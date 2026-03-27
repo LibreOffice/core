@@ -3166,7 +3166,7 @@ typedef std::map<vcl::LOKWindowId, VclPtr<vcl::Window>> LOKWindowsMap;
 
 namespace {
 
-LOKWindowsMap& GetLOKWindowsMap()
+LOKWindowsMap& GetKitWindowsMap()
 {
     // Map to remember the LOKWindowId <-> Window binding.
     static LOKWindowsMap s_aLOKWindowsMap;
@@ -3192,7 +3192,7 @@ void Window::SetKitNotifier(const vcl::ICOKitNotifier* pNotifier, bool bParent)
         // assign the LOK window id
         assert(mpWindowImpl->mnLOKWindowId == 0);
         mpWindowImpl->mnLOKWindowId = sLastLOKWindowId++;
-        GetLOKWindowsMap().emplace(mpWindowImpl->mnLOKWindowId, this);
+        GetKitWindowsMap().emplace(mpWindowImpl->mnLOKWindowId, this);
     }
 
     mpWindowImpl->mpKitNotifier = pNotifier;
@@ -3206,13 +3206,13 @@ void Window::SetLOKWindowId()
     // assign the LOK window id
     assert(mpWindowImpl->mnLOKWindowId == 0);
     mpWindowImpl->mnLOKWindowId = sLastLOKWindowId++;
-    GetLOKWindowsMap().emplace(mpWindowImpl->mnLOKWindowId, this);
+    GetKitWindowsMap().emplace(mpWindowImpl->mnLOKWindowId, this);
 }
 
 VclPtr<Window> Window::FindLOKWindow(vcl::LOKWindowId nWindowId)
 {
-    const auto it = GetLOKWindowsMap().find(nWindowId);
-    if (it != GetLOKWindowsMap().end())
+    const auto it = GetKitWindowsMap().find(nWindowId);
+    if (it != GetKitWindowsMap().end())
         return it->second;
 
     return VclPtr<Window>();
@@ -3220,14 +3220,14 @@ VclPtr<Window> Window::FindLOKWindow(vcl::LOKWindowId nWindowId)
 
 bool Window::IsLOKWindowsEmpty()
 {
-    return GetLOKWindowsMap().empty();
+    return GetKitWindowsMap().empty();
 }
 
 void Window::ReleaseKitNotifier()
 {
     // unregister the LOK window binding
     if (mpWindowImpl->mnLOKWindowId > 0)
-        GetLOKWindowsMap().erase(mpWindowImpl->mnLOKWindowId);
+        GetKitWindowsMap().erase(mpWindowImpl->mnLOKWindowId);
 
     mpWindowImpl->mpKitNotifier = nullptr;
     mpWindowImpl->mnLOKWindowId = 0;
@@ -3240,14 +3240,14 @@ ICOKitNotifier::~ICOKitNotifier()
         return;
     }
 
-    for (auto it = GetLOKWindowsMap().begin(); it != GetLOKWindowsMap().end();)
+    for (auto it = GetKitWindowsMap().begin(); it != GetKitWindowsMap().end();)
     {
         WindowImpl* pWindowImpl = it->second->ImplGetWindowImpl();
         if (pWindowImpl && pWindowImpl->mpKitNotifier == this)
         {
             pWindowImpl->mpKitNotifier = nullptr;
             pWindowImpl->mnLOKWindowId = 0;
-            it = GetLOKWindowsMap().erase(it);
+            it = GetKitWindowsMap().erase(it);
             continue;
         }
 
@@ -3260,7 +3260,7 @@ const vcl::ICOKitNotifier* Window::GetKitNotifier() const
     return mpWindowImpl ? mpWindowImpl->mpKitNotifier : nullptr;
 }
 
-vcl::LOKWindowId Window::GetLOKWindowId() const
+vcl::LOKWindowId Window::GetKitWindowId() const
 {
     return mpWindowImpl ? mpWindowImpl->mnLOKWindowId : 0;
 }
@@ -3381,7 +3381,7 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("text", GetText());
     rJsonWriter.put("enabled", IsEnabled());
     rJsonWriter.put("canFocus", bool(GetStyle() & WB_TABSTOP));
-    rJsonWriter.put("lokWindowId", GetLOKWindowId());
+    rJsonWriter.put("lokWindowId", GetKitWindowId());
     if (!IsVisible())
         rJsonWriter.put("visible", false);
 

@@ -2762,8 +2762,8 @@ private:
                                          tools::Long& rBoundEnd, SCCOLROW nEnlarge,
                                          ScViewData& rViewData)
     {
-        ScPositionHelper& rPosHelper = bColumns ? rViewData.GetLOKWidthHelper() :
-            rViewData.GetLOKHeightHelper();
+        ScPositionHelper& rPosHelper = bColumns ? rViewData.GetKitWidthHelper() :
+            rViewData.GetKitHeightHelper();
         const auto& rStartNearest = rPosHelper.getNearestByPosition(nStartPos);
         const auto& rEndNearest = rPosHelper.getNearestByPosition(nEndPos);
 
@@ -2910,10 +2910,10 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         nEndRow = rCellRange.aEnd.Row();
         aRangeProvider.getRowPositions(nStartHeightPx, nEndHeightPx);
 
-        aViewData.GetLOKHeightHelper().removeByIndex(mnLOKStartHeaderRow);
-        aViewData.GetLOKHeightHelper().removeByIndex(mnLOKEndHeaderRow);
-        aViewData.GetLOKHeightHelper().insert(nStartRow, nStartHeightPx);
-        aViewData.GetLOKHeightHelper().insert(nEndRow, nEndHeightPx);
+        aViewData.GetKitHeightHelper().removeByIndex(mnLOKStartHeaderRow);
+        aViewData.GetKitHeightHelper().removeByIndex(mnLOKEndHeaderRow);
+        aViewData.GetKitHeightHelper().insert(nStartRow, nStartHeightPx);
+        aViewData.GetKitHeightHelper().insert(nEndRow, nEndHeightPx);
 
         mnLOKStartHeaderRow = nStartRow;
         mnLOKEndHeaderRow = nEndRow;
@@ -3008,10 +3008,10 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         nEndCol = rCellRange.aEnd.Col();
         aRangeProvider.getColPositions(nStartWidthPx, nEndWidthPx);
 
-        aViewData.GetLOKWidthHelper().removeByIndex(mnLOKStartHeaderCol);
-        aViewData.GetLOKWidthHelper().removeByIndex(mnLOKEndHeaderCol);
-        aViewData.GetLOKWidthHelper().insert(nStartCol, nStartWidthPx);
-        aViewData.GetLOKWidthHelper().insert(nEndCol, nEndWidthPx);
+        aViewData.GetKitWidthHelper().removeByIndex(mnLOKStartHeaderCol);
+        aViewData.GetKitWidthHelper().removeByIndex(mnLOKEndHeaderCol);
+        aViewData.GetKitWidthHelper().insert(nStartCol, nStartWidthPx);
+        aViewData.GetKitWidthHelper().insert(nEndCol, nEndWidthPx);
 
         mnLOKStartHeaderCol = nStartCol;
         mnLOKEndHeaderCol = nEndCol;
@@ -3207,8 +3207,8 @@ void ScTabView::extendTiledAreaIfNeeded()
     aRangeProvider.getColPositions(nStartColPos, nEndColPos);
     aRangeProvider.getRowPositions(nStartRowPos, nEndRowPos);
 
-    ScPositionHelper& rWidthHelper = aViewData.GetLOKWidthHelper();
-    ScPositionHelper& rHeightHelper = aViewData.GetLOKHeightHelper();
+    ScPositionHelper& rWidthHelper = aViewData.GetKitWidthHelper();
+    ScPositionHelper& rHeightHelper = aViewData.GetKitHeightHelper();
 
     // Update mnLOKStartHeaderCol and mnLOKEndHeaderCol members.
     // These are consulted in some ScGridWindow methods.

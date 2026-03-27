@@ -501,8 +501,8 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 }
 
                 // update the current LOK language and locale for the dialog tunneling
-                comphelper::COKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
-                comphelper::COKit::setLocale(pViewShell->GetLOKLocale());
+                comphelper::COKit::setLanguageTag(pViewShell->GetKitLanguageTag());
+                comphelper::COKit::setLocale(pViewShell->GetKitLocale());
 
                 pNotebookBar = VclPtr<NotebookBar>::Create(pSysWindow, "NotebookBar", aBuf, xFrame, std::move(pNotebookBarAddonsItem));
                 rViewData.m_pNotebookBar = pNotebookBar;

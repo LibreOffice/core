@@ -1232,7 +1232,7 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
 
         aPayload.emplace_back("rectangle", aRect.toString());
 
-        pNotifier->notifyWindow(GetLOKWindowId(), u"invalidate"_ustr, aPayload);
+        pNotifier->notifyWindow(GetKitWindowId(), u"invalidate"_ustr, aPayload);
     }
     else if (GetParent() && GetParent()->IsFormControl())
     {

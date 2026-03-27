@@ -444,18 +444,18 @@ public:
     /// Set the COKit language of this view.
     void SetLOKLanguageTag(const OUString& rBcp47LanguageTag);
     /// Get the COKit language of this view.
-    const LanguageTag& GetLOKLanguageTag() const { return maLOKLanguageTag; }
+    const LanguageTag& GetKitLanguageTag() const { return maLOKLanguageTag; }
     /// Enable/Disable COKit AT support for this view.
     void SetLOKAccessibilityState(bool bEnabled);
     /// Get COKit AT support state for this view.
-    bool GetLOKAccessibilityState() const { return mbLOKAccessibilityEnabled; }
+    bool GetKitAccessibilityState() const { return mbLOKAccessibilityEnabled; }
     /// Set COKit color preview state for this view.
     void SetLOKColorPreviewState(bool bEnabled);
     /// Return COKit color preview state for this view.
     bool IsLOKColorPreviewEnabled() const { return mbLOKColorPreviewEnabled; }
 
     /// Get the COKit timezone of this view. See @SetLOKTimezone.
-    std::pair<bool, OUString> GetLOKTimezone() const
+    std::pair<bool, OUString> GetKitTimezone() const
     {
         return { maLOKIsTimezoneSet, maLOKTimezone };
     }
@@ -472,13 +472,13 @@ public:
     /// Set the COKit locale of this view.
     void SetLOKLocale(const OUString& rBcp47LanguageTag);
     /// Get the COKit locale of this view.
-    const LanguageTag& GetLOKLocale() const { return maLOKLocale; }
+    const LanguageTag& GetKitLocale() const { return maLOKLocale; }
     /// Set the COKit locale and language of this view.
     void SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag);
     /// Get the COKit calendar of this view.
-    CalendarWrapper& GetLOKCalendar();
+    CalendarWrapper& GetKitCalendar();
     /// Get the form factor of the device where the lok client is running.
-    LOKDeviceFormFactor GetLOKDeviceFormFactor() const { return maLOKDeviceFormFactor; }
+    LOKDeviceFormFactor GetKitDeviceFormFactor() const { return maLOKDeviceFormFactor; }
     /// Check if the lok client is running on a desktop machine.
     bool isLOKDesktop() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::DESKTOP; }
     /// Check if the lok client is running on a tablet.

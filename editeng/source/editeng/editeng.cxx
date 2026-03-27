@@ -1927,9 +1927,9 @@ void EditEngine::SetLOKSpecialPaperSize(const Size& rSize)
     getImpl().SetLOKSpecialPaperSize(rSize);
 }
 
-const Size& EditEngine::GetLOKSpecialPaperSize() const
+const Size& EditEngine::GetKitSpecialPaperSize() const
 {
-    return getImpl().GetLOKSpecialPaperSize();
+    return getImpl().GetKitSpecialPaperSize();
 }
 
 EFieldInfo::EFieldInfo()

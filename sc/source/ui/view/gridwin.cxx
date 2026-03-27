@@ -5203,7 +5203,7 @@ void ScGridWindow::UpdateEditViewPos()
         {
             tools::Rectangle aPTwipsRect = mrViewData.GetEditArea(eWhich, nCol, nRow, this, nullptr,
                     true, true /* bInPrintTwips */);
-            tools::Rectangle aOutputAreaPTwips = pView->GetLOKSpecialOutputArea();
+            tools::Rectangle aOutputAreaPTwips = pView->GetKitSpecialOutputArea();
             aOutputAreaPTwips.SetPos(aPTwipsRect.TopLeft());
             pView->SetLOKSpecialOutputArea(aOutputAreaPTwips);
         }
@@ -5253,20 +5253,20 @@ void ScGridWindow::UpdateFormulas(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
 
         if (nX1 < 0)
-            nX1 = pViewShell->GetLOKStartHeaderCol() + 1;
+            nX1 = pViewShell->GetKitStartHeaderCol() + 1;
         if (nY1 < 0)
-            nY1 = pViewShell->GetLOKStartHeaderRow() + 1;
+            nY1 = pViewShell->GetKitStartHeaderRow() + 1;
         if (nX2 < 0)
-            nX2 = pViewShell->GetLOKEndHeaderCol();
+            nX2 = pViewShell->GetKitEndHeaderCol();
         if (nY2 < 0)
-            nY2 = pViewShell->GetLOKEndHeaderRow();
+            nY2 = pViewShell->GetKitEndHeaderRow();
 
         if (nX1 < 0 || nY1 < 0) return;
 
         // Consider frozen ranges not in main pane range as candidates
         // for update
-        SCCOLROW nFreezeCol = mrViewData.GetLOKSheetFreezeIndex(true);
-        SCCOLROW nFreezeRow = mrViewData.GetLOKSheetFreezeIndex(false);
+        SCCOLROW nFreezeCol = mrViewData.GetKitSheetFreezeIndex(true);
+        SCCOLROW nFreezeRow = mrViewData.GetKitSheetFreezeIndex(false);
         if ((nFreezeCol || nFreezeRow) && (nX1 || nY1))
         {
             // top left

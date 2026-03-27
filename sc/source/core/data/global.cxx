@@ -1124,7 +1124,7 @@ CalendarWrapper& ScGlobal::GetCalendar()
     {
         if (SfxViewShell* pCurr = SfxViewShell::Current())
         {
-            return pCurr->GetLOKCalendar();
+            return pCurr->GetKitCalendar();
         }
     }
     if ( !oCalendar )

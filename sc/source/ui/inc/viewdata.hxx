@@ -440,14 +440,14 @@ public:
     SCROW           GetCurYForTab( SCTAB nTabIndex ) const;
     SCCOL           GetOldCurX() const;
     SCROW           GetOldCurY() const;
-    tools::Long            GetLOKDocWidthPixel() const             { return pThisTab->aWidthHelper.getPosition(pThisTab->nMaxTiledCol); }
-    tools::Long            GetLOKDocHeightPixel() const            { return pThisTab->aHeightHelper.getPosition(pThisTab->nMaxTiledRow); }
+    tools::Long            GetKitDocWidthPixel() const             { return pThisTab->aWidthHelper.getPosition(pThisTab->nMaxTiledCol); }
+    tools::Long            GetKitDocHeightPixel() const            { return pThisTab->aHeightHelper.getPosition(pThisTab->nMaxTiledRow); }
 
-    ScPositionHelper& GetLOKWidthHelper()                   { return pThisTab->aWidthHelper; }
-    ScPositionHelper& GetLOKHeightHelper()                  { return pThisTab->aHeightHelper; }
+    ScPositionHelper& GetKitWidthHelper()                   { return pThisTab->aWidthHelper; }
+    ScPositionHelper& GetKitHeightHelper()                  { return pThisTab->aHeightHelper; }
 
-    ScPositionHelper* GetLOKWidthHelper(SCTAB nTabIndex);
-    ScPositionHelper* GetLOKHeightHelper(SCTAB nTabIndex);
+    ScPositionHelper* GetKitWidthHelper(SCTAB nTabIndex);
+    ScPositionHelper* GetKitHeightHelper(SCTAB nTabIndex);
 
     ScSplitMode     GetHSplitMode() const                   { return pThisTab->eHSplitMode; }
     ScSplitMode     GetVSplitMode() const                   { return pThisTab->eVSplitMode; }
@@ -715,7 +715,7 @@ public:
 
     bool            IsSelCtrlMouseClick() const { return bSelCtrlMouseClick; }
 
-    SCCOLROW        GetLOKSheetFreezeIndex(bool bIsCol) const;
+    SCCOLROW        GetKitSheetFreezeIndex(bool bIsCol) const;
     bool            SetLOKSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol, SCTAB nForTab = -1);
     bool            RemoveLOKFreeze();
     void            DeriveLOKFreezeAllSheets();

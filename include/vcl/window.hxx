@@ -1100,7 +1100,7 @@ public:
     /// Interface to register for dialog / window tunneling.
     void                                SetKitNotifier(const vcl::ICOKitNotifier* pNotifier, bool bParent = false);
     const vcl::ICOKitNotifier* GetKitNotifier() const;
-    vcl::LOKWindowId                    GetLOKWindowId() const;
+    vcl::LOKWindowId                    GetKitWindowId() const;
 
     /// This sets the lokWindowId without setting a notifier.
     void                                SetLOKWindowId();

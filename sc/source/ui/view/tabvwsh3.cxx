@@ -1361,8 +1361,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     ScViewData& rViewData = GetViewData();
                     SCTAB nThisTab = rViewData.GetTabNumber();
                     bool bChangedX = false, bChangedY = false;
-                    if (rViewData.GetLOKSheetFreezeIndex(true) > 0 ||
-                        rViewData.GetLOKSheetFreezeIndex(false) > 0 )                             // remove freeze
+                    if (rViewData.GetKitSheetFreezeIndex(true) > 0 ||
+                        rViewData.GetKitSheetFreezeIndex(false) > 0 )                             // remove freeze
                     {
                         bChangedX = rViewData.RemoveLOKFreeze();
                     }                                                                            // create or fixate

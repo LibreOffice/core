@@ -166,7 +166,7 @@ void JSInstanceBuilder::initializeDialogSender()
     {
         m_aParentDialog = pRoot->GetParent()->GetParentWithKitNotifier();
         if (m_aParentDialog)
-            m_nWindowId = m_aParentDialog->GetLOKWindowId();
+            m_nWindowId = m_aParentDialog->GetKitWindowId();
         InsertWindowToMap(getMapIdFromWindowId());
     }
 
@@ -231,7 +231,7 @@ void JSInstanceBuilder::initializeNotebookbarSender(sal_uInt64 nLOKWindowId)
     {
         m_aParentDialog = pRoot->GetParent()->GetParentWithKitNotifier();
         if (m_aParentDialog)
-            m_nWindowId = m_aParentDialog->GetLOKWindowId();
+            m_nWindowId = m_aParentDialog->GetKitWindowId();
         if (!m_nWindowId && nLOKWindowId)
         {
             m_nWindowId = nLOKWindowId;
@@ -438,7 +438,7 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OUString& id)
         if (!pDialog->GetKitNotifier())
             pDialog->SetKitNotifier(GetpApp());
 
-        m_nWindowId = pDialog->GetLOKWindowId();
+        m_nWindowId = pDialog->GetKitWindowId();
         pDialog->SetLOKTunnelingState(false);
 
         InsertWindowToMap(getMapIdFromWindowId());
@@ -467,7 +467,7 @@ std::unique_ptr<weld::Assistant> JSInstanceBuilder::weld_assistant(const OUStrin
                                               : nullptr);
     if (pDialog)
     {
-        m_nWindowId = pDialog->GetLOKWindowId();
+        m_nWindowId = pDialog->GetKitWindowId();
         pDialog->SetLOKTunnelingState(false);
 
         InsertWindowToMap(getMapIdFromWindowId());
@@ -496,7 +496,7 @@ std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(cons
 
     if (pMessageDialog)
     {
-        m_nWindowId = pMessageDialog->GetLOKWindowId();
+        m_nWindowId = pMessageDialog->GetKitWindowId();
         pMessageDialog->SetLOKTunnelingState(false);
 
         InsertWindowToMap(getMapIdFromWindowId());
@@ -848,7 +848,7 @@ std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OUString& i
             pPopupRoot->SetKitNotifier(pWin->GetKitNotifier());
             m_aParentDialog = pPopupRoot;
             m_aWindowToRelease = pPopupRoot;
-            m_nWindowId = m_aParentDialog->GetLOKWindowId();
+            m_nWindowId = m_aParentDialog->GetKitWindowId();
 
             pPopover->set_window_id(m_nWindowId);
             JSInstanceBuilder::Popups().Remember(OUString::number(m_nWindowId), pDockingWindow);
@@ -950,7 +950,7 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
     pNotifier = xMessageDialog->GetKitNotifier();
     if (pNotifier)
     {
-        OUString sWindowId = OUString::number(xMessageDialog->GetLOKWindowId());
+        OUString sWindowId = OUString::number(xMessageDialog->GetKitWindowId());
         InsertWindowToMap(sWindowId);
         xMessageDialog->SetLOKTunnelingState(false);
 
@@ -1060,7 +1060,7 @@ std::unique_ptr<weld::Button> JSDialog::weld_button_for_response(int nResponse)
 
         auto pParentDialog = m_xDialog->GetParentWithKitNotifier();
         if (pParentDialog)
-            JSInstanceBuilder::RememberWidget(OUString::number(pParentDialog->GetLOKWindowId()),
+            JSInstanceBuilder::RememberWidget(OUString::number(pParentDialog->GetKitWindowId()),
                                               pButton->get_id(), xWeldWidget.get());
     }
 
@@ -1088,7 +1088,7 @@ std::unique_ptr<weld::Button> JSAssistant::weld_button_for_response(int nRespons
 
         auto pParentDialog = m_xWizard->GetParentWithKitNotifier();
         if (pParentDialog)
-            JSInstanceBuilder::RememberWidget(OUString::number(pParentDialog->GetLOKWindowId()),
+            JSInstanceBuilder::RememberWidget(OUString::number(pParentDialog->GetKitWindowId()),
                                               pButton->get_id(), xWeldWidget.get());
     }
 
@@ -1482,7 +1482,7 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* p
     if (pBuilder)
         return;
 
-    m_sWindowId = OUString::number(m_xMessageDialog->GetLOKWindowId());
+    m_sWindowId = OUString::number(m_xMessageDialog->GetKitWindowId());
 
     if (::OKButton* pOKBtn
         = dynamic_cast<::OKButton*>(m_xMessageDialog->get_widget_for_response(RET_OK)))
@@ -1515,7 +1515,7 @@ JSMessageDialog::~JSMessageDialog()
 void JSMessageDialog::RememberMessageDialog()
 {
     static constexpr OUString sWidgetName = u"__DIALOG__"_ustr;
-    OUString sWindowId = OUString::number(m_xMessageDialog->GetLOKWindowId());
+    OUString sWindowId = OUString::number(m_xMessageDialog->GetKitWindowId());
     auto aWidgetMap = JSInstanceBuilder::Widgets().Find(sWindowId);
     if (aWidgetMap && aWidgetMap->Find(sWidgetName))
         return;
@@ -1656,14 +1656,14 @@ void JSToolbar::set_menu_item_active(const OUString& rIdent, bool bActive)
     {
         if (bActive)
         {
-            JSInstanceBuilder::Popups().Remember(OUString::number(pPopupRoot->GetLOKWindowId()),
+            JSInstanceBuilder::Popups().Remember(OUString::number(pPopupRoot->GetKitWindowId()),
                                                  pFloat);
             sendPopup(pPopupRoot, m_xToolBox->get_id(), rIdent);
         }
         else if (bWasActive)
         {
-            JSInstanceBuilder::Popups().Forget(OUString::number(pPopupRoot->GetLOKWindowId()));
-            sendClosePopup(pPopupRoot->GetLOKWindowId());
+            JSInstanceBuilder::Popups().Forget(OUString::number(pPopupRoot->GetKitWindowId()));
+            sendClosePopup(pPopupRoot->GetKitWindowId());
         }
     }
 }
@@ -2094,7 +2094,7 @@ void JSMenuButton::do_set_active(bool bActive)
         if (bActive)
             sendPopup(pPopup->GetChild(0), m_xMenuButton->get_id(), m_xMenuButton->get_id());
         else
-            sendClosePopup(pPopup->GetChild(0)->GetLOKWindowId());
+            sendClosePopup(pPopup->GetChild(0)->GetKitWindowId());
     }
 }
 
@@ -2158,7 +2158,7 @@ void JSPopover::popdown()
     }
 
     if (getWidget() && getWidget()->GetChild(0))
-        sendClosePopup(getWidget()->GetChild(0)->GetLOKWindowId());
+        sendClosePopup(getWidget()->GetChild(0)->GetKitWindowId());
 
     SalInstancePopover::popdown();
 }

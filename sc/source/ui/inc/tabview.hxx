@@ -629,10 +629,10 @@ public:
 
     static void OnLOKNoteStateChanged(const ScPostIt* pNote);
 
-    SCROW GetLOKStartHeaderRow() const { return mnLOKStartHeaderRow; }
-    SCROW GetLOKEndHeaderRow() const { return mnLOKEndHeaderRow; }
-    SCCOL GetLOKStartHeaderCol() const { return mnLOKStartHeaderCol; }
-    SCCOL GetLOKEndHeaderCol() const { return mnLOKEndHeaderCol; }
+    SCROW GetKitStartHeaderRow() const { return mnLOKStartHeaderRow; }
+    SCROW GetKitEndHeaderRow() const { return mnLOKEndHeaderRow; }
+    SCCOL GetKitStartHeaderCol() const { return mnLOKStartHeaderCol; }
+    SCCOL GetKitEndHeaderCol() const { return mnLOKEndHeaderCol; }
 
     void SyncGridWindowMapModeFromDrawMapMode();
 

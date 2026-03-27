@@ -817,7 +817,7 @@ include/sfx2/infobar.hxx:104
 include/sfx2/kit/componenthelpers.hxx:48
     void KitChartHelper::Invalidate()
 include/sfx2/viewsh.hxx:475
-    enum LOKDeviceFormFactor SfxViewShell::GetLOKDeviceFormFactor() const
+    enum LOKDeviceFormFactor SfxViewShell::GetKitDeviceFormFactor() const
 include/svl/itempool.hxx:202
     unsigned short SfxItemPool::GetSize_Impl() const
 include/svl/itempool.hxx:224
@@ -1689,9 +1689,9 @@ sc/source/ui/inc/SparklineDataRangeDialog.hxx:52
 sc/source/ui/inc/TableFillingAndNavigationTools.hxx:122
     unsigned long DataRangeIterator::size()
 sc/source/ui/inc/viewdata.hxx:407
-    long ScViewData::GetLOKDocWidthPixel() const
+    long ScViewData::GetKitDocWidthPixel() const
 sc/source/ui/inc/viewdata.hxx:408
-    long ScViewData::GetLOKDocHeightPixel() const
+    long ScViewData::GetKitDocHeightPixel() const
 sc/source/ui/inc/viewdata.hxx:557
     _Bool ScViewData::IsGridMode() const
 scaddins/source/analysis/analysishelper.hxx:781

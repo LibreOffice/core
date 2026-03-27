@@ -758,7 +758,7 @@ Size ScModelObj::getDocumentSize(SCCOL& rnTiledRenderingAreaEndCol, SCROW& rnTil
         return ScViewData::ToPixel(nSize, fPPTX);
     };
 
-    tools::Long nDocWidthPixel = pViewData->GetLOKWidthHelper().computePosition(rnTiledRenderingAreaEndCol, GetColWidthPx);
+    tools::Long nDocWidthPixel = pViewData->GetKitWidthHelper().computePosition(rnTiledRenderingAreaEndCol, GetColWidthPx);
     tools::Long nDocHeightPixel = pThisDoc->GetScaledRowHeight(0, rnTiledRenderingAreaEndRow, nTab, fPPTY);
 
     if (nDocWidthPixel > 0 && nDocHeightPixel > 0)

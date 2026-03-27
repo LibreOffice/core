@@ -1532,13 +1532,13 @@ void ScViewData::SetMaxTiledCol( SCCOL nNewMaxCol )
         return nSizePx;
     };
 
-    tools::Long nTotalPixels = GetLOKWidthHelper().computePosition(nNewMaxCol, GetColWidthPx);
+    tools::Long nTotalPixels = GetKitWidthHelper().computePosition(nNewMaxCol, GetColWidthPx);
 
     SAL_INFO("sc.lok.docsize", "ScViewData::SetMaxTiledCol: nNewMaxCol: "
             << nNewMaxCol << ", nTotalPixels: " << nTotalPixels);
 
-    GetLOKWidthHelper().removeByIndex(pThisTab->nMaxTiledCol);
-    GetLOKWidthHelper().insert(nNewMaxCol, nTotalPixels);
+    GetKitWidthHelper().removeByIndex(pThisTab->nMaxTiledCol);
+    GetKitWidthHelper().insert(nNewMaxCol, nTotalPixels);
 
     pThisTab->nMaxTiledCol = nNewMaxCol;
 }
@@ -1557,13 +1557,13 @@ void ScViewData::SetMaxTiledRow( SCROW nNewMaxRow )
         return nSizePx;
     };
 
-    tools::Long nTotalPixels = GetLOKHeightHelper().computePosition(nNewMaxRow, GetRowHeightPx);
+    tools::Long nTotalPixels = GetKitHeightHelper().computePosition(nNewMaxRow, GetRowHeightPx);
 
     SAL_INFO("sc.lok.docsize", "ScViewData::SetMaxTiledRow: nNewMaxRow: "
             << nNewMaxRow << ", nTotalPixels: " << nTotalPixels);
 
-    GetLOKHeightHelper().removeByIndex(pThisTab->nMaxTiledRow);
-    GetLOKHeightHelper().insert(nNewMaxRow, nTotalPixels);
+    GetKitHeightHelper().removeByIndex(pThisTab->nMaxTiledRow);
+    GetKitHeightHelper().insert(nNewMaxRow, nTotalPixels);
 
     pThisTab->nMaxTiledRow = nNewMaxRow;
 }
@@ -1845,7 +1845,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         tools::Rectangle aVis = pEditView[eWhich]->GetVisArea();
         tools::Rectangle aVisPTwips;
         if (bLOKPrintTwips)
-            aVisPTwips = pEditView[eWhich]->GetLOKSpecialVisArea();
+            aVisPTwips = pEditView[eWhich]->GetKitSpecialVisArea();
 
         tools::Long nDiff = aVis.Right() - aVis.Left();
         tools::Long nDiffPTwips = bLOKPrintTwips ? (aVisPTwips.Right() - aVisPTwips.Left()) : 0;
@@ -1974,12 +1974,12 @@ void ScViewData::EditGrowX()
     Size        aSize = pEngine->GetPaperSize();
     Size aSizePTwips;
     if (bLOKPrintTwips)
-        aSizePTwips = pEngine->GetLOKSpecialPaperSize();
+        aSizePTwips = pEngine->GetKitSpecialPaperSize();
 
     tools::Rectangle   aArea = pCurView->GetOutputArea();
     tools::Rectangle aAreaPTwips;
     if (bLOKPrintTwips)
-        aAreaPTwips = pCurView->GetLOKSpecialOutputArea();
+        aAreaPTwips = pCurView->GetKitSpecialOutputArea();
 
     tools::Long        nOldRight = aArea.Right();
 
@@ -2150,7 +2150,7 @@ void ScViewData::EditGrowX()
         tools::Rectangle aVis = pCurView->GetVisArea();
         tools::Rectangle aVisPTwips;
         if (bLOKPrintTwips)
-            aVisPTwips = pCurView->GetLOKSpecialVisArea();
+            aVisPTwips = pCurView->GetKitSpecialVisArea();
 
         if ( bGrowCentered )
         {
@@ -2276,8 +2276,8 @@ void ScViewData::EditGrowY( bool bInitial )
 
     if (bLOKPrintTwips)
     {
-        aSizePTwips = rEngine.GetLOKSpecialPaperSize();
-        aAreaPTwips = pCurView->GetLOKSpecialOutputArea();
+        aSizePTwips = rEngine.GetKitSpecialPaperSize();
+        aAreaPTwips = pCurView->GetKitSpecialOutputArea();
     }
 
     tools::Long nOldBottom = aArea.Bottom();
@@ -2449,7 +2449,7 @@ void ScViewData::SetTabNo( SCTAB nNewTab )
     RecalcPixPos();     //! not always needed!
 }
 
-ScPositionHelper* ScViewData::GetLOKWidthHelper(SCTAB nTabIndex)
+ScPositionHelper* ScViewData::GetKitWidthHelper(SCTAB nTabIndex)
 {
     if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())) ||
         !maTabData[nTabIndex])
@@ -2459,7 +2459,7 @@ ScPositionHelper* ScViewData::GetLOKWidthHelper(SCTAB nTabIndex)
     return &(maTabData[nTabIndex]->aWidthHelper);
 }
 
-ScPositionHelper* ScViewData::GetLOKHeightHelper(SCTAB nTabIndex)
+ScPositionHelper* ScViewData::GetKitHeightHelper(SCTAB nTabIndex)
 {
     if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())) ||
         !maTabData[nTabIndex])
@@ -3392,11 +3392,11 @@ void ScViewData::CalcPPT()
             continue;
 
         if (bResetWidths)
-            if (auto* pWHelper = GetLOKWidthHelper(nTabIdx))
+            if (auto* pWHelper = GetKitWidthHelper(nTabIdx))
                 pWHelper->invalidateByPosition(0L);
 
         if (bResetHeights)
-            if (auto* pHHelper = GetLOKHeightHelper(nTabIdx))
+            if (auto* pHHelper = GetKitHeightHelper(nTabIdx))
                 pHHelper->invalidateByPosition(0L);
     }
 }
@@ -4371,9 +4371,9 @@ void ScViewData::AddPixelsWhileBackward( tools::Long & rScrY, tools::Long nEndPi
     rPosY = nRow;
 }
 
-SCCOLROW ScViewData::GetLOKSheetFreezeIndex(bool bIsCol) const
+SCCOLROW ScViewData::GetKitSheetFreezeIndex(bool bIsCol) const
 {
-    SCCOLROW nFreezeIndex = bIsCol ? mrDoc.GetLOKFreezeCol(CurrentTabForData()) : mrDoc.GetLOKFreezeRow(CurrentTabForData());
+    SCCOLROW nFreezeIndex = bIsCol ? mrDoc.GetKitFreezeCol(CurrentTabForData()) : mrDoc.GetKitFreezeRow(CurrentTabForData());
     return nFreezeIndex >= 0 ? nFreezeIndex : 0;
 }
 
@@ -4421,8 +4421,8 @@ void ScViewData::DeriveLOKFreezeIfNeeded(SCTAB nForTab)
 
     bool bConvertToFreezeX = false;
     bool bConvertToFreezeY = false;
-    SCCOL nFreezeCol = mrDoc.GetLOKFreezeCol(nForTab);
-    SCROW nFreezeRow = mrDoc.GetLOKFreezeRow(nForTab);
+    SCCOL nFreezeCol = mrDoc.GetKitFreezeCol(nForTab);
+    SCROW nFreezeRow = mrDoc.GetKitFreezeRow(nForTab);
 
     if (nFreezeCol == -1)
     {
@@ -4470,7 +4470,7 @@ void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& 
                                        tools::Long& nExHSplitPos, tools::Long& nExVSplitPos, SCTAB nForTab) const
 {
     // split mode to potentially use based on original: if it was split, use split mode to preserve that, otherwise use freeze
-    // whether there is actual split/freeze will depend on GetLOKFreezeCol/Row
+    // whether there is actual split/freeze will depend on GetKitFreezeCol/Row
     const ScSplitMode aExSplitMode = (eExHSplitMode == SC_SPLIT_NORMAL || eExVSplitMode == SC_SPLIT_NORMAL) ? SC_SPLIT_NORMAL : SC_SPLIT_FIX;
 
     // initialize split modes and positions in case no split/freeze is set
@@ -4484,8 +4484,8 @@ void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& 
     bool bConvertToScrPosX = false;
     bool bConvertToScrPosY = false;
 
-    SCCOL nFreezeCol = mrDoc.GetLOKFreezeCol(nForTab);
-    SCROW nFreezeRow = mrDoc.GetLOKFreezeRow(nForTab);
+    SCCOL nFreezeCol = mrDoc.GetKitFreezeCol(nForTab);
+    SCROW nFreezeRow = mrDoc.GetKitFreezeRow(nForTab);
 
     if (nFreezeCol > 0)
     {

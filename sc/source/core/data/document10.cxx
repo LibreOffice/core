@@ -1069,21 +1069,21 @@ OString ScDocument::dumpSheetGeomData(SCTAB nTab, bool bColumns, SheetGeomType e
     return pTab->dumpSheetGeomData(bColumns, eGeomType);
 }
 
-SCCOL ScDocument::GetLOKFreezeCol(SCTAB nTab) const
+SCCOL ScDocument::GetKitFreezeCol(SCTAB nTab) const
 {
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
         return -1;
 
-    return pTab->GetLOKFreezeCol();
+    return pTab->GetKitFreezeCol();
 }
-SCROW ScDocument::GetLOKFreezeRow(SCTAB nTab) const
+SCROW ScDocument::GetKitFreezeRow(SCTAB nTab) const
 {
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
         return -1;
 
-    return pTab->GetLOKFreezeRow();
+    return pTab->GetKitFreezeRow();
 }
 
 bool ScDocument::SetLOKFreezeCol(SCCOL nFreezeCol, SCTAB nTab)

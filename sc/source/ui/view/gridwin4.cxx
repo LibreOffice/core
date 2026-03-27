@@ -1366,7 +1366,7 @@ namespace
         tools::Long nEndPosPx = 0;
 
         ScPositionHelper& rPositionHelper =
-                bColumnHeader ? rViewData.GetLOKWidthHelper() : rViewData.GetLOKHeightHelper();
+                bColumnHeader ? rViewData.GetKitWidthHelper() : rViewData.GetKitHeightHelper();
         const auto& rStartNearest = rPositionHelper.getNearestByPosition(nTileStartPosPx);
         const auto& rEndNearest = rPositionHelper.getNearestByPosition(nTileEndPosPx);
 
@@ -1391,7 +1391,7 @@ namespace
             return nSizePx;
         };
 
-        ScPositionHelper rHelper = rViewData.GetLOKWidthHelper();
+        ScPositionHelper rHelper = rViewData.GetKitWidthHelper();
         tools::Long nEndColPos = rHelper.computePosition(nEndCol, GetColWidthPx);
 
         nTileColOffset += (nEndColPos - nTileEndPx - nTileColOffset);

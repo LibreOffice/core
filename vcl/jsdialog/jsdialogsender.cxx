@@ -89,7 +89,7 @@ OString JSDialogNotifyIdle::generateFullUpdate() const
 
     m_aContentWindow->DumpAsPropertyTree(aJsonWriter);
     if (m_aNotifierWindow)
-        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
+        aJsonWriter.put("id", m_aNotifierWindow->GetKitWindowId());
     aJsonWriter.put("jsontype", m_sTypeOfJSON);
 
     return aJsonWriter.finishAndGetAsOString();
@@ -105,7 +105,7 @@ OString JSDialogNotifyIdle::generateWidgetUpdate(const VclPtr<vcl::Window>& pWin
     aJsonWriter.put("jsontype", m_sTypeOfJSON);
     aJsonWriter.put("action", "update");
     if (m_aNotifierWindow)
-        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
+        aJsonWriter.put("id", m_aNotifierWindow->GetKitWindowId());
     {
         auto aEntries = aJsonWriter.startNode("control");
         pWindow->DumpAsPropertyTree(aJsonWriter);
@@ -118,7 +118,7 @@ OString JSDialogNotifyIdle::generateCloseMessage() const
 {
     tools::JsonWriter aJsonWriter;
     if (m_aNotifierWindow)
-        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
+        aJsonWriter.put("id", m_aNotifierWindow->GetKitWindowId());
     aJsonWriter.put("jsontype", m_sTypeOfJSON);
     aJsonWriter.put("action", "close");
 
@@ -134,7 +134,7 @@ JSDialogNotifyIdle::generateActionMessage(const VclPtr<vcl::Window>& pWindow,
     aJsonWriter.put("jsontype", m_sTypeOfJSON);
     aJsonWriter.put("action", "action");
     if (m_aNotifierWindow)
-        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
+        aJsonWriter.put("id", m_aNotifierWindow->GetKitWindowId());
 
     {
         auto aDataNode = aJsonWriter.startNode("data");
@@ -192,7 +192,7 @@ OString JSDialogNotifyIdle::generatePopupMessage(const VclPtr<vcl::Window>& pWin
     aJsonWriter.put("cancellable", true);
     aJsonWriter.put("popupParent", sParentId);
     aJsonWriter.put("clickToClose", sCloseId);
-    aJsonWriter.put("id", pWindow->GetParentWithKitNotifier()->GetLOKWindowId());
+    aJsonWriter.put("id", pWindow->GetParentWithKitNotifier()->GetKitWindowId());
 
     return aJsonWriter.finishAndGetAsOString();
 }
@@ -234,7 +234,7 @@ OString JSDialogNotifyIdle::generateMenuMessage(const VclPtr<PopupMenu>& pMenu,
     aJsonWriter.put("cancellable", true);
     aJsonWriter.put("popupParent", sParentId);
     aJsonWriter.put("clickToClose", sCloseId);
-    aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
+    aJsonWriter.put("id", m_aNotifierWindow->GetKitWindowId());
 
     return aJsonWriter.finishAndGetAsOString();
 }

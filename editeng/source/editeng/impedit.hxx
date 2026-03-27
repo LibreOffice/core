@@ -513,9 +513,9 @@ public:
     void InitLOKSpecialPositioning(MapUnit eUnit, const tools::Rectangle& rOutputArea,
                                    const Point& rVisDocStartPos);
     void SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea);
-    const tools::Rectangle & GetLOKSpecialOutputArea() const;
+    const tools::Rectangle & GetKitSpecialOutputArea() const;
     void SetLOKSpecialVisArea(const tools::Rectangle& rVisArea);
-    tools::Rectangle GetLOKSpecialVisArea() const;
+    tools::Rectangle GetKitSpecialVisArea() const;
     bool HasLOKSpecialPositioning() const;
 
     void SetLOKSpecialFlags(LOKSpecialFlags eFlags);
@@ -1340,7 +1340,7 @@ public:
 
     void Dispose();
     void SetLOKSpecialPaperSize(const Size& rSize) { maLOKSpecialPaperSize = rSize; }
-    const Size& GetLOKSpecialPaperSize() const { return maLOKSpecialPaperSize; }
+    const Size& GetKitSpecialPaperSize() const { return maLOKSpecialPaperSize; }
 
     enum class CallbackResult
     {

@@ -1696,7 +1696,7 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset)
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell && pTabViewShell->GetDocId() == pCurrentViewShell->GetDocId())
         {
-            if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKWidthHelper(nCurrentTabIndex))
+            if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetKitWidthHelper(nCurrentTabIndex))
                 pPosHelper->invalidateByIndex(nStartCol);
 
             // if we remove a column the cursor position  and the current selection
@@ -1759,7 +1759,7 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, tools::Long nOffset)
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell && pTabViewShell->GetDocId() == pCurrentViewShell->GetDocId())
         {
-            if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKHeightHelper(nCurrentTabIndex))
+            if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetKitHeightHelper(nCurrentTabIndex))
                 pPosHelper->invalidateByIndex(nStartRow);
 
             // if we remove a row the cursor position and the current selection
@@ -1824,12 +1824,12 @@ void ScViewFunc::OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
         {
             if (bWidth)
             {
-                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKWidthHelper(nCurTab))
+                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetKitWidthHelper(nCurTab))
                     pPosHelper->invalidateByIndex(nStart);
             }
             else
             {
-                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKHeightHelper(nCurTab))
+                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetKitHeightHelper(nCurTab))
                     pPosHelper->invalidateByIndex(nStart);
             }
         }

@@ -661,7 +661,7 @@ void FloatingWindow::PixelInvalidate(const tools::Rectangle* /*pRectangle*/)
             std::make_pair("rectangle"_ostr, aRect.toString())
         };
         const vcl::ICOKitNotifier* pNotifier = pParent->GetKitNotifier();
-        pNotifier->notifyWindow(GetLOKWindowId(), u"invalidate"_ustr, aPayload);
+        pNotifier->notifyWindow(GetKitWindowId(), u"invalidate"_ustr, aPayload);
     }
 }
 
@@ -699,7 +699,7 @@ void FloatingWindow::StateChanged( StateChangedType nType )
                 else
                     aItems.emplace_back("type", "child");
 
-                aItems.emplace_back("parentId", OString::number(pParent->GetLOKWindowId()));
+                aItems.emplace_back("parentId", OString::number(pParent->GetKitWindowId()));
                 if (mbInPopupMode)
                     aItems.emplace_back("position", mpImplData->maPos.toString()); // pixels
                 else // mpImplData->maPos is not set
@@ -707,13 +707,13 @@ void FloatingWindow::StateChanged( StateChangedType nType )
 
             }
             aItems.emplace_back("size", GetSizePixel().toString());
-            GetKitNotifier()->notifyWindow(GetLOKWindowId(), u"created"_ustr, aItems);
+            GetKitNotifier()->notifyWindow(GetKitWindowId(), u"created"_ustr, aItems);
         }
         else if (!IsVisible() && nType == StateChangedType::Visible)
         {
             if (const vcl::ICOKitNotifier* pNotifier = GetKitNotifier())
             {
-                pNotifier->notifyWindow(GetLOKWindowId(), u"close"_ustr);
+                pNotifier->notifyWindow(GetKitWindowId(), u"close"_ustr);
                 ReleaseKitNotifier();
             }
         }

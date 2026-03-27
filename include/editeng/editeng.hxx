@@ -625,7 +625,7 @@ public:
     void EnableSkipOutsideFormat(bool set);
 
     void SetLOKSpecialPaperSize(const Size& rSize);
-    const Size& GetLOKSpecialPaperSize() const;
+    const Size& GetKitSpecialPaperSize() const;
 };
 
 #endif // INCLUDED_EDITENG_EDITENG_HXX

@@ -402,9 +402,9 @@ public:
     void InitLOKSpecialPositioning(MapUnit eUnit, const tools::Rectangle& rOutputArea,
                                    const Point& rVisDocStartPos);
     void SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea);
-    const tools::Rectangle & GetLOKSpecialOutputArea() const;
+    const tools::Rectangle & GetKitSpecialOutputArea() const;
     void SetLOKSpecialVisArea(const tools::Rectangle& rVisArea);
-    tools::Rectangle GetLOKSpecialVisArea() const;
+    tools::Rectangle GetKitSpecialVisArea() const;
     bool HasLOKSpecialPositioning() const;
 
     void SetLOKSpecialFlags(LOKSpecialFlags eFlags);

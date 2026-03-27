@@ -205,7 +205,7 @@ void KitHelper::setView(int nId)
     DisableCallbacks dc;
 
     bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
-    if (bIsCurrShell && comphelper::COKit::getLanguageTag().getBcp47() == pViewShell->GetLOKLanguageTag().getBcp47())
+    if (bIsCurrShell && comphelper::COKit::getLanguageTag().getBcp47() == pViewShell->GetKitLanguageTag().getBcp47())
         return;
 
     if (bIsCurrShell)
@@ -215,12 +215,12 @@ void KitHelper::setView(int nId)
         // This can happen, when someone sets the language or SfxViewShell::Current() separately.
         SAL_WARN("lok", "LANGUAGE mismatch at setView! ... old (wrong) lang:"
                         << comphelper::COKit::getLanguageTag().getBcp47()
-                        << " new lang:" << pViewShell->GetLOKLanguageTag().getBcp47());
+                        << " new lang:" << pViewShell->GetKitLanguageTag().getBcp47());
     }
 
     // update the current LOK language and locale for the dialog tunneling
-    comphelper::COKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
-    comphelper::COKit::setLocale(pViewShell->GetLOKLocale());
+    comphelper::COKit::setLanguageTag(pViewShell->GetKitLanguageTag());
+    comphelper::COKit::setLocale(pViewShell->GetKitLocale());
 
     if (bIsCurrShell)
         return;
@@ -523,7 +523,7 @@ std::pair<bool, OUString> KitHelper::getViewTimezone(int nId)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        return pViewShell->GetLOKTimezone();
+        return pViewShell->GetKitTimezone();
     }
 
     return {};
@@ -1529,8 +1529,8 @@ SfxLokLanguageGuard::SfxLokLanguageGuard(const SfxViewShell* pNewShell)
 
     // The current view ID is not the one that belongs to this frame, update
     // language/locale.
-    comphelper::COKit::setLanguageTag(pNewShell->GetLOKLanguageTag());
-    comphelper::COKit::setLocale(pNewShell->GetLOKLocale());
+    comphelper::COKit::setLanguageTag(pNewShell->GetKitLanguageTag());
+    comphelper::COKit::setLocale(pNewShell->GetKitLocale());
     m_bSetLanguage = true;
 }
 
@@ -1541,8 +1541,8 @@ SfxLokLanguageGuard::~SfxLokLanguageGuard()
         return;
     }
 
-    comphelper::COKit::setLanguageTag(m_pOldShell->GetLOKLanguageTag());
-    comphelper::COKit::setLocale(m_pOldShell->GetLOKLocale());
+    comphelper::COKit::setLanguageTag(m_pOldShell->GetKitLanguageTag());
+    comphelper::COKit::setLocale(m_pOldShell->GetKitLocale());
 }
 
 LOKEditViewHistory::EditViewHistoryMap LOKEditViewHistory::maEditViewHistory;

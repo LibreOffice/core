@@ -282,7 +282,7 @@ bool SortOperation::runImplementation()
             if (pTabViewShell && pTabViewShell->GetDocId() == pKitSomeViewForThisDoc->GetDocId())
             {
                 if (ScPositionHelper* pPosHelper
-                    = pTabViewShell->GetViewData().GetLOKHeightHelper(mnTab))
+                    = pTabViewShell->GetViewData().GetKitHeightHelper(mnTab))
                     pPosHelper->invalidateByIndex(nStartRow);
             }
             pViewShell = SfxViewShell::GetNext(*pViewShell);

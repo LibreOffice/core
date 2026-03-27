@@ -589,12 +589,12 @@ OString ScTable::dumpColumnRowGroups(bool bColumns) const
     return pOutlineTable->GetRowArray().dumpAsString();
 }
 
-SCCOL ScTable::GetLOKFreezeCol() const
+SCCOL ScTable::GetKitFreezeCol() const
 {
     return maLOKFreezeCell.Col();
 }
 
-SCROW ScTable::GetLOKFreezeRow() const
+SCROW ScTable::GetKitFreezeRow() const
 {
     return maLOKFreezeCell.Row();
 }

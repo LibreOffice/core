@@ -854,10 +854,10 @@ bool ScGridWindow::UpdateVisibleRange()
     if (comphelper::COKit::isActive())
     {
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-        nPosX = lcl_getValidValue(pViewShell->GetLOKStartHeaderCol(), nPosX);
-        nPosY = lcl_getValidValue(pViewShell->GetLOKStartHeaderRow(), nPosY);
-        nXRight = lcl_getValidValue(pViewShell->GetLOKEndHeaderCol(), nXRight);
-        nYBottom = lcl_getValidValue(pViewShell->GetLOKEndHeaderRow(), nYBottom);
+        nPosX = lcl_getValidValue(pViewShell->GetKitStartHeaderCol(), nPosX);
+        nPosY = lcl_getValidValue(pViewShell->GetKitStartHeaderRow(), nPosY);
+        nXRight = lcl_getValidValue(pViewShell->GetKitEndHeaderCol(), nXRight);
+        nYBottom = lcl_getValidValue(pViewShell->GetKitEndHeaderRow(), nYBottom);
     }
     else
     {

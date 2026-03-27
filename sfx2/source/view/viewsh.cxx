@@ -3221,7 +3221,7 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
         OUString sModule = xModuleManager->identify(rFrame.GetFrame().GetFrameInterface());
 
         // Get the language name.
-        OUString viewLang = GetLOKLanguageTag().getBcp47();
+        OUString viewLang = GetKitLanguageTag().getBcp47();
 
         // Merge them & have a key.
         OUString key = sModule + viewLang;
@@ -3289,9 +3289,9 @@ void SfxViewShell::dumpCOKitViewState(rtl::OStringBuffer &rState)
     rState.append("\n\tPart:\t");
     rState.append(static_cast<sal_Int32>(getPart()));
     rState.append("\n\tLang:\t");
-    rState.append(OUStringToOString(GetLOKLanguageTag().getBcp47(), RTL_TEXTENCODING_UTF8));
+    rState.append(OUStringToOString(GetKitLanguageTag().getBcp47(), RTL_TEXTENCODING_UTF8));
     rState.append("\n\tA11y:\t");
-    rState.append(GetLOKAccessibilityState() ? "enabled" : "disabled");
+    rState.append(GetKitAccessibilityState() ? "enabled" : "disabled");
 
     if (pImpl->m_pCOKitViewCallback)
         pImpl->m_pCOKitViewCallback->dumpState(rState);
@@ -3411,7 +3411,7 @@ void SfxViewShell::viewAddPendingInvalidateTiles()
 void SfxViewShell::afterCallbackRegistered()
 {
     LOK_INFO("sfx.view", "SfxViewShell::afterCallbackRegistered invoked");
-    if (GetLOKAccessibilityState())
+    if (GetKitAccessibilityState())
     {
         KitDocumentFocusListener& rDocFocusListener = GetKitDocumentFocusListener();
         rDocFocusListener.notifyFocusedParagraphChanged();
@@ -3529,11 +3529,11 @@ void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
     if (this == Current())
     {
         // update the current LOK language and locale for the dialog tunneling
-        comphelper::COKit::setLanguageTag(GetLOKLanguageTag());
-        comphelper::COKit::setLocale(GetLOKLocale());
+        comphelper::COKit::setLanguageTag(GetKitLanguageTag());
+        comphelper::COKit::setLocale(GetKitLocale());
     }
     mpCalendar = std::make_unique<CalendarWrapper>(::comphelper::getProcessComponentContext());
-    mpCalendar->loadDefaultCalendar(GetLOKLocale().getLocale());
+    mpCalendar->loadDefaultCalendar(GetKitLocale().getLocale());
 }
 
 void SfxViewShell::SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag)
@@ -3542,12 +3542,12 @@ void SfxViewShell::SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag)
     SetLOKLocale(rBcp47LanguageTag);
 }
 
-CalendarWrapper& SfxViewShell::GetLOKCalendar()
+CalendarWrapper& SfxViewShell::GetKitCalendar()
 {
     if (!mpCalendar)
     {
         mpCalendar = std::make_unique<CalendarWrapper>(::comphelper::getProcessComponentContext());
-        mpCalendar->loadDefaultCalendar( GetLOKLocale().getLocale() );
+        mpCalendar->loadDefaultCalendar( GetKitLocale().getLocale() );
     }
 
     return *mpCalendar;

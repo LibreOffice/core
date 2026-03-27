@@ -1426,8 +1426,8 @@ private:
     /// Returns list-of-spans representation of the column/row groupings encoded as an OString.
     OString dumpColumnRowGroups(bool bColumns) const;
 
-    SCCOL GetLOKFreezeCol() const;
-    SCROW GetLOKFreezeRow() const;
+    SCCOL GetKitFreezeCol() const;
+    SCROW GetKitFreezeRow() const;
     bool  SetLOKFreezeCol(SCCOL nFreezeCol);
     bool  SetLOKFreezeRow(SCROW nFreezeRow);
 

@@ -301,9 +301,9 @@ void vcl::Cursor::LOKNotify(vcl::Window* pWindow, const OUString& rAction)
             const tools::Rectangle aRectTwip = pDevice->PixelToLogic(aRect, MapMode(MapUnit::MapTwip));
 
             if (pWindow->IsFormControl())
-                pNotifier->notifyCursorInvalidation(&aRectTwip, true, pWindow->GetLOKWindowId());
+                pNotifier->notifyCursorInvalidation(&aRectTwip, true, pWindow->GetKitWindowId());
             else
-                pNotifier->notifyCursorInvalidation(&aRectTwip, true, pWindow->GetParent()->GetLOKWindowId());
+                pNotifier->notifyCursorInvalidation(&aRectTwip, true, pWindow->GetParent()->GetKitWindowId());
         }
     }
     else
@@ -321,7 +321,7 @@ void vcl::Cursor::LOKNotify(vcl::Window* pWindow, const OUString& rAction)
             const tools::Rectangle aRect = calcualteCursorRect(GetPos(), GetSize(), pWindow, pParent);
             aItems.emplace_back("rectangle", aRect.toString());
         }
-        pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
+        pNotifier->notifyWindow(pParent->GetKitWindowId(), rAction, aItems);
     }
 }
 

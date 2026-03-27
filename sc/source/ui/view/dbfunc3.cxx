@@ -2409,12 +2409,12 @@ void ScDBFunc::OnLOKShowHideColRow(bool bColumns, SCCOLROW nStart)
         {
             if (bColumns)
             {
-                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKWidthHelper(nCurrentTabIndex))
+                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetKitWidthHelper(nCurrentTabIndex))
                     pPosHelper->invalidateByIndex(nStart);
             }
             else
             {
-                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKHeightHelper(nCurrentTabIndex))
+                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetKitHeightHelper(nCurrentTabIndex))
                     pPosHelper->invalidateByIndex(nStart);
             }
 

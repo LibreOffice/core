@@ -327,7 +327,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
     VclPtr<vcl::Window> pParent = mpOutputWindow->GetParentWithKitNotifier();
     vcl::Region aRegion( *pPolyPoly );
 
-    if (pParent && pParent->GetLOKWindowId() != 0)
+    if (pParent && pParent->GetKitWindowId() != 0)
     {
         const tools::Long nX = mpOutputWindow->GetOutOffXPixel() - pParent->GetOutOffXPixel();
         const tools::Long nY = mpOutputWindow->GetOutOffYPixel() - pParent->GetOutOffYPixel();
@@ -349,7 +349,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
         aItems.emplace_back("rectangles", sRectangle);
         aItems.emplace_back("startHandleVisible", OString::boolean(bStartHandleVisible));
         aItems.emplace_back("endHandleVisible", OString::boolean(bEndHandleVisible));
-        pNotifier->notifyWindow(pParent->GetLOKWindowId(), u"text_selection"_ustr, aItems);
+        pNotifier->notifyWindow(pParent->GetKitWindowId(), u"text_selection"_ustr, aItems);
     }
     else if (mpViewShell)
     {
@@ -2153,12 +2153,12 @@ void ImpEditView::DeselectAll()
     if (comphelper::COKit::isActive() && mpViewShell && mpOutputWindow)
     {
         VclPtr<vcl::Window> pParent = mpOutputWindow->GetParentWithKitNotifier();
-        if (pParent && pParent->GetLOKWindowId())
+        if (pParent && pParent->GetKitWindowId())
         {
             const vcl::ICOKitNotifier* pNotifier = pParent->GetKitNotifier();
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back("rectangles", "");
-            pNotifier->notifyWindow(pParent->GetLOKWindowId(), u"text_selection"_ustr, aItems);
+            pNotifier->notifyWindow(pParent->GetKitWindowId(), u"text_selection"_ustr, aItems);
         }
     }
 }
@@ -2808,7 +2808,7 @@ void ImpEditView::SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea)
     mpLOKSpecialPositioning->SetOutputArea(rOutputArea);
 }
 
-const tools::Rectangle & ImpEditView::GetLOKSpecialOutputArea() const
+const tools::Rectangle & ImpEditView::GetKitSpecialOutputArea() const
 {
     assert(mpLOKSpecialPositioning);
     return mpLOKSpecialPositioning->GetOutputArea();
@@ -2820,7 +2820,7 @@ void ImpEditView::SetLOKSpecialVisArea(const tools::Rectangle& rVisArea)
     mpLOKSpecialPositioning->SetVisDocStartPos(rVisArea.TopLeft());
 }
 
-tools::Rectangle ImpEditView::GetLOKSpecialVisArea() const
+tools::Rectangle ImpEditView::GetKitSpecialVisArea() const
 {
     assert(mpLOKSpecialPositioning);
     return mpLOKSpecialPositioning->GetVisDocArea();

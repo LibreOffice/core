@@ -5899,7 +5899,7 @@ static char* doc_getPresentationInfo(COKitDocument* pThis)
     SfxViewShell* pViewShell = KitHelper::getViewOfId(nView);
     if (pViewShell)
     {
-        bAllyState = pViewShell->GetLOKAccessibilityState();
+        bAllyState = pViewShell->GetKitAccessibilityState();
     }
 
     return convertOString(pDoc->getPresentationInfo(bAllyState));

@@ -597,7 +597,7 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivat
         if (!getImpl().mpOutputWindow)
             return;
         VclPtr<vcl::Window> pParent = getImpl().mpOutputWindow->GetParentWithKitNotifier();
-        if (pParent && pParent->GetLOKWindowId() != 0)
+        if (pParent && pParent->GetKitWindowId() != 0)
             return;
 
         static const OString aPayload = OString::boolean(true);
@@ -615,7 +615,7 @@ void EditView::HideCursor(bool bDeactivate)
         if (!getImpl().mpOutputWindow)
             return;
         VclPtr<vcl::Window> pParent = getImpl().mpOutputWindow->GetParentWithKitNotifier();
-        if (pParent && pParent->GetLOKWindowId() != 0)
+        if (pParent && pParent->GetKitWindowId() != 0)
             return;
 
         OString aPayload = OString::boolean(false);
@@ -1843,9 +1843,9 @@ void EditView::SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea)
     getImpl().SetLOKSpecialOutputArea(rOutputArea);
 }
 
-const tools::Rectangle & EditView::GetLOKSpecialOutputArea() const
+const tools::Rectangle & EditView::GetKitSpecialOutputArea() const
 {
-    return getImpl().GetLOKSpecialOutputArea();
+    return getImpl().GetKitSpecialOutputArea();
 }
 
 void EditView::SetLOKSpecialVisArea(const tools::Rectangle& rVisArea)
@@ -1853,9 +1853,9 @@ void EditView::SetLOKSpecialVisArea(const tools::Rectangle& rVisArea)
     getImpl().SetLOKSpecialVisArea(rVisArea);
 }
 
-tools::Rectangle EditView::GetLOKSpecialVisArea() const
+tools::Rectangle EditView::GetKitSpecialVisArea() const
 {
-    return getImpl().GetLOKSpecialVisArea();
+    return getImpl().GetKitSpecialVisArea();
 }
 
 bool EditView::HasLOKSpecialPositioning() const

@@ -486,8 +486,8 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 else
                 {
                     rSet.Put(SfxBoolItem(nWhich,
-                            rViewData.GetLOKSheetFreezeIndex(true) > 0 ||
-                            rViewData.GetLOKSheetFreezeIndex(false) > 0 ));
+                            rViewData.GetKitSheetFreezeIndex(true) > 0 ||
+                            rViewData.GetKitSheetFreezeIndex(false) > 0 ));
                 }
                 break;
 
@@ -496,7 +496,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     Point aPos;
                     bool bIsCol = (nWhich == SID_WINDOW_FIX_COL);
-                    aPos.setX(rViewData.GetLOKSheetFreezeIndex(bIsCol));
+                    aPos.setX(rViewData.GetKitSheetFreezeIndex(bIsCol));
                     aPos.setY(rViewData.GetTabNumber());
                     rSet.Put(SfxPointItem(nWhich, aPos));
                 }

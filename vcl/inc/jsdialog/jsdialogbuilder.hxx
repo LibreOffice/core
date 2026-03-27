@@ -431,7 +431,7 @@ public:
     virtual void set_buildable_name(const OUString& rName) override
     {
         SalInstanceWidget::set_buildable_name(rName);
-        assert(false); // we remember old name in GetLOKWeldWidgetsMap()
+        assert(false); // we remember old name in GetKitWeldWidgetsMap()
         // TODO: implement renaming or avoid it for LOK
     }
 };
