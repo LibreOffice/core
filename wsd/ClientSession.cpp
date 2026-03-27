@@ -740,6 +740,47 @@ Poco::JSON::Array::Ptr ClientSession::buildAIToolDefinitions() const
         DocumentToolDescriptions::EXTRACT_LINK_TARGETS_DESCRIPTION,
         makeParamSchema({}, {})));
 
+    // list_calc_functions - discover available spreadsheet functions
+    tools->add(makeAITool(
+        "list_calc_functions",
+        "List all available spreadsheet functions in the current Calc document, "
+        "grouped by category. Returns function names and signatures. "
+        "Call this when you need to verify a function exists or discover "
+        "the right function for a task. Only works for Calc/spreadsheet documents.",
+        makeParamSchema({}, {})));
+
+    // evaluate_formula - test a formula without inserting it
+    tools->add(makeAITool(
+        "evaluate_formula",
+        "Evaluate a formula without inserting it into the spreadsheet. "
+        "Returns the computed result so you can verify correctness before inserting. "
+        "Always call this before set_cell_formula to check your formula produces "
+        "the expected result. Uses US English syntax (comma separators).",
+        makeParamSchema(
+            {{"cell", {"string", "Cell address for evaluation context, e.g. 'G1'"}},
+             {"formula", {"string", "The formula to evaluate, starting with ="}}},
+            {"cell", "formula"})));
+
+    // set_cell_formula - insert formulas into cells (Calc only)
+    tools->add(makeAITool(
+        "set_cell_formula",
+        "Set formulas or values in one or more cells of the currently open spreadsheet. "
+        "Use US English formula syntax (commas as argument separators, period as decimal "
+        "separator). Always prefix formulas with =. Example: =AVERAGE(A1:A10). "
+        "Can also set plain text or numbers. Only works for Calc/spreadsheet documents.\n\n"
+        "For a single cell, provide 'cell' and 'formula' parameters.\n"
+        "For multiple cells, provide 'formulas' as a JSON array of objects, each with "
+        "'cell' and 'formula' keys. Example: [{\"cell\":\"E1\",\"formula\":\"Total\"}, "
+        "{\"cell\":\"E2\",\"formula\":\"=SUM(A2:D2)\"}]\n"
+        "Always prefer the batch 'formulas' array when setting more than one cell.",
+        makeParamSchema(
+            {{"cell", {"string", "Target cell address for a single cell, e.g. 'A1', 'B5'"}},
+             {"formula", {"string", "The formula or value for a single cell"}},
+             {"formulas", {"string", "JSON array of {cell, formula} objects for batch operations"}},
+             {"summary", {"string",
+                 "Brief human-readable description of the changes, shown to the user for approval"}}},
+            {})));
+
     return tools;
 }
 
@@ -790,7 +831,21 @@ bool ClientSession::handleAIChatAction(const std::string& firstLine)
         systemPrompt +=
             " When referencing specific spreadsheet cells in your responses, "
             "format them as clickable links using this pattern: [B2](cell://B2), "
-            "where the column letters come from the header row and the row number from the Row column.";
+            "where the column letters come from the header row and the row number from the Row column."
+            " When the user asks for a formula, use the set_cell_formula tool to insert it directly"
+            " into the spreadsheet. Always use US English formula syntax with commas as argument"
+            " separators (e.g., =VLOOKUP(A1,B:C,2,FALSE) not =VLOOKUP(A1;B:C;2;FALSE))."
+            " Use standard Excel/Calc function names: SUM, AVERAGE, VLOOKUP, IF, COUNTIF,"
+            " SUMIF, INDEX, MATCH, etc."
+            " If you are unsure whether a function exists, call list_calc_functions to check."
+            " If the user has selected spreadsheet data, use the cell addresses visible in that data"
+            " to construct accurate cell references. If no target cell is specified by the user,"
+            " choose a sensible empty cell near the data (e.g., below the last row or to the right)."
+            " When setting multiple cells, always use a single set_cell_formula call with the"
+            " 'formulas' array parameter to batch all cells into one operation."
+            " Before inserting formulas with set_cell_formula, call evaluate_formula first"
+            " to verify the result is correct. If the result is unexpected, fix the formula"
+            " and evaluate again before inserting.";
 
     if (docType == "presentation")
         systemPrompt +=
@@ -1203,6 +1258,146 @@ bool ClientSession::executeAIToolCall(const std::string& toolCallId,
         return true;
     }
 
+    // evaluate_formula - read-only, send to kit
+    if (fnName == "evaluate_formula")
+    {
+        std::string cell, formula;
+        Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
+        if (JsonUtil::parseJSON(argsJson, argsObj))
+        {
+            JsonUtil::findJSONValue(argsObj, "cell", cell);
+            JsonUtil::findJSONValue(argsObj, "formula", formula);
+        }
+
+        if (cell.empty() || formula.empty())
+        {
+            continueAIToolLoop(toolCallId,
+                "{\"error\":\"Missing cell or formula parameter\"}");
+            return true;
+        }
+
+        _aiToolLoop->awaitingKitResponse = true;
+        _aiToolLoop->pendingToolCallId = toolCallId;
+        _aiToolLoop->pendingToolName = fnName;
+
+        std::string encodedFormula;
+        Poco::URI::encode(formula, "", encodedFormula);
+
+        sendAIToolProgress(fnName, "Evaluating formula...");
+        forwardToChild("commandvalues command=.uno:EvaluateFormula?cell="
+            + cell + "&formula=" + encodedFormula, docBroker);
+        return true;
+    }
+
+    // list_calc_functions - read-only, send to kit
+    if (fnName == "list_calc_functions")
+    {
+        _aiToolLoop->awaitingKitResponse = true;
+        _aiToolLoop->pendingToolCallId = toolCallId;
+        _aiToolLoop->pendingToolName = fnName;
+
+        sendAIToolProgress(fnName, "Loading function catalog...");
+        forwardToChild("commandvalues command=.uno:CalcFunctionList", docBroker);
+        return true;
+    }
+
+    // set_cell_formula - requires user approval (single or batch)
+    if (fnName == "set_cell_formula")
+    {
+        std::string cell, formula, formulasJson, summary;
+        Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
+        if (JsonUtil::parseJSON(argsJson, argsObj))
+        {
+            JsonUtil::findJSONValue(argsObj, "cell", cell);
+            JsonUtil::findJSONValue(argsObj, "formula", formula);
+            JsonUtil::findJSONValue(argsObj, "formulas", formulasJson);
+            JsonUtil::findJSONValue(argsObj, "summary", summary);
+        }
+
+        // Build a JSON array of {cell, formula} pairs for uniform handling.
+        Poco::JSON::Array::Ptr pairs = new Poco::JSON::Array();
+
+        if (!formulasJson.empty())
+        {
+            // Batch mode: parse the formulas array
+            Poco::JSON::Array::Ptr parsed;
+            try
+            {
+                Poco::JSON::Parser parser;
+                auto result = parser.parse(formulasJson);
+                parsed = result.extract<Poco::JSON::Array::Ptr>();
+            }
+            catch (const std::exception&)
+            {
+                continueAIToolLoop(toolCallId,
+                    "{\"error\":\"Invalid JSON in formulas parameter. "
+                    "Must be an array of {cell, formula} objects.\"}");
+                return true;
+            }
+
+            for (unsigned i = 0; i < parsed->size(); ++i)
+            {
+                auto obj = parsed->getObject(i);
+                if (!obj) continue;
+                std::string c, f;
+                JsonUtil::findJSONValue(obj, "cell", c);
+                JsonUtil::findJSONValue(obj, "formula", f);
+                if (c.empty() || f.empty()) continue;
+                Poco::JSON::Object::Ptr pair = new Poco::JSON::Object();
+                pair->set("cell", c);
+                pair->set("formula", f);
+                pairs->add(pair);
+            }
+        }
+        else if (!cell.empty() && !formula.empty())
+        {
+            // Single cell mode
+            Poco::JSON::Object::Ptr pair = new Poco::JSON::Object();
+            pair->set("cell", cell);
+            pair->set("formula", formula);
+            pairs->add(pair);
+        }
+
+        if (pairs->size() == 0)
+        {
+            continueAIToolLoop(toolCallId,
+                "{\"error\":\"No valid cell/formula pairs provided. "
+                "Use 'cell'+'formula' for one cell or 'formulas' array for batch.\"}");
+            return true;
+        }
+
+        // Build summary for approval UI
+        if (summary.empty())
+        {
+            summary = "";
+            for (unsigned i = 0; i < pairs->size(); ++i)
+            {
+                auto p = pairs->getObject(i);
+                std::string c, f;
+                JsonUtil::findJSONValue(p, "cell", c);
+                JsonUtil::findJSONValue(p, "formula", f);
+                summary += "- ";
+                summary += c;
+                summary += ": `";
+                summary += f;
+                summary += "`\n";
+            }
+        }
+
+        _aiToolLoop->awaitingApproval = true;
+        _aiToolLoop->pendingToolCallId = toolCallId;
+        _aiToolLoop->pendingToolName = fnName;
+        _aiToolLoop->pendingSummary = summary;
+
+        // Store the pairs array for execution after approval.
+        std::ostringstream storedJson;
+        pairs->stringify(storedJson);
+        _aiToolLoop->pendingTransformArgs = storedJson.str();
+
+        sendAIToolApproval(fnName, "");
+        return true;
+    }
+
     // transform_document_structure - requires user approval
     if (fnName == "transform_document_structure")
     {
@@ -1436,6 +1631,61 @@ bool ClientSession::handleAIChatApprove(const std::string& firstLine)
             sendAIToolProgress(_aiToolLoop->pendingToolName, "Working...");
             forwardToChild(command, docBroker);
         }
+        else if (_aiToolLoop->pendingToolName == "set_cell_formula")
+        {
+            _aiToolLoop->awaitingApproval = false;
+
+            // Parse the stored array of {cell, formula} pairs
+            Poco::JSON::Array::Ptr pairs;
+            try
+            {
+                Poco::JSON::Parser parser;
+                auto result = parser.parse(_aiToolLoop->pendingTransformArgs);
+                pairs = result.extract<Poco::JSON::Array::Ptr>();
+            }
+            catch (const std::exception&)
+            {
+                continueAIToolLoop(toolCallId, "{\"error\":\"Internal error parsing stored formulas\"}");
+                return true;
+            }
+
+            sendAIToolProgress("set_cell_formula", "Setting formulas...");
+
+            // Dispatch GoToCell + EnterString for each pair
+            Poco::JSON::Array resultArr;
+            for (unsigned i = 0; i < pairs->size(); ++i)
+            {
+                auto p = pairs->getObject(i);
+                if (!p) continue;
+                std::string cell, formula;
+                JsonUtil::findJSONValue(p, "cell", cell);
+                JsonUtil::findJSONValue(p, "formula", formula);
+
+                std::string escapedCell = JsonUtil::escapeJSONValue(cell);
+                std::string escapedFormula = JsonUtil::escapeJSONValue(formula);
+
+                std::string goToArgs = "{\"ToPoint\":{\"type\":\"string\",\"value\":\""
+                    + escapedCell + "\"}}";
+                forwardToChild("uno .uno:GoToCell " + goToArgs, docBroker);
+
+                std::string enterArgs = "{\"StringName\":{\"type\":\"string\",\"value\":\""
+                    + escapedFormula + "\"}}";
+                forwardToChild("uno .uno:EnterString " + enterArgs, docBroker);
+
+                Poco::JSON::Object::Ptr r = new Poco::JSON::Object();
+                r->set("cell", cell);
+                r->set("formula", formula);
+                resultArr.add(r);
+            }
+
+            // Continue tool loop with success
+            std::ostringstream resultJson;
+            Poco::JSON::Object resultObj;
+            resultObj.set("success", true);
+            resultObj.set("cells", resultArr);
+            resultObj.stringify(resultJson);
+            continueAIToolLoop(toolCallId, resultJson.str());
+        }
         else
         {
             // transform_document_structure - check for GenerateImage commands
@@ -1453,6 +1703,11 @@ bool ClientSession::handleAIChatApprove(const std::string& firstLine)
                 "{\"error\":\"User declined document inspection. "
                 "Answer their request directly without inspecting the document. "
                 "If the request is to create new content, just generate it.\"}";
+        else if (_aiToolLoop->pendingToolName == "set_cell_formula")
+            rejectionMsg =
+                "{\"error\":\"User rejected the formula insertion. "
+                "Show them the formula in a code block so they can copy it manually, "
+                "and ask if they would like a different formula.\"}";
         else
             rejectionMsg =
                 "{\"error\":\"User rejected the document modification. "
@@ -4366,6 +4621,18 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     }
     else if (tokens.equals(0, "commandvalues:"))
     {
+#if !MOBILEAPP
+        // Intercept commandvalues responses for the AI tool loop
+        if (_aiToolLoop && _aiToolLoop->awaitingKitResponse
+            && (_aiToolLoop->pendingToolName == "list_calc_functions"
+                || _aiToolLoop->pendingToolName == "evaluate_formula"))
+        {
+            _aiToolLoop->awaitingKitResponse = false;
+            continueAIToolLoop(_aiToolLoop->pendingToolCallId, payload->jsonString());
+            return true;
+        }
+#endif
+
         const std::string stringJSON = payload->jsonString();
         if (!stringJSON.empty())
         {

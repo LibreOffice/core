@@ -44,6 +44,7 @@ namespace cool {
 		private lastSentSelectedText: string = '';
 		private hintText: string = '';
 		private progressText: string = '';
+		private pendingFormulaContext: string = '';
 
 		private builder: any;
 		private container: HTMLElement;
@@ -650,6 +651,12 @@ namespace cool {
 					text: _('Sanity check data'),
 					enabled: true,
 				});
+				cardChildren.push({
+					id: 'aichat-chip-create-formula',
+					type: 'pushbutton',
+					text: _('Create a formula'),
+					enabled: true,
+				});
 			}
 
 			const cardsToShow = this.showAllCards
@@ -708,6 +715,7 @@ namespace cool {
 				'aichat-clear-btn': () => this.clearConversation(),
 				'aichat-chip-formula-diagnosis': () => this.diagnoseFormulaError(),
 				'aichat-chip-sanity-check': () => this.sanityCheckData(),
+				'aichat-chip-create-formula': () => this.createFormula(),
 				'aichat-see-more': () => {
 					this.showAllCards = !this.showAllCards;
 					this.builder.updateWidget(this.container, this.getMessagesListJSON());
@@ -902,7 +910,14 @@ namespace cool {
 			}
 
 			let userContent = text;
-			if (selectedText) {
+			// If createFormula() captured selection context before the user typed,
+			// use it when no fresh selection is available.
+			if (!selectedText && this.pendingFormulaContext) {
+				selectedText = '';
+				userContent = this.pendingFormulaContext + text;
+				this.pendingFormulaContext = '';
+			} else if (selectedText) {
+				this.pendingFormulaContext = '';
 				userContent =
 					'[Selected text from document:\n```\n' + selectedText + '\n```]\n\n';
 
@@ -1073,6 +1088,14 @@ namespace cool {
 					summary +
 					'\n\n' +
 					_('Do you want to apply this change?');
+			} else if (data.toolName === 'set_cell_formula') {
+				const summary = data.summary || _('Set cell formula');
+				content =
+					_('The AI wants to set a formula in your spreadsheet:') +
+					'\n\n' +
+					summary +
+					'\n\n' +
+					_('Do you want to apply this change?');
 			} else {
 				content = _(
 					'The AI wants to perform an action. Do you want to proceed?',
@@ -1086,7 +1109,8 @@ namespace cool {
 				timestamp: Date.now(),
 				isApproval: true,
 				approvalType:
-					data.toolName === 'transform_document_structure'
+					data.toolName === 'transform_document_structure' ||
+					data.toolName === 'set_cell_formula'
 						? 'modify'
 						: 'inspect',
 			};
@@ -1709,6 +1733,33 @@ namespace cool {
 			this.updateChatState(true);
 			this.updateHint();
 			this.dispatchRequest();
+		}
+
+		private async createFormula(): Promise<void> {
+			if (this.isProcessing) return;
+
+			let context = '';
+			if (TextSelections.isActive()) {
+				try {
+					const markdown = await this.fetchSelectedMarkdown();
+					if (markdown && markdown.trim()) {
+						context =
+							'[Selected text from document:\n```\n' +
+							markdown +
+							'\n```]\n\n' +
+							this.getCellReferenceInstructions() +
+							'\n\n';
+					}
+				} catch {
+					// No selection context available, proceed without it
+				}
+			}
+
+			this.hintText = _(
+				'Describe what formula you need. For example: "Calculate the average of column B" or "Sum all values where column A is greater than 100".',
+			);
+			this.pendingFormulaContext = context;
+			this.updateHint();
 		}
 
 		private getCellReferenceInstructions(): string {
