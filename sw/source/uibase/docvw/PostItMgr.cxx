@@ -216,7 +216,7 @@ namespace {
 
         if (pView)
         {
-            pView->viewCallback(LOK_CALLBACK_COMMENT, OString(aPayload));
+            pView->viewCallback(KIT_CALLBACK_COMMENT, OString(aPayload));
         }
     }
 

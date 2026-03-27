@@ -694,7 +694,7 @@ IMPL_LINK( ModelData_Impl, OptionsDialogClosedHdl, css::ui::dialogs::DialogClose
     if (pEvt->DialogResult == RET_OK && m_xFilterProperties)
     {
         if (pNotifier)
-            pNotifier->viewCallback( LOK_CALLBACK_EXPORT_FILE, "PENDING"_ostr );
+            pNotifier->viewCallback( KIT_CALLBACK_EXPORT_FILE, "PENDING"_ostr );
 
         const uno::Sequence< beans::PropertyValue > aPropsFromDialog = m_xFilterProperties->getPropertyValues();
         for ( const auto& rProp : aPropsFromDialog )
@@ -704,7 +704,7 @@ IMPL_LINK( ModelData_Impl, OptionsDialogClosedHdl, css::ui::dialogs::DialogClose
     }
     else if (pNotifier)
     {
-        pNotifier->viewCallback( LOK_CALLBACK_EXPORT_FILE, "ABORT"_ostr );
+        pNotifier->viewCallback( KIT_CALLBACK_EXPORT_FILE, "ABORT"_ostr );
     }
 }
 
@@ -1970,7 +1970,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         if ( pViewShell )
         {
             OUString sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            pViewShell->viewCallback( LOK_CALLBACK_EXPORT_FILE, sURL.toUtf8() );
+            pViewShell->viewCallback( KIT_CALLBACK_EXPORT_FILE, sURL.toUtf8() );
         }
     }
 

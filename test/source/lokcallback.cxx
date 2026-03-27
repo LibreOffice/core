@@ -75,7 +75,7 @@ void TestLokCallbackWrapper::viewInvalidateTilesCallback(const tools::Rectangle*
         buf.append(", " + OString::number(static_cast<sal_Int32>(nPart)) + ", "
                    + OString::number(static_cast<sal_Int32>(nMode)));
     }
-    callCallback(LOK_CALLBACK_INVALIDATE_TILES, buf.makeStringAndClear().getStr(), NO_VIEWID);
+    callCallback(KIT_CALLBACK_INVALIDATE_TILES, buf.makeStringAndClear().getStr(), NO_VIEWID);
 }
 
 // TODO This is probably a pointless code duplication with CallbackFlushHandler,
@@ -130,7 +130,7 @@ void TestLokCallbackWrapper::discardUpdatedTypes(int nType, int nViewId)
     bool allViewIds = false;
     if (nViewId < 0)
         allViewIds = true;
-    if (nType == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR
+    if (nType == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR
         && !comphelper::COKit::isViewIdForVisCursorInvalidation())
         allViewIds = true;
     for (auto it = m_updatedTypesPerViewId.begin(); it != m_updatedTypesPerViewId.end();)

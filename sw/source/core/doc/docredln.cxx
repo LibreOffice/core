@@ -419,7 +419,7 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
     while (pViewShell)
     {
         if (pView && pView->GetDocId() == pViewShell->GetDocId())
-            pViewShell->viewCallback(nType == RedlineNotification::Modify ? LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED : LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED, OString(aPayload));
+            pViewShell->viewCallback(nType == RedlineNotification::Modify ? KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED : KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED, OString(aPayload));
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }

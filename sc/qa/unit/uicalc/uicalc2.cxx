@@ -194,7 +194,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf119793)
 
     // Move the shape to the right
     selectObjectByName(u"Shape 1");
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
     Scheduler::ProcessEventsToIdle();
 
     //position has changed
@@ -203,8 +203,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf119793)
 
     // Type into the shape
     typeString(u"x");
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_ESCAPE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
@@ -711,8 +711,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf136113)
 
     // Move the shape up
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::UP);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::UP);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::UP);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::UP);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(18142), pObj->GetSnapRect().Left());
@@ -1518,7 +1518,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf155796)
     goToCell(u"A1:A6"_ustr);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_UP);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_UP);
     Scheduler::ProcessEventsToIdle();
 
     ScRangeList aMarkedArea = getViewShell()->GetViewData().GetMarkData().GetMarkedRanges();

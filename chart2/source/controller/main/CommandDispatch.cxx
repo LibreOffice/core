@@ -148,7 +148,7 @@ void CommandDispatch::fireStatusEventForURL(
         {
             OString aPayload = rURL.toUtf8()
                 + (bEnabled ? std::string_view("=enabled") : std::string_view("=disabled"));
-            pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+            pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
         }
     }
 }

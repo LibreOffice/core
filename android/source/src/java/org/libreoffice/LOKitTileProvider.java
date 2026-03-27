@@ -68,7 +68,7 @@ class LOKitTileProvider implements TileProvider {
 
         mOffice = new Office(COKit.getCOKitHandle());
         mOffice.setMessageCallback(messageCallback);
-        mOffice.setOptionalFeatures(Document.LOK_FEATURE_DOCUMENT_PASSWORD);
+        mOffice.setOptionalFeatures(Document.KIT_FEATURE_DOCUMENT_PASSWORD);
         mContext.setTileProvider(this);
         mInputFile = input;
 
@@ -90,7 +90,7 @@ class LOKitTileProvider implements TileProvider {
             mOffice = new Office(handle);
             Log.i(LOGTAG, "====> new Office created");
             mOffice.setMessageCallback(messageCallback);
-            mOffice.setOptionalFeatures(Document.LOK_FEATURE_DOCUMENT_PASSWORD);
+            mOffice.setOptionalFeatures(Document.KIT_FEATURE_DOCUMENT_PASSWORD);
             Log.i(LOGTAG, "====> setup Lokit callback and optional features (password support)");
             mDocument = mOffice.documentLoad(
                     (new File(fileToBeEncoded.getParent(),encodedFileName)).getPath()

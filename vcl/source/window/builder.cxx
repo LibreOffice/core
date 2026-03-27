@@ -213,12 +213,12 @@ void Application::UICoverageReport(tools::JsonWriter& rJson,
     std::vector<OUString> missingAppDialogUIs, missingAppSidebarUIs;
     switch (docType)
     {
-        case LOK_DOCTYPE_TEXT:
+        case KIT_DOCTYPE_TEXT:
             sAppName = "Writer";
             missingAppDialogUIs = jsdialog::completeWriterDialogList(entries);
             missingAppSidebarUIs = jsdialog::completeWriterSidebarList(entries);
             break;
-        case LOK_DOCTYPE_SPREADSHEET:
+        case KIT_DOCTYPE_SPREADSHEET:
             sAppName = "Calc";
             missingAppDialogUIs = jsdialog::completeCalcDialogList(entries);
             missingAppSidebarUIs = jsdialog::completeCalcSidebarList(entries);

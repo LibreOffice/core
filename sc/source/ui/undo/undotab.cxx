@@ -114,7 +114,7 @@ void lcl_UndoCommandResult(const ScTabViewShell& rViewShell,
             lcl_MakeJsonArray(aJson, *pOldTabs, "oldTabs");
     }
 
-    rViewShell.viewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+    rViewShell.viewCallback(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
 }
 }
 
@@ -1449,7 +1449,7 @@ void ScUndoPrintRange::DoChange(bool bUndo)
             pNewRanges->GetPrintRangesInfo(aJsonWriter);
 
         const OString message = aJsonWriter.finishAndGetAsOString();
-        pViewShell->viewCallback(LOK_CALLBACK_PRINT_RANGES, message);
+        pViewShell->viewCallback(KIT_CALLBACK_PRINT_RANGES, message);
     }
 
     rDocShell.PostPaint( ScRange(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab), PaintPartFlags::Grid );

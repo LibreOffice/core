@@ -525,7 +525,7 @@ void SmGraphicWidget::SetIsCursorVisible(bool bVis)
     if (comphelper::COKit::isActive())
     {
         mrViewShell.SendCaretToLOK();
-        mrViewShell.viewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
+        mrViewShell.viewCallback(KIT_CALLBACK_CURSOR_VISIBLE,
                                                OString::boolean(bVis));
     }
 }
@@ -2052,7 +2052,7 @@ public:
     {
         if (comphelper::COKit::isActive())
             if (auto pViewShell = GetViewShell_Impl())
-                pViewShell->viewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
+                pViewShell->viewCallback(KIT_CALLBACK_CURSOR_VISIBLE,
                                                        OString::boolean(false));
 
         SfxBaseController::dispose();
@@ -2214,7 +2214,7 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
 {
     switch (nType)
     {
-        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         {
             OString sRectangle;
             if (const SmGraphicWidget& widget = GetGraphicWidget(); widget.IsCursorVisible())
@@ -2231,7 +2231,7 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
             }
             return KitHelper::makeVisCursorInvalidation(nViewId, sRectangle, false, {});
         }
-        case LOK_CALLBACK_TEXT_SELECTION:
+        case KIT_CALLBACK_TEXT_SELECTION:
         {
             OString sRectangle;
             if (const SmGraphicWidget& widget = GetGraphicWidget(); widget.IsCursorVisible())
@@ -2252,10 +2252,10 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
             }
             return sRectangle;
         }
-        case LOK_CALLBACK_TEXT_SELECTION_START:
-        case LOK_CALLBACK_TEXT_SELECTION_END:
-        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        case KIT_CALLBACK_TEXT_SELECTION_START:
+        case KIT_CALLBACK_TEXT_SELECTION_END:
+        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
             return {};
     }
     return SfxViewShell::getLOKPayload(nType, nViewId); // aborts
@@ -2264,14 +2264,14 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
 void SmViewShell::SendCaretToLOK() const
 {
     const int nViewId = sal_Int32(GetViewShellId());
-    if (const auto payload = getLOKPayload(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, nViewId))
+    if (const auto payload = getLOKPayload(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR, nViewId))
     {
-        viewCallbackWithViewId(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+        viewCallbackWithViewId(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
                                              *payload, nViewId);
     }
-    if (const auto payload = getLOKPayload(LOK_CALLBACK_TEXT_SELECTION, nViewId))
+    if (const auto payload = getLOKPayload(KIT_CALLBACK_TEXT_SELECTION, nViewId))
     {
-        viewCallback(LOK_CALLBACK_TEXT_SELECTION, *payload);
+        viewCallback(KIT_CALLBACK_TEXT_SELECTION, *payload);
     }
 }
 

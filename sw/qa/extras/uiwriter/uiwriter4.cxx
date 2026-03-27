@@ -1121,7 +1121,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf84695)
 
     // Now Enter + a key should add some text.
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     emulateTyping(u"a");
 
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
@@ -1167,8 +1167,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf84695Tab)
 
     // Now pressing 'tab' should jump to the other shape.
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     // And finally make sure the selection has changed.
@@ -1544,16 +1544,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation2)
 
     // Toggle on the legacy checkbox
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
     // Tab to the next control - the modern checkbox
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     // Tab to the next control - the second legacy checkbox, and toggle it on.
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
     // Tab to the next control - a plain text control without placeholder text
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     // Tab to the next control - a combobox with custom text
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
@@ -1567,13 +1567,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation2)
         // so the next tab should take us back to the beginning with the first legacy checkbox.
 
         // Tab to the legacy checkbox, and toggle it off.
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
+        pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+        pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
         Scheduler::ProcessEventsToIdle();
         CPPUNIT_ASSERT(!pCheckBox->IsChecked());
 
         // Tab to the next content control
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+        pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     }
 }
 
@@ -1595,8 +1595,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation)
         sw::mark::CheckboxFieldmark* pCheckBox = dynamic_cast<::sw::mark::CheckboxFieldmark*>(*it);
         CPPUNIT_ASSERT(!pCheckBox->IsChecked());
 
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox on
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
+        pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox on
+        pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -1607,11 +1607,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation)
         sw::mark::CheckboxFieldmark* pCheckBox = dynamic_cast<::sw::mark::CheckboxFieldmark*>(*it);
 
         CPPUNIT_ASSERT(pCheckBox->IsChecked());
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox off
+        pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox off
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT(!pCheckBox->IsChecked());
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
+        pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
     }
 }
 

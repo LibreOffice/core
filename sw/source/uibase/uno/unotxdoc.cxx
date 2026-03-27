@@ -4083,13 +4083,13 @@ void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
     SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
     switch (nType)
     {
-    case LOK_SETTEXTSELECTION_START:
+    case KIT_SETTEXTSELECTION_START:
         rEditWin.SetCursorTwipPosition(Point(nX, nY), /*bPoint=*/false, /*bClearMark=*/false);
         break;
-    case LOK_SETTEXTSELECTION_END:
+    case KIT_SETTEXTSELECTION_END:
         rEditWin.SetCursorTwipPosition(Point(nX, nY), /*bPoint=*/true, /*bClearMark=*/false);
         break;
-    case LOK_SETTEXTSELECTION_RESET:
+    case KIT_SETTEXTSELECTION_RESET:
         rEditWin.SetCursorTwipPosition(Point(nX, nY), /*bPoint=*/true, /*bClearMark=*/true);
         break;
     default:
@@ -4147,10 +4147,10 @@ void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)
     SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
     switch (nType)
     {
-    case LOK_SETGRAPHICSELECTION_START:
+    case KIT_SETGRAPHICSELECTION_START:
         rEditWin.SetGraphicTwipPosition(/*bStart=*/true, Point(nX, nY));
         break;
-    case LOK_SETGRAPHICSELECTION_END:
+    case KIT_SETGRAPHICSELECTION_END:
         rEditWin.SetGraphicTwipPosition(/*bStart=*/false, Point(nX, nY));
         break;
     default:

@@ -176,7 +176,7 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
 {
     switch (nType)
     {
-        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+        case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
         {
             boost::property_tree::ptree aTree;
             std::stringstream aStream(pPayload);
@@ -184,7 +184,7 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_textCursorVisible = aTree.get_child("visible").get_value<std::string>() == "true";
         }
         break;
-        case LOK_CALLBACK_CELL_CURSOR:
+        case KIT_CALLBACK_CELL_CURSOR:
         {
             m_bOwnCursorInvalidated = true;
             uno::Sequence<OUString> aSeq
@@ -199,17 +199,17 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             }
         }
         break;
-        case LOK_CALLBACK_CELL_VIEW_CURSOR:
+        case KIT_CALLBACK_CELL_VIEW_CURSOR:
         {
             m_bViewCursorInvalidated = true;
         }
         break;
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
         {
             m_bTextViewSelectionInvalidated = true;
         }
         break;
-        case LOK_CALLBACK_VIEW_LOCK:
+        case KIT_CALLBACK_VIEW_LOCK:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -217,18 +217,18 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
         }
         break;
-        case LOK_CALLBACK_GRAPHIC_SELECTION:
+        case KIT_CALLBACK_GRAPHIC_SELECTION:
         {
             m_bGraphicSelection = true;
             m_ShapeSelection = OString(pPayload);
         }
         break;
-        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
         {
             m_bGraphicViewSelection = true;
         }
         break;
-        case LOK_CALLBACK_INVALIDATE_TILES:
+        case KIT_CALLBACK_INVALIDATE_TILES:
         {
             OString text(pPayload);
             if (text.startsWith("EMPTY"))
@@ -255,12 +255,12 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             }
         }
         break;
-        case LOK_CALLBACK_CELL_FORMULA:
+        case KIT_CALLBACK_CELL_FORMULA:
         {
             m_sCellFormula = pPayload;
         }
         break;
-        case LOK_CALLBACK_COMMENT:
+        case KIT_CALLBACK_COMMENT:
         {
             m_aCommentCallbackResult.clear();
             std::stringstream aStream(pPayload);
@@ -268,32 +268,32 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
         }
         break;
-        case LOK_CALLBACK_INVALIDATE_HEADER:
+        case KIT_CALLBACK_INVALIDATE_HEADER:
         {
             m_sInvalidateHeader = pPayload;
         }
         break;
-        case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+        case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         {
             m_sInvalidateSheetGeometry = pPayload;
         }
         break;
-        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         {
             m_aInvalidateCursorResult.parseMessage(pPayload);
         }
         break;
-        case LOK_CALLBACK_HYPERLINK_CLICKED:
+        case KIT_CALLBACK_HYPERLINK_CLICKED:
         {
             m_aHyperlinkClicked = pPayload;
         }
         break;
-        case LOK_CALLBACK_TEXT_SELECTION:
+        case KIT_CALLBACK_TEXT_SELECTION:
         {
             m_aTextSelectionResult.parseMessage(pPayload);
         }
         break;
-        case LOK_CALLBACK_STATE_CHANGED:
+        case KIT_CALLBACK_STATE_CHANGED:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -325,7 +325,7 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aStateChanges[aCommandName] = aTree;
         }
         break;
-        case LOK_CALLBACK_JSDIALOG:
+        case KIT_CALLBACK_JSDIALOG:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;

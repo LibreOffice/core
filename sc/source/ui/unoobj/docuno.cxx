@@ -866,13 +866,13 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     aData.setLogicPosition(aPointHMM);
     switch (nType)
     {
-        case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+        case KIT_MOUSEEVENT_MOUSEBUTTONDOWN:
             aEvent = VclEventId::WindowMouseButtonDown;
             break;
-        case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+        case KIT_MOUSEEVENT_MOUSEBUTTONUP:
             aEvent = VclEventId::WindowMouseButtonUp;
             break;
-        case LOK_MOUSEEVENT_MOUSEMOVE:
+        case KIT_MOUSEEVENT_MOUSEMOVE:
             aEvent = VclEventId::WindowMouseMove;
             break;
         default:
@@ -913,13 +913,13 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
         {
             switch (nType)
             {
-                case LOK_SETTEXTSELECTION_START:
+                case KIT_SETTEXTSELECTION_START:
                     pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
                     break;
-                case LOK_SETTEXTSELECTION_END:
+                case KIT_SETTEXTSELECTION_END:
                     pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
                     break;
-                case LOK_SETTEXTSELECTION_RESET:
+                case KIT_SETTEXTSELECTION_RESET:
                     pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
                     break;
                 default:
@@ -938,13 +938,13 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
         Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
         switch (nType)
         {
-            case LOK_SETTEXTSELECTION_START:
+            case KIT_SETTEXTSELECTION_START:
                 rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
                 break;
-            case LOK_SETTEXTSELECTION_END:
+            case KIT_SETTEXTSELECTION_END:
                 rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
                 break;
-            case LOK_SETTEXTSELECTION_RESET:
+            case KIT_SETTEXTSELECTION_RESET:
                 rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
                 break;
             default:
@@ -1023,7 +1023,7 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
 
     switch (nType)
     {
-    case LOK_SETGRAPHICSELECTION_START:
+    case KIT_SETGRAPHICSELECTION_START:
         {
             MouseEvent aClickEvent(Point(nPixelX, nPixelY), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
             pGridWindow->MouseButtonDown(aClickEvent);
@@ -1031,7 +1031,7 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
             pGridWindow->MouseMove(aMoveEvent);
         }
         break;
-    case LOK_SETGRAPHICSELECTION_END:
+    case KIT_SETGRAPHICSELECTION_END:
         {
             MouseEvent aMoveEvent(Point(nPixelX, nPixelY), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
             pGridWindow->MouseMove(aMoveEvent);
@@ -1066,8 +1066,8 @@ void ScModelObj::resetSelection()
         pViewShell->Unmark();
 
     // and hide the cell and text selection
-    pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
-    KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
+    pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, ""_ostr);
+    KitHelper::notifyOtherViews(pViewShell, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
 }
 
 void ScModelObj::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)
@@ -1103,7 +1103,7 @@ static void lcl_sendLOKDocumentBackground(const ScViewData* pViewData)
     const Color& rColor = rBackground.GetColor();
 
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->viewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR, rColor.AsRGBHexString().toUtf8());
+    pViewShell->viewCallback(KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR, rColor.AsRGBHexString().toUtf8());
 }
 
 void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_)

@@ -354,7 +354,7 @@ void ScGridWindow::InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
                 if (aZoomX == aScaleX && aZoomY == aScaleY)
                 {
                     KitHelper::notifyOtherView(*pThisViewShell, pOtherViewShell,
-                            LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", rCursorRect.toString());
+                            KIT_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", rCursorRect.toString());
                 }
             }
         }
@@ -1735,7 +1735,7 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
         pViewShell->UpdateInputHandler();
     }
 
-    if (nType == LOK_SETTEXTSELECTION_RESET)
+    if (nType == KIT_SETTEXTSELECTION_RESET)
     {
         pTabView->DoneBlockMode();
         return;
@@ -1767,7 +1767,7 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
     // change the selection
     switch (nType)
     {
-        case LOK_SETTEXTSELECTION_START:
+        case KIT_SETTEXTSELECTION_START:
             if (nNewPosX != nCol1 || nNewPosY != nRow1 || bWasEmpty)
             {
                 pTabView->SetCursor(nNewPosX, nNewPosY);
@@ -1776,7 +1776,7 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
                 pTabView->MarkCursor(nCol2, nRow2, nTab);
             }
             break;
-        case LOK_SETTEXTSELECTION_END:
+        case KIT_SETTEXTSELECTION_END:
             if (nNewPosX != nCol2 || nNewPosY != nRow2 || bWasEmpty)
             {
                 pTabView->SetCursor(nCol1, nRow1);

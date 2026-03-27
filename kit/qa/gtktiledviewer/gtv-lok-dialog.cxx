@@ -166,7 +166,7 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
         priv->m_nLastButtonPressed = nEventButton;
         pDocument->pClass->postWindowMouseEvent(pDocument,
                                                 priv->dialogid,
-                                                LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                                KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                                 (pEvent->x),
                                                 (pEvent->y),
                                                 nCount,
@@ -197,7 +197,7 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
         priv->m_nLastButtonPressed = nEventButton;
         pDocument->pClass->postWindowMouseEvent(pDocument,
                                                 priv->dialogid,
-                                                LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                                KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                                 (pEvent->x),
                                                 (pEvent->y),
                                                 nCount,
@@ -227,7 +227,7 @@ gtv_lok_dialog_signal_motion(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
 
     pDocument->pClass->postWindowMouseEvent(pDocument,
                                             priv->dialogid,
-                                            LOK_MOUSEEVENT_MOUSEMOVE,
+                                            KIT_MOUSEEVENT_MOUSEMOVE,
                                             (pEvent->x),
                                             (pEvent->y),
                                             1,
@@ -343,7 +343,7 @@ gtv_lok_dialog_signal_key(GtkWidget* pDialogDrawingArea, GdkEventKey* pEvent)
 
     pDocument->pClass->postWindowKeyEvent(pDocument,
                                           priv->dialogid,
-                                          pEvent->type == GDK_KEY_RELEASE ? LOK_KEYEVENT_KEYUP : LOK_KEYEVENT_KEYINPUT,
+                                          pEvent->type == GDK_KEY_RELEASE ? KIT_KEYEVENT_KEYUP : KIT_KEYEVENT_KEYINPUT,
                                           nCharCode,
                                           nKeyCode);
 
@@ -545,7 +545,7 @@ gtv_lok_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
         priv->m_nChildLastButtonPressed = nEventButton;
         pDocument->pClass->postWindowMouseEvent(pDocument,
                                                 priv->m_nChildId,
-                                                LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                                KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                                 (pEvent->x),
                                                 (pEvent->y),
                                                 nCount,
@@ -576,7 +576,7 @@ gtv_lok_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
         priv->m_nChildLastButtonPressed = nEventButton;
         pDocument->pClass->postWindowMouseEvent(pDocument,
                                                 priv->m_nChildId,
-                                                LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                                KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                                 (pEvent->x),
                                                 (pEvent->y),
                                                 nCount,
@@ -606,7 +606,7 @@ gtv_lok_dialog_floating_win_signal_motion(GtkWidget* /*pDialogDrawingArea*/, Gdk
 
     pDocument->pClass->postWindowMouseEvent(pDocument,
                                             priv->m_nChildId,
-                                            LOK_MOUSEEVENT_MOUSEMOVE,
+                                            KIT_MOUSEEVENT_MOUSEMOVE,
                                             (pEvent->x),
                                             (pEvent->y),
                                             1,

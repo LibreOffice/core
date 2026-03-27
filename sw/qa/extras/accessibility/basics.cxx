@@ -42,11 +42,11 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestTypeSimple)
     auto xContext = getDocumentAccessibleContext();
     CPPUNIT_ASSERT(xContext.is());
 
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 'h', 0);
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 'e', 0);
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 'l', 0);
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 'l', 0);
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 'o', 0);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 'h', 0);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 'e', 0);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 'l', 0);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 'l', 0);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 'o', 0);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>hello</PARAGRAPH>"_ustr, collectText(xContext));
@@ -58,11 +58,11 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestTypeMultiPara)
     auto xContext = getDocumentAccessibleContext();
     CPPUNIT_ASSERT(xContext.is());
 
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 'A', 0);
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 'B', 0);
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 'C', 0);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 'A', 0);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 'B', 0);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 'C', 0);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(
@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestMenuInsertPageBreak)
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Page Break"));
     // we need to move focus to the paragraph after the page break to insert the page number there
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));
 
     CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>1</PARAGRAPH><PARAGRAPH>2</PARAGRAPH>"_ustr, collectText());

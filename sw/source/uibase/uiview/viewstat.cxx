@@ -237,7 +237,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     {
                         aPayload += "IsPortrait";
                     }
-                    viewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+                    viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
                 }
             }
             break;
@@ -468,7 +468,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     SwRedlineTable::size_type nRedline = 0;
                     if (pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), &nRedline))
                         aPayload += OString::number(nRedline);
-                    viewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+                    viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
                 }
             }
             break;

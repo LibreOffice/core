@@ -124,10 +124,10 @@ public class Document {
      *  COKit until the corresponding reply is received, which would
      *  deadlock if the client does not support the feature.
      */
-    public static final long LOK_FEATURE_DOCUMENT_PASSWORD = 1;
-    public static final long LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY = (1 << 1);
-    public static final long LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK = (1 << 2);
-    public static final long LOK_FEATURE_NO_TILED_ANNOTATIONS = (1 << 3);
+    public static final long KIT_FEATURE_DOCUMENT_PASSWORD = 1;
+    public static final long KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY = (1 << 1);
+    public static final long KIT_FEATURE_PART_IN_INVALIDATION_CALLBACK = (1 << 2);
+    public static final long KIT_FEATURE_NO_TILED_ANNOTATIONS = (1 << 3);
 
     private final ByteBuffer handle;
     private MessageCallback messageCallback = null;

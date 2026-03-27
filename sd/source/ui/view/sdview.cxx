@@ -730,7 +730,7 @@ bool View::SdrBeginTextEdit(
                     aRectangle = o3tl::convert(aRectangle, o3tl::Length::mm100, o3tl::Length::twip);
                 }
                 OString sRectangle = aRectangle.toString();
-                KitHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
+                KitHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), KIT_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
             }
         }
     }
@@ -827,7 +827,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
             mpViewSh->GetViewShellBase().GetDrawController()->FireSelectionChangeListener();
 
             if (comphelper::COKit::isActive())
-                KitHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY"_ostr);
+                KitHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), KIT_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY"_ostr);
 
         }
 

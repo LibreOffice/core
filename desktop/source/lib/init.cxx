@@ -322,7 +322,7 @@ public:
         {
             OString aChunk = aOutput.makeStringAndClear();
             if (gImpl && gImpl->mpCallback)
-                gImpl->mpCallback(LOK_CALLBACK_PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
+                gImpl->mpCallback(KIT_CALLBACK_PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
         }
     }
 };
@@ -755,11 +755,11 @@ static bool lcl_isViewCallbackType(const int type)
 {
     switch (type)
     {
-        case LOK_CALLBACK_CELL_VIEW_CURSOR:
-        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
-        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
-        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+        case KIT_CALLBACK_CELL_VIEW_CURSOR:
+        case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+        case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
             return true;
 
         default:
@@ -771,9 +771,9 @@ static bool isUpdatedType(int type)
 {
     switch (type)
     {
-        case LOK_CALLBACK_TEXT_SELECTION:
-        case LOK_CALLBACK_TEXT_SELECTION_START:
-        case LOK_CALLBACK_TEXT_SELECTION_END:
+        case KIT_CALLBACK_TEXT_SELECTION:
+        case KIT_CALLBACK_TEXT_SELECTION_START:
+        case KIT_CALLBACK_TEXT_SELECTION_END:
             return true;
         default:
             return false;
@@ -784,9 +784,9 @@ static bool isUpdatedTypePerViewId(int type)
 {
     switch (type)
     {
-        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
             return true;
         default:
             return false;
@@ -1425,19 +1425,19 @@ int getDocumentType (COKitDocument* pThis)
 
         if (xDocument->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
         {
-            return LOK_DOCTYPE_SPREADSHEET;
+            return KIT_DOCTYPE_SPREADSHEET;
         }
         else if (xDocument->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr))
         {
-            return LOK_DOCTYPE_PRESENTATION;
+            return KIT_DOCTYPE_PRESENTATION;
         }
         else if (xDocument->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr))
         {
-            return LOK_DOCTYPE_DRAWING;
+            return KIT_DOCTYPE_DRAWING;
         }
         else if (xDocument->supportsService(u"com.sun.star.text.TextDocument"_ustr) || xDocument->supportsService(u"com.sun.star.text.WebDocument"_ustr))
         {
-            return LOK_DOCTYPE_TEXT;
+            return KIT_DOCTYPE_TEXT;
         }
         else
         {
@@ -1448,7 +1448,7 @@ int getDocumentType (COKitDocument* pThis)
     {
         SetLastExceptionMsg("exception: " + exception.Message);
     }
-    return LOK_DOCTYPE_OTHER;
+    return KIT_DOCTYPE_OTHER;
 }
 
 } // anonymous namespace
@@ -1465,7 +1465,7 @@ IMPL_LINK_NOARG(WaitUntilIdle, IdleHdl, Timer*, void)
     tools::JsonWriter aJson;
     aJson.put("commandName", ".uno:ReportWhenIdle");
     aJson.put("idleID", msIdleId);
-    mpCallbackFlushHandler->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+    mpCallbackFlushHandler->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     mpCallbackFlushHandler.reset();
     msIdleId.clear();
 }
@@ -1635,21 +1635,21 @@ CallbackFlushHandler::CallbackFlushHandler(COKitDocument* pDocument, COKitCallba
 {
     // Add the states that are safe to skip duplicates on, even when
     // not consequent (i.e. do no emit them if unchanged from last).
-    m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_GRAPHIC_SELECTION, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_MOUSE_POINTER, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_CELL_CURSOR, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_CELL_FORMULA, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_CELL_ADDRESS, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_SET_PART, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_TABLE_SELECTED, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_TAB_STOP_LIST, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_RULER_UPDATE, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_VERTICAL_RULER_UPDATE, "NIL"_ostr);
-    m_states.emplace(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_TEXT_SELECTION, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_GRAPHIC_SELECTION, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_STATE_CHANGED, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_MOUSE_POINTER, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_CELL_CURSOR, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_CELL_FORMULA, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_CELL_ADDRESS, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_CURSOR_VISIBLE, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_SET_PART, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_TABLE_SELECTED, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_TAB_STOP_LIST, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_RULER_UPDATE, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_VERTICAL_RULER_UPDATE, "NIL"_ostr);
+    m_states.emplace(KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE, "NIL"_ostr);
 
     if (char* pViewRenderState = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewRenderState"))
     {
@@ -1715,7 +1715,7 @@ void CallbackFlushHandler::resetUpdatedTypePerViewId( int nType, int nViewId )
     assert(isUpdatedTypePerViewId(nType));
     bool allViewIds = false;
     // Handle specially messages that do not have viewId for backwards compatibility.
-    if( nType == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR && !comphelper::COKit::isViewIdForVisCursorInvalidation())
+    if( nType == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR && !comphelper::COKit::isViewIdForVisCursorInvalidation())
         allViewIds = true;
     if( !allViewIds )
     {
@@ -1772,7 +1772,7 @@ void CallbackFlushHandler::viewInvalidateTilesCallback(const tools::Rectangle* p
 
     // RectangleAndPart ctor doesn't store &aRect, so this is OK.
     CallbackData callbackData(&aRect, nPart, nMode);
-    queue(LOK_CALLBACK_INVALIDATE_TILES, callbackData);
+    queue(KIT_CALLBACK_INVALIDATE_TILES, callbackData);
 }
 
 void CallbackFlushHandler::viewUpdatedCallback(int nType)
@@ -1831,17 +1831,17 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         // In background mode - avoid any extraneous or confusing messages
         switch (type)
         {
-        case LOK_CALLBACK_INVALIDATE_TILES:
-        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        case LOK_CALLBACK_TEXT_SELECTION:
-        case LOK_CALLBACK_CURSOR_VISIBLE:
-        case LOK_CALLBACK_GRAPHIC_SELECTION:
-        case LOK_CALLBACK_TABLE_SELECTED:
-        case LOK_CALLBACK_SET_PART:
-        case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
-        case LOK_CALLBACK_MOUSE_POINTER:
-        case LOK_CALLBACK_INVALIDATE_HEADER:
-        case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+        case KIT_CALLBACK_INVALIDATE_TILES:
+        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case KIT_CALLBACK_TEXT_SELECTION:
+        case KIT_CALLBACK_CURSOR_VISIBLE:
+        case KIT_CALLBACK_GRAPHIC_SELECTION:
+        case KIT_CALLBACK_TABLE_SELECTED:
+        case KIT_CALLBACK_SET_PART:
+        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        case KIT_CALLBACK_MOUSE_POINTER:
+        case KIT_CALLBACK_INVALIDATE_HEADER:
+        case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
             SAL_INFO("lok", "Elide event in background save mode");
             return;
         default:
@@ -1851,16 +1851,16 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
 
     bool bIsChartActive = false;
     bool bIsComment = false;
-    if (type == LOK_CALLBACK_GRAPHIC_SELECTION)
+    if (type == KIT_CALLBACK_GRAPHIC_SELECTION)
     {
         KitChartHelper aChartHelper(SfxViewShell::Current());
         bIsChartActive = aChartHelper.GetWindow() != nullptr;
     }
-    else if (type == LOK_CALLBACK_COMMENT)
+    else if (type == KIT_CALLBACK_COMMENT)
     {
         bIsComment = true;
     }
-    else if (type == LOK_CALLBACK_VIEW_RENDER_STATE)
+    else if (type == KIT_CALLBACK_VIEW_RENDER_STATE)
     {
         m_aViewRenderState = aCallbackData.getPayload();
     }
@@ -1874,28 +1874,28 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         // while the complex command in question executes.
         // We don't want to suppress everything here on the wrong assumption
         // that no new events are fired during painting.
-        if (type != LOK_CALLBACK_STATE_CHANGED &&
-            type != LOK_CALLBACK_INVALIDATE_TILES &&
-            type != LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
-            type != LOK_CALLBACK_CURSOR_VISIBLE &&
-            type != LOK_CALLBACK_VIEW_CURSOR_VISIBLE &&
-            type != LOK_CALLBACK_TEXT_SELECTION &&
-            type != LOK_CALLBACK_TEXT_SELECTION_START &&
-            type != LOK_CALLBACK_TEXT_SELECTION_END &&
-            type != LOK_CALLBACK_MEDIA_SHAPE &&
-            type != LOK_CALLBACK_REFERENCE_MARKS)
+        if (type != KIT_CALLBACK_STATE_CHANGED &&
+            type != KIT_CALLBACK_INVALIDATE_TILES &&
+            type != KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
+            type != KIT_CALLBACK_CURSOR_VISIBLE &&
+            type != KIT_CALLBACK_VIEW_CURSOR_VISIBLE &&
+            type != KIT_CALLBACK_TEXT_SELECTION &&
+            type != KIT_CALLBACK_TEXT_SELECTION_START &&
+            type != KIT_CALLBACK_TEXT_SELECTION_END &&
+            type != KIT_CALLBACK_MEDIA_SHAPE &&
+            type != KIT_CALLBACK_REFERENCE_MARKS)
         {
             SAL_INFO("lok", "Skipping while painting [" << type << "]: [" << aCallbackData.getPayload() << "].");
             return;
         }
 
         // In Writer we drop all notifications during painting.
-        if (doc_getDocumentType(m_pDocument) == LOK_DOCTYPE_TEXT)
+        if (doc_getDocumentType(m_pDocument) == KIT_DOCTYPE_TEXT)
             return;
     }
 
     // Suppress invalid payloads.
-    if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
+    if (type == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
         aCallbackData.getPayload().indexOf(", 0, 0, ") != -1 &&
         aCallbackData.getPayload().indexOf("\"hyperlink\":\"\"") == -1 &&
         aCallbackData.getPayload().indexOf("\"hyperlink\": {}") == -1)
@@ -1927,37 +1927,37 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     // drop duplicate callbacks for the listed types
     switch (type)
     {
-        case LOK_CALLBACK_TEXT_SELECTION_START:
-        case LOK_CALLBACK_TEXT_SELECTION_END:
-        case LOK_CALLBACK_TEXT_SELECTION:
-        case LOK_CALLBACK_GRAPHIC_SELECTION:
-        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
-        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
-        case LOK_CALLBACK_STATE_CHANGED:
-        case LOK_CALLBACK_MOUSE_POINTER:
-        case LOK_CALLBACK_CELL_CURSOR:
-        case LOK_CALLBACK_CELL_VIEW_CURSOR:
-        case LOK_CALLBACK_CELL_FORMULA:
-        case LOK_CALLBACK_CELL_ADDRESS:
-        case LOK_CALLBACK_CELL_SELECTION_AREA:
-        case LOK_CALLBACK_CURSOR_VISIBLE:
-        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
-        case LOK_CALLBACK_SET_PART:
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
-        case LOK_CALLBACK_INVALIDATE_HEADER:
-        case LOK_CALLBACK_WINDOW:
-        case LOK_CALLBACK_CALC_FUNCTION_LIST:
-        case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
-        case LOK_CALLBACK_REFERENCE_MARKS:
-        case LOK_CALLBACK_CELL_AUTO_FILL_AREA:
-        case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
-        case LOK_CALLBACK_A11Y_CARET_CHANGED:
-        case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
-        case LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
-        case LOK_CALLBACK_COLOR_PALETTES:
-        case LOK_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE:
-        case LOK_CALLBACK_A11Y_SELECTION_CHANGED:
+        case KIT_CALLBACK_TEXT_SELECTION_START:
+        case KIT_CALLBACK_TEXT_SELECTION_END:
+        case KIT_CALLBACK_TEXT_SELECTION:
+        case KIT_CALLBACK_GRAPHIC_SELECTION:
+        case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        case KIT_CALLBACK_STATE_CHANGED:
+        case KIT_CALLBACK_MOUSE_POINTER:
+        case KIT_CALLBACK_CELL_CURSOR:
+        case KIT_CALLBACK_CELL_VIEW_CURSOR:
+        case KIT_CALLBACK_CELL_FORMULA:
+        case KIT_CALLBACK_CELL_ADDRESS:
+        case KIT_CALLBACK_CELL_SELECTION_AREA:
+        case KIT_CALLBACK_CURSOR_VISIBLE:
+        case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
+        case KIT_CALLBACK_SET_PART:
+        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+        case KIT_CALLBACK_INVALIDATE_HEADER:
+        case KIT_CALLBACK_WINDOW:
+        case KIT_CALLBACK_CALC_FUNCTION_LIST:
+        case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+        case KIT_CALLBACK_REFERENCE_MARKS:
+        case KIT_CALLBACK_CELL_AUTO_FILL_AREA:
+        case KIT_CALLBACK_A11Y_FOCUS_CHANGED:
+        case KIT_CALLBACK_A11Y_CARET_CHANGED:
+        case KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
+        case KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
+        case KIT_CALLBACK_COLOR_PALETTES:
+        case KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE:
+        case KIT_CALLBACK_A11Y_SELECTION_CHANGED:
         {
             const auto pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
             auto pos2 = toQueue2(pos);
@@ -1970,14 +1970,14 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         break;
     }
 
-    if (type == LOK_CALLBACK_TEXT_SELECTION && aCallbackData.isEmpty())
+    if (type == KIT_CALLBACK_TEXT_SELECTION && aCallbackData.isEmpty())
     {
-        const auto posStart = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_START);
+        const auto posStart = std::find(m_queue1.rbegin(), m_queue1.rend(), KIT_CALLBACK_TEXT_SELECTION_START);
         auto posStart2 = toQueue2(posStart);
         if (posStart != m_queue1.rend())
             posStart2->clear();
 
-        const auto posEnd = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_END);
+        const auto posEnd = std::find(m_queue1.rbegin(), m_queue1.rend(), KIT_CALLBACK_TEXT_SELECTION_END);
         auto posEnd2 = toQueue2(posEnd);
         if (posEnd != m_queue1.rend())
             posEnd2->clear();
@@ -1988,13 +1988,13 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     {
         switch (type)
         {
-            case LOK_CALLBACK_TEXT_SELECTION_START:
-            case LOK_CALLBACK_TEXT_SELECTION_END:
-            case LOK_CALLBACK_TEXT_SELECTION:
-            case LOK_CALLBACK_GRAPHIC_SELECTION:
-            case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-            case LOK_CALLBACK_INVALIDATE_TILES:
-            case LOK_CALLBACK_TOOLTIP:
+            case KIT_CALLBACK_TEXT_SELECTION_START:
+            case KIT_CALLBACK_TEXT_SELECTION_END:
+            case KIT_CALLBACK_TEXT_SELECTION:
+            case KIT_CALLBACK_GRAPHIC_SELECTION:
+            case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+            case KIT_CALLBACK_INVALIDATE_TILES:
+            case KIT_CALLBACK_TOOLTIP:
                 if (removeAll(type))
                     SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
                 break;
@@ -2006,25 +2006,25 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         {
             // These are safe to use the latest state and ignore previous
             // ones (if any) since the last overrides previous ones.
-            case LOK_CALLBACK_TEXT_SELECTION_START:
-            case LOK_CALLBACK_TEXT_SELECTION_END:
-            case LOK_CALLBACK_TEXT_SELECTION:
-            case LOK_CALLBACK_MOUSE_POINTER:
-            case LOK_CALLBACK_CELL_CURSOR:
-            case LOK_CALLBACK_CELL_FORMULA:
-            case LOK_CALLBACK_CELL_ADDRESS:
-            case LOK_CALLBACK_CURSOR_VISIBLE:
-            case LOK_CALLBACK_SET_PART:
-            case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
-            case LOK_CALLBACK_RULER_UPDATE:
-            case LOK_CALLBACK_VERTICAL_RULER_UPDATE:
-            case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
-            case LOK_CALLBACK_A11Y_CARET_CHANGED:
-            case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
-            case LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
-            case LOK_CALLBACK_COLOR_PALETTES:
-            case LOK_CALLBACK_TOOLTIP:
-            case LOK_CALLBACK_SHAPE_INNER_TEXT:
+            case KIT_CALLBACK_TEXT_SELECTION_START:
+            case KIT_CALLBACK_TEXT_SELECTION_END:
+            case KIT_CALLBACK_TEXT_SELECTION:
+            case KIT_CALLBACK_MOUSE_POINTER:
+            case KIT_CALLBACK_CELL_CURSOR:
+            case KIT_CALLBACK_CELL_FORMULA:
+            case KIT_CALLBACK_CELL_ADDRESS:
+            case KIT_CALLBACK_CURSOR_VISIBLE:
+            case KIT_CALLBACK_SET_PART:
+            case KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+            case KIT_CALLBACK_RULER_UPDATE:
+            case KIT_CALLBACK_VERTICAL_RULER_UPDATE:
+            case KIT_CALLBACK_A11Y_FOCUS_CHANGED:
+            case KIT_CALLBACK_A11Y_CARET_CHANGED:
+            case KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
+            case KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
+            case KIT_CALLBACK_COLOR_PALETTES:
+            case KIT_CALLBACK_TOOLTIP:
+            case KIT_CALLBACK_SHAPE_INNER_TEXT:
             {
                 if (removeAll(type))
                     SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
@@ -2034,20 +2034,20 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             // These are safe to use the latest state and ignore previous
             // ones (if any) since the last overrides previous ones,
             // but only if the view is the same.
-            case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+            case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
                 // deleting the duplicate of visible cursor message can cause hyperlink popup not to show up on second/or more click on the same place.
                 // If the hyperlink is not empty we can bypass that to show the popup
                 if (aCallbackData.getPayload().indexOf("\"hyperlink\":\"\"") == -1
                     && aCallbackData.getPayload().indexOf("\"hyperlink\": {}") == -1)
                     break;
                 [[fallthrough]];
-            case LOK_CALLBACK_CELL_VIEW_CURSOR:
-            case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
-            case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
-            case LOK_CALLBACK_TEXT_VIEW_SELECTION:
-            case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
-            case LOK_CALLBACK_CALC_FUNCTION_LIST:
-            case LOK_CALLBACK_FORM_FIELD_BUTTON:
+            case KIT_CALLBACK_CELL_VIEW_CURSOR:
+            case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
+            case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
+            case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+            case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
+            case KIT_CALLBACK_CALC_FUNCTION_LIST:
+            case KIT_CALLBACK_FORM_FIELD_BUTTON:
             {
                 const int nViewId = aCallbackData.getViewId();
                 removeAll(type, [nViewId] (const CallbackData& elemData) {
@@ -2057,14 +2057,14 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             }
             break;
 
-            case LOK_CALLBACK_INVALIDATE_TILES:
+            case KIT_CALLBACK_INVALIDATE_TILES:
                 if (processInvalidateTilesEvent(type, aCallbackData))
                     return;
             break;
 
             // State changes with same name override previous ones with a different value.
             // Ex. ".uno:PageStatus=Slide 20 of 83" overwrites any previous PageStatus.
-            case LOK_CALLBACK_STATE_CHANGED:
+            case KIT_CALLBACK_STATE_CHANGED:
             {
                 // Compare the state name=value and overwrite earlier entries with same name.
                 const auto pos = aCallbackData.getPayload().indexOf('=');
@@ -2084,12 +2084,12 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             }
             break;
 
-            case LOK_CALLBACK_WINDOW:
+            case KIT_CALLBACK_WINDOW:
                 if (processWindowEvent(type, aCallbackData))
                     return;
             break;
 
-            case LOK_CALLBACK_GRAPHIC_SELECTION:
+            case KIT_CALLBACK_GRAPHIC_SELECTION:
             {
                 // remove only selection ranges and 'EMPTY' messages
                 // always send 'INPLACE' and 'INPLACE EXIT' messages
@@ -2144,7 +2144,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     // If we have to invalidate all tiles, we can skip any new tile invalidation.
     // Find the last INVALIDATE_TILES entry, if any to see if it's invalidate-all.
     const auto pos
-        = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_INVALIDATE_TILES);
+        = std::find(m_queue1.rbegin(), m_queue1.rend(), KIT_CALLBACK_INVALIDATE_TILES);
     if (pos != m_queue1.rend())
     {
         auto pos2 = toQueue2(pos);
@@ -2173,7 +2173,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     {
         SAL_INFO("lok", "Have Empty [" << type << "]: [" << aCallbackData.getPayload()
                                        << "] so removing all with part " << rcNew.m_nPart << ".");
-        removeAll(LOK_CALLBACK_INVALIDATE_TILES, [&rcNew](const CallbackData& elemData) {
+        removeAll(KIT_CALLBACK_INVALIDATE_TILES, [&rcNew](const CallbackData& elemData) {
             // Remove exiting if new is all-encompassing, or if of the same part.
             return ((rcNew.m_nPart == -1 || rcNew.m_nPart == elemData.getRectangleAndPart().m_nPart)
                 && (rcNew.m_nMode == elemData.getRectangleAndPart().m_nMode));
@@ -2184,7 +2184,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
         const auto rcOrig = rcNew;
 
         SAL_INFO("lok", "Have [" << type << "]: [" << aCallbackData.getPayload() << "] so merging overlapping.");
-        removeAll(LOK_CALLBACK_INVALIDATE_TILES,[&rcNew](const CallbackData& elemData) {
+        removeAll(KIT_CALLBACK_INVALIDATE_TILES,[&rcNew](const CallbackData& elemData) {
             const RectangleAndPart& rcOld = elemData.getRectangleAndPart();
             if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 &&
                 (rcOld.m_nPart != rcNew.m_nPart || rcOld.m_nMode != rcNew.m_nMode))
@@ -2268,7 +2268,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
         // remove all previous window part invalidations
         if (aRectStr.empty())
         {
-            removeAll(LOK_CALLBACK_WINDOW,[&nLOKWindowId](const CallbackData& elemData) {
+            removeAll(KIT_CALLBACK_WINDOW,[&nLOKWindowId](const CallbackData& elemData) {
                 const boost::property_tree::ptree& aOldTree = elemData.getJson();
                 if (nLOKWindowId == aOldTree.get<unsigned>("id", 0)
                     && aOldTree.get<std::string>("action", "") == "invalidate")
@@ -2287,7 +2287,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
             auto it2 = m_queue2.rbegin();
             for (;it1 != m_queue1.rend(); ++it1, ++it2)
             {
-                if (*it1 != LOK_CALLBACK_WINDOW)
+                if (*it1 != KIT_CALLBACK_WINDOW)
                     continue;
                 const boost::property_tree::ptree& aOldTree = it2->getJson();
                 if (nLOKWindowId == aOldTree.get<unsigned>("id", 0)
@@ -2314,7 +2314,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
             aRectStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
             tools::Rectangle aNewRect(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
             bool currentIsRedundant = false;
-            removeAll(LOK_CALLBACK_WINDOW, [&aNewRect, &nLOKWindowId,
+            removeAll(KIT_CALLBACK_WINDOW, [&aNewRect, &nLOKWindowId,
                        &currentIsRedundant](const CallbackData& elemData) {
                 const boost::property_tree::ptree& aOldTree = elemData.getJson();
                 if (aOldTree.get<std::string>("action", "") == "invalidate")
@@ -2387,7 +2387,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
     else if (aAction == "created")
     {
         // Remove all previous actions on same dialog, if we are creating it anew.
-        removeAll(LOK_CALLBACK_WINDOW,[&nLOKWindowId](const CallbackData& elemData) {
+        removeAll(KIT_CALLBACK_WINDOW,[&nLOKWindowId](const CallbackData& elemData) {
             const boost::property_tree::ptree& aOldTree = elemData.getJson();
             if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
                 return true;
@@ -2409,7 +2409,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
     {
         // A size change is practically re-creation of the window.
         // But at a minimum it's a full invalidation.
-        removeAll(LOK_CALLBACK_WINDOW, [&nLOKWindowId](const CallbackData& elemData) {
+        removeAll(KIT_CALLBACK_WINDOW, [&nLOKWindowId](const CallbackData& elemData) {
             const boost::property_tree::ptree& aOldTree = elemData.getJson();
             if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
             {
@@ -2440,17 +2440,17 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
     std::swap(updatedTypesPerViewId, m_updatedTypesPerViewId);
 
     // Some types must always precede other types, for example
-    // LOK_CALLBACK_TEXT_SELECTION_START and LOK_CALLBACK_TEXT_SELECTION_END
-    // must always precede LOK_CALLBACK_TEXT_SELECTION if present.
+    // KIT_CALLBACK_TEXT_SELECTION_START and KIT_CALLBACK_TEXT_SELECTION_END
+    // must always precede KIT_CALLBACK_TEXT_SELECTION if present.
     // Only these types should be present (see isUpdatedType()) and should be processed in this order.
     static const int orderedUpdatedTypes[] = {
-        LOK_CALLBACK_TEXT_SELECTION_START, LOK_CALLBACK_TEXT_SELECTION_END, LOK_CALLBACK_TEXT_SELECTION };
+        KIT_CALLBACK_TEXT_SELECTION_START, KIT_CALLBACK_TEXT_SELECTION_END, KIT_CALLBACK_TEXT_SELECTION };
     // Only these types should be present (see isUpdatedTypePerViewId()) and (as of now)
     // the order doesn't matter.
     static const int orderedUpdatedTypesPerViewId[] = {
-        LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
-        LOK_CALLBACK_INVALIDATE_VIEW_CURSOR,
-        LOK_CALLBACK_TEXT_VIEW_SELECTION };
+        KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+        KIT_CALLBACK_INVALIDATE_VIEW_CURSOR,
+        KIT_CALLBACK_TEXT_VIEW_SELECTION };
 
     if (viewShell)
     {
@@ -2497,7 +2497,7 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
 
 void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* viewShell, int viewId )
 {
-    if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR)
+    if (type == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR)
     {
         if (const SfxViewShell* viewShell2 = KitStarMathHelper(viewShell).GetSmViewShell())
             viewShell = viewShell2;
@@ -2549,7 +2549,7 @@ void CallbackFlushHandler::invoke()
         {
             sal_Int32 idx;
             // key-value pairs
-            if (type == LOK_CALLBACK_STATE_CHANGED &&
+            if (type == KIT_CALLBACK_STATE_CHANGED &&
                 (idx = payload.indexOf('=')) != -1)
             {
                 OString key = payload.copy(0, idx);
@@ -3044,7 +3044,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         if (pLib->mpCallback)
         {
             int nState = doc_getSignatureState(pDocument);
-            pLib->mpCallback(LOK_CALLBACK_SIGNATURE_STATUS, OString::number(nState).getStr(), pLib->mpCallbackData);
+            pLib->mpCallback(KIT_CALLBACK_SIGNATURE_STATUS, OString::number(nState).getStr(), pLib->mpCallbackData);
         }
 
         auto aFontMappingUseData = OutputDevice::FinishTrackingFontMappingUse();
@@ -3745,19 +3745,19 @@ static int doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForma
 
         switch (doc_getDocumentType(pThis))
         {
-        case LOK_DOCTYPE_SPREADSHEET:
+        case KIT_DOCTYPE_SPREADSHEET:
             pMap = aCalcExtensionMap;
             break;
-        case LOK_DOCTYPE_PRESENTATION:
+        case KIT_DOCTYPE_PRESENTATION:
             pMap = aImpressExtensionMap;
             break;
-        case LOK_DOCTYPE_DRAWING:
+        case KIT_DOCTYPE_DRAWING:
             pMap = aDrawExtensionMap;
             break;
-        case LOK_DOCTYPE_TEXT:
+        case KIT_DOCTYPE_TEXT:
             pMap = aWriterExtensionMap;
             break;
-        case LOK_DOCTYPE_OTHER:
+        case KIT_DOCTYPE_OTHER:
         default:
             SAL_INFO("lok", "Can't save document - unsupported document type.");
             return false;
@@ -4331,7 +4331,7 @@ static void doc_paintTile(COKitDocument* pThis,
 #if defined(IOS)
     double fDPIScale = 1.0;
 
-    // Online uses the LOK_TILEMODE_RGBA by default so flip the normal flags
+    // Online uses the KIT_TILEMODE_RGBA by default so flip the normal flags
     // to kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big
     CGContextRef pCGContext = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8,
                                                     nCanvasWidth * 4, CGColorSpaceCreateDeviceRGB(),
@@ -4535,7 +4535,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
         // Text documents have a single coordinate system; don't change part.
         int nOrigPart = 0;
         const int aType = doc_getDocumentType(pThis);
-        const bool isText = (aType == LOK_DOCTYPE_TEXT);
+        const bool isText = (aType == KIT_DOCTYPE_TEXT);
         int nOrigEditMode = 0;
         bool bPaintTextEdit = true;
         int nViewId = nOrigViewId;
@@ -4640,9 +4640,9 @@ static int doc_getTileMode(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/)
 {
     SetLastExceptionMsg();
 #if ENABLE_CAIRO_RGBA || defined IOS
-    return LOK_TILEMODE_RGBA;
+    return KIT_TILEMODE_RGBA;
 #else
-    return LOK_TILEMODE_BGRA;
+    return KIT_TILEMODE_BGRA;
 #endif
 }
 
@@ -4802,7 +4802,7 @@ static void doc_registerCallback(COKitDocument* pThis,
                 sPayload.append("\"" + f.toUtf8() + "\"");
             }
             sPayload.append(" ] }");
-            pCallback(LOK_CALLBACK_FONTS_MISSING, sPayload.toString().getStr(), pData);
+            pCallback(KIT_CALLBACK_FONTS_MISSING, sPayload.toString().getStr(), pData);
             pDocument->maFontsMissing.clear();
         }
 
@@ -4987,7 +4987,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, i
                 pWindow->KeyInput(aEvt);
         }
         else
-            KitHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 8, KEY_BACKSPACE, nCharBefore - 1);
+            KitHelper::postKeyEventAsync(pWindow, KIT_KEYEVENT_KEYINPUT, 8, KEY_BACKSPACE, nCharBefore - 1);
     }
 
     if (nCharAfter > 0)
@@ -5000,7 +5000,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, i
                 pWindow->KeyInput(aEvt);
         }
         else
-            KitHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 46, KEY_DELETE, nCharAfter - 1);
+            KitHelper::postKeyEventAsync(pWindow, KIT_KEYEVENT_KEYINPUT, 46, KEY_DELETE, nCharAfter - 1);
     }
 }
 
@@ -5022,10 +5022,10 @@ static void doc_postWindowKeyEvent(COKitDocument* /*pThis*/, unsigned nLOKWindow
 
     switch (nType)
     {
-        case LOK_KEYEVENT_KEYINPUT:
+        case KIT_KEYEVENT_KEYINPUT:
             Application::PostKeyEvent(VclEventId::WindowKeyInput, pWindow, &aEvent);
             break;
-        case LOK_KEYEVENT_KEYUP:
+        case KIT_KEYEVENT_KEYUP:
             Application::PostKeyEvent(VclEventId::WindowKeyUp, pWindow, &aEvent);
             break;
         default:
@@ -5092,16 +5092,16 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
         utl::MediaDescriptor aMediaDescriptor;
         switch (doc_getDocumentType(pThis))
         {
-            case LOK_DOCTYPE_PRESENTATION:
+            case KIT_DOCTYPE_PRESENTATION:
                 aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_svg_Export"_ustr;
                 break;
-            case LOK_DOCTYPE_DRAWING:
+            case KIT_DOCTYPE_DRAWING:
                 aMediaDescriptor[u"FilterName"_ustr] <<= u"draw_svg_Export"_ustr;
                 break;
-            case LOK_DOCTYPE_TEXT:
+            case KIT_DOCTYPE_TEXT:
                 aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_svg_Export"_ustr;
                 break;
-            case LOK_DOCTYPE_SPREADSHEET:
+            case KIT_DOCTYPE_SPREADSHEET:
                 aMediaDescriptor[u"FilterName"_ustr] <<= u"calc_svg_Export"_ustr;
                 break;
             default:
@@ -5141,7 +5141,7 @@ namespace {
     This will call a LOK_COMMAND_FINISHED callback when postUnoCommand was
     called with the parameter requesting the notification.
 
-    @see COKitCallbackType::LOK_CALLBACK_UNO_COMMAND_RESULT.
+    @see COKitCallbackType::KIT_CALLBACK_UNO_COMMAND_RESULT.
 */
 class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatchResultListener>
 {
@@ -5181,7 +5181,7 @@ public:
         aJson.put("saveDurationMics", std::chrono::duration_cast<std::chrono::microseconds>(
                                           std::chrono::steady_clock::now() - mSaveTime)
                                           .count());
-        mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+        mpCallback->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     }
 
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
@@ -5537,7 +5537,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
             tools::JsonWriter aJson;
             aJson.put("commandName", pCommand);
             aJson.put("success", bResult);
-            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+            pDocument->mpCallbackFlushHandlers[nView]->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
             return;
         }
 
@@ -5573,7 +5573,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
                 aJson.put("type", "string");
                 aJson.put("value", "unmodified");
             }
-            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+            pDocument->mpCallbackFlushHandlers[nView]->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
             return;
         }
     }
@@ -5687,7 +5687,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
             aJson.put("commandName", aCommand);
             aJson.put("success", true);
             Application::UICoverageReport(aJson, getDocumentType(pThis), linguisticDataAvailable);
-            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+            pDocument->mpCallbackFlushHandlers[nView]->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
         }
 
         if (applyTracking)
@@ -5789,13 +5789,13 @@ static void doc_postWindowMouseEvent(COKitDocument* /*pThis*/, unsigned nLOKWind
 
     switch (nType)
     {
-        case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+        case KIT_MOUSEEVENT_MOUSEBUTTONDOWN:
             Application::PostMouseEvent(VclEventId::WindowMouseButtonDown, pWindow, &aEvent);
             break;
-        case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+        case KIT_MOUSEEVENT_MOUSEBUTTONUP:
             Application::PostMouseEvent(VclEventId::WindowMouseButtonUp, pWindow, &aEvent);
             break;
-        case LOK_MOUSEEVENT_MOUSEMOVE:
+        case KIT_MOUSEEVENT_MOUSEMOVE:
             Application::PostMouseEvent(VclEventId::WindowMouseMove, pWindow, &aEvent);
             break;
         default:
@@ -6188,29 +6188,29 @@ static int doc_getSelectionType(COKitDocument* pThis)
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return LOK_SELTYPE_NONE;
+        return KIT_SELTYPE_NONE;
     }
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No selection available"_ustr);
-        return LOK_SELTYPE_NONE;
+        return KIT_SELTYPE_NONE;
     }
 
     css::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(xTransferable, css::uno::UNO_QUERY);
     if (xTransferable2.is() && xTransferable2->isComplex())
-        return LOK_SELTYPE_COMPLEX;
+        return KIT_SELTYPE_COMPLEX;
 
     OString aRet;
     bool bSuccess = getFromTransferable(xTransferable, "text/plain;charset=utf-8"_ostr, aRet);
     if (!bSuccess)
-        return LOK_SELTYPE_NONE;
+        return KIT_SELTYPE_NONE;
 
     if (aRet.getLength() > 10000)
-        return LOK_SELTYPE_COMPLEX;
+        return KIT_SELTYPE_COMPLEX;
 
-    return !aRet.isEmpty() ? LOK_SELTYPE_TEXT : LOK_SELTYPE_NONE;
+    return !aRet.isEmpty() ? KIT_SELTYPE_TEXT : KIT_SELTYPE_NONE;
 }
 
 static int doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeType, char** pText, char** pUsedMimeType)
@@ -6226,19 +6226,19 @@ static int doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeTy
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return LOK_SELTYPE_NONE;
+        return KIT_SELTYPE_NONE;
     }
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No selection available"_ustr);
-        return LOK_SELTYPE_NONE;
+        return KIT_SELTYPE_NONE;
     }
 
     css::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(xTransferable, css::uno::UNO_QUERY);
     if (xTransferable2.is() && xTransferable2->isComplex())
-        return LOK_SELTYPE_COMPLEX;
+        return KIT_SELTYPE_COMPLEX;
 
     OString aType
         = pMimeType && pMimeType[0] != '\0' ? OString(pMimeType) : "text/plain;charset=utf-8"_ostr;
@@ -6246,13 +6246,13 @@ static int doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeTy
     OString aRet;
     bool bSuccess = getFromTransferable(xTransferable, aType, aRet);
     if (!bSuccess)
-        return LOK_SELTYPE_NONE;
+        return KIT_SELTYPE_NONE;
 
     if (aRet.getLength() > 10000)
-        return LOK_SELTYPE_COMPLEX;
+        return KIT_SELTYPE_COMPLEX;
 
     if (aRet.isEmpty())
-        return LOK_SELTYPE_NONE;
+        return KIT_SELTYPE_NONE;
 
     if (pText)
         *pText = convertOString(aRet);
@@ -6265,7 +6265,7 @@ static int doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeTy
             *pUsedMimeType = nullptr;
     }
 
-    return LOK_SELTYPE_TEXT;
+    return KIT_SELTYPE_TEXT;
 }
 
 static int doc_getClipboard(COKitDocument* pThis,
@@ -6672,7 +6672,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
         // should be shown in the normal dropdown, which we should add to the start of the list
         // to simplify their selection.
         if (sStyleFam == "ParagraphStyles"
-            && docType == LOK_DOCTYPE_TEXT)
+            && docType == KIT_DOCTYPE_TEXT)
         {
             for (const OUString& rStyle: aWriterStyles)
             {
@@ -6690,7 +6690,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
             // Filter out the default styles - they are already at the top
             // of the list
             if (aDefaultStyleNames.find(rStyle) == aDefaultStyleNames.end() ||
-                (sStyleFam != "ParagraphStyles" || docType != LOK_DOCTYPE_TEXT) )
+                (sStyleFam != "ParagraphStyles" || docType != KIT_DOCTYPE_TEXT) )
             {
                 boost::property_tree::ptree aChild;
                 aChild.put("", rStyle.toUtf8());
@@ -6852,7 +6852,7 @@ static char* getTrackedChanges(COKitDocument* pThis)
     // We want positions of the track changes also which is not possible from
     // UNO. Enable positioning information for text documents only for now, so
     // construct the tracked changes JSON from inside the sw/, not here using UNO
-    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT && xRedlinesSupplier.is())
+    if (doc_getDocumentType(pThis) != KIT_DOCTYPE_TEXT && xRedlinesSupplier.is())
     {
         auto redlinesNode = aJson.startArray("redlines");
         uno::Reference<container::XEnumeration> xRedlines = xRedlinesSupplier->getRedlines()->createEnumeration();
@@ -7435,7 +7435,7 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nLOKWindowId,
     comphelper::COKit::setDPIScale(fDPIScale);
 
 #if defined(IOS)
-    // Online uses the LOK_TILEMODE_RGBA by default so flip the normal flags
+    // Online uses the KIT_TILEMODE_RGBA by default so flip the normal flags
     // to kCGImageAlphaNoneSkipLast | kCGImageByteOrder32Big
     CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipLast | kCGImageByteOrder32Big);
 
@@ -7489,11 +7489,11 @@ static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nLOKWindowId, int 
         return;
     }
 
-    if (nAction == LOK_WINDOW_CLOSE)
+    if (nAction == KIT_WINDOW_CLOSE)
     {
         vcl::CloseTopLevel(pWindow);
     }
-    else if (nAction == LOK_WINDOW_PASTE)
+    else if (nAction == KIT_WINDOW_PASTE)
     {
 #ifndef IOS
         OUString aMimeType;
@@ -7519,7 +7519,7 @@ static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nLOKWindowId, int 
             SetLastExceptionMsg(u"Window command 'paste': wrong parameters."_ustr);
 #else
         (void) pData;
-        assert(!"doc_postWindow() with LOK_WINDOW_PASTE should not be called on iOS");
+        assert(!"doc_postWindow() with KIT_WINDOW_PASTE should not be called on iOS");
 #endif
     }
 }
@@ -7680,7 +7680,7 @@ static void doc_sendFormFieldEvent(COKitDocument* pThis, const char* pArguments)
     SolarMutexGuard aGuard;
 
     // Supported in Writer only
-    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT)
+    if (doc_getDocumentType(pThis) != KIT_DOCTYPE_TEXT)
             return;
 
     StringMap aMap(jsdialog::jsonToStringMap(pArguments));
@@ -7705,7 +7705,7 @@ static bool doc_renderSearchResult(COKitDocument* pThis,
                                      const char* pSearchResult, unsigned char** pBitmapBuffer,
                                      int* pWidth, int* pHeight, size_t* pByteSize)
 {
-    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT)
+    if (doc_getDocumentType(pThis) != KIT_DOCTYPE_TEXT)
         return false;
 
     if (pBitmapBuffer == nullptr)
@@ -7756,7 +7756,7 @@ static void doc_sendContentControlEvent(COKitDocument* pThis, const char* pArgum
     SolarMutexGuard aGuard;
 
     // Supported in Writer only
-    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT)
+    if (doc_getDocumentType(pThis) != KIT_DOCTYPE_TEXT)
     {
         return;
     }
@@ -7833,7 +7833,7 @@ static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER COKitDocument* pThis,
     SolarMutexGuard aGuard;
 
     int nDocType = getDocumentType(pThis);
-    if (!(nDocType == LOK_DOCTYPE_TEXT || nDocType == LOK_DOCTYPE_PRESENTATION || nDocType == LOK_DOCTYPE_SPREADSHEET))
+    if (!(nDocType == KIT_DOCTYPE_TEXT || nDocType == KIT_DOCTYPE_PRESENTATION || nDocType == KIT_DOCTYPE_SPREADSHEET))
         return;
 
     KitHelper::setAccessibilityState(nId, nEnabled);
@@ -7908,13 +7908,13 @@ static void lo_setOptionalFeatures(COKit* pThis, unsigned long long const featur
 
     LibCO_Impl *const pLib = static_cast<LibCO_Impl*>(pThis);
     pLib->mOptionalFeatures = features;
-    if (features & LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK)
+    if (features & KIT_FEATURE_PART_IN_INVALIDATION_CALLBACK)
         comphelper::COKit::setPartInInvalidation(true);
-    if (features & LOK_FEATURE_NO_TILED_ANNOTATIONS)
+    if (features & KIT_FEATURE_NO_TILED_ANNOTATIONS)
         comphelper::COKit::setTiledAnnotations(false);
-    if (features & LOK_FEATURE_RANGE_HEADERS)
+    if (features & KIT_FEATURE_RANGE_HEADERS)
         comphelper::COKit::setRangeHeaders(true);
-    if (features & LOK_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK)
+    if (features & KIT_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK)
         comphelper::COKit::setViewIdForVisCursorInvalidation(true);
 }
 
@@ -8080,14 +8080,14 @@ static void lo_status_indicator_callback(void *data, comphelper::COKit::statusIn
     switch (type)
     {
     case comphelper::COKit::statusIndicatorCallbackType::Start:
-        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_START, pText, pLib->mpCallbackData);
+        pLib->mpCallback(KIT_CALLBACK_STATUS_INDICATOR_START, pText, pLib->mpCallbackData);
         break;
     case comphelper::COKit::statusIndicatorCallbackType::SetValue:
-        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE,
+        pLib->mpCallback(KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE,
             OUString(OUString::number(percent)).toUtf8().getStr(), pLib->mpCallbackData);
         break;
     case comphelper::COKit::statusIndicatorCallbackType::Finish:
-        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_FINISH, nullptr, pLib->mpCallbackData);
+        pLib->mpCallback(KIT_CALLBACK_STATUS_INDICATOR_FINISH, nullptr, pLib->mpCallbackData);
         break;
     }
 }
@@ -8336,7 +8336,7 @@ static void preloadData()
         if (component.factory == "private:factory/swriter")
         {
             // Query document styles to initialize writer's on-demand created table style globals
-            char *pThrowaway = getComponentStyles(xComp, LOK_DOCTYPE_TEXT, ".uno:StyleApply");
+            char *pThrowaway = getComponentStyles(xComp, KIT_DOCTYPE_TEXT, ".uno:StyleApply");
             free(pThrowaway);
         }
 

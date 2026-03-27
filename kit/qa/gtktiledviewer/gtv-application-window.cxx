@@ -174,7 +174,7 @@ static void initWindow(GtvApplicationWindow* window)
     if (pDocument)
     {
         COKitDocumentType eDocType = static_cast<COKitDocumentType>(pDocument->pClass->getDocumentType(pDocument));
-        if (eDocType == LOK_DOCTYPE_SPREADSHEET)
+        if (eDocType == KIT_DOCTYPE_SPREADSHEET)
         {
             // Align to top left corner, so the tiles are in sync with the
             // row/column bar, even when zooming out enough that not all space is
@@ -464,7 +464,7 @@ gtv_application_window_unregister_child_window(GtvApplicationWindow* window, Gtk
         COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
         guint dialogId = 0;
         g_object_get(G_OBJECT(pChildWin), "dialogid", &dialogId, nullptr);
-        pDocument->pClass->postWindow(pDocument, dialogId, LOK_WINDOW_CLOSE, nullptr);
+        pDocument->pClass->postWindow(pDocument, dialogId, KIT_WINDOW_CLOSE, nullptr);
     }
 }
 

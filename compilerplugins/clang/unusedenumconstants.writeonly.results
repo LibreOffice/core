@@ -2019,7 +2019,7 @@ include/jvmfwk/framework.hxx:181
 include/jvmfwk/framework.hxx:191
     enum javaFrameworkError JFW_E_CONFIGURATION
 include/COKit/COKitEnums.h:57
-    COKitSelectionType LOK_SELTYPE_COMPLEX
+    COKitSelectionType KIT_SELTYPE_COMPLEX
 include/linguistic/misc.hxx:62
     enum linguistic::DictionaryError NOT_EXISTS
 include/linguistic/misc.hxx:69

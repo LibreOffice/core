@@ -91,7 +91,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     OString aPayload(pPayload);
     switch (nType)
     {
-        case LOK_CALLBACK_INVALIDATE_TILES:
+        case KIT_CALLBACK_INVALIDATE_TILES:
         {
             tools::Rectangle aInvalidation;
             uno::Sequence<OUString> aSeq
@@ -115,7 +115,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             ++m_nInvalidations;
         }
         break;
-        case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
         {
             uno::Sequence<OUString> aSeq
                 = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
@@ -124,7 +124,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             m_aDocumentSize.setHeight(aSeq[1].toInt32());
         }
         break;
-        case LOK_CALLBACK_TEXT_SELECTION:
+        case KIT_CALLBACK_TEXT_SELECTION:
         {
             m_aTextSelection = pPayload;
             if (m_aSearchResultSelection.empty())
@@ -133,12 +133,12 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
                 ++m_nSelectionAfterSearchResult;
         }
         break;
-        case LOK_CALLBACK_SEARCH_NOT_FOUND:
+        case KIT_CALLBACK_SEARCH_NOT_FOUND:
         {
             m_bFound = false;
         }
         break;
-        case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
+        case KIT_CALLBACK_SEARCH_RESULT_SELECTION:
         {
             m_aSearchResultSelection.clear();
             boost::property_tree::ptree aTree;
@@ -154,17 +154,17 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             }
         }
         break;
-        case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+        case KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
         {
             ++m_nRedlineTableSizeChanged;
         }
         break;
-        case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+        case KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
         {
             ++m_nRedlineTableEntryModified;
         }
         break;
-        case LOK_CALLBACK_STATE_CHANGED:
+        case KIT_CALLBACK_STATE_CHANGED:
         {
             OString aTrackedChangeIndexPrefix(".uno:TrackedChangeIndex="_ostr);
             if (aPayload.startsWith(aTrackedChangeIndexPrefix))
@@ -177,7 +177,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             }
         }
         break;
-        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         {
             if (comphelper::COKit::isViewIdForVisCursorInvalidation())
             {
@@ -197,22 +197,22 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             }
         }
         break;
-        case LOK_CALLBACK_FORM_FIELD_BUTTON:
+        case KIT_CALLBACK_FORM_FIELD_BUTTON:
         {
             m_aFormFieldButton = OString(pPayload);
         }
         break;
-        case LOK_CALLBACK_CONTENT_CONTROL:
+        case KIT_CALLBACK_CONTENT_CONTROL:
         {
             m_aContentControl = OString(pPayload);
         }
         break;
-        case LOK_CALLBACK_GRAPHIC_SELECTION:
+        case KIT_CALLBACK_GRAPHIC_SELECTION:
         {
             m_ShapeSelection = OString(pPayload);
         }
         break;
-        case LOK_CALLBACK_TOOLTIP:
+        case KIT_CALLBACK_TOOLTIP:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;

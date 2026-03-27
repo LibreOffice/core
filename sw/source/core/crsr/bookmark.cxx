@@ -448,7 +448,7 @@ namespace sw::mark
             aJson.put("DeleteBookmark", fieldCommand.toString());
         }
 
-        pViewShell->viewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+        pViewShell->viewCallback(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     }
 
     void Bookmark::InitDoc(SwDoc& io_rDoc,
@@ -613,7 +613,7 @@ namespace sw::mark
             aJson.put("DeleteTextFormField", fieldCommand);
         }
 
-        pViewShell->viewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+        pViewShell->viewCallback(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     }
 
     void TextFieldmark::InitDoc(SwDoc& io_rDoc,
@@ -1039,12 +1039,12 @@ namespace sw::mark
 
         // Placeholder text
         sPayload.append("\"placeholderText\": \"" + OUStringToOString(SwResId(STR_DROP_DOWN_EMPTY_LIST), RTL_TEXTENCODING_UTF8) + "\"}}");
-        pViewShell->viewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.toString());
+        pViewShell->viewCallback(KIT_CALLBACK_FORM_FIELD_BUTTON, sPayload.toString());
     }
 
     void DropDownFieldmark::SendLOKHideMessage(const SfxViewShell* pViewShell)
     {
-        pViewShell->viewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON,
+        pViewShell->viewCallback(KIT_CALLBACK_FORM_FIELD_BUTTON,
             "{\"action\": \"hide\", \"type\": \"drop-down\"}"_ostr);
     }
 

@@ -459,7 +459,7 @@ void ScTabControl::SwitchToPageId(sal_uInt16 nId)
     {
         // notify COKit about changed page
         OString aPayload = OString::number(nId - 1);
-        rViewData.GetViewShell()->viewCallback(LOK_CALLBACK_SET_PART, aPayload);
+        rViewData.GetViewShell()->viewCallback(KIT_CALLBACK_SET_PART, aPayload);
     }
 }
 

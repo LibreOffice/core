@@ -124,9 +124,9 @@ void KitInteractionHandler::postError(css::task::InteractionClassification class
 
     std::size_t nView = SfxViewShell::Current() ? KitHelper::getCurrentView() : 0;
     if (m_pLOKDocument && m_pLOKDocument->mpCallbackFlushHandlers.count(nView))
-        m_pLOKDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_ERROR, aJson.finishAndGetAsOString());
+        m_pLOKDocument->mpCallbackFlushHandlers[nView]->queue(KIT_CALLBACK_ERROR, aJson.finishAndGetAsOString());
     else if (m_pLOKit->mpCallback)
-        m_pLOKit->mpCallback(LOK_CALLBACK_ERROR, aJson.finishAndGetAsOString().getStr(), m_pLOKit->mpCallbackData);
+        m_pLOKit->mpCallback(KIT_CALLBACK_ERROR, aJson.finishAndGetAsOString().getStr(), m_pLOKit->mpCallbackData);
 }
 
 namespace {
@@ -312,14 +312,14 @@ bool KitInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
         return false;
 
     if (m_pLOKit->mpCallback &&
-        m_pLOKit->hasOptionalFeature(bIsRequestPasswordToModify ? LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
-                                                                : LOK_FEATURE_DOCUMENT_PASSWORD))
+        m_pLOKit->hasOptionalFeature(bIsRequestPasswordToModify ? KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
+                                                                : KIT_FEATURE_DOCUMENT_PASSWORD))
     {
         // release SolarMutex, so the callback handler, which may run in another thread,
         // can acquire it in 'lo_setDocumentPassword'
         SolarMutexReleaser aReleaser;
-        m_pLOKit->mpCallback(bIsRequestPasswordToModify ? LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY
-                                                        : LOK_CALLBACK_DOCUMENT_PASSWORD,
+        m_pLOKit->mpCallback(bIsRequestPasswordToModify ? KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY
+                                                        : KIT_CALLBACK_DOCUMENT_PASSWORD,
                 sUrl.getStr(),
                 m_pLOKit->mpCallbackData);
 

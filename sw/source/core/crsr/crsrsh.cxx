@@ -1690,7 +1690,7 @@ void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const
         if (OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView())
         {
             OString sRect = pOutlinerView->GetOutputArea().toString();
-            KitHelper::notifyOtherView(*GetSfxViewShell(), pOtherShell, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRect);
+            KitHelper::notifyOtherView(*GetSfxViewShell(), pOtherShell, KIT_CALLBACK_VIEW_LOCK, "rectangle", sRect);
         }
     }
     else
@@ -1701,7 +1701,7 @@ void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const
         if (GetSfxViewShell() != pOtherShell)
         {
             OString aPayload = OString::boolean(m_bSVCursorVis);
-            KitHelper::notifyOtherView(*GetSfxViewShell(), pOtherShell, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
+            KitHelper::notifyOtherView(*GetSfxViewShell(), pOtherShell, KIT_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
         }
         // Text selection.
         m_pCurrentCursor->Show(pOtherShell);
@@ -2620,7 +2620,7 @@ void SwCursorShell::sendLOKCursorUpdates()
     }
 
     OString pChar = aJsonWriter.finishAndGetAsOString();
-    pNotifySh->viewCallback(LOK_CALLBACK_TABLE_SELECTED, pChar);
+    pNotifySh->viewCallback(KIT_CALLBACK_TABLE_SELECTED, pChar);
 }
 
 void SwCursorShell::RefreshBlockCursor()
@@ -2911,8 +2911,8 @@ void SwCursorShell::ShowCursor()
     if (SfxViewShell* pNotifySh = comphelper::COKit::isActive() ? GetSfxViewShell() : nullptr)
     {
         const OString aPayload = OString::boolean(m_bSVCursorVis);
-        pNotifySh->viewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
-        KitHelper::notifyOtherViews(pNotifySh, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
+        pNotifySh->viewCallback(KIT_CALLBACK_CURSOR_VISIBLE, aPayload);
+        KitHelper::notifyOtherViews(pNotifySh, KIT_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 
     UpdateCursor();
@@ -2933,8 +2933,8 @@ void SwCursorShell::HideCursor()
     if (SfxViewShell* pNotifySh = comphelper::COKit::isActive() ? GetSfxViewShell() : nullptr)
     {
         OString aPayload = OString::boolean(m_bSVCursorVis);
-        pNotifySh->viewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
-        KitHelper::notifyOtherViews(pNotifySh, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
+        pNotifySh->viewCallback(KIT_CALLBACK_CURSOR_VISIBLE, aPayload);
+        KitHelper::notifyOtherViews(pNotifySh, KIT_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 }
 

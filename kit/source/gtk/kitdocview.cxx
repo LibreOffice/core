@@ -241,7 +241,7 @@ struct KitDocumentViewPrivateImpl
         m_bInDragEndHandle(false),
         m_nViewId(0),
         m_nPartId(0),
-        m_eDocumentType(LOK_DOCTYPE_OTHER),
+        m_eDocumentType(KIT_DOCTYPE_OTHER),
         m_nTileSizeTwips(0),
         m_aVisibleArea({0, 0, 0, 0}),
         m_bVisibleAreaSet(false),
@@ -490,7 +490,7 @@ handleGraphicSelectionOnButtonPress(GdkRectangle& aClick, KitDocumentView* pDocV
 
             GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
             LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
-            pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_START;
+            pLOEvent->m_nSetGraphicSelectionType = KIT_SETGRAPHICSELECTION_START;
             pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(priv->m_aGraphicHandleRects[i].x + priv->m_aGraphicHandleRects[i].width / 2, priv->m_fZoom);
             pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(priv->m_aGraphicHandleRects[i].y + priv->m_aGraphicHandleRects[i].height / 2, priv->m_fZoom);
             g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
@@ -552,7 +552,7 @@ handleGraphicSelectionOnButtonRelease(KitDocumentView* pDocView, GdkEventButton*
 
             GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
             LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
-            pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
+            pLOEvent->m_nSetGraphicSelectionType = KIT_SETGRAPHICSELECTION_END;
             pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
             pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
             g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
@@ -577,7 +577,7 @@ handleGraphicSelectionOnButtonRelease(KitDocumentView* pDocView, GdkEventButton*
 
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
-    pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
+    pLOEvent->m_nSetGraphicSelectionType = KIT_SETGRAPHICSELECTION_END;
     pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
     pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
@@ -748,7 +748,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
 
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY);
-    pLOEvent->m_nKeyEvent = pEvent->type == GDK_KEY_RELEASE ? LOK_KEYEVENT_KEYUP : LOK_KEYEVENT_KEYINPUT;
+    pLOEvent->m_nKeyEvent = pEvent->type == GDK_KEY_RELEASE ? KIT_KEYEVENT_KEYUP : KIT_KEYEVENT_KEYINPUT;
     pLOEvent->m_nCharCode = nCharCode;
     pLOEvent->m_nKeyCode  = nKeyCode;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
@@ -931,39 +931,39 @@ globalCallback (gpointer pData)
 
     switch (pCallback->m_nType)
     {
-    case LOK_CALLBACK_STATUS_INDICATOR_START:
+    case KIT_CALLBACK_STATUS_INDICATOR_START:
     {
         priv->m_nLoadProgress = 0.0;
         g_signal_emit (pCallback->m_pDocView, doc_view_signals[LOAD_CHANGED], 0, 0.0);
     }
     break;
-    case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+    case KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE:
     {
         priv->m_nLoadProgress = static_cast<gdouble>(std::stoi(pCallback->m_aPayload)/100.0);
         g_signal_emit (pCallback->m_pDocView, doc_view_signals[LOAD_CHANGED], 0, priv->m_nLoadProgress);
     }
     break;
-    case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
+    case KIT_CALLBACK_STATUS_INDICATOR_FINISH:
     {
         priv->m_nLoadProgress = 1.0;
         g_signal_emit (pCallback->m_pDocView, doc_view_signals[LOAD_CHANGED], 0, 1.0);
     }
     break;
-    case LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
+    case KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
         bModify = true;
         [[fallthrough]];
-    case LOK_CALLBACK_DOCUMENT_PASSWORD:
+    case KIT_CALLBACK_DOCUMENT_PASSWORD:
     {
         char const*const pURL(pCallback->m_aPayload.c_str());
         g_signal_emit (pCallback->m_pDocView, doc_view_signals[PASSWORD_REQUIRED], 0, pURL, bModify);
     }
     break;
-    case LOK_CALLBACK_ERROR:
+    case KIT_CALLBACK_ERROR:
     {
         reportError(pCallback->m_pDocView, pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_SIGNATURE_STATUS:
+    case KIT_CALLBACK_SIGNATURE_STATUS:
     {
         // TODO
     }
@@ -983,7 +983,7 @@ globalCallbackWorker(int nType, const char* pPayload, void* pData)
     KitDocumentView* pDocView = LOK_DOC_VIEW (pData);
 
     CallbackData* pCallback = new CallbackData(nType, pPayload ? pPayload : "(nil)", pDocView);
-    g_info("KitDocumentView_Impl::globalCallbackWorkerImpl: %s, '%s'", lokCallbackTypeToString(nType), pPayload);
+    g_info("KitDocumentView_Impl::globalCallbackWorkerImpl: %s, '%s'", kitCallbackTypeToString(nType), pPayload);
     gdk_threads_add_idle(globalCallback, pCallback);
 }
 
@@ -1109,7 +1109,7 @@ callback (gpointer pData)
 
     switch (static_cast<COKitCallbackType>(pCallback->m_nType))
     {
-    case LOK_CALLBACK_INVALIDATE_TILES:
+    case KIT_CALLBACK_INVALIDATE_TILES:
     {
         if (pCallback->m_aPayload.compare(0, 5, "EMPTY") != 0) // payload doesn't start with "EMPTY"
         {
@@ -1122,7 +1122,7 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
-    case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+    case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
     {
 
         std::stringstream aStream(pCallback->m_aPayload);
@@ -1144,11 +1144,11 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
-    case LOK_CALLBACK_TEXT_SELECTION:
+    case KIT_CALLBACK_TEXT_SELECTION:
     {
         priv->m_aTextSelectionRectangles = payloadToRectangles(pDocView, pCallback->m_aPayload.c_str());
         bool bIsTextSelected = !priv->m_aTextSelectionRectangles.empty();
-        // In case the selection is empty, then we get no LOK_CALLBACK_TEXT_SELECTION_START/END events.
+        // In case the selection is empty, then we get no KIT_CALLBACK_TEXT_SELECTION_START/END events.
         if (!bIsTextSelected)
         {
             memset(&priv->m_aTextSelectionStart, 0, sizeof(priv->m_aTextSelectionStart));
@@ -1163,22 +1163,22 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
-    case LOK_CALLBACK_TEXT_SELECTION_START:
+    case KIT_CALLBACK_TEXT_SELECTION_START:
     {
         priv->m_aTextSelectionStart = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
     }
     break;
-    case LOK_CALLBACK_TEXT_SELECTION_END:
+    case KIT_CALLBACK_TEXT_SELECTION_END:
     {
         priv->m_aTextSelectionEnd = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
     }
     break;
-    case LOK_CALLBACK_CURSOR_VISIBLE:
+    case KIT_CALLBACK_CURSOR_VISIBLE:
     {
         priv->m_bCursorVisible = pCallback->m_aPayload == "true";
     }
     break;
-    case LOK_CALLBACK_MOUSE_POINTER:
+    case KIT_CALLBACK_MOUSE_POINTER:
     {
         // We do not want the cursor to get changed in view-only mode
         if (priv->m_bEdit)
@@ -1193,7 +1193,7 @@ callback (gpointer pData)
         }
     }
     break;
-    case LOK_CALLBACK_GRAPHIC_SELECTION:
+    case KIT_CALLBACK_GRAPHIC_SELECTION:
     {
         if (pCallback->m_aPayload != "EMPTY")
             priv->m_aGraphicSelection = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
@@ -1202,7 +1202,7 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
-    case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+    case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1222,7 +1222,7 @@ callback (gpointer pData)
         break;
     }
     break;
-    case LOK_CALLBACK_CELL_CURSOR:
+    case KIT_CALLBACK_CELL_CURSOR:
     {
         if (pCallback->m_aPayload != "EMPTY")
             priv->m_aCellCursor = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
@@ -1231,33 +1231,33 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
-    case LOK_CALLBACK_HYPERLINK_CLICKED:
+    case KIT_CALLBACK_HYPERLINK_CLICKED:
     {
         hyperlinkClicked(pDocView, pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_STATE_CHANGED:
+    case KIT_CALLBACK_STATE_CHANGED:
     {
         commandChanged(pDocView, pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_SEARCH_NOT_FOUND:
+    case KIT_CALLBACK_SEARCH_NOT_FOUND:
     {
         searchNotFound(pDocView, pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
+    case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
     {
         refreshSize(pDocView);
         g_signal_emit(pDocView, doc_view_signals[SIZE_CHANGED], 0, nullptr);
     }
     break;
-    case LOK_CALLBACK_SET_PART:
+    case KIT_CALLBACK_SET_PART:
     {
         setPart(pDocView, pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
+    case KIT_CALLBACK_SEARCH_RESULT_SELECTION:
     {
         boost::property_tree::ptree aTree;
         std::stringstream aStream(pCallback->m_aPayload);
@@ -1266,27 +1266,27 @@ callback (gpointer pData)
         searchResultCount(pDocView, std::to_string(nCount));
     }
     break;
-    case LOK_CALLBACK_UNO_COMMAND_RESULT:
+    case KIT_CALLBACK_UNO_COMMAND_RESULT:
     {
         commandResult(pDocView, pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_CELL_ADDRESS:
+    case KIT_CALLBACK_CELL_ADDRESS:
     {
         addressChanged(pDocView, pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_CELL_FORMULA:
+    case KIT_CALLBACK_CELL_FORMULA:
     {
         formulaChanged(pDocView, pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_ERROR:
+    case KIT_CALLBACK_ERROR:
     {
         reportError(pDocView, pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+    case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1298,7 +1298,7 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
-    case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+    case KIT_CALLBACK_TEXT_VIEW_SELECTION:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1310,7 +1310,7 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
-    case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+    case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1322,7 +1322,7 @@ callback (gpointer pData)
         break;
     }
     break;
-    case LOK_CALLBACK_CELL_VIEW_CURSOR:
+    case KIT_CALLBACK_CELL_VIEW_CURSOR:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1341,7 +1341,7 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
-    case LOK_CALLBACK_VIEW_LOCK:
+    case KIT_CALLBACK_VIEW_LOCK:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1360,30 +1360,30 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
-    case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+    case KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
     {
         break;
     }
-    case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+    case KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
     {
         break;
     }
-    case LOK_CALLBACK_COMMENT:
+    case KIT_CALLBACK_COMMENT:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[COMMENT], 0, pCallback->m_aPayload.c_str());
         break;
-    case LOK_CALLBACK_RULER_UPDATE:
+    case KIT_CALLBACK_RULER_UPDATE:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[RULER], 0, pCallback->m_aPayload.c_str());
         break;
-    case LOK_CALLBACK_VERTICAL_RULER_UPDATE:
+    case KIT_CALLBACK_VERTICAL_RULER_UPDATE:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[RULER], 0, pCallback->m_aPayload.c_str());
         break;
-    case LOK_CALLBACK_WINDOW:
+    case KIT_CALLBACK_WINDOW:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[WINDOW], 0, pCallback->m_aPayload.c_str());
         break;
-    case LOK_CALLBACK_INVALIDATE_HEADER:
+    case KIT_CALLBACK_INVALIDATE_HEADER:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[INVALIDATE_HEADER], 0, pCallback->m_aPayload.c_str());
         break;
-    case LOK_CALLBACK_REFERENCE_MARKS:
+    case KIT_CALLBACK_REFERENCE_MARKS:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1405,7 +1405,7 @@ callback (gpointer pData)
         break;
     }
 
-    case LOK_CALLBACK_CONTENT_CONTROL:
+    case KIT_CALLBACK_CONTENT_CONTROL:
     {
         std::stringstream aPayloadStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1460,46 +1460,46 @@ callback (gpointer pData)
     }
     break;
 
-    case LOK_CALLBACK_STATUS_INDICATOR_START:
-    case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
-    case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
-    case LOK_CALLBACK_DOCUMENT_PASSWORD:
-    case LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
-    case LOK_CALLBACK_VALIDITY_LIST_BUTTON:
-    case LOK_CALLBACK_VALIDITY_INPUT_HELP:
-    case LOK_CALLBACK_SIGNATURE_STATUS:
-    case LOK_CALLBACK_CONTEXT_MENU:
-    case LOK_CALLBACK_PROFILE_FRAME:
-    case LOK_CALLBACK_CLIPBOARD_CHANGED:
-    case LOK_CALLBACK_CONTEXT_CHANGED:
-    case LOK_CALLBACK_CELL_SELECTION_AREA:
-    case LOK_CALLBACK_CELL_AUTO_FILL_AREA:
-    case LOK_CALLBACK_TABLE_SELECTED:
-    case LOK_CALLBACK_JSDIALOG:
-    case LOK_CALLBACK_CALC_FUNCTION_LIST:
-    case LOK_CALLBACK_TAB_STOP_LIST:
-    case LOK_CALLBACK_FORM_FIELD_BUTTON:
-    case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
-    case LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
-    case LOK_COMMAND_BLOCKED:
-    case LOK_CALLBACK_SC_FOLLOW_JUMP:
-    case LOK_CALLBACK_PRINT_RANGES:
-    case LOK_CALLBACK_FONTS_MISSING:
-    case LOK_CALLBACK_MEDIA_SHAPE:
-    case LOK_CALLBACK_EXPORT_FILE:
-    case LOK_CALLBACK_VIEW_RENDER_STATE:
-    case LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR:
-    case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
-    case LOK_CALLBACK_A11Y_CARET_CHANGED:
-    case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
-    case LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
-    case LOK_CALLBACK_COLOR_PALETTES:
-    case LOK_CALLBACK_DOCUMENT_PASSWORD_RESET:
-    case LOK_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE:
-    case LOK_CALLBACK_A11Y_SELECTION_CHANGED:
-    case LOK_CALLBACK_CORE_LOG:
-    case LOK_CALLBACK_TOOLTIP:
-    case LOK_CALLBACK_SHAPE_INNER_TEXT:
+    case KIT_CALLBACK_STATUS_INDICATOR_START:
+    case KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+    case KIT_CALLBACK_STATUS_INDICATOR_FINISH:
+    case KIT_CALLBACK_DOCUMENT_PASSWORD:
+    case KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
+    case KIT_CALLBACK_VALIDITY_LIST_BUTTON:
+    case KIT_CALLBACK_VALIDITY_INPUT_HELP:
+    case KIT_CALLBACK_SIGNATURE_STATUS:
+    case KIT_CALLBACK_CONTEXT_MENU:
+    case KIT_CALLBACK_PROFILE_FRAME:
+    case KIT_CALLBACK_CLIPBOARD_CHANGED:
+    case KIT_CALLBACK_CONTEXT_CHANGED:
+    case KIT_CALLBACK_CELL_SELECTION_AREA:
+    case KIT_CALLBACK_CELL_AUTO_FILL_AREA:
+    case KIT_CALLBACK_TABLE_SELECTED:
+    case KIT_CALLBACK_JSDIALOG:
+    case KIT_CALLBACK_CALC_FUNCTION_LIST:
+    case KIT_CALLBACK_TAB_STOP_LIST:
+    case KIT_CALLBACK_FORM_FIELD_BUTTON:
+    case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+    case KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
+    case KIT_COMMAND_BLOCKED:
+    case KIT_CALLBACK_SC_FOLLOW_JUMP:
+    case KIT_CALLBACK_PRINT_RANGES:
+    case KIT_CALLBACK_FONTS_MISSING:
+    case KIT_CALLBACK_MEDIA_SHAPE:
+    case KIT_CALLBACK_EXPORT_FILE:
+    case KIT_CALLBACK_VIEW_RENDER_STATE:
+    case KIT_CALLBACK_APPLICATION_BACKGROUND_COLOR:
+    case KIT_CALLBACK_A11Y_FOCUS_CHANGED:
+    case KIT_CALLBACK_A11Y_CARET_CHANGED:
+    case KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
+    case KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
+    case KIT_CALLBACK_COLOR_PALETTES:
+    case KIT_CALLBACK_DOCUMENT_PASSWORD_RESET:
+    case KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE:
+    case KIT_CALLBACK_A11Y_SELECTION_CHANGED:
+    case KIT_CALLBACK_CORE_LOG:
+    case KIT_CALLBACK_TOOLTIP:
+    case KIT_CALLBACK_SHAPE_INNER_TEXT:
     {
         // TODO: Implement me
         break;
@@ -1517,7 +1517,7 @@ static void callbackWorker (int nType, const char* pPayload, void* pData)
     CallbackData* pCallback = new CallbackData(nType, pPayload ? pPayload : "(nil)", pDocView);
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
     std::stringstream ss;
-    ss << "callbackWorker, view #" << priv->m_nViewId << ": " << lokCallbackTypeToString(nType) << ", '" << (pPayload ? pPayload : "(nil)") << "'";
+    ss << "callbackWorker, view #" << priv->m_nViewId << ": " << kitCallbackTypeToString(nType) << ", '" << (pPayload ? pPayload : "(nil)") << "'";
     g_info("%s", ss.str().c_str());
     gdk_threads_add_idle(callback, pCallback);
 }
@@ -1748,7 +1748,7 @@ static const GdkRGBA& getDarkColor(int nViewId, KitDocumentViewPrivate& priv)
     if (it != aColorMap.end())
         return it->second;
 
-    if (priv->m_eDocumentType == LOK_DOCTYPE_TEXT)
+    if (priv->m_eDocumentType == KIT_DOCTYPE_TEXT)
     {
         char* pValues = priv->m_pDocument->pClass->getCommandValues(priv->m_pDocument, ".uno:TrackedChangeAuthors");
         std::stringstream aInfo;
@@ -1821,7 +1821,7 @@ renderOverlay(KitDocumentView* pDocView, cairo_t* pCairo)
                 continue;
 
             // Show view cursors when in Writer or when the part matches.
-            if (rPair.second.m_nPart != priv->m_nPartId && priv->m_eDocumentType != LOK_DOCTYPE_TEXT)
+            if (rPair.second.m_nPart != priv->m_nPartId && priv->m_eDocumentType != KIT_DOCTYPE_TEXT)
                 continue;
 
             GdkRectangle& rCursor = rPair.second.m_aRectangle;
@@ -1933,7 +1933,7 @@ renderOverlay(KitDocumentView* pDocView, cairo_t* pCairo)
     // Selections of other views.
     for (const auto& rPair : priv->m_aTextViewSelectionRectangles)
     {
-        if (rPair.second.m_nPart != priv->m_nPartId && priv->m_eDocumentType != LOK_DOCTYPE_TEXT)
+        if (rPair.second.m_nPart != priv->m_nPartId && priv->m_eDocumentType != KIT_DOCTYPE_TEXT)
             continue;
 
         for (const GdkRectangle& rRectangle : rPair.second.m_aRectangles)
@@ -1960,7 +1960,7 @@ renderOverlay(KitDocumentView* pDocView, cairo_t* pCairo)
     for (const auto& rPair : priv->m_aGraphicViewSelections)
     {
         const ViewRectangle& rRectangle = rPair.second;
-        if (rRectangle.m_nPart != priv->m_nPartId && priv->m_eDocumentType != LOK_DOCTYPE_TEXT)
+        if (rRectangle.m_nPart != priv->m_nPartId && priv->m_eDocumentType != KIT_DOCTYPE_TEXT)
             continue;
 
         const GdkRGBA& rDark = getDarkColor(rPair.first, priv);
@@ -2090,7 +2090,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         priv->m_nLastButtonPressTime = pEvent->time;
         GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
         LOEvent* pLOEvent = new LOEvent(LOK_POST_MOUSE_EVENT);
-        pLOEvent->m_nPostMouseEventType = LOK_MOUSEEVENT_MOUSEBUTTONDOWN;
+        pLOEvent->m_nPostMouseEventType = KIT_MOUSEEVENT_MOUSEBUTTONDOWN;
         pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventCount = nCount;
@@ -2132,7 +2132,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         priv->m_nLastButtonReleaseTime = pEvent->time;
         GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
         LOEvent* pLOEvent = new LOEvent(LOK_POST_MOUSE_EVENT);
-        pLOEvent->m_nPostMouseEventType = LOK_MOUSEEVENT_MOUSEBUTTONUP;
+        pLOEvent->m_nPostMouseEventType = KIT_MOUSEEVENT_MOUSEBUTTONUP;
         pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventCount = nCount;
@@ -2199,21 +2199,21 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     {
         g_info("lcl_signalMotion: dragging the middle handle");
         getDragPoint(&priv->m_aHandleMiddleRect, pEvent, &aPoint);
-        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, LOK_SETTEXTSELECTION_RESET, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
+        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, KIT_SETTEXTSELECTION_RESET, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
         return FALSE;
     }
     if (priv->m_bInDragStartHandle)
     {
         g_info("lcl_signalMotion: dragging the start handle");
         getDragPoint(&priv->m_aHandleStartRect, pEvent, &aPoint);
-        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, LOK_SETTEXTSELECTION_START, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
+        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, KIT_SETTEXTSELECTION_START, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
         return FALSE;
     }
     if (priv->m_bInDragEndHandle)
     {
         g_info("lcl_signalMotion: dragging the end handle");
         getDragPoint(&priv->m_aHandleEndRect, pEvent, &aPoint);
-        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, LOK_SETTEXTSELECTION_END, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
+        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, KIT_SETTEXTSELECTION_END, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
         return FALSE;
     }
     aGuard.unlock();
@@ -2243,7 +2243,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
 
         GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
         LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
-        pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_START;
+        pLOEvent->m_nSetGraphicSelectionType = KIT_SETGRAPHICSELECTION_START;
         pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
         pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
@@ -2263,7 +2263,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
 
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_POST_MOUSE_EVENT);
-    pLOEvent->m_nPostMouseEventType = LOK_MOUSEEVENT_MOUSEMOVE;
+    pLOEvent->m_nPostMouseEventType = KIT_MOUSEEVENT_MOUSEMOVE;
     pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
     pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
     pLOEvent->m_nPostMouseEventCount = 1;
@@ -2275,7 +2275,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
-        g_warning("Unable to call LOK_MOUSEEVENT_MOUSEMOVE: %s", error->message);
+        g_warning("Unable to call KIT_MOUSEEVENT_MOUSEMOVE: %s", error->message);
         g_clear_error(&error);
     }
     g_object_unref(task);
@@ -2631,9 +2631,9 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
 {
     KitDocumentView* pDocView = LOK_DOC_VIEW (object);
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
-    bool bDocPasswordEnabled = priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD;
-    bool bDocPasswordToModifyEnabled = priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
-    bool bTiledAnnotationsEnabled = !(priv->m_nLOKFeatures & LOK_FEATURE_NO_TILED_ANNOTATIONS);
+    bool bDocPasswordEnabled = priv->m_nLOKFeatures & KIT_FEATURE_DOCUMENT_PASSWORD;
+    bool bDocPasswordToModifyEnabled = priv->m_nLOKFeatures & KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
+    bool bTiledAnnotationsEnabled = !(priv->m_nLOKFeatures & KIT_FEATURE_NO_TILED_ANNOTATIONS);
 
     switch (propId)
     {
@@ -2672,21 +2672,21 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
     case PROP_DOC_PASSWORD:
         if (bool(g_value_get_boolean (value)) != bDocPasswordEnabled)
         {
-            priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ LOK_FEATURE_DOCUMENT_PASSWORD;
+            priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ KIT_FEATURE_DOCUMENT_PASSWORD;
             priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
         }
         break;
     case PROP_DOC_PASSWORD_TO_MODIFY:
         if ( bool(g_value_get_boolean (value)) != bDocPasswordToModifyEnabled)
         {
-            priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
+            priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
             priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
         }
         break;
     case PROP_TILED_ANNOTATIONS:
         if ( bool(g_value_get_boolean (value)) != bTiledAnnotationsEnabled)
         {
-            priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ LOK_FEATURE_NO_TILED_ANNOTATIONS;
+            priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ KIT_FEATURE_NO_TILED_ANNOTATIONS;
             priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
         }
         break;
@@ -2748,13 +2748,13 @@ static void lok_doc_view_get_property (GObject* object, guint propId, GValue *va
         g_value_set_boolean (value, priv->m_bCanZoomOut);
         break;
     case PROP_DOC_PASSWORD:
-        g_value_set_boolean (value, (priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD) != 0);
+        g_value_set_boolean (value, (priv->m_nLOKFeatures & KIT_FEATURE_DOCUMENT_PASSWORD) != 0);
         break;
     case PROP_DOC_PASSWORD_TO_MODIFY:
-        g_value_set_boolean (value, (priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY) != 0);
+        g_value_set_boolean (value, (priv->m_nLOKFeatures & KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY) != 0);
         break;
     case PROP_TILED_ANNOTATIONS:
-        g_value_set_boolean (value, !(priv->m_nLOKFeatures & LOK_FEATURE_NO_TILED_ANNOTATIONS));
+        g_value_set_boolean (value, !(priv->m_nLOKFeatures & KIT_FEATURE_NO_TILED_ANNOTATIONS));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propId, pspec);
@@ -2915,8 +2915,8 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
                      priv->m_aLOPath.c_str());
         return FALSE;
     }
-    priv->m_nLOKFeatures |= LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK;
-    priv->m_nLOKFeatures |= LOK_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
+    priv->m_nLOKFeatures |= KIT_FEATURE_PART_IN_INVALIDATION_CALLBACK;
+    priv->m_nLOKFeatures |= KIT_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
     priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
 
     if (priv->m_bUnipoll)

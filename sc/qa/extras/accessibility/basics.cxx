@@ -33,7 +33,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestCalcMenu)
     // in cell A1, insert the date
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Date"));
     // move down to A2
-    documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::DOWN);
+    documentPostKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, css::awt::Key::DOWN);
     // in cell A2, insert the time
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Time"));
 

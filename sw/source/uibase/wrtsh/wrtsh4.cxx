@@ -241,11 +241,11 @@ std::optional<OString> SwWrtShell::getLOKPayload(int nType, int nViewId) const
 {
     switch(nType)
     {
-        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
             return GetVisibleCursor()->getLOKPayload(nType, nViewId);
-        case LOK_CALLBACK_TEXT_SELECTION:
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        case KIT_CALLBACK_TEXT_SELECTION:
+        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
         {
             // Aggregate selection rectangles from all cursors in the ring.
             // In add mode (CTRL+click multi-selection), the actual selections
@@ -265,13 +265,13 @@ std::optional<OString> SwWrtShell::getLOKPayload(int nType, int nViewId) const
                 }
             }
             OString sRect = comphelper::string::join("; ", aAllRects);
-            if (nType == LOK_CALLBACK_TEXT_SELECTION)
+            if (nType == KIT_CALLBACK_TEXT_SELECTION)
                 return sRect;
-            else // LOK_CALLBACK_TEXT_VIEW_SELECTION
+            else // KIT_CALLBACK_TEXT_VIEW_SELECTION
                 return KitHelper::makePayloadJSON(GetSfxViewShell(), nViewId, "selection", sRect);
         }
-        case LOK_CALLBACK_TEXT_SELECTION_START:
-        case LOK_CALLBACK_TEXT_SELECTION_END:
+        case KIT_CALLBACK_TEXT_SELECTION_START:
+        case KIT_CALLBACK_TEXT_SELECTION_END:
             return GetCursor_()->getLOKPayload(nType);
     }
     abort();

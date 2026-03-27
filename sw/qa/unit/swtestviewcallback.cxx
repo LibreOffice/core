@@ -62,17 +62,17 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
     m_bCalled = true;
     switch (nType)
     {
-        case LOK_CALLBACK_STATE_CHANGED:
+        case KIT_CALLBACK_STATE_CHANGED:
         {
             m_aStateChanges.push_back(pPayload);
             break;
         }
-        case LOK_CALLBACK_INVALIDATE_TILES:
+        case KIT_CALLBACK_INVALIDATE_TILES:
         {
             m_bTilesInvalidated = true;
         }
         break;
-        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         {
             m_bOwnCursorInvalidated = true;
 
@@ -100,7 +100,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
                 m_bOwnCursorAtOrigin = true;
         }
         break;
-        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
         {
             m_bViewCursorInvalidated = true;
             std::stringstream aStream(pPayload);
@@ -119,18 +119,18 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aViewCursor.setHeight(aSeq[3].toInt32());
         }
         break;
-        case LOK_CALLBACK_TEXT_SELECTION:
+        case KIT_CALLBACK_TEXT_SELECTION:
         {
             m_bOwnSelectionSet = true;
         }
         break;
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
         {
             m_bViewSelectionSet = true;
             m_aViewSelection = aPayload;
         }
         break;
-        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+        case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -138,7 +138,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_bViewCursorVisible = aTree.get_child("visible").get_value<std::string>() == "true";
         }
         break;
-        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -147,12 +147,12 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
                 = aTree.get_child("selection").get_value<std::string>() != "EMPTY";
         }
         break;
-        case LOK_CALLBACK_GRAPHIC_SELECTION:
+        case KIT_CALLBACK_GRAPHIC_SELECTION:
         {
             m_bGraphicSelection = aPayload != "EMPTY";
         }
         break;
-        case LOK_CALLBACK_VIEW_LOCK:
+        case KIT_CALLBACK_VIEW_LOCK:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -160,12 +160,12 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
         }
         break;
-        case LOK_CALLBACK_VIEW_RENDER_STATE:
+        case KIT_CALLBACK_VIEW_RENDER_STATE:
         {
             m_aViewRenderState = pPayload;
         }
         break;
-        case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+        case KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
         {
             m_aRedlineTableChanged.clear();
             std::stringstream aStream(pPayload);
@@ -173,7 +173,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aRedlineTableChanged = m_aRedlineTableChanged.get_child("redline");
         }
         break;
-        case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+        case KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
         {
             m_aRedlineTableModified.clear();
             std::stringstream aStream(pPayload);
@@ -181,7 +181,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aRedlineTableModified = m_aRedlineTableModified.get_child("redline");
         }
         break;
-        case LOK_CALLBACK_COMMENT:
+        case KIT_CALLBACK_COMMENT:
         {
             ++m_nCommentCallbackCount;
             m_aComment.clear();
@@ -190,17 +190,17 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aComment = m_aComment.get_child("comment");
         }
         break;
-        case LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
+        case KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
         {
             m_aDocColor = aPayload;
             break;
         }
-        case LOK_CALLBACK_EXPORT_FILE:
+        case KIT_CALLBACK_EXPORT_FILE:
         {
             m_aExportFile = aPayload;
             break;
         }
-        case LOK_CALLBACK_CURSOR_VISIBLE:
+        case KIT_CALLBACK_CURSOR_VISIBLE:
         {
             m_bCursorVisible = aPayload == "true";
             break;

@@ -161,9 +161,9 @@ CPPUNIT_TEST_FIXTURE(Test, testPDFReadLOKOnlyTextEdit)
     Size aPageSize = pPage->GetSize();
     auto nCenterX = o3tl::toTwips(aPageSize.Width() / 2, o3tl::Length::mm100);
     auto nCenterY = o3tl::toTwips(aPageSize.Height() / 2, o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, nCenterX, nCenterY, 2,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, nCenterX, nCenterY, 2,
                                       MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, nCenterX, nCenterY, 2,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, nCenterX, nCenterY, 2,
                                       MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 

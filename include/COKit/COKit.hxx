@@ -91,7 +91,7 @@ public:
      * don't have parts.
      *
      * @return a rectangle list, using the same format as
-     * LOK_CALLBACK_TEXT_SELECTION.
+     * KIT_CALLBACK_TEXT_SELECTION.
      */
     char* getPartPageRectangles()
     {
@@ -390,7 +390,7 @@ public:
      *
      * This function is a more efficient combination of getSelectionType() and getTextSelection().
      * It returns the same as getSelectionType(), and additionally if the return value is
-     * LOK_SELTYPE_TEXT then it also returns the same as getTextSelection(), otherwise
+     * KIT_SELTYPE_TEXT then it also returns the same as getTextSelection(), otherwise
      * pText and pUsedMimeType are unchanged.
      *
      * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
@@ -404,7 +404,7 @@ public:
         if (COKIT_DOCUMENT_HAS(mpDoc, getSelectionTypeAndText))
             return mpDoc->pClass->getSelectionTypeAndText(mpDoc, pMimeType, pText, pUsedMimeType);
         int type = mpDoc->pClass->getSelectionType(mpDoc);
-        if(type == LOK_SELTYPE_TEXT && pText)
+        if(type == KIT_SELTYPE_TEXT && pText)
             *pText = mpDoc->pClass->getTextSelection(mpDoc, pMimeType, pUsedMimeType);
         return type;
     }
@@ -660,7 +660,7 @@ public:
      * @param nWindowId Specify the window id to post the input event to. If
      * nWindow is 0, the event is posted into the document
      * @param nType see COKitExtTextInputType
-     * @param pText Text for LOK_EXT_TEXTINPUT
+     * @param pText Text for KIT_EXT_TEXTINPUT
      */
     void postWindowExtTextInputEvent(unsigned nWindowId, int nType, const char* pText)
     {
@@ -1086,14 +1086,14 @@ public:
      * @param pURL      the URL of the document, as sent to the callback
      * @param pPassword the password, nullptr indicates no password
      *
-     * In response to LOK_CALLBACK_DOCUMENT_PASSWORD, a valid password
+     * In response to KIT_CALLBACK_DOCUMENT_PASSWORD, a valid password
      * will continue loading the document, an invalid password will
-     * result in another LOK_CALLBACK_DOCUMENT_PASSWORD request,
+     * result in another KIT_CALLBACK_DOCUMENT_PASSWORD request,
      * and a NULL password will abort loading the document.
      *
-     * In response to LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY, a valid
+     * In response to KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY, a valid
      * password will continue loading the document, an invalid password will
-     * result in another LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY request,
+     * result in another KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY request,
      * and a NULL password will continue loading the document in read-only
      * mode.
      *

@@ -423,7 +423,7 @@ public:
     /// Get the DocId used by Mobile LOKit to load multiple documents.
     ViewShellDocId GetDocId() const override;
 
-    /// ICOKitNotifier. Emits a LOK_CALLBACK_INVALIDATE_TILES.
+    /// ICOKitNotifier. Emits a KIT_CALLBACK_INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const override;
     /// ICOKitNotifier.
     virtual void notifyCursorInvalidation(tools::Rectangle const *, bool bControlEvent, int windowID) const override;

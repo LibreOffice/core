@@ -126,8 +126,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEvent)
     pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
             SfxCallMode::SYNCHRON, { &aInputString });
 
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(pView->GetTextEditObject());
@@ -161,10 +161,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostMouseEvent)
     vcl::Cursor* pCursor = rEditView.GetCursor();
     Point aPosition(pCursor->GetPos().getX(), pCursor->GetPos().getY() + pCursor->GetSize().Height() / 2);
     aPosition.setX(aPosition.getX() - 1000);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       o3tl::toTwips(aPosition.getX(), o3tl::Length::mm100), o3tl::toTwips(aPosition.getY(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                       o3tl::toTwips(aPosition.getX(), o3tl::Length::mm100), o3tl::toTwips(aPosition.getY(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -196,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetTextSelection)
     vcl::Cursor* pCursor = rEditView.GetCursor();
     Point aEnd = pCursor->GetPos();
     aEnd.setX(aEnd.getX() + 1000);
-    pXImpressDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aEnd.getX(), aEnd.getY());
+    pXImpressDocument->setTextSelection(KIT_SETTEXTSELECTION_END, aEnd.getX(), aEnd.getY());
     // The new selection must include the ending dot, too -- but not the first word.
     CPPUNIT_ASSERT_EQUAL(u"bbb."_ustr, rEditView.GetSelected());
 }
@@ -239,8 +239,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetGraphicSelection)
     CPPUNIT_ASSERT_EQUAL(int(SdrHdlKind::Lower), static_cast<int>(pHdl->GetKind()));
     ::tools::Rectangle aShapeBefore = pObject->GetSnapRect();
     // Resize.
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, o3tl::toTwips(pHdl->GetPos().getX(), o3tl::Length::mm100), o3tl::toTwips(pHdl->GetPos().getY(), o3tl::Length::mm100));
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, o3tl::toTwips(pHdl->GetPos().getX(), o3tl::Length::mm100), o3tl::toTwips(pHdl->GetPos().getY() + 1000, o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_START, o3tl::toTwips(pHdl->GetPos().getX(), o3tl::Length::mm100), o3tl::toTwips(pHdl->GetPos().getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_END, o3tl::toTwips(pHdl->GetPos().getX(), o3tl::Length::mm100), o3tl::toTwips(pHdl->GetPos().getY() + 1000, o3tl::Length::mm100));
 
     // Assert that view shell ID tracking works.
     sal_Int32 nView1 = KitHelper::getCurrentView();
@@ -456,10 +456,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDeleteTable)
     SdrView* pSdrView = pViewShell->GetView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     CPPUNIT_ASSERT(rMarkList.GetMarkCount());
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::A);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::A);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DELETE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::A);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::A);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_DELETE);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!rMarkList.GetMarkCount());
 }
@@ -504,8 +504,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTable)
 
     // Resize the upper row, decrease its height by 1 cm.
     Point aInnerRowEdge = pObject->GetSnapRect().Center();
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY() - 1000, o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_END, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY() - 1000, o3tl::Length::mm100));
 
     // Remember the resized row heights.
     sal_Int32 nResizedRow1 = xRow1->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
@@ -549,8 +549,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumn)
 
     // Resize the left column, decrease its width by 1 cm.
     Point aInnerRowEdge = pObject->GetSnapRect().Center();
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, o3tl::toTwips(aInnerRowEdge.getX() - 1000, o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_END, o3tl::toTwips(aInnerRowEdge.getX() - 1000, o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
 
     // Remember the resized column widths.
     pXmlDoc = parseXmlDump();
@@ -638,10 +638,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorViews)
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pView = pViewShell->GetView();
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pView->IsTextEdit());
 
@@ -661,8 +661,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorViews)
     CPPUNIT_ASSERT(aView2.m_bViewLock);
     KitHelper::setView(nView1);
     aView2.m_bTilesInvalidated = false;
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     // This failed: the second view was not invalidated when pressing a key in
     // the first view.
@@ -690,10 +690,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_SingleClick)
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 4), o3tl::Length::mm100);
     const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 4), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                       cornerX, cornerY,
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -705,10 +705,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_SingleClick)
     // Click again, now on the text, in the center, to start editing.
     const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 2), o3tl::Length::mm100);
     const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 2), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -739,10 +739,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_DoubleClick)
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 4), o3tl::Length::mm100);
     const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 4), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -783,10 +783,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_MultiView)
     ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 2), o3tl::Length::mm100);
     const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 2), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       2, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                       centerX, centerY,
                                       2, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -819,10 +819,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_Escape)
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 2), o3tl::Length::mm100);
     const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 2), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -832,8 +832,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_Escape)
     CPPUNIT_ASSERT(aView1.m_bCursorVisible);
 
     // End editing by pressing the escape key.
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // We must be in text editing mode and have cursor visible.
@@ -877,10 +877,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoLimiting)
 
     // Begin text edit on the only object on the slide.
     KitHelper::setView(nView1);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pViewShell1->GetView()->IsTextEdit());
 
@@ -910,8 +910,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoLimiting)
     }
 
     // Exit text edit mode
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!pViewShell1->GetView()->IsTextEdit());
@@ -973,10 +973,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateViewTextCursor)
     SdTestViewCallback aView1;
 
     // Begin text edit.
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pSdrView = pViewShell->GetView();
@@ -1026,10 +1026,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf102223)
 
     // select contents of cell
     ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                       o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1069,10 +1069,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf118354)
 
     // Without the fix, it would crash here
     ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                       o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1090,10 +1090,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEventInvalidation)
     SdTestViewCallback aView1;
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pView = pViewShell->GetView();
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F2);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_F2);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_F2);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_F2);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pView->GetTextEditObject());
 
@@ -1104,18 +1104,18 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEventInvalidation)
     pXImpressDocument->setPart(1);
     sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pView2 = pViewShell2->GetView();
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F2);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_F2);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_F2);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_F2);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pView2->GetTextEditObject());
 
     // Now go left with the cursor in the second view and watch for
     // invalidations.
     aView2.m_bTilesInvalidated = false;
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_LEFT);
     Scheduler::ProcessEventsToIdle();
     // This failed: moving the cursor caused unexpected invalidation.
     CPPUNIT_ASSERT(!aView2.m_bTilesInvalidated);
@@ -1145,10 +1145,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClipNumRules)
 
         // select contents of bullet item
         ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-        pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+        pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
             o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
             1, MOUSE_LEFT, 0);
-        pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+        pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
             o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
             1, MOUSE_LEFT, 0);
         Scheduler::ProcessEventsToIdle();
@@ -1176,8 +1176,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClipNumRules)
         dispatchCommand(mxComponent, u".uno:Paste"_ustr, uno::Sequence<beans::PropertyValue>());
 
         // send an ESC key to trigger the commit of the edit to the main model
-        pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-        pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+        pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+        pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
         Scheduler::ProcessEventsToIdle();
 
         pView->SdrBeginTextEdit(pTextObject);
@@ -1231,10 +1231,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf104405)
     EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
     rEditView2.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
     ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       o3tl::toTwips(aRect.Left(), o3tl::Length::mm100), o3tl::toTwips(aRect.Top(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                       o3tl::toTwips(aRect.Left(), o3tl::Length::mm100), o3tl::toTwips(aRect.Top(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
 
@@ -1266,8 +1266,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
     pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
             SfxCallMode::SYNCHRON, { &aInputString });
 
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
 
     // now save, reload, and assert that we did not lose the edit
@@ -1389,7 +1389,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+    // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     int nComment1 = aView1.m_aCommentCallbackResult.get<int>("id");
@@ -1413,7 +1413,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     });
     dispatchCommand(mxComponent, u".uno:ReplyToAnnotation"_ustr, aArgs);
 
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
+    // We received a KIT_CALLBACK_COMMENT callback with comment 'Modify' action
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
@@ -1437,7 +1437,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     });
     dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
+    // We received a KIT_CALLBACK_COMMENT callback with comment 'Modify' action
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
@@ -1454,7 +1454,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     });
     dispatchCommand(mxComponent, u".uno:DeleteAnnotation"_ustr, aArgs);
 
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
+    // We received a KIT_CALLBACK_COMMENT callback with comment 'Remove' action
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
@@ -1626,10 +1626,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage2)
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 4), o3tl::Length::mm100);
     const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 4), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1683,14 +1683,14 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDisableUndoRepair)
 
     // Insert a character in the first view.
     KitHelper::setView(nView1);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'h', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'h', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'h', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 'h', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pViewShell1->GetView()->IsTextEdit());
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!pViewShell1->GetView()->IsTextEdit());
 
@@ -1711,14 +1711,14 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDisableUndoRepair)
     // Insert a character in the second view.
     KitHelper::setView(nView2);
     pXImpressDocument->setPart(1);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'c', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 'c', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pViewShell2->GetView()->IsTextEdit());
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!pViewShell2->GetView()->IsTextEdit());
 
@@ -1767,14 +1767,14 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDocumentRepair)
     // Insert a character in the second view.
     KitHelper::setView(nView2);
     pXImpressDocument->setPart(1);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'c', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 'c', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pViewShell2->GetView()->IsTextEdit());
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!pViewShell2->GetView()->IsTextEdit());
 
@@ -1904,12 +1904,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf115783)
 
     // Create a cell selection and set font height.
     // Go to the end of the B1 cell.
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_LEFT);
     // Create a B1->C1 cell selection.
     const int nShiftRight = KEY_SHIFT + KEY_RIGHT;
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, nShiftRight);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, nShiftRight);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, nShiftRight);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, nShiftRight);
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
         { "FontHeight.Height", uno::Any(static_cast<float>(12)) },
     });
@@ -1960,44 +1960,44 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteTextOnSlide)
     CPPUNIT_ASSERT(pXImpressDocument);
 
     // select second text object
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
     Scheduler::ProcessEventsToIdle();
 
     // step into text editing
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '1', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, '1', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '1', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, '1', 0);
     Scheduler::ProcessEventsToIdle();
 
     // select full text
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
 
     // Copy some text
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, uno::Sequence<beans::PropertyValue>());
 
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // Paste onto the slide
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, uno::Sequence<beans::PropertyValue>());
 
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // Check the position of the newly added text shape, created for pasted text
@@ -2072,20 +2072,20 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCutSelectionChange)
     Scheduler::ProcessEventsToIdle();
 
     // Select first text object
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
     Scheduler::ProcessEventsToIdle();
 
     // step into text editing
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '1', 0);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, '1', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '1', 0);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, '1', 0);
     Scheduler::ProcessEventsToIdle();
 
     // select some text
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
 
     // Check that we have a selection before cutting
@@ -2231,8 +2231,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testRegenerateDiagram)
     pActualPage->GetObj(0)->GetSubList()->RemoveObject(1);
 
     // select diagram
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
@@ -2396,8 +2396,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteUndo)
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pObject, pView->GetSdrPageView());
     pView->SdrBeginTextEdit(pObject);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_HOME);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_HOME);
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     ESelection aWordSelection(0, 0, 0, 1); // "w" of "world"
     rEditView.SetSelection(aWordSelection);
@@ -4519,8 +4519,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteMarkdownInEditMode)
     pView->MarkObj(pObject, pView->GetSdrPageView());
     pView->SdrBeginTextEdit(pObject);
     CPPUNIT_ASSERT(pView->GetTextEditObject());
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_HOME);
+    pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_HOME);
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
 
     // Select all text:

@@ -747,7 +747,7 @@ bool SwView::ExecSpellPopup(const Point& rPt, bool bIsMouseEvent)
 
                                 std::stringstream aStream;
                                 boost::property_tree::write_json(aStream, aRoot, true);
-                                pViewShell->viewCallback(LOK_CALLBACK_CONTEXT_MENU, OString(aStream.str()));
+                                pViewShell->viewCallback(KIT_CALLBACK_CONTEXT_MENU, OString(aStream.str()));
                             }
                         }
                         else

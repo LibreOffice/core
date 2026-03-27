@@ -233,7 +233,7 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
                     KitHelper::notifyViewRenderState(pViewSh, pScModelObj);
                     // In Online, the document color is the one used for the background, contrary to
                     // Writer and Draw that use the application background color.
-                    pViewSh->viewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
+                    pViewSh->viewCallback(KIT_CALLBACK_APPLICATION_BACKGROUND_COLOR,
                             aFillColor.AsRGBHexString().toUtf8());
                 }
 

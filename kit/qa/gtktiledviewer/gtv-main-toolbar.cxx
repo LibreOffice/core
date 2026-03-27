@@ -239,7 +239,7 @@ gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, COKitDocumentType eDocType,
     GtvMainToolbarPrivate& priv = getPrivate(toolbar);
     gtk_widget_set_visible(toolbar->m_pAddressbar, false);
     gtk_widget_set_visible(toolbar->m_pFormulabar, false);
-    if (eDocType == LOK_DOCTYPE_SPREADSHEET)
+    if (eDocType == KIT_DOCTYPE_SPREADSHEET)
     {
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pLeftpara), ".uno:AlignLeft");
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pCenterpara), ".uno:AlignHorizontalCenter");
@@ -250,7 +250,7 @@ gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, COKitDocumentType eDocType,
         gtk_widget_set_visible(toolbar->m_pAddressbar, true);
         gtk_widget_set_visible(toolbar->m_pFormulabar, true);
     }
-    else if (eDocType == LOK_DOCTYPE_PRESENTATION)
+    else if (eDocType == KIT_DOCTYPE_PRESENTATION)
     {
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pDeleteComment), ".uno:DeleteAnnotation");
     }

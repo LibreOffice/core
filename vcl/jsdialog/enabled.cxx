@@ -775,7 +775,7 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
         else if (entry == u"svx/ui/sidebargallery.ui")
             continue;
 
-        if (docType != LOK_DOCTYPE_TEXT)
+        if (docType != KIT_DOCTYPE_TEXT)
         {
             // These only appear in writer
             if (entry == u"svx/ui/accessibilitycheckentry.ui" ||
@@ -786,7 +786,7 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
             }
         }
 
-        if (docType == LOK_DOCTYPE_TEXT)
+        if (docType == KIT_DOCTYPE_TEXT)
         {
             // Skip this one, its context means it cannot appear in writer
             if (entry == u"svx/ui/sidebarshadow.ui")
@@ -796,7 +796,7 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
                 continue;
         }
 
-        if (docType != LOK_DOCTYPE_PRESENTATION && docType != LOK_DOCTYPE_DRAWING)
+        if (docType != KIT_DOCTYPE_PRESENTATION && docType != KIT_DOCTYPE_DRAWING)
         {
             // Skip this one, in practice it appears in draw/impress
             // TODO: it should probably be made to appear in writer/calc too
@@ -834,7 +834,7 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 continue;
             }
 
-            if (docType != LOK_DOCTYPE_TEXT)
+            if (docType != KIT_DOCTYPE_TEXT)
             {
                 // The 'writerperfect' ones are writer only
                 if (o3tl::starts_with(entry, u"writerperfect"))
@@ -849,7 +849,7 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 }
             }
 
-            if (docType == LOK_DOCTYPE_SPREADSHEET)
+            if (docType == KIT_DOCTYPE_SPREADSHEET)
             {
                 // Not supported in Calc
                 if (entry == u"svx/ui/gotopagedialog.ui" ||

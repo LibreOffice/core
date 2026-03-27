@@ -209,7 +209,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf151974)
     dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Paste special as RTF
@@ -372,7 +372,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143574)
 
     // Select a shape in the group
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have crashed
@@ -718,12 +718,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
     SwXTextDocument* pTextDoc = getSwTextDoc();
     for (auto nLineBreakCount = 0; nLineBreakCount < 4; ++nLineBreakCount)
     {
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+        pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
         Scheduler::ProcessEventsToIdle();
     }
     for (auto nSpaceCount = 0; nSpaceCount < 10; ++nSpaceCount)
     {
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SPACE);
+        pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_SPACE);
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -1419,7 +1419,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147961)
 
     // Without the fix in place, this test would have crashed here
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
@@ -2126,9 +2126,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
 
     // Add 3x tab to the doc
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     auto pExportDump = parseLayoutDump();
@@ -2179,7 +2179,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf155028)
 
     // Select a shape in the group
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
@@ -2250,17 +2250,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636)
 
     //go to middle row
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, u".uno:MergeCells"_ustr, {});
@@ -2287,15 +2287,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getColumns()->getCount());
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, u".uno:MergeCells"_ustr, {});
@@ -2503,7 +2503,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf123285)
     dispatchCommand(mxComponent, u".uno:GoToEndOfPage"_ustr, {});
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, the last "sentence" would have been changed to " entence"
@@ -2532,7 +2532,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
@@ -2558,7 +2558,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
     {
     }
 
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_UP | KEY_MOD2);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_UP | KEY_MOD2);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
@@ -2753,8 +2753,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150457)
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, xParagraph->getString());
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_PAGEUP);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_PAGEUP);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     emulateTyping(u"d");
 
     dispatchCommand(mxComponent, u".uno:InsertFootnote"_ustr, {});
@@ -2765,17 +2765,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150457)
     CPPUNIT_ASSERT_EQUAL(u"def"_ustr, xParagraph->getString());
 
     // This key sequence deletes a footnote and its number (without the fix applied)
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_UP);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_UP);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_HOME);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
 
     // Page up moves the cursor from the footnote area to the main text, then
     // doing select all and pressing delete removes all the text and footnote references,
     // thus removing all the footnotes
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_PAGEUP);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::SELECT_ALL);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_PAGEUP);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::SELECT_ALL);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
 
     // Without having fix in place, segfault happens after running next line
     Scheduler::ProcessEventsToIdle();

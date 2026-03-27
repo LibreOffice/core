@@ -69,7 +69,7 @@ void ScTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 {
     switch (nType)
     {
-        case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
         {
             OString aPayload(pPayload);
             sal_Int32 nIndex = 0;
@@ -130,8 +130,8 @@ void ScTiledRenderingTest::cellInvalidationHelper(ScModelObj* pModelObj, ScTabVi
     else // DeleteText
     {
         pView->SetCursor(rAdr.Col(), rAdr.Row());
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -147,15 +147,15 @@ void ScTiledRenderingTest::typeCharsInCell(const std::string& aStr, SCCOL nCol, 
 
     for (const char& cChar : aStr)
     {
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, cChar, 0);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, cChar, 0);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, cChar, 0);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, cChar, 0);
         Scheduler::ProcessEventsToIdle();
     }
 
     if (bCommit)
     {
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
         Scheduler::ProcessEventsToIdle();
     }
 }

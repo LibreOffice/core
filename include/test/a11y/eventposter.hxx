@@ -41,8 +41,8 @@ public:
     /** Posts a full key down/up cycle */
     void postKeyEventAsync(int nCharCode, int nKeyCode) const
     {
-        postKeyEventAsync(LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
-        postKeyEventAsync(LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
+        postKeyEventAsync(KIT_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
+        postKeyEventAsync(KIT_KEYEVENT_KEYUP, nCharCode, nKeyCode);
     }
 
     /** @see KitHelper::postExtTextEventAsync */
@@ -51,8 +51,8 @@ public:
     /** Posts a full text input + commit sequence */
     void postExtTextEventAsync(const OUString& rText) const
     {
-        postExtTextEventAsync(LOK_EXT_TEXTINPUT, rText);
-        postExtTextEventAsync(LOK_EXT_TEXTINPUT_END, rText);
+        postExtTextEventAsync(KIT_EXT_TEXTINPUT, rText);
+        postExtTextEventAsync(KIT_EXT_TEXTINPUT_END, rText);
     }
 };
 

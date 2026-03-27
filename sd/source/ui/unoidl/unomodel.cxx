@@ -4311,9 +4311,9 @@ void SdXImpressDocument::setPartMode( int nPartMode )
     PageKind aPageKind( PageKind::Standard );
     switch ( nPartMode )
     {
-    case LOK_PARTMODE_SLIDES:
+    case KIT_PARTMODE_SLIDES:
         break;
-    case LOK_PARTMODE_NOTES:
+    case KIT_PARTMODE_NOTES:
         aPageKind = PageKind::Notes;
         break;
     }
@@ -4565,13 +4565,13 @@ void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
     Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
     switch (nType)
     {
-    case LOK_SETTEXTSELECTION_START:
+    case KIT_SETTEXTSELECTION_START:
         pViewShell->SetCursorMm100Position(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
         break;
-    case LOK_SETTEXTSELECTION_END:
+    case KIT_SETTEXTSELECTION_END:
         pViewShell->SetCursorMm100Position(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
         break;
-    case LOK_SETTEXTSELECTION_RESET:
+    case KIT_SETTEXTSELECTION_RESET:
         pViewShell->SetCursorMm100Position(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
         break;
     default:
@@ -4608,10 +4608,10 @@ void SdXImpressDocument::setGraphicSelection(int nType, int nX, int nY)
     Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
     switch (nType)
     {
-    case LOK_SETGRAPHICSELECTION_START:
+    case KIT_SETGRAPHICSELECTION_START:
         pViewShell->SetGraphicMm100Position(/*bStart=*/true, aPoint);
         break;
-    case LOK_SETGRAPHICSELECTION_END:
+    case KIT_SETGRAPHICSELECTION_END:
         pViewShell->SetGraphicMm100Position(/*bStart=*/false, aPoint);
         break;
     default:

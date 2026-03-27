@@ -46,7 +46,7 @@ namespace desktop {
         int m_nMode;
 
         // This is the "EMPTY" rectangle, which somewhat confusingly actually means
-        // to drop all rectangles (see LOK_CALLBACK_INVALIDATE_TILES documentation),
+        // to drop all rectangles (see KIT_CALLBACK_INVALIDATE_TILES documentation),
         // and so it is actually an infinite rectangle and not an empty one.
         constexpr static tools::Rectangle emptyAllRectangle = {0, 0, KitHelper::MaxTwips, KitHelper::MaxTwips};
 

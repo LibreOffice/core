@@ -1250,7 +1250,7 @@ void SvxRuler::NotifyKit()
     tools::JsonWriter aJsonWriter;
     CreateJsonNotification(aJsonWriter);
     OString pJsonData = aJsonWriter.finishAndGetAsOString();
-    COKitCallbackType eType = isHorizontal() ? LOK_CALLBACK_RULER_UPDATE : LOK_CALLBACK_VERTICAL_RULER_UPDATE;
+    COKitCallbackType eType = isHorizontal() ? KIT_CALLBACK_RULER_UPDATE : KIT_CALLBACK_VERTICAL_RULER_UPDATE;
     pViewShell->viewCallback(eType, pJsonData);
 }
 

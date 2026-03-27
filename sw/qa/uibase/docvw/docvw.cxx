@@ -199,7 +199,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShiftDoubleClickOnImage)
 
 namespace
 {
-/// Test LOK callback, handling just LOK_CALLBACK_TOOLTIP.
+/// Test LOK callback, handling just KIT_CALLBACK_TOOLTIP.
 struct TooltipCallback
 {
     std::string rect;
@@ -217,7 +217,7 @@ void TooltipCallback::callback(int nType, const char* pPayload, void* pData)
 
 void TooltipCallback::callbackImpl(int nType, const char* pPayload)
 {
-    if (nType == LOK_CALLBACK_TOOLTIP)
+    if (nType == KIT_CALLBACK_TOOLTIP)
     {
         std::stringstream aStream(pPayload);
         boost::property_tree::ptree aTree;
@@ -269,7 +269,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
     pWrtShell->StartOfSection(/*bSelect=*/false);
     Point aStart = pShellCursor->GetSttPos();
     Point aMiddle((aStart.getX() + aEnd.getX()) / 2, (aStart.getY() + aEnd.getY()) / 2);
-    getSwTextDoc()->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, aMiddle.getX(), aMiddle.getY(), 1, 0,
+    getSwTextDoc()->postMouseEvent(KIT_MOUSEEVENT_MOUSEMOVE, aMiddle.getX(), aMiddle.getY(), 1, 0,
                                    0);
     Scheduler::ProcessEventsToIdle();
 

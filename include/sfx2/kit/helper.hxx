@@ -176,26 +176,26 @@ public:
     static void notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
                                 int nType, const boost::property_tree::ptree& rTree);
 
-    /// Emits a LOK_CALLBACK_STATE_CHANGED
+    /// Emits a KIT_CALLBACK_STATE_CHANGED
     static void sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem);
-    /// Emits a LOK_CALLBACK_WINDOW
+    /// Emits a KIT_CALLBACK_WINDOW
     static void notifyWindow(const SfxViewShell* pThisView,
                              vcl::LOKWindowId nWindowId,
                              std::u16string_view rAction,
                              const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>());
-    /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED - if @bInvalidateAll - first invalidates all parts
+    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED - if @bInvalidateAll - first invalidates all parts
     static void notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
-    /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAll - first invalidates all parts
+    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAll - first invalidates all parts
     static void notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
-    /// Emits a LOK_CALLBACK_STATE_CHANGED for all views of the same document - with payload ".uno:CurrentPageResize"
+    /// Emits a KIT_CALLBACK_STATE_CHANGED for all views of the same document - with payload ".uno:CurrentPageResize"
     static void notifyCurrentPageSizeChangedAllViews(vcl::ITiledRenderable* pDoc);
-    /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document with the same part
+    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document with the same part
     static void notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart);
-    /// Emits a LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR
+    /// Emits a KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR
     static void notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const * pRect, bool bControlEvent, int windowID);
-    /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
+    /// Emits a KIT_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
     static void notifyInvalidation(SfxViewShell const* pThisView, int nPart, tools::Rectangle const *);
-    /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed
+    /// Emits a KIT_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed
     /// uses the Part reported by pThisView
     static void notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const *);
     /// Notifies all views with the given type and payload.
@@ -204,7 +204,7 @@ public:
     /// Notify about the editing context change.
     static void notifyContextChange(const css::ui::ContextChangeEventObject& rEvent);
 
-    /// Emits an LOK_CALLBACK_VIEW_RENDER_STATE
+    /// Emits an KIT_CALLBACK_VIEW_RENDER_STATE
     static void notifyViewRenderState(SfxViewShell const* pViewShell, vcl::ITiledRenderable* pDoc);
 
     // Notify about the given type needing an update.
@@ -219,7 +219,7 @@ public:
     static void notifyOtherViewsUpdatePerViewId(SfxViewShell const* pViewShell, int nType);
 
     static OString makePayloadJSON(const SfxViewShell* pThisView, int nViewId, std::string_view rKey, const OString& rPayload);
-    /// Makes a LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR payload, but tweaks it according to setOptionalFeatures() if needed.
+    /// Makes a KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR payload, but tweaks it according to setOptionalFeatures() if needed.
     static OString makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
                                              bool bMispelledWord = false, const OString& rHyperlink = ""_ostr);
 

@@ -159,7 +159,7 @@ void ViewCallback::callbackImpl(int nType, const char* /*pPayload*/)
 {
     switch (nType)
     {
-        case LOK_CALLBACK_INVALIDATE_TILES:
+        case KIT_CALLBACK_INVALIDATE_TILES:
         {
             ++m_nInvalidations;
         }

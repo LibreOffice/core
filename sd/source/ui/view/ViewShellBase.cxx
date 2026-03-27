@@ -261,9 +261,9 @@ ViewShellBase::ViewShellBase (
 ViewShellBase::~ViewShellBase()
 {
     // Notify other LOK views that we are going away.
-    KitHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
-    KitHelper::notifyOtherViews(this, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
-    KitHelper::notifyOtherViews(this, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+    KitHelper::notifyOtherViews(this, KIT_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
+    KitHelper::notifyOtherViews(this, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
+    KitHelper::notifyOtherViews(this, KIT_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);
 
     sfx2::SfxNotebookBar::CloseMethod(GetFrame()->GetBindings());
 
@@ -1116,7 +1116,7 @@ void ViewShellBase::afterCallbackRegistered()
         aTree.put("state", "true");
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree);
-        viewCallback(LOK_CALLBACK_STATE_CHANGED, OString(aStream.str()));
+        viewCallback(KIT_CALLBACK_STATE_CHANGED, OString(aStream.str()));
     }
 }
 
@@ -1153,7 +1153,7 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
             if (pWin && pWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
                 aRectangle = o3tl::toTwips(aRectangle, o3tl::Length::mm100);
             OString sRectangle = aRectangle.toString();
-            KitHelper::notifyOtherView(pDrawViewShell->GetViewShellBase(), pOtherShell, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
+            KitHelper::notifyOtherView(pDrawViewShell->GetViewShellBase(), pOtherShell, KIT_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
         }
     }
     else

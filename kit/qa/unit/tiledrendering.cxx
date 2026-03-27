@@ -59,8 +59,8 @@ void insertString(Document& rDocument, const std::string& s)
 {
     for (const char c : s)
     {
-        rDocument.postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
-        rDocument.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+        rDocument.postKeyEvent(KIT_KEYEVENT_KEYINPUT, c, 0);
+        rDocument.postKeyEvent(KIT_KEYEVENT_KEYUP, c, 0);
         processEventsToIdle();
     }
 }
@@ -181,7 +181,7 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
-    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
+    CPPUNIT_ASSERT_EQUAL(KIT_DOCTYPE_TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
     // This crashed.
     pDocument->postUnoCommand(".uno:Bold");
     processEventsToIdle();
@@ -192,7 +192,7 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     // FIXME: same comment as below wrt lockfile removal.
     remove( sPresentationLockFile.c_str() );
 
-    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_PRESENTATION, static_cast<COKitDocumentType>(getDocumentType(pOffice, sPresentationDocPath)));
+    CPPUNIT_ASSERT_EQUAL(KIT_DOCTYPE_PRESENTATION, static_cast<COKitDocumentType>(getDocumentType(pOffice, sPresentationDocPath)));
 
     // TODO: do this for all supported document types
 }
@@ -224,7 +224,7 @@ void TiledRenderingTest::testPaintPartTile(Office* pOffice)
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
-    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
+    CPPUNIT_ASSERT_EQUAL(KIT_DOCTYPE_TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
 
     // Create two views.
     pDocument->getView();
@@ -251,17 +251,17 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
     // assert that '.' is the decimal separator
     insertString(*pDocument, "1.5");
 
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::RIGHT);
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::RIGHT);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, css::awt::Key::RIGHT);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, css::awt::Key::RIGHT);
     processEventsToIdle();
 
     insertString(*pDocument, "=2*A1");
 
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::RETURN);
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, css::awt::Key::RETURN);
     processEventsToIdle();
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::UP);
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::UP);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, css::awt::Key::UP);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, css::awt::Key::UP);
     processEventsToIdle();
 
 #if 0
@@ -281,17 +281,17 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
     // with cs-CZ, the decimal separator is ',' instead, assert that
     insertString(*pDocument, "1,5");
 
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::RIGHT);
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::RIGHT);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, css::awt::Key::RIGHT);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, css::awt::Key::RIGHT);
     processEventsToIdle();
 
     insertString(*pDocument, "=2*A1");
 
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::RETURN);
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, css::awt::Key::RETURN);
     processEventsToIdle();
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::UP);
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::UP);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, css::awt::Key::UP);
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, css::awt::Key::UP);
     processEventsToIdle();
 
     // we've got a meaningful result
@@ -402,7 +402,7 @@ void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
-    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
+    CPPUNIT_ASSERT_EQUAL(KIT_DOCTYPE_TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
 
     // Create two views.
     int nViewA = pDocument->getView();
@@ -417,16 +417,16 @@ void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
 
     // First a key-stroke from a
     pDocument->setView(nViewA);
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 97, 0); // a
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 512);   // 'a
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 97, 0); // a
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, 512);   // 'a
 
     // A space on 'a' - force commit
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, 0); // ' '
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 1284);   // '' '
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 32, 0); // ' '
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, 1284);   // '' '
 
     // Another 'a'
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 97, 0); // a
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 512);   // 'a
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 97, 0); // a
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, 512);   // 'a
 
     // FIXME: Wait for writer input handler to commit that.
     // without this we fall foul of edtwin's KeyInputFlushTimer
@@ -434,12 +434,12 @@ void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
 
     // Quickly a new key-stroke from b
     pDocument->setView(nViewB);
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 98, 0); // b
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 514);   // 'b
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 98, 0); // b
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, 514);   // 'b
 
     // A space on 'b' - force commit
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, 0); // ' '
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 1284);   // '' '
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 32, 0); // ' '
+    pDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, 1284);   // '' '
 
     // Wait for writer input handler to commit that.
     std::this_thread::sleep_for(std::chrono::milliseconds(300));

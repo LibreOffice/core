@@ -337,7 +337,7 @@ void ScInputHandler::SendReferenceMarks( const SfxViewShell* pViewShell,
 
     OString aPayload( ss.str() );
     pViewShell->viewCallback(
-                LOK_CALLBACK_REFERENCE_MARKS, aPayload );
+                KIT_CALLBACK_REFERENCE_MARKS, aPayload );
 }
 
 static inline void incPos( const sal_Unicode c, sal_Int32& rPos, ESelection& rSel )
@@ -1100,7 +1100,7 @@ void ScInputHandler::HideTip()
 
     const SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::COKit::isActive() && pViewShell)
-        pViewShell->viewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, "hidetip"_ostr);
+        pViewShell->viewCallback(KIT_CALLBACK_CALC_FUNCTION_LIST, "hidetip"_ostr);
 }
 void ScInputHandler::HideTipBelow()
 {
@@ -1277,7 +1277,7 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                             writer.put("type", "formulausage");
                             writer.put("text", aNew);
                             OString sFunctionUsageTip = writer.finishAndGetAsOString();
-                            pViewShell->viewCallback(LOK_CALLBACK_TOOLTIP, sFunctionUsageTip);
+                            pViewShell->viewCallback(KIT_CALLBACK_TOOLTIP, sFunctionUsageTip);
                         }
                     }
                 }
@@ -1498,7 +1498,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
             }
 
             OString s = aPayload.makeStringAndClear();
-            pViewShell->viewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s);
+            pViewShell->viewCallback(KIT_CALLBACK_CALC_FUNCTION_LIST, s);
         }
         return;
     }
@@ -2870,7 +2870,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         }
 
         OUString aText = ScEditUtil::GetMultilineString(*mpEditEngine);
-        pActiveViewSh->viewCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8());
+        pActiveViewSh->viewCallback(KIT_CALLBACK_CELL_FORMULA, aText.toUtf8());
         pActiveViewSh->LOKSendFormulabarUpdate(pActiveView,
                                                aText,
                                                aSel);
@@ -4397,7 +4397,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                             aSel.end.nPara = 0;
 
                         pActiveViewSh->LOKSendFormulabarUpdate(pActiveView, aString, aSel);
-                        pActiveViewSh->viewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8());
+                        pActiveViewSh->viewCallback(KIT_CALLBACK_CELL_FORMULA, aString.toUtf8());
                     }
                 }
 
@@ -4441,7 +4441,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     }
 
                     if (comphelper::COKit::isActive() && pActiveViewSh)
-                        pActiveViewSh->viewCallback(LOK_CALLBACK_CELL_ADDRESS, aPosStr.toUtf8());
+                        pActiveViewSh->viewCallback(KIT_CALLBACK_CELL_ADDRESS, aPosStr.toUtf8());
                 }
 
                 if (bStopEditing) {

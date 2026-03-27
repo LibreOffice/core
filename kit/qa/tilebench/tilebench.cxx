@@ -123,12 +123,12 @@ static void dumpTile(const char *pNameStem,
             {
                 switch (mode)
                 {
-                    case LOK_TILEMODE_RGBA:
+                    case KIT_TILEMODE_RGBA:
                         buf[0] = (*(pixel + 0) * 255 + alpha / 2) / alpha;
                         buf[1] = (*(pixel + 1) * 255 + alpha / 2) / alpha;
                         buf[2] = (*(pixel + 2) * 255 + alpha / 2) / alpha;
                         break;
-                    case LOK_TILEMODE_BGRA:
+                    case KIT_TILEMODE_BGRA:
                         buf[0] = (*(pixel + 2) * 255 + alpha / 2) / alpha;
                         buf[1] = (*(pixel + 1) * 255 + alpha / 2) / alpha;
                         buf[2] = (*(pixel + 0) * 255 + alpha / 2) / alpha;
@@ -158,9 +158,9 @@ static void testTile( Document *pDocument, int max_parts,
     const int mode = pDocument->getTileMode();
 
     aTimes.emplace_back("getparts");
-    const int nOriginalPart = (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT ? 1 : pDocument->getPart());
+    const int nOriginalPart = (pDocument->getDocumentType() == KIT_DOCTYPE_TEXT ? 1 : pDocument->getPart());
     // Writer really has 1 part (the full doc).
-    const int nTotalParts = (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT ? 1 : pDocument->getParts());
+    const int nTotalParts = (pDocument->getDocumentType() == KIT_DOCTYPE_TEXT ? 1 : pDocument->getParts());
     const int nParts = (max_parts < 0 ? nTotalParts : std::min(max_parts, nTotalParts));
     aTimes.emplace_back();
 
@@ -185,7 +185,7 @@ static void testTile( Document *pDocument, int max_parts,
     long const nTileTwipHeight = 3840;
 
     // Estimate the maximum tiles based on the number of parts requested, if Writer.
-    if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
+    if (pDocument->getDocumentType() == KIT_DOCTYPE_TEXT)
         max_tiles = static_cast<int>(ceil(max_parts * 16128. / nTilePixelHeight) * ceil(static_cast<double>(nWidth) / nTilePixelWidth));
     fprintf(stderr, "Parts to render: %d, Total Parts: %d, Max parts: %d, Max tiles: %d\n", nParts, nTotalParts, max_parts, max_tiles);
 
@@ -201,7 +201,7 @@ static void testTile( Document *pDocument, int max_parts,
         fprintf (stderr, "render '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
         free (pName);
 
-        if (dump || pDocument->getDocumentType() != LOK_DOCTYPE_TEXT)
+        if (dump || pDocument->getDocumentType() != KIT_DOCTYPE_TEXT)
         {
             // whole part; meaningful only for non-writer documents.
             aTimes.emplace_back("render whole part");
@@ -239,7 +239,7 @@ static void testTile( Document *pDocument, int max_parts,
         { // scaled
             aTimes.emplace_back("render sub-regions at scale");
             int nMaxTiles = max_tiles;
-            if (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT)
+            if (pDocument->getDocumentType() == KIT_DOCTYPE_TEXT)
                 nMaxTiles = static_cast<int>(ceil(max_parts * 16128. / nTileTwipHeight) * ceil(static_cast<double>(nWidth) / nTileTwipWidth));
             int nTiles = 0;
             for (long nY = 0; nY < nHeight - 1; nY += nTileTwipHeight)
@@ -486,7 +486,7 @@ static void kitCallback(int nType, const char* pPayload, void* pData)
 {
     Document *pDocument = static_cast<Document *>(pData);
 
-    if (nType != LOK_CALLBACK_WINDOW)
+    if (nType != KIT_CALLBACK_WINDOW)
         return;
 
     std::stringstream aStream(pPayload);
@@ -541,7 +541,7 @@ static void testDialog( Document *pDocument, const char *uno_cmd )
     }
 
     aTimes.emplace_back("post close dialog");
-    pDocument->postWindow(nDialogId, LOK_WINDOW_CLOSE);
+    pDocument->postWindow(nDialogId, KIT_WINDOW_CLOSE);
     aTimes.emplace_back();
 
     pDocument->destroyView(view);
@@ -629,7 +629,7 @@ int main( int argc, char* argv[] )
 
     std::unique_ptr<Document> pDocument;
 
-    pOffice->setOptionalFeatures(LOK_FEATURE_NO_TILED_ANNOTATIONS);
+    pOffice->setOptionalFeatures(KIT_FEATURE_NO_TILED_ANNOTATIONS);
 
     aTimes.emplace_back("load document");
     if (doc_url != nullptr)
@@ -660,13 +660,13 @@ int main( int argc, char* argv[] )
             {
                 switch (pDocument->getDocumentType())
                 {
-                case LOK_DOCTYPE_SPREADSHEET:
+                case KIT_DOCTYPE_SPREADSHEET:
                     uno_cmd = ".uno:FormatCellDialog";
                     break;
-                case LOK_DOCTYPE_TEXT:
-                case LOK_DOCTYPE_PRESENTATION:
-                case LOK_DOCTYPE_DRAWING:
-                case LOK_DOCTYPE_OTHER:
+                case KIT_DOCTYPE_TEXT:
+                case KIT_DOCTYPE_PRESENTATION:
+                case KIT_DOCTYPE_DRAWING:
+                case KIT_DOCTYPE_OTHER:
                     return help("missing argument to --dialog and no default");
                 }
             }

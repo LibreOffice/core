@@ -1134,7 +1134,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
 
             SfxViewShell* pViewShell = GetViewData().GetViewShell();
             const OString message = aJsonWriter.finishAndGetAsOString();
-            pViewShell->viewCallback(LOK_CALLBACK_PRINT_RANGES, message);
+            pViewShell->viewCallback(KIT_CALLBACK_PRINT_RANGES, message);
         }
 
         pDocSh->GetUndoManager()->AddUndoAction(
@@ -2133,7 +2133,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             GetFrameWin()->LeaveWait();
             if (!bIsApi)
             {
-                GetViewData().GetViewShell()->viewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8());
+                GetViewData().GetViewShell()->viewCallback(KIT_CALLBACK_SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8());
                 SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NotFound);
             }
 
@@ -2188,9 +2188,9 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             if (pGridWindow && nCommand == SvxSearchCmd::FIND)
             {
                 // move the cell selection handles
-                pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_RESET, aCurPos.X(), aCurPos.Y());
-                pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_START, aCurPos.X(), aCurPos.Y());
-                pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_END, aCurPos.X(), aCurPos.Y());
+                pGridWindow->SetCellSelectionPixel(KIT_SETTEXTSELECTION_RESET, aCurPos.X(), aCurPos.Y());
+                pGridWindow->SetCellSelectionPixel(KIT_SETTEXTSELECTION_START, aCurPos.X(), aCurPos.Y());
+                pGridWindow->SetCellSelectionPixel(KIT_SETTEXTSELECTION_END, aCurPos.X(), aCurPos.Y());
             }
 
             if (pGridWindow)
@@ -2216,9 +2216,9 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 boost::property_tree::write_json(aStream, aTree);
                 OString aPayload( aStream.str() );
                 SfxViewShell* pViewShell = GetViewData().GetViewShell();
-                pViewShell->viewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload);
+                pViewShell->viewCallback(KIT_CALLBACK_SEARCH_RESULT_SELECTION, aPayload);
 
-                // Trigger LOK_CALLBACK_TEXT_SELECTION now.
+                // Trigger KIT_CALLBACK_TEXT_SELECTION now.
                 MarkDataChanged();
             }
         }

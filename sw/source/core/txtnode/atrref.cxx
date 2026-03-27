@@ -142,7 +142,7 @@ SwTextRefMark::~SwTextRefMark()
         aJson.put("DeleteField", fieldCommand.toString());
     }
 
-    pViewShell->viewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+    pViewShell->viewCallback(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
 }
 
 const sal_Int32* SwTextRefMark::GetEnd() const

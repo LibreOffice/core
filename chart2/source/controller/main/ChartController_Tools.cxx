@@ -1313,13 +1313,13 @@ void ChartController::executeDispatch_LOKSetTextSelection(int nType, int nX, int
     Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
     switch (nType)
     {
-        case LOK_SETTEXTSELECTION_START:
+        case KIT_SETTEXTSELECTION_START:
             rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
             break;
-        case LOK_SETTEXTSELECTION_END:
+        case KIT_SETTEXTSELECTION_END:
             rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
             break;
-        case LOK_SETTEXTSELECTION_RESET:
+        case KIT_SETTEXTSELECTION_RESET:
             rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
             break;
         default:

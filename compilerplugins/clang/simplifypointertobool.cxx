@@ -347,7 +347,7 @@ bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castEx
     //            auto ret = getCallValue(arg);
     //            if (ret.hasValue() && (ret.getValue() == 1 || ret.getValue() == 0))
     //                continue;
-    //            // something like: priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD
+    //            // something like: priv->m_nLOKFeatures & KIT_FEATURE_DOCUMENT_PASSWORD
     //            if (isa<BinaryOperator>(arg->IgnoreParenImpCasts()))
     //                continue;
     //            // something like: pbEmbolden ? FcTrue : FcFalse

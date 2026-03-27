@@ -759,8 +759,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf167973_CaseRotateCaseWithBullets)
     emulateTyping(u"First line");
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     emulateTyping(u"Second line");
@@ -1181,7 +1181,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157492_TrackedMovingRow)
     for (int i = 0; i < 3; ++i)
     {
         pWrtShell->Insert(u"x"_ustr);
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
+        pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
     }
 
     Scheduler::ProcessEventsToIdle();
@@ -1309,7 +1309,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155846_MovingColumn)
     for (int i = 0; i < 4; ++i)
     {
         pWrtShell->Insert(u"x"_ustr);
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+        pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     }
 
     Scheduler::ProcessEventsToIdle();
@@ -2723,8 +2723,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf153423)
     emulateTyping(u"1. Item 1");
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have failed with
@@ -2940,7 +2940,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf139922)
     createSwDoc();
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     emulateTyping(u"this is a SEntence. this is a SEntence.");
@@ -2993,7 +2993,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf129270)
 
     // Press enter
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Numbering for previous outline should remain the same "2"
@@ -3102,7 +3102,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testNestedGroupTextBoxCopyCrash)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
     // This crashed here before the fix.
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
     Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 

@@ -630,8 +630,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteWithReturnKey)
         dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
 
         // Paste using Return
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(u"Test"_ustr, pDoc->GetString(ScAddress(0, i, 0)));
@@ -649,14 +649,14 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf56036)
 
     // Insert Newline
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     typeString(u"+ 3)");
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have failed with
@@ -672,23 +672,23 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf154174_repeat_empty)
     insertStringToCell(u"A1"_ustr, u"aaaa");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::Y);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::Y);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::Y);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::Y);
     Scheduler::ProcessEventsToIdle();
 
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT_EQUAL(u"aaaa"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::F2);
     Scheduler::ProcessEventsToIdle();
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
     Scheduler::ProcessEventsToIdle();
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have failed with
@@ -708,12 +708,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119162)
 
     // Insert Newline
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString(u"Test" + OUStringChar(u'\xA')),
@@ -802,12 +802,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132026)
             typeString(*aChar);
 
             sal_uInt16 nDir = aDirections[i];
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, nDir);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, nDir);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, nDir);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, nDir);
             Scheduler::ProcessEventsToIdle();
 
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
             Scheduler::ProcessEventsToIdle();
 
             sal_Int16 nSign = (*aChar == u"-") ? -1 : 1;
@@ -818,12 +818,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132026)
             goToCell(u"E2"_ustr);
             typeString(*aChar);
 
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, nDir);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, nDir);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, nDir);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, nDir);
             Scheduler::ProcessEventsToIdle();
 
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
             Scheduler::ProcessEventsToIdle();
 
             // Without the fix in place, this test would have failed with
@@ -882,13 +882,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146795)
 
     // Move to B3
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
     // Select the three following cells
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have crashed here
@@ -926,11 +926,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147744)
 
     // Move to A3
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
     // Select the following cell
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have crashed here
@@ -990,8 +990,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138432)
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have failed with
@@ -1285,8 +1285,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf140151)
 
     // Focus is already on the button
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, the current cursor position wouldn't have changed
@@ -1308,7 +1308,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf68290)
     {
         checkCurrentCursorPosition(*pDocSh, rAddress);
 
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -1323,7 +1323,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf156462)
     checkCurrentCursorPosition(*pDocSh, u"G2");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_LEFT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_LEFT);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, the cursor would have jumped to cell C2
@@ -1338,7 +1338,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132057)
     checkCurrentCursorPosition(*pDocSh, u"AU43");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, the cursor would have jumped to cell BM1
@@ -1354,13 +1354,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
     checkCurrentCursorPosition(*pDocSh, u"C6");
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
     checkCurrentCursorPosition(*pDocSh, u"G6");
 
     //without the fix, cursor would jump to C29 instead of C7.
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     checkCurrentCursorPosition(*pDocSh, u"C7");
 }
@@ -1376,8 +1376,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123052)
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     for (const auto& rAddress : aExpectedAddresses)
     {
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
         Scheduler::ProcessEventsToIdle();
 
         checkCurrentCursorPosition(*pDocSh, rAddress);
@@ -1388,8 +1388,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123052)
     for (std::vector<OUString>::reverse_iterator it = aExpectedAddresses.rbegin();
          it != aExpectedAddresses.rend(); ++it)
     {
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | awt::Key::TAB);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_SHIFT | awt::Key::TAB);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | awt::Key::TAB);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_SHIFT | awt::Key::TAB);
         Scheduler::ProcessEventsToIdle();
 
         // Without the fix in place, this test would have failed here
@@ -1461,15 +1461,15 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146994)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
     Scheduler::ProcessEventsToIdle();
 
     checkCurrentCursorPosition(*pDocSh, u"D3");
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
     ScRangeList aMarkedArea = getViewShell()->GetViewData().GetMarkData().GetMarkedRanges();
@@ -1586,7 +1586,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf102525)
     goToCell(u"B1:B4"_ustr);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F4);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_F4);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(1, 0, 0));
@@ -1622,7 +1622,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf39650)
     goToCell(u"B2"_ustr);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F4);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_F4);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(u"=R3C3"_ustr, pDoc->GetFormula(1, 1, 0));
@@ -1641,7 +1641,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf45020)
     goToCell(u"A1"_ustr);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
     ScRangeList aMarkedArea = getViewShell()->GetViewData().GetMarkData().GetMarkedRanges();
@@ -2004,7 +2004,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     pMod->SetInputOptions(aInputOption);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     checkCurrentCursorPosition(*pDocSh, u"A2");
@@ -2012,7 +2012,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     aInputOption.SetMoveDir(DIR_TOP);
     pMod->SetInputOptions(aInputOption);
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     checkCurrentCursorPosition(*pDocSh, u"A1");
@@ -2020,7 +2020,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     aInputOption.SetMoveDir(DIR_RIGHT);
     pMod->SetInputOptions(aInputOption);
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     checkCurrentCursorPosition(*pDocSh, u"B1");
@@ -2028,7 +2028,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     aInputOption.SetMoveDir(DIR_LEFT);
     pMod->SetInputOptions(aInputOption);
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     checkCurrentCursorPosition(*pDocSh, u"A1");
@@ -2300,8 +2300,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf167386_copy_paste_textbox)
         getViewShell()->GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount());
 
     // Press escape to leave edit mode
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(
@@ -2309,8 +2309,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf167386_copy_paste_textbox)
         getViewShell()->GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount());
 
     // Press escape again to deselect the textbox
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // Nothing is selected
@@ -2440,8 +2440,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testKeyboardMergeRef)
 
     goToCell(u"A1"_ustr);
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pViewShell->IsRefInputMode());
     {
@@ -2450,8 +2450,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testKeyboardMergeRef)
         CPPUNIT_ASSERT_EQUAL(u"=A1:A10"_ustr, *pInput);
     }
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_UP | KEY_SHIFT);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_UP | KEY_SHIFT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_UP | KEY_SHIFT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_UP | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pViewShell->IsRefInputMode());
     {
@@ -2481,10 +2481,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMouseMergeRef)
     Point aA6 = pViewShell->GetViewData().GetPrintTwipsPos(0, 5);
     Point aA7 = pViewShell->GetViewData().GetPrintTwipsPos(0, 6);
 
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aA1.X() + 5, aA1.Y() + 5, 1,
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, aA1.X() + 5, aA1.Y() + 5, 1,
                               MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, aA6.X() + 5, aA6.Y() + 5, 1, MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aA7.X() + 5, aA7.Y() + 5, 1, MOUSE_LEFT,
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEMOVE, aA6.X() + 5, aA6.Y() + 5, 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, aA7.X() + 5, aA7.Y() + 5, 1, MOUSE_LEFT,
                               0);
     Scheduler::ProcessEventsToIdle();
 
@@ -2513,10 +2513,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testFillHandleDnD)
     Point aA7 = pViewShell->GetViewData().GetPrintTwipsPos(0, 6);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aB2.X() - 1, aB2.Y() - 1, 1,
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, aB2.X() - 1, aB2.Y() - 1, 1,
                               MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, aA7.X(), aA7.Y(), 1, MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aA7.X(), aA7.Y(), 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEMOVE, aA7.X(), aA7.Y(), 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, aA7.X(), aA7.Y(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 
     ScDocument* pDoc = getScDoc();

@@ -234,7 +234,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         {
             m_nPageLastTime = nPage;
             OString aPayload = OString::number(nPage - 1);
-            pNotifyViewShell->viewCallback(LOK_CALLBACK_SET_PART, aPayload);
+            pNotifyViewShell->viewCallback(KIT_CALLBACK_SET_PART, aPayload);
         }
 
         // This may get called often, so instead of sending data on each update, just notify
@@ -245,19 +245,19 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         {
             if (pViewShell == pNotifyViewShell)
             {
-                KitHelper::notifyUpdatePerViewId(*pViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
+                KitHelper::notifyUpdatePerViewId(*pViewShell, KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
             }
             else
             {
                 KitHelper::notifyUpdatePerViewId(*pViewShell, pNotifyViewShell, *pViewShell,
-                    LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
+                    KIT_CALLBACK_INVALIDATE_VIEW_CURSOR);
             }
         }
         else
         {
             KitHelper::notifyUpdatePerViewId(*pNotifyViewShell, SfxViewShell::Current(),
-                *pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
-            KitHelper::notifyOtherViewsUpdatePerViewId(pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
+                *pNotifyViewShell, KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
+            KitHelper::notifyOtherViewsUpdatePerViewId(pNotifyViewShell, KIT_CALLBACK_INVALIDATE_VIEW_CURSOR);
         }
     }
 
@@ -280,7 +280,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 
 std::optional<OString> SwVisibleCursor::getLOKPayload(int nType, int nViewId) const
 {
-    assert(nType == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR || nType == LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
+    assert(nType == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR || nType == KIT_CALLBACK_INVALIDATE_VIEW_CURSOR);
     if (comphelper::COKit::isActive())
     {
         SwRect aRect = m_aLastLOKRect;
@@ -289,7 +289,7 @@ std::optional<OString> SwVisibleCursor::getLOKPayload(int nType, int nViewId) co
         tools::Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
         OString sRect = aSVRect.toString();
 
-        if(nType == LOK_CALLBACK_INVALIDATE_VIEW_CURSOR)
+        if(nType == KIT_CALLBACK_INVALIDATE_VIEW_CURSOR)
             return KitHelper::makePayloadJSON(m_pCursorShell->GetSfxViewShell(), nViewId, "rectangle", sRect);
 
         // is cursor at a misspelled word ?
@@ -508,9 +508,9 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         FillStartEnd(aStartRect, aEndRect);
 
         if (aStartRect.HasArea())
-            KitHelper::notifyUpdate(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_SELECTION_START);
+            KitHelper::notifyUpdate(GetShell()->GetSfxViewShell(), KIT_CALLBACK_TEXT_SELECTION_START);
         if (aEndRect.HasArea())
-            KitHelper::notifyUpdate(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_SELECTION_END);
+            KitHelper::notifyUpdate(GetShell()->GetSfxViewShell(), KIT_CALLBACK_TEXT_SELECTION_END);
     }
 
     std::vector<OString> aRect;
@@ -523,8 +523,8 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
     OString sRect = comphelper::string::join("; ", aRect);
     if (!pSelectionRectangles)
     {
-        KitHelper::notifyUpdate(GetShell()->GetSfxViewShell(),LOK_CALLBACK_TEXT_SELECTION);
-        KitHelper::notifyOtherViewsUpdatePerViewId(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION);
+        KitHelper::notifyUpdate(GetShell()->GetSfxViewShell(),KIT_CALLBACK_TEXT_SELECTION);
+        KitHelper::notifyOtherViewsUpdatePerViewId(GetShell()->GetSfxViewShell(), KIT_CALLBACK_TEXT_VIEW_SELECTION);
     }
     else
         pSelectionRectangles->push_back(sRect);
@@ -534,8 +534,8 @@ std::optional<OString> SwSelPaintRects::getLOKPayload(int nType) const
 {
     switch( nType )
     {
-        case LOK_CALLBACK_TEXT_SELECTION_START:
-        case LOK_CALLBACK_TEXT_SELECTION_END:
+        case KIT_CALLBACK_TEXT_SELECTION_START:
+        case KIT_CALLBACK_TEXT_SELECTION_END:
         {
             // The selection may be a complex polygon, emit the logical
             // start/end cursor rectangle of the selection as separate
@@ -550,13 +550,13 @@ std::optional<OString> SwSelPaintRects::getLOKPayload(int nType) const
             if (!size())
                 return {};
 
-            if( nType == LOK_CALLBACK_TEXT_SELECTION_START )
+            if( nType == KIT_CALLBACK_TEXT_SELECTION_START )
             {
                 if (aStartRect.HasArea())
                     return aStartRect.SVRect().toString();
                 return {};
             }
-            else // LOK_CALLBACK_TEXT_SELECTION_END
+            else // KIT_CALLBACK_TEXT_SELECTION_END
             {
                 if (aEndRect.HasArea())
                     return aEndRect.SVRect().toString();
@@ -729,7 +729,7 @@ void SwSelPaintRects::HighlightContentControl()
             }
 
             OString pJson(aJson.finishAndGetAsOString());
-            GetShell()->GetSfxViewShell()->viewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson);
+            GetShell()->GetSfxViewShell()->viewCallback(KIT_CALLBACK_CONTENT_CONTROL, pJson);
         }
         if (m_pContentControlOverlay)
         {
@@ -813,7 +813,7 @@ void SwSelPaintRects::HighlightContentControl()
             tools::JsonWriter aJson;
             aJson.put("action", "hide");
             OString pJson(aJson.finishAndGetAsOString());
-            pNotifySh->viewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson);
+            pNotifySh->viewCallback(KIT_CALLBACK_CONTENT_CONTROL, pJson);
         }
         m_pContentControlOverlay.reset();
 
@@ -991,7 +991,7 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
     {
         // Just notify pViewShell about our existing selection.
         if (pViewShell != GetShell()->GetSfxViewShell())
-            KitHelper::notifyOtherView(*GetShell()->GetSfxViewShell(), pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+            KitHelper::notifyOtherView(*GetShell()->GetSfxViewShell(), pViewShell, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
     }
     else
     {
@@ -1007,8 +1007,8 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
             return;
         }
 
-        pSfxViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect);
-        KitHelper::notifyOtherViews(pSfxViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+        pSfxViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, sRect);
+        KitHelper::notifyOtherViews(pSfxViewShell, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
     }
 }
 

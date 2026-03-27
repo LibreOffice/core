@@ -41,9 +41,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
     Scheduler::ProcessEventsToIdle();
     aView2.m_aStateChanges.clear();
 
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/1, /*y=*/1, /*count=*/2,
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/1, /*y=*/1, /*count=*/2,
                               /*buttons=*/1, /*modifier=*/0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/1, /*y=*/1, /*count=*/2,
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/1, /*y=*/1, /*count=*/2,
                               /*buttons=*/1, /*modifier=*/0);
     KitHelper::setView(nView1);
     Scheduler::ProcessEventsToIdle();
@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCopyMultiSelection)
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
     // Ctrl-click on A3:
     int nCtrl = KEY_MOD1;
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
                               MOUSE_LEFT, nCtrl);
 
     // When getting the selection:
@@ -227,9 +227,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTdf167042)
     uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, false) };
     dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
 
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
                               MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aPoint.getX(), aPoint.getY(), 1,
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, aPoint.getX(), aPoint.getY(), 1,
                               MOUSE_LEFT, 0);
 
     // Check that FormatPaintbrush worked

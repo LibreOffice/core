@@ -307,7 +307,7 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
     private void stateChanged(String payload) {
         String[] parts = payload.split("=");
         if (parts.length < 2) {
-            Log.e(LOGTAG, "LOK_CALLBACK_STATE_CHANGED unexpected payload: " + payload);
+            Log.e(LOGTAG, "KIT_CALLBACK_STATE_CHANGED unexpected payload: " + payload);
             return;
         }
         final String value = parts[1];
@@ -358,7 +358,7 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UPDATE_PART_PAGE_RECT));
             }
         } else {
-            Log.d(LOGTAG, "LOK_CALLBACK_STATE_CHANGED type uncatched: " + payload);
+            Log.d(LOGTAG, "KIT_CALLBACK_STATE_CHANGED type uncatched: " + payload);
         }
     }
 

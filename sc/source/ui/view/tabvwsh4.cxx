@@ -2263,10 +2263,10 @@ ScTabViewShell::~ScTabViewShell()
     mChangesListener.clear();
 
     // Notify other LOK views that we are going away.
-    KitHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
-    KitHelper::notifyOtherViews(this, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
-    KitHelper::notifyOtherViews(this, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);
-    KitHelper::notifyOtherViews(this, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
+    KitHelper::notifyOtherViews(this, KIT_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
+    KitHelper::notifyOtherViews(this, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
+    KitHelper::notifyOtherViews(this, KIT_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+    KitHelper::notifyOtherViews(this, KIT_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
 
     // all to NULL, in case the TabView-dtor tries to access them
     //! (should not really! ??!?!)

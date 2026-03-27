@@ -224,8 +224,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewCursors)
     // This was false, the new view did not get the view (cell) cursor of the old view.
     CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
     CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
     Scheduler::ProcessEventsToIdle();
     KitHelper::destroyView(KitHelper::getCurrentView());
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
@@ -336,8 +336,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandle)
 {
     ScModelObj* pModelObj = createDoc("shape.ods");
     ScTestViewCallback aView1;
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
@@ -364,8 +364,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandleTextBox)
 {
     ScModelObj* pModelObj = createDoc("shape-textbox.ods");
     ScTestViewCallback aView1;
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
@@ -465,8 +465,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViews)
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     // text edit a cell in view #1
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
 
@@ -476,8 +476,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViews)
     ScTestViewCallback aView2;
 
     // move cell cursor i view #2
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
     Scheduler::ProcessEventsToIdle();
 
     // check that text edit view in view #1 has not be killed
@@ -504,8 +504,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
     // text edit a cell in view #1
     KitHelper::setView(nView1);
     aView2.m_bInvalidateTiles = false;
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
     CPPUNIT_ASSERT(aView2.m_bInvalidateTiles);
@@ -514,16 +514,16 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
     // we can be sure we are out of the initial tile
     for (int i = 0; i < 40; ++i)
     {
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     }
     Scheduler::ProcessEventsToIdle();
 
     // text edit a cell in view #1 inside the new tile and
     // check that view #2 receive a tile invalidate message
     aView2.m_bInvalidateTiles = false;
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView2.m_bInvalidateTiles);
 
@@ -535,8 +535,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
     // text edit a cell in view #1
     KitHelper::setView(nView1);
     aView3.m_bInvalidateTiles = false;
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'y', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'y', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView3.m_bInvalidateTiles);
 }
@@ -581,16 +581,16 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGraphicInvalidate)
 
     // Click to select graphic
     aView.m_bGraphicSelection = false;
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bGraphicSelection);
 
     // Drag Drop graphic
     aView.m_bGraphicSelection = false;
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, /*x=*/ 1,/*y=*/ 10,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 10, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEMOVE, /*x=*/ 1,/*y=*/ 10,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 10, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!aView.m_bFullInvalidateTiles);
 
@@ -677,22 +677,22 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnCopyPasteCells)
 
     uno::Sequence<beans::PropertyValue> aArgs;
     // select and copy cells
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, aArgs);
 
     // move to destination cell
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_UP);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_UP);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_UP);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_UP);
     Scheduler::ProcessEventsToIdle();
 
     // paste cells
@@ -713,8 +713,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnInserRowCol)
     // move downward
     for (int i = 0; i < 200; ++i)
     {
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_DOWN);
     }
     Scheduler::ProcessEventsToIdle();
 
@@ -729,8 +729,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnInserRowCol)
     // move on the right
     for (int i = 0; i < 200; ++i)
     {
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_RIGHT);
     }
     Scheduler::ProcessEventsToIdle();
 
@@ -775,7 +775,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
-        // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+        // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("1"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
@@ -822,7 +822,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         });
         dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
-        // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
+        // We received a KIT_CALLBACK_COMMENT callback with comment 'Modify' action
         CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
@@ -843,7 +843,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         });
         dispatchCommand(mxComponent, u".uno:DeleteNote"_ustr, aArgs);
 
-        // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
+        // We received a KIT_CALLBACK_COMMENT callback with comment 'Remove' action
         CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
@@ -873,10 +873,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoLimiting)
 
     // text edit a cell in view #1
     KitHelper::setView(nView1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // check that undo action count in not 0
@@ -931,10 +931,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoRepairDispatch)
 
     // text edit a cell in view #1
     KitHelper::setView(nView1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // check that undo action count in not 0
@@ -998,8 +998,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeWithTwoViews)
 
     // Set the visible area, and press page down
     pModelObj->setClientVisibleArea(tools::Rectangle(750, 1861, 20583, 6997));
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN);
     Scheduler::ProcessEventsToIdle();
 
     int nCanvasWidth = 256;
@@ -1056,10 +1056,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDisableUndoRepair)
 
     // text edit a cell in view #1
     KitHelper::setView(nView1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'h', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'h', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'h', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'h', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     // view1 has UNDO enabled, view2 is in UNDO-repair
     {
@@ -1079,10 +1079,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDisableUndoRepair)
     // text edit a cell in view #2
     KitHelper::setView(nView2);
     pModelObj->setPart(1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'c', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'c', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     // both views have UNDO enabled
     Scheduler::ProcessEventsToIdle();
     {
@@ -1130,10 +1130,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentRepair)
     // Insert a character in the second view.
     KitHelper::setView(nView2);
     pModelObj->setPart(1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'c', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'c', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     {
         std::unique_ptr<SfxBoolItem> pItem1;
@@ -1277,8 +1277,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testIMESupport)
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
 
     // commit the string to the cell
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(aInputs[aInputs.size() - 1], pDoc->GetString(ScAddress(0, 0, 0)));
@@ -1421,8 +1421,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPageDownInvalidation)
     KitHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, awt::Key::PAGEDOWN, 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, awt::Key::PAGEDOWN, 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, awt::Key::PAGEDOWN, 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, awt::Key::PAGEDOWN, 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aView1.m_aInvalidations.size());
@@ -1468,8 +1468,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeNoInvalidation)
 
     aView1.ClearAllInvalids();
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     // switching sheets should trigger no unnecessary invalidations
     CPPUNIT_ASSERT(!aView1.m_bInvalidateTiles);
@@ -1484,8 +1484,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeNoInvalidation)
     aView1.ClearAllInvalids();
 
     // switching back should also trigger no unnecessary invalidations
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEUP | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEUP | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEUP | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::PAGEUP | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!aView1.m_bInvalidateTiles);
 
@@ -1496,8 +1496,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeNoInvalidation)
     typeCharsInCell("101", 1, 0, pView, pModelObj); // Type '101' in B1
     aView1.ClearAllInvalids();
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     aView1.ClearAllInvalids();
@@ -1506,14 +1506,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeNoInvalidation)
     getTile(pModelObj, 0, 0, 3840, 3840);
 
     // switching back to sheet 1 should trigger no unnecessary invalidations
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEUP | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEUP | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEUP | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::PAGEUP | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!aView1.m_bInvalidateTiles);
 
     // switching to sheet 2 should trigger no unnecessary invalidations this time
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!aView1.m_bInvalidateTiles);
 
@@ -1620,11 +1620,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testJumpHorizontallyInvalidation)
     KitHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD2);
     Scheduler::ProcessEventsToIdle();
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD2);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
@@ -1644,8 +1644,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testJumpToLastRowInvalidation)
     KitHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
@@ -2060,10 +2060,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDeleteCellMultilineContent)
     sal_uInt16 nRow1Height = rDoc.GetRowHeight(static_cast<SCROW>(0), static_cast<SCTAB>(0), false);
 
     // delete multiline cell content in view #1
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
     Scheduler::ProcessEventsToIdle();
 
     // check if the row header has been invalidated and if the involved row is of the expected height
@@ -2170,9 +2170,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortAscendingDescending)
     ScTestViewCallback aView;
 
     // select the values in the first column
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 551, 129, 1, MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, 820, 1336, 1, MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, 820, 1359, 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, 551, 129, 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEMOVE, 820, 1336, 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, 820, 1359, 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     aView.m_sInvalidateSheetGeometry = ""_ostr;
 
@@ -2320,8 +2320,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditCursorBounds)
 
     aView.m_aInvalidateCursorResult.clear();
     // Enter edit mode in the same cell.
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::F2);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!aView.m_aInvalidateCursorResult.empty());
@@ -2363,13 +2363,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextSelectionBounds)
 
     aView.m_aTextSelectionResult.clear();
     // Enter edit mode in the same cell and select all text.
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::F2);
     Scheduler::ProcessEventsToIdle();
 
     // CTRL + A
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::A);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::A);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::A);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::A);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!aView.m_aTextSelectionResult.empty());
@@ -2394,8 +2394,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetViewDataCrash)
             { "Index", uno::Any(sal_Int32(2)) }
         }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView1);
@@ -2409,10 +2409,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetViewDataCrash)
     KitHelper::setView(nView1);
     // Delete a range.
     pView1->SetCursor(1, 1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_SHIFT);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN | KEY_SHIFT);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
     // It will crash at this point without the fix.
     Scheduler::ProcessEventsToIdle();
 }
@@ -2466,7 +2466,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
-        // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+        // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("1"), aView.m_aCommentCallbackResult.get<std::string>("id"));
         CPPUNIT_ASSERT_EQUAL(std::string("0"), aView.m_aCommentCallbackResult.get<std::string>("tab"));
@@ -2486,7 +2486,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
             Scheduler::ProcessEventsToIdle();
             dispatchCommand(mxComponent, u".uno:Paste"_ustr, aCopyPasteArgs); // Paste to cell B50
 
-            // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+            // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
             CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
             // Without the fix the id will be "1".
             CPPUNIT_ASSERT_EQUAL(std::string("2"), aView.m_aCommentCallbackResult.get<std::string>("id"));
@@ -2498,16 +2498,16 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
         // Cell range (with a comment) copy paste test
         {
             // Select range A1:C3
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
-            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
+            pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
             Scheduler::ProcessEventsToIdle();
 
             dispatchCommand(mxComponent, u".uno:Copy"_ustr, aCopyPasteArgs);
@@ -2516,7 +2516,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
             Scheduler::ProcessEventsToIdle();
             dispatchCommand(mxComponent, u".uno:Paste"_ustr, aCopyPasteArgs); // Paste to cell D50
 
-            // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+            // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
             CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
             // Without the fix the id will be "1".
             CPPUNIT_ASSERT_EQUAL(std::string("3"), aView.m_aCommentCallbackResult.get<std::string>("id"));
@@ -2589,10 +2589,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReordering)
 
     // text edit a cell in view #1
     KitHelper::setView(nView1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // check that undo action count is not 0
@@ -2600,15 +2600,15 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReordering)
 
     // text edit a different cell in view #2
     KitHelper::setView(nView2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // check that undo action count is not 1
@@ -2651,23 +2651,23 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
 
     // text edit a cell in view #1
     KitHelper::setView(nView1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // text edit another cell in view #1
     KitHelper::setView(nView1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'y', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'y', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'y', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'y', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(u"xx"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
@@ -2677,12 +2677,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
     KitHelper::setView(nView2);
     ScTabViewShell* pViewShell2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     pViewShell2->SetCursor(0, 2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'C', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'C', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'C', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'C', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'C', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'C', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'C', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'C', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(3), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(u"xx"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
@@ -2739,12 +2739,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
 
     // text edit a cell in view #1
     KitHelper::setView(nView1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
@@ -2752,12 +2752,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
     KitHelper::setView(nView2);
     ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     pView2->SetCursor(0, 2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'C', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'C', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'C', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'C', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'C', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'C', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'C', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'C', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(u"xx"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
@@ -2765,12 +2765,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
 
     // and another cell in view #2
     pView2->SetCursor(0, 3);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'D', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'D', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'D', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'D', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'D', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'D', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'D', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'D', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(3), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(u"xx"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
@@ -2875,15 +2875,15 @@ void testInvalidateOnTextEditWithDifferentZoomLevels::TestBody(const ColRowZoom&
     Scheduler::ProcessEventsToIdle();
     aView1.m_bInvalidateTiles = false;
     rInvalidations.clear();
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT(!rInvalidations.empty());
     tools::Rectangle aInvRect1 = rInvalidations[0];
     // end editing
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
     // view #2
     KitHelper::createView();
@@ -2897,8 +2897,8 @@ void testInvalidateOnTextEditWithDifferentZoomLevels::TestBody(const ColRowZoom&
     // text edit in view #2
     aView1.m_bInvalidateTiles = false;
     rInvalidations.clear();
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT(!rInvalidations.empty());
@@ -3043,8 +3043,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellMinimalInvalidations)
     cellInvalidationHelper(pModelObj, pView, aD13, true, true);
 
     // switch to RTL sheet
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
 
     cellInvalidationHelper(pModelObj, pView, aA8, true, true);
@@ -3112,8 +3112,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     CPPUNIT_ASSERT(pView2);
     pView2->SetCursor(aB7.Col(), aB7.Row());
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
     Scheduler::ProcessEventsToIdle();
 
     // The problem tested for here is with two views at different zooms then a
@@ -3171,8 +3171,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInputHandlerSyncedZoom)
     Scheduler::ProcessEventsToIdle();
 
     // Activate edit mode in that A5 cell
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::F2);
     Scheduler::ProcessEventsToIdle();
 
     const ScViewData* pViewData1 = ScDocShell::GetViewData();
@@ -3203,8 +3203,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInputHandlerSyncedZoom)
     Scheduler::ProcessEventsToIdle();
 
     // Activate edit mode in that A6 cell
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::F2);
     Scheduler::ProcessEventsToIdle();
 
     const ScViewData* pViewData2 = ScDocShell::GetViewData();
@@ -3303,8 +3303,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     Scheduler::ProcessEventsToIdle();
 
     // Click at on the left side of A1 cell
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     // Check the A1 cell is selected in view #1
@@ -3312,8 +3312,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
 
     // Click at on the right side of A1 cell
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     // Check the A1 cell is selected in view #1
@@ -3334,8 +3334,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     Scheduler::ProcessEventsToIdle();
 
     // Click at on the left side of A1 cell
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     // Check the A1 cell is selected in view #2
@@ -3343,8 +3343,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
 
     // Click at on the right side of A1 cell
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     // Check the A1 cell is selected in view #2
@@ -3414,8 +3414,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditShapeText)
     Scheduler::ProcessEventsToIdle();
 
     // Enter editing mode, shape start with no text
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::F2);
 
     Scheduler::ProcessEventsToIdle();
 
@@ -3517,12 +3517,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLeftOverflowEdit)
 
     // Enter edit mode and select all text.
     aView.m_aTextSelectionResult.clear();
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::F2);
     Scheduler::ProcessEventsToIdle();
     // CTRL + A
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::A);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::A);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::A);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::A);
     Scheduler::ProcessEventsToIdle();
 
     // Without the accompanying fix this would fail with
@@ -3585,13 +3585,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorVisibilityAfterPaste)
 
     Scheduler::ProcessEventsToIdle();
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'B', 0); // Type B.
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'B', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'B', 0); // Type B.
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'B', 0);
     Scheduler::ProcessEventsToIdle();
 
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
     Scheduler::ProcessEventsToIdle();
 
     pView->SetCursor(0, 0); // Go to A1.
@@ -3603,8 +3603,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorVisibilityAfterPaste)
     pView->SetCursor(0, 1); // Go to A2.
     Scheduler::ProcessEventsToIdle();
 
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'B', 0); // Type B.
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'B', 0);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'B', 0); // Type B.
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'B', 0);
     Scheduler::ProcessEventsToIdle();
 
     uno::Sequence<beans::PropertyValue> aArgs;
@@ -3626,8 +3626,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoFilterPosition)
     Scheduler::ProcessEventsToIdle();
 
     // Use autofilter button shortcut (ALT + DOWNARROW) to avoid coordinate based click.
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_MOD2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN | KEY_MOD2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_MOD2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DOWN | KEY_MOD2);
     Scheduler::ProcessEventsToIdle();
 
     // We should have the autofilter position callback.
@@ -3646,8 +3646,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPivotFilterPosition)
     Scheduler::ProcessEventsToIdle();
 
     // Use filter button shortcut (ALT + DOWNARROW) to avoid coordinate based click.
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_MOD2);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN | KEY_MOD2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_MOD2);
+    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DOWN | KEY_MOD2);
     Scheduler::ProcessEventsToIdle();
 
     // We should have the autofilter position callback.

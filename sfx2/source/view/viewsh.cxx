@@ -194,7 +194,7 @@ void SfxClipboardChangeListener::ChangedContents()
     if (comphelper::COKit::isActive())
     {
         // In the future we might send the payload as well.
-        KitHelper::notifyAllViews(LOK_CALLBACK_CLIPBOARD_CHANGED, ""_ostr);
+        KitHelper::notifyAllViews(KIT_CALLBACK_CLIPBOARD_CHANGED, ""_ostr);
     }
 }
 
@@ -945,7 +945,7 @@ void KitDocumentFocusListener::notifyEditingInSelectionState(bool bParagraph)
     if (m_pViewShell)
     {
         SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEditingInSelectionState: payload: \n" << aPayload);
-        m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE, aPayload.c_str());
+        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE, aPayload.c_str());
     }
 }
 
@@ -979,7 +979,7 @@ void KitDocumentFocusListener::notifyFocusedParagraphChanged(bool force)
                        m_sFocusedParagraph, m_nCaretPosition,
                        m_nSelectionStart, m_nSelectionEnd, m_nListPrefixLength, force);
 
-        m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_FOCUS_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_FOCUS_CHANGED, aPayload.c_str());
     }
 }
 
@@ -994,7 +994,7 @@ void KitDocumentFocusListener::notifyCaretChanged()
     if (m_pViewShell)
     {
         SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyCaretChanged: " << m_nCaretPosition);
-        m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_CARET_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_CARET_CHANGED, aPayload.c_str());
     }
 }
 
@@ -1012,7 +1012,7 @@ void KitDocumentFocusListener::notifyTextSelectionChanged()
     {
         SAL_INFO("lok.a11y",  "KitDocumentFocusListener::notifyTextSelectionChanged: "
                 "start: " << m_nSelectionStart << ", end: " << m_nSelectionEnd);
-        m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, aPayload.c_str());
     }
 }
 
@@ -1066,7 +1066,7 @@ void KitDocumentFocusListener::notifyFocusedCellChanged(
                        m_sFocusedParagraph, m_nCaretPosition, m_nSelectionStart, m_nSelectionEnd,
                        m_nListPrefixLength, false);
 
-        m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED, aPayload.c_str());
     }
 }
 
@@ -1152,7 +1152,7 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
         {
             SAL_INFO("lok.a11y",  "KitDocumentFocusListener::notifySelectionChanged: "
                                      "action: " << sAction << ", name: " << sName);
-            m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_SELECTION_CHANGED, aPayload.c_str());
+            m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_SELECTION_CHANGED, aPayload.c_str());
         }
     }
 }
@@ -3306,10 +3306,10 @@ static bool ignoreCOKitViewCallback(int nType, const SfxViewShell_Impl* pImpl)
     {
         switch (nType)
         {
-        case LOK_CALLBACK_FORM_FIELD_BUTTON:
-        case LOK_CALLBACK_TEXT_SELECTION:
-        case LOK_CALLBACK_COMMENT:
-        case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        case KIT_CALLBACK_FORM_FIELD_BUTTON:
+        case KIT_CALLBACK_TEXT_SELECTION:
+        case KIT_CALLBACK_COMMENT:
+        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
             break;
         default:
             // Reject e.g. invalidate during paint.
@@ -3321,12 +3321,12 @@ static bool ignoreCOKitViewCallback(int nType, const SfxViewShell_Impl* pImpl)
     {
         switch (nType)
         {
-        case LOK_CALLBACK_TEXT_SELECTION:
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
-        case LOK_CALLBACK_TEXT_SELECTION_START:
-        case LOK_CALLBACK_TEXT_SELECTION_END:
-        case LOK_CALLBACK_GRAPHIC_SELECTION:
-        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        case KIT_CALLBACK_TEXT_SELECTION:
+        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+        case KIT_CALLBACK_TEXT_SELECTION_START:
+        case KIT_CALLBACK_TEXT_SELECTION_END:
+        case KIT_CALLBACK_GRAPHIC_SELECTION:
+        case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
             return true;
         }
     }
@@ -3336,7 +3336,7 @@ static bool ignoreCOKitViewCallback(int nType, const SfxViewShell_Impl* pImpl)
 
 void SfxViewShell::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const
 {
-    if (ignoreCOKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, pImpl.get()))
+    if (ignoreCOKitViewCallback(KIT_CALLBACK_INVALIDATE_TILES, pImpl.get()))
         return;
     if (pImpl->m_pCOKitViewCallback)
         pImpl->m_pCOKitViewCallback->viewInvalidateTilesCallback(pRect, nPart, nMode);
@@ -3356,7 +3356,7 @@ void SfxViewShell::viewCallbackWithViewId(int nType, const OString& pPayload, in
         SAL_INFO(
             "sfx.view",
             "SfxViewShell::viewCallbackWithViewId no callback set! Dropped payload of type "
-            << lokCallbackTypeToString(nType) << ": [" << pPayload << ']');
+            << kitCallbackTypeToString(nType) << ": [" << pPayload << ']');
 }
 
 void SfxViewShell::viewCallback(int nType, const OString& pPayload) const
@@ -3369,7 +3369,7 @@ void SfxViewShell::viewCallback(int nType, const OString& pPayload) const
         SAL_INFO(
             "sfx.view",
             "SfxViewShell::viewCallback no callback set! Dropped payload of type "
-            << lokCallbackTypeToString(nType) << ": [" << pPayload << ']');
+            << kitCallbackTypeToString(nType) << ": [" << pPayload << ']');
 }
 
 void SfxViewShell::viewUpdatedCallback(int nType) const
@@ -3382,7 +3382,7 @@ void SfxViewShell::viewUpdatedCallback(int nType) const
         SAL_INFO(
             "sfx.view",
             "SfxViewShell::viewUpdatedCallback no callback set! Dropped payload of type "
-            << lokCallbackTypeToString(nType));
+            << kitCallbackTypeToString(nType));
 }
 
 void SfxViewShell::viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const
@@ -3395,7 +3395,7 @@ void SfxViewShell::viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSou
         SAL_INFO(
             "sfx.view",
             "SfxViewShell::viewUpdatedCallbackPerViewId no callback set! Dropped payload of type "
-            << lokCallbackTypeToString(nType));
+            << kitCallbackTypeToString(nType));
 }
 
 void SfxViewShell::viewAddPendingInvalidateTiles()
@@ -3426,7 +3426,7 @@ void SfxViewShell::flushPendingKitInvalidateTiles()
 std::optional<OString> SfxViewShell::getLOKPayload(int nType, int /*nViewId*/) const
 {
     // SfxViewShell itself currently doesn't handle any updated-payload types.
-    SAL_WARN("sfx.view", "SfxViewShell::getLOKPayload unhandled type " << lokCallbackTypeToString(nType));
+    SAL_WARN("sfx.view", "SfxViewShell::getLOKPayload unhandled type " << kitCallbackTypeToString(nType));
     abort();
 }
 

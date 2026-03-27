@@ -37,10 +37,10 @@ public:
 
     virtual void viewCallback(int nType, const OString& pPayload) const = 0;
 
-    /// Emits a LOK_CALLBACK_INVALIDATE_TILES.
+    /// Emits a KIT_CALLBACK_INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const = 0;
 
-    /// Emits a LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR.
+    /// Emits a KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR.
     virtual void notifyCursorInvalidation(tools::Rectangle const *, bool bControlEvent, int windowID) const = 0;
 
     /// Debugging

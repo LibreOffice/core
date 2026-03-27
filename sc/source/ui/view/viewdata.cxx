@@ -1588,8 +1588,8 @@ void notifyCellCursorAt(const ScTabViewShell* pViewShell, SCCOL nCol, SCROW nRow
     ss << rCursor.getX() << ", " << rCursor.getY() << ", " << rCursor.GetWidth() << ", "
        << rCursor.GetHeight() << ", " << nCol << ", " << nRow;
 
-    pViewShell->viewCallback(LOK_CALLBACK_CELL_CURSOR, ss.str().c_str());
-    KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle",
+    pViewShell->viewCallback(KIT_CALLBACK_CELL_CURSOR, ss.str().c_str());
+    KitHelper::notifyOtherViews(pViewShell, KIT_CALLBACK_CELL_VIEW_CURSOR, "rectangle",
                                    ss.str().c_str());
 }
 

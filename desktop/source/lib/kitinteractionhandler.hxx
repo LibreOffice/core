@@ -59,7 +59,7 @@ private:
     KitInteractionHandler(const KitInteractionHandler&) = delete;
     KitInteractionHandler& operator=(const KitInteractionHandler&) = delete;
 
-    /** Call the LOK_CALLBACK_ERROR on the LOK document (if available) or LOK lib.
+    /** Call the KIT_CALLBACK_ERROR on the LOK document (if available) or LOK lib.
 
         The error itself is a JSON message, like:
         {

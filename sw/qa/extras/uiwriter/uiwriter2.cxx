@@ -410,8 +410,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
     pWrtShell->AutoCorrect(corr, cIns);
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have crashed here
@@ -1971,8 +1971,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf108687_tabstop)
 
     // Now pressing 'tab' should jump to the radio buttons.
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
     //sal_Int32 nEndIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     //CPPUNIT_ASSERT_EQUAL(sal_Int32(11), nEndIndex);

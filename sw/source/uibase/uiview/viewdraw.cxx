@@ -639,7 +639,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
             if (comphelper::COKit::isActive())
             {
                 OString sRect = pView->GetOutputArea().toString();
-                KitHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRect);
+                KitHelper::notifyOtherViews(this, KIT_CALLBACK_VIEW_LOCK, "rectangle", sRect);
             }
         }
     }

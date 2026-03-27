@@ -565,7 +565,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScreenPosition, const Si
                 writer.put("row", rAddress.Row());
             }
             OString info = writer.finishAndGetAsOString();
-            pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, info);
+            pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, info);
         }
     }
 

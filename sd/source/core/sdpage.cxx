@@ -1863,8 +1863,8 @@ void SdPage::NotifyPagePropertyChanges()
     OString out = jsonWriter.finishAndGetAsOString();
     if (SfxViewShell* pViewShell = SfxViewShell::Current())
     {
-        pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, out);
-        pViewShell->NotifyOtherViews(LOK_CALLBACK_STATE_CHANGED, ".uno:PageSetup"_ostr, out);
+        pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, out);
+        pViewShell->NotifyOtherViews(KIT_CALLBACK_STATE_CHANGED, ".uno:PageSetup"_ostr, out);
     }
 }
 

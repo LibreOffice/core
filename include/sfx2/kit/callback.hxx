@@ -36,7 +36,7 @@ public:
     virtual void viewCallback(int nType, const rtl::OString& pPayload) = 0;
     // Callback that explicitly provides view id (which is also included in the payload).
     virtual void viewCallbackWithViewId(int nType, const rtl::OString& pPayload, int nViewId) = 0;
-    // LOK_CALLBACK_INVALIDATE_TILES
+    // KIT_CALLBACK_INVALIDATE_TILES
     // nPart is either part, -1 for all-parts, or INT_MIN if
     // comphelper::COKit::isPartInInvalidation() is not set
     virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)

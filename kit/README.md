@@ -61,11 +61,11 @@ event is emitted. The callback types are described using the
 function signature itself is provided by the COKitCallback typedef in
 `COKitTypes.h`. The most important callback types:
 
-- `LOK_CALLBACK_INVALIDATE_TILES`: drop all tiles cached on client-side that
+- `KIT_CALLBACK_INVALIDATE_TILES`: drop all tiles cached on client-side that
   intersect with the provided rectangle
-- `LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR`: need to set the position and/or the
+- `KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR`: need to set the position and/or the
   size of the cursor
-- `LOK_CALLBACK_TEXT_SELECTION`: need to adjust the selection overlay provided
+- `KIT_CALLBACK_TEXT_SELECTION`: need to adjust the selection overlay provided
   by the client as the set of rectangles describing the selection overlay
   changed
 
@@ -91,7 +91,7 @@ of the following alternatives, which require no changes to these headers:
   parameters.
 - core → LOK client direction:
   - Use `getCommandValues()` when this is initiated by the LOK client.
-  - Use `LOK_CALLBACK_STATE_CHANGED` with a JSON payload when this is initiated by core.
+  - Use `KIT_CALLBACK_STATE_CHANGED` with a JSON payload when this is initiated by core.
 
 It's useful to stick to these if possible, only add new C++ API when these are not a good fit.
 

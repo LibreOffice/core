@@ -118,7 +118,7 @@ void XMLErrors::AddRecord(
                 aWriter.put("cmd", "");
                 aWriter.put("message", rExceptionMessage);
             }
-            mpNotifier->viewCallback(LOK_CALLBACK_ERROR, aWriter.finishAndGetAsOString());
+            mpNotifier->viewCallback(KIT_CALLBACK_ERROR, aWriter.finishAndGetAsOString());
         }
     }
 

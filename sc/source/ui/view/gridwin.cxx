@@ -952,7 +952,7 @@ void ScGridWindow::SendAutofilterPopupPosition(SCCOL nCol, SCROW nRow) {
             writer.put("row", nRow);
         }
         OString info = writer.finishAndGetAsOString();
-        pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, info);
+        pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, info);
     }
 }
 
@@ -964,7 +964,7 @@ void ScGridWindow::SendAutofilterChange() {
         writer.put("commandName", "AutoFilterChange");
         writer.put("state", true);
         OString info = writer.finishAndGetAsOString();
-        pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, info);
+        pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, info);
     }
 }
 
@@ -2456,7 +2456,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aRoot, true);
 
-                pViewShell->viewCallback(LOK_CALLBACK_CONTEXT_MENU,
+                pViewShell->viewCallback(KIT_CALLBACK_CONTEXT_MENU,
                                                        OString(aStream.str()));
             }
         }
@@ -2725,7 +2725,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     int mouseY = aPos.Y() / fPPTX;
                     OString aMsg(aUrl.toUtf8() + " coordinates: " + aCursor + ", "
                                  + OString::number(mouseX) + ", " + OString::number(mouseY));
-                    pViewShell->viewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg);
+                    pViewShell->viewCallback(KIT_CALLBACK_HYPERLINK_CLICKED, aMsg);
                 } else
                     ScGlobal::OpenURL(aUrl, aTarget);
             }
@@ -2853,7 +2853,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                          + pViewShell->GetViewData().describeCellCursorAt(nPosX, nPosY) + ", "
                          + OString::number(aPos.X() / pViewShell->GetViewData().GetPPTX()) + ", "
                          + OString::number(aPos.Y() / pViewShell->GetViewData().GetPPTY()));
-            pViewShell->viewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg);
+            pViewShell->viewCallback(KIT_CALLBACK_HYPERLINK_CLICKED, aMsg);
         }
     }
 
@@ -5375,7 +5375,7 @@ void ScGridWindow::updateLOKInputHelp(const OUString& title, const OUString& con
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
-    pViewShell->viewCallback(LOK_CALLBACK_VALIDITY_INPUT_HELP, OString(aStream.str()));
+    pViewShell->viewCallback(KIT_CALLBACK_VALIDITY_INPUT_HELP, OString(aStream.str()));
 }
 
 void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos ) const
@@ -5385,14 +5385,14 @@ void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos 
     std::stringstream ss;
     ss << nX << ", " << nY << ", " << static_cast<unsigned int>(bVisible);
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    pViewShell->viewCallback(LOK_CALLBACK_VALIDITY_LIST_BUTTON, OString(ss.str()));
+    pViewShell->viewCallback(KIT_CALLBACK_VALIDITY_LIST_BUTTON, OString(ss.str()));
 }
 
 void ScGridWindow::notifyKitCellFollowJump( ) const
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
 
-    pViewShell->viewCallback(LOK_CALLBACK_SC_FOLLOW_JUMP, getCellCursor());
+    pViewShell->viewCallback(KIT_CALLBACK_SC_FOLLOW_JUMP, getCellCursor());
 }
 
 void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
@@ -6254,15 +6254,15 @@ void ScGridWindow::notifyKitCellCursor() const
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
 
-    pViewShell->viewCallback(LOK_CALLBACK_CELL_CURSOR, getCellCursor());
+    pViewShell->viewCallback(KIT_CALLBACK_CELL_CURSOR, getCellCursor());
     if (bListValButton && aListValPos == mrViewData.GetCurPos())
         updateLOKValListButton(true, aListValPos);
     std::vector<tools::Rectangle> aRects;
     GetSelectionRects(aRects);
     if (aRects.empty() || !mrViewData.IsActive())
     {
-        pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
-        KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+        pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, ""_ostr);
+        KitHelper::notifyOtherViews(pViewShell, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
     }
 }
 
@@ -6287,7 +6287,7 @@ void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
             aCursor = pForTabView->GetViewData().describeCellCursorAt(
                 mrViewData.GetCurX(), mrViewData.GetCurY()); // our position.
     }
-    KitHelper::notifyOtherView(*pViewShell, pForShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+    KitHelper::notifyOtherView(*pViewShell, pForShell, KIT_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
 }
 
 // Send our cursor details to a view described by @pForShell, or all views
@@ -6310,13 +6310,13 @@ void ScGridWindow::updateKitCellCursor(const SfxViewShell* pForShell) const
         if (pForShell)
         {
             KitHelper::notifyOtherView(*pViewShell, pForShell,
-                    LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+                    KIT_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
         }
         else
         {
             notifyKitCellCursor();
             KitHelper::notifyOtherViews(pViewShell,
-                    LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+                    KIT_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
         }
 
         return;
@@ -6405,8 +6405,8 @@ void ScGridWindow::DeleteCursorOverlay()
     if (comphelper::COKit::isActive() && mrViewData.HasEditView(eWhich))
         return;
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    pViewShell->viewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY"_ostr);
-    KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
+    pViewShell->viewCallback(KIT_CALLBACK_CELL_CURSOR, "EMPTY"_ostr);
+    KitHelper::notifyOtherViews(pViewShell, KIT_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
     mpOOCursors.reset();
 }
 
@@ -6557,12 +6557,12 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
     if (!aBoundingBox.IsEmpty())
         sBoundingBoxString = aBoundingBox.toString();
     OString aRectListString = rectanglesToString(rLogicRects);
-    pViewShell->viewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
-    pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectListString);
+    pViewShell->viewCallback(KIT_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
+    pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, aRectListString);
 
     if (bInPrintTwips)
     {
-        KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
+        KitHelper::notifyOtherViews(pViewShell, KIT_CALLBACK_TEXT_VIEW_SELECTION,
                                        "selection", aRectListString);
         return;
     }
@@ -6584,7 +6584,7 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
         std::vector<tools::Rectangle> aPixelRects;
         pGrid->GetPixelRectsFor(mrViewData.GetMarkData() /* ours */, aPixelRects);
         auto aOtherLogicRects = convertPixelToLogical(pOther->GetViewData(), aPixelRects, aDummyBBox);
-        KitHelper::notifyOtherView(*pViewShell, pOther, LOK_CALLBACK_TEXT_VIEW_SELECTION,
+        KitHelper::notifyOtherView(*pViewShell, pOther, KIT_CALLBACK_TEXT_VIEW_SELECTION,
                                       "selection", rectanglesToString(aOtherLogicRects));
     }
 }
@@ -6627,11 +6627,11 @@ void ScGridWindow::updateOtherKitSelections() const
             if (!aBoundingBox.IsEmpty())
                 sBoundingBoxString = aBoundingBox.toString();
 
-            pViewShell->viewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
-            pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString);
+            pViewShell->viewCallback(KIT_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
+            pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, aRectsString);
         }
         else
-            KitHelper::notifyOtherView(*it, pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
+            KitHelper::notifyOtherView(*it, pViewShell, KIT_CALLBACK_TEXT_VIEW_SELECTION,
                                           "selection", aRectsString);
     }
 }
@@ -6667,10 +6667,10 @@ void updateCOKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & r
             writer.put("rectangle", sRectangleString);
         }
         OString info = writer.finishAndGetAsOString();
-        pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, info);
+        pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, info);
     }
     else
-        pViewShell->viewCallback(LOK_CALLBACK_CELL_AUTO_FILL_AREA, sRectangleString);
+        pViewShell->viewCallback(KIT_CALLBACK_CELL_AUTO_FILL_AREA, sRectangleString);
 }
 
 } //end anonymous namespace
@@ -6990,9 +6990,9 @@ void ScGridWindow::UpdateSelectionOverlay()
     else
     {
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-        pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY"_ostr);
-        pViewShell->viewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, "EMPTY"_ostr);
-        KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+        pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, "EMPTY"_ostr);
+        pViewShell->viewCallback(KIT_CALLBACK_CELL_SELECTION_AREA, "EMPTY"_ostr);
+        KitHelper::notifyOtherViews(pViewShell, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
 
         ScInputHandler* pViewHdl = ScModule::get()->GetInputHdl(pViewShell);
         if (!pViewHdl || !pViewHdl->IsEditMode())
@@ -7409,8 +7409,8 @@ void ScGridWindow::UpdateDragRectOverlay()
             if (!aBoundingBox.IsEmpty())
                 sBoundingBoxString = aBoundingBox.toString();
 
-            pViewShell->viewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
-            pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString);
+            pViewShell->viewCallback(KIT_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
+            pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, aRectsString);
         }
     }
 }

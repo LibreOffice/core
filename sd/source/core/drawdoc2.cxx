@@ -1569,7 +1569,7 @@ void SdDrawDocument::NotifyLOKHasOverviewPage(bool bHasOverviewPage)
     aJsonWriter.put("commandName", ".uno:HasOverviewPage");
     aJsonWriter.put("state", bHasOverviewPage ? std::string_view("true") : std::string_view("false"));
     pViewShell->viewCallback(
-        LOK_CALLBACK_STATE_CHANGED, aJsonWriter.finishAndGetAsOString());
+        KIT_CALLBACK_STATE_CHANGED, aJsonWriter.finishAndGetAsOString());
 }
 
 void SdDrawDocument::ReshufflePages()

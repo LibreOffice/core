@@ -40,7 +40,7 @@ void JSDialogNotifyIdle::send(const OString& sMsg)
         {
             m_bForce = false;
             m_LastNotificationMessage = sMsg;
-            pNotifier->viewCallback(LOK_CALLBACK_JSDIALOG, m_LastNotificationMessage);
+            pNotifier->viewCallback(KIT_CALLBACK_JSDIALOG, m_LastNotificationMessage);
         }
     }
 }

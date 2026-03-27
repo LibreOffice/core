@@ -57,7 +57,7 @@ void ViewCallback::callbackImpl(int nType, const char* pPayload)
 {
     switch (nType)
     {
-        case LOK_CALLBACK_STATE_CHANGED:
+        case KIT_CALLBACK_STATE_CHANGED:
         {
             OUString aPayload = OUString::fromUtf8(pPayload);
             m_aStateChanges.push_back(aPayload);

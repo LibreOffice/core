@@ -698,13 +698,13 @@ void KitHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pIt
 
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aItem);
-        pShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, OString(aStream.str()));
+        pShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, OString(aStream.str()));
     }
 }
 
 void KitHelper::notifyViewRenderState(const SfxViewShell* pShell, vcl::ITiledRenderable* pDoc)
 {
-    pShell->viewCallback(LOK_CALLBACK_VIEW_RENDER_STATE, pDoc->getViewRenderState());
+    pShell->viewCallback(KIT_CALLBACK_VIEW_RENDER_STATE, pDoc->getViewRenderState());
 }
 
 void KitHelper::notifyWindow(const SfxViewShell* pThisView,
@@ -733,7 +733,7 @@ void KitHelper::notifyWindow(const SfxViewShell* pThisView,
     aPayload.append('}');
 
     const OString s = aPayload.makeStringAndClear();
-    pThisView->viewCallback(LOK_CALLBACK_WINDOW, s);
+    pThisView->viewCallback(KIT_CALLBACK_WINDOW, s);
 }
 
 void KitHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect, bool bControlEvent, int windowID)
@@ -745,7 +745,7 @@ void KitHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools::R
         sPayload += "\", \"controlEvent\": true, \"windowId\": \"" + OString::number(windowID) + "\"";
     }
     sPayload += " }";
-    pThisView->viewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload);
+    pThisView->viewCallback(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload);
 }
 
 void KitHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect)
@@ -780,7 +780,7 @@ void KitHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const O
             pThisView->viewInvalidateTilesCallback(&aRectangle, i, nMode);
         }
     }
-    pThisView->viewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload);
+    pThisView->viewCallback(KIT_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload);
 }
 
 void KitHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
@@ -817,7 +817,7 @@ void KitHelper::notifyCurrentPageSizeChangedAllViews(vcl::ITiledRenderable *pDoc
         if (pCurrentViewShell == nullptr || pViewShell->GetDocId() == pCurrentViewShell->GetDocId())
         {
             OString aPayload = ".uno:CurrentPageResize"_ostr;
-            pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+            pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
@@ -893,7 +893,7 @@ void KitHelper::notifyContextChange(const css::ui::ContextChangeEventObject& rEv
         rEvent.ApplicationName.replace(' ', '_') +
         " " +
         rEvent.ContextName.replace(' ', '_');
-    pViewShell->viewCallback(LOK_CALLBACK_CONTEXT_CHANGED, aBuffer.toUtf8());
+    pViewShell->viewCallback(KIT_CALLBACK_CONTEXT_CHANGED, aBuffer.toUtf8());
 }
 
 void KitHelper::notifyLog(const std::ostringstream& stream)
@@ -910,11 +910,11 @@ void KitHelper::notifyLog(const std::ostringstream& stream)
         {
             for (const auto& msg : g_logNotifierCache)
             {
-                pViewShell->viewCallback(LOK_CALLBACK_CORE_LOG, msg.c_str());
+                pViewShell->viewCallback(KIT_CALLBACK_CORE_LOG, msg.c_str());
             }
             g_logNotifierCache.clear();
         }
-        pViewShell->viewCallback(LOK_CALLBACK_CORE_LOG, stream.str().c_str());
+        pViewShell->viewCallback(KIT_CALLBACK_CORE_LOG, stream.str().c_str());
     }
     else
     {
@@ -1360,10 +1360,10 @@ void KitHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
     LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
     switch (nType)
     {
-    case LOK_KEYEVENT_KEYINPUT:
+    case KIT_KEYEVENT_KEYINPUT:
         pLOKEv->mnEvent = VclEventId::WindowKeyInput;
         break;
-    case LOK_KEYEVENT_KEYUP:
+    case KIT_KEYEVENT_KEYUP:
         pLOKEv->mnEvent = VclEventId::WindowKeyUp;
         break;
     default:
@@ -1390,11 +1390,11 @@ void KitHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
     LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
     switch (nType)
     {
-    case LOK_EXT_TEXTINPUT:
+    case KIT_EXT_TEXTINPUT:
         pLOKEv->mnEvent = VclEventId::ExtTextInput;
         pLOKEv->maText = rText;
         break;
-    case LOK_EXT_TEXTINPUT_END:
+    case KIT_EXT_TEXTINPUT_END:
         pLOKEv->mnEvent = VclEventId::EndExtTextInput;
         pLOKEv->maText = "";
         break;
@@ -1410,13 +1410,13 @@ void KitHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMouse
     LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
     switch (rLokMouseEventData.mnType)
     {
-    case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+    case KIT_MOUSEEVENT_MOUSEBUTTONDOWN:
         pLOKEv->mnEvent = VclEventId::WindowMouseButtonDown;
         break;
-    case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+    case KIT_MOUSEEVENT_MOUSEBUTTONUP:
         pLOKEv->mnEvent = VclEventId::WindowMouseButtonUp;
         break;
-    case LOK_MOUSEEVENT_MOUSEMOVE:
+    case KIT_MOUSEEVENT_MOUSEMOVE:
         pLOKEv->mnEvent = VclEventId::WindowMouseMove;
         break;
     default:
@@ -1483,7 +1483,7 @@ bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int 
 
     // check if the user hit a chart which is being edited by someone else
     // and, if so, skip current mouse event
-    if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
+    if (nType != KIT_MOUSEEVENT_MOUSEMOVE)
     {
         if (KitChartHelper::HitAny({nX, nY}, bNegativeX))
             return true;
@@ -1513,7 +1513,7 @@ void KitHelper::sendNetworkAccessError(std::string_view rAction)
     if (pViewShell)
     {
         pViewShell->viewCallback(
-            LOK_CALLBACK_ERROR, aWriter.finishAndGetAsOString());
+            KIT_CALLBACK_ERROR, aWriter.finishAndGetAsOString());
     }
 }
 
