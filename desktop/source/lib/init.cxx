@@ -1853,7 +1853,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     bool bIsComment = false;
     if (type == LOK_CALLBACK_GRAPHIC_SELECTION)
     {
-        LokChartHelper aChartHelper(SfxViewShell::Current());
+        KitChartHelper aChartHelper(SfxViewShell::Current());
         bIsChartActive = aChartHelper.GetWindow() != nullptr;
     }
     else if (type == LOK_CALLBACK_COMMENT)
@@ -5072,7 +5072,7 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    LokChartHelper aChartHelper(SfxViewShell::Current());
+    KitChartHelper aChartHelper(SfxViewShell::Current());
 
     if (aChartHelper.GetWindow())
         return 0;
@@ -5580,7 +5580,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
     else if (gImpl && aCommand == ".uno:TransformDialog")
     {
         bool bNeedConversion = false;
-        LokChartHelper aChartHelper(pViewShell);
+        KitChartHelper aChartHelper(pViewShell);
 
         if (aChartHelper.GetWindow() )
         {
@@ -5716,7 +5716,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
 
     if (aCommand != ".uno:Save")
     {
-        if (LokChartHelper aChartHelper(SfxViewShell::Current()); aChartHelper.GetWindow())
+        if (KitChartHelper aChartHelper(SfxViewShell::Current()); aChartHelper.GetWindow())
         {
             aChartHelper.Dispatch(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
             return;

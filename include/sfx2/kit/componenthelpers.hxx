@@ -24,7 +24,7 @@ class SfxViewShell;
 class VirtualDevice;
 
 /// A class for chart editing support via COKit.
-class SFX2_DLLPUBLIC LokChartHelper
+class SFX2_DLLPUBLIC KitChartHelper
 {
 private:
     SfxViewShell* mpViewShell;
@@ -33,7 +33,7 @@ private:
     bool mbNegativeX;
 
 public:
-    LokChartHelper(SfxViewShell* pViewShell, bool bNegativeX = false)
+    KitChartHelper(SfxViewShell* pViewShell, bool bNegativeX = false)
         : mpViewShell(pViewShell)
         , mpWindow(nullptr)
         , mbNegativeX(bNegativeX)

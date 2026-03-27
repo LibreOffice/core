@@ -1473,7 +1473,7 @@ bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int 
         nX = -nX;
 
     // check if the user hit a chart/math object which is being edited by this view
-    if (LokChartHelper aChartHelper(pViewShell, bNegativeX);
+    if (KitChartHelper aChartHelper(pViewShell, bNegativeX);
         aChartHelper.postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScaleX, fScaleY))
         return true;
 
@@ -1485,7 +1485,7 @@ bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int 
     // and, if so, skip current mouse event
     if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
     {
-        if (LokChartHelper::HitAny({nX, nY}, bNegativeX))
+        if (KitChartHelper::HitAny({nX, nY}, bNegativeX))
             return true;
     }
 
@@ -1494,7 +1494,7 @@ bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int 
 
 VclPtr<vcl::Window> KitHelper::getInPlaceDocWindow(SfxViewShell* pViewShell)
 {
-    if (VclPtr<vcl::Window> pWindow = LokChartHelper(pViewShell).GetWindow())
+    if (VclPtr<vcl::Window> pWindow = KitChartHelper(pViewShell).GetWindow())
         return pWindow;
     if (VclPtr<vcl::Window> pWindow = KitStarMathHelper(pViewShell).GetWidgetWindow())
         return pWindow;

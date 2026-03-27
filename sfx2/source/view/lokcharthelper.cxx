@@ -27,7 +27,7 @@
 
 using namespace com::sun::star;
 
-css::uno::Reference<css::frame::XController>& LokChartHelper::GetXController() const
+css::uno::Reference<css::frame::XController>& KitChartHelper::GetXController() const
 {
     if(!mxController.is() && mpViewShell)
     {
@@ -53,7 +53,7 @@ css::uno::Reference<css::frame::XController>& LokChartHelper::GetXController() c
     return mxController;
 }
 
-vcl::Window* LokChartHelper::GetWindow()
+vcl::Window* KitChartHelper::GetWindow()
 {
     if (!mpWindow)
     {
@@ -86,7 +86,7 @@ vcl::Window* LokChartHelper::GetWindow()
     return mpWindow.get();
 }
 
-tools::Rectangle LokChartHelper::GetChartBoundingBox()
+tools::Rectangle KitChartHelper::GetChartBoundingBox()
 {
     tools::Rectangle aBBox;
     if (mpViewShell)
@@ -131,19 +131,19 @@ tools::Rectangle LokChartHelper::GetChartBoundingBox()
     return aBBox;
 }
 
-void LokChartHelper::Dispatch(const OUString& cmd,
+void KitChartHelper::Dispatch(const OUString& cmd,
                               const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const
 {
     comphelper::dispatchCommand(cmd, GetXController(), rArguments);
 }
 
-void LokChartHelper::Invalidate()
+void KitChartHelper::Invalidate()
 {
     mpWindow = nullptr;
     mxController.clear();
 }
 
-bool LokChartHelper::Hit(const Point& aPos)
+bool KitChartHelper::Hit(const Point& aPos)
 {
     if (mpViewShell)
     {
@@ -157,7 +157,7 @@ bool LokChartHelper::Hit(const Point& aPos)
     return false;
 }
 
-bool LokChartHelper::HitAny(const Point& aPos, bool bNegativeX)
+bool KitChartHelper::HitAny(const Point& aPos, bool bNegativeX)
 {
     SfxViewShell* pCurView = SfxViewShell::Current();
     int nPartForCurView = pCurView ? pCurView->getPart() : -1;
@@ -166,7 +166,7 @@ bool LokChartHelper::HitAny(const Point& aPos, bool bNegativeX)
     {
         if (pCurView && pViewShell->GetDocId() == pCurView->GetDocId() && pViewShell->getPart() == nPartForCurView)
         {
-            LokChartHelper aChartHelper(pViewShell, bNegativeX);
+            KitChartHelper aChartHelper(pViewShell, bNegativeX);
             if (aChartHelper.Hit(aPos))
                 return true;
         }
@@ -175,7 +175,7 @@ bool LokChartHelper::HitAny(const Point& aPos, bool bNegativeX)
     return false;
 }
 
-void LokChartHelper::PaintTile(VirtualDevice& rRenderContext, const tools::Rectangle& rTileRect)
+void KitChartHelper::PaintTile(VirtualDevice& rRenderContext, const tools::Rectangle& rTileRect)
 {
     if (!mpViewShell)
         return;
@@ -219,7 +219,7 @@ void LokChartHelper::PaintTile(VirtualDevice& rRenderContext, const tools::Recta
         pChartWindow->EnableMapMode(false);
 }
 
-void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
+void KitChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
                                           int nOutputWidth, int nOutputHeight,
                                           int nTilePosX, int nTilePosY,
                                           tools::Long nTileWidth, tools::Long nTileHeight,
@@ -252,14 +252,14 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
     {
         if (pCurView && pViewShell->GetDocId() == pCurView->GetDocId() && pViewShell->getPart() == nPartForCurView)
         {
-            LokChartHelper aChartHelper(pViewShell, bNegativeX);
+            KitChartHelper aChartHelper(pViewShell, bNegativeX);
             aChartHelper.PaintTile(rDevice, aTileRect);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
 
-bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
+bool KitChartHelper::postMouseEvent(int nType, int nX, int nY,
                                     int nCount, int nButtons, int nModifier,
                                     double fScaleX, double fScaleY)
 {
@@ -287,7 +287,7 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
     return false;
 }
 
-bool LokChartHelper::setTextSelection(int nType, int nX, int nY)
+bool KitChartHelper::setTextSelection(int nType, int nX, int nY)
 {
     tools::Rectangle rChartBBox = GetChartBoundingBox();
     if (rChartBBox.Contains(Point(nX, nY)))
@@ -308,7 +308,7 @@ bool LokChartHelper::setTextSelection(int nType, int nX, int nY)
     return false;
 }
 
-bool LokChartHelper::setGraphicSelection(int nType, int nX, int nY,
+bool KitChartHelper::setGraphicSelection(int nType, int nX, int nY,
                                          double fScaleX, double fScaleY)
 {
     tools::Rectangle rChartBBox = GetChartBoundingBox();

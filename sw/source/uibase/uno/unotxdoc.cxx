@@ -3378,7 +3378,7 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
     pViewShell->PaintTile(rDevice, nOutputWidth, nOutputHeight,
                           nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-    LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
+    KitChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
     // Draw Form controls
@@ -4076,7 +4076,7 @@ void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
     SolarMutexGuard aGuard;
 
     SfxViewShell* pViewShell = m_pDocShell->GetView();
-    LokChartHelper aChartHelper(pViewShell);
+    KitChartHelper aChartHelper(pViewShell);
     if (aChartHelper.setTextSelection(nType, nX, nY))
         return;
 
@@ -4140,7 +4140,7 @@ void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)
     double fScale = aOption.GetZoom() / o3tl::convert(100.0, o3tl::Length::px, o3tl::Length::twip);
 
     SfxViewShell* pViewShell = m_pDocShell->GetView();
-    LokChartHelper aChartHelper(pViewShell);
+    KitChartHelper aChartHelper(pViewShell);
     if (aChartHelper.setGraphicSelection(nType, nX, nY, fScale, fScale))
         return;
 

@@ -1554,11 +1554,11 @@ LogLuv24fromXYZ
 LogLuv24toXYZ
 LogLuv32fromXYZ
 LogLuv32toXYZ
-LokChartHelper::Hit(Point const&)
-LokChartHelper::HitAny(Point const&, bool)
-LokChartHelper::Invalidate()
-LokChartHelper::PaintTile(VirtualDevice&, tools::Rectangle const&)
-LokChartHelper::postMouseEvent(int, int, int, int, int, int, double, double)
+KitChartHelper::Hit(Point const&)
+KitChartHelper::HitAny(Point const&, bool)
+KitChartHelper::Invalidate()
+KitChartHelper::PaintTile(VirtualDevice&, tools::Rectangle const&)
+KitChartHelper::postMouseEvent(int, int, int, int, int, int, double, double)
 KitStarMathHelper::GetWidgetWindow()
 KitStarMathHelper::PaintTile(VirtualDevice&, tools::Rectangle const&)
 KitStarMathHelper::postMouseEvent(int, int, int, int, int, int, double, double)

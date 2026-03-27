@@ -1633,7 +1633,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     rDevice.SetMapMode(aOriginalMode);
 
     // Paint the chart(s) in edit mode.
-    LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
+    KitChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
         nTilePosX, nTilePosY, nTileWidth, nTileHeight, bLayoutRTL);
 
     rDevice.SetMapMode(aOriginalMode);

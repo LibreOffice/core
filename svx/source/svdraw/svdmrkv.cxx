@@ -1054,7 +1054,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
 
             if (bIsChart)
             {
-                LokChartHelper aChartHelper(pViewShell);
+                KitChartHelper aChartHelper(pViewShell);
                 css::uno::Reference<css::frame::XController>& xChartController = aChartHelper.GetXController();
                 css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier( xChartController, uno::UNO_QUERY);
                 if (xSelectionSupplier.is())

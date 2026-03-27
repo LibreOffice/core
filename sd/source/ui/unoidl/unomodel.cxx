@@ -4096,7 +4096,7 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     if (comphelper::COKit::isActive())
         pView->SetPaintTextEdit(true);
 
-    LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
+    KitChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
     KitStarMathHelper::PaintAllInPlaceOnTile(rDevice, nOutputWidth, nOutputHeight, nTilePosX,
                                              nTilePosY, nTileWidth, nTileHeight);
@@ -4558,7 +4558,7 @@ void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
     if (!pViewShell)
         return;
 
-    LokChartHelper aChartHelper(pViewShell->GetViewShell());
+    KitChartHelper aChartHelper(pViewShell->GetViewShell());
     if (aChartHelper.setTextSelection(nType, nX, nY))
         return;
 
@@ -4601,7 +4601,7 @@ void SdXImpressDocument::setGraphicSelection(int nType, int nX, int nY)
 
     constexpr double fScale = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::px);
 
-    LokChartHelper aChartHelper(pViewShell->GetViewShell());
+    KitChartHelper aChartHelper(pViewShell->GetViewShell());
     if (aChartHelper.setGraphicSelection(nType, nX, nY, fScale, fScale))
         return;
 

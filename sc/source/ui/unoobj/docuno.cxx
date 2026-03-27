@@ -892,7 +892,7 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
 
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
-    LokChartHelper aChartHelper(pViewShell);
+    KitChartHelper aChartHelper(pViewShell);
     if (aChartHelper.setTextSelection(nType, nX, nY))
         return;
 
@@ -1014,7 +1014,7 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
     double fPPTY = pViewData->GetPPTY();
 
     pViewShell = pViewData->GetViewShell();
-    LokChartHelper aChartHelper(pViewShell);
+    KitChartHelper aChartHelper(pViewShell);
     if (aChartHelper.setGraphicSelection(nType, nX, nY, fPPTX, fPPTY))
         return;
 
