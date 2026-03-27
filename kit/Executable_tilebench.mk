@@ -27,7 +27,7 @@ $(eval $(call gb_Executable_add_libs,tilebench,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,tilebench,\
-    libreofficekit/qa/tilebench/tilebench \
+    kit/qa/tilebench/tilebench \
 ))
 
 # vim: set noet sw=4 ts=4:

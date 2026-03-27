@@ -866,11 +866,11 @@ jvmfwk/inc/vendorbase.hxx:179
     jfw_plugin::VendorBase m_sArch OUString
 l10ntools/inc/common.hxx:32
     common::HandledArgs m_bUTF8BOM _Bool
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:28
+kit/qa/gtktiledviewer/gtv-application-window.hxx:28
     GtvRenderingArgs m_aBackgroundColor std::string
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:62
+kit/qa/gtktiledviewer/gtv-application-window.hxx:62
     GtvApplicationWindow statusbar GtkWidget *
-libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.cxx:38
+kit/qa/gtktiledviewer/gtv-main-toolbar.cxx:38
     (anonymous namespace)::GtvMainToolbarPrivateImpl m_pPartModeSelector GtkWidget *
 oox/inc/drawingml/chart/axismodel.hxx:39
     oox::drawingml::chart::AxisDispUnitsModel mfCustomUnit double

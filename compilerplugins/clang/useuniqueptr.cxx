@@ -329,7 +329,7 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
         return;
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/cppuhelper/qa/"))
         return;
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/libreofficekit/qa/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/kit/qa/"))
         return;
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/qa/"))
         return;

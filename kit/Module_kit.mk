@@ -7,37 +7,37 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,libreofficekit))
+$(eval $(call gb_Module_Module,kit))
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 
-$(eval $(call gb_Module_add_check_targets,libreofficekit, \
-    CppunitTest_libreofficekit_checkapi \
+$(eval $(call gb_Module_add_check_targets,kit, \
+    CppunitTest_kit_checkapi \
 ))
 
 # tdf#113311 disabled because it can deadlock on shutdown
-#$(eval $(call gb_Module_add_subsequentcheck_targets,libreofficekit,\
-    CppunitTest_libreofficekit_tiledrendering \
+#$(eval $(call gb_Module_add_subsequentcheck_targets,kit,\
+    CppunitTest_kit_tiledrendering \
 ))
 
 ifneq ($(ENABLE_GTK3),)
-$(eval $(call gb_Module_add_targets,libreofficekit,\
-    Library_libreofficekitgtk \
+$(eval $(call gb_Module_add_targets,kit,\
+    Library_kitgtk \
     Executable_gtktiledviewer \
 ))
 endif # ($(ENABLE_GTK3),)
 
-$(eval $(call gb_Module_add_targets,libreofficekit,\
+$(eval $(call gb_Module_add_targets,kit,\
     $(if $(DISABLE_DYNLOADING),,Executable_tilebench) \
     Package_selectionhandles \
-    UIConfig_libreofficekit \
+    UIConfig_kit \
 ))
 
 else ifeq ($(OS),WNT)
 
 ifneq ($(ENABLE_GTKTILEDVIEWER),)
-$(eval $(call gb_Module_add_targets,libreofficekit,\
-    Library_libreofficekitgtk \
+$(eval $(call gb_Module_add_targets,kit,\
+    Library_kitgtk \
     Executable_gtktiledviewer \
     Package_selectionhandles \
 ))

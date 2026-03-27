@@ -3204,7 +3204,7 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
 
 bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 {
-    bool setModuleConfig = false; // In case libreofficekit is active, we will re-set the module config class.
+    bool setModuleConfig = false; // In case kit is active, we will re-set the module config class.
     if (!pImpl->m_xAccExec)
     {
         pImpl->m_xAccExec = ::svt::AcceleratorExecute::createAcceleratorHelper();

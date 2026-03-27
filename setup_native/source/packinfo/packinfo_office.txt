@@ -1292,9 +1292,9 @@ End
 
 Start
 module = "gid_Module_Libreofficekit"
-solarispackagename = "%BASISPACKAGEPREFIX-libreofficekit-data"
+solarispackagename = "%BASISPACKAGEPREFIX-kit-data"
 solarisrequires = "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX-libreofficekit-data"
+packagename = "%BASISPACKAGEPREFIX-kit-data"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
 copyright = "2026 Collabora Productivity Ltd."

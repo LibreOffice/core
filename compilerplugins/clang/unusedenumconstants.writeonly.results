@@ -4460,52 +4460,52 @@ jvmfwk/plugins/sunmajor/pluginlib/util.cxx:193
     enum jfw_plugin::(anonymous namespace)::FileHandleReader::Result RESULT_EOF
 jvmfwk/plugins/sunmajor/pluginlib/util.cxx:203
     enum jfw_plugin::(anonymous namespace)::FileHandleReader::(unnamed at /home/noel/libo-plugin/jvmfwk/plugins/sunmajor/pluginlib/util.cxx:203:5) BUFFER_SIZE
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:76
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:69:1) PROP_LAST
-libreofficekit/source/gtk/lokdocview.cxx:285
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) LOAD_CHANGED
-libreofficekit/source/gtk/lokdocview.cxx:286
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) EDIT_CHANGED
-libreofficekit/source/gtk/lokdocview.cxx:287
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) COMMAND_CHANGED
-libreofficekit/source/gtk/lokdocview.cxx:288
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) SEARCH_NOT_FOUND
-libreofficekit/source/gtk/lokdocview.cxx:289
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) PART_CHANGED
-libreofficekit/source/gtk/lokdocview.cxx:290
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) SIZE_CHANGED
-libreofficekit/source/gtk/lokdocview.cxx:291
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) HYPERLINK_CLICKED
-libreofficekit/source/gtk/lokdocview.cxx:292
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) CURSOR_CHANGED
-libreofficekit/source/gtk/lokdocview.cxx:293
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) SEARCH_RESULT_COUNT
-libreofficekit/source/gtk/lokdocview.cxx:294
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) COMMAND_RESULT
-libreofficekit/source/gtk/lokdocview.cxx:295
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) ADDRESS_CHANGED
-libreofficekit/source/gtk/lokdocview.cxx:296
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) FORMULA_CHANGED
-libreofficekit/source/gtk/lokdocview.cxx:297
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) TEXT_SELECTION
-libreofficekit/source/gtk/lokdocview.cxx:298
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) CONTENT_CONTROL
-libreofficekit/source/gtk/lokdocview.cxx:299
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) PASSWORD_REQUIRED
-libreofficekit/source/gtk/lokdocview.cxx:300
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) COMMENT
-libreofficekit/source/gtk/lokdocview.cxx:301
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) RULER
-libreofficekit/source/gtk/lokdocview.cxx:302
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) WINDOW
-libreofficekit/source/gtk/lokdocview.cxx:303
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) INVALIDATE_HEADER
-libreofficekit/source/gtk/lokdocview.cxx:305
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:283:1) LAST_SIGNAL
-libreofficekit/source/gtk/lokdocview.cxx:331
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:308:1) PROP_LAST
-libreofficekit/source/gtk/tilebuffer.hxx:172
-    enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/tilebuffer.hxx:169:1) LOK_TILEBUFFER_MEMORY
+kit/qa/gtktiledviewer/gtv-lok-dialog.cxx:76
+    enum (unnamed at /home/noel/libo-plugin/kit/qa/gtktiledviewer/gtv-lok-dialog.cxx:69:1) PROP_LAST
+kit/source/gtk/lokdocview.cxx:285
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) LOAD_CHANGED
+kit/source/gtk/lokdocview.cxx:286
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) EDIT_CHANGED
+kit/source/gtk/lokdocview.cxx:287
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) COMMAND_CHANGED
+kit/source/gtk/lokdocview.cxx:288
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) SEARCH_NOT_FOUND
+kit/source/gtk/lokdocview.cxx:289
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) PART_CHANGED
+kit/source/gtk/lokdocview.cxx:290
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) SIZE_CHANGED
+kit/source/gtk/lokdocview.cxx:291
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) HYPERLINK_CLICKED
+kit/source/gtk/lokdocview.cxx:292
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) CURSOR_CHANGED
+kit/source/gtk/lokdocview.cxx:293
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) SEARCH_RESULT_COUNT
+kit/source/gtk/lokdocview.cxx:294
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) COMMAND_RESULT
+kit/source/gtk/lokdocview.cxx:295
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) ADDRESS_CHANGED
+kit/source/gtk/lokdocview.cxx:296
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) FORMULA_CHANGED
+kit/source/gtk/lokdocview.cxx:297
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) TEXT_SELECTION
+kit/source/gtk/lokdocview.cxx:298
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) CONTENT_CONTROL
+kit/source/gtk/lokdocview.cxx:299
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) PASSWORD_REQUIRED
+kit/source/gtk/lokdocview.cxx:300
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) COMMENT
+kit/source/gtk/lokdocview.cxx:301
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) RULER
+kit/source/gtk/lokdocview.cxx:302
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) WINDOW
+kit/source/gtk/lokdocview.cxx:303
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) INVALIDATE_HEADER
+kit/source/gtk/lokdocview.cxx:305
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:283:1) LAST_SIGNAL
+kit/source/gtk/lokdocview.cxx:331
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:308:1) PROP_LAST
+kit/source/gtk/tilebuffer.hxx:172
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/tilebuffer.hxx:169:1) LOK_TILEBUFFER_MEMORY
 oox/inc/drawingml/chart/objectformatter.hxx:39
     enum oox::drawingml::chart::ObjectType OBJECTTYPE_CHARTTITLE
 oox/inc/drawingml/chart/objectformatter.hxx:40

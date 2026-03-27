@@ -2066,19 +2066,19 @@ l10ntools/inc/po.hxx:112
     void PoOfstream::PoOfstream(const class rtl::OString &,enum PoOfstream::OpenMode)
     enum PoOfstream::OpenMode aMode
     1
-libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:54
+kit/qa/gtktiledviewer/gtv-main-toolbar.hxx:54
     void gtv_main_toolbar_doc_loaded(struct GtvMainToolbar *,COKitDocumentType,_Bool)
     _Bool bEditMode
     1
-libreofficekit/qa/tilebench/tilebench.cxx:72
+kit/qa/tilebench/tilebench.cxx:72
     void dumpTile(const char *,const int,const int,const int,const unsigned char *,const int,const int,int)
     const int nOffX
     0
-libreofficekit/qa/tilebench/tilebench.cxx:72
+kit/qa/tilebench/tilebench.cxx:72
     void dumpTile(const char *,const int,const int,const int,const unsigned char *,const int,const int,int)
     const int nOffY
     0
-libreofficekit/qa/tilebench/tilebench.cxx:155
+kit/qa/tilebench/tilebench.cxx:155
     void testTile(class lok::Document *,int,int,_Bool)
     _Bool dump
     1

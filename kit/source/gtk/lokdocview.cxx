@@ -36,7 +36,7 @@
 #endif
 
 // Cursor bitmaps from the installation set.
-#define CURSOR_HANDLE_DIR "/../share/libreofficekit/"
+#define CURSOR_HANDLE_DIR "/../share/kit/"
 // Number of handles around a graphic selection.
 #define GRAPHIC_HANDLE_COUNT 8
 // Maximum Zoom allowed

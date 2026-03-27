@@ -9,7 +9,7 @@
 
 #include "macros.inc"
 
-#include "AutoInstall/libreofficekit"
+#include "AutoInstall/kit"
 
 Module gid_Module_Libreofficekit
     Name = "Libreofficekit Data";
@@ -23,7 +23,7 @@ End
 
 Directory gid_Dir_Share_Libreofficekit
     ParentID = gid_Brand_Dir_Share;
-    DosName = "libreofficekit";
+    DosName = "kit";
 End
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -336,31 +336,31 @@ include/vcl/pdf/PDFAnnotationMarker.hxx:79
     vcl::pdf::PDFAnnotationMarkerHighlight meTextMarkerType PDFTextMarkerType
 include/xmloff/shapeimport.hxx:55
     SdXML3DLightContext mbSpecular _Bool
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:51
+kit/qa/gtktiledviewer/gtv-application-window.hxx:51
     GtvApplicationWindow parent_instance GtkApplicationWindow
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:55
+kit/qa/gtktiledviewer/gtv-application-window.hxx:55
     GtvApplicationWindow doctype COKitDocumentType
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:74
+kit/qa/gtktiledviewer/gtv-application-window.hxx:74
     GtvApplicationWindowClass parentClass GtkApplicationWindowClass
-libreofficekit/qa/gtktiledviewer/gtv-application.hxx:26
+kit/qa/gtktiledviewer/gtv-application.hxx:26
     GtvApplication parent GtkApplication
-libreofficekit/qa/gtktiledviewer/gtv-application.hxx:31
+kit/qa/gtktiledviewer/gtv-application.hxx:31
     GtvApplicationClass parentClass GtkApplicationClass
-libreofficekit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:28
+kit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:28
     GtvCalcHeaderBar parent GtkDrawingArea
-libreofficekit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:37
+kit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:37
     GtvCalcHeaderBarClass parentClass GtkDrawingAreaClass
-libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:26
+kit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:26
     GtvCommentsSidebar parent GtkBox
-libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:35
+kit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:35
     GtvCommentsSidebarClass parentClass GtkBoxClass
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.hxx:28
+kit/qa/gtktiledviewer/gtv-lok-dialog.hxx:28
     GtvLokDialog parent GtkDialog
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.hxx:33
+kit/qa/gtktiledviewer/gtv-lok-dialog.hxx:33
     GtvLokDialogClass parentClass GtkDialogClass
-libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
+kit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
     GtvMainToolbar parent GtkBox
-libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:38
+kit/qa/gtktiledviewer/gtv-main-toolbar.hxx:38
     GtvMainToolbarClass parentClass GtkBoxClass
 lingucomponent/source/languageguessing/simpleguesser.cxx:75
     (anonymous namespace)::textcat_t maxsize uint4

@@ -115,7 +115,7 @@ jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:195
 jvmfwk/source/fwkbase.cxx:379
     jfw::getMode g_mode
     JFW_MODE
-libreofficekit/source/gtk/tilebuffer.hxx:230
+kit/source/gtk/tilebuffer.hxx:230
     LOEvent m_nSetGraphicSelectionType
     int
 oox/inc/drawingml/textspacing.hxx:62

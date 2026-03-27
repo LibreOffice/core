@@ -53,7 +53,7 @@ public:
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/basic/source/sbx/sbxdec.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/source/doc/syspath.cxx")
             // ignore this for now
-            || loplugin::hasPathnamePrefix(fn, SRCDIR "/libreofficekit")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/kit")
             // FunctionAddress not working well enough here
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/pyuno/source/module/pyuno_struct.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/pyuno/source/module/pyuno.cxx")

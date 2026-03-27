@@ -1766,11 +1766,11 @@ include/xmloff/XMLSettingsExportContext.hxx:39
     void xmloff::XMLSettingsExportContext::AddAttribute(enum xmloff::token::XMLTokenEnum,enum xmloff::token::XMLTokenEnum)
     enum xmloff::token::XMLTokenEnum i_eName
     1987
-libreofficekit/qa/tilebench/tilebench.cxx:72
+kit/qa/tilebench/tilebench.cxx:72
     void dumpTile(const char *,const int,const int,const int,const unsigned char *,const int,const int,int)
     int nTotalWidth
     -1
-libreofficekit/qa/tilebench/tilebench.cxx:352
+kit/qa/tilebench/tilebench.cxx:352
     int testJoinsAt(class lok::Document *,long,long,const long,const long)
     const long nTilePixelSize
     256

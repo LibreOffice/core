@@ -71,7 +71,7 @@
 		29F88FB72A554D7000C77A3F /* setup_native */ = {isa = PBXFileReference; lastKnownFileType = folder; name = setup_native; path = ../setup_native; sourceTree = "<group>"; };
 		29F88FB82A554D7000C77A3F /* sysui */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sysui; path = ../sysui; sourceTree = "<group>"; };
 		29F88FB92A554D7000C77A3F /* librelogo */ = {isa = PBXFileReference; lastKnownFileType = folder; name = librelogo; path = ../librelogo; sourceTree = "<group>"; };
-		29F88FBA2A554D7000C77A3F /* libreofficekit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = libreofficekit; path = ../libreofficekit; sourceTree = "<group>"; };
+		29F88FBA2A554D7000C77A3F /* kit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = kit; path = ../kit; sourceTree = "<group>"; };
 		29F88FBB2A554D7100C77A3F /* oox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = oox; path = ../oox; sourceTree = "<group>"; };
 		29F88FBC2A554D7100C77A3F /* binaryurp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = binaryurp; path = ../binaryurp; sourceTree = "<group>"; };
 		29F88FBD2A554D7100C77A3F /* configmgr */ = {isa = PBXFileReference; lastKnownFileType = folder; name = configmgr; path = ../configmgr; sourceTree = "<group>"; };
@@ -206,7 +206,7 @@
 				29F88F9F2A554D6E00C77A3F /* jvmfwk */,
 				29F88FF92A554D7A00C77A3F /* l10ntools */,
 				29F88FB92A554D7000C77A3F /* librelogo */,
-				29F88FBA2A554D7000C77A3F /* libreofficekit */,
+				29F88FBA2A554D7000C77A3F /* kit */,
 				29F88FAD2A554D6F00C77A3F /* lingucomponent */,
 				29F88F9B2A554D6E00C77A3F /* linguistic */,
 				29F88F9C2A554D6E00C77A3F /* lotuswordpro */,

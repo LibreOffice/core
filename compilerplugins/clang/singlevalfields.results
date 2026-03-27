@@ -400,7 +400,7 @@ include/vcl/weldutils.hxx:410
 io/qa/textinputstream.cxx:97
     (anonymous namespace)::Input open_
     1
-libreofficekit/source/gtk/lokdocview.cxx:86
+kit/source/gtk/lokdocview.cxx:86
     (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading
     0
 lingucomponent/source/spellcheck/languagetool/languagetoolimp.hxx:39

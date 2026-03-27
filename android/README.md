@@ -3,7 +3,7 @@
 ## Bootstrap
 
 Contains common code for all projects on Android to bootstrap LibreOffice. In
-addition it is a home to `COKit` (LOK - see `libreofficekit/README.md`) JNI
+addition it is a home to `COKit` (LOK - see `kit/README.md`) JNI
 classes.
 
 ## Stuff in Source Directory

@@ -186,7 +186,7 @@ local file="$1"
         */libsofficeapp.so)
             allowlist="${allowlist} ${x11allowlist} ${openglallowlist} ${gioallowlist} libcups.so.2"
         ;;
-        */liblibreofficekitgtk.so)
+        */libkitgtk.so)
             allowlist="${allowlist} ${gtk3allowlist}"
         ;;
         */libsdlo.so)

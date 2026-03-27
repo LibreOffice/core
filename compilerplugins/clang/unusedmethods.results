@@ -1362,9 +1362,9 @@ include/xmlreader/span.hxx:43
      xmlreader::Span::Span(const char (&)[_ArrayExtent])
 include/xmlreader/span.hxx:70
     _Bool xmlreader::Span::operator!=(const char (&)[_ArrayExtent]) const
-libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
+kit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
     void * gtv_comments_sidebar_get_instance_private(struct GtvCommentsSidebar *)
-libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:37
+kit/qa/gtktiledviewer/gtv-signal-handlers.hxx:37
     void openLokDialog(struct _GtkWidget *,void *)
 lotuswordpro/source/filter/clone.hxx:28
     detail::has_clone<LwpAtomHolder>::no & detail::has_clone::check_sig()

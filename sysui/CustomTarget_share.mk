@@ -163,14 +163,14 @@ $(share_WORKDIR)/%/create_tree.sh: $(share_SRCDIR)/share/create_tree.sh \
 ifneq ($(INTROSPECTION_SCANNER),)
 
 $(share_WORKDIR)/%/LOKDocView-0.1.gir: \
-		$(call gb_Library_get_target,libreofficekitgtk)
+		$(call gb_Library_get_target,kitgtk)
 	mkdir -p $(dir $@)
 	PYTHONWARNINGS=default g-ir-scanner "${SRCDIR}/include/COKit/COKitGtk.h" \
-				 "${SRCDIR}/libreofficekit/source/gtk/lokdocview.cxx" \
+				 "${SRCDIR}/kit/source/gtk/lokdocview.cxx" \
                  `${PKG_CONFIG} --cflags-only-I gobject-introspection-1.0 gtk+-3.0` \
 				 -I"${SRCDIR}/include/" \
                  --include=GLib-2.0 --include=GObject-2.0 --include=Gio-2.0 \
-                 --library=libreofficekitgtk --library-path="${INSTDIR}/program" \
+                 --library=kitgtk --library-path="${INSTDIR}/program" \
                  --include=Gdk-3.0 --include=GdkPixbuf-2.0 --include=Gtk-3.0 \
                  --namespace=LOKDocView --nsversion=0.1 --identifier-prefix=LOKDoc --symbol-prefix=lok_doc \
                  --c-include="COKit/COKitGtk.h" \

@@ -7,41 +7,41 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Library_Library,libreofficekitgtk))
+$(eval $(call gb_Library_Library,kitgtk))
 
-$(eval $(call gb_Library_use_sdk_api,libreofficekitgtk))
+$(eval $(call gb_Library_use_sdk_api,kitgtk))
 
-$(eval $(call gb_Library_add_exception_objects,libreofficekitgtk,\
-    libreofficekit/source/gtk/lokdocview \
-    libreofficekit/source/gtk/tilebuffer \
+$(eval $(call gb_Library_add_exception_objects,kitgtk,\
+    kit/source/gtk/lokdocview \
+    kit/source/gtk/tilebuffer \
 ))
 
-$(eval $(call gb_Library_use_externals,libreofficekitgtk,\
+$(eval $(call gb_Library_use_externals,kitgtk,\
     boost_headers \
 ))
 
-$(eval $(call gb_Library_set_include,libreofficekitgtk,\
+$(eval $(call gb_Library_set_include,kitgtk,\
     $$(INCLUDE) \
     $$(GTK3_CFLAGS) \
 ))
 
-$(eval $(call gb_Library_add_libs,libreofficekitgtk,\
+$(eval $(call gb_Library_add_libs,kitgtk,\
     $(GTK3_LIBS) \
 ))
 
-$(eval $(call gb_Library_add_defs,libreofficekitgtk,\
+$(eval $(call gb_Library_add_defs,kitgtk,\
 	-DLOK_PATH="\"$(LIBDIR)/libreoffice/$(LIBO_LIB_FOLDER)\"" \
 	-DLOK_DOC_VIEW_IMPLEMENTATION \
 ))
 
 ifeq ($(OS),$(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Library_add_libs,libreofficekitgtk,\
+$(eval $(call gb_Library_add_libs,kitgtk,\
     $(UNIX_DLAPI_LIBS) -lm \
 ))
 endif
 
-$(eval $(call gb_Library_use_packages,libreofficekitgtk, \
-    libreofficekit_selectionhandles \
+$(eval $(call gb_Library_use_packages,kitgtk, \
+    kit_selectionhandles \
 ))
 
 # vim: set noet sw=4 ts=4:

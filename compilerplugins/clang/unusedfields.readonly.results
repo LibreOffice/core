@@ -456,9 +456,9 @@ io/source/stm/odata.cxx:556
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(unnamed struct at /home/noel/libo-plugin/io/source/stm/odata.cxx:556:23) n1 sal_uInt32
 io/source/stm/odata.cxx:556
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(unnamed struct at /home/noel/libo-plugin/io/source/stm/odata.cxx:556:23) n2 sal_uInt32
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:48
+kit/qa/gtktiledviewer/gtv-lok-dialog.cxx:48
     (anonymous namespace)::GtvLokDialogPrivate m_nChildKeyModifier guint32
-libreofficekit/source/gtk/lokdocview.cxx:86
+kit/source/gtk/lokdocview.cxx:86
     (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading _Bool
 lingucomponent/source/languageguessing/simpleguesser.cxx:72
     (anonymous namespace)::textcat_t fprint void **

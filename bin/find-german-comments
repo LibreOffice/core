@@ -294,7 +294,7 @@ class Parser:
             "jvmfwk" : 1,
             "jurt" : 1,
             "l10ntools" : 1,
-            "libreofficekit" : 1,
+            "kit" : 1,
             "lingucomponent" : 1,
             "linguistic" : 1,
             "lotuswordpro" : 1,

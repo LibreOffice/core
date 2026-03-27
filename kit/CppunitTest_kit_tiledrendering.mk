@@ -9,32 +9,32 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,libreofficekit_tiledrendering))
+$(eval $(call gb_CppunitTest_CppunitTest,kit_tiledrendering))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,libreofficekit_tiledrendering, \
-    libreofficekit/qa/unit/tiledrendering \
+$(eval $(call gb_CppunitTest_add_exception_objects,kit_tiledrendering, \
+    kit/qa/unit/tiledrendering \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,libreofficekit_tiledrendering,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,kit_tiledrendering,boost_headers))
 
 # We need all these libraries / etc. due for CppunitTest to work, even though
 # our test specifically tests LOK only functionality which would otherwise not
 # require any normal LO api/libraries.
-$(eval $(call gb_CppunitTest_use_libraries,libreofficekit_tiledrendering, \
+$(eval $(call gb_CppunitTest_use_libraries,kit_tiledrendering, \
 	sal \
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_CppunitTest_add_libs,libreofficekit_tiledrendering,\
+$(eval $(call gb_CppunitTest_add_libs,kit_tiledrendering,\
     -lm \
     -ldl \
 ))
 endif
 
-$(eval $(call gb_CppunitTest_use_api,libreofficekit_tiledrendering,\
+$(eval $(call gb_CppunitTest_use_api,kit_tiledrendering,\
     offapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,libreofficekit_tiledrendering))
+$(eval $(call gb_CppunitTest_use_configuration,kit_tiledrendering))
 
 # vim: set noet sw=4 ts=4:

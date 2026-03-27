@@ -188,7 +188,7 @@ def main():
     tree = ET.parse(sys.argv[1], parser=LineNumberingParser())
     root = tree.getroot()
 
-    if sys.argv[1] != "libreofficekit/qa/gtktiledviewer/gtv.ui":
+    if sys.argv[1] != "kit/qa/gtktiledviewer/gtv.ui":
         lint_assert('domain' in root.attrib, "interface needs to specify translation domain")
 
     top_level_widgets = [element for element in root.findall('object') if element.attrib['class'] not in IGNORED_TOP_LEVEL_WIDGETS]

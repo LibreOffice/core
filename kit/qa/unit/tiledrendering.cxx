@@ -146,17 +146,17 @@ void TiledRenderingTest::runAllTests()
 
 void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
 {
-    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/IDONOTEXIST.odt";
+    const string sDocPath = m_sSrcRoot + "/kit/qa/data/IDONOTEXIST.odt";
     std::unique_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
     CPPUNIT_ASSERT( !pDocument );
     // TODO: we probably want to have some way of returning what
     // the cause of failure was. getError() will return
     // something along the lines of:
-    // "Unsupported URL <file:///SRC_ROOT/libreofficekit/qa/data/IDONOTEXIST.odt>: "type detection failed""
+    // "Unsupported URL <file:///SRC_ROOT/kit/qa/data/IDONOTEXIST.odt>: "type detection failed""
 }
 
 // Our dumped .png files end up in
-// workdir/CppunitTest/libreofficekit_tiledrendering.test.core
+// workdir/CppunitTest/kit_tiledrendering.test.core
 
 static int getDocumentType( Office* pOffice, const string& rPath )
 {
@@ -168,8 +168,8 @@ static int getDocumentType( Office* pOffice, const string& rPath )
 std::unique_ptr<Document> TiledRenderingTest::loadDocument( Office *pOffice, const string &pName,
                                                             const char *pFilterOptions )
 {
-    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/" + pName;
-    const string sLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock." + pName + "#";
+    const string sDocPath = m_sSrcRoot + "/kit/qa/data/" + pName;
+    const string sLockFile = m_sSrcRoot +"/kit/qa/data/.~lock." + pName + "#";
 
     remove( sLockFile.c_str() );
 
@@ -186,8 +186,8 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     pDocument->postUnoCommand(".uno:Bold");
     processEventsToIdle();
 
-    const string sPresentationDocPath = m_sSrcRoot + "/libreofficekit/qa/data/blank_presentation.odp";
-    const string sPresentationLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.blank_presentation.odp#";
+    const string sPresentationDocPath = m_sSrcRoot + "/kit/qa/data/blank_presentation.odp";
+    const string sPresentationLockFile = m_sSrcRoot +"/kit/qa/data/.~lock.blank_presentation.odp#";
 
     // FIXME: same comment as below wrt lockfile removal.
     remove( sPresentationLockFile.c_str() );

@@ -11,7 +11,7 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/ooo))
 
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,\
 	brand \
-	libreofficekit \
+	kit \
 	ooo \
 	ooo_fonts \
 	ooo_images \
@@ -71,7 +71,7 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     scp2/source/ooo/profileitem_ooo \
     scp2/source/ooo/scpaction_ooo \
     $(if $(filter-out MACOSX WNT,$(OS)), \
-		scp2/source/ooo/module_libreofficekit \
+		scp2/source/ooo/module_kit \
 	) \
 ))
 

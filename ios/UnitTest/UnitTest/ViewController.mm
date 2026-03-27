@@ -51,7 +51,7 @@ extern "C" {
 #include "../../../vcl/qa/cppunit/BitmapTest.cxx"
 
 #define main tilebench_main
-#include "../../../libreofficekit/qa/tilebench/tilebench.cxx"
+#include "../../../kit/qa/tilebench/tilebench.cxx"
 
 @implementation ViewController
 

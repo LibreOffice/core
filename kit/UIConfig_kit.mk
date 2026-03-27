@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UIConfig_UIConfig,libreofficekit))
+$(eval $(call gb_UIConfig_UIConfig,kit))
 
-$(eval $(call gb_UIConfig_add_a11yerrors_uifiles,libreofficekit,\
-	libreofficekit/qa/gtktiledviewer/gtv \
+$(eval $(call gb_UIConfig_add_a11yerrors_uifiles,kit,\
+	kit/qa/gtktiledviewer/gtv \
 ))
 
 # vim: set noet sw=4 ts=4:

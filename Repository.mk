@@ -679,8 +679,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	embobj \
 	$(if $(ENABLE_JAVA),hsqldb) \
 	i18nutil \
-	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), libreofficekitgtk) \
-	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), libreofficekitgtk) \
+	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), kitgtk) \
+	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), kitgtk) \
 	$(if $(ENABLE_JAVA), \
 		$(if $(filter $(OS),MACOSX),,officebean) \
 	) \
@@ -859,9 +859,9 @@ $(eval $(call gb_Helper_register_packages_for_install,calc,\
 	sc_res_xml \
 ))
 
-$(eval $(call gb_Helper_register_packages_for_install,libreofficekit,\
-	$(if $(filter LINUX %BSD SOLARIS, $(OS)),libreofficekit_selectionhandles) \
-	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), libreofficekit_selectionhandles) \
+$(eval $(call gb_Helper_register_packages_for_install,kit,\
+	$(if $(filter LINUX %BSD SOLARIS, $(OS)),kit_selectionhandles) \
+	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), kit_selectionhandles) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ure,\
@@ -1218,7 +1218,7 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 	filter \
 	formula \
 	fps \
-	libreofficekit \
+	kit \
 	$(call gb_Helper_optional,SCRIPTING,modules/BasicIDE) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,\
 		modules/dbapp \
