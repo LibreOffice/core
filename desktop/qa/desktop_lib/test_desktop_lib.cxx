@@ -596,7 +596,7 @@ void DesktopLOKTest::testGetPartPageRectangles()
 
 void DesktopLOKTest::testGetFilterTypes()
 {
-    LibLibreOffice_Impl aOffice;
+    LibCO_Impl aOffice;
     char* pJSON = aOffice.m_pOfficeClass->getFilterTypes(&aOffice);
 
     std::stringstream aStream(pJSON);
@@ -610,7 +610,7 @@ void DesktopLOKTest::testGetFilterTypes()
 
 void DesktopLOKTest::testSearchCalc()
 {
-    LibLibreOffice_Impl aOffice;
+    LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
@@ -640,7 +640,7 @@ void DesktopLOKTest::testSearchCalc()
 
 void DesktopLOKTest::testSearchAllNotificationsCalc()
 {
-    LibLibreOffice_Impl aOffice;
+    LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
@@ -3190,7 +3190,7 @@ void DesktopLOKTest::testCalcValidityDropdownInReadonlyMode()
 
 void DesktopLOKTest::testPropertySettingOnFormulaBar()
 {
-    LibLibreOffice_Impl aOffice;
+    LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("formulabar.ods");
     Scheduler::ProcessEventsToIdle();
 
@@ -3236,7 +3236,7 @@ void DesktopLOKTest::testPropertySettingOnFormulaBar()
 
 void DesktopLOKTest::testSearchTermReset()
 {
-    LibLibreOffice_Impl aOffice;
+    LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("empty.ods");
     Scheduler::ProcessEventsToIdle();
 
@@ -3271,7 +3271,7 @@ void DesktopLOKTest::testSearchTermReset()
 
 void DesktopLOKTest::testFormulaBarAcceptButton()
 {
-    LibLibreOffice_Impl aOffice;
+    LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("empty.ods");
     Scheduler::ProcessEventsToIdle();
 
@@ -3312,7 +3312,7 @@ void DesktopLOKTest::testFormulaBarAcceptButton()
 
 void DesktopLOKTest::testRunMacro()
 {
-    LibLibreOffice_Impl aOffice;
+    LibCO_Impl aOffice;
     bool bGoodMacro, bNonExistentMacro;
 
     // Tools macros come pre-installed in system share/basic folder,
@@ -3604,7 +3604,7 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
     readFileIntoByteVector(u"test-cert-signing.pem", aCertificate);
     readFileIntoByteVector(u"test-PK-signing.pem", aPrivateKey);
 
-    LibLibreOffice_Impl aOffice;
+    LibCO_Impl aOffice;
     bool bResult = aOffice.m_pOfficeClass->signDocument(&aOffice, maTempFile.GetURL().toUtf8().getStr(),
                                          aCertificate.data(), int(aCertificate.size()),
                                          aPrivateKey.data(), int(aPrivateKey.size()));

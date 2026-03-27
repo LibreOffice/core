@@ -244,7 +244,7 @@ public:
             "rptui::OXReportControllerObserver::OEnvLock",
             "oglcanvas::TransformationPreserver",
             "io_acceptor::(anonymous namespace)::BeingInAccept",
-            "desktop::LibLibreOffice_Impl",
+            "desktop::LibCO_Impl",
             "ToolbarUnoDispatcher",
             "ooo::vba::excel::(anonymous namespace)::PasteCellsWarningReseter",
             "oox::drawingml::(anonymous namespace)::ActionLockGuard",

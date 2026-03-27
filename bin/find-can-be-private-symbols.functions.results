@@ -11803,7 +11803,7 @@ del_splitvars
 del_varnameex
 delete_SOSrec
 der_alloc
-desktop::LibLibreOffice_Impl::dumpState(rtl::OStringBuffer&)
+desktop::LibCO_Impl::dumpState(rtl::OStringBuffer&)
 desktop::Lockfile::isStale() const
 desktop::Lockfile::syncToFile() const
 destroyPQExpBuffer

@@ -58,7 +58,7 @@ using namespace com::sun::star;
 
 LOKInteractionHandler::LOKInteractionHandler(
         OString command,
-        desktop::LibLibreOffice_Impl *const pLOKit,
+        desktop::LibCO_Impl *const pLOKit,
         desktop::LibLODocument_Impl *const pLOKDocument)
     : m_pLOKit(pLOKit)
     , m_pLOKDocument(pLOKDocument)

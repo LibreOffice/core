@@ -282,7 +282,7 @@ namespace desktop {
         void updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle);
     };
 
-    struct DESKTOP_DLLPUBLIC LibLibreOffice_Impl : public COKit
+    struct DESKTOP_DLLPUBLIC LibCO_Impl : public COKit
     {
         OUString maLastExceptionMsg;
         std::shared_ptr< COKitClass > m_pOfficeClass;
@@ -292,8 +292,8 @@ namespace desktop {
         int64_t mOptionalFeatures;
         std::map<OString, rtl::Reference<LOKInteractionHandler>> mInteractionMap;
 
-        LibLibreOffice_Impl();
-        ~LibLibreOffice_Impl();
+        LibCO_Impl();
+        ~LibCO_Impl();
 
         bool hasOptionalFeature(COKitOptionalFeatures const feature)
         {

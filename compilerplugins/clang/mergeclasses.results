@@ -300,7 +300,7 @@ merge XclImpCachedValue with (anonymous namespace)::XclImpCrn
 merge XclImpCheckBoxObj with XclImpOptionButtonObj
 merge XclNumFmtBuffer with XclImpNumFmtBuffer
 maybe merge ZipPackageEntry with cppu::ImplInheritanceHelper, in modules package and cppuhelper
-maybe merge _COKit with desktop::LibLibreOffice_Impl, in modules COKit and desktop
+maybe merge _COKit with desktop::LibCO_Impl, in modules COKit and desktop
 maybe merge _COKitDocument with desktop::LibLODocument_Impl, in modules COKit and desktop
 maybe merge _uno_ExtEnvironment with (anonymous namespace)::uno_DefaultEnvironment, in modules uno and cppu
 maybe merge accessibility::AccessibleSelectionBase with accessibility::AccessibleDocumentViewBase, in modules editeng and sd

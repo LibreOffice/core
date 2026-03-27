@@ -271,7 +271,7 @@ extern "C" {
 using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
 
 
-static LibLibreOffice_Impl *gImpl = nullptr;
+static LibCO_Impl *gImpl = nullptr;
 static bool cok_preinit_2_called = false;
 static bool gUseCompactFonts = false;
 static std::weak_ptr< COKitClass > gOfficeClass;
@@ -2778,7 +2778,7 @@ static char* lo_extractDocumentStructureRequest(COKit* pThis, const char* pFileP
 
 static int lo_getDocsCount(COKit* pThis);
 
-LibLibreOffice_Impl::LibLibreOffice_Impl()
+LibCO_Impl::LibCO_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
     , maThread(nullptr)
     , mpCallback(nullptr)
@@ -2823,7 +2823,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
     pClass = m_pOfficeClass.get();
 }
 
-LibLibreOffice_Impl::~LibLibreOffice_Impl()
+LibCO_Impl::~LibCO_Impl()
 {
 }
 
@@ -2865,7 +2865,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
     static int nDocumentIdCounter = 0;
 
-    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
     pLib->maLastExceptionMsg.clear();
 
     const OUString aURL(getAbsoluteURL(pURL));
@@ -3160,7 +3160,7 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
 
     SolarMutexGuard aGuard;
 
-    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
     pLib->maLastExceptionMsg.clear();
 
     OUString sURL( pURL, strlen(pURL), RTL_TEXTENCODING_UTF8 );
@@ -3698,7 +3698,7 @@ static void lo_registerCallback (COKit* pThis,
     Application* pApp = GetpApp();
     assert(pApp);
 
-    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
     pLib->maLastExceptionMsg.clear();
 
     pApp->m_pCallback = pLib->mpCallback = pCallback;
@@ -5427,14 +5427,14 @@ static void lo_dumpState (COKit* pThis, const char* /* pOptions */, char** pStat
     *pState = nullptr;
     OStringBuffer aState(4096*256);
 
-    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
 
     pLib->dumpState(aState);
 
     *pState = convertOString(aState.makeStringAndClear());
 }
 
-void LibLibreOffice_Impl::dumpState(rtl::OStringBuffer &rState)
+void LibCO_Impl::dumpState(rtl::OStringBuffer &rState)
 {
     rState.append("COKit state:"
                   "\n\tLastExceptionMsg:\t");
@@ -7852,7 +7852,7 @@ static char* lo_getError (COKit *pThis)
 
     SolarMutexGuard aGuard;
 
-    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
     return convertOUString(pLib->maLastExceptionMsg);
 }
 
@@ -7867,7 +7867,7 @@ static char* lo_getFilterTypes(COKit* pThis)
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    LibLibreOffice_Impl* pImpl = static_cast<LibLibreOffice_Impl*>(pThis);
+    LibCO_Impl* pImpl = static_cast<LibCO_Impl*>(pThis);
 
     if (!xSFactory.is())
         xSFactory = comphelper::getProcessServiceFactory();
@@ -7906,7 +7906,7 @@ static void lo_setOptionalFeatures(COKit* pThis, unsigned long long const featur
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    LibCO_Impl *const pLib = static_cast<LibCO_Impl*>(pThis);
     pLib->mOptionalFeatures = features;
     if (features & LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK)
         comphelper::COKit::setPartInInvalidation(true);
@@ -7928,7 +7928,7 @@ static void lo_setDocumentPassword(COKit* pThis,
 
     assert(pThis);
     assert(pURL);
-    LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    LibCO_Impl *const pLib = static_cast<LibCO_Impl*>(pThis);
     auto it = pLib->mInteractionMap.find(OString(pURL));
     assert(it != pLib->mInteractionMap.end());
     it->second->SetPassword(pPassword);
@@ -8072,7 +8072,7 @@ static bool bInitialized = false;
 
 static void lo_status_indicator_callback(void *data, comphelper::COKit::statusIndicatorCallbackType type, int percent, const char* pText)
 {
-    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(data);
+    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(data);
 
     if (!pLib->mpCallback)
         return;
@@ -8521,7 +8521,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
         if (cok_preinit_2_called)
         {
             SAL_INFO("lok", "Create libreoffice object");
-            gImpl = new LibLibreOffice_Impl();
+            gImpl = new LibCO_Impl();
         }
     }
     else if (bPreInited)
@@ -8529,7 +8529,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     else
         eStage = FULL_INIT;
 
-    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
 
     if (bInitialized)
         return 1;
@@ -8876,7 +8876,7 @@ COKit *cokit_hook_2(const char* install_path, const char* user_profile_url)
         if (!cok_preinit_2_called)
         {
             SAL_INFO("lok", "Create libreoffice object");
-            gImpl = new LibLibreOffice_Impl();
+            gImpl = new LibCO_Impl();
         }
 
         if (!lo_initialize(gImpl, install_path, user_profile_url))
@@ -8913,7 +8913,7 @@ static void lo_destroy(COKit* pThis)
 {
     SolarMutexClearableGuard aGuard;
 
-    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
     gImpl = nullptr;
 
     SAL_INFO("lok", "LO Destroy");

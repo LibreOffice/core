@@ -29,7 +29,7 @@
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 
 namespace desktop {
-    struct LibLibreOffice_Impl;
+    struct LibCO_Impl;
     struct LibLODocument_Impl;
 }
 
@@ -46,7 +46,7 @@ class LOKInteractionHandler: public cppu::WeakImplHelper<css::lang::XServiceInfo
                                                          css::task::XInteractionHandler2>
 {
 private:
-    desktop::LibLibreOffice_Impl * m_pLOKit;
+    desktop::LibCO_Impl * m_pLOKit;
     desktop::LibLODocument_Impl * m_pLOKDocument;
 
     /// Command for which we use this interaction handler (like "load", "save", "saveas", ...)
@@ -81,7 +81,7 @@ public:
 
     explicit LOKInteractionHandler(
             OString command,
-            desktop::LibLibreOffice_Impl *,
+            desktop::LibCO_Impl *,
             desktop::LibLODocument_Impl *pLOKDocumt = nullptr);
 
     virtual ~LOKInteractionHandler() override;
