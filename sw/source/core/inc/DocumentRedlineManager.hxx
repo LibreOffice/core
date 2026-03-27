@@ -33,7 +33,7 @@ class AppendRedlineContext;
 /// one opened Writer document. Per-view data is not stored here. Important members are the redline
 /// flags (whether to record / show changes) & the redline table (that contains the actual
 /// redlines).
-class SAL_DLLPUBLIC_RTTI DocumentRedlineManager final : public IDocumentRedlineAccess
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) DocumentRedlineManager final : public IDocumentRedlineAccess
 {
 public:
     DocumentRedlineManager( SwDoc& i_rSwdoc );

@@ -42,7 +42,7 @@ enum class GraphicContentType : sal_Int32
     Vector
 };
 
-class SAL_DLLPUBLIC_RTTI ImpGraphic final : public vcl::graphic::MemoryManaged
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ImpGraphic final : public vcl::graphic::MemoryManaged
 {
     friend class Graphic;
     friend class GraphicID;

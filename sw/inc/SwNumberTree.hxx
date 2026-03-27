@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <o3tl/sorted_vector.hxx>
 #include "SwNumberTreeTypes.hxx"
 
@@ -109,7 +110,7 @@ struct compSwNumberTreeNodeLessThan
 
      The phantom gets numbered with the start value.
 */
-class SAL_DLLPUBLIC_RTTI SwNumberTreeNode
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwNumberTreeNode
 {
 protected:
     typedef o3tl::sorted_vector<SwNumberTreeNode*, compSwNumberTreeNodeLessThan>

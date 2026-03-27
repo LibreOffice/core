@@ -94,7 +94,7 @@ enum class ScObjectHandling
     MirrorRTLMode // used for switch between RTL and LTR by .uno:SheetRightToLeft
 };
 
-class SAL_DLLPUBLIC_RTTI ScDrawLayer final : public FmFormModel
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScDrawLayer final : public FmFormModel
 {
 private:
     OUString        aName;

@@ -32,7 +32,7 @@ class SwFormatFrameSize;
 class SwCellFrame;
 
 /// A layout frame is a frame that contains other frames (m_pLower), e.g. SwPageFrame or SwTabFrame.
-class SAL_DLLPUBLIC_RTTI SwLayoutFrame: public SwFrame
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwLayoutFrame: public SwFrame
 {
     // The SwFrame in disguise
     friend class SwFlowFrame;

@@ -108,7 +108,7 @@ using SwTableBoxes = std::vector<SwTableBox*>;
 class SwTableSortBoxes : public o3tl::sorted_vector<SwTableBox*> {};
 
 /// SwTable is one table in the document model, containing rows (which contain cells).
-class SAL_DLLPUBLIC_RTTI SwTable: public SwClient          //Client of FrameFormat.
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwTable: public SwClient          //Client of FrameFormat.
 {
 
 protected:

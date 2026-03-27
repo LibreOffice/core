@@ -79,7 +79,7 @@ struct FieldShadowState
     }
 };
 
-class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwPostItMgr final : public SfxListener,
                                              public SfxBroadcaster
 {
     private:

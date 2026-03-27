@@ -72,7 +72,7 @@ class SwLinguServiceEventListener;
 class SwTableAutoFormatTable;
 enum class SwRedlineRenderMode;
 
-class SAL_DLLPUBLIC_RTTI SwModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
     OUString            m_sActAuthor;
 

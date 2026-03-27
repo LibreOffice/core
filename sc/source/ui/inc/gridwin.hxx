@@ -95,7 +95,7 @@ namespace sdr::overlay { class OverlayObjectList; }
 class ScFilterListBox;
 struct ScDPLabelData;
 
-class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTargetHelper, public DragSourceHelper
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScGridWindow : public vcl::DocWindow, public DropTargetHelper, public DragSourceHelper
 {
     // ScFilterListBox is always used for selection list
     friend class ScFilterListBox;

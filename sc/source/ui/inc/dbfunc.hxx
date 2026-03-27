@@ -31,7 +31,7 @@ class ScDPSaveData;
 struct ScDPNumGroupInfo;
 struct ScSubTotalParam;
 
-class SAL_DLLPUBLIC_RTTI ScDBFunc : public ScViewFunc
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScDBFunc : public ScViewFunc
 {
 private:
     void GetSelectedMemberList(ScDPUniqueStringSet& rEntries, tools::Long& rDimension);

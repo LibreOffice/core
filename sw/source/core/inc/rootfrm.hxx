@@ -80,7 +80,7 @@ using SwFlyDestroyList = o3tl::sorted_vector<SwFlyFrame*>;
 
 /// The root element of a Writer document layout. Lower frames are expected to
 /// be SwPageFrame instances.
-class SAL_DLLPUBLIC_RTTI SwRootFrame final : public SwLayoutFrame
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwRootFrame final : public SwLayoutFrame
 {
     // Needs to disable the Superfluous temporarily
     friend void AdjustSizeChgNotify( SwRootFrame *pRoot );

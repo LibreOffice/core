@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_TABLEMODEL_HXX
 #define INCLUDED_SVX_SOURCE_INC_TABLEMODEL_HXX
 
+#include <config_options.h>
 #include <sal/types.h>
 #include <com/sun/star/util/XBroadcaster.hpp>
 #include <com/sun/star/table/XTable.hpp>
@@ -53,7 +54,7 @@ protected:
 
 typedef ::comphelper::WeakComponentImplHelper< css::table::XTable, css::util::XBroadcaster > TableModelBase;
 
-class SVXCORE_DLLPUBLIC TableModel final :
+class UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) TableModel final :
                    public TableModelBase,
                    public ICellRange
 {

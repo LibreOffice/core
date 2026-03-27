@@ -72,7 +72,7 @@ enum class PasteTableType
 
 class SwTransferDdeLink;
 
-class SAL_DLLPUBLIC_RTTI SwTransferable final : public TransferableHelper
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwTransferable final : public TransferableHelper
 {
     friend class SwView_Impl;
     SfxObjectShellLock              m_aDocShellRef;

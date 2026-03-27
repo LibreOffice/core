@@ -26,7 +26,7 @@
 #include <vcl/BitmapAccessMode.hxx>
 #include <vcl/BitmapInfoAccess.hxx>
 
-class SAL_DLLPUBLIC_RTTI BitmapReadAccess : public BitmapInfoAccess
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) BitmapReadAccess : public BitmapInfoAccess
 {
     friend class BitmapWriteAccess;
 

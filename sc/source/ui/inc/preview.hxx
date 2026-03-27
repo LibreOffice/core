@@ -28,7 +28,7 @@ class ScDocShell;
 class ScPreviewShell;
 class FmFormView;
 
-class SAL_DLLPUBLIC_RTTI ScPreview : public vcl::Window
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScPreview : public vcl::Window
 {
 private:
     ScMarkData::MarkedTabsType maSelectedTabs;

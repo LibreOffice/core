@@ -165,7 +165,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-class SAL_DLLPUBLIC_RTTI SwRangeRedline final : public SwPaM, public ISwContentIndexOwner
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwRangeRedline final : public SwPaM, public ISwContentIndexOwner
 {
     SwRedlineData* m_pRedlineData;
     std::optional<SwNodeIndex> m_oContentSect;

@@ -141,7 +141,7 @@ struct SAL_DLLPUBLIC_RTTI ScTableStyleParam
     bool operator== (const ScTableStyleParam& rData) const;
 };
 
-class SAL_DLLPUBLIC_RTTI ScDBData final : public SvtListener, public ScRefreshTimer
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScDBData final : public SvtListener, public ScRefreshTimer
 {
 private:
     std::unique_ptr<ScSortParam> mpSortParam;

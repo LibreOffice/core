@@ -172,7 +172,7 @@ public:
 // this is only for the XML Export in the hxx
 class ScChangeActionContent;
 
-class SAL_DLLPUBLIC_RTTI ScChangeAction
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScChangeAction
 {
     friend class ScChangeTrack;
     friend class ScChangeActionIns;
@@ -591,7 +591,7 @@ enum ScChangeActionContentCellType
     SC_CACCT_MATREF
 };
 
-class SAL_DLLPUBLIC_RTTI ScChangeActionContent final : public ScChangeAction
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScChangeActionContent final : public ScChangeAction
 {
     friend class ScChangeTrack;
 
@@ -810,7 +810,7 @@ enum ScChangeTrackMergeState
 // and are decremented, to keep values in a table separated from "normal" actions.
 #define SC_CHGTRACK_GENERATED_START (sal_uInt32(0xfffffff0))
 
-class SAL_DLLPUBLIC_RTTI ScChangeTrack final : public utl::ConfigurationListener
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScChangeTrack final : public utl::ConfigurationListener
 {
     friend void ScChangeAction::RejectRestoreContents( ScChangeTrack*, SCCOL, SCROW );
     friend bool ScChangeActionDel::Reject( ScDocument& pDoc );

@@ -93,7 +93,7 @@ public:
     }
 };
 
-class SAL_DLLPUBLIC_RTTI View : public FmFormView
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) View : public FmFormView
 {
 public:
 

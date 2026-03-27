@@ -159,7 +159,7 @@ struct VisibleCursorState
 
 } // namespace sw
 
-class SAL_DLLPUBLIC_RTTI SwCursorShell
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwCursorShell
     : public SwViewShell
     , public sw::BroadcastingModify
     , public ::sw::IShellCursorSupplier
