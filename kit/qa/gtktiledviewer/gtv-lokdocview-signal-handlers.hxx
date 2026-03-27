@@ -13,21 +13,21 @@
 #include <gtk/gtk.h>
 #include <COKit/COKitGtk.h>
 
-namespace LOKDocViewSigHandlers {
-    void editChanged(LOKDocView* pDocView, gboolean bWasEdit, gpointer);
-    void commandChanged(LOKDocView* pDocView, char* pPayload, gpointer);
-    void commandResult(LOKDocView*, char*, gpointer);
-    void searchNotFound(LOKDocView*, char*, gpointer);
-    void searchResultCount(LOKDocView*, char*, gpointer);
-    void partChanged(LOKDocView*, int, gpointer);
-    void hyperlinkClicked(LOKDocView*, char*, gpointer);
-    void cursorChanged(LOKDocView* pDocView, gint nX, gint nY, gint nWidth, gint nHeight, gpointer);
-    void addressChanged(LOKDocView* pDocView, char* pPayload, gpointer);
-    void formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer);
-    void passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer);
-    void comment(LOKDocView* pDocView, gchar* pComment, gpointer);
-    void window(LOKDocView* pDocView, gchar* pPayload, gpointer);
-    void contentControl(LOKDocView* pDocView, gchar* pComment, gpointer);
+namespace KitDocumentViewSigHandlers {
+    void editChanged(KitDocumentView* pDocView, gboolean bWasEdit, gpointer);
+    void commandChanged(KitDocumentView* pDocView, char* pPayload, gpointer);
+    void commandResult(KitDocumentView*, char*, gpointer);
+    void searchNotFound(KitDocumentView*, char*, gpointer);
+    void searchResultCount(KitDocumentView*, char*, gpointer);
+    void partChanged(KitDocumentView*, int, gpointer);
+    void hyperlinkClicked(KitDocumentView*, char*, gpointer);
+    void cursorChanged(KitDocumentView* pDocView, gint nX, gint nY, gint nWidth, gint nHeight, gpointer);
+    void addressChanged(KitDocumentView* pDocView, char* pPayload, gpointer);
+    void formulaChanged(KitDocumentView* pDocView, char* pPayload, gpointer);
+    void passwordRequired(KitDocumentView* pDocView, char* pUrl, gboolean bModify, gpointer);
+    void comment(KitDocumentView* pDocView, gchar* pComment, gpointer);
+    void window(KitDocumentView* pDocView, gchar* pPayload, gpointer);
+    void contentControl(KitDocumentView* pDocView, gchar* pComment, gpointer);
 
     gboolean configureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);
 }

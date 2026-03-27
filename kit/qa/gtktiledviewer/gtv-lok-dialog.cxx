@@ -27,7 +27,7 @@ namespace {
 
 struct GtvLokDialogPrivate
 {
-    LOKDocView* lokdocview;
+    KitDocumentView* lokdocview;
     GtkWidget* pDialogDrawingArea;
     GtkWidget* pFloatingWin;
 
@@ -445,8 +445,8 @@ gtv_lok_dialog_class_init(GtvLokDialogClass* klass)
     G_OBJECT_CLASS(klass)->set_property = gtv_lok_dialog_set_property;
 
     properties[PROP_LOKDOCVIEW_CONTEXT] = g_param_spec_object("lokdocview",
-                                                              "LOKDocView Context",
-                                                              "The LOKDocView context object to be used for dialog rendering",
+                                                              "KitDocumentView Context",
+                                                              "The KitDocumentView context object to be used for dialog rendering",
                                                               LOK_TYPE_DOC_VIEW,
                                                               static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                                                        G_PARAM_CONSTRUCT_ONLY |
@@ -699,7 +699,7 @@ void gtv_lok_dialog_child_close(GtvLokDialog* dialog)
     }
 }
 
-GtkWidget* gtv_lok_dialog_new(LOKDocView* pDocView, guint dialogId, guint width, guint height)
+GtkWidget* gtv_lok_dialog_new(KitDocumentView* pDocView, guint dialogId, guint width, guint height)
 {
     g_debug("Dialog [ %d ] of size: %d x %d created", dialogId, width, height);
     GtkWindow* pWindow = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));

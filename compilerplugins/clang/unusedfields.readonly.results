@@ -459,7 +459,7 @@ io/source/stm/odata.cxx:556
 kit/qa/gtktiledviewer/gtv-lok-dialog.cxx:48
     (anonymous namespace)::GtvLokDialogPrivate m_nChildKeyModifier guint32
 kit/source/gtk/lokdocview.cxx:86
-    (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading _Bool
+    (anonymous namespace)::KitDocumentViewPrivateImpl m_bIsLoading _Bool
 lingucomponent/source/languageguessing/simpleguesser.cxx:72
     (anonymous namespace)::textcat_t fprint void **
 lingucomponent/source/languageguessing/simpleguesser.cxx:74

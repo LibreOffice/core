@@ -401,7 +401,7 @@ io/qa/textinputstream.cxx:97
     (anonymous namespace)::Input open_
     1
 kit/source/gtk/lokdocview.cxx:86
-    (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading
+    (anonymous namespace)::KitDocumentViewPrivateImpl m_bIsLoading
     0
 lingucomponent/source/spellcheck/languagetool/languagetoolimp.hxx:39
     LanguageToolGrammarChecker mCachedResults

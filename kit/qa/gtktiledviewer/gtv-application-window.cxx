@@ -204,7 +204,7 @@ static void initWindow(GtvApplicationWindow* window)
 static void
 gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res, gpointer /*userdata*/)
 {
-    LOKDocView* pDocView = LOK_DOC_VIEW (source_object);
+    KitDocumentView* pDocView = LOK_DOC_VIEW (source_object);
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     GError* error = nullptr;
     if (!lok_doc_view_open_document_finish(pDocView, res, &error))
@@ -333,23 +333,23 @@ static void setupDocView(GtvApplicationWindow* window)
 #if GLIB_CHECK_VERSION(2,40,0)
     g_assert_nonnull(window->lokdocview);
 #endif
-    g_signal_connect(window->lokdocview, "edit-changed", G_CALLBACK(LOKDocViewSigHandlers::editChanged), nullptr);
-    g_signal_connect(window->lokdocview, "command-changed", G_CALLBACK(LOKDocViewSigHandlers::commandChanged), nullptr);
-    g_signal_connect(window->lokdocview, "command-result", G_CALLBACK(LOKDocViewSigHandlers::commandResult), nullptr);
-    g_signal_connect(window->lokdocview, "search-not-found", G_CALLBACK(LOKDocViewSigHandlers::searchNotFound), nullptr);
-    g_signal_connect(window->lokdocview, "search-result-count", G_CALLBACK(LOKDocViewSigHandlers::searchResultCount), nullptr);
-    g_signal_connect(window->lokdocview, "part-changed", G_CALLBACK(LOKDocViewSigHandlers::partChanged), nullptr);
-    g_signal_connect(window->lokdocview, "hyperlink-clicked", G_CALLBACK(LOKDocViewSigHandlers::hyperlinkClicked), nullptr);
+    g_signal_connect(window->lokdocview, "edit-changed", G_CALLBACK(KitDocumentViewSigHandlers::editChanged), nullptr);
+    g_signal_connect(window->lokdocview, "command-changed", G_CALLBACK(KitDocumentViewSigHandlers::commandChanged), nullptr);
+    g_signal_connect(window->lokdocview, "command-result", G_CALLBACK(KitDocumentViewSigHandlers::commandResult), nullptr);
+    g_signal_connect(window->lokdocview, "search-not-found", G_CALLBACK(KitDocumentViewSigHandlers::searchNotFound), nullptr);
+    g_signal_connect(window->lokdocview, "search-result-count", G_CALLBACK(KitDocumentViewSigHandlers::searchResultCount), nullptr);
+    g_signal_connect(window->lokdocview, "part-changed", G_CALLBACK(KitDocumentViewSigHandlers::partChanged), nullptr);
+    g_signal_connect(window->lokdocview, "hyperlink-clicked", G_CALLBACK(KitDocumentViewSigHandlers::hyperlinkClicked), nullptr);
     g_signal_connect(window->lokdocview, "content-control",
-                     G_CALLBACK(LOKDocViewSigHandlers::contentControl), nullptr);
-    g_signal_connect(window->lokdocview, "cursor-changed", G_CALLBACK(LOKDocViewSigHandlers::cursorChanged), nullptr);
-    g_signal_connect(window->lokdocview, "address-changed", G_CALLBACK(LOKDocViewSigHandlers::addressChanged), nullptr);
-    g_signal_connect(window->lokdocview, "formula-changed", G_CALLBACK(LOKDocViewSigHandlers::formulaChanged), nullptr);
-    g_signal_connect(window->lokdocview, "password-required", G_CALLBACK(LOKDocViewSigHandlers::passwordRequired), nullptr);
-    g_signal_connect(window->lokdocview, "comment", G_CALLBACK(LOKDocViewSigHandlers::comment), nullptr);
-    g_signal_connect(window->lokdocview, "window", G_CALLBACK(LOKDocViewSigHandlers::window), window);
+                     G_CALLBACK(KitDocumentViewSigHandlers::contentControl), nullptr);
+    g_signal_connect(window->lokdocview, "cursor-changed", G_CALLBACK(KitDocumentViewSigHandlers::cursorChanged), nullptr);
+    g_signal_connect(window->lokdocview, "address-changed", G_CALLBACK(KitDocumentViewSigHandlers::addressChanged), nullptr);
+    g_signal_connect(window->lokdocview, "formula-changed", G_CALLBACK(KitDocumentViewSigHandlers::formulaChanged), nullptr);
+    g_signal_connect(window->lokdocview, "password-required", G_CALLBACK(KitDocumentViewSigHandlers::passwordRequired), nullptr);
+    g_signal_connect(window->lokdocview, "comment", G_CALLBACK(KitDocumentViewSigHandlers::comment), nullptr);
+    g_signal_connect(window->lokdocview, "window", G_CALLBACK(KitDocumentViewSigHandlers::window), window);
 
-    g_signal_connect(window->lokdocview, "configure-event", G_CALLBACK(LOKDocViewSigHandlers::configureEvent), nullptr);
+    g_signal_connect(window->lokdocview, "configure-event", G_CALLBACK(KitDocumentViewSigHandlers::configureEvent), nullptr);
 }
 
 void

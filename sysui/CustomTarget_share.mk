@@ -122,8 +122,8 @@ $(eval $(call gb_CustomTarget_register_targets,sysui/share,\
 		$(product)/openoffice.sh \
 		$(product)/create_tree.sh \
 		$(if $(INTROSPECTION_SCANNER),\
-			$(product)/LOKDocView-0.1.gir \
-			$(product)/LOKDocView-0.1.typelib) \
+			$(product)/KitDocumentView-0.1.gir \
+			$(product)/KitDocumentView-0.1.typelib) \
 		$(product)/launcherlist) \
 ))
 
@@ -162,7 +162,7 @@ $(share_WORKDIR)/%/create_tree.sh: $(share_SRCDIR)/share/create_tree.sh \
 # $XDG_DATA_DIRS
 ifneq ($(INTROSPECTION_SCANNER),)
 
-$(share_WORKDIR)/%/LOKDocView-0.1.gir: \
+$(share_WORKDIR)/%/KitDocumentView-0.1.gir: \
 		$(call gb_Library_get_target,kitgtk)
 	mkdir -p $(dir $@)
 	PYTHONWARNINGS=default g-ir-scanner "${SRCDIR}/include/COKit/COKitGtk.h" \
@@ -172,11 +172,11 @@ $(share_WORKDIR)/%/LOKDocView-0.1.gir: \
                  --include=GLib-2.0 --include=GObject-2.0 --include=Gio-2.0 \
                  --library=kitgtk --library-path="${INSTDIR}/program" \
                  --include=Gdk-3.0 --include=GdkPixbuf-2.0 --include=Gtk-3.0 \
-                 --namespace=LOKDocView --nsversion=0.1 --identifier-prefix=LOKDoc --symbol-prefix=lok_doc \
+                 --namespace=KitDocumentView --nsversion=0.1 --identifier-prefix=LOKDoc --symbol-prefix=lok_doc \
                  --c-include="COKit/COKitGtk.h" \
 				 --output="$@" --warn-all --no-libtool
 
-$(share_WORKDIR)/%/LOKDocView-0.1.typelib: $(share_WORKDIR)/%/LOKDocView-0.1.gir
+$(share_WORKDIR)/%/KitDocumentView-0.1.typelib: $(share_WORKDIR)/%/KitDocumentView-0.1.gir
 	g-ir-compiler "$<" --output="$@"
 
 endif

@@ -669,7 +669,7 @@ void docAdjustmentChanged(GtkAdjustment*, gpointer pData)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(pData);
     if (window->lokdocview)
-        LOKDocViewSigHandlers::configureEvent(window->lokdocview, nullptr, nullptr);
+        KitDocumentViewSigHandlers::configureEvent(window->lokdocview, nullptr, nullptr);
 }
 
 void signalSearchNext(GtkWidget* pButton, gpointer /*pItem*/)

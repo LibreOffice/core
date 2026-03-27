@@ -36,7 +36,7 @@ static gboolean destroyLokDialog(GtkWidget* pWidget, gpointer userdata)
     return FALSE;
 }
 
-void LOKDocViewSigHandlers::editChanged(LOKDocView* pDocView, gboolean bWasEdit, gpointer)
+void KitDocumentViewSigHandlers::editChanged(KitDocumentView* pDocView, gboolean bWasEdit, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     bool bEdit = lok_doc_view_get_edit(LOK_DOC_VIEW(window->lokdocview));
@@ -47,7 +47,7 @@ void LOKDocViewSigHandlers::editChanged(LOKDocView* pDocView, gboolean bWasEdit,
     gtv_main_toolbar_set_edit(pMainToolbar, bEdit);
 }
 
-void LOKDocViewSigHandlers::commandChanged(LOKDocView* pDocView, char* pPayload, gpointer)
+void KitDocumentViewSigHandlers::commandChanged(KitDocumentView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     std::string aPayload(pPayload);
@@ -93,18 +93,18 @@ void LOKDocViewSigHandlers::commandChanged(LOKDocView* pDocView, char* pPayload,
     }
 }
 
-void LOKDocViewSigHandlers::commandResult(LOKDocView*, char* pPayload, gpointer)
+void KitDocumentViewSigHandlers::commandResult(KitDocumentView*, char* pPayload, gpointer)
 {
     fprintf(stderr, "Command finished: %s\n", pPayload);
 }
 
-void LOKDocViewSigHandlers::searchNotFound(LOKDocView* pDocView, char* , gpointer)
+void KitDocumentViewSigHandlers::searchNotFound(KitDocumentView* pDocView, char* , gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     gtk_label_set_text(GTK_LABEL(window->findbarlabel), "Search key not found");
 }
 
-void LOKDocViewSigHandlers::searchResultCount(LOKDocView* pDocView, char* pPayload, gpointer)
+void KitDocumentViewSigHandlers::searchResultCount(KitDocumentView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     std::stringstream ss;
@@ -112,7 +112,7 @@ void LOKDocViewSigHandlers::searchResultCount(LOKDocView* pDocView, char* pPaylo
     gtk_label_set_text(GTK_LABEL(window->findbarlabel), ss.str().c_str());
 }
 
-void LOKDocViewSigHandlers::partChanged(LOKDocView* /*pDocView*/, int, gpointer)
+void KitDocumentViewSigHandlers::partChanged(KitDocumentView* /*pDocView*/, int, gpointer)
 {
 //    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     //rWindow.m_bPartSelectorBroadcast = false;
@@ -120,7 +120,7 @@ void LOKDocViewSigHandlers::partChanged(LOKDocView* /*pDocView*/, int, gpointer)
     //  rWindow.m_bPartSelectorBroadcast = true;
 }
 
-void LOKDocViewSigHandlers::hyperlinkClicked(LOKDocView* pDocView, char* pPayload, gpointer)
+void KitDocumentViewSigHandlers::hyperlinkClicked(KitDocumentView* pDocView, char* pPayload, gpointer)
 {
     GError* pError = nullptr;
 #if GTK_CHECK_VERSION(3,22,0)
@@ -138,7 +138,7 @@ void LOKDocViewSigHandlers::hyperlinkClicked(LOKDocView* pDocView, char* pPayloa
     }
 }
 
-void LOKDocViewSigHandlers::cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
+void KitDocumentViewSigHandlers::cursorChanged(KitDocumentView* pDocView, gint nX, gint nY,
                               gint /*nWidth*/, gint /*nHeight*/, gpointer /*pData*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
@@ -186,7 +186,7 @@ void LOKDocViewSigHandlers::cursorChanged(LOKDocView* pDocView, gint nX, gint nY
         gtk_adjustment_set_value(hadj, lok_doc_view_twip_to_pixel(pDocView, x));
 }
 
-void LOKDocViewSigHandlers::addressChanged(LOKDocView* pDocView, char* pPayload, gpointer)
+void KitDocumentViewSigHandlers::addressChanged(KitDocumentView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     GtvMainToolbar* toolbar = gtv_application_window_get_main_toolbar(window);
@@ -194,7 +194,7 @@ void LOKDocViewSigHandlers::addressChanged(LOKDocView* pDocView, char* pPayload,
     gtk_entry_set_text(pAddressbar, pPayload);
 }
 
-void LOKDocViewSigHandlers::formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer)
+void KitDocumentViewSigHandlers::formulaChanged(KitDocumentView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     GtvMainToolbar* toolbar = gtv_application_window_get_main_toolbar(window);
@@ -202,7 +202,7 @@ void LOKDocViewSigHandlers::formulaChanged(LOKDocView* pDocView, char* pPayload,
     gtk_entry_set_text(pFormulabar, pPayload);
 }
 
-void LOKDocViewSigHandlers::contentControl(LOKDocView* pDocView, gchar* pJson, gpointer)
+void KitDocumentViewSigHandlers::contentControl(KitDocumentView* pDocView, gchar* pJson, gpointer)
 {
     GtvApplicationWindow* window
         = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
@@ -235,7 +235,7 @@ void LOKDocViewSigHandlers::contentControl(LOKDocView* pDocView, gchar* pJson, g
     gtv_application_window_set_part_broadcast(window, true);
 }
 
-void LOKDocViewSigHandlers::passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer)
+void KitDocumentViewSigHandlers::passwordRequired(KitDocumentView* pDocView, char* pUrl, gboolean bModify, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     GtkWidget* pPasswordDialog = gtk_dialog_new_with_buttons ("Password required",
@@ -274,7 +274,7 @@ void LOKDocViewSigHandlers::passwordRequired(LOKDocView* pDocView, char* pUrl, g
     gtk_widget_destroy(pPasswordDialog);
 }
 
-void LOKDocViewSigHandlers::comment(LOKDocView* pDocView, gchar* pComment, gpointer)
+void KitDocumentViewSigHandlers::comment(KitDocumentView* pDocView, gchar* pComment, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
 
@@ -330,7 +330,7 @@ void LOKDocViewSigHandlers::comment(LOKDocView* pDocView, gchar* pComment, gpoin
     }
 }
 
-void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpointer pData)
+void KitDocumentViewSigHandlers::window(KitDocumentView* pDocView, gchar* pPayload, gpointer pData)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(pData);
 
@@ -434,7 +434,7 @@ void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpoint
     }
 }
 
-gboolean LOKDocViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
+gboolean KitDocumentViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pWidget)));
 
