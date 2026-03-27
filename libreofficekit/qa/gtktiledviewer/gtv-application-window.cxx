@@ -12,7 +12,7 @@
 #include <filesystem>
 #include <memory>
 
-#include <LibreOfficeKit/LibreOfficeKitGtk.h>
+#include <LibreOfficeKit/COKitGtk.h>
 #include <LibreOfficeKit/COKitEnums.h>
 
 #include "gtv-application-window.hxx"

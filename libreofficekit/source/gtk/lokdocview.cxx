@@ -22,7 +22,7 @@
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/COKitEnums.h>
-#include <LibreOfficeKit/LibreOfficeKitGtk.h>
+#include <LibreOfficeKit/COKitGtk.h>
 #include <vcl/event.hxx>
 
 #include "tilebuffer.hxx"

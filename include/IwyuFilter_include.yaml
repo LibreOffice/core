@@ -2,7 +2,7 @@
 assumeFilename: desktop/source/app/app.cxx
 customAssumeFilenames:
     # Needs  -isystem /usr/include/gtk-3.0
-    include/LibreOfficeKit/LibreOfficeKitGtk.h: libreofficekit/source/gtk/lokdocview.cxx
+    include/LibreOfficeKit/COKitGtk.h: libreofficekit/source/gtk/lokdocview.cxx
     # Needs -I/.../workdir/UnpackedTarball/libxml2/include
     include/comphelper/dumpxmltostring.hxx: chart2/source/view/main/ChartView.cxx
     # Needs -I/.../core/external/unixODBC/inc
