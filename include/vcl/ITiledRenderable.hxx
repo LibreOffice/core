@@ -145,7 +145,7 @@ public:
      */
     virtual OUString getPartHash(int nPart) = 0;
 
-    /// @see lok::Document::setPartMode().
+    /// @see kit::Document::setPartMode().
     virtual void setPartMode(int) {}
 
     /**
@@ -170,21 +170,21 @@ public:
     /**
      * Posts a keyboard event on the document.
      *
-     * @see lok::Document::postKeyEvent().
+     * @see kit::Document::postKeyEvent().
      */
     virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) = 0;
 
     /**
      * Posts a mouse event on the document.
      *
-     * @see lok::Document::postMouseEvent().
+     * @see kit::Document::postMouseEvent().
      */
     virtual void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier) = 0;
 
     /**
      * Sets the start or end of a text selection.
      *
-     * @see lok::Document::setTextSelection().
+     * @see kit::Document::setTextSelection().
      */
     virtual void setTextSelection(int nType, int nX, int nY) = 0;
 
@@ -196,17 +196,17 @@ public:
     /**
      * Adjusts the graphic selection.
      *
-     * @see lok::Document::setGraphicSelection().
+     * @see kit::Document::setGraphicSelection().
      */
     virtual void setGraphicSelection(int nType, int nX, int nY) = 0;
 
     /**
-     * @see lok::Document::resetSelection().
+     * @see kit::Document::resetSelection().
      */
     virtual void resetSelection() = 0;
 
     /**
-     * @see lok::Document::getPartPageRectangles().
+     * @see kit::Document::getPartPageRectangles().
      */
     virtual OUString getPartPageRectangles()
     {
@@ -288,7 +288,7 @@ public:
     {
     }
 
-    /// @see lok::Document::setClientVisibleArea().
+    /// @see kit::Document::setClientVisibleArea().
     virtual void setClientVisibleArea(const tools::Rectangle& /*rRectangle*/)
     {
     }
@@ -317,32 +317,32 @@ public:
     }
 
     /// Implementation for
-    /// lok::Document::getCommandValues(".uno:AcceptTrackedChanges") when there
+    /// kit::Document::getCommandValues(".uno:AcceptTrackedChanges") when there
     /// is no matching UNO API.
     virtual void getTrackedChanges(tools::JsonWriter&)
     {
     }
 
     /// Implementation for
-    /// lok::Document::getCommandValues(".uno:TrackedChangeAuthors").
+    /// kit::Document::getCommandValues(".uno:TrackedChangeAuthors").
     virtual void getTrackedChangeAuthors(tools::JsonWriter& /*rJsonWriter*/)
     {
     }
 
     /// Implementation for
-    /// lok::Document::getCommandValues(".uno:ViewAnnotations");
+    /// kit::Document::getCommandValues(".uno:ViewAnnotations");
     virtual void getPostIts(tools::JsonWriter& /*rJsonWriter*/)
     {
     }
 
     /// Implementation for
-    /// lok::Document::getCommandValues(".uno:ViewAnnotationsPosition");
+    /// kit::Document::getCommandValues(".uno:ViewAnnotationsPosition");
     virtual void getPostItsPos(tools::JsonWriter& /*rJsonWriter*/)
     {
     }
 
     /// Implementation for
-    /// lok::Document::getCommandValues(".uno:RulerState");
+    /// kit::Document::getCommandValues(".uno:RulerState");
     virtual void getRulerState(tools::JsonWriter& /*rJsonWriter*/)
     {
     }
@@ -370,7 +370,7 @@ public:
      */
     virtual void moveSelectedParts(int /*nPosition*/, bool /*bDuplicate*/) {}
 
-    /// @see lok::Document::completeFunction().
+    /// @see kit::Document::completeFunction().
     virtual void completeFunction(const OUString& /*rFunctionName*/)
     {
     }

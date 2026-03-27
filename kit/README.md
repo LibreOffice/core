@@ -37,20 +37,20 @@ to bottom-up).
 ## Tiled Editing
 
 On top of the tiled rendering API, a set of new methods have been added to the
-`lok::Document` class to allow basic editing, too. Communication between the LOK
+`kit::Document` class to allow basic editing, too. Communication between the LOK
 client and LibreOffice is a two-way channel. The client can initiate an action
 by calling the above mentioned methods. The most important methods for the
 client -> LibreOffice communication are:
 
 - `initializeForRendering()`, expected to be called right after
-  `lok::Office::documentLoad()` returned a `lok::Document*`.
+  `kit::Office::documentLoad()` returned a `kit::Document*`.
 - `postKeyEvent()`, expected to be called when the user provides input on the
   (soft-)keyboard.
 - `postMouseEvent()`, expected to be called when the user generated a touch or
   mouse event.
 
 In general, all coordinates are always in absolute twips (20th of a point, or:
-1" = 1440 twips). See `lok::Document` in `COKit.hxx` for a full list of
+1" = 1440 twips). See `kit::Document` in `COKit.hxx` for a full list of
 methods and their documentation.
 
 The other way around (LibreOffice -> LOK client) is implemented using a

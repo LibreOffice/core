@@ -11,18 +11,18 @@ int main(int argc, char* argv[])
     const char* input = argv[1];
     const char* output = argv[2];
 
-    lok::Office* llo = NULL;
+    kit::Office* llo = NULL;
     try
     {
         const char* lo_bin_dir = std::getenv("OO_SDK_URE_BIN_DIR");
-        llo = lok::lok_cpp_init(lo_bin_dir);
+        llo = kit::lok_cpp_init(lo_bin_dir);
         if (!llo)
         {
             std::cerr << "Error: could not initialise COKit\n";
             return 1;
         }
 
-        lok::Document* lodoc = llo->documentLoad(input, NULL /* options */);
+        kit::Document* lodoc = llo->documentLoad(input, NULL /* options */);
         if (!lodoc)
         {
             std::cerr << "Error: could not load document: " << llo->getError() << "\n";

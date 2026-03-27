@@ -314,7 +314,7 @@ void commandValuesDebugger(GtkWidget* pButton, gpointer /* pItem */)
     {
         const gchar* pUnoCmd = gtk_entry_get_text(GTK_ENTRY(pUnoCmdEntry));
         gchar* pValues = lok_doc_view_get_command_values(LOK_DOC_VIEW(window->kitdocview), pUnoCmd);
-        g_info("lok::Document::getCommandValues(%s) : %s", pUnoCmd, pValues);
+        g_info("kit::Document::getCommandValues(%s) : %s", pUnoCmd, pValues);
         g_free(pValues);
     }
 
@@ -459,7 +459,7 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
         return;
 
     std::stringstream aInfo;
-    aInfo << "lok::Document::getCommandValues('.uno:AcceptTrackedChanges') returned '" << pValues << "'" << std::endl;
+    aInfo << "kit::Document::getCommandValues('.uno:AcceptTrackedChanges') returned '" << pValues << "'" << std::endl;
     g_info("%s", aInfo.str().c_str());
     std::stringstream aStream(pValues);
     free(pValues);
@@ -565,7 +565,7 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
         const std::string& rType = aTypes[nType];
         char* pValues = pDocument->pClass->getCommandValues(pDocument, rType.c_str());
         std::stringstream aInfo;
-        aInfo << "lok::Document::getCommandValues('" << rType << "') returned '" << pValues << "'" << std::endl;
+        aInfo << "kit::Document::getCommandValues('" << rType << "') returned '" << pValues << "'" << std::endl;
         g_info("%s", aInfo.str().c_str());
         std::stringstream aStream(pValues);
         free(pValues);

@@ -16,21 +16,21 @@
 extern "C" {
 #endif
 
-/** @see lok::Office::registerCallback().
+/** @see kit::Office::registerCallback().
     @since LibreOffice 6.0
  */
 typedef void (*COKitCallback)(int nType, const char* pPayload, void* pData);
 
-/** @see lok::Office::runLoop().
+/** @see kit::Office::runLoop().
     @since LibreOffice 6.3
  */
 typedef int (*COKitPollCallback)(void* pData, int timeoutUs);
 typedef void (*COKitWakeCallback)(void* pData);
 
-/// @see lok::Office::registerAnyInputCallback()
+/// @see kit::Office::registerAnyInputCallback()
 typedef bool (*COKitAnyInputCallback)(void* pData, int nMostUrgentPriority);
 
-/// @see lok::Office::registerFileSaveDialogCallback()
+/// @see kit::Office::registerFileSaveDialogCallback()
 typedef void (*COKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pResultUri,
                                             size_t nResultUri);
 

@@ -1812,6 +1812,6 @@ void trimMemory(int nTarget)
     // else for now caches re-fill themselves as/when used.
 }
 
-} // namespace lok, namespace vcl
+} // namespace kit, namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

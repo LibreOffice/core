@@ -62,7 +62,7 @@ COKitSelectionType;
  *  COKit until the corresponding reply is received, which would
  *  deadlock if the client does not support the feature.
  *
- *  @see lok::Office::setOptionalFeatures().
+ *  @see kit::Office::setOptionalFeatures().
  */
 typedef enum
 {
@@ -70,7 +70,7 @@ typedef enum
      * Handle KIT_CALLBACK_DOCUMENT_PASSWORD by prompting the user
      * for a password.
      *
-     * @see lok::Office::setDocumentPassword().
+     * @see kit::Office::setDocumentPassword().
      */
     KIT_FEATURE_DOCUMENT_PASSWORD = (1ULL << 0),
 
@@ -78,7 +78,7 @@ typedef enum
      * Handle KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY by prompting the user
      * for a password.
      *
-     * @see lok::Office::setDocumentPassword().
+     * @see kit::Office::setDocumentPassword().
      */
     KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY = (1ULL << 1),
 
@@ -266,7 +266,7 @@ typedef enum
      * Size of the document changed.
      *
      * Payload format is "width, height", i.e. clients get the new size without
-     * having to do an explicit lok::Document::getDocumentSize() call.
+     * having to do an explicit kit::Document::getDocumentSize() call.
      *
      * A size change is always preceded by a series of
      * KIT_CALLBACK_INVALIDATE_TILES events invalidating any areas
@@ -350,7 +350,7 @@ typedef enum
      * Loading a document requires a password.
      *
      * Loading the document is blocked until the password is provided via
-     * lok::Office::setDocumentPassword().  The document cannot be loaded
+     * kit::Office::setDocumentPassword().  The document cannot be loaded
      * without the password.
      */
     KIT_CALLBACK_DOCUMENT_PASSWORD = 20,
@@ -359,7 +359,7 @@ typedef enum
      * Editing a document requires a password.
      *
      * Loading the document is blocked until the password is provided via
-     * lok::Office::setDocumentPassword().
+     * kit::Office::setDocumentPassword().
      */
     KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY = 21,
 
@@ -410,7 +410,7 @@ typedef enum
      *     "rectangle": "..."
      * }
      *
-     * - viewId is a value returned earlier by lok::Document::createView()
+     * - viewId is a value returned earlier by kit::Document::createView()
      * - rectangle uses the format of KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR
      */
     KIT_CALLBACK_INVALIDATE_VIEW_CURSOR = 24,
@@ -425,7 +425,7 @@ typedef enum
      *     "selection": "..."
      * }
      *
-     * - viewId is a value returned earlier by lok::Document::createView()
+     * - viewId is a value returned earlier by kit::Document::createView()
      * - selection uses the format of KIT_CALLBACK_TEXT_SELECTION.
      */
     KIT_CALLBACK_TEXT_VIEW_SELECTION = 25,
@@ -440,7 +440,7 @@ typedef enum
      *     "rectangle": "..."
      * }
      *
-     * - viewId is a value returned earlier by lok::Document::createView()
+     * - viewId is a value returned earlier by kit::Document::createView()
      * - rectangle uses the format of KIT_CALLBACK_CELL_CURSOR.
      */
     KIT_CALLBACK_CELL_VIEW_CURSOR = 26,
@@ -456,7 +456,7 @@ typedef enum
      *     "selection": "..."
      * }
      *
-     * - viewId is a value returned earlier by lok::Document::createView()
+     * - viewId is a value returned earlier by kit::Document::createView()
      * - selection uses the format of KIT_CALLBACK_INVALIDATE_TILES.
      */
     KIT_CALLBACK_GRAPHIC_VIEW_SELECTION = 27,
@@ -472,7 +472,7 @@ typedef enum
      *     "visible": "..."
      * }
      *
-     * - viewId is a value returned earlier by lok::Document::createView()
+     * - viewId is a value returned earlier by kit::Document::createView()
      * - visible uses the format of KIT_CALLBACK_CURSOR_VISIBLE.
      */
     KIT_CALLBACK_VIEW_CURSOR_VISIBLE = 28,
@@ -488,7 +488,7 @@ typedef enum
      *     "rectangle": "..."
      * }
      *
-     * - viewId is a value returned earlier by lok::Document::createView()
+     * - viewId is a value returned earlier by kit::Document::createView()
      * - rectangle uses the format of KIT_CALLBACK_INVALIDATE_TILES.
      */
     KIT_CALLBACK_VIEW_LOCK = 29,
@@ -510,7 +510,7 @@ typedef enum
      * }
      *
      * The format is the same as an entry of
-     * lok::Document::getCommandValues('.uno:AcceptTrackedChanges'), extra
+     * kit::Document::getCommandValues('.uno:AcceptTrackedChanges'), extra
      * fields:
      *
      * - 'action' is either 'Add' or 'Remove', depending on if this is an
@@ -535,7 +535,7 @@ typedef enum
      * }
      *
      * The format is the same as an entry of
-     * lok::Document::getCommandValues('.uno:AcceptTrackedChanges'), extra
+     * kit::Document::getCommandValues('.uno:AcceptTrackedChanges'), extra
      * fields:
      *
      * - 'action' is 'Modify'.
@@ -560,7 +560,7 @@ typedef enum
      * }
      *
      * The format is the same as an entry of
-     * lok::Document::getCommandValues('.uno:ViewAnnotations'), extra
+     * kit::Document::getCommandValues('.uno:ViewAnnotations'), extra
      * fields:
      *
      * - 'action' can be 'Add', 'Remove' or 'Modify' depending on whether

@@ -475,7 +475,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     }
 
     // Provide size in the payload, so clients don't have to
-    // call lok::Document::getDocumentSize().
+    // call kit::Document::getDocumentSize().
     std::stringstream ss;
     ss << aNewSize.Width() << ", " << aNewSize.Height();
     OString sSize( ss.str() );

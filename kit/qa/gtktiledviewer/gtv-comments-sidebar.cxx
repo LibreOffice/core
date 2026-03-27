@@ -40,7 +40,7 @@ gtv_comments_sidebar_view_annotations(GtvCommentsSidebar* sidebar)
 
     COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
     char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewAnnotations");
-    g_info("lok::Document::getCommandValues(%s) : %s", ".uno:ViewAnnotations", pValues);
+    g_info("kit::Document::getCommandValues(%s) : %s", ".uno:ViewAnnotations", pValues);
     std::stringstream aStream(pValues);
     free(pValues);
 

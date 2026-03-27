@@ -412,9 +412,9 @@ public:
 
     /// Set if we are doing tiled searching.
     void setTiledSearching(bool bTiledSearching);
-    /// See lok::Document::getPart().
+    /// See kit::Document::getPart().
     virtual int getPart() const;
-    /// See lok::Document::getMode().
+    /// See kit::Document::getMode().
     virtual int getEditMode() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     /// See OutlinerViewShell::GetViewShellId().

@@ -26,7 +26,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
-using namespace lok;
+using namespace kit;
 
 static int help( const char *error = nullptr )
 {

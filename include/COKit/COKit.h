@@ -86,34 +86,34 @@ struct COKitClassStruct
                               COKitCallback pCallback,
                               void* pData);
 
-    /** @see lok::Office::getFilterTypes().
+    /** @see kit::Office::getFilterTypes().
         @since LibreOffice 6.0
      */
     char* (*getFilterTypes) (COKit* pThis);
 
-    /** @see lok::Office::setOptionalFeatures().
+    /** @see kit::Office::setOptionalFeatures().
         @since LibreOffice 6.0
      */
     void (*setOptionalFeatures)(COKit* pThis, unsigned long long features);
 
-    /** @see lok::Office::setDocumentPassword().
+    /** @see kit::Office::setDocumentPassword().
         @since LibreOffice 6.0
      */
     void (*setDocumentPassword) (COKit* pThis,
             char const* pURL,
             char const* pPassword);
 
-    /** @see lok::Office::getVersionInfo().
+    /** @see kit::Office::getVersionInfo().
         @since LibreOffice 6.0
      */
     char* (*getVersionInfo) (COKit* pThis);
 
-    /** @see lok::Office::runMacro().
+    /** @see kit::Office::runMacro().
         @since LibreOffice 6.0
      */
     int (*runMacro) (COKit *pThis, const char* pURL);
 
-    /** @see lok::Office::signDocument().
+    /** @see kit::Office::signDocument().
         @since LibreOffice 6.2
      */
      bool (*signDocument) (COKit* pThis,
@@ -123,64 +123,64 @@ struct COKitClassStruct
                            const unsigned char* pPrivateKeyBinary,
                            const int nPrivateKeyBinarySize);
 
-    /// @see lok::Office::runLoop()
+    /// @see kit::Office::runLoop()
     void (*runLoop) (COKit* pThis,
                      COKitPollCallback pPollCallback,
                      COKitWakeCallback pWakeCallback,
                      void* pData);
 
-    /// @see lok::Office::sendDialogEvent
+    /// @see kit::Office::sendDialogEvent
     void (*sendDialogEvent) (COKit* pThis,
                             unsigned long long int nLOKWindowId,
                             const char* pArguments);
 
-    /// @see lok::Office::setOption
+    /// @see kit::Office::setOption
     void (*setOption) (COKit* pThis, const char* pOption, const char* pValue);
 
-    /// @see lok::Office::dumpState
+    /// @see kit::Office::dumpState
     /// @since LibreOffice 7.5
     void (*dumpState) (COKit* pThis, const char* pOptions, char** pState);
 
-    /** @see lok::Office::extractRequest.
+    /** @see kit::Office::extractRequest.
      */
     char* (*extractRequest) (COKit* pThis,
                            const char* pFilePath);
 
-    /// @see lok::Office::trimMemory
+    /// @see kit::Office::trimMemory
     /// @since LibreOffice 7.6
     void (*trimMemory) (COKit* pThis, int nTarget);
 
-    /// @see lok::Office::startURP
+    /// @see kit::Office::startURP
     void* (*startURP)(COKit* pThis,
                     void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
                     int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
                     int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen));
 
-    /// @see lok::Office::stopURP
+    /// @see kit::Office::stopURP
     void (*stopURP)(COKit* pThis, void* pSendURPToLOContext);
 
-    /// @see lok::Office::joinThreads
+    /// @see kit::Office::joinThreads
     int (*joinThreads)(COKit* pThis);
 
-    /// @see lok::Office::startThreads
+    /// @see kit::Office::startThreads
     void (*startThreads)(COKit* pThis);
 
-    /// @see lok::Office::setForkedChild
+    /// @see kit::Office::setForkedChild
     void (*setForkedChild)(COKit* pThis, bool bIsChild);
 
-    /** @see lok::Office::extractDocumentStructureRequest.
+    /** @see kit::Office::extractDocumentStructureRequest.
      */
     char* (*extractDocumentStructureRequest)(COKit* pThis, const char* pFilePath,
                                              const char* pFilter);
 
-    /// @see lok::Office::registerAnyInputCallback()
+    /// @see kit::Office::registerAnyInputCallback()
     void (*registerAnyInputCallback)(COKit* pThis,
                                      COKitAnyInputCallback pCallback, void* pData);
 
-    /// @see lok::Office::getDocsCount().
+    /// @see kit::Office::getDocsCount().
     int (*getDocsCount) (COKit* pThis);
 
-    /// @see lok::Office::registerFileSaveDialogCallback()
+    /// @see kit::Office::registerFileSaveDialogCallback()
     void (*registerFileSaveDialogCallback)(COKit* pThis,
             COKitFileSaveDialogCallback pCallback);
 };
@@ -203,34 +203,34 @@ struct COKitDocumentClassStruct
                    const char* pFormat,
                    const char* pFilterOptions);
 
-    /** @see lok::Document::getDocumentType().
+    /** @see kit::Document::getDocumentType().
         @since LibreOffice 6.0
      */
     int (*getDocumentType) (COKitDocument* pThis);
 
 #if defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
-    /// @see lok::Document::getParts().
+    /// @see kit::Document::getParts().
     int (*getParts) (COKitDocument* pThis);
 
-    /// @see lok::Document::getPartPageRectangles().
+    /// @see kit::Document::getPartPageRectangles().
     char* (*getPartPageRectangles) (COKitDocument* pThis);
 
-    /// @see lok::Document::getPart().
+    /// @see kit::Document::getPart().
     int (*getPart) (COKitDocument* pThis);
 
-    /// @see lok::Document::setPart().
+    /// @see kit::Document::setPart().
     void (*setPart) (COKitDocument* pThis,
                      int nPart);
 
-    /// @see lok::Document::getPartName().
+    /// @see kit::Document::getPartName().
     char* (*getPartName) (COKitDocument* pThis,
                           int nPart);
 
-    /// @see lok::Document::setPartMode().
+    /// @see kit::Document::setPartMode().
     void (*setPartMode) (COKitDocument* pThis,
                          int nMode);
 
-    /// @see lok::Document::paintTile().
+    /// @see kit::Document::paintTile().
     void (*paintTile) (COKitDocument* pThis,
                        unsigned char* pBuffer,
                        const int nCanvasWidth,
@@ -240,30 +240,30 @@ struct COKitDocumentClassStruct
                        const int nTileWidth,
                        const int nTileHeight);
 
-    /// @see lok::Document::getTileMode().
+    /// @see kit::Document::getTileMode().
     int (*getTileMode) (COKitDocument* pThis);
 
-    /// @see lok::Document::getDocumentSize().
+    /// @see kit::Document::getDocumentSize().
     void (*getDocumentSize) (COKitDocument* pThis,
                              long* pWidth,
                              long* pHeight);
 
-    /// @see lok::Document::initializeForRendering().
+    /// @see kit::Document::initializeForRendering().
     void (*initializeForRendering) (COKitDocument* pThis,
                                     const char* pArguments);
 
-    /// @see lok::Document::registerCallback().
+    /// @see kit::Document::registerCallback().
     void (*registerCallback) (COKitDocument* pThis,
                               COKitCallback pCallback,
                               void* pData);
 
-    /// @see lok::Document::postKeyEvent
+    /// @see kit::Document::postKeyEvent
     void (*postKeyEvent) (COKitDocument* pThis,
                           int nType,
                           int nCharCode,
                           int nKeyCode);
 
-    /// @see lok::Document::postMouseEvent
+    /// @see kit::Document::postMouseEvent
     void (*postMouseEvent) (COKitDocument* pThis,
                             int nType,
                             int nX,
@@ -272,75 +272,75 @@ struct COKitDocumentClassStruct
                             int nButtons,
                             int nModifier);
 
-    /// @see lok::Document::postUnoCommand
+    /// @see kit::Document::postUnoCommand
     void (*postUnoCommand) (COKitDocument* pThis,
                             const char* pCommand,
                             const char* pArguments,
                             bool bNotifyWhenFinished);
 
-    /// @see lok::Document::setTextSelection
+    /// @see kit::Document::setTextSelection
     void (*setTextSelection) (COKitDocument* pThis,
                               int nType,
                               int nX,
                               int nY);
 
-    /// @see lok::Document::getTextSelection
+    /// @see kit::Document::getTextSelection
     char* (*getTextSelection) (COKitDocument* pThis,
                                const char* pMimeType,
                                char** pUsedMimeType);
 
-    /// @see lok::Document::paste().
+    /// @see kit::Document::paste().
     bool (*paste) (COKitDocument* pThis,
                    const char* pMimeType,
                    const char* pData,
                    size_t nSize);
 
-    /// @see lok::Document::setGraphicSelection
+    /// @see kit::Document::setGraphicSelection
     void (*setGraphicSelection) (COKitDocument* pThis,
                                  int nType,
                                  int nX,
                                  int nY);
 
-    /// @see lok::Document::resetSelection
+    /// @see kit::Document::resetSelection
     void (*resetSelection) (COKitDocument* pThis);
 
-    /// @see lok::Document::getCommandValues().
+    /// @see kit::Document::getCommandValues().
     char* (*getCommandValues) (COKitDocument* pThis, const char* pCommand);
 
-    /// @see lok::Document::setClientZoom().
+    /// @see kit::Document::setClientZoom().
     void (*setClientZoom) (COKitDocument* pThis,
             int nTilePixelWidth,
             int nTilePixelHeight,
             int nTileTwipWidth,
             int nTileTwipHeight);
 
-    /// @see lok::Document::setVisibleArea).
+    /// @see kit::Document::setVisibleArea).
     void (*setClientVisibleArea) (COKitDocument* pThis, int nX, int nY, int nWidth, int nHeight);
 
-    /// @see lok::Document::createView().
+    /// @see kit::Document::createView().
     int (*createView) (COKitDocument* pThis);
-    /// @see lok::Document::destroyView().
+    /// @see kit::Document::destroyView().
     void (*destroyView) (COKitDocument* pThis, int nId);
-    /// @see lok::Document::setView().
+    /// @see kit::Document::setView().
     void (*setView) (COKitDocument* pThis, int nId);
-    /// @see lok::Document::getView().
+    /// @see kit::Document::getView().
     int (*getView) (COKitDocument* pThis);
-    /// @see lok::Document::getViewsCount().
+    /// @see kit::Document::getViewsCount().
     int (*getViewsCount) (COKitDocument* pThis);
 
-    /// @see lok::Document::renderFont().
+    /// @see kit::Document::renderFont().
     unsigned char* (*renderFont) (COKitDocument* pThis,
                        const char* pFontName,
                        const char* pChar,
                        int* pFontWidth,
                        int* pFontHeight);
 
-    /// @see lok::Document::getPartHash().
+    /// @see kit::Document::getPartHash().
     char* (*getPartHash) (COKitDocument* pThis,
                           int nPart);
 
     /// Paints a tile from a specific part.
-    /// @see lok::Document::paintTile().
+    /// @see kit::Document::paintTile().
     void (*paintPartTile) (COKitDocument* pThis,
                            unsigned char* pBuffer,
                            const int nPart,
@@ -352,32 +352,32 @@ struct COKitDocumentClassStruct
                            const int nTileWidth,
                            const int nTileHeight);
 
-    /// @see lok::Document::getViewIds().
+    /// @see kit::Document::getViewIds().
     bool (*getViewIds) (COKitDocument* pThis,
                        int* pArray,
                        size_t nSize);
 
-    /// @see lok::Document::setOutlineState).
+    /// @see kit::Document::setOutlineState).
     void (*setOutlineState) (COKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden);
 
     /// Paints window with given id to the buffer
-    /// @see lok::Document::paintWindow().
+    /// @see kit::Document::paintWindow().
     void (*paintWindow) (COKitDocument* pThis, unsigned nWindowId,
                          unsigned char* pBuffer,
                          const int x, const int y,
                          const int width, const int height);
 
-    /// @see lok::Document::postWindow().
+    /// @see kit::Document::postWindow().
     void (*postWindow) (COKitDocument* pThis, unsigned nWindowId, int nAction, const char* pData);
 
-    /// @see lok::Document::postWindowKeyEvent().
+    /// @see kit::Document::postWindowKeyEvent().
     void (*postWindowKeyEvent) (COKitDocument* pThis,
                                 unsigned nWindowId,
                                 int nType,
                                 int nCharCode,
                                 int nKeyCode);
 
-    /// @see lok::Document::postWindowMouseEvent().
+    /// @see kit::Document::postWindowMouseEvent().
     void (*postWindowMouseEvent) (COKitDocument* pThis,
                                   unsigned nWindowId,
                                   int nType,
@@ -387,21 +387,21 @@ struct COKitDocumentClassStruct
                                   int nButtons,
                                   int nModifier);
 
-    /// @see lok::Document::setViewLanguage().
+    /// @see kit::Document::setViewLanguage().
     void (*setViewLanguage) (COKitDocument* pThis, int nId, const char* language);
 
-    /// @see lok::Document::postWindowExtTextInputEvent
+    /// @see kit::Document::postWindowExtTextInputEvent
     void (*postWindowExtTextInputEvent) (COKitDocument* pThis,
                                          unsigned nWindowId,
                                          int nType,
                                          const char* pText);
 
-    /// @see lok::Document::getPartInfo().
+    /// @see kit::Document::getPartInfo().
     char* (*getPartInfo) (COKitDocument* pThis, int nPart);
 
     /// Paints window with given id to the buffer with the give DPI scale
     /// (every pixel is dpiscale-times larger).
-    /// @see lok::Document::paintWindow().
+    /// @see kit::Document::paintWindow().
     void (*paintWindowDPI) (COKitDocument* pThis, unsigned nWindowId,
                             unsigned char* pBuffer,
                             const int x, const int y,
@@ -410,26 +410,26 @@ struct COKitDocumentClassStruct
 
 // CERTIFICATE AND SIGNING
 
-    /// @see lok::Document::insertCertificate().
+    /// @see kit::Document::insertCertificate().
     bool (*insertCertificate) (COKitDocument* pThis,
                                 const unsigned char* pCertificateBinary,
                                 const int nCertificateBinarySize,
                                 const unsigned char* pPrivateKeyBinary,
                                 const int nPrivateKeyBinarySize);
 
-    /// @see lok::Document::addCertificate().
+    /// @see kit::Document::addCertificate().
     bool (*addCertificate) (COKitDocument* pThis,
                                 const unsigned char* pCertificateBinary,
                                 const int nCertificateBinarySize);
 
-    /// @see lok::Document::getSignatureState().
+    /// @see kit::Document::getSignatureState().
     int (*getSignatureState) (COKitDocument* pThis);
 // END CERTIFICATE AND SIGNING
 
-    /// @see lok::Document::renderShapeSelection
+    /// @see kit::Document::renderShapeSelection
     size_t (*renderShapeSelection)(COKitDocument* pThis, char** pOutput);
 
-    /// @see lok::Document::postWindowGestureEvent().
+    /// @see kit::Document::postWindowGestureEvent().
     void (*postWindowGestureEvent) (COKitDocument* pThis,
                                   unsigned nWindowId,
                                   const char* pType,
@@ -437,22 +437,22 @@ struct COKitDocumentClassStruct
                                   int nY,
                                   int nOffset);
 
-    /// @see lok::Document::createViewWithOptions().
+    /// @see kit::Document::createViewWithOptions().
     int (*createViewWithOptions) (COKitDocument* pThis, const char* pOptions);
 
-    /// @see lok::Document::selectPart().
+    /// @see kit::Document::selectPart().
     void (*selectPart) (COKitDocument* pThis, int nPart, int nSelect);
 
-    /// @see lok::Document::moveSelectedParts().
+    /// @see kit::Document::moveSelectedParts().
     void (*moveSelectedParts) (COKitDocument* pThis, int nPosition, bool bDuplicate);
 
     /// Resize window with given id.
-    /// @see lok::Document::resizeWindow().
+    /// @see kit::Document::resizeWindow().
     void (*resizeWindow) (COKitDocument* pThis, unsigned nWindowId,
                           const int width, const int height);
 
     /// Pass a nullptr terminated array of mime-type strings
-    /// @see lok::Document::getClipboard for more details
+    /// @see kit::Document::getClipboard for more details
     int (*getClipboard) (COKitDocument* pThis,
                          const char **pMimeTypes,
                          size_t      *pOutCount,
@@ -460,28 +460,28 @@ struct COKitDocumentClassStruct
                          size_t     **pOutSizes,
                          char      ***pOutStreams);
 
-    /// @see lok::Document::setClipboard
+    /// @see kit::Document::setClipboard
     int (*setClipboard) (COKitDocument* pThis,
                          const size_t   nInCount,
                          const char   **pInMimeTypes,
                          const size_t  *pInSizes,
                          const char   **pInStreams);
 
-    /// @see lok::Document::getSelectionType
+    /// @see kit::Document::getSelectionType
     int (*getSelectionType) (COKitDocument* pThis);
 
-    /// @see lok::Document::removeTextContext
+    /// @see kit::Document::removeTextContext
     void (*removeTextContext) (COKitDocument* pThis,
                                unsigned nWindowId,
                                int nBefore,
                                int nAfter);
 
-    /// @see lok::Document::sendDialogEvent
+    /// @see kit::Document::sendDialogEvent
     void (*sendDialogEvent) (COKitDocument* pThis,
                             unsigned long long int nLOKWindowId,
                             const char* pArguments);
 
-    /// @see lok::Document::renderFontOrientation().
+    /// @see kit::Document::renderFontOrientation().
     unsigned char* (*renderFontOrientation) (COKitDocument* pThis,
                        const char* pFontName,
                        const char* pChar,
@@ -490,7 +490,7 @@ struct COKitDocumentClassStruct
                        int pOrientation);
 
     /// Switches view to viewId if viewId >= 0, and paints window
-    /// @see lok::Document::paintWindowDPI().
+    /// @see kit::Document::paintWindowDPI().
     void (*paintWindowForView) (COKitDocument* pThis, unsigned nWindowId,
                                 unsigned char* pBuffer,
                                 const int x, const int y,
@@ -498,92 +498,92 @@ struct COKitDocumentClassStruct
                                 const double dpiscale,
                                 int viewId);
 
-    /// @see lok::Document::completeFunction().
+    /// @see kit::Document::completeFunction().
     void (*completeFunction) (COKitDocument* pThis, const char* pFunctionName);
 
-    /// @see lok::Document::setWindowTextSelection
+    /// @see kit::Document::setWindowTextSelection
     void (*setWindowTextSelection) (COKitDocument* pThis,
                                     unsigned nWindowId,
                                     bool bSwap,
                                     int nX,
                                     int nY);
 
-    /// @see lok::Document::sendFormFieldEvent
+    /// @see kit::Document::sendFormFieldEvent
     void (*sendFormFieldEvent) (COKitDocument* pThis,
                                 const char* pArguments);
 
-    /// @see lok::Document::setBlockedCommandList
+    /// @see kit::Document::setBlockedCommandList
     void (*setBlockedCommandList) (COKitDocument* pThis,
                                 int nViewId,
                                 const char* blockedCommandList);
 
-    /// @see lok::Document::renderSearchResult
+    /// @see kit::Document::renderSearchResult
     bool (*renderSearchResult) (COKitDocument* pThis,
                                 const char* pSearchResult,
                                 unsigned char** pBitmapBuffer,
                                 int* pWidth, int* pHeight, size_t* pByteSize);
 
-    /// @see lok::Document::sendContentControlEvent().
+    /// @see kit::Document::sendContentControlEvent().
     void (*sendContentControlEvent)(COKitDocument* pThis, const char* pArguments);
 
-    /// @see lok::Document::getSelectionTypeAndText
+    /// @see kit::Document::getSelectionTypeAndText
     /// @since LibreOffice 7.4
     int (*getSelectionTypeAndText) (COKitDocument* pThis,
                                     const char* pMimeType,
                                     char** pText,
                                     char** pUsedMimeType);
 
-    /// @see lok::Document::getDataArea().
+    /// @see kit::Document::getDataArea().
     void (*getDataArea) (COKitDocument* pThis,
                          long nPart,
                          long* pCol,
                          long* pRow);
 
-    /// @see lok::Document::getEditMode().
+    /// @see kit::Document::getEditMode().
     int (*getEditMode) (COKitDocument* pThis);
 
-    /// @see lok::Document::setViewTimezone().
+    /// @see kit::Document::setViewTimezone().
     void (*setViewTimezone) (COKitDocument* pThis, int nId, const char* timezone);
 
-    /// @see lok::Document::setAccessibilityState().
+    /// @see kit::Document::setAccessibilityState().
     void (*setAccessibilityState) (COKitDocument* pThis, int nId, bool nEnabled);
 
-    /// @see lok::Document::getA11yFocusedParagraph.
+    /// @see kit::Document::getA11yFocusedParagraph.
     char* (*getA11yFocusedParagraph) (COKitDocument* pThis);
 
-    /// @see lok::Document::getA11yCaretPosition.
+    /// @see kit::Document::getA11yCaretPosition.
     int (*getA11yCaretPosition) (COKitDocument* pThis);
 
-    /// @see lok::Document::setViewReadOnly().
+    /// @see kit::Document::setViewReadOnly().
     void (*setViewReadOnly) (COKitDocument* pThis, int nId, const bool readOnly);
 
-    /// @see lok::Document::setAllowChangeComments().
+    /// @see kit::Document::setAllowChangeComments().
     void (*setAllowChangeComments) (COKitDocument* pThis, int nId, const bool allow);
 
-    /// @see lok::Document::getPresentationInfo
+    /// @see kit::Document::getPresentationInfo
     char* (*getPresentationInfo) (COKitDocument* pThis);
 
-    /// @see lok::Document::createSlideRenderer
+    /// @see kit::Document::createSlideRenderer
     bool (*createSlideRenderer) (
         COKitDocument* pThis,
         const char* pSlideHash,
         int nSlideNumber, unsigned* nViewWidth, unsigned* nViewHeight,
         bool bRenderBackground, bool bRenderMasterPage);
 
-    /// @see lok::Document::postSlideshowCleanup
+    /// @see kit::Document::postSlideshowCleanup
     void (*postSlideshowCleanup)(COKitDocument* pThis);
 
-    /// @see lok::Document::renderNextSlideLayer
+    /// @see kit::Document::renderNextSlideLayer
     bool (*renderNextSlideLayer)(
         COKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale, char** pJsonMessage);
 
-    /// @see lok::Document::setViewOption
+    /// @see kit::Document::setViewOption
     void (*setViewOption)(COKitDocument* pThis, const char* pOption, const char* pValue);
 
-    /// @see lok::Document::setColorPreviewState().
+    /// @see kit::Document::setColorPreviewState().
     void (*setColorPreviewState) (COKitDocument* pThis, int nId, bool nEnabled);
 
-    /// @see lok::Document::setAllowManageRedlines().
+    /// @see kit::Document::setAllowManageRedlines().
     void (*setAllowManageRedlines)(COKitDocument* pThis, int nId, bool allow);
 
 #endif // defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY

@@ -19,17 +19,17 @@
  *  b) allow ABI stability - C++ vtables are not good for that.
  *  c) avoid C++ types as part of the API.
  */
-namespace lok
+namespace kit
 {
 
-/// The lok::Document class represents one loaded document instance.
+/// The kit::Document class represents one loaded document instance.
 class Document
 {
 private:
     COKitDocument* mpDoc;
 
 public:
-    /// A lok::Document is typically created by the lok::Office::documentLoad() method.
+    /// A kit::Document is typically created by the kit::Office::documentLoad() method.
     Document(COKitDocument* pDoc) :
         mpDoc(pDoc)
     {}
@@ -488,7 +488,7 @@ public:
      * @return {commandName: unoCmd, commandValues: {possible_values}}
      *
      * The return value is dynamically allocated and should be
-     * deallocated by calling the lok::Office::freeMemory() function.
+     * deallocated by calling the kit::Office::freeMemory() function.
      */
     char* getCommandValues(const char* pCommand)
     {
@@ -970,14 +970,14 @@ public:
 #endif // defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
-/// The lok::Office class represents one started COKit instance.
+/// The kit::Office class represents one started COKit instance.
 class Office
 {
 private:
     COKit* mpThis;
 
 public:
-    /// A lok::Office is typically created by the lok_cpp_init() function.
+    /// A kit::Office is typically created by the lok_cpp_init() function.
     Office(COKit* pThis) :
         mpThis(pThis)
     {}
@@ -1345,9 +1345,9 @@ public:
     }
 };
 
-/// Create a lok::Office instance.
+/// Create a kit::Office instance.
 ///
-/// Presumably you are not supposed to create multiple lok::Office
+/// Presumably you are not supposed to create multiple kit::Office
 /// instances in the same process. Possibly not even a new one after
 /// destroying a previous one.
 ///
@@ -1357,7 +1357,7 @@ inline Office* lok_cpp_init(const char* pInstallPath, const char* pUserProfileUr
     COKit* pThis = cok_init_2(pInstallPath, pUserProfileUrl);
     if (pThis == NULL || pThis->pClass->nSize == 0)
         return NULL;
-    return new ::lok::Office(pThis);
+    return new ::kit::Office(pThis);
 }
 
 }

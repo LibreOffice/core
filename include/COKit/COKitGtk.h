@@ -83,7 +83,7 @@ LOK_DOC_VIEW_DLLPUBLIC GtkWidget* lok_doc_view_new_from_user_profile (const gcha
 /**
  * lok_doc_view_new_from_widget:
  * @pDocView: The #KitDocumentView instance
- * @pRenderingArguments: (nullable) (allow-none): lok::Document::initializeForRendering() arguments.
+ * @pRenderingArguments: (nullable) (allow-none): kit::Document::initializeForRendering() arguments.
  *
  * Returns: (transfer none): The #KitDocumentView widget instance.
  */
@@ -94,7 +94,7 @@ LOK_DOC_VIEW_DLLPUBLIC GtkWidget* lok_doc_view_new_from_widget     (KitDocumentV
  * lok_doc_view_open_document:
  * @pDocView: The #KitDocumentView instance
  * @pPath: (transfer full): The path of the document that #KitDocumentView widget should try to open
- * @pRenderingArguments: (nullable) (allow-none): lok::Document::initializeForRendering() arguments.
+ * @pRenderingArguments: (nullable) (allow-none): kit::Document::initializeForRendering() arguments.
  * @cancellable:
  * @callback:
  * @userdata:
@@ -378,7 +378,7 @@ LOK_DOC_VIEW_DLLPUBLIC gfloat  lok_doc_view_twip_to_pixel          (KitDocumentV
 /**
  * lok_doc_view_send_content_control_event:
  * @pDocView: The #KitDocumentView instance
- * @pArguments: (nullable) (allow-none): see lok::Document::sendContentControlEvent() for the details.
+ * @pArguments: (nullable) (allow-none): see kit::Document::sendContentControlEvent() for the details.
  */
 LOK_DOC_VIEW_DLLPUBLIC void lok_doc_view_send_content_control_event(KitDocumentView* pDocView, const gchar* pArguments);
 

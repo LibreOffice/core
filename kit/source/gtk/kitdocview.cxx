@@ -263,7 +263,7 @@ void setDocumentView(COKitDocument* pDoc, int viewId)
 {
     assert(pDoc);
     std::stringstream ss;
-    ss << "lok::Document::setView(" << viewId << ")";
+    ss << "kit::Document::setView(" << viewId << ")";
     g_info("%s", ss.str().c_str());
     pDoc->pClass->setView(pDoc, viewId);
 }
@@ -610,7 +610,7 @@ postKeyEventInThread(gpointer data)
     if (priv->m_nTileSizeTwips)
     {
         ss.str(std::string());
-        ss << "lok::Document::setClientZoom(" << nTileSizePixelsScaled << ", " << nTileSizePixelsScaled << ", " << priv->m_nTileSizeTwips << ", " << priv->m_nTileSizeTwips << ")";
+        ss << "kit::Document::setClientZoom(" << nTileSizePixelsScaled << ", " << nTileSizePixelsScaled << ", " << priv->m_nTileSizeTwips << ", " << priv->m_nTileSizeTwips << ")";
         g_info("%s", ss.str().c_str());
         priv->m_pDocument->pClass->setClientZoom(priv->m_pDocument,
                                                  nTileSizePixelsScaled,
@@ -622,7 +622,7 @@ postKeyEventInThread(gpointer data)
     if (priv->m_bVisibleAreaSet)
     {
         ss.str(std::string());
-        ss << "lok::Document::setClientVisibleArea(" << priv->m_aVisibleArea.x << ", " << priv->m_aVisibleArea.y << ", ";
+        ss << "kit::Document::setClientVisibleArea(" << priv->m_aVisibleArea.x << ", " << priv->m_aVisibleArea.y << ", ";
         ss << priv->m_aVisibleArea.width << ", " << priv->m_aVisibleArea.height << ")";
         g_info("%s", ss.str().c_str());
         priv->m_pDocument->pClass->setClientVisibleArea(priv->m_pDocument,
@@ -634,7 +634,7 @@ postKeyEventInThread(gpointer data)
     }
 
     ss.str(std::string());
-    ss << "lok::Document::postKeyEvent(" << pLOEvent->m_nKeyEvent << ", " << pLOEvent->m_nCharCode << ", " << pLOEvent->m_nKeyCode << ")";
+    ss << "kit::Document::postKeyEvent(" << pLOEvent->m_nKeyEvent << ", " << pLOEvent->m_nCharCode << ", " << pLOEvent->m_nKeyCode << ")";
     g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->postKeyEvent(priv->m_pDocument,
                                             pLOEvent->m_nKeyEvent,
@@ -1752,7 +1752,7 @@ static const GdkRGBA& getDarkColor(int nViewId, KitDocumentViewPrivate& priv)
     {
         char* pValues = priv->m_pDocument->pClass->getCommandValues(priv->m_pDocument, ".uno:TrackedChangeAuthors");
         std::stringstream aInfo;
-        aInfo << "lok::Document::getCommandValues('.uno:TrackedChangeAuthors') returned '" << pValues << "'" << std::endl;
+        aInfo << "kit::Document::getCommandValues('.uno:TrackedChangeAuthors') returned '" << pValues << "'" << std::endl;
         g_info("%s", aInfo.str().c_str());
 
         std::stringstream aStream(pValues);
@@ -2294,7 +2294,7 @@ setGraphicSelectionInThread(gpointer data)
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
-    ss << "lok::Document::setGraphicSelection(" << pLOEvent->m_nSetGraphicSelectionType;
+    ss << "kit::Document::setGraphicSelection(" << pLOEvent->m_nSetGraphicSelectionType;
     ss << ", " << pLOEvent->m_nSetGraphicSelectionX;
     ss << ", " << pLOEvent->m_nSetGraphicSelectionY << ")";
     g_info("%s", ss.str().c_str());
@@ -2332,7 +2332,7 @@ postMouseEventInThread(gpointer data)
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
-    ss << "lok::Document::postMouseEvent(" << pLOEvent->m_nPostMouseEventType;
+    ss << "kit::Document::postMouseEvent(" << pLOEvent->m_nPostMouseEventType;
     ss << ", " << pLOEvent->m_nPostMouseEventX;
     ss << ", " << pLOEvent->m_nPostMouseEventY;
     ss << ", " << pLOEvent->m_nPostMouseEventCount;
@@ -2449,7 +2449,7 @@ postCommandInThread (gpointer data)
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
-    ss << "lok::Document::postUnoCommand(" << pLOEvent->m_pCommand << ", " << pLOEvent->m_pArguments << ")";
+    ss << "kit::Document::postUnoCommand(" << pLOEvent->m_pCommand << ", " << pLOEvent->m_pArguments << ")";
     g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->postUnoCommand(priv->m_pDocument, pLOEvent->m_pCommand, pLOEvent->m_pArguments, pLOEvent->m_bNotifyWhenFinished);
 }
@@ -2516,7 +2516,7 @@ paintTileInThread (gpointer data)
     std::stringstream ss;
     GTimer* aTimer = g_timer_new();
     gulong nElapsedMs;
-    ss << "lok::Document::paintTile(" << static_cast<void*>(pBuffer) << ", "
+    ss << "kit::Document::paintTile(" << static_cast<void*>(pBuffer) << ", "
         << nTileSizePixelsScaled << ", " << nTileSizePixelsScaled << ", "
         << aTileRectangle.x << ", " << aTileRectangle.y << ", "
         << pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor) << ", "
@@ -3980,7 +3980,7 @@ lok_doc_view_copy_selection (KitDocumentView* pDocView,
         return nullptr;
 
     std::stringstream ss;
-    ss << "lok::Document::getTextSelection('" << pMimeType << "')";
+    ss << "kit::Document::getTextSelection('" << pMimeType << "')";
     g_info("%s", ss.str().c_str());
     return pDocument->pClass->getTextSelection(pDocument, pMimeType, pUsedMimeType);
 }
@@ -4007,7 +4007,7 @@ lok_doc_view_paste (KitDocumentView* pDocView,
     if (pData)
     {
         std::stringstream ss;
-        ss << "lok::Document::paste('" << pMimeType << "', '" << std::string(pData, nSize) << ", "<<nSize<<"')";
+        ss << "kit::Document::paste('" << pMimeType << "', '" << std::string(pData, nSize) << ", "<<nSize<<"')";
         g_info("%s", ss.str().c_str());
         ret = pDocument->pClass->paste(pDocument, pMimeType, pData, nSize);
     }
