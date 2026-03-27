@@ -19,9 +19,10 @@
 
 #pragma once
 
-#include <basic/sbstar.hxx>
+#include <basic/sbdef.hxx>
 #include <sbxfac.hxx>
 #include "sbunoobj.hxx"
+#include <tools/link.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <comphelper/errcode.hxx>
 #include <config_features.h>
@@ -37,6 +38,7 @@ class SbOLEFactory;
 class SbFormFactory;
 class SbiInstance;
 class SbModule;
+class StarBASIC;
 class BasicManager;
 
 class SbiFactory final : public SbxFactory

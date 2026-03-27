@@ -34,7 +34,7 @@ namespace com::sun::star::script { struct ModuleInfo; }
 
 class SbMethod;
 
-class BASIC_DLLPUBLIC StarBASIC final : public SbxObject
+class BASIC_DLLPUBLIC_SCRIPTING StarBASIC final : public SbxObject
 {
     friend class SbiScanner;
     friend class SbiExpression; // Access to RTL
