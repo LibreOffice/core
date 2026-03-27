@@ -66,7 +66,7 @@ class XclImpSupbookTab
 public:
     /** Stores the sheet name and marks the sheet index as invalid.
         The sheet index is set while creating the Calc sheet with CreateTable(). */
-    explicit            XclImpSupbookTab( OUString aTabName );
+    explicit            XclImpSupbookTab( const OUString& aTabName );
 
     const OUString& GetTabName() const { return maTabName; }
 
@@ -557,8 +557,8 @@ XclImpCrn::XclImpCrn( XclImpStream& rStrm, const XclAddress& rXclPos ) :
 
 // Sheet in an external document ==============================================
 
-XclImpSupbookTab::XclImpSupbookTab( OUString aTabName ) :
-    maTabName(std::move( aTabName ))
+XclImpSupbookTab::XclImpSupbookTab( const OUString& aTabName ) :
+    maTabName(aTabName.replaceAll(u"]", u""))
 {
 }
 
