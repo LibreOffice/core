@@ -6,9 +6,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 _main
-_libreofficekit_hook
-_libreofficekit_hook_2
+_cokit_hook
+_cokit_hook_2
 _lok_preinit
-_lok_preinit_2
+_cok_preinit_2
 _malloc
 _free

@@ -15,6 +15,6 @@
 #include "test.h"
 
 // just make sure this stuff compiles from a plain C file
-COKit* compile_test(void) { return lok_init("install/path"); }
+COKit* compile_test(void) { return cok_init("install/path"); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

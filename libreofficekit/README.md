@@ -11,7 +11,7 @@ tiled rendering API).
 LOK functionality can be accessed by including `COKit.h[xx]` in your
 program.
 
-LOK initialisation (`lok_init`) requires the inclusion of `COKitInit.h` in
+LOK initialisation (`cok_init`) requires the inclusion of `COKitInit.h` in
 your program. If you use the C++ `COKit.hxx` header, it already includes
 `COKitInit.h` for you.
 

@@ -13230,8 +13230,8 @@ libpagemaker::PMDocument::isSupported(librevenge::RVNGInputStream*)
 libpagemaker::PMDocument::parse(librevenge::RVNGInputStream*, librevenge::RVNGDrawingInterface*)
 libqxp::QXPDocument::isSupported(librevenge::RVNGInputStream*, libqxp::QXPDocument::Type*)
 libqxp::QXPDocument::parse(librevenge::RVNGInputStream*, librevenge::RVNGDrawingInterface*, libqxp::QXPPathResolver*)
-libreofficekit_hook
-libreofficekit_hook_2
+cokit_hook
+cokit_hook_2
 libvisio::VisioDocument::isSupported(librevenge::RVNGInputStream*)
 libvisio::VisioDocument::parse(librevenge::RVNGInputStream*, librevenge::RVNGDrawingInterface*)
 libvisio::VisioDocument::parseStencils(librevenge::RVNGInputStream*, librevenge::RVNGDrawingInterface*)

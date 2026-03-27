@@ -68,7 +68,7 @@ extern "C"
 #ifndef _WIN32
 
 #if !defined(IOS)
-        static void *lok_loadlib(const char *pFN)
+        static void *cok_loadlib(const char *pFN)
     {
         return dlopen(pFN, RTLD_LAZY
 #if defined LOK_LOADLIB_GLOBAL
@@ -77,24 +77,24 @@ extern "C"
                       );
     }
 
-    static char *lok_dlerror(void)
+    static char *cok_dlerror(void)
     {
         return dlerror();
     }
 
-    // This function must be called to release memory allocated by lok_dlerror()
-    static void lok_dlerror_free(char *pErrMessage)
+    // This function must be called to release memory allocated by cok_dlerror()
+    static void cok_dlerror_free(char *pErrMessage)
     {
         (void)pErrMessage;
         // Do nothing for return of dlerror()
     }
 
-    static void *lok_dlsym(void *Hnd, const char *pName)
+    static void *cok_dlsym(void *Hnd, const char *pName)
     {
         return dlsym(Hnd, pName);
     }
 
-    static int lok_dlclose(void *Hnd)
+    static int cok_dlclose(void *Hnd)
     {
         return dlclose(Hnd);
     }
@@ -103,7 +103,7 @@ extern "C"
 
 #else // _WIN32
 
-    static wchar_t* lok_string_to_wide_string(const char* string)
+    static wchar_t* cok_string_to_wide_string(const char* string)
     {
         const size_t len = strlen(string);
         if (len == 0)
@@ -131,7 +131,7 @@ extern "C"
         return result;
     }
 
-    static char* lok_wide_string_to_string(const wchar_t* wstring)
+    static char* cok_wide_string_to_string(const wchar_t* wstring)
     {
         if (wstring == NULL)
             return NULL;
@@ -155,15 +155,15 @@ extern "C"
         return result;
     }
 
-    static void *lok_loadlib(const char *pFN)
+    static void *cok_loadlib(const char *pFN)
     {
-        wchar_t* wpFN = lok_string_to_wide_string(pFN);
+        wchar_t* wpFN = cok_string_to_wide_string(pFN);
         void* result = LoadLibraryW(wpFN);
         free(wpFN);
         return result;
     }
 
-    static char *lok_dlerror(void)
+    static char *cok_dlerror(void)
     {
         LPWSTR wbuf = NULL;
         int rc = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -177,23 +177,23 @@ extern "C"
         if (wbuf[wcslen(wbuf)-1] == L'\r')
             wbuf[wcslen(wbuf)-1] = L'\0';
 
-        char* result = lok_wide_string_to_string(wbuf);
+        char* result = cok_wide_string_to_string(wbuf);
         HeapFree(GetProcessHeap(), 0, wbuf);
         return result;
     }
 
-    // This function must be called to release memory allocated by lok_dlerror()
-    static void lok_dlerror_free(char *pErrMessage)
+    // This function must be called to release memory allocated by cok_dlerror()
+    static void cok_dlerror_free(char *pErrMessage)
     {
         free(pErrMessage);
     }
 
-    static void *lok_dlsym(void *Hnd, const char *pName)
+    static void *cok_dlsym(void *Hnd, const char *pName)
     {
         return reinterpret_cast<void *>(GetProcAddress((HINSTANCE) Hnd, pName));
     }
 
-    static int lok_dlclose(void *Hnd)
+    static int cok_dlclose(void *Hnd)
     {
         return FreeLibrary((HINSTANCE) Hnd);
     }
@@ -201,11 +201,11 @@ extern "C"
 #endif
 
 #if !defined(IOS)
-static int lok_stat(const char* path, struct stat* st)
+static int cok_stat(const char* path, struct stat* st)
 {
 #ifdef _WIN32
     struct _stat32 st32;
-    wchar_t* wpath = lok_string_to_wide_string(path);
+    wchar_t* wpath = cok_string_to_wide_string(path);
     int result = _wstat32(wpath, &st32);
     free(wpath);
     if (result != -1)
@@ -228,7 +228,7 @@ static int lok_stat(const char* path, struct stat* st)
 #endif
 }
 
-static void *lok_dlopen( const char *install_path, char ** _imp_lib )
+static void *cok_dlopen( const char *install_path, char ** _imp_lib )
 {
     char *imp_lib;
     void *dlhandle;
@@ -241,7 +241,7 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
     if (!install_path)
         return NULL;
 
-    if (lok_stat(install_path, &dir_st) != 0)
+    if (cok_stat(install_path, &dir_st) != 0)
     {
         fprintf(stderr, "installation path \"%s\" does not exist\n", install_path);
         return NULL;
@@ -265,15 +265,15 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
     struct stat st;
     // If SOFFICEAPP_LIB exists but is ridiculously small, it is the
     // one-line text stub as in the --enable-mergedlib case.
-    if (lok_stat(imp_lib, &st) == 0 && st.st_size > 1000)
+    if (cok_stat(imp_lib, &st) == 0 && st.st_size > 1000)
     {
-        dlhandle = lok_loadlib(imp_lib);
+        dlhandle = cok_loadlib(imp_lib);
         if (!dlhandle)
         {
-            char *pErrMessage = lok_dlerror();
+            char *pErrMessage = cok_dlerror();
             fprintf(stderr, "failed to open library '%s': %s\n",
                     imp_lib, pErrMessage);
-            lok_dlerror_free(pErrMessage);
+            cok_dlerror_free(pErrMessage);
             free(imp_lib);
             return NULL;
         }
@@ -282,13 +282,13 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
     {
         strncpy(imp_lib + partial_length, MERGED_LIB, imp_lib_size - partial_length);
 
-        dlhandle = lok_loadlib(imp_lib);
+        dlhandle = cok_loadlib(imp_lib);
         if (!dlhandle)
         {
-            char *pErrMessage = lok_dlerror();
+            char *pErrMessage = cok_dlerror();
             fprintf(stderr, "failed to open library '%s': %s\n",
                     imp_lib, pErrMessage);
-            lok_dlerror_free(pErrMessage);
+            cok_dlerror_free(pErrMessage);
             free(imp_lib);
             return NULL;
         }
@@ -298,20 +298,20 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
 }
 #endif
 
-typedef COKit *(LokHookFunction)( const char *install_path);
+typedef COKit *(CokHookFunction)( const char *install_path);
 
-typedef COKit *(LokHookFunction2)( const char *install_path, const char *user_profile_url );
+typedef COKit *(CokHookFunction2)( const char *install_path, const char *user_profile_url );
 
-typedef int             (LokHookPreInit)  ( const char *install_path, const char *user_profile_url );
+typedef int             (CokHookPreInit)  ( const char *install_path, const char *user_profile_url );
 
-// For client code directly accessing the exported lok_preinit_2 via lok_dlsym:
-typedef int             (LokHookPreInit2) ( const char *install_path, const char *user_profile_url, COKit** kit);
+// For client code directly accessing the exported cok_preinit_2 via cok_dlsym:
+typedef int             (CokHookPreInit2) ( const char *install_path, const char *user_profile_url, COKit** kit);
 
 #if defined(IOS) || defined(ANDROID) || defined(__EMSCRIPTEN__)
-COKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path);
+COKit *cokit_hook_2(const char* install_path, const char* user_profile_path);
 #endif
 
-// install_path is the pathname to the LibreOffice installation
+// install_path is the pathname to the CollaboraOffice installation
 // directory, the one with the subdirectories "program", "share" etc.
 // On Linux there is nothing special here, you just pass such a
 // pathname.
@@ -328,34 +328,34 @@ COKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_
 //
 // user_profile_url is a file: URI for the user profile. Can be NULL.
 
-static COKit *lok_init_2( const char *install_path,  const char *user_profile_url )
+static COKit *cok_init_2( const char *install_path,  const char *user_profile_url )
 {
 #if !defined(IOS) && !defined(ANDROID) && !defined(__EMSCRIPTEN__)
     void *dlhandle;
     char *imp_lib;
-    LokHookFunction *pSym;
-    LokHookFunction2 *pSym2;
+    CokHookFunction *pSym;
+    CokHookFunction2 *pSym2;
 
-    dlhandle = lok_dlopen(install_path, &imp_lib);
+    dlhandle = cok_dlopen(install_path, &imp_lib);
     if (!dlhandle)
         return NULL;
 
-    pSym2 = (LokHookFunction2 *) lok_dlsym(dlhandle, "libreofficekit_hook_2");
+    pSym2 = (CokHookFunction2 *) cok_dlsym(dlhandle, "cokit_hook_2");
     if (!pSym2)
     {
         if (user_profile_url != NULL)
         {
-            fprintf( stderr, "the LibreOffice version in '%s' does not support passing a user profile to the hook function\n",
+            fprintf( stderr, "the CollaboraOffice version in '%s' does not support passing a user profile to the hook function\n",
                      imp_lib );
-            lok_dlclose( dlhandle );
+            cok_dlclose( dlhandle );
             free( imp_lib );
             return NULL;
         }
-        pSym = (LokHookFunction *) lok_dlsym( dlhandle, "libreofficekit_hook" );
+        pSym = (CokHookFunction *) cok_dlsym( dlhandle, "cokit_hook" );
         if (!pSym)
         {
             fprintf( stderr, "failed to find hook in library '%s'\n", imp_lib );
-            lok_dlclose( dlhandle );
+            cok_dlclose( dlhandle );
             free( imp_lib );
             return NULL;
         }
@@ -368,8 +368,8 @@ static COKit *lok_init_2( const char *install_path,  const char *user_profile_ur
     if (user_profile_url != NULL && user_profile_url[0] == '/')
     {
         // It should be either a file: URL or a vnd.sun.star.pathname: URL.
-        fprintf( stderr, "second parameter to lok_init_2 '%s' should be a URL, not a pathname\n", user_profile_url );
-        lok_dlclose( dlhandle );
+        fprintf( stderr, "second parameter to cok_init_2 '%s' should be a URL, not a pathname\n", user_profile_url );
+        cok_dlclose( dlhandle );
         free( imp_lib );
         return NULL;
     }
@@ -379,33 +379,33 @@ static COKit *lok_init_2( const char *install_path,  const char *user_profile_ur
     // coverity[leaked_storage] - on purpose
     return pSym2( install_path, user_profile_url );
 #else
-    return libreofficekit_hook_2( install_path, user_profile_url );
+    return cokit_hook_2( install_path, user_profile_url );
 #endif
 }
 
 static LOK_TOLERATE_UNUSED
-COKit *lok_init( const char *install_path )
+COKit *cok_init( const char *install_path )
 {
-    return lok_init_2( install_path, NULL );
+    return cok_init_2( install_path, NULL );
 }
 
 #if !defined(IOS)
 static LOK_TOLERATE_UNUSED
-int lok_preinit( const char *install_path,  const char *user_profile_url )
+int cok_preinit( const char *install_path,  const char *user_profile_url )
 {
     void *dlhandle;
     char *imp_lib;
-    LokHookPreInit *pSym;
+    CokHookPreInit *pSym;
 
-    dlhandle = lok_dlopen(install_path, &imp_lib);
+    dlhandle = cok_dlopen(install_path, &imp_lib);
     if (!dlhandle)
         return -1;
 
-    pSym = (LokHookPreInit *) lok_dlsym(dlhandle, "lok_preinit");
+    pSym = (CokHookPreInit *) cok_dlsym(dlhandle, "cok_preinit");
     if (!pSym)
     {
         fprintf( stderr, "failed to find pre-init hook in library '%s'\n", imp_lib );
-        lok_dlclose( dlhandle );
+        cok_dlclose( dlhandle );
         free( imp_lib );
         return -1;
     }

@@ -59,7 +59,7 @@ extern "C" {
     [super viewDidLoad];
 
     // Simplest (?) way to do all the tedious initialization
-    lok_init_2(nullptr, nullptr);
+    cok_init_2(nullptr, nullptr);
 
     {
         // First run some normal cppunit tests. Seems that at least the BitmapTest needs to be run

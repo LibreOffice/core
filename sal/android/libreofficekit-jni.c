@@ -42,7 +42,7 @@ AAssetManager* native_asset_manager;
 extern void Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env, jobject clazz, jstring string);
 extern void Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env, jobject clazz, jboolean state);
 
-extern COKit* libreofficekit_hook(const char* install_path);
+extern COKit* cokit_hook(const char* install_path);
 
 static char *full_program_dir = NULL;
 
@@ -174,9 +174,9 @@ jboolean Java_org_libreoffice_kit_COKit_initializeNative
     strncpy(full_program_dir + data_dir_len, program_dir, sizeof(program_dir));
 
     // Initialize COKit
-    if (!libreofficekit_hook(full_program_dir))
+    if (!cokit_hook(full_program_dir))
     {
-        LOGE("libreofficekit_hook returned null");
+        LOGE("cokit_hook returned null");
         return JNI_FALSE;
     }
 
@@ -194,7 +194,7 @@ jobject Java_org_libreoffice_kit_COKit_getCOKitHandle
     (void) env;
     (void) clazz;
 
-    aOffice = libreofficekit_hook(full_program_dir);
+    aOffice = cokit_hook(full_program_dir);
 
     return (*env)->NewDirectByteBuffer(env, (void*) aOffice, sizeof(COKit));
 }

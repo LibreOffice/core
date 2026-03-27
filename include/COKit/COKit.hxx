@@ -1351,10 +1351,10 @@ public:
 /// instances in the same process. Possibly not even a new one after
 /// destroying a previous one.
 ///
-/// For information on the parameters, see writeup for lok_init_2 in COKitInit.h.
+/// For information on the parameters, see writeup for cok_init_2 in COKitInit.h.
 inline Office* lok_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
 {
-    COKit* pThis = lok_init_2(pInstallPath, pUserProfileUrl);
+    COKit* pThis = cok_init_2(pInstallPath, pUserProfileUrl);
     if (pThis == NULL || pThis->pClass->nSize == 0)
         return NULL;
     return new ::lok::Office(pThis);

@@ -603,7 +603,7 @@ int main( int argc, char* argv[] )
         aTimes.emplace_back("pre-initialization");
         setenv("LOK_ALLOWLIST_LANGUAGES", "en_US", 0);
         // coverity[tainted_string] - build time test tool
-        lok_preinit(argv[1], user_url.c_str());
+        cok_preinit(argv[1], user_url.c_str());
         aTimes.emplace_back();
     }
     const char *install_path = argv[1];

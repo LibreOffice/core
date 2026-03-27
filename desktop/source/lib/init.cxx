@@ -272,7 +272,7 @@ using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::Language
 
 
 static LibLibreOffice_Impl *gImpl = nullptr;
-static bool lok_preinit_2_called = false;
+static bool cok_preinit_2_called = false;
 static bool gUseCompactFonts = false;
 static std::weak_ptr< COKitClass > gOfficeClass;
 static std::weak_ptr< COKitDocumentClass > gDocumentClass;
@@ -8518,7 +8518,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     if (pThis == nullptr)
     {
         eStage = PRE_INIT;
-        if (lok_preinit_2_called)
+        if (cok_preinit_2_called)
         {
             SAL_INFO("lok", "Create libreoffice object");
             gImpl = new LibLibreOffice_Impl();
@@ -8865,15 +8865,15 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
 }
 
 SAL_JNI_EXPORT
-COKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_url)
+COKit *cokit_hook_2(const char* install_path, const char* user_profile_url)
 {
     static bool alreadyCalled = false;
 
-    if ((!lok_preinit_2_called && !gImpl) || (lok_preinit_2_called && !alreadyCalled))
+    if ((!cok_preinit_2_called && !gImpl) || (cok_preinit_2_called && !alreadyCalled))
     {
         alreadyCalled = true;
 
-        if (!lok_preinit_2_called)
+        if (!cok_preinit_2_called)
         {
             SAL_INFO("lok", "Create libreoffice object");
             gImpl = new LibLibreOffice_Impl();
@@ -8888,21 +8888,21 @@ COKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_
 }
 
 SAL_JNI_EXPORT
-COKit *libreofficekit_hook(const char* install_path)
+COKit *cokit_hook(const char* install_path)
 {
-    return libreofficekit_hook_2(install_path, nullptr);
+    return cokit_hook_2(install_path, nullptr);
 }
 
 SAL_JNI_EXPORT
-int lok_preinit(const char* install_path, const char* user_profile_url)
+int cok_preinit(const char* install_path, const char* user_profile_url)
 {
     return lo_initialize(nullptr, install_path, user_profile_url);
 }
 
 SAL_JNI_EXPORT
-int lok_preinit_2(const char* install_path, const char* user_profile_url, COKit** kit)
+int cok_preinit_2(const char* install_path, const char* user_profile_url, COKit** kit)
 {
-    lok_preinit_2_called = true;
+    cok_preinit_2_called = true;
     int result = lo_initialize(nullptr, install_path, user_profile_url);
     if (kit != nullptr)
         *kit = gImpl;

@@ -2905,7 +2905,7 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
     static const char testingLangs[] = "de_DE en_GB en_US es_ES fr_FR it nl pt_BR pt_PT ru";
     (void)g_setenv("LOK_ALLOWLIST_LANGUAGES", testingLangs, FALSE);
 
-    priv->m_pOffice = lok_init_2(priv->m_aLOPath.c_str(), priv->m_aUserProfileURL.empty() ? nullptr : priv->m_aUserProfileURL.c_str());
+    priv->m_pOffice = cok_init_2(priv->m_aLOPath.c_str(), priv->m_aUserProfileURL.empty() ? nullptr : priv->m_aUserProfileURL.c_str());
 
     if (priv->m_pOffice == nullptr)
     {
@@ -2977,13 +2977,13 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
     /**
      * LOKDocView:lopointer:
      *
-     * A COKit* in case lok_init() is already called
+     * A COKit* in case cok_init() is already called
      * previously.
      */
     properties[PROP_LO_POINTER] =
         g_param_spec_pointer("lopointer",
                              "LO Pointer",
-                             "A COKit* from lok_init()",
+                             "A COKit* from cok_init()",
                              static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                       G_PARAM_CONSTRUCT_ONLY |
                                                       G_PARAM_STATIC_STRINGS));
