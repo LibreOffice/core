@@ -66,7 +66,7 @@ public:
 };
 
 /// Represents the contents of KitClipboard.
-class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
+class KitTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
     css::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
     std::vector<css::uno::Any> m_aContent;
@@ -74,10 +74,10 @@ class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfer
     static void initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor, OUString aMimeType);
 
 public:
-    LOKTransferable();
-    LOKTransferable(size_t nInCount, const char** pInMimeTypes, const size_t* pInSizes,
+    KitTransferable();
+    KitTransferable(size_t nInCount, const char** pInMimeTypes, const size_t* pInSizes,
                     const char** pInStreams);
-    LOKTransferable(const OUString& sMimeType, const css::uno::Sequence<sal_Int8>& aSequence);
+    KitTransferable(const OUString& sMimeType, const css::uno::Sequence<sal_Int8>& aSequence);
 
     css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
 

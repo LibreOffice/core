@@ -78,7 +78,7 @@ KitClipboard::KitClipboard()
                                     css::lang::XServiceInfo>(m_aMutex)
 {
     // Encourage 'paste' menu items to always show up.
-    uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable());
+    uno::Reference<datatransfer::XTransferable> xTransferable(new KitTransferable());
     setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
 }
 
@@ -143,7 +143,7 @@ void KitClipboard::removeClipboardListener(
     osl::ClearableMutexGuard aGuard(m_aMutex);
     std::erase(m_aListeners, listener);
 }
-LOKTransferable::LOKTransferable(const OUString& sMimeType,
+KitTransferable::KitTransferable(const OUString& sMimeType,
                                  const css::uno::Sequence<sal_Int8>& aSequence)
 {
     m_aContent.reserve(1);
@@ -162,7 +162,7 @@ LOKTransferable::LOKTransferable(const OUString& sMimeType,
 }
 
 /// Use to ensure we have some dummy content on the clipboard to allow a 1st 'paste'
-LOKTransferable::LOKTransferable()
+KitTransferable::KitTransferable()
 {
     m_aContent.reserve(1);
     m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
@@ -173,7 +173,7 @@ LOKTransferable::LOKTransferable()
 }
 
 // cf. sot/source/base/exchange.cxx for these two exceptional types.
-void LOKTransferable::initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor,
+void KitTransferable::initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor,
                                           OUString aMimeType)
 {
     if (aMimeType.startsWith("text/plain"))
@@ -196,7 +196,7 @@ void LOKTransferable::initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor
     rFlavor.HumanPresentableName = aMimeType;
 }
 
-LOKTransferable::LOKTransferable(const size_t nInCount, const char** pInMimeTypes,
+KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeTypes,
                                  const size_t* pInSizes, const char** pInStreams)
 {
     m_aContent.reserve(nInCount);
@@ -216,7 +216,7 @@ LOKTransferable::LOKTransferable(const size_t nInCount, const char** pInMimeType
     }
 }
 
-uno::Any SAL_CALL LOKTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
+uno::Any SAL_CALL KitTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
 {
     assert(m_aContent.size() == static_cast<size_t>(m_aFlavors.getLength()));
     for (size_t i = 0; i < m_aContent.size(); ++i)
@@ -231,12 +231,12 @@ uno::Any SAL_CALL LOKTransferable::getTransferData(const datatransfer::DataFlavo
     return {};
 }
 
-uno::Sequence<datatransfer::DataFlavor> SAL_CALL LOKTransferable::getTransferDataFlavors()
+uno::Sequence<datatransfer::DataFlavor> SAL_CALL KitTransferable::getTransferDataFlavors()
 {
     return m_aFlavors;
 }
 
-sal_Bool SAL_CALL LOKTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
+sal_Bool SAL_CALL KitTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
 {
     return std::find_if(std::cbegin(m_aFlavors), std::cend(m_aFlavors),
                         [&rFlavor](const datatransfer::DataFlavor& i) {

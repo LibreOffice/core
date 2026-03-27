@@ -6374,7 +6374,7 @@ static int doc_setClipboard(COKitDocument* pThis,
         return false;
     }
 
-    uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable(nInCount, pInMimeTypes, pInSizes, pInStreams));
+    uno::Reference<datatransfer::XTransferable> xTransferable(new KitTransferable(nInCount, pInMimeTypes, pInSizes, pInStreams));
 
     auto xClip = forceSetClipboardForCurrentView(pThis);
     xClip->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
@@ -7507,7 +7507,7 @@ static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nLOKWindowId, int 
 
         if (!aMimeType.isEmpty() && aData.hasElements())
         {
-            uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable(aMimeType, aData));
+            uno::Reference<datatransfer::XTransferable> xTransferable(new KitTransferable(aMimeType, aData));
             uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(new KitClipboard);
             xClipboard->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
             pWindow->SetClipboard(xClipboard);
