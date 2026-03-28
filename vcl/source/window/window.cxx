@@ -3457,11 +3457,17 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("labelForType", windowTypeName(pAccLabelFor->GetType()));
     }
 
-    vcl::Window* pAccLabelledBy = GetAccessibleRelationLabeledBy();
-    if (pAccLabelledBy)
-        rJsonWriter.put("labelledBy", pAccLabelledBy->get_id());
+    auto aLabelledBy = GetAllAccessibleRelationLabeledBy();
+    if (aLabelledBy.size() == 1)
+        rJsonWriter.put("labelledBy", aLabelledBy[0]->get_id());
+    else if (aLabelledBy.size() > 1)
+    {
+        auto aArr = rJsonWriter.startArray("labelledBy");
+        for (auto const pWin : aLabelledBy)
+            rJsonWriter.putSimpleValue(pWin->get_id());
+    }
 
-    OUString sAccName = (!pAccLabelFor && !pAccLabelledBy) ? GetAccessibleName() : OUString();
+    OUString sAccName = (!pAccLabelFor && aLabelledBy.empty()) ? GetAccessibleName() : OUString();
     OUString sAccDesc = GetAccessibleDescription();
 
     if (!sAccName.isEmpty() || !sAccDesc.isEmpty() || !sAccRole.isEmpty())

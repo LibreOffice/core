@@ -195,7 +195,7 @@ struct ImplAccessibleInfos
     std::optional<OUString>
                         pAccessibleDescription;
     rtl::Reference<comphelper::OAccessible> pAccessibleParent;
-    VclPtr<vcl::Window> pLabeledByWindow;
+    std::vector<VclPtr<vcl::Window>> aLabeledByWindows;
     VclPtr<vcl::Window> pLabelForWindow;
 
     ImplAccessibleInfos();

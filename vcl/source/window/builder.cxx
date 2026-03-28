@@ -652,7 +652,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const O
                 if (!pTarget)
                     continue;
                 if (rType == "labelled-by")
-                    pSource->SetAccessibleRelationLabeledBy(pTarget);
+                    pSource->AddAccessibleRelationLabeledBy(pTarget);
                 else if (rType == "label-for")
                     pSource->SetAccessibleRelationLabelFor(pTarget);
                 else
