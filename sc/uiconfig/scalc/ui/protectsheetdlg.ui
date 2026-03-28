@@ -381,7 +381,7 @@
                       <object class="GtkLabel" id="useautofilter">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="protectsheetdlg|delete-columns">Use AutoFilter</property>
+                        <property name="label" translatable="yes" context="protectsheetdlg|useautofilter">Use AutoFilter</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -393,7 +393,7 @@
                       <object class="GtkLabel" id="usepivot">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="protectsheetdlg|delete-columns">Use Pivot Table and Pivot Chart</property>
+                        <property name="label" translatable="yes" context="protectsheetdlg|usepivot">Use Pivot Table and Pivot Chart</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
