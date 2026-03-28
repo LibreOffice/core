@@ -268,25 +268,44 @@ static void UpdateDarkMode(HWND hWnd)
     if (!hUxthemeLib)
         return;
 
+    // OfficeLabs: check OFFICELABS_THEME env var for early theme override
+    // (config may not be loaded yet at WM_CREATE time)
+    bool bForceLight = false;
+    bool bForceDark = false;
+    if (const char* pTheme = getenv("OFFICELABS_THEME"))
+    {
+        if (strcmp(pTheme, "light") == 0)
+            bForceLight = true;
+        else if (strcmp(pTheme, "dark") == 0)
+            bForceDark = true;
+    }
+
     typedef PreferredAppMode(WINAPI* SetPreferredAppMode_t)(PreferredAppMode);
     auto SetPreferredAppMode = reinterpret_cast<SetPreferredAppMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(135)));
     if (SetPreferredAppMode)
     {
-        switch (MiscSettings::GetAppColorMode())
+        if (bForceLight)
+            SetPreferredAppMode(ForceLight);
+        else if (bForceDark)
+            SetPreferredAppMode(ForceDark);
+        else
         {
-            case AppearanceMode::AUTO:
-                SetPreferredAppMode(AllowDark);
-                break;
-            case AppearanceMode::LIGHT:
-                SetPreferredAppMode(ForceLight);
-                break;
-            case AppearanceMode::DARK:
-                SetPreferredAppMode(ForceDark);
-                break;
+            switch (MiscSettings::GetAppColorMode())
+            {
+                case AppearanceMode::AUTO:
+                    SetPreferredAppMode(AllowDark);
+                    break;
+                case AppearanceMode::LIGHT:
+                    SetPreferredAppMode(ForceLight);
+                    break;
+                case AppearanceMode::DARK:
+                    SetPreferredAppMode(ForceDark);
+                    break;
+            }
         }
     }
 
-    BOOL bDarkMode = UseDarkMode();
+    BOOL bDarkMode = bForceLight ? FALSE : (bForceDark ? TRUE : UseDarkMode());
 
     typedef void(WINAPI* AllowDarkModeForWindow_t)(HWND, BOOL);
     auto AllowDarkModeForWindow = reinterpret_cast<AllowDarkModeForWindow_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(133)));
@@ -5769,6 +5788,14 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
 
             UpdateAutoAccel();
             UpdateDarkMode(hWnd);
+
+            // OfficeLabs: force title bar light/dark via env var
+            // This overrides after UpdateDarkMode in case config wasn't loaded yet
+            if (const char* pTheme = getenv("OFFICELABS_THEME"))
+            {
+                BOOL bDark = (strcmp(pTheme, "dark") == 0) ? TRUE : FALSE;
+                DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &bDark, sizeof(bDark));
+            }
 
             // Set HWND already here, as data might be used already
             // when messages are being sent by CreateWindow()

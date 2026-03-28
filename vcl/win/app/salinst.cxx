@@ -407,6 +407,34 @@ WinSalInstance::WinSalInstance()
     pSVData->maAppData.mxToolkitName = OUString("win");
     m_bSupportsOpenGL = true;
     WinSkiaSalGraphicsImpl::prepareSkia();
+
+    // OfficeLabs: set preferred app mode BEFORE any windows are created
+    // so title bars respect the chosen theme from the start
+    if (const char* pTheme = getenv("OFFICELABS_THEME"))
+    {
+        HINSTANCE hUxthemeLib = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+        if (hUxthemeLib)
+        {
+            enum PreferredAppMode { Default, AllowDark, ForceDark, ForceLight, Max };
+            typedef PreferredAppMode(WINAPI* SetPreferredAppMode_t)(PreferredAppMode);
+            if (auto SetPreferredAppMode = reinterpret_cast<SetPreferredAppMode_t>(
+                    GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(135))))
+            {
+                if (strcmp(pTheme, "light") == 0)
+                    SetPreferredAppMode(ForceLight);
+                else if (strcmp(pTheme, "dark") == 0)
+                    SetPreferredAppMode(ForceDark);
+            }
+            // Refresh the immersive color policy so Windows applies the change
+            typedef void(WINAPI* RefreshImmersiveColorPolicyState_t)();
+            if (auto RefreshPolicy = reinterpret_cast<RefreshImmersiveColorPolicyState_t>(
+                    GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(104))))
+            {
+                RefreshPolicy();
+            }
+            FreeLibrary(hUxthemeLib);
+        }
+    }
 }
 
 WinSalInstance::~WinSalInstance()
