@@ -477,10 +477,15 @@ WebViewPanel::WebViewPanel(weld::Widget* pParent, SfxBindings* pBindings)
         return;
     }
 
-    // Defer until after sidebar layout so the panel has a valid size/position.
-    postToVclThread([this]() {
-        initOrReattachCefBrowser();
-    });
+    // Defer CEF browser creation until the first Resize() with non-zero
+    // dimensions.  At construction time the sidebar panel has not been laid
+    // out yet, so OutputToAbsoluteScreenPixel() returns (0,0) and
+    // IsReallyVisible() returns false, which causes the popup to be created
+    // at the wrong position and immediately hidden — making the sidebar
+    // invisible until the user manually resizes the window.
+    m_aDeferredInitTimer.SetInvokeHandler(LINK(this, WebViewPanel, DeferredInitTimerHdl));
+    m_aDeferredInitTimer.SetTimeout(1000); // 1 second — enough for sidebar layout
+    m_aDeferredInitTimer.Start();
 }
 
 WebViewPanel::~WebViewPanel()
@@ -750,6 +755,12 @@ void WebViewPanel::reattachCefBrowser()
     SAL_INFO("officelabs.cef", "reattachCefBrowser: done");
 }
 
+IMPL_LINK_NOARG(WebViewPanel, DeferredInitTimerHdl, Timer*, void)
+{
+    m_aDeferredInitTimer.Stop();
+    initOrReattachCefBrowser();
+}
+
 void WebViewPanel::syncCefWindowSize()
 {
     if (!m_hCefParentWnd || !m_pBinWindow)
@@ -799,15 +810,36 @@ void WebViewPanel::syncCefWindowSize()
         return;
 
     // --- Z-order ---
-    // Only boost to HWND_TOP when this frame is the active one. Inactive
-    // panels stay at their natural Z-order (above their owner frame but
-    // below the active application's windows), preventing them from
-    // covering unrelated foreground content.
-    if (bFrameActive)
+    // Detect popup/floating windows by scanning Z-order above us.
+    // If a visible WS_POPUP window exists between our frame and the top
+    // of Z-order (that isn't our CEF window), a dropdown is open —
+    // don't boost to HWND_TOP so the dropdown stays above us.
     {
-        SetWindowPos(m_hCefParentWnd, HWND_TOP,
-                     0, 0, 0, 0,
-                     SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        bool bPopupAbove = false;
+        if (bFrameActive)
+        {
+            HWND hAbove = GetWindow(m_hCefParentWnd, GW_HWNDPREV);
+            for (int i = 0; hAbove && i < 20; ++i, hAbove = GetWindow(hAbove, GW_HWNDPREV))
+            {
+                if (hAbove == m_hFrameWnd)
+                    break;
+                if (!IsWindowVisible(hAbove))
+                    continue;
+                LONG style = GetWindowLong(hAbove, GWL_STYLE);
+                if (style & WS_POPUP)
+                {
+                    bPopupAbove = true;
+                    break;
+                }
+            }
+        }
+
+        if (!bPopupAbove && bFrameActive)
+        {
+            SetWindowPos(m_hCefParentWnd, HWND_TOP,
+                         0, 0, 0, 0,
+                         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        }
     }
 
     // --- Position and size tracking ---
