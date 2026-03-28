@@ -262,6 +262,33 @@ LRESULT CALLBACK WebViewPanel::FrameSubclassProc(
         return DefSubclassProc(hWnd, uMsg, wParam, lParam);
     }
 
+    case WM_ENTERMENULOOP:
+    case WM_INITMENUPOPUP:
+    {
+        // A menu or popup is opening — temporarily push CEF behind so
+        // dropdown menus render on top of the AI sidebar.
+        if (pPanel && pPanel->m_hCefParentWnd)
+        {
+            SetWindowPos(pPanel->m_hCefParentWnd, HWND_BOTTOM,
+                         0, 0, 0, 0,
+                         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        }
+        return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+    }
+
+    case WM_EXITMENULOOP:
+    case WM_UNINITMENUPOPUP:
+    {
+        // Menu closed — restore CEF to top of Z-order.
+        if (pPanel && pPanel->m_hCefParentWnd)
+        {
+            SetWindowPos(pPanel->m_hCefParentWnd, HWND_TOP,
+                         0, 0, 0, 0,
+                         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        }
+        return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+    }
+
     case WM_ENTERSIZEMOVE:
     {
         if (pPanel)
