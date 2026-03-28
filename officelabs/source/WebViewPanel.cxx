@@ -484,7 +484,7 @@ WebViewPanel::WebViewPanel(weld::Widget* pParent, SfxBindings* pBindings)
     // at the wrong position and immediately hidden — making the sidebar
     // invisible until the user manually resizes the window.
     m_aDeferredInitTimer.SetInvokeHandler(LINK(this, WebViewPanel, DeferredInitTimerHdl));
-    m_aDeferredInitTimer.SetTimeout(1000); // 1 second — enough for sidebar layout
+    m_aDeferredInitTimer.SetTimeout(200); // 200ms — retries until sidebar is laid out
     m_aDeferredInitTimer.Start();
 }
 
@@ -672,6 +672,11 @@ void WebViewPanel::initCefBrowser()
 
     state.browserCreated = true;
 
+    // Reset cached size to force syncCefWindowSize() to recalculate
+    // on the first timer tick (avoids stale initial dimensions)
+    m_aLastSize = Size(0, 0);
+    m_aLastPos = Point(-1, -1);
+
     // Start resize tracking timer
     m_aResizeTimer.SetInvokeHandler(LINK(this, WebViewPanel, ResizeTimerHdl));
     m_aResizeTimer.SetTimeout(500);
@@ -757,8 +762,41 @@ void WebViewPanel::reattachCefBrowser()
 
 IMPL_LINK_NOARG(WebViewPanel, DeferredInitTimerHdl, Timer*, void)
 {
+    // Check if the sidebar panel is actually laid out with a valid position.
+    // If not, keep retrying every 200ms until it is (up to 10 seconds).
+    if (m_pBinWindow)
+    {
+        vcl::Window* pParent = m_pBinWindow->GetParent();
+        if (pParent)
+        {
+            auto aScrPos = pParent->OutputToAbsoluteScreenPixel(Point(0, 0));
+            Size aSize = pParent->GetSizePixel();
+            bool bReady = (aSize.Width() > 0 && aSize.Height() > 0
+                           && (aScrPos.X() > 0 || aScrPos.Y() > 0)
+                           && pParent->IsReallyVisible());
+            if (!bReady)
+            {
+                // Not ready yet — retry soon (up to 50 attempts = 10 seconds)
+                static int nRetries = 0;
+                if (nRetries++ < 50)
+                {
+                    m_aDeferredInitTimer.SetTimeout(200);
+                    m_aDeferredInitTimer.Start();
+                    return;
+                }
+                // Give up after 10 seconds — proceed anyway
+            }
+        }
+    }
+
     m_aDeferredInitTimer.Stop();
     initOrReattachCefBrowser();
+
+    // Force repeated size syncs for the next 5 seconds to catch late layout
+    m_aLastSize = Size(0, 0);
+    m_aLastPos = Point(-1, -1);
+    m_nReattachGraceTicks = 10;
+    syncCefWindowSize();
 }
 
 void WebViewPanel::syncCefWindowSize()
@@ -766,9 +804,18 @@ void WebViewPanel::syncCefWindowSize()
     if (!m_hCefParentWnd || !m_pBinWindow)
         return;
 
+    // Walk up the VCL hierarchy to find the largest enclosing sidebar panel.
+    // m_pBinWindow->GetParent() is the panel content area, but it may be
+    // smaller than the visible sidebar. Walk up until we find the panel
+    // that fills the sidebar deck area.
     vcl::Window* pParent = m_pBinWindow->GetParent();
     if (!pParent)
         return;
+
+    // Try grandparent — the deck body area which extends to the full sidebar height
+    vcl::Window* pGrandParent = pParent->GetParent();
+    if (pGrandParent && pGrandParent->GetSizePixel().Height() > pParent->GetSizePixel().Height())
+        pParent = pGrandParent;
 
     // --- Visibility management ---
     // Show this panel's popup whenever its sidebar is visible and its frame
@@ -847,7 +894,8 @@ void WebViewPanel::syncCefWindowSize()
     auto aScrPos = pParent->OutputToAbsoluteScreenPixel(Point(0, 0));
     Point aPos(static_cast<int>(aScrPos.X()), static_cast<int>(aScrPos.Y()));
 
-    if (aSize == m_aLastSize && aPos == m_aLastPos)
+    // Skip cache check during grace period — sidebar may still be resizing
+    if (m_nReattachGraceTicks <= 0 && aSize == m_aLastSize && aPos == m_aLastPos)
         return;
 
     m_aLastSize = aSize;
