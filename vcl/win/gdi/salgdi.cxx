@@ -264,6 +264,10 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
         mpImpl.reset(impl);
         mWinSalGraphicsImplBase = impl;
     }
+
+    // Enable file-based widget theme (OfficeLabs modern theme)
+    // Activated when VCL_DRAW_WIDGETS_FROM_FILE=1 env var is set
+    initWidgetDrawBackends(false);
 }
 
 WinSalGraphics::~WinSalGraphics()

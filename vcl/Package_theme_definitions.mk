@@ -52,6 +52,48 @@ $(eval $(call gb_Package_add_files_with_dir,vcl_theme_definitions,$(LIBO_SHARE_F
 	ios/arrow-down.svg \
 	ios/slider-button.svg \
 	ios/slider-button-disabled.svg \
+	online/definition.xml \
+	online/pushbutton-default.svg \
+	online/pushbutton-rollover.svg \
+	online/pushbutton-disabled.svg \
+	online/common-rect.svg \
+	online/common-rect-disabled.svg \
+	online/common-rect-focus.svg \
+	online/common-rect-focus-slim.svg \
+	online/combobox.svg \
+	online/combobox-disabled.svg \
+	online/combobox-button.svg \
+	online/combobox-button-disabled.svg \
+	online/spinbox-left.svg \
+	online/spinbox-left-pressed.svg \
+	online/spinbox-left-disabled.svg \
+	online/spinbox-right.svg \
+	online/spinbox-right-pressed.svg \
+	online/spinbox-right-disabled.svg \
+	online/scrollbar-horizontal.svg \
+	online/scrollbar-vertical.svg \
+	online/slider-button.svg \
+	online/slider-button-disabled.svg \
+	online/arrow-up.svg \
+	online/arrow-down.svg \
+	online/tabitem-first.svg \
+	online/tabitem-first-selected.svg \
+	online/tabitem-middle.svg \
+	online/tabitem-middle-selected.svg \
+	online/tabitem-last.svg \
+	online/tabitem-last-selected.svg \
+	online/switch-on.svg \
+	online/switch-on-pressed.svg \
+	online/switch-on-disabled.svg \
+	online/switch-off.svg \
+	online/switch-off-pressed.svg \
+	online/switch-off-disabled.svg \
+	online/tick-on.svg \
+	online/tick-on-pressed.svg \
+	online/tick-on-disabled.svg \
+	online/tick-off.svg \
+	online/tick-off-pressed.svg \
+	online/tick-off-disabled.svg \
 ))
 
 # vim: set noet sw=4 ts=4:

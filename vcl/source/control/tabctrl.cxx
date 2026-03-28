@@ -2325,7 +2325,7 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( tools::Long nWidth )
     tools::Long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() + 1 : 0;
     tools::Long nFullWidth = nShortcutsWidth;
 
-    const tools::Long nOffsetX = 2 + nShortcutsWidth;
+    const tools::Long nOffsetX = 2 + nHamburgerWidth + nShortcutsWidth;
     const tools::Long nOffsetY = 2;
 
     //fdo#66435 throw Knuth/Tex minimum raggedness algorithm at the problem
@@ -2379,16 +2379,16 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( tools::Long nWidth )
     // tdf#127610 subtract width of shortcuts from width available for tab items
     lcl_AdjustSingleLineTabs(nMaxWidth - nShortcutsWidth, mpTabCtrlData.get());
 
-    // position the shortcutbox
+    // position the menu button on the LEFT (OfficeLabs: hamburger-first layout)
+    tools::Long nPosY = (m_nHeaderHeight - m_pOpenMenu->GetSizePixel().getHeight()) / 2;
+    m_pOpenMenu->SetPosPixel(Point(0, nPosY));
+
+    // position the shortcutbox after the hamburger
     if (m_pShortcuts)
     {
-        tools::Long nPosY = (m_nHeaderHeight - m_pShortcuts->GetSizePixel().getHeight()) / 2;
-        m_pShortcuts->SetPosPixel(Point(0, nPosY));
+        tools::Long nShortcutPosY = (m_nHeaderHeight - m_pShortcuts->GetSizePixel().getHeight()) / 2;
+        m_pShortcuts->SetPosPixel(Point(nHamburgerWidth, nShortcutPosY));
     }
-
-    tools::Long nPosY = (m_nHeaderHeight - m_pOpenMenu->GetSizePixel().getHeight()) / 2;
-    // position the menu
-    m_pOpenMenu->SetPosPixel(Point(nWidth - nHamburgerWidth, nPosY));
 
     return true;
 }
