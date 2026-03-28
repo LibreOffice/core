@@ -875,11 +875,11 @@ void ScDrawView::DeleteMarked()
 
 SdrEndTextEditKind ScDrawView::ScEndTextEdit()
 {
-    bool bIsTextEdit = IsTextEdit();
-    SdrEndTextEditKind eKind = SdrEndTextEdit();
+    if (!IsTextEdit())
+        return SdrEndTextEditKind::Unchanged;
 
-    if (bIsTextEdit)
-        rViewData.GetViewShell()->SetDrawTextUndo(nullptr);   // the "normal" undo manager
+    SdrEndTextEditKind eKind = SdrEndTextEdit();
+    rViewData.GetViewShell()->SetDrawTextUndo(nullptr);   // the "normal" undo manager
 
     return eKind;
 }

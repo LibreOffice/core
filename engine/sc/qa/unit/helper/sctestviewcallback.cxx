@@ -148,6 +148,7 @@ ScTestViewCallback::ScTestViewCallback(bool bDeleteListenerOnDestruct)
     , m_bFullInvalidateTiles(false)
     , m_bInvalidateTiles(false)
     , m_bViewLock(false)
+    , m_nViewLockCount(0)
     , m_callbackWrapper(&callback, this)
 {
     mpViewShell = SfxViewShell::Current();
@@ -215,6 +216,7 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
             m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
+            ++m_nViewLockCount;
         }
         break;
         case KIT_CALLBACK_GRAPHIC_SELECTION:

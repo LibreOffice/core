@@ -311,6 +311,29 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewLock)
     CPPUNIT_ASSERT(!aView1.m_bViewLock);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetSwitchViewLock)
+{
+    // Load a document with two sheets and create two views.
+    ScModelObj* pModelObj = createDoc("two_sheets.ods");
+    ScTestViewCallback aView1;
+    KitHelper::createView();
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScTestViewCallback aView2;
+
+    // Reset counter after view creation (which may trigger callbacks).
+    Scheduler::ProcessEventsToIdle();
+    aView1.m_nViewLockCount = 0;
+
+    // Switch to the second view and have it switch sheets.
+    KitHelper::setView(aView2.getViewID());
+    pModelObj->setPart(1);
+    Scheduler::ProcessEventsToIdle();
+
+    // The first view should not have received any VIEW_LOCK callbacks,
+    // because no text editing was active.
+    CPPUNIT_ASSERT_EQUAL(0, aView1.m_nViewLockCount);
+}
+
 namespace
 {
 void lcl_extractHandleParameters(std::string_view selection, sal_uInt32& id, sal_uInt32& x, sal_uInt32& y)
