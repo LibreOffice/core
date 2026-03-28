@@ -58,6 +58,7 @@ class SwHTMLForm_Impl;
 class SwApplet_Impl;
 struct SwHTMLFootEndNote_Impl;
 class HTMLTableCnts;
+class SwNumRule;
 struct SwPending;
 class SvxCSS1PropertyInfo;
 struct ImplSVEvent;
@@ -217,6 +218,8 @@ class HTMLAttrContext
     std::unique_ptr<HTMLAttrContext_SaveDoc> m_pSaveDocContext;
     std::unique_ptr<SfxItemSet> m_pFrameItemSet;
 
+    SwNumRule* m_pSavedNumRule = nullptr; // saved NumRule when nested list type conflicts
+
     HtmlTokenId m_nToken;  // the token of the context
 
     sal_uInt16  m_nTextFormatColl; // a style created in the context or zero
@@ -304,6 +307,9 @@ public:
 
     void SetVisible(bool bVisible) { m_bVisible = bVisible; }
     bool IsVisible() const { return m_bVisible; }
+
+    void SetSavedNumRule(SwNumRule* pRule) { m_pSavedNumRule = pRule; }
+    SwNumRule* GetSavedNumRule() const { return m_pSavedNumRule; }
 };
 
 typedef std::vector<std::unique_ptr<HTMLAttrContext>> HTMLAttrContexts;

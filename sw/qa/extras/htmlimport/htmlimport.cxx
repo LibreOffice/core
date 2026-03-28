@@ -665,6 +665,66 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf155011)
     // Must not crash / fail asserts
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testNestedListMixedType)
+{
+    createSwWebDoc("nested-list-mixed-type.html");
+    // The HTML has an outer <ol> with two <li>s:
+    //   first <li> contains a nested <ol>
+    //   second <li> contains a nested <ul>
+    // Without the fix, the nested <ul> was imported as <ol> (inheriting the sibling's type).
+
+    // Find paragraphs "Ordered 1" and "Bullet 1" and check their numbering types.
+    // "Ordered 1" should be SVX_NUM_ARABIC (ordered list)
+    // "Bullet 1" should be SVX_NUM_CHAR_SPECIAL (unordered/bullet list)
+    bool bFoundOrdered = false;
+    bool bFoundBullet = false;
+    uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaAccess(xTextDoc->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaAccess->createEnumeration();
+    while (xParaEnum->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+        OUString sText = xPara->getString().trim();
+        uno::Reference<beans::XPropertySet> xProps(xPara, uno::UNO_QUERY);
+        bool bIsNumber = false;
+        xProps->getPropertyValue(u"NumberingIsNumber"_ustr) >>= bIsNumber;
+        if (!bIsNumber)
+            continue;
+
+        uno::Reference<container::XIndexAccess> xLevels(
+            xProps->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
+        sal_Int16 nLevel = -1;
+        xProps->getPropertyValue(u"NumberingLevel"_ustr) >>= nLevel;
+        if (nLevel < 0)
+            continue;
+
+        uno::Sequence<beans::PropertyValue> aRuleProps;
+        xLevels->getByIndex(nLevel) >>= aRuleProps;
+        sal_Int16 nNumberingType = -1;
+        for (const auto& rProp : aRuleProps)
+        {
+            if (rProp.Name == "NumberingType")
+            {
+                nNumberingType = rProp.Value.get<sal_Int16>();
+                break;
+            }
+        }
+
+        if (sText.indexOf("Ordered 1") >= 0)
+        {
+            CPPUNIT_ASSERT_EQUAL(style::NumberingType::ARABIC, nNumberingType);
+            bFoundOrdered = true;
+        }
+        else if (sText.indexOf("Bullet 1") >= 0)
+        {
+            CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHAR_SPECIAL, nNumberingType);
+            bFoundBullet = true;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("paragraph 'Ordered 1' not found", bFoundOrdered);
+    CPPUNIT_ASSERT_MESSAGE("paragraph 'Bullet 1' not found", bFoundBullet);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

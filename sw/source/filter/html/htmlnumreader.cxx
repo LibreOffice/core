@@ -75,6 +75,34 @@ void SwHTMLParser::NewNumberBulletList( HtmlTokenId nToken )
 
     // Change the format for this level if that hasn't happened yet for this level
     bool bNewNumFormat = rInfo.GetNumRule()->GetNumFormat( nLevel ) == nullptr;
+
+    // If the level already has a format, check if it matches the current list type.
+    // When sibling nested lists at the same depth have different types (e.g.,
+    // <ol><li><ol>...</ol></li><li><ul>...</ul></li></ol>), we need a new NumRule
+    // so that each nested list can have its own numbering type at that level.
+    SwNumRule* pSavedNumRule = nullptr;
+    if( !bNewNumFormat )
+    {
+        const SwNumFormat& rExistingFmt = rInfo.GetNumRule()->Get(nLevel);
+        bool bExistingIsOrdered = rExistingFmt.GetNumberingType() != SVX_NUM_CHAR_SPECIAL
+                                  && rExistingFmt.GetNumberingType() != SVX_NUM_BITMAP;
+        bool bTokenIsOrdered = (HtmlTokenId::ORDERLIST_ON == nToken);
+        if( bExistingIsOrdered != bTokenIsOrdered )
+        {
+            pSavedNumRule = rInfo.GetNumRule();
+            sal_uInt16 nPos = m_xDoc->MakeNumRule( m_xDoc->GetUniqueNumRuleName() );
+            SwNumRule* pNewRule = m_xDoc->GetNumRuleTable()[nPos];
+            for( sal_uInt8 i = 0; i < nLevel; ++i )
+            {
+                const SwNumFormat* pParentFmt = pSavedNumRule->GetNumFormat(i);
+                if( pParentFmt )
+                    pNewRule->Set( i, *pParentFmt );
+            }
+            rInfo.SetNumRule( pNewRule );
+            bNewNumFormat = true;
+        }
+    }
+
     bool bChangeNumFormat = false;
 
     // Create the default numbering format
@@ -247,6 +275,8 @@ void SwHTMLParser::NewNumberBulletList( HtmlTokenId nToken )
 
     // create a new context
     std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
+    if( pSavedNumRule )
+        xCntxt->SetSavedNumRule( pSavedNumRule );
 
     // Parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -400,6 +430,10 @@ void SwHTMLParser::EndNumberBulletList( HtmlTokenId nToken )
         }
         else
         {
+            // Restore the previous NumRule if this nested list had a type conflict
+            if( xCntxt && xCntxt->GetSavedNumRule() )
+                rInfo.SetNumRule( xCntxt->GetSavedNumRule() );
+
             // the next paragraph not numbered first
             SetNodeNum( rInfo.GetLevel() );
         }
