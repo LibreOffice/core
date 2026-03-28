@@ -570,8 +570,42 @@
     <!-- ============================================================ -->
     <!-- Menu (empty = use defaults with style colors)                 -->
     <!-- ============================================================ -->
-    <menubar/>
-    <menupopup/>
+    <menubar>
+        <part value="Entire">
+            <state>
+                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0"/>
+            </state>
+        </part>
+        <part value="MenuItem">
+            <state selected="false">
+                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0"/>
+            </state>
+            <state selected="true">
+                <rect stroke="#525252" fill="#0F3D3A" stroke-width="1" rx="4" ry="4"/>
+            </state>
+        </part>
+    </menubar>
+
+    <menupopup>
+        <part value="Entire">
+            <state>
+                <rect stroke="#525252" fill="#2D2D2D" stroke-width="1" rx="6" ry="6"/>
+            </state>
+        </part>
+        <part value="MenuItem">
+            <state selected="false">
+                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0"/>
+            </state>
+            <state selected="true">
+                <rect stroke="#0D9488" fill="#0F3D3A" stroke-width="0" rx="4" ry="4"/>
+            </state>
+        </part>
+        <part value="Separator">
+            <state>
+                <line stroke="#404040" stroke-width="1" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
+            </state>
+        </part>
+    </menupopup>
 
     <tooltip>
         <part value="Entire">
