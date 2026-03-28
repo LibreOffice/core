@@ -100,11 +100,35 @@ void Theme::UpdateTheme()
     {
         const StyleSettings& rStyle (Application::GetSettings().GetStyleSettings());
 
-        Color aBaseBackgroundColor (rStyle.GetDialogColor());
-        // UX says this should be a little brighter, but that looks off when compared to the other windows.
-        //aBaseBackgroundColor.IncreaseLuminance(7);
-        Color aSecondColor (aBaseBackgroundColor);
-        aSecondColor.DecreaseLuminance(15);
+        // OfficeLabs: use branded colors when OFFICELABS_THEME env var is set
+        const char* pOlTheme = getenv("OFFICELABS_THEME");
+        const bool bOfficeLabs = (pOlTheme != nullptr);
+        const bool bDark = bOfficeLabs ? (strcmp(pOlTheme, "dark") == 0)
+                                       : rStyle.GetFaceColor().IsDark();
+
+        Color aBaseBackgroundColor, aSecondColor, aHighlight;
+
+        if (bOfficeLabs)
+        {
+            if (bDark)
+            {
+                aBaseBackgroundColor = Color(0x2D, 0x2D, 0x2D); // #2D2D2D
+                aSecondColor = Color(0x33, 0x33, 0x33);         // #333333
+            }
+            else
+            {
+                aBaseBackgroundColor = Color(0xFA, 0xFA, 0xFA); // #FAFAFA
+                aSecondColor = Color(0xF0, 0xF0, 0xF0);        // #F0F0F0
+            }
+            aHighlight = Color(0x0D, 0x94, 0x88); // #0D9488 teal accent
+        }
+        else
+        {
+            aBaseBackgroundColor = rStyle.GetDialogColor();
+            aSecondColor = aBaseBackgroundColor;
+            aSecondColor.DecreaseLuminance(15);
+            aHighlight = rStyle.GetHighlightColor();
+        }
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_DeckBackground],
@@ -129,7 +153,7 @@ void Theme::UpdateTheme()
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_Highlight],
-            Any(sal_Int32(rStyle.GetHighlightColor().GetRGBColor())));
+            Any(sal_Int32(aHighlight.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Color_HighlightText],
             Any(sal_Int32(rStyle.GetHighlightTextColor().GetRGBColor())));
