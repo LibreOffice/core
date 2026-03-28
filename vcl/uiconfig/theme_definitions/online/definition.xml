@@ -78,8 +78,8 @@
         <tabHighlightTextColor value="#2DD4BF"/>
 
         <!-- Help / Tooltip -->
-        <helpColor value="#3D3D3D"/>
-        <helpTextColor value="#E5E5E5"/>
+        <helpColor value="#F5F5DC"/>
+        <helpTextColor value="#1A1A1A"/>
     </style>
 
     <settings>
@@ -103,6 +103,9 @@
             </state>
             <state enabled="true" rollover="true">
                 <external source="pushbutton-rollover.svg" />
+            </state>
+            <state enabled="true" pressed="true">
+                <external source="pushbutton-pressed.svg" />
             </state>
             <state enabled="false">
                 <external source="pushbutton-disabled.svg" />
@@ -519,13 +522,21 @@
         </part>
 
         <part value="Button">
-            <!-- Active/pressed toolbar button -->
+            <!-- Active/toggled toolbar button -->
             <state enabled="true" button-value="true">
-                <rect stroke="#0F3D3A" fill="#0F3D3A" stroke-width="1" rx="6" ry="6"/>
+                <rect stroke="#0D9488" fill="#1A5C56" stroke-width="1" rx="6" ry="6"/>
             </state>
-            <!-- Inactive toolbar button (transparent) -->
+            <!-- Inactive toolbar button -->
             <state enabled="true" button-value="false">
                 <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0" rx="6" ry="6"/>
+            </state>
+            <!-- Rollover toolbar button -->
+            <state enabled="true" rollover="true">
+                <rect stroke="#525252" fill="#3D3D3D" stroke-width="1" rx="6" ry="6"/>
+            </state>
+            <!-- Pressed toolbar button -->
+            <state enabled="true" pressed="true">
+                <rect stroke="#2DD4BF" fill="#1A5C56" stroke-width="1" rx="6" ry="6"/>
             </state>
             <!-- Disabled toolbar button -->
             <state enabled="false">
@@ -561,5 +572,12 @@
     <!-- ============================================================ -->
     <menubar/>
     <menupopup/>
-    <tooltip/>
+
+    <tooltip>
+        <part value="Entire">
+            <state>
+                <rect stroke="#525252" fill="#F5F5DC" stroke-width="1" rx="4" ry="4"/>
+            </state>
+        </part>
+    </tooltip>
 </widgets>
