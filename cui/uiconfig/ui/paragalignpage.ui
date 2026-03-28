@@ -587,6 +587,11 @@
                     <property name="label" translatable="yes" context="paragalignpage|labelMinimum">Minimum</property>
                     <property name="use-underline">True</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="spin_WORD_SPACING_MIN"/>
+                      <relation type="label-for" target="spin_LETTER_SPACING_MIN"/>
+                      <relation type="label-for" target="spin_GLYPH_SCALING_MIN"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -600,6 +605,9 @@
                     <property name="label" translatable="yes" context="paragalignpage|labelDesired">Desired</property>
                     <property name="use-underline">True</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="spin_WORD_SPACING"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -613,6 +621,11 @@
                     <property name="label" translatable="yes" context="paragalignpage|labelMaximum">Maximum</property>
                     <property name="use-underline">True</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="spin_WORD_SPACING_MAX"/>
+                      <relation type="label-for" target="spin_LETTER_SPACING_MAX"/>
+                      <relation type="label-for" target="spin_GLYPH_SCALING_MAX"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -626,6 +639,11 @@
                     <property name="label" translatable="yes" context="paragalignpage|labelWordSpacing">_Word spacing:</property>
                     <property name="use-underline">True</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="spin_WORD_SPACING_MIN"/>
+                      <relation type="label-for" target="spin_WORD_SPACING"/>
+                      <relation type="label-for" target="spin_WORD_SPACING_MAX"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -639,6 +657,10 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentPercent</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelWordSpacing"/>
+                      <relation type="labelled-by" target="labelMinimum"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spin_WORD_SPACING_MIN-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="paralignpage|extended_tip|JUSTIFICATION-MIN">Adjusts the minimum word spacing. Enter a number between 0% (no word spacing) and 250% (two and a half times the width of the space character).</property>
@@ -657,6 +679,10 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentPercent2</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelWordSpacing"/>
+                      <relation type="labelled-by" target="labelDesired"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spin_WORD_SPACING-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="paralignpage|extended_tip|JUSTIFICATION">Adjusts the desired word spacing. Enter a number between 0% (no word spacing) and 250% (two and a half times the width of the space character).</property>
@@ -675,6 +701,10 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentPercent3</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelWordSpacing"/>
+                      <relation type="labelled-by" target="labelMaximum"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spin_WORD_SPACING_MAX-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="paralignpage|extended_tip|JUSTIFICATION-MAX">Adjusts the maximum word spacing. Enter a number between 0% (no word spacing) and 250% (two and a half times the width of the space character).</property>
@@ -693,6 +723,10 @@
                     <property name="label" translatable="yes" context="paragalignpage|labelLetterSpacing">_Letter spacing:</property>
                     <property name="use-underline">True</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="spin_LETTER_SPACING_MIN"/>
+                      <relation type="label-for" target="spin_LETTER_SPACING_MAX"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -706,6 +740,10 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentPercent4</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelLetterSpacing"/>
+                      <relation type="labelled-by" target="labelMinimum"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spin_LETTER_SPACING_MIN-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="paralignpage|extended_tip|LETTER-JUSTIFICATION-MIN">Adjusts the minimum letter spacing. Enter a number between -100% and 0% (original letter spacing).</property>
@@ -724,6 +762,10 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentPercent5</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelLetterSpacing"/>
+                      <relation type="labelled-by" target="labelMaximum"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spin_LETTER_SPACING_MAX-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="paralignpage|extended_tip|LETTER-JUSTIFICATION-MAX">Adjusts the maximum letter spacing. Enter a number between 0% (original letter spacing) and 500% (letter spacing is five times the width of the space character).</property>
@@ -742,6 +784,10 @@
                     <property name="label" translatable="yes" context="paragalignpage|labelGlyphScaling">_Glyph scaling:</property>
                     <property name="use-underline">True</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="spin_GLYPH_SCALING_MIN"/>
+                      <relation type="label-for" target="spin_GLYPH_SCALING_MAX"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -755,6 +801,10 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentPercent6</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelGlyphScaling"/>
+                      <relation type="labelled-by" target="labelMinimum"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spin_GLYPH_SCALING_MIN-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="paralignpage|extended_tip|GLYPH-SCALING-MIN">Adjusts the minimum glyph scaling. Enter a number between 50% (ultra-condensed) and 100% (regular).</property>
@@ -773,6 +823,10 @@
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustmentPercent7</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelGlyphScaling"/>
+                      <relation type="labelled-by" target="labelMaximum"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spin_GLYPH_SCALING_MAX-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="paralignpage|extended_tip|GLYPH-SCALING-MMAX">Adjusts the maximum glyph scaling. Enter a number between 100% (regular) and 200% (ultra-expanded).</property>

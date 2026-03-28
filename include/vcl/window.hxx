@@ -1151,7 +1151,9 @@ public:
     OUString                            GetAccessibleDescription() const;
 
     SAL_DLLPRIVATE void                 SetAccessibleRelationLabeledBy( vcl::Window* pLabeledBy );
+    SAL_DLLPRIVATE void                 AddAccessibleRelationLabeledBy( vcl::Window* pLabeledBy );
     vcl::Window*                        GetAccessibleRelationLabeledBy() const;
+    std::vector<vcl::Window*>           GetAllAccessibleRelationLabeledBy() const;
 
     SAL_DLLPRIVATE void                 SetAccessibleRelationLabelFor( vcl::Window* pLabelFor );
     vcl::Window*                        GetAccessibleRelationLabelFor() const;

@@ -51,7 +51,6 @@ using namespace ::com::sun::star;
 ImplAccessibleInfos::ImplAccessibleInfos()
 {
     nAccessibleRole = accessibility::AccessibleRole::UNKNOWN;
-    pLabeledByWindow = nullptr;
     pLabelForWindow = nullptr;
 }
 
@@ -600,7 +599,21 @@ void Window::SetAccessibleRelationLabeledBy( vcl::Window* pLabeledBy )
 {
     if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
-    mpWindowImpl->mpAccessibleInfos->pLabeledByWindow = pLabeledBy;
+    auto& rVec = mpWindowImpl->mpAccessibleInfos->aLabeledByWindows;
+    rVec.clear();
+    if (pLabeledBy)
+        rVec.push_back(pLabeledBy);
+}
+
+void Window::AddAccessibleRelationLabeledBy( vcl::Window* pLabeledBy )
+{
+    if (!pLabeledBy)
+        return;
+    if ( !mpWindowImpl->mpAccessibleInfos )
+        mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
+    auto& rVec = mpWindowImpl->mpAccessibleInfos->aLabeledByWindows;
+    if (std::find(rVec.begin(), rVec.end(), VclPtr<vcl::Window>(pLabeledBy)) == rVec.end())
+        rVec.push_back(pLabeledBy);
 }
 
 void Window::SetAccessibleRelationLabelFor( vcl::Window* pLabelFor )
@@ -642,8 +655,8 @@ vcl::Window* Window::GetAccessibleRelationLabelFor() const
 
 vcl::Window* Window::GetAccessibleRelationLabeledBy() const
 {
-    if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabeledByWindow)
-        return mpWindowImpl->mpAccessibleInfos->pLabeledByWindow;
+    if (mpWindowImpl->mpAccessibleInfos && !mpWindowImpl->mpAccessibleInfos->aLabeledByWindows.empty())
+        return mpWindowImpl->mpAccessibleInfos->aLabeledByWindows[0];
 
     auto const& aMnemonicLabels = list_mnemonic_labels();
     if (!aMnemonicLabels.empty())
@@ -669,6 +682,26 @@ vcl::Window* Window::GetAccessibleRelationLabeledBy() const
         return getLegacyNonLayoutAccessibleRelationLabeledBy();
 
     return nullptr;
+}
+
+std::vector<vcl::Window*> Window::GetAllAccessibleRelationLabeledBy() const
+{
+    std::vector<vcl::Window*> aResult;
+
+    if (mpWindowImpl->mpAccessibleInfos)
+    {
+        for (auto const& rWin : mpWindowImpl->mpAccessibleInfos->aLabeledByWindows)
+            aResult.push_back(rWin.get());
+    }
+
+    if (aResult.empty())
+    {
+        vcl::Window* pSingle = GetAccessibleRelationLabeledBy();
+        if (pSingle)
+            aResult.push_back(pSingle);
+    }
+
+    return aResult;
 }
 
 bool Window::IsAccessibilityEventsSuppressed()
