@@ -85,8 +85,6 @@ public:
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         OutputDevice& rDevice = pDrawingArea->get_ref_device();
         rDevice.SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
-
-        SetPointer(PointerStyle::RefHand);
     }
 
     virtual void Resize() override
@@ -125,19 +123,9 @@ public:
         weld::CustomWidgetController::StyleUpdated();
     }
 
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override
+    virtual bool MouseButtonUp(const MouseEvent&) override
     {
-        if (rMEvt.IsLeft())
-        {
-            OUString sURL = officecfg::Office::Common::Menus::VolunteerURL::get();
-            localizeWebserviceURI(sURL);
-
-            Reference<css::system::XSystemShellExecute> const xSystemShellExecute(
-                css::system::SystemShellExecute::create(
-                    ::comphelper::getProcessComponentContext()));
-            xSystemShellExecute->execute(sURL, OUString(),
-                                         css::system::SystemShellExecuteFlags::URIS_ONLY);
-        }
+        // OfficeLabs: brand logo click is a no-op (no volunteer URL)
         return true;
     }
 
@@ -193,20 +181,11 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     mxHelpButton->set_label(mxAltHelpLabel->get_label());
     mxHelpButton->connect_clicked(LINK(this, BackingWindow, ClickHelpHdl));
 
-    // tdf#161796 replace the extension button with a donate button
-    if (officecfg::Office::Common::Misc::ShowDonation::get())
-    {
-        mxExtensionsButton->hide();
-        mxDonateButton->show();
-        mxDonateButton->set_from_icon_name(BMP_DONATE);
-        OUString sDonate(SfxResId(STR_DONATE_BUTTON));
-        if (sDonate.getLength() > 8)
-        {
-            mxDonateButton->set_tooltip_text(sDonate);
-            sDonate = OUString::Concat(sDonate.subView(0, 7)) + "...";
-        }
-        mxDonateButton->set_label(sDonate);
-    }
+    // OfficeLabs: hide donate and extensions buttons (not relevant for our product)
+    mxDonateButton->hide();
+    mxExtensionsButton->hide();
+    mxHelpButton->hide();
+    mxSmallButtonsBox->hide();
 
     mxDropTarget = mxAllRecentThumbnails->GetDropTarget();
 

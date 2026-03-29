@@ -992,6 +992,18 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
             aImgTL.AdjustY((aRect.GetHeight() - aImageSize.Height()) / 2 );
         rRenderContext.DrawImage(aImgTL, pItem->maTabImage, pItem->m_bEnabled ? DrawImageFlags::NONE : DrawImageFlags::Disable );
     }
+
+    // OfficeLabs: draw accent underline for selected tab
+    if (pItem->id() == mnCurPageId)
+    {
+        const tools::Long nAccentHeight = 3;
+        Color aAccentColor(0x0D, 0x94, 0x88); // OfficeLabs teal accent
+        rRenderContext.SetLineColor(aAccentColor);
+        rRenderContext.SetFillColor(aAccentColor);
+        rRenderContext.DrawRect(tools::Rectangle(
+            Point(aRect.Left(), aRect.Bottom() - nAccentHeight + 1),
+            Size(aRect.GetWidth(), nAccentHeight)));
+    }
 }
 
 bool TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
@@ -2360,8 +2372,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( tools::Long nWidth )
         if( nFullWidth < nMaxWidth && !item.maText.isEmpty() && aSize.getWidth() < 100)
             aSize.setWidth( 100 );
 
-        if( !item.maText.isEmpty() && aSize.getHeight() < 28 )
-            aSize.setHeight( 28 );
+        if( !item.maText.isEmpty() && aSize.getHeight() < 36 )
+            aSize.setHeight( 36 );
 
         tools::Rectangle aNewRect( Point( nX, nY ), aSize );
         if ( mbSmallInvalidate && (item.maRect != aNewRect) )
@@ -2371,8 +2383,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( tools::Long nWidth )
         item.mnLine = 0;
         item.mbFullVisible = true;
 
-        nLineWidthAry[0] += aSize.Width();
-        nX += aSize.Width();
+        nLineWidthAry[0] += aSize.Width() + 4;
+        nX += aSize.Width() + 4;
     }
 
     // we always have only one line of tabs
