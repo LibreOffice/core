@@ -477,15 +477,27 @@ WebViewPanel::WebViewPanel(weld::Widget* pParent, SfxBindings* pBindings)
         return;
     }
 
-    // Defer CEF browser creation until the first Resize() with non-zero
-    // dimensions.  At construction time the sidebar panel has not been laid
-    // out yet, so OutputToAbsoluteScreenPixel() returns (0,0) and
-    // IsReallyVisible() returns false, which causes the popup to be created
-    // at the wrong position and immediately hidden — making the sidebar
-    // invisible until the user manually resizes the window.
-    m_aDeferredInitTimer.SetInvokeHandler(LINK(this, WebViewPanel, DeferredInitTimerHdl));
-    m_aDeferredInitTimer.SetTimeout(200); // 200ms — retries until sidebar is laid out
-    m_aDeferredInitTimer.Start();
+    // Defer CEF browser creation to allow sidebar layout to complete.
+    // Then send a synthetic WM_SIZE to force the sidebar deck to re-layout
+    // with the correct dimensions.
+    postToVclThread([this]() {
+        initOrReattachCefBrowser();
+
+        // Option C: send synthetic WM_SIZE to frame to force sidebar re-layout
+        if (m_hFrameWnd)
+        {
+            RECT rc;
+            GetClientRect(m_hFrameWnd, &rc);
+            SendMessage(m_hFrameWnd, WM_SIZE, SIZE_RESTORED,
+                        MAKELPARAM(rc.right - rc.left, rc.bottom - rc.top));
+        }
+
+        // Force immediate size sync after re-layout
+        m_aLastSize = Size(0, 0);
+        m_aLastPos = Point(-1, -1);
+        m_nReattachGraceTicks = 10;
+        syncCefWindowSize();
+    });
 }
 
 WebViewPanel::~WebViewPanel()
@@ -760,45 +772,6 @@ void WebViewPanel::reattachCefBrowser()
     SAL_INFO("officelabs.cef", "reattachCefBrowser: done");
 }
 
-IMPL_LINK_NOARG(WebViewPanel, DeferredInitTimerHdl, Timer*, void)
-{
-    // Check if the sidebar panel is actually laid out with a valid position.
-    // If not, keep retrying every 200ms until it is (up to 10 seconds).
-    if (m_pBinWindow)
-    {
-        vcl::Window* pParent = m_pBinWindow->GetParent();
-        if (pParent)
-        {
-            auto aScrPos = pParent->OutputToAbsoluteScreenPixel(Point(0, 0));
-            Size aSize = pParent->GetSizePixel();
-            bool bReady = (aSize.Width() > 0 && aSize.Height() > 0
-                           && (aScrPos.X() > 0 || aScrPos.Y() > 0)
-                           && pParent->IsReallyVisible());
-            if (!bReady)
-            {
-                // Not ready yet — retry soon (up to 50 attempts = 10 seconds)
-                static int nRetries = 0;
-                if (nRetries++ < 50)
-                {
-                    m_aDeferredInitTimer.SetTimeout(200);
-                    m_aDeferredInitTimer.Start();
-                    return;
-                }
-                // Give up after 10 seconds — proceed anyway
-            }
-        }
-    }
-
-    m_aDeferredInitTimer.Stop();
-    initOrReattachCefBrowser();
-
-    // Force repeated size syncs for the next 5 seconds to catch late layout
-    m_aLastSize = Size(0, 0);
-    m_aLastPos = Point(-1, -1);
-    m_nReattachGraceTicks = 10;
-    syncCefWindowSize();
-}
-
 void WebViewPanel::syncCefWindowSize()
 {
     if (!m_hCefParentWnd || !m_pBinWindow)
@@ -906,15 +879,27 @@ void WebViewPanel::syncCefWindowSize()
                  aSize.Width(), aSize.Height(),
                  SWP_NOZORDER | SWP_NOACTIVATE);
 
+    // Resize ALL CEF child windows to match the parent.
+    // CEF creates nested HWNDs: Chrome_WidgetWin_1 → Chrome_RenderWidgetHostHWND
+    // Both must be resized or the viewport stays at the initial (wrong) size.
+    // NOTE: m_browser may be null during first few seconds (async creation),
+    // so we resize children by HWND enumeration regardless of m_browser state.
+    HWND hChild = GetWindow(m_hCefParentWnd, GW_CHILD);
+    while (hChild)
+    {
+        MoveWindow(hChild, 0, 0, aSize.Width(), aSize.Height(), TRUE);
+        HWND hGrandChild = GetWindow(hChild, GW_CHILD);
+        while (hGrandChild)
+        {
+            MoveWindow(hGrandChild, 0, 0, aSize.Width(), aSize.Height(), TRUE);
+            hGrandChild = GetWindow(hGrandChild, GW_HWNDNEXT);
+        }
+        hChild = GetWindow(hChild, GW_HWNDNEXT);
+    }
     if (m_browser)
     {
-        HWND cefHwnd = m_browser->GetHost()->GetWindowHandle();
-        if (cefHwnd)
-        {
-            SetWindowPos(cefHwnd, nullptr, 0, 0,
-                         aSize.Width(), aSize.Height(),
-                         SWP_NOZORDER | SWP_NOMOVE);
-        }
+        m_browser->GetHost()->NotifyMoveOrResizeStarted();
+        m_browser->GetHost()->WasResized();
     }
 }
 
@@ -1051,8 +1036,14 @@ void WebViewPanel::onBrowserCreated(CefRefPtr<CefBrowser> browser)
     SAL_INFO("officelabs.cef", "CEF browser created for frame "
              << reinterpret_cast<sal_uIntPtr>(m_hFrameWnd));
 
-    // Now that the browser is ready, detect and bind the current document
+    // Browser is ready — force immediate resize of all CEF child HWNDs
+    // to match the parent. Without this, the viewport stays at the initial
+    // (too-large) CefRect from CreateBrowser and the bottom is clipped.
     postToVclThread([this]() {
+        m_aLastSize = Size(0, 0);
+        m_aLastPos = Point(-1, -1);
+        syncCefWindowSize();
+
         detectDocument();
     });
 }

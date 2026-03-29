@@ -97,7 +97,6 @@ private:
         UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
     DECL_LINK(ResizeTimerHdl, Timer*, void);
-    DECL_LINK(DeferredInitTimerHdl, Timer*, void);
 
     SfxBindings* m_pBindings;
 
@@ -127,8 +126,7 @@ private:
     // returns false, causing an immediate SW_HIDE.
     int m_nReattachGraceTicks = 0;
 
-    // Deferred CEF init: wait for sidebar layout before creating browser
-    Timer m_aDeferredInitTimer{ "officelabs::WebViewPanel deferred init" };
+    // Deferred CEF init timer (removed — now uses postToVclThread + synthetic WM_SIZE)
 
     // Backend document bridge (per-panel — rebuilt on each attach)
     std::unique_ptr<DocumentController> m_pDocController;
