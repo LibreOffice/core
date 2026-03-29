@@ -117,8 +117,6 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/fldui/DateFormFieldDialog \
     sw/source/ui/fldui/DropDownFieldDialog \
     sw/source/ui/fldui/DropDownFormFieldDialog \
-    sw/source/ui/fldui/changedb \
-    sw/source/ui/fldui/flddb \
     sw/source/ui/fldui/flddinf \
     sw/source/ui/fldui/flddok \
     sw/source/ui/fldui/fldedt \
@@ -172,6 +170,8 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Library_add_exception_objects,swui,\
+    sw/source/ui/fldui/changedb \
+    sw/source/ui/fldui/flddb \
     sw/source/ui/dbui/addresslistdialog \
     sw/source/ui/dbui/createaddresslistdialog \
     sw/source/ui/dbui/customizeaddresslistdialog \

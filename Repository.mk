@@ -269,8 +269,9 @@ $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,base, \
 	abp \
-	dbp \
-	dbu \
+	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		dbp \
+		dbu) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
@@ -405,9 +406,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	configmgr \
 	ctl \
-	dba \
-	dbahsql \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		dba \
+		dbahsql \
 		dbase \
 		dbaxml) \
 	dbtools \
@@ -428,7 +429,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	fps_office \
 	for \
 	forui \
-	frm \
+	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
 	fsstorage \
 	fwk \
     $(call gb_Helper_optionals_or,HELPTOOLS XMLHELP,helplinker) \
@@ -445,14 +446,14 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(MERGELIBS),merged) \
 	migrationoo2 \
 	migrationoo3 \
-	mozbootstrap \
+	$(call gb_Helper_optional,DBCONNECTIVITY,mozbootstrap) \
 	msfilter \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	mtfrenderer \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysql_jdbc) \
 	$(call gb_Helper_optional,MARIADBC,$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc)) \
 	numbertext \
-	odbc \
+	$(call gb_Helper_optional,DBCONNECTIVITY,odbc) \
 	odfflatxml \
 	offacc \
 	oox \
@@ -559,9 +560,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,python, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,reportbuilder, \
-	rpt \
-	rptui \
-	rptxml \
+	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		rpt \
+		rptui \
+		rptxml) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
@@ -691,7 +693,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	emboleobj \
 	package2 \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
-	sdbc2 \
+	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
 	sofficeapp \
 	srtrs1 \
 	ucb1 \
@@ -1231,17 +1233,17 @@ $(eval $(call gb_Helper_register_mos,\
 	chart \
 	cnr \
 	cui \
-	dba \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
 	dkt \
 	editeng \
 	flt \
 	for \
 	$(call gb_Helper_optional,DESKTOP,fps) \
-	frm \
+	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
 	fwk \
 	oox \
 	pcr \
-	rpt \
+	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
 	$(call gb_Helper_optional,SCRIPTING,sb) \
 	sc \
 	sca \
