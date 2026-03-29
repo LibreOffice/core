@@ -95,6 +95,8 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(SYSTEM_LIBPNG),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/libpng") \
 		$(if $(SYSTEM_LIBXML),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/libxml2") \
 		$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
+		CFLAGS="$(CFLAGS) $(gb_LTOFLAGS) $(call gb_ExternalProject_get_build_flags,cairo)" \
+		LDFLAGS="$(gb_LTOFLAGS) $(call gb_ExternalProject_get_link_flags,cairo)" \
 		$(MESON) setup --wrap-mode nofallback builddir \
 			$(if $(debug),-Dstrip=false,-Dstrip=true) \
 			$(if $(filter -fsanitize=%,$(CC)),-Db_lundef=false) \

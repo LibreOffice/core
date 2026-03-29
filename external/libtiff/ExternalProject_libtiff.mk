@@ -51,7 +51,7 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			--with-pic \
 			--without-x \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,libtiff) $(gb_EMSCRIPTEN_CFLAGS)" \
+			CFLAGS="$(CFLAGS) $(gb_LTOFLAGS) $(call gb_ExternalProject_get_build_flags,libtiff) $(gb_EMSCRIPTEN_CFLAGS)" \
 			$(if $(SYSTEM_ZLIB),,--with-zlib-include-dir="$(gb_UnpackedTarball_workdir)/zlib") \
 			$(if $(SYSTEM_ZLIB),,--with-zlib-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
 			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-include-dir="$(gb_UnpackedTarball_workdir)/libjpeg-turbo/src") \
@@ -61,7 +61,7 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 				--with-webp-lib-dir="$(gb_UnpackedTarball_workdir)/libwebp/output/lib/libwebp$(if $(MSVC_USE_DEBUG_RUNTIME),_debug)$(gb_StaticLibrary_PLAINEXT)", \
 				--with-webp-lib-dir="$(gb_UnpackedTarball_workdir)/libwebp/src/.libs")) \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS)" \
-			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libtiff) $(gb_EMSCRIPTEN_LDFLAGS)" \
+			LDFLAGS="$(gb_LTOFLAGS) $(call gb_ExternalProject_get_link_flags,libtiff) $(gb_EMSCRIPTEN_LDFLAGS)" \
 			ac_cv_lib_z_inflateEnd=yes \
 			ac_cv_lib_jpeg_jpeg_read_scanlines=yes \
 			ac_cv_lib_jpeg_jpeg12_read_scanlines=no \
