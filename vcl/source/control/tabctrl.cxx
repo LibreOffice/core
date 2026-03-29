@@ -2383,8 +2383,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( tools::Long nWidth )
         item.mnLine = 0;
         item.mbFullVisible = true;
 
-        nLineWidthAry[0] += aSize.Width() + 4;
-        nX += aSize.Width() + 4;
+        nLineWidthAry[0] += aSize.Width();
+        nX += aSize.Width();
     }
 
     // we always have only one line of tabs
