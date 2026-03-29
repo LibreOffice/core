@@ -45,7 +45,7 @@ gb_MERGE_LIBRARY_LIST := \
 	for \
 	forui \
 	fps_office \
-	frm \
+	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
 	fsstorage \
 	fwk \
 	$(if $(filter WNT,$(OS)),gdipluscanvas) \
@@ -137,13 +137,13 @@ gb_MERGE_LIBRARY_LIST += \
 	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
 	cui \
 	date \
-	dba \
-	dbahsql \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		dba \
+		dbahsql \
 		dbase \
-		dbaxml) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
+		dbaxml \
+		dbpool2 \
+		dbu) \
 	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
 	$(if $(ENABLE_EVOAB2),evoab) \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
@@ -163,19 +163,20 @@ gb_MERGE_LIBRARY_LIST += \
 	$(if $(filter $(OS),MACOSX), \
 		macab1 \
 	) \
-	mozbootstrap \
+	$(call gb_Helper_optional,DBCONNECTIVITY,mozbootstrap) \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysql_jdbc) \
 	$(call gb_Helper_optional,MARIADBC,$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc)) \
-	odbc \
+	$(call gb_Helper_optional,DBCONNECTIVITY,odbc) \
 	pdffilter \
 	$(if $(BUILD_POSTGRESQL_SDBC),postgresql-sdbc) \
 	pricing \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
-	rpt \
-	rptui \
+	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		rpt \
+		rptui ) \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
-	sdbc2 \
+	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
 	slideshow \
 	$(if $(filter WNT,$(OS)), \

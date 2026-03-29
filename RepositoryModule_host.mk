@@ -37,7 +37,7 @@ endif
 
 ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
-	dbaccess \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbaccess) \
 ))
 endif
 
