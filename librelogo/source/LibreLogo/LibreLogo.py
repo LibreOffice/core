@@ -17,6 +17,7 @@ import itertools
 import threading
 import time as __time__
 from math import pi, sin, cos, asin, hypot
+from math import log10, sqrt # noqa: F401
 
 from com.sun.star.awt import Point as __Point__
 from com.sun.star.awt import Gradient as __Gradient__
@@ -203,6 +204,7 @@ __match_fontfeatures__ = re.compile( r"(</?)("
 __match_localized_colors__ = {}
 # LABEL not localized tags (localized translated to these):
 __match_tags__ = [re.compile(i, re.IGNORECASE) for i in [r'<(b|strong)>', r'</(b|strong)>', r'<(i|em)>', r'</(i|em)>', '<u>', '</u>', r'<(s|del)>', r'</(s|del)>', '<sup>', '</sup>', '<sub>', '</sub>', r'<(fontcolor) ([^<>]*)>', r'</(fontcolor)>', r'<(fillcolor) ([^<>]*)>', r'</(fillcolor)>', r'<(fontfamily) ([^<>]*)>', r'</(fontfamily)>', r'<(fontfeature) ([^<>]*)>', r'</(fontfeature) ?([^<>]*)>', r'<(fontheight) ([^<>]*)>', r'</(fontheight)>']]
+__lastdialogmessage__ = ""
 
 class __Doc__:
     def __init__(self, doc):
@@ -373,6 +375,7 @@ def Print(s):
         __checkhalt__()
 
 def MessageBox(parent, message, title, msgtype = "messbox", buttons = __OK__):
+    global __lastdialogmessage__
     msgtypes = ("messbox", "infobox", "errorbox", "warningbox", "querybox")
     if msgtype not in msgtypes:
         msgtype = "messbox"
@@ -384,7 +387,7 @@ def MessageBox(parent, message, title, msgtype = "messbox", buttons = __OK__):
     d.WindowAttributes = buttons
     tk = parent.getToolkit()
     msgbox = tk.createWindow(d)
-    msgbox.MessageText = message
+    msgbox.MessageText = __lastdialogmessage__ = message
     if title:
         msgbox.CaptionText = title
     return msgbox.execute()
@@ -610,6 +613,10 @@ class LogoProgram(threading.Thread):
 # to check LibreLogo program termination (in that case, return value is False)
 def __is_alive__():
     return __thread__ is not None
+
+# to check the message of the last dialog (MessageBox) presented by LibreLogo
+def __last_dialog_message__():
+    return __lastdialogmessage__
 
 def __encodestring__(m):
     __strings__.append(re.sub("(\\[^\\]|\\\\(?=[‘’“”»」』]))", "", m.group(2)))

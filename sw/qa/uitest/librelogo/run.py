@@ -8,6 +8,7 @@
 #
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import type_text
 from com.sun.star.awt.FontSlant import ITALIC as __Slant_ITALIC__
 from com.sun.star.awt.FontUnderline import NONE as __Underline_NONE__
@@ -15,6 +16,7 @@ from com.sun.star.awt.FontUnderline import SINGLE as __Underline_SINGLE__
 from com.sun.star.awt.FontStrikeout import NONE as __Strikeout_NONE__
 from com.sun.star.awt.FontStrikeout import SINGLE as __Strikeout_SINGLE__
 from com.sun.star.script.provider import theMasterScriptProviderFactory
+import time
 
 class LibreLogoTest(UITestCase):
     LIBRELOGO_PATH = "vnd.sun.star.script:LibreLogo|LibreLogo.py$%s?language=Python&location=share"
@@ -313,5 +315,38 @@ x 3 ; draw only a few levels
 
     def test_custom_lock(self):
         self.check_label(True)
+
+    def run_and_get_message(self, program):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+            # to check the state of LibreLogo program execution
+            xIsAlive = self.getScript("__is_alive__")
+
+            # to check the last dialog message presented by LibreLogo
+            xLastDialogMessage = self.getScript("__last_dialog_message__")
+
+            # write the given program in the document
+            type_text(xWriterEdit, program)
+
+            # run the written program
+            self.logo("run")
+
+            # wait for LibreLogo program termination closing every opened dialog
+            while xIsAlive.invoke((), (), ())[0]:
+                xCurrentTopWindow = self.xUITest.getTopFocusWindow()
+                if get_state_as_dict(xCurrentTopWindow)['WindowType'] == '130':
+                    xDialogOk = xCurrentTopWindow.getChild('ok')
+                    xDialogOk.executeAction("CLICK", tuple())
+                time.sleep(self.ui_test.get_default_sleep())
+
+            return xLastDialogMessage.invoke((), (), ())[0]
+
+    def test_print_log10(self):
+        self.assertEqual(self.run_and_get_message("print log10 1000"), "3.0")
+
+    def test_print_sqrt(self):
+        self.assertEqual(self.run_and_get_message("print sqrt 16"), "4.0")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
