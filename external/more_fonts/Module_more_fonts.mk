@@ -35,7 +35,6 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_noto_serif_hebrew \
 	ExternalPackage_noto_serif_lao \
 	ExternalPackage_reem \
-	ExternalPackage_scheherazade \
 	UnpackedTarball_alef \
 	UnpackedTarball_amiri \
 	UnpackedTarball_caladea \
@@ -61,7 +60,6 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_noto_serif_hebrew \
 	UnpackedTarball_noto_serif_lao \
 	UnpackedTarball_reem \
-	UnpackedTarball_scheherazade \
 ))
 
 # vim: set noet sw=4 ts=4:
