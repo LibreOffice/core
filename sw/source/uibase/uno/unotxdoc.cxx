@@ -3320,7 +3320,11 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
                                  int nTilePosX, int nTilePosY,
                                  tools::Long nTileWidth, tools::Long nTileHeight )
 {
+    if (!m_pDocShell)
+        return;
     SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
+    if (!pViewShell)
+        return;
     pViewShell->PaintTile(rDevice, nOutputWidth, nOutputHeight,
                           nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
@@ -3985,6 +3989,8 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
 {
     SolarMutexGuard aGuard;
 
+    if (!m_pDocShell)
+        return;
     SwViewShell* pWrtViewShell = m_pDocShell->GetWrtShell();
     if (!pWrtViewShell)
     {
