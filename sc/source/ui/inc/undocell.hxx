@@ -135,7 +135,7 @@ private:
     void            SetChangeTrack();
 };
 
-class ScUndoSetCell : public ScSimpleUndo
+class ScUndoSetCell : public ScSimpleUndo, public sc::UndoSheetViewSortData
 {
 public:
     ScUndoSetCell( ScDocShell& rDocSh, const ScAddress& rPos, ScCellValue aOldVal, ScCellValue aNewVal );
