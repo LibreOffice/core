@@ -5177,6 +5177,10 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_PivotTable_DefaultAndSheetView)
         bool bResult = aDBDocFunc.UpdatePivotTable(*pSheetViewDPObject, true, true);
         CPPUNIT_ASSERT(bResult);
 
+        // Get the pivot table object again, as it can be recreated when we sync.
+        pSheetViewDPObject = findPivotTableOnTab(rDocument, nSheetViewTab);
+        CPPUNIT_ASSERT(pSheetViewDPObject);
+
         // Verify the default view pivot table has the updated ROW layout
         ScDPObject* pDefaultDPObject = findPivotTableOnTab(rDocument, nDefaultViewTab);
         CPPUNIT_ASSERT(pDefaultDPObject);
@@ -5319,6 +5323,10 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ReplacePivotTable_DefaultAndSheetView)
         sc::ReplacePivotTableOperation aOperation(*pDocShell, pSheetViewDPObject, &aNewDPObject,
                                                   true, true, false);
         CPPUNIT_ASSERT(aOperation.run());
+
+        // Get the pivot table object again, as it can be recreated when we sync.
+        pSheetViewDPObject = findPivotTableOnTab(rDocument, nSheetViewTab);
+        CPPUNIT_ASSERT(pSheetViewDPObject);
 
         // Verify the default view pivot table has the updated ROW layout
         ScDPObject* pDefaultDPObject = findPivotTableOnTab(rDocument, nDefaultViewTab);
