@@ -178,6 +178,7 @@ public:
 
     bool PasteRTFTable( SvStream& rOStm, SdrPage* pPage, SdrInsertFlags nPasteOptions );
     bool PasteHTMLTable( SvStream& rOStm, SdrPage* pPage, SdrInsertFlags nPasteOptions );
+    bool InsertImagesFromHtml( SvStream& rStream, const Point& rPos );
 
     bool                    IsPresObjSelected(bool bOnPage = true, bool bOnMasterPage = true, bool bCheckPresObjListOnly = false, bool bCheckLayoutOnly = false) const;
 

@@ -1465,6 +1465,9 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
             else
             {
+                if (InsertImagesFromHtml(*xStm, maDropPos))
+                    return true;
+
                 OutlinerView* pOLV = GetTextEditOutlinerView();
 
                 if (pOLV)

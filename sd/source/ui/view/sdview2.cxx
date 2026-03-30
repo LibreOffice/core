@@ -27,6 +27,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpagv.hxx>
 #include <svl/urlbmk.hxx>
@@ -35,8 +36,16 @@
 #include <sot/formats.hxx>
 #include <editeng/editeng.hxx>
 
+#include <comphelper/lok.hxx>
 #include <svtools/embedtransfer.hxx>
+#include <svtools/parhtml.hxx>
+#include <svtools/htmltokn.h>
+#include <svx/svdetc.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdoutl.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <tools/debug.hxx>
+#include <tools/hostfilter.hxx>
 
 #include <anminfo.hxx>
 #include <strings.hrc>
@@ -916,6 +925,108 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
         rExchangeList.clear();
 
     return bNameOK;
+}
+
+namespace {
+
+class SdHTMLImageCollector
+{
+public:
+    explicit SdHTMLImageCollector(SdrModel& rModel);
+    void Read(SvStream& rStream);
+
+    std::vector<Graphic> maGraphics;
+
+private:
+    std::unique_ptr<SdrOutliner> mpOutliner;
+    DECL_LINK(HTMLImportHdl, HtmlImportInfo&, void);
+};
+
+SdHTMLImageCollector::SdHTMLImageCollector(SdrModel& rModel)
+    : mpOutliner(SdrMakeOutliner(OutlinerMode::TextObject, rModel))
+{
+}
+
+void SdHTMLImageCollector::Read(SvStream& rStream)
+{
+    EditEngine& rEdit = const_cast<EditEngine&>(mpOutliner->GetEditEngine());
+    Link<HtmlImportInfo&, void> aOldLink(rEdit.GetHtmlImportHdl());
+    rEdit.SetHtmlImportHdl(LINK(this, SdHTMLImageCollector, HTMLImportHdl));
+    mpOutliner->Read(rStream, OUString(), EETextFormat::Html);
+    rEdit.SetHtmlImportHdl(aOldLink);
+}
+
+IMPL_LINK(SdHTMLImageCollector, HTMLImportHdl, HtmlImportInfo&, rInfo, void)
+{
+    if (rInfo.eState != HtmlImportState::NextToken)
+        return;
+    if (rInfo.nToken != HtmlTokenId::IMAGE)
+        return;
+
+    const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
+    OUString aURL;
+    for (const auto& rOption : rOptions)
+    {
+        if (rOption.GetToken() == HtmlOptionId::SRC)
+        {
+            aURL = rOption.GetString();
+            break;
+        }
+    }
+
+    if (aURL.isEmpty())
+        return;
+
+    INetURLObject aGraphicURL(aURL);
+    if (comphelper::COKit::isActive())
+    {
+        if (HostFilter::isForbidden(aGraphicURL.GetHost()))
+            KitHelper::sendNetworkAccessError("paste");
+    }
+
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    std::optional<Graphic> oGraphic(std::in_place);
+    if (aGraphicURL.GetProtocol() == INetProtocol::Data)
+    {
+        std::unique_ptr<SvMemoryStream> pStream(aGraphicURL.getData());
+        if (!pStream)
+            return;
+
+        *oGraphic = rFilter.ImportUnloadedGraphic(*pStream);
+    }
+    else if (ERRCODE_NONE != GraphicFilter::LoadGraphic(aURL, OUString(),
+            *oGraphic, &rFilter))
+    {
+        return;
+    }
+
+    if (oGraphic && oGraphic->GetType() != GraphicType::NONE)
+        maGraphics.push_back(std::move(*oGraphic));
+}
+
+} // anonymous namespace
+
+bool View::InsertImagesFromHtml(SvStream& rStream, const Point& rPos)
+{
+    SdHTMLImageCollector aCollector(getSdrModelFromSdrView());
+    aCollector.Read(rStream);
+
+    if (aCollector.maGraphics.empty())
+    {
+        rStream.Seek(0);
+        return false;
+    }
+
+    Point aInsertPos(rPos);
+    sal_Int8 nAction = DND_ACTION_COPY;
+    for (auto& rGraphic : aCollector.maGraphics)
+    {
+        InsertGraphic(rGraphic, nAction, aInsertPos, nullptr, nullptr);
+        aInsertPos.AdjustX(10);
+        aInsertPos.AdjustY(10);
+    }
+
+    return true;
 }
 
 } // end of namespace sd

@@ -25,6 +25,9 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/sdooitm.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdpage.hxx>
+#include <sot/exchange.hxx>
 #include <animations/animationnodehelper.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -56,9 +59,13 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/graphicmimetype.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/processfactory.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/dibtools.hxx>
@@ -2412,6 +2419,76 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf163343_brokenAnimation)
     createSdImpressDoc("odp/tdf163343.odp");
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1),
                          getSdDocShell()->GetDoc()->GetSdPageCount(PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testHTMLClipboardImport)
+{
+    class HTMLTransferable : public comphelper::WeakImplHelper<datatransfer::XTransferable>
+    {
+    public:
+        HTMLTransferable(const OUString& url)
+            : m_aFileURL(url)
+        {
+        }
+
+        // XTransferable
+        uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& aFlavor) override
+        {
+            if (!isDataFlavorSupported(aFlavor))
+                return {};
+            SvFileStream aStream(m_aFileURL, StreamMode::READ);
+            uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
+            aStream.ReadBytes(bytes.getArray(), aStream.remainingSize());
+            return uno::Any(bytes);
+        }
+        uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+        {
+            return { getHTMLFlavor() };
+        }
+        sal_Bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& aFlavor) override
+        {
+            return aFlavor.MimeType.equalsIgnoreAsciiCase(getHTMLFlavor().MimeType);
+        }
+
+    private:
+        OUString m_aFileURL;
+
+        static datatransfer::DataFlavor getHTMLFlavor()
+        {
+            datatransfer::DataFlavor ret;
+            CPPUNIT_ASSERT(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML, ret));
+            return ret;
+        }
+    };
+
+    createSdImpressDoc("empty.fodp");
+    auto xContext(comphelper::getProcessComponentContext());
+    auto xClipboard = xContext->getServiceManager()
+                          ->createInstanceWithContext(
+                              u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr, xContext)
+                          .queryThrow<datatransfer::clipboard::XClipboard>();
+    xClipboard->setContents(new HTMLTransferable(createFileURL(u"html.clipboard.html")), {});
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    const SdrPage* pPage = GetPage(1);
+    SdrGrafObj* const pObject = dynamic_cast<SdrGrafObj* const>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pObject);
+    CPPUNIT_ASSERT(!pObject->IsLinkedGraphic());
+
+    const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
+    const Graphic& rGraphic = rGraphicObj.GetGraphic();
+    CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphic.GetType()));
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(16848), rGraphic.GetSizeBytes());
+
+    const Bitmap& rBitmap = rGraphic.GetBitmapRef();
+    const Color aBorderColor = rBitmap.GetPixelColor(4, 4);
+    Color aExpectedBorderColor(0x00, 0x00, 0x00);
+    CPPUNIT_ASSERT_EQUAL(aExpectedBorderColor, aBorderColor);
+
+    const Color aFillColor = rBitmap.GetPixelColor(20, 20);
+    Color aExpectedFillColor(0xff, 0x00, 0x00);
+    CPPUNIT_ASSERT_EQUAL(aExpectedFillColor, aFillColor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
