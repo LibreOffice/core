@@ -581,7 +581,7 @@ void setSuppressGetBitmapFromXclObjComment(SdrCaptionObj* pSdrCaptionObj, bool b
     }
 }
 
-XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const tools::Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, const tools::Rectangle &rFrom, const tools::Rectangle &rTo ) :
+XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const tools::Rectangle& rRect, const EditTextObject* pEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, const tools::Rectangle &rFrom, const tools::Rectangle &rTo ) :
     XclObj( rObjMgr, EXC_OBJTYPE_NOTE, true )
             , maScPos( rAddress )
             , mpCaption( pCaption )
@@ -598,7 +598,10 @@ XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const tools::Rectang
 
     ProcessEscherObj( rObjMgr.GetRoot(), rRect, pCaption, bVisible);
     // TXO
-    pTxo .reset(new XclTxo( rObjMgr.GetRoot(), rEditObj, pCaption ));
+    if (pEditObj)
+        pTxo.reset(new XclTxo( rObjMgr.GetRoot(), *pEditObj, pCaption ));
+    else
+        pTxo.reset(new XclTxo( OUString(), 0 ));
 }
 
 static void lcl_FillProps( EscherPropertyContainer& rPropOpt, SdrObject* pCaption, bool bVisible )
