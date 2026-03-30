@@ -2978,6 +2978,20 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testExtSourceFieldsXLS)
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField", 13);
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testNumberGroupingXLS)
+{
+    createScDoc("xls/pivottable_number_grouping.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pCacheDef = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
+    CPPUNIT_ASSERT(pCacheDef);
+
+    assertXPath(pCacheDef,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[@databaseField='0']/"
+                "x:fieldGroup/x:groupItems",
+                "count", u"3");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
