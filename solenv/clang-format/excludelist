@@ -11886,6 +11886,7 @@ sw/qa/extras/ww8export/ww8export2.cxx
 sw/qa/extras/ww8export/ww8export3.cxx
 sw/qa/extras/ww8export/ww8export4.cxx
 sw/qa/extras/ww8import/ww8import.cxx
+sw/qa/extras/xsltimport/xsltimport.cxx
 sw/qa/inc/bordertest.hxx
 sw/qa/inc/swmodeltestbase.hxx
 sw/qa/unit/sw-dialogs-test.cxx

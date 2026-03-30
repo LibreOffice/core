@@ -131,6 +131,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_txtexport \
     CppunitTest_sw_txtencexport \
     CppunitTest_sw_txtimport \
+    CppunitTest_sw_xsltimport \
     CppunitTest_sw_uiwriter \
     CppunitTest_sw_uiwriter2 \
     CppunitTest_sw_uiwriter3 \

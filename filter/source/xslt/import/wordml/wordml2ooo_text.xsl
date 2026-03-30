@@ -1001,21 +1001,37 @@
     </xsl:template>
     <xsl:template name="replace-spaces">
         <xsl:param name="curr-string"/>
-        <xsl:if test="contains($curr-string,'  ')">
-            <xsl:value-of select="substring-before($curr-string,'  ')"/>
-            <text:s text:c="2"/>
-            <xsl:variable name="next-string" select="substring-after($curr-string,'  ')"/>
-            <xsl:choose>
-                <xsl:when test="contains($next-string, '  ')">
-                    <xsl:call-template name="replace-spaces">
-                        <xsl:with-param name="curr-string" select="$next-string"/>
-                    </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$next-string"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="not(contains($curr-string, '  '))">
+                <xsl:value-of select="$curr-string"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="substring-before($curr-string, '  ')"/>
+                <xsl:variable name="rest" select="substring-after($curr-string, '  ')"/>
+                <xsl:variable name="rest-no-spaces" select="translate($rest, ' ', '')"/>
+                <xsl:variable name="first-nonspace-char" select="substring($rest-no-spaces, 1, 1)"/>
+                <xsl:choose>
+                    <xsl:when test="$first-nonspace-char = ''">
+                        <text:s>
+                            <xsl:attribute name="text:c">
+                                <xsl:value-of select="2 + string-length($rest)"/>
+                            </xsl:attribute>
+                        </text:s>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="leading" select="substring-before($rest, $first-nonspace-char)"/>
+                        <text:s>
+                            <xsl:attribute name="text:c">
+                                <xsl:value-of select="2 + string-length($leading)"/>
+                            </xsl:attribute>
+                        </text:s>
+                        <xsl:call-template name="replace-spaces">
+                            <xsl:with-param name="curr-string" select="substring($rest, string-length($leading) + 1)"/>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     <xsl:template match="w:tab">
         <xsl:element name="text:tab"/>
