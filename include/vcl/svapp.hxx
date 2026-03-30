@@ -1276,6 +1276,12 @@ public:
     /** Update main thread identifier */
     static void                 UpdateMainThread();
 
+    /** Do we have a native/system color chooser dialog available?
+
+     @returns True if native color chooser dialog is available, false otherwise.
+     */
+    static bool hasNativeColorChooserDialog();
+
     /** Do we have a native / system file selector available?
 
      @returns True if native file selector is available, false otherwise.

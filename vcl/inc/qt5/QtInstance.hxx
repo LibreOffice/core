@@ -210,6 +210,7 @@ public:
     virtual void TriggerUserEventProcessing() override;
     virtual void ProcessEvent(SalUserEvent aEvent) override;
 
+    bool hasNativeColorChooserDialog() const override { return true; }
     bool hasNativeFileSelection() const override { return true; }
     css::uno::Reference<css::ui::dialogs::XFilePicker2>
     createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&) override;

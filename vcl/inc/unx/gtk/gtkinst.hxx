@@ -264,6 +264,7 @@ public:
 
     virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
 
+    bool hasNativeColorChooserDialog() const override { return true; }
     virtual bool hasNativeFileSelection() const override { return true; }
 
     virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 >

@@ -1670,6 +1670,11 @@ void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {
 }
 
+bool Application::hasNativeColorChooserDialog()
+{
+    return GetSalInstance()->hasNativeColorChooserDialog();
+}
+
 bool Application::hasNativeFileSelection()
 {
     ImplSVData* pSVData = ImplGetSVData();

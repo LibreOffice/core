@@ -337,13 +337,16 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xShowTipOfTheDayImg->set_visible(!bEnable);
     m_xShowTipOfTheDay->save_state();
 
-    bEnable = !officecfg::Office::Common::Misc::UseSystemColorDialog::isReadOnly();
+    const bool bHaveNativeCholorChooserDialog = Application::hasNativeColorChooserDialog();
+    bool bReadOnly = officecfg::Office::Common::Misc::UseSystemColorDialog::isReadOnly();
+    bEnable = !bReadOnly && bHaveNativeCholorChooserDialog;
     m_xColorDlgCB->set_sensitive(bEnable);
-    m_xColorDlgROImage->set_visible(!bEnable);
-    m_xColorDlgCB->set_active(!officecfg::Office::Common::Misc::UseSystemColorDialog::get());
+    m_xColorDlgROImage->set_visible(bReadOnly);
+    m_xColorDlgCB->set_active(!bHaveNativeCholorChooserDialog
+                              || !officecfg::Office::Common::Misc::UseSystemColorDialog::get());
     m_xColorDlgCB->save_state();
 
-    const bool bReadOnly = officecfg::Office::Common::Misc::UseSystemFileDialog::isReadOnly();
+    bReadOnly = officecfg::Office::Common::Misc::UseSystemFileDialog::isReadOnly();
     bEnable = !bReadOnly && lcl_HasSystemFilePicker();
     m_xFileDlgCB->set_sensitive(bEnable);
     m_xFileDlgROImage->set_visible(bReadOnly);
