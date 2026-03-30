@@ -79,7 +79,6 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
 
     /** returns the currently used sort order.
 
-
         <p>
         The order criteria returned is part of the ORDER BY clause of the
         select command, but it does not contain the ORDER BY keyword .

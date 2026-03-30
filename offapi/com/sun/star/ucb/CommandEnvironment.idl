@@ -24,8 +24,6 @@ module com { module sun { module star { module ucb {
     com::sun::star::task::XInteractionHandler and
     com::sun::star::ucb::XProgressHandler. The respective
     get methods will simply return these handlers.
-
-    @since OOo 3.3
  */
  published service CommandEnvironment : ::com::sun::star::ucb::XCommandEnvironment
  {

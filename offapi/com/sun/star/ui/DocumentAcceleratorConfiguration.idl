@@ -19,10 +19,6 @@
 
 module com {  module sun {  module star {  module ui {
 
-/**
-
-    @since LibreOffice 4.2
-*/
 service DocumentAcceleratorConfiguration : XAcceleratorConfiguration
 {
     createWithDocumentRoot([in] com::sun::star::embed::XStorage DocumentRoot);

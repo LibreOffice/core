@@ -21,9 +21,6 @@
 module com {  module sun {  module star {  module sheet {
 
 
-/**
-    @since LibreOffice 4.1
- */
 published interface XGlobalSheetSettings
 {
     /** specifies whether the cursor is moved after entering into cells.

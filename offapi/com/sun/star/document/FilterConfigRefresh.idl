@@ -21,9 +21,6 @@
 module com { module sun { module star { module document {
 
 
-/**
-    @since LibreOffice 4.1
- */
 service FilterConfigRefresh : com::sun::star::util::XRefreshable;
 
 

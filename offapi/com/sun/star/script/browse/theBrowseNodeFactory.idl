@@ -26,8 +26,6 @@ module com { module sun { module star { module script { module browse {
     <pre>
     /singletons/com.sun.star.script.theBrowseNodeFactory
     </pre>
-
-    @since OOo 2.0
 */
 singleton theBrowseNodeFactory : XBrowseNodeFactory;
 

@@ -44,8 +44,6 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     providing either instances of PropertyPutArgument or
     PropertyGetArgument as arguments to
     com::sun::star::script::XInvocation::Invoke.
-
-    @since OOo 1.1.2
 */
 struct PropertyPutArgument
 {

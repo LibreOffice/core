@@ -25,8 +25,6 @@ module com {  module sun {  module star {  module ui {
     The constants describe bits in a bit field which determine
     the current image set of an image manager.
     </p>
-
-    @since OOo 2.0
  */
 constants ImageType
 {
@@ -39,7 +37,6 @@ constants ImageType
     const short SIZE_LARGE         = 1;
 
     /** an image with size 32.
-        @since LibreOffice 5.3
      */
     const short SIZE_32            = 2;
 
@@ -53,8 +50,6 @@ constants ImageType
 
     /** an image specialized for rl-tb writing. if unset, the
         image is unspecialized or for lr-tb writing.
-
-        @since LibreOffice 25.8
      */
     const short DIR_RL_TB = 8;
 };

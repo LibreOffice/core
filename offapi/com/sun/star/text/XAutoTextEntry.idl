@@ -23,18 +23,6 @@
 
 /** identifies an autotext entry.
 
-
-
-
-
-
-
-
-
-
-
-
-
     @deprecated
  */
 published interface XAutoTextEntry: com::sun::star::uno::XInterface

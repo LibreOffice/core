@@ -37,8 +37,6 @@ published service ChartDocument
     /** If a ChartDocument may be stored as XML file,
         this service should be supported in order to preserve unparsed
         XML attributes.
-
-    @since OOo 1.1.2
      */
     [optional] service ::com::sun::star::xml::UserDefinedAttributesSupplier;
 

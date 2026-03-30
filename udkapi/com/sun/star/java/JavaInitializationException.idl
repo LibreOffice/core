@@ -32,8 +32,6 @@ module com { module sun { module star { module java {
     com::sun::star::java::JavaNotConfiguredException <br>
     com::sun::star::java::MissingJavaRuntimeException <br>
     com::sun::star::java::JavaVMCreationFailureException <br>
-
-    @since OOo 1.1.2
  */
 published exception JavaInitializationException: com::sun::star::uno::DeploymentException
 {

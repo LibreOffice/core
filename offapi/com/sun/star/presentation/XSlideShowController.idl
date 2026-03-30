@@ -24,7 +24,6 @@
 /** interface to control a running slide show.
 
     @see XPresentation2
-    @since OOo 3.0
 */
 interface XSlideShowController
 {
@@ -232,15 +231,11 @@ interface XSlideShowController
     [attribute] long PenColor;
 
     /** This attribute changes the width of the pen.
-
-        @since LibreOffice 4.2
     */
     [attribute] double PenWidth;
 
 
     /** This method clears ink drawing from the slideshow being played
-
-        @since LibreOffice 7.2
     */
     void setEraseAllInk( [in] boolean EraseAllInk );
 

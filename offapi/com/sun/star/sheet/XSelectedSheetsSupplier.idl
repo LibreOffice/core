@@ -9,9 +9,6 @@
 
 module com { module sun { module star { module sheet {
 
-/**
- * @since LibreOffice 3.5
- */
 interface XSelectedSheetsSupplier: com::sun::star::uno::XInterface
 {
     /**

@@ -46,7 +46,6 @@ published constants ReferenceFieldSource
     const short ENDNOTE = 4;
 
     /** The source is a style.
-    @since LibreOffice 24.2
     */
     const short STYLE = 5;
 };

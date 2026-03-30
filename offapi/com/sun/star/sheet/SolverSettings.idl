@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module sheet {
 
 
 /** A solver model defined in a sheet and accessible via the solver dialog
- *
- *  @since LibreOffice 25.2
  */
 service SolverSettings: XSolverSettings;
 

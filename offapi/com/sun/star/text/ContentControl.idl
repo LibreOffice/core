@@ -12,8 +12,6 @@ module com { module sun { module star { module text {
 /** This service specifies a content control with properties in a TextDocument.
 
     A content control wraps one or more text portions and controls the behavior of that content.
-
-    @since LibreOffice 7.4
 */
 service ContentControl
 {
@@ -93,64 +91,44 @@ service ContentControl
     [optional, property] string Color;
 
     /** The appearance: just remembered.
-
-        @since LibreOffice 7.6
     */
     [optional, property] string Appearance;
 
     /** Combo box that allows free-form text as well, i.e. not dropdown.
-
-        @since LibreOffice 7.5
     */
     [optional, property] boolean ComboBox;
 
     /** Drop-down that does not allow free-form text, i.e. not combo box.
-
-        @since LibreOffice 7.5
     */
     [optional, property] boolean DropDown;
 
     /** The alias: kind of a human-readable title / description, show up on the UI.
                    -also used by VBA to group controls into a smaller, indexed collection
-
-        @since LibreOffice 7.5
     */
     [optional, property] string Alias;
 
     /** The tag: similar to Alias, but is meant to be machine-readable.
                  -also used by VBA to group controls into a smaller, indexed collection
-
-        @since LibreOffice 7.5
     */
     [optional, property] string Tag;
 
     /** The formatted date string, based on DateFormat, DateLanguage and CurrentDate.
-
-        @since LibreOffice 7.5
     */
     [optional, property, readonly] string DateString;
 
     /** A unique numeric id, used by macros to identify a specific control.
-
-        @since LibreOffice 7.5
     */
     [optional, property] long Id;
 
     /** Describes the order in which keyboard navigation moves between controls
-
-        @since LibreOffice 7.6
     */
     [optional, property] unsigned long TabIndex;
 
     /** Describes whether the control itself and/or its data can be modified or deleted by the user.
-
-        @since LibreOffice 7.6
     */
     [optional, property] string Lock;
 
     /** Indicates if the control accepts soft breaks.
-
-        @since LibreOffice 24.2
     */
     [optional, property] string MultiLine;
 };

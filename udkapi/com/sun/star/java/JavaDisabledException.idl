@@ -24,8 +24,6 @@ module com { module sun { module star { module java {
     been switched off.<p>
     The user has switched off Java in the configuration of the office,
     for example by means of the options dialog.
-
-    @since OOo 1.1.2
  */
 published exception JavaDisabledException: JavaInitializationException
 {

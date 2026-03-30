@@ -36,8 +36,6 @@ module com { module sun { module star { module awt {
     @see com::sun::star::accessibility::XAccessibleComponent
     @see com::sun::star::accessibility::XAccessibleExtendedComponent
     @see com::sun::star::accessibility::XAccessibleAction
-
-    @since OOo 1.1.2
 */
 service AccessibleDropDownListBox
 {

@@ -22,8 +22,6 @@ module com { module sun { module star { module view {
 
 
 /** provides access to the form layer elements in a view
-
-    @since OOo 2.3
  */
 interface XFormLayerAccess
 {

@@ -35,8 +35,6 @@ module com { module sun { module star { module accessibility {
     here.</p>
 
     @see XAccessibleContext
-
-    @since OOo 1.1.2
 */
 constants AccessibleRole
 {
@@ -560,8 +558,6 @@ constants AccessibleRole
         <p>The object represents a button that drops down a list of items.</p>
 
         <p>See also PUSH_BUTTON and BUTTON_MENU.</p>
-
-        @since OOo 3.0
     */
     const short BUTTON_DROPDOWN = 68;
 
@@ -570,8 +566,6 @@ constants AccessibleRole
         <p>The object represents a button that drops down a menu.</p>
 
         <p>See also PUSH_BUTTON and BUTTON_DROPDOWN.</p>
-
-        @since OOo 3.0
     */
     const short BUTTON_MENU = 69;
 
@@ -579,8 +573,6 @@ constants AccessibleRole
 
         <p>The object contains descriptive information, usually textual, about
         another user interface element such as a table, chart, or image.</p>.
-
-        @since OOo 3.0
     */
     const short CAPTION = 70;
 
@@ -589,16 +581,12 @@ constants AccessibleRole
         <p>The object is a graphical depiction of quantitative data. It may contain multiple
         subelements whose attributes and/or description may be queried to obtain both
         the quantitative data and information about how the data is being presented.</p>
-
-        @since OOo 3.0
     */
     const short CHART = 71;
 
     /** Edit bar role
 
         <p>A role indicating the object acts as a formula for calculating a value.</p>
-
-         @since OOo 3.0
     */
     const short EDIT_BAR = 72;
 
@@ -606,8 +594,6 @@ constants AccessibleRole
 
         <p>The object is a container for form controls, for instance as part of a web form
         or user-input form within a document.</p>
-
-        @since OOo 3.0
     */
     const short FORM = 73;
 
@@ -615,16 +601,12 @@ constants AccessibleRole
 
     <p>Usually a graphic with multiple hotspots, where each hotspot can be activated
         resulting in the loading of another document or section of a document.</p>
-
-        @since OOo 3.0
     */
     const short IMAGE_MAP = 74;
 
     /** Note role
 
         <p>An embedded note which is not visible until activated.</p>
-
-        @since OOo 3.0
     */
     const short NOTE = 75;
 
@@ -632,16 +614,12 @@ constants AccessibleRole
 
         <p>An object representing a page of document content. It is used in documents
         which are accessed by the user on a page by page basis.</p>
-
-        @since OOo 3.0
     */
     const short PAGE = 76;
 
     /** Ruler role
 
         <p>An object which describes margins and tab stops, etc. for text objects which it controls.</p>
-
-        @since OOo 3.0
     */
     const short RULER = 77;
 
@@ -649,8 +627,6 @@ constants AccessibleRole
 
         <p>The object is a containing instance of document content which constitutes a particular
         "logical" section of the document.</p>
-
-        @since OOo 3.0
     */
     const short SECTION = 78;
 
@@ -659,16 +635,12 @@ constants AccessibleRole
         <p>An object that presents an element in a tree</p>
 
         </p>See also TREE and TREE_TABLE.</p>
-
-        @since OOo 3.0
     */
     const short TREE_ITEM = 79;
 
     /** Tree table role
 
         <p>An object which represents both hierarchical and tabular information.</p>
-
-        @since OOo 3.0
     */
     const short TREE_TABLE = 80;
 
@@ -681,8 +653,6 @@ constants AccessibleRole
         In the OpenDocument file format a comment is known as an annotation.</p>
 
         <p>See also COMMENT_END.</p>
-
-        @since OOo 3.2
     */
     const short COMMENT = 81;
 
@@ -693,32 +663,24 @@ constants AccessibleRole
 
         <p>This object and the corresponding object representing the comment shall be
         in relation of type MEMBER_OF.</p>
-
-        @since OOo 3.2
     */
     const short COMMENT_END = 82;
 
     /** View of a presentation document.
 
         <p>It's an specific variation of DOCUMENT for presentations.</p>
-
-        @since LibreOffice 4.3
     */
     const short DOCUMENT_PRESENTATION = 83;
 
     /** View of an spreadsheet document.
 
         <p>It's an specific variation of DOCUMENT for spreadsheets.</p>
-
-        @since LibreOffice 4.3
     */
     const short DOCUMENT_SPREADSHEET = 84;
 
     /** View of a text document.
 
         <p>It's an specific variation of DOCUMENT for text.</p>
-
-        @since LibreOffice 4.3
     */
     const short DOCUMENT_TEXT = 85;
 
@@ -730,8 +692,6 @@ constants AccessibleRole
            label.</p>
 
         <p>See also LABEL and TEXT.</p>
-
-        @since LibreOffice 6.2
     */
     const short STATIC = 86;
 
@@ -739,16 +699,12 @@ constants AccessibleRole
 
         <p>An object that presents information to the user when the SHOWING state change event is
            fired for the object.</p>
-
-        @since LibreOffice 7.5
     */
     const short NOTIFICATION = 87;
 
     /** Block quote role.
 
         <p>A section of content that is quoted from another source.</p>
-
-        @since LibreOffice 24.2
     */
     const short BLOCK_QUOTE = 88;
 

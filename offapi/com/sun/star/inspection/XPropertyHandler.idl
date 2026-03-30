@@ -32,8 +32,6 @@ interface XPropertyControlFactory;
 
     @see ObjectInspector
     @see LineDescriptor
-
-    @since OOo 2.0.3
 */
 interface XPropertyHandler
 {

@@ -21,8 +21,6 @@ module com {  module sun {  module star {  module sdb {
 
 /**
     This IDL was created from the service's places of use, so it is probably incomplete.
-
-    @since LibreOffice 4.1
  */
 service TableDefinition : com::sun::star::beans::XPropertySet
 {

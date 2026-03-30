@@ -31,8 +31,6 @@
     @see Frame
 
     @deprecated
-
-    @since OOo 1.1.2
  */
 published service Task
 {

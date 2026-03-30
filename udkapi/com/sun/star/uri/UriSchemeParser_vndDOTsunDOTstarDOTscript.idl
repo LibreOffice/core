@@ -36,8 +36,6 @@ published interface XUriSchemeParser;
    <p>This service is not intended to be instantiated directly by client code.
    Rather, it should be used indirectly through the
    com::sun::star::uri::UriReferenceFactory service.</p>
-
-   @since OOo 2.0
  */
 published service UriSchemeParser_vndDOTsunDOTstarDOTscript: XUriSchemeParser
 {};

@@ -33,8 +33,6 @@ interface XParametricPolyPolygon2D;
     scaled in such a way that it will cover the same [0,1]x[0,1] box
     as the hatch and the gradient. The transformation member can then
     be used to scale the complete texture as it fits suit.<p>
-
-    @since OOo 2.0
  */
 struct Texture
 {

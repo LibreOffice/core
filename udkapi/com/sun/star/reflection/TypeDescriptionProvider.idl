@@ -59,8 +59,6 @@ published service TypeDescriptionProvider
 
     /** Interface for creating enumerations for type descriptions supported
         by this TypeDescriptionProvider
-
-    @since OOo 1.1.2
     */
     [optional] interface XTypeDescriptionEnumerationAccess;
 };

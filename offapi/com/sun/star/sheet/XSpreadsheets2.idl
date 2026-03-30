@@ -32,8 +32,6 @@ interface XSpreadsheets2: com::sun::star::sheet::XSpreadsheets
 
         @throws ::com::sun::star::lang::IllegalArgumentException
         @throws com::sun::star::lang::IndexOutOfBoundsException
-
-        @since LibreOffice 3.5
      */
     long importSheet(
             [in] com::sun::star::sheet::XSpreadsheetDocument srcDoc,

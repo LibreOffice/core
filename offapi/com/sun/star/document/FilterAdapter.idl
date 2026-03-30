@@ -21,8 +21,6 @@
 module com {   module sun {   module star {   module document {
 
     /* Provides access to user to filters written to use the FilterAdapter
-
-       @since OOo 1.1.2
     */
 published service FilterAdapter
     {

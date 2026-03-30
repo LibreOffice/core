@@ -28,8 +28,6 @@ module com { module sun { module star { module ucb {
     ftp-server.
 
     @see com::sun::star::ucb::Content
-
-    @since OOo 1.1.2
 */
 
 published service FTPContentProvider

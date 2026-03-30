@@ -25,8 +25,6 @@ module com { module sun { module star { module java {
     <p>The Java framework uses a configuration file, which can be used
     by distributors to determine what versions are supported. If this
     file is modified, then the current settings are regarded as invalid.</p>
-
-    @since OOo 2.0
  */
 exception InvalidJavaSettingsException: JavaInitializationException
 {

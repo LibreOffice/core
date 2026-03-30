@@ -36,9 +36,6 @@ module com {  module sun {  module star {  module drawing {
     is due to underlying implementation constraints and may change in the
     future.</p>
 
-
-
-     @since OOo 1.1.2
 */
 service AccessibleOLEShape
 {

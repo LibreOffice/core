@@ -31,8 +31,6 @@ module xml {
 
     @see com::sun::star::configuration::backend::xml::LayerParser
         Service that parses configuration layer XML.
-
-    @since OOo 1.1.2
 */
 published service SchemaParser
 {

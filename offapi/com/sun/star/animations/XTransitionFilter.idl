@@ -27,7 +27,6 @@
     with `double` values that set the transition progress the specific
     amount of time.
 
-
     @see http://www.w3.org/TR/smil20/smil-transitions.html#edef-transitionFilter
 */
 interface XTransitionFilter : XAnimate

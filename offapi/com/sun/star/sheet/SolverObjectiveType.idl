@@ -13,8 +13,6 @@ module com {  module sun {  module star {  module sheet {
 
 
 /** Specifies the objective type of the solver model
- *
- *  @since LibreOffice 25.2
  */
 constants SolverObjectiveType
 {

@@ -24,8 +24,6 @@
 /** makes it possible to move a text range (e.g. a paragraph by itself)
     within this text.
 
-
-
     <p>The movement is specified by the number of paragraphs within the order
     of paragraphs.
 

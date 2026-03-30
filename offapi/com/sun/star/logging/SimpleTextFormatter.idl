@@ -28,8 +28,6 @@ interface XLogFormatter;
     <p>Every log record, as passed to XLogFormatter::format(), will
     be formatted into a single text line, with just the log message being output.
     If the loglevel is WARNING, or SEVERE, the line will be prefixed accordingly.</p>
-
-    @since LibreOffice 6.2
  */
 service SimpleTextFormatter : XLogFormatter
 {

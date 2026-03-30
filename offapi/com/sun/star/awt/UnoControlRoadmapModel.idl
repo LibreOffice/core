@@ -78,8 +78,6 @@ service UnoControlRoadmapModel
             <li>If #Graphic is set, #ImageURL will be reset
             to an empty string.</li>
         </ul></p>
-
-        @since OOo 2.1
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 

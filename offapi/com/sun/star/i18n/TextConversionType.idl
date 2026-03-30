@@ -24,8 +24,6 @@ module com {  module sun {  module star {  module i18n {
 
 /** These constants specify the conversion type to be used with
     XTextConversion.
-
-     @since OOo 1.1.2
 */
 
 published constants TextConversionType

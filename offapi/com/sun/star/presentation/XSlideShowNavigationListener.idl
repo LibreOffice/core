@@ -12,8 +12,6 @@ module com {  module sun {  module star {  module presentation {
 /** Listener interface with navigation support to receive global slide show events.<p>
 
     @see XSlideShowListener
-
-    @since LibreOffice 7.6
  */
 interface XSlideShowNavigationListener : com::sun::star::presentation::XSlideShowListener
 {

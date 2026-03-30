@@ -29,7 +29,6 @@ module com {  module sun {  module star {  module util {
     @see BootstrapMacroExpander
     @see theMacroExpander
 
-    @since OOo 1.1.2
     @deprecated rather use the util::theMacroExpander singleton
 */
 published service MacroExpander

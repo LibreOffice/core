@@ -28,7 +28,6 @@
 /** could be used as an extension for performing data definition tasks on
     databases, and to control the access rights on database objects.
 
-
     <p>
     It may be implemented by a database driver provider, to encapsulate the
     complexity of data definition, and to give a common way for data definition as

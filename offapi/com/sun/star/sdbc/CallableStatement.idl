@@ -25,7 +25,6 @@
 
 /** is used to execute SQL stored procedures.
 
-
     <p>
     SDBC provides a stored procedure SQL escape that allows stored procedures
     to be called in a standard way for all RDBMSs. This escape syntax has one

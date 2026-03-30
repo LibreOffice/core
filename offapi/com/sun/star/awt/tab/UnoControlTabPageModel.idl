@@ -21,7 +21,6 @@
 module com {  module sun {  module star {  module awt { module tab {
 
 /** specifies the standard model of a XTabPageModel.
-    @since OOo 3.4
  */
 published service UnoControlTabPageModel
 {
@@ -40,32 +39,26 @@ published service UnoControlTabPageModel
     [optional, property] string HelpURL;
 
     /** specifies that a horizontal scrollbar should be added to the dialog
-        @since LibreOffice 7.1
      */
     [optional, property] boolean HScroll;
 
     /** specifies that a vertical scrollbar should be added to the dialog
-        @since LibreOffice 7.1
      */
     [optional, property] boolean VScroll;
 
     /** specifies the horizontal position of the scrolled dialog content
-        @since LibreOffice 7.1
      */
     [optional, property] long ScrollLeft;
 
     /** specifies the vertical position of the scrolled dialog content
-        @since LibreOffice 7.1
      */
     [optional, property] long ScrollTop;
 
     /** specifies the total width of the scrollable dialog content
-        @since LibreOffice 7.1
      */
     [optional, property] long ScrollWidth;
 
     /** specifies the total height of the scrollable dialog content
-        @since LibreOffice 7.1
      */
     [optional, property] long ScrollHeight;
 

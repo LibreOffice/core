@@ -27,8 +27,6 @@ module com { module sun { module star { module i18n {
     <p> Used by
     XExtendedTransliteration::transliterateChar2Char()
     </p>
-
-     @since OOo 1.1.2
  */
 published exception MultipleCharsOutputException : ::com::sun::star::uno::Exception
 {

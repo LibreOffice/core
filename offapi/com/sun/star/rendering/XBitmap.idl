@@ -26,8 +26,6 @@ module com { module sun { module star { module rendering {
     methods can be found at the XIntegerBitmap,
     XIeeeDoubleBitmap, XIeeeFloatBitmap and
     XHalfFloatBitmap interfaces.<p>
-
-    @since OOo 2.0
  */
 interface XBitmap : ::com::sun::star::uno::XInterface
 {

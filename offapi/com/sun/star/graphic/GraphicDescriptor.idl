@@ -131,14 +131,10 @@ published service GraphicDescriptor
     [optional, property] boolean Animated;
 
     /** Indicates that the graphic is an external linked graphic
-
-        @since LibreOffice 6.1
     */
     [optional, property] boolean Linked;
 
     /** The URL of the location from where the graphic was loaded from
-
-        @since LibreOffice 6.1
     */
     [optional, property] string OriginURL;
 };

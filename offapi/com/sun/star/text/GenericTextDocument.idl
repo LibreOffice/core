@@ -55,7 +55,6 @@ published service GenericTextDocument
 
     [optional] interface com::sun::star::text::XEndnotesSupplier;
 
-    /** @since LibreOffice 7.5 */
     [optional] interface com::sun::star::text::XContentControlsSupplier;
 
     [optional] interface com::sun::star::util::XReplaceable;
@@ -76,28 +75,16 @@ published service GenericTextDocument
 
     [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
 
-    /** @since OOo 1.1.2
-     */
     [optional] interface com::sun::star::text::XBookmarksSupplier;
 
-    /** @since OOo 1.1.2
-     */
     [optional] interface com::sun::star::text::XDocumentIndexesSupplier;
 
-    /** @since OOo 1.1.2
-     */
     [optional] interface com::sun::star::text::XTextFieldsSupplier;
 
-    /** @since OOo 1.1.2
-     */
     [optional] interface com::sun::star::text::XTextFramesSupplier;
 
-    /** @since OOo 1.1.2
-     */
     [optional] interface com::sun::star::text::XTextSectionsSupplier;
 
-    /** @since OOo 1.1.2
-     */
     [optional] interface com::sun::star::util::XNumberFormatsSupplier;
 
     /** contains the identifier of the default locale of the document.
@@ -124,8 +111,6 @@ published service GenericTextDocument
     /** contains a string that consists of characters that mark the
         separation of words in counting the words in a document.
 
-
-
         <p> I.e. slash and backslash. Whitespace (tab stop,
         space, paragraph break, line break) always separate
         words.</p>@see WordCount
@@ -137,14 +122,10 @@ published service GenericTextDocument
          *
          *  When no concordance file should be used the string is empty.
          *  Used for text documents only.
-     *
-     *  @since OOo 1.1.2
          */
         [optional, property] string IndexAutoMarkFileURL;
 
         /** specifies if change recording is active.
-     *
-     *  @since OOo 1.1.2
          */
         [optional, property] boolean RecordChanges;
 
@@ -155,8 +136,6 @@ published service GenericTextDocument
          *    Oct-12-29 will be interpreted as Oct-12-2029
          *    Oct-12-30 will be interpreted as Oct-12-1930
          *    Oct-12-02 will be interpreted as Oct-12-2002
-     *
-     *  @since OOo 1.1.2
          */
         [optional, property] short TwoDigitYear;
 };

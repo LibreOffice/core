@@ -43,8 +43,6 @@ module com { module sun { module star { module accessibility {
     accessibility contexts for being equal.</p>
 
     @see AccessibleContext
-
-    @since OOo 1.1.2
 */
 interface XAccessible : ::com::sun::star::uno::XInterface
 {

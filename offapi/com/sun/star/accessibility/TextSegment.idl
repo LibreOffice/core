@@ -44,8 +44,6 @@ module com { module sun { module star { module accessibility {
     structure does not alter the enclosing text.</p>
 
     @see XAccessibleText
-
-    @since OOo 1.1.2
 */
 
 struct TextSegment

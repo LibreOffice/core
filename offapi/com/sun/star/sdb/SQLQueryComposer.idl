@@ -27,7 +27,6 @@
 
 /** represents a tool for composing SQL select statements.
 
-
     <p>
     It hides the complexity of parsing and evaluating SQL Statements and provides
     sophisticated methods for expanding a SQL-Statement with filter and order

@@ -24,8 +24,6 @@ module com { module sun { module star { module form { module runtime {
 /** encapsulates the state of a FormFeature
 
     @see XFormOperations
-
-    @since OOo 2.2
  */
 struct FeatureState
 {

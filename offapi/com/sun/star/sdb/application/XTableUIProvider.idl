@@ -27,8 +27,6 @@ interface XDatabaseDocumentUI;
     interface information and/or components for database tables.
 
     @see com::sun::star::sdb::Connection
-
-    @since OOo 2.2
  */
 interface XTableUIProvider
 {

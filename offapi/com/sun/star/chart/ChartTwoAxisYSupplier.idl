@@ -51,8 +51,6 @@ published service ChartTwoAxisYSupplier
     /** determines if the title of the secondary y-axis is shown or hidden.
 
         @see ChartTitle
-
-        @since OOo 3.0
     */
     [optional, property] boolean HasSecondaryYAxisTitle;
 

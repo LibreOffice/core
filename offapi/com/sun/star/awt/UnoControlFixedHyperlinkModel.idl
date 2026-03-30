@@ -60,8 +60,6 @@ service UnoControlFixedHyperlinkModel
 
         <p>Not every border style (see #Border) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
-
-        @since OOo 2.0
      */
     [optional, property] long BorderColor;
 
@@ -129,8 +127,6 @@ service UnoControlFixedHyperlinkModel
 
 
         /** specifies the vertical alignment of the text in the control.
-
-            @since OOo 2.0
          */
         [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };

@@ -27,8 +27,6 @@ module com {  module sun {  module star {  module view {
     to be registered, thus a client object will learn about the print progress.</p>
 
     @see XPrintJobListener
-
-    @since OOo 1.1.2
  */
 published interface XPrintJobBroadcaster : com::sun::star::uno::XInterface
 {

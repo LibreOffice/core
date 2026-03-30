@@ -34,8 +34,6 @@ module com {   module sun {   module star {   module rdf {
     `string` constants.
     </p>
 
-    @since OOo 3.0
-
     @see XRepository::importGraph
     @see XRepository::exportGraph
  */

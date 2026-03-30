@@ -116,8 +116,6 @@ published constants TemplateDescription
             <li>A checkbox "Show Preview"</li>
             <li>A window for displaying a file preview</li>
         </ul>
-
-        @since LibreOffice 5.3
     */
     const short FILEOPEN_PREVIEW                               = 11;
 
@@ -126,8 +124,6 @@ published constants TemplateDescription
             <li>A checkbox "Insert as link"</li>
             <li>A push button "Play"</li>
         </ul>
-
-        @since LibreOffice 5.3
     */
     const short FILEOPEN_LINK_PLAY                             = 12;
 
@@ -138,8 +134,6 @@ published constants TemplateDescription
             <li>A listbox  "Image Anchor" for choosing how to anchor the image in Calc.</li>
             <li>A window for displaying a file preview</li>
         </ul>
-
-        @since LibreOffice 6.1
     */
     const short FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR             = 13;
 
@@ -149,8 +143,6 @@ published constants TemplateDescription
             <li>A checkbox "Filter Options"</li>
             <li>A listbox "Version" for selecting a document version</li>
         </ul>
-
-        @since LibreOffice 25.8
     */
     const short FILEOPEN_READONLY_VERSION_FILTEROPTIONS        = 14;
 };

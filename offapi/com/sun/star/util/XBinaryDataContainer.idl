@@ -15,8 +15,6 @@ module com { module sun { module star { module util
     The binary data in the container is regarded as read-only so no
     access that would allow changing the data is allowed in this
     interface.
-
-    @since LibreOffice 7.2
  */
 interface XBinaryDataContainer
 {

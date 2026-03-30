@@ -21,8 +21,6 @@
 module com {  module sun {  module star {  module embed {
 
 /** This interface allows to set a password for an object.
-
-    @since OOo 3.4
  */
 interface XEncryptionProtectedStorage: XEncryptionProtectedSource2
 {
@@ -110,8 +108,6 @@ interface XEncryptionProtectedStorage: XEncryptionProtectedSource2
                     OpenPGP-encrypted session key for this recipient
             </dd>
         </dl>
-
-        @since LibreOffice 6.0
      */
     void setGpgProperties( [in] sequence< sequence< ::com::sun::star::beans::NamedValue > > aProps )
         raises( ::com::sun::star::lang::IllegalArgumentException );

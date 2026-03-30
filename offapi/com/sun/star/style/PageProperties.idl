@@ -236,8 +236,6 @@ published service PageProperties
     [property, maybevoid] boolean HeaderIsShared;
 
     /** determines if the header/footer content on the first page and remaining pages is the same.
-
-        @since LibreOffice 4.0
      */
     [optional, property, maybevoid] boolean FirstIsShared;
 
@@ -455,39 +453,27 @@ published service PageProperties
     [property, maybevoid] long HeaderBorderDistance;
 
     /** contains the graphic of the background.
-
-        @since LibreOffice 6.1
      */
     [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 
     /** contains the graphic of the background of the header.
-
-        @since LibreOffice 6.1
      */
     [optional, property, maybevoid] com::sun::star::graphic::XGraphic HeaderBackGraphic;
 
     /** contains the graphic of the background of the footer.
-
-        @since LibreOffice 6.1
      */
     [optional, property, maybevoid] com::sun::star::graphic::XGraphic FooterBackGraphic;
 
     /** determines the gutter margin of the page.
-
-        @since LibreOffice 7.2
      */
     [optional, property] long GutterMargin;
 
     /** does the background cover the full page or only inside the
         margins?
-
-        @since LibreOffice 7.2
      */
     [optional, property] boolean BackgroundFullSize;
 
     /** specifies that the page gutter shall be placed on the right side of the page.
-
-        @since LibreOffice 7.2
      */
     [optional, property] boolean RtlGutter;
 

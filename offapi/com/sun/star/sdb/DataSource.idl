@@ -49,7 +49,6 @@ published service DataSource
         as it is the case when using XCompletedConnection or com::sun::star::sdbc::XDataSource.
         @see XCompletedConnection
         @see com::sun::star::sdbc::XDataSource
-        @since OOo 1.1.2
      */
     interface com::sun::star::sdbc::XIsolatedConnection;
 

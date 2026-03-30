@@ -10,7 +10,6 @@
 module com { module sun { module star { module document {
 
 /** An exception used to notify loading of an exotic file format
-    @since LibreOffice 6.1
 */
 exception ExoticFileLoadException : ::com::sun::star::uno::Exception
 {

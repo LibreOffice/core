@@ -24,12 +24,6 @@
 /** makes it possible to remove text contents before or
     after existing text contents.
 
-
-
-
-
-
-
     @deprecated
  */
 published interface XRelativeTextContentRemove: com::sun::star::uno::XInterface

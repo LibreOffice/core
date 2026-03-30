@@ -20,8 +20,6 @@
 module com {  module sun {  module star {  module text {
 
 /** supplies access to a document model position at a view-dependent pixel position.
-
-    @since LibreOffice 7.2
  */
 interface XTextViewTextRangeSupplier: com::sun::star::uno::XInterface
 {

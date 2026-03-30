@@ -39,8 +39,6 @@ published struct Currency2 : com::sun::star::i18n::Currency
 {
     /** If set, the currency and/or its symbol is only to be used in
         legacy context.
-
-        @since OOo 2.0.3
      */
     boolean LegacyOnly;
 };

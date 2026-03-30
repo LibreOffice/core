@@ -42,8 +42,6 @@ published constants LinguServiceEventFlags
     const short HYPHENATE_AGAIN = 4;
 
     /** Request new proofreading of the document
-
-        @since OOo 3.0.1
     */
     const short PROOFREAD_AGAIN = 8;
 

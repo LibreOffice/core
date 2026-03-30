@@ -34,7 +34,6 @@ module com { module sun { module star { module sdbc {
     </p>
     @see com::sun::star::sdbc::XDriver
     @see com::sun::star::sdbc::XConnection
-    @since LibreOffice 4.0
  */
 published interface XDriverManager2
 {

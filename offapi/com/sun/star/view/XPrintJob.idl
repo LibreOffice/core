@@ -28,8 +28,6 @@ module com {  module sun {  module star {  module view {
     the context of the print job.</p>
 
     @see XPrintJobListener
-
-    @since OOo 1.1.2
  */
 published interface XPrintJob : com::sun::star::uno::XInterface
 {

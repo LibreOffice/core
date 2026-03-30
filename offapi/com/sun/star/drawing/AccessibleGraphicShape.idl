@@ -27,8 +27,6 @@ module com {  module sun {  module star {  module drawing {
     service by the additional support of the
     ::com::sun::star::accessibility::XAccessibleImage
     interface.</p>
-
-     @since OOo 1.1.2
 */
 service AccessibleGraphicShape
 {

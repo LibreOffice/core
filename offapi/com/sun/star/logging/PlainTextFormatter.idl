@@ -29,8 +29,6 @@ interface XLogFormatter;
     be formatted into a single text line, assembling the sequence number, the thread ID,
     the time of the logged event, the source class/method name (if applicable), and the
     log message.</p>
-
-    @since OOo 2.3
  */
 service PlainTextFormatter : XLogFormatter
 {

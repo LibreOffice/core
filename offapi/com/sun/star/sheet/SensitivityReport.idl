@@ -13,8 +13,6 @@ module com {  module sun {  module star {  module sheet {
 
 
 /** Stores all the information related to the sensitivity report of a linear programming model
- *
- *  @since LibreOffice 25.2
  */
 struct SensitivityReport
 {

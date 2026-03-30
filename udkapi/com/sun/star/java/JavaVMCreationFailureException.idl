@@ -28,8 +28,6 @@ module com { module sun { module star { module java {
     return because it tries to quit the process ( _exit), the shared
     library is corrupted, so that the symbols for JNI_GetDefaultVMInitArgs
     or JNI_CreateJavaVM cannot be found, etc.
-
-    @since OOo 1.1.2
  */
 published exception JavaVMCreationFailureException: JavaInitializationException
 {

@@ -24,8 +24,6 @@ module com { module sun { module star { module accessibility {
     XAccessibleEventListener.
 
     <p>It is usually implemented by AccessibleContext.
-
-    @since OOo 1.1.2
 */
 struct AccessibleEventObject: ::com::sun::star::lang::EventObject
 {
@@ -52,7 +50,6 @@ struct AccessibleEventObject: ::com::sun::star::lang::EventObject
     /**
         For events like add/remove/update of a child, this specifies the index of the object.
         For anything else, it should be -1.
-        @since LibreOffice 7.6
     */
     long IndexHint;
 };

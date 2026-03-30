@@ -31,8 +31,6 @@ module com { module sun { module star { module ui {
     registered at the single instance UIElementFactoryManager
     service to provide access to itself.
     </p>
-
-    @since OOo 2.0
 */
 
 service UIElementFactory

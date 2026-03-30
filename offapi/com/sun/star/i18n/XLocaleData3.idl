@@ -17,8 +17,6 @@ module com { module sun { module star { module i18n {
     <p> Derived from ::com::sun::star::i18n::XLocaleData2 this provides an
     additional method to return a sequence of all
     ::com::sun::star::i18n::Calendar2 elements available for that locale.
-
-    @since LibreOffice 3.5
  */
 
 published interface XLocaleData3 : com::sun::star::i18n::XLocaleData2

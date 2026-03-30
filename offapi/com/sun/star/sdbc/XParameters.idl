@@ -32,7 +32,6 @@
 /** is used for parameter setting, commonly implemented in conjunction with
     PreparedStatements.
 
-
     <p>
     <b>Note:</b> The setXXX methods for setting IN parameter values
     must specify types that are compatible with the defined SQL type of
@@ -73,7 +72,6 @@ published interface XParameters: com::sun::star::uno::XInterface
         be used for user-named types and REF type parameters.  Examples
         of user-named types include: STRUCT, DISTINCT, OBJECT, and
         named array types.
-
 
         <p>
         <b>Note:</b> To be portable, applications must give the
@@ -284,7 +282,6 @@ published interface XParameters: com::sun::star::uno::XInterface
 
     /** sets the value of a parameter using an any.
 
-
         <p>The given object will be converted to the targetSqlType
         before being sent to the database.
         If the object has a custom mapping (is of a class implementing SQLData),
@@ -308,8 +305,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             raises (SQLException);
 
     /** set a value from the Datatype ANY for a parameter.
-
-
 
         <p>The given object will be converted to the targetSqlType
         before being sent to the database.
@@ -386,7 +381,6 @@ published interface XParameters: com::sun::star::uno::XInterface
 
 
     /** clears the current parameter values immediately.
-
 
         <p>In general, parameter values remain in force for repeated use of a
         Statement. Setting a parameter value automatically clears its

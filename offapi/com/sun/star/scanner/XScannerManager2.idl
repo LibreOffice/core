@@ -13,8 +13,6 @@ module com { module sun { module star { module scanner {
 
 /**
     Extension of XScannerManager.
-
-    @since LibreOffice 3.5
 */
 published interface XScannerManager2: com::sun::star::scanner::XScannerManager
 {

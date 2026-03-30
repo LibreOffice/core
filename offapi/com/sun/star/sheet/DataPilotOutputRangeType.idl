@@ -27,8 +27,6 @@ module com { module sun { module star { module sheet {
     returns a different cell range depending upon the value passed to it as the argument.</p>
 
     @see com::sun::star::sheet::XDataPilotTable2
-
-    @since OOo 3.0
  */
 constants DataPilotOutputRangeType
 {

@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
 
 /** is the UNO representation of the Automation type <code>DECIMAL</code>.
 
-
-    @since OOo 1.1.2
  */
 struct Decimal
 {

@@ -23,8 +23,6 @@ module com { module sun { module star { module ldap {
   Generic exception occurring during access to an LDAP server.
   The actual LDAP error code is provided for more refined
   error management.
-
-     @since OOo 1.1.2
   */
 published exception LdapGenericException : ::com::sun::star::uno::Exception
 {

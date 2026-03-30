@@ -20,8 +20,6 @@
 module com { module sun { module star { module rendering {
 
 /** This structure describes format of a floating point bitmap.<p>
-
-    @since OOo 2.0
  */
 constants FloatingPointBitmapFormat
 {

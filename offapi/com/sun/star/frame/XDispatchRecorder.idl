@@ -35,8 +35,6 @@ module com {  module sun {  module star {  module frame {
 
     @see Frame
     @see XDispatchRecorderSupplier
-
-    @since OOo 1.1.2
  */
 published interface XDispatchRecorder: com::sun::star::uno::XInterface
 {

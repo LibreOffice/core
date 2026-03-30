@@ -28,7 +28,6 @@ module com {  module sun {  module star {  module sheet {
     FilterOperator enum.</p>
 
     @see SheetFilterDescriptor
-    @since OOo 3.2
  */
 published struct TableFilterField2
 {

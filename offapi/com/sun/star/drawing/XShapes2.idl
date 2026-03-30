@@ -11,8 +11,6 @@ module com {  module sun {  module star { module drawing {
 
 /**
  * Allows insertion of shapes at different positions.
- *
- * @since LibreOffice 4.2
  */
 interface XShapes2
 {
@@ -20,8 +18,6 @@ interface XShapes2
      * Insert a new shape to the top of the stack.
      *
      * @param xShape shape to be inserted.
-     *
-     * @since LibreOffice 4.2
      */
     void addTop( [in] com::sun::star::drawing::XShape xShape );
 
@@ -29,8 +25,6 @@ interface XShapes2
      * Insert a new shape to the bottom of the stack.
      *
      * @param xShape shape to be inserted.
-     *
-     * @since LibreOffice 4.2
      */
     void addBottom( [in] com::sun::star::drawing::XShape xShape );
 };

@@ -26,14 +26,10 @@ interface XUITest
     XUIObject getFloatWindow();
 
     /** Get the XUIObject for the given window.
-
-        @since LibreOffice 25.8
     */
     XUIObject getWindow([in] ::com::sun::star::awt::XWindow xWindow);
 
     /** Get the XUIObject for the window that currently has focus.
-
-        @since LibreOffice 26.2
     */
     XUIObject getFocusWindow();
 };

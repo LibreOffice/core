@@ -48,8 +48,6 @@ published service ChartDataPointProperties
     /** If ChartDataPointProperties may be stored as XML
         element, this service should be supported in order to preserve
         unparsed XML attributes.
-
-    @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
@@ -124,16 +122,12 @@ published service ChartDataPointProperties
     [optional, property] long SegmentOffset;
 
     /** specifies if the text of a data label (caption) must be wrapped
-
-        @since LibreOffice 5.1
      */
     [optional, property] boolean TextWordWrap;
 
     /** In charts that support symbols, you can set this property to
         a graphic object.  This graphic is then used as symbol for each
         data point.
-
-        @since LibreOffice 6.1
 
         @see ChartSymbolType
      */

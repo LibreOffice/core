@@ -40,8 +40,6 @@ module com {   module sun {   module star {   module rdf {
     XURI
     </pre>
 
-    @since OOo 3.0
-
     @see XRepository
     @see Statement
     @see XResource

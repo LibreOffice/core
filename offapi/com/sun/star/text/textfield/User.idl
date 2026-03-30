@@ -41,8 +41,6 @@ published service User
     [optional, property] long NumberFormat;
     /** determines whether changes in language attributes at the position the text field
         is located also change the number format as appropriate for this language.
-
-    @since OOo 1.1.2
      */
     [optional, property] boolean IsFixedLanguage;
 };

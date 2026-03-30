@@ -21,8 +21,6 @@
 module com { module sun { module star { module deployment {
 
 /** A LicenseException reflects the necessity of someone agreeing to a license.
-
-    @since OOo 2.0.4
  */
 exception LicenseException : com::sun::star::uno::Exception
 {

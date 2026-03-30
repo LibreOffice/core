@@ -33,8 +33,6 @@ module com { module sun { module star { module accessibility {
     support the XAccessibleText interface.</p>
 
     @see XAccessibleHyperlink, XAccessibleText
-
-    @since OOo 1.1.2
 */
 interface XAccessibleHypertext
     : ::com::sun::star::accessibility::XAccessibleText

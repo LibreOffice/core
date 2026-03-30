@@ -19,10 +19,6 @@
 
 module com { module sun { module star { module ucb {
 
-/**
-
-  @since LibreOffice 4.0
-*/
 published interface XUniversalContentBroker
 {
     /** must be implemented to make it possible to resolve cyclic object
@@ -71,7 +67,6 @@ published interface XUniversalContentBroker
         XCommandProcessor::createCommandIdentifier() to avoid
         resource leaks. For a detailed description of the problem refer to
         XCommandProcessor2::releaseCommandIdentifier().
-
 
         <p>This interface is required.
 

@@ -48,8 +48,6 @@ published enum ValidationAlertStyle
     MACRO,
 
     /** silently reject
-
-        @since LibreOffice 26.2
      */
     NONE
 };

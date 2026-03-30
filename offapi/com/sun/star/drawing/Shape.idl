@@ -145,8 +145,6 @@ published service Shape
     /** Grab bag of shape properties, used as a string-any map for
         interim interop purposes.
 
-        @since LibreOffice 4.2
-
         <p>This property is intentionally not handled by the ODF
         filter. Any member that should be handled there should be
         first moved out from this grab bag to a separate property.</p>
@@ -155,15 +153,11 @@ published service Shape
 
     /** contains the relative height of the object.
         <p> It is only valid if it is greater than zero.</p>
-
-        @since LibreOffice 4.3
      */
     [optional, property] short RelativeHeight;
 
     /** contains the relative width of the object.
         <p> It is only valid if it is greater than zero. </p>
-
-        @since LibreOffice 4.3
      */
     [optional, property] short RelativeWidth;
 
@@ -171,7 +165,6 @@ published service Shape
         <p> It is only valid if RelativeHeight is greater than zero.</p>
 
         @see com::sun::star::text::RelOrientation
-        @since LibreOffice 4.3
      */
     [optional, property] short RelativeHeightRelation;
 
@@ -179,7 +172,6 @@ published service Shape
         <p> It is only valid if RelativeWidth is greater than zero.</p>
 
         @see com::sun::star::text::RelOrientation
-        @since LibreOffice 4.3
      */
     [optional, property] short RelativeWidthRelation;
 
@@ -187,8 +179,6 @@ published service Shape
 
         <p>This short title is visible as an alternative tag in HTML format.
         Accessibility tools can read this text.</p>
-
-        @since OOo 2.2
     */
     [optional, property] string Title;
 
@@ -197,8 +187,6 @@ published service Shape
         <p>The long description text can be entered to describe an object in
         more detail to users with screen reader software. The description is
         visible as an alternative tag for accessibility tools.</p>
-
-        @since OOo 2.2
     */
     [optional, property] string Description;
 
@@ -206,8 +194,6 @@ published service Shape
 
         If `TRUE`, it is considered not part of the document content,
         and may be ignored by assistive technologies.
-
-        @since LibreOffice 7.6
     */
     [optional, property] boolean Decorative;
 

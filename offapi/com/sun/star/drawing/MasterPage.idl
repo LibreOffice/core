@@ -23,7 +23,6 @@
 
 /** This service is a single master page inside a drawing document.
 
-
     <p>It serves as a background page for zero or more DrawPages.
     Since this service is derived from the service GenericDrawPage,
     it can be used as a draw page with three differences:

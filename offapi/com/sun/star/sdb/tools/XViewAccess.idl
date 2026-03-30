@@ -23,8 +23,6 @@ module com {  module sun {  module star {  module sdb { module tools {
 
     @see com::sun::star::sdb::DataSource::Settings
     @see com::sun::star::sdbcx::View
-
-    @since OOo 3.3
 */
 interface XViewAccess
 {

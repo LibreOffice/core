@@ -35,8 +35,6 @@ module com { module sun { module star { module configuration { module backend {
   @see com::sun::star::configuration::backend::Layer
         Service providing access to individual
         configuration data for an entity.
-
-  @since OOo 1.1.2
   */
 published service Schema
 {
@@ -52,8 +50,6 @@ published service Schema
 
     /**
       The URL of the layer data.
-
-      @since OOo 2.0
       */
     [property,optional,readonly] string URL ;
 

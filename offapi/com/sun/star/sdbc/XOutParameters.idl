@@ -22,7 +22,6 @@
 
 /** is used to register Out-Parameters for stored procedures.
 
-
     <p>
     SDBC provides a stored procedure SQL escape that allows stored procedures
     to be called in a standard way for all RDBMSs. This escape syntax has one
@@ -86,7 +85,6 @@ published interface XOutParameters: com::sun::star::uno::XInterface
         <code>parameterIndex</code>
         to the SDBC type <code>sqlType</code>. All
         OUT parameters must be registered before a stored procedure is executed.
-
 
         <p>
         The SDBC type specified by

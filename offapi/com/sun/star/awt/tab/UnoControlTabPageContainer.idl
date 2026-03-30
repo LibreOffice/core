@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module awt {  module tab {
 
 
 /** specifies a TabPageContainer control.
-
-    @since OOo 3.4
  */
 published service UnoControlTabPageContainer
 {

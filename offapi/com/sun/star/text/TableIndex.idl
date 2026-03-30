@@ -45,7 +45,6 @@ published service TableIndex
 
     /** determines if paragraphs with one particular style applied are
         included in the index.
-        @since LibreOffice 7.6
      */
     [optional, property, maybevoid] string CreateFromParagraphStyle;
 };

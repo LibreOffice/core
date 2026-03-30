@@ -42,8 +42,6 @@
     XGridSelectionListener and add the instance with the method
     XGridRowSelection::addSelectionListener().
     You than will be notified for any selection change.</p>
-
-    @since OOo 3.3
  */
 service UnoControlGrid
 {

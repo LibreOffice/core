@@ -41,8 +41,6 @@ module com { module sun { module star { module configuration { module backend {
     <p> Layers contains data for multiple components
         associated to a single entity.
     <p>
-
-    @since OOo 1.1.2
 */
 published service SingleBackend
 {

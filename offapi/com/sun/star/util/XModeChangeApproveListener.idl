@@ -24,8 +24,6 @@ module com {  module sun {  module star {  module util {
 /** allows to veto changes in an object's internal mode.
 
     @see XModeChangeBroadcaster
-
-    @since OOo 1.1.2
 */
 published interface XModeChangeApproveListener : com::sun::star::lang::XEventListener
 {

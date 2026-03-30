@@ -51,8 +51,6 @@ interface XParagraphAppend : com::sun::star::uno::XInterface
         @param
             TextRange specifies the position of the insertion.
 
-        @since LibreOffice 4.0
-
          */
          com::sun::star::text::XTextRange finishParagraphInsert(  [in] com::sun::star::beans::PropertyValues CharacterAndParagraphProperties,
                                                                   [in] com::sun::star::text::XTextRange TextRange )

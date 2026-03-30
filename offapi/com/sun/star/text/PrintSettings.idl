@@ -66,8 +66,6 @@ published service PrintSettings
     /** specifies if the printer paper tray selection of the system
         printer is used.
 
-
-
         <p>If com::sun::star::view::PrintSettings::PaperFromSetup is `FALSE`,
         then the paper tray selection of the page styles is used.</p>
      */

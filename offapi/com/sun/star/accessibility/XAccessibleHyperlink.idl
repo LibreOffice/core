@@ -37,8 +37,6 @@ module com { module sun { module star { module accessibility {
     XAccessibleText interface. The XAccessibleHyperlink::getStartIndex() and
     XAccessibleHyperlink::getEndIndex() methods return
     indices with respect to the text exposed by that interface.</p>
-
-    @since OOo 1.1.2
 */
 interface XAccessibleHyperlink :
     ::com::sun::star::accessibility::XAccessibleAction

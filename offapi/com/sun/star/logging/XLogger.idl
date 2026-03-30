@@ -33,8 +33,6 @@ interface XLogHandler;
         <li>There's no localization support.</li>
         <li>Logger instances do not form a hierarchy.</li>
     </ul></p>
-
-    @since OOo 2.3
  */
 interface XLogger
 {

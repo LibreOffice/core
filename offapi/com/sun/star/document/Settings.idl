@@ -142,8 +142,6 @@ published service Settings
     [optional, property] long CurrentDatabaseCommandType;
 
     // Draw and Impress
-    /**
-     */
     [optional, property] long DefaultTabStop;
 
     // Draw and Impress
@@ -197,33 +195,21 @@ published service Settings
     [optional, property] string ColorTableURL;
 
     // Draw and Impress
-    /**
-     */
     [optional, property] string DashTableURL;
 
     // Draw and Impress
-    /**
-     */
     [optional, property] string LineEndTableURL;
 
     // Draw and Impress
-    /**
-     */
     [optional, property] string HatchTableURL;
 
     // Draw and Impress
-    /**
-     */
     [optional, property] string GradientTableURL;
 
     // Draw and Impress
-    /**
-     */
     [optional, property] string BitmapTableURL;
 
     // Calc
-    /**
-     */
     [optional, property] boolean AutoCalculate;
 
     // Writer, later others
@@ -244,38 +230,28 @@ published service Settings
     /**
        Whether to embed fonts used by the document (see e.g. handling
        of OOXML embedRegular etc.)
-       @since LibreOffice 4.0
      */
     [optional, property] boolean EmbedFonts;
     // Writer, maybe later others
     /**
        Whether to embed also system fonts used by the document.
        Does not have any effect if EmbedFonts is false.
-       @since LibreOffice 4.0
      */
     [optional, property] boolean EmbedSystemFonts;
 
     /** Whether to embed only the fonts that are used in the document.
-
-        @since LibreOffice 6.2
      */
      [optional, property] boolean EmbedOnlyUsedFonts;
 
     /** Whether to embed Latin script fonts.
-
-        @since LibreOffice 6.2
      */
     [optional, property] boolean EmbedLatinScriptFonts;
 
     /** Whether to embed Asian script fonts.
-
-        @since LibreOffice 6.2
      */
     [optional, property] boolean EmbedAsianScriptFonts;
 
     /** Whether to embed Complex script fonts.
-
-        @since LibreOffice 6.2
      */
     [optional, property] boolean EmbedComplexScriptFonts;
 };

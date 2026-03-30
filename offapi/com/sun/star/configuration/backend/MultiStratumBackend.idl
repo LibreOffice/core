@@ -41,7 +41,6 @@ service MultiStratumBackend
          must be passed, that provides further backend initialization settings.
       </p>
 
-
     */
 
     [optional] interface com::sun::star::lang::XInitialization ;

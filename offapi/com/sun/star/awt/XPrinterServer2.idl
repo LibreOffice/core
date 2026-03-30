@@ -21,8 +21,6 @@
 
 /**
   extends printer server interface
-
-  @since LibreOffice 6.3
 */
 
 interface XPrinterServer2: ::com::sun::star::awt::XPrinterServer

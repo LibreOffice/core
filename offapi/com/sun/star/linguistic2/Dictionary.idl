@@ -22,11 +22,8 @@ module com { module sun { module star { module linguistic2 {
 
 /** represents a dictionary used for spell checking and hyphenation.
 
-
     @see    com::sun::star::linguistic2::DictionaryList
     @see    com::sun::star::linguistic2::XSearchableDictionaryList
-
-    @since OOo 3.0.1
 */
 service Dictionary
 {

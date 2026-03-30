@@ -30,8 +30,6 @@ module com { module sun { module star { module frame {
     implementation which provides a list of latest files that a user has
     worked on. This list gets changes consistently during a work session.
     </p>
-
-    @since OOo 2.0
 */
 
 service PopupMenuController
@@ -89,8 +87,6 @@ service PopupMenuController
         Po-pup menu controller functions must be specified using the following
         the dispatch URL scheme: "vnd.sun.star.popup:" opaque_part [ "?" query ].
         </p>
-
-        @since OOo 2.2
     */
     [optional] interface com::sun::star::frame::XDispatchProvider;
 
@@ -101,8 +97,6 @@ service PopupMenuController
         life-time. For correct life-time handling a pop-up menu
         controller should support this interface.
         </p>
-
-        @since OOo 2.2
     */
     [optional] interface com::sun::star::lang::XComponent;
 };

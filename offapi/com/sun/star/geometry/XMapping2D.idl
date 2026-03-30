@@ -30,8 +30,6 @@ module com {  module sun {  module star {  module geometry {
     inverse. Bijectiveness also implies completeness, i.e. for every
     pair of real numbers there must be another pair that is mapped
     upon them.<p>
-
-    @since OOo 2.0
  */
 interface XMapping2D : ::com::sun::star::uno::XInterface
 {

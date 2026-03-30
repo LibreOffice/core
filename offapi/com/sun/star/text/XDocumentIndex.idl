@@ -23,17 +23,10 @@
 
 /** This is the main interface for a document index.
 
-
-
     <p>Use com::sun::star::util::XRefreshable and
     com::sun::star::lang::XServiceInfo instead, if available.
 
     </p>
-
-
-
-
-
 
     @deprecated
     @see com::sun::star::util::XRefreshable

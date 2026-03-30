@@ -20,9 +20,6 @@
 
  module com {  module sun {  module star {  module frame {
 
-/**
-    @since LibreOffice 4.2
- */
 service OfficeFrameLoader : XSynchronousFrameLoader;
 
 

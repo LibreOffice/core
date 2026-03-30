@@ -29,8 +29,6 @@ module com {  module sun {  module star {  module sdb {
     @see com::sun::star::sdb::ContentLoader
     @see com::sun::star::frame::XDispatch
     @see com::sun::star::frame::XDispatchProviderInterceptor
-
-    @since OOo 1.1.2
 */
 
 published service TableDesign

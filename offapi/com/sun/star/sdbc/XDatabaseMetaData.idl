@@ -25,7 +25,6 @@
 
 /** provides comprehensive information about the database as a whole.
 
-
     <p>Many of the methods here return lists of information in
     the form of
     com::sun::star::sdbc::XResultSet
@@ -302,7 +301,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         This is the string that can be used to escape "_" or "%" in
         the string pattern style catalog search parameters.
 
-
         <p>
         The "_" character represents any single character.
         </p>
@@ -343,7 +341,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     boolean supportsAlterTableWithDropColumn() raises (SQLException);
 
     /** support the Database column aliasing?
-
 
         <p>
         The SQL AS clause can be used to provide names for
@@ -1058,7 +1055,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Gets a description of the stored procedures available in a
         catalog.
 
-
         <p>
         Only procedure descriptions matching the schema and
         procedure name criteria are returned. They are ordered by
@@ -1114,7 +1110,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** gets a description of a catalog's stored procedure parameters
         and result columns.
-
 
         <p>
         Only descriptions matching the schema, procedure and
@@ -1215,7 +1210,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** gets a description of tables available in a catalog.
 
-
         <p>Only table descriptions matching the catalog, schema, table
         name, and type criteria are returned. They are ordered by
         TABLE_TYPE, TABLE_SCHEM, and TABLE_NAME.
@@ -1265,7 +1259,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Gets the schema names available in this database. The results
         are ordered by schema name.
 
-
         <p>The schema column is:
         </p>
         <ol>
@@ -1283,7 +1276,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** gets the catalog names available in this database. The results
         are ordered by catalog name.
 
-
         <p>The catalog column is:
         </p>
         <ol>
@@ -1300,7 +1292,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** gets the table types available in this database. The results
         are ordered by table type.
-
 
         <p>The table type is:
         </p>
@@ -1320,7 +1311,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** gets a description of table columns available in
         the specified catalog.
-
 
         <p>Only column descriptions matching the catalog, schema, table
         and column name criteria are returned. They are ordered by
@@ -1418,7 +1408,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** gets a description of the access rights for a table's columns.
 
-
         <p>
         Only privileges matching the column name criteria are
         returned. They are ordered by COLUMN_NAME and PRIVILEGE.
@@ -1475,7 +1464,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         this privilege applies to all columns (this may be `TRUE` for
         some systems but is not `TRUE` for all.)
 
-
         <p>Only privileges matching the schema and table name
         criteria are returned. They are ordered by TABLE_SCHEM,
         TABLE_NAME, and PRIVILEGE.
@@ -1523,7 +1511,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** gets a description of a table's optimal set of columns that
         uniquely identifies a row. They are ordered by SCOPE.
-
 
         <p>Each column description has the following columns:
         </p>
@@ -1594,7 +1581,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         updated when any value in a row is updated. They are
         unordered.
 
-
         <p>Each column description has the following columns:
         </p>
         <ol>
@@ -1649,7 +1635,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** gets a description of a table's primary key columns. They
         are ordered by COLUMN_NAME.
 
-
         <p>Each primary key column description has the following columns:
         </p>
         <ol>
@@ -1690,7 +1675,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         referenced by a table's foreign key columns (the primary keys
         imported by a table). They are ordered by PKTABLE_CAT,
         PKTABLE_SCHEM, PKTABLE_NAME, and KEY_SEQ.
-
 
         <p>Each primary key column description has the following columns:
         </p>
@@ -1804,7 +1788,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         table's primary key columns (the foreign keys exported by a
         table). They are ordered by FKTABLE_CAT, FKTABLE_SCHEM,
         FKTABLE_NAME, and KEY_SEQ.
-
 
         <p>Each foreign key column description has the following columns:
         </p>
@@ -1921,7 +1904,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         (most tables only import a foreign key from a table once.). They
         are ordered by FKTABLE_CAT, FKTABLE_SCHEM, FKTABLE_NAME, and
         KEY_SEQ.
-
 
         <p>Each foreign key column description has the following columns:
         </p>
@@ -2044,8 +2026,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         this database. They are ordered by DATA_TYPE and then by how
         closely the data type maps to the corresponding SDBC SQL type.
 
-
-
         <p>Each type description has the following columns:
         </p>
         <ol>
@@ -2136,7 +2116,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** gets a description of a table's indices and statistics. They are
         ordered by NON_UNIQUE, TYPE, INDEX_NAME, and ORDINAL_POSITION.
-
 
         <p>Each index column description has the following columns:
         </p>
@@ -2368,7 +2347,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Gets a description of the user-defined types defined in a particular
         schema. Schema-specific UDTs may have type OBJECT, STRUCT,
         or DISTINCT.
-
 
         <p>Only types matching the catalog, schema, type name, and type
         criteria are returned. They are ordered by DATA_TYPE, TYPE_SCHEM,

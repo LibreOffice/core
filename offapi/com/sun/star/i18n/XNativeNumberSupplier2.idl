@@ -24,8 +24,6 @@ module com { module sun { module star { module i18n {
 /** Methods to convert between strings of ASCII Arabic digits and native
     numeral strings, using NatNum params.
 
-    @since LibreOffice 6.1
-
     @internal
 
     ATTENTION: This interface is marked <em>internal</em> and does not

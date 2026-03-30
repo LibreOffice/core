@@ -25,8 +25,6 @@ module com { module sun { module star { module ucb {
     access to a (ftp-server-side) file.
 
     @see com::sun::star::ucb::FTPContentProvider
-
-    @since OOo 1.1.2
 */
 published service FTPContent
 {

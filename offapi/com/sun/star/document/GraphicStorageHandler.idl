@@ -12,8 +12,6 @@ module com {  module sun {  module star {  module document {
 
 /**
     Default implementation of XGraphicStorageHandler
-
-    @since LibreOffice 6.1
  */
 service GraphicStorageHandler : XGraphicStorageHandler
 {

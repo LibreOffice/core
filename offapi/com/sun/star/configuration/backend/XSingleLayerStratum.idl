@@ -32,8 +32,6 @@ module com { module sun { module star { module configuration { module backend {
   @see com::sun::star::util::XTimeStamped
   @see com::sun::star::configuration::backend::XSchemaSupplier
   @see com::sun::star::configuration::backend::XMultiLayerStratum
-
-  @since OOo 1.1.2
 */
 published interface XSingleLayerStratum : ::com::sun::star::uno::XInterface
 {

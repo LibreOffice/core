@@ -125,11 +125,6 @@ published service SheetCell
     [optional] interface com::sun::star::beans::XTolerantMultiPropertySet;
 
 
-    /**
-
-    @since OOo 2.0
-
-    */
     [optional] interface com::sun::star::util::XModifyBroadcaster;
 
 
@@ -214,7 +209,6 @@ published service SheetCell
     /** contains the content type of the cell.
 
         @see com::sun::star::table::CellContentType
-        @since LibreOffice 6.1
     */
     [optional, readonly, property] com::sun::star::table::CellContentType CellContentType;
 
@@ -222,7 +216,6 @@ published service SheetCell
     /** contains the result type of a formula.
 
         @see com::sun::star::sheet::FormulaResult
-        @since LibreOffice 6.1
      */
     [optional, readonly, property] long FormulaResultType2;
 };

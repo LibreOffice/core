@@ -35,8 +35,6 @@ published interface XDocumentIndexMark: com::sun::star::text::XTextContent
     /** sets an explicit string for this index mark to use
         in the index.
 
-
-
         <p>If empty, the string of the TextRange to which
         the TextContent refers is used in the index.</p>
      */

@@ -22,7 +22,6 @@
 
 /** describes the driver properties for making a connection.
 
-
     <p>
     The DriverPropertyInfo is of interest only to advanced programmers
     who need to interact with a driver to discover and supply properties

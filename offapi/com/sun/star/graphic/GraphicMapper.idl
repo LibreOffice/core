@@ -14,7 +14,6 @@ module com { module sun { module star { module graphic
 /** implementation of the XGraphicMapper interface
 
     @see XGraphicMapper
-    @since LibreOffice 7.1
 */
 service GraphicMapper : XGraphicMapper;
 

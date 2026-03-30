@@ -20,9 +20,6 @@
 module com {  module sun {  module star {  module animations {
 
 
-/**
-   @since LibreOffice 4.1
-*/
 service ParallelTimeContainer : com::sun::star::animations::XParallelTimeContainer;
 
 

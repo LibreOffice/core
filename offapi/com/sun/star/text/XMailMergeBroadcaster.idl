@@ -33,8 +33,6 @@ module com { module sun { module star { module text {
 
     @see    com::sun::star::text::MailMergeEvent
     @see    com::sun::star::text::MailMerge
-
-    @since OOo 1.1.2
 */
 published interface XMailMergeBroadcaster : com::sun::star::uno::XInterface
 {

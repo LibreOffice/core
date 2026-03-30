@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module awt { module grid {
 
 
 /** specifies the standard model of a UnoControlGrid control.
-
-    @since OOo 3.3
  */
 published service UnoControlGridModel
 {

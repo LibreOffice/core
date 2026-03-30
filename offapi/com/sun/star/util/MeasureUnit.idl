@@ -85,14 +85,10 @@ published constants MeasureUnit
     const short SYSFONT = 18;
 
     /** all measures for this component are in em relative to the font
-
-        @since LibreOffice 25.2
      */
     const short FONT_EM = 19;
 
     /** all measures for this component are in ic, per the CSS definition
-
-        @since LibreOffice 25.2
      */
     const short FONT_CJK_ADVANCE = 20;
 

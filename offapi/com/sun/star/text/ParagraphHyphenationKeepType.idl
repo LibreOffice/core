@@ -26,8 +26,6 @@
     under the hyphenate-limit-last property of the CSS Text Level 4 specification.
     The latest version of the aforementioned
     specification is found here http://www.w3.org/TR/css-text-4/.
-
-    @since LibreOffice 24.8
  */
 
 constants ParagraphHyphenationKeepType

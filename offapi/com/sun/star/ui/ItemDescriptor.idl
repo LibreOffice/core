@@ -32,8 +32,6 @@ module com {  module sun {  module star {  module ui {
        No assumption is made about any graphical representation:
        You could have a menu or a toolbox working with the same item descriptor.
     </p>
-
-    @since OOo 2.0
 */
 service ItemDescriptor
 {

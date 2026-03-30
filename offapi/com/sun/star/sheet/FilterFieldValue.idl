@@ -9,9 +9,6 @@
 
 module com {  module sun {  module star {  module sheet {
 
-/**
- * @since LibreOffice 3.5
- */
 struct FilterFieldValue
 {
     /** selects whether the TableFilterFieldValue::NumericValue
@@ -40,13 +37,10 @@ struct FilterFieldValue
         </ul>
 
         @see com::sun::star::sheet::FilterFieldType
-        @since LibreOffice 7.2
      */
     long FilterType;
 
     /** The color which is used for filtering
-
-        @since LibreOffice 7.2
      */
     com::sun::star::util::Color ColorValue;
 

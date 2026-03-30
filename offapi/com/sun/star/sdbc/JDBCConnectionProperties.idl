@@ -54,8 +54,6 @@ service JDBCConnectionProperties
         in the list are expanded using the
         com::sun::star::util::theMacroExpander
         singleton.</p>
-
-        @since OOo 2.3
     */
     [optional, property] string JavaDriverClassPath;
 

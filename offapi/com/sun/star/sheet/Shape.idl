@@ -33,8 +33,6 @@ service Shape
 
     /** If set, the shape will resize with the cell.
         Only works when shape is anchored to a cell.
-
-        @since LibreOffice 6.3
     */
     [optional, property] boolean ResizeWithCell;
 

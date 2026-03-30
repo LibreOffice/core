@@ -24,7 +24,6 @@
 
 /** describes a container which provides access to database forms.
 
-
     @see com::sun::star::sdb::DocumentDefinition
  */
 service Forms

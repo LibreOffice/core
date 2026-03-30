@@ -11,8 +11,6 @@
 module com { module sun { module star { module text {
 
 /**  used to notify listeners about paste events.
-
-    @since LibreOffice 6.3
 */
 interface XPasteListener : com::sun::star::uno::XInterface
 {

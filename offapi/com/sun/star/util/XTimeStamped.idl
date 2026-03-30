@@ -34,15 +34,12 @@ module com { module sun { module star { module util {
      particularly the presence of a meaningful order between
      timestamps, depend on the implementation.
   </p>
-
-    @since OOo 1.1.2
   */
 published interface XTimeStamped : ::com::sun::star::uno::XInterface
 {
 
     /**
       returns the timestamp of the object.
-
 
       @return
         a `string` that represents a timestamp.

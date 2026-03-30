@@ -343,8 +343,6 @@ service MediaDescriptor
         Setting this to `FALSE` prevents the loaded document to be added to the recent documents list.
         Default is `TRUE`.
         </p>
-
-        @since LibreOffice 5.1
      */
     [optional,property] boolean PickListEntry;
 
@@ -413,8 +411,6 @@ service MediaDescriptor
         For loading of corrupted zip packages: Setting this to `TRUE` let the document
         be opened in repair mode, so as much as possible information will be retrieved.
         </p>
-
-     @since OOo 1.1.2
      */
     [optional,property] boolean RepairPackage;
 
@@ -524,16 +520,12 @@ service MediaDescriptor
     /** should the macro be executed.
         the value should be one from com::sun::star::document::MacroExecMode
         constant list.
-
-        @since OOo 1.1.2
      */
     [optional,property] short MacroExecutionMode;
 
     /** can the document be updated depending from links.
         the value should be one from com::sun::star::document::UpdateDocMode
         constant list.
-
-        @since OOo 1.1.2
      */
     [optional,property] short UpdateDocMode;
 
@@ -548,8 +540,6 @@ service MediaDescriptor
 
         @see ::com::sun::star::frame::XModel2::createViewController
         @see ::com::sun::star::frame::XController2::ViewControllerName
-
-        @since OOo 3.0
      */
     [optional,property] string ViewControllerName;
 
@@ -560,34 +550,24 @@ service MediaDescriptor
     /** Setting this option will prevent copying/dragging any content anywhere.
         The commands 'Copy' and 'Cut' will be disabled; selection clipboard won't work,
         and dragging with mouse will also be disabled.
-
-        @since LibreOffice 6.4
      */
     [optional,property] boolean LockContentExtraction;
 
     /** Setting this option will prevent exporting document content to any file.
         Export, Send, save as, etc will be disabled,
         as well as individual graphic/chart export and mail merge.
-
-        @since LibreOffice 6.4
      */
     [optional,property] boolean LockExport;
 
     /** Setting this option will disable all print functions (including Printer setup)
-
-        @since LibreOffice 6.4
      */
     [optional,property] boolean LockPrint;
 
     /** Setting this option will disable the save function.
-     *
-        @since LibreOffice 6.4
      */
     [optional,property] boolean LockSave;
 
     /** Setting this option will disable switching to edit mode from read-only mode.
-     *
-        @since LibreOffice 6.4
      */
     [optional,property] boolean LockEditDoc;
 
@@ -599,8 +579,6 @@ service MediaDescriptor
 
         <p>This defaults to false, except for the default template of a LibreOffice
         module, referenced as "private:factory/&lt;module&gt;".</p>
-
-        @since LibreOffice 7.0
      */
     [optional,property] boolean Replaceable;
 };

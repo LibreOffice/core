@@ -26,8 +26,6 @@ module com {  module sun {  module star {  module accessibility {
     XAccessibleContext::getLocale().</p>
 
     @see XAccessibleContext::getLocale()
-
-    @since OOo 1.1.2
 */
 exception IllegalAccessibleComponentStateException
     : ::com::sun::star::uno::Exception

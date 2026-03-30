@@ -49,8 +49,6 @@ module com { module sun { module star { module frame {
     @see com::sun::star::ui::UIElementTypes
     @see com::sun::star::frame::XFrame
     </p>
-
-    @since OOo 2.0
 */
 
 interface XLayoutManager : com::sun::star::uno::XInterface

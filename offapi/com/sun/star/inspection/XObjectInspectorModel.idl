@@ -24,8 +24,6 @@ interface XPropertyHandler;
 /** describes the model of an ObjectInspector
 
     @see ObjectInspector
-
-    @since OOo 2.0.3
 */
 interface XObjectInspectorModel
 {
@@ -115,8 +113,6 @@ interface XObjectInspectorModel
         Additionally, the inspector can optionally display a section dedicated to help
         texts. Clients could use this section to display context-sensitive help, for
         instance short texts explaining the currently selected property.</p>
-
-        @since OOo 2.2
     */
     [attribute, readonly] boolean HasHelpSection;
 
@@ -129,8 +125,6 @@ interface XObjectInspectorModel
         <p>The layout of the ObjectInspector is undefined if
         #MinHelpTextLines is larger than
         #MaxHelpTextLines.</p>
-
-        @since OOo 2.2
     */
     [attribute, readonly] long MinHelpTextLines;
 
@@ -143,8 +137,6 @@ interface XObjectInspectorModel
         <p>The layout of the ObjectInspector is undefined if
         #MaxHelpTextLines is smaller than
         #MinHelpTextLines.</p>
-
-        @since OOo 2.2
     */
     [attribute, readonly] long MaxHelpTextLines;
 

@@ -13,8 +13,6 @@ module com {  module sun {  module star { module drawing {
  * Yet another XShapes interface, enables sorting shapes with
  * some extra attention paid to shapes with textboxes and overall
  * performance
- *
- * @since LibreOffice 6.4
  */
 interface XShapes3
 {
@@ -24,8 +22,6 @@ interface XShapes3
      *
      * @param sortOrder
      * desired order of the shapes
-     *
-     * @since LibreOffice 6.4
      */
 
     void sort( [in] sequence< long> sortOrder )

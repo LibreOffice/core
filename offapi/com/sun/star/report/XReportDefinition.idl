@@ -153,7 +153,6 @@ interface XReportDefinition
     is `TRUE`. By switching it to `FALSE`, you can pass backend-specific SQL statements,
     which are not standard SQL, to your database.</p>
 
-
     @see com::sun::star::sdb::CommandType
     */
     [attribute,bound] string Command;

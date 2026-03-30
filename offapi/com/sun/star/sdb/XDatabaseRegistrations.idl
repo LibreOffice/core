@@ -29,8 +29,6 @@ published interface XDatabaseRegistrationsListener;
     this way hiding the concrete configuration structure from its clients. You should,
     if possible at all, use this interface, instead of modifying or querying the configuration
     data directly.</p>
-
-    @since OOo 3.3
  */
 published interface XDatabaseRegistrations
 {

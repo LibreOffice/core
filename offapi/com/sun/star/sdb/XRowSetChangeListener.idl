@@ -26,7 +26,6 @@ module com { module sun { module star { module sdb {
 
     @see XRowSetChangeBroadcaster
     @see XRowSetSupplier
-    @since OOo 3.2
  */
     interface XRowSetChangeListener : ::com::sun::star::lang::XEventListener
 {

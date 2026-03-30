@@ -24,8 +24,6 @@ module com { module sun { module star { module rendering {
     Color components usually correspond to physical attributes like the
     amount of red colorant contained in an output color. This constant
     field enumerates the most common ones.
-
-    @since OOo 2.3
  */
 constants ColorComponentTag
 {

@@ -23,8 +23,6 @@
 
 
 /** Exception signalling a deployment error.
-
-    @since OOo 1.1.2
 */
 published exception DeploymentException : com::sun::star::uno::RuntimeException
 {

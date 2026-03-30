@@ -61,8 +61,6 @@ module com { module sun { module star { module accessibility {
     </p>
 
     @see XAccessibleExtendedComponent
-
-    @since OOo 1.1.2
 */
 interface XAccessibleComponent : ::com::sun::star::uno::XInterface
 {

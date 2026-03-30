@@ -33,8 +33,6 @@ published service UnoControlCurrencyField
 
     /** gives access to the value of a spin field and makes it possible to
         register for spin events.
-
-        @since OOo 1.1.2
      */
     [optional] interface com::sun::star::awt::XSpinField;
 

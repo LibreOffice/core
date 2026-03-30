@@ -56,8 +56,6 @@ module com {  module sun {  module star {  module geometry {
     there is also a projection from 3D to 2D device coordinates needed.
     Only then the total transformation matrix (including projection to 2D)
     and the device resolution determine the actual measurement unit in 3D.<p>
-
-    @since OOo 2.0
  */
 struct AffineMatrix3D
 {

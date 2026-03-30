@@ -21,8 +21,6 @@ module com {  module sun {  module star {  module inspection {
 
 /** defines the interface for an XPropertyControl which supports
     displaying and entering numerical values.
-
-    @since OOo 2.0.3
 */
 interface XNumericControl : XPropertyControl
 {

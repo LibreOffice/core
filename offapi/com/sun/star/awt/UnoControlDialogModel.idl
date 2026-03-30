@@ -106,16 +106,12 @@ published service UnoControlDialogModel
 
 
     /** If set to true the dialog will have the desktop as parent.
-
-        @since OOo 2.3
      */
     [optional, property] boolean DesktopAsParent;
 
     /** specifies a URL that references a graphic that should be used as a
         background image.
             @see Graphic
-
-        @since OOo 2.4
     */
     [optional, property] string ImageURL;
 
@@ -129,38 +125,30 @@ published service UnoControlDialogModel
             <li>If #Graphic is set, #ImageURL will be reset
             to an empty string.</li>
         </ul></p>
-
-        @since OOo 2.4
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
     /** specifies that a horizontal scrollbar should be added to the dialog
-        @since LibreOffice 4.0
      */
     [optional, property] boolean HScroll;
 
     /** specifies that a vertical scrollbar should be added to the dialog
-        @since LibreOffice 4.0
      */
     [optional, property] boolean VScroll;
 
     /** specifies the horizontal position of the scrolled dialog content
-        @since LibreOffice 4.0
      */
     [optional, property] long ScrollLeft;
 
     /** specifies the vertical position of the scrolled dialog content
-        @since LibreOffice 4.0
      */
     [optional, property] long ScrollTop;
 
     /** specifies the total width of the scrollable dialog content
-        @since LibreOffice 4.0
      */
     [optional, property] long ScrollWidth;
 
     /** specifies the total height of the scrollable dialog content
-        @since LibreOffice 4.0
      */
     [optional, property] long ScrollHeight;
 

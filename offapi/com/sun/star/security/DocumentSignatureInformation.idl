@@ -63,17 +63,14 @@ struct DocumentSignatureInformation
     boolean PartialDocumentSignature;
     /**
      *  The ID of the Signature Line
-     *  @since LibreOffice 6.0
      */
     string SignatureLineId;
     /**
      *  The Signature Line Image which is shown when the signature is valid
-     *  @since LibreOffice 6.0
      */
     com::sun::star::graphic::XGraphic ValidSignatureLineImage;
     /**
      *  The Signature Line Image which is shown when the signature is invalid
-     *  @since LibreOffice 6.0
      */
     com::sun::star::graphic::XGraphic InvalidSignatureLineImage;
 };

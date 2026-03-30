@@ -55,37 +55,27 @@ published service DatabaseRange
 
 
     /** specifies whether the AutoFilter is enabled or not.
-
-        @since OOo 1.1.2
      */
     [optional, property] boolean AutoFilter;
 
 
     /** specifies whether the filter criteria should be taken from a CellRange.
-
-        @since OOo 1.1.2
      */
     [optional, property] boolean UseFilterCriteriaSource;
 
 
     /** specifies the range where the filter can find the filter criteria.
         <p>This is only used if SheetFilterDescriptor::UseFilterCriteriaSource is `TRUE`.</p>
-
-        @since OOo 1.1.2
      */
     [optional, property] com::sun::star::table::CellRangeAddress FilterCriteriaSource;
 
 
     /** specifies the time between two refresh actions in seconds.
-
-        @since OOo 2.0
      */
     [optional, property] long RefreshPeriod;
 
 
     /** specifies whether the imported data is only a selection of the database.
-
-        @since OOo 2.0
      */
     [optional, property] boolean FromSelection;
 
@@ -98,52 +88,36 @@ published service DatabaseRange
 
         @see com::sun::star::sheet::FormulaToken
         @see com::sun::star::sheet::FormulaMapGroupSpecialOffset::DB_AREA
-
-        @since OOo 3.0
      */
     [optional, readonly, property] long TokenIndex;
 
 
     /** specifies whether this range includes a bottom row of totals.
-
-        @since LibreOffice 5.0
      */
     [optional, property] boolean TotalsRow;
 
 
     /** specifies whether this range includes a top row of headers.
-
-        @since LibreOffice 5.0
      */
     [optional, property] boolean ContainsHeader;
 
     /** specifies the name of the table style.
-
-        @since LibreOffice 26.2
      */
     [optional, property] string TableStyleName;
 
     /** specifies that the first and second row colors are different.
-
-        @since LibreOffice 26.2
      */
     [optional, property] boolean UseRowStripes;
 
     /** specifies that the first and second col colors are different.
-
-        @since LibreOffice 26.2
      */
     [optional, property] boolean UseColStripes;
 
     /** specifies that the first col has different format or not.
-
-        @since LibreOffice 26.2
      */
     [optional, property] boolean UseFirstColumnFormatting;
 
     /** specifies that the last col has different format or not.
-
-        @since LibreOffice 26.2
      */
     [optional, property] boolean UseLastColumnFormatting;
 };

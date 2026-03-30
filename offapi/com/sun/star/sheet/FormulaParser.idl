@@ -68,8 +68,6 @@ service FormulaParser
         documents. The sequence must be in the order of indices used. Note
         that indices are 1-based, the sequence must start with an empty
         element.</p>
-
-        @since OOo 3.1
      */
     [property] sequence< ExternalLinkInfo > ExternalLinks;
 
@@ -78,8 +76,6 @@ service FormulaParser
         convention, when parsing a formula string.
 
         <p>Special syntax like: [0]!GlobalNamedRange, LocalSheet!LocalNamedRange</p>
-
-        @since LibreOffice 7.3
      */
     [property] boolean RefConventionChartOOXML;
 

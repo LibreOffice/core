@@ -23,8 +23,6 @@
 
 /** manages columns within the object.
 
-
-
     <p>The values used are relative. So it is not necessary to know the
     width of the object. The sum of the relative width values depends on
     the object and is defined in "ReferenceValue."
@@ -47,8 +45,6 @@ published interface XTextColumns: com::sun::star::uno::XInterface
 
     /** sets the number of columns.
 
-
-
         <p>The minimum is 1 column.</p>
      */
     void setColumnCount( [in] short nColumns );
@@ -59,8 +55,6 @@ published interface XTextColumns: com::sun::star::uno::XInterface
     sequence<com::sun::star::text::TextColumn> getColumns();
 
     /** sets the descriptors of all columns.
-
-
 
         <p>The number of members in the sequence must be the same as the
         number of columns of the object.

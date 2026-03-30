@@ -33,8 +33,6 @@ published service ChartArea
     /** If the ChartArea may be stored as XML element,
         this service should be supported in order to preserve unparsed
         XML attributes.
-
-    @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 

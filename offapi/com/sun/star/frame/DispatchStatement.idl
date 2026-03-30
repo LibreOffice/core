@@ -21,8 +21,6 @@
  module com {  module sun {  module star {  module frame {
 
 /** represents a dispatch statement from a recorded macro
-
-    @since OOo 1.1.2
  */
 published struct DispatchStatement
 {

@@ -26,8 +26,6 @@ module com { module sun { module star { module accessibility {
 
     @see AccessibleEventObject
     @see XAccessibleEventListener
-
-    @since OOo 1.1.2
  */
 interface XAccessibleEventBroadcaster: ::com::sun::star::uno::XInterface
 {

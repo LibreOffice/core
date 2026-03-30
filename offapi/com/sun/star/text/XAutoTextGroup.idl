@@ -32,8 +32,6 @@ published interface XAutoTextGroup: com::sun::star::container::XNameAccess
 
     /** renames an entry in the autotext group.
 
-
-
         <p>The position of the autotext entry is not changed.
 
         </p>

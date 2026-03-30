@@ -23,8 +23,6 @@
 
 /** provides access to the reference marks within this context (i.e. document).
 
-
-
     <p>A reference mark is used to refer to text positions in a text
     document.
 

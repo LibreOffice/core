@@ -23,8 +23,6 @@ module com {  module sun {  module star {  module inspection {
     in a hyperlink-like way
 
     <p>Hyperlink controls exchange their value (XPropertyControl::Value) as strings.</p>
-
-    @since OOo 2.0.3
 */
 interface XHyperlinkControl : XPropertyControl
 {

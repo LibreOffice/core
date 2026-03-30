@@ -23,8 +23,6 @@
 
 /** describes the link for a text section.
 
-
-
     <p>If the URL is an empty string, then the section is not linked.
 
     </p>

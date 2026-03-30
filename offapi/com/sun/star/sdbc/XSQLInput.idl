@@ -32,7 +32,6 @@
 /** represents an input stream that contains a stream of values representing an
     instance of a SQL structured or distinct type.
 
-
     <p>
     This interface, used only for custom mapping, is used by the driver
     behind the scenes, and a programmer never directly invokes
@@ -174,7 +173,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     com::sun::star::io::XInputStream readCharacterStream() raises (SQLException);
 
     /** returns the datum at the head of the stream as an any.
-
 
         <p>
         The actual type of the any returned is determined by the default

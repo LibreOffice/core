@@ -19,8 +19,6 @@ published interface XIntrospection;
     interface.</p>
 
     <p>For details, see method XIntrospection::inspect().</p>
-
-    @since LibreOffice 4.3
 */
 published singleton theIntrospection: XIntrospection;
 

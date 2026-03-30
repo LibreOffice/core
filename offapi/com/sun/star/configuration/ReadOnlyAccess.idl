@@ -12,8 +12,6 @@ module com { module sun { module star { module configuration {
 /** Provides easy read-only access to the complete configuration.
 
     <p>This service is still unpublished and unstable.</p>
-
-    @since LibreOffice 4.0
 */
 service ReadOnlyAccess: com::sun::star::container::XHierarchicalNameAccess {
     /** Service constructor.

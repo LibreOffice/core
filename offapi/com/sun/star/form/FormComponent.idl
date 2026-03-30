@@ -72,8 +72,6 @@ published service FormComponent
         removable. That is, the com::sun::star::beans::PropertyAttribute::REMOVABLE
         will always be set, even if you do not specify it in the
         com::sun::star::beans::XPropertyContainer::addProperty() call.</p>
-
-        @since OOo 2.3
     */
     [optional] interface com::sun::star::beans::XPropertyBag;
 

@@ -31,8 +31,6 @@ module com {  module sun {  module star {  module sheet {
     will have no effect.
 
     @see com::sun::star::sheet::DataPilotSource
-
-    @since OOo 3.0
  */
 interface XDrillDownDataSupplier: com::sun::star::uno::XInterface
 {

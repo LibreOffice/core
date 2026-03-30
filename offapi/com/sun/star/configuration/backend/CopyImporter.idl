@@ -24,8 +24,6 @@ module com { module sun { module star { module configuration { module backend {
 /**
     imports data into a configuration layer by copying over existing data.
 
-
-    @since OOo 1.1.2
 */
 published service CopyImporter
 {

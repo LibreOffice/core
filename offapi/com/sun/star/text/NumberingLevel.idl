@@ -150,8 +150,6 @@ published service NumberingLevel
 
     /** contains the name of the paragraph style that should use this numbering.
         This is ignored for chapter numbering rules, use HeadingStyleName.
-
-        @since LibreOffice 3.6
      */
     [optional, property] string ParagraphStyleName;
 
@@ -175,8 +173,6 @@ published service NumberingLevel
                 If it equals LABEL_ALIGNMENT, properties Adjust, LabelFollowedBy,
                 ListtabStopPosition, FirstLineIndent, IndentAt are used.
                 </p>
-
-                @since OOo 3.0
         */
         [optional, property] short PositionAndSpaceMode;
 
@@ -187,8 +183,6 @@ published service NumberingLevel
                 For valid values see com::sun::star::text::LabelFollow.
                 Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
                 </p>
-
-                @since OOo 3.0
         */
         [optional, property] short LabelFollowedBy;
 
@@ -200,8 +194,6 @@ published service NumberingLevel
                 Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT
                 and LabelFollowedBy equal LABELFOLLOW_LISTTAB
                 </p>
-
-                @since OOo 3.0
         */
         [optional, property] long ListtabStopPosition;
 
@@ -211,8 +203,6 @@ published service NumberingLevel
                 Specifies the first line indent.
                 Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
                 </p>
-
-                @since OOo 3.0
         */
         [optional, property] long FirstLineIndent;
 
@@ -222,8 +212,6 @@ published service NumberingLevel
                 Specifies the indent of the text lines
                 Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
                 </p>
-
-                @since OOo 3.0
         */
         [optional, property] long IndentAt;
 };

@@ -22,8 +22,6 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 /**
     Provides a unified interface for new-style service SystemClipboard.
-
-    @since LibreOffice 4.2
 */
 published interface XSystemClipboard
 {

@@ -36,7 +36,6 @@ interface XSearchableDictionary : com::sun::star::linguistic2::XDictionary
 
         @see    com::sun::star::linguistic2::XDictionaryEntry
         @see    com::sun::star::linguistic2::XSearchableDictionaryList
-        @since OOo 3.0.1
     */
     sequence< com::sun::star::linguistic2::XDictionaryEntry > searchSimilarEntries( [in] string aWord );
 

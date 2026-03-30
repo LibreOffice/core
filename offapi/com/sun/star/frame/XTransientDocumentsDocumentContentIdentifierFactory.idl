@@ -16,8 +16,6 @@ module com { module sun { module star { module frame {
 
     @see com::sun::star::document::OfficeDocument
     @see com::sun::star::ucb::XContentIdentifier
-
-    @since LibreOffice 6.3
 */
 interface XTransientDocumentsDocumentContentIdentifierFactory
     : com::sun::star::uno::XInterface

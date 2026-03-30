@@ -111,8 +111,6 @@ service Spreadsheet
 
 
     /** provides a method to set an external name at the sheet.
-
-        @since OOo 3.0
      */
     [optional] interface com::sun::star::sheet::XExternalSheetName;
 
@@ -178,8 +176,6 @@ service Spreadsheet
 
     <p> When false a summary row is inserted above the detailed data being
         summarized and a new outline level is established on that row.</p>
-
-        @since LibreOffice 25.2
     */
     [optional, property] boolean TotalsRowBelow;
 };

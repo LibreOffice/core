@@ -23,8 +23,6 @@ module com { module sun { module star { module sheet {
   The sc module uses this to get a pointer to the ScAbstractDialogFactory from the scui module.
   Because we have a dependency in our modules that goes the "wrong" way.
 
-  @since LibreOffice 24.8
-
   @internal
 
   ATTENTION: This is marked <em>internal</em> and does not

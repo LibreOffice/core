@@ -31,8 +31,6 @@ module com { module sun { module star { module accessibility {
     <p>A key binding describes alternative ways how to invoke an action with
     pressing one or more keys after each other.  Each individual sequence of
     key strokes </p>
-
-    @since OOo 1.1.2
 */
 interface XAccessibleKeyBinding : ::com::sun::star::uno::XInterface
 {

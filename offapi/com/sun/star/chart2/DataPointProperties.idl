@@ -36,8 +36,6 @@ service DataPointProperties
 
         Note that there is access for some of them
         through some alias.
-
-        @since LibreOffice 5.1
     */
     service ::com::sun::star::drawing::FillProperties;
 
@@ -222,8 +220,6 @@ service DataPointProperties
     [property] com::sun::star::drawing::BitmapMode FillBitmapMode;
 
 
-    /**
-     */
     [optional, property] Symbol                       Symbol;
 
     /** describes a value by which a data point is moved from its
@@ -245,8 +241,6 @@ service DataPointProperties
 
     /** specifies a text with possible fields that is used as a data point label,
         if set then Label property is ignored
-
-        @since LibreOffice 6.1
     */
     [optional, property] sequence<XDataPointCustomLabelField>  CustomLabelFields;
 
@@ -255,8 +249,6 @@ service DataPointProperties
     [optional, property] string LabelSeparator;
 
     /** specifies if the text of a data label (caption) must be wrapped
-
-        @since LibreOffice 5.1
      */
     [optional, property] boolean TextWordWrap;
 
@@ -313,14 +305,10 @@ service DataPointProperties
     [optional, maybevoid, property] short             PercentDiagonal;
 
     /** Custom position on the page associated to the CUSTOM label placement.
-
-        @since LibreOffice 7.0
     */
     [optional, maybevoid, property] ::com::sun::star::chart2::RelativePosition CustomLabelPosition;
 
     /** Custom size associated with the CUSTOM label placement.
-
-        @since LibreOffice 24.8
     */
     [optional, maybevoid, property] ::com::sun::star::chart2::RelativeSize CustomLabelSize;
 };

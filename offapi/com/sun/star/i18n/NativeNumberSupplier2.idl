@@ -23,8 +23,6 @@ module com { module sun { module star { module i18n {
 
 /** Supplier for transliteration of numerals (native number strings).
 
-    @since LibreOffice 6.1
-
     @internal
 
     ATTENTION: This service is marked <em>internal</em> and does not

@@ -87,7 +87,6 @@ published constants PropertyAttribute
 
         @see com::sun::star::reflection::XPropertyTypeDescription
         @see com::sun::star::reflection::XServiceTypeDescription
-    @since OOo 1.1.2
      */
     const short OPTIONAL = 256;
 };

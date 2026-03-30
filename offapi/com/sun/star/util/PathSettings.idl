@@ -25,8 +25,6 @@ module com {  module sun {  module star {  module  util {
     A legacy (single-instance) service-variant of thePathSettings singleton.
 
     @deprecated Use thePathSettings singleton instead.
-
-    @since OOo 1.1.2
  */
 published service PathSettings : XPathSettings;
 

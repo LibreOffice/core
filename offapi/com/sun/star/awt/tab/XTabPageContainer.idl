@@ -23,8 +23,6 @@ module com {  module sun {  module star {  module awt { module tab {
 /** An interface to a control that displays tab pages.
 
     @see UnoControlTabPageContainer
-
-    @since OOo 3.4
  */
 published interface XTabPageContainer
 {

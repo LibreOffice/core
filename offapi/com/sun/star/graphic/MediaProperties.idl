@@ -105,8 +105,6 @@ published service MediaProperties
     /** This property is only used for loading graphics
 
         <p>Load the graphic as an external link</p>
-
-        @since LibreOffice 6.1
     */
     [optional, property] boolean LoadAsLink;
 };

@@ -35,7 +35,6 @@
 
     @see DispatchRecorder
     @see Frame
-    @since OOo 1.1.2
  */
 published service DispatchRecorderSupplier : XDispatchRecorderSupplier;
 

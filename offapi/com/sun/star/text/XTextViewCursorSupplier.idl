@@ -23,8 +23,6 @@
 
 /** supplies access to the cursor in the view.
 
-
-
     <p>This cursor is the same instance that is available in the user
     interface.
 

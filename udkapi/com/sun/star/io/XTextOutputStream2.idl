@@ -22,8 +22,6 @@
 module com {  module sun {  module star {  module io {
 
 /** Provides a unified interface for the new-style service TextOutputStream.
-
-    @since LibreOffice 4.1
  */
 published interface XTextOutputStream2
 {

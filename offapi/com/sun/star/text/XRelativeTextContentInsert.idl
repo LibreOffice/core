@@ -25,12 +25,6 @@
 /** makes it possible to insert new text contents before or
     after existing text contents.
 
-
-
-
-
-
-
     @deprecated
  */
 published interface XRelativeTextContentInsert: com::sun::star::uno::XInterface

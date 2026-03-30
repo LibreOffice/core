@@ -26,7 +26,6 @@
     </p>
 
     @see XDigestContextSupplier
-    @since OOo 3.4
  */
 interface XDigestContext : com::sun::star::uno::XInterface
 {

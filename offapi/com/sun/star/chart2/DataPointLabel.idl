@@ -58,14 +58,10 @@ struct DataPointLabel
 
     /** The caption contains a custom label text, which belongs
         to a data point label.
-
-        @since LibreOffice 7.1
      */
     boolean                     ShowCustomLabel;
 
     /** The name of the data series is additionally displayed in the caption.
-
-        @since LibreOffice 7.2
      */
     boolean ShowSeriesName;
 };

@@ -24,8 +24,6 @@
 /** describes the cropping of graphic objects.
     Cropping means to show only parts of the object.
 
-
-
     <p>Negative values cut the visible area; positive values
     extend the visible area by filling it with background color.
     The absolute sum of top and bottom crop must be smaller

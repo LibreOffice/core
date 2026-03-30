@@ -11,8 +11,6 @@ module com { module sun { module star { module document {
 
 /** Some fonts embedded in the document have no editing permissions.
     The document can only be opened read-only.
-
-    @since LibreOffice 26.2
 */
 exception FontsDisallowEditingRequest : ::com::sun::star::uno::Exception
 {

@@ -25,7 +25,6 @@ module com { module sun { module star { module xml { module crypto {
     algorithms.
 
     @see XCipherContextSupplier
-    @since OOo 3.4
 */
 constants CipherID
 {
@@ -45,8 +44,6 @@ constants CipherID
         [XMLENC-CORE1] 5.2.4 AES-GCM.
 
         @see https://www.w3.org/TR/xmlenc-core1/#sec-AES-GCM
-
-        @since LibreOffice 24.2
      */
     const long AES_GCM_W3C = 3;
 };

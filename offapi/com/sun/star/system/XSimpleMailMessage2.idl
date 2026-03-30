@@ -20,8 +20,6 @@
 module com { module sun { module star { module system {
 
 /** This interface extends XSimpleMailMessage
-
-    @since LibreOffice 4.2
 */
 interface XSimpleMailMessage2 : XSimpleMailMessage
 {

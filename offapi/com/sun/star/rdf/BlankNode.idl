@@ -23,8 +23,6 @@ module com {   module sun {   module star {   module rdf {
 
 /** represents a blank node that may occur in a RDF graph.
 
-    @since OOo 3.0
-
     @see XRepository
  */
 service BlankNode : XBlankNode

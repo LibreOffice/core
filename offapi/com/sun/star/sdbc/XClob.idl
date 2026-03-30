@@ -28,7 +28,6 @@
     <code>CLOB</code>
     type.
 
-
     <p>
     A SQL
     <code>CLOB</code>
@@ -102,7 +101,6 @@ published interface XClob: com::sun::star::uno::XInterface
         designated by this
         <code>Clob</code>
         object.
-
 
         <p>
         The substring begins at position <code>pos</code> and has up

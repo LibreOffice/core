@@ -23,8 +23,6 @@ module com { module sun { module star { module frame {
     A legacy (single-instance) service-variant of theToolbarControllerFactory singleton.
 
     @deprecated Use theToolbarControllerFactory singleton instead.
-
-    @since OOo 2.0
 */
 
 service ToolbarControllerFactory : XUIControllerFactory;

@@ -17,8 +17,6 @@ module com { module sun { module star { module i18n {
 
     <p> It is derived from ::com::sun::star::i18n::XCalendar3 and
     provides additional methods to set and get the local time. </p>
-
-    @since LibreOffice 5.0
  */
 interface XCalendar4 : com::sun::star::i18n::XCalendar3
 {
@@ -52,8 +50,6 @@ interface XCalendar4 : com::sun::star::i18n::XCalendar3
                 If empty, the system's time zone is used.
                 Else specified as "Region/City" name like "Europe/Berlin",
                 or a custom time zone ID such as "UTC" or "GMT-8:00".
-
-        @since LibreOffice 6.3
      */
     void    loadDefaultCalendarTZ( [in] ::com::sun::star::lang::Locale rLocale, [in] string TimeZone );
 
@@ -71,8 +67,6 @@ interface XCalendar4 : com::sun::star::i18n::XCalendar3
                 If empty, the system's time zone is used.
                 Else specified as "Region/City" name like "Europe/Berlin",
                 or a custom time zone ID such as "UTC" or "GMT-8:00".
-
-        @since LibreOffice 6.3
      */
     void    loadCalendarTZ( [in] string uniqueID,
                             [in] ::com::sun::star::lang::Locale rLocale,

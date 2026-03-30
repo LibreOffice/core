@@ -23,7 +23,6 @@ module com {  module sun {  module star {  module io {
 
 /** makes it possible to read and write the corresponding stream.
 
-
     <p>If you want to allow control from outside, also implement the
     XActiveDataControl interface. </p>
  */

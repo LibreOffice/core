@@ -23,8 +23,6 @@ module com {  module sun {  module star {  module util {
 
 
 /** Expands macro in expressions, i.e. substitutes macro names.
-
-    @since OOo 1.1.2
 */
 published interface XMacroExpander : com::sun::star::uno::XInterface
 {

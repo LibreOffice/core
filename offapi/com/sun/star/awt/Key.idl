@@ -363,22 +363,19 @@ published constants Key
     const short SEMICOLON = 1317;
 
 
-    /** @since LibreOffice 4.3 **/
     const short QUOTERIGHT = 1318;
 
-    /** @since LibreOffice 7.5 **/
     const short RIGHTCURLYBRACKET = 1319;
 
-    /** @since LibreOffice 7.6 **/
     const short COLON = 1320;
 
-    /* # sign. @since LibreOffice 24.2 */
+    /* # sign. */
     const short NUMBERSIGN = 191;
 
-    /* XF86Forward @since LibreOffice 24.2 */
+    /* XF86Forward */
     const short XF86FORWARD = 167;
 
-    /* XF86Back @since LibreOffice 24.2 */
+    /* XF86Back */
     const short XF86BACK = 166;
 
     /** The following values don't correspond to physical keys on any

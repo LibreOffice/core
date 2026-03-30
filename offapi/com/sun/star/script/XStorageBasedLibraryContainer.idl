@@ -28,8 +28,6 @@ module com { module sun { module star { module script {
     <p>A persistent library container is associated with a root storage. The
     container is responsible for a particular sub storage of the root storage,
     the container storage.</p>
-
-    @since OOo 2.3
  */
 interface XStorageBasedLibraryContainer
 {

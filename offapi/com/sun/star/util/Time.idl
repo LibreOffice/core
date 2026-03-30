@@ -42,8 +42,6 @@ published struct Time
     unsigned short Hours;
 
     /** true: time zone is UTC false: unknown time zone.
-
-        @since LibreOffice 4.1
      */
     boolean IsUTC;
 

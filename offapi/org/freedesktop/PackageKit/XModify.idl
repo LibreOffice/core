@@ -24,70 +24,60 @@ interface XModify : com::sun::star::uno::XInterface
 {
     /**
      * Installs local package sequence< string > files or service packs.
-     * @since LibreOffice 4.0
      */
 
     void InstallPackageFiles([in] sequence< string > files, [in] string interaction);
 
     /**
      * Installs sequence< string > packages to provide sequence< string > files.
-     * @since LibreOffice 4.0
      */
 
     void InstallProvideFiles([in] sequence< string > files, [in] string interaction);
 
     /**
      * Installs sequence< string > packages to provide sequence< string > files.
-     * @since LibreOffice 4.0
      */
 
     void InstallCatalogs([in] sequence< string > files, [in] string interaction);
 
     /**
      * Installs sequence< string > packages from a configured software source.
-     * @since LibreOffice 4.0
      */
 
     void InstallPackageNames([in] sequence< string > packages, [in] string interaction);
 
     /**
      * Installs mimetype handlers from a configured software source.
-     * @since LibreOffice 4.0
      */
 
     void InstallMimeTypes([in] sequence< string > mimeTypes, [in] string interaction);
 
     /**
      * Installs fontconfig resources ( [in] usually fonts) from a configured software source.
-     * @since LibreOffice 4.0
      */
 
     void InstallFontconfigResources([in] sequence< string > resources, [in] string interaction);
 
     /**
      * Installs GStreamer resources ( [in] usually codecs) from a configured software source.
-     * @since LibreOffice 4.0
      */
 
     void InstallGStreamerResources([in] sequence< string > resources, [in] string interaction);
 
     /**
      * Installs resources of a given type from a configured software source.
-     * @since LibreOffice 4.0
      */
 
     void InstallResources([in] sequence< string > types, [in] sequence< string > resources, [in] string interaction);
 
     /**
      * Removes sequence< string > packages that provide the given local sequence< string > files.
-     * @since LibreOffice 4.0
      */
 
     void RemovePackageByFiles([in] sequence< string > files, [in] string interaction);
 
     /**
      * Installs printer drivers from a configured software source.
-     * @since LibreOffice 4.0
      */
 
     void InstallPrinterDrivers([in] sequence< string > files, [in] string interaction);

@@ -31,8 +31,6 @@ interface XPropertyControlObserver;
     disable the UI for property <code>Foo</code>, but another handler has superseded this property, then
     the ObjectInspector will not <em>have</em> any UI for it. In this case, the call to
     <code>enablePropertyUI( "Foo" )</code> will simply be ignored.</p>
-
-    @since OOo 2.0.3
 */
 interface XObjectInspectorUI
 {
@@ -128,16 +126,12 @@ interface XObjectInspectorUI
         in all property controls.</p>
 
         @see revokeControlObserver
-
-        @since OOo 2.2
     */
     void    registerControlObserver( [in] XPropertyControlObserver Observer );
 
     /** revokes a previously registered control observer
 
         @see registerControlObserver
-
-        @since OOo 2.2
     */
     void    revokeControlObserver( [in] XPropertyControlObserver Observer );
 
@@ -147,8 +141,6 @@ interface XObjectInspectorUI
         @throws NoSupportException
             if the XObjectInspectorModel::HasHelpSection property
             requires the help section to be unavailable.
-
-        @since OOo 2.2
     */
     void setHelpSectionText( [in] string HelpText )
         raises ( ::com::sun::star::lang::NoSupportException );

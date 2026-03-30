@@ -24,8 +24,6 @@
 /** Allows to set date values as categories.
 
 <p>Can be obtained from interface XChartDocument via method getData().</p>
-
-@since OOo 3.4
 */
 
 published interface XDateCategories

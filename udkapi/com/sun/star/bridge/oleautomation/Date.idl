@@ -34,8 +34,6 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     `double` and date type is important. Therefore Date
     is declared as struct.
     </p>
-
-    @since OOo 1.1.2
  */
 struct Date
 {

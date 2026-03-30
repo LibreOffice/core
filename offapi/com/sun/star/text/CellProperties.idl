@@ -118,22 +118,16 @@ published service CellProperties
     [property] short VertOrient;
 
     /** contains the graphic object that is displayed as background graphic.
-
-        @since LibreOffice 6.1
      */
     [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 
     /** Parent text of this table cell.
 
         This might be a header text, body text, parent cell, etc.
-
-        @since LibreOffice 6.3
      */
     [optional, readonly, property] com::sun::star::text::XText ParentText;
 
     /** If TRUE, the table cell wasn't deleted or inserted with its tracked cell content
-
-        @since LibreOffice 7.6
      */
     [optional, property] boolean HasTextChangesOnly;
 };

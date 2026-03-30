@@ -131,7 +131,6 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
         <em>aUserDefinedCharactersStart</em> and/or
         <em>aUserDefinedCharactersCont</em>. </p>
 
-
         @returns
             A filled ParseResult structure. If no
             unambiguous token could be parsed,

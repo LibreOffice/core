@@ -28,8 +28,6 @@ module com { module sun { module star { module linguistic2 {
     com::sun::star::util::XFlushable interface.
     If they do those dictionaries have to be flushed upon termination
     of the dictionary list.</p>
-
-     @since OOo 1.1.2
 */
 published interface XConversionDictionaryList : com::sun::star::uno::XInterface
 {
@@ -105,7 +103,6 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
             the starting pos of the substring to be looked for.
         @param  nLength
             the length of the substring to be looked for.
-
 
         @param aLocale
             Locale the conversion is referred to.

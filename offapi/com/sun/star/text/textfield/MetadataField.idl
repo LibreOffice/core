@@ -24,8 +24,6 @@ module com { module sun { module star { module text { module textfield {
 /** is a com::sun::star::text::TextField whose content
     is specified by RDF metadata.
 
-    @since OOo 3.2
-
     @see com::sun::star::rdf
 */
 service MetadataField
@@ -47,7 +45,6 @@ service MetadataField
 
     /** The com::sun::star::text::TextContent
         that is the parent of this MetadataField.
-        @since OOo 3.3
      */
     interface com::sun::star::container::XChild;
 

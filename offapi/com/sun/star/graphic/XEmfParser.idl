@@ -25,8 +25,6 @@ interface XPrimitive2D;
 
     This interface allows to parse a WMF/EMF/EMF+ stream in form of a sequence of bytes
     to be parsed into a sequence of XPrimitive2Ds
-
-    @since LibreOffice 6.0
  */
 interface XEmfParser : ::com::sun::star::uno::XInterface
 {
@@ -50,8 +48,6 @@ interface XEmfParser : ::com::sun::star::uno::XInterface
 
         @param Size
             the size in 100/th mm
-
-        @since LibreOffice 7.1
      */
     void setSizeHint([in] com::sun::star::geometry::RealPoint2D Size);
 };

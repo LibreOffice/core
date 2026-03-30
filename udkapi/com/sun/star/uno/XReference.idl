@@ -28,8 +28,6 @@ published interface XReference: com::sun::star::uno::XInterface
 {
     /** removes all references to the adapter.
 
-
-
         <p> This method is called when the adapted object dies.
         The implementation of the client-side's weak reference
         must include removal of all references to the adapter.

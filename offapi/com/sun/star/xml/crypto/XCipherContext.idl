@@ -26,7 +26,6 @@
     </p>
 
     @see XCipherContextSupplier
-    @since OOo 3.4
  */
 interface XCipherContext : com::sun::star::uno::XInterface
 {

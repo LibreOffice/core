@@ -42,8 +42,6 @@ module com { module sun { module star { module ui {
         <li><b>floater</b></li>
     </ul>
     </p>
-
-    @since OOo 2.0
  */
 
 interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface

@@ -9,9 +9,6 @@
 
 module com {  module sun {  module star {  module sheet {
 
-/**
- * @since LibreOffice 7.2
- */
 constants FilterFieldType
 {
    /** Filter by numeric value */

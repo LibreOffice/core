@@ -121,16 +121,12 @@ published service ParagraphProperties
 
     /** determines if contextual spacing is used.
 
-        @since LibreOffice 3.6
-
         <p>If true, the top and bottom margins of the paragraph should not be
         applied when the previous and next paragraphs have the same style.</p>
      */
     [optional, property] boolean ParaContextMargin;
 
     /** Grab bag of paragraph properties, used as a string-any map for interim interop purposes.
-
-        @since LibreOffice 4.2
 
         <p>This property is intentionally not handled by the ODF filter. Any
         member that should be handled there should be first moved out from this grab
@@ -163,8 +159,6 @@ published service ParagraphProperties
 
     /** determines if the register mode is applied to a
         paragraph.
-
-
 
         <p>Remark: Register mode is only used if the register
         mode property of the page style is switched on.</p>
@@ -204,7 +198,6 @@ published service ParagraphProperties
     /** Setting this property to `TRUE` prevents page or column
         breaks between this and the following paragraph.
 
-
         <p>This feature is useful for preventing title paragraphs to be
         the last line on a page or column.</p>
      */
@@ -235,7 +228,6 @@ published service ParagraphProperties
     [optional, property] boolean ParaIsNumberingRestart;
 
     /** specifies the name of the style for the numbering.
-
 
         <p>The name must be one of the names which are available via
         XStyleFamiliesSupplier.</p>
@@ -365,58 +357,42 @@ published service ParagraphProperties
 
         /** specifies the outline level to which the paragraph belongs
 
-            @since OOo 3.1
-
             <p>Value 0 indicates that the paragraph belongs to the body text.</p>
             <p>Values [1..10] indicates that the paragraph belongs to the corresponding outline level.</p>
          */
         [optional, property] short OutlineLevel;
 
         /** contains the graphic for the background of a paragraph.
-
-            @since LibreOffice 6.1
          */
         [optional, property] com::sun::star::graphic::XGraphic ParaBackGraphic;
 
         /** specifies that a child node of a parent node that is not counted
             is continuing the numbering of parent's previous node's sub tree.
 
-            @since OOo 3.0.1
-
             @note misspelling retained for compatibility
          */
         [optional, property, readonly] boolean ContinueingPreviousSubTree;
 
         /** allows reading the generated numbering list label.
-
-            @since OOo 3.0.1
          */
         [optional, property, readonly] string ListLabelString;
 
         /** Specifies whether words written in CAPS will be hyphenated.
             Setting to `true` will disable hyphenation of words written in CAPS for this paragraph.
-
-            @since LibreOffice 6.4
          */
         [optional, property] boolean ParaHyphenationNoCaps;
 
         /** Specifies whether last word of paragraph will be hyphenated.
             Setting to `true` will disable hyphenation of last word for this paragraph.
-
-            @since LibreOffice 7.4
          */
         [optional, property] boolean ParaHyphenationNoLastWord;
 
         /** specifies the minimum word length in characters, when hyphenation is applied.
-
-            @since LibreOffice 7.4
          */
         [optional, property] short ParaHyphenationMinWordLength;
 
         /** specifies the hyphenation zone, i.e. allowed extra white space
             in the line before applying hyphenation.
-
-            @since LibreOffice 7.4
          */
         [optional, property] long ParaHyphenationZone;
 
@@ -425,7 +401,6 @@ published service ParagraphProperties
             other paragraphs of the same text, i.e. a paragraph with lower
             identifier is there before the other ones with greater values.
             This property depends on implementation details and is considered experimental.
-            @since LibreOffice 7.6
          */
         [optional, property, readonly] long SortedTextId;
 
@@ -433,8 +408,6 @@ published service ParagraphProperties
             within a single spread, page, or column. The default type is column.
 
             @see ParaHyphenationKeepType
-
-            @since LibreOffice 24.8
          */
         [optional, property] boolean ParaHyphenationKeep;
 
@@ -443,15 +416,11 @@ published service ParagraphProperties
             @see ParaHyphenationKeep
 
             @see com::sun::star::text::ParagraphHyphenationKeepType
-
-            @since LibreOffice 24.8
          */
         [optional, property] long ParaHyphenationKeepType;
 
         /** specifies the minimum number of characters of the compound word part
             to remain before the hyphen character (when hyphenation is applied).
-
-            @since LibreOffice 24.8
          */
         [optional, property] short ParaHyphenationCompoundMinLeadingChars;
 
@@ -462,8 +431,6 @@ published service ParagraphProperties
             @see ParaHyphenationKeep
 
             @see ParaHyphenationKeepType
-
-            @since LibreOffice 25.8
          */
         [optional, property] boolean ParaHyphenationKeepLine;
 
@@ -473,8 +440,6 @@ published service ParagraphProperties
             <p>If set to 0, ParaHyphenationZone is used for line breaking.</p>
 
             @see ParaHyphenationZone
-
-            @since LibreOffice 25.8
          */
         [optional, property] long ParaHyphenationZoneAlways;
 
@@ -484,8 +449,6 @@ published service ParagraphProperties
             <p>If set to 0, ParaHyphenationZoneAlways is used for line breaking.</p>
 
             @see ParaHyphenationZoneAlways
-
-            @since LibreOffice 25.8
          */
         [optional, property] long ParaHyphenationZoneColumn;
 
@@ -495,8 +458,6 @@ published service ParagraphProperties
             <p>If set to 0, ParaHyphenationZoneColumn is used for line breaking.</p>
 
             @see ParaHyphenationZoneColumn
-
-            @since LibreOffice 25.8
          */
         [optional, property] long ParaHyphenationZonePage;
 
@@ -506,8 +467,6 @@ published service ParagraphProperties
             <p>If set to 0, ParaHyphenationZonePage is used for line breaking.</p>
 
             @see ParaHyphenationZonePage
-
-            @since LibreOffice 25.8
          */
         [optional, property] long ParaHyphenationZoneSpread;
 
@@ -520,8 +479,6 @@ published service ParagraphProperties
             @see ParaWordSpacingMininum
 
             @see ParaWordSpacingMaximum
-
-            @since LibreOffice 25.8
          */
         [optional, property] long ParaWordSpacing;
 
@@ -534,8 +491,6 @@ published service ParagraphProperties
             @see ParaWordSpacing
 
             @see ParaWordSpacingMaximum
-
-            @since LibreOffice 25.8
          */
         [optional, property] long ParaWordSpacingMinimum;
 
@@ -548,8 +503,6 @@ published service ParagraphProperties
             @see ParaWordSpacing
 
             @see ParaWordSpacingMininum
-
-            @since LibreOffice 25.8
          */
         [optional, property] long ParaWordSpacingMaximum;
 
@@ -562,8 +515,6 @@ published service ParagraphProperties
             @see CharKerning
 
             @see ParaLetterSpacingMaximum
-
-            @since LibreOffice 26.3
          */
         [optional, property] long ParaLetterSpacingMinimum;
 
@@ -576,8 +527,6 @@ published service ParagraphProperties
             @see CharKerning
 
             @see ParaLetterSpacingMininum
-
-            @since LibreOffice 26.3
          */
         [optional, property] long ParaLetterSpacingMaximum;
 
@@ -590,8 +539,6 @@ published service ParagraphProperties
             @see CharScaleWidth
 
             @see ParaScaleWidthMaximum
-
-            @since LibreOffice 26.3
          */
         [optional, property] long ParaScaleWidthMinimum;
 
@@ -604,8 +551,6 @@ published service ParagraphProperties
             @see CharScaleWidth
 
             @see ParaScaleWidthMininum
-
-            @since LibreOffice 26.3
          */
         [optional, property] long ParaScaleWidthMaximum;
 };

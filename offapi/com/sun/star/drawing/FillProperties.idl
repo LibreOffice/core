@@ -212,14 +212,11 @@ published service FillProperties
         this is the cropping, otherwise it is empty.
 
         @see com::sun::star::text::GraphicCrop
-        @since LibreOffice 4.3
      */
     [optional, property] com::sun::star::text::GraphicCrop GraphicCrop;
 
     /** If this is `TRUE`, and FillStyle is FillStyle::NONE:
         The area displays the slide background
-
-        @since LibreOffice 7.5
     */
     [optional, property] boolean FillUseSlideBackground;
 

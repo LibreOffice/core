@@ -31,8 +31,6 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     sequence can be unordered. The Automation object being called must support
     named arguments, otherwise the call fails.
     </p>
-
-    @since OOo 1.1.2
  */
 struct NamedArgument
 {

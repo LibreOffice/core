@@ -244,8 +244,6 @@ published service TableAutoFormatField
 
 
     /** property containing a description of the cell border.
-
-        @since OOo 1.1.2
      */
     [optional, property] com::sun::star::table::TableBorder TableBorder;
 
@@ -253,8 +251,6 @@ published service TableAutoFormatField
     /** property containing a description of the cell border.
         Preferred over com::sun::star::table::TableBorder
         #TableBorder.
-
-        @since LibreOffice 3.6
      */
     [optional, property] com::sun::star::table::TableBorder2 TableBorder2;
 };

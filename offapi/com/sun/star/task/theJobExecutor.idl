@@ -26,8 +26,6 @@ module com { module sun { module star { module task {
 
     @see Job
     @see AsyncJob
-
-    @since LibreOffice 4.3
  */
 published singleton theJobExecutor : XJobExecutor;
 

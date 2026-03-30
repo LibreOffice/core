@@ -23,8 +23,6 @@ module com {  module sun {  module star {  module sheet {
 /** Primary interface for the com::sun::star::sheet::ExternalDocLink service.
 
     @see com::sun::star::sheet::ExternalDocLink
-
-    @since OOo 3.1
  */
 interface XExternalDocLink
 {

@@ -23,8 +23,6 @@
 
 /** thrown in case that a certain type name does exist, but does not meet
     some other criteria.
-
-    @since OOo 1.1.2
   */
 published exception InvalidTypeNameException : com::sun::star::uno::Exception
 {

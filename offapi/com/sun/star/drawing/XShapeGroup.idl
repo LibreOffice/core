@@ -31,8 +31,6 @@ published interface XShapeGroup: com::sun::star::drawing::XShape
         for the parts of a grouped Shape. Then the parts can
         be edited instead of the group as a whole.
 
-
-
         <p>This affects only the user interface. The behavior is not
         specified if this instance is not visible on any view. In this case
         it may or may not work.</p>
@@ -42,8 +40,6 @@ published interface XShapeGroup: com::sun::star::drawing::XShape
     /** leaves the group, which disables the editing function
         for the parts of a grouped Shape. Then only the
         group as a whole can be edited.
-
-
 
         <p>This affects only the user interface. The behavior is not
         specified if this instance is not visible on any view. In this case

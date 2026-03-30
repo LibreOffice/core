@@ -15,8 +15,6 @@ module com {  module sun {  module star {  module sheet {
 /** This is used to specify a constraint for a solver model.
  *  In this struct, both sides of the model constraint can be expressed as cell ranges.
  *  Note that com::sun::star::sheet::SolverConstraint only supports single cell addresses
- *
- *  @since LibreOffice 25.2
  */
 struct ModelConstraint
 {

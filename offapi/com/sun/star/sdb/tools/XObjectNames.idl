@@ -45,8 +45,6 @@ module com {  module sun {  module star {  module sdb { module tools {
     will be thrown.</p>
 
     @see XConnectionTools
-
-    @since OOo 2.0.4
 */
 interface XObjectNames
 {

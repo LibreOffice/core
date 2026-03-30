@@ -35,8 +35,6 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     `hyper` and a currency type is important. Therefore
     Currency is declared as struct.
     </p>
-
-    @since OOo 1.1.2
  */
 struct Currency
 {

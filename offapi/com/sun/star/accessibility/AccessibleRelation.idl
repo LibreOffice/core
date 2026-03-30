@@ -24,8 +24,6 @@ module com { module sun { module star { module accessibility {
 
     <p>The represented relation points from the implementing object to a set
     of target objects.</p>
-
-    @since OOo 1.1.2
 */
 struct AccessibleRelation
 {

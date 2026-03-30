@@ -34,8 +34,6 @@ module com {   module sun {   module star {   module document {
     storeToStorage() and storeToMedium().
     </p>
 
-    @since OOo 3.0
-
     @see XDocumentPropertiesSupplier
             for getting access to an instance from a loaded document
     @see DocumentProperties     for a service that implements this interface

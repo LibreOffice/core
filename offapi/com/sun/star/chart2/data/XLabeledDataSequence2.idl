@@ -28,9 +28,6 @@ module chart2
 module data
 {
 
-/**
-    @since LibreOffice 4.1
-  */
 interface XLabeledDataSequence2
 {
     /** provides read- and write-access to the underlying data.

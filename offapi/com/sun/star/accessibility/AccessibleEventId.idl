@@ -29,8 +29,6 @@ module com { module sun { module star { module accessibility {
 
     @see AccessibleEventObject
     @see XAccessibleEventListener
-
-    @since OOo 1.1.2
 */
 constants AccessibleEventId
 {
@@ -358,16 +356,12 @@ constants AccessibleEventId
     /** Constant used to indicate that a list box entry has been expanded.
         AccessibleEventObject::OldValue is empty.
         AccessibleEventObject::NewValue contains the expanded list box entry.
-
-        @since OOo 3.2
     */
     const short LISTBOX_ENTRY_EXPANDED = 32;
 
     /** Constant used to indicate that a list box entry has been collapsed.
         AccessibleEventObject::OldValue is empty.
         AccessibleEventObject::NewValue contains the collapsed list box entry.
-
-        @since OOo 3.2
     */
     const short LISTBOX_ENTRY_COLLAPSED = 33;
 
@@ -378,8 +372,6 @@ constants AccessibleEventId
 
         <p>AccessibleEventObject::OldValue contains the item to be removed.</p>
         <p>AccessibleEventObject::NewValue is empty.</p>
-
-        @since LibreOffice 4.3
     */
     const short ACTIVE_DESCENDANT_CHANGED_NOFOCUS = 34;
 
@@ -389,8 +381,6 @@ constants AccessibleEventId
 
         <p>AccessibleEventObject::OldValue is empty.</p>
         <p>AccessibleEventObject::NewValue contains the item to be added.</p>
-
-        @since LibreOffice 4.3
     */
     const short SELECTION_CHANGED_ADD = 35;
 
@@ -398,8 +388,6 @@ constants AccessibleEventId
 
         <p>AccessibleEventObject::OldValue is empty.</p>
         <p>AccessibleEventObject::NewValue contains the item that has been removed.</p>
-
-        @since LibreOffice 4.3
     */
     const short SELECTION_CHANGED_REMOVE = 36;
 
@@ -408,26 +396,18 @@ constants AccessibleEventId
 
         <p>AccessibleEventObject::OldValue and
         AccessibleEventObject::NewValue is empty.</p>
-
-        @since LibreOffice 4.3
     */
     const short SELECTION_CHANGED_WITHIN = 37;
 
     /** A change of page or slide.
-
-        @since LibreOffice 4.3
     */
     const short PAGE_CHANGED = 38;
 
     /** The cursor has moved to/from a section
-
-        @since LibreOffice 4.3
     */
     const short SECTION_CHANGED = 39;
 
     /** The cursor has moved to/from a section
-
-        @since LibreOffice 4.3
     */
     const short COLUMN_CHANGED = 40;
 
@@ -438,8 +418,6 @@ constants AccessibleEventId
         AccessibleEventObject::NewValue are empty.
         The new role can be retrieved via
         XAccessibleContext::getAccessibleRole.</p>
-
-        @since LibreOffice 4.3
     */
     const short ROLE_CHANGED =41;
 };

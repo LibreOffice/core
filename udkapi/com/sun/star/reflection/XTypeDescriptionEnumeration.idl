@@ -22,8 +22,6 @@
 
 
 /** Defines an enumeration for type descriptions.
-
-    @since OOo 1.1.2
   */
 published interface XTypeDescriptionEnumeration : com::sun::star::container::XEnumeration
 {

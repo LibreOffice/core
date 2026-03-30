@@ -22,8 +22,6 @@
  module com {  module sun {  module star {  module frame {
 
 /** This exception can be thrown in case arguments are wrong.
-
-    @since OOo 1.1.2
  */
 published exception IllegalArgumentIOException: com::sun::star::io::IOException
 {

@@ -13,8 +13,6 @@ module com {  module sun {  module star {  module sheet {
 
 
 /** Provides access to the solver settings stored in a specific Calc sheet
- *
- *  @since LibreOffice 25.2
  */
 interface XSolverSettings: com::sun::star::uno::XInterface
 {

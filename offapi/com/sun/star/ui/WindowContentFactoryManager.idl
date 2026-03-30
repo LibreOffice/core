@@ -25,8 +25,6 @@ module com {  module sun {  module star {  module ui {
    A legacy (single-instance) service-variant of theWindowContentFactoryManager singleton.
 
    @deprecated Use theWindowContentFactoryManager singleton instead.
-
-   @since LibreOffice 4.1
 */
 service WindowContentFactoryManager : com::sun::star::lang::XSingleComponentFactory;
 

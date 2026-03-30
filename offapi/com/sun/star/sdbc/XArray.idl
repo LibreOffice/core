@@ -149,7 +149,6 @@ published interface XArray: com::sun::star::uno::XInterface
         ,
         the connection type mapping is used instead.
 
-
         <p>
         The result set contains one row for each array element, with
         two columns in each row.  The second column stores the element
@@ -187,7 +186,6 @@ published interface XArray: com::sun::star::uno::XInterface
         `NULL`
         ,
         the connection type mapping is used instead.
-
 
         <p>
         The result set contains one row for each array element, with

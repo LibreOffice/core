@@ -31,14 +31,10 @@ interface XToolkitExperimental : XToolkit3
     void pause([in] long nMilliseconds);
 
     /** Start time logging.
-
-        @since LibreOffice 6.0
      */
     void startRecording();
 
     /** Stop time logging.
-
-        @since LibreOffice 6.0
      */
     void stopRecording();
 
@@ -46,8 +42,6 @@ interface XToolkitExperimental : XToolkit3
         First line is the time of the recorded operations in seconds,
         next ones are the log lines. A log line contains the thread ID,
         time stamp, profile zone ID and "start" or "stop".
-
-        @since LibreOffice 6.0
      */
     sequence<string> getRecordingAndClear();
 

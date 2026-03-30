@@ -23,8 +23,6 @@
 
 /** describes the rules for chapter numbering in a text document.
 
-
-
     <p>Some of the properties that are available in the interface are
     ignored here.
 
@@ -48,8 +46,6 @@ published service ChapterNumberingRule
 
     /** contains the name of the paragraph style that marks this heading
         level.
-
-
 
         <p>It is necessary that each style name appears only
         once in the sequence of numbering rules.</p>

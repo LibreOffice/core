@@ -26,8 +26,6 @@ module com {  module sun {  module star {  module inspection {
     <p>A control which would canonically implement this interface is a list box control:
     The string list defined by XStringListControl would in the control be
     represented as drop-down list containing all the strings.</p>
-
-    @since OOo 2.0.3
 */
 interface XStringListControl : XPropertyControl
 {

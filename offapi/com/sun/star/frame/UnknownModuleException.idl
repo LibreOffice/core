@@ -23,8 +23,6 @@ module com {  module sun {  module star {  module frame {
 /** This exception can be thrown in case an office
  *  module could not be classified or does not have
  *  a valid configuration.
-
-    @since OOo 2.0
  */
 exception UnknownModuleException : ::com::sun::star::uno::Exception
 {

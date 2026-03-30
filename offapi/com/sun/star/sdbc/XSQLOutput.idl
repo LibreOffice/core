@@ -36,7 +36,6 @@
     is used by the driver, and its methods are never directly invoked
     by a programmer.
 
-
     <p>
     When an object of a class implementing interface
     com::sun::star::sdbc::XSQLData
@@ -179,7 +178,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
 
     /** writes to the stream the data contained in the given
         <code>XSQLData</code> object.
-
 
         <p
         >When the

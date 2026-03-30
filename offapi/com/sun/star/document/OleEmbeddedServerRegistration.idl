@@ -27,8 +27,6 @@ module com {  module sun {  module star {  module document {
     This service is only used to register embedded server support
     for StarOffice documents.
     </p>
-
-     @since OOo 1.1.2
  */
 published service OleEmbeddedServerRegistration
     : com::sun::star::uno::XInterface;

@@ -14,8 +14,6 @@ module com { module sun { module star { module media {
     <p> The XPlayerListener interface must be implemented by
     the clients of the Player service which need to be informed about
     events while the Player service is displayed.</p>
-
-    @since LibreOffice 7.4
 */
 
 interface XPlayerListener : com::sun::star::lang::XEventListener

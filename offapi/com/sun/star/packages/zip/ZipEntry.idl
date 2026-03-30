@@ -24,7 +24,6 @@ module com {  module sun {  module star {   module packages {  module zip {
 
 /** used to represent a ZIP file entry
 
-
     <p>This interface is an IDL version of the Java interface
     <em>java.util.zip.ZipFile</em> with some minor adaptations.</p>
  */

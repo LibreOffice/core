@@ -26,8 +26,6 @@ module com { module sun { module star { module awt {
     <p>Components implementing this interface maintain a variable number of image sets. Components displaying
     those images will choose the best-fitting image set depending on the available space, and possibly other
     restrictions.</p>
-
-    @since OOo 3.4
  */
 interface XAnimatedImages
 {

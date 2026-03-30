@@ -23,8 +23,6 @@
 
 /** A GluePoint could be attached to a shape or to a page.
 
-
-
     <p>If a GluePoint is attached to a shape, it is moved when
     the shape moves.
     The ends of connectors can be attached to GluePoint.</p>

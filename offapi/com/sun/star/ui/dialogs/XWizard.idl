@@ -61,8 +61,6 @@ interface XWizardPage;
 
     @see XWizardController
     @see XWizardPage
-
-    @since OOo 3.3
  */
 interface XWizard
 {

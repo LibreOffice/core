@@ -32,8 +32,6 @@ module com { module sun { module star { module configuration { module backend {
 
   @see com::sun::star::configuration::backend::DataImporter
         Service that supports applying a LayerFilter to imported data.
-
-  @since OOo 2.0
   */
 published service LayerFilter
 {

@@ -20,9 +20,6 @@
 
  module com {  module sun {  module star {  module embed {
 
-/**
-    @since LibreOffice 4.1
- */
 service OOoEmbeddedObjectFactory : XEmbeddedObjectCreator;
 
 

@@ -23,8 +23,6 @@ module com { module sun { module star { module i18n {
 
 /** provides access to locale specific ordinal suffix systems.
 
-    @since OOo 2.2
-
     @internal
 
     ATTENTION: This interface is marked <em>internal</em> and does not

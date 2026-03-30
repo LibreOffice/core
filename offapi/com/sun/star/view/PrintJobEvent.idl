@@ -26,8 +26,6 @@ module com {  module sun {  module star {  module view {
     <p>com::sun::star::lang::EventObject::Source
     contains the XPrintJob having changed its state</p>.
 
-    @since OOo 1.1.2
-
  */
 published struct PrintJobEvent : com::sun::star::lang::EventObject
 {

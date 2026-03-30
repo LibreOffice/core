@@ -21,8 +21,6 @@ module com { module sun { module star { module uri {
 
 /**
    translates between external and internal URI references.
-
-   @since OOo 2.0
  */
 published service ExternalUriReferenceTranslator:
     XExternalUriReferenceTranslator;

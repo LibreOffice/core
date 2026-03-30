@@ -24,8 +24,6 @@
 /** Offers access to complex column and row descriptions.
 
 <p>Can be obtained from interface XChartDocument via method getData().</p>
-
-@since OOo 3.3
 */
 
 published interface XComplexDescriptionAccess : XChartDataArray

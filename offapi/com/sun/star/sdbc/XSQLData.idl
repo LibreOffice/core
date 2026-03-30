@@ -25,7 +25,6 @@
 
 /** is used for the custom mapping of SQL user-defined types.
 
-
     <p>
     This interface must be implemented by a service that is
     registered in a type mapping.  It is expected that this interface
@@ -40,7 +39,6 @@ published interface XSQLData: com::sun::star::uno::XInterface
     /** returns the fully-qualified name of the SQL user-defined type
         that this object represents.
 
-
         <p>
         This method is called by the SDBC driver to get the name of the
         UDT instance that is being mapped to this instance of SQLData.
@@ -54,7 +52,6 @@ published interface XSQLData: com::sun::star::uno::XInterface
 
 
     /** populates this object with data read from the database.
-
 
         <p>
         The implementation of the method must follow this protocol:
@@ -94,7 +91,6 @@ published interface XSQLData: com::sun::star::uno::XInterface
         raises (SQLException);
 
     /** writes this object to the given SQL data stream.
-
 
         <p>
         The implementation of the method must follow this protocol:

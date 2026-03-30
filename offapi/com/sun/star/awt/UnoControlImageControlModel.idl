@@ -49,8 +49,6 @@ published service UnoControlImageControlModel
 
         <p>Not every border style (see #Border) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
-
-        @since OOo 2.0
      */
     [optional, property] long BorderColor;
 
@@ -86,8 +84,6 @@ published service UnoControlImageControlModel
             <li>If #Graphic is set, #ImageURL will be reset
             to an empty string.</li>
         </ul></p>
-
-        @since OOo 2.1
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
@@ -107,15 +103,11 @@ published service UnoControlImageControlModel
         <p>If this property is present, it supersedes the #ScaleImage property.</p>
 
         <p>The value of this property is one of the ImageScaleMode constants.</p>
-
-        @since OOo 3.1
     */
     [property, optional] short ScaleMode;
 
 
     /** specifies that the control can be reached with the TAB key.
-
-        @since OOo 1.1.2
      */
     [optional, property] boolean Tabstop;
 

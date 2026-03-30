@@ -37,8 +37,6 @@ module com { module sun { module star { module ui {
         <li><b>floater</b>A basic user interface element.</li>
     </ul>
     </p>
-
-    @since OOo 2.0
 */
 
 interface XUIElementFactory : ::com::sun::star::uno::XInterface

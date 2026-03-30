@@ -13,7 +13,6 @@
 
 
 /** These constants define the position of ruby text.
-    @since LibreOffice 6.1
  */
 constants RubyPosition
 {

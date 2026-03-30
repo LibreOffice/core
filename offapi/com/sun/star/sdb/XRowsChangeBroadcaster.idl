@@ -27,7 +27,6 @@ interface XRowsChangeListener;
 
     @see XRowSetSupplier
     @see XRowsChangeListener
-    @since OOo 3.3
  */
 interface XRowsChangeBroadcaster
 {

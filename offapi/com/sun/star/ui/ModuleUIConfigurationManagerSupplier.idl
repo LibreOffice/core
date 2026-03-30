@@ -24,8 +24,6 @@ module com { module sun { module star { module ui {
     theModuleUIConfigurationManagerSupplier singleton.
 
     @deprecated Use theModuleUIConfigurationManagerSupplier singleton instead.
-
-    @since OOo 2.0
 */
 service ModuleUIConfigurationManagerSupplier : XModuleUIConfigurationManagerSupplier;
 

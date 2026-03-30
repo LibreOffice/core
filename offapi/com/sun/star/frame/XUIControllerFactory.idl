@@ -30,8 +30,6 @@ module com { module sun { module star { module frame {
     @see StatusbarControllerFactory
     @see ToolbarControllerFactory
     </p>
-
-    @since LibreOffice 4.1
  */
 interface XUIControllerFactory
 {

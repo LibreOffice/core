@@ -30,8 +30,6 @@ module com {  module sun {  module star {  module geometry {
     arcs connect start and end point) which satisfy the given set of
     constrains. Thus, there are two flags indicating which one of those
     ellipses should be taken.<p>
-
-    @since OOo 2.0
  */
 struct EllipticalArc
 {

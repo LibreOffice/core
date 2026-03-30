@@ -24,8 +24,6 @@ module com {  module sun {  module star {  module awt {
 published interface XGraphics2: com::sun::star::awt::XGraphics
 {
     /** clears the given rectangle on the device
-
-        @since LibreOffice 4.1
      */
     void clear( [in] Rectangle aRect );
 
@@ -34,8 +32,6 @@ published interface XGraphics2: com::sun::star::awt::XGraphics
         in the output device.
 
         <p>Note that some devices may not support this operation.</p>
-
-        @since LibreOffice 4.1
 
         @param  nX
             the X coordinate on the device where the graphic will be drawn

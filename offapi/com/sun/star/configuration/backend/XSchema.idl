@@ -24,8 +24,6 @@ module com { module sun { module star { module configuration { module backend {
 /**
   Handles access to the elements of a component schema,
   i.e its templates and its component definition.
-
-    @since OOo 1.1.2
 */
 published interface XSchema : ::com::sun::star::uno::XInterface
 {

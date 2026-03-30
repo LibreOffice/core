@@ -33,8 +33,6 @@ module com { module sun { module star { module ui {
 
     @see com::sun::star::frame::XFrame
     </p>
-
-    @since OOo 2.0
 */
 
 

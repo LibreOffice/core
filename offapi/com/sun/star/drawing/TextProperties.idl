@@ -146,8 +146,6 @@ published service TextProperties
     /** This is the distance from the lower edge of the Shape to the
         lower edge of the text.
 
-
-
         <p>This is only useful if Text::TextVerticalAdjust is
         BLOCK or if Text::TextFitSize is
         `TRUE`.</p>
@@ -228,8 +226,6 @@ published service TextProperties
 
 
     /** Column layout properties for the text.
-
-        @since LibreOffice 7.2
      */
     [optional, property] ::com::sun::star::text::XTextColumns TextColumns;
 };

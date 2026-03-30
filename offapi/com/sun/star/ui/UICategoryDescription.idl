@@ -24,8 +24,6 @@ module com {  module sun {  module star {  module ui {
     A legacy (single-instance) service-variant of theUICategoryDescription singleton.
 
     @deprecated Use theUICategoryDescription singleton instead.
-
-    @since OOo 2.0
 */
 service UICategoryDescription : com::sun::star::container::XNameAccess;
 

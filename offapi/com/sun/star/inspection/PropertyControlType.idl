@@ -29,8 +29,6 @@ module com {  module sun {  module star {  module inspection {
     @see XPropertyControl
     @see XPropertyControlFactory
     @see XPropertyControl::ValueType
-
-    @since OOo 2.0.3
 */
 constants PropertyControlType
 {

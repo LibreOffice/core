@@ -38,8 +38,6 @@ module com { module sun { module star { module rendering {
     metrics) will be subject to that transformation. Depending on the
     underlying font technology, actual device output might be off by
     up to one device pixel from the transformed metrics.
-
-    @since OOo 2.0
  */
 struct FontMetrics
 {

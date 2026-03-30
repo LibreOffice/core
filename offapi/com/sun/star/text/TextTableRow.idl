@@ -77,14 +77,10 @@ published service TextTableRow
 
 
         /** If `TRUE`, the row is allowed to be split at page or column breaks.
-
-                @since OOo 2.0
          */
         [optional, property, maybevoid] boolean IsSplitAllowed;
 
     /** Grab bag of row properties, used as a string-any map for interop purposes.
-
-        @since LibreOffice 4.4
 
         <p>This property is intentionally not handled by the ODF filter. Any
         member that should be handled there should be first moved out from this grab
@@ -93,14 +89,10 @@ published service TextTableRow
     [optional, property] sequence<com::sun::star::beans::PropertyValue> RowInteropGrabBag;
 
     /** contains the graphic of the background.
-
-        @since LibreOffice 6.1
      */
     [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 
     /** If TRUE, the table row wasn't deleted or inserted with its tracked cell content
-
-        @since LibreOffice 7.2
      */
 
         [optional, property] boolean HasTextChangesOnly;

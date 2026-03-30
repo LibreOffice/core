@@ -33,8 +33,6 @@ module backend {
             <li>Missing write access when updating data.</li>
         </ul>
     </p>
-
-    @since OOo 1.1.2
   */
 published exception InsufficientAccessRightsException : BackendAccessException {
 } ;

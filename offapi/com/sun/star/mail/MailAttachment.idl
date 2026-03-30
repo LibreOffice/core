@@ -23,8 +23,6 @@ module com { module sun { module star { module mail {
     A MailAttachment specifies a mail message attachment.
 
     @see ::com::sun::star::mail::XMailMessage
-
-    @since OOo 2.0
 */
 struct MailAttachment
 {

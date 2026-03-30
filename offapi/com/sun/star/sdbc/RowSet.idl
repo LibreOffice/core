@@ -32,7 +32,6 @@
     and a
     com::sun::star::sdbc::ResultSet.
 
-
     <p>
     It acts like a typical bean. Before you use the RowSet, you have to specify a
     set of properties like a DataSource and a Command and other properties known of

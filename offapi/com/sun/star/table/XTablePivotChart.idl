@@ -11,8 +11,6 @@ module com {  module sun {  module star {  module table {
 
 /** provides access to the settings of a pivot chart object in a
     table or spreadsheet.
-
-    @since LibreOffice 5.4
  */
 interface XTablePivotChart: com::sun::star::uno::XInterface
 {

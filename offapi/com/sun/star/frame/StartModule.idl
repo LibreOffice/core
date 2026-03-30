@@ -20,9 +20,6 @@
 
  module com {  module sun {  module star {  module frame {
 
-/**
-    @since LibreOffice 4.1
- */
 service StartModule : com::sun::star::frame::XController
 {
     createWithParentWindow([in] com::sun::star::awt::XWindow ContainerWindow);

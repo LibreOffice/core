@@ -22,7 +22,6 @@
 
 /** is thrown when an error occurs during a batch update operation.
 
-
     <p>In addition to the information provided by
     com::sun::star::sdbc::SQLException
     , a

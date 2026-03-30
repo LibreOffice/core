@@ -25,7 +25,6 @@ module com { module sun { module star { module xml { module crypto {
     algorithms.
 
     @see XDigestContextSupplier
-    @since OOo 3.4
 */
 constants DigestID
 {
@@ -48,15 +47,11 @@ constants DigestID
     const long SHA256_1K = 4;
 
     /** identifier of SHA-512 algorithm
-
-        @since LibreOffice 6.0
      */
     const long SHA512 = 5;
 
     /** identifier of SHA-512 algorithm that is applied to the first
         kilobyte of data.
-
-        @since LibreOffice 6.0
      */
     const long SHA512_1K = 6;
 };

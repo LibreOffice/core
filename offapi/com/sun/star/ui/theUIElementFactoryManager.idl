@@ -26,8 +26,6 @@ module com { module sun { module star { module ui {
 
     Prior to LibreOffice 4.3, this singleton was only available as a
     (single-instance) UIElementFactoryManager service.
-
-    @since LibreOffice 4.3
 */
 
 singleton theUIElementFactoryManager : XUIElementFactoryManager;

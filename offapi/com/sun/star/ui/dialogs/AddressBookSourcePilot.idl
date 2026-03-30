@@ -20,9 +20,6 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-/**
-    @since LibreOffice 4.1
-*/
 service AddressBookSourcePilot : XExecutableDialog
 {
     createWithParent([in] com::sun::star::awt::XWindow ParentWindow);

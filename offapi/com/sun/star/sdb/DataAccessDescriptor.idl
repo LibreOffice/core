@@ -31,8 +31,6 @@ module com {  module sun {  module star {  module sdb {
     <p>Every component providing or requiring a DataAccessDescriptor for some functionality
     is urged to specify which properties are mandatory, and which ones optional. Additionally,
     it's free to specify any additional requirements about the relations of properties.</p>
-
-    @since OOo 1.1.2
 */
 published service DataAccessDescriptor
 {

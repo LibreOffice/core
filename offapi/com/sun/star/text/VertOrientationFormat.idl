@@ -23,8 +23,6 @@
 
 /** describes the vertical orientation of an object.
 
-
-
     <p>If <code>VerticalOrientation == VERT_NONE</code>, then the value "YPos"
     describes the distance from the top of the context. Otherwise "YPos"
     is ignored.

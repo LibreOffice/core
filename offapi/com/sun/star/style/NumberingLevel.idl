@@ -77,8 +77,6 @@ published service NumberingLevel
     [property] short StartWith;
 
     /** This is the graphic bitmap to use as a symbol.
-
-        @since LibreOffice 6.1
      */
     [optional, property] com::sun::star::awt::XBitmap GraphicBitmap;
 
@@ -94,14 +92,10 @@ published service NumberingLevel
 
         Example: ListFormat "(%1% %2%.%3%)" can be resolved to numbering
         in actual multilevel list like "(4 1.3)".
-
-        @since LibreOffice 7.2
      */
     [optional, property] string ListFormat;
 
     /** Specifies if this level should use Arabic numbers for all levels
-
-        @since LibreOffice 24.2
      */
     [optional, property] boolean IsLegal;
 };

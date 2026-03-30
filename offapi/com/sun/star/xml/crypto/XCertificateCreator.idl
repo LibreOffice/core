@@ -21,8 +21,6 @@ module com { module sun { module star { module xml { module crypto {
 
 /**
  * Interface for creating and adding certificates
- *
- * @since LibreOffice 6.2
  */
 interface XCertificateCreator : com::sun::star::uno::XInterface
 {

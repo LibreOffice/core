@@ -20,9 +20,6 @@
 
 module com {  module sun {  module star {  module frame {
 
-/**
-    @since LibreOffice 4.1
- */
 published interface XFrame2
 {
     /** contains user defined attributes.
@@ -58,8 +55,6 @@ published interface XFrame2
     interface XDispatchProvider;
 
     /** provides information about supported commands
-
-        @since OOo 2.0
     */
     interface XDispatchInformationProvider;
 
@@ -118,8 +113,6 @@ published interface XFrame2
         It's not recommended to cache an already gotten supplier. Because there exist
         no possibility to check for enabled/disabled recording then.
         </p>
-
-    @since OOo 1.1.2
      */
     [attribute] XDispatchRecorderSupplier DispatchRecorderSupplier;
 

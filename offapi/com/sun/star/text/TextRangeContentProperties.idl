@@ -23,8 +23,6 @@ module com {  module sun {  module star {  module text {
 
 
 /** describes the structural properties to retrieve text contents.
-
-    @since OOo 3.3
  */
 service TextRangeContentProperties
 {
@@ -70,20 +68,14 @@ service TextRangeContentProperties
         NestedTextContent;
 
     /** Paragraph for the start of this range.
-
-        @since LibreOffice 6.0
      */
     [optional, readonly, property] com::sun::star::text::XTextContent TextParagraph;
 
     /** Properties of the linebreak, e.g. for clearing break purposes.
-
-        @since LibreOffice 7.4
      */
     [optional, readonly, property] com::sun::star::text::XTextContent LineBreak;
 
     /** may contain a content control.
-
-        @since LibreOffice 7.4
      */
     [optional, readonly, property] com::sun::star::text::XTextContent ContentControl;
 

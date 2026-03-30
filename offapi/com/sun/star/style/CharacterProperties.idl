@@ -355,15 +355,11 @@ published service CharacterProperties
 
         <p> It is not guaranteed that the order in the sequence reflects
         the order of the evaluation of the character style attributes.</p>
-
-        @since OOo 1.1.2
      */
     [optional, property] sequence<string> CharStyleNames;
 
 
     /** If this optional property is `TRUE`, then the characters are invisible.
-
-        @since OOo 2.0
      */
     [optional, property] boolean CharHidden;
 
@@ -377,73 +373,60 @@ published service CharacterProperties
 
     /** This property contains the left border of the object.
      *
-     *  @since LibreOffice 4.2
     **/
     [property, optional] com::sun::star::table::BorderLine2 CharLeftBorder;
 
     /** This property contains the right border of the object.
      *
-     *  @since LibreOffice 4.2
     **/
     [property, optional] com::sun::star::table::BorderLine2 CharRightBorder;
 
     /** This property contains the top border of the object.
      *
-     *  @since LibreOffice 4.2
     **/
     [property, optional] com::sun::star::table::BorderLine2 CharTopBorder;
 
     /** This property contains the bottom border of the object.
      *
-     *  @since LibreOffice 4.2
     **/
     [property, optional] com::sun::star::table::BorderLine2 CharBottomBorder;
 
     /** This property contains the distance from the border to the object.
      *
-     *  @since LibreOffice 4.2
     **/
     [property, optional] long CharBorderDistance;
 
     /** This property contains the distance from the left border to the object.
      *
-     *  @since LibreOffice 4.2
     **/
     [property, optional] long CharLeftBorderDistance;
 
     /** This property contains the distance from the right border to the object.
      *
-     *  @since LibreOffice 4.2
     **/
     [property, optional] long CharRightBorderDistance;
 
     /** This property contains the distance from the top border to the object.
      *
-     *  @since LibreOffice 4.2
     **/
     [property, optional] long CharTopBorderDistance;
 
     /** This property contains the distance from the bottom border to the object.
      *
-     *  @since LibreOffice 4.2
     **/
     [property, optional] long CharBottomBorderDistance;
 
     /** Determines the type, color, and width of the shadow.
      *
-     *  @since LibreOffice 4.2
     **/
     [optional, property] com::sun::star::table::ShadowFormat CharShadowFormat;
 
     /** Determines the color of the highlight.
      *
-     *  @since LibreOffice 4.2
     **/
     [optional, property] com::sun::star::util::Color CharHighlight;
 
     /** Grab bag of character properties, used as a string-any map for interim interop purposes.
-
-        @since LibreOffice 4.3
 
         <p>This property is intentionally not handled by the ODF filter. Any
         member that should be handled there should be first moved out from this grab
@@ -453,13 +436,10 @@ published service CharacterProperties
 
     /** This optional property determines the position of the ruby .
         @see com::sun::star::text::RubyPosition
-        @since LibreOffice 6.1
      */
     [optional, property] short RubyPosition;
 
     /** This is the transparency of the character text.
-
-        @since LibreOffice 7.0
 
         <p>The value 100 means entirely transparent, while 0 means not transparent at all.</p>
     */
@@ -468,13 +448,11 @@ published service CharacterProperties
     /** If available, keeps the color theme index, so that the character can
      *  be re-colored easily based on a theme.
      *
-     *  @since LibreOffice 7.3
      **/
     [optional, property] short CharColorTheme;
 
     /** Tint or shade of the character color.
      *
-     *  @since LibreOffice 7.3
      **/
     [optional, property] short CharColorTintOrShade;
 
@@ -482,7 +460,6 @@ published service CharacterProperties
      *  specific script type.
      *  @see com::sun::star::text::ScriptHintType
      *
-     * @since LibreOffice 25.8
      **/
     [optional, property] short CharScriptHint;
 };

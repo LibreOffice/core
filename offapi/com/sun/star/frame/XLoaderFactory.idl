@@ -23,8 +23,6 @@
 
 /**
     Unified service interface for FrameLoaderFactory and ContentHandlerFactory.
-
-    @since LibreOffice 4.2
  */
 published interface XLoaderFactory
 {

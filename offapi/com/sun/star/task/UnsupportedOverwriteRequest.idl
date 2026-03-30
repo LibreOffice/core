@@ -29,8 +29,6 @@ module com { module sun { module star { module task {
     user specifies to do so. Continuations for using with
     the mentioned service are Abort and Approve.
     </P>
-
-    @since OOo 1.1.2
 */
 published exception UnsupportedOverwriteRequest: ClassifiedInteractionRequest
 {

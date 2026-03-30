@@ -28,8 +28,6 @@ published service PageFootnoteInfo
 {
     /** contains the maximum height of the footnote section.
 
-
-
         <p>If 0, the maximum is the height of the page.</p>
      */
     [property] long FootnoteHeight;

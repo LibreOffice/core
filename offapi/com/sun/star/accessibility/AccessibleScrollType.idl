@@ -23,8 +23,6 @@ module com { module sun { module star { module accessibility {
 
     <p>Describes the type of scrolling that are available for the methods of
     the XAccessibleScrollableText interface.</p>
-
-    @since LibreOffice 7.0
 */
 enum AccessibleScrollType
 {

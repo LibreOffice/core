@@ -24,8 +24,6 @@ module com { module sun { module star { module awt {
     the list items. In addition of the simple container functionality of the
     AccessibleList service the
     com::sun::star::accessibility::XAccessibleSelection interface is supported.
-
-    @since OOo 1.1.2
 */
 service AccessibleListBoxList
 {

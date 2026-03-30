@@ -24,8 +24,6 @@ module com {  module sun {  module star {  module util {
 /** allows to listen for changes in an object's internal mode.
 
     @see XModeChangeBroadcaster
-
-    @since OOo 1.1.2
 */
 published interface XModeChangeListener : com::sun::star::lang::XEventListener
 {

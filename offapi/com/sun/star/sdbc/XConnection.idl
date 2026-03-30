@@ -32,7 +32,6 @@
     database. Within the context of a Connection, SQL statements are
     executed and results are returned.
 
-
     <p>
     A Connection's database is able to provide information
     describing its tables, its supported SQL grammar, its stored
@@ -52,7 +51,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     /** creates a new
         com::sun::star::sdbc::Statement
         object for sending SQL statements to the database.
-
 
         <p>
         SQL statements without parameters are normally
@@ -78,7 +76,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     /** creates a
         com::sun::star::sdbc::PreparedStatement
         object for sending parameterized SQL statements to the database.
-
 
         <p>
         A SQL statement with or without IN parameters can be
@@ -126,7 +123,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         object for calling
         database stored procedures.
 
-
         <p>
         The CallableStatement provides methods for setting up its IN and OUT
         parameters, and methods for executing the call to a stored procedure.
@@ -172,7 +168,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     string nativeSQL([in]string sql) raises (SQLException);
 
     /** sets this connection's auto-commit mode.
-
 
         <p>
         If a connection is in auto-commit mode, then all its SQL
@@ -239,7 +234,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
 
     /** tests to see if a connection is closed.
 
-
         <p>
         <b>
         Note:
@@ -256,7 +250,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     boolean isClosed() raises (SQLException);
 
     /** gets the metadata regarding this connection's database.
-
 
         <p>
         A Connection's database is able to provide information
@@ -275,7 +268,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
 
     /** puts this connection in read-only mode as a hint to enable
         database optimizations.
-
 
         <p>
         <b>
@@ -323,7 +315,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     string getCatalog() raises (SQLException);
 
     /** attempts to change the transaction isolation level to the one given.
-
 
         <p>
         The constants defined in
@@ -373,7 +364,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     /** installs the given type map as the type map for this connection.
         The type map will be used for the custom mapping of SQL structured types
         and distinct types.
-
 
         <p>
         Only if the driver supports custom type mapping is the setting of a map allowed.

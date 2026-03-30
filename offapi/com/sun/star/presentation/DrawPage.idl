@@ -133,7 +133,6 @@ published service DrawPage
     [optional, property] long DateTimeFormat;
 
     /** Specifies slide transition time in seconds.
-        @since LibreOffice 6.1
         @see Speed
      */
     [property, optional] double TransitionDuration;

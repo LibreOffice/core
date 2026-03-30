@@ -21,8 +21,6 @@ module com { module sun { module star { module chart2 {
 
 /**
     Provides unified interface for FormattedString service.
-
-    @since LibreOffice 4.1
 */
 interface XFormattedString2
 {

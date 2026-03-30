@@ -46,8 +46,6 @@ published service RangeSelectionArguments
         <p>If `TRUE`, the selection is restricted to a
         single cell.  If `FALSE`, multiple adjoining cells can be
         selected.  The default value is `FALSE`.</p>
-
-    @since OOo 2.0.3
      */
     [optional, property] boolean SingleCellMode;
 };

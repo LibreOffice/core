@@ -47,8 +47,6 @@ published constants NamedRangeFlag
 
 
     /** The range is hidden from the user interface
-
-        @since LibreOffice 24.2
      */
     const long HIDDEN = 16;
 

@@ -48,8 +48,6 @@ interface XImageControl
         <p>If this property is present, it supersedes the ScaleImage property.</p>
 
         <p>The value of this property is one of the com::sun::star::awt::ImageScaleMode constants.</p>
-
-        @since OOo 3.2
     */
     [attribute,bound] short ScaleMode
     {

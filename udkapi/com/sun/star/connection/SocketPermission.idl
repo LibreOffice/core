@@ -72,8 +72,6 @@ SocketPermission("localhost:1024-", "accept,connect,listen");
     dangerous because malevolent code can then more easily transfer and share
     confidential data among parties who may not otherwise have access to the data.
     </p>
-
-    @since OOo 1.1.2
 */
 published struct SocketPermission
 {

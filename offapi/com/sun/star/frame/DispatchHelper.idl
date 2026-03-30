@@ -32,8 +32,6 @@ module com {  module sun {  module star {  module frame {
     @see DispatchProvider
     @see XDispatchProvider
     @see XDispatch
-
-    @since OOo 1.1.2
  */
 published service DispatchHelper : XDispatchHelper;
 

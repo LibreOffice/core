@@ -52,8 +52,6 @@ published service NamedRange
 
         @see com::sun::star::sheet::FormulaToken
         @see com::sun::star::sheet::FormulaMapGroupSpecialOffset::NAME
-
-        @since OOo 3.0
      */
     [optional, readonly, property] long TokenIndex;
 
@@ -69,8 +67,6 @@ published service NamedRange
         interface of Calc, and its name will not appear in cell formulas. A
         formula referring to this defined name will show the formula
         definition contained in the name instead.</p>
-
-        @since OOo 3.0
      */
     [optional, property] boolean IsSharedFormula;
 };

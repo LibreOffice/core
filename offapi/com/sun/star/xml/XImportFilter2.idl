@@ -24,8 +24,6 @@ module com { module sun { module star { module xml {
 
 /** interface to implement for an XML-based import filter.
     Enhanced vs XImportFilter to take a XFastDocumentHandler.
-
-    @since LibreOffice 7.1
  */
 interface XImportFilter2: com::sun::star::uno::XInterface
 {

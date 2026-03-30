@@ -121,19 +121,14 @@ published service Style
             <li>NumberingLevel10</li>
         </ul>
 
-
-        @since  OOo 2.0.1
      */
     [optional, property] sequence< com::sun::star::beans::NamedValue > ParaStyleConditions;
 
     /** Flag indicating whether to hide the style in the UI.
-        @since LibreOffice 4.0
      */
     [optional, property] boolean Hidden;
 
     /** Grab bag of style properties, used as a string-any map for interim interop purposes.
-
-        @since LibreOffice 4.2
 
         <p>This property is intentionally not handled by the ODF filter. Any
         member that should be handled there should be first moved out from this grab

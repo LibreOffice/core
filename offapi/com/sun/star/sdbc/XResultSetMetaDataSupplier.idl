@@ -24,7 +24,6 @@
 
 /** provides access to the meta data of a result set.
 
-
     <p>
     The number, types, and properties of a ResultSet's columns are
     provided by the

@@ -24,8 +24,6 @@ module com { module sun { module star { module form { module runtime {
 /** is an event fired by a filter controller, when the filter managed by the controller changes.
 
     @see XFilterController
-
-    @since OOo 3.3
  */
 struct FilterEvent : ::com::sun::star::lang::EventObject
 {

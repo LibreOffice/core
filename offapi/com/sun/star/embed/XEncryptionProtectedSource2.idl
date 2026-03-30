@@ -21,8 +21,6 @@
 module com {  module sun {  module star {  module embed {
 
 /** This interface allows to set a password for an object.
-
-    @since OOo 3.4
  */
 interface XEncryptionProtectedSource2: XEncryptionProtectedSource
 {

@@ -34,8 +34,6 @@ module com { module sun { module star { module accessibility {
     Take an OK button of a dialog as an example.  Its role is
     AccessibleRole::BUTTON, its name is "OK", and its description
     is something like "Accepts all changes made in the dialog".</p>
-
-    @since OOo 1.1.2
 */
 interface XAccessibleContext : ::com::sun::star::uno::XInterface
 {

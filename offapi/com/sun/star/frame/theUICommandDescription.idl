@@ -43,8 +43,6 @@ module com { module sun { module star { module frame {
     Prior to LibreOffice 4.3, this singleton was only available as a
     (single-instance) UICommandDescription service.
 
-    @since LibreOffice 4.3
-
 */
 singleton theUICommandDescription : com::sun::star::container::XNameAccess;
 

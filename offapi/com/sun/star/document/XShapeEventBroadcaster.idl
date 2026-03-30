@@ -22,8 +22,6 @@ module com {   module sun {   module star {   module document {
 
 /**
   Used to link a listener to a specific shape
-
-  @since LibreOffice 6.4
  */
 interface XShapeEventBroadcaster : com::sun::star::document::XEventBroadcaster
 {

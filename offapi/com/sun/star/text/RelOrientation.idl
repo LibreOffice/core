@@ -66,20 +66,14 @@ published constants RelOrientation
     const short PAGE_PRINT_AREA = 8;
 
         /** at the top of the text line, only sensible for vertical orientation.
-
-            @since OOo 2.0
          */
         const short TEXT_LINE = 9;
 
     /** Bottom page border (page area below PAGE_PRINT_AREA).
-
-        @since LibreOffice 7.0
      */
     const short PAGE_PRINT_AREA_BOTTOM = 10;
 
     /** Top page border (page area above PAGE_PRINT_AREA).
-
-        @since LibreOffice 7.1
      */
     const short PAGE_PRINT_AREA_TOP = 11;
 

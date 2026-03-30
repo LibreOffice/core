@@ -24,8 +24,6 @@ interface XLogger;
 
 
 /** implements a pool for named XLogger instances
-
-    @since OOo 2.3
  */
 interface XLoggerPool
 {

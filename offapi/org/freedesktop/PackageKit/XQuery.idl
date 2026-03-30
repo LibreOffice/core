@@ -24,14 +24,12 @@ interface XQuery : com::sun::star::uno::XInterface
 {
     /**
      * Installs local package files or service packs.
-     * @since LibreOffice 4.0
      */
 
     void IsInstalled([in] string packageName, [in] string interaction, [out] boolean installed);
 
     /**
      * Installs packages to provide files.
-     * @since LibreOffice 4.0
      */
 
     void SearchFile([in] string fileName, [in] string interaction, [out] boolean installed, [out] string packageName);

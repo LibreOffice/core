@@ -28,8 +28,6 @@ module com {   module sun {   module star {   module document {
     StandaloneDocumentInfo services.
     </p>
 
-    @since OOo 3.0
-
     @see XDocumentProperties
     @see XDocumentPropertiesSupplier
  */

@@ -63,8 +63,6 @@ module com {  module sun {  module star {  module  util {
         This special service is not designed to be a text substitution but shall
         provide (a) valid substituted path(s).
     </p>
-
-    @since OOo 1.1.2
 */
 
 published service PathSubstitution : XStringSubstitution;

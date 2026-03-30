@@ -21,7 +21,6 @@ module com { module sun { module star { module awt {
 
 /**
  Information about a font mapping that took place.
- @since LibreOffice 7.3
 */
 published struct XFontMappingUseItem
 {

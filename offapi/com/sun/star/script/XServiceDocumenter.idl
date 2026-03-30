@@ -10,7 +10,6 @@
 module com {  module sun {  module star {  module  script {
 
 /** provides documentation for UNO services
-    @since LibreOffice 5.1
  */
 interface XServiceDocumenter
 {

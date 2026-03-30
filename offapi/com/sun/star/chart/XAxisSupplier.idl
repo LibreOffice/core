@@ -20,7 +20,6 @@
 module com {  module sun {  module star {  module chart {
 
 /** Easier access to the different axes within a chart.
-@since OOo 3.4
 */
 
 interface XAxisSupplier : ::com::sun::star::uno::XInterface

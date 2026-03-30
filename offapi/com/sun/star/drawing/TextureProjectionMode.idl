@@ -23,8 +23,6 @@
 
 /** defines how the texture is mapped to the object.
 
-
-
     <p>It can be set independently for X and Y texture directions.</p>
  */
 published enum TextureProjectionMode

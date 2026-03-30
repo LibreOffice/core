@@ -24,8 +24,6 @@
 
 /** specifies the legend of a chart.
 
-
-
     <p>The text/font properties which are specified in the service
     com::sun::star::drawing::Shape correlate to all text
     objects inside the legend.</p>
@@ -48,8 +46,6 @@ published service ChartLegend
     /** If a ChartLegend may be stored as XML file,
         this service should be supported in order to preserve unparsed
         XML attributes.
-
-    @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 

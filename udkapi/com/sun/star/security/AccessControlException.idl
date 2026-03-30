@@ -23,8 +23,6 @@ module com {  module sun {  module star {  module security {
 
 /** Exception notifying a lacking permission to access data or execute code
     thus it is thrown if permission ought to be denied.
-
-    @since OOo 1.1.2
 */
 published exception AccessControlException : com::sun::star::uno::SecurityException
 {

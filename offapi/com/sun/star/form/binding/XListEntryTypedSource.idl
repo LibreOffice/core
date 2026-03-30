@@ -14,8 +14,6 @@ module com {  module sun {  module star {  module form { module binding {
 /** specifies a source of string list entries with corresponding underlying data values
 
     @see XListEntrySource
-
-    @since LibreOffice 5.4
 */
 interface XListEntryTypedSource : com::sun::star::form::binding::XListEntrySource
 {

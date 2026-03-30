@@ -39,8 +39,6 @@ published interface XAdapter: com::sun::star::uno::XInterface
 
     /** adds a reference to the adapter.
 
-
-
         <p>All added references are called when the adapted object dies.
 
         </p>

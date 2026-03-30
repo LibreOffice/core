@@ -11,8 +11,6 @@ module com { module sun { module star { module chart2 {
 
 /**
     Provides interface for DataPointCustomLabelField service.
-
-    @since LibreOffice 6.1
 */
 interface XDataPointCustomLabelField : XFormattedString2
 {
@@ -26,29 +24,21 @@ interface XDataPointCustomLabelField : XFormattedString2
 
     /**
         Indicates whether the label field's content is sourced from a cell[range] or not.
-
-        @since LibreOffice 7.3
     */
     boolean getDataLabelsRange();
 
     /**
         Sets whether the label field's content is sourced from a cell[range] or not.
-
-        @since LibreOffice 7.3
     */
     void setDataLabelsRange( [in] boolean dataLabelsRange );
 
     /**
         Returns the address of the cell[range] from which the content of this field is sourced.
-
-        @since LibreOffice 7.3
     */
     string getCellRange();
 
     /**
         Sets the address of the cell[range] from which the content of this field is sourced.
-
-        @since LibreOffice 7.3
     */
     void setCellRange( [in] string cellRange );
 

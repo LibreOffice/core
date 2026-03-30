@@ -21,8 +21,6 @@ module com { module sun { module star { module configuration {
    the (old-style) DefaultProvider service, as it is the most
    frequently used one.  See the DefaultProvider service for
    details.</p>
-
-   @since OOo 1.1.2
 */
 published singleton theDefaultProvider:
     com::sun::star::lang::XMultiServiceFactory;

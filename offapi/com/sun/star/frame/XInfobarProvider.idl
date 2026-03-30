@@ -12,8 +12,6 @@ module com {  module sun {  module star {  module frame {
 /** Allows to add Infobars to a frame.
 
     This interface can be obtained via com::sun::star::frame::XController.
-
-    @since LibreOffice 6.4
  */
 interface XInfobarProvider: uno::XInterface
 {
@@ -119,8 +117,6 @@ interface XInfobarProvider: uno::XInterface
 
         @param id
             The ID which was used when creating this Infobar.
-
-        @since LibreOffice 7.0
 
         @code{.bas}
         Function  HasMyInfobar as boolean

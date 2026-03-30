@@ -95,8 +95,6 @@ module com { module sun { module star { module linguistic2 {
     </ul>
 
     </p>
-
-    @since OOo 2.2
  */
 interface XLanguageGuessing
 {

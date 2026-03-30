@@ -167,50 +167,34 @@ published constants NumberingType
 
     /** Numbering in Arabic alphabet letters
         as "&#1571;,&#1576;,&#1578;..."
-
-        @since OOo 1.1.2
      */
     const short CHARS_ARABIC = 31;
 
     /** Numbering in Thai alphabet letters
-
-        @since OOo 1.1.2
      */
     const short CHARS_THAI = 32;
 
     /** Numbering in Hebrew alphabet letters
-
-        @since OOo 2.0
      */
     const short CHARS_HEBREW = 33;
 
     /** Numbering in Nepali alphabet letters
-
-        @since OOo 2.0.1
      */
     const short CHARS_NEPALI = 34;
 
     /** Numbering in Khmer alphabet letters
-
-        @since OOo 2.0.1
      */
     const short CHARS_KHMER = 35;
 
     /** Numbering in Lao alphabet letters
-
-        @since OOo 2.0.1
       */
     const short CHARS_LAO = 36;
     /** Numbering in Tibetan/Dzongkha alphabet letters
-
-        @since OOo 2.0.3
       */
     const short CHARS_TIBETAN = 37;
 
     /** Numbering in Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;,  &#1042;, &#1043;, ..., &#1070;, &#1071;, &#1040;&#1074;, &#1040;&#1072;, &#1040;&#1074;, ... &#1040;&#1072;&#1072;, &#1040;&#1072;&#1073;".
-
-        @since OOo 2.0.4
      */
      /*
         Since IDL comments allow only 7-bit characters, hence the XHTML
@@ -230,8 +214,6 @@ published constants NumberingType
 
     /** Numbering in Cyrillic alphabet lower case letters as
         "&#1072;, &#1073;, &#1074;, &#1075;, ..., &#1102;, &#1103;, &#1072; &#1072;,  &#1072;&#1073;, &#1072;&#1074;, ...  &#1072; &#1072; &#1072;,  &#1072; &#1072;&#1073;".
-
-        @since OOo 2.0.4
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE ,
@@ -247,8 +229,6 @@ published constants NumberingType
 
     /** Numbering in Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1041;&#1073;, &#1042;&#1074;, ... &#1040;&#1072;&#1072;, ...".
-
-        @since OOo 2.0.4
      */
      /*
         CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE , ... ,
@@ -262,8 +242,6 @@ published constants NumberingType
 
     /** Numbering in Cyrillic alphabet upper case letters as
         "&#1072;, &#1073;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1073;&#1073;, &#1074;&#1074;, ... &#1072;&#1072;&#1072;, ...".
-
-        @since OOo 2.0.4
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE , ... ,
@@ -277,8 +255,6 @@ published constants NumberingType
 
     /** Numbering in Russian Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;, &#1042;, &#1043;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1040;&#1073;, &#1040;&#1074;, ... &#1040;&#1072;&#1072;, &#1040;&#1072;&#1073;".
-
-        @since OOo 2.0.4
      */
      /*
         CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE ,
@@ -294,8 +270,6 @@ published constants NumberingType
 
     /** Numbering in Russian Cyrillic alphabet lower case letters as
         "&#1072;, &#1073;, &#1074;, &#1075;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1072;&#1073;, &#1072;&#1074;, ... &#1072;&#1072;&#1072;, &#1072;&#1072;&#1073;".
-
-        @since OOo 2.0.4
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE ,
@@ -311,8 +285,6 @@ published constants NumberingType
 
     /** Numbering in Russian Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1041;&#1073;, &#1042;&#1074;, ... &#1040;&#1072;&#1072;, ...".
-
-        @since OOo 2.0.4
      */
      /*
         CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE , ... ,
@@ -326,8 +298,6 @@ published constants NumberingType
 
     /** Numbering in Russian Cyrillic alphabet upper case letters as
         "&#1072;, &#1073;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1073;&#1073;, &#1074;&#1074;, ... &#1072;&#1072;&#1072;, ...".
-
-        @since OOo 2.0.4
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE , ... ,
@@ -340,20 +310,14 @@ published constants NumberingType
     const short CHARS_CYRILLIC_LOWER_LETTER_N_RU = 45;
 
     /** Numbering in Persian alphabet letters (aa, be, pe, te, ...)
-
-        @since OOo 2.4
      */
     const short CHARS_PERSIAN = 46;
 
     /** Numbering in Myanmar alphabet letters
-
-        @since OOo 3.1
      */
     const short CHARS_MYANMAR = 47;
 
     /** Numbering in Serbian Cyrillic alphabet upper case letters
-
-        @since OOo 3.1
      */
      /*
         CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE ,
@@ -367,8 +331,6 @@ published constants NumberingType
     const short CHARS_CYRILLIC_UPPER_LETTER_SR = 48;
 
     /** Numbering in Russian Serbian alphabet lower case letters
-
-        @since OOo 3.1
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE ,
@@ -382,8 +344,6 @@ published constants NumberingType
     const short CHARS_CYRILLIC_LOWER_LETTER_SR = 49;
 
     /** Numbering in Serbian Cyrillic alphabet upper case letters
-
-        @since OOo 3.1
      */
      /*
         CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE , ... ,
@@ -395,8 +355,6 @@ published constants NumberingType
     const short CHARS_CYRILLIC_UPPER_LETTER_N_SR = 50;
 
     /** Numbering in Serbian Cyrillic alphabet upper case letters
-
-        @since OOo 3.1
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE , ... ,
@@ -408,82 +366,58 @@ published constants NumberingType
     const short CHARS_CYRILLIC_LOWER_LETTER_N_SR = 51;
 
     /** Numbering in Greek alphabet upper case letters
-
-        @since LibreOffice 3.3
      */
     const short CHARS_GREEK_UPPER_LETTER = 52;
 
     /** Numbering in Greek alphabet lower case letters
-
-        @since LibreOffice 3.3
      */
     const short CHARS_GREEK_LOWER_LETTER = 53;
 
 
     /** Numbering in Arabic alphabet using abjad sequence
-
-        @since LibreOffice 3.5
      */
     const short CHARS_ARABIC_ABJAD = 54;
 
     /** Numbering in Persian words
-
-        @since LibreOffice 3.5
      */
     const short CHARS_PERSIAN_WORD = 55;
 
     /** Numbering in Hebrew numerals
-
-        @since LibreOffice 5.4
      */
     const short NUMBER_HEBREW = 56;
 
     /** Numbering in Arabic-Indic numerals
-
-        @since LibreOffice 6.1
      */
     const short NUMBER_ARABIC_INDIC = 57;
 
     /** Numbering in East Arabic-Indic numerals
-
-        @since LibreOffice 6.1
      */
     const short NUMBER_EAST_ARABIC_INDIC = 58;
 
     /** Numbering in Indic Devanagari numerals
-
-        @since LibreOffice 6.1
      */
     const short NUMBER_INDIC_DEVANAGARI = 59;
 
     /** Numbering in ordinal numbers of the language
         of the text node
         for example, 1st, 2nd, 3rd... in English
-
-        @since LibreOffice 6.1
      */
     const short TEXT_NUMBER = 60;
 
     /** Numbering in cardinal numbers of the language
         of the text node
         for example, One, Two, Three... in English
-
-        @since LibreOffice 6.1
      */
     const short TEXT_CARDINAL = 61;
 
     /** Numbering in ordinal numbers of the language
         of the text node
         for example, First, Second, Third... in English
-
-        @since LibreOffice 6.1
      */
     const short TEXT_ORDINAL = 62;
 
     /** Footnoting symbols according the University of Chicago style:
           \*, &#2020;, &#2021;, &#00a7;, **, &#2020;&#2020; etc.
-
-        @since LibreOffice 6.4
      */
      /*
         ASTERISK, DAGGER, DOUBLE DAGGER, SECTION SIGN,
@@ -493,83 +427,63 @@ published constants NumberingType
 
     /** Numbering is in Arabic numbers, padded with zero to have a length of at least two, as "01,
         02, ..., 10, 11, ...".
-
-        @since LibreOffice 7.0
      */
     const short ARABIC_ZERO = 64;
 
     /** Numbering is in Arabic numbers, padded with zero to have a length of at least three, as
         "001, 002, ..., 100, 101, ...".
-
-        @since LibreOffice 7.0
      */
     const short ARABIC_ZERO3 = 65;
 
     /** Numbering is in Arabic numbers, padded with zero to have a length of at least four, as
         "0001, 0002, ..., 1000, 1001, ...".
-
-        @since LibreOffice 7.0
      */
     const short ARABIC_ZERO4 = 66;
 
     /** Numbering is in Arabic numbers, padded with zero to have a length of at least five, as
         "00001, 00002, ..., 10000, 10001, ...".
-
-        @since LibreOffice 7.0
      */
     const short ARABIC_ZERO5 = 67;
 
     /** Numbering is in Szekely rovas (Old Hungarian) numerals
-
-        @since LibreOffice 7.1
      */
     const short SZEKELY_ROVAS = 68;
 
     /** Numbering is in Korean Digital number as
         "일,이,삼,...,일영,일영영, ..."
-
-        @since LibreOffice 7.3
      */
     const short NUMBER_DIGITAL_KO = 69;
 
     /** Numbering is in Korean Digital Number, reserved "koreanDigital2", as
         "一,二,三,...,一零,一零零, ..."
-
-        @since LibreOffice 7.3
      */
     const short NUMBER_DIGITAL2_KO = 70;
 
     /** Numbering is in Korean Legal Number, reserved "koreanLegal", as
         "하나,둘,셋,..."
-
-        @since LibreOffice 7.3
      */
     const short NUMBER_LEGAL_KO = 71;
 
     /** Numbering in Cyrillic alphabet upper case letters
 
-        @since LibreOffice 7.6
         See https://en.wikipedia.org/wiki/Ukrainian_alphabet
       */
     const short CHARS_CYRILLIC_UPPER_LETTER_UK = 72;
 
     /** Numbering in Cyrillic alphabet lower case letters
 
-        @since LibreOffice 7.6
         See https://en.wikipedia.org/wiki/Ukrainian_alphabet
       */
     const short CHARS_CYRILLIC_LOWER_LETTER_UK = 73;
 
     /** Numbering in Cyrillic alphabet upper case letters
 
-        @since LibreOffice 7.6
         See https://en.wikipedia.org/wiki/Ukrainian_alphabet
       */
     const short CHARS_CYRILLIC_UPPER_LETTER_N_UK = 74;
 
     /** Numbering in Cyrillic alphabet upper case letters
 
-        @since LibreOffice 7.6
         See https://en.wikipedia.org/wiki/Ukrainian_alphabet
       */
     const short CHARS_CYRILLIC_LOWER_LETTER_N_UK = 75;

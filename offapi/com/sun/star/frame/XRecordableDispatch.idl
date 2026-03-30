@@ -58,8 +58,6 @@
 
     @see XDispatchRecorderSupplier
     @see XDispatch
-
-    @since OOo 1.1.2
  */
 published interface XRecordableDispatch: com::sun::star::uno::XInterface
 {

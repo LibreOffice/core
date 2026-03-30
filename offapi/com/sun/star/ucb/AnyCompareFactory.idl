@@ -21,8 +21,6 @@
 module com { module sun { module star { module ucb {
 
 /** is a factory to get XAnyCompare service implementations.
-
-    @since OOo 1.1.2
 */
 published service AnyCompareFactory : XAnyCompareFactory
 {

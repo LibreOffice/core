@@ -12,8 +12,6 @@ module com { module sun { module star { module xml { module xslt {
 /** Get unspecified XSLT filter transformer.
 
     <p>It is not safe to expect support for any features except XSLT 1.0 .
-
-    @since LibreOffice 4.0
   */
 service XSLTTransformer : XXSLTTransformer
 {

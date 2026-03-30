@@ -27,8 +27,6 @@ interface XTypeDescription;
 
    <p>This type supersedes XServiceTypeDescription, which only
    supports obsolete, accumulation-based services.</p>
-
-   @since OOo 2.0
  */
 interface XServiceTypeDescription2: XServiceTypeDescription {
     /**

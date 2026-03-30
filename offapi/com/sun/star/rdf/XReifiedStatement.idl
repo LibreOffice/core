@@ -23,8 +23,6 @@ module com {   module sun {   module star {   module rdf {
 
 /** represents a reified RDF statement.
 
-    @since OOo 3.0
-
     @see XRepository
  */
 interface XReifiedStatement : XResource

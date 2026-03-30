@@ -17,8 +17,6 @@ module com { module sun { module star { module i18n {
     <p> Derived from ::com::sun::star::i18n::XLocaleData4
     this provides an additional method to return an instance of
     com::sun::star::i18n::LocaleDataItem2
-
-    @since LibreOffice 6.0
  */
 
 interface XLocaleData5 : com::sun::star::i18n::XLocaleData4

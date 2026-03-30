@@ -82,8 +82,6 @@ published service PrintOptions
     /** The job name which is sent to the printer (can be seen in the Printer job queue).
      *
      *  If omitted, the document title will be used as default.
-     *
-     *  @since LibreOffice 7.5
      */
     [optional, property] boolean JobName;
 };

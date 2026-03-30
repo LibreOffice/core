@@ -32,8 +32,6 @@ module com { module sun { module star { module smarttags {
        text for smart tags. Smart tags are pieces of text that can be
        associated with specific actions which are defined by
        implementations of the SmartTagAction service.</p>
-
-    @since OOo 2.3
  */
 
 service SmartTagRecognizer : XSmartTagRecognizer {};

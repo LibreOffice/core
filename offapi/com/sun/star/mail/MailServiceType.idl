@@ -19,9 +19,6 @@
 
 module com { module sun { module star { module mail {
 
-/**
-    @since OOo 2.0
- */
 enum MailServiceType
 {
     /** A SMTP service */

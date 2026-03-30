@@ -22,8 +22,6 @@ module com { module sun { module star { module document {
 
 
 /** is supported by OfficeDocuments which allow to embed scripts
-
-    @since OOo 2.4
  */
 interface XEmbeddedScripts
 {

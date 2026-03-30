@@ -19,8 +19,6 @@ module com { module sun { module star { module system { module windows {
 
     Use XJumpList::abortList to cancel a current list building session.
     Use XJumpList::getRemovedItems to see which items were removed by the user.
-
-    @since LibreOffice 7.4
 */
 interface XJumpList: com::sun::star::uno::XInterface
 {

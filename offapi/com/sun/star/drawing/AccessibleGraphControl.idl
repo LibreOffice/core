@@ -37,8 +37,6 @@ module com {  module sun {  module star {  module drawing {
     the Writer application.
 
     <p>The children of graph controls are shapes that define contours.</p>
-
-     @since OOo 1.1.2
  */
 service AccessibleGraphControl
 {

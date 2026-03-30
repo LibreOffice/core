@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module text {
 
 
 /** provides functionality to ...
-
-    @since OOo 3.0
  */
 
 interface XFlatParagraphIterator: com::sun::star::uno::XInterface

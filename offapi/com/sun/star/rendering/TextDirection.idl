@@ -22,8 +22,6 @@ module com { module sun { module star { module rendering {
 /** Specifies main text direction in a text portion.<p>
 
     This also changes the interpretation of the start point.<p>
-
-    @since OOo 2.0
  */
 constants TextDirection
 {

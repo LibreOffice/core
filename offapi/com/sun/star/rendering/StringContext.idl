@@ -25,8 +25,6 @@ module com { module sun { module star { module rendering {
     A possibly much larger string than later rendered is necessary
     here, because in several languages, glyph selection is context
     dependent.<p>
-
-    @since OOo 2.0
  */
 struct StringContext
 {

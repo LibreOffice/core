@@ -56,8 +56,6 @@ published interface XUriReferenceFactory;
    <var>s</var>&prime;, then that service is used.  It is an error if that
    service does not support
    com::sun::star::uri::XUriSchemeParser.</p>
-
-   @since OOo 2.0
  */
 published service UriReferenceFactory: XUriReferenceFactory;
 

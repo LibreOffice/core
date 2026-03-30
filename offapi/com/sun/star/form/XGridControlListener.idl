@@ -24,7 +24,6 @@ module com { module sun { module star { module form {
 /** specifies a listener which is to be notified about state changes in a grid control
 
     @see XGridControl
-    @since OOo 3.1
  */
 interface XGridControlListener : ::com::sun::star::lang::XEventListener
 {

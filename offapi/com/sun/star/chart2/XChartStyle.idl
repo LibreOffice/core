@@ -11,8 +11,6 @@
 module com {  module sun {  module star {  module chart2 {
 
 /** Chart style interface
-
-    @since LibreOffice 26.2
 */
 
 interface XChartStyle : com::sun::star::uno::XInterface

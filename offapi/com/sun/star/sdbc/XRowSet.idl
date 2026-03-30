@@ -27,8 +27,6 @@
     a special behavior for a result set and notifies an application on
     certain row set events such as a change in its value.
 
-
-
     <p>
     The XRowSet interface is unique in that it is intended to be
     a software layer on top of an SDBC driver. Implementations of the

@@ -9,9 +9,6 @@
 
 module com { module sun { module star { module chart2 {
 
-/**
-    @since LibreOffice 6.1
-*/
 service DataPointCustomLabelField : XDataPointCustomLabelField;
 
 }; }; }; };

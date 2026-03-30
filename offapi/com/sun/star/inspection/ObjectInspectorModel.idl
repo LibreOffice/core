@@ -30,8 +30,6 @@ module com {  module sun {  module star {  module inspection {
     @see XObjectInspectorModel
     @see XObjectInspectorModel::describeCategories
     @see XObjectInspectorModel::getPropertyOrderIndex
-
-    @since OOo 2.0.3
 */
 service ObjectInspectorModel : XObjectInspectorModel
 {
@@ -80,8 +78,6 @@ service ObjectInspectorModel : XObjectInspectorModel
         @see XObjectInspectorModel::HasHelpSection
         @see XObjectInspectorModel::MinHelpTextLines
         @see XObjectInspectorModel::MaxHelpTextLines
-
-        @since OOo 2.2
     */
     createWithHandlerFactoriesAndHelpSection(
         [in] sequence< any > handlerFactories,

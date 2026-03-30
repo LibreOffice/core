@@ -36,8 +36,6 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
         the signature.
 
        Macros will not be signed.
-
-       @since LibreOffice 6.1
      */
     boolean signSignatureLine( [in] ::com::sun::star::embed::XStorage xStorage,
                                [in] ::com::sun::star::io::XStream xSignStream,
@@ -100,22 +98,16 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
 
     /**  This method shows the CertificateChooser dialog, used by document and PDF signing
          Shows only private certificates
-
-         @since LibreOffice 5.3
      */
     com::sun::star::security::XCertificate chooseCertificate( [out] string Description );
 
     /**  This is an alias for 'chooseCertificate', shows the CertificateChooser dialog
          with private certificates
-
-         @since LibreOffice 6.0
      */
     com::sun::star::security::XCertificate chooseSigningCertificate( [out] string Description );
 
     /**  This shows the certificate selection dialog and allows to only select the certificate
          without actually signing the document.
-
-         @since LibreOffice 6.1
      */
     com::sun::star::security::XCertificate selectSigningCertificate( [out] string Description );
 
@@ -125,8 +117,6 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
         @param certificateKind
                com::sun::star::security::CertificateKind ENUM to choose only from certificates of a certain type.
                CertificateKind_NONE lists all types of certificates for choosing.
-
-         @since LibreOffice 6.2
      */
     com::sun::star::security::XCertificate selectSigningCertificateWithType(
         [in] CertificateKind certificateKind,
@@ -138,46 +128,34 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
         @param certificateKind
                com::sun::star::security::CertificateKind ENUM to choose only from certificates of a certain type.
                CertificateKind_NONE lists all types of certificates for choosing.
-
-         @since LibreOffice 25.2
      */
     sequence< com::sun::star::security::XCertificate > chooseEncryptionCertificate(
         [in] CertificateKind certificateKind);
 
     /**  This method shows the CertificateChooser dialog, used by document and PDF signing
          Shows only private certificates and returns usage string in addition to description.
-
-         @since LibreOffice 6.0
      */
     com::sun::star::security::XCertificate chooseCertificateWithProps( [out] sequence<::com::sun::star::beans::PropertyValue> Properties);
 
     /** Signs the content of the document with the provided certificate.
-
-        @since LibreOffice 6.2
      */
     boolean signDocumentWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
                                         [in] ::com::sun::star::embed::XStorage xStorage,
                                         [in] ::com::sun::star::io::XStream xStream);
 
     /** Set parent window to use when showing dialogs
-
-        @since LibreOffice 6.3
     */
     void setParentWindow([in] ::com::sun::star::awt::XWindow xParentWindow);
 
     /** signs the content of the Scripting including macros and basic dialogs with the provided certificate.
 
         <p>The rest of document content will not be signed.</p>
-
-        @since LibreOffice 7.0
     */
     boolean signScriptingContentWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
                                                 [in] ::com::sun::star::embed::XStorage xStorage,
                                                 [in] ::com::sun::star::io::XStream xStream);
 
     /** queries the user if they want to trust an untrusted certificate.
-
-        @since LibreOffice 24.8
     */
     boolean trustUntrustedCertificate([in] ::com::sun::star::security::XCertificate xCertificate);
 };

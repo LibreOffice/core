@@ -27,8 +27,6 @@ interface XCompoundTypeDescription;
 
    <p>This type supersedes XInterfaceAttributeTypeDescription,
    which does not support extended attributes.</p>
-
-   @since OOo 2.0
  */
 interface XInterfaceAttributeTypeDescription2:
     XInterfaceAttributeTypeDescription

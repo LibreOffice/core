@@ -25,8 +25,6 @@ module com { module sun { module star { module rendering {
     The start and end of stroked paths can have one out of several
     different shapes (which are, of course, only visible for strokes
     wider than one device pixel).<p>
-
-    @since OOo 2.0
  */
 constants PathCapType
 {

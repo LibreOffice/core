@@ -85,7 +85,6 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
         @param objPrivileges
             a value from the com::sun::star::sdbcx::Privilege constants group
 
-
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */

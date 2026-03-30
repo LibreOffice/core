@@ -23,8 +23,6 @@ module com { module sun { module star { module script {
 
 /** is thrown when an operation on a unloaded library is attempted which requires the library
     being loaded.
-
-    @since OOo 3.0
 */
 exception LibraryNotLoadedException : com::sun::star::uno::Exception
 {

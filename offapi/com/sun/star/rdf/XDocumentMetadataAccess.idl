@@ -36,8 +36,6 @@ module com {   module sun {   module star {   module rdf {
     This is so that you can easily make RDF statements about the document.
     </p>
 
-    @since OOo 3.2
-
     @see XDocumentRepository
  */
 interface XDocumentMetadataAccess

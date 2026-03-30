@@ -36,8 +36,6 @@ module xml {
     @see com::sun::star::configuration::backend::xml::LayerWriter
         Service that writes OOR Update XML for data described via
         com::sun::star::configuration::backend::XLayerHandler.
-
-    @since OOo 1.1.2
 */
 published service LayerParser
 {

@@ -30,8 +30,6 @@ module com { module sun { module star { module xml {
    interface.  Error conditions must be signaled by throwing
    a com::sun::star::xml::sax::SAXException in the
    com::sun::star::xml::sax::XDocumentHandler calls.
-
-    @since OOo 1.1.2
  */
 published service ExportFilter
 {

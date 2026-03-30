@@ -21,8 +21,6 @@ module com { module sun { module star { module deployment {
 
 /** Objects implementing this interface provide a URL to the root of
     an installed package.
-
-    @since OOo 2.3
 */
 interface XPackageInformationProvider
 {

@@ -24,7 +24,6 @@
 
 /** provides the possibility to find columns by their name.
 
-
     <p>
     When several columns have the same name, then the value
     of the first matching column will be returned. The column name option is

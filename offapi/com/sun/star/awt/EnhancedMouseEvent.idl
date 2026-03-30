@@ -26,8 +26,6 @@
 
     @see MouseEvent
 
-    @since OOo 2.0
-
  */
 published struct EnhancedMouseEvent: com::sun::star::awt::MouseEvent
 {

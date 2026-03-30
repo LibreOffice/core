@@ -11,8 +11,6 @@ module com { module sun { module star { module util {
 
 /** Constants that define the search algorithm to be used with
     com::sun::star::util::SearchOptions2::SearchAlgorithms2
-
-    @since LibreOffice 5.2
  */
 constants SearchAlgorithms2
 {

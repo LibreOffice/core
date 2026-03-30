@@ -24,8 +24,6 @@ module com {  module sun {  module star {  module presentation {
     This interface provides the necessary methods to enable an
     XSlideShow interface to display a presentation. The slide show can
     be displayed simultaneously on multiple views<p>
-
-    @since OOo 2.4
  */
 interface XSlideShowView : ::com::sun::star::uno::XInterface
 {

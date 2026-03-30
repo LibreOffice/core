@@ -26,8 +26,6 @@ module com {  module sun {  module star {  module util {
 
     @deprecated
 
-    @since OOo 1.1.2
-
  */
 published service Sortable
 {

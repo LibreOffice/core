@@ -49,8 +49,6 @@ interface XTypeDescription;
        com::sun::star::reflection::XStructTypeDescription::getTypeArguments()
        return an empty sequence.</li>
    </ul>
-
-   @since OOo 2.0
  */
 interface XStructTypeDescription: XCompoundTypeDescription {
     /**

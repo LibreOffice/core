@@ -24,8 +24,6 @@ module com {  module sun {  module star {  module document {
     a document or document content event occurs
 
     <p>Such events will be broadcasted by a XShapeEventBroadcaster.</p>
-
-    @since LibreOffice 6.4
  */
 interface XShapeEventListener
 {

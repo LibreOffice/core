@@ -89,8 +89,6 @@ interface XTextLayout;
     retrieved from every canvas object via the
     getDevice() call) - they will then internally
     optimize to the underlying graphics subsystem.<p>
-
-    @since OOo 2.0
  */
 interface XCanvas : ::com::sun::star::uno::XInterface
 {

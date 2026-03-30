@@ -12,8 +12,6 @@ module com {  module sun {  module star {  module reflection {
 /** Dump any UNOIDL value as a string.
 
     Mainly useful for logging and debugging purposes.
-
-    @since LibreOffice 7.6
 */
 interface XDump {
     /** Dump a UNOIDL value as a string.

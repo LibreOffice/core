@@ -32,8 +32,6 @@ module com {  module sun {  module star {  module inspection {
     @see XPropertyHandler
     @see scom::sun::star::beans::XIntrospectionAccess
     @see XPropertyControl
-
-    @since OOo 2.0.3
 */
 service GenericPropertyHandler : XPropertyHandler;
 

@@ -17,8 +17,6 @@ module com { module sun { module star { module util {
     Derived from com::sun::star::util::XTextSearch this interface adds
     simple wildcard search capabilities using
     com::sun::star::util::SearchOptions2 options.
-
-    @since LibreOffice 5.2
  */
 interface XTextSearch2 : com::sun::star::util::XTextSearch
 {

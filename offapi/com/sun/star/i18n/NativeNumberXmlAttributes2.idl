@@ -30,8 +30,6 @@ module com { module sun { module star { module i18n {
     XNativeNumberSupplier2::convertFromXmlAttributes()
     </p>
 
-    @since LibreOffice 6.1
-
     @internal
 
     ATTENTION: This struct is marked <em>internal</em> and does not

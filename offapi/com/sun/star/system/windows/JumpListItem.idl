@@ -11,8 +11,6 @@
 module com { module sun { module star { module system { module windows {
 
 /** Specifies an item for com::sun::star::system::windows::XJumpList .
-
-    @since LibreOffice 7.4
 */
 
 struct JumpListItem

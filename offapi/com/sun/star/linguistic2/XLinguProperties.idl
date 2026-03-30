@@ -22,8 +22,6 @@ module com { module sun { module star { module linguistic2 {
 
 /**
     Interface for LinguProperties service.
-
-    @since LibreOffice 4.1
 */
 published interface XLinguProperties
 {

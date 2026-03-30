@@ -182,7 +182,6 @@ published interface XRow: com::sun::star::uno::XInterface
         stream. This method is particularly suitable for retrieving large
         LONGVARBINARY values.
 
-
         <p>
         <b>Note:</b> All the data in the returned stream must be
         read prior to getting the value of any other column. The next
@@ -206,7 +205,6 @@ published interface XRow: com::sun::star::uno::XInterface
         uninterpreted bytes. The value can then be read in chunks from the
         stream. This method is particularly suitable for retrieving large
         LONGVARBINARY or LONGVARCHAR values.
-
 
         <p>
         <b>Note:</b> All the data in the returned stream must be

@@ -45,8 +45,6 @@ module com { module sun { module star { module accessibility {
    XAccessibleTable::getAccessibleColumnCount().  In case of
    Calc the current range of valid indices for retrieving data include
    the maximum table size minus one.</p>
-
-    @since OOo 1.1.2
 */
 interface XAccessibleTable : ::com::sun::star::uno::XInterface
 {

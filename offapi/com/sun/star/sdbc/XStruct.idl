@@ -26,7 +26,6 @@
 
 /** is used for the standard mapping for a SQL structured type.
 
-
     <p>
     A
     <code>Struct</code>

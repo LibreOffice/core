@@ -118,14 +118,10 @@ published service SearchDescriptor
 
         <p> SearchRegularExpression, SearchWildcard and SearchSimilarity
         are mutually exclusive, only one can be `TRUE` at the same time. </p>
-
-        @since LibreOffice 5.2
      */
     [optional, property] boolean SearchWildcard;
 
     /** Specifies the character used to escape special characters in wildcards.
-
-        @since LibreOffice 24.2
      */
     [optional, property] long WildcardEscapeCharacter;
 

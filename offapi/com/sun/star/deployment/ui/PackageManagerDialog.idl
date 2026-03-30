@@ -23,8 +23,6 @@ module com { module sun { module star { module deployment { module ui {
 /** The PackageManagerDialog is used to visually manage installed
     packages of the user and shared installation as well as currently open
     documents.
-
-    @since OOo 2.0
 */
 service PackageManagerDialog : com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
 {

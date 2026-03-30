@@ -32,8 +32,6 @@ module com {  module sun {  module star {  module security {
     based on the context it encapsulates, rather than
     that of the current execution thread.
     </p>
-
-    @since OOo 1.1.2
 */
 published interface XAccessControlContext : com::sun::star::uno::XInterface
 {

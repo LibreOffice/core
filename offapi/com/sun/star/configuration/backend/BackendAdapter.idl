@@ -24,8 +24,6 @@ module com { module sun { module star { module configuration { module backend {
 /**
     implements Backend retrieving data
     from a SingleBackend.
-
-    @since OOo 1.1.2
 */
 published service BackendAdapter
 {

@@ -32,15 +32,11 @@ published enum TextContentAnchorType
 
     /** The object is anchored instead of a character.
 
-
-
         <p>The size of the object influences the height of the text line.</p>
      */
     AS_CHARACTER,
 
     /** The object is anchored to the page.
-
-
 
         <p>The position does not change if the content of the document is changed.</p>
      */
@@ -51,8 +47,6 @@ published enum TextContentAnchorType
     AT_FRAME,
 
     /** The object is anchored to a character.
-
-
 
         <p>The position of the object changes if the position of this
         character is changed.

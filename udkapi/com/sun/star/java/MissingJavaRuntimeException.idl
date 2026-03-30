@@ -23,8 +23,6 @@ module com { module sun { module star { module java {
 /** indicates that the Java runtime library could not be found. <p>
     This happens when a user moves or deletes a Java installation after
     the office has been configured to use that Java installation.
-
-    @since OOo 1.1.2
  */
 published exception MissingJavaRuntimeException: JavaInitializationException
 {

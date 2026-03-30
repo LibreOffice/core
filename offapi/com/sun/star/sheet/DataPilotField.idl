@@ -166,8 +166,6 @@ published service DataPilotField
         (GeneralFunction2::NONE means no subtotals).
         For data fields, this is the function shown in the data pilot
         table.</p>
-
-        @since LibreOffice 5.3
      */
 
     [property, optional] short Function2;
@@ -186,8 +184,6 @@ published service DataPilotField
         <p>The order of the functions in this sequence is reflected in the
         DataPilot table. Multiple entries of the same function are ignored
         when setting the property.</p>
-
-        @since LibreOffice 5.3
      */
     [property, optional] sequence<short> Subtotals2;
 };

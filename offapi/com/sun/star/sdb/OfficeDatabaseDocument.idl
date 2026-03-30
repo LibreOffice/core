@@ -34,7 +34,6 @@ module com {  module sun {  module star {  module sdb {
 
     @see com::sun::star::sdb::XOfficeDatabaseDocument
     @see com::sun::star::document::OfficeDocument
-    @since OOo 2.0
  */
 service OfficeDatabaseDocument
 {
@@ -49,13 +48,11 @@ service OfficeDatabaseDocument
     interface XOfficeDatabaseDocument;
 
     /** allows access to the Basic macros and dialogs possibly embedded in the document
-        @since OOo 3.1
     */
     interface ::com::sun::star::document::XEmbeddedScripts;
 
     /** supplies a script provider which can be used to execute macros and scripts
         embedded in the document
-        @since OOo 3.1
     */
     interface ::com::sun::star::script::provider::XScriptProviderSupplier;
 
@@ -72,8 +69,6 @@ service OfficeDatabaseDocument
         in earlier versions of OpenOffice.org did not support the <code>XLoadable</code> interface,
         so the usual way of creating a document from scratch was to create it, set properties as
         needed, and store it.</p>
-
-        @since OOo 3.1
     */
     interface ::com::sun::star::frame::XLoadable;
 
@@ -186,8 +181,6 @@ service OfficeDatabaseDocument
                 </tr>
         </table>
         </p>
-
-        @since OOo 3.1
     */
     interface ::com::sun::star::document::XDocumentEventBroadcaster;
 

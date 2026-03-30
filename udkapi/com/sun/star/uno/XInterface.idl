@@ -26,7 +26,6 @@
     possibility of querying for other
     interfaces of the same logical object.
 
-
     <p>
     "Logical Object" in this case means that the
     interfaces actually can be supported by internal (e.g. aggregated) physical objects.</p>

@@ -22,7 +22,6 @@ module com {  module sun {  module star {  module sheet {
 
 
 /** used to specify a function to be calculated from values.
-    @since LibreOffice 5.3
  */
 published constants GeneralFunction2
 {
@@ -95,7 +94,6 @@ published constants GeneralFunction2
 
     /**
     *   median of all numerical values is calculated.
-    *   @since LibreOffice 5.3
     */
     const short MEDIAN = 13;
 };

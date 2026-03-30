@@ -13,8 +13,6 @@ module com {  module sun {  module star {  module sheet {
 
     <p>The constants correspond to the ODF attribute
     table:embedded-number-behavior (19.628, part 3 ODF 1.4).</p>
-
-    @since LibreOffice 26.2
  */
 published constants SortNumberBehavior
 {

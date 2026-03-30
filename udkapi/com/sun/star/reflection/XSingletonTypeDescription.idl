@@ -29,8 +29,6 @@
 
     <p>The type class of this type is
     com::sun::star::uno::TypeClass::SINGLETON.
-
-    @since OOo 1.1.2
   */
 published interface XSingletonTypeDescription : com::sun::star::reflection::XTypeDescription
 {

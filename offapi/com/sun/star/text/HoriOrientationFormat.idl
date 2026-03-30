@@ -23,8 +23,6 @@
 
 /** describes the horizontal orientation of an object.
 
-
-
     <p>If <code>HorizontalOrientation == HORI_NONE</code>, then the value
     "XPos" describes the distance from the left border of the context.
     Otherwise "XPos" is ignored.

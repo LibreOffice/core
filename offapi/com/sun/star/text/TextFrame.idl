@@ -93,7 +93,6 @@ published service TextFrame
         width properties.
 
         @see    SizeType
-        @since  OOo 2.4
      */
     [optional, property] short WidthType;
 
@@ -134,15 +133,12 @@ published service TextFrame
     /** adjusts the vertical position of the text inside of the frame.
 
         @see com::sun::star::drawing::TextVerticalAdjust
-        @since LibreOffice 4.3
     */
     [optional, property] com::sun::star::drawing::TextVerticalAdjust TextVerticalAdjust;
 
     /** Parent text of this text frame.
 
         This might be a header text, body text, etc.
-
-        @since LibreOffice 6.3
      */
     [optional, readonly, property] com::sun::star::text::XText ParentText;
 };

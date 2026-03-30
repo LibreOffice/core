@@ -26,8 +26,6 @@ module com {  module sun {  module star {  module sheet {
    additional methods.
 
    @see com::sun::star::sheet::XDataPilotTable
-
-   @since OOo 3.0
  */
 interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
 {

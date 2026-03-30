@@ -30,14 +30,10 @@ interface XAudio : XAnimationNode
     [attribute] double Volume;
 
     /** Specifies if the source shape should be hidden during slideshow (defaults to false).
-
-        @since LibreOffice 7.2
     */
     [attribute] boolean HideDuringShow;
 
     /** Specifies if the source shape is a narration for the slide (defaults to false).
-
-        @since LibreOffice 7.2
     */
     [attribute] boolean Narration;
 };

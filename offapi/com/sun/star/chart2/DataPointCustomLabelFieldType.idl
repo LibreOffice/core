@@ -10,8 +10,6 @@
 module com { module sun { module star { module chart2 {
 
 /** The Field type enumeration for custom data point labels.
-
-    @since LibreOffice 6.1
  */
 enum DataPointCustomLabelFieldType
 {

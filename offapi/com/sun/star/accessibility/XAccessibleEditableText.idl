@@ -25,8 +25,6 @@ module com { module sun { module star { module accessibility {
     <p>This interface is typically used in conjunction with the
     XAccessibleText interface and extends it with the ability
     to modify the text represented by that interface.</p>
-
-    @since OOo 1.1.2
 */
 interface XAccessibleEditableText
     : ::com::sun::star::accessibility::XAccessibleText

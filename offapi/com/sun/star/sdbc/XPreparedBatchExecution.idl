@@ -22,7 +22,6 @@
 
 /** is used for batch execution on PreparedStatements.
 
-
     <p>
     A
     com::sun::star::sdbc::PreparedStatement

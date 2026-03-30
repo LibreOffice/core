@@ -52,8 +52,6 @@ published service GetReference
     /** contains the language id of the alternative language-dependent references.
         <p> Alternative language-dependent forms of reference types. </p>
 
-        @since LibreOffice 6.1
-
         <p> The current set of supported languages is:
         <ul>
             <li>hu : Hungarian, reference with lowercase article "a" or "az"</li>
@@ -63,7 +61,6 @@ published service GetReference
      */
     [optional, property] string ReferenceFieldLanguage;
     /** contains extra flags which can modify the behaviour of the field
-        @since LibreOffice 24.2
      */
     [optional, property] short ReferenceFieldFlags;
 };

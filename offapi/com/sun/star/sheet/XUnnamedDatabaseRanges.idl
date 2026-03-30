@@ -12,7 +12,6 @@ module com {  module sun {  module star {  module sheet {
 
 
 /** provides functions to manage the sheet local databases
- * @since LibreOffice 3.5
  */
 
 interface XUnnamedDatabaseRanges: com::sun::star::uno::XInterface

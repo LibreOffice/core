@@ -26,8 +26,6 @@
        with either initNew() or load() call before any usage. In case the object
        is already initialized the mentioned methods should throw DoubleInitializationException.
     </p>
-
-    @since OOo 1.1.2
  */
 published interface XLoadable: com::sun::star::uno::XInterface
 {

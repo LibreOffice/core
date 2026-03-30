@@ -40,8 +40,6 @@ module com { module sun { module star { module io {
    com::sun::star::io::XAsyncOutputMonitor::waitForCompletion()
    should be called after the series of calls to
    com::sun::star::io::XOutputStream::writeBytes().</p>
-
-   @since OOo 2.0
 */
 interface XAsyncOutputMonitor {
     /**

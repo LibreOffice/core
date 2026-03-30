@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module ui {
 /** Represents an item in a status bar
 
     @see com::sun::star::frame::XStatusbarController
-
-    @since LibreOffice 4.1
 */
 interface XStatusbarItem
 {
@@ -59,7 +57,7 @@ interface XStatusbarItem
             </li>
             <li>com::sun::star::ui::ItemStyle::AUTO_SIZE</li>
             <li>com::sun::star::ui::ItemStyle::OWNER_DRAW</li>
-            <li>com::sun::star::ui::ItemStyle::MANDATORY (@since LibreOffice 6.1)</li>
+            <li>com::sun::star::ui::ItemStyle::MANDATORY</li>
         </ul>
 
         @see com::sun::star::ui::ItemStyle

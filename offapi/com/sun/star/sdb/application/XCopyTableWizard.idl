@@ -32,8 +32,6 @@ interface XCopyTableListener;
 
     <p>The <code>copy table wizard</code> described by this interfaces cares for those,
     and other, settings.</p>
-
-    @since OOo 2.4
  */
 interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
 {

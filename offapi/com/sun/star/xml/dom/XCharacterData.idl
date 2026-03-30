@@ -44,7 +44,6 @@ interface XCharacterData: XNode
         DOMException - DOMSTRING_SIZE_ERR: Raised when it would return more characters
             than fit in a DOMString variable on the implementation platform.
 
-
     */
     string getData() raises (DOMException);
 

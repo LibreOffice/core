@@ -12,7 +12,6 @@
  module com {  module sun {  module star {  module ui {
 
 /** provides access to Deck
-    @since LibreOffice 5.1
 */
 
 interface XDeck

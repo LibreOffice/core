@@ -20,8 +20,6 @@
 module com {  module sun {  module star {  module awt {
 
 /** These constants are used to specify a result of executing a XMessageBox.
-
-    @since LibreOffice 4.2
  */
 constants MessageBoxResults
 {

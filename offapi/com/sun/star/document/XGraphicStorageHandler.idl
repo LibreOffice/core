@@ -12,8 +12,6 @@ module com {  module sun {  module star {  module document {
 
 /** interface for loading, saving and serializing of XGraphic objects to
     a document storage
-
-    @since LibreOffice 6.1
  */
 interface XGraphicStorageHandler : com::sun::star::uno::XInterface
 {

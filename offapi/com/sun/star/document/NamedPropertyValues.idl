@@ -20,9 +20,6 @@
 
 module com { module sun { module star { module document {
 
-/**
-    @since LibreOffice 4.1
- */
 service NamedPropertyValues : com::sun::star::container::XNameContainer;
 
 

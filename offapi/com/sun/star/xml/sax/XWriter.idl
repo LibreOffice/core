@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module xml {  module sax {
 
 /**
   Provides a unified interface for the new-style Writer service to implement.
-
-  @since LibreOffice 4.0
  */
 interface XWriter
 {
@@ -31,7 +29,6 @@ interface XWriter
     interface com::sun::star::xml::sax::XExtendedDocumentHandler;
 
     /** Adds support for custom entity names list
-      * @since LibreOffice 7.2
       */
     void setCustomEntityNames( [in] sequence< com::sun::star::beans::Pair<string,string> > replacements );
 };

@@ -23,8 +23,6 @@
 
 /** the server-side interface to a weak object.
 
-
-
     <p>This interface is proxy to the adapted object.
     In order to make it possible to have weak references to objects,
     the XAdapter interface must be implemented to provide
@@ -75,8 +73,6 @@
 published interface XWeak: com::sun::star::uno::XInterface
 {
     /** queries the weak adapter.
-
-
 
         <p>It is important that the adapter must know, but not hold
         the adapted object. If the adapted object dies, all references

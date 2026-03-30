@@ -21,8 +21,6 @@ module com { module sun { module star { module deployment {
 
 /** Implementations of this service provide the root location
     of a package for a given Package ID.
-
-    @since OOo 2.3
 */
 singleton PackageInformationProvider : XPackageInformationProvider;
 

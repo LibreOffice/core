@@ -23,7 +23,6 @@
 
 /** This service provides access to the structure of the levels of document indexes.
 
-
     <p>
     The element type is Sequence&lt; PropertyValues &gt;. Each element in this sequence represents
     a member of an index line. The following properties are part of such an element.

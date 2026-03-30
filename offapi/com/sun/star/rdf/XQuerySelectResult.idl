@@ -36,8 +36,6 @@ module com {   module sun {   module star {   module rdf {
     the length of the sequence being the same as the number of query variables.
     </p>
 
-    @since OOo 3.0
-
     @see XRepository::querySelect
     @see XNode
  */

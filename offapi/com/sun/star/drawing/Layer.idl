@@ -23,7 +23,6 @@
 
 /** A layer is an entity inside a document which contains shapes.
 
-
     <p>There could be zero or more Shapes attached to
     such a layer.
 

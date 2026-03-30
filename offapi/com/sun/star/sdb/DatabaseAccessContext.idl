@@ -22,7 +22,6 @@
 /** is the context for data access beans. It allows to register aliases for database
     access beans. It is possible to have different aliases for different locales.
 
-
     <p>
     A DatabaseContext stores an alias for the URL of a database access component
     for a given locale. It is also allowed to work with a default locale. This is useful

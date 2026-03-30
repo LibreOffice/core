@@ -34,8 +34,6 @@ module com {  module sun {  module star {  module  util {
 
     Prior to LibreOffice 4.3, this singleton was only available as a
     (single-instance) PathSettings service.
-
-    @since LibreOffice 4.3
  */
 published singleton thePathSettings : XPathSettings;
 

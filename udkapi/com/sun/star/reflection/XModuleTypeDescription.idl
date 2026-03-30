@@ -25,8 +25,6 @@
 
     <p>The type class of this type is
     com::sun::star::uno::TypeClass::MODULE.
-
-    @since OOo 1.1.2
   */
 published interface XModuleTypeDescription : com::sun::star::reflection::XTypeDescription
 {

@@ -18,8 +18,6 @@ module com { module sun { module star { module ucb {
     cmis-enabled server.</p>
 
     @see com::sun::star::ucb::Content
-
-    @since LibreOffice 3.5
 */
 
 service CmisContentProvider : com::sun::star::ucb::XContentProvider

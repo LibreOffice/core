@@ -31,8 +31,6 @@ interface XLogHandler;
     file.</p>
 
     @see XLogHandler::Encoding
-
-    @since OOo 2.3
  */
 service FileHandler : XLogHandler
 {

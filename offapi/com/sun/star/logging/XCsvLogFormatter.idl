@@ -26,8 +26,6 @@ module com { module sun { module star { module logging {
     output
 
     @see XLogFormatter, XLogHandler
-
-    @since OOo 3.0
 */
 interface XCsvLogFormatter : XLogFormatter
 {

@@ -23,8 +23,6 @@ module com { module sun { module star { module accessibility {
 
     <p>This enum defines the available types of relations that
     are usable by AccessibleRelation.</p>
-
-    @since OOo 1.1.2
 */
 enum AccessibleRelationType
 {
@@ -95,16 +93,12 @@ enum AccessibleRelationType
         <p>Indicates an object is a cell in a tree or tree table which is
         displayed because a cell in the same column is expanded and
         identifies that cell.</p>
-
-        @since OOo 3.0
     */
     NODE_CHILD_OF,
 
     /** Described-by relation type.
 
         <p>Indicates an object is described by the target object.</p>
-
-        @since OOo 3.5
     */
     DESCRIBED_BY
 };

@@ -46,8 +46,6 @@ module com { module sun { module star { module auth {
 
     The interface supports the creation of XSSOManager instances
     which can subsequently be used to create security contexts.
-
-    @since OOo 1.1.2
  */
 
 published service SSOManagerFactory: XSSOManagerFactory;

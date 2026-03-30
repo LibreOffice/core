@@ -23,8 +23,6 @@ module com {  module sun {  module star {  module inspection {
     in an object inspector
 
     @see XPropertyHandler::onInteractivePropertySelection
-
-    @since OOo 2.0.3
 */
 enum InteractiveSelectionResult
 {

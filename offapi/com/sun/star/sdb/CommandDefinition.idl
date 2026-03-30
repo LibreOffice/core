@@ -19,9 +19,6 @@
 
  module com {  module sun {  module star {  module sdb {
 
-/**
-    @since LibreOffice 4.1
- */
 service CommandDefinition : com::sun::star::sdbcx::XRename;
 
 

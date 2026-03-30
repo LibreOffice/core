@@ -32,8 +32,6 @@ module com {  module sun {  module star {  module frame {
     <p>
 
     @see com::sun::star::frame::XDispatchProvider
-
-    @since OOo 2.0
 */
 interface XStatusbarController
 {

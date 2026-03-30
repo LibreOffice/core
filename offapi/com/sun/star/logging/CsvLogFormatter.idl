@@ -33,8 +33,6 @@ interface XCsvLogFormatter;
     user-defined columns. If the Formatter is configured to have more than one
     (user-defined) column the data to log has to be preformatted with the
     formatMultiColumn method.</p>
-
-    @since OOo 3.0
  */
 service CsvLogFormatter : XCsvLogFormatter
 {

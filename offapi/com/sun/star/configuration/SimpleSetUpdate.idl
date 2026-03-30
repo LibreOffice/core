@@ -74,7 +74,6 @@ published service SimpleSetUpdate
  or com::sun::star::container::XNameContainer::replaceByName().
 </p>
 
-
  <p>Objects that are removed using
  com::sun::star::container::XNameContainer::removeByName()
  or replaced using

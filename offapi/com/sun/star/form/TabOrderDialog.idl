@@ -22,9 +22,6 @@
 module com {  module sun {  module star {  module form {
 
 
-/**
-    @since LibreOffice 4.2
- */
 published service TabOrderDialog : com::sun::star::ui::dialogs::XExecutableDialog
 {
     createWithModel([in] com::sun::star::awt::XTabControllerModel TabbingModel,

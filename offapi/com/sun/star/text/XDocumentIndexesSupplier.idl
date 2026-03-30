@@ -23,8 +23,6 @@
 
 /** gives access to the collection of document indexes.
 
-
-
     <p>In general this interface is supported by a TextDocument.</p>
  */
 published interface XDocumentIndexesSupplier: com::sun::star::uno::XInterface

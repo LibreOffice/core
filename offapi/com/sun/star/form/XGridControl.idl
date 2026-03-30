@@ -22,8 +22,6 @@ module com { module sun { module star { module form {
 
 
 /** specifies (some) functionality provided by a grid control (aka table control)
-
-    @since OOo 3.1
  */
 interface XGridControl
 {

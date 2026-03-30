@@ -13,8 +13,6 @@ module com {  module sun {  module star {  module text {
  * Script type hint values.
  *
  * These values are used to influence how script types are assigned to characters.
- *
- * @since LibreOffice 25.8
  */
 constants ScriptHintType
 {

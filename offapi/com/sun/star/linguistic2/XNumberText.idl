@@ -89,8 +89,6 @@ module com { module sun { module star { module linguistic2 {
     </ul>
 
     </p>
-
-    @since LibreOffice 6.1
  */
 interface XNumberText
 {

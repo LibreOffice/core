@@ -47,8 +47,6 @@ module com {  module sun {  module star {  module drawing {
     However, if there happens to be a view mode change which results in a
     rearrangement of the visible shapes, the user gets notified of this.</li>
     </ol></p>
-
-     @since OOo 1.1.2
 */
 service AccessibleDrawDocumentView
 {

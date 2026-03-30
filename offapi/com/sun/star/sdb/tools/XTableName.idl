@@ -43,8 +43,6 @@ module com {  module sun {  module star {  module sdb { module tools {
     @see XConnectionTools
     @see com::sun::star::sdbc::XDatabaseMetaData
     @see com::sun::star::sdb::DataSource::Settings
-
-    @since OOo 2.0.4
 */
 interface XTableName
 {

@@ -14,8 +14,6 @@ module com {  module sun {  module star {  module sheet {
 
 /** Describes the status reported by the solver
  *  Used in com::sun::star::sheet::XSolverSettings
- *
- *  @since LibreOffice 25.2
  */
 constants SolverStatus
 {

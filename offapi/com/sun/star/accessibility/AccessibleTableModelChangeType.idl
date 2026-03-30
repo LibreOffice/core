@@ -34,8 +34,6 @@ module com { module sun { module star { module accessibility {
         been inserted or removed.  In contrast, the remaining constant
         AccessibleTabelModelChangeType::UPDATE specifies a
         change of the table's content.</p>
-
-    @since OOo 1.1.2
 */
 constants AccessibleTableModelChangeType
 {
@@ -54,8 +52,6 @@ constants AccessibleTableModelChangeType
         structure to determine the indices of the rows that
         have been inserted.
         Column indices should be set to -1.</p>
-
-        @since LibreOffice 7.4
     */
     const short ROWS_INSERTED = 4;
 
@@ -65,8 +61,6 @@ constants AccessibleTableModelChangeType
         structure to determine the indices of the columns that
         have been inserted.
         Row indices should be set to -1.</p>
-
-        @since LibreOffice 7.4
     */
     const short COLUMNS_INSERTED = 5;
 
@@ -76,8 +70,6 @@ constants AccessibleTableModelChangeType
         structure to determine the indices of the rows that
         have been removed.
         Column indices should be set to -1.</p>
-
-        @since LibreOffice 7.4
     */
     const short ROWS_REMOVED = 6;
 
@@ -87,8 +79,6 @@ constants AccessibleTableModelChangeType
         structure to determine the indices of the columns that
         have been removed.
         Row indices should be set to -1.</p>
-
-        @since LibreOffice 7.4
     */
     const short COLUMNS_REMOVED = 7;
 };

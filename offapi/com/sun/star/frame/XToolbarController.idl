@@ -32,8 +32,6 @@
     <p>
 
     @see com::sun::star::frame::XDispatchProvider
-
-    @since OOo 2.0
  */
 interface XToolbarController : com::sun::star::uno::XInterface
 {

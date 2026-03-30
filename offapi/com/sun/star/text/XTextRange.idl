@@ -24,8 +24,6 @@
 
 /** describes the object's position in a text.
 
-
-
     <p>It represents a text range. The beginning and end of the range may
     be identical.
     </p>
@@ -53,8 +51,6 @@ published interface XTextRange: com::sun::star::uno::XInterface
     string getString();
 
     /** the whole string of characters of this piece of text is replaced.
-
-
 
         <p>All styles are removed when applying this method.
 

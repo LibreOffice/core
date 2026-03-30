@@ -246,8 +246,6 @@ published service DataSourceBrowser
         <p>The selection supplied by com::sun::star::ui::ContextMenuExecuteEvent::Selection,
         in the event structure passed to the context menu interceptors, actually is a value from the
         com::sun::star::sdb::application::NamedDatabaseObject group.</p>
-
-        @since OOo 3.0
     */
     [optional] interface ::com::sun::star::ui::XContextMenuInterception;
 };

@@ -28,8 +28,6 @@ module com { module sun { module star { module configuration { module backend {
         com::sun::star::lang::XInitialization::initialize()
         are supported.
     </p>
-
-    @since OOo 1.1.2
 */
 published service MergeImporter
 {

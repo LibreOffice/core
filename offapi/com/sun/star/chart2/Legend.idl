@@ -58,8 +58,6 @@ service Legend
     [property] boolean Show;
 
     /** Determines, whether the legend should overlay the chart.
-
-        @since LibreOffice 7.0
      */
     [property] boolean Overlay;
 

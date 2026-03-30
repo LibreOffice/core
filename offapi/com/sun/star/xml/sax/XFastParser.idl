@@ -131,13 +131,11 @@ interface XFastParser: com::sun::star::uno::XInterface
     string getNamespaceURL( [in] string prefix )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    /** @since LibreOffice 5.3 */
     void setNamespaceHandler( [in] XFastNamespaceHandler Handler);
 
     /**
       * Simulate a DTD file.
       * Will allow to use customized entity references like &infin; .
-      * @since LibreOffice 7.1
       */
     void setCustomEntityNames( [in] sequence< beans::Pair<string,string> > replacements);
 };

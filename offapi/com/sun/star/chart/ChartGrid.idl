@@ -23,8 +23,6 @@
 
 /** specifies the grid of the diagram in a chart.
 
-
-
     <p>The distance between the grid lines depends on the distance of the help
     or main tick marks, which may be set in ChartAxis.</p>@see ChartAxis
  */
@@ -35,8 +33,6 @@ published service ChartGrid
     /** If a ChartGrid may be stored as XML element, this
         service should be supported in order to preserve unparsed XML
         attributes.
-
-    @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 

@@ -61,8 +61,6 @@ service Cell
             <li>ShadowFormat: non-functional implementation.</li>
             <li>CellProtection: non-functional implementation.</li>
         </ul>
-
-        @since OOo 2.0
      */
     service com::sun::star::table::CellProperties;
 

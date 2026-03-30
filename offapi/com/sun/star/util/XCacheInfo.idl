@@ -10,8 +10,6 @@
 module com {  module sun {  module star {  module util {
 
 /** Interface that allows an implementation to opt out from caching.
-
-    @since LibreOffice 7.4
  */
 interface XCacheInfo: com::sun::star::uno::XInterface
 {

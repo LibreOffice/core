@@ -176,8 +176,6 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
         @see Connection
         @see XQueriesSupplier
         @see DatabaseDocument
-
-        @since OOo 2.0.4
     */
     string getQueryWithSubstitution()
         raises (com::sun::star::sdbc::SQLException);

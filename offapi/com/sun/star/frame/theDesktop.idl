@@ -31,8 +31,6 @@
 
     Prior to LibreOffice 4.3, this singleton was only available as a
     (single-instance) Desktop service.
-
-    @since LibreOffice 4.3
  */
 published singleton theDesktop : XDesktop2;
 

@@ -60,8 +60,6 @@ published constants FontWeight
 
 
     /** specifies a 105% font weight.
-
-        @since LibreOffice 26.2
      */
     const float MEDIUM = 105.000000;
 

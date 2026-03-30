@@ -33,8 +33,6 @@ module com { module sun { module star { module rendering {
     premultiplied with alpha, and Fa and Fb are described for the
     different composite modes (wherein Aa and Ab denote source and
     destination alpha, respectively).<p>
-
-    @since OOo 2.0
  */
 constants CompositeOperation
 {

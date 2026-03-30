@@ -35,8 +35,6 @@ module com { module sun { module star { module rendering {
     If you want to manually override the configured service list, you can pass
     a service name to try first.
     </p>
-
-    @since OOo 2.0
 */
 service CanvasFactory : com::sun::star::lang::XMultiComponentFactory;
 

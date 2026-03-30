@@ -45,8 +45,6 @@ module com { module sun { module star { module ui {
     (single-instance) WindowStateConfiguration service.
 
     @see com::sun::star::frame::ModuleManager
-
-    @since LibreOffice 4.3
 */
 
 singleton theWindowStateConfiguration : com::sun::star::container::XNameAccess;

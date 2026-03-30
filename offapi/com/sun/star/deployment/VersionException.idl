@@ -26,8 +26,6 @@ interface XPackage;
 
    <p>This exception is intended to be used with an
    com::sun::star::task::XInteractionHandler.</p>
-
-   @since OOo 2.1
 */
 exception VersionException: com::sun::star::uno::Exception {
     /**

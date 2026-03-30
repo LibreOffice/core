@@ -21,8 +21,6 @@ module data
 
 /**
  * Pivot table field entry data.
- *
- * @since LibreOffice 5.4
  */
 struct PivotTableFieldEntry
 {

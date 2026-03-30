@@ -37,8 +37,6 @@ service DefaultComponentInspectorModel : com::sun::star::inspection::XObjectInsp
 {
     /** creates a default DefaultComponentInspectorModel, providing factories for all
         handlers listed above.
-
-        @since OOo 2.2
     */
     createDefault();
 
@@ -60,8 +58,6 @@ service DefaultComponentInspectorModel : com::sun::star::inspection::XObjectInsp
         @see XObjectInspectorModel::HasHelpSection
         @see XObjectInspectorModel::MinHelpTextLines
         @see XObjectInspectorModel::MaxHelpTextLines
-
-        @since OOo 2.2
     */
     createWithHelpSection(
         [in] long minHelpTextLines,

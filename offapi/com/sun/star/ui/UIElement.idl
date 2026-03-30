@@ -29,8 +29,6 @@ module com { module sun { module star { module ui {
     the specific user interface element type. Every user interface must be initialized
     before it can be used.
     </p>
-
-    @since OOo 2.0
 */
 
 service UIElement

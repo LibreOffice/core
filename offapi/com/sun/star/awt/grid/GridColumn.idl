@@ -22,8 +22,6 @@
 
 
 /** Represents a column as used by the DefaultGridColumnModel
-
-    @since OOo 3.3
  */
 service GridColumn
 {

@@ -52,8 +52,6 @@ module com {  module sun {  module star {  module io {
 /// granting read and especially write access to various files and directories.
 /// The <code>"<<ALL FILES>>"</code> permission with write action is
 /// especially dangerous.  This grants permission to write to the entire file system.
-///
-/// @since OOo 1.1.2
 published struct FilePermission
 {
     /** target file url

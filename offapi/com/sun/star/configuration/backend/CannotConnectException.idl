@@ -32,8 +32,6 @@ module backend {
             <li>Internal failure of the backend access layer.</li>
         </ul>
     </p>
-
-    @since OOo 1.1.2
   */
 published exception CannotConnectException : BackendSetupException {
 } ;

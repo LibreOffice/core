@@ -37,8 +37,6 @@ module com { module sun { module star { module document {
     refers to the document which supports embedding scripts, and which is unambiguously
     associated with the controller. This must not necessarily be the model returned by
     com::sun::star::frame::XController::getModel().</p>
-
-    @since OOo 2.4
  */
 interface XScriptInvocationContext
 {

@@ -21,9 +21,6 @@
 module com {  module sun {  module star {  module office {
 
 
-/**
-    @since LibreOffice 4.2
- */
 service Quickstart : com::sun::star::beans::XFastPropertySet
 {
     createDefault();

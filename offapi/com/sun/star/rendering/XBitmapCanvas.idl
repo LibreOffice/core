@@ -26,8 +26,6 @@ module com { module sun { module star { module rendering {
     This interface is a specialization of the canvas interface for
     bitmapped canvases, where additional methods for accessing and
     moving of bitmap content are provided.<p>
-
-    @since OOo 2.0
  */
 interface XBitmapCanvas : XCanvas
 {

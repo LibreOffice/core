@@ -30,7 +30,6 @@ interface XTextConvert : com::sun::star::uno::XInterface
 
         /** moves the paragraphs from Start to End into a text frame.
 
-
         @param Start    start position of frame content
 
         @param End      end position of frame content
@@ -50,7 +49,6 @@ interface XTextConvert : com::sun::star::uno::XInterface
                                 com::sun::star::beans::PropertyVetoException );
 
         /** converts the paragraphs marked in TableRanges into a table.
-
 
         @param TableRanges contains the TextRange interfaces of the paragraphs, cells and rows of the table.
             <p>The inner sequence contains the start and end paragraphs of each table cell.

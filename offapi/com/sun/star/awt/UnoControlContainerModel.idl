@@ -54,8 +54,6 @@ published service UnoControlContainerModel
 
         <p>Not every border style (see #Border) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
-
-        @since OOo 2.0
      */
     [optional, property] long BorderColor;
 

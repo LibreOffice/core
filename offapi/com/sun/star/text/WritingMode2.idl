@@ -77,8 +77,6 @@ published constants WritingMode2
 
     /** text within a line is written bottom-to-top. Lines and blocks are
         placed left-to-right.
-
-        @since LibreOffice 6.3
      */
     const short BT_LR = 5;
 
@@ -87,8 +85,6 @@ published constants WritingMode2
         are placed right-to-left. This corresponds to OOXML attribute
         vert="vert" for shapes and ECMA w:val="tbRl" attribute in
         <w:textDirection> element.
-
-        @since LibreOffice 7.5
     */
     const short TB_RL90 = 6;
 
@@ -97,8 +93,6 @@ published constants WritingMode2
         'X' This is like LR_TB where 1 Character fit in every line.
         'T' Only 1 line display is implemented.
         This corresponds to OOXML attribute vert="wordArtVert" for shapes.
-
-        @since LibreOffice 24.8
     */
     const short STACKED = 7;
 };

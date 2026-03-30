@@ -24,8 +24,6 @@ module backend {
     Exception thrown when authentication to the underlying backend fails
     because the configured authentication mechanism is not supported by the
     backend or no valid mechanism can be negotiated.
-
-    @since OOo 1.1.2
   */
 published exception InvalidAuthenticationMechanismException : BackendSetupException {
 } ;

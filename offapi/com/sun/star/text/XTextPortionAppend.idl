@@ -60,8 +60,6 @@ interface XTextPortionAppend : com::sun::star::uno::XInterface
         @param
             TextRange specifies the position of the insert.
 
-        @since LibreOffice 4.0
-
      */
          com::sun::star::text::XTextRange  insertTextPortion(
                                 [in] string Text,

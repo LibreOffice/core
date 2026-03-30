@@ -39,7 +39,6 @@ module com {  module sun {  module star {  module container {
     }
     @endcode
 
-
     <p> If the object changed, the behavior of the enumeration is
     not specified. This is not a remote interface.  </p>
  */

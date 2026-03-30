@@ -12,8 +12,6 @@ module com { module sun { module star { module configuration {
 /* Is used to deliver documentation for the configuration.
 
    <p>This interface is still unpublished and unstable.</p>
-
-   @since LibreOffice 24.2
 */
 interface XDocumentation {
     /** @returns

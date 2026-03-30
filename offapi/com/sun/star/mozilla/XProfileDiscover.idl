@@ -24,7 +24,6 @@
 
 /** is the interface used to list and get information for Mozilla/Thunderbird profiles
 
-
     @see com::sun::star::mozilla::XProfileManager
     @see com::sun::star::mozilla::MozillaBootstrap
  */

@@ -21,8 +21,6 @@ module com { module sun { module star { module uri {
 
 /**
    represents absolute &ldquo;vnd.sun.star.expand&rdquo; URL references.
-
-   @since OOo 2.3
  */
 published interface XVndSunStarExpandUrlReference {
     /**

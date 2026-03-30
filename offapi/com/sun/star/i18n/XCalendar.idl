@@ -184,7 +184,6 @@ published interface XCalendar : com::sun::star::uno::XInterface
                     Valid only for CalendarDisplayIndex::DAY,
                     CalendarDisplayIndex::MONTH and
                     CalendarDisplayIndex::GENITIVE_MONTH <br>
-                    @since LibreOffice 3.5
                     </dd>
 
             <p> This parameter is not used if the

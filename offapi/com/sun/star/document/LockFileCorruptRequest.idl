@@ -22,8 +22,6 @@ module com { module sun { module star { module document {
 
 /** Is used for interaction handle to query user's decision
     when the lock file is corrupt.
-
-    @since LibreOffice 6.0
 */
 exception LockFileCorruptRequest : ::com::sun::star::io::IOException
 {

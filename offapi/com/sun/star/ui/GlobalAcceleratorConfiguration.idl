@@ -20,8 +20,6 @@
 module com {  module sun {  module star {  module ui {
 
 /** provides access to the global accelerator (aka shortcut) configuration set.
-
-    @since OOo 2.0
 */
 service GlobalAcceleratorConfiguration : XAcceleratorConfiguration;
 

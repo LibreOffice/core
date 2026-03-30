@@ -26,8 +26,6 @@
 /** is used for executing a static SQL statement and obtaining the results
     produced by it.
 
-
-
     <p>
     Only one ResultSet per Statement can be open at any point in
     time; therefore, if the reading of one ResultSet is interleaved
@@ -65,7 +63,6 @@ published interface XStatement: com::sun::star::uno::XInterface
     long executeUpdate([in]string sql) raises (SQLException);
 
     /** executes a SQL statement that may return multiple results.
-
 
         <p>
         Under some (uncommon) situations a single SQL statement may return

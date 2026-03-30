@@ -11,8 +11,6 @@ module com { module sun { module star { module graphic
 {
 
 /** This interface allows mapping of XGraphics for a certain string key
-
-    @since LibreOffice 7.1
  */
 interface XGraphicMapper
 {

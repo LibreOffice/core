@@ -27,8 +27,6 @@ module com { module sun { module star { module document {
     and further a validate and flush mechanism for more performance and a special query mode
     can be used here too.
     </p>
-
-    @since OOo 1.1.2
  */
 published service ExtendedTypeDetectionFactory
 {

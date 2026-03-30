@@ -47,8 +47,6 @@ interface XSvgParser : ::com::sun::star::uno::XInterface
 
         @param aAbsolutePath
         The path containing the SVG XML data
-
-        @since LibreOffice 6.3
      */
     any getDrawCommands(
         [in] io::XInputStream xSvgStream,

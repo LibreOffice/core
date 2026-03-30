@@ -10,8 +10,6 @@
 module com { module sun { module star { module text {
 
 /** allows for adding/removing of paste event listeners.
-
-    @since LibreOffice 6.3
 */
 interface XPasteBroadcaster : com::sun::star::uno::XInterface
 {

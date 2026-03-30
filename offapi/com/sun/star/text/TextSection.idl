@@ -180,8 +180,6 @@ published service TextSection
     [optional, property] long SectionRightMargin;
 
     /** contains the graphic of the background.
-
-        @since LibreOffice 6.1
      */
     [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 };

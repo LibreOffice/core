@@ -45,7 +45,6 @@ module com { module sun { module star { module deployment {
     </p>
 
     @see thePackageManagerFactory
-    @since OOo 2.0
     @deprecated
          Use XExtensionManager.
 */
@@ -86,7 +85,6 @@ interface XPackageManager
 
         The properties argument is currently only used to suppress the license information
         for shared extensions.
-
 
         @param url
                package URL, must be UCB conform

@@ -27,8 +27,6 @@ module com {   module sun {   module star {   module document {
     via this supplier interface.
     </p>
 
-    @since OOo 3.0
-
     @see XDocumentProperties
     @see DocumentProperties
  */

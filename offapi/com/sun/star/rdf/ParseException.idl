@@ -22,8 +22,6 @@ module com {   module sun {   module star {   module rdf {
 
 /** represents an error condition that is signaled on parsing an RDF file.
 
-    @since OOo 3.0
-
     @see XRepository
  */
 exception ParseException : com::sun::star::uno::Exception

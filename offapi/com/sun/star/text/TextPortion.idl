@@ -47,7 +47,6 @@ published service TextPortion
     interface ::com::sun::star::container::XContentEnumerationAccess;
 
     /** gives access to a sequence of properties.
-        @since OOo 2.0
      */
     [optional]
     interface ::com::sun::star::beans::XTolerantMultiPropertySet;
@@ -106,7 +105,6 @@ published service TextPortion
     ::com::sun::star::text::XTextField TextField;
 
     /** contains the text range of a text portion of type InContentMetadata.
-        @since OOo 3.2
      */
     [optional, readonly, property]
     ::com::sun::star::text::XTextContent InContentMetadata;

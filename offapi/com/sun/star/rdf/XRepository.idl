@@ -41,9 +41,6 @@ module com {   module sun {   module star {   module rdf {
     query language is provided.
     </p>
 
-
-    @since OOo 3.2
-
     @see XRepositorySupplier
     @see XDocumentRepository
  */

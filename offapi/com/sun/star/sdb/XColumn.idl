@@ -157,7 +157,6 @@ published interface XColumn: com::sun::star::uno::XInterface
         stream. This method is particularly suitable for retrieving large
         LONGVARBINARY or LONGVARCHAR values.
 
-
         <p>
         <b>Note:</b> All the data in the returned stream must be
         read prior to getting the value of any other column. The next

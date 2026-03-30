@@ -23,8 +23,6 @@ module com {   module sun {   module star {   module rdf {
 
 /** provides access to an RDF Repository.
 
-    @since OOo 3.0
-
     @see XRepository
  */
 interface XRepositorySupplier

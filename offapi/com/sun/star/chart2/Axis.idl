@@ -109,26 +109,18 @@ service Axis
     [optional, property] com::sun::star::chart::ChartAxisMarkPosition MarkPosition;
 
     /** Determines display units are available for axis
-
-        @since LibreOffice 4.3
      */
     [optional, property] boolean DisplayUnits;
 
     /** Determines built in display unit value for axis
-
-        @since LibreOffice 4.3
      */
     [optional, property] string BuiltInUnit;
 
     /** Compatibility option: determines which strategy should be tried first for fixing axis labels overlapping issues
-
-        @since LibreOffice 5.1
      */
     [optional, property] boolean TryStaggeringFirst;
 
     /** This attribute specifies the shift of the first major tick from the origin.
-
-        @since LibreOffice 7.0
      */
     [optional, property] long MajorOrigin;
 

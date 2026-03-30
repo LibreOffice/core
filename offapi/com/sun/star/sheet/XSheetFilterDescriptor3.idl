@@ -16,8 +16,6 @@ module com {  module sun {  module star {  module sheet {
     TableFilterField2 struct.</p>
 
     @see SheetFilterDescriptor2
-
-    @since LibreOffice 3.5
  */
 interface XSheetFilterDescriptor3: com::sun::star::uno::XInterface
 {

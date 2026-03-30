@@ -30,7 +30,6 @@ published service BaseIndex
 {
     interface com::sun::star::text::XDocumentIndex;
 
-    /** @since LibreOffice 4.0 */
     [optional] interface com::sun::star::util::XRefreshable;
 
     /** contains the title of the index.*/
@@ -107,8 +106,6 @@ published service BaseIndex
     [property] com::sun::star::text::XTextSection HeaderSection;
 
     /** contains the graphic object that is displayed as background graphic.
-
-        @since LibreOffice 6.1
     */
     [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 };

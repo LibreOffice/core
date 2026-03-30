@@ -12,8 +12,6 @@
 
 
 /** Interface for physics animation.
-
-    @since LibreOffice 7.1
 */
 interface XAnimatePhysics : XAnimate
 {

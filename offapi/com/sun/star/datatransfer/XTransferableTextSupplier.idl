@@ -11,8 +11,6 @@
 
 module com { module sun { module star { module datatransfer {
 
-/** @since LibreOffice 7.2
- */
 interface XTransferableTextSupplier
 {
     /** Provide access to a transferable representation of a given text

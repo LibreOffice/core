@@ -45,7 +45,6 @@ published interface XDataSource: com::sun::star::uno::XInterface
     /** sets the maximum time in seconds that this data source will wait
         while attempting to connect to a database.
 
-
         <p>
         A value of zero specifies that the timeout is the default system
         timeout if there is one; otherwise, it specifies that there is no timeout.
@@ -61,7 +60,6 @@ published interface XDataSource: com::sun::star::uno::XInterface
 
     /** gets the maximum time in seconds that this data source can wait
         while attempting to connect to a database.
-
 
         <p>
         A value of zero means that the timeout is the default system timeout

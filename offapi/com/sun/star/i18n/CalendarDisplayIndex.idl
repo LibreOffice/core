@@ -39,12 +39,10 @@ published constants CalendarDisplayIndex
     const short ERA              = 4;
 
     /** name of a possessive genitive case month
-        @since LibreOffice 3.5
      */
     const short GENITIVE_MONTH   = 5;
 
     /** name of a partitive case month
-        @since LibreOffice 3.5
      */
     const short PARTITIVE_MONTH  = 6;
 };

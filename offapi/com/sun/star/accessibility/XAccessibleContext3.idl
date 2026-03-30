@@ -22,8 +22,6 @@ module com { module sun { module star { module accessibility {
  interface XAccessible;
 
 /** Implement this interface to speed up operations when iterating over large amounts of children.
- *
-    @since LibreOffice 6.4
 */
 interface XAccessibleContext3 : ::com::sun::star::uno::XInterface
 {

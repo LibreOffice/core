@@ -10,8 +10,6 @@
 module com { module sun { module star { module awt {
 
 /** extends XTopWindow with additional functionality
-
-    @since LibreOffice 25.2
 */
 interface XTopWindow3: XTopWindow2 {
     /** controls whether the window is currently shown full screen */

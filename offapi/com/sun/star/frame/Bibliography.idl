@@ -20,9 +20,6 @@
 
  module com {  module sun {  module star {  module frame {
 
-/**
-    @since LibreOffice 4.1
- */
 published service Bibliography : com::sun::star::container::XNameAccess;
 
 

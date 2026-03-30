@@ -29,8 +29,6 @@ module com { module sun { module star { module configuration {
 
     <p>This object is accessible as singleton
     theDefaultProvider</p>.
-
-    @since OOo 1.1.2
 */
 published service DefaultProvider
 {
@@ -49,15 +47,11 @@ published service DefaultProvider
     [optional] interface com::sun::star::util::XFlushable;
 
     /** Enable setting/getting locale for Provider
-
-        @since OOo 2.0
      */
 
     [optional] interface com::sun::star::lang::XLocalizable;
 
     /** Property to enable/disable asynchronous write-back from in-memory cache to backend(s)
-
-        @since OOo 2.0
      */
 
     [optional,property] boolean EnableAsync;

@@ -38,8 +38,6 @@ module com { module sun { module star { module ui { module dialogs {
     operation is then continued, using the new com::sun::star::document::MediaDescriptor.</p>
 
     <p>Otherwise, the filter operation is canceled.</p>
-
-    @since OOo 1.1.2
  */
 published service FilterOptionsDialog
 {

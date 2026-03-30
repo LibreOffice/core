@@ -133,8 +133,6 @@ published service GenericDrawPage
 
     /** does the background cover the full page or only inside the
         margins?
-
-        @since LibreOffice 7.2
      */
     [optional, property] boolean BackgroundFullSize;
 

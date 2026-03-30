@@ -106,8 +106,6 @@ published service SheetCellRange
 
 
     /** provides simultaneous access to the formula contents of all cells.
-
-        @since OOo 1.1.2
      */
     [optional] interface com::sun::star::sheet::XCellRangeFormula;
 
@@ -181,11 +179,6 @@ published service SheetCellRange
     [optional] interface com::sun::star::beans::XTolerantMultiPropertySet;
 
 
-    /**
-
-    @since OOo 2.0
-
-    */
     [optional] interface com::sun::star::util::XModifyBroadcaster;
 
 

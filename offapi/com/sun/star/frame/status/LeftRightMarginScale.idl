@@ -23,8 +23,6 @@ module com {  module sun {  module star {  module frame {  module status {
 
 
 /** specifies a left and right margin.
-
-    @since LibreOffice 5.3
  */
 struct LeftRightMarginScale
 {

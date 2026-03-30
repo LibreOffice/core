@@ -25,8 +25,6 @@ module com {  module sun {  module star {  module table {
     <p>In a structure which is used for setting, these flags determine
     if the corresponding line should be set or if the old value should
     be kept.</p>
-
-    @since LibreOffice 3.6
  */
 published struct TableBorder2
 {

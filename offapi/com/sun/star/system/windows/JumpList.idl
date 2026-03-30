@@ -15,8 +15,6 @@ interface XJumpList;
 
 /** Specifies a Jump List service. Allows to add custom commands to the Windows Jump List.
 
-    @since LibreOffice 7.4
-
     @see com::sun::star::system::windows::XJumpList
 */
 

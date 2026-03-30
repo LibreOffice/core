@@ -12,7 +12,6 @@
 
 /** These constants define the way the attribute Metal of service
     EnhancedCustomShapeExtrusion is interpreted for rendering the shape.
-    @since LibreOffice 7.4
  */
 constants EnhancedCustomShapeMetalType
 {

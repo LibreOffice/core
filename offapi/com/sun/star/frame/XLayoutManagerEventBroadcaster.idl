@@ -23,8 +23,6 @@
 /** makes it possible to receive events from a layout manager.
 
     @see ::com::sun::star::frame::LayoutManager
-
-    @since OOo 2.0
  */
 
 interface XLayoutManagerEventBroadcaster : com::sun::star::uno::XInterface

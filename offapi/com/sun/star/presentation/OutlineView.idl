@@ -26,8 +26,6 @@
 
     In an outline view, the textual contents of presentation text objects
     from all presentation pages are presented as a continuous outline text.
-
-    @since OOo 1.1.2
  */
 published service OutlineView
 {

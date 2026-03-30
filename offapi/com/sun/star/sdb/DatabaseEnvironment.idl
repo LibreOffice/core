@@ -26,8 +26,6 @@
 /** @deprecated
     is the top level service for accessing database components.
 
-
-
     <p>It enables the service user to establish connections to databases
     or to use database access beans to gain access to database components.
     This service takes control over all other database services.</p>

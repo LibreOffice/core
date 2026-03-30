@@ -23,8 +23,6 @@ published interface XVndSunStarPkgUrlReferenceFactory;
 
 /**
    creates &ldquo;vnd.sun.star.pkg&rdquo; URL references.
-
-   @since OOo 2.0
  */
 published service VndSunStarPkgUrlReferenceFactory:
     XVndSunStarPkgUrlReferenceFactory;

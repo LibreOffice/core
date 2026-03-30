@@ -36,8 +36,6 @@ module com { module sun { module star { module sdb { module application {
     defined in the database document itself.</p>
 
     @see DatabaseObject
-
-    @since OOo 3.0
  */
 constants DatabaseObjectContainer
 {

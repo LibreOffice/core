@@ -22,8 +22,6 @@
 
 
 /** enhances the Presentation service to give access to a XPresentation2 interface.
-
-    @since OOo 3.0
 */
 service Presentation2
 {

@@ -21,9 +21,6 @@
 module com {  module sun {  module star {  module form {
 
 
-/**
-    @since LibreOffice 4.1
- */
 published interface XForms
 {
     /** allows to register listeners to be notified of changes in the container.

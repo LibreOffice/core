@@ -20,9 +20,6 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-/**
-    @since LibreOffice 4.1
-*/
 published service XSLTFilterDialog : XExecutableDialog;
 
 

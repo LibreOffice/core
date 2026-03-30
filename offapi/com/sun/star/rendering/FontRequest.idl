@@ -29,8 +29,6 @@ module com { module sun { module star { module rendering {
     Leave the FontInfo::FamilyName and
     FontInfo::StyleName empty, if font selection
     should only happen via the PANOSE description.
-
-    @since OOo 2.0
  */
 struct FontRequest
 {

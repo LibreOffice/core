@@ -22,7 +22,6 @@
 
 
 /** Specifies a unit for intervals on a date-time axis
-@since OOo 3.4
  */
 published constants TimeUnit
 {

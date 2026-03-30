@@ -25,7 +25,6 @@
 
 /** provides the possibility of executing a precompiled SQL statement.
 
-
     <p>
     A SQL statement is pre-compiled and stored in a PreparedStatement object.
     This object can then be used to efficiently execute this statement multiple
@@ -59,7 +58,6 @@ published interface XPreparedStatement: com::sun::star::uno::XInterface
     long executeUpdate() raises (SQLException);
 
     /** executes any kind of SQL statement.
-
 
         <p>
         Some prepared statements return multiple results; the execute

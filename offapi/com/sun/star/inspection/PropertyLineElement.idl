@@ -24,8 +24,6 @@ module com {  module sun {  module star {  module inspection {
 
     @see XPropertyHandler::describePropertyLine
     @see LineDescriptor
-
-    @since OOo 2.0.3
 */
 constants PropertyLineElement
 {

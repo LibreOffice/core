@@ -24,8 +24,6 @@ module com {  module sun {  module star {  module sheet {
 /** Constants designating the link type in
     ExternalLinkInfo, used with
     FormulaParser::ExternalLinks.
-
-    @since OOo 3.1
  */
 constants ExternalLinkType
 {

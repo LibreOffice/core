@@ -32,8 +32,6 @@ module com {  module sun {  module star {  module awt {
 
     Also this handler is more flexible, because it optionally allows the
     consumption of key events.
-
-    @since OOo 1.1.2
  */
 published interface XMouseClickHandler: ::com::sun::star::lang::XEventListener
 {

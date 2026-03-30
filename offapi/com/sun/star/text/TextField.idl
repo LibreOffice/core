@@ -44,8 +44,6 @@ published service TextField
 
         <p>Not all available text fields are used, for example fields
         that are part of unused styles.</p>
-
-        @since  OOo 2.0.1
      */
     [optional, property, readonly] boolean IsFieldUsed;
 
@@ -55,14 +53,10 @@ published service TextField
         <p>Not all available text fields are actually displayed
         even when they are used. For example hidden fields or fields
         in hidden text are used in the document but get not displayed.</p>
-
-        @since  OOo 2.0.1
      */
     [optional, property, readonly] boolean IsFieldDisplayed;
 
     /** Contains short title for the field, used to for tooltip purposes if it's non-empty.
-
-        @since LibreOffice 7.4
     */
     [optional, property] string Title;
 

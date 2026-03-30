@@ -21,8 +21,6 @@ module com {  module sun {  module star {  module text {
 
 /** makes it possible to access the content controls within
     the context (e.g. document).
-
-    @since LibreOffice 7.5
  */
 interface XContentControlsSupplier: com::sun::star::uno::XInterface
 {

@@ -10,8 +10,6 @@
 module com { module sun { module star { module text {
 
 /** This service specifies a line break with properties in a TextDocument.
-
-    @since LibreOffice 7.4
 */
 service LineBreak
 {

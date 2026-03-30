@@ -40,13 +40,10 @@ published service ChartAxis
     /** If a ChartAxis may be stored as XML element, this
         service should be supported in order to preserve unparsed XML
         attributes.
-
-        @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
     /** Access to the sub elements of an axis like title and grids.
-        @since OOo 3.4
      */
     [optional] interface com::sun::star::chart::XAxis;
 
@@ -117,13 +114,11 @@ published service ChartAxis
 
 
     /** determines which type of axis this is, e.g. a date-axis or a category-axis @see ChartAxisType
-        @since OOo 3.4
      */
     [optional, property] long AxisType;
 
 
     /** if the current axis is a date-axis the intervals are chosen as given with TimeIncrement
-        @since OOo 3.4
      */
     [optional, maybevoid, property] TimeIncrement TimeIncrement;
 

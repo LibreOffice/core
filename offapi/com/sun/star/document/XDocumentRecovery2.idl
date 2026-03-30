@@ -26,8 +26,6 @@ module com { module sun { module star { module document {
     by providing a method to query how much time elapsed since modified state of
     the document was set.
 
-    @since LibreOffice 24.2
-
  */
 interface XDocumentRecovery2: ::com::sun::star::document::XDocumentRecovery
 {

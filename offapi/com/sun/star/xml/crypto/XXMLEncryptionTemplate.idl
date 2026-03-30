@@ -38,7 +38,6 @@ module com { module sun { module star { module xml { module crypto {
  * <p>With the help of encryption context, the encryptor or decryptor specifies
  * the key from the KeyInfo in the encryption template.</p>
  *
- *
  * <p>It isn't a good method to set the EncryptedKey here. In general, there is
  * a RetrievalMethod in EncryptedData by which we can get the EncryptedKey.
  *

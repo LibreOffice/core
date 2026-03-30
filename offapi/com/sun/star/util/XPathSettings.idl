@@ -21,9 +21,6 @@
 module com {  module sun {  module star {  module  util {
 
 
-/**
-    @since LibreOffice 4.1
- */
 published interface XPathSettings
 {
   /** Main interface to have access to the path properties. */

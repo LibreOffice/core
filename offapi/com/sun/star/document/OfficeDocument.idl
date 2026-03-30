@@ -93,20 +93,14 @@ published service OfficeDocument
     [optional] interface XViewDataSupplier;
 
     /** allows for getting information about a print job
-
-        @since OOo 1.1.2
      */
     [optional] interface com::sun::star::view::XPrintJobBroadcaster;
 
     /** is supported when the document can contain scripts and dialogs
-
-        @since OOo 2.4
     */
     [optional] interface XEmbeddedScripts;
 
     /** access to the DocumentProperties.
-
-        @since OOo 3.0
      */
     [optional] interface XDocumentPropertiesSupplier;
 
@@ -143,8 +137,6 @@ published service OfficeDocument
 
     /** Grab bag of document properties, used as a string-any map for
         interim interop purposes.
-
-        @since LibreOffice 4.2
 
         <p>This property is intentionally not handled by the ODF
         filter. Any member that should be handled there should be

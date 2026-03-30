@@ -23,8 +23,6 @@ module com {   module sun {   module star {   module rdf {
 
 /** represents a literal that may occur in a RDF graph.
 
-    @since OOo 3.0
-
     @see XRepository
  */
 service Literal : XLiteral

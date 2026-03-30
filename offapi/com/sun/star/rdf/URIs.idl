@@ -28,8 +28,6 @@ module com {   module sun {   module star {   module rdf {
     These constants are for use with URI::createKnown().
     </p>
 
-    @since OOo 3.2
-
     @see URI::createKnown
  */
 constants URIs
@@ -316,8 +314,6 @@ constants URIs
         (replacement of the default field shading color)
 
         urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0odf#shading
-
-        @since LibreOffice 7.2
      */
     const short LO_EXT_SHADING      = 2106;
 };

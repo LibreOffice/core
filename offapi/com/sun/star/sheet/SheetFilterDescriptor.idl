@@ -41,8 +41,6 @@ published service SheetFilterDescriptor
         structures supporting a wider range of comparison operators, compared
         to the TableFilterField structure provided by interface
         XSheetFilterDescriptor.
-
-        @since OOo 3.2
      */
     [optional] interface XSheetFilterDescriptor2;
 

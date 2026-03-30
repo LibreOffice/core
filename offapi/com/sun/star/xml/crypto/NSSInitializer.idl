@@ -27,8 +27,6 @@ module com { module sun { module star { module xml { module crypto {
 
     After the first usage you have to restart LibreOffice to activate a new
     NSS path.
-
-    @since LibreOffice 4.0
  */
 service NSSInitializer : XNSSInitializer;
 

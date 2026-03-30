@@ -26,8 +26,6 @@
     E.g. that can be useful for interactions.
 
     This is designed to mesh with tools::ErrCodeMsg
-
-    @since LibreOffice 24.2
  */
 exception ErrorCodeRequest2 : com::sun::star::task::ErrorCodeRequest
 {

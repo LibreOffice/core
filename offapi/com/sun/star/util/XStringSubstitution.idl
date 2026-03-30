@@ -28,8 +28,6 @@
     not part of this interface definition.  Please look at the documentation
     of the implementation that must specify these parameters.
     </p>
-
-    @since OOo 1.1.2
 */
 published interface XStringSubstitution : com::sun::star::uno::XInterface
 {

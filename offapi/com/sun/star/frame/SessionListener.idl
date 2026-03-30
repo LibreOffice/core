@@ -24,8 +24,6 @@
 
 /**
     This was created from its sole place of use, so it might be incomplete.
-
-    @since LibreOffice 4.1
 */
 service SessionListener : com::sun::star::frame::XSessionManagerListener2
 {

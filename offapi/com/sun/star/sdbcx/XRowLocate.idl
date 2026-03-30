@@ -22,7 +22,6 @@
 
 /** is used to identify rows within a result set and to find rows by a bookmark.
 
-
     <p>
     Bookmarks are only valid in the scope of the current result set and
     are not interchangeable between result sets. A bookmark could be a complex data
@@ -61,7 +60,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
 
     /** moves the cursor a relative number of rows, either positive or negative
         starting at a given bookmark position.
-
 
         <p>
         If the bookmark could not be located, a result set will be positioned

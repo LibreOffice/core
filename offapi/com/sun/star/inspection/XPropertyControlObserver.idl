@@ -25,8 +25,6 @@ interface XPropertyControl;
 
 /** specifies an interface for components to observer certain aspects
     of an XPropertyControl.
-
-    @since OOo 2.2
 */
 interface XPropertyControlObserver
 {

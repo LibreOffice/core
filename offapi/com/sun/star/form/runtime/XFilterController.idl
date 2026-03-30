@@ -57,8 +57,6 @@ interface XFilterControllerListener;
     @see com::sun::star::sdbc::XResultSetMetaData::isSearchable
     @see com::sun::star::sdb::XSingleSelectQueryAnalyzer::getStructuredFilter
     @see com::sun::star::sdb::SQLFilterOperator
-
-    @since OOo 3.3
  */
 interface XFilterController
 {

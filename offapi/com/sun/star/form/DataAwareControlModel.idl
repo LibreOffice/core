@@ -100,8 +100,6 @@ published service DataAwareControlModel
         a database field which cannot be `NULL`, and the model itself does not have a value, then the database
         update is prevented, showing an error message to the user. To disable this behavior on a per-control
         basis, use the <code>InputRequired</code> property.</p>
-
-        @since OOo 3.1
     */
     [optional, property] boolean InputRequired;
 

@@ -32,7 +32,6 @@ published interface XAcceptor: com::sun::star::uno::XInterface
         After a successful return, the method may be called again to accept
         further connections, but the parameter string MUST be left unchanged.
 
-
        @param sConnectionDescription
                 contains the kind of the connection plus a
               comma separated list of attributes,

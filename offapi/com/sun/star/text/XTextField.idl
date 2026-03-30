@@ -23,8 +23,6 @@
 
 /** is the base interface for all text fields.
 
-
-
     <p>A text field is embedded in text and expands to a sequence of
     characters.
 

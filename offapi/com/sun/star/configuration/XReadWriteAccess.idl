@@ -12,15 +12,12 @@ module com { module sun { module star { module configuration {
 /* Provides easy read/write access to the complete configuration.
 
    <p>This interface is still unpublished and unstable.</p>
-
-   @since LibreOffice 3.6
 */
 interface XReadWriteAccess {
     interface com::sun::star::container::XHierarchicalNameReplace;
 
     interface com::sun::star::util::XChangesBatch;
 
-    // @since LibreOffice 5.0
     interface com::sun::star::beans::XHierarchicalPropertySetInfo;
 };
 

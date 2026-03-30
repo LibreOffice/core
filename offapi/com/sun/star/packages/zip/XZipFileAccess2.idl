@@ -23,7 +23,6 @@ module com {  module sun {  module star {   module packages {  module zip {
 
 /**
     Merged interface for ZipFileAccess service.
-    @since LibreOffice 4.1
  */
 interface XZipFileAccess2
 {

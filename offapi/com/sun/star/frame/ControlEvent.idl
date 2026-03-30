@@ -23,8 +23,6 @@ module com {  module sun {  module star {  module frame {
 
 /** describes a control event sent by extended user interface
     controls.
-
-    @since OOo 2.0.3
  */
 struct ControlEvent
 {

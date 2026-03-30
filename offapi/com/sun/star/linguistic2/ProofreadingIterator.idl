@@ -31,8 +31,6 @@ module com { module sun { module star { module linguistic2 {
     <p>An implementation of this service acts as a mediator between documents
     and proofreaders (often called just grammar checkers). It is responsible to
     process requests for proofreading text portions.</p>
-
-    @since OOo 3.0.1
  */
 
 service ProofreadingIterator : XProofreadingIterator;

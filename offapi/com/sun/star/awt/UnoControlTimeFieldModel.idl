@@ -48,8 +48,6 @@ published service UnoControlTimeFieldModel
 
         <p>Not every border style (see #Border) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
-
-        @since OOo 2.0
      */
     [optional, property] long BorderColor;
 
@@ -88,8 +86,6 @@ published service UnoControlTimeFieldModel
 
     /** specifies whether the selection in the control should be hidden when
         the control is not active (focused).
-
-        @since OOo 2.0
      */
     [optional, property] boolean HideInactiveSelection;
 
@@ -106,8 +102,6 @@ published service UnoControlTimeFieldModel
 
     /** specifies whether the mouse should show repeating behavior, i.e.
         repeatedly trigger an action when keeping pressed.
-
-        @since OOo 2.0
      */
     [optional, property] boolean Repeat;
 
@@ -119,8 +113,6 @@ published service UnoControlTimeFieldModel
         allow to repeatedly trigger this action, without the need to release the
         mouse button and to press it again. The delay between two such triggers
         is specified with this property.</p>
-
-        @since OOo 2.0
      */
     [optional, property] long RepeatDelay;
 
@@ -141,8 +133,6 @@ published service UnoControlTimeFieldModel
 
 
     /** specifies the text displayed in the control.
-
-        @since OOo 2.0
      */
     [optional, property] string Text;
 
@@ -190,8 +180,6 @@ published service UnoControlTimeFieldModel
 
         <p>Only com::sun::star::text::WritingMode2::LR_TB and
         com::sun::star::text::WritingMode2::RL_TB are supported at the moment.</p>
-
-        @since OOo 3.1
     */
     [optional, property] short WritingMode;
 
@@ -205,20 +193,14 @@ published service UnoControlTimeFieldModel
 
 
     /** specifies the vertical alignment of the text in the control.
-
-        @since OOo 3.3
      */
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 
     /** specifies the background color (RGB) of selected text in the control which is highlighted.
-
-        @since LibreOffice 7.5
      */
     [optional, property] com::sun::star::util::Color HighlightColor;
 
     /** specifies the text color (RGB) of selected text in the control which is highlighted.
-
-        @since LibreOffice 7.5
      */
     [optional, property] com::sun::star::util::Color HighlightTextColor;
 };

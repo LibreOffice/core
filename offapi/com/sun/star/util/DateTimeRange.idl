@@ -82,8 +82,6 @@ published struct DateTimeRange
     short EndYear;
 
     /** true: time zone is UTC false: unknown time zone.
-
-        @since LibreOffice 4.1
      */
     boolean IsUTC;
 

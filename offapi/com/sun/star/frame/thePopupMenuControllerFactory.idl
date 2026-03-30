@@ -29,8 +29,6 @@ module com { module sun { module star { module frame {
 
     Prior to LibreOffice 4.3, this singleton was only available as a
     (single-instance) PopupMenuControllerFactory service.
-
-    @since LibreOffice 4.3
 */
 singleton thePopupMenuControllerFactory : XUIControllerFactory;
 

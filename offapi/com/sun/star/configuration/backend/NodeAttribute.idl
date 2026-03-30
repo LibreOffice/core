@@ -31,8 +31,6 @@ module com { module sun { module star { module configuration { module backend {
     @see com::sun::star::configuration::backend::SchemaAttribute
         During merging the values may be combined with static attributes
         from the schema.
-
-    @since OOo 1.1.2
  */
 published constants NodeAttribute
 {
@@ -61,8 +59,6 @@ published constants NodeAttribute
         XLayerHandler::addOrReplaceNodeFromTemplate(),
         XUpdateHandler::addOrReplaceNode(), and
         XUpdateHandler::addOrReplaceNodeFromTemplate().</p>
-
-        @since OOo 2.0.3
      */
     const short FUSE = 2048;
 

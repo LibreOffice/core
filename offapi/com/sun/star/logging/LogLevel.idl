@@ -24,8 +24,6 @@ module com { module sun { module star { module logging {
 /** specifies levels to distinguish between severities of logged events
 
     @see XLogger
-
-    @since OOo 2.3
  */
 constants LogLevel
 {

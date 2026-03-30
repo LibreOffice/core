@@ -19,9 +19,6 @@
 
 module com { module sun { module star { module ui {
 
-/**
-    @since LibreOffice 4.1
-*/
 interface XUIConfigurationManager2
 {
     /** provides access to set a storage and to check if a storage has been
@@ -56,8 +53,6 @@ interface XUIConfigurationManager2
     /**
         Creates a new configuration manager in case there are different views with different languages.
         This function enables those views to have short cut keys specific to the languages.
-
-        @since LibreOffice 7.6
     */
     com::sun::star::ui::XAcceleratorConfiguration createShortCutManager();
 };

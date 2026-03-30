@@ -30,13 +30,9 @@ published service Annotation
      */
     [property]string Author;
     /** contains the initials of the author of the annotation.
-
-        @since LibreOffice 4.0
      */
     [optional, property]string Initials;
     /** contains the name of the annotation.
-
-        @since LibreOffice 4.0
      */
     [optional, property]string Name;
     /** contains the annotation's content

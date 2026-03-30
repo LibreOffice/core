@@ -22,8 +22,6 @@
 
 
 /** thrown in case that a certain type name does not exist.
-
-    @since OOo 1.1.2
   */
 published exception NoSuchTypeNameException : com::sun::star::uno::Exception
 {

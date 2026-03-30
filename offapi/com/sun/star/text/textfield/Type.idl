@@ -16,8 +16,6 @@ module com {  module sun {  module star {  module text { module textfield {
  * Right now this only contains the types that are supported by the edit engine,
  * but it should eventually contain all field types that are used across all
  * engines.
- *
- * @since LibreOffice 3.6
  */
 constants Type
 {

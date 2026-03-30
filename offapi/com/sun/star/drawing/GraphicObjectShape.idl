@@ -140,7 +140,6 @@ published service GraphicObjectShape
     [optional, property] boolean SignatureLineIsSigned;
 
     /// Shape as a QR Code
-    /// @since LibreOffice 6.4
     [optional, property] com::sun::star::drawing::BarCode BarCodeProperties;
 };
 

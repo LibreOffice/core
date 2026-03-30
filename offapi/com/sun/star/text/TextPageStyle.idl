@@ -70,8 +70,6 @@ published service TextPageStyle
     /** contains the interface to the text of the header of first pages.
 
         @see com::sun::star::text::Text
-
-        @since LibreOffice 4.0
       */
     [optional, property] com::sun::star::text::XText HeaderTextFirst;
 
@@ -100,8 +98,6 @@ published service TextPageStyle
     /** contains the interface to the text of the footer of a first page.
 
         @see com::sun::star::text::Text
-
-        @since LibreOffice 4.0
       */
     [optional, property] com::sun::star::text::XText FooterTextFirst;
 

@@ -61,8 +61,6 @@ published service UnoControlButtonModel
         focus when the user clicks onto it with the mouse.<br/>
         If set to `FALSE`, the focus is preserved when the user operates the button control with
         the mouse.</p>
-
-        @since OOo 2.0
      */
     [optional, property] boolean FocusOnClick;
 
@@ -126,8 +124,6 @@ published service UnoControlButtonModel
             <li>If #Graphic is set, #ImageURL will be reset
             to an empty string.</li>
         </ul></p>
-
-        @since OOo 2.1
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
@@ -138,8 +134,6 @@ published service UnoControlButtonModel
 
 
     /** specifies that the text may be displayed on more than one line.
-
-        @since OOo 2.0
      */
     [optional, property] boolean MultiLine;
 
@@ -160,8 +154,6 @@ published service UnoControlButtonModel
         release the mouse button, and press it again. With this property
         set to `TRUE`, the button is repeatedly pressed while you hold
         down the mouse button.</p>
-
-        @since OOo 2.0
      */
     [optional, property] boolean Repeat;
 
@@ -173,8 +165,6 @@ published service UnoControlButtonModel
         allow to repeatedly trigger this action, without the need to release the
         mouse button and to press it again. The delay between two such triggers
         is specified with this property.</p>
-
-        @since OOo 2.0
      */
     [optional, property] long RepeatDelay;
 
@@ -217,15 +207,11 @@ published service UnoControlButtonModel
 
         <p>The default for this property is `FALSE`, which means the button behaves like a usual
         push button.</p>
-
-        @since OOo 2.0
      */
     [optional, property] boolean Toggle;
 
 
     /** specifies the vertical alignment of the text in the control.
-
-        @since OOo 2.0
      */
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 

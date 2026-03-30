@@ -20,10 +20,6 @@
 module com {  module sun {  module star {  module ui {
 
 
-/**
-
-    @since LibreOffice 4.1
-*/
 service ImageManager : XImageManager;
 
 }; }; }; }; // com.sun.star.ui

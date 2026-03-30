@@ -37,8 +37,6 @@
     xPage.add( xShape )
     next x%
     @endcode
-
-    @since OOo 1.1.2
  */
 published service SpreadsheetDrawPage
 {

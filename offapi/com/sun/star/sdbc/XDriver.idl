@@ -25,8 +25,6 @@
 
 /** is the interface that every driver class must implement.
 
-
-
     <p>
     Each driver should supply a service that implements
     the Driver interface.
@@ -56,8 +54,6 @@ published interface XDriver: com::sun::star::uno::XInterface
         of driver to connect to the given URL.  This will be common, as when
         the driver manager is asked to connect to a given URL it passes
         the URL to each loaded driver in turn.
-
-
 
         <p>
         The driver should raise a

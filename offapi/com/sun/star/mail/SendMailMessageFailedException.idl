@@ -26,8 +26,6 @@ module com { module sun { module star { module mail {
    to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>.
 
    @see com::sun::star::mail::XMailService
-
-   @since OOo 2.0
  */
 exception SendMailMessageFailedException: com::sun::star::mail::MailException
 {

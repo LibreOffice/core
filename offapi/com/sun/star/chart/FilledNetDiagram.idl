@@ -22,7 +22,7 @@
  module com {  module sun {  module star {  module chart {
 
 
-/** specifies filled net diagrams. @since OOo 3.2
+/** specifies filled net diagrams.
 
     <p>Net diagrams are also known as radar diagrams.</p>
  */

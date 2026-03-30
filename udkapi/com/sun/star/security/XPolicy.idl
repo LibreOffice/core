@@ -24,8 +24,6 @@ module com {  module sun {  module star {  module security {
     the default permissions if no user is given.
 
     @see com::sun::star::security::Policy
-
-    @since OOo 1.1.2
 */
 published interface XPolicy : com::sun::star::uno::XInterface
 {

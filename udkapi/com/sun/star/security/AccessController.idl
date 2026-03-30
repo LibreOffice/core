@@ -33,8 +33,6 @@ module com {  module sun {  module star {  module security {
     Also, it obviously has also to be ensured that the object is process-local
     to assure that permission checks are not corrupted via insecure inter-process
     communication.
-
-    @since OOo 1.1.2
 */
 published service AccessController : XAccessController;
 

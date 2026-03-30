@@ -17,7 +17,6 @@ module chart2
 {
 
 /** Describes a data table for a Diagram.
-    @since LibreOffice 7.5
  */
 service DataTable
 {

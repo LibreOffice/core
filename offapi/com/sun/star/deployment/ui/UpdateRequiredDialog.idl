@@ -21,8 +21,6 @@
 module com { module sun { module star { module deployment { module ui {
 
 /** The UpdateRequiredDialog is used to show a list of extensions not compatible with this office version.
-
-    @since OOo 3.2
 */
 service UpdateRequiredDialog : com::sun::star::ui::dialogs::XExecutableDialog
 {

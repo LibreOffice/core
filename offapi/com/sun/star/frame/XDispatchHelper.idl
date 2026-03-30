@@ -23,8 +23,6 @@
 /** provides an easy way to dispatch functions useful at UI level.
 
     @see XDispatch
-
-    @since OOo 1.1.2
  */
 published interface XDispatchHelper : com::sun::star::uno::XInterface
 {

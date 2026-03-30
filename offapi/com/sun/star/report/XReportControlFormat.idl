@@ -117,8 +117,6 @@ interface XReportControlFormat
     };
 
     /** If this optional property is `TRUE`, then the characters are invisible.
-
-        @since OOo 2.0
      */
     [attribute,bound] boolean CharHidden
     {
@@ -221,8 +219,6 @@ interface XReportControlFormat
     };
 
     /** This attribute specifies the name of the font style.
-
-
 
         <p>It may contain more than one name separated by comma.</p>
      */

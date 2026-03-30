@@ -25,7 +25,6 @@ module com {  module sun {  module star {  module text {
 published service BaseFrameProperties
 {
     /** gives access to the UserDefinedAttributes property.
-        @since  OOo 2.1
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
@@ -258,8 +257,6 @@ published service BaseFrameProperties
         <p>The value of this property is only evaluated for the positioning
         of the shape, if the text document setting ConsiderTextWrapOnObjPos
         is `TRUE`. Valid values are given by #WrapInfluenceOnPosition</p>
-
-        @since OOo 2.0
      */
     [optional, property] short WrapInfluenceOnPosition;
 
@@ -269,8 +266,6 @@ published service BaseFrameProperties
         the  layouting for the frame needs to be finished but the whole
         document needs to be formatted as well. Thus if that was not done
         previously it may take some while to retrieve this value.</p>
-
-        @since OOo 2.0.4
      */
     [optional, property, maybevoid] com::sun::star::awt::Size LayoutSize;
 
@@ -278,8 +273,6 @@ published service BaseFrameProperties
 
             <p>This short title is visible as an alternative tag in HTML format.
             Accessibility tools can read this text.</p>
-
-            @since OOo 3.2
         */
         [optional, property] string Title;
 
@@ -288,27 +281,19 @@ published service BaseFrameProperties
             <p>The long description text can be entered to describe an object in
             more detail to users with screen reader software. The description is
             visible as an alternative tag for accessibility tools.</p>
-
-            @since OOo 3.2
         */
         [optional, property] string Description;
         /** This enumeration selects the style the area will be filled with.
 
             <p>Currently only set for gradients.</p>
-
-            @since LibreOffice 4.1
         */
         [optional, property] com::sun::star::drawing::FillStyle FillStyle;
         /** If the property #FillStyle is set to
             FillStyle::GRADIENT, this describes the gradient used.
-
-            @since LibreOffice 4.1
         */
         [optional, property] com::sun::star::awt::Gradient FillGradient;
         /** If the property #FillStyle is set to
             FillStyle::GRADIENT, this is the name of the gradient used.
-
-            @since LibreOffice 4.1
         */
         [optional, property] string FillGradientName;
 
@@ -316,14 +301,10 @@ published service BaseFrameProperties
 
             <p>This is the same as setting the Color member of the
             #ShadowFormat property to an ARGB color.</p>
-
-            @since LibreOffice 4.2
          */
         [optional, property] short ShadowTransparence;
 
         /** Grab bag of frame properties, used as a string-any map for interim interop purposes.
-
-            @since LibreOffice 4.2
 
             <p>This property is intentionally not handled by the ODF filter. Any
             member that should be handled there should be first moved out from this grab
@@ -335,7 +316,6 @@ published service BaseFrameProperties
             <p> It is only valid if RelativeHeight is greater than zero.</p>
 
             @see com::sun::star::text::RelOrientation
-            @since LibreOffice 4.3
          */
         [optional, property] short RelativeHeightRelation;
 
@@ -343,24 +323,18 @@ published service BaseFrameProperties
             <p> It is only valid if RelativeWidth is greater than zero.</p>
 
             @see com::sun::star::text::RelOrientation
-            @since LibreOffice 4.3
          */
         [optional, property] short RelativeWidthRelation;
 
     /** contains the graphic for the background.
-
-        @since LibreOffice 6.1
     */
     [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 
     /** This defines if the frame is allowed to overlap with other anchored objects.
-        @since LibreOffice 6.4
     */
     [optional, property] boolean AllowOverlap;
 
     /** Contains popup text for the frame, used to for tooltip purposes if it's non-empty.
-
-        @since LibreOffice 7.4
     */
     [optional, property] string Tooltip;
 
@@ -368,20 +342,14 @@ published service BaseFrameProperties
 
         If `TRUE`, it is considered not part of the document content,
         and may be ignored by assistive technologies.
-
-        @since LibreOffice 7.5
     */
     [optional, property] boolean Decorative;
 
     /** If `TRUE`, the frame is allowed to be split at page breaks.
-
-        @since LibreOffice 7.6
      */
     [optional, property] boolean IsSplitAllowed;
 
     /** If `TRUE`, text wraps around a split fly on all pages.
-
-        @since LibreOffice 24.2
      */
     [optional, property] boolean WrapTextAtFlyStart;
 

@@ -10,7 +10,6 @@
 module com { module sun { module star { module xml { module crypto {
 
 /** Constants to identify Key Derivation Function
-    @since LibreOffice 24.2
  */
 constants KDFID
 {

@@ -36,8 +36,6 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     and `long` is important. Therefore the Scode is
     declared as struct.
     </p>
-
-    @since OOo 1.1.2
  */
 
 

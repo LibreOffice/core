@@ -21,8 +21,6 @@
 module com { module sun { module star { module linguistic2 {
 
 /** specifies the conversion dictionary type to be used with XConversionDictionary.
-
-     @since OOo 1.1.2
 */
 constants ConversionDictionaryType
 {
@@ -31,8 +29,6 @@ constants ConversionDictionaryType
     const short HANGUL_HANJA        = 1;
 
     /** Dictionary type for the conversion between Simplified and Traditional Chinese
-
-        @since OOo 2.0
     */
     const short SCHINESE_TCHINESE   = 2;
 };

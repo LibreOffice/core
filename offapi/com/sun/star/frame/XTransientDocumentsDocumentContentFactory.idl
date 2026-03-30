@@ -26,8 +26,6 @@ module com { module sun { module star { module frame {
      @version  1.0
      @see      com::sun::star::document::OfficeDocument
      @see      com::sun::star::ucb::TransientDocumentsDocumentContent
-
-     @since OOo 2.0
 */
 interface XTransientDocumentsDocumentContentFactory : com::sun::star::uno::XInterface
 {

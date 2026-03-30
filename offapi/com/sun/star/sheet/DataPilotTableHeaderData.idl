@@ -34,8 +34,6 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::DataPilotTablePositionType
     @see com::sun::star::sheet::DataPilotFieldFilter
     @see com::sun::star::sheet::DataResult
-
-    @since OOo 3.0
  */
 struct DataPilotTableHeaderData
 {

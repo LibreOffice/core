@@ -33,8 +33,6 @@ module com { module sun { module star { module configuration { module backend {
   @see com::sun::star::util::XTimeStamped
   @see com::sun::star::configuration::backend::XSchemaSupplier
   @see com::sun::star::configuration::backend::XSingleLayerStratum
-
-  @since OOo 1.1.2
 */
 published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
 {
@@ -42,7 +40,6 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
     /**
       identifies the layers within this stratum which should be read and
       merged to determine data of a component for an entity
-
 
       @param aComponent
                 The name of the component to access.

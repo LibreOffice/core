@@ -24,8 +24,6 @@ module com { module sun { module star { module frame {
 /** provides function to update a menu bar for inplace editing.
 
     @deprecated
-
-    @since OOo 2.0
 */
 
 interface XMenuBarAcceptor : com::sun::star::uno::XInterface

@@ -22,8 +22,6 @@ module com { module sun { module star { module sdb {
 
 /**
     This interface could be incomplete since I derived it from its places of use.
-
-    @since LibreOffice 4.1
 */
 service OrderDialog : com::sun::star::ui::dialogs::XExecutableDialog
 {

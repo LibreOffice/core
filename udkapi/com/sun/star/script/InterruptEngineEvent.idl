@@ -45,8 +45,6 @@ published struct InterruptEngineEvent: com::sun::star::lang::EventObject
     /** contains the first line in the module's source code that is affected
         by the event that took place.
 
-
-
         <p>If "name" addresses a function, all line and column values
         are nevertheless given relative to the module's source. If
         source code is not available, this value addresses a binary

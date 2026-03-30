@@ -25,8 +25,6 @@ interface XPackage;
    indicates that a function call with the given arguments is not supported
    because the extension was removed. XPackage::isRemoved() will
    return true on that object.
-
-   @since OOo 3.3
 */
 exception ExtensionRemovedException: com::sun::star::uno::Exception {
 

@@ -27,8 +27,6 @@ module backend {
     <p> Any future attempts to access data from the backend through this object
         will also fail.
     </p>
-
-    @since OOo 1.1.2
   */
 published exception ConnectionLostException : BackendAccessException {
 } ;

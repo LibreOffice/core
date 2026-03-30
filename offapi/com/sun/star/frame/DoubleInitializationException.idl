@@ -22,8 +22,6 @@
  module com {  module sun {  module star {  module frame {
 
 /** This exception can be thrown in case an object is initialized second time.
-
-    @since OOo 1.1.2
  */
 published exception DoubleInitializationException: com::sun::star::uno::Exception
 {

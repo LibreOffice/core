@@ -45,8 +45,6 @@ interface XPolyPolygon2D;
     Depending on the underlying font technology, actual device output
     might be off by up to one device pixel from the transformed
     metrics.<p>
-
-    @since OOo 2.0
  */
 interface XTextLayout : ::com::sun::star::uno::XInterface
 {
@@ -162,8 +160,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         positions per character.
 
         @see XTextLayout::applyKashidaPositions)
-
-        @since LibreOffice 7.6
      */
     sequence<boolean>            queryKashidaPositions();
 
@@ -183,8 +179,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         @throws com::sun::star::lang::IllegalArgumentException
         if the size of aPositions is not zero and does not match the number of
         characters in the text.
-
-        @since LibreOffice 7.6
      */
     void                        applyKashidaPositions( [in] sequence< boolean > aPositions )
         raises (com::sun::star::lang::IllegalArgumentException);

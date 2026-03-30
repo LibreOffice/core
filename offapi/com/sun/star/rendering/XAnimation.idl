@@ -31,8 +31,6 @@ module com { module sun { module star { module rendering {
     This interface must be implemented by every animation object. It
     is used by the XCanvas interface to render generic
     animations.<p>
-
-    @since OOo 2.0
  */
 interface XAnimation : ::com::sun::star::uno::XInterface
 {

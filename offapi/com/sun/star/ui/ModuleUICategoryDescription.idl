@@ -30,8 +30,6 @@ module com { module sun { module star { module ui {
     commands that are part of a single OpenOffice.org module, like Writer
     or Calc.
     </p>
-
-    @since OOo 2.0
 */
 
 service ModuleUICategoryDescription

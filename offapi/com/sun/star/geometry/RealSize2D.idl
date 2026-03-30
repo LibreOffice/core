@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module geometry {
 /** This structure contains data representing a two-dimensional size.<p>
 
     The data is stored real-valued.<p>
-
-    @since OOo 2.0
  */
 struct RealSize2D
 {

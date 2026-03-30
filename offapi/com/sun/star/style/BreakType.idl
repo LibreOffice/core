@@ -32,16 +32,12 @@ published enum BreakType
 
     /** A column break is applied before the object to which it belongs.
 
-
-
         <p>This implies that the object to which it belongs is the
         first in its column.</p>
      */
     COLUMN_BEFORE,
 
     /** A column break is applied after the object to which it belongs.
-
-
 
         <p>This implies that the object to which it belongs is the last
         in its column.</p>
@@ -51,15 +47,11 @@ published enum BreakType
     /** A column break is applied before and after the object to which
         it belongs.
 
-
-
         <p>This implies that this object is the only one in its column.</p>
      */
     COLUMN_BOTH,
 
     /** A page break is applied before the object to which it belongs.
-
-
 
         <p>This implies that the object to which it belongs is the
         first on its page.      </p>
@@ -68,8 +60,6 @@ published enum BreakType
 
     /** A page break is applied after the object to which it belongs.
 
-
-
         <p>This implies that the object to which it belongs is the last
         on its page.</p>
      */
@@ -77,8 +67,6 @@ published enum BreakType
 
     /** A page break is applied before and after the object to which
         it belongs.
-
-
 
         <p>This implies that this object is the only one on its page.</p>
      */

@@ -28,8 +28,6 @@ module com { module sun { module star { module sdb { module application {
 
     @see com::sun::star::frame::Controller
     @see com::sun::star::sdb::DatabaseDocument
-
-    @since OOo 2.2
  */
 interface XDatabaseDocumentUI
 {
@@ -89,8 +87,6 @@ interface XDatabaseDocumentUI
         <p>The components here might either be documents (com::sun::star::frame::XModel),
         controllers (com::sun::star::frame::XController), or frames
         (com::sun::star::frame::XFrame).
-
-        @since OOo 3.0
     */
     [attribute, readonly] sequence< ::com::sun::star::lang::XComponent >
             SubComponents;
@@ -137,8 +133,6 @@ interface XDatabaseDocumentUI
 
         @return
             `TRUE` if and only if both suspending and closing all sub components succeeds.
-
-        @since OOo 3.0
     */
     boolean closeSubComponents();
 
@@ -271,7 +265,6 @@ interface XDatabaseDocumentUI
 
         <p>In opposite to createComponent(), this method allows you to specify
         additional arguments which are passed to the to-be-loaded component.</p>
-
 
         @param ObjectType
             specifies the type of the object, must be one of the DatabaseObject

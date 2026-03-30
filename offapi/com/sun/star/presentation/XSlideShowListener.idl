@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module presentation {
 /** Listener interface to receive global slide show events.<p>
 
     @see XShapeEventListener
-
-    @since OOo 3.0
  */
 interface XSlideShowListener : ::com::sun::star::animations::XAnimationListener
 {

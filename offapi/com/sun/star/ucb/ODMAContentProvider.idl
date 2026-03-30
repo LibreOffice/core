@@ -25,12 +25,9 @@ module com { module sun { module star { module ucb {
 
     <p>It provides access to a document structure stored on a Document Management System (DMS).</p>
 
-
     @see com::sun::star::ucb::ContentProvider
     @see com::sun::star::ucb::Content
     @see com::sun::star::ucb::ODMAContent
-
-    @since OOo 1.1.2
 */
 published service ODMAContentProvider
 {
@@ -46,8 +43,6 @@ published service ODMAContentProvider
             of this folder. The OCP Root Folder can only contain OCP Documents.
             It has the URL <code><b>vnd.sun.star.odma:/</b></code>.</p>
         </ol>
-
-
 
         <p><b>URL Scheme for OCP Contents</b>
         <p>Each OCP content has an identifier corresponding to the following

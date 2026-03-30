@@ -20,9 +20,6 @@
 
 module com {  module sun {  module star {  module frame {
 
-/**
-  @since LibreOffice 4.1
-*/
 published interface XDesktop2
 {
     /** provides access to dispatchers for the frame.

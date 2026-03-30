@@ -24,8 +24,6 @@ module backend {
   Generic exception thrown when physical access to an underlying
   backend fails.
   <p>Wraps an exception that originates in the underlying access layer.</p>
-
-    @since OOo 1.1.2
   */
 published exception BackendAccessException : ::com::sun::star::lang::WrappedTargetException {
 } ;

@@ -21,9 +21,6 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/**
-    @since LibreOffice 4.1
-*/
 published interface XGraphicExportFilter
 {
     /** calling com::sun::star::document::XFilter::filter()

@@ -24,8 +24,6 @@ module com {  module sun {  module star {  module i18n {
 
 /** Input check mode constants to use with
     XInputSequenceChecker::checkInputSequence()
-
-     @since OOo 1.1.2
 */
 
 published constants InputSequenceCheckMode

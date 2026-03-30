@@ -35,8 +35,6 @@ interface XPropertyControl;
 
     @see XPropertyHandler::describePropertyLine
     @see PropertyLineElement
-
-    @since OOo 2.0.3
 */
 struct LineDescriptor
 {

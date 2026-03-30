@@ -29,8 +29,6 @@ module com { module sun { module star { module ui {
     user interface elements. This service provides access to the user interface commands
     that are part of a single OpenOffice.org module, like Writer or Calc.
     </p>
-
-    @since OOo 2.0
 */
 
 service ModuleUICommandDescription

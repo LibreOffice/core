@@ -22,8 +22,6 @@
 
 /**
     Unified interface for LayoutManager service.
-
-    @since LibreOffice 4.2
 */
 interface XLayoutManager2
 {

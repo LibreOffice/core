@@ -41,8 +41,6 @@
         <li>boolean <code>PreserveContentSize</code>: When true, the outer window is resized the content/document size is preserved</li>
     </ul>
     </p>
-
-    @since OOo 2.0
 */
 
 service LayoutManager : XLayoutManager2;

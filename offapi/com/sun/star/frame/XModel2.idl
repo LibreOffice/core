@@ -125,8 +125,6 @@ interface XModel2 : com::sun::star::frame::XModel
     /** Sets com::sun::star::document::MediaDescriptor properties
         of the current model during runtime.
 
-        @since LibreOffice 6.3
-
         @param Arguments
             Properties which should be set
             Supported properties:

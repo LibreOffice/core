@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module sdb { module tools {
 /** allows to access the active connection
 
     @see com::sun::star::sdbcx::XConnection
-
-    @since OOo 3.3
 */
 interface XConnectionSupplier
 {

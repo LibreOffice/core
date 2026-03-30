@@ -37,18 +37,13 @@ published service Diagram
     interface com::sun::star::chart::XDiagram;
 
     /** Provides easier access to the different axes and their sub elements.
-        @since OOo 3.4
     */
     [optional] interface com::sun::star::chart::XAxisSupplier;
 
     /** Provides access to the titles of the secondary X axis and Y axis.
-        @since OOo 3.0
      */
     [optional] interface com::sun::star::chart::XSecondAxisTitleSupplier;
 
-    /**
-    @since OOo 3.3
-     */
     [optional] interface com::sun::star::chart::XDiagramPositioning;
 
 
@@ -72,8 +67,6 @@ published service Diagram
     /** If a Diagram may be stored as XML file, this
         service should be supported in order to preserve unparsed XML
         attributes.
-
-    @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 

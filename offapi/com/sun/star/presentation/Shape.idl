@@ -24,7 +24,6 @@
 
 /** this service is supported from all shapes inside a PresentationDocument.
 
-
     This usually enhances objects of type com::sun::star::drawing::Shape with
     presentation properties.
 */
@@ -131,8 +130,6 @@ published service Shape
     /** Determines if the shape has custom placeholder text.
 
         This is the custom placeholder text for Presentation objects.
-
-        @since LibreOffice 26.2
     */
     [optional, property] string CustomPromptText;
 

@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module inspection {
 interface XPropertyControlContext;
 
 /** defines the interface for a single control in an ObjectInspector
-
-    @since OOo 2.0.3
 */
 interface XPropertyControl
 {

@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module security {
 
 /** Service for getting sets of permissions reading from some persistent
     storage.
-
-    @since OOo 1.1.2
 */
 published service Policy : XPolicy;
 

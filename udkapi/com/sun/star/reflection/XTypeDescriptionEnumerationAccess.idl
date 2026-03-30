@@ -23,8 +23,6 @@
 
 /** Defines an interface for creating enumerations for type descriptions.
 
-    @since OOo 1.1.2
-
   */
 published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XInterface
 {

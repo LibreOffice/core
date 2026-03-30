@@ -32,8 +32,6 @@ module com { module sun { module star { module accessibility {
     combines methods from the Java interfaces
     <code>javax.accessibility.AccessibleComponent</code> and
     <code>javax.accessibility.AccessibleExtendedComponent</code>.</p>
-
-    @since OOo 1.1.2
 */
 interface XAccessibleExtendedComponent : XAccessibleComponent
 {

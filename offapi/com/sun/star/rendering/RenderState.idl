@@ -27,8 +27,6 @@ interface XPolyPolygon2D;
     This structure contains information considered as the render
     state, i.e. the common setup required to render each individual
     XCanvas primitive.<p>
-
-    @since OOo 2.0
  */
 struct RenderState
 {

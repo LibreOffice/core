@@ -22,8 +22,6 @@ module com {  module sun {  module star {  module inspection {
 interface XPropertyControl;
 
 /** a factory for XPropertyControls
-
-    @since OOo 2.0.3
 */
 interface XPropertyControlFactory
 {

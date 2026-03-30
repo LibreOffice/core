@@ -21,8 +21,6 @@ module com {  module sun {  module star {  module xml { module dom {
 
 /**
   Provides a unified interface for the SAXDocumentBuilder service to implement.
-
-  @since LibreOffice 4.0
 */
 interface XSAXDocumentBuilder2
 {

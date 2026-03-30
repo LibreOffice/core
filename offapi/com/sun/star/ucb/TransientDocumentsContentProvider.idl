@@ -40,8 +40,6 @@ module com { module sun { module star { module ucb {
     @see TransientDocumentsDocumentContent
     @see TransientDocumentsFolderContent
     @see TransientDocumentsStreamContent
-
-    @since OOo 2.0
 */
 service TransientDocumentsContentProvider
 {

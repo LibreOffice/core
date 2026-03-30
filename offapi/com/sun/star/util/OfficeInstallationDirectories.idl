@@ -33,7 +33,6 @@ module com {  module sun {  module star {  module  util {
     possibility to share one office user data directory among parallel office
     installations.
 
-    @since OOo 2.0
     @deprecated rather use the singleton theOfficeInstallationDirectories
  */
 published service OfficeInstallationDirectories {

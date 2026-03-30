@@ -22,8 +22,6 @@
 
 
 /** allows converting between different measurement units
-
-    @since OOo 3.0
  */
 interface XUnitConversion: com::sun::star::uno::XInterface
 {

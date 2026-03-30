@@ -11,8 +11,6 @@
 module com {  module sun {  module star {  module util {
 
 /** represents a combined time value with time zone.
-
-    @since LibreOffice 4.1
  */
 struct TimeWithTimezone
 {

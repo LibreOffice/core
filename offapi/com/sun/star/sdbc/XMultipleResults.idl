@@ -25,7 +25,6 @@
 /** is used for inspecting multiple results produced by the execution of a
     SQL statement.
 
-
     <p>
     Under some (uncommon) situations a single SQL statement may return
     multiple result sets and/or update counts.  Normally you can ignore
@@ -58,7 +57,6 @@ published interface XMultipleResults: com::sun::star::uno::XInterface
     XResultSet getResultSet() raises (SQLException);
 
     /** returns the current result as an update count.
-
 
         <p>
         If the result is a ResultSet or there are no more results, -1

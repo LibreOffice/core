@@ -28,8 +28,6 @@ module com { module sun { module star { module linguistic2 {
     conversion at all. It might also support other linguistic functions of
     a given language, for example, spelling out years, gender and formal
     variants or complex affixation of number names, or article selection.</p>
-
-    @since LibreOffice 6.1
  */
 
     service NumberText:XNumberText;

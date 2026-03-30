@@ -54,8 +54,6 @@ module com {  module sun {  module star {  module geometry {
     render something onto a physical output device, like a screen or a
     printer, Then, the total transformation matrix and the device
     resolution determine the actual measurement unit.<p>
-
-    @since OOo 2.0
  */
 struct AffineMatrix2D
 {

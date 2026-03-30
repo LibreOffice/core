@@ -29,8 +29,6 @@ module com {  module sun {  module star {  module ui {
     You could have a menu or a toolbar working with the same UIElementSettings
     although limitations based on the real user interface element may be visible.
     </p>
-
-    @since OOo 2.0
 */
 service UIElementSettings
 {

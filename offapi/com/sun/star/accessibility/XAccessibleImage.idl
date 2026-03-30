@@ -25,8 +25,6 @@ module com { module sun { module star { module accessibility {
     buttons.  The corresponding interface of the Java Accessibility API is
     AccessibleIcon.  This interface lets you retrieve an image's size and
     description.</p>
-
-    @since OOo 1.1.2
 */
 interface XAccessibleImage : ::com::sun::star::uno::XInterface
 {

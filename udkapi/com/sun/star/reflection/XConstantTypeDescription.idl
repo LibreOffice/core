@@ -31,8 +31,6 @@
     @see XModuleTypeDescription
     @see XConstantsTypeDescription
 
-    @since OOo 1.1.2
-
   */
 published interface XConstantTypeDescription : com::sun::star::reflection::XTypeDescription
 {

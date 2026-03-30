@@ -13,8 +13,6 @@
 /** provides SQL ROWID value which is a built-in type, a value of which can be thought of as an address for its identified row in a database table.
     Whether that address is logical or, in any respects, physical is determined by its originating data source
     for the releasing of resources acquired by the implementing object.
-
-    @since LibreOffice 25.8
  */
 interface XRowId
 {

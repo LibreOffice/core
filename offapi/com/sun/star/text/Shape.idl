@@ -132,8 +132,6 @@ published service Shape
             <p>The value of this property is only evaluated for the positioning
             of the shape, if the text document setting ConsiderTextWrapOnObjPos
             is `TRUE`. Valid values are given by #WrapInfluenceOnPosition</p>
-
-            @since OOo 2.0
          */
         [optional, property] short WrapInfluenceOnPosition;
 
@@ -144,16 +142,12 @@ published service Shape
         file format to the OpenOffice.org file format. It provides the
         transformation property of the included service com::sun::star::drawing::Shape
         converted to the horizontal left-to-right layout.</p>
-
-        @since OOo 2.0
     */
     [optional, readonly, property] com::sun::star::drawing::HomogenMatrix3 TransformationInHoriL2R;
     /** determines layout direction the position attributes of the shape
         is given
 
         <p>Valid values are given by #PositionLayoutDir</p>
-
-        @since OOo 2.0
      */
     [optional, property] short PositionLayoutDir;
     /** determines the start position of the shape in horizontal left-to-right
@@ -163,8 +157,6 @@ published service Shape
         file format to the OpenOffice.org file format. It provides the
         start position property of the included service com::sun::star::drawing::Shape
         converted to the horizontal left-to-right layout.</p>
-
-        @since OOo 2.0
     */
     [optional, readonly, property] com::sun::star::awt::Point StartPositionInHoriL2R;
     /** determines the end position of the shape in horizontal left-to-right
@@ -174,13 +166,10 @@ published service Shape
         file format to the OpenOffice.org file format. It provides the
         end position property of the included service com::sun::star::drawing::Shape
         converted to the horizontal left-to-right layout.</p>
-
-        @since OOo 2.0
     */
     [optional, readonly, property] com::sun::star::awt::Point EndPositionInHoriL2R;
 
     /** This defines if the shape is allowed to overlap with other anchored objects.
-        @since LibreOffice 6.4
     */
     [optional, property] boolean AllowOverlap;
 };

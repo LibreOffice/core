@@ -20,9 +20,6 @@
 
  module com {  module sun {  module star {  module task {
 
-/**
-    @since LibreOffice 4.1
- */
 service StatusIndicatorFactory : XStatusIndicatorFactory
 {
     createWithFrame( [in] com::sun::star::frame::XFrame Frame, [in] boolean DisableReschedule, [in] boolean AllowParentShow );

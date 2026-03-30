@@ -31,8 +31,6 @@ module com { module sun { module star { module awt {
 
     @see com::sun::star::accessibility::AccessibleContext
     @see com::sun::star::accessibility::XAccessibleComponent
-
-    @since OOo 1.1.2
 */
 service AccessibleIconChoiceControl
 {
