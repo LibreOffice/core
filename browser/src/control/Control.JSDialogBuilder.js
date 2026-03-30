@@ -1443,6 +1443,8 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			let tooltip = builder._cleanText(data.tooltip) || builder._cleanText(data.text);
 			if (data.command && (!tooltip || !tooltip.includes('('))) // Add shortcut to tooltip based on command
 				tooltip = JSDialog.ShortcutsUtil.getShortcut(tooltip, data.command);
+			else if (tooltip)
+				tooltip = JSDialog.ShortcutsUtil.localizeModifiers(tooltip);
 			div.setAttribute('data-cooltip', tooltip);
 			enabledTooltip = tooltip;
 

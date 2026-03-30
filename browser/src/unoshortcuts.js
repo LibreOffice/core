@@ -109,3 +109,16 @@ var unoShortcutsMap = {
 	'.uno:ZoomMinus': 'Ctrl+Shift+PageDown',
 	'.uno:ZoomPlus': 'Ctrl+Shift+PageUp',
 };
+
+var unoShortcutsModifierL10N = {
+	ca: { Shift: 'Maj' },
+	de: { Ctrl: 'Strg', Shift: 'Umschalt' },
+	es: { Shift: 'Mayús' },
+	fr: { Shift: 'Maj' },
+	it: { Shift: 'Maiusc' },
+	lt: { Ctrl: 'Vald', Shift: 'Lyg2' },
+	nb: { Shift: 'Skift' },
+	nn: { Shift: 'Skift' },
+	sl: { Ctrl: 'Krmilka', Shift: 'Dvigalka', Alt: 'Izmenjalka' },
+	sv: { Shift: 'Skift' },
+};

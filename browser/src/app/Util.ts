@@ -11,6 +11,7 @@
  */
 
 declare var brandProductFAQURL: string | undefined;
+declare var unoShortcutsModifierL10N: any;
 
 interface IDAble {
 	_leaflet_id: number;
@@ -237,27 +238,28 @@ class Util {
 	}
 
 	public static replaceCtrlAltInMac(msg: string): string {
-		if (window.L.Browser.mac) {
-			var ctrl = /Ctrl/g;
-			var alt = /Alt/g;
-			const CustomString = String as any;
-			if (
-				CustomString.locale.startsWith('de') ||
-				CustomString.locale.startsWith('dsb') ||
-				CustomString.locale.startsWith('hsb')
-			) {
-				ctrl = /Strg/g;
+		if (!window.L.Browser.mac) return msg;
+
+		// Find the localized modifier names for the current language
+		// from the generated unoShortcutsModifierL10N table.
+		let ctrlName = 'Ctrl';
+		let altName = 'Alt';
+		if (typeof unoShortcutsModifierL10N !== 'undefined') {
+			for (const [lang, replacements] of Object.entries(
+				unoShortcutsModifierL10N,
+			)) {
+				if ((String as any).locale.startsWith(lang)) {
+					const r = replacements as Record<string, string>;
+					if (r['Ctrl']) ctrlName = r['Ctrl'];
+					if (r['Alt']) altName = r['Alt'];
+					break;
+				}
 			}
-			if (CustomString.locale.startsWith('lt')) {
-				ctrl = /Vald/g;
-			}
-			if (CustomString.locale.startsWith('sl')) {
-				ctrl = /Krmilka/gi;
-				alt = /Izmenjalka/gi;
-			}
-			return msg.replace(ctrl, '⌘').replace(alt, '⌥');
 		}
-		return msg;
+
+		return msg
+			.replace(new RegExp(ctrlName, 'gi'), '\u2318')
+			.replace(new RegExp(altName, 'gi'), '\u2325');
 	}
 
 	public static randomString(len: number): string {

@@ -18,6 +18,7 @@
 
 declare var JSDialog: any;
 declare var unoShortcutsMap: any;
+declare var unoShortcutsModifierL10N: any;
 
 // Non-UNO IDs that share a shortcut with a UNO command.
 const UNO_ALIASES: Record<string, string> = {
@@ -70,27 +71,29 @@ class ShortcutsUtil {
 	 * @param {string} shortcut - The shortcut to localize.
 	 * @returns {string} - The localized text with the shortcut.
 	 */
+	public localizeModifiers(text: string): string {
+		if (typeof unoShortcutsModifierL10N !== 'undefined') {
+			for (const [lang, replacements] of Object.entries(
+				unoShortcutsModifierL10N,
+			)) {
+				if (String.locale.startsWith(lang)) {
+					for (const [eng, loc] of Object.entries(
+						replacements as Record<string, string>,
+					)) {
+						text = text.replace(eng, loc as string);
+					}
+					break;
+				}
+			}
+		}
+		return text;
+	}
+
 	public getShortcut(text: string, command: string): string {
 		let shortcut = this.shortcutMap.get(command);
 		if (!shortcut) return text;
 
-		// localize shortcut
-		if (
-			String.locale.startsWith('de') ||
-			String.locale.startsWith('dsb') ||
-			String.locale.startsWith('hsb')
-		) {
-			shortcut = shortcut.replace('Ctrl', 'Strg');
-		}
-		if (String.locale.startsWith('lt')) {
-			shortcut = shortcut.replace('Ctrl', 'Vald');
-		}
-		if (String.locale.startsWith('sl')) {
-			shortcut = shortcut
-				.replace('Ctrl', 'Krmilka')
-				.replace('Alt', 'izmenjalka')
-				.replace('Shift', 'dvigalka');
-		}
+		shortcut = this.localizeModifiers(shortcut);
 
 		var newText =
 			_(text).replace('~', '') +
