@@ -134,13 +134,18 @@ void SheetDataContext::onEndElement()
         // a) need to set format first
         // :/
         case XML_normal:
-            setCellFormula( maCellData.maCellAddr, maFormulaStr );
-            mrSheetData.setCellFormat( maCellData );
+            if (!maFormulaStr.isEmpty())
+            {
+                setCellFormula(maCellData.maCellAddr, maFormulaStr);
+                mrSheetData.setCellFormat(maCellData);
 
-            // If a number cell has some preloaded value, stick it into the buffer
-            // but do this only for real cell formulas (not array, shared etc.)
-            if (!maCellValue.isEmpty())
-                setCellFormulaValue(maCellData.maCellAddr, maCellValue, maCellData.mnCellType);
+                // If a number cell has some preloaded value, stick it into the buffer
+                // but do this only for real cell formulas (not array, shared etc.)
+                if (!maCellValue.isEmpty())
+                    setCellFormulaValue(maCellData.maCellAddr, maCellValue, maCellData.mnCellType);
+            }
+            else
+                mbHasFormula = false;
             break;
 
         case XML_shared:
