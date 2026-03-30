@@ -84,7 +84,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 {
     friend class SvxRulerItem;
 
-    std::vector<std::unique_ptr<SvxRulerItem> > pCtrlItems;
+    std::vector<std::unique_ptr<SvxRulerItem> > m_pCtrlItems;
 
     std::unique_ptr<SvxLongLRSpaceItem> mxLRSpaceItem;    // left and right edge
     std::unique_ptr<SfxRectangleItem>   mxMinMaxItem;     // maxima for dragging
@@ -96,35 +96,35 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     std::unique_ptr<SvxColumnItem>      mxColumnItem;     // columns
     std::unique_ptr<SvxObjectItem>      mxObjectItem;     // object
 
-    VclPtr<vcl::Window>         pEditWin;
+    VclPtr<vcl::Window>         m_pEditWin;
 
     std::unique_ptr<SvxRuler_Impl> mxRulerImpl;
 
-    bool            bAppSetNullOffset :1;
-    bool            bHorz :1;
-    tools::Long            lLogicNullOffset;     // in logic coordinates
-    tools::Long            lAppNullOffset;       // in logic coordinates
-    tools::Long            lInitialDragPos;
-    SvxRulerSupportFlags nFlags;
-    SvxRulerDragFlags    nDragType;
-    sal_uInt16      nDefTabType;
-    sal_uInt16      nTabCount;
-    sal_uInt16      nTabBufSize;
-    tools::Long            lDefTabDist;
-    tools::Long            lTabPos;
+    bool            m_bAppSetNullOffset :1;
+    bool            m_bHorz :1;
+    tools::Long            m_lLogicNullOffset;     // in logic coordinates
+    tools::Long            m_lAppNullOffset;       // in logic coordinates
+    tools::Long            m_lInitialDragPos;
+    SvxRulerSupportFlags m_nFlags;
+    SvxRulerDragFlags    m_nDragType;
+    sal_uInt16      m_nDefTabType;
+    sal_uInt16      m_nTabCount;
+    sal_uInt16      m_nTabBufSize;
+    tools::Long            m_lDefTabDist;
+    tools::Long            m_lTabPos;
 
     std::vector<RulerTab>    mpTabs;    // tab positions in pixel
     std::vector<RulerIndent> mpIndents; // paragraph margins in pixel
     std::vector<RulerBorder> mpBorders;
     std::vector<RulerBorder> mpObjectBorders;
 
-    SfxBindings*    pBindings;
-    tools::Long            nDragOffset;
-    tools::Long            nMaxLeft;
-    tools::Long            nMaxRight;
-    bool            bValid;
-    bool            bListening;
-    bool            bActive;
+    SfxBindings*    m_pBindings;
+    tools::Long            m_nDragOffset;
+    tools::Long            m_nMaxLeft;
+    tools::Long            m_nMaxRight;
+    bool            m_bValid;
+    bool            m_bListening;
+    bool            m_bActive;
 
     bool mbCoarseSnapping;
     bool mbSnapping;
@@ -232,7 +232,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     void UpdateParaContents_Impl(tools::Long lDiff, UpdateType);
 
 protected:
-    bool isHorizontal() { return bHorz; }
+    bool isHorizontal() { return m_bHorz; }
 
     virtual void    Command( const CommandEvent& rCEvt ) override;
     virtual void    Click() override;
