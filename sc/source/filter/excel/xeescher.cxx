@@ -1712,8 +1712,11 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
                 if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ) )
                 {
                     lcl_GetFromTo( rRoot, pCaption->GetLogicRect(), maScPos.Tab(), maCommentFrom, maCommentTo );
-                    if( const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-                        mnObjId = rRoot.GetObjectManager().AddObj( std::make_unique<XclObjComment>( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible, maScPos, maCommentFrom, maCommentTo ) );
+                    const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject();
+                    const EditTextObject* pEditObj = pOPO ? &pOPO->GetTextObject() : nullptr;
+                    mnObjId = rRoot.GetObjectManager().AddObj(std::make_unique<XclObjComment>(
+                        rRoot.GetObjectManager(), pCaption->GetLogicRect(), pEditObj, pCaption,
+                        mbVisible, maScPos, maCommentFrom, maCommentTo));
 
                     SfxItemSet aItemSet = pCaption->GetMergedItemSet();
                     meTVA       = pCaption->GetTextVerticalAdjust();

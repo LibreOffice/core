@@ -180,7 +180,7 @@ class XclObjComment : public XclObj
 
 public:
                                 XclObjComment( XclExpObjectManager& rObjMgr,
-                                    const tools::Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, const tools::Rectangle &rFrom, const tools::Rectangle &To );
+                                    const tools::Rectangle& rRect, const EditTextObject* pEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, const tools::Rectangle &rFrom, const tools::Rectangle &To );
     virtual                     ~XclObjComment() override;
 
     /** c'tor process for formatted text objects above .
