@@ -53,6 +53,13 @@ struct ResolvedColor
     model::ComplexColor maComplexColor;
 };
 
+struct FontData
+{
+    bool bBold = false;
+    ::Color maColor;
+    model::ComplexColor maComplexColor;
+};
+
 /// Build a ComplexColor from OOXML theme index + tint and resolve it.
 /// Tint conversion replicates addExcelTintTransformation() from oox/source/drawingml/color.cxx.
 ///
@@ -68,12 +75,10 @@ ResolvedColor resolveThemeColor(const model::ColorSet& rColorSet, const ThemeCol
            && rThemeColor.nThemeId < static_cast<int>(std::size(aOoxmlIndexToThemeType)));
     model::ThemeColorType eType = aOoxmlIndexToThemeType[rThemeColor.nThemeId];
 
-    // Build the ComplexColor for storage (used for theme-aware round-tripping)
     model::ComplexColor aComplexColor;
     aComplexColor.setThemeColor(eType);
 
     double fTint = rThemeColor.fTint;
-    // OOXML scale: 100'000 = 100% (used for ComplexColor transforms)
     sal_Int32 nLumModOox = 100'000;
     sal_Int32 nLumOffOox = 0;
 
@@ -108,7 +113,6 @@ ResolvedColor resolveThemeColor(const model::ColorSet& rColorSet, const ThemeCol
 
 // Use the exact same path as the oox filter: create a BorderLine2 and call
 // SvxBoxItem::LineToSvxLine(). This guarantees identical SvxBorderLine results.
-
 void setBorderLine(editeng::SvxBorderLine& rLine, const ResolvedColor& rColor,
                    BorderElementStyle eStyle)
 {
@@ -143,38 +147,44 @@ void setBorderLine(editeng::SvxBorderLine& rLine, const ResolvedColor& rColor,
     rLine.setComplexColor(rColor.maComplexColor);
 }
 
-} // end anonymous namespace
-
-void ScTableStyleGenerator::generateDefaultStyles(ScDocument& rDoc,
-                                                  const model::ColorSet& rColorSet)
+std::vector<ResolvedColor> resolveColors(const model::ColorSet& rColorSet)
 {
-    // Clear existing OOXML default styles before regeneration
-    ScTableStyles* pTableStyles = rDoc.GetTableStyles();
-    if (!pTableStyles)
-        return;
-
-    pTableStyles->ClearOOXMLDefaultStyles();
-
-    // Step 1: Resolve all theme colors
     size_t nColors = std::size(aThemeColors);
     std::vector<ResolvedColor> aColors(nColors);
     for (size_t i = 0; i < nColors; ++i)
         aColors[i] = resolveThemeColor(rColorSet, aThemeColors[i]);
+    return aColors;
+}
 
-    // Step 2: Build fill items (SvxBrushItem)
+std::vector<SvxBrushItem> buildFills(const std::vector<ResolvedColor>& rColors)
+{
     size_t nFills = std::size(aFills);
-    std::vector<SvxBrushItem> aFillItems(nFills, SvxBrushItem(ATTR_BACKGROUND));
+    std::vector<SvxBrushItem> aFillItems;
+    aFillItems.reserve(nFills);
     for (size_t i = 0; i < nFills; ++i)
     {
+        aFillItems.emplace_back(ATTR_BACKGROUND);
         const ::Fill& rFill = aFills[i];
-        aFillItems[i].SetColor(aColors[rFill.nFgColorId].maColor);
-        aFillItems[i].setComplexColor(aColors[rFill.nFgColorId].maComplexColor);
+        aFillItems[i].SetColor(rColors[rFill.nFgColorId].maColor);
+        aFillItems[i].setComplexColor(rColors[rFill.nFgColorId].maComplexColor);
+    }
+    return aFillItems;
+}
+
+void buildBorders(const std::vector<ResolvedColor>& rColors, std::vector<SvxBoxItem>& rBoxItems,
+                  std::vector<SvxBoxInfoItem>& rBoxInfoItems)
+{
+    size_t nBorders = std::size(aBorders);
+    rBoxItems.clear();
+    rBoxItems.reserve(nBorders);
+    rBoxInfoItems.clear();
+    rBoxInfoItems.reserve(nBorders);
+    for (size_t i = 0; i < nBorders; ++i)
+    {
+        rBoxItems.emplace_back(ATTR_BORDER);
+        rBoxInfoItems.emplace_back(ATTR_BORDER_INNER);
     }
 
-    // Step 3: Build border items (SvxBoxItem + SvxBoxInfoItem)
-    size_t nBorders = std::size(aBorders);
-    std::vector<SvxBoxItem> aBoxItems(nBorders, SvxBoxItem(ATTR_BORDER));
-    std::vector<SvxBoxInfoItem> aBoxInfoItems(nBorders, SvxBoxInfoItem(ATTR_BORDER_INNER));
     for (size_t i = 0; i < nBorders; ++i)
     {
         const ::Border& rBorder = aBorders[i];
@@ -183,59 +193,62 @@ void ScTableStyleGenerator::generateDefaultStyles(ScDocument& rDoc,
         if (rBorder.nTopId >= 0)
         {
             const BorderElement& rElem = aBorderElements[rBorder.nTopId];
-            setBorderLine(aLine, aColors[rElem.nColorId], rElem.eBorderStyle);
-            aBoxItems[i].SetLine(&aLine, SvxBoxItemLine::TOP);
+            setBorderLine(aLine, rColors[rElem.nColorId], rElem.eBorderStyle);
+            rBoxItems[i].SetLine(&aLine, SvxBoxItemLine::TOP);
         }
         if (rBorder.nBottomId >= 0)
         {
             const BorderElement& rElem = aBorderElements[rBorder.nBottomId];
-            setBorderLine(aLine, aColors[rElem.nColorId], rElem.eBorderStyle);
-            aBoxItems[i].SetLine(&aLine, SvxBoxItemLine::BOTTOM);
+            setBorderLine(aLine, rColors[rElem.nColorId], rElem.eBorderStyle);
+            rBoxItems[i].SetLine(&aLine, SvxBoxItemLine::BOTTOM);
         }
         if (rBorder.nLeftId >= 0)
         {
             const BorderElement& rElem = aBorderElements[rBorder.nLeftId];
-            setBorderLine(aLine, aColors[rElem.nColorId], rElem.eBorderStyle);
-            aBoxItems[i].SetLine(&aLine, SvxBoxItemLine::LEFT);
+            setBorderLine(aLine, rColors[rElem.nColorId], rElem.eBorderStyle);
+            rBoxItems[i].SetLine(&aLine, SvxBoxItemLine::LEFT);
         }
         if (rBorder.nRightId >= 0)
         {
             const BorderElement& rElem = aBorderElements[rBorder.nRightId];
-            setBorderLine(aLine, aColors[rElem.nColorId], rElem.eBorderStyle);
-            aBoxItems[i].SetLine(&aLine, SvxBoxItemLine::RIGHT);
+            setBorderLine(aLine, rColors[rElem.nColorId], rElem.eBorderStyle);
+            rBoxItems[i].SetLine(&aLine, SvxBoxItemLine::RIGHT);
         }
         if (rBorder.nVerticalId >= 0)
         {
             const BorderElement& rElem = aBorderElements[rBorder.nVerticalId];
-            setBorderLine(aLine, aColors[rElem.nColorId], rElem.eBorderStyle);
-            aBoxInfoItems[i].SetLine(&aLine, SvxBoxInfoItemLine::VERT);
+            setBorderLine(aLine, rColors[rElem.nColorId], rElem.eBorderStyle);
+            rBoxInfoItems[i].SetLine(&aLine, SvxBoxInfoItemLine::VERT);
         }
         if (rBorder.nHorizontalId >= 0)
         {
             const BorderElement& rElem = aBorderElements[rBorder.nHorizontalId];
-            setBorderLine(aLine, aColors[rElem.nColorId], rElem.eBorderStyle);
-            aBoxInfoItems[i].SetLine(&aLine, SvxBoxInfoItemLine::HORI);
+            setBorderLine(aLine, rColors[rElem.nColorId], rElem.eBorderStyle);
+            rBoxInfoItems[i].SetLine(&aLine, SvxBoxInfoItemLine::HORI);
         }
     }
+}
 
-    // Step 4: Build font data (bold + color)
+std::vector<FontData> buildFonts(const std::vector<ResolvedColor>& rColors)
+{
     size_t nFonts = std::size(aFonts);
-    struct FontData
-    {
-        bool bBold;
-        ::Color maColor;
-        model::ComplexColor maComplexColor;
-    };
     std::vector<FontData> aFontData(nFonts);
     for (size_t i = 0; i < nFonts; ++i)
     {
         const ::Font& rFont = aFonts[i];
         aFontData[i].bBold = rFont.bBold;
-        aFontData[i].maColor = aColors[rFont.nThemeColorId].maColor;
-        aFontData[i].maComplexColor = aColors[rFont.nThemeColorId].maComplexColor;
+        aFontData[i].maColor = rColors[rFont.nThemeColorId].maColor;
+        aFontData[i].maComplexColor = rColors[rFont.nThemeColorId].maComplexColor;
     }
+    return aFontData;
+}
 
-    // Step 5: Build DXF patterns (ScPatternAttr)
+std::vector<std::unique_ptr<ScPatternAttr>>
+buildDxfPatterns(ScDocument& rDoc, const std::vector<SvxBrushItem>& rFillItems,
+                 const std::vector<SvxBoxItem>& rBoxItems,
+                 const std::vector<SvxBoxInfoItem>& rBoxInfoItems,
+                 const std::vector<FontData>& rFontData)
+{
     size_t nDxfs = std::size(aDxfs);
     std::vector<std::unique_ptr<ScPatternAttr>> aDxfPatterns(nDxfs);
     for (size_t i = 0; i < nDxfs; ++i)
@@ -245,21 +258,19 @@ void ScTableStyleGenerator::generateDefaultStyles(ScDocument& rDoc,
         SfxItemSet& rItemSet = pPattern->GetItemSetWritable();
 
         if (rDxf.nFillId >= 0)
-            rItemSet.Put(aFillItems[rDxf.nFillId]);
+            rItemSet.Put(rFillItems[rDxf.nFillId]);
 
         if (rDxf.nBorderId >= 0)
         {
-            const SvxBoxItem& rBox = aBoxItems[rDxf.nBorderId];
+            const SvxBoxItem& rBox = rBoxItems[rDxf.nBorderId];
             bool bHasOuter
                 = rBox.GetLine(SvxBoxItemLine::TOP) || rBox.GetLine(SvxBoxItemLine::BOTTOM)
                   || rBox.GetLine(SvxBoxItemLine::LEFT) || rBox.GetLine(SvxBoxItemLine::RIGHT);
 
-            // Only put SvxBoxItem if it has outer lines (matching filter behavior)
             if (bHasOuter)
                 rItemSet.Put(rBox);
 
-            // Only put SvxBoxInfoItem if it has vertical or horizontal lines
-            const SvxBoxInfoItem& rInfo = aBoxInfoItems[rDxf.nBorderId];
+            const SvxBoxInfoItem& rInfo = rBoxInfoItems[rDxf.nBorderId];
             if (rInfo.GetVert() || rInfo.GetHori())
             {
                 rItemSet.Put(rInfo);
@@ -268,7 +279,7 @@ void ScTableStyleGenerator::generateDefaultStyles(ScDocument& rDoc,
 
         if (rDxf.nFontId >= 0)
         {
-            const FontData& rFontInfo = aFontData[rDxf.nFontId];
+            const FontData& rFontInfo = rFontData[rDxf.nFontId];
             if (rFontInfo.bBold)
             {
                 SvxWeightItem aWeight(WEIGHT_BOLD, ATTR_FONT_WEIGHT);
@@ -282,8 +293,12 @@ void ScTableStyleGenerator::generateDefaultStyles(ScDocument& rDoc,
 
         aDxfPatterns[i] = std::move(pPattern);
     }
+    return aDxfPatterns;
+}
 
-    // Step 6: Assemble table styles
+void assembleTableStyles(ScTableStyles& rTableStyles,
+                         const std::vector<std::unique_ptr<ScPatternAttr>>& rDxfPatterns)
+{
     size_t nTableStyles = std::size(aTableStyles);
     for (size_t i = 0; i < nTableStyles; ++i)
     {
@@ -296,15 +311,48 @@ void ScTableStyleGenerator::generateDefaultStyles(ScDocument& rDoc,
         {
             const ::TableStyleElement& rElem
                 = aTableStyleElements[rStyleInfo.pTableStyleElementIds[j]];
-            if (aDxfPatterns[rElem.nDxfId])
+            if (rDxfPatterns[rElem.nDxfId])
             {
-                auto pPatternCopy = std::make_unique<ScPatternAttr>(*aDxfPatterns[rElem.nDxfId]);
+                auto pPatternCopy = std::make_unique<ScPatternAttr>(*rDxfPatterns[rElem.nDxfId]);
                 pStyle->SetPattern(rElem.eElement, std::move(pPatternCopy));
             }
         }
 
-        pTableStyles->AddTableStyle(std::move(pStyle));
+        rTableStyles.AddTableStyle(std::move(pStyle));
     }
+}
+
+} // end anonymous namespace
+
+void ScTableStyleGenerator::generateDefaultStyles(ScDocument& rDoc,
+                                                  const model::ColorSet& rColorSet)
+{
+    ScTableStyles* pTableStyles = rDoc.GetTableStyles();
+    if (!pTableStyles)
+        return;
+
+    pTableStyles->ClearOOXMLDefaultStyles();
+
+    // Step 1: Resolve all theme colors
+    std::vector<ResolvedColor> aColors = resolveColors(rColorSet);
+
+    // Step 2: Build fill items (SvxBrushItem)
+    std::vector<SvxBrushItem> aFillItems = buildFills(aColors);
+
+    // Step 3: Build border items (SvxBoxItem + SvxBoxInfoItem)
+    std::vector<SvxBoxItem> aBoxItems;
+    std::vector<SvxBoxInfoItem> aBoxInfoItems;
+    buildBorders(aColors, aBoxItems, aBoxInfoItems);
+
+    // Step 4: Build font data (bold + color)
+    std::vector<FontData> aFontData = buildFonts(aColors);
+
+    // Step 5: Build DXF patterns (ScPatternAttr)
+    std::vector<std::unique_ptr<ScPatternAttr>> aDxfPatterns
+        = buildDxfPatterns(rDoc, aFillItems, aBoxItems, aBoxInfoItems, aFontData);
+
+    // Step 6: Assemble table styles
+    assembleTableStyles(*pTableStyles, aDxfPatterns);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
