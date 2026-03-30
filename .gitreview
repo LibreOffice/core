@@ -1,7 +1,0 @@
-[gerrit]
-host=gerrit.libreoffice.org
-port=29418
-project=dictionaries
-defaultremote=logerrit
-defaultbranch=master
-
