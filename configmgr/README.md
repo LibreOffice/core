@@ -79,7 +79,7 @@ for set members, and ignores it everywhere else.
 - Only true sets support mandatory members.  A localized property for the "`*`"
 locale, though acting much like a set, does not support mandatory members.
 
-- The LibreOffice Registry Format document claims that group extension
+- The "LibreOffice Registry Format" document claims that group extension
 properties are implicitly mandatory, but at least the new configmgr code does
 not treat them like that (i.e., they can be removed again).
 

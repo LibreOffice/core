@@ -1,3 +1,3 @@
-# API to Use LibreOffice from Java Applications (OfficeBean)
+# API to Use Collabora Office from Java Applications (OfficeBean)
 
-LibreOffice's API is completely exposed so that all office components can be fully controlled.
+Collabora Office's API is completely exposed so that all office components can be fully controlled.

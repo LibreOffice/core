@@ -1,4 +1,4 @@
- # config variable for LibreOffice
+ # config variable for Collabora Office
  # this file is intended to be able to be included in a Makefile
  # and not to be sourced in a shell session
  #

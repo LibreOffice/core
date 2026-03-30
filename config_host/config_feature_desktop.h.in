@@ -10,8 +10,8 @@
  * or iOS for now. Support for those is work in progress.
  *
  * Non-DESKTOP implies that the OS makes sure that only one instance
- * of each LibreOffice-based "app" at a time can be running, and thus
- * the LibreOffice code does not need to handle such things itself.
+ * of each Collabora Office-based "app" at a time can be running, and thus
+ * the Collabora Office code does not need to handle such things itself.
  *
  * Non-DESKTOP implies no traditional inter-app drag and drop concept.
  *

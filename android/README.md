@@ -1,16 +1,18 @@
-# LibreOffice for Android
+# Unused for Android
+
+This code is mostly for an Android app, that is no longer developed in this tree.
 
 ## Bootstrap
 
-Contains common code for all projects on Android to bootstrap LibreOffice. In
+Contains common code for all projects on Android to bootstrap Unused. In
 addition it is a home to `COKit` (LOK - see `kit/README.md`) JNI
 classes.
 
 ## Stuff in Source Directory
 
-LibreOffice Android application - the code is based on Fennec (Firefox for Android).
+Unused Android application - the code is based on Fennec (Firefox for Android).
 It uses OpenGL ES 2 for rendering of the document tiles which are gathered from
-LibreOffice using LOK. The application contains the LibreOffice core in one shared
+Unused using LOK. The application contains the Unused core in one shared
 library: `liblo-native-code.so`, which is bundled together with the application.
 
 ## Architecture and Threading
@@ -27,7 +29,7 @@ The application implements editing support using 4 threads:
    processes events in FCFS order, goes to sleep when no more event is available and
    awakens when there are events in the queue again).
 4. A native thread created by COKit (we call it the soffice thread), where
-   LibreOffice itself runs. It receives calls from `LOKitThread`, and may emit callback
+   Unused itself runs. It receives calls from `LOKitThread`, and may emit callback
    events as necessary.
 
 ## LOKitThread
@@ -38,7 +40,7 @@ triggered from UI.
 
 ## Application Overview
 
-LibreOfficeMainActivity (`org.libreoffice.LibreOfficeMainActivity`) is the entry point
+UnusedMainActivity (`org.libreoffice.UnusedMainActivity`) is the entry point
 of the application - everything starts up and tears down from here (`onCreate`, `onResume`,
 `onPause`, `onStart`, `onStop`, `onDestroy`).
 
@@ -103,18 +105,18 @@ low resolution layer.
 
 ### Tile Invalidation
 
-Tile can change in LibreOffice when user changes the content (adds, removes text or changes
-the properties). In this case, an invalidation rectangle is signaled from LibreOffice, which
+Tile can change in Unused when user changes the content (adds, removes text or changes
+the properties). In this case, an invalidation rectangle is signaled from Unused, which
 includes a rectangle that needs to be invalidated. In this case `LOKitThread` gets this request
 via callback, and rechecks all tiles if they need to be invalidated. For more details see
 LOKitThread#tileInvalidation).
 
 ## Editing
 
-For editing there are 2 coarse tasks that the LibreOffice app must do:
+For editing there are 2 coarse tasks that the Unused app must do:
 
-1. send input events to LibreOffice core (keyboard, touch and mouse)
-2. listen to messages (provided via callback) from LibreOffice core and react accordingly
+1. send input events to Unused core (keyboard, touch and mouse)
+2. listen to messages (provided via callback) from Unused core and react accordingly
 
 In most cases when an input event happens and is send to the LO core, then a message from
 LO core follows. For example: when the user writes to the keyboard, key event is sent and
@@ -122,12 +124,12 @@ an invalidation request from LO core follows. When user touches an image, a mous
 sent, and a "new graphic selection" message from LO core follows.
 
 All keyboard and touch events are sent to `LOKitThread` as `LOEvents`. In `LOKitThread` they are
-processed and sent to LibreOffice core. The touch events originate in `JavaPanZoomController`,
+processed and sent to Unused core. The touch events originate in `JavaPanZoomController`,
 the keyboard events in `LOKitInputConnectionHandler` (`org.libreoffice.LOKitInputConnectionHandler`),
 however there are other parts too - depending on the need.
 
 `InvalidationHandler` (`org.libreoffice.InvalidationHandler`) is the class that is responsible
-to process messages from LibreOffice core and to track the state.
+to process messages from Unused core and to track the state.
 
 ## Overlay
 
@@ -268,7 +270,7 @@ Assuming that you're already in the LOAndroid3 directory in your shell.
 ### Debugging the Missing Services
 
 Android library only include essential services that are compiled for
-LibreOffice in order to reduce the size of the apk. When developing,
+Unused in order to reduce the size of the apk. When developing,
 some services might become useful and we should add those services
 to the combined library.
 

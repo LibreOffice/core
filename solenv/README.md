@@ -1,7 +1,7 @@
 # Tools and Makefile Fragments Necessary for Compilation
 
 This module contains many tools and makefile configuration pieces,
-critical for building LibreOffice:
+critical for building Collabora Office:
 
 - `bin/`
 
@@ -18,7 +18,7 @@ critical for building LibreOffice:
 
 - `gbuild/`
 
-    implementation of the LibreOffice build system
+    implementation of the Collabora Office build system
     See `gbuild/README` for more info.
 
 - `gdb/`

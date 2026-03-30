@@ -39,7 +39,7 @@
  * desktop (or server) OS
  *
  * Non-MULTIUSER implies that the OS makes sure that only one
- * LibreOffice-based process at a time can be running that could
+ * Collabora Office-based process at a time can be running that could
  * access the same local documents, and that thus no locking of local
  * documents is needed, and that no "shared documents" in Calc
  * is meaningful.
@@ -64,9 +64,9 @@
 
 #define HAVE_FEATURE_AVAHI 0
 
-/* MACOSX_SANDBOX - whether LibreOffice runs in a macOS sandbox
+/* MACOSX_SANDBOX - whether Collabora Office runs in a macOS sandbox
  *
- * When building LibreOffice for distribution through the Mac App Store,
+ * When building Collabora Office for distribution through the Mac App Store,
  * it must be sandboxed.
  */
 
@@ -74,7 +74,7 @@
 
 /* READONLY_INSTALLSET - whether to treat the installation as read-only
  *
- * Prevents attempts by LibreOffice to write into its installation. That means
+ * Prevents attempts by Collabora Office to write into its installation. That means
  * at least that no "system-wide" extensions can be added, if the location for
  * them is the traditional one right in the middle of the installation.
  * Probably not completely implemented.
