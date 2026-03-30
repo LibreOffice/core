@@ -208,6 +208,17 @@ tools::PolyPolygon getFillPolyPolygon(const ::basegfx::B2DPolyPolygon& rPoly)
     return tools::PolyPolygon(aPoly);
 }
 
+tools::Rectangle getPDFGraphicRect(const basegfx::B2DVector& rTranslate,
+                                   const basegfx::B2DVector& rScale)
+{
+    const basegfx::B2DRange aCurrentRange(rTranslate.getX(), rTranslate.getY(),
+                                          rTranslate.getX() + rScale.getX(),
+                                          rTranslate.getY() + rScale.getY());
+    return tools::Rectangle(
+        sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
+        sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
+}
+
 } // end of anonymous namespace
 
 namespace drawinglayer::processor2d
@@ -495,6 +506,26 @@ void VclMetafileProcessor2D::impEndSvtGraphicStroke(SvtGraphicStroke const* pSvt
         mnSvtGraphicStrokeCount--;
         mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_END"_ostr));
     }
+}
+
+bool VclMetafileProcessor2D::impPDFBeginGroup(const basegfx::B2DHomMatrix& rTransform,
+                                              basegfx::B2DVector& rTranslate,
+                                              basegfx::B2DVector& rScale)
+{
+    static bool bSuppressPDFExtOutDevDataSupport(false); // loplugin:constvars:ignore
+
+    if (mpPDFExtOutDevData && !bSuppressPDFExtOutDevDataSupport)
+    {
+        double fRotate, fShearX;
+        rTransform.decompose(rScale, rTranslate, fRotate, fShearX);
+
+        if (basegfx::fTools::equalZero(fRotate) && (rScale.getX() > 0.0) && (rScale.getY() > 0.0))
+        {
+            mpPDFExtOutDevData->BeginGroup();
+            return true;
+        }
+    }
+    return false;
 }
 
 void VclMetafileProcessor2D::popStructureElement(vcl::pdf::StructElement eElem)
@@ -1078,25 +1109,11 @@ void VclMetafileProcessor2D::processFillGraphicPrimitive2D(
     // as is done in processGraphicPrimitive2D
     bool bUsingPDFExtOutDevData(false);
     basegfx::B2DVector aTranslate, aScale;
-    static bool bSuppressPDFExtOutDevDataSupport(false); // loplugin:constvars:ignore
 
-    if (mpPDFExtOutDevData && !bSuppressPDFExtOutDevDataSupport)
+    if (rFillGraphicPrimitive2D.getFillGraphic().getGraphic().IsGfxLink())
     {
-        const Graphic& rGraphic = rFillGraphicPrimitive2D.getFillGraphic().getGraphic();
-
-        if (rGraphic.IsGfxLink())
-        {
-            const basegfx::B2DHomMatrix& rTransform = rFillGraphicPrimitive2D.getTransformation();
-            double fRotate, fShearX;
-            rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-            if (basegfx::fTools::equalZero(fRotate) && (aScale.getX() > 0.0)
-                && (aScale.getY() > 0.0))
-            {
-                bUsingPDFExtOutDevData = true;
-                mpPDFExtOutDevData->BeginGroup();
-            }
-        }
+        bUsingPDFExtOutDevData
+            = impPDFBeginGroup(rFillGraphicPrimitive2D.getTransformation(), aTranslate, aScale);
     }
 
     // process recursively and add MetaFile comment
@@ -1105,12 +1122,7 @@ void VclMetafileProcessor2D::processFillGraphicPrimitive2D(
     if (!bUsingPDFExtOutDevData)
         return;
 
-    const basegfx::B2DRange aCurrentRange(aTranslate.getX(), aTranslate.getY(),
-                                          aTranslate.getX() + aScale.getX(),
-                                          aTranslate.getY() + aScale.getY());
-    const tools::Rectangle aCurrentRect(
-        sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
-        sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
+    const tools::Rectangle aCurrentRect(getPDFGraphicRect(aTranslate, aScale));
 
     mpPDFExtOutDevData->EndGroup(rFillGraphicPrimitive2D.getFillGraphic().getGraphic(), 0,
                                  aCurrentRect, aCurrentRect);
@@ -1121,31 +1133,15 @@ void VclMetafileProcessor2D::processGraphicPrimitive2D(
 {
     bool bUsingPDFExtOutDevData(false);
     basegfx::B2DVector aTranslate, aScale;
-    static bool bSuppressPDFExtOutDevDataSupport(false); // loplugin:constvars:ignore
 
-    if (mpPDFExtOutDevData && !bSuppressPDFExtOutDevDataSupport)
+    if (rGraphicPrimitive.getGraphicObject().GetGraphic().IsGfxLink())
     {
-        // emulate data handling from UnoControlPDFExportContact, original see
-        // svtools/source/graphic/grfmgr.cxx
-        const Graphic& rGraphic = rGraphicPrimitive.getGraphicObject().GetGraphic();
+        const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
 
-        if (rGraphic.IsGfxLink())
+        if (!rAttr.IsSpecialDrawMode() && !rAttr.IsAdjusted())
         {
-            const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
-
-            if (!rAttr.IsSpecialDrawMode() && !rAttr.IsAdjusted())
-            {
-                const basegfx::B2DHomMatrix& rTransform = rGraphicPrimitive.getTransform();
-                double fRotate, fShearX;
-                rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                if (basegfx::fTools::equalZero(fRotate) && (aScale.getX() > 0.0)
-                    && (aScale.getY() > 0.0))
-                {
-                    bUsingPDFExtOutDevData = true;
-                    mpPDFExtOutDevData->BeginGroup();
-                }
-            }
+            bUsingPDFExtOutDevData
+                = impPDFBeginGroup(rGraphicPrimitive.getTransform(), aTranslate, aScale);
         }
     }
 
@@ -1155,14 +1151,7 @@ void VclMetafileProcessor2D::processGraphicPrimitive2D(
     if (!bUsingPDFExtOutDevData)
         return;
 
-    // emulate data handling from UnoControlPDFExportContact, original see
-    // svtools/source/graphic/grfmgr.cxx
-    const basegfx::B2DRange aCurrentRange(aTranslate.getX(), aTranslate.getY(),
-                                          aTranslate.getX() + aScale.getX(),
-                                          aTranslate.getY() + aScale.getY());
-    const tools::Rectangle aCurrentRect(
-        sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
-        sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
+    const tools::Rectangle aCurrentRect(getPDFGraphicRect(aTranslate, aScale));
     const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
     // fdo#72530 don't pass empty Rectangle to EndGroup
     tools::Rectangle aCropRect(aCurrentRect);
@@ -1195,12 +1184,11 @@ void VclMetafileProcessor2D::processGraphicPrimitive2D(
 
         // calculate crop range and rect
         basegfx::B2DRange aCropRange;
-        aCropRange.expand(
-            aCurrentRange.getMinimum()
-            - basegfx::B2DPoint(rAttr.GetLeftCrop() * fFactorX, rAttr.GetTopCrop() * fFactorY));
-        aCropRange.expand(
-            aCurrentRange.getMaximum()
-            + basegfx::B2DPoint(rAttr.GetRightCrop() * fFactorX, rAttr.GetBottomCrop() * fFactorY));
+        aCropRange.expand(basegfx::B2DPoint(aTranslate.getX() - rAttr.GetLeftCrop() * fFactorX,
+                                            aTranslate.getY() - rAttr.GetTopCrop() * fFactorY));
+        aCropRange.expand(basegfx::B2DPoint(
+            aTranslate.getX() + aScale.getX() + rAttr.GetRightCrop() * fFactorX,
+            aTranslate.getY() + aScale.getY() + rAttr.GetBottomCrop() * fFactorY));
 
         aCropRect = tools::Rectangle(
             sal_Int32(floor(aCropRange.getMinX())), sal_Int32(floor(aCropRange.getMinY())),

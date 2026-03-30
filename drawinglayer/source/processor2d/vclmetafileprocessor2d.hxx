@@ -106,6 +106,8 @@ private:
                                    const attribute::LineStartEndAttribute* pEnd);
     void impStartSvtGraphicStroke(SvtGraphicStroke const* pSvtGraphicStroke);
     void impEndSvtGraphicStroke(SvtGraphicStroke const* pSvtGraphicStroke);
+    bool impPDFBeginGroup(const basegfx::B2DHomMatrix& rTransform, basegfx::B2DVector& rTranslate,
+                          basegfx::B2DVector& rScale);
     void popStructureElement(vcl::pdf::StructElement eElem);
     void popListItem();
     void popList();
