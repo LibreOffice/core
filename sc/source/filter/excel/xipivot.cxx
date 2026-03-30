@@ -411,6 +411,18 @@ void XclImpPCField::ConvertGroupField( ScDPSaveData& rSaveData, const ScfStringV
 
 // private --------------------------------------------------------------------
 
+static OUString lcl_ItemToText( const XclImpPCItem& rItem )
+{
+    const OUString& rText = rItem.ConvertToText();
+    if( !rText.isEmpty() )
+        return rText;
+    if( const double* pVal = rItem.GetDouble() )
+        return OUString::number( *pVal );
+    if( const sal_Int16* pVal = rItem.GetInteger() )
+        return OUString::number( *pVal );
+    return rText;
+}
+
 void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const
 {
     const XclImpPCField* pBaseField = GetGroupBaseField();
@@ -426,7 +438,7 @@ void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStri
     aGroupItems.reserve( maItems.size() );
     // initialize with own item names
     for( const auto& rxItem : maItems )
-        aGroupItems.emplace_back( rxItem->ConvertToText() );
+        aGroupItems.emplace_back(lcl_ItemToText(*rxItem));
 
     // *** iterate over all base items, set their names at corresponding own items ***
     for( sal_uInt16 nItemIdx = 0, nItemCount = static_cast< sal_uInt16 >( maGroupOrder.size() ); nItemIdx < nItemCount; ++nItemIdx )
@@ -434,7 +446,7 @@ void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStri
             if( const XclImpPCItem* pBaseItem = pBaseField->GetItem( nItemIdx ) )
                 if( const XclImpPCItem* pGroupItem = GetItem( maGroupOrder[ nItemIdx ] ) )
                     if( *pBaseItem != *pGroupItem )
-                        aGroupItems[ maGroupOrder[ nItemIdx ] ].AddElement( pBaseItem->ConvertToText() );
+                        aGroupItems[maGroupOrder[nItemIdx]].AddElement(lcl_ItemToText(*pBaseItem));
 
     // *** create the ScDPSaveGroupDimension object, fill with grouping info ***
     ScDPSaveGroupDimension aGroupDim( rBaseFieldName, GetFieldName( rVisNames ) );
