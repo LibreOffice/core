@@ -19,6 +19,9 @@ class ScDocument;
 
 /// Generates the 60 default OOXML table styles from the ECMA-376 spec data,
 /// resolving theme-relative colors against the given ColorSet.
+///
+/// The generation is split internally into discrete steps: resolveColors,
+/// buildFills, buildBorders, buildFonts, buildDxfPatterns, and assembleTableStyles.
 class SC_DLLPUBLIC ScTableStyleGenerator
 {
 public:
