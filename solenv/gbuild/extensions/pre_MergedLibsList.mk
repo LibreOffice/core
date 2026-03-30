@@ -123,7 +123,7 @@ ifneq ($(MERGELIBS_MORE),)
 
 gb_MERGE_LIBRARY_LIST += \
 	$(if $(filter $(OS),WNT), \
-		ado \
+		$(call gb_Helper_optional,DBCONNECTIVITY,ado) \
 	) \
 	analysis \
 	animcore \

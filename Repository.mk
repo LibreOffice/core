@@ -505,7 +505,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	xsltdlg \
 	xsltfilter \
 	$(if $(filter $(OS),WNT), \
-		ado \
+		$(call gb_Helper_optional,DBCONNECTIVITY,ado) \
 		oleautobridge \
 		smplmail \
 		wininetbe1 \
