@@ -88,12 +88,10 @@ enum class SvNumFormatType : sal_Int16
       */
      UNDEFINED = css::util::NumberFormat::UNDEFINED, // 2048
      /** @internal is used to flag an empty sub format.
-         @since LibreOffice 5.1
       */
      EMPTY = css::util::NumberFormat::EMPTY, // 4096
     /** @internal selects a time duration format.
         8192 + TIME (4)
-        @since LibreOffice 6.2
      */
      DURATION = css::util::NumberFormat::DURATION, // 8196
 };

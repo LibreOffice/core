@@ -103,8 +103,6 @@ struct AxisIdPair{
  A helper container class to collect the chart data point labels and the address
  of the cell[range] from which the labels are sourced if that is the case. This
  is then used to write the label texts under the extension tag <c15:datalabelsRange>.
-
- @since LibreOffice 7.3.0
  */
 class DataLabelsRange
 {

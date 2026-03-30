@@ -15,8 +15,6 @@ namespace embeddedobj
 {
 /** This class is only used to tell the OCommonEmbeddedObject class
     that the following call is an Link- / Ole-refresh.
-
-    @since LibreOffice 7.4
  */
 class EMBOBJ_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") EmbeddedUpdate
 {

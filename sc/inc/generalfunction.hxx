@@ -83,7 +83,6 @@ enum class ScGeneralFunction
 
     /**
     *   median of all numerical values is calculated.
-    *   @since LibreOffice 5.3
     */
     MEDIAN = css::sheet::GeneralFunction2::MEDIAN
 };
