@@ -741,7 +741,8 @@ EXTRA_DIST = \
              favicon.ico \
              scripts/create-sbom.py \
              scripts/refresh-git-hooks \
-             scripts/unocommands.py
+             scripts/unocommands.py \
+             scripts/unoshortcuts.py
 
 if ENABLE_LIBFUZZER
 CLEANUP_COMMAND=true

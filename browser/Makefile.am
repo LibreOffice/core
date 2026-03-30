@@ -64,6 +64,9 @@ QUIET_STYLELINT_0 = @echo "  STYLELINT" $@;
 QUIET_UNOCOMMANDS = $(QUIET_UNOCOMMANDS_$(V))
 QUIET_UNOCOMMANDS_ = $(QUIET_UNOCOMMANDS_$(AM_DEFAULT_VERBOSITY))
 QUIET_UNOCOMMANDS_0 = @echo "  UNOCOMMANDS " $@;
+QUIET_UNOSHORTCUTS = $(QUIET_UNOSHORTCUTS_$(V))
+QUIET_UNOSHORTCUTS_ = $(QUIET_UNOSHORTCUTS_$(AM_DEFAULT_VERBOSITY))
+QUIET_UNOSHORTCUTS_0 = @echo "  UNOSHORTCUTS " $@;
 
 MOCHA_DIR = $(srcdir)/mocha_tests
 MOCHA_JS_DIR = $(MOCHA_DIR)/workdir
@@ -325,6 +328,7 @@ COOL_JS_LST =\
 	src/Leaflet.js \
 	src/errormessages.js \
 	src/unocommands.js \
+	src/unoshortcuts.js \
 	src/UNO/Key.js \
 	src/core/Util.js \
 	src/core/Class.js \
@@ -949,9 +953,10 @@ $(INTERMEDIATE_DIR)/admin-src.js: $(COOL_ADMIN_TS_JS) $(COOL_ADMIN_JS)
 	$(call run_prettier_check,--debug-check $(srcdir)/admin/src)
 	@awk 'FNR == 1 {print ""} 1' $(COOL_ADMIN_TS_JS) $(patsubst %.js,$(srcdir)/%.js,$(COOL_ADMIN_JS)) > $@
 
-$(INTERMEDIATE_DIR)/cool-src.js: tscompile.done $(call prereq_cool) $(COOL_JS_DST) $(abs_top_srcdir)/scripts/unocommands.py $(srcdir)/cool-src.js.m4
+$(INTERMEDIATE_DIR)/cool-src.js: tscompile.done $(call prereq_cool) $(COOL_JS_DST) $(abs_top_srcdir)/scripts/unocommands.py $(abs_top_srcdir)/scripts/unoshortcuts.py $(srcdir)/cool-src.js.m4
 	@mkdir -p $(dir $@)
 	$(QUIET_UNOCOMMANDS) $(abs_top_srcdir)/scripts/unocommands.py --check $(abs_top_srcdir)
+	$(QUIET_UNOSHORTCUTS) $(abs_top_srcdir)/scripts/unoshortcuts.py --check $(abs_top_srcdir)
 	@printf "Checking for obsolete JS build intermediates in this makefile... "
 	@if ! test "z$(COOL_ASSERT_INTERSECT)" = "z"; then echo; echo "Error: please remove obsolete files:"; echo "$(COOL_ASSERT_INTERSECT)"; exit 1; else echo "clean"; fi
 	$(call run_eslint_check,$(srcdir)/src $(srcdir)/js)
