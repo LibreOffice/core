@@ -18,6 +18,7 @@
 
 declare var JSDialog: any;
 declare var unoShortcutsMap: any;
+declare var unoShortcutsL10N: any;
 declare var unoShortcutsModifierL10N: any;
 
 // Non-UNO IDs that share a shortcut with a UNO command.
@@ -44,6 +45,20 @@ class ShortcutsUtil {
 		if (typeof unoShortcutsMap !== 'undefined') {
 			for (const [command, shortcut] of Object.entries(unoShortcutsMap)) {
 				this.shortcutMap.set(command, shortcut as string);
+			}
+		}
+
+		// Apply per-language shortcut overrides from Accelerators.xcu.
+		// Core defines different key combos per language
+		if (typeof unoShortcutsL10N !== 'undefined') {
+			for (const [lang, overrides] of Object.entries(unoShortcutsL10N)) {
+				if ((String as any).locale.startsWith(lang)) {
+					const o = overrides as Record<string, string>;
+					for (const [command, shortcut] of Object.entries(o)) {
+						this.shortcutMap.set(command, shortcut);
+					}
+					break;
+				}
 			}
 		}
 
