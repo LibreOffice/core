@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <hintids.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
@@ -153,6 +154,8 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
 {
     m_xMenuButton->connect_toggled(LINK(this, SwOutlineTabDialog, FormHdl));
     m_xMenuButton->connect_selected(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
+
+    m_xMenuButton->set_visible(!comphelper::LibreOfficeKit::isActive());
 
     m_xNumRule.reset(new SwNumRule(*rSh.GetOutlineNumRule()));
     GetCancelButton().connect_clicked(LINK(this, SwOutlineTabDialog, CancelHdl));
