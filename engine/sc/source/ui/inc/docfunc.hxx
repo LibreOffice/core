@@ -112,10 +112,10 @@ public:
                                                bool bApi );
 
     bool            SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi );
-    bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
+    SC_DLLPUBLIC bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
     void SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction );
-    bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
-    bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
+    SC_DLLPUBLIC bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
+    SC_DLLPUBLIC bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
 
     bool SetStringOrEditCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
 
@@ -123,7 +123,7 @@ public:
      * Below two methods take ownership of the formula cell instance(s). The caller
      * must not delete it after passing it to this call.
      */
-    bool SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction );
+    SC_DLLPUBLIC bool SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction );
     bool SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells, bool bInteraction );
     void PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi );
     bool SetCellText(

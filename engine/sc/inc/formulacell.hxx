@@ -217,7 +217,7 @@ public:
        formula::FormulaGrammar::GRAM_DEFAULT effectively isformula::FormulaGrammar::GRAM_NATIVE_UI that
         also includes formula::FormulaGrammar::CONV_UNSPECIFIED, therefore uses the address
         convention associated with rPos::nTab by default. */
-    ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos,
+    SC_DLLPUBLIC ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos,
                     const OUString& rFormula,
                     const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                     ScMatrixMode cMatInd = ScMatrixMode::NONE );

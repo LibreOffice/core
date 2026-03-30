@@ -413,6 +413,8 @@ void ScUndoSetCell::Undo()
     if (pChangeTrack)
         pChangeTrack->Undo(mnEndChangeAction, mnEndChangeAction);
 
+    sc::UndoSheetViewSortData::restore(rDocShell, true);
+
     EndUndo();
 }
 
@@ -423,6 +425,9 @@ void ScUndoSetCell::Redo()
     MoveCursorToCell();
     rDocShell.PostPaintCell(maPos);
     SetChangeTrack();
+
+    sc::UndoSheetViewSortData::restore(rDocShell, false);
+
     EndRedo();
 }
 
@@ -496,7 +501,11 @@ void ScUndoSetCell::MoveCursorToCell()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if ( pViewShell )
     {
-        pViewShell->SetTabNo( maPos.Tab() );
+        // Don't switch tabs if the current view is a sheet view for the target tab.
+        SCTAB nCurrentTab = pViewShell->GetViewData().GetTabNumber();
+        ScDocument& rDocument = rDocShell.GetDocument();
+        if (rDocument.GetDefaultViewTableNumber(nCurrentTab) != maPos.Tab())
+            pViewShell->SetTabNo(maPos.Tab());
         pViewShell->MoveCursorAbs( maPos.Col(), maPos.Row(), SC_FOLLOW_JUMP, false, false );
     }
 }

@@ -38,6 +38,9 @@
 #include <SparklineAttributes.hxx>
 #include <SparklineGroup.hxx>
 #include <dpobject.hxx>
+#include <editeng/editobj.hxx>
+#include <editutil.hxx>
+#include <formulacell.hxx>
 #include <operation/DeleteCellsOperation.hxx>
 #include <operation/InsertCellsOperation.hxx>
 #include <operation/ReplacePivotTableOperation.hxx>
@@ -4230,213 +4233,292 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_AutoFilterRangeExpansionFromSheetView)
     // directly below the auto-filter range works as expected on sheet view
     // and is properly synced to the default view. Also check undo and redo
     // works as expected.
+    // Run the same test with different ways to set the cell value to cover
+    // all the paths.
 
-    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
-    ScDocument& rDocument = pDocShell->GetDocument();
-
-    setupViews();
-
-    // Create sheet view and sort descending
+    using SetCellFunc = std::function<void(ScDocShell&, ScDocument&, ScAddress const&,
+                                           ScTabViewShell*, ScModelObj*)>;
+    struct TestCase
     {
-        switchToSheetView();
-        createNewSheetViewInCurrentView();
-        sortDescendingForCell(u"A1");
-    }
+        SetCellFunc maSetCell;
+        bool mbTextCell; // is the cell value text or number
+    };
 
-    // Sort ascending on default view
+    auto aTestCases = std::to_array<TestCase>({
+        // SetNormalStringOperation
+        { [this](ScDocShell&, ScDocument&, ScAddress const& rPos, ScTabViewShell* pTabView,
+                 ScModelObj* pModel) {
+             typeCharsInCell(std::string("6"), rPos.Col(), rPos.Row(), pTabView, pModel);
+         },
+          false },
+        // SetValueOperation
+        { [](ScDocShell& rDocShell, ScDocument&, ScAddress const& rPos, ScTabViewShell*,
+             ScModelObj*) { rDocShell.GetDocFunc().SetValueCell(rPos, 6.0, true); },
+          false },
+        // SetFormulaOperation
+        { [](ScDocShell& rDocShell, ScDocument& rDocument, ScAddress const& rPos, ScTabViewShell*,
+             ScModelObj*) {
+             rDocShell.GetDocFunc().SetFormulaCell(
+                 rPos, new ScFormulaCell(rDocument, rPos, u"=3+3"_ustr), true);
+         },
+          false },
+        // SetStringOperation
+        { [](ScDocShell& rDocShell, ScDocument&, ScAddress const& rPos, ScTabViewShell*,
+             ScModelObj*) { rDocShell.GetDocFunc().SetStringCell(rPos, u"6"_ustr, true); },
+          true },
+        // SetEditTextOperation
+        { [](ScDocShell& rDocShell, ScDocument& rDocument, ScAddress const& rPos, ScTabViewShell*,
+             ScModelObj*) {
+             ScFieldEditEngine& rEE = rDocument.GetEditEngine();
+             rEE.SetTextCurrentDefaults(u"6"_ustr);
+             rDocShell.GetDocFunc().SetEditCell(rPos, *rEE.CreateTextObject(), true);
+         },
+          true },
+    });
+
+    for (auto const& rTestCase : aTestCases)
     {
-        switchToDefaultView();
-        sortAscendingForCell(u"A1");
-    }
+        ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+        pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+        ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+        ScDocument& rDocument = pDocShell->GetDocument();
 
-    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+        setupViews();
 
-    // Initial state - default view ascending, sheet view descending
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
-                         getValues(mpTabViewDefaultView, 0, 1, 4));
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
-                         getValues(mpTabViewSheetView, 0, 1, 4));
+        // Create sheet view and sort descending
+        {
+            switchToSheetView();
+            createNewSheetViewInCurrentView();
+            sortDescendingForCell(u"A1");
+        }
 
-    // Verify auto-filter range is A1:A5
-    ScDBData* pDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
-    CPPUNIT_ASSERT(pDBData);
-    ScRange aDBRange;
-    pDBData->GetArea(aDBRange);
-    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 4, nDefaultViewTab), aDBRange);
+        // Sort ascending on default view
+        {
+            switchToDefaultView();
+            sortAscendingForCell(u"A1");
+        }
 
-    // Get classes for sort data checks
-    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
-    std::shared_ptr<sc::SheetView> pSheetView = rDocument.GetSheetView(nSheetViewTab);
-    CPPUNIT_ASSERT(pSheetView);
-    std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
-    CPPUNIT_ASSERT(pManager);
+        SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
 
-    // Initial sort data
-    CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(1), pSheetView->getSortOrder()->maSortInfo.mnFirstRow);
-    CPPUNIT_ASSERT_EQUAL(SCROW(4), pSheetView->getSortOrder()->maSortInfo.mnLastRow);
-    CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(0), pSheetView->getSortParam()->nRow1);
-    CPPUNIT_ASSERT_EQUAL(SCROW(4), pSheetView->getSortParam()->nRow2);
-    CPPUNIT_ASSERT(pManager->getSortOrder() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(1), pManager->getSortOrder()->maSortInfo.mnFirstRow);
-    CPPUNIT_ASSERT_EQUAL(SCROW(4), pManager->getSortOrder()->maSortInfo.mnLastRow);
+        // Initial state - default view ascending, sheet view descending
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
 
-    // Type a value in A6 on sheet view (below auto-filter range)
-    {
-        switchToSheetView();
-        typeCharsInCell(std::string("6"), 0, 5, mpTabViewSheetView, pModelObj);
-    }
+        // Verify auto-filter range is A1:A5
+        ScDBData* pDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+        CPPUNIT_ASSERT(pDBData);
+        ScRange aDBRange;
+        pDBData->GetArea(aDBRange);
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 4, nDefaultViewTab), aDBRange);
 
-    // DB range expanded to A1:A6
-    pDBData->GetArea(aDBRange);
-    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 5, nDefaultViewTab), aDBRange);
+        // Get classes for sort data checks
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+        std::shared_ptr<sc::SheetView> pSheetView = rDocument.GetSheetView(nSheetViewTab);
+        CPPUNIT_ASSERT(pSheetView);
+        std::shared_ptr<sc::SheetViewManager> pManager
+            = rDocument.GetSheetViewManager(nDefaultViewTab);
+        CPPUNIT_ASSERT(pManager);
 
-    // Default view - ascending sorted with new value
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7", u"6" }),
-                         getValues(mpTabViewDefaultView, 0, 1, 5));
+        // Initial sort data
+        CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(1), pSheetView->getSortOrder()->maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(4), pSheetView->getSortOrder()->maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), pSheetView->getSortParam()->nRow1);
+        CPPUNIT_ASSERT_EQUAL(SCROW(4), pSheetView->getSortParam()->nRow2);
+        CPPUNIT_ASSERT(pManager->getSortOrder() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(1), pManager->getSortOrder()->maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(4), pManager->getSortOrder()->maSortInfo.mnLastRow);
 
-    // Sheet view - descending sorted with new value
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"6", u"5", u"4", u"3" }),
-                         getValues(mpTabViewSheetView, 0, 1, 5));
+        // Set a value in A6 on sheet view (below auto-filter range)
+        {
+            switchToSheetView();
+            ScAddress aCellPos(0, 5, nSheetViewTab);
+            rTestCase.maSetCell(*pDocShell, rDocument, aCellPos, mpTabViewSheetView, pModelObj);
+        }
 
-    // Sort data valid after expansion
-    CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(1), pSheetView->getSortOrder()->maSortInfo.mnFirstRow);
-    CPPUNIT_ASSERT_EQUAL(SCROW(5), pSheetView->getSortOrder()->maSortInfo.mnLastRow);
-    CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(0), pSheetView->getSortParam()->nRow1);
-    CPPUNIT_ASSERT_EQUAL(SCROW(5), pSheetView->getSortParam()->nRow2);
-    CPPUNIT_ASSERT(pManager->getSortOrder() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(1), pManager->getSortOrder()->maSortInfo.mnFirstRow);
-    CPPUNIT_ASSERT_EQUAL(SCROW(5), pManager->getSortOrder()->maSortInfo.mnLastRow);
+        // DB range expanded to A1:A6
+        pDBData->GetArea(aDBRange);
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 5, nDefaultViewTab), aDBRange);
 
-    // Undo the cell edit
-    {
-        switchToSheetView();
-        undo();
-    }
+        // Default view - ascending sorted with new value
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7", u"6" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 5));
 
-    // DB range contracted back to A1:A5
-    pDBData->GetArea(aDBRange);
-    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 4, nDefaultViewTab), aDBRange);
+        // Sheet view - descending sorted with new value
+        // Text cells sort before numbers in descending order
+        if (rTestCase.mbTextCell)
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"6", u"7", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewSheetView, 0, 1, 5));
+        else
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"6", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewSheetView, 0, 1, 5));
 
-    // Default view - back to ascending sorted
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
-                         getValues(mpTabViewDefaultView, 0, 1, 4));
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, rDocument.GetString(ScAddress(0, 5, nDefaultViewTab)));
+        // Sort data valid after expansion
+        CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(1), pSheetView->getSortOrder()->maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), pSheetView->getSortOrder()->maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), pSheetView->getSortParam()->nRow1);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), pSheetView->getSortParam()->nRow2);
+        CPPUNIT_ASSERT(pManager->getSortOrder() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(1), pManager->getSortOrder()->maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), pManager->getSortOrder()->maSortInfo.mnLastRow);
 
-    // Sheet view - back to descending sorted
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
-                         getValues(mpTabViewSheetView, 0, 1, 4));
+        // Undo the cell edit
+        {
+            switchToSheetView();
+            undo();
+        }
 
-    // Sort data preserved after undo
-    CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(1), pSheetView->getSortOrder()->maSortInfo.mnFirstRow);
-    CPPUNIT_ASSERT_EQUAL(SCROW(4), pSheetView->getSortOrder()->maSortInfo.mnLastRow);
-    CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(0), pSheetView->getSortParam()->nRow1);
-    CPPUNIT_ASSERT_EQUAL(SCROW(4), pSheetView->getSortParam()->nRow2);
-    CPPUNIT_ASSERT(pManager->getSortOrder() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(1), pManager->getSortOrder()->maSortInfo.mnFirstRow);
-    CPPUNIT_ASSERT_EQUAL(SCROW(4), pManager->getSortOrder()->maSortInfo.mnLastRow);
+        // DB range contracted back to A1:A5
+        pDBData->GetArea(aDBRange);
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 4, nDefaultViewTab), aDBRange);
 
-    // Redo the cell edit
-    {
-        switchToSheetView();
-        redo();
-    }
+        // Default view - back to ascending sorted
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, rDocument.GetString(ScAddress(0, 5, nDefaultViewTab)));
 
-    // DB range expanded to A1:A6 again
-    pDBData->GetArea(aDBRange);
-    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 5, nDefaultViewTab), aDBRange);
+        // Sheet view - back to descending sorted
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
 
-    // Default view - ascending sorted with new value
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7", u"6" }),
-                         getValues(mpTabViewDefaultView, 0, 1, 5));
+        // Sort data preserved after undo
+        CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(1), pSheetView->getSortOrder()->maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(4), pSheetView->getSortOrder()->maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), pSheetView->getSortParam()->nRow1);
+        CPPUNIT_ASSERT_EQUAL(SCROW(4), pSheetView->getSortParam()->nRow2);
+        CPPUNIT_ASSERT(pManager->getSortOrder() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(1), pManager->getSortOrder()->maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(4), pManager->getSortOrder()->maSortInfo.mnLastRow);
 
-    // Sheet view - descending sorted with new value
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"6", u"5", u"4", u"3" }),
-                         getValues(mpTabViewSheetView, 0, 1, 5));
+        // Redo the cell edit
+        {
+            switchToSheetView();
+            redo();
+        }
 
-    // Sort data preserved after redo
-    CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(1), pSheetView->getSortOrder()->maSortInfo.mnFirstRow);
-    CPPUNIT_ASSERT_EQUAL(SCROW(5), pSheetView->getSortOrder()->maSortInfo.mnLastRow);
-    CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(0), pSheetView->getSortParam()->nRow1);
-    CPPUNIT_ASSERT_EQUAL(SCROW(5), pSheetView->getSortParam()->nRow2);
-    CPPUNIT_ASSERT(pManager->getSortOrder() != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SCROW(1), pManager->getSortOrder()->maSortInfo.mnFirstRow);
-    CPPUNIT_ASSERT_EQUAL(SCROW(5), pManager->getSortOrder()->maSortInfo.mnLastRow);
+        // DB range expanded to A1:A6 again
+        pDBData->GetArea(aDBRange);
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 5, nDefaultViewTab), aDBRange);
 
-    // Sort the default view descending - now covers all 5 rows
-    {
-        switchToDefaultView();
-        sortDescendingForCell(u"A1");
-    }
+        // Default view - ascending sorted with new value
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7", u"6" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 5));
 
-    // Default view - descending sorted with all 5 values
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"6", u"5", u"4", u"3" }),
-                         getValues(mpTabViewDefaultView, 0, 1, 5));
+        // Sheet view - descending sorted with new value
+        if (rTestCase.mbTextCell)
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"6", u"7", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewSheetView, 0, 1, 5));
+        else
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"6", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewSheetView, 0, 1, 5));
 
-    // Sheet view - still descending
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"6", u"5", u"4", u"3" }),
-                         getValues(mpTabViewSheetView, 0, 1, 5));
+        // Sort data preserved after redo
+        CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(1), pSheetView->getSortOrder()->maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), pSheetView->getSortOrder()->maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), pSheetView->getSortParam()->nRow1);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), pSheetView->getSortParam()->nRow2);
+        CPPUNIT_ASSERT(pManager->getSortOrder() != nullptr);
+        CPPUNIT_ASSERT_EQUAL(SCROW(1), pManager->getSortOrder()->maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), pManager->getSortOrder()->maSortInfo.mnLastRow);
 
-    // Edit values one at a time on the default view
+        // Sort the default view descending - now covers all 5 rows
+        {
+            switchToDefaultView();
+            sortDescendingForCell(u"A1");
+        }
 
-    // Edit A2
-    {
-        switchToDefaultView();
-        typeCharsInCell(std::string("77"), 0, 1, mpTabViewDefaultView, pModelObj);
-    }
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"6", u"5", u"4", u"3" }),
-                         getValues(mpTabViewDefaultView, 0, 1, 5));
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"6", u"5", u"4", u"3" }),
-                         getValues(mpTabViewSheetView, 0, 1, 5));
+        // Default view - descending sorted with all 5 values
+        // After re-sorting, text "6" becomes a number via typeCharsInCell overwrite
+        if (rTestCase.mbTextCell)
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"6", u"7", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewDefaultView, 0, 1, 5));
+        else
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"6", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewDefaultView, 0, 1, 5));
 
-    // Edit A3
-    {
-        switchToDefaultView();
-        typeCharsInCell(std::string("66"), 0, 2, mpTabViewDefaultView, pModelObj);
-    }
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"5", u"4", u"3" }),
-                         getValues(mpTabViewDefaultView, 0, 1, 5));
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"5", u"4", u"3" }),
-                         getValues(mpTabViewSheetView, 0, 1, 5));
+        // Sheet view - still descending
+        if (rTestCase.mbTextCell)
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"6", u"7", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewSheetView, 0, 1, 5));
+        else
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"6", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewSheetView, 0, 1, 5));
 
-    // Edit A4
-    {
-        switchToDefaultView();
-        typeCharsInCell(std::string("55"), 0, 3, mpTabViewDefaultView, pModelObj);
-    }
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"4", u"3" }),
-                         getValues(mpTabViewDefaultView, 0, 1, 5));
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"4", u"3" }),
-                         getValues(mpTabViewSheetView, 0, 1, 5));
+        // Edit values one at a time on the default view
 
-    // Edit A5
-    {
-        switchToDefaultView();
-        typeCharsInCell(std::string("44"), 0, 4, mpTabViewDefaultView, pModelObj);
-    }
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"44", u"3" }),
-                         getValues(mpTabViewDefaultView, 0, 1, 5));
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"44", u"3" }),
-                         getValues(mpTabViewSheetView, 0, 1, 5));
+        // Edit A2
+        {
+            switchToDefaultView();
+            typeCharsInCell(std::string("77"), 0, 1, mpTabViewDefaultView, pModelObj);
+        }
+        if (rTestCase.mbTextCell)
+        {
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"7", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewDefaultView, 0, 1, 5));
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"7", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewSheetView, 0, 1, 5));
+        }
+        else
+        {
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"6", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewDefaultView, 0, 1, 5));
+            CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"6", u"5", u"4", u"3" }),
+                                 getValues(mpTabViewSheetView, 0, 1, 5));
+        }
 
-    // Edit A6
-    {
-        switchToDefaultView();
-        typeCharsInCell(std::string("33"), 0, 5, mpTabViewDefaultView, pModelObj);
-    }
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"44", u"33" }),
-                         getValues(mpTabViewDefaultView, 0, 1, 5));
-    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"44", u"33" }),
-                         getValues(mpTabViewSheetView, 0, 1, 5));
+        // Edit A3
+        {
+            switchToDefaultView();
+            typeCharsInCell(std::string("66"), 0, 2, mpTabViewDefaultView, pModelObj);
+        }
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"5", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 5));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"5", u"4", u"3" }),
+                             getValues(mpTabViewSheetView, 0, 1, 5));
+
+        // Edit A4
+        {
+            switchToDefaultView();
+            typeCharsInCell(std::string("55"), 0, 3, mpTabViewDefaultView, pModelObj);
+        }
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 5));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"4", u"3" }),
+                             getValues(mpTabViewSheetView, 0, 1, 5));
+
+        // Edit A5
+        {
+            switchToDefaultView();
+            typeCharsInCell(std::string("44"), 0, 4, mpTabViewDefaultView, pModelObj);
+        }
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"44", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 5));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"44", u"3" }),
+                             getValues(mpTabViewSheetView, 0, 1, 5));
+
+        // Edit A6
+        {
+            switchToDefaultView();
+            typeCharsInCell(std::string("33"), 0, 5, mpTabViewDefaultView, pModelObj);
+        }
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"44", u"33" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 5));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"77", u"66", u"55", u"44", u"33" }),
+                             getValues(mpTabViewSheetView, 0, 1, 5));
+
+        tearDown();
+        setUp();
+
+    } // end for loop
 }
 
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoDeleteCells_SheetViewSortData)
