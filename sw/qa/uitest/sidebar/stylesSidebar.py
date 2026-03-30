@@ -49,20 +49,42 @@ class StylesSidebar(UITestCase):
             expectedResults = ["customParagraphStyle", "customCharacterStyle", "customFrameStyle",
                     "customPageStyle", "customNumberingStyle"]
 
+            self.xUITest.executeCommand(".uno:Sidebar")
+
+            xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "StyleListPanel"}))
+
+            # wait until the template panel is available
+            xTemplatePanel = self.ui_test.wait_until_child_is_available('TemplatePanel')
+
+            # 'left' is the toolbar that contains the style family buttons
+            xLeft = xTemplatePanel.getChild('left')
+
             for i in range(5):
 
-                self.xUITest.executeCommand(".uno:Sidebar")
-                xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "StyleListPanel"}))
-
-                xFilter = xWriterEdit.getChild('filter')
-                select_by_text(xFilter, "Custom Styles")
-
-                xLeft = xWriterEdit.getChild('left')
-
-                #change to another style type
+                # change to another style type (style family)
                 xLeft.executeAction("CLICK", mkPropertyValues({"POS": str( i )}))
 
-                xFlatView = xWriterEdit.getChild("flatview")
+                # open the style filters popover
+                xToolBar = xTemplatePanel.getChild("stylefilterstoolbar")
+                xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"}))
+
+                xFloatWindow = self.xUITest.getFloatWindow()
+                xStyleFiltersPopover = xFloatWindow.getChild("container")
+                xStyleFiltersTreeView = xStyleFiltersPopover.getChild("stylefilterstreeview")
+
+                # click on 'All Styles' entry
+                xEntry = xStyleFiltersTreeView.getChild("0")
+                xEntry.executeAction("CLICK", tuple())
+
+                # click on 'Custom Styles' entry
+                xEntry = xStyleFiltersTreeView.getChild("3")
+                xEntry.executeAction("CLICK", tuple())
+
+                # close the style filters popover
+                xToolBar = xTemplatePanel.getChild("stylefilterstoolbar")
+                xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"}))
+
+                xFlatView = xTemplatePanel.getChild("flatview")
 
                 self.assertEqual(1, len(xFlatView.getChildren()))
 
@@ -70,7 +92,7 @@ class StylesSidebar(UITestCase):
                 self.ui_test.wait_until_property_is_updated(xFlatView, "SelectEntryText", expectedResults[i])
                 self.assertEqual(expectedResults[i], get_state_as_dict(xFlatView)['SelectEntryText'])
 
-                self.xUITest.executeCommand(".uno:Sidebar")
+            self.xUITest.executeCommand(".uno:Sidebar")
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

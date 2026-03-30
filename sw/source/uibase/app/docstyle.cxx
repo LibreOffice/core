@@ -3161,11 +3161,13 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     mxIterSheet->Reset();
 
     const SwDoc& rDoc = static_cast<const SwDocStyleSheetPool*>(pBasePool)->GetDoc();
-    const SfxStyleSearchBits nSrchMask = nMask;
+    SfxStyleSearchBits nSrchMask = nMask;
     const bool bIsSearchUsed = SearchUsed();
 
     bool bSearchHidden( nMask & SfxStyleSearchBits::Hidden );
     bool bOnlyHidden = nMask == SfxStyleSearchBits::Hidden;
+    if (!bOnlyHidden)
+        nSrchMask = nSrchMask & ~SfxStyleSearchBits::Hidden;
     bool bFavourite = nMask == SfxStyleSearchBits::Favourite;
 
     const bool bOrganizer = static_cast<const SwDocStyleSheetPool*>(pBasePool)->IsOrganizerMode();

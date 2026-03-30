@@ -39,6 +39,8 @@
 
 #include <editeng/editids.hrc>
 
+#include <vcl/svapp.hxx>
+
 using namespace css;
 
 namespace svx
@@ -369,7 +371,9 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
         if (oFont)
             mrOutputDev.SetFont(*oFont);
 
-        if (maFontColor != COL_AUTO)
+        if (mpStyle->IsHidden())
+            mrOutputDev.SetTextColor(Application::GetSettings().GetStyleSettings().GetDisableColor());
+        else if (maFontColor != COL_AUTO)
             mrOutputDev.SetTextColor(maFontColor);
         else
         {

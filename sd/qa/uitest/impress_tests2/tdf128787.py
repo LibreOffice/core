@@ -37,8 +37,8 @@ class tdf128787(UITestCase):
             stylename.executeAction("TYPE", mkPropertyValues({"TEXT": "New Style"}))
 
         # make sure filter is set "Hierarchical"' so the 'treeview' tree is used
-        xFilter = xTemplatePanel.getChild('filter')
-        select_by_text(xFilter, "Hierarchical")
+        xItem = xTemplatePanel.getChild("hierarchical")
+        xItem.executeAction("CLICK", tuple())
 
         xTreeView = xTemplatePanel.getChild('treeview')
         # "New Style" should be the first child of the first child in the tree

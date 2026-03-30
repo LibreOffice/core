@@ -434,11 +434,13 @@ struct DoesStyleMatchStyleSheetPredicate final : public svl::StyleSheetPredicate
 
         bool bUsed = mIterator->SearchUsed() && styleSheet.IsUsed( );
 
-        bool bSearchHidden( mIterator->GetSearchMask() & SfxStyleSearchBits::Hidden );
-        bool bMatchVisibility = bSearchHidden || !styleSheet.IsHidden() || bUsed;
+        // bMatchVisibility introduced in commit 2fd9c2bf9af0c50dae3af3dbe5e22965ccdb4ae7
+        // followup commit 1d6b6298199c2809de49f68714834aa94fb0143e
+        //bool bSearchHidden( mIterator->GetSearchMask() & SfxStyleSearchBits::Hidden );
+        //bool bMatchVisibility = bSearchHidden || !styleSheet.IsHidden() || bUsed;
         bool bOnlyHidden = mIterator->GetSearchMask( ) == SfxStyleSearchBits::Hidden && styleSheet.IsHidden( );
 
-        bool bMatches = bMatchFamily && bMatchVisibility
+        bool bMatches = bMatchFamily /*&& bMatchVisibility*/
             && (( styleSheet.GetMask() & ( mIterator->GetSearchMask() & ~SfxStyleSearchBits::Used )) ||
                 bUsed || bOnlyHidden ||
                 ( mIterator->GetSearchMask() & SfxStyleSearchBits::AllVisible ) == SfxStyleSearchBits::AllVisible );

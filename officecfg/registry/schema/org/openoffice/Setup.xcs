@@ -183,7 +183,7 @@
         </info>
         <value>0</value>
       </prop>
-      <prop oor:name="ooSetupFactoryStyleFilter" oor:type="xs:int" oor:nillable="false">
+      <prop oor:name="ooSetupFactoryStyleFilter" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: setup -->
         <info>
           <desc>Specifies the ID of the style filter (Stylist) for the

@@ -38,6 +38,8 @@
 
 #include "StyleList.hxx"
 
+#include <svtools/toolbarmenu.hxx>
+
 class SfxStyleFamilyItem;
 class SfxTemplateItem;
 class SfxBindings;
@@ -58,6 +60,7 @@ protected:
 #define COUNT_BOUND_FUNC        14
 
     friend class SfxTemplateControllerItem;
+    friend class StyleList;
 
     SfxBindings* pBindings;
 
@@ -65,19 +68,27 @@ protected:
     DeletionWatcher* m_pDeletionWatcher;
 
     StyleList m_aStyleList;
+
+    std::unique_ptr<weld::CheckButton> mxHierarchicalCheckbox;
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
     std::unique_ptr<weld::CheckButton> mxSpotlightCheckbox;
-    std::unique_ptr<weld::ComboBox> mxFilterLb;
+    std::unique_ptr<weld::Toolbar> m_xStyleFiltersToolbar;
+    std::unique_ptr<ToolbarPopupContainer> m_xStyleFiltersToolbarPopoverContainer;
 
-    sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
-    sal_uInt16 nActFilter; // FilterIdx
+    struct StyleFiltersToolbarPopup : public WeldToolbarPopup
+    {
+        StyleFiltersToolbarPopup(weld::Toolbar* pParent, StyleList &rStyleList);
+        virtual void GrabFocus() override;
+
+        std::unique_ptr<weld::TreeView> m_xFiltersTreeView;
+        std::unique_ptr<weld::Button> m_xOKButton;
+    };
 
     bool bIsWater :1;
     bool bUpdate :1;
     bool bWaterDisabled :1;
     bool bNewByExampleDisabled :1;
     bool bUpdateByExampleDisabled :1;
-    bool m_bWantHierarchical :1;
 
     Link<void*, size_t> m_aStyleListReadResource;
     Link<void*, void> m_aStyleListClear;
@@ -90,9 +101,11 @@ protected:
     Link<bool, void> m_aStyleListEnableTreeDrag;
     Link<void*, void> m_aStyleListEnableDelete;
     Link<const SfxBoolItem*, void> m_aStyleListSetWaterCanState;
-    Link<sal_uInt16, void> m_aStyleListSetFamily;
 
-    DECL_LINK(FilterSelectHdl, weld::ComboBox&, void );
+    DECL_LINK(FilterToolbarSelectHdl, const OUString&, void);
+    DECL_LINK(FilterToolbarMenuHdl, const OUString&, void);
+    DECL_LINK(FilterToolbarPopupOKButtonHdl, weld::Button&, void);
+    DECL_LINK(HierarchicalHdl, weld::Toggleable&, void);
     DECL_LINK(PreviewHdl, weld::Toggleable&, void);
     DECL_LINK(SpotlightHdl, weld::Toggleable&, void);
 
@@ -102,9 +115,7 @@ protected:
     virtual void ReplaceUpdateButtonByMenu();
 
     void Initialize();
-    void EnableHierarchical(bool, StyleList& rStyleList);
 
-    void FilterSelect( sal_uInt16 nFilterIdx );
     void SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
     void SetWaterCanState( const SfxBoolItem* pItem );
     bool IsSafeForWaterCan() const;
@@ -112,13 +123,12 @@ protected:
     void SetFamily(SfxStyleFamily nFamily);
     void ActionSelect(const OUString& rId, StyleList& rStyleList);
 
-    void SaveFactoryStyleFilter(SfxObjectShell const* i_pObjSh, sal_Int32 i_nFilter);
+    void LoadFactoryStyleFilter(SfxObjectShell* pObjectShell);
+    void SaveFactoryStyleFilter();
 
     DECL_LINK(ReadResource_Hdl, StyleList&, void);
     DECL_LINK(ClearResource_Hdl, void*, void);
     DECL_LINK(SaveSelection_Hdl, StyleList&, SfxObjectShell*);
-    DECL_LINK(LoadFactoryStyleFilter_Hdl, SfxObjectShell const*, sal_Int32);
-    DECL_LINK(UpdateStyles_Hdl, StyleFlags, void);
     DECL_LINK(UpdateFamily_Hdl, StyleList&, void);
     DECL_LINK(UpdateStyleDependents_Hdl, void*, void);
 
@@ -134,9 +144,8 @@ public:
     // This function is used when a newstyle is created
     DECL_LINK(OnAsyncExecuteDrop, void*, void);
 
-    // Used in StyleList::UpdateStyles, StyleList::Update
     // Whenever a new family(Eg. Character, List etc.) is selected it comes into action
-    void FamilySelect(sal_uInt16 nId, StyleList& rStyleList, bool bRefresh = false);
+    void FamilySelect(sal_uInt16 nId, bool bFillTreeView = true);
 
     // Constructor
     SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld::Container*, weld::Builder* pBuilder);
@@ -165,10 +174,9 @@ public:
     virtual bool IsCheckedItem(const OUString& /*rMesId*/) { return true; }
 
     // This is used when a style is selected
-    void SelectStyle(const OUString& rStyle, bool bIsCallback, StyleList& rStyleList);
+    void SelectStyle(const OUString& rStyle);
 
-    //When a new document is created, it comes into action
-    void IsUpdate(StyleList&);
+    void SelectUpdate(const rtl::OUString &rStr);
 
     // This function return the value of bUpdate in Stylelist
     // This value is used in StyleList's Notify
@@ -188,7 +196,6 @@ public:
     void connect_stylelist_enable_tree_drag(const Link<bool, void> rLink);
     void connect_stylelist_enable_delete(const Link<void*, void> rLink);
     void connect_stylelist_set_water_can_state(const Link<const SfxBoolItem*, void> rLink);
-    void connect_set_family(const Link<sal_uInt16, void> rLink) { m_aStyleListSetFamily = rLink; }
 };
 
 class ToolbarDropTarget;
@@ -231,6 +238,12 @@ public:
 
     void Initialize();
 };
+
+namespace SfxTemplate
+{
+sal_uInt16 SfxFamilyIdToNId(SfxStyleFamily nFamily);
+SfxStyleFamily NIdToSfxFamilyId(sal_uInt16 nId);
+}
 
 #endif // INCLUDED_SFX2_SOURCE_INC_TEMPLDGI_HXX
 

@@ -32,24 +32,14 @@
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
+#include <sfx2/module.hxx>
+#include <unordered_map>
+#include <set>
+
 class SfxObjectShell;
 class SfxTemplateItem;
 class SfxCommonTemplateDialog_Impl;
 class SfxTemplateControllerItem;
-
-enum class StyleFlags
-{
-    NONE = 0,
-    UpdateFamilyList = 1,
-    UpdateFamily = 2
-};
-
-namespace o3tl
-{
-template <> struct typed_flags<StyleFlags> : is_typed_flags<StyleFlags, 3>
-{
-};
-}
 
 class TreeViewDropTarget;
 
@@ -60,6 +50,7 @@ class StyleList final : public SfxListener
 {
     friend class TreeViewDropTarget;
     friend class SfxTemplateControllerItem;
+    friend class SfxCommonTemplateDialog_Impl;
 
 public:
     // Constructor
@@ -73,9 +64,7 @@ public:
     void Initialize();
 
     // It selects the style in treeview
-    // bIsCallBack is true for the selected style. For eg. if "Addressee" is selected in
-    // styles, bIsCallBack will be true for it.
-    void SelectStyle(const OUString& rStr, bool bIsCallback);
+    void SelectStyle(std::u16string_view rStr);
     // Checks whether a family has a saved state
     bool CurrentFamilyHasState() { return nullptr != m_pFamilyState[m_nActFamily - 1]; }
 
@@ -90,17 +79,13 @@ public:
     void EnableNewByExample(bool newByExampleDisabled);
 
     // This function is used to set a hierarchical view.
-    void SetHierarchical();
-    // This function handles the controls while setting a filter except hierarchical
-    void SetFilterControlsHandle();
-    // Return whether treeview is visible
-    // It is used in StyleList's UpdateStyles_Hdl
-    // It is used to defaultly set the hierarchical view
-    bool IsTreeView() const { return m_xTreeBox->get_visible(); }
+    void ShowHierarchicalView();
+    // This function hides the hierarchical tree then shows the flat tree.
+    void ShowFlatView();
 
     // Helper function: Access to the current family item
     // Used in Dialog's updateStyleHandler, Execute_Impl etc...
-    const SfxStyleFamilyItem* GetFamilyItem() const;
+    SfxStyleFamilyItem* GetFamilyItem();
     // Used to get the current selected entry in treeview
     // Used in Dialog's Execute_Impl, Action_Select etc...
     OUString GetSelectedEntry() const;
@@ -119,15 +104,14 @@ public:
     // It is a necessary condition to execute a style
     bool EnableExecute();
 
-    void connect_UpdateStyles(const Link<StyleFlags, void>& rLink) { m_aUpdateStyles = rLink; }
+    void ShowPreviews(bool bEnable);
+
     void connect_ReadResource(const Link<StyleList&, void>& rLink) { m_aReadResource = rLink; }
     void connect_ClearResource(const Link<void*, void>& rLink) { m_aClearResource = rLink; }
-    void connect_LoadFactoryStyleFilter(const Link<SfxObjectShell const*, sal_Int32>& rLink);
     void connect_SaveSelection(const Link<StyleList&, SfxObjectShell*> rLink);
     void connect_UpdateFamily(const Link<StyleList&, void> rLink) { m_aUpdateFamily = rLink; }
 
-    void FamilySelect(sal_uInt16 nEntry, bool bRefresh = false);
-    void FilterSelect(sal_uInt16 nActFilter, bool bsetFilter);
+    void FamilySelect(sal_uInt16 nEntry, bool bFillTreeView);
 
     DECL_LINK(NewMenuExecuteAction, void*, void);
     DECL_LINK(OnPopupEnd, const OUString&, void);
@@ -138,15 +122,16 @@ public:
     void SetSpotlightCharStyles(bool bSet) { m_bSpotlightCharStyles = bSet; }
     bool IsSpotlightCharStyles() { return m_bSpotlightCharStyles; }
 
-private:
-    void FillTreeBox(SfxStyleFamily eFam);
+    sal_uInt16 GetActiveFilter();
 
-    void UpdateFamily();
-    void UpdateStyles(StyleFlags nFlags);
+private:
+    void FillHierarchicalTreeView(bool bExpandRootEntries = false);
+    void FillFlatTreeView();
+
+    void SelectUpdate(const OUString& rStr);
 
     OUString getDefaultStyleName(const SfxStyleFamily eFam);
-    SfxStyleFamily GetActualFamily() const;
-    void GetSelectedStyle() const;
+    SfxStyleFamily GetActualFamily();
 
     sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt, const DropTargetHelper& rHelper);
     void DropHdl(const OUString& rStyle, const OUString& rParent);
@@ -173,15 +158,13 @@ private:
     DECL_LINK(EnableTreeDrag, bool, void);
     DECL_LINK(EnableDelete, void*, void);
     DECL_LINK(SetWaterCanState, const SfxBoolItem*, void);
-    DECL_LINK(SetFamily, sal_uInt16, void);
 
     void InvalidateBindings();
 
     void Update();
-    Link<StyleFlags, void> m_aUpdateStyles;
+
     Link<StyleList&, void> m_aReadResource;
     Link<void*, void> m_aClearResource;
-    Link<SfxObjectShell const*, sal_Int32> m_aLoadFactoryStyleFilter;
     Link<StyleList&, SfxObjectShell*> m_aSaveSelection;
     Link<StyleList&, void> m_aUpdateFamily;
 
@@ -190,6 +173,9 @@ private:
     void DeleteHdl();
     void HideHdl();
     void ShowHdl();
+
+    DECL_LINK(ExpandHdl, const weld::TreeIter&, bool);
+    DECL_LINK(CollapseHdl, const weld::TreeIter&, bool);
 
     DECL_LINK(DragBeginHdl, bool&, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
@@ -213,11 +199,10 @@ private:
     bool m_bCanHide : 1;
     bool m_bCanShow : 1;
     bool m_bCanNew : 1;
-    bool m_bUpdateFamily : 1;
     bool m_bCanDel : 1;
     bool m_bBindingUpdate : 1;
     SfxStyleSheetBasePool* m_pStyleSheetPool;
-    sal_uInt16 m_nActFilter;
+
     std::unique_ptr<weld::TreeView> m_xFmtLb;
     std::unique_ptr<weld::TreeView> m_xTreeBox;
 
@@ -228,7 +213,6 @@ private:
     std::array<std::unique_ptr<SfxTemplateItem>, MAX_FAMILIES> m_pFamilyState;
     SfxObjectShell* m_pCurObjShell;
     sal_uInt16 m_nActFamily;
-    SfxStyleSearchBits m_nAppFilter; // Filter, which has set the application (for automatic)
 
     std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;
     std::unique_ptr<TreeViewDropTarget> m_xTreeView2DropTargetHelper;
@@ -247,4 +231,9 @@ private:
     bool m_bModuleHasStylesSpotlightFeature = false;
     bool m_bSpotlightParaStyles = false;
     bool m_bSpotlightCharStyles = false;
+
+    std::unordered_map<SfxStyleFamily, std::set<SfxStyleSearchBits>> m_aFamilySelectedFiltersSet;
+    std::unordered_map<SfxStyleFamily, std::set<OUString>> m_aFamilyExpandedStyleEntriesSet;
+    // used to expand all root level entries on first selection
+    std::set<SfxStyleFamily> m_aFamiliesThatHaveBeenSelectedSet;
 };
