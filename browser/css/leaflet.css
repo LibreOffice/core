@@ -752,14 +752,14 @@ input.clipboard {
 	margin: 0 -1px;
 	height: 100%;
 	text-align: right;
-	background: #18A303;
+	background: #5c3dcc;
 	border: 1px solid;
-	border-color: #106802;
+	border-color: #4422bf #5435c4;
 	border-radius: 10px;
-	background-image: -webkit-linear-gradient(top, #92E285, #43C330 70%, #18A303);
-	background-image: -moz-linear-gradient(top, #92E285, #43C330 70%, #18A303);
-	background-image: -o-linear-gradient(top, #92E285, #43C330 70%, #18A303);
-	background-image: linear-gradient(to bottom, #92E285, #43C330 70%, #18A303);
+	background-image: -webkit-linear-gradient(top, #745dc6, #6549cc 70%, #5c3dcc);
+	background-image: -moz-linear-gradient(top, #745dc6, #6549cc 70%, #5c3dcc);
+	background-image: -o-linear-gradient(top, #745dc6, #6549cc 70%, #5c3dcc);
+	background-image: linear-gradient(to bottom, #745dc6, #6549cc 70%, #5c3dcc);
 	-webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
 	box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
 }
