@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_RTL_STRING_HXX
 #define INCLUDED_RTL_STRING_HXX
 
@@ -84,7 +80,6 @@ namespace rtl
 A wrapper dressing a string literal as a static-refcount rtl_String.
 
 This class is not part of public API and is meant to be used only in LibreOffice code.
-@since LibreOffice 4.0
 */
 template<std::size_t N> class SAL_WARN_UNUSED OStringLiteral {
     static_assert(N != 0);
@@ -242,7 +237,6 @@ public:
       Move constructor.
 
       @param    str         an OString.
-      @since LibreOffice 5.2
     */
 #if !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
     constexpr
@@ -344,8 +338,6 @@ public:
       If there are any embedded \0's in the string literal, the result is undefined.
       Use the overload that explicitly accepts length.
 
-      @since LibreOffice 3.6
-
       @param    literal       a string literal
     */
     template< typename T >
@@ -386,8 +378,6 @@ public:
     /// @cond INTERNAL
     /**
       New string from an 8-Bit string literal.
-
-      @since LibreOffice 7.1
     */
     template<std::size_t N> constexpr OString(OStringLiteral<N> const & literal):
         pData(const_cast<rtl_String *>(&literal.str)) {}
@@ -522,7 +512,6 @@ public:
       Move assign a new string.
 
       @param    str         an OString.
-      @since LibreOffice 5.2
     */
     OString & operator=( OString && str ) noexcept
     {
@@ -538,7 +527,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, OString& >::Type operator=( T& literal )
@@ -653,7 +641,6 @@ public:
 
     /**
       Clears the string, i.e, makes a zero-character string
-      @since LibreOffice 4.4
     */
     void clear()
     {
@@ -675,8 +662,6 @@ public:
 
       @return   true if the string is empty;
                 false, otherwise.
-
-      @since LibreOffice 3.4
     */
     bool isEmpty() const
     {
@@ -702,8 +687,6 @@ public:
       @param index must be non-negative and less than length.
 
       @return the character at the given index.
-
-      @since LibreOffice 3.5
     */
     char operator [](sal_Int32 index) const {
         // silence spurious -Werror=strict-overflow warnings from GCC 4.8.2
@@ -882,7 +865,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type  equalsIgnoreAsciiCase( T& literal ) const
@@ -963,7 +945,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type  match( T& literal, sal_Int32 fromIndex = 0 ) const
@@ -995,8 +976,6 @@ public:
 
       @return true if and only if the given str is contained as a substring of
       this string at the given fromIndex
-
-      @since LibreOffice 3.6
     */
     bool matchL(
         char const * str, sal_Int32 strLength, sal_Int32 fromIndex = 0)
@@ -1054,7 +1033,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type matchIgnoreAsciiCase( T& literal, sal_Int32 fromIndex = 0 ) const
@@ -1081,8 +1059,6 @@ public:
 
       @return true if and only if the given str appears as a substring at the
       start of this string
-
-      @since LibreOffice 4.0
     */
     bool startsWith(std::string_view str) const {
         return match(str);
@@ -1097,8 +1073,6 @@ public:
 
       @return true if and only if the given str appears as a substring at the
       start of this string
-
-      @since LibreOffice 4.0
     */
     bool startsWith(std::string_view str, OString * rest) const {
         assert(rest);
@@ -1118,8 +1092,6 @@ public:
 
       @return true if and only if the given str appears as a substring at the
       start of this string
-
-      @since LibreOffice 25.2
     */
     bool startsWith(std::string_view str, std::string_view * rest) const {
         assert(rest);
@@ -1141,8 +1113,6 @@ public:
 
       @return true if and only if the given str appears as a substring at the
       start of this string
-
-      @since LibreOffice 4.0
     */
     bool startsWith(OString const & str, OString * rest = NULL) const {
         bool b = match(str);
@@ -1157,7 +1127,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 4.0
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type startsWith(
@@ -1169,7 +1138,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 4.0
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type startsWith(
@@ -1186,7 +1154,6 @@ public:
     }
     /**
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 25.2
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type startsWith(
@@ -1205,7 +1172,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 4.0
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type startsWith(
@@ -1235,8 +1201,6 @@ public:
       @return true if and only if the given str appears as a substring at the
       start of this string, ignoring the case of ASCII letters ("A"--"Z" and
       "a"--"z")
-
-      @since LibreOffice 5.1
     */
     bool startsWithIgnoreAsciiCase(std::string_view str)
         const
@@ -1259,8 +1223,6 @@ public:
       @return true if and only if the given str appears as a substring at the
       start of this string, ignoring the case of ASCII letters ("A"--"Z" and
       "a"--"z")
-
-      @since LibreOffice 5.1
     */
     bool startsWithIgnoreAsciiCase(std::string_view str, OString * rest)
         const
@@ -1288,8 +1250,6 @@ public:
       @return true if and only if the given str appears as a substring at the
       start of this string, ignoring the case of ASCII letters ("A"--"Z" and
       "a"--"z")
-
-      @since LibreOffice 25.2
     */
     bool startsWithIgnoreAsciiCase(std::string_view str, std::string_view * rest)
         const
@@ -1318,8 +1278,6 @@ public:
       @return true if and only if the given str appears as a substring at the
       start of this string, ignoring the case of ASCII letters ("A"--"Z" and
       "a"--"z")
-
-      @since LibreOffice 5.1
     */
     bool startsWithIgnoreAsciiCase(OString const & str, OString * rest = NULL)
         const
@@ -1336,7 +1294,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 5.1
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
@@ -1350,7 +1307,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 5.1
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
@@ -1382,7 +1338,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 5.1
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
@@ -1408,8 +1363,6 @@ public:
 
       @return true if and only if the given str appears as a substring at the
       end of this string
-
-      @since LibreOffice 3.6
     */
     bool endsWith(std::string_view str) const {
         return str.size() <= sal_uInt32(getLength())
@@ -1426,8 +1379,6 @@ public:
 
       @return true if and only if the given str appears as a substring at the
       end of this string
-
-      @since LibreOffice 3.6
     */
     bool endsWith(std::string_view str, OString * rest) const {
         assert(rest);
@@ -1447,8 +1398,6 @@ public:
 
       @return true if and only if the given str appears as a substring at the
       end of this string
-
-      @since LibreOffice 25.2
     */
     bool endsWith(std::string_view str, std::string_view * rest) const {
         assert(rest);
@@ -1470,8 +1419,6 @@ public:
 
       @return true if and only if the given str appears as a substring at the
       end of this string
-
-      @since LibreOffice 3.6
     */
     bool endsWith(OString const & str, OString * rest = NULL) const {
         bool b = str.getLength() <= getLength()
@@ -1487,7 +1434,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 25.2
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type endsWith(
@@ -1509,7 +1455,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type endsWith(
@@ -1529,7 +1474,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 25.2
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type endsWith(
@@ -1550,7 +1494,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type endsWith(
@@ -1587,8 +1530,6 @@ public:
 
       @return true if and only if the given str appears as a substring at the
       end of this string
-
-      @since LibreOffice 3.6
     */
     bool endsWithL(char const * str, sal_Int32 strLength) const {
         return strLength <= getLength()
@@ -1647,7 +1588,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr, T& literal )
@@ -1669,7 +1609,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OString& rStr )
@@ -1715,7 +1654,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr, T& literal )
@@ -1726,7 +1664,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OString& rStr )
@@ -1832,7 +1769,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const
@@ -1863,8 +1799,6 @@ public:
                 of the first character of the first such substring is
                 returned. If it does not occur as a substring starting
                 at fromIndex or beyond, -1 is returned.
-
-      @since LibreOffice 3.6
     */
     sal_Int32 indexOfL(char const * str, sal_Int32 len, sal_Int32 fromIndex = 0)
         const
@@ -2108,8 +2042,6 @@ public:
       from the function its value is the index into this string at which the
       replacement took place or -1 if no replacement took place; if the pointer
       is null, searching always starts at index 0
-
-      @since LibreOffice 3.6
     */
     SAL_WARN_UNUSED_RESULT OString replaceFirst(
         OString const & from, OString const & to, sal_Int32 * index = NULL) const
@@ -2132,8 +2064,6 @@ public:
       @param from  the substring to be replaced
 
       @param to  the replacing substring
-
-      @since LibreOffice 3.6
     */
     SAL_WARN_UNUSED_RESULT OString replaceAll(OString const & from, OString const & to) const {
         rtl_String * s = NULL;
@@ -2236,8 +2166,6 @@ public:
       @param separator  the character which separates the tokens
 
       @return  the given token, or an empty string
-
-      @since LibreOffice 3.6
      */
     OString getToken(sal_Int32 count, char separator) const {
         sal_Int32 n = 0;
@@ -2292,8 +2220,6 @@ public:
       @return   the uint32 represented from this string.
                 0 if this string represents no number or one of too large
                 magnitude.
-
-      @since LibreOffice 4.2
     */
     sal_uInt32 toUInt32( sal_Int16 radix = 10 ) const
     {
@@ -2324,8 +2250,6 @@ public:
       @return   the uint64 represented from this string.
                 0 if this string represents no number or one of too large
                 magnitude.
-
-      @since LibreOffice 4.1
     */
     sal_uInt64 toUInt64( sal_Int16 radix = 10 ) const
     {
@@ -2393,7 +2317,6 @@ public:
       @param    i           an integer value
       @param    radix       the radix (between 2 and 36)
       @return   a string with the string representation of the argument.
-      @since LibreOffice 4.1
     */
     static OString number( int i, sal_Int16 radix = 10 )
     {
@@ -2401,32 +2324,27 @@ public:
         return OString(aBuf, rtl_str_valueOfInt32(aBuf, i, radix));
     }
     /// @overload
-    /// @since LibreOffice 4.1
     static OString number( unsigned int i, sal_Int16 radix = 10 )
     {
         return number( static_cast< unsigned long long >( i ), radix );
     }
     /// @overload
-    /// @since LibreOffice 4.1
     static OString number( long i, sal_Int16 radix = 10 )
     {
         return number( static_cast< long long >( i ), radix );
     }
     /// @overload
-    /// @since LibreOffice 4.1
     static OString number( unsigned long i, sal_Int16 radix = 10 )
     {
         return number( static_cast< unsigned long long >( i ), radix );
     }
     /// @overload
-    /// @since LibreOffice 4.1
     static OString number( long long ll, sal_Int16 radix = 10 )
     {
         char aBuf[RTL_STR_MAX_VALUEOFINT64];
         return OString(aBuf, rtl_str_valueOfInt64(aBuf, ll, radix));
     }
     /// @overload
-    /// @since LibreOffice 4.1
     static OString number( unsigned long long ll, sal_Int16 radix = 10 )
     {
         char aBuf[RTL_STR_MAX_VALUEOFUINT64];
@@ -2441,7 +2359,6 @@ public:
 
       @param    f           a float.
       @return   a string with the decimal representation of the argument.
-      @since LibreOffice 4.1
     */
     static OString number( float f )
     {
@@ -2463,7 +2380,6 @@ public:
 
       @param    d           a double.
       @return   a string with the decimal representation of the argument.
-      @since LibreOffice 4.1
     */
     static OString number( double d )
     {
@@ -2509,7 +2425,6 @@ public:
 
       @param    b   a bool.
       @return   a string with the string representation of the argument.
-      @since LibreOffice 4.1
     */
     static OString boolean( bool b )
     {
@@ -2707,8 +2622,6 @@ struct CStringHash
 /**
     Support for rtl::OString in std::ostream (and thus in
     CPPUNIT_ASSERT or SAL_INFO macros, for example).
-
-    @since LibreOffice 4.0
  */
 template< typename charT, typename traits > std::basic_ostream<charT, traits> &
 operator <<(
@@ -2777,8 +2690,6 @@ rtl
 /// @cond INTERNAL
 /**
   Make OString hashable by default for use in STL containers.
-
-  @since LibreOffice 6.0
 */
 #if defined LIBO_INTERNAL_ONLY
 namespace std {

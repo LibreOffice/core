@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_CPPUHELPER_WEAKREF_HXX
 #define INCLUDED_CPPUHELPER_WEAKREF_HXX
 
@@ -146,8 +143,6 @@ public:
         { return get(); }
 
     /** Releases this reference.
-
-        @since UDK 3.2.12
     */
     void SAL_CALL clear();
 
@@ -191,8 +186,6 @@ public:
         or XInt is null, then this reference is null.
 
         @param xInt another hard reference
-
-        @since UDK 3.2.12
     */
     WeakReference & SAL_CALL operator = (
             const css::uno::Reference< interface_type > & xInt )

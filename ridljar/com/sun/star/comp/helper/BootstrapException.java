@@ -21,8 +21,6 @@ package com.sun.star.comp.helper;
 /**
  * BootstrapException is a checked exception that wraps an exception
  * thrown by the original target.
- *
- * @since UDK 3.1.0
  */
 public class BootstrapException extends java.lang.Exception {
 

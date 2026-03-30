@@ -37,7 +37,6 @@ import com.sun.star.uno.XCurrentContext;
  *
  * @see         com.sun.star.lib.uno.environments.remote.ThreadId
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
- * @since       UDK1.0
  */
 public class Job {
     protected IReceiver _iReceiver;

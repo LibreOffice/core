@@ -36,8 +36,6 @@ public class TypeInfo
 
        <p>Only used in the <code>flags</code> argument of the
        <code>AttributeTypeInfo</code> constructors.</p>
-
-       @since UDK 3.2
      */
     public static final int BOUND = 0x00000100;
 

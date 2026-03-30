@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_H
 #define INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_H
 
@@ -122,8 +119,6 @@ public:
     /** Create a sequence with the given elements.
 
         @param init an initializer_list
-
-        @since LibreOffice 5.0
      */
     inline Sequence(std::initializer_list<E> init);
 #endif
@@ -162,8 +157,6 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
     /** This function allows to use Sequence in cases where  std::size is needed, and the like.
-
-        @since LibreOffice 6.4
     */
     sal_uInt32 size() const
         { assert(getLength() >= 0); return static_cast<sal_uInt32>(getLength()); }
@@ -192,32 +185,24 @@ public:
 #if !defined LIBO_INTERNAL_ONLY
     /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
-
-        @since LibreOffice 4.2
     */
     inline E * begin();
 #endif
 
     /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
-
-        @since LibreOffice 4.2
     */
     inline E const * begin() const;
 
 #if !defined LIBO_INTERNAL_ONLY
     /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
-
-        @since LibreOffice 4.2
     */
     inline E * end();
 #endif
 
     /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
-
-        @since LibreOffice 4.2
     */
     inline E const * end() const;
 
@@ -282,8 +267,6 @@ public:
     /** Swaps sequences efficiently exchanging their underlying representations.
 
         @param other another sequence of same type
-
-        @since LibreOffice 7.3
     */
     inline void swap(Sequence& other);
 #endif

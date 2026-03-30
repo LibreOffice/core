@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_SAL_LOG_HXX
 #define INCLUDED_SAL_LOG_HXX
 
@@ -197,8 +193,6 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
     @attention For now, this functionality should only be used internally within
     LibreOffice. It may change again in a future version.
-
-    @since LibreOffice 3.5
 */
 #define SAL_WHERE SAL_DETAIL_WHERE
 
@@ -213,8 +207,6 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
     @attention For now, this functionality should only be used internally within
     LibreOffice. It may change again in a future version.
-
-    @since LibreOffice 3.5
 */
 #if defined _LIBCPP_VERSION \
     || (defined _GLIBCXX_RELEASE \
@@ -356,8 +348,6 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
     @attention For now, this functionality should only be used internally within
     LibreOffice. It may change again in a future version.
-
-    @since LibreOffice 3.5
 */
 
 /**

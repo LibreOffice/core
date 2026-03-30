@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_COM_SUN_STAR_UNO_TYPE_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_TYPE_HXX
 
@@ -109,8 +106,6 @@ typelib_TypeDescriptionReference * Array< T >::s_pType = NULL;
 /**
    Support for Type in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO
    macros, for example).
-
-   @since LibreOffice 5.4
 */
 template<typename charT, typename traits> std::basic_ostream<charT, traits> &
 operator <<(std::basic_ostream<charT, traits> & stream, Type const & type)

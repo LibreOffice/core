@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #pragma once
 
 #include "sal/config.h"
@@ -153,7 +149,6 @@ public:
 
     /**
         @overload
-        @since LibreOffice 3.6
      */
     template< typename T >
     OStringBuffer( const T& value, typename libreoffice_internal::CharPtrDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy())
@@ -190,8 +185,6 @@ public:
 
       If there are any embedded \0's in the string literal, the result is undefined.
       Use the overload that explicitly accepts length.
-
-      @since LibreOffice 3.6
 
       @param    literal       a string literal
     */
@@ -275,8 +268,6 @@ public:
     }
 
     /** Assign from a string.
-
-        @since LibreOffice 5.3
     */
 #if defined LIBO_INTERNAL_ONLY
     OStringBuffer & operator =(std::string_view string) {
@@ -302,8 +293,6 @@ public:
 #endif
 
     /** Assign from a string literal.
-
-        @since LibreOffice 5.3
     */
     template<typename T>
     typename
@@ -325,7 +314,7 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    /** @overload @since LibreOffice 5.3 */
+    /** @overload */
     template<typename T1, typename T2>
     OStringBuffer & operator =(OStringConcat<T1, T2> && concat) {
         sal_Int32 const n = concat.length();
@@ -384,8 +373,6 @@ public:
 
       @return   true if the string buffer is empty;
                 false, otherwise.
-
-      @since LibreOffice 4.1
     */
     bool isEmpty() const
     {
@@ -504,8 +491,6 @@ public:
       @param index must be non-negative and less than length.
 
       @return a reference to the character at the given index.
-
-      @since LibreOffice 3.5
     */
     char & operator [](sal_Int32 index)
     {
@@ -565,7 +550,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, OStringBuffer& >::Type append( T& literal )
@@ -642,8 +626,6 @@ public:
 
         @param   b   a <code>bool</code>.
         @return  this string buffer.
-
-        @since LibreOffice 4.3
      */
     OStringBuffer & append(bool b)
     {
@@ -753,8 +735,6 @@ public:
 
        @return a pointer to the start of the uninitialized block; only valid
        until this OStringBuffer's capacity changes
-
-       @since LibreOffice 4.4
     */
     char * appendUninitialized(sal_Int32 length) SAL_RETURNS_NONNULL {
         sal_Int32 n = getLength();
@@ -821,7 +801,6 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
@@ -899,8 +878,6 @@ public:
         @param      offset   the offset.
         @param      b        a <code>bool</code>.
         @return     this string buffer.
-
-        @since LibreOffice 4.3
      */
     OStringBuffer & insert(sal_Int32 offset, bool b)
     {
@@ -1061,8 +1038,6 @@ public:
         @param pInternalCapacity
         This output parameter receives a pointer to the internal capacity.
         pInternalCapacity itself must not be null.
-
-        @since LibreOffice 5.4
     */
     void accessInternals(
         rtl_String *** pInternalData, sal_Int32 ** pInternalCapacity)

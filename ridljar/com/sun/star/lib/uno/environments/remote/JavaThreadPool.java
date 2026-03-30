@@ -27,7 +27,6 @@ package com.sun.star.lib.uno.environments.remote;
  * @see         com.sun.star.lib.uno.environments.remote.IThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
  * @see         com.sun.star.lib.uno.environments.remote.JobQueue
- * @since       UDK1.0
  */
 public class JavaThreadPool implements IThreadPool {
     /**

@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_RTL_USTRBUF_HXX
 #define INCLUDED_RTL_USTRBUF_HXX
 
@@ -170,7 +166,7 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    /** @overload @since LibreOffice 5.3 */
+    /** @overload */
     template<typename T>
     OUStringBuffer(
         T & literal,
@@ -263,7 +259,6 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
     /** Move assignment
-     * @since LibreOffice 7.3
      */
     OUStringBuffer& operator = ( OUStringBuffer&& value ) noexcept
     {
@@ -278,8 +273,6 @@ public:
 #endif
 
     /** Assign from a string.
-
-        @since LibreOffice 5.3
     */
 #if defined LIBO_INTERNAL_ONLY
     OUStringBuffer & operator =(std::u16string_view string) {
@@ -309,8 +302,6 @@ public:
 #endif
 
     /** Assign from a string literal.
-
-        @since LibreOffice 5.3
     */
     template<typename T>
     typename
@@ -335,7 +326,7 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    /** @overload @since LibreOffice 5.3 */
+    /** @overload */
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<
         T, OUStringBuffer &>::TypeUtf16
@@ -347,7 +338,7 @@ public:
 #endif
 
 #if defined LIBO_INTERNAL_ONLY
-    /** @overload @since LibreOffice 5.3 */
+    /** @overload */
     template<typename T1, typename T2>
     OUStringBuffer & operator =(OUStringConcat<T1, T2> && concat) {
         sal_Int32 const n = concat.length();
@@ -405,8 +396,6 @@ public:
 
       @return   true if the string buffer is empty;
                 false, otherwise.
-
-      @since LibreOffice 4.1
     */
     bool isEmpty() const
     {
@@ -525,8 +514,6 @@ public:
       @param index must be non-negative and less than length.
 
       @return a reference to the character at the given index.
-
-      @since LibreOffice 3.5
     */
     sal_Unicode & operator [](sal_Int32 index)
     {
@@ -540,8 +527,6 @@ public:
       @param index must be non-negative and less than length.
 
       @return a reference to the character at the given index.
-
-      @since LibreOffice 4.2
     */
     const sal_Unicode & operator [](sal_Int32 index) const
     {
@@ -587,8 +572,6 @@ public:
 
         @param   str   a string.
         @return  this string buffer.
-
-        @since LibreOffice 4.0
      */
     OUStringBuffer & append(const OUStringBuffer &str)
     {
@@ -643,7 +626,6 @@ public:
     /**
         @overload
         This function accepts an ASCII string literal as its argument.
-        @since LibreOffice 3.6
      */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type append( T& literal )
@@ -656,7 +638,7 @@ public:
     typename libreoffice_internal::NonConstCharArrayDetector<T, OUStringBuffer &>::TypeUtf16
     append(T & value) { return append(static_cast<sal_Unicode *>(value)); }
 
-    /** @overload @since LibreOffice 5.3 */
+    /** @overload */
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<
         T, OUStringBuffer &>::TypeUtf16
@@ -731,8 +713,6 @@ public:
 
         @param   b   a <code>bool</code>.
         @return  this string buffer.
-
-        @since LibreOffice 4.1
      */
     OUStringBuffer & append(bool b)
     {
@@ -784,8 +764,6 @@ public:
 
         @param   c   an ASCII <code>char</code>.
         @return  this string buffer.
-
-        @since LibreOffice 3.5
      */
     OUStringBuffer & append(char c)
     {
@@ -907,8 +885,6 @@ public:
 
        @return a pointer to the start of the uninitialized block; only valid
        until this OUStringBuffer's capacity changes
-
-       @since LibreOffice 4.4
     */
     sal_Unicode * appendUninitialized(sal_Int32 length) SAL_RETURNS_NONNULL {
         sal_Int32 n = getLength();
@@ -921,7 +897,6 @@ public:
        "Stream" operator to append a value to this OUStringBuffer.
 
        @internal
-       @since LibreOffice 7.5
      */
     template<typename T>
     OUStringBuffer& operator<<(T&& rValue)
@@ -1029,7 +1004,6 @@ public:
     /**
         @overload
         This function accepts an ASCII string literal as its argument.
-        @since LibreOffice 3.6
      */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
@@ -1044,7 +1018,7 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    /** @overload @since LibreOffice 5.3 */
+    /** @overload */
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<
         T, OUStringBuffer &>::TypeUtf16
@@ -1095,8 +1069,6 @@ public:
         @param      offset   the offset.
         @param      b        a <code>bool</code>.
         @return     this string buffer.
-
-        @since LibreOffice 4.3
      */
     OUStringBuffer & insert(sal_Int32 offset, bool b)
     {
@@ -1119,8 +1091,6 @@ public:
         @param      offset   the offset.
         @param      c        a <code>char</code>.
         @return     this string buffer.
-
-        @since LibreOffice 3.6
      */
     OUStringBuffer & insert(sal_Int32 offset, char c)
     {
@@ -1297,8 +1267,6 @@ public:
 
         @param  start       The beginning index, inclusive. default to 0
         @return this string buffer.
-
-        @since LibreOffice 4.0
      */
     OUStringBuffer & truncate( sal_Int32 start = 0 )
     {
@@ -1309,8 +1277,6 @@ public:
     /**
        Replace all occurrences of
        oldChar in this string buffer with newChar.
-
-       @since LibreOffice 4.0
 
        @param    oldChar     the old character.
        @param    newChar     the new character.
@@ -1353,8 +1319,6 @@ public:
        Returns the index within this string of the first occurrence of the
        specified character, starting the search at the specified index.
 
-       @since LibreOffice 4.0
-
        @param    ch          character to be located.
        @param    fromIndex   the index to start the search from.
                              The index must be greater or equal than 0
@@ -1375,8 +1339,6 @@ public:
        Returns the index within this string of the last occurrence of the
        specified character, searching backward starting at the end.
 
-       @since LibreOffice 4.0
-
        @param    ch          character to be located.
        @return   the index of the last occurrence of the character in the
                  character sequence represented by this string, or
@@ -1391,8 +1353,6 @@ public:
        Returns the index within this string of the last occurrence of the
        specified character, searching backward starting before the specified
        index.
-
-       @since LibreOffice 4.0
 
        @param    ch          character to be located.
        @param    fromIndex   the index before which to start the search.
@@ -1413,8 +1373,6 @@ public:
 
        If str doesn't include any character, always -1 is
        returned. This is also the case, if both strings are empty.
-
-       @since LibreOffice 4.0
 
        @param    str         the substring to search for.
        @param    fromIndex   the index to start the search from.
@@ -1445,8 +1403,6 @@ public:
     /**
        @overload
        This function accepts an ASCII string literal as its argument.
-
-       @since LibreOffice 4.0
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const
@@ -1461,7 +1417,7 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    /** @overload @since LibreOffice 5.3 */
+    /** @overload */
     template<typename T>
     typename
         libreoffice_internal::ConstCharArrayDetector<T, sal_Int32>::TypeUtf16
@@ -1481,8 +1437,6 @@ public:
        in this string.
        If str doesn't include any character, always -1 is
        returned. This is also the case, if both strings are empty.
-
-       @since LibreOffice 4.0
 
        @param    str         the substring to search for.
        @return   If the string argument occurs one or more times as a substring
@@ -1514,8 +1468,6 @@ public:
        If str doesn't include any character, always -1 is
        returned. This is also the case, if both strings are empty.
 
-       @since LibreOffice 4.0
-
        @param    str         the substring to search for.
        @param    fromIndex   the index before which to start the search.
        @return   If the string argument occurs one or more times as a substring
@@ -1542,7 +1494,6 @@ public:
     /**
        @overload
        This function accepts an ASCII string literal as its argument.
-       @since LibreOffice 4.0
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const
@@ -1556,7 +1507,7 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    /** @overload @since LibreOffice 5.3 */
+    /** @overload */
     template<typename T>
     typename
         libreoffice_internal::ConstCharArrayDetector<T, sal_Int32>::TypeUtf16
@@ -1569,8 +1520,6 @@ public:
 
     /**
        Strip the given character from the start of the buffer.
-
-       @since LibreOffice 4.0
 
        @param    c         the character to strip
        @return   The number of characters stripped
@@ -1596,8 +1545,6 @@ public:
     /**
        Strip the given character from the end of the buffer.
 
-       @since LibreOffice 4.0
-
        @param    c         the character to strip
        @return   The number of characters stripped
 
@@ -1621,8 +1568,6 @@ public:
     }
     /**
        Strip the given character from the both end of the buffer.
-
-       @since LibreOffice 4.0
 
        @param    c         the character to strip
        @return   The number of characters stripped
@@ -1682,7 +1627,6 @@ public:
 
       @param     beginIndex   the beginning index, inclusive.
       @return    the specified substring.
-      @since LibreOffice 4.1
     */
     OUStringBuffer copy( sal_Int32 beginIndex ) const
     {
@@ -1700,7 +1644,6 @@ public:
       @param     beginIndex   the beginning index, inclusive.
       @param     count        the number of characters.
       @return    the specified substring.
-      @since LibreOffice 4.1
     */
     OUStringBuffer copy( sal_Int32 beginIndex, sal_Int32 count ) const
     {

@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_CPPUHELPER_PROPERTYSETMIXIN_HXX
 #define INCLUDED_CPPUHELPER_PROPERTYSETMIXIN_HXX
 
@@ -64,8 +60,6 @@ namespace cppu {
    directly (e.g., in such subclasses, use
    &ldquo;<code>PropertySetMixin::Implements</code>&rdquo; instead of
    &ldquo;<code>PropertySetMixinImpl::Implements</code>&rdquo;).
-
-   @since UDK 3.2.1
 */
 class CPPUHELPER_DLLPUBLIC PropertySetMixinImpl:
     public css::beans::XPropertySet,
@@ -344,8 +338,6 @@ private:
 
    No specializations of this class template should be added by client
    code.
-
-   @since UDK 3.2.1
 */
 template< typename T > class PropertySetMixin: public PropertySetMixinImpl {
 protected:

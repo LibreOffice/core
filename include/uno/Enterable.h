@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_UNO_ENTERABLE_H
 #define INCLUDED_UNO_ENTERABLE_H
 
@@ -37,7 +33,6 @@ extern "C"
     (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
 
     @param context
-    @since UDK 3.2.7
 */
 typedef void uno_Enterable_enter     (void * context);
 
@@ -46,7 +41,6 @@ typedef void uno_Enterable_enter     (void * context);
     (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
 
     @param context
-    @since UDK 3.2.7
 */
 typedef void uno_Enterable_leave     (void * context);
 
@@ -57,7 +51,6 @@ typedef void uno_Enterable_leave     (void * context);
     @param context
     @param pCallee  the function to be called
     @param pParam   the parameter pointer to be passed to the function
-    @since UDK 3.2.7
 */
 typedef void uno_Enterable_callInto_v(void * context, uno_EnvCallee * pCallee, va_list * pParam);
 
@@ -68,7 +61,6 @@ typedef void uno_Enterable_callInto_v(void * context, uno_EnvCallee * pCallee, v
     @param context
     @param pCallee  the function to be called
     @param pParam   the parameter pointer to be passed to the function
-    @since UDK 3.2.7
 */
 typedef void uno_Enterable_callOut_v (void * context, uno_EnvCallee * pCallee, va_list * pParam);
 
@@ -80,15 +72,12 @@ typedef void uno_Enterable_callOut_v (void * context, uno_EnvCallee * pCallee, v
     @param  context
     @param  ppReason  the reason, in case calling is not valid
     @return           0 == calling is not valid, 1 == calling is valid
-    @since UDK 3.2.7
 */
 typedef int  uno_Enterable_isValid_v (void * context, rtl_uString ** ppReason);
 
 
 /** A struct pReserved needs to point to, if implementing a purpose environment.
     (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
-
-    @since UDK 3.2.7
 */
 typedef struct
 {

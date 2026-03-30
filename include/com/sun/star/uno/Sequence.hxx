@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_HXX
 
@@ -278,8 +275,6 @@ void sequence_output_bytes( std::basic_ostream<charT, traits> &os, const value_t
 /**
    Support for Sequence in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO
    macros, for example).
-
-   @since LibreOffice 6.1
 */
 template< typename value_t, typename charT, typename traits >
 inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &os, css::uno::Sequence<value_t> const& v)

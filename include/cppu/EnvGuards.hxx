@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_CPPU_ENVGUARDS_HXX
 #define INCLUDED_CPPU_ENVGUARDS_HXX
 
@@ -33,8 +29,6 @@ namespace cppu
         The provided Environment becomes entered in the constructor and left
         in the destructor.
         (http://wiki.openoffice.org/wiki/Uno/Cpp/Spec/Environment_Guard)
-
-        @since UDK 3.2.7
     */
     class EnvGuard
     {
@@ -81,8 +75,6 @@ namespace cppu
         Any entered Environment becomes left in the constructor and re-entered
         in the destructor.
         (http://wiki.openoffice.org/wiki/Uno/Cpp/Spec/Environment_AntiGuard)
-
-        @since UDK 3.2.7
     */
     class AntiEnvGuard
     {

@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_COM_SUN_STAR_UNO_REFERENCE_H
 #define INCLUDED_COM_SUN_STAR_UNO_REFERENCE_H
 
@@ -167,8 +164,6 @@ enum UnoReference_QueryThrow
 };
 /** Enum defining UNO_SET_THROW for throwing if attempts are made to assign a null
     interface
-
-    @since UDK 3.2.8
 */
 enum UnoReference_SetThrow
 {
@@ -358,8 +353,6 @@ public:
 
         @param rRef another interface reference of the same type
         @param dummy UNO_SET_THROW to distinguish from default copy constructor
-
-        @since UDK 3.2.8
     */
     inline Reference( const Reference< interface_type > & rRef, UnoReference_SetThrow dummy );
     /** Constructor: assigns from the given interface of the same type. Throws a RuntimeException
@@ -367,8 +360,6 @@ public:
 
         @param pInterface an interface pointer
         @param dummy UNO_SET_THROW to distinguish from default assignment constructor
-
-        @since UDK 3.2.8
     */
     inline Reference( interface_type * pInterface, UnoReference_SetThrow dummy );
 
@@ -390,7 +381,6 @@ public:
 
     /** Indirection operator.
 
-        @since LibreOffice 6.3
         @return UNacquired interface reference
     */
     interface_type & SAL_CALL operator * () const {
@@ -510,8 +500,6 @@ public:
 
         @param pInterface an interface pointer
         @param dummy UNO_SET_THROW to force obvious distinction to other set methods
-
-        @since UDK 3.2.8
     */
     inline void SAL_CALL set( interface_type * pInterface, UnoReference_SetThrow dummy);
     /** sets the given interface
@@ -520,8 +508,6 @@ public:
 
         @param rRef an interface reference
         @param dummy UNO_SET_THROW to force obvious distinction to other set methods
-
-        @since UDK 3.2.8
     */
     inline void SAL_CALL set( const Reference< interface_type > & rRef, UnoReference_SetThrow dummy);
 

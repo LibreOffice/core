@@ -33,7 +33,6 @@ import com.sun.star.registry.XRegistryKey;
  *
  * @see         com.sun.star.connection.XConnection
  * @see         com.sun.star.comp.loader.JavaLoader
- * @since       UDK1.0
  */
 public class PipedConnection implements XConnection {
     /**

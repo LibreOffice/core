@@ -30,8 +30,6 @@ import java.security.PrivilegedExceptionAction;
  * A helper class for executing UNO JARs.
  *
  * <p><em>This class is not yet stable.</em></p>
- *
- * @since UDK 3.2.0
  */
 public final class UnoLoader {
     /**

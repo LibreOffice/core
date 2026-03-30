@@ -34,8 +34,6 @@ extern "C" {
 
    @see typereg::Reader
    @see typereg::Writer
-
-   @since UDK 3.2.0
  */
 enum typereg_Version {
     /**

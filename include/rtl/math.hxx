@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_RTL_MATH_HXX
 #define INCLUDED_RTL_MATH_HXX
 
@@ -70,8 +66,6 @@ inline rtl::OString doubleToString(double fValue, rtl_math_StringFormat eFormat,
 
 /** A wrapper around rtl_math_doubleToString that appends to an
     rtl::OStringBuffer.
-
-    @since LibreOffice 5.4
 */
 inline void doubleToStringBuffer(
     rtl::OStringBuffer& rBuffer, double fValue, rtl_math_StringFormat eFormat,
@@ -88,8 +82,6 @@ inline void doubleToStringBuffer(
 
 /** A wrapper around rtl_math_doubleToString that appends to an
     rtl::OStringBuffer, with no grouping.
-
-    @since LibreOffice 5.4
 */
 inline void doubleToStringBuffer(
     rtl::OStringBuffer& rBuffer, double fValue, rtl_math_StringFormat eFormat,

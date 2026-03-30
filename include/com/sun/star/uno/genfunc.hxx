@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_COM_SUN_STAR_UNO_GENFUNC_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_GENFUNC_HXX
 

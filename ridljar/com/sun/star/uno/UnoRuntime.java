@@ -310,8 +310,6 @@ public class UnoRuntime {
 
        @return the given value, or the neutral value of the given type, if the
        given value was an invalid <code>null</code> value.
-
-       @since UDK 3.2.3
     */
     public static final Object completeValue(Type type, Object value) {
         if (value != null) {

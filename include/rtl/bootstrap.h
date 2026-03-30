@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_RTL_BOOTSTRAP_H
 #define INCLUDED_RTL_BOOTSTRAP_H
 
@@ -211,8 +208,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_expandMacros(
 
     @param[out] encoded
     the given value with all occurrences of special characters ("$" and "\") escaped
-
-    @since UDK 3.2.9
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_encode(
     rtl_uString const * value, rtl_uString ** encoded );

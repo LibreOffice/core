@@ -37,7 +37,6 @@ import java.util.Iterator;
  *
  * @see com.sun.star.uno.UnoRuntime
  * @see com.sun.star.uno.IEnvironment
- * @since UDK1.0
  */
 public final class java_environment implements IEnvironment {
     public java_environment(Object context) {

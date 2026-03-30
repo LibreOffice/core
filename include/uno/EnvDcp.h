@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_UNO_ENVDCP_H
 #define INCLUDED_UNO_ENVDCP_H
 
@@ -37,7 +33,6 @@ extern "C"
 
     @param pEnvDcp        the Environment Descriptor
     @param ppEnvTypeName  the OBI type
-    @since UDK 3.2.7
 */
 CPPU_DLLPUBLIC void uno_EnvDcp_getTypeName(rtl_uString const * pEnvDcp, rtl_uString ** ppEnvTypeName);
 
@@ -47,7 +42,6 @@ CPPU_DLLPUBLIC void uno_EnvDcp_getTypeName(rtl_uString const * pEnvDcp, rtl_uStr
 
     @param pEnvDcp        the Environment Descriptor
     @param ppEnvPurpose   the purpose
-    @since UDK 3.2.7
 */
 CPPU_DLLPUBLIC void uno_EnvDcp_getPurpose (rtl_uString const * pEnvDcp, rtl_uString ** ppEnvPurpose);
 

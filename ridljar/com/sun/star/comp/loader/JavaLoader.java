@@ -59,7 +59,6 @@ import com.sun.star.uno.AnyConverter;
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
  * @see         com.sun.star.comp.servicemanager.ServiceManager
- * @since       UDK1.0
  */
 public class JavaLoader implements XImplementationLoader,
                                    XServiceInfo,

@@ -107,7 +107,6 @@ public class Bootstrap {
      *
      * @return an array of default commandline options
      * @see #bootstrap( String[] )
-     * @since LibreOffice 5.1
      */
     public static final String[] getDefaultOptions()
     {
@@ -293,8 +292,6 @@ public class Bootstrap {
      * @throws BootstrapException if things go awry.
      *
      * @return a bootstrapped component context.
-     *
-     * @since UDK 3.1.0
      */
     public static final XComponentContext bootstrap()
         throws BootstrapException {
@@ -314,8 +311,6 @@ public class Bootstrap {
      * @throws BootstrapException if things go awry.
      *
      * @return a bootstrapped component context.
-     *
-     * @since LibreOffice 5.1
      */
     public static final XComponentContext bootstrap( String[] argArray )
         throws BootstrapException {
@@ -407,8 +402,6 @@ public class Bootstrap {
      * @throws BootstrapException if things go awry.
      *
      * @return a bootstrapped component context.
-     *
-     * @since LibreOffice 24.2
      */
     public static final XComponentContext bootstrapWebsocketConnection( String url )
         throws BootstrapException {

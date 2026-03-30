@@ -45,7 +45,6 @@ import com.sun.star.uno.Type;
  * @see         com.sun.star.lang.XServiceInfo
  * @see         com.sun.star.lang.XSingleServiceFactory
  * @see         com.sun.star.registry.XRegistryKey
- * @since       UDK1.0
  */
 public class FactoryHelper {
 

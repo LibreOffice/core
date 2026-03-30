@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_COM_SUN_STAR_UNO_ANY_H
 #define INCLUDED_COM_SUN_STAR_UNO_ANY_H
 
@@ -349,8 +346,6 @@ template<> Any SAL_CALL makeAny(Any const &) SAL_DELETED_FUNCTION;
 
     (A difference to the deprecated makeAny is that makeAny cannot be called on an Any, while
     toAny just returns the given Any.)
-
-    @since LibreOffice 5.0
 */
 template<typename T> inline Any toAny(T const & value);
 
@@ -372,8 +367,6 @@ template<> inline Any toAny(Any const & value);
     extraction succeeded (and left unmodified otherwise)
 
     @return  true iff extraction succeeded
-
-    @since LibreOffice 5.3
 */
 template<typename T> inline bool fromAny(Any const & any, T * value);
 

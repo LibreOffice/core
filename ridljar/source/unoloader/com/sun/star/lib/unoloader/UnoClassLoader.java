@@ -41,8 +41,6 @@ import java.util.jar.JarInputStream;
  *
  * <p><em>This is an internal, unstable class of the Uno Runtime Environment; it
  * should not be used by client code.</em></p>
- *
- * @since UDK 3.2.0
  */
 public final class UnoClassLoader extends URLClassLoader {
     /**

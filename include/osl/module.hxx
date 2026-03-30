@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_OSL_MODULE_HXX
 #define INCLUDED_OSL_MODULE_HXX
 
@@ -89,7 +85,6 @@ public:
         return is();
     }
 
-    /// @since UDK 3.2.8
     bool SAL_CALL loadRelative(
         ::oslGenericFunction baseModule, ::rtl::OUString const & relativePath,
         ::sal_Int32 mode = SAL_LOADMODULE_DEFAULT)
@@ -99,7 +94,6 @@ public:
         return is();
     }
 
-    /// @since LibreOffice 3.5
     bool SAL_CALL loadRelative(
         oslGenericFunction baseModule, char const * relativePath,
         sal_Int32 mode = SAL_LOADMODULE_DEFAULT)
@@ -147,7 +141,6 @@ public:
         return osl_getFunctionSymbol( m_Module, ustrFunctionSymbolName.pData );
     }
 
-    /// @since LibreOffice 3.5
     oslGenericFunction SAL_CALL getFunctionSymbol(char const * name) const {
         return osl_getAsciiFunctionSymbol(m_Module, name);
     }
@@ -161,8 +154,6 @@ public:
 
         This instance returns to the state of a default-constructed instance
         again.
-
-        @since LibreOffice 4.3
     */
     void release() { m_Module = NULL; }
 

@@ -39,8 +39,6 @@ import com.sun.star.registry.XRegistryKey;
  * @see com.sun.star.connection.XConnection
  * @see com.sun.star.connection.XConnector
  * @see com.sun.star.comp.loader.JavaLoader
- *
- * @since UDK 1.0
  */
 public class Connector implements XConnector {
     /**

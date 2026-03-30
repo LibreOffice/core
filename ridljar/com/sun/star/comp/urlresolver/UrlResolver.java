@@ -45,7 +45,6 @@ import com.sun.star.uno.UnoRuntime;
  *
  * @see         com.sun.star.bridge.XBridgeFactory
  * @see         com.sun.star.connection.Connector
- * @since       UDK1.0
  */
 public class UrlResolver {
     public static class _UrlResolver implements XUnoUrlResolver {

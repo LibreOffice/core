@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_CPPU_UNOTYPE_HXX
 #define INCLUDED_CPPU_UNOTYPE_HXX
 
@@ -55,8 +51,6 @@ template< typename > class UnoType;
 
    This type is declared but not defined.  Its only use is as a template
    argument to cppu::UnoType.
-
-   @since UDK 3.2.2
 */
 struct UnoVoidType;
 
@@ -68,8 +62,6 @@ struct UnoVoidType;
 
    This type is declared but not defined.  Its only use is as a template
    argument to cppu::UnoType.
-
-   @since UDK 3.2.2
 */
 struct UnoUnsignedShortType;
 
@@ -81,8 +73,6 @@ struct UnoUnsignedShortType;
 
    This type is declared but not defined.  Its only use is as a template
    argument to cppu::UnoType.
-
-   @since UDK 3.2.2
 */
 struct UnoCharType;
 
@@ -95,8 +85,6 @@ struct UnoCharType;
 
    This type is declared but not defined.  Its only use is as a template
    argument to cppu::UnoType.
-
-   @since UDK 3.2.2
 */
 template< typename > struct UnoSequenceType;
 
@@ -284,8 +272,6 @@ namespace cppu {
    appropriate template argument (the latter three to unambiguously specify UNO
    types, as the UNO types UNSIGNED SHORT and CHAR map to the same C++ type),
    and css::uno::Reference with any appropriate template argument.
-
-   @since UDK 3.2.2
 */
 template< typename T > class UnoType {
 public:
@@ -317,8 +303,6 @@ template<> css::uno::Type inline const & UnoType<void>::get() {
    of getCppuType.  The replacement has exactly the same semantics as
    getCppuType, in that it returns correct results for the UNO type UNSIGNED
    SHORT but not for the UNO type CHAR.
-
-   @since UDK 3.2.2
 */
 template< typename T > inline css::uno::Type const &
 getTypeFavourUnsigned(SAL_UNUSED_PARAMETER T const *) {
@@ -332,8 +316,6 @@ getTypeFavourUnsigned(SAL_UNUSED_PARAMETER T const *) {
    of getCppuType.  The replacement has exactly the same semantics as
    getCppuType, in that it returns correct results for the UNO type UNSIGNED
    SHORT but not for the UNO type CHAR.
-
-   @since UDK 3.2.2
 */
 inline css::uno::Type const &
 getTypeFavourUnsigned(SAL_UNUSED_PARAMETER ::sal_uInt16 const *) {
@@ -347,8 +329,6 @@ getTypeFavourUnsigned(SAL_UNUSED_PARAMETER ::sal_uInt16 const *) {
    of getCppuType.  The replacement has exactly the same semantics as
    getCppuType, in that it returns correct results for the UNO type UNSIGNED
    SHORT but not for the UNO type CHAR.
-
-   @since UDK 3.2.2
 */
 template< typename T > inline css::uno::Type const &
 getTypeFavourUnsigned(css::uno::Sequence< T > const *);
@@ -364,8 +344,6 @@ getTypeFavourUnsigned(css::uno::Sequence< T > const *);
    as the getCppuType template, in that it returns correct results for the UNO
    type CHAR but not for the UNO type UNSIGNED SHORT.  Additionally, it also
    returns the intended results for sequence types.
-
-   @since UDK 3.2.3
 */
 template< typename T > inline css::uno::Type const &
 getTypeFavourChar(SAL_UNUSED_PARAMETER T const *) {
@@ -380,8 +358,6 @@ getTypeFavourChar(SAL_UNUSED_PARAMETER T const *) {
    as the getCppuType template, in that it returns correct results for the UNO
    type CHAR but not for the UNO type UNSIGNED SHORT.  Additionally, it also
    returns the intended results for sequence types.
-
-   @since UDK 3.2.3
 */
 inline css::uno::Type const &
 getTypeFavourChar(SAL_UNUSED_PARAMETER ::sal_Unicode const *) {
@@ -396,8 +372,6 @@ getTypeFavourChar(SAL_UNUSED_PARAMETER ::sal_Unicode const *) {
    as the getCppuType template, in that it returns correct results for the UNO
    type CHAR but not for the UNO type UNSIGNED SHORT.  Additionally, it also
    returns the intended results for sequence types.
-
-   @since UDK 3.2.3
 */
 template< typename T > inline css::uno::Type const &
 getTypeFavourChar(css::uno::Sequence< T > const *);

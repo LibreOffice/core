@@ -35,8 +35,6 @@ namespace typereg {
    A type reader working on a binary blob that represents a UNOIDL type.
 
    <p>Instances of this class are not multi-thread&ndash;safe.</p>
-
-   @since UDK 3.2.0
  */
 class Reader {
 public:

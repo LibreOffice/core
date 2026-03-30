@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_SALHELPER_THREAD_HXX
 #define INCLUDED_SALHELPER_THREAD_HXX
 
@@ -27,8 +23,6 @@ namespace salhelper
 {
 /**
    A safe encapsulation of ::osl::Thread.
-
-   @since LibreOffice 3.6
 */
 class SALHELPER_DLLPUBLIC Thread : public salhelper::SimpleReferenceObject, private osl::Thread
 {

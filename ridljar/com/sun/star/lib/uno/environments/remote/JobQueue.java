@@ -37,7 +37,6 @@ import com.sun.star.lang.DisposedException;
  * @see         com.sun.star.lib.uno.environments.remote.IThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
  * @see         com.sun.star.lib.uno.environments.remote.ThreadId
- * @since       UDK1.0
  */
 public class JobQueue {
     /**

@@ -258,8 +258,6 @@ public class Type {
      * @param zClass the Java class of this type; must not be <code>null</code>
      * @param alternative controls which UNO type to choose in case of
      *     ambiguities
-     *
-     * @since UDK 3.2.0
      */
     public Type(Class<?> zClass, boolean alternative) {
         init(null, zClass, alternative, false, false);
@@ -410,8 +408,6 @@ public class Type {
      *
      * @param type some Type
      * @return true if this type is a supertype of the given type
-     *
-     * @since UDK 3.2.0
      */
     public boolean isSupertypeOf(Type type) {
         if (_typeClass != type._typeClass) {

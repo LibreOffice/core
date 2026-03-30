@@ -50,8 +50,6 @@ public class Factory
                services implemented
         @return
                object factory
-
-        @since UDK 3.2.13
     */
     public static XSingleComponentFactory createComponentFactory(
         Class impl_class, String impl_name, String supported_services [] )

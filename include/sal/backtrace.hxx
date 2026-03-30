@@ -23,8 +23,6 @@
   a small handful of recorded stack traces.
 
   @param backtraceDepth value indicating the maximum backtrace depth; must be > 0
-
-  @since LibreOffice 6.0
 */
 #if defined LIBO_INTERNAL_ONLY
 

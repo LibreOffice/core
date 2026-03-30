@@ -49,7 +49,6 @@ import com.sun.star.uno.XComponentContext;
  * @see         com.sun.star.container.XContentEnumerationAccess
  * @see         com.sun.star.lang.XComponent
  * @see         com.sun.star.lang.XServiceInfo
- * @since       UDK1.0
  */
 public class ServiceManager implements XMultiServiceFactory,
                                        XMultiComponentFactory,
@@ -589,7 +588,6 @@ public class ServiceManager implements XMultiServiceFactory,
      *
      * @see         com.sun.star.lang.XSingleServiceFactory
      * @see         com.sun.star.lang.XServiceInfo
-     * @since       UDK1.0
      */
     static class ServiceEnumerationImpl implements XEnumeration {
         java.util.Iterator<Object> enumeration = null;

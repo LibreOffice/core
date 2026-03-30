@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_CPPU_ENTERABLE_HXX
 #define INCLUDED_CPPU_ENTERABLE_HXX
 
@@ -33,7 +29,6 @@ namespace cppu
     (http://wiki.openoffice.org/wiki/Uno/Cpp/Spec/Environment_Stack)
 
     @see uno_Enterable
-    @since UDK 3.2.7
 */
 class Enterable : public uno_Enterable
 {

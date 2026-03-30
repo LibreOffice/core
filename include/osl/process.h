@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_OSL_PROCESS_H
 #define INCLUDED_OSL_PROCESS_H
 
@@ -374,16 +370,12 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getEnvironment(
 /** Set the value of one environment variable.
     @param[in] strVar  denotes the name of the variable to set.
     @param[in] strValue  string of the new value of environment variable.
-
-    @since UDK 3.2.13
 */
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_setEnvironment(
         rtl_uString *strVar, rtl_uString *strValue);
 
 /** Unsets the value of one environment variable.
     @param[in] strVar  denotes the name of the variable to unset.
-
-    @since UDK 3.2.13
 */
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_clearEnvironment(
         rtl_uString *strVar);

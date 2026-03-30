@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_RTL_URI_H
 #define INCLUDED_RTL_URI_H
 
@@ -166,8 +162,6 @@ typedef enum
 
     /** Like rtl_UriEncodeIgnoreEscapes, but indicating failure when converting
         unmappable characters.
-
-        @since UDK 3.2.0
      */
     rtl_UriEncodeStrict,
 
@@ -178,8 +172,6 @@ typedef enum
         UTF-8.  This mechanism is meant to be used on the result of a rtl_UriDecodeToIuri decoding,
         which will thus only contain escape sequences representing either ASCII characters or broken
         UTF-8 sequences, and which will all be kept as-is.
-
-        @since UDK 3.2.7
      */
     rtl_UriEncodeStrictKeepEscapes,
 
@@ -214,8 +206,6 @@ typedef enum
 
     /** Like rtl_UriDecodeWithCharset, but indicating failure when converting
         unmappable characters.
-
-        @since UDK 3.2.0
      */
     rtl_UriDecodeStrict,
 

@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_UNO_ENVIRONMENT_HXX
 #define INCLUDED_UNO_ENVIRONMENT_HXX
 
@@ -57,7 +54,6 @@ public:
 
         @param typeName   the optional type of the Environment, falls back to "uno" in case being empty,
                           respectively to current C++ Environment.
-        @since UDK 3.2.7
     */
     inline static Environment getCurrent(rtl::OUString const & typeName = rtl::OUString(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
 
@@ -164,7 +160,6 @@ public:
 
         @param pCallee  the function to call
         @param pParam   the parameter pointer to be passed to the function
-        @since UDK 3.2.7
     */
     inline void SAL_CALL invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const;
 
@@ -172,20 +167,15 @@ public:
 
         @param pCallee  the function to call
         @param ...      the parameters to be passed to the function
-        @since UDK 3.2.7
     */
     inline void SAL_CALL invoke(uno_EnvCallee * pCallee, ...) const;
 
     /** Enter this environment explicitly.
-
-        @since UDK 3.2.7
     */
     inline void SAL_CALL enter() const;
 
     /** Checks, if it is valid to currently call objects
         belonging to this environment.
-
-        @since UDK 3.2.7
     */
     inline int  SAL_CALL isValid(rtl::OUString * pReason) const;
 };

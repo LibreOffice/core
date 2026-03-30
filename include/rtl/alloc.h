@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_RTL_ALLOC_H
 #define INCLUDED_RTL_ALLOC_H
 
@@ -95,8 +91,6 @@ SAL_DLLPUBLIC void * SAL_CALL rtl_allocateZeroMemory (
 
     @param[in] Ptr   pointer to the previously allocated memory.
     @param[in] Bytes memory size.
-
-    @since LibreOffice 5.0
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_secureZeroMemory (
     void *   Ptr,
@@ -129,8 +123,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_freeZeroMemory (
         sizeof(void*).
     @param[in] Bytes     memory size.
     @return pointer to the allocated memory.
-
-    @since LibreOffice 4.3
  */
 SAL_DLLPUBLIC void* SAL_CALL rtl_allocateAlignedMemory (
     sal_Size Alignment,
@@ -143,8 +135,6 @@ SAL_DLLPUBLIC void* SAL_CALL rtl_allocateAlignedMemory (
     Memory is released, and the pointer invalidated.
 
     @param[in] Ptr pointer to the previously allocated memory.
-
-    @since LibreOffice 4.3
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_freeAlignedMemory (
     void *   Ptr
@@ -318,8 +308,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
  * It is almost certainly not the method that you want,
  * use with extraordinary care referring to the
  * implementation.
- *
- * @since LibreOffice 6.1
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_alloc_preInit (
     sal_uInt8 mode

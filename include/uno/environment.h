@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_UNO_ENVIRONMENT_H
 #define INCLUDED_UNO_ENVIRONMENT_H
 
@@ -332,7 +329,6 @@ CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironmentByName(
 
     @param ppEnv      inout parameter; a given environment will be released
     @param pTypeName  the optional type of the environment, falls back to "uno"
-    @since UDK 3.2.7
 */
 CPPU_DLLPUBLIC void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName)
     SAL_THROW_EXTERN_C();
@@ -346,7 +342,6 @@ typedef void SAL_CALL uno_EnvCallee(va_list * pParam);
     @param pEnv     the target environment
     @param pCallee  the function to call
     @param pParam   the parameter pointer passed to the function
-    @since UDK 3.2.7
  */
 CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_list * pParam)
     SAL_THROW_EXTERN_C();
@@ -356,7 +351,6 @@ CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke_v(uno_Environment * pEnv, un
     @param pEnv     the target environment
     @param pCallee  the function to call
     @param ...      the parameters passed to the function
-    @since UDK 3.2.7
 */
 CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke (uno_Environment * pEnv, uno_EnvCallee * pCallee, ...)
     SAL_THROW_EXTERN_C();
@@ -364,7 +358,6 @@ CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke (uno_Environment * pEnv, uno
 /** Enter an environment explicitly.
 
     @param pEnv    the environment to enter; NULL leaves all environments
-    @since UDK 3.2.7
 */
 CPPU_DLLPUBLIC void SAL_CALL uno_Environment_enter(uno_Environment * pEnv)
     SAL_THROW_EXTERN_C();
@@ -375,7 +368,6 @@ CPPU_DLLPUBLIC void SAL_CALL uno_Environment_enter(uno_Environment * pEnv)
     @param pEnv                    the environment
     @param pReason                 the reason, if it is not valid
     @return                        1 == valid, 0 == invalid
-    @since UDK 3.2.7
 */
 CPPU_DLLPUBLIC int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason)
     SAL_THROW_EXTERN_C();

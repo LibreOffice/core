@@ -22,8 +22,8 @@ import com.sun.star.uno.Type;
 public class MemberTypeInfo extends TypeInfo
 {
     int m_index;
-    private final Type m_unoType; // @since UDK 3.2
-    private final int m_typeParameterIndex; // @since UDK 3.2
+    private final Type m_unoType;
+    private final int m_typeParameterIndex;
 
     /**
        Create a member type info with a UNO type that cannot unambiguously be
@@ -42,8 +42,6 @@ public class MemberTypeInfo extends TypeInfo
        @param typeParameterIndex the index of the type parameter that determines
        the type of this parameterized member; or <code>-1</code> if this member
        is of an explicit type, or is the member of a plain struct type
-
-       @since UDK 3.2
      */
     public MemberTypeInfo(
         String name, int index, int flags, Type unoType, int typeParameterIndex)
@@ -71,8 +69,6 @@ public class MemberTypeInfo extends TypeInfo
        @return the exact UNO type of this member type info, or <code>null</code>
        if the UNO type is already unambiguously represented by the Java&nbsp;1.2
        type
-
-       @since UDK 3.2
      */
     public final Type getUnoType() {
         return m_unoType;
@@ -85,8 +81,6 @@ public class MemberTypeInfo extends TypeInfo
        @return the index of the type parameter that determines the type of this
        parameterized member; if this member is of an explicit type, or is the
        member of a plain struct type, <code>-1</code> is returned
-
-       @since UDK 3.2
      */
     public final int getTypeParameterIndex() {
         return m_typeParameterIndex;

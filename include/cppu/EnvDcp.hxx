@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_CPPU_ENVDCP_HXX
 #define INCLUDED_CPPU_ENVDCP_HXX
 
@@ -36,7 +32,6 @@ namespace EnvDcp
 
     @param  rEnvDcp        the Environment Descriptor
     @return                the OBI type
-    @since UDK 3.2.7
 */
 inline rtl::OUString getTypeName(rtl::OUString const& rEnvDcp)
 {
@@ -52,7 +47,6 @@ inline rtl::OUString getTypeName(rtl::OUString const& rEnvDcp)
 
     @param  rEnvDcp        the Environment Descriptor
     @return                the purpose
-    @since UDK 3.2.7
 */
 inline rtl::OUString getPurpose(rtl::OUString const& rEnvDcp)
 {

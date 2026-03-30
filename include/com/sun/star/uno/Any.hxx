@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_COM_SUN_STAR_UNO_ANY_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_ANY_HXX
 
@@ -684,8 +681,6 @@ template<> Any Any::get() const = delete;
 /**
    Support for Any in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO
    macros, for example).
-
-   @since LibreOffice 4.2
 */
 template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &o, Any const &any) {

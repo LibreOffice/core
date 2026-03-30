@@ -83,7 +83,6 @@ public class Any {
      * @param any a Java value representing a UNO <code>ANY</code> value.
      * @return a complete Java value (that is, an <code>Any</code> instance)
      * representing the same UNO <code>ANY</code> value as the given argument.
-     * @since UDK 3.2.3
     */
     public static final Any complete(Object any) {
         return any instanceof Any

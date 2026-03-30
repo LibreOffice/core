@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_OSL_FILE_HXX
 #define INCLUDED_OSL_FILE_HXX
 
@@ -721,7 +717,6 @@ public:
         True if it's a directory, False otherwise.
 
         @see getFileType
-        @since LibreOffice 3.6
     */
     bool isDirectory() const
     {
@@ -736,7 +731,6 @@ public:
         @see getFileType
         @see isFile
         @see isLink
-        @since LibreOffice 3.6
     */
     bool isRegular() const
     {
@@ -749,7 +743,6 @@ public:
         True if it's a link, False otherwise.
 
         @see getFileType
-        @since LibreOffice 3.6
     */
     bool isLink() const
     {
@@ -924,8 +917,6 @@ public:
 
         @return
         the URL with which this File instance was created.
-
-        @since LibreOffice 4.1
     */
     rtl::OUString getURL() const { return _aPath; }
 
@@ -1325,8 +1316,6 @@ public:
         @retval E_BUSY device or resource busy
 
         @see move()
-
-        @since LibreOffice 6.2
     */
     static RC replace(const ::rtl::OUString& ustrSourceFileURL,
                       const ::rtl::OUString& ustrDestFileURL)
@@ -1580,8 +1569,6 @@ public:
     @retval false if the items point to a different resource, or a fatal error occurred<br>
 
     @see osl_getDirectoryItem()
-
-    @since LibreOffice 3.6
 */
     bool isIdenticalTo( const DirectoryItem &pOther )
     {
@@ -1673,8 +1660,6 @@ public:
 
         @return
         the URL with which this Directory instance was created.
-
-        @since LibreOffice 4.1
     */
     rtl::OUString getURL() const { return _aPath; }
 

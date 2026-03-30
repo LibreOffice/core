@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_TYPELIB_TYPEDESCRIPTION_H
 #define INCLUDED_TYPELIB_TYPEDESCRIPTION_H
 
@@ -150,8 +147,6 @@ typedef struct _typelib_CompoundTypeDescription
    This is only used to represent plain struct types and instantiated
    polymorphic struct types; there is no representation of polymorphic struct
    type templates at this level.
-
-   @since UDK 3.2.0
  */
 typedef struct _typelib_StructTypeDescription
 {
@@ -275,16 +270,12 @@ typedef struct _typelib_InterfaceMethodTypeDescription
     struct _typelib_InterfaceTypeDescription *  pInterface;
     /** the inherited direct base method (null for a method that is not
         inherited)
-
-        @since UDK 3.2.0
     */
     typelib_TypeDescriptionReference *          pBaseRef;
     /** if pBaseRef is null, the member position of this method within
         pInterface, not counting members inherited from bases; if pBaseRef is
         not null, the index of the direct base within pInterface from which this
         method is inherited
-
-        @since UDK 3.2.0
     */
     sal_Int32                                   nIndex;
 } typelib_InterfaceMethodTypeDescription;
@@ -310,36 +301,24 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
     struct _typelib_InterfaceTypeDescription *  pInterface;
     /** the inherited direct base attribute (null for an attribute that is not
         inherited)
-
-        @since UDK 3.2.0
     */
     typelib_TypeDescriptionReference *          pBaseRef;
     /** if pBaseRef is null, the member position of this attribute within
         pInterface, not counting members inherited from bases; if pBaseRef is
         not null, the index of the direct base within pInterface from which this
         attribute is inherited
-
-        @since UDK 3.2.0
     */
     sal_Int32                                   nIndex;
     /** number of getter exceptions
-
-        @since UDK 3.2.0
     */
     sal_Int32                                   nGetExceptions;
     /** array of getter exception types
-
-        @since UDK 3.2.0
     */
     typelib_TypeDescriptionReference **         ppGetExceptions;
     /** number of setter exceptions
-
-        @since UDK 3.2.0
     */
     sal_Int32                                   nSetExceptions;
     /** array of setter exception types
-
-        @since UDK 3.2.0
     */
     typelib_TypeDescriptionReference **         ppSetExceptions;
 } typelib_InterfaceAttributeTypeDescription;
@@ -412,13 +391,9 @@ typedef struct SAL_DLLPUBLIC_RTTI _typelib_InterfaceTypeDescription
     */
     sal_Int32 *                                 pMapFunctionIndexToMemberIndex;
     /** number of base types
-
-        @since UDK 3.2.0
     */
     sal_Int32                                   nBaseTypes;
     /** array of base type descriptions
-
-        @since UDK 3.2.0
     */
     struct _typelib_InterfaceTypeDescription ** ppBaseTypes;
 } typelib_InterfaceTypeDescription;
@@ -443,8 +418,6 @@ typedef struct _typelib_CompoundMember_Init
 
 /**
    Init struct of members for typelib_typedescription_newStruct().
-
-   @since UDK 3.2.0
  */
 typedef struct _typelib_StructMember_Init
 {
@@ -534,8 +507,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_new(
     @param pType base type;
     @param nMembers number of members
     @param pMembers array of members
-
-    @since UDK 3.2.0
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newStruct(
     typelib_TypeDescription ** ppRet,
@@ -583,8 +554,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
     @param ppBaseInterfaces base interface types
     @param nMembers number of members
     @param ppMembers members; attributes or methods
-
-    @since UDK 3.2.0
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
     typelib_InterfaceTypeDescription ** ppRet,
@@ -658,8 +627,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     @param ppGetExceptionNames type names of getter exceptions
     @param nSetExceptions number of setter exceptions
     @param ppSetExceptionNames type names of setter exceptions
-
-    @since UDK 3.2.0
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     typelib_InterfaceAttributeTypeDescription ** ppRet,
@@ -921,8 +888,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_compound_type_init(
     @param pParameterizedTypes flags for direct members, specifying whether they
         are of parameterized type (true) or explicit type (false); must be null
         for a plain struct type
-
-    @since UDK 3.2.0
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_struct_type_init(
     typelib_TypeDescriptionReference ** ppRef, const char * pTypeName,
@@ -950,8 +915,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_interface_type_init(
     @param pTypeName name of interface
     @param nBaseTypes number of base types
     @param ppBaseTypes base types
-
-    @since UDK 3.2.0
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_mi_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,

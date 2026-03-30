@@ -42,8 +42,6 @@ import java.net.*;
  * @see com.sun.star.connection.XConnection2
  * @see com.sun.star.connection.XConnector
  * @see com.sun.star.comp.loader.JavaLoader
- *
- * @since UDK 1.0
  */
 public final class socketAcceptor implements XAcceptor {
     /**

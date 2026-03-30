@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_CPPU_MAP_HXX
 #define INCLUDED_CPPU_MAP_HXX
 
@@ -38,7 +34,6 @@ namespace cppu
         @param  pT        the object to be mapped
         @param  outerEnv  the target environment
         @return           the mapped object
-        @since UDK 3.2.7
      */
     template<class T> inline T * mapOut(T * pT, css::uno::Environment const & outerEnv)
     {
@@ -53,7 +48,6 @@ namespace cppu
         @param  pT        the object to be mapped
         @param  outerEnv  the source environment
         @return           the mapped object
-        @since UDK 3.2.7
      */
     template<class T> inline T * mapIn(T * pT, css::uno::Environment const & outerEnv)
     {
@@ -68,7 +62,6 @@ namespace cppu
         @param  any       the any to be mapped
         @param  res       the target any
         @param  outerEnv  the target environment
-        @since UDK 3.2.7
      */
     // Problem: any gets assigned to something, acquire/releases may be called in wrong env.
     inline void mapOutAny(css::uno::Any const & any, css::uno::Any * res, css::uno::Environment const & outerEnv)
@@ -89,7 +82,6 @@ namespace cppu
         @param  any       the any to be mapped
         @param  res       the target any
         @param  outerEnv  the source environment
-        @since UDK 3.2.7
      */
     inline void mapInAny(css::uno::Any const & any, css::uno::Any * res, css::uno::Environment const & outerEnv)
     {

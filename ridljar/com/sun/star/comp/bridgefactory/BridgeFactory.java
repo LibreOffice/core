@@ -44,7 +44,6 @@ import com.sun.star.uno.UnoRuntime;
  * <p>This component is only usable for remote bridges.</p>
  *
  * @see         com.sun.star.uno.UnoRuntime
- * @since       UDK1.0
  */
 public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
     private static final boolean DEBUG = false;

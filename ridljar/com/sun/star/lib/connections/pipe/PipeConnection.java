@@ -37,7 +37,6 @@ import com.sun.star.lib.util.NativeLibraryLoader;
  * @see         com.sun.star.lib.connections.pipe.pipeAcceptor
  * @see         com.sun.star.lib.connections.pipe.pipeConnector
  * @see         com.sun.star.connection.XConnection
- * @since       UDK1.0
  */
 public class PipeConnection implements XConnection, XConnectionBroadcaster {
     /**

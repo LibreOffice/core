@@ -69,8 +69,6 @@ import java.util.Map;
 
    <p>Client code should not use the monitors associated with instances of this
    class, as they are used for internal purposes.</p>
-
-   @since UDK 3.2
 */
 public final class PropertySetMixin {
     /**

@@ -35,8 +35,6 @@ import java.util.HashMap;
 /**
  * Supplies information about UNO types. Allows to examine a type
  * in detail (e.g. it is used for marshaling/unmarshaling).
- *
- * @since UDK2.0
  */
 public final class TypeDescription {
     public static TypeDescription getTypeDescription(String typeName)

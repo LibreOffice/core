@@ -22,7 +22,7 @@ import com.sun.star.uno.Type;
 public class AttributeTypeInfo extends TypeInfo
 {
     protected int m_index;
-    private final Type m_unoType; // @since UDK 3.2
+    private final Type m_unoType;
 
     /**
        Create an attribute type info with a UNO type that cannot unambiguously
@@ -37,8 +37,6 @@ public class AttributeTypeInfo extends TypeInfo
 
        @param unoType the exact UNO type; or <code>null</code> if the UNO type
        is already unambiguously represented by the Java&nbsp;1.2 type
-
-       @since UDK 3.2
      */
     public AttributeTypeInfo(String name, int index, int flags, Type unoType) {
         super(name, flags);
@@ -63,8 +61,6 @@ public class AttributeTypeInfo extends TypeInfo
 
     /**
        Returns the status of the 'bound' flag.
-
-       @since UDK 3.2
      */
     public final boolean isBound() {
         return (m_flags & TypeInfo.BOUND) != 0;
@@ -77,8 +73,6 @@ public class AttributeTypeInfo extends TypeInfo
        @return the exact UNO type of this attribute type info, or
        <code>null</code> if the UNO type is already unambiguously represented by
        the Java&nbsp;1.2 type
-
-       @since UDK 3.2
      */
     public final Type getUnoType() {
         return m_unoType;

@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_CPPUHELPER_BOOTSTRAP_HXX
 #define INCLUDED_CPPUHELPER_BOOTSTRAP_HXX
 
@@ -81,8 +78,6 @@ defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile);
 
 /**
  * An exception indicating a bootstrap error.
- *
- * @since UDK 3.2.0
  */
 class CPPUHELPER_DLLPUBLIC BootstrapException
 {
@@ -134,8 +129,6 @@ private:
  * @exception BootstrapException
  * Thrown in case bootstrap() signals an exception due to a
  * bootstrap error.
- *
- * @since UDK 3.2.0
  */
 CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
 SAL_CALL bootstrap();
@@ -155,8 +148,6 @@ SAL_CALL bootstrap();
  *
  * @exception css::lang::IllegalArgumentException
  * If uri is a vnd.sun.star.expand URL that contains unknown macros.
- *
- * @since UDK 3.2.8
  */
 CPPUHELPER_DLLPUBLIC ::rtl::OUString
 SAL_CALL bootstrap_expandUri(::rtl::OUString const & uri);

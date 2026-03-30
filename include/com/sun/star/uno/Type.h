@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_COM_SUN_STAR_UNO_TYPE_H
 #define INCLUDED_COM_SUN_STAR_UNO_TYPE_H
 
@@ -475,8 +472,6 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const double * 
     Use cppu::UnoType instead (or the internal-only cppu::getTypeFavourChar).
     Also note that getCppuType< com::sun::star::uno::Sequence< sal_Unicode > >()
     does not work as expected.
-
-    @since UDK 3.2.0
 */
 template< typename T > SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL
@@ -490,8 +485,6 @@ getCppuType();
     Use cppu::UnoType instead (or the internal-only cppu::getTypeFavourChar).
     Also note that getCppuType< com::sun::star::uno::Sequence< sal_Unicode > >()
     does not work as expected.
-
-    @since UDK 3.2.0
 */
 template<> SAL_DEPRECATED("use cppu::UnoType")
 inline const ::com::sun::star::uno::Type & SAL_CALL

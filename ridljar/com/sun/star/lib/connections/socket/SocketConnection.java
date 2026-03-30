@@ -43,7 +43,6 @@ import com.sun.star.io.XStreamListener;
  * @see         com.sun.star.lib.connections.socket.socketAcceptor
  * @see         com.sun.star.lib.connections.socket.socketConnector
  * @see         com.sun.star.connection.XConnection
- * @since       UDK1.0
  */
 public class SocketConnection implements XConnection, XConnectionBroadcaster {
     /**

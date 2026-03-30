@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_RTL_USTRBUF_H
 #define INCLUDED_RTL_USTRBUF_H
 
@@ -189,8 +185,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_remove(
 
     @param  ppThis      The string, on that the operation should take place
     @param  nCapacity   pointer to the capacity of the string buffer
-
-    @since LibreOffice 3.6
  */
 SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_uStringBuffer_makeStringAndClear(
                                         /*inout*/ rtl_uString ** ppThis,
@@ -204,8 +198,6 @@ SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_uStringBuffer_makeStringAndClear(
     conversions to OUString to be accurately traced.
 
     @param  pThis      The string, on that the operation should take place
-
-    @since LibreOffice 3.6
  */
 SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_uStringBuffer_refReturn( rtl_uString *pThis );
 

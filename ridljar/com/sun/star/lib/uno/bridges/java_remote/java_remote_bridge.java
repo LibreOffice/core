@@ -63,8 +63,6 @@ import com.sun.star.uno.XInterface;
  *
  * <p>The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.</p>
- *
- * @since       UDK1.0
  */
 public class java_remote_bridge
     implements IBridge, IReceiver, RequestHandler, XBridge, XComponent,

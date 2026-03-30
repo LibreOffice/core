@@ -23,7 +23,6 @@ package com.sun.star.lib.uno.environments.remote;
  * This interface is an abstraction of the various threadpool implementations.
  *
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPoolManager
- * @since       UDK1.0
  */
 public interface IThreadPool {
     /**

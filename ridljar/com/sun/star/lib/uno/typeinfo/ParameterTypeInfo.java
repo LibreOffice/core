@@ -23,7 +23,7 @@ public class ParameterTypeInfo extends TypeInfo
 {
     protected int       m_index;
     protected String    m_methodName;
-    private final Type m_unoType; // @since UDK 3.2
+    private final Type m_unoType;
 
     /**
        Create a parameter type info with a UNO type that cannot unambiguously be
@@ -40,8 +40,6 @@ public class ParameterTypeInfo extends TypeInfo
 
        @param unoType the exact UNO type; or <code>null</code> if the UNO type
        is already unambiguously represented by the Java&nbsp;1.2 type
-
-       @since UDK 3.2
      */
     public ParameterTypeInfo(
         String name, String methodName, int index, int flags, Type unoType)
@@ -94,8 +92,6 @@ public class ParameterTypeInfo extends TypeInfo
        @return the exact UNO type of this parameter type info, or
        <code>null</code> if the UNO type is already unambiguously represented by
        the Java&nbsp;1.2 type
-
-       @since UDK 3.2
      */
     public final Type getUnoType() {
         return m_unoType;

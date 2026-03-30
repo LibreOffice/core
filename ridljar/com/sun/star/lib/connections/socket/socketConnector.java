@@ -44,8 +44,6 @@ import java.net.UnknownHostException;
  * @see com.sun.star.connection.XConnection
  * @see com.sun.star.connection.XConnector
  * @see com.sun.star.comp.loader.JavaLoader
- *
- * @since UDK 1.0
  */
 public final class socketConnector implements XConnector {
     /**

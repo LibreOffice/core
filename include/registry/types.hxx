@@ -99,8 +99,6 @@ enum RTTypeClass
        (The value of this enumerator is chosen so that it is unlikely that its
        addition changes the underlying type of this enumeration for any C/C++
        compiler.)
-
-       @since UDK 3.2.0
      */
     RT_TYPE_PUBLISHED = 0x4000
     /// @endcond
@@ -168,8 +166,6 @@ enum class RTFieldAccess
 
        Only valid for fields that represent members of polymorphic struct type
        templates.
-
-       @since UDK 3.2.0
      */
     PARAMETERIZED_TYPE = 0x4000,
     /**
@@ -177,8 +173,6 @@ enum class RTFieldAccess
 
        Used in combination with RTFieldAccess::CONST for individual constants (which are
        not members of constant groups).
-
-       @since UDK 3.2.0
      */
     PUBLISHED = 0x8000,
 
@@ -251,16 +245,12 @@ enum class RTMethodMode
     /**
        Indicates an extended attribute getter (that has a 'raises' clause) of an
        interface type.
-
-       @since UDK 3.2.0
      */
     ATTRIBUTE_GET,
 
     /**
        Indicates an extended attribute setter (that has a 'raises' clause) of an
        interface type.
-
-       @since UDK 3.2.0
      */
     ATTRIBUTE_SET
 };
@@ -291,8 +281,6 @@ enum RTParamMode
        This value can be combined with any of RT_PARAM_IN, RT_PARAM_OUT, and
        RT_PARAM_INOUT (however, service constructors currently only allow
        RT_PARAM_IN, anyway).
-
-       @since UDK 3.2.0
      */
     RT_PARAM_REST = 4
 };
@@ -327,8 +315,6 @@ enum class RTReferenceType
 
     /**
        Indicates a type parameter of a polymorphic struct type template.
-
-       @since UDK 3.2.0
      */
     TYPE_PARAMETER
 };

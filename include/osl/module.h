@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_OSL_MODULE_H
 #define INCLUDED_OSL_MODULE_H
 
@@ -82,8 +78,6 @@ SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_
     @param[in] nRtldMode denotes the mode.
 
     @return NULL if the module could not be loaded, otherwise a handle to the module.
-
-    @since UDK 3.6
 */
 SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 nRtldMode);
 
@@ -95,8 +89,6 @@ SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sa
     @param[in] mode the SAL_LOADMODULE_xxx flags.
 
     @return a non-NULL handle to the loaded module, or NULL if an error occurred.
-
-    @since UDK 3.2.8
 */
 SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleRelative(
     oslGenericFunction baseModule, rtl_uString * relativePath, sal_Int32 mode);
@@ -110,8 +102,6 @@ SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleRelative(
     @param[in] mode     the SAL_LOADMODULE_xxx flags.
 
     @return a non-NULL handle to the loaded module, or NULL if an error occurred.
-
-    @since LibreOffice 3.5
 */
 SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleRelativeAscii(
     oslGenericFunction baseModule, char const * relativePath, sal_Int32 mode);

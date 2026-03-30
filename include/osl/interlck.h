@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_OSL_INTERLCK_H
 #define INCLUDED_OSL_INTERLCK_H
 
@@ -65,8 +61,6 @@ SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInte
 
     @param p Address of count variable
     @return The adjusted value of the count variable.
-
-    @since LibreOffice 4.0
 */
 #if HAVE_GCC_BUILTIN_ATOMIC
 #    define osl_atomic_increment(p)  __sync_add_and_fetch((p), 1)
@@ -84,8 +78,6 @@ SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInte
 
     @param p Address of count variable
     @return The adjusted value of the count variable.
-
-    @since LibreOffice 4.0
 */
 #if HAVE_GCC_BUILTIN_ATOMIC
 #    define osl_atomic_decrement(p) __sync_sub_and_fetch((p), 1)

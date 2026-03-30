@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_CPPUHELPER_SUPPORTSSERVICE_HXX
 #define INCLUDED_CPPUHELPER_SUPPORTSSERVICE_HXX
 
@@ -39,8 +35,6 @@ namespace cppu {
 
     @return true iff the sequence returned by the given implementation's
     getSupportedServices method contains the given name
-
-    @since LibreOffice 4.0
 */
 bool CPPUHELPER_DLLPUBLIC supportsService(
     css::lang::XServiceInfo * implementation,

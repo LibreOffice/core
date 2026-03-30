@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_UNO_SEQUENCE2_H
 #define INCLUDED_UNO_SEQUENCE2_H
 
@@ -182,8 +179,6 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_realloc(
     @param type the type of the sequence, must be non-null
     @param release function called each time an interface needs to be release,
         must be non-null
-
-    @since LibreOffice 4.4
 */
 CPPU_DLLPUBLIC void SAL_CALL uno_type_sequence_destroy(
     uno_Sequence * sequence, struct _typelib_TypeDescriptionReference * type,

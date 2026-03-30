@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_RTL_STRING_H
 #define INCLUDED_RTL_STRING_H
 
@@ -762,8 +758,6 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_toInt32(
     @return
     the unsigned integer value represented by the string, or 0 if the string
     does not represent an unsigned integer.
-
-    @since LibreOffice 4.2
  */
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_str_toUInt32(
         const char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
@@ -806,7 +800,6 @@ SAL_DLLPUBLIC sal_Int64 SAL_CALL rtl_str_toInt64(
     not represent a long integer.
 
     @internal
-    @since LibreOffice 6.4
 */
 SAL_DLLPUBLIC sal_Int64 SAL_CALL rtl_str_toInt64_WithLength(
         const char * str, sal_Int16 radix, sal_Int32 nStrLength ) SAL_THROW_EXTERN_C();
@@ -826,8 +819,6 @@ SAL_DLLPUBLIC sal_Int64 SAL_CALL rtl_str_toInt64_WithLength(
     @return
     the unsigned long integer value represented by the string, or 0 if the
     string does not represent an unsigned long integer.
-
-    @since LibreOffice 4.1
  */
 SAL_DLLPUBLIC sal_uInt64 SAL_CALL rtl_str_toUInt64(
         const char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
@@ -920,8 +911,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_new( rtl_String ** newStr ) SAL_THROW_EXT
     @param[out] nLen the number of characters. Must be >= 0.
 
     @return pointer to the new string.
-
-    @since LibreOffice 4.1
  */
 SAL_DLLPUBLIC rtl_String * SAL_CALL rtl_string_alloc(sal_Int32 nLen) SAL_THROW_EXTERN_C();
 
@@ -1000,8 +989,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromStr_WithLength( rtl_String ** newS
     @param[in]     from         the String to take the substring from.
     @param[in]     beginIndex   the beginning index, inclusive.
     @param[in]     count        the number of characters.
-
-    @since LibreOffice 4.0
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromSubString(
         rtl_String ** newStr, const rtl_String * from,
@@ -1009,7 +996,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromSubString(
 
 /**
  @internal
- @since LibreOffice 3.6
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromLiteral( rtl_String ** newStr, const char * value, sal_Int32 len, sal_Int32 allocExtra ) SAL_THROW_EXTERN_C();
 
@@ -1156,8 +1142,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplace(
     and not greater than the original string's length; upon exit from the
     function its value is the index into the original string at which the
     replacement took place or -1 if no replacement took place
-
-    @since LibreOffice 3.6
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplaceFirst(
     rtl_String ** newStr, rtl_String * str, char const * from,
@@ -1184,8 +1168,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplaceFirst(
     point to memory of at least \p toLength bytes
 
     @param toLength  the length of the \p to substring; must be non-negative
-
-    @since LibreOffice 3.6
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplaceAll(
     rtl_String ** newStr, rtl_String * str, char const * from,
@@ -1440,7 +1422,6 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_convertUStringToString(
  @param size
  the number of characters
 
- @since LibreOffice 4.1
  @internal
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_string_ensureCapacity( rtl_String ** str, sal_Int32 size ) SAL_THROW_EXTERN_C();

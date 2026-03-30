@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_OSL_FILE_H
 #define INCLUDED_OSL_FILE_H
 
@@ -313,8 +309,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseDirectoryItem(
     @retval sal_False if the items point to a different resource, or a fatal error occurred
 
     @see osl_getDirectoryItem()
-
-    @since LibreOffice 3.6
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_identicalDirectoryItem(
                                         oslDirectoryItem pItemA,
@@ -795,8 +789,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
 /** Indicate that the file can be accessed randomly (i.e. there is no sequential
     reading). Basically it means that the first byte of every page in the
     file-mapping will be read.
-
-    @since UDK 3.2.10
  */
 #define osl_File_MapFlag_RandomAccess ((sal_uInt32)(0x1))
 
@@ -807,8 +799,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
     @attention As this assumes that madvise() with the WILLREAD flag is
     asynchronous (which is I'm afraid an incorrect assumption), Linux systems
     will ignore this flag.
-
-    @since UDK 3.2.12
 */
 #define osl_File_MapFlag_WillNeed ((sal_uInt32)(0x2))
 
@@ -849,8 +839,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
                 open for writing
     @retval osl_File_E_NOMEM process's maximum number of mappings have
                 been exceeded
-
-    @since UDK 3.2.10
 */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_mapFile (
   oslFileHandle Handle,
@@ -871,8 +859,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_mapFile (
     the already by LibreOffice Android-specific bootstrapping code
     mmapped .apk archive. We can't go and randomly munmap part of the
     .apk archive. So this function is not present on Android.
-
-    @since UDK 3.2.10
 */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_unmapFile (
   void*      pAddr,
@@ -889,8 +875,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_unmapFile (
     On Android, for files below /assets, i.e. located inside the app
     archive (.apk), this won't actually unmap anything; all the .apk
     stays mapped.
-
-    @since UDK 3.6
 */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_unmapMappedFile (
   oslFileHandle Handle,
@@ -1027,7 +1011,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_writeFile(
     @retval osl_File_E_FAULT bad address
     @retval osl_File_E_AGAIN operation would block
     @retval osl_File_E_NOLINK link has been severed
-    @since UDK 3.2.10
  */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_readFileAt(
   oslFileHandle Handle,
@@ -1069,7 +1052,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_readFileAt(
     @retval osl_File_E_NOLINK link has been severed
     @retval osl_File_E_NOSPC no space left on device
     @retval osl_File_E_NXIO no such device or address
-    @since UDK 3.2.10
 */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_writeFileAt(
   oslFileHandle Handle,
@@ -1185,8 +1167,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectory( rtl_uString* pustrDirec
     the various flags can differ across operating systems.
 
     @see osl_createDirectory()
-
-    @since LibreOffice 4.3
 */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectoryWithFlags(
     rtl_uString * url, sal_uInt32 flags);
@@ -1662,8 +1642,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createTempFile(
         (temporarily) unavailable
 
     @see osl_moveFile()
-
-    @since LibreOffice 6.2
 */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_replaceFile(rtl_uString* pustrSourceFileURL,
                                                     rtl_uString* pustrDestFileURL);

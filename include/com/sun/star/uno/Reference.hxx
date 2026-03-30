@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
 #ifndef INCLUDED_COM_SUN_STAR_UNO_REFERENCE_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_REFERENCE_HXX
 
@@ -471,8 +468,6 @@ inline bool BaseReference::operator != ( const BaseReference & rRef ) const
 /**
    Support for BaseReference in std::ostream (and thus in CPPUNIT_ASSERT or
    SAL_INFO macros, for example).
-
-   @since LibreOffice 5.4
 */
 template<typename charT, typename traits> std::basic_ostream<charT, traits> &
 operator <<(
@@ -491,8 +486,6 @@ namespace std
 
 /**
   Make css::uno::Reference hashable by default for use in STL containers.
-
-  @since LibreOffice 6.3
 */
 template<typename T>
 struct hash<::css::uno::Reference<T>>

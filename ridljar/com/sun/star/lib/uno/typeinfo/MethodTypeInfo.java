@@ -22,7 +22,7 @@ import com.sun.star.uno.Type;
 public class MethodTypeInfo extends TypeInfo
 {
     protected int m_index;
-    private final Type m_unoType; // @since UDK 3.2
+    private final Type m_unoType;
 
     /**
        Create a method type info with a UNO return type that cannot
@@ -37,8 +37,6 @@ public class MethodTypeInfo extends TypeInfo
 
        @param unoType the exact UNO return type; or <code>null</code> if the UNO
        type is already unambiguously represented by the Java&nbsp;1.2 type
-
-       @since UDK 3.2
      */
     public MethodTypeInfo(String name, int index, int flags, Type unoType) {
         super(name, flags);
@@ -78,8 +76,6 @@ public class MethodTypeInfo extends TypeInfo
        @return the exact UNO return type of this method type info, or
        <code>null</code> if the UNO type is already unambiguously represented by
        the Java&nbsp;1.2 type
-
-       @since UDK 3.2
      */
     public final Type getUnoType() {
         return m_unoType;

@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_RTL_STRINGUTILS_HXX
 #define INCLUDED_RTL_STRINGUTILS_HXX
 
@@ -99,8 +95,6 @@ struct SAL_WARN_UNUSED OStringChar {
       sal_Unicode const * s = ...;
       sal_Unicode c = ...;
       OUString t = s + OUStringChar(c);
-
-    @since LibreOffice 5.0
 */
 struct SAL_WARN_UNUSED OUStringChar_ {
     constexpr OUStringChar_(sal_Unicode theC): c(theC) {}

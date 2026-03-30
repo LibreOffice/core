@@ -30,8 +30,6 @@ import java.net.URLEncoder;
  *
  * This used to be used to do URL to File mapping in pre-Java1.4 days, but since
  * we now require Java 1.5, it is largely unnecessary.
- *
- * @since UDK 3.2.8
  */
 public final class UrlToFileMapper {
 

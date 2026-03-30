@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * This file is part of LibreOffice published API.
- */
-
 #ifndef INCLUDED_CPPU_HELPER_PURPENV_MAPPING_HXX
 #define INCLUDED_CPPU_HELPER_PURPENV_MAPPING_HXX
 
@@ -35,8 +31,6 @@ namespace cppu { namespace helper { namespace purpenv {
 
 /** C++ helper for implementing Purpose Environments.
     (http://wiki.openoffice.org/wiki/Uno/Cpp/Spec/Purpose_Bridge_Implementation_Helper)
-
-    @since UDK 3.2.7
 */
 
 typedef void ProbeFun(

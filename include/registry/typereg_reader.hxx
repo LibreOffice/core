@@ -47,8 +47,6 @@
 
    @return false iff an out-of-memory condition occurred, in which case
    <code>result</code> is left unchanged, and no type reader is created
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC bool typereg_reader_create(
     void const * buffer, sal_uInt32 length,
@@ -58,8 +56,6 @@ REG_DLLPUBLIC bool typereg_reader_create(
    Increments the reference count of a type reader.
 
    @param handle a handle on a type reader; may be null
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_acquire(void * handle);
 
@@ -69,8 +65,6 @@ REG_DLLPUBLIC void typereg_reader_acquire(void * handle);
    <p>If the reference count drops to zero, the type reader is destroyed.</p>
 
    @param handle a handle on a type reader; may be null
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_release(void * handle);
 
@@ -82,8 +76,6 @@ REG_DLLPUBLIC void typereg_reader_release(void * handle);
    @return the version of the binary blob from which the type reader was
    constructed; if <code>handle</code> is null, <code>TYPEREG_VERSION_0</code>
    is returned
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC typereg_Version typereg_reader_getVersion(void const * handle);
 
@@ -95,8 +87,6 @@ REG_DLLPUBLIC typereg_Version typereg_reader_getVersion(void const * handle);
    @param result an out-parameter obtaining the documentation string; must not
    be null; if <code>handle</code> is null, an empty string is returned; if an
    out-of-memory condition occurs, a pointer to a null pointer is returned
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getDocumentation(
     void * handle, rtl_uString ** result);
@@ -110,7 +100,6 @@ REG_DLLPUBLIC void typereg_reader_getDocumentation(
    null; if <code>handle</code> is null, an empty string is returned; if an
    out-of-memory condition occurs, a pointer to a null pointer is returned
 
-   @since UDK 3.2.0
    @deprecated
  */
 REG_DLLPUBLIC void typereg_reader_getFileName(void * handle, rtl_uString ** result);
@@ -127,8 +116,6 @@ REG_DLLPUBLIC void typereg_reader_getFileName(void * handle, rtl_uString ** resu
 
    @return the type class of the type reader; if <code>handle</code> is null,
    <code>RT_TYPE_INVALID</code> is returned
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC RTTypeClass typereg_reader_getTypeClass(void * handle);
 
@@ -139,8 +126,6 @@ REG_DLLPUBLIC RTTypeClass typereg_reader_getTypeClass(void * handle);
 
    @return whether the type reader is published; if <code>handle</code> is null,
    false is returned
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC bool typereg_reader_isPublished(void * handle);
 
@@ -152,8 +137,6 @@ REG_DLLPUBLIC bool typereg_reader_isPublished(void * handle);
    @param result an out-parameter obtaining the type name string; must not be
    null; if <code>handle</code> is null, an empty string is returned; if an
    out-of-memory condition occurs, a pointer to a null pointer is returned
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getTypeName(void * handle, rtl_uString ** result);
 
@@ -164,8 +147,6 @@ REG_DLLPUBLIC void typereg_reader_getTypeName(void * handle, rtl_uString ** resu
 
    @return the number of super types of the type reader; if <code>handle</code>
    is null, zero is returned
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC sal_uInt16 typereg_reader_getSuperTypeCount(void * handle);
 
@@ -180,8 +161,6 @@ REG_DLLPUBLIC sal_uInt16 typereg_reader_getSuperTypeCount(void * handle);
 
    @param index a valid index into the range of super types of the given type
    reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getSuperTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
@@ -193,8 +172,6 @@ REG_DLLPUBLIC void typereg_reader_getSuperTypeName(
 
    @return the number of fields of the type reader; if <code>handle</code> is
    null, zero is returned
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC sal_uInt16 typereg_reader_getFieldCount(void * handle);
 
@@ -208,8 +185,6 @@ REG_DLLPUBLIC sal_uInt16 typereg_reader_getFieldCount(void * handle);
    pointer is returned
 
    @param index a valid index into the range of fields of the given type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getFieldDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index);
@@ -225,7 +200,6 @@ REG_DLLPUBLIC void typereg_reader_getFieldDocumentation(
 
    @param index a valid index into the range of fields of the given type reader
 
-   @since UDK 3.2.0
    @deprecated
  */
 REG_DLLPUBLIC void typereg_reader_getFieldFileName(
@@ -239,8 +213,6 @@ REG_DLLPUBLIC void typereg_reader_getFieldFileName(
    @param index a valid index into the range of fields of the given type reader
 
    @return the flags of the given field of the type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC RTFieldAccess typereg_reader_getFieldFlags(
     void * handle, sal_uInt16 index);
@@ -255,8 +227,6 @@ REG_DLLPUBLIC RTFieldAccess typereg_reader_getFieldFlags(
    returned
 
    @param index a valid index into the range of fields of the given type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getFieldName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
@@ -271,8 +241,6 @@ REG_DLLPUBLIC void typereg_reader_getFieldName(
    pointer is returned
 
    @param index a valid index into the range of fields of the given type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getFieldTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
@@ -292,8 +260,6 @@ REG_DLLPUBLIC void typereg_reader_getFieldTypeName(
 
    @return false iff an out-of-memory condition occurred, in which case
    <code>type</code> and <code>value</code> are left unchanged
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC bool typereg_reader_getFieldValue(
     void * handle, sal_uInt16 index, RTValueType * type,
@@ -306,8 +272,6 @@ REG_DLLPUBLIC bool typereg_reader_getFieldValue(
 
    @return the number of methods of the type reader; if <code>handle</code> is
    null, zero is returned
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC sal_uInt16 typereg_reader_getMethodCount(void * handle);
 
@@ -321,8 +285,6 @@ REG_DLLPUBLIC sal_uInt16 typereg_reader_getMethodCount(void * handle);
    pointer is returned
 
    @param index a valid index into the range of methods of the given type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getMethodDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index);
@@ -335,8 +297,6 @@ REG_DLLPUBLIC void typereg_reader_getMethodDocumentation(
    @param index a valid index into the range of methods of the given type reader
 
    @return the flags of the given method of the type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC RTMethodMode typereg_reader_getMethodFlags(
     void * handle, sal_uInt16 index);
@@ -351,8 +311,6 @@ REG_DLLPUBLIC RTMethodMode typereg_reader_getMethodFlags(
    returned
 
    @param index a valid index into the range of methods of the given type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getMethodName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
@@ -367,8 +325,6 @@ REG_DLLPUBLIC void typereg_reader_getMethodName(
    a null pointer is returned
 
    @param index a valid index into the range of methods of the given type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getMethodReturnTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
@@ -381,8 +337,6 @@ REG_DLLPUBLIC void typereg_reader_getMethodReturnTypeName(
    @param index a valid index into the range of methods of the given type reader
 
    @return the number of parameters of the given method of the type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC sal_uInt16 typereg_reader_getMethodParameterCount(
     void * handle, sal_uInt16 index);
@@ -400,8 +354,6 @@ REG_DLLPUBLIC sal_uInt16 typereg_reader_getMethodParameterCount(
 
    @return the flags of the given parameter of the given method of the type
    reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC RTParamMode typereg_reader_getMethodParameterFlags(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex);
@@ -420,8 +372,6 @@ REG_DLLPUBLIC RTParamMode typereg_reader_getMethodParameterFlags(
 
    @param parameterIndex a valid index into the range of parameters of the given
    method
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getMethodParameterName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
@@ -441,8 +391,6 @@ REG_DLLPUBLIC void typereg_reader_getMethodParameterName(
 
    @param parameterIndex a valid index into the range of parameters of the given
    method
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getMethodParameterTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
@@ -456,8 +404,6 @@ REG_DLLPUBLIC void typereg_reader_getMethodParameterTypeName(
    @param index a valid index into the range of methods of the given type reader
 
    @return the number of exceptions of the given method of the type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC sal_uInt16 typereg_reader_getMethodExceptionCount(
     void * handle, sal_uInt16 index);
@@ -476,8 +422,6 @@ REG_DLLPUBLIC sal_uInt16 typereg_reader_getMethodExceptionCount(
 
    @param exceptionIndex a valid index into the range of exceptions of the given
    method
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getMethodExceptionTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
@@ -490,8 +434,6 @@ REG_DLLPUBLIC void typereg_reader_getMethodExceptionTypeName(
 
    @return the number of references of the type reader; if <code>handle</code>
    is null, zero is returned
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC sal_uInt16 typereg_reader_getReferenceCount(void * handle);
 
@@ -506,8 +448,6 @@ REG_DLLPUBLIC sal_uInt16 typereg_reader_getReferenceCount(void * handle);
 
    @param index a valid index into the range of references of the given type
    reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getReferenceDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index);
@@ -521,8 +461,6 @@ REG_DLLPUBLIC void typereg_reader_getReferenceDocumentation(
    reader
 
    @return the flags of the given reference of the type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC RTFieldAccess typereg_reader_getReferenceFlags(
     void * handle, sal_uInt16 index);
@@ -536,8 +474,6 @@ REG_DLLPUBLIC RTFieldAccess typereg_reader_getReferenceFlags(
    reader
 
    @return the sort of the given reference of the type reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC RTReferenceType typereg_reader_getReferenceSort(
     void * handle, sal_uInt16 index);
@@ -553,8 +489,6 @@ REG_DLLPUBLIC RTReferenceType typereg_reader_getReferenceSort(
 
    @param index a valid index into the range of references of the given type
    reader
-
-   @since UDK 3.2.0
  */
 REG_DLLPUBLIC void typereg_reader_getReferenceTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
