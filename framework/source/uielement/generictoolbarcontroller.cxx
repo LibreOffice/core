@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <svl/imageitm.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
@@ -117,11 +118,11 @@ GenericToolbarController::~GenericToolbarController()
 {
 }
 
-void SAL_CALL GenericToolbarController::dispose()
+void GenericToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
+    svt::ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
-
-    svt::ToolboxController::dispose();
 
     m_pToolbar = nullptr;
     m_xToolbar.reset();
@@ -354,9 +355,9 @@ ImageOrientationController::ImageOrientationController(const Reference<XComponen
         VCLUnoHelper::GetWindow(getParent())->AddEventListener(LINK(this, ImageOrientationController, WindowEventListener));
 }
 
-void ImageOrientationController::dispose()
+void ImageOrientationController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    ToolboxController::dispose();
+    ToolboxController::disposing(rGuard);
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(getParent());
     if (pWindow)
         pWindow->RemoveEventListener(LINK(this, ImageOrientationController, WindowEventListener));

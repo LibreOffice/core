@@ -20,6 +20,7 @@
 #include <uielement/FixedTextToolbarController.hxx>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/svapp.hxx>
@@ -77,12 +78,15 @@ FixedTextToolbarController::FixedTextToolbarController(
     m_xToolbar->SetItemBits(m_nID, ToolBoxItemBits::AUTOSIZE | m_xToolbar->GetItemBits(m_nID));
 }
 
-void SAL_CALL FixedTextToolbarController::dispose()
+void FixedTextToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    SolarMutexGuard aSolarMutexGuard;
-    m_xToolbar->SetItemWindow(m_nID, nullptr);
-    m_pFixedTextControl.disposeAndClear();
-    ComplexToolbarController::dispose();
+    {
+        comphelper::unique_unlock aUnlock(rGuard);
+        SolarMutexGuard aSolarMutexGuard;
+        m_xToolbar->SetItemWindow(m_nID, nullptr);
+        m_pFixedTextControl.disposeAndClear();
+    }
+    ComplexToolbarController::disposing(rGuard);
 }
 
 Sequence<PropertyValue> FixedTextToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const

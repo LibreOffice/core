@@ -15,6 +15,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -205,11 +206,11 @@ css::uno::Sequence< OUString > SAL_CALL LimitBoxController::getSupportedServiceN
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
-/// XComponent
-void SAL_CALL LimitBoxController::dispose()
+/// WeakComponentImplHelperBase
+void LimitBoxController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    svt::ToolboxController::dispose();
-
+    svt::ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
     m_xLimitBox.disposeAndClear();
 }

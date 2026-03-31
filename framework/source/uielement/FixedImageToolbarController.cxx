@@ -19,6 +19,7 @@
 
 #include <uielement/FixedImageToolbarController.hxx>
 
+#include <comphelper/unique_unlock.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -86,14 +87,17 @@ FixedImageToolbarController::FixedImageToolbarController(
     SvtMiscOptions().AddListenerLink(LINK(this, FixedImageToolbarController, MiscOptionsChanged));
 }
 
-void SAL_CALL FixedImageToolbarController::dispose()
+void FixedImageToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    SolarMutexGuard aSolarMutexGuard;
-    SvtMiscOptions().RemoveListenerLink(
-        LINK(this, FixedImageToolbarController, MiscOptionsChanged));
-    m_xToolbar->SetItemWindow(m_nID, nullptr);
-    m_pFixedImageControl.disposeAndClear();
-    ComplexToolbarController::dispose();
+    {
+        comphelper::unique_unlock aUnlock(rGuard);
+        SolarMutexGuard aSolarMutexGuard;
+        SvtMiscOptions().RemoveListenerLink(
+            LINK(this, FixedImageToolbarController, MiscOptionsChanged));
+        m_xToolbar->SetItemWindow(m_nID, nullptr);
+        m_pFixedImageControl.disposeAndClear();
+    }
+    ComplexToolbarController::disposing(rGuard);
 }
 
 void FixedImageToolbarController::executeControlCommand(const css::frame::ControlCommand&) {}

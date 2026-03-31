@@ -18,6 +18,7 @@
  */
 
 #include <StylesPreviewToolBoxControl.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -38,10 +39,10 @@ StylesPreviewToolBoxControl::initialize(const css::uno::Sequence<css::uno::Any>&
         InitializeStyles(m_xFrame->getController()->getModel());
 }
 
-void SAL_CALL StylesPreviewToolBoxControl::dispose()
+void StylesPreviewToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    svt::ToolboxController::dispose();
-
+    svt::ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
     m_xVclBox.disposeAndClear();
     m_xWeldBox.reset();

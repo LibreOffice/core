@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 
+#include <comphelper/unique_unlock.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
 
@@ -168,13 +169,16 @@ sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& Servic
     return cppu::supportsService(this, ServiceName);
 }
 
-// XComponent
-void SAL_CALL PopupWindowController::dispose()
+// WeakComponentImplHelperBase
+void PopupWindowController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    mxInterimPopover.reset();
-    mxPopoverContainer.reset();
-    mxImpl.reset();
-    svt::ToolboxController::dispose();
+    {
+        comphelper::unique_unlock aUnlock(rGuard);
+        mxInterimPopover.reset();
+        mxPopoverContainer.reset();
+        mxImpl.reset();
+    }
+    svt::ToolboxController::disposing(rGuard);
 }
 
 // XStatusListener

@@ -26,12 +26,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <comphelper/multicontainer2.hxx>
-#include <comphelper/broadcasthelper.hxx>
-#include <comphelper/proparrhlp.hxx>
-#include <comphelper/propertycontainer.hxx>
-#include <cppuhelper/propshlp.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/propcontainerimplhelper.hxx>
 #include <tools/link.hxx>
 #include <utility>
 #include <vcl/toolboxid.hxx>
@@ -55,17 +51,14 @@ namespace weld
 namespace svt
 {
 
-typedef cppu::WeakImplHelper<
+typedef comphelper::WeakComponentImplHelper<
         css::frame::XStatusListener, css::frame::XToolbarController,
-        css::lang::XInitialization, css::util::XUpdatable,
-        css::lang::XComponent >
+        css::lang::XInitialization, css::util::XUpdatable >
     ToolboxController_Base;
 
 class SVT_DLLPUBLIC ToolboxController :
-                          public ToolboxController_Base,
-                          public ::comphelper::OMutexAndBroadcastHelper,
-                          public ::comphelper::OPropertyContainer,
-                          public ::comphelper::OPropertyArrayUsageHelper< ToolboxController >
+                          public ::comphelper::OPropertyContainerImplHelper<
+                              ToolboxController_Base, ToolboxController >
 {
     private:
         bool  m_bSupportVisible;
@@ -83,25 +76,13 @@ class SVT_DLLPUBLIC ToolboxController :
         void updateStatus( const OUString& rCommandURL );
         void updateStatus();
 
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
-        virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
-
         // XInitialization
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 
         // XUpdatable
         virtual void SAL_CALL update() override;
 
-        // XComponent
-        virtual void SAL_CALL dispose() override;
-        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rListener ) override;
-
         // XEventListener
-        using cppu::OPropertySetHelper::disposing;
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XStatusListener
@@ -113,12 +94,6 @@ class SVT_DLLPUBLIC ToolboxController :
         virtual void SAL_CALL doubleClick() override;
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
-        // OPropertySetHelper
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) override;
-        // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
@@ -133,6 +108,9 @@ class SVT_DLLPUBLIC ToolboxController :
         bool IsInSidebar() const { return m_bSidebar; }
 
     protected:
+        // weak component / custom disposal
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
+
         bool getToolboxId( ToolBoxItemId& rItemId, ToolBox** ppToolBox );
         struct Listener
         {
@@ -175,14 +153,12 @@ class SVT_DLLPUBLIC ToolboxController :
         const css::uno::Reference< css::awt::XWindow >& getParent() const { return m_xParentWindow;}
 
         bool                                                      m_bInitialized,
-                                                                  m_bDisposed,
                                                                   m_bSidebar;
         ToolBoxItemId                                             m_nToolBoxId;
         css::uno::Reference< css::frame::XFrame >                 m_xFrame;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         OUString                                                  m_aCommandURL;
         URLToDispatchMap                                          m_aListenerMap;
-        comphelper::OMultiTypeInterfaceContainerHelper2           m_aListenerContainer;   /// container for ALL Listener
 
         css::uno::Reference< css::awt::XWindow >                  m_xParentWindow;
         css::uno::Reference< css::util::XURLTransformer >         m_xUrlTransformer;

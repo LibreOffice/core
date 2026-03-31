@@ -24,6 +24,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <comphelper/kit.hxx>
 #include <rtl/math.hxx>
 #include <utility>
@@ -64,8 +65,8 @@ class FontHeightToolBoxControl : public FontHeightToolBoxControl_Base
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-        // XComponent
-        virtual void SAL_CALL dispose() override;
+        // WeakComponentImplHelperBase
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XStatusListener
         virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
@@ -373,11 +374,11 @@ uno::Sequence< OUString > SAL_CALL FontHeightToolBoxControl::getSupportedService
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
-// XComponent
-void SAL_CALL FontHeightToolBoxControl::dispose()
+// WeakComponentImplHelperBase
+void FontHeightToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    svt::ToolboxController::dispose();
-
+    svt::ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
     m_xVclBox.disposeAndClear();
     m_xWeldBox.reset();

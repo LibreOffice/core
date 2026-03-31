@@ -86,8 +86,8 @@ protected:
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window *pParent);
 
 public:
-    // XComponent
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // new controller API
     // XStatusListener

@@ -70,12 +70,6 @@ ImageButtonToolbarController::~ImageButtonToolbarController()
 {
 }
 
-void SAL_CALL ImageButtonToolbarController::dispose()
-{
-    SolarMutexGuard aSolarMutexGuard;
-    ComplexToolbarController::dispose();
-}
-
 void ImageButtonToolbarController::executeControlCommand( const css::frame::ControlCommand& rControlCommand )
 {
     SolarMutexGuard aSolarMutexGuard;

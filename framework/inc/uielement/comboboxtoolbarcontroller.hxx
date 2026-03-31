@@ -40,8 +40,8 @@ class ComboboxToolbarController final : public ComplexToolbarController
                                    const OUString& aCommand );
         virtual ~ComboboxToolbarController() override;
 
-        // XComponent
-        virtual void SAL_CALL dispose() override;
+        // WeakComponentImplHelperBase
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // called from ComboBoxControl
         void Select();

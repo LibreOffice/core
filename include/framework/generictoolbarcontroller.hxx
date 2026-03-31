@@ -40,8 +40,8 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) GenericToolbarController final : public sv
                                   const OUString& aCommand );
         virtual ~GenericToolbarController() override;
 
-        // XComponent
-        virtual void SAL_CALL dispose() override;
+        // WeakComponentImplHelperBase
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XToolbarController
         virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
@@ -75,8 +75,8 @@ public:
                                const css::uno::Reference<css::awt::XWindow>& rParentWindow,
                                const OUString& rModuleName);
 
-    // XComponent
-    void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XStatusListener
     void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;

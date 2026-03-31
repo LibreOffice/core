@@ -29,6 +29,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
+#include <o3tl/temporary.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
@@ -63,12 +65,18 @@ ComplexToolbarController::~ComplexToolbarController()
 {
 }
 
-void SAL_CALL ComplexToolbarController::dispose()
+void ComplexToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
 
     m_xToolbar->SetItemWindow( m_nID, nullptr );
-    svt::ToolboxController::dispose();
+    {
+        // Locking a mess because of order of calls; I don't know if the order is important - I
+        // just keep it as it was before.
+        SolarMutexReleaser releaser;
+        svt::ToolboxController::disposing(o3tl::temporary(std::unique_lock(m_aMutex)));
+    }
 
     m_xURLTransformer.clear();
     m_xToolbar.reset();

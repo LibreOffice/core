@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <comphelper/unique_unlock.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -27,11 +28,14 @@ SlideTransitionsToolBoxControl::initialize(const css::uno::Sequence<css::uno::An
     svt::ToolboxController::initialize(rArguments);
 }
 
-void SAL_CALL SlideTransitionsToolBoxControl::dispose()
+void SlideTransitionsToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    SolarMutexGuard aSolarMutexGuard;
-    m_xVclBox.disposeAndClear();
-    svt::ToolboxController::dispose();
+    {
+        comphelper::unique_unlock aUnlock(rGuard);
+        SolarMutexGuard aSolarMutexGuard;
+        m_xVclBox.disposeAndClear();
+    }
+    svt::ToolboxController::disposing(rGuard);
 }
 
 void SAL_CALL

@@ -56,8 +56,8 @@ public:
     virtual css::uno::Reference<css::awt::XWindow>
         SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XUpdatable
     virtual void SAL_CALL update() override;

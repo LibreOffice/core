@@ -34,8 +34,9 @@ typedef cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceI
 class PopupMenuToolbarController : public ToolBarBase
 {
 public:
-    // XComponent
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    using svt::ToolboxController::disposing;
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
     // XToolbarController

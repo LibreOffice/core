@@ -65,7 +65,8 @@ public:
     ParaLRSpacingControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
     virtual ~ParaLRSpacingControl() override;
 
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState) override;
@@ -79,7 +80,7 @@ public:
 
     virtual void SAL_CALL acquire() noexcept override;
 
-    virtual void SAL_CALL disposing(const ::css::lang::EventObject&) override;
+    virtual void SAL_CALL disposing(const ::css::lang::EventObject& rEvent) override;
 
     virtual void SAL_CALL release() noexcept override;
 

@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/event.hxx>
@@ -191,14 +192,15 @@ SpinfieldToolbarController::~SpinfieldToolbarController()
 {
 }
 
-void SAL_CALL SpinfieldToolbarController::dispose()
+void SpinfieldToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    SolarMutexGuard aSolarMutexGuard;
-
-    m_xToolbar->SetItemWindow( m_nID, nullptr );
-    m_pSpinfieldControl.disposeAndClear();
-
-    ComplexToolbarController::dispose();
+    {
+        comphelper::unique_unlock aUnlock(rGuard);
+        SolarMutexGuard aSolarMutexGuard;
+        m_xToolbar->SetItemWindow( m_nID, nullptr );
+        m_pSpinfieldControl.disposeAndClear();
+    }
+    ComplexToolbarController::disposing(rGuard);
 }
 
 Sequence<PropertyValue> SpinfieldToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const

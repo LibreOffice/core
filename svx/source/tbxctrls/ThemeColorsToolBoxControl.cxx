@@ -18,16 +18,20 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
 
 ThemeColorsToolBoxControl::ThemeColorsToolBoxControl() {}
 
 ThemeColorsToolBoxControl::~ThemeColorsToolBoxControl() {}
 
-void SAL_CALL ThemeColorsToolBoxControl::dispose()
+void ThemeColorsToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    SolarMutexGuard aSolarMutexGuard;
-    m_xVclBox.disposeAndClear();
-    svt::ToolboxController::dispose();
+    {
+        comphelper::unique_unlock aUnlock(rGuard);
+        SolarMutexGuard aSolarMutexGuard;
+        m_xVclBox.disposeAndClear();
+    }
+    svt::ToolboxController::disposing(rGuard);
 }
 
 void SAL_CALL

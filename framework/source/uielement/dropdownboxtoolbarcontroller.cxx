@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
@@ -141,14 +142,15 @@ DropdownToolbarController::~DropdownToolbarController()
 {
 }
 
-void SAL_CALL DropdownToolbarController::dispose()
+void DropdownToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    SolarMutexGuard aSolarMutexGuard;
-
-    m_xToolbar->SetItemWindow( m_nID, nullptr );
-    m_pListBoxControl.disposeAndClear();
-
-    ComplexToolbarController::dispose();
+    {
+        comphelper::unique_unlock aUnlock(rGuard);
+        SolarMutexGuard aSolarMutexGuard;
+        m_xToolbar->SetItemWindow( m_nID, nullptr );
+        m_pListBoxControl.disposeAndClear();
+    }
+    ComplexToolbarController::disposing(rGuard);
 }
 
 Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const

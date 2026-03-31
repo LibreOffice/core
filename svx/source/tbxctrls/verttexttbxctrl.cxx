@@ -76,7 +76,10 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::un
 {
     SvxVertCTLTextTbxCtrl_Base::initialize(rArguments);
     // fdo#83320 Hide vertical text commands early
-    setFastPropertyValue_NoBroadcast(1, css::uno::Any(true));
+    {
+        std::unique_lock aGuard(m_aMutex);
+        setFastPropertyValue_NoBroadcast(aGuard, 1, css::uno::Any(true));
+    }
 
     if (m_pToolbar)
     {

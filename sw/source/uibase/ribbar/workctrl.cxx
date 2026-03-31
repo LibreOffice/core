@@ -34,6 +34,7 @@
 #include <cmdid.h>
 #include <helpids.h>
 #include <wrtsh.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/voiditem.hxx>
@@ -700,11 +701,11 @@ uno::Sequence< OUString > SAL_CALL NavElementToolBoxControl::getSupportedService
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
-// XComponent
-void SAL_CALL NavElementToolBoxControl::dispose()
+// WeakComponentImplHelperBase
+void NavElementToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    svt::ToolboxController::dispose();
-
+    svt::ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
     m_xVclBox.disposeAndClear();
     m_xWeldBox.reset();
@@ -808,9 +809,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
-
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
@@ -845,14 +843,6 @@ sal_Bool SAL_CALL PrevNextScrollToolboxController::supportsService( const OUStri
 css::uno::Sequence< OUString > SAL_CALL PrevNextScrollToolboxController::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
-}
-
-// XComponent
-void SAL_CALL PrevNextScrollToolboxController::dispose()
-{
-    SolarMutexGuard aSolarMutexGuard;
-
-    svt::ToolboxController::dispose();
 }
 
 // XStatusListener

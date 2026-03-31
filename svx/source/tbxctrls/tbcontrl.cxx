@@ -22,6 +22,7 @@
 #include <comphelper/configurationlistener.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <tools/color.hxx>
 #include <svl/numformat.hxx>
 #include <svl/poolitem.hxx>
@@ -292,8 +293,8 @@ public:
     // XToolbarController
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -3318,11 +3319,11 @@ void SAL_CALL SvxStyleToolBoxControl::initialize(const Sequence<Any>& rArguments
     }
 }
 
-// XComponent
-void SAL_CALL SvxStyleToolBoxControl::dispose()
+// WeakComponentImplHelperBase
+void SvxStyleToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    svt::ToolboxController::dispose();
-
+    svt::ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
     m_pImpl->m_xVclBox.disposeAndClear();
     m_pImpl->m_xWeldBox.reset();
@@ -3699,10 +3700,10 @@ css::uno::Reference<css::awt::XWindow> SvxFontNameToolBoxControl::createItemWind
     return xItemWindow;
 }
 
-void SvxFontNameToolBoxControl::dispose()
+void SvxFontNameToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    ToolboxController::dispose();
-
+    ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
     m_xVclBox.disposeAndClear();
     m_xWeldBox.reset();

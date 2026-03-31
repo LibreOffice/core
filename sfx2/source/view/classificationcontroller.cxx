@@ -29,6 +29,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/configurationlistener.hxx>
 
@@ -82,8 +83,8 @@ public:
     sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    // XComponent
-    void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XToolbarController
     uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) override;
@@ -166,11 +167,12 @@ uno::Sequence<OUString> ClassificationCategoriesController::getSupportedServiceN
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
-void ClassificationCategoriesController::dispose()
+void ClassificationCategoriesController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
+    svt::ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
 
-    svt::ToolboxController::dispose();
     m_pClassification.disposeAndClear();
     m_aPropertyListener.dispose();
     m_xListener->dispose();

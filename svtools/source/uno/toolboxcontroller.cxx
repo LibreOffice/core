@@ -34,12 +34,12 @@
 #include <vcl/weldutils.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
 
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE  = 1;
 constexpr OUString TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE = u"SupportsVisible"_ustr;
 
 
-using namespace ::cppu;
 using namespace css::awt;
 using namespace css::uno;
 using namespace css::util;
@@ -53,17 +53,14 @@ namespace svt
 ToolboxController::ToolboxController(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame,
-    OUString aCommandURL ) :
-    OPropertyContainer( GetBroadcastHelper() )
-    ,   m_bSupportVisible( false )
+    OUString aCommandURL )
+    :   m_bSupportVisible( false )
     ,   m_bInitialized( false )
-    ,   m_bDisposed( false )
     ,   m_bSidebar( false )
     ,   m_nToolBoxId( SAL_MAX_UINT16 )
     ,   m_xFrame( xFrame )
     ,   m_xContext( rxContext )
     ,   m_aCommandURL(std::move( aCommandURL ))
-    ,   m_aListenerContainer( m_aMutex )
     ,   m_pToolbar(nullptr)
     ,   m_pBuilder(nullptr)
 {
@@ -82,14 +79,11 @@ ToolboxController::ToolboxController(
     }
 }
 
-ToolboxController::ToolboxController() :
-    OPropertyContainer(GetBroadcastHelper())
-    ,   m_bSupportVisible(false)
+ToolboxController::ToolboxController()
+    :   m_bSupportVisible(false)
     ,   m_bInitialized( false )
-    ,   m_bDisposed( false )
     ,   m_bSidebar( false )
     ,   m_nToolBoxId( SAL_MAX_UINT16 )
-    ,   m_aListenerContainer( m_aMutex )
     ,   m_pToolbar(nullptr)
     ,   m_pBuilder(nullptr)
 {
@@ -136,29 +130,6 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
     }
 
     return xLayoutManager;
-}
-
-// XInterface
-Any SAL_CALL ToolboxController::queryInterface( const Type& rType )
-{
-    css::uno::Any a(ToolboxController_Base::queryInterface(rType));
-    return a.hasValue() ? a : OPropertyContainer::queryInterface(rType);
-}
-
-void SAL_CALL ToolboxController::acquire() noexcept
-{
-    ToolboxController_Base::acquire();
-}
-
-void SAL_CALL ToolboxController::release() noexcept
-{
-    ToolboxController_Base::release();
-}
-
-css::uno::Sequence<css::uno::Type> ToolboxController::getTypes()
-{
-    return comphelper::concatSequences(ToolboxController_Base::getTypes(),
-                getBaseTypes());
 }
 
 void SAL_CALL ToolboxController::initialize( const Sequence< Any >& rArguments )
@@ -235,20 +206,10 @@ void SAL_CALL ToolboxController::update()
     bindListener();
 }
 
-// XComponent
-void SAL_CALL ToolboxController::dispose()
+// WeakComponentImplHelperBase
+void ToolboxController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    Reference< XComponent > xThis(this);
-
-    {
-        SolarMutexGuard aSolarMutexGuard;
-        if ( m_bDisposed )
-            return;
-    }
-
-    css::lang::EventObject aEvent( xThis );
-    m_aListenerContainer.disposeAndClear( aEvent );
-
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
     Reference< XStatusListener > xStatusListener(this);
     for (auto const& listener : m_aListenerMap)
@@ -268,20 +229,7 @@ void SAL_CALL ToolboxController::dispose()
         catch ( Exception& )
         {
         }
-
     }
-
-    m_bDisposed = true;
-}
-
-void SAL_CALL ToolboxController::addEventListener( const Reference< XEventListener >& xListener )
-{
-    m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
-}
-
-void SAL_CALL ToolboxController::removeEventListener( const Reference< XEventListener >& rListener )
-{
-    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), rListener );
 }
 
 // XEventListener
@@ -687,59 +635,11 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
 }
 
 
-css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ToolboxController::getPropertySetInfo()
-{
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-::cppu::IPropertyArrayHelper& ToolboxController::getInfoHelper()
-{
-        return *getArrayHelper();
-}
-
-
 ::cppu::IPropertyArrayHelper* ToolboxController::createArrayHelper( ) const
 {
         css::uno::Sequence< Property > aProps;
         describeProperties(aProps);
         return new ::cppu::OPropertyArrayHelper(aProps);
-}
-
-sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue(css::uno::Any& aConvertedValue,
-                                                              css::uno::Any& aOldValue,
-                                                              sal_Int32 nHandle,
-                                                              const css::uno::Any& rValue)
-{
-    switch (nHandle)
-    {
-        case TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE:
-        {
-            bool aNewValue(false);
-            rValue >>= aNewValue;
-            if (aNewValue != m_bSupportVisible)
-            {
-                aConvertedValue <<= aNewValue;
-                aOldValue <<= m_bSupportVisible;
-                return true;
-            }
-            return false;
-        }
-    }
-    return OPropertyContainer::convertFastPropertyValue(aConvertedValue, aOldValue, nHandle, rValue);
-}
-
-void SAL_CALL ToolboxController::setFastPropertyValue_NoBroadcast(
-    sal_Int32                       nHandle,
-    const css::uno::Any& rValue )
-{
-    OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, rValue);
-    if (TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE == nHandle)
-    {
-        bool bValue(false);
-        if (( rValue >>= bValue ) && m_bInitialized)
-            m_bSupportVisible = bValue;
-    }
 }
 
 

@@ -46,8 +46,8 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XUpdatable
     virtual void SAL_CALL update() override;
