@@ -1391,7 +1391,7 @@ void VclBuilderPreload()
 
 extern "C" VclBuilder::customMakeWidget lo_get_custom_widget_func(const char* name);
 
-#elif defined EMSCRIPTEN && !ENABLE_QT5
+#elif defined __EMSCRIPTEN__ && !ENABLE_QT5
 
 // This branch is mainly for building for WASM, and especially for
 // Collabora Online in the browser, where code from core and Collabora
@@ -1479,7 +1479,7 @@ VclBuilder::customMakeWidget GetCustomMakeWidget(const OUString& rName)
         else
             pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(
                 aI->second->getFunctionSymbol(sFunction));
-#elif !HAVE_FEATURE_DESKTOP || (defined EMSCRIPTEN && !ENABLE_QT5)
+#elif !HAVE_FEATURE_DESKTOP || (defined __EMSCRIPTEN__ && !ENABLE_QT5)
         // This ifdef branch is mainly for building for either the
         // Android or iOS apps, or the Collabora Online as WASM thing.
         pFunction = lo_get_custom_widget_func(sFunction.toUtf8().getStr());

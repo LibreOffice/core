@@ -40,7 +40,7 @@
 #include <sys/stat.h>
 #endif
 
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
 #include <emscripten/threading.h>
 #include <rtl/uri.hxx>
 extern void execute_browser(const char* sUrl);
@@ -54,7 +54,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system::SystemShellExecuteFlags;
 using namespace cppu;
 
-#ifndef EMSCRIPTEN
+#ifndef __EMSCRIPTEN__
 namespace
 {
     void escapeForShell( OStringBuffer & rBuffer, const OString & rURL)
@@ -80,7 +80,7 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
 
 void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
 {
-#ifndef EMSCRIPTEN
+#ifndef __EMSCRIPTEN__
     OStringBuffer aBuffer, aLaunchBuffer;
 
     if (comphelper::COKit::isActive())
@@ -266,7 +266,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     int nerr = errno;
     throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ),
         static_cast < XSystemShellExecute * > (this), nerr );
-#else // EMSCRIPTEN
+#else // __EMSCRIPTEN__
     (void)nFlags;
 
     css::uno::Reference< css::uri::XUriReference > uri(

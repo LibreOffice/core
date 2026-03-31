@@ -87,7 +87,7 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
        }
     }
 
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
     m_bDisableReschedule = true;
 #endif
     impl_createProgress();

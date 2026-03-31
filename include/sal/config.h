@@ -79,7 +79,7 @@
 #define SAL_CONFIGFILE(name) name "rc"
 #endif
 
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".bc"
 #define SAL_EXEEXTENSION ""

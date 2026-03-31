@@ -21,7 +21,7 @@
 
 #include <mutex>
 
-#if !defined(ANDROID) && !defined(IOS) && !defined(EMSCRIPTEN) && !defined(_WIN32)
+#if !defined(ANDROID) && !defined(IOS) && !defined(__EMSCRIPTEN__) && !defined(_WIN32)
 #include <pthread.h>
 #endif
 
@@ -52,7 +52,7 @@
 #include <tools/time.hxx>
 #include <o3tl/unreachable.hxx>
 
-#if defined EMSCRIPTEN
+#if defined __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
@@ -75,7 +75,7 @@ do { \
 #define DBG_TESTSVPYIELDMUTEX() ((void)0)
 #endif
 
-#if !defined(ANDROID) && !defined(IOS) && !defined(EMSCRIPTEN)
+#if !defined(ANDROID) && !defined(IOS) && !defined(__EMSCRIPTEN__)
 
 static void atfork_child()
 {
@@ -96,10 +96,10 @@ SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
     m_MainThread = osl::Thread::getCurrentIdentifier();
     if( s_pDefaultInstance == nullptr )
         s_pDefaultInstance = this;
-#if !defined(ANDROID) && !defined(IOS) && !defined(EMSCRIPTEN) && !defined(_WIN32)
+#if !defined(ANDROID) && !defined(IOS) && !defined(__EMSCRIPTEN__) && !defined(_WIN32)
     pthread_atfork(nullptr, nullptr, atfork_child);
 #endif
-#if defined EMSCRIPTEN
+#if defined __EMSCRIPTEN__
     ImplGetSVData()->maAppData.m_bUseSystemLoop = true;
 #endif
 }
@@ -298,7 +298,7 @@ void SvpSalInstance::ProcessEvent( SalUserEvent aEvent )
     pMutex->m_NonMainWaitingYieldCond.set();
 }
 
-#if defined EMSCRIPTEN
+#if defined __EMSCRIPTEN__
 
 static void loop(void * arg) {
     SolarMutexGuard g;

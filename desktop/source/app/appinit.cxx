@@ -45,7 +45,7 @@
 #include <iostream>
 #include <map>
 
-#if defined EMSCRIPTEN
+#if defined __EMSCRIPTEN__
 #include <initjsunoscripting.hxx>
 #endif
 
@@ -85,7 +85,7 @@ void Desktop::InitApplicationServiceManager()
         UNO_QUERY_THROW);
 #endif
     comphelper::setProcessServiceFactory(sm);
-#if defined EMSCRIPTEN
+#if defined __EMSCRIPTEN__
     initJsUnoScripting();
 #endif
 }

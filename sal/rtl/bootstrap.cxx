@@ -46,7 +46,7 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
 #include <osl/detail/emscripten-bootstrap.h>
 #endif
 
@@ -227,7 +227,7 @@ static OUString getIniFileName(bool overriding) {
         ? OUString("vnd.sun.star.pathname:/assets/fundamental.override.ini")
         : OUString("vnd.sun.star.pathname:/assets/rc");
     resolvePathnameUrl(&fileName);
-#elif defined(EMSCRIPTEN)
+#elif defined(__EMSCRIPTEN__)
     fileName = overriding
         ? OUString("vnd.sun.star.pathname:/instdir/program/fundamental.override.ini")
         : OUString("vnd.sun.star.pathname:/instdir/program/sofficerc");
@@ -506,7 +506,7 @@ bool Bootstrap_Impl::getValue(
         return true;
     }
 
-#if defined ANDROID || defined EMSCRIPTEN
+#if defined ANDROID || defined __EMSCRIPTEN__
     if (key == "APP_DATA_DIR")
     {
         const char *app_data_dir = lo_get_app_data_dir();

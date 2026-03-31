@@ -9,7 +9,7 @@
 
 #pragma once
 
-#if defined(EMSCRIPTEN)
+#if defined(__EMSCRIPTEN__)
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,6 +21,6 @@ const char *lo_get_app_data_dir(void);
 }
 #endif
 
-#endif // EMSCRIPTEN
+#endif // __EMSCRIPTEN__
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@ gb_AR := $(AR)
 endif
 
 gb_OSDEFS := \
-	-D$(OS) \
+	$(if $(filter-out EMSCRIPTEN,$(OS)),-D$(OS)) \
 	-D_PTHREADS \
 	-DUNIX \
 	-DUNX \

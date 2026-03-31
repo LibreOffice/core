@@ -356,7 +356,7 @@ void RemoveIconCacheDirectory()
 
 namespace {
 
-#if defined(DBG_UTIL) && !defined(EMSCRIPTEN)
+#if defined(DBG_UTIL) && !defined(__EMSCRIPTEN__)
 void runGraphicsRenderTests()
 {
     if (comphelper::COKit::isActive())
@@ -530,7 +530,7 @@ void Desktop::Init()
     RequestHandler::Status aStatus = RequestHandler::Enable(true);
     if ( aStatus == RequestHandler::IPC_STATUS_PIPE_ERROR )
     {
-#if defined(ANDROID) || defined(EMSCRIPTEN)
+#if defined(ANDROID) || defined(__EMSCRIPTEN__)
         // Ignore crack pipe errors on Android
 #else
         // Keep using this oddly named BE_PATHINFO_MISSING value
@@ -1390,7 +1390,7 @@ int Desktop::Main()
 
     recordTime(startT, "SetSplashScreenProgress(25): time = ");
 
-#if HAVE_FEATURE_DESKTOP && !defined(EMSCRIPTEN)
+#if HAVE_FEATURE_DESKTOP && !defined(__EMSCRIPTEN__)
     // check user installation directory for lockfile so we can be sure
     // there is no other instance using our data files from a remote host
 
@@ -1645,7 +1645,7 @@ int Desktop::Main()
         CheckOpenCLCompute(xDesktop);
 #endif
 
-#if defined(DBG_UTIL) && !defined(EMSCRIPTEN)
+#if defined(DBG_UTIL) && !defined(__EMSCRIPTEN__)
         //Running the VCL graphics rendering tests
         const char * pDisplay = std::getenv("DISPLAY");
         if (!pDisplay || pDisplay[0] == ':')

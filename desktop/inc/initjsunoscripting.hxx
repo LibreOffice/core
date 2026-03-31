@@ -11,7 +11,7 @@
 
 #include <sal/config.h>
 
-#if defined EMSCRIPTEN
+#if defined __EMSCRIPTEN__
 
 void initJsUnoScripting();
 

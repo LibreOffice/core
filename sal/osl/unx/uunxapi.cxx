@@ -222,7 +222,7 @@ template<> OUString fromOString(OString const & s)
 template<typename T> bool realpath_(const T& pstrFileName, T& ppstrResolvedName)
 {
     OString fn = toOString(pstrFileName);
-#if defined ANDROID || defined(EMSCRIPTEN)
+#if defined ANDROID || defined(__EMSCRIPTEN__)
 #if defined ANDROID
     if (fn == "/assets" || fn.startsWith("/assets/"))
 #else
@@ -236,7 +236,7 @@ template<typename T> bool realpath_(const T& pstrFileName, T& ppstrResolvedName)
 
         return true;
     }
-#endif // ANDROID || EMSCRIPTEN
+#endif // ANDROID || __EMSCRIPTEN__
 
 #ifdef MACOSX
     fn = macxp_resolveAliasAndConvert(fn);

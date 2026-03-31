@@ -34,7 +34,7 @@
 
 namespace {
 
-#if !(defined ANDROID || defined EMSCRIPTEN)
+#if !(defined ANDROID || defined __EMSCRIPTEN__)
 OUString get_this_libpath() {
     static OUString s_uri = []() {
         OUString uri;
@@ -61,7 +61,7 @@ OUString cppu::getUnoIniUri() {
     // and since rtlBootstrapHandle is not ref-counted doing anything
     // clean here is hardish.
     OUString uri("file:///assets/program");
-#elif defined(EMSCRIPTEN)
+#elif defined(__EMSCRIPTEN__)
     OUString uri("file:///instdir/program");
 #else
     OUString uri(get_this_libpath());

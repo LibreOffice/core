@@ -47,7 +47,7 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
 #include <initjsunoscripting.hxx>
 #include <osl/detail/emscripten-bootstrap.h>
 #endif
@@ -7991,7 +7991,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
     xSFactory.set(xFactory, uno::UNO_QUERY_THROW);
     comphelper::setProcessServiceFactory(xSFactory);
 
-#if defined EMSCRIPTEN
+#if defined __EMSCRIPTEN__
     initJsUnoScripting();
 #endif
 
@@ -8570,7 +8570,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     }
     else
     {
-#if defined ANDROID || defined EMSCRIPTEN
+#if defined ANDROID || defined __EMSCRIPTEN__
         aAppPath = OUString::fromUtf8(lo_get_app_data_dir()) + "/program";
 #else
         // Fun conversion dance back and forth between URLs and system paths...

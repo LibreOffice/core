@@ -108,7 +108,7 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetDockingWindowCreator( SfxDockingWindowFactory );
         ::framework::SetIsDockingWindowVisible( IsDockingWindowVisible );
         Application::SetHelp( pSfxHelp );
-#if HAVE_FEATURE_XMLHELP || defined(EMSCRIPTEN)
+#if HAVE_FEATURE_XMLHELP || defined(__EMSCRIPTEN__)
         bool bHelpTip = officecfg::Office::Common::Help::Tip::get();
         bool bExtendedHelpTip = officecfg::Office::Common::Help::ExtendedTip::get();
         if (bHelpTip)

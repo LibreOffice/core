@@ -19,7 +19,7 @@ QtMainWindow::QtMainWindow(QtFrame& rFrame, Qt::WindowFlags f)
     : QMainWindow(nullptr, f)
     , m_rFrame(rFrame)
 {
-#ifndef EMSCRIPTEN
+#ifndef __EMSCRIPTEN__
     QAccessible::installFactory(QtAccessibleWidget::customFactory);
 #endif
 }

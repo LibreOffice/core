@@ -296,7 +296,7 @@ QStringList QtMimeData::formats() const
 
     for (const auto& rFlavor : aFormats)
     {
-#if !(QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined EMSCRIPTEN)
+#if !(QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined __EMSCRIPTEN__)
         aList << toQString(rFlavor.MimeType);
 #endif
         lcl_textMimeInfo(rFlavor.MimeType, m_bHaveNoCharset, bHaveUTF16, m_bHaveUTF8);
@@ -305,7 +305,7 @@ QStringList QtMimeData::formats() const
     // we provide a locale encoded and a UTF-8 variant, if missing
     if (m_bHaveNoCharset || bHaveUTF16 || m_bHaveUTF8)
     {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined EMSCRIPTEN
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined __EMSCRIPTEN__
         aList << QStringLiteral("text/plain");
 #else
         // if there is a text representation from LO point of view, it'll be UTF-16
@@ -316,7 +316,7 @@ QStringList QtMimeData::formats() const
             aList << QStringLiteral("text/plain");
 #endif
     }
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined EMSCRIPTEN
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined __EMSCRIPTEN__
     else if (aFormats.hasElements())
     {
         aList << toQString(aFormats[0].MimeType);

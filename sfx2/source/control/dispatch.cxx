@@ -1943,7 +1943,7 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
     css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext ), css::uno::UNO_QUERY );
-#if defined EMSCRIPTEN && ENABLE_QT5
+#if defined __EMSCRIPTEN__ && ENABLE_QT5
     // At least under Emscripten with Qt5, the QMenu::exec underlying the below call to
     // xPopupMenu->execute returns immediately, without going into a new event loop, and we need to
     // keep the underlying QMenu instance alive via the static lastPopupController chain here, until
@@ -1996,7 +1996,7 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
         }
     }
 
-#if !(defined EMSCRIPTEN && ENABLE_QT5)
+#if !(defined __EMSCRIPTEN__ && ENABLE_QT5)
     css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
     if ( xComponent.is() )
         xComponent->dispose();

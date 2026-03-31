@@ -414,7 +414,7 @@ const OUString& SalGetDesktopEnvironment()
     static OUString aDesktopEnvironment( "Windows" );
 #elif defined(MACOSX)
     static OUString aDesktopEnvironment( "MacOSX" );
-#elif defined(EMSCRIPTEN)
+#elif defined(__EMSCRIPTEN__)
     static OUString aDesktopEnvironment("WASM");
 #elif defined(ANDROID)
     static OUString aDesktopEnvironment("android");

@@ -34,7 +34,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QPointer>
 
-#if !defined EMSCRIPTEN
+#if !defined __EMSCRIPTEN__
 #include <unx/sessioninhibitor.hxx>
 #endif
 #if CHECK_ANY_QT_USING_X11
@@ -103,7 +103,7 @@ class VCLPLUG_QT_PUBLIC QtFrame final : public QObject, public SalFrame
     sal_uInt32 m_nRestoreScreen;
     QRect m_aRestoreGeometry;
 
-#if !defined EMSCRIPTEN
+#if !defined __EMSCRIPTEN__
     SessionManagerInhibitor m_SessionManagerInhibitor;
 #endif
 #if CHECK_ANY_QT_USING_X11

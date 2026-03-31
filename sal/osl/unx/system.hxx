@@ -209,7 +209,7 @@ int macxp_resolveAlias(char *path, int buflen);
 #   define  NO_PTHREAD_RTL
 #endif
 
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
 #   include <pthread.h>
 #   include <sys/file.h>
 #   include <sys/ioctl.h>
@@ -231,7 +231,7 @@ int macxp_resolveAlias(char *path, int buflen);
     !defined(__sun) && !defined(MACOSX) && \
     !defined(OPENBSD) && !defined(DRAGONFLY) && \
     !defined(IOS) && !defined(ANDROID) && \
-    !defined(HAIKU) && !defined(EMSCRIPTEN)
+    !defined(HAIKU) && !defined(__EMSCRIPTEN__)
 #   error "Target platform not specified!"
 #endif
 

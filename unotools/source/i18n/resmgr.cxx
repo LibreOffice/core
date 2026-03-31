@@ -57,7 +57,7 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
 #include <osl/detail/emscripten-bootstrap.h>
 #endif
 
@@ -125,7 +125,7 @@ namespace Translate
         gen.characters(boost::locale::char_facet_t::char_f);
         gen.categories(boost::locale::category_t::message | boost::locale::category_t::information);
 #endif
-#if defined(ANDROID) || defined(EMSCRIPTEN)
+#if defined(ANDROID) || defined(__EMSCRIPTEN__)
         OString sPath(OString(lo_get_app_data_dir()) + "/program/resource");
 #else
         OUString uri(u"$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/"_ustr);

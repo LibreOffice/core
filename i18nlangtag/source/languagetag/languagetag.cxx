@@ -38,7 +38,7 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
 #include <osl/detail/emscripten-bootstrap.h>
 #endif
 
@@ -221,7 +221,7 @@ void LiblangtagDataRef::teardown()
 
 void LiblangtagDataRef::setupDataPath()
 {
-#if defined(ANDROID) || defined(EMSCRIPTEN)
+#if defined(ANDROID) || defined(__EMSCRIPTEN__)
     maDataPath = OString(lo_get_app_data_dir()) + "/share/liblangtag";
 #else
     // maDataPath is assumed to be empty here.

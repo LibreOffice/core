@@ -240,7 +240,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
         if (bInitialized)
             return aInstance;
 
-#if ! defined(MACOSX) && ! defined(EMSCRIPTEN)
+#if ! defined(MACOSX) && ! defined(__EMSCRIPTEN__)
         // try libpaper
         // #i78617# workaround missing paperconf command
         FILE* pPipe = popen( "paperconf 2>/dev/null", "r" );

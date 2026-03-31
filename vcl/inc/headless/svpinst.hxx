@@ -95,7 +95,7 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance, public SalUserEv
     virtual void            TriggerUserEventProcessing() override;
     virtual void            ProcessEvent( SalUserEvent aEvent ) override;
 
-#if defined EMSCRIPTEN
+#if defined __EMSCRIPTEN__
     bool DoExecute(int &nExitCode) override;
     void DoQuit() override;
 #endif

@@ -36,7 +36,7 @@ static void InitCurl_easy(CURL* const pCURL)
     if (path == nullptr)
     {
         SAL_WARN("ucb.ucp.webdav.curl", "no OpenSSL CA certificate bundle found");
-#if !defined(EMSCRIPTEN)
+#if !defined(__EMSCRIPTEN__)
         throw css::uno::RuntimeException(u"no OpenSSL CA certificate bundle found"_ustr);
 #endif
     }

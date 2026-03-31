@@ -21,7 +21,7 @@
 #define INCLUDED_SAL_ALLOCA_H
 
 #if defined(__sun) || defined(LINUX) || defined(ANDROID) || defined(HAIKU) || defined(MACOSX)      \
-    || defined(IOS) || defined(EMSCRIPTEN)
+    || defined(IOS) || defined(__EMSCRIPTEN__)
 
 #ifndef INCLUDED_ALLOCA_H
 #include <alloca.h>

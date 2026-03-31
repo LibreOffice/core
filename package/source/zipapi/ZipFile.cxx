@@ -734,7 +734,7 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
     if (!bUseBufferedStream)
         return xSrcStream;
 
-#ifndef EMSCRIPTEN
+#ifndef __EMSCRIPTEN__
     static const sal_Int32 nThreadingThreshold = 10000;
 
     // "encrypted-package" is the only data stream, no point in threading it

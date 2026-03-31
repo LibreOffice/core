@@ -335,7 +335,7 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
          nSheetsLeft++;
     }
 
-#if defined EMSCRIPTEN && !HAVE_EMSCRIPTEN_JSPI
+#if defined __EMSCRIPTEN__ && !HAVE_EMSCRIPTEN_JSPI
     // Hack around Application::Yield() deliberately calling std::abort() in the standard (non-JSPI)
     // Emscripten case; so instead of yielding (which implicitly releases the SolarMutex), just
     // release the SolarMutex so that the WorkerThreads can proceed:

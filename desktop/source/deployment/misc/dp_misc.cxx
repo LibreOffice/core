@@ -70,7 +70,7 @@ std::shared_ptr<rtl::Bootstrap> & UnoRc()
     return theRc;
 };
 
-#if !defined EMSCRIPTEN
+#if !defined __EMSCRIPTEN__
 
 bool existsOfficePipe()
 {
@@ -326,7 +326,7 @@ OUString generateOfficePipeId()
 
 bool office_is_running()
 {
-#if defined EMSCRIPTEN
+#if defined __EMSCRIPTEN__
     return true;
 #else
     // i#82778: We need to check if we run within the office process. Then we must not use the pipe,

@@ -409,7 +409,7 @@ void Scheduler::CallbackTaskScheduling()
     ImplSVData *pSVData = ImplGetSVData();
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
 
-#if !(defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD)
+#if !(defined __EMSCRIPTEN__ && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD)
     //TODO: While the special Emscripten Qt6 JSPI/non-PROXY_TO_PTHREAD mode doesn't lock the
     // SolarMutex in QtTimer::timeoutActivated, but only down below when calling pTask->Invoke(),
     // that looks too brittle in general, so treat that special mode specially here.
@@ -593,7 +593,7 @@ void Scheduler::CallbackTaskScheduling()
         {
             // prepare Scheduler object for deletion after handling
             pTask->SetDeletionFlags();
-#if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+#if defined __EMSCRIPTEN__ && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
             if (pTask->DecideTransferredExecution())
             {
                 auto & data = comphelper::emscriptenthreading::getData();

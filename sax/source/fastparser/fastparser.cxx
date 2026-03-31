@@ -828,7 +828,7 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
         rEntity.mxDocumentHandler->startDocument();
     }
 
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
     rEntity.mbEnableThreads = false;
 #else
     if (!getenv("SAX_DISABLE_THREADS") && !m_bDisableThreadedParser)

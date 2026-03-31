@@ -95,7 +95,7 @@ namespace {
 
 oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 {
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
     // Just return some dummy file: URL for now to see what happens
     OUString fileURL = "vnd.sun.star.pathname:/instdir/program/soffice";
     rtl_uString_acquire(fileURL.pData);

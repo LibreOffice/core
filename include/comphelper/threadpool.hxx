@@ -68,7 +68,7 @@ public:
         @param  bJoin - if set call joinThreadsIfIdle() at the end
     */
     void        waitUntilDone(const std::shared_ptr<ThreadTaskTag>&, bool bJoin =
-#if defined EMSCRIPTEN
+#if defined __EMSCRIPTEN__
                                                                      false
 #else
                                                                      true

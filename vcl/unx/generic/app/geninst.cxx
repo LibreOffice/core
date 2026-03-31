@@ -25,7 +25,7 @@
 #if defined(__FreeBSD__)
 #  include <sys/utsname.h>
 #endif
-#if defined(EMSCRIPTEN)
+#if defined(__EMSCRIPTEN__)
 #include <emscripten/version.h>
 #endif
 
@@ -90,7 +90,7 @@ OUString SalGenericInstance::getOSVersion()
             break;
     }
     aKernelVer = OUString::createFromAscii(stName.sysname) + " " + aKernelVer.copy(0, nIndex);
-#elif defined(EMSCRIPTEN)
+#elif defined(__EMSCRIPTEN__)
 #if defined __EMSCRIPTEN_MAJOR__
     aKernelVer = u"Emscripten "_ustr + OUString::number(__EMSCRIPTEN_MAJOR__) + u"."_ustr
                  + OUString::number(__EMSCRIPTEN_MINOR__) + u"."_ustr

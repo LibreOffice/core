@@ -735,7 +735,7 @@ void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
 
 void QtFrame::StartPresentation(bool bStart)
 {
-#if !defined EMSCRIPTEN
+#if !defined __EMSCRIPTEN__
     assert(m_aSystemData.platform != SystemEnvData::Platform::Invalid);
 
 #if CHECK_QT5_USING_X11
