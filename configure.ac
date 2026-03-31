@@ -3471,9 +3471,6 @@ if test "$enable_database_connectivity" != no; then
     BUILD_TYPE="$BUILD_TYPE DBCONNECTIVITY"
     AC_DEFINE(HAVE_FEATURE_DBCONNECTIVITY)
 else
-    if test "$_os" = iOS; then
-        AC_MSG_ERROR([Presumably can't disable DB connectivity on iOS.])
-    fi
     disable_database_connectivity_dependencies
 fi
 
