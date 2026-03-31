@@ -195,7 +195,8 @@ void Table::applyAutoFilters()
 
 void Table::applyTableColumns()
 {
-    maTableColumns.finalizeImport( findDatabaseRangeByIndex( mnTokenIndex ));
+    maTableColumns.finalizeImport(findDatabaseRangeByIndex(mnTokenIndex),
+                                  maModel.mnType == XML_queryTable);
 }
 
 TableBuffer::TableBuffer( const WorkbookHelper& rHelper ) :

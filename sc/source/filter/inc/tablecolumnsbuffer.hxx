@@ -81,7 +81,7 @@ public:
     TableColumn&        createTableColumn();
 
     /** Applies the columns to the passed database range. */
-    bool                finalizeImport( ScDBData* pDBData );
+    bool                finalizeImport( ScDBData* pDBData, bool bQueryTable );
 
 private:
     typedef RefVector< TableColumn > TableColumnVector;
@@ -99,7 +99,7 @@ public:
     TableColumns&       createTableColumns();
 
     /** Applies the table columns to the passed database range. */
-    void                finalizeImport( ScDBData* pDBData );
+    void                finalizeImport( ScDBData* pDBData, bool bQueryTable );
 
 private:
     /** Returns the table columns object used. */

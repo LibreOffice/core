@@ -635,6 +635,18 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testCsvImportEmptyFilterOptions)
     CPPUNIT_ASSERT_EQUAL(u"second"_ustr, pDoc->GetString(ScAddress(2, 2, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testQueryTableHeaders)
+{
+    createScDoc("xlsx/TableEmptyHeaders.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pTable = parseExport(u"xl/tables/table1.xml"_ustr);
+    CPPUNIT_ASSERT(pTable);
+
+    assertXPath(pTable, "/x:table/x:tableColumns/x:tableColumn[1]", "name", u"Column1");
+    assertXPath(pTable, "/x:table/x:tableColumns/x:tableColumn[2]", "name", u"Column2");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,6 +24,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>
 #include <dbdata.hxx>
+#include <document.hxx>
 #include <subtotalparam.hxx>
 
 XmlColumnPrModel::XmlColumnPrModel() :
@@ -129,7 +130,7 @@ TableColumn& TableColumns::createTableColumn()
     return *xTableColumn;
 }
 
-bool TableColumns::finalizeImport( ScDBData* pDBData )
+bool TableColumns::finalizeImport( ScDBData* pDBData, bool bQueryTable )
 {
     SAL_WARN_IF( static_cast<size_t>(mnCount) != maTableColumnVector.size(), "sc.filter",
             "TableColumns::finalizeImport - count attribute doesn't match number of tableColumn elements");
@@ -160,6 +161,27 @@ bool TableColumns::finalizeImport( ScDBData* pDBData )
         }
         pDBData->SetTableColumnNames( std::move(aNames) );
 
+        // If table type is "queryTable" and `removeDataOnSave` attribute is set to true,
+        // Excel removes table data from sheet including headers
+        // We don't support Power Query connections, fill table headers in the sheet with table data.
+        if (bQueryTable && pDBData->HasHeader())
+        {
+            ScRange aRange;
+            pDBData->GetArea(aRange);
+            ScDocument& rDoc = getScDocument();
+            const std::vector<OUString>& rNames = pDBData->GetTableColumnNames();
+            SCCOL nStartCol = aRange.aStart.Col();
+            SCROW nRow = aRange.aStart.Row();
+            SCTAB nTab = aRange.aStart.Tab();
+            for (size_t j = 0; j < rNames.size(); ++j)
+            {
+                SCCOL nCol = nStartCol + static_cast<SCCOL>(j);
+                OUString sHeader = rNames[j];
+                if (!sHeader.isEmpty() && rDoc.GetString(nCol, nRow, nTab).isEmpty())
+                    rDoc.SetString(nCol, nRow, nTab, sHeader);
+            }
+        }
+
         // Import subtotal parameters for columns
         if (hasAnySetValue)
         {
@@ -187,11 +209,11 @@ TableColumns& TableColumnsBuffer::createTableColumns()
     return *xTableColumns;
 }
 
-void TableColumnsBuffer::finalizeImport( ScDBData* pDBData )
+void TableColumnsBuffer::finalizeImport( ScDBData* pDBData, bool bQueryTable )
 {
     TableColumns* pTableColumns = getActiveTableColumns();
     if ( pTableColumns )
-        pTableColumns->finalizeImport( pDBData );
+        pTableColumns->finalizeImport( pDBData, bQueryTable );
 }
 
 TableColumns* TableColumnsBuffer::getActiveTableColumns()
