@@ -1925,7 +1925,7 @@ public:
     {
         SeriesMinMaxType& rStore = m_SeriesGroup[fX]; // get storage for given X value.
         if (rStore.empty())
-            rStore.resize(mnNumSeries, { std::numeric_limits<double>::max(), std::numeric_limits<double>::min() });
+            rStore.resize(mnNumSeries, { std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest() });
 
         MinMaxType& r = rStore[mnCurSeries];
         if (fY < r.first)
@@ -1944,7 +1944,7 @@ public:
         }
 
         rfMin = std::numeric_limits<double>::max();
-        rfMax = std::numeric_limits<double>::min();
+        rfMax = std::numeric_limits<double>::lowest();
 
         /**
          * For each, X value, calculate Y value range
