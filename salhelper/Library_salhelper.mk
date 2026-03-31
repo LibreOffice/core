@@ -28,13 +28,6 @@ $(eval $(call gb_Library_add_exception_objects,salhelper,\
     salhelper/source/timer \
 ))
 
-# At least on Linux, for backwards compatibility the salhelper library needs a
-# specific soname and symbol versioning.  The symbols in the gcc3.map should be
-# those not already filtered out due to hidden visibility, so combining the
-# visibility feature with the version map file feature works well.
-# Solaris would need something like this, too.  Its backwards compatibility is
-# broken for now:
-
-$(eval $(call gb_Library_set_soversion_script,salhelper,$(SRCDIR)/salhelper/source/gcc3.map))
+$(eval $(call gb_Library_set_soversion,salhelper))
 
 # vim: set noet sw=4 ts=4:

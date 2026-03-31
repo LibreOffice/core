@@ -140,8 +140,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(call gb_LinkTarget__NeedsCxxLinker),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(T_LTOFLAGS) \
-		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--soname=$(notdir $(1)) \
-			-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT)) \
+		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1))) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_USE_LD) $(T_LDFLAGS) $(foreach pre_js,$(T_PREJS), --pre-js $(pre_js)) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -171,7 +170,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		    $(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
                 ) \
 		-o $(1) \
-	$(if $(SOVERSIONSCRIPT),&& ln -sf ../../program/$(notdir $(1)) $(ILIBTARGET)) \
+	$(if $(SOVERSION),&& ln -sf ../../program/$(notdir $(1)) $(ILIBTARGET)) \
 	$(if $(filter EMSCRIPTEN,$(OS)),$(if $(call gb_target_symbols_enabled,$(1)),$(if $(filter TRUE,$(HAVE_EXTERNAL_DWARF)),&& emdwp -e $(patsubst %$(gb_Executable_EXT),%.wasm.debug.wasm,$(1)) -o $(patsubst %$(gb_Executable_EXT),%.wasm.debug.wasm.dwp,$(1))))) \
 	$(if $(call gb_LinkTarget__WantLock,$(2)),; RC=$$? ; rm -f $(gb_LinkTarget__Lock); if test $$RC -ne 0; then exit $$RC; fi))
 
@@ -306,7 +305,7 @@ $(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1
 
 endef
 
-gb_Library__set_soversion_script_platform = $(gb_Library__set_soversion_script)
+gb_Library__set_soversion_platform = $(gb_Library__set_soversion)
 
 gb_Library_get_sdk_link_dir = $(INSTDIR)/$(SDKDIRNAME)/lib
 

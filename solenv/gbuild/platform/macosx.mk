@@ -126,7 +126,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		-o $(1) && \
 	rm -f $${FILELIST} && \
-	$(if $(SOVERSIONSCRIPT),ln -sf $(1) $(ILIBTARGET),:) && \
+	$(if $(SOVERSION),ln -sf $(1) $(ILIBTARGET),:) && \
 	$(if $(filter Executable,$(TARGETTYPE)), \
 		$(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl app $(LAYER) $(1) &&) \
 	$(if $(filter Library Bundle CppunitTest,$(TARGETTYPE)),\
@@ -225,7 +225,7 @@ $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1
 
 endef
 
-gb_Library__set_soversion_script_platform = $(gb_Library__set_soversion_script)
+gb_Library__set_soversion_platform = $(gb_Library__set_soversion)
 
 gb_Library_get_sdk_link_dir := $(gb_Library_DLLDIR)
 

@@ -114,18 +114,14 @@ $(call gb_LinkTarget_set_ilibtarget,$(call gb_Library_get_linktarget,$(1)),$(2))
 
 endef
 
-define gb_Library__set_soversion_script
-$(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktarget,$(1)),$(2))
+define gb_Library__set_soversion
+$(call gb_LinkTarget_set_soversion,$(call gb_Library_get_linktarget,$(1)))
 $(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_versionlink_target,$(1)))
 
 endef
 
-# for libraries that maintain stable ABI: set SOVERSION and version script
-# $(call gb_Library_set_soversion_script,versionscript)
-define gb_Library_set_soversion_script
-$(if $(2),,$(call gb_Output_error,gb_Library_set_soversion_script: no script))
-$(if $(3),$(call gb_Output_error,gb_Library_set_soversion_script: too many arguments))
-$(call gb_Library__set_soversion_script_platform,$(1),$(2))
+define gb_Library_set_soversion
+$(call gb_Library__set_soversion_platform,$(1))
 endef
 
 gb_Library__get_component_var = $(call gb_Library__get_workdir_linktargetname,$(1))<>COMPONENTFILE
