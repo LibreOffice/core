@@ -297,6 +297,9 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
         bRet = SdXMLFilter( rMedium, *this, SdXMLFilterMode::Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
     }
 
+    if (bRet)
+        mpDoc->UpdateAllLinks();
+
     if( bRet )
     {
         SdDrawDocument* pDoc = GetDoc();
@@ -583,6 +586,11 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     }
 
     return bRet;
+}
+
+void DrawDocShell::UpdateLinks()
+{
+    mpDoc->UpdateAllLinks();
 }
 
 /**
