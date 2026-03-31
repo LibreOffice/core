@@ -985,18 +985,17 @@ void SdDrawDocument::UpdateAllLinks()
     if (s_pDocLockedInsertingLinks || !m_pLinkManager || m_pLinkManager->GetLinks().empty())
         return;
 
-    s_pDocLockedInsertingLinks = this; // lock inserting links. only links in this document should by resolved
+    ::sd::DrawDocShell* pDocShell = GetDocSh();
+    if (!pDocShell)
+        return;
 
-    if (mpDocSh)
+    if (pDocShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
     {
-        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = mpDocSh->getEmbeddedObjectContainer();
-        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+        s_pDocLockedInsertingLinks = this;
+        m_pLinkManager->UpdateAllLinks(false, false, nullptr, u""_ustr);
+        if (s_pDocLockedInsertingLinks == this)
+            s_pDocLockedInsertingLinks = nullptr;
     }
-
-    m_pLinkManager->UpdateAllLinks(true, false, nullptr, u""_ustr);  // query box: update all links?
-
-    if (s_pDocLockedInsertingLinks == this)
-        s_pDocLockedInsertingLinks = nullptr;  // unlock inserting links
 }
 
 /** this loops over the presentation objects of a page and repairs some new settings
