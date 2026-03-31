@@ -556,6 +556,15 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
 ::sfx2::SvBaseLink::UpdateResult SdrEmbedObjectLink::DataChanged(
     const OUString& /*rMimeType*/, const css::uno::Any & /*rValue*/ )
 {
+    // Deferred link: the object was not created during import because link
+    // updates were not yet allowed, complete the creation now.
+    if (m_pObj->CompleteDeferredLink())
+    {
+        m_pObj->GetNewReplacement();
+        m_pObj->SetChanged();
+        return SUCCESS;
+    }
+
     if ( !m_pObj->UpdateLinkURL_Impl() )
     {
         // the link URL was not changed
@@ -643,6 +652,10 @@ public:
 
     sfx2::SvBaseLink* mpObjectLink;
     OUString maLinkURL;
+
+    // Stored when a linked OLE object is deferred during import because
+    // link updates are not yet allowed, used to complete creation later.
+    css::uno::Sequence<css::beans::PropertyValue> maDeferredMediaDescriptor;
 
     rtl::Reference<SvxUnoShapeModifyListener> mxModifyListener;
 
@@ -1051,6 +1064,55 @@ void SdrOle2Obj::CheckFileLink_Impl()
     {
         TOOLS_WARN_EXCEPTION("svx", "SdrOle2Obj::CheckFileLink_Impl()");
     }
+}
+
+void SdrOle2Obj::SetDeferredLink(const OUString& rLinkURL,
+                                 const uno::Sequence<beans::PropertyValue>& rMediaDescriptor)
+{
+    if (mpImpl->mpObjectLink)
+        return;
+
+    mpImpl->maLinkURL = rLinkURL;
+    mpImpl->maDeferredMediaDescriptor = rMediaDescriptor;
+
+    sfx2::LinkManager* pLinkManager = getSdrModelFromSdrObject().GetLinkManager();
+    if (!pLinkManager)
+        return;
+
+    mpImpl->mpObjectLink = new SdrEmbedObjectLink(this);
+    pLinkManager->InsertFileLink(*mpImpl->mpObjectLink,
+        sfx2::SvBaseLinkObjectType::ClientOle, mpImpl->maLinkURL);
+}
+
+bool SdrOle2Obj::CompleteDeferredLink()
+{
+    if (!mpImpl->maDeferredMediaDescriptor.hasElements())
+        return false;
+
+    // take ownership of the descriptor and clear it so we don't retry
+    uno::Sequence<beans::PropertyValue> aMediaDescriptor;
+    std::swap(aMediaDescriptor, mpImpl->maDeferredMediaDescriptor);
+
+    ::comphelper::IEmbeddedHelper* pPersist = getSdrModelFromSdrObject().GetPersist();
+    if (!pPersist)
+        return false;
+
+    OUString aPersistName;
+    uno::Reference<embed::XEmbeddedObject> xObj =
+        pPersist->getEmbeddedObjectContainer().InsertEmbeddedLink(
+            aMediaDescriptor, aPersistName);
+    if (!xObj.is())
+        return false;
+
+    SetObjRef(xObj);
+    SetPersistName(aPersistName);
+    SetChanged();
+    return true;
+}
+
+bool SdrOle2Obj::HasDeferredLink() const
+{
+    return mpImpl->maDeferredMediaDescriptor.hasElements();
 }
 
 void SdrOle2Obj::Connect_Impl(SvxOle2Shape* pCreator)

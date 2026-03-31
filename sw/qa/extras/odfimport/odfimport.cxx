@@ -127,6 +127,47 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawObjectLinkDeferred)
                            pOLENode->HasDeferredLink());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testLinkedOLEExport)
+{
+    // Load a document with a linked OLE object whose target exists,
+    // save and reload, and verify the linked OLE survives.
+    createSwDoc("linked_ole.fodt");
+
+    SwDoc* pDoc = getSwDoc();
+    SwOLENode* pOLENode = nullptr;
+    for (const auto* pFlyFormat : *pDoc->GetSpzFrameFormats())
+    {
+        const SwNodeIndex* pIdx = pFlyFormat->GetContent().GetContentIdx();
+        if (!pIdx)
+            continue;
+        SwNode* pNd = pDoc->GetNodes()[pIdx->GetIndex() + 1];
+        if (pNd && pNd->IsOLENode())
+        {
+            pOLENode = pNd->GetOLENode();
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("OLE node should exist after loading linked OLE", pOLENode);
+
+    saveAndReload(TestFilter::ODT);
+
+    pDoc = getSwDoc();
+    pOLENode = nullptr;
+    for (const auto* pFlyFormat : *pDoc->GetSpzFrameFormats())
+    {
+        const SwNodeIndex* pIdx = pFlyFormat->GetContent().GetContentIdx();
+        if (!pIdx)
+            continue;
+        SwNode* pNd = pDoc->GetNodes()[pIdx->GetIndex() + 1];
+        if (pNd && pNd->IsOLENode())
+        {
+            pOLENode = pNd->GetOLENode();
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("OLE node should survive ODF round-trip", pOLENode);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testEmptySvgFamilyName)
 {
     createSwDoc("empty-svg-family-name.odt");

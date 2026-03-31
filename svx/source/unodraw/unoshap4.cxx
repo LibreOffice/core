@@ -40,6 +40,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <sfx2/objsh.hxx>
 #include <sot/exchange.hxx>
 
 #include <svx/svdmodel.hxx>
@@ -462,6 +463,15 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
         auto pMediaDescr = aMediaDescr.getArray();
         pMediaDescr[2].Name = "InteractionHandler";
         pMediaDescr[2].Value <<= xInteraction;
+    }
+
+    // Defer link creation during import so that type detection does not
+    // fetch the URL before the user has been prompted about link updates.
+    SfxObjectShell* pShell = dynamic_cast<SfxObjectShell*>(pPersist);
+    if (pShell && pShell->IsLoading())
+    {
+        pOle2Obj->SetDeferredLink(aLinkURL, aMediaDescr);
+        return;
     }
 
     //TODO/LATER: how to cope with creation failure?!

@@ -25,6 +25,7 @@
 
 #include <DrawDocShell.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <editeng/outlobj.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/compatflags.hxx>
@@ -33,6 +34,7 @@
 #include <editeng/editstat.hxx>
 #include <editeng/flstitem.hxx>
 #include <svl/flagitem.hxx>
+#include <svl/intitem.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/docfile.hxx>
@@ -293,13 +295,19 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
     bRet = SfxObjectShell::Load( rMedium );
     if (bRet)
     {
-        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
-        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+        getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
         bRet = SdXMLFilter( rMedium, *this, SdXMLFilterMode::Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
     }
 
     if (bRet)
+    {
+        const SfxUInt16Item* pUpdateDocItem = rSet.GetItem(SID_UPDATEDOCMODE, false);
+        sal_uInt16 nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue()
+                                                   : css::document::UpdateDocMode::ACCORDING_TO_CONFIG;
+        if (nUpdateDocMode != css::document::UpdateDocMode::NO_UPDATE)
+            getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
         mpDoc->UpdateAllLinks();
+    }
 
     if( bRet )
     {
@@ -456,6 +464,13 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     else // initial loading of the document
     {
         mpDoc->EnableUndo(false);
+
+        const SfxUInt16Item* pUpdateDocItem
+            = rMedium.GetItemSet().GetItem(SID_UPDATEDOCMODE, false);
+        sal_uInt16 nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue()
+                                                   : css::document::UpdateDocMode::ACCORDING_TO_CONFIG;
+        if (nUpdateDocMode == css::document::UpdateDocMode::NO_UPDATE)
+            getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
     }
 
     mpDoc->incImportExport();
@@ -525,6 +540,8 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         bStartPresentation = nStartingSlide;
         mpDoc->SetStartWithPresentation(nStartingSlide);
     }
+
+    getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
 
     if( aFilterName == pFilterPowerPoint97
         || aFilterName == pFilterPowerPoint97Template

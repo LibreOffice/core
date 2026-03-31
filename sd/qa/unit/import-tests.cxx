@@ -19,11 +19,13 @@
 
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdoole2.hxx>
 #include <svx/svdotable.hxx>
 #include <o3tl/environment.hxx>
 
 #include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
@@ -36,6 +38,7 @@
 #include <stlpool.hxx>
 
 #include <unotools/syslocaleoptions.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/file.hxx>
@@ -1062,6 +1065,55 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testMasterPageStyleParent)
     }
     // check that there are actually parents...
     CPPUNIT_ASSERT_EQUAL(16, parents);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testLinkedOLEExport)
+{
+    // Impress equivalent of Writer's testLinkedOLEExport: load a document
+    // with a linked OLE object whose target exists, save and reload, and
+    // verify the linked OLE survives. Use FULL_UPDATE so the linked OLE
+    // is created during load (the default NO_UPDATE in test mode would
+    // leave the link deferred).
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::FULL_UPDATE)),
+    };
+    loadFromFile(u"linked_ole.fodp", aParams);
+
+    const SdrPage* pPage = GetPage(1);
+    CPPUNIT_ASSERT(pPage);
+    CPPUNIT_ASSERT(pPage->GetObjCount() > 0);
+    const SdrOle2Obj* pOleObj = dynamic_cast<const SdrOle2Obj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("OLE object should exist after loading linked OLE", pOleObj);
+
+    saveAndReload(TestFilter::ODP);
+
+    pPage = GetPage(1);
+    CPPUNIT_ASSERT(pPage);
+    CPPUNIT_ASSERT(pPage->GetObjCount() > 0);
+    pOleObj = dynamic_cast<const SdrOle2Obj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("OLE object should survive ODP round-trip", pOleObj);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testDrawObjectLinkDeferred)
+{
+    // draw:object with non-package xlink:href must not trigger type detection
+    // (which fetches the URL) during import. The link is deferred until the
+    // user confirms link updates. Uses non-routable 192.0.2.1 so that an
+    // actual fetch would hang/timeout.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"draw-object-link.fodp", aParams);
+
+    const SdrPage* pPage = GetPage(1);
+    CPPUNIT_ASSERT(pPage);
+    CPPUNIT_ASSERT(pPage->GetObjCount() > 0);
+    const SdrOle2Obj* pOleObj = dynamic_cast<const SdrOle2Obj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("OLE placeholder should exist after import", pOleObj);
+    CPPUNIT_ASSERT_MESSAGE("OLE link should be deferred, not created during import",
+                           pOleObj->HasDeferredLink());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
