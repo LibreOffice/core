@@ -68,9 +68,18 @@ struct TableStyleElement
     int nDxfId;
 };
 
+enum class TableStyleCategory
+{
+    Light,
+    Medium,
+    Dark
+};
+
 struct TableStyle
 {
     const char* pName;
+    TableStyleCategory eCategory;
+    int nNumber;
     size_t nElements;
     int pTableStyleElementIds[9];
 };

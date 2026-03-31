@@ -22,6 +22,8 @@
 
 #include <document.hxx>
 #include <patattr.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
 #include <tablestyle.hxx>
 #include <sc.hrc>
 
@@ -296,6 +298,21 @@ buildDxfPatterns(ScDocument& rDoc, const std::vector<SvxBrushItem>& rFillItems,
     return aDxfPatterns;
 }
 
+TranslateId getCategoryTranslateId(TableStyleCategory eCategory)
+{
+    switch (eCategory)
+    {
+        case TableStyleCategory::Light:
+            return STR_TABLE_STYLE_LIGHT;
+        case TableStyleCategory::Medium:
+            return STR_TABLE_STYLE_MEDIUM;
+        case TableStyleCategory::Dark:
+            return STR_TABLE_STYLE_DARK;
+    }
+    SAL_WARN("sc", "getCategoryTranslateId: unknown TableStyleCategory");
+    return {};
+}
+
 void assembleTableStyles(ScTableStyles& rTableStyles,
                          const std::vector<std::unique_ptr<ScPatternAttr>>& rDxfPatterns)
 {
@@ -303,8 +320,10 @@ void assembleTableStyles(ScTableStyles& rTableStyles,
     for (size_t i = 0; i < nTableStyles; ++i)
     {
         const ::TableStyle& rStyleInfo = aTableStyles[i];
+        OUString aUIName = ScResId(getCategoryTranslateId(rStyleInfo.eCategory)) + " "
+                           + OUString::number(rStyleInfo.nNumber);
         auto pStyle = std::make_unique<ScTableStyle>(OUString::createFromAscii(rStyleInfo.pName),
-                                                     std::optional<OUString>());
+                                                     std::optional<OUString>(aUIName));
         pStyle->SetOOXMLDefault(true);
 
         for (size_t j = 0; j < rStyleInfo.nElements; ++j)
