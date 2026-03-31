@@ -1,3 +1,4 @@
+#include <comphelper/unique_unlock.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -25,11 +26,14 @@ SlideMasterPagesAllToolBoxControl::statusChanged(const css::frame::FeatureStateE
     // Handle status changes if needed
 }
 
-void SAL_CALL SlideMasterPagesAllToolBoxControl::dispose()
+void SlideMasterPagesAllToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    SolarMutexGuard aSolarMutexGuard;
-    m_xVclBox.disposeAndClear();
-    svt::ToolboxController::dispose();
+    {
+        comphelper::unique_unlock aUnlock(rGuard);
+        SolarMutexGuard aSolarMutexGuard;
+        m_xVclBox.disposeAndClear();
+    }
+    svt::ToolboxController::disposing(rGuard);
 }
 
 css::uno::Reference<css::awt::XWindow> SlideMasterPagesAllToolBoxControl::createItemWindow(

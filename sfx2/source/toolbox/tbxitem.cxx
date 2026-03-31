@@ -45,6 +45,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/InterimItemWindow.hxx>
@@ -148,12 +149,10 @@ unsigned short SfxToolBoxControl::GetSlotId() const
 }
 
 
-void SAL_CALL SfxToolBoxControl::dispose()
+void SfxToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    if ( m_bDisposed )
-        return;
-
-    svt::ToolboxController::dispose();
+    svt::ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
 
     // Remove and destroy our item window at our toolbox
     SolarMutexGuard aGuard;

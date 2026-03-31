@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/weld/weld.hxx>
@@ -169,14 +170,15 @@ ComboboxToolbarController::~ComboboxToolbarController()
 {
 }
 
-void SAL_CALL ComboboxToolbarController::dispose()
+void ComboboxToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    SolarMutexGuard aSolarMutexGuard;
-
-    m_xToolbar->SetItemWindow( m_nID, nullptr );
-    m_pComboBox.disposeAndClear();
-
-    ComplexToolbarController::dispose();
+    {
+        comphelper::unique_unlock aUnlock(rGuard);
+        SolarMutexGuard aSolarMutexGuard;
+        m_xToolbar->SetItemWindow( m_nID, nullptr );
+        m_pComboBox.disposeAndClear();
+    }
+    ComplexToolbarController::disposing(rGuard);
 }
 
 Sequence<PropertyValue> ComboboxToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const

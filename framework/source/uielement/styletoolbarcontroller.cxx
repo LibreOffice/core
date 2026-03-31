@@ -258,9 +258,9 @@ void StyleToolbarController::statusChanged( const css::frame::FeatureStateEvent&
     }
 }
 
-void StyleToolbarController::dispose()
+void StyleToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    ToolboxController::dispose();
+    ToolboxController::disposing(rGuard);
     m_aListenerMap.clear(); // Break the cycle with StyleDispatcher.
 }
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/unique_unlock.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -129,8 +130,8 @@ public:
         return { u"com.sun.star.frame.ToolbarController"_ustr };
     }
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XToolbarController
     virtual uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) override;
@@ -221,8 +222,8 @@ public:
         return { u"com.sun.star.frame.ToolbarController"_ustr };
     }
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XToolbarController
     virtual uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) override;
@@ -231,11 +232,11 @@ public:
     virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) override;
 };
 
-void MMCurrentEntryController::dispose()
+void MMCurrentEntryController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
+    svt::ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
-
-    svt::ToolboxController::dispose();
     m_xCurrentEdit.disposeAndClear();
 }
 
@@ -298,11 +299,11 @@ void MMCurrentEntryController::statusChanged(const frame::FeatureStateEvent& rEv
     }
 }
 
-void MMExcludeEntryController::dispose()
+void MMExcludeEntryController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
+    svt::ToolboxController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
     SolarMutexGuard aSolarMutexGuard;
-
-    svt::ToolboxController::dispose();
     m_xExcludeCheckbox.disposeAndClear();
 }
 

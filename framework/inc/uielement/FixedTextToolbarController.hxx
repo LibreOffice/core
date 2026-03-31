@@ -37,8 +37,8 @@ public:
                                const css::uno::Reference<css::frame::XFrame>& rFrame,
                                ToolBox* pToolBar, ToolBoxItemId nID, const OUString& aCommand);
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
 private:
     virtual void executeControlCommand(const css::frame::ControlCommand& rControlCommand) override;

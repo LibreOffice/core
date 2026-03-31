@@ -29,6 +29,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/intitem.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/unique_unlock.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
@@ -123,15 +124,16 @@ ParaLRSpacingControl::~ParaLRSpacingControl()
 {
 }
 
-void SAL_CALL ParaLRSpacingControl::dispose()
+void ParaLRSpacingControl::disposing(std::unique_lock<std::mutex>& rGuard)
 {
     if(m_xMultiplexer.is())
     {
+        comphelper::unique_unlock aUnlock(rGuard);
         m_xMultiplexer->removeAllContextChangeEventListeners(this);
         m_xMultiplexer.clear();
     }
 
-    SfxToolBoxControl::dispose();
+    SfxToolBoxControl::disposing(rGuard);
 }
 
 void ParaLRSpacingControl::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
@@ -200,9 +202,10 @@ void SAL_CALL ParaLRSpacingControl::acquire() noexcept
     SfxToolBoxControl::acquire();
 }
 
-void SAL_CALL ParaLRSpacingControl::disposing(const ::css::lang::EventObject&)
+void SAL_CALL ParaLRSpacingControl::disposing(const ::css::lang::EventObject& rEvent)
 {
-    SfxToolBoxControl::disposing();
+    // disambiguate XEventListener inherited via both SfxToolBoxControl and XContextChangeEventListener
+    svt::ToolboxController::disposing(rEvent);
 }
 
 void SAL_CALL ParaLRSpacingControl::release() noexcept

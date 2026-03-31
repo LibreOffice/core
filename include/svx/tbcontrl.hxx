@@ -168,8 +168,8 @@ public:
     // XUpdatable
     virtual void SAL_CALL update() override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

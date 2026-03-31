@@ -22,6 +22,7 @@
 #include <uielement/popuptoolbarcontroller.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/unique_unlock.hxx>
 #include <helper/persistentwindowstate.hxx>
 #include <menuconfiguration.hxx>
 #include <svtools/imagemgr.hxx>
@@ -62,30 +63,31 @@ PopupMenuToolbarController::PopupMenuToolbarController(
 {
 }
 
-void SAL_CALL PopupMenuToolbarController::dispose()
+void PopupMenuToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    svt::ToolboxController::dispose();
-
-    osl::MutexGuard aGuard( m_aMutex );
-    if( m_xPopupMenuController.is() )
+    svt::ToolboxController::disposing(rGuard);
     {
-        css::uno::Reference< css::lang::XComponent > xComponent(
-            m_xPopupMenuController, css::uno::UNO_QUERY );
-        if( xComponent.is() )
+        comphelper::unique_unlock aUnlock(rGuard);
+        if( m_xPopupMenuController.is() )
         {
-            try
+            css::uno::Reference< css::lang::XComponent > xComponent(
+                m_xPopupMenuController, css::uno::UNO_QUERY );
+            if( xComponent.is() )
             {
-                xComponent->dispose();
+                try
+                {
+                    xComponent->dispose();
+                }
+                catch (...)
+                {}
             }
-            catch (...)
-            {}
+            m_xPopupMenuController.clear();
         }
-        m_xPopupMenuController.clear();
-    }
 
-    m_xContext.clear();
-    m_xPopupMenuFactory.clear();
-    m_xPopupMenu.clear();
+        m_xContext.clear();
+        m_xPopupMenuFactory.clear();
+        m_xPopupMenu.clear();
+    }
 }
 
 void SAL_CALL PopupMenuToolbarController::initialize(
@@ -93,7 +95,7 @@ void SAL_CALL PopupMenuToolbarController::initialize(
 {
     ToolboxController::initialize( aArguments );
 
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( !m_aPopupCommand.getLength() )
         m_aPopupCommand = m_aCommandURL;
 
@@ -152,7 +154,7 @@ PopupMenuToolbarController::createPopupWindow()
 {
     css::uno::Reference< css::awt::XWindow > xRet;
 
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( !m_bHasController )
         return xRet;
 
@@ -375,8 +377,8 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
+    // WeakComponentImplHelperBase
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -523,9 +525,10 @@ void SaveToolbarController::disposing( const css::lang::EventObject& rEvent )
         PopupMenuToolbarController::disposing( rEvent );
 }
 
-void SaveToolbarController::dispose()
+void SaveToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    PopupMenuToolbarController::dispose();
+    PopupMenuToolbarController::disposing(rGuard);
+    comphelper::unique_unlock aUnlock(rGuard);
     if ( m_xModifiable.is() )
     {
         m_xModifiable->removeModifyListener( this );
@@ -609,7 +612,7 @@ void SAL_CALL NewToolbarController::initialize( const css::uno::Sequence< css::u
 {
     PopupMenuToolbarController::initialize( aArguments );
 
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     createPopupMenuController();
 }
 
@@ -638,7 +641,7 @@ void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStat
 
 void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     OUString aURL, aTarget;
     if ( m_xPopupMenu.is() && m_nMenuId )

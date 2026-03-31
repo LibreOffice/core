@@ -52,12 +52,6 @@ ToggleButtonToolbarController::~ToggleButtonToolbarController()
 {
 }
 
-void SAL_CALL ToggleButtonToolbarController::dispose()
-{
-    SolarMutexGuard aSolarMutexGuard;
-    ComplexToolbarController::dispose();
-}
-
 Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs{ // Add key modifier to argument list

@@ -42,8 +42,8 @@ class EditToolbarController final : public ComplexToolbarController
                                const OUString& aCommand );
         virtual ~EditToolbarController() override;
 
-        // XComponent
-        virtual void SAL_CALL dispose() override;
+        // WeakComponentImplHelperBase
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // called from EditControl
         void Modify();

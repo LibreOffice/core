@@ -40,9 +40,6 @@ class ImageButtonToolbarController final : public ComplexToolbarController
                                       const OUString& aCommand );
         virtual ~ImageButtonToolbarController() override;
 
-        // XComponent
-        virtual void SAL_CALL dispose() override;
-
     private:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;
 
