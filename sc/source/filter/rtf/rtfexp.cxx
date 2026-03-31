@@ -25,6 +25,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svtools/rtfout.hxx>
@@ -259,6 +260,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     bool bResetAttr(false);
 
     const SvxFontItem&          rFontItem       = pAttr->GetItem( ATTR_FONT );
+    const SvxFontHeightItem& rFontHeightItem = pAttr->GetItem(ATTR_FONT_HEIGHT);
     const SvxHorJustifyItem&    rHorJustifyItem = pAttr->GetItem( ATTR_HOR_JUSTIFY );
     const SvxWeightItem&        rWeightItem     = pAttr->GetItem( ATTR_FONT_WEIGHT );
     const SvxPostureItem&       rPostureItem    = pAttr->GetItem( ATTR_FONT_POSTURE );
@@ -266,6 +268,12 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 
     m_aDocStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_F )
         .WriteOString( OString::number(AddFont(rFontItem)) );
+
+    m_aDocStrm.WriteOString(OOO_STRING_SVTOOLS_RTF_FS);
+    sal_Int32 nHeight = rFontHeightItem.GetHeight();
+    // Twips => HalfPoints
+    nHeight /= 10;
+    m_aDocStrm.WriteNumberAsString(nHeight);
 
     const char* pChar;
 

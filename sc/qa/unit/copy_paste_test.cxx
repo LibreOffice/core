@@ -26,6 +26,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 
@@ -69,6 +70,7 @@ public:
     void testMarkdownExportSingleCell();
     void testMarkdownRoundtripFormattedText();
     void testMarkdownRoundtripTable();
+    void testRTFFontHeight();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
@@ -103,6 +105,7 @@ public:
     CPPUNIT_TEST(testMarkdownExportSingleCell);
     CPPUNIT_TEST(testMarkdownRoundtripFormattedText);
     CPPUNIT_TEST(testMarkdownRoundtripTable);
+    CPPUNIT_TEST(testRTFFontHeight);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1340,6 +1343,33 @@ void ScCopyPasteTest::testMarkdownRoundtripTable()
     CPPUNIT_ASSERT_EQUAL(u"Age"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(u"Alice"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
+}
+
+void ScCopyPasteTest::testRTFFontHeight()
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScTabViewShell* pViewShell = getViewShell();
+    pDoc->SetString(ScAddress(0, 0, 0), u"Text"_ustr);
+    sal_uInt32 nHeightPt = 8;
+    pDoc->ApplyAttr(0, 0, 0, SvxFontHeightItem(nHeightPt * 20, 100, ATTR_FONT_HEIGHT));
+
+    // Select a range containing A1:
+    ScRange aRange(0, 0, 0, 1, 0, 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aRange);
+
+    // Obtain a transferable, similar to what happens on copy to clipboard:
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    auto xTransferable = pModelObj->getSelection();
+    // Get the RTF data:
+    auto aRTF
+        = xTransferable->getTransferData({ u"text/rtf"_ustr, {}, cppu::UnoType<OUString>::get() });
+    OUString sRTF;
+    CPPUNIT_ASSERT(aRTF >>= sRTF);
+
+    // Check that the font height was exported (in Half-point units)
+    OUString sText = "\\fs" + OUString::number(nHeightPt * 2);
+    CPPUNIT_ASSERT(sRTF.indexOf(sText) >= 0);
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
