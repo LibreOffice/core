@@ -42,10 +42,12 @@
 #include <com/sun/star/document/XDocumentInsertable.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/boxitem.hxx>
+#include <sfx2/docfile.hxx>
 #include <vcl/scheduler.hxx>
 
 #include <IDocumentSettingAccess.hxx>
@@ -57,6 +59,8 @@
 #include <olmenu.hxx>
 #include <hintids.hxx>
 #include <docsh.hxx>
+#include <fmtcntnt.hxx>
+#include <ndole.hxx>
 #include <unotxdoc.hxx>
 #include <frmatr.hxx>
 #include <expfld.hxx>
@@ -79,6 +83,48 @@ class Test : public SwModelTestBase
     public:
         Test() : SwModelTestBase(u"/sw/qa/extras/odfimport/data/"_ustr) {}
 };
+
+CPPUNIT_TEST_FIXTURE(Test, testDrawObjectLinkDeferred)
+{
+    // Given a document with draw:object xlink:href pointing to a URL, the link
+    // shouldn't be fetched until the update links is called.
+    //
+    // Load with NO_UPDATE so that UpdateLinks does not complete the deferred
+    // link, we want to verify the state immediately after import.  The test
+    // uses 192.0.2.1 (non-routeable) so without the fix type detection fetch
+    // would hang/timeout.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"draw-object-link.fodt"), aParams);
+    CPPUNIT_ASSERT(!getSwDocShell()->GetMedium()->GetWarningError());
+    calcLayout();
+
+    SwDoc* pDoc = getSwDoc();
+
+    // find the OLE node via fly frame formats
+    SwOLENode* pOLENode = nullptr;
+    for (const auto* pFlyFormat : *pDoc->GetSpzFrameFormats())
+    {
+        const SwNodeIndex* pIdx = pFlyFormat->GetContent().GetContentIdx();
+        if (!pIdx)
+            continue;
+        SwNode* pNd = pDoc->GetNodes()[pIdx->GetIndex() + 1];
+        if (pNd && pNd->IsOLENode())
+        {
+            pOLENode = pNd->GetOLENode();
+            break;
+        }
+    }
+
+    // the placeholder frame and OLE node must exist
+    CPPUNIT_ASSERT_MESSAGE("OLE placeholder node should exist after import", pOLENode);
+
+    // If this is false, the link was either not deferred or was completed despite NO_UPDATE.
+    CPPUNIT_ASSERT_MESSAGE("OLE link should be deferred, not created during import",
+                           pOLENode->HasDeferredLink());
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testEmptySvgFamilyName)
 {
