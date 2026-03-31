@@ -647,18 +647,27 @@ VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const O
             }
             else
             {
-                vcl::Window *pTarget = get(rParam);
-                SAL_WARN_IF(!pTarget, "vcl", "missing parameter of a11y relation: " << rParam);
-                if (!pTarget)
-                    continue;
-                if (rType == "labelled-by")
-                    pSource->AddAccessibleRelationLabeledBy(pTarget);
-                else if (rType == "label-for")
-                    pSource->SetAccessibleRelationLabelFor(pTarget);
-                else
+                // rParam may contain multiple space-separated targets
+                // when the same relation type appears more than once
+                sal_Int32 nIdx = 0;
+                do
                 {
-                    SAL_WARN("vcl.builder", "unhandled a11y relation :" << rType);
-                }
+                    OUString sTarget = rParam.getToken(0, ' ', nIdx);
+                    if (sTarget.isEmpty())
+                        continue;
+                    vcl::Window *pTarget = get(sTarget);
+                    SAL_WARN_IF(!pTarget, "vcl", "missing parameter of a11y relation: " << sTarget);
+                    if (!pTarget)
+                        continue;
+                    if (rType == "labelled-by")
+                        pSource->AddAccessibleRelationLabeledBy(pTarget);
+                    else if (rType == "label-for")
+                        pSource->SetAccessibleRelationLabelFor(pTarget);
+                    else
+                    {
+                        SAL_WARN("vcl.builder", "unhandled a11y relation :" << rType);
+                    }
+                } while (nIdx >= 0);
             }
         }
     }
@@ -2729,7 +2738,13 @@ void BuilderBase::collectAtkRelationAttribute(xmlreader::XmlReader& reader, stri
     }
 
     if (!sProperty.isEmpty())
-        rMap[sProperty] = sValue;
+    {
+        auto it = rMap.find(sProperty);
+        if (it != rMap.end())
+            it->second += " " + sValue;
+        else
+            rMap[sProperty] = sValue;
+    }
 }
 
 void BuilderBase::collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap)
