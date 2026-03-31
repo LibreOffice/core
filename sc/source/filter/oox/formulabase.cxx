@@ -1200,6 +1200,7 @@ private:
 
     bool                initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap& rFuncTokenMap );
     bool                initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, const ApiTokenMap& rExtFuncTokenMap, const FunctionInfoVector& rFuncInfos );
+    bool                initErrorOpCodes( const ApiTokenMap& rTokenMap );
 };
 
 OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
@@ -1269,7 +1270,10 @@ OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
             // functions
             fillFuncTokenMaps( aTokenMap, aExtFuncTokenMap, aEntrySeq, xMapper ) &&
             initFuncOpCodes( aTokenMap, aExtFuncTokenMap, rFuncInfos ) &&
-            initOpCode( OPCODE_DDE,           aTokenMap, "DDE", nullptr );
+            initOpCode( OPCODE_DDE,           aTokenMap, "DDE", nullptr ) &&
+            // error constants
+            fillTokenMap( aTokenMap, aEntrySeq, xMapper, ERROR_CONSTANTS ) &&
+            initErrorOpCodes( aTokenMap );
 
         OSL_ENSURE( bIsValid, "OpCodeProviderImpl::OpCodeProviderImpl - opcodes not initialized" );
 
@@ -1447,6 +1451,18 @@ bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, c
         }
     }
     return bIsValid;
+}
+
+bool OpCodeProviderImpl::initErrorOpCodes( const ApiTokenMap& rTokenMap )
+{
+    for (const auto& [rName, rToken] : rTokenMap)
+    {
+        FormulaOpCodeMapEntry aEntry;
+        aEntry.Name = rName;
+        aEntry.Token = rToken;
+        maParserMap.push_back( aEntry );
+    }
+    return true;
 }
 
 OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxModelFactory,

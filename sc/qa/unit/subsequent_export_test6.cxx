@@ -803,6 +803,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleCustomRoundtripXLSX)
     CPPUNIT_ASSERT_EQUAL(382.0, pDoc->GetValue(ScAddress(3, 10, 0))); // SUM of Age column
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testErrorExternalsInDataValidation)
+{
+    createScDoc("xlsx/invalid_ext_data_validation.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet2.xml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[2]/x:formula1",
+                       u"[2]Hilfsblatt!#REF!");
+
+    xmlDocUniquePtr pDocXml = parseExport(u"xl/externalLinks/externalLink2.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

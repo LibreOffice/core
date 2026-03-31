@@ -556,10 +556,6 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
     }
     else
     {
-        /* FIXME: Once we support error constants in formulas we'll need a map
-         * group for that, e.g. FormulaMapGroup::ERROR_CONSTANTS, and fill
-         * SC_OPCODE_START_ERRORS to SC_OPCODE_STOP_ERRORS. */
-
         // Anything else but SPECIAL.
         if ((nGroups & FormulaMapGroup::SEPARATORS) != 0)
         {
@@ -657,6 +653,11 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             {
                 rCompiler.fillAddInToken( aVec, isEnglish());
             }
+        }
+        if ((nGroups & FormulaMapGroup::ERROR_CONSTANTS) != 0)
+        {
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), SC_OPCODE_START_ERRORS,
+                    ::std::min< sal_uInt16 >( SC_OPCODE_STOP_ERRORS, mnSymbols ) );
         }
     }
     return uno::Sequence< FormulaOpCodeMapEntry >(aVec.data(), aVec.size());

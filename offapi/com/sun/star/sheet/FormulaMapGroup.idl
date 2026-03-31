@@ -52,6 +52,9 @@ constants FormulaMapGroup
     /** Functions */
     const long FUNCTIONS          = 0x00000010;
 
+    /** Error constants */
+    const long ERROR_CONSTANTS    = 0x00000020;
+
     /** All groups except SPECIAL */
     const long ALL_EXCEPT_SPECIAL = 0x7fffffff;
 };
