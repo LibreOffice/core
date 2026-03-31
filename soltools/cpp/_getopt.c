@@ -27,7 +27,6 @@
 
 static int opterr = 1;
 int optind = 1;
-static int optopt;
 char *optarg;
 
 int
@@ -53,7 +52,7 @@ int
                 optind++; optind++;
             }
     }
-    optopt = c = argv[optind][sp];
+    c = argv[optind][sp];
     if (c == ':' || (cp = strchr(opts, c)) == NULL)
     {
         ERR(": illegal option -- ", c);
