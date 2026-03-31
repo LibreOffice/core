@@ -499,6 +499,54 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     return xPropSet;
 }
 
+static uno::Sequence< beans::PropertyValue > lcl_buildLinkMediaDescriptor(
+        const OUString& rAbsURL, SwDocShell* pShell )
+{
+    uno::Sequence< beans::PropertyValue > aMediaDescriptor{ comphelper::makePropertyValue(
+        u"URL"_ustr, rAbsURL) };
+
+    if (SfxMedium* pMedium = pShell ? pShell->GetMedium() : nullptr)
+    {
+        uno::Reference< task::XInteractionHandler > xInteraction = pMedium->GetInteractionHandler();
+        if ( xInteraction.is() )
+        {
+            aMediaDescriptor.realloc( 2 );
+            auto pMediaDescriptor = aMediaDescriptor.getArray();
+            pMediaDescriptor[1].Name = "InteractionHandler";
+            pMediaDescriptor[1].Value <<= xInteraction;
+        }
+
+        const auto nLen = aMediaDescriptor.getLength() + 1;
+        aMediaDescriptor.realloc(nLen);
+        auto pMediaDescriptor = aMediaDescriptor.getArray();
+        pMediaDescriptor[nLen - 1].Name = "Referer";
+        pMediaDescriptor[nLen - 1].Value <<= pMedium->GetName();
+    }
+
+    return aMediaDescriptor;
+}
+
+static rtl::Reference < SwXTextEmbeddedObject > lcl_insertOLEFrame(
+        SwDoc *pDoc, const SwPaM& rPaM,
+        const svt::EmbeddedObjectRef& xObjRef, SfxItemSet* pItemSet )
+{
+    SwFrameFormat *pFrameFormat =
+        pDoc->getIDocumentContentOperations().InsertEmbObject(
+            rPaM, xObjRef, pItemSet );
+    if (!pFrameFormat)
+        return nullptr;
+
+    rtl::Reference < SwXTextEmbeddedObject > xPropSet =
+        SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                        *pDoc, pFrameFormat);
+    if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+    {
+        SwXFrame::GetOrCreateSdrObject(*
+                static_cast<SwFlyFrameFormat*>(pFrameFormat)); // req for z-order
+    }
+    return xPropSet;
+}
+
 uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         SvXMLImport& rImport,
         const OUString& rHRef,
@@ -527,6 +575,11 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     if( !bValidURL )
         return nullptr;
 
+    OUString aAbsURL(aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ));
+    SwDocShell* pShell = pDoc->GetDocShell();
+    uno::Sequence< beans::PropertyValue > aMediaDescriptor =
+        lcl_buildLinkMediaDescriptor( aAbsURL, pShell );
+
     rtl::Reference < SwXTextEmbeddedObject > xPropSet;
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     try
@@ -535,50 +588,15 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory =
                 embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
 
-        uno::Sequence< beans::PropertyValue > aMediaDescriptor{ comphelper::makePropertyValue(
-            u"URL"_ustr, aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )) };
-
-        SwDocShell* pShell = pDoc->GetDocShell();
-        if (SfxMedium* pMedium = pShell ? pShell->GetMedium() : nullptr)
-        {
-            uno::Reference< task::XInteractionHandler > xInteraction = pMedium->GetInteractionHandler();
-            if ( xInteraction.is() )
-            {
-                aMediaDescriptor.realloc( 2 );
-                auto pMediaDescriptor = aMediaDescriptor.getArray();
-                pMediaDescriptor[1].Name = "InteractionHandler";
-                pMediaDescriptor[1].Value <<= xInteraction;
-            }
-
-            const auto nLen = aMediaDescriptor.getLength() + 1;
-            aMediaDescriptor.realloc(nLen);
-            auto pMediaDescriptor = aMediaDescriptor.getArray();
-            pMediaDescriptor[nLen - 1].Name = "Referer";
-            pMediaDescriptor[nLen - 1].Value <<= pMedium->GetName();
-        }
-
         uno::Reference < embed::XEmbeddedObject > xObj(
             xFactory->createInstanceLink(
                 xStorage, u"DummyName"_ustr, aMediaDescriptor, uno::Sequence< beans::PropertyValue >() ),
             uno::UNO_QUERY_THROW );
 
-        {
-            SwFrameFormat *const pFrameFormat =
-                pDoc->getIDocumentContentOperations().InsertEmbObject(
-                    *pTextCursor->GetPaM(),
-                    ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
-                    &aItemSet );
+        // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
 
-            // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
-
-            xPropSet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                            *pDoc, pFrameFormat);
-            if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
-            {
-                SwXFrame::GetOrCreateSdrObject(*
-                        static_cast<SwFlyFrameFormat*>(pFrameFormat)); // req for z-order
-            }
-        }
+        xPropSet = lcl_insertOLEFrame( pDoc, *pTextCursor->GetPaM(),
+            ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT), &aItemSet );
     }
     catch ( uno::Exception& )
     {
