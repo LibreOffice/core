@@ -304,8 +304,6 @@ static int yychar;  /*  the lookahead symbol        */
 YYSTYPE yylval;         /*  the semantic value of the       */
                 /*  lookahead symbol            */
 
-static int yynerrs;     /*  number of parse errors so far       */
-
 /*  YYINITDEPTH indicates the initial size of the parser's stacks   */
 
 #ifndef YYINITDEPTH
@@ -360,7 +358,6 @@ yyparse(YYPARSE_PARAM_ARG)
 
   yystate = 0;
   yyerrstatus = 0;
-  yynerrs = 0;
   yychar = YYEMPTY;     /* Cause a token to be read.  */
 
   /* Initialize stack pointers.
@@ -757,8 +754,6 @@ yyerrlab:   /* here on detecting error */
   if (! yyerrstatus)
     /* If not already recovering from an error, report this error.  */
     {
-      ++yynerrs;
-
 #ifdef YYERROR_VERBOSE
       yyn = yypact[yystate];
 
