@@ -268,7 +268,7 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OUString&, rIdent, void)
         nLevelNo = 9;
     else if (rIdent == "saveas")
     {
-        SwNumNamesDlg aDlg(m_xDialog.get());
+        auto xDlg = std::make_shared<SwNumNamesDlg>(m_xDialog.get());
         const OUString *aStrArr[SwChapterNumRules::nMaxRules];
         for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
         {
@@ -278,14 +278,16 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OUString&, rIdent, void)
             else
                 aStrArr[i] = nullptr;
         }
-        aDlg.SetUserNames(aStrArr);
-        if (aDlg.run() == RET_OK)
-        {
-            const OUString aName(aDlg.GetName());
-            m_pChapterNumRules->ApplyNumRules( SwNumRulesWithName(
-                    *m_xNumRule, aName ), aDlg.GetCurEntryPos() );
-            m_xMenuButton->set_item_label("form" + OUString::number(aDlg.GetCurEntryPos() + 1), aName);
-        }
+        xDlg->SetUserNames(aStrArr);
+        weld::DialogController::runAsync(xDlg, [this, xDlg](sal_Int32 nResult) {
+            if (nResult == RET_OK)
+            {
+                const OUString aName(xDlg->GetName());
+                m_pChapterNumRules->ApplyNumRules( SwNumRulesWithName(
+                        *m_xNumRule, aName ), xDlg->GetCurEntryPos() );
+                m_xMenuButton->set_item_label("form" + OUString::number(xDlg->GetCurEntryPos() + 1), aName);
+            }
+        });
         return;
     }
 

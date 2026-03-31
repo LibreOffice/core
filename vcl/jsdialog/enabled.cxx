@@ -268,6 +268,7 @@ constexpr auto SwriterDialogList
         { u"modules/swriter/ui/insertsectiondialog.ui" },
         { u"modules/swriter/ui/linenumbering.ui" },
         { u"modules/swriter/ui/newuserindexdialog.ui" },
+        { u"modules/swriter/ui/numberingnamedialog.ui" },
         { u"modules/swriter/ui/numparapage.ui" },
         { u"modules/swriter/ui/objectdialog.ui" },
         { u"modules/swriter/ui/outlinenumbering.ui" },
