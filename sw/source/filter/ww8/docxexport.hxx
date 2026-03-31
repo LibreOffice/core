@@ -96,7 +96,14 @@ class DocxExport : public MSWordExportBase
     sal_Int32 m_nOLEObjects;
 
     /// Cache of already exported OLEs
-    std::map<OUString, OUString> m_aOLECache;
+    struct OLECacheEntry
+    {
+        OUString sFileName;
+        OUString sRelationType;
+        OUString sRelId;
+        css::uno::Reference<css::io::XOutputStream> xOutputStream;
+    };
+    std::map<OUString, OLECacheEntry> m_aOLECache;
 
     /// ActiveX controls counter
     sal_Int32 m_nActiveXControls;

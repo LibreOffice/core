@@ -492,11 +492,23 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
 
 OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
 {
-    // Check if the OLE is already exported
+    // If the OLE was already exported, reuse the relationship ID for the same file,
+    // or create a new relationship ID pointing to the existing OLE for new files.
     const OUString& sPersistName = rObject.GetCurrentPersistName();
     auto it = m_aOLECache.find(sPersistName);
     if (it != m_aOLECache.end())
-        return OUStringToOString(it->second, RTL_TEXTENCODING_UTF8);
+    {
+        OLECacheEntry& rEntry = it->second;
+        if (rEntry.xOutputStream == GetFS()->getOutputStream())
+            return OUStringToOString(rEntry.sRelId, RTL_TEXTENCODING_UTF8);
+
+        // Create new relID and update the cache
+        OUString const sId = m_rFilter.addRelation(GetFS()->getOutputStream(), rEntry.sRelationType,
+                                                   rEntry.sFileName);
+        rEntry.sRelId = sId;
+        rEntry.xOutputStream = GetFS()->getOutputStream();
+        return OUStringToOString(sId, RTL_TEXTENCODING_UTF8);
+    }
 
     uno::Reference <embed::XEmbeddedObject> xObj( rObject.GetOleRef() );
     uno::Reference<uno::XComponentContext> const xContext(
@@ -541,7 +553,9 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
         io_rProgID = OUString::createFromAscii(pProgID);
     }
 
-    m_aOLECache[sPersistName] = sId;
+    m_aOLECache[sPersistName]
+        = OLECacheEntry{ sFileName, sRelationType, sId, GetFS()->getOutputStream() };
+
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
