@@ -493,6 +493,7 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats 
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_12 );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_8 );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_5 );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::MARKDOWN );
     }
 
     if ( !lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::EMBED_SOURCE_OLE ) )
@@ -527,7 +528,8 @@ static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
              rData.HasFormat( SotClipboardFormatId::LINK ) ||
              rData.HasFormat( SotClipboardFormatId::HTML ) ||
              rData.HasFormat( SotClipboardFormatId::HTML_SIMPLE ) ||
-             rData.HasFormat( SotClipboardFormatId::DIF ) )
+             rData.HasFormat( SotClipboardFormatId::DIF ) ||
+             rData.HasFormat( SotClipboardFormatId::MARKDOWN ) )
         {
             bPossible = true;
         }
