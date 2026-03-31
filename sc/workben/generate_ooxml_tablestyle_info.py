@@ -1,3 +1,5 @@
+import re
+
 import click
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
@@ -303,6 +305,9 @@ def parse_table_style(style) -> TableStyle:
     elif table_style_name == "TableStyleDark4 ":
         # Trim unintended trailing space
         table_style_name = "TableStyleDark4"
+    elif table_style_name == "TableStyleLight14 ":
+        # Trim unintended trailing space
+        table_style_name = "TableStyleLight14"
 
     return TableStyle(table_style_name, [parse_table_style_element(element, style_defs) for element in list(tableStyle)])
 
@@ -559,14 +564,19 @@ def dump_table_styles(table_styles: list[TableStyle], output_path: str):
     for table_style in sorted(table_styles):
         table_style_element_ids = ", ".join([f"{table_style_element_map[element]}" for element in table_style.elements])
         table_style_element_str = f"{{ {table_style_element_ids} }}"
-        output.append(f"{{ \"{table_style.name}\", {len(table_style.elements)}, {table_style_element_str} }}")
+        # Extract category and number from the style name (e.g. "TableStyleLight1" -> Light, 1)
+        m = re.match(r"^TableStyle(Light|Medium|Dark)(\d+)\s*$", table_style.name)
+        assert m, f"Unexpected table style name: {table_style.name}"
+        category = f"TableStyleCategory::{m.group(1)}"
+        number = m.group(2)
+        output.append(f"{{ \"{table_style.name}\", {category}, {number}, {len(table_style.elements)}, {table_style_element_str} }}")
 
     output_str = ", ".join(output)
     table_style_str = f"constexpr TableStyle aTableStyles[] = {{ {output_str} }};\n"
     content.append(table_style_str)
 
     content.append(footer)
-    with open(output_path, "w") as f:
+    with open(output_path, "w", newline="\n") as f:
         f.write("\n".join(content))
 
 

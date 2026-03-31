@@ -453,4 +453,9 @@
 
 #define STR_AUTOCALC_OFF                            NC_("STR_AUTOCALC_OFF", "AutoCalculate: Off\nClick to enable.")
 
+/* Table Styles */
+#define STR_TABLE_STYLE_LIGHT                       NC_("STR_TABLE_STYLE_LIGHT", "Table Style Light")
+#define STR_TABLE_STYLE_MEDIUM                      NC_("STR_TABLE_STYLE_MEDIUM", "Table Style Medium")
+#define STR_TABLE_STYLE_DARK                        NC_("STR_TABLE_STYLE_DARK", "Table Style Dark")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
