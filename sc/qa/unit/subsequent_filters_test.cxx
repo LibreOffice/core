@@ -7,10 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <svl/intitem.hxx>
+#include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/borderline.hxx>
 #include <cellvalue.hxx>
@@ -119,6 +122,24 @@ void testContentImpl(ScDocument& rDoc, bool bCheckMergedCells)
 
     //add additional checks here
 }
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDrawObjectLinkDeferred)
+{
+    // draw:object with non-package xlink:href must not trigger type detection
+    // (which fetches the URL) during import. The link is deferred until the
+    // user confirms link updates. Uses non-routable 192.0.2.1 so that an
+    // actual fetch would hang/timeout.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"draw-object-link.fods", aParams);
+
+    const SdrOle2Obj* pOleObj = getSingleOleObject(*getScDoc(), 0);
+    CPPUNIT_ASSERT_MESSAGE("OLE placeholder should exist after import", pOleObj);
+    CPPUNIT_ASSERT_MESSAGE("OLE link should be deferred, not created during import",
+                           pOleObj->HasDeferredLink());
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentODS)

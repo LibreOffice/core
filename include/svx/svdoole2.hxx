@@ -24,6 +24,7 @@
 #include <svx/svxdllapi.h>
 #include <sfx2/lnkbase.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Reference.h>
 
 namespace com::sun::star {
@@ -164,6 +165,14 @@ public:
     void BreakFileLink_Impl();
     void DisconnectFileLink_Impl();
     void CheckFileLink_Impl();
+
+    // Register a deferred link during import when the document has not yet
+    // prompted the user about link updates. The actual embedded object will be
+    // created when the user confirms via UpdateAllLinks
+    void SetDeferredLink(const OUString& rLinkURL,
+                         const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
+    bool CompleteDeferredLink();
+    bool HasDeferredLink() const;
 
     // allows to transfer the graphics to the object helper
     void SetGraphicToObj( const Graphic& aGraphic );
