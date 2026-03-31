@@ -580,26 +580,22 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     uno::Sequence< beans::PropertyValue > aMediaDescriptor =
         lcl_buildLinkMediaDescriptor( aAbsURL, pShell );
 
-    rtl::Reference < SwXTextEmbeddedObject > xPropSet;
-    uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
-    try
+    // Insert a placeholder OLE frame and register the link with the link manager.
+    // The actual embedded object creation (includes its type detection) is deferred to
+    // SwOLENode::CompleteDeferredLink, called after link updates are allowed.
+    svt::EmbeddedObjectRef xEmptyRef;
+    // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
+    rtl::Reference<SwXTextEmbeddedObject> xPropSet = lcl_insertOLEFrame(pDoc, *pTextCursor->GetPaM(), xEmptyRef, &aItemSet);
+    if (xPropSet)
     {
-        // create object with desired ClassId
-        uno::Reference < embed::XEmbeddedObjectCreator > xFactory =
-                embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
-
-        uno::Reference < embed::XEmbeddedObject > xObj(
-            xFactory->createInstanceLink(
-                xStorage, u"DummyName"_ustr, aMediaDescriptor, uno::Sequence< beans::PropertyValue >() ),
-            uno::UNO_QUERY_THROW );
-
-        // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
-
-        xPropSet = lcl_insertOLEFrame( pDoc, *pTextCursor->GetPaM(),
-            ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT), &aItemSet );
-    }
-    catch ( uno::Exception& )
-    {
+        SwFrameFormat *pFrameFormat = xPropSet->GetFrameFormat();
+        const SwNodeIndex* pIdx = pFrameFormat->GetContent().GetContentIdx();
+        if (pIdx)
+        {
+            SwOLENode* pOLENode = pDoc->GetNodes()[pIdx->GetIndex() + 1]->GetOLENode();
+            if (pOLENode)
+                pOLENode->SetDeferredLink(aAbsURL, aMediaDescriptor);
+        }
     }
 
     // TODO/LATER: should the rStyleName and rTableName be handled as for usual embedded object?

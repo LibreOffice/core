@@ -18,6 +18,10 @@
  */
 
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/embed/OOoEmbeddedObjectFactory.hpp>
+#include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
@@ -178,6 +182,15 @@ SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode)
 ::sfx2::SvBaseLink::UpdateResult SwEmbedObjectLink::DataChanged(
     const OUString&, const uno::Any& )
 {
+    // deferred link: the object was not created during import, complete the
+    // creation now
+    if (m_pOleNode->CompleteDeferredLink())
+    {
+        m_pOleNode->GetNewReplacement();
+        m_pOleNode->SetChanged();
+        return SUCCESS;
+    }
+
     if (!m_pOleNode->UpdateLinkURL_Impl())
     {
         // the link URL was not changed
@@ -702,6 +715,63 @@ void SwOLENode::CheckFileLink_Impl()
     catch( uno::Exception& )
     {
     }
+}
+
+void SwOLENode::SetDeferredLink(const OUString& rLinkURL,
+                                const uno::Sequence<beans::PropertyValue>& rMediaDescriptor)
+{
+    if (mpObjectLink)
+        return;
+
+    maLinkURL = rLinkURL;
+    maDeferredMediaDescriptor = rMediaDescriptor;
+
+    mpObjectLink = new SwEmbedObjectLink(this);
+    GetDoc().getIDocumentLinksAdministration().GetLinkManager().InsertFileLink(
+        *mpObjectLink, sfx2::SvBaseLinkObjectType::ClientOle, maLinkURL);
+}
+
+bool SwOLENode::CompleteDeferredLink()
+{
+    if (!maDeferredMediaDescriptor.hasElements())
+        return false;
+
+    // Take ownership of the descriptor and clear it so we don't retry
+    uno::Sequence<beans::PropertyValue> aMediaDescriptor;
+    std::swap(aMediaDescriptor, maDeferredMediaDescriptor);
+
+    try
+    {
+        uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
+
+        // create object with desired ClassId
+        uno::Reference<embed::XEmbeddedObjectCreator> xFactory =
+            embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
+
+        uno::Reference<embed::XEmbeddedObject> xObj(xFactory->createInstanceLink(
+                xStorage, u"DummyName"_ustr, aMediaDescriptor, uno::Sequence<beans::PropertyValue>()),
+            uno::UNO_QUERY);
+
+        if (!xObj.is())
+            return false;
+
+        SwDoc& rDoc = GetDoc();
+        comphelper::EmbeddedObjectContainer& rContainer = rDoc.GetDocShell()->getEmbeddedObjectContainer();
+
+        OUString aPersistName;
+        rContainer.InsertEmbeddedObject(xObj, aPersistName);
+
+        maOLEObj.GetObject().Assign(xObj, maOLEObj.GetObject().GetViewAspect());
+        maOLEObj.m_aName = aPersistName;
+
+        SetChanged();
+        return true;
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
+    return false;
 }
 
 // #i99665#

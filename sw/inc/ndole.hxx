@@ -23,6 +23,7 @@
 #include <svtools/embedhlp.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <rtl/ref.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 class SvxDrawPage;
 class SwGrfFormatColl;
@@ -100,6 +101,10 @@ class SW_DLLPUBLIC SwOLENode final: public SwNoTextNode
     sfx2::SvBaseLink*  mpObjectLink;
     OUString maLinkURL;
 
+    // Stored when a linked OLE object is deferred during import until link
+    // updates are allowed
+    css::uno::Sequence<css::beans::PropertyValue> maDeferredMediaDescriptor;
+
     SwOLENode(  const SwNode& rWhere,
                 const svt::EmbeddedObjectRef&,
                 SwGrfFormatColl *pGrfColl,
@@ -152,6 +157,14 @@ public:
     void DisconnectFileLink_Impl();
 
     void CheckFileLink_Impl();
+
+    // Register a deferred link during import, when link updates are not yet
+    // allowed, and create the the actual embedded object when the user allows
+    // link updating.
+    void SetDeferredLink(const OUString& rLinkURL,
+                         const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
+    bool CompleteDeferredLink();
+    bool HasDeferredLink() const { return maDeferredMediaDescriptor.hasElements(); }
 
     // #i99665#
     bool IsChart() const;
