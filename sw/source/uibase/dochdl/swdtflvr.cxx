@@ -37,7 +37,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/markdown.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/temporary.hxx>
 #include <unotools/ucbstreamhelper.hxx>
