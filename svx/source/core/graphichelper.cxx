@@ -25,6 +25,7 @@
 #include <svx/graphichelper.hxx>
 #include <svx/strings.hrc>
 #include <comphelper/diagnose_ex.hxx>
+#include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -203,9 +204,9 @@ OUString GraphicHelper::ExportGraphicToTempFile(const Graphic& rGraphic, std::u1
     if (nDotPos > 0)
         aBaseName = aBaseName.copy(0, nDotPos);
 
-    // Write to /tmp/ — the COOL download handler constructs the URL as
-    // "../../" + filename relative to /tmp/user/docs/, which resolves to /tmp/.
-    OUString aTempFileURL = "file:///tmp/" + aBaseName + "." + aExtension;
+    OUString aTempDir;
+    osl::FileBase::getTempDirURL(aTempDir);
+    OUString aTempFileURL = aTempDir + "/" + aBaseName + "." + aExtension;
 
     // Try to write the native graphic data first
     GfxLink aGfxLink = rGraphic.GetGfxLink();
