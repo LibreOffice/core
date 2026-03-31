@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.core.view.GestureDetectorCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.graphics.Insets;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -22,13 +26,24 @@ public class PresentationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
         setContentView(R.layout.presentation_mode);
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, windowInsets) -> {
+            WindowInsetsCompat compat = WindowInsetsCompat.toWindowInsetsCompat(windowInsets.toWindowInsets(), v);
+            Insets systemBars = compat.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets displayCutout = compat.getInsets(WindowInsetsCompat.Type.displayCutout());
+            int top = Math.max(systemBars.top, displayCutout.top);
+            int bottom = Math.max(systemBars.bottom, displayCutout.bottom);
+            int left = Math.max(systemBars.left, displayCutout.left);
+            int right = Math.max(systemBars.right, displayCutout.right);
+            v.setPadding(left, top, right, bottom);
+            return windowInsets;
+        });
 
         // get intent and url
         Intent intent = getIntent();

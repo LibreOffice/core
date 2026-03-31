@@ -46,7 +46,7 @@ base {
 
 android {
     namespace = "org.libreoffice"
-    compileSdk = 35
+    compileSdk = 36
 
     ndkPath = androidNdkPath
     ndkVersion = androidNdkVersion
@@ -84,7 +84,7 @@ android {
 
     defaultConfig {
         // minSdkVersion is set in liboSettings.gradle.kts
-        targetSdk = 35
+        targetSdk = 36
         vectorDrawables.useSupportLibrary = true
     }
 

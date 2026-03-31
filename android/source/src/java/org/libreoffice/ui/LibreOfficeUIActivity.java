@@ -17,11 +17,15 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.graphics.Insets;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -34,6 +38,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
@@ -49,6 +55,7 @@ import org.libreoffice.SettingsActivity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnClickListener{
     public enum DocumentType {
@@ -128,13 +135,25 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
     private LinearLayout writerLayout;
     private LinearLayout impressLayout;
     private LinearLayout calcLayout;
+    private Toolbar toolbar;
+    private View rootView;
+    private View drawerLayout;
+    private View nestedScrollView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = getWindow();
+            View decorView = window.getDecorView();
+            int systemUiVisibility = decorView.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            decorView.setSystemUiVisibility(systemUiVisibility);
+        }
 
         // init UI
         createUI();
+
         fabOpenAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_open);
         fabCloseAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_close);
 
@@ -156,8 +175,11 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
     public void createUI() {
         setContentView(R.layout.activity_document_browser);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbar = findViewById(R.id.toolbar);
+        rootView = findViewById(android.R.id.content);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        nestedScrollView = findViewById(R.id.nestedScrollView);
+        setSupportActionBar((Toolbar) toolbar);
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
@@ -204,6 +226,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
 
         recentRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recentRecyclerView.setAdapter(new RecentFilesAdapter(this, recentFiles));
+        setupWindowInsetsListener();
     }
 
     private void expandFabMenu() {
@@ -217,6 +240,29 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
         drawFAB.setClickable(true);
         calcFAB.setClickable(true);
         isFabMenuOpen = true;
+    }
+
+    private void setupWindowInsetsListener() {
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, windowInsets) -> {
+            WindowInsetsCompat compat = WindowInsetsCompat.toWindowInsetsCompat(Objects.requireNonNull(windowInsets.toWindowInsets()), v);
+            Insets systemBars = compat.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets displayCutout = compat.getInsets(WindowInsetsCompat.Type.displayCutout());
+            int top = Math.max(systemBars.top, displayCutout.top);
+            v.setPadding(v.getPaddingLeft(), top, v.getPaddingRight(), v.getPaddingBottom());
+            return windowInsets;
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(nestedScrollView, (v, windowInsets) -> {
+            WindowInsetsCompat compat = WindowInsetsCompat.toWindowInsetsCompat(Objects.requireNonNull(windowInsets.toWindowInsets()), v);
+            Insets systemBars = compat.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets displayCutout = compat.getInsets(WindowInsetsCompat.Type.displayCutout());
+            int top = Math.max(systemBars.top, displayCutout.top);
+            int bottom = Math.max(systemBars.bottom, displayCutout.bottom);
+            int left = Math.max(systemBars.left, displayCutout.left);
+            int right = Math.max(systemBars.right, displayCutout.right);
+            v.setPadding(left, top, right, bottom);
+            return windowInsets;
+        });
     }
 
     private void collapseFabMenu() {
@@ -320,7 +366,10 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
     protected void onResume() {
         super.onResume();
         Log.d(LOGTAG, "onResume");
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         createUI();
+        ViewCompat.requestApplyInsets(toolbar);
+        ViewCompat.requestApplyInsets(nestedScrollView);
     }
 
     private void addDocumentToRecents(Uri fileUri) {
