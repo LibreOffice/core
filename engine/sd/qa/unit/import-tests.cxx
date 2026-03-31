@@ -73,6 +73,8 @@
 #include <undo/undomanager.hxx>
 
 #include <unotools/syslocaleoptions.hxx>
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/kit.hxx>
@@ -2300,6 +2302,55 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFontIndependentLineSpacingMigration)
         checkFixedCellHeight(DynCastSdrTextObj(pPage->GetObj(0)), false,
                              "Slide 5 fixed 0.8cm: should NOT have font-independent spacing");
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testLinkedOLEExport)
+{
+    // Impress equivalent of Writer's testLinkedOLEExport: load a document
+    // with a linked OLE object whose target exists, save and reload, and
+    // verify the linked OLE survives. Use FULL_UPDATE so the linked OLE
+    // is created during load (the default NO_UPDATE in test mode would
+    // leave the link deferred).
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::FULL_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"linked_ole.fodp"), aParams);
+
+    const SdrPage* pPage = GetPage(1);
+    CPPUNIT_ASSERT(pPage);
+    CPPUNIT_ASSERT(pPage->GetObjCount() > 0);
+    const SdrOle2Obj* pOleObj = dynamic_cast<const SdrOle2Obj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("OLE object should exist after loading linked OLE", pOleObj);
+
+    saveAndReload(TestFilter::ODP);
+
+    pPage = GetPage(1);
+    CPPUNIT_ASSERT(pPage);
+    CPPUNIT_ASSERT(pPage->GetObjCount() > 0);
+    pOleObj = dynamic_cast<const SdrOle2Obj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("OLE object should survive ODP round-trip", pOleObj);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testDrawObjectLinkDeferred)
+{
+    // draw:object with non-package xlink:href must not trigger type detection
+    // (which fetches the URL) during import. The link is deferred until the
+    // user confirms link updates. Uses non-routable 192.0.2.1 so that an
+    // actual fetch would hang/timeout.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"draw-object-link.fodp"), aParams);
+
+    const SdrPage* pPage = GetPage(1);
+    CPPUNIT_ASSERT(pPage);
+    CPPUNIT_ASSERT(pPage->GetObjCount() > 0);
+    const SdrOle2Obj* pOleObj = dynamic_cast<const SdrOle2Obj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("OLE placeholder should exist after import", pOleObj);
+    CPPUNIT_ASSERT_MESSAGE("OLE link should be deferred, not created during import",
+                           pOleObj->HasDeferredLink());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

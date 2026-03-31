@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"
+    office:version="1.2"
+    office:mimetype="application/vnd.oasis.opendocument.presentation">
+  <office:body>
+    <office:presentation>
+      <draw:page draw:name="page1" draw:master-page-name="">
+        <draw:frame draw:name="Object1" svg:width="5cm" svg:height="5cm"
+                    svg:x="2cm" svg:y="2cm">
+          <draw:object xlink:href="empty.fodp"
+                       xlink:type="simple" xlink:show="embed"
+                       xlink:actuate="onLoad">
+            <loext:p/>
+          </draw:object>
+        </draw:frame>
+      </draw:page>
+    </office:presentation>
+  </office:body>
+</office:document>
