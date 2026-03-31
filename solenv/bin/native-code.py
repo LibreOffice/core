@@ -117,13 +117,13 @@ core_constructor_list = [
     ("com_sun_star_cui_ColorPicker_get_implementation", "#if !ENABLE_FUZZERS"),
     ("com_sun_star_cui_GetCreateDialogFactoryService", "#if !ENABLE_FUZZERS"),
 # dbaccess/util/dba.component
-    "com_sun_star_comp_dba_DataAccessDescriptorFactory",
-    "com_sun_star_comp_dba_OCommandDefinition",
-    "com_sun_star_comp_dba_OComponentDefinition",
-    "com_sun_star_comp_dba_ODatabaseContext_get_implementation",
-    "com_sun_star_comp_dba_ODatabaseDocument",
-    "com_sun_star_comp_dba_ODatabaseSource",
-    "com_sun_star_comp_dba_ORowSet_get_implementation",
+    ("com_sun_star_comp_dba_DataAccessDescriptorFactory", "#if HAVE_FEATURE_DBCONNECTIVITY"),
+    ("com_sun_star_comp_dba_OCommandDefinition", "#if HAVE_FEATURE_DBCONNECTIVITY"),
+    ("com_sun_star_comp_dba_OComponentDefinition", "#if HAVE_FEATURE_DBCONNECTIVITY"),
+    ("com_sun_star_comp_dba_ODatabaseContext_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
+    ("com_sun_star_comp_dba_ODatabaseDocument", "#if HAVE_FEATURE_DBCONNECTIVITY"),
+    ("com_sun_star_comp_dba_ODatabaseSource", "#if HAVE_FEATURE_DBCONNECTIVITY"),
+    ("com_sun_star_comp_dba_ORowSet_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
 # desktop/kitclipboard.component
     "desktop_KitClipboard_get_implementation",
 # drawinglayer/drawinglayer.component
