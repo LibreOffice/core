@@ -752,6 +752,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103544, "tdf103544.docx")
     CPPUNIT_ASSERT(nBodyTop > nShapeBottom); // textbox is fully above the text body area
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf170767_verticalEscape, "tdf170767_verticalEscape.odt")
+{
+    // given a pure ODT file, with two shapes floating above the text-body (in header area)
+
+    // tdf#143899: non-Compat15 ODT should not be vertically limited to the body text
+    // The text-shape requests to be 1.25 cm above its anchor paragraph (the first paragraph)
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(OUString("aaa"), getXPathContent(pDump, "//fly[1]/txt"));
+    sal_Int32 nShapeTop = getXPath(pDump, "//fly[1]/infos/bounds", "top").toInt32();
+    sal_Int32 nBodyTop = getXPath(pDump, "//page/body/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT(nBodyTop > nShapeTop); // text-shape is well above the text body area
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(710), nShapeTop);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf103573, "tdf103573.docx")
 {
     // Relative positions to the left or right margin (MS Word naming) was not handled.

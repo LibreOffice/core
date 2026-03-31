@@ -472,7 +472,8 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
     SwRect aPgAlignArea;
     {
         const IDocumentSettingAccess& rIDSA = mpFrameFormat->getIDocumentSettingAccess();
-        const bool bMSOLayout = rIDSA.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
+        const bool bConsiderWrapOnObjPos
+            = rIDSA.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
         const SwFormatSurround& rSurround = mpFrameFormat->GetSurround();
         bool bWrapThrough = rSurround.GetSurround() == css::text::WrapTextMode_THROUGH;
         // If the frame format is a TextBox of a draw shape, then use the
@@ -481,15 +482,16 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
 
         // #i26945# - no extension of restricted area, if
         // object's attribute follow text flow is set and its inside a table
-        if (bMSOLayout &&
+        if (bConsiderWrapOnObjPos &&
              ( !bFollowTextFlow ||
                !GetAnchoredObj().GetAnchorFrame()->IsInTab() ) )
         {
             const SwPageFrame& rPageFrame = *rPageAlignLayFrame.FindPageFrame();
             aPgAlignArea = rPageFrame.getFrameArea();
 
-            // re-using existing compat option to determine old (<=compat14) behaviour
-            const bool bCompat15 = !rIDSA.get(DocumentSettingId::ADD_FLY_OFFSETS);
+            // re-using existing compat options to determine if this needs special Word 2013+ layout
+            const bool bCompat15 = !rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN) // <= MSO2010
+                                   && rIDSA.get(DocumentSettingId::TAB_OVER_SPACING); // <= MSO2013+
 
             // Instead of using the top of the page as the vertical limit,
             // DOCX compatibilityMode 15 started to use the text body as the vertical limit
@@ -518,8 +520,8 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
             // When Microsoft follows text flow,
             // it prevents vertical movement beyond the cell margin (unless wrap-through).
             // Don't touch bVert to avoid issues: who knows what should happen in that case
-            if (bMSOLayout && bFollowTextFlow && rPageAlignLayFrame.IsCellFrame() && !bWrapThrough
-                && !bVert)
+            if (bConsiderWrapOnObjPos && bFollowTextFlow && rPageAlignLayFrame.IsCellFrame()
+                && !bWrapThrough && !bVert)
             {
                 const auto pRow = const_cast<SwFrame&>(rPageAlignLayFrame).FindRowFrame();
                 assert(pRow);
