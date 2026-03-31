@@ -988,7 +988,8 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
 
 void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj, sal_uInt16 nSlotId)
 {
-    ConstructHelper::SetLineEnds(rAttr, rObj, nSlotId, 100);
+    // tdf#152244 - Remove explicit arrow size end width
+    ConstructHelper::SetLineEnds(rAttr, rObj, nSlotId, LINE_END_WIDTH_DEFAULT);
 }
 
 void SwFEShell::SelectionToTop( bool bTop )
