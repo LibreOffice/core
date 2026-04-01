@@ -1088,7 +1088,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
     switch(nSID)
     {
         case SID_ATTR_FILL_TRANSPARENCE:
-            updateFillTransparence(bDisabled, bDefaultOrSet, static_cast<const XFillTransparenceItem*>(pState));
+            updateFillTransparence(bDisabled, bDefaultOrSet, bDefaultOrSet ? static_cast<const XFillTransparenceItem*>(pState) : nullptr);
         break;
         case SID_ATTR_FILL_FLOATTRANSPARENCE:
             updateFillFloatTransparence(bDisabled, bDefaultOrSet, pState);
