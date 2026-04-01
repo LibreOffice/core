@@ -37,6 +37,8 @@
 #include <ndtxt.hxx>
 #include <docufld.hxx>
 #include <fmtfld.hxx>
+#include <IDocumentStylePoolAccess.hxx>
+#include <poolfmt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -138,13 +140,12 @@ void SwDoc::ReplaceDocumentProperties(const SwDoc& rSource, bool mailMerge)
     ReplaceUserDefinedDocumentProperties( xSourceDocProps );
 }
 
-/// Convert <placeholder:"text":"help"> patterns in the glossary document
-/// to actual SwJumpEditField objects. This was previously done by the
-/// Template.Autotext.Main Basic macro (from the now-removed wizards module).
-static void ConvertGlossaryPlaceholders(SwDoc& rDoc)
+/// Convert autotext field-encoding patterns in the glossary document to actual
+/// field objects. Previously done by Template.Autotext.Main Basic macro.
+/// Handles: <placeholder:"text":"help">, <field:Type>, <UL>
+static void ConvertGlossaryFields(SwDoc& rDoc)
 {
-    SwJumpEditFieldType* pFieldType = static_cast<SwJumpEditFieldType*>(
-        rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::JumpEdit));
+    IDocumentContentOperations& rIDCO = rDoc.getIDocumentContentOperations();
 
     auto& rNodes = rDoc.GetNodes();
     for (SwNodeOffset nNode = rNodes.GetEndOfExtras().GetIndex() + 1;
@@ -154,63 +155,126 @@ static void ConvertGlossaryPlaceholders(SwDoc& rDoc)
         if (!pTextNode)
             continue;
 
-        const OUString& rText = pTextNode->GetText();
-        // Search for <placeholder:"text":"help"> pattern
-        static constexpr OUString sPrefix(u"<placeholder:"_ustr);
-
+        // Re-read text reference each iteration since deletions/insertions
+        // invalidate prior references
         sal_Int32 nPos = 0;
-        while ((nPos = rText.indexOf(sPrefix, nPos)) != -1)
+        while (nPos < pTextNode->GetText().getLength())
         {
-            // Find the closing >
-            sal_Int32 nEnd = rText.indexOf('>', nPos + sPrefix.getLength());
+            const OUString& rText = pTextNode->GetText();
+            nPos = rText.indexOf('<', nPos);
+            if (nPos == -1)
+                break;
+
+            sal_Int32 nEnd = rText.indexOf('>', nPos + 1);
             if (nEnd == -1)
                 break;
 
-            // Extract the content between <placeholder: and >
-            // Format: <placeholder:"text":"help">
-            OUString sContent = rText.copy(nPos + sPrefix.getLength(),
-                                           nEnd - nPos - sPrefix.getLength());
+            OUString sMatch = rText.copy(nPos + 1, nEnd - nPos - 1);
 
-            // Parse "text":"help" — both parts are double-quoted, separated by :
-            OUString sPlaceholder;
-            OUString sHint;
-            if (sContent.startsWith("\""))
+            if (sMatch.startsWithIgnoreAsciiCase("placeholder:"))
             {
-                sal_Int32 nQuoteEnd = sContent.indexOf('"', 1);
-                if (nQuoteEnd != -1)
+                // <placeholder:"text":"help"> -> SwJumpEditField
+                OUString sContent = sMatch.copy(SAL_N_ELEMENTS("placeholder:") - 1);
+                OUString sPlaceholder;
+                OUString sHint;
+                if (sContent.startsWith("\""))
                 {
-                    sPlaceholder = sContent.copy(1, nQuoteEnd - 1);
-                    // Look for :"help" after the first quoted string
-                    sal_Int32 nHintStart = sContent.indexOf(":\"", nQuoteEnd);
-                    if (nHintStart != -1)
+                    sal_Int32 nQuoteEnd = sContent.indexOf('"', 1);
+                    if (nQuoteEnd != -1)
                     {
-                        nHintStart += 2; // skip :"
-                        sal_Int32 nHintEnd = sContent.indexOf('"', nHintStart);
-                        if (nHintEnd != -1)
-                            sHint = sContent.copy(nHintStart, nHintEnd - nHintStart);
+                        sPlaceholder = sContent.copy(1, nQuoteEnd - 1);
+                        sal_Int32 nHintStart = sContent.indexOf(":\"", nQuoteEnd);
+                        if (nHintStart != -1)
+                        {
+                            nHintStart += 2;
+                            sal_Int32 nHintEnd = sContent.indexOf('"', nHintStart);
+                            if (nHintEnd != -1)
+                                sHint = sContent.copy(nHintStart, nHintEnd - nHintStart);
+                        }
                     }
                 }
-            }
+                if (sPlaceholder.isEmpty())
+                {
+                    ++nPos;
+                    continue;
+                }
 
-            if (sPlaceholder.isEmpty())
+                SwPaM aPaM(*pTextNode, nPos, *pTextNode, nEnd + 1);
+                rIDCO.DeleteAndJoin(aPaM);
+
+                auto* pFieldType = static_cast<SwJumpEditFieldType*>(
+                    rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::JumpEdit));
+                SwJumpEditField aField(pFieldType, SwJumpEditFormat::Text,
+                                       sPlaceholder, sHint);
+                rIDCO.InsertPoolItem(SwPaM(*pTextNode, nPos), SwFormatField(aField));
+                nPos += 1;
+            }
+            else if (sMatch.startsWithIgnoreAsciiCase("field:"))
+            {
+                // <field:Company> -> SwExtUserField
+                OUString sFieldName = sMatch.copy(SAL_N_ELEMENTS("field:") - 1).trim().toAsciiUpperCase();
+
+                static const std::pair<std::u16string_view, SwExtUserSubType> aFieldMap[] = {
+                    { u"COMPANY", SwExtUserSubType::Company },
+                    { u"FIRSTNAME", SwExtUserSubType::Firstname },
+                    { u"NAME", SwExtUserSubType::Name },
+                    { u"SHORTCUT", SwExtUserSubType::Shortcut },
+                    { u"STREET", SwExtUserSubType::Street },
+                    { u"COUNTRY", SwExtUserSubType::Country },
+                    { u"ZIP", SwExtUserSubType::Zip },
+                    { u"CITY", SwExtUserSubType::City },
+                    { u"TITLE", SwExtUserSubType::Title },
+                    { u"POSITION", SwExtUserSubType::Position },
+                    { u"PHONE_PRIVATE", SwExtUserSubType::PhonePrivate },
+                    { u"PHONE_COMPANY", SwExtUserSubType::PhoneCompany },
+                    { u"FAX", SwExtUserSubType::Fax },
+                    { u"EMAIL", SwExtUserSubType::Email },
+                    { u"STATE", SwExtUserSubType::State },
+                };
+
+                SwExtUserSubType nSubType = SwExtUserSubType::Company;
+                bool bFound = false;
+                for (const auto& [name, type] : aFieldMap)
+                {
+                    if (sFieldName == name)
+                    {
+                        nSubType = type;
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (!bFound)
+                {
+                    ++nPos;
+                    continue;
+                }
+
+                SwPaM aPaM(*pTextNode, nPos, *pTextNode, nEnd + 1);
+                rIDCO.DeleteAndJoin(aPaM);
+
+                auto* pFieldType = static_cast<SwExtUserFieldType*>(
+                    rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::ExtUser));
+                SwExtUserField aField(pFieldType, nSubType,
+                                      SwAuthorFormat::Name | SwAuthorFormat::Fixed);
+                rIDCO.InsertPoolItem(SwPaM(*pTextNode, nPos), SwFormatField(aField));
+                nPos += 1;
+            }
+            else if (sMatch == "UL")
+            {
+                // <UL> -> apply "List Bullet" paragraph style and remove marker
+                SwPaM aPaM(*pTextNode, nPos, *pTextNode, nEnd + 1);
+                rIDCO.DeleteAndJoin(aPaM);
+
+                SwTextFormatColl* pColl = rDoc.getIDocumentStylePoolAccess()
+                    .GetTextCollFromPool(RES_POOLCOLL_BULLET_LEVEL1);
+                if (pColl)
+                    pTextNode->ChgFormatColl(pColl);
+                // nPos stays the same -- we deleted but didn't insert
+            }
+            else
             {
                 ++nPos;
-                continue;
             }
-
-            // Delete the placeholder text and insert a field
-            SwPaM aPaM(*pTextNode, nPos, *pTextNode, nEnd + 1);
-            rDoc.getIDocumentContentOperations().DeleteAndJoin(aPaM);
-
-            SwJumpEditField aField(pFieldType, SwJumpEditFormat::Text,
-                                   sPlaceholder, sHint);
-            SwFormatField aFormatField(aField);
-            SwPosition aInsertPos(*pTextNode, nPos);
-            rDoc.getIDocumentContentOperations().InsertPoolItem(
-                SwPaM(aInsertPos), aFormatField);
-
-            // The field character takes 1 position; continue searching after it
-            nPos += 1;
         }
     }
 }
@@ -237,10 +301,9 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                 pGDoc->getIDocumentContentOperations().DelFullPara(aPaM);
             }
 
-            // Convert <placeholder:...> text patterns to JumpEdit fields.
-            // Previously done by the Template.Autotext.Main Basic macro.
-            if (mbInsOnlyTextGlssry)
-                ConvertGlossaryPlaceholders(*pGDoc);
+            // Convert <placeholder:...>, <field:...>, <UL> text patterns to
+            // fields/styles. Previously done by Template.Autotext.Main macro.
+            ConvertGlossaryFields(*pGDoc);
 
             // Update all fixed fields, with the right DocInfo.
             // FIXME: UGLY: Because we cannot limit the range in which to do

@@ -1068,6 +1068,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf144364)
         getParagraph(1)->getString());
 }
 
+// Test that <field:company> in autotext is converted to an ExtendedUser field.
+// Uses en-US "JARL" autotext (Job Application: Rejection Letter) which contains
+// <field:company> in its content.xml.
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testGlossaryFieldUserDataConversion)
+{
+    createSwDoc();
+    SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    pWrtSh->Insert(u"JARL"_ustr);
+
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_F3);
+    Scheduler::ProcessEventsToIdle();
+
+    // JARL contains "Thank you for your interest in <field:company>."
+    // The <field:company> must be converted to an ExtendedUser field.
+    bool bFieldFound = false;
+    sal_Int32 nParas = getParagraphs();
+    for (sal_Int32 i = 1; i <= nParas; ++i)
+    {
+        OUString sText = getParagraph(i)->getString();
+        if (sText.indexOf("Thank you for your interest in") != -1)
+        {
+            CPPUNIT_ASSERT_MESSAGE("<field:company> was not converted",
+                                   sText.indexOf("<field:company>") == -1);
+            bFieldFound = true;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("JARL autotext paragraph not found", bFieldFound);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146248)
 {
     createSwDoc("tdf146248.docx");
