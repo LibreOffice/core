@@ -110,22 +110,6 @@ Unixlink gid_Unixlink_Applications
 End
 #endif
 
-Directory gid_Dir_Wizards
-    Styles = (CREATE);
-#if defined MACOSX
-    ParentID = gid_Brand_Dir_Share;
-#else
-    ParentID = gid_Brand_Dir_Program;
-#endif
-    DosName = "wizards";
-End
-
-Directory gid_Dir_Wizards_Ui
-    Styles = (CREATE);
-    ParentID = gid_Dir_Wizards;
-    DosName = "ui";
-End
-
 Directory gid_Dir_Resource
 #if defined MACOSX
     ParentID = gid_Brand_Dir_Share;
@@ -268,81 +252,6 @@ End
 Directory gid_Dir_Basic
     ParentID = gid_Brand_Dir_Share;
     DosName = "basic";
-End
-
-Directory gid_Dir_Basic_Access2Base
-    ParentID = gid_Dir_Basic;
-    DosName = "Access2Base";
-End
-
-Directory gid_Dir_Basic_Euro
-    ParentID = gid_Dir_Basic;
-    DosName = "Euro";
-End
-
-Directory gid_Dir_Basic_Gimmicks
-    ParentID = gid_Dir_Basic;
-    DosName = "Gimmicks";
-End
-
-Directory gid_Dir_Basic_Depot
-    ParentID = gid_Dir_Basic;
-    DosName = "Depot";
-End
-
-Directory gid_Dir_Basic_Template
-    ParentID = gid_Dir_Basic;
-    DosName = "Template";
-End
-
-Directory gid_Dir_Basic_Tools
-    ParentID = gid_Dir_Basic;
-    DosName = "Tools";
-End
-
-Directory gid_Dir_Basic_ScriptForge
-    ParentID = gid_Dir_Basic;
-    DosName = "ScriptForge";
-End
-
-Directory gid_Dir_Basic_SFDatabases
-    ParentID = gid_Dir_Basic;
-    DosName = "SFDatabases";
-End
-
-Directory gid_Dir_Basic_SFDialogs
-    ParentID = gid_Dir_Basic;
-    DosName = "SFDialogs";
-End
-
-Directory gid_Dir_Basic_SFDocuments
-    ParentID = gid_Dir_Basic;
-    DosName = "SFDocuments";
-End
-
-Directory gid_Dir_Basic_SFUnitTests
-    ParentID = gid_Dir_Basic;
-    DosName = "SFUnitTests";
-End
-
-Directory gid_Dir_Basic_SFWidgets
-    ParentID = gid_Dir_Basic;
-    DosName = "SFWidgets";
-End
-
-Directory gid_Dir_Basic_Importwiz
-    ParentID = gid_Dir_Basic;
-    DosName = "ImportWizard";
-End
-
-Directory gid_Dir_Basic_Formwiz
-    ParentID = gid_Dir_Basic;
-    DosName = "FormWizard";
-End
-
-Directory gid_Dir_Basic_Tutorials
-    ParentID = gid_Dir_Basic;
-    DosName = "Tutorials";
 End
 
 Directory gid_Dir_Basic_Scriptbindinglib

@@ -360,8 +360,7 @@ lcl_maybeAddScript(
         //same id
         if (sOriginalUrl.match("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE")
             || sOriginalUrl.match("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE")
-            || sOriginalUrl.match("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")
-            || sOriginalUrl.match("$(INST)/share/basic/Access2Base/"))
+            || sOriginalUrl.match("vnd.sun.star.expand:$BUNDLED_EXTENSIONS"))
         {
             xScriptLibs->removeLibrary(rName);
             bCanAdd = true;

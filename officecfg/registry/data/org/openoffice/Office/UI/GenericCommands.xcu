@@ -5151,21 +5151,6 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:AutoPilotAgenda" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">AutoPilot: Agenda</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:AutoPilotFax" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">AutoPilot: Fax</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:AutoPilotLetter" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">AutoPilot: Letter</value>
-        </prop>
-      </node>
       <node oor:name=".uno:VersionDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Versions...</value>

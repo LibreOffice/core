@@ -146,60 +146,30 @@ namespace dbaui
 
         return xRet;
     }
-    void OLinkedDocumentsAccess::impl_newWithPilot(const OUString& rWizardService,
-                                                   const sal_Int32 _nCommandType,
-                                                   const OUString& _rObjectName)
+    void OLinkedDocumentsAccess::impl_newWithPilot(const OUString& /*rWizardService*/,
+                                                   const sal_Int32 /*_nCommandType*/,
+                                                   const OUString& /*_rObjectName*/)
     {
-        try
-        {
-            ::comphelper::NamedValueCollection aArgs;
-            aArgs.put( u"DataSourceName"_ustr, m_sDataSourceName );
-
-            if ( m_xConnection.is() )
-                aArgs.put( u"ActiveConnection"_ustr, m_xConnection );
-
-            if ( !_rObjectName.isEmpty() && ( _nCommandType != -1 ) )
-            {
-                aArgs.put( u"CommandType"_ustr, _nCommandType );
-                aArgs.put( u"Command"_ustr, _rObjectName );
-            }
-
-            aArgs.put( u"DocumentUI"_ustr, m_xDocumentUI );
-
-            Reference< XJobExecutor > xWizard;
-            {
-                weld::WaitObject aWaitCursor(m_pDialogParent);
-                xWizard.set(m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                                rWizardService, aArgs.getWrappedPropertyValues(), m_xContext),
-                            UNO_QUERY_THROW);
-            }
-
-            xWizard->trigger( u"start"_ustr );
-            ::comphelper::disposeComponent( xWizard );
-        }
-        catch(const Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
+        // wizards module has been removed; these Java-based wizard services
+        // (com.sun.star.wizards.{form,report,table,query}.*) no longer exist.
+        SAL_WARN("dbaccess", "wizard service no longer available");
     }
     void OLinkedDocumentsAccess::newFormWithPilot( const sal_Int32 _nCommandType,const OUString& _rObjectName )
     {
-        impl_newWithPilot(u"com.sun.star.wizards.form.CallFormWizard"_ustr, _nCommandType,
-                          _rObjectName);
+        impl_newWithPilot(u""_ustr, _nCommandType, _rObjectName);
     }
 
     void OLinkedDocumentsAccess::newReportWithPilot( const sal_Int32 _nCommandType, const OUString& _rObjectName )
     {
-        impl_newWithPilot(u"com.sun.star.wizards.report.CallReportWizard"_ustr, _nCommandType,
-                          _rObjectName);
+        impl_newWithPilot(u""_ustr, _nCommandType, _rObjectName);
     }
     void OLinkedDocumentsAccess::newTableWithPilot()
     {
-        impl_newWithPilot(u"com.sun.star.wizards.table.CallTableWizard"_ustr, -1, OUString());
+        impl_newWithPilot(u""_ustr, -1, OUString());
     }
     void OLinkedDocumentsAccess::newQueryWithPilot()
     {
-        impl_newWithPilot(u"com.sun.star.wizards.query.CallQueryWizard"_ustr, -1, OUString());
+        impl_newWithPilot(u""_ustr, -1, OUString());
     }
     Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 i_nActionID,
         const ::comphelper::NamedValueCollection& i_rCreationArgs, Reference< XComponent >& o_rDefinition )

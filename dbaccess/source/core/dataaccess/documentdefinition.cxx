@@ -1989,25 +1989,12 @@ bool ODocumentDefinition::prepareClose()
     return true;
 }
 
-void ODocumentDefinition::fillReportData( const Reference< XComponentContext >& _rContext,
-                                               const Reference< util::XCloseable >& _rxComponent,
-                                               const Reference< XConnection >& _rxActiveConnection )
+void ODocumentDefinition::fillReportData( const Reference< XComponentContext >& /*_rContext*/,
+                                               const Reference< util::XCloseable >& /*_rxComponent*/,
+                                               const Reference< XConnection >& /*_rxActiveConnection*/ )
 {
-    uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-    {
-        {"TextDocument", uno::Any(_rxComponent)},
-        {"ActiveConnection", uno::Any(_rxActiveConnection)}
-    }));
-    try
-    {
-        Reference< XJobExecutor > xExecutable(
-            _rContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.wizards.report.CallReportWizard"_ustr, aArgs, _rContext), UNO_QUERY_THROW );
-        xExecutable->trigger( u"fill"_ustr );
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION("dbaccess");
-    }
+    // wizards module has been removed; report wizard service no longer exists.
+    SAL_WARN("dbaccess", "report wizard service no longer available");
 }
 
 void ODocumentDefinition::updateDocumentTitle()

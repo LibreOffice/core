@@ -264,66 +264,6 @@
       </node>
     </node>
     <node oor:name="Wizard">
-      <node oor:name="m0" oor:op="replace" install:module="writer">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>service:com.sun.star.wizards.letter.CallWizard?insert</value>
-        </prop>
-        <prop oor:name="Title">
-          <value xml:lang="en-US">~Letter...</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_self</value>
-        </prop>
-      </node>
-      <node oor:name="m1" oor:op="replace" install:module="writer">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>service:com.sun.star.wizards.fax.CallWizard?insert</value>
-        </prop>
-        <prop oor:name="Title">
-          <value xml:lang="en-US">~Fax...</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_self</value>
-        </prop>
-      </node>
-      <node oor:name="m2" oor:op="replace" install:module="writer">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>service:com.sun.star.wizards.agenda.CallWizard?insert</value>
-        </prop>
-        <prop oor:name="Title">
-          <value xml:lang="en-US">~Agenda...</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_self</value>
-        </prop>
-      </node>
-      <node oor:name="m10" oor:op="replace">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>private:separator</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_self</value>
-        </prop>
-      </node>
-      <node oor:name="m11" oor:op="replace">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>macro:///ImportWizard.Main.Main</value>
-        </prop>
-        <prop oor:name="Title">
-          <value xml:lang="en-US">Document ~Converter...</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_self</value>
-        </prop>
-      </node>
-      <node oor:name="m13" oor:op="replace">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>private:separator</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_self</value>
-        </prop>
-      </node>
       <node oor:name="m14" oor:op="replace" install:module="base">
         <prop oor:name="URL" oor:type="xs:string">
           <value>.uno:AutoPilotAddressDataSource</value>

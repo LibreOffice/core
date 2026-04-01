@@ -500,21 +500,8 @@ void DBContentLoader::cancel()
 IMPL_LINK_NOARG( DBContentLoader, OnStartTableWizard, void*, void )
 {
     m_nStartWizard = nullptr;
-    try
-    {
-        Sequence<Any> aWizArgs(comphelper::InitAnyPropertySequence(
-        {
-            {"DatabaseLocation", Any(m_sCurrentURL)}
-        }));
-        SolarMutexGuard aGuard;
-        Reference< XJobExecutor > xTableWizard( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.wizards.table.CallTableWizard"_ustr, aWizArgs, m_aContext), UNO_QUERY);
-        if ( xTableWizard.is() )
-            xTableWizard->trigger(u"start"_ustr);
-    }
-    catch(const Exception&)
-    {
-        TOOLS_WARN_EXCEPTION( "dbaccess", "caught an exception while starting the table wizard!");
-    }
+    // wizards module has been removed; table wizard service no longer exists.
+    SAL_WARN("dbaccess", "table wizard service no longer available");
     m_xMySelf = nullptr;
 }
 

@@ -28,7 +28,6 @@ officecfg_XCSFILES := \
     Office/ExtendedColorScheme \
     Office/ExtensionDependencies \
     Office/ExtensionManager \
-    Office/FormWizard \
     Office/Histories \
     Office/Impress \
     Office/Java \
@@ -46,7 +45,6 @@ officecfg_XCSFILES := \
     Office/ReportDesign \
     Office/Scripting \
     Office/Security \
-    Office/TableWizard \
     Office/TypeDetection \
     Office/UI \
     Office/UI/BaseWindowState \
