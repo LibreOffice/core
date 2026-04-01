@@ -2980,6 +2980,26 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testNumberGroupingXLS)
                 "count", u"3");
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFieldSingleDataDimXLSX)
+{
+    // Pivot table with a single calculated field as the only data dimension.
+    // The calculated field references source fields that are not in the data
+    // area, so they are added as hidden dependency measures for evaluation.
+    // This must not crash during result calculation.
+    createScDoc("xlsx/pivot-table/tdf126858-1.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll();
+
+    CPPUNIT_ASSERT(pDoc->HasPivotTable());
+
+    // Verify pivot output values at B4:B7 on sheet 0
+    CPPUNIT_ASSERT_EQUAL(u"8976"_ustr, pDoc->GetString(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"9936"_ustr, pDoc->GetString(ScAddress(1, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"37408"_ustr, pDoc->GetString(ScAddress(1, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"168168"_ustr, pDoc->GetString(ScAddress(1, 6, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -869,7 +869,7 @@ void ScDPSource::AddDataDimsToResultData(sheet::DataPilotFieldOrientation nDataO
         mpResultData.reset(new ScDPResultData(*this));
 
     mpResultData->SetMeasureData(aDataFunctions, aDataRefValues, aDataRefOrient, aDataNames,
-                                 aDataIndexes);
+                                 aDataIndexes, maDataDims.size());
     mpResultData->SetDataLayoutOrientation(nDataOrient);
     mpResultData->SetLateInit(bLateInit);
 }

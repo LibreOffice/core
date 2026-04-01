@@ -775,6 +775,7 @@ static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, tools::Long nFu
 
 ScDPResultData::ScDPResultData( ScDPSource& rSrc ) :
     mrSource(rSrc),
+    mnVisibleMeasureCount( 0 ),
     bLateInit( false ),
     bDataAtCol( false ),
     bDataAtRow( false )
@@ -787,13 +788,18 @@ ScDPResultData::~ScDPResultData()
 
 void ScDPResultData::SetMeasureData(
     std::vector<ScSubTotalFunc>& rFunctions, std::vector<sheet::DataPilotFieldReference>& rRefs,
-    std::vector<sheet::DataPilotFieldOrientation>& rRefOrient, std::vector<OUString>& rNames, std::vector<sal_Int32>& rIndexes )
+    std::vector<sheet::DataPilotFieldOrientation>& rRefOrient, std::vector<OUString>& rNames,
+    std::vector<sal_Int32>& rIndexes, tools::Long nVisibleMeasureCount )
 {
+    mnVisibleMeasureCount = nVisibleMeasureCount;
     // We need to have at least one measure data at all times.
 
     maMeasureFuncs.swap(rFunctions);
     if (maMeasureFuncs.empty())
+    {
         maMeasureFuncs.push_back(SUBTOTAL_FUNC_NONE);
+        mnVisibleMeasureCount = 1;
+    }
 
     maMeasureRefs.swap(rRefs);
     if (maMeasureRefs.empty())
@@ -825,7 +831,9 @@ void ScDPResultData::SetLateInit( bool bSet )
 
 tools::Long ScDPResultData::GetColStartMeasure() const
 {
-    if (maMeasureFuncs.size() == 1)
+    // Use the visible (user-facing) measure count, not the total which may
+    // include hidden dependency measures added for calculated field evaluation.
+    if (mnVisibleMeasureCount == 1)
         return 0;
 
     return bDataAtCol ? SC_DPMEASURE_ALL : SC_DPMEASURE_ANY;
@@ -833,7 +841,9 @@ tools::Long ScDPResultData::GetColStartMeasure() const
 
 tools::Long ScDPResultData::GetRowStartMeasure() const
 {
-    if (maMeasureFuncs.size() == 1)
+    // Use the visible (user-facing) measure count, not the total which may
+    // include hidden dependency measures added for calculated field evaluation.
+    if (mnVisibleMeasureCount == 1)
         return 0;
 
     return bDataAtRow ? SC_DPMEASURE_ALL : SC_DPMEASURE_ANY;
@@ -862,7 +872,7 @@ OUString ScDPResultData::GetMeasureString(tools::Long nMeasure, bool bForce, ScS
     //  with bForce==true, return function instead of "result" for single measure
     //  with eForceFunc != SUBTOTAL_FUNC_NONE, always use eForceFunc
     rbTotalResult = false;
-    if ( nMeasure < 0 || (maMeasureFuncs.size() == 1 && !bForce && eForceFunc == SUBTOTAL_FUNC_NONE) )
+    if ( nMeasure < 0 || (mnVisibleMeasureCount == 1 && !bForce && eForceFunc == SUBTOTAL_FUNC_NONE) )
     {
         //  for user-specified subtotal function with all measures,
         //  display only function name

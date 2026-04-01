@@ -281,6 +281,8 @@ class ScDPResultData
     std::vector<OUString> maMeasureNames;
     std::vector<sal_Int32> maMeasureIndexes;
 
+    tools::Long             mnVisibleMeasureCount;
+
     bool                    bLateInit:1;
     bool                    bDataAtCol:1;
     bool                    bDataAtRow:1;
@@ -295,7 +297,8 @@ public:
         std::vector<ScSubTotalFunc>& rFunctions,
         std::vector<css::sheet::DataPilotFieldReference>& rRefs,
         std::vector<css::sheet::DataPilotFieldOrientation>& rRefOrient,
-        std::vector<OUString>& rNames, std::vector<sal_Int32>& rIndexes );
+        std::vector<OUString>& rNames, std::vector<sal_Int32>& rIndexes,
+        tools::Long nVisibleMeasureCount );
 
     void                SetDataLayoutOrientation( css::sheet::DataPilotFieldOrientation nOrient );
     void                SetLateInit( bool bSet );
