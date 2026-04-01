@@ -1778,11 +1778,38 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
     else if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::GDIMETAFILE, aFlavor ) &&
              TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )
     {
-        GDIMetaFile aMtf;
-
-        bRet = GetGDIMetaFile( aFlavor, aMtf );
-        if( bRet )
-            rGraphic = aMtf;
+        // Import EMF/WMF directly into Graphic to preserve GfxLink with
+        // original bytes. This avoids re-export through EMFWriter at DOCX
+        // save time, which changes reference device metrics and causes
+        // wrong scaling on reimport (tdf#168886, tdf#168237).
+        // Try EMF first, then WMF (same order as GetGDIMetaFile).
+        DataFlavor aMetaFlavor;
+        if (HasFormat(SotClipboardFormatId::EMF) &&
+            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::EMF, aMetaFlavor))
+        {
+            if (std::unique_ptr<SvStream> xStm = GetSotStorageStream(aMetaFlavor))
+            {
+                if (GraphicConverter::Import(*xStm, rGraphic) == ERRCODE_NONE)
+                    bRet = true;
+            }
+        }
+        if (!bRet && HasFormat(SotClipboardFormatId::WMF) &&
+            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::WMF, aMetaFlavor))
+        {
+            if (std::unique_ptr<SvStream> xStm = GetSotStorageStream(aMetaFlavor))
+            {
+                if (GraphicConverter::Import(*xStm, rGraphic) == ERRCODE_NONE)
+                    bRet = true;
+            }
+        }
+        if (!bRet)
+        {
+            // Fallback to old path if direct import fails
+            GDIMetaFile aMtf;
+            bRet = GetGDIMetaFile( aFlavor, aMtf );
+            if( bRet )
+                rGraphic = aMtf;
+        }
     }
     else
     {

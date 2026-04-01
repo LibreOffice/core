@@ -1306,6 +1306,58 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153196, "A019_min.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nRightMargin);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf168886_EmfPassThrough)
+{
+    // tdf#168886: EMF pasted from OriginPro must be saved as original .emf bytes
+    // in DOCX, not re-exported through EMFWriter. Re-export changes the EMF header
+    // reference device metrics, causing scaling errors on HiDPI displays.
+    createSwDoc("tdf168886_emf_origin.odt");
+
+    // Verify image dimensions preserved after DOCX roundtrip (±0.5%)
+    saveAndReload(TestFilter::DOCX);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    awt::Size aSize = xShape->getSize();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(17000.0, static_cast<double>(aSize.Width), 85.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(13019.0, static_cast<double>(aSize.Height), 65.0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf168237_EmfExcelPassThrough)
+{
+    // tdf#168237: EMF from Excel uses printer DC (600 DPI) as reference device.
+    // Without pass-through, EMFWriter re-exports at VDev DPI, causing ~76% shrink.
+    createSwDoc("tdf168237_emf_excel.odt");
+
+    saveAndReload(TestFilter::DOCX);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    awt::Size aSize = xShape->getSize();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(16002.0, static_cast<double>(aSize.Width), 80.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9001.0, static_cast<double>(aSize.Height), 45.0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf168237_EmfExcelShear)
+{
+    // tdf#168237: Excel EMF with non-standard aspect ratio (portrait).
+    createSwDoc("tdf168237_emf_excel_smaller_taller_shear.odt");
+
+    saveAndReload(TestFilter::DOCX);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    awt::Size aSize = xShape->getSize();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8962), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10504), aSize.Height);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf168237_EmfCalcShear)
+{
+    // tdf#168237: Calc EMF with different device context than Excel.
+    createSwDoc("tdf168237_emf_calc_smaller_taller_shear.odt");
+
+    saveAndReload(TestFilter::DOCX);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    awt::Size aSize = xShape->getSize();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11456), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10502), aSize.Height);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
