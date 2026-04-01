@@ -3315,8 +3315,10 @@ void DesktopLOKTest::testRunMacro()
     LibCO_Impl aOffice;
     bool bGoodMacro, bNonExistentMacro;
 
-    // Tools macros come pre-installed in system share/basic folder,
-    bGoodMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, "macro:///Tools.Debug.ActivateReadOnlyFlag()");
+    // Load a document with an embedded macro
+    loadDoc("macro.ods");
+
+    bGoodMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, "macro://./TestLib.TestModule.TestMacro()");
     CPPUNIT_ASSERT(bGoodMacro);
 
     bNonExistentMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, "macro:///I.Am.Not(There)");
