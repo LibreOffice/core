@@ -32,6 +32,9 @@ class TestXScriptProvider(unittest.TestCase):
     def tearDown(self):
         del self.xScriptProvider
 
+    # Tools Basic library was part of the removed wizards module;
+    # no application-level Basic libraries are available to test with.
+    @unittest.skip("Tools library removed with wizards module")
     def test_get_script_application(self):
         #getScript for built-in StarBasic function
         xScript = self.xScriptProvider.getScript(
