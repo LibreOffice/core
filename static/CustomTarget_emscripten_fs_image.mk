@@ -1133,7 +1133,6 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/simpress/layoutlist.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/simpress/objectlist.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/simpress/styles.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/simpress/transitions-ogl.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/simpress/transitions.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Beach.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Blue.theme \
