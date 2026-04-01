@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <doc.hxx>
@@ -212,7 +213,8 @@ static void ConvertGlossaryFields(SwDoc& rDoc)
             else if (sMatch.startsWithIgnoreAsciiCase("field:"))
             {
                 // <field:Company> -> SwExtUserField
-                OUString sFieldName = OUString(sMatch.subView(SAL_N_ELEMENTS("field:") - 1)).trim().toAsciiUpperCase();
+                std::u16string_view sFieldView = o3tl::trim(sMatch.subView(SAL_N_ELEMENTS("field:") - 1));
+                OUString sFieldName = OUString(sFieldView).toAsciiUpperCase();
 
                 static const std::pair<std::u16string_view, SwExtUserSubType> aFieldMap[] = {
                     { u"COMPANY", SwExtUserSubType::Company },
