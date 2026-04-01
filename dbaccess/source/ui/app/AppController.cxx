@@ -1861,12 +1861,10 @@ IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType, void )
     newElementWithPilot( eType );
 }
 
+// wizards module has been removed; wizard services no longer available
+SAL_LOPLUGIN_ANNOTATE("suppress:staticmethods")
 void OApplicationController::newElementWithPilot( ElementType /*_eType*/ )
 {
-    // wizards module has been removed; wizard services no longer exist
-
-    // no need for onDocumentOpened, the table wizard opens the created table by using
-    // XDatabaseDocumentUI::loadComponent method.
 }
 
 Reference< XComponent > OApplicationController::newElement( ElementType _eType, const ::comphelper::NamedValueCollection& i_rAdditionalArguments,
