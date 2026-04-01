@@ -3090,7 +3090,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
             if (aBackgroundColor == COL_TRANSPARENT || aBackgroundColor == COL_AUTO)
                 aBackgroundColor = GetBackgroundColor();
 
-            const SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
+            const SfxViewShell* pKitSh = comphelper::COKit::isActive() ? SfxViewShell::Current() : nullptr;
             if (pKitSh)
             {
                 if (aBackgroundColor == COL_AUTO)
