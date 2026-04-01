@@ -427,13 +427,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
         CPPUNIT_ASSERT_EQUAL(Color(0xE48312), pTheme->GetColor(model::ThemeColorType::Accent1));
     }
 
+    // Get the default color set to apply
+    auto const* pDefaultColorSet = svx::ColorSets::getDefault();
+    CPPUNIT_ASSERT(pDefaultColorSet);
+    OUString aDefaultName = pDefaultColorSet->getName();
+    Color aDefaultAccent1 = pDefaultColorSet->getColor(model::ThemeColorType::Accent1);
+
     // Change theme colors
     {
-        auto const& rColorSets = svx::ColorSets::get();
-        auto pNewColorSet
-            = std::make_shared<model::ColorSet>(*rColorSets.getColorSet(u"LibreOffice"));
-        // check that the theme colors are as expected
-        CPPUNIT_ASSERT_EQUAL(u"LibreOffice"_ustr, pNewColorSet->getName());
+        auto pNewColorSet = std::make_shared<model::ColorSet>(*pDefaultColorSet);
 
         sw::ThemeColorChanger aChanger(getSwDocShell());
         aChanger.apply(pNewColorSet);
@@ -447,8 +449,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
 
         auto pColorSet = pTheme->getColorSet();
         CPPUNIT_ASSERT(pColorSet);
-        CPPUNIT_ASSERT_EQUAL(u"LibreOffice"_ustr, pColorSet->getName());
-        CPPUNIT_ASSERT_EQUAL(Color(0x18A303), pTheme->GetColor(model::ThemeColorType::Accent1));
+        CPPUNIT_ASSERT_EQUAL(aDefaultName, pColorSet->getName());
+        CPPUNIT_ASSERT_EQUAL(aDefaultAccent1, pTheme->GetColor(model::ThemeColorType::Accent1));
     }
 
     // Undo
@@ -477,8 +479,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
 
         auto pColorSet = pTheme->getColorSet();
         CPPUNIT_ASSERT(pColorSet);
-        CPPUNIT_ASSERT_EQUAL(u"LibreOffice"_ustr, pColorSet->getName());
-        CPPUNIT_ASSERT_EQUAL(Color(0x18A303), pTheme->GetColor(model::ThemeColorType::Accent1));
+        CPPUNIT_ASSERT_EQUAL(aDefaultName, pColorSet->getName());
+        CPPUNIT_ASSERT_EQUAL(aDefaultAccent1, pTheme->GetColor(model::ThemeColorType::Accent1));
     }
 }
 

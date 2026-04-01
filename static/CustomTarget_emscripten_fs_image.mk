@@ -1143,7 +1143,6 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Green.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Grey.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Forest.theme \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Libreoffice.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Ocean.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Office.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Orange.theme \

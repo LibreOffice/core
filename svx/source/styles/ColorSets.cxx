@@ -147,7 +147,7 @@ model::ColorSet const* ColorSets::getDefault()
 {
     bool bForceDefault = !o3tl::getEnvironment(u"LO_FORCE_FALLBACK_DOCUMENT_THEME"_ustr).isEmpty();
     ColorSets& rSets = ColorSets::get();
-    auto const* pColorSet = rSets.getColorSet(u"LibreOffice");
+    auto const* pColorSet = rSets.getColorSet(u"Classic");
     if (pColorSet && !bForceDefault)
     {
         return pColorSet;

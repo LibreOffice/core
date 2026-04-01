@@ -18,6 +18,7 @@
 #include <scitems.hxx>
 #include <undomanager.hxx>
 #include <ThemeColorChanger.hxx>
+#include <svx/ColorSets.hxx>
 
 using namespace css;
 
@@ -67,20 +68,23 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testChangeTheme)
     auto const& pTheme = pDrawLayer->getTheme();
     CPPUNIT_ASSERT(pTheme);
 
-    const Color aBackgroundThemeColor(0xc99c00);
+    auto* pDefaultColorSet = svx::ColorSets::getDefault();
+    CPPUNIT_ASSERT(pDefaultColorSet);
     const auto eBackgroundThemeType = model::ThemeColorType::Accent5;
+    const Color aBackgroundThemeColor = pDefaultColorSet->getColor(eBackgroundThemeType);
 
-    const Color aCellTextThemeColor(0x0369a3);
     const auto eCellTextThemeType = model::ThemeColorType::Accent2;
+    const Color aCellTextThemeColor = pDefaultColorSet->getColor(eCellTextThemeType);
 
-    const Color aCellBorderLeftThemeColor(0x18a303);
-    const Color aCellBorderRightThemeColor(0xa33e03);
-    const Color aCellBorderTopThemeColor(0x8e03a3);
-    const Color aCellBorderBottomThemeColor(0xc9211e);
     const auto eCellBorderLeftThemeType = model::ThemeColorType::Accent1;
     const auto eCellBorderRightThemeType = model::ThemeColorType::Accent3;
     const auto eCellBorderTopThemeType = model::ThemeColorType::Accent4;
     const auto eCellBorderBottomThemeType = model::ThemeColorType::Accent6;
+    const Color aCellBorderLeftThemeColor = pDefaultColorSet->getColor(eCellBorderLeftThemeType);
+    const Color aCellBorderRightThemeColor = pDefaultColorSet->getColor(eCellBorderRightThemeType);
+    const Color aCellBorderTopThemeColor = pDefaultColorSet->getColor(eCellBorderTopThemeType);
+    const Color aCellBorderBottomThemeColor
+        = pDefaultColorSet->getColor(eCellBorderBottomThemeType);
 
     // Create a new pattern with font, background and borders set to theme colors
     ScPatternAttr aNewPattern(m_pDoc->getCellAttributeHelper());
@@ -266,6 +270,13 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testChangeTheme_TopBottomBorderOnly)
     const auto eCellBorderTopThemeType = model::ThemeColorType::Accent1;
     const auto eCellBorderBottomThemeType = model::ThemeColorType::Accent2;
 
+    auto* pDefaultColorSet = svx::ColorSets::getDefault();
+    CPPUNIT_ASSERT(pDefaultColorSet);
+    const Color aDefaultCellBorderTopThemeColor
+        = pDefaultColorSet->getColor(eCellBorderTopThemeType);
+    const Color aDefaultCellBorderBottomThemeColor
+        = pDefaultColorSet->getColor(eCellBorderBottomThemeType);
+
     // Create a new pattern with font, background and borders set to theme colors
     ScPatternAttr aNewPattern(m_pDoc->getCellAttributeHelper());
     {
@@ -307,8 +318,9 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testChangeTheme_TopBottomBorderOnly)
         auto pBorderItem = static_cast<const SvxBoxItem*>(pItem);
 
         // Colors should be from the default theme
-        CPPUNIT_ASSERT_EQUAL(Color(0x18a303), pBorderItem->GetTop()->GetColor());
-        CPPUNIT_ASSERT_EQUAL(Color(0x0369a3), pBorderItem->GetBottom()->GetColor());
+        CPPUNIT_ASSERT_EQUAL(aDefaultCellBorderTopThemeColor, pBorderItem->GetTop()->GetColor());
+        CPPUNIT_ASSERT_EQUAL(aDefaultCellBorderBottomThemeColor,
+                             pBorderItem->GetBottom()->GetColor());
     }
 
     // Create a new theme

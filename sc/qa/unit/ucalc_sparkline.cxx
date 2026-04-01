@@ -18,6 +18,7 @@
 #include <SparklineAttributes.hxx>
 #include <ThemeColorChanger.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <svx/ColorSets.hxx>
 
 using namespace css;
 
@@ -893,17 +894,25 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testSparklineThemeColorChange)
     ScRange aDataRange(0, 0, 0, 3, 5, 0); //A1:D6
     ScRange aRange(0, 6, 0, 3, 6, 0); // A7:D7
 
+    auto eSeriesThemeType = model::ThemeColorType::Accent3;
+    auto eAxisThemeType = model::ThemeColorType::Accent1;
+
+    auto* pDefaultColorSet = svx::ColorSets::getDefault();
+    CPPUNIT_ASSERT(pDefaultColorSet);
+    const auto aDefaultColorSeries = pDefaultColorSet->getColor(eSeriesThemeType);
+    const auto aDefaultColorAxis = pDefaultColorSet->getColor(eAxisThemeType);
+
     {
         auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
         sc::SparklineAttributes& rAttibutes = pSparklineGroup->getAttributes();
 
         model::ComplexColor aSeriesComplexColor;
-        aSeriesComplexColor.setThemeColor(model::ThemeColorType::Accent3);
+        aSeriesComplexColor.setThemeColor(eSeriesThemeType);
         aSeriesComplexColor.setFinalColor(pTheme->getColorSet()->resolveColor(aSeriesComplexColor));
         rAttibutes.setColorSeries(aSeriesComplexColor);
 
         model::ComplexColor aAxisComplexColor;
-        aAxisComplexColor.setThemeColor(model::ThemeColorType::Accent1);
+        aAxisComplexColor.setThemeColor(eAxisThemeType);
         aAxisComplexColor.setFinalColor(pTheme->getColorSet()->resolveColor(aAxisComplexColor));
         rAttibutes.setColorAxis(aAxisComplexColor);
 
@@ -915,8 +924,9 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testSparklineThemeColorChange)
         auto pGroup = m_pDoc->GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
         CPPUNIT_ASSERT(pGroup);
         sc::SparklineAttributes& rAttibutes = pGroup->getAttributes();
-        CPPUNIT_ASSERT_EQUAL(Color(0xa33e03), rAttibutes.getColorSeries().getFinalColor());
-        CPPUNIT_ASSERT_EQUAL(Color(0x18a303), rAttibutes.getColorAxis().getFinalColor());
+
+        CPPUNIT_ASSERT_EQUAL(aDefaultColorSeries, rAttibutes.getColorSeries().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(aDefaultColorAxis, rAttibutes.getColorAxis().getFinalColor());
     }
 
     {
@@ -954,8 +964,8 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testSparklineThemeColorChange)
         auto pGroup = m_pDoc->GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
         CPPUNIT_ASSERT(pGroup);
         sc::SparklineAttributes& rAttibutes = pGroup->getAttributes();
-        CPPUNIT_ASSERT_EQUAL(Color(0xa33e03), rAttibutes.getColorSeries().getFinalColor());
-        CPPUNIT_ASSERT_EQUAL(Color(0x18a303), rAttibutes.getColorAxis().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(aDefaultColorSeries, rAttibutes.getColorSeries().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(aDefaultColorAxis, rAttibutes.getColorAxis().getFinalColor());
     }
 }
 

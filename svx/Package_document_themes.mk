@@ -19,7 +19,6 @@ $(eval $(call gb_Package_add_files,svx_document_themes,$(LIBO_SHARE_FOLDER)/them
     Forest.theme \
     Green.theme \
     Grey.theme \
-    Libreoffice.theme \
     Ocean.theme \
     Office.theme \
     Orange.theme \
