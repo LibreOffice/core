@@ -2743,6 +2743,10 @@ namespace emfio
         mpInputStream->ReadInt32(nMillX);
         mpInputStream->ReadInt32(nMillY);
         SAL_INFO("emfio", "\tRef (mm): " << nMillX << ", " << nMillY);
+        SAL_INFO("emfio", "\tRef DPI: (" << (nMillX > 0 ? nPixX * 25.4 / nMillX : 0)
+                          << ", " << (nMillY > 0 ? nPixY * 25.4 / nMillY : 0)
+                          << ") rclFrame=(" << rclFrame.Left() << "," << rclFrame.Top()
+                          << ")-(" << rclFrame.Right() << "," << rclFrame.Bottom() << ")");
 
         SetrclFrame(rclFrame);
         SetrclBounds(rclBounds);

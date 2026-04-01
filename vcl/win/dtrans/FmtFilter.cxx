@@ -137,6 +137,19 @@ Sequence< sal_Int8 > WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile )
     if( hEnhMetaFile &&
         ( ( nSize = GetEnhMetaFileBits( hEnhMetaFile, 0, nullptr ) ) != 0 ) )
     {
+        ENHMETAHEADER emfHeader;
+        if (GetEnhMetaFileHeader(hEnhMetaFile, sizeof(emfHeader), &emfHeader))
+        {
+            SAL_INFO("vcl.win.dtrans", "EMF clipboard: size=" << nSize << " bytes"
+                << " rclFrame=(" << emfHeader.rclFrame.left << "," << emfHeader.rclFrame.top
+                << ")-(" << emfHeader.rclFrame.right << "," << emfHeader.rclFrame.bottom << ")"
+                << " szlDevice=" << emfHeader.szlDevice.cx << "x" << emfHeader.szlDevice.cy
+                << " szlMilli=" << emfHeader.szlMillimeters.cx << "x" << emfHeader.szlMillimeters.cy
+                << " DPI=(" << (emfHeader.szlDevice.cx * 25.4 / emfHeader.szlMillimeters.cx) << ","
+                << (emfHeader.szlDevice.cy * 25.4 / emfHeader.szlMillimeters.cy) << ")"
+                << " nRecords=" << emfHeader.nRecords);
+        }
+
         aRet.realloc( nSize );
 
         if( GetEnhMetaFileBits( hEnhMetaFile, nSize, reinterpret_cast<unsigned char*>(aRet.getArray()) ) != nSize )
