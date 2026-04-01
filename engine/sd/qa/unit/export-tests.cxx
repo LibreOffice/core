@@ -784,6 +784,15 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testLinkedGraphicRT)
         // Load the original file with one image
         createSdImpressDoc("odp/document_with_linked_graphic.odp");
 
+        // allow link updates so the linked graphic is fetched
+        {
+            SdXImpressDocument* pXImpressDocument
+                = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+            CPPUNIT_ASSERT(pXImpressDocument);
+            pXImpressDocument->GetDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(
+                true);
+        }
+
         // Check if the graphic has been imported correctly (before doing the export/import run)
         {
             static constexpr OString sFailedImportMessage
@@ -817,6 +826,10 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testLinkedGraphicRT)
             SdXImpressDocument* pXImpressDocument
                 = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
             CPPUNIT_ASSERT(pXImpressDocument);
+
+            // allow link updates on the reloaded document too
+            pXImpressDocument->GetDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(
+                true);
             SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDoc != nullptr);
             const SdrPage* pPage = pDoc->GetPage(1);

@@ -20,6 +20,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <tools/zcodec.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <vcl/scheduler.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -313,8 +314,20 @@ void Test::testGraphicShape()
     {
         createSwDoc("graphic_shape.odt");
 
+        // allow link updates so the deferred linked graphic shape
+        // download can proceed, then pump the event loop to let the
+        // async download complete before export
+        getSwDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+        getSwDoc()->GetEditShell()->GetLinkManager().UpdateAllLinks(false, true, nullptr, u""_ustr);
+        Scheduler::ProcessEventsToIdle();
+
         // Export the document and import again for a check
         saveAndReload(eFilterName);
+
+        // allow link updates on the reloaded document too
+        getSwDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+        getSwDoc()->GetEditShell()->GetLinkManager().UpdateAllLinks(false, true, nullptr, u""_ustr);
+        Scheduler::ProcessEventsToIdle();
 
         // Check whether graphic exported well
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + TestFilterNames.at(eFilterName).toUtf8();

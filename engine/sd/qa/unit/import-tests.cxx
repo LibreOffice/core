@@ -2353,6 +2353,20 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDrawObjectLinkDeferred)
                            pOleObj->HasDeferredLink());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest, testDrawImageRemoteNotFetched)
+{
+    // draw:image with a remote xlink:href must not fetch the URL during
+    // import. Uses non-routable 192.0.2.1 so that an actual fetch would
+    // hang/timeout causing this test to fail.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"draw-image-link.fodp"), aParams);
+
+    CPPUNIT_ASSERT(mxComponent.is());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

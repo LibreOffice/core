@@ -144,6 +144,21 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDrawObjectLinkDeferred)
                            pOleObj->HasDeferredLink());
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDrawImageRemoteNotFetched)
+{
+    // draw:image with a remote xlink:href must not fetch the URL during
+    // import. Uses non-routable 192.0.2.1 so that an actual fetch would
+    // hang/timeout causing this test to fail.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"draw-image-link.fods"), aParams);
+
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentODS)
 {
     createScDoc("ods/universal-content.ods");

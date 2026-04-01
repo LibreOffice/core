@@ -31,6 +31,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <unotools/mediadescriptor.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -143,6 +144,18 @@ bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
 
     default:
         return false;
+    }
+
+    // Don't start the async download if the user has not yet allowed link
+    // updates. The link stays registered but data will only be fetched
+    // when Update() is called after the user confirms
+    SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
+    if (pShell && !pShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+    {
+        // register the data advise so Update() can trigger the download
+        // later when the user allows link updates
+        AddDataAdvise( pLink, SotExchange::GetFormatMimeType( pLink->GetContentType()), 0 );
+        return true;
     }
 
     SetUpdateTimeout( 0 );
