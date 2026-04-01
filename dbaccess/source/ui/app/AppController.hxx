@@ -170,6 +170,7 @@ namespace dbaui
                 Our mutex must not be locked.
             @since #i39203#
         */
+        SAL_LOPLUGIN_ANNOTATE("suppress:staticmethods")
         void newElementWithPilot( ElementType _eType );
 
         /** converts the query to a view

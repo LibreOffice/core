@@ -212,7 +212,7 @@ static void ConvertGlossaryFields(SwDoc& rDoc)
             else if (sMatch.startsWithIgnoreAsciiCase("field:"))
             {
                 // <field:Company> -> SwExtUserField
-                OUString sFieldName = sMatch.copy(SAL_N_ELEMENTS("field:") - 1).trim().toAsciiUpperCase();
+                OUString sFieldName = OUString(sMatch.subView(SAL_N_ELEMENTS("field:") - 1)).trim().toAsciiUpperCase();
 
                 static const std::pair<std::u16string_view, SwExtUserSubType> aFieldMap[] = {
                     { u"COMPANY", SwExtUserSubType::Company },
