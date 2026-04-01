@@ -25,6 +25,7 @@
 #include <editeng/flstitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/infobar.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -212,6 +213,12 @@ void ScDocShell::ReloadAllLinks()
     }
 
     m_pDocument->UpdateAreaLinks();
+
+    // update linked graphics from the draw layer
+    if (sfx2::LinkManager* pLinkMgr = m_pDocument->GetDocLinkManager().getLinkManager(false))
+    {
+        pLinkMgr->UpdateAllLinks(false, false, nullptr, u""_ustr);
+    }
 }
 
 IMPL_LINK( ScDocShell, ReloadAllLinksHdl, weld::Button&, rButton, void )
