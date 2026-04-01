@@ -1868,39 +1868,8 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
 
     OSL_ENSURE( getContainer(), "OApplicationController::newElementWithPilot: without a view?" );
 
-    switch ( _eType )
-    {
-        case E_REPORT:
-        case E_FORM:
-        {
-            std::unique_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-            if ( aHelper->isConnected() )
-            {
-                sal_Int32 nCommandType = -1;
-                const OUString sCurrentSelected( getCurrentlySelectedName( nCommandType ) );
-                if ( E_REPORT == _eType )
-                    aHelper->newReportWithPilot( nCommandType, sCurrentSelected );
-                else
-                    aHelper->newFormWithPilot( nCommandType, sCurrentSelected );
-            }
-        }
-        break;
-        case E_QUERY:
-        case E_TABLE:
-         {
-            std::unique_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-            if ( aHelper->isConnected() )
-            {
-                if ( E_QUERY == _eType )
-                    aHelper->newQueryWithPilot();
-                else
-                    aHelper->newTableWithPilot();
-            }
-         }
-         break;
-        case E_NONE:
-            break;
-    }
+    // wizards module has been removed; wizard services no longer exist
+    (void)_eType;
 
     // no need for onDocumentOpened, the table wizard opens the created table by using
     // XDatabaseDocumentUI::loadComponent method.

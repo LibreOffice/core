@@ -74,17 +74,6 @@ namespace dbaui
                           css::uno::Reference< css::lang::XComponent >& o_rDefinition
                 );
 
-        void    newFormWithPilot(
-                    const sal_Int32 _nCommandType,
-                    const OUString& _rObjectName
-                );
-        void    newReportWithPilot(
-                    const sal_Int32 _nCommandType,
-                    const OUString& _rObjectName
-                );
-        void    newQueryWithPilot();
-        void    newTableWithPilot();
-
     private:
         css::uno::Reference< css::lang::XComponent >
             impl_open(
@@ -93,9 +82,6 @@ namespace dbaui
                 ElementOpenMode _eOpenMode,
                 const ::comphelper::NamedValueCollection& _rAdditionalArgs
             );
-
-        void impl_newWithPilot(const OUString& rWizardService, const sal_Int32 _nCommandType,
-                               const OUString& _rObjectName);
     };
 
 }   // namespace dbaui

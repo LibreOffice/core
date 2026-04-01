@@ -146,31 +146,6 @@ namespace dbaui
 
         return xRet;
     }
-    void OLinkedDocumentsAccess::impl_newWithPilot(const OUString& /*rWizardService*/,
-                                                   const sal_Int32 /*_nCommandType*/,
-                                                   const OUString& /*_rObjectName*/)
-    {
-        // wizards module has been removed; these Java-based wizard services
-        // (com.sun.star.wizards.{form,report,table,query}.*) no longer exist.
-        SAL_WARN("dbaccess", "wizard service no longer available");
-    }
-    void OLinkedDocumentsAccess::newFormWithPilot( const sal_Int32 _nCommandType,const OUString& _rObjectName )
-    {
-        impl_newWithPilot(u""_ustr, _nCommandType, _rObjectName);
-    }
-
-    void OLinkedDocumentsAccess::newReportWithPilot( const sal_Int32 _nCommandType, const OUString& _rObjectName )
-    {
-        impl_newWithPilot(u""_ustr, _nCommandType, _rObjectName);
-    }
-    void OLinkedDocumentsAccess::newTableWithPilot()
-    {
-        impl_newWithPilot(u""_ustr, -1, OUString());
-    }
-    void OLinkedDocumentsAccess::newQueryWithPilot()
-    {
-        impl_newWithPilot(u""_ustr, -1, OUString());
-    }
     Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 i_nActionID,
         const ::comphelper::NamedValueCollection& i_rCreationArgs, Reference< XComponent >& o_rDefinition )
     {
