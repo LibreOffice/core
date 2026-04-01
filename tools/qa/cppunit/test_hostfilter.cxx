@@ -7,6 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// Exclude this on Windows. The HostFilter::setAllowedExtRefPaths expects colon-separated paths
+// and can't work with Windows-specific paths like "C:/foo", which would get split into "C" and
+// "/foo". isFileUrlForbidden internally converts file URLs to absolute, so on Window can't work
+// with Linux paths.
+#ifndef _WIN32
+
 #include <sal/config.h>
 
 #include <cppunit/TestAssert.h>
@@ -124,5 +130,7 @@ void TestHostFilter::testParentDirectorySegments()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestHostFilter);
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
