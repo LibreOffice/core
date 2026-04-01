@@ -34,6 +34,9 @@
 #include <acorrect.hxx>
 #include <crsrsh.hxx>
 #include <docsh.hxx>
+#include <ndtxt.hxx>
+#include <docufld.hxx>
+#include <fmtfld.hxx>
 
 using namespace ::com::sun::star;
 
@@ -135,6 +138,83 @@ void SwDoc::ReplaceDocumentProperties(const SwDoc& rSource, bool mailMerge)
     ReplaceUserDefinedDocumentProperties( xSourceDocProps );
 }
 
+/// Convert <placeholder:"text":"help"> patterns in the glossary document
+/// to actual SwJumpEditField objects. This was previously done by the
+/// Template.Autotext.Main Basic macro (from the now-removed wizards module).
+static void ConvertGlossaryPlaceholders(SwDoc& rDoc)
+{
+    SwJumpEditFieldType* pFieldType = static_cast<SwJumpEditFieldType*>(
+        rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::JumpEdit));
+
+    auto& rNodes = rDoc.GetNodes();
+    for (SwNodeOffset nNode = rNodes.GetEndOfExtras().GetIndex() + 1;
+         nNode < rNodes.GetEndOfContent().GetIndex(); ++nNode)
+    {
+        SwTextNode* pTextNode = rNodes[nNode]->GetTextNode();
+        if (!pTextNode)
+            continue;
+
+        const OUString& rText = pTextNode->GetText();
+        // Search for <placeholder:"text":"help"> pattern
+        static constexpr OUString sPrefix(u"<placeholder:"_ustr);
+
+        sal_Int32 nPos = 0;
+        while ((nPos = rText.indexOf(sPrefix, nPos)) != -1)
+        {
+            // Find the closing >
+            sal_Int32 nEnd = rText.indexOf('>', nPos + sPrefix.getLength());
+            if (nEnd == -1)
+                break;
+
+            // Extract the content between <placeholder: and >
+            // Format: <placeholder:"text":"help">
+            OUString sContent = rText.copy(nPos + sPrefix.getLength(),
+                                           nEnd - nPos - sPrefix.getLength());
+
+            // Parse "text":"help" — both parts are double-quoted, separated by :
+            OUString sPlaceholder;
+            OUString sHint;
+            if (sContent.startsWith("\""))
+            {
+                sal_Int32 nQuoteEnd = sContent.indexOf('"', 1);
+                if (nQuoteEnd != -1)
+                {
+                    sPlaceholder = sContent.copy(1, nQuoteEnd - 1);
+                    // Look for :"help" after the first quoted string
+                    sal_Int32 nHintStart = sContent.indexOf(":\"", nQuoteEnd);
+                    if (nHintStart != -1)
+                    {
+                        nHintStart += 2; // skip :"
+                        sal_Int32 nHintEnd = sContent.indexOf('"', nHintStart);
+                        if (nHintEnd != -1)
+                            sHint = sContent.copy(nHintStart, nHintEnd - nHintStart);
+                    }
+                }
+            }
+
+            if (sPlaceholder.isEmpty())
+            {
+                ++nPos;
+                continue;
+            }
+
+            // Delete the placeholder text and insert a field
+            SwPaM aPaM(*pTextNode, nPos, *pTextNode, nEnd + 1);
+            rDoc.getIDocumentContentOperations().DeleteAndJoin(aPaM);
+
+            SwJumpEditField aField(pFieldType, SwJumpEditFormat::Text,
+                                   sPlaceholder, sHint);
+            SwFormatField aFormatField(aField);
+            SwPosition aInsertPos(*pTextNode, nPos);
+            rDoc.getIDocumentContentOperations().InsertPoolItem(
+                SwPaM(aInsertPos), aFormatField);
+
+            // The field character takes 1 position; continue searching after it
+            nPos += 1;
+        }
+    }
+}
+
 /// inserts an AutoText block
 bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                             SwPaM& rPaM, SwCursorShell* pShell )
@@ -156,6 +236,11 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                 SwPaM aPaM(*pGDoc->GetNodes()[pGDoc->GetNodes().GetEndOfContent().GetIndex() - 1]);
                 pGDoc->getIDocumentContentOperations().DelFullPara(aPaM);
             }
+
+            // Convert <placeholder:...> text patterns to JumpEdit fields.
+            // Previously done by the Template.Autotext.Main Basic macro.
+            if (mbInsOnlyTextGlssry)
+                ConvertGlossaryPlaceholders(*pGDoc);
 
             // Update all fixed fields, with the right DocInfo.
             // FIXME: UGLY: Because we cannot limit the range in which to do
