@@ -585,6 +585,11 @@ SAL_IMPLEMENT_MAIN()
                 OUString td_name(td->getName());
                 bool bEmit = std::any_of(unoidlMandatoryProvs.begin(), unoidlMandatoryProvs.end(),
                     [&td_name](rtl::Reference<unoidl::Provider>& rProv) { return rProv->findEntity(td_name).is(); });
+                // skip test-only types that climaker cannot handle (polymorphic
+                // structs with reused type parameters)
+                if (bEmit && td_name.startsWith("com.sun.star.testuno.")) {
+                    bEmit = false;
+                }
                 if (bEmit) {
                     type_emitter->get_type(td);
                 }
