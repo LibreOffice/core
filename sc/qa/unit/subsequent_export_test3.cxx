@@ -26,6 +26,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <tools/datetime.hxx>
 #include <tools/UnitConversion.hxx>
 
@@ -1203,8 +1204,17 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testLinkedGraphicRT)
         const OString sFailedMessage
             = OString::Concat("Failed on filter: ") + TestFilterNames.at(aFilterNames[i]).toUtf8();
 
+        // linked graphic fetch is deferred during loading, allow link
+        // updates and trigger the fetch before export
+        getScDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+        getScDoc()->GetLinkManager()->UpdateAllLinks(false, true, nullptr, u""_ustr);
+
         // Export the document and import again for a check
         saveAndReload(aFilterNames[i]);
+
+        // allow link updates on the reloaded document too (for ODS/XLS
+        // which keep the graphic as a link rather than embedding it)
+        getScDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
 
         // Check whether graphic imported well after export
         ScDocument* pDoc = getScDoc();
