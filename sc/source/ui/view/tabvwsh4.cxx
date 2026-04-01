@@ -1632,7 +1632,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             if (!bLink)
             {
                 const sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
-                if (rDoc.HasLinkFormulaNeedingCheck() || rDoc.HasAreaLinks() || rMgr.hasDdeOrOleOrWebServiceLinks())
+                if (rDoc.HasLinkFormulaNeedingCheck() || rDoc.HasAreaLinks() || rMgr.hasExternalLinks())
                     bLink = true;
             }
             if (bLink)
