@@ -190,8 +190,17 @@ bool SwAttrIter::IsSymbol(TextFrameIndex const nNewPos)
 
 bool SwTextFrame::IsSymbolAt(TextFrameIndex const nPos) const
 {
-    SwTextInfo info(const_cast<SwTextFrame*>(this));
-    SwTextIter iter(const_cast<SwTextFrame*>(this), &info);
+    SwTextFrame* pFrame = const_cast<SwTextFrame*>(this);
+    while (pFrame && !pFrame->GetPara())
+    {
+        // This is a split anchor frame, and GetPara only returns a para for the last follow frame
+        pFrame = pFrame->GetFollow();
+    }
+    if (!pFrame)
+        return false;
+
+    SwTextInfo info(pFrame);
+    SwTextIter iter(pFrame, &info);
     return iter.IsSymbol(nPos);
 }
 
