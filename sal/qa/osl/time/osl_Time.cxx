@@ -7,6 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// Exclude this on Windows. These tests rely on osl_setTimezone and osl_getTimeValueFromDateTime;
+// but on Windows, osl_setTimezone basically does nothing useful: just as on other platforms, it
+// sets the TZ environment variable; but on Windows, the API used by osl_getTimeValueFromDateTime
+// ignores TZ and always uses the system timezone.
+#ifndef _WIN32
+
 #include <sal/types.h>
 #include <osl/time.h>
 
@@ -269,5 +275,7 @@ public:
 CPPUNIT_TEST_SUITE_REGISTRATION(TimeTest);
 
 } // namespace
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
