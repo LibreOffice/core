@@ -18,6 +18,7 @@ $(eval $(call gb_Library_add_exception_objects,testuno, \
 $(eval $(call gb_Library_set_componentfile,testuno,unotest/source/testuno/testuno,services))
 
 $(eval $(call gb_Library_use_libraries,testuno, \
+    comphelper \
     cppu \
     cppuhelper \
     sal \
