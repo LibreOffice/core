@@ -289,7 +289,7 @@ static void disallowAllLinksUpdate(SvBaseLink* pShellProvider)
 
 void LinkManager::UpdateAllLinks(
     bool bAskUpdate,
-    bool bUpdateGrfLinks,
+    bool /*bUpdateGrfLinks*/,
     weld::Window* pParentWin,
     OUString const & referer )
 {
@@ -327,9 +327,7 @@ void LinkManager::UpdateAllLinks(
         if( !bFound )
             continue;  // was not available!
 
-        // Graphic-Links not to update yet
-        if( !pLink->IsVisible() ||
-            ( !bUpdateGrfLinks && SvBaseLinkObjectType::ClientGraphic == pLink->GetObjType() ))
+        if( !pLink->IsVisible() )
             continue;
 
         if( bAskUpdate )

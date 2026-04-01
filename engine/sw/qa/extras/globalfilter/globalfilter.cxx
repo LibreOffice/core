@@ -170,8 +170,14 @@ void Test::testLinkedGraphicRT()
 
         const OString sFailedMessage = OString::Concat("Failed on filter: ") + TestFilterNames.at(eFilterName).toUtf8();
 
+        // allow link updates so the linked graphic is fetched
+        getSwDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+
         // Export the document and import again for a check
         saveAndReload(eFilterName);
+
+        // allow link updates on the reloaded document too
+        getSwDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
 
         SwDoc* pDoc = getSwDoc();
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDoc);
