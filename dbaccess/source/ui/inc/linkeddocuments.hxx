@@ -44,7 +44,6 @@ namespace dbaui
         css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >
                     m_xDocumentUI;
         weld::Window* m_pDialogParent;
-        OUString    m_sDataSourceName;
 
     public:
         OLinkedDocumentsAccess(
@@ -52,8 +51,7 @@ namespace dbaui
             const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rDocumentUI,
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const css::uno::Reference< css::container::XNameAccess >& _rxContainer,
-            const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-            OUString _sDataSourceName
+            const css::uno::Reference< css::sdbc::XConnection>& _xConnection
         );
         ~OLinkedDocumentsAccess();
 
