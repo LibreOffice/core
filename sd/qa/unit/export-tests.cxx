@@ -811,6 +811,15 @@ void SdExportTest::testLinkedGraphicRT(TestFilter eFilter)
     // Load the original file with one image
     createSdImpressDoc("odp/document_with_linked_graphic.odp");
 
+    // allow link updates so the linked graphic is fetched
+    {
+        SdXImpressDocument* pXImpressDocument
+            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pXImpressDocument);
+        pXImpressDocument->GetDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(
+            true);
+    }
+
     // Check if the graphic has been imported correctly (before doing the export/import run)
     {
         static constexpr OString sFailedImportMessage
@@ -818,6 +827,11 @@ void SdExportTest::testLinkedGraphicRT(TestFilter eFilter)
         SdXImpressDocument* pXImpressDocument
             = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
         CPPUNIT_ASSERT(pXImpressDocument);
+
+        // allow link updates on the reloaded document too
+        pXImpressDocument->GetDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(
+            true);
+
         SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
         CPPUNIT_ASSERT_MESSAGE(sFailedImportMessage.getStr(), pDoc != nullptr);
         const SdrPage* pPage = pDoc->GetPage(1);
@@ -836,6 +850,15 @@ void SdExportTest::testLinkedGraphicRT(TestFilter eFilter)
     // Save and reload
     saveAndReload(eFilter);
 
+    // allow link updates so the linked graphic is fetched
+    {
+        SdXImpressDocument* pXImpressDocument
+            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pXImpressDocument);
+        pXImpressDocument->GetDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(
+            true);
+    }
+
     // Check whether graphic imported well after export
     {
         const OString sFailedMessage = "Failed on filter: " + TestFilterNames.at(eFilter).toUtf8();
@@ -844,6 +867,11 @@ void SdExportTest::testLinkedGraphicRT(TestFilter eFilter)
             = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
         CPPUNIT_ASSERT(pXImpressDocument);
         SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+        // allow link updates on the reloaded document too
+        pXImpressDocument->GetDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(
+            true);
+
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDoc != nullptr);
         const SdrPage* pPage = pDoc->GetPage(1);
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pPage != nullptr);

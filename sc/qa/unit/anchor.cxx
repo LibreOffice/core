@@ -74,6 +74,9 @@ void ScAnchorTest::testUndoAnchor()
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
     CPPUNIT_ASSERT(pDocSh);
 
+    // allow link updates so the linked graphic is fetched
+    pDocSh->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+
     // Check whether graphic imported well
     ScDocument& rDoc = pDocSh->GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();

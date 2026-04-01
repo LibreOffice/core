@@ -29,7 +29,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -591,7 +593,12 @@ void SdrGrafObj::ForceSwapIn() const
     if (m_pGraphicLink && (mpGraphicObject->GetType() == GraphicType::NONE  ||
                          mpGraphicObject->GetType() == GraphicType::Default) )
     {
-        m_pGraphicLink->Update();
+        // Don't fetch linked graphic URLs if the user has not yet allowed
+        // link updates. They have not been prompted about external content.
+        sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
+        SfxObjectShell* pShell = pLinkManager ? pLinkManager->GetPersist() : nullptr;
+        if (!pShell || pShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+            m_pGraphicLink->Update();
     }
 }
 
