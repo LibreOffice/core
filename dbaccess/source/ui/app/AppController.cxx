@@ -1861,15 +1861,9 @@ IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType, void )
     newElementWithPilot( eType );
 }
 
-void OApplicationController::newElementWithPilot( ElementType _eType )
+void OApplicationController::newElementWithPilot( ElementType /*_eType*/ )
 {
-    utl::CloseVeto aKeepDoc( getFrame() );
-        // prevent the document being closed while the wizard is open
-
-    OSL_ENSURE( getContainer(), "OApplicationController::newElementWithPilot: without a view?" );
-
     // wizards module has been removed; wizard services no longer exist
-    (void)_eType;
 
     // no need for onDocumentOpened, the table wizard opens the created table by using
     // XDatabaseDocumentUI::loadComponent method.
