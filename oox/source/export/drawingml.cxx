@@ -1490,8 +1490,16 @@ OUString GraphicExport::writeNewEntryToStorage(const Graphic& rGraphic, bool bRe
             aExtension = u"tif"_ustr;
             break;
         case GfxLinkType::NativeWmf:
-            sMediaType = u"image/x-wmf"_ustr;
-            aExtension = u"wmf"_ustr;
+            if (aLink.IsEMF())
+            {
+                sMediaType = u"image/x-emf"_ustr;
+                aExtension = u"emf"_ustr;
+            }
+            else
+            {
+                sMediaType = u"image/x-wmf"_ustr;
+                aExtension = u"wmf"_ustr;
+            }
             break;
         case GfxLinkType::NativeMet:
             sMediaType = u"image/x-met"_ustr;
