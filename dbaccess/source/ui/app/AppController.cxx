@@ -1864,6 +1864,7 @@ IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType, void )
 void OApplicationController::newElementWithPilot( ElementType /*_eType*/ )
 {
     // wizards module has been removed; wizard services no longer available
+    OSL_ENSURE( getContainer(), "OApplicationController::newElementWithPilot: without a view?" );
 }
 
 Reference< XComponent > OApplicationController::newElement( ElementType _eType, const ::comphelper::NamedValueCollection& i_rAdditionalArguments,
