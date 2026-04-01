@@ -61,6 +61,7 @@
 #include <hintids.hxx>
 #include <docsh.hxx>
 #include <fmtcntnt.hxx>
+#include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <unotxdoc.hxx>
 #include <frmatr.hxx>
@@ -166,6 +167,52 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkedOLEExport)
         }
     }
     CPPUNIT_ASSERT_MESSAGE("OLE node should survive ODF round-trip", pOLENode);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDrawImageRemoteNotFetched)
+{
+    // draw:image with a remote xlink:href must not fetch the URL during
+    // import or layout. The linked graphic is fetched via
+    // LinkManager::GetGraphicFromAny which checks getUserAllowsLinkUpdate.
+    // During import this is false, so the fetch is blocked. The test uses a
+    // non-routable address (192.0.2.1) so that an actual fetch would
+    // hang/timeout causing this test to fail by timeout.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"draw-image-link.fodt", aParams);
+
+    // if we reach here without hanging, no fetch was attempted
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDrawImageEmbeddedNotBlocked)
+{
+    // Embedded (inline base64) images must not be blocked by the linked
+    // graphic security checks. This verifies that the getUserAllowsLinkUpdate
+    // guard in SwGrfNode does not interfere with package/embedded images.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"draw-image-embedded.fodt", aParams);
+
+    SwDoc* pDoc = getSwDoc();
+    SwNodeOffset nNodes = pDoc->GetNodes().Count();
+    // find a graphic node with actual loaded pixel data
+    for (SwNodeOffset i(0); i < nNodes; ++i)
+    {
+        if (SwGrfNode* pGrfNode = pDoc->GetNodes()[i]->GetGrfNode())
+        {
+            // embedded image should have real graphic data, not Default type
+            CPPUNIT_ASSERT_MESSAGE("Embedded image should be loaded",
+                                   pGrfNode->GetGrfObj().GetType() != GraphicType::Default);
+            return;
+        }
+    }
+    CPPUNIT_FAIL("No graphic node found in document");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmptySvgFamilyName)

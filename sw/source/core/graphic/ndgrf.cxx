@@ -31,6 +31,7 @@
 #include <vcl/vectorgraphicdata.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <docsh.hxx>
 #include <editeng/boxitem.hxx>
 #include <sot/formats.hxx>
 #include <fmtfsize.hxx>
@@ -231,8 +232,13 @@ bool SwGrfNode::ReRead(
                 maGrfObj.SetGraphic( *pGraphic );
                 onGraphicChanged();
                 bReadGrf = true;
-                // create connection without update, as we have the graphic
-                mxLink->Connect();
+                // Create connection without update, as we have the graphic,
+                // but don't connect if the user has not yet allowed link
+                // updates because the async download would fetch the URL
+                // before the user is prompted
+                SwDocShell* pDocSh = GetDoc().GetDocShell();
+                if (!pDocSh || pDocSh->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+                    mxLink->Connect();
             }
             else
             {
@@ -242,7 +248,9 @@ bool SwGrfNode::ReRead(
                 onGraphicChanged();
                 if ( bNewGrf )
                 {
-                    mxLink->SwapIn();
+                    SwDocShell* pDocSh = GetDoc().GetDocShell();
+                    if (!pDocSh || pDocSh->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+                        mxLink->SwapIn();
                 }
             }
         }
@@ -428,6 +436,12 @@ bool SwGrfNode::SwapIn(bool bWaitForData)
 {
     if(mbInSwapIn) // not recursively!
         return true;
+
+    // Don't fetch linked graphic URLs if the user has not yet allowed link
+    // updates, they have not been prompted about external content
+    SwDocShell* pSh = GetDoc().GetDocShell();
+    if (pSh && !pSh->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+        return false;
 
     bool bRet = false;
     mbInSwapIn = true;
@@ -842,6 +856,12 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
         OSL_FAIL( "<SwGrfNode::TriggerAsyncLoad()> - Method is misused. Method call is only valid for graphic nodes, which refer a linked graphic file" );
         return;
     }
+
+    // Don't fetch linked graphic URLs if the user has not yet allowed
+    // link updates, they have not been prompted about external content
+    SwDocShell* pSh = GetDoc().GetDocShell();
+    if (pSh && !pSh->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+        return;
 
     if (mpThreadConsumer != nullptr)
         return;
