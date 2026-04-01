@@ -127,15 +127,15 @@ bool DocumentLinkManager::idleCheckLinks()
 
 bool DocumentLinkManager::hasDdeLinks() const
 {
-    return hasDdeOrOleOrWebServiceLinks(true, false, false);
+    return hasExternalLinks(true, false, false, false);
 }
 
-bool DocumentLinkManager::hasDdeOrOleOrWebServiceLinks() const
+bool DocumentLinkManager::hasExternalLinks() const
 {
-    return hasDdeOrOleOrWebServiceLinks(true, true, true);
+    return hasExternalLinks(true, true, true, true);
 }
 
-bool DocumentLinkManager::hasDdeOrOleOrWebServiceLinks(bool bDde, bool bOle, bool bWebService) const
+bool DocumentLinkManager::hasExternalLinks(bool bDde, bool bOle, bool bWebService, bool bGraphic) const
 {
     sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
     if (!pMgr)
@@ -150,6 +150,8 @@ bool DocumentLinkManager::hasDdeOrOleOrWebServiceLinks(bool bDde, bool bOle, boo
         if (bOle && (dynamic_cast<SdrEmbedObjectLink*>(pBase) || dynamic_cast<SdrIFrameLink*>(pBase)))
             return true;
         if (bWebService && dynamic_cast<ScWebServiceLink*>(pBase))
+            return true;
+        if (bGraphic && pBase->GetObjType() == sfx2::SvBaseLinkObjectType::ClientGraphic)
             return true;
     }
 

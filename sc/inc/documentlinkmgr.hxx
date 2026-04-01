@@ -53,7 +53,7 @@ public:
     bool idleCheckLinks();
 
     bool hasDdeLinks() const;
-    bool hasDdeOrOleOrWebServiceLinks() const;
+    bool hasExternalLinks() const;
     bool hasExternalRefLinks() const;
 
     bool updateDdeOrOleOrWebServiceLinks(weld::Window* pWin);
@@ -63,7 +63,7 @@ public:
     size_t getDdeLinkCount() const;
 
 private:
-    bool hasDdeOrOleOrWebServiceLinks(bool bDde, bool bOle, bool bWebService) const;
+    bool hasExternalLinks(bool bDde, bool bOle, bool bWebService, bool bGraphic) const;
 };
 
 }
