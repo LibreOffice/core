@@ -1114,7 +1114,9 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
     printf( "\n" );
 }
 
-#if POPPLER_CHECK_VERSION(0, 64, 0)
+#if POPPLER_CHECK_VERSION(26, 4, 0)
+void PDFOutDev::drawString(GfxState*, const std::string& /*s*/)
+#elif POPPLER_CHECK_VERSION(0, 64, 0)
 void PDFOutDev::drawString(GfxState*, const GooString* /*s*/)
 #else
 void PDFOutDev::drawString(GfxState*, GooString* /*s*/)
