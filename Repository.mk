@@ -1166,7 +1166,6 @@ $(eval $(call gb_Helper_register_mos,\
 	sw \
 	uui \
 	vcl \
-	wiz \
 	wpt \
 	$(if $(ENABLE_NSS)$(ENABLE_OPENSSL),xsc) \
 ))
