@@ -26,7 +26,7 @@
 #include <vcl/window.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/datatransfer/clipboard/LokClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/KitClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
@@ -487,7 +487,7 @@ Reference<XClipboard> GetSystemClipboard()
 #else
         if (comphelper::COKit::isActive())
         {
-            xClipboard = css::datatransfer::clipboard::LokClipboard::create(
+            xClipboard = css::datatransfer::clipboard::KitClipboard::create(
                     comphelper::getProcessComponentContext());
         }
 #endif

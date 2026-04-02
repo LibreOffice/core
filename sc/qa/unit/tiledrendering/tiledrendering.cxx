@@ -11,7 +11,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
-#include <com/sun/star/datatransfer/clipboard/LokClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/KitClipboard.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <test/helper/transferable.hxx>
@@ -1217,14 +1217,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMultiViewCopyPaste)
     ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView1);
     // emulate clipboard
-    pView1->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::LokClipboard::create(comphelper::getProcessComponentContext()));
+    pView1->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::KitClipboard::create(comphelper::getProcessComponentContext()));
 
     // view #2
     int nView1 = KitHelper::getCurrentView();
     KitHelper::createView();
     ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     // emulate clipboard
-    pView2->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::LokClipboard::create(comphelper::getProcessComponentContext()));
+    pView2->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::KitClipboard::create(comphelper::getProcessComponentContext()));
     CPPUNIT_ASSERT(pView2);
     CPPUNIT_ASSERT(pView1 != pView2);
     CPPUNIT_ASSERT(pView1->GetViewData().GetActiveWin()->GetClipboard() != pView2->GetViewData().GetActiveWin()->GetClipboard());

@@ -21,6 +21,6 @@
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.datatransfer.KitClipboard"
     constructor="desktop_KitClipboard_get_implementation">
-    <service name="com.sun.star.datatransfer.clipboard.LokClipboard"/>
+    <service name="com.sun.star.datatransfer.clipboard.KitClipboard"/>
   </implementation>
 </component>

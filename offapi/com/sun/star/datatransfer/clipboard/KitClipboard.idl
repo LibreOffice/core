@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_datatransfer_clipboard_LokClipboard_idl__
-#define __com_sun_star_datatransfer_clipboard_LokClipboard_idl__
+#ifndef __com_sun_star_datatransfer_clipboard_KitClipboard_idl__
+#define __com_sun_star_datatransfer_clipboard_KitClipboard_idl__
 
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.idl>
 
@@ -26,7 +26,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 /** This service provides access to the clipboard dedicated for current view
 */
-service LokClipboard : XSystemClipboard;
+service KitClipboard : XSystemClipboard;
 
 }; }; }; }; };
 

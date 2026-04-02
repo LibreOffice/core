@@ -84,7 +84,7 @@ KitClipboard::KitClipboard()
 
 Sequence<OUString> KitClipboard::getSupportedServiceNames_static()
 {
-    Sequence<OUString> aRet{ u"com.sun.star.datatransfer.clipboard.LokClipboard"_ustr };
+    Sequence<OUString> aRet{ u"com.sun.star.datatransfer.clipboard.KitClipboard"_ustr };
     return aRet;
 }
 

@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/datatransfer/clipboard/LokClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/KitClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
@@ -367,7 +367,7 @@ SalInstance::CreateClipboard(const Sequence<Any>& arguments)
         // <https://lists.freedesktop.org/archives/libreoffice/2020-April/084824.html> "Re: Linux
         // SAL_USE_VCLPLUGIN=svp and the clipboard"):
         css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
-            css::datatransfer::clipboard::LokClipboard::create(
+            css::datatransfer::clipboard::KitClipboard::create(
                 comphelper::getProcessComponentContext());
         return xClipboard;
     }
