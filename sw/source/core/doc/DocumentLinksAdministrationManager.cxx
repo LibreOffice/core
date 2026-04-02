@@ -226,12 +226,21 @@ void DocumentLinksAdministrationManager::UpdateLinks()
     comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pShell->getEmbeddedObjectContainer();
     if (bUpdate)
     {
-        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
-
-        weld::Window* pDlgParent = GetFrameWeld(pShell);
-        SfxMedium * medium = pShell->GetMedium();
-        GetLinkManager().UpdateAllLinks(
-            bAskUpdate, false, pDlgParent, medium == nullptr ? OUString() : medium->GetName());
+        if (bAskUpdate)
+        {
+            // Don't show a modal dialog during load - show an infobar
+            // after the view is ready instead
+            rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+            pShell->SetPendingLinkUpdateInfobar();
+        }
+        else
+        {
+            rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+            SfxMedium* medium = pShell->GetMedium();
+            GetLinkManager().UpdateAllLinks(
+                false, false, nullptr,
+                medium == nullptr ? OUString() : medium->GetName());
+        }
     }
     else
     {

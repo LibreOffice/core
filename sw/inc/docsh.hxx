@@ -94,6 +94,8 @@ class SW_DLLPUBLIC SwDocShell
         ///< whether SID_MAIL_PREPAREEXPORT removed content that
         ///< SID_MAIL_EXPORT_FINISHED needs to restore
 
+    bool m_bPendingLinkUpdateInfobar = false;
+
     css::uno::Reference< ooo::vba::XSinkCaller > mxAutomationDocumentEventsCaller;
     css::uno::Reference< ooo::vba::word::XDocument> mxAutomationDocumentObject;
 
@@ -191,6 +193,7 @@ public:
 
     /// OLE 2.0-notification.
     DECL_DLLPRIVATE_LINK( Ole2ModifiedHdl, bool, void );
+    DECL_DLLPRIVATE_LINK( AllowLinksUpdateHdl, weld::Button&, void );
 
     /// Override SfxObjectShell::GetBaseModel and return a more accurate type
     rtl::Reference<SwXTextDocument> GetBaseModel() const;
@@ -313,6 +316,9 @@ public:
      This new function is necessary to trigger update of links in docs
      read by the binary filter: */
     virtual void UpdateLinks() override;
+
+    void ShowLinkUpdateInfobar();
+    void SetPendingLinkUpdateInfobar() { m_bPendingLinkUpdateInfobar = true; }
 
     css::uno::Reference< css::frame::XController >
                                 GetController();

@@ -11,6 +11,7 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from org.libreoffice.unotest import systemPathToFileUrl
+from com.sun.star.beans import PropertyValue
 from tempfile import TemporaryDirectory
 import os.path
 
@@ -21,42 +22,39 @@ class Tdf145326(UITestCase):
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "tdf145326-temp.odt")
 
-            with self.ui_test.execute_dialog_through_command(".uno:Open", close_button="") as xOpenDialog:
+            # Load with QUIET_UPDATE so DDE links are updated without
+            # prompting (the update-links prompt is now an infobar, not
+            # a modal dialog)
+            prop = PropertyValue()
+            prop.Name = "UpdateDocMode"
+            prop.Value = 1  # QUIET_UPDATE
+            with self.ui_test.load_file(get_url_for_data_file("tdf145326.odt"), (prop,)):
 
-                xFileName = xOpenDialog.getChild("file_name")
-                xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf145326.odt")}))
+                with self.ui_test.execute_dialog_through_command(".uno:LinkDialog", close_button="close") as xDialog:
 
-                xOpenBtn = xOpenDialog.getChild("open")
-                # Update all links dialog
-                with self.ui_test.wait_until_component_loaded():
-                    with self.ui_test.execute_blocking_action(xOpenBtn.executeAction, args=('CLICK', ()), close_button="yes"):
+                    sLinks = "TB_LINKS"
+                    xLinks = xDialog.getChild(sLinks)
+                    self.assertEqual(1, len(xLinks.getChildren()))
+
+                    sFileName = "FULL_FILE_NAME"
+                    xFileName = xDialog.getChild(sFileName)
+                    self.assertTrue(get_state_as_dict(xFileName)["Text"].endswith("SAmple odp.ods"))
+
+                    sBreakLink = "BREAK_LINK"
+                    xBreakLink = xDialog.getChild(sBreakLink)
+
+                    with self.ui_test.execute_blocking_action(xBreakLink.executeAction,
+                            args=("CLICK", tuple()), close_button="yes"):
                         pass
 
-            with self.ui_test.execute_dialog_through_command(".uno:LinkDialog", close_button="close") as xDialog:
+                # Save Copy as
+                with self.ui_test.execute_dialog_through_command('.uno:SaveAs', close_button="open") as xDialog:
+                    xFileName = xDialog.getChild('file_name')
+                    xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
+                    xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
+                    xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
 
-                sLinks = "TB_LINKS"
-                xLinks = xDialog.getChild(sLinks)
-                self.assertEqual(1, len(xLinks.getChildren()))
-
-                sFileName = "FULL_FILE_NAME"
-                xFileName = xDialog.getChild(sFileName)
-                self.assertTrue(get_state_as_dict(xFileName)["Text"].endswith("SAmple odp.ods"))
-
-                sBreakLink = "BREAK_LINK"
-                xBreakLink = xDialog.getChild(sBreakLink)
-
-                with self.ui_test.execute_blocking_action(xBreakLink.executeAction,
-                        args=("CLICK", tuple()), close_button="yes"):
-                    pass
-
-            # Save Copy as
-            with self.ui_test.execute_dialog_through_command('.uno:SaveAs', close_button="open") as xDialog:
-                xFileName = xDialog.getChild('file_name')
-                xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
-                xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
-                xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
-
-            self.ui_test.close_doc()
+                self.ui_test.close_doc()
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
 
