@@ -2697,6 +2697,7 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
             break;
     }
 
+    const IDocumentSettingAccess& rIDSA = rFormat.getIDocumentSettingAccess();
     mnGroupShapeBooleanProperties = 0;
     // LayoutInCell is hugely problematic if the value is false,
     // so much so that Microsoft, since DOCX compat15, ignores it and always does a layoutInCell.
@@ -2713,9 +2714,10 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
     if (!bLayoutInCell)
         bLayoutInCell = mnYRelTo == 3 || mnXRelTo == 3;
 
+    // Re-using existing compat flags to determine if this comes from an MSO-formatted document.
     // If this is already MSO format, then we need to round-trip a false FollowingTextFlow value
-    const bool bIsMSOLayout = rFormat.getIDocumentSettingAccess().get(
-        DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
+    const bool bIsMSOLayout = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN) // <= MSO 2010
+                              || rIDSA.get(DocumentSettingId::TAB_OVER_SPACING); // <= MSO 2013+
 
     // For native LO: if !FollowingTextFlow and the fly is oriented to the pageMargin(0) or page(1),
     // we must write layoutInCell(false), but paragraph-oriented flies match layoutInCell placement.
