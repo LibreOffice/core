@@ -1346,6 +1346,8 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
     const bool bIsGroupObj = (pObj != pShape->FindRealSdrObject()) && pObj;
     if (auto pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj))
     {
+        const IDocumentSettingAccess& rIDSA = pFormat->getIDocumentSettingAccess();
+
         // Do not create undo entry for the positioning
         ::sw::UndoGuard const UndoGuard(pShape->GetDoc().GetIDocumentUndoRedo());
         auto aGuard = SwTextBoxLockGuard(*pShape->GetOtherTextBoxFormats());
@@ -1366,8 +1368,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             {
                 auto nRightSpace = pShape->GetLRSpace().ResolveRight({});
 
-                const bool bMSOLayout = pFormat->getIDocumentSettingAccess().get(
-                    DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS);
+                const bool bMSOLayout = rIDSA.get(DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS);
                 if (bMSOLayout)
                 {
                     aNewHOri.SetPos(-aRect.Right() + nRightSpace
@@ -1502,9 +1503,9 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
 
                 // Microsoft allows WrapThrough shapes to be placed outside of the cell
                 // despite having specified layoutInCell.
-                // (Re-using existing, appropriately-named, compat flag to identify MSO formats.)
-                const bool bMSOLayout = pFormat->getIDocumentSettingAccess().get(
-                    DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
+                // (Re-using existing compat flags to identify MSO formatted document).
+                const bool bMSOLayout = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN) // <= MSO 2010
+                                        || rIDSA.get(DocumentSettingId::TAB_OVER_SPACING); // <=2013
 
                 // Table position
                 Point nTableOffset;
