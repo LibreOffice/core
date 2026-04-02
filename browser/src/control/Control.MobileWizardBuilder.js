@@ -653,7 +653,7 @@ window.L.Control.MobileWizardBuilder = window.L.Control.JSDialogBuilder.extend({
 			builder.map.sendUnoCommand(command, params);
 		};
 
-		JSDialog._spinfieldControl(parentContainer, lineData, builder, callbackFunction);
+		JSDialog.spinfieldControl(parentContainer, lineData, builder, callbackFunction);
 	},
 
 	_panelHandler: function(parentContainer, data, builder) {

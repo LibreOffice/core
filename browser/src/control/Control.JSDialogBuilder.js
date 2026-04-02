@@ -96,10 +96,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		this._controlHandlers['pagesizeentry'] = JSDialog.pageSizeEntry;
 		this._controlHandlers['checkbox'] = JSDialog.Checkbox;
 		this._controlHandlers['basespinfield'] = JSDialog.baseSpinField;
-		this._controlHandlers['spinfield'] = JSDialog._spinfieldControl;
-		this._controlHandlers['metricfield'] = JSDialog._metricfieldControl;
+		this._controlHandlers['spinfield'] = JSDialog.spinfieldControl;
+		this._controlHandlers['metricfield'] = JSDialog.metricfieldControl;
 		this._controlHandlers['time'] = JSDialog.timeField;
-		this._controlHandlers['formattedfield'] = JSDialog._formattedfieldControl;
+		this._controlHandlers['formattedfield'] = JSDialog.formattedfieldControl;
 		this._controlHandlers['edit'] = JSDialog.edit;
 		this._controlHandlers['searchedit'] = JSDialog.searchEdit;
 		this._controlHandlers['formulabaredit'] = JSDialog.formulabarEdit;
@@ -1964,8 +1964,8 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			}
 		};
 
-		JSDialog._spinfieldControl(content, rowsData, builder, callbackFunction);
-		JSDialog._spinfieldControl(content, colsData, builder, callbackFunction);
+		JSDialog.spinfieldControl(content, rowsData, builder, callbackFunction);
+		JSDialog.spinfieldControl(content, colsData, builder, callbackFunction);
 
 		var buttonData = { text: _('Insert Table') };
 		JSDialog.pushButton(content, buttonData, builder, function() {

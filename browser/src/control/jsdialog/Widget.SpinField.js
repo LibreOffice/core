@@ -10,10 +10,16 @@
  */
 
 /*
- * JSDialog.baseSpinField,
- * JSDialog._spinfieldControl,
- * JSDialog._metricfieldControl
- * JSDialog._formattedfieldControl
+ * The spinfield constructors:
+ * 	- JSDialog.baseSpinField
+ * 	- JSDialog.spinfieldControl
+ * 	- JSDialog.metricfieldControl
+ * 	- JSDialog.formattedfieldControl
+ *
+ * The helper functions used elsewhere, like in JSDialogBuilder for example:
+ * 	- _parseSpinFieldValue
+ * 	- _formatSpinFieldValue
+ * 	- _setSpinFieldValue
  */
 
 /* global $ _ JSDialog */
@@ -282,7 +288,7 @@ JSDialog.baseSpinField = function (parentContainer, data, builder) {
 	return controls;
 };
 
-JSDialog._spinfieldControl = function (
+JSDialog.spinfieldControl = function (
 	parentContainer,
 	data,
 	builder,
@@ -322,7 +328,7 @@ JSDialog._spinfieldControl = function (
 	return false;
 };
 
-JSDialog._metricfieldControl = function (
+JSDialog.metricfieldControl = function (
 	parentContainer,
 	data,
 	builder,
@@ -354,7 +360,7 @@ JSDialog._metricfieldControl = function (
 	return false;
 };
 
-JSDialog._formattedfieldControl = function (
+JSDialog.formattedfieldControl = function (
 	parentContainer,
 	data,
 	builder,
