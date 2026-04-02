@@ -219,7 +219,7 @@ Module.uno_init.then(function() {
         const args = new Module.uno_Sequence_com$sun$star$beans$PropertyValue(
             0, Module.uno_Sequence.FromSize);
         xModel = css.frame.XComponentLoader.query(desktop).loadComponentFromURL(
-            'file:///android/default-document/example.odt', '_default', 0, args);
+            'file:///TODO/example.odt', '_default', 0, args);
         args.delete();
     }
     const xTextDocument = css.text.XTextDocument.query(xModel);
@@ -239,7 +239,7 @@ Module.uno_init.then(function() {
         const args = new Module.uno_Sequence_com$sun$star$beans$PropertyValue(
             0, Module.uno_Sequence.FromSize);
         xModel = css.frame.XComponentLoader.query(desktop).loadComponentFromURL(
-            'file:///android/default-document/example.odt', '_default', 0, args);
+            'file:///TODO/example.odt', '_default', 0, args);
         args.delete();
     }
     const xTextDocument = css.text.XTextDocument.query(xModel);
