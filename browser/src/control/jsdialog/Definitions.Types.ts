@@ -86,6 +86,7 @@ interface JSBuilder {
 	_getAccessKeyFromText: (text: string) => string;
 	_stressAccessKey: (element: HTMLElement, accessKey: string) => void;
 	_expanderHandler: any; // FIXME: use handlers getter instead
+	_unitToVisibleString: (unit: string) => string;
 }
 
 // widget handler, returns true if child nodes should be still processed by the builder

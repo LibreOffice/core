@@ -22,10 +22,22 @@
  * 	- _setSpinFieldValue
  */
 
-/* global $ _ JSDialog */
+declare var JSDialog: any;
 
-let _decimal;
-let _minusSign;
+interface SpinFieldContainer extends HTMLDivElement {
+	_step: number;
+	_min?: number;
+	_max?: number;
+	_unit: string;
+}
+
+type SpinFieldControls = {
+	container: SpinFieldContainer;
+	spinfield: HTMLInputElement;
+};
+
+let _decimal: string;
+let _minusSign: string;
 
 const _ensureInitialized = function () {
 	if (_decimal === undefined) {
@@ -48,14 +60,14 @@ const _numericCharPattern = function () {
 	return new RegExp('[0-9\\' + getDecimal() + '\\' + getMinusSign() + ']');
 };
 
-const _preventNonNumericalInput = function (e) {
-	e = e || window.event;
+const _preventNonNumericalInput = function (e: KeyboardEvent) {
+	e = e || (window.event as KeyboardEvent);
 	var charCode = typeof e.which == 'undefined' ? e.keyCode : e.which;
 	var charStr = String.fromCharCode(charCode);
 	if (!charStr.match(_numericCharPattern()) && charCode !== 13)
 		return e.preventDefault();
 
-	var value = e.target.value;
+	var value = (e.target as any).value;
 	if (!value) return;
 
 	// no dup
@@ -64,7 +76,11 @@ const _preventNonNumericalInput = function (e) {
 	}
 };
 
-const _spinFieldStep = function (div, spinfield, direction) {
+const _spinFieldStep = function (
+	div: SpinFieldContainer,
+	spinfield: HTMLInputElement,
+	direction: number,
+) {
 	const step = div._step || 1;
 	const min = div._min;
 	const max = div._max;
@@ -87,17 +103,20 @@ const _spinFieldStep = function (div, spinfield, direction) {
 	spinfield.dispatchEvent(new Event('change'));
 };
 
-const _extractUnits = function (text) {
+const _extractUnits = function (text: string) {
 	if (!text) return '';
 	return text.replace(/[\d.-]/g, '').trim();
 };
 
-const _cleanValueFromUnits = function (text) {
+const _cleanValueFromUnits = function (text: string) {
 	if (!text) return '';
 	return text.replace(/[^\d.-]/g, '').trim();
 };
 
-const _clampSpinFieldValue = function (container, displayValue) {
+const _clampSpinFieldValue = function (
+	container: SpinFieldContainer,
+	displayValue: string,
+) {
 	let value = JSDialog._parseSpinFieldValue(displayValue);
 	let num = parseFloat(value);
 	if (!isNaN(num)) {
@@ -110,23 +129,24 @@ const _clampSpinFieldValue = function (container, displayValue) {
 	return value;
 };
 
-const _getStepPrecision = function (step) {
+const _getStepPrecision = function (step: number) {
 	const str = '' + Math.abs(step);
 	const dot = str.indexOf('.');
 	return dot >= 0 ? str.length - dot - 1 : 0;
 };
 
 const listenNumericChanges = function (
-	data,
-	builder,
-	controls,
-	customCallback,
+	_data: any,
+	builder: JSBuilder,
+	controls: SpinFieldControls,
+	customCallback: JSDialogCallback,
 ) {
 	controls.spinfield.addEventListener('change', function () {
 		if (controls.container.hasAttribute('disabled')) return;
 		const value = _clampSpinFieldValue(controls.container, this.value);
-		if (customCallback) customCallback();
-		else {
+		if (customCallback) {
+			customCallback('spinfield', 'change', controls.container, value, builder);
+		} else {
 			builder.callback(
 				'spinfield',
 				'change',
@@ -145,18 +165,20 @@ const listenNumericChanges = function (
 	});
 };
 
-JSDialog.baseSpinField = function (parentContainer, data, builder) {
-	const controls = {};
-
-	const div = window.L.DomUtil.create(
+JSDialog.baseSpinField = function (
+	parentContainer: HTMLElement,
+	data: any,
+	builder: JSBuilder,
+	_customCallback: JSDialogCallback,
+): SpinFieldControls {
+	const div: SpinFieldContainer = window.L.DomUtil.create(
 		'div',
 		builder.options.cssClass + ' spinfieldcontainer',
 		parentContainer,
 	);
 	div.id = data.id;
-	controls['container'] = div;
 
-	const spinfield = window.L.DomUtil.create(
+	const spinfield: HTMLInputElement = window.L.DomUtil.create(
 		'input',
 		builder.options.cssClass + ' spinfield',
 		div,
@@ -167,12 +189,14 @@ JSDialog.baseSpinField = function (parentContainer, data, builder) {
 	spinfield.setAttribute('role', 'spinbutton');
 	spinfield.setAttribute('spellcheck', 'false');
 	spinfield.dir = document.documentElement.dir;
-	spinfield.tabIndex = '0';
+	spinfield.tabIndex = 0;
 	spinfield.setAttribute('autocomplete', 'off');
 
 	if (data.label) {
 		const fixedTextData = { text: data.label, labelFor: data.id };
-		builder._fixedtextControl(parentContainer, fixedTextData, builder);
+		/* todo: no need to add _fixedtextControl to the builder interface,
+		 * it will be converted to typescript soon. */
+		(builder as any)._fixedtextControl(parentContainer, fixedTextData, builder);
 	} else {
 		JSDialog.SetupA11yLabelForLabelableElement(
 			parentContainer,
@@ -181,8 +205,6 @@ JSDialog.baseSpinField = function (parentContainer, data, builder) {
 			builder,
 		);
 	}
-
-	controls['spinfield'] = spinfield;
 
 	var unitStr = '';
 	if (data.unit && data.unit !== ':') {
@@ -211,7 +233,7 @@ JSDialog.baseSpinField = function (parentContainer, data, builder) {
 	div._step = data.step != undefined ? data.step : 1;
 
 	const isDisabled = data.enabled === false;
-	spinfield.setAttribute('aria-disabled', isDisabled);
+	spinfield.setAttribute('aria-disabled', isDisabled.toString());
 	if (isDisabled) {
 		div.setAttribute('disabled', 'true');
 		spinfield.setAttribute('disabled', 'true');
@@ -258,21 +280,23 @@ JSDialog.baseSpinField = function (parentContainer, data, builder) {
 	// custom buttons need explicit synchronization.
 	JSDialog.SynchronizeDisabledState(div, [spinfield, up, down]);
 
-	up.addEventListener('mousedown', function (e) {
+	up.addEventListener('mousedown', function (e: MouseEvent) {
 		e.preventDefault();
 	});
-	down.addEventListener('mousedown', function (e) {
+
+	down.addEventListener('mousedown', function (e: MouseEvent) {
 		e.preventDefault();
 	});
 
 	up.addEventListener('click', function () {
 		_spinFieldStep(div, spinfield, 1);
 	});
+
 	down.addEventListener('click', function () {
 		_spinFieldStep(div, spinfield, -1);
 	});
 
-	spinfield.addEventListener('keydown', function (e) {
+	spinfield.addEventListener('keydown', function (e: KeyboardEvent) {
 		const ctrlKey =
 			window.L.Browser.mac || window.ThisIsTheiOSApp ? e.metaKey : e.ctrlKey;
 		if (e.key === 'ArrowUp') {
@@ -302,18 +326,40 @@ JSDialog.baseSpinField = function (parentContainer, data, builder) {
 		}
 	});
 
+	const controls: SpinFieldControls = {
+		container: div,
+		spinfield: spinfield,
+	};
+
 	return controls;
 };
 
 JSDialog.spinfieldControl = function (
-	parentContainer,
-	data,
-	builder,
-	customCallback,
+	parentContainer: HTMLElement,
+	data: any,
+	builder: JSBuilder,
+	customCallback: JSDialogCallback,
 ) {
 	/* since the spinfields are also used by mobile, it's better to
 	 * leave the callback resolution dynamic (like here). */
-	const controls = builder._controlHandlers['basespinfield'](
+
+	/* for now we have this temporary type to prevent typescript error
+	 * in the `builder._controlHandlers['...'](...)` statement below. we
+	 * didn't remove that because `MobileWizardBuilder` calls this function
+	 * and overrides the constructor for 'basespinfield'. when that is converted
+	 * to typescript, we will remove this. */
+	type baseSpinFieldConstructor = (
+		parentContainer: HTMLElement,
+		data: any,
+		builder: JSBuilder,
+		_customCallback: JSDialogCallback,
+	) => SpinFieldControls;
+
+	const baseSpinFieldCallback = builder._controlHandlers[
+		'basespinfield'
+	] as unknown as baseSpinFieldConstructor;
+
+	const controls: SpinFieldControls = baseSpinFieldCallback(
 		parentContainer,
 		data,
 		builder,
@@ -336,7 +382,8 @@ JSDialog.spinfieldControl = function (
 	controls.spinfield.addEventListener('change', function () {
 		if (controls.container.hasAttribute('disabled')) return;
 		const value = _clampSpinFieldValue(controls.container, this.value);
-		if (customCallback) customCallback();
+		if (customCallback)
+			customCallback('spinfield', 'change', controls.container, value, builder);
 		else
 			builder.callback('spinfield', 'set', controls.container, value, builder);
 	});
@@ -346,17 +393,19 @@ JSDialog.spinfieldControl = function (
 };
 
 JSDialog.metricfieldControl = function (
-	parentContainer,
-	data,
-	builder,
-	customCallback,
+	parentContainer: HTMLElement,
+	data: any,
+	builder: JSBuilder,
+	customCallback: JSDialogCallback,
 ) {
-	const controls = builder._controlHandlers['basespinfield'](
+	/* jscpd:ignore-start */
+	const controls = JSDialog.baseSpinField(
 		parentContainer,
 		data,
 		builder,
 		customCallback,
-	);
+	) as SpinFieldControls;
+	/* jscpd:ignore-end */
 
 	if (!window.L.Browser.cypressTest && !window.L.Browser.chrome) {
 		controls.spinfield.onkeypress = window.L.bind(
@@ -378,10 +427,10 @@ JSDialog.metricfieldControl = function (
 };
 
 JSDialog.formattedfieldControl = function (
-	parentContainer,
-	data,
-	builder,
-	customCallback,
+	parentContainer: HTMLElement,
+	data: any,
+	builder: JSBuilder,
+	customCallback: JSDialogCallback,
 ) {
 	if (!data.unit && data.text) {
 		const units = data.text.split(' ');
@@ -394,12 +443,12 @@ JSDialog.formattedfieldControl = function (
 		data.unit = _extractUnits(data.text.toString());
 	}
 
-	const controls = builder._controlHandlers['basespinfield'](
+	const controls = JSDialog.baseSpinField(
 		parentContainer,
 		data,
 		builder,
 		customCallback,
-	);
+	) as SpinFieldControls;
 
 	if (!window.L.Browser.cypressTest && !window.L.Browser.chrome) {
 		controls.spinfield.onkeypress = window.L.bind(
@@ -420,7 +469,7 @@ JSDialog.formattedfieldControl = function (
 	return false;
 };
 
-JSDialog._parseSpinFieldValue = function (displayValue) {
+JSDialog._parseSpinFieldValue = function (displayValue: string) {
 	if (!displayValue) return '';
 	var pattern = _numericCharPattern();
 	var value = '';
@@ -432,7 +481,7 @@ JSDialog._parseSpinFieldValue = function (displayValue) {
 	return value;
 };
 
-JSDialog._formatSpinFieldValue = function (value, unit) {
+JSDialog._formatSpinFieldValue = function (value: number, unit: string) {
 	var str = '' + value;
 	if (getDecimal() !== '.') str = str.replace('.', getDecimal());
 	if (unit) {
@@ -443,14 +492,18 @@ JSDialog._formatSpinFieldValue = function (value, unit) {
 	return str;
 };
 
-JSDialog._setSpinFieldValue = function (spinfield, displayValue, numericValue) {
+JSDialog._setSpinFieldValue = function (
+	spinfield: HTMLInputElement,
+	displayValue: string,
+	numericValue: number,
+) {
 	spinfield.value = displayValue;
 	const num = parseFloat(
 		numericValue != undefined
 			? numericValue
 			: JSDialog._parseSpinFieldValue(displayValue),
 	);
-	if (!isNaN(num)) spinfield.setAttribute('aria-valuenow', num);
+	if (!isNaN(num)) spinfield.setAttribute('aria-valuenow', num.toString());
 	if (displayValue && displayValue !== '' + num)
 		spinfield.setAttribute('aria-valuetext', displayValue);
 	else spinfield.removeAttribute('aria-valuetext');

@@ -88,6 +88,7 @@ window.L.Control.MobileWizardBuilder = window.L.Control.JSDialogBuilder.extend({
 		data.parent = parent;
 	},
 
+	/* todo: merge this with JSDialog.baseSpinField */
 	baseSpinField: function(parentContainer, data, builder, customCallback) {
 		var controls = {};
 		if (data.label) {
