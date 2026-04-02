@@ -259,7 +259,8 @@ void lcl_RemoveTextEditOutlinerViews(SdrObjEditView const* pThis, SdrPageView co
         {
             nView--;
             OutlinerView* pOutlinerView = pOutliner->GetView(nView);
-            if (pOutlinerView->GetWindow()->GetOutDev() != pOutputDevice)
+            vcl::Window* pWin = pOutlinerView->GetWindow();
+            if (!pWin || pWin->isDisposed() || pWin->GetOutDev() != pOutputDevice)
                 continue;
 
             pOutliner->RemoveView(nView);
@@ -1868,15 +1869,26 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             i--;
             OutlinerView* pOLV = pTEOutliner->GetView(i);
             sal_uInt16 nMorePix = pOLV->GetInvalidateMore() + 10;
-            VclPtr<vcl::Window> pWin = pOLV->GetWindow();
-            tools::Rectangle aRect(pOLV->GetOutputArea());
+            // Get the raw window pointer first; if null or disposed we skip
+            // invalidation entirely. Constructing a VclPtr from a raw pointer
+            // calls acquire() which crashes if the Window was already freed
+            // (use-after-free in multi-view LOK sessions).
+            vcl::Window* pRawWin = pOLV->GetWindow();
+            bool bInvalidate = pRawWin && !pRawWin->isDisposed();
+            VclPtr<vcl::Window> pWin;
+            tools::Rectangle aRect;
+            if (bInvalidate)
+            {
+                pWin = pRawWin;
+                aRect = pOLV->GetOutputArea();
+            }
             pTEOutliner->RemoveView(i);
             if (!mbTextEditDontDelete || i != 0)
             {
                 // may not own the zeroth one
                 delete pOLV;
             }
-            if (pWin && !pWin->isDisposed())
+            if (bInvalidate)
             {
                 aRect.Union(m_aTextEditArea);
                 aRect.Union(m_aMinTextEditArea);
@@ -2589,8 +2601,12 @@ void SdrObjEditView::AddDeviceToPaintView(OutputDevice& rNewDev)
     if (mxWeakTextEditObj.get() && !mbTextEditOnlyOneView
         && rNewDev.GetOutDevType() == OUTDEV_WINDOW)
     {
-        OutlinerView* pOutlView = ImpMakeOutlinerView(rNewDev.GetOwnerWindow(), nullptr);
-        mpTextEditOutliner->InsertView(pOutlView);
+        vcl::Window* pNewWin = rNewDev.GetOwnerWindow();
+        if (pNewWin && !pNewWin->isDisposed())
+        {
+            OutlinerView* pOutlView = ImpMakeOutlinerView(pNewWin, nullptr);
+            mpTextEditOutliner->InsertView(pOutlView);
+        }
     }
 }
 

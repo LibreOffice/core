@@ -473,6 +473,12 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     if (meSelectionMode == EESelectionMode::Hidden)
         return;
 
+    // In multi-view LOK sessions, the window may have been disposed while
+    // this EditView still references it. GetOutDev() returns nullptr for
+    // disposed windows, which would crash in GetOutputDevice().
+    if (!pTargetDevice && mpOutputWindow && mpOutputWindow->isDisposed())
+        return;
+
     // It must be ensured before rendering the selection, that the contents of
     // the window is completely valid! Must be here so that in any case if
     // empty, then later on two-Paint Events! Must be done even before the
