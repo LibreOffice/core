@@ -2793,6 +2793,16 @@ std::unique_ptr<ScTokenArray> ScDPDataMember::ReplaceTokenMeasuresWithValues(con
             // remove from recursion stack after processing
             rRecStack.erase(nMemberMeasure);
         }
+        else
+        {
+            // Field name is a valid ocDPFieldName but not found among measures —
+            // it is a group field or a row/column field not in the data area.
+            // Truly invalid names are already #NAME! error tokens from
+            // ParseDPFieldName and never reach here as ocDPFieldName.
+            // Replace with 0 to match Excel (SUM of text/group values = 0).
+            formula::FormulaToken* pValToken = new formula::FormulaDoubleToken(0.0);
+            pNewArray->ReplaceRPNToken(aIterResult.GetIndex() - 1, pValToken);
+        }
     }
     return pNewArray;
 }

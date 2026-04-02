@@ -3036,6 +3036,30 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFieldDiffAggregationXLSX)
     CPPUNIT_ASSERT_EQUAL(u"330"_ustr, pDoc->GetString(ScAddress(2, 4, 2)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFieldNameErrorXLSX)
+{
+    // tdf#78486: When the pivot cache field name differs from the actual source
+    // column name (e.g. cache has "Werte2" but source column is "Werte"), the
+    // calculated field formula must use #NAME? for the unresolvable reference
+    // after import, matching Excel behavior. Otherwise re-saving produces a
+    // corrupt file (formula references a field that doesn't exist in the cache).
+    createScDoc("xlsx/pivot-table/pivot_calcfield_nameerror.xlsx");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pDocXml = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+
+    // The cache should have "Werte" (from actual source data), not "Werte2"
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name", u"Werte");
+
+    // The calculated field formula should contain #NAME? instead of the stale "Werte2"
+    OUString aFormula
+        = getXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "formula");
+    // Original formula was IF(Werte2 >0,Werte2,0) but "Werte2" is not a valid
+    // source column (actual column is "Werte"), so it becomes #NAME?.
+    CPPUNIT_ASSERT_EQUAL(u"IF(#NAME? >0,#NAME?,0)"_ustr, aFormula);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

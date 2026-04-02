@@ -3103,6 +3103,17 @@ struct FindInvalidRange
     }
 };
 
+std::vector<OUString> collectGroupFieldNames( const ScDPDimensionSaveData* pDimData )
+{
+    std::vector<OUString> aNames;
+    if (pDimData)
+    {
+        for (const auto& rGrp : pDimData->GetGroupDimensions())
+            aNames.push_back(rGrp.GetGroupDimName());
+    }
+    return aNames;
+}
+
 void setGroupItemsToCache( ScDPCache& rCache, const o3tl::sorted_vector<ScDPObject*>& rRefs )
 {
     // Go through all referencing pivot tables, and re-fill the group dimension info.
@@ -3117,6 +3128,28 @@ void setGroupItemsToCache( ScDPCache& rCache, const o3tl::sorted_vector<ScDPObje
             continue;
 
         pGroupDims->WriteToCache(rCache);
+    }
+}
+
+void setCalcFieldsToCache( ScDPCache& rCache, const o3tl::sorted_vector<ScDPObject*>& rRefs )
+{
+    // Re-populate calculated field data from referencing pivot tables.
+    // All tables sharing the same cache have the same calculated fields,
+    // and WriteToCache/SetCalculatedField propagates back to all ref
+    // objects, so we only need to write from the first one that has data.
+    for (const ScDPObject* pObj : rRefs)
+    {
+        const ScDPSaveData* pSave = pObj->GetSaveData();
+        if (!pSave)
+            continue;
+
+        const ScDPDimCalcSaveData* pCalcData = pSave->GetExistingDimCalcData();
+        if (!pCalcData)
+            continue;
+
+        pCalcData->WriteToCache(rCache,
+            collectGroupFieldNames(pSave->GetExistingDimensionData()));
+        break;
     }
 }
 
@@ -3154,6 +3187,10 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
             pDimData->WriteToCache(*itCache->second);
         }
 
+        if (pCalculatedDimData)
+            pCalculatedDimData->WriteToCache(*itCache->second,
+                collectGroupFieldNames(pDimData));
+
         return itCache->second.get();
     }
 
@@ -3163,7 +3200,8 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
     if (pDimData)
         pDimData->WriteToCache(*pCache);
     if (pCalculatedDimData)
-        pCalculatedDimData->WriteToCache(*pCache);
+        pCalculatedDimData->WriteToCache(*pCache,
+            collectGroupFieldNames(pDimData));
 
     // Get the smallest available range index.
     it = std::find_if(maRanges.begin(), maRanges.end(), FindInvalidRange());
@@ -3287,8 +3325,9 @@ void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, o3tl::sorte
     o3tl::sorted_vector<ScDPObject*> aRefs(rCache.GetAllReferences());
     rRefs.swap(aRefs);
 
-    // Make sure to re-populate the group dimension info.
+    // Make sure to re-populate the group dimension and calculated field info.
     setGroupItemsToCache(rCache, rRefs);
+    setCalcFieldsToCache(rCache, rRefs);
 }
 
 bool ScDPCollection::SheetCaches::remove(const ScDPCache* p)
@@ -3330,7 +3369,8 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName, con
     if (pDimData)
         pDimData->WriteToCache(*pCache);
     if (pCalculatedDimData)
-        pCalculatedDimData->WriteToCache(*pCache);
+        pCalculatedDimData->WriteToCache(*pCache,
+            collectGroupFieldNames(pDimData));
 
     const ScDPCache *const p = pCache.get();
     m_Caches.insert(std::make_pair(rName, std::move(pCache)));
@@ -3365,8 +3405,9 @@ void ScDPCollection::NameCaches::updateCache(
     o3tl::sorted_vector<ScDPObject*> aRefs(rCache.GetAllReferences());
     rRefs.swap(aRefs);
 
-    // Make sure to re-populate the group dimension info.
+    // Make sure to re-populate the group dimension and calculated field info.
     setGroupItemsToCache(rCache, rRefs);
+    setCalcFieldsToCache(rCache, rRefs);
 }
 
 bool ScDPCollection::NameCaches::remove(const ScDPCache* p)
@@ -3428,7 +3469,8 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
     if (pDimData)
         pDimData->WriteToCache(*pCache);
     if (pCalculatedDimData)
-        pCalculatedDimData->WriteToCache(*pCache);
+        pCalculatedDimData->WriteToCache(*pCache,
+            collectGroupFieldNames(pDimData));
 
     ::comphelper::disposeComponent(xRowSet);
     const ScDPCache* p = pCache.get();
@@ -3537,8 +3579,9 @@ void ScDPCollection::DBCaches::updateCache(
     o3tl::sorted_vector<ScDPObject*> aRefs(rCache.GetAllReferences());
     aRefs.swap(rRefs);
 
-    // Make sure to re-populate the group dimension info.
+    // Make sure to re-populate the group dimension and calculated field info.
     setGroupItemsToCache(rCache, rRefs);
+    setCalcFieldsToCache(rCache, rRefs);
 }
 
 bool ScDPCollection::DBCaches::remove(const ScDPCache* p)

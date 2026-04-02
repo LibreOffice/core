@@ -981,6 +981,7 @@ void ScDPCache::Clear()
     maFields.clear();
     maLabelNames.clear();
     maGroupFields.clear();
+    maCalculatedFields.clear();
     maEmptyRows.clear();
     maStringPools.clear();
 }

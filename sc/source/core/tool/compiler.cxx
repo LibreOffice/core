@@ -3985,7 +3985,10 @@ bool ScCompiler::ParseDPFieldName( const OUString& rName )
         return true;
     }
 
-    return false;
+    // Field name not found among available pivot fields — emit #NAME! error
+    // to match Excel behavior (MSO shows #NAME! for unresolved references).
+    maRawToken.SetErrorConstant(FormulaError::NoName);
+    return true;
 }
 
 bool ScCompiler::ParseColRowName( const OUString& rName )

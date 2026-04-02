@@ -23,7 +23,9 @@
 #include <dpobject.hxx>
 #include <dputil.hxx>
 #include <document.hxx>
+#include <compiler.hxx>
 #include <tokenarray.hxx>
+#include <formula/errorcodes.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
@@ -820,7 +822,8 @@ bool ScDPDimCalcSaveData::operator==(const ScDPDimCalcSaveData&) const
     return false;
 }
 
-void ScDPDimCalcSaveData::WriteToCache(ScDPCache& rCache) const
+void ScDPDimCalcSaveData::WriteToCache(ScDPCache& rCache,
+                                       const std::vector<OUString>& rGroupFieldNames) const
 {
     // Take a local copy: rCache.SetCalculatedField() propagates back to all
     // ref objects (including potentially *this), which could modify
@@ -834,10 +837,40 @@ void ScDPDimCalcSaveData::WriteToCache(ScDPCache& rCache) const
     // This handles the case where the source range was expanded or shrunk
     // (e.g. 3 columns → 4 columns) and the stored mnIndex is now stale.
     sal_Int32 nSourceColCount = rCache.GetFieldCount();
+
+    // Recompile formulas against the real source column names so that
+    // references to renamed/removed columns become #NAME! (matching Excel).
+    // Build available field names: source columns + group dims + calc fields.
+    ScDocument& rDoc = rCache.GetDoc();
+    ScCompiler aComp(rDoc, ScAddress(ScAddress::INITIALIZE_INVALID),
+                     rDoc.GetGrammar(), true, false);
+    for (sal_Int32 i = 0; i < nSourceColCount; ++i)
+        aComp.SetAvailablePivotFields(rCache.GetDimensionName(i));
+    for (const OUString& rName : rGroupFieldNames)
+        aComp.SetAvailablePivotFields(rName);
+    for (const auto& rEntry : aFields)
+        aComp.SetAvailablePivotFields(rEntry->maFieldName);
+
     sal_Int32 nOffset = 0;
     for (const std::shared_ptr<ScDPCache::CalculatedField>& rEntry : aFields)
     {
-        rCache.SetCalculatedField(rEntry->maFieldName, rEntry->mpArrayRef,
+        std::shared_ptr<ScTokenArray> pArray = rEntry->mpArrayRef;
+
+        // Recompile from the formula string using the real source field names.
+        // ParseDPFieldName emits #NAME! for any field not in the list.
+        if (!rEntry->maCalculation.isEmpty())
+        {
+            std::unique_ptr<ScTokenArray> pRecompiled(
+                aComp.CompileString(rEntry->maCalculation));
+            if (pRecompiled && pRecompiled->GetCodeError() == FormulaError::NONE
+                && pRecompiled->GetLen())
+            {
+                aComp.CompileTokenArray(); // Generate RPN tokens
+                pArray.reset(pRecompiled.release());
+            }
+        }
+
+        rCache.SetCalculatedField(rEntry->maFieldName, pArray,
                                   nSourceColCount + nOffset);
         ++nOffset;
     }

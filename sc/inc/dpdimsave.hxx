@@ -208,6 +208,8 @@ public:
 
     sal_Int32 CollectDateParts( const OUString& rBaseDimName ) const;
 
+    const ::std::vector< ScDPSaveGroupDimension >& GetGroupDimensions() const { return maGroupDims; }
+
 private:
     typedef ::std::vector< ScDPSaveGroupDimension >         ScDPSaveGroupDimVec;
     typedef ::std::map<OUString, ScDPSaveNumGroupDimension> ScDPSaveNumGroupDimMap;
@@ -231,7 +233,8 @@ public:
 
     bool operator==(const ScDPDimCalcSaveData& r) const;
 
-    void WriteToCache(ScDPCache& rCache) const;
+    void WriteToCache(ScDPCache& rCache,
+                      const std::vector<OUString>& rGroupFieldNames = {}) const;
 
     SC_DLLPUBLIC void SetCalculatedField(const std::shared_ptr<ScDPCache::CalculatedField>& pField);
     void RemoveCalculatedField(const OUString& rFieldName);
