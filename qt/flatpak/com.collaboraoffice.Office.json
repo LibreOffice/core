@@ -20,8 +20,6 @@
     "--socket=wayland",
     "--socket=pulseaudio",
     "--socket=cups",
-    "--filesystem=xdg-config/gtk-3.0",
-    "--filesystem=xdg-config/fontconfig:ro",
     "--filesystem=xdg-run/gvfsd",
     "--filesystem=xdg-documents",
     "--env=LIBO_FLATPAK=1",
@@ -36,9 +34,6 @@
   ],
   "build-options": {
     "append-path": "/usr/lib/sdk/node20/bin:/usr/lib/libexec",
-    "env": {
-      "NINJA_STATUS": "[%p | %f/%t] "
-    },
     "no-debuginfo-compression": true
   },
   "modules": [
