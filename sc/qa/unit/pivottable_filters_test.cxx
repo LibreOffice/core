@@ -3000,6 +3000,42 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFieldSingleDataDimXLSX)
     CPPUNIT_ASSERT_EQUAL(u"168168"_ustr, pDoc->GetString(ScAddress(1, 6, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFieldDiffAggregationXLSX)
+{
+    // Calculated fields always operate on SUM of referenced fields (matching
+    // Excel behavior), even when the same field is visible with a different
+    // aggregation function like COUNT.
+    // Sheet2: SUM of Spend + calc field Field1 = Spend * 2
+    // Sheet3: COUNT of Spend + calc field Field1 = Spend * 2
+    // Both must produce the same Field1 values (SUM-based).
+    createScDoc("xlsx/pivot-table/test_diff_aggregation.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll();
+
+    CPPUNIT_ASSERT(pDoc->HasPivotTable());
+
+    // Sheet2 (SUM pivot): B3:C5 on sheet 1
+    // SUM of Spend: 2010=78, 2011=87, total=165
+    CPPUNIT_ASSERT_EQUAL(u"78"_ustr, pDoc->GetString(ScAddress(1, 2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"87"_ustr, pDoc->GetString(ScAddress(1, 3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"165"_ustr, pDoc->GetString(ScAddress(1, 4, 1)));
+    // Field1 = Spend * 2: 2010=156, 2011=174, total=330
+    CPPUNIT_ASSERT_EQUAL(u"156"_ustr, pDoc->GetString(ScAddress(2, 2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"174"_ustr, pDoc->GetString(ScAddress(2, 3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"330"_ustr, pDoc->GetString(ScAddress(2, 4, 1)));
+
+    // Sheet3 (COUNT pivot): B3:C5 on sheet 2
+    // COUNT of Spend: 2010=3, 2011=3, total=6
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(1, 2, 2)));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(1, 3, 2)));
+    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(ScAddress(1, 4, 2)));
+    // Field1 must still use SUM(Spend) * 2, not COUNT(Spend) * 2
+    CPPUNIT_ASSERT_EQUAL(u"156"_ustr, pDoc->GetString(ScAddress(2, 2, 2)));
+    CPPUNIT_ASSERT_EQUAL(u"174"_ustr, pDoc->GetString(ScAddress(2, 3, 2)));
+    CPPUNIT_ASSERT_EQUAL(u"330"_ustr, pDoc->GetString(ScAddress(2, 4, 2)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

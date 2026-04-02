@@ -2712,13 +2712,16 @@ void ScDPDataMember::UpdateRunningTotals(
 tools::Long ScDPDataMember::FindMeasureIndex(const std::vector<OUString>& rNames,
                                              const OUString& rName)
 {
-    auto it = std::find_if(rNames.begin(), rNames.end(), [&rName](const OUString& rItem)
+    // Search from the end so that hidden SUM dependency measures (appended
+    // after visible measures) are found before visible non-SUM measures of
+    // the same field. This ensures calculated fields always use SUM values.
+    auto it = std::find_if(rNames.rbegin(), rNames.rend(), [&rName](const OUString& rItem)
                            { return rItem.equalsIgnoreAsciiCase(rName); });
 
-    if (it == rNames.end())
+    if (it == rNames.rend())
         return -1;
 
-    return static_cast<tools::Long>(std::distance(rNames.begin(), it));
+    return static_cast<tools::Long>(std::distance(rNames.begin(), it.base()) - 1);
 }
 
 std::unique_ptr<ScTokenArray> ScDPDataMember::ReplaceTokenMeasuresWithValues(const ScTokenArray* pArray,

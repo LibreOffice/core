@@ -734,8 +734,24 @@ void ScDPSource::AddDataDimsToResultData(sheet::DataPilotFieldOrientation nDataO
     ScDPDimensions* pDimsObj = GetDimensionsObject();
     if (!bExtended)
     {
-        // Track everything already known (original + new)
-        std::unordered_set<sal_Int32> aVisited(maDataDims.begin(), maDataDims.end());
+        // Build a set of visible data dims that use a non-SUM function.
+        // Calculated fields always operate on SUM of referenced fields (matching
+        // Excel behavior), so when a referenced field is visible with e.g. COUNT,
+        // we need a separate hidden SUM measure for formula evaluation.
+        std::unordered_set<sal_Int32> aVisibleNonSum;
+        for (const auto nDim : maDataDims)
+        {
+            ScDPDimension* pDim = pDimsObj->getByIndex(nDim);
+            if (!pDim)
+                continue;
+            ScGeneralFunction eFunc = pDim->getFunction();
+            if (eFunc != ScGeneralFunction::AUTO && eFunc != ScGeneralFunction::SUM)
+                aVisibleNonSum.insert(nDim);
+        }
+
+        // Track hidden dependencies already added to avoid duplicates.
+        std::unordered_set<sal_Int32> aHiddenDeps;
+        std::unordered_set<sal_Int32> aOriginalDims(maDataDims.begin(), maDataDims.end());
         std::vector<sal_Int32> aStack;
         aStack.reserve(maDataDims.size());
 
@@ -766,10 +782,30 @@ void ScDPSource::AddDataDimsToResultData(sheet::DataPilotFieldOrientation nDataO
                 OUString aName = t->GetString().getString();
 
                 SCCOL nDepIndex = rCache.GetDimensionIndex(aName);
+                if (nDepIndex < 0)
+                    continue;
 
-                if (nDepIndex >= 0 && aVisited.insert(nDepIndex).second) // only new ones
+                // Already added as hidden dependency — skip
+                if (aHiddenDeps.count(nDepIndex))
+                    continue;
+
+                if (aOriginalDims.count(nDepIndex))
                 {
+                    // Field is already visible in the data area. If it uses
+                    // a non-SUM function (e.g. COUNT), add a hidden SUM copy
+                    // because calculated fields always operate on SUM values.
+                    if (aVisibleNonSum.count(nDepIndex))
+                    {
+                        vNewDims.push_back(nDepIndex);
+                        aHiddenDeps.insert(nDepIndex);
+                    }
+                    // If visible with SUM — use it directly, no copy needed.
+                }
+                else
+                {
+                    // Field not in the data area — add as hidden dependency.
                     vNewDims.push_back(nDepIndex);
+                    aHiddenDeps.insert(nDepIndex);
                     aStack.push_back(nDepIndex);
                 }
             }
@@ -803,17 +839,21 @@ void ScDPSource::AddDataDimsToResultData(sheet::DataPilotFieldOrientation nDataO
     aDataFunctions.reserve(vNewDims.size());
     aDataRefOrient.reserve(vNewDims.size());
 
-    for (const tools::Long nDimIndex : vNewDims)
+    for (size_t i = 0; i < vNewDims.size(); ++i)
     {
+        const tools::Long nDimIndex = vNewDims[i];
+        bool bIsHiddenDep = (i >= maDataDims.size());
+
         // Get function for each data field.
         ScDPDimension* pDim = pDimsObj->getByIndex(nDimIndex);
         if (!pDim)
             continue;
 
         ScGeneralFunction eUser = pDim->getFunction();
-        if (eUser == ScGeneralFunction::AUTO)
+        if (eUser == ScGeneralFunction::AUTO || bIsHiddenDep)
         {
-            //TODO: test for numeric data
+            // Hidden dependency measures always use SUM, matching Excel's
+            // behavior where calculated fields operate on sum of underlying data.
             eUser = ScGeneralFunction::SUM;
         }
 
