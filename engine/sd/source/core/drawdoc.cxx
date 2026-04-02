@@ -42,7 +42,12 @@
 #include <officecfg/Office/Draw.hxx>
 
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/kit/helper.hxx>
+#include <svl/intitem.hxx>
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#include <unotools/securityoptions.hxx>
 #include <Outliner.hxx>
 #include <sdmod.hxx>
 #include <editeng/editstat.hxx>
@@ -1019,10 +1024,56 @@ void SdDrawDocument::UpdateAllLinks()
     if (!pDocShell)
         return;
 
-    if (pDocShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+    comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer
+        = pDocShell->getEmbeddedObjectContainer();
+
+    if (rEmbeddedObjectContainer.getUserAllowsLinkUpdate())
     {
         s_pDocLockedInsertingLinks = this;
         m_pLinkManager->UpdateAllLinks(false, false, nullptr, u""_ustr);
+        if (s_pDocLockedInsertingLinks == this)
+            s_pDocLockedInsertingLinks = nullptr;
+        return;
+    }
+
+    SfxMedium* pMedium = pDocShell->GetMedium();
+    const SfxUInt16Item* pUpdateDocItem = pMedium
+        ? pMedium->GetItemSet().GetItem(SID_UPDATEDOCMODE, false)
+        : nullptr;
+    sal_uInt16 nUpdateDocMode = pUpdateDocItem
+        ? pUpdateDocItem->GetValue()
+        : css::document::UpdateDocMode::NO_UPDATE;
+
+    if (nUpdateDocMode == css::document::UpdateDocMode::NO_UPDATE)
+        return;
+
+    bool bAskUpdate = true;
+    switch (nUpdateDocMode)
+    {
+        case css::document::UpdateDocMode::QUIET_UPDATE:
+            bAskUpdate = false;
+            break;
+        case css::document::UpdateDocMode::FULL_UPDATE:
+            bAskUpdate = false;
+            break;
+        case css::document::UpdateDocMode::ACCORDING_TO_CONFIG:
+            bAskUpdate = !pMedium
+                || !SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(
+                       pMedium->GetName());
+            break;
+    }
+
+    if (bAskUpdate)
+    {
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+        pDocShell->SetPendingLinkUpdateInfobar();
+    }
+    else
+    {
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+        s_pDocLockedInsertingLinks = this;
+        m_pLinkManager->UpdateAllLinks(false, false, nullptr,
+            pMedium ? pMedium->GetName() : OUString());
         if (s_pDocLockedInsertingLinks == this)
             s_pDocLockedInsertingLinks = nullptr;
     }

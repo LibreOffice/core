@@ -92,6 +92,8 @@ public:
     virtual bool            Load( SfxMedium &rMedium  ) override;
     virtual bool            LoadFrom( SfxMedium& rMedium ) override;
     virtual void            UpdateLinks() override;
+    void                    ShowLinkUpdateInfobar();
+    void                    SetPendingLinkUpdateInfobar() { m_bPendingLinkUpdateInfobar = true; }
     virtual bool            SaveAs( SfxMedium &rMedium  ) override;
 
     virtual ::tools::Rectangle       GetVisArea(sal_uInt16 nAspect) const override;
@@ -200,6 +202,7 @@ public:
     virtual OutputDevice* GetDocumentRefDev() override;
 
     DECL_DLLPRIVATE_LINK( RenameSlideHdl, AbstractSvxNameDialog&, bool );
+    DECL_DLLPRIVATE_LINK(AllowLinksUpdateHdl, weld::Button&, void);
 
     // ExecuteSpellPopup now handled by DrawDocShell
     DECL_DLLPRIVATE_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );
@@ -226,6 +229,7 @@ private:
     bool                    mbInDestruction;
     bool                    mbOwnPrinter;
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
+    bool                    m_bPendingLinkUpdateInfobar = false;
 };
 
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED

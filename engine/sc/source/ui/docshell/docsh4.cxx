@@ -520,21 +520,21 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     {
                         pViewFrame->RemoveInfoBar(u"enablecontent");
                         auto pInfoBar = pViewFrame->AppendInfoBar(u"enablecontent"_ustr, SfxResId(RID_SECURITY_WARNING_TITLE),
-                                                                  ScResId(STR_RELOAD_TABLES), InfobarType::WARNING);
+                                                                  SfxResId(STR_INFOBAR_LINKS_DISABLED), InfobarType::WARNING);
                         if (pInfoBar)
                         {
                             weld::Button& rHelpBtn = pInfoBar->addButton();
                             rHelpBtn.set_label(GetStandardText(StandardButtonType::Help).replaceFirst("~", ""));
                             rHelpBtn.connect_clicked(LINK(nullptr, LinkHelp, DispatchHelpLinksHdl));
                             weld::Button& rBtn = pInfoBar->addButton();
-                            rBtn.set_label(ScResId(STR_ENABLE_CONTENT));
-                            rBtn.set_tooltip_text(ScResId(STR_ENABLE_CONTENT_TOOLTIP));
+                            rBtn.set_label(SfxResId(STR_INFOBAR_ALLOW_UPDATING));
+                            rBtn.set_tooltip_text(SfxResId(STR_INFOBAR_ALLOW_UPDATING_TOOLTIP));
                             rBtn.connect_clicked(LINK(this, ScDocShell, ReloadAllLinksHdl));
 
                             // when active content is disabled the "Allow updating" button has no functionality.
                             if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
                             {
-                                rBtn.set_tooltip_text(ScResId(STR_ENABLE_CONTENT_TOOLTIP_DISABLED));
+                                rBtn.set_tooltip_text(SfxResId(STR_INFOBAR_ALLOW_UPDATING_TOOLTIP_DISABLED));
                                 rBtn.set_sensitive(false);
                             }
                         }

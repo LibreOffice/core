@@ -82,6 +82,9 @@
 #include <cmdid.h>
 #include <strings.hrc>
 
+#include <sfx2/infobar.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 
@@ -1312,6 +1315,50 @@ void SwDocShell::UpdateLinks()
     SwTextFootnote::SetUniqueSeqRefNo( *GetDoc() );
     SwNodeIndex aTmp( GetDoc()->GetNodes() );
     GetDoc()->GetFootnoteIdxs().UpdateFootnote( aTmp.GetNode() );
+}
+
+void SwDocShell::ShowLinkUpdateInfobar()
+{
+    if (!m_bPendingLinkUpdateInfobar)
+        return;
+    m_bPendingLinkUpdateInfobar = false;
+
+    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(this);
+    if (!pViewFrame)
+        return;
+
+    pViewFrame->RemoveInfoBar(u"enablecontent");
+    auto pInfoBar = pViewFrame->AppendInfoBar(
+        u"enablecontent"_ustr, SfxResId(RID_SECURITY_WARNING_TITLE),
+        SfxResId(STR_INFOBAR_LINKS_DISABLED), InfobarType::WARNING);
+    if (!pInfoBar)
+        return;
+
+    weld::Button& rBtn = pInfoBar->addButton();
+    rBtn.set_label(SfxResId(STR_INFOBAR_ALLOW_UPDATING));
+    rBtn.set_tooltip_text(SfxResId(STR_INFOBAR_ALLOW_UPDATING_TOOLTIP));
+    rBtn.connect_clicked(LINK(this, SwDocShell, AllowLinksUpdateHdl));
+
+    if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+    {
+        rBtn.set_tooltip_text(SfxResId(STR_INFOBAR_ALLOW_UPDATING_TOOLTIP_DISABLED));
+        rBtn.set_sensitive(false);
+    }
+}
+
+IMPL_LINK_NOARG(SwDocShell, AllowLinksUpdateHdl, weld::Button&, void)
+{
+    getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+
+    sfx2::LinkManager& rLinkMgr
+        = GetDoc()->getIDocumentLinksAdministration().GetLinkManager();
+    SfxMedium* pMed = GetMedium();
+    rLinkMgr.UpdateAllLinks(false, false, nullptr,
+                            pMed ? pMed->GetName() : OUString());
+
+    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(this);
+    if (pViewFrame)
+        pViewFrame->RemoveInfoBar(u"enablecontent");
 }
 
 uno::Reference< frame::XController >
