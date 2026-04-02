@@ -1442,6 +1442,44 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         rRepaint.Width( rRepaint.Width() - nChg );
     }
 
+    // If a floating table's fly is anchored to this frame and the table overflows the fly frame,
+    // ensure the anchor is tall enough to include the fly's content height. This can make the
+    // anchor overflow the page, and potentially move to the next page.
+    if (GetDrawObjs())
+    {
+        SwRectFnSet aRectFnSet(*this);
+        const SwTwips nFrameBottom = aRectFnSet.GetBottom(getFrameArea()) + nChg;
+        SwTwips nContentBottom = nFrameBottom;
+        for (auto* pObj : *GetDrawObjs())
+        {
+            auto pFly = pObj ? pObj->DynCastFlyFrame() : nullptr;
+            auto pContentFly = pFly ? pFly->DynCastFlyAtContentFrame() : nullptr;
+            if (!pContentFly)
+                continue;
+            if (pContentFly->IsInMakeAll())
+            {
+                // We are called from inside one of our own flys' MakeAll - do not grow at all
+                nContentBottom = nFrameBottom;
+                break;
+            }
+            if (!pContentFly->Lower() || !pContentFly->isFrameAreaPositionValid()
+                || !pContentFly->IsFlySplitAllowed())
+                continue;
+
+            SwTwips nFlyHeight = aRectFnSet.GetHeight(pFly->getFrameArea());
+            SwTwips nContentHeight = aRectFnSet.GetHeight(pFly->Lower()->getFrameArea());
+            // Only grow when the content overflows the fly frame (i.e. the fly needs splitting)
+            if (nContentHeight > nFlyHeight)
+            {
+                SwTwips nContentBottom1 = aRectFnSet.GetTop(pFly->getFrameArea()) + nContentHeight;
+                if (nContentBottom1 > nContentBottom)
+                    nContentBottom = nContentBottom1;
+            }
+        }
+        if (nContentBottom > nFrameBottom)
+            nChg += nContentBottom - nFrameBottom;
+    }
+
     AdjustFrame( nChg, bHasToFit );
 
     if( HasFollow() || IsInFootnote() )

@@ -18,6 +18,7 @@
 #include <formatflysplit.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
+#include <sectfrm.hxx>
 #include <sortedobjs.hxx>
 #include <tabfrm.hxx>
 #include <txtfrm.hxx>
@@ -752,23 +753,59 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyThenTable)
     save(TestFilter::PDF_WRITER);
 }
 
-/* FIXME: hangs indefinitely; prior to disabling, it passed the test, but hung interactively; and
-   even before that, it produced a wrong layout anyway.
-   The problem is somehow related to section. The looping sequence is:
-   1. The table tries to split on page 1, with space less than minimal row height.
-   2. It splits successfully between rows 1 and 2. The follow moves to page 2.
-   3. The original table still doesn't fit page 1, and moves to page 2 (for some reason, into the
-      same follow fly that holds its follow).
-   4. It detects that its next is its follow, and joins it.
-   5. It moves pack to page 1. But all the generated follow flys get collected on page 3 (!).
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInTextSection)
 {
     // The document contains a DOCX cont sect break, which is mapped to a TextSection.
     // This crashed, the anchor was split directly, so the follow anchor was moved outside the
     // section frame, which is broken.
     createSwDoc("floattable-in-text-section.docx");
+
+    // Then make sure the table is split across pages 2 and 3:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    // Page 1: paragraph "Start", then the section starts (no fly here).
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(!pPage1->GetSortedObjs());
+    SwFrame* pBody1 = pPage1->GetLower();
+    auto pStart = dynamic_cast<SwTextFrame*>(pBody1->GetLower());
+    CPPUNIT_ASSERT(pStart);
+    auto pSect1 = dynamic_cast<SwSectionFrame*>(pStart->GetNext());
+    CPPUNIT_ASSERT(pSect1);
+    // Page 2: section follow with anchor in section, fly with row 1.
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage2->GetSortedObjs()->size());
+    auto pPage2Fly = dynamic_cast<SwFlyAtContentFrame*>((*pPage2->GetSortedObjs())[0]);
+    CPPUNIT_ASSERT(pPage2Fly);
+    auto pTab1 = dynamic_cast<SwTabFrame*>(pPage2Fly->GetLower());
+    CPPUNIT_ASSERT(pTab1);
+    // The table has exactly one row on this page.
+    SwFrame* pRow1 = pTab1->GetLower();
+    CPPUNIT_ASSERT(pRow1);
+    CPPUNIT_ASSERT(!pRow1->GetNext());
+    // The body on page 2 has a follow section (the anchor is in the section).
+    SwFrame* pBody2 = pPage2->GetLower();
+    auto pSect2 = dynamic_cast<SwSectionFrame*>(pBody2->GetLower());
+    CPPUNIT_ASSERT(pSect2);
+    CPPUNIT_ASSERT(pSect2->IsFollow());
+    // Page 3: section follow, fly follow with row 2.
+    auto pPage3 = dynamic_cast<SwPageFrame*>(pPage2->GetNext());
+    CPPUNIT_ASSERT(pPage3);
+    CPPUNIT_ASSERT(pPage3->GetSortedObjs());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage3->GetSortedObjs()->size());
+    auto pPage3Fly = dynamic_cast<SwFlyAtContentFrame*>((*pPage3->GetSortedObjs())[0]);
+    CPPUNIT_ASSERT(pPage3Fly);
+    // The fly on page 3 is the follow of the fly on page 2.
+    CPPUNIT_ASSERT_EQUAL(pPage2Fly->GetFollow(), pPage3Fly);
+    auto pTab2 = dynamic_cast<SwTabFrame*>(pPage3Fly->GetLower());
+    CPPUNIT_ASSERT(pTab2);
+    // The table has exactly one row on this page.
+    SwFrame* pRow2 = pTab2->GetLower();
+    CPPUNIT_ASSERT(pRow2);
+    CPPUNIT_ASSERT(!pRow2->GetNext());
 }
-*/
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTableRowKeep)
 {
