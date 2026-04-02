@@ -34,6 +34,7 @@ JSDialog.fixedtextControl = function (
 		parentContainer,
 	) as HTMLLabelElement;
 	fixedtext.htmlFor = data.labelFor + '-input';
+	fixedtext.id = data.id;
 
 	if (data.text) fixedtext.textContent = builder._cleanText(data.text);
 	else if (data.html) fixedtext.innerHTML = data.html;
@@ -97,7 +98,6 @@ JSDialog.fixedtextControl = function (
 		});
 	});
 
-	fixedtext.id = data.id;
 	if (data.style && data.style.length) {
 		window.L.DomUtil.addClass(fixedtext, data.style);
 	} else {
