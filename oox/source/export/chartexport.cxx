@@ -867,17 +867,39 @@ OUString ChartExport::parseFormula( const OUString& rRange )
 }
 
 // Output the chartex AlternateContent fallback path
-static void writeChartexAlternateContent(FSHelperPtr pFS)
+static void writeChartexAlternateContent(FSHelperPtr pFS, const DocumentType eDocType)
 {
+    sal_Int32 nNS = -1;
+    switch (eDocType)
+    {
+        case DOCUMENT_DOCX:
+            nNS = XML_wps;
+            break;
+        case DOCUMENT_PPTX:
+            nNS = XML_p;
+            break;
+        case DOCUMENT_XLSX:
+        default:
+            nNS = XML_xdr;
+            break;
+    }
+
+    // TODO: Handle DOCX properly, probably uses wps:wsp and doesn't require some of elements written here
     pFS->startElementNS(XML_mc, XML_Fallback);
-    pFS->startElementNS(XML_xdr, XML_sp, XML_macro, "", XML_textlink, "");
-    pFS->startElementNS(XML_xdr, XML_nvSpPr);
-    pFS->singleElementNS(XML_xdr, XML_cNvPr, XML_id, "0", XML_name, "");
-    pFS->startElementNS(XML_xdr, XML_cNvSpPr);
+    pFS->startElementNS(nNS, XML_sp,
+        XML_macro, sax_fastparser::UseIf("", nNS == XML_xdr),
+        XML_textlink, sax_fastparser::UseIf("", nNS == XML_xdr));
+    pFS->startElementNS(nNS, XML_nvSpPr);
+    pFS->singleElementNS(nNS, XML_cNvPr, XML_id, "0", XML_name, "");
+    pFS->startElementNS(nNS, XML_cNvSpPr);
     pFS->singleElementNS(XML_a, XML_spLocks, XML_noTextEdit, "1");
-    pFS->endElementNS(XML_xdr, XML_cNvSpPr);
-    pFS->endElementNS(XML_xdr, XML_nvSpPr);
-    pFS->startElementNS(XML_xdr, XML_spPr);
+    pFS->endElementNS(nNS, XML_cNvSpPr);
+
+    if (nNS == XML_p)
+        pFS->singleElementNS(nNS, XML_nvPr);
+
+    pFS->endElementNS(nNS, XML_nvSpPr);
+    pFS->startElementNS(nNS, XML_spPr);
     pFS->startElementNS(XML_a, XML_xfrm);
     pFS->singleElementNS(XML_a, XML_off, XML_x, "6600825", XML_y, "2533650");
     pFS->singleElementNS(XML_a, XML_ext, XML_cx, "4572000", XML_cy, "2743200");
@@ -893,8 +915,8 @@ static void writeChartexAlternateContent(FSHelperPtr pFS)
     pFS->singleElementNS(XML_a, XML_prstClr, XML_val, "green");
     pFS->endElementNS(XML_a, XML_solidFill);
     pFS->endElementNS(XML_a, XML_ln);
-    pFS->endElementNS(XML_xdr, XML_spPr);
-    pFS->startElementNS(XML_xdr, XML_txBody);
+    pFS->endElementNS(nNS, XML_spPr);
+    pFS->startElementNS(nNS, XML_txBody);
     pFS->singleElementNS(XML_a, XML_bodyPr, XML_vertOverflow, "clip", XML_horzOverflow, "clip");
     pFS->singleElementNS(XML_a, XML_lstStyle);
     pFS->startElementNS(XML_a, XML_p);
@@ -909,8 +931,8 @@ static void writeChartexAlternateContent(FSHelperPtr pFS)
     pFS->endElementNS(XML_a, XML_t);
     pFS->endElementNS(XML_a, XML_r);
     pFS->endElementNS(XML_a, XML_p);
-    pFS->endElementNS(XML_xdr, XML_txBody);
-    pFS->endElementNS(XML_xdr, XML_sp);
+    pFS->endElementNS(nNS, XML_txBody);
+    pFS->endElementNS(nNS, XML_sp);
 }
 
 namespace {
@@ -1236,7 +1258,8 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     if (bIsChartex) {
         pFS->endElementNS(XML_mc, XML_Choice);
 
-        writeChartexAlternateContent(pFS);
+        DocumentType eDocType = GetDocumentType();
+        writeChartexAlternateContent(pFS, eDocType);
 
         pFS->endElementNS(XML_mc, XML_Fallback);
         pFS->endElementNS(XML_mc, XML_AlternateContent);
@@ -1469,22 +1492,25 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
                 FSNS( XML_xmlns, XML_r ), pFB->getNamespaceURL(OOX_NS(officeRel)));
     }
 
-    if( !bIncludeTable )
+    if (!bIsChartex)
     {
-        // TODO:external data
-    }
-    else
-    {
-        Reference< XPropertySet > xPropSet(xChartDoc, UNO_QUERY);
-        Any aNullDate = xPropSet->getPropertyValue("NullDate");
-        util::DateTime aDate;
-        if ((aNullDate >>= aDate) && (aDate.Year == 1904 && aDate.Month == 1 && aDate.Day == 1))
+        if( !bIncludeTable )
         {
-            pFS->singleElement(FSNS(XML_c, XML_date1904), XML_val, "1");
+            // TODO:external data
         }
         else
         {
-            pFS->singleElement(FSNS(XML_c, XML_date1904), XML_val, "0");
+            Reference< XPropertySet > xPropSet(xChartDoc, UNO_QUERY);
+            Any aNullDate = xPropSet->getPropertyValue("NullDate");
+            util::DateTime aDate;
+            if ((aNullDate >>= aDate) && (aDate.Year == 1904 && aDate.Month == 1 && aDate.Day == 1))
+            {
+                pFS->singleElement(FSNS(XML_c, XML_date1904), XML_val, "1");
+            }
+            else
+            {
+                pFS->singleElement(FSNS(XML_c, XML_date1904), XML_val, "0");
+            }
         }
     }
 

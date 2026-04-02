@@ -1956,6 +1956,25 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testConnectorShapeAnimationTarget)
                 "spid", sShapeId);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testChartExExport)
+{
+    createSdImpressDoc("pptx/forum-mso-de-138303.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+
+    const OString sPath1 = "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Fallback"_ostr;
+    assertXPath(pDoc, sPath1 + "/xdr:sp"_ostr, 0);
+    assertXPath(pDoc, sPath1 + "/p:sp"_ostr, 1);
+    assertXPath(pDoc, sPath1 + "/p:sp/p:nvSpPr/p:nvPr"_ostr, 1);
+
+    pDoc = parseExport(u"ppt/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/cx:chartSpace/c:date1904", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
