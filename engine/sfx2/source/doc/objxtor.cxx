@@ -258,6 +258,7 @@ SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
     , bIsInGenerateThumbnail (false)
     , mbAvoidRecentDocs(false)
     , bRememberSignature(false)
+    , bPendingLinkUpdateInfobar(false)
 {
     if (i_nCreationFlags & SfxModelFlags::EMBEDDED_OBJECT)
         eCreateMode = SfxObjectCreateMode::EMBEDDED;
@@ -288,6 +289,7 @@ SfxObjectShell::SfxObjectShell(SfxObjectCreateMode eMode)
     , bIsInGenerateThumbnail(false)
     , mbAvoidRecentDocs(false)
     , bRememberSignature(false)
+    , bPendingLinkUpdateInfobar(false)
 {
 }
 

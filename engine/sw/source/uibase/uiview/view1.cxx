@@ -48,7 +48,7 @@ void SwView::Activate(bool bMDIActivate)
     if(pDocSh)
     {
         pDocSh->SetView(this);
-        pDocSh->ShowLinkUpdateInfobar();
+        pDocSh->CheckPendingLinkUpdateInfobar();
     }
     SwModule::get()->SetView(this);
 
