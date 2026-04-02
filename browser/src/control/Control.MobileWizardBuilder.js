@@ -93,7 +93,7 @@ window.L.Control.MobileWizardBuilder = window.L.Control.JSDialogBuilder.extend({
 		var controls = {};
 		if (data.label) {
 			var fixedTextData = { text: data.label };
-			builder._fixedtextControl(parentContainer, fixedTextData, builder);
+			JSDialog.fixedtextControl(parentContainer, fixedTextData, builder);
 		}
 
 		var div = window.L.DomUtil.create('div', 'spinfieldcontainer', parentContainer);
