@@ -1712,11 +1712,6 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry/static.xcd \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry/xsltfilter.xcd \
     $(INSTROOT)/$(LIBO_SHARE_PRESETS_FOLDER)/autotext/mytexts.bau \
-    $(INSTROOT)/$(LIBO_SHARE_PRESETS_FOLDER)/basic/dialog.xlc \
-    $(INSTROOT)/$(LIBO_SHARE_PRESETS_FOLDER)/basic/script.xlc \
-    $(INSTROOT)/$(LIBO_SHARE_PRESETS_FOLDER)/basic/Standard/dialog.xlb \
-    $(INSTROOT)/$(LIBO_SHARE_PRESETS_FOLDER)/basic/Standard/Module1.xba \
-    $(INSTROOT)/$(LIBO_SHARE_PRESETS_FOLDER)/basic/Standard/script.xlb \
     $(INSTROOT)/$(LIBO_SHARE_PRESETS_FOLDER)/config/autotbl.fmt \
     $(INSTROOT)/$(LIBO_SHARE_PRESETS_FOLDER)/gallery/sg30.sdv \
     $(INSTROOT)/$(LIBO_SHARE_PRESETS_FOLDER)/gallery/sg30.thm \
