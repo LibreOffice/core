@@ -46,7 +46,10 @@ void SwView::Activate(bool bMDIActivate)
     // be destroyed or by Activate a new one will be set.
     SwDocShell* pDocSh = GetDocShell();
     if(pDocSh)
+    {
         pDocSh->SetView(this);
+        pDocSh->ShowLinkUpdateInfobar();
+    }
     SwModule::get()->SetView(this);
 
     // Document size has changed.
