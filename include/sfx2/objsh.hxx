@@ -201,6 +201,7 @@ private:
     bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
     bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
     bool                        bRememberSignature; // Do we want to remember the signature.
+    bool                        bPendingLinkUpdateInfobar;
 
     enum TriState               {undefined, yes, no};
     TriState                    mbContinueImportOnFilterExceptions = undefined; // try to import as much as possible
@@ -338,6 +339,10 @@ public:
     bool                        SwitchPersistence(
                                     const css::uno::Reference< css::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
+    virtual void                PerformLinkUpdate();
+    void                        SetPendingLinkUpdateInfobar() { bPendingLinkUpdateInfobar = true; }
+    void                        CheckPendingLinkUpdateInfobar();
+    void                        ShowLinkUpdateInfobar();
     virtual bool                LoadExternal( SfxMedium& rMedium );
     bool                        IsConfigOptionsChecked() const;
     void                        SetConfigOptionsChecked( bool bChecked );
@@ -385,6 +390,7 @@ public:
     SignatureState              GetScriptingSignatureState();
     void SignScriptingContent(weld::Window* pDialogParent, const std::function<void(bool)>& rCallback);
     DECL_DLLPRIVATE_LINK(SignDocumentHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(AllowLinksUpdateHdl, weld::Button&, void);
 
     virtual std::shared_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet& rItemSet);
 

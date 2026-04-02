@@ -71,6 +71,10 @@
 #include <tools/link.hxx>
 #include <svl/cryptosign.hxx>
 
+#include <officecfg/Office/Common.hxx>
+#include <vcl/stdtext.hxx>
+#include <vcl/help.hxx>
+
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>
@@ -1706,6 +1710,71 @@ IMPL_LINK_NOARG(SfxObjectShell, SignDocumentHandler, weld::Button&, void)
     }
     SfxUnoFrameItem aDocFrame(SID_FILLFRAME, pViewFrm->GetFrame().GetFrameInterface());
     pViewFrm->GetDispatcher()->ExecuteList(SID_SIGNATURE, SfxCallMode::SLOT, {}, { &aDocFrame });
+}
+
+void SfxObjectShell::PerformLinkUpdate()
+{
+}
+
+void SfxObjectShell::CheckPendingLinkUpdateInfobar()
+{
+    if (!bPendingLinkUpdateInfobar)
+        return;
+    bPendingLinkUpdateInfobar = false;
+    ShowLinkUpdateInfobar();
+}
+
+namespace
+{
+class LinkUpdateHelp
+{
+public:
+    DECL_STATIC_LINK(LinkUpdateHelp, DispatchHelpLinksHdl, weld::Button&, void);
+};
+
+IMPL_STATIC_LINK(LinkUpdateHelp, DispatchHelpLinksHdl, weld::Button&, rBtn, void)
+{
+    if (Help* pHelp = Application::GetHelp())
+        pHelp->Start(u"cui/ui/baselinksdialog/UPDATE_NOW"_ustr, &rBtn);
+}
+}
+
+void SfxObjectShell::ShowLinkUpdateInfobar()
+{
+    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(this);
+    if (!pViewFrame)
+        return;
+
+    pViewFrame->RemoveInfoBar(u"enablecontent");
+    auto pInfoBar = pViewFrame->AppendInfoBar(
+        u"enablecontent"_ustr, SfxResId(RID_SECURITY_WARNING_TITLE),
+        SfxResId(STR_INFOBAR_LINKS_DISABLED), InfobarType::WARNING);
+    if (!pInfoBar)
+        return;
+
+    weld::Button& rHelpBtn = pInfoBar->addButton();
+    rHelpBtn.set_label(GetStandardText(StandardButtonType::Help).replaceFirst("~", ""));
+    rHelpBtn.connect_clicked(LINK(nullptr, LinkUpdateHelp, DispatchHelpLinksHdl));
+
+    weld::Button& rBtn = pInfoBar->addButton();
+    rBtn.set_label(SfxResId(STR_INFOBAR_ALLOW_UPDATING));
+    rBtn.set_tooltip_text(SfxResId(STR_INFOBAR_ALLOW_UPDATING_TOOLTIP));
+    rBtn.connect_clicked(LINK(this, SfxObjectShell, AllowLinksUpdateHdl));
+
+    if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+    {
+        rBtn.set_tooltip_text(SfxResId(STR_INFOBAR_ALLOW_UPDATING_TOOLTIP_DISABLED));
+        rBtn.set_sensitive(false);
+    }
+}
+
+IMPL_LINK_NOARG(SfxObjectShell, AllowLinksUpdateHdl, weld::Button&, void)
+{
+    getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+    PerformLinkUpdate();
+    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(this);
+    if (pViewFrame)
+        pViewFrame->RemoveInfoBar(u"enablecontent");
 }
 
 void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
