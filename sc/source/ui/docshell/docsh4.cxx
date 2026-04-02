@@ -24,13 +24,10 @@
 #include <scitems.hxx>
 #include <editeng/flstitem.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/infobar.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <sfx2/sfxresid.hxx>
-#include <sfx2/strings.hrc>
 #include <svtools/ehdl.hxx>
 #include <svtools/langtab.hxx>
 #include <basic/sbxcore.hxx>
@@ -40,7 +37,6 @@
 #include <svx/svdograf.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/dataaccessdescriptor.hxx>
@@ -219,7 +215,7 @@ void ScDocShell::ReloadAllLinks()
     }
 }
 
-IMPL_LINK( ScDocShell, ReloadAllLinksHdl, weld::Button&, rButton, void )
+void ScDocShell::PerformLinkUpdate()
 {
     ScDocument& rDoc = GetDocument();
     if (rDoc.HasLinkFormulaNeedingCheck() && rDoc.GetDocLinkManager().hasExternalRefLinks())
@@ -227,7 +223,7 @@ IMPL_LINK( ScDocShell, ReloadAllLinksHdl, weld::Button&, rButton, void )
         // If we have WEBSERVICE/Dde link and other external links in the document, it might indicate some
         // exfiltration attempt, add *another* warning about this on top of the "Security Warning"
         // shown in the infobar before they got here.
-        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(&rButton,
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetActiveDialogParent(),
                                                        VclMessageType::Warning, VclButtonsType::YesNo,
                                                        ScResId(STR_TRUST_DOCUMENT_WARNING)));
         xQueryBox->set_secondary_text(ScResId(STR_WEBSERVICE_WITH_LINKS_WARNING));
@@ -237,27 +233,18 @@ IMPL_LINK( ScDocShell, ReloadAllLinksHdl, weld::Button&, rButton, void )
     }
 
     ReloadAllLinks();
+}
+
+IMPL_LINK_NOARG( ScDocShell, ReloadAllLinksHdl, weld::Button&, void )
+{
+    getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+    PerformLinkUpdate();
 
     ScTabViewShell* pViewSh = GetBestViewShell();
     SfxViewFrame* pViewFrame = pViewSh ? pViewSh->GetFrame() : nullptr;
     if (pViewFrame)
         pViewFrame->RemoveInfoBar(u"enablecontent");
     SAL_WARN_IF(!pViewFrame, "sc", "expected there to be a ViewFrame");
-}
-
-namespace
-{
-    class LinkHelp
-    {
-    public:
-        DECL_STATIC_LINK(LinkHelp, DispatchHelpLinksHdl, weld::Button&, void);
-    };
-}
-
-IMPL_STATIC_LINK(LinkHelp, DispatchHelpLinksHdl, weld::Button&, rBtn, void)
-{
-    if (Help* pHelp = Application::GetHelp())
-        pHelp->Start(HID_UPDATE_LINK_WARNING, &rBtn);
 }
 
 void ScDocShell::Execute( SfxRequest& rReq )
@@ -488,32 +475,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 else if (nSet == LM_ON_DEMAND)
                 {
-                    ScTabViewShell* pViewSh = GetBestViewShell();
-                    SfxViewFrame* pViewFrame = pViewSh ? pViewSh->GetFrame() : nullptr;
-                    if (pViewFrame)
-                    {
-                        pViewFrame->RemoveInfoBar(u"enablecontent");
-                        auto pInfoBar = pViewFrame->AppendInfoBar(u"enablecontent"_ustr, SfxResId(RID_SECURITY_WARNING_TITLE),
-                                                                  SfxResId(STR_INFOBAR_LINKS_DISABLED), InfobarType::WARNING);
-                        if (pInfoBar)
-                        {
-                            weld::Button& rHelpBtn = pInfoBar->addButton();
-                            rHelpBtn.set_label(GetStandardText(StandardButtonType::Help).replaceFirst("~", ""));
-                            rHelpBtn.connect_clicked(LINK(nullptr, LinkHelp, DispatchHelpLinksHdl));
-                            weld::Button& rBtn = pInfoBar->addButton();
-                            rBtn.set_buildable_name(u"allowupdating"_ustr);
-                            rBtn.set_label(SfxResId(STR_INFOBAR_ALLOW_UPDATING));
-                            rBtn.set_tooltip_text(SfxResId(STR_INFOBAR_ALLOW_UPDATING_TOOLTIP));
-                            rBtn.connect_clicked(LINK(this, ScDocShell, ReloadAllLinksHdl));
-
-                            // when active content is disabled the "Allow updating" button has no functionality.
-                            if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
-                            {
-                                rBtn.set_tooltip_text(SfxResId(STR_INFOBAR_ALLOW_UPDATING_TOOLTIP_DISABLED));
-                                rBtn.set_sensitive(false);
-                            }
-                        }
-                    }
+                    ShowLinkUpdateInfobar();
                     rReq.Done();
                 }
             }
