@@ -8,7 +8,7 @@
 _main
 _cokit_hook
 _cokit_hook_2
-_lok_preinit
+_cok_preinit
 _cok_preinit_2
 _malloc
 _free
