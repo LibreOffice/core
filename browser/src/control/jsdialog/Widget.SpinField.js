@@ -24,11 +24,28 @@
 
 /* global $ _ JSDialog */
 
-const _decimal = app.localeService.getDecimalSeparator() || '.';
-const _minusSign = app.localeService.getMinusSign() || '-';
+let _decimal;
+let _minusSign;
+
+const _ensureInitialized = function () {
+	if (_decimal === undefined) {
+		_decimal = app.localeService.getDecimalSeparator() || '.';
+		_minusSign = app.localeService.getMinusSign() || '-';
+	}
+};
+
+const getDecimal = function () {
+	_ensureInitialized();
+	return _decimal;
+};
+
+const getMinusSign = function () {
+	_ensureInitialized();
+	return _minusSign;
+};
 
 const _numericCharPattern = function () {
-	return new RegExp('[0-9\\' + _decimal + '\\' + _minusSign + ']');
+	return new RegExp('[0-9\\' + getDecimal() + '\\' + getMinusSign() + ']');
 };
 
 const _preventNonNumericalInput = function (e) {
@@ -42,7 +59,7 @@ const _preventNonNumericalInput = function (e) {
 	if (!value) return;
 
 	// no dup
-	if (_decimal === charStr || _minusSign === charStr) {
+	if (getDecimal() === charStr || getMinusSign() === charStr) {
 		if (value.indexOf(charStr) > -1) return e.preventDefault();
 	}
 };
@@ -410,14 +427,14 @@ JSDialog._parseSpinFieldValue = function (displayValue) {
 	for (var i = 0; i < displayValue.length; i++) {
 		if (displayValue[i].match(pattern)) value += displayValue[i];
 	}
-	if (_decimal !== '.') value = value.replace(_decimal, '.');
-	if (_minusSign !== '-') value = value.replace(_minusSign, '-');
+	if (getDecimal() !== '.') value = value.replace(getDecimal(), '.');
+	if (getMinusSign() !== '-') value = value.replace(getMinusSign(), '-');
 	return value;
 };
 
 JSDialog._formatSpinFieldValue = function (value, unit) {
 	var str = '' + value;
-	if (_decimal !== '.') str = str.replace('.', _decimal);
+	if (getDecimal() !== '.') str = str.replace('.', getDecimal());
 	if (unit) {
 		var noSpace =
 			unit === '°' || unit === '"' || unit === '\u2033' || unit === '%';
