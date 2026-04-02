@@ -140,6 +140,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
 {
     // get format of object
     const SwFrameFormat& rFrameFormat = GetFrameFormat();
+    const IDocumentSettingAccess& rIDSA = rFrameFormat.getIDocumentSettingAccess();
 
     // declare and set <pFooter> to footer frame, if object is anchored
     // at a frame belonging to the footer.
@@ -268,9 +269,9 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
     aRectFnSet.Refresh(*pOrientFrame);
 
     // Microsoft allows WrapThrough shapes to be placed outside of the cell despite layoutInCell
-    // (Re-use existing compat flag to identify MSO formats. The name also matches this purpose.)
-    const bool bMSOLayout = rFrameFormat.getIDocumentSettingAccess().get(
-        DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
+    // (Re-using existing compat flags to identify MSO formatted document).
+    const bool bMSOLayout = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN) // <= MSO 2010
+                            || rIDSA.get(DocumentSettingId::TAB_OVER_SPACING); // <= MSO 2013+
     const bool bMSOLayoutInCell
         = bMSOLayout && DoesObjFollowsTextFlow() && GetAnchorTextFrame().IsInTab();
     const bool bIgnoreVertLayoutInCell = bMSOLayoutInCell && bWrapThrough;
