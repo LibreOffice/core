@@ -203,6 +203,8 @@ public:
     /// Like Cut(), except that follow chaining is maintained.
     void DelEmpty();
     bool IsWrapOnAllPages() const;
+    /// True if this fly's MakeAll is currently on the call stack.
+    bool IsInMakeAll() const;
     void dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const override;
 };
 

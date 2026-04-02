@@ -235,6 +235,7 @@ public:
     ~SwOszControl();
     bool ChkOsz();
     static bool IsInProgress( const SwFlyFrame *pFly );
+    static bool IsOnStack( const SwFlyFrame *pFly );
 };
 
 }
@@ -289,6 +290,17 @@ bool SwOszControl::IsInProgress( const SwFlyFrame *pFly )
     if (SwOszControl::s_pStack5 && !pFly->IsLowerOf(SwOszControl::s_pStack5))
         return true;
     return false;
+}
+
+bool SwOszControl::IsOnStack( const SwFlyFrame *pFly )
+{
+    return s_pStack1 == pFly || s_pStack2 == pFly || s_pStack3 == pFly || s_pStack4 == pFly
+           || s_pStack5 == pFly;
+}
+
+bool SwFlyAtContentFrame::IsInMakeAll() const
+{
+    return SwOszControl::IsOnStack(this);
 }
 
 bool SwOszControl::ChkOsz()
