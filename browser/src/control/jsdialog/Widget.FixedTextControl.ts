@@ -13,31 +13,38 @@
  * JSDialog.fixedtextControl - fixed label
  */
 
-/* global app $ JSDialog */
+declare var JSDialog: any;
 
-JSDialog.fixedtextControl = function (parentContainer, data, builder) {
+JSDialog.fixedtextControl = function (
+	parentContainer: HTMLElement,
+	data: TextWidget,
+	builder: JSBuilder,
+) {
 	// Check if this label should render as static content(i.e. span) instead of interactive label
 	if (
 		!data.labelFor ||
 		!JSDialog.GetFormControlTypesInLO().has(data.labelForType)
-	)
+	) {
 		return JSDialog.StaticText(parentContainer, data, builder);
+	}
 
-	var fixedtext = window.L.DomUtil.create(
+	const fixedtext = window.L.DomUtil.create(
 		'label',
 		builder.options.cssClass,
 		parentContainer,
-	);
-
+	) as HTMLLabelElement;
 	fixedtext.htmlFor = data.labelFor + '-input';
 
 	if (data.text) fixedtext.textContent = builder._cleanText(data.text);
 	else if (data.html) fixedtext.innerHTML = data.html;
 
-	var accKey = builder._getAccessKeyFromText(data.text);
+	const accKey = builder._getAccessKeyFromText(data.text);
 	builder._stressAccessKey(fixedtext, accKey);
 
-	const updateLabelForAttribute = function (label, labelledControl) {
+	const updateLabelForAttribute = function (
+		label: HTMLLabelElement,
+		labelledControl: any,
+	) {
 		const isLabelable = JSDialog.GetFormControlTypesInCO().has(
 			labelledControl.nodeName,
 		);
@@ -60,12 +67,14 @@ JSDialog.fixedtextControl = function (parentContainer, data, builder) {
 	app.layoutingService.appendLayoutingTask(function () {
 		if (!data.labelFor) return;
 
-		var labelledControl = document.getElementById(data.labelFor);
+		const labelledControl = document.getElementById(data.labelFor);
 		if (labelledControl) {
-			var target = labelledControl;
-			var input = labelledControl.querySelector('input');
+			let target = labelledControl;
+
+			const input = labelledControl.querySelector('input');
 			if (input) target = input;
-			var select = labelledControl.querySelector('select');
+
+			const select = labelledControl.querySelector('select');
 			if (select) target = select;
 
 			builder._setAccessKey(target, accKey);
@@ -74,7 +83,9 @@ JSDialog.fixedtextControl = function (parentContainer, data, builder) {
 		// we need to schedule it again as some elements are not yet available
 		// i.e. pop-ups: Double click on Chart->Sidebar->Colors
 		app.layoutingService.appendLayoutingTask(function () {
-			var targetElement =
+			if (!data.labelFor) return;
+
+			const targetElement =
 				document.getElementById(
 					data.labelFor + '-input-' + builder.options.suffix,
 				) ||
