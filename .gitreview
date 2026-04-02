@@ -1,7 +1,6 @@
 [gerrit]
-host=gerrit.libreoffice.org
+host=gerrit.collaboraoffice.com
 port=29418
 project=core
-defaultremote=logerrit
-defaultbranch=distro/collabora/co-26.04
-
+defaultremote=collabora
+defaultbranch=main
