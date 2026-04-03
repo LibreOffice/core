@@ -46,7 +46,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/scopeguard.hxx>
 #include <svl/itempool.hxx>
 
 #include <sfx2/app.hxx>
