@@ -1614,6 +1614,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                 new FmFormView(
                     *pModel,
                     &rDevice));
+            mpKitDrawView->setHideFormControl(true);
         }
 
         mpKitDrawView->SetNegativeX(bLayoutRTL);
