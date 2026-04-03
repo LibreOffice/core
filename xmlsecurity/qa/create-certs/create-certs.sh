@@ -16,7 +16,7 @@
 # considered unsafe.
 #
 # 3) Create two client certificates that can be used to sign ODF documents in
-# LibreOffice.
+# Collabora Office.
 #
 # References:
 #
