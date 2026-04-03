@@ -341,40 +341,47 @@ void AccessibilityIssue::quickFixIssue() const
         {
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             SwWrtShell* pWrtShell = pShell->GetWrtShell();
-            ScopedVclPtr<AbstractSvxNameDialog> aNameDialog(pFact->CreateSvxNameDialog(
+            VclPtr<AbstractSvxNameDialog> xNameDialog(pFact->CreateSvxNameDialog(
                 pWrtShell->GetView().GetFrameWeld(), OUString(), SwResId(STR_HYPERLINK_NO_NAME_DLG),
                 SwResId(STR_HYPERLINK_NO_NAME_DLG)));
-            if (aNameDialog->Execute() == RET_OK)
-            {
-                if (m_eIssueObject == IssueObject::HYPERLINKTEXT)
+
+            bResetAndQueue = false;
+            xNameDialog->StartExecuteAsync([this, xNameDialog, pWrtShell](sal_Int32 nResult) {
+                if (nResult == RET_OK)
                 {
-                    SwContentNode* pContentNode = m_pNode->GetContentNode();
-                    SwPosition aStart(*pContentNode, m_nStart);
-                    SwPosition aEnd(*pContentNode, m_nEnd);
-                    rtl::Reference<SwXTextRange> xRun
-                        = SwXTextRange::CreateXTextRange(*m_pDoc, aStart, &aEnd);
-                    if (xRun.is()
-                        && xRun->getPropertySetInfo()->hasPropertyByName(u"HyperLinkName"_ustr))
+                    if (m_eIssueObject == IssueObject::HYPERLINKTEXT)
                     {
-                        xRun->setPropertyValue(u"HyperLinkName"_ustr,
-                                               uno::Any(aNameDialog->GetName()));
+                        SwContentNode* pContentNode = m_pNode->GetContentNode();
+                        SwPosition aStart(*pContentNode, m_nStart);
+                        SwPosition aEnd(*pContentNode, m_nEnd);
+                        rtl::Reference<SwXTextRange> xRun
+                            = SwXTextRange::CreateXTextRange(*m_pDoc, aStart, &aEnd);
+                        if (xRun.is()
+                            && xRun->getPropertySetInfo()->hasPropertyByName(u"HyperLinkName"_ustr))
+                        {
+                            xRun->setPropertyValue(u"HyperLinkName"_ustr,
+                                                   uno::Any(xNameDialog->GetName()));
+                        }
                     }
-                }
-                else
-                {
-                    SwFlyFrameFormat* const pFlyFormat{ const_cast<SwFlyFrameFormat*>(
-                        m_pDoc->FindFlyByName(UIName(m_sObjectID))) };
-                    if (pFlyFormat)
+                    else
                     {
-                        SwFormatURL item{ pFlyFormat->GetURL() };
-                        item.SetName(aNameDialog->GetName());
-                        SwAttrSet set{ m_pDoc->GetAttrPool(), svl::Items<RES_URL, RES_URL> };
-                        set.Put(item);
-                        m_pDoc->SetFlyFrameAttr(*pFlyFormat, set);
+                        SwFlyFrameFormat* const pFlyFormat{ const_cast<SwFlyFrameFormat*>(
+                            m_pDoc->FindFlyByName(UIName(m_sObjectID))) };
+                        if (pFlyFormat)
+                        {
+                            SwFormatURL item{ pFlyFormat->GetURL() };
+                            item.SetName(xNameDialog->GetName());
+                            SwAttrSet set{ m_pDoc->GetAttrPool(), svl::Items<RES_URL, RES_URL> };
+                            set.Put(item);
+                            m_pDoc->SetFlyFrameAttr(*pFlyFormat, set);
+                        }
                     }
+                    pWrtShell->SetModified();
                 }
-                pWrtShell->SetModified();
-            }
+                xNameDialog->disposeOnce();
+                if (m_pNode)
+                    m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(m_pNode);
+            });
         }
         break;
         case IssueObject::DOCUMENT_TITLE:
