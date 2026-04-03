@@ -652,6 +652,16 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                 OUString aItemName = rCache.GetFormattedString(nBase, rItem, false);
                 if (aItemToGroupIdx.find(aItemName) == aItemToGroupIdx.end())
                 {
+                    // Dates are grouped by converting to double
+                    if (rItem.GetType() == ScDPItemData::Value)
+                    {
+                        auto iter = aItemToGroupIdx.find(OUString::number(rItem.GetValue()));
+                        if (iter != aItemToGroupIdx.end())
+                        {
+                            aItemToGroupIdx[aItemName] = iter->second;
+                            continue;
+                        }
+                    }
                     sal_Int32 nGroupIdx = static_cast<sal_Int32>(aGroupItemNames.size());
                     aGroupItemNames.push_back(aItemName);
                     aItemToGroupIdx[aItemName] = nGroupIdx;

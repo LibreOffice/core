@@ -136,7 +136,19 @@ void ScDPSaveGroupItem::ConvertElementsToItems(SvNumberFormatter* pFormatter,
 
 bool ScDPSaveGroupItem::HasInGroup(const ScDPItemData& rItem) const
 {
-    return std::find(maItems.begin(), maItems.end(), rItem) != maItems.end();
+    if (std::find(maItems.begin(), maItems.end(), rItem) != maItems.end())
+        return true;
+
+    // Empty items are stored as String("") by ConvertElementsToItems
+    // Match them here so they are correctly mapped to a group
+    if (rItem.GetType() == ScDPItemData::Empty)
+    {
+        ScDPItemData aEmptyStr;
+        aEmptyStr.SetString(OUString());
+        return std::find(maItems.begin(), maItems.end(), aEmptyStr) != maItems.end();
+    }
+
+    return false;
 }
 
 void ScDPSaveGroupItem::AddToData(ScDPGroupDimension& rDataDim) const

@@ -411,13 +411,15 @@ void XclImpPCField::ConvertGroupField( ScDPSaveData& rSaveData, const ScfStringV
 
 // private --------------------------------------------------------------------
 
-static OUString lcl_ItemToText( const XclImpPCItem& rItem )
+static OUString lcl_ItemToText( const XclImpPCItem& rItem, const XclImpRoot& rRoot )
 {
     const OUString& rText = rItem.ConvertToText();
     if( !rText.isEmpty() )
         return rText;
     if( const double* pVal = rItem.GetDouble() )
         return OUString::number( *pVal );
+    if( const DateTime* pDateTime = rItem.GetDateTime() )
+        return OUString::number( rRoot.GetDoubleFromDateTime( *pDateTime ) );
     if( const sal_Int16* pVal = rItem.GetInteger() )
         return OUString::number( *pVal );
     return rText;
@@ -438,7 +440,7 @@ void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStri
     aGroupItems.reserve( maItems.size() );
     // initialize with own item names
     for( const auto& rxItem : maItems )
-        aGroupItems.emplace_back(lcl_ItemToText(*rxItem));
+        aGroupItems.emplace_back(lcl_ItemToText(*rxItem, *this));
 
     // *** iterate over all base items, set their names at corresponding own items ***
     for( sal_uInt16 nItemIdx = 0, nItemCount = static_cast< sal_uInt16 >( maGroupOrder.size() ); nItemIdx < nItemCount; ++nItemIdx )
@@ -446,7 +448,7 @@ void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStri
             if( const XclImpPCItem* pBaseItem = pBaseField->GetItem( nItemIdx ) )
                 if( const XclImpPCItem* pGroupItem = GetItem( maGroupOrder[ nItemIdx ] ) )
                     if( *pBaseItem != *pGroupItem )
-                        aGroupItems[maGroupOrder[nItemIdx]].AddElement(lcl_ItemToText(*pBaseItem));
+                        aGroupItems[maGroupOrder[nItemIdx]].AddElement(lcl_ItemToText(*pBaseItem, *this));
 
     // *** create the ScDPSaveGroupDimension object, fill with grouping info ***
     ScDPSaveGroupDimension aGroupDim( rBaseFieldName, GetFieldName( rVisNames ) );
