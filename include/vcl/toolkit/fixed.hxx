@@ -43,6 +43,7 @@ private:
                               const Point& rPos, const Size& rSize, bool bFillLayout = false ) const;
 public:
     SAL_DLLPRIVATE static DrawTextFlags ImplGetTextStyle( WinBits nWinBits );
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 protected:
     virtual void    FillLayoutData() const override;
     virtual const vcl::Font&

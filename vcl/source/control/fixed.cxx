@@ -106,6 +106,25 @@ FixedText::FixedText(vcl::Window* pParent, WinBits nStyle, WindowType eType)
     ImplInit( pParent, nStyle );
 }
 
+void FixedText::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    WinBits nStyle = GetStyle();
+    Control::DumpAsPropertyTree(rJsonWriter);
+
+    if (nStyle & WB_RIGHT)
+    {
+        rJsonWriter.put("xalign", "right");
+    }
+    else if (nStyle & WB_CENTER)
+    {
+        rJsonWriter.put("xalign", "center");
+    }
+    else
+    {
+        rJsonWriter.put("xalign", "left");
+    }
+}
+
 DrawTextFlags FixedText::ImplGetTextStyle( WinBits nWinStyle )
 {
     DrawTextFlags nTextStyle = DrawTextFlags::Mnemonic | DrawTextFlags::EndEllipsis;
