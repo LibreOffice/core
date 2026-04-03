@@ -1898,6 +1898,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf168355)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pPageFrm->GetVirtPageNum());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testSplitFloattableGetCurWord)
+{
+    // Given a document with a floating table that splits across pages: the anchor paragraph has
+    // text; it's split together with its floating table; and its first frame has no SwParaPortion
+    // (only the last follow frame has it).
+    createSwDoc("floattable-nosection-7in.docx");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    // Go to end (the anchor paragraph for the floating table)
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+
+    // Without the fix this would crash
+    CPPUNIT_ASSERT_EQUAL(u"End"_ustr, pWrtShell->GetCurWord());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

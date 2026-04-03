@@ -708,7 +708,7 @@ public:
     /// Update content of all charts for table with given name.
     void UpdateCharts( const UIName& rName );
 
-    OUString GetCurWord() const;
+    SW_DLLPUBLIC OUString GetCurWord() const; // used in CppunitTest_sw_uiwriter9
 
     /** Glossary from glossary document in current document.
      Styles only if not already existent. */
