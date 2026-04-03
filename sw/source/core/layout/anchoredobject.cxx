@@ -971,6 +971,14 @@ SwFlyFrame* SwAnchoredObject::DynCastFlyFrame()
     return nullptr;
 }
 
+SwFlyAtContentFrame* SwAnchoredObject::DynCastFlyAtContentFrame()
+{
+    if (SwFlyFrame* pFlyFrame = DynCastFlyFrame())
+        if (pFlyFrame->IsFlyAtContentFrame())
+            return static_cast<SwFlyAtContentFrame*>(pFlyFrame);
+    return nullptr;
+}
+
 void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
 {
     (void)xmlTextWriterStartElement( writer, BAD_CAST( getElementName() ) );

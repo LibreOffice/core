@@ -27,6 +27,7 @@ class SwFrame;
 class SwLayoutFrame;
 class SwTextFrame;
 class SwFlyFrame;
+class SwFlyAtContentFrame;
 class SwPageFrame;
 
 class SwFrameFormat;
@@ -495,6 +496,7 @@ class SAL_DLLPUBLIC_RTTI SwAnchoredObject
 
         virtual const SwFlyFrame* DynCastFlyFrame() const;
         virtual SwFlyFrame* DynCastFlyFrame();
+        SW_DLLPUBLIC SwFlyAtContentFrame* DynCastFlyAtContentFrame();
 };
 
 /// Helper class for notify that positioning of an anchored object is in progress.

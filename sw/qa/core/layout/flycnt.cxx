@@ -1101,11 +1101,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNested)
     CPPUNIT_ASSERT(pPage1->GetSortedObjs());
     SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPage1Objs.size());
-    auto pPage1Fly1 = rPage1Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    auto pPage1Fly1 = rPage1Objs[0]->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pPage1Fly1);
     CPPUNIT_ASSERT(pPage1Fly1->GetAnchorFrameContainingAnchPos()->IsInFly());
     CPPUNIT_ASSERT(pPage1Fly1->GetFollow());
-    auto pPage1Fly2 = rPage1Objs[1]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    auto pPage1Fly2 = rPage1Objs[1]->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pPage1Fly2);
     CPPUNIT_ASSERT(!pPage1Fly2->GetAnchorFrameContainingAnchPos()->IsInFly());
     CPPUNIT_ASSERT(pPage1Fly2->GetFollow());
@@ -1114,7 +1114,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNested)
     CPPUNIT_ASSERT(pPage2->GetSortedObjs());
     SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPage2Objs.size());
-    auto pPage2Fly1 = rPage2Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    auto pPage2Fly1 = rPage2Objs[0]->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pPage2Fly1);
     CPPUNIT_ASSERT(pPage2Fly1->GetAnchorFrameContainingAnchPos()->IsInFly());
     CPPUNIT_ASSERT(pPage2Fly1->GetPrecede());
@@ -1133,7 +1133,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNested)
     // which makes the "Inner A2" text visible.
     CPPUNIT_ASSERT_LESS(pPage2->getFrameArea().Right(), pPage2Fly1->getFrameArea().Right());
 
-    auto pPage2Fly2 = rPage2Objs[1]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    auto pPage2Fly2 = rPage2Objs[1]->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pPage2Fly2);
     CPPUNIT_ASSERT(!pPage2Fly2->GetAnchorFrameContainingAnchPos()->IsInFly());
     CPPUNIT_ASSERT(pPage2Fly2->GetPrecede());
@@ -1183,7 +1183,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyMoveMaster)
     CPPUNIT_ASSERT(pPage1->GetSortedObjs());
     SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
-    auto pPage1Fly = rPage1Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    auto pPage1Fly = rPage1Objs[0]->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pPage1Fly);
     CPPUNIT_ASSERT(!pPage1Fly->GetPrecede());
     CPPUNIT_ASSERT(pPage1Fly->HasFollow());
@@ -1192,7 +1192,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyMoveMaster)
     CPPUNIT_ASSERT(pPage2->GetSortedObjs());
     SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
-    auto pPage2Fly = rPage2Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    auto pPage2Fly = rPage2Objs[0]->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pPage2Fly);
     CPPUNIT_ASSERT(pPage2Fly->GetPrecede());
     CPPUNIT_ASSERT(pPage2Fly->HasFollow());
@@ -1201,7 +1201,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyMoveMaster)
     CPPUNIT_ASSERT(pPage3->GetSortedObjs());
     SwSortedObjs& rPage3Objs = *pPage3->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage3Objs.size());
-    auto pPage3Fly = rPage3Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    auto pPage3Fly = rPage3Objs[0]->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pPage3Fly);
     CPPUNIT_ASSERT(pPage3Fly->GetPrecede());
     CPPUNIT_ASSERT(!pPage3Fly->GetFollow());

@@ -309,8 +309,6 @@ public:
     virtual const SwFlyFrame* DynCastFlyFrame() const override;
     virtual SwFlyFrame* DynCastFlyFrame() override;
 
-    SW_DLLPUBLIC SwFlyAtContentFrame* DynCastFlyAtContentFrame();
-
     bool IsSplitButNotYetMovedFollow() const;
 
     bool GetRedlineRenderModeFrame(SvxBoxItem& rBoxItem) const;

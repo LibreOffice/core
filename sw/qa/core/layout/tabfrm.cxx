@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTableJoin)
     {
         SwSortedObjs& rPageObjs = *pPage1->GetSortedObjs();
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
-        auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+        auto pFly = rPageObjs[0]->DynCastFlyAtContentFrame();
         CPPUNIT_ASSERT(pFly);
         // Start of the chain.
         CPPUNIT_ASSERT(!pFly->GetPrecede());
@@ -145,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTableJoin)
     {
         SwSortedObjs& rPageObjs = *pPage2->GetSortedObjs();
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
-        auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+        auto pFly = rPageObjs[0]->DynCastFlyAtContentFrame();
         CPPUNIT_ASSERT(pFly);
         CPPUNIT_ASSERT(pFly->GetPrecede());
         CPPUNIT_ASSERT(pFly->HasFollow());
@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTableJoin)
     {
         SwSortedObjs& rPageObjs = *pPage3->GetSortedObjs();
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
-        auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+        auto pFly = rPageObjs[0]->DynCastFlyAtContentFrame();
         CPPUNIT_ASSERT(pFly);
         CPPUNIT_ASSERT(pFly->GetPrecede());
         CPPUNIT_ASSERT(pFly->HasFollow());
@@ -166,7 +166,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTableJoin)
     CPPUNIT_ASSERT(pPage4->GetSortedObjs());
     SwSortedObjs& rPageObjs = *pPage4->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
-    auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    auto pFly = rPageObjs[0]->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pFly);
     // End of the chain.
     CPPUNIT_ASSERT(pFly->GetPrecede());
@@ -188,7 +188,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWrappedByTable)
     CPPUNIT_ASSERT(pPage->GetSortedObjs());
     SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
-    auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    auto pFly = rPageObjs[0]->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pFly);
     // Get the bottom of the floating table, ignoring margins:
     SwTwips nFloatingBottom = pFly->getFrameArea().Top() + pFly->getFramePrintArea().Height();

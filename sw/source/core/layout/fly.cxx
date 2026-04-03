@@ -2303,11 +2303,6 @@ void SwFlyFrame::UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const
     rMngr.SetUnfloatTableButton(this, bShow,  aTopRightPixel);
 }
 
-SwFlyAtContentFrame* SwFlyFrame::DynCastFlyAtContentFrame()
-{
-    return IsFlyAtContentFrame() ? static_cast<SwFlyAtContentFrame*>(this) : nullptr;
-}
-
 bool SwFlyFrame::IsSplitButNotYetMovedFollow() const
 {
     if (IsFlySplitAllowed())

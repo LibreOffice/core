@@ -54,7 +54,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNegativeHeight)
             CPPUNIT_ASSERT(pPage->GetSortedObjs());
             SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
             CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
-            auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+            auto pFly = rPageObjs[0]->DynCastFlyAtContentFrame();
             CPPUNIT_ASSERT(pFly);
             CPPUNIT_ASSERT(!pFly->GetPrecede());
             CPPUNIT_ASSERT(pFly->GetFollow());
@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNegativeHeight)
             CPPUNIT_ASSERT(pPage->GetSortedObjs());
             SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
             CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
-            auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+            auto pFly = rPageObjs[0]->DynCastFlyAtContentFrame();
             CPPUNIT_ASSERT(pFly);
             CPPUNIT_ASSERT(pFly->GetPrecede());
             CPPUNIT_ASSERT(pFly->GetFollow());
@@ -76,7 +76,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNegativeHeight)
             CPPUNIT_ASSERT(pPage->GetSortedObjs());
             SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
             CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
-            auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+            auto pFly = rPageObjs[0]->DynCastFlyAtContentFrame();
             CPPUNIT_ASSERT(pFly);
             CPPUNIT_ASSERT(pFly->GetPrecede());
             CPPUNIT_ASSERT(!pFly->GetFollow());
@@ -104,7 +104,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFlyRelWithRounding)
     CPPUNIT_ASSERT(pPage->GetSortedObjs());
     SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
-    auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    auto pFly = rPageObjs[0]->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pFly);
     tools::Long nFlyWidth = pFly->getFrameArea().Width();
     // Without the accompanying fix in place, this test would have failed with:
@@ -132,7 +132,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeLeftPaddingOffPage)
     CPPUNIT_ASSERT(pPage->GetSortedObjs());
     SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPageObjs.size());
-    auto pFly = rPageObjs[1]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    auto pFly = rPageObjs[1]->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pFly);
     SwTwips nFlyLeft = pFly->getFrameArea().Left() + pFly->getFramePrintArea().Left();
     // Without the accompanying fix in place, this test would have failed with:
