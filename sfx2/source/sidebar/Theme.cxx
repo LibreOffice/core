@@ -19,6 +19,7 @@
 
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/app.hxx>
+#include <string>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -101,9 +102,13 @@ void Theme::UpdateTheme()
         const StyleSettings& rStyle (Application::GetSettings().GetStyleSettings());
 
         // OfficeLabs: use branded colors when OFFICELABS_THEME env var is set
-        const char* pOlTheme = getenv("OFFICELABS_THEME");
-        const bool bOfficeLabs = (pOlTheme != nullptr);
-        const bool bDark = bOfficeLabs ? (strcmp(pOlTheme, "dark") == 0)
+        // Cached in a static to avoid thread-unsafe repeated getenv() calls.
+        static const std::string s_olThemeSidebar = [] {
+            const char* p = getenv("OFFICELABS_THEME");
+            return p ? std::string(p) : std::string();
+        }();
+        const bool bOfficeLabs = !s_olThemeSidebar.empty();
+        const bool bDark = bOfficeLabs ? (s_olThemeSidebar == "dark")
                                        : rStyle.GetFaceColor().IsDark();
 
         Color aBaseBackgroundColor, aSecondColor, aHighlight;

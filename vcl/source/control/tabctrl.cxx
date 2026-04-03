@@ -993,10 +993,11 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
         rRenderContext.DrawImage(aImgTL, pItem->maTabImage, pItem->m_bEnabled ? DrawImageFlags::NONE : DrawImageFlags::Disable );
     }
 
-    // OfficeLabs: draw accent underline for selected tab
-    if (pItem->id() == mnCurPageId)
+    // OfficeLabs: draw accent underline for selected tab (notebookbar only)
+    if (pItem->id() == mnCurPageId
+        && dynamic_cast<const NotebookbarTabControlBase*>(this))
     {
-        const tools::Long nAccentHeight = 3;
+        const tools::Long nAccentHeight = std::max(tools::Long(3), tools::Long(3 * rRenderContext.GetDPIScaleFactor()));
         Color aAccentColor(0x0D, 0x94, 0x88); // OfficeLabs teal accent
         rRenderContext.SetLineColor(aAccentColor);
         rRenderContext.SetFillColor(aAccentColor);
@@ -2392,8 +2393,11 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( tools::Long nWidth )
     lcl_AdjustSingleLineTabs(nMaxWidth - nShortcutsWidth, mpTabCtrlData.get());
 
     // position the menu button on the LEFT (OfficeLabs: hamburger-first layout)
-    tools::Long nPosY = (m_nHeaderHeight - m_pOpenMenu->GetSizePixel().getHeight()) / 2;
-    m_pOpenMenu->SetPosPixel(Point(0, nPosY));
+    if (m_pOpenMenu)
+    {
+        tools::Long nPosY = (m_nHeaderHeight - m_pOpenMenu->GetSizePixel().getHeight()) / 2;
+        m_pOpenMenu->SetPosPixel(Point(0, nPosY));
+    }
 
     // position the shortcutbox after the hamburger
     if (m_pShortcuts)

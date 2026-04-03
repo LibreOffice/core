@@ -29,6 +29,7 @@
 
 #include <memory>
 #include <string.h>
+#include <string>
 #include <limits.h>
 
 #include <svsys.h>
@@ -270,13 +271,18 @@ static void UpdateDarkMode(HWND hWnd)
 
     // OfficeLabs: check OFFICELABS_THEME env var for early theme override
     // (config may not be loaded yet at WM_CREATE time)
+    // Cached in a static to avoid thread-unsafe repeated getenv() calls.
+    static const std::string s_officeLabsTheme = [] {
+        const char* p = getenv("OFFICELABS_THEME");
+        return p ? std::string(p) : std::string();
+    }();
     bool bForceLight = false;
     bool bForceDark = false;
-    if (const char* pTheme = getenv("OFFICELABS_THEME"))
+    if (!s_officeLabsTheme.empty())
     {
-        if (strcmp(pTheme, "light") == 0)
+        if (s_officeLabsTheme == "light")
             bForceLight = true;
-        else if (strcmp(pTheme, "dark") == 0)
+        else if (s_officeLabsTheme == "dark")
             bForceDark = true;
     }
 
@@ -5791,10 +5797,16 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
 
             // OfficeLabs: force title bar light/dark via env var
             // This overrides after UpdateDarkMode in case config wasn't loaded yet
-            if (const char* pTheme = getenv("OFFICELABS_THEME"))
             {
-                BOOL bDark = (strcmp(pTheme, "dark") == 0) ? TRUE : FALSE;
-                DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &bDark, sizeof(bDark));
+                static const std::string s_olThemeWmCreate = [] {
+                    const char* p = getenv("OFFICELABS_THEME");
+                    return p ? std::string(p) : std::string();
+                }();
+                if (!s_olThemeWmCreate.empty())
+                {
+                    BOOL bDark = (s_olThemeWmCreate == "dark") ? TRUE : FALSE;
+                    DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &bDark, sizeof(bDark));
+                }
             }
 
             // Set HWND already here, as data might be used already

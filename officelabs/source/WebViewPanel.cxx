@@ -796,7 +796,10 @@ void WebViewPanel::syncCefWindowSize()
     // its own sidebar), so multiple panels can be visible simultaneously
     // across different document windows without overlapping each other.
     HWND hFg = GetForegroundWindow();
-    bool bFrameActive = (hFg == m_hFrameWnd || hFg == m_hCefParentWnd);
+    // Check if frame is active: direct match OR foreground is a descendant
+    // of our frame (handles OLE in-place activation windows like charts).
+    bool bFrameActive = (hFg == m_hFrameWnd || hFg == m_hCefParentWnd
+                         || (m_hFrameWnd && IsChild(m_hFrameWnd, hFg)));
 
     bool bSidebarVisible = pParent->IsReallyVisible();
     bool bFrameMinimized = m_hFrameWnd && IsIconic(m_hFrameWnd);
@@ -887,14 +890,20 @@ void WebViewPanel::syncCefWindowSize()
     HWND hChild = GetWindow(m_hCefParentWnd, GW_CHILD);
     while (hChild)
     {
-        MoveWindow(hChild, 0, 0, aSize.Width(), aSize.Height(), TRUE);
-        HWND hGrandChild = GetWindow(hChild, GW_CHILD);
-        while (hGrandChild)
+        HWND hNext = GetWindow(hChild, GW_HWNDNEXT);
+        if (IsWindow(hChild))
         {
-            MoveWindow(hGrandChild, 0, 0, aSize.Width(), aSize.Height(), TRUE);
-            hGrandChild = GetWindow(hGrandChild, GW_HWNDNEXT);
+            MoveWindow(hChild, 0, 0, aSize.Width(), aSize.Height(), FALSE);
+            HWND hGrandChild = GetWindow(hChild, GW_CHILD);
+            while (hGrandChild)
+            {
+                HWND hGrandNext = GetWindow(hGrandChild, GW_HWNDNEXT);
+                if (IsWindow(hGrandChild))
+                    MoveWindow(hGrandChild, 0, 0, aSize.Width(), aSize.Height(), FALSE);
+                hGrandChild = hGrandNext;
+            }
         }
-        hChild = GetWindow(hChild, GW_HWNDNEXT);
+        hChild = hNext;
     }
     if (m_browser)
     {
