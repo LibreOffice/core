@@ -660,7 +660,7 @@
                                     </child>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="val2-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 2</property>
                                         <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|val1">Specifies a value to filter the field.</property>
                                       </object>
                                     </child>
@@ -683,7 +683,7 @@
                                     </accessibility>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="color2-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color2-atkobject">Color</property>
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color2-atkobject">Color 2</property>
                                         <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color2">Specifies a color to filter the field.</property>
                                       </object>
                                     </child>
@@ -757,7 +757,7 @@
                                     </accessibility>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="color1-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color1-atkobject">Color</property>
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color1-atkobject">Color 1</property>
                                         <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color1">Specifies a color to filter the field.</property>
                                       </object>
                                     </child>
@@ -808,7 +808,7 @@
                                     </child>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="val3-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 3</property>
                                         <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|val1">Specifies a value to filter the field.</property>
                                       </object>
                                     </child>
@@ -831,7 +831,7 @@
                                     </accessibility>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="color3-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color3-atkobject">Color</property>
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color3-atkobject">Color 3</property>
                                         <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color3">Specifies a color to filter the field.</property>
                                       </object>
                                     </child>
@@ -882,7 +882,7 @@
                                     </child>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="val4-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 4</property>
                                         <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|val1">Specifies a value to filter the field.</property>
                                       </object>
                                     </child>
@@ -905,7 +905,7 @@
                                     </accessibility>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="color4-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color4-atkobject">Color</property>
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color4-atkobject">Color 4</property>
                                         <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color4">Specifies a color to filter the field.</property>
                                       </object>
                                     </child>
