@@ -637,6 +637,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testCsvImportEmptyFilterOptions)
     CPPUNIT_ASSERT_EQUAL(u"second"_ustr, pDoc->GetString(ScAddress(2, 2, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testMissingPathExternal)
+{
+    createScDoc("xlsx/MissingPathExternal.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pExternalRel
+        = parseExport(u"xl/externalLinks/_rels/externalLink1.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pExternalRel);
+
+    assertXPath(
+        pExternalRel, "/rels:Relationships/rels:Relationship", "Type",
+        u"http://schemas.microsoft.com/office/2006/relationships/xlExternalLinkPath/xlPathMissing");
+    assertXPath(pExternalRel, "/rels:Relationships/rels:Relationship", "Target", u"Tabelle1");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testQueryTableHeaders)
 {
     createScDoc("xlsx/TableEmptyHeaders.xlsx");

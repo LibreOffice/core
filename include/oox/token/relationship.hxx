@@ -40,6 +40,7 @@ enum class Relationship
     DRAWING,
     ENDNOTES,
     EXTERNALLINKPATH,
+    MISSINGEXTERNALLINKPATH,
     FONT,
     FONTTABLE,
     FOOTER,

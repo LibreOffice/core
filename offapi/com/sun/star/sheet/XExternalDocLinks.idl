@@ -38,6 +38,7 @@ interface XExternalDocLinks
         @return com::sun::star::sheet::XExternalDocLink external document link instance
      */
     com::sun::star::sheet::XExternalDocLink addDocLink( [in] string aDocName );
+    com::sun::star::sheet::XExternalDocLink addMissingDocLink( [in] string aDocName);
 };
 
 }; }; }; };

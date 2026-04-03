@@ -437,6 +437,9 @@ public:
     virtual css::uno::Reference< css::sheet::XExternalDocLink >
         SAL_CALL addDocLink( const OUString& aDocName ) override;
 
+    virtual css::uno::Reference<css::sheet::XExternalDocLink>
+        SAL_CALL addMissingDocLink(const OUString& aDocName) override;
+
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;

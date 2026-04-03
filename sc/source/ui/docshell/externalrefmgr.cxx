@@ -2548,7 +2548,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);
     std::shared_ptr<const SfxFilter> pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName(rFilter);
 
-    if (pFileData->maRelativeName.isEmpty())
+    if (pFileData->maRelativeName.isEmpty() && !pFileData->mbPathMissing)
     {
         // Generate a relative file path.
         INetURLObject aBaseURL(getOwnDocumentName());
@@ -2728,7 +2728,7 @@ void ScExternalRefManager::addFilesToLinkManager()
 
 void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(std::u16string_view rOwnDocName)
 {
-    if (maRelativeName.isEmpty())
+    if (mbPathMissing || maRelativeName.isEmpty())
         // No relative path given.  Nothing to do.
         return;
 
@@ -3113,6 +3113,20 @@ void ScExternalRefManager::setFilterData(sal_uInt16 nFileId, const OUString& rFi
     maSrcFiles[nFileId].maFilterOptions = rOptions;
 }
 
+bool ScExternalRefManager::isPathMissing(sal_uInt16 nFileId)
+{
+    if (nFileId >= maSrcFiles.size())
+        return true;
+    return maSrcFiles[nFileId].mbPathMissing;
+}
+
+void ScExternalRefManager::setPathMissing(sal_uInt16 nFileId)
+{
+    if (nFileId >= maSrcFiles.size())
+        return;
+    maSrcFiles[nFileId].mbPathMissing = true;
+}
+
 void ScExternalRefManager::clear()
 {
     for (auto& rEntry : maLinkListeners)
@@ -3139,6 +3153,9 @@ void ScExternalRefManager::resetSrcFileData(const OUString& rBaseFileUrl)
 {
     for (auto& rSrcFile : maSrcFiles)
     {
+        if (rSrcFile.mbPathMissing)
+            continue;
+
         // Re-generate relative file name from the absolute file name.
         OUString aAbsName = rSrcFile.maRealFileName;
         if (aAbsName.isEmpty())

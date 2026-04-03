@@ -433,6 +433,7 @@ public:
         OUString maRelativeName;
         OUString maFilterName;
         OUString maFilterOptions;
+        bool mbPathMissing = false;  /// true if external relation is (xlPathMissing).
 
         void maybeCreateRealFileName(std::u16string_view rOwnDocName);
     };
@@ -646,6 +647,9 @@ public:
      * @param rOptions
      */
     void setFilterData(sal_uInt16 nFileId, const OUString& rFilterName, const OUString& rOptions);
+
+    SC_DLLPUBLIC bool isPathMissing(sal_uInt16 nFileId);
+    void setPathMissing(sal_uInt16 nFileId);
 
     void clear();
 

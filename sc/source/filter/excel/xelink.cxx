@@ -366,6 +366,7 @@ private:
     XclSupbookType      meType;         /// Type of this SUPBOOK record.
     sal_uInt16          mnXclTabCount;  /// Number of internal sheets.
     sal_uInt16          mnFileId;       /// 1-based external reference file ID for OOXML
+    bool                mbPathMissing = false; /// true if external relation is xlPathMissing.
 };
 
 // All SUPBOOKS in a document =================================================
@@ -1531,6 +1532,7 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rUrl ) :
     ScExternalRefManager* pRefMgr = rRoot.GetDoc().GetExternalRefManager();
     sal_uInt16 nFileId = pRefMgr->getExternalFileId( rUrl );
     mnFileId = nFileId + 1;
+    mbPathMissing = pRefMgr->isPathMissing(nFileId);
     ScfStringVec aTabNames;
     pRefMgr->getAllCachedTableNames( nFileId, aTabNames );
     size_t nTabIndex = 0;
@@ -1669,20 +1671,27 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr pExternalLink = rStrm.GetCurrentStream();
 
     // Add relation for this stream, e.g. xl/externalLinks/_rels/externalLink1.xml.rels
-    sal_uInt16 nLevel = 0;
-    bool bRel = true;
-
-    // BuildFileName delete ../ and convert them to nLevel
-    // but addrelation needs ../ instead of nLevel, so we have to convert it back
-    OUString sFile = XclExpHyperlink::BuildFileName(nLevel, bRel, maUrl, GetRoot(), true);
-    while (nLevel > 0)
+    OUString sFile = maUrl;
+    OUString sRelType;
+    if (mbPathMissing)
+        sRelType = oox::getRelationship(Relationship::MISSINGEXTERNALLINKPATH);
+    else
     {
-        sFile = "../" + sFile;
-        --nLevel;
+        sal_uInt16 nLevel = 0;
+        bool bRel = true;
+
+        // BuildFileName delete ../ and convert them to nLevel
+        // but addrelation needs ../ instead of nLevel, so we have to convert it back
+        sFile = XclExpHyperlink::BuildFileName(nLevel, bRel, maUrl, GetRoot(), true);
+        while (nLevel > 0)
+        {
+            sFile = "../" + sFile;
+            --nLevel;
+        }
+        sRelType = oox::getRelationship(Relationship::EXTERNALLINKPATH);
     }
 
-    OUString sId = rStrm.addRelation( pExternalLink->getOutputStream(),
-            oox::getRelationship(Relationship::EXTERNALLINKPATH), sFile, true );
+    OUString sId = rStrm.addRelation(pExternalLink->getOutputStream(), sRelType, sFile, true);
 
     pExternalLink->startElement( XML_externalLink,
             XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8());

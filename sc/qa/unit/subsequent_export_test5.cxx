@@ -70,22 +70,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf142929_filterLessThanXLSX)
     assertXPath(pDoc, "//x:customFilters/x:customFilter", "operator", u"lessThan");
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest5, testInvalidNamedRange)
-{
-    // Given a document which has a named range (myname) that refers to the "1" external link, but
-    // the link's type is xlPathMissing, when importing that document:
-    createScDoc("xlsx/invalid-named-range.xlsx");
-
-    // Then make sure that named range is ignored, as "1" can't be resolved, and exporting it back
-    // to XLSX (without the xlPathMissing link) would corrupt the document:
-    uno::Reference<beans::XPropertySet> xDocProps(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xNamedRanges(
-        xDocProps->getPropertyValue(u"NamedRanges"_ustr), uno::UNO_QUERY);
-    // Without the fix in place, this test would have failed, we didn't ignore the problematic named
-    // range on import.
-    CPPUNIT_ASSERT(!xNamedRanges->hasByName(u"myname"_ustr));
-}
-
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testExternalDefinedNameXLSX)
 {
     createScDoc("xlsx/tdf144397.xlsx");

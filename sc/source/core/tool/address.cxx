@@ -429,8 +429,9 @@ static const sal_Unicode * lcl_XL_ParseSheetRef( const sal_Unicode* start,
     TRUE in all other cases, also when there is no index sequence or the input
     name is not numeric.
  */
-static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExternDocName,
-                                   const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
+static bool lcl_XL_getExternalDoc(const sal_Unicode** ppErrRet, OUString& rExternDocName,
+                                  const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
+                                  bool& bMissingPath)
 {
     // 1-based, sequence starts with an empty element.
     if (pExternalLinks && pExternalLinks->hasElements())
@@ -445,6 +446,7 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExte
             switch (rInfo.Type)
             {
                 case sheet::ExternalLinkType::DOCUMENT :
+                case sheet::ExternalLinkType::MISSINGDOCUMENT:
                     {
                         OUString aStr;
                         if (!(rInfo.Data >>= aStr))
@@ -457,6 +459,8 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExte
                             return false;
                         }
                         rExternDocName = aStr;
+                        if (rInfo.Type == sheet::ExternalLinkType::MISSINGDOCUMENT)
+                            bMissingPath = true;
                     }
                     break;
                     case sheet::ExternalLinkType::SELF :
@@ -498,6 +502,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     rExternDocName.clear();
     const sal_Unicode* pMsoxlQuoteStop = nullptr;
     const sal_Unicode* pQuoted3DStop = nullptr;
+    bool bMissingPath = false;
     if (*p == '[')
     {
         ++p;
@@ -523,10 +528,11 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         ++p;
 
         const sal_Unicode* pErrRet = start;
-        if (!lcl_XL_getExternalDoc( &pErrRet, rExternDocName, pExternalLinks))
+        if (!lcl_XL_getExternalDoc(&pErrRet, rExternDocName, pExternalLinks, bMissingPath))
             return pErrRet;
 
-        rExternDocName = ScGlobal::GetAbsDocName(rExternDocName, rDoc.GetDocumentShell());
+        if (!bMissingPath)
+            rExternDocName = ScGlobal::GetAbsDocName(rExternDocName, rDoc.GetDocumentShell());
     }
     else if (*p == '\'')
     {
@@ -594,7 +600,8 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                     if (nOpen == 0)
                     {
                         const sal_Unicode* pErrRet = start;
-                        if (!lcl_XL_getExternalDoc( &pErrRet, rExternDocName, pExternalLinks))
+                        if (!lcl_XL_getExternalDoc(&pErrRet, rExternDocName, pExternalLinks,
+                                                   bMissingPath))
                             return pErrRet;
                     }
                 }
@@ -648,7 +655,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         // Use the current tab, it needs to be passed in. : aEnd.SetTab( .. );
     }
 
-    if (!rExternDocName.isEmpty())
+    if (!bMissingPath && !rExternDocName.isEmpty())
     {
         ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
         pRefMgr->convertToAbsName(rExternDocName);

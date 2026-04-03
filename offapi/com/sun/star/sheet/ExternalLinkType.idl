@@ -48,6 +48,10 @@ constants ExternalLinkType
      */
     const long SPECIAL  = 4;
 
+    /** Missing external document.
+     */
+    const long MISSINGDOCUMENT = 5;
+
 };
 
 

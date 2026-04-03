@@ -1611,6 +1611,17 @@ uno::Reference< sheet::XExternalDocLink > SAL_CALL ScExternalDocLinksObj::addDoc
     return aDocLink;
 }
 
+uno::Reference<sheet::XExternalDocLink>
+    SAL_CALL ScExternalDocLinksObj::addMissingDocLink(const OUString& aDocName)
+{
+    SolarMutexGuard aGuard;
+    sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aDocName);
+    mpRefMgr->setPathMissing(nFileId);
+    uno::Reference<sheet::XExternalDocLink> aDocLink(
+        new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
+    return aDocLink;
+}
+
 Any SAL_CALL ScExternalDocLinksObj::getByName(const OUString &aName)
 {
     SolarMutexGuard aGuard;
