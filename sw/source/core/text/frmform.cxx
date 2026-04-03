@@ -1486,18 +1486,16 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         SwTwips nContentBottom = nFrameBottom;
         for (auto* pObj : *GetDrawObjs())
         {
-            auto pFly = pObj ? pObj->DynCastFlyFrame() : nullptr;
-            auto pContentFly = pFly ? pFly->DynCastFlyAtContentFrame() : nullptr;
-            if (!pContentFly)
+            auto pFly = pObj ? pObj->DynCastFlyAtContentFrame() : nullptr;
+            if (!pFly)
                 continue;
-            if (pContentFly->IsInMakeAll())
+            if (pFly->IsInMakeAll())
             {
                 // We are called from inside one of our own flys' MakeAll - do not grow at all
                 nContentBottom = nFrameBottom;
                 break;
             }
-            if (!pContentFly->Lower() || !pContentFly->isFrameAreaPositionValid()
-                || !pContentFly->IsFlySplitAllowed())
+            if (!pFly->Lower() || !pFly->isFrameAreaPositionValid() || !pFly->IsFlySplitAllowed())
                 continue;
 
             SwTwips nFlyHeight = aRectFnSet.GetHeight(pFly->getFrameArea());
