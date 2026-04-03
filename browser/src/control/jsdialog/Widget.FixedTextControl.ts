@@ -39,6 +39,10 @@ JSDialog.fixedtextControl = function (
 	if (data.text) fixedtext.textContent = builder._cleanText(data.text);
 	else if (data.html) fixedtext.innerHTML = data.html;
 
+	if (data.xalign) {
+		fixedtext.style.cssText = 'text-align:' + data.xalign + ';';
+	}
+
 	const accKey = builder._getAccessKeyFromText(data.text);
 	builder._stressAccessKey(fixedtext, accKey);
 
