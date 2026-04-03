@@ -53,8 +53,7 @@ $(eval $(call gb_Library_use_libraries,svx,\
     cppu \
     $(call gb_Helper_optional,BREAKPAD, \
 		crashreport) \
-    $(call gb_Helper_optional,DBCONNECTIVITY, \
-        dbtools) \
+    dbtools \
     docmodel \
     drawinglayercore \
     drawinglayer \

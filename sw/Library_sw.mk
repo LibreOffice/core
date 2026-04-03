@@ -60,8 +60,7 @@ $(eval $(call gb_Library_use_libraries,sw,\
     comphelper \
     cppu \
     cppuhelper \
-    $(call gb_Helper_optional,DBCONNECTIVITY, \
-        dbtools) \
+    dbtools \
     docmodel \
     drawinglayercore \
     drawinglayer \
