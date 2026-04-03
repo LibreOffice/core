@@ -91,17 +91,20 @@ IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl, weld::Button&, void)
     OUString aDesc(m_xEnterAUrl->get_label());
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(
+    VclPtr<AbstractSvxNameDialog> pDlg(
         pFact->CreateSvxNameDialog(m_xDialog.get(), OUString(), aDesc));
 
-    if (pDlg->Execute() == RET_OK)
-    {
-        AddTSAURL(pDlg->GetName());
-        m_xOKBtn->set_sensitive(true);
-    }
-    m_xURLListBox->unselect_all();
-    // After operations in a ListBox we have nothing selected
-    m_xDeleteBtn->set_sensitive(false);
+    pDlg->StartExecuteAsync([this, pDlg](sal_Int32 nResult) {
+        if (nResult == RET_OK)
+        {
+            AddTSAURL(pDlg->GetName());
+            m_xOKBtn->set_sensitive(true);
+        }
+        pDlg->disposeOnce();
+        m_xURLListBox->unselect_all();
+        // After operations in a ListBox we have nothing selected
+        m_xDeleteBtn->set_sensitive(false);
+    });
 }
 
 IMPL_LINK_NOARG(TSAURLsDialog, SelectHdl, weld::TreeView&, void)
