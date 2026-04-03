@@ -31,6 +31,7 @@
 #include <vcl/customweld.hxx>
 
 enum class PageType;
+class AbstractSvxNameDialog;
 class ColorListBox;
 
 class SvxLineTabDialog final : public SfxTabDialogController
@@ -292,6 +293,11 @@ private:
 
     void CheckChanges_Impl();
 
+    void AddDash(const OUString& aName);
+    void runAddNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount);
+    void runModifyNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos,
+                             const OUString& rOldName);
+
 public:
     SvxLineDefTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SvxLineDefTabPage() override;
@@ -351,6 +357,12 @@ private:
 
     void SelectLineEndHdl_Impl();
     void CheckChanges_Impl();
+
+    void AddLineEnd(const OUString& aName, const basegfx::B2DPolyPolygon& rPolyPolygon);
+    void ModifyLineEnd(sal_Int32 nPos, const OUString& aName);
+    void runAddNameDialog(VclPtr<AbstractSvxNameDialog> pDlg,
+                          const basegfx::B2DPolyPolygon& rPolyPolygon);
+    void runModifyNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos);
 
 public:
     SvxLineEndDefTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

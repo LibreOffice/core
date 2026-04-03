@@ -506,55 +506,88 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-    bool bLoop = true;
+    VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-    while ( bLoop && pDlg->Execute() == RET_OK )
-    {
-        aName = pDlg->GetName();
-        bDifferent = true;
+    runAddNameDialog(pDlg, nCount);
+}
 
-        for( tools::Long i = 0; i < nCount && bDifferent; i++ )
+void SvxLineDefTabPage::runAddNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount)
+{
+    pDlg->StartExecuteAsync([pDlg, nCount, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
         {
-            if( aName == pDashList->GetDash( i )->GetName() )
+            pDlg->disposeOnce();
+            // determine button state
+            if (pDashList->Count())
+            {
+                m_xBtnModify->set_sensitive(true);
+                m_xBtnDelete->set_sensitive(true);
+                m_xBtnSave->set_sensitive(true);
+            }
+            return;
+        }
+
+        OUString aName = pDlg->GetName();
+
+        bool bDifferent = true;
+        for (tools::Long i = 0; i < nCount && bDifferent; i++)
+        {
+            if (aName == pDashList->GetDash(i)->GetName())
                 bDifferent = false;
         }
 
-        if( bDifferent )
+        if (bDifferent)
         {
-            bLoop = false;
-            FillDash_Impl();
-
-            tools::Long nDashCount = pDashList->Count();
-            pDashList->Insert( std::make_unique<XDashEntry>(aDash, aName), nDashCount );
-            m_xLbLineStyles->Append( *pDashList->GetDash(nDashCount), pDashList->GetUiBitmap(nDashCount) );
-
-            m_xLbLineStyles->set_active(m_xLbLineStyles->get_count() - 1);
-
-            *pnDashListState |= ChangeType::MODIFIED;
-
-            *pPageType = PageType::Hatch;
-
-            // save values for changes recognition (-> method)
-            m_xNumFldNumber1->save_value();
-            m_xMtrLength1->save_value();
-            m_xLbType1->save_value();
-            m_xNumFldNumber2->save_value();
-            m_xMtrLength2->save_value();
-            m_xLbType2->save_value();
-            m_xMtrDistance->save_value();
+            pDlg->disposeOnce();
+            AddDash(aName);
+            return;
         }
-        else
-        {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-            xBox->run();
-        }
-    }
-    pDlg.disposeAndClear();
+
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(xWarnBox, [pDlg, nCount, this](sal_Int32 nWarnResult) {
+            if (nWarnResult == RET_OK)
+                runAddNameDialog(pDlg, nCount);
+            else
+            {
+                pDlg->disposeOnce();
+                // determine button state
+                if (pDashList->Count())
+                {
+                    m_xBtnModify->set_sensitive(true);
+                    m_xBtnDelete->set_sensitive(true);
+                    m_xBtnSave->set_sensitive(true);
+                }
+            }
+        });
+    });
+}
+
+void SvxLineDefTabPage::AddDash(const OUString& aName)
+{
+    FillDash_Impl();
+
+    tools::Long nDashCount = pDashList->Count();
+    pDashList->Insert(std::make_unique<XDashEntry>(aDash, aName), nDashCount);
+    m_xLbLineStyles->Append(*pDashList->GetDash(nDashCount), pDashList->GetUiBitmap(nDashCount));
+
+    m_xLbLineStyles->set_active(m_xLbLineStyles->get_count() - 1);
+
+    *pnDashListState |= ChangeType::MODIFIED;
+
+    *pPageType = PageType::Hatch;
+
+    // save values for changes recognition (-> method)
+    m_xNumFldNumber1->save_value();
+    m_xMtrLength1->save_value();
+    m_xLbType1->save_value();
+    m_xNumFldNumber2->save_value();
+    m_xMtrLength2->save_value();
+    m_xLbType2->save_value();
+    m_xMtrDistance->save_value();
 
     // determine button state
-    if ( pDashList->Count() )
+    if (pDashList->Count())
     {
         m_xBtnModify->set_sensitive(true);
         m_xBtnDelete->set_sensitive(true);
@@ -573,26 +606,34 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     OUString aOldName = aName;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-    tools::Long nCount = pDashList->Count();
-    bool bLoop = true;
+    runModifyNameDialog(pDlg, nPos, aOldName);
+}
 
-    while ( bLoop && pDlg->Execute() == RET_OK )
-    {
-        aName = pDlg->GetName();
-        bool bDifferent = true;
-
-        for( tools::Long i = 0; i < nCount && bDifferent; i++ )
+void SvxLineDefTabPage::runModifyNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos,
+                                            const OUString& rOldName)
+{
+    pDlg->StartExecuteAsync([pDlg, nPos, rOldName, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
         {
-            if( aName == pDashList->GetDash( i )->GetName() &&
-                aName != aOldName )
+            pDlg->disposeOnce();
+            return;
+        }
+
+        OUString aName = pDlg->GetName();
+        bool bDifferent = true;
+        tools::Long nCount = pDashList->Count();
+
+        for (tools::Long i = 0; i < nCount && bDifferent; i++)
+        {
+            if (aName == pDashList->GetDash(i)->GetName() && aName != rOldName)
                 bDifferent = false;
         }
 
-        if ( bDifferent )
+        if (bDifferent)
         {
-            bLoop = false;
+            pDlg->disposeOnce();
             FillDash_Impl();
 
             pDashList->Replace(std::make_unique<XDashEntry>(aDash, aName), nPos);
@@ -612,14 +653,19 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
             m_xMtrLength2->save_value();
             m_xLbType2->save_value();
             m_xMtrDistance->save_value();
+            return;
         }
-        else
-        {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-            xBox->run();
-        }
-    }
+
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(
+            xWarnBox, [pDlg, nPos, rOldName, this](sal_Int32 nWarnResult) {
+                if (nWarnResult == RET_OK)
+                    runModifyNameDialog(pDlg, nPos, rOldName);
+                else
+                    pDlg->disposeOnce();
+            });
+    });
 }
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl, weld::Button&, void)

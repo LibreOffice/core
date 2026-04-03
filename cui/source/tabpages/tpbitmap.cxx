@@ -647,31 +647,42 @@ void SvxBitmapTabPage::ClickRenameHdl()
     OUString aName( m_pBitmapList->GetBitmap( nPos )->GetName() );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-    bool bLoop = true;
-    while( bLoop && pDlg->Execute() == RET_OK )
-    {
-        aName = pDlg->GetName();
-        sal_Int32 nBitmapPos = SearchBitmapList( aName );
-        bool bValidBitmapName = (nBitmapPos == nPos ) || (nBitmapPos == -1);
+    runRenameDialog(pDlg, nPos);
+}
 
-        if(bValidBitmapName)
+void SvxBitmapTabPage::runRenameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos)
+{
+    pDlg->StartExecuteAsync([pDlg, nPos, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
         {
-            bLoop = false;
+            pDlg->disposeOnce();
+            return;
+        }
+
+        OUString aName = pDlg->GetName();
+        sal_Int32 nBitmapPos = SearchBitmapList(aName);
+        bool bValidBitmapName = (nBitmapPos == nPos) || (nBitmapPos == -1);
+
+        if (bValidBitmapName)
+        {
+            pDlg->disposeOnce();
             m_pBitmapList->GetBitmap(nPos)->SetName(aName);
-
             m_xBitmapLB->set_text(nPos, aName);
-
             m_nBitmapListState |= ChangeType::MODIFIED;
+            return;
         }
-        else
-        {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-            xBox->run();
-        }
-    }
+
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(xWarnBox, [pDlg, nPos, this](sal_Int32 nWarnResult) {
+            if (nWarnResult == RET_OK)
+                runRenameDialog(pDlg, nPos);
+            else
+                pDlg->disposeOnce();
+        });
+    });
 }
 
 void SvxBitmapTabPage::ClickDeleteHdl()
@@ -858,54 +869,12 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
         OUString aDesc(CuiResId(RID_CUISTR_DESC_EXT_BITMAP));
 
         // convert file URL to UI name
-        OUString        aName;
         INetURLObject   aURL( aDlg.GetPath() );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(
+        VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(
             pDialogFrameWeld, aURL.GetLastName().getToken(0, '.'), aDesc));
-        nError = ErrCode(1);
 
-        while( pDlg->Execute() == RET_OK )
-        {
-            aName = pDlg->GetName();
-
-            bool bDifferent = true;
-
-            for( tools::Long i = 0; i < nCount && bDifferent; i++ )
-                if( aName == m_pBitmapList->GetBitmap( i )->GetName() )
-                    bDifferent = false;
-
-            if( bDifferent ) {
-                nError = ERRCODE_NONE;
-                break;
-            }
-
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDialogFrameWeld, u"cui/ui/queryduplicatedialog.ui"_ustr));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-            if (xBox->run() != RET_OK)
-                break;
-        }
-
-        pDlg.disposeAndClear();
-
-        if( !nError )
-        {
-            m_pBitmapList->Insert(std::make_unique<XBitmapEntry>(aGraphic, aName), nCount);
-
-            OUString sId = nCount > 0 ? m_xBitmapLB->get_id( nCount - 1 ) : OUString();
-            sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
-            Bitmap aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, aIconSize );
-            auto pVDev = GetVirtualDevice(aBitmap);
-            Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
-
-            m_xBitmapLB->insert( nId + 1, &aName, &sId, &aBmp, nullptr);
-            FillPresetListBox();
-
-            m_xBitmapLB->select( nId + 1 );
-            m_nBitmapListState |= ChangeType::MODIFIED;
-
-            ModifyBitmapHdl(*m_xBitmapLB);
-        }
+        runImportNameDialog(pDlg, nCount, aGraphic);
     }
     else
     {
@@ -914,6 +883,58 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
         std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"NoLoadedFileDialog"_ustr));
         xBox->run();
     }
+}
+
+void SvxBitmapTabPage::runImportNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount,
+                                           const Graphic& rGraphic)
+{
+    pDlg->StartExecuteAsync([pDlg, nCount, rGraphic, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+        {
+            pDlg->disposeOnce();
+            return;
+        }
+
+        OUString aName = pDlg->GetName();
+
+        bool bDifferent = (SearchBitmapList(aName) == -1);
+        if (bDifferent)
+        {
+            pDlg->disposeOnce();
+            ImportBitmap(aName, nCount, rGraphic);
+            return;
+        }
+
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(
+            xWarnBox, [pDlg, nCount, rGraphic, this](sal_Int32 nWarnResult) {
+                if (nWarnResult == RET_OK)
+                    runImportNameDialog(pDlg, nCount, rGraphic);
+                else
+                    pDlg->disposeOnce();
+            });
+    });
+}
+
+void SvxBitmapTabPage::ImportBitmap(const OUString& aName, tools::Long nCount,
+                                    const Graphic& rGraphic)
+{
+    m_pBitmapList->Insert(std::make_unique<XBitmapEntry>(rGraphic, aName), nCount);
+
+    OUString sId = nCount > 0 ? m_xBitmapLB->get_id(nCount - 1) : OUString();
+    sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
+    Bitmap aBitmap = m_pBitmapList->GetBitmapForPreview(nCount, aIconSize);
+    ScopedVclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
+    Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
+
+    m_xBitmapLB->insert(nId + 1, &aName, &sId, &aBmp, nullptr);
+    FillPresetListBox();
+
+    m_xBitmapLB->select(nId + 1);
+    m_nBitmapListState |= ChangeType::MODIFIED;
+
+    ModifyBitmapHdl(*m_xBitmapLB);
 }
 
 ScopedVclPtr<VirtualDevice> SvxBitmapTabPage::GetVirtualDevice(Bitmap aBitmap)

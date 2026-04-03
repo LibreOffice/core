@@ -481,7 +481,7 @@ void SvxHatchTabPage::runNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::L
         }
 
         // Offer to try again
-        auto xWarnBox = std::make_shared<weld::MessageDialogController>(GetFrameWeld(),
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(GetFrameWeld(),
                 "cui/ui/queryduplicatedialog.ui", "DuplicateNameDialog");
         weld::DialogController::runAsync(xWarnBox, [pDlg, nCount, this](sal_Int32 nWarnResult) {
             if (nWarnResult == RET_OK)
@@ -672,32 +672,42 @@ void SvxHatchTabPage::ClickRenameHdl()
     OUString aName( m_pHatchingList->GetHatch( nPos )->GetName() );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-    bool bLoop = true;
-    while( bLoop && pDlg->Execute() == RET_OK )
-    {
-        aName = pDlg->GetName();
-        sal_Int32 nHatchPos = SearchHatchList( aName );
-        bool bValidHatchName = (nHatchPos == nPos ) || (nHatchPos == -1);
+    runRenameDialog(pDlg, nPos);
+}
 
-        if(bValidHatchName)
+void SvxHatchTabPage::runRenameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos)
+{
+    pDlg->StartExecuteAsync([pDlg, nPos, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
         {
-            bLoop = false;
+            pDlg->disposeOnce();
+            return;
+        }
+
+        OUString aName = pDlg->GetName();
+        sal_Int32 nHatchPos = SearchHatchList(aName);
+        bool bValidHatchName = (nHatchPos == nPos) || (nHatchPos == -1);
+
+        if (bValidHatchName)
+        {
+            pDlg->disposeOnce();
             m_pHatchingList->GetHatch(nPos)->SetName(aName);
-
             m_xHatchLB->set_text(nPos, aName);
-
             m_nHatchingListState |= ChangeType::MODIFIED;
+            return;
         }
-        else
-        {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-            xBox->run();
-        }
-    }
 
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(xWarnBox, [pDlg, nPos, this](sal_Int32 nWarnResult) {
+            if (nWarnResult == RET_OK)
+                runRenameDialog(pDlg, nPos);
+            else
+                pDlg->disposeOnce();
+        });
+    });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

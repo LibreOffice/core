@@ -371,60 +371,80 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-    sal_uInt16 nError   = 1;
+    VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-    while (pDlg->Execute() == RET_OK)
-    {
-        aName = pDlg->GetName();
+    runAddNameDialog(pDlg, nCount);
+}
 
-        bValidGradientName = (SearchGradientList(aName) == -1);
-
-        if (bValidGradientName)
+void SvxGradientTabPage::runAddNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount)
+{
+    pDlg->StartExecuteAsync([pDlg, nCount, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
         {
-            nError = 0;
-            break;
+            pDlg->disposeOnce();
+            // determine button state
+            if (m_pGradientList->Count())
+                m_xBtnModify->set_sensitive(true);
+            return;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-        if (xWarnBox->run() != RET_OK)
-            break;
-    }
-    pDlg.disposeAndClear();
+        OUString aName = pDlg->GetName();
 
-    if( !nError )
-    {
-        sal_uInt16 nValue = 0; // automatic step count
-        if (!m_xCbIncrement->get_active())
-            nValue = m_xMtrIncrement->get_value();
-        basegfx::BGradient aBGradient(
-                              createColorStops(),
-                              static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
-                              Degree10(static_cast<sal_Int16>((m_xMtrAngle->get_value(FieldUnit::NONE) % 360) * 10)),
-                              static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
-                              static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
-                              static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
-                              static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
-                              static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
-                              nValue);
+        bool bValidGradientName = (SearchGradientList(aName) == -1);
+        if (bValidGradientName)
+        {
+            pDlg->disposeOnce();
+            AddGradient(aName, nCount);
+            return;
+        }
 
-        m_pGradientList->Insert(std::make_unique<XGradientEntry>(aBGradient, aName), nCount);
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(xWarnBox, [pDlg, nCount, this](sal_Int32 nWarnResult) {
+            if (nWarnResult == RET_OK)
+                runAddNameDialog(pDlg, nCount);
+            else
+            {
+                pDlg->disposeOnce();
+                // determine button state
+                if (m_pGradientList->Count())
+                    m_xBtnModify->set_sensitive(true);
+            }
+        });
+    });
+}
 
-        OUString sId = nCount > 0 ? m_xGradientLB->get_id( nCount - 1 ) : OUString();
-        sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
-        Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( nCount, aIconSize );
-        auto pVDev = GetVirtualDevice(aBitmap);
-        Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
+void SvxGradientTabPage::AddGradient(const OUString& aName, tools::Long nCount)
+{
+    sal_uInt16 nValue = 0; // automatic step count
+    if (!m_xCbIncrement->get_active())
+        nValue = m_xMtrIncrement->get_value();
+    basegfx::BGradient aBGradient(
+                          createColorStops(),
+                          static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
+                          Degree10(static_cast<sal_Int16>((m_xMtrAngle->get_value(FieldUnit::NONE) % 360) * 10)),
+                          static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
+                          nValue);
 
-        m_xGradientLB->insert( nId + 1, &aName, &sId, &aBmp, nullptr);
-        FillPresetListBox();
-        m_xGradientLB->select( nId + 1 );
+    m_pGradientList->Insert(std::make_unique<XGradientEntry>(aBGradient, aName), nCount);
 
-        m_nGradientListState |= ChangeType::MODIFIED;
+    OUString sId = nCount > 0 ? m_xGradientLB->get_id( nCount - 1 ) : OUString();
+    sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
+    Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( nCount, aIconSize );
+    ScopedVclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
+    Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
 
-        ChangeGradientHdl_Impl();
-    }
+    m_xGradientLB->insert( nId + 1, &aName, &sId, &aBmp, nullptr);
+    FillPresetListBox();
+    m_xGradientLB->select( nId + 1 );
+
+    m_nGradientListState |= ChangeType::MODIFIED;
+
+    ChangeGradientHdl_Impl();
 
     // determine button state
     if (m_pGradientList->Count())
@@ -472,7 +492,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     m_pGradientList->Replace(std::make_unique<XGradientEntry>(aBGradient, aName), nPos);
 
     Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), aIconSize );
-    auto pVDev = GetVirtualDevice(aBitmap);
+    ScopedVclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
     Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
 
     m_xGradientLB->remove( nPos );
@@ -595,31 +615,42 @@ void SvxGradientTabPage::ClickRenameHdl()
     OUString aName( m_pGradientList->GetGradient( nPos )->GetName() );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-    bool bLoop = true;
-    while( bLoop && pDlg->Execute() == RET_OK )
-    {
-        aName = pDlg->GetName();
+    runRenameDialog(pDlg, nPos);
+}
+
+void SvxGradientTabPage::runRenameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos)
+{
+    pDlg->StartExecuteAsync([pDlg, nPos, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+        {
+            pDlg->disposeOnce();
+            return;
+        }
+
+        OUString aName = pDlg->GetName();
         sal_Int32 nGradientPos = SearchGradientList(aName);
-        bool bValidGradientName = (nGradientPos == nPos ) || (nGradientPos == -1);
+        bool bValidGradientName = (nGradientPos == nPos) || (nGradientPos == -1);
 
-        if( bValidGradientName )
+        if (bValidGradientName)
         {
-            bLoop = false;
+            pDlg->disposeOnce();
             m_pGradientList->GetGradient(nPos)->SetName(aName);
-
-            m_xGradientLB->set_text( nPos, aName );
-
+            m_xGradientLB->set_text(nPos, aName);
             m_nGradientListState |= ChangeType::MODIFIED;
+            return;
         }
-        else
-        {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-            xBox->run();
-        }
-    }
+
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(xWarnBox, [pDlg, nPos, this](sal_Int32 nWarnResult) {
+            if (nWarnResult == RET_OK)
+                runRenameDialog(pDlg, nPos);
+            else
+                pDlg->disposeOnce();
+        });
+    });
 }
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl, weld::IconView&, void)

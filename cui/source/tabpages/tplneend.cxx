@@ -281,39 +281,62 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     // if yes, repeat and demand a new name
     if ( !bDifferent )
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-        std::unique_ptr<weld::MessageDialog> xWarningBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-        xWarningBox->run();
-
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-        bool bLoop = true;
-
-        while( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
-        {
-            aName = pDlg->GetName();
-            bDifferent = true;
-
-            for( tools::Long i = 0; i < nCount && bDifferent; i++ )
-            {
-                if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = false;
-            }
-
-            if( bDifferent )
-                bLoop = false;
-            else
-                xWarningBox->run();
-        }
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(xWarnBox, [this, nPos, aName, aDesc](sal_Int32 /*nWarnResult*/) {
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            VclPtr<AbstractSvxNameDialog> pDlg(
+                pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+            runModifyNameDialog(pDlg, nPos);
+        });
+        return;
     }
 
-    // if not existing, enter the entry
-    if( !bDifferent )
-        return;
+    ModifyLineEnd(nPos, aName);
+}
 
+void SvxLineEndDefTabPage::runModifyNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos)
+{
+    pDlg->StartExecuteAsync([pDlg, nPos, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+        {
+            pDlg->disposeOnce();
+            return;
+        }
+
+        OUString aName = pDlg->GetName();
+        bool bDifferent = true;
+        tools::Long nCount = pLineEndList->Count();
+
+        for (tools::Long i = 0; i < nCount && bDifferent; i++)
+        {
+            if (aName == pLineEndList->GetLineEnd(i)->GetName())
+                bDifferent = false;
+        }
+
+        if (bDifferent)
+        {
+            pDlg->disposeOnce();
+            ModifyLineEnd(nPos, aName);
+            return;
+        }
+
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(xWarnBox, [pDlg, nPos, this](sal_Int32 nWarnResult) {
+            if (nWarnResult == RET_OK)
+                runModifyNameDialog(pDlg, nPos);
+            else
+                pDlg->disposeOnce();
+        });
+    });
+}
+
+void SvxLineEndDefTabPage::ModifyLineEnd(sal_Int32 nPos, const OUString& aName)
+{
     const XLineEndEntry* pOldEntry = pLineEndList->GetLineEnd(nPos);
 
-    if(pOldEntry)
+    if (pOldEntry)
     {
         // #123497# Need to replace the existing entry with a new one
         pLineEndList->Replace(std::make_unique<XLineEndEntry>(pOldEntry->GetLineEnd(), aName), nPos);
@@ -389,42 +412,9 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
         }
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc ));
-        bool bLoop = true;
+        VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-        while ( bLoop && pDlg->Execute() == RET_OK )
-        {
-            aName = pDlg->GetName();
-            bDifferent = true;
-
-            for( tools::Long i = 0; i < nCount && bDifferent; i++ )
-            {
-                if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = false;
-            }
-
-            if( bDifferent )
-            {
-                bLoop = false;
-
-                auto nLineEndCount = pLineEndList->Count();
-                pLineEndList->Insert(std::make_unique<XLineEndEntry>(aNewPolyPolygon, aName), nLineEndCount);
-
-                // add to the ListBox
-                m_xLbLineEnds->Append(*pLineEndList->GetLineEnd(nLineEndCount), pLineEndList->GetUiBitmap(nLineEndCount));
-                m_xLbLineEnds->set_active(m_xLbLineEnds->get_count() - 1);
-
-                *pnLineEndListState |= ChangeType::MODIFIED;
-
-                SelectLineEndHdl_Impl();
-            }
-            else
-            {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-                std::unique_ptr<weld::MessageDialog> xWarningBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-                xWarningBox->run();
-            }
-        }
+        runAddNameDialog(pDlg, aNewPolyPolygon);
     }
     else
         m_xBtnAdd->set_sensitive(false);
@@ -436,6 +426,61 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
         m_xBtnDelete->set_sensitive(true);
         m_xBtnSave->set_sensitive(true);
     }
+}
+
+void SvxLineEndDefTabPage::runAddNameDialog(VclPtr<AbstractSvxNameDialog> pDlg,
+                                            const basegfx::B2DPolyPolygon& rPolyPolygon)
+{
+    pDlg->StartExecuteAsync([pDlg, rPolyPolygon, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+        {
+            pDlg->disposeOnce();
+            return;
+        }
+
+        OUString aName = pDlg->GetName();
+        bool bDifferent = true;
+        tools::Long nCount = pLineEndList->Count();
+
+        for (tools::Long i = 0; i < nCount && bDifferent; i++)
+        {
+            if (aName == pLineEndList->GetLineEnd(i)->GetName())
+                bDifferent = false;
+        }
+
+        if (bDifferent)
+        {
+            pDlg->disposeOnce();
+            AddLineEnd(aName, rPolyPolygon);
+            return;
+        }
+
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(
+            xWarnBox, [pDlg, rPolyPolygon, this](sal_Int32 nWarnResult) {
+                if (nWarnResult == RET_OK)
+                    runAddNameDialog(pDlg, rPolyPolygon);
+                else
+                    pDlg->disposeOnce();
+            });
+    });
+}
+
+void SvxLineEndDefTabPage::AddLineEnd(const OUString& aName,
+                                      const basegfx::B2DPolyPolygon& rPolyPolygon)
+{
+    tools::Long nLineEndCount = pLineEndList->Count();
+    pLineEndList->Insert(std::make_unique<XLineEndEntry>(rPolyPolygon, aName), nLineEndCount);
+
+    // add to the ListBox
+    m_xLbLineEnds->Append(*pLineEndList->GetLineEnd(nLineEndCount),
+                           pLineEndList->GetUiBitmap(nLineEndCount));
+    m_xLbLineEnds->set_active(m_xLbLineEnds->get_count() - 1);
+
+    *pnLineEndListState |= ChangeType::MODIFIED;
+
+    SelectLineEndHdl_Impl();
 }
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, weld::Button&, void)

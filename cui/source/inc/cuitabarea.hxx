@@ -28,6 +28,7 @@
 
 class AbstractSvxNameDialog;
 class ColorListBox;
+class Graphic;
 class SdrModel;
 class SvxBitmapCtl;
 
@@ -382,6 +383,9 @@ private:
     // MCGR: Preserve ColorStops until we have a UI to edit these
     basegfx::BColorStops createColorStops();
 
+    void AddGradient(const OUString& aName, tools::Long nCount);
+    void runAddNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount);
+    void runRenameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos);
     static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Bitmap aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
@@ -461,6 +465,7 @@ private:
 
     void AddHatch(const OUString& aName, tools::Long nCount);
     void runNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount);
+    void runRenameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos);
     static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Bitmap aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
@@ -551,6 +556,10 @@ private:
     sal_Int32 SearchBitmapList(const GraphicObject& rGraphicObject);
     tools::Long AddBitmap(const GraphicObject& rGraphicObject, const OUString& rName,
                           bool bOnlyForThisDocument = false);
+    void runRenameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos);
+    void runImportNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount,
+                             const Graphic& rGraphic);
+    void ImportBitmap(const OUString& aName, tools::Long nCount, const Graphic& rGraphic);
     static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Bitmap aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
@@ -613,6 +622,9 @@ private:
 
     sal_Int32 SearchPatternList(std::u16string_view rPatternName);
 
+    void AddPattern(const OUString& aName, tools::Long nCount);
+    void runAddNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount);
+    void runRenameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos);
     static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Bitmap aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);

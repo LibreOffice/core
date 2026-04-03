@@ -378,72 +378,89 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-    sal_uInt16         nError(1);
+    VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-    while( pDlg->Execute() == RET_OK )
-    {
-        aName = pDlg->GetName();
+    runAddNameDialog(pDlg, nCount);
+}
 
-        bValidPatternName = (SearchPatternList(aName) == -1);
-
-        if( bValidPatternName ) {
-            nError = 0;
-            break;
+void SvxPatternTabPage::runAddNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount)
+{
+    pDlg->StartExecuteAsync([pDlg, nCount, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+        {
+            pDlg->disposeOnce();
+            // determine button state
+            if (m_pPatternList->Count())
+                m_xBtnModify->set_sensitive(true);
+            return;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-        if (xWarnBox->run() != RET_OK)
-            break;
+        OUString aName = pDlg->GetName();
+
+        bool bValidPatternName = (SearchPatternList(aName) == -1);
+        if (bValidPatternName)
+        {
+            pDlg->disposeOnce();
+            AddPattern(aName, nCount);
+            return;
+        }
+
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(xWarnBox, [pDlg, nCount, this](sal_Int32 nWarnResult) {
+            if (nWarnResult == RET_OK)
+                runAddNameDialog(pDlg, nCount);
+            else
+            {
+                pDlg->disposeOnce();
+                // determine button state
+                if (m_pPatternList->Count())
+                    m_xBtnModify->set_sensitive(true);
+            }
+        });
+    });
+}
+
+void SvxPatternTabPage::AddPattern(const OUString& aName, tools::Long nCount)
+{
+    std::unique_ptr<XBitmapEntry> pEntry;
+    if (m_xCtlPixel->IsEnabled())
+    {
+        const Bitmap aBitmap(m_xBitmapCtl->GetBitmap());
+        pEntry.reset(new XBitmapEntry(Graphic(aBitmap), aName));
+    }
+    else // it must be a not existing imported bitmap
+    {
+        if (const XFillBitmapItem* pFillBmpItem = m_rOutAttrs.GetItemIfSet(XATTR_FILLBITMAP))
+        {
+            pEntry.reset(new XBitmapEntry(pFillBmpItem->GetGraphicObject(), aName));
+        }
+        else
+            assert(!"SvxPatternTabPage::ClickAddHdl_Impl(), XBitmapEntry* pEntry == nullptr ?");
     }
 
-    pDlg.disposeAndClear();
-
-    if( !nError )
+    if (pEntry)
     {
-        std::unique_ptr<XBitmapEntry> pEntry;
-        if( m_xCtlPixel->IsEnabled() )
-        {
-            const Bitmap aBitmap(m_xBitmapCtl->GetBitmap());
+        m_pPatternList->Insert(std::move(pEntry), nCount);
 
-            pEntry.reset(new XBitmapEntry(Graphic(aBitmap), aName));
-        }
-        else // it must be a not existing imported bitmap
-        {
-            if(const XFillBitmapItem* pFillBmpItem = m_rOutAttrs.GetItemIfSet(XATTR_FILLBITMAP))
-            {
-                pEntry.reset(new XBitmapEntry(pFillBmpItem->GetGraphicObject(), aName));
-            }
-            else
-                assert(!"SvxPatternTabPage::ClickAddHdl_Impl(), XBitmapEntry* pEntry == nullptr ?");
-        }
+        OUString sId = nCount > 0 ? m_xPatternLB->get_id(nCount - 1) : OUString();
+        sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
+        Bitmap aBitmapEx = m_pPatternList->GetBitmapForPreview(nCount, aIconSize);
+        ScopedVclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmapEx);
+        Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
 
-        if( pEntry )
-        {
-            m_pPatternList->Insert(std::move(pEntry), nCount);
+        m_xPatternLB->insert(nId + 1, &aName, &sId, &aBmp, nullptr);
+        FillPresetListBox();
+        m_xPatternLB->select(nId + 1);
 
-            OUString sId = nCount > 0 ? m_xPatternLB->get_id( nCount - 1 ) : OUString();
-            sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
-            Bitmap aBitmapEx = m_pPatternList->GetBitmapForPreview( nCount, aIconSize );
-            auto pVDev = GetVirtualDevice(aBitmapEx);
-            Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
+        m_nPatternListState |= ChangeType::MODIFIED;
 
-            m_xPatternLB->insert( nId + 1, &aName, &sId, &aBmp, nullptr);
-            FillPresetListBox();
-            m_xPatternLB->select( nId + 1 );
-
-            m_nPatternListState |= ChangeType::MODIFIED;
-
-            ChangePatternHdl_Impl(*m_xPatternLB);
-        }
+        ChangePatternHdl_Impl(*m_xPatternLB);
     }
 
     // determine button state
-    if( m_pPatternList->Count() )
-    {
+    if (m_pPatternList->Count())
         m_xBtnModify->set_sensitive(true);
-    }
 }
 
 IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, weld::Button&, void)
@@ -562,33 +579,42 @@ void SvxPatternTabPage::ClickRenameHdl()
     OUString aName(m_pPatternList->GetBitmap(nPos)->GetName());
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-    bool bLoop = true;
+    runRenameDialog(pDlg, nPos);
+}
 
-    while( bLoop && pDlg->Execute() == RET_OK )
-    {
-        aName = pDlg->GetName();
+void SvxPatternTabPage::runRenameDialog(VclPtr<AbstractSvxNameDialog> pDlg, sal_Int32 nPos)
+{
+    pDlg->StartExecuteAsync([pDlg, nPos, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+        {
+            pDlg->disposeOnce();
+            return;
+        }
+
+        OUString aName = pDlg->GetName();
         sal_Int32 nPatternPos = SearchPatternList(aName);
-        bool bValidPatternName = (nPatternPos == nPos ) || (nPatternPos == -1);
+        bool bValidPatternName = (nPatternPos == nPos) || (nPatternPos == -1);
 
-        if( bValidPatternName )
+        if (bValidPatternName)
         {
-            bLoop = false;
-
+            pDlg->disposeOnce();
             m_pPatternList->GetBitmap(nPos)->SetName(aName);
-
-            m_xPatternLB->set_text( nPos, aName );
-
+            m_xPatternLB->set_text(nPos, aName);
             m_nPatternListState |= ChangeType::MODIFIED;
+            return;
         }
-        else
-        {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-            std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-            xWarnBox->run();
-        }
-    }
+
+        std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(
+            GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
+        weld::DialogController::runAsync(xWarnBox, [pDlg, nPos, this](sal_Int32 nWarnResult) {
+            if (nWarnResult == RET_OK)
+                runRenameDialog(pDlg, nPos);
+            else
+                pDlg->disposeOnce();
+        });
+    });
 }
 
 void SvxPatternTabPage::ClickDeleteHdl()
