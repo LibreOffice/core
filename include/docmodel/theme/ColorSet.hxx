@@ -37,6 +37,12 @@ public:
 
     Color resolveColor(model::ComplexColor const& rComplexColor) const;
 
+    /// Resolve a themed ComplexColor by applying LumMod and LumOff together
+    /// in a single HSL round-trip. Use this instead of resolveColor() for
+    /// OOXML-originated colors, where the two transforms must be combined
+    /// to produce correct results.
+    Color resolveOOXMLColor(model::ComplexColor const& rComplexColor) const;
+
     Color getColor(model::ThemeColorType eType) const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;

@@ -49,6 +49,37 @@ Color ColorSet::resolveColor(model::ComplexColor const& rComplexColor) const
     return rComplexColor.applyTransformations(aColor);
 }
 
+Color ColorSet::resolveOOXMLColor(model::ComplexColor const& rComplexColor) const
+{
+    auto eThemeType = rComplexColor.getThemeColorType();
+    if (eThemeType == model::ThemeColorType::Unknown)
+    {
+        SAL_WARN("svx", "ColorSet::resolveOOXMLColor with ThemeColorType::Unknown");
+        return COL_AUTO;
+    }
+
+    Color aColor = getColor(eThemeType);
+
+    // ComplexColor::applyTransformations() applies LumMod and LumOff as two
+    // separate RGB-HSL-RGB round-trips, but they must be combined into one
+    // call to get correct results (the intermediate round-trip can zero out
+    // saturation at boundary luminance values).
+    sal_Int16 nLumMod = 10'000;
+    sal_Int16 nLumOff = 0;
+    for (auto const& rTransform : rComplexColor.getTransformations())
+    {
+        if (rTransform.meType == model::TransformationType::LumMod)
+            nLumMod = static_cast<sal_Int16>(rTransform.mnValue);
+        else if (rTransform.meType == model::TransformationType::LumOff)
+            nLumOff = static_cast<sal_Int16>(rTransform.mnValue);
+    }
+
+    if (nLumMod != 10'000 || nLumOff != 0)
+        aColor.ApplyLumModOff(nLumMod, nLumOff);
+
+    return aColor;
+}
+
 void ColorSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ColorSet"));

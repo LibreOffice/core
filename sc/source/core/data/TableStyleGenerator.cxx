@@ -64,11 +64,6 @@ struct FontData
 
 /// Build a ComplexColor from OOXML theme index + tint and resolve it.
 /// Tint conversion replicates addExcelTintTransformation() from oox/source/drawingml/color.cxx.
-///
-/// Note: We resolve the color manually using Color::ApplyLumModOff() rather than
-/// ColorSet::resolveColor(), because ComplexColor::applyTransformations() applies
-/// LumMod and LumOff as separate sequential operations, but they must be applied
-/// together in a single ApplyLumModOff() call to get correct results.
 ResolvedColor resolveThemeColor(const model::ColorSet& rColorSet, const ThemeColor& rThemeColor)
 {
     ResolvedColor aResult;
@@ -77,38 +72,29 @@ ResolvedColor resolveThemeColor(const model::ColorSet& rColorSet, const ThemeCol
            && rThemeColor.nThemeId < static_cast<int>(std::size(aOoxmlIndexToThemeType)));
     model::ThemeColorType eType = aOoxmlIndexToThemeType[rThemeColor.nThemeId];
 
+    // Build ComplexColor with transforms in 10'000 scale (ComplexColor convention),
+    // converting from OOXML 100'000 scale used by addExcelTintTransformation().
     model::ComplexColor aComplexColor;
     aComplexColor.setThemeColor(eType);
 
     double fTint = rThemeColor.fTint;
-    sal_Int32 nLumModOox = 100'000;
-    sal_Int32 nLumOffOox = 0;
-
     if (fTint > 0.0)
     {
-        sal_Int32 nValue = std::round(std::abs(fTint) * 100'000.0);
-        nLumModOox = 100'000 - nValue;
-        nLumOffOox = nValue;
-        aComplexColor.addTransformation({ model::TransformationType::LumMod, nLumModOox });
-        aComplexColor.addTransformation({ model::TransformationType::LumOff, nLumOffOox });
+        sal_Int32 nValue = std::round(std::abs(fTint) * 10'000.0);
+        aComplexColor.addTransformation(
+            { model::TransformationType::LumMod, 10'000 - nValue });
+        aComplexColor.addTransformation(
+            { model::TransformationType::LumOff, nValue });
     }
     else if (fTint < 0.0)
     {
-        sal_Int32 nValue = std::round(std::abs(fTint) * 100'000.0);
-        nLumModOox = 100'000 - nValue;
-        aComplexColor.addTransformation({ model::TransformationType::LumMod, nLumModOox });
+        sal_Int32 nValue = std::round(std::abs(fTint) * 10'000.0);
+        aComplexColor.addTransformation(
+            { model::TransformationType::LumMod, 10'000 - nValue });
     }
 
     aResult.maComplexColor = aComplexColor;
-
-    // Resolve: get base theme color, then apply LumMod+LumOff together.
-    // ApplyLumModOff uses 10'000 = 100% scale (sal_Int16), so divide OOXML values by 10.
-    ::Color aColor = rColorSet.getColor(eType);
-    sal_Int16 nLumMod = static_cast<sal_Int16>(nLumModOox / 10);
-    sal_Int16 nLumOff = static_cast<sal_Int16>(nLumOffOox / 10);
-    if (nLumMod != 10'000 || nLumOff != 0)
-        aColor.ApplyLumModOff(nLumMod, nLumOff);
-    aResult.maColor = aColor;
+    aResult.maColor = rColorSet.resolveOOXMLColor(aComplexColor);
 
     return aResult;
 }
