@@ -24,6 +24,7 @@ void SAL_CALL WeakComponentImplHelperBase::dispose()
         return;
     m_bDisposed = true;
     disposing(aGuard);
+    assert(aGuard.owns_lock() && "callees are required to keep this locked on return");
     if (!aGuard.owns_lock())
         aGuard.lock();
     css::lang::EventObject aEvt(static_cast<OWeakObject*>(this));

@@ -131,6 +131,8 @@ void ContextChangeEventMultiplexer::disposing(std::unique_lock<std::mutex>& rGua
             listener->disposing(aEvent);
         }
     }
+
+    rGuard.lock();
 }
 
 // XContextChangeEventMultiplexer
