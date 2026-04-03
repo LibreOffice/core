@@ -5395,7 +5395,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 ++nDeleteTextNodes; // must be deleted
             }
 
-            const bool bEmptyDestNd = pDestTextNd->GetText().isEmpty();
+            const bool bEmptyDestNd = pDestTextNd->GetText().isEmpty()
+                || pDestTextNd->GetText() == "\n";
 
             NUMRULE_STATE
             if( bCopyCollFormat && ( bOneNode || bEmptyDestNd ))

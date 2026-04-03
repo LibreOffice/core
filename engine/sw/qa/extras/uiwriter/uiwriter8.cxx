@@ -13,6 +13,7 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -25,6 +26,7 @@
 #include <frameformats.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/streamwrap.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <sfx2/linkmgr.hxx>
 
@@ -3317,6 +3319,84 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158459)
     CPPUNIT_ASSERT(pTextNode);
     // Check that deleted parts (paragraph break, "c", "e") haven't been pasted
     CPPUNIT_ASSERT_EQUAL(u"abdf"_ustr, pTextNode->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCopyPasteParaFormatting)
+{
+    // Given a document with three paragraphs:
+    // - paragraphs 1-2: justified text "Hello" and "World" (multi-node source)
+    // - paragraph 3: just a newline character "\n" (destination)
+    // Copying multiple paragraphs triggers the multi-node path in CopyImplImpl
+    // where bEmptyDestNd is false for "\n", so CopyCollFormat is skipped.
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+
+    {
+        SwPaM aPaM(aIdx);
+
+        // Build two formatted paragraphs as copy source: first justified, second right-aligned
+        pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Hello"_ustr);
+        aPaM.GetPointNode().GetTextNode()->SetAttr(
+            SvxAdjustItem(SvxAdjust::Block, RES_PARATR_ADJUST));
+        pDoc->getIDocumentContentOperations().SplitNode(*aPaM.GetPoint(), false);
+        pDoc->getIDocumentContentOperations().InsertString(aPaM, u"World"_ustr);
+        aPaM.GetPointNode().GetTextNode()->SetAttr(
+            SvxAdjustItem(SvxAdjust::Right, RES_PARATR_ADJUST));
+
+        // Third paragraph: destination with "\n" content and default (left) alignment
+        pDoc->getIDocumentContentOperations().SplitNode(*aPaM.GetPoint(), false);
+        pDoc->getIDocumentContentOperations().InsertString(aPaM, u"\n"_ustr);
+        aPaM.GetPointNode().GetTextNode()->SetAttr(
+            SvxAdjustItem(SvxAdjust::Left, RES_PARATR_ADJUST));
+    }
+
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(u"\n"_ustr, getParagraph(3)->getString());
+
+    // Use CopyRange directly to exercise CopyImplImpl
+    // Walk forward from start of body to find the three paragraphs
+    SwNodeIndex aNodeIdx(pDoc->GetNodes().GetEndOfExtras());
+    SwContentNode* pSttNode = SwNodes::GoNext(&aNodeIdx);
+    ++aNodeIdx;
+    SwContentNode* pEndNode = aNodeIdx.GetNode().GetContentNode();
+    ++aNodeIdx;
+    SwContentNode* pDestNode = aNodeIdx.GetNode().GetContentNode();
+    CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pSttNode->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"World"_ustr, pEndNode->GetTextNode()->GetText());
+
+    {
+        SwPaM aCopyPaM(*pSttNode, 0, *pEndNode, pEndNode->GetTextNode()->GetText().getLength());
+        SwPosition aDestPos(*pDestNode, 0);
+
+        pDoc->getIDocumentContentOperations().CopyRange(aCopyPaM, aDestPos, SwCopyFlags::Default);
+    }
+
+    // The last pasted paragraph should preserve right alignment from source.
+    // In CopyImplImpl, bEmptyDestNd is false for "\n" content, so
+    // CopyCollFormat is skipped in the multi-node path (line ~5419).
+    auto xLastPara = getParagraph(getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(u"World\n"_ustr, xLastPara->getString());
+    CPPUNIT_ASSERT_EQUAL(
+        style::ParagraphAdjust_RIGHT,
+        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xLastPara, u"ParaAdjust"_ustr)));
+
+    // Undo and verify we're back to the original state
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(u"\n"_ustr, getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT,
+                         static_cast<style::ParagraphAdjust>(
+                             getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr)));
+
+    // Redo and verify formatting is restored
+    pWrtShell->Redo();
+    xLastPara = getParagraph(getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(u"World\n"_ustr, xLastPara->getString());
+    CPPUNIT_ASSERT_EQUAL(
+        style::ParagraphAdjust_RIGHT,
+        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xLastPara, u"ParaAdjust"_ustr)));
 }
 
 } // end of anonymous namespace
