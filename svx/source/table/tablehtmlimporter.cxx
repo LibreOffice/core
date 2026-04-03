@@ -448,8 +448,25 @@ void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
         case HtmlTokenId::TABLEDATA_ON:
         {
             ++mnCellInRow;
-            assert(mpActDefault);
             RowColSpan aRowColSpan = lcl_GetRowColSpan(options);
+
+            // If no <col> definitions exist, create column edges on-the-fly
+            if (!mpActDefault)
+            {
+                sal_Int32 nColSpan = std::max(aRowColSpan.mnColSpan, sal_Int32(1));
+                for (sal_Int32 i = 0; i < nColSpan; ++i)
+                {
+                    sal_Int32 nEdgeIdx = mnCellInRow + i;
+                    if (nEdgeIdx >= static_cast<sal_Int32>(maColumnEdges.size()))
+                    {
+                        const sal_Int32 nSize = 1000 + mnLastEdge;
+                        InsertColumnEdge(nSize);
+                        mnLastEdge = nSize;
+                    }
+                }
+                mpActDefault = mpInsDefault.get();
+            }
+
             mpActDefault->mnColSpan = aRowColSpan.mnColSpan;
             mpActDefault->mnRowSpan = aRowColSpan.mnRowSpan;
             mnCellStartPara = pInfo->aSelection.start.nPara;
@@ -465,8 +482,12 @@ void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
                 mpActDefault = mpInsDefault.get();
             if (mpActDefault->mnColSpan > 0)
             {
-                mpActDefault->mnCellX = maColumnEdges[mnCellInRow + mpActDefault->mnColSpan - 1];
-                InsertCell(mnCellStartPara, pInfo->aSelection.end.nPara);
+                sal_Int32 nEdgeIdx = mnCellInRow + mpActDefault->mnColSpan - 1;
+                if (nEdgeIdx >= 0 && nEdgeIdx < static_cast<sal_Int32>(maColumnEdges.size()))
+                {
+                    mpActDefault->mnCellX = maColumnEdges[nEdgeIdx];
+                    InsertCell(mnCellStartPara, pInfo->aSelection.end.nPara);
+                }
             }
             NextColumn();
         }
