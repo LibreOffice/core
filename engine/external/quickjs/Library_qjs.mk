@@ -12,7 +12,6 @@ $(eval $(call gb_Library_Library,qjs))
 $(eval $(call gb_Library_add_defs,qjs,-DBUILDING_QJS_SHARED))
 
 $(eval $(call gb_Library_add_generated_cobjects,qjs, \
-    UnpackedTarball/quickjs/cutils \
     UnpackedTarball/quickjs/dtoa \
     UnpackedTarball/quickjs/libregexp \
     UnpackedTarball/quickjs/libunicode \

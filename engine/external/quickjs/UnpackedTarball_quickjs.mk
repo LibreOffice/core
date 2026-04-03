@@ -9,12 +9,6 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,quickjs))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,quickjs,0))
-
 $(eval $(call gb_UnpackedTarball_set_tarball,quickjs,$(QUICKJS_TARBALL)))
-
-$(eval $(call gb_UnpackedTarball_add_patches,quickjs, \
-    external/quickjs/windows.patch \
-))
 
 # vim: set noet sw=4 ts=4:

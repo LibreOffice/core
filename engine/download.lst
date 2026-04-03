@@ -694,8 +694,8 @@ PYTHON_BOOTSTRAP_TARBALL := python.3.12.8.nupkg
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-QUICKJS_SHA256SUM := c882895d2dde0920fbfc668ec5de514774db1d400390692f4f6bfa8e513f6084
-QUICKJS_TARBALL := quickjs-v0.12.0.tar.gz
+QUICKJS_SHA256SUM := 13ed1d22cd4b2b693a94a234e752d1ea6a0064434a740031ff90439679257c6c
+QUICKJS_TARBALL := quickjs-v0.13.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
