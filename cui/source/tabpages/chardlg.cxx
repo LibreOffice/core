@@ -1266,6 +1266,23 @@ void SvxCharNamePage::FontModifyHdl_Impl(const weld::Widget& rNameBox)
         FillStyleBox_Impl(rNameBox);
         FillSizeBox_Impl(rNameBox);
         EnableFeatureButton(rNameBox);
+        m_xFontVariations.reset();
+    }
+
+    const FontList& rFontList = GetFontList();
+    OUString sFontName = GetPreviewFont().GetFamilyName();
+    OUString sStyleName = m_xWestFontStyleLB->get_active_text();
+    if (!sFontName.isEmpty() && !sStyleName.isEmpty() && rFontList.IsAvailable(sFontName))
+    {
+        FontMetric aMetric = rFontList.Get(sFontName, sStyleName);
+        m_xVDev->SetOutputSizePixel(Size(10, 10));
+        m_xVDev->SetFont(aMetric);
+
+        auto aVariations = m_xVDev->GetFontVariations();
+        if (!aVariations.empty())
+            m_xFontVariations = std::move(aVariations);
+        else
+            m_xFontVariations.reset();
     }
 }
 
