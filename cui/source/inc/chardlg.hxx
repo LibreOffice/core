@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <vcl/font/Variation.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/fntctrl.hxx>
@@ -30,6 +31,8 @@
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <memory>
+
+namespace cui { class FontVariationsPopup; }
 
 // forward ---------------------------------------------------------------
 
@@ -80,6 +83,7 @@ private:
     std::unique_ptr<weld::Label> m_xWestFontLanguageFT;
     std::unique_ptr<SvxLanguageBox> m_xWestFontLanguageLB;
     std::unique_ptr<weld::Button> m_xWestFontFeaturesButton;
+    std::unique_ptr<weld::Button> m_xWestFontVariationsButton;
     std::unique_ptr<weld::Label> m_xWestFontTypeFT;
 
     std::unique_ptr<weld::Notebook> m_xCJK_CTL;
@@ -92,6 +96,7 @@ private:
     std::unique_ptr<weld::Label> m_xEastFontLanguageFT;
     std::unique_ptr<SvxLanguageBox> m_xEastFontLanguageLB;
     std::unique_ptr<weld::Button> m_xEastFontFeaturesButton;
+    std::unique_ptr<weld::Button> m_xEastFontVariationsButton;
     std::unique_ptr<weld::Label> m_xEastFontTypeFT;
 
     std::unique_ptr<weld::Label> m_xCTLFontNameFT;
@@ -103,7 +108,11 @@ private:
     std::unique_ptr<weld::Label> m_xCTLFontLanguageFT;
     std::unique_ptr<SvxLanguageBox> m_xCTLFontLanguageLB;
     std::unique_ptr<weld::Button> m_xCTLFontFeaturesButton;
+    std::unique_ptr<weld::Button> m_xCTLFontVariationsButton;
     std::unique_ptr<weld::Label> m_xCTLFontTypeFT;
+
+    std::optional<std::vector<vcl::font::Variation>> m_xFontVariations;
+    std::unique_ptr<cui::FontVariationsPopup> m_xFontVariationsPopup;
 
     //for getting FontFeatures
     ScopedVclPtrInstance<VirtualDevice> m_xVDev;
@@ -136,6 +145,8 @@ private:
     DECL_LINK(UpdateHdl_Impl, Timer *, void );
     DECL_LINK(FontModifyComboBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(FontFeatureButtonClicked, weld::Button&, void);
+    DECL_LINK(FontVariationButtonClicked, weld::Button&, void);
+    DECL_LINK(FontVariationsChangedHdl, cui::FontVariationsPopup&, void);
 
     void FontModifyHdl_Impl(const weld::Widget&);
 

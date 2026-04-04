@@ -291,16 +291,31 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="btnWestVariations">
+                <property name="label" translatable="yes" context="charnamepage|west_variations_button">Variations...</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="hexpand">True</property>
+                <property name="halign">fill</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="btnWestFeatures">
                 <property name="label" translatable="yes" context="charnamepage|west_features_button-cjk">Features...</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="halign">fill</property>
               </object>
               <packing>
                 <property name="left-attach">2</property>
-                <property name="top-attach">4</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
@@ -318,7 +333,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">5</property>
+                <property name="top-attach">6</property>
                 <property name="width">2</property>
               </packing>
             </child>
@@ -558,16 +573,31 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="btnCJKVariations">
+                <property name="label" translatable="yes" context="charnamepage|east_variations_button">Variations...</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="hexpand">True</property>
+                <property name="halign">fill</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="btnCJKFeatures">
                 <property name="label" translatable="yes" context="charnamepage|east_features_button">Features...</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="halign">fill</property>
               </object>
               <packing>
                 <property name="left-attach">2</property>
-                <property name="top-attach">4</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
@@ -585,7 +615,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">5</property>
+                <property name="top-attach">6</property>
                 <property name="width">2</property>
               </packing>
             </child>
@@ -813,16 +843,31 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="btnCTLVariations">
+                <property name="label" translatable="yes" context="charnamepage|ctl_variations_button">Variations...</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="hexpand">True</property>
+                <property name="halign">fill</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="btnCTLFeatures">
                 <property name="label" translatable="yes" context="charnamepage|ctl_features_button">Features...</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="halign">fill</property>
               </object>
               <packing>
                 <property name="left-attach">2</property>
-                <property name="top-attach">4</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
@@ -839,7 +884,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">5</property>
+                <property name="top-attach">6</property>
                 <property name="width">2</property>
               </packing>
             </child>

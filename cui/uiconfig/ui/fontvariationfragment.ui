@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="cui">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkAdjustment" id="spinadjustment">
+    <property name="upper">1000</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <!-- n-columns=3 n-rows=1 -->
+  <object class="GtkGrid" id="variationentry">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="column-spacing">6</property>
+    <child>
+      <object class="GtkLabel" id="label">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="mnemonic-widget">spin</property>
+        <property name="width-chars">12</property>
+        <property name="xalign">0</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScale" id="scale">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="adjustment">spinadjustment</property>
+        <property name="draw-value">False</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="scale-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="fontvariationfragment|scale">Variation axis value</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSpinButton" id="spin">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="width-chars">7</property>
+        <property name="adjustment">spinadjustment</property>
+        <property name="digits">2</property>
+      </object>
+      <packing>
+        <property name="left-attach">2</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+  </object>
+</interface>
