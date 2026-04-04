@@ -1200,6 +1200,7 @@ public:
 
     bool GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeatures) const;
     bool GetFontVariationAxes(std::vector<vcl::font::VariationAxis>& rAxes) const;
+    std::vector<vcl::font::Variation> GetFontVariations() const;
 
     bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
                                                     int nLen, std::vector< tools::Rectangle >& rVector ) const;
