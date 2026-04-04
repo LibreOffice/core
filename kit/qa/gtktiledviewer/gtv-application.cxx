@@ -70,7 +70,7 @@ gtv_application_init(GtvApplication* app)
 {
     static const GOptionEntry commandLineOptions[] =
     {
-        { "version", 0, 0, G_OPTION_ARG_NONE, nullptr, "Show LOkit version", nullptr },
+        { "version", 0, 0, G_OPTION_ARG_NONE, nullptr, "Show COKit version", nullptr },
         { "lo-path", 0, 0, G_OPTION_ARG_STRING, nullptr, "LO path", nullptr },
         { "unipoll", 0, 0, G_OPTION_ARG_NONE, nullptr, "Enable unified polling loop", nullptr },
         { "user-profile", 0, 0, G_OPTION_ARG_STRING, nullptr, "User profile to use", nullptr },
