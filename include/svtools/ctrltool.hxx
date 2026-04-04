@@ -25,6 +25,7 @@
 #include <tools/fontenum.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <vcl/font/Variation.hxx>
 #include <vcl/vclptr.hxx>
 
 #include <vector>
@@ -172,6 +173,11 @@ public:
     OUString                GetStyleName( const FontMetric& rFontMetric ) const;
     OUString                GetFaceStyleName( std::u16string_view rName,
                                               const OUString& rStyleName ) const;
+    std::vector<vcl::font::Variation> GetStyleVariations( const OUString& rName,
+                                                          const OUString& rStyle ) const;
+    OUString                FindStyleForVariations( const OUString& rName,
+                                                    const std::vector<vcl::font::Variation>& rVariations,
+                                                    const OUString& rPreferred ) const;
 
     FontMetric           Get( const OUString& rName,
                                  const OUString& rStyleName ) const;

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+
 #include <tools/fldunit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
@@ -328,8 +330,9 @@ void SvxCharNamePage::Initialize()
     SetExchangeSupport();
 
     Link<weld::ComboBox&,void> aLink = LINK(this, SvxCharNamePage, FontModifyComboBoxHdl_Impl);
+    Link<weld::ComboBox&,void> aStyleLink = LINK(this, SvxCharNamePage, FontStyleModifyHdl_Impl);
     m_xWestFontNameLB->connect_changed(aLink);
-    m_xWestFontStyleLB->connect_changed(aLink);
+    m_xWestFontStyleLB->connect_changed(aStyleLink);
     m_xWestFontSizeLB->connect_changed(aLink);
     m_xWestFontLanguageLB->connect_changed(aLink);
 
@@ -337,14 +340,14 @@ void SvxCharNamePage::Initialize()
     m_xWestFontVariationsButton->connect_clicked(LINK(this, SvxCharNamePage, FontVariationButtonClicked));
 
     m_xEastFontNameLB->connect_changed(aLink);
-    m_xEastFontStyleLB->connect_changed(aLink);
+    m_xEastFontStyleLB->connect_changed(aStyleLink);
     m_xEastFontSizeLB->connect_changed(aLink);
     m_xEastFontLanguageLB->connect_changed(aLink);
     m_xEastFontFeaturesButton->connect_clicked(LINK(this, SvxCharNamePage, FontFeatureButtonClicked));
     m_xEastFontVariationsButton->connect_clicked(LINK(this, SvxCharNamePage, FontVariationButtonClicked));
 
     m_xCTLFontNameLB->connect_changed(aLink);
-    m_xCTLFontStyleLB->connect_changed(aLink);
+    m_xCTLFontStyleLB->connect_changed(aStyleLink);
     m_xCTLFontSizeLB->connect_changed(aLink);
     m_xCTLFontLanguageLB->connect_changed(aLink);
     m_xCTLFontFeaturesButton->connect_clicked(LINK(this, SvxCharNamePage, FontFeatureButtonClicked));
@@ -1216,6 +1219,19 @@ IMPL_LINK(SvxCharNamePage, FontModifyComboBoxHdl_Impl, weld::ComboBox&, rBox, vo
     FontModifyHdl_Impl(rBox);
 }
 
+IMPL_LINK(SvxCharNamePage, FontStyleModifyHdl_Impl, weld::ComboBox&, rBox, void)
+{
+    // Picking a style selects a named instance, which replaces any explicit
+    // settings for that script.
+    if (&m_xWestFontStyleLB->get_widget() == &rBox)
+        m_oFontVariations.emplace();
+    else if (&m_xEastFontStyleLB->get_widget() == &rBox)
+        m_oCJKFontVariations.emplace();
+    else if (&m_xCTLFontStyleLB->get_widget() == &rBox)
+        m_oCTLFontVariations.emplace();
+    FontModifyHdl_Impl(rBox);
+}
+
 IMPL_LINK(SvxCharNamePage, FontFeatureButtonClicked, weld::Button&, rButton, void)
 {
     OUString sFontName;
@@ -1251,33 +1267,42 @@ IMPL_LINK(SvxCharNamePage, FontFeatureButtonClicked, weld::Button&, rButton, voi
 
 IMPL_LINK(SvxCharNamePage, FontVariationButtonClicked, weld::Button&, rButton, void)
 {
-    OUString sFontName;
-
     if (&rButton == m_xWestFontVariationsButton.get())
     {
-        sFontName = GetPreviewFont().GetFamilyName();
+        m_sFontVariationsFontName = GetPreviewFont().GetFamilyName();
+        m_pFontVariationsStyleBox = m_xWestFontStyleLB.get();
         m_pFontVariations = &m_oFontVariations;
     }
     else if (&rButton == m_xEastFontVariationsButton.get())
     {
-        sFontName = GetPreviewCJKFont().GetFamilyName();
+        m_sFontVariationsFontName = GetPreviewCJKFont().GetFamilyName();
+        m_pFontVariationsStyleBox = m_xEastFontStyleLB.get();
         m_pFontVariations = &m_oCJKFontVariations;
     }
     else if (&rButton == m_xCTLFontVariationsButton.get())
     {
-        sFontName = GetPreviewCTLFont().GetFamilyName();
+        m_sFontVariationsFontName = GetPreviewCTLFont().GetFamilyName();
+        m_pFontVariationsStyleBox = m_xCTLFontStyleLB.get();
         m_pFontVariations = &m_oCTLFontVariations;
     }
 
-    if (sFontName.isEmpty() || !m_pFontVariations)
+    if (m_sFontVariationsFontName.isEmpty() || !m_pFontVariationsStyleBox || !m_pFontVariations)
         return;
 
-    std::vector<vcl::font::VariationAxis> aAxes = getFontVariationAxes(sFontName, *m_xVDev);
+    std::vector<vcl::font::VariationAxis> aAxes
+        = getFontVariationAxes(m_sFontVariationsFontName, *m_xVDev);
     if (aAxes.empty())
         return;
 
-    m_xFontVariationsPopup = std::make_unique<svx::FontVariationsPopup>(
-        &rButton, aAxes, m_pFontVariations->value_or(std::vector<vcl::font::Variation>()));
+    // Without explicit settings, start from those of the selected named instance.
+    std::vector<vcl::font::Variation> aVariations
+        = m_pFontVariations->value_or(std::vector<vcl::font::Variation>());
+    if (aVariations.empty())
+        aVariations = GetFontList().GetStyleVariations(
+            m_sFontVariationsFontName, m_pFontVariationsStyleBox->get_active_text());
+
+    m_xFontVariationsPopup
+        = std::make_unique<svx::FontVariationsPopup>(&rButton, aAxes, aVariations);
     m_xFontVariationsPopup->connect_changed(LINK(this, SvxCharNamePage, FontVariationsChangedHdl));
     m_xFontVariationsPopup->popup_at_rect(&rButton,
                                           tools::Rectangle(Point(0, 0), rButton.get_preferred_size()));
@@ -1285,10 +1310,22 @@ IMPL_LINK(SvxCharNamePage, FontVariationButtonClicked, weld::Button&, rButton, v
 
 IMPL_LINK_NOARG(SvxCharNamePage, FontVariationsChangedHdl, svx::FontVariationsPopup&, void)
 {
-    if (!m_xFontVariationsPopup || !m_pFontVariations)
+    if (!m_xFontVariationsPopup || !m_pFontVariationsStyleBox || !m_pFontVariations)
         return;
 
-    *m_pFontVariations = m_xFontVariationsPopup->getVariations();
+    std::vector<vcl::font::Variation> aVariations = m_xFontVariationsPopup->getVariations();
+    // Settings that match a named instance are stored as the font style
+    // instead, as an instance is better supported than explicit settings.
+    // Settings that match none leave the style empty; keeping the old one
+    // would be wrong.
+    const OUString sStyleName = GetFontList().FindStyleForVariations(
+        m_sFontVariationsFontName, aVariations, m_pFontVariationsStyleBox->get_active_text());
+    m_pFontVariationsStyleBox->set_active_or_entry_text(sStyleName);
+    if (sStyleName.isEmpty())
+        *m_pFontVariations = std::move(aVariations);
+    else
+        m_pFontVariations->emplace();
+
     UpdatePreview_Impl();
 }
 
