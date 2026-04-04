@@ -424,6 +424,7 @@ public:
     OUString const& get_saved_value() const { return m_xComboBox->get_saved_value(); }
     int get_count() const { return m_xComboBox->get_count(); }
     int find_text(const OUString& rStr) const { return m_xComboBox->find_text(rStr); }
+    weld::ComboBox& get_widget() { return *m_xComboBox; }
 private:
     FontStyleBox(const FontStyleBox& ) = delete;
     FontStyleBox& operator=(const FontStyleBox&) = delete;
