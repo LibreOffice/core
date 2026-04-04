@@ -113,7 +113,7 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=6 n-rows=3 -->
+              <!-- n-columns=5 n-rows=3 -->
               <object class="GtkGrid" id="grid8">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -124,26 +124,11 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkLabel" id="columnft">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="columnpage|columnft">Column</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="column1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label">_1</property>
+                    <property name="label" translatable="no">Width _1</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -151,7 +136,7 @@
                     <property name="mnemonic-widget">width1mf</property>
                   </object>
                   <packing>
-                    <property name="left-attach">2</property>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -160,7 +145,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label">_2</property>
+                    <property name="label" translatable="no">Width _2</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -168,7 +153,7 @@
                     <property name="mnemonic-widget">width2mf</property>
                   </object>
                   <packing>
-                    <property name="left-attach">3</property>
+                    <property name="left-attach">2</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -177,7 +162,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label">_3</property>
+                    <property name="label" translatable="no">Width _3</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -185,25 +170,8 @@
                     <property name="mnemonic-widget">width3mf</property>
                   </object>
                   <packing>
-                    <property name="left-attach">4</property>
+                    <property name="left-attach">3</property>
                     <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="widthft">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="columnpage|widthft">Width:</property>
-                    <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="width3mf"/>
-                      <relation type="label-for" target="width2mf"/>
-                      <relation type="label-for" target="width1mf"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -216,10 +184,6 @@
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment7</property>
                     <property name="digits">2</property>
-                    <accessibility>
-                      <relation type="labelled-by" target="widthft"/>
-                      <relation type="labelled-by" target="column3"/>
-                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width3mf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width3mf">Enter the width of the column.</property>
@@ -227,7 +191,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">4</property>
+                    <property name="left-attach">3</property>
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
@@ -241,10 +205,6 @@
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment6</property>
                     <property name="digits">2</property>
-                    <accessibility>
-                      <relation type="labelled-by" target="widthft"/>
-                      <relation type="labelled-by" target="column2"/>
-                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width2mf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width2mf">Enter the width of the column.</property>
@@ -252,7 +212,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">3</property>
+                    <property name="left-attach">2</property>
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
@@ -266,10 +226,6 @@
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
-                    <accessibility>
-                      <relation type="labelled-by" target="widthft"/>
-                      <relation type="labelled-by" target="column1"/>
-                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width1mf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width1mf">Enter the width of the column.</property>
@@ -277,33 +233,50 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">2</property>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="distft">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="columnpage|distft">Spacing:</property>
-                    <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="spacing1mf"/>
-                      <relation type="label-for" target="spacing2mf"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <!-- n-columns=2 n-rows=1 -->
+                  <!-- n-columns=2 n-rows=2 -->
                   <object class="GtkGrid" id="grid15">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">center</property>
+                    <property name="row-spacing">6</property>
                     <property name="column-spacing">24</property>
+                    <child>
+                      <object class="GtkLabel" id="spacinglbl1">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label">Spacing 1-2</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">spacing1mf</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="spacinglbl2">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label">Spacing 2-3</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">spacing2mf</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="GtkSpinButton" id="spacing1mf">
                         <property name="visible">True</property>
@@ -313,9 +286,6 @@
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="distft"/>
-                        </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spacing1mf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|spacing1mf">Enter the amount of space that you want to leave between the columns.</property>
@@ -324,7 +294,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -336,9 +306,6 @@
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment8</property>
                         <property name="digits">2</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="distft"/>
-                        </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spacing2mf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|spacing2mf">Enter the amount of space that you want to leave between the columns.</property>
@@ -347,12 +314,12 @@
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">2</property>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">2</property>
                     <property name="width">3</property>
                   </packing>
@@ -372,7 +339,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
+                    <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -391,21 +358,9 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">5</property>
+                    <property name="left-attach">4</property>
                     <property name="top-attach">0</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -949,9 +904,6 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="ignore-hidden">True</property>
     <widgets>
-      <widget name="columnft"/>
-      <widget name="widthft"/>
-      <widget name="distft"/>
       <widget name="linestyleft"/>
       <widget name="linewidthft"/>
       <widget name="lineheightft"/>

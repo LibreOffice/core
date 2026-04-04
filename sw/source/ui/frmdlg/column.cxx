@@ -382,6 +382,8 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xLbl1(m_xBuilder->weld_label(u"column1"_ustr))
     , m_xLbl2(m_xBuilder->weld_label(u"column2"_ustr))
     , m_xLbl3(m_xBuilder->weld_label(u"column3"_ustr))
+    , m_xSpacingLbl1(m_xBuilder->weld_label(u"spacinglbl1"_ustr))
+    , m_xSpacingLbl2(m_xBuilder->weld_label(u"spacinglbl2"_ustr))
     , m_xBtnNext(m_xBuilder->weld_button(u"next"_ustr))
     , m_xAutoWidthBox(m_xBuilder->weld_check_button(u"autowidth"_ustr))
     , m_xLineTypeLbl(m_xBuilder->weld_label(u"linestyleft"_ustr))
@@ -413,6 +415,8 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
     connectPercentField(*m_xEd3);
     connectPercentField(*m_xDistEd1);
     connectPercentField(*m_xDistEd2);
+
+    SetLabels(m_nFirstVis);
 
     m_xTextDirectionLB->append(SvxFrameDirection::Horizontal_LR_TB, SvxResId(RID_SVXSTR_FRAMEDIR_LTR));
     m_xTextDirectionLB->append(SvxFrameDirection::Horizontal_RL_TB, SvxResId(RID_SVXSTR_FRAMEDIR_RTL));
@@ -857,9 +861,11 @@ void SwColumnPage::UpdateCols()
     m_xEd1->set_sensitive(bEnable12);
     bool bEnable = m_nCols > 1;
     m_xDistEd1->set_sensitive(bEnable);
+    m_xSpacingLbl1->set_sensitive(bEnable);
     m_xAutoWidthBox->set_sensitive(bEnable && !m_bHtmlMode);
     m_xEd2->set_sensitive(bEnable12);
     m_xDistEd2->set_sensitive(bEnable3);
+    m_xSpacingLbl2->set_sensitive(bEnable3);
     m_xEd3->set_sensitive(bEnable3);
     m_xLbl1->set_sensitive(bEnable12);
     m_xLbl2->set_sensitive(bEnable12);
@@ -897,13 +903,22 @@ void SwColumnPage::SetLabels( sal_uInt16 nVis )
     const OUString sLbl( '~' );
 
     const OUString sLbl1(OUString::number( nVis + 1 ));
-    m_xLbl1->set_label(sLbl1.replaceAt(sLbl1.getLength()-1, 0, sLbl));
-
     const OUString sLbl2(OUString::number( nVis + 2 ));
-    m_xLbl2->set_label(sLbl2.replaceAt(sLbl2.getLength()-1, 0, sLbl));
-
     const OUString sLbl3(OUString::number( nVis + 3 ));
-    m_xLbl3->set_label(sLbl3.replaceAt(sLbl3.getLength()-1, 0, sLbl));
+
+    const OUString sWidthFmt = SwResId(STR_COLUMN_WIDTH_LABEL);
+    m_xLbl1->set_label(sWidthFmt.replaceFirst("%1",
+        sLbl1.replaceAt(sLbl1.getLength()-1, 0, sLbl)));
+    m_xLbl2->set_label(sWidthFmt.replaceFirst("%1",
+        sLbl2.replaceAt(sLbl2.getLength()-1, 0, sLbl)));
+    m_xLbl3->set_label(sWidthFmt.replaceFirst("%1",
+        sLbl3.replaceAt(sLbl3.getLength()-1, 0, sLbl)));
+
+    const OUString sSpacingFmt = SwResId(STR_COLUMN_SPACING_LABEL);
+    m_xSpacingLbl1->set_label(
+        sSpacingFmt.replaceFirst("%1", sLbl1).replaceFirst("%2", sLbl2));
+    m_xSpacingLbl2->set_label(
+        sSpacingFmt.replaceFirst("%1", sLbl2).replaceFirst("%2", sLbl3));
 
     const OUString sColumnWidth = SwResId( STR_ACCESS_COLUMN_WIDTH ) ;
     m_xEd1->set_accessible_name(sColumnWidth.replaceFirst("%1", sLbl1));

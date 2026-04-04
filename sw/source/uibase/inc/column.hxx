@@ -91,6 +91,8 @@ class SwColumnPage final : public SfxTabPage
     std::unique_ptr<weld::Label> m_xLbl1;
     std::unique_ptr<weld::Label> m_xLbl2;
     std::unique_ptr<weld::Label> m_xLbl3;
+    std::unique_ptr<weld::Label> m_xSpacingLbl1;
+    std::unique_ptr<weld::Label> m_xSpacingLbl2;
     std::unique_ptr<weld::Button> m_xBtnNext;
     std::unique_ptr<weld::CheckButton> m_xAutoWidthBox;
     std::unique_ptr<weld::Label> m_xLineTypeLbl;

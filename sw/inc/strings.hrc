@@ -340,6 +340,8 @@
 #define STR_AUTHMRK_INSERT                      NC_("STR_AUTHMRK_INSERT", "Insert Citation")
 #define STR_ACCESS_PAGESETUP_SPACING            NC_("STR_ACCESS_PAGESETUP_SPACING", "Spacing between %1 and %2")
 #define STR_ACCESS_COLUMN_WIDTH                 NC_("STR_ACCESS_COLUMN_WIDTH", "Column %1 Width")
+#define STR_COLUMN_WIDTH_LABEL                  NC_("STR_COLUMN_WIDTH_LABEL", "Width %1")
+#define STR_COLUMN_SPACING_LABEL                NC_("STR_COLUMN_SPACING_LABEL", "Spacing %1-%2")
 #define STR_CAPTION_TABLE                       NC_("STR_CAPTION_TABLE", "%PRODUCTNAME Writer Table")
 #define STR_CAPTION_FRAME                       NC_("STR_CAPTION_FRAME", "%PRODUCTNAME Writer Frame")
 #define STR_CAPTION_GRAPHIC                     NC_("STR_CAPTION_GRAPHIC", "%PRODUCTNAME Writer Image")
