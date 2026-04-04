@@ -302,10 +302,11 @@ IMPL_LINK_NOARG(SwContentControlDlg, OkHdl, weld::Button&, void)
 
 IMPL_LINK(SwContentControlDlg, SelectCharHdl, weld::Button&, rButton, void)
 {
-    SvxCharacterMap aMap(m_xDialog.get(), nullptr, nullptr);
+    std::shared_ptr<SvxCharacterMap> xMap(new SvxCharacterMap(m_xDialog.get(), nullptr, nullptr));
     sal_UCS4 cBullet = 0;
     sal_Int32 nIndex = 0;
-    if (&rButton == m_xCheckedStateBtn.get())
+    bool bIsCheckedState = (&rButton == m_xCheckedStateBtn.get());
+    if (bIsCheckedState)
     {
         cBullet = m_pContentControl->GetCheckedState().iterateCodePoints(&nIndex);
     }
@@ -313,21 +314,21 @@ IMPL_LINK(SwContentControlDlg, SelectCharHdl, weld::Button&, rButton, void)
     {
         cBullet = m_pContentControl->GetUncheckedState().iterateCodePoints(&nIndex);
     }
-    aMap.SetChar(cBullet);
-    if (aMap.run() != RET_OK)
-    {
-        return;
-    }
+    xMap->SetChar(cBullet);
+    weld::DialogController::runAsync(xMap, [this, xMap, bIsCheckedState](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+            return;
 
-    cBullet = aMap.GetChar();
-    if (&rButton == m_xCheckedStateBtn.get())
-    {
-        m_xCheckedState->set_text(OUString(&cBullet, 1));
-    }
-    else if (&rButton == m_xUncheckedStateBtn.get())
-    {
-        m_xUncheckedState->set_text(OUString(&cBullet, 1));
-    }
+        sal_UCS4 cNewBullet = xMap->GetChar();
+        if (bIsCheckedState)
+        {
+            m_xCheckedState->set_text(OUString(&cNewBullet, 1));
+        }
+        else
+        {
+            m_xUncheckedState->set_text(OUString(&cNewBullet, 1));
+        }
+    });
 }
 
 IMPL_LINK_NOARG(SwContentControlDlg, InsertHdl, weld::Button&, void)
