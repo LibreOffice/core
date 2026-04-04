@@ -924,7 +924,7 @@ void SvxBulletAndPositionDlg::PopulateGalleryMenu()
                                     : double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
                 aBitmap.Scale(nScale, nScale);
             }
-            pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
+            pVD->SetOutputSizePixel(aBitmap.GetSizePixel());
             pVD->DrawBitmap(Point(), aBitmap);
 
             // We want to show only icon names not full path.
