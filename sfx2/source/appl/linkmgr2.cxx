@@ -289,7 +289,6 @@ static void disallowAllLinksUpdate(SvBaseLink* pShellProvider)
 
 void LinkManager::UpdateAllLinks(
     bool bAskUpdate,
-    bool /*bUpdateGrfLinks*/,
     weld::Window* pParentWin,
     OUString const & referer )
 {

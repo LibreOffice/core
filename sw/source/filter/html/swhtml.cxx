@@ -496,7 +496,7 @@ SwHTMLParser::~SwHTMLParser()
             SfxObjectCreateMode::INTERNAL != pShell->GetCreateMode() )
         {
             SfxMedium * medium = pShell->GetMedium();
-            m_xDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL, false, nullptr, medium == nullptr ? OUString() : medium->GetName() );
+            m_xDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL, nullptr, medium == nullptr ? OUString() : medium->GetName() );
         }
 
         if ( pShell->IsLoading() )

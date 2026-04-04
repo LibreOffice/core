@@ -623,7 +623,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEn
     }
     else if (rSelectedPopupEntry == u"updatelinks" || rSelectedPopupEntry == u"updateall")
     {
-        m_pActiveShell->GetLinkManager().UpdateAllLinks(true, false, nullptr, u""_ustr);
+        m_pActiveShell->GetLinkManager().UpdateAllLinks(true, nullptr, u""_ustr);
         if (rSelectedPopupEntry == u"updateall")
             nSlot = FN_UPDATE_TOX;
         pCont = nullptr;

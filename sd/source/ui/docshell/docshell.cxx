@@ -372,7 +372,7 @@ void DrawDocShell::PerformLinkUpdate()
     if (mpDoc && mpDoc->GetLinkManager())
     {
         SdDrawDocument::s_pDocLockedInsertingLinks = mpDoc;
-        mpDoc->GetLinkManager()->UpdateAllLinks(false, false, nullptr, u""_ustr);
+        mpDoc->GetLinkManager()->UpdateAllLinks(false, nullptr, u""_ustr);
         if (SdDrawDocument::s_pDocLockedInsertingLinks == mpDoc)
             SdDrawDocument::s_pDocLockedInsertingLinks = nullptr;
     }
