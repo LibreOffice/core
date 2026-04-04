@@ -14,6 +14,7 @@
 #include <vcl/gdimtf.hxx>
 #include <svx/svdpage.hxx>
 #include <o3tl/string_view.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -23,6 +24,7 @@
 #include <unotxdoc.hxx>
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
@@ -545,6 +547,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testLinkedBullet)
     // Given a document with a graphic bullet, where the image is a linked one:
     createSwDoc("linked-bullet.odt");
     SwDocShell* pShell = getSwDocShell();
+    // allow link updates and trigger fetch so the linked bullet image
+    // is loaded before rendering
+    pShell->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+    sfx2::LinkManager& rLinkMgr = getSwDoc()->getIDocumentLinksAdministration().GetLinkManager();
+    rLinkMgr.UpdateAllLinks(false, nullptr, u""_ustr);
 
     // When rendering that document:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();

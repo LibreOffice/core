@@ -38,6 +38,7 @@
 #include <section.hxx>
 #include <docary.hxx>
 #include <frmfmt.hxx>
+#include <numrule.hxx>
 #include <fmtcntnt.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
@@ -199,6 +200,12 @@ void DocumentLinksAdministrationManager::UpdateLinks()
         return;
     if (pShell->IsPreview())
         return;
+
+    // Register links for numbering rules with remote bullet images
+    // before checking whether the link list is empty
+    for (SwNumRuleTable::size_type n = 0; n < m_rDoc.GetNumRuleTable().size(); ++n)
+        m_rDoc.GetNumRuleTable()[n]->RegisterGrfLinks(m_rDoc);
+
     if (GetLinkManager().GetLinks().empty())
         return;
     sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode(true);

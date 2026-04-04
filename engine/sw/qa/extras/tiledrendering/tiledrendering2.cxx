@@ -27,10 +27,14 @@
 #include <comphelper/scopeguard.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/json_writer.hxx>
+#include <vcl/virdev.hxx>
 #include <unotxdoc.hxx>
 
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#include <sfx2/linkmgr.hxx>
 #include <view.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <docsh.hxx>
@@ -854,6 +858,37 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBlockedCommandSlotState)
     // Query the state of .uno:Bold after blocking — should be disabled
     eState = pDispatcher->QueryState(SID_ATTR_CHAR_WEIGHT, aResult);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, eState);
+}
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testImageBulletRemoteNotFetched)
+{
+    // text:list-level-style-image with a remote xlink:href must not fetch
+    // the URL during paint when link updates are not allowed.
+    comphelper::COKit::setActive(false);
+    comphelper::ScopeGuard aCOKitGuard([] { comphelper::COKit::setActive(true); });
+
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"image-bullet-link.fodt"), aParams);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    // the bullet image link should be registered in the link manager
+    sfx2::LinkManager& rLinkMgr
+        = pDocShell->GetDoc()->getIDocumentLinksAdministration().GetLinkManager();
+    CPPUNIT_ASSERT_MESSAGE("bullet image link should be registered", !rLinkMgr.GetLinks().empty());
+
+    pWrtShell->CalcLayout();
+
+    // render through SwViewShell::Paint which exercises the full text paint
+    // path including SwGrfNumPortion::Paint -> DrawGraphic -> lcl_DrawGraphic.
+    // The getUserAllowsLinkUpdate guard blocks the fetch.
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(Size(1024, 1024));
+    static_cast<SwViewShell*>(pWrtShell)->Paint(
+        *pDevice, tools::Rectangle(Point(0, 0), pWrtShell->GetLayout()->getFrameArea().SSize()));
 }
 }
 

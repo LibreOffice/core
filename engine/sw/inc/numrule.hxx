@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <editeng/numitem.hxx>
 #include <i18nlangtag/lang.h>
+#include <tools/ref.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
 #include "calbck.hxx"
@@ -38,6 +39,7 @@ class SwTextFormatColl;
 class IDocumentListsAccess;
 class SwNodeNum;
 namespace vcl { class Font; }
+namespace sfx2 { class SvBaseLink; }
 class SfxGrabBagItem;
 class SwDoc;
 class SwTextNode;
@@ -140,6 +142,8 @@ private:
     SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
     OUString msDefaultListId;
     std::shared_ptr<SfxGrabBagItem> mpGrabBagItem; ///< Style InteropGrabBag.
+
+    tools::SvRef<sfx2::SvBaseLink> maGrfLinks[ MAXLEVEL ];
 
 public:
     /// add parameter <eDefaultNumberFormatPositionAndSpaceMode>
@@ -275,6 +279,9 @@ public:
     void dumpAsXml(xmlTextWriterPtr w) const;
     SW_DLLPUBLIC void GetGrabBagItem(css::uno::Any& rVal) const;
     void SetGrabBagItem(const css::uno::Any& rVal);
+
+    void RegisterGrfLinks(SwDoc& rDoc);
+    void RemoveGrfLinks(SwDoc& rDoc);
 };
 
 /// namespace for static functions and methods for numbering and bullets
