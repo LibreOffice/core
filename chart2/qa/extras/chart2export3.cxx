@@ -353,6 +353,43 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTitleManualLayoutXLSX)
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:bodyPr", "rot", u"1200000");
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf170215_nullDate)
+{
+    // given a document with a 1904 null date
+
+    loadFromFile(u"docx/tdf170215_nullDate.docx");
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlChart = parseExport(u"word/charts/chart1.xml"_ustr);
+
+    // without the accompanying fix, the chart position was c:x = 0, c:y = 0, c:w = 1, c:h = 1
+    double fVal
+        = getXPath(pXmlChart, "//c:chart/c:plotArea/c:layout/c:manualLayout/c:x", "val").toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.167196850393701, fVal, 1e-3);
+    fVal
+        = getXPath(pXmlChart, "//c:chart/c:plotArea/c:layout/c:manualLayout/c:y", "val").toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.9501639397879E-2, fVal, 1e-3);
+    fVal
+        = getXPath(pXmlChart, "//c:chart/c:plotArea/c:layout/c:manualLayout/c:w", "val").toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.79983223972003459, fVal, 1e-3);
+    fVal
+        = getXPath(pXmlChart, "//c:chart/c:plotArea/c:layout/c:manualLayout/c:h", "val").toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.83151211314412998, fVal, 1e-3);
+
+    // the legend position was also broken
+    fVal = getXPath(pXmlChart, "//c:chart/c:legend/c:layout/c:manualLayout/c:x", "val").toDouble();
+    // without the accompanying fix, the legend c:x was 0.635125
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.31758505293523898, fVal, 1e-3);
+    fVal = getXPath(pXmlChart, "//c:chart/c:legend/c:layout/c:manualLayout/c:y", "val").toDouble();
+    // without the accompanying fix, the legend c:y was 1.17414285714286
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.91331265696104458, fVal, 1e-3);
+    fVal = getXPath(pXmlChart, "//c:chart/c:legend/c:layout/c:manualLayout/c:w", "val").toDouble();
+    // without the accompanying fix, the legend c:w was 0.868733591698962
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.43437287266545593, fVal, 1e-3);
+    fVal = getXPath(pXmlChart, "//c:chart/c:legend/c:layout/c:manualLayout/c:h", "val").toDouble();
+    // without the accompanying fix, the legend c:h was 0.111444492070296
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8.6687343038954701E-2, fVal, 1e-3);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testPlotAreaManualLayoutXLSX)
 {
     loadFromFile(u"xlsx/plot_area_manual_layout.xlsx");
