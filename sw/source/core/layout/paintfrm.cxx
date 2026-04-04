@@ -18,6 +18,7 @@
  */
 
 #include <utility>
+#include <o3tl/test_info.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/canvastools.hxx>
 #include <tools/lazydelete.hxx>
@@ -1661,11 +1662,22 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext &rOu
 
     GraphicObject *pGrf = const_cast<GraphicObject*>(rBrush.GetGraphicObject());
 
+    // If a graphic with a URL reaches paint without being loaded, only fetch
+    // it when link updates are allowed.
+    // Once all URLs as GraphicExternalLink are brought under link manager
+    // control (bullet images, background images, etc.), this block should
+    // become unreachable and can be removed.
     OUString aOriginURL = pGrf->GetGraphic().getOriginURL();
     if (pGrf->GetGraphic().GetType() == GraphicType::Default && !aOriginURL.isEmpty())
     {
-        Graphic aGraphic = vcl::graphic::loadFromURL(aOriginURL);
-        pGrf->SetGraphic(aGraphic);
+        SfxObjectShell* pSh = rSh.GetDoc()->GetPersist();
+        if (pSh && pSh->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+        {
+            assert(!o3tl::IsRunningUnitTest()
+                   && "lcl_DrawGraphic: unexpected remote graphic fetch during unit test");
+            Graphic aGraphic = vcl::graphic::loadFromURL(aOriginURL);
+            pGrf->SetGraphic(aGraphic);
+        }
     }
 
     // Outsource drawing of background with a background color

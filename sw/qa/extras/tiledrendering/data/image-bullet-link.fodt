@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    office:version="1.2"
+    office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <text:list-style style:name="L1">
+      <text:list-level-style-image text:level="1"
+          xlink:href="http://192.0.2.1:12345/bullet.png"
+          xlink:type="simple" xlink:show="embed"
+          xlink:actuate="onLoad">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment"
+            fo:width="0.4cm" fo:height="0.4cm">
+          <style:list-level-label-alignment text:label-followed-by="listtab"
+              fo:text-indent="-0.635cm" fo:margin-left="1.27cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-image>
+    </text:list-style>
+  </office:automatic-styles>
+  <office:body>
+    <office:text>
+      <text:list text:style-name="L1">
+        <text:list-item>
+          <text:p>Bullet item</text:p>
+        </text:list-item>
+      </text:list>
+    </office:text>
+  </office:body>
+</office:document>
