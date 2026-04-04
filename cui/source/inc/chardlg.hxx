@@ -124,6 +124,9 @@ private:
     /// the list the open popover writes to, one of the three above
     std::optional<std::vector<vcl::font::Variation>>* m_pFontVariations = nullptr;
     std::unique_ptr<svx::FontVariationsPopup> m_xFontVariationsPopup;
+    // the font the open variations popover belongs to
+    OUString m_sFontVariationsFontName;
+    FontStyleBox* m_pFontVariationsStyleBox = nullptr;
 
     //for getting FontFeatures
     ScopedVclPtrInstance<VirtualDevice> m_xVDev;
@@ -155,6 +158,7 @@ private:
 
     DECL_LINK(UpdateHdl_Impl, Timer *, void );
     DECL_LINK(FontModifyComboBoxHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(FontStyleModifyHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(FontFeatureButtonClicked, weld::Button&, void);
     DECL_LINK(FontVariationButtonClicked, weld::Button&, void);
     DECL_LINK(FontVariationsChangedHdl, svx::FontVariationsPopup&, void);

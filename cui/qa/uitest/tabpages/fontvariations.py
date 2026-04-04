@@ -79,6 +79,16 @@ class FontVariations(UITestCase):
                 self.assertEqual("Weight", sLabel.replace("~", ""))
                 self.assertEqual("400", get_state_as_dict(xPopover.getChild("spin-wght"))["Value"])
 
+    def test_popover_shows_named_instance_value(self):
+        with self.ui_test.create_doc_in_start_center("writer"):
+            with self.ui_test.execute_dialog_through_command(
+                    ".uno:FontDialog", close_button="cancel") as xDialog:
+                self.setFontName(xDialog, VARIABLE_FONT)
+                self.setComboText(xDialog, "cbWestStyle", "Bold")
+
+                xPopover = self.openPopover(xDialog)
+                self.assertEqual("700", get_state_as_dict(xPopover.getChild("spin-wght"))["Value"])
+
     def test_popover_sets_variations(self):
         with self.ui_test.create_doc_in_start_center("writer") as component:
             self.typeText()
@@ -88,6 +98,86 @@ class FontVariations(UITestCase):
                 self.setAxisValue(self.openPopover(xDialog), OFF_INSTANCE)
 
             self.assertEqual('"wght" 650', component.CurrentSelection[0].CharFontVariations)
+
+    def test_popover_value_matching_instance_picks_style(self):
+        with self.ui_test.create_doc_in_start_center("writer") as component:
+            self.typeText()
+
+            # wght=700 is a named instance, so it is stored as the font style
+            # rather than as an explicit setting.
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
+                self.setFontName(xDialog, VARIABLE_FONT)
+                xPopover = self.openPopover(xDialog)
+                self.setAxisValue(xPopover, "700")
+                self.assertEqual("Bold", get_state_as_dict(xDialog.getChild("cbWestStyle"))["Text"])
+
+            self.assertEqual("", component.CurrentSelection[0].CharFontVariations)
+            self.assertEqual(150.0, component.CurrentSelection[0].CharWeight)
+
+    def test_off_instance_value_clears_style(self):
+        with self.ui_test.create_doc_in_start_center("writer") as component:
+            self.typeText()
+
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
+                self.setFontName(xDialog, VARIABLE_FONT)
+                xPopover = self.openPopover(xDialog)
+                self.setAxisValue(xPopover, "700")
+                self.assertEqual("Bold", get_state_as_dict(xDialog.getChild("cbWestStyle"))["Text"])
+
+                # No named instance describes this, so the style must not go on
+                # claiming Bold.
+                self.setAxisValue(xPopover, OFF_INSTANCE)
+                self.assertEqual("", get_state_as_dict(xDialog.getChild("cbWestStyle"))["Text"])
+
+            self.assertEqual('"wght" 650', component.CurrentSelection[0].CharFontVariations)
+            self.assertEqual(100.0, component.CurrentSelection[0].CharWeight)
+
+    def test_popover_default_value_picks_regular(self):
+        with self.ui_test.create_doc_in_start_center("writer") as component:
+            self.typeText()
+
+            # The default instance reports no coordinates of its own, but wght=400
+            # still describes it.
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
+                self.setFontName(xDialog, VARIABLE_FONT)
+                xPopover = self.openPopover(xDialog)
+                self.setAxisValue(xPopover, "700")
+                self.assertEqual("Bold", get_state_as_dict(xDialog.getChild("cbWestStyle"))["Text"])
+
+                self.setAxisValue(xPopover, "400")
+                self.assertEqual("Regular",
+                                 get_state_as_dict(xDialog.getChild("cbWestStyle"))["Text"])
+
+            self.assertEqual("", component.CurrentSelection[0].CharFontVariations)
+            self.assertEqual(100.0, component.CurrentSelection[0].CharWeight)
+
+    def test_style_change_drops_variations(self):
+        with self.ui_test.create_doc_in_start_center("writer") as component:
+            self.typeText()
+
+            # Picking a style is picking a named instance, so the popover has to
+            # come back up showing that instance and not the dropped settings.
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
+                self.setFontName(xDialog, VARIABLE_FONT)
+                self.setAxisValue(self.openPopover(xDialog), OFF_INSTANCE)
+                self.setComboText(xDialog, "cbWestStyle", "Bold")
+
+                xPopover = self.openPopover(xDialog)
+                self.assertEqual("700", get_state_as_dict(xPopover.getChild("spin-wght"))["Value"])
+
+            self.assertEqual("", component.CurrentSelection[0].CharFontVariations)
+            self.assertEqual(150.0, component.CurrentSelection[0].CharWeight)
+
+    def test_named_instance_writes_no_variations(self):
+        with self.ui_test.create_doc_in_start_center("writer") as component:
+            self.typeText()
+
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
+                self.setFontName(xDialog, VARIABLE_FONT)
+                self.setComboText(xDialog, "cbWestStyle", "Bold")
+
+            self.assertEqual("", component.CurrentSelection[0].CharFontVariations)
+            self.assertEqual(150.0, component.CurrentSelection[0].CharWeight)
 
     def test_variations_survive_size_change(self):
         with self.ui_test.create_doc_in_start_center("writer") as component:
