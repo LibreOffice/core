@@ -887,7 +887,7 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
 
         // When the image with handles is not found, the bitmap returned is
         // empty. This is a problem when we use LibreOffice as a library
-        // (through LOKit - for example on Android) even when we don't show
+        // (through COKit - for example on Android) even when we don't show
         // the handles, because the hit test would always return false.
         //
         // This HACK replaces the empty bitmap with a black 13x13 bitmap handle

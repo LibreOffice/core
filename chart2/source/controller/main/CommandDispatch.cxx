@@ -139,9 +139,9 @@ void CommandDispatch::fireStatusEventForURL(
         }
     }
 
-    // Notify LOKit clients about chart command state changes.
+    // Notify COKit clients about chart command state changes.
     // The chart controller's dispatcher is not part of the SfxDispatcher chain,
-    // so state changes would otherwise not reach the LOKit callback layer.
+    // so state changes would otherwise not reach the COKit callback layer.
     if( !xSingleListener.is() && comphelper::COKit::isActive())
     {
         if( SfxViewShell* pViewShell = SfxViewShell::Current())

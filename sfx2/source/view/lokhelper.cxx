@@ -60,7 +60,7 @@ bool g_bSettingView(false);
 
 /// Used to disable callbacks.
 /// Needed to avoid recursion when switching views,
-/// which can cause clients to invoke LOKit API and
+/// which can cause clients to invoke Kit API and
 /// implicitly set the view, which might cause an
 /// infinite recursion if not detected and prevented.
 class DisableCallbacks
@@ -883,7 +883,7 @@ void KitHelper::notifyContextChange(const css::ui::ContextChangeEventObject& rEv
     {
         // Source may be an embedded controller (e.g. ChartController) that
         // is not an SfxViewShell itself. Fall back to the current view shell
-        // so that context changes from embedded editors reach LOKit clients.
+        // so that context changes from embedded editors reach COKit clients.
         pViewShell = SfxViewShell::Current();
     }
     if (!pViewShell)

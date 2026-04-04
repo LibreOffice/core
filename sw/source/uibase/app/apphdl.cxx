@@ -979,7 +979,7 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
                                         /*bIsSpellAllAgain=*/false, /*bSmartTags=*/false);
         }
 
-        // if not LOKit, then update the module defaults (for reload/open/new etc.)
+        // if not COKit, then update the module defaults (for reload/open/new etc.)
         if (!bKit && aViewColors != aViewOption.GetColorConfig())
         {
             aViewOption.SetColorConfig(aViewColors);

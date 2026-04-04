@@ -65,7 +65,7 @@ public:
 
     SvtLanguageTableImpl();
 
-    // In LOKit mode, rebuild the table if the UI language has changed.
+    // In COKit mode, rebuild the table if the UI language has changed.
     void            RebuildIfNeeded();
 
     bool            HasType( const LanguageType eType ) const;

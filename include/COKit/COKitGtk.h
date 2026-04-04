@@ -339,7 +339,7 @@ LOK_DOC_VIEW_DLLPUBLIC void     lok_doc_view_set_document_password (KitDocumentV
  * lok_doc_view_get_version_info:
  * @pDocView: The #KitDocumentView instance
  *
- * Get version information of the LOKit process
+ * Get version information of the Kit process
  *
  * Returns: JSON string containing version information in format:
  * {ProductName: <>, ProductVersion: <>, ProductExtension: <>, BuildId: <>}

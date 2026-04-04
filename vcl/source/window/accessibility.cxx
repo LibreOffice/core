@@ -646,7 +646,7 @@ vcl::Window* Window::GetAccessibleRelationLabelFor() const
     if (pWindow)
         return pWindow;
 
-    // Avoid searching when using LOKit (jsdialog) - it can slow down dumping to json when we have a huge hierarchy
+    // Avoid searching when using COKit (jsdialog) - it can slow down dumping to json when we have a huge hierarchy
     if (!comphelper::COKit::isActive() && !isContainerWindow(this) && !isContainerWindow(GetParent()))
         return getLegacyNonLayoutAccessibleRelationLabelFor();
 
@@ -677,7 +677,7 @@ vcl::Window* Window::GetAccessibleRelationLabeledBy() const
             return pFallback;
     }
 
-    // Avoid searching when using LOKit (jsdialog) - it can slow down dumping to json when we have a huge hierarchy
+    // Avoid searching when using COKit (jsdialog) - it can slow down dumping to json when we have a huge hierarchy
     if (!comphelper::COKit::isActive() && !isContainerWindow(this) && !isContainerWindow(GetParent()))
         return getLegacyNonLayoutAccessibleRelationLabeledBy();
 

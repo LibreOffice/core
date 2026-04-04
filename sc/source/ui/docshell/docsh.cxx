@@ -2808,7 +2808,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             else if (0 < aOptions.nSheetToExport && aOptions.nSheetToExport <= nCount)
             {
                 // Single sheet export, 1-based.
-                // Write to the provided output stream so that LOKit convert-to
+                // Write to the provided output stream so that COKit convert-to
                 // finds the result at the expected URL (instead of a separate
                 // file named with the sheet name).
                 SvStream* pStream = rMed.GetOutStream();

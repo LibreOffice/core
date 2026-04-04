@@ -245,7 +245,7 @@ public:
     }
 
     /**
-     * Registers a callback. LOK will invoke this function when it wants to
+     * Registers a callback. COKit will invoke this function when it wants to
      * inform the client about events.
      *
      * @param pCallback the callback to invoke
@@ -1030,7 +1030,7 @@ public:
     }
 
     /**
-     * Registers a callback. LOK will invoke this function when it wants to
+     * Registers a callback. COKit will invoke this function when it wants to
      * inform the client about events.
      *
      * @param pCallback the callback to invoke
@@ -1096,7 +1096,7 @@ public:
     }
 
     /**
-     * Get version information of the LOKit process
+     * Get version information of the COKit process
      *
      * @returns JSON string containing version information in format:
      * {ProductName: <>, ProductVersion: <>, ProductExtension: <>, BuildId: <>}

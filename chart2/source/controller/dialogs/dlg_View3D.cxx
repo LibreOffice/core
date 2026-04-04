@@ -50,7 +50,7 @@ View3DDialog::View3DDialog(weld::Window* pParent, const rtl::Reference<::chart::
     m_xAppearance.reset(new ThreeD_SceneAppearance_TabPage(m_xTabControl->get_page(u"appearance"_ustr), xChartModel, m_aControllerLocker));
 
     // TODO: implement Svx3DLightControl as a JSDialog widget so that the
-    // Illumination tab can work in LOKit.
+    // Illumination tab can work in COKit.
     if (!comphelper::COKit::isActive())
     {
         aStr = RID_L + RID_TAB_CHART_ILLUMINATION.sIconName;

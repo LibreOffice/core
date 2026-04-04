@@ -129,7 +129,7 @@ gtv_application_handle_local_options(GApplication* app, GVariantDict* options)
             GtkWidget* pDocView = lok_doc_view_new(priv->m_pRenderingArgs->m_aLoPath.c_str(), nullptr, nullptr);
             const gchar* versionInfo = lok_doc_view_get_version_info(LOK_DOC_VIEW(pDocView));
             if (versionInfo)
-                g_print("LOKit version: %s", versionInfo);
+                g_print("Kit version: %s", versionInfo);
         }
 
         return 1; // exit anyway

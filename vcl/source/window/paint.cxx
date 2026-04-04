@@ -1369,7 +1369,7 @@ void Window::PaintImmediately()
 
 void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rPos )
 {
-    // Special drawing when called through LOKit
+    // Special drawing when called through COKit
     // TODO: Move to its own method
     if (comphelper::COKit::isActive())
     {

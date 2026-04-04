@@ -419,7 +419,7 @@ public:
     /// See OutlinerViewShell::GetViewShellId().
     ViewShellId GetViewShellId() const override;
 
-    /// Get the DocId used by Mobile LOKit to load multiple documents.
+    /// Get the DocId used by Mobile COKit to load multiple documents.
     ViewShellDocId GetDocId() const override;
 
     /// ICOKitNotifier. Emits a KIT_CALLBACK_INVALIDATE_TILES.

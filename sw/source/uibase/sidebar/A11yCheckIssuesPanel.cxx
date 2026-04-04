@@ -232,9 +232,9 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
 
     m_xOptionsButton->connect_clicked(LINK(this, A11yCheckIssuesPanel, OptionsButtonClicked));
 
-    // If LOKit is enabled, then enable the update button and don't run the accessibility check.
+    // If COKit is enabled, then enable the update button and don't run the accessibility check.
     // In desktop don't show the update button and schedule to run the accessibility check async
-    // If LOKit is enabled, hide the Options button and its label.
+    // If COKit is enabled, hide the Options button and its label.
     if (comphelper::COKit::isActive())
     {
         m_xLevelExpanders[0]->hide();

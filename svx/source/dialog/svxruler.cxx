@@ -1199,7 +1199,7 @@ void SvxRuler::CreateJsonNotification(tools::JsonWriter& rJsonWriter)
         nMargin2 = ConvertPosLogic(GetMargin2());
         nPageOffset = ConvertPosLogic(GetPageOffset());
 
-        // In LOKit API we expect the ruler 0,0 coordinate is where the document starts.
+        // In COKit API we expect the ruler 0,0 coordinate is where the document starts.
         // In Impress and Draw the ruler 0,0 is where the canvas starts, not where the document starts.
         // The margin to the document is 1 document width (on the left and right) and 0.5 document height
         // (on the top and bottom).

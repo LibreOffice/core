@@ -47,7 +47,7 @@ OUString ScDefaultsOptions::GetInitTabPrefix() const
 {
     if (comphelper::COKit::isActive() && !bInitTabPrefixChanged)
     {
-        // LOKit may have different users with different locales, so the proper
+        // Kit may have different users with different locales, so the proper
         // translation of the default TabPrefix has to be fetched each time
         return ScResId(STR_TABLE_DEF);
     }

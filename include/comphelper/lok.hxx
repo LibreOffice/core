@@ -172,7 +172,7 @@ COMPHELPER_DLLPUBLIC void setView(int nView);
 COMPHELPER_DLLPUBLIC void setViewGetter(const std::function<int()>& pViewGetter);
 COMPHELPER_DLLPUBLIC int getView();
 
-/// Set the current DocId, which is used by Mobile LOKit to
+/// Set the current DocId, which is used by Mobile COKit to
 /// load multiple documents and yet identify the views of each.
 /// There are events that are fired while creating a new view,
 /// and if we don't have a DocId, we can't know which other views

@@ -384,7 +384,7 @@ void SAL_CALL ChartController::attachFrame(
         pSidebar->updateModel(getChartModel());
     }
 
-    // Notify context change unconditionally so that LOKit clients
+    // Notify context change unconditionally so that COKit clients
     // (e.g. the notebookbar) learn about chart activation even when
     // no sidebar is available.
     mpSelectionChangeHandler->selectionChanged(css::lang::EventObject());
