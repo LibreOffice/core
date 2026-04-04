@@ -119,6 +119,13 @@ refresh_all_hooks()
 
     for repo in ${SUBMODULES_ALL?} ; do
         refresh_submodule_hooks "$repo" "$lnarg"
+        if echo " ${SUBMODULES_CONFIGURED?} " | grep -q " ${repo?} " ; then
+            git update-index --no-skip-worktree "${repo}" 2>/dev/null
+        else
+            # skip-worktree prevents "does not have a commit checked out"
+            # error during git commit for unneeded submodules
+            git update-index --skip-worktree "${repo}" 2>/dev/null
+        fi
     done
 
     popd > /dev/null
