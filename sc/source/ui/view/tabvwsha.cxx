@@ -1058,7 +1058,6 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     if (!pDialogParent)
                         pDialogParent = GetFrameWeld();
 
-                    SfxNewStyleDlg aDlg(pDialogParent, *pStylePool, eFamily);
                     auto xDlg = std::make_shared<SfxNewStyleDlg>(pDialogParent, *pStylePool, eFamily);
                     auto xRequest = std::make_shared<SfxRequest>(rReq);
                     rReq.Ignore();
