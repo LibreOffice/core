@@ -96,7 +96,7 @@ public:
     SAL_DLLPRIVATE bool             ImplIsMouseDown() const  { return mbMouseDown; }
                    static Point     ImplCalcPos(vcl::Window* pWindow,
                                                 const tools::Rectangle& rRect, FloatWinPopupFlags nFlags,
-                                                sal_uInt16& rArrangeIndex, Point* pLOKTwipsPos = nullptr);
+                                                sal_uInt16& rArrangeIndex, Point* pKitTwipsPos = nullptr);
                    static AbsoluteScreenPixelPoint ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos);
                    static AbsoluteScreenPixelRectangle ImplConvertToAbsPos(vcl::Window* pReference, const tools::Rectangle& rRect);
     SAL_DLLPRIVATE static tools::Rectangle ImplConvertToRelPos(vcl::Window* pReference, const AbsoluteScreenPixelRectangle& rRect);

@@ -266,7 +266,7 @@ void Application::UICoverageReport(tools::JsonWriter& rJson,
     }
 }
 
-std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
+std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nKitWindowId)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -276,20 +276,20 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
     if (comphelper::COKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
         if (jsdialog::isBuilderEnabledForSidebar(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "sidebar", nLOKWindowId);
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "sidebar", nKitWindowId);
         else if (jsdialog::isBuilderEnabledForPopup(rUIFile))
             return JSInstanceBuilder::CreatePopupBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else if (jsdialog::isBuilderEnabledForMenu(rUIFile))
             return JSInstanceBuilder::CreateMenuBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else if (jsdialog::isBuilderEnabledForNavigator(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "navigator", nLOKWindowId);
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "navigator", nKitWindowId);
         else if (jsdialog::isBuilderEnabledForQuickFind(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "quickfind", nLOKWindowId);
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "quickfind", nKitWindowId);
         else if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
             return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         // this is notebookbar widget but converted from sidebar panel
         else if (jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "notebookbar", nLOKWindowId);
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "notebookbar", nKitWindowId);
         else
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
@@ -297,7 +297,7 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
     return pSVData->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 }
 
-std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
+std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nKitWindowId)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -308,18 +308,18 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
     {
         // Notebookbar sub controls
         if (jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))
-            return JSInstanceBuilder::CreateNotebookbarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>(), nLOKWindowId);
+            return JSInstanceBuilder::CreateNotebookbarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>(), nKitWindowId);
         else if (jsdialog::isBuilderEnabledForFormulabar(rUIFile))
             return JSInstanceBuilder::CreateFormulabarBuilder(pParent, AllSettings::GetUIRootDir(),
-                                                              rUIFile, nLOKWindowId);
+                                                              rUIFile, nKitWindowId);
         else if (jsdialog::isBuilderEnabledForAddressInput(rUIFile))
             return JSInstanceBuilder::CreateAddressInputBuilder(
-                pParent, AllSettings::GetUIRootDir(), rUIFile, nLOKWindowId);
+                pParent, AllSettings::GetUIRootDir(), rUIFile, nKitWindowId);
         else
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
 
-    return pSVData->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
+    return pSVData->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nKitWindowId);
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,

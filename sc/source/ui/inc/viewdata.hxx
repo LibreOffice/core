@@ -337,8 +337,8 @@ private:
     bool                bGrowing;
     sal_Int16           nFormulaBarLines;           // Visible lines in the formula bar
 
-    tools::Long                m_nLOKPageUpDownOffset;
-    tools::Rectangle    maLOKVisibleArea;///< The visible area in the COKit client.
+    tools::Long                m_nKitPageUpDownOffset;
+    tools::Rectangle    maKitVisibleArea;///< The visible area in the COKit client.
 
     DECL_LINK( EditEngineHdl, EditStatus&, void );
 
@@ -612,12 +612,12 @@ public:
     void    SetEditHighlight(bool bNewHighlight) { bEditHighlight = bNewHighlight; }
 
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
-    void ForcePageUpDownOffset(tools::Long nTwips) { m_nLOKPageUpDownOffset = nTwips; }
-    tools::Long GetPageUpDownOffset() const { return m_nLOKPageUpDownOffset; }
+    void ForcePageUpDownOffset(tools::Long nTwips) { m_nKitPageUpDownOffset = nTwips; }
+    tools::Long GetPageUpDownOffset() const { return m_nKitPageUpDownOffset; }
 
     /// The visible area in the client (set by setClientVisibleArea).
-    const tools::Rectangle& getLOKVisibleArea() const { return maLOKVisibleArea; }
-    void setLOKVisibleArea(const tools::Rectangle& rArea) { maLOKVisibleArea = rArea; }
+    const tools::Rectangle& getLOKVisibleArea() const { return maKitVisibleArea; }
+    void setLOKVisibleArea(const tools::Rectangle& rArea) { maKitVisibleArea = rArea; }
 
     void            KillEditView();
     void            ResetEditView();

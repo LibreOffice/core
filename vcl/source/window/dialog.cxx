@@ -763,7 +763,7 @@ void Dialog::StateChanged( StateChangedType nType )
         const bool bKitActive = comphelper::COKit::isActive();
         if (bKitActive && bTunnelingEnabled)
         {
-            std::vector<vcl::LOKPayloadItem> aItems;
+            std::vector<vcl::KitPayloadItem> aItems;
             aItems.emplace_back("type", "dialog");
             aItems.emplace_back("size", GetSizePixel().toString());
             aItems.emplace_back("unique_id", this->get_id().toUtf8());
@@ -804,7 +804,7 @@ void Dialog::StateChanged( StateChangedType nType )
         const vcl::ICOKitNotifier* pNotifier = GetKitNotifier();
         if (pNotifier && bTunnelingEnabled)
         {
-            std::vector<vcl::LOKPayloadItem> aPayload;
+            std::vector<vcl::KitPayloadItem> aPayload;
             aPayload.emplace_back("title", GetText().toUtf8());
             pNotifier->notifyWindow(GetKitWindowId(), u"title_changed"_ustr, aPayload);
         }
@@ -823,7 +823,7 @@ void Dialog::StateChanged( StateChangedType nType )
         const vcl::ICOKitNotifier* pNotifier = GetKitNotifier();
         if (pNotifier && bTunnelingEnabled)
         {
-            std::vector<vcl::LOKPayloadItem> aPayload;
+            std::vector<vcl::KitPayloadItem> aPayload;
             aPayload.emplace_back("title", GetText().toUtf8());
             pNotifier->notifyWindow(GetKitWindowId(), IsVisible()? u"show"_ustr: u"hide"_ustr, aPayload);
         }
@@ -1061,7 +1061,7 @@ bool Dialog::ImplStartExecute(bool async)
             // can have invalid size at 'created' message above.
             // If there is no difference, the client should detect it and ignore us,
             // otherwise, this should make sure that the window has the correct size.
-            std::vector<vcl::LOKPayloadItem> aItems;
+            std::vector<vcl::KitPayloadItem> aItems;
             aItems.emplace_back("size", GetSizePixel().toString());
             aItems.emplace_back("unique_id", this->get_id().toUtf8());
             pNotifier->notifyWindow(GetKitWindowId(), u"size_changed"_ustr, aItems);
@@ -1439,7 +1439,7 @@ void Dialog::Resize()
     const vcl::ICOKitNotifier* pNotifier = GetKitNotifier();
     if (pNotifier && bTunnelingEnabled)
     {
-        std::vector<vcl::LOKPayloadItem> aItems;
+        std::vector<vcl::KitPayloadItem> aItems;
         aItems.emplace_back("size", GetSizePixel().toString());
         aItems.emplace_back("unique_id", this->get_id().toUtf8());
         pNotifier->notifyWindow(GetKitWindowId(), u"size_changed"_ustr, aItems);

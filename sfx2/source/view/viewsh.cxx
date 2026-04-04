@@ -2750,9 +2750,9 @@ SfxViewShell::SfxViewShell
 ,   pWindow(nullptr)
 ,   bNoNewWindow( nFlags & SfxViewShellFlags::NO_NEWWINDOW )
 ,   mbPrinterSettingsModified(false)
-,   maLOKLanguageTag(LANGUAGE_NONE)
-,   maLOKLocale(LANGUAGE_NONE)
-,   maLOKDeviceFormFactor(LOKDeviceFormFactor::UNKNOWN)
+,   maKitLanguageTag(LANGUAGE_NONE)
+,   maKitLocale(LANGUAGE_NONE)
+,   maKitDeviceFormFactor(KitDeviceFormFactor::UNKNOWN)
 ,   mbLOKAccessibilityEnabled(false)
 ,   mbLOKColorPreviewEnabled(false)
 {
@@ -2767,14 +2767,14 @@ SfxViewShell::SfxViewShell
 
     if (comphelper::COKit::isActive())
     {
-        maLOKLanguageTag = KitHelper::getDefaultLanguage();
-        maLOKLocale = KitHelper::getDefaultLanguage();
+        maKitLanguageTag = KitHelper::getDefaultLanguage();
+        maKitLocale = KitHelper::getDefaultLanguage();
 
         const auto [isTimezoneSet, aTimezone] = KitHelper::getDefaultTimezone();
-        maLOKIsTimezoneSet = isTimezoneSet;
-        maLOKTimezone = aTimezone;
+        maKitIsTimezoneSet = isTimezoneSet;
+        maKitTimezone = aTimezone;
 
-        maLOKDeviceFormFactor = KitHelper::getDeviceFormFactor();
+        maKitDeviceFormFactor = KitHelper::getDeviceFormFactor();
 
         vcl::Window* pFrameWin = rViewFrame.GetWindow().GetFrameWindow();
         if (pFrameWin && !pFrameWin->GetKitNotifier())
@@ -3458,9 +3458,9 @@ void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
     // If we want de-CH, and the de localisation is available, we don't want to use de-DE as then
     // the magic in Translate::get() won't turn ess-zet into double s.
     if (rBcp47LanguageTag == "de-CH")
-        maLOKLanguageTag = std::move(aTag);
+        maKitLanguageTag = std::move(aTag);
     else
-        maLOKLanguageTag = std::move(aFallbackTag);
+        maKitLanguageTag = std::move(aFallbackTag);
 }
 
 KitDocumentFocusListener& SfxViewShell::GetKitDocumentFocusListener()
@@ -3525,7 +3525,7 @@ void SfxViewShell::SetLOKColorPreviewState(bool bEnabled)
 
 void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
 {
-    maLOKLocale = LanguageTag(rBcp47LanguageTag, true).makeFallback();
+    maKitLocale = LanguageTag(rBcp47LanguageTag, true).makeFallback();
     if (this == Current())
     {
         // update the current LOK language and locale for the dialog tunneling
@@ -4003,7 +4003,7 @@ Reference< view::XRenderable > SfxViewShell::GetRenderable()
     return xRender;
 }
 
-void SfxViewShell::notifyWindow(vcl::LOKWindowId nDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload) const
+void SfxViewShell::notifyWindow(vcl::KitWindowId nDialogId, const OUString& rAction, const std::vector<vcl::KitPayloadItem>& rPayload) const
 {
     KitHelper::notifyWindow(this, nDialogId, rAction, rPayload);
 }

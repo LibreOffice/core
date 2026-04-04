@@ -1322,9 +1322,9 @@ public:
     // For vclbootstrapprotector:
     static void setDeInitHook(Link<LinkParamNone*,void> const & hook);
 
-    static std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile = false, sal_uInt64 nLOKWindowId = 0);
+    static std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile = false, sal_uInt64 nKitWindowId = 0);
     // For the duration of vcl parent windows
-    static std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0);
+    static std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nKitWindowId = 0);
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                     VclButtonsType eButtonType, const OUString& rPrimaryMessage,
@@ -1336,9 +1336,9 @@ public:
     void* m_pCallbackData;
     COKitCallback m_pCallback;
 
-    virtual void notifyWindow(vcl::LOKWindowId nLOKWindowId,
+    virtual void notifyWindow(vcl::KitWindowId nKitWindowId,
                               const OUString& rAction,
-                              const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) const override;
+                              const std::vector<vcl::KitPayloadItem>& rPayload = std::vector<vcl::KitPayloadItem>()) const override;
     virtual void viewCallback(int nType, const OString& pPayload) const override;
     virtual void notifyInvalidation(tools::Rectangle const* pRect) const override;
     virtual void notifyCursorInvalidation(tools::Rectangle const* pRect, bool bControlEvent, int windowID) const override;

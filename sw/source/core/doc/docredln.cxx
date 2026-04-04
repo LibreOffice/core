@@ -352,7 +352,7 @@ void SwRedlineTable::setMovedIDIfNeeded(sal_uInt32 nMax)
 }
 
 /// Emits LOK notification about one addition / removal of a redline item.
-void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
+void SwRedlineTable::KitRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
 {
     // Disable since usability is very low beyond some small number of changes.
     if (!lcl_LOKRedlineNotificationEnabled())
@@ -430,7 +430,7 @@ bool SwRedlineTable::Insert(SwRangeRedline*& p)
     {
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         size_type nP = rv.first - begin();
-        LOKRedlineNotification(RedlineNotification::Add, p);
+        KitRedlineNotification(RedlineNotification::Add, p);
 
         // detect text moving by checking nearby redlines, except during Undo
         // (apply isMoved() during OpenDocument and DOCX import, too, to fix
@@ -688,7 +688,7 @@ void SwRedlineTable::Remove( const SwRangeRedline* p )
 
 void SwRedlineTable::Remove( size_type nP )
 {
-    LOKRedlineNotification(RedlineNotification::Remove, maVector[nP]);
+    KitRedlineNotification(RedlineNotification::Remove, maVector[nP]);
     SwDoc* pDoc = nullptr;
     if( !nP && 1 == size() )
         pDoc = &maVector.front()->GetDoc();
@@ -711,7 +711,7 @@ void SwRedlineTable::DeleteAndDestroyAll()
     {
         auto const pRedline = maVector.back();
         maVector.erase_at(maVector.size() - 1);
-        LOKRedlineNotification(RedlineNotification::Remove, pRedline);
+        KitRedlineNotification(RedlineNotification::Remove, pRedline);
         delete pRedline;
     }
     m_bHasOverlappingElements = false;
@@ -724,7 +724,7 @@ void SwRedlineTable::DeleteAndDestroy(size_type const nP)
     if (pRedline == mpMaxEndPos)
         mpMaxEndPos = nullptr;
     maVector.erase(maVector.begin() + nP);
-    LOKRedlineNotification(RedlineNotification::Remove, pRedline);
+    KitRedlineNotification(RedlineNotification::Remove, pRedline);
     delete pRedline;
 }
 
@@ -1576,7 +1576,7 @@ void MaybeNotifyRedlineModification(SwRangeRedline& rRedline, SwDoc& rDoc)
     {
         if (rRedTable[i] == &rRedline)
         {
-            SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, &rRedline);
+            SwRedlineTable::KitRedlineNotification(RedlineNotification::Modify, &rRedline);
             break;
         }
     }
@@ -1587,10 +1587,10 @@ void SwRangeRedline::MaybeNotifyRedlinePositionModification(tools::Long nTop)
     if (!lcl_LOKRedlineNotificationEnabled())
         return;
 
-    if(!m_oLOKLastNodeTop || *m_oLOKLastNodeTop != nTop)
+    if(!m_oKitLastNodeTop || *m_oKitLastNodeTop != nTop)
     {
-        m_oLOKLastNodeTop = nTop;
-        SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, this);
+        m_oKitLastNodeTop = nTop;
+        SwRedlineTable::KitRedlineNotification(RedlineNotification::Modify, this);
     }
 }
 

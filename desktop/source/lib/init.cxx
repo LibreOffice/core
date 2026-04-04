@@ -1179,14 +1179,14 @@ static void doc_postWindowExtTextInputEvent(COKitDocument* pThis,
                                             int nType,
                                             const char* pText);
 static void doc_removeTextContext(COKitDocument* pThis,
-                                  unsigned nLOKWindowId,
+                                  unsigned nKitWindowId,
                                   int nCharBefore,
                                   int nCharAfter);
 static void doc_sendDialogEvent(COKitDocument* pThis,
-                               unsigned long long int nLOKWindowId,
+                               unsigned long long int nKitWindowId,
                                const char* pArguments);
 static void doc_postWindowKeyEvent(COKitDocument* pThis,
-                                   unsigned nLOKWindowId,
+                                   unsigned nKitWindowId,
                                    int nType,
                                    int nCharCode,
                                    int nKeyCode);
@@ -1198,7 +1198,7 @@ static void doc_postMouseEvent (COKitDocument* pThis,
                                 int nButtons,
                                 int nModifier);
 static void doc_postWindowMouseEvent (COKitDocument* pThis,
-                                      unsigned nLOKWindowId,
+                                      unsigned nKitWindowId,
                                       int nType,
                                       int nX,
                                       int nY,
@@ -1206,7 +1206,7 @@ static void doc_postWindowMouseEvent (COKitDocument* pThis,
                                       int nButtons,
                                       int nModifier);
 static void doc_postWindowGestureEvent(COKitDocument* pThis,
-                                      unsigned nLOKWindowId,
+                                      unsigned nKitWindowId,
                                       const char* pType,
                                       int nX,
                                       int nY,
@@ -1216,7 +1216,7 @@ static void doc_postUnoCommand(COKitDocument* pThis,
                                const char* pArguments,
                                bool bNotifyWhenFinished);
 static void doc_setWindowTextSelection(COKitDocument* pThis,
-                                       unsigned nLOKWindowId,
+                                       unsigned nKitWindowId,
                                        bool swap,
                                        int nX,
                                        int nY);
@@ -1281,22 +1281,22 @@ static unsigned char* doc_renderFont(COKitDocument* pThis,
                           int* pFontHeight);
 static char* doc_getPartHash(COKitDocument* pThis, int nPart);
 
-static void doc_paintWindow(COKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
+static void doc_paintWindow(COKitDocument* pThis, unsigned nKitWindowId, unsigned char* pBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight);
 
-static void doc_paintWindowDPI(COKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
+static void doc_paintWindowDPI(COKitDocument* pThis, unsigned nKitWindowId, unsigned char* pBuffer,
                                const int nX, const int nY,
                                const int nWidth, const int nHeight,
                                const double fDPIScale);
 
-static void doc_paintWindowForView(COKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
+static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId, unsigned char* pBuffer,
                                    const int nX, const int nY,
                                    const int nWidth, const int nHeight,
                                    const double fDPIScale, int viewId);
 
 static void doc_postWindow(COKitDocument* pThis, unsigned
- nLOKWindowId, int nAction, const char* pData);
+ nKitWindowId, int nAction, const char* pData);
 
 static char* doc_getPartInfo(COKitDocument* pThis, int nPart);
 
@@ -1314,7 +1314,7 @@ static int doc_getSignatureState(COKitDocument* pThis);
 
 static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput);
 
-static void doc_resizeWindow(COKitDocument* pThis, unsigned nLOKWindowId,
+static void doc_resizeWindow(COKitDocument* pThis, unsigned nKitWindowId,
                              const int nWidth, const int nHeight);
 
 static void doc_completeFunction(COKitDocument* pThis, const char*);
@@ -2258,7 +2258,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
     const OString& payload = aCallbackData.getPayload();
 
     boost::property_tree::ptree& aTree = aCallbackData.setJson(std::string(payload));
-    const unsigned nLOKWindowId = aTree.get<unsigned>("id", 0);
+    const unsigned nKitWindowId = aTree.get<unsigned>("id", 0);
     const std::string aAction = aTree.get<std::string>("action", "");
     if (aAction == "invalidate")
     {
@@ -2267,9 +2267,9 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
         // remove all previous window part invalidations
         if (aRectStr.empty())
         {
-            removeAll(KIT_CALLBACK_WINDOW,[&nLOKWindowId](const CallbackData& elemData) {
+            removeAll(KIT_CALLBACK_WINDOW,[&nKitWindowId](const CallbackData& elemData) {
                 const boost::property_tree::ptree& aOldTree = elemData.getJson();
-                if (nLOKWindowId == aOldTree.get<unsigned>("id", 0)
+                if (nKitWindowId == aOldTree.get<unsigned>("id", 0)
                     && aOldTree.get<std::string>("action", "") == "invalidate")
                 {
                     return true;
@@ -2289,7 +2289,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
                 if (*it1 != KIT_CALLBACK_WINDOW)
                     continue;
                 const boost::property_tree::ptree& aOldTree = it2->getJson();
-                if (nLOKWindowId == aOldTree.get<unsigned>("id", 0)
+                if (nKitWindowId == aOldTree.get<unsigned>("id", 0)
                      && aOldTree.get<std::string>("action", "") == "invalidate"
                      && aOldTree.get<std::string>("rectangle", "").empty())
                 {
@@ -2313,7 +2313,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
             aRectStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
             tools::Rectangle aNewRect(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
             bool currentIsRedundant = false;
-            removeAll(KIT_CALLBACK_WINDOW, [&aNewRect, &nLOKWindowId,
+            removeAll(KIT_CALLBACK_WINDOW, [&aNewRect, &nKitWindowId,
                        &currentIsRedundant](const CallbackData& elemData) {
                 const boost::property_tree::ptree& aOldTree = elemData.getJson();
                 if (aOldTree.get<std::string>("action", "") == "invalidate")
@@ -2327,7 +2327,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
                     const tools::Rectangle aOldRect = tools::Rectangle(
                         nOldLeft, nOldTop, nOldLeft + nOldWidth, nOldTop + nOldHeight);
 
-                    if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
+                    if (nKitWindowId == aOldTree.get<unsigned>("id", 0))
                     {
                         if (aNewRect == aOldRect)
                         {
@@ -2386,14 +2386,14 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
     else if (aAction == "created")
     {
         // Remove all previous actions on same dialog, if we are creating it anew.
-        removeAll(KIT_CALLBACK_WINDOW,[&nLOKWindowId](const CallbackData& elemData) {
+        removeAll(KIT_CALLBACK_WINDOW,[&nKitWindowId](const CallbackData& elemData) {
             const boost::property_tree::ptree& aOldTree = elemData.getJson();
-            if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
+            if (nKitWindowId == aOldTree.get<unsigned>("id", 0))
                 return true;
             return false;
         });
 
-        VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+        VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
         if (!pWindow)
         {
             SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -2408,9 +2408,9 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
     {
         // A size change is practically re-creation of the window.
         // But at a minimum it's a full invalidation.
-        removeAll(KIT_CALLBACK_WINDOW, [&nLOKWindowId](const CallbackData& elemData) {
+        removeAll(KIT_CALLBACK_WINDOW, [&nKitWindowId](const CallbackData& elemData) {
             const boost::property_tree::ptree& aOldTree = elemData.getJson();
-            if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
+            if (nKitWindowId == aOldTree.get<unsigned>("id", 0))
             {
                 const std::string aOldAction = aOldTree.get<std::string>("action", "");
                 if (aOldAction == "invalidate")
@@ -2765,7 +2765,7 @@ static void lo_registerFileSaveDialogCallback(COKit* pThis,
                        COKitFileSaveDialogCallback pFileSaveDialogCallback);
 
 static void lo_sendDialogEvent(COKit* pThis,
-                               unsigned long long int nLOKWindowId,
+                               unsigned long long int nKitWindowId,
                                const char* pArguments);
 
 static void lo_setOption(COKit* pThis, const char* pOption, const char* pValue);
@@ -4944,7 +4944,7 @@ static void doc_postWindowExtTextInputEvent(COKitDocument* pThis, unsigned nWind
     KitHelper::postExtTextEventAsync(pWindow, nType, OUString::fromUtf8(std::string_view(pText, strlen(pText))));
 }
 
-static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, int nCharBefore, int nCharAfter)
+static void doc_removeTextContext(COKitDocument* pThis, unsigned nKitWindowId, int nCharBefore, int nCharAfter)
 {
     SolarMutexGuard aGuard;
 
@@ -4952,7 +4952,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, i
         return;
 
     VclPtr<vcl::Window> pWindow;
-    if (nLOKWindowId == 0)
+    if (nKitWindowId == 0)
     {
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
@@ -4964,12 +4964,12 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, i
     }
     else
     {
-        pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+        pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
     }
 
     if (!pWindow)
     {
-        SetLastExceptionMsg("No window found for window id: " + OUString::number(nLOKWindowId));
+        SetLastExceptionMsg("No window found for window id: " + OUString::number(nKitWindowId));
         return;
     }
 
@@ -4979,7 +4979,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, i
     if (nCharBefore > 0)
     {
         // backspace
-        if (nLOKWindowId == 0)
+        if (nKitWindowId == 0)
         {
             KeyEvent aEvt(8, KEY_BACKSPACE);
             for (int i = 0; i < nCharBefore; ++i)
@@ -4992,7 +4992,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, i
     if (nCharAfter > 0)
     {
         // delete (forward)
-        if (nLOKWindowId == 0)
+        if (nKitWindowId == 0)
         {
             KeyEvent aEvt(46, KEY_DELETE);
             for (int i = 0; i < nCharAfter; ++i)
@@ -5003,14 +5003,14 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, i
     }
 }
 
-static void doc_postWindowKeyEvent(COKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nCharCode, int nKeyCode)
+static void doc_postWindowKeyEvent(COKitDocument* /*pThis*/, unsigned nKitWindowId, int nType, int nCharCode, int nKeyCode)
 {
     comphelper::ProfileZone aZone("doc_postWindowKeyEvent");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -5766,14 +5766,14 @@ static void doc_postMouseEvent(COKitDocument* pThis, int nType, int nX, int nY, 
     }
 }
 
-static void doc_postWindowMouseEvent(COKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+static void doc_postWindowMouseEvent(COKitDocument* /*pThis*/, unsigned nKitWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     comphelper::ProfileZone aZone("doc_postWindowMouseEvent");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -5803,14 +5803,14 @@ static void doc_postWindowMouseEvent(COKitDocument* /*pThis*/, unsigned nLOKWind
     }
 }
 
-static void doc_postWindowGestureEvent(COKitDocument* /*pThis*/, unsigned nLOKWindowId, const char* pType, int nX, int nY, int nOffset)
+static void doc_postWindowGestureEvent(COKitDocument* /*pThis*/, unsigned nKitWindowId, const char* pType, int nX, int nY, int nOffset)
 {
     comphelper::ProfileZone aZone("doc_postWindowGestureEvent");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -5855,14 +5855,14 @@ static void doc_setTextSelection(COKitDocument* pThis, int nType, int nX, int nY
     pDoc->setTextSelection(nType, nX, nY);
 }
 
-static void doc_setWindowTextSelection(COKitDocument* /*pThis*/, unsigned nLOKWindowId, bool swap, int nX, int nY)
+static void doc_setWindowTextSelection(COKitDocument* /*pThis*/, unsigned nKitWindowId, bool swap, int nX, int nY)
 {
     comphelper::ProfileZone aZone("doc_setWindowTextSelection");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -7387,24 +7387,24 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER COKitDocument* /*p
 }
 
 
-static void doc_paintWindow(COKitDocument* pThis, unsigned nLOKWindowId,
+static void doc_paintWindow(COKitDocument* pThis, unsigned nKitWindowId,
                             unsigned char* pBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight)
 {
-    doc_paintWindowDPI(pThis, nLOKWindowId, pBuffer, nX, nY, nWidth, nHeight, 1.0);
+    doc_paintWindowDPI(pThis, nKitWindowId, pBuffer, nX, nY, nWidth, nHeight, 1.0);
 }
 
-static void doc_paintWindowDPI(COKitDocument* pThis, unsigned nLOKWindowId,
+static void doc_paintWindowDPI(COKitDocument* pThis, unsigned nKitWindowId,
                                unsigned char* pBuffer,
                                const int nX, const int nY,
                                const int nWidth, const int nHeight,
                                const double fDPIScale)
 {
-    doc_paintWindowForView(pThis, nLOKWindowId, pBuffer, nX, nY, nWidth, nHeight, fDPIScale, -1);
+    doc_paintWindowForView(pThis, nKitWindowId, pBuffer, nX, nY, nWidth, nHeight, fDPIScale, -1);
 }
 
-static void doc_paintWindowForView(COKitDocument* pThis, unsigned nLOKWindowId,
+static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId,
                                    unsigned char* pBuffer, const int nX, const int nY,
                                    const int nWidth, const int nHeight,
                                    const double fDPIScale, int viewId)
@@ -7414,7 +7414,7 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nLOKWindowId,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -7473,14 +7473,14 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nLOKWindowId,
     comphelper::COKit::setDialogPainting(false);
 }
 
-static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nLOKWindowId, int nAction, const char* pData)
+static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nKitWindowId, int nAction, const char* pData)
 {
     comphelper::ProfileZone aZone("doc_postWindow");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -7641,13 +7641,13 @@ static int doc_getSignatureState(COKitDocument* pThis)
     return int(pObjectShell->GetDocumentSignatureState());
 }
 
-static void doc_resizeWindow(COKitDocument* /*pThis*/, unsigned nLOKWindowId,
+static void doc_resizeWindow(COKitDocument* /*pThis*/, unsigned nKitWindowId,
                              const int nWidth, const int nHeight)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog resizing, or window not found."_ustr);

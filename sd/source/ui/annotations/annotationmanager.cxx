@@ -264,7 +264,7 @@ void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObje
         uno::Reference<office::XAnnotation> xAnnotation( aEvent.Source, uno::UNO_QUERY );
         if ( auto pAnnotation = dynamic_cast<sd::Annotation*>(xAnnotation.get()) )
         {
-            LOKCommentNotify(sdr::annotation::CommentNotificationType::Remove, &mrBase, *pAnnotation);
+            KitCommentNotify(sdr::annotation::CommentNotificationType::Remove, &mrBase, *pAnnotation);
         }
     }
 
@@ -469,7 +469,7 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
             xText->setString(sText);
         }
 
-        LOKCommentNotifyAll(sdr::annotation::CommentNotificationType::Modify, *xAnnotation);
+        KitCommentNotifyAll(sdr::annotation::CommentNotificationType::Modify, *xAnnotation);
     }
 
     if (mpDoc->IsUndoEnabled())
@@ -566,7 +566,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
         mpDoc->EndUndo();
 
     // Tell our LOK clients about new comment added
-    LOKCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *xAnnotation);
+    KitCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *xAnnotation);
 
     UpdateTags(true);
     SelectAnnotation(xAnnotation, isVisibleAnnotations());
@@ -668,7 +668,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     xAnnotation->setDateTime( getCurrentDateTime() );
 
     // Tell our LOK clients about this (comment modification)
-    LOKCommentNotifyAll(sdr::annotation::CommentNotificationType::Modify, *xAnnotation);
+    KitCommentNotifyAll(sdr::annotation::CommentNotificationType::Modify, *xAnnotation);
 
     if( mpDoc->IsUndoEnabled() )
         mpDoc->EndUndo();

@@ -380,10 +380,10 @@ weld::Window* SfxRequest::GetFrameWeld() const
 
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
-    const bool bIsLOK = comphelper::COKit::isActive();
+    const bool bIsKit = comphelper::COKit::isActive();
     static svtools::EditableColorConfig aEditableConfig;
     static bool aColorConfigInitialized = false;
-    if (!aColorConfigInitialized && bIsLOK)
+    if (!aColorConfigInitialized && bIsKit)
     {
         // preload color schemes
         aEditableConfig.LoadScheme("Light");
@@ -754,9 +754,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // the last change requires re-sending the change. In which case individual shells will have to
             // decide if this color-scheme change is a change from their perspective to avoid unnecessary
             // invalidations.
-            if (!pNewThemeArg || bIsLOK || aEditableConfig.GetCurrentSchemeName() != sSchemeName)
+            if (!pNewThemeArg || bIsKit || aEditableConfig.GetCurrentSchemeName() != sSchemeName)
             {
-                if (bIsLOK)
+                if (bIsKit)
                     aEditableConfig.SetCurrentSchemeName(sSchemeName);
                 else
                     aEditableConfig.LoadScheme(sSchemeName);

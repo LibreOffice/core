@@ -59,9 +59,9 @@ using namespace com::sun::star;
 KitInteractionHandler::KitInteractionHandler(
         OString command,
         desktop::LibCO_Impl *const pKit,
-        desktop::LibLODocument_Impl *const pLOKDocument)
+        desktop::LibLODocument_Impl *const pKitDocument)
     : m_pKit(pKit)
-    , m_pLOKDocument(pLOKDocument)
+    , m_pKitDocument(pKitDocument)
     , m_command(std::move(command))
     , m_usePassword(false)
 {
@@ -123,8 +123,8 @@ void KitInteractionHandler::postError(css::task::InteractionClassification class
     aJson.put("message", message.toUtf8());
 
     std::size_t nView = SfxViewShell::Current() ? KitHelper::getCurrentView() : 0;
-    if (m_pLOKDocument && m_pLOKDocument->mpCallbackFlushHandlers.count(nView))
-        m_pLOKDocument->mpCallbackFlushHandlers[nView]->queue(KIT_CALLBACK_ERROR, aJson.finishAndGetAsOString());
+    if (m_pKitDocument && m_pKitDocument->mpCallbackFlushHandlers.count(nView))
+        m_pKitDocument->mpCallbackFlushHandlers[nView]->queue(KIT_CALLBACK_ERROR, aJson.finishAndGetAsOString());
     else if (m_pKit->mpCallback)
         m_pKit->mpCallback(KIT_CALLBACK_ERROR, aJson.finishAndGetAsOString().getStr(), m_pKit->mpCallbackData);
 }

@@ -193,11 +193,11 @@ void ScContentTree::InitRoot( ScContentId nType )
         //In case of LOK we may have many different ScContentTrees in different languages.
         //At creation time, we store what language we use, and then use it later too.
         //It does not work in the constructor, that is why it is here.
-        if (!m_pResLocaleForLOK)
+        if (!m_pResLocaleForKit)
         {
-            m_pResLocaleForLOK = std::make_unique<std::locale>(ScModule::get()->GetResLocale());
+            m_pResLocaleForKit = std::make_unique<std::locale>(ScModule::get()->GetResLocale());
         }
-        aName = Translate::get(SCSTR_CONTENT_ARY[static_cast<int>(nType)], *m_pResLocaleForLOK);
+        aName = Translate::get(SCSTR_CONTENT_ARY[static_cast<int>(nType)], *m_pResLocaleForKit);
     }
     else
     {

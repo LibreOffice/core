@@ -24,7 +24,7 @@ namespace vcl
 #pragma warning(push)
 #pragma warning(disable : 4592)
 #endif
-const std::map<PointerStyle, OString> gaLOKPointerMap{
+const std::map<PointerStyle, OString> gaKitPointerMap{
     { PointerStyle::Arrow, "default" },
     // PointerStyle::Null ?
     { PointerStyle::Wait, "wait" },

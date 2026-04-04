@@ -756,9 +756,9 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         // LOK case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
         // visible area.
         const SwRect &rVisArea = m_pImp->GetShell().VisArea();
-        SwRect aLokVisArea(m_pImp->GetShell().getLOKVisibleArea());
-        bool bUseLokVisArea = comphelper::COKit::isActive() && !aLokVisArea.IsEmpty();
-        const SwRect& rVis = bUseLokVisArea ? aLokVisArea : rVisArea;
+        SwRect aKitVisArea(m_pImp->GetShell().getLOKVisibleArea());
+        bool bUseKitVisArea = comphelper::COKit::isActive() && !aKitVisArea.IsEmpty();
+        const SwRect& rVis = bUseKitVisArea ? aKitVisArea : rVisArea;
 
         while( pPg && pPg->getFrameArea().Bottom() < rVis.Top() )
             pPg = static_cast<SwPageFrame*>(pPg->GetNext());
@@ -1094,9 +1094,9 @@ bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
     const SwRect &rVisArea = m_pImp->GetShell().VisArea();
     // LOK case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
     // visible area.
-    SwRect aLokVisArea(m_pImp->GetShell().getLOKVisibleArea());
-    bool bUseLokVisArea = comphelper::COKit::isActive() && !aLokVisArea.IsEmpty();
-    const SwRect& rVis = bUseLokVisArea ? aLokVisArea : rVisArea;
+    SwRect aKitVisArea(m_pImp->GetShell().getLOKVisibleArea());
+    bool bUseKitVisArea = comphelper::COKit::isActive() && !aKitVisArea.IsEmpty();
+    const SwRect& rVis = bUseKitVisArea ? aKitVisArea : rVisArea;
 
     if ( (prPage->getFrameArea().Top() >= rVis.Bottom()) ||
          (prPage->getFrameArea().Left()>= rVis.Right()) )
@@ -2356,9 +2356,9 @@ bool SwLayIdle::DoIdleJob(IdleJobType eJob, IdleJobArea eJobArea)
         // LOK case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
         // visible area.
         const SwRect &rVisArea = m_pImp->GetShell().VisArea();
-        SwRect aLokVisArea(m_pImp->GetShell().getLOKVisibleArea());
-        bool bUseLokVisArea = comphelper::COKit::isActive() && !aLokVisArea.IsEmpty();
-        const SwRect& rVis = bUseLokVisArea ? aLokVisArea : rVisArea;
+        SwRect aKitVisArea(m_pImp->GetShell().getLOKVisibleArea());
+        bool bUseKitVisArea = comphelper::COKit::isActive() && !aKitVisArea.IsEmpty();
+        const SwRect& rVis = bUseKitVisArea ? aKitVisArea : rVisArea;
         if (pPage && eJobArea == IdleJobArea::VISIBLE &&
             !pPage->getFrameArea().Overlaps(rVis))
         {

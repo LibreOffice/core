@@ -315,7 +315,7 @@ bool ScGridWindow::NeedLOKCursorInvalidation(const tools::Rectangle& rCursorRect
 {
     // Don't see the need for a map as there will be only a few zoom levels
     // and as of now X and Y zooms in online are the same.
-    for (auto& rEntry : maLOKLastCursor)
+    for (auto& rEntry : maKitLastCursor)
     {
         if (fScaleX == rEntry.mfScaleX && fScaleY == rEntry.mfScaleY)
         {
@@ -328,7 +328,7 @@ bool ScGridWindow::NeedLOKCursorInvalidation(const tools::Rectangle& rCursorRect
         }
     }
 
-    maLOKLastCursor.push_back(LOKCursorEntry{fScaleX, fScaleY, rCursorRect});
+    maKitLastCursor.push_back(KitCursorEntry{fScaleX, fScaleY, rCursorRect});
     return true;
 }
 
@@ -769,7 +769,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     tools::Rectangle aDrawingRectLogic;
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     bool bLokRTL = bLayoutRTL && bIsTiledRendering;
-    std::unique_ptr<ScLokRTLContext> pLokRTLCtxt(
+    std::unique_ptr<ScLokRTLContext> pKitRTLCtxt(
         bLokRTL ?
             new ScLokRTLContext(aOutputData, o3tl::convert(aOriginalMode.GetOrigin().X(), o3tl::Length::twip, o3tl::Length::px)) :
             nullptr);
@@ -976,7 +976,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
     // Autofilter- and Pivot-Buttons
-    DrawButtons(nX1, nX2, rTableInfo, pContentDev, pLokRTLCtxt.get());          // Pixel
+    DrawButtons(nX1, nX2, rTableInfo, pContentDev, pKitRTLCtxt.get());          // Pixel
 
     // Show Note Mark
     if (rOpts.GetOption(sc::ViewOption::NOTES))
@@ -1111,7 +1111,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if (bIsTiledRendering)
     {
         ScTabViewShell* pThisViewShell = mrViewData.GetViewShell();
-        ViewShellList aCurrentDocViewList = LOKEditViewHistory::GetSortedViewsForDoc(pThisViewShell->GetDocId());
+        ViewShellList aCurrentDocViewList = KitEditViewHistory::GetSortedViewsForDoc(pThisViewShell->GetDocId());
         tools::Rectangle aTileRectPx(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
 
         for (SfxViewShell* pVS: aCurrentDocViewList)
@@ -1161,8 +1161,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             {
                 // Transform the cell range X coordinates such that the edit cell area is
                 // horizontally mirrored w.r.t the (combined-)tile.
-                aStart.setX(pLokRTLCtxt->docToTilePos(aStart.X()));
-                aEnd.setX(pLokRTLCtxt->docToTilePos(aEnd.X()));
+                aStart.setX(pKitRTLCtxt->docToTilePos(aStart.X()));
+                aEnd.setX(pKitRTLCtxt->docToTilePos(aEnd.X()));
             }
 
             // don't overwrite grid
@@ -1243,9 +1243,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 // Transform the cell range X coordinates such that the edit cell area is
                 // horizontally mirrored w.r.t the (combined-)tile.
                 aNewOutputArea = tools::Rectangle(
-                    pLokRTLCtxt->docToTilePos(aNewOutputArea.Left() - aOriginAbsPx.X()) + aOriginAbsPx.X(),
+                    pKitRTLCtxt->docToTilePos(aNewOutputArea.Left() - aOriginAbsPx.X()) + aOriginAbsPx.X(),
                     aNewOutputArea.Top(),
-                    pLokRTLCtxt->docToTilePos(aNewOutputArea.Right() - aOriginAbsPx.X()) + aOriginAbsPx.X() + nCursorGapPx,
+                    pKitRTLCtxt->docToTilePos(aNewOutputArea.Right() - aOriginAbsPx.X()) + aOriginAbsPx.X() + nCursorGapPx,
                     aNewOutputArea.Bottom());
                 aNewOutputArea.Normalize();
             }
@@ -1459,8 +1459,8 @@ namespace
 
 void ScGridWindow::resetCachedViewGridOffsets() const
 {
-    if (mpLOKDrawView)
-        if (SdrPageView* pPageView = mpLOKDrawView->GetSdrPageView())
+    if (mpKitDrawView)
+        if (SdrPageView* pPageView = mpKitDrawView->GetSdrPageView())
             pPageView->resetGridOffsetsOfAllPageWindows();
 }
 
@@ -1605,9 +1605,9 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     {
         bool bPrintTwipsMsgs = comphelper::COKit::isCompatFlagSet(
                 comphelper::COKit::Compat::scPrintTwipsMsgs);
-        if (!mpLOKDrawView)
+        if (!mpKitDrawView)
         {
-            mpLOKDrawView.reset(bPrintTwipsMsgs ?
+            mpKitDrawView.reset(bPrintTwipsMsgs ?
                 new ScLOKDrawView(
                     &rDevice,
                     mrViewData) :
@@ -1616,9 +1616,9 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                     &rDevice));
         }
 
-        mpLOKDrawView->SetNegativeX(bLayoutRTL);
-        mpLOKDrawView->ShowSdrPage(mpLOKDrawView->GetModel().GetPage(nTab));
-        aOutputData.SetDrawView(mpLOKDrawView.get());
+        mpKitDrawView->SetNegativeX(bLayoutRTL);
+        mpKitDrawView->ShowSdrPage(mpKitDrawView->GetModel().GetPage(nTab));
+        aOutputData.SetDrawView(mpKitDrawView.get());
         aOutputData.SetSpellCheckContext(mpSpellCheckCxt.get());
     }
 
@@ -2044,7 +2044,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     }
 }
 
-void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev, const ScLokRTLContext* pLokRTLContext)
+void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev, const ScLokRTLContext* pKitRTLContext)
 {
     aComboButton.SetOutputDevice( pContentDev );
 
@@ -2138,8 +2138,8 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                     mrViewData.GetMergeSizePixel( nStartCol, nStartRow, nSizeX, nSizeY );//get nSizeX
                     nSizeY = ScViewData::ToPixel(rDoc.GetRowHeight(nRow, nTab), mrViewData.GetPPTY());
                     Point aScrPos = mrViewData.GetScrPos( nCol, nRow, eWhich );
-                    if (pLokRTLContext)
-                        aScrPos.setX(pLokRTLContext->docToTilePos(aScrPos.X()));
+                    if (pKitRTLContext)
+                        aScrPos.setX(pKitRTLContext->docToTilePos(aScrPos.X()));
 
                     aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1), bLayoutRTL);
                     aCellBtn.setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL

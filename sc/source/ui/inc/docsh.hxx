@@ -67,7 +67,7 @@ typedef std::unordered_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
 
 //enum ScDBFormat { SC_FORMAT_SDF, SC_FORMAT_DBF };
 
-enum class LOKCommentNotificationType { Add, Modify, Remove };
+enum class KitCommentNotificationType { Add, Modify, Remove };
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream);
 
@@ -411,7 +411,7 @@ public:
     static const OUString & GetDBaseFilterName();
     static const OUString & GetDifFilterName();
     static bool       HasAutomaticTableName( std::u16string_view rFilter );
-    static void       LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument& rDocument, const ScAddress& rPos, const ScPostIt* pNote);
+    static void       KitCommentNotify(KitCommentNotificationType nType, const ScDocument& rDocument, const ScAddress& rPos, const ScPostIt* pNote);
 
     DECL_LINK( RefreshDBDataHdl, Timer*, void );
 

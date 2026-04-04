@@ -43,7 +43,7 @@ protected:
     // of this control on reaching pass the last child. This is suitable when
     // the Control is the toplevel control and has no siblings or parent
     InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OUString& rID,
-                      bool bAllowCycleFocusOut = true, sal_uInt64 nLOKWindowId = 0);
+                      bool bAllowCycleFocusOut = true, sal_uInt64 nKitWindowId = 0);
 
     void InitControlBase(weld::Widget* pWidget);
 

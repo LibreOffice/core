@@ -292,7 +292,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
     {
         aHelpStr = ScResId( STR_QUICKHELP_DELETE );
 
-        if (ScTabViewShell* pLOKViewShell
+        if (ScTabViewShell* pKitViewShell
             = comphelper::COKit::isActive() ? aViewData.GetViewShell() : nullptr)
         {
             // set cell addresses for deletion by autofill
@@ -310,7 +310,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             aReferenceMarks[0] = ScInputHandler::GetReferenceMark(
                 aViewData, *aViewData.GetDocShell(), nX1, nX2, nY1, nY2, nTab, aSelColor);
 
-            ScInputHandler::SendReferenceMarks(pLOKViewShell, aReferenceMarks);
+            ScInputHandler::SendReferenceMarks(pKitViewShell, aReferenceMarks);
         }
     }
     else if ( nEndX != aMarkRange.aEnd.Col() || nEndY != aMarkRange.aEnd.Row() )
@@ -337,7 +337,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         sTipString = aHelpStr;
         sTopParent = pWin;
 
-        if (ScTabViewShell* pLOKViewShell
+        if (ScTabViewShell* pKitViewShell
             = comphelper::COKit::isActive() ? aViewData.GetViewShell() : nullptr)
         {
             // we need to use nAddX and nAddX here because we need the next row&column address
@@ -352,7 +352,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             writer.put("text", sTipString);
             writer.put("celladdress", sCellAddress);
             OString sPayloadString = writer.finishAndGetAsOString();
-            pLOKViewShell->viewCallback(KIT_CALLBACK_TOOLTIP, sPayloadString);
+            pKitViewShell->viewCallback(KIT_CALLBACK_TOOLTIP, sPayloadString);
         }
     }
 }

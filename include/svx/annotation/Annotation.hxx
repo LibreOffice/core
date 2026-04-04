@@ -40,11 +40,11 @@ enum class CommentNotificationType
 };
 
 /** Kit notify for a view */
-SVXCORE_DLLPUBLIC void LOKCommentNotify(CommentNotificationType nType,
+SVXCORE_DLLPUBLIC void KitCommentNotify(CommentNotificationType nType,
                                         const SfxViewShell* pViewShell, Annotation& rAnnotation);
 
 /** Kit notify for all views */
-SVXCORE_DLLPUBLIC void LOKCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation);
+SVXCORE_DLLPUBLIC void KitCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation);
 
 /** Type of the annotation (that is supported) */
 enum class AnnotationType

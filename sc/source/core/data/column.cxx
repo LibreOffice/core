@@ -1760,7 +1760,7 @@ public:
 
         // Notify our LOK clients
         if (m_bAddressChanged)
-            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Modify, m_rDocument, aAddr, p);
+            ScDocShell::KitCommentNotify(KitCommentNotificationType::Modify, m_rDocument, aAddr, p);
     }
 };
 
@@ -1842,7 +1842,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
                 ScAddress aAddr(rColumn.nCol, nRow, rColumn.nTab);
                 p->UpdateCaptionPos(aAddr);
                 // Notify our LOK clients
-                ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Modify, rColumn.GetDoc(), aAddr, p);
+                ScDocShell::KitCommentNotify(KitCommentNotificationType::Modify, rColumn.GetDoc(), aAddr, p);
             }
         };
         sc::ProcessNote(rColumn.maCellNotes.begin(), rColumn.maCellNotes, 0, rColumn.GetDoc().MaxRow(), aFunc);

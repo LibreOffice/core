@@ -1662,12 +1662,12 @@ void SwTextNode::Update(
                 // Redline is changed only when some change occurs before it
                 if (nChangePos <= pRedln->Start()->GetContentIndex())
                 {
-                    SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, pRedln);
+                    SwRedlineTable::KitRedlineNotification(RedlineNotification::Modify, pRedln);
                 }
             }
         }
         else if (this == &pRedln->GetPoint()->GetNode())
-            SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, pRedln);
+            SwRedlineTable::KitRedlineNotification(RedlineNotification::Modify, pRedln);
     }
 }
 

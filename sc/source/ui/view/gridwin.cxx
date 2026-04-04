@@ -1846,7 +1846,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
 
 void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if (KitHelper::getDeviceFormFactor() == LOKDeviceFormFactor::MOBILE)
+    if (KitHelper::getDeviceFormFactor() == KitDeviceFormFactor::MOBILE)
     {
         ScViewFunc* pView = mrViewData.GetView();
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();

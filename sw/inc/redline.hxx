@@ -169,7 +169,7 @@ class SAL_DLLPUBLIC_RTTI SwRangeRedline final : public SwPaM, public ISwContentI
 {
     SwRedlineData* m_pRedlineData;
     std::optional<SwNodeIndex> m_oContentSect;
-    std::optional<tools::Long> m_oLOKLastNodeTop;
+    std::optional<tools::Long> m_oKitLastNodeTop;
     sal_uInt32 m_nId;
     bool m_bDelLastPara : 1;
     bool m_bIsVisible : 1;

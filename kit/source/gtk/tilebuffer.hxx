@@ -83,7 +83,7 @@ private:
 /**
    This class represents the tile buffer which is responsible for managing,
    reusing and caching all the already rendered tiles. If the given tile is not
-   present in the buffer, call to COKit Document's (m_pLOKDocument) paintTile
+   present in the buffer, call to COKit Document's (m_pKitDocument) paintTile
    method is made which fetches the rendered tile from LO core and store it in
    buffer for future reuse.
 */

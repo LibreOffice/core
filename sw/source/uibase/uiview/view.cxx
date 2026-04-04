@@ -811,7 +811,7 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     m_bIsPreviewDoubleClick(false),
     m_bMakeSelectionVisible(false),
     m_bForceChangesToolbar(true),
-    m_nLOKPageUpDownOffset(0),
+    m_nKitPageUpDownOffset(0),
     m_aBringToAttentionBlinkTimer("SwView m_aBringToAttentionBlinkTimer"),
     m_nBringToAttentionBlinkTimeOutsRemaining(0)
 {

@@ -447,10 +447,10 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
         OUString aModuleName = xModuleManager->identify( xFrame );
         vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
-        bool bIsLOK = comphelper::COKit::isActive();
+        bool bIsKit = comphelper::COKit::isActive();
 
         OUString sFile;
-        if (bIsLOK)
+        if (bIsKit)
             sFile = "notebookbar_online.ui";
         else
             sFile = lcl_getNotebookbarFileName( eApp );
@@ -463,11 +463,11 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
         bool bChangedFile = sNewFile != sCurrentFile;
 
-        if ((!bIsLOK && (
+        if ((!bIsKit && (
                 (!sFile.isEmpty() && bChangedFile) ||
                 (!pNotebookBar || !pNotebookBar->IsVisible()) ||
                 bReloadNotebookbar)
-            ) || (bIsLOK && !hasWeldedWrapper))
+            ) || (bIsKit && !hasWeldedWrapper))
         {
             OUString aBuf = rUIFile + sFile;
 
@@ -475,7 +475,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             std::vector<Image> aImageValues;
             std::vector<css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > > aExtensionValues;
             std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem;
-            if (!bIsLOK)
+            if (!bIsKit)
             {
                 pNotebookBarAddonsItem = std::make_unique<NotebookBarAddonsItem>();
                 NotebookbarAddonValues(aImageValues , aExtensionValues);
@@ -483,7 +483,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 pNotebookBarAddonsItem->aImageValues = std::move(aImageValues);
             }
 
-            if (bIsLOK)
+            if (bIsKit)
             {
                 if (!pViewShell)
                     return false;

@@ -294,7 +294,7 @@ void UndoInsertOrRemoveAnnotation::Undo()
     else
     {
         pPage->addAnnotation(mxAnnotation, mnIndex);
-        LOKCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *mxAnnotation);
+        KitCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *mxAnnotation);
     }
 }
 
@@ -308,7 +308,7 @@ void UndoInsertOrRemoveAnnotation::Redo()
     if (mbInsert)
     {
         pPage->addAnnotationNoNotify(mxAnnotation, mnIndex);
-        LOKCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *mxAnnotation);
+        KitCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *mxAnnotation);
     }
     else
     {

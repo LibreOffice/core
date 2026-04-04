@@ -2011,10 +2011,10 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions()
         {
             mbContinueImportOnFilterExceptions = yes;
             // lok: we want to overwrite file in jail, so don't use template flag
-            bool bIsLOK = comphelper::COKit::isActive();
+            bool bIsKit = comphelper::COKit::isActive();
             // allow repair
             pMedium->GetItemSet().Put(SfxBoolItem(SID_REPAIRPACKAGE, true));
-            pMedium->GetItemSet().Put(SfxBoolItem(SID_TEMPLATE, !bIsLOK));
+            pMedium->GetItemSet().Put(SfxBoolItem(SID_TEMPLATE, !bIsKit));
             pMedium->GetItemSet().Put(SfxStringItem(SID_DOCINFO_TITLE, aDocName));
         }
         else

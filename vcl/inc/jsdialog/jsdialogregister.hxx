@@ -16,7 +16,7 @@ namespace jsdialog
 {
 template <class T> class WidgetRegister
 {
-    // Map to remember the LOKWindowId <-> widget binding.
+    // Map to remember the KitWindowId <-> widget binding.
     std::map<OUString, T> m_aWidgetMap;
     std::map<OUString, T>& Map() { return m_aWidgetMap; }
     const std::map<OUString, T>& Map() const { return m_aWidgetMap; }

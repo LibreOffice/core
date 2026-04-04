@@ -116,7 +116,7 @@ struct COKitClassStruct
 
     /// @see kit::Office::sendDialogEvent
     void (*sendDialogEvent) (COKit* pThis,
-                            unsigned long long int nLOKWindowId,
+                            unsigned long long int nKitWindowId,
                             const char* pArguments);
 
     /// @see kit::Office::setOption
@@ -459,7 +459,7 @@ struct COKitDocumentClassStruct
 
     /// @see kit::Document::sendDialogEvent
     void (*sendDialogEvent) (COKitDocument* pThis,
-                            unsigned long long int nLOKWindowId,
+                            unsigned long long int nKitWindowId,
                             const char* pArguments);
 
     /// @see kit::Document::renderFontOrientation().

@@ -73,7 +73,7 @@ namespace tools
 class JsonWriter;
 }
 
-class LOKTrigger;
+class KitTrigger;
 
 namespace weld
 {
@@ -82,7 +82,7 @@ class DialogController;
 
 class VCL_DLLPUBLIC Widget
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     int m_nBlockNotify = 0;
 
@@ -445,7 +445,7 @@ public:
 
 class VCL_DLLPUBLIC ScrolledWindow : virtual public Widget
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     Link<ScrolledWindow&, void> m_aVValueChangeHdl;
     Link<ScrolledWindow&, void> m_aHValueChangeHdl;
@@ -510,7 +510,7 @@ public:
 
 class VCL_DLLPUBLIC Notebook : virtual public Widget
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
 protected:
     Link<const OUString&, bool> m_aLeavePageHdl;
@@ -813,7 +813,7 @@ protected:
     Link<ComboBox&, bool> m_aEntryActivateHdl;
     Link<OUString&, bool> m_aEntryInsertTextHdl;
 
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     void signal_changed()
     {
@@ -1023,7 +1023,7 @@ public:
 */
 class VCL_DLLPUBLIC TreeView : virtual public Widget
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
 public:
     typedef std::pair<const TreeIter&, int> iter_col;
@@ -1672,7 +1672,7 @@ typedef std::tuple<OUString&, const TreeIter&, int> encoded_image_query;
 
 class VCL_DLLPUBLIC IconView : virtual public Widget
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
 private:
     OUString m_sSavedValue;
@@ -1864,7 +1864,7 @@ public:
 
 class VCL_DLLPUBLIC Button : virtual public Widget
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
 protected:
     Link<Button&, void> m_aClickHdl;
@@ -1898,7 +1898,7 @@ public:
 
 class VCL_DLLPUBLIC Toggleable : virtual public Widget
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
 protected:
     Link<Toggleable&, void> m_aToggleHdl;
@@ -1939,12 +1939,12 @@ public:
 
 class VCL_DLLPUBLIC ToggleButton : virtual public Button, virtual public Toggleable
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 };
 
 class VCL_DLLPUBLIC MenuButton : virtual public ToggleButton
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     Link<const OUString&, void> m_aSelectHdl;
 
@@ -2041,7 +2041,7 @@ public:
 
 class VCL_DLLPUBLIC LinkButton : virtual public Widget
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     Link<LinkButton&, bool> m_aActivateLinkHdl;
 
@@ -2111,7 +2111,7 @@ protected:
     Link<Entry&, void> m_aCursorPositionHdl;
     Link<Entry&, bool> m_aActivateHdl;
 
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     void signal_changed()
     {
@@ -2217,7 +2217,7 @@ public:
 
 class VCL_DLLPUBLIC SpinButton : virtual public Entry
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     Link<SpinButton&, void> m_aValueChangedHdl;
     Link<sal_Int64, OUString> m_aFormatValueHdl;
@@ -2379,7 +2379,7 @@ class EntryFormatter;
 // are managed by a more complex Formatter which can support doubles.
 class VCL_DLLPUBLIC FormattedSpinButton : virtual public Entry
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     Link<FormattedSpinButton&, void> m_aValueChangedHdl;
 
@@ -2414,7 +2414,7 @@ public:
 
 class VCL_DLLPUBLIC Calendar : virtual public Widget
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     Link<Calendar&, void> m_aSelectedHdl;
     Link<Calendar&, void> m_aActivatedHdl;
@@ -2796,7 +2796,7 @@ public:
 
 class VCL_DLLPUBLIC TextView : virtual public Widget
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
 private:
     OUString m_sSavedValue;
@@ -2998,7 +2998,7 @@ public:
     virtual AbsoluteScreenPixelPoint get_accessible_location_on_screen() = 0;
 
 private:
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     virtual void click(const Point&) = 0;
 
@@ -3019,7 +3019,7 @@ enum class Placement
 
 class VCL_DLLPUBLIC Menu
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     Link<const OUString&, void> m_aActivateHdl;
 
@@ -3086,7 +3086,7 @@ public:
 
 class VCL_DLLPUBLIC Popover : virtual public Container
 {
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
 private:
     Link<weld::Popover&, void> m_aCloseHdl;
@@ -3111,7 +3111,7 @@ class VCL_DLLPUBLIC Toolbar : virtual public Widget
     Link<const OUString&, void> m_aToggleMenuHdl;
 
 protected:
-    friend class ::LOKTrigger;
+    friend class ::KitTrigger;
 
     void signal_clicked(const OUString& rIdent) { m_aClickHdl.Call(rIdent); }
     void signal_toggle_menu(const OUString& rIdent) { m_aToggleMenuHdl.Call(rIdent); }

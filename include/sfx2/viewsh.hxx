@@ -116,7 +116,7 @@ namespace o3tl
     <SfxViewShell>.
 */
 
-enum class LOKDeviceFormFactor
+enum class KitDeviceFormFactor
 {
     UNKNOWN     = 0,
     DESKTOP     = 1,
@@ -170,15 +170,15 @@ friend class SfxPrinterController;
     VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
     bool                        mbPrinterSettingsModified;
-    LanguageTag                 maLOKLanguageTag;
-    LanguageTag                 maLOKLocale;
+    LanguageTag                 maKitLanguageTag;
+    LanguageTag                 maKitLocale;
     std::unique_ptr<CalendarWrapper> mpCalendar;
-    LOKDeviceFormFactor         maLOKDeviceFormFactor;
+    KitDeviceFormFactor         maKitDeviceFormFactor;
     bool                        mbLOKAccessibilityEnabled;
     rtl::Reference<KitDocumentFocusListener>   mpKitDocumentFocusListener;
     std::unordered_set<OUString>    mvLOKBlockedCommandList;
-    OUString maLOKTimezone;
-    bool maLOKIsTimezoneSet;
+    OUString maKitTimezone;
+    bool maKitIsTimezoneSet;
     bool                        mbLOKColorPreviewEnabled;
 
     /// Used for async export
@@ -273,7 +273,7 @@ public:
     virtual const SfxShell*     GetFormShell() const { return nullptr; };
 
     // ICOKitNotifier
-    virtual void                notifyWindow(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) const override;
+    virtual void                notifyWindow(vcl::KitWindowId nKitWindowId, const OUString& rAction, const std::vector<vcl::KitPayloadItem>& rPayload = std::vector<vcl::KitPayloadItem>()) const override;
     virtual OString             dumpNotifyState() const override;
 
     // Focus, KeyInput, Cursor
@@ -443,7 +443,7 @@ public:
     /// Set the COKit language of this view.
     void SetLOKLanguageTag(const OUString& rBcp47LanguageTag);
     /// Get the COKit language of this view.
-    const LanguageTag& GetKitLanguageTag() const { return maLOKLanguageTag; }
+    const LanguageTag& GetKitLanguageTag() const { return maKitLanguageTag; }
     /// Enable/Disable COKit AT support for this view.
     void SetLOKAccessibilityState(bool bEnabled);
     /// Get COKit AT support state for this view.
@@ -456,7 +456,7 @@ public:
     /// Get the COKit timezone of this view. See @SetLOKTimezone.
     std::pair<bool, OUString> GetKitTimezone() const
     {
-        return { maLOKIsTimezoneSet, maLOKTimezone };
+        return { maKitIsTimezoneSet, maKitTimezone };
     }
 
     /// Set the COKit timezone of this view.
@@ -464,26 +464,26 @@ public:
     /// @rTimezone the value to set (which could be empty).
     void SetLOKTimezone(bool isSet, const OUString& rTimezone)
     {
-        maLOKIsTimezoneSet = isSet;
-        maLOKTimezone = rTimezone;
+        maKitIsTimezoneSet = isSet;
+        maKitTimezone = rTimezone;
     }
 
     /// Set the COKit locale of this view.
     void SetLOKLocale(const OUString& rBcp47LanguageTag);
     /// Get the COKit locale of this view.
-    const LanguageTag& GetKitLocale() const { return maLOKLocale; }
+    const LanguageTag& GetKitLocale() const { return maKitLocale; }
     /// Set the COKit locale and language of this view.
     void SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag);
     /// Get the COKit calendar of this view.
     CalendarWrapper& GetKitCalendar();
     /// Get the form factor of the device where the lok client is running.
-    LOKDeviceFormFactor GetKitDeviceFormFactor() const { return maLOKDeviceFormFactor; }
+    KitDeviceFormFactor GetKitDeviceFormFactor() const { return maKitDeviceFormFactor; }
     /// Check if the lok client is running on a desktop machine.
-    bool isLOKDesktop() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::DESKTOP; }
+    bool isLOKDesktop() const { return maKitDeviceFormFactor == KitDeviceFormFactor::DESKTOP; }
     /// Check if the lok client is running on a tablet.
-    bool isLOKTablet() const  { return maLOKDeviceFormFactor == LOKDeviceFormFactor::TABLET; }
+    bool isLOKTablet() const  { return maKitDeviceFormFactor == KitDeviceFormFactor::TABLET; }
     /// Check if the lok client is running on a mobile device.
-    bool isLOKMobilePhone() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::MOBILE; }
+    bool isLOKMobilePhone() const { return maKitDeviceFormFactor == KitDeviceFormFactor::MOBILE; }
 
     virtual tools::Rectangle getLOKVisibleArea() const { return tools::Rectangle(); }
 

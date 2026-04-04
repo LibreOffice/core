@@ -142,7 +142,7 @@ public:
     /// Set the language and locale for the given view.
     static void setViewLanguageAndLocale(int nId, const OUString& rBcp47LanguageTag);
     /// Get the device form factor that should be used for a new view.
-    static LOKDeviceFormFactor getDeviceFormFactor();
+    static KitDeviceFormFactor getDeviceFormFactor();
     /// Set the device form factor that should be used for a new view.
     static void setDeviceFormFactor(std::u16string_view rDeviceFormFactor);
     /// Set color preview state for the given view.
@@ -180,9 +180,9 @@ public:
     static void sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem);
     /// Emits a KIT_CALLBACK_WINDOW
     static void notifyWindow(const SfxViewShell* pThisView,
-                             vcl::LOKWindowId nWindowId,
+                             vcl::KitWindowId nWindowId,
                              std::u16string_view rAction,
-                             const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>());
+                             const std::vector<vcl::KitPayloadItem>& rPayload = std::vector<vcl::KitPayloadItem>());
     /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED - if @bInvalidateAll - first invalidates all parts
     static void notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
     /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAll - first invalidates all parts
@@ -232,7 +232,7 @@ public:
                                       int nType, const OUString &rText);
 
     /// Helper for posting async mouse event
-    static void postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMouseEventData const & rLokMouseEventData);
+    static void postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMouseEventData const & rKitMouseEventData);
 
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
@@ -309,7 +309,7 @@ public:
 typedef std::list<SfxViewShell*> ViewShellList;
 
 /// Used to keep track of the last N views that text edited a document through an EditView
-class SFX2_DLLPUBLIC LOKEditViewHistory
+class SFX2_DLLPUBLIC KitEditViewHistory
 {
 public:
     typedef std::list<SfxViewShell*> ViewShellList;

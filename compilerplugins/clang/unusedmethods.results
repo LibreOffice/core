@@ -201,7 +201,7 @@ editeng/inc/TextPortionList.hxx:65
 editeng/inc/TextPortionList.hxx:66
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<TextPortion> *, std::__cxx1998::vector<std::unique_ptr<TextPortion> > >, std::vector<std::unique_ptr<TextPortion> > > TextPortionList::cend() const
 editeng/source/editeng/impedit.hxx:231
-    tools::Rectangle LOKSpecialPositioning::GetWindowPos(const tools::Rectangle &,enum MapUnit) const
+    tools::Rectangle KitSpecialPositioning::GetWindowPos(const tools::Rectangle &,enum MapUnit) const
 editeng/source/editeng/impedit.hxx:806
     double ImpEditEngine::scaleXFontValue(long) const
 editeng/source/editeng/impedit.hxx:814
@@ -817,7 +817,7 @@ include/sfx2/infobar.hxx:104
 include/sfx2/kit/componenthelpers.hxx:48
     void KitChartHelper::Invalidate()
 include/sfx2/viewsh.hxx:475
-    enum LOKDeviceFormFactor SfxViewShell::GetKitDeviceFormFactor() const
+    enum KitDeviceFormFactor SfxViewShell::GetKitDeviceFormFactor() const
 include/svl/itempool.hxx:202
     unsigned short SfxItemPool::GetSize_Impl() const
 include/svl/itempool.hxx:224
@@ -1185,7 +1185,7 @@ include/vcl/inputctx.hxx:62
 include/vcl/ITiledRenderable.hxx:238
     enum PointerStyle vcl::ITiledRenderable::getPointer()
 include/vcl/jsdialog/executor.hxx:67
-    void LOKTrigger::trigger_clicked(weld::Button &)
+    void KitTrigger::trigger_clicked(weld::Button &)
 include/vcl/lok.hxx:23
     void vcl::lok::unregisterPollCallbacks()
 include/vcl/metric.hxx:52

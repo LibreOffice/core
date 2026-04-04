@@ -783,8 +783,8 @@ bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const
 
     bool bLayoutRTL = true && (m_nLayout & SalLayoutFlags::BiDiRtl);
     bool bDevRTL = rOutDev.IsRTLEnabled();
-    bool bIsLOK = comphelper::COKit::isActive();
-    if( (bLayoutRTL || bDevRTL) && !bIsLOK )
+    bool bIsKit = comphelper::COKit::isActive();
+    if( (bLayoutRTL || bDevRTL) && !bIsKit )
     {
         mirror(aControlRegion, rOutDev);
         std::unique_ptr< ImplControlValue > mirrorValue( aValue.clone());

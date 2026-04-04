@@ -1954,7 +1954,7 @@ public:
         ScPostIt* pNew = p->Clone(aSrcPos, mrDestCol.GetDoc(), aDestPos, mbCloneCaption).release();
         miPos = mrDestNotes.set(miPos, nDestRow, pNew);
         // Notify our LOK clients also
-        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, mrDestCol.GetDoc(), aDestPos, pNew);
+        ScDocShell::KitCommentNotify(KitCommentNotificationType::Add, mrDestCol.GetDoc(), aDestPos, pNew);
     }
 };
 
@@ -2258,7 +2258,7 @@ namespace {
             ScAddress aAddr(m_aAddress);
             aAddr.SetRow(nRow);
             // Notify our LOK clients
-            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, m_rDocument, aAddr, p);
+            ScDocShell::KitCommentNotify(KitCommentNotificationType::Remove, m_rDocument, aAddr, p);
         }
     };
 } // anonymous namespace

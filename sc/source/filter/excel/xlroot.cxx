@@ -210,8 +210,8 @@ void XclRoot::SetTextEncoding( rtl_TextEncoding eTextEnc )
 void XclRoot::SetCharWidth( const XclFontData& rFontData )
 {
     mrData.mnCharWidth = 0;
-    bool bIsLOK = comphelper::COKit::isActive();
-    if( OutputDevice* pPrinter = GetPrinter( bIsLOK ) )
+    bool bIsKit = comphelper::COKit::isActive();
+    if( OutputDevice* pPrinter = GetPrinter( bIsKit ) )
     {
         vcl::Font aFont( rFontData.maName, Size( 0, rFontData.mnHeight ) );
         aFont.SetFamily( rFontData.GetScFamily( GetTextEncoding() ) );

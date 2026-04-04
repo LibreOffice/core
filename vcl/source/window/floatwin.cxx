@@ -42,7 +42,7 @@ public:
     VclPtr<ToolBox> mpBox;
     AbsoluteScreenPixelRectangle maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
     Point maPos; // position of the floating window wrt. parent
-    Point maLOKTwipsPos; ///< absolute position of the floating window in the document - in twips (for toplevel floating windows).
+    Point maKitTwipsPos; ///< absolute position of the floating window in the document - in twips (for toplevel floating windows).
 };
 
 FloatingWindow::ImplData::ImplData()
@@ -226,7 +226,7 @@ void FloatingWindow::dispose()
 
 Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
                                   const tools::Rectangle& rRect, FloatWinPopupFlags nFlags,
-                                  sal_uInt16& rArrangeIndex, Point* pLOKTwipsPos)
+                                  sal_uInt16& rArrangeIndex, Point* pKitTwipsPos)
 {
     // get window position
     AbsoluteScreenPixelPoint aPos;
@@ -453,7 +453,7 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
             AbsoluteScreenPixelRectangle( e1, e2 );
     }
 
-    if (bLOKActive && pLOKTwipsPos)
+    if (bLOKActive && pKitTwipsPos)
     {
         if (pW->IsMapModeEnabled() || pW->GetMapMode().GetMapUnit() == MapUnit::MapPixel)
         {
@@ -465,11 +465,11 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
             // and anyway the following is what we already do in
             // ScGridWindow::LogicInvalidate when map mode is not enabled.
 
-            *pLOKTwipsPos = pW->PixelToLogic(aPosOut, MapMode(MapUnit::MapTwip));
+            *pKitTwipsPos = pW->PixelToLogic(aPosOut, MapMode(MapUnit::MapTwip));
         }
         else
         {
-            *pLOKTwipsPos = OutputDevice::LogicToLogic(aPosOut, pW->GetMapMode(), MapMode(MapUnit::MapTwip));
+            *pKitTwipsPos = OutputDevice::LogicToLogic(aPosOut, pW->GetMapMode(), MapMode(MapUnit::MapTwip));
         }
     }
 
@@ -656,7 +656,7 @@ void FloatingWindow::PixelInvalidate(const tools::Rectangle* /*pRectangle*/)
     if (VclPtr<vcl::Window> pParent = GetParentWithKitNotifier())
     {
         const tools::Rectangle aRect(Point(0,0), Size(GetSizePixel().Width()+1, GetSizePixel().Height()+1));
-        std::vector<vcl::LOKPayloadItem> aPayload
+        std::vector<vcl::KitPayloadItem> aPayload
         {
             std::make_pair("rectangle"_ostr, aRect.toString())
         };
@@ -679,7 +679,7 @@ void FloatingWindow::StateChanged( StateChangedType nType )
     {
         if (nType == StateChangedType::InitShow)
         {
-            std::vector<vcl::LOKPayloadItem> aItems;
+            std::vector<vcl::KitPayloadItem> aItems;
             if (pParent == this)
             {
                 // we are a toplevel window, let's so far pretend to be a
@@ -689,7 +689,7 @@ void FloatingWindow::StateChanged( StateChangedType nType )
                     aItems.emplace_back("type", "dropdown");
                 else
                     aItems.emplace_back("type", "dialog");
-                aItems.emplace_back("position", mpImplData->maLOKTwipsPos.toString()); // twips
+                aItems.emplace_back("position", mpImplData->maKitTwipsPos.toString()); // twips
             }
             else
             {
@@ -791,7 +791,7 @@ void FloatingWindow::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopu
     // compute window position according to flags and arrangement
     sal_uInt16 nArrangeIndex;
     DoInitialLayout();
-    mpImplData->maPos = ImplCalcPos(this, rRect, nFlags, nArrangeIndex, &mpImplData->maLOKTwipsPos);
+    mpImplData->maPos = ImplCalcPos(this, rRect, nFlags, nArrangeIndex, &mpImplData->maKitTwipsPos);
     SetPosPixel( mpImplData->maPos );
     ImplGetFrame()->PositionByToolkit(rRect, nFlags);
 

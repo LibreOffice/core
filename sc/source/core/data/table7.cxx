@@ -591,12 +591,12 @@ OString ScTable::dumpColumnRowGroups(bool bColumns) const
 
 SCCOL ScTable::GetKitFreezeCol() const
 {
-    return maLOKFreezeCell.Col();
+    return maKitFreezeCell.Col();
 }
 
 SCROW ScTable::GetKitFreezeRow() const
 {
-    return maLOKFreezeCell.Row();
+    return maKitFreezeCell.Row();
 }
 
 bool ScTable::SetLOKFreezeCol(SCCOL nFreezeCol)
@@ -607,9 +607,9 @@ bool ScTable::SetLOKFreezeCol(SCCOL nFreezeCol)
         return false;
     }
 
-    if (maLOKFreezeCell.Col() != nFreezeCol)
+    if (maKitFreezeCell.Col() != nFreezeCol)
     {
-        maLOKFreezeCell.SetCol(nFreezeCol);
+        maKitFreezeCell.SetCol(nFreezeCol);
         return true;
     }
 
@@ -624,9 +624,9 @@ bool ScTable::SetLOKFreezeRow(SCROW nFreezeRow)
         return false;
     }
 
-    if (maLOKFreezeCell.Row() != nFreezeRow)
+    if (maKitFreezeCell.Row() != nFreezeRow)
     {
-        maLOKFreezeCell.SetRow(nFreezeRow);
+        maKitFreezeCell.SetRow(nFreezeRow);
         return true;
     }
 

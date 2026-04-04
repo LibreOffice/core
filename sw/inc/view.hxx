@@ -266,7 +266,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     /// COKit has to force the page size for PgUp/PgDown
     /// functionality based on the user's view, instead of using the m_aVisArea.
-    SwTwips         m_nLOKPageUpDownOffset;
+    SwTwips         m_nKitPageUpDownOffset;
 
     SelectCycle m_aSelectCycle;
 
@@ -596,7 +596,7 @@ public:
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
     void ForcePageUpDownOffset(SwTwips nTwips)
     {
-        m_nLOKPageUpDownOffset = nTwips;
+        m_nKitPageUpDownOffset = nTwips;
     }
 
     // hand over Shell

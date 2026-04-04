@@ -827,7 +827,7 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft,
     {
         if (nPage >= rVirtualDevs.size())
         {
-            bool bIsLOK = comphelper::COKit::isActive();
+            bool bIsKit = comphelper::COKit::isActive();
             rVirtualDevs.emplace_back(VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA));
 
             VirtualDevice& rDevice = *rVirtualDevs.back();
@@ -835,13 +835,13 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft,
             const Color aColor = Application::GetSettings().GetStyleSettings().GetFieldColor();
             rDevice.SetBackground(Wallpaper(aColor));
             rDevice.Erase();
-            if (bIsLOK)
+            if (bIsKit)
             {
                 rDevice.SetDPIX(nDPIX);
                 rDevice.SetDPIY(nDPIY);
             }
 
-            weld::SetPointFont(rDevice, m_xComboBox->get_font(), bIsLOK);
+            weld::SetPointFont(rDevice, m_xComboBox->get_font(), bIsKit);
             assert(rVirtualDevs.size() == nPage + 1);
         }
 

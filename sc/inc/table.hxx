@@ -235,7 +235,7 @@ private:
     std::unique_ptr<ScConditionalFormatList> mpCondFormatList;
     sc::SparklineList maSparklineList;
 
-    ScAddress       maLOKFreezeCell;
+    ScAddress       maKitFreezeCell;
 
     bool            bScenario:1;
     bool            bLayoutRTL:1;

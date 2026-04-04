@@ -1222,7 +1222,7 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
     if (const vcl::ICOKitNotifier* pNotifier = GetKitNotifier())
     {
         // In case we are routing the window, notify the client
-        std::vector<vcl::LOKPayloadItem> aPayload;
+        std::vector<vcl::KitPayloadItem> aPayload;
         tools::Rectangle aRect(Point(0, 0), aSize);
         if (pRectangle)
             aRect = *pRectangle;

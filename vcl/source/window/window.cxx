@@ -735,7 +735,7 @@ WindowImpl::WindowImpl( vcl::Window& rWindow, WindowType eType )
     static bool bDoubleBuffer = getenv("VCL_DOUBLEBUFFERING_FORCE_ENABLE");
     mbDoubleBufferingRequested = bDoubleBuffer; // when we are not sure, assume it cannot do double-buffering via RenderContext
     mpKitNotifier                       = nullptr;
-    mnLOKWindowId                       = 0;
+    mnKitWindowId                       = 0;
     mbUseFrameData                      = false;
 }
 
@@ -3144,22 +3144,22 @@ void Window::SetComponentInterface( Reference< css::awt::XVclWindowPeer > const 
         pWrapper->SetWindowInterface( this, xIFace );
 }
 
-typedef std::map<vcl::LOKWindowId, VclPtr<vcl::Window>> LOKWindowsMap;
+typedef std::map<vcl::KitWindowId, VclPtr<vcl::Window>> LOKWindowsMap;
 
 namespace {
 
 LOKWindowsMap& GetKitWindowsMap()
 {
-    // Map to remember the LOKWindowId <-> Window binding.
-    static LOKWindowsMap s_aLOKWindowsMap;
+    // Map to remember the KitWindowId <-> Window binding.
+    static LOKWindowsMap s_aKitWindowsMap;
 
-    return s_aLOKWindowsMap;
+    return s_aKitWindowsMap;
 }
 
 }
 
 // Counter to be able to have unique id's for each window.
-static vcl::LOKWindowId sLastLOKWindowId = 1;
+static vcl::KitWindowId sLastKitWindowId = 1;
 
 void Window::SetKitNotifier(const vcl::ICOKitNotifier* pNotifier, bool bParent)
 {
@@ -3172,9 +3172,9 @@ void Window::SetKitNotifier(const vcl::ICOKitNotifier* pNotifier, bool bParent)
     if (!bParent)
     {
         // assign the LOK window id
-        assert(mpWindowImpl->mnLOKWindowId == 0);
-        mpWindowImpl->mnLOKWindowId = sLastLOKWindowId++;
-        GetKitWindowsMap().emplace(mpWindowImpl->mnLOKWindowId, this);
+        assert(mpWindowImpl->mnKitWindowId == 0);
+        mpWindowImpl->mnKitWindowId = sLastKitWindowId++;
+        GetKitWindowsMap().emplace(mpWindowImpl->mnKitWindowId, this);
     }
 
     mpWindowImpl->mpKitNotifier = pNotifier;
@@ -3186,12 +3186,12 @@ void Window::SetLOKWindowId()
     assert(comphelper::COKit::isActive());
 
     // assign the LOK window id
-    assert(mpWindowImpl->mnLOKWindowId == 0);
-    mpWindowImpl->mnLOKWindowId = sLastLOKWindowId++;
-    GetKitWindowsMap().emplace(mpWindowImpl->mnLOKWindowId, this);
+    assert(mpWindowImpl->mnKitWindowId == 0);
+    mpWindowImpl->mnKitWindowId = sLastKitWindowId++;
+    GetKitWindowsMap().emplace(mpWindowImpl->mnKitWindowId, this);
 }
 
-VclPtr<Window> Window::FindLOKWindow(vcl::LOKWindowId nWindowId)
+VclPtr<Window> Window::FindLOKWindow(vcl::KitWindowId nWindowId)
 {
     const auto it = GetKitWindowsMap().find(nWindowId);
     if (it != GetKitWindowsMap().end())
@@ -3208,11 +3208,11 @@ bool Window::IsLOKWindowsEmpty()
 void Window::ReleaseKitNotifier()
 {
     // unregister the LOK window binding
-    if (mpWindowImpl->mnLOKWindowId > 0)
-        GetKitWindowsMap().erase(mpWindowImpl->mnLOKWindowId);
+    if (mpWindowImpl->mnKitWindowId > 0)
+        GetKitWindowsMap().erase(mpWindowImpl->mnKitWindowId);
 
     mpWindowImpl->mpKitNotifier = nullptr;
-    mpWindowImpl->mnLOKWindowId = 0;
+    mpWindowImpl->mnKitWindowId = 0;
 }
 
 ICOKitNotifier::~ICOKitNotifier()
@@ -3228,7 +3228,7 @@ ICOKitNotifier::~ICOKitNotifier()
         if (pWindowImpl && pWindowImpl->mpKitNotifier == this)
         {
             pWindowImpl->mpKitNotifier = nullptr;
-            pWindowImpl->mnLOKWindowId = 0;
+            pWindowImpl->mnKitWindowId = 0;
             it = GetKitWindowsMap().erase(it);
             continue;
         }
@@ -3242,9 +3242,9 @@ const vcl::ICOKitNotifier* Window::GetKitNotifier() const
     return mpWindowImpl ? mpWindowImpl->mpKitNotifier : nullptr;
 }
 
-vcl::LOKWindowId Window::GetKitWindowId() const
+vcl::KitWindowId Window::GetKitWindowId() const
 {
-    return mpWindowImpl ? mpWindowImpl->mnLOKWindowId : 0;
+    return mpWindowImpl ? mpWindowImpl->mnKitWindowId : 0;
 }
 
 VclPtr<vcl::Window> Window::GetParentWithKitNotifier()

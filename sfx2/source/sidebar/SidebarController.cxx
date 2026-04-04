@@ -556,9 +556,9 @@ void SidebarController::UpdateConfigurations()
         && mnRequestedForceFlags == SwitchFlag_NoForce)
         return;
 
-    bool bIsLOK = comphelper::COKit::isActive();
+    bool bIsKit = comphelper::COKit::isActive();
 
-    if (!bIsLOK && maCurrentContext.msApplication != "none" &&
+    if (!bIsKit && maCurrentContext.msApplication != "none" &&
         !maCurrentContext.msApplication.isEmpty())
     {
         mpResourceManager->SaveDecksSettings(maCurrentContext);
@@ -569,7 +569,7 @@ void SidebarController::UpdateConfigurations()
     if (!maRequestedContext.msApplication.isEmpty() &&
         (maCurrentContext.msApplication != maRequestedContext.msApplication))
     {
-        if (bIsLOK)
+        if (bIsKit)
         {
             // LOK has no last-used memory
             const auto& rOverrides = mpResourceManager->GetDeckOverrides();

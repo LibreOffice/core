@@ -194,10 +194,10 @@ private:
 
     double              mfPendingTabBarWidth;       // Tab bar width relative to frame window width.
 
-    SCROW               mnLOKStartHeaderRow;
-    SCROW               mnLOKEndHeaderRow;
-    SCCOL               mnLOKStartHeaderCol;
-    SCCOL               mnLOKEndHeaderCol;
+    SCROW               mnKitStartHeaderRow;
+    SCROW               mnKitEndHeaderRow;
+    SCCOL               mnKitStartHeaderCol;
+    SCCOL               mnKitEndHeaderCol;
 
     bool                bMinimized:1;
     bool                bInUpdateHeader:1;
@@ -629,10 +629,10 @@ public:
 
     static void OnLOKNoteStateChanged(const ScPostIt* pNote);
 
-    SCROW GetKitStartHeaderRow() const { return mnLOKStartHeaderRow; }
-    SCROW GetKitEndHeaderRow() const { return mnLOKEndHeaderRow; }
-    SCCOL GetKitStartHeaderCol() const { return mnLOKStartHeaderCol; }
-    SCCOL GetKitEndHeaderCol() const { return mnLOKEndHeaderCol; }
+    SCROW GetKitStartHeaderRow() const { return mnKitStartHeaderRow; }
+    SCROW GetKitEndHeaderRow() const { return mnKitEndHeaderRow; }
+    SCCOL GetKitStartHeaderCol() const { return mnKitStartHeaderCol; }
+    SCCOL GetKitEndHeaderCol() const { return mnKitEndHeaderCol; }
 
     void SyncGridWindowMapModeFromDrawMapMode();
 

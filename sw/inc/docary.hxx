@@ -280,7 +280,7 @@ public:
     void                        Resort() { maVector.Resort(); mpMaxEndPos = nullptr; }
 
     // Notifies all LOK clients when redlines are added/modified/removed
-    static void                 LOKRedlineNotification(RedlineNotification eType, SwRangeRedline* pRedline);
+    static void                 KitRedlineNotification(RedlineNotification eType, SwRangeRedline* pRedline);
 
 private:
     void CheckOverlapping(vector_type::const_iterator it);

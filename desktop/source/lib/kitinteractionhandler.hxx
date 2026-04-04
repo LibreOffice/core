@@ -47,7 +47,7 @@ class KitInteractionHandler: public cppu::WeakImplHelper<css::lang::XServiceInfo
 {
 private:
     desktop::LibCO_Impl * m_pKit;
-    desktop::LibLODocument_Impl * m_pLOKDocument;
+    desktop::LibLODocument_Impl * m_pKitDocument;
 
     /// Command for which we use this interaction handler (like "load", "save", "saveas", ...)
     OString m_command;
@@ -82,7 +82,7 @@ public:
     explicit KitInteractionHandler(
             OString command,
             desktop::LibCO_Impl *,
-            desktop::LibLODocument_Impl *pLOKDocumt = nullptr);
+            desktop::LibLODocument_Impl *pKitDocumt = nullptr);
 
     virtual ~KitInteractionHandler() override;
 

@@ -182,7 +182,7 @@ public:
 
     virtual std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
     virtual std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
-                                                bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0);
+                                                bool bAllowCycleFocusOut, sal_uInt64 nKitWindowId = 0);
     virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage);
     virtual std::unique_ptr<weld::ColorChooserDialog>

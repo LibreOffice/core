@@ -313,9 +313,9 @@ const vcl::KeyCode* Application::GetReservedKeyCode( size_t i )
         return &ReservedKeys[i];
 }
 
-void Application::notifyWindow(vcl::LOKWindowId /*nLOKWindowId*/,
+void Application::notifyWindow(vcl::KitWindowId /*nKitWindowId*/,
                                const OUString& /*rAction*/,
-                               const std::vector<vcl::LOKPayloadItem>& /*rPayload = std::vector<LOKPayloadItem>()*/) const
+                               const std::vector<vcl::KitPayloadItem>& /*rPayload = std::vector<KitPayloadItem>()*/) const
 {
     SAL_WARN("vcl", "Invoked not implemented method: Application::notifyWindow");
 }

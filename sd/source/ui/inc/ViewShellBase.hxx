@@ -223,8 +223,8 @@ public:
     /// See SfxViewShell::GetColorConfigColor().
     ::Color GetColorConfigColor(svtools::ColorConfigEntry nColorType) const override;
 
-    void setLOKVisibleArea(const ::tools::Rectangle& rArea) { maLOKVisibleArea = rArea; }
-    virtual ::tools::Rectangle getLOKVisibleArea() const override { return maLOKVisibleArea; }
+    void setLOKVisibleArea(const ::tools::Rectangle& rArea) { maKitVisibleArea = rArea; }
+    virtual ::tools::Rectangle getLOKVisibleArea() const override { return maKitVisibleArea; }
 
     const SdViewOptions& GetViewOptions() const;
     void SetViewOptions(const SdViewOptions& rOptions) const;
@@ -240,7 +240,7 @@ private:
     std::unique_ptr<Implementation> mpImpl;
     DrawDocShell* mpDocShell;
     SdDrawDocument* mpDocument;
-    ::tools::Rectangle maLOKVisibleArea;
+    ::tools::Rectangle maKitVisibleArea;
 
     /** Determine from the properties of the document shell the initial type
         of the view shell in the center pane.  We use this method to avoid

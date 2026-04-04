@@ -126,7 +126,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
 
     /// COKit needs a persistent FmFormView for tiled rendering,
     /// otherwise the invalidations from drawinglayer do not work.
-    std::unique_ptr<FmFormView> mpLOKDrawView;
+    std::unique_ptr<FmFormView> mpKitDrawView;
 
     struct MouseEventState;
 
@@ -149,7 +149,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
 
     VisibleRange maVisibleRange;
 
-    struct LOKCursorEntry
+    struct KitCursorEntry
     {
         double mfScaleX;
         double mfScaleY;
@@ -158,7 +158,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
 
     // Stores the last cursor position in twips for all
     // zoom levels demanded from a ScGridWindow instance.
-    std::vector<LOKCursorEntry> maLOKLastCursor;
+    std::vector<KitCursorEntry> maKitLastCursor;
 
     std::shared_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
 
@@ -445,7 +445,7 @@ public:
                                 tools::Long nDimIndex, ScDPObject* pDPObj);
 
     void DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev,
-                     const ScLokRTLContext* pLokRTLContext);
+                     const ScLokRTLContext* pKitRTLContext);
 
     using Window::Draw;
     void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,

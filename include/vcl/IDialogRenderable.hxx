@@ -21,9 +21,9 @@ namespace tools { class Rectangle; }
 namespace vcl
 {
 
-typedef std::pair<const OString, const OString> LOKPayloadItem;
+typedef std::pair<const OString, const OString> KitPayloadItem;
 
-typedef sal_uInt32 LOKWindowId;
+typedef sal_uInt32 KitWindowId;
 
 class VCL_DLLPUBLIC ICOKitNotifier
 {
@@ -31,9 +31,9 @@ public:
     virtual ~ICOKitNotifier();
 
     /// Callbacks
-    virtual void notifyWindow(vcl::LOKWindowId nLOKWindowId,
+    virtual void notifyWindow(vcl::KitWindowId nKitWindowId,
                               const OUString& rAction,
-                              const std::vector<LOKPayloadItem>& rPayload = std::vector<LOKPayloadItem>()) const = 0;
+                              const std::vector<KitPayloadItem>& rPayload = std::vector<KitPayloadItem>()) const = 0;
 
     virtual void viewCallback(int nType, const OString& pPayload) const = 0;
 

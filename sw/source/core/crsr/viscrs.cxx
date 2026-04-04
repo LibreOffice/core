@@ -240,7 +240,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         // This may get called often, so instead of sending data on each update, just notify
         // that there's been an update, and the other side will pull the data using
         // getLOKPayload() when it decides to.
-        m_aLastLOKRect = aRect;
+        m_aLastKitRect = aRect;
         if (pViewShell)
         {
             if (pViewShell == pNotifyViewShell)
@@ -283,7 +283,7 @@ std::optional<OString> SwVisibleCursor::getLOKPayload(int nType, int nViewId) co
     assert(nType == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR || nType == KIT_CALLBACK_INVALIDATE_VIEW_CURSOR);
     if (comphelper::COKit::isActive())
     {
-        SwRect aRect = m_aLastLOKRect;
+        SwRect aRect = m_aLastKitRect;
 
         // notify about the cursor position & size
         tools::Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
@@ -630,7 +630,7 @@ void SwSelPaintRects::HighlightInputField()
 void SwSelPaintRects::HighlightContentControl()
 {
     std::vector<basegfx::B2DRange> aContentControlRanges;
-    std::vector<OString> aLOKRectangles;
+    std::vector<OString> aKitRectangles;
     SwRect aFirstPortionPaintArea;
     SwRect aLastPortionPaintArea;
     bool bRTL = false;
@@ -670,7 +670,7 @@ void SwSelPaintRects::HighlightContentControl()
                                                    aRect.Bottom() + 1);
                 if (comphelper::COKit::isActive())
                 {
-                    aLOKRectangles.push_back(aRect.toString());
+                    aKitRectangles.push_back(aRect.toString());
                 }
             }
 
@@ -704,7 +704,7 @@ void SwSelPaintRects::HighlightContentControl()
     {
         if (comphelper::COKit::isActive())
         {
-            OString aPayload = comphelper::string::join("; ", aLOKRectangles);
+            OString aPayload = comphelper::string::join("; ", aKitRectangles);
             tools::JsonWriter aJson;
             aJson.put("action", "show");
             aJson.put("rectangles", aPayload);

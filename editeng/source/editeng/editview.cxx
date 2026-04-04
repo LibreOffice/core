@@ -210,7 +210,7 @@ tools::Rectangle lcl_negateRectX(const tools::Rectangle& rRect)
 
 void EditView::InvalidateWindow(const tools::Rectangle& rClipRect)
 {
-    LOKEditViewHistory::Update();
+    KitEditViewHistory::Update();
     bool bNegativeX = IsNegativeX();
     if (EditViewCallbacks* pEditViewCallbacks = getImpl().getEditViewCallbacks())
     {
@@ -247,7 +247,7 @@ void EditView::Invalidate()
 {
     const tools::Rectangle aInvRect = GetInvalidateRect();
 
-    LOKEditViewHistory::Update();
+    KitEditViewHistory::Update();
     getImpl().InvalidateAtWindow(aInvRect);
     InvalidateOtherViewWindows(aInvRect);
 }
@@ -1863,7 +1863,7 @@ bool EditView::HasLOKSpecialPositioning() const
     return getImpl().HasLOKSpecialPositioning();
 }
 
-void EditView::SetLOKSpecialFlags(LOKSpecialFlags eFlags)
+void EditView::SetLOKSpecialFlags(KitSpecialFlags eFlags)
 {
     getImpl().SetLOKSpecialFlags(eFlags);
 }

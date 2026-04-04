@@ -64,55 +64,55 @@ static void lcl_AlignToPixel(Point& rPoint, const OutputDevice& rOutDev, short n
     rPoint = rOutDev.PixelToLogic( rPoint );
 }
 
-LOKSpecialPositioning::LOKSpecialPositioning(const ImpEditView& rImpEditView, MapUnit eUnit,
+KitSpecialPositioning::KitSpecialPositioning(const ImpEditView& rImpEditView, MapUnit eUnit,
                                              const tools::Rectangle& rOutputArea,
                                              const Point& rVisDocStartPos) :
                                              mrImpEditView(rImpEditView),
                                              maOutArea(rOutputArea),
                                              maVisDocStartPos(rVisDocStartPos),
                                              meUnit(eUnit),
-                                             meFlags(LOKSpecialFlags::NONE)
+                                             meFlags(KitSpecialFlags::NONE)
 {
 }
 
-void LOKSpecialPositioning::ReInit(MapUnit eUnit, const tools::Rectangle& rOutputArea, const Point& rVisDocStartPos)
+void KitSpecialPositioning::ReInit(MapUnit eUnit, const tools::Rectangle& rOutputArea, const Point& rVisDocStartPos)
 {
     meUnit = eUnit;
     maOutArea = rOutputArea;
     maVisDocStartPos = rVisDocStartPos;
 }
 
-void LOKSpecialPositioning::SetOutputArea(const tools::Rectangle& rOutputArea)
+void KitSpecialPositioning::SetOutputArea(const tools::Rectangle& rOutputArea)
 {
     maOutArea = rOutputArea;
 }
 
-const tools::Rectangle& LOKSpecialPositioning::GetOutputArea() const
+const tools::Rectangle& KitSpecialPositioning::GetOutputArea() const
 {
     return maOutArea;
 }
 
-void LOKSpecialPositioning::SetVisDocStartPos(const Point& rVisDocStartPos)
+void KitSpecialPositioning::SetVisDocStartPos(const Point& rVisDocStartPos)
 {
     maVisDocStartPos = rVisDocStartPos;
 }
 
-tools::Rectangle LOKSpecialPositioning::GetVisDocArea() const
+tools::Rectangle KitSpecialPositioning::GetVisDocArea() const
 {
     return tools::Rectangle(GetVisDocLeft(), GetVisDocTop(), GetVisDocRight(), GetVisDocBottom());
 }
 
-bool LOKSpecialPositioning::IsVertical() const
+bool KitSpecialPositioning::IsVertical() const
 {
     return mrImpEditView.IsVertical();
 }
 
-bool LOKSpecialPositioning::IsTopToBottom() const
+bool KitSpecialPositioning::IsTopToBottom() const
 {
     return mrImpEditView.IsTopToBottom();
 }
 
-Point LOKSpecialPositioning::GetWindowPos(const Point& rDocPos, MapUnit eDocPosUnit) const
+Point KitSpecialPositioning::GetWindowPos(const Point& rDocPos, MapUnit eDocPosUnit) const
 {
     const Point aDocPos = convertUnit(rDocPos, eDocPosUnit);
     Point aPoint;
@@ -138,7 +138,7 @@ Point LOKSpecialPositioning::GetWindowPos(const Point& rDocPos, MapUnit eDocPosU
     return aPoint;
 }
 
-tools::Rectangle LOKSpecialPositioning::GetWindowPos(const tools::Rectangle& rDocRect, MapUnit eDocRectUnit) const
+tools::Rectangle KitSpecialPositioning::GetWindowPos(const tools::Rectangle& rDocRect, MapUnit eDocRectUnit) const
 {
     const tools::Rectangle aDocRect = convertUnit(rDocRect, eDocRectUnit);
     Point aPos(GetWindowPos(aDocRect.TopLeft(), meUnit));
@@ -156,7 +156,7 @@ tools::Rectangle LOKSpecialPositioning::GetWindowPos(const tools::Rectangle& rDo
     return aRect;
 }
 
-Point LOKSpecialPositioning::convertUnit(const Point& rPos, MapUnit ePosUnit) const
+Point KitSpecialPositioning::convertUnit(const Point& rPos, MapUnit ePosUnit) const
 {
     if (ePosUnit == meUnit)
         return rPos;
@@ -164,7 +164,7 @@ Point LOKSpecialPositioning::convertUnit(const Point& rPos, MapUnit ePosUnit) co
     return OutputDevice::LogicToLogic(rPos, MapMode(ePosUnit), MapMode(meUnit));
 }
 
-tools::Rectangle LOKSpecialPositioning::convertUnit(const tools::Rectangle& rRect, MapUnit eRectUnit) const
+tools::Rectangle KitSpecialPositioning::convertUnit(const tools::Rectangle& rRect, MapUnit eRectUnit) const
 {
     if (eRectUnit == meUnit)
         return rRect;
@@ -172,7 +172,7 @@ tools::Rectangle LOKSpecialPositioning::convertUnit(const tools::Rectangle& rRec
     return OutputDevice::LogicToLogic(rRect, MapMode(eRectUnit), MapMode(meUnit));
 }
 
-Point LOKSpecialPositioning::GetRefPoint() const
+Point KitSpecialPositioning::GetRefPoint() const
 {
     return maOutArea.TopLeft();
 }
@@ -197,8 +197,8 @@ ImpEditView::ImpEditView(EditView* pView, EditEngine& rEditEngine, vcl::Window* 
     , meSelectionMode(EESelectionMode::Std)
     , meAnchorMode(EEAnchorMode::TopLeft)
     , mpEditViewCallbacks(nullptr)
-    , mbBroadcastLOKViewCursor(comphelper::COKit::isActive())
-    , mbSuppressLOKMessages(false)
+    , mbBroadcastKitViewCursor(comphelper::COKit::isActive())
+    , mbSuppressKitMessages(false)
     , mbNegativeX(false)
 {
     maEditSelection.Min() = rEditEngine.GetEditDoc().GetStartPaM();
@@ -345,7 +345,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
         OString sRectangle = comphelper::string::join("; ", v);
 
         const vcl::ICOKitNotifier* pNotifier = pParent->GetKitNotifier();
-        std::vector<vcl::LOKPayloadItem> aItems;
+        std::vector<vcl::KitPayloadItem> aItems;
         aItems.emplace_back("rectangles", sRectangle);
         aItems.emplace_back("startHandleVisible", OString::boolean(bStartHandleVisible));
         aItems.emplace_back("endHandleVisible", OString::boolean(bEndHandleVisible));
@@ -372,7 +372,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
             }
         }
 
-        bool bMm100ToTwip = !mpLOKSpecialPositioning && (mpOutputWindow->GetMapMode().GetMapUnit() == MapUnit::Map100thMM);
+        bool bMm100ToTwip = !mpKitSpecialPositioning && (mpOutputWindow->GetMapMode().GetMapUnit() == MapUnit::Map100thMM);
 
         Point aOrigin;
         if (mpOutputWindow->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
@@ -381,8 +381,8 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
 
         OString sRectangle;
         OString sRefPoint;
-        if (mpLOKSpecialPositioning)
-            sRefPoint = mpLOKSpecialPositioning->GetRefPoint().toString();
+        if (mpKitSpecialPositioning)
+            sRefPoint = mpKitSpecialPositioning->GetRefPoint().toString();
 
         std::vector<tools::Rectangle> aRectangles;
         aRegion.GetRegionRectangles(aRectangles);
@@ -413,14 +413,14 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
             }
             sRectangle = comphelper::string::join("; ", v);
 
-            if (mpLOKSpecialPositioning && !sRectangle.isEmpty())
+            if (mpKitSpecialPositioning && !sRectangle.isEmpty())
                 sRectangle += ":: " + sRefPoint;
 
             tools::Rectangle& rStart = aRectangles.front();
             tools::Rectangle aStart(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
 
             OString aPayload = aStart.toString();
-            if (mpLOKSpecialPositioning)
+            if (mpKitSpecialPositioning)
                 aPayload += ":: " + sRefPoint;
 
             mpViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION_START, aPayload);
@@ -429,7 +429,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
             tools::Rectangle aEnd(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
 
             aPayload = aEnd.toString();
-            if (mpLOKSpecialPositioning)
+            if (mpKitSpecialPositioning)
                 aPayload += ":: " + sRefPoint;
 
             mpViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION_END, aPayload);
@@ -523,8 +523,8 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
     bool bStartHandleVisible = false;
     bool bEndHandleVisible = false;
-    bool bLOKCalcRTL = mpLOKSpecialPositioning &&
-        (mpLOKSpecialPositioning->IsLayoutRTL() || getEditEngine().IsRightToLeft(nStartPara));
+    bool bLOKCalcRTL = mpKitSpecialPositioning &&
+        (mpKitSpecialPositioning->IsLayoutRTL() || getEditEngine().IsRightToLeft(nStartPara));
 
     auto DrawHighlight = [&, nStartLine = sal_Int32(0), nEndLine = sal_Int32(0)](
                              const ImpEditEngine::LineAreaInfo& rInfo) mutable {
@@ -665,7 +665,7 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDo
     if ( rDocPosTopLeft.X() == rDocPosBottomRight.X() )
         return;
 
-    if (mpLOKSpecialPositioning && pPolyPoly)
+    if (mpKitSpecialPositioning && pPolyPoly)
     {
         MapUnit eDevUnit = rTarget.GetMapMode().GetMapUnit();
         tools::Rectangle aSelRect(rDocPosTopLeft, rDocPosBottomRight);
@@ -1363,12 +1363,12 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
         GetCursor()->SetSize( aCursorSz );
 
-        if (comphelper::COKit::isActive() && mpViewShell && !mbSuppressLOKMessages)
+        if (comphelper::COKit::isActive() && mpViewShell && !mbSuppressKitMessages)
         {
             Point aPos = GetCursor()->GetPos();
             boost::property_tree::ptree aMessageParams;
             const OutputDevice& rOutDev = GetOutputDevice();
-            if (mpLOKSpecialPositioning)
+            if (mpKitSpecialPositioning)
             {
                 // Sending the absolute (pure) logical coordinates of the cursor to the client is not
                 // enough for it to accurately reconstruct the corresponding tile-twips coordinates of the cursor.
@@ -1383,7 +1383,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 Point aRefPointLogical = GetOutputArea().TopLeft();
                 // Get the relative coordinates w.r.t refpoint in display hmm.
                 aCursorRectPureLogical.Move(-aRefPointLogical.X(), -aRefPointLogical.Y());
-                if (getEditEngine().IsRightToLeft(nPara) || mpLOKSpecialPositioning->IsLayoutRTL())
+                if (getEditEngine().IsRightToLeft(nPara) || mpKitSpecialPositioning->IsLayoutRTL())
                 {
                     tools::Long nMirrorW = GetOutputArea().GetWidth();
                     tools::Long nLeft = aCursorRectPureLogical.Left(), nRight = aCursorRectPureLogical.Right();
@@ -1393,7 +1393,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 // Convert to twips.
                 aCursorRectPureLogical = OutputDevice::LogicToLogic(aCursorRectPureLogical, MapMode(eDevUnit), MapMode(MapUnit::MapTwip));
                 // "refpoint" in print twips.
-                const Point aRefPoint = mpLOKSpecialPositioning->GetRefPoint();
+                const Point aRefPoint = mpKitSpecialPositioning->GetRefPoint();
                 aMessageParams.put("relrect", aCursorRectPureLogical.toString());
                 aMessageParams.put("refpoint", aRefPoint.toString());
             }
@@ -1469,7 +1469,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                     }
                 }
 
-                if (mbBroadcastLOKViewCursor)
+                if (mbBroadcastKitViewCursor)
                     KitHelper::notifyOtherViews(pThisShell,
                             KIT_CALLBACK_INVALIDATE_VIEW_CURSOR, aMessageParams);
 
@@ -2156,7 +2156,7 @@ void ImpEditView::DeselectAll()
         if (pParent && pParent->GetKitWindowId())
         {
             const vcl::ICOKitNotifier* pNotifier = pParent->GetKitNotifier();
-            std::vector<vcl::LOKPayloadItem> aItems;
+            std::vector<vcl::KitPayloadItem> aItems;
             aItems.emplace_back("rectangles", "");
             pNotifier->notifyWindow(pParent->GetKitWindowId(), u"text_selection"_ustr, aItems);
         }
@@ -2796,45 +2796,45 @@ void ImpEditView::InitLOKSpecialPositioning(MapUnit eUnit,
                                            const tools::Rectangle& rOutputArea,
                                            const Point& rVisDocStartPos)
 {
-    if (!mpLOKSpecialPositioning)
-        mpLOKSpecialPositioning.reset(new LOKSpecialPositioning(*this, eUnit, rOutputArea, rVisDocStartPos));
+    if (!mpKitSpecialPositioning)
+        mpKitSpecialPositioning.reset(new KitSpecialPositioning(*this, eUnit, rOutputArea, rVisDocStartPos));
     else
-        mpLOKSpecialPositioning->ReInit(eUnit, rOutputArea, rVisDocStartPos);
+        mpKitSpecialPositioning->ReInit(eUnit, rOutputArea, rVisDocStartPos);
 }
 
 void ImpEditView::SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea)
 {
-    assert(mpLOKSpecialPositioning);
-    mpLOKSpecialPositioning->SetOutputArea(rOutputArea);
+    assert(mpKitSpecialPositioning);
+    mpKitSpecialPositioning->SetOutputArea(rOutputArea);
 }
 
 const tools::Rectangle & ImpEditView::GetKitSpecialOutputArea() const
 {
-    assert(mpLOKSpecialPositioning);
-    return mpLOKSpecialPositioning->GetOutputArea();
+    assert(mpKitSpecialPositioning);
+    return mpKitSpecialPositioning->GetOutputArea();
 }
 
 void ImpEditView::SetLOKSpecialVisArea(const tools::Rectangle& rVisArea)
 {
-    assert(mpLOKSpecialPositioning);
-    mpLOKSpecialPositioning->SetVisDocStartPos(rVisArea.TopLeft());
+    assert(mpKitSpecialPositioning);
+    mpKitSpecialPositioning->SetVisDocStartPos(rVisArea.TopLeft());
 }
 
 tools::Rectangle ImpEditView::GetKitSpecialVisArea() const
 {
-    assert(mpLOKSpecialPositioning);
-    return mpLOKSpecialPositioning->GetVisDocArea();
+    assert(mpKitSpecialPositioning);
+    return mpKitSpecialPositioning->GetVisDocArea();
 }
 
 bool ImpEditView::HasLOKSpecialPositioning() const
 {
-    return bool(mpLOKSpecialPositioning);
+    return bool(mpKitSpecialPositioning);
 }
 
-void ImpEditView::SetLOKSpecialFlags(LOKSpecialFlags eFlags)
+void ImpEditView::SetLOKSpecialFlags(KitSpecialFlags eFlags)
 {
-    assert(mpLOKSpecialPositioning);
-    mpLOKSpecialPositioning->SetFlags(eFlags);
+    assert(mpKitSpecialPositioning);
+    mpKitSpecialPositioning->SetFlags(eFlags);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

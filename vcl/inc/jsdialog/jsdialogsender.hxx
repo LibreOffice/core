@@ -64,7 +64,7 @@ public:
                    const OUString& sCloseId);
     void sendMenu(const VclPtr<PopupMenu>& pMenu, const OUString& sParentId,
                   const OUString& sCloseId);
-    void sendClosePopup(vcl::LOKWindowId nWindowId);
+    void sendClosePopup(vcl::KitWindowId nWindowId);
     virtual void renameWidget(const OUString& rOldName, const OUString& rNewName);
     void flush() { mpIdleNotify->Invoke(); }
 

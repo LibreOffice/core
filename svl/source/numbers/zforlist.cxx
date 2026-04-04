@@ -992,7 +992,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
         }
         else
         {
-            bool bIsLOK = comphelper::COKit::isActive();
+            bool bIsKit = comphelper::COKit::isActive();
             bool bSystemLanguage = false;
             LanguageType nLang = pEntry->GetLanguage();
             if (nLang == LANGUAGE_SYSTEM)
@@ -1000,7 +1000,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
                 bSystemLanguage = true;
                 nLang = SvtSysLocale().GetLanguageTag().getLanguageType();
             }
-            if (!bIsLOK && nLang != LANGUAGE_ENGLISH_US)
+            if (!bIsKit && nLang != LANGUAGE_ENGLISH_US)
             {
                 sal_Int32 nCheckPos;
                 SvNumFormatType nType = SvNumFormatType::DEFINED;

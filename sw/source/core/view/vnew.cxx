@@ -146,7 +146,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt, tools::Long const nFlags)
     awt::Rectangle aClientVisibleArea = comphelper::COKit::getInitialClientVisibleArea();
     if (aClientVisibleArea.Width && aClientVisibleArea.Height)
     {
-        maLOKVisibleArea
+        maKitVisibleArea
             = tools::Rectangle(Point(aClientVisibleArea.X, aClientVisibleArea.Y),
                                Size(aClientVisibleArea.Width, aClientVisibleArea.Height));
     }

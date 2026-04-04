@@ -83,7 +83,7 @@ class SwViewShellImp
     SwPageFrame     *m_pFirstVisiblePage; // Always points to the first visible Page
     std::optional<SwRegionRects> m_oPaintRegion; // Collector of Paintrects from the LayAction
 
-    std::vector<SwRect> m_pendingLOKInvalidations;
+    std::vector<SwRect> m_pendingKitInvalidations;
 
     SwLayAction   *m_pLayAction;      // Is set if an Action object exists
                                  // Is registered by the SwLayAction ctor and deregistered by the dtor

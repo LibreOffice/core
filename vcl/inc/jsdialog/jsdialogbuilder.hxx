@@ -96,10 +96,10 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
 
     void initializeDialogSender();
     void initializePopupSender();
-    void initializeSidebarSender(sal_uInt64 nLOKWindowId, const std::u16string_view& rUIFile,
+    void initializeSidebarSender(sal_uInt64 nKitWindowId, const std::u16string_view& rUIFile,
                                  const std::u16string_view& sTypeOfJSON);
-    void initializeNotebookbarSender(sal_uInt64 nLOKWindowId);
-    void initializeFormulabarSender(sal_uInt64 nLOKWindowId, const std::u16string_view& sTypeOfJSON,
+    void initializeNotebookbarSender(sal_uInt64 nKitWindowId);
+    void initializeFormulabarSender(sal_uInt64 nKitWindowId, const std::u16string_view& sTypeOfJSON,
                                     vcl::Window* pVclParent);
     void initializeMenuSender(weld::Widget* pParent);
 
@@ -141,7 +141,7 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
 
 public:
     JSInstanceBuilder(weld::Widget* pParent, vcl::Window* pVclParent, std::u16string_view rUIRoot,
-                      const OUString& rUIFile, Type eBuilderType, sal_uInt64 nLOKWindowId = 0,
+                      const OUString& rUIFile, Type eBuilderType, sal_uInt64 nKitWindowId = 0,
                       const std::u16string_view& sTypeOfJSON = u"",
                       const css::uno::Reference<css::frame::XFrame>& rFrame
                       = css::uno::Reference<css::frame::XFrame>());
@@ -155,7 +155,7 @@ public:
                              sal_uInt64 nWindowId = 0);
     static std::unique_ptr<JSInstanceBuilder>
     CreateSidebarBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
-                         const OUString& jsonType, sal_uInt64 nLOKWindowId = 0);
+                         const OUString& jsonType, sal_uInt64 nKitWindowId = 0);
 
     static std::unique_ptr<JSInstanceBuilder>
     CreatePopupBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
@@ -166,12 +166,12 @@ public:
     static std::unique_ptr<JSInstanceBuilder> CreateFormulabarBuilder(vcl::Window* pParent,
                                                                       const OUString& rUIRoot,
                                                                       const OUString& rUIFile,
-                                                                      sal_uInt64 nLOKWindowId);
+                                                                      sal_uInt64 nKitWindowId);
 
     static std::unique_ptr<JSInstanceBuilder> CreateAddressInputBuilder(vcl::Window* pParent,
                                                                         const OUString& rUIRoot,
                                                                         const OUString& rUIFile,
-                                                                        sal_uInt64 nLOKWindowId);
+                                                                        sal_uInt64 nKitWindowId);
 
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OUString& id) override;
@@ -253,7 +253,7 @@ public:
     virtual void sendPopup(vcl::Window* pPopup, const OUString& rParentId, const OUString& rCloseId)
         = 0;
 
-    virtual void sendClosePopup(vcl::LOKWindowId nWindowId) = 0;
+    virtual void sendClosePopup(vcl::KitWindowId nWindowId) = 0;
 };
 
 class SAL_LOPLUGIN_ANNOTATE("crosscast") OnDemandRenderingHandler
@@ -423,7 +423,7 @@ public:
             m_pSender->sendPopup(pPopup, rParentId, rCloseId);
     }
 
-    virtual void sendClosePopup(vcl::LOKWindowId nWindowId) override
+    virtual void sendClosePopup(vcl::KitWindowId nWindowId) override
     {
         if (!m_nFreezeCounter && m_pSender)
             m_pSender->sendClosePopup(nWindowId);
@@ -859,7 +859,7 @@ public:
 
 class JSPopover : public JSWidget<SalInstancePopover, DockingWindow>
 {
-    vcl::LOKWindowId mnWindowId;
+    vcl::KitWindowId mnWindowId;
 
 public:
     JSPopover(JSDialogSender* pSender, DockingWindow* pPopover, SalInstanceBuilder* pBuilder,
@@ -869,7 +869,7 @@ public:
                                weld::Placement ePlace = weld::Placement::Under) override;
     virtual void popdown() override;
 
-    void set_window_id(vcl::LOKWindowId nWindowId) { mnWindowId = nWindowId; }
+    void set_window_id(vcl::KitWindowId nWindowId) { mnWindowId = nWindowId; }
 };
 
 class JSBox : public JSWidget<SalInstanceBox, VclBox>

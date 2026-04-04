@@ -370,7 +370,7 @@ void JSDialogSender::sendPopup(const VclPtr<vcl::Window>& pWindow, const OUStrin
     mpIdleNotify->Start();
 }
 
-void JSDialogSender::sendClosePopup(vcl::LOKWindowId nWindowId)
+void JSDialogSender::sendClosePopup(vcl::KitWindowId nWindowId)
 {
     if (!mpIdleNotify)
         return;

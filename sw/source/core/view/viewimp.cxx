@@ -167,7 +167,7 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
 
 void SwViewShellImp::AddPendingKitInvalidation( const SwRect& rRect )
 {
-    std::vector<SwRect>& l = m_pendingLOKInvalidations;
+    std::vector<SwRect>& l = m_pendingKitInvalidations;
     if(l.empty() && m_rShell.GetSfxViewShell()) // Announce that these invalidations will need flushing.
         m_rShell.GetSfxViewShell()->viewAddPendingInvalidateTiles();
     // These are often repeated, so check first for duplicates.
@@ -178,7 +178,7 @@ void SwViewShellImp::AddPendingKitInvalidation( const SwRect& rRect )
 std::vector<SwRect> SwViewShellImp::TakePendingLOKInvalidations()
 {
     std::vector<SwRect> ret;
-    std::swap(ret, m_pendingLOKInvalidations);
+    std::swap(ret, m_pendingKitInvalidations);
     return ret;
 }
 

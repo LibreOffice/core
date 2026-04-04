@@ -44,7 +44,7 @@ DocumentTimerManager::DocumentTimerManager(SwDoc& i_rSwdoc)
     , m_bStartOnUnblock(false)
     , m_aDocIdle(i_rSwdoc, "sw::DocumentTimerManager m_aDocIdle")
     , m_aFireIdleJobsTimer("sw::DocumentTimerManager m_aFireIdleJobsTimer")
-    , m_bWaitForLokInit(true)
+    , m_bWaitForKitInit(true)
 {
     m_aDocIdle.SetPriority(TaskPriority::LOWEST);
     m_aDocIdle.SetInvokeHandler(LINK(this, DocumentTimerManager, DoIdleJobs));
@@ -56,16 +56,16 @@ DocumentTimerManager::DocumentTimerManager(SwDoc& i_rSwdoc)
 
 void DocumentTimerManager::StartIdling()
 {
-    if (m_bWaitForLokInit && comphelper::COKit::isActive())
+    if (m_bWaitForKitInit && comphelper::COKit::isActive())
     {
         // Start the idle jobs only after a certain delay.
-        m_bWaitForLokInit = false;
+        m_bWaitForKitInit = false;
         StopIdling();
         m_aFireIdleJobsTimer.Start();
         return;
     }
 
-    m_bWaitForLokInit = false;
+    m_bWaitForKitInit = false;
     m_bStartOnUnblock = true;
     if (0 == m_nIdleBlockCount)
     {

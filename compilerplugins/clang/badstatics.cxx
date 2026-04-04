@@ -208,7 +208,7 @@ public:
                     .Class("ScAddInListener").GlobalNamespace()) // not owning
                 || (loplugin::DeclCheck(pVarDecl).Var("maThreadSpecific")
                     .Class("ScDocument").GlobalNamespace()) // not owning
-                || name == "s_aLOKWindowsMap" // LOK only, guarded by assert, and LOK never tries to perform a VCL cleanup
+                || name == "s_aKitWindowsMap" // LOK only, guarded by assert, and LOK never tries to perform a VCL cleanup
                     // vcl/inc/jsdialog/jsdialogbuilder.hxx
                 || name == "m_aWidgetRegister" // LOK only, similar case as above
                     //
@@ -236,7 +236,7 @@ public:
                    // removed in AquaA11yFocusTracker::window_got_focus and
                    // AquaA11yFocusTracker::WindowEventHandler (TODO: is that guaranteed?)
                 || (loplugin::DeclCheck(pVarDecl).Var("maEditViewHistory")
-                        .Class("LOKEditViewHistory").GlobalNamespace())
+                        .Class("KitEditViewHistory").GlobalNamespace())
                    // sfx2/kit/helper.hxx, only handling pointers, not owning
                ) // these variables appear unproblematic
             {

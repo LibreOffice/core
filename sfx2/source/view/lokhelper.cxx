@@ -94,7 +94,7 @@ namespace
 {
 LanguageTag g_defaultLanguageTag(u"en-US"_ustr, true);
 LanguageTag g_loadLanguageTag(u"en-US"_ustr, true); //< The language used to load.
-LOKDeviceFormFactor g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
+KitDeviceFormFactor g_deviceFormFactor = KitDeviceFormFactor::UNKNOWN;
 bool g_isDefaultTimezoneSet = false;
 OUString g_DefaultTimezone;
 const std::size_t g_logNotifierCacheMaxSize = 50;
@@ -469,7 +469,7 @@ void KitHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
     }
 }
 
-LOKDeviceFormFactor KitHelper::getDeviceFormFactor()
+KitDeviceFormFactor KitHelper::getDeviceFormFactor()
 {
     return g_deviceFormFactor;
 }
@@ -477,13 +477,13 @@ LOKDeviceFormFactor KitHelper::getDeviceFormFactor()
 void KitHelper::setDeviceFormFactor(std::u16string_view rDeviceFormFactor)
 {
     if (rDeviceFormFactor == u"desktop")
-        g_deviceFormFactor = LOKDeviceFormFactor::DESKTOP;
+        g_deviceFormFactor = KitDeviceFormFactor::DESKTOP;
     else if (rDeviceFormFactor == u"tablet")
-        g_deviceFormFactor = LOKDeviceFormFactor::TABLET;
+        g_deviceFormFactor = KitDeviceFormFactor::TABLET;
     else if (rDeviceFormFactor == u"mobile")
-        g_deviceFormFactor = LOKDeviceFormFactor::MOBILE;
+        g_deviceFormFactor = KitDeviceFormFactor::MOBILE;
     else
-        g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
+        g_deviceFormFactor = KitDeviceFormFactor::UNKNOWN;
 }
 
 void KitHelper::setColorPreviewState(int nId, bool nEnabled)
@@ -708,17 +708,17 @@ void KitHelper::notifyViewRenderState(const SfxViewShell* pShell, vcl::ITiledRen
 }
 
 void KitHelper::notifyWindow(const SfxViewShell* pThisView,
-                                vcl::LOKWindowId nLOKWindowId,
+                                vcl::KitWindowId nKitWindowId,
                                 std::u16string_view rAction,
-                                const std::vector<vcl::LOKPayloadItem>& rPayload)
+                                const std::vector<vcl::KitPayloadItem>& rPayload)
 {
     assert(pThisView != nullptr && "pThisView must be valid");
 
-    if (nLOKWindowId == 0 || DisableCallbacks::disabled())
+    if (nKitWindowId == 0 || DisableCallbacks::disabled())
         return;
 
     OStringBuffer aPayload =
-        "{ \"id\": \"" + OString::number(nLOKWindowId) + "\""
+        "{ \"id\": \"" + OString::number(nKitWindowId) + "\""
         ", \"action\": \"" + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8) + "\"";
 
     for (const auto& rItem: rPayload)
@@ -1236,7 +1236,7 @@ void KitHelper::dispatchUnoCommand(const boost::property_tree::ptree& tree)
 
 namespace
 {
-    struct LOKAsyncEventData
+    struct KitAsyncEventData
     {
         int mnView; // Window is not enough.
         VclPtr<vcl::Window> mpWindow;
@@ -1248,42 +1248,42 @@ namespace
 
     void LOKPostAsyncEvent(void* pEv, void*)
     {
-        std::unique_ptr<LOKAsyncEventData> pLOKEv(static_cast<LOKAsyncEventData*>(pEv));
-        if (pLOKEv->mpWindow->isDisposed())
+        std::unique_ptr<KitAsyncEventData> pKitEv(static_cast<KitAsyncEventData*>(pEv));
+        if (pKitEv->mpWindow->isDisposed())
             return;
 
         int nView = KitHelper::getCurrentView();
-        if (nView != pLOKEv->mnView)
+        if (nView != pKitEv->mnView)
         {
-            SAL_INFO("sfx.view", "LOK - view mismatch " << nView << " vs. " << pLOKEv->mnView);
-            KitHelper::setView(pLOKEv->mnView);
+            SAL_INFO("sfx.view", "LOK - view mismatch " << nView << " vs. " << pKitEv->mnView);
+            KitHelper::setView(pKitEv->mnView);
         }
 
-        if (!pLOKEv->mpWindow->HasChildPathFocus(true))
+        if (!pKitEv->mpWindow->HasChildPathFocus(true))
         {
             SAL_INFO("sfx.view", "LOK - focus mismatch, switching focus");
-            pLOKEv->mpWindow->GrabFocus();
+            pKitEv->mpWindow->GrabFocus();
         }
 
-        VclPtr<vcl::Window> pFocusWindow = pLOKEv->mpWindow->GetFocusedWindow();
+        VclPtr<vcl::Window> pFocusWindow = pKitEv->mpWindow->GetFocusedWindow();
         if (!pFocusWindow)
-            pFocusWindow = pLOKEv->mpWindow;
+            pFocusWindow = pKitEv->mpWindow;
 
-        if (pLOKEv->mpWindow->isDisposed())
+        if (pKitEv->mpWindow->isDisposed())
             return;
 
-        switch (pLOKEv->mnEvent)
+        switch (pKitEv->mnEvent)
         {
         case VclEventId::WindowKeyInput:
         {
-            sal_uInt16 nRepeat = pLOKEv->maKeyEvent.GetRepeat();
-            KeyEvent singlePress(pLOKEv->maKeyEvent.GetCharCode(),
-                                 pLOKEv->maKeyEvent.GetKeyCode());
+            sal_uInt16 nRepeat = pKitEv->maKeyEvent.GetRepeat();
+            KeyEvent singlePress(pKitEv->maKeyEvent.GetCharCode(),
+                                 pKitEv->maKeyEvent.GetKeyCode());
             for (sal_uInt16 i = 0; i <= nRepeat; ++i)
                 if (!pFocusWindow->isDisposed())
                     pFocusWindow->KeyInput(singlePress);
 
-            if (pLOKEv->maKeyEvent.GetKeyCode().GetCode() == KEY_CONTEXTMENU)
+            if (pKitEv->maKeyEvent.GetKeyCode().GetCode() == KEY_CONTEXTMENU)
             {
                 // later do use getCaretPosition probably, or get focused obj position, smt like that
                 Point aPos = pFocusWindow->GetPointerPosPixel();
@@ -1294,38 +1294,38 @@ namespace
         }
         case VclEventId::WindowKeyUp:
             if (!pFocusWindow->isDisposed())
-                pFocusWindow->KeyUp(pLOKEv->maKeyEvent);
+                pFocusWindow->KeyUp(pKitEv->maKeyEvent);
             break;
         case VclEventId::WindowMouseButtonDown:
-            pLOKEv->mpWindow->SetLastMousePos(pLOKEv->maMouseEvent.GetPosPixel());
-            pLOKEv->mpWindow->MouseButtonDown(pLOKEv->maMouseEvent);
+            pKitEv->mpWindow->SetLastMousePos(pKitEv->maMouseEvent.GetPosPixel());
+            pKitEv->mpWindow->MouseButtonDown(pKitEv->maMouseEvent);
             // Invoke the context menu
-            if (pLOKEv->maMouseEvent.GetButtons() & MOUSE_RIGHT)
+            if (pKitEv->maMouseEvent.GetButtons() & MOUSE_RIGHT)
             {
-                const CommandEvent aCEvt(pLOKEv->maMouseEvent.GetPosPixel(), CommandEventId::ContextMenu, true, nullptr);
-                pLOKEv->mpWindow->Command(aCEvt);
+                const CommandEvent aCEvt(pKitEv->maMouseEvent.GetPosPixel(), CommandEventId::ContextMenu, true, nullptr);
+                pKitEv->mpWindow->Command(aCEvt);
             }
             break;
         case VclEventId::WindowMouseButtonUp:
-            pLOKEv->mpWindow->SetLastMousePos(pLOKEv->maMouseEvent.GetPosPixel());
-            pLOKEv->mpWindow->MouseButtonUp(pLOKEv->maMouseEvent);
+            pKitEv->mpWindow->SetLastMousePos(pKitEv->maMouseEvent.GetPosPixel());
+            pKitEv->mpWindow->MouseButtonUp(pKitEv->maMouseEvent);
 
             // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
             // will not take care of releasing that with tiled rendering
-            if (pLOKEv->mpWindow->IsTracking())
-                pLOKEv->mpWindow->EndTracking();
+            if (pKitEv->mpWindow->IsTracking())
+                pKitEv->mpWindow->EndTracking();
 
             break;
         case VclEventId::WindowMouseMove:
-            pLOKEv->mpWindow->SetLastMousePos(pLOKEv->maMouseEvent.GetPosPixel());
-            pLOKEv->mpWindow->MouseMove(pLOKEv->maMouseEvent);
-            pLOKEv->mpWindow->RequestHelp(HelpEvent{
-                pLOKEv->mpWindow->OutputToScreenPixel(pLOKEv->maMouseEvent.GetPosPixel()),
+            pKitEv->mpWindow->SetLastMousePos(pKitEv->maMouseEvent.GetPosPixel());
+            pKitEv->mpWindow->MouseMove(pKitEv->maMouseEvent);
+            pKitEv->mpWindow->RequestHelp(HelpEvent{
+                pKitEv->mpWindow->OutputToScreenPixel(pKitEv->maMouseEvent.GetPosPixel()),
                 HelpEventMode::QUICK }); // If needed, HelpEventMode should be taken from a config
             break;
         case VclEventId::ExtTextInput:
         case VclEventId::EndExtTextInput:
-            pLOKEv->mpWindow->PostExtTextInputEvent(pLOKEv->mnEvent, pLOKEv->maText);
+            pKitEv->mpWindow->PostExtTextInputEvent(pKitEv->mnEvent, pKitEv->maText);
             break;
         default:
             assert(false);
@@ -1333,7 +1333,7 @@ namespace
         }
     }
 
-    void postEventAsync(LOKAsyncEventData *pEvent)
+    void postEventAsync(KitAsyncEventData *pEvent)
     {
         if (!pEvent->mpWindow || pEvent->mpWindow->isDisposed())
         {
@@ -1357,21 +1357,21 @@ namespace
 void KitHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
                                      int nType, int nCharCode, int nKeyCode, int nRepeat)
 {
-    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    KitAsyncEventData* pKitEv = new KitAsyncEventData;
     switch (nType)
     {
     case KIT_KEYEVENT_KEYINPUT:
-        pLOKEv->mnEvent = VclEventId::WindowKeyInput;
+        pKitEv->mnEvent = VclEventId::WindowKeyInput;
         break;
     case KIT_KEYEVENT_KEYUP:
-        pLOKEv->mnEvent = VclEventId::WindowKeyUp;
+        pKitEv->mnEvent = VclEventId::WindowKeyUp;
         break;
     default:
         assert(false);
     }
-    pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, nRepeat);
-    pLOKEv->mpWindow = xWindow;
-    postEventAsync(pLOKEv);
+    pKitEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, nRepeat);
+    pKitEv->mpWindow = xWindow;
+    postEventAsync(pKitEv);
 }
 
 void KitHelper::setBlockedCommandList(int nViewId, const char* blockedCommandList)
@@ -1387,54 +1387,54 @@ void KitHelper::setBlockedCommandList(int nViewId, const char* blockedCommandLis
 void KitHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
                                          int nType, const OUString &rText)
 {
-    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    KitAsyncEventData* pKitEv = new KitAsyncEventData;
     switch (nType)
     {
     case KIT_EXT_TEXTINPUT:
-        pLOKEv->mnEvent = VclEventId::ExtTextInput;
-        pLOKEv->maText = rText;
+        pKitEv->mnEvent = VclEventId::ExtTextInput;
+        pKitEv->maText = rText;
         break;
     case KIT_EXT_TEXTINPUT_END:
-        pLOKEv->mnEvent = VclEventId::EndExtTextInput;
-        pLOKEv->maText = "";
+        pKitEv->mnEvent = VclEventId::EndExtTextInput;
+        pKitEv->maText = "";
         break;
     default:
         assert(false);
     }
-    pLOKEv->mpWindow = xWindow;
-    postEventAsync(pLOKEv);
+    pKitEv->mpWindow = xWindow;
+    postEventAsync(pKitEv);
 }
 
-void KitHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMouseEventData const & rLokMouseEventData)
+void KitHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMouseEventData const & rKitMouseEventData)
 {
-    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
-    switch (rLokMouseEventData.mnType)
+    KitAsyncEventData* pKitEv = new KitAsyncEventData;
+    switch (rKitMouseEventData.mnType)
     {
     case KIT_MOUSEEVENT_MOUSEBUTTONDOWN:
-        pLOKEv->mnEvent = VclEventId::WindowMouseButtonDown;
+        pKitEv->mnEvent = VclEventId::WindowMouseButtonDown;
         break;
     case KIT_MOUSEEVENT_MOUSEBUTTONUP:
-        pLOKEv->mnEvent = VclEventId::WindowMouseButtonUp;
+        pKitEv->mnEvent = VclEventId::WindowMouseButtonUp;
         break;
     case KIT_MOUSEEVENT_MOUSEMOVE:
-        pLOKEv->mnEvent = VclEventId::WindowMouseMove;
+        pKitEv->mnEvent = VclEventId::WindowMouseMove;
         break;
     default:
         assert(false);
     }
 
     // no reason - just always true so far.
-    assert (rLokMouseEventData.meModifiers == MouseEventModifiers::SIMPLECLICK);
+    assert (rKitMouseEventData.meModifiers == MouseEventModifiers::SIMPLECLICK);
 
-    pLOKEv->maMouseEvent = MouseEvent(rLokMouseEventData.maPosition, rLokMouseEventData.mnCount,
-                                      rLokMouseEventData.meModifiers, rLokMouseEventData.mnButtons,
-                                      rLokMouseEventData.mnModifier);
-    if (rLokMouseEventData.maLogicPosition)
+    pKitEv->maMouseEvent = MouseEvent(rKitMouseEventData.maPosition, rKitMouseEventData.mnCount,
+                                      rKitMouseEventData.meModifiers, rKitMouseEventData.mnButtons,
+                                      rKitMouseEventData.mnModifier);
+    if (rKitMouseEventData.maLogicPosition)
     {
-        pLOKEv->maMouseEvent.setLogicPosition(*rLokMouseEventData.maLogicPosition);
+        pKitEv->maMouseEvent.setLogicPosition(*rKitMouseEventData.maLogicPosition);
     }
-    pLOKEv->mpWindow = xWindow;
-    postEventAsync(pLOKEv);
+    pKitEv->mpWindow = xWindow;
+    postEventAsync(pKitEv);
 }
 
 void KitHelper::dumpState(rtl::OStringBuffer &rState)
@@ -1545,10 +1545,10 @@ SfxLokLanguageGuard::~SfxLokLanguageGuard()
     comphelper::COKit::setLocale(m_pOldShell->GetKitLocale());
 }
 
-LOKEditViewHistory::EditViewHistoryMap LOKEditViewHistory::maEditViewHistory;
+KitEditViewHistory::EditViewHistoryMap KitEditViewHistory::maEditViewHistory;
 
 
-void LOKEditViewHistory::Update(bool bRemove)
+void KitEditViewHistory::Update(bool bRemove)
 {
     if (!comphelper::COKit::isActive())
         return;
@@ -1568,7 +1568,7 @@ void LOKEditViewHistory::Update(bool bRemove)
     }
 }
 
-ViewShellList LOKEditViewHistory::GetHistoryForDoc(ViewShellDocId aDocId)
+ViewShellList KitEditViewHistory::GetHistoryForDoc(ViewShellDocId aDocId)
 {
     int nDocId = aDocId.get();
     ViewShellList aResult;
@@ -1577,9 +1577,9 @@ ViewShellList LOKEditViewHistory::GetHistoryForDoc(ViewShellDocId aDocId)
     return aResult;
 }
 
- ViewShellList LOKEditViewHistory::GetSortedViewsForDoc(ViewShellDocId aDocId)
+ ViewShellList KitEditViewHistory::GetSortedViewsForDoc(ViewShellDocId aDocId)
  {
-     ViewShellList aEditViewHistoryForDoc = LOKEditViewHistory::GetHistoryForDoc(aDocId);
+     ViewShellList aEditViewHistoryForDoc = KitEditViewHistory::GetHistoryForDoc(aDocId);
      // all views where document is loaded
      ViewShellList aCurrentDocViewList;
      // active views that are listed in the edit history

@@ -204,7 +204,7 @@ protected:
     static ShellResource*      spShellRes;      ///< Resources for the Shell.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.
-    tools::Rectangle        maLOKVisibleArea;///< The visible area in the COKit client.
+    tools::Rectangle        maKitVisibleArea;///< The visible area in the COKit client.
     rtl::Reference<SwDoc>   mxDoc;          ///< The document; never 0.
 
     sal_uInt16 mnStartAction; ///< != 0 if at least one Action is active.
@@ -289,8 +289,8 @@ public:
     const SwRect& VisArea() const;
 
     /// The visible area in the client (set by setClientVisibleArea).
-    const tools::Rectangle & getLOKVisibleArea() const { return maLOKVisibleArea; }
-    void setLOKVisibleArea(const tools::Rectangle& rArea) { maLOKVisibleArea = rArea; }
+    const tools::Rectangle & getLOKVisibleArea() const { return maKitVisibleArea; }
+    void setLOKVisibleArea(const tools::Rectangle& rArea) { maKitVisibleArea = rArea; }
 
     // If necessary scroll until passed Rect is situated in visible sector.
     void MakeVisible( const SwRect &, ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault );

@@ -55,7 +55,7 @@ class ScContentTree
 
     o3tl::enumarray<ScContentId, sal_uInt16> pPosList;     // for the sequence
 
-    std::unique_ptr<std::locale> m_pResLocaleForLOK; //it needed only in case of LOK
+    std::unique_ptr<std::locale> m_pResLocaleForKit; //it needed only in case of LOK
 
     ScDocShell* GetManualOrCurrent();
 

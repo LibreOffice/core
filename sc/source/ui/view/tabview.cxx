@@ -204,10 +204,10 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     nOldCurX( 0 ),
     nOldCurY( 0 ),
     mfPendingTabBarWidth( -1.0 ),
-    mnLOKStartHeaderRow( -2 ),
-    mnLOKEndHeaderRow( -1 ),
-    mnLOKStartHeaderCol( -2 ),
-    mnLOKEndHeaderCol( -1 ),
+    mnKitStartHeaderRow( -2 ),
+    mnKitEndHeaderRow( -1 ),
+    mnKitStartHeaderCol( -2 ),
+    mnKitEndHeaderCol( -1 ),
     bMinimized( false ),
     bInUpdateHeader( false ),
     bInActivatePart( false ),
@@ -2892,8 +2892,8 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     tools::Long nStartWidthPx = 0;
 
     tools::Rectangle aOldVisArea(
-            mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
-            mnLOKEndHeaderCol, mnLOKEndHeaderRow);
+            mnKitStartHeaderCol + 1, mnKitStartHeaderRow + 1,
+            mnKitEndHeaderCol, mnKitEndHeaderRow);
 
     ScRangeProvider aRangeProvider(rRectangle, /* bInPixels */ false, aViewData);
     const ScRange& rCellRange = aRangeProvider.getCellRange();
@@ -2910,13 +2910,13 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         nEndRow = rCellRange.aEnd.Row();
         aRangeProvider.getRowPositions(nStartHeightPx, nEndHeightPx);
 
-        aViewData.GetKitHeightHelper().removeByIndex(mnLOKStartHeaderRow);
-        aViewData.GetKitHeightHelper().removeByIndex(mnLOKEndHeaderRow);
+        aViewData.GetKitHeightHelper().removeByIndex(mnKitStartHeaderRow);
+        aViewData.GetKitHeightHelper().removeByIndex(mnKitEndHeaderRow);
         aViewData.GetKitHeightHelper().insert(nStartRow, nStartHeightPx);
         aViewData.GetKitHeightHelper().insert(nEndRow, nEndHeightPx);
 
-        mnLOKStartHeaderRow = nStartRow;
-        mnLOKEndHeaderRow = nEndRow;
+        mnKitStartHeaderRow = nStartRow;
+        mnKitEndHeaderRow = nEndRow;
     }
 
     sal_Int32 nVisibleRows = nEndRow - nStartRow;
@@ -3008,13 +3008,13 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         nEndCol = rCellRange.aEnd.Col();
         aRangeProvider.getColPositions(nStartWidthPx, nEndWidthPx);
 
-        aViewData.GetKitWidthHelper().removeByIndex(mnLOKStartHeaderCol);
-        aViewData.GetKitWidthHelper().removeByIndex(mnLOKEndHeaderCol);
+        aViewData.GetKitWidthHelper().removeByIndex(mnKitStartHeaderCol);
+        aViewData.GetKitWidthHelper().removeByIndex(mnKitEndHeaderCol);
         aViewData.GetKitWidthHelper().insert(nStartCol, nStartWidthPx);
         aViewData.GetKitWidthHelper().insert(nEndCol, nEndWidthPx);
 
-        mnLOKStartHeaderCol = nStartCol;
-        mnLOKEndHeaderCol = nEndCol;
+        mnKitStartHeaderCol = nStartCol;
+        mnKitEndHeaderCol = nEndCol;
     }
 
     sal_Int32 nVisibleCols = nEndCol - nStartCol;
@@ -3091,8 +3091,8 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     ///  end collecting COLs
 
     vcl::Region aNewVisArea(
-            tools::Rectangle(mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
-                    mnLOKEndHeaderCol, mnLOKEndHeaderRow));
+            tools::Rectangle(mnKitStartHeaderCol + 1, mnKitStartHeaderRow + 1,
+                    mnKitEndHeaderCol, mnKitEndHeaderRow));
     aNewVisArea.Exclude(aOldVisArea);
     tools::Rectangle aChangedArea = aNewVisArea.GetBoundRect();
     if (!aChangedArea.IsEmpty())
@@ -3180,8 +3180,8 @@ void ScTabView::extendTiledAreaIfNeeded()
 {
     SAL_INFO("sc.lok.header",
         "extendTiledAreaIfNeeded: START: ClientView: ColRange["
-        << mnLOKStartHeaderCol << "," << mnLOKEndHeaderCol
-        << "] RowRange[" << mnLOKStartHeaderRow << "," << mnLOKEndHeaderRow
+        << mnKitStartHeaderCol << "," << mnKitEndHeaderCol
+        << "] RowRange[" << mnKitStartHeaderRow << "," << mnKitEndHeaderRow
         << "] MaxTiledCol = " << aViewData.GetMaxTiledCol()
         << " MaxTiledRow = " << aViewData.GetMaxTiledRow());
 
@@ -3191,8 +3191,8 @@ void ScTabView::extendTiledAreaIfNeeded()
         return;
 
     // Needed for conditional updating of visible-range/formula.
-    tools::Rectangle aOldVisCellRange(mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
-                                      mnLOKEndHeaderCol, mnLOKEndHeaderRow);
+    tools::Rectangle aOldVisCellRange(mnKitStartHeaderCol + 1, mnKitStartHeaderRow + 1,
+                                      mnKitEndHeaderCol, mnKitEndHeaderRow);
 
     ScRangeProvider aRangeProvider(rVisArea, /* bInPixels */ false, aViewData);
     // Index bounds.
@@ -3210,36 +3210,36 @@ void ScTabView::extendTiledAreaIfNeeded()
     ScPositionHelper& rWidthHelper = aViewData.GetKitWidthHelper();
     ScPositionHelper& rHeightHelper = aViewData.GetKitHeightHelper();
 
-    // Update mnLOKStartHeaderCol and mnLOKEndHeaderCol members.
+    // Update mnKitStartHeaderCol and mnKitEndHeaderCol members.
     // These are consulted in some ScGridWindow methods.
-    if (mnLOKStartHeaderCol != nStartCol)
+    if (mnKitStartHeaderCol != nStartCol)
     {
-        rWidthHelper.removeByIndex(mnLOKStartHeaderCol);
+        rWidthHelper.removeByIndex(mnKitStartHeaderCol);
         rWidthHelper.insert(nStartCol, nStartColPos);
-        mnLOKStartHeaderCol = nStartCol;
+        mnKitStartHeaderCol = nStartCol;
     }
 
-    if (mnLOKEndHeaderCol != nEndCol)
+    if (mnKitEndHeaderCol != nEndCol)
     {
-        rWidthHelper.removeByIndex(mnLOKEndHeaderCol);
+        rWidthHelper.removeByIndex(mnKitEndHeaderCol);
         rWidthHelper.insert(nEndCol, nEndColPos);
-        mnLOKEndHeaderCol = nEndCol;
+        mnKitEndHeaderCol = nEndCol;
     }
 
-    // Update mnLOKStartHeaderRow and mnLOKEndHeaderRow members.
+    // Update mnKitStartHeaderRow and mnKitEndHeaderRow members.
     // These are consulted in some ScGridWindow methods.
-    if (mnLOKStartHeaderRow != nStartRow)
+    if (mnKitStartHeaderRow != nStartRow)
     {
-        rHeightHelper.removeByIndex(mnLOKStartHeaderRow);
+        rHeightHelper.removeByIndex(mnKitStartHeaderRow);
         rHeightHelper.insert(nStartRow, nStartRowPos);
-        mnLOKStartHeaderRow = nStartRow;
+        mnKitStartHeaderRow = nStartRow;
     }
 
-    if (mnLOKEndHeaderRow != nEndRow)
+    if (mnKitEndHeaderRow != nEndRow)
     {
-        rHeightHelper.removeByIndex(mnLOKEndHeaderRow);
+        rHeightHelper.removeByIndex(mnKitEndHeaderRow);
         rHeightHelper.insert(nEndRow, nEndRowPos);
-        mnLOKEndHeaderRow = nEndRow;
+        mnKitEndHeaderRow = nEndRow;
     }
 
     constexpr SCCOL nMinExtraCols = 10;
@@ -3255,8 +3255,8 @@ void ScTabView::extendTiledAreaIfNeeded()
     lcl_ExtendTiledDimension(/* bColumn */ false, nEndRow, nExtraRows, *this, aViewData);
 
     vcl::Region aNewVisCellRange(
-            tools::Rectangle(mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
-                             mnLOKEndHeaderCol, mnLOKEndHeaderRow));
+            tools::Rectangle(mnKitStartHeaderCol + 1, mnKitStartHeaderRow + 1,
+                             mnKitEndHeaderCol, mnKitEndHeaderRow));
     aNewVisCellRange.Exclude(aOldVisCellRange);
     tools::Rectangle aChangedCellRange = aNewVisCellRange.GetBoundRect();
     if (!aChangedCellRange.IsEmpty())
@@ -3268,8 +3268,8 @@ void ScTabView::extendTiledAreaIfNeeded()
 
     SAL_INFO("sc.lok.header",
         "extendTiledAreaIfNeeded: END: ClientView: ColRange["
-        << mnLOKStartHeaderCol << "," << mnLOKEndHeaderCol
-        << "] RowRange[" << mnLOKStartHeaderRow << "," << mnLOKEndHeaderRow
+        << mnKitStartHeaderCol << "," << mnKitEndHeaderCol
+        << "] RowRange[" << mnKitStartHeaderRow << "," << mnKitEndHeaderRow
         << "] MaxTiledCol = " << aViewData.GetMaxTiledCol()
         << " MaxTiledRow = " << aViewData.GetMaxTiledRow());
 }

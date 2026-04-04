@@ -1100,7 +1100,7 @@ public:
     /// Interface to register for dialog / window tunneling.
     void                                SetKitNotifier(const vcl::ICOKitNotifier* pNotifier, bool bParent = false);
     const vcl::ICOKitNotifier* GetKitNotifier() const;
-    vcl::LOKWindowId                    GetKitWindowId() const;
+    vcl::KitWindowId                    GetKitWindowId() const;
 
     /// This sets the lokWindowId without setting a notifier.
     void                                SetLOKWindowId();
@@ -1111,8 +1111,8 @@ public:
     /// Indicate that LOK is not going to use this dialog any more.
     void                                ReleaseKitNotifier();
 
-    /// Find an existing Window based on the LOKWindowId.
-    static VclPtr<vcl::Window>          FindLOKWindow(vcl::LOKWindowId nWindowId);
+    /// Find an existing Window based on the KitWindowId.
+    static VclPtr<vcl::Window>          FindLOKWindow(vcl::KitWindowId nWindowId);
 
     /// check if LOK Window container is empty
     SAL_DLLPRIVATE static bool          IsLOKWindowsEmpty();

@@ -311,7 +311,7 @@ void vcl::Cursor::LOKNotify(vcl::Window* pWindow, const OUString& rAction)
         if (comphelper::COKit::isDialogPainting())
             return;
 
-        std::vector<vcl::LOKPayloadItem> aItems;
+        std::vector<vcl::KitPayloadItem> aItems;
         if (rAction == "cursor_visible")
         {
             aItems.emplace_back("visible", mpData->mbCurVisible ? "true" : "false");

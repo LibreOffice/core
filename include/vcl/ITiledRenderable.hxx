@@ -40,7 +40,7 @@ namespace vcl
      * by css, it might turn out to be worth mapping some of these missing cursors
      * to available cursors?
      */
-    extern const std::map <PointerStyle, OString> gaLOKPointerMap;
+    extern const std::map <PointerStyle, OString> gaKitPointerMap;
 
 
 class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ITiledRenderable

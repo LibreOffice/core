@@ -14,7 +14,7 @@
 #include <vcl/weld.hxx>
 #include <unordered_map>
 
-class LOKTrigger
+class KitTrigger
 {
 public:
     static void trigger_changed(weld::TextView& rView) { rView.signal_changed(); }

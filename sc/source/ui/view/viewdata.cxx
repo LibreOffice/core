@@ -831,7 +831,7 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
         bEditHighlight ( false ),
         bGrowing (false),
         nFormulaBarLines(1),
-        m_nLOKPageUpDownOffset( 0 )
+        m_nKitPageUpDownOffset( 0 )
 {
     assert(bool(pDoc) != bool(pDocSh)); // either one or the other, not both
     maMarkData.SelectOneTable(0); // Sync with nTabNo
@@ -1710,7 +1710,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     }
 
     if (bLOKActive && pEditView[eWhich]->HasLOKSpecialPositioning())
-        pEditView[eWhich]->SetLOKSpecialFlags(bLOKLayoutRTL ? LOKSpecialFlags::LayoutRTL : LOKSpecialFlags::NONE);
+        pEditView[eWhich]->SetLOKSpecialFlags(bLOKLayoutRTL ? KitSpecialFlags::LayoutRTL : KitSpecialFlags::NONE);
 
     tools::Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
     pEditView[eWhich]->SetOutputArea( aOutputArea );
@@ -2350,7 +2350,7 @@ void ScViewData::EditGrowY( bool bInitial )
 
 void ScViewData::ResetEditView()
 {
-    LOKEditViewHistory::Update(/*bRemove: */ true);
+    KitEditViewHistory::Update(/*bRemove: */ true);
     EditEngine* pEngine = nullptr;
     for (sal_uInt16 i=0; i<4; i++)
     {
@@ -2373,7 +2373,7 @@ void ScViewData::ResetEditView()
 
 void ScViewData::KillEditView()
 {
-    LOKEditViewHistory::Update(/*bRemove: */ true);
+    KitEditViewHistory::Update(/*bRemove: */ true);
     for (sal_uInt16 i=0; i<4; i++)
         if (pEditView[i])
         {

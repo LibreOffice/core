@@ -118,7 +118,7 @@ bool PointerBool::VisitCallExpr(CallExpr const* callExpr)
             auto ret = getCallValue(arg);
             if (ret.has_value() && (*ret == 1 || *ret == 0))
                 continue;
-            // something like: priv->m_nLOKFeatures & KIT_FEATURE_DOCUMENT_PASSWORD
+            // something like: priv->m_nKitFeatures & KIT_FEATURE_DOCUMENT_PASSWORD
             if (isa<BinaryOperator>(arg->IgnoreParenImpCasts()))
                 continue;
             // something like: pbEmbolden ? FcTrue : FcFalse

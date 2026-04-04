@@ -70,7 +70,7 @@ struct SfxRequest_Impl: public SfxListener
     std::unique_ptr<SfxAllItemSet>
                     pInternalArgs;
     SfxViewFrame*   pViewFrame;
-    int m_nLokViewId = -1;
+    int m_nKitViewId = -1;
 
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
     css::uno::Reference< css::util::XURLTransformer > xTransform;
@@ -752,12 +752,12 @@ void SfxRequest::ReleaseArgs()
 
 void SfxRequest::SetLokViewId(int nId)
 {
-    pImpl->m_nLokViewId = nId;
+    pImpl->m_nKitViewId = nId;
 }
 
 int SfxRequest::GetLokViewId() const
 {
-    return pImpl->m_nLokViewId;
+    return pImpl->m_nKitViewId;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

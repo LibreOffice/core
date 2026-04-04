@@ -206,13 +206,13 @@ public:
 class ImpEditView;
 
 /// This is meant just for Calc, where all positions in logical units (twips for LOK) are computed by
-/// doing independent pixel-alignment for each cell's size. LOKSpecialPositioning stores
+/// doing independent pixel-alignment for each cell's size. KitSpecialPositioning stores
 /// both 'output-area' and 'visible-doc-position' in pure logical unit (twips for LOK).
 /// This allows the cursor/selection messages to be in regular(print) twips unit like in Writer.
-class LOKSpecialPositioning
+class KitSpecialPositioning
 {
 public:
-    LOKSpecialPositioning(const ImpEditView& rImpEditView, MapUnit eUnit, const tools::Rectangle& rOutputArea,
+    KitSpecialPositioning(const ImpEditView& rImpEditView, MapUnit eUnit, const tools::Rectangle& rOutputArea,
                           const Point& rVisDocStartPos);
 
     void ReInit(MapUnit eUnit, const tools::Rectangle& rOutputArea, const Point& rVisDocStartPos);
@@ -233,8 +233,8 @@ public:
     Point            GetWindowPos(const Point& rDocPos, MapUnit eDocPosUnit) const;
     tools::Rectangle GetWindowPos(const tools::Rectangle& rDocRect, MapUnit eDocRectUnit) const;
 
-    void SetFlags(LOKSpecialFlags eFlags) { meFlags = eFlags; }
-    bool IsLayoutRTL() { return bool(meFlags & LOKSpecialFlags::LayoutRTL); }
+    void SetFlags(KitSpecialFlags eFlags) { meFlags = eFlags; }
+    bool IsLayoutRTL() { return bool(meFlags & KitSpecialFlags::LayoutRTL); }
 
     Point GetRefPoint() const;
 
@@ -246,7 +246,7 @@ private:
     tools::Rectangle maOutArea;
     Point maVisDocStartPos;
     MapUnit meUnit;
-    LOKSpecialFlags meFlags;
+    KitSpecialFlags meFlags;
 };
 
 class ImpEditView : public vcl::unohelper::DragAndDropClient
@@ -308,9 +308,9 @@ private:
     // in Draw/Impress in an OverlayObject which avoids evtl. expensive full
     // repaints of the EditView(s)
     EditViewCallbacks* mpEditViewCallbacks;
-    std::unique_ptr<LOKSpecialPositioning> mpLOKSpecialPositioning;
-    bool mbBroadcastLOKViewCursor:1;
-    bool mbSuppressLOKMessages:1;
+    std::unique_ptr<KitSpecialPositioning> mpKitSpecialPositioning;
+    bool mbBroadcastKitViewCursor:1;
+    bool mbSuppressKitMessages:1;
     bool mbNegativeX:1;
 
     EditViewCallbacks* getEditViewCallbacks() const
@@ -331,7 +331,7 @@ private:
 
     void SetBroadcastLOKViewCursor(bool bSet)
     {
-        mbBroadcastLOKViewCursor = bSet;
+        mbBroadcastKitViewCursor = bSet;
     }
 
 protected:
@@ -518,10 +518,10 @@ public:
     tools::Rectangle GetKitSpecialVisArea() const;
     bool HasLOKSpecialPositioning() const;
 
-    void SetLOKSpecialFlags(LOKSpecialFlags eFlags);
+    void SetLOKSpecialFlags(KitSpecialFlags eFlags);
 
-    void SuppressLOKMessages(bool bSet) { mbSuppressLOKMessages = bSet; }
-    bool IsSuppressLOKMessages() const { return mbSuppressLOKMessages; }
+    void SuppressLOKMessages(bool bSet) { mbSuppressKitMessages = bSet; }
+    bool IsSuppressLOKMessages() const { return mbSuppressKitMessages; }
 
     void SetNegativeX(bool bSet) { mbNegativeX = bSet; }
     bool IsNegativeX() const { return mbNegativeX; }
@@ -623,7 +623,7 @@ private:
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
     Timer maStatusTimer;
-    Size maLOKSpecialPaperSize;
+    Size maKitSpecialPaperSize;
 
     Link<EditStatus&,void>         maStatusHdlLink;
     Link<EENotify&,void>           maNotifyHdl;
@@ -1339,8 +1339,8 @@ public:
     void EnableSkipOutsideFormat(bool set) { mbSkipOutsideFormat = set; }
 
     void Dispose();
-    void SetLOKSpecialPaperSize(const Size& rSize) { maLOKSpecialPaperSize = rSize; }
-    const Size& GetKitSpecialPaperSize() const { return maLOKSpecialPaperSize; }
+    void SetLOKSpecialPaperSize(const Size& rSize) { maKitSpecialPaperSize = rSize; }
+    const Size& GetKitSpecialPaperSize() const { return maKitSpecialPaperSize; }
 
     enum class CallbackResult
     {

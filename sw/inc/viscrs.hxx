@@ -50,7 +50,7 @@ class SW_DLLPUBLIC SwVisibleCursor
 
     /// For COKit only - remember what page we were at the last time.
     sal_uInt16 m_nPageLastTime;
-    SwRect m_aLastLOKRect;
+    SwRect m_aLastKitRect;
 
     bool m_bIsVisible;
     bool m_bIsDragCursor;

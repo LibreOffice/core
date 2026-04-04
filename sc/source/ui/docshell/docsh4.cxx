@@ -3032,7 +3032,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     return pObj;
 }
 
-void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument& rDocument, const ScAddress& rPos, const ScPostIt* pNote)
+void ScDocShell::KitCommentNotify(KitCommentNotificationType nType, const ScDocument& rDocument, const ScAddress& rPos, const ScPostIt* pNote)
 {
     if ( !rDocument.IsDocVisible() || // don't want callbacks until document load
          !comphelper::COKit::isActive() ||
@@ -3042,15 +3042,15 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
     tools::JsonWriter aAnnotation;
     {
         auto commentNode = aAnnotation.startNode("comment");
-        aAnnotation.put("action", (nType == LOKCommentNotificationType::Add ? "Add" :
-                                   (nType == LOKCommentNotificationType::Remove ? "Remove" :
-                                    (nType == LOKCommentNotificationType::Modify ? "Modify" : "???"))));
+        aAnnotation.put("action", (nType == KitCommentNotificationType::Add ? "Add" :
+                                   (nType == KitCommentNotificationType::Remove ? "Remove" :
+                                    (nType == KitCommentNotificationType::Modify ? "Modify" : "???"))));
 
         assert(pNote);
         aAnnotation.put("id", pNote->GetId());
         aAnnotation.put("tab", rPos.Tab());
 
-        if (nType != LOKCommentNotificationType::Remove)
+        if (nType != KitCommentNotificationType::Remove)
         {
             aAnnotation.put("author", pNote->GetAuthor());
             aAnnotation.put("dateTime", pNote->GetDate());

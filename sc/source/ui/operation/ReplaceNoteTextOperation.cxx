@@ -98,8 +98,8 @@ bool ReplaceNoteTextOperation::runImplementation()
         // Let our LOK clients know about the new/modified note
         if (pNewNote)
         {
-            ScDocShell::LOKCommentNotify(hadOldNote ? LOKCommentNotificationType::Modify
-                                                    : LOKCommentNotificationType::Add,
+            ScDocShell::KitCommentNotify(hadOldNote ? KitCommentNotificationType::Modify
+                                                    : KitCommentNotificationType::Add,
                                          rDoc, aPos, pNewNote);
         }
 

@@ -37,14 +37,14 @@ public:
     {
         mrAnnotation.toData(maRedoData);
         mrAnnotation.fromData(maUndoData);
-        LOKCommentNotifyAll(CommentNotificationType::Modify, mrAnnotation);
+        KitCommentNotifyAll(CommentNotificationType::Modify, mrAnnotation);
     }
 
     void Redo() override
     {
         mrAnnotation.toData(maUndoData);
         mrAnnotation.fromData(maRedoData);
-        LOKCommentNotifyAll(CommentNotificationType::Modify, mrAnnotation);
+        KitCommentNotifyAll(CommentNotificationType::Modify, mrAnnotation);
     }
 
 protected:
@@ -55,7 +55,7 @@ protected:
 
 } // anonymous ns
 
-void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell,
+void KitCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell,
                       Annotation& rAnnotation)
 {
     // callbacks only if tiled annotations are explicitly turned off by LOK client
@@ -66,7 +66,7 @@ void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
     pViewShell->viewCallback(KIT_CALLBACK_COMMENT, aPayload);
 }
 
-void LOKCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
+void KitCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
 {
     // callbacks only if tiled annotations are explicitly turned off by LOK client
     if (!comphelper::COKit::isActive() || comphelper::COKit::isTiledAnnotations())

@@ -179,12 +179,12 @@ void JSInstanceBuilder::initializePopupSender()
     m_sTypeOfJSON = "popup";
 }
 
-void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
+void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nKitWindowId,
                                                 const std::u16string_view& rUIFile,
                                                 const std::u16string_view& sTypeOfJSON)
 {
     m_sTypeOfJSON = sTypeOfJSON;
-    m_nWindowId = nLOKWindowId;
+    m_nWindowId = nKitWindowId;
 
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
 
@@ -222,7 +222,7 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
-void JSInstanceBuilder::initializeNotebookbarSender(sal_uInt64 nLOKWindowId)
+void JSInstanceBuilder::initializeNotebookbarSender(sal_uInt64 nKitWindowId)
 {
     m_sTypeOfJSON = "notebookbar";
 
@@ -232,9 +232,9 @@ void JSInstanceBuilder::initializeNotebookbarSender(sal_uInt64 nLOKWindowId)
         m_aParentDialog = pRoot->GetParent()->GetParentWithKitNotifier();
         if (m_aParentDialog)
             m_nWindowId = m_aParentDialog->GetKitWindowId();
-        if (!m_nWindowId && nLOKWindowId)
+        if (!m_nWindowId && nKitWindowId)
         {
-            m_nWindowId = nLOKWindowId;
+            m_nWindowId = nKitWindowId;
             m_bIsNotebookbar = true;
         }
         InsertWindowToMap(getMapIdFromWindowId());
@@ -243,12 +243,12 @@ void JSInstanceBuilder::initializeNotebookbarSender(sal_uInt64 nLOKWindowId)
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
-void JSInstanceBuilder::initializeFormulabarSender(sal_uInt64 nLOKWindowId,
+void JSInstanceBuilder::initializeFormulabarSender(sal_uInt64 nKitWindowId,
                                                    const std::u16string_view& sTypeOfJSON,
                                                    vcl::Window* pVclParent)
 {
     m_sTypeOfJSON = sTypeOfJSON;
-    m_nWindowId = nLOKWindowId;
+    m_nWindowId = nKitWindowId;
 
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
     m_aContentWindow = pVclParent;
@@ -270,7 +270,7 @@ void JSInstanceBuilder::initializeMenuSender(weld::Widget* pParent)
 
 JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, vcl::Window* pVclParent,
                                      std::u16string_view rUIRoot, const OUString& rUIFile,
-                                     JSInstanceBuilder::Type eBuilderType, sal_uInt64 nLOKWindowId,
+                                     JSInstanceBuilder::Type eBuilderType, sal_uInt64 nKitWindowId,
                                      const std::u16string_view& sTypeOfJSON,
                                      const css::uno::Reference<css::frame::XFrame>& rFrame)
     : SalInstanceBuilder(pVclParent ? pVclParent : extract_sal_widget(pParent), rUIRoot, rUIFile,
@@ -296,15 +296,15 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, vcl::Window* pVclPar
             break;
 
         case JSInstanceBuilder::Type::Sidebar:
-            initializeSidebarSender(nLOKWindowId, rUIFile, sTypeOfJSON);
+            initializeSidebarSender(nKitWindowId, rUIFile, sTypeOfJSON);
             break;
 
         case JSInstanceBuilder::Type::Notebookbar:
-            initializeNotebookbarSender(nLOKWindowId);
+            initializeNotebookbarSender(nKitWindowId);
             break;
 
         case JSInstanceBuilder::Type::Formulabar:
-            initializeFormulabarSender(nLOKWindowId, sTypeOfJSON, pVclParent);
+            initializeFormulabarSender(nKitWindowId, sTypeOfJSON, pVclParent);
             break;
 
         case JSInstanceBuilder::Type::Menu:
@@ -337,10 +337,10 @@ std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateSidebarBuilder(weld:
                                                                            const OUString& rUIRoot,
                                                                            const OUString& rUIFile,
                                                                            const OUString& jsonType,
-                                                                           sal_uInt64 nLOKWindowId)
+                                                                           sal_uInt64 nKitWindowId)
 {
     return std::make_unique<JSInstanceBuilder>(pParent, nullptr, rUIRoot, rUIFile,
-                                               JSInstanceBuilder::Type::Sidebar, nLOKWindowId,
+                                               JSInstanceBuilder::Type::Sidebar, nKitWindowId,
                                                jsonType);
 }
 
@@ -362,19 +362,19 @@ std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateMenuBuilder(weld::Wi
 
 std::unique_ptr<JSInstanceBuilder>
 JSInstanceBuilder::CreateFormulabarBuilder(vcl::Window* pParent, const OUString& rUIRoot,
-                                           const OUString& rUIFile, sal_uInt64 nLOKWindowId)
+                                           const OUString& rUIFile, sal_uInt64 nKitWindowId)
 {
     return std::make_unique<JSInstanceBuilder>(nullptr, pParent, rUIRoot, rUIFile,
-                                               JSInstanceBuilder::Type::Formulabar, nLOKWindowId,
+                                               JSInstanceBuilder::Type::Formulabar, nKitWindowId,
                                                u"formulabar");
 }
 
 std::unique_ptr<JSInstanceBuilder>
 JSInstanceBuilder::CreateAddressInputBuilder(vcl::Window* pParent, const OUString& rUIRoot,
-                                             const OUString& rUIFile, sal_uInt64 nLOKWindowId)
+                                             const OUString& rUIFile, sal_uInt64 nKitWindowId)
 {
     return std::make_unique<JSInstanceBuilder>(nullptr, pParent, rUIRoot, rUIFile,
-                                               JSInstanceBuilder::Type::Formulabar, nLOKWindowId,
+                                               JSInstanceBuilder::Type::Formulabar, nKitWindowId,
                                                u"addressinputfield");
 }
 
