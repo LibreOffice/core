@@ -82,7 +82,7 @@ struct CallbackData
 };
 
 static CallbackData gCallbackData;
-static CallbackData gCallbackDataLOKit;
+static CallbackData gCallbackDataKit;
 
 /**
  * Handle retrieved callback
@@ -171,13 +171,13 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_bindMessa
 {
     COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
 
-    gCallbackDataLOKit.aObject = (jobject) pEnv->NewGlobalRef(aObject);
+    gCallbackDataKit.aObject = (jobject) pEnv->NewGlobalRef(aObject);
     jclass aClass = pEnv->GetObjectClass(aObject);
-    gCallbackDataLOKit.aClass = (jclass) pEnv->NewGlobalRef(aClass);
+    gCallbackDataKit.aClass = (jclass) pEnv->NewGlobalRef(aClass);
 
-    gCallbackDataLOKit.aJavaCallbackMethod = pEnv->GetMethodID(aClass, "messageRetrievedLOKit", "(ILjava/lang/String;)V");
+    gCallbackDataKit.aJavaCallbackMethod = pEnv->GetMethodID(aClass, "messageRetrievedLOKit", "(ILjava/lang/String;)V");
 
-    pCOKit->pClass->registerCallback(pCOKit, messageCallback, (void*) &gCallbackDataLOKit);
+    pCOKit->pClass->registerCallback(pCOKit, messageCallback, (void*) &gCallbackDataKit);
 }
 
 /* Document */
