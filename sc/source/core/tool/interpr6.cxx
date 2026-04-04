@@ -297,6 +297,49 @@ public:
     size_t getCount() const { return mnCount; }
 };
 
+class NonEmptyCellCounter
+{
+    size_t mnCount;
+public:
+    NonEmptyCellCounter() : mnCount(0) {}
+
+    void operator() (const sc::CellStoreType::value_type& rNode, size_t /*nOffset*/, size_t nDataSize)
+    {
+        if (rNode.type != sc::element_type_empty)
+            mnCount += nDataSize;
+    }
+
+    size_t getCount() const { return mnCount; }
+};
+
+class FuncCountA : public sc::ColumnSpanSet::ColumnAction
+{
+    sc::ColumnBlockConstPosition maPos;
+    ScColumn* mpCol;
+    size_t mnCount;
+
+public:
+    FuncCountA() : mpCol(nullptr), mnCount(0) {}
+
+    virtual void startColumn(ScColumn* pCol) override
+    {
+        mpCol = pCol;
+        mpCol->InitBlockPosition(maPos);
+    }
+
+    virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal) override
+    {
+        if (!bVal)
+            return;
+
+        NonEmptyCellCounter aFunc;
+        maPos.miCellPos = sc::ParseBlock(maPos.miCellPos, mpCol->GetCellStore(), aFunc, nRow1, nRow2);
+        mnCount += aFunc.getCount();
+    };
+
+    size_t getCount() const { return mnCount; }
+};
+
 class FuncCount : public sc::ColumnSpanSet::ColumnAction
 {
     const ScInterpreterContext& mrContext;
@@ -732,7 +775,17 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if ( eFunc == ifCOUNT2 || eFunc == ifCOUNT )
                         break;
                 }
-                if( eFunc == ifCOUNT2 )
+                if( eFunc == ifCOUNT2 && mnSubTotalFlags == SubtotalFlags::NONE )
+                {
+                    sc::RangeColumnSpanSet aSet( aRange );
+                    FuncCountA aAction;
+                    aSet.executeColumnAction( mrDoc, aAction );
+                    nCount += aAction.getCount();
+
+                    if ( nGlobalError != FormulaError::NONE )
+                        nGlobalError = FormulaError::NONE;
+                }
+                else if( eFunc == ifCOUNT2 )
                 {
                     ScCellIterator aIter( mrDoc, aRange, mnSubTotalFlags );
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
