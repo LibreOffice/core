@@ -39,6 +39,11 @@
 
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
+#include <sfx2/lnkbase.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
+#include <IDocumentLinksAdministration.hxx>
 
 #include <list.hxx>
 
@@ -556,6 +561,122 @@ SwNumRule::~SwNumRule()
 
     maTextNodeList.clear();
     maParagraphStyleList.clear();
+}
+
+namespace {
+
+class SwNumRuleLink final : public sfx2::SvBaseLink
+{
+    SwNumRule* m_pRule;
+    SwDoc* m_pDoc;
+    sal_uInt16 m_nLevel;
+public:
+    SwNumRuleLink(SwNumRule* pRule, SwDoc* pDoc, sal_uInt16 nLevel)
+        : SvBaseLink(SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB)
+        , m_pRule(pRule)
+        , m_pDoc(pDoc)
+        , m_nLevel(nLevel)
+    {
+    }
+
+    virtual UpdateResult DataChanged(const OUString& rMimeType,
+                                     const css::uno::Any& rValue) override
+    {
+        if (!m_pRule || !m_pDoc)
+            return ERROR_GENERAL;
+
+        Graphic aGrf;
+        sfx2::LinkManager& rLinkMgr
+            = m_pDoc->getIDocumentLinksAdministration().GetLinkManager();
+        if (!rLinkMgr.GetGraphicFromAny(rMimeType, rValue, aGrf, nullptr))
+            return ERROR_GENERAL;
+        if (aGrf.GetType() == GraphicType::Default)
+            return ERROR_GENERAL;
+
+        const SwNumFormat* pFmt = m_pRule->GetNumFormat(m_nLevel);
+        if (!pFmt)
+            return SUCCESS;
+
+        const SvxBrushItem* pBrush = pFmt->GetBrush();
+        if (!pBrush)
+            return SUCCESS;
+
+        SvxBrushItem aNewBrush(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND);
+        aNewBrush.SetGraphic(aGrf);
+        Size aSize = pFmt->GetGraphicSize();
+        if (!aSize.Width() || !aSize.Height())
+        {
+            Size aPixelSize = aGrf.GetSizePixel();
+            if (aPixelSize.Width() && aPixelSize.Height())
+                aSize = OutputDevice::LogicToLogic(aPixelSize,
+                            MapMode(MapUnit::MapPixel),
+                            MapMode(MapUnit::MapTwip));
+        }
+        sal_Int16 eOrient = pFmt->GetVertOrient();
+        SwNumFormat aNewFmt(*pFmt);
+        aNewFmt.SetGraphicBrush(&aNewBrush, &aSize, &eOrient);
+        m_pRule->Set(m_nLevel, aNewFmt);
+
+        SwNumRule::tTextNodeList aTextNodeList;
+        m_pRule->GetTextNodeList(aTextNodeList);
+        for (SwTextNode* pNode : aTextNodeList)
+            pNode->NumRuleChgd();
+
+        return SUCCESS;
+    }
+};
+
+}
+
+void SwNumRule::RegisterGrfLinks(SwDoc& rDoc)
+{
+    sfx2::LinkManager& rLinkMgr
+        = rDoc.getIDocumentLinksAdministration().GetLinkManager();
+
+    for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
+    {
+        if (maGrfLinks[n])
+            continue;
+
+        const SwNumFormat* pFmt = GetNumFormat(n);
+        if (!pFmt)
+            continue;
+
+        const SvxBrushItem* pBrush = pFmt->GetBrush();
+        if (!pBrush)
+            continue;
+
+        const Graphic* pGrf = pBrush->GetGraphicObject()
+                                  ? &pBrush->GetGraphicObject()->GetGraphic()
+                                  : nullptr;
+        if (!pGrf)
+            continue;
+        if (pGrf->GetType() != GraphicType::Default)
+            continue;
+
+        OUString aOriginURL = pGrf->getOriginURL();
+        if (aOriginURL.isEmpty())
+            continue;
+
+        maGrfLinks[n] = new SwNumRuleLink(this, &rDoc, n);
+        rLinkMgr.InsertFileLink(*maGrfLinks[n],
+                                sfx2::SvBaseLinkObjectType::ClientGraphic,
+                                aOriginURL);
+    }
+}
+
+void SwNumRule::RemoveGrfLinks(SwDoc& rDoc)
+{
+    sfx2::LinkManager& rLinkMgr
+        = rDoc.getIDocumentLinksAdministration().GetLinkManager();
+    for (auto& rLink : maGrfLinks)
+    {
+        if (rLink)
+        {
+            rLinkMgr.Remove(rLink.get());
+            rLink.clear();
+        }
+    }
 }
 
 void SwNumRule::CheckCharFormats( SwDoc& rDoc )
