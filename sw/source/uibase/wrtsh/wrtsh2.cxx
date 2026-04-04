@@ -159,15 +159,11 @@ bool SwWrtShell::InsertField2Impl(SwField const& rField,
 
 // Start the field update
 
-void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
+void SwWrtShell::UpdateInputFields( std::shared_ptr<SwInputFieldList> pLst )
 {
     // Go through the list of fields and updating
-    std::unique_ptr<SwInputFieldList> pTmp;
     if (!pLst)
-    {
-        pTmp.reset(new SwInputFieldList( this ));
-        pLst = pTmp.get();
-    }
+        pLst = std::make_shared<SwInputFieldList>( this );
 
     const size_t nCnt = pLst->Count();
     if(!nCnt)
@@ -175,10 +171,7 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
 
     pLst->PushCursor();
 
-    bool bCancel = false;
-
     size_t nIndex = 0;
-    FieldDialogPressedButton ePressedButton = FieldDialogPressedButton::NONE;
 
     SwField* pField = GetCurField();
     if (pField)
@@ -193,31 +186,56 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
         }
     }
 
-    while (!bCancel)
+    UpdateInputFieldsStep(pLst, nCnt, nIndex);
+}
+
+void SwWrtShell::UpdateInputFieldsStep(const std::shared_ptr<SwInputFieldList>& pLst,
+                                       size_t nCnt, size_t nIndex)
+{
+    bool bPrev = nIndex > 0;
+    bool bNext = nIndex < nCnt - 1;
+    pLst->GotoFieldPos(nIndex);
+    SwField* pField = pLst->GetField(nIndex);
+
+    if (pField->GetTyp()->Which() == SwFieldIds::Dropdown)
     {
-        bool bPrev = nIndex > 0;
-        bool bNext = nIndex < nCnt - 1;
-        pLst->GotoFieldPos(nIndex);
-        pField = pLst->GetField(nIndex);
-        if (pField->GetTyp()->Which() == SwFieldIds::Dropdown)
-        {
-            bCancel = StartDropDownFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
-        }
+        StartDropDownFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(),
+                              [this, pLst, nCnt, nIndex](bool bCancel,
+                                                         FieldDialogPressedButton ePressedButton) {
+                                  UpdateInputFieldsContinue(pLst, nCnt, nIndex, bCancel,
+                                                           ePressedButton);
+                              });
+    }
+    else
+    {
+        FieldDialogPressedButton ePressedButton = FieldDialogPressedButton::NONE;
+        bool bCancel
+            = StartInputFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
+        UpdateInputFieldsContinue(pLst, nCnt, nIndex, bCancel, ePressedButton);
+    }
+}
+
+void SwWrtShell::UpdateInputFieldsContinue(const std::shared_ptr<SwInputFieldList>& pLst,
+                                           size_t nCnt, size_t nIndex,
+                                           bool bCancel, FieldDialogPressedButton ePressedButton)
+{
+    if (!bCancel)
+    {
+        // Otherwise update error at multi-selection:
+        pLst->GetField(nIndex)->GetTyp()->UpdateFields();
+
+        if (ePressedButton == FieldDialogPressedButton::Previous && nIndex > 0)
+            nIndex--;
+        else if (ePressedButton == FieldDialogPressedButton::Next && nIndex < nCnt - 1)
+            nIndex++;
         else
-            bCancel = StartInputFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
+            bCancel = true;
+    }
 
-        if (!bCancel)
-        {
-            // Otherwise update error at multi-selection:
-            pLst->GetField(nIndex)->GetTyp()->UpdateFields();
-
-            if (ePressedButton == FieldDialogPressedButton::Previous && nIndex > 0)
-                nIndex--;
-            else if (ePressedButton == FieldDialogPressedButton::Next && nIndex < nCnt - 1)
-                nIndex++;
-            else
-                bCancel = true;
-        }
+    if (!bCancel)
+    {
+        UpdateInputFieldsStep(pLst, nCnt, nIndex);
+        return;
     }
 
     pLst->PopCursor();
@@ -324,29 +342,30 @@ void SwWrtShell::EditDropDownFieldDlg(SwField* pField, weld::Widget* pParentWin)
     });
 }
 
-bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton,
-                                       weld::Widget* pParentWin, SwWrtShell::FieldDialogPressedButton* pPressedButton)
+void SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton,
+                                       weld::Widget* pParentWin,
+                                       const std::function<void(bool, FieldDialogPressedButton)>& rCallback)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(pParentWin, *this, pField, bPrevButton, bNextButton));
-    const short nRet = pDlg->Execute();
+    VclPtr<AbstractDropDownFieldDialog> pDlg(
+        pFact->CreateDropDownFieldDialog(pParentWin, *this, pField, bPrevButton, bNextButton));
 
-    if (pPressedButton)
-    {
+    pDlg->StartExecuteAsync([pDlg, rCallback, this](sal_Int32 nRet) {
+        FieldDialogPressedButton ePressedButton = FieldDialogPressedButton::NONE;
         if (pDlg->PrevButtonPressed())
-            *pPressedButton = FieldDialogPressedButton::Previous;
+            ePressedButton = FieldDialogPressedButton::Previous;
         else if (pDlg->NextButtonPressed())
-            *pPressedButton = FieldDialogPressedButton::Next;
-    }
+            ePressedButton = FieldDialogPressedButton::Next;
 
-    pDlg.disposeAndClear();
-    bool bRet = RET_CANCEL == nRet;
-    GetWin()->PaintImmediately();
-    if(RET_YES == nRet)
-    {
-        GetView().GetViewFrame().GetDispatcher()->Execute(FN_EDIT_FIELD, SfxCallMode::SYNCHRON);
-    }
-    return bRet;
+        pDlg->disposeOnce();
+        bool bCancel = RET_CANCEL == nRet;
+        GetWin()->PaintImmediately();
+        if (RET_YES == nRet)
+        {
+            GetView().GetViewFrame().GetDispatcher()->Execute(FN_EDIT_FIELD, SfxCallMode::SYNCHRON);
+        }
+        rCallback(bCancel, ePressedButton);
+    });
 }
 
 // Insert directory - remove selection

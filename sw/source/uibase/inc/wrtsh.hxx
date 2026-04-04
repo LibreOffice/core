@@ -24,6 +24,8 @@
 #include <swurl.hxx>
 #include <IMark.hxx>
 #include "navmgr.hxx"
+#include <functional>
+#include <memory>
 #include <optional>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <o3tl/typed_flags_set.hxx>
@@ -277,7 +279,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool    PageCursor(SwTwips lOffset, bool bSelect);
 
     // update fields
-    void    UpdateInputFields( SwInputFieldList* pLst = nullptr );
+    void    UpdateInputFields( std::shared_ptr<SwInputFieldList> pLst = nullptr );
 
     void    NoEdit(bool bHideCursor = true);
     void    Edit();
@@ -426,9 +428,12 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     // update input fields
     bool    StartInputFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, FieldDialogPressedButton* pPressedButton = nullptr);
     // update DropDown fields
-    bool    StartDropDownFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, FieldDialogPressedButton* pPressedButton = nullptr);
+    void    StartDropDownFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, const std::function<void(bool, FieldDialogPressedButton)>& rCallback);
     // update single DropDown field
     void    EditDropDownFieldDlg(SwField*, weld::Widget* pParentWin);
+
+    void    UpdateInputFieldsStep(const std::shared_ptr<SwInputFieldList>& pLst, size_t nCnt, size_t nIndex);
+    void    UpdateInputFieldsContinue(const std::shared_ptr<SwInputFieldList>& pLst, size_t nCnt, size_t nIndex, bool bCancel, FieldDialogPressedButton ePressedButton);
 
     //"Handler" for changes at DrawView - for controls.
     virtual void DrawSelChanged( ) override;

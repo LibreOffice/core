@@ -505,7 +505,7 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
         m_pWrtShell->StartAllAction();
 
         // cache all InputFields
-        SwInputFieldList aFieldLst( m_pWrtShell, true );
+        auto pFieldLst = std::make_shared<SwInputFieldList>( m_pWrtShell, true );
 
         m_pWrtShell->InsertGlossary(*pGlossary, aShortName);
         m_pWrtShell->EndAllAction();
@@ -516,8 +516,8 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
         m_pWrtShell->EndUndo(SwUndoId::INSGLOSSARY);
 
         // demand input for all new InputFields
-        if( aFieldLst.BuildSortLst() )
-            m_pWrtShell->UpdateInputFields( &aFieldLst );
+        if( pFieldLst->BuildSortLst() )
+            m_pWrtShell->UpdateInputFields( pFieldLst );
     }
     return true;
 }
@@ -552,7 +552,7 @@ bool SwGlossaryHdl::InsertGlossary(const OUString &rName)
     m_pWrtShell->StartAllAction();
 
     // cache all InputFields
-    SwInputFieldList aFieldLst( m_pWrtShell, true );
+    auto pFieldLst = std::make_shared<SwInputFieldList>( m_pWrtShell, true );
 
     m_pWrtShell->InsertGlossary(*pGlos, rName);
     m_pWrtShell->EndAllAction();
@@ -562,8 +562,8 @@ bool SwGlossaryHdl::InsertGlossary(const OUString &rName)
     }
 
     // demand input for all new InputFields
-    if( aFieldLst.BuildSortLst() )
-        m_pWrtShell->UpdateInputFields( &aFieldLst );
+    if( pFieldLst->BuildSortLst() )
+        m_pWrtShell->UpdateInputFields( pFieldLst );
 
     if(!m_pCurGrp)
         delete pGlos;
