@@ -62,6 +62,8 @@
 #include <svx/flagsdef.hxx>
 #include <FontFeatures.hxx>
 #include <FontFeaturesDialog.hxx>
+#include <svx/FontVariationsPopup.hxx>
+#include <editeng/fontvariationsitem.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/unit_conversion.hxx>
@@ -81,7 +83,8 @@ const WhichRangesContainer SvxCharNamePage::pNameRanges(svl::Items<
     SID_ATTR_CHAR_LANGUAGE, SID_ATTR_CHAR_LANGUAGE,
     SID_ATTR_CHAR_CJK_FONT, SID_ATTR_CHAR_CJK_WEIGHT,
     SID_ATTR_CHAR_CTL_FONT, SID_ATTR_CHAR_CTL_WEIGHT,
-    SID_ATTR_CHAR_OPTICAL_SIZING, SID_ATTR_CHAR_OPTICAL_SIZING
+    SID_ATTR_CHAR_OPTICAL_SIZING, SID_ATTR_CHAR_OPTICAL_SIZING,
+    SID_ATTR_CHAR_FONT_VARIATIONS, SID_ATTR_CHAR_FONT_VARIATIONS
 >);
 
 const WhichRangesContainer SvxCharEffectsPage::pEffectsRanges(svl::Items<
@@ -209,6 +212,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xWestFontLanguageFT(m_xBuilder->weld_label(u"lbWestLanguage"_ustr))
     , m_xWestFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"cbWestLanguage"_ustr)))
     , m_xWestFontFeaturesButton(m_xBuilder->weld_button(u"btnWestFeatures"_ustr))
+    , m_xWestFontVariationsButton(m_xBuilder->weld_button(u"btnWestVariations"_ustr))
     , m_xWestFontTypeFT(m_xBuilder->weld_label(u"lbWestFontinfo"_ustr))
     , m_xCJK_CTL(m_xBuilder->weld_notebook(u"nbCJKCTL"_ustr))
     // CJK
@@ -220,6 +224,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xEastFontLanguageFT(m_xBuilder->weld_label(u"lbCJKLanguage"_ustr))
     , m_xEastFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"cbCJKLanguage"_ustr)))
     , m_xEastFontFeaturesButton(m_xBuilder->weld_button(u"btnCJKFeatures"_ustr))
+    , m_xEastFontVariationsButton(m_xBuilder->weld_button(u"btnCJKVariations"_ustr))
     , m_xEastFontTypeFT(m_xBuilder->weld_label(u"lbCJKFontinfo"_ustr))
     // CTL
     , m_xCTLFontNameFT(m_xBuilder->weld_label(u"lbCTLFontname"_ustr))
@@ -231,6 +236,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xCTLFontLanguageFT(m_xBuilder->weld_label(u"lbCTLLanguage"_ustr))
     , m_xCTLFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"cbCTLLanguage"_ustr)))
     , m_xCTLFontFeaturesButton(m_xBuilder->weld_button(u"btnCTLFeatures"_ustr))
+    , m_xCTLFontVariationsButton(m_xBuilder->weld_button(u"btnCTLVariations"_ustr))
     , m_xCTLFontTypeFT(m_xBuilder->weld_label(u"lbCTLFontinfo"_ustr))
 
     , m_xVDev(*Application::GetDefaultDevice(), DeviceFormat::WITH_ALPHA)
@@ -328,18 +334,21 @@ void SvxCharNamePage::Initialize()
     m_xWestFontLanguageLB->connect_changed(aLink);
 
     m_xWestFontFeaturesButton->connect_clicked(LINK(this, SvxCharNamePage, FontFeatureButtonClicked));
+    m_xWestFontVariationsButton->connect_clicked(LINK(this, SvxCharNamePage, FontVariationButtonClicked));
 
     m_xEastFontNameLB->connect_changed(aLink);
     m_xEastFontStyleLB->connect_changed(aLink);
     m_xEastFontSizeLB->connect_changed(aLink);
     m_xEastFontLanguageLB->connect_changed(aLink);
     m_xEastFontFeaturesButton->connect_clicked(LINK(this, SvxCharNamePage, FontFeatureButtonClicked));
+    m_xEastFontVariationsButton->connect_clicked(LINK(this, SvxCharNamePage, FontVariationButtonClicked));
 
     m_xCTLFontNameLB->connect_changed(aLink);
     m_xCTLFontStyleLB->connect_changed(aLink);
     m_xCTLFontSizeLB->connect_changed(aLink);
     m_xCTLFontLanguageLB->connect_changed(aLink);
     m_xCTLFontFeaturesButton->connect_clicked(LINK(this, SvxCharNamePage, FontFeatureButtonClicked));
+    m_xCTLFontVariationsButton->connect_clicked(LINK(this, SvxCharNamePage, FontVariationButtonClicked));
 
     m_pImpl->m_aUpdateIdle.SetInvokeHandler( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
 }
@@ -476,26 +485,53 @@ void SvxCharNamePage::UpdatePreview_Impl()
 
     m_xCTLFontTypeFT->set_label(rFontList.GetFontMapText(aCTLFontMetric));
 
+    rFont.SetVariations(m_oFontVariations.value_or(std::vector<vcl::font::Variation>()));
+    rCJKFont.SetVariations(m_oCJKFontVariations.value_or(std::vector<vcl::font::Variation>()));
+    rCTLFont.SetVariations(m_oCTLFontVariations.value_or(std::vector<vcl::font::Variation>()));
+
     m_aPreviewWin.Invalidate();
 }
+
+namespace
+{
+std::vector<vcl::font::VariationAxis> getFontVariationAxes(OUString const& rFontName,
+                                                          VirtualDevice& rVDev)
+{
+    rVDev.SetOutputSizePixel(Size(10, 10));
+
+    vcl::Font aFont = rVDev.GetFont();
+    aFont.SetFamilyName(rFontName);
+    rVDev.SetFont(aFont);
+
+    std::vector<vcl::font::VariationAxis> vAxes;
+    rVDev.GetFontVariationAxes(vAxes);
+    return vAxes;
+}
+
+}
+
 void SvxCharNamePage::EnableFeatureButton(const weld::Widget& rNameBox)
 {
     OUString sFontName;
-    weld::Button* pButton= nullptr;
+    weld::Button* pFeatureButton = nullptr;
+    weld::Button* pVariationButton = nullptr;
     if (m_xWestFontNameLB.get() == &rNameBox)
     {
         sFontName = m_xWestFontNameLB->get_active_text();
-        pButton= m_xWestFontFeaturesButton.get();
+        pFeatureButton = m_xWestFontFeaturesButton.get();
+        pVariationButton = m_xWestFontVariationsButton.get();
     }
     else if (m_xEastFontNameLB.get() == &rNameBox)
     {
         sFontName = m_xEastFontNameLB->get_active_text();
-        pButton=m_xEastFontFeaturesButton.get();
+        pFeatureButton = m_xEastFontFeaturesButton.get();
+        pVariationButton = m_xEastFontVariationsButton.get();
     }
     else if (m_xCTLFontNameLB.get() == &rNameBox)
     {
         sFontName = m_xCTLFontNameLB->get_active_text();
-        pButton= m_xCTLFontFeaturesButton.get();
+        pFeatureButton = m_xCTLFontFeaturesButton.get();
+        pVariationButton = m_xCTLFontVariationsButton.get();
     }
     else
     {
@@ -503,9 +539,8 @@ void SvxCharNamePage::EnableFeatureButton(const weld::Widget& rNameBox)
         return;
     }
 
-    bool  bEnable = !getFontFeatureList(sFontName, *m_xVDev).empty();
-
-    pButton->set_sensitive(bEnable);
+    pFeatureButton->set_sensitive(!getFontFeatureList(sFontName, *m_xVDev).empty());
+    pVariationButton->set_sensitive(!getFontVariationAxes(sFontName, *m_xVDev).empty());
 }
 
 void SvxCharNamePage::FillStyleBox_Impl(const weld::Widget& rNameBox)
@@ -1214,6 +1249,49 @@ IMPL_LINK(SvxCharNamePage, FontFeatureButtonClicked, weld::Button&, rButton, voi
     }
 }
 
+IMPL_LINK(SvxCharNamePage, FontVariationButtonClicked, weld::Button&, rButton, void)
+{
+    OUString sFontName;
+
+    if (&rButton == m_xWestFontVariationsButton.get())
+    {
+        sFontName = GetPreviewFont().GetFamilyName();
+        m_pFontVariations = &m_oFontVariations;
+    }
+    else if (&rButton == m_xEastFontVariationsButton.get())
+    {
+        sFontName = GetPreviewCJKFont().GetFamilyName();
+        m_pFontVariations = &m_oCJKFontVariations;
+    }
+    else if (&rButton == m_xCTLFontVariationsButton.get())
+    {
+        sFontName = GetPreviewCTLFont().GetFamilyName();
+        m_pFontVariations = &m_oCTLFontVariations;
+    }
+
+    if (sFontName.isEmpty() || !m_pFontVariations)
+        return;
+
+    std::vector<vcl::font::VariationAxis> aAxes = getFontVariationAxes(sFontName, *m_xVDev);
+    if (aAxes.empty())
+        return;
+
+    m_xFontVariationsPopup = std::make_unique<svx::FontVariationsPopup>(
+        &rButton, aAxes, m_pFontVariations->value_or(std::vector<vcl::font::Variation>()));
+    m_xFontVariationsPopup->connect_changed(LINK(this, SvxCharNamePage, FontVariationsChangedHdl));
+    m_xFontVariationsPopup->popup_at_rect(&rButton,
+                                          tools::Rectangle(Point(0, 0), rButton.get_preferred_size()));
+}
+
+IMPL_LINK_NOARG(SvxCharNamePage, FontVariationsChangedHdl, svx::FontVariationsPopup&, void)
+{
+    if (!m_xFontVariationsPopup || !m_pFontVariations)
+        return;
+
+    *m_pFontVariations = m_xFontVariationsPopup->getVariations();
+    UpdatePreview_Impl();
+}
+
 void SvxCharNamePage::FontModifyHdl_Impl(const weld::Widget& rNameBox)
 {
     m_pImpl->m_aUpdateIdle.Start();
@@ -1223,6 +1301,13 @@ void SvxCharNamePage::FontModifyHdl_Impl(const weld::Widget& rNameBox)
         FillStyleBox_Impl(rNameBox);
         FillSizeBox_Impl(rNameBox);
         EnableFeatureButton(rNameBox);
+        // The old font's settings don't apply to the new one.
+        if (m_xWestFontNameLB.get() == &rNameBox)
+            m_oFontVariations.emplace();
+        else if (m_xEastFontNameLB.get() == &rNameBox)
+            m_oCJKFontVariations.emplace();
+        else
+            m_oCTLFontVariations.emplace();
     }
 }
 
@@ -1273,6 +1358,19 @@ void SvxCharNamePage::Reset( const SfxItemSet* rSet )
     Reset_Impl( *rSet, Asian );
     Reset_Impl( *rSet, Ctl );
 
+    auto resetVariations = [this, rSet](TypedWhichId<SvxFontVariationsItem> nSlot,
+                                        std::optional<std::vector<vcl::font::Variation>>& rDest) {
+        const sal_uInt16 nWhichId = GetWhich(nSlot);
+        if (rSet->GetItemState(nWhichId) < SfxItemState::DEFAULT)
+            return;
+        const auto& rItem = static_cast<const SvxFontVariationsItem&>(rSet->Get(nWhichId));
+        if (!rItem.GetVariations().empty())
+            rDest = rItem.GetVariations();
+    };
+    resetVariations(SID_ATTR_CHAR_FONT_VARIATIONS, m_oFontVariations);
+    resetVariations(SID_ATTR_CHAR_CJK_FONT_VARIATIONS, m_oCJKFontVariations);
+    resetVariations(SID_ATTR_CHAR_CTL_FONT_VARIATIONS, m_oCTLFontVariations);
+
     SetPrevFontWidthScale( *rSet );
     UpdatePreview_Impl();
 }
@@ -1298,6 +1396,23 @@ bool SvxCharNamePage::FillItemSet( SfxItemSet* rSet )
     bool bModified = FillItemSet_Impl( *rSet, Western );
     bModified |= FillItemSet_Impl( *rSet, Asian );
     bModified |= FillItemSet_Impl( *rSet, Ctl );
+
+    auto fillVariations = [this, rSet, &bModified](
+                              TypedWhichId<SvxFontVariationsItem> nSlot,
+                              const std::optional<std::vector<vcl::font::Variation>>& rVariations) {
+        if (!rVariations)
+            return;
+        SvxFontVariationsItem aItem(*rVariations, GetWhich(nSlot));
+        const SfxPoolItem* pOld = GetOldItem(*rSet, nSlot);
+        if (pOld ? aItem != *pOld : !rVariations->empty())
+        {
+            rSet->Put(aItem);
+            bModified = true;
+        }
+    };
+    fillVariations(SID_ATTR_CHAR_FONT_VARIATIONS, m_oFontVariations);
+    fillVariations(SID_ATTR_CHAR_CJK_FONT_VARIATIONS, m_oCJKFontVariations);
+    fillVariations(SID_ATTR_CHAR_CTL_FONT_VARIATIONS, m_oCTLFontVariations);
 
     return bModified;
 }
