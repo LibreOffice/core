@@ -1232,7 +1232,7 @@ void ScExportTest3::testLinkedGraphicRT(TestFilter eFormatType)
     // linked graphic fetch is deferred during loading, allow link
     // updates and trigger the fetch before export
     getScDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
-    getScDoc()->GetLinkManager()->UpdateAllLinks(false, true, nullptr, u""_ustr);
+    getScDoc()->GetLinkManager()->UpdateAllLinks(false, nullptr, u""_ustr);
 
     // Export the document and import again for a check
     saveAndReload(eFormatType);
