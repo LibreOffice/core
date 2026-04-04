@@ -195,17 +195,17 @@ static void populatePartSelector(GtvMainToolbar* toolbar)
     const int nMaxLength = 50;
     char sText[nMaxLength];
 
-    int nParts = lok_doc_view_get_parts(LOK_DOC_VIEW(window->kitdocview));
+    int nParts = kit_doc_view_get_parts(KIT_DOC_VIEW(window->kitdocview));
     for ( int i = 0; i < nParts; i++ )
     {
-        char* pName = lok_doc_view_get_part_name(LOK_DOC_VIEW(window->kitdocview), i);
+        char* pName = kit_doc_view_get_part_name(KIT_DOC_VIEW(window->kitdocview), i);
         assert( pName );
         snprintf( sText, nMaxLength, "%i (%s)", i+1, pName );
         free( pName );
 
         gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT(priv->m_pPartSelector), sText );
     }
-    gtk_combo_box_set_active(GTK_COMBO_BOX(priv->m_pPartSelector), lok_doc_view_get_part(LOK_DOC_VIEW(window->kitdocview)));
+    gtk_combo_box_set_active(GTK_COMBO_BOX(priv->m_pPartSelector), kit_doc_view_get_part(KIT_DOC_VIEW(window->kitdocview)));
 
     gtv_application_window_set_part_broadcast(window, true);
 }

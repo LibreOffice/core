@@ -49,7 +49,7 @@ void btn_clicked(GtkWidget* pButton, gpointer)
 
     bool bNotify = g_strcmp0(label, ".uno:Save") == 0;
     if (window->kitdocview)
-        lok_doc_view_post_command(LOK_DOC_VIEW(window->kitdocview), label, aArguments.c_str(), bNotify);
+        kit_doc_view_post_command(KIT_DOC_VIEW(window->kitdocview), label, aArguments.c_str(), bNotify);
 }
 
 void doCopy(GtkWidget* pButton, gpointer /*pItem*/)
@@ -57,7 +57,7 @@ void doCopy(GtkWidget* pButton, gpointer /*pItem*/)
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     char* pUsedFormat = nullptr;
     // TODO: Should check `text-selection` signal before trying to copy
-    char* pSelection = lok_doc_view_copy_selection(LOK_DOC_VIEW(window->kitdocview), "text/html", &pUsedFormat);
+    char* pSelection = kit_doc_view_copy_selection(KIT_DOC_VIEW(window->kitdocview), "text/html", &pUsedFormat);
     if (!pSelection)
         return;
 
@@ -118,7 +118,7 @@ void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
         }
         gint nLength;
         const guchar* pData = gtk_selection_data_get_data_with_length(pSelectionData, &nLength);
-        bool bSuccess = lok_doc_view_paste(LOK_DOC_VIEW(window->kitdocview), aTargetName.c_str(), reinterpret_cast<const char*>(pData), nLength);
+        bool bSuccess = kit_doc_view_paste(KIT_DOC_VIEW(window->kitdocview), aTargetName.c_str(), reinterpret_cast<const char*>(pData), nLength);
         gtk_selection_data_free(pSelectionData);
         if (bSuccess)
             return;
@@ -126,7 +126,7 @@ void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
 
     gchar* pText = gtk_clipboard_wait_for_text(pClipboard);
     if (pText)
-        lok_doc_view_paste(LOK_DOC_VIEW(window->kitdocview), "text/plain;charset=utf-8", pText, strlen(pText));
+        kit_doc_view_paste(KIT_DOC_VIEW(window->kitdocview), "text/plain;charset=utf-8", pText, strlen(pText));
 }
 
 void createView(GtkWidget* pButton, gpointer /*pItem*/)
@@ -139,7 +139,7 @@ void getRulerState(GtkWidget* pButton, gpointer /*pItem*/)
 {
     const std::string type = ".uno:RulerState";
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
-    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
+    COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
     pDocument->pClass->getCommandValues(pDocument, type.c_str());
 }
 
@@ -212,7 +212,7 @@ void recentUnoChanged( GtkWidget* pSelector, gpointer /* pItem */ )
     if (aUnoArgs.empty())
         return;
 
-    lok_doc_view_post_command(LOK_DOC_VIEW(pWindow->kitdocview), pUnoCmd, aUnoArgs.c_str(), false);
+    kit_doc_view_post_command(KIT_DOC_VIEW(pWindow->kitdocview), pUnoCmd, aUnoArgs.c_str(), false);
     g_free(pUnoCmd);
 }
 
@@ -277,7 +277,7 @@ void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
 
         g_info("Generated UNO command: %s %s", sUnoCmd, aArguments.c_str());
 
-        lok_doc_view_post_command(LOK_DOC_VIEW(window->kitdocview), sUnoCmd, (aArguments.empty() ? nullptr : aArguments.c_str()), false);
+        kit_doc_view_post_command(KIT_DOC_VIEW(window->kitdocview), sUnoCmd, (aArguments.empty() ? nullptr : aArguments.c_str()), false);
         addToRecentUnoCommands(window, sUnoCmd, std::move(aArguments));
 
         g_free(sUnoCmd);
@@ -313,7 +313,7 @@ void commandValuesDebugger(GtkWidget* pButton, gpointer /* pItem */)
     if (res == GTK_RESPONSE_OK)
     {
         const gchar* pUnoCmd = gtk_entry_get_text(GTK_ENTRY(pUnoCmdEntry));
-        gchar* pValues = lok_doc_view_get_command_values(LOK_DOC_VIEW(window->kitdocview), pUnoCmd);
+        gchar* pValues = kit_doc_view_get_command_values(KIT_DOC_VIEW(window->kitdocview), pUnoCmd);
         g_info("kit::Document::getCommandValues(%s) : %s", pUnoCmd, pValues);
         g_free(pValues);
     }
@@ -325,8 +325,8 @@ void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pButton));
-    if (bool(lok_doc_view_get_edit(LOK_DOC_VIEW(window->kitdocview))) != bActive)
-        lok_doc_view_set_edit(LOK_DOC_VIEW(window->kitdocview), bActive);
+    if (bool(kit_doc_view_get_edit(KIT_DOC_VIEW(window->kitdocview))) != bActive)
+        kit_doc_view_set_edit(KIT_DOC_VIEW(window->kitdocview), bActive);
 }
 
 void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
@@ -336,8 +336,8 @@ void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
 
     if (gtv_application_window_get_part_broadcast(window) && window->kitdocview)
     {
-        lok_doc_view_set_part( LOK_DOC_VIEW(window->kitdocview), nPart );
-        lok_doc_view_reset_view(LOK_DOC_VIEW(window->kitdocview));
+        kit_doc_view_set_part( KIT_DOC_VIEW(window->kitdocview), nPart );
+        kit_doc_view_reset_view(KIT_DOC_VIEW(window->kitdocview));
     }
 }
 
@@ -351,7 +351,7 @@ void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
 
     if ( window->kitdocview )
     {
-        lok_doc_view_set_partmode( LOK_DOC_VIEW(window->kitdocview), ePartMode );
+        kit_doc_view_set_partmode( KIT_DOC_VIEW(window->kitdocview), ePartMode );
     }
 }
 
@@ -367,7 +367,7 @@ void changeContentControl(GtkWidget* pSelector, gpointer /*pItem*/)
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aValues);
         std::string aJson = aStream.str();
-        lok_doc_view_send_content_control_event(LOK_DOC_VIEW(window->kitdocview), aJson.c_str());
+        kit_doc_view_send_content_control_event(KIT_DOC_VIEW(window->kitdocview), aJson.c_str());
     }
 }
 
@@ -394,7 +394,7 @@ void changeDateContentControl(GtkWidget* pSelector, gpointer /*pItem*/)
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aValues);
         std::string aJson = aStream.str();
-        lok_doc_view_send_content_control_event(LOK_DOC_VIEW(window->kitdocview), aJson.c_str());
+        kit_doc_view_send_content_control_event(KIT_DOC_VIEW(window->kitdocview), aJson.c_str());
     }
 }
 
@@ -409,7 +409,7 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 
     if ( window->kitdocview )
     {
-        fCurrentZoom = lok_doc_view_get_zoom( LOK_DOC_VIEW(window->kitdocview) );
+        fCurrentZoom = kit_doc_view_get_zoom( KIT_DOC_VIEW(window->kitdocview) );
     }
 
     if ( strcmp(sName, "zoom-in-symbolic") == 0)
@@ -440,10 +440,10 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 
     if ( fZoom != 0 && window->kitdocview )
     {
-        lok_doc_view_set_zoom( LOK_DOC_VIEW(window->kitdocview), fZoom );
+        kit_doc_view_set_zoom( KIT_DOC_VIEW(window->kitdocview), fZoom );
         GdkRectangle aVisibleArea;
         gtv_application_window_get_visible_area(window, &aVisibleArea);
-        lok_doc_view_set_visible_area(LOK_DOC_VIEW(window->kitdocview), &aVisibleArea);
+        kit_doc_view_set_visible_area(KIT_DOC_VIEW(window->kitdocview), &aVisibleArea);
     }
     const std::string aZoom = std::string("Zoom: ") + std::to_string(int(fZoom * 100)) + std::string("%");
     gtk_label_set_text(GTK_LABEL(window->zoomlabel), aZoom.c_str());
@@ -453,7 +453,7 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     // Get the data.
-    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
+    COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
     char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
     if (!pValues)
         return;
@@ -545,7 +545,7 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
             aStream.str(std::string());
             boost::property_tree::write_json(aStream, aCommandTree);
             std::string aArguments = aStream.str();
-            lok_doc_view_post_command(LOK_DOC_VIEW(window->kitdocview), aCommand.c_str(), aArguments.c_str(), false);
+            kit_doc_view_post_command(KIT_DOC_VIEW(window->kitdocview), aCommand.c_str(), aArguments.c_str(), false);
         }
     }
 
@@ -556,7 +556,7 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     // Get the data.
-    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
+    COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
     // Show it in linear time, so first redo in reverse order, then undo.
     std::vector<std::string> aTypes = {".uno:Redo", ".uno:Undo"};
     std::vector<boost::property_tree::ptree> aTrees;
@@ -652,7 +652,7 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTree);
             std::string aArguments = aStream.str();
-            lok_doc_view_post_command(LOK_DOC_VIEW(window->kitdocview), aType.c_str(), aArguments.c_str(), false);
+            kit_doc_view_post_command(KIT_DOC_VIEW(window->kitdocview), aType.c_str(), aArguments.c_str(), false);
         }
     }
 
@@ -678,7 +678,7 @@ void signalSearchNext(GtkWidget* pButton, gpointer /*pItem*/)
     GtkEntry* pEntry = GTK_ENTRY(window->findbarEntry);
     const char* pText = gtk_entry_get_text(pEntry);
     bool findAll = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(window->findAll));
-    lok_doc_view_find_next(LOK_DOC_VIEW(window->kitdocview), pText, findAll);
+    kit_doc_view_find_next(KIT_DOC_VIEW(window->kitdocview), pText, findAll);
 }
 
 void signalSearchPrev(GtkWidget* pButton, gpointer /*pItem*/)
@@ -687,7 +687,7 @@ void signalSearchPrev(GtkWidget* pButton, gpointer /*pItem*/)
     GtkEntry* pEntry = GTK_ENTRY(window->findbarEntry);
     const char* pText = gtk_entry_get_text(pEntry);
     bool findAll = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(window->findAll));
-    lok_doc_view_find_prev(LOK_DOC_VIEW(window->kitdocview), pText, findAll);
+    kit_doc_view_find_prev(KIT_DOC_VIEW(window->kitdocview), pText, findAll);
 }
 
 gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pData*/)
@@ -719,7 +719,7 @@ void toggleFindAll(GtkWidget* pButton, gpointer /*pItem*/)
     const char* pText = gtk_entry_get_text(pEntry);
     bool findAll = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(window->findAll));
     gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(window->findAll), !findAll);
-    lok_doc_view_highlight_all(LOK_DOC_VIEW(window->kitdocview), pText);
+    kit_doc_view_highlight_all(KIT_DOC_VIEW(window->kitdocview), pText);
 }
 
 void editButtonClicked(GtkWidget* pWidget, gpointer userdata)
@@ -743,7 +743,7 @@ void editButtonClicked(GtkWidget* pWidget, gpointer userdata)
     boost::property_tree::write_json(aStream, aTree);
     std::string aArguments = aStream.str();
 
-    lok_doc_view_post_command(LOK_DOC_VIEW(window->kitdocview), ".uno:EditAnnotation", aArguments.c_str(), false);
+    kit_doc_view_post_command(KIT_DOC_VIEW(window->kitdocview), ".uno:EditAnnotation", aArguments.c_str(), false);
 }
 
 void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
@@ -769,10 +769,10 @@ void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
 
     // Different reply UNO command for impress
     std::string replyCommand = ".uno:ReplyComment";
-    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
+    COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
     if (pDocument && pDocument->pClass->getDocumentType(pDocument) == KIT_DOCTYPE_PRESENTATION)
         replyCommand = ".uno:ReplyToAnnotation";
-    lok_doc_view_post_command(LOK_DOC_VIEW(window->kitdocview), replyCommand.c_str(), aArguments.c_str(), false);
+    kit_doc_view_post_command(KIT_DOC_VIEW(window->kitdocview), replyCommand.c_str(), aArguments.c_str(), false);
 }
 
 void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
@@ -790,7 +790,7 @@ void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
 
     // Different reply UNO command for impress
     std::string deleteCommand = ".uno:DeleteComment";
-    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
+    COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
     if (pDocument)
     {
         if (pDocument->pClass->getDocumentType(pDocument) == KIT_DOCTYPE_PRESENTATION)
@@ -799,7 +799,7 @@ void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
             deleteCommand = ".uno:DeleteNote";
     }
 
-    lok_doc_view_post_command(LOK_DOC_VIEW(window->kitdocview), deleteCommand.c_str(), aArguments.c_str(), false);
+    kit_doc_view_post_command(KIT_DOC_VIEW(window->kitdocview), deleteCommand.c_str(), aArguments.c_str(), false);
 }
 
 /// Handles the key-press-event of the address entry widget.
@@ -820,14 +820,14 @@ gboolean signalAddressbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pD
             boost::property_tree::write_json(aStream, aTree);
             std::string aArguments = aStream.str();
 
-            lok_doc_view_post_command(LOK_DOC_VIEW(window->kitdocview), ".uno:GoToCell", aArguments.c_str(), false);
+            kit_doc_view_post_command(KIT_DOC_VIEW(window->kitdocview), ".uno:GoToCell", aArguments.c_str(), false);
             gtk_widget_grab_focus(window->kitdocview);
             return true;
         }
         case GDK_KEY_Escape:
         {
             std::string aArguments;
-            lok_doc_view_post_command(LOK_DOC_VIEW(window->kitdocview), ".uno:Cancel", aArguments.c_str(), false);
+            kit_doc_view_post_command(KIT_DOC_VIEW(window->kitdocview), ".uno:Cancel", aArguments.c_str(), false);
             gtk_widget_grab_focus(window->kitdocview);
             return true;
         }

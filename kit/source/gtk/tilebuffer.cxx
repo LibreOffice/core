@@ -69,7 +69,7 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
 
     m_mTiles[index].valid = false;
 
-    LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE);
+    LOEvent* pLOEvent = new LOEvent(KIT_PAINT_TILE);
     pLOEvent->m_nPaintTileX = x;
     pLOEvent->m_nPaintTileY = y;
     pLOEvent->m_fPaintTileZoom = fZoom;
@@ -77,7 +77,7 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
     g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
-        g_warning("Unable to call LOK_PAINT_TILE: %s", error->message);
+        g_warning("Unable to call KIT_PAINT_TILE: %s", error->message);
         g_clear_error(&error);
     }
 }
@@ -93,7 +93,7 @@ Tile& TileBuffer::getTile(int x, int y, GTask* task,
         g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);
         if (error != nullptr)
         {
-            g_warning("Unable to call LOK_PAINT_TILE: %s", error->message);
+            g_warning("Unable to call KIT_PAINT_TILE: %s", error->message);
             g_clear_error(&error);
         }
         return m_mTiles[index];
@@ -103,7 +103,7 @@ Tile& TileBuffer::getTile(int x, int y, GTask* task,
         g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);
         if (error != nullptr)
         {
-            g_warning("Unable to call LOK_PAINT_TILE: %s", error->message);
+            g_warning("Unable to call KIT_PAINT_TILE: %s", error->message);
             g_clear_error(&error);
         }
         return m_DummyTile;
@@ -134,7 +134,7 @@ void LOEvent::destroy(void* pMemory)
 }
 
 GQuark
-LOKTileBufferErrorQuark()
+KitTileBufferErrorQuark()
 {
     return g_quark_from_static_string("lok-tilebuffer-error");
 }

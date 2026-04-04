@@ -18,7 +18,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,kit_tiledrendering, \
 $(eval $(call gb_CppunitTest_use_external,kit_tiledrendering,boost_headers))
 
 # We need all these libraries / etc. due for CppunitTest to work, even though
-# our test specifically tests LOK only functionality which would otherwise not
+# our test specifically tests COKit only functionality which would otherwise not
 # require any normal LO api/libraries.
 $(eval $(call gb_CppunitTest_use_libraries,kit_tiledrendering, \
 	sal \

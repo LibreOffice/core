@@ -39,7 +39,7 @@ static gboolean destroyLokDialog(GtkWidget* pWidget, gpointer userdata)
 void KitDocumentViewSigHandlers::editChanged(KitDocumentView* pDocView, gboolean bWasEdit, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-    bool bEdit = lok_doc_view_get_edit(LOK_DOC_VIEW(window->kitdocview));
+    bool bEdit = kit_doc_view_get_edit(KIT_DOC_VIEW(window->kitdocview));
     g_info("signalEdit: %d -> %d", bWasEdit, bEdit);
 
     // Let the main toolbar know, so that it can enable disable the button
@@ -64,7 +64,7 @@ void KitDocumentViewSigHandlers::commandChanged(KitDocumentView* pDocView, char*
             bool bEdit = aValue == "true";
             if (bool(gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem))) != bEdit)
             {
-                // Avoid invoking lok_doc_view_post_command().
+                // Avoid invoking kit_doc_view_post_command().
                 // FIXME: maybe block/unblock the signal (see
                 // g_signal_handlers_block_by_func) ?
                 gtv_application_window_set_toolbar_broadcast(window, false);
@@ -160,7 +160,7 @@ void KitDocumentViewSigHandlers::cursorChanged(KitDocumentView* pDocView, gint n
     else if (nY > visArea.y + visArea.height)
     {
         y = nY - visArea.height/2;
-        upper = lok_doc_view_pixel_to_twip(pDocView, gtk_adjustment_get_upper(vadj));
+        upper = kit_doc_view_pixel_to_twip(pDocView, gtk_adjustment_get_upper(vadj));
         if (y > upper)
             y = upper;
 
@@ -175,15 +175,15 @@ void KitDocumentViewSigHandlers::cursorChanged(KitDocumentView* pDocView, gint n
     else if (nX > visArea.x + visArea.width)
     {
         x = nX - visArea.width/2;
-        upper = lok_doc_view_pixel_to_twip(pDocView, gtk_adjustment_get_upper(hadj));
+        upper = kit_doc_view_pixel_to_twip(pDocView, gtk_adjustment_get_upper(hadj));
         if (x > upper)
             x = upper;
     }
 
     if (y!=-1)
-        gtk_adjustment_set_value(vadj, lok_doc_view_twip_to_pixel(pDocView, y));
+        gtk_adjustment_set_value(vadj, kit_doc_view_twip_to_pixel(pDocView, y));
     if (x!=-1)
-        gtk_adjustment_set_value(hadj, lok_doc_view_twip_to_pixel(pDocView, x));
+        gtk_adjustment_set_value(hadj, kit_doc_view_twip_to_pixel(pDocView, x));
 }
 
 void KitDocumentViewSigHandlers::addressChanged(KitDocumentView* pDocView, char* pPayload, gpointer)
@@ -262,12 +262,12 @@ void KitDocumentViewSigHandlers::passwordRequired(KitDocumentView* pDocView, cha
     switch (res)
     {
     case GTK_RESPONSE_OK:
-        lok_doc_view_set_document_password (LOK_DOC_VIEW(window->kitdocview), pUrl, gtk_entry_get_text(GTK_ENTRY(pPasswordEntry)));
+        kit_doc_view_set_document_password (KIT_DOC_VIEW(window->kitdocview), pUrl, gtk_entry_get_text(GTK_ENTRY(pPasswordEntry)));
         break;
     case GTK_RESPONSE_ACCEPT:
         // User accepts to open this document as read-only
     case GTK_RESPONSE_DELETE_EVENT:
-        lok_doc_view_set_document_password (LOK_DOC_VIEW(window->kitdocview), pUrl, nullptr);
+        kit_doc_view_set_document_password (KIT_DOC_VIEW(window->kitdocview), pUrl, nullptr);
         break;
     }
 
@@ -446,7 +446,7 @@ gboolean KitDocumentViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEvent
         return false;
     }
 
-    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
+    COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
     if (!pDocument || pDocument->pClass->getDocumentType(pDocument) != KIT_DOCTYPE_SPREADSHEET)
         return true;
 
@@ -459,10 +459,10 @@ gboolean KitDocumentViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEvent
 
     std::stringstream aCommand;
     aCommand << ".uno:ViewRowColumnHeaders";
-    aCommand << "?x=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->kitdocview), colPosPixel));
-    aCommand << "&width=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->kitdocview), colSizePixel));
-    aCommand << "&y=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->kitdocview), rowPosPixel));
-    aCommand << "&height=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->kitdocview), rowSizePixel));
+    aCommand << "?x=" << int(kit_doc_view_pixel_to_twip(KIT_DOC_VIEW(window->kitdocview), colPosPixel));
+    aCommand << "&width=" << int(kit_doc_view_pixel_to_twip(KIT_DOC_VIEW(window->kitdocview), colSizePixel));
+    aCommand << "&y=" << int(kit_doc_view_pixel_to_twip(KIT_DOC_VIEW(window->kitdocview), rowPosPixel));
+    aCommand << "&height=" << int(kit_doc_view_pixel_to_twip(KIT_DOC_VIEW(window->kitdocview), rowSizePixel));
     std::stringstream ss;
     ss << "kit::Document::getCommandValues(" << aCommand.str() << ")";
     g_info("%s", ss.str().c_str());

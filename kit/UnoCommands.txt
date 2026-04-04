@@ -1,4 +1,4 @@
-This document describes UNO commands that are (know to be) used with LOK.
+This document describes UNO commands that are (know to be) used with COKit.
 
 Command: ".uno:InsertGraphic"
 

@@ -1,17 +1,17 @@
 # COKit
 
-COKit can be used for accessing LibreOffice functionality
+COKit can be used for accessing CollaboraOffice functionality
 through C/C++, without any need to use UNO.
 
 For now it only offers document conversion (in addition to an experimental
 tiled rendering API).
 
-## Integrating LOK Into Other Software
+## Integrating COKit Into Other Software
 
-LOK functionality can be accessed by including `COKit.h[xx]` in your
+COKit functionality can be accessed by including `COKit.h[xx]` in your
 program.
 
-LOK initialisation (`cok_init`) requires the inclusion of `COKitInit.h` in
+COKit initialisation (`cok_init`) requires the inclusion of `COKitInit.h` in
 your program. If you use the C++ `COKit.hxx` header, it already includes
 `COKitInit.h` for you.
 
@@ -23,24 +23,24 @@ An example program can be seen on:
 
 ## Tiled Rendering
 
-To use LOK Tiled Rendering you will need the following before the LOK includes:
+To use COKit Tiled Rendering you will need the following before the COKit includes:
 
     #define KIT_USE_UNSTABLE_API
 
-(This must be define before ANY LOK header, i.e. including the Init header.)
+(This must be define before ANY COKit header, i.e. including the Init header.)
 
 Currently only bitmap-buffer rendering is supported, with a 32-bit BGRA
 colorspace (further alternatives could feasibly be implemented as needed).
-Scanlines are ordered top-down (whereas LibreOffice will internally default
+Scanlines are ordered top-down (whereas CollaboraOffice will internally default
 to bottom-up).
 
 ## Tiled Editing
 
 On top of the tiled rendering API, a set of new methods have been added to the
-`kit::Document` class to allow basic editing, too. Communication between the LOK
-client and LibreOffice is a two-way channel. The client can initiate an action
+`kit::Document` class to allow basic editing, too. Communication between the COKit
+client and CollaboraOffice is a two-way channel. The client can initiate an action
 by calling the above mentioned methods. The most important methods for the
-client -> LibreOffice communication are:
+client -> CollaboraOffice communication are:
 
 - `initializeForRendering()`, expected to be called right after
   `kit::Office::documentLoad()` returned a `kit::Document*`.
@@ -53,8 +53,8 @@ In general, all coordinates are always in absolute twips (20th of a point, or:
 1" = 1440 twips). See `kit::Document` in `COKit.hxx` for a full list of
 methods and their documentation.
 
-The other way around (LibreOffice -> LOK client) is implemented using a
-callback. A LOK client can register a callback using the registerCallback()
+The other way around (CollaboraOffice -> COKit client) is implemented using a
+callback. A COKit client can register a callback using the registerCallback()
 method. Whenever editing requires some action on the client side, a callback
 event is emitted. The callback types are described using the
 `COKitCallbackType` enumeration in `COKitEnums.h`, the callback
@@ -69,28 +69,22 @@ function signature itself is provided by the COKitCallback typedef in
   by the client as the set of rectangles describing the selection overlay
   changed
 
-There are currently two known LOK clients supporting tiled editing:
-
-- `gtktiledviewer` (see below), which allows testing the LOK core implementation
-  on (desktop) Linux
-- (LibreOffice on) Android
-
-Core has next to no idea what is the LOK client, so for effective development,
+Core has next to no idea what is the COKit client, so for effective development,
 it's recommended that the core part is developed against `gtktiledviewer`, and
 once a feature works there, then implement the Android part, with its slower
 development iteration (slow uploading to the device, the need to link all
 object files into a single `.so`, etc).
 
-### LOK API guidelines
+### COKit API guidelines
 
 Introducing explicit new API under `include/COKit/` adds type safety but listing each &
 every micro-feature in those headers don't scale. Before extending those headers, consider using one
 of the following alternatives, which require no changes to these headers:
 
-- LOK client → core direction: use `postUnoCommand()` to dispatch an UNO command, optionally with
+- COKit client → core direction: use `postUnoCommand()` to dispatch an UNO command, optionally with
   parameters.
-- core → LOK client direction:
-  - Use `getCommandValues()` when this is initiated by the LOK client.
+- core → COKit client direction:
+  - Use `getCommandValues()` when this is initiated by the COKit client.
   - Use `KIT_CALLBACK_STATE_CHANGED` with a JSON payload when this is initiated by core.
 
 It's useful to stick to these if possible, only add new C++ API when these are not a good fit.

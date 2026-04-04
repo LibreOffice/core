@@ -618,7 +618,7 @@ int main( int argc, char* argv[] )
 
     aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
-    std::unique_ptr<Office> pOffice( lok_cpp_init(install_path, user_profile) );
+    std::unique_ptr<Office> pOffice( kit_cpp_init(install_path, user_profile) );
     if (pOffice == nullptr)
     {
         fprintf(stderr, "Failed to initialize Office from %s\n", argv[1]);

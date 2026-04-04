@@ -16,7 +16,7 @@
 
 #include <map>
 
-#define LOK_TILEBUFFER_ERROR (LOKTileBufferErrorQuark())
+#define KIT_TILEBUFFER_ERROR (KitTileBufferErrorQuark())
 
 // Let's use a square of side 256 pixels for each tile.
 const int nTileSizePixels = 256;
@@ -44,7 +44,7 @@ float twipToPixel(float fInput, float zoom);
 /**
    Gets GQuark identifying this tile buffer errors
 */
-GQuark LOKTileBufferErrorQuark(void);
+GQuark KitTileBufferErrorQuark(void);
 
 /**
    This class represents a single tile in the tile buffer.
@@ -83,7 +83,7 @@ private:
 /**
    This class represents the tile buffer which is responsible for managing,
    reusing and caching all the already rendered tiles. If the given tile is not
-   present in the buffer, call to LOK Document's (m_pLOKDocument) paintTile
+   present in the buffer, call to COKit Document's (m_pLOKDocument) paintTile
    method is made which fetches the rendered tile from LO core and store it in
    buffer for future reuse.
 */
@@ -111,8 +111,8 @@ public:
        @param y the tile along the y-axis of the buffer
        @param task GTask object containing the necessary data
        @param pool GThreadPool managed by the widget instance used for all the
-       LOK calls made by widget. It is needed here because getTile invokes one
-       of the LOK call : paintTile.
+       COKit calls made by widget. It is needed here because getTile invokes one
+       of the COKit call : paintTile.
 
        @return the tile at the mentioned position (x, y)
      */
@@ -138,8 +138,8 @@ public:
        @param zoom zoom factor of the document
        @param task GTask object containing the necessary data
        @param pool GThreadPool managed by the widget instance used for all the
-       LOK calls made by widget. It is needed here because setInvalid() invokes one
-       of the LOK call : paintTile.
+       COKit calls made by widget. It is needed here because setInvalid() invokes one
+       of the COKit call : paintTile.
      */
     void setInvalid(int x, int y, float zoom, GTask* task, GThreadPool*);
 
@@ -154,34 +154,34 @@ private:
 
 enum
 {
-    LOK_LOAD_DOC,
-    LOK_POST_COMMAND,
-    LOK_SET_EDIT,
-    LOK_SET_PARTMODE,
-    LOK_SET_PART,
-    LOK_POST_KEY,
-    LOK_PAINT_TILE,
-    LOK_POST_MOUSE_EVENT,
-    LOK_SET_GRAPHIC_SELECTION,
-    LOK_SET_CLIENT_ZOOM
+    KIT_LOAD_DOC,
+    KIT_POST_COMMAND,
+    KIT_SET_EDIT,
+    KIT_SET_PARTMODE,
+    KIT_SET_PART,
+    KIT_POST_KEY,
+    KIT_PAINT_TILE,
+    KIT_POST_MOUSE_EVENT,
+    KIT_SET_GRAPHIC_SELECTION,
+    KIT_SET_CLIENT_ZOOM
 };
 
 enum
 {
-    LOK_TILEBUFFER_CHANGED,
-    LOK_TILEBUFFER_MEMORY
+    KIT_TILEBUFFER_CHANGED,
+    KIT_TILEBUFFER_MEMORY
 };
 
 /**
-   A struct that we use to store the data about the LOK call.
+   A struct that we use to store the data about the COKit call.
 
-   Object of this type is passed with all the LOK calls,
+   Object of this type is passed with all the COKit calls,
    so that they can be identified. Additionally, it also contains
-   the data that LOK call needs.
+   the data that COKit call needs.
 */
 struct LOEvent
 {
-    /// To identify the type of LOK call
+    /// To identify the type of COKit call
     int m_nType;
 
     /// @name post_command parameters

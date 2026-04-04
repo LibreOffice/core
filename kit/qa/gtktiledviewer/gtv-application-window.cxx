@@ -170,7 +170,7 @@ static void initWindow(GtvApplicationWindow* window)
 #endif
 
     // TODO: Implement progressbar in statusbar
-    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
+    COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
     if (pDocument)
     {
         COKitDocumentType eDocType = static_cast<COKitDocumentType>(pDocument->pClass->getDocumentType(pDocument));
@@ -184,7 +184,7 @@ static void initWindow(GtvApplicationWindow* window)
         }
 
         // By default make the document editable in a new window
-        lok_doc_view_set_edit(LOK_DOC_VIEW(window->kitdocview), true);
+        kit_doc_view_set_edit(KIT_DOC_VIEW(window->kitdocview), true);
         // Let toolbar adjust its button accordingly
         gtv_main_toolbar_doc_loaded(GTV_MAIN_TOOLBAR(priv->toolbarcontainer), eDocType, true /* Edit button state */);
     }
@@ -204,10 +204,10 @@ static void initWindow(GtvApplicationWindow* window)
 static void
 gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res, gpointer /*userdata*/)
 {
-    KitDocumentView* pDocView = LOK_DOC_VIEW (source_object);
+    KitDocumentView* pDocView = KIT_DOC_VIEW (source_object);
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     GError* error = nullptr;
-    if (!lok_doc_view_open_document_finish(pDocView, res, &error))
+    if (!kit_doc_view_open_document_finish(pDocView, res, &error))
     {
         GtkWidget* pDialog = gtk_message_dialog_new(GTK_WINDOW(window),
                                                     GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -233,13 +233,13 @@ void gtv_application_window_get_visible_area(GtvApplicationWindow* pWindow, GdkR
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pWindow->scrolledwindow));
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pWindow->scrolledwindow));
 
-    pArea->x      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->kitdocview),
+    pArea->x      = kit_doc_view_pixel_to_twip(KIT_DOC_VIEW(pWindow->kitdocview),
                                                gtk_adjustment_get_value(pHAdjustment));
-    pArea->y      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->kitdocview),
+    pArea->y      = kit_doc_view_pixel_to_twip(KIT_DOC_VIEW(pWindow->kitdocview),
                                                gtk_adjustment_get_value(pVAdjustment));
-    pArea->width  = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->kitdocview),
+    pArea->width  = kit_doc_view_pixel_to_twip(KIT_DOC_VIEW(pWindow->kitdocview),
                                                gtk_adjustment_get_page_size(pHAdjustment));
-    pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->kitdocview),
+    pArea->height = kit_doc_view_pixel_to_twip(KIT_DOC_VIEW(pWindow->kitdocview),
                                                gtk_adjustment_get_page_size(pVAdjustment));
 }
 
@@ -360,7 +360,7 @@ gtv_application_window_create_view_from_window(GtvApplicationWindow* window)
 
     GtvApplicationWindow* newWindow = GTV_APPLICATION_WINDOW(gtv_application_window_new(GTK_APPLICATION(app)));
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
-    newWindow->kitdocview = lok_doc_view_new_from_widget(LOK_DOC_VIEW(window->kitdocview), aArguments.c_str());
+    newWindow->kitdocview = kit_doc_view_new_from_widget(KIT_DOC_VIEW(window->kitdocview), aArguments.c_str());
     setupDocView(newWindow);
 
     gtk_container_add(GTK_CONTAINER(newWindow->scrolledwindow), newWindow->kitdocview);
@@ -384,7 +384,7 @@ gtv_application_window_load_document(GtvApplicationWindow* window,
         nullptr : priv->m_pRenderingArgs->m_aUserProfile.c_str();
 
     window->kitdocview = GTK_WIDGET(
-        g_initable_new(LOK_TYPE_DOC_VIEW, nullptr, nullptr,
+        g_initable_new(KIT_TYPE_DOC_VIEW, nullptr, nullptr,
                        "lopath", priv->m_pRenderingArgs->m_aLoPath.c_str(),
                        "unipoll", priv->m_pRenderingArgs->m_bUnipoll,
                        "userprofileurl", pUserProfile,
@@ -398,7 +398,7 @@ gtv_application_window_load_document(GtvApplicationWindow* window,
 
     // Create argument JSON
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
-    lok_doc_view_open_document(LOK_DOC_VIEW(window->kitdocview), aDocPath.c_str(),
+    kit_doc_view_open_document(KIT_DOC_VIEW(window->kitdocview), aDocPath.c_str(),
                                aArguments.c_str(), nullptr,
                                gtv_application_open_document_callback, window->kitdocview);
 
@@ -461,7 +461,7 @@ gtv_application_window_unregister_child_window(GtvApplicationWindow* window, Gtk
     if (pChildWin)
     {
         priv->m_pChildWindows = g_list_remove(priv->m_pChildWindows, pChildWin);
-        COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
+        COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
         guint dialogId = 0;
         g_object_get(G_OBJECT(pChildWin), "dialogid", &dialogId, nullptr);
         pDocument->pClass->postWindow(pDocument, dialogId, KIT_WINDOW_CLOSE, nullptr);

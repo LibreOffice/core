@@ -77,7 +77,7 @@ static OUString getFileURLFromSystemPath(OUString const & path)
     return url;
 }
 
-// We specifically don't use the usual BootStrapFixture, as LOK does
+// We specifically don't use the usual BootStrapFixture, as COKit does
 // all its own setup and bootstrapping, and should be usable in a
 // raw C++ program.
 class TiledRenderingTest : public ::CppUnit::TestFixture
@@ -98,7 +98,7 @@ public:
     }
 
     // Currently it isn't possible to do multiple startup/shutdown
-    // cycle of LOK in a single process -- hence we run all our tests
+    // cycle of COKit in a single process -- hence we run all our tests
     // as one test, which simply carries out the individual test
     // components on the one Office instance that we retrieve.
     void runAllTests();
@@ -128,7 +128,7 @@ void TiledRenderingTest::runAllTests()
     OUString sUserInstallURL = aWorkdirRootURL + "/unittest";
     rtl::Bootstrap::set("UserInstallation", sUserInstallURL);
 
-    std::unique_ptr< Office > pOffice( lok_cpp_init(
+    std::unique_ptr< Office > pOffice( kit_cpp_init(
                                       m_sLOPath.c_str() ) );
     CPPUNIT_ASSERT( pOffice );
 
@@ -272,7 +272,7 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
 
     pDocument.reset();
 
-    // FIXME: LOK will fail when trying to open a locked file
+    // FIXME: COKit will fail when trying to open a locked file
     remove(sLockFile.c_str());
 
     // load the file again, now in another language
@@ -320,12 +320,12 @@ void TiledRenderingTest::testOverlay( Office* /*pOffice*/ )
     const string sDocPath = m_sSrcRoot + "/odk/examples/java/DocumentHandling/test/test1.odt";
     const string sLockFile = m_sSrcRoot + "/odk/examples/java/DocumentHandling/test/.~lock.test1.odt#";
 
-    // FIXME: this is a temporary hack: LOK will fail when trying to open a
+    // FIXME: this is a temporary hack: COKit will fail when trying to open a
     // locked file, and since we're reusing the file for a different unit
     // test it's entirely possible that an unwanted lock file will remain.
     // Hence forcefully remove it here.
     remove( sLockFile.c_str() );
-    std::unique_ptr< Office > pOffice( lok_cpp_init(
+    std::unique_ptr< Office > pOffice( kit_cpp_init(
                                       m_sLOPath.c_str() ) );
     assert( pOffice.get() );
 

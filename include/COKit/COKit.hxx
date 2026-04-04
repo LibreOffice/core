@@ -975,7 +975,7 @@ private:
     COKit* mpThis;
 
 public:
-    /// A kit::Office is typically created by the lok_cpp_init() function.
+    /// A kit::Office is typically created by the kit_cpp_init() function.
     Office(COKit* pThis) :
         mpThis(pThis)
     {}
@@ -1341,7 +1341,7 @@ public:
 /// destroying a previous one.
 ///
 /// For information on the parameters, see writeup for cok_init_2 in COKitInit.h.
-inline Office* lok_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
+inline Office* kit_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
 {
     COKit* pThis = cok_init_2(pInstallPath, pUserProfileUrl);
     if (pThis == NULL || pThis->pClass->nSize == 0)
