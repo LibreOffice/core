@@ -46,7 +46,7 @@ class KitInteractionHandler: public cppu::WeakImplHelper<css::lang::XServiceInfo
                                                          css::task::XInteractionHandler2>
 {
 private:
-    desktop::LibCO_Impl * m_pLOKit;
+    desktop::LibCO_Impl * m_pKit;
     desktop::LibLODocument_Impl * m_pLOKDocument;
 
     /// Command for which we use this interaction handler (like "load", "save", "saveas", ...)

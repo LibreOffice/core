@@ -58,14 +58,14 @@ using namespace com::sun::star;
 
 KitInteractionHandler::KitInteractionHandler(
         OString command,
-        desktop::LibCO_Impl *const pLOKit,
+        desktop::LibCO_Impl *const pKit,
         desktop::LibLODocument_Impl *const pLOKDocument)
-    : m_pLOKit(pLOKit)
+    : m_pKit(pKit)
     , m_pLOKDocument(pLOKDocument)
     , m_command(std::move(command))
     , m_usePassword(false)
 {
-    assert(m_pLOKit);
+    assert(m_pKit);
 }
 
 KitInteractionHandler::~KitInteractionHandler()
@@ -125,8 +125,8 @@ void KitInteractionHandler::postError(css::task::InteractionClassification class
     std::size_t nView = SfxViewShell::Current() ? KitHelper::getCurrentView() : 0;
     if (m_pLOKDocument && m_pLOKDocument->mpCallbackFlushHandlers.count(nView))
         m_pLOKDocument->mpCallbackFlushHandlers[nView]->queue(KIT_CALLBACK_ERROR, aJson.finishAndGetAsOString());
-    else if (m_pLOKit->mpCallback)
-        m_pLOKit->mpCallback(KIT_CALLBACK_ERROR, aJson.finishAndGetAsOString().getStr(), m_pLOKit->mpCallbackData);
+    else if (m_pKit->mpCallback)
+        m_pKit->mpCallback(KIT_CALLBACK_ERROR, aJson.finishAndGetAsOString().getStr(), m_pKit->mpCallbackData);
 }
 
 namespace {
@@ -311,17 +311,17 @@ bool KitInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
     if (!bPasswordRequestFound)
         return false;
 
-    if (m_pLOKit->mpCallback &&
-        m_pLOKit->hasOptionalFeature(bIsRequestPasswordToModify ? KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
+    if (m_pKit->mpCallback &&
+        m_pKit->hasOptionalFeature(bIsRequestPasswordToModify ? KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
                                                                 : KIT_FEATURE_DOCUMENT_PASSWORD))
     {
         // release SolarMutex, so the callback handler, which may run in another thread,
         // can acquire it in 'lo_setDocumentPassword'
         SolarMutexReleaser aReleaser;
-        m_pLOKit->mpCallback(bIsRequestPasswordToModify ? KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY
+        m_pKit->mpCallback(bIsRequestPasswordToModify ? KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY
                                                         : KIT_CALLBACK_DOCUMENT_PASSWORD,
                 sUrl.getStr(),
-                m_pLOKit->mpCallbackData);
+                m_pKit->mpCallbackData);
 
         // block until SetPassword is called
         m_havePassword.wait();
