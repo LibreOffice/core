@@ -151,7 +151,7 @@ private:
     SVX_DLLPRIVATE void ImpSetPointsRects() const;
     void UndirtyMrkPnt() const;
 
-    SAL_DLLPRIVATE void SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell);
+    SAL_DLLPRIVATE void SetMarkHandlesForKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell);
     SAL_DLLPRIVATE OString CreateInnerTextRectString() const;
     SAL_DLLPRIVATE bool dumpGluePointsToJSON(boost::property_tree::ptree& rTree);
 
@@ -159,7 +159,7 @@ protected:
     SAL_DLLPRIVATE virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     SAL_DLLPRIVATE virtual void ModelHasChanged() override; // Is called by the PaintView
     SAL_DLLPRIVATE virtual void SetMarkHandles(SfxViewShell* pOtherShell); // maHdlList - fill (List of handles)
-    SAL_DLLPRIVATE void modelHasChangedLOKit();
+    SAL_DLLPRIVATE void modelHasChangedKit();
     SAL_DLLPRIVATE void         SetMarkRects();                                             // Rects at the PageViews
     void         CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
     SAL_DLLPRIVATE void         AddDragModeHdl(SdrDragMode eMode);
@@ -249,7 +249,7 @@ public:
     /// whether all x coordinates in use are negated or not
     void SetNegativeX(bool bOn) { mbNegativeX = bOn; }
     bool IsNegativeX() const { return mbNegativeX; }
-    SAL_DLLPRIVATE void SetInnerTextAreaForLOKit() const;
+    SAL_DLLPRIVATE void SetInnerTextAreaForKit() const;
 
 // migrate selections
 

@@ -2060,7 +2060,7 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             if (mpTextEditOutliner && mpTextEditOutliner->IsModified())
             {
                 GetModel().SetChanged();
-                SetInnerTextAreaForLOKit();
+                SetInnerTextAreaForKit();
             }
 
             /* Start chaining processing */
@@ -2254,7 +2254,7 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
                 if (mpTextEditOutliner && mpTextEditOutliner->IsModified())
                 {
                     GetModel().SetChanged();
-                    SetInnerTextAreaForLOKit();
+                    SetInnerTextAreaForKit();
                 }
             }
             return true;
@@ -2528,7 +2528,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             if (rTEOutliner.IsModified())
             {
                 GetModel().SetChanged();
-                SetInnerTextAreaForLOKit();
+                SetInnerTextAreaForKit();
             }
 
             ImpMakeTextCursorAreaVisible();

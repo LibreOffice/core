@@ -267,10 +267,10 @@ void SdrMarkView::ModelHasChanged()
     }
 
     if (comphelper::COKit::isActive())
-        modelHasChangedLOKit();
+        modelHasChangedKit();
 }
 
-void SdrMarkView::modelHasChangedLOKit()
+void SdrMarkView::modelHasChangedKit()
 {
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     if (rMarkList.GetMarkCount() <= 0)
@@ -897,7 +897,7 @@ OString SdrMarkView::CreateInnerTextRectString() const
     return OString();
 }
 
-void SdrMarkView::SetInnerTextAreaForLOKit() const
+void SdrMarkView::SetInnerTextAreaForKit() const
 {
     if (!comphelper::COKit::isActive())
         return;
@@ -907,7 +907,7 @@ void SdrMarkView::SetInnerTextAreaForLOKit() const
         pViewShell->viewCallback(KIT_CALLBACK_SHAPE_INNER_TEXT, sRectString);
 }
 
-void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell)
+void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell)
 {
     SfxViewShell* pViewShell = GetSfxViewShell();
 
@@ -1684,7 +1684,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     // moved it here to access all the handles for callback.
     if (bTiledRendering && pViewShell)
     {
-        SetMarkHandlesForLOKit(aRect, pOtherShell);
+        SetMarkHandlesForKit(aRect, pOtherShell);
     }
 
     // try to restore focus handle index from remembered values
