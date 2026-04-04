@@ -1299,7 +1299,18 @@ void SbRtl_Space(StarBASIC *, SbxArray & rPar, bool)
         return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
     }
 
-    const sal_Int32 nCount = rPar.Get(1)->GetLong();
+    sal_Int32 nCount = rPar.Get(1)->GetLong();
+
+    if (nCount < 0)
+    {
+        if (SbiRuntime::isVBAEnabled())
+        {
+            return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+        }
+
+        nCount = 0;
+    }
+
     rPar.Get(0)->PutString(OUString::Concat(RepeatedUChar(' ', nCount)));
 }
 

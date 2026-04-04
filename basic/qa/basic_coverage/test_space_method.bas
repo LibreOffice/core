@@ -7,11 +7,24 @@
 
 Option Explicit
 
-Function doUnitTest as String
-    ' SPACE
-    If ( Space(3) <> "   " ) Then
-        doUnitTest = "FAIL"
-    Else
-        doUnitTest = "OK"
-    End If
+Function doUnitTest As String
+    TestUtil.Testinit
+    verify_testSpace
+    doUnitTest = TestUtil.GetResult()
 End Function
+
+Sub verify_testSpace()
+    On Error Goto errorHandler
+
+    TestUtil.AssertEqual(Space(3), "   ", "Space(3)")
+    TestUtil.AssertEqual(Space(2), "  ",  "Space(2)")
+    TestUtil.AssertEqual(Space(0), "",    "Space(0)")
+
+    ' Negative values generate an empty string
+    TestUtil.AssertEqual(Space(-1), "", "Space(-1)")
+    TestUtil.AssertEqual(Space(-4), "", "Space(-4)")
+
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("verify_testSpace", Err, Error$, Erl)
+End Sub
