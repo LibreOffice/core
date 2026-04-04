@@ -1318,7 +1318,7 @@ void SwDocShell::PerformLinkUpdate()
 {
     sfx2::LinkManager& rLinkMgr
         = GetDoc()->getIDocumentLinksAdministration().GetLinkManager();
-    rLinkMgr.UpdateAllLinks(false, false, nullptr,
+    rLinkMgr.UpdateAllLinks(false, nullptr,
                             GetMedium() ? GetMedium()->GetName() : OUString());
 }
 

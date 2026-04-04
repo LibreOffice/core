@@ -213,7 +213,7 @@ void ScDocShell::ReloadAllLinks()
     // update linked graphics from the draw layer
     if (sfx2::LinkManager* pLinkMgr = m_pDocument->GetDocLinkManager().getLinkManager(false))
     {
-        pLinkMgr->UpdateAllLinks(false, false, nullptr, u""_ustr);
+        pLinkMgr->UpdateAllLinks(false, nullptr, u""_ustr);
     }
 }
 

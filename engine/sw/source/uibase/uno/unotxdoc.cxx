@@ -2451,7 +2451,7 @@ void SwXTextDocument::updateLinks(  )
     if( !rLnkMan.GetLinks().empty() )
     {
         UnoActionContext aAction(&rDoc);
-        rLnkMan.UpdateAllLinks( false, true, nullptr, u""_ustr );
+        rLnkMan.UpdateAllLinks( false, nullptr, u""_ustr );
     }
 }
 

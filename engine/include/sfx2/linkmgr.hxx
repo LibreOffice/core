@@ -129,7 +129,6 @@ public:
     static SvLinkSourceRef CreateObj( SvBaseLink const * );
 
     void        UpdateAllLinks(bool bAskUpdate,
-                               bool bUpdateGrfLinks,
                                weld::Window* pParentWin,
                                OUString const & referer);
 
