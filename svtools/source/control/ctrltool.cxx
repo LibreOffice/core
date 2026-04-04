@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <memory>
 #include <string.h>
 #include <string_view>
@@ -31,6 +32,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 #include <sal/macros.h>
 #include <svtools/strings.hrc>
@@ -641,6 +643,70 @@ namespace
 
         return aInfo;
     }
+}
+
+namespace
+{
+std::vector<vcl::font::Variation> ImplGetVariations(OutputDevice& rDev, const vcl::Font& rFont)
+{
+    rDev.SetFont(rFont);
+
+    const std::vector<vcl::font::Variation> aSelected = rDev.GetFontVariations();
+    std::vector<vcl::font::VariationAxis> aAxes;
+    rDev.GetFontVariationAxes(aAxes);
+
+    std::vector<vcl::font::Variation> aVariations;
+    for (const auto& rAxis : aAxes)
+    {
+        auto it = std::find_if(aSelected.begin(), aSelected.end(),
+                               [&rAxis](const auto& rVar) { return rVar.nTag == rAxis.nTag; });
+        aVariations.push_back(
+            { rAxis.nTag, it != aSelected.end() ? it->fValue : rAxis.fDefaultValue });
+    }
+
+    std::sort(aVariations.begin(), aVariations.end(),
+              [](const auto& rA, const auto& rB) { return rA.nTag < rB.nTag; });
+    return aVariations;
+}
+}
+
+std::vector<vcl::font::Variation> FontList::GetStyleVariations(const OUString& rName,
+                                                               const OUString& rStyle) const
+{
+    if (rName.isEmpty() || rStyle.isEmpty() || !IsAvailable(rName))
+        return {};
+
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    pVDev->SetOutputSizePixel(Size(10, 10));
+    return ImplGetVariations(*pVDev, Get(rName, rStyle));
+}
+
+OUString FontList::FindStyleForVariations(const OUString& rName,
+                                          const std::vector<vcl::font::Variation>& rVariations,
+                                          const OUString& rPreferred) const
+{
+    if (rName.isEmpty() || !IsAvailable(rName))
+        return OUString();
+
+    std::vector<vcl::font::Variation> aVariations(rVariations);
+    std::sort(aVariations.begin(), aVariations.end(),
+              [](const auto& rA, const auto& rB) { return rA.nTag < rB.nTag; });
+
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    pVDev->SetOutputSizePixel(Size(10, 10));
+
+    if (!rPreferred.isEmpty() && ImplGetVariations(*pVDev, Get(rName, rPreferred)) == aVariations)
+        return rPreferred;
+
+    for (sal_Handle hFontMetric = GetFirstFontMetric(rName); hFontMetric;
+         hFontMetric = GetNextFontMetric(hFontMetric))
+    {
+        const FontMetric& rFontMetric = GetFontMetric(hFontMetric);
+        if (ImplGetVariations(*pVDev, rFontMetric) == aVariations)
+            return GetStyleName(rFontMetric);
+    }
+
+    return OUString();
 }
 
 FontMetric FontList::Get(const OUString& rName, const OUString& rStyleName) const

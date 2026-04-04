@@ -25,6 +25,7 @@
 #include <tools/fontenum.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <vcl/font/Variation.hxx>
 #include <vcl/vclptr.hxx>
 
 #include <vector>
@@ -172,6 +173,23 @@ public:
     OUString                GetStyleName( const FontMetric& rFontMetric ) const;
     OUString                GetFaceStyleName( std::u16string_view rName,
                                               const OUString& rStyleName ) const;
+
+    /** The variation settings of a style, covering every axis of the font.
+
+        The default instance names no coordinates of its own, and a named
+        instance need not pin them all, so both are filled in from the axes.
+     */
+    std::vector<vcl::font::Variation> GetStyleVariations( const OUString& rName,
+                                                          const OUString& rStyle ) const;
+
+    /** The style these variation settings describe, empty for none.
+
+        Several styles can share the same settings, e.g. when italic is a face
+        of its own, so a style that already fits is preferred to searching.
+     */
+    OUString                FindStyleForVariations( const OUString& rName,
+                                                    const std::vector<vcl::font::Variation>& rVariations,
+                                                    const OUString& rPreferred ) const;
 
     FontMetric           Get( const OUString& rName,
                                  const OUString& rStyleName ) const;
