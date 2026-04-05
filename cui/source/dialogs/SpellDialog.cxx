@@ -43,7 +43,7 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/specialchars.hxx>
+#include <svx/cuicharmap.hxx>
 #include <vcl/event.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/weld.hxx>
@@ -1709,16 +1709,19 @@ IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OUString&, rCurItemId, void
     }
     else if (rCurItemId == "insert")
     {
-        if (auto pImplFncGetSpecialChars = vcl::GetGetSpecialCharsFunction())
-        {
-            OUString aChars = pImplFncGetSpecialChars(GetDrawingArea(), m_xEditEngine->GetStandardFont(0));
-            if (!aChars.isEmpty())
+        auto xMap = std::make_shared<SvxCharacterMap>(GetDrawingArea(), nullptr, nullptr);
+        xMap->SetCharFont(m_xEditEngine->GetStandardFont(0));
+        weld::DialogController::runAsync(xMap, [this, xMap](sal_Int32 nResult) {
+            if (nResult != RET_OK)
+                return;
+            sal_UCS4 cChar = xMap->GetChar();
+            if (cChar)
             {
                 ESelection aCurrentSelection(m_xEditView->GetSelection());
-                m_xEditEngine->QuickInsertText(aChars, aCurrentSelection);
+                m_xEditEngine->QuickInsertText(OUString(&cChar, 1), aCurrentSelection);
                 CallModifyLink();
             }
-        }
+        });
     }
 }
 
