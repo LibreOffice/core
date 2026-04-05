@@ -402,6 +402,9 @@
             <value>
             </value>
           </prop>
+          <prop oor:name="HasMenubar">
+            <value>true</value>
+          </prop>
           <prop oor:name="Sidebar">
             <value>Arrow</value>
           </prop>

@@ -2949,6 +2949,11 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // now apply the values from theming, if available
     WinSalGraphics::updateSettingsNative( rSettings );
+
+    // OfficeLabs: apply file-based widget theme colors (definition.xml)
+    // This must run AFTER updateSettingsNative so theme XML colors win
+    if (mpGraphics)
+        mpGraphics->UpdateSettings( rSettings );
 }
 
 const SystemEnvData& WinSalFrame::GetSystemData() const
