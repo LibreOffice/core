@@ -464,7 +464,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     NavElementToolBoxControl* pToolBoxControl =
             dynamic_cast<NavElementToolBoxControl*>(xController.get());
 
-    // In case of LOK, the xController may not a NavElementToolBoxControl
+    // In case of COKit, the xController may not a NavElementToolBoxControl
     if (comphelper::COKit::isActive() && !pToolBoxControl)
     {
         m_pNavigateByComboBox = nullptr;

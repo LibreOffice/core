@@ -158,7 +158,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testIdleLayoutingAnyInput)
 {
-    // Set up LOK:
+    // Set up COKit:
     comphelper::COKit::setActive(true);
 
     // Given a document with 3 pages, the first page is visible:
@@ -199,7 +199,7 @@ CPPUNIT_TEST_FIXTURE(Test, testIdleLayoutingAnyInput)
     // high-priority task caused the any input callback not to interrupt.
     CPPUNIT_ASSERT(pPage3->IsInvalidContent());
 
-    // Tear down LOK:
+    // Tear down COKit:
     aHighPrioTask.Stop();
     Scheduler::ProcessEventsToIdle();
 }

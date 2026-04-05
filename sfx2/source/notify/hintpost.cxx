@@ -36,7 +36,7 @@ void SfxHintPoster::Post(std::unique_ptr<SfxRequest> pHintToPost)
 {
     if (comphelper::COKit::isActive())
     {
-        // Store the LOK view at the time of posting, so we can restore it later.
+        // Store the COKit view at the time of posting, so we can restore it later.
         if (KitHelper::isSettingView())
         {
             // This would be bad, setView() should not trigger new posted hints, otherwise this will

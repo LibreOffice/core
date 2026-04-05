@@ -29,8 +29,8 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool b
     , m_xBtnDatabase(m_xBuilder->weld_radio_button(u"database"_ustr))
     , m_xBtnExternal(m_xBuilder->weld_radio_button(u"external"_ustr))
     , m_xLbNamedRange(m_xBuilder->weld_combo_box(u"rangelb"_ustr))
-    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr)) // for LOK jsdialog
-    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr)) // for LOK jsdialog
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr)) // for COKit jsdialog
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr)) // for COKit jsdialog
 {
     m_xBtnSelection->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
     m_xBtnNamedRange->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );

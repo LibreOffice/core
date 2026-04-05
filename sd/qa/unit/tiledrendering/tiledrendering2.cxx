@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     aMarkedObjects[0]->GetGrabBagItem(aAny);
     comphelper::SequenceAsHashMap aMap(aAny);
     CPPUNIT_ASSERT(aMap.contains("SignatureCertificate"));
-    // Also verify that this is exposed at a LOK level:
+    // Also verify that this is exposed at a COKit level:
     OString aShapeSelection = "[" + aView.m_ShapeSelection + "]";
     const char* pShapeSelectionStr = aShapeSelection.getStr();
     std::stringstream aStream(pShapeSelectionStr);

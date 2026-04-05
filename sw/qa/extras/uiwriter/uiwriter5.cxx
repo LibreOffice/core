@@ -1384,7 +1384,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
         CPPUNIT_ASSERT_EQUAL(nFrameLeft, rAnchor.Left());
     }
 
-    // Test the comment anchor we expose via the LOK API.
+    // Test the comment anchor we expose via the COKit API.
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1418, 1418, 0, 0
     // - Actual  : 1418, 1418, 1024, 1024
@@ -1842,7 +1842,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateInvalidation)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testOleSaveWhileEdit)
 {
-    // Enable LOK mode, otherwise OCommonEmbeddedObject::SwitchStateTo_Impl() will throw when it
+    // Enable COKit mode, otherwise OCommonEmbeddedObject::SwitchStateTo_Impl() will throw when it
     // finds out that the test runs headless.
     comphelper::COKit::setActive();
 

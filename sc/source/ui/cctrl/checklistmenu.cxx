@@ -640,7 +640,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
         mxFieldsCombo->hide();
     }
     if (!comphelper::COKit::isActive()) {
-        // In LOK (read: under JSDialog), it is preferable to run this search on
+        // In COKit (read: under JSDialog), it is preferable to run this search on
         // the client side rather than in core for positioning/interference/etc. reasons
         mxEdSearch->show();
     }
@@ -1751,7 +1751,7 @@ void ScCheckListMenuControl::launch(weld::Widget* pWidget, const tools::Rectangl
         }
         else
         {
-            // in LOK mode, rRect is in document pixel coordinates, so width has to be added
+            // in COKit mode, rRect is in document pixel coordinates, so width has to be added
             // to place the popup next to the (visual) left aligned button.
             aRect.Move(aRect.GetWidth(), 0);
         }

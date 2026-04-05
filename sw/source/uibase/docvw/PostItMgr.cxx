@@ -141,7 +141,7 @@ namespace {
             return aPosAnchorA < aPosAnchorB;
     }
 
-    /// Emits LOK notification about one addition/removal/change of a comment
+    /// Emits COKit notification about one addition/removal/change of a comment
     void lcl_CommentNotification(const SwView* pView, const CommentNotificationType nType, const SwAnnotationItem* pItem, const sal_uInt32 nPostItId)
     {
         if (!comphelper::COKit::isActive())
@@ -638,7 +638,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     this->Broadcast(rHint);
                     RemoveItem(pField);
 
-                    // If LOK has disabled tiled annotations, emit annotation callbacks
+                    // If COKit has disabled tiled annotations, emit annotation callbacks
                     if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
                     {
                         SwPostItField* pPostItField = static_cast<SwPostItField*>(pField->GetField());
@@ -669,7 +669,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             this->Forward(rBC, rHint);
                         }
 
-                        // If LOK has disabled tiled annotations, emit annotation callbacks
+                        // If COKit has disabled tiled annotations, emit annotation callbacks
                         if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
                         {
                             if(SwFormatFieldHintWhich::CHANGED == pFormatHint->Which())

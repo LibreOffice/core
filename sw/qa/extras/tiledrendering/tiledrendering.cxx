@@ -2908,7 +2908,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineNotificationDuringSave)
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer8"_ustr;
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have never returned due to an infinite
-    // loop while sending not needed LOK notifications for redline changes during save.
+    // loop while sending not needed COKit notifications for redline changes during save.
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 }
 

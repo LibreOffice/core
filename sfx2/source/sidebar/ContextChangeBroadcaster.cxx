@@ -92,7 +92,7 @@ void ContextChangeBroadcaster::BroadcastContextChange (
         rsModuleName,
         rsContextName);
 
-    // notify the LOK too
+    // notify the COKit too
     if (comphelper::COKit::isActive())
     {
         KitHelper::notifyContextChange(aEvent);

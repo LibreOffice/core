@@ -265,7 +265,7 @@ struct SwViewColors
 
 /// View option to determine if some of the redlines should be omitted during rendering or not.
 ///
-/// This is exposed on the LOK API, don't reorder the names.
+/// This is exposed on the COKit API, don't reorder the names.
 enum class SwRedlineRenderMode
 {
     /// Normal rendering.

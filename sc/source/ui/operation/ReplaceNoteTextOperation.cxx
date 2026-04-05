@@ -95,7 +95,7 @@ bool ReplaceNoteTextOperation::runImplementation()
 
         aModificator.SetDocumentModified();
 
-        // Let our LOK clients know about the new/modified note
+        // Let our COKit clients know about the new/modified note
         if (pNewNote)
         {
             ScDocShell::KitCommentNotify(hadOldNote ? KitCommentNotificationType::Modify

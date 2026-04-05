@@ -355,7 +355,7 @@ private:
 
     /** Do search and replace for next match.
         @param pSelections
-            When tiled rendering and not 0, then don't emit LOK events, instead
+            When tiled rendering and not 0, then don't emit COKit events, instead
             assume the caller will do so.
         @return
             The return value specifies whether the search ended (</sal_True>) or

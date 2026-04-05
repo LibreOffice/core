@@ -925,7 +925,7 @@ Point DockingWindow::GetFloatingPos() const
             aData.setMask(vcl::WindowDataMask::Pos);
             pWrapper->mpFloatWin->GetWindowState( aData );
             AbsoluteScreenPixelPoint aPos(aData.x(), aData.y());
-            // LOK needs logic coordinates not absolute screen position for autofilter menu
+            // COKit needs logic coordinates not absolute screen position for autofilter menu
             if (!comphelper::COKit::isActive())
                 return pWrapper->mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
             return Point(aPos);

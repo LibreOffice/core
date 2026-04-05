@@ -80,7 +80,7 @@ class SVXCORE_DLLPUBLIC SdrDragStat final
     sal_Int32 GetPrevPos() const { return mvPnts.size()-(mvPnts.size()>1 ? 2 : 1); }
 
     // This is passed all the way through to ApplySpecialDrag of the Edge Object
-    // For LOK, we cannot really specify which gluepoint to select by default
+    // For COKit, we cannot really specify which gluepoint to select by default
     // It selects the nearest gluepoints after DragEnd event.
     // When multiple objects are on top of each other or somehow their gluepoints
     // collide, the gluepoint is selected from the lowest order numbered object

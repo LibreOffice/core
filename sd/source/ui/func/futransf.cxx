@@ -73,7 +73,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
 
     if (pArgs)
     {
-        // If this comes from LOK, that means the shape is moved by mouse
+        // If this comes from COKit, that means the shape is moved by mouse
         // only then pArgs is pre-set.
         setUndo(mpView, pArgs, comphelper::COKit::isActive());
         return;

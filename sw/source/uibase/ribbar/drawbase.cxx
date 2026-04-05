@@ -582,7 +582,7 @@ Point  SwDrawBase::GetDefaultCenterPos() const
         aVisArea = SwRect(m_pSh->getLOKVisibleArea());
         aVisArea.Intersection(SwRect(Point(), aDocSz));
 
-        // In LOK multi-page view the visible area may span multiple pages,
+        // In COKit multi-page view the visible area may span multiple pages,
         // so the naive center may fall between pages. Constrain to a single
         // page to guarantee the shape lands on an actual page.
         SwRootFrame* pLayout = m_pSh->GetLayout();

@@ -1111,7 +1111,7 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     if (!pViewData)
         return;
 
-    // Currently in LOK clients the doc background cannot be changed, so send this sparingly as possible but for every view.
+    // Currently in COKit clients the doc background cannot be changed, so send this sparingly as possible but for every view.
     // FIXME: Find a better place to trigger this callback where it would be called just once per view creation.
     // Doing this in ScTabViewShell init code does not work because callbacks do not work at that point for the first view.
     lcl_sendLOKDocumentBackground(pViewData);

@@ -686,7 +686,7 @@ Point Window::GetVisibleCenter()
 {
     Point aPos = ::tools::Rectangle(Point(), GetOutputSizePixel()).Center();
 
-    // For LOK
+    // For COKit
     bool bMapModeWasEnabled(IsMapModeEnabled());
     EnableMapMode(/*true*/);
     aPos = PixelToLogic(aPos);

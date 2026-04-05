@@ -346,7 +346,7 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
 
     aWTimer.SetTimeout( nUpdateInterval );
     if (!comphelper::COKit::isActive())
-        // Generating fake mouse moves does not work with LOK.
+        // Generating fake mouse moves does not work with COKit.
         aWTimer.Start();
     if ( eSelMode != SelectionMode::Single )
     {

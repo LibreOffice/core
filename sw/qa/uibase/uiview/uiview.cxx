@@ -473,7 +473,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeCommand)
 
 namespace
 {
-/// LOK view callback for test purposes.
+/// COKit view callback for test purposes.
 struct ViewCallback
 {
     std::set<SwRedlineRenderMode> m_aInvalidationModes;
@@ -510,7 +510,7 @@ void ViewCallback::callbackImpl(int nType, const char* pPayload)
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
 {
-    // Set up LOK:
+    // Set up COKit:
     comphelper::COKit::setActive(true);
     comphelper::COKit::setPartInInvalidation(true);
 
@@ -539,7 +539,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
     CPPUNIT_ASSERT(aCallback.m_aInvalidationModes.contains(SwRedlineRenderMode::OmitInserts));
     CPPUNIT_ASSERT(aCallback.m_aInvalidationModes.contains(SwRedlineRenderMode::OmitDeletes));
 
-    // Tear down LOK:
+    // Tear down COKit:
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
     comphelper::COKit::setPartInInvalidation(false);
 }

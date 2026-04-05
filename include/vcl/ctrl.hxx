@@ -228,7 +228,7 @@ public:
     SAL_DLLPRIVATE vcl::Font GetUnzoomedControlPointFont() const;
     void            SetShowAccelerator (bool val);
 
-    /// Notify the LOK client about an invalidated area.
+    /// Notify the COKit client about an invalidated area.
     virtual void LogicInvalidate( const tools::Rectangle* pRectangle ) override;
 
     virtual void FlashWindow() const override {};

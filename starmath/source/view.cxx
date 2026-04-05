@@ -2101,7 +2101,7 @@ void SmViewShell::Activate( bool bIsMDIActivate )
 
     if (IsInlineEditEnabled())
     {
-        // In LOK, activate in-place editing
+        // In COKit, activate in-place editing
         GetGraphicWidget().GrabFocus();
     }
     else if (SmEditWindow *pEdit = GetEditWindow())

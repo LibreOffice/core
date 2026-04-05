@@ -359,7 +359,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         maCellNotes.set(
             pBlockPos->miCellNotePos, nRow1, aNotes.begin(), aNotes.end());
 
-    // Notify our LOK clients.
+    // Notify our COKit clients.
     aDestPosition.SetRow(nRow1);
     for (size_t i = 0; i < nDestSize; ++i)
     {

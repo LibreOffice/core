@@ -367,7 +367,7 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(
     const Size& rNewSize, double fScale, const Point& rNewOffset,
     sal_uInt8 *const pBuffer)
 {
-    // If this is ever needed for something else than LOK, changes will
+    // If this is ever needed for something else than COKit, changes will
     // be needed in SvpSalVirtualDevice::CreateSurface() .
     assert(comphelper::COKit::isActive());
     assert(pBuffer);

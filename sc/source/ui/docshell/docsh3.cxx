@@ -195,7 +195,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
 
     Broadcast(ScPaintHint(aPaintRanges.Combine(), nPart, nMaxWidthAffectedHint));
 
-    // LOK: we are supposed to update the row / columns headers (and actually
+    // COKit: we are supposed to update the row / columns headers (and actually
     // the document size too - cell size affects that, obviously)
     if ((nPart & (PaintPartFlags::Top | PaintPartFlags::Left)) && comphelper::COKit::isActive())
     {

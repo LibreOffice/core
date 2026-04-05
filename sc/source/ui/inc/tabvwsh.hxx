@@ -204,7 +204,7 @@ private:
     // temporary data for exchange in the used multi-dialog structure
     std::shared_ptr<ScCondFormatDlgData> m_pScCondFormatDlgData;
 
-    // Chart insert wizard's mark to make sure it undoes the correct thing in LOK case
+    // Chart insert wizard's mark to make sure it undoes the correct thing in COKit case
     UndoStackMark m_InsertWizardUndoMark = MARK_INVALID;
 
 private:

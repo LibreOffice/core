@@ -392,7 +392,7 @@ public:
     void DrawSelectionXOR(OutlinerViewShell* pOtherShell);
 
     /**
-     * This is meant for Calc(LOK), but there may be other use-cases.
+     * This is meant for Calc(COKit), but there may be other use-cases.
      * In Calc, all logical positions are computed by
      * doing independent pixel-alignment for each cell's size. The *LOKSpecial* methods
      * can be used to set/get the output-area and visible-area in real logical

@@ -265,7 +265,7 @@ void ResourceManager::ReadDeckList()
     {
         if (comphelper::COKit::isActive())
         {
-            // Hide these decks in LOK as they aren't fully functional.
+            // Hide these decks in COKit as they aren't fully functional.
             if (aDeckName == "GalleryDeck")
                 continue;
         }
@@ -443,7 +443,7 @@ void ResourceManager::ReadPanelList()
 
         if (comphelper::COKit::isActive())
         {
-            // Hide these panels in LOK as they aren't fully functional.
+            // Hide these panels in COKit as they aren't fully functional.
             OUString aPanelId = getString(aPanelNode, u"Id"_ustr);
             if (aPanelId == "PageStylesPanel" || aPanelId == "PageHeaderPanel"
                 || aPanelId == "PageFooterPanel")

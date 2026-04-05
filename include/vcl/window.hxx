@@ -1105,16 +1105,16 @@ public:
     /// This sets the lokWindowId without setting a notifier.
     void                                SetLOKWindowId();
 
-    /// Find the nearest parent with LOK Notifier; can be itself if this Window has LOK notifier set.
+    /// Find the nearest parent with COKit Notifier; can be itself if this Window has COKit notifier set.
     VclPtr<vcl::Window>                 GetParentWithKitNotifier();
 
-    /// Indicate that LOK is not going to use this dialog any more.
+    /// Indicate that COKit is not going to use this dialog any more.
     void                                ReleaseKitNotifier();
 
     /// Find an existing Window based on the KitWindowId.
     static VclPtr<vcl::Window>          FindLOKWindow(vcl::KitWindowId nWindowId);
 
-    /// check if LOK Window container is empty
+    /// check if COKit Window container is empty
     SAL_DLLPRIVATE static bool          IsLOKWindowsEmpty();
 
     /// Dumps itself and potentially its children to a property tree, to be written easily to JSON.

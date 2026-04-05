@@ -616,7 +616,7 @@ NSSCMSMessage *CreateCMSMessage(const PRTime* time,
     {
         if (!comphelper::COKit::isActive())
         {
-            // pPrivateKey only exists in the memory in the LOK case, don't delete it.
+            // pPrivateKey only exists in the memory in the COKit case, don't delete it.
             SECKEY_DestroyPrivateKey(pPrivateKey);
         }
         *cms_signer = NSS_CMSSignerInfo_Create(result, cert, SEC_OID_SHA256);

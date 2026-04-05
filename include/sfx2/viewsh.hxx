@@ -219,7 +219,7 @@ private:
 
     KitDocumentFocusListener& GetKitDocumentFocusListener();
     const KitDocumentFocusListener& GetKitDocumentFocusListener() const;
-    bool lokReadOnlyView : 1 = false; // When true, this is a LOK readonly view
+    bool lokReadOnlyView : 1 = false; // When true, this is a COKit readonly view
     bool allowChangeComments : 1 = false; // Allow editing comments in readonly view mode
     bool allowManageRedlines : 1 = false; // Allow accepting/rejecting changes in readonly view mode
 

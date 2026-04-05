@@ -535,7 +535,7 @@ void ListBox::SetDropDownLineCount( sal_uInt16 nLines )
 void ListBox::AdaptDropDownLineCountToMaximum()
 {
     // Adapt to maximum allowed number.
-    // Limit for LOK as we can't render outside of the dialog canvas.
+    // Limit for COKit as we can't render outside of the dialog canvas.
     if (comphelper::COKit::isActive())
         SetDropDownLineCount(11);
     else

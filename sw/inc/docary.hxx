@@ -210,7 +210,7 @@ struct CompareSwRedlineTable
     bool operator()(const SwRangeRedline* lhs, const SwRangeRedline* rhs) const;
 };
 
-// Notification type for notifying about redlines to LOK clients
+// Notification type for notifying about redlines to COKit clients
 enum class RedlineNotification { Add, Remove, Modify };
 
 class SW_DLLPUBLIC SwRedlineTable
@@ -279,7 +279,7 @@ public:
     vector_type::const_iterator end() const { return maVector.end(); }
     void                        Resort() { maVector.Resort(); mpMaxEndPos = nullptr; }
 
-    // Notifies all LOK clients when redlines are added/modified/removed
+    // Notifies all COKit clients when redlines are added/modified/removed
     static void                 KitRedlineNotification(RedlineNotification eType, SwRangeRedline* pRedline);
 
 private:

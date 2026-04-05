@@ -170,7 +170,7 @@ void ViewCallback::callbackImpl(int nType, const char* /*pPayload*/)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
 {
-    // Set up LOK to track invalidations.
+    // Set up COKit to track invalidations.
     comphelper::COKit::setActive(true);
 
     // Given a document with a title field:
@@ -199,7 +199,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     // i.e. the footer was also invalidated on each keypress.
     CPPUNIT_ASSERT_EQUAL(1, aCallback.m_nInvalidations);
 
-    // Tear down LOK.
+    // Tear down COKit.
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
 }
 

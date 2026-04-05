@@ -395,7 +395,7 @@ VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
 
 void DeInitVCL()
 {
-    // The LOK Windows map container should be empty
+    // The COKit Windows map container should be empty
     assert(vcl::Window::IsLOKWindowsEmpty());
 
     //rhbz#1444437, when using LibreOffice like a library you can't realistically

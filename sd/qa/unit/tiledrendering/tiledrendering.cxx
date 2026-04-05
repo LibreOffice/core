@@ -1366,7 +1366,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
 
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::Any(u"LOK User1"_ustr)},
+        {".uno:Author", uno::Any(u"Kit User1"_ustr)},
     }));
     SdTestViewCallback aView1;
     int nView1 = KitHelper::getCurrentView();
@@ -1374,7 +1374,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     KitHelper::createView();
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::Any(u"LOK User2"_ustr)},
+        {".uno:Author", uno::Any(u"Kit User2"_ustr)},
     }));
     pXImpressDocument->initializeForTiledRendering(aArgs);
     SdTestViewCallback aView2;
@@ -1397,8 +1397,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     css::util::DateTime aDateTime;
     OUString aDateTimeString = OUString::createFromAscii(aView1.m_aCommentCallbackResult.get<std::string>("dateTime"));
     CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTimeString, aDateTime));
-    CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
-    CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Kit User1"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Kit User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
@@ -1418,13 +1418,13 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView2.m_aCommentCallbackResult.get<int>("id"));
-    CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
-    CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Kit User2"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Kit User2"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
     OUString aReplyTextView1 = OUString::createFromAscii(aView1.m_aCommentCallbackResult.get<std::string>("text"));
     OUString aReplyTextView2 = OUString::createFromAscii(aView2.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT(aReplyTextView1.startsWith("Reply to LOK User1"));
+    CPPUNIT_ASSERT(aReplyTextView1.startsWith("Reply to Kit User1"));
     CPPUNIT_ASSERT(aReplyTextView1.endsWith("Reply to comment"));
-    CPPUNIT_ASSERT(aReplyTextView2.startsWith("Reply to LOK User1"));
+    CPPUNIT_ASSERT(aReplyTextView2.startsWith("Reply to Kit User1"));
     CPPUNIT_ASSERT(aReplyTextView2.endsWith("Reply to comment"));
     CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
     CPPUNIT_ASSERT(!aView2.m_aCommentCallbackResult.get<std::string>("parthash").empty());
@@ -1473,7 +1473,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 
     createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::Any(u"LOK User1"_ustr)},
+        {".uno:Author", uno::Any(u"Kit User1"_ustr)},
     }));
 
     SdTestViewCallback aView1;
@@ -1491,7 +1491,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 
     CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 478, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 500, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
@@ -1504,7 +1504,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 478, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+    CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 500, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 
     comphelper::COKit::setTiledAnnotations(true);
 }
@@ -1519,7 +1519,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
 
     createDoc("dummy.odg", comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::Any(u"LOK User1"_ustr)},
+        {".uno:Author", uno::Any(u"Kit User1"_ustr)},
     }));
 
     SdTestViewCallback aView1;
@@ -1537,7 +1537,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
 
     CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 478, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 500, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
@@ -1550,7 +1550,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
 
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 478, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+    CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 500, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 
     comphelper::COKit::setTiledAnnotations(true);
 }

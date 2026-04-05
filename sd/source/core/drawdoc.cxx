@@ -554,7 +554,7 @@ void SdDrawDocument::ResizeCurrentPage(
     //     pNotesPage->SetAutoLayout( pNotesPage->GetAutoLayout() );
     // }
 
-    // Notify LOK clients of the current page size change.
+    // Notify COKit clients of the current page size change.
     if (!comphelper::COKit::isActive())
         return;
 
@@ -700,7 +700,7 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
         }
     }
 
-    // Notify LOK clients of the document size change.
+    // Notify COKit clients of the document size change.
     if (!comphelper::COKit::isActive())
         return;
 

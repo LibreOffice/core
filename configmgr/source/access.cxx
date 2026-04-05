@@ -1456,7 +1456,7 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
 
         // Since the locale given to us is the one used at initialization,
         // here we override it with the actual current-user's language to
-        // support per-view localization in LOK.
+        // support per-view localization in COKit.
         if (comphelper::COKit::isActive())
             locale = comphelper::COKit::getLanguageTag().getBcp47();
 

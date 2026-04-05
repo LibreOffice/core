@@ -1041,7 +1041,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             pViewFrame = SfxViewFrame::GetFirst();
             while( pViewFrame )
             {
-                // in LOK case we want to apply changes only to the current view
+                // in COKit case we want to apply changes only to the current view
                 if (comphelper::COKit::isActive() &&
                     pViewFrame != &SfxViewShell::Current()->GetViewFrame())
                 {

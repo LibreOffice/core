@@ -633,7 +633,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
             if (pRedline)
             {
-                // In case of LOK and comment text is already provided, skip
+                // In case of COKit and comment text is already provided, skip
                 // dialog creation and just change the redline comment directly
                 if (comphelper::COKit::isActive() && !sCommentText.isEmpty())
                 {

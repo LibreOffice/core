@@ -313,7 +313,7 @@ void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
 static bool isAcceptRejectCommandsEnabled(const SwView& rView)
 {
     // Check the state of the command, including read-only mode and special cases
-    // like LOK AllowChangeComments mode
+    // like COKit AllowChangeComments mode
     return rView.GetViewFrame().GetDispatcher()->QueryState(FN_REDLINE_ACCEPT_ALL,
                                                             o3tl::temporary(SfxPoolItemHolder()))
            != SfxItemState::DISABLED;

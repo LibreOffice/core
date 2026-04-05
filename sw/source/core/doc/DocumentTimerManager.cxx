@@ -51,7 +51,7 @@ DocumentTimerManager::DocumentTimerManager(SwDoc& i_rSwdoc)
 
     m_aFireIdleJobsTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
     m_aFireIdleJobsTimer.SetInvokeHandler(LINK(this, DocumentTimerManager, FireIdleJobsTimeout));
-    m_aFireIdleJobsTimer.SetTimeout(1000); // Enough time for LOK to render the first tiles.
+    m_aFireIdleJobsTimer.SetTimeout(1000); // Enough time for COKit to render the first tiles.
 }
 
 void DocumentTimerManager::StartIdling()
@@ -104,7 +104,7 @@ void DocumentTimerManager::UnblockIdling()
 
 IMPL_LINK(DocumentTimerManager, FireIdleJobsTimeout, Timer*, , void)
 {
-    // Now we can run the idle jobs, assuming we finished LOK initialization.
+    // Now we can run the idle jobs, assuming we finished COKit initialization.
     StartIdling();
 }
 

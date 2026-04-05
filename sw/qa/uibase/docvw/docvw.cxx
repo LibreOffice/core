@@ -199,7 +199,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShiftDoubleClickOnImage)
 
 namespace
 {
-/// Test LOK callback, handling just KIT_CALLBACK_TOOLTIP.
+/// Test COKit callback, handling just KIT_CALLBACK_TOOLTIP.
 struct TooltipCallback
 {
     std::string rect;
@@ -247,7 +247,7 @@ void TooltipCallback::callbackImpl(int nType, const char* pPayload)
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
 {
-    // Set up LOK:
+    // Set up COKit:
     comphelper::COKit::setActive(true);
 
     // Given a document with a redline:
@@ -279,7 +279,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
     CPPUNIT_ASSERT(!aCallback.anchorRectangles.empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Insert"), aCallback.redlineType);
 
-    // Tear down LOK:
+    // Tear down COKit:
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
 }
 

@@ -2160,7 +2160,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         }
     }
 
-    // Avoid LOK selection notifications before we have all the results.
+    // Avoid COKit selection notifications before we have all the results.
     GetViewData().GetViewShell()->setTiledSearching(true);
     MarkDataChanged();
     GetViewData().GetViewShell()->setTiledSearching(false);

@@ -218,7 +218,7 @@ void KitHelper::setView(int nId)
                         << " new lang:" << pViewShell->GetKitLanguageTag().getBcp47());
     }
 
-    // update the current LOK language and locale for the dialog tunneling
+    // update the current COKit language and locale for the dialog tunneling
     comphelper::COKit::setLanguageTag(pViewShell->GetKitLanguageTag());
     comphelper::COKit::setLocale(pViewShell->GetKitLocale());
 
@@ -1255,13 +1255,13 @@ namespace
         int nView = KitHelper::getCurrentView();
         if (nView != pKitEv->mnView)
         {
-            SAL_INFO("sfx.view", "LOK - view mismatch " << nView << " vs. " << pKitEv->mnView);
+            SAL_INFO("sfx.view", "COKit - view mismatch " << nView << " vs. " << pKitEv->mnView);
             KitHelper::setView(pKitEv->mnView);
         }
 
         if (!pKitEv->mpWindow->HasChildPathFocus(true))
         {
-            SAL_INFO("sfx.view", "LOK - focus mismatch, switching focus");
+            SAL_INFO("sfx.view", "COKit - focus mismatch, switching focus");
             pKitEv->mpWindow->GrabFocus();
         }
 
@@ -1467,7 +1467,7 @@ bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int 
                                                      int nModifier, double fScaleX, double fScaleY,
                                                      bool bNegativeX)
 {
-    // In LOK RTL mode draw/svx operates in negative X coordinates
+    // In COKit RTL mode draw/svx operates in negative X coordinates
     // But the coordinates from client is always positive, so negate nX.
     if (bNegativeX)
         nX = -nX;

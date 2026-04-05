@@ -1758,7 +1758,7 @@ public:
         if (m_bUpdateCaptionPos)
             p->UpdateCaptionPos(aAddr);
 
-        // Notify our LOK clients
+        // Notify our COKit clients
         if (m_bAddressChanged)
             ScDocShell::KitCommentNotify(KitCommentNotificationType::Modify, m_rDocument, aAddr, p);
     }
@@ -1841,7 +1841,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
             {
                 ScAddress aAddr(rColumn.nCol, nRow, rColumn.nTab);
                 p->UpdateCaptionPos(aAddr);
-                // Notify our LOK clients
+                // Notify our COKit clients
                 ScDocShell::KitCommentNotify(KitCommentNotificationType::Modify, rColumn.GetDoc(), aAddr, p);
             }
         };

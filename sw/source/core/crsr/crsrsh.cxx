@@ -2472,7 +2472,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
     if( m_pBlockCursor )
         RefreshBlockCursor();
 
-    // We should not restrict cursor update to the active view when using LOK
+    // We should not restrict cursor update to the active view when using COKit
     bool bCheckFocus = m_bHasFocus || comphelper::COKit::isActive();
 
     if( !bIdleEnd && bCheckFocus && !m_bBasicHideCursor )

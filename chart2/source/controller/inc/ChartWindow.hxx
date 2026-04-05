@@ -55,7 +55,7 @@ public:
 
     void ForceInvalidate();
     virtual void ImplInvalidate( const vcl::Region* rRegion, InvalidateFlags nFlags ) override;
-    /// Notify the LOK client about an invalidated area.
+    /// Notify the COKit client about an invalidated area.
     virtual void LogicInvalidate( const tools::Rectangle* pRectangle ) override;
 
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;

@@ -398,7 +398,7 @@ public:
 
     rtl::Reference< DNDListenerContainer > mxDNDListenerContainer;
 
-    const vcl::ICOKitNotifier* mpKitNotifier; ///< To emit the LOK callbacks eg. for dialog tunneling.
+    const vcl::ICOKitNotifier* mpKitNotifier; ///< To emit the COKit callbacks eg. for dialog tunneling.
     vcl::KitWindowId mnKitWindowId; ///< ID of this specific window.
     bool mbUseFrameData;
 };

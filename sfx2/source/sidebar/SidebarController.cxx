@@ -367,7 +367,7 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
 
         bool bSwitchedApp = maRequestedContext.msApplication != maCurrentContext.msApplication;
         // Happens on reattach of sidebar to frame or context change
-        // LOK performance impact: prevents to switch sidebar on every keypress in multi user case
+        // COKit performance impact: prevents to switch sidebar on every keypress in multi user case
         // Allow when enters embedded OLE (eg. Math formula editor second time)
         if (!comphelper::COKit::isActive() || bSwitchedApp)
             UpdateConfigurations();
@@ -486,7 +486,7 @@ void SidebarController::NotifyResize()
                 // that can collapse or expand. For others, limit
                 // the height to something sensible.
                 const sal_Int32 nExtHeight = (msCurrentDeckId == "PropertyDeck" ? 2000 : 600);
-                // No TabBar in LOK (use nWidth in full).
+                // No TabBar in COKit (use nWidth in full).
                 mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nExtHeight);
             }
             else
@@ -501,7 +501,7 @@ void SidebarController::NotifyResize()
         // Now place the tab bar.
         mpTabBar->setPosSizePixel(nTabX, 0, nTabBarDefaultWidth, nHeight);
         if (!comphelper::COKit::isActive())
-            mpTabBar->Show(); // Don't show TabBar in LOK.
+            mpTabBar->Show(); // Don't show TabBar in COKit.
     }
 
     // Determine if the closer of the deck can be shown.
@@ -571,7 +571,7 @@ void SidebarController::UpdateConfigurations()
     {
         if (bIsKit)
         {
-            // LOK has no last-used memory
+            // COKit has no last-used memory
             const auto& rOverrides = mpResourceManager->GetDeckOverrides();
             const auto aOverride = rOverrides.find(maRequestedContext.msApplication);
             if (aOverride != rOverrides.end())
@@ -1172,7 +1172,7 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, const OUString&, rCurItemId, vo
         }
         else
         {
-            // In LOK we don't really destroy the sidebar when "closing";
+            // In COKit we don't really destroy the sidebar when "closing";
             // we simply hide it. This is because recreating it is problematic
             // See notes in SidebarDockingWindow::NotifyResize().
             RequestCloseDeck();

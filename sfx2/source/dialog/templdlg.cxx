@@ -814,7 +814,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanel
     m_xActionTbR->set_item_help_id(u"newmenu"_ustr, HID_TEMPLDLG_NEWBYEXAMPLE);
     m_xActionTbR->set_item_help_id(u"update"_ustr, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
-    // Features not working in LOK yet
+    // Features not working in COKit yet
     if (comphelper::COKit::isActive())
     {
         m_xActionTbR->set_item_visible(u"watercan"_ustr, false);
@@ -872,7 +872,7 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId, const SfxStyleFami
 
 void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
 {
-    // in LOK we don't support all options yet
+    // in COKit we don't support all options yet
     if (comphelper::COKit::isActive())
         return;
 

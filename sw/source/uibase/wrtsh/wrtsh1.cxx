@@ -687,7 +687,7 @@ void SwWrtShell::LaunchOLEObj(sal_Int32 nVerb)
     svt::EmbeddedObjectRef& xRef = GetOLEObject();
     OSL_ENSURE( xRef.is(), "OLE not found" );
 
-    // LOK: we don't want to handle any other embedded objects than
+    // COKit: we don't want to handle any other embedded objects than
     // charts, there are too many problems with eg. embedded spreadsheets
     // (like it creates a separate view for the calc sheet)
     if (comphelper::COKit::isActive())

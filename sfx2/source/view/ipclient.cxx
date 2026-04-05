@@ -443,7 +443,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
     // and any method that should return pixels returns 100th mm and the chart
     // window map mode has a ~26.485 scale factor.
     // All that does not fit with current implementation for handling chart
-    // editing in LOK.
+    // editing in COKit.
     if (comphelper::COKit::isActive())
     {
         bool bMapModeEnabled = pEditWin->IsMapModeEnabled();

@@ -205,9 +205,9 @@ public:
 
 class ImpEditView;
 
-/// This is meant just for Calc, where all positions in logical units (twips for LOK) are computed by
+/// This is meant just for Calc, where all positions in logical units (twips for COKit) are computed by
 /// doing independent pixel-alignment for each cell's size. KitSpecialPositioning stores
-/// both 'output-area' and 'visible-doc-position' in pure logical unit (twips for LOK).
+/// both 'output-area' and 'visible-doc-position' in pure logical unit (twips for COKit).
 /// This allows the cursor/selection messages to be in regular(print) twips unit like in Writer.
 class KitSpecialPositioning
 {

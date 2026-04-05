@@ -389,7 +389,7 @@ void SwTextFrame::MakePos()
         }
     }
 
-    // Inform LOK clients about change in position of redlines (if any)
+    // Inform COKit clients about change in position of redlines (if any)
     if(!comphelper::COKit::isActive())
         return;
 

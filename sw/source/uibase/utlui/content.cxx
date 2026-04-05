@@ -3418,7 +3418,7 @@ void SwContentTree::Display( bool bActive )
                 OUString aImage(GetImageIdForContentTypeId(nCntType));
                 bool bChOnDemand = 0 != rpContentT->GetMemberCount();
 
-                // In case of LOK, empty content types must be hidden in the contenttree
+                // In case of COKit, empty content types must be hidden in the contenttree
                 if (comphelper::COKit::isActive() && !bChOnDemand)
                 {
                     continue;
@@ -3896,7 +3896,7 @@ bool SwContentTree::HasContentChanged()
 
         if (comphelper::COKit::isActive())
         {
-            // In case of LOK, empty contentTypes are hidden, even in all content view
+            // In case of COKit, empty contentTypes are hidden, even in all content view
             // so it is not enough to check only the m_xTreeView.
             bool bCountChanged = false;
             bool bHasContentChanged = false;

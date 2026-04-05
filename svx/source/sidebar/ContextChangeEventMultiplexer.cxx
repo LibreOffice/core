@@ -50,7 +50,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
     if (xMultiplexer.is())
         xMultiplexer->broadcastContextChangeEvent(aEvent, rxController);
 
-    // notify the LOK too after all the change have taken effect.
+    // notify the COKit too after all the change have taken effect.
     if (comphelper::COKit::isActive())
     {
         KitHelper::notifyContextChange(aEvent);

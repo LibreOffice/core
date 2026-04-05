@@ -1710,7 +1710,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
                     return false;
             }
 
-            // 2. LOK view context is read-only
+            // 2. COKit view context is read-only
             if (bReadOnlyLokView)
             {
                 if (!IsCommandAllowedInLokReadOnlyViewMode(pSlot->GetCommand(),
@@ -1718,7 +1718,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
                 {
                     SAL_WARN("sfx.control", "SfxDispatcher::FindServer_: rejecting command '"
                                                 << pSlot->GetCommand()
-                                                << "', not allowed in LOK read-only view mode");
+                                                << "', not allowed in COKit read-only view mode");
                     return false;
                 }
             }

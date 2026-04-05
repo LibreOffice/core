@@ -632,7 +632,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
     //Therefore we do not assert here.
     // It's not possible to detect when an empty value would actually be used.
     // (note: getenv is a hack to detect if we're running in a unit test)
-    // Also, it's okay to have an empty user installation path in case of LOK
+    // Also, it's okay to have an empty user installation path in case of COKit
     if (aState == ::utl::Bootstrap::PATH_EXISTS || getenv("SRC_ROOT") ||
         (comphelper::COKit::isActive() && aState == ::utl::Bootstrap::PATH_VALID))
     {

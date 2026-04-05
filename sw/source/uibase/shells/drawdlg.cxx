@@ -308,7 +308,7 @@ static void lcl_unifyFillTransparencyItems(const SfxItemSet& rSet)
     // are disabled. When gradient transparency is disabled, all fields of XFillFloatTransparenceItem are invalid
     // and not used. So convert XFillTransparenceItem's constant transparency percentage as an intensity
     // and assign this to the XFillFloatTransparenceItem's start-intensity and end-intensity fields.
-    // Now the LOK clients need only listen to statechange messages of XFillFloatTransparenceItem
+    // Now the COKit clients need only listen to statechange messages of XFillFloatTransparenceItem
     // to get fill-transparency settings instead of listening to two separate items.
 
     XFillFloatTransparenceItem* pFillFloatTranspItem =

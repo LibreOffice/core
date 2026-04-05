@@ -662,7 +662,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCutFontworkObject)
 
 CPPUNIT_TEST_FIXTURE(Test, testMultiSelectionTextSelectionCallback)
 {
-    // Given a document with "ABC" and LOK active:
+    // Given a document with "ABC" and COKit active:
     comphelper::COKit::setActive(true);
     createSwDoc();
     SwXTextDocument* pTextDocument = getSwTextDoc();
@@ -678,7 +678,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiSelectionTextSelectionCallback)
     pWrtShell->EnterAddMode();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
-    // Then the LOK text selection payload should not be empty:
+    // Then the COKit text selection payload should not be empty:
     std::optional<OString> aPayload
         = pWrtShell->getLOKPayload(KIT_CALLBACK_TEXT_SELECTION, nViewId);
     CPPUNIT_ASSERT(aPayload.has_value());
@@ -686,7 +686,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiSelectionTextSelectionCallback)
     // was part of the payload.
     CPPUNIT_ASSERT(!aPayload->isEmpty());
 
-    // Tear down LOK:
+    // Tear down COKit:
     mxComponent->dispose();
     mxComponent.clear();
     comphelper::COKit::setActive(false);

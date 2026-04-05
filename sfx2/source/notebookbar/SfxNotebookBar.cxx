@@ -489,7 +489,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                     return false;
 
                 // Notebookbar was loaded too early what caused:
-                //   * in LOK: Paste Special feature was incorrectly initialized
+                //   * in COKit: Paste Special feature was incorrectly initialized
                 // Skip first request so Notebookbar will be initialized after document was loaded
                 static std::map<const void*, bool> bSkippedFirstInit;
                 if (eApp == vcl::EnumContext::Application::Writer
@@ -500,7 +500,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                     return false;
                 }
 
-                // update the current LOK language and locale for the dialog tunneling
+                // update the current COKit language and locale for the dialog tunneling
                 comphelper::COKit::setLanguageTag(pViewShell->GetKitLanguageTag());
                 comphelper::COKit::setLocale(pViewShell->GetKitLocale());
 

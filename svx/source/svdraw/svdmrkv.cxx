@@ -303,7 +303,7 @@ void SdrMarkView::modelHasChangedKit()
             }
         }
 
-        // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for LOK.
+        // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for COKit.
         if (mpMarkedPV)
         {
             if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
@@ -948,7 +948,7 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
 
     if (!aSelection.IsEmpty())
     {
-        // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for LOK.
+        // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for COKit.
         if (mpMarkedPV)
         {
             if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())

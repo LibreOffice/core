@@ -483,7 +483,7 @@ void Scheduler::ProcessEventsToIdle()
 }
 
 extern "C" {
-/// used by unit tests that test only via the LOK API
+/// used by unit tests that test only via the COKit API
 SAL_DLLPUBLIC_EXPORT void unit_lok_process_events_to_idle()
 {
     const SolarMutexGuard aGuard;
@@ -949,7 +949,7 @@ ImplSVEvent* Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, 
     {
         Point aTransformedPos( pMouseEvent->GetPosPixel() );
 
-        // LOK uses (0, 0) as the origin of all windows; don't offset.
+        // COKit uses (0, 0) as the origin of all windows; don't offset.
         if (!comphelper::COKit::isActive())
         {
             aTransformedPos.AdjustX(pWin->GetOutOffXPixel());

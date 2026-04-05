@@ -416,7 +416,7 @@ struct ImplSVData
 
     Link<LinkParamNone*,void> maDeInitHook;
 
-    // LOK & headless backend specific hooks
+    // COKit & headless backend specific hooks
     COKitPollCallback mpPollCallback = nullptr;
     COKitWakeCallback mpWakeCallback = nullptr;
     void *mpPollClosure = nullptr;

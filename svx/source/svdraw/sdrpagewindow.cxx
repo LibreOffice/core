@@ -460,7 +460,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
     }
     else if (comphelper::COKit::isActive())
     {
-        // we don't really have to have a paint window with LOK; OTOH we know
+        // we don't really have to have a paint window with COKit; OTOH we know
         // that the drawinglayer units are 100ths of mm, so they are easy to
         // convert to twips
 

@@ -208,11 +208,11 @@ public:
                     .Class("ScAddInListener").GlobalNamespace()) // not owning
                 || (loplugin::DeclCheck(pVarDecl).Var("maThreadSpecific")
                     .Class("ScDocument").GlobalNamespace()) // not owning
-                || name == "s_aKitWindowsMap" // LOK only, guarded by assert, and LOK never tries to perform a VCL cleanup
+                || name == "s_aKitWindowsMap" // COKit only, guarded by assert, and COKit never tries to perform a VCL cleanup
                     // vcl/inc/jsdialog/jsdialogbuilder.hxx
-                || name == "m_aWidgetRegister" // LOK only, similar case as above
+                || name == "m_aWidgetRegister" // COKit only, similar case as above
                     //
-                || name == "gNotebookBarManager" // LOK only case, when notebookbar is closed - VclPtr instance is removed
+                || name == "gNotebookBarManager" // COKit only case, when notebookbar is closed - VclPtr instance is removed
                 || name == "gStaticManager" // vcl/source/graphic/Manager.cxx - stores non-owning pointers
                 || name == "aThreadedInterpreterPool"    // ScInterpreterContext(Pool), not owning
                 || name == "aNonThreadedInterpreterPool" // ScInterpreterContext(Pool), not owning

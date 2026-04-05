@@ -1645,7 +1645,7 @@ void SwTextNode::Update(
         pEditShell->ValidateParagraphSignatures(this, true);
     }
 
-    // Inform LOK clients about change in position of redlines (if any)
+    // Inform COKit clients about change in position of redlines (if any)
     // Don't emit notifications during save: redline flags are temporarily changed during save, but
     // it's not useful to let clients know about such changes.
     if (!comphelper::COKit::isActive() || GetDoc().IsInWriting())

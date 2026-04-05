@@ -280,7 +280,7 @@ namespace sdr::contact {
     static void adjustControlGeometry_throw( const ControlHolder& _rControl, const tools::Rectangle& _rLogicBoundingRect,
         const basegfx::B2DHomMatrix& _rViewTransformation, const ::basegfx::B2DHomMatrix& _rZoomLevelNormalization )
     {
-        // In the LOK case, control geometry is handled by KitControlHandler
+        // In the COKit case, control geometry is handled by KitControlHandler
         // except when the document is exported to PDF or printed,
         // so we use isTiledPainting() in place of the more generic isActive()
         if (comphelper::COKit::isTiledPainting())

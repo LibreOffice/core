@@ -257,7 +257,7 @@ void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObje
     // a new annotation is inserted, it consists of OnAnnotationInserted
     // followed by a chain of OnAnnotationChanged (called for setting each
     // of the annotation attributes - author, text etc.). This is not what a
-    // LOK client wants. So only handle removal here as annotation removal
+    // COKit client wants. So only handle removal here as annotation removal
     // consists of only one event - 'OnAnnotationRemoved'
     if ( aEvent.EventName == "OnAnnotationRemoved" )
     {
@@ -565,7 +565,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
     if (mpDoc->IsUndoEnabled())
         mpDoc->EndUndo();
 
-    // Tell our LOK clients about new comment added
+    // Tell our COKit clients about new comment added
     KitCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *xAnnotation);
 
     UpdateTags(true);
@@ -667,7 +667,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     // set current time to reply
     xAnnotation->setDateTime( getCurrentDateTime() );
 
-    // Tell our LOK clients about this (comment modification)
+    // Tell our COKit clients about this (comment modification)
     KitCommentNotifyAll(sdr::annotation::CommentNotificationType::Modify, *xAnnotation);
 
     if( mpDoc->IsUndoEnabled() )
@@ -766,8 +766,8 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
     rtl::Reference<sdr::annotation::Annotation> xAnnotation;
     GetSelectedAnnotation(xAnnotation);
 
-    // Don't disable these slot in case of LOK, as postit doesn't need to
-    // selected before doing an operation on it in LOK
+    // Don't disable these slot in case of COKit, as postit doesn't need to
+    // selected before doing an operation on it in COKit
     if( (!xAnnotation.is() && !comphelper::COKit::isActive()) || bReadOnly )
     {
         rSet.DisableItem( SID_DELETE_POSTIT );

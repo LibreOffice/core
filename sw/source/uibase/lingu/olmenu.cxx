@@ -589,7 +589,7 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
     if (!comphelper::COKit::isActive())
         return;
 
-    // None is added only for LOK, it means there is no need to execute anything
+    // None is added only for COKit, it means there is no need to execute anything
     m_xPopupMenu->SetItemCommand(MN_SHORT_COMMENT, u".uno:None"_ustr);
     m_xPopupMenu->SetItemCommand(m_nSpellDialogId, u".uno:SpellingAndGrammarDialog"_ustr);
     if(m_bGrammarResults)

@@ -63,7 +63,7 @@ SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nI
 
     if (comphelper::COKit::isActive())
     {
-        // Undock sidebar in LOK to allow for resizing freely
+        // Undock sidebar in COKit to allow for resizing freely
         // (i.e. when the client window is resized) and collapse
         // it so the client can open it on demand.
         pDockWin->SetFloatingSize(Size(pDockWin->GetSizePixel().Width(),

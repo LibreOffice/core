@@ -361,7 +361,7 @@ SfxTabDialogController::SfxTabDialogController
         m_pOutSet.reset(new SfxItemSet(*m_pSet->GetPool(), m_pSet->GetRanges()));
     }
 
-    // The reset functionality seems to be confusing to many; disable in LOK.
+    // The reset functionality seems to be confusing to many; disable in COKit.
     if (comphelper::COKit::isActive())
         RemoveResetButton();
 }

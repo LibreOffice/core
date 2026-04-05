@@ -449,7 +449,7 @@ bool SvpSalInstance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
 
     // This is wrong and must be removed!
     // We always want to drop the SolarMutex on yield; that is the whole point of yield.
-    // If we know the LOK client has pending input events, then don't yet return, so those events
+    // If we know the COKit client has pending input events, then don't yet return, so those events
     // can be processed as well.
     if (!bMustSleep && !comphelper::COKit::anyInput())
         return bWasEvent;

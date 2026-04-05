@@ -62,7 +62,7 @@ private:
     DocumentTimerManager& operator=(DocumentTimerManager const&) = delete;
 
     /// Delay starting idle jobs to allow for post-load activity.
-    /// Used by LOK only.
+    /// Used by COKit only.
     DECL_LINK(FireIdleJobsTimeout, Timer*, void);
 
     DECL_LINK(DoIdleJobs, Timer*, void);
@@ -75,7 +75,7 @@ private:
     bool m_bStartOnUnblock; ///< true, if the last unblock should start the timer
     SwDocIdle m_aDocIdle;
     Timer m_aFireIdleJobsTimer;
-    bool m_bWaitForKitInit; ///< true if we waited for LOK to initialize already.
+    bool m_bWaitForKitInit; ///< true if we waited for COKit to initialize already.
 };
 
 inline bool DocumentTimerManager::IsDocIdle() const

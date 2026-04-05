@@ -271,7 +271,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     }
     else if (pViewSh)
     {
-        // Don't stop editing in LOK a remote user might be editing.
+        // Don't stop editing in COKit a remote user might be editing.
         const bool bStopEditing = !comphelper::COKit::isActive();
         pViewSh->UpdateInputHandler(true, bStopEditing); // Absolutely necessary update
     }
@@ -1840,7 +1840,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
 
     if ( comphelper::COKit::isActive() && nCommand == CommandEventId::CursorPos )
     {
-        // LOK uses this to setup caret position because drawingarea is replaced
+        // COKit uses this to setup caret position because drawingarea is replaced
         // with text input field, it sends logical caret position (start, end) not pixels
 
         StartEditEngine(ScInputHandler::ErrorMessage);

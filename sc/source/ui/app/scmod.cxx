@@ -1659,7 +1659,7 @@ bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
         else if ( pDocSh && comphelper::COKit::isActive() )
         {
             // m_nCurRefDlgId is not deglobalized so it can be set by other view
-            // in LOK case when no ChildWindow for this view was detected -> fallback
+            // in COKit case when no ChildWindow for this view was detected -> fallback
             ScInputHandler* pHdl = GetInputHdl();
             if ( pHdl )
                 bIsModal = pHdl->IsModalMode(*pDocSh);
@@ -1699,7 +1699,7 @@ bool ScModule::IsTableLocked()
             bLocked = true;     // for other views, see IsModalMode
     }
 
-    // We can't stop LOK clients from switching part, and getting out of sync.
+    // We can't stop COKit clients from switching part, and getting out of sync.
     assert(!bLocked || !comphelper::COKit::isActive());
 
     return bLocked;
@@ -1748,7 +1748,7 @@ bool ScModule::IsFormulaMode()
         else if ( comphelper::COKit::isActive() )
         {
             // m_nCurRefDlgId is not deglobalized so it can be set by other view
-            // in LOK case when no ChildWindow for this view was detected -> fallback
+            // in COKit case when no ChildWindow for this view was detected -> fallback
             ScInputHandler* pHdl = GetInputHdl();
             if ( pHdl )
                 bIsFormula = pHdl->IsFormulaMode();
@@ -1823,7 +1823,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument& rDoc,
         else if ( comphelper::COKit::isActive() )
         {
             // m_nCurRefDlgId is not deglobalized so it can be set by other view
-            // in LOK case when no ChildWindow for this view was detected -> fallback
+            // in COKit case when no ChildWindow for this view was detected -> fallback
             ScInputHandler* pHdl = GetInputHdl();
             if (pHdl)
                 pHdl->SetReference( aNew, rDoc );

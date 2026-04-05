@@ -332,7 +332,7 @@ void ViewShell::Activate(bool bIsMDIActivate)
             SfxCallMode nCall = SfxCallMode::RECORD;
             if (comphelper::COKit::isActive())
             {
-                // Make sure the LOK case doesn't dispatch async events while switching views, that
+                // Make sure the COKit case doesn't dispatch async events while switching views, that
                 // would lead to a loop, see SfxHintPoster::DoEvent_Impl().
                 nCall |= SfxCallMode::SYNCHRON;
             }

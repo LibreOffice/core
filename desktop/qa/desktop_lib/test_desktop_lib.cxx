@@ -2770,7 +2770,7 @@ void DesktopKitTest::testCommentsImpress()
             {
                 CPPUNIT_ASSERT(rComment.second.get<int>("id") > 0);
                 CPPUNIT_ASSERT_EQUAL(std::string("This is comment1"), rComment.second.get<std::string>("text"));
-                CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), rComment.second.get<std::string>("author"));
+                CPPUNIT_ASSERT_EQUAL(std::string("Kit User1"), rComment.second.get<std::string>("author"));
                 css::util::DateTime aDateTime;
                 OUString aDateTimeString = OUString::createFromAscii(rComment.second.get<std::string>("dateTime"));
                 CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTimeString, aDateTime));
@@ -2780,7 +2780,7 @@ void DesktopKitTest::testCommentsImpress()
             {
                 CPPUNIT_ASSERT(rComment.second.get<int>("id") > 0);
                 CPPUNIT_ASSERT_EQUAL(std::string("This is comment2"), rComment.second.get<std::string>("text"));
-                CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), rComment.second.get<std::string>("author"));
+                CPPUNIT_ASSERT_EQUAL(std::string("Kit User2"), rComment.second.get<std::string>("author"));
                 css::util::DateTime aDateTime;
                 OUString aDateTimeString = OUString::createFromAscii(rComment.second.get<std::string>("dateTime"));
                 CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTimeString, aDateTime));
@@ -2809,7 +2809,7 @@ void DesktopKitTest::testCommentsCallbacksWriter()
     ViewCallback aView2(pDocument);
 
     // Add a new comment
-    OString aCommandArgs("{ \"Text\": { \"type\": \"string\", \"value\": \"Additional comment\" }, \"Author\": { \"type\": \"string\", \"value\": \"LOK User1\" } }"_ostr);
+    OString aCommandArgs("{ \"Text\": { \"type\": \"string\", \"value\": \"Additional comment\" }, \"Author\": { \"type\": \"string\", \"value\": \"Kit User1\" } }"_ostr);
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
@@ -2914,7 +2914,7 @@ void DesktopKitTest::testCommentsAddEditDeleteDraw()
     {
         tools::JsonWriter aJson;
         addParameter(aJson, "Text", "string", "Comment");
-        addParameter(aJson, "Author", "string", "LOK User1");
+        addParameter(aJson, "Author", "string", "Kit User1");
         aCommandArgs = aJson.finishAndGetAsOString();
     }
 
@@ -2963,7 +2963,7 @@ void DesktopKitTest::testCommentsInReadOnlyMode()
     int viewId = pDocument->m_pDocumentClass->createView(pDocument);
     pDocument->m_pDocumentClass->setView(pDocument, viewId);
 
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{\".uno:Author\":{\"type\":\"string\",\"value\":\"LOK User1\"}}");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{\".uno:Author\":{\"type\":\"string\",\"value\":\"Kit User1\"}}");
 
     KitHelper::setViewReadOnly(viewId, true);
     KitHelper::setAllowChangeComments(viewId, true);
@@ -2977,7 +2977,7 @@ void DesktopKitTest::testCommentsInReadOnlyMode()
     {
         tools::JsonWriter aJson;
         addParameter(aJson, "Text", "string", "Comment");
-        addParameter(aJson, "Author", "string", "LOK User1");
+        addParameter(aJson, "Author", "string", "Kit User1");
         aCommandArgs = aJson.finishAndGetAsOString();
     }
 

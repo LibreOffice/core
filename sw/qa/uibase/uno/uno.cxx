@@ -607,7 +607,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testRedlineRenderModePartInfo)
     aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
     pWrtShell->ApplyViewOptions(aOpt);
 
-    // When getting the LOK part info:
+    // When getting the COKit part info:
     OUString aPartInfo = getSwTextDoc()->getPartInfo(0);
 
     // Then make sure we get the correct value:

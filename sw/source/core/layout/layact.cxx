@@ -94,7 +94,7 @@ inline void SwLayAction::CheckIdleEnd()
 
     if (comphelper::COKit::isActive() && !IsInterrupt() && bool(GetInputType()))
     {
-        // Also check if the LOK client has any pending input events.
+        // Also check if the COKit client has any pending input events.
         m_bInterrupt = comphelper::COKit::anyInput();
     }
 }
@@ -753,7 +753,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         // already - the border of the page will never be painted.
         SwPageFrame *pPg = pPage;
         if (lcl_isLayoutLooping()) return;
-        // LOK case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
+        // COKit case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
         // visible area.
         const SwRect &rVisArea = m_pImp->GetShell().VisArea();
         SwRect aKitVisArea(m_pImp->GetShell().getLOKVisibleArea());
@@ -1092,7 +1092,7 @@ bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
 
     // Decide if prPage is visible, i.e. part of the visible area.
     const SwRect &rVisArea = m_pImp->GetShell().VisArea();
-    // LOK case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
+    // COKit case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
     // visible area.
     SwRect aKitVisArea(m_pImp->GetShell().getLOKVisibleArea());
     bool bUseKitVisArea = comphelper::COKit::isActive() && !aKitVisArea.IsEmpty();
@@ -2353,7 +2353,7 @@ bool SwLayIdle::DoIdleJob(IdleJobType eJob, IdleJobArea eJobArea)
         }
 
         pPage = static_cast<SwPageFrame*>(pPage->GetNext());
-        // LOK case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
+        // COKit case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
         // visible area.
         const SwRect &rVisArea = m_pImp->GetShell().VisArea();
         SwRect aKitVisArea(m_pImp->GetShell().getLOKVisibleArea());
@@ -2447,7 +2447,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
             }
             if (comphelper::COKit::isActive())
             {
-                // Let the LOK anyInput() mechanism know that we're inside the idle layout.
+                // Let the COKit anyInput() mechanism know that we're inside the idle layout.
                 comphelper::COKit::setIdleLayouting(true);
             }
 

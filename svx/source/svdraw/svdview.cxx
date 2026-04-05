@@ -376,7 +376,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                     // for e.g. URL links when hoovering and clicking
                     // them will not work. Tried several other changes,
                     // but this one safely keeps existing behaviour as-is.
-                    // Except for the LOK. LOK doesn't have hoovering popup
+                    // Except for the COKit. COKit doesn't have hoovering popup
                     // feature.
                     eHit = comphelper::COKit::isActive() ? SdrHitKind::TextEditObj : SdrHitKind::UnmarkedObject;
                     break;

@@ -348,7 +348,7 @@ void DrawViewShell::WriteFrameViewData()
     ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     if (comphelper::COKit::isActive())
     {
-        // aVisArea is nonsensical in the LOK case, use the slide size
+        // aVisArea is nonsensical in the COKit case, use the slide size
         aVisArea = ::tools::Rectangle(Point(), getCurrentPage()->GetSize());
     }
 

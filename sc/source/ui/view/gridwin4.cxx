@@ -2319,7 +2319,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     double nPPTX = mrViewData.GetPPTX();
     double nPPTY = mrViewData.GetPPTY();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-    // LOK clients needs exact document coordinates, so don't horizontally mirror them.
+    // COKit clients needs exact document coordinates, so don't horizontally mirror them.
     tools::Long nLayoutSign = (!comphelper::COKit::isActive() && bLayoutRTL) ? -1 : 1;
 
     ScMarkData aMultiMark( rMarkData );

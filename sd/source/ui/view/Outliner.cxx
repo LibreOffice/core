@@ -1286,7 +1286,7 @@ void SdOutliner::ProvideNextTextObject()
         {
             maCurrentPosition = *maObjectIterator;
 
-            // LOK: do not descent to notes or master pages when searching
+            // COKit: do not descent to notes or master pages when searching
             bool bForbiddenPage = comphelper::COKit::isActive() && (maCurrentPosition.mePageKind != PageKind::Standard || maCurrentPosition.meEditMode != EditMode::Page);
 
             rVectorGraphicSearchContext.reset();

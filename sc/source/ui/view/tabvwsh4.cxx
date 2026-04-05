@@ -278,7 +278,7 @@ void ScTabViewShell::Deactivate(bool bMDI)
     {
         HideNoteOverlay();           // note marker
 
-        // in LOK case this could be triggered on every action from other view (doc_setView)
+        // in COKit case this could be triggered on every action from other view (doc_setView)
         // we don't want to hide tooltip only because other view did some action
         if ( pHdl && !comphelper::COKit::isActive() )
             pHdl->HideTip();        // Hide formula auto input tip
@@ -2355,7 +2355,7 @@ ScTabViewShell::~ScTabViewShell()
     mChangesListener->stopListening();
     mChangesListener.clear();
 
-    // Notify other LOK views that we are going away.
+    // Notify other COKit views that we are going away.
     KitHelper::notifyOtherViews(this, KIT_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
     KitHelper::notifyOtherViews(this, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
     KitHelper::notifyOtherViews(this, KIT_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);

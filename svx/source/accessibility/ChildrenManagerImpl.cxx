@@ -309,7 +309,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
         aBoundingBox.SetBottom( aPos.Y + aSize.Height );
 
         // Insert shape if it is visible, i.e. its bounding box overlaps
-        // the visible area. In the LOK case we skip the overlap check
+        // the visible area. In the COKit case we skip the overlap check
         // since we could remove a shape that is visible on the client.
         if ( aBoundingBox.Overlaps(aVisibleArea) || comphelper::COKit::isActive())
             raDescriptorList.emplace_back(xShape);

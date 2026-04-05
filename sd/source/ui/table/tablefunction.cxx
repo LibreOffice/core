@@ -109,7 +109,7 @@ static void InsertTableImpl(const DrawViewShell* pShell,
 
         if (comphelper::COKit::isActive())
         {
-            // aWinRect is nonsensical in the LOK case
+            // aWinRect is nonsensical in the COKit case
             aWinRect = ::tools::Rectangle(aPos, aMaxSize);
         }
         else

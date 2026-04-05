@@ -1158,7 +1158,7 @@ namespace sdr::contact
         bool ObjectContactOfScDrawView::supportsGridOffsets() const
         {
             // Except when scPrintTwipsMsgs flag is active,
-            // Calc in LOK mode directly sets pixel-aligned logical coordinates for draw-objects.
+            // Calc in COKit mode directly sets pixel-aligned logical coordinates for draw-objects.
             if (comphelper::COKit::isActive() &&
                 !comphelper::COKit::isCompatFlagSet(
                     comphelper::COKit::Compat::scPrintTwipsMsgs))

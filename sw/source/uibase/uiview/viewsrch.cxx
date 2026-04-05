@@ -84,7 +84,7 @@ static void lcl_addContainerToJson(boost::property_tree::ptree& rTree, const OSt
     rTree.add_child(rKey.getStr(), aChildren);
 }
 
-/// Emits LOK callbacks (count, selection) for search results.
+/// Emits COKit callbacks (count, selection) for search results.
 static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwWrtShell const * pWrtShell, bool bHighlightAll)
 {
     // Emit a callback also about the selection rectangles, grouped by matches.
@@ -266,7 +266,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
             break;
             case SvxSearchCmd::FIND_ALL:
             {
-                // Disable LOK selection notifications during search.
+                // Disable COKit selection notifications during search.
                 m_pWrtShell->GetSfxViewShell()->setTiledSearching(true);
                 const auto nFound = SearchAll();
                 m_pWrtShell->GetSfxViewShell()->setTiledSearching(false);

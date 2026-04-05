@@ -2895,7 +2895,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
     try
     {
-        // 'Language=...' is an option that LOK consumes by itself, and does
+        // 'Language=...' is an option that COKit consumes by itself, and does
         // not pass it as a parameter to the filter
         OUString aOptions = getUString(pOptions);
         const OUString aLanguage = extractParameter(aOptions, u"Language");
@@ -2911,7 +2911,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
             }
 
             KitHelper::setDefaultLanguage(aLanguage);
-            // Set the LOK language tag, used for dialog tunneling.
+            // Set the COKit language tag, used for dialog tunneling.
             comphelper::COKit::setLanguageTag(LanguageTag(aLanguage));
             comphelper::COKit::setLocale(LanguageTag(aLanguage));
 
@@ -3000,7 +3000,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         // set AsTemplate explicitly false to be able to load template files
         // as regular files, otherwise we cannot save them; it will try
-        // to bring saveas dialog which cannot work with LOK case
+        // to bring saveas dialog which cannot work with COKit case
         uno::Sequence<css::beans::PropertyValue> aFilterOptions{
             comphelper::makePropertyValue(u"FilterOptions"_ustr, aOptions),
             comphelper::makePropertyValue(u"InteractionHandler"_ustr, uno::Reference<task::XInteractionHandler2>(pInteraction)),
@@ -3972,10 +3972,10 @@ static int doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForma
 }
 
 /**
- * Initialize UNO commands, in the sense that from now on, the LOK client gets updates for status
+ * Initialize UNO commands, in the sense that from now on, the COKit client gets updates for status
  * changes of these commands. This is necessary, because (unlike in the desktop case) there are no
  * toolbars hosting widgets these UNO commands, so no such status updates would be sent to the
- * headless LOK clients out of the box.
+ * headless COKit clients out of the box.
  */
 static void doc_iniUnoCommands ()
 {
@@ -7194,7 +7194,7 @@ static int doc_createViewWithOptions(COKitDocument* pThis,
 
     if (!aLanguage.isEmpty())
     {
-        // Set the LOK language tag, used for dialog tunneling.
+        // Set the COKit language tag, used for dialog tunneling.
         comphelper::COKit::setLanguageTag(LanguageTag(aLanguage));
         comphelper::COKit::setLocale(LanguageTag(aLanguage));
     }
@@ -8807,7 +8807,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
         if (eStage != SECOND_INIT)
             ErrorRegistry::RegisterDisplay(aBasicErrorFunc);
 
-        SAL_INFO("lok", "LOK Initialized");
+        SAL_INFO("lok", "COKit Initialized");
         if (eStage == PRE_INIT)
             bPreInited = true;
         else

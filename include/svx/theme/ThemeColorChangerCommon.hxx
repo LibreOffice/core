@@ -23,7 +23,7 @@ namespace theme
 SVXCORE_DLLPUBLIC void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject,
                                        SdrView* pView, SfxUndoManager* pUndoManager = nullptr);
 
-/// Sends to the LOK updated palettes
+/// Sends to the COKit updated palettes
 SVXCORE_DLLPUBLIC void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet,
                                  const std::set<Color>& rDocumentColors);
 }

@@ -265,7 +265,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    // In the LOK case, we want to set the document modified state
+                    // In the COKit case, we want to set the document modified state
                     // right away at the start of the edit, so that the content is
                     // saved even when the user leaves the document before hitting
                     // Enter

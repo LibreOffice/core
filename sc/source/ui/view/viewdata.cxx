@@ -1818,7 +1818,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
         Size aPaperSize = pView->GetActiveWin()->PixelToLogic( Size( nSizeXPix, nSizeYPix ), GetLogicMode() );
         Size aPaperSizePTwips(nSizeXPTwips, nSizeYPTwips);
-        // In the LOK case the following code can make the cell background and visible area larger
+        // In the COKit case the following code can make the cell background and visible area larger
         // than needed which makes selecting the adjacent right cell impossible in some cases.
         if (bBreak && !bAsianVertical && pScMod->GetInputOptions().GetTextWysiwyg() && !bLOKActive)
         {

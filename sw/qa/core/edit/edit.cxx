@@ -39,7 +39,7 @@ public:
     }
 };
 
-/// LOK view callback for test purposes.
+/// COKit view callback for test purposes.
 struct ViewCallback
 {
     std::vector<OUString> m_aStateChanges;
@@ -486,7 +486,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSelf)
 
 CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
 {
-    // Set up LOK:
+    // Set up COKit:
     comphelper::COKit::setActive(true);
 
     // Given a new document:
@@ -524,7 +524,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
     CPPUNIT_ASSERT_EQUAL(std::string("2026-02-12T13:52:55.923182809"),
                          aTree.get<std::string>("state.metadata.thisDocument.modificationDate"));
 
-    // Tear down LOK:
+    // Tear down COKit:
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
 }
 

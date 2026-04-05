@@ -550,7 +550,7 @@ void CustomAnimationPane::updateControls()
 
         if (!mxLBSubControl || nOldPropertyType != nNewPropertyType)
         {
-            // for LOK destroy old widgets first
+            // for COKit destroy old widgets first
             mxLBSubControl.reset(nullptr);
             // then create new control, to keep correct pointers for actions
             mxLBSubControl = SdPropertySubControl::create(nNewPropertyType, mxFTProperty.get(), mxPlaceholderBox.get(), GetFrameWeld(), aValue, pEffect->getPresetId(), LINK(this, CustomAnimationPane, implPropertyHdl));
@@ -665,7 +665,7 @@ void CustomAnimationPane::updateControls()
         // use an empty direction box to fill the space
         if (!mxLBSubControl || (nOldPropertyType != nPropertyTypeDirection && nOldPropertyType != nPropertyTypeNone))
         {
-            // for LOK destroy old widgets first
+            // for COKit destroy old widgets first
             mxLBSubControl.reset(nullptr);
             // then create new control, to keep correct pointers for actions
             mxLBSubControl = SdPropertySubControl::create(nPropertyTypeDirection, mxFTProperty.get(), mxPlaceholderBox.get(), GetFrameWeld(), uno::Any(), OUString(), LINK(this, CustomAnimationPane, implPropertyHdl));
@@ -2425,7 +2425,7 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
     if (!bForcePreview && !mxCBAutoPreview->get_active())
         return;
 
-    // No preview in LOK.
+    // No preview in COKit.
     if (comphelper::COKit::isActive())
         return;
 

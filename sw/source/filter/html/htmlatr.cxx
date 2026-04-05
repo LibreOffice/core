@@ -2276,8 +2276,8 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     rWrt.OutBookmarks();
 
     // now it's a good opportunity again for an LF - if it is still allowed
-    // FIXME: for LOK case we set rWrt.m_nWishLineLen as -1, for now keep old flow
-    // when LOK side will be fixed - don't insert new line at the beginning
+    // FIXME: for COKit case we set rWrt.m_nWishLineLen as -1, for now keep old flow
+    // when COKit side will be fixed - don't insert new line at the beginning
     if( rWrt.IsLFPossible() && rWrt.IsPrettyPrint() && rWrt.m_nWishLineLen >= 0 &&
         rWrt.GetLineLen() >= rWrt.m_nWishLineLen )
     {

@@ -510,7 +510,7 @@ void SfxObjectShell::AfterSignContent(bool bHaveWeSigned, weld::Window* pDialogP
 {
     if (comphelper::COKit::isActive())
     {
-        // LOK signing certificates are per-view, don't store them in the model.
+        // COKit signing certificates are per-view, don't store them in the model.
         return;
     }
 
@@ -1125,7 +1125,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 if (comphelper::COKit::isActive() && bForceSaveAs)
                 {
-                    // Don't force save as in LOK but report that file cannot be written
+                    // Don't force save as in COKit but report that file cannot be written
                     // to avoid confusion with exporting for file download purpose
 
                     throw task::ErrorCodeIOException(

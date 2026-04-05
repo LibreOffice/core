@@ -119,7 +119,7 @@ sal_Int32 TabBar::GetDefaultWidth()
 
 void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDecks)
 {
-    // invisible with LOK, so keep empty to avoid invalidations
+    // invisible with COKit, so keep empty to avoid invalidations
     if (comphelper::COKit::isActive())
         return;
 
@@ -382,7 +382,7 @@ void TabBar::UpdateMenus()
 
     bool bHideLock = true;
     bool bHideUnLock = true;
-    // LOK doesn't support docked/undocked; Sidebar is floating but rendered docked in browser.
+    // COKit doesn't support docked/undocked; Sidebar is floating but rendered docked in browser.
     if (!comphelper::COKit::isActive())
     {
         // Add entry for docking or un-docking the tool panel.

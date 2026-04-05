@@ -543,7 +543,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
 
 bool SwView::GetPageScrollUpOffset( SwTwips &rOff ) const
 {
-    // in the LOK case, force the value set by the API
+    // in the COKit case, force the value set by the API
     if (comphelper::COKit::isActive() && m_nKitPageUpDownOffset > 0)
     {
         rOff = -m_nKitPageUpDownOffset;
@@ -565,7 +565,7 @@ bool SwView::GetPageScrollUpOffset( SwTwips &rOff ) const
 
 bool SwView::GetPageScrollDownOffset( SwTwips &rOff ) const
 {
-    // in the LOK case, force the value set by the API
+    // in the COKit case, force the value set by the API
     if (comphelper::COKit::isActive() && m_nKitPageUpDownOffset > 0)
     {
         rOff = m_nKitPageUpDownOffset;

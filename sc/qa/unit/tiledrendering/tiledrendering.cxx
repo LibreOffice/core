@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextViewSelection)
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
-    // Create a selection on two cells in the second view, that's a text selection in LOK terms.
+    // Create a selection on two cells in the second view, that's a text selection in COKit terms.
     aView1.m_bTextViewSelectionInvalidated = false;
     dispatchCommand(mxComponent, u".uno:GoRightSel"_ustr, {});
     // Make sure the first view got its notification.
@@ -771,7 +771,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
             {"Text", uno::Any(u"Comment"_ustr)},
-            {"Author", uno::Any(u"LOK User1"_ustr)},
+            {"Author", uno::Any(u"Kit User1"_ustr)},
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -782,8 +782,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         CPPUNIT_ASSERT_EQUAL(std::string("1"), aView2.m_aCommentCallbackResult.get<std::string>("id"));
         CPPUNIT_ASSERT_EQUAL(std::string("0"), aView1.m_aCommentCallbackResult.get<std::string>("tab"));
         CPPUNIT_ASSERT_EQUAL(std::string("0"), aView2.m_aCommentCallbackResult.get<std::string>("tab"));
-        CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
-        CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Kit User1"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Kit User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
         CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
         CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
         CPPUNIT_ASSERT_EQUAL(std::string("4 4 4 4"), aView1.m_aCommentCallbackResult.get<std::string>("cellRange"));
@@ -818,7 +818,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         {
             {"Id", uno::Any(OUString::createFromAscii(aCommentId))},
             {"Text", uno::Any(u"Edited comment"_ustr)},
-            {"Author", uno::Any(u"LOK User2"_ustr)},
+            {"Author", uno::Any(u"Kit User2"_ustr)},
         });
         dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
@@ -827,8 +827,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
         CPPUNIT_ASSERT_EQUAL(aCommentId, aView2.m_aCommentCallbackResult.get<std::string>("id"));
-        CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
-        CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Kit User2"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Kit User2"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
         CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
         CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
         CPPUNIT_ASSERT_EQUAL(std::string("3 3 3 3"), aView1.m_aCommentCallbackResult.get<std::string>("cellRange"));
@@ -2461,8 +2461,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
         // Add a new comment
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
-            {"Text", uno::Any(u"LOK Comment Cell B2"_ustr)},
-            {"Author", uno::Any(u"LOK Client"_ustr)},
+            {"Text", uno::Any(u"COKit Comment Cell B2"_ustr)},
+            {"Author", uno::Any(u"COKit Client"_ustr)},
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -2470,8 +2470,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("1"), aView.m_aCommentCallbackResult.get<std::string>("id"));
         CPPUNIT_ASSERT_EQUAL(std::string("0"), aView.m_aCommentCallbackResult.get<std::string>("tab"));
-        CPPUNIT_ASSERT_EQUAL(std::string("LOK Client"), aView.m_aCommentCallbackResult.get<std::string>("author"));
-        CPPUNIT_ASSERT_EQUAL(std::string("LOK Comment Cell B2"), aView.m_aCommentCallbackResult.get<std::string>("text"));
+        CPPUNIT_ASSERT_EQUAL(std::string("COKit Client"), aView.m_aCommentCallbackResult.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL(std::string("COKit Comment Cell B2"), aView.m_aCommentCallbackResult.get<std::string>("text"));
 
         uno::Sequence<beans::PropertyValue> aCopyPasteArgs;
 
@@ -2491,8 +2491,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
             // Without the fix the id will be "1".
             CPPUNIT_ASSERT_EQUAL(std::string("2"), aView.m_aCommentCallbackResult.get<std::string>("id"));
             CPPUNIT_ASSERT_EQUAL(std::string("0"), aView.m_aCommentCallbackResult.get<std::string>("tab"));
-            CPPUNIT_ASSERT_EQUAL(std::string("LOK Client"), aView.m_aCommentCallbackResult.get<std::string>("author"));
-            CPPUNIT_ASSERT_EQUAL(std::string("LOK Comment Cell B2"), aView.m_aCommentCallbackResult.get<std::string>("text"));
+            CPPUNIT_ASSERT_EQUAL(std::string("COKit Client"), aView.m_aCommentCallbackResult.get<std::string>("author"));
+            CPPUNIT_ASSERT_EQUAL(std::string("COKit Comment Cell B2"), aView.m_aCommentCallbackResult.get<std::string>("text"));
         }
 
         // Cell range (with a comment) copy paste test
@@ -2521,8 +2521,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
             // Without the fix the id will be "1".
             CPPUNIT_ASSERT_EQUAL(std::string("3"), aView.m_aCommentCallbackResult.get<std::string>("id"));
             CPPUNIT_ASSERT_EQUAL(std::string("0"), aView.m_aCommentCallbackResult.get<std::string>("tab"));
-            CPPUNIT_ASSERT_EQUAL(std::string("LOK Client"), aView.m_aCommentCallbackResult.get<std::string>("author"));
-            CPPUNIT_ASSERT_EQUAL(std::string("LOK Comment Cell B2"), aView.m_aCommentCallbackResult.get<std::string>("text"));
+            CPPUNIT_ASSERT_EQUAL(std::string("COKit Client"), aView.m_aCommentCallbackResult.get<std::string>("author"));
+            CPPUNIT_ASSERT_EQUAL(std::string("COKit Comment Cell B2"), aView.m_aCommentCallbackResult.get<std::string>("text"));
         }
     }
     comphelper::COKit::setTiledAnnotations(true);

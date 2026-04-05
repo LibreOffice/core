@@ -1953,7 +1953,7 @@ public:
         ScAddress aDestPos(mnDestCol, nDestRow, mnDestTab);
         ScPostIt* pNew = p->Clone(aSrcPos, mrDestCol.GetDoc(), aDestPos, mbCloneCaption).release();
         miPos = mrDestNotes.set(miPos, nDestRow, pNew);
-        // Notify our LOK clients also
+        // Notify our COKit clients also
         ScDocShell::KitCommentNotify(KitCommentNotificationType::Add, mrDestCol.GetDoc(), aDestPos, pNew);
     }
 };
@@ -2257,7 +2257,7 @@ namespace {
             // Create a 'complete' address object
             ScAddress aAddr(m_aAddress);
             aAddr.SetRow(nRow);
-            // Notify our LOK clients
+            // Notify our COKit clients
             ScDocShell::KitCommentNotify(KitCommentNotificationType::Remove, m_rDocument, aAddr, p);
         }
     };

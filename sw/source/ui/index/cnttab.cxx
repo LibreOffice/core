@@ -1720,7 +1720,7 @@ public:
     {
         m_xButton->connect_key_press(LINK(this, SwTOXButton, KeyInputHdl));
         m_xButton->connect_focus_in(LINK(this, SwTOXButton, FocusInHdl));
-        // In LOK mode, clicking a toggle button sends a "toggled" action but
+        // In COKit mode, clicking a toggle button sends a "toggled" action but
         // does not trigger VCL focus_in, so also track selection via toggled.
         m_xButton->connect_toggled(LINK(this, SwTOXButton, ToggledHdl));
         m_xButton->set_tooltip_text(m_pParent->CreateQuickHelp(rToken));
@@ -3329,7 +3329,7 @@ void SwTokenWindow::AdjustScrolling()
         m_xRightScrollWin->set_sensitive(false);
         m_xLeftScrollWin->set_sensitive(false);
     }
-    // In LOK mode, VCL layout dimensions may not match browser layout,
+    // In COKit mode, VCL layout dimensions may not match browser layout,
     // so don't disable scroll buttons - the browser determines overflow.
 }
 

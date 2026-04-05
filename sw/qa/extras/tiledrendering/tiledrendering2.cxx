@@ -341,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPDFExportViewSwitch)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testLoadVisibleArea)
 {
-    // Given a document with 3 pages, the LOK visible area at load time is set to the first page:
+    // Given a document with 3 pages, the COKit visible area at load time is set to the first page:
     awt::Rectangle aVisibleArea{ 0, 0, 12240, 15840 };
     comphelper::COKit::setInitialClientVisibleArea(aVisibleArea);
     comphelper::ScopeGuard g([] { comphelper::COKit::setInitialClientVisibleArea({}); });

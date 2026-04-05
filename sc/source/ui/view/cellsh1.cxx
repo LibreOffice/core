@@ -1412,7 +1412,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     bool bColPoss, bRowPoss;
                     pTabViewShell->TestRemoveOutline( bColPoss, bRowPoss );
-                    // TODO: handle this case in LOK too
+                    // TODO: handle this case in COKit too
                     if ( bColPoss && bRowPoss && !comphelper::COKit::isActive() )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();

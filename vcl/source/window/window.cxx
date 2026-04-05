@@ -3171,7 +3171,7 @@ void Window::SetKitNotifier(const vcl::ICOKitNotifier* pNotifier, bool bParent)
 
     if (!bParent)
     {
-        // assign the LOK window id
+        // assign the COKit window id
         assert(mpWindowImpl->mnKitWindowId == 0);
         mpWindowImpl->mnKitWindowId = sLastKitWindowId++;
         GetKitWindowsMap().emplace(mpWindowImpl->mnKitWindowId, this);
@@ -3185,7 +3185,7 @@ void Window::SetLOKWindowId()
     // never use this in the desktop case
     assert(comphelper::COKit::isActive());
 
-    // assign the LOK window id
+    // assign the COKit window id
     assert(mpWindowImpl->mnKitWindowId == 0);
     mpWindowImpl->mnKitWindowId = sLastKitWindowId++;
     GetKitWindowsMap().emplace(mpWindowImpl->mnKitWindowId, this);
@@ -3207,7 +3207,7 @@ bool Window::IsLOKWindowsEmpty()
 
 void Window::ReleaseKitNotifier()
 {
-    // unregister the LOK window binding
+    // unregister the COKit window binding
     if (mpWindowImpl->mnKitWindowId > 0)
         GetKitWindowsMap().erase(mpWindowImpl->mnKitWindowId);
 

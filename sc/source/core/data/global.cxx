@@ -501,7 +501,7 @@ void ScGlobal::InitPPT()
 
     if (comphelper::COKit::isActive())
     {
-        // LOK: the below limited precision is not enough for RowColumnHeader.
+        // COKit: the below limited precision is not enough for RowColumnHeader.
         nScreenPPTX = o3tl::convert<double>(pDev->GetDPIX(), o3tl::Length::twip, o3tl::Length::in);
         nScreenPPTY = o3tl::convert<double>(pDev->GetDPIY(), o3tl::Length::twip, o3tl::Length::in);
     }

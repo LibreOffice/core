@@ -1311,7 +1311,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_ole_object_disable)
         _pBatch->commit();
     });
 
-    // Enable LOK mode, otherwise OCommonEmbeddedObject::SwitchStateTo_Impl() will throw when it
+    // Enable COKit mode, otherwise OCommonEmbeddedObject::SwitchStateTo_Impl() will throw when it
     // finds out that the test runs headless.
     comphelper::COKit::setActive();
 

@@ -3528,7 +3528,7 @@ void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
     maKitLocale = LanguageTag(rBcp47LanguageTag, true).makeFallback();
     if (this == Current())
     {
-        // update the current LOK language and locale for the dialog tunneling
+        // update the current COKit language and locale for the dialog tunneling
         comphelper::COKit::setLanguageTag(GetKitLanguageTag());
         comphelper::COKit::setLocale(GetKitLocale());
     }

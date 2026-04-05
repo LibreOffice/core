@@ -735,7 +735,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         if ( GetErrorIgnoreWarning() == ERRCODE_NONE )
         {
-            // Experimental PDF importing using PDFium. This is currently enabled for LOK only and
+            // Experimental PDF importing using PDFium. This is currently enabled for COKit only and
             // we handle it not via XmlFilterAdaptor but a new SdPdfFilter.
 #if !HAVE_FEATURE_POPPLER
             constexpr bool bUsePdfium = true;

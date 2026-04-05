@@ -362,8 +362,8 @@ SalInstance::CreateClipboard(const Sequence<Any>& arguments)
     return new vcl::GenericClipboard();
 #else
     if (comphelper::COKit::isActive()) {
-        // In LOK, each document view shall have its own clipboard instance (whereas
-        // in non-LOK below we keep handing out one single instance; see also
+        // In COKit, each document view shall have its own clipboard instance (whereas
+        // in non-COKit below we keep handing out one single instance; see also
         // <https://lists.freedesktop.org/archives/libreoffice/2020-April/084824.html> "Re: Linux
         // SAL_USE_VCLPLUGIN=svp and the clipboard"):
         css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =

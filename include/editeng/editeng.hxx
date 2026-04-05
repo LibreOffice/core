@@ -210,7 +210,7 @@ public:
     MapMode const & GetRefMapMode() const;
 
     /// Change the update mode per bUpdate and potentially trigger FormatAndUpdate.
-    /// bRestoring is used for LOK to update cursor visibility, specifically,
+    /// bRestoring is used for COKit to update cursor visibility, specifically,
     /// when true, it means we are restoring the update mode after internally
     /// disabling it (f.e. during SetText to set/delete default text in Impress).
     /// @return previous value of update

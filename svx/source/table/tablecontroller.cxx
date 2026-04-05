@@ -2394,7 +2394,7 @@ void SvxTableController::destroySelectionOverlay()
 
     if (comphelper::COKit::isActive())
     {
-        // Clear the LOK text selection so far provided by this table.
+        // Clear the COKit text selection so far provided by this table.
         if(SfxViewShell* pViewShell = SfxViewShell::Current())
         {
             pViewShell->viewCallback(KIT_CALLBACK_CELL_SELECTION_AREA, "EMPTY"_ostr);

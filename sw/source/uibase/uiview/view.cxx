@@ -1170,7 +1170,7 @@ SwViewGlueDocShell::~SwViewGlueDocShell()
 
 SwView::~SwView()
 {
-    // Notify other LOK views that we are going away.
+    // Notify other COKit views that we are going away.
     KitHelper::notifyOtherViews(this, KIT_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
     KitHelper::notifyOtherViews(this, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
     KitHelper::notifyOtherViews(this, KIT_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);

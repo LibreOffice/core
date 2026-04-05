@@ -1110,7 +1110,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     // aFilterName is a pure output parameter, pDialogParams is an in/out parameter
     OUString aFilterName;
-    // in LOK case we don't show File Picker so it will fail, but execute to do other preparations
+    // in COKit case we don't show File Picker so it will fail, but execute to do other preparations
     if (pFileDlg->Execute(pDialogParams, aFilterName, nScriptingSignatureState) != ERRCODE_NONE
         && !comphelper::COKit::isActive() )
     {
@@ -1722,7 +1722,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         aFileNameIter->second >>= aFileName;
         if (comphelper::COKit::isActive())
         {
-            // In the LOK case, we didn't actually display any dialog yet, so invoke a callback if
+            // In the COKit case, we didn't actually display any dialog yet, so invoke a callback if
             // that's set.
             OUString aNewURI;
             if (comphelper::COKit::fileSaveDialog(aFileName, aNewURI))

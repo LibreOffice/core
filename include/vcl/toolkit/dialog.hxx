@@ -81,7 +81,7 @@ protected:
     void    ImplInitDialog( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
     virtual void ImplDeferredInit(vcl::Window* pParent, WinBits nBits) override;
 
-    /// Find and set the LOK notifier according to the pParent.
+    /// Find and set the COKit notifier according to the pParent.
     void ImplKitNotifier(vcl::Window* pParent);
 
 public:

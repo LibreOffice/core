@@ -175,7 +175,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     }
 
     auto lclSizePixelToLogic = [this](Size szs) {
-        // In LOK without tiled annotations, SwAnnotationWin desn't have the
+        // In COKit without tiled annotations, SwAnnotationWin desn't have the
         // right conversion when printing to PDF but mxSidebarTextControl does
         if (comphelper::COKit::isActive()
             && !comphelper::COKit::isTiledAnnotations())
@@ -185,7 +185,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     };
 
     auto lclPointPixelToLogic = [this](Point pnt) {
-        // In LOK without tiled annotations, SwAnnotationWin desn't have the
+        // In COKit without tiled annotations, SwAnnotationWin desn't have the
         // right conversion when printing to PDF but mxSidebarTextControl does
         if (comphelper::COKit::isActive()
             && !comphelper::COKit::isTiledAnnotations())
@@ -612,7 +612,7 @@ void SwAnnotationWin::SetPosAndSize()
                 break;
             }
 
-            // LOK has map mode disabled, and we still want to perform pixel ->
+            // COKit has map mode disabled, and we still want to perform pixel ->
             // twips conversion for the size of the line above the note.
             if (comphelper::COKit::isActive() && !EditWin().IsMapModeEnabled())
             {
@@ -1062,7 +1062,7 @@ void SwAnnotationWin::DeactivatePostIt()
     mpOutliner->CompleteOnlineSpelling();
 
     SetViewState(ViewState::NORMAL);
-    // Make sure this view doesn't emit LOK callbacks during the update, as the
+    // Make sure this view doesn't emit COKit callbacks during the update, as the
     // sidebar window's SidebarTextControl doesn't have a valid twip offset
     // (map mode origin) during that operation.
     bool bTiledPainting = comphelper::COKit::isTiledPainting();

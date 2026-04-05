@@ -2989,7 +2989,7 @@ const OUString & SfxViewFrame::GetActualPresentationURL_Impl() const
 
 void SfxViewFrame::SetModalMode( bool bModal )
 {
-    // no real modality for LOK
+    // no real modality for COKit
     if (comphelper::COKit::isActive())
         return;
 
@@ -3540,8 +3540,8 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         if (pDeckIdItem)
         {
             const OUString aDeckId(pDeckIdItem->GetValue());
-            // Compatibility with old LOK "toggle always"
-            // TODO: check LOK with tdf#142978 Show a11y sidebar when finding issues on PDF export, hash: 53fc5fa
+            // Compatibility with old COKit "toggle always"
+            // TODO: check COKit with tdf#142978 Show a11y sidebar when finding issues on PDF export, hash: 53fc5fa
             const bool isLOK = comphelper::COKit::isActive();
             const SfxBoolItem* pToggleItem = rReq.GetArg(SID_SIDEBAR_DECK_TOGGLE);
             bool bToggle = isLOK || (pToggleItem && pToggleItem->GetValue());

@@ -111,7 +111,7 @@ SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* p
     m_xTypeLB->clear();
 
     if (comphelper::COKit::isActive()) {
-        // In LOK (read: under JSDialog), it is preferable to run this search on
+        // In COKit (read: under JSDialog), it is preferable to run this search on
         // the client side rather than in core for positioning/interference/etc. reasons
         m_xFilterED->hide();
     }

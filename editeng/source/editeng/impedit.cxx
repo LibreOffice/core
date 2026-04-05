@@ -279,7 +279,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
     }
 }
 
-/// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
+/// Translate absolute <-> relative twips: COKit wants absolute coordinates as output and gives absolute coordinates as input.
 static void lcl_translateTwips(const OutputDevice& rParent, OutputDevice& rChild)
 {
     // Don't translate if we already have a non-zero origin.
@@ -1411,7 +1411,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
             tools::Rectangle aRect(aPos.getX(), aPos.getY(), aPos.getX() + GetCursor()->GetWidth(), aPos.getY() + GetCursor()->GetHeight());
 
-            // LOK output is always in twips, convert from mm100 if necessary.
+            // COKit output is always in twips, convert from mm100 if necessary.
             if (rOutDev.GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
             {
                 aRect = o3tl::convert(aRect, o3tl::Length::mm100, o3tl::Length::twip);
@@ -1423,7 +1423,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 // Move the rectangle, so that we output absolute twips.
                 aRect.Move(aOrigin.getX(), aOrigin.getY());
             }
-            // Let the LOK client decide the cursor width.
+            // Let the COKit client decide the cursor width.
             aRect.setWidth(0);
 
             OString sRect = aRect.toString();

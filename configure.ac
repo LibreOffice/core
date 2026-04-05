@@ -914,9 +914,9 @@ AC_SUBST(ANDROID_SDK_DIR)
 AC_ARG_ENABLE([android-lok],
     AS_HELP_STRING([--enable-android-lok],
         [The Android app from the android/ subdir needs several tweaks all
-         over the place that break the LOK when used in the Online-based
+         over the place that break the COKit when used in the Online-based
          Android app.  This switch indicates that the intent of this build is
-         actually the Online-based, non-modified LOK.])
+         actually the Online-based, non-modified COKit.])
 )
 ENABLE_ANDROID_LOK=
 if test -n "$ANDROID_NDK_DIR" ; then
@@ -3191,7 +3191,7 @@ AC_ARG_WITH(coredumpctl,
 
 AC_ARG_WITH(buildconfig-recorded,
     AS_HELP_STRING([--with-buildconfig-recorded],
-        [Put build config into version info reported by LOK. Incompatible with reproducible builds.]),
+        [Put build config into version info reported by COKit. Incompatible with reproducible builds.]),
 )
 
 AC_MSG_CHECKING([whether to record build config])

@@ -351,7 +351,7 @@ void SwRedlineTable::setMovedIDIfNeeded(sal_uInt32 nMax)
         m_nMaxMovedID = nMax;
 }
 
-/// Emits LOK notification about one addition / removal of a redline item.
+/// Emits COKit notification about one addition / removal of a redline item.
 void SwRedlineTable::KitRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
 {
     // Disable since usability is very low beyond some small number of changes.

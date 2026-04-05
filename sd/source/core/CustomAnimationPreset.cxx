@@ -442,7 +442,7 @@ std::map<OUString, CustomAnimationPresets>  CustomAnimationPresets::mPresetsMap;
 const CustomAnimationPresets& CustomAnimationPresets::getCustomAnimationPresets()
 {
     // Support localization per-view. Currently not useful for Desktop
-    // but very much critical for LOK. The cache now is per-language.
+    // but very much critical for COKit. The cache now is per-language.
     const OUString aLang = comphelper::COKit::isActive()
                                ? comphelper::COKit::getLanguageTag().getBcp47()
                                : SvtSysLocaleOptions().GetLanguageTag().getBcp47();

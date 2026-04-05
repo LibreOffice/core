@@ -325,7 +325,7 @@ public:
     // geometrical attribute (position, size, rotation angle)
     // A PageOrigin set at a position is taken into account.
     SfxItemSet GetGeoAttrFromMarked() const;
-    // In LOK, interactive shape movement uses this function
+    // In COKit, interactive shape movement uses this function
     // in that case, margin is not taken into account
     // and the final position of the shape becomes incorrect
     // However, "Position and Size" dialog and other cases already add the margins.

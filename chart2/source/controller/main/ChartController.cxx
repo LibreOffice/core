@@ -1896,7 +1896,7 @@ const o3tl::sorted_vector< std::u16string_view >& ChartController::impl_getAvail
         u"SelectTheme",
         u"ChartSaveToNewTheme",
 
-        // LOK commands
+        // COKit commands
         u"LOKSetTextSelection", u"LOKTransform",
     };
     return s_AvailableCommands;

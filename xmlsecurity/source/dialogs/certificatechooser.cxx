@@ -88,7 +88,7 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
 
     if (comphelper::COKit::isActive())
     {
-        // Single certificate doesn't change during the lifetime of a LOK view: no need to search or
+        // Single certificate doesn't change during the lifetime of a COKit view: no need to search or
         // reload it.
         m_xSearchBox->hide();
         m_xReloadBtn->hide();
@@ -228,7 +228,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
                 {
                     if (comphelper::COKit::isActive())
                     {
-                        // The LOK case takes the signing certificate from the view.
+                        // The COKit case takes the signing certificate from the view.
                         if (m_pViewShell && m_pViewShell->GetSigningCertificate().m_xCertificate.is())
                         {
                             xCerts = { m_pViewShell->GetSigningCertificate().m_xCertificate };

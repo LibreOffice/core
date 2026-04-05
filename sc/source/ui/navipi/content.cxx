@@ -190,7 +190,7 @@ void ScContentTree::InitRoot( ScContentId nType )
     OUString aName;
     if(comphelper::COKit::isActive())
     {
-        //In case of LOK we may have many different ScContentTrees in different languages.
+        //In case of COKit we may have many different ScContentTrees in different languages.
         //At creation time, we store what language we use, and then use it later too.
         //It does not work in the constructor, that is why it is here.
         if (!m_pResLocaleForKit)

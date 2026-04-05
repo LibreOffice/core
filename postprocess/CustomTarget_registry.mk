@@ -295,7 +295,7 @@ postprocess_FILES_main += \
 else ifeq (LINUX,$(OS))
 postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu
-	# This condition is for LOK case. When the windowing system is not X11, above condition is not met. So we add the required files here.
+	# This condition is for COKit case. When the windowing system is not X11, above condition is not met. So we add the required files here.
 else ifeq (WNT,$(OS))
 postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Inet-wnt.xcu \

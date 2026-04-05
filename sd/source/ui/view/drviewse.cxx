@@ -688,7 +688,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic(::tools::Rectangle(Point(0,0), GetActiveWindow()->GetOutputSizePixel()));
     if (comphelper::COKit::isActive())
     {
-        // aVisArea is nonsensical in the LOK case, use the slide size
+        // aVisArea is nonsensical in the COKit case, use the slide size
         aVisArea = ::tools::Rectangle(Point(), getCurrentPage()->GetSize());
     }
 

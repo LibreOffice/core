@@ -404,7 +404,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 // Not relevant for us here, but can be used in unit tests.
                 // Usually unit tests would not end up here, but e.g. the
-                // LOK Tiled Rendering tests end up running a full soffice
+                // COKit Tiled Rendering tests end up running a full soffice
                 // process, and we can't bail on the use of --protector.
 
                 // We specifically need to consume the following 2 arguments

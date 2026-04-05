@@ -146,7 +146,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPDFReadLOKOnlyTextEdit)
         return;
     }
 
-    // Given a PDF loaded in LOK read-only mode:
+    // Given a PDF loaded in COKit read-only mode:
     SdUsePdfium aGuard;
     loadFromFile(u"pdf/sample.pdf");
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());

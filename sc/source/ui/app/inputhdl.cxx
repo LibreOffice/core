@@ -488,7 +488,7 @@ ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScD
 {
     ScSplitPos eWhich = rViewData.GetActivePart();
 
-    // This method is LOK specific.
+    // This method is COKit specific.
     if (comphelper::COKit::isCompatFlagSet(
             comphelper::COKit::Compat::scPrintTwipsMsgs))
     {
@@ -1794,7 +1794,7 @@ void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
     EditEngine const& rEditEngine = pEditView->getEditEngine();
     {
         aFormula = rEditEngine.GetText(0);
-        /* TODO: LOK: are you sure you want '+' and '-' let start formulas with
+        /* TODO: COKit: are you sure you want '+' and '-' let start formulas with
          * function names? That was meant for "data typist" numeric keyboard
          * input. */
         bEdit = aFormula.getLength() > 1 && (aFormula[0] == '=' || aFormula[0] == '+' || aFormula[0] == '-');
@@ -2915,7 +2915,7 @@ void ScInputHandler::UpdateFormulaMode()
             if (pInputWin)
                 pInputWin->SetFormulaMode(true);
 
-            // in LOK, we always need to perform the GetFormulaData() call so
+            // in COKit, we always need to perform the GetFormulaData() call so
             // that the formula insertion works
             if (comphelper::COKit::isActive() || pMod->GetAppOptions().GetAutoComplete())
                 GetFormulaData();
@@ -4103,7 +4103,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             DataChanged(false, bSetModified); // also calls UpdateParenthesis()
             bInRangeUpdate = false;
 
-            // In the LOK case, we want to set the document modified state
+            // In the COKit case, we want to set the document modified state
             // right away at the start of the edit, so that the content is
             // saved even when the user leaves the document before hitting
             // Enter
@@ -4489,7 +4489,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
             pDelayTimer->Start();
     }
 
-    // Don't hide function tooltip in LOK, a remote user might be using tip.
+    // Don't hide function tooltip in COKit, a remote user might be using tip.
     if (bStopEditing)
         HideTip();
     HideTipBelow();
