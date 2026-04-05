@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- OfficeLabs Modern Theme (Dark Mode)
-     Accent: Teal #2DD4BF
-     Surfaces: Dark (#1E1E1E, #2D2D2D, #3D3D3D)
-     Borders: Subtle (#404040, #525252)
-     Text: Light (#E5E5E5, #D4D4D4)
+<!-- OfficeLabs Modern Theme (Dark Mode — Dracula/Midnight Blue)
+     Accent: Teal #2DD4BF (brand)
+     Surfaces: Dracula (#1A1B26, #282A36, #343747, #44475A)
+     Borders: Blue-tinted (#44475A)
+     Text: Dracula (#F8F8F2, #CDD6F4, #6272A4)
      Rounded corners (6px buttons, 15px toggles)
 -->
 
 <widgets>
     <style>
         <!-- Surfaces -->
-        <faceColor value="#2D2D2D"/>
-        <windowColor value="#1E1E1E"/>
-        <dialogColor value="#2D2D2D"/>
-        <dialogTextColor value="#E5E5E5"/>
-        <workspaceColor value="#252525"/>
+        <faceColor value="#282A36"/>
+        <windowColor value="#1A1B26"/>
+        <dialogColor value="#282A36"/>
+        <dialogTextColor value="#F8F8F2"/>
+        <workspaceColor value="#21222C"/>
 
         <!-- Text -->
-        <windowTextColor value="#E5E5E5"/>
-        <buttonTextColor value="#D4D4D4"/>
+        <windowTextColor value="#F8F8F2"/>
+        <buttonTextColor value="#CDD6F4"/>
         <defaultActionButtonTextColor value="#FFFFFF"/>
         <actionButtonTextColor value="#FFFFFF"/>
         <actionButtonRolloverTextColor value="#FFFFFF"/>
         <buttonRolloverTextColor value="#2DD4BF"/>
-        <radioCheckTextColor value="#E5E5E5"/>
-        <groupTextColor value="#A3A3A3"/>
-        <labelTextColor value="#D4D4D4"/>
-        <toolTextColor value="#D4D4D4"/>
-        <fontColor value="#E5E5E5"/>
-        <monoColor value="#E5E5E5"/>
+        <radioCheckTextColor value="#F8F8F2"/>
+        <groupTextColor value="#6272A4"/>
+        <labelTextColor value="#CDD6F4"/>
+        <toolTextColor value="#CDD6F4"/>
+        <fontColor value="#F8F8F2"/>
+        <monoColor value="#F8F8F2"/>
 
-        <!-- Interactive / Accent (brighter teal for dark bg) -->
+        <!-- Interactive / Accent (teal — unchanged) -->
         <highlightColor value="#0D9488"/>
         <highlightTextColor value="#FFFFFF"/>
         <activeColor value="#0D9488"/>
         <activeTextColor value="#FFFFFF"/>
-        <activeBorderColor value="#525252"/>
+        <activeBorderColor value="#44475A"/>
         <checkedColor value="#0D9488"/>
         <linkColor value="#2DD4BF"/>
         <visitedLinkColor value="#5EEAD4"/>
 
         <!-- Inactive / Disabled -->
-        <deactiveColor value="#3D3D3D"/>
-        <deactiveTextColor value="#737373"/>
-        <deactiveBorderColor value="#404040"/>
-        <disableColor value="#737373"/>
+        <deactiveColor value="#343747"/>
+        <deactiveTextColor value="#6272A4"/>
+        <deactiveBorderColor value="#44475A"/>
+        <disableColor value="#6272A4"/>
 
         <!-- Light/Shadow (borders) -->
-        <lightColor value="#3D3D3D"/>
-        <lightBorderColor value="#404040"/>
-        <shadowColor value="#525252"/>
-        <darkShadowColor value="#737373"/>
+        <lightColor value="#343747"/>
+        <lightBorderColor value="#44475A"/>
+        <shadowColor value="#44475A"/>
+        <darkShadowColor value="#6272A4"/>
 
         <!-- Fields -->
-        <fieldColor value="#1E1E1E"/>
-        <fieldTextColor value="#E5E5E5"/>
-        <fieldRolloverTextColor value="#E5E5E5"/>
+        <fieldColor value="#1A1B26"/>
+        <fieldTextColor value="#F8F8F2"/>
+        <fieldRolloverTextColor value="#F8F8F2"/>
 
         <!-- Menus -->
-        <menuColor value="#2D2D2D"/>
-        <menuBarColor value="#2D2D2D"/>
+        <menuColor value="#282A36"/>
+        <menuBarColor value="#282A36"/>
         <menuBarRolloverColor value="#0D9488"/>
-        <menuBorderColor value="#404040"/>
-        <menuTextColor value="#E5E5E5"/>
-        <menuBarTextColor value="#D4D4D4"/>
+        <menuBorderColor value="#44475A"/>
+        <menuTextColor value="#F8F8F2"/>
+        <menuBarTextColor value="#CDD6F4"/>
         <menuBarRolloverTextColor value="#FFFFFF"/>
         <menuBarHighlightTextColor value="#FFFFFF"/>
         <menuHighlightColor value="#0D9488"/>
         <menuHighlightTextColor value="#FFFFFF"/>
 
         <!-- Tabs -->
-        <activeTabColor value="#2D2D2D"/>
-        <inactiveTabColor value="#252525"/>
-        <tabTextColor value="#A3A3A3"/>
+        <activeTabColor value="#44475A"/>
+        <inactiveTabColor value="#282A36"/>
+        <tabTextColor value="#6272A4"/>
         <tabRolloverTextColor value="#2DD4BF"/>
         <tabHighlightTextColor value="#2DD4BF"/>
 
@@ -100,22 +100,22 @@
     <pushbutton>
         <part value="Entire">
             <state enabled="true">
-                <rect stroke="#404040" fill="#2D2D2D" stroke-width="1" rx="6" ry="6"/>
+                <rect stroke="#44475A" fill="#282A36" stroke-width="1" rx="6" ry="6"/>
             </state>
             <state enabled="true" rollover="true">
-                <rect stroke="#525252" fill="#3D3D3D" stroke-width="1" rx="6" ry="6"/>
+                <rect stroke="#6272A4" fill="#343747" stroke-width="1" rx="6" ry="6"/>
             </state>
             <state enabled="true" pressed="true">
-                <rect stroke="#0D9488" fill="#2D2D2D" stroke-width="1" rx="6" ry="6"/>
+                <rect stroke="#0D9488" fill="#282A36" stroke-width="1" rx="6" ry="6"/>
             </state>
             <state enabled="true" default="true">
-                <rect stroke="#0D9488" fill="#2D2D2D" stroke-width="1" rx="6" ry="6"/>
+                <rect stroke="#0D9488" fill="#282A36" stroke-width="1" rx="6" ry="6"/>
             </state>
             <state enabled="true" focused="true">
-                <rect stroke="#0D9488" fill="#2D2D2D" stroke-width="1" rx="6" ry="6"/>
+                <rect stroke="#0D9488" fill="#282A36" stroke-width="1" rx="6" ry="6"/>
             </state>
             <state enabled="false">
-                <rect stroke="#333333" fill="#2D2D2D" stroke-width="1" rx="6" ry="6"/>
+                <rect stroke="#44475A" fill="#282A36" stroke-width="1" rx="6" ry="6"/>
             </state>
         </part>
     </pushbutton>
@@ -265,7 +265,7 @@
     <spinbox>
         <part value="Entire" orientation="decrease-edit-increase">
             <state>
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0" />
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0" />
             </state>
         </part>
         <part value="SubEdit">
@@ -320,22 +320,22 @@
         <part value="ButtonRight"/>
         <part value="TrackHorzLeft">
             <state>
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0" />
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0" />
             </state>
         </part>
         <part value="TrackHorzRight">
             <state>
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0" />
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0" />
             </state>
         </part>
         <part value="TrackVertUpper">
             <state>
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0" />
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0" />
             </state>
         </part>
         <part value="TrackVertLower">
             <state>
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0" />
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0" />
             </state>
         </part>
     </scrollbar>
@@ -357,12 +357,12 @@
                 <line stroke="#0D9488" stroke-width="4" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
             </state>
             <state enabled="false">
-                <line stroke="#525252" stroke-width="4" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
+                <line stroke="#44475A" stroke-width="4" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
             </state>
         </part>
         <part value="TrackHorzRight">
             <state>
-                <line stroke="#404040" stroke-width="4" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
+                <line stroke="#44475A" stroke-width="4" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
             </state>
         </part>
         <part value="TrackVertUpper">
@@ -370,12 +370,12 @@
                 <line stroke="#0D9488" stroke-width="4" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
             </state>
             <state enabled="false">
-                <line stroke="#525252" stroke-width="4" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
+                <line stroke="#44475A" stroke-width="4" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
             </state>
         </part>
         <part value="TrackVertLower">
             <state>
-                <line stroke="#404040" stroke-width="4" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
+                <line stroke="#44475A" stroke-width="4" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
             </state>
         </part>
     </slider>
@@ -386,12 +386,12 @@
     <fixedline>
         <part value="SeparatorHorz">
             <state>
-                <line stroke="#404040" fill="#404040" stroke-width="1" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
+                <line stroke="#44475A" fill="#44475A" stroke-width="1" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
             </state>
         </part>
         <part value="SeparatorVert">
             <state>
-                <line stroke="#404040" fill="#404040" stroke-width="1" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
+                <line stroke="#44475A" fill="#44475A" stroke-width="1" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
             </state>
         </part>
     </fixedline>
@@ -439,7 +439,7 @@
     <tabheader>
         <part value="Entire">
             <state>
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0" rx="0" ry="0"/>
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0" rx="0" ry="0"/>
             </state>
         </part>
     </tabheader>
@@ -447,7 +447,7 @@
     <tabpane>
         <part value="Entire">
             <state>
-                <rect stroke="#404040" fill="#2D2D2D" stroke-width="1" rx="0" ry="0"/>
+                <rect stroke="#44475A" fill="#282A36" stroke-width="1" rx="0" ry="0"/>
             </state>
         </part>
     </tabpane>
@@ -455,7 +455,7 @@
     <tabbody>
         <part value="Entire">
             <state>
-                <rect stroke="#404040" fill="#2D2D2D" stroke-width="1" rx="0" ry="0"/>
+                <rect stroke="#44475A" fill="#282A36" stroke-width="1" rx="0" ry="0"/>
             </state>
         </part>
     </tabbody>
@@ -466,12 +466,12 @@
     <windowbackground>
         <part value="BackgroundWindow">
             <state>
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0" rx="0" ry="0"/>
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0" rx="0" ry="0"/>
             </state>
         </part>
         <part value="BackgroundDialog">
             <state>
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0" rx="0" ry="0"/>
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0" rx="0" ry="0"/>
             </state>
         </part>
     </windowbackground>
@@ -482,7 +482,7 @@
     <frame>
         <part value="Border">
             <state>
-                <rect stroke="#404040" fill="#2D2D2D" stroke-width="1" rx="6" ry="6"/>
+                <rect stroke="#44475A" fill="#282A36" stroke-width="1" rx="6" ry="6"/>
             </state>
         </part>
     </frame>
@@ -493,13 +493,13 @@
     <toolbar>
         <part value="DrawBackgroundHorz">
             <state>
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0" rx="0" ry="0"/>
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0" rx="0" ry="0"/>
             </state>
         </part>
 
         <part value="DrawBackgroundVert">
             <state>
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0" rx="0" ry="0"/>
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0" rx="0" ry="0"/>
             </state>
         </part>
 
@@ -513,13 +513,13 @@
 
         <part value="SeparatorVert">
             <state>
-                <line stroke="#404040" fill="#404040" stroke-width="1" x1="0.5" y1="0.15" x2="0.5" y2="0.85"/>
+                <line stroke="#44475A" fill="#44475A" stroke-width="1" x1="0.5" y1="0.15" x2="0.5" y2="0.85"/>
             </state>
         </part>
 
         <part value="SeparatorHorz">
             <state>
-                <line stroke="#404040" fill="#404040" stroke-width="1" x1="0.15" y1="0.5" x2="0.85" y2="0.5"/>
+                <line stroke="#44475A" fill="#44475A" stroke-width="1" x1="0.15" y1="0.5" x2="0.85" y2="0.5"/>
             </state>
         </part>
 
@@ -537,7 +537,7 @@
     <listheader>
          <part value="Button">
             <state>
-                <rect stroke="#404040" fill="#252525" stroke-width="1" rx="0" ry="0"/>
+                <rect stroke="#44475A" fill="#21222C" stroke-width="1" rx="0" ry="0"/>
             </state>
         </part>
         <part value="Arrow">
@@ -556,15 +556,15 @@
     <menubar>
         <part value="Entire">
             <state>
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0"/>
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0"/>
             </state>
         </part>
         <part value="MenuItem">
             <state selected="false">
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0"/>
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0"/>
             </state>
             <state selected="true">
-                <rect stroke="#525252" fill="#0F3D3A" stroke-width="1" rx="4" ry="4"/>
+                <rect stroke="#44475A" fill="#1A3A38" stroke-width="1" rx="4" ry="4"/>
             </state>
         </part>
     </menubar>
@@ -572,20 +572,20 @@
     <menupopup>
         <part value="Entire">
             <state>
-                <rect stroke="#525252" fill="#2D2D2D" stroke-width="1" rx="6" ry="6"/>
+                <rect stroke="#44475A" fill="#282A36" stroke-width="1" rx="6" ry="6"/>
             </state>
         </part>
         <part value="MenuItem">
             <state selected="false">
-                <rect stroke="#2D2D2D" fill="#2D2D2D" stroke-width="0"/>
+                <rect stroke="#282A36" fill="#282A36" stroke-width="0"/>
             </state>
             <state selected="true">
-                <rect stroke="#0D9488" fill="#0F3D3A" stroke-width="0" rx="4" ry="4"/>
+                <rect stroke="#0D9488" fill="#1A3A38" stroke-width="0" rx="4" ry="4"/>
             </state>
         </part>
         <part value="Separator">
             <state>
-                <line stroke="#404040" stroke-width="1" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
+                <line stroke="#44475A" stroke-width="1" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
             </state>
         </part>
     </menupopup>
@@ -593,7 +593,7 @@
     <tooltip>
         <part value="Entire">
             <state>
-                <rect stroke="#525252" fill="#F5F5DC" stroke-width="1" rx="4" ry="4"/>
+                <rect stroke="#44475A" fill="#F5F5DC" stroke-width="1" rx="4" ry="4"/>
             </state>
         </part>
     </tooltip>
