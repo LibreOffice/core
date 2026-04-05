@@ -10,6 +10,7 @@
  *   getSelection - Get current selection
  *   applyEdit    - Apply/reject a pending edit
  *   getAppType   - Get current application type ("writer", "calc", "impress")
+ *   switchTheme  - Switch light/dark theme, re-point junctions, restart LO
  *
  * THREADING: m_pPanel is std::atomic because it's read on the CEF IO
  *            thread (OnQuery) and written on the VCL thread (setPanel).
@@ -62,6 +63,8 @@ private:
     void handleApplyEdit(const std::string& json,
                          CefRefPtr<Callback> callback);
     void handleGetAppType(CefRefPtr<Callback> callback);
+    void handleSwitchTheme(const std::string& json,
+                           CefRefPtr<Callback> callback);
 
     std::atomic<WebViewPanel*> m_pPanel;
 };
