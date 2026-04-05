@@ -30,7 +30,7 @@
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
-#include <vcl/lok.hxx>
+#include <vcl/kit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/window.hxx>
@@ -1343,7 +1343,7 @@ namespace
         }
 
         pEvent->mnView = KitHelper::getCurrentView();
-        if (vcl::lok::isUnipoll())
+        if (vcl::kit::isUnipoll())
         {
             if (!Application::IsMainThread())
                 SAL_WARN("lok", "Posting event directly but not called from main thread!");

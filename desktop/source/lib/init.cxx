@@ -68,7 +68,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/idletask.hxx>
-#include <vcl/lok.hxx>
+#include <vcl/kit.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <o3tl/string_view.hxx>
@@ -3428,7 +3428,7 @@ static void flushBufferedVOCs()
 
 static void lo_trimMemory(COKit* /* pThis */, int nTarget)
 {
-    vcl::lok::trimMemory(nTarget);
+    vcl::kit::trimMemory(nTarget);
 
     if (nTarget > 2000)
     {
@@ -5439,7 +5439,7 @@ void LibCO_Impl::dumpState(rtl::OStringBuffer &rState)
                   "\n\tLastExceptionMsg:\t");
     rState.append(rtl::OUStringToOString(maLastExceptionMsg, RTL_TEXTENCODING_UTF8));
     rState.append("\n\tUnipoll:\t");
-    rState.append(vcl::lok::isUnipoll() ? "yes" : "no: events on thread");
+    rState.append(vcl::kit::isUnipoll() ? "yes" : "no: events on thread");
     rState.append("\n\tOptionalFeatures:\t0x");
     rState.append(static_cast<sal_Int64>(mOptionalFeatures), 16);
     rState.append("\n\tCallbackData:\t0x");
@@ -5451,7 +5451,7 @@ void LibCO_Impl::dumpState(rtl::OStringBuffer &rState)
         rState.append("noshell");
     // TODO: dump mInteractionMap
     KitHelper::dumpState(rState);
-    vcl::lok::dumpState(rState);
+    vcl::kit::dumpState(rState);
 }
 
 // We have special handling for some uno commands and it seems we need to check for readonly state.
@@ -5496,7 +5496,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
 
-    if (!vcl::lok::isUnipoll())
+    if (!vcl::kit::isUnipoll())
     {
         beans::PropertyValue aSynchronMode;
         aSynchronMode.Name = u"SynchronMode"_ustr;
@@ -7205,7 +7205,7 @@ static int doc_createViewWithOptions(COKitDocument* pThis,
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     const int nId = KitHelper::createView(pDocument->mnDocumentId);
 
-    vcl::lok::numberOfViewsChanged(KitHelper::getViewsCount(pDocument->mnDocumentId));
+    vcl::kit::numberOfViewsChanged(KitHelper::getViewsCount(pDocument->mnDocumentId));
 
     forceSetClipboardForCurrentView(pThis);
 
@@ -7231,7 +7231,7 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER COKitDocument* pThis, int nId)
     KitHelper::destroyView(nId);
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    vcl::lok::numberOfViewsChanged(KitHelper::getViewsCount(pDocument->mnDocumentId));
+    vcl::kit::numberOfViewsChanged(KitHelper::getViewsCount(pDocument->mnDocumentId));
 }
 
 static void doc_setView(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId)
@@ -8031,13 +8031,13 @@ static void lo_runLoop(COKit* /*pThis*/,
     {
         SolarMutexGuard aGuard;
 
-        vcl::lok::registerPollCallbacks(pPollCallback, pWakeCallback, pData);
+        vcl::kit::registerPollCallbacks(pPollCallback, pWakeCallback, pData);
         KitHelper::registerViewCallbacks();
         Application::UpdateMainThread();
         soffice_main();
     }
 #if defined(IOS) || defined(ANDROID)
-    vcl::lok::unregisterPollCallbacks();
+    vcl::kit::unregisterPollCallbacks();
     Application::ReleaseSolarMutex();
 #endif
 }

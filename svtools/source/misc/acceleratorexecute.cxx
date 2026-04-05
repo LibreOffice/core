@@ -37,7 +37,7 @@
 #include <utility>
 #include <vcl/evntpost.hxx>
 #include <sal/log.hxx>
-#include <vcl/lok.hxx>
+#include <vcl/kit.hxx>
 #include <rtl/ref.hxx>
 
 #include <comphelper/kit.hxx>
@@ -208,7 +208,7 @@ bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     {
         // Note: Such instance can be used one times only and destroy itself afterwards .-)
         css::uno::Reference<css::lang::XComponent> xFrame(xProvider, css::uno::UNO_QUERY);
-        if (vcl::lok::isUnipoll())
+        if (vcl::kit::isUnipoll())
         { // tdf#130382 - all synchronous really.
             try {
                 xDispatch->dispatch (aURL, css::uno::Sequence< css::beans::PropertyValue >());

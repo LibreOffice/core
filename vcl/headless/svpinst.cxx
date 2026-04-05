@@ -29,7 +29,7 @@
 
 #include <vcl/virdev.hxx>
 #include <vcl/inputtypes.hxx>
-#include <vcl/lok.hxx>
+#include <vcl/kit.hxx>
 
 #include <headless/svpinst.hxx>
 #include <headless/svpframe.hxx>
@@ -395,7 +395,7 @@ sal_uInt32 SvpSalYieldMutex::doRelease(bool const bUnlockAll)
 
         if (isReleased)
         {
-            if (vcl::lok::isUnipoll())
+            if (vcl::kit::isUnipoll())
             {
                 if (pInst)
                     pInst->Wakeup();
@@ -470,7 +470,7 @@ bool SvpSalInstance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
 
     SolarMutexReleaser aReleaser;
 
-    if (vcl::lok::isUnipoll())
+    if (vcl::kit::isUnipoll())
     {
         ImplSVData* pSVData = ImplGetSVData();
         if (pSVData->mpPollClosure)

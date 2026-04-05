@@ -7,15 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_LOK_HXX
-#define INCLUDED_VCL_LOK_HXX
+#ifndef INCLUDED_VCL_KIT_HXX
+#define INCLUDED_VCL_KIT_HXX
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
 #include <rtl/strbuf.hxx>
 #include <COKit/COKitTypes.h>
 
-namespace vcl::lok
+namespace vcl::kit
 {
 bool VCL_DLLPUBLIC isUnipoll();
 void VCL_DLLPUBLIC registerPollCallbacks(COKitPollCallback pPollCallback,

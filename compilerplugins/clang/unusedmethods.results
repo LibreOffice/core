@@ -1186,8 +1186,8 @@ include/vcl/ITiledRenderable.hxx:238
     enum PointerStyle vcl::ITiledRenderable::getPointer()
 include/vcl/jsdialog/executor.hxx:67
     void KitTrigger::trigger_clicked(weld::Button &)
-include/vcl/lok.hxx:23
-    void vcl::lok::unregisterPollCallbacks()
+include/vcl/kit.hxx:23
+    void vcl::kit::unregisterPollCallbacks()
 include/vcl/metric.hxx:52
     double FontMetric::GetUnitEm() const
 include/vcl/metric.hxx:53

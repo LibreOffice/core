@@ -40,7 +40,7 @@
 
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/dialoghelper.hxx>
-#include <vcl/lok.hxx>
+#include <vcl/kit.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/keycod.hxx>
@@ -1699,7 +1699,7 @@ void Application::setDeInitHook(Link<LinkParamNone*,void> const & hook) {
     pSVData->maAppData.mbInAppMain = true;
 }
 
-namespace vcl::lok {
+namespace vcl::kit {
 
 void registerPollCallbacks(
     COKitPollCallback pPollCallback,
