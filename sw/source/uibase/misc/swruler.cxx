@@ -25,7 +25,7 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <strings.hrc>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #define CONTROL_BORDER_WIDTH 1
 

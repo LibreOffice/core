@@ -44,7 +44,7 @@
 #include <vcl/unohelp2.hxx>
 #include <vcl/event.hxx>
 #include <vcl/keycod.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/cuicharmap.hxx>

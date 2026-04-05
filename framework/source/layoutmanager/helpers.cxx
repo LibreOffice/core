@@ -28,7 +28,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>

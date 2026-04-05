@@ -23,7 +23,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/json_writer.hxx>

@@ -94,7 +94,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <sfx2/signaturestate.hxx>

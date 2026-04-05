@@ -25,7 +25,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/UI/Sidebar.hxx>
 #include <unotools/confignode.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>

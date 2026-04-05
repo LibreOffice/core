@@ -29,7 +29,7 @@
 #include <services.h>
 #include <targets.h>
 #include <comphelper/interaction.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <framework/interaction.hxx>

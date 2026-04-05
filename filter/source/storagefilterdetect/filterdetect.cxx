@@ -33,7 +33,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <utility>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace ::com::sun::star;
 using utl::MediaDescriptor;

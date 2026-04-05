@@ -45,7 +45,7 @@
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>

@@ -28,7 +28,7 @@
 #include <sfx2/viewsh.hxx>
 
 #include <vcl/event.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <tools/json_writer.hxx>
 

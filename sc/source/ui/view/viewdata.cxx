@@ -64,7 +64,7 @@
 #include <transobj.hxx>
 #include <clipparam.hxx>
 #include <comphelper/flagguard.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/string.hxx>

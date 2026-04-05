@@ -41,7 +41,7 @@
 #include <tabprotection.hxx>
 #include <markdata.hxx>
 #include <inputopt.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 namespace {
 

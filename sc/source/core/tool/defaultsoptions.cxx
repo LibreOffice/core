@@ -15,7 +15,7 @@
 #include <scresid.hxx>
 #include <sc.hrc>
 #include <utility>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;

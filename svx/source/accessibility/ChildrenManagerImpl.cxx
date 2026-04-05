@@ -38,7 +38,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>

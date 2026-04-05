@@ -267,7 +267,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/errcode.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>

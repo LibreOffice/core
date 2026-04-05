@@ -11,7 +11,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <sal/log.hxx>
 #include <svx/svdmodel.hxx>

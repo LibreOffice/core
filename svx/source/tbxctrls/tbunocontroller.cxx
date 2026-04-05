@@ -24,7 +24,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <rtl/math.hxx>
 #include <utility>
 #include <vcl/event.hxx>

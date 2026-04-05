@@ -33,7 +33,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 #include <osl/diagnose.h>

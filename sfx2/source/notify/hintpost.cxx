@@ -23,7 +23,7 @@
 #include <sfx2/kit/helper.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 SfxHintPoster::SfxHintPoster(SfxDispatcher* aLink)
     : m_Link(aLink)

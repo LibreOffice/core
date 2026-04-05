@@ -71,7 +71,7 @@
 #include <i18nutil/kashida.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>

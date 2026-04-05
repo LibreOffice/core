@@ -49,7 +49,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <sal/log.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svtools/unitconv.hxx>
 #include <tools/debug.hxx>
 

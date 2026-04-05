@@ -152,7 +152,7 @@
 #include <memory>
 #include <vector>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/pathoptions.hxx>
 

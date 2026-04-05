@@ -46,7 +46,7 @@
 #include <markdata.hxx>
 #include <scabstdlg.hxx>
 #include <columnspanset.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 #include <inputwin.hxx>
 #include <officecfg/Office/Calc.hxx>

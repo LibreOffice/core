@@ -38,7 +38,7 @@
 #include <unotools/syslocale.hxx>
 
 #include <editeng/acorrcfg.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/configurationlistener.hxx>
 
 SwViewColors SwViewOption::s_aInitialColorConfig {};

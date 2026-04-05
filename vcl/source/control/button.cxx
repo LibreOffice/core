@@ -47,7 +47,7 @@
 
 #include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <boost/property_tree/ptree.hpp>
 #include <tools/json_writer.hxx>

@@ -69,7 +69,7 @@
 #include <com/sun/star/util/InvalidStateException.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/queryinterface.hxx>

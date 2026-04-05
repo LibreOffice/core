@@ -22,7 +22,7 @@
 #include <svx/fmobjfac.hxx>
 #include <svx/objfac3d.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/devtools/DevelopmentToolChildWindow.hxx>

@@ -68,7 +68,7 @@
 #include <svx/fontworkbar.hxx>
 #include <svx/svdoutl.hxx>
 #include <tools/svborder.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>

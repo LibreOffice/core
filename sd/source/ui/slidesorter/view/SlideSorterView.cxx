@@ -40,7 +40,7 @@
 #include <sdpage.hxx>
 #include <Window.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

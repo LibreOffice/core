@@ -73,7 +73,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <vcl/graphicfilter.hxx>
 #include <svtools/embedhlp.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

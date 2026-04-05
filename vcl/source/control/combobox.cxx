@@ -32,7 +32,7 @@
 #include <accessibility/vclxaccessibledropdowncombobox.hxx>
 #include <accessibility/vclxaccessiblecombobox.hxx>
 #include <listbox.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/string_view.hxx>
 
 struct ComboBoxBounds

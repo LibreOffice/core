@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
 #include <svl/stritem.hxx>

@@ -18,7 +18,7 @@
  */
 
 #include "PageBackground.hxx"
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
 #include <UserDefinedProperties.hxx>

@@ -50,7 +50,7 @@
 #include <appoptio.hxx>
 #include <attrib.hxx>
 #include <spellcheckcontext.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <osl/diagnose.h>
 

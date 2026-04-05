@@ -12,7 +12,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <test/unoapixml_test.hxx>
 #include <sfx2/viewsh.hxx>

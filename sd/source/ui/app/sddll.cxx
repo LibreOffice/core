@@ -77,7 +77,7 @@
 #include <svx/tbxctl.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sdabstdlg.hxx>
 #include <sdfilter.hxx>
 #include <sdmod.hxx>

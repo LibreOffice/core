@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
 #include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>

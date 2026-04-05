@@ -87,7 +87,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <memory>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace sw::sidebarwindows;
 

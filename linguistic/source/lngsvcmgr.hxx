@@ -22,7 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>

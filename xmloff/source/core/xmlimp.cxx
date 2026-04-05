@@ -90,7 +90,7 @@
 #include <com/sun/star/container/XMap.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 

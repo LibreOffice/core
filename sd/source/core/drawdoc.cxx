@@ -55,7 +55,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/localedatawrapper.hxx>

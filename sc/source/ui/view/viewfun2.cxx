@@ -79,7 +79,7 @@
 #include <tokenarray.hxx>
 #include <rowheightcontext.hxx>
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <mergecellsdialog.hxx>
 #include <sheetevents.hxx>
 #include <columnspanset.hxx>

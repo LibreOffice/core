@@ -33,7 +33,7 @@
 #include <docfld.hxx>
 #include <fldbas.hxx>
 #include <vcl/scheduler.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <editsh.hxx>
 
 namespace sw

@@ -51,7 +51,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 
 #include <formatsh.hxx>

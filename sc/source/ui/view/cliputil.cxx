@@ -28,7 +28,7 @@
 #include <formulacell.hxx>
 
 #include <sfx2/classificationhelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <inputopt.hxx>
 #include <scmod.hxx>
 #include <warnbox.hxx>

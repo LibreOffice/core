@@ -29,7 +29,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <FileDefinitionWidgetDraw.hxx>
 #include <rtl/math.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <toolbarvalue.hxx>
 #include <scrollbarvalue.hxx>
 

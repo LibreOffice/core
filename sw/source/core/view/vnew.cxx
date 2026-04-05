@@ -20,7 +20,7 @@
 #include <sfx2/printer.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>

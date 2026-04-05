@@ -14,7 +14,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <test/lokcallback.hxx>
 #include <vcl/event.hxx>

@@ -13,7 +13,7 @@
 #include <tools/json_writer.hxx>
 #include <sfx2/viewsh.hxx>
 #include <unotools/datetime.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 
 using namespace css;

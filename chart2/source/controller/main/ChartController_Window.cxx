@@ -64,7 +64,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 
 #include <chart2/AbstractPivotTableDataProvider.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 

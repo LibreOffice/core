@@ -38,7 +38,7 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/multicontainer2.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
 

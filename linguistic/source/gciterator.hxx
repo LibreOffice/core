@@ -34,7 +34,7 @@
 #include <osl/thread.h>
 
 #include <com/sun/star/uno/Any.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <i18nlangtag/lang.h>
 

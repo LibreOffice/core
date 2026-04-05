@@ -28,7 +28,7 @@
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <svx/svxdlg.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <memory>
 

@@ -34,7 +34,7 @@
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <o3tl/safeint.hxx>

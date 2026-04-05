@@ -85,7 +85,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <unotools/ucbhelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/docpasswordrequest.hxx>

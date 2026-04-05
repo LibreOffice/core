@@ -27,7 +27,7 @@
 #include <svx/xlndsit.hxx>
 #include <svx/unomid.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sal/log.hxx>
 #include <sfx2/viewsh.hxx>
 #include <utility>

@@ -54,7 +54,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svx/svxids.hrc>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>

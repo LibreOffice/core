@@ -57,7 +57,7 @@
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 namespace frm
 {
 using namespace ::com::sun::star::uno;

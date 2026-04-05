@@ -98,7 +98,7 @@
 #include <i18nlangtag/lang.h>
 
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

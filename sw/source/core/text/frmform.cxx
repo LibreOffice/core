@@ -47,7 +47,7 @@
 #include <sortedobjs.hxx>
 #include <editeng/tstpitem.hxx>
 #include <redline.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <flyfrms.hxx>
 #include <frmtool.hxx>
 #include <layouter.hxx>

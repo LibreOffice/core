@@ -81,7 +81,7 @@
 #include <window.h>
 #include <wizdlg.hxx>
 #include <salvtables.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 SalFrame::SalFrame()
     : m_pWindow(nullptr)

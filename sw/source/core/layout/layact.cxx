@@ -70,7 +70,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <vector>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <drawdoc.hxx>
 
 void SwLayAction::CheckWaitCursor()

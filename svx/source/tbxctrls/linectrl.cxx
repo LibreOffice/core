@@ -45,7 +45,7 @@
 
 #include <memory>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star::uno;

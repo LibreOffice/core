@@ -24,7 +24,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/wrkwin.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <accessibility/floatingwindowaccessible.hxx>
 #include <accessibility/vclxaccessiblefixedtext.hxx>

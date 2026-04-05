@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/ptitem.hxx>

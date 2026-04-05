@@ -51,7 +51,7 @@
 #include <vcl/jsdialog/executor.hxx>
 
 #include <vcl/commandevent.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <sdpage.hxx>
 

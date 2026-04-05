@@ -18,7 +18,7 @@
  */
 
 #include <svx/svditer.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svl/urlbmk.hxx>

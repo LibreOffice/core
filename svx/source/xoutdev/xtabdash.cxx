@@ -27,7 +27,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>

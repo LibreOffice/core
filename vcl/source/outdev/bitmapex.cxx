@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <rtl/math.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <vcl/alpha.hxx>

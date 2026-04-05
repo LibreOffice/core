@@ -18,7 +18,7 @@
  */
 
 #include <scitems.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/eeitem.hxx>
 

@@ -67,7 +67,7 @@
 #include <DrawController.hxx>
 #include <unomodel.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <LayerTabBar.hxx>
 

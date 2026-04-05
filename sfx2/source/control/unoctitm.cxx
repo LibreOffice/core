@@ -71,7 +71,7 @@
 
 #include <sal/log.hxx>
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <desktop/crashreport.hxx>

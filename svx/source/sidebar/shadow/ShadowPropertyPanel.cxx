@@ -22,7 +22,7 @@
 #include <svx/sdprcitm.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdshcitm.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svl/itemset.hxx>
 
 using namespace css;

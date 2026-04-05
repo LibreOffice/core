@@ -36,7 +36,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <uitool.hxx>
 #include <IMark.hxx>

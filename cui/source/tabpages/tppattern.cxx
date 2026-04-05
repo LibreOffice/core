@@ -39,7 +39,7 @@
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <sal/log.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace com::sun::star;
 

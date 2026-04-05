@@ -43,7 +43,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/msgpool.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/base64.hxx>

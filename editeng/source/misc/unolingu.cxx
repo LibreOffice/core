@@ -29,7 +29,7 @@
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>

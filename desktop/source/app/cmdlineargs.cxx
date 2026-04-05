@@ -31,7 +31,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/process.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <unotools/bootstrap.hxx>

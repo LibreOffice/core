@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/outlobj.hxx>

@@ -19,7 +19,7 @@
 
 #include <vcl/layout.hxx>
 #include <PriorityHBox.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 namespace
 {

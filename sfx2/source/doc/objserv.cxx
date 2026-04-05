@@ -63,7 +63,7 @@
 #include <vcl/weld.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 #include <tools/link.hxx>
 #include <svl/cryptosign.hxx>

@@ -28,7 +28,7 @@
 #include <hintids.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>

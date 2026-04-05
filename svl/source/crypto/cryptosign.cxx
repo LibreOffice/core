@@ -32,7 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>

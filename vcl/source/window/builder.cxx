@@ -18,7 +18,7 @@
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <i18nutil/unicode.hxx>
 #include <jsdialog/enabled.hxx>
 #include <o3tl/string_view.hxx>

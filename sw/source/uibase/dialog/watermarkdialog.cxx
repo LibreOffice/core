@@ -19,7 +19,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/watermarkitem.hxx>
 #include <svtools/ctrltool.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/itemset.hxx>
 

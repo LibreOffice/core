@@ -1258,7 +1258,7 @@ comphelper/source/misc/instancelocker.cxx
 comphelper/source/misc/instancelocker.hxx
 comphelper/source/misc/interaction.cxx
 comphelper/source/misc/logging.cxx
-comphelper/source/misc/lok.cxx
+comphelper/source/misc/kit.cxx
 comphelper/source/misc/mimeconfighelper.cxx
 comphelper/source/misc/namedvaluecollection.cxx
 comphelper/source/misc/numberedcollection.cxx

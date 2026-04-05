@@ -512,9 +512,9 @@ include/comphelper/logging.hxx:415
     void comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
 include/comphelper/logging.hxx:428
     void comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/lok.hxx:71
+include/comphelper/kit.hxx:71
     _Bool comphelper::COKit::isLocalRendering()
-include/comphelper/lok.hxx:143
+include/comphelper/kit.hxx:143
     void comphelper::COKit::setBlockedCommandList(const char *)
 include/comphelper/multicontainer2.hxx:112
     void comphelper::OMultiTypeInterfaceContainerHelper2::clear()

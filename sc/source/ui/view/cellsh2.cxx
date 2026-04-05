@@ -21,7 +21,7 @@
 
 #include <basic/sberrors.hxx>
 #include <scitems.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <basic/sbxcore.hxx>

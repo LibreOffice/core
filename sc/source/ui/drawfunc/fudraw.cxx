@@ -36,7 +36,7 @@
 #include <userdat.hxx>
 #include <docsh.hxx>
 #include <drawview.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 
 namespace

@@ -19,7 +19,7 @@
 
 #include <memory>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>

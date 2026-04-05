@@ -51,7 +51,7 @@
 #include <scresid.hxx>
 #include <sheetevents.hxx>
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <tools/json_writer.hxx>
 
 #include <memory>

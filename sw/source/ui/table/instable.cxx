@@ -23,7 +23,7 @@
 #include <swmodule.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <viewopt.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 
 void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,

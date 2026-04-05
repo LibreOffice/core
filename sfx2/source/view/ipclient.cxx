@@ -61,7 +61,7 @@
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <svtools/soerr.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/exc_hlp.hxx>

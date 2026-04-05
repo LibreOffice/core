@@ -108,7 +108,7 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svx/postattr.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svl/numformat.hxx>

@@ -44,7 +44,7 @@
 #include <strings.hrc>
 #include <svdata.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 class ImpVclMEdit : public SfxListener
 {

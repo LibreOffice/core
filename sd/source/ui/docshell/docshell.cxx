@@ -59,7 +59,7 @@
 #include <OutlineView.hxx>
 #include <ViewShellBase.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <DrawViewShell.hxx>
 #include <sdpage.hxx>
 #include <docmodel/theme/Theme.hxx>

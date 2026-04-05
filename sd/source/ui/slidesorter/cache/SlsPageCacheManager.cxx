@@ -27,7 +27,7 @@
 #include <unordered_map>
 #include <utility>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 namespace {
 

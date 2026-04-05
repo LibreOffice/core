@@ -23,7 +23,7 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 const Size aGlueHalfSize(4,4);
 

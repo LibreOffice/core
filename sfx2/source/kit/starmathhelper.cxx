@@ -15,7 +15,7 @@
 #include <sfx2/objsh.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/fract.hxx>
 #include <tools/UnitConversion.hxx>

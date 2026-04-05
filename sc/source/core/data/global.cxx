@@ -54,7 +54,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <global.hxx>
 #include <scresid.hxx>

@@ -45,7 +45,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/EnumContext.hxx>
 #include <o3tl/enumrange.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 #include <editeng/itemtype.hxx>
 #include <osl/diagnose.h>

@@ -48,7 +48,7 @@
 #include <memory>
 
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/string.hxx>

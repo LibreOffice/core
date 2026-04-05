@@ -26,7 +26,7 @@
 
 #include <svl/svdde.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>

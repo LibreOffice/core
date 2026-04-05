@@ -48,7 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <libxml/xmlwriter.h>
 #include <tools/XmlWriter.hxx>

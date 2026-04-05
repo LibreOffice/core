@@ -38,7 +38,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xfltrit.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <textboxhelper.hxx>
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)

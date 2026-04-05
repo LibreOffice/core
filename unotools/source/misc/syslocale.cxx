@@ -24,7 +24,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
 #include <osl/thread.h>

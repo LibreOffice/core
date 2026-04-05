@@ -78,7 +78,7 @@
 #include <tools/fileutil.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/memorystream.hxx>
 #include <comphelper/processfactory.hxx>

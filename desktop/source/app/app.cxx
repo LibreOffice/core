@@ -84,7 +84,7 @@
 #include <desktop/exithelper.h>
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/threadpool.hxx>

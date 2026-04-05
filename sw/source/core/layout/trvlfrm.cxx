@@ -55,7 +55,7 @@
 #include <sectfrm.hxx>
 
 #include <swselectionlist.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
 
 namespace {

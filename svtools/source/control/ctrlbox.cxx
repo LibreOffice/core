@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <config_folders.h>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <i18nutil/unicode.hxx>
 #include <o3tl/test_info.hxx>
 #include <o3tl/untaint.hxx>

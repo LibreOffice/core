@@ -59,7 +59,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <osl/diagnose.h>

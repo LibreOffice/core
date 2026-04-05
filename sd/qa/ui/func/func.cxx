@@ -16,7 +16,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <vcl/scheduler.hxx>
 #include <osl/process.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 #include <sfx2/viewsh.hxx>
 #include <svx/svdview.hxx>

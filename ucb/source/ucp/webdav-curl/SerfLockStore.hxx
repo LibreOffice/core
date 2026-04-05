@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <utility>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <condition_variable>
 
 #include "CurlSession.hxx"

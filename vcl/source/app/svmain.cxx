@@ -94,7 +94,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #endif
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <uno/current_context.hxx>
 

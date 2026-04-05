@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>

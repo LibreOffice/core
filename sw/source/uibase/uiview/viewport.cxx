@@ -36,7 +36,7 @@
 #include <PostItMgr.hxx>
 
 #include <basegfx/utils/zoomtools.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <vcl/weld.hxx>
 #include <tools/svborder.hxx>
 #include <osl/diagnose.h>

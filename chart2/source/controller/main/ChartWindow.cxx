@@ -29,7 +29,7 @@
 #include <sfx2/ipclient.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace ::com::sun::star;
 

@@ -72,7 +72,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XToolkit.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/threadpool.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <osl/process.h>

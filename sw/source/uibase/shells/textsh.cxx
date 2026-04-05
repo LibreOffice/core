@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <hintids.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <svl/globalnameitem.hxx>
 #include <sfx2/bindings.hxx>

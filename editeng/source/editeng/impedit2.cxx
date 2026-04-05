@@ -67,7 +67,7 @@
 #include <i18nutil/guessparadirection.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/flagguard.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configuration.hxx>
 

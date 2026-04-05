@@ -39,7 +39,7 @@
 #include <vcl/pdf/PDFNote.hxx>
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 

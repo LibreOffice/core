@@ -36,7 +36,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <assert.h>
 
 #include <sfx2/viewfrm.hxx>

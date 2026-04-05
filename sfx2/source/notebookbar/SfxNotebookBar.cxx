@@ -17,7 +17,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/weldutils.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <officecfg/Office/UI/ToolbarMode.hxx>

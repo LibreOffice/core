@@ -28,7 +28,7 @@
 #include <globstr.hrc>
 #include <sc.hrc>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 
 static void lcl_InvalidateOutliner( SfxBindings* pBindings )

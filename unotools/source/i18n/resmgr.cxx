@@ -40,7 +40,7 @@
 #   include <libintl.h>
 #endif
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <unotools/resmgr.hxx>
 #include <osl/thread.h>
 #include <osl/file.hxx>

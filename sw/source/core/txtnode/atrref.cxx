@@ -29,7 +29,7 @@
 #include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>

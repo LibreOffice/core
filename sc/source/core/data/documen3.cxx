@@ -75,7 +75,7 @@
 #include <progress.hxx>
 #include <globalnames.hxx>
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/flagguard.hxx>
 #include <config_fuzzers.h>
 #include <memory>

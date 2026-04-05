@@ -19,7 +19,7 @@
 
 #include <memory>
 #include <hintids.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <vcl/svapp.hxx>

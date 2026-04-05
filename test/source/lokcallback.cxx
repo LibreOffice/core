@@ -12,7 +12,7 @@
 #include <COKit/COKitEnums.h>
 #include <rtl/strbuf.hxx>
 #include <tools/gen.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>

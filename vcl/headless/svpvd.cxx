@@ -23,7 +23,7 @@
 #include <headless/svpgdi.hxx>
 
 #include <basegfx/vector/b2ivector.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <cairo.h>
 

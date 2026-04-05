@@ -23,7 +23,7 @@
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <view.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxdlg.hxx>
 

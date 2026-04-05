@@ -84,7 +84,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <svx/unoapi.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>
 #include <DrawController.hxx>

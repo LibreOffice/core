@@ -68,7 +68,7 @@
 #include <svl/itempool.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <map>
 #include <vector>
 

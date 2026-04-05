@@ -69,7 +69,7 @@
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsPageSelector.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>

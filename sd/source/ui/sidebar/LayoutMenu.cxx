@@ -54,7 +54,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
 #include <xmloff/autolayout.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <framework/AbstractView.hxx>
 

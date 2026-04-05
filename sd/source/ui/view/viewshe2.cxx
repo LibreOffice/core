@@ -60,7 +60,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
 #include <svx/charthelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace com::sun::star;
 

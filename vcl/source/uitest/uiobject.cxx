@@ -37,7 +37,7 @@
 #include <verticaltabctrl.hxx>
 
 #include <comphelper/string.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>

@@ -37,7 +37,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 
 using namespace com::sun::star;

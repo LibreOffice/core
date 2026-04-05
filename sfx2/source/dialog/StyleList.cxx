@@ -34,7 +34,7 @@
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 

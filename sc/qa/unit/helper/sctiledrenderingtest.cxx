@@ -10,7 +10,7 @@
 #include "sctiledrenderingtest.hxx"
 
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/scheduler.hxx>

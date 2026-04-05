@@ -16,7 +16,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <comphelper/propertyvalue.hxx>

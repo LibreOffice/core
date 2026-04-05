@@ -31,7 +31,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <fusel.hxx>
 #include <sc.hrc>

@@ -46,7 +46,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/weldutils.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/embed/EmbedVerbs.hpp>

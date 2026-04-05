@@ -19,7 +19,7 @@
 
 #include <scitems.hxx>
 #include <vcl/settings.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <attrib.hxx>
 #include <gridwin.hxx>

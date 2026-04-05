@@ -49,7 +49,7 @@
 
 #include <comphelper/numberedcollection.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>

@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <i18nutil/unicode.hxx>

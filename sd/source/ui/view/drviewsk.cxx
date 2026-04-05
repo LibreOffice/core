@@ -13,7 +13,7 @@
 
 #include <com/sun/star/presentation/SlideShow.hpp>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>

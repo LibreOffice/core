@@ -55,7 +55,7 @@
 #include <svtools/langtab.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

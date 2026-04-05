@@ -66,7 +66,7 @@
 #include <o3tl/temporary.hxx>
 #include <officecfg/Office/Common.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace com::sun::star;
 

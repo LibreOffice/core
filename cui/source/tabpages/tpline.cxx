@@ -64,7 +64,7 @@
 #include <svx/strings.hrc>
 #include <cuitabarea.hxx>
 #include <svtools/unitconv.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/string_view.hxx>
 
 #define MAX_BMP_WIDTH   16

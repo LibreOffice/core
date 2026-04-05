@@ -31,7 +31,7 @@
 #include <sfx2/weldutils.hxx>
 #include <tools/urlobj.hxx>
 #include <bitmaps.hlst>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace css;
 using namespace css::uno;

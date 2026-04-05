@@ -41,7 +41,7 @@
 #include <unotbl.hxx>
 #include <unochart.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace ::com::sun::star;
 

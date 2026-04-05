@@ -53,7 +53,7 @@
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <authfld.hxx>
 #include <expfld.hxx>
 

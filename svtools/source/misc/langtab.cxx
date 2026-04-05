@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.h>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>

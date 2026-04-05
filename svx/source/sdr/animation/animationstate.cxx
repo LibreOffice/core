@@ -23,7 +23,7 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 
 namespace sdr::animation

@@ -26,7 +26,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <basic/sberrors.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>

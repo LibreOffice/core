@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 static OUString getCustomizedUIRootDir()
 {

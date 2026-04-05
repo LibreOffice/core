@@ -71,7 +71,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <names.hxx>
 
 using namespace ::editeng;

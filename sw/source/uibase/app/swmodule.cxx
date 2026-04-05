@@ -44,7 +44,7 @@
 #include <com/sun/star/scanner/ScannerManager.hpp>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <ooo/vba/XSinkCaller.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>

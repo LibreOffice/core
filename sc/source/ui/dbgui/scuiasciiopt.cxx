@@ -37,7 +37,7 @@
 #include <miscuno.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
 

@@ -21,7 +21,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XSelectionFunction.hpp>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <svx/svdotable.hxx>
 #include <svx/svxids.hrc>

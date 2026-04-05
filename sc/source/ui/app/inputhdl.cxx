@@ -62,7 +62,7 @@
 #include <formula/formulahelper.hxx>
 #include <formula/funcvarargs.h>
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
 
 #include <attrib.hxx>

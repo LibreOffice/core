@@ -23,7 +23,7 @@
 #include <editeng/editobj.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdocapt.hxx> //
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
 
 #include <document.hxx>

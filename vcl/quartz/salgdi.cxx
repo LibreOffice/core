@@ -36,7 +36,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/long.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>

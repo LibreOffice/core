@@ -11,7 +11,7 @@
 #include <document.hxx>
 #include <view.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <editeng/editeng.hxx>
 #include <COKit/COKitEnums.h>
 #include <osl/diagnose.h>

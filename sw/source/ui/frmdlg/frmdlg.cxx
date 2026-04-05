@@ -38,7 +38,7 @@
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svx/drawitem.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <vcl/tabs.hrc>
 

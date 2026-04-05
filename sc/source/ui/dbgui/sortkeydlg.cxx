@@ -9,7 +9,7 @@
 
 #include <memory>
 #include <sortkeydlg.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <vcl/svapp.hxx>
 
 #include <scresid.hxx>

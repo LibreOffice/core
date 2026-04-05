@@ -28,7 +28,7 @@
 #include <com/sun/star/ucb/CertificateValidationRequest.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/string_view.hxx>

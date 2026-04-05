@@ -18,7 +18,7 @@
  */
 
 #include <headless/svpgdi.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 SvpSalGraphics::SvpSalGraphics()
     : m_aTextRenderImpl(m_aCairoCommon)

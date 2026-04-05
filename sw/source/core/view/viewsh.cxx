@@ -77,7 +77,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/svdpagv.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <shellres.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <tools/UnitConversion.hxx>

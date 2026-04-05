@@ -118,7 +118,7 @@
 #include <dbconfig.hxx>
 #include <dbmgr.hxx>
 #include <reffld.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <svtools/strings.hrc>

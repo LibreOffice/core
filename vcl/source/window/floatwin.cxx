@@ -23,7 +23,7 @@
 #include <salframe.hxx>
 #include <helpwin.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sal/log.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>

@@ -58,7 +58,7 @@
 #include <svx/chrtitem.hxx>
 #include <svx/xflgrit.hxx>
 #include <tools/UnitConversion.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <vcl/unohelp2.hxx>
 
 using namespace css;

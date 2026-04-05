@@ -23,7 +23,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/viewsh.hxx>
 #include <COKit/COKitEnums.h>
 

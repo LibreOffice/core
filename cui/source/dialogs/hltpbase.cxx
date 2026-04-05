@@ -20,7 +20,7 @@
 #include <memory>
 #include <sal/config.h>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/event.hxx>

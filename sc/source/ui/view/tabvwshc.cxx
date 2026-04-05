@@ -76,7 +76,7 @@
 #include <SparklineDataRangeDialog.hxx>
 
 #include <svtools/colorcfg.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/unreachable.hxx>
 #include <o3tl/make_shared.hxx>
 #include <COKit/COKitEnums.h>

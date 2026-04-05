@@ -40,7 +40,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <openuriexternally.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 #include <tools/json_writer.hxx>
 

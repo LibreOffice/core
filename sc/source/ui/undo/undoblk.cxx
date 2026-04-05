@@ -22,7 +22,7 @@
 #include <vcl/virdev.hxx>
 #include <editeng/boxitem.hxx>
 #include <sfx2/app.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
 
 #include <undoblk.hxx>

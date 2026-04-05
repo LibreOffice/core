@@ -31,7 +31,7 @@
 #include <unotools/charclass.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>

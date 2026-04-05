@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <COKit/COKitEnums.h>

@@ -51,7 +51,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <cstddef>
 #include <memory>

@@ -46,7 +46,7 @@
 #include <bitmaps.hlst>
 #include <strings.hrc>
 #include <resourcemanager.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <comphelper/processfactory.hxx>
 

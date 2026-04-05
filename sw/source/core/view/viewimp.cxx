@@ -31,7 +31,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <pagepreviewlayout.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>

@@ -96,7 +96,7 @@
 #include <utility>
 #include <unordered_map>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>

@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/viewsh.hxx>

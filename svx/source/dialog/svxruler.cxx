@@ -48,7 +48,7 @@
 #include <COKit/COKitEnums.h>
 #include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include "rlrcitem.hxx"
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

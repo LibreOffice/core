@@ -20,7 +20,7 @@
 #include <StylesPreviewWindow.hxx>
 
 #include <comphelper/base64.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>

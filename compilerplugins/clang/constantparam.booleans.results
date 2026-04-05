@@ -714,11 +714,11 @@ include/comphelper/interfacecontainer2.hxx:174
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> comphelper::OInterfaceContainerHelper2::getInterface(int) const
     int nIndex
     0
-include/comphelper/lok.hxx:70
+include/comphelper/kit.hxx:70
     void setLocalRendering(_Bool)
     _Bool bLocalRendering
     1
-include/comphelper/lok.hxx:95
+include/comphelper/kit.hxx:95
     void setRangeHeaders(_Bool)
     _Bool bTiledAnnotations
     1

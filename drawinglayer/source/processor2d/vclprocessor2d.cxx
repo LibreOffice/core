@@ -22,7 +22,7 @@
 #include "getdigitlanguage.hxx"
 #include "vclhelperbufferdevice.hxx"
 #include <cmath>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <utility>

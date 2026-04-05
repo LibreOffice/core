@@ -24,7 +24,7 @@
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/CustomPropertyField.hxx>
 #include <editeng/measfld.hxx>

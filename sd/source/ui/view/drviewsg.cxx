@@ -31,7 +31,7 @@
 
 #include <app.hrc>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>
 

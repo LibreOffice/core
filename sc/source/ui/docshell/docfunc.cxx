@@ -19,7 +19,7 @@
 
 #include <scitems.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <sfx2/app.hxx>

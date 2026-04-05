@@ -50,7 +50,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/random.hxx>
 #include <docufld.hxx>
 #include <txtfld.hxx>

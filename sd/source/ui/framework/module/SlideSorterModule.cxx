@@ -19,7 +19,7 @@
 
 #include "SlideSorterModule.hxx"
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ConfigurationController.hxx>
 #include <framework/ConfigurationChangeEvent.hxx>

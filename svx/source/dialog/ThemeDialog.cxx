@@ -12,7 +12,7 @@
 #include <docmodel/theme/Theme.hxx>
 #include <svx/ColorSets.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <vcl/virdev.hxx>
 
 namespace svx

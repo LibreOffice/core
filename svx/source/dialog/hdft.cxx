@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <svl/itemiter.hxx>
 #include <sfx2/objsh.hxx>

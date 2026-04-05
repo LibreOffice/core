@@ -29,7 +29,7 @@
 
 #include <sfx2/chalign.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
 

@@ -37,7 +37,7 @@
 #include <svtools/ctrltool.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/string_view.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 // Standard fontsizes for scalable Fonts
 const int FontList::aStdSizeAry[] =

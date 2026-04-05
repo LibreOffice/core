@@ -66,7 +66,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/datetime.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 
 #include <editeng/acorrcfg.hxx>

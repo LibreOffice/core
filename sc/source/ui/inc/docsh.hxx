@@ -24,7 +24,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/viewsh.hxx>
 #include <o3tl/deleter.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <scdllapi.h>

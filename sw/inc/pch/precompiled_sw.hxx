@@ -216,7 +216,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>
 #include <comphelper/interfacecontainer3.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>

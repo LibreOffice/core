@@ -35,7 +35,7 @@
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 namespace drawinglayer::processor2d
 {

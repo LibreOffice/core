@@ -11,7 +11,7 @@
 
 #include <vcl/scheduler.hxx>
 #include <vcl/idle.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
 #include <unotxdoc.hxx>

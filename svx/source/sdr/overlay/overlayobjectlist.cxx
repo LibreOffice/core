@@ -23,7 +23,7 @@
 #include <tools/gen.hxx>
 
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #define DEFAULT_VALUE_FOR_HITTEST_PIXEL         (2)
 #define DEFAULT_VALUE_FOR_HITTEST_TWIP          (30)

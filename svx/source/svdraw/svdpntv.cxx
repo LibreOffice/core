@@ -43,7 +43,7 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svx/svdviter.hxx>
 #include <osl/diagnose.h>
 #include <officecfg/Office/Common.hxx>

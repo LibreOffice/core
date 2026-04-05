@@ -20,7 +20,7 @@
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <officecfg/Office/Calc.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/langitem.hxx>
 #include <o3tl/temporary.hxx>

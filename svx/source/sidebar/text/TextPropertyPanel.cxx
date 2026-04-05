@@ -20,7 +20,7 @@
 #include "TextPropertyPanel.hxx"
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/viewsh.hxx>
 
 using namespace css;

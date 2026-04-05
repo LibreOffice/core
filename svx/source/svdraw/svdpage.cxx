@@ -57,7 +57,7 @@
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
 #include <docmodel/theme/Theme.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 

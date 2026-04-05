@@ -51,7 +51,7 @@
 #include <svx/svdotable.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace com::sun::star;
 

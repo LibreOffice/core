@@ -31,7 +31,7 @@
 #include <drawdoc.hxx>
 #include <unokywds.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>

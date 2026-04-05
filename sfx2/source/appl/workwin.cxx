@@ -20,7 +20,7 @@
 #include <config_features.h>
 #include <config_feature_desktop.h>
 #include <comphelper/configuration.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

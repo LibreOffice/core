@@ -42,7 +42,7 @@
 #include <svx/svxids.hrc>
 #include <sal/log.hxx>
 #include <svtools/unitconv.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace com::sun::star;
 

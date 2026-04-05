@@ -21,7 +21,7 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/intitem.hxx>

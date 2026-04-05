@@ -45,7 +45,7 @@
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>

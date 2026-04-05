@@ -67,7 +67,7 @@
 #include <comphelper/string.hxx>
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>

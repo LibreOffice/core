@@ -29,7 +29,7 @@
 
 #include <hintids.hxx>
 #include <cmdid.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 
 #include <i18nutil/unicode.hxx>

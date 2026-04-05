@@ -69,7 +69,7 @@
 #include <COKit/COKitEnums.h>
 #include <rtl/ustring.hxx>
 #include <sfx2/viewsh.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/objsh.hxx>
 #include <svl/cryptosign.hxx>

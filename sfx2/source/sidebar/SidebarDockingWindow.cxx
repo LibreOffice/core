@@ -22,7 +22,7 @@
 #include <sidebar/PanelDescriptor.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

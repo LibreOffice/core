@@ -104,7 +104,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <sfx2/IDocumentModelAccessor.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <tools/json_writer.hxx>
 
 #include <editeng/editeng.hxx>

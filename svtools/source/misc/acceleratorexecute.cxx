@@ -40,7 +40,7 @@
 #include <vcl/lok.hxx>
 #include <rtl/ref.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 namespace svt
 {

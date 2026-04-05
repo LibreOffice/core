@@ -19,7 +19,7 @@
 
 #include <svx/svdobj.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <init.hxx>
 #include <fesh.hxx>
 #include <tabcol.hxx>

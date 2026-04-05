@@ -19,7 +19,7 @@
 
 #include <config_wasm_strip.h>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <ndole.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

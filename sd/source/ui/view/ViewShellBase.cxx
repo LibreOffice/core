@@ -74,7 +74,7 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>
 #include <editeng/editview.hxx>

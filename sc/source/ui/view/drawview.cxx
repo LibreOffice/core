@@ -34,7 +34,7 @@
 #include <svx/sdrundomanager.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>

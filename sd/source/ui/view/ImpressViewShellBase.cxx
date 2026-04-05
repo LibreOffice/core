@@ -29,7 +29,7 @@
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 namespace sd {
 

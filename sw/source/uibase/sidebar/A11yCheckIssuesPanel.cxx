@@ -27,7 +27,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/enumrange.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include "A11yCheckIssuesPanel.hxx"
 

@@ -56,7 +56,7 @@
 #include <DrawController.hxx>
 #include <unolayer.hxx>
 #include <memory>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 namespace sd {
 

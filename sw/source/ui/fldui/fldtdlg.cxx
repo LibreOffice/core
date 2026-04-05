@@ -40,7 +40,7 @@
 #include <view.hxx>
 #include <fldtdlg.hxx>
 #include <swmodule.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>

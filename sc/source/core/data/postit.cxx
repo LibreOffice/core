@@ -29,7 +29,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdtagitm.hxx>

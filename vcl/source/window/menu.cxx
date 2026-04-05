@@ -25,7 +25,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/types.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>

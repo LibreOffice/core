@@ -19,7 +19,7 @@
 
 #include <memory>
 #include "impedit.hxx"
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/txtrange.hxx>
 #include <rtl/strbuf.hxx>

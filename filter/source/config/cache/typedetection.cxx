@@ -40,7 +40,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/fileurl.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <utility>

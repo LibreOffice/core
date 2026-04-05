@@ -18,7 +18,7 @@
  */
 
 #include <svl/hint.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svx/numfmtsh.hxx>
 #include <svx/numinf.hxx>
 #include <svx/svxids.hrc>

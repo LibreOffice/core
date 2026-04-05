@@ -29,7 +29,7 @@
 #include <xmloff/odffields.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <txtfrm.hxx>
 #include <tabfrm.hxx>
 #include <view.hxx>

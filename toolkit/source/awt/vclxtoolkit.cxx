@@ -141,7 +141,7 @@
 #endif
 #include <awt/vclxspinbutton.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/processfactory.hxx>

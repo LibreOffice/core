@@ -21,7 +21,7 @@
 
 #include <chartview/DrawModelWrapper.hxx>
 #include <com/sun/star/chart2/XDiagram.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/viewsh.hxx>
 
 #include <sfx2/weldutils.hxx>

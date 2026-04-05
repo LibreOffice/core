@@ -19,7 +19,7 @@
 #include <svx/dlgctrl.hxx>
 #include <swmodule.hxx>
 #include <usrpref.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>

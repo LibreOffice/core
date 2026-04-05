@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <scitems.hxx>
 #include <sfx2/app.hxx>

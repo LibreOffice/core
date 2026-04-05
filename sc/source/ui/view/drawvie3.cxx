@@ -25,7 +25,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <strings.hrc>

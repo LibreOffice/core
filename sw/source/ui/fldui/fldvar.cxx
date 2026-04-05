@@ -18,7 +18,7 @@
  */
 
 #include <swtypes.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <usrfld.hxx>

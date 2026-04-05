@@ -31,7 +31,7 @@
 #include <config_features.h>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <comphelper/base64.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/string_view.hxx>

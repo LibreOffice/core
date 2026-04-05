@@ -20,7 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <dapitype.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool bEnableExternal)
     : GenericDialogController(pParent, u"modules/scalc/ui/selectsource.ui"_ustr, u"SelectSourceDialog"_ustr)

@@ -26,7 +26,7 @@
 #endif
 
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/test_info.hxx>

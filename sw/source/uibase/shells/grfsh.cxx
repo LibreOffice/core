@@ -56,7 +56,7 @@
 #include <swwait.hxx>
 #include <svx/extedit.hxx>
 #include <svx/graphichelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 #include <sfx2/viewsh.hxx>
 #include <doc.hxx>

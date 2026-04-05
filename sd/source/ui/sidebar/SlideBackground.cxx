@@ -61,7 +61,7 @@
 #include <vcl/svapp.hxx>
 
 #include <editeng/sizeitem.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <unomodel.hxx>
 #include <sfx2/kit/helper.hxx>
 

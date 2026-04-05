@@ -20,7 +20,7 @@
 #include <memory>
 #include <utility>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <config_global.h>
 #include <o3tl/safeint.hxx>
 #include <vcl/window.hxx>

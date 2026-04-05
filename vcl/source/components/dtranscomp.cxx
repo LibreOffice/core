@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/test_info.hxx>
 #include <osl/mutex.hxx>

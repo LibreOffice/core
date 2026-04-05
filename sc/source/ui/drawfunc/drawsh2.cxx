@@ -50,7 +50,7 @@
 #include <dbdata.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/xflgrit.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 
 #include <svx/xflclit.hxx>

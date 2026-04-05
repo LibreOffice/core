@@ -19,7 +19,7 @@
 
 #include "vclpixelprocessor2d.hxx"
 #include "vclhelperbufferdevice.hxx"
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <sal/log.hxx>
 #include <vcl/outdev.hxx>

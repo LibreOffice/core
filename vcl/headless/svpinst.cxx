@@ -48,7 +48,7 @@
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <tools/time.hxx>
 #include <o3tl/unreachable.hxx>
 

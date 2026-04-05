@@ -21,7 +21,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <scitems.hxx>
 #include <document.hxx>
 #include <docpool.hxx>

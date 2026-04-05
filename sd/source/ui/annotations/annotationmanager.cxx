@@ -23,7 +23,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svditer.hxx>
 

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <IconThemeSelector.hxx>
 

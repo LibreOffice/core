@@ -26,7 +26,7 @@
 #include <strings.hrc>
 
 #include <SheetViewManager.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>

@@ -31,7 +31,7 @@
 
 #include <comphelper/solarmutex.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/test_info.hxx>
 
 #include <osl/process.h>

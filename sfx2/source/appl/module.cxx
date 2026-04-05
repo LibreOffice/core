@@ -32,7 +32,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/resmgr.hxx>
 #include <sal/log.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #define ShellClass_SfxModule

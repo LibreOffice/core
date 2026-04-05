@@ -67,7 +67,7 @@
 #include <vcl/weld.hxx>
 #include <openuriexternally.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 #include <sfx2/viewsh.hxx>
 

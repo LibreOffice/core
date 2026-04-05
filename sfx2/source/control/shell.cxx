@@ -30,7 +30,7 @@
 #include <svl/undo.hxx>
 #include <svtools/asynclink.hxx>
 #include <unotools/configmgr.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/bindings.hxx>

@@ -60,7 +60,7 @@
 #include <svx/svxids.hrc>
 #include <COKit/COKitEnums.h>
 #include <comphelper/string.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <VectorGraphicSearchContext.hxx>
 #include <fusearch.hxx>

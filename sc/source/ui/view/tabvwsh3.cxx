@@ -54,7 +54,7 @@
 #include <svx/zoomslideritem.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/ColorSets.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/sheet/XCellRangeData.hpp>

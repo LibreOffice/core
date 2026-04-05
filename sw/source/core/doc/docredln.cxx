@@ -26,7 +26,7 @@
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/prntitem.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <COKit/COKitEnums.h>
 #include <unotools/datetime.hxx>

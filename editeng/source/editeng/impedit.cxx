@@ -30,7 +30,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <editeng/flditem.hxx>
 #include <vcl/dndlistenercontainer.hxx>
 #include <svl/intitem.hxx>

@@ -21,7 +21,7 @@
 
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <DrawDocShell.hxx>
 

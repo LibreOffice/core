@@ -23,7 +23,7 @@
 #include <NotebookbarPopup.hxx>
 #include <PriorityHBox.hxx>
 #include <PriorityMergedHBox.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #define DUMMY_WIDTH 50
 #define BUTTON_WIDTH 30

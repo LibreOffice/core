@@ -11,7 +11,7 @@
 #include <vcl/BinaryDataContainer.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <unotools/tempfile.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/hash.hxx>
 #include <sal/log.hxx>

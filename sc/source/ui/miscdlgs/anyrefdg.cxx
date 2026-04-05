@@ -39,7 +39,7 @@
 #include <inputopt.hxx>
 #include <rangeutl.hxx>
 #include <tokenarray.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <output.hxx>
 
 #include <memory>

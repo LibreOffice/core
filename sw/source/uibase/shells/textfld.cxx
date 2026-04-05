@@ -19,7 +19,7 @@
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <AnnotationWin.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <hintids.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <sfx2/bindings.hxx>

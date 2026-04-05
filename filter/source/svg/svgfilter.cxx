@@ -20,7 +20,7 @@
 
 #include <cstdio>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>

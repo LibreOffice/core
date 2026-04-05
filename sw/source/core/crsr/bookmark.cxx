@@ -43,7 +43,7 @@
 #include <DateFormFieldButton.hxx>
 #include <DropDownFormFieldButton.hxx>
 #include <DocumentContentOperationsManager.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <txtfrm.hxx>
 #include <COKit/COKitEnums.h>
 #include <rtl/strbuf.hxx>

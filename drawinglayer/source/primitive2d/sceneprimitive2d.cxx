@@ -36,7 +36,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <comphelper/threadpool.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svx/ChartThemeType.hxx>
 

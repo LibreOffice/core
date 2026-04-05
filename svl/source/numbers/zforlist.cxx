@@ -24,7 +24,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/string_view.hxx>
 #include <tools/debug.hxx>

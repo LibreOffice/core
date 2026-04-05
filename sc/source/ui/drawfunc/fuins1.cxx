@@ -48,7 +48,7 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 #include <globstr.hrc>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <tools/hostfilter.hxx>
 #include <tools/urlobj.hxx>

@@ -13,7 +13,7 @@
 #include <cppunit/TestAssert.h>
 
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/kit/helper.hxx>
 

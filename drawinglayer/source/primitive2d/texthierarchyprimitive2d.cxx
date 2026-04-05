@@ -19,7 +19,7 @@
 
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 
 using namespace com::sun::star;

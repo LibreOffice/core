@@ -36,7 +36,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <unotools/configmgr.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>

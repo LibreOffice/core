@@ -71,7 +71,7 @@
 #include <spellcheckcontext.hxx>
 #include <markdata.hxx>
 #include <formula/FormulaCompiler.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <COKit/COKitEnums.h>
 #include <output.hxx>

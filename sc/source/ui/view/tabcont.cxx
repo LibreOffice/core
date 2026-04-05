@@ -37,7 +37,7 @@
 #include <markdata.hxx>
 #include <gridwin.hxx>
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData& rData )
     : TabBar(pParent, WB_3DLOOK | WB_MINSCROLL | WB_SCROLL | WB_RANGESELECT | WB_MULTISELECT | WB_DRAG, true)

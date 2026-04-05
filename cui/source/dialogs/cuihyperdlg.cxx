@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <osl/diagnose.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <unotools/viewoptions.hxx>
 #include <cuihyperdlg.hxx>
 #include <hlinettp.hxx>

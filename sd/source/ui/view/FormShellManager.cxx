@@ -24,7 +24,7 @@
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <Window.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/vclevent.hxx>
 #include <svx/fmshell.hxx>

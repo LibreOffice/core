@@ -1598,11 +1598,11 @@ include/comphelper/documentconstants.hxx:113
     enum SfxFilterFlags COMBINED
 include/comphelper/errcode.hxx:68
     enum WarningFlag Yes
-include/comphelper/lok.hxx:101
+include/comphelper/kit.hxx:101
     enum comphelper::COKit::Compat none
-include/comphelper/lok.hxx:102
+include/comphelper/kit.hxx:102
     enum comphelper::COKit::Compat scNoGridBackground
-include/comphelper/lok.hxx:103
+include/comphelper/kit.hxx:103
     enum comphelper::COKit::Compat scPrintTwipsMsgs
 include/connectivity/parameters.hxx:68
     enum dbtools::ParameterManager::ParameterClassification LinkedByParamName

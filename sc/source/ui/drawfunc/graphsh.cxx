@@ -25,7 +25,7 @@
 #include <svx/grafctrl.hxx>
 #include <svx/compressgraphicdialog.hxx>
 #include <svx/graphichelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 #include <sfx2/viewsh.hxx>
 #include <svx/svxids.hrc>

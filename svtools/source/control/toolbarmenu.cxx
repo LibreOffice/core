@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <utility>

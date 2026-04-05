@@ -21,7 +21,7 @@
 
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchResult.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svx/svdview.hxx>

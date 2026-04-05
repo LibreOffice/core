@@ -49,7 +49,7 @@
 
 #include <workctrl.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <swcont.hxx>
 #include <content.hxx>

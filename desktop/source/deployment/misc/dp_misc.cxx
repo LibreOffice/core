@@ -47,7 +47,7 @@
 #include <memory>
 #include <string_view>
 #include <thread>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <salhelper/linkhelper.hxx>
 

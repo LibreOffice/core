@@ -245,7 +245,7 @@
 #include <comphelper/errcode.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/interfacecontainer4.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>

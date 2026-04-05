@@ -133,7 +133,7 @@
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
 #include <vcl/TypeSerializer.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <comphelper/classids.hxx>

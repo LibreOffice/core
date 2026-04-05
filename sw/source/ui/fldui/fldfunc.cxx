@@ -26,7 +26,7 @@
 #include "fldfunc.hxx"
 #include "flddinf.hxx"
 #include <flddropdown.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <o3tl/string_view.hxx>
 
 #define USER_DATA_VERSION_1 "1"

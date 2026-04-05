@@ -48,7 +48,7 @@
 #include <sal/log.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/window.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 
 SdrViewEvent::SdrViewEvent()

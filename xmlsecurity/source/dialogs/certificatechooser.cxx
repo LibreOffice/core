@@ -26,7 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmlsechelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/cryptosign.hxx>

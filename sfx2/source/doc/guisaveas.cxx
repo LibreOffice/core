@@ -71,7 +71,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mimeconfighelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <COKit/COKitEnums.h>
 #include <utility>

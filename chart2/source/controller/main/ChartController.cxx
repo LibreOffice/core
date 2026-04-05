@@ -69,7 +69,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>

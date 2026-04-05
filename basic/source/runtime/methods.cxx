@@ -44,7 +44,7 @@
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <comphelper/DirectoryHelper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <runtime.hxx>
 #include <sbunoobj.hxx>

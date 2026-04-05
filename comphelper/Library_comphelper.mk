@@ -118,7 +118,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/instancelocker \
     comphelper/source/misc/interaction \
     comphelper/source/misc/logging \
-    comphelper/source/misc/lok \
+    comphelper/source/misc/kit \
     comphelper/source/misc/mimeconfighelper \
     comphelper/source/misc/namedvaluecollection \
     comphelper/source/misc/numberedcollection \

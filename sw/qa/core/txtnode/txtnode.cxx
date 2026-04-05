@@ -10,7 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <sfx2/viewsh.hxx>

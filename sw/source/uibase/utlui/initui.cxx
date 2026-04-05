@@ -32,7 +32,7 @@
 #include <utlui.hrc>
 #include <authfld.hxx>
 #include <unotools/syslocale.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 // Global Pointer
 

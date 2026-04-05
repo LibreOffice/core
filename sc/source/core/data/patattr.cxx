@@ -64,7 +64,7 @@
 #include <validat.hxx>
 #include <scmod.hxx>
 #include <fillinfo.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <tabvwsh.hxx>
 
 CellAttributeHelper::CellAttributeHelper(SfxItemPool& rSfxItemPool)

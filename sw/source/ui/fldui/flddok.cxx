@@ -24,7 +24,7 @@
 #include "flddok.hxx"
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <o3tl/string_view.hxx>

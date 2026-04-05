@@ -58,7 +58,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/viewsh.hxx>

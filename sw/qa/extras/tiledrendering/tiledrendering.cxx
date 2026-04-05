@@ -54,7 +54,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <COKit/COKitEnums.h>
 #include <sfx2/kit/helper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/searchopt.hxx>
 

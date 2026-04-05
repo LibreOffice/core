@@ -69,7 +69,7 @@
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/viewsh.hxx>
 #include <editeng/editview.hxx>
 #include <tools/UnitConversion.hxx>

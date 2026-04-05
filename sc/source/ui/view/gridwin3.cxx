@@ -37,7 +37,7 @@
 
 #include <drawutil.hxx>
 #include <document.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 static bool lcl_HasSelectionChanged(const SdrMarkList & rBeforeList, const SdrMarkList & rAfterList)
 {

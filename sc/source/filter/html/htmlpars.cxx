@@ -20,7 +20,7 @@
 #include <memory>
 #include <sal/config.h>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 
 #include <scitems.hxx>

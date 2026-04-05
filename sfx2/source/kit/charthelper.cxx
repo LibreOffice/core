@@ -10,7 +10,7 @@
 #include <sfx2/kit/componenthelpers.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <COKit/COKitEnums.h>
 #include <sfx2/ipclient.hxx>

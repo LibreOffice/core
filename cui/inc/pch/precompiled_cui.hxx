@@ -273,7 +273,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/errcode.hxx>
 #include <comphelper/interfacecontainer4.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>

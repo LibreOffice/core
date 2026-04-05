@@ -24,7 +24,7 @@
 
 #include <hlmailtp.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace ::com::sun::star;
 

@@ -41,7 +41,7 @@
 #include <salinst.hxx>
 #include <comphelper/emscriptenthreading.hxx>
 #include <comphelper/profilezone.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <schedulerimpl.hxx>
 
 namespace {

@@ -26,7 +26,7 @@
 #include <svl/zformat.hxx>
 #include <COKit/COKitEnums.h>
 #include <vcl/scheduler.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <sfx2/msgpool.hxx>

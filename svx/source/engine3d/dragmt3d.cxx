@@ -35,7 +35,7 @@
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/view3d.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 
 E3dDragMethod::E3dDragMethod (

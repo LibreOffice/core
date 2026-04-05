@@ -54,7 +54,7 @@
 #include <txatbase.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <memory>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <editsh.hxx>
 
 #include <viewopt.hxx>

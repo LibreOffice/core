@@ -35,7 +35,7 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <xmlscript/xml_helper.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/xmlencode.hxx>
 #include <svl/inettype.hxx>
 #include <o3tl/string_view.hxx>

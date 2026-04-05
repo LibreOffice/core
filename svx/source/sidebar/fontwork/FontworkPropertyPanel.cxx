@@ -21,7 +21,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 using namespace css;
 using namespace css::uno;

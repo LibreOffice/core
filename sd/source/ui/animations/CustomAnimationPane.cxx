@@ -48,7 +48,7 @@
 #include "motionpathtag.hxx"
 #include <CustomAnimationPreset.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/frame.hxx>
 #include <comphelper/diagnose_ex.hxx>

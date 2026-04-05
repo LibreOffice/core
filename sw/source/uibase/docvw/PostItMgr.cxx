@@ -80,7 +80,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <COKit/COKitEnums.h>

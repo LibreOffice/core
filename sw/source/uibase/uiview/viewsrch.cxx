@@ -46,7 +46,7 @@
 #include <cmdid.h>
 #include <docsh.hxx>
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 
 #include <strings.hrc>

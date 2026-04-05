@@ -43,7 +43,7 @@
 #include <svl/ilstitem.hxx>
 #include <svl/int64item.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svtools/unitconv.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>

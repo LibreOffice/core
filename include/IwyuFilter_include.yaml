@@ -533,7 +533,7 @@ excludelist:
     - com/sun/star/graphic/XPrimitive3D.hpp
     include/sfx2/childwin.hxx:
     # Needed in macro #define
-    - comphelper/lok.hxx
+    - comphelper/kit.hxx
     include/sfx2/dinfdlg.hxx:
     # Needed for implicit dtor
     - com/sun/star/document/CmisProperty.hpp

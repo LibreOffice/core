@@ -47,7 +47,7 @@
 
 #include <libxml/xmlstring.h>
 #include <libxml/xmlwriter.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <strings.hrc>
 
 constexpr OUString S_ANNOTATION_BOOKMARK = u"____"_ustr;

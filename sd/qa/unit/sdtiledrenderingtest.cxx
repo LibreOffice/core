@@ -9,7 +9,7 @@
 
 #include <sdtiledrenderingtest.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>

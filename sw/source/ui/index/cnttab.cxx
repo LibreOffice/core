@@ -67,7 +67,7 @@
 #include <chpfld.hxx>
 #include <names.hxx>
 #include <svtools/editbrowsebox.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <vcl/jsdialog/executor.hxx>
 
 #include <cmath>

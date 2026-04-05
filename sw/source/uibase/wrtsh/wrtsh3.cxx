@@ -29,7 +29,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
 #include <sfx2/dispatch.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <tools/json_writer.hxx>
 #include <COKit/COKitEnums.h>
 

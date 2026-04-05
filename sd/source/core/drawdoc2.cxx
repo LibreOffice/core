@@ -42,7 +42,7 @@
 #include <svx/svdlayer.hxx>
 
 #include <svx/svditer.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <sdresid.hxx>

@@ -31,7 +31,7 @@
 #include <svdata.hxx>
 #include <listbox.hxx>
 #include <dndeventdispatcher.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 #include <tools/json_writer.hxx>

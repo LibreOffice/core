@@ -48,7 +48,7 @@
 #include <o3tl/string_view.hxx>
 
 #include <comphelper/automationinvokedzone.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>

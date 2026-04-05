@@ -21,7 +21,7 @@
 
 #include <CommandDispatch.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 #include <sfx2/viewsh.hxx>
 

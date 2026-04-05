@@ -34,7 +34,7 @@
 #include <sfx2/bindings.hxx>
 
 #include <svx/srchdlg.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 
 const int CharactersBeforeAndAfter = 40;

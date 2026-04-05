@@ -44,7 +44,7 @@
 #include <svx/sxenditm.hxx>
 #include <svx/xpoly.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 void SdrObjConnection::ResetVars()
 {

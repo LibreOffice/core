@@ -21,7 +21,7 @@
 #include <vcl/window.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/dndlistenercontainer.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sal/log.hxx>
 
 FunctionSet::~FunctionSet()

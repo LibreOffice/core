@@ -25,7 +25,7 @@
 #include <svx/svdoole2.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <unotools/charclass.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
 
 #include <dbdocfun.hxx>

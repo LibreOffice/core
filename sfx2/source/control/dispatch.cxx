@@ -37,7 +37,7 @@
 #include <com/sun/star/ui/ContextMenuExecuteEvent.hpp>
 
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <config_vclplug.h>

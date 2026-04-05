@@ -21,7 +21,7 @@
 #include <hints.hxx>
 
 #include <comphelper/configuration.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/escapementitem.hxx>

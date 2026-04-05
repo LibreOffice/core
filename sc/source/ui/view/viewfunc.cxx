@@ -72,7 +72,7 @@
 #include <cellsuno.hxx>
 #include <tokenarray.hxx>
 #include <rowheightcontext.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <conditio.hxx>
 #include <columnspanset.hxx>
 #include <stringutil.hxx>

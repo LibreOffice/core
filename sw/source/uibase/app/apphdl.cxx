@@ -83,7 +83,7 @@
 #include <swabstdlg.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <COKit/COKitEnums.h>
 
 #include <salhelper/simplereferenceobject.hxx>

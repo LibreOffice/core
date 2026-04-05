@@ -27,7 +27,7 @@
 #include <unotools/localedatawrapper.hxx>
 
 #include <dndeventdispatcher.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/timer.hxx>

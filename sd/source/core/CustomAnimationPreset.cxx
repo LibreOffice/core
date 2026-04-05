@@ -32,7 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/random.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>

@@ -33,7 +33,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <vcl/graphicfilter.hxx>
 #include <IconThemeScanner.hxx>

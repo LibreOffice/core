@@ -18,7 +18,7 @@
  */
 
 #include <iconcdlg.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <cuihyperdlg.hxx>
 
 #include <cassert>

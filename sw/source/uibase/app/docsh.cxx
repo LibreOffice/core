@@ -40,7 +40,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/flstitem.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/classids.hxx>
 #include <basic/sbmod.hxx>
 #include <osl/diagnose.h>

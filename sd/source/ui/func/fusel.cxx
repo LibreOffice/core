@@ -61,7 +61,7 @@
 #include <svx/annotation/ObjectAnnotationData.hxx>
 
 #include <COKit/COKitEnums.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svl/cryptosign.hxx>
 
 using namespace ::com::sun::star;

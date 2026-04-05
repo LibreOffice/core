@@ -120,7 +120,7 @@
 
 #include <vcl/BitmapTools.hxx>
 #include <comphelper/configuration.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <vcl/GraphicLoader.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

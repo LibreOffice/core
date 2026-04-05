@@ -33,7 +33,7 @@
 #include <strings.hrc>
 #include <EventMultiplexer.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <svx/gallery.hxx>

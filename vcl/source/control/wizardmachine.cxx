@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/debug.hxx>
 #include <vcl/roadmapwizardmachine.hxx>

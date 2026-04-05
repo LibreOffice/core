@@ -21,7 +21,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>

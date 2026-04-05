@@ -23,7 +23,7 @@
 #include <tools/json_writer.hxx>
 #include <COKit/COKitEnums.h>
 #include <sfx2/viewsh.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 #include <node.hxx>
 #include <doc.hxx>

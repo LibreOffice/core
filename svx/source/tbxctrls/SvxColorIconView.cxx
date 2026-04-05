@@ -24,7 +24,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmap.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 
 sal_uInt32 SvxColorIconView::getEntryEdgeLength()
 {

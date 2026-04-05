@@ -39,7 +39,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <rtl/ref.hxx>
 
 namespace framework{
