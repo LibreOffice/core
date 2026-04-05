@@ -21,8 +21,20 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/link.hxx>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/task/XRestartManager.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <rtl/bootstrap.hxx>
 
 #include <functional>
+#include <cstdlib>
+
+#ifdef _WIN32
+#include <prewin.h>
+#include <windows.h>
+#include <postwin.h>
+#endif
 
 namespace {
 
@@ -162,6 +174,13 @@ bool WebViewMessageHandler::OnQuery(
         || req.find("\"type\": \"getAppType\"") != std::string::npos)
     {
         handleGetAppType(callback);
+        return true;
+    }
+
+    if (req.find("\"type\":\"switchTheme\"") != std::string::npos
+        || req.find("\"type\": \"switchTheme\"") != std::string::npos)
+    {
+        handleSwitchTheme(req, callback);
         return true;
     }
 
@@ -328,6 +347,86 @@ void WebViewMessageHandler::handleGetAppType(CefRefPtr<Callback> callback)
         OString utf8AppType = OUStringToOString(appType, RTL_TEXTENCODING_UTF8);
         std::string response = "{\"appType\":\"" + std::string(utf8AppType.getStr()) + "\"}";
         cb->Success(response);
+    });
+}
+
+void WebViewMessageHandler::handleSwitchTheme(
+    const std::string& req,
+    CefRefPtr<Callback> callback)
+{
+    // Extract theme from JSON: {"type":"switchTheme","theme":"light"|"dark"}
+    std::string theme = "dark";
+    auto pos = req.find("\"theme\"");
+    if (pos != std::string::npos)
+    {
+        auto valStart = req.find(':', pos);
+        auto qStart = req.find('"', valStart + 1);
+        auto qEnd = req.find('"', qStart + 1);
+        if (qStart != std::string::npos && qEnd != std::string::npos)
+            theme = req.substr(qStart + 1, qEnd - qStart - 1);
+    }
+
+    SAL_INFO("officelabs.cef", "switchTheme requested: " << theme);
+
+    CefRefPtr<Callback> cb = callback;
+    std::string themeCopy = theme;
+
+    postToVclThread([cb, themeCopy]() {
+        // 1. Run switch-theme.ps1 to re-point junctions
+        // Find the script relative to soffice.exe
+        OUString sProgPath(u"$BRAND_BASE_DIR/program"_ustr);
+        rtl::Bootstrap::expandMacros(sProgPath);
+        OUString sCorePath;
+        // Navigate from instdir/program/ up to officelabs-core/
+        // instdir is inside libreoffice-fork, core is sibling at repo level
+        OUString sBaseDir(u"$BRAND_BASE_DIR"_ustr);
+        rtl::Bootstrap::expandMacros(sBaseDir);
+
+#ifdef _WIN32
+        // Build path to switch-theme.ps1
+        // sBaseDir = .../libreoffice-fork/instdir
+        // script = .../officelabs-core/switch-theme.ps1
+        OString baseUtf8 = OUStringToOString(sBaseDir, RTL_TEXTENCODING_UTF8);
+        std::string basePath(baseUtf8.getStr());
+
+        // Go up from instdir to libreoffice-fork, then up to suite root, then into officelabs-core
+        std::string scriptPath = basePath + "/../../officelabs-core/switch-theme.ps1";
+
+        std::string cmd = "powershell.exe -ExecutionPolicy Bypass -File \""
+                          + scriptPath + "\" -Theme " + themeCopy;
+
+        SAL_INFO("officelabs.cef", "Running: " << cmd);
+
+        // Run script (non-blocking would be better, but synchronous is fine for a quick script)
+        int ret = std::system(cmd.c_str());
+        SAL_INFO("officelabs.cef", "switch-theme.ps1 returned: " << ret);
+
+        // 2. Set env var for current process (in case restart is delayed)
+        _putenv_s("OFFICELABS_THEME", themeCopy.c_str());
+#endif
+
+        // 3. Respond to JS with success
+        cb->Success("{\"success\":true,\"theme\":\"" + themeCopy + "\",\"restartRequired\":true}");
+
+        // 4. Request restart via LO's built-in restart manager
+        try
+        {
+            auto xContext = comphelper::getProcessComponentContext();
+            css::uno::Reference<css::uno::XInterface> xService(
+                xContext->getServiceManager()->createInstanceWithContext(
+                    u"com.sun.star.comp.task.OfficeRestartManager"_ustr, xContext));
+            css::uno::Reference<css::task::XRestartManager> xRestart(xService, css::uno::UNO_QUERY);
+            if (xRestart.is())
+            {
+                xRestart->requestRestart(
+                    css::uno::Reference<css::task::XInteractionHandler>());
+                SAL_INFO("officelabs.cef", "Restart requested via XRestartManager");
+            }
+        }
+        catch (const css::uno::Exception& e)
+        {
+            SAL_WARN("officelabs.cef", "Failed to request restart: " << e.Message);
+        }
     });
 }
 
