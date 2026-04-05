@@ -47,7 +47,7 @@ public:
     osl::Condition m_aDocSizeCondition;
     Size m_aDocumentSize;
 
-    TestLokCallbackWrapper m_callbackWrapper;
+    TestKitCallbackWrapper m_callbackWrapper;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -211,9 +211,9 @@ kit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:26
 kit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:35
     GtvCommentsSidebarClass parentClass GtkBoxClass
 kit/qa/gtktiledviewer/gtv-lok-dialog.hxx:28
-    GtvLokDialog parent GtkDialog
+    GtvKitDialog parent GtkDialog
 kit/qa/gtktiledviewer/gtv-lok-dialog.hxx:33
-    GtvLokDialogClass parentClass GtkDialogClass
+    GtvKitDialogClass parentClass GtkDialogClass
 kit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
     GtvMainToolbar parent GtkBox
 kit/qa/gtktiledviewer/gtv-main-toolbar.hxx:38

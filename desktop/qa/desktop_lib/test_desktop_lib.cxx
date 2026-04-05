@@ -88,17 +88,17 @@ static COKitDocumentType getDocumentTypeFromName(std::string_view name)
     return KIT_DOCTYPE_TEXT;
 }
 
-class DesktopLOKTest : public UnoApiTest
+class DesktopKitTest : public UnoApiTest
 {
 public:
-    DesktopLOKTest() : UnoApiTest(u"/desktop/qa/data/"_ustr),
+    DesktopKitTest() : UnoApiTest(u"/desktop/qa/data/"_ustr),
     m_nSelectionBeforeSearchResult(0),
     m_nSelectionAfterSearchResult(0),
     m_bModified(false),
     m_nTrackChanges(0)
     {
     }
-    ~DesktopLOKTest();
+    ~DesktopKitTest();
 
     void readFileIntoByteVector(
         std::u16string_view sFilename, std::vector<sal_uInt8> & rByteVector);
@@ -222,7 +222,7 @@ public:
     void testColorPaletteCallback();
     void testABI();
 
-    CPPUNIT_TEST_SUITE(DesktopLOKTest);
+    CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
     CPPUNIT_TEST(testGetFonts);
     CPPUNIT_TEST(testCreateView);
@@ -329,7 +329,7 @@ public:
     std::unique_ptr<LibLODocument_Impl> m_pDocument;
 };
 
-DesktopLOKTest::~DesktopLOKTest()
+DesktopKitTest::~DesktopKitTest()
 {
 #if USE_TLS_NSS
     NSS_Shutdown();
@@ -354,7 +354,7 @@ static Control* GetFocusControl(vcl::Window const * pParent)
 }
 
 std::unique_ptr<LibLODocument_Impl>
-DesktopLOKTest::loadDocUrlImpl(const OUString& rFileURL, COKitDocumentType eType)
+DesktopKitTest::loadDocUrlImpl(const OUString& rFileURL, COKitDocumentType eType)
 {
     OUString aService;
     switch (eType)
@@ -384,31 +384,31 @@ DesktopLOKTest::loadDocUrlImpl(const OUString& rFileURL, COKitDocumentType eType
 }
 
 std::unique_ptr<LibLODocument_Impl>
-DesktopLOKTest::loadDocImpl(const char* pName, COKitDocumentType eType)
+DesktopKitTest::loadDocImpl(const char* pName, COKitDocumentType eType)
 {
     OUString aFileURL = createFileURL(OUString::createFromAscii(pName));
     return loadDocUrlImpl(aFileURL, eType);
 }
 
 std::unique_ptr<LibLODocument_Impl>
-DesktopLOKTest::loadDocImpl(const char* pName)
+DesktopKitTest::loadDocImpl(const char* pName)
 {
     return loadDocImpl(pName, getDocumentTypeFromName(pName));
 }
 
-LibLODocument_Impl* DesktopLOKTest::loadDocUrl(const OUString& rFileURL, COKitDocumentType eType)
+LibLODocument_Impl* DesktopKitTest::loadDocUrl(const OUString& rFileURL, COKitDocumentType eType)
 {
     m_pDocument = loadDocUrlImpl(rFileURL, eType);
     return m_pDocument.get();
 }
 
-LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, COKitDocumentType eType)
+LibLODocument_Impl* DesktopKitTest::loadDoc(const char* pName, COKitDocumentType eType)
 {
     m_pDocument = loadDocImpl(pName, eType);
     return m_pDocument.get();
 }
 
-void DesktopLOKTest::closeDoc(std::unique_ptr<LibLODocument_Impl>& pDocument)
+void DesktopKitTest::closeDoc(std::unique_ptr<LibLODocument_Impl>& pDocument)
 {
     if (pDocument)
     {
@@ -424,12 +424,12 @@ void DesktopLOKTest::closeDoc(std::unique_ptr<LibLODocument_Impl>& pDocument)
     }
 }
 
-void DesktopLOKTest::callback(int nType, const char* pPayload, void* pData)
+void DesktopKitTest::callback(int nType, const char* pPayload, void* pData)
 {
-    static_cast<DesktopLOKTest*>(pData)->callbackImpl(nType, pPayload);
+    static_cast<DesktopKitTest*>(pData)->callbackImpl(nType, pPayload);
 }
 
-void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
+void DesktopKitTest::callbackImpl(int nType, const char* pPayload)
 {
     switch (nType)
     {
@@ -491,7 +491,7 @@ void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
     }
 }
 
-void DesktopLOKTest::testGetStyles()
+void DesktopKitTest::testGetStyles()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     boost::property_tree::ptree aTree;
@@ -526,7 +526,7 @@ void DesktopLOKTest::testGetStyles()
     free(pJSON);
 }
 
-void DesktopLOKTest::testGetFonts()
+void DesktopKitTest::testGetFonts()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp");
     boost::property_tree::ptree aTree;
@@ -546,7 +546,7 @@ void DesktopLOKTest::testGetFonts()
     free(pJSON);
 }
 
-void DesktopLOKTest::testCreateView()
+void DesktopKitTest::testCreateView()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
@@ -572,7 +572,7 @@ void DesktopLOKTest::testCreateView()
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
 }
 
-void DesktopLOKTest::testGetPartPageRectangles()
+void DesktopKitTest::testGetPartPageRectangles()
 {
     // Test that we get as many page rectangles as expected: blank document is
     // one page.
@@ -594,7 +594,7 @@ void DesktopLOKTest::testGetPartPageRectangles()
     free(pRectangles);
 }
 
-void DesktopLOKTest::testGetFilterTypes()
+void DesktopKitTest::testGetFilterTypes()
 {
     LibCO_Impl aOffice;
     char* pJSON = aOffice.m_pOfficeClass->getFilterTypes(&aOffice);
@@ -608,12 +608,12 @@ void DesktopLOKTest::testGetFilterTypes()
     free(pJSON);
 }
 
-void DesktopLOKTest::testSearchCalc()
+void DesktopKitTest::testSearchCalc()
 {
     LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
@@ -638,12 +638,12 @@ void DesktopLOKTest::testSearchCalc()
     CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
 }
 
-void DesktopLOKTest::testSearchAllNotificationsCalc()
+void DesktopKitTest::testSearchAllNotificationsCalc()
 {
     LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
@@ -659,7 +659,7 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
     CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
 }
 
-void DesktopLOKTest::testPaintTile()
+void DesktopKitTest::testPaintTile()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     int nCanvasWidth = 100;
@@ -685,13 +685,13 @@ void DesktopLOKTest::testPaintTile()
     pDocument->pClass->paintTile(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
-void DesktopLOKTest::testSaveAs()
+void DesktopKitTest::testSaveAs()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
 }
 
-void DesktopLOKTest::testSaveAsJsonOptions()
+void DesktopKitTest::testSaveAsJsonOptions()
 {
     // Given a document with 3 pages:
     LibLODocument_Impl* pDocument = loadDoc("3page.odg");
@@ -714,13 +714,13 @@ void DesktopLOKTest::testSaveAsJsonOptions()
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
 }
 
-void DesktopLOKTest::testSaveAsCalc()
+void DesktopKitTest::testSaveAsCalc()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
 }
 
-void DesktopLOKTest::testPasteWriter()
+void DesktopKitTest::testPasteWriter()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     OString aText("hello"_ostr);
@@ -777,7 +777,7 @@ void DesktopLOKTest::testPasteWriter()
     CPPUNIT_ASSERT_EQUAL(u"foo _bar_ baz"_ustr, xTextPortionRange->getString());
 }
 
-void DesktopLOKTest::testPasteWriterJPEG()
+void DesktopKitTest::testPasteWriterJPEG()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
@@ -808,7 +808,7 @@ void DesktopLOKTest::testPasteWriterJPEG()
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape->getPropertyValue(u"AnchorType"_ustr).get<text::TextContentAnchorType>());
 }
 
-void DesktopLOKTest::testUndoWriter()
+void DesktopKitTest::testUndoWriter()
 {
     // Load a Writer document and press a key.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
@@ -826,7 +826,7 @@ void DesktopLOKTest::testUndoWriter()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("actions").size());
 }
 
-void DesktopLOKTest::testRowColumnHeaders()
+void DesktopKitTest::testRowColumnHeaders()
 {
     /*
      * Payload example:
@@ -938,7 +938,7 @@ void DesktopLOKTest::testRowColumnHeaders()
     CPPUNIT_ASSERT(!bNotEnoughHeaders);
 }
 
-void DesktopLOKTest::testHiddenRowHeaders()
+void DesktopKitTest::testHiddenRowHeaders()
 {
     LibLODocument_Impl* pDocument = loadDoc("hidden-row.ods");
 
@@ -976,7 +976,7 @@ void DesktopLOKTest::testHiddenRowHeaders()
     }
 }
 
-void DesktopLOKTest::testCellCursor()
+void DesktopKitTest::testCellCursor()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
 
@@ -995,7 +995,7 @@ void DesktopLOKTest::testCellCursor()
     CPPUNIT_ASSERT_EQUAL("0, 0, 1274, 254, 0, 0"_ostr, aRectangle);
 }
 
-void DesktopLOKTest::testCommandResult()
+void DesktopKitTest::testCommandResult()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
@@ -1014,7 +1014,7 @@ void DesktopLOKTest::testCommandResult()
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
 
     // but we get some real values when the callback is set up
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
@@ -1029,10 +1029,10 @@ void DesktopLOKTest::testCommandResult()
     CPPUNIT_ASSERT_EQUAL(true, aTree.get_child("success").get_value<bool>());
 }
 
-void DesktopLOKTest::testWriterComments()
+void DesktopKitTest::testWriterComments()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
     uno::Reference<awt::XReschedule> xToolkit = css::awt::Toolkit::create(comphelper::getProcessComponentContext());
 
     // Insert a comment at the beginning of the document and wait till the main
@@ -1068,7 +1068,7 @@ void DesktopLOKTest::testWriterComments()
     CPPUNIT_ASSERT_EQUAL(u"test"_ustr, xTextField->getPropertyValue(u"Content"_ustr).get<OUString>());
 }
 
-void DesktopLOKTest::testSheetOperations()
+void DesktopKitTest::testSheetOperations()
 {
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
 
@@ -1100,11 +1100,11 @@ void DesktopLOKTest::testSheetOperations()
     }
 }
 
-void DesktopLOKTest::testSheetSelections()
+void DesktopKitTest::testSheetSelections()
 {
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods", KIT_DOCTYPE_SPREADSHEET);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
     /*
      * Check if selection data is correct
@@ -1195,11 +1195,11 @@ void DesktopLOKTest::testSheetSelections()
     }
 }
 
-void DesktopLOKTest::testSheetDragDrop()
+void DesktopKitTest::testSheetDragDrop()
 {
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods", KIT_DOCTYPE_SPREADSHEET);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
     int row01 = 100;
     int col01 = 1100;
@@ -1398,11 +1398,11 @@ namespace {
 
 } // end anonymous namespace
 
-void DesktopLOKTest::testContextMenuCalc()
+void DesktopKitTest::testContextMenuCalc()
 {
     LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods", KIT_DOCTYPE_SPREADSHEET);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
     // Values in twips
     Point aPointOnImage(1150, 1100);
@@ -1506,11 +1506,11 @@ void DesktopLOKTest::testContextMenuCalc()
     }
 }
 
-void DesktopLOKTest::testContextMenuWriter()
+void DesktopKitTest::testContextMenuWriter()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
     Point aRandomPoint(1150, 1100);
     pDocument->pClass->postMouseEvent(pDocument,
@@ -1559,11 +1559,11 @@ void DesktopLOKTest::testContextMenuWriter()
     }
 }
 
-void DesktopLOKTest::testContextMenuImpress()
+void DesktopKitTest::testContextMenuImpress()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp", KIT_DOCTYPE_PRESENTATION);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
     // random point where we don't hit an underlying comment or text box
     Point aRandomPoint(10, 1150);
@@ -1689,7 +1689,7 @@ static void callbackCompressionTest(const int type, const char* payload, void* d
     notifs->emplace_back(type, std::string(payload ? payload : "(nil)"));
 }
 
-void DesktopLOKTest::testNotificationCompression()
+void DesktopKitTest::testNotificationCompression()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     std::vector<std::tuple<int, std::string>> notifs;
@@ -1776,7 +1776,7 @@ void DesktopLOKTest::testNotificationCompression()
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:AssignLayout=1"), std::get<1>(notifs[i++]));
 }
 
-void DesktopLOKTest::testTileInvalidationCompression()
+void DesktopKitTest::testTileInvalidationCompression()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
@@ -1916,7 +1916,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
     }
 }
 
-void DesktopLOKTest::testPartInInvalidation()
+void DesktopKitTest::testPartInInvalidation()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     // No part in invalidation: merge.
@@ -1997,7 +1997,7 @@ static void callbackBinaryCallbackTest(const int type, const char* payload, void
     notifs->emplace_back(type, std::string(payload ? payload : "(nil)"));
 }
 
-void DesktopLOKTest::testBinaryCallback()
+void DesktopKitTest::testBinaryCallback()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
@@ -2048,7 +2048,7 @@ void DesktopLOKTest::testBinaryCallback()
     }
 }
 
-void DesktopLOKTest::testOmitInvalidate()
+void DesktopKitTest::testOmitInvalidate()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     tools::Rectangle aRectangle{Point(0, 0), Size(10, 10)};
@@ -2107,7 +2107,7 @@ void DesktopLOKTest::testOmitInvalidate()
     }
 }
 
-void DesktopLOKTest::test2ViewsOmitInvalidate()
+void DesktopKitTest::test2ViewsOmitInvalidate()
 {
     // Given a document with 2 views:
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
@@ -2139,7 +2139,7 @@ void DesktopLOKTest::test2ViewsOmitInvalidate()
     CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 19, 9, 0, 0"), std::get<1>(aCallbacks2[0]));
 }
 
-void DesktopLOKTest::testInput()
+void DesktopKitTest::testInput()
 {
     // Load a Writer document, enable change recording and press a key.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
@@ -2174,7 +2174,7 @@ void DesktopLOKTest::testInput()
     free(pText);
 }
 
-void DesktopLOKTest::testRedlineWriter()
+void DesktopKitTest::testRedlineWriter()
 {
     // Load a Writer document, enable change recording and press a key.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
@@ -2201,7 +2201,7 @@ void DesktopLOKTest::testRedlineWriter()
             // MARK
 }
 
-void DesktopLOKTest::testRedlineCalc()
+void DesktopKitTest::testRedlineCalc()
 {
     // Load a Writer document, enable change recording and press a key.
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
@@ -2431,7 +2431,7 @@ public:
 
 }
 
-void DesktopLOKTest::testPaintPartTile()
+void DesktopKitTest::testPaintPartTile()
 {
     // Load an impress doc of 2 slides.
 //    ViewCallback aView1;
@@ -2472,7 +2472,7 @@ void DesktopLOKTest::testPaintPartTile()
     //CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
 }
 
-void DesktopLOKTest::testPaintTileOmitInvalidate()
+void DesktopKitTest::testPaintTileOmitInvalidate()
 {
     // Given a painted tile:
     comphelper::COKit::setPartInInvalidation(true);
@@ -2498,7 +2498,7 @@ void DesktopLOKTest::testPaintTileOmitInvalidate()
     CPPUNIT_ASSERT(aView.m_bTilesInvalidated);
 }
 
-void DesktopLOKTest::testCreateViewOmitInvalidate()
+void DesktopKitTest::testCreateViewOmitInvalidate()
 {
     // Given a document with 2 views: view 1 renders sheet One, then view 2 gets created and finally
     // view 1 switches to sheet Two:
@@ -2538,7 +2538,7 @@ void DesktopLOKTest::testCreateViewOmitInvalidate()
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
 }
 
-void DesktopLOKTest::testPaintPartTileDifferentSchemes()
+void DesktopKitTest::testPaintPartTileDifferentSchemes()
 {
     Color aDarkColor(0x1c, 0x1c, 0x1c);
 
@@ -2618,7 +2618,7 @@ void DesktopLOKTest::testPaintPartTileDifferentSchemes()
 
 #if HAVE_MORE_FONTS
 #include <rtl/uri.hxx>
-void DesktopLOKTest::testGetFontSubset()
+void DesktopKitTest::testGetFontSubset()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     OUString aFontName = rtl::Uri::encode(
@@ -2640,7 +2640,7 @@ void DesktopLOKTest::testGetFontSubset()
 }
 #endif
 
-void DesktopLOKTest::testCommentsWriter()
+void DesktopKitTest::testCommentsWriter()
 {
     // Disable tiled rendering for comments
     comphelper::COKit::setTiledAnnotations(false);
@@ -2692,7 +2692,7 @@ void DesktopLOKTest::testCommentsWriter()
 }
 
 
-void DesktopLOKTest::testCommentsCalc()
+void DesktopKitTest::testCommentsCalc()
 {
     // Disable tiled rendering for comments
     comphelper::COKit::setTiledAnnotations(false);
@@ -2742,7 +2742,7 @@ void DesktopLOKTest::testCommentsCalc()
 }
 
 
-void DesktopLOKTest::testCommentsImpress()
+void DesktopKitTest::testCommentsImpress()
 {
     // Disable tiled rendering for comments
     comphelper::COKit::setTiledAnnotations(false);
@@ -2797,7 +2797,7 @@ void DesktopLOKTest::testCommentsImpress()
     comphelper::COKit::setTiledAnnotations(true);
 }
 
-void DesktopLOKTest::testCommentsCallbacksWriter()
+void DesktopKitTest::testCommentsCallbacksWriter()
 {
     // Comments callback are emitted only if tiled annotations are off
     comphelper::COKit::setTiledAnnotations(false);
@@ -2901,7 +2901,7 @@ void addParameter(tools::JsonWriter& rJson, const char* sName, std::string_view 
 
 }
 
-void DesktopLOKTest::testCommentsAddEditDeleteDraw()
+void DesktopKitTest::testCommentsAddEditDeleteDraw()
 {
     // Comments callback are emitted only if tiled annotations are off
     comphelper::COKit::setTiledAnnotations(false);
@@ -2954,7 +2954,7 @@ void DesktopLOKTest::testCommentsAddEditDeleteDraw()
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("id"));
 }
 
-void DesktopLOKTest::testCommentsInReadOnlyMode()
+void DesktopKitTest::testCommentsInReadOnlyMode()
 {
     // Comments callback are emitted only if tiled annotations are off
     comphelper::COKit::setTiledAnnotations(false);
@@ -3020,7 +3020,7 @@ void DesktopLOKTest::testCommentsInReadOnlyMode()
     //CPPUNIT_ASSERT_EQUAL(nCommentId, aView.m_aCommentCallbackResult.get<int>("id"));
 }
 
-void DesktopLOKTest::testRedlinesInReadOnlyMode()
+void DesktopKitTest::testRedlinesInReadOnlyMode()
 {
     // In AllowManageRedlines mode, it must be possible to perform redline editing commands,
     // even in read-only mode.
@@ -3122,7 +3122,7 @@ void DesktopLOKTest::testRedlinesInReadOnlyMode()
     CPPUNIT_ASSERT(!aCallback.m_aCommentCallbackResult.empty());
 }
 
-void DesktopLOKTest::testCalcValidityDropdown()
+void DesktopKitTest::testCalcValidityDropdown()
 {
     LibLODocument_Impl* pDocument = loadDoc("validity.ods");
     Scheduler::ProcessEventsToIdle();
@@ -3158,7 +3158,7 @@ void DesktopLOKTest::testCalcValidityDropdown()
     free(pCellContent);
 }
 
-void DesktopLOKTest::testCalcValidityDropdownInReadonlyMode()
+void DesktopKitTest::testCalcValidityDropdownInReadonlyMode()
 {
     LibLODocument_Impl* pDocument = loadDoc("validity.ods");
     Scheduler::ProcessEventsToIdle();
@@ -3188,7 +3188,7 @@ void DesktopLOKTest::testCalcValidityDropdownInReadonlyMode()
     CPPUNIT_ASSERT_EQUAL(true, aView.m_JSONDialog.empty());
 }
 
-void DesktopLOKTest::testPropertySettingOnFormulaBar()
+void DesktopKitTest::testPropertySettingOnFormulaBar()
 {
     LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("formulabar.ods");
@@ -3234,7 +3234,7 @@ void DesktopLOKTest::testPropertySettingOnFormulaBar()
     CPPUNIT_ASSERT_EQUAL(false, aView.m_stateBold); // This line doesn't pass without the fix in this commit.
 }
 
-void DesktopLOKTest::testSearchTermReset()
+void DesktopKitTest::testSearchTermReset()
 {
     LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("empty.ods");
@@ -3269,7 +3269,7 @@ void DesktopLOKTest::testSearchTermReset()
     CPPUNIT_ASSERT_EQUAL(std::string(""), aView.m_searchTerm);
 }
 
-void DesktopLOKTest::testFormulaBarAcceptButton()
+void DesktopKitTest::testFormulaBarAcceptButton()
 {
     LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("empty.ods");
@@ -3310,7 +3310,7 @@ void DesktopLOKTest::testFormulaBarAcceptButton()
     CPPUNIT_ASSERT_EQUAL(std::string("sc_input_window"), aView.m_JSONDialog.get_child("data").get_child("control_id").get_value<std::string>());
 }
 
-void DesktopLOKTest::testRunMacro()
+void DesktopKitTest::testRunMacro()
 {
     LibCO_Impl aOffice;
     bool bNonExistentMacro;
@@ -3324,7 +3324,7 @@ void DesktopLOKTest::testRunMacro()
     CPPUNIT_ASSERT(!bNonExistentMacro);
 }
 
-void DesktopLOKTest::testExtractParameter()
+void DesktopKitTest::testExtractParameter()
 {
     OUString aOptions(u"Language=de-DE"_ustr);
     OUString aValue = extractParameter(aOptions, u"Language");
@@ -3352,7 +3352,7 @@ void DesktopLOKTest::testExtractParameter()
     CPPUNIT_ASSERT_EQUAL(u"Something1,Something2=blah,Something3"_ustr, aOptions);
 }
 
-void DesktopLOKTest::readFileIntoByteVector(std::u16string_view sFilename, std::vector<unsigned char> & rByteVector)
+void DesktopKitTest::readFileIntoByteVector(std::u16string_view sFilename, std::vector<unsigned char> & rByteVector)
 {
     rByteVector.clear();
     OUString aURL = createFileURL(sFilename);
@@ -3361,7 +3361,7 @@ void DesktopLOKTest::readFileIntoByteVector(std::u16string_view sFilename, std::
     aStream.ReadBytes(rByteVector.data(), aStream.remainingSize());
 }
 
-void DesktopLOKTest::testGetSignatureState_Signed()
+void DesktopKitTest::testGetSignatureState_Signed()
 {
     LibLODocument_Impl* pDocument = loadDoc("signed.odt");
     Scheduler::ProcessEventsToIdle();
@@ -3394,7 +3394,7 @@ void DesktopLOKTest::testGetSignatureState_Signed()
     CPPUNIT_ASSERT_EQUAL(int(1), nState);
 }
 
-void DesktopLOKTest::testGetSignatureState_NonSigned()
+void DesktopKitTest::testGetSignatureState_NonSigned()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     Scheduler::ProcessEventsToIdle();
@@ -3404,7 +3404,7 @@ void DesktopLOKTest::testGetSignatureState_NonSigned()
 }
 
 #if 0 // broken with system nss on RHEL 7
-void DesktopLOKTest::testInsertCertificate_DER_ODT()
+void DesktopKitTest::testInsertCertificate_DER_ODT()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
@@ -3451,7 +3451,7 @@ void DesktopLOKTest::testInsertCertificate_DER_ODT()
 }
 
 
-void DesktopLOKTest::testInsertCertificate_PEM_ODT()
+void DesktopKitTest::testInsertCertificate_PEM_ODT()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
@@ -3505,7 +3505,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
     CPPUNIT_ASSERT_EQUAL(int(1), nState);
 }
 
-void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
+void DesktopKitTest::testInsertCertificate_PEM_DOCX()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.docx");
@@ -3560,7 +3560,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
 }
 #endif
 
-void DesktopLOKTest::testSignDocument_PEM_PDF()
+void DesktopKitTest::testSignDocument_PEM_PDF()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
@@ -3613,10 +3613,10 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
     CPPUNIT_ASSERT(bResult);
 }
 
-void DesktopLOKTest::testTextSelectionHandles()
+void DesktopKitTest::testTextSelectionHandles()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
     OString aText("hello"_ostr);
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
@@ -3652,7 +3652,7 @@ void DesktopLOKTest::testTextSelectionHandles()
     CPPUNIT_ASSERT_EQUAL("1897, 1418, 0, 275"_ostr, m_aTextSelectionEnd);
 }
 
-void DesktopLOKTest::testDialogPaste()
+void DesktopKitTest::testDialogPaste()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->postUnoCommand(pDocument, ".uno:HyperlinkDialog", nullptr, false);
@@ -3677,7 +3677,7 @@ void DesktopLOKTest::testDialogPaste()
     Scheduler::ProcessEventsToIdle();
 }
 
-void DesktopLOKTest::testComplexSelection()
+void DesktopKitTest::testComplexSelection()
 {
     // Start with a blank text file and add contents.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
@@ -3732,7 +3732,7 @@ void DesktopLOKTest::testComplexSelection()
                                                                  "", nullptr, nullptr));
 }
 
-void DesktopLOKTest::testCalcSaveAs()
+void DesktopKitTest::testCalcSaveAs()
 {
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
     CPPUNIT_ASSERT(pDocument);
@@ -3763,7 +3763,7 @@ void DesktopLOKTest::testCalcSaveAs()
     CPPUNIT_ASSERT_EQUAL("X"_ostr, aView.m_aCellFormula);
 }
 
-void DesktopLOKTest::testSpellcheckerMultiView()
+void DesktopKitTest::testSpellcheckerMultiView()
 {
     static constexpr OUString aLangISO(u"en-US"_ustr);
     SvtSysLocaleOptions aSysLocaleOptions;
@@ -3781,7 +3781,7 @@ void DesktopLOKTest::testSpellcheckerMultiView()
     LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods", KIT_DOCTYPE_SPREADSHEET);
     pDocument->pClass->setViewLanguage(pDocument, 0, "en-US"); // For spellchecking.
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
     pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'a', 0);
     pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'a', 0);
@@ -3812,7 +3812,7 @@ void DesktopLOKTest::testSpellcheckerMultiView()
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
 }
 
-void DesktopLOKTest::testMultiDocuments()
+void DesktopKitTest::testMultiDocuments()
 {
     for (int i = 0; i < 3; i++)
     {
@@ -3908,11 +3908,11 @@ void DesktopLOKTest::testMultiDocuments()
     }
 }
 
-void DesktopLOKTest::testControlState()
+void DesktopKitTest::testControlState()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
-    TestLokCallbackWrapper::InitializeSidebar();
+    TestKitCallbackWrapper::InitializeSidebar();
     Scheduler::ProcessEventsToIdle();
 
     boost::property_tree::ptree aState;
@@ -3922,11 +3922,11 @@ void DesktopLOKTest::testControlState()
     CPPUNIT_ASSERT(!aState.empty());
 }
 
-void DesktopLOKTest::testMetricField()
+void DesktopKitTest::testMetricField()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
-    SfxChildWindow* pSideBar = TestLokCallbackWrapper::InitializeSidebar();
+    SfxChildWindow* pSideBar = TestKitCallbackWrapper::InitializeSidebar();
     Scheduler::ProcessEventsToIdle();
 
     vcl::Window* pWin = pSideBar->GetWindow();
@@ -3944,7 +3944,7 @@ void DesktopLOKTest::testMetricField()
     CPPUNIT_ASSERT_EQUAL(aMap[u"VALUE"_ustr], aRet[u"Value"_ustr]);
 }
 
-void DesktopLOKTest::testJumpCursor()
+void DesktopKitTest::testJumpCursor()
 {
     comphelper::COKit::setTiledAnnotations(false);
 
@@ -3974,7 +3974,7 @@ void DesktopLOKTest::testJumpCursor()
     comphelper::COKit::setTiledAnnotations(true);
 }
 
-void DesktopLOKTest::testRenderSearchResult_WriterNode()
+void DesktopKitTest::testRenderSearchResult_WriterNode()
 {
     constexpr const bool bDumpBitmap = false;
 
@@ -4019,7 +4019,7 @@ void DesktopLOKTest::testRenderSearchResult_WriterNode()
     std::free(pBuffer);
 }
 
-void DesktopLOKTest::testRenderSearchResult_CommonNode()
+void DesktopKitTest::testRenderSearchResult_CommonNode()
 {
     constexpr const bool bDumpBitmap = false;
 
@@ -4073,7 +4073,7 @@ static void lcl_repeatKeyStroke(LibLODocument_Impl *pDocument, int nCharCode, in
     }
 }
 
-void DesktopLOKTest::testNoDuplicateTableSelection()
+void DesktopKitTest::testNoDuplicateTableSelection()
 {
     LibLODocument_Impl* pDocument = loadDoc("table-selection.odt");
 
@@ -4106,7 +4106,7 @@ void DesktopLOKTest::testNoDuplicateTableSelection()
     CPPUNIT_ASSERT(aView1.m_bEmptyTableSelection);
 }
 
-void DesktopLOKTest::testMultiViewTableSelection()
+void DesktopKitTest::testMultiViewTableSelection()
 {
     LibLODocument_Impl* pDocument = loadDoc("table-selection.odt");
 
@@ -4169,7 +4169,7 @@ void DesktopLOKTest::testMultiViewTableSelection()
     CPPUNIT_ASSERT(!aView1.m_bEmptyTableSelection);
 }
 
-void DesktopLOKTest::testColorPaletteCallback()
+void DesktopKitTest::testColorPaletteCallback()
 {
     LibLODocument_Impl* pDocument = loadDoc("ThemeDocument.docx");
 
@@ -4211,7 +4211,7 @@ constexpr size_t documentClassOffset(int i)
 
 }
 
-void DesktopLOKTest::testABI()
+void DesktopKitTest::testABI()
 {
     // STABLE ABI, NEVER CHANGE (unless there's a very good reason, agreed by ESC, etc.)
     CPPUNIT_ASSERT_EQUAL(classOffset(0), offsetof(COKitClass, destroy));
@@ -4337,7 +4337,7 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(81), sizeof(COKitDocumentClass));
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

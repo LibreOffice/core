@@ -999,7 +999,7 @@ include/sfx2/linkmgr.hxx:64
     enum SfxLinkUpdateMode nUpdateType
     3
 include/sfx2/kit/helper.hxx:72
-    void LokMouseEventData::LokMouseEventData(int,class Point,int,enum MouseEventModifiers,int,int)
+    void KitMouseEventData::KitMouseEventData(int,class Point,int,enum MouseEventModifiers,int,int)
     enum MouseEventModifiers eModifiers
     256
 include/sfx2/kit/helper.hxx:158

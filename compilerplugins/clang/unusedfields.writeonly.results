@@ -285,9 +285,9 @@ dbaccess/source/ui/browser/dbloader.cxx:60
 dbaccess/source/ui/inc/RelationController.hxx:36
     dbaui::ORelationController m_xWaitObject std::unique_ptr<weld::WaitObject>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:316
-    DesktopLOKTest m_bModified _Bool
+    DesktopKitTest m_bModified _Bool
 desktop/qa/desktop_lib/test_desktop_lib.cxx:317
-    DesktopLOKTest m_nTrackChanges int
+    DesktopKitTest m_nTrackChanges int
 desktop/qa/desktop_lib/test_desktop_lib.cxx:2209
     (anonymous namespace)::RedlineInfo index std::string
 desktop/source/app/app.cxx:1285

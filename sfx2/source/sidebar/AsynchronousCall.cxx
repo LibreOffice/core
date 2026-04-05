@@ -58,7 +58,7 @@ void AsynchronousCall::CancelRequest()
 void AsynchronousCall::Sync()
 {
     if (mnCallId != nullptr) {
-        SfxLokLanguageGuard aGuard(mpViewFrame ? mpViewFrame->GetViewShell() : nullptr);
+        SfxKitLanguageGuard aGuard(mpViewFrame ? mpViewFrame->GetViewShell() : nullptr);
         maAction();
         CancelRequest();
     }
@@ -69,7 +69,7 @@ IMPL_LINK_NOARG(AsynchronousCall, HandleUserCall, void*, void )
     mnCallId = nullptr;
     if (maAction)
     {
-        SfxLokLanguageGuard aGuard(mpViewFrame ? mpViewFrame->GetViewShell() : nullptr);
+        SfxKitLanguageGuard aGuard(mpViewFrame ? mpViewFrame->GetViewShell() : nullptr);
         maAction();
     }
 }

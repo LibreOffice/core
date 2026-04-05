@@ -177,7 +177,7 @@ bool KitStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, in
             // GetFormulaDrawPos; hopefully, in lok/in-place case, it's always [ 0, 0 ]?)
             aMousePos = pWindow->LogicToPixel(aMousePos);
 
-            LokMouseEventData aMouseEventData(
+            KitMouseEventData aMouseEventData(
                 nType, aMousePos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
             KitHelper::postMouseEventAsync(pWindow, aMouseEventData);
 

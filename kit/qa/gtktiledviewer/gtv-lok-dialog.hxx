@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef GTV_LOK_DIALOG_H
-#define GTV_LOK_DIALOG_H
+#ifndef GTV_KIT_DIALOG_H
+#define GTV_KIT_DIALOG_H
 
 #include <gtk/gtk.h>
 
@@ -16,39 +16,39 @@
 
 G_BEGIN_DECLS
 
-#define GTV_TYPE_LOK_DIALOG            (gtv_lok_dialog_get_type())
-#define GTV_LOK_DIALOG(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTV_TYPE_LOK_DIALOG, GtvLokDialog))
-#define GTV_IS_LOK_DIALOG(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTV_TYPE_LOK_DIALOG))
-#define GTV_LOK_DIALOG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass),  GTV_TYPE_LOK_DIALOG, GtvLokDialogClass))
-#define GTV_IS_LOK_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  GTV_TYPE_LOK_DIALOG))
-#define GTV_LOK_DIALOG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  GTV_TYPE_LOK_DIALOG, GtvLokDialogClass))
+#define GTV_TYPE_KIT_DIALOG            (gtv_kit_dialog_get_type())
+#define GTV_KIT_DIALOG(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTV_TYPE_KIT_DIALOG, GtvKitDialog))
+#define GTV_IS_KIT_DIALOG(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTV_TYPE_KIT_DIALOG))
+#define GTV_KIT_DIALOG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass),  GTV_TYPE_KIT_DIALOG, GtvKitDialogClass))
+#define GTV_IS_KIT_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  GTV_TYPE_KIT_DIALOG))
+#define GTV_KIT_DIALOG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  GTV_TYPE_KIT_DIALOG, GtvKitDialogClass))
 
-struct GtvLokDialog
+struct GtvKitDialog
 {
     GtkDialog parent;
 };
 
-struct GtvLokDialogClass
+struct GtvKitDialogClass
 {
     GtkDialogClass parentClass;
 };
 
-GType gtv_lok_dialog_get_type               (void) G_GNUC_CONST;
+GType gtv_kit_dialog_get_type               (void) G_GNUC_CONST;
 
-GtkWidget* gtv_lok_dialog_new(KitDocumentView* pDocView, guint dialogId, guint width, guint height);
+GtkWidget* gtv_kit_dialog_new(KitDocumentView* pDocView, guint dialogId, guint width, guint height);
 
-void gtv_lok_dialog_invalidate(GtvLokDialog* dialog, const GdkRectangle& aRectangle);
+void gtv_kit_dialog_invalidate(GtvKitDialog* dialog, const GdkRectangle& aRectangle);
 
-void gtv_lok_dialog_child_create(GtvLokDialog* dialog, guint childId, guint nX, guint nY, guint width, guint height);
+void gtv_kit_dialog_child_create(GtvKitDialog* dialog, guint childId, guint nX, guint nY, guint width, guint height);
 
-void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog);
+void gtv_kit_dialog_child_invalidate(GtvKitDialog* dialog);
 
-void gtv_lok_dialog_child_close(GtvLokDialog* dialog);
+void gtv_kit_dialog_child_close(GtvKitDialog* dialog);
 
-gboolean gtv_lok_dialog_is_parent_of(GtvLokDialog* dialog, guint childId);
+gboolean gtv_kit_dialog_is_parent_of(GtvKitDialog* dialog, guint childId);
 
 G_END_DECLS
 
-#endif /* GTV_LOK_DIALOG_H */
+#endif /* GTV_KIT_DIALOG_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

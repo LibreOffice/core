@@ -1213,7 +1213,7 @@ void SfxBindings::UpdateControllers_Impl
 IMPL_LINK( SfxBindings, NextJob, Timer *, pTimer, void )
 {
     SfxViewFrame* pFrame = pDispatcher ? pDispatcher->GetFrame() : nullptr;
-    SfxLokLanguageGuard aGuard(pFrame ? pFrame->GetViewShell() : nullptr);
+    SfxKitLanguageGuard aGuard(pFrame ? pFrame->GetViewShell() : nullptr);
 
     NextJob_Impl(pTimer);
 }

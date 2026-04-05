@@ -25,10 +25,10 @@ A helper to convert CoKitCallbackInterface to a LIbreOfficeKitCallback for tests
 It reimplements the specialized callbacks and converts them to the generic type/payload
 callback.
 */
-class OOO_DLLPUBLIC_TEST TestLokCallbackWrapper final : public CoKitCallbackInterface, public Idle
+class OOO_DLLPUBLIC_TEST TestKitCallbackWrapper final : public CoKitCallbackInterface, public Idle
 {
 public:
-    TestLokCallbackWrapper(COKitCallback callback, void* data);
+    TestKitCallbackWrapper(COKitCallback callback, void* data);
     /// Discard all possibly still held events.
     void clear();
     /// Set the view id of the associated SfxViewShell.

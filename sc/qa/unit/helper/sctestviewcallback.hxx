@@ -79,7 +79,7 @@ public:
     OString m_ShapeSelection;
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
     std::string decimalSeparator;
-    TestLokCallbackWrapper m_callbackWrapper;
+    TestKitCallbackWrapper m_callbackWrapper;
 
     ScTestViewCallback(bool bDeleteListenerOnDestruct = true);
 

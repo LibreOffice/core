@@ -1405,7 +1405,7 @@ void KitHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
     postEventAsync(pKitEv);
 }
 
-void KitHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMouseEventData const & rKitMouseEventData)
+void KitHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, KitMouseEventData const & rKitMouseEventData)
 {
     KitAsyncEventData* pKitEv = new KitAsyncEventData;
     switch (rKitMouseEventData.mnType)
@@ -1517,7 +1517,7 @@ void KitHelper::sendNetworkAccessError(std::string_view rAction)
     }
 }
 
-SfxLokLanguageGuard::SfxLokLanguageGuard(const SfxViewShell* pNewShell)
+SfxKitLanguageGuard::SfxKitLanguageGuard(const SfxViewShell* pNewShell)
     : m_bSetLanguage(false)
     , m_pOldShell(nullptr)
 {
@@ -1534,7 +1534,7 @@ SfxLokLanguageGuard::SfxLokLanguageGuard(const SfxViewShell* pNewShell)
     m_bSetLanguage = true;
 }
 
-SfxLokLanguageGuard::~SfxLokLanguageGuard()
+SfxKitLanguageGuard::~SfxKitLanguageGuard()
 {
     if (!m_bSetLanguage || !m_pOldShell)
     {

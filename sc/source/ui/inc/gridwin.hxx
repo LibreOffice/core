@@ -56,7 +56,7 @@ class ScNoteOverlay;
 class SdrHdlList;
 class ScTransferObj;
 struct SpellCallbackInfo;
-class ScLokRTLContext;
+class ScKitRTLContext;
 
         //  mouse status (nMouseStatus)
 
@@ -445,7 +445,7 @@ public:
                                 tools::Long nDimIndex, ScDPObject* pDPObj);
 
     void DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev,
-                     const ScLokRTLContext* pKitRTLContext);
+                     const ScKitRTLContext* pKitRTLContext);
 
     using Window::Draw;
     void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,

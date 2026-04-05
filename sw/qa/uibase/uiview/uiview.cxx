@@ -520,7 +520,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     ViewCallback aCallback;
-    TestLokCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
+    TestKitCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
     aCallbackWrapper.setLOKViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
     SwViewOption aOpt(*pWrtShell->GetViewOptions());

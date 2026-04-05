@@ -361,7 +361,7 @@ include/oox/core/contexthandler2.hxx:230
 include/oox/ole/axbinarywriter.hxx:153
     oox::ole::AxBinaryPropertyWriter maStreamProps ComplexPropVector
 include/sfx2/kit/helper.hxx:70
-    LokMouseEventData maLogicPosition std::optional<Point>
+    KitMouseEventData maLogicPosition std::optional<Point>
 include/sfx2/msg.hxx:94
     SfxTypeAttrib nAID sal_uInt16
 include/sfx2/msg.hxx:95
@@ -457,7 +457,7 @@ io/source/stm/odata.cxx:556
 io/source/stm/odata.cxx:556
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(unnamed struct at /home/noel/libo-plugin/io/source/stm/odata.cxx:556:23) n2 sal_uInt32
 kit/qa/gtktiledviewer/gtv-lok-dialog.cxx:48
-    (anonymous namespace)::GtvLokDialogPrivate m_nChildKeyModifier guint32
+    (anonymous namespace)::GtvKitDialogPrivate m_nChildKeyModifier guint32
 kit/source/gtk/kitdocview.cxx:86
     (anonymous namespace)::KitDocumentViewPrivateImpl m_bIsLoading _Bool
 lingucomponent/source/languageguessing/simpleguesser.cxx:72

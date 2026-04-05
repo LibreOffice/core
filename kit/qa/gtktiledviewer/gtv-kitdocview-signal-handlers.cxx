@@ -349,7 +349,7 @@ void KitDocumentViewSigHandlers::window(KitDocumentView* pDocView, gchar* pPaylo
 
         if (aType == "dialog")
         {
-            GtkWidget* pDialog = gtv_lok_dialog_new(pDocView, nWinId, aSizePoints[0], aSizePoints[1]);
+            GtkWidget* pDialog = gtv_kit_dialog_new(pDocView, nWinId, aSizePoints[0], aSizePoints[1]);
             g_info("created  dialog, for dialogid: %d with size: %s", nWinId, aSize.c_str());
 
             gtv_application_window_register_child_window(window, GTK_WINDOW(pDialog));
@@ -374,7 +374,7 @@ void KitDocumentViewSigHandlers::window(KitDocumentView* pDocView, gchar* pPaylo
             }
             const std::string aPos = aRoot.get<std::string>("position");
             std::vector<int> aPosPoints = GtvHelpers::split<int>(aPos, ", ", 2);
-            gtv_lok_dialog_child_create(GTV_LOK_DIALOG(pDialog), nWinId, aPosPoints[0], aPosPoints[1], aSizePoints[0], aSizePoints[1]);
+            gtv_kit_dialog_child_create(GTV_KIT_DIALOG(pDialog), nWinId, aPosPoints[0], aPosPoints[1], aSizePoints[0], aSizePoints[1]);
         }
     }
     else
@@ -384,9 +384,9 @@ void KitDocumentViewSigHandlers::window(KitDocumentView* pDocView, gchar* pPaylo
         if (pParent) // it's a floating window in the dialog
         {
             if (aAction == "invalidate")
-                gtv_lok_dialog_child_invalidate(GTV_LOK_DIALOG(pParent));
+                gtv_kit_dialog_child_invalidate(GTV_KIT_DIALOG(pParent));
             else if (aAction == "close")
-                gtv_lok_dialog_child_close(GTV_LOK_DIALOG(pParent));
+                gtv_kit_dialog_child_close(GTV_KIT_DIALOG(pParent));
         }
         else if (GtkWindow* pDialog = gtv_application_window_get_child_window_by_id(window, nWinId))
         { // it's the dialog window itself
@@ -408,7 +408,7 @@ void KitDocumentViewSigHandlers::window(KitDocumentView* pDocView, gchar* pPaylo
                              nullptr);
 
                 GdkRectangle aGdkRectangle = {0, 0, 0, 0};
-                gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pDialog), aGdkRectangle);
+                gtv_kit_dialog_invalidate(GTV_KIT_DIALOG(pDialog), aGdkRectangle);
             }
             else if (aAction == "invalidate")
             {
@@ -423,7 +423,7 @@ void KitDocumentViewSigHandlers::window(KitDocumentView* pDocView, gchar* pPaylo
                 catch(const std::exception&)
                 {}
 
-                gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pDialog), aGdkRectangle);
+                gtv_kit_dialog_invalidate(GTV_KIT_DIALOG(pDialog), aGdkRectangle);
             }
             else if (aAction == "title_changed")
             {

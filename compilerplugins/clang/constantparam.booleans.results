@@ -427,7 +427,7 @@ dbaccess/source/ui/inc/WTypeSelect.hxx:121
     _Bool bEnable
     0
 desktop/qa/desktop_lib/test_desktop_lib.cxx:140
-    struct desktop::LibLODocument_Impl * DesktopLOKTest::loadDocUrl(const class rtl::OUString &,COKitDocumentType)
+    struct desktop::LibLODocument_Impl * DesktopKitTest::loadDocUrl(const class rtl::OUString &,COKitDocumentType)
     COKitDocumentType eType
     1
 desktop/qa/desktop_lib/test_desktop_lib.cxx:3575
@@ -3474,7 +3474,7 @@ sd/qa/unit/sdmodeltestbase.hxx:155
     class com::sun::star::uno::Reference<class com::sun::star::text::XTextField> SdModelTestBase::getTextFieldFromPage(int,int,int,int)
     int nPara
     0
-sd/qa/unit/tiledrendering/LOKitSearchTest.cxx:756
+sd/qa/unit/tiledrendering/KitSearchTest.cxx:756
     class rtl::OUString getShapeText(class SdXImpressDocument *,unsigned int,unsigned int)
     unsigned int nShape
     0

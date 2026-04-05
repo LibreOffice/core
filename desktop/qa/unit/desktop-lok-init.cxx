@@ -24,15 +24,15 @@
 using namespace css;
 
 /// Unit tests for desktop/source/lib/init.cxx internals.
-class LOKInitTest : public ::CppUnit::TestFixture
+class KitInitTest : public ::CppUnit::TestFixture
 {
 public:
-    LOKInitTest() {}
+    KitInitTest() {}
 
     void testJsonToPropertyValues();
     void testJsonToPropertyValuesBorder();
 
-    CPPUNIT_TEST_SUITE(LOKInitTest);
+    CPPUNIT_TEST_SUITE(KitInitTest);
     CPPUNIT_TEST(testJsonToPropertyValues);
     CPPUNIT_TEST(testJsonToPropertyValuesBorder);
     CPPUNIT_TEST_SUITE_END();
@@ -54,7 +54,7 @@ void assertSequencesEqual(const uno::Sequence<beans::PropertyValue>& expected,
 }
 } // namespace
 
-void LOKInitTest::testJsonToPropertyValues()
+void KitInitTest::testJsonToPropertyValues()
 {
     const char arguments[] = "{"
                              "\"FileName\":{"
@@ -68,7 +68,7 @@ void LOKInitTest::testJsonToPropertyValues()
         aArgs, comphelper::containerToSequence(desktop::jsonToPropertyValuesVector(arguments)));
 }
 
-void LOKInitTest::testJsonToPropertyValuesBorder()
+void KitInitTest::testJsonToPropertyValuesBorder()
 {
     const char arguments[]
         = "{"
@@ -153,7 +153,7 @@ void LOKInitTest::testJsonToPropertyValuesBorder()
         aArgs, comphelper::containerToSequence(desktop::jsonToPropertyValuesVector(arguments)));
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(LOKInitTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(KitInitTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

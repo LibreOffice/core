@@ -19,8 +19,8 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 
-TestLokCallbackWrapper::TestLokCallbackWrapper(COKitCallback callback, void* data)
-    : Idle("TestLokCallbackWrapper flush timer")
+TestKitCallbackWrapper::TestKitCallbackWrapper(COKitCallback callback, void* data)
+    : Idle("TestKitCallbackWrapper flush timer")
     , m_callback(callback)
     , m_data(data)
 {
@@ -29,14 +29,14 @@ TestLokCallbackWrapper::TestLokCallbackWrapper(COKitCallback callback, void* dat
     SetPriority(TaskPriority::LOWEST);
 }
 
-void TestLokCallbackWrapper::clear()
+void TestKitCallbackWrapper::clear()
 {
     m_viewId = -1;
     m_updatedTypes.clear();
     m_updatedTypesPerViewId.clear();
 }
 
-inline void TestLokCallbackWrapper::startTimer()
+inline void TestKitCallbackWrapper::startTimer()
 {
     if (!IsActive())
         Start();
@@ -44,25 +44,25 @@ inline void TestLokCallbackWrapper::startTimer()
 
 constexpr int NO_VIEWID = -1;
 
-inline void TestLokCallbackWrapper::callCallback(int nType, const char* pPayload, int nViewId)
+inline void TestKitCallbackWrapper::callCallback(int nType, const char* pPayload, int nViewId)
 {
     discardUpdatedTypes(nType, nViewId);
     m_callback(nType, pPayload, m_data);
     startTimer();
 }
 
-void TestLokCallbackWrapper::viewCallback(int nType, const rtl::OString& pPayload)
+void TestKitCallbackWrapper::viewCallback(int nType, const rtl::OString& pPayload)
 {
     callCallback(nType, pPayload.getStr(), NO_VIEWID);
 }
 
-void TestLokCallbackWrapper::viewCallbackWithViewId(int nType, const rtl::OString& pPayload,
+void TestKitCallbackWrapper::viewCallbackWithViewId(int nType, const rtl::OString& pPayload,
                                                     int nViewId)
 {
     callCallback(nType, pPayload.getStr(), nViewId);
 }
 
-void TestLokCallbackWrapper::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
+void TestKitCallbackWrapper::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
                                                          int nMode)
 {
     OStringBuffer buf(64);
@@ -85,7 +85,7 @@ void TestLokCallbackWrapper::viewInvalidateTilesCallback(const tools::Rectangle*
 // is presumably this class using CallbackFlushHandler internally by default,
 // but having an option to use this simpler code when needed.
 
-void TestLokCallbackWrapper::viewUpdatedCallback(int nType)
+void TestKitCallbackWrapper::viewUpdatedCallback(int nType)
 {
     if (std::find(m_updatedTypes.begin(), m_updatedTypes.end(), nType) == m_updatedTypes.end())
     {
@@ -94,7 +94,7 @@ void TestLokCallbackWrapper::viewUpdatedCallback(int nType)
     }
 }
 
-void TestLokCallbackWrapper::viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId)
+void TestKitCallbackWrapper::viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId)
 {
     const PerViewIdData data{ nType, nViewId, nSourceViewId };
     auto& l = m_updatedTypesPerViewId;
@@ -109,13 +109,13 @@ void TestLokCallbackWrapper::viewUpdatedCallbackPerViewId(int nType, int nViewId
     startTimer();
 }
 
-void TestLokCallbackWrapper::viewAddPendingInvalidateTiles()
+void TestKitCallbackWrapper::viewAddPendingInvalidateTiles()
 {
     // Invoke() will call flushPendingKitInvalidateTiles().
     startTimer();
 }
 
-void TestLokCallbackWrapper::discardUpdatedTypes(int nType, int nViewId)
+void TestKitCallbackWrapper::discardUpdatedTypes(int nType, int nViewId)
 {
     // If a callback is called directly with an event, drop the updated flag for it, since
     // the direct event replaces it.
@@ -142,7 +142,7 @@ void TestLokCallbackWrapper::discardUpdatedTypes(int nType, int nViewId)
     }
 }
 
-void TestLokCallbackWrapper::flushLOKData()
+void TestKitCallbackWrapper::flushLOKData()
 {
     if (m_updatedTypes.empty() && m_updatedTypesPerViewId.empty())
         return;
@@ -176,7 +176,7 @@ void TestLokCallbackWrapper::flushLOKData()
     }
 }
 
-void TestLokCallbackWrapper::Invoke()
+void TestKitCallbackWrapper::Invoke()
 {
     // Timer timeout, flush any possibly pending data.
     for (SfxViewShell* viewShell = SfxViewShell::GetFirst(false); viewShell != nullptr;
@@ -187,7 +187,7 @@ void TestLokCallbackWrapper::Invoke()
     flushLOKData();
 }
 
-SfxChildWindow* TestLokCallbackWrapper::InitializeSidebar()
+SfxChildWindow* TestKitCallbackWrapper::InitializeSidebar()
 {
     // in init.cxx we do setupSidebar which creates the controller, do it here
 

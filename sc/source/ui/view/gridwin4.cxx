@@ -616,10 +616,10 @@ private:
  * Used to store the necessary information about the (combined-)tile
  * area relevant to coordinate transformations in RTL mode.
  */
-class ScLokRTLContext
+class ScKitRTLContext
 {
 public:
-    ScLokRTLContext(const ScOutputData& rOutputData, const tools::Long nTileDeviceOriginPixelX):
+    ScKitRTLContext(const ScOutputData& rOutputData, const tools::Long nTileDeviceOriginPixelX):
         mrOutputData(rOutputData),
         mnTileDevOriginX(nTileDeviceOriginPixelX)
     {}
@@ -769,9 +769,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     tools::Rectangle aDrawingRectLogic;
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     bool bLokRTL = bLayoutRTL && bIsTiledRendering;
-    std::unique_ptr<ScLokRTLContext> pKitRTLCtxt(
+    std::unique_ptr<ScKitRTLContext> pKitRTLCtxt(
         bLokRTL ?
-            new ScLokRTLContext(aOutputData, o3tl::convert(aOriginalMode.GetOrigin().X(), o3tl::Length::twip, o3tl::Length::px)) :
+            new ScKitRTLContext(aOutputData, o3tl::convert(aOriginalMode.GetOrigin().X(), o3tl::Length::twip, o3tl::Length::px)) :
             nullptr);
 
     {
@@ -2044,7 +2044,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     }
 }
 
-void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev, const ScLokRTLContext* pKitRTLContext)
+void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev, const ScKitRTLContext* pKitRTLContext)
 {
     aComboButton.SetOutputDevice( pContentDev );
 

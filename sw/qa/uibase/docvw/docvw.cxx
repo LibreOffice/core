@@ -255,7 +255,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
     getSwTextDoc()->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     TooltipCallback aCallback;
-    TestLokCallbackWrapper aCallbackWrapper(&TooltipCallback::callback, &aCallback);
+    TestKitCallbackWrapper aCallbackWrapper(&TooltipCallback::callback, &aCallback);
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
     aCallbackWrapper.setLOKViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
     pWrtShell->SetRedlineFlagsAndCheckInsMode(RedlineFlags::On | RedlineFlags::ShowMask);

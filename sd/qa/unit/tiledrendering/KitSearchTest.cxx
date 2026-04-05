@@ -26,10 +26,10 @@
 
 using namespace css;
 
-class LOKitSearchTest : public SdTiledRenderingTest
+class KitSearchTest : public SdTiledRenderingTest
 {
 public:
-    LOKitSearchTest()
+    KitSearchTest()
         : SdTiledRenderingTest()
     {
     }
@@ -39,7 +39,7 @@ protected:
     void lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll = false);
 };
 
-void LOKitSearchTest::lcl_search(const OUString& rKey, bool bFindAll, bool bBackwards)
+void KitSearchTest::lcl_search(const OUString& rKey, bool bFindAll, bool bBackwards)
 {
     Scheduler::ProcessEventsToIdle();
     SvxSearchCmd eSearch = bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND;
@@ -53,7 +53,7 @@ void LOKitSearchTest::lcl_search(const OUString& rKey, bool bFindAll, bool bBack
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
 }
 
-void LOKitSearchTest::lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll)
+void KitSearchTest::lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll)
 {
     Scheduler::ProcessEventsToIdle();
 
@@ -81,7 +81,7 @@ SdrObject* lclGetSelectedObject(sd::ViewShell* pViewShell)
 
 } // end anonymous namespace
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, Search)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, Search)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, Search)
     CPPUNIT_ASSERT_EQUAL(false, m_bFound);
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAll)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchAll)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -135,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAll)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllSelections)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchAllSelections)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllSelections)
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), m_aSelection.size());
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllNotifications)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchAllNotifications)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -161,7 +161,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllNotifications)
     CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllFollowedBySearch)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchAllFollowedBySearch)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -177,7 +177,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllFollowedBySearch)
                              pXImpressDocument->getSelection(), "text/plain;charset=utf-8"_ostr));
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, DontSearchInMasterPages)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, DontSearchInMasterPages)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -189,7 +189,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, DontSearchInMasterPages)
     CPPUNIT_ASSERT_EQUAL(false, m_bFound);
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFNonExisting)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchInPDFNonExisting)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -221,7 +221,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFNonExisting)
     CPPUNIT_ASSERT_EQUAL(false, m_bFound);
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDF)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchInPDF)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -269,7 +269,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDF)
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)), m_aSelection[0]);
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFOnePDFObject)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchInPDFOnePDFObject)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -309,7 +309,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFOnePDFObject)
     CPPUNIT_ASSERT_EQUAL(2, m_nSearchResultCount);
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFInMultiplePages)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchInPDFInMultiplePages)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -399,7 +399,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFInMultiplePages)
     CPPUNIT_ASSERT_EQUAL("9463, 3382, 1099, 499"_ostr, m_aSearchResultSelection[0]);
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFInMultiplePagesBackwards)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchInPDFInMultiplePagesBackwards)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -499,7 +499,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFInMultiplePagesBackwards)
 
 // Test searching in document with mixed objects.
 // We have 2 objects: 1. Text Object, 2. Graphic Object with PDF
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchIn2MixedObjects)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchIn2MixedObjects)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchIn2MixedObjects)
 }
 
 // Test searching in document with mixed objects. We have 6 objects.
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchIn6MixedObjects)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchIn6MixedObjects)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -763,7 +763,7 @@ OUString getShapeText(SdXImpressDocument* pXImpressDocument, sal_uInt32 nPage, s
 }
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, Replace)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, Replace)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -792,7 +792,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, Replace)
     CPPUNIT_ASSERT_EQUAL(u"bbb"_ustr, getShapeText(pXImpressDocument, 4, 0));
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, ReplaceAll)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, ReplaceAll)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -821,7 +821,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, ReplaceAll)
     CPPUNIT_ASSERT_EQUAL(u"bbb"_ustr, getShapeText(pXImpressDocument, 4, 0));
 }
 
-CPPUNIT_TEST_FIXTURE(LOKitSearchTest, ReplaceCombined)
+CPPUNIT_TEST_FIXTURE(KitSearchTest, ReplaceCombined)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();

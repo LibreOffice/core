@@ -14,7 +14,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sd_lokit_search))
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sd_lokit_search))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_lokit_search, \
-    sd/qa/unit/tiledrendering/LOKitSearchTest \
+    sd/qa/unit/tiledrendering/KitSearchTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_lokit_search, \

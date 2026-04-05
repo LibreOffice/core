@@ -275,7 +275,7 @@ bool KitChartHelper::postMouseEvent(int nType, int nX, int nY,
             // can depend on the client zoom
             Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
 
-            LokMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
+            KitMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
                                               nButtons, nModifier);
             KitHelper::postMouseEventAsync(pChartWindow, aMouseEventData);
 

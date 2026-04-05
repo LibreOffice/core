@@ -613,7 +613,7 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView();
     tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
     Size aOutputSize(nOutputWidth, nOutputHeight);
-    LokControlHandler::paintControlTile(pPage, pDrawView, *pGridWindow, rDevice, aOutputSize, aTileRect);
+    KitControlHandler::paintControlTile(pPage, pDrawView, *pGridWindow, rDevice, aOutputSize, aTileRect);
 }
 
 void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
@@ -851,7 +851,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     ScDrawLayer* pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(nTab));
     SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView();
-    if (LokControlHandler::postMouseEvent(pPage, pDrawView, *pGridWindow, nType, aPointHMMDraw, nCount, nButtons, nModifier))
+    if (KitControlHandler::postMouseEvent(pPage, pDrawView, *pGridWindow, nType, aPointHMMDraw, nCount, nButtons, nModifier))
         return;
 
     if (!pGridWindow->HasChildPathFocus(true))

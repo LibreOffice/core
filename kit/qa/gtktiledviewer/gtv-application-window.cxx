@@ -496,7 +496,7 @@ gtv_application_window_get_parent(GtvApplicationWindow* window, guint nWinId)
     GList* pIt = nullptr;
     for (pIt = priv->m_pChildWindows; pIt != nullptr; pIt = pIt->next)
     {
-        if (gtv_lok_dialog_is_parent_of(GTV_LOK_DIALOG(pIt->data), nWinId))
+        if (gtv_kit_dialog_is_parent_of(GTV_KIT_DIALOG(pIt->data), nWinId))
             return GTK_WIDGET(pIt->data);
     }
     return nullptr;

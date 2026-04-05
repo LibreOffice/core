@@ -50,7 +50,7 @@ protected:
     /// For document size changed callback.
     osl::Condition m_aDocumentSizeCondition;
     xmlBufferPtr m_pXmlBuffer;
-    TestLokCallbackWrapper m_callbackWrapper;
+    TestKitCallbackWrapper m_callbackWrapper;
 };
 
 /// A view callback tracks callbacks invoked on one specific view.
@@ -76,7 +76,7 @@ public:
     OString m_ShapeSelection;
     std::vector<std::string> m_aStateChanged;
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
-    TestLokCallbackWrapper m_callbackWrapper;
+    TestKitCallbackWrapper m_callbackWrapper;
     bool invalidatedAll;
     int editModeOfInvalidation;
     int partOfInvalidation;

@@ -25,7 +25,7 @@
 
 #include <optional>
 
-class LokControlHandler
+class KitControlHandler
 {
 public:
     static bool postMouseEvent(const SdrPage* pPage, const SdrView* pDrawView,
@@ -80,7 +80,7 @@ public:
                         Point aControlRelativePosition = o3tl::convert(
                             aControlRelativePositionHMM, o3tl::Length::mm100, o3tl::Length::px);
 
-                        LokMouseEventData aMouseEventData(nType, aControlRelativePosition, nCount,
+                        KitMouseEventData aMouseEventData(nType, aControlRelativePosition, nCount,
                                                           MouseEventModifiers::SIMPLECLICK,
                                                           nButtons, nModifier);
                         KitHelper::postMouseEventAsync(pWindow, aMouseEventData);

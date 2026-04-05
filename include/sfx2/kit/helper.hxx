@@ -61,7 +61,7 @@
 
 #endif
 
-struct SFX2_DLLPUBLIC LokMouseEventData
+struct SFX2_DLLPUBLIC KitMouseEventData
 {
     int mnType;
     Point maPosition;
@@ -71,7 +71,7 @@ struct SFX2_DLLPUBLIC LokMouseEventData
     int mnModifier;
     std::optional<Point> maLogicPosition;
 
-    LokMouseEventData(int nType, Point aPosition, int nCount, MouseEventModifiers eModifiers, int nButtons, int nModifier)
+    KitMouseEventData(int nType, Point aPosition, int nCount, MouseEventModifiers eModifiers, int nButtons, int nModifier)
         : mnType(nType)
         , maPosition(aPosition)
         , mnCount(nCount)
@@ -232,7 +232,7 @@ public:
                                       int nType, const OUString &rText);
 
     /// Helper for posting async mouse event
-    static void postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMouseEventData const & rKitMouseEventData);
+    static void postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, KitMouseEventData const & rKitMouseEventData);
 
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
@@ -296,14 +296,14 @@ void KitHelper::forEachOtherView(ViewShellType* pThisViewShell, FunctionType f)
 }
 
 /// If LOK is active, switch to the language/locale of the provided shell and back on delete.
-class SfxLokLanguageGuard
+class SfxKitLanguageGuard
 {
     bool m_bSetLanguage;
     const SfxViewShell* m_pOldShell;
 
 public:
-    SfxLokLanguageGuard(const SfxViewShell* pNewShell);
-    ~SfxLokLanguageGuard();
+    SfxKitLanguageGuard(const SfxViewShell* pNewShell);
+    ~SfxKitLanguageGuard();
 };
 
 typedef std::list<SfxViewShell*> ViewShellList;

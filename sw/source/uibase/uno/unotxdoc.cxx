@@ -3389,7 +3389,7 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
     SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
     tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
     Size aOutputSize(nOutputWidth, nOutputHeight);
-    LokControlHandler::paintControlTile(pPage, pDrawView, rEditWin, rDevice, aOutputSize, aTileRect);
+    KitControlHandler::paintControlTile(pPage, pDrawView, rEditWin, rDevice, aOutputSize, aTileRect);
     comphelper::COKit::setTiledPainting(false);
 }
 
@@ -4062,10 +4062,10 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
     Point aPointTwip(nX, nY);
     Point aPointHMMDraw = o3tl::convert(aPointTwip, o3tl::Length::twip, o3tl::Length::mm100);
-    if (LokControlHandler::postMouseEvent(pPage, pDrawView, rEditWin, nType, aPointHMMDraw, nCount, nButtons, nModifier))
+    if (KitControlHandler::postMouseEvent(pPage, pDrawView, rEditWin, nType, aPointHMMDraw, nCount, nButtons, nModifier))
             return;
 
-    LokMouseEventData aMouseEventData(nType, Point(nX, nY), nCount,
+    KitMouseEventData aMouseEventData(nType, Point(nX, nY), nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
     KitHelper::postMouseEventAsync(&rEditWin, aMouseEventData);

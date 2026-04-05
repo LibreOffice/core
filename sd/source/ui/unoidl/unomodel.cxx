@@ -4113,7 +4113,7 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
         ::sd::Window* pActiveWin = pViewSh->GetActiveWindow();
         ::tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
         Size aOutputSize(nOutputWidth, nOutputHeight);
-        LokControlHandler::paintControlTile(pPage, pDrawView, *pActiveWin, rDevice, aOutputSize, aTileRect);
+        KitControlHandler::paintControlTile(pPage, pDrawView, *pActiveWin, rDevice, aOutputSize, aTileRect);
     }
 
     comphelper::COKit::setTiledPainting(false);
@@ -4542,10 +4542,10 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
         return;
     }
 
-    if (LokControlHandler::postMouseEvent(pPage, pDrawView, *pActiveWin, nType, aPointHMM, nCount, nButtons, nModifier))
+    if (KitControlHandler::postMouseEvent(pPage, pDrawView, *pActiveWin, nType, aPointHMM, nCount, nButtons, nModifier))
             return;
 
-    LokMouseEventData aMouseEventData(nType, aPointHMM, nCount, MouseEventModifiers::SIMPLECLICK,
+    KitMouseEventData aMouseEventData(nType, aPointHMM, nCount, MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
     KitHelper::postMouseEventAsync(pViewShell->GetActiveWindow(), aMouseEventData);
 }

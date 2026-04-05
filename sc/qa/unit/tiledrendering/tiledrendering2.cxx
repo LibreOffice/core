@@ -37,7 +37,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
     ScTestViewCallback aView2;
     SfxViewShell* pView2 = SfxViewShell::Current();
     pView2->SetLOKLocale(u"de-DE"_ustr);
-    TestLokCallbackWrapper::InitializeSidebar();
+    TestKitCallbackWrapper::InitializeSidebar();
     Scheduler::ProcessEventsToIdle();
     aView2.m_aStateChanges.clear();
 

@@ -56,7 +56,7 @@ protected:
         std::string text;
         std::string rect;
     } m_aTooltip;
-    TestLokCallbackWrapper m_callbackWrapper;
+    TestKitCallbackWrapper m_callbackWrapper;
 };
 
 #endif // INCLUDED_SW_QA_INC_SWTILEDRENDERINGTEST_HXX

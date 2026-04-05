@@ -355,9 +355,9 @@ kit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:26
 kit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:35
     GtvCommentsSidebarClass parentClass GtkBoxClass
 kit/qa/gtktiledviewer/gtv-lok-dialog.hxx:28
-    GtvLokDialog parent GtkDialog
+    GtvKitDialog parent GtkDialog
 kit/qa/gtktiledviewer/gtv-lok-dialog.hxx:33
-    GtvLokDialogClass parentClass GtkDialogClass
+    GtvKitDialogClass parentClass GtkDialogClass
 kit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
     GtvMainToolbar parent GtkBox
 kit/qa/gtktiledviewer/gtv-main-toolbar.hxx:38
@@ -491,7 +491,7 @@ sc/inc/SolverSettings.hxx:240
 sc/inc/token.hxx:402
     SingleDoubleRefModifier aDub ScComplexRefData
 sc/qa/unit/helper/sctestviewcallback.hxx:81
-    ScTestViewCallback m_callbackWrapper TestLokCallbackWrapper
+    ScTestViewCallback m_callbackWrapper TestKitCallbackWrapper
 sc/source/core/data/document.cxx:1240
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1241
@@ -547,7 +547,7 @@ scripting/source/stringresource/stringresource.cxx:1246
 sd/inc/anminfo.hxx:51
     SdAnimationInfo maSecondSoundFile OUString
 sd/qa/inc/sdtiledrenderingtest.hxx:79
-    SdTestViewCallback m_callbackWrapper TestLokCallbackWrapper
+    SdTestViewCallback m_callbackWrapper TestKitCallbackWrapper
 sd/qa/unit/tiledrendering/tiledrendering.cxx:2830
     (anonymous namespace)::SlideRendererChecker mnSlideNumber sal_Int32
 sd/source/filter/eppt/epptbase.hxx:348
@@ -755,7 +755,7 @@ sw/qa/core/test_ToxTextGenerator.cxx:145
 sw/qa/extras/uiwriter/uiwriter10.cxx:48
     SwUiWriterTest5 m_aSavedSettings AllSettings
 sw/qa/inc/swtestviewcallback.hxx:56
-    SwTestViewCallback m_callbackWrapper TestLokCallbackWrapper
+    SwTestViewCallback m_callbackWrapper TestKitCallbackWrapper
 sw/source/core/crsr/crbm.cxx:62
     (anonymous namespace)::CursorStateHelper m_aSaveState SwCursorSaveState
 sw/source/core/inc/ftnboss.hxx:34
