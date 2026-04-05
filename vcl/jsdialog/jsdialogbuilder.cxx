@@ -1646,11 +1646,11 @@ void JSToolbar::set_menu_item_active(const OUString& rIdent, bool bActive)
     if (!pFloat)
         return;
 
-    // See WeldToolbarPopup : include/svtools/toolbarmenu.hxx
-    // TopLevel (Popover) -> Container -> main container of the popup
+    // The popover DockingWindow's first child is the "container" widget
+    // from the .ui file. This is the correct serialization root for both:
+    // - ToolbarPopupContainer (VclBox "container" holding moved-in content)
+    // - Direct WeldToolbarPopup (VclGrid "container" with the actual UI)
     vcl::Window* pPopupRoot = pFloat->GetChild(0);
-    if (pPopupRoot)
-        pPopupRoot = pPopupRoot->GetChild(0);
 
     if (pPopupRoot)
     {
