@@ -1796,12 +1796,18 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                 if (!sIconName.isEmpty())
                 {
                     // e.g. "chart2/res/dataeditor_icon05.png" -> "lc_dataeditor_icon05.svg"
+                    // e.g. "cmd/sc_paste.png"              -> "lc_paste.svg"
                     sal_Int32 nSlash = sIconName.lastIndexOf('/');
                     OUString sFileName = (nSlash >= 0) ? sIconName.copy(nSlash + 1) : sIconName;
                     if (sFileName.endsWith(".png"))
                         sFileName = OUString::Concat(sFileName.subView(0, sFileName.getLength() - 4)) + ".svg";
-                    if (!sFileName.startsWith("lc_"))
-                        sFileName = "lc_" + sFileName;
+                    else if (sFileName.indexOf('.') < 0)
+                        sFileName += ".svg";
+                    // Strip sc_/lc_ size prefix before adding the
+                    // canonical lc_ prefix that COOL expects.
+                    if (sFileName.startsWith("sc_") || sFileName.startsWith("lc_"))
+                        sFileName = sFileName.copy(3);
+                    sFileName = "lc_" + sFileName;
                     rJsonWriter.put("icon", sFileName);
                 }
 
