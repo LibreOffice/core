@@ -123,6 +123,9 @@ tools::Rectangle Deck::GetContentArea() const
 
 void Deck::DataChanged(const DataChangedEvent&)
 {
+    if (mxTitleBar)
+        mxTitleBar->DataChanged();
+
     for (auto& rpPanel : maPanels)
         rpPanel->DataChanged();
 

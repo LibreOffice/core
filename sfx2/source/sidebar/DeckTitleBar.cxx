@@ -72,6 +72,7 @@ DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
     , mbIsCloserVisible(false)
 {
     mxLabel->set_label(rsTitle);
+    mxLabel->set_background(Theme::GetColor(Theme::Color_DeckTitleBarBackground));
     mxGripWidget->SetPointer(PointerStyle::Move);
 
     if (maCloserAction)
@@ -129,6 +130,7 @@ void DeckTitleBar::HandleToolBoxItemClick()
 void DeckTitleBar::DataChanged()
 {
     mxToolBox->set_item_icon_name(u"button"_ustr, u"sfx2/res/closedoc.png"_ustr);
+    mxLabel->set_background(Theme::GetColor(Theme::Color_DeckTitleBarBackground));
     TitleBar::DataChanged();
 }
 
