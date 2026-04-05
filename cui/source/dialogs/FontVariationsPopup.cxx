@@ -80,6 +80,7 @@ FontVariationsPopup::FontVariationsPopup(
         pItem->xSpin->set_value(static_cast<int>(fCurrentValue * 100));
 
         pItem->aChangedHdl = LINK(this, FontVariationsPopup, ValueChangedHdl);
+        pItem->xSpin->connect_activate(LINK(this, FontVariationsPopup, ActivateHdl));
         m_aItems.push_back(std::move(pItem));
         ++nRow;
     }
@@ -111,6 +112,12 @@ IMPL_LINK_NOARG(FontVariationsPopup, ResetClickedHdl, weld::Button&, void)
         pItem->xSpin->set_value(static_cast<int>(pItem->fDefaultValue * 100));
     }
     m_aChangedHdl.Call(*this);
+}
+
+IMPL_LINK_NOARG(FontVariationsPopup, ActivateHdl, weld::Entry&, bool)
+{
+    m_xPopover->popdown();
+    return true;
 }
 
 IMPL_LINK_NOARG(FontVariationsPopup, ValueChangedHdl, FontVariationItem&, void)

@@ -53,6 +53,7 @@ private:
 
     DECL_LINK(ResetClickedHdl, weld::Button&, void);
     DECL_LINK(ValueChangedHdl, FontVariationItem&, void);
+    DECL_LINK(ActivateHdl, weld::Entry&, bool);
 
 public:
     FontVariationsPopup(weld::Widget* pParent, const std::vector<vcl::font::VariationAxis>& rAxes,
