@@ -85,6 +85,7 @@ FontVariationsControl::FontVariationsControl(
         pItem->xSpin->set_value(static_cast<int>(fCurrentValue * 100));
 
         pItem->aChangedHdl = LINK(this, FontVariationsControl, ValueChangedHdl);
+        pItem->xSpin->connect_activate(LINK(this, FontVariationsControl, ActivateHdl));
         m_aItems.push_back(std::move(pItem));
         ++nRow;
     }
@@ -118,6 +119,11 @@ IMPL_LINK_NOARG(FontVariationsControl, ValueChangedHdl, FontVariationItem&, void
     m_aChangedHdl.Call(*this);
 }
 
+IMPL_LINK(FontVariationsControl, ActivateHdl, weld::Entry&, rEntry, bool)
+{
+    return m_aActivateHdl.IsSet() && m_aActivateHdl.Call(rEntry);
+}
+
 FontVariationsPopup::FontVariationsPopup(
     weld::Widget* pParent, const std::vector<vcl::font::VariationAxis>& rAxes,
     const std::vector<vcl::font::Variation>& rCurrentVariations)
@@ -132,6 +138,7 @@ FontVariationsPopup::FontVariationsPopup(
     m_xControl.reset(new FontVariationsControl(*m_xContentWindow, *m_xContentGrid, *m_xResetButton,
                                                rAxes, rCurrentVariations));
     m_xControl->connect_changed(LINK(this, FontVariationsPopup, ChangedHdl));
+    m_xControl->connect_activate(LINK(this, FontVariationsPopup, ActivateHdl));
 }
 
 FontVariationsPopup::~FontVariationsPopup() {}
@@ -149,6 +156,12 @@ std::vector<vcl::font::Variation> FontVariationsPopup::getVariations() const
 IMPL_LINK_NOARG(FontVariationsPopup, ChangedHdl, FontVariationsControl&, void)
 {
     m_aChangedHdl.Call(*this);
+}
+
+IMPL_LINK_NOARG(FontVariationsPopup, ActivateHdl, weld::Entry&, bool)
+{
+    m_xPopover->popdown();
+    return true;
 }
 
 } // namespace svx

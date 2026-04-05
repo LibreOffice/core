@@ -55,9 +55,11 @@ private:
     std::vector<std::unique_ptr<FontVariationItem>> m_aItems;
 
     Link<FontVariationsControl&, void> m_aChangedHdl;
+    Link<weld::Entry&, bool> m_aActivateHdl;
 
     DECL_LINK(ResetClickedHdl, weld::Button&, void);
     DECL_LINK(ValueChangedHdl, FontVariationItem&, void);
+    DECL_LINK(ActivateHdl, weld::Entry&, bool);
 
 public:
     FontVariationsControl(weld::ScrolledWindow& rContentWindow, weld::Grid& rContentGrid,
@@ -67,6 +69,8 @@ public:
     ~FontVariationsControl();
 
     void connect_changed(const Link<FontVariationsControl&, void>& rLink) { m_aChangedHdl = rLink; }
+    /// Enter was pressed on a value, so that a host can close itself.
+    void connect_activate(const Link<weld::Entry&, bool>& rLink) { m_aActivateHdl = rLink; }
 
     std::vector<vcl::font::Variation> getVariations() const;
 };
@@ -86,6 +90,7 @@ private:
     Link<FontVariationsPopup&, void> m_aChangedHdl;
 
     DECL_LINK(ChangedHdl, FontVariationsControl&, void);
+    DECL_LINK(ActivateHdl, weld::Entry&, bool);
 
 public:
     FontVariationsPopup(weld::Widget* pParent, const std::vector<vcl::font::VariationAxis>& rAxes,
