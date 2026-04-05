@@ -40,6 +40,8 @@
 #include <vcl/specialchars.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
+#include <svtools/miscopt.hxx>
+#include <cstring>
 
 #include <unoctitm.hxx>
 #include <appdata.hxx>
@@ -187,6 +189,17 @@ void SfxApplication::Initialize_Impl()
     xDesktop->addTerminateListener( new SfxTerminateListener_Impl );
 
     pImpl->mxAppDispatch = new SfxStatusDispatcher;
+
+    // OfficeLabs: force dark icon theme when OFFICELABS_THEME=dark
+    // Must happen early, before any toolbar/icon renders.
+    {
+        const char* pTheme = std::getenv("OFFICELABS_THEME");
+        if (pTheme && std::strcmp(pTheme, "dark") == 0)
+        {
+            SvtMiscOptions aMiscOpts;
+            aMiscOpts.SetIconTheme(u"colibre_dark_svg"_ustr);
+        }
+    }
 
     // SV-Look
     Help::EnableContextHelp();

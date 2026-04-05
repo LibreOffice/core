@@ -117,13 +117,13 @@ void Theme::UpdateTheme()
         {
             if (bDark)
             {
-                aBaseBackgroundColor = Color(0x2D, 0x2D, 0x2D); // #2D2D2D
-                aSecondColor = Color(0x33, 0x33, 0x33);         // #333333
+                aBaseBackgroundColor = Color(0x28, 0x2A, 0x36); // #282A36 Dracula bg
+                aSecondColor = Color(0x34, 0x37, 0x47);         // #343747 Dracula surface
             }
             else
             {
                 aBaseBackgroundColor = Color(0xFA, 0xFA, 0xFA); // #FAFAFA
-                aSecondColor = Color(0xF0, 0xF0, 0xF0);        // #F0F0F0
+                aSecondColor = Color(0xF0, 0xF1, 0xF3);         // #F0F1F3
             }
             aHighlight = Color(0x0D, 0x94, 0x88); // #0D9488 teal accent
         }
