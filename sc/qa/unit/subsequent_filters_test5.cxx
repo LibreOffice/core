@@ -418,6 +418,16 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoRedo)
     CPPUNIT_ASSERT(!pDBData->HasTotals());
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testFullColumnRefs)
+{
+    createScDoc("xlsx/forum-mso-en4-134670.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(u"Total # Of Companies"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    // For K2 cell cached value is 1
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(10, 1, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

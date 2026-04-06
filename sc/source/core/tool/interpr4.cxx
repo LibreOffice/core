@@ -1521,6 +1521,19 @@ bool ScInterpreter::ConvertMatrixParameters()
                         SCROW nRow1, nRow2;
                         SCTAB nTab1, nTab2;
                         DoubleRefToVars( p, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                        // Trim full-column references to the data area to
+                        // avoid creating huge matrices. Only shrink the end;
+                        // the start is preserved for correct index semantics.
+                        // Restrict to Value parameters to avoid changing the
+                        // size of ForceArray/Array parameters used by paired-
+                        // array functions like CORREL across different sheets.
+                        if (eType == formula::ParamClass::Value && nTab1 == nTab2
+                            && (nRow2 == mrDoc.MaxRow() || nCol2 == mrDoc.MaxCol()))
+                        {
+                            SCCOL nTempCol = nCol1;
+                            SCROW nTempRow = nRow1;
+                            mrDoc.ShrinkToDataArea(nTab1, nTempCol, nTempRow, nCol2, nRow2);
+                        }
                         // Make sure the map exists, created if not.
                         GetTokenMatrixMap();
                         ScMatrixRef pMat = CreateMatrixFromDoubleRef( p,
