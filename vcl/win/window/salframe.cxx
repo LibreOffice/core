@@ -269,22 +269,9 @@ static void UpdateDarkMode(HWND hWnd)
     if (!hUxthemeLib)
         return;
 
-    // OfficeLabs: check OFFICELABS_THEME env var for early theme override
-    // (config may not be loaded yet at WM_CREATE time)
-    // Cached in a static to avoid thread-unsafe repeated getenv() calls.
-    static const std::string s_officeLabsTheme = [] {
-        const char* p = getenv("OFFICELABS_THEME");
-        return p ? std::string(p) : std::string();
-    }();
+    // OfficeLabs: always force dark mode on all windows (branded fork).
     bool bForceLight = false;
-    bool bForceDark = false;
-    if (!s_officeLabsTheme.empty())
-    {
-        if (s_officeLabsTheme == "light")
-            bForceLight = true;
-        else if (s_officeLabsTheme == "dark")
-            bForceDark = true;
-    }
+    bool bForceDark = true;
 
     typedef PreferredAppMode(WINAPI* SetPreferredAppMode_t)(PreferredAppMode);
     auto SetPreferredAppMode = reinterpret_cast<SetPreferredAppMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(135)));
