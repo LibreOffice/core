@@ -86,6 +86,60 @@ void Theme::HandleDataChange()
     }
 
     GetCurrentTheme().UpdateTheme();
+
+    // OfficeLabs: re-apply dark VCL StyleSettings every time settings change.
+    // LO re-syncs with the Windows system (light) colors after startup, which
+    // overrides our initial Application::SetSettings() call in Initialize_Impl().
+    // Using a static recursion guard to prevent infinite DataChanged loops.
+    static const bool s_bOfficeLabs = [] {
+        const char* p = std::getenv("OFFICELABS_THEME");
+        return p && std::strcmp(p, "dark") == 0;
+    }();
+    if (s_bOfficeLabs)
+    {
+        static bool s_bApplying = false;
+        if (!s_bApplying)
+        {
+            s_bApplying = true;
+
+            const Color aBg    (0x28, 0x2A, 0x36);
+            const Color aSurface(0x34, 0x37, 0x47);
+            const Color aBorder (0x44, 0x47, 0x5A);
+            const Color aText  (0xF8, 0xF8, 0xF2);
+            const Color aSubtext(0x62, 0x72, 0xA4);
+
+            AllSettings aAllSettings(Application::GetSettings());
+            StyleSettings aStyle(aAllSettings.GetStyleSettings());
+
+            aStyle.SetDialogColor(aBg);
+            aStyle.SetDialogTextColor(aText);
+            aStyle.SetFaceColor(aBg);
+            aStyle.SetButtonTextColor(aText);
+            aStyle.SetMenuColor(aSurface);
+            aStyle.SetMenuTextColor(aText);
+            aStyle.SetMenuBarColor(aBg);
+            aStyle.SetMenuBarTextColor(aText);
+            aStyle.SetMenuBorderColor(aBorder);
+            aStyle.SetLabelTextColor(aText);
+            aStyle.SetGroupTextColor(aText);
+            aStyle.SetRadioCheckTextColor(aText);
+            aStyle.SetDisableColor(aSubtext);
+            aStyle.SetDeactiveColor(aSurface);
+            aStyle.SetDeactiveTextColor(aSubtext);
+            aStyle.SetShadowColor(aBorder);
+            aStyle.SetDarkShadowColor(aBg);
+            aStyle.SetLightColor(aSurface);
+            aStyle.SetLightBorderColor(aBorder);
+            aStyle.SetActiveColor(aSurface);
+            aStyle.SetActiveTextColor(aText);
+            aStyle.SetActiveBorderColor(aBorder);
+
+            aAllSettings.SetStyleSettings(aStyle);
+            Application::SetSettings(aAllSettings);
+
+            s_bApplying = false;
+        }
+    }
 }
 
 void Theme::InitializeTheme()
