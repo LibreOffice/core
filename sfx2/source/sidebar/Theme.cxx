@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/sidebar/Theme.hxx>
-#include <sidebar/OfficelabsTheme.hxx>
 #include <sfx2/app.hxx>
 #include <string>
 
@@ -88,47 +87,52 @@ void Theme::HandleDataChange()
 
     GetCurrentTheme().UpdateTheme();
 
-    // OfficeLabs: re-apply themed VCL StyleSettings every time settings change.
-    // Light theme uses system defaults, dark themes override.
-    if (GetOLTheme() != OLTheme::Light)
+    // OfficeLabs: re-apply dark VCL StyleSettings every time settings change.
+    // LO re-syncs with the Windows system (light) colors after startup, which
+    // overrides our initial Application::SetSettings() call in Initialize_Impl().
     {
         static bool s_bApplying = false;
         if (!s_bApplying)
         {
             s_bApplying = true;
-            auto olc = GetOLColors();
+
+            const Color aBg    (0x28, 0x2A, 0x36);
+            const Color aSurface(0x34, 0x37, 0x47);
+            const Color aBorder (0x44, 0x47, 0x5A);
+            const Color aText  (0xF8, 0xF8, 0xF2);
+            const Color aSubtext(0x62, 0x72, 0xA4);
 
             AllSettings aAllSettings(Application::GetSettings());
             StyleSettings aStyle(aAllSettings.GetStyleSettings());
 
-            aStyle.SetDialogColor(olc.bg);
-            aStyle.SetDialogTextColor(olc.text);
-            aStyle.SetFaceColor(olc.bg);
-            aStyle.SetButtonTextColor(olc.text);
-            aStyle.SetWorkspaceColor(olc.surface);
-            aStyle.SetMenuColor(olc.surface);
-            aStyle.SetMenuTextColor(olc.text);
-            aStyle.SetMenuBarColor(olc.bg);
-            aStyle.SetMenuBarTextColor(olc.text);
-            aStyle.SetMenuBorderColor(olc.border);
-            aStyle.SetLabelTextColor(olc.text);
-            aStyle.SetGroupTextColor(olc.text);
-            aStyle.SetRadioCheckTextColor(olc.text);
-            aStyle.SetDisableColor(olc.subtext);
-            aStyle.SetDeactiveColor(olc.surface);
-            aStyle.SetDeactiveTextColor(olc.subtext);
-            aStyle.SetShadowColor(olc.border);
-            aStyle.SetDarkShadowColor(olc.bg);
-            aStyle.SetLightColor(olc.surface);
-            aStyle.SetLightBorderColor(olc.border);
-            aStyle.SetActiveColor(olc.surface);
-            aStyle.SetActiveTextColor(olc.text);
-            aStyle.SetActiveBorderColor(olc.border);
-            aStyle.SetWindowTextColor(olc.text);
-            aStyle.SetTabTextColor(olc.text);
-            aStyle.SetTabRolloverTextColor(olc.text);
-            aStyle.SetTabHighlightTextColor(olc.text);
-            aStyle.SetFieldTextColor(olc.text);
+            aStyle.SetDialogColor(aBg);
+            aStyle.SetDialogTextColor(aText);
+            aStyle.SetFaceColor(aBg);
+            aStyle.SetButtonTextColor(aText);
+            aStyle.SetMenuColor(aSurface);
+            aStyle.SetMenuTextColor(aText);
+            aStyle.SetMenuBarColor(aBg);
+            aStyle.SetMenuBarTextColor(aText);
+            aStyle.SetMenuBorderColor(aBorder);
+            aStyle.SetLabelTextColor(aText);
+            aStyle.SetGroupTextColor(aText);
+            aStyle.SetRadioCheckTextColor(aText);
+            aStyle.SetDisableColor(aSubtext);
+            aStyle.SetDeactiveColor(aSurface);
+            aStyle.SetDeactiveTextColor(aSubtext);
+            aStyle.SetShadowColor(aBorder);
+            aStyle.SetDarkShadowColor(aBg);
+            aStyle.SetLightColor(aSurface);
+            aStyle.SetLightBorderColor(aBorder);
+            aStyle.SetActiveColor(aSurface);
+            aStyle.SetActiveTextColor(aText);
+            aStyle.SetActiveBorderColor(aBorder);
+            aStyle.SetWindowTextColor(aText);
+            aStyle.SetTabTextColor(aText);
+            aStyle.SetTabRolloverTextColor(aText);
+            aStyle.SetTabHighlightTextColor(aText);
+            aStyle.SetFieldTextColor(aText);
+            aStyle.SetWorkspaceColor(aSurface);
 
             aAllSettings.SetStyleSettings(aStyle);
             Application::SetSettings(aAllSettings);

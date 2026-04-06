@@ -19,7 +19,6 @@
 
 #include <sfx2/sidebar/TabBar.hxx>
 #include <sidebar/DeckDescriptor.hxx>
-#include <sidebar/OfficelabsTheme.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sidebar/Tools.hxx>
 #include <sfx2/sidebar/FocusManager.hxx>
@@ -82,7 +81,8 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     // we have this widget just so we can measure best width for static TabBar::GetDefaultWidth
     mxMeasureBox->hide();
 
-    const Color aTabBg = GetOLColors().bg;
+    // OfficeLabs: hardcode dark background on all VCL layers.
+    const Color aTabBg(0x28, 0x2A, 0x36);
     SetPaintTransparent(false);
     SetBackground(Wallpaper(aTabBg));
     m_xVclContentArea->SetBackground(Wallpaper(aTabBg));
@@ -182,12 +182,10 @@ void TabBar::RemoveDeckHighlight()
 
 void TabBar::DataChanged(const DataChangedEvent& rDataChangedEvent)
 {
-    {
-        const Color aTabBg = GetOLColors().bg;
-        SetBackground(aTabBg);
-        m_xVclContentArea->SetBackground(Wallpaper(aTabBg));
-        m_xContainer->set_background(aTabBg);
-    }
+    const Color aTabBg(0x28, 0x2A, 0x36);
+    SetBackground(aTabBg);
+    m_xVclContentArea->SetBackground(Wallpaper(aTabBg));
+    m_xContainer->set_background(aTabBg);
     UpdateButtonIcons();
     UpdateMenus();
 
@@ -263,7 +261,7 @@ TabBar::Item::Item(TabBar& rTabBar)
     , mxButton(mxBuilder->weld_toolbar(u"button"_ustr))
     , mbIsHidden(false)
 {
-    mxButton->set_background(GetOLColors().bg);
+    mxButton->set_background(Color(0x28, 0x2A, 0x36));
 }
 
 TabBar::Item::~Item()

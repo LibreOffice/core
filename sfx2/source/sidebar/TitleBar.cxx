@@ -18,9 +18,10 @@
  */
 
 #include <sidebar/TitleBar.hxx>
-#include <sidebar/OfficelabsTheme.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
+#include <cstdlib>
+#include <cstring>
 
 namespace sfx2::sidebar {
 
@@ -39,9 +40,10 @@ TitleBar::TitleBar(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem)
 
 void TitleBar::SetBackground()
 {
-    auto c = GetOLColors();
-    mxTitlebar->set_background(c.bg);
-    mxToolBox->set_background(c.bg);
+    // OfficeLabs: always use dark background — this is a branded fork.
+    Color aColor(0x28, 0x2A, 0x36); // Dracula bg
+    mxTitlebar->set_background(aColor);
+    mxToolBox->set_background(aColor);
 }
 
 void TitleBar::DataChanged()

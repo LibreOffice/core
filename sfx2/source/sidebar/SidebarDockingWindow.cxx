@@ -19,7 +19,6 @@
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sidebar/OfficelabsTheme.hxx>
 #include <sidebar/PanelDescriptor.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
@@ -33,6 +32,8 @@
 #include <vcl/event.hxx>
 #include <vcl/wall.hxx>
 #include <osl/diagnose.h>
+#include <cstdlib>
+#include <cstring>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -46,8 +47,9 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
     : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits)
     , mbIsReadyToDrag(false)
 {
-    // OfficeLabs: set sidebar root background from theme config file.
-    SetBackground(Wallpaper(GetOLColors().bg));
+    // OfficeLabs: dark background on the sidebar root — shows through
+    // all transparent InterimItemWindow children (Deck, TabBar).
+    SetBackground(Wallpaper(Color(0x28, 0x2A, 0x36)));
 
     // Get the XFrame from the bindings.
     if (pSfxBindings==nullptr || pSfxBindings->GetDispatcher()==nullptr)
