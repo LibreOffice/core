@@ -19,7 +19,6 @@
 
 #include <sidebar/DeckLayouter.hxx>
 #include <sidebar/DeckTitleBar.hxx>
-#include <cstdlib>
 #include <sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>
@@ -492,15 +491,9 @@ tools::Rectangle PlaceDeckTitle(
     DeckTitleBar& rDeckTitleBar,
     const tools::Rectangle& rAvailableSpace)
 {
-    // OfficeLabs: hide the native deck title bar — the React UI provides its own header.
-    static const bool bOfficeLabs = [] {
-        const char* p = std::getenv("OFFICELABS_THEME");
-        return p && *p;
-    }();
-
-    if (pDockingWindow->IsFloatingMode() || bOfficeLabs)
+    if (pDockingWindow->IsFloatingMode())
     {
-        // When the side bar is undocked or running in OfficeLabs mode, hide the deck title.
+        // When the side bar is undocked then the outer system window displays the deck title.
         rDeckTitleBar.Show(false);
         return rAvailableSpace;
     }

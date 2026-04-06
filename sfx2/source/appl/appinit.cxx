@@ -40,6 +40,7 @@
 #include <vcl/specialchars.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/miscopt.hxx>
 #include <cstring>
 
@@ -190,14 +191,67 @@ void SfxApplication::Initialize_Impl()
 
     pImpl->mxAppDispatch = new SfxStatusDispatcher;
 
-    // OfficeLabs: force dark icon theme when OFFICELABS_THEME=dark
-    // Must happen early, before any toolbar/icon renders.
+    // OfficeLabs: apply dark theme when OFFICELABS_THEME=dark.
+    // Sets VCL StyleSettings so ALL native widgets (TabBar, DeckTitleBar labels,
+    // toolbars, etc.) render with Dracula colors — no per-widget hacks needed.
     {
         const char* pTheme = std::getenv("OFFICELABS_THEME");
         if (pTheme && std::strcmp(pTheme, "dark") == 0)
         {
+            // 1. Force dark icon set
             SvtMiscOptions aMiscOpts;
             aMiscOpts.SetIconTheme(u"colibre_dark_svg"_ustr);
+
+            // 2. Override VCL StyleSettings with Dracula palette.
+            //    WindowColor (document canvas) and FieldColor (text inputs) are
+            //    intentionally left at system defaults so documents stay white.
+            const Color aBg    (0x28, 0x2A, 0x36); // Dracula background
+            const Color aSurface(0x34, 0x37, 0x47); // Dracula surface
+            const Color aBorder (0x44, 0x47, 0x5A); // Dracula border/comment
+            const Color aText  (0xF8, 0xF8, 0xF2); // Dracula foreground
+            const Color aSubtext(0x62, 0x72, 0xA4); // Dracula comment (muted)
+
+            AllSettings aAllSettings(Application::GetSettings());
+            StyleSettings aStyle(aAllSettings.GetStyleSettings());
+
+            // Dialog / panel backgrounds
+            aStyle.SetDialogColor(aBg);
+            aStyle.SetDialogTextColor(aText);
+
+            // Toolbar / button face
+            aStyle.SetFaceColor(aBg);
+            aStyle.SetButtonTextColor(aText);
+
+            // Menu
+            aStyle.SetMenuColor(aSurface);
+            aStyle.SetMenuTextColor(aText);
+            aStyle.SetMenuBarColor(aBg);
+            aStyle.SetMenuBarTextColor(aText);
+            aStyle.SetMenuBorderColor(aBorder);
+
+            // Label / static text
+            aStyle.SetLabelTextColor(aText);
+            aStyle.SetGroupTextColor(aText);
+            aStyle.SetRadioCheckTextColor(aText);
+
+            // Disabled / deactivated
+            aStyle.SetDisableColor(aSubtext);
+            aStyle.SetDeactiveColor(aSurface);
+            aStyle.SetDeactiveTextColor(aSubtext);
+
+            // Shadow / border
+            aStyle.SetShadowColor(aBorder);
+            aStyle.SetDarkShadowColor(aBg);
+            aStyle.SetLightColor(aSurface);
+            aStyle.SetLightBorderColor(aBorder);
+
+            // Active title bar (floating windows / panels)
+            aStyle.SetActiveColor(aSurface);
+            aStyle.SetActiveTextColor(aText);
+            aStyle.SetActiveBorderColor(aBorder);
+
+            aAllSettings.SetStyleSettings(aStyle);
+            Application::SetSettings(aAllSettings);
         }
     }
 
