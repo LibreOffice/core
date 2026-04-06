@@ -120,7 +120,7 @@ namespace sal::systools
         {
         }
 
-        COMReference(COMReference<T>&& other) :
+        COMReference(COMReference<T>&& other) noexcept :
             COMReference(std::exchange(other.com_ptr_, nullptr), false)
         {
         }
@@ -144,7 +144,7 @@ namespace sal::systools
             return operator=(other.com_ptr_);
         }
 
-        COMReference<T>& operator=(COMReference<T>&& other)
+        COMReference<T>& operator=(COMReference<T>&& other) noexcept
         {
             if (com_ptr_ != other.com_ptr_)
             {
