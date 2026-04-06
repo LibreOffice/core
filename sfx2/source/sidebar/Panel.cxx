@@ -26,6 +26,8 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/wall.hxx>
 
 
 #if OSL_DEBUG_LEVEL >= 2
@@ -213,6 +215,12 @@ void Panel::DataChanged()
 {
     mxTitleBar->DataChanged();
     mxContents->set_background(Theme::GetColor(Theme::Color_PanelBackground));
+    if (mxXWindow)
+    {
+        vcl::Window* pChildFrame = VCLUnoHelper::GetWindow(mxXWindow);
+        if (pChildFrame)
+            pChildFrame->SetBackground(Wallpaper(Theme::GetColor(Theme::Color_PanelBackground)));
+    }
 }
 
 Reference<awt::XWindow> Panel::GetElementWindow()
@@ -232,7 +240,15 @@ const Reference<awt::XWindow>& Panel::GetElementParentWindow()
     if (!mxXWindow)
     {
         if (mbWantsAWT)
+        {
             mxXWindow = mxContents->CreateChildFrame();
+            // The VclBin created by CreateChildFrame has no explicit background,
+            // so it defaults to system white. Set it to the panel background color
+            // so panel content areas match the dark/light theme.
+            vcl::Window* pChildFrame = VCLUnoHelper::GetWindow(mxXWindow);
+            if (pChildFrame)
+                pChildFrame->SetBackground(Wallpaper(Theme::GetColor(Theme::Color_PanelBackground)));
+        }
         else
             mxXWindow = Reference<awt::XWindow>(new weld::TransportAsXWindow(mxContents.get()));
     }
