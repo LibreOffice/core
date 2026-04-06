@@ -27,12 +27,14 @@
 
 #include <vbahelper/vbawindowbase.hxx>
 
+class ScModelObj;
+
 typedef cppu::ImplInheritanceHelper< VbaWindowBase, ov::excel::XWindow > WindowImpl_BASE;
 
 class ScVbaWindow : public WindowImpl_BASE
 {
 private:
-    css::uno::Reference<css::frame::XModel> m_xModel;
+    rtl::Reference<ScModelObj> m_xModel;
     css::uno::Reference< ov::excel::XPane > m_xPane;
 
     void init();
@@ -55,7 +57,7 @@ public:
     ScVbaWindow(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::frame::XModel >& xModel,
+        const rtl::Reference< ScModelObj >& xModel,
         const css::uno::Reference< css::frame::XController >& xController );
     /// @throws css::uno::RuntimeException
     ScVbaWindow(

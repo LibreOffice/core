@@ -490,10 +490,10 @@ SwVbaApplication::getServiceNames()
     return aServiceNames;
 }
 
-uno::Reference< frame::XModel >
+SfxBaseModel*
 SwVbaApplication::getCurrentDocument()
 {
-    return static_cast<SfxBaseModel*>(getCurrentWordDoc( mxContext ).get());
+    return getCurrentWordDoc( mxContext ).get();
 }
 
 rtl::Reference< SwXTextDocument >

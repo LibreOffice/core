@@ -25,6 +25,7 @@
 
 #include <vbahelper/vbaapplicationbase.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <docuno.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace ooo::vba { class XSink; }
@@ -50,7 +51,7 @@ private:
     std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
 
 protected:
-    virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() override;
+    virtual ScModelObj* getCurrentDocument() override;
 
 public:
     explicit ScVbaApplication( const css::uno::Reference< css::uno::XComponentContext >& m_xContext );

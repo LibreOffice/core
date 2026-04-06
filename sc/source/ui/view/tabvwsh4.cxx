@@ -1933,8 +1933,8 @@ static bool lcl_CheckInArrayCols(std::vector<uno::Sequence<uno::Any>>& nUniqueRe
 rtl::Reference<ScTableSheetObj> ScTabViewShell::GetRangeWithSheet(css::table::CellRangeAddress& rRangeData, bool& bHasData, bool bHasUnoArguments)
 {
     // get spreadsheet document model & controller
-    uno::Reference<frame::XModel> xModel(GetViewData().GetDocShell()->GetModel());
-    uno::Reference<frame::XController> xController(xModel->getCurrentController());
+    ScModelObj* pModel(GetViewData().GetDocShell()->GetModel());
+    uno::Reference<frame::XController> xController(pModel->getCurrentController());
 
     // spreadsheet's extension of com.sun.star.frame.Controller service
     ScTabViewObj* pSpreadsheetDocument = dynamic_cast<ScTabViewObj*>(xController.get());
@@ -2004,30 +2004,27 @@ void ScTabViewShell::HandleDuplicateRecordsHighlight(const rtl::Reference<ScTabl
         return;
     }
 
-    uno::Reference<frame::XModel> xModel(GetViewData().GetDocShell()->GetModel());
+    ScModelObj* pModel(GetViewData().GetDocShell()->GetModel());
     rtl::Reference<ScCellRangeObj> xSheetRange(
             ActiveSheet->getScCellRangeByPosition(aRange.StartColumn, aRange.StartRow, aRange.EndColumn, aRange.EndRow));
 
     uno::Sequence<uno::Sequence<uno::Any>> aDataArray = xSheetRange->getDataArray();
 
-    uno::Reference< document::XUndoManagerSupplier > xUndoManager( xModel, uno::UNO_QUERY );
-    uno::Reference<document::XActionLockable> xLockable(xModel, uno::UNO_QUERY);
-
     ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
 
     comphelper::ScopeGuard aUndoContextGuard(
-        [&xUndoManager, &xLockable, &xModel, &rDoc] {
-        xUndoManager->getUndoManager()->leaveUndoContext();
-        xLockable->removeActionLock();
-        if (xModel->hasControllersLocked())
-            xModel->unlockControllers();
+        [pModel, &rDoc] {
+        pModel->getUndoManager()->leaveUndoContext();
+        pModel->removeActionLock();
+        if (pModel->hasControllersLocked())
+            pModel->unlockControllers();
         rDoc.UnlockAdjustHeight();
     });
 
     rDoc.LockAdjustHeight();
-    xModel->lockControllers();
-    xLockable->addActionLock();
-    xUndoManager->getUndoManager()->enterUndoContext("HandleDuplicateRecords");
+    pModel->lockControllers();
+    pModel->addActionLock();
+    pModel->getUndoManager()->enterUndoContext("HandleDuplicateRecords");
 
     bool nModifier = false;         // modifier key pressed?
     bool bNoDuplicatesForSelection = true;
@@ -2104,34 +2101,30 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
         return;
     }
 
-    uno::Reference<frame::XModel> xModel(GetViewData().GetDocShell()->GetModel());
+    ScModelObj* pModel(GetViewData().GetDocShell()->GetModel());
     rtl::Reference<ScCellRangeObj> xSheetRange(
             ActiveSheet->getScCellRangeByPosition(aRange.StartColumn, aRange.StartRow, aRange.EndColumn, aRange.EndRow));
 
     uno::Sequence<uno::Sequence<uno::Any>> aDataArray = xSheetRange->getDataArray();
 
-    uno::Reference< document::XUndoManagerSupplier > xUndoManager( xModel, uno::UNO_QUERY );
-    uno::Reference<document::XActionLockable> xLockable(xModel, uno::UNO_QUERY);
-
-    uno::Reference<sheet::XCalculatable> xCalculatable(xModel, uno::UNO_QUERY);
-    bool bAutoCalc = xCalculatable->isAutomaticCalculationEnabled();
+    bool bAutoCalc = pModel->isAutomaticCalculationEnabled();
     ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
 
     comphelper::ScopeGuard aUndoContextGuard(
-        [&xUndoManager, &xLockable, &xModel, &xCalculatable, &bAutoCalc, &rDoc] {
-        xUndoManager->getUndoManager()->leaveUndoContext();
-        xCalculatable->enableAutomaticCalculation(bAutoCalc);
-        xLockable->removeActionLock();
-        if (xModel->hasControllersLocked())
-            xModel->unlockControllers();
+        [pModel, &bAutoCalc, &rDoc] {
+        pModel->getUndoManager()->leaveUndoContext();
+        pModel->enableAutomaticCalculation(bAutoCalc);
+        pModel->removeActionLock();
+        if (pModel->hasControllersLocked())
+            pModel->unlockControllers();
         rDoc.UnlockAdjustHeight();
     });
 
     rDoc.LockAdjustHeight();
-    xModel->lockControllers();
-    xLockable->addActionLock();
-    xCalculatable->enableAutomaticCalculation(true);
-    xUndoManager->getUndoManager()->enterUndoContext("HandleDuplicateRecords");
+    pModel->lockControllers();
+    pModel->addActionLock();
+    pModel->enableAutomaticCalculation(true);
+    pModel->getUndoManager()->enterUndoContext("HandleDuplicateRecords");
 
     if (bDuplicateRows)
     {

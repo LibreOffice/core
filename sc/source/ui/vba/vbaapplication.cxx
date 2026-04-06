@@ -241,7 +241,7 @@ ScVbaApplication::hasProperty( const OUString& Name )
 uno::Reference< excel::XWorkbook >
 ScVbaApplication::getActiveWorkbook()
 {
-    uno::Reference< frame::XModel > xModel( getCurrentExcelDoc( mxContext ), uno::UNO_SET_THROW );
+    rtl::Reference< ScModelObj > xModel( dynamic_cast<ScModelObj*>(getCurrentExcelDoc( mxContext ).get()) );
     uno::Reference< excel::XWorkbook > xWorkbook( getVBADocument( xModel ), uno::UNO_QUERY );
     if( xWorkbook.is() ) return xWorkbook;
     // #i116936# getVBADocument() may return null in documents without global VBA mode enabled
@@ -251,7 +251,7 @@ ScVbaApplication::getActiveWorkbook()
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaApplication::getThisWorkbook()
 {
-    uno::Reference< frame::XModel > xModel( getThisExcelDoc( mxContext ), uno::UNO_SET_THROW );
+    rtl::Reference< ScModelObj > xModel( dynamic_cast<ScModelObj*>(getThisExcelDoc( mxContext ).get()) );
     uno::Reference< excel::XWorkbook > xWorkbook( getVBADocument( xModel ), uno::UNO_QUERY );
     if( xWorkbook.is() ) return xWorkbook;
     // #i116936# getVBADocument() may return null in documents without global VBA mode enabled
@@ -466,7 +466,7 @@ ScVbaApplication::Dialogs( const uno::Any &aIndex )
 uno::Reference< excel::XWindow > SAL_CALL
 ScVbaApplication::getActiveWindow()
 {
-    uno::Reference< frame::XModel > xModel = getCurrentDocument();
+    rtl::Reference< ScModelObj > xModel = getCurrentDocument();
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
     uno::Reference< XHelperInterface > xParent( getActiveWorkbook(), uno::UNO_QUERY_THROW );
     uno::Reference< excel::XWindow > xWin( new ScVbaWindow( xParent, mxContext, xModel, xController ) );
@@ -536,7 +536,7 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar )
 ScVbaApplication::getCalculation()
 {
     // TODO: in Excel, this is an application-wide setting
-    uno::Reference<sheet::XCalculatable> xCalc(getCurrentDocument(), uno::UNO_QUERY_THROW);
+    rtl::Reference<ScModelObj> xCalc(getCurrentDocument());
     if(xCalc->isAutomaticCalculationEnabled())
         return excel::XlCalculation::xlCalculationAutomatic;
     else
@@ -547,7 +547,7 @@ void SAL_CALL
 ScVbaApplication::setCalculation( ::sal_Int32 _calculation )
 {
     // TODO: in Excel, this is an application-wide setting
-    uno::Reference< sheet::XCalculatable > xCalc(getCurrentDocument(), uno::UNO_QUERY_THROW);
+    rtl::Reference< ScModelObj > xCalc(getCurrentDocument());
     switch(_calculation)
     {
         case excel::XlCalculation::xlCalculationManual:
@@ -963,9 +963,8 @@ ScVbaApplication::setIteration( sal_Bool bSet )
 void SAL_CALL
 ScVbaApplication::Calculate()
 {
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
-    uno::Reference< sheet::XCalculatable > xCalculatable( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    xCalculatable->calculateAll();
+    rtl::Reference< ScModelObj > xModel( getCurrentDocument() );
+    xModel->calculateAll();
 }
 
 /// @throws uno::RuntimeException
@@ -1414,10 +1413,10 @@ ScVbaApplication::Caller( const uno::Any& /*aIndex*/ )
     return aRet;
 }
 
-uno::Reference< frame::XModel >
+ScModelObj*
 ScVbaApplication::getCurrentDocument()
 {
-    return getCurrentExcelDoc(mxContext);
+    return dynamic_cast<ScModelObj*>(getCurrentExcelDoc(mxContext).get());
 }
 
 uno::Any SAL_CALL

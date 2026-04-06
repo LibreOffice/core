@@ -19,19 +19,21 @@
 #pragma once
 #include <ooo/vba/excel/XStyles.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::container { class XNameContainer; }
+class ScModelObj;
 
 typedef CollTestImplHelper< ov::excel::XStyles > ScVbaStyles_BASE;
 class ScVbaStyles: public ScVbaStyles_BASE
 {
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< ScModelObj > mxModel;
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
     css::uno::Reference< css::container::XNameContainer > mxNameContainerCellStyles;
 public:
     /// @throws css::script::BasicErrorException
-    ScVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, ScModelObj* pModel );
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< OUString > getStyleNames();
     /// @throws css::script::BasicErrorException

@@ -47,7 +47,7 @@ protected:
     virtual ~VbaApplicationBase() override;
 
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() = 0;
+    virtual css::frame::XModel* getCurrentDocument() = 0;
 public:
     // XHelperInterface ( parent is itself )
     virtual css::uno::Reference< ov::XHelperInterface > SAL_CALL getParent(  ) override { return this; }

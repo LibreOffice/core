@@ -290,7 +290,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         xStorage = pMedium->GetStorage();
 
     // get filter
-    uno::Reference<frame::XModel> xModel = mrDocShell.GetModel();
+    rtl::Reference<ScModelObj> xModel = mrDocShell.GetModel();
 
     /** property map for export info set */
     static comphelper::PropertyMapEntry const aImportInfoMap[] =
@@ -318,10 +318,9 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
 
     // ---- get BuildId from parent container if available
 
-    uno::Reference< container::XChild > xChild( xModel, uno::UNO_QUERY );
-    if( xChild.is() )
+    if( xModel.is() )
     {
-        uno::Reference< beans::XPropertySet > xParentSet( xChild->getParent(), uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xParentSet( xModel->getParent(), uno::UNO_QUERY );
         if( xParentSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
@@ -382,13 +381,11 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         // RDF metadata: ODF >= 1.2
         try
         {
-            const uno::Reference< rdf::XDocumentMetadataAccess > xDMA(
-                xModel, uno::UNO_QUERY_THROW );
             const uno::Reference< rdf::XURI > xBaseURI(
                 ::sfx2::createBaseURI( xContext, xModel, aBaseURL, aName ) );
             uno::Reference<task::XInteractionHandler> xHandler =
                 mrDocShell.GetMedium()->GetInteractionHandler();
-            xDMA->loadMetadataFromStorage( xStorage, xBaseURI, xHandler );
+            xModel->loadMetadataFromStorage( xStorage, xBaseURI, xHandler );
         }
         catch ( const lang::WrappedTargetException & e)
         {
@@ -528,19 +525,18 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
 
     bool bRet = !rError.IsError();
 
-    ::svx::DropUnusedNamedItems(xModel);
+    ::svx::DropUnusedNamedItems(cppu::getXWeak(xModel.get()));
 
     // set BuildId on XModel for later OLE object loading
     if( xInfoSet.is() )
     {
-        uno::Reference< beans::XPropertySet > xModelSet( xModel, uno::UNO_QUERY );
-        if( xModelSet.is() )
+        if( xModel.is() )
         {
-            uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
+            uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModel->getPropertySetInfo() );
             OUString sBuildPropName(u"BuildId"_ustr );
             if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sBuildPropName) )
             {
-                xModelSet->setPropertyValue( sBuildPropName, xInfoSet->getPropertyValue(sBuildPropName) );
+                xModel->setPropertyValue( sBuildPropName, xInfoSet->getPropertyValue(sBuildPropName) );
             }
         }
 
@@ -557,9 +553,9 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
             /*  Set library container to VBA compatibility mode, this
                 forces loading the Basic project, which in turn creates the
                 VBA Globals object and does all related initialization. */
-            if ( xModelSet.is() ) try
+            if ( xModel.is() ) try
             {
-                uno::Reference< script::vba::XVBACompatibility > xVBACompat( xModelSet->getPropertyValue(
+                uno::Reference< script::vba::XVBACompatibility > xVBACompat( xModel->getPropertyValue(
                     u"BasicLibraries"_ustr ), uno::UNO_QUERY_THROW );
                 xVBACompat->setVBACompatibilityMode( true );
             }
@@ -757,11 +753,10 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
     if ( pObjSh && xStorage.is() )
     {
-        uno::Reference<frame::XModel> xModel(pObjSh->GetModel());
+        rtl::Reference<ScModelObj> xModel(pObjSh->GetModel());
         // sorting wants to create undo actions
         assert(SfxObjectCreateMode::STANDARD != pObjSh->GetCreateMode() || rDoc.GetDrawLayer()->IsUndoEnabled());
-        uno::Reference<drawing::XDrawPagesSupplier> const xDPS(xModel, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> const xDPs(xDPS->getDrawPages());
+        uno::Reference<container::XIndexAccess> const xDPs(xModel->getDrawPages());
         assert(xDPs.is());
         for (auto i = xDPs->getCount(); 0 < i; )
         {
@@ -846,9 +841,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
                     && aVersion != ODFVER_010_TEXT
                     && aVersion != ODFVER_011_TEXT )
                 {
-                    const uno::Reference< rdf::XDocumentMetadataAccess > xDMA(
-                        xModel, uno::UNO_QUERY_THROW );
-                    xDMA->storeMetadataToStorage( xStorage );
+                    xModel->storeMetadataToStorage( xStorage );
                 }
             }
             catch ( const beans::UnknownPropertyException &)

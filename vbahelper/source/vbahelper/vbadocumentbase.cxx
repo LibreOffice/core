@@ -290,7 +290,7 @@ VbaDocumentBase::getVBProject()
             if (xVBE)
             {
                 uno::Sequence< uno::Any > aArgs{ uno::Any(xVBE), // the VBE
-                                                 uno::Any(getModel()) }; // document model for script container access
+                                                 uno::Any(uno::Reference(getModel())) }; // document model for script container access
                 uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager() );
                 if (xServiceManager)
                     mxVBProject = xServiceManager->createInstanceWithArgumentsAndContext(

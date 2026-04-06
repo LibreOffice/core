@@ -237,14 +237,13 @@ void XclExpRoot::InitializeGlobals()
                 SAL_WARN( "sc", "XclExpRoot::InitializeGlobals - no object shell");
                 break;
             }
-            uno::Reference< lang::XComponent > xComponent = pShell->GetModel();
-            if (!xComponent.is())
+            rtl::Reference< ScModelObj > xModel = pShell->GetModel();
+            if (!xModel.is())
             {
                 SAL_WARN( "sc", "XclExpRoot::InitializeGlobals - no component");
                 break;
             }
-            uno::Reference< lang::XMultiServiceFactory > xModelFactory( xComponent, uno::UNO_QUERY);
-            oox::xls::OpCodeProvider aOpCodeProvider(xModelFactory, false);
+            oox::xls::OpCodeProvider aOpCodeProvider(xModel, false);
             // Compiler mocks about non-matching ctor or conversion from
             // Sequence<...> to Sequence<const ...> if directly created or passed,
             // conversion through Any works around.

@@ -2026,12 +2026,12 @@ static OUString getFileNameFromDoc( const ScDocument* pDoc )
     // TODO : er points at ScGlobal::GetAbsDocName()
     // as a better template.  Look into it
     OUString sFileName;
-    SfxObjectShell* pShell;
+    ScDocShell* pShell;
 
     if( nullptr != pDoc &&
         nullptr != (pShell = pDoc->GetDocumentShell() ) )
     {
-        uno::Reference< frame::XModel > xModel = pShell->GetModel();
+        rtl::Reference< ScModelObj > xModel = pShell->GetModel();
         if( xModel.is() )
         {
             if( !xModel->getURL().isEmpty() )

@@ -20,6 +20,7 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { class XPropertyState; }
@@ -31,6 +32,7 @@ namespace ooo::vba::excel { class XFont; }
 namespace ooo::vba::excel { class XInterior; }
 
 class ScCellRangesBase;
+class ScModelObj;
 class SfxItemSet;
 
 template< typename... Ifc >
@@ -43,7 +45,7 @@ protected:
     css::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
     css::uno::Reference< css::util::XNumberFormats > xNumberFormats;
     css::uno::Reference< css::util::XNumberFormatTypes > xNumberFormatTypes;
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< ScModelObj > mxModel;
     css::uno::Reference< css::beans::XPropertyState > xPropertyState;
     bool mbCheckAmbiguoity;
     bool mbAddIndent;
@@ -61,7 +63,7 @@ protected:
     virtual ScCellRangesBase* getCellRangesBase();
 public:
     /// @throws css::script::BasicErrorException
-    ScVbaFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::beans::XPropertySet >  _xPropertySet, css::uno::Reference< css::frame::XModel > xModel, bool bCheckAmbiguoity );
+    ScVbaFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::beans::XPropertySet >  _xPropertySet, const rtl::Reference<ScModelObj>& xModel, bool bCheckAmbiguoity );
     virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() = 0;
      /// @throws css::uno::RuntimeException
      void SAL_CALL setAddIndent( const css::uno::Any& BAddIndent) { BAddIndent >>= mbAddIndent; }

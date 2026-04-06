@@ -32,6 +32,7 @@
 #include <vbahelper/vbaapplicationbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 
 #include "vbawindow.hxx"
 
@@ -124,7 +125,8 @@ public:
     // XSinkCaller
     virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments ) override;
 
-    virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() override;
+    // this should be SwXTextDocument, but the inheritance hierarchy makes that impossoble
+    virtual SfxBaseModel* getCurrentDocument() override;
 
     rtl::Reference<SwXTextDocument> getCurrentSwDocument();
 };

@@ -190,7 +190,7 @@ public:
 ScVbaWindow::ScVbaWindow(
         const uno::Reference< XHelperInterface >& xParent,
         const uno::Reference< uno::XComponentContext >& xContext,
-        const uno::Reference< frame::XModel >& xModel,
+        const rtl::Reference< ScModelObj >& xModel,
         const uno::Reference< frame::XController >& xController ) :
     WindowImpl_BASE( xParent, xContext, xController ),
     m_xModel(xModel)
@@ -202,7 +202,7 @@ ScVbaWindow::ScVbaWindow(
         const uno::Sequence< uno::Any >& args,
         const uno::Reference< uno::XComponentContext >& xContext ) :
     WindowImpl_BASE( args, xContext ),
-    m_xModel(getXSomethingFromArgs< frame::XModel >( args, 1, false ))
+    m_xModel(dynamic_cast<ScModelObj*>(getXSomethingFromArgs< frame::XModel >( args, 1, false ).get()))
 {
     init();
 }
@@ -729,7 +729,7 @@ void SAL_CALL ScVbaWindow::setZoom(const uno::Any& _zoom)
 {
     sal_Int16 nZoom = 100;
     _zoom >>= nZoom;
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( m_xModel, uno::UNO_QUERY_THROW );
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( m_xModel );
     uno::Reference< excel::XWorksheet > xActiveSheet = ActiveSheet();
     SCTAB nTab = 0;
     if ( !ScVbaWorksheets::nameExists (xSpreadDoc, xActiveSheet->getName(), nTab) )

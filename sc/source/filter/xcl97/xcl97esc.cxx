@@ -413,7 +413,7 @@ std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< X
 
             // writes from xCtrlModel into mxCtlsStrm, raw class name returned in aClassName
             Reference< XOutputStream > xOut( new utl::OSeekableOutputStreamWrapper( *mxCtlsStrm ) );
-            Reference< css::frame::XModel > xModel( GetDocShell() ? GetDocShell()->GetModel() : nullptr );
+            rtl::Reference< ScModelObj > xModel( GetDocShell() ? GetDocShell()->GetModel() : nullptr );
             if( xModel.is() && xOut.is() && oox::ole::MSConvertOCXControls::WriteOCXExcelKludgeStream( xModel, xOut, xCtrlModel, xShape->getSize(), aClassName ) )
             {
                 sal_uInt32 nStrmSize = static_cast< sal_uInt32 >( mxCtlsStrm->Tell() - nStrmStart );

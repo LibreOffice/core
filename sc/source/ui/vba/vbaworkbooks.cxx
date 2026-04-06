@@ -42,11 +42,10 @@ const sal_Int16 CUSTOM_CHAR = 5;
 
 static uno::Any
 getWorkbook( const uno::Reference< uno::XComponentContext >& xContext,
-             const uno::Reference< sheet::XSpreadsheetDocument > &xDoc,
+             const rtl::Reference< ScModelObj > &xModel,
              const uno::Reference< XHelperInterface >& xParent )
 {
     // FIXME: fine as long as ScVbaWorkbook is stateless ...
-    uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
     if( !xModel.is() )
         return uno::Any();
 
@@ -71,7 +70,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< sheet::XSpreadsheetDocument > xDoc( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        return getWorkbook( m_xContext, xDoc, m_xParent );
+        return getWorkbook( m_xContext, static_cast<ScModelObj*>(xDoc.get()), m_xParent );
     }
 
 };
@@ -102,7 +101,7 @@ uno::Any
 ScVbaWorkbooks::createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc( aSource, uno::UNO_QUERY_THROW );
-    return getWorkbook( mxContext, xDoc, mxParent );
+    return getWorkbook( mxContext, dynamic_cast<ScModelObj*>(xDoc.get()), mxParent );
 }
 
 uno::Any SAL_CALL
@@ -147,7 +146,7 @@ ScVbaWorkbooks::Add( const uno::Any& Template )
     if (!xSpreadDoc.is())
         return uno::Any();
 
-    uno::Any aRet = getWorkbook( mxContext, xSpreadDoc, mxParent );
+    uno::Any aRet = getWorkbook( mxContext, dynamic_cast<ScModelObj*>(xSpreadDoc.get()), mxParent );
     uno::Reference< excel::XWorkbook > xWBook( aRet, uno::UNO_QUERY );
     if (xWBook.is())
         xWBook->Activate();
@@ -266,7 +265,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         throw uno::RuntimeException(u"Bad Format"_ustr );
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( openDocument( rFileName, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
-    uno::Any aRet = getWorkbook( mxContext, xSpreadDoc, mxParent );
+    uno::Any aRet = getWorkbook( mxContext, dynamic_cast<ScModelObj*>(xSpreadDoc.get()), mxParent );
     uno::Reference< excel::XWorkbook > xWBook( aRet, uno::UNO_QUERY );
     if ( xWBook.is() )
         xWBook->Activate();

@@ -190,7 +190,7 @@ ScVbaWorkbook::init()
 
 ScVbaWorkbook::ScVbaWorkbook( const css::uno::Reference< ov::XHelperInterface >& xParent,
                               const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                              css::uno::Reference< css::frame::XModel > const & xModel )
+                              rtl::Reference< ScModelObj > const & xModel )
 : ScVbaWorkbook_BASE( xParent, xContext ),
   mxModel(xModel)
 {
@@ -200,7 +200,7 @@ ScVbaWorkbook::ScVbaWorkbook( const css::uno::Reference< ov::XHelperInterface >&
 ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< uno::Any> const & args,
                               uno::Reference< uno::XComponentContext> const & xContext )
 : ScVbaWorkbook_BASE( args, xContext ),
-  mxModel(getXSomethingFromArgs< frame::XModel >( args, 1 ))
+  mxModel(dynamic_cast<ScModelObj*>(getXSomethingFromArgs< frame::XModel >( args, 1 ).get()))
 {
     init();
 }
@@ -263,8 +263,7 @@ ScVbaWorkbook::Protect( const uno::Any &aPassword )
 sal_Bool
 ScVbaWorkbook::getProtectStructure()
 {
-    uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
-    return xProt->isProtected();
+    return getModel()->isProtected();
 }
 
 sal_Bool SAL_CALL ScVbaWorkbook::getPrecisionAsDisplayed()
@@ -290,7 +289,7 @@ void SAL_CALL ScVbaWorkbook::setPrecisionAsDisplayed( sal_Bool _precisionAsDispl
 
 OUString SAL_CALL ScVbaWorkbook::getAuthor()
 {
-    uno::Reference<document::XDocumentPropertiesSupplier> xDPS( getModel(), uno::UNO_QUERY );
+    rtl::Reference<ScModelObj> xDPS( getModel() );
     if (!xDPS.is())
         return u"?"_ustr;
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
@@ -299,7 +298,7 @@ OUString SAL_CALL ScVbaWorkbook::getAuthor()
 
 void SAL_CALL ScVbaWorkbook::setAuthor( const OUString& _author )
 {
-    uno::Reference<document::XDocumentPropertiesSupplier> xDPS( getModel(), uno::UNO_QUERY );
+    rtl::Reference<ScModelObj> xDPS( getModel() );
     if (!xDPS.is())
         return;
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
@@ -311,7 +310,7 @@ ScVbaWorkbook::SaveCopyAs( const OUString& sFileName )
 {
     OUString aURL;
     osl::FileBase::getFileURLFromSystemPath( sFileName, aURL );
-    uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
+    rtl::Reference< ScModelObj > xStor( getModel() );
     uno::Sequence<  beans::PropertyValue > storeProps{ comphelper::makePropertyValue(
         u"FilterName"_ustr, u"MS Excel 97"_ustr) };
     xStor->storeToURL( aURL, storeProps );
@@ -358,7 +357,7 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
     uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr, uno::Any()) };
     setFilterPropsFromFormat( nFileFormat, storeProps );
 
-    uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
+    rtl::Reference< ScModelObj > xStor( getModel() );
     xStor->storeAsURL( sURL, storeProps );
 }
 
@@ -417,7 +416,7 @@ ScVbaWorkbook::getServiceNames()
 OUString SAL_CALL
 ScVbaWorkbook::getCodeName()
 {
-    uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY_THROW );
+    rtl::Reference< ScModelObj > xModelProp( getModel() );
     return xModelProp->getPropertyValue(u"CodeName"_ustr).get< OUString >();
 }
 

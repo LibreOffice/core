@@ -388,14 +388,14 @@ getDocShellFromRanges( const uno::Reference< sheet::XSheetCellRangeContainer >& 
 }
 
 /// @throws uno::RuntimeException
-static uno::Reference< frame::XModel > getModelFromXIf( const uno::Reference< uno::XInterface >& xIf )
+static rtl::Reference< ScModelObj > getModelFromXIf( const uno::Reference< uno::XInterface >& xIf )
 {
     ScDocShell* pDocShell = getDocShellFromIf(xIf );
     return pDocShell->GetModel();
 }
 
 /// @throws uno::RuntimeException
-static uno::Reference< frame::XModel > getModelFromRange( const uno::Reference< table::XCellRange >& xRange )
+static rtl::Reference< ScModelObj > getModelFromRange( const uno::Reference< table::XCellRange >& xRange )
 {
     // the XInterface for getImplementation can be any derived interface, no need for queryInterface
     uno::Reference< uno::XInterface > xIf( xRange );
@@ -480,7 +480,7 @@ class NumFormatHelper
 public:
     explicit NumFormatHelper( const uno::Reference< table::XCellRange >& xRange )
     {
-        mxSupplier.set( getModelFromRange( xRange ), uno::UNO_QUERY_THROW );
+        mxSupplier.set( cppu::getXWeak(getModelFromRange( xRange ).get()), uno::UNO_QUERY_THROW );
         mxRangeProps.set( xRange, uno::UNO_QUERY_THROW);
         mxFormats = mxSupplier->getNumberFormats();
     }
@@ -1418,7 +1418,14 @@ lcl_setupBorders( const uno::Reference< excel::XRange >& xParentRange, const uno
 }
 
 ScVbaRange::ScVbaRange( uno::Sequence< uno::Any> const & args,
-    uno::Reference< uno::XComponentContext> const & xContext ) : ScVbaRange_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext, getXSomethingFromArgs< beans::XPropertySet >( args, 1, false ), getModelFromXIf( getXSomethingFromArgs< uno::XInterface >( args, 1 ) ), true ), mbIsRows( false ), mbIsColumns( false )
+    uno::Reference< uno::XComponentContext> const & xContext )
+    : ScVbaRange_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ),
+                       xContext,
+                       getXSomethingFromArgs< beans::XPropertySet >( args, 1, false ),
+                       getModelFromXIf( getXSomethingFromArgs< uno::XInterface >( args, 1 ) ),
+                       true ),
+      mbIsRows( false ),
+      mbIsColumns( false )
 {
     mxRange.set( mxPropertySet, uno::UNO_QUERY );
     mxRanges.set( mxPropertySet, uno::UNO_QUERY );
@@ -5374,8 +5381,8 @@ ScVbaRange::getStyle()
     OUString sStyleName;
     xProps->getPropertyValue( CELLSTYLE ) >>= sStyleName;
     ScDocShell* pShell = getScDocShell();
-    uno::Reference< frame::XModel > xModel( pShell->GetModel() );
-    uno::Reference< excel::XStyle > xStyle = new ScVbaStyle( this, mxContext,  sStyleName, xModel );
+    ScModelObj* pModel( pShell->GetModel() );
+    uno::Reference< excel::XStyle > xStyle = new ScVbaStyle( this, mxContext, sStyleName, pModel );
     return uno::Any( xStyle );
 }
 void SAL_CALL

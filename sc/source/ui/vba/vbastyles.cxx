@@ -24,12 +24,13 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <utility>
+#include <docuno.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 static css::uno::Any
-lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel )
+lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const rtl::Reference<ScModelObj>& xModel )
 {
     uno::Reference< beans::XPropertySet > xStyleProps( aObject, uno::UNO_QUERY_THROW );
     uno::Reference< excel::XStyle > xStyle( new ScVbaStyle( xParent, xContext, xStyleProps, xModel ) );
@@ -38,15 +39,15 @@ lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Referenc
 
 ScVbaStyles::ScVbaStyles( const uno::Reference< XHelperInterface >& xParent,
                           const uno::Reference< css::uno::XComponentContext > & xContext,
-                          const uno::Reference< frame::XModel >& xModel )
+                          ScModelObj* pModel )
 : ScVbaStyles_BASE( xParent,
                     xContext,
-                    uno::Reference< container::XIndexAccess >( ScVbaStyle::getStylesNameContainer( xModel ), uno::UNO_QUERY_THROW ) ),
-  mxModel( xModel )
+                    uno::Reference< container::XIndexAccess >( ScVbaStyle::getStylesNameContainer( pModel ), uno::UNO_QUERY_THROW ) ),
+  mxModel( pModel )
 {
     try
     {
-        mxMSF.set( mxModel, uno::UNO_QUERY_THROW );
+        mxMSF = mxModel;
         mxNameContainerCellStyles.set( m_xNameAccess, uno::UNO_QUERY_THROW );
     }
     catch (uno::Exception& )
@@ -80,11 +81,11 @@ class EnumWrapper : public EnumerationHelper_BASE
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         uno::Reference<XHelperInterface > m_xParent;
         uno::Reference<uno::XComponentContext > m_xContext;
-        uno::Reference<frame::XModel > m_xModel;
+        rtl::Reference<ScModelObj > m_xModel;
 
         sal_Int32 nIndex;
 public:
-        EnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess, uno::Reference<XHelperInterface > xParent, uno::Reference<uno::XComponentContext > xContext, uno::Reference<frame::XModel > xModel ) : m_xIndexAccess(std::move( xIndexAccess )), m_xParent(std::move( xParent )), m_xContext(std::move( xContext )), m_xModel(std::move( xModel )), nIndex( 0 ) {}
+        EnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess, uno::Reference<XHelperInterface > xParent, uno::Reference<uno::XComponentContext > xContext, rtl::Reference<ScModelObj > xModel ) : m_xIndexAccess(std::move( xIndexAccess )), m_xParent(std::move( xParent )), m_xContext(std::move( xContext )), m_xModel(std::move( xModel )), nIndex( 0 ) {}
         virtual sal_Bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
