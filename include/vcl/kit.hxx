@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_KIT_HXX
-#define INCLUDED_VCL_KIT_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
@@ -32,7 +31,5 @@ void VCL_DLLPUBLIC trimMemory(int nTarget);
 // Dump internal state of VCL windows etc. for debugging
 void VCL_DLLPUBLIC dumpState(rtl::OStringBuffer& rState);
 }
-
-#endif // INCLUDE_VCL_LOK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
