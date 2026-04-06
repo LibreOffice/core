@@ -40,13 +40,8 @@ TitleBar::TitleBar(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem)
 
 void TitleBar::SetBackground()
 {
-    // OfficeLabs: bypass Theme::GetColor which may not be initialized yet.
-    // Use Dracula palette directly when OFFICELABS_THEME=dark.
-    static const bool s_bDark = [] {
-        const char* p = std::getenv("OFFICELABS_THEME");
-        return p && std::strcmp(p, "dark") == 0;
-    }();
-    Color aColor = s_bDark ? Color(0x28, 0x2A, 0x36) : Theme::GetColor(meThemeItem);
+    // OfficeLabs: always use dark background — this is a branded fork.
+    Color aColor(0x28, 0x2A, 0x36); // Dracula bg
     mxTitlebar->set_background(aColor);
     mxToolBox->set_background(aColor);
 }

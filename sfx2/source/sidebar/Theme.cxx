@@ -90,12 +90,6 @@ void Theme::HandleDataChange()
     // OfficeLabs: re-apply dark VCL StyleSettings every time settings change.
     // LO re-syncs with the Windows system (light) colors after startup, which
     // overrides our initial Application::SetSettings() call in Initialize_Impl().
-    // Using a static recursion guard to prevent infinite DataChanged loops.
-    static const bool s_bOfficeLabs = [] {
-        const char* p = std::getenv("OFFICELABS_THEME");
-        return p && std::strcmp(p, "dark") == 0;
-    }();
-    if (s_bOfficeLabs)
     {
         static bool s_bApplying = false;
         if (!s_bApplying)

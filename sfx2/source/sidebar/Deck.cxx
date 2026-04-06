@@ -66,12 +66,7 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentW
     // Override InterimItemWindow's SetPaintTransparent(true) so background paints.
     SetPaintTransparent(false);
     {
-        static const bool s_bDark = [] {
-            const char* p = std::getenv("OFFICELABS_THEME");
-            return p && std::strcmp(p, "dark") == 0;
-        }();
-        Color aDeckBg = s_bDark ? Color(0x28, 0x2A, 0x36)
-                                : Theme::GetColor(Theme::Color_DeckBackground);
+        const Color aDeckBg(0x28, 0x2A, 0x36);
         SetBackground(Wallpaper(aDeckBg));
         m_xVclContentArea->SetBackground(Wallpaper(aDeckBg));
         m_xContainer->set_background(aDeckBg);

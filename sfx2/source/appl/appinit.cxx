@@ -191,12 +191,8 @@ void SfxApplication::Initialize_Impl()
 
     pImpl->mxAppDispatch = new SfxStatusDispatcher;
 
-    // OfficeLabs: apply dark theme when OFFICELABS_THEME=dark.
-    // Sets VCL StyleSettings so ALL native widgets (TabBar, DeckTitleBar labels,
-    // toolbars, etc.) render with Dracula colors — no per-widget hacks needed.
+    // OfficeLabs: always apply dark theme — this is a branded fork.
     {
-        const char* pTheme = std::getenv("OFFICELABS_THEME");
-        if (pTheme && std::strcmp(pTheme, "dark") == 0)
         {
             // 1. Force dark icon set
             SvtMiscOptions aMiscOpts;

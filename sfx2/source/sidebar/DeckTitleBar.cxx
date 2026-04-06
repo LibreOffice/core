@@ -55,13 +55,7 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/) override
     {
-        static const bool s_bDark = [] {
-            const char* p = std::getenv("OFFICELABS_THEME");
-            return p && std::strcmp(p, "dark") == 0;
-        }();
-        Color aBg = s_bDark ? Color(0x28, 0x2A, 0x36)
-                            : Theme::GetColor(Theme::Color_DeckTitleBarBackground);
-        rRenderContext.SetBackground(aBg);
+        rRenderContext.SetBackground(Color(0x28, 0x2A, 0x36));
         rRenderContext.Erase();
         rRenderContext.DrawBitmap(Point(0, 0), maGrip);
     }
@@ -80,16 +74,7 @@ DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
     , mbIsCloserVisible(false)
 {
     mxLabel->set_label(rsTitle);
-    {
-        static const bool s_bDark = [] {
-            const char* p = std::getenv("OFFICELABS_THEME");
-            return p && std::strcmp(p, "dark") == 0;
-        }();
-        if (s_bDark)
-            mxLabel->set_background(Color(0x28, 0x2A, 0x36));
-        else
-            mxLabel->set_background(Theme::GetColor(Theme::Color_DeckTitleBarBackground));
-    }
+    mxLabel->set_background(Color(0x28, 0x2A, 0x36));
     mxGripWidget->SetPointer(PointerStyle::Move);
 
     if (maCloserAction)
@@ -147,13 +132,7 @@ void DeckTitleBar::HandleToolBoxItemClick()
 void DeckTitleBar::DataChanged()
 {
     mxToolBox->set_item_icon_name(u"button"_ustr, u"sfx2/res/closedoc.png"_ustr);
-    static const bool s_bDark = [] {
-        const char* p = std::getenv("OFFICELABS_THEME");
-        return p && std::strcmp(p, "dark") == 0;
-    }();
-    Color aBg = s_bDark ? Color(0x28, 0x2A, 0x36)
-                        : Theme::GetColor(Theme::Color_DeckTitleBarBackground);
-    mxLabel->set_background(aBg);
+    mxLabel->set_background(Color(0x28, 0x2A, 0x36));
     TitleBar::DataChanged();
 }
 
