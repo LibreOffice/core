@@ -343,6 +343,10 @@ void SalInstanceWidget::set_background(const Color& rColor)
 {
     m_xWidget->SetControlBackground(rColor);
     m_xWidget->SetBackground(m_xWidget->GetControlBackground());
+    // When an explicit background color is set, the widget must paint it.
+    // VCL containers (VclBox etc.) are paint-transparent by default, which
+    // causes SetBackground to be ignored during rendering.
+    m_xWidget->SetPaintTransparent(false);
     if (m_xWidget->GetStyle() & WB_CLIPCHILDREN)
     {
         // turn off WB_CLIPCHILDREN otherwise the bg won't extend "under"
