@@ -197,10 +197,13 @@ void SfxApplication::Initialize_Impl()
         auto olTheme = sfx2::sidebar::GetOLTheme();
         bool bDark = (olTheme != sfx2::sidebar::OLTheme::Light);
         {
-            // 1. Icon set
+            // 1. Icon set — must set explicitly for both modes since LO persists
+            // the icon theme in the user profile from the previous session.
             SvtMiscOptions aMiscOpts;
             if (bDark)
                 aMiscOpts.SetIconTheme(u"colibre_dark_svg"_ustr);
+            else
+                aMiscOpts.SetIconTheme(u"colibre"_ustr);
 
             if (bDark)
             {
