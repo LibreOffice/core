@@ -20,6 +20,8 @@
 #include <sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
+#include <cstdlib>
+#include <cstring>
 #include <utility>
 #include <vcl/bitmap.hxx>
 #include <vcl/outdev.hxx>
@@ -72,7 +74,16 @@ DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
     , mbIsCloserVisible(false)
 {
     mxLabel->set_label(rsTitle);
-    mxLabel->set_background(Theme::GetColor(Theme::Color_DeckTitleBarBackground));
+    {
+        static const bool s_bDark = [] {
+            const char* p = std::getenv("OFFICELABS_THEME");
+            return p && std::strcmp(p, "dark") == 0;
+        }();
+        if (s_bDark)
+            mxLabel->set_background(Color(0x28, 0x2A, 0x36));
+        else
+            mxLabel->set_background(Theme::GetColor(Theme::Color_DeckTitleBarBackground));
+    }
     mxGripWidget->SetPointer(PointerStyle::Move);
 
     if (maCloserAction)

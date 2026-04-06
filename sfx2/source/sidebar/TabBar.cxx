@@ -83,10 +83,17 @@ TabBar::TabBar(vcl::Window* pParentWindow,
 
     // Override InterimItemWindow's SetPaintTransparent(true) so our background
     // is actually painted instead of letting the parent show through.
+    // Bypass Theme::GetColor — it may not be initialized at construction time.
+    static const bool s_bDark = [] {
+        const char* p = std::getenv("OFFICELABS_THEME");
+        return p && std::strcmp(p, "dark") == 0;
+    }();
+    const Color aTabBg = s_bDark ? Color(0x28, 0x2A, 0x36)
+                                 : Theme::GetColor(Theme::Color_TabBarBackground);
     SetPaintTransparent(false);
-    SetBackground(Wallpaper(Theme::GetColor(Theme::Color_TabBarBackground)));
-    m_xVclContentArea->SetBackground(Wallpaper(Theme::GetColor(Theme::Color_TabBarBackground)));
-    m_xContainer->set_background(Theme::GetColor(Theme::Color_TabBarBackground));
+    SetBackground(Wallpaper(aTabBg));
+    m_xVclContentArea->SetBackground(Wallpaper(aTabBg));
+    m_xContainer->set_background(aTabBg);
 
 #if OSL_DEBUG_LEVEL >= 2
     SetText(OUString("TabBar"));
@@ -182,9 +189,15 @@ void TabBar::RemoveDeckHighlight()
 
 void TabBar::DataChanged(const DataChangedEvent& rDataChangedEvent)
 {
-    SetBackground(Theme::GetColor(Theme::Color_TabBarBackground));
-    m_xVclContentArea->SetBackground(Wallpaper(Theme::GetColor(Theme::Color_TabBarBackground)));
-    m_xContainer->set_background(Theme::GetColor(Theme::Color_TabBarBackground));
+    static const bool s_bDark = [] {
+        const char* p = std::getenv("OFFICELABS_THEME");
+        return p && std::strcmp(p, "dark") == 0;
+    }();
+    const Color aTabBg = s_bDark ? Color(0x28, 0x2A, 0x36)
+                                 : Theme::GetColor(Theme::Color_TabBarBackground);
+    SetBackground(aTabBg);
+    m_xVclContentArea->SetBackground(Wallpaper(aTabBg));
+    m_xContainer->set_background(aTabBg);
     UpdateButtonIcons();
     UpdateMenus();
 
@@ -260,7 +273,14 @@ TabBar::Item::Item(TabBar& rTabBar)
     , mxButton(mxBuilder->weld_toolbar(u"button"_ustr))
     , mbIsHidden(false)
 {
-    mxButton->set_background(Theme::GetColor(Theme::Color_TabBarBackground));
+    {
+        static const bool s_bDark = [] {
+            const char* p = std::getenv("OFFICELABS_THEME");
+            return p && std::strcmp(p, "dark") == 0;
+        }();
+        if (s_bDark)
+            mxButton->set_background(Color(0x28, 0x2A, 0x36));
+    }
 }
 
 TabBar::Item::~Item()

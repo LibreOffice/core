@@ -20,6 +20,8 @@
 #include <sidebar/TitleBar.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
+#include <cstdlib>
+#include <cstring>
 
 namespace sfx2::sidebar {
 
@@ -38,7 +40,13 @@ TitleBar::TitleBar(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem)
 
 void TitleBar::SetBackground()
 {
-    Color aColor(Theme::GetColor(meThemeItem));
+    // OfficeLabs: bypass Theme::GetColor which may not be initialized yet.
+    // Use Dracula palette directly when OFFICELABS_THEME=dark.
+    static const bool s_bDark = [] {
+        const char* p = std::getenv("OFFICELABS_THEME");
+        return p && std::strcmp(p, "dark") == 0;
+    }();
+    Color aColor = s_bDark ? Color(0x28, 0x2A, 0x36) : Theme::GetColor(meThemeItem);
     mxTitlebar->set_background(aColor);
     mxToolBox->set_background(aColor);
 }
