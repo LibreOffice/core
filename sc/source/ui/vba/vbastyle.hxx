@@ -25,6 +25,8 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "vbaformat.hxx"
 
+class ScModelObj;
+
 typedef ScVbaFormat< ov::excel::XStyle > ScVbaStyle_BASE;
 
 class ScVbaStyle final : public ScVbaStyle_BASE
@@ -37,12 +39,12 @@ class ScVbaStyle final : public ScVbaStyle_BASE
 public:
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const OUString& sStyleName, const css::uno::Reference< css::frame::XModel >& _xModel );
+    ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const OUString& sStyleName, const rtl::Reference<ScModelObj>& _xModel );
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& _xModel );
+    ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const rtl::Reference<ScModelObj>& _cModel );
     /// @throws css::uno::RuntimeException
-    static css::uno::Reference< css::container::XNameAccess > getStylesNameContainer( const css::uno::Reference< css::frame::XModel >& xModel );
+    static css::uno::Reference< css::container::XNameAccess > getStylesNameContainer( const rtl::Reference<ScModelObj>& xModel );
     virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() override { return this; };
     // XStyle Methods
     virtual sal_Bool SAL_CALL BuiltIn() override;

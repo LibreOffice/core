@@ -26,6 +26,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 
 #include <vector>
 
@@ -45,7 +46,8 @@ private:
     css::uno::Reference< css::container::XNameAccess > getFormControls() const;
 
 protected:
-    virtual css::uno::Reference< css::frame::XModel > getModel() const override;
+    // this should be SwXTextDocument, but the inheritance hierarchy makes that impossoble
+    virtual SfxBaseModel* getModel() const override;
 
 public:
     SwVbaDocument( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& m_xContext, rtl::Reference< SwXTextDocument > const & xModel );

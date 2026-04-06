@@ -1687,9 +1687,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
 {
     ScDLL::Init();
 
-    SfxObjectShellLock xDocSh(new ScDocShell);
+    rtl::Reference<ScDocShell> xDocSh(new ScDocShell);
+    SfxObjectShellLock xLock(xDocSh.get());
     xDocSh->DoInitNew();
-    uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
+    rtl::Reference<ScModelObj> xModel(xDocSh->GetModel());
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
@@ -1740,9 +1741,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
 {
     ScDLL::Init();
 
-    SfxObjectShellLock xDocSh(new ScDocShell);
+    rtl::Reference<ScDocShell> xDocSh(new ScDocShell);
+    SfxObjectShellLock xLock(xDocSh.get());
     xDocSh->DoInitNew();
-    uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
+    rtl::Reference<ScModelObj> xModel(xDocSh->GetModel());
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
@@ -1814,9 +1816,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLSX(SvStream &rStream)
 {
     ScDLL::Init();
 
-    SfxObjectShellLock xDocSh(new ScDocShell);
+    rtl::Reference<ScDocShell> xDocSh(new ScDocShell);
+    SfxObjectShellLock xLock(xDocSh.get());
     xDocSh->DoInitNew();
-    uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
+    rtl::Reference<ScModelObj> xModel(xDocSh->GetModel());
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
