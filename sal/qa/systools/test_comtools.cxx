@@ -240,7 +240,7 @@ namespace test_comtools
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test_comtools::test_COMReference);
 
-} // namespace rtl_OUString
+} // namespace test_comtools
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
