@@ -849,6 +849,7 @@ sub call_epm
         if ($ENV{'EPM_FLAGS'}) { $extraflags = $ENV{'EPM_FLAGS'}; }
 
     $extraflags .= ' -g' unless $installer::globals::strip;
+    $extraflags .= ' --keep-files' if $installer::globals::debian;
 
     my $verboseflag = "-v";
     if ( ! $installer::globals::quiet ) { $verboseflag = "-v2"; };
