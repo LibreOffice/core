@@ -279,7 +279,7 @@ void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const 
         pVclPeer->SetFormControl(true);
 
         if (comphelper::COKit::isActive())
-            pVclPeer->SetLOKWindowId();
+            pVclPeer->SetKitWindowId();
     }
 }
 

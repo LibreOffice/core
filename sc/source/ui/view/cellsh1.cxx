@@ -1461,7 +1461,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pTabViewShell->CopyToClip( nullptr, false, false, true );
                 rReq.Done();
 
-                if (!comphelper::COKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsLokReadOnlyView())
+                if (!comphelper::COKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsKitReadOnlyView())
                     GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
 
                 pTabViewShell->ShowCursor();
@@ -1475,7 +1475,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pTabViewShell->CutToClip();
                 rReq.Done();
 
-                if (!comphelper::COKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsLokReadOnlyView())
+                if (!comphelper::COKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsKitReadOnlyView())
                     GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
 
                 pTabViewShell->ShowCursor();
@@ -3358,7 +3358,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         colEnd, rowEnd, rData.GetRefEndZ() );
                     pScMod->SetReference( aRef, rData.GetDocument(), &rData.GetMarkData() );
 
-                    pInputHdl->UpdateLokReferenceMarks();
+                    pInputHdl->UpdateKitReferenceMarks();
                 }
             }
             break;

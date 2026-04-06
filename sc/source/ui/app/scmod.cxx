@@ -912,7 +912,7 @@ svtools::ColorConfig& ScModule::GetColorConfig()
     return *m_pColorConfig;
 }
 
-bool ScModule::IsLOKViewInDarkMode()
+bool ScModule::IsKitViewInDarkMode()
 {
     SfxViewShell* pKitSh = comphelper::COKit::isActive() ? SfxViewShell::Current() : nullptr;
     if( pKitSh )
@@ -1451,13 +1451,13 @@ bool ScModule::InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit )
     return pHdl && pHdl->KeyInput( rKEvt, bStartEdit );
 }
 
-void ScModule::InputEnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInLOK )
+void ScModule::InputEnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInKit )
 {
     if ( !SfxGetpApp()->IsDowning() ) // Not when quitting the program
     {
         ScInputHandler* pHdl = GetInputHdl();
         if (pHdl)
-            pHdl->EnterHandler( nBlockMode, bBeforeSavingInLOK );
+            pHdl->EnterHandler( nBlockMode, bBeforeSavingInKit );
     }
 }
 

@@ -820,7 +820,7 @@ void DeleteFields(const SfxRequest& rReq, SwWrtShell& rWrtSh)
 
 void lcl_LogWarning(std::string sWarning)
 {
-    LOK_WARN("sw.transform",  sWarning);
+    KIT_WARN("sw.transform",  sWarning);
 }
 
 bool lcl_ChangeChartColumnCount(const uno::Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nId,

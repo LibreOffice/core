@@ -206,7 +206,7 @@ public:
                    bool bOnlyVisible = true,
                    const std::function<bool ( const SfxViewShell& )>& isViewShell = nullptr );
     SAL_RET_MAYBENULL static SfxViewShell* Current();
-    SAL_WARN_UNUSED_RESULT static bool IsCurrentLokViewReadOnly();
+    SAL_WARN_UNUSED_RESULT static bool IsCurrentKitViewReadOnly();
 
     SAL_RET_MAYBENULL static SfxViewShell* Get( const css::uno::Reference< css::frame::XController>& i_rController );
 
@@ -219,7 +219,7 @@ private:
 
     KitDocumentFocusListener& GetKitDocumentFocusListener();
     const KitDocumentFocusListener& GetKitDocumentFocusListener() const;
-    bool lokReadOnlyView : 1 = false; // When true, this is a COKit readonly view
+    bool kitReadOnlyView : 1 = false; // When true, this is a COKit readonly view
     bool allowChangeComments : 1 = false; // Allow editing comments in readonly view mode
     bool allowManageRedlines : 1 = false; // Allow accepting/rejecting changes in readonly view mode
 
@@ -245,8 +245,8 @@ public:
     void                        JumpToMark( const OUString& rMark );
     void                        VisAreaChanged();
 
-    void                        SetLokReadOnlyView(bool readOnlyView) { lokReadOnlyView = readOnlyView; };
-    bool                        IsLokReadOnlyView() const { return lokReadOnlyView; };
+    void                        SetKitReadOnlyView(bool readOnlyView) { kitReadOnlyView = readOnlyView; };
+    bool                        IsKitReadOnlyView() const { return kitReadOnlyView; };
     void                        SetAllowChangeComments(bool allow) { allowChangeComments = allow; }
     bool                        IsAllowChangeComments() const { return allowChangeComments; }
     void                        SetAllowManageRedlines(bool allow) { allowManageRedlines = allow; }
@@ -407,7 +407,7 @@ public:
     // Returns current payload for nType, after viewUpdatedCallback() or
     // viewUpdatedCallbackPerViewId() were called. If no payload should
     // be generated, the ignore flag should be set.
-    virtual std::optional<OString> getLOKPayload(int nType, int nViewId) const;
+    virtual std::optional<OString> getKitPayload(int nType, int nViewId) const;
 
     /// Set if we are doing tiled searching.
     void setTiledSearching(bool bTiledSearching);
@@ -441,19 +441,19 @@ public:
     virtual ::Color GetColorConfigColor(svtools::ColorConfigEntry nColorType) const;
 
     /// Set the COKit language of this view.
-    void SetLOKLanguageTag(const OUString& rBcp47LanguageTag);
+    void SetKitLanguageTag(const OUString& rBcp47LanguageTag);
     /// Get the COKit language of this view.
     const LanguageTag& GetKitLanguageTag() const { return maKitLanguageTag; }
     /// Enable/Disable COKit AT support for this view.
-    void SetLOKAccessibilityState(bool bEnabled);
+    void SetKitAccessibilityState(bool bEnabled);
     /// Get COKit AT support state for this view.
     bool GetKitAccessibilityState() const { return mbLOKAccessibilityEnabled; }
     /// Set COKit color preview state for this view.
-    void SetLOKColorPreviewState(bool bEnabled);
+    void SetKitColorPreviewState(bool bEnabled);
     /// Return COKit color preview state for this view.
-    bool IsLOKColorPreviewEnabled() const { return mbLOKColorPreviewEnabled; }
+    bool IsKitColorPreviewEnabled() const { return mbLOKColorPreviewEnabled; }
 
-    /// Get the COKit timezone of this view. See @SetLOKTimezone.
+    /// Get the COKit timezone of this view. See @SetKitTimezone.
     std::pair<bool, OUString> GetKitTimezone() const
     {
         return { maKitIsTimezoneSet, maKitTimezone };
@@ -462,30 +462,30 @@ public:
     /// Set the COKit timezone of this view.
     /// @isSet true to use @rTimezone, even if it's empty. Otherwise, no timezone.
     /// @rTimezone the value to set (which could be empty).
-    void SetLOKTimezone(bool isSet, const OUString& rTimezone)
+    void SetKitTimezone(bool isSet, const OUString& rTimezone)
     {
         maKitIsTimezoneSet = isSet;
         maKitTimezone = rTimezone;
     }
 
     /// Set the COKit locale of this view.
-    void SetLOKLocale(const OUString& rBcp47LanguageTag);
+    void SetKitLocale(const OUString& rBcp47LanguageTag);
     /// Get the COKit locale of this view.
     const LanguageTag& GetKitLocale() const { return maKitLocale; }
     /// Set the COKit locale and language of this view.
-    void SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag);
+    void SetKitLanguageAndLocale(const OUString& rBcp47LanguageTag);
     /// Get the COKit calendar of this view.
     CalendarWrapper& GetKitCalendar();
     /// Get the form factor of the device where the lok client is running.
     KitDeviceFormFactor GetKitDeviceFormFactor() const { return maKitDeviceFormFactor; }
     /// Check if the lok client is running on a desktop machine.
-    bool isLOKDesktop() const { return maKitDeviceFormFactor == KitDeviceFormFactor::DESKTOP; }
+    bool isKitDesktop() const { return maKitDeviceFormFactor == KitDeviceFormFactor::DESKTOP; }
     /// Check if the lok client is running on a tablet.
-    bool isLOKTablet() const  { return maKitDeviceFormFactor == KitDeviceFormFactor::TABLET; }
+    bool isKitTablet() const  { return maKitDeviceFormFactor == KitDeviceFormFactor::TABLET; }
     /// Check if the lok client is running on a mobile device.
-    bool isLOKMobilePhone() const { return maKitDeviceFormFactor == KitDeviceFormFactor::MOBILE; }
+    bool isKitMobilePhone() const { return maKitDeviceFormFactor == KitDeviceFormFactor::MOBILE; }
 
-    virtual tools::Rectangle getLOKVisibleArea() const { return tools::Rectangle(); }
+    virtual tools::Rectangle getKitVisibleArea() const { return tools::Rectangle(); }
 
     // Blocked Command view settings
     void setBlockedCommandList(const char* blockedCommandList);

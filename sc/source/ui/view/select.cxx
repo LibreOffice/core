@@ -144,7 +144,7 @@ void ScViewFunctionSet::SetSelectionEngine( ScViewSelectionEngine* pSelEngine )
 // Drag & Drop
 void ScViewFunctionSet::BeginDrag()
 {
-    if (m_rViewData.GetViewShell()->IsLokReadOnlyView())
+    if (m_rViewData.GetViewShell()->IsKitReadOnlyView())
         return;
 
     SCTAB nTab = m_rViewData.CurrentTabForData();

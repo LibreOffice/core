@@ -262,7 +262,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         ScInputHandler* pInputHandler = pScMod->GetInputHdl();
         if (pInputHandler)
         {
-            pInputHandler->UpdateLokReferenceMarks();
+            pInputHandler->UpdateKitReferenceMarks();
         }
     }
 
@@ -388,7 +388,7 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
     ScInputHandler* pInputHandler = mod->GetInputHdl();
     if (pInputHandler)
     {
-        pInputHandler->UpdateLokReferenceMarks();
+        pInputHandler->UpdateKitReferenceMarks();
     }
 }
 

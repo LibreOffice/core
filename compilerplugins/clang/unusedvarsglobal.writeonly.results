@@ -24,7 +24,7 @@ include/vcl/animate/Animation.hxx:98
     sal_uLong gAnimationRendererCount
 kit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
     gpointer gtv_comments_sidebar_parent_class
-kit/qa/gtktiledviewer/gtv-lok-dialog.cxx:62
+kit/qa/gtktiledviewer/gtv-kit-dialog.cxx:62
     gpointer gtv_kit_dialog_parent_class
 sal/osl/unx/system.cxx:164
     void *[3] dummy

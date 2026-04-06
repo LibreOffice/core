@@ -85,7 +85,7 @@ constexpr OUString TAG_TABBARWIDTH = u"tw:"_ustr;
 
 namespace {
 
-void lcl_LOKRemoveWindow(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
+void lcl_KitRemoveWindow(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
 {
     if (comphelper::COKit::isActive())
     {
@@ -547,7 +547,7 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
 
     if (comphelper::COKit::isActive())
     {
-        rViewData.OverrideWithLOKFreeze(eExHSplitMode, eExVSplitMode,
+        rViewData.OverrideWithKitFreeze(eExHSplitMode, eExVSplitMode,
                                         nExFixPosX, nExFixPosY,
                                         nExHSplitPos, nExVSplitPos, nTab);
     }
@@ -600,7 +600,7 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
     pSettings[SC_TABLE_ZOOM_TYPE].Value <<= sal_Int16(eZoomType);
 
     const std::optional<sal_uInt16>& oExportZoom = rViewData.GetExportZoom();
-    if (oExportZoom && comphelper::IsContextFlagActive(u"IsLOKExport"_ustr))
+    if (oExportZoom && comphelper::IsContextFlagActive(u"IsKitExport"_ustr))
         nZoomValue = *oExportZoom;
 
     pSettings[SC_TABLE_ZOOM_VALUE].Name = SC_ZOOMVALUE;
@@ -1617,13 +1617,13 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         }
         else
         {
-            lcl_LOKRemoveWindow(GetViewShell(), eWhich);
+            lcl_KitRemoveWindow(GetViewShell(), eWhich);
             pEditView[eWhich]->setEditEngine(rNewEngine);
         }
 
         if (pEditView[eWhich]->GetWindow() != pWin)
         {
-            lcl_LOKRemoveWindow(GetViewShell(), eWhich);
+            lcl_KitRemoveWindow(GetViewShell(), eWhich);
             pEditView[eWhich]->SetWindow(pWin);
             OSL_FAIL("EditView Window has changed");
         }
@@ -1635,7 +1635,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         if (bLOKActive)
         {
             // We can broadcast the view-cursor message in print-twips for all views.
-            pEditView[eWhich]->SetBroadcastLOKViewCursor(bLOKPrintTwips);
+            pEditView[eWhich]->SetBroadcastKitViewCursor(bLOKPrintTwips);
             pEditView[eWhich]->RegisterViewShell(pView);
         }
     }
@@ -1703,14 +1703,14 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     if (bLOKPrintTwips)
     {
-        if (!pEditView[eWhich]->HasLOKSpecialPositioning())
-            pEditView[eWhich]->InitLOKSpecialPositioning(MapUnit::MapTwip, aPTwipsRect, Point());
+        if (!pEditView[eWhich]->HasKitSpecialPositioning())
+            pEditView[eWhich]->InitKitSpecialPositioning(MapUnit::MapTwip, aPTwipsRect, Point());
         else
-            pEditView[eWhich]->SetLOKSpecialOutputArea(aPTwipsRect);
+            pEditView[eWhich]->SetKitSpecialOutputArea(aPTwipsRect);
     }
 
-    if (bLOKActive && pEditView[eWhich]->HasLOKSpecialPositioning())
-        pEditView[eWhich]->SetLOKSpecialFlags(bLOKLayoutRTL ? KitSpecialFlags::LayoutRTL : KitSpecialFlags::NONE);
+    if (bLOKActive && pEditView[eWhich]->HasKitSpecialPositioning())
+        pEditView[eWhich]->SetKitSpecialFlags(bLOKLayoutRTL ? KitSpecialFlags::LayoutRTL : KitSpecialFlags::NONE);
 
     tools::Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
     pEditView[eWhich]->SetOutputArea( aOutputArea );
@@ -1838,7 +1838,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
         rNewEngine.SetPaperSize( aPaperSize );
         if (bLOKPrintTwips)
-            rNewEngine.SetLOKSpecialPaperSize(aPaperSizePTwips);
+            rNewEngine.SetKitSpecialPaperSize(aPaperSizePTwips);
 
         // sichtbarer Ausschnitt
         Size aPaper = rNewEngine.GetPaperSize();
@@ -1881,7 +1881,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         // of paragraphs in edit mode at the accessibility API.
         pEditView[eWhich]->SetVisArea(aVis);
         if (bLOKPrintTwips)
-            pEditView[eWhich]->SetLOKSpecialVisArea(aVisPTwips);
+            pEditView[eWhich]->SetKitSpecialVisArea(aVisPTwips);
         //  UpdateMode has been disabled in ScInputHandler::StartTable
         //  must be enabled before EditGrowY (GetTextHeight)
         rNewEngine.SetUpdateLayout( true );
@@ -2206,13 +2206,13 @@ void ScViewData::EditGrowX()
 
         pCurView->SetVisArea( aVis );
         if (bLOKPrintTwips)
-            pCurView->SetLOKSpecialVisArea( aVisPTwips );
+            pCurView->SetKitSpecialVisArea( aVisPTwips );
 
         bMoveArea = false;
     }
 
     if (bLOKPrintTwips)
-        pCurView->SetLOKSpecialOutputArea(aAreaPTwips);
+        pCurView->SetKitSpecialOutputArea(aAreaPTwips);
 
     pCurView->SetOutputArea(aArea);
 
@@ -2328,7 +2328,7 @@ void ScViewData::EditGrowY( bool bInitial )
         return;
 
     if (bLOKPrintTwips)
-        pCurView->SetLOKSpecialOutputArea(aAreaPTwips);
+        pCurView->SetKitSpecialOutputArea(aAreaPTwips);
 
     pCurView->SetOutputArea(aArea);
 
@@ -2358,7 +2358,7 @@ void ScViewData::ResetEditView()
         {
             if (bEditActive[i])
             {
-                lcl_LOKRemoveWindow(GetViewShell(), static_cast<ScSplitPos>(i));
+                lcl_KitRemoveWindow(GetViewShell(), static_cast<ScSplitPos>(i));
                 pEngine = &pEditView[i]->getEditEngine();
                 pEngine->RemoveView(pEditView[i].get());
                 pEditView[i]->SetOutputArea( tools::Rectangle() );
@@ -3597,7 +3597,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
 
             if (bLOKActive)
             {
-                OverrideWithLOKFreeze(eExHSplit, eExVSplit,
+                OverrideWithKitFreeze(eExHSplit, eExVSplit,
                                       nExFixPosX, nExFixPosY,
                                       nExHSplitPos, nExVSplitPos, nTab);
             }
@@ -3826,7 +3826,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
     }
 
     if (comphelper::COKit::isActive())
-        DeriveLOKFreezeAllSheets();
+        DeriveKitFreezeAllSheets();
 
     // RecalcPixPos or so - also nMPos - also for ReadUserData ??!?!
 }
@@ -3882,7 +3882,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     pSettings[SC_ZOOM_TYPE].Name = SC_ZOOMTYPE;
     pSettings[SC_ZOOM_TYPE].Value <<= sal_Int16(pThisTab->eZoomType);
 
-    if (oExportZoom && comphelper::IsContextFlagActive(u"IsLOKExport"_ustr))
+    if (oExportZoom && comphelper::IsContextFlagActive(u"IsKitExport"_ustr))
         nZoomValue = *oExportZoom;
 
     pSettings[SC_ZOOM_VALUE].Name = SC_ZOOMVALUE;
@@ -4135,7 +4135,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
     mrDoc.SetViewOptions(maOptions);
 
     if (comphelper::COKit::isActive())
-        DeriveLOKFreezeAllSheets();
+        DeriveKitFreezeAllSheets();
 }
 
 void ScViewData::SetOptions( const ScViewOptions& rOpt )
@@ -4377,7 +4377,7 @@ SCCOLROW ScViewData::GetKitSheetFreezeIndex(bool bIsCol) const
     return nFreezeIndex >= 0 ? nFreezeIndex : 0;
 }
 
-bool ScViewData::SetLOKSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol, SCTAB nForTab)
+bool ScViewData::SetKitSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol, SCTAB nForTab)
 {
     if (nForTab == -1)
     {
@@ -4385,33 +4385,33 @@ bool ScViewData::SetLOKSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol
     }
     else if (!ValidTab(nForTab) || !IsValidTabNumber(nForTab))
     {
-        SAL_WARN("sc.viewdata", "ScViewData::SetLOKSheetFreezeIndex :  invalid nForTab = " << nForTab);
+        SAL_WARN("sc.viewdata", "ScViewData::SetKitSheetFreezeIndex :  invalid nForTab = " << nForTab);
         return false;
     }
 
-    return bIsCol ? mrDoc.SetLOKFreezeCol(static_cast<SCCOL>(nFreezeIndex), nForTab)
-                  : mrDoc.SetLOKFreezeRow(static_cast<SCROW>(nFreezeIndex), nForTab);
+    return bIsCol ? mrDoc.SetKitFreezeCol(static_cast<SCCOL>(nFreezeIndex), nForTab)
+                  : mrDoc.SetKitFreezeRow(static_cast<SCROW>(nFreezeIndex), nForTab);
 }
 
-bool ScViewData::RemoveLOKFreeze()
+bool ScViewData::RemoveKitFreeze()
 {
-    bool colUnfreezed = SetLOKSheetFreezeIndex(0, true);
-    bool rowUnfreezed = SetLOKSheetFreezeIndex(0, false);
+    bool colUnfreezed = SetKitSheetFreezeIndex(0, true);
+    bool rowUnfreezed = SetKitSheetFreezeIndex(0, false);
     return colUnfreezed || rowUnfreezed;
 }
 
-void ScViewData::DeriveLOKFreezeAllSheets()
+void ScViewData::DeriveKitFreezeAllSheets()
 {
     SCTAB nMaxTab = static_cast<SCTAB>(maTabData.size()) - 1;
     for (SCTAB nTab = 0; nTab <= nMaxTab; ++nTab)
-        DeriveLOKFreezeIfNeeded(nTab);
+        DeriveKitFreezeIfNeeded(nTab);
 }
 
-void ScViewData::DeriveLOKFreezeIfNeeded(SCTAB nForTab)
+void ScViewData::DeriveKitFreezeIfNeeded(SCTAB nForTab)
 {
     if (!ValidTab(nForTab) || (nForTab >= static_cast<SCTAB>(maTabData.size())))
     {
-        SAL_WARN("sc.viewdata", "ScViewData::DeriveLOKFreezeIfNeeded :  invalid nForTab = " << nForTab);
+        SAL_WARN("sc.viewdata", "ScViewData::DeriveKitFreezeIfNeeded :  invalid nForTab = " << nForTab);
         return;
     }
 
@@ -4461,11 +4461,11 @@ void ScViewData::DeriveLOKFreezeIfNeeded(SCTAB nForTab)
             nFreezeRow = nRow;
     }
 
-    mrDoc.SetLOKFreezeCol(nFreezeCol, nForTab);
-    mrDoc.SetLOKFreezeRow(nFreezeRow, nForTab);
+    mrDoc.SetKitFreezeCol(nFreezeCol, nForTab);
+    mrDoc.SetKitFreezeRow(nFreezeRow, nForTab);
 }
 
-void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& eExVSplitMode,
+void ScViewData::OverrideWithKitFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& eExVSplitMode,
                                        SCCOL& nExFixPosX, SCROW& nExFixPosY,
                                        tools::Long& nExHSplitPos, tools::Long& nExVSplitPos, SCTAB nForTab) const
 {

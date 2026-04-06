@@ -351,9 +351,9 @@ public:
     void UpdateSelectionArea(const ScMarkData& rSel, ScPatternAttr* pAttr = nullptr,
                              bool adjustHeight = true);
 
-    void            OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset);
-    void            OnLOKInsertDeleteRow(SCROW nStartRow, tools::Long nOffset);
-    void            OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth);
+    void            OnKitInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset);
+    void            OnKitInsertDeleteRow(SCROW nStartRow, tools::Long nOffset);
+    void            OnKitSetWidthOrHeight(SCCOLROW nStart, bool bWidth);
 
     bool            TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrChanged );
     void            DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,

@@ -537,7 +537,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void SetEnteringStdMode(bool bEnteringStdMode) { m_bEnteringStdMode = bEnteringStdMode; }
     bool IsEnteringStdMode() const { return m_bEnteringStdMode; }
 
-    SW_DLLPUBLIC std::optional<OString> getLOKPayload(int nType, int nViewId) const;
+    SW_DLLPUBLIC std::optional<OString> getKitPayload(int nType, int nViewId) const;
 
 private:
 

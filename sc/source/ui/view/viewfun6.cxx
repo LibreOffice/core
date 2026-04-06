@@ -553,7 +553,7 @@ void ScViewFunc::EditNote()
         ScrollToObject( pCaption );         // make object fully visible
         pFuText->SetInEditMode( pCaption );
 
-        ScTabView::OnLOKNoteStateChanged( pNote );
+        ScTabView::OnKitNoteStateChanged( pNote );
     }
     collectUIInformation(u"OPEN"_ustr);
 }

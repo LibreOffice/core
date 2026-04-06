@@ -189,7 +189,7 @@ public:
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
 
 protected:
-    void CopyLokViewCallbackFromFrameCreator();
+    void CopyKitViewCallbackFromFrameCreator();
 
 private:
     enum ConnectSfxFrame

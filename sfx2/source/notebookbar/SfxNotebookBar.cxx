@@ -257,7 +257,7 @@ static utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Reference<css:
     return utl::OConfigurationNode();
 }
 
-void SfxNotebookBar::RemoveCurrentLOKWrapper()
+void SfxNotebookBar::RemoveCurrentKitWrapper()
 {
     const SfxViewShell* pViewShell = SfxViewShell::Current();
     auto& rViewData = NotebookBarViewManager::get().getViewData(pViewShell);
@@ -280,7 +280,7 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
 {
     if (comphelper::COKit::isActive())
     {
-        RemoveCurrentLOKWrapper();
+        RemoveCurrentKitWrapper();
         return;
     }
 

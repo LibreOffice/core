@@ -218,7 +218,7 @@ namespace sw::mark
         bool IsInClipboard() const override;
         bool IsInUndo() const override;
         bool IsInContent() const override;
-        void sendLOKDeleteCallback();
+        void sendKitDeleteCallback();
         css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
 
     private:
@@ -344,8 +344,8 @@ namespace sw::mark
         // This method should be called only by the portion so we can now the portion's painting area
         void SetPortionPaintArea(const SwRect& rPortionPaintArea);
 
-        void SendLOKShowMessage(const SfxViewShell* pViewShell);
-        static void SendLOKHideMessage(const SfxViewShell* pViewShell);
+        void SendKitShowMessage(const SfxViewShell* pViewShell);
+        static void SendKitHideMessage(const SfxViewShell* pViewShell);
 
     private:
         SwRect m_aPortionPaintArea;

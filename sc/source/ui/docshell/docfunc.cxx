@@ -977,7 +977,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
 
     rDoc.SetStreamValid(rPos.Tab(), false);
 
-    ScTabView::OnLOKNoteStateChanged(pNote);
+    ScTabView::OnKitNoteStateChanged(pNote);
 
     if (ScViewData* pViewData = ScDocShell::GetViewData())
     {
@@ -1766,7 +1766,7 @@ bool ScDocFunc::SetWidthOrHeight(
 
     ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
     if (pViewSh)
-        pViewSh->OnLOKSetWidthOrHeight(nStart, bWidth);
+        pViewSh->OnKitSetWidthOrHeight(nStart, bWidth);
 
     rDocShell.PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab,PaintPartFlags::All);
     aModificator.SetDocumentModified();

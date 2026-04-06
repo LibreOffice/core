@@ -92,7 +92,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
     // import transition presets
     Reference< XAnimationNode > xAnimationNode;
 
-    const std::set<sal_Int16> LOKSupportedTransitionTypes = {
+    const std::set<sal_Int16> KitSupportedTransitionTypes = {
             TransitionType::BARWIPE,
             TransitionType::BOXWIPE,
             TransitionType::FOURBOXWIPE,
@@ -123,7 +123,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             TransitionType::ZOOM
     };
 
-    const std::set<sal_Int16> LOKSupportedTransitionSubTypes = {
+    const std::set<sal_Int16> KitSupportedTransitionSubTypes = {
             TransitionSubType::DEFAULT,
             TransitionSubType::LEFTTORIGHT,
             TransitionSubType::TOPTOBOTTOM,
@@ -222,7 +222,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             TransitionSubType::ROTATEIN
     };
 
-    const std::set<sal_Int16> LOKMiscShapeWipeNonSupportedTransitionSubTypes = {
+    const std::set<sal_Int16> KitMiscShapeWipeNonSupportedTransitionSubTypes = {
             TransitionSubType::DIAMOND,
             TransitionSubType::HEART,
             TransitionSubType::CIRCLE,
@@ -246,14 +246,14 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                 {
                     sal_Int16 eTransitionType = pPreset->getTransition();
                     sal_Int16 eTransitionSubType = pPreset->getSubtype();
-                    if( LOKSupportedTransitionTypes.find(eTransitionType) == LOKSupportedTransitionTypes.end()
-                            || LOKSupportedTransitionSubTypes.find(eTransitionSubType) == LOKSupportedTransitionSubTypes.end() )
+                    if( KitSupportedTransitionTypes.find(eTransitionType) == KitSupportedTransitionTypes.end()
+                            || KitSupportedTransitionSubTypes.find(eTransitionSubType) == KitSupportedTransitionSubTypes.end() )
                     {
                         continue;
                     }
 
                     if( eTransitionType == TransitionType::MISCSHAPEWIPE
-                            && LOKMiscShapeWipeNonSupportedTransitionSubTypes.find(eTransitionSubType) != LOKMiscShapeWipeNonSupportedTransitionSubTypes.end() )
+                            && KitMiscShapeWipeNonSupportedTransitionSubTypes.find(eTransitionSubType) != KitMiscShapeWipeNonSupportedTransitionSubTypes.end() )
                     {
                         continue;
                     }

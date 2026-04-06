@@ -12,7 +12,7 @@
 
 #include "swmodeltestbase.hxx"
 
-#include <test/lokcallback.hxx>
+#include <test/kitcallback.hxx>
 
 #include "swqahelperdllapi.h"
 

@@ -639,7 +639,7 @@ include/editeng/editview.hxx:276
     unsigned short nWhich
     4045
 include/editeng/editview.hxx:389
-    void EditView::InitLOKSpecialPositioning(enum MapUnit,const class tools::Rectangle &,const class Point &)
+    void EditView::InitKitSpecialPositioning(enum MapUnit,const class tools::Rectangle &,const class Point &)
     enum MapUnit eUnit
     9
 include/editeng/fhgtitem.hxx:75
@@ -2475,7 +2475,7 @@ sc/source/ui/inc/uiitems.hxx:274
     unsigned short nWhich
     26346
 sc/source/ui/inc/viewdata.hxx:679
-    _Bool ScViewData::SetLOKSheetFreezeIndex(const int,_Bool,short)
+    _Bool ScViewData::SetKitSheetFreezeIndex(const int,_Bool,short)
     short nForTab
     -1
 sc/source/ui/pagedlg/tptable.cxx:59
@@ -2947,7 +2947,7 @@ sw/source/core/doc/doclay.cxx:98
     unsigned short which
     64
 sw/source/core/doc/docredln.cxx:287
-    void lcl_LOKInvalidateFrames(const class sw::BroadcastingModify &,const class SwRootFrame *,const enum SwFrameType,const class Point *)
+    void lcl_KitInvalidateFrames(const class sw::BroadcastingModify &,const class SwRootFrame *,const enum SwFrameType,const class Point *)
     const enum SwFrameType nFrameType
     49152
 sw/source/core/doc/DocumentStylePoolManager.cxx:125

@@ -9,15 +9,15 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sd_lokit_search))
+$(eval $(call gb_CppunitTest_CppunitTest,sd_kit_search))
 
-$(eval $(call gb_CppunitTest_use_common_precompiled_header,sd_lokit_search))
+$(eval $(call gb_CppunitTest_use_common_precompiled_header,sd_kit_search))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sd_lokit_search, \
+$(eval $(call gb_CppunitTest_add_exception_objects,sd_kit_search, \
     sd/qa/unit/tiledrendering/KitSearchTest \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sd_lokit_search, \
+$(eval $(call gb_CppunitTest_use_libraries,sd_kit_search, \
     comphelper \
     cppu \
     cppuhelper \
@@ -38,12 +38,12 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_lokit_search, \
     utl \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sd_lokit_search,\
+$(eval $(call gb_CppunitTest_use_externals,sd_kit_search,\
     boost_headers \
     libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sd_lokit_search,\
+$(eval $(call gb_CppunitTest_set_include,sd_kit_search,\
     -I$(SRCDIR)/sd/inc \
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/qa/unit \
@@ -51,22 +51,22 @@ $(eval $(call gb_CppunitTest_set_include,sd_lokit_search,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sd_lokit_search))
+$(eval $(call gb_CppunitTest_use_sdk_api,sd_kit_search))
 
-$(eval $(call gb_CppunitTest_use_ure,sd_lokit_search))
-$(eval $(call gb_CppunitTest_use_vcl,sd_lokit_search))
+$(eval $(call gb_CppunitTest_use_ure,sd_kit_search))
+$(eval $(call gb_CppunitTest_use_vcl,sd_kit_search))
 
-$(eval $(call gb_CppunitTest_use_rdb,sd_lokit_search,services))
+$(eval $(call gb_CppunitTest_use_rdb,sd_kit_search,services))
 
-$(eval $(call gb_CppunitTest_use_configuration,sd_lokit_search))
+$(eval $(call gb_CppunitTest_use_configuration,sd_kit_search))
 
-$(eval $(call gb_CppunitTest_use_uiconfigs,sd_lokit_search, \
+$(eval $(call gb_CppunitTest_use_uiconfigs,sd_kit_search, \
     modules/simpress \
     svx \
 ))
 
 
-$(eval $(call gb_CppunitTest_add_arguments,sd_lokit_search, \
+$(eval $(call gb_CppunitTest_add_arguments,sd_kit_search, \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 ))
 

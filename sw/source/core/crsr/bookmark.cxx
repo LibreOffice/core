@@ -430,7 +430,7 @@ namespace sw::mark
         m_aName = rName;
     }
 
-    void Bookmark::sendLOKDeleteCallback()
+    void Bookmark::sendKitDeleteCallback()
     {
         if (!comphelper::COKit::isActive() || GetMarkPos().GetDoc().IsClipBoard())
             return;
@@ -997,12 +997,12 @@ namespace sw::mark
         }
     }
 
-    void DropDownFieldmark::SendLOKShowMessage(const SfxViewShell* pViewShell)
+    void DropDownFieldmark::SendKitShowMessage(const SfxViewShell* pViewShell)
     {
         if (!comphelper::COKit::isActive())
             return;
 
-        if (!pViewShell || pViewShell->isLOKMobilePhone())
+        if (!pViewShell || pViewShell->isKitMobilePhone())
             return;
 
         if (m_aPortionPaintArea.IsEmpty())
@@ -1042,7 +1042,7 @@ namespace sw::mark
         pViewShell->viewCallback(KIT_CALLBACK_FORM_FIELD_BUTTON, sPayload.toString());
     }
 
-    void DropDownFieldmark::SendLOKHideMessage(const SfxViewShell* pViewShell)
+    void DropDownFieldmark::SendKitHideMessage(const SfxViewShell* pViewShell)
     {
         pViewShell->viewCallback(KIT_CALLBACK_FORM_FIELD_BUTTON,
             "{\"action\": \"hide\", \"type\": \"drop-down\"}"_ostr);

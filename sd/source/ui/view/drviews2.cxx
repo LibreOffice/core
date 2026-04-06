@@ -279,7 +279,7 @@ public:
 
 void lcl_LogWarning(const std::string& rWarning)
 {
-    LOK_WARN("sd.transform", rWarning);
+    KIT_WARN("sd.transform", rWarning);
     TransformWarningCollector::add(rWarning);
 }
 
@@ -1437,7 +1437,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             sal_uInt16 nCanvasPageIndex = GetDoc()->GetOrInsertCanvasPage();
             Cancel(); // Don't know what this does
             SwitchPage(nCanvasPageIndex);
-            GetDoc()->NotifyLOKHasOverviewPage(true);
+            GetDoc()->NotifyKitHasOverviewPage(true);
             rReq.Done();
         }
         break;

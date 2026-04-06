@@ -758,12 +758,12 @@ bool DeleteCellsOperation::runImplementation()
 
         if (bDeleteCols)
         {
-            pViewSh->OnLOKInsertDeleteColumn(maRange.aStart.Col(),
+            pViewSh->OnKitInsertDeleteColumn(maRange.aStart.Col(),
                                              -1 * (maRange.aEnd.Col() - maRange.aStart.Col() + 1));
         }
         if (bDeleteRows)
         {
-            pViewSh->OnLOKInsertDeleteRow(maRange.aStart.Row(),
+            pViewSh->OnKitInsertDeleteRow(maRange.aStart.Row(),
                                           -1 * (maRange.aEnd.Row() - maRange.aStart.Row() + 1));
         }
 

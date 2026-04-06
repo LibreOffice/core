@@ -36,7 +36,7 @@ using namespace css;
 
 namespace sfx2::sidebar {
 
-void Deck::LOKSendSidebarFullUpdate()
+void Deck::KitSendSidebarFullUpdate()
 {
     if (comphelper::COKit::isActive())
     {
@@ -127,7 +127,7 @@ void Deck::DataChanged(const DataChangedEvent&)
         rpPanel->DataChanged();
 
     RequestLayoutInternal();
-    Deck::LOKSendSidebarFullUpdate();
+    Deck::KitSendSidebarFullUpdate();
 }
 
 /*
@@ -204,7 +204,7 @@ void Deck::ResetPanels(SharedPanelContainer&& rPanelContainer)
     RequestLayoutInternal();
 
     if (bDifferent)
-        Deck::LOKSendSidebarFullUpdate();
+        Deck::KitSendSidebarFullUpdate();
 }
 
 void Deck::RequestLayoutInternal()
@@ -242,7 +242,7 @@ void Deck::RequestLayout()
     }
     const SfxViewShell* pViewShell = SfxViewShell::Current();
     if (mnMinimalWidth > 0 && (mnMinimalWidth != aParentSize.Width() || GetSizePixel().Width() != mnMinimalWidth)
-            && pViewShell && pViewShell->isLOKMobilePhone())
+            && pViewShell && pViewShell->isKitMobilePhone())
     {
         aParentSize.setWidth(mnMinimalWidth);
         bChangeNeeded = true;

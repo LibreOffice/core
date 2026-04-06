@@ -29,7 +29,7 @@ using namespace com::sun::star;
 namespace comphelper::COKit
 {
 
-#if !LOK_ALWAYS_ACTIVE
+#if !KIT_ALWAYS_ACTIVE
 static bool g_bActive(false);
 #endif
 
@@ -123,7 +123,7 @@ static LanguageAndLocale g_aLanguageAndLocale;
 /// Scaling of the cairo canvas painting for hi-dpi
 static double g_fDPIScale(1.0);
 
-#if !LOK_ALWAYS_ACTIVE
+#if !KIT_ALWAYS_ACTIVE
 void setActive(bool bActive)
 {
     g_bActive = bActive;
@@ -282,7 +282,7 @@ bool isAllowlistedLanguage(const OUString& lang)
     static const std::vector<OUString> aAllowlist = [] {
         std::vector<OUString> aList;
         // coverity[tainted_data] - we trust the contents of this variable
-        const char* pAllowlist = getenv("LOK_ALLOWLIST_LANGUAGES");
+        const char* pAllowlist = getenv("KIT_ALLOWLIST_LANGUAGES");
         if (pAllowlist)
         {
             std::stringstream stream(pAllowlist);
@@ -300,7 +300,7 @@ bool isAllowlistedLanguage(const OUString& lang)
         }
         else
         {
-            aList.emplace_back("*"); // LOK_ALLOWLIST_LANGUAGES not defined, allow all
+            aList.emplace_back("*"); // KIT_ALLOWLIST_LANGUAGES not defined, allow all
         }
 
         if (aList.empty())

@@ -936,8 +936,8 @@ bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi, boo
         else if (comphelper::COKit::isActive())
         {
             ScTabViewShell* pTabViewShell = rViewData.GetViewShell();
-            pTabViewShell->OnLOKSetWidthOrHeight(rViewData.GetCurX(), true);
-            pTabViewShell->OnLOKSetWidthOrHeight(rViewData.GetCurY(), false);
+            pTabViewShell->OnKitSetWidthOrHeight(rViewData.GetCurX(), true);
+            pTabViewShell->OnKitSetWidthOrHeight(rViewData.GetCurY(), false);
 
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(pTabViewShell, true /* bColumns */, true /* bRows */,
                 true /* bSizes */, false /* bHidden */, false /* bFiltered */, false /* bGroups */, rViewData.GetTabNumber());

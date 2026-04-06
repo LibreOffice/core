@@ -167,8 +167,8 @@ void ScTabViewShell::Activate(bool bMDI)
             }
         }
 
-        bool isLOK = comphelper::COKit::isActive();
-        UpdateInputHandler( /*bForce=*/ !isLOK, /*bStopEditing=*/ !isLOK );
+        bool isKit = comphelper::COKit::isActive();
+        UpdateInputHandler( /*bForce=*/ !isKit, /*bStopEditing=*/ !isKit );
 
         if ( bFirstActivate )
         {
@@ -2305,7 +2305,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
         LanguageType eLatin, eCjk, eCtl;
         rDoc.GetLanguage(eLatin, eCjk, eCtl);
         OUString aLang = LanguageTag(eLatin).getBcp47();
-        SetLOKLanguageAndLocale(aLang);
+        SetKitLanguageAndLocale(aLang);
     }
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -2434,9 +2434,9 @@ ScNavigatorSettings* ScTabViewShell::GetNavigatorSettings()
     return pNavSettings.get();
 }
 
-tools::Rectangle ScTabViewShell::getLOKVisibleArea() const
+tools::Rectangle ScTabViewShell::getKitVisibleArea() const
 {
-    return GetViewData().getLOKVisibleArea();
+    return GetViewData().getKitVisibleArea();
 }
 
 void ScTabViewShell::SetDragObject(ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj)

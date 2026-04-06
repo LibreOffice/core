@@ -456,7 +456,7 @@ io/source/stm/odata.cxx:556
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(unnamed struct at /home/noel/libo-plugin/io/source/stm/odata.cxx:556:23) n1 sal_uInt32
 io/source/stm/odata.cxx:556
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(unnamed struct at /home/noel/libo-plugin/io/source/stm/odata.cxx:556:23) n2 sal_uInt32
-kit/qa/gtktiledviewer/gtv-lok-dialog.cxx:48
+kit/qa/gtktiledviewer/gtv-kit-dialog.cxx:48
     (anonymous namespace)::GtvKitDialogPrivate m_nChildKeyModifier guint32
 kit/source/gtk/kitdocview.cxx:86
     (anonymous namespace)::KitDocumentViewPrivateImpl m_bIsLoading _Bool

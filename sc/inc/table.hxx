@@ -1428,8 +1428,8 @@ private:
 
     SCCOL GetKitFreezeCol() const;
     SCROW GetKitFreezeRow() const;
-    bool  SetLOKFreezeCol(SCCOL nFreezeCol);
-    bool  SetLOKFreezeRow(SCROW nFreezeRow);
+    bool  SetKitFreezeCol(SCCOL nFreezeCol);
+    bool  SetKitFreezeRow(SCROW nFreezeRow);
 
     /**
      * Use this to iterate through non-empty visible cells in a single column.

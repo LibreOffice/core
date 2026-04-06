@@ -534,8 +534,8 @@ private:
     void executeDispatch_ToggleGridHorizontal();
     void executeDispatch_ToggleGridVertical();
 
-    void executeDispatch_LOKSetTextSelection(int nType, int nX, int nY);
-    void executeDispatch_LOKPieSegmentDragging(int nOffset);
+    void executeDispatch_KitSetTextSelection(int nType, int nX, int nY);
+    void executeDispatch_KitPieSegmentDragging(int nOffset);
     void executeDispatch_FillColor(const css::uno::Any& rColor);
     void executeDispatch_FillGradient(std::u16string_view sJSONGradient);
     void executeDispatch_LineColor(const css::uno::Any& rColor);

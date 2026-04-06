@@ -401,8 +401,8 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
         const SfxBoolItem& rItem = rThisDoc.GetAttr(nThisCol, nThisRow, nThisTab, ATTR_LINEBREAK);
         if (rItem.GetValue() || entireColumnOrRowSelected)
         {
-            pTabViewShell->OnLOKSetWidthOrHeight(nThisCol, true);
-            pTabViewShell->OnLOKSetWidthOrHeight(nThisRow, false);
+            pTabViewShell->OnKitSetWidthOrHeight(nThisCol, true);
+            pTabViewShell->OnKitSetWidthOrHeight(nThisRow, false);
 
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 pTabViewShell, true /* bColumns */, true /* bRows */, true /* bSizes*/,

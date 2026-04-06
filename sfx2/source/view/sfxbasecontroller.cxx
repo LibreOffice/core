@@ -969,7 +969,7 @@ void SfxBaseController::ReleaseShell_Impl()
     attachFrame( aXFrame );
 }
 
-void SfxBaseController::CopyLokViewCallbackFromFrameCreator()
+void SfxBaseController::CopyKitViewCallbackFromFrameCreator()
 {
     if (!m_pData->m_pViewShell)
         return;

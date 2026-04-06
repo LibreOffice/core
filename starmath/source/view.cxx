@@ -523,7 +523,7 @@ void SmGraphicWidget::SetIsCursorVisible(bool bVis)
     bIsCursorVisible = bVis;
     if (comphelper::COKit::isActive())
     {
-        mrViewShell.SendCaretToLOK();
+        mrViewShell.SendCaretToKit();
         mrViewShell.viewCallback(KIT_CALLBACK_CURSOR_VISIBLE,
                                                OString::boolean(bVis));
     }
@@ -2030,7 +2030,7 @@ public:
 
         if (comphelper::COKit::isActive())
         {
-            CopyLokViewCallbackFromFrameCreator();
+            CopyKitViewCallbackFromFrameCreator();
             // In lok mode, DocumentHolder::ShowUI is not called on OLE in-place activation,
             // because respective code is skipped in OCommonEmbeddedObject::SwitchStateTo_Impl,
             // so sidebar controller does not get registered properly; do it here
@@ -2209,7 +2209,7 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
     }
 }
 
-std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
+std::optional<OString> SmViewShell::getKitPayload(int nType, int nViewId) const
 {
     switch (nType)
     {
@@ -2257,18 +2257,18 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
         case KIT_CALLBACK_TEXT_VIEW_SELECTION:
             return {};
     }
-    return SfxViewShell::getLOKPayload(nType, nViewId); // aborts
+    return SfxViewShell::getKitPayload(nType, nViewId); // aborts
 }
 
-void SmViewShell::SendCaretToLOK() const
+void SmViewShell::SendCaretToKit() const
 {
     const int nViewId = sal_Int32(GetViewShellId());
-    if (const auto payload = getLOKPayload(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR, nViewId))
+    if (const auto payload = getKitPayload(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR, nViewId))
     {
         viewCallbackWithViewId(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
                                              *payload, nViewId);
     }
-    if (const auto payload = getLOKPayload(KIT_CALLBACK_TEXT_SELECTION, nViewId))
+    if (const auto payload = getKitPayload(KIT_CALLBACK_TEXT_SELECTION, nViewId))
     {
         viewCallback(KIT_CALLBACK_TEXT_SELECTION, *payload);
     }

@@ -525,7 +525,7 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
             DrawViewShell* pDrawViewSh = dynamic_cast<DrawViewShell*>(mpDocSh->GetViewShell());
             pDrawViewSh->RememberCanvasPageVisArea(::tools::Rectangle());
         }
-        NotifyLOKHasOverviewPage(false);
+        NotifyKitHasOverviewPage(false);
         mpCanvasPage = nullptr;
     }
     pSdPage->DisconnectLink();
@@ -1552,10 +1552,10 @@ void SdDrawDocument::ImportCanvasPage()
         populatePagePreviewsGrid();
         connectPagePreviews();
     }
-    NotifyLOKHasOverviewPage(true);
+    NotifyKitHasOverviewPage(true);
 }
 
-void SdDrawDocument::NotifyLOKHasOverviewPage(bool bHasOverviewPage)
+void SdDrawDocument::NotifyKitHasOverviewPage(bool bHasOverviewPage)
 {
     if (!comphelper::COKit::isActive())
         return;

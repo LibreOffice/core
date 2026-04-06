@@ -129,7 +129,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData, bool bRa
     if (comphelper::COKit::isActive())
     {
         SCCOLROW nStart = aMarkedRows[0].mnStart;
-        OnLOKSetWidthOrHeight(nStart, /*width: */ false);
+        OnKitSetWidthOrHeight(nStart, /*width: */ false);
     }
 
     double nPPTX = GetViewData().GetPPTX();
@@ -192,7 +192,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi )
 {
     if (comphelper::COKit::isActive())
     {
-        OnLOKSetWidthOrHeight(nStartRow, /*width: */ false);
+        OnKitSetWidthOrHeight(nStartRow, /*width: */ false);
     }
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();

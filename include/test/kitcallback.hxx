@@ -32,7 +32,7 @@ public:
     /// Discard all possibly still held events.
     void clear();
     /// Set the view id of the associated SfxViewShell.
-    void setLOKViewId(int viewId) { m_viewId = viewId; }
+    void setKitViewId(int viewId) { m_viewId = viewId; }
     virtual void viewCallback(int nType, const rtl::OString& pPayload) override;
     virtual void viewCallbackWithViewId(int nType, const rtl::OString& pPayload,
                                         int nViewId) override;
@@ -50,7 +50,7 @@ public:
 private:
     void callCallback(int nType, const char* pPayload, int nViewId);
     void startTimer();
-    void flushLOKData();
+    void flushKitData();
     void discardUpdatedTypes(int nType, int nViewId);
     COKitCallback m_callback;
     void* m_data;

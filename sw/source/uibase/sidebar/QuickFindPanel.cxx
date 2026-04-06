@@ -38,8 +38,8 @@
 #include <comphelper/processfactory.hxx>
 
 const int CharactersBeforeAndAfter = 40;
-const OUString LOKPageEntryPrefix = u"-$#~"_ustr;
-const OUString LOKPageEntrySuffix = u"~#$-"_ustr;
+const OUString KitPageEntryPrefix = u"-$#~"_ustr;
+const OUString KitPageEntrySuffix = u"~#$-"_ustr;
 
 namespace
 {
@@ -418,7 +418,7 @@ IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aP
     }
     else
     {
-        aEntry = ParsePageEntry(aEntry); // remove '-' or LOKPageEntryPrefix and LOKPageEntrySuffix
+        aEntry = ParsePageEntry(aEntry); // remove '-' or KitPageEntryPrefix and KitPageEntrySuffix
         tools::Long aTextWidth = rRenderContext.GetTextWidth(aEntry);
         tools::Long aTextHeight = rRenderContext.GetTextHeight();
 
@@ -766,8 +766,8 @@ OUString QuickFindPanel::CreatePageEntry(sal_Int32 nPageNum)
 {
     if (comphelper::COKit::isActive())
     {
-        return LOKPageEntryPrefix + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPageNum)
-               + LOKPageEntrySuffix;
+        return KitPageEntryPrefix + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPageNum)
+               + KitPageEntrySuffix;
     }
     return u"-"_ustr + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPageNum);
 }
@@ -781,7 +781,7 @@ bool QuickFindPanel::IsPageEntry(std::u16string_view sEntryId)
 {
     if (comphelper::COKit::isActive())
     {
-        return sEntryId.starts_with(LOKPageEntryPrefix) && sEntryId.ends_with(LOKPageEntrySuffix);
+        return sEntryId.starts_with(KitPageEntryPrefix) && sEntryId.ends_with(KitPageEntrySuffix);
     }
     return sEntryId[0] == '-';
 }
@@ -790,9 +790,9 @@ OUString QuickFindPanel::ParsePageEntry(const OUString& sEntryId)
 {
     if (comphelper::COKit::isActive())
     {
-        return sEntryId.copy(LOKPageEntryPrefix.getLength(),
+        return sEntryId.copy(KitPageEntryPrefix.getLength(),
                              sEntryId.getLength()
-                                 - LOKPageEntrySuffix.getLength()); // remove '-$#~' and '~#$-'
+                                 - KitPageEntrySuffix.getLength()); // remove '-$#~' and '~#$-'
     }
     return sEntryId.copy(1); // remove '-'
 }

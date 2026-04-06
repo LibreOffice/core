@@ -32,11 +32,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
     int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
     SfxViewShell* pView1 = SfxViewShell::Current();
-    pView1->SetLOKLocale(u"en-US"_ustr);
+    pView1->SetKitLocale(u"en-US"_ustr);
     KitHelper::createView();
     ScTestViewCallback aView2;
     SfxViewShell* pView2 = SfxViewShell::Current();
-    pView2->SetLOKLocale(u"de-DE"_ustr);
+    pView2->SetKitLocale(u"de-DE"_ustr);
     TestKitCallbackWrapper::InitializeSidebar();
     Scheduler::ProcessEventsToIdle();
     aView2.m_aStateChanges.clear();
@@ -155,7 +155,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCool11739LocaleDialogFieldUnit)
 {
     createDoc("empty.ods");
     SfxViewShell* pView1 = SfxViewShell::Current();
-    pView1->SetLOKLocale(u"fr-FR"_ustr);
+    pView1->SetKitLocale(u"fr-FR"_ustr);
 
     ScModule* pMod = ScModule::get();
     FieldUnit eMetric = pMod->GetMetric();
@@ -265,7 +265,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testBreakPageView)
     std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
     ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
     xDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-    xDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize), 1.0, Point(),
+    xDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasSize, nCanvasSize), 1.0, Point(),
                                                        aPixmap.data());
     pModelObj->paintTile(*xDevice, nCanvasSize, nCanvasSize, 3840, 3840, 3840, 3840);
     xDevice->EnableMapMode(false);

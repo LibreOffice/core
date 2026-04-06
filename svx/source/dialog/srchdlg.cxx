@@ -88,7 +88,7 @@ static bool IsMobile()
     if (!comphelper::COKit::isActive())
         return false;
     SfxViewShell* pCurrent = SfxViewShell::Current();
-    return pCurrent && pCurrent->isLOKMobilePhone();
+    return pCurrent && pCurrent->isKitMobilePhone();
 }
 
 enum class ModifyFlags {

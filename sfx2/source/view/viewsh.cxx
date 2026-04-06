@@ -546,7 +546,7 @@ void aboutEvent(std::string msg, const accessibility::AccessibleEventObject& aEv
     }
     catch( const lang::IndexOutOfBoundsException& /*e*/ )
     {
-        LOK_WARN("lok.a11y", "Focused object has invalid index in parent");
+        KIT_WARN("lok.a11y", "Focused object has invalid index in parent");
     }
 }
 
@@ -1654,7 +1654,7 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
     }
     catch( const lang::IndexOutOfBoundsException& )
     {
-        LOK_WARN("lok.a11y",
+        KIT_WARN("lok.a11y",
                  "KitDocumentFocusListener::notifyEvent:Focused object has invalid index in parent");
     }
 }
@@ -1684,7 +1684,7 @@ uno::Reference< accessibility::XAccessible > KitDocumentFocusListener::getAccess
         }
     }
 
-    LOK_WARN("lok.a11y",
+    KIT_WARN("lok.a11y",
              "KitDocumentFocusListener::getAccessible: Can't get any accessible object from event source.");
 
     return uno::Reference< accessibility::XAccessible >();
@@ -1694,7 +1694,7 @@ void KitDocumentFocusListener::attachRecursive(
     const uno::Reference< accessibility::XAccessible >& xAccessible
 )
 {
-    LOK_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(1): xAccessible: " << xAccessible.get());
+    KIT_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(1): xAccessible: " << xAccessible.get());
 
     uno::Reference< accessibility::XAccessibleContext > xContext =
         xAccessible->getAccessibleContext();
@@ -1710,7 +1710,7 @@ void KitDocumentFocusListener::attachRecursive(
 {
     try
     {
-        LOK_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(2): xAccessible: "
+        KIT_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(2): xAccessible: "
                                  << xAccessible.get() << ", role: " << xContext->getAccessibleRole()
                                  << ", name: " << xContext->getAccessibleName()
                                  << ", parent: " << xContext->getAccessibleParent().get()
@@ -1728,7 +1728,7 @@ void KitDocumentFocusListener::attachRecursive(
     }
     catch (const uno::Exception& e)
     {
-        LOK_WARN("lok.a11y", "KitDocumentFocusListener::attachRecursive(2): raised exception: " << e.Message);
+        KIT_WARN("lok.a11y", "KitDocumentFocusListener::attachRecursive(2): raised exception: " << e.Message);
     }
 }
 
@@ -2947,12 +2947,12 @@ SfxViewShell* SfxViewShell::Current()
     return pCurrent ? pCurrent->GetViewShell() : nullptr;
 }
 
-bool SfxViewShell::IsCurrentLokViewReadOnly()
+bool SfxViewShell::IsCurrentKitViewReadOnly()
 {
     if (!comphelper::COKit::isActive())
         return false;
     SfxViewShell* pCurrent = Current();
-    return pCurrent && pCurrent->IsLokReadOnlyView();
+    return pCurrent && pCurrent->IsKitReadOnlyView();
 }
 
 SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
@@ -3239,7 +3239,7 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
             batch->commit();
 
             // We have set the language. Time to create the config manager.
-            acceleratorConfs[key] = svt::AcceleratorExecute::lok_createNewAcceleratorConfiguration(::comphelper::getProcessComponentContext(), sModule);
+            acceleratorConfs[key] = svt::AcceleratorExecute::kit_createNewAcceleratorConfiguration(::comphelper::getProcessComponentContext(), sModule);
 
             std::shared_ptr<comphelper::ConfigurationChanges> batch2(comphelper::ConfigurationChanges::create());
             officecfg::Setup::L10N::ooLocale::set(actualLang, batch2);
@@ -3247,7 +3247,7 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
         }
 
         if (setModuleConfig)
-            pImpl->m_xAccExec->lok_setModuleConfig(acceleratorConfs[key]);
+            pImpl->m_xAccExec->kit_setModuleConfig(acceleratorConfs[key]);
     }
 
     return pImpl->m_xAccExec->execute(aKey.GetKeyCode());
@@ -3410,7 +3410,7 @@ void SfxViewShell::viewAddPendingInvalidateTiles()
 
 void SfxViewShell::afterCallbackRegistered()
 {
-    LOK_INFO("sfx.view", "SfxViewShell::afterCallbackRegistered invoked");
+    KIT_INFO("sfx.view", "SfxViewShell::afterCallbackRegistered invoked");
     if (GetKitAccessibilityState())
     {
         KitDocumentFocusListener& rDocFocusListener = GetKitDocumentFocusListener();
@@ -3423,10 +3423,10 @@ void SfxViewShell::flushPendingKitInvalidateTiles()
     // SfxViewShell itself does not delay any tile invalidations.
 }
 
-std::optional<OString> SfxViewShell::getLOKPayload(int nType, int /*nViewId*/) const
+std::optional<OString> SfxViewShell::getKitPayload(int nType, int /*nViewId*/) const
 {
     // SfxViewShell itself currently doesn't handle any updated-payload types.
-    SAL_WARN("sfx.view", "SfxViewShell::getLOKPayload unhandled type " << kitCallbackTypeToString(nType));
+    SAL_WARN("sfx.view", "SfxViewShell::getKitPayload unhandled type " << kitCallbackTypeToString(nType));
     abort();
 }
 
@@ -3448,7 +3448,7 @@ vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const
     return aColorConfig.GetColorValue(eEntry).nColor;
 }
 
-void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
+void SfxViewShell::SetKitLanguageTag(const OUString& rBcp47LanguageTag)
 {
     LanguageTag aTag(rBcp47LanguageTag, true);
 
@@ -3477,7 +3477,7 @@ const KitDocumentFocusListener& SfxViewShell::GetKitDocumentFocusListener() cons
     return const_cast<SfxViewShell*>(this)->GetKitDocumentFocusListener();
 }
 
-void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
+void SfxViewShell::SetKitAccessibilityState(bool bEnabled)
 {
     if (bEnabled == mbLOKAccessibilityEnabled)
         return;
@@ -3502,7 +3502,7 @@ void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
         }
         catch (const uno::Exception&)
         {
-            LOK_WARN("SetLOKAccessibilityState", "Exception caught processing KitDocumentFocusListener::attachRecursive");
+            KIT_WARN("SetKitAccessibilityState", "Exception caught processing KitDocumentFocusListener::attachRecursive");
         }
     }
     else
@@ -3513,17 +3513,17 @@ void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
         }
         catch (const uno::Exception&)
         {
-            LOK_WARN("SetLOKAccessibilityState", "Exception caught processing KitDocumentFocusListener::detachRecursive");
+            KIT_WARN("SetKitAccessibilityState", "Exception caught processing KitDocumentFocusListener::detachRecursive");
         }
     }
 }
 
-void SfxViewShell::SetLOKColorPreviewState(bool bEnabled)
+void SfxViewShell::SetKitColorPreviewState(bool bEnabled)
 {
     mbLOKColorPreviewEnabled = bEnabled;
 }
 
-void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
+void SfxViewShell::SetKitLocale(const OUString& rBcp47LanguageTag)
 {
     maKitLocale = LanguageTag(rBcp47LanguageTag, true).makeFallback();
     if (this == Current())
@@ -3536,10 +3536,10 @@ void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
     mpCalendar->loadDefaultCalendar(GetKitLocale().getLocale());
 }
 
-void SfxViewShell::SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag)
+void SfxViewShell::SetKitLanguageAndLocale(const OUString& rBcp47LanguageTag)
 {
-    SetLOKLanguageTag(rBcp47LanguageTag);
-    SetLOKLocale(rBcp47LanguageTag);
+    SetKitLanguageTag(rBcp47LanguageTag);
+    SetKitLocale(rBcp47LanguageTag);
 }
 
 CalendarWrapper& SfxViewShell::GetKitCalendar()

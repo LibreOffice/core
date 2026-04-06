@@ -1086,22 +1086,22 @@ SCROW ScDocument::GetKitFreezeRow(SCTAB nTab) const
     return pTab->GetKitFreezeRow();
 }
 
-bool ScDocument::SetLOKFreezeCol(SCCOL nFreezeCol, SCTAB nTab)
+bool ScDocument::SetKitFreezeCol(SCCOL nFreezeCol, SCTAB nTab)
 {
     ScTable* pTab = FetchTable(nTab);
     if (!pTab)
         return false;
 
-    return pTab->SetLOKFreezeCol(nFreezeCol);
+    return pTab->SetKitFreezeCol(nFreezeCol);
 }
 
-bool ScDocument::SetLOKFreezeRow(SCROW nFreezeRow, SCTAB nTab)
+bool ScDocument::SetKitFreezeRow(SCROW nFreezeRow, SCTAB nTab)
 {
     ScTable* pTab = FetchTable(nTab);
     if (!pTab)
         return false;
 
-    return pTab->SetLOKFreezeRow(nFreezeRow);
+    return pTab->SetKitFreezeRow(nFreezeRow);
 }
 
 std::set<SCCOL> ScDocument::QueryColumnsWithFormulaCells( SCTAB nTab ) const

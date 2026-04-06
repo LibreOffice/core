@@ -725,7 +725,7 @@ void SidebarController::SwitchToDeck (
         if (xDeckDescriptor)
         {
             SwitchToDeck(*xDeckDescriptor, maCurrentContext);
-            Deck::LOKSendSidebarFullUpdate();
+            Deck::KitSendSidebarFullUpdate();
         }
     }
 }
@@ -1231,7 +1231,7 @@ void SidebarController::RequestCloseDeck()
     if (comphelper::COKit::isActive() && mpCurrentDeck)
     {
         const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (pViewShell && pViewShell->isLOKMobilePhone())
+        if (pViewShell && pViewShell->isKitMobilePhone())
         {
             // Mobile phone - TODO: unify with desktop
             tools::JsonWriter aJsonWriter;

@@ -750,12 +750,12 @@ void SfxRequest::ReleaseArgs()
     pImpl->pInternalArgs.reset();
 }
 
-void SfxRequest::SetLokViewId(int nId)
+void SfxRequest::SetKitViewId(int nId)
 {
     pImpl->m_nKitViewId = nId;
 }
 
-int SfxRequest::GetLokViewId() const
+int SfxRequest::GetKitViewId() const
 {
     return pImpl->m_nKitViewId;
 }

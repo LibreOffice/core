@@ -47,7 +47,7 @@ void processEventsToIdle()
     if (!processFn)
     {
         void *me = dlopen(nullptr, RTLD_NOW);
-        processFn = reinterpret_cast<ProcessEventsToIdleFn *>(dlsym(me, "unit_lok_process_events_to_idle"));
+        processFn = reinterpret_cast<ProcessEventsToIdleFn *>(dlsym(me, "unit_kit_process_events_to_idle"));
     }
 
     CPPUNIT_ASSERT(processFn);

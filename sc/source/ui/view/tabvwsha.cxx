@@ -254,7 +254,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     SearchOptionFlags nOptions = SearchOptionFlags::ALL;
 
                     // No replacement if ReadOnly
-                    if (GetViewData().GetDocShell()->IsReadOnly() || IsCurrentLokViewReadOnly())
+                    if (GetViewData().GetDocShell()->IsReadOnly() || IsCurrentKitViewReadOnly())
                         nOptions &= ~SearchOptionFlags( SearchOptionFlags::REPLACE | SearchOptionFlags::REPLACE_ALL );
                     rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(nOptions) ) );
                 }
@@ -401,7 +401,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case FID_SELECT_SHEET_VIEW:
             case FID_EXIT_SHEET_VIEW:
                 {
-                    if (GetViewData().GetDocShell()->IsReadOnly() || IsCurrentLokViewReadOnly())
+                    if (GetViewData().GetDocShell()->IsReadOnly() || IsCurrentKitViewReadOnly())
                     {
                         rSet.DisableItem(nWhich);
                     }
@@ -841,7 +841,7 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
         // to save immediately without committing any erroneous input in possibly
         // a cell with validation rules. After save is complete the user
         // can continue editing.
-        ScModule::get()->InputEnterHandler(ScEnterMode::NORMAL, bLOKActive /* bBeforeSavingInLOK */);
+        ScModule::get()->InputEnterHandler(ScEnterMode::NORMAL, bLOKActive /* bBeforeSavingInKit */);
 
         if (bLOKActive)
         {

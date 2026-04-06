@@ -14,7 +14,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <osl/conditn.hxx>
-#include <test/lokcallback.hxx>
+#include <test/kitcallback.hxx>
 
 #include "sdqahelperdllapi.h"
 

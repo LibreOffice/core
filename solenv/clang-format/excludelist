@@ -6415,8 +6415,8 @@ kit/qa/gtktiledviewer/gtv-comments-sidebar.cxx
 kit/qa/gtktiledviewer/gtv-comments-sidebar.hxx
 kit/qa/gtktiledviewer/gtv-helpers.cxx
 kit/qa/gtktiledviewer/gtv-helpers.hxx
-kit/qa/gtktiledviewer/gtv-lok-dialog.cxx
-kit/qa/gtktiledviewer/gtv-lok-dialog.hxx
+kit/qa/gtktiledviewer/gtv-kit-dialog.cxx
+kit/qa/gtktiledviewer/gtv-kit-dialog.hxx
 kit/qa/gtktiledviewer/gtv-kitdocview-signal-handlers.cxx
 kit/qa/gtktiledviewer/gtv-kitdocview-signal-handlers.hxx
 kit/qa/gtktiledviewer/gtv-main-toolbar.cxx
@@ -10163,7 +10163,7 @@ sfx2/source/view/impframe.hxx
 sfx2/source/view/impviewframe.hxx
 sfx2/source/view/ipclient.cxx
 sfx2/source/kit/charthelper.cxx
-sfx2/source/view/lokhelper.cxx
+sfx2/source/view/kithelper.cxx
 sfx2/source/view/printer.cxx
 sfx2/source/view/prnmon.hxx
 sfx2/source/view/sfxbasecontroller.cxx

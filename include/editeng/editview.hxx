@@ -212,7 +212,7 @@ public:
     void            Invalidate();
     ::Pair            Scroll( tools::Long nHorzScroll, tools::Long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
-    void            SetBroadcastLOKViewCursor(bool bSet);
+    void            SetBroadcastKitViewCursor(bool bSet);
     tools::Rectangle       GetEditCursor() const;
     void            ShowCursor( bool bGotoCursor = true, bool bForceVisCursor = true, bool bActivate = false );
     void            HideCursor( bool bDeactivate = false );
@@ -394,23 +394,23 @@ public:
     /**
      * This is meant for Calc(COKit), but there may be other use-cases.
      * In Calc, all logical positions are computed by
-     * doing independent pixel-alignment for each cell's size. The *LOKSpecial* methods
+     * doing independent pixel-alignment for each cell's size. The *KitSpecial* methods
      * can be used to set/get the output-area and visible-area in real logical
      * units. This enables EditView to send cursor/selection messages in
      * real logical units like it is done for Writer.
      */
-    void InitLOKSpecialPositioning(MapUnit eUnit, const tools::Rectangle& rOutputArea,
+    void InitKitSpecialPositioning(MapUnit eUnit, const tools::Rectangle& rOutputArea,
                                    const Point& rVisDocStartPos);
-    void SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea);
+    void SetKitSpecialOutputArea(const tools::Rectangle& rOutputArea);
     const tools::Rectangle & GetKitSpecialOutputArea() const;
-    void SetLOKSpecialVisArea(const tools::Rectangle& rVisArea);
+    void SetKitSpecialVisArea(const tools::Rectangle& rVisArea);
     tools::Rectangle GetKitSpecialVisArea() const;
-    bool HasLOKSpecialPositioning() const;
+    bool HasKitSpecialPositioning() const;
 
-    void SetLOKSpecialFlags(KitSpecialFlags eFlags);
+    void SetKitSpecialFlags(KitSpecialFlags eFlags);
 
-    void SuppressLOKMessages(bool bSet);
-    bool IsSuppressLOKMessages() const;
+    void SuppressKitMessages(bool bSet);
+    bool IsSuppressKitMessages() const;
 
     /// To inform editeng that negated x document coordinates are in use.
     void SetNegativeX(bool bSet);

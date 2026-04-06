@@ -680,7 +680,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiSelectionTextSelectionCallback)
 
     // Then the COKit text selection payload should not be empty:
     std::optional<OString> aPayload
-        = pWrtShell->getLOKPayload(KIT_CALLBACK_TEXT_SELECTION, nViewId);
+        = pWrtShell->getKitPayload(KIT_CALLBACK_TEXT_SELECTION, nViewId);
     CPPUNIT_ASSERT(aPayload.has_value());
     // Without the fix in place, this test would have failed, only the non-range "after B" selection
     // was part of the payload.

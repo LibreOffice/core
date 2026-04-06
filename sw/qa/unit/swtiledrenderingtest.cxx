@@ -78,7 +78,7 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
 void SwTiledRenderingTest::setupCOKitViewCallback(SfxViewShell* pViewShell)
 {
     pViewShell->setCOKitViewCallback(&m_callbackWrapper);
-    m_callbackWrapper.setLOKViewId(KitHelper::getView(*pViewShell));
+    m_callbackWrapper.setKitViewId(KitHelper::getView(*pViewShell));
 }
 
 void SwTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)

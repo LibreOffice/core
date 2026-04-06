@@ -177,7 +177,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAsyncLayout)
     pWrtShell->InsertPageBreak();
     SwRootFrame* pLayout = pWrtShell->GetLayout();
     SwPageFrame* pPage1 = pLayout->GetLower()->DynCastPageFrame();
-    pWrtShell->setLOKVisibleArea(pPage1->getFrameArea().SVRect());
+    pWrtShell->setKitVisibleArea(pPage1->getFrameArea().SVRect());
 
     // When all pages get invalidated:
     pWrtShell->StartAllAction();
@@ -230,7 +230,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnyInput)
     pWrtShell->InsertPageBreak();
     SwRootFrame* pLayout = pWrtShell->GetLayout();
     SwPageFrame* pPage1 = pLayout->GetLower()->DynCastPageFrame();
-    pWrtShell->setLOKVisibleArea(pPage1->getFrameArea().SVRect());
+    pWrtShell->setKitVisibleArea(pPage1->getFrameArea().SVRect());
 
     // When all pages get invalidated:
     pWrtShell->StartAllAction();
@@ -762,7 +762,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSpellcheckVisibleArea)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwRootFrame* pLayout = pWrtShell->GetLayout();
     SwPageFrame* pPage1 = pLayout->GetLower()->DynCastPageFrame();
-    pWrtShell->setLOKVisibleArea(pPage1->getFrameArea().SVRect());
+    pWrtShell->setKitVisibleArea(pPage1->getFrameArea().SVRect());
     pPage1->InvalidateAll();
     SwPageFrame* pPage2 = pPage1->GetNext()->DynCastPageFrame();
     pPage2->InvalidateAll();

@@ -454,7 +454,7 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
     bDockingAllowed(true),
     bInternalDockingAllowed(true),
     bAllChildrenVisible(true),
-#if !defined(ANDROID) || HAVE_FEATURE_ANDROID_LOK
+#if !defined(ANDROID) || HAVE_FEATURE_ANDROID_KIT
     bIsFullScreen( false ),
 #else // Fennec-based Android Viewer
     bIsFullScreen( true ),

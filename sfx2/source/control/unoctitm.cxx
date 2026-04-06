@@ -115,7 +115,7 @@ const char* const URLTypeNames[URLType_COUNT] =
     "double"
 };
 
-static void InterceptLOKStateChangeEvent( sal_uInt16 nSID, SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState );
+static void InterceptKitStateChangeEvent( sal_uInt16 nSID, SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState );
 
 void SfxStatusDispatcher::ReleaseAll()
 {
@@ -920,7 +920,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
     if (pDispatcher && pDispatcher->GetFrame())
     {
-        InterceptLOKStateChangeEvent(nSID, pDispatcher->GetFrame(), aEvent, pState);
+        InterceptKitStateChangeEvent(nSID, pDispatcher->GetFrame(), aEvent, pState);
     }
 
     const std::vector<OUString> aContainedTypes = pDispatch->getContainedTypes();
@@ -1022,7 +1022,7 @@ OString Int32Payload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureStateEv
 OString TransformPayload(sal_uInt16 nSID, SfxViewFrame* pViewFrame,
                          const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem*)
 {
-    if (aEvent.IsEnabled && pViewFrame->GetViewShell()->isLOKMobilePhone())
+    if (aEvent.IsEnabled && pViewFrame->GetViewShell()->isKitMobilePhone())
     {
         boost::property_tree::ptree aTree;
         boost::property_tree::ptree aState;
@@ -1498,7 +1498,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
     return aUnoCommandList;
 }
 
-static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState)
+static void InterceptKitStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState)
 {
     const SfxViewShell* pViewShell = pViewFrame->GetViewShell();
     if (!comphelper::COKit::isActive() || !pViewShell)

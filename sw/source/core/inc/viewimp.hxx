@@ -173,7 +173,7 @@ public:
     void DeletePaintRegion() { m_oPaintRegion.reset(); }
 
     void AddPendingKitInvalidation( const SwRect& rRect );
-    std::vector<SwRect> TakePendingLOKInvalidations();
+    std::vector<SwRect> TakePendingKitInvalidations();
 
     /// New Interface for StarView Drawing
     bool  HasDrawView()             const { return nullptr != m_pDrawView; }

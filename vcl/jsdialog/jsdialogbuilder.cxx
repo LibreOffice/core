@@ -439,7 +439,7 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OUString& id)
             pDialog->SetKitNotifier(GetpApp());
 
         m_nWindowId = pDialog->GetKitWindowId();
-        pDialog->SetLOKTunnelingState(false);
+        pDialog->SetKitTunnelingState(false);
 
         InsertWindowToMap(getMapIdFromWindowId());
 
@@ -468,7 +468,7 @@ std::unique_ptr<weld::Assistant> JSInstanceBuilder::weld_assistant(const OUStrin
     if (pDialog)
     {
         m_nWindowId = pDialog->GetKitWindowId();
-        pDialog->SetLOKTunnelingState(false);
+        pDialog->SetKitTunnelingState(false);
 
         InsertWindowToMap(getMapIdFromWindowId());
 
@@ -497,7 +497,7 @@ std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(cons
     if (pMessageDialog)
     {
         m_nWindowId = pMessageDialog->GetKitWindowId();
-        pMessageDialog->SetLOKTunnelingState(false);
+        pMessageDialog->SetKitTunnelingState(false);
 
         InsertWindowToMap(getMapIdFromWindowId());
 
@@ -952,7 +952,7 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
     {
         OUString sWindowId = OUString::number(xMessageDialog->GetKitWindowId());
         InsertWindowToMap(sWindowId);
-        xMessageDialog->SetLOKTunnelingState(false);
+        xMessageDialog->SetKitTunnelingState(false);
 
         return new JSMessageDialog(xMessageDialog, nullptr, true);
     }

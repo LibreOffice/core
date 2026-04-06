@@ -162,7 +162,7 @@ SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
 #ifndef DISABLE_DYNLOADING
 
 extern "C" SAL_DLLPUBLIC_EXPORT
-void lok_preload_hook()
+void kit_preload_hook()
 {
     // msword (any symbol will do)
     sw::Filters::GetMswordLibSymbol("ImportDOC");

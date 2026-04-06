@@ -68,7 +68,7 @@ SdTiledRenderingTest::createDoc(const char* pName,
 void SdTiledRenderingTest::setupCOKitViewCallback(SfxViewShell& rViewShell)
 {
     rViewShell.setCOKitViewCallback(&m_callbackWrapper);
-    m_callbackWrapper.setLOKViewId(KitHelper::getView(rViewShell));
+    m_callbackWrapper.setKitViewId(KitHelper::getView(rViewShell));
 }
 
 void SdTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)
@@ -209,7 +209,7 @@ SdTestViewCallback::SdTestViewCallback()
     mpViewShell = SfxViewShell::Current();
     mpViewShell->setCOKitViewCallback(&m_callbackWrapper);
     mnView = KitHelper::getCurrentView();
-    m_callbackWrapper.setLOKViewId(mnView);
+    m_callbackWrapper.setKitViewId(mnView);
 }
 
 SdTestViewCallback::~SdTestViewCallback()

@@ -620,7 +620,7 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
     {
         // If we are inside tiled painting, invalidations are ignored.
         // Ignore them right now to save work, but also to avoid the problem
-        // that this state could be reset before FlushPendingLOKInvalidateTiles()
+        // that this state could be reset before FlushPendingKitInvalidateTiles()
         // gets called.
         if(comphelper::COKit::isTiledPainting())
             return;
@@ -632,7 +632,7 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
         // and then calls InvalidateWindows() based on that. On then this code
         // would call Invalidate() for all views for each rectangle.
         // So collect the rectangles, avoid duplicates (which there usually will
-        // be many because of the repetitions), FlushPendingLOKInvalidateTiles()
+        // be many because of the repetitions), FlushPendingKitInvalidateTiles()
         // will collect all rectangles from all related views, compress them
         // and only with those relatively few rectangle it'd call Invalidate()
         // for all views.
@@ -654,13 +654,13 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
     }
 }
 
-void SwViewShell::FlushPendingLOKInvalidateTiles()
+void SwViewShell::FlushPendingKitInvalidateTiles()
 {
     assert(comphelper::COKit::isActive());
     SwRegionRects rects;
     for(SwViewShell& rSh : GetRingContainer())
     {
-        std::vector<SwRect> tmpRects = rSh.Imp()->TakePendingLOKInvalidations();
+        std::vector<SwRect> tmpRects = rSh.Imp()->TakePendingKitInvalidations();
         rects.insert( rects.end(), tmpRects.begin(), tmpRects.end());
     }
     rects.Compress( SwRegionRects::CompressFuzzy );

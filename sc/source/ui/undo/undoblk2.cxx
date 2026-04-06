@@ -102,7 +102,7 @@ void ScUndoWidthOrHeight::Undo()
             break;
 
         if (pViewShell)
-            pViewShell->OnLOKSetWidthOrHeight(nStart, bWidth);
+            pViewShell->OnKitSetWidthOrHeight(nStart, bWidth);
 
         if (bWidth) // Width
         {

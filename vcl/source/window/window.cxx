@@ -3144,14 +3144,14 @@ void Window::SetComponentInterface( Reference< css::awt::XVclWindowPeer > const 
         pWrapper->SetWindowInterface( this, xIFace );
 }
 
-typedef std::map<vcl::KitWindowId, VclPtr<vcl::Window>> LOKWindowsMap;
+typedef std::map<vcl::KitWindowId, VclPtr<vcl::Window>> KitWindowsMap;
 
 namespace {
 
-LOKWindowsMap& GetKitWindowsMap()
+KitWindowsMap& GetKitWindowsMap()
 {
     // Map to remember the KitWindowId <-> Window binding.
-    static LOKWindowsMap s_aKitWindowsMap;
+    static KitWindowsMap s_aKitWindowsMap;
 
     return s_aKitWindowsMap;
 }
@@ -3180,7 +3180,7 @@ void Window::SetKitNotifier(const vcl::ICOKitNotifier* pNotifier, bool bParent)
     mpWindowImpl->mpKitNotifier = pNotifier;
 }
 
-void Window::SetLOKWindowId()
+void Window::SetKitWindowId()
 {
     // never use this in the desktop case
     assert(comphelper::COKit::isActive());
@@ -3191,7 +3191,7 @@ void Window::SetLOKWindowId()
     GetKitWindowsMap().emplace(mpWindowImpl->mnKitWindowId, this);
 }
 
-VclPtr<Window> Window::FindLOKWindow(vcl::KitWindowId nWindowId)
+VclPtr<Window> Window::FindKitWindow(vcl::KitWindowId nWindowId)
 {
     const auto it = GetKitWindowsMap().find(nWindowId);
     if (it != GetKitWindowsMap().end())
@@ -3200,7 +3200,7 @@ VclPtr<Window> Window::FindLOKWindow(vcl::KitWindowId nWindowId)
     return VclPtr<Window>();
 }
 
-bool Window::IsLOKWindowsEmpty()
+bool Window::IsKitWindowsEmpty()
 {
     return GetKitWindowsMap().empty();
 }
@@ -3363,7 +3363,7 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("text", GetText());
     rJsonWriter.put("enabled", IsEnabled());
     rJsonWriter.put("canFocus", bool(GetStyle() & WB_TABSTOP));
-    rJsonWriter.put("lokWindowId", GetKitWindowId());
+    rJsonWriter.put("kitWindowId", GetKitWindowId());
     if (!IsVisible())
         rJsonWriter.put("visible", false);
 

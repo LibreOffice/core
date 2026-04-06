@@ -398,8 +398,8 @@ void ScUndoOutlineBlock::Undo()
     rDocShell.PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top);
 
 
-    pViewShell->OnLOKShowHideColRow(/*columns: */ true, nStartCol - 1);
-    pViewShell->OnLOKShowHideColRow(/*columns: */ false, nStartRow - 1);
+    pViewShell->OnKitShowHideColRow(/*columns: */ true, nStartCol - 1);
+    pViewShell->OnKitShowHideColRow(/*columns: */ false, nStartRow - 1);
 
     EndUndo();
 }
@@ -1047,7 +1047,7 @@ void ScUndoQuery::Undo()
 
 
     // invalidate cache positions and update cursor and selection
-    pViewShell->OnLOKShowHideColRow(/*bColumns*/ false, aQueryParam.nRow1 - 1);
+    pViewShell->OnKitShowHideColRow(/*bColumns*/ false, aQueryParam.nRow1 - 1);
     ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, nTab);
     ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
             pViewShell,

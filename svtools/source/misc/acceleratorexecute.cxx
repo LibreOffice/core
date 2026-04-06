@@ -411,7 +411,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     return xAccCfg;
 }
 
-css::uno::Reference<css::ui::XAcceleratorConfiguration> AcceleratorExecute::lok_createNewAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const OUString& sModule)
+css::uno::Reference<css::ui::XAcceleratorConfiguration> AcceleratorExecute::kit_createNewAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const OUString& sModule)
 {
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(css::ui::theModuleUIConfigurationManagerSupplier::get(rxContext));
 
@@ -430,7 +430,7 @@ css::uno::Reference<css::ui::XAcceleratorConfiguration> AcceleratorExecute::lok_
     return css::uno::Reference<css::ui::XAcceleratorConfiguration>();
 }
 
-void AcceleratorExecute::lok_setModuleConfig(const css::uno::Reference<css::ui::XAcceleratorConfiguration>& acceleratorConfig)
+void AcceleratorExecute::kit_setModuleConfig(const css::uno::Reference<css::ui::XAcceleratorConfiguration>& acceleratorConfig)
 {
     this->m_xModuleCfg = acceleratorConfig;
 }

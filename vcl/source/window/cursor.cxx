@@ -236,8 +236,8 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
             mpData->maTimer.Start();
         else if ( !mpData->mbCurVisible )
             ImplDraw();
-        LOKNotify( pWindow, u"cursor_invalidate"_ustr );
-        LOKNotify( pWindow, u"cursor_visible"_ustr );
+        KitNotify( pWindow, u"cursor_invalidate"_ustr );
+        KitNotify( pWindow, u"cursor_visible"_ustr );
     }
 }
 
@@ -272,7 +272,7 @@ tools::Rectangle calcualteCursorRect(Point const& rPosition, Size const rSize, v
 
 } // end anonymous namespace
 
-void vcl::Cursor::LOKNotify(vcl::Window* pWindow, const OUString& rAction)
+void vcl::Cursor::KitNotify(vcl::Window* pWindow, const OUString& rAction)
 {
     if (!pWindow)
         return;
@@ -336,7 +336,7 @@ bool vcl::Cursor::ImplDoHide( bool bSuspend )
 
         if ( !bSuspend )
         {
-            LOKNotify( mpData->mpWindow, u"cursor_visible"_ustr );
+            KitNotify( mpData->mpWindow, u"cursor_visible"_ustr );
             mpData->maTimer.Stop();
             mpData->mpWindow = nullptr;
         }
@@ -375,7 +375,7 @@ void vcl::Cursor::ImplNew()
     ImplDraw();
     if ( !mpWindow )
     {
-        LOKNotify( mpData->mpWindow, u"cursor_invalidate"_ustr );
+        KitNotify( mpData->mpWindow, u"cursor_invalidate"_ustr );
         if ( mpData->maTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )
             mpData->maTimer.Start();
     }

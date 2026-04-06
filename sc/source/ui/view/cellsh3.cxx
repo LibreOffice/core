@@ -66,11 +66,11 @@ OString escapeJSON(const OUString &aStr)
     return OUStringToOString(aEscaped, RTL_TEXTENCODING_UTF8);
 }
 
-void lcl_lokGetWholeFunctionList()
+void lcl_kitGetWholeFunctionList()
 {
     const SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!(comphelper::COKit::isActive()
-        && pViewShell && pViewShell->isLOKMobilePhone()))
+        && pViewShell && pViewShell->isKitMobilePhone()))
         return;
 
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
@@ -416,12 +416,12 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 const SfxViewShell* pViewShell = SfxViewShell::Current();
                 if (comphelper::COKit::isActive()
-                    && pViewShell && pViewShell->isLOKMobilePhone())
+                    && pViewShell && pViewShell->isKitMobilePhone())
                 {
                     // not set the dialog id in the mobile case or we would
                     // not be able to get cell address pasted in the edit view
                     // by just tapping on them
-                    lcl_lokGetWholeFunctionList();
+                    lcl_kitGetWholeFunctionList();
                 }
                 else
                 {

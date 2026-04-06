@@ -4660,7 +4660,7 @@ void SdXImpressDocument::setClientVisibleArea(const ::tools::Rectangle& rRectang
     if (!pViewShell)
         return;
 
-    pViewShell->GetViewShellBase().setLOKVisibleArea(rRectangle);
+    pViewShell->GetViewShellBase().setKitVisibleArea(rRectangle);
 
     if (pViewShell->getCurrentPage()->IsCanvasPage())
         pViewShell->RememberCanvasPageVisArea(rRectangle);
@@ -5140,7 +5140,7 @@ bool isRequestedSlideValid(SdDrawDocument* mpDoc, sal_Int32 nSlideNumber, const 
     }
     catch (uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION( "sd", "SdXImpressDocument::createLOKSlideRenderer: failed" );
+        TOOLS_WARN_EXCEPTION( "sd", "SdXImpressDocument::createKitSlideRenderer: failed" );
     }
     return false;
 }

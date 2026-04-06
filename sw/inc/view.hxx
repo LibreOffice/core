@@ -730,9 +730,9 @@ public:
     const OUString& GetOldDrwCat();
     void SetOldDrwCat(const OUString& sStr);
 
-    virtual tools::Rectangle getLOKVisibleArea() const override;
+    virtual tools::Rectangle getKitVisibleArea() const override;
     virtual void flushPendingKitInvalidateTiles() override;
-    virtual std::optional<OString> getLOKPayload(int nType, int nViewId) const override;
+    virtual std::optional<OString> getKitPayload(int nType, int nViewId) const override;
     /// See SfxViewShell::getEditMode().
     int getEditMode() const override;
 

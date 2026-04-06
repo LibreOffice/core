@@ -451,7 +451,7 @@ Dialog::ImplKitNotifier(vcl::Window*)
 Dialog::ImplSetModalInputMode(bool)
 Dialog::ImplStartExecute()
 Dialog::SetInstallKitNotifierHdl(Link<void*, vcl::ICOKitNotifier*> const&)
-Dialog::SetLOKTunnelingState(bool)
+Dialog::SetKitTunnelingState(bool)
 Dialog::SetModalInputMode(bool)
 Dialog::SetPopupMenuHdl(Link<CommandEvent const&, bool> const&)
 Dialog::StartExecuteAsync(VclAbstractDialog::AsyncContext&)
@@ -3767,7 +3767,7 @@ SfxDispatcher::GetSlot(rtl::OUString const&)
 SfxDispatcher::HideUI(bool)
 SfxDispatcher::IsActive(SfxShell const&)
 SfxDispatcher::IsAppDispatcher() const
-SfxDispatcher::IsCommandAllowedInLokReadOnlyViewMode(rtl::OUString)
+SfxDispatcher::IsCommandAllowedInKitReadOnlyViewMode(rtl::OUString)
 SfxDispatcher::IsFlushed() const
 SfxDispatcher::PostMsgHandler(std::unique_ptr<SfxRequest, std::default_delete<SfxRequest> >)
 SfxDispatcher::SfxDispatcher()
@@ -4123,12 +4123,12 @@ SfxRequest::AllowRecording(bool)
 SfxRequest::AllowsRecording() const
 SfxRequest::ForgetAllArgs()
 SfxRequest::GetCallMode() const
-SfxRequest::GetLokViewId() const
+SfxRequest::GetKitViewId() const
 SfxRequest::GetMacroRecorder(SfxViewFrame const&)
 SfxRequest::IsCancelled() const
 SfxRequest::IsSynchronCall() const
 SfxRequest::ReleaseArgs()
-SfxRequest::SetLokViewId(int)
+SfxRequest::SetKitViewId(int)
 SfxRequest::SetSynchronCall(bool)
 SfxRequest::SfxRequest(unsigned short, SfxCallMode, SfxAllItemSet const&, SfxAllItemSet const&)
 SfxSetItem::SfxSetItem(unsigned short, SfxItemSet const&)
@@ -4287,8 +4287,8 @@ SfxViewShell::JumpToMark(rtl::OUString const&)
 SfxViewShell::OutplaceActivated(bool)
 SfxViewShell::RegisterInterface(SfxModule const*)
 SfxViewShell::SetCurrentDocument() const
-SfxViewShell::SetLOKAccessibilityState(bool)
-SfxViewShell::SetLOKLanguageTag(rtl::OUString const&)
+SfxViewShell::SetKitAccessibilityState(bool)
+SfxViewShell::SetKitLanguageTag(rtl::OUString const&)
 SfxViewShell::SetMargin(Size const&)
 SfxViewShell::SetPrinter(SfxPrinter*, SfxPrinterChangeFlags)
 SfxViewShell::StartPrint(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&, bool, bool)
@@ -9289,7 +9289,7 @@ SwVisibleCursor::Hide()
 SwVisibleCursor::SetPosAndShow(SfxViewShell const*)
 SwVisibleCursor::Show()
 SwVisibleCursor::SwVisibleCursor(SwCursorShell const*)
-SwVisibleCursor::getLOKPayload(int, int) const
+SwVisibleCursor::getKitPayload(int, int) const
 SwVisibleCursor::~SwVisibleCursor()
 SwWait::EnterWaitAndLockDispatcher()
 SwWait::LeaveWaitAndUnlockDispatcher()
@@ -15167,7 +15167,7 @@ sfx2::SafeMode::putRestartFlag()
 sfx2::SafeMode::removeFlag()
 sfx2::SfxNotebookBar::CloseMethod(SystemWindow*)
 sfx2::SfxNotebookBar::ReloadNotebookBar(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-sfx2::SfxNotebookBar::RemoveCurrentLOKWrapper()
+sfx2::SfxNotebookBar::RemoveCurrentKitWrapper()
 sfx2::SfxNotebookBar::RemoveListeners(SystemWindow const*)
 sfx2::SfxNotebookBar::ResetActiveToolbarModeToDefault(vcl::EnumContext::Application)
 sfx2::SfxNotebookBar::ShowMenubar(SfxViewFrame const*, bool)
@@ -15420,7 +15420,7 @@ svl::IndexedStyleSheets::ReindexOnNameChange(rtl::OUString const&, rtl::OUString
 svl::crypto::Signing::Verify(SvStream&, std::vector<std::pair<unsigned long, unsigned long>, std::allocator<std::pair<unsigned long, unsigned long> > > const&, bool, std::vector<unsigned char, std::allocator<unsigned char> > const&, SignatureInformation&)
 svt::AcceleratorExecute::execute(com::sun::star::awt::KeyEvent const&)
 svt::AcceleratorExecute::findCommand(com::sun::star::awt::KeyEvent const&)
-svt::AcceleratorExecute::lok_setModuleConfig(com::sun::star::uno::Reference<com::sun::star::ui::XAcceleratorConfiguration> const&)
+svt::AcceleratorExecute::kit_setModuleConfig(com::sun::star::uno::Reference<com::sun::star::ui::XAcceleratorConfiguration> const&)
 svt::AcceleratorExecute::st_AWTKey2VCLKey(com::sun::star::awt::KeyEvent const&)
 svt::AcceleratorExecute::st_VCLKey2AWTKey(vcl::KeyCode const&)
 svt::AcceleratorExecute::st_openDocConfig(com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&)
@@ -16019,7 +16019,7 @@ unicodeisalpha(unsigned short)
 unicodetolower(unsigned short, int)
 unicodetoupper(unsigned short, int)
 uniqlist(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&)
-unit_lok_process_events_to_idle
+unit_kit_process_events_to_idle
 unload_BB
 unload_BLAS
 unload_basis

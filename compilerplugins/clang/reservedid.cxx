@@ -54,7 +54,7 @@ private:
 
     Kind determineKind(llvm::StringRef const & id);
 
-    bool isInLokIncludeFile(SourceLocation spellingLocation) const;
+    bool isInKitIncludeFile(SourceLocation spellingLocation) const;
 
     bool isApi(NamedDecl const * decl);
 };
@@ -282,7 +282,7 @@ ReservedId::Kind ReservedId::determineKind(llvm::StringRef const & id) {
     return Kind::Ok;
 }
 
-bool ReservedId::isInLokIncludeFile(SourceLocation spellingLocation) const {
+bool ReservedId::isInKitIncludeFile(SourceLocation spellingLocation) const {
     return loplugin::hasPathnamePrefix(
         getFilenameOfLocation(spellingLocation),
         SRCDIR "/include/COKit/");
@@ -300,7 +300,7 @@ bool ReservedId::isApi(NamedDecl const * decl) {
     }
     auto const loc = compiler.getSourceManager().getSpellingLoc(
         decl->getLocation());
-    if (!(isInUnoIncludeFile(loc) || isInLokIncludeFile(loc))
+    if (!(isInUnoIncludeFile(loc) || isInKitIncludeFile(loc))
         || isa<ParmVarDecl>(decl))
     {
         return false;

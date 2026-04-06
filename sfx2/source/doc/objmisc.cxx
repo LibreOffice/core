@@ -362,7 +362,7 @@ bool SfxObjectShell::IsReadOnlyUI() const
 */
 
 {
-    return pImpl->bReadOnlyUI || SfxViewShell::IsCurrentLokViewReadOnly();
+    return pImpl->bReadOnlyUI || SfxViewShell::IsCurrentKitViewReadOnly();
 }
 
 

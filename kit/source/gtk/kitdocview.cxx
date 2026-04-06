@@ -92,7 +92,7 @@ struct KitDocumentViewPrivateImpl
     COKitDocument* m_pDocument;
 
     std::unique_ptr<TileBuffer> m_pTileBuffer;
-    GThreadPool* lokThreadPool;
+    GThreadPool* kitThreadPool;
 
     gfloat m_fZoom;
     glong m_nDocumentWidthTwips;
@@ -211,7 +211,7 @@ struct KitDocumentViewPrivateImpl
         m_bUnipoll(false),
         m_pOffice(nullptr),
         m_pDocument(nullptr),
-        lokThreadPool(nullptr),
+        kitThreadPool(nullptr),
         m_fZoom(0),
         m_nDocumentWidthTwips(0),
         m_nDocumentHeightTwips(0),
@@ -392,7 +392,7 @@ KitPostCommand (KitDocumentView* pDocView,
     pLOEvent->m_bNotifyWhenFinished = bNotifyWhenFinished;
 
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
         g_warning("Unable to call KIT_POST_COMMAND: %s", error->message);
@@ -495,7 +495,7 @@ handleGraphicSelectionOnButtonPress(GdkRectangle& aClick, KitDocumentView* pDocV
             pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(priv->m_aGraphicHandleRects[i].y + priv->m_aGraphicHandleRects[i].height / 2, priv->m_fZoom);
             g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-            g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+            g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
             if (error != nullptr)
             {
                 g_warning("Unable to call KIT_SET_GRAPHIC_SELECTION: %s", error->message);
@@ -557,7 +557,7 @@ handleGraphicSelectionOnButtonRelease(KitDocumentView* pDocView, GdkEventButton*
             pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
             g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-            g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+            g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
             if (error != nullptr)
             {
                 g_warning("Unable to call KIT_SET_GRAPHIC_SELECTION: %s", error->message);
@@ -582,7 +582,7 @@ handleGraphicSelectionOnButtonRelease(KitDocumentView* pDocView, GdkEventButton*
     pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
         g_warning("Unable to call KIT_SET_GRAPHIC_SELECTION: %s", error->message);
@@ -752,7 +752,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     pLOEvent->m_nCharCode = nCharCode;
     pLOEvent->m_nKeyCode  = nKeyCode;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
         g_warning("Unable to call KIT_POST_KEY: %s", error->message);
@@ -1086,7 +1086,7 @@ setTilesInvalid (KitDocumentView* pDocView, const GdkRectangle& rRectangle)
         for (int j = aStart.y; j < aEnd.y; j++)
         {
             GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
-            priv->m_pTileBuffer->setInvalid(i, j, priv->m_fZoom, task, priv->lokThreadPool);
+            priv->m_pTileBuffer->setInvalid(i, j, priv->m_fZoom, task, priv->kitThreadPool);
             g_object_unref(task);
         }
     }
@@ -1100,8 +1100,8 @@ callback (gpointer pData)
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
 
     //callback registered before the widget was destroyed.
-    //Use existence of lokThreadPool as flag it was torn down
-    if (!priv->lokThreadPool)
+    //Use existence of kitThreadPool as flag it was torn down
+    if (!priv->kitThreadPool)
     {
         delete pCallback;
         return G_SOURCE_REMOVE;
@@ -1726,7 +1726,7 @@ renderDocument(KitDocumentView* pDocView, cairo_t* pCairo)
                 GTask* task = g_task_new(pDocView, nullptr, paintTileCallback, pLOEvent);
                 g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-                Tile& currentTile = priv->m_pTileBuffer->getTile(nRow, nColumn, task, priv->lokThreadPool);
+                Tile& currentTile = priv->m_pTileBuffer->getTile(nRow, nColumn, task, priv->kitThreadPool);
                 cairo_surface_t* pSurface = currentTile.getBuffer();
                 cairo_set_source_surface(pCairo, pSurface,
                                              twipToPixel(aTileRectangleTwips.x, priv->m_fZoom),
@@ -2110,7 +2110,7 @@ kit_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         priv->m_nLastButtonPressed = pLOEvent->m_nPostMouseEventButton;
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-        g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+        g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
         if (error != nullptr)
         {
             g_warning("Unable to call KIT_POST_MOUSE_EVENT: %s", error->message);
@@ -2152,7 +2152,7 @@ kit_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         priv->m_nLastButtonPressed = pLOEvent->m_nPostMouseEventButton;
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-        g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+        g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
         if (error != nullptr)
         {
             g_warning("Unable to call KIT_POST_MOUSE_EVENT: %s", error->message);
@@ -2248,7 +2248,7 @@ kit_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
         pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-        g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+        g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
         if (error != nullptr)
         {
             g_warning("Unable to call KIT_SET_GRAPHIC_SELECTION: %s", error->message);
@@ -2272,7 +2272,7 @@ kit_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
 
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
         g_warning("Unable to call KIT_MOUSEEVENT_MOUSEMOVE: %s", error->message);
@@ -2550,7 +2550,7 @@ paintTileInThread (gpointer data)
 
 
 static void
-lokThreadFunc(gpointer data, gpointer /*user_data*/)
+kitThreadFunc(gpointer data, gpointer /*user_data*/)
 {
     GTask* task = G_TASK(data);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
@@ -2618,7 +2618,7 @@ static void kit_doc_view_init (KitDocumentView* pDocView)
                           |GDK_KEY_PRESS_MASK
                           |GDK_KEY_RELEASE_MASK);
 
-    priv->lokThreadPool = g_thread_pool_new(lokThreadFunc,
+    priv->kitThreadPool = g_thread_pool_new(kitThreadFunc,
                                             nullptr,
                                             1,
                                             FALSE,
@@ -2787,10 +2787,10 @@ static void kit_doc_view_destroy (GtkWidget* widget)
         priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, nullptr, nullptr);
     }
 
-    if (priv->lokThreadPool)
+    if (priv->kitThreadPool)
     {
-        g_thread_pool_free(priv->lokThreadPool, true, true);
-        priv->lokThreadPool = nullptr;
+        g_thread_pool_free(priv->kitThreadPool, true, true);
+        priv->kitThreadPool = nullptr;
     }
 
     aGuard.unlock();
@@ -2854,7 +2854,7 @@ static void kit_wake_callback(void *)
     g_main_context_wakeup(nullptr);
 }
 
-static gboolean spin_lok_loop(void *pData)
+static gboolean spin_kit_loop(void *pData)
 {
     KitDocumentView *pDocView = KIT_DOC_VIEW (pData);
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
@@ -2880,7 +2880,7 @@ static void updateClientZoom(KitDocumentView *pDocView)
     pLOEvent->m_nTileTwipHeight = pixelToTwip(nTileSizePixelsScaled, priv->m_fZoom * nScaleFactor);
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
         g_warning("Unable to call KIT_SET_CLIENT_ZOOM: %s", error->message);
@@ -2920,7 +2920,7 @@ static gboolean kit_doc_view_initable_init (GInitable *initable, GCancellable* /
     priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nKitFeatures);
 
     if (priv->m_bUnipoll)
-        g_idle_add(spin_lok_loop, pDocView);
+        g_idle_add(spin_kit_loop, pDocView);
 
     return true;
 }
@@ -3639,7 +3639,7 @@ kit_doc_view_open_document (KitDocumentView* pDocView,
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
     g_task_set_source_tag(task, reinterpret_cast<gpointer>(kit_doc_view_open_document));
 
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
         g_warning("Unable to call KIT_LOAD_DOC: %s", error->message);
@@ -3781,7 +3781,7 @@ kit_doc_view_set_part (KitDocumentView* pDocView, int nPart)
     pLOEvent->m_nPart = nPart;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
         g_warning("Unable to call KIT_SET_PART: %s", error->message);
@@ -3832,7 +3832,7 @@ kit_doc_view_set_partmode(KitDocumentView* pDocView,
     pLOEvent->m_nPartMode = nPartMode;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
         g_warning("Unable to call KIT_SET_PARTMODE: %s", error->message);
@@ -3901,7 +3901,7 @@ kit_doc_view_set_edit(KitDocumentView* pDocView,
     pLOEvent->m_bEdit = bEdit;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
         g_warning("Unable to call KIT_SET_EDIT: %s", error->message);

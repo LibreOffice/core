@@ -1821,7 +1821,7 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
     std::optional<css::uno::ContextLayer> oLayer;
     if (comphelper::COKit::isActive())
     {
-        oLayer.emplace(comphelper::NewFlagContext(u"IsLOKExport"_ustr));
+        oLayer.emplace(comphelper::NewFlagContext(u"IsKitExport"_ustr));
     }
 
     uno::Reference<container::XIndexAccess> xIndexAccess;

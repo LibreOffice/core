@@ -169,7 +169,7 @@ CPPUNIT_TEST_FIXTURE(Test, testIdleLayoutingAnyInput)
     pWrtShell->InsertPageBreak();
     SwRootFrame* pLayout = pWrtShell->GetLayout();
     SwPageFrame* pPage1 = pLayout->GetLower()->DynCastPageFrame();
-    pWrtShell->setLOKVisibleArea(pPage1->getFrameArea().SVRect());
+    pWrtShell->setKitVisibleArea(pPage1->getFrameArea().SVRect());
     // Visible page is calculated, the rest is not:
     pWrtShell->StartAllAction();
     pPage1->InvalidateContent();

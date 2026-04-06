@@ -221,7 +221,7 @@ private:
 enum class DialogCancelMode {
     Off,      ///< do not automatically cancel dialogs
     Silent,   ///< silently cancel any dialogs
-    LOKSilent, ///< silently cancel any dialogs (COKit case)
+    KitSilent, ///< silently cancel any dialogs (COKit case)
     Fatal     ///< cancel any dialogs by std::abort
 };
 
@@ -754,7 +754,7 @@ public:
     static ImplSVEvent *        PostKeyEvent( VclEventId nEvent, vcl::Window *pWin, KeyEvent const * pKeyEvent );
 
 
-    static bool                 LOKHandleMouseEvent( VclEventId nEvent, vcl::Window *pWin, const MouseEvent* pEvent );
+    static bool                 KitHandleMouseEvent( VclEventId nEvent, vcl::Window *pWin, const MouseEvent* pEvent );
 
     /** Send mouse event
 

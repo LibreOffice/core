@@ -242,7 +242,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
                               SearchOptionFlags::SIMILARITY  |
                               SearchOptionFlags::SELECTION;
 
-                if (!IsReadOnly() && !SfxViewShell::IsCurrentLokViewReadOnly())
+                if (!IsReadOnly() && !SfxViewShell::IsCurrentKitViewReadOnly())
                 {
                     nOpt |= SearchOptionFlags::REPLACE;
                     nOpt |= SearchOptionFlags::REPLACE_ALL;

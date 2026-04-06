@@ -18,7 +18,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <test/lokcallback.hxx>
+#include <test/kitcallback.hxx>
 #include <comphelper/string.hxx>
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -522,7 +522,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
     ViewCallback aCallback;
     TestKitCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
-    aCallbackWrapper.setLOKViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
+    aCallbackWrapper.setKitViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
     SwViewOption aOpt(*pWrtShell->GetViewOptions());
     aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
     pWrtShell->ApplyViewOptions(aOpt);

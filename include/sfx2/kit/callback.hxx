@@ -46,7 +46,7 @@ public:
     // This is used for messages that are generated often but only the last one is needed.
     virtual void viewUpdatedCallback(int nType) = 0;
     // Like viewUpdatedCallback(), but a last message is needed for each nViewId value.
-    // SfxViewShell:getLOKPayload() will be called on nSourceViewId view.
+    // SfxViewShell:getKitPayload() will be called on nSourceViewId view.
     virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) = 0;
     // There are pending invalidate tiles calls that need to be processed.
     // A call to SfxViewShell::flushPendingKitInvalidateTiles() should be scheduled.

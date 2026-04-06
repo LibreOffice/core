@@ -425,7 +425,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case SID_OPENDLG_FUNCTION:
         {
-            if (!isLOKMobilePhone())
+            if (!isKitMobilePhone())
             {
                 // dialog checks, what is in the cell
                 xResult = std::make_shared<ScFormulaDlg>(pB, pCW, pParent, GetViewData(), ScGlobal::GetStarCalcFunctionMgr());
@@ -478,7 +478,7 @@ void ScTabViewShell::afterCallbackRegistered()
         ScInputWindow* pInputWindow = pHdl->GetInputWindow();
         if (pInputWindow)
         {
-            pInputWindow->NotifyLOKClient();
+            pInputWindow->NotifyKitClient();
         }
     }
 
@@ -487,7 +487,7 @@ void ScTabViewShell::afterCallbackRegistered()
     {
         std::shared_ptr<model::ColorSet> pThemeColors = pDocShell->GetThemeColors();
         std::set<Color> aDocumentColors = pDocShell->GetDocColors();
-        svx::theme::notifyLOK(pThemeColors, aDocumentColors);
+        svx::theme::notifyKit(pThemeColors, aDocumentColors);
     }
 }
 

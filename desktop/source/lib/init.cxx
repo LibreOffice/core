@@ -261,7 +261,7 @@ using namespace lang;
 static int urandom = -1;
 
 extern "C" {
-    int SAL_JNI_EXPORT lok_open_urandom()
+    int SAL_JNI_EXPORT kit_open_urandom()
     {
         return dup(urandom);
     }
@@ -2394,7 +2394,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
             return false;
         });
 
-        VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
+        VclPtr<Window> pWindow = vcl::Window::FindKitWindow(nKitWindowId);
         if (!pWindow)
         {
             SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -2502,7 +2502,7 @@ void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* vie
         if (const SfxViewShell* viewShell2 = KitStarMathHelper(viewShell).GetSmViewShell())
             viewShell = viewShell2;
     }
-    std::optional<OString> payload = viewShell->getLOKPayload( type, viewId );
+    std::optional<OString> payload = viewShell->getKitPayload( type, viewId );
     if(!payload)
         return; // No actual payload to send.
     CallbackData callbackData(*payload, viewId);
@@ -2951,7 +2951,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         const OUString aBatch = extractParameter(aOptions, u"Batch");
         if (!aBatch.isEmpty())
         {
-             Application::SetDialogCancelMode(DialogCancelMode::LOKSilent);
+             Application::SetDialogCancelMode(DialogCancelMode::KitSilent);
         }
 
         rtl::Reference<KitInteractionHandler> const pInteraction(
@@ -2991,7 +2991,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
             }
         }
 
-#if defined(ANDROID) && HAVE_FEATURE_ANDROID_LOK
+#if defined(ANDROID) && HAVE_FEATURE_ANDROID_KIT
         sal_Int16 nMacroExecMode = document::MacroExecMode::USE_CONFIG;
 #else
         const OUString aEnableMacrosExecution = extractParameter(aOptions, u"EnableMacrosExecution");
@@ -3018,7 +3018,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         OutputDevice::StartTrackingFontMappingUse();
 
-        if (const char* pExemptVerifyHost = ::getenv("LOK_EXEMPT_VERIFY_HOST"))
+        if (const char* pExemptVerifyHost = ::getenv("KIT_EXEMPT_VERIFY_HOST"))
             HostFilter::setExemptVerifyHost(OUString(pExemptVerifyHost, strlen(pExemptVerifyHost), RTL_TEXTENCODING_UTF8));
 
         const int nThisDocumentId = nDocumentIdCounter++;
@@ -4362,14 +4362,14 @@ static void doc_paintTile(COKitDocument* pThis,
     // Set background to transparent by default.
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(
+    pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(
                 Size(nCanvasWidth, nCanvasHeight), 1.0, Point(),
                 pBuffer);
 
     pDoc->paintTile(*pDevice, nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-    static bool bDebug = getenv("LOK_DEBUG_TILES") != nullptr;
+    static bool bDebug = getenv("KIT_DEBUG_TILES") != nullptr;
     if (bDebug)
     {
         // Draw a small red rectangle in the top left corner so that it's easy to see where a new tile begins.
@@ -4933,7 +4933,7 @@ static void doc_postWindowExtTextInputEvent(COKitDocument* pThis, unsigned nWind
     }
     else
     {
-        pWindow = vcl::Window::FindLOKWindow(nWindowId);
+        pWindow = vcl::Window::FindKitWindow(nWindowId);
     }
 
     if (!pWindow)
@@ -4949,7 +4949,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nKitWindowId, i
 {
     SolarMutexGuard aGuard;
 
-    if (SfxViewShell::IsCurrentLokViewReadOnly())
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
         return;
 
     VclPtr<vcl::Window> pWindow;
@@ -4965,7 +4965,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nKitWindowId, i
     }
     else
     {
-        pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
+        pWindow = vcl::Window::FindKitWindow(nKitWindowId);
     }
 
     if (!pWindow)
@@ -5011,7 +5011,7 @@ static void doc_postWindowKeyEvent(COKitDocument* /*pThis*/, unsigned nKitWindow
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindKitWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -5138,7 +5138,7 @@ namespace {
 
 /** Class to react on finishing of a dispatched command.
 
-    This will call a LOK_COMMAND_FINISHED callback when postUnoCommand was
+    This will call a KIT_COMMAND_FINISHED callback when postUnoCommand was
     called with the parameter requesting the notification.
 
     @see COKitCallbackType::KIT_CALLBACK_UNO_COMMAND_RESULT.
@@ -5461,7 +5461,7 @@ static bool isCommandAllowed(std::u16string_view command)
     static constexpr std::u16string_view denyList[] = { u".uno:SidebarShow", u".uno:SidebarHide" };
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (!pViewShell || !pViewShell->IsLokReadOnlyView())
+    if (!pViewShell || !pViewShell->IsKitReadOnlyView())
         return true;
 
     if (command == u".uno:Save")
@@ -5636,12 +5636,12 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
                     }
                 }
             }
-            aChartHelper.Dispatch(u".uno:LOKTransform"_ustr,
+            aChartHelper.Dispatch(u".uno:KitTransform"_ustr,
                                   comphelper::containerToSequence(aPropertyValuesVector));
             return;
         }
     }
-    else if (gImpl && aCommand == ".uno:LOKSidebarWriterPage")
+    else if (gImpl && aCommand == ".uno:KitSidebarWriterPage")
     {
         if (!sfx2::sidebar::Sidebar::Setup(u"WriterPageDeck"))
         {
@@ -5774,7 +5774,7 @@ static void doc_postWindowMouseEvent(COKitDocument* /*pThis*/, unsigned nKitWind
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindKitWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -5811,7 +5811,7 @@ static void doc_postWindowGestureEvent(COKitDocument* /*pThis*/, unsigned nKitWi
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindKitWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -5863,7 +5863,7 @@ static void doc_setWindowTextSelection(COKitDocument* /*pThis*/, unsigned nKitWi
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindKitWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -7361,7 +7361,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER COKitDocument* /*p
 
     memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
     aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-    aDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(
+    aDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(
                 Size(nFontWidth, nFontHeight), 1.0, Point(),
                 pBuffer);
 
@@ -7415,7 +7415,7 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindKitWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -7462,7 +7462,7 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId,
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nWidth, nHeight), 1.0, Point(), pBuffer);
+    pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nWidth, nHeight), 1.0, Point(), pBuffer);
 
     MapMode aMapMode(pDevice->GetMapMode());
     aMapMode.SetOrigin(Point(-(nX / fDPIScale), -(nY / fDPIScale)));
@@ -7481,7 +7481,7 @@ static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nKitWindowId, int 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindKitWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
@@ -7648,7 +7648,7 @@ static void doc_resizeWindow(COKitDocument* /*pThis*/, unsigned nKitWindowId,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nKitWindowId);
+    VclPtr<Window> pWindow = vcl::Window::FindKitWindow(nKitWindowId);
     if (!pWindow)
     {
         SetLastExceptionMsg(u"Document doesn't support dialog resizing, or window not found."_ustr);
@@ -7760,7 +7760,7 @@ static void doc_sendContentControlEvent(COKitDocument* pThis, const char* pArgum
         return;
     }
 
-    if (SfxViewShell::IsCurrentLokViewReadOnly())
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
         return;
 
     StringMap aMap(jsdialog::jsonToStringMap(pArguments));
@@ -8116,7 +8116,7 @@ static void preLoadShortCutAccelerators()
         for (const OUString& supportedModuleName : supportedModuleNames)
         {
             OUString key = supportedModuleName + installedLocales[i];
-            acceleratorConfs[key] = svt::AcceleratorExecute::lok_createNewAcceleratorConfiguration(::comphelper::getProcessComponentContext(), supportedModuleName);
+            acceleratorConfs[key] = svt::AcceleratorExecute::kit_createNewAcceleratorConfiguration(::comphelper::getProcessComponentContext(), supportedModuleName);
         }
     }
 
@@ -8208,7 +8208,7 @@ static void preloadData()
     // Hack to load and cache the module liblocaledata_others.so which is not loaded normally
     // (when loading dictionaries of just non-Asian locales). Creating a XCalendar4 of one Asian locale
     // will cheaply load this missing "others" locale library. Appending an Asian locale in
-    // LOK_ALLOWLIST_LANGUAGES env-var also works but at the cost of loading that dictionary.
+    // KIT_ALLOWLIST_LANGUAGES env-var also works but at the cost of loading that dictionary.
     css::uno::Reference< css::i18n::XCalendar4 > xCal = css::i18n::LocaleCalendar2::create(comphelper::getProcessComponentContext());
     css::lang::Locale aAsianLocale = { u"hi"_ustr, u"IN"_ustr, {} };
     xCal->loadDefaultCalendar(aAsianLocale);
@@ -8398,7 +8398,7 @@ static void activateNotebookbar(std::u16string_view rApp)
 
 void setHelpRootURL()
 {
-    const char* pHelpRootURL = ::getenv("LOK_HELP_URL");
+    const char* pHelpRootURL = ::getenv("KIT_HELP_URL");
     if (pHelpRootURL)
     {
         OUString aHelpRootURL = OStringToOUString(pHelpRootURL, RTL_TEXTENCODING_UTF8);
@@ -8504,10 +8504,10 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     rtl_alloc_preInit(2);
 #endif
 
-    if (const char* pAllowlist = ::getenv("LOK_HOST_ALLOWLIST"))
+    if (const char* pAllowlist = ::getenv("KIT_HOST_ALLOWLIST"))
         HostFilter::setAllowedHostsRegex(pAllowlist);
 
-    if (const char* pHostExemptVerifyHost = ::getenv("LOK_HOST_ALLOWLIST_EXEMPT_VERIFY_HOST"))
+    if (const char* pHostExemptVerifyHost = ::getenv("KIT_HOST_ALLOWLIST_EXEMPT_VERIFY_HOST"))
         HostFilter::setAllowedHostsExemptVerifyHost(strncmp(pHostExemptVerifyHost,"1", 1) == 0);
 
     if (const char* pExtRefPaths = ::getenv("KIT_ALLOWED_EXTREF_PATHS"))
@@ -8705,7 +8705,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
             SfxApplication::GetOrCreate();
 #endif
 
-#if HAVE_FEATURE_ANDROID_LOK
+#if HAVE_FEATURE_ANDROID_KIT
             // Register the bundled extensions - so that the dictionaries work
             desktop::Desktop::SynchronizeExtensionRepositories(false);
             bool bFailed = desktop::Desktop::CheckExtensionDependencies();
@@ -8773,7 +8773,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
             osl::FileBase::getTempDirURL(aNewTemp);
             aOptions.SetTempPath(aNewTemp);
             {
-                const char *pWorkPath = getenv("LOK_WORKDIR");
+                const char *pWorkPath = getenv("KIT_WORKDIR");
                 if (pWorkPath)
                 {
                     OString sWorkPath(pWorkPath);

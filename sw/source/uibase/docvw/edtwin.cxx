@@ -3056,7 +3056,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     bool bPageAnchored = false;
     bool bOverHeaderFooterFly = IsOverHeaderFooterFly( aDocPos, eControl, bOverFly, bPageAnchored );
 
-    bool bIsViewReadOnly = m_rView.GetDocShell()->IsReadOnly() || (rSh.GetSfxViewShell() && rSh.GetSfxViewShell()->IsLokReadOnlyView());
+    bool bIsViewReadOnly = m_rView.GetDocShell()->IsReadOnly() || (rSh.GetSfxViewShell() && rSh.GetSfxViewShell()->IsKitReadOnlyView());
     if (bOverHeaderFooterFly && (!bIsViewReadOnly && rSh.GetCurField()))
         // We have a field here, that should have priority over header/footer fly.
         bOverHeaderFooterFly = false;
@@ -4273,7 +4273,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         m_pShadCursor.reset();
     }
 
-    bool bIsViewReadOnly = m_rView.GetDocShell()->IsReadOnly() || (rSh.GetSfxViewShell() && rSh.GetSfxViewShell()->IsLokReadOnlyView());
+    bool bIsViewReadOnly = m_rView.GetDocShell()->IsReadOnly() || (rSh.GetSfxViewShell() && rSh.GetSfxViewShell()->IsKitReadOnlyView());
 
     CurrShell aCurr( &rSh );
 
@@ -5728,7 +5728,7 @@ bool SwEditWin::IsViewReadonly() const
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
     SfxViewShell* pNotifySh = rSh.GetSfxViewShell();
-    return (m_rView.GetDocShell()->IsReadOnly() && rSh.IsCursorReadonly()) || (pNotifySh && pNotifySh->IsLokReadOnlyView());
+    return (m_rView.GetDocShell()->IsReadOnly() && rSh.IsCursorReadonly()) || (pNotifySh && pNotifySh->IsKitReadOnlyView());
 }
 
 void SwEditWin::Command( const CommandEvent& rCEvt )

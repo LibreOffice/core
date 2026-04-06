@@ -396,7 +396,7 @@ VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
 void DeInitVCL()
 {
     // The COKit Windows map container should be empty
-    assert(vcl::Window::IsLOKWindowsEmpty());
+    assert(vcl::Window::IsKitWindowsEmpty());
 
     //rhbz#1444437, when using LibreOffice like a library you can't realistically
     //tear everything down and recreate them on the next call, there's too many

@@ -191,10 +191,10 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         InsertItem      (SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
     }
 
-    const bool bIsLOKMobilePhone = mpViewShell && mpViewShell->isLOKMobilePhone();
+    const bool bIsKitMobilePhone = mpViewShell && mpViewShell->isKitMobilePhone();
 
     // sigma and equal buttons
-    if (!bIsLOKMobilePhone)
+    if (!bIsKitMobilePhone)
     {
         InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::DROPDOWN, 3);
         InsertItem      (SID_INPUT_EQUAL,    Image(StockImage::Yes, RID_BMP_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
@@ -219,7 +219,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     }
 
     // sigma and equal buttons
-    if (!bIsLOKMobilePhone)
+    if (!bIsKitMobilePhone)
     {
         SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUMME);
         SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
@@ -425,7 +425,7 @@ void ScInputWindow::StartFormula()
             if (comphelper::COKit::isActive())
             {
                 TextGrabFocus();
-                if (pViewSh && !pViewSh->isLOKDesktop())
+                if (pViewSh && !pViewSh->isKitDesktop())
                 {
                     nStartPara = nEndPara = pView->getEditEngine().GetParagraphCount() ?
                         (pView->getEditEngine().GetParagraphCount() - 1) : 0;
@@ -517,7 +517,7 @@ void ScInputWindow::Resize()
     Invalidate();
 }
 
-void ScInputWindow::NotifyLOKClient()
+void ScInputWindow::NotifyKitClient()
 {
     if (comphelper::COKit::isActive() && !GetKitNotifier() && mpViewShell)
         SetKitNotifier(mpViewShell);
@@ -880,7 +880,7 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
 
     // disable the multiline toggle on the mobile phones
     const SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (!comphelper::COKit::isActive() || !(pViewShell && pViewShell->isLOKMobilePhone()))
+    if (!comphelper::COKit::isActive() || !(pViewShell && pViewShell->isKitMobilePhone()))
         mxButtonDown->show();
 
     // tdf#154042 Use an initial height of one row so the Toolbar positions
@@ -1168,7 +1168,7 @@ ScTextWndGroup::ScTextWndGroup(ScInputBarGroup& rParent, ScTabViewShell* pViewSh
     if (ScTabViewShell* pActiveViewShell = comphelper::COKit::isActive() ?
             dynamic_cast<ScTabViewShell*>(SfxViewShell::Current()) : nullptr)
     {
-        pActiveViewShell->LOKSendFormulabarUpdate(nullptr, u""_ustr, ESelection());
+        pActiveViewShell->KitSendFormulabarUpdate(nullptr, u""_ustr, ESelection());
     }
 }
 
@@ -1584,7 +1584,7 @@ void ScTextWnd::InitEditEngine()
 
     // we get cursor, selection etc. messages from the VCL/window layer
     // otherwise these are injected into the document causing confusion.
-    m_xEditView->SuppressLOKMessages(true);
+    m_xEditView->SuppressKitMessages(true);
 
     m_xEditView->setEditViewCallbacks(this);
     m_xEditView->SetInsertMode(bIsInsertMode);
@@ -2099,7 +2099,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString, bool bKitUpdate )
             dynamic_cast<ScTabViewShell*>(SfxViewShell::Current()) : nullptr)
     {
         ESelection aSel = m_xEditView ? m_xEditView->GetSelection() : ESelection();
-        pActiveViewShell->LOKSendFormulabarUpdate(m_xEditView.get(), rNewString, aSel);
+        pActiveViewShell->KitSendFormulabarUpdate(m_xEditView.get(), rNewString, aSel);
     }
 
     SetScrollBarRange();

@@ -747,7 +747,7 @@ void Dialog::SetInstallKitNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& r
     mpDialogImpl->m_aInstallKitNotifierHdl = rLink;
 }
 
-void Dialog::SetLOKTunnelingState(bool bEnabled)
+void Dialog::SetKitTunnelingState(bool bEnabled)
 {
     mpDialogImpl->m_bLOKTunneling = bEnabled;
 }
@@ -988,7 +988,7 @@ bool Dialog::ImplStartExecute(bool async)
                     << "\" cancelled in silent mode");
             return false;
 
-        case DialogCancelMode::LOKSilent:
+        case DialogCancelMode::KitSilent:
             return false;
 
         default: // default cannot happen

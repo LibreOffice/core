@@ -15,7 +15,7 @@
 
 #include <tools/gen.hxx>
 #include <rtl/string.hxx>
-#include <test/lokcallback.hxx>
+#include <test/kitcallback.hxx>
 
 #include "scqahelperdllapi.h"
 #include <tabvwsh.hxx>

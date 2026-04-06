@@ -305,7 +305,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/view/ipclient \
     sfx2/source/kit/charthelper \
     sfx2/source/kit/starmathhelper \
-    sfx2/source/view/lokhelper \
+    sfx2/source/view/kithelper \
     sfx2/source/view/printer \
     sfx2/source/view/sfxbasecontroller \
     sfx2/source/view/userinputinterception \

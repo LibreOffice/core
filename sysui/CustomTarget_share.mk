@@ -172,7 +172,7 @@ $(share_WORKDIR)/%/KitDocumentView-0.1.gir: \
                  --include=GLib-2.0 --include=GObject-2.0 --include=Gio-2.0 \
                  --library=kitgtk --library-path="${INSTDIR}/program" \
                  --include=Gdk-3.0 --include=GdkPixbuf-2.0 --include=Gtk-3.0 \
-                 --namespace=KitDocumentView --nsversion=0.1 --identifier-prefix=LOKDoc --symbol-prefix=lok_doc \
+                 --namespace=KitDocumentView --nsversion=0.1 --identifier-prefix=KitDoc --symbol-prefix=kit_doc \
                  --c-include="COKit/COKitGtk.h" \
 				 --output="$@" --warn-all --no-libtool
 

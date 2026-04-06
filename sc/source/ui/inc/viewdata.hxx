@@ -616,8 +616,8 @@ public:
     tools::Long GetPageUpDownOffset() const { return m_nKitPageUpDownOffset; }
 
     /// The visible area in the client (set by setClientVisibleArea).
-    const tools::Rectangle& getLOKVisibleArea() const { return maKitVisibleArea; }
-    void setLOKVisibleArea(const tools::Rectangle& rArea) { maKitVisibleArea = rArea; }
+    const tools::Rectangle& getKitVisibleArea() const { return maKitVisibleArea; }
+    void setKitVisibleArea(const tools::Rectangle& rArea) { maKitVisibleArea = rArea; }
 
     void            KillEditView();
     void            ResetEditView();
@@ -716,11 +716,11 @@ public:
     bool            IsSelCtrlMouseClick() const { return bSelCtrlMouseClick; }
 
     SCCOLROW        GetKitSheetFreezeIndex(bool bIsCol) const;
-    bool            SetLOKSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol, SCTAB nForTab = -1);
-    bool            RemoveLOKFreeze();
-    void            DeriveLOKFreezeAllSheets();
-    void            DeriveLOKFreezeIfNeeded(SCTAB nForTab);
-    void            OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& eExVSplitMode,
+    bool            SetKitSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol, SCTAB nForTab = -1);
+    bool            RemoveKitFreeze();
+    void            DeriveKitFreezeAllSheets();
+    void            DeriveKitFreezeIfNeeded(SCTAB nForTab);
+    void            OverrideWithKitFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& eExVSplitMode,
                                           SCCOL& nExFixPosX, SCROW& nExFixPosY,
                                           tools::Long& nExHSplitPos, tools::Long& nExVSplitPos, SCTAB nForTab) const;
 

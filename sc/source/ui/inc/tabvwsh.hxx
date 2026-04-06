@@ -467,7 +467,7 @@ public:
     /// is equal to nCurrentTabIndex
     static void notifyAllViewsSheetGeomInvalidation(const SfxViewShell* pForViewShell, bool bColumns, bool bRows, bool bSizes,
                                                     bool bHidden, bool bFiltered, bool bGroups, SCTAB nCurrentTabIndex);
-    void LOKSendFormulabarUpdate(const EditView* pEditView, const OUString& rText, const ESelection& rSelection);
+    void KitSendFormulabarUpdate(const EditView* pEditView, const OUString& rText, const ESelection& rSelection);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
     SC_DLLPUBLIC static css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
 
@@ -475,7 +475,7 @@ public:
     void ClearFormEditData();
     ScFormEditData* GetFormEditData() { return mpFormEditData.get(); }
 
-    virtual tools::Rectangle getLOKVisibleArea() const override;
+    virtual tools::Rectangle getKitVisibleArea() const override;
 
     const ScDragData& GetDragData() const { return *m_pDragData; }
     void SetDragObject(ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj);

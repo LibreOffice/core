@@ -1912,7 +1912,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         MapMode aDrawMode = pWin->GetDrawMapMode();
         tools::Rectangle aVisible(
             bLOKActive ?
-            OutputDevice::LogicToLogic( aViewData.getLOKVisibleArea(), MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM) )
+            OutputDevice::LogicToLogic( aViewData.getKitVisibleArea(), MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM) )
             : pWin->PixelToLogic( tools::Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode ) );
 
         ScDocument& rDoc = aViewData.GetDocument();
@@ -1940,7 +1940,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         if (bLOKActive && bLayoutRTL)
         {
             // In this case we operate in negative X coordinates. The rectangle aSelection already
-            // has negative X coordinates. So the x coordinates in the rectangle aVisible(from getLOKVisibleArea)
+            // has negative X coordinates. So the x coordinates in the rectangle aVisible(from getKitVisibleArea)
             // need be negated to match.
             aVisible = tools::Rectangle(-aVisible.Right(), aVisible.Top(), -aVisible.Left(), aVisible.Bottom());
         }
@@ -3185,7 +3185,7 @@ void ScTabView::extendTiledAreaIfNeeded()
         << "] MaxTiledCol = " << aViewData.GetMaxTiledCol()
         << " MaxTiledRow = " << aViewData.GetMaxTiledRow());
 
-    const tools::Rectangle rVisArea = aViewData.getLOKVisibleArea();
+    const tools::Rectangle rVisArea = aViewData.getKitVisibleArea();
     if (rVisArea.Top() >= rVisArea.Bottom() ||
         rVisArea.Left() >= rVisArea.Right())
         return;

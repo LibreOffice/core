@@ -874,7 +874,7 @@ void ScTabView::TestHintWindow()
                     if (pWindow == pWin)
                     {
                         xOverlayManager->add(*pOverlay);
-                        pWindow->updateLOKInputHelp(aTitle, aMessage);
+                        pWindow->updateKitInputHelp(aTitle, aMessage);
                     }
                     else
                     {
@@ -2199,7 +2199,7 @@ void ScTabView::OnCOKitTabChanged()
     pThisViewShell->viewCallback(KIT_CALLBACK_INVALIDATE_HEADER, "all"_ostr);
 
     if (pThisViewShell->GetInputHandler())
-        pThisViewShell->GetInputHandler()->UpdateLokReferenceMarks();
+        pThisViewShell->GetInputHandler()->UpdateKitReferenceMarks();
 }
 
 // TextEditOverlayObject for TextOnOverlay TextEdit. It directly

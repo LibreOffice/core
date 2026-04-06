@@ -646,7 +646,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                 SfxViewShell* pViewShell = mrViewShell.GetViewShell();
                 if (pViewShell)
                 {
-                    bReadOnly = pViewShell->IsLokReadOnlyView();
+                    bReadOnly = pViewShell->IsKitReadOnlyView();
                 }
             }
 

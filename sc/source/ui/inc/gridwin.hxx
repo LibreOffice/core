@@ -325,9 +325,9 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
                                   ::std::vector< tools::Rectangle >& rRects, bool bInPrintTwips) const;
     void            UpdateKitSelection(const std::vector<tools::Rectangle>& rRectangles,
                                        std::vector<tools::Rectangle>* pLogicRects = nullptr);
-    bool            NeedLOKCursorInvalidation(const tools::Rectangle& rCursorRect,
+    bool            NeedKitCursorInvalidation(const tools::Rectangle& rCursorRect,
                                               double fScaleX, double fScaleY);
-    void            InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
+    void            InvalidateKitViewCursor(const tools::Rectangle& rCursorRect,
                                             double fScaleX, double fScaleY);
 
     void            SetupInitialPageBreaks(const ScDocument& rDoc, SCTAB nTab);
@@ -527,8 +527,8 @@ public:
     ScViewData& getViewData();
     virtual FactoryFunction GetUITestFactory() const override;
 
-    void updateLOKValListButton(bool bVisible, const ScAddress& rPos) const;
-    void updateLOKInputHelp(const OUString& title, const OUString& content) const;
+    void updateKitValListButton(bool bVisible, const ScAddress& rPos) const;
+    void updateKitInputHelp(const OUString& title, const OUString& content) const;
 
     void initiatePageBreaks();
 

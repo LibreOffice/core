@@ -599,11 +599,11 @@ SCROW ScTable::GetKitFreezeRow() const
     return maKitFreezeCell.Row();
 }
 
-bool ScTable::SetLOKFreezeCol(SCCOL nFreezeCol)
+bool ScTable::SetKitFreezeCol(SCCOL nFreezeCol)
 {
     if (!ValidCol(nFreezeCol))
     {
-        SAL_WARN("sc.core", "ScTable::SetLOKFreezeCol : invalid nFreezeCol = " << nFreezeCol);
+        SAL_WARN("sc.core", "ScTable::SetKitFreezeCol : invalid nFreezeCol = " << nFreezeCol);
         return false;
     }
 
@@ -616,11 +616,11 @@ bool ScTable::SetLOKFreezeCol(SCCOL nFreezeCol)
     return false;
 }
 
-bool ScTable::SetLOKFreezeRow(SCROW nFreezeRow)
+bool ScTable::SetKitFreezeRow(SCROW nFreezeRow)
 {
     if (!ValidRow(nFreezeRow))
     {
-        SAL_WARN("sc.core", "ScTable::SetLOKFreezeRow : invalid nFreezeRow = " << nFreezeRow);
+        SAL_WARN("sc.core", "ScTable::SetKitFreezeRow : invalid nFreezeRow = " << nFreezeRow);
         return false;
     }
 

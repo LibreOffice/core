@@ -1922,9 +1922,9 @@ void EditEngine::EnableSkipOutsideFormat(bool bValue)
     getImpl().EnableSkipOutsideFormat(bValue);
 }
 
-void EditEngine::SetLOKSpecialPaperSize(const Size& rSize)
+void EditEngine::SetKitSpecialPaperSize(const Size& rSize)
 {
-    getImpl().SetLOKSpecialPaperSize(rSize);
+    getImpl().SetKitSpecialPaperSize(rSize);
 }
 
 const Size& EditEngine::GetKitSpecialPaperSize() const

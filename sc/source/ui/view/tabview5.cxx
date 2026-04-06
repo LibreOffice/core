@@ -693,7 +693,7 @@ void ScTabView::ResetBrushDocument()
     }
 }
 
-void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
+void ScTabView::OnKitNoteStateChanged(const ScPostIt* pNote)
 {
     if (!comphelper::COKit::isActive())
         return;

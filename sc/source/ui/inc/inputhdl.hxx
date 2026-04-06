@@ -202,7 +202,7 @@ public:
     void            MergeLanguageAttributes( ScEditEngineDefaulter& rDestEngine ) const;
 
     bool            KeyInput( const KeyEvent& rKEvt, bool bStartEdit );
-    void            EnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL, bool bBeforeSavingInLOK = false );
+    void            EnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL, bool bBeforeSavingInKit = false );
     void            EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUString aString,
                        const OUString& aPreAutoCorrectString);
     void            CancelHandler();
@@ -291,7 +291,7 @@ public:
                     // actually private, public for SID_INPUT_SUM
     void            InitRangeFinder(const OUString& rFormula);
 
-    void            UpdateLokReferenceMarks();
+    void            UpdateKitReferenceMarks();
     static void     SendReferenceMarks( const SfxViewShell* pViewShell,
                          const std::vector<ReferenceMark>& rReferenceMarks );
 
@@ -303,7 +303,7 @@ public:
 
     static void ErrorMessage(ScTabViewShell* pActiveViewShell, TranslateId errorMessage);
 
-    void            LOKPasteFunctionData(const OUString& rFunctionName);
+    void            KitPasteFunctionData(const OUString& rFunctionName);
 };
 
 //  ScInputHdlState

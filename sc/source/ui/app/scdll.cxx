@@ -258,7 +258,7 @@ void ScDLL::Init()
 #ifndef DISABLE_DYNLOADING
 
 extern "C" SAL_DLLPUBLIC_EXPORT
-void lok_preload_hook()
+void kit_preload_hook()
 {
     // scfilt
     ScFormatFilter::Get();

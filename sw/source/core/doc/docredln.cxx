@@ -284,7 +284,7 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc& rDoc, const SwTableBox&
 namespace
 {
 
-void lcl_LOKInvalidateFrames(const sw::BroadcastingModify& rMod, const SwRootFrame* pLayout,
+void lcl_KitInvalidateFrames(const sw::BroadcastingModify& rMod, const SwRootFrame* pLayout,
         SwFrameType const nFrameType, const Point* pPoint)
 {
     SwIterator<SwFrame, sw::BroadcastingModify, sw::IteratorMode::UnwrapMulti> aIter(rMod);
@@ -311,7 +311,7 @@ void lcl_LOKInvalidateFrames(const sw::BroadcastingModify& rMod, const SwRootFra
     }
 }
 
-void lcl_LOKInvalidateStartEndFrames(SwShellCursor& rCursor)
+void lcl_KitInvalidateStartEndFrames(SwShellCursor& rCursor)
 {
     if (!(rCursor.HasMark() &&
         rCursor.GetPoint()->GetNode().IsContentNode() &&
@@ -325,16 +325,16 @@ void lcl_LOKInvalidateStartEndFrames(SwShellCursor& rCursor)
 
     auto [pStartPos, pEndPos] = rCursor.StartEnd(); // SwPosition*
 
-    lcl_LOKInvalidateFrames(*(pStartPos->GetNode().GetContentNode()),
+    lcl_KitInvalidateFrames(*(pStartPos->GetNode().GetContentNode()),
                             rCursor.GetShell()->GetLayout(),
                             FRM_CNTNT, &rCursor.GetSttPos());
 
-    lcl_LOKInvalidateFrames(*(pEndPos->GetNode().GetContentNode()),
+    lcl_KitInvalidateFrames(*(pEndPos->GetNode().GetContentNode()),
                             rCursor.GetShell()->GetLayout(),
                             FRM_CNTNT, &rCursor.GetEndPos());
 }
 
-bool lcl_LOKRedlineNotificationEnabled()
+bool lcl_KitRedlineNotificationEnabled()
 {
     static bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
     if (comphelper::COKit::isActive() && !bDisableRedlineComments)
@@ -355,7 +355,7 @@ void SwRedlineTable::setMovedIDIfNeeded(sal_uInt32 nMax)
 void SwRedlineTable::KitRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
 {
     // Disable since usability is very low beyond some small number of changes.
-    if (!lcl_LOKRedlineNotificationEnabled())
+    if (!lcl_KitRedlineNotificationEnabled())
         return;
 
     boost::property_tree::ptree aRedline;
@@ -389,7 +389,7 @@ void SwRedlineTable::KitRedlineNotification(RedlineNotification nType, SwRangeRe
         const OString sRects = comphelper::string::join("; ", aRects);
         aRedline.put("textRange", sRects.getStr());
 
-        lcl_LOKInvalidateStartEndFrames(aCursor);
+        lcl_KitInvalidateStartEndFrames(aCursor);
 
         // When this notify method is called text invalidation is not done yet
         // Calling FillRects updates the text area so invalidation will not run on the correct rects
@@ -1465,7 +1465,7 @@ sal_uInt32 SwRangeRedline::s_nLastId = 1;
 
 namespace
 {
-void lcl_LOKBroadcastCommentOperation(RedlineType type, const SwPaM& rPam)
+void lcl_KitBroadcastCommentOperation(RedlineType type, const SwPaM& rPam)
 {
     if (comphelper::COKit::isActive())
     {
@@ -1500,7 +1500,7 @@ SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam, sal_uInt32 n
             ? SwResId(STR_REDLINE_COMMENT_DELETED)
             : SwResId(STR_REDLINE_COMMENT_ADDED) );
 
-        lcl_LOKBroadcastCommentOperation(eTyp, rPam);
+        lcl_KitBroadcastCommentOperation(eTyp, rPam);
     }
 }
 
@@ -1524,7 +1524,7 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
             ? SwResId(STR_REDLINE_COMMENT_DELETED)
             : SwResId(STR_REDLINE_COMMENT_ADDED) );
 
-        lcl_LOKBroadcastCommentOperation(rData.m_eType, rPam);
+        lcl_KitBroadcastCommentOperation(rData.m_eType, rPam);
     }
 }
 
@@ -1568,7 +1568,7 @@ SwRangeRedline::~SwRangeRedline()
 
 void MaybeNotifyRedlineModification(SwRangeRedline& rRedline, SwDoc& rDoc)
 {
-    if (!lcl_LOKRedlineNotificationEnabled())
+    if (!lcl_KitRedlineNotificationEnabled())
         return;
 
     const SwRedlineTable& rRedTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
@@ -1584,7 +1584,7 @@ void MaybeNotifyRedlineModification(SwRangeRedline& rRedline, SwDoc& rDoc)
 
 void SwRangeRedline::MaybeNotifyRedlinePositionModification(tools::Long nTop)
 {
-    if (!lcl_LOKRedlineNotificationEnabled())
+    if (!lcl_KitRedlineNotificationEnabled())
         return;
 
     if(!m_oKitLastNodeTop || *m_oKitLastNodeTop != nTop)

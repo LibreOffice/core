@@ -1363,7 +1363,7 @@ include/xmlreader/span.hxx:70
 kit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
     void * gtv_comments_sidebar_get_instance_private(struct GtvCommentsSidebar *)
 kit/qa/gtktiledviewer/gtv-signal-handlers.hxx:37
-    void openLokDialog(struct _GtkWidget *,void *)
+    void openKitDialog(struct _GtkWidget *,void *)
 lotuswordpro/source/filter/clone.hxx:28
     detail::has_clone<LwpAtomHolder>::no & detail::has_clone::check_sig()
 lotuswordpro/source/filter/clone.hxx:28

@@ -299,7 +299,7 @@ include/drawinglayer/tools/primitive2dxmldump.hxx:46
     const class rtl::OUString & rStreamName
     ""
 include/editeng/editview.hxx:389
-    void EditView::InitLOKSpecialPositioning(enum MapUnit,const class tools::Rectangle &,const class Point &)
+    void EditView::InitKitSpecialPositioning(enum MapUnit,const class tools::Rectangle &,const class Point &)
     const class Point & rVisDocStartPos
     Point()
 include/editeng/scripttypeitem.hxx:37
@@ -499,7 +499,7 @@ include/vcl/toolkit/svlbitm.hxx:111
     class rtl::OUString aText
     ""
 include/vcl/virdev.hxx:125
-    _Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(const class Size &,const class Fraction &,const class Point &,unsigned char *)
+    _Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndKitBuffer(const class Size &,const class Fraction &,const class Point &,unsigned char *)
     const class Point & rNewOffset
     Point()
 include/xmloff/txtparae.hxx:418

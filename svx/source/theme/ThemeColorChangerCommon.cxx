@@ -171,7 +171,7 @@ void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject, SdrVi
         updateEditEngTextSections(rColorSet, pObject, *pView);
 }
 
-void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet,
+void notifyKit(std::shared_ptr<model::ColorSet> const& pColorSet,
                const std::set<Color>& rDocumentColors)
 {
     if (comphelper::COKit::isActive())

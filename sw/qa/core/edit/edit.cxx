@@ -13,7 +13,7 @@
 
 #include <editeng/wghtitem.hxx>
 #include <COKit/COKitEnums.h>
-#include <test/lokcallback.hxx>
+#include <test/kitcallback.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/kit/helper.hxx>
 
@@ -496,7 +496,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
     ViewCallback aCallback;
     TestKitCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
-    aCallbackWrapper.setLOKViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
+    aCallbackWrapper.setKitViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
 
     // When comparing with an old document:
     OUString aOther = createFileURL(u"compare-old.odt");

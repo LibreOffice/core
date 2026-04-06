@@ -120,9 +120,9 @@ public:
     */
     weld::Window* GetFrameWeld() const;
 
-    void SetLokViewId(int nId);
+    void SetKitViewId(int nId);
 
-    int GetLokViewId() const;
+    int GetKitViewId() const;
 
 private:
     const SfxRequest&   operator=(const SfxRequest &) = delete;

@@ -1077,7 +1077,7 @@ void SAL_CALL ChartController::dispatch(
 {
     OUString aCommand = rURL.Path;
 
-    if(aCommand == "LOKSetTextSelection")
+    if(aCommand == "KitSetTextSelection")
     {
         if (rArgs.getLength() == 3)
         {
@@ -1087,10 +1087,10 @@ void SAL_CALL ChartController::dispatch(
             rArgs[1].Value >>= nX;
             sal_Int32 nY = 0;
             rArgs[2].Value >>= nY;
-            executeDispatch_LOKSetTextSelection(nType, nX, nY);
+            executeDispatch_KitSetTextSelection(nType, nX, nY);
         }
     }
-    else if (aCommand == "LOKTransform")
+    else if (aCommand == "KitTransform")
     {
         if (rArgs[0].Name == "Action")
         {
@@ -1102,7 +1102,7 @@ void SAL_CALL ChartController::dispatch(
                     sal_Int32 nOffset;
                     if (rArgs[1].Value >>= nOffset)
                     {
-                        this->executeDispatch_LOKPieSegmentDragging(nOffset);
+                        this->executeDispatch_KitPieSegmentDragging(nOffset);
                     }
                 }
             }
@@ -1897,7 +1897,7 @@ const o3tl::sorted_vector< std::u16string_view >& ChartController::impl_getAvail
         u"ChartSaveToNewTheme",
 
         // COKit commands
-        u"LOKSetTextSelection", u"LOKTransform",
+        u"KitSetTextSelection", u"KitTransform",
     };
     return s_AvailableCommands;
 }

@@ -239,7 +239,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 
         // This may get called often, so instead of sending data on each update, just notify
         // that there's been an update, and the other side will pull the data using
-        // getLOKPayload() when it decides to.
+        // getKitPayload() when it decides to.
         m_aLastKitRect = aRect;
         if (pViewShell)
         {
@@ -278,7 +278,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
     m_aTextCursor.Show();
 }
 
-std::optional<OString> SwVisibleCursor::getLOKPayload(int nType, int nViewId) const
+std::optional<OString> SwVisibleCursor::getKitPayload(int nType, int nViewId) const
 {
     assert(nType == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR || nType == KIT_CALLBACK_INVALIDATE_VIEW_CURSOR);
     if (comphelper::COKit::isActive())
@@ -530,7 +530,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         pSelectionRectangles->push_back(sRect);
 }
 
-std::optional<OString> SwSelPaintRects::getLOKPayload(int nType) const
+std::optional<OString> SwSelPaintRects::getKitPayload(int nType) const
 {
     switch( nType )
     {

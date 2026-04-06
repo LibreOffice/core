@@ -2788,8 +2788,8 @@ public:
 
     SCCOL GetKitFreezeCol(SCTAB nTab) const;
     SCROW GetKitFreezeRow(SCTAB nTab) const;
-    bool  SetLOKFreezeCol(SCCOL nFreezeCol, SCTAB nTab);
-    bool  SetLOKFreezeRow(SCROW nFreezeRow, SCTAB nTab);
+    bool  SetKitFreezeCol(SCCOL nFreezeCol, SCTAB nTab);
+    bool  SetKitFreezeRow(SCROW nFreezeRow, SCTAB nTab);
 
     SC_DLLPUBLIC ScTableStyles* GetTableStyles();
     SC_DLLPUBLIC const ScTableStyles* GetTableStyles() const;

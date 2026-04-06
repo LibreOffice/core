@@ -4551,7 +4551,7 @@ vcl/inc/unx/wmadaptor.hxx:179
     int n
     0
 vcl/inc/window.h:433
-    _Bool ImplLOKHandleMouseEvent(const class VclPtr<class vcl::Window> &,enum NotifyEventType,_Bool,long,long,unsigned long,unsigned short,enum MouseEventModifiers,unsigned short)
+    _Bool ImplKitHandleMouseEvent(const class VclPtr<class vcl::Window> &,enum NotifyEventType,_Bool,long,long,unsigned long,unsigned short,enum MouseEventModifiers,unsigned short)
     _Bool bMouseLeave
     0
 vcl/inc/wizdlg.hxx:123

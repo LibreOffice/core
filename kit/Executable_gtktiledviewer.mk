@@ -61,7 +61,7 @@ $(eval $(call gb_Executable_add_exception_objects,gtktiledviewer,\
     kit/qa/gtktiledviewer/gtv-kitdocview-signal-handlers \
     kit/qa/gtktiledviewer/gtv-calc-header-bar \
     kit/qa/gtktiledviewer/gtv-comments-sidebar \
-    kit/qa/gtktiledviewer/gtv-lok-dialog \
+    kit/qa/gtktiledviewer/gtv-kit-dialog \
 ))
 
 # vim: set noet sw=4 ts=4:

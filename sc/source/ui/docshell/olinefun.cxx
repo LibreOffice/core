@@ -412,7 +412,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     rDoc.UpdatePageBreaks( nTab );
 
     if ( pViewSh )
-        pViewSh->OnLOKShowHideColRow(bColumns, nStart - 1);
+        pViewSh->OnKitShowHideColRow(bColumns, nStart - 1);
 
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
@@ -523,8 +523,8 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
         if ( pViewSh )
         {
-            pViewSh->OnLOKShowHideColRow(/*columns: */ true, nMinStartCol - 1);
-            pViewSh->OnLOKShowHideColRow(/*columns: */ false, nMinStartRow - 1);
+            pViewSh->OnKitShowHideColRow(/*columns: */ true, nMinStartCol - 1);
+            pViewSh->OnKitShowHideColRow(/*columns: */ false, nMinStartRow - 1);
         }
 
         rDocShell.PostPaint( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
@@ -713,7 +713,7 @@ void ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
     if ( pViewSh )
-        pViewSh->OnLOKShowHideColRow(bColumns, nStart - 1);
+        pViewSh->OnKitShowHideColRow(bColumns, nStart - 1);
 
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
@@ -781,7 +781,7 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     rDoc.UpdatePageBreaks( nTab );
 
     if ( pViewSh )
-        pViewSh->OnLOKShowHideColRow(bColumns, nStart - 1);
+        pViewSh->OnKitShowHideColRow(bColumns, nStart - 1);
 
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );

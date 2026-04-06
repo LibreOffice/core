@@ -21,9 +21,9 @@ bool osl_get_system_random_data(char* buffer, size_t desired_len)
 
     assert(buffer);
 
-    static int (*lok_open_urandom)()
-        = reinterpret_cast<int (*)()>(dlsym(RTLD_DEFAULT, "lok_open_urandom"));
-    if (!lok_open_urandom || (fd = lok_open_urandom()) < 0)
+    static int (*kit_open_urandom)()
+        = reinterpret_cast<int (*)()>(dlsym(RTLD_DEFAULT, "kit_open_urandom"));
+    if (!kit_open_urandom || (fd = kit_open_urandom()) < 0)
         fd = open("/dev/urandom", O_RDONLY);
 
     if (fd != -1)

@@ -13,7 +13,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include <rtl/string.hxx>
-#include <test/lokcallback.hxx>
+#include <test/kitcallback.hxx>
 #include <tools/gen.hxx>
 
 #include "swqahelperdllapi.h"

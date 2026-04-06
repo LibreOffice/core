@@ -323,7 +323,7 @@ void ImpEditView::SelectionChanged()
 }
 
 // This function is also called when a text's font || size is changed. Because its highlight rectangle must be updated.
-void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible) {
+void ImpEditView::kitSelectionCallback(const std::optional<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible) {
     VclPtr<vcl::Window> pParent = mpOutputWindow->GetParentWithKitNotifier();
     vcl::Region aRegion( *pPolyPoly );
 
@@ -633,7 +633,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     getImpEditEngine().IterateLineAreas(DrawHighlight, ImpEditEngine::IterFlag::none);
 
     if (comphelper::COKit::isActive() && mpViewShell && mpOutputWindow)
-        lokSelectionCallback(pPolyPoly, bStartHandleVisible, bEndHandleVisible);
+        kitSelectionCallback(pPolyPoly, bStartHandleVisible, bEndHandleVisible);
 
     if (pRegion || comphelper::COKit::isActive())
     {
@@ -2792,7 +2792,7 @@ void ImpEditView::RemoveDragAndDropListeners()
     mbActiveDragAndDropListener = false;
 }
 
-void ImpEditView::InitLOKSpecialPositioning(MapUnit eUnit,
+void ImpEditView::InitKitSpecialPositioning(MapUnit eUnit,
                                            const tools::Rectangle& rOutputArea,
                                            const Point& rVisDocStartPos)
 {
@@ -2802,7 +2802,7 @@ void ImpEditView::InitLOKSpecialPositioning(MapUnit eUnit,
         mpKitSpecialPositioning->ReInit(eUnit, rOutputArea, rVisDocStartPos);
 }
 
-void ImpEditView::SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea)
+void ImpEditView::SetKitSpecialOutputArea(const tools::Rectangle& rOutputArea)
 {
     assert(mpKitSpecialPositioning);
     mpKitSpecialPositioning->SetOutputArea(rOutputArea);
@@ -2814,7 +2814,7 @@ const tools::Rectangle & ImpEditView::GetKitSpecialOutputArea() const
     return mpKitSpecialPositioning->GetOutputArea();
 }
 
-void ImpEditView::SetLOKSpecialVisArea(const tools::Rectangle& rVisArea)
+void ImpEditView::SetKitSpecialVisArea(const tools::Rectangle& rVisArea)
 {
     assert(mpKitSpecialPositioning);
     mpKitSpecialPositioning->SetVisDocStartPos(rVisArea.TopLeft());
@@ -2826,12 +2826,12 @@ tools::Rectangle ImpEditView::GetKitSpecialVisArea() const
     return mpKitSpecialPositioning->GetVisDocArea();
 }
 
-bool ImpEditView::HasLOKSpecialPositioning() const
+bool ImpEditView::HasKitSpecialPositioning() const
 {
     return bool(mpKitSpecialPositioning);
 }
 
-void ImpEditView::SetLOKSpecialFlags(KitSpecialFlags eFlags)
+void ImpEditView::SetKitSpecialFlags(KitSpecialFlags eFlags)
 {
     assert(mpKitSpecialPositioning);
     mpKitSpecialPositioning->SetFlags(eFlags);

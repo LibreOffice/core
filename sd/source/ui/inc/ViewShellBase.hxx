@@ -223,8 +223,8 @@ public:
     /// See SfxViewShell::GetColorConfigColor().
     ::Color GetColorConfigColor(svtools::ColorConfigEntry nColorType) const override;
 
-    void setLOKVisibleArea(const ::tools::Rectangle& rArea) { maKitVisibleArea = rArea; }
-    virtual ::tools::Rectangle getLOKVisibleArea() const override { return maKitVisibleArea; }
+    void setKitVisibleArea(const ::tools::Rectangle& rArea) { maKitVisibleArea = rArea; }
+    virtual ::tools::Rectangle getKitVisibleArea() const override { return maKitVisibleArea; }
 
     const SdViewOptions& GetViewOptions() const;
     void SetViewOptions(const SdViewOptions& rOptions) const;

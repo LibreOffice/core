@@ -310,7 +310,7 @@ private:
 
     const SwRangeRedline* GotoRedline_( SwRedlineTable::size_type nArrPos, bool bSelect );
 
-    void sendLOKCursorUpdates();
+    void sendKitCursorUpdates();
 
     DECL_LINK(DoLayoutIdle, Timer*, void); // calls SwViewShell::LayoutIdle
 

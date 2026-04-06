@@ -33,12 +33,12 @@
 #include <comphelper/kit.hxx>
 #include <PostItMgr.hxx>
 
-static bool isLOKMobilePhone()
+static bool isKitMobilePhone()
 {
     if (!comphelper::COKit::isActive())
         return false;
     SfxViewShell* pCurrent = SfxViewShell::Current();
-    return pCurrent && pCurrent->isLOKMobilePhone();
+    return pCurrent && pCurrent->isKitMobilePhone();
 }
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
@@ -96,7 +96,7 @@ void SwWordCountFloatDlg::showCJK(bool bShowCJK)
 {
     m_xCurrentCjkcharsFT->set_visible(bShowCJK);
     m_xDocCjkcharsFT->set_visible(bShowCJK);
-    if (isLOKMobilePhone() && m_xCjkcharsLabelFT2)
+    if (isKitMobilePhone() && m_xCjkcharsLabelFT2)
         m_xCjkcharsLabelFT2->set_visible(bShowCJK);
     m_xCjkcharsLabelFT->set_visible(bShowCJK);
 }
@@ -105,7 +105,7 @@ void SwWordCountFloatDlg::showStandardizedPages(bool bShowStandardizedPages)
 {
     m_xCurrentStandardizedPagesFT->set_visible(bShowStandardizedPages);
     m_xDocStandardizedPagesFT->set_visible(bShowStandardizedPages);
-    if (isLOKMobilePhone() && m_xStandardizedPagesLabelFT2)
+    if (isKitMobilePhone() && m_xStandardizedPagesLabelFT2)
         m_xStandardizedPagesLabelFT2->set_visible(bShowStandardizedPages);
     m_xStandardizedPagesLabelFT->set_visible(bShowStandardizedPages);
 }
@@ -114,7 +114,7 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
                                          SfxChildWindow* pChild,
                                          weld::Window *pParent,
                                          SfxChildWinInfo const * pInfo)
-    : SfxModelessDialogController(_pBindings, pChild, pParent, isLOKMobilePhone() ? u"modules/swriter/ui/wordcount-mobile.ui"_ustr : u"modules/swriter/ui/wordcount.ui"_ustr, u"WordCountDialog"_ustr)
+    : SfxModelessDialogController(_pBindings, pChild, pParent, isKitMobilePhone() ? u"modules/swriter/ui/wordcount-mobile.ui"_ustr : u"modules/swriter/ui/wordcount.ui"_ustr, u"WordCountDialog"_ustr)
     , m_xCurrentWordFT(m_xBuilder->weld_label(u"selectwords"_ustr))
     , m_xCurrentCharacterFT(m_xBuilder->weld_label(u"selectchars"_ustr))
     , m_xCurrentCharacterExcludingSpacesFT(m_xBuilder->weld_label(u"selectcharsnospaces"_ustr))

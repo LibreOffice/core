@@ -181,7 +181,7 @@ void KitHelper::destroyView(int nId)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        pViewShell->SetLOKAccessibilityState(false);
+        pViewShell->SetKitAccessibilityState(false);
         SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
         SfxRequest aRequest(rViewFrame, SID_CLOSEWIN);
         rViewFrame.Exec_Impl(aRequest);
@@ -386,7 +386,7 @@ void KitHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        pViewShell->SetLOKLanguageTag(rBcp47LanguageTag);
+        pViewShell->SetKitLanguageTag(rBcp47LanguageTag);
         // sync also global getter if we are the current view
         bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
         if (bIsCurrShell)
@@ -402,7 +402,7 @@ void KitHelper::setViewLanguageAndLocale(int nId, const OUString& rBcp47Language
     {
         if (pViewShell->GetViewShellId() == ViewShellId(nId))
         {
-            pViewShell->SetLOKLanguageAndLocale(rBcp47LanguageTag);
+            pViewShell->SetKitLanguageAndLocale(rBcp47LanguageTag);
             // sync also global getter if we are the current view
             bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
             if (bIsCurrShell)
@@ -419,8 +419,8 @@ void KitHelper::setViewReadOnly(int nId, bool readOnly)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        LOK_INFO("lok.readonlyview", "KitHelper::setViewReadOnly: view id: " << nId << ", readOnly: " << readOnly);
-        pViewShell->SetLokReadOnlyView(readOnly);
+        KIT_INFO("lok.readonlyview", "KitHelper::setViewReadOnly: view id: " << nId << ", readOnly: " << readOnly);
+        pViewShell->SetKitReadOnlyView(readOnly);
     }
 }
 
@@ -428,7 +428,7 @@ void KitHelper::setAllowChangeComments(int nId, bool allow)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        LOK_INFO("lok.readonlyview", "KitHelper::setAllowChangeComments: view id: " << nId << ", allow: " << allow);
+        KIT_INFO("lok.readonlyview", "KitHelper::setAllowChangeComments: view id: " << nId << ", allow: " << allow);
         pViewShell->SetAllowChangeComments(allow);
     }
 }
@@ -437,7 +437,7 @@ void KitHelper::setAllowManageRedlines(int nId, bool allow)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        LOK_INFO("lok.readonlyview", "KitHelper::setAllowManageRedlines: view id: " << nId << ", allow: " << allow);
+        KIT_INFO("lok.readonlyview", "KitHelper::setAllowManageRedlines: view id: " << nId << ", allow: " << allow);
         pViewShell->SetAllowManageRedlines(allow);
     }
 }
@@ -446,8 +446,8 @@ void KitHelper::setAccessibilityState(int nId, bool nEnabled)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        LOK_INFO("lok.a11y", "KitHelper::setAccessibilityState: view id: " << nId << ", nEnabled: " << nEnabled);
-        pViewShell->SetLOKAccessibilityState(nEnabled);
+        KIT_INFO("lok.a11y", "KitHelper::setAccessibilityState: view id: " << nId << ", nEnabled: " << nEnabled);
+        pViewShell->SetKitAccessibilityState(nEnabled);
     }
 }
 
@@ -455,7 +455,7 @@ void KitHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        pViewShell->SetLOKLocale(rBcp47LanguageTag);
+        pViewShell->SetKitLocale(rBcp47LanguageTag);
         if (pViewShell->GetViewShellId() == ViewShellId(nId))
         {
             // sync also global getter if we are the current view
@@ -494,7 +494,7 @@ void KitHelper::setColorPreviewState(int nId, bool nEnabled)
     {
         if (pViewShell && pViewShell->GetViewShellId() == ViewShellId(nId))
         {
-            pViewShell->SetLOKColorPreviewState(nEnabled);
+            pViewShell->SetKitColorPreviewState(nEnabled);
             return;
         }
     }
@@ -515,7 +515,7 @@ void KitHelper::setViewTimezone(int nId, bool isSet, const OUString& rTimezone)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        pViewShell->SetLOKTimezone(isSet, rTimezone);
+        pViewShell->SetKitTimezone(isSet, rTimezone);
     }
 }
 
@@ -1219,7 +1219,7 @@ void KitHelper::dispatchUnoCommand(const boost::property_tree::ptree& tree)
     if (std::u16string_view rest;
         !command.startsWith(".uno:", &rest) || !GetKitUnoCommandList().contains(rest))
     {
-        LOK_WARN("lok.transform",
+        KIT_WARN("lok.transform",
                  "UnoCommand command is not recognized: '" << command << "'");
         return;
     }
@@ -1246,7 +1246,7 @@ namespace
         OUString maText;
     };
 
-    void LOKPostAsyncEvent(void* pEv, void*)
+    void KitPostAsyncEvent(void* pEv, void*)
     {
         std::unique_ptr<KitAsyncEventData> pKitEv(static_cast<KitAsyncEventData*>(pEv));
         if (pKitEv->mpWindow->isDisposed())
@@ -1347,10 +1347,10 @@ namespace
         {
             if (!Application::IsMainThread())
                 SAL_WARN("lok", "Posting event directly but not called from main thread!");
-            LOKPostAsyncEvent(pEvent, nullptr);
+            KitPostAsyncEvent(pEvent, nullptr);
         }
         else
-            Application::PostUserEvent(LINK_NONMEMBER(pEvent, LOKPostAsyncEvent));
+            Application::PostUserEvent(LINK_NONMEMBER(pEvent, KitPostAsyncEvent));
     }
 }
 

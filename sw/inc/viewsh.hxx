@@ -250,7 +250,7 @@ public:
     bool AddPaintRect( const SwRect &rRect );
 
     void InvalidateWindows( const SwRect &rRect );
-    void FlushPendingLOKInvalidateTiles();
+    void FlushPendingKitInvalidateTiles();
 
     /// Invalidates complete Layout (ApplyViewOption).
     SW_DLLPUBLIC void Reformat();
@@ -289,8 +289,8 @@ public:
     const SwRect& VisArea() const;
 
     /// The visible area in the client (set by setClientVisibleArea).
-    const tools::Rectangle & getLOKVisibleArea() const { return maKitVisibleArea; }
-    void setLOKVisibleArea(const tools::Rectangle& rArea) { maKitVisibleArea = rArea; }
+    const tools::Rectangle & getKitVisibleArea() const { return maKitVisibleArea; }
+    void setKitVisibleArea(const tools::Rectangle& rArea) { maKitVisibleArea = rArea; }
 
     // If necessary scroll until passed Rect is situated in visible sector.
     void MakeVisible( const SwRect &, ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault );

@@ -653,7 +653,7 @@ void SdrEditView::CheckPossibilities()
     static_cast<SdrPolyEditView*>(this)->ImpCheckPolyPossibilities();
     m_bPossibilitiesDirty=false;
 
-    if (m_bReadOnly || SfxViewShell::IsCurrentLokViewReadOnly() ) {
+    if (m_bReadOnly || SfxViewShell::IsCurrentKitViewReadOnly() ) {
         bool bTemp=m_bGrpEnterPossible;
         ImpResetPossibilityFlags();
         m_bReadOnly=true;

@@ -1257,7 +1257,7 @@ namespace sw::mark
                     Bookmark* pBookmark = *ppBookmark;
 
                     if(pBookmark)
-                        pBookmark->sendLOKDeleteCallback();
+                        pBookmark->sendKitDeleteCallback();
 
                     m_vBookmarks.erase(ppBookmark);
                 }
@@ -1613,7 +1613,7 @@ namespace sw::mark
                 pNewActiveFieldmark->ShowButton(&rEditWin);
         }
 
-        LOKUpdateActiveField(pSwView);
+        KitUpdateActiveField(pSwView);
     }
 
     void MarkManager::ClearFieldActivation()
@@ -1624,7 +1624,7 @@ namespace sw::mark
         m_pLastActiveFieldmark = nullptr;
     }
 
-    void MarkManager::LOKUpdateActiveField(const SfxViewShell* pViewShell)
+    void MarkManager::KitUpdateActiveField(const SfxViewShell* pViewShell)
     {
         if (!comphelper::COKit::isActive())
             return;
@@ -1635,7 +1635,7 @@ namespace sw::mark
                                 dynamic_cast<::sw::mark::DropDownFieldmark*>(m_pLastActiveFieldmark) :
                                 nullptr)
             {
-                pDrowDown->SendLOKShowMessage(pViewShell);
+                pDrowDown->SendKitShowMessage(pViewShell);
             }
         }
         else
@@ -1653,7 +1653,7 @@ namespace sw::mark
             }
 
             if (bDropDownFieldExist)
-                ::sw::mark::DropDownFieldmark::SendLOKHideMessage(pViewShell);
+                ::sw::mark::DropDownFieldmark::SendKitHideMessage(pViewShell);
         }
     }
 

@@ -318,7 +318,7 @@ private:
         return mpEditViewCallbacks;
     }
 
-    void lokSelectionCallback(const std::optional<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible);
+    void kitSelectionCallback(const std::optional<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible);
 
     void setEditViewCallbacks(EditViewCallbacks* pEditViewCallbacks)
     {
@@ -329,7 +329,7 @@ private:
 
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const;
 
-    void SetBroadcastLOKViewCursor(bool bSet)
+    void SetBroadcastKitViewCursor(bool bSet)
     {
         mbBroadcastKitViewCursor = bSet;
     }
@@ -510,18 +510,18 @@ public:
         return sal_uInt16(mnInvalidateMore);
     }
 
-    void InitLOKSpecialPositioning(MapUnit eUnit, const tools::Rectangle& rOutputArea,
+    void InitKitSpecialPositioning(MapUnit eUnit, const tools::Rectangle& rOutputArea,
                                    const Point& rVisDocStartPos);
-    void SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea);
+    void SetKitSpecialOutputArea(const tools::Rectangle& rOutputArea);
     const tools::Rectangle & GetKitSpecialOutputArea() const;
-    void SetLOKSpecialVisArea(const tools::Rectangle& rVisArea);
+    void SetKitSpecialVisArea(const tools::Rectangle& rVisArea);
     tools::Rectangle GetKitSpecialVisArea() const;
-    bool HasLOKSpecialPositioning() const;
+    bool HasKitSpecialPositioning() const;
 
-    void SetLOKSpecialFlags(KitSpecialFlags eFlags);
+    void SetKitSpecialFlags(KitSpecialFlags eFlags);
 
-    void SuppressLOKMessages(bool bSet) { mbSuppressKitMessages = bSet; }
-    bool IsSuppressLOKMessages() const { return mbSuppressKitMessages; }
+    void SuppressKitMessages(bool bSet) { mbSuppressKitMessages = bSet; }
+    bool IsSuppressKitMessages() const { return mbSuppressKitMessages; }
 
     void SetNegativeX(bool bSet) { mbNegativeX = bSet; }
     bool IsNegativeX() const { return mbNegativeX; }
@@ -1339,7 +1339,7 @@ public:
     void EnableSkipOutsideFormat(bool set) { mbSkipOutsideFormat = set; }
 
     void Dispose();
-    void SetLOKSpecialPaperSize(const Size& rSize) { maKitSpecialPaperSize = rSize; }
+    void SetKitSpecialPaperSize(const Size& rSize) { maKitSpecialPaperSize = rSize; }
     const Size& GetKitSpecialPaperSize() const { return maKitSpecialPaperSize; }
 
     enum class CallbackResult

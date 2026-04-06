@@ -3502,7 +3502,7 @@ void SwXTextDocument::setClientVisibleArea(const tools::Rectangle& rRectangle)
 
     if (SwViewShell* pViewShell = m_pDocShell->GetWrtShell())
     {
-        pViewShell->setLOKVisibleArea(rRectangle);
+        pViewShell->setKitVisibleArea(rRectangle);
     }
 }
 

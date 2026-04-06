@@ -32,31 +32,31 @@
 
 #include <boost/property_tree/ptree_fwd.hpp>
 
-#define LOK_NOTIFY_LOG_TO_CLIENT 1
+#define KIT_NOTIFY_LOG_TO_CLIENT 1
 
-#define LOK_LOG_STREAM(level, area, stream) \
+#define KIT_LOG_STREAM(level, area, stream) \
     do { \
-            ::std::ostringstream lok_detail_stream; \
-            lok_detail_stream << level << ':'; \
+            ::std::ostringstream kit_detail_stream; \
+            kit_detail_stream << level << ':'; \
             if (std::strcmp(level, "debug") != 0) \
-                lok_detail_stream << area << ':'; \
+                kit_detail_stream << area << ':'; \
             const char* const where = SAL_WHERE; \
-            lok_detail_stream << where << stream; \
-            KitHelper::notifyLog(lok_detail_stream); \
+            kit_detail_stream << where << stream; \
+            KitHelper::notifyLog(kit_detail_stream); \
         } while (false)
 
-#if LOK_NOTIFY_LOG_TO_CLIENT > 0
-#define LOK_INFO(area, stream) \
-    LOK_LOG_STREAM("info", area, stream) \
+#if KIT_NOTIFY_LOG_TO_CLIENT > 0
+#define KIT_INFO(area, stream) \
+    KIT_LOG_STREAM("info", area, stream) \
 
-#define LOK_WARN(area, stream) \
-    LOK_LOG_STREAM("warn", area, stream)
+#define KIT_WARN(area, stream) \
+    KIT_LOG_STREAM("warn", area, stream)
 
 #else
-#define LOK_INFO(area, stream) \
+#define KIT_INFO(area, stream) \
     SAL_INFO(area, stream) \
 
-#define LOK_WARN(area, stream) \
+#define KIT_WARN(area, stream) \
     SAL_WARN(area, stream)
 
 #endif
@@ -212,7 +212,7 @@ public:
     // Notify about the given type needing a per-viewid update.
     static void notifyUpdatePerViewId(SfxViewShell const& rViewShell, int nType);
     /// Same as notifyUpdatePerViewId(), pTargetShell will be notified, relevant viewId in pViewShell,
-    /// pSourceView->getLOKPayload() will be called to get the data.
+    /// pSourceView->getKitPayload() will be called to get the data.
     static void notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxViewShell const* pViewShell,
         SfxViewShell const& rSourceShell, int nType);
     // Notify other views about the given type needing a per-viewid update.

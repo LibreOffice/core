@@ -68,7 +68,7 @@ public:
     void SetPosAndShow(SfxViewShell const * pViewShell);
     const vcl::Cursor& GetTextCursor() const;
 
-    std::optional<OString> getLOKPayload(int nType, int nViewId) const;
+    std::optional<OString> getKitPayload(int nType, int nViewId) const;
 
 #if ENABLE_YRS
     ::std::optional<OUString> m_Author;
@@ -140,7 +140,7 @@ public:
     static void Get1PixelInLogic( const SwViewShell& rSh,
                                     tools::Long* pX = nullptr, tools::Long* pY = nullptr );
 
-    std::optional<OString> getLOKPayload(int nType) const;
+    std::optional<OString> getKitPayload(int nType) const;
 };
 
 /// Represents the current text cursor of one opened edit window.

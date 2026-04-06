@@ -753,10 +753,10 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         // already - the border of the page will never be painted.
         SwPageFrame *pPg = pPage;
         if (lcl_isLayoutLooping()) return;
-        // COKit case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
+        // COKit case: VisArea() is the entire document and getKitVisibleArea() may contain the actual
         // visible area.
         const SwRect &rVisArea = m_pImp->GetShell().VisArea();
-        SwRect aKitVisArea(m_pImp->GetShell().getLOKVisibleArea());
+        SwRect aKitVisArea(m_pImp->GetShell().getKitVisibleArea());
         bool bUseKitVisArea = comphelper::COKit::isActive() && !aKitVisArea.IsEmpty();
         const SwRect& rVis = bUseKitVisArea ? aKitVisArea : rVisArea;
 
@@ -1092,9 +1092,9 @@ bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
 
     // Decide if prPage is visible, i.e. part of the visible area.
     const SwRect &rVisArea = m_pImp->GetShell().VisArea();
-    // COKit case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
+    // COKit case: VisArea() is the entire document and getKitVisibleArea() may contain the actual
     // visible area.
-    SwRect aKitVisArea(m_pImp->GetShell().getLOKVisibleArea());
+    SwRect aKitVisArea(m_pImp->GetShell().getKitVisibleArea());
     bool bUseKitVisArea = comphelper::COKit::isActive() && !aKitVisArea.IsEmpty();
     const SwRect& rVis = bUseKitVisArea ? aKitVisArea : rVisArea;
 
@@ -2353,10 +2353,10 @@ bool SwLayIdle::DoIdleJob(IdleJobType eJob, IdleJobArea eJobArea)
         }
 
         pPage = static_cast<SwPageFrame*>(pPage->GetNext());
-        // COKit case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
+        // COKit case: VisArea() is the entire document and getKitVisibleArea() may contain the actual
         // visible area.
         const SwRect &rVisArea = m_pImp->GetShell().VisArea();
-        SwRect aKitVisArea(m_pImp->GetShell().getLOKVisibleArea());
+        SwRect aKitVisArea(m_pImp->GetShell().getKitVisibleArea());
         bool bUseKitVisArea = comphelper::COKit::isActive() && !aKitVisArea.IsEmpty();
         const SwRect& rVis = bUseKitVisArea ? aKitVisArea : rVisArea;
         if (pPage && eJobArea == IdleJobArea::VISIBLE &&

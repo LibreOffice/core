@@ -184,7 +184,7 @@ public:
     ScNavipiCfg&        GetNavipiCfg();
     ScAddInCfg&         GetAddInCfg();
     svtools::ColorConfig&   GetColorConfig();
-    static bool         IsLOKViewInDarkMode();
+    static bool         IsKitViewInDarkMode();
     SC_DLLPUBLIC SvtUserOptions& GetUserOptions();
     SC_DLLPUBLIC FieldUnit GetMetric();
 
@@ -195,7 +195,7 @@ public:
     bool                IsInputMode();  // also for SC_INPUT_TYPE
     void                SetInputMode( ScInputMode eMode, const OUString* pInitText = nullptr );
     bool                InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit = false );
-    SC_DLLPUBLIC void   InputEnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL, bool bBeforeSavingInLOK = false );
+    SC_DLLPUBLIC void   InputEnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL, bool bBeforeSavingInKit = false );
     void                InputCancelHandler();
     void                InputSelection( const EditView* pView );
     void                InputChanged( const EditView* pView );

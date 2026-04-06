@@ -972,7 +972,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertGraphicInvalidations)
     int nCanvasHeight = 256;
     std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
-    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight), 1.0, Point(), aBuffer.data());
+    pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasWidth, nCanvasHeight), 1.0, Point(), aBuffer.data());
     pModelObj->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     Scheduler::ProcessEventsToIdle();
 
@@ -1006,7 +1006,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeWithTwoViews)
     int nCanvasHeight = 256;
     std::vector<unsigned char> aBuffer1(nCanvasWidth * nCanvasHeight * 4);
     ScopedVclPtrInstance<VirtualDevice> pDevice1(DeviceFormat::WITHOUT_ALPHA);
-    pDevice1->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight), 1.0, Point(), aBuffer1.data());
+    pDevice1->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasWidth, nCanvasHeight), 1.0, Point(), aBuffer1.data());
     pModelObj->paintTile(*pDevice1, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/291840, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     Scheduler::ProcessEventsToIdle();
 
@@ -1016,7 +1016,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeWithTwoViews)
 
     std::vector<unsigned char> aBuffer2(nCanvasWidth * nCanvasHeight * 4);
     ScopedVclPtrInstance<VirtualDevice> pDevice2(DeviceFormat::WITHOUT_ALPHA);
-    pDevice2->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight), 1.0, Point(), aBuffer2.data());
+    pDevice2->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasWidth, nCanvasHeight), 1.0, Point(), aBuffer2.data());
     pModelObj->paintTile(*pDevice2, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/291840, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     Scheduler::ProcessEventsToIdle();
 
@@ -1437,7 +1437,7 @@ static Bitmap getTile(ScModelObj* pModelObj, int nTilePosX, int nTilePosY, tools
     std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
     ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
     xDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-    xDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize),
+    xDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasSize, nCanvasSize),
             1.0, Point(), aPixmap.data());
     pModelObj->paintTile(*xDevice, nCanvasSize, nCanvasSize, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
     xDevice->EnableMapMode(false);
@@ -3138,7 +3138,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     pModelObj->setExportZoom(150);
 
     {
-        uno::ContextLayer aLayer(comphelper::NewFlagContext(u"IsLOKExport"_ustr));
+        uno::ContextLayer aLayer(comphelper::NewFlagContext(u"IsKitExport"_ustr));
         save(TestFilter::ODS); // .ODS
     }
     xmlDocUniquePtr pSettingsXml = parseExport(u"settings.xml"_ustr);
@@ -3230,7 +3230,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)
     KitHelper::createView();
     ScTestViewCallback aView2;
     SfxViewShell* pView2 = SfxViewShell::Current();
-    pView2->SetLOKLocale(u"de-DE"_ustr);
+    pView2->SetKitLocale(u"de-DE"_ustr);
     {
         SfxViewFrame& rFrame = pView2->GetViewFrame();
         SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(&rFrame);
@@ -3453,7 +3453,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
         int nViewFR = KitHelper::getCurrentView();
         ScTestViewCallback aView1;
         SfxViewShell* pViewFR = SfxViewShell::Current();
-        pViewFR->SetLOKLocale(u"fr-FR"_ustr);
+        pViewFR->SetKitLocale(u"fr-FR"_ustr);
 
         // modify G12 with FR and use French keywords in the format
         KitHelper::setView(nViewFR);
@@ -3669,7 +3669,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPrintRanges)
     CPPUNIT_ASSERT_EQUAL(u"{\"printranges\":[{\"sheet\":0,\"ranges\":[[2,6,2,6]]}]}"_ustr, printRanges);
 }
 
-CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLOKLanguageStatus)
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testKitLanguageStatus)
 {
     ScModelObj* pModelObj = createDoc("pivotfr.ods");
     CPPUNIT_ASSERT(pModelObj);

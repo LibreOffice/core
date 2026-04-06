@@ -22,7 +22,7 @@
 #include "gtv-kitdocview-signal-handlers.hxx"
 #include "gtv-calc-header-bar.hxx"
 #include "gtv-comments-sidebar.hxx"
-#include "gtv-lok-dialog.hxx"
+#include "gtv-kit-dialog.hxx"
 
 #include <boost/property_tree/json_parser.hpp>
 

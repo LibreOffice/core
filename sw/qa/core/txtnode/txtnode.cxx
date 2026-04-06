@@ -17,7 +17,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/scheduler.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <test/lokcallback.hxx>
+#include <test/kitcallback.hxx>
 #include <editeng/escapementitem.hxx>
 
 #include <IDocumentStatistics.hxx>
@@ -183,7 +183,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     ViewCallback aCallback;
     TestKitCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
-    aCallbackWrapper.setLOKViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
+    aCallbackWrapper.setKitViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
     Scheduler::ProcessEventsToIdle();
     aCallback.m_nInvalidations = 0;
 

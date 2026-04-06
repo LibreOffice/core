@@ -3542,9 +3542,9 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
             const OUString aDeckId(pDeckIdItem->GetValue());
             // Compatibility with old COKit "toggle always"
             // TODO: check COKit with tdf#142978 Show a11y sidebar when finding issues on PDF export, hash: 53fc5fa
-            const bool isLOK = comphelper::COKit::isActive();
+            const bool isKit = comphelper::COKit::isActive();
             const SfxBoolItem* pToggleItem = rReq.GetArg(SID_SIDEBAR_DECK_TOGGLE);
-            bool bToggle = isLOK || (pToggleItem && pToggleItem->GetValue());
+            bool bToggle = isKit || (pToggleItem && pToggleItem->GetValue());
             ::sfx2::sidebar::Sidebar::ShowDeck(aDeckId, this, bToggle);
         }
         rReq.Done();

@@ -363,7 +363,7 @@ private:
     */
     bool SearchAndReplaceOnce(std::vector<::sd::SearchSelection>* pSelections = nullptr);
 
-    void sendLOKSearchResultCallback(const std::shared_ptr<sd::ViewShell>& pViewShell,
+    void sendKitSearchResultCallback(const std::shared_ptr<sd::ViewShell>& pViewShell,
                                      const OutlinerView* pOutlinerView,
                                      std::vector<sd::SearchSelection>* pSelections);
 

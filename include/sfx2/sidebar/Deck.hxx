@@ -66,7 +66,7 @@ public:
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
 
-    static void LOKSendSidebarFullUpdate();
+    static void KitSendSidebarFullUpdate();
 
 private:
     void RequestLayoutInternal();

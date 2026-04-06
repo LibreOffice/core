@@ -1529,7 +1529,7 @@ SfxSlotFilterState SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) 
         return bFound ? SfxSlotFilterState::DISABLED : SfxSlotFilterState::ENABLED;
 }
 
-static bool IsCommandAllowedInLokReadOnlyViewMode(std::u16string_view commandName,
+static bool IsCommandAllowedInKitReadOnlyViewMode(std::u16string_view commandName,
                                                   const SfxViewShell& viewShell)
 {
     if (viewShell.IsAllowChangeComments())
@@ -1638,9 +1638,9 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
 
     const bool isViewerAppMode = officecfg::Office::Common::Misc::ViewerAppMode::get();
     const bool bReadOnlyGlobal = SfxSlotFilterState::ENABLED_READONLY != nSlotEnableMode && xImp->bReadOnly;
-    const bool bReadOnlyLokView = !bReadOnlyGlobal && comphelper::COKit::isActive()
+    const bool bReadOnlyKitView = !bReadOnlyGlobal && comphelper::COKit::isActive()
                                   && xImp->pFrame && xImp->pFrame->GetViewShell()
-                                  && xImp->pFrame->GetViewShell()->IsLokReadOnlyView();
+                                  && xImp->pFrame->GetViewShell()->IsKitReadOnlyView();
 
     const bool bIsInPlace = xImp->pFrame && xImp->pFrame->GetObjectShell()->IsInPlaceActive();
     // Shell belongs to Server?
@@ -1711,9 +1711,9 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
             }
 
             // 2. COKit view context is read-only
-            if (bReadOnlyLokView)
+            if (bReadOnlyKitView)
             {
-                if (!IsCommandAllowedInLokReadOnlyViewMode(pSlot->GetCommand(),
+                if (!IsCommandAllowedInKitReadOnlyViewMode(pSlot->GetCommand(),
                                                            *xImp->pFrame->GetViewShell()))
                 {
                     SAL_WARN("sfx.control", "SfxDispatcher::FindServer_: rejecting command '"
@@ -2060,7 +2060,7 @@ void SfxDispatcher::SetReadOnly_Impl( bool bOn )
 
 bool SfxDispatcher::GetReadOnly_Impl() const
 {
-    return xImp->bReadOnly || SfxViewShell::IsCurrentLokViewReadOnly();
+    return xImp->bReadOnly || SfxViewShell::IsCurrentKitViewReadOnly();
 }
 
 /** With 'bOn' the Dispatcher is quasi dead and transfers everything to the
@@ -2133,7 +2133,7 @@ bool SfxDispatcher::IsReadOnlyShell_Impl( sal_uInt16 nShell ) const
             bResult = xImp->bReadOnly;
     }
 
-    if (!bResult && SfxViewShell::IsCurrentLokViewReadOnly())
+    if (!bResult && SfxViewShell::IsCurrentKitViewReadOnly())
             bResult = true;
 
     return bResult;

@@ -1400,9 +1400,9 @@ void ScGridWindow::ShowFilterMenu(weld::Window* pParent, const tools::Rectangle&
     // minimum width in pixel
     if (comphelper::COKit::isActive())
     {
-        const tools::Long nMinLOKWinWidth = o3tl::convert(STD_COL_WIDTH * 13 / 10, o3tl::Length::twip, o3tl::Length::px);
-        if (nSizeX < nMinLOKWinWidth)
-            nSizeX = nMinLOKWinWidth;
+        const tools::Long nMinKitWinWidth = o3tl::convert(STD_COL_WIDTH * 13 / 10, o3tl::Length::twip, o3tl::Length::px);
+        if (nSizeX < nMinKitWinWidth)
+            nSizeX = nMinKitWinWidth;
     }
 
     weld::TreeView& rFilterBox = mpFilterBox->get_widget();
@@ -1749,7 +1749,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
     SfxInPlaceClient* pClient = mrViewData.GetViewShell()->GetIPClient();
     bool bOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
-    if ( mrViewData.IsActive() && !bOleActive && !mrViewData.GetViewShell()->IsLokReadOnlyView())
+    if ( mrViewData.IsActive() && !bOleActive && !mrViewData.GetViewShell()->IsKitReadOnlyView())
     {
         ScDocument& rDoc = mrViewData.GetDocument();
         SCTAB nTab = mrViewData.CurrentTabForData();
@@ -2014,7 +2014,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
                         pEditView->SetOutputArea(aOutputArea);
                     });
 
-                lcl_GetMirror(aMouse, aOutputArea, mrViewData.getLOKVisibleArea().GetWidth());
+                lcl_GetMirror(aMouse, aOutputArea, mrViewData.getKitVisibleArea().GetWidth());
                 pEditView->SetOutputArea(aOutputArea);
 
                 MouseEvent aEvent(aMouse, rMEvt.GetClicks(), rMEvt.GetMode(),
@@ -2173,8 +2173,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
                 if (!bWasMouseCaptured && IsMouseCaptured())
                     ReleaseMouse();
 
-                const bool lokReadOnly = comphelper::COKit::isActive() && pViewSh->IsLokReadOnlyView();
-                if (lokReadOnly)
+                const bool kitReadOnly = comphelper::COKit::isActive() && pViewSh->IsKitReadOnlyView();
+                if (kitReadOnly)
                     return; // Return as if the action was performed, so the flow is not affected.
 
                 LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row() );
@@ -2317,7 +2317,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     pEditView->SetOutputArea(aOutputArea);
                 });
 
-            lcl_GetMirror(aMouse, aOutputArea, mrViewData.getLOKVisibleArea().GetWidth());
+            lcl_GetMirror(aMouse, aOutputArea, mrViewData.getKitVisibleArea().GetWidth());
             pEditView->SetOutputArea(aOutputArea);
 
             MouseEvent aEvent(aMouse, rMEvt.GetClicks(), rMEvt.GetMode(),
@@ -2713,7 +2713,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 // the cell coordinates must be sent along with click position for elegance
                 ScTabViewShell* pViewShell = mrViewData.GetViewShell();
                 if (isTiledRendering && pViewShell &&
-                    (pViewShell->isLOKMobilePhone() || pViewShell->isLOKTablet()))
+                    (pViewShell->isKitMobilePhone() || pViewShell->isKitTablet()))
                 {
                     aPos = rMEvt.GetPosPixel();
                     mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
@@ -2920,7 +2920,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
                     pEditView->SetOutputArea(aOutputArea);
                 });
 
-            lcl_GetMirror(aMouse, aOutputArea, mrViewData.getLOKVisibleArea().GetWidth());
+            lcl_GetMirror(aMouse, aOutputArea, mrViewData.getKitVisibleArea().GetWidth());
             pEditView->SetOutputArea(aOutputArea);
 
             MouseEvent aEvent(aMouse, rMEvt.GetClicks(), rMEvt.GetMode(),
@@ -5206,7 +5206,7 @@ void ScGridWindow::UpdateEditViewPos()
                     true, true /* bInPrintTwips */);
             tools::Rectangle aOutputAreaPTwips = pView->GetKitSpecialOutputArea();
             aOutputAreaPTwips.SetPos(aPTwipsRect.TopLeft());
-            pView->SetLOKSpecialOutputArea(aOutputAreaPTwips);
+            pView->SetKitSpecialOutputArea(aOutputAreaPTwips);
         }
 
         Point aScrPos = PixelToLogic( aPixRect.TopLeft(), mrViewData.GetLogicMode() );
@@ -5366,7 +5366,7 @@ void ScGridWindow::UpdateAutoFillMark(bool bMarked, const ScRange& rMarkRange)
     }
 }
 
-void ScGridWindow::updateLOKInputHelp(const OUString& title, const OUString& content) const
+void ScGridWindow::updateKitInputHelp(const OUString& title, const OUString& content) const
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
 
@@ -5379,7 +5379,7 @@ void ScGridWindow::updateLOKInputHelp(const OUString& title, const OUString& con
     pViewShell->viewCallback(KIT_CALLBACK_VALIDITY_INPUT_HELP, OString(aStream.str()));
 }
 
-void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos ) const
+void ScGridWindow::updateKitValListButton( bool bVisible, const ScAddress& rPos ) const
 {
     SCCOL nX = rPos.Col();
     SCROW nY = rPos.Row();
@@ -5411,7 +5411,7 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
             // paint area of new button
             if ( comphelper::COKit::isActive() )
             {
-                updateLOKValListButton( true, aListValPos );
+                updateKitValListButton( true, aListValPos );
             }
             else
             {
@@ -5427,7 +5427,7 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
         // paint area of old button
         if ( comphelper::COKit::isActive() )
         {
-            updateLOKValListButton( false, aOldPos );
+            updateKitValListButton( false, aOldPos );
         }
         else
         {
@@ -5839,7 +5839,7 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
 
         ScDocShell* pDocSh = mrViewData.GetDocShell();
 
-        pHdl->UpdateLokReferenceMarks();
+        pHdl->UpdateKitReferenceMarks();
 
         // only redrawing what has been changed...
         lcl_PaintRefChanged( pDocSh, aOld, aNew );
@@ -6257,7 +6257,7 @@ void ScGridWindow::notifyKitCellCursor() const
 
     pViewShell->viewCallback(KIT_CALLBACK_CELL_CURSOR, getCellCursor());
     if (bListValButton && aListValPos == mrViewData.GetCurPos())
-        updateLOKValListButton(true, aListValPos);
+        updateKitValListButton(true, aListValPos);
     std::vector<tools::Rectangle> aRects;
     GetSelectionRects(aRects);
     if (aRects.empty() || !mrViewData.IsActive())

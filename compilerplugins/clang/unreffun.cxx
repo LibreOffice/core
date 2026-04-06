@@ -103,7 +103,7 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
             // Workaround for redeclarations that introduce visibility attributes
             // (as is done with
             //
-            //  SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
+            //  SAL_DLLPUBLIC_EXPORT GType kit_doc_view_get_type();
             //
             // in kit/source/gtk/kitdocview.cxx):
             if (decl->getAttr<VisibilityAttr>() != nullptr

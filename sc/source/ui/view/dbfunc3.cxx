@@ -2394,7 +2394,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         ErrorMessage(STR_MSSG_REPEATDB_0);
 }
 
-void ScDBFunc::OnLOKShowHideColRow(bool bColumns, SCCOLROW nStart)
+void ScDBFunc::OnKitShowHideColRow(bool bColumns, SCCOLROW nStart)
 {
     if (!comphelper::COKit::isActive())
         return;

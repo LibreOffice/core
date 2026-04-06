@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_LOK_HXX
-#define INCLUDED_COMPHELPER_LOK_HXX
+#ifndef INCLUDED_COMPHELPER_KIT_HXX
+#define INCLUDED_COMPHELPER_KIT_HXX
 
 #include <functional>
 
@@ -43,7 +43,7 @@ public:
 // Functions to be called only from the COKit implementation in desktop, not from other
 // places in LibreOffice code.
 
-#if LOK_ALWAYS_ACTIVE
+#if KIT_ALWAYS_ACTIVE
 inline void setActive(bool bActive = true) { (void)bActive; }
 #else
 COMPHELPER_DLLPUBLIC void setActive(bool bActive = true);
@@ -65,7 +65,7 @@ COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(
 // Functions that can be called from arbitrary places in LibreOffice.
 
 // Check whether the code is running as invoked through COKit.
-#if LOK_ALWAYS_ACTIVE
+#if KIT_ALWAYS_ACTIVE
 constexpr bool isActive() { return true; }
 #else
 COMPHELPER_DLLPUBLIC bool isActive();
@@ -187,6 +187,6 @@ setInitialClientVisibleArea(const css::awt::Rectangle& rClientVisibleArea);
 COMPHELPER_DLLPUBLIC css::awt::Rectangle getInitialClientVisibleArea();
 }
 
-#endif // INCLUDED_COMPHELPER_LOK_HXX
+#endif // INCLUDED_COMPHELPER_KIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

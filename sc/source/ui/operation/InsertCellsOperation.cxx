@@ -742,13 +742,13 @@ bool InsertCellsOperation::runImplementation()
 
         if (bInsertCols)
         {
-            pViewSh->OnLOKInsertDeleteColumn(
+            pViewSh->OnKitInsertDeleteColumn(
                 maRange.aStart.Col() - (meCmd == INS_INSCOLS_BEFORE ? 1 : 0), 1);
         }
 
         if (bInsertRows)
         {
-            pViewSh->OnLOKInsertDeleteRow(
+            pViewSh->OnKitInsertDeleteRow(
                 maRange.aStart.Row() - (meCmd == INS_INSROWS_BEFORE ? 1 : 0), 1);
         }
 

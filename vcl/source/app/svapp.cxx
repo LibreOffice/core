@@ -484,7 +484,7 @@ void Scheduler::ProcessEventsToIdle()
 
 extern "C" {
 /// used by unit tests that test only via the COKit API
-SAL_DLLPUBLIC_EXPORT void unit_lok_process_events_to_idle()
+SAL_DLLPUBLIC_EXPORT void unit_kit_process_events_to_idle()
 {
     const SolarMutexGuard aGuard;
     Scheduler::ProcessEventsToIdle();
@@ -872,7 +872,7 @@ ImplSVEvent* Application::PostGestureEvent(VclEventId nEvent, vcl::Window* pWin,
     return nEventId;
 }
 
-bool Application::LOKHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, const MouseEvent* pEvent)
+bool Application::KitHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, const MouseEvent* pEvent)
 {
     bool bSuccess = false;
     SalMouseEvent aMouseEvent;
@@ -892,7 +892,7 @@ bool Application::LOKHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, c
     {
         case VclEventId::WindowMouseMove:
             aMouseEvent.mnButton = 0;
-            bSuccess = ImplLOKHandleMouseEvent(pWindow, NotifyEventType::MOUSEMOVE, false,
+            bSuccess = ImplKitHandleMouseEvent(pWindow, NotifyEventType::MOUSEMOVE, false,
                                                aMouseEvent.mnX, aMouseEvent.mnY,
                                                aMouseEvent.mnTime, aMouseEvent.mnCode,
                                                ImplGetMouseMoveMode(&aMouseEvent),
@@ -901,7 +901,7 @@ bool Application::LOKHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, c
 
         case VclEventId::WindowMouseButtonDown:
             aMouseEvent.mnButton = pEvent->GetButtons();
-            bSuccess = ImplLOKHandleMouseEvent(pWindow, NotifyEventType::MOUSEBUTTONDOWN, false,
+            bSuccess = ImplKitHandleMouseEvent(pWindow, NotifyEventType::MOUSEBUTTONDOWN, false,
                                                aMouseEvent.mnX, aMouseEvent.mnY,
                                                aMouseEvent.mnTime,
 #ifdef MACOSX
@@ -917,7 +917,7 @@ bool Application::LOKHandleMouseEvent(VclEventId nEvent, vcl::Window* pWindow, c
 
         case VclEventId::WindowMouseButtonUp:
             aMouseEvent.mnButton = pEvent->GetButtons();
-            bSuccess = ImplLOKHandleMouseEvent(pWindow, NotifyEventType::MOUSEBUTTONUP, false,
+            bSuccess = ImplKitHandleMouseEvent(pWindow, NotifyEventType::MOUSEBUTTONUP, false,
                                                aMouseEvent.mnX, aMouseEvent.mnY,
                                                aMouseEvent.mnTime,
 #ifdef MACOSX

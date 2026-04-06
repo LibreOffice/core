@@ -137,7 +137,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoneToLibraryBullet)
     CPPUNIT_ASSERT_EQUAL(u"\u25CB"_ustr, aBulletChar);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testPDFReadLOKOnlyTextEdit)
+CPPUNIT_TEST_FIXTURE(Test, testPDFReadKitOnlyTextEdit)
 {
     comphelper::COKit::setActive();
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
@@ -152,7 +152,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPDFReadLOKOnlyTextEdit)
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     SfxViewShell* pSfxViewShell = SfxViewShell::Current();
     CPPUNIT_ASSERT(pSfxViewShell);
-    pSfxViewShell->SetLokReadOnlyView(true);
+    pSfxViewShell->SetKitReadOnlyView(true);
 
     // When double-clicking at the page center:
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();

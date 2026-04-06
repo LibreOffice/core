@@ -175,7 +175,7 @@ void SwViewShellImp::AddPendingKitInvalidation( const SwRect& rRect )
         l.push_back( rRect );
 }
 
-std::vector<SwRect> SwViewShellImp::TakePendingLOKInvalidations()
+std::vector<SwRect> SwViewShellImp::TakePendingKitInvalidations()
 {
     std::vector<SwRect> ret;
     std::swap(ret, m_pendingKitInvalidations);

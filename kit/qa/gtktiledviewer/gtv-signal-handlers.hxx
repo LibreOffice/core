@@ -34,7 +34,7 @@ void changePartMode(GtkWidget* pSelector, gpointer /* pItem */);
 
 void changePart(GtkWidget* pSelector, gpointer /*pItem*/);
 
-void openLokDialog(GtkWidget* pSelector, gpointer /*pItem*/);
+void openKitDialog(GtkWidget* pSelector, gpointer /*pItem*/);
 
 void changeZoom(GtkWidget* pButton, gpointer /* pItem */);
 

@@ -472,7 +472,7 @@ handle_r1c1:
         // Do not skip last separator; could be a quote (?)
     }
 
-    UpdateLokReferenceMarks();
+    UpdateKitReferenceMarks();
 
     if (nCount)
     {
@@ -537,7 +537,7 @@ ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScD
                                           rColor );
 }
 
-void ScInputHandler::UpdateLokReferenceMarks()
+void ScInputHandler::UpdateKitReferenceMarks()
 {
     if ( !comphelper::COKit::isActive())
         return;
@@ -1271,7 +1271,7 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                         }
 
                         const SfxViewShell* pViewShell = SfxViewShell::Current();
-                        if (comphelper::COKit::isActive() && pViewShell && pViewShell->isLOKDesktop())
+                        if (comphelper::COKit::isActive() && pViewShell && pViewShell->isKitDesktop())
                         {
                             tools::JsonWriter writer;
                             writer.put("type", "formulausage");
@@ -1773,7 +1773,7 @@ void ScInputHandler::PasteFunctionData()
         pActiveView->ShowCursor();
 }
 
-void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
+void ScInputHandler::KitPasteFunctionData(const OUString& rFunctionName)
 {
     // in case we have no top view try to create it
     if (!pTopView && pInputWin)
@@ -1822,7 +1822,7 @@ void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
     }
 }
 
-void ScTabViewShell::LOKSendFormulabarUpdate(const EditView* pActiveView,
+void ScTabViewShell::KitSendFormulabarUpdate(const EditView* pActiveView,
                                              const OUString& rText,
                                              const ESelection& rSelection)
 {
@@ -2529,7 +2529,7 @@ bool ScInputHandler::StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInp
             aTester.TestSelectedBlock(
                 rDoc, aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Col(), aCursorPos.Row(), rMark );
 
-        bool bStartInputMode = !(pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsLokReadOnlyView());
+        bool bStartInputMode = !(pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsKitReadOnlyView());
 
         if (!aTester.IsEditable())
         {
@@ -2871,7 +2871,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
 
         OUString aText = ScEditUtil::GetMultilineString(*mpEditEngine);
         pActiveViewSh->viewCallback(KIT_CALLBACK_CELL_FORMULA, aText.toUtf8());
-        pActiveViewSh->LOKSendFormulabarUpdate(pActiveView,
+        pActiveViewSh->KitSendFormulabarUpdate(pActiveView,
                                                aText,
                                                aSel);
     }
@@ -3139,7 +3139,7 @@ static void lcl_SelectionToEnd( EditView* pView )
         pView->SetSelection(ESelection::AtEnd());
 }
 
-void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInLOK )
+void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInKit )
 {
     if (!mbDocumentDisposing && comphelper::COKit::isActive()
         && pActiveViewSh != SfxViewShell::Current())
@@ -3219,7 +3219,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
                         pSelEngine->ReleaseMouse();
                 }
 
-                if (bBeforeSavingInLOK)
+                if (bBeforeSavingInKit)
                 {
                     // Invalid entry but not applied to the document model.
                     // Exit to complete the "save", leaving the edit view as it is
@@ -3977,7 +3977,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
         UpdateActiveView();
         bool bNewView = DataChanging( nChar );
 
-        if (bProtected || (pActiveViewSh && pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsLokReadOnlyView())) // Protected cell?
+        if (bProtected || (pActiveViewSh && pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsKitReadOnlyView())) // Protected cell?
             bUsed = true;                           // Don't forward KeyEvent
         else                                        // Changes allowed
         {
@@ -4214,7 +4214,7 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
         UpdateActiveView();
         bool bNewView = DataChanging( 0, true );
 
-        if (!bProtected && pActiveViewSh && !(pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsLokReadOnlyView())) // changes allowed
+        if (!bProtected && pActiveViewSh && !(pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsKitReadOnlyView())) // changes allowed
         {
             if (bNewView)                           // create new edit view
             {
@@ -4396,7 +4396,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         if (aSel.end.nPara == EE_PARA_MAX)
                             aSel.end.nPara = 0;
 
-                        pActiveViewSh->LOKSendFormulabarUpdate(pActiveView, aString, aSel);
+                        pActiveViewSh->KitSendFormulabarUpdate(pActiveView, aString, aSel);
                         pActiveViewSh->viewCallback(KIT_CALLBACK_CELL_FORMULA, aString.toUtf8());
                     }
                 }
@@ -4557,7 +4557,7 @@ void ScInputHandler::InputSelection( const EditView* pView )
     {
         EditView* pActiveView = pTopView ? pTopView : pTableView;
         ESelection aSel = pActiveView ? pActiveView->GetSelection() : ESelection();
-        pActiveViewSh->LOKSendFormulabarUpdate(pActiveView, GetEditString(), aSel);
+        pActiveViewSh->KitSendFormulabarUpdate(pActiveView, GetEditString(), aSel);
     }
 }
 

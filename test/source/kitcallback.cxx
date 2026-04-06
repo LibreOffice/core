@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/lokcallback.hxx>
+#include <test/kitcallback.hxx>
 
 #include <COKit/COKitEnums.h>
 #include <rtl/strbuf.hxx>
@@ -142,7 +142,7 @@ void TestKitCallbackWrapper::discardUpdatedTypes(int nType, int nViewId)
     }
 }
 
-void TestKitCallbackWrapper::flushLOKData()
+void TestKitCallbackWrapper::flushKitData()
 {
     if (m_updatedTypes.empty() && m_updatedTypesPerViewId.empty())
         return;
@@ -160,7 +160,7 @@ void TestKitCallbackWrapper::flushLOKData()
 
     for (int type : updatedTypes)
     {
-        std::optional<OString> payload = viewShell->getLOKPayload(type, m_viewId);
+        std::optional<OString> payload = viewShell->getKitPayload(type, m_viewId);
         if (payload)
             viewCallback(type, *payload);
     }
@@ -170,7 +170,7 @@ void TestKitCallbackWrapper::flushLOKData()
             return shell.GetViewShellId().get() == data.sourceViewId;
         });
         assert(viewShell != nullptr);
-        std::optional<OString> payload = viewShell->getLOKPayload(data.type, data.viewId);
+        std::optional<OString> payload = viewShell->getKitPayload(data.type, data.viewId);
         if (payload)
             viewCallbackWithViewId(data.type, *payload, data.viewId);
     }
@@ -184,7 +184,7 @@ void TestKitCallbackWrapper::Invoke()
     {
         viewShell->flushPendingKitInvalidateTiles();
     }
-    flushLOKData();
+    flushKitData();
 }
 
 SfxChildWindow* TestKitCallbackWrapper::InitializeSidebar()

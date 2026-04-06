@@ -879,7 +879,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
             break;
     }
 
-    Application::LOKHandleMouseEvent(aEvent, pGridWindow, &aData);
+    Application::KitHandleMouseEvent(aEvent, pGridWindow, &aData);
 }
 
 void ScModelObj::setTextSelection(int nType, int nX, int nY)
@@ -1094,7 +1094,7 @@ bool ScModelObj::isMimeTypeSupported()
     return EditEngine::HasValidData(aDataHelper.GetTransferable());
 }
 
-static void lcl_sendLOKDocumentBackground(const ScViewData* pViewData)
+static void lcl_sendKitDocumentBackground(const ScViewData* pViewData)
 {
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
@@ -1114,7 +1114,7 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     // Currently in COKit clients the doc background cannot be changed, so send this sparingly as possible but for every view.
     // FIXME: Find a better place to trigger this callback where it would be called just once per view creation.
     // Doing this in ScTabViewShell init code does not work because callbacks do not work at that point for the first view.
-    lcl_sendLOKDocumentBackground(pViewData);
+    lcl_sendKitDocumentBackground(pViewData);
 
     const double newZoomX(double(o3tl::toTwips(nTilePixelWidth_, o3tl::Length::px)) / nTileTwipWidth_);
     const double newZoomY(double(o3tl::toTwips(nTilePixelHeight_, o3tl::Length::px)) / nTileTwipHeight_);
@@ -1235,7 +1235,7 @@ void ScModelObj::setClientVisibleArea(const tools::Rectangle& rRectangle)
     pViewData->ForcePageUpDownOffset(rRectangle.GetHeight());
 
     // Store the visible area so that we can use at places like shape insertion
-    pViewData->setLOKVisibleArea(rRectangle);
+    pViewData->setKitVisibleArea(rRectangle);
 
     if (comphelper::COKit::isCompatFlagSet(
             comphelper::COKit::Compat::scPrintTwipsMsgs))
@@ -1344,7 +1344,7 @@ void ScModelObj::completeFunction(const OUString& rFunctionName)
     if (ScInputHandler* pHdl = ScModule::get()->GetInputHdl())
     {
         assert(!rFunctionName.isEmpty());
-        pHdl->LOKPasteFunctionData(rFunctionName);
+        pHdl->KitPasteFunctionData(rFunctionName);
     }
 }
 

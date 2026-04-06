@@ -366,7 +366,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     {
         ScViewData& rViewData = GetViewData();
         tools::Long nLayoutSign = rViewData.GetDocument().IsLayoutRTL(rViewData.CurrentTabForData()) ? -1 : 1;
-        aInsertPos = rViewData.getLOKVisibleArea().Center();
+        aInsertPos = rViewData.getKitVisibleArea().Center();
         if (comphelper::COKit::isCompatFlagSet(
                 comphelper::COKit::Compat::scPrintTwipsMsgs))
             aInsertPos = rViewData.GetPrintTwipsPosFromTileTwips(aInsertPos);

@@ -2170,7 +2170,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
                 Imp()->InvalidateAccessibleCursorPosition( pTableFrame );
 #endif
             if (comphelper::COKit::isActive())
-                sendLOKCursorUpdates();
+                sendKitCursorUpdates();
             return;
         }
     }
@@ -2542,12 +2542,12 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
 #endif
 
     if (comphelper::COKit::isActive())
-        sendLOKCursorUpdates();
+        sendKitCursorUpdates();
 
     getIDocumentMarkAccess()->NotifyCursorUpdate(*this);
 }
 
-void SwCursorShell::sendLOKCursorUpdates()
+void SwCursorShell::sendKitCursorUpdates()
 {
     SfxViewShell* pNotifySh = GetSfxViewShell();
     if (!pNotifySh)

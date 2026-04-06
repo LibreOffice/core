@@ -300,7 +300,7 @@ bool KitChartHelper::setTextSelection(int nType, int nX, int nY)
             comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinX)),
             comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinY))
         };
-        Dispatch(u".uno:LOKSetTextSelection"_ustr, aArgs);
+        Dispatch(u".uno:KitSetTextSelection"_ustr, aArgs);
         return true;
     }
     return false;

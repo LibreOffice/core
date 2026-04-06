@@ -78,7 +78,7 @@ public:
     bool shouldVisitTemplateInstantiations() const { return true; }
 
 private:
-    bool isInLokIncludeFile(SourceLocation spellingLocation) const;
+    bool isInKitIncludeFile(SourceLocation spellingLocation) const;
 
     bool isFromCIncludeFile(SourceLocation spellingLocation) const;
 
@@ -249,7 +249,7 @@ bool Nullptr::TraverseInitListExpr(InitListExpr * expr, DataRecursionQueue * que
             expr->isSemanticForm() ? expr : expr->getSemanticForm(), queue);
 }
 
-bool Nullptr::isInLokIncludeFile(SourceLocation spellingLocation) const {
+bool Nullptr::isInKitIncludeFile(SourceLocation spellingLocation) const {
     return loplugin::hasPathnamePrefix(
         getFilenameOfLocation(spellingLocation),
         SRCDIR "/include/COKit/");
@@ -342,7 +342,7 @@ void Nullptr::handleNull(
                 }
                 if (isInUnoIncludeFile(
                         compiler.getSourceManager().getSpellingLoc(loc))
-                    || isInLokIncludeFile(
+                    || isInKitIncludeFile(
                         compiler.getSourceManager().getSpellingLoc(loc))
                     || isSharedCAndCppCode(loc))
                 {
@@ -374,7 +374,7 @@ void Nullptr::handleNull(
     }
     auto const asMacro = !compiler.getLangOpts().CPlusPlus
         || isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(loc))
-        || isInLokIncludeFile(compiler.getSourceManager().getSpellingLoc(loc))
+        || isInKitIncludeFile(compiler.getSourceManager().getSpellingLoc(loc))
         || isSharedCAndCppCode(loc);
     assert(!asMacro || nullPointerKind != Expr::NPCK_GNUNull);
     rewriteOrWarn(e, castKind, nullPointerKind, asMacro ? "NULL" : "nullptr");

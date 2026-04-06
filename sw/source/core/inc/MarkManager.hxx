@@ -112,7 +112,7 @@ namespace sw::mark {
 
             virtual void NotifyCursorUpdate(const SwCursorShell& rCursorShell) override;
             virtual void ClearFieldActivation() override;
-            void LOKUpdateActiveField(const SfxViewShell* pViewShell);
+            void KitUpdateActiveField(const SfxViewShell* pViewShell);
 
             void dumpAsXml(xmlTextWriterPtr pWriter) const;
 

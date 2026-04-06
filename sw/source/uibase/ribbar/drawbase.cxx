@@ -579,7 +579,7 @@ Point  SwDrawBase::GetDefaultCenterPos() const
     SwRect aVisArea(m_pSh->VisArea());
     if (comphelper::COKit::isActive())
     {
-        aVisArea = SwRect(m_pSh->getLOKVisibleArea());
+        aVisArea = SwRect(m_pSh->getKitVisibleArea());
         aVisArea.Intersection(SwRect(Point(), aDocSz));
 
         // In COKit multi-page view the visible area may span multiple pages,

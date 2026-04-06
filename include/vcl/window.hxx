@@ -1102,8 +1102,8 @@ public:
     const vcl::ICOKitNotifier* GetKitNotifier() const;
     vcl::KitWindowId                    GetKitWindowId() const;
 
-    /// This sets the lokWindowId without setting a notifier.
-    void                                SetLOKWindowId();
+    /// This sets the kitWindowId without setting a notifier.
+    void                                SetKitWindowId();
 
     /// Find the nearest parent with COKit Notifier; can be itself if this Window has COKit notifier set.
     VclPtr<vcl::Window>                 GetParentWithKitNotifier();
@@ -1112,10 +1112,10 @@ public:
     void                                ReleaseKitNotifier();
 
     /// Find an existing Window based on the KitWindowId.
-    static VclPtr<vcl::Window>          FindLOKWindow(vcl::KitWindowId nWindowId);
+    static VclPtr<vcl::Window>          FindKitWindow(vcl::KitWindowId nWindowId);
 
     /// check if COKit Window container is empty
-    SAL_DLLPRIVATE static bool          IsLOKWindowsEmpty();
+    SAL_DLLPRIVATE static bool          IsKitWindowsEmpty();
 
     /// Dumps itself and potentially its children to a property tree, to be written easily to JSON.
     virtual void DumpAsPropertyTree(tools::JsonWriter&);

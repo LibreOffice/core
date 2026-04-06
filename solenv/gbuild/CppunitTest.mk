@@ -135,7 +135,7 @@ else
 		mkdir -p $(dir $@) && \
 		rm -fr $@.user && cp -r $(WORKDIR)/unittest $@.user && \
 		$(if $(gb_CppunitTest__use_confpreinit), \
-		    $(INSTDIR)/program/lokconf_init $(call gb_CppunitTest__make_args) &&) \
+		    $(INSTDIR)/program/kitconf_init $(call gb_CppunitTest__make_args) &&) \
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
@@ -267,7 +267,7 @@ endif
 endef
 
 define gb_CppunitTest_use_confpreinit
-$(call gb_CppunitTest_use_executable,$(1),lokconf_init)
+$(call gb_CppunitTest_use_executable,$(1),kitconf_init)
 $(call gb_CppunitTest_get_target,$(1)) : gb_CppunitTest__use_confpreinit := TRUE
 
 endef

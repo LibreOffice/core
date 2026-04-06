@@ -760,7 +760,7 @@ basegfx::B2DRectangle getPDFSelection(const std::unique_ptr<VectorGraphicSearch>
 
 } // end namespace
 
-void SdOutliner::sendLOKSearchResultCallback(const std::shared_ptr<sd::ViewShell> & pViewShell,
+void SdOutliner::sendKitSearchResultCallback(const std::shared_ptr<sd::ViewShell> & pViewShell,
                                              const OutlinerView* pOutlinerView,
                                              std::vector<sd::SearchSelection>* pSelections)
 {
@@ -999,7 +999,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
 
     if (pViewShell && comphelper::COKit::isActive() && mbStringFound)
     {
-        sendLOKSearchResultCallback(pViewShell, getOutlinerView(), pSelections);
+        sendKitSearchResultCallback(pViewShell, getOutlinerView(), pSelections);
     }
 
     return mbEndOfSearch;

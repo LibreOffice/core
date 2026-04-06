@@ -248,7 +248,7 @@ public:
     DECL_STATIC_LINK(LinkHelp, DispatchHelpLinksHdl, weld::Button&, void);
 };
 
-void lcl_setLOKLocale(ScTabViewShell& rViewShell, const LanguageType eLang)
+void lcl_setKitLocale(ScTabViewShell& rViewShell, const LanguageType eLang)
 {
     OUString aLang = LanguageTag(eLang).getBcp47();
     /// This is only used for building the lok calendar as of date.
@@ -270,7 +270,7 @@ void ScDocShell::SetLanguage(LanguageType eLatin, LanguageType eCjk, LanguageTyp
     {
         if (ScTabViewShell* pViewShell = GetBestViewShell())
         {
-            lcl_setLOKLocale(*pViewShell, eLatin);
+            lcl_setKitLocale(*pViewShell, eLatin);
         }
     }
 

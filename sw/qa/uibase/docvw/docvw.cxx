@@ -16,7 +16,7 @@
 #include <COKit/COKitEnums.h>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <test/lokcallback.hxx>
+#include <test/kitcallback.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scheduler.hxx>
 
@@ -257,7 +257,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
     TooltipCallback aCallback;
     TestKitCallbackWrapper aCallbackWrapper(&TooltipCallback::callback, &aCallback);
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
-    aCallbackWrapper.setLOKViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
+    aCallbackWrapper.setKitViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
     pWrtShell->SetRedlineFlagsAndCheckInsMode(RedlineFlags::On | RedlineFlags::ShowMask);
     pWrtShell->Insert(u"test"_ustr);
 

@@ -1967,7 +1967,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         }
 
         // Some libraries use other (non-UNO) libraries requiring preinit
-        oslGenericFunction fpPreload = aModule.getFunctionSymbol( "lok_preload_hook" );
+        oslGenericFunction fpPreload = aModule.getFunctionSymbol("kit_preload_hook");
         if (fpPreload)
         {
             static std::vector<oslGenericFunction> aPreloaded;

@@ -62,7 +62,7 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <svtools/colorcfg.hxx>
 #include <sal/types.h>
-#include <test/lokcallback.hxx>
+#include <test/kitcallback.hxx>
 
 #if USE_TLS_NSS
 #include <nss.h>

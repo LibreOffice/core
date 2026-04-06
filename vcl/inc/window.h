@@ -433,7 +433,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType n
                            tools::Long nX, tools::Long nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode );
 
-bool ImplLOKHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType nSVEvent, bool bMouseLeave,
+bool ImplKitHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType nSVEvent, bool bMouseLeave,
                               tools::Long nX, tools::Long nY, sal_uInt64 nMsgTime,
                               sal_uInt16 nCode, MouseEventModifiers nMode, sal_uInt16 nClicks);
 

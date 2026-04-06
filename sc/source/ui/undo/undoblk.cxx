@@ -188,7 +188,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
                 if (pViewShell)
                 {
                     const tools::Long nSign = bUndo ? -1 : 1;
-                    pViewShell->OnLOKInsertDeleteRow(aEffRange.aStart.Row(), nSign * (aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
+                    pViewShell->OnKitInsertDeleteRow(aEffRange.aStart.Row(), nSign * (aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
                 }
             }
             break;
@@ -209,7 +209,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
                 if (pViewShell)
                 {
                     const tools::Long nSign = bUndo ? -1 : 1;
-                    pViewShell->OnLOKInsertDeleteColumn(aEffRange.aStart.Col(), nSign * (aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
+                    pViewShell->OnKitInsertDeleteColumn(aEffRange.aStart.Col(), nSign * (aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
                 }
             }
             break;
@@ -444,7 +444,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
                 if (pViewShell)
                 {
                     const tools::Long nSign = bUndo ? 1 : -1;
-                    pViewShell->OnLOKInsertDeleteRow(aEffRange.aStart.Row(), nSign * (aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
+                    pViewShell->OnKitInsertDeleteRow(aEffRange.aStart.Row(), nSign * (aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
                 }
             }
             break;
@@ -462,7 +462,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
                 if (pViewShell)
                 {
                     const tools::Long nSign = bUndo ? 1 : -1;
-                    pViewShell->OnLOKInsertDeleteColumn(aEffRange.aStart.Col(), nSign * (aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
+                    pViewShell->OnKitInsertDeleteColumn(aEffRange.aStart.Col(), nSign * (aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
                 }
             }
             break;
@@ -1395,8 +1395,8 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
     {
         if (comphelper::COKit::isActive())
         {
-            pTabViewShell->OnLOKSetWidthOrHeight(aPaintRange.aStart.Col(), true);
-            pTabViewShell->OnLOKSetWidthOrHeight(aPaintRange.aStart.Row(), false);
+            pTabViewShell->OnKitSetWidthOrHeight(aPaintRange.aStart.Col(), true);
+            pTabViewShell->OnKitSetWidthOrHeight(aPaintRange.aStart.Row(), false);
         }
 
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
@@ -1566,8 +1566,8 @@ void ScUndoDragDrop::Redo()
 
         if (ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell())
         {
-            pTabViewShell->OnLOKSetWidthOrHeight(nStartCol, true);
-            pTabViewShell->OnLOKSetWidthOrHeight(nStartRow, false);
+            pTabViewShell->OnKitSetWidthOrHeight(nStartCol, true);
+            pTabViewShell->OnKitSetWidthOrHeight(nStartRow, false);
 
             SCTAB nStartTab = aDestRange.aStart.Tab();
             SCTAB nEndTab = aDestRange.aEnd.Tab();

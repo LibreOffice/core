@@ -1360,7 +1360,7 @@ void SmCursor::RequestRepaint()
     {
         if (comphelper::COKit::isActive())
         {
-            pViewSh->SendCaretToLOK();
+            pViewSh->SendCaretToKit();
         }
         else if ( SfxObjectCreateMode::EMBEDDED == mpDocShell->GetCreateMode() )
             mpDocShell->Repaint();

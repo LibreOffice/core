@@ -1297,7 +1297,7 @@ void ChartController::executeDispatch_LineWidth(const css::uno::Any& rWidth)
     }
 }
 
-void ChartController::executeDispatch_LOKSetTextSelection(int nType, int nX, int nY)
+void ChartController::executeDispatch_KitSetTextSelection(int nType, int nX, int nY)
 {
     if (!m_pDrawViewWrapper)
         return;
@@ -1328,7 +1328,7 @@ void ChartController::executeDispatch_LOKSetTextSelection(int nType, int nX, int
     }
 }
 
-void ChartController::executeDispatch_LOKPieSegmentDragging( int nOffset )
+void ChartController::executeDispatch_KitPieSegmentDragging( int nOffset )
 {
     try
     {

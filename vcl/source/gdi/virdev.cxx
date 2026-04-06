@@ -363,7 +363,7 @@ void VirtualDevice::EnableRTL( bool bEnable )
     OutputDevice::EnableRTL(bEnable);
 }
 
-bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(
+bool VirtualDevice::SetOutputSizePixelScaleOffsetAndKitBuffer(
     const Size& rNewSize, double fScale, const Point& rNewOffset,
     sal_uInt8 *const pBuffer)
 {

@@ -627,7 +627,7 @@ public:
                                  bool bFiltered, bool bGroups);
     void extendTiledAreaIfNeeded();
 
-    static void OnLOKNoteStateChanged(const ScPostIt* pNote);
+    static void OnKitNoteStateChanged(const ScPostIt* pNote);
 
     SCROW GetKitStartHeaderRow() const { return mnKitStartHeaderRow; }
     SCROW GetKitEndHeaderRow() const { return mnKitEndHeaderRow; }

@@ -9,25 +9,25 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,desktop_lok_init))
+$(eval $(call gb_CppunitTest_CppunitTest,desktop_kit_init))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,desktop_lok_init, \
-    desktop/qa/unit/desktop-lok-init \
+$(eval $(call gb_CppunitTest_add_exception_objects,desktop_kit_init, \
+    desktop/qa/unit/desktop-kit-init \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,desktop_lok_init,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,desktop_kit_init,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,desktop_lok_init))
+$(eval $(call gb_CppunitTest_use_sdk_api,desktop_kit_init))
 
-$(eval $(call gb_CppunitTest_use_ure,desktop_lok_init))
+$(eval $(call gb_CppunitTest_use_ure,desktop_kit_init))
 
-$(eval $(call gb_CppunitTest_set_include,desktop_lok_init,\
+$(eval $(call gb_CppunitTest_set_include,desktop_kit_init,\
     -I$(SRCDIR)/desktop/source/inc \
     -I$(SRCDIR)/desktop/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,desktop_lok_init, \
+$(eval $(call gb_CppunitTest_use_libraries,desktop_kit_init, \
     comphelper \
     cppu \
     sal \
@@ -37,12 +37,12 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lok_init, \
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_CppunitTest_add_libs,desktop_lok_init,\
+$(eval $(call gb_CppunitTest_add_libs,desktop_kit_init,\
     -lm \
     -ldl \
 ))
 endif
 
-$(eval $(call gb_CppunitTest_use_configuration,desktop_lok_init))
+$(eval $(call gb_CppunitTest_use_configuration,desktop_kit_init))
 
 # vim: set noet sw=4 ts=4:

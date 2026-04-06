@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testReloadPage)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), nPage);
 }
 
-CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperExtractCertificates)
+CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitHelperExtractCertificates)
 {
     std::string signatureCa = R"(-----BEGIN CERTIFICATE-----
 foo
@@ -94,7 +94,7 @@ bar
 }
 
 #ifdef UNX
-CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperAddCertifices)
+CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitHelperAddCertifices)
 {
     // Given a loaded and signed document, CA is not trusted by default:
     loadFromFile(u"signed.odt");
@@ -118,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperAddCertifices)
     CPPUNIT_ASSERT_EQUAL(SignatureState::OK, pObjectShell->GetDocumentSignatureState());
 }
 
-CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignature)
+CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitHelperCommandValuesSignature)
 {
 #if ENABLE_PDFIMPORT
     // Given an unsigned PDF file:
@@ -178,7 +178,7 @@ OUString GetSignatureHash()
 #endif
 }
 
-CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignatureHash)
+CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitHelperCommandValuesSignatureHash)
 {
 #if ENABLE_PDFIMPORT
     // Given an unsigned PDF file:

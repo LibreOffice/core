@@ -432,7 +432,7 @@ bool SfxObjectShell::IsSignPDF() const
     return false;
 }
 
-static void sendErrorToLOK(const ErrCodeMsg& error)
+static void sendErrorToKit(const ErrCodeMsg& error)
 {
     if (error.GetCode().GetClass() == ErrCodeClass::NONE)
         return;
@@ -1194,7 +1194,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( lErr != ERRCODE_IO_ABORT )
             {
                 if (comphelper::COKit::isActive())
-                    sendErrorToLOK(lErr);
+                    sendErrorToKit(lErr);
                 else
                 {
                     SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
@@ -1371,7 +1371,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             ErrCodeMsg lErr = GetErrorCode();
 
             if (comphelper::COKit::isActive())
-                sendErrorToLOK(lErr);
+                sendErrorToKit(lErr);
             else
             {
                 weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);

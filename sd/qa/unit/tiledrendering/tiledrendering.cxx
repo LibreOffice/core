@@ -2136,7 +2136,7 @@ static void assertTilePixelColor(SdXImpressDocument* pXImpressDocument, int nPix
     std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize),
+    pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasSize, nCanvasSize),
             1.0, Point(), aPixmap.data());
     pXImpressDocument->paintTile(*pDevice, nCanvasSize, nCanvasSize, 0, 0, 15360, 7680);
     pDevice->EnableMapMode(false);
@@ -2914,7 +2914,7 @@ std::string GetSlideHash(SdXImpressDocument* pDoc, sal_Int32 nSlideNumber)
     }
     catch (uno::Exception&)
     {
-        CPPUNIT_FAIL("SdXImpressDocument::createLOKSlideRenderer: failed");
+        CPPUNIT_FAIL("SdXImpressDocument::createKitSlideRenderer: failed");
     }
     return {};
 }

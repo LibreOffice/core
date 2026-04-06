@@ -334,7 +334,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
 
-    void            NotifyLOKClient();
+    void            NotifyKitClient();
 
     void MenuHdl(std::u16string_view command);
     DECL_LINK( DropdownClickHdl, ToolBox*, void );

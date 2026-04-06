@@ -517,7 +517,7 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
         pTxtObj->SetMergedItemSet(aSet);
         pTxtObj->AdjustTextFrameWidthAndHeight();
         const SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
-        if (pCurrentViewShell && (pCurrentViewShell->isLOKMobilePhone() || pCurrentViewShell->isLOKTablet()))
+        if (pCurrentViewShell && (pCurrentViewShell->isKitMobilePhone() || pCurrentViewShell->isKitTablet()))
             pTxtObj->SetText(SdResId(STR_PRESOBJ_TEXT_EDIT_MOBILE));
     }
     else if( nSlotId == SID_ATTR_CHAR_VERTICAL )

@@ -23,12 +23,12 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/itemset.hxx>
 
-static bool isLOKMobilePhone()
+static bool isKitMobilePhone()
 {
     if (!comphelper::COKit::isActive())
         return false;
     SfxViewShell* pCurrent = SfxViewShell::Current();
-    return pCurrent && pCurrent->isLOKMobilePhone();
+    return pCurrent && pCurrent->isKitMobilePhone();
 }
 
 SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindings)
@@ -43,7 +43,7 @@ SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindin
 {
     InitFields();
 
-    if (isLOKMobilePhone())
+    if (isKitMobilePhone())
     {
         m_xBuilder->weld_label(u"ColorLabel"_ustr)->hide();
         m_xColor->hide();

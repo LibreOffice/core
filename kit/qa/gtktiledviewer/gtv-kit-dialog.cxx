@@ -16,7 +16,7 @@
 #include <COKit/COKitEnums.h>
 
 #include "gtv-application-window.hxx"
-#include "gtv-lok-dialog.hxx"
+#include "gtv-kit-dialog.hxx"
 
 #include <com/sun/star/awt/Key.hpp>
 
@@ -69,7 +69,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(GtvKitDialog, gtv_kit_dialog, GTK_TYPE_DIALOG);
 enum
 {
     PROP_0,
-    PROP_LOKDOCVIEW_CONTEXT,
+    PROP_KITDOCVIEW_CONTEXT,
     PROP_DIALOG_ID,
     PROP_DIALOG_WIDTH,
     PROP_DIALOG_HEIGHT,
@@ -393,7 +393,7 @@ gtv_kit_dialog_set_property(GObject* object, guint propId, const GValue* value, 
 
     switch(propId)
     {
-    case PROP_LOKDOCVIEW_CONTEXT:
+    case PROP_KITDOCVIEW_CONTEXT:
         priv->kitdocview = KIT_DOC_VIEW(g_value_get_object(value));
         break;
     case PROP_DIALOG_ID:
@@ -421,7 +421,7 @@ gtv_kit_dialog_get_property(GObject* object, guint propId, GValue* value, GParam
 
     switch(propId)
     {
-    case PROP_LOKDOCVIEW_CONTEXT:
+    case PROP_KITDOCVIEW_CONTEXT:
         g_value_set_object(value, priv->kitdocview);
         break;
     case PROP_DIALOG_ID:
@@ -444,7 +444,7 @@ gtv_kit_dialog_class_init(GtvKitDialogClass* klass)
     G_OBJECT_CLASS(klass)->get_property = gtv_kit_dialog_get_property;
     G_OBJECT_CLASS(klass)->set_property = gtv_kit_dialog_set_property;
 
-    properties[PROP_LOKDOCVIEW_CONTEXT] = g_param_spec_object("kitdocview",
+    properties[PROP_KITDOCVIEW_CONTEXT] = g_param_spec_object("kitdocview",
                                                               "KitDocumentView Context",
                                                               "The KitDocumentView context object to be used for dialog rendering",
                                                               KIT_TYPE_DOC_VIEW,

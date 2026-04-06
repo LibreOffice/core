@@ -237,13 +237,13 @@ bool SwWrtShell::BwdPara_()
     return bRet;
 }
 
-std::optional<OString> SwWrtShell::getLOKPayload(int nType, int nViewId) const
+std::optional<OString> SwWrtShell::getKitPayload(int nType, int nViewId) const
 {
     switch(nType)
     {
         case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
-            return GetVisibleCursor()->getLOKPayload(nType, nViewId);
+            return GetVisibleCursor()->getKitPayload(nType, nViewId);
         case KIT_CALLBACK_TEXT_SELECTION:
         case KIT_CALLBACK_TEXT_VIEW_SELECTION:
         {
@@ -272,7 +272,7 @@ std::optional<OString> SwWrtShell::getLOKPayload(int nType, int nViewId) const
         }
         case KIT_CALLBACK_TEXT_SELECTION_START:
         case KIT_CALLBACK_TEXT_SELECTION_END:
-            return GetCursor_()->getLOKPayload(nType);
+            return GetCursor_()->getKitPayload(nType);
     }
     abort();
 }

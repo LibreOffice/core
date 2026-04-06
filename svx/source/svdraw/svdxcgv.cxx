@@ -401,8 +401,8 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     tools::Long xs=nSizX;
     tools::Long ys=nSizY;
     // set the pos to 0, 0 for online case
-    bool isLOK = comphelper::COKit::isActive();
-    Point aPos(isLOK ? 0 : rCenter.X()-xs/2, isLOK ? 0 : rCenter.Y()-ys/2);
+    bool isKit = comphelper::COKit::isActive();
+    Point aPos(isKit ? 0 : rCenter.X()-xs/2, isKit ? 0 : rCenter.Y()-ys/2);
     tools::Rectangle aR(aPos.X(),aPos.Y(),aPos.X()+xs,aPos.Y()+ys);
     pObj->SetLogicRect(aR);
     rLst.InsertObject(pObj, SAL_MAX_SIZE);

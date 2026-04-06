@@ -12,7 +12,7 @@
 #include <test/unoapixml_test.hxx>
 
 #include <osl/conditn.hxx>
-#include <test/lokcallback.hxx>
+#include <test/kitcallback.hxx>
 
 #include <types.hxx>
 

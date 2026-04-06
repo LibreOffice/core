@@ -72,7 +72,7 @@ private:
     static bool m_bHide;
 
     static void ResetActiveToolbarModeToDefault(vcl::EnumContext::Application eApp);
-    static void RemoveCurrentLOKWrapper();
+    static void RemoveCurrentKitWrapper();
 
     DECL_DLLPRIVATE_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, void);
 };

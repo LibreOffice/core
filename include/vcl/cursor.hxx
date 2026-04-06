@@ -99,7 +99,7 @@ public:
     void            DrawToDevice(OutputDevice& rRenderContext);
 
 private:
-    SAL_DLLPRIVATE void LOKNotify( vcl::Window* pWindow, const OUString& rAction );
+    SAL_DLLPRIVATE void KitNotify( vcl::Window* pWindow, const OUString& rAction );
     SAL_DLLPRIVATE bool ImplPrepForDraw(const OutputDevice* pDevice, ImplCursorData& rData);
     SAL_DLLPRIVATE void ImplRestore();
     SAL_DLLPRIVATE void ImplDoShow( bool bDrawDirect, bool bRestore );

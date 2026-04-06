@@ -96,7 +96,7 @@ bool SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
         cairo_surface_destroy(m_pSurface);
     }
 
-    // The buffer should only be set by VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer()
+    // The buffer should only be set by VirtualDevice::SetOutputSizePixelScaleOffsetAndKitBuffer()
     // when used to draw a tile for COKit. It cannot be used for something else, because otherwise
     // this would need a way to detect whether this is a tiled paint that needs COKit handling
     // or whether it's that something else that just might happen to be called with COKit active.

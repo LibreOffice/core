@@ -156,7 +156,7 @@ EditViewCallbacks::~EditViewCallbacks()
 EditView::EditView(EditEngine& rEditEngine, vcl::Window* pWindow)
     : mpImpEditView(new ImpEditView(this, rEditEngine, pWindow))
 {
-    getImpl().mbReadOnly = getImpl().mbReadOnly || SfxViewShell::IsCurrentLokViewReadOnly();
+    getImpl().mbReadOnly = getImpl().mbReadOnly || SfxViewShell::IsCurrentKitViewReadOnly();
 }
 
 EditView::~EditView()
@@ -254,7 +254,7 @@ void EditView::Invalidate()
 
 void EditView::SetReadOnly( bool bReadOnly )
 {
-    getImpl().mbReadOnly = bReadOnly || SfxViewShell::IsCurrentLokViewReadOnly();
+    getImpl().mbReadOnly = bReadOnly || SfxViewShell::IsCurrentKitViewReadOnly();
 }
 
 bool EditView::IsReadOnly() const
@@ -572,9 +572,9 @@ bool EditView::Command(const CommandEvent& rCEvt)
     return getImpl().Command(rCEvt);
 }
 
-void EditView::SetBroadcastLOKViewCursor(bool bSet)
+void EditView::SetBroadcastKitViewCursor(bool bSet)
 {
-    getImpl().SetBroadcastLOKViewCursor(bSet);
+    getImpl().SetBroadcastKitViewCursor(bSet);
 }
 
 tools::Rectangle EditView::GetEditCursor() const
@@ -994,7 +994,7 @@ bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWron
     return getImpl().IsWrongSpelledWord( aPaM , bMarkIfWrong );
 }
 
-static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLangWord,
+static void KitSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLangWord,
                                   LanguageType nGuessLangPara, sal_uInt16 nSuggestions)
 {
     if (!comphelper::COKit::isActive())
@@ -1261,7 +1261,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel,
         xPopupMenu->remove(u"autocorrect"_ustr);
         xPopupMenu->remove(u"autocorrectdlg"_ustr);
 
-        LOKSendSpellPopupMenu(*xPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
+        KitSendSpellPopupMenu(*xPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
         return true;
     }
 
@@ -1831,16 +1831,16 @@ void EditView::DrawSelectionXOR(OutlinerViewShell* pOtherShell)
     getImpl().RegisterOtherShell(nullptr);
 }
 
-void EditView::InitLOKSpecialPositioning(MapUnit eUnit,
+void EditView::InitKitSpecialPositioning(MapUnit eUnit,
                                          const tools::Rectangle& rOutputArea,
                                          const Point& rVisDocStartPos)
 {
-    getImpl().InitLOKSpecialPositioning(eUnit, rOutputArea, rVisDocStartPos);
+    getImpl().InitKitSpecialPositioning(eUnit, rOutputArea, rVisDocStartPos);
 }
 
-void EditView::SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea)
+void EditView::SetKitSpecialOutputArea(const tools::Rectangle& rOutputArea)
 {
-    getImpl().SetLOKSpecialOutputArea(rOutputArea);
+    getImpl().SetKitSpecialOutputArea(rOutputArea);
 }
 
 const tools::Rectangle & EditView::GetKitSpecialOutputArea() const
@@ -1848,9 +1848,9 @@ const tools::Rectangle & EditView::GetKitSpecialOutputArea() const
     return getImpl().GetKitSpecialOutputArea();
 }
 
-void EditView::SetLOKSpecialVisArea(const tools::Rectangle& rVisArea)
+void EditView::SetKitSpecialVisArea(const tools::Rectangle& rVisArea)
 {
-    getImpl().SetLOKSpecialVisArea(rVisArea);
+    getImpl().SetKitSpecialVisArea(rVisArea);
 }
 
 tools::Rectangle EditView::GetKitSpecialVisArea() const
@@ -1858,24 +1858,24 @@ tools::Rectangle EditView::GetKitSpecialVisArea() const
     return getImpl().GetKitSpecialVisArea();
 }
 
-bool EditView::HasLOKSpecialPositioning() const
+bool EditView::HasKitSpecialPositioning() const
 {
-    return getImpl().HasLOKSpecialPositioning();
+    return getImpl().HasKitSpecialPositioning();
 }
 
-void EditView::SetLOKSpecialFlags(KitSpecialFlags eFlags)
+void EditView::SetKitSpecialFlags(KitSpecialFlags eFlags)
 {
-    getImpl().SetLOKSpecialFlags(eFlags);
+    getImpl().SetKitSpecialFlags(eFlags);
 }
 
-void EditView::SuppressLOKMessages(bool bSet)
+void EditView::SuppressKitMessages(bool bSet)
 {
-    getImpl().SuppressLOKMessages(bSet);
+    getImpl().SuppressKitMessages(bSet);
 }
 
-bool EditView::IsSuppressLOKMessages() const
+bool EditView::IsSuppressKitMessages() const
 {
-    return getImpl().IsSuppressLOKMessages();
+    return getImpl().IsSuppressKitMessages();
 }
 
 void EditView::SetNegativeX(bool bSet)

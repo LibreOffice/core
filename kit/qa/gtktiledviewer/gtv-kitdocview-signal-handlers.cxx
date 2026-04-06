@@ -14,23 +14,23 @@
 #include "gtv-calc-header-bar.hxx"
 #include "gtv-comments-sidebar.hxx"
 #include "gtv-kitdocview-signal-handlers.hxx"
-#include "gtv-lok-dialog.hxx"
+#include "gtv-kit-dialog.hxx"
 
 #include <boost/property_tree/json_parser.hpp>
 
-static gboolean deleteLokDialog(GtkWidget* pWidget, GdkEvent* /*event*/, gpointer userdata)
+static gboolean deleteKitDialog(GtkWidget* pWidget, GdkEvent* /*event*/, gpointer userdata)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(userdata);
-    g_info("deleteLokDialog");
+    g_info("deleteKitDialog");
     gtv_application_window_unregister_child_window(window, GTK_WINDOW(pWidget));
 
     return FALSE;
 }
 
-static gboolean destroyLokDialog(GtkWidget* pWidget, gpointer userdata)
+static gboolean destroyKitDialog(GtkWidget* pWidget, gpointer userdata)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(userdata);
-    g_info("destroyLokDialog");
+    g_info("destroyKitDialog");
     gtv_application_window_unregister_child_window(window, GTK_WINDOW(pWidget));
 
     return FALSE;
@@ -353,8 +353,8 @@ void KitDocumentViewSigHandlers::window(KitDocumentView* pDocView, gchar* pPaylo
             g_info("created  dialog, for dialogid: %d with size: %s", nWinId, aSize.c_str());
 
             gtv_application_window_register_child_window(window, GTK_WINDOW(pDialog));
-            g_signal_connect(pDialog, "destroy", G_CALLBACK(destroyLokDialog), window);
-            g_signal_connect(pDialog, "delete-event", G_CALLBACK(deleteLokDialog), window);
+            g_signal_connect(pDialog, "destroy", G_CALLBACK(destroyKitDialog), window);
+            g_signal_connect(pDialog, "delete-event", G_CALLBACK(deleteKitDialog), window);
 
             if (!aTitle.empty())
                 gtk_window_set_title(GTK_WINDOW(pDialog), aTitle.c_str());

@@ -438,7 +438,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                 SearchOptionFlags nOpt = SRC_SEARCHOPTIONS;
                 SwDocShell* pDocShell = GetDocShell();
                 assert(pDocShell);
-                if (pDocShell->IsReadOnly() || SfxViewShell::IsCurrentLokViewReadOnly())
+                if (pDocShell->IsReadOnly() || SfxViewShell::IsCurrentKitViewReadOnly())
                     nOpt &= ~SearchOptionFlags(SearchOptionFlags::REPLACE|SearchOptionFlags::REPLACE_ALL);
 
                 rSet.Put( SfxUInt16Item( SID_SEARCH_OPTIONS,  static_cast<sal_uInt16>(nOpt) ) );

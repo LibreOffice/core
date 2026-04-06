@@ -156,7 +156,7 @@ public:
 
     void            SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink);
     void            SetInstallKitNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink);
-    void            SetLOKTunnelingState(bool bEnabled);
+    void            SetKitTunnelingState(bool bEnabled);
 
     void            add_button(PushButton* pButton, int nResponse, bool bTransferOwnership);
     void            set_default_response(int nResponse);

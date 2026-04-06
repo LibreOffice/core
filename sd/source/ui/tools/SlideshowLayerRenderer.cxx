@@ -114,7 +114,7 @@ public:
 
         maVirtualDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-        maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, fScale, Point(),
+        maVirtualDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(rSlideSize, fScale, Point(),
                                                                    pBuffer);
         Size aPageSize(rPage.GetSize());
 

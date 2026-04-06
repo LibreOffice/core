@@ -370,7 +370,7 @@ bool QueryOperation::runImplementation()
         // maybe it would be better to set bColumns to !rQueryParam.bByRow ?
         // anyway at the beginning the value of bByRow is 'false'
         // then after the first sort action it becomes 'true'
-        pViewSh->OnLOKShowHideColRow(/*bColumns*/ false, mrQueryParam.nRow1 - 1);
+        pViewSh->OnKitShowHideColRow(/*bColumns*/ false, mrQueryParam.nRow1 - 1);
     }
 
     if (bCopy)

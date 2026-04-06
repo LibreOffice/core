@@ -1371,12 +1371,12 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if (rViewData.GetKitSheetFreezeIndex(true) > 0 ||
                         rViewData.GetKitSheetFreezeIndex(false) > 0 )                             // remove freeze
                     {
-                        bChangedX = rViewData.RemoveLOKFreeze();
+                        bChangedX = rViewData.RemoveKitFreeze();
                     }                                                                            // create or fixate
                     else
                     {
-                        bChangedX = rViewData.SetLOKSheetFreezeIndex(rViewData.GetCurX(), true);    // Freeze column
-                        bChangedY = rViewData.SetLOKSheetFreezeIndex(rViewData.GetCurY(), false);   // Freeze row
+                        bChangedX = rViewData.SetKitSheetFreezeIndex(rViewData.GetCurX(), true);    // Freeze column
+                        bChangedY = rViewData.SetKitSheetFreezeIndex(rViewData.GetCurY(), false);   // Freeze row
                     }
 
                     rReq.Done();
@@ -1419,7 +1419,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     ScViewData& rViewData = GetViewData();
                     SCTAB nThisTab = rViewData.GetTabNumber();
-                    bool bChanged = rViewData.SetLOKSheetFreezeIndex(nFreezeIndex, bIsCol);
+                    bool bChanged = rViewData.SetKitSheetFreezeIndex(nFreezeIndex, bIsCol);
                     rReq.Done();
                     if (bChanged)
                     {

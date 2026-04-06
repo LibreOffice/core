@@ -1683,7 +1683,7 @@ void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 }
 
 
-void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset)
+void ScViewFunc::OnKitInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset)
 {
     if (!comphelper::COKit::isActive() || nOffset == 0)
         return;
@@ -1746,7 +1746,7 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset)
     }
 }
 
-void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, tools::Long nOffset)
+void ScViewFunc::OnKitInsertDeleteRow(SCROW nStartRow, tools::Long nOffset)
 {
     if (!comphelper::COKit::isActive() || nOffset == 0)
         return;
@@ -1809,7 +1809,7 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, tools::Long nOffset)
     }
 }
 
-void ScViewFunc::OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
+void ScViewFunc::OnKitSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
 {
     if (!comphelper::COKit::isActive())
         return;
@@ -2326,7 +2326,7 @@ void ScViewFunc::SetWidthOrHeight(
     SCCOLROW nStart = rRanges.front().mnStart;
     SCCOLROW nEnd = rRanges.back().mnEnd;
 
-    OnLOKSetWidthOrHeight(nStart, bWidth);
+    OnKitSetWidthOrHeight(nStart, bWidth);
 
     bool bFormula = false;
     if ( eMode == SC_SIZE_OPTIMAL )

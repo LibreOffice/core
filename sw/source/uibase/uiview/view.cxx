@@ -1246,7 +1246,7 @@ void SwView::afterCallbackRegistered()
     {
         std::shared_ptr<model::ColorSet> pThemeColors = pDocShell->GetThemeColors();
         std::set<Color> aDocumentColors = pDocShell->GetDocColors();
-        svx::theme::notifyLOK(pThemeColors, aDocumentColors);
+        svx::theme::notifyKit(pThemeColors, aDocumentColors);
     }
 }
 
@@ -2033,10 +2033,10 @@ void SwView::AddTransferable(SwTransferable& rTransferable)
     GetViewImpl()->AddTransferable(rTransferable);
 }
 
-tools::Rectangle SwView::getLOKVisibleArea() const
+tools::Rectangle SwView::getKitVisibleArea() const
 {
     if (SwViewShell* pVwSh = GetWrtShellPtr())
-        return pVwSh->getLOKVisibleArea();
+        return pVwSh->getKitVisibleArea();
     else
         return tools::Rectangle();
 }
@@ -2044,13 +2044,13 @@ tools::Rectangle SwView::getLOKVisibleArea() const
 void SwView::flushPendingKitInvalidateTiles()
 {
     if (SwWrtShell* pSh = GetWrtShellPtr())
-        pSh->FlushPendingLOKInvalidateTiles();
+        pSh->FlushPendingKitInvalidateTiles();
 }
 
-std::optional<OString> SwView::getLOKPayload(int nType, int nViewId) const
+std::optional<OString> SwView::getKitPayload(int nType, int nViewId) const
 {
     if (SwWrtShell* pSh = GetWrtShellPtr())
-        return pSh->getLOKPayload(nType, nViewId);
+        return pSh->getKitPayload(nType, nViewId);
     else
         return std::nullopt;
 }

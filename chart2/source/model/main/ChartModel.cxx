@@ -1610,7 +1610,7 @@ void ChartModel::clearColorPalette()
     // Not reset the selected palette if user is just previewing a color
     // for a data series or a data point
     SfxViewShell* pCurrentShell = SfxViewShell::Current();
-    if (pCurrentShell && pCurrentShell->IsLOKColorPreviewEnabled())
+    if (pCurrentShell && pCurrentShell->IsKitColorPreviewEnabled())
         return;
 
     setColorPalette(ChartColorPaletteType::Unknown, 0);
@@ -1685,7 +1685,7 @@ void ChartModel::clearGradientPalette()
     // Not reset the selected palette if user is just previewing a color
     // for a data series or a data point
     SfxViewShell* pCurrentShell = SfxViewShell::Current();
-    if (pCurrentShell && pCurrentShell->IsLOKColorPreviewEnabled())
+    if (pCurrentShell && pCurrentShell->IsKitColorPreviewEnabled())
         return;
 
     setGradientPalette(ChartGradientVariation::Unknown, ChartGradientType::Invalid);

@@ -624,7 +624,7 @@ public:
     // in given paper size and exceeding lines will be ignored.
     void EnableSkipOutsideFormat(bool set);
 
-    void SetLOKSpecialPaperSize(const Size& rSize);
+    void SetKitSpecialPaperSize(const Size& rSize);
     const Size& GetKitSpecialPaperSize() const;
 };
 

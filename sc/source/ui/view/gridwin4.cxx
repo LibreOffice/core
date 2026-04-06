@@ -310,7 +310,7 @@ void ScGridWindow::PrePaint(vcl::RenderContext& /*rRenderContext*/)
     }
 }
 
-bool ScGridWindow::NeedLOKCursorInvalidation(const tools::Rectangle& rCursorRect,
+bool ScGridWindow::NeedKitCursorInvalidation(const tools::Rectangle& rCursorRect,
         double fScaleX, double fScaleY)
 {
     // Don't see the need for a map as there will be only a few zoom levels
@@ -332,10 +332,10 @@ bool ScGridWindow::NeedLOKCursorInvalidation(const tools::Rectangle& rCursorRect
     return true;
 }
 
-void ScGridWindow::InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
+void ScGridWindow::InvalidateKitViewCursor(const tools::Rectangle& rCursorRect,
         double fScaleX, double fScaleY)
 {
-    if (!NeedLOKCursorInvalidation(rCursorRect, fScaleX, fScaleY))
+    if (!NeedKitCursorInvalidation(rCursorRect, fScaleX, fScaleY))
         return;
 
     ScTabViewShell* pThisViewShell = mrViewData.GetViewShell();
@@ -593,16 +593,16 @@ class SuppressEditViewMessagesGuard
 public:
     SuppressEditViewMessagesGuard(EditView& rEditView) :
         mrEditView(rEditView),
-        mbOrigSuppressFlag(rEditView.IsSuppressLOKMessages())
+        mbOrigSuppressFlag(rEditView.IsSuppressKitMessages())
     {
         if (!mbOrigSuppressFlag)
-            mrEditView.SuppressLOKMessages(true);
+            mrEditView.SuppressKitMessages(true);
     }
 
     ~SuppressEditViewMessagesGuard()
     {
-        if (mrEditView.IsSuppressLOKMessages() != mbOrigSuppressFlag)
-            mrEditView.SuppressLOKMessages(mbOrigSuppressFlag);
+        if (mrEditView.IsSuppressKitMessages() != mbOrigSuppressFlag)
+            mrEditView.SuppressKitMessages(mbOrigSuppressFlag);
     }
 
 private:
@@ -1293,7 +1293,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                     aCursorRect.setWidth(0);
                     aCursorRect.Move(aCursPos.getX(), 0);
                     // Sends view cursor position to views of all matching zooms if needed (avoids duplicates).
-                    InvalidateLOKViewCursor(aCursorRect, aMM.GetScaleX(), aMM.GetScaleY());
+                    InvalidateKitViewCursor(aCursorRect, aMM.GetScaleX(), aMM.GetScaleY());
                 }
 
                 // Rollback the mapmode and 'output area'.
@@ -1391,13 +1391,13 @@ namespace
         nTileColOffset += (nEndColPos - nTileEndPx - nTileColOffset);
     }
 
-    class ScLOKProxyObjectContact final : public sdr::contact::ObjectContactOfPageView
+    class ScKitProxyObjectContact final : public sdr::contact::ObjectContactOfPageView
     {
     private:
         tools::WeakReference<ScDrawView> m_xScDrawView;
 
     public:
-        explicit ScLOKProxyObjectContact(
+        explicit ScKitProxyObjectContact(
             ScDrawView* pDrawView,
             SdrPageWindow& rPageWindow,
             const char* pDebugName) :
@@ -1434,10 +1434,10 @@ namespace
         }
     };
 
-    class ScLOKDrawView : public FmFormView
+    class ScKitDrawView : public FmFormView
     {
     public:
-        ScLOKDrawView(OutputDevice* pOut, ScViewData& rData) :
+        ScKitDrawView(OutputDevice* pOut, ScViewData& rData) :
             FmFormView(*rData.GetDocument().GetDrawLayer(), pOut),
             mpScDrawView(rData.GetScDrawView())
         {
@@ -1449,7 +1449,7 @@ namespace
             if (!mpScDrawView)
                 return SdrView::createViewSpecificObjectContact(rPageWindow, pDebugName);
 
-            return new ScLOKProxyObjectContact(mpScDrawView, rPageWindow, pDebugName);
+            return new ScKitProxyObjectContact(mpScDrawView, rPageWindow, pDebugName);
         }
 
     private:
@@ -1608,7 +1608,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
         if (!mpKitDrawView)
         {
             mpKitDrawView.reset(bPrintTwipsMsgs ?
-                new ScLOKDrawView(
+                new ScKitDrawView(
                     &rDevice,
                     mrViewData) :
                 new FmFormView(

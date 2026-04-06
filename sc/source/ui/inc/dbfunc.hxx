@@ -123,7 +123,7 @@ public:
 
     static sal_uInt16   DoUpdateCharts( const ScAddress& rPos, ScDocument& rDoc, bool bAllCharts );
 
-    void            OnLOKShowHideColRow(bool bColumns, SCCOLROW nStartRow);
+    void            OnKitShowHideColRow(bool bColumns, SCCOLROW nStartRow);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

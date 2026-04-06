@@ -238,7 +238,7 @@ OUString ScEditUtil::GetCellFieldValue(
             {
                 *ppTextColor = ScModule::get()->GetColorConfig().GetColorValue(eEntry).nColor;
                 if (comphelper::COKit::isActive())
-                    ScModule::IsLOKViewInDarkMode() ? *ppTextColor = Color(0x1D99F3) : *ppTextColor = Color(0x000080);
+                    ScModule::IsKitViewInDarkMode() ? *ppTextColor = Color(0x1D99F3) : *ppTextColor = Color(0x000080);
             }
 
             if (ppFldLineStyle)
