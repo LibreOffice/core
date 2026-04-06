@@ -66,7 +66,6 @@ class SvxSingleNumPickTabPage final : public SfxTabPage
     TypedWhichId<SvxNumBulletItem> nNumItemId;
 
     std::unique_ptr<weld::IconView> m_xExamplesIV;
-    Size aPreviewSize;
 
     DECL_LINK(NumSelectHdl_Impl, weld::IconView&, void);
     DECL_LINK(DoubleClickHdl_Impl, weld::IconView&, bool);
@@ -139,7 +138,6 @@ class SvxNumPickTabPage final : public SfxTabPage
     bool                bPreset     : 1;
 
     std::unique_ptr<weld::IconView> m_xExamplesIV;
-    Size aPreviewSize;
 
     DECL_LINK(NumSelectHdl_Impl, weld::IconView&, void);
     DECL_LINK(DoubleClickHdl_Impl, weld::IconView&, bool);

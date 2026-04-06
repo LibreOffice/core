@@ -632,7 +632,6 @@ private:
     bool                mbStrikeUsed;       /// true = Font strikeout used.
     bool                mbBorderUsed;       /// true = Border attribute used.
     bool                mbPattUsed;         /// true = Pattern attribute used.
-    bool                mbFormula2;
 };
 
 XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority, ScAddress aOrigin ) :
@@ -651,9 +650,9 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
     mbItalicUsed( false ),
     mbStrikeUsed( false ),
     mbBorderUsed( false ),
-    mbPattUsed( false ),
-    mbFormula2(false)
+    mbPattUsed( false )
 {
+    bool bFormula2(false);
     // Set correct tab for maOrigin from GetValidSrcPos() of the format-entry.
     ScAddress aValidSrcPos = mrFormatEntry.GetValidSrcPos();
     maOrigin.SetTab(aValidSrcPos.Tab());
@@ -703,11 +702,11 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
         break;
         case ScConditionMode::Between:
             mnOperator = EXC_CF_CMP_BETWEEN;
-            mbFormula2 = true;
+            bFormula2 = true;
         break;
         case ScConditionMode::NotBetween:
             mnOperator = EXC_CF_CMP_NOT_BETWEEN;
-            mbFormula2 = true;
+            bFormula2 = true;
         break;
         case ScConditionMode::Equal:
             mnOperator = EXC_CF_CMP_EQUAL;
@@ -741,7 +740,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
     std::unique_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateFlatCopiedTokenArray( 0 ) );
     mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
 
-    if (mbFormula2)
+    if (bFormula2)
     {
         xScTokArr = mrFormatEntry.CreateFlatCopiedTokenArray( 1 );
         mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );

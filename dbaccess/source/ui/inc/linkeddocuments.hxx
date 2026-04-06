@@ -41,14 +41,11 @@ namespace dbaui
                     m_xDocumentContainer;
         css::uno::Reference< css::sdbc::XConnection>
                     m_xConnection;
-        css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >
-                    m_xDocumentUI;
         weld::Window* m_pDialogParent;
 
     public:
         OLinkedDocumentsAccess(
             weld::Window* pDialogParent,
-            const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rDocumentUI,
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const css::uno::Reference< css::container::XNameAccess >& _rxContainer,
             const css::uno::Reference< css::sdbc::XConnection>& _xConnection

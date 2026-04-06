@@ -475,7 +475,7 @@ std::unique_ptr< OLinkedDocumentsAccess > OApplicationController::getDocumentsAc
     }
 
     std::unique_ptr< OLinkedDocumentsAccess > pDocuments( new OLinkedDocumentsAccess(
-        getFrameWeld(), this, getORB(), xDocContainer, xConnection
+        getFrameWeld(), getORB(), xDocContainer, xConnection
     ) );
     return pDocuments;
 }

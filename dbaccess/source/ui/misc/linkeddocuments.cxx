@@ -82,13 +82,12 @@ namespace dbaui
     }
 
     // OLinkedDocumentsAccess
-    OLinkedDocumentsAccess::OLinkedDocumentsAccess( weld::Window* pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
+    OLinkedDocumentsAccess::OLinkedDocumentsAccess( weld::Window* pDialogParent,
         const Reference< XComponentContext >& _rxContext, const Reference< XNameAccess >& _rxContainer,
         const Reference< XConnection>& _xConnection )
         :m_xContext(_rxContext)
         ,m_xDocumentContainer(_rxContainer)
         ,m_xConnection(_xConnection)
-        ,m_xDocumentUI( i_rDocumentUI )
         ,m_pDialogParent(pDialogParent)
     {
         OSL_ENSURE(m_xContext.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");

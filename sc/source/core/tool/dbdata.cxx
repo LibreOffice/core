@@ -823,7 +823,6 @@ void ScDBData::ImportTotalRowParam(ScSubTotalParam& rSubTotalParam,
                                    formula::FormulaGrammar::Grammar eGrammar) const
 {
     rSubTotalParam.bDoSort = false;
-    rSubTotalParam.bGroupedBy = false;
     rSubTotalParam.aGroups[0].nField = rSubTotalParam.nCol1; // which column we add 'Summary'
 
     const size_t nEntryCount = rSubTotalParam.nCol2 - rSubTotalParam.nCol1 + 1; // col count
@@ -897,7 +896,6 @@ void ScDBData::ImportTotalRowParam(ScSubTotalParam& rSubTotalParam,
 void ScDBData::CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const
 {
     rSubTotalParam.bDoSort = false;
-    rSubTotalParam.bGroupedBy = false;
     rSubTotalParam.aGroups[0].nField = rSubTotalParam.nCol1; // which column we add 'Summary'
 
     const size_t nEntryCount = rSubTotalParam.nCol2 - rSubTotalParam.nCol1 + 1; // col count

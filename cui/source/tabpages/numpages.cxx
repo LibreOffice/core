@@ -153,8 +153,9 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(weld::Container* pPage, weld::D
     , bPreset(false)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , m_xExamplesIV(m_xBuilder->weld_icon_view(u"pick_numbering_iconview"_ustr))
-    , aPreviewSize(150, 200)
 {
+    Size aPreviewSize(150, 200);
+
     SetExchangeSupport();
     SvxBmpNumIconView::PopulateIconView(m_xExamplesIV.get(), NumberingPageType::SINGLENUM, aPreviewSize);
     m_xExamplesIV->connect_selection_changed(LINK(this, SvxSingleNumPickTabPage, NumSelectHdl_Impl));
@@ -622,8 +623,9 @@ SvxNumPickTabPage::SvxNumPickTabPage(weld::Container* pPage, weld::DialogControl
     , bModified(false)
     , bPreset(false)
     , m_xExamplesIV(m_xBuilder->weld_icon_view(u"pick_outline_iconview"_ustr))
-    , aPreviewSize(150, 200)
 {
+    Size aPreviewSize(150, 200);
+
     SetExchangeSupport();
 
     SvxBmpNumIconView::PopulateIconView(m_xExamplesIV.get(), NumberingPageType::OUTLINE, aPreviewSize);

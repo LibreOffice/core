@@ -196,7 +196,6 @@ class DBContentLoader : public ::cppu::WeakImplHelper< XFrameLoader, XServiceInf
 private:
     const Reference< XComponentContext >  m_aContext;
     rtl::Reference< DBContentLoader >   m_xMySelf;
-    OUString                            m_sCurrentURL;
     ImplSVEvent * m_nStartWizard;
 
     DECL_LINK( OnStartTableWizard, void*, void );
@@ -478,7 +477,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             // reset the data of the previous async drop (if any)
             if ( m_nStartWizard )
                 Application::RemoveUserEvent(m_nStartWizard);
-            m_sCurrentURL = xModel->getURL();
             m_xMySelf = this;
             m_nStartWizard = Application::PostUserEvent(LINK(this, DBContentLoader, OnStartTableWizard));
         }

@@ -104,7 +104,6 @@ void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
                         // Subtotals
                         ScSubTotalParam aSubTotalParam;
                         aNewDBData.GetSubTotalParam(aSubTotalParam);
-                        aSubTotalParam.bHasHeader = aNewDBData.HasHeader();
 
                         if (!aNewDBData.HasTotals())
                         {

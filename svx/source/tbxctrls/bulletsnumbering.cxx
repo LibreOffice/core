@@ -57,7 +57,6 @@ class NumberingPopup : public WeldToolbarPopup
 
 private:
     std::vector<std::pair<OUString, OUString>> maCustomBullets;
-    Size aPreviewSize;
 
 public:
     NumberingPopup(NumberingToolBoxControl& rController, weld::Widget* pParent, NumberingPageType ePageType);
@@ -94,8 +93,9 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     , mxMoreButton(m_xBuilder->weld_button(u"more"_ustr))
     , mxBulletsLabel(m_xBuilder->weld_label(u"label_default"_ustr))
     , mxDocBulletsLabel(m_xBuilder->weld_label(u"label_doc"_ustr))
-    , aPreviewSize(80, 100)
 {
+    Size aPreviewSize(80, 100);
+
     SvxBmpNumIconView::PopulateIconView(mxIconView.get(), mePageType, aPreviewSize);
     SvxBmpNumIconView::PopulateIconView(mxIconViewDoc.get(), NumberingPageType::DOCBULLET, aPreviewSize);
 

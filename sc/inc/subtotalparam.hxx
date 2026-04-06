@@ -33,8 +33,6 @@ struct SC_DLLPUBLIC ScSubTotalParam
     bool            bAscending:1      = true;   ///< sort ascending
     bool            bUserDef:1        = false;  ///< sort user defined
     bool            bIncludePattern:1 = false;  ///< sort formats
-    bool            bGroupedBy:1      = true;   ///< grouped by column
-    bool            bHasHeader:1      = true;   ///< has header row
 
     struct SubtotalGroup
     {

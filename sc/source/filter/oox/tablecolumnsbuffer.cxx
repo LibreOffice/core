@@ -187,7 +187,6 @@ bool TableColumns::finalizeImport( ScDBData* pDBData, bool bQueryTable )
         {
             ScSubTotalParam aSubTotalParam;
             pDBData->GetSubTotalParam(aSubTotalParam);
-            aSubTotalParam.bHasHeader = pDBData->HasHeader();
             pDBData->ImportTotalRowParam(aSubTotalParam, aAttributes,
                                          formula::FormulaGrammar::GRAM_OOXML);
             pDBData->SetSubTotalParam(aSubTotalParam);
