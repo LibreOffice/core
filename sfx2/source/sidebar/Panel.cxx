@@ -23,6 +23,7 @@
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
 
@@ -66,6 +67,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , mxContents(mxBuilder->weld_box(u"contents"_ustr))
 {
     mxContents->set_visible(mbIsExpanded);
+    mxContents->set_background(Theme::GetColor(Theme::Color_PanelBackground));
     mxContainer->connect_get_property_tree(LINK(this, Panel, DumpAsPropertyTreeHdl));
 }
 
@@ -210,6 +212,7 @@ bool Panel::HasIdPredicate (std::u16string_view rsId) const
 void Panel::DataChanged()
 {
     mxTitleBar->DataChanged();
+    mxContents->set_background(Theme::GetColor(Theme::Color_PanelBackground));
 }
 
 Reference<awt::XWindow> Panel::GetElementWindow()
