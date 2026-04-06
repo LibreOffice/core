@@ -123,13 +123,13 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             tools::Rectangle aBackRect = aRect;
             aBackRect.AdjustTop(3 );
             aBackRect.AdjustBottom( -2 );
-            pDev->SetFillColor(Color(50,107,197));
+            pDev->SetFillColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
             pDev->DrawRect(aBackRect);
         }
 
         //draw text
         if(nSelItem ==  nItemId )
-            aFont.SetColor(COL_WHITE);
+            aFont.SetColor(Application::GetSettings().GetStyleSettings().GetHighlightTextColor());
         else
             aFont.SetColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
         pDev->SetFont(aFont);
@@ -138,7 +138,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
         //draw line
         if( nSelItem ==  nItemId )
-            pDev->SetLineColor(COL_WHITE);
+            pDev->SetLineColor(Application::GetSettings().GetStyleSettings().GetHighlightTextColor());
         else
             pDev->SetLineColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
 
