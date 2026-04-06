@@ -197,19 +197,10 @@ void SfxApplication::Initialize_Impl()
         auto olTheme = sfx2::sidebar::GetOLTheme();
         bool bDark = (olTheme != sfx2::sidebar::OLTheme::Light);
         {
-            // 1. Icon set + widget theme
+            // 1. Icon set
             SvtMiscOptions aMiscOpts;
             if (bDark)
                 aMiscOpts.SetIconTheme(u"colibre_dark_svg"_ustr);
-            else
-            {
-                // Light: use default icons and disable custom dark widget theme
-                aMiscOpts.SetIconTheme(u"colibre"_ustr);
-#ifdef _WIN32
-                // Clear the dark widget theme so definition.xml dark colors don't apply
-                _putenv_s("VCL_DRAW_WIDGETS_FROM_FILE", "");
-#endif
-            }
 
             if (bDark)
             {
