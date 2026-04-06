@@ -260,6 +260,7 @@ TabBar::Item::Item(TabBar& rTabBar)
     , mxButton(mxBuilder->weld_toolbar(u"button"_ustr))
     , mbIsHidden(false)
 {
+    mxButton->set_background(Theme::GetColor(Theme::Color_TabBarBackground));
 }
 
 TabBar::Item::~Item()
