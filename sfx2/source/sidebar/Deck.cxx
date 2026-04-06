@@ -28,6 +28,8 @@
 #include <sfx2/viewsh.hxx>
 
 #include <vcl/event.hxx>
+#include <cstdlib>
+#include <cstring>
 #include <comphelper/lok.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <tools/json_writer.hxx>
@@ -63,9 +65,17 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentW
 
     // Override InterimItemWindow's SetPaintTransparent(true) so background paints.
     SetPaintTransparent(false);
-    SetBackground(Wallpaper(Theme::GetColor(Theme::Color_DeckBackground)));
-    m_xVclContentArea->SetBackground(Wallpaper(Theme::GetColor(Theme::Color_DeckBackground)));
-    m_xContainer->set_background(Theme::GetColor(Theme::Color_DeckBackground));
+    {
+        static const bool s_bDark = [] {
+            const char* p = std::getenv("OFFICELABS_THEME");
+            return p && std::strcmp(p, "dark") == 0;
+        }();
+        Color aDeckBg = s_bDark ? Color(0x28, 0x2A, 0x36)
+                                : Theme::GetColor(Theme::Color_DeckBackground);
+        SetBackground(Wallpaper(aDeckBg));
+        m_xVclContentArea->SetBackground(Wallpaper(aDeckBg));
+        m_xContainer->set_background(aDeckBg);
+    }
 
     mxVerticalScrollBar->vadjustment_set_step_increment(10);
     mxVerticalScrollBar->vadjustment_set_page_increment(100);

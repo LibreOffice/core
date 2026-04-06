@@ -55,7 +55,13 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/) override
     {
-        rRenderContext.SetBackground(Theme::GetColor(Theme::Color_DeckTitleBarBackground));
+        static const bool s_bDark = [] {
+            const char* p = std::getenv("OFFICELABS_THEME");
+            return p && std::strcmp(p, "dark") == 0;
+        }();
+        Color aBg = s_bDark ? Color(0x28, 0x2A, 0x36)
+                            : Theme::GetColor(Theme::Color_DeckTitleBarBackground);
+        rRenderContext.SetBackground(aBg);
         rRenderContext.Erase();
         rRenderContext.DrawBitmap(Point(0, 0), maGrip);
     }
@@ -141,7 +147,13 @@ void DeckTitleBar::HandleToolBoxItemClick()
 void DeckTitleBar::DataChanged()
 {
     mxToolBox->set_item_icon_name(u"button"_ustr, u"sfx2/res/closedoc.png"_ustr);
-    mxLabel->set_background(Theme::GetColor(Theme::Color_DeckTitleBarBackground));
+    static const bool s_bDark = [] {
+        const char* p = std::getenv("OFFICELABS_THEME");
+        return p && std::strcmp(p, "dark") == 0;
+    }();
+    Color aBg = s_bDark ? Color(0x28, 0x2A, 0x36)
+                        : Theme::GetColor(Theme::Color_DeckTitleBarBackground);
+    mxLabel->set_background(aBg);
     TitleBar::DataChanged();
 }
 
