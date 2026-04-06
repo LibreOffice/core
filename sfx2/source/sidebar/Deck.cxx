@@ -61,6 +61,10 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentW
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
 
+    // Override InterimItemWindow's SetPaintTransparent(true) so background paints.
+    SetPaintTransparent(false);
+    SetBackground(Wallpaper(Theme::GetColor(Theme::Color_DeckBackground)));
+    m_xVclContentArea->SetBackground(Wallpaper(Theme::GetColor(Theme::Color_DeckBackground)));
     m_xContainer->set_background(Theme::GetColor(Theme::Color_DeckBackground));
 
     mxVerticalScrollBar->vadjustment_set_step_increment(10);

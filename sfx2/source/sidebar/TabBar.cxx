@@ -81,7 +81,12 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     // we have this widget just so we can measure best width for static TabBar::GetDefaultWidth
     mxMeasureBox->hide();
 
+    // Override InterimItemWindow's SetPaintTransparent(true) so our background
+    // is actually painted instead of letting the parent show through.
+    SetPaintTransparent(false);
     SetBackground(Wallpaper(Theme::GetColor(Theme::Color_TabBarBackground)));
+    m_xVclContentArea->SetBackground(Wallpaper(Theme::GetColor(Theme::Color_TabBarBackground)));
+    m_xContainer->set_background(Theme::GetColor(Theme::Color_TabBarBackground));
 
 #if OSL_DEBUG_LEVEL >= 2
     SetText(OUString("TabBar"));
@@ -178,6 +183,8 @@ void TabBar::RemoveDeckHighlight()
 void TabBar::DataChanged(const DataChangedEvent& rDataChangedEvent)
 {
     SetBackground(Theme::GetColor(Theme::Color_TabBarBackground));
+    m_xVclContentArea->SetBackground(Wallpaper(Theme::GetColor(Theme::Color_TabBarBackground)));
+    m_xContainer->set_background(Theme::GetColor(Theme::Color_TabBarBackground));
     UpdateButtonIcons();
     UpdateMenus();
 

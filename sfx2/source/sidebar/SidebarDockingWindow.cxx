@@ -30,7 +30,10 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <tools/gen.hxx>
 #include <vcl/event.hxx>
+#include <vcl/wall.hxx>
 #include <osl/diagnose.h>
+#include <cstdlib>
+#include <cstring>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -44,6 +47,15 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
     : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits)
     , mbIsReadyToDrag(false)
 {
+    // OfficeLabs: the entire sidebar container must have a dark background.
+    // TabBar and Deck are InterimItemWindows (paint-transparent), so the
+    // SidebarDockingWindow background is what shows through everywhere.
+    {
+        const char* pTheme = std::getenv("OFFICELABS_THEME");
+        if (pTheme && std::strcmp(pTheme, "dark") == 0)
+            SetBackground(Wallpaper(Color(0x28, 0x2A, 0x36)));
+    }
+
     // Get the XFrame from the bindings.
     if (pSfxBindings==nullptr || pSfxBindings->GetDispatcher()==nullptr)
     {
