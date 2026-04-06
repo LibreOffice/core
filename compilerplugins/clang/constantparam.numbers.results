@@ -1143,7 +1143,7 @@ include/svx/AccessibleShape.hxx:200
     long aState
     1024
 include/svx/annotation/Annotation.hxx:44
-    void LOKCommentNotify(enum sdr::annotation::CommentNotificationType,const class SfxViewShell *,class sdr::annotation::Annotation &)
+    void KitCommentNotify(enum sdr::annotation::CommentNotificationType,const class SfxViewShell *,class sdr::annotation::Annotation &)
     enum sdr::annotation::CommentNotificationType nType
     2
 include/svx/dbaexchange.hxx:58

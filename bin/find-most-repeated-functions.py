@@ -46,4 +46,4 @@ for k in sorted(list(sizeDict), reverse=True):
 
 
 # include/vcl/ITiledRenderable.hxx
-# why is gaLOKPointerMap declared inside this header?
+# why is gaKitPointerMap declared inside this header?

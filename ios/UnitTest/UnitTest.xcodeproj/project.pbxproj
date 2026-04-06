@@ -106,7 +106,7 @@
 		BEA20D6E2166596F0032F67B /* svpdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpdata.cxx; path = ../../vcl/headless/svpdata.cxx; sourceTree = "<group>"; };
 		BEA20D6F2166596F0032F67B /* svpdummies.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpdummies.cxx; path = ../../vcl/headless/svpdummies.cxx; sourceTree = "<group>"; };
 		BEA20D702166596F0032F67B /* svpprn.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpprn.cxx; path = ../../vcl/headless/svpprn.cxx; sourceTree = "<group>"; };
-		BEA20DC221678BB60032F67B /* lokcharthelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lokcharthelper.cxx; path = ../../sfx2/source/kit/charthelper.cxx; sourceTree = "<group>"; };
+		BEA20DC221678BB60032F67B /* kitcharthelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = kitcharthelper.cxx; path = ../../sfx2/source/kit/charthelper.cxx; sourceTree = "<group>"; };
 		BEA20DC4216797C00032F67B /* pdffontcache.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = pdffontcache.hxx; path = ../../vcl/source/gdi/pdffontcache.hxx; sourceTree = "<group>"; };
 		BEA20DC5216797C00032F67B /* impgraph.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = impgraph.cxx; path = ../../vcl/source/gdi/impgraph.cxx; sourceTree = "<group>"; };
 		BEA20DC6216797C00032F67B /* base14.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = base14.cxx; path = ../../vcl/source/gdi/base14.cxx; sourceTree = "<group>"; };
@@ -378,7 +378,7 @@
 		BEA20DC121678B9E0032F67B /* view */ = {
 			isa = PBXGroup;
 			children = (
-				BEA20DC221678BB60032F67B /* lokcharthelper.cxx */,
+				BEA20DC221678BB60032F67B /* kitcharthelper.cxx */,
 			);
 			name = view;
 			sourceTree = "<group>";
