@@ -8509,7 +8509,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     if (const char* pHostExemptVerifyHost = ::getenv("LOK_HOST_ALLOWLIST_EXEMPT_VERIFY_HOST"))
         HostFilter::setAllowedHostsExemptVerifyHost(strncmp(pHostExemptVerifyHost,"1", 1) == 0);
 
-    if (const char* pExtRefPaths = ::getenv("LOK_ALLOWED_EXTREF_PATHS"))
+    if (const char* pExtRefPaths = ::getenv("KIT_ALLOWED_EXTREF_PATHS"))
         HostFilter::setAllowedExtRefPaths(pExtRefPaths);
 
     // What stage are we at ?
