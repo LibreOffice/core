@@ -96,6 +96,8 @@
 #include <shellapi.h>
 #include <uxtheme.h>
 #include <Vssym32.h>
+#include <fstream>
+#include <string>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -269,9 +271,37 @@ static void UpdateDarkMode(HWND hWnd)
     if (!hUxthemeLib)
         return;
 
-    // OfficeLabs: always force dark mode on all windows (branded fork).
+    // OfficeLabs: read theme from config file.
+    // Can't include OfficelabsTheme.hxx here (VCL can't depend on sfx2),
+    // so read the file directly.
     bool bForceLight = false;
-    bool bForceDark = true;
+    bool bForceDark = false;
+    {
+        wchar_t exePath[MAX_PATH] = {};
+        GetModuleFileNameW(nullptr, exePath, MAX_PATH);
+        std::wstring ws(exePath);
+        auto pos = ws.rfind(L"\\program\\");
+        if (pos != std::wstring::npos)
+        {
+            std::wstring confPath = ws.substr(0, pos) + L"\\share\\officelabs_theme.txt";
+            std::ifstream f(confPath);
+            if (f.is_open())
+            {
+                std::string theme;
+                std::getline(f, theme);
+                while (!theme.empty() && (theme.back() == '\r' || theme.back() == '\n' || theme.back() == ' '))
+                    theme.pop_back();
+                if (theme == "light")
+                    bForceLight = true;
+                else
+                    bForceDark = true;
+            }
+            else
+                bForceDark = true; // default midnight-blue
+        }
+        else
+            bForceDark = true;
+    }
 
     typedef PreferredAppMode(WINAPI* SetPreferredAppMode_t)(PreferredAppMode);
     auto SetPreferredAppMode = reinterpret_cast<SetPreferredAppMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(135)));
