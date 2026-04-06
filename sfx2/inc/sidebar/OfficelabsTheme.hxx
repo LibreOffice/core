@@ -74,8 +74,8 @@ inline OLColors GetOLColors()
                      Color(0x77, 0x77, 0x77) };  // subtext
         case OLTheme::MidnightBlue:
         default:
-            return { Color(0x28, 0x2A, 0x36),   // bg
-                     Color(0x34, 0x37, 0x47),   // surface
+            return { Color(0x21, 0x22, 0x2C),   // bg — VS Code Dracula sidebar
+                     Color(0x28, 0x2A, 0x36),   // surface — Dracula editor bg
                      Color(0x44, 0x47, 0x5A),   // border
                      Color(0xF8, 0xF8, 0xF2),   // text
                      Color(0x62, 0x72, 0xA4) };  // subtext

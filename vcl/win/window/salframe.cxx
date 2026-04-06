@@ -272,10 +272,8 @@ static void UpdateDarkMode(HWND hWnd)
         return;
 
     // OfficeLabs: read theme from config file.
-    // Can't include OfficelabsTheme.hxx here (VCL can't depend on sfx2),
-    // so read the file directly.
-    bool bForceLight = false;
-    bool bForceDark = false;
+    // Read theme: light / midnight-blue / dark
+    std::string olTheme = "midnight-blue";
     {
         wchar_t exePath[MAX_PATH] = {};
         GetModuleFileNameW(nullptr, exePath, MAX_PATH);
@@ -287,48 +285,24 @@ static void UpdateDarkMode(HWND hWnd)
             std::ifstream f(confPath);
             if (f.is_open())
             {
-                std::string theme;
-                std::getline(f, theme);
-                while (!theme.empty() && (theme.back() == '\r' || theme.back() == '\n' || theme.back() == ' '))
-                    theme.pop_back();
-                if (theme == "light")
-                    bForceLight = true;
-                else
-                    bForceDark = true;  // both midnight-blue and dark get dark title bar + menus
+                std::getline(f, olTheme);
+                while (!olTheme.empty() && (olTheme.back() == '\r' || olTheme.back() == '\n' || olTheme.back() == ' '))
+                    olTheme.pop_back();
             }
-            else
-                bForceDark = true; // default midnight-blue
         }
-        else
-            bForceDark = true;
     }
 
     typedef PreferredAppMode(WINAPI* SetPreferredAppMode_t)(PreferredAppMode);
     auto SetPreferredAppMode = reinterpret_cast<SetPreferredAppMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(135)));
     if (SetPreferredAppMode)
     {
-        if (bForceLight)
+        if (olTheme == "light")
             SetPreferredAppMode(ForceLight);
-        else if (bForceDark)
-            SetPreferredAppMode(ForceDark);
         else
-        {
-            switch (MiscSettings::GetAppColorMode())
-            {
-                case AppearanceMode::AUTO:
-                    SetPreferredAppMode(AllowDark);
-                    break;
-                case AppearanceMode::LIGHT:
-                    SetPreferredAppMode(ForceLight);
-                    break;
-                case AppearanceMode::DARK:
-                    SetPreferredAppMode(ForceDark);
-                    break;
-            }
-        }
+            SetPreferredAppMode(ForceDark); // midnight-blue + dark
     }
 
-    BOOL bDarkMode = bForceLight ? FALSE : (bForceDark ? TRUE : UseDarkMode());
+    BOOL bDarkMode = (olTheme != "light") ? TRUE : FALSE;
 
     typedef void(WINAPI* AllowDarkModeForWindow_t)(HWND, BOOL);
     auto AllowDarkModeForWindow = reinterpret_cast<AllowDarkModeForWindow_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(133)));
