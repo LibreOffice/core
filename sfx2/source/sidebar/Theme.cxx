@@ -103,8 +103,9 @@ void Theme::HandleDataChange()
 
             aStyle.SetDialogColor(olc.bg);
             aStyle.SetDialogTextColor(olc.text);
-            aStyle.SetFaceColor(olc.bg);
+            aStyle.SetFaceColor(olc.border);
             aStyle.SetButtonTextColor(olc.text);
+            aStyle.SetWorkspaceColor(olc.border);
             aStyle.SetMenuColor(olc.surface);
             aStyle.SetMenuTextColor(olc.text);
             aStyle.SetMenuBarColor(olc.bg);
