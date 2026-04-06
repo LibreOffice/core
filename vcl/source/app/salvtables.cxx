@@ -343,10 +343,14 @@ void SalInstanceWidget::set_background(const Color& rColor)
 {
     m_xWidget->SetControlBackground(rColor);
     m_xWidget->SetBackground(m_xWidget->GetControlBackground());
-    // When an explicit background color is set, the widget must paint it.
-    // VCL containers (VclBox etc.) are paint-transparent by default, which
-    // causes SetBackground to be ignored during rendering.
+    // When an explicit background color is set, the widget must actually
+    // paint it.  Two things prevent that by default for VCL containers
+    // (VclBox, VclGrid, …):
+    //   1) SetPaintTransparent(true) in VclContainer ctor
+    //   2) No Invalidate() — containers don't override
+    //      StateChanged(ControlBackground), so no repaint is scheduled.
     m_xWidget->SetPaintTransparent(false);
+    m_xWidget->EnableChildTransparentMode(false);
     if (m_xWidget->GetStyle() & WB_CLIPCHILDREN)
     {
         // turn off WB_CLIPCHILDREN otherwise the bg won't extend "under"
@@ -357,6 +361,10 @@ void SalInstanceWidget::set_background(const Color& rColor)
         WindowImpl* pImpl = m_xWidget->ImplGetWindowImpl();
         pImpl->mbClipChildren = true;
     }
+    // Force repaint with Erase so the new background is actually drawn.
+    // Without this, container widgets (which don't handle
+    // StateChanged(ControlBackground)) would never schedule a repaint.
+    m_xWidget->Invalidate();
 }
 
 void SalInstanceWidget::set_background()
