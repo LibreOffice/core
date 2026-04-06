@@ -21,6 +21,7 @@
 #include <sidebar/DeckDescriptor.hxx>
 #include <sidebar/DeckLayouter.hxx>
 #include <sidebar/DeckTitleBar.hxx>
+#include <sidebar/OfficelabsTheme.hxx>
 #include <sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
@@ -28,8 +29,6 @@
 #include <sfx2/viewsh.hxx>
 
 #include <vcl/event.hxx>
-#include <cstdlib>
-#include <cstring>
 #include <comphelper/lok.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <tools/json_writer.hxx>
@@ -66,7 +65,7 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentW
     // Override InterimItemWindow's SetPaintTransparent(true) so background paints.
     SetPaintTransparent(false);
     {
-        const Color aDeckBg(0x28, 0x2A, 0x36);
+        const Color aDeckBg = GetOLColors().bg;
         SetBackground(Wallpaper(aDeckBg));
         m_xVclContentArea->SetBackground(Wallpaper(aDeckBg));
         m_xContainer->set_background(aDeckBg);

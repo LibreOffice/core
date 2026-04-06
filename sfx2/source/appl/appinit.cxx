@@ -37,6 +37,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <sidebar/OfficelabsTheme.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
@@ -191,21 +192,28 @@ void SfxApplication::Initialize_Impl()
 
     pImpl->mxAppDispatch = new SfxStatusDispatcher;
 
-    // OfficeLabs: always apply dark theme — this is a branded fork.
+    // OfficeLabs: apply theme from config file (instdir/share/officelabs_theme.txt).
     {
+        auto olTheme = sfx2::sidebar::GetOLTheme();
+        bool bDark = (olTheme != sfx2::sidebar::OLTheme::Light);
         {
-            // 1. Force dark icon set
+            // 1. Icon set: dark icons for dark/midnight-blue, default for light
             SvtMiscOptions aMiscOpts;
-            aMiscOpts.SetIconTheme(u"colibre_dark_svg"_ustr);
+            if (bDark)
+                aMiscOpts.SetIconTheme(u"colibre_dark_svg"_ustr);
 
-            // 2. Override VCL StyleSettings with Dracula palette.
-            //    WindowColor (document canvas) and FieldColor (text inputs) are
-            //    intentionally left at system defaults so documents stay white.
-            const Color aBg    (0x28, 0x2A, 0x36); // Dracula background
-            const Color aSurface(0x34, 0x37, 0x47); // Dracula surface
-            const Color aBorder (0x44, 0x47, 0x5A); // Dracula border/comment
-            const Color aText  (0xF8, 0xF8, 0xF2); // Dracula foreground
-            const Color aSubtext(0x62, 0x72, 0xA4); // Dracula comment (muted)
+            if (!bDark)
+            {
+                // Light theme — skip StyleSettings override, use system defaults
+            }
+            else
+            {
+            auto olc = sfx2::sidebar::GetOLColors();
+            const Color aBg     = olc.bg;
+            const Color aSurface = olc.surface;
+            const Color aBorder  = olc.border;
+            const Color aText    = olc.text;
+            const Color aSubtext = olc.subtext;
 
             AllSettings aAllSettings(Application::GetSettings());
             StyleSettings aStyle(aAllSettings.GetStyleSettings());
@@ -255,6 +263,7 @@ void SfxApplication::Initialize_Impl()
 
             aAllSettings.SetStyleSettings(aStyle);
             Application::SetSettings(aAllSettings);
+            } // end if (bDark)
         }
     }
 
