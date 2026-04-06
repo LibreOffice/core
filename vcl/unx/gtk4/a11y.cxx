@@ -632,6 +632,11 @@ static void lo_accessible_range_init(gpointer iface_, gpointer)
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
+#if defined __clang__
+#if __has_warning("-Wunused-but-set-global")
+#pragma clang diagnostic ignored "-Wunused-but-set-global"
+#endif
+#endif
 #endif
 G_DEFINE_TYPE_WITH_CODE(LoAccessible, lo_accessible, G_TYPE_OBJECT,
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_ACCESSIBLE, lo_accessible_accessible_init))
@@ -909,6 +914,11 @@ static void ooo_fixed_accessible_init(GtkAccessibleInterface* iface)
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
+#if defined __clang__
+#if __has_warning("-Wunused-but-set-global")
+#pragma clang diagnostic ignored "-Wunused-but-set-global"
+#endif
+#endif
 #endif
 G_DEFINE_TYPE_WITH_CODE(OOoFixed, ooo_fixed, GTK_TYPE_FIXED,
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_ACCESSIBLE, ooo_fixed_accessible_init))

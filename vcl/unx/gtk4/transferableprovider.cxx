@@ -29,7 +29,18 @@ struct _TransferableContentClass : public GdkContentProviderClass
 };
 }
 
+#if defined __clang__
+#if __has_warning("-Wunused-but-set-global")
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-but-set-global"
+#endif
+#endif
 G_DEFINE_TYPE(TransferableContent, transerable_content, GDK_TYPE_CONTENT_PROVIDER)
+#if defined __clang__
+#if __has_warning("-Wunused-but-set-global")
+#pragma clang diagnostic pop
+#endif
+#endif
 
 static void transerable_content_write_mime_type_async(GdkContentProvider* provider,
                                                       const char* mime_type, GOutputStream* stream,

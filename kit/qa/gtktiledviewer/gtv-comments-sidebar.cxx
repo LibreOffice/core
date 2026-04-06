@@ -27,6 +27,9 @@
 #if __has_warning("-Wdeprecated-volatile")
 #pragma clang diagnostic ignored "-Wdeprecated-volatile"
 #endif
+#if __has_warning("-Wunused-but-set-global")
+#pragma clang diagnostic ignored "-Wunused-but-set-global"
+#endif
 #endif
 G_DEFINE_TYPE(GtvCommentsSidebar, gtv_comments_sidebar, GTK_TYPE_BOX);
 #ifdef __GNUC__

@@ -54,16 +54,17 @@ struct GtvKitDialogPrivate
 }
 
 #if defined __clang__
-#if __has_warning("-Wdeprecated-volatile")
 #pragma clang diagnostic push
+#if __has_warning("-Wdeprecated-volatile")
 #pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
+#if __has_warning("-Wunused-but-set-global")
+#pragma clang diagnostic ignored "-Wunused-but-set-global"
 #endif
 #endif
 G_DEFINE_TYPE_WITH_PRIVATE(GtvKitDialog, gtv_kit_dialog, GTK_TYPE_DIALOG);
 #if defined __clang__
-#if __has_warning("-Wdeprecated-volatile")
 #pragma clang diagnostic pop
-#endif
 #endif
 
 enum

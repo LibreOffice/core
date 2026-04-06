@@ -18,7 +18,18 @@ struct _NotifyingLayout
     Link<void*, void> m_aLink;
 };
 
+#if defined __clang__
+#if __has_warning("-Wunused-but-set-global")
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-but-set-global"
+#endif
+#endif
 G_DEFINE_TYPE(NotifyingLayout, notifying_layout, GTK_TYPE_LAYOUT_MANAGER)
+#if defined __clang__
+#if __has_warning("-Wunused-but-set-global")
+#pragma clang diagnostic pop
+#endif
+#endif
 
 static void notifying_layout_measure(GtkLayoutManager* pLayoutManager, GtkWidget* widget,
                                      GtkOrientation orientation, int for_size, int* minimum,
