@@ -922,7 +922,8 @@ void SdrObjEditView::EditViewCursorRect(const tools::Rectangle& rRect, int nExtT
     mpTextEditWin->SetCursorRect(&rRect, nExtTextInputWidth);
 }
 
-void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
+void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow,
+                                     const SdrPageView* pRenderingPageView)
 {
     if (!comphelper::COKit::isActive())
     {
@@ -950,7 +951,11 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
 
     OutlinerView* pOLV = pActiveOutliner->GetView(0);
     SdrPage* pPage = GetSdrPageView()->GetPage();
-    pOLV->SetBackgroundColor(pPage->GetPageBackgroundColor(GetSdrPageView(), true));
+    // When painting another user's text edit, use the rendering view's PageView
+    // so that the background color (and thus auto text color resolution) matches
+    // the rendering user's theme, not the editing user's theme.
+    const SdrPageView* pBgPageView = pRenderingPageView ? pRenderingPageView : GetSdrPageView();
+    pOLV->SetBackgroundColor(pPage->GetPageBackgroundColor(pBgPageView, true));
     ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
 }
 

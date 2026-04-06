@@ -173,7 +173,10 @@ public:
 
     // used to call the old ImpPaintOutlinerView. Will be replaced when the
     // outliner will be displayed on the overlay in edit mode.
-    void TextEditDrawing(SdrPaintWindow& rPaintWindow);
+    // pRenderingPageView: when painting another view's text edit for a different
+    // user's tile, pass the rendering view's SdrPageView so that the background
+    // color (and thus auto text color) is resolved for the correct theme.
+    void TextEditDrawing(SdrPaintWindow& rPaintWindow, const SdrPageView* pRenderingPageView = nullptr);
 
     // Actionhandling for macromode
     virtual bool IsAction() const override;
