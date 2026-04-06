@@ -128,6 +128,10 @@ void Theme::HandleDataChange()
             aStyle.SetActiveTextColor(aText);
             aStyle.SetActiveBorderColor(aBorder);
             aStyle.SetWindowTextColor(aText);
+            aStyle.SetTabTextColor(aText);
+            aStyle.SetTabRolloverTextColor(aText);
+            aStyle.SetTabHighlightTextColor(aText);
+            aStyle.SetFieldTextColor(aText);
 
             aAllSettings.SetStyleSettings(aStyle);
             Application::SetSettings(aAllSettings);

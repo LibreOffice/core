@@ -246,8 +246,12 @@ void SfxApplication::Initialize_Impl()
             aStyle.SetActiveTextColor(aText);
             aStyle.SetActiveBorderColor(aBorder);
 
-            // Window text (used by notebookbar "Home" context label)
+            // Window / tab text
             aStyle.SetWindowTextColor(aText);
+            aStyle.SetTabTextColor(aText);
+            aStyle.SetTabRolloverTextColor(aText);
+            aStyle.SetTabHighlightTextColor(aText);
+            aStyle.SetFieldTextColor(aText);
 
             aAllSettings.SetStyleSettings(aStyle);
             Application::SetSettings(aAllSettings);
