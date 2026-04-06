@@ -294,7 +294,7 @@ static void UpdateDarkMode(HWND hWnd)
                 if (theme == "light")
                     bForceLight = true;
                 else
-                    bForceDark = true;
+                    bForceDark = true;  // both midnight-blue and dark get dark title bar + menus
             }
             else
                 bForceDark = true; // default midnight-blue
