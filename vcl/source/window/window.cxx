@@ -3431,6 +3431,8 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         sAccRole = "tablist";
     else if (nAccessibleRole == css::accessibility::AccessibleRole::GROUP_BOX)
         sAccRole = "group";
+    else if (nAccessibleRole == css::accessibility::AccessibleRole::TEXT)
+        sAccRole = "textbox";
 
     vcl::Window* pAccLabelFor = getAccessibleRelationLabelFor();
     if (pAccLabelFor)
