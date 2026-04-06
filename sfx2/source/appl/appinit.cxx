@@ -222,9 +222,9 @@ void SfxApplication::Initialize_Impl()
             aStyle.SetDialogTextColor(aText);
 
             // Toolbar / button face
-            aStyle.SetFaceColor(aBorder);  // lighter than bg — makes ruler visible
+            aStyle.SetFaceColor(aBg);
             aStyle.SetButtonTextColor(aText);
-            aStyle.SetWorkspaceColor(aBorder);
+            aStyle.SetWorkspaceColor(aSurface);  // lighter shade for ruler visibility
 
             // Menu
             aStyle.SetMenuColor(aSurface);
