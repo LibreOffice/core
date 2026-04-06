@@ -220,7 +220,7 @@ namespace sal::systools
         void clear() { assign(nullptr); }
 
         bool is() const { return (com_ptr_ != nullptr); }
-        operator bool() const { return is(); }
+        explicit operator bool() const { return is(); }
 
     private:
         static void addRef(T* ptr)
