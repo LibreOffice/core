@@ -911,6 +911,11 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, SystemTextColorFl
     }
 #endif
 
+    // OfficeLabs: if the face color is dark, ensure button text is light.
+    // Windows dark mode + widget file can leave text black on dark background.
+    if (aColor.IsDark() && rStyleSettings.GetFaceColor().IsDark())
+        aColor = rStyleSettings.GetButtonTextColor();
+
     pDev->SetTextColor(aColor);
 
     if ( IsEnabled() )
