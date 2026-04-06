@@ -127,6 +127,7 @@ void Theme::HandleDataChange()
             aStyle.SetActiveColor(aSurface);
             aStyle.SetActiveTextColor(aText);
             aStyle.SetActiveBorderColor(aBorder);
+            aStyle.SetWindowTextColor(aText);
 
             aAllSettings.SetStyleSettings(aStyle);
             Application::SetSettings(aAllSettings);
