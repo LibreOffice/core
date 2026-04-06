@@ -60,11 +60,11 @@ public:
     SVX_DLLPUBLIC SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrollArea, const VclPtr<VirtualDevice>& rVirDev);
     virtual ~SvxShowCharSet() override;
 
-    virtual void            RecalculateFont(vcl::RenderContext& rRenderContext);
+    void            RecalculateFont(vcl::RenderContext& rRenderContext);
 
     SVX_DLLPUBLIC void      SelectCharacter( sal_UCS4 cNew );
-    virtual sal_UCS4        GetSelectCharacter() const;
-    virtual sal_UCS4        GetCharFromIndex(int index) const;
+    SVX_DLLPUBLIC sal_UCS4        GetSelectCharacter() const;
+    sal_UCS4        GetCharFromIndex(int index) const;
     void                    createContextMenu(const Point& rPosition);
 
     void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { maDoubleClkHdl = rLink; }
@@ -81,11 +81,11 @@ public:
     void            loadFavCharacterList(); //loads both Fav char and Fav char font list
     void            updateFavCharacterList(const OUString& rChar, const OUString& rFont);
 
-    virtual svx::SvxShowCharSetItem*    ImplGetItem( int _nPos );
+    svx::SvxShowCharSetItem*    ImplGetItem( int _nPos );
     int                         FirstInView() const;
-    virtual int                         LastInView() const;
+    int                         LastInView() const;
     int                         PixelToMapIndex( const Point&) const;
-    virtual void                        SelectIndex( int index, bool bFocus = false );
+    void                        SelectIndex( int index, bool bFocus = false );
     void                        OutputIndex( int index );
     void                        DeSelect();
     static void                 CopyToClipboard(const OUString& str);
@@ -94,7 +94,7 @@ public:
     static sal_uInt16           GetRowPos(sal_uInt16 _nPos);
     static sal_uInt16           GetColumnPos(sal_uInt16 _nPos);
 
-    virtual sal_Int32                   getMaxCharCount() const;
+    sal_Int32                   getMaxCharCount() const;
 
     virtual void Show() override { mxScrollArea->show(); }
     virtual void Hide() override { mxScrollArea->hide(); }
