@@ -63,7 +63,7 @@ inline OLColors GetOLColors()
         case OLTheme::Light:
             return { Color(0xFA, 0xFA, 0xFA),   // bg
                      Color(0xF0, 0xF1, 0xF3),   // surface
-                     Color(0xE0, 0xE0, 0xE0),   // border
+                     Color(0xD0, 0xD0, 0xD0),   // border — darker for ruler contrast
                      Color(0x1A, 0x1A, 0x1A),   // text
                      Color(0x8B, 0x8B, 0x8B) };  // subtext
         case OLTheme::Dark:

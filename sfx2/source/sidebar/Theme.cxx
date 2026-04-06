@@ -134,7 +134,10 @@ void Theme::HandleDataChange()
             aStyle.SetTabRolloverTextColor(aText);
             aStyle.SetTabHighlightTextColor(aText);
             aStyle.SetFieldTextColor(aText);
-            aStyle.SetWorkspaceColor(aSurface);
+            aStyle.SetWorkspaceColor(olc.surface);
+            aStyle.SetFieldColor(olc.surface);
+            aStyle.SetWindowColor(aBg);
+            aStyle.SetListBoxWindowBackgroundColor(olc.surface);
 
             aAllSettings.SetStyleSettings(aStyle);
             Application::SetSettings(aAllSettings);

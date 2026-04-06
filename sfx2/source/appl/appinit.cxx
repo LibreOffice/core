@@ -246,13 +246,19 @@ void SfxApplication::Initialize_Impl()
             aStyle.SetActiveTextColor(aText);
             aStyle.SetActiveBorderColor(aBorder);
 
-            // Window / tab / field text — for "Home" button and ruler
+            // Window / tab / field text
             aStyle.SetWindowTextColor(aText);
             aStyle.SetTabTextColor(aText);
             aStyle.SetTabRolloverTextColor(aText);
             aStyle.SetTabHighlightTextColor(aText);
             aStyle.SetFieldTextColor(aText);
             aStyle.SetWorkspaceColor(aSurface);
+
+            // Sidebar input fields — dark bg so they match the theme
+            // Document canvas uses page color (always white), not these
+            aStyle.SetFieldColor(aSurface);
+            aStyle.SetWindowColor(aBg);
+            aStyle.SetListBoxWindowBackgroundColor(aSurface);
 
             aAllSettings.SetStyleSettings(aStyle);
             Application::SetSettings(aAllSettings);

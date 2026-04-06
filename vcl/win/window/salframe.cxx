@@ -315,6 +315,17 @@ static void UpdateDarkMode(HWND hWnd)
         return;
 
     DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &bDarkMode, sizeof(bDarkMode));
+
+    // OfficeLabs: set custom title bar color per theme (Windows 11 22000+)
+    // DWMWA_CAPTION_COLOR = 35, takes COLORREF (0x00BBGGRR)
+    COLORREF captionColor;
+    if (olTheme == "midnight-blue")
+        captionColor = 0x002C2221;  // #21222C in BGR
+    else if (olTheme == "dark")
+        captionColor = 0x001A1A1A;  // #1A1A1A
+    else
+        captionColor = 0x00D0D0D0;  // #D0D0D0 grey for light
+    DwmSetWindowAttribute(hWnd, 35 /*DWMWA_CAPTION_COLOR*/, &captionColor, sizeof(captionColor));
 }
 
 static void UpdateAutoAccel()
