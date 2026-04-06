@@ -18,6 +18,7 @@
  */
 
 #include <sidebar/DeckTitleBar.hxx>
+#include <sidebar/OfficelabsTheme.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
 #include <cstdlib>
@@ -55,7 +56,7 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/) override
     {
-        rRenderContext.SetBackground(Color(0x28, 0x2A, 0x36));
+        rRenderContext.SetBackground(GetOLColors().bg);
         rRenderContext.Erase();
         rRenderContext.DrawBitmap(Point(0, 0), maGrip);
     }
@@ -74,7 +75,7 @@ DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
     , mbIsCloserVisible(false)
 {
     mxLabel->set_label(rsTitle);
-    mxLabel->set_background(Color(0x28, 0x2A, 0x36));
+    mxLabel->set_background(GetOLColors().bg);
     mxGripWidget->SetPointer(PointerStyle::Move);
 
     if (maCloserAction)
@@ -132,7 +133,7 @@ void DeckTitleBar::HandleToolBoxItemClick()
 void DeckTitleBar::DataChanged()
 {
     mxToolBox->set_item_icon_name(u"button"_ustr, u"sfx2/res/closedoc.png"_ustr);
-    mxLabel->set_background(Color(0x28, 0x2A, 0x36));
+    mxLabel->set_background(GetOLColors().bg);
     TitleBar::DataChanged();
 }
 

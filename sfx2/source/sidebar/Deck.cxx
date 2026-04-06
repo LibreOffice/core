@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/sidebar/Deck.hxx>
+#include <sidebar/OfficelabsTheme.hxx>
 #include <sidebar/DeckDescriptor.hxx>
 #include <sidebar/DeckLayouter.hxx>
 #include <sidebar/DeckTitleBar.hxx>

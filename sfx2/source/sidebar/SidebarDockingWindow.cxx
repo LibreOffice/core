@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
+#include <sidebar/OfficelabsTheme.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sidebar/PanelDescriptor.hxx>
@@ -49,7 +50,7 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
 {
     // OfficeLabs: dark background on the sidebar root — shows through
     // all transparent InterimItemWindow children (Deck, TabBar).
-    SetBackground(Wallpaper(Color(0x28, 0x2A, 0x36)));
+    SetBackground(Wallpaper(GetOLColors().bg));
 
     // Get the XFrame from the bindings.
     if (pSfxBindings==nullptr || pSfxBindings->GetDispatcher()==nullptr)

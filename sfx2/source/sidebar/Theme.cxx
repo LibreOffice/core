@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/sidebar/Theme.hxx>
+#include <sidebar/OfficelabsTheme.hxx>
 #include <sfx2/app.hxx>
 #include <string>
 
@@ -96,11 +97,12 @@ void Theme::HandleDataChange()
         {
             s_bApplying = true;
 
-            const Color aBg    (0x28, 0x2A, 0x36);
-            const Color aSurface(0x34, 0x37, 0x47);
-            const Color aBorder (0x44, 0x47, 0x5A);
-            const Color aText  (0xF8, 0xF8, 0xF2);
-            const Color aSubtext(0x62, 0x72, 0xA4);
+            auto olc = GetOLColors();
+            const Color aBg      = olc.bg;
+            const Color aSurface = olc.surface;
+            const Color aBorder  = olc.border;
+            const Color aText    = olc.text;
+            const Color aSubtext = olc.subtext;
 
             AllSettings aAllSettings(Application::GetSettings());
             StyleSettings aStyle(aAllSettings.GetStyleSettings());

@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/sidebar/TabBar.hxx>
+#include <sidebar/OfficelabsTheme.hxx>
 #include <sidebar/DeckDescriptor.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sidebar/Tools.hxx>
@@ -261,7 +262,7 @@ TabBar::Item::Item(TabBar& rTabBar)
     , mxButton(mxBuilder->weld_toolbar(u"button"_ustr))
     , mbIsHidden(false)
 {
-    mxButton->set_background(Color(0x28, 0x2A, 0x36));
+    mxButton->set_background(GetOLColors().bg);
 }
 
 TabBar::Item::~Item()
