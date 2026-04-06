@@ -137,12 +137,12 @@ ScPositionHelper::ScPositionHelper(const ScDocument& rDoc, bool bColumn)
 void ScPositionHelper::insert(index_type nIndex, tools::Long nPos)
 {
     if (nIndex < 0) return;
-    SAL_INFO("sc.lok.poshelper", "ScPositionHelper::insert: nIndex: "
+    SAL_INFO("sc.kit.poshelper", "ScPositionHelper::insert: nIndex: "
             << nIndex << ", nPos: " << nPos << ", size: " << mData.size());
     value_type aValue = std::make_pair(nIndex, nPos);
     mData.erase(aValue);
     mData.insert(aValue);
-    SAL_INFO("sc.lok.poshelper",
+    SAL_INFO("sc.kit.poshelper",
             "ScPositionHelper::insert: after insert: size: " << mData.size());
 }
 
@@ -150,18 +150,18 @@ void ScPositionHelper::removeByIndex(index_type nIndex)
 {
     if (nIndex < 0)
         return;
-    SAL_INFO("sc.lok.poshelper", "ScPositionHelper::remove: nIndex: " << nIndex
+    SAL_INFO("sc.kit.poshelper", "ScPositionHelper::remove: nIndex: " << nIndex
             << ", size: " << mData.size());
     auto it = mData.find(std::make_pair(nIndex, 0));
     if (it == mData.end()) return;
     mData.erase(it);
-    SAL_INFO("sc.lok.poshelper",
+    SAL_INFO("sc.kit.poshelper",
             "ScPositionHelper::remove: after erase: size: " << mData.size());
 }
 
 void ScPositionHelper::invalidateByIndex(index_type nIndex)
 {
-    SAL_INFO("sc.lok.poshelper", "ScPositionHelper::invalidate: nIndex: " << nIndex);
+    SAL_INFO("sc.kit.poshelper", "ScPositionHelper::invalidate: nIndex: " << nIndex);
     if (nIndex < 0)
     {
         mData.clear();
@@ -176,7 +176,7 @@ void ScPositionHelper::invalidateByIndex(index_type nIndex)
 
 void ScPositionHelper::invalidateByPosition(tools::Long nPos)
 {
-    SAL_INFO("sc.lok.poshelper", "ScPositionHelper::invalidate: nPos: " << nPos);
+    SAL_INFO("sc.kit.poshelper", "ScPositionHelper::invalidate: nPos: " << nPos);
     if (nPos <= 0)
     {
         mData.clear();
@@ -192,7 +192,7 @@ void ScPositionHelper::invalidateByPosition(tools::Long nPos)
 const ScPositionHelper::value_type&
 ScPositionHelper::getNearestByIndex(index_type nIndex) const
 {
-    SAL_INFO("sc.lok.poshelper",
+    SAL_INFO("sc.kit.poshelper",
             "ScPositionHelper::getNearest: nIndex: " << nIndex << ", size: " << mData.size());
     auto posUB = mData.upper_bound(std::make_pair(nIndex, 0));
     if (posUB == mData.begin())
@@ -222,7 +222,7 @@ ScPositionHelper::getNearestByIndex(index_type nIndex) const
 const ScPositionHelper::value_type&
 ScPositionHelper::getNearestByPosition(tools::Long nPos) const
 {
-    SAL_INFO("sc.lok.poshelper",
+    SAL_INFO("sc.kit.poshelper",
             "ScPositionHelper::getNearest: nPos: " << nPos << ", size: " << mData.size());
     auto posUB = mData.upper_bound(std::make_pair(null, nPos));
 
@@ -348,14 +348,14 @@ void ScBoundsProvider::Compute(
             value_type aFirstNearest, value_type aSecondNearest,
             tools::Long nFirstBound, tools::Long nSecondBound)
 {
-    SAL_INFO("sc.lok.header", "BoundsProvider: nFirstBound: " << nFirstBound
+    SAL_INFO("sc.kit.header", "BoundsProvider: nFirstBound: " << nFirstBound
             << ", nSecondBound: " << nSecondBound);
 
     tools::Long nFirstDiff = aFirstNearest.second - nFirstBound;
     tools::Long nSecondDiff = aSecondNearest.second - nSecondBound;
-    SAL_INFO("sc.lok.header", "BoundsProvider: rTopNearest: index: " << aFirstNearest.first
+    SAL_INFO("sc.kit.header", "BoundsProvider: rTopNearest: index: " << aFirstNearest.first
             << ", pos: " << aFirstNearest.second << ", diff: " << nFirstDiff);
-    SAL_INFO("sc.lok.header", "BoundsProvider: rBottomNearest: index: " << aSecondNearest.first
+    SAL_INFO("sc.kit.header", "BoundsProvider: rBottomNearest: index: " << aSecondNearest.first
             << ", pos: " << aSecondNearest.second << ", diff: " << nSecondDiff);
 
     bool bReverse = (std::abs(nFirstDiff) >= std::abs(nSecondDiff));
@@ -369,12 +369,12 @@ void ScBoundsProvider::Compute(
 
     index_type nNearestIndex = aFirstNearest.first;
     tools::Long nNearestPosition = aFirstNearest.second;
-    SAL_INFO("sc.lok.header", "BoundsProvider: nearest to first bound:  nNearestIndex: "
+    SAL_INFO("sc.kit.header", "BoundsProvider: nearest to first bound:  nNearestIndex: "
             << nNearestIndex << ", nNearestPosition: " << nNearestPosition);
 
     GetIndexAndPos(nNearestIndex, nNearestPosition, nFirstBound,
                    nFirstIndex, nFirstPositionPx, !bReverse, nFirstDiff);
-    SAL_INFO("sc.lok.header", "BoundsProvider: nFirstIndex: " << nFirstIndex
+    SAL_INFO("sc.kit.header", "BoundsProvider: nFirstIndex: " << nFirstIndex
             << ", nFirstPositionPx: " << nFirstPositionPx);
 
     if (std::abs(nSecondDiff) < std::abs(nSecondBound - nFirstPositionPx))
@@ -388,13 +388,13 @@ void ScBoundsProvider::Compute(
         nNearestIndex = nFirstIndex;
         nSecondDiff = !bReverse ? -1 : 1;
     }
-    SAL_INFO("sc.lok.header", "BoundsProvider: nearest to second bound: nNearestIndex: "
+    SAL_INFO("sc.kit.header", "BoundsProvider: nearest to second bound: nNearestIndex: "
             << nNearestIndex << ", nNearestPosition: " << nNearestPosition
             << ", diff: " << nSecondDiff);
 
     GetIndexAndPos(nNearestIndex, nNearestPosition, nSecondBound,
                    nSecondIndex, nSecondPositionPx, bReverse, nSecondDiff);
-    SAL_INFO("sc.lok.header", "BoundsProvider: nSecondIndex: " << nSecondIndex
+    SAL_INFO("sc.kit.header", "BoundsProvider: nSecondIndex: " << nSecondIndex
             << ", nSecondPositionPx: " << nSecondPositionPx);
 
     if (bReverse)
@@ -415,7 +415,7 @@ void ScBoundsProvider::EnlargeStartBy(tools::Long nOffset)
         nFirstPositionPx -= nSizePx;
     }
     nFirstIndex = nNewFirstIndex;
-    SAL_INFO("sc.lok.header", "BoundsProvider: added offset: nFirstIndex: " << nFirstIndex
+    SAL_INFO("sc.kit.header", "BoundsProvider: added offset: nFirstIndex: " << nFirstIndex
             << ", nFirstPositionPx: " << nFirstPositionPx);
 }
 
@@ -428,7 +428,7 @@ void ScBoundsProvider::EnlargeEndBy(tools::Long nOffset)
         nSecondPositionPx += nSizePx;
     }
     nSecondIndex = nNewSecondIndex;
-    SAL_INFO("sc.lok.header", "BoundsProvider: added offset: nSecondIndex: " << nSecondIndex
+    SAL_INFO("sc.kit.header", "BoundsProvider: added offset: nSecondIndex: " << nSecondIndex
             << ", nSecondPositionPx: " << nSecondPositionPx);
 }
 
@@ -1534,7 +1534,7 @@ void ScViewData::SetMaxTiledCol( SCCOL nNewMaxCol )
 
     tools::Long nTotalPixels = GetKitWidthHelper().computePosition(nNewMaxCol, GetColWidthPx);
 
-    SAL_INFO("sc.lok.docsize", "ScViewData::SetMaxTiledCol: nNewMaxCol: "
+    SAL_INFO("sc.kit.docsize", "ScViewData::SetMaxTiledCol: nNewMaxCol: "
             << nNewMaxCol << ", nTotalPixels: " << nTotalPixels);
 
     GetKitWidthHelper().removeByIndex(pThisTab->nMaxTiledCol);
@@ -1559,7 +1559,7 @@ void ScViewData::SetMaxTiledRow( SCROW nNewMaxRow )
 
     tools::Long nTotalPixels = GetKitHeightHelper().computePosition(nNewMaxRow, GetRowHeightPx);
 
-    SAL_INFO("sc.lok.docsize", "ScViewData::SetMaxTiledRow: nNewMaxRow: "
+    SAL_INFO("sc.kit.docsize", "ScViewData::SetMaxTiledRow: nNewMaxRow: "
             << nNewMaxRow << ", nTotalPixels: " << nTotalPixels);
 
     GetKitHeightHelper().removeByIndex(pThisTab->nMaxTiledRow);

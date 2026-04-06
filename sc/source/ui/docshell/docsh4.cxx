@@ -251,7 +251,7 @@ public:
 void lcl_setKitLocale(ScTabViewShell& rViewShell, const LanguageType eLang)
 {
     OUString aLang = LanguageTag(eLang).getBcp47();
-    /// This is only used for building the lok calendar as of date.
+    /// This is only used for building the COKit calendar as of date.
     /// Don't change the view language as it affects the js-dialog language as well.
     KitHelper::setViewLocale(KitHelper::getView(rViewShell), aLang);
 }
@@ -274,7 +274,7 @@ void ScDocShell::SetLanguage(LanguageType eLatin, LanguageType eCjk, LanguageTyp
         }
     }
 
-    // Update the document language even in lok mode as
+    // Update the document language even in COKit mode as
     // the spell-check is still based on document language.
     GetDocument().SetLanguage(eLatin, eCjk, eCtl);
 }

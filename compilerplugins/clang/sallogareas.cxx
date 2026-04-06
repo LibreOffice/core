@@ -168,7 +168,7 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
             return (area == p1 && firstSeenLogArea == p2) || (area == p2 && firstSeenLogArea == p1);
         };
         // these are "cross-module" log areas
-        if (area == "i18n" || area == "lok" || area == "lok.tiledrendering")
+        if (area == "i18n" || area == "kit" || area == "kit.tiledrendering")
             ;
         // these appear to be cross-file log areas
         else if (  area == "chart2"

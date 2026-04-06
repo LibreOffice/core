@@ -163,10 +163,10 @@ public:
     template<typename ViewShellType, typename FunctionType>
     static void forEachOtherView(ViewShellType* pThisViewShell, FunctionType f);
 
-    /// Invoke the LOK callback of all other views showing the same document as pThisView, with a payload of rKey-rPayload.
+    /// Invoke the Kit callback of all other views showing the same document as pThisView, with a payload of rKey-rPayload.
     static void notifyOtherViews(const SfxViewShell* pThisView, int nType, std::string_view rKey,
                                  const OString& rPayload);
-    /// Invoke the LOK callback of all views except pThisView, with a JSON payload created from the given property tree.
+    /// Invoke the Kit callback of all views except pThisView, with a JSON payload created from the given property tree.
     static void notifyOtherViews(const SfxViewShell* pThisView, int nType,
                                  const boost::property_tree::ptree& rTree);
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
@@ -250,7 +250,7 @@ public:
 
     static VclPtr<vcl::Window> getInPlaceDocWindow(SfxViewShell* pViewShell);
 
-    /// Sends Network Access error to LOK
+    /// Sends Network Access error to Kit
     static void sendNetworkAccessError(std::string_view rAction);
 
     static void notifyLog(const std::ostringstream& stream);
@@ -271,7 +271,7 @@ public:
     static void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand);
     /// Parses key-value parameters of rCommand.
     static std::map<OUString, OUString> parseCommandParameters(std::u16string_view rCommand);
-    /// Registers function pointers in comphelper/ to set/get of the current LOK view.
+    /// Registers function pointers in comphelper/ to set/get of the current COKit view.
     static void registerViewCallbacks();
 
     static void dispatchUnoCommand(const boost::property_tree::ptree& tree);
@@ -295,7 +295,7 @@ void KitHelper::forEachOtherView(ViewShellType* pThisViewShell, FunctionType f)
     }
 }
 
-/// If LOK is active, switch to the language/locale of the provided shell and back on delete.
+/// If Kit is active, switch to the language/locale of the provided shell and back on delete.
 class SfxKitLanguageGuard
 {
     bool m_bSetLanguage;

@@ -836,7 +836,7 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
     {
         bool bLOKActive = comphelper::COKit::isActive();
 
-        // Disable error dialog box when about to save in lok mode as
+        // Disable error dialog box when about to save in Kit mode as
         // this ultimately invokes SvpSalInstance::DoYield() when we want
         // to save immediately without committing any erroneous input in possibly
         // a cell with validation rules. After save is complete the user

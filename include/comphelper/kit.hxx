@@ -132,19 +132,19 @@ COMPHELPER_DLLPUBLIC bool isViewIdForVisCursorInvalidation();
 /// Set whether clients want viewId in visible cursor invalidation payload.
 COMPHELPER_DLLPUBLIC void setViewIdForVisCursorInvalidation(bool bViewIdForVisCursorInvalidation);
 
-/// Update the current LOK's locale.
+/// Update the current Kit's locale.
 COMPHELPER_DLLPUBLIC void setLocale(const LanguageTag& languageTag);
-/// Get the current LOK's locale.
+/// Get the current Kit's locale.
 COMPHELPER_DLLPUBLIC const LanguageTag& getLocale();
 
-/// Update the current LOK's language.
+/// Update the current Kit's language.
 COMPHELPER_DLLPUBLIC void setLanguageTag(const LanguageTag& languageTag);
-/// Get the current LOK's language.
+/// Get the current Kit's language.
 COMPHELPER_DLLPUBLIC const LanguageTag& getLanguageTag();
-/// If the language name should be used for this LOK instance.
+/// If the language name should be used for this Kit instance.
 COMPHELPER_DLLPUBLIC bool isAllowlistedLanguage(const OUString& lang);
 
-/// Update the current LOK's timezone.
+/// Update the current Kit's timezone.
 COMPHELPER_DLLPUBLIC void setTimezone(bool isSet, std::u16string_view rTimezone);
 
 // Status indicator handling. Even if in theory there could be several status indicators active at
@@ -165,7 +165,7 @@ COMPHELPER_DLLPUBLIC void setFileSaveDialogCallback(
     const std::function<void(const char*, char*, size_t)>& pFileSaveDialogCallback);
 COMPHELPER_DLLPUBLIC bool fileSaveDialog(const OUString& rSuggested, OUString& rResult);
 
-// These allow setting callbacks, so that set/get of a LOK view is possible even in code that is
+// These allow setting callbacks, so that set/get of a view is possible even in code that is
 // below sfx2.
 COMPHELPER_DLLPUBLIC void setViewSetter(const std::function<void(int)>& pViewSetter);
 COMPHELPER_DLLPUBLIC void setView(int nView);

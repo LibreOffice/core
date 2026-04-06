@@ -280,7 +280,7 @@ static std::weak_ptr< COKitDocumentClass > gDocumentClass;
 
 static void SetLastExceptionMsg(const OUString& s = OUString())
 {
-    SAL_WARN_IF(!s.isEmpty(), "lok", "lok exception '" + s + "'");
+    SAL_WARN_IF(!s.isEmpty(), "kit", "kit exception '" + s + "'");
     if (gImpl)
         gImpl->maLastExceptionMsg = s;
 }
@@ -510,7 +510,7 @@ static void extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
             }
             catch(...)
             {
-                SAL_WARN("lok", "extractLinks: Exception");
+                SAL_WARN("kit", "extractLinks: Exception");
             }
         }
     }
@@ -1073,7 +1073,7 @@ css::uno::Sequence<css::lang::Locale> setLanguageToolConfig()
         }
         catch(uno::Exception const& rException)
         {
-            SAL_WARN("lok", "Failed to set LanguageTool API settings: " << rException.Message);
+            SAL_WARN("kit", "Failed to set LanguageTool API settings: " << rException.Message);
         }
     }
 
@@ -1384,7 +1384,7 @@ rtl::Reference<KitClipboard> forceSetClipboardForCurrentView(COKitDocument *pThi
         return xClip;
     }
 
-    SAL_INFO("lok", "Set to clipboard for view " << xClip.get());
+    SAL_INFO("kit", "Set to clipboard for view " << xClip.get());
     // FIXME: using a hammer here - should not be necessary if all tests used createView.
     pDoc->setClipboard(uno::Reference<datatransfer::clipboard::XClipboard>(xClip->getXI(), UNO_QUERY));
 
@@ -1610,7 +1610,7 @@ LibLODocument_Impl::~LibLODocument_Impl()
     }
     catch (const css::lang::DisposedException&)
     {
-        TOOLS_WARN_EXCEPTION("lok", "failed to dispose document");
+        TOOLS_WARN_EXCEPTION("kit", "failed to dispose document");
     }
 }
 
@@ -1779,7 +1779,7 @@ void CallbackFlushHandler::viewUpdatedCallback(int nType)
 {
     assert(isUpdatedType( nType ));
     std::unique_lock<std::recursive_mutex> lock(m_mutex);
-    SAL_INFO("lok", "Updated: [" << nType << "]");
+    SAL_INFO("kit", "Updated: [" << nType << "]");
     setUpdatedType(nType, true);
 }
 
@@ -1787,7 +1787,7 @@ void CallbackFlushHandler::viewUpdatedCallbackPerViewId(int nType, int nViewId, 
 {
     assert(isUpdatedTypePerViewId( nType ));
     std::unique_lock<std::recursive_mutex> lock(m_mutex);
-    SAL_INFO("lok", "Updated: [" << nType << "]");
+    SAL_INFO("kit", "Updated: [" << nType << "]");
     setUpdatedTypePerViewId(nType, nViewId, nSourceViewId, true);
 }
 
@@ -1824,7 +1824,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
 {
     comphelper::ProfileZone aZone("CallbackFlushHandler::queue");
 
-    SAL_INFO("lok", "Queue: [" << type << "]: [" << aCallbackData.getPayload() << "] on " << m_queue1.size() << " entries.");
+    SAL_INFO("kit", "Queue: [" << type << "]: [" << aCallbackData.getPayload() << "] on " << m_queue1.size() << " entries.");
 
     if (comphelper::COKit::isForkedChild())
     {
@@ -1842,7 +1842,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         case KIT_CALLBACK_MOUSE_POINTER:
         case KIT_CALLBACK_INVALIDATE_HEADER:
         case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
-            SAL_INFO("lok", "Elide event in background save mode");
+            SAL_INFO("kit", "Elide event in background save mode");
             return;
         default:
             break;
@@ -1885,7 +1885,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             type != KIT_CALLBACK_MEDIA_SHAPE &&
             type != KIT_CALLBACK_REFERENCE_MARKS)
         {
-            SAL_INFO("lok", "Skipping while painting [" << type << "]: [" << aCallbackData.getPayload() << "].");
+            SAL_INFO("kit", "Skipping while painting [" << type << "]: [" << aCallbackData.getPayload() << "].");
             return;
         }
 
@@ -1904,7 +1904,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         // issuing it, instead of the absolute one that we expect.
         // This is temporary however, and, once the control is created and initialized
         // correctly, it eventually emits the correct absolute coordinates.
-        SAL_INFO("lok", "Skipping invalid event [" << type << "]: [" << aCallbackData.getPayload() << "].");
+        SAL_INFO("kit", "Skipping invalid event [" << type << "]: [" << aCallbackData.getPayload() << "].");
         return;
     }
 
@@ -1915,12 +1915,12 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     // Reset the updated flag if we get a normal message.
     if(isUpdatedType(type))
     {
-        SAL_INFO("lok", "Received event with updated type [" << type << "] as normal callback");
+        SAL_INFO("kit", "Received event with updated type [" << type << "] as normal callback");
         resetUpdatedType(type);
     }
     if(isUpdatedTypePerViewId(type))
     {
-        SAL_INFO("lok", "Received event with updated type [" << type << "] as normal callback");
+        SAL_INFO("kit", "Received event with updated type [" << type << "] as normal callback");
         resetUpdatedTypePerViewId(type, aCallbackData.getViewId());
     }
 
@@ -1963,7 +1963,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             auto pos2 = toQueue2(pos);
             if (pos != m_queue1.rend() && pos2->getPayload() == aCallbackData.getPayload())
             {
-                SAL_INFO("lok", "Skipping queue duplicate [" << type << + "]: [" << aCallbackData.getPayload() << "].");
+                SAL_INFO("kit", "Skipping queue duplicate [" << type << + "]: [" << aCallbackData.getPayload() << "].");
                 return;
             }
         }
@@ -1996,7 +1996,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case KIT_CALLBACK_INVALIDATE_TILES:
             case KIT_CALLBACK_TOOLTIP:
                 if (removeAll(type))
-                    SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
+                    SAL_INFO("kit", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
                 break;
         }
     }
@@ -2027,7 +2027,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case KIT_CALLBACK_SHAPE_INNER_TEXT:
             {
                 if (removeAll(type))
-                    SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
+                    SAL_INFO("kit", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
             }
             break;
 
@@ -2104,7 +2104,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     assert(aCallbackData.validate() && "Cached callback payload object and string mismatch!");
     m_queue1.emplace_back(type);
     m_queue2.emplace_back(aCallbackData);
-    SAL_INFO("lok", "Queued #" << (m_queue1.size() - 1) <<
+    SAL_INFO("kit", "Queued #" << (m_queue1.size() - 1) <<
              " [" << type << "]: [" << aCallbackData.getPayload() << "] to have " << m_queue1.size() << " entries.");
 
 #ifdef DBG_UTIL
@@ -2120,7 +2120,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         auto it2 = m_queue2.begin();
         for (; it1 != m_queue1.end(); ++it1, ++it2)
             oss << i++ << ": [" << *it1 << "] [" << it2->getPayload() << "].\n";
-        SAL_INFO("lok", "Current Queue: " << oss.str());
+        SAL_INFO("kit", "Current Queue: " << oss.str());
         assert(
             std::all_of(
                 m_queue2.begin(), m_queue2.end(),
@@ -2137,7 +2137,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     RectangleAndPart rcNew = aCallbackData.getRectangleAndPart();
     if (rcNew.isEmpty())
     {
-        SAL_INFO("lok", "Skipping invalid event [" << type << "]: [" << aCallbackData.getPayload() << "].");
+        SAL_INFO("kit", "Skipping invalid event [" << type << "]: [" << aCallbackData.getPayload() << "].");
         return true;
     }
 
@@ -2152,7 +2152,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
         if (rcOld.isInfinite() && (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart) &&
             (rcOld.m_nMode == rcNew.m_nMode))
         {
-            SAL_INFO("lok", "Skipping queue [" << type << "]: [" << aCallbackData.getPayload()
+            SAL_INFO("kit", "Skipping queue [" << type << "]: [" << aCallbackData.getPayload()
                                                << "] since all tiles need to be invalidated.");
             return true;
         }
@@ -2162,7 +2162,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
             // If fully overlapping.
             if (rcOld.m_aRectangle.Contains(rcNew.m_aRectangle))
             {
-                SAL_INFO("lok", "Skipping queue [" << type << "]: [" << aCallbackData.getPayload()
+                SAL_INFO("kit", "Skipping queue [" << type << "]: [" << aCallbackData.getPayload()
                                                    << "] since overlaps existing all-parts.");
                 return true;
             }
@@ -2171,7 +2171,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
 
     if (rcNew.isInfinite())
     {
-        SAL_INFO("lok", "Have Empty [" << type << "]: [" << aCallbackData.getPayload()
+        SAL_INFO("kit", "Have Empty [" << type << "]: [" << aCallbackData.getPayload()
                                        << "] so removing all with part " << rcNew.m_nPart << ".");
         removeAll(KIT_CALLBACK_INVALIDATE_TILES, [&rcNew](const CallbackData& elemData) {
             // Remove exiting if new is all-encompassing, or if of the same part.
@@ -2183,13 +2183,13 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     {
         const auto rcOrig = rcNew;
 
-        SAL_INFO("lok", "Have [" << type << "]: [" << aCallbackData.getPayload() << "] so merging overlapping.");
+        SAL_INFO("kit", "Have [" << type << "]: [" << aCallbackData.getPayload() << "] so merging overlapping.");
         removeAll(KIT_CALLBACK_INVALIDATE_TILES,[&rcNew](const CallbackData& elemData) {
             const RectangleAndPart& rcOld = elemData.getRectangleAndPart();
             if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 &&
                 (rcOld.m_nPart != rcNew.m_nPart || rcOld.m_nMode != rcNew.m_nMode))
             {
-                SAL_INFO("lok", "Nothing to merge between new: "
+                SAL_INFO("kit", "Nothing to merge between new: "
                                     << rcNew.toString() << ", and old: " << rcOld.toString());
                 return false;
             }
@@ -2197,11 +2197,11 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
             if (rcNew.m_nPart == -1)
             {
                 // Don't merge unless fully overlapped.
-                SAL_INFO("lok", "New " << rcNew.toString() << " has " << rcOld.toString()
+                SAL_INFO("kit", "New " << rcNew.toString() << " has " << rcOld.toString()
                                        << "?");
                 if (rcNew.m_aRectangle.Contains(rcOld.m_aRectangle) && rcOld.m_nMode == rcNew.m_nMode)
                 {
-                    SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old "
+                    SAL_INFO("kit", "New " << rcNew.toString() << " engulfs old "
                                            << rcOld.toString() << ".");
                     return true;
                 }
@@ -2209,11 +2209,11 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
             else if (rcOld.m_nPart == -1)
             {
                 // Don't merge unless fully overlapped.
-                SAL_INFO("lok", "Old " << rcOld.toString() << " has " << rcNew.toString()
+                SAL_INFO("kit", "Old " << rcOld.toString() << " has " << rcNew.toString()
                                        << "?");
                 if (rcOld.m_aRectangle.Contains(rcNew.m_aRectangle) && rcOld.m_nMode == rcNew.m_nMode)
                 {
-                    SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old "
+                    SAL_INFO("kit", "New " << rcNew.toString() << " engulfs old "
                                            << rcOld.toString() << ".");
                     return true;
                 }
@@ -2223,13 +2223,13 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
                 const tools::Rectangle rcOverlap
                     = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
                 const bool bOverlap = !rcOverlap.IsEmpty() && rcOld.m_nMode == rcNew.m_nMode;
-                SAL_INFO("lok", "Merging " << rcNew.toString() << " & " << rcOld.toString()
+                SAL_INFO("kit", "Merging " << rcNew.toString() << " & " << rcOld.toString()
                                            << " => " << rcOverlap.toString()
                                            << " Overlap: " << bOverlap);
                 if (bOverlap)
                 {
                     rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
-                    SAL_INFO("lok", "Merged: " << rcNew.toString());
+                    SAL_INFO("kit", "Merged: " << rcNew.toString());
                     return true;
                 }
             }
@@ -2240,11 +2240,11 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
 
         if (rcNew.m_aRectangle != rcOrig.m_aRectangle)
         {
-            SAL_INFO("lok", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
+            SAL_INFO("kit", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
             if (rcNew.m_aRectangle.GetWidth() < rcOrig.m_aRectangle.GetWidth()
                 || rcNew.m_aRectangle.GetHeight() < rcOrig.m_aRectangle.GetHeight())
             {
-                SAL_WARN("lok", "Error: merged rect smaller.");
+                SAL_WARN("kit", "Error: merged rect smaller.");
             }
         }
     }
@@ -2302,7 +2302,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
             // we found a invalidate-all window callback
             if (invAllExist)
             {
-                SAL_INFO("lok.dialog", "Skipping queue ["
+                SAL_INFO("kit.dialog", "Skipping queue ["
                                            << type << "]: [" << payload
                                            << "] since whole window needs to be invalidated.");
                 return true;
@@ -2332,7 +2332,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
                     {
                         if (aNewRect == aOldRect)
                         {
-                            SAL_INFO("lok.dialog", "Duplicate rect [" << aNewRect.toString()
+                            SAL_INFO("kit.dialog", "Duplicate rect [" << aNewRect.toString()
                                                                       << "]. Skipping new.");
                             // We have a rectangle in the queue already that makes the current Callback useless.
                             currentIsRedundant = true;
@@ -2341,7 +2341,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
                         // new one engulfs the old one?
                         else if (aNewRect.Contains(aOldRect))
                         {
-                            SAL_INFO("lok.dialog",
+                            SAL_INFO("kit.dialog",
                                      "New rect [" << aNewRect.toString() << "] engulfs old ["
                                                   << aOldRect.toString() << "]. Replacing old.");
                             return true;
@@ -2349,7 +2349,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
                         // old one engulfs the new one?
                         else if (aOldRect.Contains(aNewRect))
                         {
-                            SAL_INFO("lok.dialog",
+                            SAL_INFO("kit.dialog",
                                      "Old rect [" << aOldRect.toString() << "] engulfs new ["
                                                   << aNewRect.toString() << "]. Skipping new.");
                             // We have a rectangle in the queue already that makes the current Callback useless.
@@ -2361,7 +2361,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
                             // Overlapping rects.
                             const tools::Rectangle aPreMergeRect = aNewRect;
                             aNewRect.Union(aOldRect);
-                            SAL_INFO("lok.dialog", "Merging rects ["
+                            SAL_INFO("kit.dialog", "Merging rects ["
                                                        << aPreMergeRect.toString() << "] & ["
                                                        << aOldRect.toString() << "] = ["
                                                        << aNewRect.toString()
@@ -2465,7 +2465,7 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
     else
     {
         // View removed, probably cleaning up.
-        SAL_INFO("lok", "View #" << m_viewId << " no longer found for updated events");
+        SAL_INFO("kit", "View #" << m_viewId << " no longer found for updated events");
     }
 
     for( const auto& it : updatedTypesPerViewId )
@@ -2486,7 +2486,7 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
                 }
                 if(sourceViewShell == nullptr)
                 {
-                    SAL_INFO("lok", "View #" << sourceViewId << " no longer found for updated event [" << type << "]");
+                    SAL_INFO("kit", "View #" << sourceViewId << " no longer found for updated event [" << type << "]");
                     continue; // View removed, probably cleaning up.
                 }
                 enqueueUpdatedType( type, sourceViewShell, viewId );
@@ -2508,7 +2508,7 @@ void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* vie
     CallbackData callbackData(*payload, viewId);
     m_queue1.emplace_back(type);
     m_queue2.emplace_back(callbackData);
-    SAL_INFO("lok", "Queued updated [" << type << "]: [" << callbackData.getPayload()
+    SAL_INFO("kit", "Queued updated [" << type << "]: [" << callbackData.getPayload()
         << "] to have " << m_queue1.size() << " entries.");
 }
 
@@ -2533,7 +2533,7 @@ void CallbackFlushHandler::invoke()
     // Append messages for updated types, fetch them only now.
     enqueueUpdatedTypes();
 
-    SAL_INFO("lok", "Flushing " << m_queue1.size() << " elements.");
+    SAL_INFO("kit", "Flushing " << m_queue1.size() << " elements.");
     auto it1 = m_queue1.begin();
     auto it2 = m_queue2.begin();
     for (; it1 != m_queue1.end(); ++it1, ++it2)
@@ -2542,7 +2542,7 @@ void CallbackFlushHandler::invoke()
         const auto& payload = it2->getPayload();
         const int viewId = lcl_isViewCallbackType(type) ? it2->getViewId() : -1;
 
-        SAL_INFO("lok", "processing event: [" << type << ',' << viewId << "]: [" << payload << "].");
+        SAL_INFO("kit", "processing event: [" << type << ',' << viewId << "]: [" << payload << "].");
 
         // common code-path for events on this view:
         if (viewId == -1)
@@ -2560,15 +2560,15 @@ void CallbackFlushHandler::invoke()
                     // If the value didn't change, it's safe to ignore.
                     if (stateIt->second == value)
                     {
-                        SAL_INFO("lok", "Skipping new state duplicate: [" << type << "]: [" << payload << "].");
+                        SAL_INFO("kit", "Skipping new state duplicate: [" << type << "]: [" << payload << "].");
                         continue;
                     }
-                    SAL_INFO("lok", "Replacing a state element [" << type << "]: [" << payload << "].");
+                    SAL_INFO("kit", "Replacing a state element [" << type << "]: [" << payload << "].");
                     stateIt->second = value;
                 }
                 else
                 {
-                    SAL_INFO("lok", "Inserted a new state element: [" << type << "]: [" << payload << "]");
+                    SAL_INFO("kit", "Inserted a new state element: [" << type << "]: [" << payload << "]");
                     m_lastStateChange.emplace(key, value);
                 }
             }
@@ -2580,7 +2580,7 @@ void CallbackFlushHandler::invoke()
                     // If the state didn't change, it's safe to ignore.
                     if (stateIt->second == payload)
                     {
-                        SAL_INFO("lok", "Skipping duplicate [" << type << "]: [" << payload << "].");
+                        SAL_INFO("kit", "Skipping duplicate [" << type << "]: [" << payload << "].");
                         continue;
                     }
                     stateIt->second = payload;
@@ -2599,16 +2599,16 @@ void CallbackFlushHandler::invoke()
                     // If the state didn't change, it's safe to ignore.
                     if (stateIt->second == payload)
                     {
-                        SAL_INFO("lok", "Skipping view duplicate [" << type << ',' << viewId << "]: [" << payload << "].");
+                        SAL_INFO("kit", "Skipping view duplicate [" << type << ',' << viewId << "]: [" << payload << "].");
                         continue;
                     }
 
-                    SAL_INFO("lok", "Replacing an element in view states [" << type << ',' << viewId << "]: [" << payload << "].");
+                    SAL_INFO("kit", "Replacing an element in view states [" << type << ',' << viewId << "]: [" << payload << "].");
                     stateIt->second = payload;
                 }
                 else
                 {
-                    SAL_INFO("lok", "Inserted a new element in view states: [" << type << ',' << viewId << "]: [" << payload << "]");
+                    SAL_INFO("kit", "Inserted a new element in view states: [" << type << ',' << viewId << "]: [" << payload << "]");
                     states.emplace(type, payload);
 
                 }
@@ -2872,7 +2872,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
     if (aURL.isEmpty())
     {
         pLib->maLastExceptionMsg = u"Filename to load was not provided."_ustr;
-        SAL_INFO("lok", "URL for load is empty");
+        SAL_INFO("kit", "URL for load is empty");
         return nullptr;
     }
 
@@ -2881,7 +2881,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
     if (!xContext.is())
     {
         pLib->maLastExceptionMsg = u"ComponentContext is not available"_ustr;
-        SAL_INFO("lok", "ComponentContext is not available");
+        SAL_INFO("kit", "ComponentContext is not available");
         return nullptr;
     }
 
@@ -2890,7 +2890,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
     if (!xComponentLoader.is())
     {
         pLib->maLastExceptionMsg = u"ComponentLoader is not available"_ustr;
-        SAL_INFO("lok", "ComponentLoader is not available");
+        SAL_INFO("kit", "ComponentLoader is not available");
         return nullptr;
     }
 
@@ -2916,7 +2916,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
             comphelper::COKit::setLanguageTag(LanguageTag(aLanguage));
             comphelper::COKit::setLocale(LanguageTag(aLanguage));
 
-            SAL_INFO("lok", "Set document language to " << aLanguage);
+            SAL_INFO("kit", "Set document language to " << aLanguage);
             // use with care - it sets it for the entire core, not just the
             // document
             setLanguageAndLocale(aLanguage);
@@ -3032,7 +3032,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         if (!xComponent.is())
         {
             pLib->maLastExceptionMsg = u"loadComponentFromURL returned an empty reference"_ustr;
-            SAL_INFO("lok", "Document can't be loaded - " << pLib->maLastExceptionMsg);
+            SAL_INFO("kit", "Document can't be loaded - " << pLib->maLastExceptionMsg);
             return nullptr;
         }
 
@@ -3051,12 +3051,12 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         if (aFontMappingUseData.size() > 0)
         {
-            SAL_INFO("lok.fontsubst", "================ Original substitutions:");
+            SAL_INFO("kit.fontsubst", "================ Original substitutions:");
             for (const auto &i : aFontMappingUseData)
             {
-                SAL_INFO("lok.fontsubst", i.mOriginalFont);
+                SAL_INFO("kit.fontsubst", i.mOriginalFont);
                 for (const auto &j : i.mUsedFonts)
-                    SAL_INFO("lok.fontsubst", "    " << j);
+                    SAL_INFO("kit.fontsubst", "    " << j);
             }
         }
 
@@ -3128,12 +3128,12 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         if (aFontMappingUseData.size() > 0)
         {
-            SAL_INFO("lok.fontsubst", "================ Pruned substitutions:");
+            SAL_INFO("kit.fontsubst", "================ Pruned substitutions:");
             for (const auto &i : aFontMappingUseData)
             {
-                SAL_INFO("lok.fontsubst", i.mOriginalFont);
+                SAL_INFO("kit.fontsubst", i.mOriginalFont);
                 for (const auto &j : i.mUsedFonts)
-                    SAL_INFO("lok.fontsubst", "    " << j);
+                    SAL_INFO("kit.fontsubst", "    " << j);
             }
         }
 
@@ -3142,13 +3142,13 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
             pDocument->maFontsMissing.insert(aFontMappingUseData[i].mOriginalFont);
         }
 
-        SAL_INFO("lok", "lo_documentLoadWithOptions: finished @ " << osl_getGlobalTimer());
+        SAL_INFO("kit", "lo_documentLoadWithOptions: finished @ " << osl_getGlobalTimer());
         return pDocument;
     }
     catch (const uno::Exception& exception)
     {
         pLib->maLastExceptionMsg = exception.Message;
-        TOOLS_INFO_EXCEPTION("lok", "Document can't be loaded");
+        TOOLS_INFO_EXCEPTION("kit", "Document can't be loaded");
     }
 
     return nullptr;
@@ -3167,14 +3167,14 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     if (sURL.isEmpty())
     {
         pLib->maLastExceptionMsg = u"Macro to run was not provided."_ustr;
-        SAL_INFO("lok", "Macro URL is empty");
+        SAL_INFO("kit", "Macro URL is empty");
         return false;
     }
 
     if (!sURL.startsWith("macro://"))
     {
         pLib->maLastExceptionMsg = u"This doesn't look like macro URL"_ustr;
-        SAL_INFO("lok", "Macro URL is invalid");
+        SAL_INFO("kit", "Macro URL is invalid");
         return false;
     }
 
@@ -3183,7 +3183,7 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     if (!xContext.is())
     {
         pLib->maLastExceptionMsg = u"ComponentContext is not available"_ustr;
-        SAL_INFO("lok", "ComponentContext is not available");
+        SAL_INFO("kit", "ComponentContext is not available");
         return false;
     }
 
@@ -3200,7 +3200,7 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     if (!xComponentLoader.is())
     {
         pLib->maLastExceptionMsg = u"ComponentLoader is not available"_ustr;
-        SAL_INFO("lok", "ComponentLoader is not available");
+        SAL_INFO("kit", "ComponentLoader is not available");
         return false;
     }
 
@@ -3217,7 +3217,7 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     if (!xD.is())
     {
         pLib->maLastExceptionMsg = u"Macro loader is not available"_ustr;
-        SAL_INFO("lok", "Macro loader is not available");
+        SAL_INFO("kit", "Macro loader is not available");
         return false;
     }
 
@@ -3233,7 +3233,7 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
         aErr.Value >>= nErrCode;
 
         pLib->maLastExceptionMsg = "An error occurred running macro (error code: " + OUString::number( nErrCode ) + ")";
-        SAL_INFO("lok", "Macro execution terminated with error code " << nErrCode);
+        SAL_INFO("kit", "Macro execution terminated with error code " << nErrCode);
 
         return false;
     }
@@ -3292,11 +3292,11 @@ static char* lo_extractRequest(COKit* /*pThis*/, const char* pFilePath)
             }
             catch ( const lang::IllegalArgumentException& ex )
             {
-                SAL_WARN("lok", "lo_extractRequest: IllegalArgumentException: " << ex.Message);
+                SAL_WARN("kit", "lo_extractRequest: IllegalArgumentException: " << ex.Message);
             }
             catch (...)
             {
-                SAL_WARN("lok", "lo_extractRequest: Exception on loadComponentFromURL, url= " << aURL);
+                SAL_WARN("kit", "lo_extractRequest: Exception on loadComponentFromURL, url= " << aURL);
             }
 
             if (xComp.is())
@@ -3342,11 +3342,11 @@ static char* lo_extractDocumentStructureRequest(COKit* /*pThis*/, const char* pF
             }
             catch ( const lang::IllegalArgumentException& ex )
             {
-                SAL_WARN("lok", "lo_extractDocumentStructureRequest: IllegalArgumentException: " << ex.Message);
+                SAL_WARN("kit", "lo_extractDocumentStructureRequest: IllegalArgumentException: " << ex.Message);
             }
             catch (...)
             {
-                SAL_WARN("lok", "lo_extractDocumentStructureRequest: Exception on loadComponentFromURL, url= " << aURL);
+                SAL_WARN("kit", "lo_extractDocumentStructureRequest: Exception on loadComponentFromURL, url= " << aURL);
             }
 
             if (xComp.is())
@@ -3572,7 +3572,7 @@ void FunctionBasedURPConnection::flush() {}
 
 void FunctionBasedURPConnection::close()
 {
-    SAL_INFO("lok.urp", "Requested to close FunctionBasedURPConnection");
+    SAL_INFO("kit.urp", "Requested to close FunctionBasedURPConnection");
 }
 
 OUString FunctionBasedURPConnection::getDescription() { return u""_ustr; }
@@ -3599,7 +3599,7 @@ lo_startURP(COKit* /* pThis */, void* pRecieveFromLOContext, void* pSendToLOCont
     Reference<XInstanceProvider> xInstanceProvider(new FunctionBasedURPInstanceProvider(xContext));
 
     Reference<XBridge> xBridge(xBridgeFactory->createBridge(
-        "functionurp" + OUString::number(FunctionBasedURPConnection::g_connectionCount), u"urp"_ustr,
+        "functionurp" + OUString::number(FunctionBasedURPConnection::g_connectionCount), u"kit.urp"_ustr,
         connection, xInstanceProvider));
 
     connection->setBridge(std::move(xBridge));
@@ -3735,7 +3735,7 @@ static int doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForma
     if (aURL.isEmpty())
     {
         SetLastExceptionMsg(u"Filename to save to was not provided."_ustr);
-        SAL_INFO("lok", "URL for save is empty");
+        SAL_INFO("kit", "URL for save is empty");
         return false;
     }
 
@@ -3759,7 +3759,7 @@ static int doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForma
             break;
         case KIT_DOCTYPE_OTHER:
         default:
-            SAL_INFO("lok", "Can't save document - unsupported document type.");
+            SAL_INFO("kit", "Can't save document - unsupported document type.");
             return false;
         }
 
@@ -3990,7 +3990,7 @@ static void doc_iniUnoCommands ()
     // check if Frame-Controller were created.
     if (!pViewFrame)
     {
-        SAL_WARN("lok", "iniUnoCommands: No Frame-Controller created.");
+        SAL_WARN("kit", "iniUnoCommands: No Frame-Controller created.");
         return;
     }
 
@@ -3998,7 +3998,7 @@ static void doc_iniUnoCommands ()
         xContext = comphelper::getProcessComponentContext();
     if (!xContext.is())
     {
-        SAL_WARN("lok", "iniUnoCommands: Component context is not available");
+        SAL_WARN("kit", "iniUnoCommands: Component context is not available");
         return;
     }
 
@@ -4006,7 +4006,7 @@ static void doc_iniUnoCommands ()
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
     if (!xSEInitializer.is())
     {
-        SAL_WARN("lok", "iniUnoCommands: XSEInitializer is not available");
+        SAL_WARN("kit", "iniUnoCommands: XSEInitializer is not available");
         return;
     }
 
@@ -4014,7 +4014,7 @@ static void doc_iniUnoCommands ()
         xSEInitializer->createSecurityContext(OUString());
     if (!xSecurityContext.is())
     {
-        SAL_WARN("lok", "iniUnoCommands: failed to create security context");
+        SAL_WARN("kit", "iniUnoCommands: failed to create security context");
     }
 #endif
 
@@ -4308,7 +4308,7 @@ static void doc_paintTile(COKitDocument* pThis,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SAL_INFO( "lok.tiledrendering", "paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
+    SAL_INFO( "kit.tiledrendering", "paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
               "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
               nCanvasWidth << "x" << nCanvasHeight << "]px" );
 
@@ -4340,7 +4340,7 @@ static void doc_paintTile(COKitDocument* pThis,
     CGContextTranslateCTM(pCGContext, 0, nCanvasHeight);
     CGContextScaleCTM(pCGContext, fDPIScale, -fDPIScale);
 
-    SAL_INFO( "lok.tiledrendering", "doc_paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
+    SAL_INFO( "kit.tiledrendering", "doc_paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
               "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
               nCanvasWidth << "x" << nCanvasHeight << "]px" );
 
@@ -4419,7 +4419,7 @@ inline static void writeInfoLog(const int nPart, const int nMode,
     const int nTileWidth, const int nTileHeight, const int nTilePosX, const int nTilePosY,
     const int nCanvasWidth, const int nCanvasHeight)
 {
-    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " : " << nMode << " ["
+    SAL_INFO( "kit.tiledrendering", "paintPartTile: painting @ " << nPart << " : " << nMode << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
                << nTilePosX << ", " << nTilePosY << ") to ["
                << nCanvasWidth << "x" << nCanvasHeight << "]px" );
@@ -4442,7 +4442,7 @@ inline static int getFirstViewIdAsFallback(COKitDocument* pThis)
     int result = viewIds[0];
     doc_setView(pThis, result);
 
-    SAL_WARN("lok.tiledrendering", "Why is this happening? A call to paint without setting a view?");
+    SAL_WARN("kit.tiledrendering", "Why is this happening? A call to paint without setting a view?");
 
     return result;
 }
@@ -4502,7 +4502,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
     if (bFirst)
     {
         bFirst = false;
-        SAL_INFO("lok", "doc_paintPartTile: first tile @ " << osl_getGlobalTimer());
+        SAL_INFO("kit", "doc_paintPartTile: first tile @ " << osl_getGlobalTimer());
     }
     comphelper::ProfileZone aZone("doc_paintPartTile");
 
@@ -4905,7 +4905,7 @@ static void doc_postKeyEvent(COKitDocument* pThis, int nType, int nCharCode, int
     catch (const uno::Exception& exception)
     {
         SetLastExceptionMsg(exception.Message);
-        SAL_INFO("lok", "Failed to postKeyEvent " << exception.Message);
+        SAL_INFO("kit", "Failed to postKeyEvent " << exception.Message);
     }
 }
 
@@ -5105,7 +5105,7 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
                 aMediaDescriptor[u"FilterName"_ustr] <<= u"calc_svg_Export"_ustr;
                 break;
             default:
-                SAL_WARN("lok", "Failed to render shape selection: Document type is not supported");
+                SAL_WARN("kit", "Failed to render shape selection: Document type is not supported");
         }
         aMediaDescriptor[u"SelectionOnly"_ustr] <<= true;
         aMediaDescriptor[u"OutputStream"_ustr] <<= xOut;
@@ -5128,7 +5128,7 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
     {
         css::uno::Any exAny( cppu::getCaughtException() );
         SetLastExceptionMsg(exception.Message);
-        SAL_WARN("lok", "Failed to render shape selection: " << exceptionToString(exAny));
+        SAL_WARN("kit", "Failed to render shape selection: " << exceptionToString(exAny));
     }
 
     return 0;
@@ -5199,7 +5199,7 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
 
     if (aIdIter == aMap.end() || aIdIter->second.isEmpty())
     {
-        SAL_WARN("lok", "sendDialogEvent: no widget id set");
+        SAL_WARN("kit", "sendDialogEvent: no widget id set");
         assert(false);
         return;
     }
@@ -5260,7 +5260,7 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
     }
     catch (std::out_of_range& e)
     {
-        SAL_WARN("lok", "jsdialog::ExecuteAction syntax error - field not found in '" << e.what() << "'");
+        SAL_WARN("kit", "jsdialog::ExecuteAction syntax error - field not found in '" << e.what() << "'");
         assert(false);
     }
     catch (...) {}
@@ -5294,7 +5294,7 @@ static void updateConfig(const OUString& rConfigPath)
     osl::Directory aScanRootDir(rConfigPath);
     if (aScanRootDir.open() != osl::Directory::E_None)
     {
-        SAL_WARN("lok", "Failed to open config URL: " << rConfigPath);
+        SAL_WARN("kit", "Failed to open config URL: " << rConfigPath);
         return;
     }
     osl::DirectoryItem item;
@@ -5303,7 +5303,7 @@ static void updateConfig(const OUString& rConfigPath)
         osl::FileStatus stat(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_FileURL);
         if (item.getFileStatus(stat) != osl::FileBase::E_None)
         {
-            SAL_WARN("lok", "Failed to get directory item info");
+            SAL_WARN("kit", "Failed to get directory item info");
             continue;
         }
 
@@ -5313,7 +5313,7 @@ static void updateConfig(const OUString& rConfigPath)
             osl::Directory aXCURootDir(stat.getFileURL());
             if (aXCURootDir.open() != osl::Directory::E_None)
             {
-                SAL_WARN("lok", "Failed to open XCU URL: " << stat.getFileURL());
+                SAL_WARN("kit", "Failed to open XCU URL: " << stat.getFileURL());
                 continue;
             }
 
@@ -5325,11 +5325,11 @@ static void updateConfig(const OUString& rConfigPath)
                 osl::FileStatus xcustat(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_FileURL);
                 if (xcu.getFileStatus(xcustat) != osl::FileBase::E_None)
                 {
-                    SAL_WARN("lok", "Failed to get xcu item info");
+                    SAL_WARN("kit", "Failed to get xcu item info");
                     continue;
                 }
 
-                SAL_INFO("lok", "Installing XCU Item: " << xcustat.getFileName());
+                SAL_INFO("kit", "Installing XCU Item: " << xcustat.getFileName());
                 // Filter xcu to a subset of options to allow
                 const uno::Sequence<OUString> aAllowedSubset{
                     u"/org.openoffice.Office.Calc/Grid"_ustr,
@@ -5763,7 +5763,7 @@ static void doc_postMouseEvent(COKitDocument* pThis, int nType, int nX, int nY, 
     catch (const uno::Exception& exception)
     {
         SetLastExceptionMsg(exception.Message);
-        SAL_INFO("lok", "Failed to postMouseEvent " << exception.Message);
+        SAL_INFO("kit", "Failed to postMouseEvent " << exception.Message);
     }
 }
 
@@ -6300,7 +6300,7 @@ static int doc_getClipboard(COKitDocument* pThis,
     rtl::Reference<KitClipboard> xClip(KitClipboardFactory::getClipboardForCurView());
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = xClip->getContents();
-    SAL_INFO("lok", "Got from clip: " << xClip.get() << " transferable: " << xTransferable);
+    SAL_INFO("kit", "Got from clip: " << xClip.get() << " transferable: " << xTransferable);
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No clipboard content available"_ustr);
@@ -6379,7 +6379,7 @@ static int doc_setClipboard(COKitDocument* pThis,
     auto xClip = forceSetClipboardForCurrentView(pThis);
     xClip->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
 
-    SAL_INFO("lok", "Set clip: " << xClip.get() << " to: " << xTransferable);
+    SAL_INFO("kit", "Set clip: " << xClip.get() << " to: " << xTransferable);
 
     if (!pDoc->isMimeTypeSupported())
     {
@@ -7613,7 +7613,7 @@ static bool doc_addCertificate(COKitDocument* pThis,
     if (!xCertificate.is())
         return false;
 
-    SAL_INFO("lok", "Certificate Added = IssuerName: " << xCertificate->getIssuerName() << " SubjectName: " << xCertificate->getSubjectName());
+    SAL_INFO("kit", "Certificate Added = IssuerName: " << xCertificate->getIssuerName() << " SubjectName: " << xCertificate->getSubjectName());
 
     return true;
 }
@@ -7975,7 +7975,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
     if (!xContext.is())
     {
         SetLastExceptionMsg(u"XComponentContext could not be created"_ustr);
-        SAL_INFO("lok", "XComponentContext could not be created");
+        SAL_INFO("kit", "XComponentContext could not be created");
         return false;
     }
 
@@ -7983,7 +7983,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
     if (!xFactory.is())
     {
         SetLastExceptionMsg(u"XMultiComponentFactory could not be created"_ustr);
-        SAL_INFO("lok", "XMultiComponentFactory could not be created");
+        SAL_INFO("kit", "XMultiComponentFactory could not be created");
         return false;
     }
 
@@ -7994,7 +7994,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
     initJsUnoScripting();
 #endif
 
-    SAL_INFO("lok", "Uno initialized  - " <<  xContext.is());
+    SAL_INFO("kit", "Uno initialized  - " <<  xContext.is());
 
     // set UserInstallation to user profile dir in test/user-template
 //    rtl::Bootstrap aDefaultVars;
@@ -8342,7 +8342,7 @@ static void preloadData()
         uno::Reference<frame::XModel> xModel(xComp, uno::UNO_QUERY);
         css::uno::Reference<css::frame::XController> xController(xModel ? xModel->getCurrentController() : nullptr);
         css::uno::Reference<css::frame::XFrame> xFrame(xController ? xController->getFrame() : nullptr);
-        SAL_WARN_IF(!xFrame, "lok", "Unable to get ImageList for:" << component.factory);
+        SAL_WARN_IF(!xFrame, "kit", "Unable to get ImageList for:" << component.factory);
         if (xFrame)
         {
             // Query for some image specific to this module to load all the modules command images.
@@ -8410,7 +8410,7 @@ void setHelpRootURL()
         }
         catch (uno::Exception const& rException)
         {
-            SAL_WARN("lok", "Failed to set the help root URL: " << rException.Message);
+            SAL_WARN("kit", "Failed to set the help root URL: " << rException.Message);
         }
     }
 }
@@ -8430,7 +8430,7 @@ void setCertificateDir()
         }
         catch (uno::Exception const& rException)
         {
-            SAL_WARN("lok", "Failed to set the NSS certificate database directory: " << rException.Message);
+            SAL_WARN("kit", "Failed to set the NSS certificate database directory: " << rException.Message);
         }
     }
 }
@@ -8452,7 +8452,7 @@ void setDeeplConfig()
         }
         catch(uno::Exception const& rException)
         {
-            SAL_WARN("lok", "Failed to set Deepl API settings: " << rException.Message);
+            SAL_WARN("kit", "Failed to set Deepl API settings: " << rException.Message);
         }
     }
 }
@@ -8519,7 +8519,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
         eStage = PRE_INIT;
         if (cok_preinit_2_called)
         {
-            SAL_INFO("lok", "Create libreoffice object");
+            SAL_INFO("kit", "Create libreoffice object");
             gImpl = new LibCO_Impl();
         }
     }
@@ -8540,7 +8540,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
         traceEventDumper = new TraceEventDumper();
     }
 
-    comphelper::ProfileZone aZone("lok-init");
+    comphelper::ProfileZone aZone("kit-init");
 
     if (eStage == PRE_INIT)
     {
@@ -8606,7 +8606,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
             if (e == osl::FileBase::E_None)
                 url = url2;
             else
-                SAL_WARN("lok", "resolving <" << url << "> failed with " << +e);
+                SAL_WARN("kit", "resolving <" << url << "> failed with " << +e);
         }
 
         rtl::Bootstrap::set(u"UserInstallation"_ustr, url);
@@ -8679,7 +8679,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     {
         if (eStage != SECOND_INIT)
         {
-            SAL_INFO("lok", "Attempting to initialize UNO");
+            SAL_INFO("kit", "Attempting to initialize UNO");
 
             if (!initialize_uno(aAppURL))
                 return false;
@@ -8710,7 +8710,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
             desktop::Desktop::SynchronizeExtensionRepositories(false);
             bool bFailed = desktop::Desktop::CheckExtensionDependencies();
             if (bFailed)
-                SAL_INFO("lok", "CheckExtensionDependencies failed");
+                SAL_INFO("kit", "CheckExtensionDependencies failed");
 #endif
 
             // Configure system language early, before InitVCL() and service
@@ -8767,7 +8767,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
 
         if (eStage != PRE_INIT)
         {
-            SAL_INFO("lok", "Re-initialize temp paths");
+            SAL_INFO("kit", "Re-initialize temp paths");
             SvtPathOptions aOptions;
             OUString aNewTemp;
             osl::FileBase::getTempDirURL(aNewTemp);
@@ -8789,17 +8789,17 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
             // thread), and can then use it to wait until we're definitely ready to
             // continue.
 
-            SAL_INFO("lok", "Enabling RequestHandler");
+            SAL_INFO("kit", "Enabling RequestHandler");
             RequestHandler::Enable(false);
-            SAL_INFO("lok", "Starting soffice_main");
+            SAL_INFO("kit", "Starting soffice_main");
             RequestHandler::SetReady(false);
             if (!bUnipoll)
             {
                 // Start the main thread only in non-unipoll mode (i.e. multithreaded).
                 pLib->maThread = osl_createThread(lo_startmain, nullptr);
-                SAL_INFO("lok", "Waiting for RequestHandler");
+                SAL_INFO("kit", "Waiting for RequestHandler");
                 RequestHandler::WaitForReady();
-                SAL_INFO("lok", "RequestHandler ready -- continuing");
+                SAL_INFO("kit", "RequestHandler ready -- continuing");
             }
             else
                 InitVCL();
@@ -8808,7 +8808,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
         if (eStage != SECOND_INIT)
             ErrorRegistry::RegisterDisplay(aBasicErrorFunc);
 
-        SAL_INFO("lok", "COKit Initialized");
+        SAL_INFO("kit", "COKit Initialized");
         if (eStage == PRE_INIT)
             bPreInited = true;
         else
@@ -8874,7 +8874,7 @@ COKit *cokit_hook_2(const char* install_path, const char* user_profile_url)
 
         if (!cok_preinit_2_called)
         {
-            SAL_INFO("lok", "Create libreoffice object");
+            SAL_INFO("kit", "Create libreoffice object");
             gImpl = new LibCO_Impl();
         }
 
@@ -8915,7 +8915,7 @@ static void lo_destroy(COKit* pThis)
     LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
     gImpl = nullptr;
 
-    SAL_INFO("lok", "LO Destroy");
+    SAL_INFO("kit", "LO Destroy");
 
     comphelper::COKit::setStatusIndicatorCallback(nullptr, nullptr);
     uno::Reference <frame::XDesktop2> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
@@ -8940,7 +8940,7 @@ static void lo_destroy(COKit* pThis)
 
     delete pLib;
     bInitialized = false;
-    SAL_INFO("lok", "LO Destroy Done");
+    SAL_INFO("kit", "LO Destroy Done");
 }
 
 } // extern "C"

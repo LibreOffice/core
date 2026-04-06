@@ -163,7 +163,7 @@ bool KitStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, in
         {
             aMousePos -= rBBox.TopLeft();
 
-            // In lok, Math does not convert coordinates (see SmGraphicWidget::SetDrawingArea,
+            // In Kit, Math does not convert coordinates (see SmGraphicWidget::SetDrawingArea,
             // which disables MapMode), and uses twips internally (see SmDocShell ctor and
             // SmMapUnit), but the conversion factor can depend on the client zoom.
             // 1. Remove the twip->pixel factor in the passed scales

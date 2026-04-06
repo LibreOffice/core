@@ -973,7 +973,7 @@ bool Dialog::ImplStartExecute(bool async)
                 if (!(bDialogExecuting && IsInSyncExecute()))
                     break;
                 else
-                    SAL_WARN("lok.dialog", "Dialog \"" << ImplGetDialogText(this) << "\" is being synchronously executed over an existing synchronously executing dialog.");
+                    SAL_WARN("kit.dialog", "Dialog \"" << ImplGetDialogText(this) << "\" is being synchronously executed over an existing synchronously executing dialog.");
             }
 
             if (o3tl::IsRunningUnitTest())

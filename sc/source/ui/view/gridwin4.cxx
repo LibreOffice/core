@@ -903,7 +903,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     if (bGridFirst && (bGrid || bPage))
     {
-        // Draw lines in background color cover over lok client grid lines in merged cell areas if bNoBackgroundAndGrid is set.
+        // Draw lines in background color cover over Kit client grid lines in merged cell areas if bNoBackgroundAndGrid is set.
         if (bNoBackgroundAndGrid)
             aOutputData.DrawGrid(*pContentDev, false /* bGrid */, false /* bPage */, true /* bMergeCover */);
         else
@@ -1107,7 +1107,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         pContentDev->SetMapMode(aCurrentMapMode);
     }
 
-    // in place editing - lok case
+    // in place editing - Kit case
     if (bIsTiledRendering)
     {
         ScTabViewShell* pThisViewShell = mrViewData.GetViewShell();

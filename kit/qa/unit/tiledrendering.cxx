@@ -35,7 +35,7 @@
 #include <COKit/COKitEnums.h>
 
 using namespace ::boost;
-using namespace ::lok;
+using namespace ::kit;
 using namespace ::std;
 
 namespace {

@@ -458,7 +458,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
 
 void SwAnnotationWin::InitAnswer(OutlinerParaObject const & rText)
 {
-    // If tiled annotations is off in lok case, skip adding additional reply text.
+    // If tiled annotations is off in Kit case, skip adding additional reply text.
     if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
         return;
 

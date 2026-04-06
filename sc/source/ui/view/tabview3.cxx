@@ -2900,7 +2900,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                     // the visible area.
                     // Remember that wsd expects int and that aEnd.X() is
                     // in pixels and will be converted in twips, before performing
-                    // the lok callback, so we need to avoid that an overflow occurs.
+                    // the Kit callback, so we need to avoid that an overflow occurs.
                     aEnd.setX( std::numeric_limits<int>::max() / 1000 );
                 }
                 else

@@ -136,7 +136,7 @@ void LOEvent::destroy(void* pMemory)
 GQuark
 KitTileBufferErrorQuark()
 {
-    return g_quark_from_static_string("lok-tilebuffer-error");
+    return g_quark_from_static_string("kit-tilebuffer-error");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

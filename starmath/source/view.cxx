@@ -477,7 +477,7 @@ IMPL_LINK_NOARG(SmGraphicWidget, CaretBlinkTimerHdl, Timer *, void)
 void SmGraphicWidget::CaretBlinkInit()
 {
     if (comphelper::COKit::isActive())
-        return; // No blinking in lok case
+        return; // No blinking in Kit case
     aCaretBlinkTimer.SetInvokeHandler(LINK(this, SmGraphicWidget, CaretBlinkTimerHdl));
     aCaretBlinkTimer.SetTimeout(Application::GetSettings().GetStyleSettings().GetCursorBlinkTime());
 }
@@ -2031,7 +2031,7 @@ public:
         if (comphelper::COKit::isActive())
         {
             CopyKitViewCallbackFromFrameCreator();
-            // In lok mode, DocumentHolder::ShowUI is not called on OLE in-place activation,
+            // In COKit mode, DocumentHolder::ShowUI is not called on OLE in-place activation,
             // because respective code is skipped in OCommonEmbeddedObject::SwitchStateTo_Impl,
             // so sidebar controller does not get registered properly; do it here
             if (auto xSidebar = getSidebarFromModel(getModel()))

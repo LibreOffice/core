@@ -476,13 +476,13 @@ public:
     void SetKitLanguageAndLocale(const OUString& rBcp47LanguageTag);
     /// Get the COKit calendar of this view.
     CalendarWrapper& GetKitCalendar();
-    /// Get the form factor of the device where the lok client is running.
+    /// Get the form factor of the device where the Kit client is running.
     KitDeviceFormFactor GetKitDeviceFormFactor() const { return maKitDeviceFormFactor; }
-    /// Check if the lok client is running on a desktop machine.
+    /// Check if the Kit client is running on a desktop machine.
     bool isKitDesktop() const { return maKitDeviceFormFactor == KitDeviceFormFactor::DESKTOP; }
-    /// Check if the lok client is running on a tablet.
+    /// Check if the Kit client is running on a tablet.
     bool isKitTablet() const  { return maKitDeviceFormFactor == KitDeviceFormFactor::TABLET; }
-    /// Check if the lok client is running on a mobile device.
+    /// Check if the Kit client is running on a mobile device.
     bool isKitMobilePhone() const { return maKitDeviceFormFactor == KitDeviceFormFactor::MOBILE; }
 
     virtual tools::Rectangle getKitVisibleArea() const { return tools::Rectangle(); }

@@ -101,7 +101,7 @@ certain functionality.
 @li @c comphelper.backupfilehelper
 @li @c comphelper.container - EmbeddedObjectContainer
 @li @c comphelper.crypto
-@li @c comphelper.lok
+@li @c comphelper.kit
 @li @c comphelper.traceevent
 
 @section cppu
@@ -150,9 +150,9 @@ certain functionality.
 @li @c sc.core.formulagroup
 @li @c sc.core.grouparealistener - sc::FormulaGroupAreaListener
 @li @c sc.filter - Calc filter
-@li @c sc.lok.docsize
-@li @c sc.lok.header
-@li @c sc.lok.poshelper
+@li @c sc.kit.docsize
+@li @c sc.kit.header
+@li @c sc.kit.poshelper
 @li @c sc.opencl - OpenCL-related stuff in general
 @li @c sc.opencl.source - Generated OpenCL source code
 @li @c sc.op - Calc operations
@@ -332,12 +332,12 @@ certain functionality.
 
 @section COKit
 
-@li @c lok
-@li @c lok.fontsubst
-@li @c lok.tiledrendering
-@li @c lok.dialog
-@li @c lok.a11y - COKit accessibility
-@li @c lok.urp - Uno Remote Protocol
+@li @c kit
+@li @c kit.fontsubst
+@li @c kit.tiledrendering
+@li @c kit.dialog
+@li @c kit.a11y - COKit accessibility
+@li @c kit.urp - Uno Remote Protocol
 
 @section l10ntools
 

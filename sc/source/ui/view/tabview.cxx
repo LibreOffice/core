@@ -2904,7 +2904,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
 
     if (rRectangle.Top() < rRectangle.Bottom())
     {
-        SAL_INFO("sc.lok.header", "Row Header: compute start/end rows.");
+        SAL_INFO("sc.kit.header", "Row Header: compute start/end rows.");
         tools::Long nEndHeightPx = 0;
         nStartRow = rCellRange.aStart.Row();
         nEndRow = rCellRange.aEnd.Row();
@@ -2923,7 +2923,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     if (nVisibleRows < 25)
         nVisibleRows = 25;
 
-    SAL_INFO("sc.lok.header", "Row Header: visible rows: " << nVisibleRows);
+    SAL_INFO("sc.kit.header", "Row Header: visible rows: " << nVisibleRows);
 
 
     // Get row groups
@@ -2952,7 +2952,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     {
         auto rowsNode = rJsonWriter.startArray("rows");
 
-        SAL_INFO("sc.lok.header", "Row Header: [create string data for rows]: start row: "
+        SAL_INFO("sc.kit.header", "Row Header: [create string data for rows]: start row: "
                 << nStartRow << " start height: " << nTotalPixels);
 
         if (nStartRow != nEndRow)
@@ -3002,7 +3002,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
 
     if (rRectangle.Left() < rRectangle.Right())
     {
-        SAL_INFO("sc.lok.header", "Column Header: compute start/end columns.");
+        SAL_INFO("sc.kit.header", "Column Header: compute start/end columns.");
         tools::Long nEndWidthPx = 0;
         nStartCol = rCellRange.aStart.Col();
         nEndCol = rCellRange.aEnd.Col();
@@ -3045,7 +3045,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         auto columnsNode = rJsonWriter.startArray("columns");
 
         nTotalPixels = nStartWidthPx;
-        SAL_INFO("sc.lok.header", "Col Header: [create string data for cols]: start col: "
+        SAL_INFO("sc.kit.header", "Col Header: [create string data for cols]: start col: "
                 << nStartRow << " start width: " << nTotalPixels);
 
         if (nStartCol != nEndCol)
@@ -3178,7 +3178,7 @@ OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, 
 
 void ScTabView::extendTiledAreaIfNeeded()
 {
-    SAL_INFO("sc.lok.header",
+    SAL_INFO("sc.kit.header",
         "extendTiledAreaIfNeeded: START: ClientView: ColRange["
         << mnKitStartHeaderCol << "," << mnKitEndHeaderCol
         << "] RowRange[" << mnKitStartHeaderRow << "," << mnKitEndHeaderRow
@@ -3266,7 +3266,7 @@ void ScTabView::extendTiledAreaIfNeeded()
                        aChangedCellRange.Right(), aChangedCellRange.Bottom());
     }
 
-    SAL_INFO("sc.lok.header",
+    SAL_INFO("sc.kit.header",
         "extendTiledAreaIfNeeded: END: ClientView: ColRange["
         << mnKitStartHeaderCol << "," << mnKitEndHeaderCol
         << "] RowRange[" << mnKitStartHeaderRow << "," << mnKitEndHeaderRow

@@ -469,7 +469,7 @@ void aboutView(std::string msg,  const void* pInstance, const SfxViewShell* pVie
     if (!pViewShell)
         return;
 
-    SAL_INFO("lok.a11y", ">>> " << msg << ": instance: " << pInstance
+    SAL_INFO("kit.a11y", ">>> " << msg << ": instance: " << pInstance
             << ", VIED ID: " <<  pViewShell->GetViewShellId().get() << " <<<");
 }
 
@@ -485,7 +485,7 @@ void aboutEvent(std::string msg, const accessibility::AccessibleEventObject& aEv
 
             if (xContext.is())
             {
-                SAL_INFO("lok.a11y", msg << ": event id: " << aEvent.EventId
+                SAL_INFO("kit.a11y", msg << ": event id: " << aEvent.EventId
                         << "\n  xSource: " << xSource.get()
                         << "\n  role: " << xContext->getAccessibleRole()
                         << "\n  name: " << xContext->getAccessibleName()
@@ -496,13 +496,13 @@ void aboutEvent(std::string msg, const accessibility::AccessibleEventObject& aEv
             }
             else
             {
-                SAL_INFO("lok.a11y", msg << ": event id: " << aEvent.EventId
+                SAL_INFO("kit.a11y", msg << ": event id: " << aEvent.EventId
                                          << ", no accessible context!");
             }
         }
         else
         {
-            SAL_INFO("lok.a11y", msg << ": event id: " << aEvent.EventId
+            SAL_INFO("kit.a11y", msg << ": event id: " << aEvent.EventId
                                      << ", no accessible source!");
         }
         uno::Reference< accessibility::XAccessible > xOldValue;
@@ -514,7 +514,7 @@ void aboutEvent(std::string msg, const accessibility::AccessibleEventObject& aEv
 
             if (xContext.is())
             {
-                SAL_INFO("lok.a11y", msg << ": "
+                SAL_INFO("kit.a11y", msg << ": "
                            "\n  xOldValue: " << xOldValue.get()
                         << "\n  role: " << xContext->getAccessibleRole()
                         << "\n  name: " << xContext->getAccessibleName()
@@ -533,7 +533,7 @@ void aboutEvent(std::string msg, const accessibility::AccessibleEventObject& aEv
 
             if (xContext.is())
             {
-                SAL_INFO("lok.a11y", msg << ": "
+                SAL_INFO("kit.a11y", msg << ": "
                            "\n  xNewValue: " << xNewValue.get()
                         << "\n  role: " << xContext->getAccessibleRole()
                         << "\n  name: " << xContext->getAccessibleName()
@@ -546,7 +546,7 @@ void aboutEvent(std::string msg, const accessibility::AccessibleEventObject& aEv
     }
     catch( const lang::IndexOutOfBoundsException& /*e*/ )
     {
-        KIT_WARN("lok.a11y", "Focused object has invalid index in parent");
+        KIT_WARN("kit.a11y", "Focused object has invalid index in parent");
     }
 }
 
@@ -581,7 +581,7 @@ sal_Int32 getListPrefixSize(const uno::Reference<css::accessibility::XAccessible
     css::accessibility::TextSegment aTextSegment =
         xAccText->getTextAtIndex(0, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
 
-    SAL_INFO("lok.a11y", "getListPrefixSize: prefix: " << aTextSegment.SegmentText << ", level: " << nLevel);
+    SAL_INFO("kit.a11y", "getListPrefixSize: prefix: " << aTextSegment.SegmentText << ", level: " << nLevel);
 
     return aTextSegment.SegmentEnd;
 }
@@ -605,7 +605,7 @@ void aboutTextFormatting(std::string msg, const uno::Reference<css::accessibilit
     {
         css::accessibility::TextSegment aTextSegment =
                 xAccText->getTextAtIndex(nPos, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
-        SAL_INFO("lok.a11y", msg << ": "
+        SAL_INFO("kit.a11y", msg << ": "
                 "text segment: '" << aTextSegment.SegmentText
                 << "', start: " << aTextSegment.SegmentStart
                 << ", end: " << aTextSegment.SegmentEnd);
@@ -621,7 +621,7 @@ void aboutTextFormatting(std::string msg, const uno::Reference<css::accessibilit
         }
 
         sal_Int32 nSize = aRunAttributeList.getLength();
-        SAL_INFO("lok.a11y",
+        SAL_INFO("kit.a11y",
                  msg << ": attribute list size: " << nSize);
         if (nSize)
         {
@@ -686,7 +686,7 @@ void aboutTextFormatting(std::string msg, const uno::Reference<css::accessibilit
                 }
             }
             sAttributes += " }";
-            SAL_INFO("lok.a11y",
+            SAL_INFO("kit.a11y",
                      msg << ": " << sAttributes);
         }
         nPos = aTextSegment.SegmentEnd + 1;
@@ -697,7 +697,7 @@ void aboutParagraph(const std::string& msg, const OUString& rsParagraphContent, 
                     sal_Int32 nSelectionStart, sal_Int32 nSelectionEnd, sal_Int32 nListPrefixLength,
                     bool force = false)
 {
-    SAL_INFO("lok.a11y", msg << ": "
+    SAL_INFO("kit.a11y", msg << ": "
             "\n text content: \"" << rsParagraphContent << "\""
             "\n caret pos: " << nCaretPosition
             << "\n selection: start: " << nSelectionStart << ", end: " << nSelectionEnd
@@ -731,7 +731,7 @@ void aboutFocusedCellChanged(sal_Int32 nOutCount, const std::vector<TableSizeTyp
     }
     inListStream << "]";
 
-    SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyFocusedCellChanged: "
+    SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyFocusedCellChanged: "
             "\n outCount: " << nOutCount
             << "\n inList: " << inListStream.str()
             << "\n row: " << nRow
@@ -896,7 +896,7 @@ OUString KitDocumentFocusListener::getFocusedParagraph() const
 int KitDocumentFocusListener::getCaretPosition() const
 {
     aboutView("KitDocumentFocusListener::getCaretPosition", this, m_pViewShell);
-    SAL_INFO("lok.a11y", "KitDocumentFocusListener::getCaretPosition: " << m_nCaretPosition);
+    SAL_INFO("kit.a11y", "KitDocumentFocusListener::getCaretPosition: " << m_nCaretPosition);
     return m_nCaretPosition;
 }
 
@@ -945,7 +945,7 @@ void KitDocumentFocusListener::notifyEditingInSelectionState(bool bParagraph)
     std::string aPayload = aStream.str();
     if (m_pViewShell)
     {
-        SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEditingInSelectionState: payload: \n" << aPayload);
+        SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyEditingInSelectionState: payload: \n" << aPayload);
         m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE, aPayload.c_str());
     }
 }
@@ -994,7 +994,7 @@ void KitDocumentFocusListener::notifyCaretChanged()
     std::string aPayload = aStream.str();
     if (m_pViewShell)
     {
-        SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyCaretChanged: " << m_nCaretPosition);
+        SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyCaretChanged: " << m_nCaretPosition);
         m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_CARET_CHANGED, aPayload.c_str());
     }
 }
@@ -1011,7 +1011,7 @@ void KitDocumentFocusListener::notifyTextSelectionChanged()
     std::string aPayload = aStream.str();
     if (m_pViewShell)
     {
-        SAL_INFO("lok.a11y",  "KitDocumentFocusListener::notifyTextSelectionChanged: "
+        SAL_INFO("kit.a11y",  "KitDocumentFocusListener::notifyTextSelectionChanged: "
                 "start: " << m_nSelectionStart << ", end: " << m_nSelectionEnd);
         m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, aPayload.c_str());
     }
@@ -1151,7 +1151,7 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
         std::string aPayload = aStream.str();
         if (m_pViewShell)
         {
-            SAL_INFO("lok.a11y",  "KitDocumentFocusListener::notifySelectionChanged: "
+            SAL_INFO("kit.a11y",  "KitDocumentFocusListener::notifySelectionChanged: "
                                      "action: " << sAction << ", name: " << sName);
             m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_SELECTION_CHANGED, aPayload.c_str());
         }
@@ -1209,7 +1209,7 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
     }
     else
     {
-        SAL_WARN("lok.a11y",
+        SAL_WARN("kit.a11y",
                  "KitDocumentFocusListener::updateParagraphInfo: skipped since no caret is present");
     }
 
@@ -1356,7 +1356,7 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                 aEvent.NewValue >>= nState;
                 sal_Int64 nOldState = accessibility::AccessibleStateType::INVALID;
                 aEvent.OldValue >>= nOldState;
-                SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: STATE_CHANGED: "
+                SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyEvent: STATE_CHANGED: "
                                         " New State: " << stateSetToString(nState)
                                      << ", Old State: " << stateSetToString(nOldState));
 
@@ -1440,7 +1440,7 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                                 {
                                     if (!hasState(aEvent, AccessibleStateType::ACTIVE))
                                     {
-                                        SAL_WARN("lok.a11y",
+                                        SAL_WARN("kit.a11y",
                                                  "KitDocumentFocusListener::notifyEvent: FOCUSED: "
                                                  "cell not ACTIVE for editing yet");
                                         return;
@@ -1480,7 +1480,7 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
 
                 if (nNewPos >= 0)
                 {
-                    SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: CARET_CHANGED: "
+                    SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyEvent: CARET_CHANGED: "
                                          "new pos: " << nNewPos << ", nOldPos: " << nOldPos);
 
                     uno::Reference<XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
@@ -1515,12 +1515,12 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
 
                 if (aEvent.OldValue >>= aDeletedText)
                 {
-                    SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: TEXT_CHANGED: "
+                    SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyEvent: TEXT_CHANGED: "
                                              "deleted text: >" << aDeletedText.SegmentText << "<");
                 }
                 if (aEvent.NewValue >>= aInsertedText)
                 {
-                    SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: TEXT_CHANGED: "
+                    SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyEvent: TEXT_CHANGED: "
                                              "inserted text: >" << aInsertedText.SegmentText << "<");
                 }
                 uno::Reference<XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
@@ -1537,7 +1537,7 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
             {
                 if (!isFocused(aEvent))
                 {
-                    SAL_WARN("lok.a11y",
+                    SAL_WARN("kit.a11y",
                              "KitDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: "
                              "skip non focused paragraph");
                     return;
@@ -1554,7 +1554,7 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                     updateParagraphInfo(xAccText, false, "TEXT_SELECTION_CHANGED");
 
                     m_sSelectedText = xAccText->getSelectedText();
-                    SAL_INFO("lok.a11y",
+                    SAL_INFO("kit.a11y",
                              "KitDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: selected text: >"
                               << m_sSelectedText << "<");
 
@@ -1588,7 +1588,7 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                         return; // selecting the same object; note: on editing selected object is cleared
                 else
                     m_xSelectedObject = xSelectedObject;
-                SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: SELECTION_CHANGED: "
+                SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyEvent: SELECTION_CHANGED: "
                                          "m_xSelectedObject.is(): " << m_xSelectedObject.is());
 
                 OUString sAction = selectionEventTypeToString(aEvent.EventId);
@@ -1616,7 +1616,7 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                                 // So selection can't be a cell range.
                                 sal_Int32 nDotIndex = m_sSelectedText.indexOf('.');
                                 OUString sCellAddress = m_sSelectedText.copy(nDotIndex + 1);
-                                SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: SELECTION_CHANGED: "
+                                SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyEvent: SELECTION_CHANGED: "
                                                          "cell address: >" << sCellAddress << "<");
                                 if (m_sSelectedCellAddress == sCellAddress)
                                 {
@@ -1645,7 +1645,7 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
             }
             case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
             {
-                SAL_INFO("lok.a11y", "Invalidate all children called");
+                SAL_INFO("kit.a11y", "Invalidate all children called");
                 break;
             }
             default:
@@ -1654,7 +1654,7 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
     }
     catch( const lang::IndexOutOfBoundsException& )
     {
-        KIT_WARN("lok.a11y",
+        KIT_WARN("kit.a11y",
                  "KitDocumentFocusListener::notifyEvent:Focused object has invalid index in parent");
     }
 }
@@ -1666,7 +1666,7 @@ uno::Reference< accessibility::XAccessible > KitDocumentFocusListener::getAccess
     if( xAccessible.is() )
         return xAccessible;
 
-    SAL_WARN("lok.a11y",
+    SAL_WARN("kit.a11y",
              "KitDocumentFocusListener::getAccessible: Event source doesn't implement XAccessible.");
 
     uno::Reference< accessibility::XAccessibleContext > xContext(aEvent.Source, uno::UNO_QUERY);
@@ -1684,7 +1684,7 @@ uno::Reference< accessibility::XAccessible > KitDocumentFocusListener::getAccess
         }
     }
 
-    KIT_WARN("lok.a11y",
+    KIT_WARN("kit.a11y",
              "KitDocumentFocusListener::getAccessible: Can't get any accessible object from event source.");
 
     return uno::Reference< accessibility::XAccessible >();
@@ -1694,7 +1694,7 @@ void KitDocumentFocusListener::attachRecursive(
     const uno::Reference< accessibility::XAccessible >& xAccessible
 )
 {
-    KIT_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(1): xAccessible: " << xAccessible.get());
+    KIT_INFO("kit.a11y", "KitDocumentFocusListener::attachRecursive(1): xAccessible: " << xAccessible.get());
 
     uno::Reference< accessibility::XAccessibleContext > xContext =
         xAccessible->getAccessibleContext();
@@ -1710,7 +1710,7 @@ void KitDocumentFocusListener::attachRecursive(
 {
     try
     {
-        KIT_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(2): xAccessible: "
+        KIT_INFO("kit.a11y", "KitDocumentFocusListener::attachRecursive(2): xAccessible: "
                                  << xAccessible.get() << ", role: " << xContext->getAccessibleRole()
                                  << ", name: " << xContext->getAccessibleName()
                                  << ", parent: " << xContext->getAccessibleParent().get()
@@ -1728,7 +1728,7 @@ void KitDocumentFocusListener::attachRecursive(
     }
     catch (const uno::Exception& e)
     {
-        KIT_WARN("lok.a11y", "KitDocumentFocusListener::attachRecursive(2): raised exception: " << e.Message);
+        KIT_WARN("kit.a11y", "KitDocumentFocusListener::attachRecursive(2): raised exception: " << e.Message);
     }
 }
 
@@ -1739,7 +1739,7 @@ void KitDocumentFocusListener::attachRecursive(
 )
 {
     aboutView("KitDocumentFocusListener::attachRecursive (3)", this, m_pViewShell);
-    SAL_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(3) #1: this: " << this
+    SAL_INFO("kit.a11y", "KitDocumentFocusListener::attachRecursive(3) #1: this: " << this
             << ", xAccessible: " << xAccessible.get()
             << ", role: " << xContext->getAccessibleRole()
             << ", name: " << xContext->getAccessibleName()
@@ -1752,12 +1752,12 @@ void KitDocumentFocusListener::attachRecursive(
 
     if (!xBroadcaster.is())
         return;
-    SAL_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(3) #2: xBroadcaster.is()");
+    SAL_INFO("kit.a11y", "KitDocumentFocusListener::attachRecursive(3) #2: xBroadcaster.is()");
     // If not already done, add the broadcaster to the list and attach as listener.
     const uno::Reference< uno::XInterface >& xInterface = xBroadcaster;
     if( m_aRefList.insert(xInterface).second )
     {
-        SAL_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");
+        SAL_INFO("kit.a11y", "KitDocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");
         xBroadcaster->addAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
         if (isDocument(xContext->getAccessibleRole()))
@@ -1842,7 +1842,7 @@ void KitDocumentFocusListener::detachRecursive(
     aboutView("KitDocumentFocusListener::detachRecursive (2)", this, m_pViewShell);
     sal_Int64 nStateSet = xContext->getAccessibleStateSet();
 
-    SAL_INFO("lok.a11y", "KitDocumentFocusListener::detachRecursive(2): this: " << this
+    SAL_INFO("kit.a11y", "KitDocumentFocusListener::detachRecursive(2): this: " << this
             << ", name: " << xContext->getAccessibleName()
             << ", parent: " << xContext->getAccessibleParent().get()
             << ", child count: " << xContext->getAccessibleChildCount());

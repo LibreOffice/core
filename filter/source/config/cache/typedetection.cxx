@@ -968,7 +968,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(comphelper::SequenceAsHashMap
 
                         if (aRequest.isApproved())
                         {
-                            // lok: we want to overwrite file in jail, so don't use template flag
+                            // COKit: we want to overwrite file in jail, so don't use template flag
                             const bool bIsKit = comphelper::COKit::isActive();
                             rDescriptor[utl::MediaDescriptor::PROP_DOCUMENTTITLE] <<= aDocumentTitle;
                             rDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE] <<= !bIsKit;

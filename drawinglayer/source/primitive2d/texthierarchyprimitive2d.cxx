@@ -147,7 +147,7 @@ namespace drawinglayer::primitive2d
             const geometry::ViewInformation2D& rViewInformation) const
         {
             // check if TextEdit is active. If not, process. If yes, suppress the content
-            // lok case: always decompose it when we're rendering a slide show
+            // COKit case: always decompose it when we're rendering a slide show
             if (!rViewInformation.getTextEditActive() || comphelper::COKit::isSlideshowRendering())
                 GroupPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }

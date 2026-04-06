@@ -213,7 +213,7 @@ void KitHelper::setView(int nId)
         // If we wanted to set the SfxViewShell that is actually set, we could skip it.
         // But it looks like that the language can go wrong, so we have to fix that.
         // This can happen, when someone sets the language or SfxViewShell::Current() separately.
-        SAL_WARN("lok", "LANGUAGE mismatch at setView! ... old (wrong) lang:"
+        SAL_WARN("kit", "LANGUAGE mismatch at setView! ... old (wrong) lang:"
                         << comphelper::COKit::getLanguageTag().getBcp47()
                         << " new lang:" << pViewShell->GetKitLanguageTag().getBcp47());
     }
@@ -419,7 +419,7 @@ void KitHelper::setViewReadOnly(int nId, bool readOnly)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        KIT_INFO("lok.readonlyview", "KitHelper::setViewReadOnly: view id: " << nId << ", readOnly: " << readOnly);
+        KIT_INFO("kit.readonlyview", "KitHelper::setViewReadOnly: view id: " << nId << ", readOnly: " << readOnly);
         pViewShell->SetKitReadOnlyView(readOnly);
     }
 }
@@ -428,7 +428,7 @@ void KitHelper::setAllowChangeComments(int nId, bool allow)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        KIT_INFO("lok.readonlyview", "KitHelper::setAllowChangeComments: view id: " << nId << ", allow: " << allow);
+        KIT_INFO("kit.readonlyview", "KitHelper::setAllowChangeComments: view id: " << nId << ", allow: " << allow);
         pViewShell->SetAllowChangeComments(allow);
     }
 }
@@ -437,7 +437,7 @@ void KitHelper::setAllowManageRedlines(int nId, bool allow)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        KIT_INFO("lok.readonlyview", "KitHelper::setAllowManageRedlines: view id: " << nId << ", allow: " << allow);
+        KIT_INFO("kit.readonlyview", "KitHelper::setAllowManageRedlines: view id: " << nId << ", allow: " << allow);
         pViewShell->SetAllowManageRedlines(allow);
     }
 }
@@ -446,7 +446,7 @@ void KitHelper::setAccessibilityState(int nId, bool nEnabled)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        KIT_INFO("lok.a11y", "KitHelper::setAccessibilityState: view id: " << nId << ", nEnabled: " << nEnabled);
+        KIT_INFO("kit.a11y", "KitHelper::setAccessibilityState: view id: " << nId << ", nEnabled: " << nEnabled);
         pViewShell->SetKitAccessibilityState(nEnabled);
     }
 }
@@ -1178,7 +1178,7 @@ void KitHelper::notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxViewS
         return;
 
     // This getCurrentView() is dubious
-    SAL_WARN_IF(!pViewShell, "lok", "no explicit viewshell set");
+    SAL_WARN_IF(!pViewShell, "kit", "no explicit viewshell set");
     int viewId = pViewShell ? KitHelper::getView(*pViewShell) : KitHelper::getCurrentView();
     int sourceViewId = KitHelper::getView(rSourceShell);
     rTargetShell.viewUpdatedCallbackPerViewId(nType, viewId, sourceViewId);
@@ -1219,7 +1219,7 @@ void KitHelper::dispatchUnoCommand(const boost::property_tree::ptree& tree)
     if (std::u16string_view rest;
         !command.startsWith(".uno:", &rest) || !GetKitUnoCommandList().contains(rest))
     {
-        KIT_WARN("lok.transform",
+        KIT_WARN("kit.transform",
                  "UnoCommand command is not recognized: '" << command << "'");
         return;
     }
@@ -1346,7 +1346,7 @@ namespace
         if (vcl::kit::isUnipoll())
         {
             if (!Application::IsMainThread())
-                SAL_WARN("lok", "Posting event directly but not called from main thread!");
+                SAL_WARN("kit", "Posting event directly but not called from main thread!");
             KitPostAsyncEvent(pEvent, nullptr);
         }
         else

@@ -37,12 +37,12 @@ rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
     auto it = gClipboards.get()->find(nViewId);
     if (it != gClipboards.get()->end())
     {
-        SAL_INFO("lok", "Got clip: " << it->second.get() << " from " << nViewId);
+        SAL_INFO("kit", "Got clip: " << it->second.get() << " from " << nViewId);
         return it->second;
     }
     rtl::Reference<KitClipboard> xClip(new KitClipboard());
     (*gClipboards.get())[nViewId] = xClip;
-    SAL_INFO("lok", "Created clip: " << xClip.get() << " for viewId " << nViewId);
+    SAL_INFO("kit", "Created clip: " << xClip.get() << " for viewId " << nViewId);
     return xClip;
 }
 
@@ -54,14 +54,14 @@ void KitClipboardFactory::releaseClipboardForView(int nViewId)
     if (nViewId < 0) // clear all
     {
         gClipboards.get()->clear();
-        SAL_INFO("lok", "Released all clipboards on doc destroy\n");
+        SAL_INFO("kit", "Released all clipboards on doc destroy\n");
     }
     else if (gClipboards.get())
     {
         auto it = gClipboards.get()->find(nViewId);
         if (it != gClipboards.get()->end())
         {
-            SAL_INFO("lok", "Releasing clip: " << it->second.get() << " for destroyed " << nViewId);
+            SAL_INFO("kit", "Releasing clip: " << it->second.get() << " for destroyed " << nViewId);
             gClipboards.get()->erase(it);
         }
     }
@@ -118,7 +118,7 @@ void KitClipboard::setContents(
     std::vector<Reference<datatransfer::clipboard::XClipboardListener>> aListeners(m_aListeners);
     datatransfer::clipboard::ClipboardEvent aEv;
     aEv.Contents = m_xTransferable;
-    SAL_INFO("lok", "Clip: " << this << " set contents to " << m_xTransferable);
+    SAL_INFO("kit", "Clip: " << this << " set contents to " << m_xTransferable);
 
     aGuard.clear();
 
@@ -224,7 +224,7 @@ uno::Any SAL_CALL KitTransferable::getTransferData(const datatransfer::DataFlavo
         if (m_aFlavors[i].MimeType == rFlavor.MimeType)
         {
             if (m_aFlavors[i].DataType != rFlavor.DataType)
-                SAL_WARN("lok", "Horror type mismatch!");
+                SAL_WARN("kit", "Horror type mismatch!");
             return m_aContent[i];
         }
     }

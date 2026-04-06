@@ -2008,7 +2008,7 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions()
         if (aRequest.isApproved())
         {
             mbContinueImportOnFilterExceptions = yes;
-            // lok: we want to overwrite file in jail, so don't use template flag
+            // Kit: we want to overwrite file in jail, so don't use template flag
             bool bIsKit = comphelper::COKit::isActive();
             // allow repair
             pMedium->GetItemSet().Put(SfxBoolItem(SID_REPAIRPACKAGE, true));

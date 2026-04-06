@@ -95,7 +95,7 @@ public:
     {
         if (maLanguageTag != rLanguageTag)
         {
-            SAL_INFO("comphelper.lok", "Setting language from " << maLanguageTag.getBcp47() << " to " << rLanguageTag.getBcp47());
+            SAL_INFO("comphelper.kit", "Setting language from " << maLanguageTag.getBcp47() << " to " << rLanguageTag.getBcp47());
             maLanguageTag = rLanguageTag;
         }
     }
@@ -109,7 +109,7 @@ public:
     {
         if (maLocaleLanguageTag != rLocaleLanguageTag)
         {
-            SAL_INFO("comphelper.lok", "Setting locale from " << maLocaleLanguageTag.getBcp47() << " to " << rLocaleLanguageTag.getBcp47());
+            SAL_INFO("comphelper.kit", "Setting locale from " << maLocaleLanguageTag.getBcp47() << " to " << rLocaleLanguageTag.getBcp47());
             maLocaleLanguageTag = rLocaleLanguageTag;
         }
     }
@@ -254,7 +254,7 @@ void setLocale(const LanguageTag& rLanguageTag)
 const LanguageTag& getLocale()
 {
     const LanguageTag& rLocale = g_aLanguageAndLocale.getLocale();
-    SAL_INFO_IF(rLocale.getLanguageType() == LANGUAGE_NONE, "comphelper.lok", "Locale not set");
+    SAL_INFO_IF(rLocale.getLanguageType() == LANGUAGE_NONE, "comphelper.kit", "Locale not set");
     return rLocale;
 }
 
@@ -266,7 +266,7 @@ void setLanguageTag(const LanguageTag& rLanguageTag)
 const LanguageTag& getLanguageTag()
 {
     const LanguageTag& rLanguage = g_aLanguageAndLocale.getLanguage();
-    SAL_INFO_IF(rLanguage.getLanguageType() == LANGUAGE_NONE, "comphelper.lok", "Language not set");
+    SAL_INFO_IF(rLanguage.getLanguageType() == LANGUAGE_NONE, "comphelper.kit", "Language not set");
     return rLanguage;
 }
 
@@ -389,7 +389,7 @@ bool anyInput()
         if (g_bIdleLayouting)
         {
             // Report idle priority instead of querying the scheduler.  Various unrelated tasks
-            // (timers, paint idles) may be queued at high priority, which would cause the LOK
+            // (timers, paint idles) may be queued at high priority, which would cause the COKit
             // client to not interrupt, preventing the idle layout from stopping.
             nMostUrgentPriority = static_cast<int>(TaskPriority::DEFAULT_IDLE);
         }

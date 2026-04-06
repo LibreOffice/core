@@ -341,8 +341,8 @@ bool ScOutputData::ReopenPDFStructureElement(vcl::pdf::StructElement aType, SCRO
 
 void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage, bool bMergeCover)
 {
-    // bMergeCover : Draw lines in sheet bgcolor to cover lok client grid lines in merged cell areas.
-    // When scNoGridBackground is set in lok mode, bMergeCover is set to true and bGrid to false.
+    // bMergeCover : Draw lines in sheet bgcolor to cover Kit client grid lines in merged cell areas.
+    // When scNoGridBackground is set in Kit mode, bMergeCover is set to true and bGrid to false.
 
     SCCOL nX;
     SCROW nY;

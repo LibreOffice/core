@@ -1996,7 +1996,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
                 xHandler->handle( aRequest.GetRequest() );
                 if( aRequest.isApproved() )
                 {
-                    // lok: we want to overwrite file in jail, so don't use template flag
+                    // Kit: we want to overwrite file in jail, so don't use template flag
                     bool bIsKit = comphelper::COKit::isActive();
                     // broken package: try second loading and allow repair
                     pMedium->GetItemSet().Put( SfxBoolItem( SID_REPAIRPACKAGE, true ) );

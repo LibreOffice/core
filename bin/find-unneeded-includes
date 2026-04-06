@@ -376,7 +376,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                                     'jni_uno|'
                                     'librevenge|'
                                     'linguistic|'
-                                    'lok|'
+                                    'kit|'
                                     'mtv|' # for mdds::mtv
                                     'nsSwDocInfoSubType|SWUnoHelper|nsHdFtFlags|' # sw internal
                                     'o3tl|'
