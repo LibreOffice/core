@@ -80,8 +80,6 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 	$(call gb_ExternalProject_run,build,\
 		PYTHONWARNINGS= \
 		PKG_CONFIG_TOP_BUILD_DIR= \
-		$(if $(filter ANDROID iOS,$(OS)),CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)") \
-		$(if $(filter EMSCRIPTEN,$(OS)),CFLAGS="-O3 -DCAIRO_NO_MUTEX -Wno-enum-conversion $(gb_EMSCRIPTEN_CPPFLAGS)" ) \
 		PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:$(gb_UnpackedTarball_workdir)/pixman/builddir/meson-uninstalled" \
 		$(if $(SYSTEM_FREETYPE),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/freetype/instdir/lib/pkgconfig") \
 		$(if $(SYSTEM_FONTCONFIG),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/fontconfig") \
@@ -95,7 +93,10 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(SYSTEM_LIBPNG),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/libpng") \
 		$(if $(SYSTEM_LIBXML),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/libxml2") \
 		$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
-		CFLAGS="$(CFLAGS) $(gb_LTOFLAGS) $(call gb_ExternalProject_get_build_flags,cairo)" \
+		CFLAGS="$(if $(filter ANDROID iOS,$(OS)),$(if $(debug),-g) $(gb_VISIBILITY_FLAGS), \
+		        $(if $(filter EMSCRIPTEN,$(OS)),-O3 -DCAIRO_NO_MUTEX -Wno-enum-conversion $(gb_EMSCRIPTEN_CPPFLAGS), \
+		        $(CFLAGS))) \
+		    $(gb_LTOFLAGS) $(call gb_ExternalProject_get_build_flags,cairo)" \
 		LDFLAGS="$(gb_LTOFLAGS) $(call gb_ExternalProject_get_link_flags,cairo)" \
 		$(MESON) setup --wrap-mode nofallback builddir \
 			$(if $(debug),-Dstrip=false,-Dstrip=true) \
