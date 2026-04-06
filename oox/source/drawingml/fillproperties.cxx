@@ -263,9 +263,18 @@ Reference< XGraphic > lclCheckAndApplyChangeColorTransform(const BlipFillPropert
                 }
             }
 
+            const ColorChangeKey aKey(aGraphic.ImplGetSharedImpGraphic(), static_cast<sal_Int32>(nFromColor), static_cast<sal_Int32>(nToColor), nToTransparence);
+            Reference<XGraphic> xCachedGraphic = rGraphicHelper.getCachedColorChangeGraphic(aKey);
+            if (xCachedGraphic.is())
+                return xCachedGraphic;
+
             uno::Reference<graphic::XGraphicTransformer> xTransformer(aBlipProps.mxFillGraphic, uno::UNO_QUERY);
             if (xTransformer.is())
-                return xTransformer->colorChange(xGraphic, sal_Int32(nFromColor), nTolerance, sal_Int32(nToColor), nToAlpha);
+            {
+                uno::Reference<graphic::XGraphic> xResult = xTransformer->colorChange(xGraphic, static_cast<sal_Int32>(nFromColor), nTolerance, static_cast<sal_Int32>(nToColor), nToAlpha);
+                rGraphicHelper.addGraphicToColorChangeCache(aKey, xResult);
+                return xResult;
+            }
         }
     }
     return xGraphic;

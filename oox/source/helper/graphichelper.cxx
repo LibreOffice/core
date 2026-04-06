@@ -325,6 +325,21 @@ void GraphicHelper::initializeGraphicMapperIfNeeded() const
     }
 }
 
+Reference<XGraphic>
+GraphicHelper::getCachedColorChangeGraphic(const ColorChangeKey& rKey) const
+{
+    auto it = maColorChangeCache.find(rKey);
+    if (it != maColorChangeCache.end())
+        return it->second;
+    return Reference<XGraphic>();
+}
+
+void GraphicHelper::addGraphicToColorChangeCache(
+    const ColorChangeKey& rKey, const Reference<XGraphic>& xGraphic) const
+{
+    maColorChangeCache[rKey] = xGraphic;
+}
+
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

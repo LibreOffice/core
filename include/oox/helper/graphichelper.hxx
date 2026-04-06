@@ -36,6 +36,7 @@
 
 struct WmfExternal;
 class OutputDevice;
+class ImpGraphic;
 
 namespace com::sun::star {
     namespace awt { struct Point; }
@@ -52,6 +53,10 @@ namespace oox {
 /** Provides helper functions for colors, device measurement conversion,
     graphics, and graphic objects handling.
  */
+
+typedef std::tuple<std::shared_ptr<ImpGraphic>, sal_Int32, sal_Int32, sal_Int16> ColorChangeKey;
+typedef std::map<ColorChangeKey, css::uno::Reference<css::graphic::XGraphic>> ColorChangeCache;
+
 class OOX_DLLPUBLIC GraphicHelper
 {
 public:
@@ -140,6 +145,10 @@ public:
     void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper);
 
     void initializeGraphicMapperIfNeeded() const;
+
+    css::uno::Reference<css::graphic::XGraphic> getCachedColorChangeGraphic(const ColorChangeKey& rKey) const;
+    void addGraphicToColorChangeCache(const ColorChangeKey& rKey, const css::uno::Reference<css::graphic::XGraphic>& xGraphic) const;
+
 private:
 
     css::uno::Reference< css::uno::XComponentContext > mxContext;
@@ -151,6 +160,7 @@ private:
     double              mfPixelPerHmmX;             ///< Number of screen pixels per 1/100 mm in X direction.
     double              mfPixelPerHmmY;             ///< Number of screen pixels per 1/100 mm in Y direction.
     css::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
+    mutable ColorChangeCache maColorChangeCache;
 };
 
 
