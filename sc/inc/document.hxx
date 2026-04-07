@@ -205,6 +205,7 @@ class ScEditDataArray;
 class EditTextObject;
 struct ScRefCellValue;
 class ScPostIt;
+struct ScPersonData;
 struct ScSubTotalParam;
 struct ScQueryParam;
 class ScHint;
@@ -476,6 +477,7 @@ private:
     std::unique_ptr<ScConditionMode> pConditionalFormatDialogMode;
 
     std::unique_ptr<ScAutoNameCache> pAutoNameCache;    // for automatic name lookup during CompileXML
+    std::vector<ScPersonData> maPersonList;            // persons for threaded comments
 
     std::unique_ptr<SfxItemSet> pPreviewFont; // convert to std::unique_ptr or whatever
     ScStyleSheet*       pPreviewCellStyle;
@@ -1405,6 +1407,12 @@ public:
     void              GetNotesInRange( const ScRangeList& rRange, std::vector<sc::NoteEntry>& rNotes ) const;
 
     bool              ContainsNotesInRange( const ScRangeList& rRange ) const;
+
+    // Person list (for threaded comments, [MS-XLSX] section 2.1.19)
+    SC_DLLPUBLIC void AddPerson(const ScPersonData& rPerson);
+    SC_DLLPUBLIC const ScPersonData* GetPersonById(const OUString& rId) const;
+    const std::vector<ScPersonData>& GetPersonList() const { return maPersonList; }
+    std::vector<ScPersonData>& GetPersonList() { return maPersonList; }
 
     SC_DLLPUBLIC void SetDrawPageSize(SCTAB nTab);
 

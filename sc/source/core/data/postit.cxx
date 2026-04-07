@@ -451,6 +451,8 @@ ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScPostIt& rNo
     maNoteData( rNote.maNoteData )
 {
     mnPostItId = nPostItId == 0 ? mnLastPostItId++ : nPostItId;
+    if (rNote.mpThreadedCommentData)
+        mpThreadedCommentData = std::make_unique<ScThreadedCommentData>(*rNote.mpThreadedCommentData);
     maNoteData.mxCaption.clear();
     CreateCaption( rPos, rNote.maNoteData.mxCaption.get() );
 }
@@ -477,7 +479,16 @@ std::unique_ptr<ScPostIt> ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument&
         bCloneCaption = false;
     CreateCaptionFromInitData( rOwnPos );
     sal_uInt32 nPostItId = comphelper::LibreOfficeKit::isActive() ? 0 : mnPostItId;
-    return bCloneCaption ? std::make_unique<ScPostIt>( rDestDoc, rDestPos, *this, nPostItId ) : std::make_unique<ScPostIt>( rDestDoc, rDestPos, maNoteData, false, mnPostItId );
+    std::unique_ptr<ScPostIt> pClone;
+    if (bCloneCaption)
+        pClone = std::make_unique<ScPostIt>(rDestDoc, rDestPos, *this, nPostItId);
+    else
+    {
+        pClone = std::make_unique<ScPostIt>(rDestDoc, rDestPos, maNoteData, false, mnPostItId);
+        if (mpThreadedCommentData)
+            pClone->mpThreadedCommentData = std::make_unique<ScThreadedCommentData>(*mpThreadedCommentData);
+    }
+    return pClone;
 }
 
 void ScPostIt::SetDate( const OUString& rDate )
@@ -488,6 +499,18 @@ void ScPostIt::SetDate( const OUString& rDate )
 void ScPostIt::SetAuthor( const OUString& rAuthor )
 {
     maNoteData.maAuthor = rAuthor;
+}
+
+void ScPostIt::SetResolved(bool bResolved)
+{
+    if (!mpThreadedCommentData)
+        mpThreadedCommentData = std::make_unique<ScThreadedCommentData>();
+    mpThreadedCommentData->mbDone = bResolved;
+}
+
+void ScPostIt::SetThreadedCommentData(std::unique_ptr<ScThreadedCommentData> pData)
+{
+    mpThreadedCommentData = std::move(pData);
 }
 
 void ScPostIt::AutoStamp(bool bCreate)
