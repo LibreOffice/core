@@ -12,14 +12,14 @@
  * window.L.Control.Tabs is used to switch sheets in Calc
  */
 
-/* global $ _ _UNO Hammer cool app */
+/* global $ _ _UNO Hammer JSDialog cool app */
 window.L.Control.Tabs = window.L.Control.extend({
 	onAdd: function() {
 		app.events.on('updatepermission', this._onUpdatePermission.bind(this));
 		this._initialized = false;
 	},
 
-	_onUpdatePermission: function(e) {
+	_onUpdatePermission: function() {
 		if (this._map.getDocType() !== 'spreadsheet') {
 			return;
 		}
@@ -27,9 +27,6 @@ window.L.Control.Tabs = window.L.Control.extend({
 		if (!this._initialized) {
 			this._initialize();
 		}
-		setTimeout(function() {
-			$('.spreadsheet-tab').contextMenu(e.detail.perm === 'edit');
-		}, 100);
 	},
 
 	_initialize: function () {
@@ -48,16 +45,21 @@ window.L.Control.Tabs = window.L.Control.extend({
 			return true;
 		}
 
+		// Only for small-screen devices.
 		this._menuItem = {
 			'insertsheetbefore': {
 				name: app.IconUtil.createMenuItemLink(_('Insert sheet before this'), 'InsertSheetBefore'),
 				isHtmlName: true,
-				callback: (this._insertSheetBefore).bind(this)
+				callback: (this._insertSheetBefore).bind(this),
+				_text: 'Insert sheet before this',
+				_image: 'InsertSheetBefore',
 			},
 			'insertsheetafter': {
 				name: app.IconUtil.createMenuItemLink(_('Insert sheet after this'), 'InsertSheetAfter'),
 				isHtmlName: true,
-				callback: (this._insertSheetAfter).bind(this)
+				callback: (this._insertSheetAfter).bind(this),
+				_text: 'Insert sheet after this',
+				_image: 'InsertSheetAfter',
 			},
 			'.uno:Remove': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:Remove', 'spreadsheet', true), 'Remove'),
@@ -65,19 +67,23 @@ window.L.Control.Tabs = window.L.Control.extend({
 				callback: (this._deleteSheet).bind(this),
 				visible: function() {
 					return areTabsMultiple() && !this._isProtectedSheet(this._tabForContextMenu);
-				}.bind(this)
+				}.bind(this),
+				_image: 'Remove',
 			},
 			'.uno:Name': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:RenameTable', 'spreadsheet', true), 'Name'),
 				callback: (this._renameSheet).bind(this),
 				visible: function() {
 					return !this._isProtectedSheet(this._tabForContextMenu);
-				}.bind(this)
+				}.bind(this),
+				_uno: '.uno:RenameTable',
+				_image: 'Name',
 			},
 			'.uno:Protect': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:Protect', 'spreadsheet', true), 'Protect'),
 				isHtmlName: true,
 				callback: (this._protectSheet).bind(this),
+				_image: 'Protect',
 			},
 			'.uno:Show': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:Show', 'spreadsheet', true), 'Show'),
@@ -85,30 +91,37 @@ window.L.Control.Tabs = window.L.Control.extend({
 				callback: (this._showSheet).bind(this),
 				visible: function() {
 					return app.calc.isAnyPartHidden();
-				}
+				},
+				_image: 'Show',
 			},
 			'.uno:Hide': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:Hide', 'spreadsheet', true), 'Hide'),
 				isHtmlName: true,
 				callback: (this._hideSheet).bind(this),
-				visible: areTabsMultiple
+				visible: areTabsMultiple,
+				_image: 'Hide',
 			},
 			'movesheetleft': {
 				name: app.IconUtil.createMenuItemLink(_('Move Sheet Left'), 'MoveSheetLeft'),
 				isHtmlName: true,
 				callback: (this._moveSheetLeft).bind(this),
-				visible: areTabsMultiple
+				visible: areTabsMultiple,
+				_text: 'Move Sheet Left',
+				_image: 'MoveSheetLeft',
 			},
 			'movesheetright': {
 				name: app.IconUtil.createMenuItemLink(_('Move Sheet Right'), 'MoveSheetRight'),
 				isHtmlName: true,
 				callback: (this._moveSheetRight).bind(this),
-				visible: areTabsMultiple
+				visible: areTabsMultiple,
+				_text: 'Move Sheet Right',
+				_image: 'MoveSheetRight',
 			},
 			'.uno:Move': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:Move', 'spreadsheet', true), 'Move'),
 				callback: (this._moveOrCopySheet).bind(this),
-				visible: areTabsMultiple
+				visible: areTabsMultiple,
+				_image: 'Move',
 			},
 			'.uno:CopyTab': {
 				name: app.IconUtil.createMenuItemLink(_('Copy Sheet...'), 'CopyTab'),
@@ -116,24 +129,25 @@ window.L.Control.Tabs = window.L.Control.extend({
 				callback: function() {this._map.sendUnoCommand('.uno:Move');}.bind(this),
 				visible: function() {
 					return !areTabsMultiple();
-				}
+				},
+				_text: 'Copy Sheet...',
+				_image: 'CopyTab',
 			},
 		};
 
-		if (!window.mode.isSmallScreenDevice() || window.mode.isTablet()) {
-			var that = this;
-			window.L.installContextMenu({
-				selector: '.spreadsheet-tab',
-				className: 'cool-font',
-				items: this._menuItem, // rewrite mutates
-				zIndex: 1000,
-				build: function() {
-					if (that._map.isReadOnlyMode())
-						return false;
-					return { }
-				}
-			});
-		}
+		this._menuCallbacks = {
+			'insertsheetbefore': this._insertSheetBefore.bind(this),
+			'insertsheetafter': this._insertSheetAfter.bind(this),
+			'.uno:Remove': this._deleteSheet.bind(this),
+			'.uno:RenameTable': this._renameSheet.bind(this),
+			'.uno:Protect': this._protectSheet.bind(this),
+			'.uno:Show': this._showSheet.bind(this),
+			'.uno:Hide': this._hideSheet.bind(this),
+			'movesheetleft': this._moveSheetLeft.bind(this),
+			'movesheetright': this._moveSheetRight.bind(this),
+			'.uno:Move': this._moveOrCopySheet.bind(this),
+			'.uno:CopyTab': function() { this._map.sendUnoCommand('.uno:Move'); }.bind(this),
+		};
 
 		map.on('updateparts', this._updateDisabled, this);
 	},
@@ -228,7 +242,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 											window.contextMenuWizard = true;
 											this._map.fire('mobilewizard', {data: menuData});
 										} else {
-											$(e.target).trigger('contextmenu');
+											this._openTabContextMenu(e.target);
 										}
 									}
 								};
@@ -248,8 +262,10 @@ window.L.Control.Tabs = window.L.Control.extend({
 							};
 						}(i).bind(this));
 						window.L.DomEvent.on(tab, 'contextmenu', function(j) {
-							return function() {
+							return function(e) {
+								e.preventDefault();
 								this._tabForContextMenu = j;
+								this._openTabContextMenu(e.currentTarget);
 							};
 						}(i).bind(this));
 					}
@@ -315,6 +331,62 @@ window.L.Control.Tabs = window.L.Control.extend({
 				}
 			}
 		}
+	},
+
+	_buildMenuEntries: function() {
+		const entries = [];
+		for (let key in this._menuItem) {
+			const data = this._menuItem[key];
+			let visible = true;
+			if (Object.prototype.hasOwnProperty.call(data, 'visible')) {
+				if (typeof data.visible === 'function') {
+					visible = data.visible();
+				} else {
+					visible = !!data.visible;
+				}
+			}
+
+			if (!visible) continue;
+
+			const isUNO = key.startsWith('.uno:');
+			if (Object.prototype.hasOwnProperty.call(data, '_uno')) key = data._uno;
+			let text = isUNO ? _UNO(key, 'spreadsheet', true): _(data._text);
+			entries.push({
+				id: key,
+				type: 'action',
+				text: text,
+				img: data._image,
+			});
+		}
+
+		return entries;
+	},
+
+	_openTabContextMenu: function(tabElement) {
+		if (this._map.isReadOnlyMode())
+			return;
+
+		JSDialog.CloseAllDropdowns();
+		const entries = this._buildMenuEntries();
+		const callback = (objectType, eventType, object, data, entry) => {
+			if (eventType !== 'selected')
+				return false;
+			const cb = this._menuCallbacks[entry.id];
+			if (cb) {
+				cb();
+				JSDialog.CloseAllDropdowns();
+				return true;
+			}
+			return false;
+		};
+		JSDialog.OpenDropdown(
+			'spreadsheet-tab-menu',
+			tabElement,
+			entries,
+			callback,
+			'',
+			false,
+		);
 	},
 
 	_addDnDHandlers: function(element) {
