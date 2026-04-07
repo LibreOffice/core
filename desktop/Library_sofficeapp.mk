@@ -37,7 +37,7 @@ $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
 	officecfg/registry \
 ))
 
-ifeq ($(OS),EMSCRIPTEN)
+ifeq ($(ENABLE_EMBIND_UNO),TRUE)
 $(eval $(call gb_Library_use_custom_headers,sofficeapp, \
     static/unoembind \
 ))

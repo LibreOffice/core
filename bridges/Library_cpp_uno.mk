@@ -200,6 +200,11 @@ $(eval $(call gb_Library_use_internal_comprehensive_api,$(CPPU_ENV)_uno,\
 	udkapi \
 ))
 
+ifeq ($(OS),EMSCRIPTEN)
+$(eval $(call gb_Library_use_internal_comprehensive_api,$(CPPU_ENV)_uno, \
+    offapi \
+))
+endif
 ifeq ($(OS),MACOSX)
 ifeq ($(CPUNAME),AARCH64)
 $(eval $(call gb_Library_use_internal_comprehensive_api,$(CPPU_ENV)_uno,\

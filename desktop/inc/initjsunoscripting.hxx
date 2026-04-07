@@ -11,7 +11,9 @@
 
 #include <sal/config.h>
 
-#if defined __EMSCRIPTEN__
+#include <config_emscripten.h>
+
+#if HAVE_EMBIND_UNO
 
 void initJsUnoScripting();
 

@@ -55,15 +55,17 @@ endif
 endif
 
 ifeq ($(OS),EMSCRIPTEN)
+ifeq ($(ENABLE_EMBIND_UNO),TRUE)
 $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,soffice_bin)) : $(call gb_StaticLibrary_get_linktarget_target,unoembind)
 $(call gb_LinkTarget_get_headers_target,$(call gb_Executable_get_linktarget,soffice_bin)) : $(call gb_StaticLibrary_get_headers_target,unoembind)
 $(call gb_LinkTarget__static_lib_dummy_depend,unoembind)
+endif
 
 $(call gb_Executable_get_linktarget_target,soffice_bin): \
     $(gb_CustomTarget_workdir)/desktop/soffice_bin-emscripten-exports/exports
 
 $(eval $(call gb_Executable_add_ldflags,soffice_bin,\
-	-s EXPORTED_FUNCTIONS=@$(gb_CustomTarget_workdir)/desktop/soffice_bin-emscripten-exports/exports -Wl$(COMMA)--whole-archive $(call gb_StaticLibrary_get_target,unoembind) -Wl$(COMMA)--no-whole-archive \
+	-s EXPORTED_FUNCTIONS=@$(gb_CustomTarget_workdir)/desktop/soffice_bin-emscripten-exports/exports $(if $(ENABLE_EMBIND_UNO),-Wl$(COMMA)--whole-archive $(call gb_StaticLibrary_get_target,unoembind) -Wl$(COMMA)--no-whole-archive) \
 	$(if $(ENABLE_EMSCRIPTEN_PROXY_TO_PTHREAD), \
 	    -sPROXY_TO_PTHREAD=1 \
 	    $(if $(DISABLE_GUI),, \
@@ -77,18 +79,19 @@ $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
 endif
 
 $(call gb_Executable_get_linktarget_target,soffice_bin): \
-    $(gb_CustomTarget_workdir)/static/unoembind/bindings_uno.js \
-    $(SRCDIR)/static/emscripten/uno.js \
+    $(if $(ENABLE_EMBIND_UNO),$(gb_CustomTarget_workdir)/static/unoembind/bindings_uno.js) \
+    $(if $(ENABLE_EMBIND_UNO),$(SRCDIR)/static/emscripten/uno.js) \
     $(EMSCRIPTEN_EXTRA_SOFFICE_PRE_JS)
 
-$(eval $(call gb_Executable_add_prejs,soffice_bin,$(SRCDIR)/static/emscripten/script.js))
+$(if $(ENABLE_EMBIND_UNO),$(eval $(call gb_Executable_add_prejs,soffice_bin,$(SRCDIR)/static/emscripten/script.js)))
 
 $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
-    --post-js $(gb_CustomTarget_workdir)/static/unoembind/bindings_uno.js \
-    --post-js $(SRCDIR)/static/emscripten/uno.js \
+    $(if $(ENABLE_EMBIND_UNO),--post-js $(gb_CustomTarget_workdir)/static/unoembind/bindings_uno.js) \
+    $(if $(ENABLE_EMBIND_UNO),--post-js $(SRCDIR)/static/emscripten/uno.js) \
     $(foreach i,$(EMSCRIPTEN_EXTRA_SOFFICE_PRE_JS),--pre-js $(i)) \
 ))
 
+ifeq ($(ENABLE_EMBIND_UNO),TRUE)
 ifeq ($(ENABLE_DBGUTIL)-$(gb_SUPPRESS_TESTS),TRUE-)
 
 $(call gb_Executable_get_linktarget_target,soffice_bin): \
@@ -98,6 +101,7 @@ $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
     --post-js $(SRCDIR)/unotest/source/embindtest/embindtest.js \
 ))
 
+endif
 endif
 
 endif

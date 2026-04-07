@@ -46,6 +46,7 @@
 #include <map>
 
 #if defined __EMSCRIPTEN__
+#include <config_emscripten.h>
 #include <initjsunoscripting.hxx>
 #endif
 
@@ -85,7 +86,7 @@ void Desktop::InitApplicationServiceManager()
         UNO_QUERY_THROW);
 #endif
     comphelper::setProcessServiceFactory(sm);
-#if defined __EMSCRIPTEN__
+#if defined __EMSCRIPTEN__ && HAVE_EMBIND_UNO
     initJsUnoScripting();
 #endif
 }

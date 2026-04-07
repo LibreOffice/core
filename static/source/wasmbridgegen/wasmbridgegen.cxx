@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <cstdlib>
 #include <fstream>
 #include <ios>
@@ -586,25 +587,19 @@ void computeSlotSignatures(rtl::Reference<TypeManager> const& manager,
     }
 }
 
-void appendRttiSymbolSegment(OStringBuffer& buffer, OUString const& id)
+OString computeRttiSymbol(std::vector<OString> const& path)
 {
-    OString s(OUStringToOString(id, RTL_TEXTENCODING_ASCII_US));
-    buffer.append(OString::number(s.getLength()) + s);
-}
-
-OString computeRttiSymbol(std::vector<OUString> const& path, OUString const& id)
-{
+    assert(!path.empty());
     OStringBuffer buf("__ZTI");
-    if (!path.empty())
+    if (path.size() > 1)
     {
         buf.append('N');
-        for (auto const& i : path)
-        {
-            appendRttiSymbolSegment(buf, i);
-        }
     }
-    appendRttiSymbolSegment(buf, id);
-    if (!path.empty())
+    for (auto const& i : path)
+    {
+        buf.append(OString::number(i.getLength()) + i);
+    }
+    if (path.size() > 1)
     {
         buf.append('E');
     }
@@ -614,7 +609,7 @@ OString computeRttiSymbol(std::vector<OUString> const& path, OUString const& id)
 void scan(rtl::Reference<TypeManager> const& manager,
           rtl::Reference<unoidl::MapCursor> const& cursor, std::vector<OUString>& path,
           std::set<OString>& callSignatures, std::set<OString>& slotSignatures,
-          std::set<OString>& rttis)
+          std::set<std::vector<OString>>& rttis)
 {
     assert(cursor.is());
     for (;;)
@@ -634,8 +629,16 @@ void scan(rtl::Reference<TypeManager> const& manager,
                 path.pop_back();
                 break;
             case unoidl::Entity::SORT_EXCEPTION_TYPE:
-                rttis.insert(computeRttiSymbol(path, id));
+            {
+                std::vector<OString> p;
+                for (auto const& i : path)
+                {
+                    p.push_back(OUStringToOString(i, RTL_TEXTENCODING_ASCII_US));
+                }
+                p.push_back(OUStringToOString(id, RTL_TEXTENCODING_ASCII_US));
+                rttis.insert(std::move(p));
                 break;
+            }
             case unoidl::Entity::SORT_INTERFACE_TYPE:
             {
                 auto const ite = static_cast<unoidl::InterfaceTypeEntity const*>(ent.get());
@@ -691,7 +694,7 @@ SAL_IMPLEMENT_MAIN()
         std::vector<OUString> path;
         std::set<OString> callSignatures;
         std::set<OString> slotSignatures;
-        std::set<OString> rttis;
+        std::set<std::vector<OString>> rttis;
         for (auto const& prov : mgr->getPrimaryProviders())
         {
             scan(mgr, prov->createRootCursor(), path, callSignatures, slotSignatures, rttis);
@@ -705,10 +708,24 @@ SAL_IMPLEMENT_MAIN()
         cppOut << "#include <sal/config.h>\n"
                   "#include <bit>\n"
                   "#include <string_view>\n"
+                  "#include <typeinfo>\n"
                   "#include <com/sun/star/uno/RuntimeException.hpp>\n"
                   "#include <rtl/ustring.hxx>\n"
                   "#include <sal/types.h>\n"
                   "#include <wasm/generated.hxx>\n";
+        for (auto const& rtti : rttis)
+        {
+            cppOut << "#include <";
+            for (std::size_t i = 0; i != rtti.size(); ++i)
+            {
+                if (i != 0)
+                {
+                    cppOut << "/";
+                }
+                cppOut << rtti[i];
+            }
+            cppOut << ".hpp>\n";
+        }
         for (auto const& sig : callSignatures)
         {
             cppOut << "extern \"C\" void callVirtualFunction_" << sig
@@ -865,6 +882,20 @@ SAL_IMPLEMENT_MAIN()
         cppOut << "    throw css::uno::RuntimeException(\"Wasm bridge cannot fill virtual function "
                   "slot with signature \" + OUString::fromUtf8(signature));\n"
                   "}\n";
+        if (!rttis.empty())
+        {
+            cppOut << "static std::type_info const * const rtti[] __attribute__((used)) = {\n";
+            for (auto const& rtti : rttis)
+            {
+                cppOut << "    &typeid(";
+                for (auto const& i : rtti)
+                {
+                    cppOut << "::" << i;
+                }
+                cppOut << "),\n";
+            }
+            cppOut << "};\n";
+        }
         cppOut.close();
         if (!cppOut)
         {
@@ -1017,7 +1048,7 @@ SAL_IMPLEMENT_MAIN()
         }
         for (auto const& rtti : rttis)
         {
-            expOut << rtti.getStr() << "\n";
+            expOut << computeRttiSymbol(rtti).getStr() << "\n";
         }
         expOut.close();
         if (!expOut)
