@@ -232,7 +232,7 @@ static PyRef createClassForSingleton(
     // name of the service is stored via a closure.
     OUString singletonName = xSingleton->getName();
     PyRef makeGetter = getObjectFromUnoModule(runtime, "_uno_make_singleton_getter");
-    PyRef getter = PyObject_CallOneArg(makeGetter.get(), ustring2PyString(singletonName).get());
+    PyRef getter = PyObject_CallFunctionObjArgs(makeGetter.get(), ustring2PyString(singletonName).get(), nullptr);
 
     PyObject_SetAttrString(ret.get(), "get", getter.get());
 
