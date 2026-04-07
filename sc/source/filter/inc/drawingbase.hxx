@@ -105,6 +105,8 @@ public:
     /** Calculates the resulting shape anchor in 1/100 mm. */
     css::awt::Rectangle calcAnchorRectHmm( const css::awt::Size& rPageSizeHmm ) const;
     AnchorType          getEditAs() const { return meEditAs; }
+
+    AnchorType getAnchorType() const { return meAnchorType; }
 private:
     /** Converts the passed anchor to an absolute position in EMUs. */
     ::oox::drawingml::EmuPoint calcCellAnchorEmu( const CellAnchorModel& rModel ) const;
