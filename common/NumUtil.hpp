@@ -334,18 +334,6 @@ inline std::uint64_t u64FromString(const std::string_view input, const std::uint
     return strTo<std::uint64_t>(input, def);
 }
 
-/**
-* Similar to std::atoi() but does not require p to be null-terminated.
-*
-* Returns std::numeric_limits<int>::min/max() if the result would overflow.
-*/
-inline int safe_atoi(const char* p, int len)
-{
-    std::size_t offset = 0;
-    const auto [value, res] = parseStrTo<std::int32_t>(std::string_view(p, len), offset);
-    return value;
-}
-
 /// Fast string to 32-bit signed int conversion.
 /// Optimized for performance with manual parsing and minimal branches.
 /// Drop-in replacement to std::stoi() that accepts string_view.

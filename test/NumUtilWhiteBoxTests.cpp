@@ -34,7 +34,6 @@ class NumUtilWhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testU32FromString);
     CPPUNIT_TEST(testU64FromString);
     CPPUNIT_TEST(testStoi);
-    CPPUNIT_TEST(testSafeAtoi);
     CPPUNIT_TEST(testStrtoint64MatchesStrtol);
     CPPUNIT_TEST(testStrtouint64MatchesStrtoul);
     CPPUNIT_TEST(testStrtoint64MatchesStrtoll);
@@ -47,7 +46,6 @@ class NumUtilWhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testU32FromString();
     void testU64FromString();
     void testStoi();
-    void testSafeAtoi();
     void testStrtoint64MatchesStrtol();
     void testStrtouint64MatchesStrtoul();
     void testStrtoint64MatchesStrtoll();
@@ -793,106 +791,6 @@ void NumUtilWhiteBoxTests::testStoi()
     {
         LOK_ASSERT_FAIL("Unexpected: " << exc.what());
     }
-}
-
-void NumUtilWhiteBoxTests::testSafeAtoi()
-{
-    constexpr std::string_view testname = __func__;
-
-    // Helper to compare safe_atoi with std::atoi for non-overflow cases.
-    // std::atoi has UB on overflow, so we only compare within int range.
-    auto compareWithAtoi = [&](const char* str)
-    {
-        const int stdResult = std::atoi(str);
-        const int safeResult = NumUtil::safe_atoi(str, std::strlen(str));
-        LOK_ASSERT_EQUAL_CTX(stdResult, safeResult, std::string(str));
-    };
-
-    // Basic positive numbers.
-    compareWithAtoi("0");
-    compareWithAtoi("1");
-    compareWithAtoi("7");
-    compareWithAtoi("42");
-    compareWithAtoi("123");
-    compareWithAtoi("999");
-    compareWithAtoi("12345");
-
-    // Negative numbers.
-    compareWithAtoi("-1");
-    compareWithAtoi("-7");
-    compareWithAtoi("-42");
-    compareWithAtoi("-123");
-    compareWithAtoi("-999");
-    compareWithAtoi("-12345");
-
-    // Plus sign prefix.
-    compareWithAtoi("+7");
-    compareWithAtoi("+42");
-    compareWithAtoi("+0");
-
-    // Leading whitespace.
-    compareWithAtoi("  42");
-    compareWithAtoi("\t123");
-    compareWithAtoi("   -456");
-    compareWithAtoi(" \t +789");
-
-    // Leading zeros.
-    compareWithAtoi("0042");
-    compareWithAtoi("00123");
-    compareWithAtoi("-00456");
-
-    // Trailing non-numeric characters.
-    compareWithAtoi("42xy");
-    compareWithAtoi("123abc");
-    compareWithAtoi("-456def");
-
-    // Zero variants.
-    compareWithAtoi("-0");
-    compareWithAtoi("+0");
-    compareWithAtoi("0000");
-
-    // Single digit numbers.
-    compareWithAtoi("1");
-    compareWithAtoi("9");
-    compareWithAtoi("-1");
-    compareWithAtoi("-9");
-
-    // INT_MAX boundary.
-    compareWithAtoi("2147483647");
-
-    // Empty and invalid strings (atoi returns 0).
-    compareWithAtoi("");
-    compareWithAtoi("abc");
-    compareWithAtoi("   ");
-
-    // Overflow: safe_atoi clamps to INT_MAX / -INT_MAX.
-    LOK_ASSERT_EQUAL(std::numeric_limits<int>::max(), NumUtil::safe_atoi("9999999990", 10));
-    LOK_ASSERT_EQUAL(std::numeric_limits<int>::min(), NumUtil::safe_atoi("-9999999990", 11));
-    LOK_ASSERT_EQUAL(std::numeric_limits<int>::max(),
-                     NumUtil::safe_atoi("2147483648", 10)); // INT_MAX + 1.
-
-    // Length-limiting (not null-terminated behavior).
-    {
-        std::string s("42");
-        LOK_ASSERT_EQUAL(4, NumUtil::safe_atoi(s.data(), 1));
-    }
-    {
-        std::string s("12345");
-        LOK_ASSERT_EQUAL(123, NumUtil::safe_atoi(s.data(), 3));
-    }
-
-    // Embedded null (safe_atoi uses length, stops at non-digit).
-    {
-        std::string s("123");
-        s[1] = '\0';
-        LOK_ASSERT_EQUAL(1, NumUtil::safe_atoi(s.data(), s.size()));
-    }
-
-    // Null pointer.
-    LOK_ASSERT_EQUAL(0, NumUtil::safe_atoi(nullptr, 0));
-
-    // Zero length.
-    LOK_ASSERT_EQUAL(0, NumUtil::safe_atoi("42", 0));
 }
 
 void NumUtilWhiteBoxTests::testStrtoint64MatchesStrtol()
