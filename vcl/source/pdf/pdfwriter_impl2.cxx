@@ -260,11 +260,10 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 {aBitmap.GetChecksum(), pStrm});
         }
     }
-    else if ( aBitmap.HasAlpha() )
-        m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmap );
     else
+    {
         m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmap, i_Graphic );
-
+    }
 }
 
 void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevData* i_pOutDevData, const vcl::PDFWriter::PlayMetafileContext& i_rContext, VirtualDevice* pDummyVDev )
