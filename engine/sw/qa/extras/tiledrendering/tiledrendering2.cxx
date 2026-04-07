@@ -889,6 +889,38 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testImageBulletRemoteNotFetched)
     static_cast<SwViewShell*>(pWrtShell)->Paint(
         *pDevice, tools::Rectangle(Point(0, 0), pWrtShell->GetLayout()->getFrameArea().SSize()));
 }
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBackgroundImageRemoteNotFetched)
+{
+    // style:background-image with a remote xlink:href must not fetch
+    // the URL during paint when link updates are not allowed.
+    comphelper::COKit::setActive(false);
+
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"background-image-link.fodt"), aParams);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    // the background image link should be registered in the link manager
+    sfx2::LinkManager& rLinkMgr
+        = pDocShell->GetDoc()->getIDocumentLinksAdministration().GetLinkManager();
+    CPPUNIT_ASSERT_MESSAGE("background image link should be registered",
+                           !rLinkMgr.GetLinks().empty());
+
+    pWrtShell->CalcLayout();
+
+    // render through SwViewShell::Paint which exercises the fill attribute
+    // rendering path via createNewSdrFillGraphicAttribute.
+    // The assert in that function will fire if a remote fetch is attempted.
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(Size(1024, 1024));
+    static_cast<SwViewShell*>(pWrtShell)->Paint(
+        *pDevice, tools::Rectangle(Point(0, 0), pWrtShell->GetLayout()->getFrameArea().SSize()));
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

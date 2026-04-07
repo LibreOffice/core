@@ -29,6 +29,7 @@
 #include <editeng/rsiditem.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <fillattrcache.hxx>
 #include <anchoredobject.hxx>
 #include <txtfld.hxx>
 #include <txtinet.hxx>
@@ -5818,7 +5819,12 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwTextNode::getSdrAllFill
     // create SdrAllFillAttributesHelper on demand
     if(!maFillAttributes)
     {
-        const_cast< SwTextNode* >(this)->maFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(GetSwAttrSet());
+        auto pNew = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(GetSwAttrSet());
+
+        if (hasDeferredFillBitmap(GetSwAttrSet()))
+            return pNew;
+
+        const_cast<SwTextNode*>(this)->maFillAttributes = std::move(pNew);
     }
 
     return maFillAttributes;

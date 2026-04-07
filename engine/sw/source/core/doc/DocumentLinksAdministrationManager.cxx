@@ -38,21 +38,84 @@
 #include <section.hxx>
 #include <docary.hxx>
 #include <frmfmt.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <numrule.hxx>
+#include <rootfrm.hxx>
 #include <fmtcntnt.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
 #include <frameformats.hxx>
+#include <svl/itempool.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xdef.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/securityoptions.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;
 
-//Helper functions for this file
 namespace
 {
+    // Link class for fill bitmap items with remote URLs.
+    // DataChanged receives the fetched graphic and updates the actual
+    // XFillBitmapItem in the attribute pool so the drawing layer picks up
+    // the resolved image on the next repaint.
+    class SwFillBitmapLink final : public sfx2::SvBaseLink
+    {
+        SwDoc* m_pDoc;
+    public:
+        SwFillBitmapLink(SwDoc* pDoc)
+            : SvBaseLink(SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB)
+            , m_pDoc(pDoc)
+        {
+        }
+
+        virtual UpdateResult DataChanged(const OUString& rMimeType,
+                                         const css::uno::Any& rValue) override
+        {
+            if (!m_pDoc)
+                return ERROR_GENERAL;
+
+            Graphic aGrf;
+            sfx2::LinkManager& rLinkMgr
+                = m_pDoc->getIDocumentLinksAdministration().GetLinkManager();
+            if (!rLinkMgr.GetGraphicFromAny(rMimeType, rValue, aGrf, nullptr))
+                return ERROR_GENERAL;
+            if (aGrf.GetType() == GraphicType::Default)
+                return ERROR_GENERAL;
+
+            OUString aURL;
+            sfx2::LinkManager::GetDisplayNames(this, nullptr, &aURL);
+            GraphicObject aGrfObj(aGrf);
+
+            // Replace the item in all attribute sets via pool surrogates
+            m_pDoc->GetAttrPool().iterateItemSurrogates(XATTR_FILLBITMAP,
+                [&aURL, &aGrfObj](SfxItemPool::SurrogateData& rData) -> bool
+                {
+                    auto& rItem = static_cast<const XFillBitmapItem&>(rData.getItem());
+                    const Graphic& rGrf = rItem.GetGraphicObject().GetGraphic();
+                    if (rGrf.GetType() == GraphicType::Default
+                        && rGrf.getOriginURL() == aURL)
+                    {
+                        rData.setItem(std::make_unique<XFillBitmapItem>(aGrfObj));
+                    }
+                    return true;
+                });
+
+            // The surrogate replacement bypasses Writer's change notification,
+            // but the SdrAllFillAttributesHelper cache on SwTextNode and
+            // SwFrameFormat is not populated for unresolved fill bitmaps, so
+            // invalidating all content is sufficient to pick up the new data.
+            for (SwRootFrame* pLayout : m_pDoc->GetAllLayouts())
+                pLayout->InvalidateAllContent(SwInvalidateFlags::PrtArea);
+
+            return SUCCESS;
+        }
+    };
+
+    //Helper functions for this file
     ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks )
     {
         for (const auto& rLinkIter : rLinks)
@@ -205,6 +268,21 @@ void DocumentLinksAdministrationManager::UpdateLinks()
     // before checking whether the link list is empty
     for (SwNumRuleTable::size_type n = 0; n < m_rDoc.GetNumRuleTable().size(); ++n)
         m_rDoc.GetNumRuleTable()[n]->RegisterGrfLinks(m_rDoc);
+
+    // Register links for fill bitmap items (e.g. style:background-image)
+    // with remote URLs. Iterates unique pool items, not per-node.
+    for (const SfxPoolItem* pItem : m_rDoc.GetAttrPool().GetItemSurrogates(XATTR_FILLBITMAP))
+    {
+        auto* pBmpItem = static_cast<const XFillBitmapItem*>(pItem);
+        const Graphic& rGrf = pBmpItem->GetGraphicObject().GetGraphic();
+        if (rGrf.GetType() != GraphicType::Default)
+            continue;
+        OUString aURL = rGrf.getOriginURL();
+        if (aURL.isEmpty())
+            continue;
+        tools::SvRef<sfx2::SvBaseLink> xLink(new SwFillBitmapLink(&m_rDoc));
+        GetLinkManager().InsertFileLink(*xLink, sfx2::SvBaseLinkObjectType::ClientGraphic, aURL);
+    }
 
     if (GetLinkManager().GetLinks().empty())
         return;
