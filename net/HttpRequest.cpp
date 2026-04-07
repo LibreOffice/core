@@ -268,8 +268,10 @@ FieldParseState StatusLine::parse(const char* p, int64_t& len)
         LOG_ERR("StatusLine::parse: expected valid integer number");
         return FieldParseState::Invalid;
     }
-    _statusCode = NumUtil::safe_atoi(&p[off], len - off);
-    if (_statusCode < MinValidStatusCode || _statusCode > MaxValidStatusCode)
+
+    bool res = false;
+    std::tie(_statusCode, res) = NumUtil::u32FromString(std::string(&p[off], len - off));
+    if (!res || _statusCode < MinValidStatusCode || _statusCode > MaxValidStatusCode)
     {
         LOG_ERR("StatusLine::parse: Invalid StatusCode [" << _statusCode << "]");
         return FieldParseState::Invalid;
