@@ -200,6 +200,7 @@ public:
         settings of this column. */
     ApiFilterSettings   finalizeImport();
     bool                isButtonHidden();
+    sal_Int32           getColumnId() const { return mnColId; }
 
 private:
     std::shared_ptr< FilterSettingsBase >
