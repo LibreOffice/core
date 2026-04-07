@@ -392,20 +392,18 @@ JSDialog.spinfieldControl = function (
 	return false;
 };
 
-JSDialog.metricfieldControl = function (
+const _createBaseSpinField = function (
 	parentContainer: HTMLElement,
 	data: any,
 	builder: JSBuilder,
 	customCallback: JSDialogCallback,
 ) {
-	/* jscpd:ignore-start */
 	const controls = JSDialog.baseSpinField(
 		parentContainer,
 		data,
 		builder,
 		customCallback,
 	) as SpinFieldControls;
-	/* jscpd:ignore-end */
 
 	if (!window.L.Browser.cypressTest && !window.L.Browser.chrome) {
 		controls.spinfield.onkeypress = window.L.bind(
@@ -426,6 +424,15 @@ JSDialog.metricfieldControl = function (
 	return false;
 };
 
+JSDialog.metricfieldControl = function (
+	parentContainer: HTMLElement,
+	data: any,
+	builder: JSBuilder,
+	customCallback: JSDialogCallback,
+) {
+	return _createBaseSpinField(parentContainer, data, builder, customCallback);
+};
+
 JSDialog.formattedfieldControl = function (
 	parentContainer: HTMLElement,
 	data: any,
@@ -443,30 +450,7 @@ JSDialog.formattedfieldControl = function (
 		data.unit = _extractUnits(data.text.toString());
 	}
 
-	const controls = JSDialog.baseSpinField(
-		parentContainer,
-		data,
-		builder,
-		customCallback,
-	) as SpinFieldControls;
-
-	if (!window.L.Browser.cypressTest && !window.L.Browser.chrome) {
-		controls.spinfield.onkeypress = window.L.bind(
-			_preventNonNumericalInput,
-			builder,
-		);
-	}
-
-	listenNumericChanges(data, builder, controls, customCallback);
-
-	const value = parseFloat(data.value);
-	JSDialog._setSpinFieldValue(
-		controls.spinfield,
-		JSDialog._formatSpinFieldValue(value, controls.container._unit),
-		value,
-	);
-
-	return false;
+	return _createBaseSpinField(parentContainer, data, builder, customCallback);
 };
 
 JSDialog._parseSpinFieldValue = function (displayValue: string) {
