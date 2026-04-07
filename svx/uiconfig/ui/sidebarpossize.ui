@@ -36,7 +36,7 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <child>
-      <!-- n-columns=3 n-rows=9 -->
+      <!-- n-columns=3 n-rows=10 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -147,6 +147,7 @@
           <packing>
             <property name="left-attach">1</property>
             <property name="top-attach">2</property>
+            <property name="width">2</property>
           </packing>
         </child>
         <child>
@@ -181,6 +182,7 @@
           <packing>
             <property name="left-attach">1</property>
             <property name="top-attach">3</property>
+            <property name="width">2</property>
           </packing>
         </child>
         <child>
@@ -194,7 +196,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">6</property>
+            <property name="top-attach">7</property>
           </packing>
         </child>
         <child>
@@ -214,6 +216,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:BringToFront">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -224,6 +227,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ObjectForwardOne">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -234,6 +238,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ObjectBackOne">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -244,6 +249,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:SendToBack">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -269,6 +275,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:SetObjectToBackground">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -279,6 +286,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:SetObjectToForeground">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -296,7 +304,7 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">6</property>
+            <property name="top-attach">7</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -311,7 +319,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">5</property>
+            <property name="top-attach">6</property>
           </packing>
         </child>
         <child>
@@ -328,7 +336,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">4</property>
+            <property name="top-attach">5</property>
           </packing>
         </child>
         <child>
@@ -393,6 +401,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:FlipVertical">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarpossize|flipvertical|tooltip_text">Flip the selected object vertically.</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -404,6 +413,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:FlipHorizontal">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarpossize|fliphorizontal|tooltip_text">Flip the selected object horizontally.</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -421,7 +431,7 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">4</property>
+            <property name="top-attach">5</property>
             <property name="width">2</property>
             <property name="height">2</property>
           </packing>
@@ -448,7 +458,7 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">8</property>
+            <property name="top-attach">9</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -463,7 +473,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">7</property>
+            <property name="top-attach">8</property>
           </packing>
         </child>
         <child>
@@ -483,6 +493,7 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:ObjectAlignLeft">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -493,6 +504,7 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:AlignCenter">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -503,6 +515,7 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:ObjectAlignRight">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -528,6 +541,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:AlignUp">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -538,6 +552,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:AlignMiddle">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -548,6 +563,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:AlignDown">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -565,85 +581,49 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">7</property>
+            <property name="top-attach">8</property>
             <property name="width">2</property>
           </packing>
         </child>
         <child>
-          <!-- n-columns=2 n-rows=3 -->
-          <object class="GtkGrid">
+          <object class="GtkCheckButton" id="ratio">
+            <property name="label" translatable="yes" context="sidebarpossize|keepratiolabel">Keep ratio</property>
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">False</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarpossize|ratio_tip">Keep ratio</property>
             <property name="valign">center</property>
-            <property name="column-spacing">3</property>
-            <child>
-              <object class="GtkCheckButton" id="ratio">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="focus-on-click">False</property>
-                <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="sidebarpossize|ratio_tip">Keep ratio</property>
-                <property name="valign">center</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="ratio-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|accessible_name|ratio">Keep Ratio</property>
-                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebarpossize|extended_tip|ratio">Maintains proportions when you resize the selected object.</property>
-                  </object>
-                </child>
+            <property name="margin-start">6</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="ratio-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|accessible_name|ratio">Keep Ratio</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="sidebarpossize|extended_tip|ratio">Maintains proportions when you resize the selected object.</property>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="imRatio">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="valign">center</property>
-                <property name="icon-name">res/unlocked.png</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="daRatioBottom">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">False</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="daRatioTop">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">False</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">2</property>
-            <property name="height">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">4</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="imRatio">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/unlocked.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>

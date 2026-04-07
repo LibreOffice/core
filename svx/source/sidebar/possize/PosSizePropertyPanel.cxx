@@ -75,8 +75,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxMtrHeight(m_xBuilder->weld_metric_spin_button(u"selectheight"_ustr, FieldUnit::CM))
     , mxCbxScale(m_xBuilder->weld_check_button(u"ratio"_ustr))
     , m_xCbxScaleImg(m_xBuilder->weld_image(u"imRatio"_ustr))
-    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, u"daRatioTop"_ustr, m_aRatioTop))
-    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, u"daRatioBottom"_ustr, m_aRatioBottom))
     , mxFtAngle(m_xBuilder->weld_label(u"rotationlabel"_ustr))
     , mxMtrAngle(m_xBuilder->weld_metric_spin_button(u"rotation"_ustr, FieldUnit::DEGREE)),
     mxCtrlDial(new DialControl),
@@ -138,15 +136,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxFtWidth->set_label(sLabel);
     mxFtWidth->set_size_request(nWidth, -1);
 
-    // vertical alignment = fill makes the drawingarea expand the associated spinedits so we have to size it here
-    const sal_Int16 aHeight
-        = static_cast<sal_Int16>(std::max(int(mxCbxScale->get_preferred_size().getHeight() / 2
-                                              - mxMtrWidth->get_preferred_size().getHeight() / 2),
-                                          12));
-    const sal_Int16 aWidth
-        = static_cast<sal_Int16>(mxCbxScale->get_preferred_size().getWidth() / 2);
-    m_xImgRatioTop->set_size_request(aWidth, aHeight);
-    m_xImgRatioBottom->set_size_request(aWidth, aHeight);
     //init needed for gtk3
     m_xCbxScaleImg->set_from_icon_name(mxCbxScale->get_active() ? RID_SVXBMP_LOCKED
                                                                 : RID_SVXBMP_UNLOCKED);

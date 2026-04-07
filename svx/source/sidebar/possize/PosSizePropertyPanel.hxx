@@ -95,8 +95,6 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxMtrHeight;
     std::unique_ptr<weld::CheckButton> mxCbxScale;
     std::unique_ptr<weld::Image> m_xCbxScaleImg;
-    std::unique_ptr<weld::CustomWeld> m_xImgRatioTop;
-    std::unique_ptr<weld::CustomWeld> m_xImgRatioBottom;
 
     //rotation
     std::unique_ptr<weld::Label> mxFtAngle;
