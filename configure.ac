@@ -15792,7 +15792,9 @@ if test $_os = iOS -o $_os = Android; then
 fi
 
 if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
-    if test "$enable_mergelibs" = "more"; then
+    if test "$enable_compiler_plugins" = yes; then
+        AC_MSG_ERROR([--enable-mergelibs and --enable-compiler-plugins is an untested and unchecked combination, will most likely not work])
+    elif test "$enable_mergelibs" = "more"; then
         MERGELIBS="TRUE"
         MERGELIBS_MORE="TRUE"
         AC_MSG_RESULT([yes (more)])
