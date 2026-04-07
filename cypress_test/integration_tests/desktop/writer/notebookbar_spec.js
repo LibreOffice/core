@@ -39,6 +39,22 @@ describe(['tagdesktop'], 'Notebookbar tests.', function() {
 		checkCollapsedGroups();
 	});
 
+	it('Overflow groups should not folded after switching from tabbed to compact mode', function() {
+		// Ensure wide viewport where all groups fit without folding
+		cy.viewport(1920, 1080);
+
+		desktopHelper.switchUIToCompact();
+		cy.cGet('#toolbar-up').should('be.visible');
+
+		cy.getFrameWindow().then((win) => {
+			helper.processToIdle(win);
+		});
+
+		// All foldable groups should be expanded in compact mode
+		cy.cGet('#toolbar-up .ui-overflow-group:not(.nofold):not(.ui-overflow-group-container-with-label)')
+			.should('have.length', 0);
+	});
+
 	it('OverflowGroup collapse state preserved after mode switch', function() {
 		cy.viewport(1280, 600);
 		helper.processToIdle(this.win);
