@@ -90,11 +90,6 @@ namespace drawinglayer::primitive2d
 
             /// private helpers
             bool impGetShadow3D() const;
-            void calculateDiscreteSizes(
-                const geometry::ViewInformation2D& rViewInformation,
-                basegfx::B2DRange& rDiscreteRange,
-                basegfx::B2DRange& rVisibleDiscreteRange,
-                basegfx::B2DRange& rUnitVisibleRange) const;
 
             /// local decomposition.
             virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;

@@ -106,6 +106,9 @@ protected:
     // determine if to use PixelSnapHairline on target pixel device
     bool mbPixelSnapHairline : 1;
 
+    // device scale factor of the target device (1.0 = no scaling)
+    double mfDeviceScaleFactor = 1.0;
+
 public:
     ImpViewInformation2D()
         : maObjectTransformation()
@@ -220,6 +223,8 @@ public:
 
     bool getEditViewActive() const { return mbEditViewActive; }
     void setEditViewActive(bool bNew) { mbEditViewActive = bNew; }
+    double getDeviceScaleFactor() const { return mfDeviceScaleFactor; }
+    void setDeviceScaleFactor(double fFactor) { mfDeviceScaleFactor = fFactor; }
 
     bool getReducedDisplayQuality() const { return mbReducedDisplayQuality; }
     void setReducedDisplayQuality(bool bNew) { mbReducedDisplayQuality = bNew; }
@@ -401,6 +406,16 @@ bool ViewInformation2D::getEditViewActive() const
 void ViewInformation2D::setEditViewActive(bool bNew)
 {
     mpViewInformation2D->setEditViewActive(bNew);
+}
+
+double ViewInformation2D::getDeviceScaleFactor() const
+{
+    return mpViewInformation2D->getDeviceScaleFactor();
+}
+
+void ViewInformation2D::setDeviceScaleFactor(double fFactor)
+{
+    mpViewInformation2D->setDeviceScaleFactor(fFactor);
 }
 
 bool ViewInformation2D::getPixelSnapHairline() const

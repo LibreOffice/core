@@ -1128,6 +1128,16 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(OutputDevice& rOutputDevice,
         return;
     }
 
+    // set the device scale factor from the cairo surface
+    double fSurfaceScaleX = 1.0;
+    double fSurfaceScaleY = 1.0;
+    cairo_surface_get_device_scale(cairo_get_target(mpRT), &fSurfaceScaleX, &fSurfaceScaleY);
+    {
+        geometry::ViewInformation2D aUpdatedViewInfo(rViewInformation);
+        aUpdatedViewInfo.setDeviceScaleFactor(fSurfaceScaleX);
+        setViewInformation2D(aUpdatedViewInfo);
+    }
+
     // initialize some basic used values/settings
     cairo_set_antialias(mpRT, rViewInformation.getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
                                                                     : CAIRO_ANTIALIAS_NONE);

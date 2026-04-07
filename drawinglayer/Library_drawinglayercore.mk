@@ -51,6 +51,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayercore,\
     drawinglayer/source/primitive2d/Primitive2DContainer \
     drawinglayer/source/primitive2d/groupprimitive2d \
     drawinglayer/source/primitive2d/Tools \
+    drawinglayer/source/primitive2d/ViewDependentTools \
     drawinglayer/source/geometry/viewinformation2d \
 ))
 

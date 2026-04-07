@@ -167,14 +167,6 @@ void VectorGraphicData::ensureReplacement()
     if (!maReplacement.IsEmpty())
         return; // nothing to do
 
-    // shortcut for PDF - PDFium can generate the replacement bitmap for us
-    // directly
-    if (getType() == VectorGraphicDataType::Pdf)
-    {
-        ensurePdfReplacement();
-        return;
-    }
-
     ensureSequenceAndRange();
 
     if (!maSequence.empty())

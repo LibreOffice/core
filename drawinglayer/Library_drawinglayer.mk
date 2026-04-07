@@ -136,6 +136,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/pagehierarchyprimitive2d \
     drawinglayer/source/primitive2d/pagepreviewprimitive2d \
     drawinglayer/source/primitive2d/patternfillprimitive2d \
+    drawinglayer/source/primitive2d/PdfPrimitive2D \
     drawinglayer/source/primitive2d/pointarrayprimitive2d \
     drawinglayer/source/primitive2d/polygonprimitive2d \
     drawinglayer/source/primitive2d/PolyPolygonHairlinePrimitive2D \

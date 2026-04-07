@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
+#include <drawinglayer/primitive2d/ViewDependentTools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -169,53 +170,6 @@ namespace drawinglayer::primitive2d
             return !maShadowPrimitives.empty();
         }
 
-        void ScenePrimitive2D::calculateDiscreteSizes(
-            const geometry::ViewInformation2D& rViewInformation,
-            basegfx::B2DRange& rDiscreteRange,
-            basegfx::B2DRange& rVisibleDiscreteRange,
-            basegfx::B2DRange& rUnitVisibleRange) const
-        {
-            // use unit range and transform to discrete coordinates
-            rDiscreteRange = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
-            rDiscreteRange.transform(rViewInformation.getObjectToViewTransformation() * getObjectTransformation());
-
-            // clip it against discrete Viewport (if set)
-            rVisibleDiscreteRange = rDiscreteRange;
-
-            if(!rViewInformation.getViewport().isEmpty())
-            {
-                rVisibleDiscreteRange.intersect(rViewInformation.getDiscreteViewport());
-            }
-
-            if(rVisibleDiscreteRange.isEmpty())
-            {
-                rUnitVisibleRange = rVisibleDiscreteRange;
-            }
-            else
-            {
-                // create UnitVisibleRange containing unit range values [0.0 .. 1.0] describing
-                // the relative position of rVisibleDiscreteRange inside rDiscreteRange
-                const double fDiscreteScaleFactorX(basegfx::fTools::equalZero(rDiscreteRange.getWidth()) ? 1.0 : 1.0 / rDiscreteRange.getWidth());
-                const double fDiscreteScaleFactorY(basegfx::fTools::equalZero(rDiscreteRange.getHeight()) ? 1.0 : 1.0 / rDiscreteRange.getHeight());
-
-                const double fMinX(basegfx::fTools::equal(rVisibleDiscreteRange.getMinX(), rDiscreteRange.getMinX())
-                    ? 0.0
-                    : (rVisibleDiscreteRange.getMinX() - rDiscreteRange.getMinX()) * fDiscreteScaleFactorX);
-                const double fMinY(basegfx::fTools::equal(rVisibleDiscreteRange.getMinY(), rDiscreteRange.getMinY())
-                    ? 0.0
-                    : (rVisibleDiscreteRange.getMinY() - rDiscreteRange.getMinY()) * fDiscreteScaleFactorY);
-
-                const double fMaxX(basegfx::fTools::equal(rVisibleDiscreteRange.getMaxX(), rDiscreteRange.getMaxX())
-                    ? 1.0
-                    : (rVisibleDiscreteRange.getMaxX() - rDiscreteRange.getMinX()) * fDiscreteScaleFactorX);
-                const double fMaxY(basegfx::fTools::equal(rVisibleDiscreteRange.getMaxY(), rDiscreteRange.getMaxY())
-                    ? 1.0
-                    : (rVisibleDiscreteRange.getMaxY() - rDiscreteRange.getMinY()) * fDiscreteScaleFactorY);
-
-                rUnitVisibleRange = basegfx::B2DRange(fMinX, fMinY, fMaxX, fMaxY);
-            }
-        }
-
         Primitive2DReference ScenePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DContainer aContainer;
@@ -235,12 +189,12 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            // get the involved ranges (see helper method calculateDiscreteSizes for details)
+            // get the involved ranges (see calculateDiscreteVisibleRanges for details)
             basegfx::B2DRange aDiscreteRange;
             basegfx::B2DRange aVisibleDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
 
-            calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+            calculateDiscreteVisibleRanges(rViewInformation, getObjectTransformation(), aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
 
             if(aVisibleDiscreteRange.isEmpty())
                 return new GroupPrimitive2D(std::move(aContainer));
@@ -693,7 +647,7 @@ namespace drawinglayer::primitive2d
 
         void ScenePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            // get the involved ranges (see helper method calculateDiscreteSizes for details)
+            // get the involved ranges (see calculateDiscreteVisibleRanges for details)
             basegfx::B2DRange aDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
             bool bNeedNewDecomposition(false);
@@ -702,7 +656,7 @@ namespace drawinglayer::primitive2d
             if(hasBuffered2DDecomposition())
             {
                 basegfx::B2DRange aVisibleDiscreteRange;
-                calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+                calculateDiscreteVisibleRanges(rViewInformation, getObjectTransformation(), aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
                 bDiscreteSizesAreCalculated = true;
 
                 // needs to be painted when the new part is not part of the last
@@ -735,7 +689,7 @@ namespace drawinglayer::primitive2d
                 if(!bDiscreteSizesAreCalculated)
                 {
                     basegfx::B2DRange aVisibleDiscreteRange;
-                    calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+                    calculateDiscreteVisibleRanges(rViewInformation, getObjectTransformation(), aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
                 }
 
                 // remember last used NewDiscreteSize and NewUnitVisiblePart

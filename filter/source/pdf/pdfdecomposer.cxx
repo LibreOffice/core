@@ -12,15 +12,12 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PdfPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/pdfread.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/outdev.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 #include <vcl/BinaryDataContainerTools.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <com/sun/star/graphic/XPdfDecomposer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -52,6 +49,30 @@ public:
 
 XPdfDecomposer::XPdfDecomposer(uno::Reference<uno::XComponentContext> const&) {}
 
+/** Get PDF page size in mm100 */
+bool getPdfPageSizeMM100(const BinaryDataContainer& rDataContainer, sal_Int32 nPageIndex,
+                         double& rfWidthMM100, double& rfHeightMM100)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return false;
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize(), OString());
+    if (!pPdfDocument)
+        return false;
+
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(nPageIndex);
+    if (!pPdfPage)
+        return false;
+
+    const double fPageWidthPoints = pPdfPage->getWidth();
+    const double fPageHeightPoints = pPdfPage->getHeight();
+    rfWidthMM100 = o3tl::convert(fPageWidthPoints, o3tl::Length::pt, o3tl::Length::mm100);
+    rfHeightMM100 = o3tl::convert(fPageHeightPoints, o3tl::Length::pt, o3tl::Length::mm100);
+    return true;
+}
+
 uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL
 XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer>& xDataContainer,
                                  const uno::Sequence<beans::PropertyValue>& xParameters)
@@ -72,25 +93,16 @@ XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer
 
     BinaryDataContainer aDataContainer = vcl::convertUnoBinaryDataContainer(xDataContainer);
 
-    std::vector<Bitmap> aBitmaps;
-    int rv = vcl::RenderPDFBitmaps(aDataContainer.getData(), aDataContainer.getSize(), aBitmaps,
-                                   nPageIndex, 1);
-    if (rv == 0)
-        return {}; // happens if we do not have PDFium
+    double fPageWidthMM100 = 0.0;
+    double fPageHeightMM100 = 0.0;
+    if (!getPdfPageSizeMM100(aDataContainer, nPageIndex, fPageWidthMM100, fPageHeightMM100))
+        return {};
 
-    Bitmap aReplacement(aBitmaps[0]);
+    const basegfx::B2DHomMatrix aTransform(
+        basegfx::utils::createScaleB2DHomMatrix(fPageWidthMM100, fPageHeightMM100));
 
-    // short form for scale and translate transformation
-    const Size aBitmapSize(aReplacement.GetSizePixel());
-    // ImpGraphic::getPrefMapMode() requires mm100 for bitmaps rendered from vector graphic data.
-    const Size aMM100(
-        Application::GetDefaultDevice()->PixelToLogic(aBitmapSize, MapMode(MapUnit::Map100thMM)));
-    const basegfx::B2DHomMatrix aBitmapTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(
-        aMM100.getWidth(), aMM100.getHeight(), 0, 0));
-
-    // create primitive
     return drawinglayer::primitive2d::Primitive2DContainer{
-        new drawinglayer::primitive2d::BitmapPrimitive2D(aReplacement, aBitmapTransform)
+        new drawinglayer::primitive2d::PdfPrimitive2D(aDataContainer, nPageIndex, aTransform)
     }
         .toSequence();
 }
