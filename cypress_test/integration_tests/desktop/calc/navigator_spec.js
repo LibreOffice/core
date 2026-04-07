@@ -34,7 +34,7 @@ describe.skip(['tagdesktop'], 'Navigator tests.', function () {
 
 	it('Rename sheet -> updated in Navigator', function () {
 		cy.cGet('.spreadsheet-tab.spreadsheet-tab-selected').rightclick();
-		cy.cGet('body').contains('.context-menu-link', 'Rename Sheet...').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Rename Sheet...').click();
 		cy.cGet('#modal-dialog-rename-calc-sheet').should('exist');
 		cy.cGet('#input-modal-input').type('{selectall}{backspace}renameSheet');
 		cy.cGet('#response-ok').click();

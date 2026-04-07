@@ -36,7 +36,7 @@ describe.skip(['tagmultiuser'], 'Multiuser sheet operations', function() {
 
 		//user-1/2 removes it
 		cy.cGet('#spreadsheet-tab0').rightclick();
-		cy.cGet('body').contains('.context-menu-link', 'Delete Sheet...').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Delete Sheet...').click();
 		cy.cGet('#delete-sheet-modal-response').click();
 
 		//assert for user-1/2

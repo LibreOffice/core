@@ -342,7 +342,7 @@ function selectOptionFromContextMenu(contextMenu) {
 
 	cy.wait(1000);
 	cy.cGet('.spreadsheet-tab.spreadsheet-tab-selected').rightclick();
-	cy.cGet('body').contains('.context-menu-link', contextMenu).click();
+	cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', contextMenu).click();
 
 	cy.log('>> selectOptionFromContextMenu - end');
 }
