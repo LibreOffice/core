@@ -388,18 +388,22 @@ private:
     tools::Rectangle           maCommentTo;    /// To and To Offsets
     /// map authors to remove personal info
     std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs;
+    OUString            maThreadedCommentGuid; /// Threaded comment GUID (for linking legacy comment)
 };
 
 class XclExpComments : public XclExpRecord
 {
 public:
-                        XclExpComments( SCTAB nTab, XclExpRecordList< XclExpNote >& rNotes );
+    XclExpComments(SCTAB nTab, XclExpRecordList<XclExpNote>& rNotes, ScDocument& rDoc);
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
+    void SaveThreadedCommentsXml(XclExpXmlStream& rStrm);
+
     SCTAB               mnTab;
     XclExpRecordList< XclExpNote >& mrNotes;
+    ScDocument&         mrDoc;
 };
 
 // object manager =============================================================
