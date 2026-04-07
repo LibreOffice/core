@@ -387,6 +387,7 @@ TextHAlign
 TextVAlign
 Theater
 ThesisType
+ThreadedComments
 Title
 TitlesOfParts
 Top
@@ -1641,6 +1642,7 @@ dLblPos
 dLbls
 dPr
 dPt
+dT
 dTable
 dark1
 dark2
@@ -4006,6 +4008,7 @@ parameter
 parameterType
 parameters
 parent
+parentId
 parentLabelLayout
 parentSet
 paretoLine
@@ -4082,6 +4085,9 @@ persistStorage
 persistStream
 persistStreamInit
 persistence
+person
+personId
+personList
 personal
 personalCompose
 personalReply
@@ -4274,6 +4280,7 @@ protectedRanges
 protection
 provid
 provider
+providerId
 proxy
 prst
 prstClr
@@ -5490,6 +5497,7 @@ thisWeek
 thisYear
 thistle
 thousands
+threadedComment
 threeDEmboss
 threeDEngrave
 threePt
@@ -5737,6 +5745,7 @@ useWord2002TableStyleRules
 useWord97LineBreakRules
 useXSLTWhenSaving
 user
+userId
 userA
 userB
 userC

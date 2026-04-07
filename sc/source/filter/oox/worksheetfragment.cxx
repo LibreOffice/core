@@ -347,6 +347,12 @@ WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUSt
     OUString aCommentsFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"comments" );
     if( !aCommentsFragmentPath.isEmpty() )
         importOoxFragment( new CommentsFragment( *this, aCommentsFragmentPath ) );
+
+    // store threaded comments path for later (imported after comments are finalized)
+    OUString aThreadedCommentsPath = getFragmentPathFromFirstType(
+        u"http://schemas.microsoft.com/office/2017/10/relationships/threadedComment");
+    if (!aThreadedCommentsPath.isEmpty())
+        setThreadedCommentsPath(aThreadedCommentsPath);
 }
 
 ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )

@@ -228,6 +228,8 @@ public:
     void                setDrawingPath( const OUString& rDrawingPath );
     /** Sets the path to the legacy VML drawing fragment of this sheet. */
     void                setVmlDrawingPath( const OUString& rVmlDrawingPath );
+    /** Sets the path to the threaded comments fragment of this sheet. */
+    void                setThreadedCommentsPath( const OUString& rPath );
 
     /** Extends the used area of this sheet by the passed cell position. */
     void                extendUsedArea( const ScAddress& rAddress );

@@ -2022,6 +2022,43 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTwoCellAnchorEditAsOneCell)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7620.0, static_cast<double>(aRect.GetHeight()), 1.0);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testThreadedCommentImport)
+{
+    createScDoc("xlsx/threadedComment.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // The sample has a threaded comment with a reply at A2, and a plain note at A5.
+    ScPostIt* pNote = pDoc->GetNote(0, 1, 0);
+    CPPUNIT_ASSERT(pNote);
+    // The legacy placeholder includes both root text and reply.
+    CPPUNIT_ASSERT(pNote->GetText().indexOf(u"a comment on A2") >= 0);
+    // Author should be the display name, not the tc={guid} placeholder.
+    CPPUNIT_ASSERT_EQUAL(u"Mike Kaganski"_ustr, pNote->GetAuthor());
+
+    // Threaded comment data should be attached.
+    const ScThreadedCommentData* pData = pNote->GetThreadedCommentData();
+    CPPUNIT_ASSERT(pData);
+    CPPUNIT_ASSERT_EQUAL(u"{FB8EA27E-C1B6-4481-B034-193455CC7425}"_ustr, pData->maRoot.maGuid);
+    CPPUNIT_ASSERT_EQUAL(u"a comment on A2"_ustr, pData->maRoot.maText);
+    CPPUNIT_ASSERT(!pData->mbDone); // not resolved in the sample
+
+    // The sample has one reply.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pData->maReplies.size());
+    const auto& rReply = pData->maReplies[0];
+    CPPUNIT_ASSERT_EQUAL(u"{789BBBE8-38C6-4228-9338-E9C75EB78FCF}"_ustr, rReply.maGuid);
+    CPPUNIT_ASSERT_EQUAL(u"A reply"_ustr, rReply.maText);
+
+    // Person list should be populated.
+    const ScPersonData* pPerson = pDoc->GetPersonById(pData->maRoot.maPersonId);
+    CPPUNIT_ASSERT(pPerson);
+    CPPUNIT_ASSERT_EQUAL(u"Mike Kaganski"_ustr, pPerson->maDisplayName);
+
+    // A5 has a plain old-style note (not a threaded comment).
+    ScPostIt* pPlainNote = pDoc->GetNote(0, 4, 0);
+    CPPUNIT_ASSERT(pPlainNote);
+    CPPUNIT_ASSERT(!pPlainNote->GetThreadedCommentData());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

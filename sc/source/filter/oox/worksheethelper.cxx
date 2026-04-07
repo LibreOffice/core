@@ -50,6 +50,7 @@
 #include <condformatbuffer.hxx>
 #include <document.hxx>
 #include <drawingfragment.hxx>
+#include <threadedcommentsfragment.hxx>
 #include <pagesettings.hxx>
 #include <querytablebuffer.hxx>
 #include <sheetdatabuffer.hxx>
@@ -280,6 +281,8 @@ public:
     void                setDrawingPath( const OUString& rDrawingPath );
     /** Sets the path to the legacy VML drawing fragment of this sheet. */
     void                setVmlDrawingPath( const OUString& rVmlDrawingPath );
+    /** Sets the path to the threaded comments fragment of this sheet. */
+    void                setThreadedCommentsPath( const OUString& rPath );
 
     /** Extends the used area of this sheet by the passed cell position. */
     void                extendUsedArea( const ScAddress& rAddress );
@@ -391,6 +394,7 @@ private:
     ExtLst              maExtLst;           /// List of extended elements
     OUString            maDrawingPath;      /// Path to DrawingML fragment.
     OUString            maVmlDrawingPath;   /// Path to legacy VML drawing fragment.
+    OUString            maThreadedCommentsPath; /// Path to threaded comments fragment.
     awt::Size                maDrawPageSize;     /// Current size of the drawing page in 1/100 mm.
     awt::Rectangle           maShapeBoundingBox; /// Bounding box for all shapes from all drawings.
     ISegmentProgressBarRef mxProgressBar;   /// Sheet progress bar.
@@ -681,6 +685,11 @@ void WorksheetGlobals::setDrawingPath( const OUString& rDrawingPath )
 void WorksheetGlobals::setVmlDrawingPath( const OUString& rVmlDrawingPath )
 {
     maVmlDrawingPath = rVmlDrawingPath;
+}
+
+void WorksheetGlobals::setThreadedCommentsPath( const OUString& rPath )
+{
+    maThreadedCommentsPath = rPath;
 }
 
 void WorksheetGlobals::extendUsedArea( const ScAddress& rAddress )
@@ -1350,6 +1359,10 @@ void WorksheetGlobals::finalizeDrawings()
     // comments (after callout shapes have been imported from VML/DFF)
     maComments.finalizeImport();
 
+    // threaded comments (after ScPostIt objects have been created by maComments.finalizeImport)
+    if (!maThreadedCommentsPath.isEmpty())
+        importOoxFragment(new ThreadedCommentsFragment(*this, maThreadedCommentsPath));
+
     /*  Extend used area of the sheet by cells covered with drawing objects.
         Needed if the imported document is inserted as "OLE object from file"
         and thus does not provide an OLE size property by itself. */
@@ -1521,6 +1534,11 @@ void WorksheetHelper::setDrawingPath( const OUString& rDrawingPath )
 void WorksheetHelper::setVmlDrawingPath( const OUString& rVmlDrawingPath )
 {
     mrSheetGlob.setVmlDrawingPath( rVmlDrawingPath );
+}
+
+void WorksheetHelper::setThreadedCommentsPath( const OUString& rPath )
+{
+    mrSheetGlob.setThreadedCommentsPath( rPath );
 }
 
 void WorksheetHelper::extendUsedArea( const ScAddress& rAddress )
