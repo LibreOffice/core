@@ -265,6 +265,19 @@ void DrawingFragment::onEndElement()
             if( mxDrawPage.is() && mxShape && mxAnchor )
             {
                 EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
+
+                // For twoCellAnchor we should set the size and anchor based on the `editAs` attribute (ISO-IEC-29500-1 2016 [20.5.3.2])
+                if (mxAnchor->getAnchorType() == ShapeAnchor::ANCHOR_TWOCELL
+                    && (mxAnchor->getEditAs() == ShapeAnchor::ANCHOR_ONECELL
+                        || mxAnchor->getEditAs() == ShapeAnchor::ANCHOR_ABSOLUTE))
+                {
+                    const css::awt::Size& rShapeSize = mxShape->getSize();
+                    if (rShapeSize.Width > 0 && rShapeSize.Height > 0)
+                    {
+                        aShapeRectEmu.Width = rShapeSize.Width;
+                        aShapeRectEmu.Height = rShapeSize.Height;
+                    }
+                }
                 const bool bIsShapeVisible = mxAnchor->isAnchorValid();
                 if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
                 {

@@ -2043,6 +2043,24 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf108188_pagestyle)
         !pStylePool->Find(ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Page)->IsUsed());
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTwoCellAnchorEditAsOneCell)
+{
+    createScDoc("xlsx/twoCellAnchor_editAs_oneCell.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+    const SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObj);
+
+    // xfrm ext: cx=4352924 EMU = 12091 1/100mm, cy=2743198 EMU = 7620 1/100mm
+    tools::Rectangle aRect = pObj->GetSnapRect();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(12091.0, static_cast<double>(aRect.GetWidth()), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7620.0, static_cast<double>(aRect.GetHeight()), 1.0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
