@@ -79,6 +79,7 @@
 #include <unoframe.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <editeng/brushitem.hxx>
+#include <fillattrcache.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <unomid.h>
 #include <strings.hrc>
@@ -3744,7 +3745,12 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrameFormat::getSdrAllF
         // create FillAttributes on demand
         if(!maFillAttributes)
         {
-            const_cast< SwFrameFormat* >(this)->maFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(GetAttrSet());
+            auto pNew = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(GetAttrSet());
+
+            if (hasDeferredFillBitmap(GetAttrSet()))
+                return pNew;
+
+            const_cast<SwFrameFormat*>(this)->maFillAttributes = std::move(pNew);
         }
     }
     else
