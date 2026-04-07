@@ -42,6 +42,7 @@
 #include <columnspanset.hxx>
 
 #include <editable.hxx>
+#include <postit.hxx>
 #include <tabprotection.hxx>
 #include <undomanager.hxx>
 
@@ -5114,6 +5115,111 @@ CPPUNIT_TEST_FIXTURE(Test, testNoteDefaultStyle)
 
     CPPUNIT_ASSERT(pCaption);
     CPPUNIT_ASSERT_EQUAL(ScResId(STR_STYLENAME_NOTE), pCaption->GetStyleSheet()->GetName());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNoteThreadedCommentData)
+{
+    m_pDoc->InsertTab(0, u"PostIts"_ustr);
+    m_pDoc->InitDrawLayer(m_xDocShell.get());
+
+    ScAddress aPos(0, 0, 0);
+    ScPostIt* pNote = m_pDoc->GetOrCreateNote(aPos);
+    pNote->SetText(aPos, u"Hello"_ustr);
+    pNote->SetAuthor(u"Author"_ustr);
+
+    // Initially not resolved (no threaded data).
+    CPPUNIT_ASSERT(!pNote->IsResolved());
+    CPPUNIT_ASSERT(!pNote->GetThreadedCommentData());
+
+    // SetResolved creates threaded data on demand.
+    pNote->SetResolved(true);
+    CPPUNIT_ASSERT(pNote->IsResolved());
+    CPPUNIT_ASSERT(pNote->GetThreadedCommentData());
+    CPPUNIT_ASSERT(pNote->GetThreadedCommentData()->mbDone);
+
+    // SetResolved(false) clears the flag but keeps the data.
+    pNote->SetResolved(false);
+    CPPUNIT_ASSERT(!pNote->IsResolved());
+    CPPUNIT_ASSERT(pNote->GetThreadedCommentData());
+    CPPUNIT_ASSERT(!pNote->GetThreadedCommentData()->mbDone);
+
+    // Set full threaded comment data.
+    auto pData = std::make_unique<ScThreadedCommentData>();
+    pData->maRoot.maGuid = u"{11111111-1111-1111-1111-111111111111}"_ustr;
+    pData->maRoot.maPersonId = u"{AAAA}"_ustr;
+    pData->maRoot.maDateTime = u"2026-04-07T12:00:00Z"_ustr;
+    pData->mbDone = true;
+
+    ScThreadedCommentEntry aReply;
+    aReply.maGuid = u"{22222222-2222-2222-2222-222222222222}"_ustr;
+    aReply.maPersonId = u"{BBBB}"_ustr;
+    aReply.maText = u"Reply text"_ustr;
+    pData->maReplies.push_back(aReply);
+
+    pNote->SetThreadedCommentData(std::move(pData));
+    CPPUNIT_ASSERT(pNote->IsResolved());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pNote->GetThreadedCommentData()->maReplies.size());
+    CPPUNIT_ASSERT_EQUAL(u"Reply text"_ustr, pNote->GetThreadedCommentData()->maReplies[0].maText);
+
+    // Clone preserves threaded data.
+    std::unique_ptr<ScPostIt> pClone = pNote->Clone(aPos, *m_pDoc, ScAddress(1, 0, 0), true);
+    CPPUNIT_ASSERT(pClone->IsResolved());
+    CPPUNIT_ASSERT(pClone->GetThreadedCommentData());
+    CPPUNIT_ASSERT_EQUAL(u"{11111111-1111-1111-1111-111111111111}"_ustr,
+                         pClone->GetThreadedCommentData()->maRoot.maGuid);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pClone->GetThreadedCommentData()->maReplies.size());
+
+    // Clone without caption also preserves threaded data.
+    std::unique_ptr<ScPostIt> pClone2 = pNote->Clone(aPos, *m_pDoc, ScAddress(2, 0, 0), false);
+    CPPUNIT_ASSERT(pClone2->IsResolved());
+    CPPUNIT_ASSERT_EQUAL(u"{11111111-1111-1111-1111-111111111111}"_ustr,
+                         pClone2->GetThreadedCommentData()->maRoot.maGuid);
+
+    // Remove threaded data.
+    pNote->SetThreadedCommentData(nullptr);
+    CPPUNIT_ASSERT(!pNote->IsResolved());
+    CPPUNIT_ASSERT(!pNote->GetThreadedCommentData());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNotePersonList)
+{
+    m_pDoc->InsertTab(0, u"PostIts"_ustr);
+
+    // Initially empty.
+    CPPUNIT_ASSERT(m_pDoc->GetPersonList().empty());
+
+    ScPersonData aPerson1;
+    aPerson1.maId = u"{AAAA}"_ustr;
+    aPerson1.maDisplayName = u"Alice"_ustr;
+    m_pDoc->AddPerson(aPerson1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetPersonList().size());
+
+    // Duplicate by ID is ignored.
+    ScPersonData aPerson1Dup;
+    aPerson1Dup.maId = u"{AAAA}"_ustr;
+    aPerson1Dup.maDisplayName = u"Alice duplicate"_ustr;
+    m_pDoc->AddPerson(aPerson1Dup);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetPersonList().size());
+    CPPUNIT_ASSERT_EQUAL(u"Alice"_ustr, m_pDoc->GetPersonList()[0].maDisplayName);
+
+    // Different ID is added.
+    ScPersonData aPerson2;
+    aPerson2.maId = u"{BBBB}"_ustr;
+    aPerson2.maDisplayName = u"Bob"_ustr;
+    m_pDoc->AddPerson(aPerson2);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), m_pDoc->GetPersonList().size());
+
+    // Lookup by ID.
+    const ScPersonData* pFound = m_pDoc->GetPersonById(u"{BBBB}"_ustr);
+    CPPUNIT_ASSERT(pFound);
+    CPPUNIT_ASSERT_EQUAL(u"Bob"_ustr, pFound->maDisplayName);
+
+    // Unknown ID returns nullptr.
+    CPPUNIT_ASSERT(!m_pDoc->GetPersonById(u"{CCCC}"_ustr));
 
     m_pDoc->DeleteTab(0);
 }

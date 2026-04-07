@@ -27,6 +27,7 @@
 
 #include <memory>
 #include <string_view>
+#include <vector>
 
 class EditTextObject;
 class OutlinerParaObject;
@@ -36,6 +37,35 @@ class SdrPage;
 class ScDocument;
 namespace tools { class Rectangle; }
 struct ScCaptionInitData;
+
+/** A single entry in a threaded comment (root or reply).
+    Maps to CT_ThreadedComment in [MS-XLSX] section 2.6.205. */
+struct ScThreadedCommentEntry
+{
+    OUString maGuid;       /// Unique ID (ST_Guid).
+    OUString maPersonId;   /// Reference to person in ScDocument person list.
+    OUString maDateTime;   /// ISO 8601 / xsd:dateTime (UTC).
+    OUString maText;       /// Text of this entry.
+};
+
+/** Threaded-comment metadata attached to a ScPostIt.
+    When present the note participates in the Excel "threaded comments" feature. */
+struct ScThreadedCommentData
+{
+    ScThreadedCommentEntry maRoot;                  /// Root entry (guid, personId, dateTime).
+    bool mbDone = false;                            /// Resolved / done flag.
+    std::vector<ScThreadedCommentEntry> maReplies;  /// Reply chain.
+};
+
+/** Person metadata for threaded comments.
+    Maps to CT_Person in [MS-XLSX] section 2.6.203. */
+struct ScPersonData
+{
+    OUString maId;           /// Unique person GUID.
+    OUString maDisplayName;  /// Display name.
+    OUString maUserId;       /// Provider-specific user ID.
+    OUString maProviderId;   /// Identity provider ID.
+};
 
 /** Internal data for a cell annotation. */
 struct ScNoteData
@@ -157,6 +187,16 @@ public:
 
     static OString      NoteRangeToJsonString(const ScDocument& rDoc, const ScAddress& rPos);
 
+    /** Returns true if this note has been resolved (threaded comment "done" flag). */
+    bool IsResolved() const { return mpThreadedCommentData && mpThreadedCommentData->mbDone; }
+    /** Sets the resolved state. Creates threaded comment data if not yet present. */
+    void SetResolved(bool bResolved);
+
+    /** Returns the threaded comment data, or nullptr if this is a classic note. */
+    const ScThreadedCommentData* GetThreadedCommentData() const { return mpThreadedCommentData.get(); }
+    /** Sets (replaces) the threaded comment data. Pass nullptr to remove. */
+    SC_DLLPUBLIC void SetThreadedCommentData(std::unique_ptr<ScThreadedCommentData> pData);
+
 private:
                         ScPostIt( const ScPostIt& ) = delete;
     ScPostIt&           operator=( const ScPostIt& ) = delete;
@@ -172,6 +212,7 @@ private:
     ScDocument&         mrDoc;              /// Parent document containing the note.
     mutable ScNoteData  maNoteData;         /// Note data with pointer to caption object.
     sal_uInt32          mnPostItId;
+    std::unique_ptr<ScThreadedCommentData> mpThreadedCommentData; /// Threaded comment metadata (nullable).
 };
 
 class GenerateNoteCaption

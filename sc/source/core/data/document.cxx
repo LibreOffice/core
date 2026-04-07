@@ -6897,6 +6897,20 @@ bool ScDocument::ContainsNotesInRange( const ScRangeList& rRangeList ) const
     return false;
 }
 
+void ScDocument::AddPerson(const ScPersonData& rPerson)
+{
+    if (std::none_of(maPersonList.begin(), maPersonList.end(),
+                     [&rPerson](const auto& r) { return r.maId == rPerson.maId; }))
+        maPersonList.push_back(rPerson);
+}
+
+const ScPersonData* ScDocument::GetPersonById(const OUString& rId) const
+{
+    auto it = std::find_if(maPersonList.begin(), maPersonList.end(),
+                           [&rId](const auto& r) { return r.maId == rId; });
+    return it != maPersonList.end() ? &*it : nullptr;
+}
+
 void ScDocument::SetAutoNameCache( std::unique_ptr<ScAutoNameCache> pCache )
 {
     pAutoNameCache = std::move(pCache);
