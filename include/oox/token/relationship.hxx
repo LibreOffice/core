@@ -73,6 +73,8 @@ enum class Relationship
     WORDVBADATA,
     WORKSHEET,
     XMLMAPS,
+    THREADEDCOMMENT,
+    PERSON,
     NUM_ENTRIES // last, unused
 };
 

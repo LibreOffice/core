@@ -52,4 +52,6 @@
 {Relationship::VMLDRAWING, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"},
 {Relationship::WORDVBADATA, u"http://schemas.microsoft.com/office/2006/relationships/wordVbaData"},
 {Relationship::WORKSHEET, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"},
-{Relationship::XMLMAPS, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/xmlMaps"}
+{Relationship::XMLMAPS, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/xmlMaps"},
+{Relationship::THREADEDCOMMENT, u"http://schemas.microsoft.com/office/2017/10/relationships/threadedComment"},
+{Relationship::PERSON, u"http://schemas.microsoft.com/office/2017/10/relationships/person"},

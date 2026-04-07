@@ -1772,6 +1772,13 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
 
                 if (const EditTextObject *pEditObj = pScNote->GetEditTextObject())
                     mpNoteContents = XclExpStringHelper::CreateString( rRoot, *pEditObj );
+
+                if (const ScThreadedCommentData* pThreadedData = pScNote->GetThreadedCommentData())
+                {
+                    maThreadedCommentGuid = pThreadedData->maRoot.maGuid;
+                    // Legacy comment author must be tc={guid} for Excel to link it
+                    maAuthor = XclExpString(u"tc=" + maThreadedCommentGuid, XclStrFlags::NONE, 54);
+                }
             }
 
             SetRecSize( 9 + maAuthor.GetSize() );
@@ -1850,10 +1857,10 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr rComments = rStrm.GetCurrentStream();
 
     rComments->startElement( XML_comment,
-            XML_ref,        XclXmlUtils::ToOString(mrRoot.GetDoc(), ScRange(maScPos)),
-            XML_authorId,   OString::number(nAuthorId)
-            // OOXTODO: XML_guid
-    );
+         XML_ref,        XclXmlUtils::ToOString(mrRoot.GetDoc(), ScRange(maScPos)),
+         XML_authorId,   OString::number(nAuthorId),
+         XML_guid,       sax_fastparser::UseIf(maThreadedCommentGuid,
+                                               !maThreadedCommentGuid.isEmpty()));
     rComments->startElement(XML_text);
     // OOXTODO: phoneticPr, rPh, r
     if( mpNoteContents )
@@ -1965,8 +1972,10 @@ void XclExpShapeObj::WriteSubRecs( XclExpStream& rStrm )
     WriteMacroSubRec( rStrm );
 }
 
-XclExpComments::XclExpComments( SCTAB nTab, XclExpRecordList< XclExpNote >& rNotes )
-    : mnTab( nTab ), mrNotes( rNotes )
+XclExpComments::XclExpComments(SCTAB nTab, XclExpRecordList<XclExpNote>& rNotes, ScDocument& rDoc)
+    : mnTab(nTab)
+    , mrNotes(rNotes)
+    , mrDoc(rDoc)
 {
 }
 
@@ -2029,6 +2038,73 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
     rComments->endElement( XML_commentList );
     rComments->endElement( XML_comments );
 
+    rStrm.PopStream();
+
+    SaveThreadedCommentsXml(rStrm);
+}
+
+void XclExpComments::SaveThreadedCommentsXml(XclExpXmlStream& rStrm)
+{
+    // Collect notes with threaded comment data on this sheet.
+    std::vector<sc::NoteEntry> aNotes;
+    mrDoc.GetAllNoteEntries(mnTab, aNotes);
+
+    std::vector<const sc::NoteEntry*> aThreaded;
+    for (const auto& rEntry : aNotes)
+    {
+        if (rEntry.mpNote->GetThreadedCommentData())
+            aThreaded.push_back(&rEntry);
+    }
+
+    if (aThreaded.empty())
+        return;
+
+    sax_fastparser::FSHelperPtr pStream = rStrm.CreateOutputStream(
+        XclXmlUtils::GetStreamName("xl/", "threadedComments/threadedComment", mnTab + 1),
+        XclXmlUtils::GetStreamName("../", "threadedComments/threadedComment", mnTab + 1),
+        rStrm.GetCurrentStream()->getOutputStream(),
+        "application/vnd.ms-excel.threadedcomments+xml",
+        oox::getRelationship(Relationship::THREADEDCOMMENT));
+    rStrm.PushStream(pStream);
+
+    pStream->startElement(XML_ThreadedComments,
+                          XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xthreaded)));
+
+    for (const auto* pEntry : aThreaded)
+    {
+        const ScThreadedCommentData* pData = pEntry->mpNote->GetThreadedCommentData();
+        OString aRef = XclXmlUtils::ToOString(mrDoc, ScRange(pEntry->maPos));
+
+        // Root comment.
+        pStream->startElement(XML_threadedComment,
+            XML_ref, aRef,
+            XML_dT, sax_fastparser::UseIf(pData->maRoot.maDateTime,
+                                          !pData->maRoot.maDateTime.isEmpty()),
+            XML_personId, pData->maRoot.maPersonId,
+            XML_id, pData->maRoot.maGuid,
+            XML_done, sax_fastparser::UseIf("1", pData->mbDone));
+        pStream->startElement(XML_text);
+        pStream->writeEscaped(pData->maRoot.maText);
+        pStream->endElement(XML_text);
+        pStream->endElement(XML_threadedComment);
+
+        // Replies.
+        for (const auto& rReply : pData->maReplies)
+        {
+            pStream->startElement(XML_threadedComment,
+                XML_ref, aRef,
+                XML_dT, sax_fastparser::UseIf(rReply.maDateTime, !rReply.maDateTime.isEmpty()),
+                XML_personId, rReply.maPersonId,
+                XML_id, rReply.maGuid,
+                XML_parentId, pData->maRoot.maGuid);
+            pStream->startElement(XML_text);
+            pStream->writeEscaped(rReply.maText);
+            pStream->endElement(XML_text);
+            pStream->endElement(XML_threadedComment);
+        }
+    }
+
+    pStream->endElement(XML_ThreadedComments);
     rStrm.PopStream();
 }
 

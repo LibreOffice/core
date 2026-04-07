@@ -2437,6 +2437,45 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testInvalidSheetNameLength)
                        u"xls.xls.xls.xls.xlsS-1'!$A$1:$A$1048576)-1),1)");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest, testThreadedCommentRoundtrip)
+{
+    createScDoc("xlsx/threadedComment.xlsx");
+
+    saveAndReload(TestFilter::XLSX);
+    ScDocument* pDoc = getScDoc();
+
+    // Verify the exported XLSX has tc={guid} as the legacy comment author.
+    xmlDocUniquePtr pXmlComments = parseExport(u"xl/comments1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlComments);
+    sal_Int32 nAuthorId
+        = getXPath(pXmlComments, "/x:comments/x:commentList/x:comment[@ref='A2']", "authorId")
+              .toInt32();
+    assertXPathContent(pXmlComments,
+                       "/x:comments/x:authors/x:author[" + OString::number(nAuthorId + 1) + "]",
+                       u"tc={FB8EA27E-C1B6-4481-B034-193455CC7425}");
+
+    // Threaded comment at A2 should survive round-trip.
+    ScPostIt* pNote = pDoc->GetNote(0, 1, 0);
+    CPPUNIT_ASSERT(pNote);
+    // Author should be the display name after round-trip, not tc={guid}.
+    CPPUNIT_ASSERT_EQUAL(u"Mike Kaganski"_ustr, pNote->GetAuthor());
+
+    const ScThreadedCommentData* pData = pNote->GetThreadedCommentData();
+    CPPUNIT_ASSERT(pData);
+    CPPUNIT_ASSERT_EQUAL(u"{FB8EA27E-C1B6-4481-B034-193455CC7425}"_ustr, pData->maRoot.maGuid);
+    CPPUNIT_ASSERT_EQUAL(u"a comment on A2"_ustr, pData->maRoot.maText);
+    CPPUNIT_ASSERT(!pData->mbDone);
+
+    // Reply should survive.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pData->maReplies.size());
+    CPPUNIT_ASSERT_EQUAL(u"A reply"_ustr, pData->maReplies[0].maText);
+
+    // Person should survive.
+    const ScPersonData* pPerson = pDoc->GetPersonById(pData->maRoot.maPersonId);
+    CPPUNIT_ASSERT(pPerson);
+    CPPUNIT_ASSERT_EQUAL(u"Mike Kaganski"_ustr, pPerson->maDisplayName);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
