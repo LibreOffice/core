@@ -75,6 +75,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/pdfread.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/settings.hxx>
 #include <strhelper.hxx>
 #include <vcl/svapp.hxx>
@@ -8277,20 +8278,30 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         return;
 
     // Count /Matrix and /BBox.
-    // vcl::ImportPDF() uses getDefaultPdfResolutionDpi to set the desired
-    // rendering DPI so we have to take into account that here too.
-    static const double fResolutionDPI = getDefaultPdfResolutionDpi();
     static const double fMagicScaleFactor = PDF_INSERT_MAGIC_SCALE_FACTOR;
+    basegfx::B2DSize aSize;
 
-    sal_Int32 nOldDPIX = GetDPIX();
-    sal_Int32 nOldDPIY = GetDPIY();
-    SetDPIX(fResolutionDPI);
-    SetDPIY(fResolutionDPI);
-    Size aSize = PixelToLogic(rEmit.m_aPixelSize, MapMode(m_aMapMode.GetMapUnit()));
-    SetDPIX(nOldDPIX);
-    SetDPIY(nOldDPIY);
-    double fScaleX = 1.0 / aSize.Width();
-    double fScaleY = 1.0 / aSize.Height();
+    if (rEmit.m_aPointSize)
+    {
+        // use the exact PDF page size in points
+        aSize = *rEmit.m_aPointSize;
+    }
+    else
+    {
+        // fallback: convert pixel size to points via DPI
+        static const double fResolutionDPI = getDefaultPdfResolutionDpi();
+        sal_Int32 nOldDPIX = GetDPIX();
+        sal_Int32 nOldDPIY = GetDPIY();
+        SetDPIX(fResolutionDPI);
+        SetDPIY(fResolutionDPI);
+        Size aLogicSize = PixelToLogic(rEmit.m_aPixelSize, MapMode(m_aMapMode.GetMapUnit()));
+        SetDPIX(nOldDPIX);
+        SetDPIY(nOldDPIY);
+        aSize = basegfx::B2DSize(aLogicSize.Width(), aLogicSize.Height());
+    }
+
+    double fScaleX = 1.0 / aSize.getWidth();
+    double fScaleY = 1.0 / aSize.getHeight();
 
     sal_Int32 nWrappedFormObject = 0;
     if (!m_aContext.UseReferenceXObject)
@@ -8300,8 +8311,8 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         // that scale all images by this number.
         // This fix also allows the CppunitTest_vcl_pdfexport to run
         // successfully on macOS.
-        fScaleX = fMagicScaleFactor / aSize.Width();
-        fScaleY = fMagicScaleFactor / aSize.Height();
+        fScaleX = fMagicScaleFactor / aSize.getWidth();
+        fScaleY = fMagicScaleFactor / aSize.getHeight();
 
         // Parse the PDF data, we need that to write the PDF dictionary of our
         // object.
@@ -8399,9 +8410,9 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         aLine.append("<< /Type /XObject");
         aLine.append(" /Subtype /Form");
 
-        tools::Long nWidth = aSize.Width();
-        tools::Long nHeight = aSize.Height();
-        basegfx::B2DRange aBBox(0, 0, aSize.Width(),  aSize.Height());
+        double nWidth = aSize.getWidth();
+        double nHeight = aSize.getHeight();
+        basegfx::B2DRange aBBox(0, 0, aSize.getWidth(), aSize.getHeight());
         if (auto pRotate = dynamic_cast<filter::PDFNumberElement*>(pPage->Lookup("Rotate"_ostr)))
         {
             // The original page was rotated, then construct a transformation matrix which does the
@@ -8515,10 +8526,10 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     aLine.append(" 0 0 ]");
     aLine.append(" /BBox [ 0 0 ");
     // tdf#157680 reduce size by magic scale factor in /BBox
-    aLine.append(aSize.Width() / fMagicScaleFactor);
+    appendDouble(aSize.getWidth() / fMagicScaleFactor, aLine);
     aLine.append(" ");
     // tdf#157680 reduce size by magic scale factor in /BBox
-    aLine.append(aSize.Height() / fMagicScaleFactor);
+    appendDouble(aSize.getHeight() / fMagicScaleFactor, aLine);
     aLine.append(" ]\n");
 
     if (m_aContext.UseReferenceXObject && rEmit.m_nEmbeddedObject > 0)
@@ -8542,9 +8553,9 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     {
         // Reference XObject markup is used, just refer to the fallback bitmap
         // here.
-        aStream.append(aSize.Width());
+        appendDouble(aSize.getWidth(), aStream);
         aStream.append(" 0 0 ");
-        aStream.append(aSize.Height());
+        appendDouble(aSize.getHeight(), aStream);
         aStream.append(" 0 0 cm\n");
         aStream.append("/Im");
         aStream.append(rEmit.m_nBitmapObject);
@@ -8559,9 +8570,9 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         // consistent with that.
         aStream.append("1 1 1 rg\n");
         aStream.append("0 0 ");
-        aStream.append(aSize.Width());
+        appendDouble(aSize.getWidth(), aStream);
         aStream.append(" ");
-        aStream.append(aSize.Height());
+        appendDouble(aSize.getHeight(), aStream);
         aStream.append(" re\n");
         aStream.append("f*\n");
 
@@ -8988,7 +8999,26 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     }
 
     rEmit.m_nFormObject = createObject();
-    rEmit.m_aPixelSize = rGraphic.GetSizePixel();
+
+    // get the PDF page size in points directly from PDFium (if available)
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (pPdfium)
+    {
+        auto pDocument = pPdfium->openDocument(
+            rDataContainer.getData(), rDataContainer.getSize(), OString());
+        if (pDocument)
+        {
+            sal_Int32 nPageIndex = rGraphic.getVectorGraphicData()->getPageIndex();
+            auto pPage = pDocument->openPage(nPageIndex);
+            if (pPage)
+            {
+                rEmit.m_aPointSize = basegfx::B2DSize(pPage->getWidth(), pPage->getHeight());
+            }
+        }
+    }
+
+    if (!rEmit.m_aPointSize)
+        rEmit.m_aPixelSize = rGraphic.GetSizePixel();
 }
 
 void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const tools::Rectangle& rTargetArea, const AlphaMask& rAlphaMask, const Graphic& rGraphic )

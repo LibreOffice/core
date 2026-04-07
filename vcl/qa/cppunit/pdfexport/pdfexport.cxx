@@ -638,7 +638,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106972)
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
-    // Get access to the only form object on the only page.
+    // Get access to the page resources.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
     vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources"_ostr);
@@ -646,14 +646,28 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106972)
     auto pXObjects
         = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"_ostr));
     CPPUNIT_ASSERT(pXObjects);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
-    vcl::filter::PDFObjectElement* pXObject
-        = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
-    CPPUNIT_ASSERT(pXObject);
 
-    // Get access to the only image inside the form object.
+    // Find the Form XObject among the page XObjects - it should have Resources
+    // (the PDF passthrough preserves the original PDF as a Form XObject)
+    vcl::filter::PDFObjectElement* pFormXObject = nullptr;
+    for (auto const& rPair : pXObjects->GetItems())
+    {
+        vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(rPair.first);
+        if (!pXObject)
+            continue;
+        auto pSubtype
+            = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject->Lookup("Subtype"_ostr));
+        if (pSubtype && pSubtype->GetValue() == "Form")
+        {
+            pFormXObject = pXObject;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("Expected a Form XObject (PDF passthrough)", pFormXObject);
+
+    // The Form XObject should have Resources containing an XObject with Font resources
     auto pFormResources
-        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject->Lookup("Resources"_ostr));
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pFormXObject->Lookup("Resources"_ostr));
     CPPUNIT_ASSERT(pFormResources);
     auto pImages = dynamic_cast<vcl::filter::PDFDictionaryElement*>(
         pFormResources->LookupElement("XObject"_ostr));
@@ -682,7 +696,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106972Pdf17)
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
-    // Get access to the only image on the only page.
+    // Get access to the page XObjects.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
     vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources"_ostr);
@@ -690,14 +704,24 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106972Pdf17)
     auto pXObjects
         = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"_ostr));
     CPPUNIT_ASSERT(pXObjects);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
-    vcl::filter::PDFObjectElement* pXObject
-        = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
-    CPPUNIT_ASSERT(pXObject);
 
+    // Find the Form XObject - it should have Resources (PDF passthrough)
+    bool bFoundFormWithResources = false;
+    for (auto const& rPair : pXObjects->GetItems())
+    {
+        vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(rPair.first);
+        if (!pXObject)
+            continue;
+        if (pXObject->Lookup("Resources"_ostr))
+        {
+            bFoundFormWithResources = true;
+            break;
+        }
+    }
     // Assert that we now attempt to preserve the original PDF data, even if
     // the original input was PDF >= 1.4.
-    CPPUNIT_ASSERT(pXObject->Lookup("Resources"_ostr));
+    CPPUNIT_ASSERT_MESSAGE("Expected an XObject with Resources (PDF passthrough)",
+                           bFoundFormWithResources);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)

@@ -23,6 +23,7 @@
 
 #include <map>
 #include <list>
+#include <optional>
 #include <unordered_map>
 #include <unordered_set>
 #include <memory>
@@ -30,6 +31,8 @@
 #include <vector>
 #include <stack>
 #include <variant>
+
+#include <basegfx/vector/b2dsize.hxx>
 
 #include <pdf/ResourceDict.hxx>
 #include <pdf/BitmapID.hxx>
@@ -175,6 +178,8 @@ struct ReferenceXObjectEmit
     sal_Int32 m_nBitmapObject;
     /// Size of the bitmap replacement, in pixels.
     Size m_aPixelSize;
+    /// Size of the PDF page in points, if available. Used instead of pixel size.
+    std::optional<basegfx::B2DSize> m_aPointSize;
     /// PDF data from the graphic object, if not writing a reference XObject.
     sal_Int32 m_nExternalPDFDataIndex;
     sal_Int32 m_nExternalPDFPageIndex;
