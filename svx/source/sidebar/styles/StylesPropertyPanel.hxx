@@ -16,6 +16,7 @@ namespace svx::sidebar{
 class StylesPropertyPanel : public PanelLayout
 {
 private:
+    std::unique_ptr<weld::Label> m_xFontStyleFt;
     std::unique_ptr<weld::Toolbar> m_xFontStyle;
     std::unique_ptr<ToolbarUnoDispatcher> m_xFontStyleDispatch;
 

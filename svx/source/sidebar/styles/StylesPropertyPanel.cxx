@@ -31,8 +31,9 @@ std::unique_ptr<PanelLayout> StylesPropertyPanel::Create (
 
 StylesPropertyPanel::StylesPropertyPanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, u"SidebarStylesPanel"_ustr, u"svx/ui/sidebarstylespanel.ui"_ustr)
+    , m_xFontStyleFt(m_xBuilder->weld_label(u"fontstyleft"_ustr))
     , m_xFontStyle(m_xBuilder->weld_toolbar(u"fontstyletoolbox"_ustr))
-    , m_xFontStyleDispatch(new ToolbarUnoDispatcher(*m_xFontStyle, *m_xBuilder, rxFrame))
+    , m_xFontStyleDispatch(new ToolbarUnoDispatcher(*m_xFontStyle, *m_xBuilder, rxFrame, true, m_xFontStyleFt.get()))
     , m_xStyle(m_xBuilder->weld_toolbar(u"style"_ustr))
     , m_xStyleDispatch(new ToolbarUnoDispatcher(*m_xStyle, *m_xBuilder, rxFrame))
 {

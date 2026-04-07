@@ -74,7 +74,7 @@ vcl::ImageType ToolbarUnoDispatcher::GetIconSize()
 
 ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builder& rBuilder,
                                            const css::uno::Reference<css::frame::XFrame>& rFrame,
-                                           bool bSideBar)
+                                           bool bSideBar, weld::Label* pFirstLabel)
     : m_xFrame(rFrame)
     , m_pToolbar(&rToolbar)
     , m_pBuilder(&rBuilder)
@@ -101,6 +101,8 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builde
         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommand, aModuleName);
         OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
         rToolbar.set_item_label(i, aLabel);
+        if (i == 0 && pFirstLabel)
+            pFirstLabel->set_label(aLabel);
         OUString aTooltip(
             vcl::CommandInfoProvider::GetTooltipForCommand(sCommand, aProperties, rFrame));
         rToolbar.set_item_tooltip_text(i, aTooltip);

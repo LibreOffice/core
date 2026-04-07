@@ -52,7 +52,7 @@ public:
     // fill in the label and icons for actions and dispatch the action on item click
     ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builder& rBuilder,
                          const css::uno::Reference<css::frame::XFrame>& rFrame,
-                         bool bSideBar = true);
+                         bool bSideBar = true, weld::Label* pFirstLabel = nullptr);
 
     css::uno::Reference<css::frame::XToolbarController>
     GetControllerForCommand(const OUString& rCommand) const;

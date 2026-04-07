@@ -7,7 +7,7 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <child>
-      <!-- n-columns=2 n-rows=3 -->
+      <!-- n-columns=2 n-rows=4 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -57,14 +57,13 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkToolbar" id="fontheight">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="halign">end</property>
             <property name="toolbar-style">icons</property>
             <property name="show-arrow">False</property>
             <property name="icon_size">2</property>
@@ -72,6 +71,7 @@
               <object class="GtkToolItem" id=".uno:FontHeight">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="halign">start</property>
                 <child>
                   <object class="GtkComboBoxText" id="fontsizecombobox">
                     <property name="visible">True</property>
@@ -99,7 +99,7 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
@@ -112,6 +112,7 @@
             <child>
               <object class="GtkToggleToolButton" id=".uno:Bold">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -122,6 +123,7 @@
             <child>
               <object class="GtkToggleToolButton" id=".uno:Italic">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -132,6 +134,7 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:Underline">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -142,6 +145,7 @@
             <child>
               <object class="GtkToggleToolButton" id=".uno:Strikeout">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -152,6 +156,7 @@
             <child>
               <object class="GtkToggleToolButton" id=".uno:Shadowed">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -162,7 +167,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
@@ -180,6 +185,7 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:Color">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -203,6 +209,7 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:CharBackColor">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -226,6 +233,7 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:Spacing">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -236,6 +244,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:NoBreak">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -253,7 +262,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
@@ -272,6 +281,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:Hyphenate">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -296,6 +306,7 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:SuperScript">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -306,6 +317,7 @@
                 <child>
                   <object class="GtkToggleToolButton" id=".uno:SubScript">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -324,7 +336,7 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
@@ -343,6 +355,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:SetDefault">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -367,6 +380,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ResetAttributes">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -392,6 +406,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:Grow">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -402,6 +417,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:Shrink">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -419,7 +435,35 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="fontnameft">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="no">fontname</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">fontnamecombobox</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="fontsizeft">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="no">fontsize</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">fontsizecombobox</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
       </object>
