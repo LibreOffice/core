@@ -349,6 +349,12 @@ WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUSt
     if( !aCommentsFragmentPath.isEmpty() )
         importOoxFragment( new CommentsFragment( *this, aCommentsFragmentPath ) );
 
+    // store threaded comments path for later (imported after comments are finalized)
+    OUString aThreadedCommentsPath = getFragmentPathFromFirstType(
+        u"http://schemas.microsoft.com/office/2017/10/relationships/threadedComment");
+    if (!aThreadedCommentsPath.isEmpty())
+        setThreadedCommentsPath(aThreadedCommentsPath);
+
     OUString aNamedSheetViewPath = getFragmentPathFromFirstType(u"http://schemas.microsoft.com/office/2019/04/relationships/namedSheetView");
     if (!aNamedSheetViewPath.isEmpty())
         importOoxFragment(new oox::xls::nsv::NamedSheetViewFragment(*this, aNamedSheetViewPath));
