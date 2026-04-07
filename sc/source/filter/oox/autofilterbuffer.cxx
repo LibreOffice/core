@@ -44,6 +44,7 @@
 #include <biffhelper.hxx>
 #include <document.hxx>
 #include <dbdata.hxx>
+#include <attrib.hxx>
 #include <scitems.hxx>
 #include <sortparam.hxx>
 #include <stlpool.hxx>
@@ -751,9 +752,14 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
     bool bHasOrConnection = false;
 
     ScDocument& rDoc = getScDocument();
-    SCCOL nCol = maRange.aStart.Col();
+    SCCOL nStartCol = maRange.aStart.Col();
     SCROW nRow = maRange.aStart.Row();
     SCTAB nTab = maRange.aStart.Tab();
+
+    std::set<sal_Int32> aHiddenButtonIds;
+    for (const auto& rxFilterColumn : maFilterColumns)
+        if (rxFilterColumn->isButtonHidden())
+            aHiddenButtonIds.insert(rxFilterColumn->getColumnId());
 
     // process all filter column objects, exit when 'or' connection exists
     for( const auto& rxFilterColumn : maFilterColumns )
@@ -764,10 +770,28 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
 
         if (rxFilterColumn->isButtonHidden())
         {
+            // In OOXML `colId` attribute is 0-based offset of autofilter range
+            SCCOL nCol = nStartCol + rxFilterColumn->getColumnId();
+
+            /* For merged cells except first cell all remaining cells will have the
+            "overlapped" property set to true. Autofilter dropdown button can only be
+            drawn on non-overlapped cells.
+
+            So, here if a column belongs to a merged cells, and it's the merge master
+            we skip hidding the button. */
+
+            const ScMergeAttr& rMerge = rDoc.GetAttr(nCol, nRow, nTab, ATTR_MERGE);
+            SCCOL nColSpan = rMerge.GetColMerge();
+            if (nColSpan > 1)
+            {
+                sal_Int32 nLastColId = rxFilterColumn->getColumnId() + nColSpan - 1;
+                if (aHiddenButtonIds.find(nLastColId) == aHiddenButtonIds.end())
+                    continue;
+            }
+
             auto nFlag = rDoc.GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG).GetValue();
             rDoc.ApplyAttr(nCol, nRow, nTab, ScMergeFlagAttr(nFlag & ~ScMF::Auto));
         }
-        nCol++;
 
         /*  Check whether mode for regular expressions is compatible with
             the global mode in obNeedsRegExp. If either one is still in

@@ -405,6 +405,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf83779)
     assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[2]/x:c/x:f", u"TRUE()");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testAutofilterShowButton)
+{
+    createScDoc("xlsx/autofilterShowButton.xlsx");
+    saveAndReload(TestFilter::XLSX);
+    xmlDocUniquePtr pDocXml = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn", 2);
+
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[1]", "colId", u"4");
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[1]", "hiddenButton", u"1");
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[2]", "colId", u"9");
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[2]", "hiddenButton", u"1");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf121715_FirstPageHeaderFooterXLSX)
 {
     // Check if first page header and footer are exported properly
