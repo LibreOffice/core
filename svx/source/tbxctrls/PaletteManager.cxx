@@ -459,16 +459,6 @@ std::vector< NamedColor > PaletteManager::GetRecentColors() const
     return std::vector< NamedColor >(maRecentColors.begin(), maRecentColors.end());
 }
 
-tools::Long PaletteManager::GetColorCount() const
-{
-    return mnColorCount;
-}
-
-tools::Long PaletteManager::GetRecentColorCount() const
-{
-    return maRecentColors.size();
-}
-
 void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& rName, bool bFront)
 {
     auto itColor = std::find_if(maRecentColors.begin(),

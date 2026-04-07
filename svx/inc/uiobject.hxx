@@ -32,23 +32,6 @@ private:
     OUString get_name() const override;
 };
 
-class SvxNumValueSetUIObject final : public DrawingAreaUIObject
-{
-    SvxNumValueSet* mpNumValueSet;
-
-public:
-    SvxNumValueSetUIObject(vcl::Window* pNumValueSetWin);
-
-    virtual void execute(const OUString& rAction, const StringMap& rParameters) override;
-
-    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
-
-    virtual StringMap get_state() override;
-
-private:
-    OUString get_name() const override;
-};
-
 #endif // INCLUDED_SVX_INC_UIOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

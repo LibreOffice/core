@@ -19,24 +19,7 @@
 #ifndef INCLUDED_SVX_NUMVSET_HXX
 #define INCLUDED_SVX_NUMVSET_HXX
 
-#include <vcl/idle.hxx>
-#include <svtools/valueset.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/lang/Locale.hpp>
 #include <svx/svxdllapi.h>
-
-namespace com::sun::star {
-    namespace container{
-        class XIndexAccess;
-    }
-    namespace beans{
-        struct PropertyValue;
-    }
-    namespace text{
-        class XNumberingFormatter;
-    }
-}
 
 enum class NumberingPageType
 {
@@ -45,68 +28,6 @@ enum class NumberingPageType
     SINGLENUM,
     OUTLINE,
     BITMAP
-};
-
-class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
-{
-    NumberingPageType mePageType;
-    tools::Rectangle       maOrgRect;
-    ScopedVclPtr<VirtualDevice> mpVDev;
-
-    css::uno::Reference<css::text::XNumberingFormatter> mxFormatter;
-    css::lang::Locale maLocale;
-
-    // Pair of bullet chars (first), and their respective font (second)
-    std::vector<std::pair<OUString, OUString>> maCustomBullets;
-
-    css::uno::Sequence<
-        css::uno::Sequence<
-            css::beans::PropertyValue> > maNumSettings;
-
-    css::uno::Sequence<
-        css::uno::Reference<
-            css::container::XIndexAccess> > maOutlineSettings;
-
-public:
-    SvxNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
-    void init(NumberingPageType eType);
-    virtual ~SvxNumValueSet() override;
-
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
-
-    void            SetNumberingSettings(
-        const css::uno::Sequence<
-                  css::uno::Sequence<css::beans::PropertyValue> >& aNum,
-        css::uno::Reference<css::text::XNumberingFormatter> const & xFormatter,
-        const css::lang::Locale& rLocale );
-
-    void            SetOutlineNumberingSettings(
-            css::uno::Sequence<
-                css::uno::Reference<css::container::XIndexAccess> > const & rOutline,
-            css::uno::Reference<css::text::XNumberingFormatter> const & xFormatter,
-            const css::lang::Locale& rLocale);
-
-    const std::vector<std::pair<OUString, OUString>> & GetCustomBullets() { return maCustomBullets; }
-    void SetCustomBullets(const std::vector<std::pair<OUString, OUString>>& rCustomBullets);
-
-    virtual FactoryFunction GetUITestFactory() const override;
-
-};
-
-
-class SVX_DLLPUBLIC SvxBmpNumValueSet final : public SvxNumValueSet
-{
-    Idle        m_aFormatIdle;
-    bool        m_bGrfNotFound;
-
-    DECL_DLLPRIVATE_LINK(FormatHdl_Impl, Timer *, void);
-
-public:
-    SvxBmpNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
-    void init();
-    virtual ~SvxBmpNumValueSet() override;
-
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
 };
 
 #endif

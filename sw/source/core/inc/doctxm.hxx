@@ -87,10 +87,6 @@ public:
     void UpdatePageNum();               // insert page numbering
 
     bool SetPosAtStartEnd( SwPosition& rPos ) const;
-    bool IsVisible() const override
-    {
-        return GetFormat() && GetFormat()->IsVisible();
-    }
 };
 
 struct SwDefTOXBase_Impl

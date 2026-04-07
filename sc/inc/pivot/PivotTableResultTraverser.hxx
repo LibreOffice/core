@@ -18,12 +18,6 @@
 
 namespace sc
 {
-namespace pivot
-{
-SC_DLLPUBLIC css::uno::Any
-getMemberForLevel(css::uno::Reference<css::uno::XInterface> const& xLevel, OUString const& rName);
-}
-
 /** Visitor interface for traversing the pivot table result tree structure.
  *
  * Defines the functions that are triggered with data, when the tree is traversed.

@@ -47,7 +47,6 @@ public:
     virtual boost::property_tree::ptree dumpAsJSON() const override;
 
     sal_uInt16 GetValue() const { return m_nValue; }
-    void SetValue(sal_uInt16 nTheValue) { ASSERT_CHANGE_REFCOUNTED_ITEM; assert(nTheValue <= 100); m_nValue = nTheValue; }
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 

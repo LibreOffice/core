@@ -183,7 +183,6 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxChartGradientPresetItem final : publi
     ChartGradientType meType;
 
 public:
-    static SfxPoolItem* CreateDefault();
     DECLARE_ITEM_TYPE_FUNCTION(SvxChartGradientPresetItem);
     SvxChartGradientPresetItem(ChartGradientVariation eVariation, ChartGradientType eType,
                                TypedWhichId<SvxChartGradientPresetItem> nId);
@@ -201,9 +200,6 @@ public:
 
     ChartGradientVariation GetVariation() const { return meVariation; }
     ChartGradientType GetType() const { return meType; }
-
-    void SetVariation(const ChartGradientVariation eVariation) { meVariation = eVariation; }
-    void SetType(const ChartGradientType eType) { meType = eType; }
 };
 
 #endif // INCLUDED_SVX_CHRTITEM_HXX

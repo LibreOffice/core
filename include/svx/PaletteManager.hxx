@@ -73,9 +73,6 @@ public:
     OUString    GetPaletteName();
     const OUString & GetSelectedPalettePath();
 
-    tools::Long        GetColorCount() const;
-    tools::Long        GetRecentColorCount() const;
-
     std::vector< NamedColor >        GetColors() const;
     std::vector< NamedColor >        GetRecentColors() const;
     void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName, bool bFront = true);

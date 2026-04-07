@@ -261,12 +261,6 @@ SvxChartColorPaletteItem* SvxChartColorPaletteItem::Clone(SfxItemPool* /*pPool*/
 
 // SvxChartGradientPresetItem implementation
 
-SfxPoolItem* SvxChartGradientPresetItem::CreateDefault()
-{
-    return new SvxChartGradientPresetItem(ChartGradientVariation::Unknown, ChartGradientType::Invalid,
-                                        TypedWhichId<SvxChartGradientPresetItem>(0));
-}
-
 SvxChartGradientPresetItem::SvxChartGradientPresetItem(ChartGradientVariation eVariation,
                                                        ChartGradientType eType,
                                                        const TypedWhichId<SvxChartGradientPresetItem> nId)

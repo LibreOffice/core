@@ -108,9 +108,7 @@ public:
     sal_Int32 getColSize() const;
 
     sal_Int32 getCalculatedColumnCount() const;
-    void addCalculatedField(const std::shared_ptr<ScDPCache::CalculatedField>& pField);
     bool isCalculatedField(sal_Int32 nDim) const;
-    OUString getCalculatedFieldName(sal_Int32 nDim) const;
     OUString getCalculation(sal_Int32 nDim) const;
     const ScTokenArray* getCalculationToken(sal_Int32 nDim) const;
 

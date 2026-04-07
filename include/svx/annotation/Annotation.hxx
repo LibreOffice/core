@@ -148,7 +148,6 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     OUString GetText();
-    void SetText(OUString const& rText);
 
     OString ToJSON(CommentNotificationType nType);
     void toData(AnnotationData& rData);

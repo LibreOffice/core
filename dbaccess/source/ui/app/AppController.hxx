@@ -329,12 +329,6 @@ namespace dbaui
         */
         void doAction(sal_uInt16 _nId, ElementOpenMode _eOpenMode);
 
-        /** returns the currently selected table or query name.
-        *
-        * \return the name of the currently table or query. If the tables or query container is selected otherwise an empty string will be returned.
-        */
-        OUString getCurrentlySelectedName(sal_Int32& _rnCommandType) const;
-
         /** shows the preview for the given entry
         */
         void showPreviewFor( const ElementType _eType,const OUString& _sName );

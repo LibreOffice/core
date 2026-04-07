@@ -168,7 +168,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/srchctrl \
     svx/source/dialog/srchdlg \
     svx/source/dialog/strarray \
-    svx/source/dialog/svxbmpnumvalueset \
     svx/source/dialog/svxbmpnumiconview \
     svx/source/dialog/svxgraphicitem \
     svx/source/dialog/svxruler \

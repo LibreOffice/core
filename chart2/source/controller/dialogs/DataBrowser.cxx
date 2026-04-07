@@ -1009,37 +1009,6 @@ void DataBrowser::GrabFocus()
     m_rTreeView.grab_focus();
 }
 
-void DataBrowser::RenewSeriesHeaders()
-{
-    clearHeaders();
-    DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
-    Link<impl::SeriesHeaderEdit&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
-    Link<impl::SeriesHeaderEdit&,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
-
-
-    for (size_t i = 0; i < aHeaders.size(); ++i)
-    {
-        auto const& elemHeader = aHeaders[i];
-        auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin, i );
-        Color nColor;
-        if( elemHeader.m_xDataSeries.is() &&
-            ( elemHeader.m_xDataSeries->getPropertyValue( u"Color"_ustr ) >>= nColor ))
-            spHeader->SetColor( nColor );
-        spHeader->SetChartType( elemHeader.m_xChartType, elemHeader.m_bSwapXAndYAxis );
-        spHeader->SetSeriesName(
-            elemHeader.m_xDataSeries->getLabelForRole(
-                        elemHeader.m_xChartType.is() ?
-                         elemHeader.m_xChartType->getRoleOfSequenceForSeriesLabel() :
-                         u"values-y"_ustr));
-        spHeader->SetRange( elemHeader.m_nStartColumn + 1, elemHeader.m_nEndColumn + 1 );
-        spHeader->SetGetFocusHdl( aFocusLink );
-        spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );
-        m_aSeriesHeaders.push_back(std::move(spHeader));
-    }
-
-    ImplAdjustHeaderControls();
-}
-
 void DataBrowser::ImplAdjustHeaderControls()
 {
     sal_Int32 nColCount = GetColumnCount();

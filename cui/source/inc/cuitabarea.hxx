@@ -22,7 +22,6 @@
 #include <svx/xflasit.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/SvxColorIconView.hxx>
-#include <svx/SvxPresetListBox.hxx>
 #include <svx/PaletteManager.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/hexcolorcontrol.hxx>
@@ -386,8 +385,6 @@ private:
     static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Bitmap aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
-    void MenuSelect(const OUString& rIdent);
-    void HandleMenuSelect(std::u16string_view rIdent);
     void ClickRenameHdl();
     void ClickDeleteHdl();
 
@@ -467,8 +464,6 @@ private:
     static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Bitmap aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
-    void MenuSelect(const OUString& rIdent);
-    void HandleMenuSelect(std::u16string_view rIdent);
     void ClickRenameHdl();
     void ClickDeleteHdl();
 
@@ -621,8 +616,6 @@ private:
     static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Bitmap aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
-    void MenuSelect(const OUString& rIdent);
-    void HandleMenuSelect(std::u16string_view rIdent);
     void ClickRenameHdl();
     void ClickDeleteHdl();
 

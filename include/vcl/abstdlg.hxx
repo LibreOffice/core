@@ -102,12 +102,6 @@ class AbstractColorPickerDialog : virtual public VclAbstractDialog
 {
 protected:
     virtual ~AbstractColorPickerDialog() override = default;
-
-public:
-    virtual void SetColor(const Color& rColor) = 0;
-    virtual Color GetColor() const = 0;
-
-    virtual weld::Dialog* GetDialog() const = 0;
 };
 
 class VCL_DLLPUBLIC AbstractPasswordToOpenModifyDialog : public VclAbstractDialog

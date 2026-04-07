@@ -64,47 +64,4 @@ OUString SvxShowCharSetUIObject::get_name() const
 }
 
 
-SvxNumValueSetUIObject::SvxNumValueSetUIObject(vcl::Window* pNumValueSetWin)
-    : DrawingAreaUIObject(pNumValueSetWin)
-    , mpNumValueSet(static_cast<SvxNumValueSet*>(mpController))
-{
-}
-
-void SvxNumValueSetUIObject::execute(const OUString& rAction,
-        const StringMap& rParameters)
-{
-    if (rAction == "CHOOSE")
-    {
-        auto itPos = rParameters.find(u"POS"_ustr);
-        if (itPos != rParameters.end())
-        {
-            OUString aIndexStr = itPos->second;
-            sal_Int32 nIndex = aIndexStr.toInt32();
-            mpNumValueSet->SelectItem(nIndex);
-            mpNumValueSet->Select();
-        }
-    }
-    else
-       DrawingAreaUIObject::execute(rAction, rParameters);
-}
-
-std::unique_ptr<UIObject> SvxNumValueSetUIObject::create(vcl::Window* pWindow)
-{
-    return std::unique_ptr<UIObject>(new SvxNumValueSetUIObject(pWindow));
-}
-
-OUString SvxNumValueSetUIObject::get_name() const
-{
-    return u"SvxNumValueSetUIObject"_ustr;
-}
-
-StringMap SvxNumValueSetUIObject::get_state()
-{
-    StringMap aMap = WindowUIObject::get_state();
-    aMap[u"SelectedItemId"_ustr] = OUString::number( mpNumValueSet->GetSelectedItemId() );
-    aMap[u"SelectedItemPos"_ustr] = OUString::number( mpNumValueSet->GetSelectItemPos() );
-    aMap[u"ItemsCount"_ustr] = OUString::number(mpNumValueSet->GetItemCount());
-    aMap[u"ItemText"_ustr] = mpNumValueSet->GetItemText(mpNumValueSet->GetSelectedItemId());
-    return aMap;
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

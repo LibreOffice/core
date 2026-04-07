@@ -64,30 +64,6 @@ OString scopedCppName(OString const & type, bool ns_alias)
     return s;
 }
 
-OString translateUnoToCppType(
-    codemaker::UnoType::Sort sort, std::u16string_view nucleus)
-{
-    OStringBuffer buf;
-    if (sort <= codemaker::UnoType::Sort::Any) {
-        static char const * const cppTypes[static_cast<int>(codemaker::UnoType::Sort::Any) + 1] = {
-            "void", "::sal_Bool", "::sal_Int8", "::sal_Int16", "::sal_uInt16",
-            "::sal_Int32", "::sal_uInt32", "::sal_Int64", "::sal_uInt64",
-            "float", "double", "::sal_Unicode", "rtl::OUString",
-            "::css::uno::Type", "::css::uno::Any" };
-        buf.append(cppTypes[static_cast<int>(sort)]);
-    } else {
-        if (sort == codemaker::UnoType::Sort::Interface
-            && nucleus == u"com.sun.star.uno.XInterface")
-        {
-            buf.append("::css::uno::XInterface");
-        } else {
-            //TODO: check that nucleus is a valid (UTF-8) identifier
-            buf.append(u2b(nucleus));
-        }
-    }
-    return buf.makeStringAndClear();
-}
-
 OString translateUnoToCppIdentifier(
     OString const & unoIdentifier, std::string_view prefix,
     IdentifierTranslationMode transmode, OString const * forbidden)

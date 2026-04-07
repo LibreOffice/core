@@ -18,6 +18,7 @@
  */
 
 #include <svx/numvset.hxx>
+#include <vcl/weld.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

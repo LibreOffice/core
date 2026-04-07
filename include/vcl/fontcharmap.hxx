@@ -42,7 +42,7 @@ public:
 
     /** A new FontCharMap is created based on passed arguments.
      */
-    SAL_DLLPRIVATE FontCharMap(bool bMicrosoftSymbolMap, std::vector<sal_UCS4> aRangeCodes);
+    SAL_DLLPRIVATE FontCharMap(std::vector<sal_UCS4> aRangeCodes);
 
     SAL_DLLPRIVATE virtual ~FontCharMap() override;
 
@@ -135,8 +135,6 @@ public:
         @returns Character in font character map.
      */
     sal_UCS4            GetCharFromIndex( int nCharIndex ) const;
-
-    SAL_DLLPRIVATE bool isMicrosoftSymbolMap() const;
 
 private:
     ImplFontCharMapRef mpImplFontCharMap;

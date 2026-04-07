@@ -2610,27 +2610,6 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
     }
 }
 
-OUString OApplicationController::getCurrentlySelectedName(sal_Int32& _rnCommandType) const
-{
-    _rnCommandType = ( (getContainer()->getElementType() == E_QUERY)
-                                ? CommandType::QUERY : ( (getContainer()->getElementType() == E_TABLE) ? CommandType::TABLE : -1 ));
-
-    OUString sName;
-    if ( _rnCommandType != -1 )
-    {
-        try
-        {
-            sName = getContainer()->getQualifiedName( nullptr );
-            OSL_ENSURE( !sName.isEmpty(), "OApplicationController::getCurrentlySelectedName: no name given!" );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
-    }
-    return sName;
-}
-
 void SAL_CALL OApplicationController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& Listener )
 {
     m_pSelectionNotifier->addListener( Listener );

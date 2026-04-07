@@ -83,8 +83,6 @@ public:
 
     void GrabFocus();
 
-    void RenewSeriesHeaders();
-
 private:
     rtl::Reference<::chart::ChartModel> m_xChartDoc;
     std::unique_ptr< DataBrowserModel > m_apDataBrowserModel;

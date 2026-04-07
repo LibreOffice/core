@@ -67,12 +67,7 @@ public:
     sal_UCS4        GetCharFromIndex(int index) const;
     void                    createContextMenu(const Point& rPosition);
 
-    void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { maDoubleClkHdl = rLink; }
-    void            SetReturnKeyPressHdl( const Link<SvxShowCharSet*,void>& rLink ) { m_aReturnKeypressHdl = rLink; }
-    void            SetSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maSelectHdl = rHdl; }
     void            SetHighlightHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maHighHdl = rHdl; }
-    void            SetPreSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maPreSelectHdl = rHdl; }
-    void            SetFavClickHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maFavClickHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
     SVX_DLLPUBLIC void SetFont( const vcl::Font& rFont );
     vcl::Font const & GetFont() const { return maFont; }

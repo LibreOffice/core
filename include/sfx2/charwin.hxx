@@ -116,9 +116,6 @@ public:
     void            loadFavCharacterList();
     void            updateFavCharControl();
 
-    std::deque<OUString> getFavCharList() { return m_aFavCharList; }
-    std::deque<OUString> getFavCharFontList() { return m_aFavCharFontList; }
-
     void            loadRecentCharacterList(); //loads both recent char and recent char font list
     void            updateRecentCharControl();
 

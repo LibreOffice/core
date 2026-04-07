@@ -2361,13 +2361,6 @@ void SvxSearchDialog::SaveToModule_Impl()
     m_rBindings.GetDispatcher()->Execute(SID_SEARCH_ITEM, SfxCallMode::SLOT, ppArgs);
 }
 
-short SvxSearchDialog::executeSubDialog(VclAbstractDialog * dialog) {
-    assert(!m_executingSubDialog);
-    comphelper::ScopeGuard g([this] { m_executingSubDialog = false; });
-    m_executingSubDialog = true;
-    return dialog->Execute();
-}
-
 void SvxSearchDialog::executeSubDialog(VclPtr<VclAbstractDialog> dialog, const std::function<void(sal_Int32)>& func) {
     assert(!m_executingSubDialog);
     m_executingSubDialog = true;
