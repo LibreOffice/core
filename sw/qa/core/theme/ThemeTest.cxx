@@ -379,6 +379,40 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
     CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getBackgroundFillStyleList().size());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeFontSchemeRoundTripDOCX)
+{
+    // Verify that supplemental fonts in the theme font scheme survive a round-trip.
+
+    createSwDoc("ThemeColorInHeading.docx");
+
+    auto verifyFontScheme = [this]() {
+        SwDoc* pDoc = getSwDoc();
+        SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+        CPPUNIT_ASSERT(pModel);
+        auto const& pTheme = pModel->getTheme();
+        CPPUNIT_ASSERT(pTheme);
+
+        model::FontScheme const& rFontScheme = pTheme->getFontScheme();
+        CPPUNIT_ASSERT_EQUAL(u"Noto Sans"_ustr, rFontScheme.getMajorLatin().maTypeface);
+        CPPUNIT_ASSERT_EQUAL(u"Calibri"_ustr, rFontScheme.getMinorLatin().maTypeface);
+        CPPUNIT_ASSERT_EQUAL(size_t(47), rFontScheme.getMajorSupplementalFontList().size());
+        CPPUNIT_ASSERT_EQUAL(size_t(47), rFontScheme.getMinorSupplementalFontList().size());
+        CPPUNIT_ASSERT_EQUAL(u"Angsana New"_ustr,
+                             rFontScheme.findMajorSupplementalTypeface(u"Thai"));
+        CPPUNIT_ASSERT_EQUAL(u"Cordia New"_ustr,
+                             rFontScheme.findMinorSupplementalTypeface(u"Thai"));
+    };
+
+    // Verify font scheme after import
+    verifyFontScheme();
+
+    // Export and reload
+    saveAndReload(TestFilter::DOCX);
+
+    // Verify font scheme after round-trip
+    verifyFontScheme();
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)
 {
     createSwDoc("ThemeColorInHeading.fodt");

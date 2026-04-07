@@ -122,6 +122,11 @@ bool ThemeExport::writeFontScheme(model::FontScheme const& rFontScheme)
         fillAttrList(aAttrList, rFontScheme.getMajorComplex());
         mpFS->singleElementNS(XML_a, XML_cs, aAttrList);
     }
+    for (auto const& rSupplementalFont : rFontScheme.getMajorSupplementalFontList())
+    {
+        mpFS->singleElementNS(XML_a, XML_font, XML_script, rSupplementalFont.maScript, XML_typeface,
+                              rSupplementalFont.maTypeface);
+    }
 
     mpFS->endElementNS(XML_a, XML_majorFont);
 
@@ -141,6 +146,11 @@ bool ThemeExport::writeFontScheme(model::FontScheme const& rFontScheme)
         auto aAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
         fillAttrList(aAttrList, rFontScheme.getMinorComplex());
         mpFS->singleElementNS(XML_a, XML_cs, aAttrList);
+    }
+    for (auto const& rSupplementalFont : rFontScheme.getMinorSupplementalFontList())
+    {
+        mpFS->singleElementNS(XML_a, XML_font, XML_script, rSupplementalFont.maScript, XML_typeface,
+                              rSupplementalFont.maTypeface);
     }
 
     mpFS->endElementNS(XML_a, XML_minorFont);
