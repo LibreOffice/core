@@ -1647,7 +1647,7 @@ struct SwXTextRangesImpl final : public SwXTextRanges
         OWeakObject::release();
     }
     virtual SwUnoCursor* GetCursor() override
-        { return &(*m_pUnoCursor); };
+        { return m_pUnoCursor.get(); };
     void MakeRanges();
     std::vector< rtl::Reference<SwXTextRange> > m_Ranges;
     sw::UnoCursorPointer m_pUnoCursor;
