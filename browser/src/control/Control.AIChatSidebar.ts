@@ -979,6 +979,12 @@ namespace cool {
 
 			this.hintText = '';
 			this.inputText = '';
+			// Clear the DOM value synchronously so that a pending keyup
+			// event does not restore inputText from the stale DOM value.
+			const textarea = document.querySelector(
+				'#aichat-input.ui-textarea',
+			) as HTMLTextAreaElement | null;
+			if (textarea) textarea.value = '';
 
 			const userMsg = await this.buildUserMessage(text);
 			if (!userMsg) return;
