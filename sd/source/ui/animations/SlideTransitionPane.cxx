@@ -1059,7 +1059,6 @@ void SlideTransitionPane::updateVariants(TransitionPresetPtr const& pPreset)
 {
     mxLB_VARIANT->clear();
     mxLB_VARIANT->set_sensitive(false);
-    mxLB_VARIANT->set_active(0);
 
     if (!pPreset)
     {
