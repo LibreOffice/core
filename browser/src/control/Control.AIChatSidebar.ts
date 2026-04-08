@@ -1079,11 +1079,16 @@ namespace cool {
 			);
 		}
 
+		private getModelDisplayName(): string {
+			return app.map.aiModelName || _('The AI assistant');
+		}
+
 		private onAIChatApproval(data: any): void {
 			if (data.requestId !== this.currentRequestId) return;
 			this.hintText = '';
 			this.updateHint();
 
+			const name = this.getModelDisplayName();
 			let content: string;
 			if (data.toolName === 'extract_document_structure') {
 				const plan = data.summary;
@@ -1091,13 +1096,13 @@ namespace cool {
 					content = plan + '\n\n' + _('Do you want to proceed?');
 				} else {
 					content = _(
-						'The AI wants to inspect your document. Do you want to proceed?',
-					);
+						'%1 wants to inspect your document. Do you want to proceed?',
+					).replace('%1', name);
 				}
 			} else if (data.toolName === 'transform_document_structure') {
 				const summary = data.summary || _('Modify document structure');
 				content =
-					_('The AI wants to modify your document:') +
+					_('%1 wants to modify your document:').replace('%1', name) +
 					'\n\n' +
 					summary +
 					'\n\n' +
@@ -1105,15 +1110,18 @@ namespace cool {
 			} else if (data.toolName === 'set_cell_formula') {
 				const summary = data.summary || _('Set cell formula');
 				content =
-					_('The AI wants to set a formula in your spreadsheet:') +
+					_('%1 wants to set a formula in your spreadsheet:').replace(
+						'%1',
+						name,
+					) +
 					'\n\n' +
 					summary +
 					'\n\n' +
 					_('Do you want to apply this change?');
 			} else {
 				content = _(
-					'The AI wants to perform an action. Do you want to proceed?',
-				);
+					'%1 wants to perform an action. Do you want to proceed?',
+				).replace('%1', name);
 			}
 
 			// Show the approval UI as an assistant message
