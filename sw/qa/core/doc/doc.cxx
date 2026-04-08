@@ -604,6 +604,32 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testSplitFlyInsertUndo)
     CPPUNIT_ASSERT(!rFlyFormats.empty());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEmptyTableNameUpdatesChart)
+{
+    createSwDoc("tdf171549.fodt");
+
+    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName("Table1"));
+    getSwDocShell()->GetEditShell()->SetTableName(*pFrameFormat, UIName(""));
+
+    saveAndReload(TestFilter::ODT);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:object", "notify-on-update-of-ranges", u"Table3");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableNameCollisionUpdatesChart)
+{
+    createSwDoc("tdf171549.fodt");
+
+    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName("Table1"));
+    getSwDocShell()->GetEditShell()->SetTableName(*pFrameFormat, UIName("Table2"));
+
+    saveAndReload(TestFilter::ODT);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:object", "notify-on-update-of-ranges", u"Table3");
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testVirtPageNumReset)
 {
     createSwDoc("tdf160843.odt");

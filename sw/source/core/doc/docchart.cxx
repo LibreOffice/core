@@ -148,17 +148,18 @@ void SwDoc::UpdateCharts( const UIName& rName ) const
     }
 }
 
-void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const UIName &rNewName )
+void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const UIName &rInName )
 {
+    UIName aNewName = rInName;
     const UIName aOldName( rTableFormat.GetName() );
 
-    bool bNameFound = rNewName.isEmpty();
+    bool bNameFound = aNewName.isEmpty();
     if( !bNameFound )
     {
         for(const SwTableFormat* pFormat: *GetTableFrameFormats())
         {
             if( !pFormat->IsDefault() &&
-                pFormat->GetName() == rNewName && IsUsed( *pFormat ) )
+                pFormat->GetName() == aNewName && IsUsed( *pFormat ) )
             {
                 bNameFound = true;
                 break;
@@ -166,10 +167,12 @@ void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const UIName &rNewName )
         }
     }
 
-    if( !bNameFound )
-        rTableFormat.SetFormatName( rNewName, true );
-    else
-        rTableFormat.SetFormatName( GetUniqueTableName(), true );
+    // If the new name is already taken or is empty, generate new unique table name
+    if ( bNameFound )
+    {
+        aNewName = GetUniqueTableName();
+    }
+    rTableFormat.SetFormatName( aNewName, true );
 
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -179,7 +182,7 @@ void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const UIName &rNewName )
         SwOLENode *pNd = aIdx.GetNode().GetOLENode();
         if( pNd && aOldName == pNd->GetChartTableName() )
         {
-            pNd->SetChartTableName( rNewName );
+            pNd->SetChartTableName( aNewName );
 
             SwTable* pTable = SwTable::FindTable( &rTableFormat );
             SwChartDataProvider *pPCD = getIDocumentChartDataProviderAccess().GetChartDataProvider();
