@@ -758,6 +758,7 @@ namespace cool {
 						if (imgData) {
 							this.insertImageAtCursor(imgData);
 							this.showCopyFeedback(idx, 'aichat-insert-img-');
+							this.showTransientHint(_('Image inserted at cursor'));
 						}
 					},
 				},
@@ -776,6 +777,7 @@ namespace cool {
 						if (this.messages[idx]) {
 							this.insertAtCursor(this.messages[idx].content);
 							this.showCopyFeedback(idx, 'aichat-insert-text-');
+							this.showTransientHint(_('Text inserted at cursor'));
 						}
 					},
 				},
@@ -1396,6 +1398,17 @@ namespace cool {
 			setTimeout(function () {
 				if (img.isConnected) {
 					img.src = originalSrc;
+				}
+			}, this.COPY_FEEDBACK_DURATION_MS);
+		}
+
+		private showTransientHint(text: string): void {
+			this.hintText = text;
+			this.updateHint();
+			setTimeout(() => {
+				if (this.hintText === text) {
+					this.hintText = '';
+					this.updateHint();
 				}
 			}, this.COPY_FEEDBACK_DURATION_MS);
 		}
