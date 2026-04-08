@@ -232,7 +232,7 @@ public:
     void exportDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xProperties, bool bSecurityOptOpenReadOnly );
 
     /** Write the customXml entries we are preserving (xlsx and pptx only). */
-    void exportCustomFragments();
+    void exportCustomFragments(const sax_fastparser::FSHelperPtr& pFS);
 
     /** Read the document properties and also the customXml entries (xlsx and pptx only). */
     void importDocumentProperties();

@@ -1214,7 +1214,7 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
     oox::core::XmlFilterBase::putPropertiesToDocumentGrabBag(xModel, aGrabBagProperties);
 }
 
-void XmlFilterBase::exportCustomFragments()
+void XmlFilterBase::exportCustomFragments(const sax_fastparser::FSHelperPtr& pFS)
 {
     Reference<XComponent> xModel = getModel();
     uno::Reference<beans::XPropertySet> xPropSet(xModel, uno::UNO_QUERY_THROW);
@@ -1269,7 +1269,8 @@ void XmlFilterBase::exportCustomFragments()
         const OUString fragmentPath = "customXml/item" + OUString::number(j+1) + ".xml";
         if (customXmlDom.is())
         {
-            addRelation(oox::getRelationship(Relationship::CUSTOMXML), Concat2View("../" + fragmentPath));
+            addRelation(pFS->getOutputStream(), oox::getRelationship(Relationship::CUSTOMXML),
+                        Concat2View("../" + fragmentPath));
 
             uno::Reference<xml::sax::XSAXSerializable> serializer(customXmlDom, uno::UNO_QUERY);
             uno::Reference<xml::sax::XWriter> writer = xml::sax::Writer::create(comphelper::getProcessComponentContext());

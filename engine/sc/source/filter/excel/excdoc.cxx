@@ -840,7 +840,7 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
         = sAlgorithm != "PBKDF2" && !sSalt.isEmpty() && !sHash.isEmpty() && !sUserName.isEmpty();
     rStrm.exportDocumentProperties(xDocProps, pDocShell->IsSecurityOptOpenReadOnly()
                                                   && !bHasPasswordHash && !bHasPasswordInfo);
-    rStrm.exportCustomFragments();
+    rStrm.exportCustomFragments(rStrm.GetCurrentStream());
 
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_workbook,

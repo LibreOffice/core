@@ -1227,6 +1227,18 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testCustomXml)
     std::unique_ptr<SvStream> pStream
         = parseExportStream(maTempFile.GetURL(), u"ddp/ddpfile.xen"_ustr);
     CPPUNIT_ASSERT(pStream);
+
+    // customXml item reference must not exist on package level
+    pRelsDoc = parseExport(u"_rels/.rels"_ustr);
+    CPPUNIT_ASSERT(pRelsDoc);
+    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Target='../customXml/item1.xml']",
+                0);
+
+    // customXml item reference must exist on part level
+    pRelsDoc = parseExport(u"ppt/_rels/presentation.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pRelsDoc);
+    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Target='../customXml/item1.xml']",
+                1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf94238)
