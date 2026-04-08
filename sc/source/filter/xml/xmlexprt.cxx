@@ -1950,6 +1950,7 @@ void ScXMLExport::ExportContent_()
         }
     }
     WriteExternalRefCaches(*pDoc);
+    WritePersons(*pDoc);
     WriteNamedExpressions(*pDoc);
     WriteDataStream(*pDoc);
     aExportDatabaseRanges.WriteDatabaseRanges(*pDoc);
@@ -3801,6 +3802,38 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
                                         false );
         Characters(aDate);
     }
+
+    if (!(getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
+        return;
+
+    const ScThreadedCommentData* pData = pNote->GetThreadedCommentData();
+    if (!pData)
+        return;
+
+    AddAttribute(XML_NAMESPACE_LO_EXT, XML_ID, pData->maRoot.maGuid);
+    if (!pData->maRoot.maDateTime.isEmpty())
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATE_TIME, pData->maRoot.maDateTime);
+    if (pData->mbDone)
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_RESOLVED, XML_TRUE);
+    AddAttribute(XML_NAMESPACE_LO_EXT, XML_PERSON_ID, pData->maRoot.maPersonId);
+    {
+        SvXMLElementExport aThreadedComment(*this, XML_NAMESPACE_LO_EXT,
+                                            XML_THREADED_COMMENT, true, true);
+        {
+            SvXMLElementExport aText(*this, XML_NAMESPACE_LO_EXT, XML_TEXT, true, false);
+            Characters(pData->maRoot.maText);
+        }
+        for (const auto& rReply : pData->maReplies)
+        {
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_ID, rReply.maGuid);
+            if (!rReply.maDateTime.isEmpty())
+                AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATE_TIME, rReply.maDateTime);
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_PERSON_ID, rReply.maPersonId);
+            SvXMLElementExport aReply(*this, XML_NAMESPACE_LO_EXT, XML_REPLY, true, true);
+            SvXMLElementExport aText(*this, XML_NAMESPACE_LO_EXT, XML_TEXT, true, false);
+            Characters(rReply.maText);
+        }
+    }
 }
 
 void ScXMLExport::WriteAnnotation(ScDocument& rDoc, const ScMyCell& rMyCell)
@@ -4170,6 +4203,28 @@ void ScXMLExport::WriteLabelRanges(const ScDocument& rDoc, const uno::Reference<
             AddAttribute( XML_NAMESPACE_TABLE, XML_ORIENTATION, bColumn ? XML_COLUMN : XML_ROW );
             SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, XML_LABEL_RANGE, true, true );
         }
+    }
+}
+
+void ScXMLExport::WritePersons(const ScDocument& rDoc)
+{
+    if (!(getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
+        return;
+
+    const auto& rPersonList = rDoc.GetPersonList();
+    if (rPersonList.empty())
+        return;
+
+    SvXMLElementExport aPersons(*this, XML_NAMESPACE_LO_EXT, XML_PERSONS, true, true);
+    for (const auto& rPerson : rPersonList)
+    {
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_PERSON_ID, rPerson.maId);
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_DISPLAY_NAME, rPerson.maDisplayName);
+        if (!rPerson.maUserId.isEmpty())
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_USER_ID, rPerson.maUserId);
+        if (!rPerson.maProviderId.isEmpty())
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_PROVIDER_ID, rPerson.maProviderId);
+        SvXMLElementExport aPerson(*this, XML_NAMESPACE_LO_EXT, XML_PERSON, true, true);
     }
 }
 

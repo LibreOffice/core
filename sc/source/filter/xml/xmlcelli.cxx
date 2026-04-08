@@ -954,6 +954,8 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
             pNote->SetDate( aDate );
         }
         pNote->SetAuthor( mxAnnotationData->maAuthor );
+        if (mxAnnotationData->mpThreadedCommentData)
+            pNote->SetThreadedCommentData(std::move(mxAnnotationData->mpThreadedCommentData));
     }
 
     // register a shape that has been newly created in the ScNoteUtil functions

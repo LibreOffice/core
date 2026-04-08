@@ -28,6 +28,113 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
+namespace {
+
+/// Context handler for <loext:reply> inside <loext:threaded-comment>.
+class ScXMLThreadedCommentReplyContext : public ScXMLImportContext
+{
+public:
+    ScXMLThreadedCommentReplyContext(ScXMLImport& rImport,
+                                    const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                    ScXMLAnnotationData& rData)
+        : ScXMLImportContext(rImport)
+        , mrData(rData)
+    {
+        for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
+        {
+            switch (aIter.getToken())
+            {
+                case XML_ELEMENT(LO_EXT, XML_ID):
+                    maEntry.maGuid = aIter.toString();
+                    break;
+                case XML_ELEMENT(LO_EXT, XML_DATE_TIME):
+                    maEntry.maDateTime = aIter.toString();
+                    break;
+                case XML_ELEMENT(LO_EXT, XML_PERSON_ID):
+                    maEntry.maPersonId = aIter.toString();
+                    break;
+            }
+        }
+    }
+
+    css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>&) override
+    {
+        if (nElement == XML_ELEMENT(LO_EXT, XML_TEXT))
+            return new ScXMLContentContext(GetScImport(), maTextBuffer);
+        return nullptr;
+    }
+
+    void SAL_CALL endFastElement(sal_Int32) override
+    {
+        maEntry.maText = maTextBuffer.makeStringAndClear();
+        if (mrData.mpThreadedCommentData)
+            mrData.mpThreadedCommentData->maReplies.push_back(std::move(maEntry));
+    }
+
+private:
+    ScXMLAnnotationData& mrData;
+    ScThreadedCommentEntry maEntry;
+    OUStringBuffer maTextBuffer;
+};
+
+/// Context handler for <loext:threaded-comment> inside <office:annotation>.
+class ScXMLThreadedCommentContext : public ScXMLImportContext
+{
+public:
+    ScXMLThreadedCommentContext(ScXMLImport& rImport,
+                               const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                               ScXMLAnnotationData& rData)
+        : ScXMLImportContext(rImport)
+        , mrData(rData)
+    {
+        mrData.mpThreadedCommentData = std::make_unique<ScThreadedCommentData>();
+
+        for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
+        {
+            switch (aIter.getToken())
+            {
+                case XML_ELEMENT(LO_EXT, XML_ID):
+                    mrData.mpThreadedCommentData->maRoot.maGuid = aIter.toString();
+                    break;
+                case XML_ELEMENT(LO_EXT, XML_DATE_TIME):
+                    mrData.mpThreadedCommentData->maRoot.maDateTime = aIter.toString();
+                    break;
+                case XML_ELEMENT(LO_EXT, XML_RESOLVED):
+                    mrData.mpThreadedCommentData->mbDone = IsXMLToken(aIter, XML_TRUE);
+                    break;
+                case XML_ELEMENT(LO_EXT, XML_PERSON_ID):
+                    mrData.mpThreadedCommentData->maRoot.maPersonId = aIter.toString();
+                    break;
+            }
+        }
+    }
+
+    css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
+    {
+        if (nElement == XML_ELEMENT(LO_EXT, XML_TEXT))
+            return new ScXMLContentContext(GetScImport(), maTextBuffer);
+        if (nElement == XML_ELEMENT(LO_EXT, XML_REPLY))
+            return new ScXMLThreadedCommentReplyContext(GetScImport(), xAttrList, mrData);
+        return nullptr;
+    }
+
+    void SAL_CALL endFastElement(sal_Int32) override
+    {
+        if (mrData.mpThreadedCommentData)
+            mrData.mpThreadedCommentData->maRoot.maText = maTextBuffer.makeStringAndClear();
+    }
+
+private:
+    ScXMLAnnotationData& mrData;
+    OUStringBuffer maTextBuffer;
+};
+
+} // anonymous namespace
+
 ScXMLAnnotationData::ScXMLAnnotationData() :
     mbUseShapePos( false ),
     mbShown( false )
@@ -114,6 +221,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLAnnotationContext
             return new ScXMLContentContext(GetScImport(), maCreateDateBuffer);
         case XML_ELEMENT(META, XML_DATE_STRING):
             return new ScXMLContentContext(GetScImport(), maCreateDateStringBuffer);
+        case XML_ELEMENT(LO_EXT, XML_THREADED_COMMENT):
+            return new ScXMLThreadedCommentContext(GetScImport(), xAttrList, mrAnnotationData);
     }
 
     if( pShapeContext )

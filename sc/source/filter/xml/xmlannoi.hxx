@@ -22,8 +22,10 @@
 #include <xmloff/xmlictxt.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <editeng/editdata.hxx>
+#include <postit.hxx>
 #include "importcontext.hxx"
 
+#include <memory>
 #include <vector>
 
 class ScXMLImport;
@@ -58,6 +60,7 @@ struct ScXMLAnnotationData
     OUString     maTextStyle;
     bool                mbUseShapePos;
     bool                mbShown;
+    std::unique_ptr<ScThreadedCommentData> mpThreadedCommentData;
     std::vector<ScXMLAnnotationStyleEntry> maContentStyles;
 
     explicit            ScXMLAnnotationData();

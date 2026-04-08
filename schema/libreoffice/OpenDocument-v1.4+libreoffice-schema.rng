@@ -969,6 +969,40 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:zeroOrMore>
     </rng:define>
 
+    <!-- Override spreadsheet epilogue to allow loext:persons -->
+    <rng:define name="office-spreadsheet-content-epilogue">
+      <rng:optional>
+        <rng:ref name="loext-persons"/>
+      </rng:optional>
+      <rng:ref name="table-functions"/>
+    </rng:define>
+
+    <!-- Override office-annotation to add loext:threaded-comment child element -->
+    <rng:define name="office-annotation">
+      <rng:element name="office:annotation">
+        <rng:ref name="office-annotation-attlist"/>
+        <rng:ref name="draw-caption-attlist"/>
+        <rng:ref name="common-draw-position-attlist"/>
+        <rng:ref name="common-draw-size-attlist"/>
+        <rng:ref name="common-draw-shape-with-text-and-styles-attlist"/>
+        <rng:optional><rng:ref name="dc-creator"/></rng:optional>
+        <rng:optional><rng:ref name="dc-date"/></rng:optional>
+        <rng:optional><rng:ref name="meta-date-string"/></rng:optional>
+        <rng:optional>
+          <rng:element name="meta:creator-initials"><rng:text/></rng:element>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="loext-threaded-comment"/>
+        </rng:optional>
+        <rng:zeroOrMore>
+          <rng:choice>
+            <rng:ref name="text-p"/>
+            <rng:ref name="text-list"/>
+          </rng:choice>
+        </rng:zeroOrMore>
+      </rng:element>
+    </rng:define>
+
     <rng:define name="office-annotation-attlist" combine="interleave">
       <rng:interleave>
         <rng:optional>
@@ -2122,6 +2156,43 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   </rng:define>
 
    </rng:include>
+
+    <!-- TODO no proposal -->
+  <rng:define name="loext-threaded-comment">
+    <rng:element name="loext:threaded-comment">
+      <rng:optional><rng:attribute name="loext:id"><rng:ref name="string"/></rng:attribute></rng:optional>
+      <rng:optional><rng:attribute name="loext:date-time"><rng:ref name="string"/></rng:attribute></rng:optional>
+      <rng:optional><rng:attribute name="loext:resolved"><rng:ref name="boolean"/></rng:attribute></rng:optional>
+      <rng:optional><rng:attribute name="loext:person-id"><rng:ref name="string"/></rng:attribute></rng:optional>
+      <rng:optional>
+        <rng:element name="loext:text"><rng:text/></rng:element>
+      </rng:optional>
+      <rng:zeroOrMore>
+        <rng:element name="loext:reply">
+          <rng:optional><rng:attribute name="loext:id"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional><rng:attribute name="loext:date-time"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional><rng:attribute name="loext:person-id"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional>
+            <rng:element name="loext:text"><rng:text/></rng:element>
+          </rng:optional>
+        </rng:element>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="loext-persons">
+    <rng:element name="loext:persons">
+      <rng:zeroOrMore>
+        <rng:element name="loext:person">
+          <rng:optional><rng:attribute name="loext:person-id"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional><rng:attribute name="loext:display-name"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional><rng:attribute name="loext:user-id"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional><rng:attribute name="loext:provider-id"><rng:ref name="string"/></rng:attribute></rng:optional>
+        </rng:element>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
 
     <!-- TODO no proposal -->
   <rng:define name="loext-p">
