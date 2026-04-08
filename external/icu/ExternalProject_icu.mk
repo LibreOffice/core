@@ -31,6 +31,8 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			$(gb_RUN_CONFIGURE) ./configure \
 				$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
 				$(gb_CONFIGURE_PLATFORMS) \
+				$(if $(DISABLE_DYNLOADING),\
+					--with-data-packaging=static --enable-static --disable-shared --disable-dyload) \
 				$(if $(CROSS_COMPILING), \
 					--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
 					--disable-tools --disable-extras) \
