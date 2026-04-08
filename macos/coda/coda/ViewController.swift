@@ -89,6 +89,8 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         // Add it to the view controller's view
         self.view.addSubview(webView)
 
+        webView.setAccessibilityIdentifier("CODA.DocumentWebView")
+
         webView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             webView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
