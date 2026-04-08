@@ -416,6 +416,19 @@ const _createBaseSpinField = function (
 		);
 	}
 
+	let style = '';
+	if (data.widthChars && data.widthChars > 0) {
+		style = 'width: ' + data.widthChars + 'ch;';
+	}
+
+	if (data.halign) {
+		style += 'justify-self: ' + data.halign + ';';
+	}
+
+	if (style) {
+		controls.container.style.cssText = style;
+	}
+
 	listenNumericChanges(data, builder, controls, customCallback);
 
 	const value = parseFloat(data.value);
