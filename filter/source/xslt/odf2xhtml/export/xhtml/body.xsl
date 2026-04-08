@@ -1292,7 +1292,9 @@
         <!-- REFERENCE HANDLING - ANCHOR -->
         <xsl:element namespace="{$namespace}" name="a">
             <xsl:attribute name="id">
-                <xsl:value-of select="translate(concat('a_',normalize-space($headingNumber), '_', normalize-space($title)), '&#xA;&amp;&lt;&gt;–.,;: %()[]/\+', '____________________________')" disable-output-escaping="yes"/>
+                <xsl:call-template name="sanitize-id">
+                    <xsl:with-param name="input" select="concat('a_', normalize-space($headingNumber), '_', normalize-space($title))"/>
+                </xsl:call-template>
             </xsl:attribute>
 
             <xsl:element name="span">
@@ -2671,7 +2673,9 @@
             <!-- REFERENCE HANDLING - ANCHOR -->
             <xsl:element namespace="{$namespace}" name="a">
                 <xsl:attribute name="id">
-                    <xsl:value-of select="translate(concat('a_',$listLabelElement, '_', normalize-space($title)), '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+                    <xsl:call-template name="sanitize-id">
+                        <xsl:with-param name="input" select="concat('a_', $listLabelElement, '_', normalize-space($title))"/>
+                    </xsl:call-template>
                 </xsl:attribute>
                 <xsl:apply-templates>
                     <xsl:with-param name="globalData" select="$globalData"/>

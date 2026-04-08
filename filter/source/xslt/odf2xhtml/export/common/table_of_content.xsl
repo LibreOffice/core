@@ -527,7 +527,9 @@ Scenarios unmatched:
                         <xsl:value-of select="$name"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select='concat("a_",  translate(normalize-space($text), "&#xA;&amp;&lt;&gt;.,;: %()[]/\+", "_______________________________"))'/>
+                        <xsl:call-template name="sanitize-id">
+                            <xsl:with-param name="input" select="concat('a_', normalize-space($text))"/>
+                        </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
