@@ -24,7 +24,7 @@ $(eval $(call gb_Module_add_targets,codemaker,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,codemaker,\
-    PythonTest_codemaker_python \
+    Test_codemaker \
 ))
 
 # vim:set noet sw=4 ts=4:

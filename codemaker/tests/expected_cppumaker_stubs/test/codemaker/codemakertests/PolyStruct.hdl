@@ -1,0 +1,32 @@
+#pragma once
+
+#include "sal/config.h"
+
+#include "cppu/macros.hxx"
+#include "sal/types.h"
+
+namespace com { namespace sun { namespace star { namespace uno { class Type; } } } }
+
+namespace test { namespace codemaker { namespace codemakertests {
+
+#ifdef _WIN32
+#   pragma pack(push, 8)
+#endif
+
+template< typename typeparam_if, typename typeparam_else > struct SAL_DLLPUBLIC_RTTI PolyStruct {
+    inline PolyStruct();
+
+    inline PolyStruct(typeparam_if const & member1_, const ::sal_Int32& member2_);
+
+    typeparam_if member1;
+    ::sal_Int32 member2;
+};
+
+#ifdef _WIN32
+#   pragma pack(pop)
+#endif
+
+} } }
+
+template< typename typeparam_if, typename typeparam_else > SAL_DEPRECATED("use cppu::UnoType") inline ::css::uno::Type const & SAL_CALL getCppuType(const ::test::codemaker::codemakertests::PolyStruct< typeparam_if, typeparam_else > *);
+

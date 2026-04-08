@@ -1,0 +1,12 @@
+#pragma once
+
+#include "sal/config.h"
+
+#include "test/codemaker/codemakertests/Struct1.hdl"
+#include "cppu/macros.hxx"
+
+namespace test { namespace codemaker { namespace codemakertests {
+
+typedef ::test::codemaker::codemakertests::Struct1 Struct;
+
+} } }

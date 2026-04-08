@@ -1,0 +1,12 @@
+#pragma once
+
+#include "sal/config.h"
+
+#include "com/sun/star/uno/Type.h"
+#include "cppu/macros.hxx"
+
+namespace test { namespace codemaker { namespace codemakertests {
+
+typedef ::css::uno::Type Type;
+
+} } }

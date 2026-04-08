@@ -1,0 +1,33 @@
+#pragma once
+
+#include "sal/config.h"
+
+#include "cppu/macros.hxx"
+#include "sal/types.h"
+
+namespace com { namespace sun { namespace star { namespace uno { class Type; } } } }
+
+namespace test { namespace codemaker { namespace codemakertests {
+
+#ifdef _WIN32
+#   pragma pack(push, 8)
+#endif
+
+struct SAL_DLLPUBLIC_RTTI SAL_WARN_UNUSED Struct1 {
+    inline Struct1();
+
+    inline Struct1(const ::sal_Int32& member1_);
+
+    ::sal_Int32 member1;
+};
+
+#ifdef _WIN32
+#   pragma pack(pop)
+#endif
+
+
+inline ::css::uno::Type const & cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::test::codemaker::codemakertests::Struct1 const *);
+} } }
+
+SAL_DEPRECATED("use cppu::UnoType") inline ::css::uno::Type const & SAL_CALL getCppuType(const ::test::codemaker::codemakertests::Struct1 *);
+

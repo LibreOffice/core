@@ -1,0 +1,12 @@
+#pragma once
+
+#include "sal/config.h"
+
+#include "cppu/macros.hxx"
+#include "sal/types.h"
+
+namespace test { namespace codemaker { namespace codemakertests {
+
+typedef ::sal_Int8 Byte;
+
+} } }

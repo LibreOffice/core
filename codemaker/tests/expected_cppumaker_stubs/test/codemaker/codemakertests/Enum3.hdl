@@ -1,0 +1,49 @@
+#pragma once
+
+#include "sal/config.h"
+
+#include "cppu/macros.hxx"
+
+namespace com { namespace sun { namespace star { namespace uno { class Type; } } } }
+
+namespace test { namespace codemaker { namespace codemakertests {
+
+#if defined LIBO_INTERNAL_ONLY
+
+#if defined __GNUC__
+
+enum class Enum3
+{
+
+#else
+
+enum class SAL_DLLPUBLIC_RTTI Enum3
+{
+
+#endif
+
+#else
+
+enum SAL_DLLPUBLIC_RTTI Enum3
+{
+
+#endif
+    Enum3_FIRST = 10,
+    Enum3_SECOND = 20,
+    Enum3_THIRD = 100,
+    Enum3_FOURTH = 255,
+    Enum3_MAKE_FIXED_SIZE = SAL_MAX_ENUM
+};
+
+#if defined LIBO_INTERNAL_ONLY
+constexpr auto Enum3_FIRST = Enum3::Enum3_FIRST;
+constexpr auto Enum3_SECOND = Enum3::Enum3_SECOND;
+constexpr auto Enum3_THIRD = Enum3::Enum3_THIRD;
+constexpr auto Enum3_FOURTH = Enum3::Enum3_FOURTH;
+#endif
+
+inline ::css::uno::Type const & cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::test::codemaker::codemakertests::Enum3 const *);
+} } }
+
+SAL_DEPRECATED("use cppu::UnoType") inline ::css::uno::Type const & SAL_CALL getCppuType(const ::test::codemaker::codemakertests::Enum3 *);
+

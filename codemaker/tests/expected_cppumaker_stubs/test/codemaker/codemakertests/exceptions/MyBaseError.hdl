@@ -1,0 +1,46 @@
+#pragma once
+
+#include "sal/config.h"
+
+#include "com/sun/star/uno/Exception.hdl"
+#include "cppu/macros.hxx"
+#include "rtl/ustring.hxx"
+#include "sal/types.h"
+
+namespace com { namespace sun { namespace star { namespace uno { class Type; } } } }
+
+namespace test { namespace codemaker { namespace codemakertests { namespace exceptions {
+
+class CPPU_GCC_DLLPUBLIC_EXPORT SAL_WARN_UNUSED MyBaseError : public ::css::uno::Exception
+{
+public:
+    inline CPPU_GCC_DLLPRIVATE MyBaseError(
+#if defined LIBO_USE_SOURCE_LOCATION
+        o3tl::source_location location = o3tl::source_location::current()
+#endif
+    );
+
+    inline CPPU_GCC_DLLPRIVATE MyBaseError(const ::rtl::OUString& Message_, const ::css::uno::Reference< ::css::uno::XInterface >& Context_, const ::sal_Int32& ErrorCode_, const ::rtl::OUString& Details_
+#if defined LIBO_USE_SOURCE_LOCATION
+        , o3tl::source_location location = o3tl::source_location::current()
+#endif
+    );
+
+#if !defined LIBO_INTERNAL_ONLY
+    inline CPPU_GCC_DLLPRIVATE MyBaseError(MyBaseError const &);
+
+    inline CPPU_GCC_DLLPRIVATE ~MyBaseError();
+
+    inline CPPU_GCC_DLLPRIVATE MyBaseError & operator =(MyBaseError const &);
+#endif
+
+    ::sal_Int32 ErrorCode CPPU_GCC3_ALIGN( ::css::uno::Exception );
+    ::rtl::OUString Details;
+};
+
+
+inline ::css::uno::Type const & cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::test::codemaker::codemakertests::exceptions::MyBaseError const *);
+} } } }
+
+SAL_DEPRECATED("use cppu::UnoType") inline ::css::uno::Type const & SAL_CALL getCppuType(const ::test::codemaker::codemakertests::exceptions::MyBaseError *);
+

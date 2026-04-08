@@ -1,0 +1,13 @@
+#pragma once
+
+#include "sal/config.h"
+
+#include "test/codemaker/codemakertests/Float.hdl"
+#include "com/sun/star/uno/Sequence.h"
+#include "cppu/macros.hxx"
+
+namespace test { namespace codemaker { namespace codemakertests {
+
+typedef ::css::uno::Sequence< float > SequenceFloat;
+
+} } }

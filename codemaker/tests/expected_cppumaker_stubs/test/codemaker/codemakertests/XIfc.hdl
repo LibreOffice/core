@@ -1,0 +1,43 @@
+#pragma once
+
+#include "sal/config.h"
+
+#include "com/sun/star/uno/XInterface.hdl"
+#include "test/codemaker/codemakertests/PolyStruct.hdl"
+#include "com/sun/star/uno/Any.h"
+#include "com/sun/star/uno/Reference.h"
+#include "cppu/macros.hxx"
+#include "sal/types.h"
+
+namespace com { namespace sun { namespace star { namespace uno { class Type; } } } }
+
+namespace test { namespace codemaker { namespace codemakertests {
+
+class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI XIfc : public ::css::uno::XInterface
+{
+public:
+#if defined LIBO_INTERNAL_ONLY
+    XIfc() = default;
+    XIfc(XIfc const &) = default;
+    XIfc(XIfc &&) = default;
+    XIfc & operator =(XIfc const &) = default;
+    XIfc & operator =(XIfc &&) = default;
+#endif
+
+
+    // Methods
+    virtual void SAL_CALL f1( const ::test::codemaker::codemakertests::PolyStruct< ::sal_Int32, ::sal_Int32 >& arg ) = 0;
+    virtual void SAL_CALL f2( const ::test::codemaker::codemakertests::PolyStruct< ::css::uno::Any, ::css::uno::Reference< ::css::uno::XInterface > >& arg ) = 0;
+
+    static inline ::css::uno::Type const & SAL_CALL static_type(void * = 0);
+
+protected:
+    ~XIfc() SAL_NOEXCEPT {} // avoid warnings about virtual members and non-virtual dtor
+};
+
+
+inline ::css::uno::Type const & cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::test::codemaker::codemakertests::XIfc const *);
+} } }
+
+SAL_DEPRECATED("use cppu::UnoType") inline ::css::uno::Type const & SAL_CALL getCppuType(const ::css::uno::Reference< ::test::codemaker::codemakertests::XIfc > *);
+

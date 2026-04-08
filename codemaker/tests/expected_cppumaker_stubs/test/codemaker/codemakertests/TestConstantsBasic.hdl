@@ -1,0 +1,22 @@
+#pragma once
+
+#include "sal/config.h"
+
+#include "cppu/macros.hxx"
+#include "sal/types.h"
+
+namespace test { namespace codemaker { namespace codemakertests { namespace TestConstantsBasic {
+
+static const ::sal_Bool BOOL_FALSE = sal_False;
+static const ::sal_Bool BOOL_TRUE = sal_True;
+static const ::sal_Int64 HYPER_MAX = (sal_Int64) SAL_CONST_INT64(9223372036854775807);
+static const ::sal_Int64 HYPER_MIN = SAL_MIN_INT64;
+static const ::sal_Int32 LONG_HEX = (sal_Int32)2147483647;
+static const ::sal_Int32 LONG_MAX = (sal_Int32)2147483647;
+static const ::sal_Int32 LONG_MIN = SAL_MIN_INT32;
+static const ::sal_Int16 SHORT_MAX = (sal_Int16)32767;
+static const ::sal_Int16 SHORT_MIN = (sal_Int16)-32768;
+static const ::sal_uInt32 ULONG_MAX = (sal_uInt32)4294967295U;
+static const ::sal_uInt16 USHORT_MAX = (sal_uInt16)65535;
+
+} } } }

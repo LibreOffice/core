@@ -1,0 +1,167 @@
+#pragma once
+
+#include "sal/config.h"
+
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XNamingService; } } } }
+#include "test/codemaker/codemakertests/Any.hdl"
+#include "test/codemaker/codemakertests/Boolean.hdl"
+#include "test/codemaker/codemakertests/Byte.hdl"
+#include "test/codemaker/codemakertests/Char.hdl"
+#include "test/codemaker/codemakertests/Double.hdl"
+#include "test/codemaker/codemakertests/Enum.hdl"
+#include "test/codemaker/codemakertests/Enum2.hdl"
+#include "test/codemaker/codemakertests/Float.hdl"
+#include "test/codemaker/codemakertests/Hyper.hdl"
+#include "test/codemaker/codemakertests/Long.hdl"
+#include "test/codemaker/codemakertests/SequenceAny.hdl"
+#include "test/codemaker/codemakertests/SequenceBoolean.hdl"
+#include "test/codemaker/codemakertests/SequenceByte.hdl"
+#include "test/codemaker/codemakertests/SequenceChar.hdl"
+#include "test/codemaker/codemakertests/SequenceDouble.hdl"
+#include "test/codemaker/codemakertests/SequenceEnum.hdl"
+#include "test/codemaker/codemakertests/SequenceFloat.hdl"
+#include "test/codemaker/codemakertests/SequenceHyper.hdl"
+#include "test/codemaker/codemakertests/SequenceLong.hdl"
+#include "test/codemaker/codemakertests/SequenceShort.hdl"
+#include "test/codemaker/codemakertests/SequenceString.hdl"
+#include "test/codemaker/codemakertests/SequenceStruct.hdl"
+#include "test/codemaker/codemakertests/SequenceType.hdl"
+#include "test/codemaker/codemakertests/SequenceUnsignedHyper.hdl"
+#include "test/codemaker/codemakertests/SequenceUnsignedLong.hdl"
+#include "test/codemaker/codemakertests/SequenceUnsignedShort.hdl"
+#include "test/codemaker/codemakertests/SequenceXInterface.hdl"
+#include "test/codemaker/codemakertests/SequenceXNamingService.hdl"
+#include "test/codemaker/codemakertests/Short.hdl"
+#include "test/codemaker/codemakertests/String.hdl"
+#include "test/codemaker/codemakertests/Struct.hdl"
+#include "test/codemaker/codemakertests/Struct1.hdl"
+#include "test/codemaker/codemakertests/Type.hdl"
+#include "test/codemaker/codemakertests/UnsignedHyper.hdl"
+#include "test/codemaker/codemakertests/UnsignedLong.hdl"
+#include "test/codemaker/codemakertests/UnsignedShort.hdl"
+#include "test/codemaker/codemakertests/XInterface.hdl"
+#include "test/codemaker/codemakertests/XNamingService.hdl"
+#include "com/sun/star/uno/Any.h"
+#include "com/sun/star/uno/Reference.h"
+#include "com/sun/star/uno/Sequence.h"
+#include "com/sun/star/uno/Type.h"
+#include "cppu/macros.hxx"
+#include "rtl/ustring.hxx"
+#include "sal/types.h"
+
+namespace com { namespace sun { namespace star { namespace uno { class Type; } } } }
+
+namespace test { namespace codemaker { namespace codemakertests {
+
+#ifdef _WIN32
+#   pragma pack(push, 8)
+#endif
+
+struct SAL_DLLPUBLIC_RTTI Struct2 {
+    inline Struct2();
+
+    inline Struct2(const ::sal_Bool& p1_, const ::sal_Int8& p2_, const ::sal_Int16& p3_, const ::sal_uInt16& p4_, const ::sal_Int32& p5_, const ::sal_uInt32& p6_, const ::sal_Int64& p7_, const ::sal_uInt64& p8_, const float& p9_, const double& p10_, const ::sal_Unicode& p11_, const ::rtl::OUString& p12_, const ::css::uno::Type& p13_, const ::css::uno::Any& p14_, const ::test::codemaker::codemakertests::Enum2& p15_, const ::test::codemaker::codemakertests::Struct1& p16_, const ::css::uno::Reference< ::css::uno::XInterface >& p17_, const ::css::uno::Reference< ::css::uno::XNamingService >& p18_, const ::sal_Bool& t1_, const ::sal_Int8& t2_, const ::sal_Int16& t3_, const ::sal_uInt16& t4_, const ::sal_Int32& t5_, const ::sal_uInt32& t6_, const ::sal_Int64& t7_, const ::sal_uInt64& t8_, const float& t9_, const double& t10_, const ::sal_Unicode& t11_, const ::rtl::OUString& t12_, const ::css::uno::Type& t13_, const ::css::uno::Any& t14_, const ::test::codemaker::codemakertests::Enum2& t15_, const ::test::codemaker::codemakertests::Struct1& t16_, const ::css::uno::Reference< ::css::uno::XInterface >& t17_, const ::css::uno::Reference< ::css::uno::XNamingService >& t18_, const ::css::uno::Sequence< ::sal_Bool >& a1_, const ::css::uno::Sequence< ::sal_Int8 >& a2_, const ::css::uno::Sequence< ::sal_Int16 >& a3_, const ::css::uno::Sequence< ::sal_uInt16 >& a4_, const ::css::uno::Sequence< ::sal_Int32 >& a5_, const ::css::uno::Sequence< ::sal_uInt32 >& a6_, const ::css::uno::Sequence< ::sal_Int64 >& a7_, const ::css::uno::Sequence< ::sal_uInt64 >& a8_, const ::css::uno::Sequence< float >& a9_, const ::css::uno::Sequence< double >& a10_, const ::css::uno::Sequence< ::sal_Unicode >& a11_, const ::css::uno::Sequence< ::rtl::OUString >& a12_, const ::css::uno::Sequence< ::css::uno::Type >& a13_, const ::css::uno::Sequence< ::css::uno::Any >& a14_, const ::css::uno::Sequence< ::test::codemaker::codemakertests::Enum2 >& a15_, const ::css::uno::Sequence< ::test::codemaker::codemakertests::Struct1 >& a16_, const ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >& a17_, const ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XNamingService > >& a18_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Bool > >& aa1_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int8 > >& aa2_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int16 > >& aa3_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt16 > >& aa4_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int32 > >& aa5_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt32 > >& aa6_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int64 > >& aa7_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt64 > >& aa8_, const ::css::uno::Sequence< ::css::uno::Sequence< float > >& aa9_, const ::css::uno::Sequence< ::css::uno::Sequence< double > >& aa10_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Unicode > >& aa11_, const ::css::uno::Sequence< ::css::uno::Sequence< ::rtl::OUString > >& aa12_, const ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Type > >& aa13_, const ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Any > >& aa14_, const ::css::uno::Sequence< ::css::uno::Sequence< ::test::codemaker::codemakertests::Enum2 > >& aa15_, const ::css::uno::Sequence< ::css::uno::Sequence< ::test::codemaker::codemakertests::Struct1 > >& aa16_, const ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > > >& aa17_, const ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XNamingService > > >& aa18_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Bool > >& at1_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int8 > >& at2_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int16 > >& at3_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt16 > >& at4_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int32 > >& at5_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt32 > >& at6_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int64 > >& at7_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt64 > >& at8_, const ::css::uno::Sequence< ::css::uno::Sequence< float > >& at9_, const ::css::uno::Sequence< ::css::uno::Sequence< double > >& at10_, const ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Unicode > >& at11_, const ::css::uno::Sequence< ::css::uno::Sequence< ::rtl::OUString > >& at12_, const ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Type > >& at13_, const ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Any > >& at14_, const ::css::uno::Sequence< ::css::uno::Sequence< ::test::codemaker::codemakertests::Enum2 > >& at15_, const ::css::uno::Sequence< ::css::uno::Sequence< ::test::codemaker::codemakertests::Struct1 > >& at16_, const ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > > >& at17_, const ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XNamingService > > >& at18_);
+
+    ::sal_Bool p1;
+    ::sal_Int8 p2;
+    ::sal_Int16 p3;
+    ::sal_uInt16 p4;
+    ::sal_Int32 p5;
+    ::sal_uInt32 p6;
+    ::sal_Int64 p7;
+    ::sal_uInt64 p8;
+    float p9;
+    double p10;
+    ::sal_Unicode p11;
+    ::rtl::OUString p12;
+    ::css::uno::Type p13;
+    ::css::uno::Any p14;
+    ::test::codemaker::codemakertests::Enum2 p15;
+    ::test::codemaker::codemakertests::Struct1 p16;
+    ::css::uno::Reference< ::css::uno::XInterface > p17;
+    ::css::uno::Reference< ::css::uno::XNamingService > p18;
+    ::sal_Bool t1;
+    ::sal_Int8 t2;
+    ::sal_Int16 t3;
+    ::sal_uInt16 t4;
+    ::sal_Int32 t5;
+    ::sal_uInt32 t6;
+    ::sal_Int64 t7;
+    ::sal_uInt64 t8;
+    float t9;
+    double t10;
+    ::sal_Unicode t11;
+    ::rtl::OUString t12;
+    ::css::uno::Type t13;
+    ::css::uno::Any t14;
+    ::test::codemaker::codemakertests::Enum2 t15;
+    ::test::codemaker::codemakertests::Struct1 t16;
+    ::css::uno::Reference< ::css::uno::XInterface > t17;
+    ::css::uno::Reference< ::css::uno::XNamingService > t18;
+    ::css::uno::Sequence< ::sal_Bool > a1;
+    ::css::uno::Sequence< ::sal_Int8 > a2;
+    ::css::uno::Sequence< ::sal_Int16 > a3;
+    ::css::uno::Sequence< ::sal_uInt16 > a4;
+    ::css::uno::Sequence< ::sal_Int32 > a5;
+    ::css::uno::Sequence< ::sal_uInt32 > a6;
+    ::css::uno::Sequence< ::sal_Int64 > a7;
+    ::css::uno::Sequence< ::sal_uInt64 > a8;
+    ::css::uno::Sequence< float > a9;
+    ::css::uno::Sequence< double > a10;
+    ::css::uno::Sequence< ::sal_Unicode > a11;
+    ::css::uno::Sequence< ::rtl::OUString > a12;
+    ::css::uno::Sequence< ::css::uno::Type > a13;
+    ::css::uno::Sequence< ::css::uno::Any > a14;
+    ::css::uno::Sequence< ::test::codemaker::codemakertests::Enum2 > a15;
+    ::css::uno::Sequence< ::test::codemaker::codemakertests::Struct1 > a16;
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > > a17;
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XNamingService > > a18;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Bool > > aa1;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int8 > > aa2;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int16 > > aa3;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt16 > > aa4;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int32 > > aa5;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt32 > > aa6;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int64 > > aa7;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt64 > > aa8;
+    ::css::uno::Sequence< ::css::uno::Sequence< float > > aa9;
+    ::css::uno::Sequence< ::css::uno::Sequence< double > > aa10;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Unicode > > aa11;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::rtl::OUString > > aa12;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Type > > aa13;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Any > > aa14;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::test::codemaker::codemakertests::Enum2 > > aa15;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::test::codemaker::codemakertests::Struct1 > > aa16;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > > > aa17;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XNamingService > > > aa18;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Bool > > at1;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int8 > > at2;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int16 > > at3;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt16 > > at4;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int32 > > at5;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt32 > > at6;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Int64 > > at7;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_uInt64 > > at8;
+    ::css::uno::Sequence< ::css::uno::Sequence< float > > at9;
+    ::css::uno::Sequence< ::css::uno::Sequence< double > > at10;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::sal_Unicode > > at11;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::rtl::OUString > > at12;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Type > > at13;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Any > > at14;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::test::codemaker::codemakertests::Enum2 > > at15;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::test::codemaker::codemakertests::Struct1 > > at16;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > > > at17;
+    ::css::uno::Sequence< ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XNamingService > > > at18;
+};
+
+#ifdef _WIN32
+#   pragma pack(pop)
+#endif
+
+
+inline ::css::uno::Type const & cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::test::codemaker::codemakertests::Struct2 const *);
+} } }
+
+SAL_DEPRECATED("use cppu::UnoType") inline ::css::uno::Type const & SAL_CALL getCppuType(const ::test::codemaker::codemakertests::Struct2 *);
+
