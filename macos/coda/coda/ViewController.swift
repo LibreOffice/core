@@ -49,6 +49,14 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
 
     var consoleController: ConsoleController!
 
+    /// Whether UI testing mode is active.
+    private lazy var isUITesting: Bool = {
+        ProcessInfo.processInfo.arguments.contains("--uitesting")
+    }()
+
+    /// Offscreen text view that accumulates all "lok" messages for XCUITest assertions.
+    private var testMessageLog: NSTextView?
+
     var savedViewFrame: NSRect!
     var savedConsoleViewFrame: NSRect!
 
@@ -98,6 +106,16 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             webView.topAnchor.constraint(equalTo: self.view.topAnchor),
             webView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
+
+        if isUITesting {
+            let scrollView = NSScrollView(frame: NSRect(x: -10000, y: 0, width: 100, height: 100))
+            let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: 100, height: 100))
+            textView.isEditable = false
+            textView.setAccessibilityIdentifier("CODA.TestMessageLog")
+            scrollView.documentView = textView
+            self.view.addSubview(scrollView)
+            testMessageLog = textView
+        }
     }
 
     /**
@@ -181,6 +199,10 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         case "lok":
             if let body = message.body as? String {
                 COWrapper.LOG_DBG("To Online: '\(message.body)'")
+
+                if isUITesting, let log = testMessageLog {
+                    log.string += body + "\n"
+                }
 
                 if body == "HULLO" {
                     // Now we know that the JS has started completely
