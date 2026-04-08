@@ -102,7 +102,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     ScRange aMarkRange;
     ScMarkType eMarkType = GetViewData().GetSimpleArea( aMarkRange );
-    bool bSimpleArea = (eMarkType == SC_MARK_SIMPLE);
+    // tdf#48274 - enable fill operations including filtered rows
+    bool bSimpleArea = (eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED);
     bool bOnlyNotBecauseOfMatrix;
     bool bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
     ScDocument& rDoc = GetViewData().GetDocument();

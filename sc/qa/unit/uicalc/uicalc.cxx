@@ -516,6 +516,33 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147894)
     CPPUNIT_ASSERT_EQUAL(16384.0, pDoc->GetValue(ScAddress(16383, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf48274_enable_fill_operations_including_filtered_rows)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"1");
+    insertStringToCell(u"A2"_ustr, u"2");
+    insertStringToCell(u"A3"_ustr, u"2");
+
+    goToCell(u"A2"_ustr);
+    dispatchCommand(mxComponent, u".uno:HideRow"_ustr, {});
+
+    goToCell(u"A1:A3"_ustr);
+    dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:FillDown"_ustr, {});
+
+    // Visible cell A1 remains unchanged
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    // Hidden cell A2 remains unchanged
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the fill-down operation was not executed
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf94208)
 {
     createScDoc();

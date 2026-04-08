@@ -1409,7 +1409,8 @@ bool ScViewFunc::RemoveMerge()
 void ScViewFunc::FillSimple( FillDir eDir )
 {
     ScRange aRange;
-    if (GetViewData().GetSimpleArea(aRange) == SC_MARK_SIMPLE)
+    if (GetViewData().GetSimpleArea(aRange) == SC_MARK_SIMPLE
+        || GetViewData().GetSimpleArea(aRange) == SC_MARK_SIMPLE_FILTERED)
     {
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         const ScMarkData& rMark = GetViewData().GetMarkData();
