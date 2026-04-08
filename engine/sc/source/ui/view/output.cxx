@@ -2640,6 +2640,87 @@ void ScOutputData::DrawFormulaMarks(vcl::RenderContext& rRenderContext)
     }
 }
 
+void ScOutputData::DrawFormulaErrorMarks(vcl::RenderContext& rRenderContext)
+{
+    bool bFirst = true;
+
+    tools::Long nInitPosX = mnScrX;
+    if ( mbLayoutRTL )
+        nInitPosX += mnMirrorW - 1;              // always in pixels
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
+
+    tools::Long nPosY = mnScrY - 1;
+    for (SCSIZE nArrY=1; nArrY+1<mnArrCount; nArrY++)
+    {
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
+        if ( pThisRowInfo->bChanged )
+        {
+            tools::Long nPosX = nInitPosX;
+            for (SCCOL nX=mnX1; nX<=mnX2; nX++)
+            {
+                ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
+                if (!mpDoc->ColHidden(nX, mnTab)
+                    && !pInfo->bHOverlapped && !pInfo->bVOverlapped)
+                {
+                    ScAddress aAddr(nX, mpRowInfo[nArrY].nRowNo, mnTab);
+                    ScFormulaCell* pCell = mpDoc->GetFormulaCell(aAddr);
+                    if (pCell && pCell->GetRawError() != FormulaError::NONE)
+                    {
+                        if (bFirst)
+                        {
+                            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+                            if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
+                            {
+                                Color aColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+                                rRenderContext.SetLineColor(aColor);
+                                rRenderContext.SetFillColor(aColor);
+                            }
+                            else
+                            {
+                                Color aColor(0xE0, 0x4F, 0x3E);
+                                rRenderContext.SetLineColor(aColor);
+                                rRenderContext.SetFillColor(aColor);
+                            }
+
+                            bFirst = false;
+                        }
+
+                        tools::Long nMarkX = nPosX;
+                        // top-left corner, match browser comment indicator size
+                        double nSize;
+                        if (comphelper::COKit::isActive())
+                        {
+                            // Browser draws comment triangle as: size = 2 + zoomLevel
+                            // where zoomLevel = 10 + log(scale)/log(1.2).
+                            // Derive effective zoom from mnPPTX since mfZoomX is
+                            // always 1.0 in tiled rendering.
+                            double fBasePPT = rRenderContext.GetDPIX() / 1440.0;
+                            double fScale = std::max(0.1, mnPPTX / fBasePPT);
+                            nSize = std::round(7.0 + log(fScale) / log(1.2));
+                        }
+                        else
+                        {
+                            nSize = rRenderContext.GetDPIScaleFactor() * mfZoomX * 6 + 4;
+                        }
+                        Point aPoints[3];
+                        aPoints[0] = Point(nMarkX, nPosY);
+                        aPoints[1] = Point(nMarkX, nPosY);
+                        aPoints[1].setX( mbLayoutRTL ? aPoints[1].X() - nSize : aPoints[1].X() + nSize );
+                        aPoints[2] = Point(nMarkX, nPosY + nSize);
+                        tools::Polygon aPoly(3, aPoints);
+
+                        if ( mbLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < mnScrX+mnScrW ) )
+                            rRenderContext.DrawPolygon(aPoly);
+                    }
+                }
+
+                nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+            }
+        }
+        nPosY += pThisRowInfo->nHeight;
+    }
+}
+
 void ScOutputData::AddPDFNotes()
 {
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( mpDev->GetExtOutDevData() );

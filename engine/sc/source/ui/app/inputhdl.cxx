@@ -89,6 +89,7 @@
 #include <simpleformulacalc.hxx>
 #include <compiler.hxx>
 #include <editable.hxx>
+#include <formulacell.hxx>
 #include <funcdesc.hxx>
 #include <markdata.hxx>
 #include <tokenarray.hxx>
@@ -4398,6 +4399,28 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                         pActiveViewSh->KitSendFormulabarUpdate(pActiveView, aString, aSel);
                         pActiveViewSh->viewCallback(KIT_CALLBACK_CELL_FORMULA, aString.toUtf8());
+
+                        // Send formula error info if the current cell has one
+                        {
+                            ScFormulaCell* pFormulaCell = rDoc.GetFormulaCell(aCursorPos);
+                            if (pFormulaCell)
+                            {
+                                FormulaError nErr = pFormulaCell->GetRawError();
+                                if (nErr != FormulaError::NONE)
+                                {
+                                    tools::JsonWriter aJsonWriter;
+                                    aJsonWriter.put("commandName", "CellFormulaError");
+                                    {
+                                        auto aState = aJsonWriter.startNode("state");
+                                        aJsonWriter.put("error", ScGlobal::GetErrorString(nErr));
+                                        aJsonWriter.put("errorCode", static_cast<int>(nErr));
+                                        aJsonWriter.put("errorDescription", ScGlobal::GetLongErrorString(nErr));
+                                    }
+                                    pActiveViewSh->viewCallback(KIT_CALLBACK_STATE_CHANGED,
+                                                                aJsonWriter.finishAndGetAsOString());
+                                }
+                            }
+                        }
                     }
                 }
 

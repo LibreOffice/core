@@ -423,6 +423,7 @@ public:
 
     void    DrawNoteMarks(vcl::RenderContext& rRenderContext);
     void    DrawFormulaMarks(vcl::RenderContext& rRenderContext);
+    void    DrawFormulaErrorMarks(vcl::RenderContext& rRenderContext);
     void    AddPDFNotes();
     void    DrawSparklines(vcl::RenderContext& rRenderContext);
 };

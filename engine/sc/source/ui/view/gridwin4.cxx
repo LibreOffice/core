@@ -951,6 +951,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if ( rOpts.GetOption(sc::ViewOption::FORMULAS_MARKS) )
         aOutputData.DrawFormulaMarks(*pContentDev);
 
+    aOutputData.DrawFormulaErrorMarks(*pContentDev);
+
     if ( !bLogicText )
         aOutputData.DrawStrings();     // in pixel MapMode
 
