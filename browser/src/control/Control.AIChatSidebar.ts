@@ -408,6 +408,14 @@ namespace cool {
 					text: _('Ask AI anything about your document...'),
 					enabled: true,
 				});
+				// EU AI directive compliance notice - text to be provided
+				children.push({
+					id: 'aichat-eu-notice',
+					type: 'fixedtext',
+					text: '',
+					enabled: true,
+					visible: false,
+				});
 				children.push(this.getPromptChipsJSON());
 			} else {
 				for (let i = 0; i < this.messages.length; i++) {

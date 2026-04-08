@@ -1661,6 +1661,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 				'id': 'view-ai-sidebar',
 				'type': 'bigcustomtoolitem',
 				'text': _('AI Assistant'),
+				'tooltip': _('AI Assistant'),
 				'icon': 'lc_ai_sidebar.svg',
 				'command': 'aichat',
 				'accessibility': { focusBack: true, combination: 'AI', de: null }

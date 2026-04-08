@@ -188,6 +188,15 @@
 	animation: aichat-pulse 3s ease-in-out infinite;
 }
 
+#aichat-eu-notice {
+	color: var(--color-text-lighter);
+	text-align: center;
+	padding: 4px 20px;
+	font-size: 11px;
+	line-height: 1.5;
+	opacity: 0.7;
+}
+
 /* -- Hint (transient inline warning) -- */
 
 #aichat-hint {
