@@ -36,7 +36,7 @@
 #include <sot/formats.hxx>
 #include <editeng/editeng.hxx>
 
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <svtools/embedtransfer.hxx>
 #include <svtools/parhtml.hxx>
 #include <svtools/htmltokn.h>
