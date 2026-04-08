@@ -1015,6 +1015,12 @@ function onCommandResult(e) {
 				map._renameFilename = '';
 				map.renameFile(renameFilename);
 			}
+
+			// CODA-Q: after local save completes, upload and switch
+			if (window._codaUploadAndSwitchAfterSave) {
+				window._codaUploadAndSwitchAfterSave = false;
+				window.postMobileMessage('uploadAndSwitch');
+			}
 		}
 		var postMessageObj = {
 			success: e.success

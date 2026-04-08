@@ -25,6 +25,7 @@ interface BackstageTabConfig {
 	viewType?: 'home' | 'templates' | 'info' | 'export';
 	actionType?:
 		| 'open'
+		| 'openremote'
 		| 'save'
 		| 'saveas'
 		| 'print'

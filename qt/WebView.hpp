@@ -84,6 +84,8 @@ public:
     QMainWindow* mainWindow() { return _mainWindow; }
 
     void load(const Poco::URI& fileURL = Poco::URI(), bool newFile = false, bool isStarterMode = false);
+    void loadRemote(const QString& localPath,
+                    std::shared_ptr<coda::RemoteDocInfo> remoteInfo);
 
     // templatePath and basename can be empty strings and are optional.
     static WebView* createNewDocument(QWebEngineProfile* profile, const std::string& templateType,

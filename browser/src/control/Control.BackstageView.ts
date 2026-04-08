@@ -36,6 +36,7 @@ class BackstageView extends window.L.Class {
 
 	private actionHandlers: Record<string, () => void> = {
 		open: () => this.executeOpen(),
+		openremote: () => this.executeOpenRemote(),
 		save: () => this.executeSave(),
 		saveas: () => this.executeSaveAs(),
 		print: () => this.executePrint(),
@@ -114,6 +115,14 @@ class BackstageView extends window.L.Class {
 				actionType: 'open',
 				icon: 'lc_open.svg',
 				visible: true,
+			},
+			{
+				id: 'openremote',
+				label: _('Open Remote'),
+				type: 'action',
+				actionType: 'openremote',
+				icon: 'lc_open.svg',
+				visible: (window as any).mode.isCODesktop(),
 			},
 			{
 				id: 'share',
@@ -822,6 +831,10 @@ class BackstageView extends window.L.Class {
 		} else {
 			this.sendUnoCommand('.uno:Open');
 		}
+	}
+
+	private executeOpenRemote(): void {
+		window.postMobileMessage('openremote');
 	}
 
 	private executeOptions(): void {

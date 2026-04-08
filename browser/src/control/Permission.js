@@ -19,7 +19,78 @@ window.L.Map.include({
 		'xlsb': { canEdit: false, odfFormat: 'ods' }
 	},
 
+	_setupCodaCollab: function () {
+		if (!window.mode.isCODesktop())
+			return;
+		// Track collab users, mirroring the COWASM approach in
+		// global.js.
+		if (!window.collabUsers)
+			window.collabUsers = [];
+
+		var that = this;
+		// Called from C++ Bridge::evalJS when the per-document
+		// collab WebSocket receives a message.
+		window._codaCollabMessage = function (msg) {
+			if (msg.type === 'user_list' && Array.isArray(msg.users)) {
+				window.collabUsers = msg.users;
+				window.collabEditingActive = !!msg.editingActive;
+			} else if (msg.type === 'user_joined' && msg.user) {
+				window.collabUsers.push(msg.user);
+			} else if (msg.type === 'user_left' && msg.user) {
+				window.collabUsers = window.collabUsers.filter(
+					function (u) { return u.id !== msg.user.id; });
+			}
+
+			if (msg.type === 'editing_started' && msg.user) {
+				that._onOtherUserEditingStarted(
+					msg.user.name || msg.user.id);
+			} else if (msg.type === 'switch_to_collab') {
+				that._onSwitchToCollabRequest();
+			} else if (msg.type === 'saved_and_switching') {
+				that._onEditorSavedAndSwitching();
+			} else if (msg.type === 'user_left') {
+				that._onCollabUserLeft();
+			}
+		};
+
+		// Send a message on the collab WebSocket via the C++ Bridge.
+		window.collabSendMessage = function (msg) {
+			if (window.postMobileMessage) {
+				window.postMobileMessage(
+					'collab ' + JSON.stringify(msg));
+			}
+		};
+
+		window.switchToServerMode = function () {
+			window.postMobileMessage('switchToServerMode');
+		};
+
+		// Replay any collab messages that arrived before
+		// _codaCollabMessage was defined.
+		if (window._codaCollabQueue) {
+			for (var i = 0; i < window._codaCollabQueue.length; i++) {
+				window._codaCollabMessage(window._codaCollabQueue[i]);
+			}
+			delete window._codaCollabQueue;
+		}
+
+		// Tell C++ to replay any collab messages buffered during
+		// the download phase.  C++ calls _codaCollabMessagesReplayed
+		// after all messages have been forwarded.
+		window._codaCollabMessagesReplayed = function () {
+			delete window._codaCollabMessagesReplayed;
+			if (window.collabEditingActive) {
+				// Defer so any pending closealldialogs settles.
+				setTimeout(function () {
+					that._onCollabEditingActive();
+				}, 100);
+			}
+		};
+		window.postMobileMessage('replayCollabMessages');
+	},
+
 	setPermission: function (perm) {
+		this._setupCodaCollab();
 		var button = $('#mobile-edit-button');
 		button.off('click');
 		button.attr('tabindex', 0);
@@ -219,16 +290,14 @@ window.L.Map.include({
 					// Stay in current WASM read-only mode
 				}},
 				{id: 'collab-join', func_: function () {
-					if (!window.collabUsers
-						|| window.collabUsers.length === 0) {
-						// No other collab WS users (they already
-						// switched to server mode or left).
-						window.switchToServerMode();
-					} else {
-						// Ask local editors to save and switch,
-						// then wait for the save to complete.
+					if (window.collabEditingActive) {
+						// Someone is editing locally - ask them to
+						// save and switch, then wait.
 						that._waitForCollabSave();
 						window.collabSendMessage({type: 'switch_to_collab'});
+					} else {
+						// No active editor - just switch directly.
+						window.switchToServerMode();
 					}
 				}}
 			]
@@ -286,9 +355,17 @@ window.L.Map.include({
 	// modifications, .uno:Save is a no-op and we switch immediately.
 	_saveAndSwitchToServerMode: function () {
 		if (this._permission === 'edit' && this._everModified) {
-			window._switchToServerAfterSave = true;
-			this.save(true /* dontTerminateEdit */,
-				false /* dontSaveIfUnmodified */);
+			if (window.mode.isCODesktop()) {
+				// CODA-Q: save locally first, then the Bridge
+				// handles upload and switch.
+				window._codaUploadAndSwitchAfterSave = true;
+				this.save(true /* dontTerminateEdit */,
+					false /* dontSaveIfUnmodified */);
+			} else {
+				window._switchToServerAfterSave = true;
+				this.save(true /* dontTerminateEdit */,
+					false /* dontSaveIfUnmodified */);
+			}
 		} else {
 			window.collabSendMessage({type: 'saved_and_switching'});
 			window.switchToServerMode();
@@ -319,15 +396,16 @@ window.L.Map.include({
 
 	// from read-only to edit mode
 	_switchToEditMode: function () {
-		// In WASM mode, notify the collab broker that editing is
-		// starting so that users who join later are informed.
-		if (window.ThisIsTheEmscriptenApp) {
+		// Notify the collab broker that editing is starting so that
+		// users who join later are informed.
+		if (window.ThisIsTheEmscriptenApp || window.mode.isCODesktop()) {
 			window.collabSendMessage({type: 'editing_started'});
 		}
 
-		// In WASM mode with other collab users, offer the choice
-		if (window.ThisIsTheEmscriptenApp && window.collabUsers
-			&& window.collabUsers.length > 0) {
+		// With other collab users present, offer the choice between
+		// local and collaborative editing.
+		if ((window.ThisIsTheEmscriptenApp || window.mode.isCODesktop())
+			&& window.collabUsers && window.collabUsers.length > 0) {
 			this._showWasmEditChoice();
 			return;
 		}

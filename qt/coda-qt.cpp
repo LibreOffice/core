@@ -234,7 +234,6 @@ int main(int argc, char** argv)
         QStringList() << "drawing" << "draw",
         "Create a new vector drawing."
     );
-
     argParser.addOption(debugOption);
     argParser.addOption(forcedReadOnlyOption);
     argParser.addOption(logLevelOption);
