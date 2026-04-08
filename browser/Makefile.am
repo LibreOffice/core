@@ -462,7 +462,6 @@ COOL_JS_LST =\
 	src/control/Control.RowHeader.ts \
 	src/control/Control.DocumentRepair.js \
 	src/control/Control.DownloadProgress.js \
-	src/control/Control.ContextMenu.js \
 	src/control/Control.Menubar.ts \
 	src/control/Control.Tabs.js \
 	src/control/Control.Permission.js \
@@ -1217,7 +1216,6 @@ pot:
 		src/control/Control.AlertDialog.js \
 		src/control/Control.BackstageView.ts \
 		src/control/Control.Command.js \
-		src/control/Control.ContextMenu.js \
 		src/control/Control.DocumentNameInput.js \
 		src/control/Control.DocumentRepair.js \
 		src/control/Control.DownloadProgress.js \
