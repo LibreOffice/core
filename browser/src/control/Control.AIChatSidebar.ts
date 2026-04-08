@@ -360,6 +360,14 @@ namespace cool {
 			"fill='none' stroke='%2322c55e' stroke-width='2.5' stroke-linecap='round' " +
 			"stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E";
 
+		private getTitle(): string {
+			const model = app.map.aiModelName || '';
+			if (model) {
+				return _('AI Assistant') + ': ' + model;
+			}
+			return _('AI Assistant');
+		}
+
 		private getHeaderJSON(): any {
 			return {
 				id: 'aichat-header',
@@ -369,7 +377,7 @@ namespace cool {
 					{
 						id: 'aichat-title',
 						type: 'fixedtext',
-						text: _('AI Assistant'),
+						text: this.getTitle(),
 						enabled: true,
 					},
 					{

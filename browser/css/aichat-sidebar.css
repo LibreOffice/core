@@ -88,6 +88,9 @@
 	font-size: 13px;
 	letter-spacing: -0.01em;
 	color: var(--color-main-text);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 /* Header buttons - icon style */
