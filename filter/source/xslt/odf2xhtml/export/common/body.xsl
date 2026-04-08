@@ -24,6 +24,17 @@
 
     <xsl:include href="table_of_content.xsl"/>
 
+    <!-- tdf#75837: allow-list approach to generate valid XML id attributes.
+         Only ASCII alphanumerics and underscores pass through; everything else
+         becomes an underscore via the double-translate XSLT 1.0 idiom. -->
+    <xsl:variable name="idSafeChars">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_</xsl:variable>
+
+    <xsl:template name="sanitize-id">
+        <xsl:param name="input"/>
+        <xsl:variable name="bad" select="translate($input, $idSafeChars, '')"/>
+        <xsl:value-of select="translate($input, $bad, substring('__________________________________________________', 1, string-length($bad)))"/>
+    </xsl:template>
+
 
     <!-- ****************** -->
     <!-- *** Whitespace *** -->
@@ -87,10 +98,14 @@
                 <xsl:when test="number(substring(.,1,1))">
                 <!-- Heuristic: If the first character is a number a 'a_' will be set
                     as prefix, as id have to be of type NMTOKEN -->
-                    <xsl:value-of select="concat('a_',translate(., '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________'))"/>
+                    <xsl:call-template name="sanitize-id">
+                        <xsl:with-param name="input" select="concat('a_', .)"/>
+                    </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="translate(., '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+                    <xsl:call-template name="sanitize-id">
+                        <xsl:with-param name="input" select="."/>
+                    </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
@@ -141,10 +156,14 @@
                     <xsl:when test="number(substring(@text:ref-name,1,1))">
                     <!-- Heuristic: If the first character is a number a 'a_' will be set
                         as prefix, as id have to be of type NMTOKEN -->
-                        <xsl:value-of select="concat('a_',translate(@text:ref-name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________'))"/>
+                        <xsl:call-template name="sanitize-id">
+                            <xsl:with-param name="input" select="concat('a_', @text:ref-name)"/>
+                        </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="translate(@text:ref-name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+                        <xsl:call-template name="sanitize-id">
+                            <xsl:with-param name="input" select="@text:ref-name"/>
+                        </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
@@ -163,10 +182,14 @@
                 <xsl:when test="number(substring(.,1,1))">
                 <!-- Heuristic: If the first character is a number a 'a_' will be set
                     as prefix, as id have to be of type NMTOKEN -->
-                    <xsl:value-of select="concat('a_',translate(., '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________'))"/>
+                    <xsl:call-template name="sanitize-id">
+                        <xsl:with-param name="input" select="concat('a_', .)"/>
+                    </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="translate(., '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+                    <xsl:call-template name="sanitize-id">
+                        <xsl:with-param name="input" select="."/>
+                    </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
@@ -182,10 +205,14 @@
                     <xsl:when test="number(substring(@text:ref-name,1,1))">
                     <!-- Heuristic: If the first character is a number a 'a_' will be set
                         as prefix, as id have to be of type NMTOKEN -->
-                        <xsl:value-of select="concat('a_',translate(@text:ref-name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________'))"/>
+                        <xsl:call-template name="sanitize-id">
+                            <xsl:with-param name="input" select="concat('a_', @text:ref-name)"/>
+                        </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="translate(@text:ref-name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+                        <xsl:call-template name="sanitize-id">
+                            <xsl:with-param name="input" select="@text:ref-name"/>
+                        </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
@@ -206,10 +233,14 @@
                     <xsl:when test="number(substring(@text:name,1,1))">
                     <!-- Heuristic: If the first character is a number a 'a_' will be set
                         as prefix, as id have to be of type NMTOKEN -->
-                        <xsl:value-of select="concat('a_',translate(@text:name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________'))"/>
+                        <xsl:call-template name="sanitize-id">
+                            <xsl:with-param name="input" select="concat('a_', @text:name)"/>
+                        </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="translate(@text:name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+                        <xsl:call-template name="sanitize-id">
+                            <xsl:with-param name="input" select="@text:name"/>
+                        </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
@@ -330,7 +361,9 @@
                     <xsl:apply-templates mode="concatenate"/>
                 </xsl:variable>
 
-                <xsl:value-of select="concat('a_', translate(normalize-space($title), '.,;: %()[]/\+', '_____________'))"/>
+                <xsl:call-template name="sanitize-id">
+                    <xsl:with-param name="input" select="concat('a_', normalize-space($title))"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when test="self::draw:image[office:binary-data]">
                 <xsl:choose>

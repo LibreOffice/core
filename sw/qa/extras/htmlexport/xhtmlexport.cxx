@@ -214,6 +214,28 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf66305)
         != -1);
 }
 
+CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf75837)
+{
+    createSwDoc("tdf75837.fodt");
+    setFilterOptions(u"UTF8"_ustr);
+    save(TestFilter::XHTML_WRITER);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // The heading id must contain only valid XML Name characters.
+    // Before the fix, characters like smart quotes and em dash were passed through.
+    OUString aId = getXPath(pDoc, "//h1/a", "id");
+    CPPUNIT_ASSERT(!aId.isEmpty());
+    for (sal_Int32 i = 0; i < aId.getLength(); ++i)
+    {
+        sal_Unicode c = aId[i];
+        CPPUNIT_ASSERT_MESSAGE(
+            OString("invalid character in id: U+" + OString::number(static_cast<unsigned>(c), 16))
+                .getStr(),
+            (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_');
+    }
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
