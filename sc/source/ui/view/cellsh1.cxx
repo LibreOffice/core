@@ -31,6 +31,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 #include <formula/funcvarargs.h>
+#include <rtl/digest.h>
 #include <svl/stritem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
@@ -52,6 +53,9 @@
 #include <editeng/editview.hxx>
 #include <editeng/urlfieldhelper.hxx>
 #include <svtools/cliplistener.hxx>
+#include <tools/Guid.hxx>
+#include <unotools/datetime.hxx>
+#include <unotools/useroptions.hxx>
 
 #include <cellsh.hxx>
 #include <ftools.hxx>
@@ -96,6 +100,7 @@
 #include <gridwin.hxx>
 #include <searchresults.hxx>
 #include <Sparkline.hxx>
+#include <strings.hrc>
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -2916,6 +2921,114 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
 
             pTabViewShell->DeleteContents( InsertDeleteFlags::NOTE );      // delete all notes in selection
+            rReq.Done();
+        }
+        break;
+
+        case SID_INSERT_THREADED_COMMENT:
+        {
+            ScViewData& rData = GetViewData();
+            ScAddress aPos = rData.GetCurPos();
+            ScDocument& rDoc = rData.GetDocument();
+
+            // Currently only supported via Online; text must be provided.
+            // TODO: if desktop editing support is added in the future, this handler
+            // will need to handle the empty-text case and let the user edit in place.
+            const SvxPostItTextItem* pTextItem = nullptr;
+            const SvxPostItAuthorItem* pAuthorItem = nullptr;
+            if (pReqArgs)
+            {
+                pTextItem = pReqArgs->GetItemIfSet(SID_ATTR_POSTIT_TEXT);
+                pAuthorItem = pReqArgs->GetItemIfSet(SID_ATTR_POSTIT_AUTHOR);
+            }
+            if (!pTextItem)
+            {
+                rReq.Done();
+                break;
+            }
+
+            ScPostIt* pNote = rDoc.GetOrCreateNote(aPos);
+            if (pNote)
+            {
+                pNote->SetText(aPos, pTextItem->GetValue());
+                auto pData = std::make_unique<ScThreadedCommentData>();
+                pData->maRoot.maGuid = tools::Guid(tools::Guid::Generate).getOUString();
+                pData->maRoot.maDateTime
+                    = utl::toISO8601(DateTime(DateTime::SYSTEM).GetUNODateTime());
+
+                OUString aAuthor = pAuthorItem
+                    ? pAuthorItem->GetValue() : SvtUserOptions().GetFullName();
+                if (aAuthor.isEmpty())
+                    aAuthor = ScResId(STR_CHG_UNKNOWN_AUTHOR);
+
+                // Find existing person or create one with a stable GUID derived from the name,
+                // so the same user gets the same person-id across documents.
+                OUString aPersonId;
+                for (const auto& rPerson : rDoc.GetPersonList())
+                {
+                    if (rPerson.maDisplayName == aAuthor)
+                    {
+                        aPersonId = rPerson.maId;
+                        break;
+                    }
+                }
+                if (aPersonId.isEmpty())
+                {
+                    // Generate a deterministic UUID v5 (SHA-1-based, RFC 4122) from a fixed
+                    // namespace and the author name, so the same user always gets the same
+                    // person-id.
+                    OString aInput = "CollaboraOffice:ThreadedCommentPerson:"
+                        + OUStringToOString(aAuthor, RTL_TEXTENCODING_UTF8);
+                    sal_uInt8 aDigest[RTL_DIGEST_LENGTH_SHA1];
+                    rtl_digest_SHA1(aInput.getStr(), aInput.getLength(),
+                                    aDigest, RTL_DIGEST_LENGTH_SHA1);
+                    aDigest[6] = (aDigest[6] & 0x0F) | 0x50; // version 5
+                    aDigest[8] = (aDigest[8] & 0x3F) | 0x80; // variant RFC 4122
+                    tools::Guid aGuid(aDigest);
+
+                    ScPersonData aPerson;
+                    aPerson.maId = aGuid.getOUString();
+                    aPerson.maDisplayName = aAuthor;
+                    aPerson.maUserId = aAuthor;
+                    aPerson.maProviderId = u"None"_ustr;
+                    aPersonId = aPerson.maId;
+                    rDoc.AddPerson(aPerson);
+                }
+                pData->maRoot.maPersonId = aPersonId;
+                pData->maRoot.maText = pTextItem->GetValue();
+                pNote->SetAuthor(aAuthor);
+                pNote->SetThreadedCommentData(std::move(pData));
+
+                ScDocShell::KitCommentNotify(KitCommentNotificationType::Add, rDoc, aPos, pNote);
+            }
+            rReq.Done();
+        }
+        break;
+
+        case SID_RESOLVE_THREADED_COMMENT:
+        {
+            const SvxPostItIdItem* pIdItem;
+            if (pReqArgs && (pIdItem = pReqArgs->GetItemIfSet(SID_ATTR_POSTIT_ID)))
+            {
+                sal_uInt32 nId = pIdItem->GetValue().toUInt32();
+                ScDocument& rDoc = GetViewData().GetDocument();
+                std::vector<sc::NoteEntry> aNotes;
+                rDoc.GetAllNoteEntries(aNotes);
+                for (const auto& rEntry : aNotes)
+                {
+                    if (rEntry.mpNote->GetId() == nId)
+                    {
+                        ScPostIt* pNote = rDoc.GetNote(rEntry.maPos);
+                        if (!pNote || !pNote->GetThreadedCommentData())
+                            break; // not a threaded comment
+                        pNote->SetResolved(!pNote->IsResolved());
+                        ScDocShell::KitCommentNotify(
+                            KitCommentNotificationType::Modify,
+                            rDoc, rEntry.maPos, pNote);
+                        break;
+                    }
+                }
+            }
             rReq.Done();
         }
         break;

@@ -1280,7 +1280,14 @@ void ScModelObj::getPostIts(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("tab", aNote.maPos.Tab());
         rJsonWriter.put("author", aNote.mpNote->GetAuthor());
         rJsonWriter.put("dateTime", aNote.mpNote->GetDate());
-        rJsonWriter.put("text", aNote.mpNote->GetText());
+        if (const auto* pData = aNote.mpNote->GetThreadedCommentData())
+        {
+            rJsonWriter.put("text", pData->maRoot.maText);
+            rJsonWriter.put("threaded", "true");
+            rJsonWriter.put("resolved", aNote.mpNote->IsResolved() ? "true" : "false");
+        }
+        else
+            rJsonWriter.put("text", aNote.mpNote->GetText());
 
         // Calculating the cell cursor position
         if (ScViewData* pViewData = ScDocShell::GetViewData())

@@ -3054,7 +3054,14 @@ void ScDocShell::KitCommentNotify(KitCommentNotificationType nType, const ScDocu
         {
             aAnnotation.put("author", pNote->GetAuthor());
             aAnnotation.put("dateTime", pNote->GetDate());
-            aAnnotation.put("text", pNote->GetText());
+            if (const auto* pData = pNote->GetThreadedCommentData())
+            {
+                aAnnotation.put("text", pData->maRoot.maText);
+                aAnnotation.put("threaded", "true");
+                aAnnotation.put("resolved", pNote->IsResolved() ? "true" : "false");
+            }
+            else
+                aAnnotation.put("text", pNote->GetText());
 
             // Calculating the cell cursor position
             ScViewData* pViewData = GetViewData();
