@@ -16,58 +16,67 @@
 
 #include <config.h>
 
+#include <common/SigUtil.hpp>
 #include <fuzzer/Common.hpp>
 #include <net/HttpRequest.hpp>
 #include <test/MockStreamSocket.hpp>
+#include <wsd/Admin.hpp>
 #include <wsd/ClientRequestDispatcher.hpp>
 #include <wsd/ContentType.hpp>
 
 #include <cstdint>
 
+extern "C" int LLVMFuzzerInitialize(int* /*argc*/, char*** /*argv*/)
+{
+    fuzzer::DoInitialization();
+    Admin::initialize();
+
+    std::atexit(
+        []
+        {
+            SigUtil::setTerminationFlag();
+
+            Admin::uninitialize();
+        });
+
+    return 0;
+}
+
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
-    [[maybe_unused]] static bool initialized = fuzzer::DoInitialization();
-
     try
     {
+        ClientRequestDispatcher::uninitialize(); // Clear statics.
+
         std::shared_ptr<ProtocolHandlerInterface> handler =
             std::make_shared<ClientRequestDispatcher>();
 
-        const uint8_t* pos = data;
-        const uint8_t* const end = data + size;
-        while (pos < end)
+        auto socket = std::make_shared<MockStreamSocket>();
+        socket->setHandler(handler);
+        handler->onConnect(socket);
+        Buffer& inBuf = socket->getInBuffer();
+        inBuf.append(reinterpret_cast<const char*>(data), size);
+
+        size_t lastSize = size;
+        for (;;)
         {
-            // Skip null streaks.
-            while (*pos == '\0')
+            SocketDisposition disposition(socket);
+            handler->handleIncomingMessage(disposition);
+            if (disposition.isTransfer())
             {
-                if (++pos >= end)
-                    return 0;
+                disposition.execute(); // In case we have to move, to clear it.
+                break; // We can't reuse this socket.
             }
 
-            auto socket = std::make_shared<MockStreamSocket>();
-            socket->setHandler(handler);
-            handler->onConnect(socket);
-            Buffer& inBuf = socket->getInBuffer();
+            if (disposition.isClosed() || socket->isShutdownSignalled() || lastSize == inBuf.size())
+                break; // We can't reuse this socket.
 
-            assert(pos < end);
-            const uint8_t* nul = static_cast<const uint8_t*>(memchr(pos, '\0', end - pos));
-            const uint8_t* blockEnd = nul ? nul : end;
-            const size_t blockSize = blockEnd - pos;
-            for (size_t subSize = 1; subSize <= blockSize; ++subSize)
-            {
-                // Inject the HTTP request into the socket's input buffer, one byte at a time.
-                inBuf.append(reinterpret_cast<const char*>(pos), 1);
-                ++pos;
-
-                SocketDisposition disposition(socket);
-                handler->handleIncomingMessage(disposition);
-                if (disposition.isTransfer())
-                {
-                    disposition.execute(); // In case we have to move, to clear it.
-                    break; // We can't reuse this socket.
-                }
-            }
+            lastSize = inBuf.size();
         }
+
+        // Avoid destruction-time checks as we can hold the last reference,
+        // after the thread ownership had moved, which will assert.
+        socket->resetThreadOwner();
     }
     catch (const std::exception&)
     {

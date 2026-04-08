@@ -20,6 +20,7 @@
 
 #include <common/Clipboard.hpp>
 #include <common/ConfigUtil.hpp>
+#include <common/FileUtil.hpp>
 #include <common/Log.hpp>
 #include <net/Ssl.hpp>
 #include <wsd/COOLWSD.hpp>
@@ -38,6 +39,7 @@ bool DoInitialization()
 {
     ConfigUtil::initializeFromFile("coolwsd.xml");
 
+    COOLWSD::ChildRoot = FileUtil::getSysTempDirectoryPath();
     COOLWSD::SavedClipboards = std::make_unique<ClipboardCache>();
     COOLWSD::FileRequestHandler =
         std::make_unique<FileServerRequestHandler>(COOLWSD::FileServerRoot);

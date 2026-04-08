@@ -14,6 +14,7 @@
 #include <net/Socket.hpp>
 
 #include <string>
+#include <sys/eventfd.h>
 
 /// A StreamSocket subclass for unit testing that captures output
 /// without performing real I/O. Data written via send() accumulates
@@ -22,10 +23,18 @@ class MockStreamSocket final : public StreamSocket
 {
 public:
     MockStreamSocket()
-        : StreamSocket("localhost", -1, Socket::Type::Unix, false, LocalHost)
+        : MockStreamSocket(-1)
     {
-        setNoShutdown(); // Avoid shutdown(2) on fd -1.
     }
+
+    explicit MockStreamSocket(int fd)
+        : StreamSocket("localhost", fd, Socket::Type::Unix, false, LocalHost)
+    {
+    }
+
+    using StreamSocket::isShutdownSignalled;
+    using StreamSocket::resetThreadOwner;
+    using StreamSocket::setThreadOwner;
 
     /// Return everything written to the output buffer as a string.
     std::string getOutput() const
