@@ -33,6 +33,10 @@ class SvxZoomSliderItem;
 //      SC_VIEW_END             (SID_SC_START + 99)
 #define SC_MESSAGE_START        (SID_SC_START + 100)
 //      SC_MESSAGE_END          (SID_SC_START + 199)
+// REF_CODE_BEGIN
+#define SC_HINT_REF_ERROR_CREATED    (SC_MESSAGE_START + 70)
+#define SID_REF_ERROR_NOTIFY    (SID_SC_START + 1234)
+// REF_CODE_END
 #ifndef SC_FUNCTION_START // duplicated in sfx2/sfxsids.hrc
 #define SC_FUNCTION_START       (SID_SC_START + 200)
 #endif

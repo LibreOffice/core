@@ -38,9 +38,50 @@
 #include <cellvalue.hxx>
 #include <svl/numformat.hxx>
 #include <svl/sharedstring.hxx>
+#include <strings.hrc>
+
+// REF_CODE_BEGIN
+#include <sfx2/infobar.hxx>
+#include <strings.hrc>
+#include <sfx2/viewfrm.hxx>
+
+#include <scresid.hxx>
+#include <sc.hrc>               // Provides the definition of SC_HINT_REF_ERROR_CREATED
+#include <hints.hxx>            // Provides the FULL definition of class ScHint
+#include <refupdatecontext.hxx> // Provides the definition of sc::RefUpdateResult
+#include <docsh.hxx>            // Provides the definition of ScDocShell
+#include <brdcst.hxx>           // For the ScHint definition
+
+
+// REF_CODE_END
 
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
+    // REF_CODE_BEGIN
+SfxViewShell::Notify(rBC, rHint);
+if (static_cast<sal_uInt32>(rHint.GetId()) == SC_HINT_REF_ERROR_CREATED)
+{
+    const ScHint* pScHint = dynamic_cast<const ScHint*>(&rHint);
+    if (pScHint)
+    {
+        fprintf(stderr, "===[ DEBUG ]=== UI: Notify caught RefError\n");
+
+        // FIX: Get the document and the ACTUAL result we stored in the Core
+        ScDocument& rDoc = GetViewData().GetDocument();
+        //sc::RefErrorResult& rStoredErr = rDoc.GetPendingRefError();
+    const sc::RefErrorResult& rStoredErr = rDoc.GetPendingRefError();
+
+        // Safety log: see if the string actually made it here
+        fprintf(stderr, "===[ DEBUG ]=== UI: String found in Doc: %s\n",
+                rStoredErr.maErrorAddressStr.toUtf8().getStr());
+
+        // Pass the actual stored error (with the string) to the InfoBar function
+        UpdateRefErrorInfoBar(rStoredErr);
+
+        return;
+    }
+}
+    // REF_CODE_END
     if (rHint.GetId() == SfxHintId::ScPaint) // draw new
     {
         const ScPaintHint* pPaintHint = static_cast<const ScPaintHint*>(&rHint);
@@ -397,4 +438,41 @@ void ScTabViewShell::UpdateNumberFormatter(
         rInfoItem.GetNumberFormatter()->DeleteEntry( key );
 }
 
+
+// REF_CODE_BEGIN
+using namespace com::sun::star;
+
+void ScTabViewShell::UpdateRefErrorInfoBar(const sc::RefErrorResult& rResErr)
+{
+    // 1. Safety check: If no error was created or the string is empty, do nothing.
+    if (!rResErr.mbRefErrorCreated || rResErr.maErrorAddressStr.isEmpty())
+        return;
+
+    // 2. Clean up both addresses (e.g., Sheet1.$A$1 -> Sheet1.A1)
+    // %1 is the Deleted Source, %2 is the Broken Target
+    OUString sDisplaySource = rResErr.maDeletedAddressStr.replaceAll("$", "");
+    OUString sDisplayTarget = rResErr.maErrorAddressStr.replaceAll("$", "");
+
+    // 3. Debug log showing both sides of the "Radiology" report
+    fprintf(stderr, "===[ DEBUG ]=== UI InfoBar: DELETE of %s destroyed %s\n",
+            sDisplaySource.toUtf8().getStr(),
+            sDisplayTarget.toUtf8().getStr());
+
+    // 4. Format the final message: "DELETE of %1 destroyed the logic in cell %2..."
+    // Note: replaceFirst is called twice to fill both %1 and %2
+    OUString sMsg = ScResId(STR_LOGIC_DESTROYED)
+                    .replaceFirst(u"%1", sDisplaySource)
+                    .replaceFirst(u"%2", sDisplayTarget);
+
+    // 5. Append to the ViewFrame
+    GetViewFrame().AppendInfoBar(
+        u"ref_logic_error"_ustr,
+        u"Ref Error"_ustr,
+        sMsg,
+        InfobarType::DANGER,
+        true
+    );
+}
+
+// REF_CODE_END
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

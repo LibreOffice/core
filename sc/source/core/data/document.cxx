@@ -104,6 +104,19 @@
 #include <sfx2/lokhelper.hxx>
 #include <SheetViewManager.hxx>
 
+#include <sc.hrc>
+#include <refhint.hxx>
+#include <refupdatecontext.hxx>
+
+
+// REF_CODE_BEGIN
+#include <sc.hrc>               // Provides the definition of SC_HINT_REF_ERROR_CREATED
+#include <hints.hxx>            // Provides the FULL definition of class ScHint
+#include <refupdatecontext.hxx> // Provides the definition of sc::RefUpdateResult
+#include <docsh.hxx>            // Provides the definition of ScDocShell
+#include <brdcst.hxx>           // For the ScHint definition
+// REF_CODE_END
+
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
@@ -777,6 +790,24 @@ bool ScDocument::DeleteTab( SCTAB nTab )
             bValid = true;
         }
     }
+
+    // REF_CODE_BEGIN
+    if (bValid)
+    {
+        // --- START OF INFOBAR TRIGGER LOGIC ---
+        // This logic detects if deleting the sheet caused any formula to break (producing #REF!)
+        // and broadcasts a hint to show an InfoBar in the UI.
+
+        if (HasPendingRefError())
+        {
+            // Debug log for development tracking
+            fprintf(stderr, "===[ DEBUG ]=== DeleteTab: Logic error detected in cell: %s\n",
+                maPendingRefError.maErrorAddressStr.toUtf8().getStr());
+
+            BroadcastPendingRefError();
+        }
+        }
+    // REF_CODE_END
     return bValid;
 }
 
@@ -867,6 +898,36 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
             bValid = true;
         }
     }
+    // REF_CODE_BEGIN
+    if (bValid)
+    {
+        // --- START OF INFOBAR TRIGGER LOGIC ---
+
+        // 1. Create a standard Reference Update Context (Base Class)
+        sc::RefUpdateContext aRefCxt(*this);
+        aRefCxt.meMode = URM_INSDEL;
+
+        // 2. Use 'nSheets' as the verified parameter name.
+        aRefCxt.mnTabDelta = -(static_cast<SCTAB>(nSheets));
+
+        // 3. Define the affected range: from the deleted tab to the new end of the document.
+        aRefCxt.maRange = ScRange(0, 0, nTab, MaxCol(), MaxRow(), GetTableCount());
+
+        // 4. Trigger the document-wide update to find formulas that now point to #REF!
+        UpdateReference(aRefCxt);
+
+        // 5. If a logic error was caught, broadcast it to trigger the InfoBar in the UI
+        if (HasPendingRefError())
+        {
+            fprintf(stderr, "===[ DEBUG ]=== DeleteTabs: Logic error detected in cell: %s\n",
+                maPendingRefError.maErrorAddressStr.toUtf8().getStr());
+
+
+            BroadcastPendingRefError();
+        }
+        }
+    // REF_CODE_END
+
     return bValid;
 }
 
@@ -6945,5 +7006,37 @@ void ScDocument::MergeContextBackIntoNonThreadedContext(ScInterpreterContext& th
     // lookup cache is now only in pooled ScInterpreterContext's
     threadedContext.MergeDefaultFormatKeys(*GetFormatTable());
 }
+
+// REF_CODE_BEGIN
+void ScDocument::BroadcastRefError(const sc::RefErrorResult& rResErr)
+    {
+    if (!rResErr.mbRefErrorCreated)
+        return;
+
+    // Create the hint
+    //ScHint aHint(static_cast<SfxHintId>(SC_HINT_REF_ERROR_CREATED), rResErr.maFirstErrorAddress);
+    ScHint aHint(static_cast<SfxHintId>(SC_HINT_REF_ERROR_CREATED), ScAddress());
+
+    // Get the DocShell (the UI container)
+    ScDocShell* pDocSh = GetDocumentShell();
+    if (pDocSh)
+    {
+    fprintf(stderr, "===[ DEBUG ]=== Broadcasting via DocShell for %s\n",
+        rResErr.maErrorAddressStr.toUtf8().getStr());
+        if (pDocSh) pDocSh->Broadcast(aHint); // This is the "channel" the UI listens to
+    }
+    else
+    {
+        fprintf(stderr, "===[ DEBUG ]=== No DocShell! Falling back to Document Broadcast.\n");
+        Broadcast(aHint);
+    }
+    fflush(stderr);
+}
+void ScDocument::ResetPendingRefError()
+{
+    maPendingRefError.reset();
+}
+// REF_CODE_END
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

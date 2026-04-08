@@ -70,6 +70,8 @@
 #include <ThemeColorChanger.hxx>
 #include <dialogs/SelectSheetViewDialog.hxx>
 
+#include <sfx2/infobar.hxx>    // For InfobarType
+
 namespace
 {
     void collectUIInformation(const OUString& aZoom)
@@ -1646,6 +1648,24 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             }
             break;
 
+	case SID_REF_ERROR_NOTIFY:
+        {
+            // Extract the message we passed in the StringItem
+            const SfxStringItem* pItem = rReq.GetArg<SfxStringItem>(SID_REF_ERROR_NOTIFY);
+            if (pItem)
+            {
+                // This call now happens safely AFTER the deletion command has finished.
+                // It will NOT be recorded in the Undo/Redo stack.
+                GetViewFrame().AppendInfoBar(
+                    u"ref_logic_error"_ustr,
+                    u"Ref Error"_ustr, // Title
+                    pItem->GetValue(), // The message (%1 destroyed %2...)
+                    InfobarType::DANGER,
+                    true
+                );
+            }
+            break;
+        }
         default:
             OSL_FAIL("Unknown Slot at ScTabViewShell::Execute");
             break;

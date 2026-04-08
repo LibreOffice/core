@@ -467,4 +467,8 @@
 
 #define STR_AUTOCALC_OFF                            NC_("STR_AUTOCALC_OFF", "AutoCalculate: Off\nClick to enable.")
 
+// REF_CODE_BEGIN
+#define STR_LOGIC_DESTROYED NC_("STR_LOGIC_DESTROYED", "Deleting former cell <%1> broke a formula in cell <%2>. Click UNDO twice(!)  to restore the formula.")
+// REF_CODE_END
+//
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2038,10 +2038,16 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         const ScMarkData& rMark = GetViewData().GetMarkData();
 
+
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
         // #i94841# [Collaboration] if deleting rows is rejected, the content is sometimes wrong
         if ( pDocSh->IsDocShared() && ( eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::Cols ) )
         {
+	// --- REF_CODE_BEGIN  ---
+            fprintf(stderr, "===[ DEBUG ]=== ViewFunc: Error detected. Triggering Broadcast 1.\n");
+            fflush(stderr);
+	// --- REF_CODE_BEEND  ---
+
             ScRange aDelRange( aRange.aStart );
             SCCOLROW nCount = 0;
             if ( eCmd == DelCellCmd::Rows )
@@ -2067,6 +2073,10 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
         ResetAutoSpellForContentChange();
         pDocSh->UpdateOle(GetViewData());
         CellContentChanged();
+	// --- REF_CODE_BEGIN  ---
+            fprintf(stderr, "===[ DEBUG ]=== ViewFunc: Error detected. Triggering Broadcast 3.\n");
+            fflush(stderr);
+        // --- REF_CODE_BEEND  ---
 
         if ( eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::Cols )
         {
@@ -2100,8 +2110,40 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
                                                                 true /* bHidden */, true /* bFiltered */,
                                                                 true /* bGroups */, GetViewData().GetTabNumber());
         }
+
+        // --- REF_CODE_BEGIN  ---
+        ScDocument& rDoc = GetViewData().GetDocument();
+        const sc::RefErrorResult& rResErr = rDoc.GetPendingRefError();
+
+        if (rResErr.mbRefErrorCreated)
+        {
+            fprintf(stderr, "===[ DEBUG ]=== ViewFunc: Error detected. Triggering Broadcast Cells.\n");
+            fflush(stderr);
+
+        // 1. Shouts the message to the UI
+        rDoc.BroadcastRefError(rResErr);
+
+        // 2. IMPORTANT: Clear the error so it doesn't fire again
+        // on the next unrelated UI refresh/paint.
+        rDoc.ClearPendingRefError();
+        }
+	if (GetViewData().GetDocShell()->GetDocument().HasPendingRefError())
+{
+     fprintf(stderr, "===[ DEBUG ]=== ViewFunc: Error detected. Triggering Broadcast.\n");
+     // This will call the BroadcastRefError function you wrote earlier
+     GetViewData().GetDocShell()->GetDocument().BroadcastPendingRefError();
+}
+        // --- REF_CODE_BEEND  ---
+
+
     }
     else
+	    // --- REF_CODE_BEGIN  ---
+            fprintf(stderr, "===[ DEBUG ]=== ViewFunc: NO Error detected. Triggering Broadcast 4\n");
+            fflush(stderr);
+        // --- REF_CODE_BEEND  ---
+
+
     {
         if (eCmd == DelCellCmd::Cols)
             DeleteMulti( false );

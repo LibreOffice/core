@@ -61,7 +61,16 @@
 #include "SheetViewTypes.hxx"
 
 #include <oox/helper/refvector.hxx>
+#include <sc.hrc>
+#include <refhint.hxx>
+#include <refupdatecontext.hxx>
 
+
+// REF_CODE_BEGIN
+namespace sc {
+    struct RefErrorResult;
+}
+// REF_CODE_END
 namespace com::sun::star::chart2 { class XChartDocument; }
 namespace oox
 {
@@ -99,6 +108,25 @@ class CopyFromClipContext;
 class ColumnSpanSet;
 struct ColumnBlockPosition;
 struct RefUpdateContext;
+// REF_CODE_BEGIN
+//struct RefUpdateResult;
+// REF_CODE_END
+// REF_CODE_BEGIN
+struct RefErrorResult {
+        bool mbRefErrorCreated;
+    OUString maDeletedAddressStr; // For %1 (The "Source" of the error)
+        OUString maErrorAddressStr;   // For %2 (The "Target" cell containing #REF!)
+
+    RefErrorResult() : mbRefErrorCreated(false) {}
+
+        void reset() {
+            mbRefErrorCreated = false;
+        maDeletedAddressStr = OUString();
+        maErrorAddressStr = OUString();
+            //maFirstErrorAddress.SetInvalid();
+        }
+    };
+// REF_CODE_END
 class EditTextIterator;
 struct NoteEntry;
 class DocumentLinkManager;
@@ -218,6 +246,9 @@ class ScTableStyles;
 namespace sc {
 
 typedef std::map<OUString, Bitmap> IconSetBitmapMap;
+// REF_CODE_BEGIN
+//struct RefUpdateResult;
+// REF_CODE_END
 
 }
 
@@ -354,8 +385,43 @@ friend class sc::EditTextIterator;
 friend struct ScMutationGuard;
 friend struct ScMutationDisable;
 
-
+// REF_CODE_BEGIN
+private:
+    // ... other members ...
+    sc::RefErrorResult maPendingRefError; // This stores the error
 public:
+    // Setter (used by token.cxx)
+    //void SetPendingRefError(const ScAddress& rAddr) {
+    //    maPendingRefError.mbRefErrorCreated = true;
+    //    maPendingRefError.maFirstErrorAddress = rAddr;
+    // }
+    void SetPendingRefError(const sc::RefErrorResult& rRes) {
+    maPendingRefError = rRes;
+    }
+
+    // Getter (used by viewfunc.cxx)
+    const sc::RefErrorResult& GetPendingRefError() const { return maPendingRefError; }
+    void ResetPendingRefError();
+
+    // Clear (used by viewfunc.cxx)
+    void ClearPendingRefError() {
+        maPendingRefError.mbRefErrorCreated = false;
+        //maPendingRefError.maFirstErrorAddress.SetInvalid();
+    maPendingRefError.reset();
+    }
+    bool HasPendingRefError() const { return maPendingRefError.mbRefErrorCreated; }
+
+    void BroadcastPendingRefError() {
+        if (maPendingRefError.mbRefErrorCreated) {
+            BroadcastRefError(maPendingRefError);
+            // Clear it so it doesn't pop up again on the next click
+            maPendingRefError.mbRefErrorCreated = false;
+        }
+        }
+
+// REF_CODE_END
+public:
+
     enum class HardRecalcState
     {
         OFF,        /// normal calculation of dependencies
@@ -1869,6 +1935,9 @@ public:
     void               UpdateReference( sc::RefUpdateContext& rCxt,  ScDocument*
                                         pUndoDoc = nullptr, bool bIncludeDraw = true,
                                         bool bUpdateNoteCaptionPos = true );
+    // REF_CODE_BEGIN
+    void               BroadcastRefError(const sc::RefErrorResult& rRes);
+    // REF_CODE_END
     /**
      * @param pClipDoc original clipboard doc, i.e. non-transposed
      *                 This clip doc is used to check references pointing to cut cells.

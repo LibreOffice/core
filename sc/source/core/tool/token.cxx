@@ -3196,8 +3196,61 @@ bool isDBDataModified( const ScDocument& rDoc, const formula::FormulaToken& rTok
 
 }
 
+// REF_CODE_BEGIN
+namespace {
+
+/**
+ * Updates the RefUpdateResult if a transition from "No Error" to "REF Error" is detected.
+ */
+//void lcl_updateRefError(sc::RefErrorResult& rResErr, const ScAddress& rPos, bool bOldError, bool bNewError)
+//void lcl_updateResult(sc::RefErrorResult& rRes, const ScAddress& rPos, bool bOldError, bool bNewError)
+//void lcl_updateRefError(sc::RefErrorResult& rResErr, const ScAddress& rPos,
+//                        bool bOldError, bool bNewError, ScDocument* pDoc)
+void lcl_updateRefError(sc::RefErrorResult& rResErr, const ScAddress& rPos,
+                        const ScAddress& rOldRefAddr, bool bOldError, bool bNewError, ScDocument* pDoc)
+{
+    fprintf(stderr, "===[ DEBUG ]=== File: %s | Line: %d | Function: %s\n", __FILE__, __LINE__, __func__);
+                rPos.Format(ScRefFlags::ADDR_ABS).toUtf8().getStr();
+    fflush(stderr);
+    if (!bOldError && bNewError)
+    {
+        if (!bOldError && bNewError)
+    {
+        if (!rResErr.mbRefErrorCreated)
+        {
+            rResErr.mbRefErrorCreated = true;
+
+            if (pDoc)
+            {
+                // %1: The DELETED cell (The "Source")
+                // We format the address we calculated from the old reference
+                rResErr.maDeletedAddressStr = rOldRefAddr.Format(ScRefFlags::ADDR_ABS_3D, pDoc);
+                // %2: The FORMULA cell (The "Target")
+                // This is the cell currently being processed (rPos)
+                rResErr.maErrorAddressStr = rPos.Format(ScRefFlags::ADDR_ABS_3D, pDoc);
+
+                // Persist to document
+                pDoc->SetPendingRefError(rResErr);
+            }
+
+            fprintf(stderr, "===[ DEBUG ]=== Radiology: DELETE of %s destroyed logic in %s\n",
+                    rResErr.maDeletedAddressStr.toUtf8().getStr(),
+                    rResErr.maErrorAddressStr.toUtf8().getStr());
+            fflush(stderr);
+        }
+    }
+    }
+
+}
+
+} // namespace
+// REF_CODE_END
+
 sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos )
 {
+// REF_CODE_BEGIN
+    sc::RefErrorResult rResErr; // This object is populated by lcl_updateRefError calls inside this function
+// REF_CODE_END
     ScRange aSelectedRange = getSelectedRange(rCxt);
 
     sc::RefUpdateResult aRes;
@@ -3232,9 +3285,22 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 
                         if (rCxt.isDeleted() && aSelectedRange.Contains(aAbs))
                         {
+                            // REF_CODE_BEGIN
+			    fprintf(stderr, "===[ DEBUG ]=== File: %s | Line: %d | Function: %s\n", __FILE__, __LINE__, __func__);
+                            fflush(stderr);
+
+                            bool bOldError = rRef.IsDeleted();
+                            // REF_CODE_END
+			    //
                             // This reference is in the deleted region.
                             setRefDeleted(rRef, rCxt);
                             aRes.mbValueChanged = true;
+			    // REF_CODE_BEGIN
+                            //lcl_updateRefError(rResErr, rOldPos, bOldError, rRef.IsDeleted(), &rCxt.mrDoc);
+			    //lcl_updateRefError(rResErr, rOldPos, aAbs, bOldError, rRef.IsDeleted(), &rCxt.mrDoc);
+			    //lcl_updateRefError(rResErr, rOldPos, aAbs.aStart, bOldError, rRef.IsDeleted(), &rCxt.mrDoc);
+			    lcl_updateRefError(rResErr, rOldPos, aAbs, bOldError, rRef.IsDeleted(), &rCxt.mrDoc);
+                            // REF_CODE_END
                             break;
                         }
 
@@ -3424,6 +3490,21 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
         }
     }
 
+    // REF_CODE_BEGIN
+    if (rResErr.mbRefErrorCreated)
+    {
+        // rCxt.mrDoc is the reference to the ScDocument
+        // We "persist" the error here so the ViewFunc can find it later
+        //rCxt.mrDoc.SetPendingRefError(aRes.maFirstErrorAddress);
+	rCxt.mrDoc.SetPendingRefError(rResErr);
+
+        // Debugging to confirm the engine has passed the data to the document
+        fprintf(stderr, "===[ DEBUG ]=== Core: Ref Error at %s saved to Document.\n",
+             rResErr.maErrorAddressStr.toUtf8().getStr());
+        fflush(stderr);
+    }
+    // REF_CODE_END
+
     return aRes;
 }
 
@@ -3431,6 +3512,10 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
     const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos, const ScAddress& rNewPos )
 {
     sc::RefUpdateResult aRes;
+    // REF_CODE_BEGIN
+    sc::RefErrorResult rResErr; // This object is populated by lcl_updateRefError calls inside this function
+    // REF_CODE_END
+
 
     if (!rCxt.mnColDelta && !rCxt.mnRowDelta && !rCxt.mnTabDelta)
         // The cell hasn't moved at all.
@@ -4237,12 +4322,27 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
 
 namespace {
 
-bool adjustSingleRefOnDeletedTab( const ScSheetLimits& rLimits, ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
+bool adjustSingleRefOnDeletedTab( const ScSheetLimits& rLimits, ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos, ScDocument* pDoc = nullptr)
 {
     ScAddress aAbs = rRef.toAbs(rLimits, rOldPos);
     if (nDelPos <= aAbs.Tab() && aAbs.Tab() < nDelPos + nSheets)
     {
         rRef.SetTabDeleted(true);
+	// --- REF_CODE_BEGIN
+	if (pDoc && pDoc->GetDocumentShell())
+        {
+            sc::RefErrorResult aResLocal;
+            aResLocal.mbRefErrorCreated = true;
+//            aResLocal.maFirstErrorAddress = rOldPos;
+	    aResLocal.maErrorAddressStr = rOldPos.Format(ScRefFlags::ADDR_ABS_3D, pDoc);
+
+            fprintf(stderr, "===[ DEBUG ]=== Core stored string: %s\n",
+            aResLocal.maErrorAddressStr.toUtf8().getStr());
+
+            pDoc->SetPendingRefError(aResLocal);
+            pDoc->BroadcastRefError(aResLocal);
+        }
+	// --- REF_CODE_END
         return true;
     }
 
@@ -4323,6 +4423,10 @@ bool adjustDoubleRefOnDeleteTab(const ScSheetLimits& rLimits, ScComplexRefData& 
 
 sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( const sc::RefUpdateDeleteTabContext& rCxt, const ScAddress& rOldPos )
 {
+// REF_CODE_BEGIN
+    sc::RefErrorResult rResErr; // This object is populated by lcl_updateRefError calls inside this function
+// REF_CODE_END
+
     sc::RefUpdateResult aRes;
     ScAddress aNewPos = rOldPos;
     ScRangeUpdater::UpdateDeleteTab( aNewPos, rCxt);
@@ -4342,15 +4446,46 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( const sc::RefUpda
             {
                 case svSingleRef:
                     {
+			fprintf(stderr, "===[ DEBUG ]=== File: %s | Line: %d | Function: %s\n", __FILE__, __LINE__, __func__);
+                        fflush(stderr);
                         ScSingleRefData& rRef = *p->GetSingleRef();
+			ScAddress aAbs = rRef.toAbs(*mxSheetLimits, rOldPos);
+			// REF_CODE_BEGIN
+                        bool bOldError = rRef.IsTabDeleted();
+                        // REF_CODE_END
+
                         if (adjustSingleRefOnDeletedTab(*mxSheetLimits, rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
                             aRes.mbReferenceModified = true;
+
+			// REF_CODE_BEGIN_NOK
+                        //lcl_updateRefError(rResErr, rOldPos, bOldError, rRef.IsTabDeleted());
+                        // lcl_updateRefError(rResErr, rOldPos, bOldError, rRef.IsTabDeleted(), &rCxt.mrDoc);
+			//lcl_updateRefError(rResErr, rOldPos, aAbs.aStart, bOldError, rRef.IsDeleted(), &rCxt.mrDoc);
+			//lcl_updateRefError(rResErr, rOldPos, aAbs, bOldError, rRef.IsDeleted(), &rCxt.mrDoc);
+			lcl_updateRefError(rResErr, rOldPos, aAbs, bOldError, rRef.IsTabDeleted(), &rCxt.mrDoc);
+                        // REF_CODE_END
                     }
                     break;
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
+			ScRange aAbs = rRef.toAbs(*mxSheetLimits, rOldPos);
+			fprintf(stderr, "===[ DEBUG ]=== File: %s | Line: %d | Function: %s\n", __FILE__, __LINE__, __func__);
+                        fflush(stderr);
+
+			// REF_CODE_BEGIN
+                        // A range is in error if either end point has a deleted tab
+                        bool bOldError = rRef.Ref1.IsTabDeleted() || rRef.Ref2.IsTabDeleted();
+                        // REF_CODE_END
+
                         aRes.mbReferenceModified |= adjustDoubleRefOnDeleteTab(*mxSheetLimits, rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos);
+
+			// REF_CODE_BEGIN_NOK
+                        bool bNewError = rRef.Ref1.IsTabDeleted() || rRef.Ref2.IsTabDeleted();
+                        //lcl_updateRefError(rResErr, rOldPos, bOldError, bNewError);
+                        //lcl_updateRefError(rResErr, rOldPos, bOldError, bNewError, &rCxt.mrDoc);
+			lcl_updateRefError(rResErr, rOldPos, aAbs.aStart, bOldError, bNewError, &rCxt.mrDoc);
+                        // REF_CODE_END
                     }
                     break;
                 default:
@@ -5478,5 +5613,6 @@ void ScTokenArray::Dump() const
     }
 }
 #endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

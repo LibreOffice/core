@@ -828,6 +828,16 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                         else
                             pUndoManager->RedoWithContext(aUndoRedoContext);
                     }
+		    // 2. RADIOLOGY CLEANUP: Execute immediately after the loop
+                    if ( bIsUndo )
+                    {
+                        ScDocument& rDoc = GetViewData().GetDocument();
+                        rDoc.ResetPendingRefError();
+
+                        // Remove the InfoBar using the unique ID
+                        GetViewFrame().RemoveInfoBar(u"ref_logic_error"_ustr);
+                    }
+                    // --- RADIOLOGY CLEANUP END ---
                 }
                 catch ( const uno::Exception& )
                 {

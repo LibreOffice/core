@@ -207,6 +207,11 @@ private:
     // Chart insert wizard's mark to make sure it undoes the correct thing in LOK case
     UndoStackMark m_InsertWizardUndoMark = MARK_INVALID;
 
+    // REF_CODE_BEGIN
+    // void UpdateRefErrorInfoBar(sc::RefErrorResult& rRes);
+    void UpdateRefErrorInfoBar(const sc::RefErrorResult& rResErr);
+    // REF_CODE_BEGIN
+
 private:
     void    Construct( TriState nForceDesignMode );
 
@@ -490,6 +495,7 @@ public:
     const std::shared_ptr<ScCondFormatDlgData>& getScCondFormatDlgData() const { return m_pScCondFormatDlgData; }
 
     void SetInsertWizardUndoMark();
+    void UpdateRefErrorInfoBar();
 
 private:
     void ExecuteMoveTable( SfxRequest& rReq );
