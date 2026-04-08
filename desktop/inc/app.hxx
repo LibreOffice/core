@@ -125,6 +125,7 @@ class Desktop final : public Application
     private:
         void                    RegisterServices();
         static void             DeregisterServices();
+        static void             EnsureStartCenterFallbackMenubar();
 
     public:
         static void             CreateTemporaryDirectory();
