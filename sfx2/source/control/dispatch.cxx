@@ -1538,6 +1538,7 @@ static bool IsCommandAllowedInLokReadOnlyViewMode(std::u16string_view commandNam
     {
         static constexpr std::u16string_view allowed[] = {
             u".uno:InsertAnnotation",
+            u".uno:InsertThreadedComment",
             u".uno:ReplyComment",
             u".uno:ResolveComment",
             u".uno:ResolveCommentThread",

@@ -3868,6 +3868,41 @@ SfxVoidItem DeleteNote SID_DELETE_NOTE
 ]
 
 
+SfxVoidItem InsertThreadedComment SID_INSERT_THREADED_COMMENT
+(SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,
+ SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Edit;
+]
+
+SfxVoidItem ResolveComment SID_RESOLVE_THREADED_COMMENT
+(SvxPostItIdItem Id SID_ATTR_POSTIT_ID)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxStringItem NumberFormat SID_NUMBER_FORMAT
 
 [

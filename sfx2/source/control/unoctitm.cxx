@@ -1466,6 +1466,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"JumpToMark", { PayloadType::None, true } },
         { u"MoveKeepInsertMode", { PayloadType::None, true } },
         { u"Orientation", { PayloadType::None, true } },
+        { u"InsertThreadedComment", { PayloadType::None, true } },
         { u"ReplyComment", { PayloadType::None, true } },
         { u"ResolveComment", { PayloadType::None, true } },
         { u"ResolveCommentThread", { PayloadType::None, true } },
