@@ -28,6 +28,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 		cscript /e:javascript configure.js \
 			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
 			$(if $(filter TRUE,$(MSVC_USE_DEBUG_RUNTIME)),debug=yes) \
+			$(if $(DISABLE_DYNLOADING),static=yes) \
 		&& nmake \
 	,win32)
 	$(call gb_Trace_EndRange,libxml2,EXTERNAL)

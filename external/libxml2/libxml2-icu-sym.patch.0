@@ -1,4 +1,7 @@
-Find bundled ICU in workdir and use debug .libs when needed
+-*- Mode: Diff -*-
+
+Find bundled ICU in workdir and use debug .libs when needed. Also use
+static ICU .libs when needed.
 
 diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
 --- win32/Makefile.msvc.dt	2014-07-18 19:00:23.372103963 +0200
@@ -21,17 +24,33 @@ diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
  LIBS =
  !if "$(WITH_HTTP)" == "1"
  LIBS = $(LIBS) wsock32.lib ws2_32.lib
-@@ -74,9 +77,13 @@
+@@ -74,9 +77,17 @@
+ !endif 
+ !if "$(WITH_ICU)" == "1"
  !if "$(STATIC)" == "1"
- LIBS = $(LIBS) advapi32.lib sicuuc.lib sicuin.lib sicudt.lib
++!if "$(DEBUG)" == "1"
+-LIBS = $(LIBS) advapi32.lib sicuuc.lib sicuin.lib sicudt.lib
++LIBS = $(LIBS) advapi32.lib sicuucd.lib sicuind.lib sicudtd.lib
++!else
++LIBS = $(LIBS) advapi32.lib sicuuc.lib sicuin.lib sicudt.lib
++!endif
  !else
 +!if "$(DEBUG)" == "1"
 +LIBS = $(LIBS) icuind.lib icuucd.lib icudtd.lib
 +!else
  LIBS = $(LIBS) icuuc.lib icuin.lib icudt.lib
- !endif
- !endif
 +!endif
+ !endif
+ !endif
  !if "$(WITH_ZLIB)" == "1"
- # could be named differently zdll or zlib
- # LIBS = $(LIBS) zdll.lib
+@@ -370,8 +370,8 @@
+ # An implicit rule for xmllint and friends.
+ !if "$(STATIC)" == "1"
+ {$(UTILS_SRCDIR)}.c{$(BINDIR)}.exe:
+-	$(CC) /D "LIBXML_STATIC" $(CFLAGS) /Fo$(UTILS_INTDIR)\ /c $< 
+-	$(LD) $(LDFLAGS) /OUT:$@ $(XML_A) $(LIBS) $(UTILS_INTDIR)\$(<B).obj
++	$(CC) /D "LIBXML_STATIC" $(CFLAGS) /Fo$(UTILS_INTDIR)\ /c $< ..\lintmain.c ..\shell.c
++	$(LD) $(LDFLAGS) /OUT:$@ $(XML_A) $(LIBS) $(UTILS_INTDIR)\$(<B).obj   $(UTILS_INTDIR)\lintmain.obj $(UTILS_INTDIR)\shell.obj
+ 	@$(_VC_MANIFEST_EMBED_EXE)
+ !else
+ {$(UTILS_SRCDIR)}.c{$(BINDIR)}.exe:
