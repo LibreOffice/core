@@ -3371,6 +3371,17 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     if (!rTooltip.isEmpty())
         rJsonWriter.put("tooltip", rTooltip);
 
+    VclAlign nHalign = get_halign();
+    if (nHalign != VclAlign::Fill)
+    {
+        if (nHalign == VclAlign::Start)
+            rJsonWriter.put("halign", "start");
+        else if (nHalign == VclAlign::Center)
+            rJsonWriter.put("halign", "center");
+        else if (nHalign == VclAlign::End)
+            rJsonWriter.put("halign", "end");
+    }
+
     if (vcl::Window* pChild = mpWindowImpl->mpFirstChild)
     {
         auto childrenNode = rJsonWriter.startArray("children");
