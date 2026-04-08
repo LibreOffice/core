@@ -21,6 +21,7 @@ interface ViewSetting {
 	signatureCertificate?: string;
 	aiConfigured?: boolean;
 	aiRequestTimeout?: string;
+	aiModelName?: string;
 }
 
 class ServerConnectionService {
@@ -48,6 +49,7 @@ class ServerConnectionService {
 		app.map.aiRequestTimeout = viewSetting.aiRequestTimeout
 			? Math.max(10, Number(viewSetting.aiRequestTimeout))
 			: 120;
+		app.map.aiModelName = viewSetting.aiModelName || '';
 
 		let zoteroPlugin = app.map.zotero;
 		const zoteroAPIKey = viewSetting.zoteroAPIKey;

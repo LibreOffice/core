@@ -3331,6 +3331,8 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
                               !aiProviderModel.empty() &&
                               !aiProviderURL.empty();
     viewSettings->set("aiConfigured", aiConfigured);
+    if (aiConfigured)
+        viewSettings->set("aiModelName", aiProviderModel);
 
     sendTextFrame("viewsetting: " + JsonUtil::jsonToString(viewSettings));
 

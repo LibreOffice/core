@@ -235,6 +235,7 @@ interface MapInterface extends Evented {
 	dialog: any;
 	isAIConfigured?: boolean;
 	aiRequestTimeout?: number;
+	aiModelName?: string;
 
 	_controlCorners: Record<string, Node>;
 	_contextMenu: ContextMenuControl;

@@ -1840,6 +1840,8 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
         const bool aiConfigured = !aiProviderAPIKey.empty() && !aiProviderModel.empty() &&
                                   !aiProviderURL.empty();
         viewSettings->set("aiConfigured", aiConfigured);
+        if (aiConfigured)
+            viewSettings->set("aiModelName", aiProviderModel);
         viewSettingsString = JsonUtil::jsonToString(viewSettings);
     }
     catch (const std::exception& exc)
