@@ -191,10 +191,11 @@
 #aichat-eu-notice {
 	color: var(--color-text-lighter);
 	text-align: center;
-	padding: 4px 20px;
-	font-size: 11px;
-	line-height: 1.5;
-	opacity: 0.7;
+	padding: 2px 0 0;
+	font-size: 8px;
+	line-height: 1.2;
+	opacity: 0.5;
+	letter-spacing: 0.01em;
 }
 
 /* -- Hint (transient inline warning) -- */
@@ -403,12 +404,19 @@
 #aichat-input-area {
 	display: flex !important;
 	grid-auto-flow: unset !important;
-	align-items: flex-end;
+	flex-direction: column;
 	gap: 0;
-	padding: 10px 12px;
+	padding: 8px 12px 2px;
 	border-top: 1px solid var(--color-border);
 	flex-shrink: 0;
 	background: var(--color-background-lighter);
+}
+
+#aichat-input-row {
+	display: flex !important;
+	grid-auto-flow: unset !important;
+	align-items: flex-end;
+	gap: 0;
 	position: relative;
 }
 
@@ -496,12 +504,12 @@
 }
 
 /* Position send button inside the input field */
-#aichat-input-area > .ui-pushbutton-wrapper {
+#aichat-input-row > .ui-pushbutton-wrapper {
 	margin: 0;
 	flex-shrink: 0;
 	position: absolute;
-	right: 16px;
-	bottom: 13px;
+	right: 4px;
+	bottom: 3px;
 }
 
 /* -- Markdown rendering in assistant messages -- */
