@@ -53,4 +53,14 @@ public:
     virtual void SAL_CALL characters(const OUString & aChars) override;
 };
 
+class ScXMLPersonsContext : public ScXMLImportContext
+{
+public:
+    ScXMLPersonsContext(ScXMLImport& rImport);
+
+    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL
+        createFastChildContext(sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

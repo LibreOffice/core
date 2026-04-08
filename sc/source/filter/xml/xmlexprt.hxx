@@ -192,6 +192,7 @@ class ScXMLExport : public SvXMLExport
     void WriteScenario(const ScDocument& rDoc);   // core implementation
     void WriteTheLabelRanges(const ScDocument& rDoc, const rtl::Reference<ScModelObj>& xSpreadDoc);
     void WriteLabelRanges(const ScDocument& rDoc, const css::uno::Reference< css::container::XIndexAccess >& xRangesIAccess, bool bColumn);
+    void WritePersons(const ScDocument& rDoc);
     void WriteNamedExpressions(const ScDocument& rDoc);
     void WriteExternalDataMapping(ScDocument& rDoc);
     void WriteExternalDataTransformations(const ScDocument& rDoc, const std::vector<std::shared_ptr<sc::DataTransformation>>& rDataTransformations);

@@ -2476,6 +2476,53 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testThreadedCommentRoundtrip)
     CPPUNIT_ASSERT_EQUAL(u"Mike Kaganski"_ustr, pPerson->maDisplayName);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest, testThreadedCommentOdsRoundtrip)
+{
+    // Open xlsx with threaded comments, save as ODS, reopen — verify full data survives.
+    createScDoc("xlsx/threadedComment.xlsx");
+
+    saveAndReload(TestFilter::ODS);
+    ScDocument* pDoc = getScDoc();
+
+    // Verify the ODS XML structure in content.xml.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // loext:threaded-comment inside office:annotation with the correct root GUID.
+    const OString sTC = "//office:annotation/loext:threaded-comment"
+                        "[@loext:id='{FB8EA27E-C1B6-4481-B034-193455CC7425}']"_ostr;
+    assertXPath(pXmlDoc, sTC, 1);
+    assertXPathContent(pXmlDoc, sTC + "/loext:text", u"a comment on A2");
+    // Not resolved — loext:resolved must be absent.
+    assertXPath(pXmlDoc, sTC + "[@loext:resolved]", 0);
+    // One reply with correct text.
+    assertXPath(pXmlDoc, sTC + "/loext:reply", 1);
+    assertXPathContent(pXmlDoc, sTC + "/loext:reply/loext:text", u"A reply");
+
+    // loext:persons at spreadsheet body level.
+    assertXPath(pXmlDoc,
+                "//loext:persons/loext:person"
+                "[@loext:display-name='Mike Kaganski']",
+                1);
+
+    // Verify in-memory data after round-trip.
+    ScPostIt* pNote = pDoc->GetNote(0, 1, 0);
+    CPPUNIT_ASSERT(pNote);
+
+    const ScThreadedCommentData* pData = pNote->GetThreadedCommentData();
+    CPPUNIT_ASSERT(pData);
+    CPPUNIT_ASSERT_EQUAL(u"{FB8EA27E-C1B6-4481-B034-193455CC7425}"_ustr, pData->maRoot.maGuid);
+    CPPUNIT_ASSERT_EQUAL(u"a comment on A2"_ustr, pData->maRoot.maText);
+    CPPUNIT_ASSERT(!pData->mbDone);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pData->maReplies.size());
+    CPPUNIT_ASSERT_EQUAL(u"A reply"_ustr, pData->maReplies[0].maText);
+
+    const ScPersonData* pPerson = pDoc->GetPersonById(pData->maRoot.maPersonId);
+    CPPUNIT_ASSERT(pPerson);
+    CPPUNIT_ASSERT_EQUAL(u"Mike Kaganski"_ustr, pPerson->maDisplayName);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

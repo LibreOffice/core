@@ -19,6 +19,7 @@
 
 #include <document.hxx>
 #include <docuno.hxx>
+#include <postit.hxx>
 #include <sheetdata.hxx>
 
 #include "xmlbodyi.hxx"
@@ -117,6 +118,42 @@ ScXMLBodyContext::~ScXMLBodyContext()
 {
 }
 
+ScXMLPersonsContext::ScXMLPersonsContext(ScXMLImport& rImport)
+    : ScXMLImportContext(rImport)
+{
+}
+
+uno::Reference<xml::sax::XFastContextHandler> SAL_CALL
+ScXMLPersonsContext::createFastChildContext(sal_Int32 nElement,
+    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
+{
+    if (nElement == XML_ELEMENT(LO_EXT, XML_PERSON))
+    {
+        ScPersonData aPerson;
+        for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
+        {
+            switch (aIter.getToken())
+            {
+                case XML_ELEMENT(LO_EXT, XML_PERSON_ID):
+                    aPerson.maId = aIter.toString();
+                    break;
+                case XML_ELEMENT(LO_EXT, XML_DISPLAY_NAME):
+                    aPerson.maDisplayName = aIter.toString();
+                    break;
+                case XML_ELEMENT(LO_EXT, XML_USER_ID):
+                    aPerson.maUserId = aIter.toString();
+                    break;
+                case XML_ELEMENT(LO_EXT, XML_PROVIDER_ID):
+                    aPerson.maProviderId = aIter.toString();
+                    break;
+            }
+        }
+        if (ScDocument* pDoc = GetScImport().GetDocument())
+            pDoc->AddPerson(aPerson);
+    }
+    return nullptr;
+}
+
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         ScXMLBodyContext::createFastChildContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
@@ -165,6 +202,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         pContext = new ScXMLNamedExpressionsContext (
             GetScImport(),
             std::make_shared<ScXMLNamedExpressionsContext::GlobalInserter>(GetScImport()) );
+        break;
+    case XML_ELEMENT( LO_EXT, XML_PERSONS ):
+        pContext = new ScXMLPersonsContext(GetScImport());
         break;
     case XML_ELEMENT( TABLE, XML_DATABASE_RANGES ):
         pContext = new ScXMLDatabaseRangesContext ( GetScImport() );
