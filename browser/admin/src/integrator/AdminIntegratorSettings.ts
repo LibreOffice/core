@@ -1598,9 +1598,9 @@ class SettingIframe {
 			return;
 		}
 
+		this.generateAISettingsUI(data, settingsContainer);
 		this.generateZoteroUI(data, settingsContainer);
 		this.generateDocSigningUI(data, settingsContainer);
-		this.generateAISettingsUI(data, settingsContainer);
 	}
 
 	private generateZoteroUI(data: ViewSettings, settingsContainer: HTMLElement) {
@@ -1738,7 +1738,7 @@ class SettingIframe {
 		aiContainer.id = 'ai-section';
 		aiContainer.classList.add('section');
 
-		aiContainer.appendChild(this.createHeading(_('AI Settings')));
+		aiContainer.appendChild(this.createHeading(_('AI Assistant')));
 		const aiDesc = document.createElement('p');
 		aiDesc.className = 'view-setting-description';
 		aiDesc.textContent = _(
@@ -1755,7 +1755,7 @@ class SettingIframe {
 		aiContainer.appendChild(
 			this.createSettingsActions(
 				'ai',
-				'AI Settings',
+				'AI Assistant',
 				'viewsetting.json',
 				() => {
 					const defaultSettings = this.getDefaultViewSettings();
