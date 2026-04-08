@@ -281,7 +281,7 @@
                       <object class="GtkSpinButton" id="spacing1mf">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="halign">center</property>
+                        <property name="halign">end</property>
                         <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment3</property>
@@ -301,7 +301,7 @@
                       <object class="GtkSpinButton" id="spacing2mf">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="halign">center</property>
+                        <property name="halign">start</property>
                         <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment8</property>
