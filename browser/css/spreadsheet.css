@@ -254,40 +254,69 @@
 .formula-error-help-btn {
 	display: inline-flex;
 	align-items: center;
-	gap: 4px;
-	padding: 3px 8px;
-	background: var(--color-background-lighter);
-	border: 1px solid var(--color-border);
-	border-radius: 6px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 3px 8px rgba(0, 0, 0, 0.05);
-	cursor: pointer;
-	white-space: nowrap;
-	font-size: 0.75rem;
-	font-weight: 500;
-	color: var(--color-text-dark);
+	justify-content: center;
 	pointer-events: auto;
-	transform: translateY(-100%);
-	transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
-	animation: formula-help-fade-in 0.2s ease-out;
+	transform: translate(calc(-100% - 3px), 0);
+	cursor: pointer;
+	animation: formula-help-fade-in 0.12s ease-out;
 }
 @keyframes formula-help-fade-in {
-	from { opacity: 0; transform: translateY(calc(-100% + 4px)); }
-	to { opacity: 1; transform: translateY(-100%); }
+	from { opacity: 0; }
+	to { opacity: 1; }
 }
-.formula-error-help-btn:hover {
+.formula-error-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	height: 16px;
+	background: #d4880f;
+	border-radius: 2px;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 1;
+}
+.formula-error-help-btn:hover .formula-error-icon {
+	background: #bf7a0d;
+}
+.formula-error-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	min-width: 210px;
+	background: var(--color-background-lighter);
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	padding: 4px 0;
+	z-index: 1000;
+	white-space: nowrap;
+	font-size: 0.8rem;
+	color: var(--color-text-dark);
+}
+.formula-error-menu-header {
+	padding: 6px 10px;
+	font-weight: 600;
+	color: var(--color-text-dark);
+	line-height: 1.3;
+}
+.formula-error-menu-error-code {
+	color: #b33a3a;
+	font-family: monospace;
+	font-size: 0.75rem;
+}
+.formula-error-menu-separator {
+	height: 1px;
+	background: var(--color-border);
+	margin: 2px 0;
+}
+.formula-error-menu-item {
+	padding: 6px 12px;
+	cursor: pointer;
+}
+.formula-error-menu-item:hover {
 	background: var(--color-background-dark);
-}
-.formula-error-help-btn:active {
-	background: var(--color-background-darker);
-}
-.formula-error-help-btn img {
-	width: 14px;
-	height: 14px;
-	vertical-align: middle;
-	flex-shrink: 0;
-}
-.formula-error-help-btn span {
-	line-height: 14px;
 }
 
 [data-docType='spreadsheet'] #toolbar-wrapper.tablet {

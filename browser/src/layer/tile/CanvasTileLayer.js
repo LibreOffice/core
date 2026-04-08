@@ -1473,54 +1473,27 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._lastFormula = newFormula;
 		this._map.fire('cellformula', {formula: newFormula});
 
-		if (this.isCalc()) {
-			this._checkForFormulaError(newFormula);
+		// Clear pending error; statechanged CellFormulaError will set it
+		// if the new cell has one.
+		this._pendingCellError = null;
+	},
+
+	_onCellFormulaError: function (state) {
+		if (state && typeof state === 'object' && state.error) {
+			this._pendingCellError = state;
+		} else {
+			this._pendingCellError = null;
+			app.definitions.formulaErrorHelpSection.hide();
 		}
+		this._showPendingCellError();
 	},
 
-	_checkForFormulaError: function (formula) {
-		app.definitions.formulaErrorHelpSection.hide();
-
-		if (!app.map.isAIConfigured || !formula || !formula.startsWith('='))
+	_showPendingCellError: function () {
+		if (!this._pendingCellError || !app.calc.cellCursorVisible)
 			return;
-
-		if (this._formulaErrorCheckTimer)
-			clearTimeout(this._formulaErrorCheckTimer);
-
-		this._formulaErrorCheckTimer = setTimeout(
-			this._doFormulaErrorCheck.bind(this),
-			300,
-		);
-	},
-
-	_doFormulaErrorCheck: function () {
-		this._formulaErrorCheckTimer = null;
-
-		var handleResponse = function (e) {
-			if (e.commandName === '.uno:FormulaDepChain') {
-				clearTimeout(timeout);
-				app.map.off('commandvalues', handleResponse);
-				if (
-					e.commandValues &&
-					e.commandValues.hasError &&
-					app.calc.cellCursorVisible
-				) {
-					var rect = app.calc.cellCursorRectangle;
-					var pos = new cool.SimplePoint(
-						rect.x2,
-						rect.y1,
-					);
-					app.definitions.formulaErrorHelpSection.show(pos);
-				}
-			}
-		};
-
-		var timeout = setTimeout(function () {
-			app.map.off('commandvalues', handleResponse);
-		}, 3000);
-
-		app.map.on('commandvalues', handleResponse);
-		app.socket.sendMessage('commandvalues command=.uno:FormulaDepChain');
+		var rect = app.calc.cellCursorRectangle;
+		var pos = new cool.SimplePoint(rect.x1, rect.y1);
+		app.definitions.formulaErrorHelpSection.show(pos, this._pendingCellError);
 	},
 
 	_onCalcFunctionUsageMsg: function (textMsg) {
@@ -1781,8 +1754,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// Remove input help if there is any:
 		app.definitions.validityInputHelpSection.removeValidityInputHelp();
 
-		// Hide formula error help button when cell cursor changes.
+		// Reposition formula error button with the updated cursor rect.
 		app.definitions.formulaErrorHelpSection.hide();
+		this._showPendingCellError();
 	},
 
 	_onDocumentRepair: function (textMsg) {

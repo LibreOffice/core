@@ -956,6 +956,9 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		else if (e.commandName === 'TableAutoFillInfo') {
 			this._onTableAutoFillStateChanged(e.state.rectangle);
 		}
+		else if (e.commandName === 'CellFormulaError') {
+			this._onCellFormulaError(e.state);
+		}
 	},
 
 	_onTableAutoFillStateChanged: function (textMsg) {
