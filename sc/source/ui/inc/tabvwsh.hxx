@@ -208,7 +208,6 @@ private:
     UndoStackMark m_InsertWizardUndoMark = MARK_INVALID;
 
     // REF_CODE_BEGIN
-    // void UpdateRefErrorInfoBar(sc::RefErrorResult& rRes);
     void UpdateRefErrorInfoBar(const sc::RefErrorResult& rResErr);
     // REF_CODE_BEGIN
 

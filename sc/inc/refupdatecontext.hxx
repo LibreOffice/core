@@ -116,11 +116,8 @@ struct RefUpdateResult
     SCTAB mnTab;
 
     // REF_CODE_BEGIN
-    /** * Flagged true if a previously valid reference becomes #REF!
-     * during this specific update operation.
-     */
     bool mbRefErrorCreated;
-    /** Stores the address of the cell containing the formula that errored. */
+
     ScAddress maFirstErrorAddress;
     // REF_CODE_END
 

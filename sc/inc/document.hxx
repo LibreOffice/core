@@ -65,7 +65,6 @@
 #include <refhint.hxx>
 #include <refupdatecontext.hxx>
 
-
 // REF_CODE_BEGIN
 namespace sc {
     struct RefErrorResult;
@@ -109,13 +108,10 @@ class ColumnSpanSet;
 struct ColumnBlockPosition;
 struct RefUpdateContext;
 // REF_CODE_BEGIN
-//struct RefUpdateResult;
-// REF_CODE_END
-// REF_CODE_BEGIN
 struct RefErrorResult {
         bool mbRefErrorCreated;
-    OUString maDeletedAddressStr; // For %1 (The "Source" of the error)
-        OUString maErrorAddressStr;   // For %2 (The "Target" cell containing #REF!)
+    OUString maDeletedAddressStr;
+    OUString maErrorAddressStr;
 
     RefErrorResult() : mbRefErrorCreated(false) {}
 
@@ -387,26 +383,19 @@ friend struct ScMutationDisable;
 
 // REF_CODE_BEGIN
 private:
-    // ... other members ...
-    sc::RefErrorResult maPendingRefError; // This stores the error
+    sc::RefErrorResult maPendingRefError;
 public:
-    // Setter (used by token.cxx)
-    //void SetPendingRefError(const ScAddress& rAddr) {
-    //    maPendingRefError.mbRefErrorCreated = true;
-    //    maPendingRefError.maFirstErrorAddress = rAddr;
-    // }
-    void SetPendingRefError(const sc::RefErrorResult& rRes) {
+    void SetPendingRefError(const sc::RefErrorResult& rRes)
+    {
     maPendingRefError = rRes;
     }
-
-    // Getter (used by viewfunc.cxx)
     const sc::RefErrorResult& GetPendingRefError() const { return maPendingRefError; }
     void ResetPendingRefError();
 
     // Clear (used by viewfunc.cxx)
     void ClearPendingRefError() {
         maPendingRefError.mbRefErrorCreated = false;
-        //maPendingRefError.maFirstErrorAddress.SetInvalid();
+
     maPendingRefError.reset();
     }
     bool HasPendingRefError() const { return maPendingRefError.mbRefErrorCreated; }
@@ -414,7 +403,6 @@ public:
     void BroadcastPendingRefError() {
         if (maPendingRefError.mbRefErrorCreated) {
             BroadcastRefError(maPendingRefError);
-            // Clear it so it doesn't pop up again on the next click
             maPendingRefError.mbRefErrorCreated = false;
         }
         }

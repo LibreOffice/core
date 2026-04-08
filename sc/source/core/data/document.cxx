@@ -794,15 +794,9 @@ bool ScDocument::DeleteTab( SCTAB nTab )
     // REF_CODE_BEGIN
     if (bValid)
     {
-        // --- START OF INFOBAR TRIGGER LOGIC ---
-        // This logic detects if deleting the sheet caused any formula to break (producing #REF!)
-        // and broadcasts a hint to show an InfoBar in the UI.
-
         if (HasPendingRefError())
         {
-            // Debug log for development tracking
-            fprintf(stderr, "===[ DEBUG ]=== DeleteTab: Logic error detected in cell: %s\n",
-                maPendingRefError.maErrorAddressStr.toUtf8().getStr());
+            maPendingRefError.maErrorAddressStr.toUtf8().getStr();
 
             BroadcastPendingRefError();
         }
@@ -901,22 +895,15 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
     // REF_CODE_BEGIN
     if (bValid)
     {
-        // --- START OF INFOBAR TRIGGER LOGIC ---
-
-        // 1. Create a standard Reference Update Context (Base Class)
         sc::RefUpdateContext aRefCxt(*this);
         aRefCxt.meMode = URM_INSDEL;
 
-        // 2. Use 'nSheets' as the verified parameter name.
         aRefCxt.mnTabDelta = -(static_cast<SCTAB>(nSheets));
 
-        // 3. Define the affected range: from the deleted tab to the new end of the document.
         aRefCxt.maRange = ScRange(0, 0, nTab, MaxCol(), MaxRow(), GetTableCount());
 
-        // 4. Trigger the document-wide update to find formulas that now point to #REF!
         UpdateReference(aRefCxt);
 
-        // 5. If a logic error was caught, broadcast it to trigger the InfoBar in the UI
         if (HasPendingRefError())
         {
             fprintf(stderr, "===[ DEBUG ]=== DeleteTabs: Logic error detected in cell: %s\n",
@@ -7013,16 +7000,11 @@ void ScDocument::BroadcastRefError(const sc::RefErrorResult& rResErr)
     if (!rResErr.mbRefErrorCreated)
         return;
 
-    // Create the hint
-    //ScHint aHint(static_cast<SfxHintId>(SC_HINT_REF_ERROR_CREATED), rResErr.maFirstErrorAddress);
     ScHint aHint(static_cast<SfxHintId>(SC_HINT_REF_ERROR_CREATED), ScAddress());
 
-    // Get the DocShell (the UI container)
     ScDocShell* pDocSh = GetDocumentShell();
     if (pDocSh)
     {
-    fprintf(stderr, "===[ DEBUG ]=== Broadcasting via DocShell for %s\n",
-        rResErr.maErrorAddressStr.toUtf8().getStr());
         if (pDocSh) pDocSh->Broadcast(aHint); // This is the "channel" the UI listens to
     }
     else
