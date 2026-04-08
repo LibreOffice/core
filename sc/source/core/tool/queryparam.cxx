@@ -32,8 +32,6 @@
 
 namespace {
 
-const size_t MAXQUERY = 8;
-
 class FindByField
 {
     SCCOLROW mnField;

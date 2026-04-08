@@ -24,6 +24,7 @@
 #include "queryentry.hxx"
 #include "types.hxx"
 
+#include <boost/container/small_vector.hpp>
 #include <vector>
 #include <ostream>
 
@@ -64,10 +65,8 @@ struct SAL_DLLPUBLIC_RTTI ScQueryParamBase
     void FillInExcelSyntax( svl::SharedStringPool& rPool, const OUString& aCellStr, SCSIZE nIndex,
                             ScInterpreterContext* pContext );
 
-protected:
-    typedef std::vector<ScQueryEntry> EntriesType;
-
-public:
+    static constexpr size_t MAXQUERY = 8;
+    typedef boost::container::small_vector<ScQueryEntry, MAXQUERY> EntriesType;
     typedef EntriesType::const_iterator const_iterator;
 
     const_iterator begin() const;

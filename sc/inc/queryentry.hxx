@@ -24,6 +24,7 @@
 #include <unotools/textsearch.hxx>
 #include <tools/color.hxx>
 
+#include <boost/container/small_vector.hpp>
 #include <memory>
 #include <vector>
 
@@ -55,7 +56,7 @@ struct SC_DLLPUBLIC ScQueryEntry final
 
         bool operator== (const Item& r) const;
     };
-    typedef std::vector<Item> QueryItemsType;
+    typedef boost::container::small_vector<Item, 1> QueryItemsType;
 
     bool            bDoQuery;
     SCCOLROW        nField;
