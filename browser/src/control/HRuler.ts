@@ -20,6 +20,8 @@
  * Handles user interactions like scrolling and dragging, and renders grid lines/ticks.
  */
 
+declare var JSDialog: any;
+
 class HRuler extends Ruler {
 	_firstLineMarker: HTMLDivElement;
 	_pStartMarker: HTMLDivElement;
@@ -1129,31 +1131,71 @@ class HRuler extends Ruler {
 		return tabstop;
 	}
 
-	_showTabstopContextMenu(position: number, tabstopNumber: number) {
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		var self = this;
+	_showTabstopContextMenu(
+		position: number,
+		tabstopNumber: number,
+		event: MouseEvent,
+	) {
 		this.currentPositionInTwips = position;
 		this.currentTabStopIndex = tabstopNumber;
-		$.contextMenu({
-			selector: '.cool-ruler-horizontal-tabstopcontainer',
-			className: 'cool-font',
-			items: {
-				inserttabstop: {
-					name: _('Insert tabstop'),
-					callback: this._insertTabstop.bind(this),
-					visible: function () {
-						return self.currentPositionInTwips != null;
-					},
-				},
-				removetabstop: {
-					name: _('Delete tabstop'),
-					callback: this._deleteTabstop.bind(this),
-					visible: function () {
-						return self.currentTabStopIndex != null;
-					},
-				},
-			},
-		});
+
+		const entries: Array<MenuDefinition> = [];
+		if (position != null) {
+			entries.push({
+				id: 'inserttabstop',
+				type: 'comboboxentry',
+				text: _('Insert tabstop'),
+				pos: 0,
+			});
+		}
+		if (tabstopNumber != null) {
+			entries.push({
+				id: 'removetabstop',
+				type: 'comboboxentry',
+				text: _('Delete tabstop'),
+				pos: 0,
+			});
+		}
+
+		const container = this._rTSContainer;
+		const childCount = container.children.length;
+		const menuPosEl = document.createElement('div');
+		menuPosEl.style.position = 'absolute';
+		container.appendChild(menuPosEl);
+
+		const rect = container.getBoundingClientRect();
+		menuPosEl.style.left = event.clientX - rect.left + 'px';
+		menuPosEl.style.top = event.clientY - rect.top + 'px';
+
+		const callback = (
+			objectType: string,
+			eventType: string,
+			object: any,
+			data: any,
+			entry: MenuDefinition,
+		): boolean => {
+			if (entry.id === 'inserttabstop') {
+				this._insertTabstop();
+			} else if (entry.id === 'removetabstop') {
+				this._deleteTabstop();
+			}
+			JSDialog.CloseAllDropdowns();
+			menuPosEl.remove();
+			console.assert(
+				childCount >= container.children.length,
+				'HRuler: leak of children detected',
+			);
+			return true;
+		};
+
+		JSDialog.OpenDropdown(
+			'hruler-tabstop-menu',
+			menuPosEl,
+			entries,
+			callback,
+			'',
+			false,
+		);
 	}
 
 	_initiateTabstopDrag(event: any) {
@@ -1183,9 +1225,9 @@ class HRuler extends Ruler {
 						x: pointX,
 						y: 0,
 					}).x;
-					this._showTabstopContextMenu(position, null);
+					this._showTabstopContextMenu(position, null, event);
 				} else {
-					this._showTabstopContextMenu(null, tabstop.tabStopNumber);
+					this._showTabstopContextMenu(null, tabstop.tabStopNumber, event);
 				}
 				event.stopPropagation();
 				return;
@@ -1331,7 +1373,7 @@ class HRuler extends Ruler {
 				tabstopNumber = tabstop.tabStopNumber;
 				pointXTwip = null;
 			}
-			this._showTabstopContextMenu(pointXTwip, tabstopNumber);
+			this._showTabstopContextMenu(pointXTwip, tabstopNumber, event);
 		}
 	}
 
