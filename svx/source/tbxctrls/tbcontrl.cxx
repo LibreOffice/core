@@ -155,11 +155,6 @@ public:
     OUString get_text(int nIndex) const { return m_xWidget->get_text(nIndex); }
     OUString get_active_text() const { return m_xWidget->get_active_text(); }
 
-    int find_text(const OUString& rStr)
-    {
-        return m_xWidget->find_text(rStr);
-    }
-
     void append_text(const OUString& rStr)
     {
         OUString sId(OUString::number(m_xWidget->get_count()));
@@ -3436,6 +3431,8 @@ void SvxStyleToolBoxControl::FillStyleBox()
     // Add used, favourite and user defined
 
     std::vector<OUString> aStyles;
+    // use a set to avoid O(n^2) performance problem in insert loop
+    std::unordered_set<OUString> aStylesSet;
 
     AppendStyles(aStyles, eFamily, SfxStyleSearchBits::Favourite);
     AppendStyles(aStyles, eFamily, SfxStyleSearchBits::UserDefined);
@@ -3445,14 +3442,17 @@ void SvxStyleToolBoxControl::FillStyleBox()
     if (m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc)
     {
         for( const auto &rStyle : m_pImpl->aDefaultStyles )
+        {
             pBox->append_text(rStyle.second);
+            aStylesSet.insert(rStyle.second);
+        }
     }
 
     // Insert styles
     for (const auto& rStyle : aStyles)
     {
         // do not duplicate default styles
-        if (pBox->find_text(rStyle) == -1)
+        if (aStylesSet.insert(rStyle).second)
             pBox->append_text(rStyle);
     }
 
