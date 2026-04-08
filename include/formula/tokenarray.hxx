@@ -233,7 +233,7 @@ class FORMULA_DLLPUBLIC FormulaTokenArray
 {
 protected:
     std::unique_ptr<FormulaToken*[]> pCode; // Token code array
-    FormulaToken**  pRPN;                   // RPN array
+    std::unique_ptr<FormulaToken*[]> pRPN;                   // RPN array
     sal_uInt16      nLen;                   // Length of token array
     sal_uInt16      nRPN;                   // Length of RPN array
     FormulaError    nError;                 // Error code
@@ -359,9 +359,9 @@ public:
     /// Assign pRPN to point to a newly created array filled with the data from pData
     void CreateNewRPNArrayFromData( FormulaToken** pData, sal_uInt16 nSize )
     {
-        pRPN = new FormulaToken*[ nSize ];
+        pRPN = std::make_unique<FormulaToken*[]>(nSize);
         nRPN = nSize;
-        memcpy( pRPN, pData, nSize * sizeof( FormulaToken* ) );
+        memcpy( pRPN.get(), pData, nSize * sizeof( FormulaToken* ) );
     }
 
     FormulaToken** GetArray() const  { return pCode.get(); }
@@ -371,11 +371,11 @@ public:
         return FormulaTokenArrayStandardRange(pCode.get(), nLen);
     }
 
-    FormulaToken** GetCode()  const  { return pRPN; }
+    FormulaToken** GetCode()  const  { return pRPN.get(); }
 
     FormulaTokenArrayStandardRange RPNTokens() const
     {
-        return FormulaTokenArrayStandardRange(pRPN, nRPN);
+        return FormulaTokenArrayStandardRange(pRPN.get(), nRPN);
     }
 
     FormulaTokenArrayReferencesRange References() const
