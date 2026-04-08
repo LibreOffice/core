@@ -361,14 +361,13 @@ void FormulaTokenArray::DelRPN()
 {
     if( nRPN )
     {
-        FormulaToken** p = pRPN;
+        FormulaToken** p = pRPN.get();
         for( sal_uInt16 i = 0; i < nRPN; i++ )
         {
             (*p++)->DecRef();
         }
-        delete [] pRPN;
+        pRPN.reset();
     }
-    pRPN = nullptr;
     nRPN = 0;
 }
 
@@ -469,7 +468,6 @@ bool FormulaTokenArray::HasOpCodes(const unordered_opcode_set& rOpCodes) const
 }
 
 FormulaTokenArray::FormulaTokenArray() :
-    pRPN(nullptr),
     nLen(0),
     nRPN(0),
     nError(FormulaError::NONE),
@@ -534,8 +532,9 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
     }
     if( nRPN )
     {
-        pp = pRPN = new FormulaToken*[ nRPN ];
-        memcpy( pp, r.pRPN, nRPN * sizeof( FormulaToken* ) );
+        pRPN = std::make_unique<FormulaToken*[]>(nRPN);
+        pp = pRPN.get();
+        memcpy( pp, r.pRPN.get(), nRPN * sizeof( FormulaToken* ) );
         for( sal_uInt16 i = 0; i < nRPN; i++ )
             (*pp++)->IncRef();
     }
@@ -544,8 +543,7 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
 void FormulaTokenArray::Move( FormulaTokenArray&& r )
 {
     pCode  = std::move(r.pCode);
-    pRPN   = r.pRPN;
-    r.pRPN = nullptr;
+    pRPN   = std::move(r.pRPN);
     nLen   = r.nLen;
     r.nLen = 0;
     nRPN   = r.nRPN;
@@ -627,7 +625,7 @@ void FormulaTokenArray::CheckAllRPNTokens()
 {
     if( nRPN )
     {
-        FormulaToken** p = pRPN;
+        FormulaToken** p = pRPN.get();
         for( sal_uInt16 i = 0; i < nRPN; i++ )
         {
             CheckToken( *p[ i ] );
