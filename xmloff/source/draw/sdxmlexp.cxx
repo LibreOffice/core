@@ -1802,7 +1802,83 @@ void SdXMLExport::ExportContent_()
     }
 
     if( IsImpress() )
+    {
+        exportSections();
         exportPresentationSettings();
+    }
+}
+
+void SdXMLExport::exportSections()
+{
+    if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
+        return;
+
+    try
+    {
+        uno::Reference<beans::XPropertySet> xDocProps(GetModel(), uno::UNO_QUERY);
+        if (!xDocProps.is())
+            return;
+
+        uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+        if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
+            return;
+
+        uno::Sequence<beans::PropertyValue> aGrabBag;
+        xDocProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+
+        uno::Sequence<beans::PropertyValue> aSectionList;
+        for (const auto& rProp : aGrabBag)
+        {
+            if (rProp.Name == "OOXSectionList")
+            {
+                rProp.Value >>= aSectionList;
+                break;
+            }
+        }
+
+        if (!aSectionList.hasElements())
+            return;
+
+        SvXMLElementExport aSectionListElem(*this, XML_NAMESPACE_LO_EXT, XML_SECTION_LIST,
+                                            true, true);
+
+        for (const auto& rSectionProp : aSectionList)
+        {
+            uno::Sequence<beans::PropertyValue> aSectionProps;
+            rSectionProp.Value >>= aSectionProps;
+
+            OUString sSectionName;
+            OUString sSectionId;
+            uno::Sequence<OUString> aSlideNames;
+
+            for (const auto& rProp : aSectionProps)
+            {
+                if (rProp.Name == "Name")
+                    rProp.Value >>= sSectionName;
+                else if (rProp.Name == "Id")
+                    rProp.Value >>= sSectionId;
+                else if (rProp.Name == "SlideNameList")
+                    rProp.Value >>= aSlideNames;
+            }
+
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, sSectionName);
+            if (!sSectionId.isEmpty())
+                AddAttribute(XML_NAMESPACE_LO_EXT, XML_IDENTIFIER, sSectionId);
+            SvXMLElementExport aSectionElem(*this, XML_NAMESPACE_LO_EXT, XML_SECTION,
+                                            true, true);
+
+            for (const OUString& rSlideName : aSlideNames)
+            {
+                AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, rSlideName);
+                SvXMLElementExport aSlideElem(*this, XML_NAMESPACE_LO_EXT, XML_SECTION_SLIDE,
+                                              true, true);
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "while exporting sections");
+    }
 }
 
 void SdXMLExport::exportPresentationSettings()

@@ -19,6 +19,7 @@
 
 #include "ximpbody.hxx"
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltoken.hxx>
 #include "ximpnote.hxx"
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
@@ -27,8 +28,13 @@
 #include "ximpstyl.hxx"
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/families.hxx>
 #include "ximpshow.hxx"
@@ -295,6 +301,120 @@ void SdXMLDrawPageContext::endFastElement(sal_Int32 nElement)
     }
 }
 
+namespace {
+
+/// Handles <loext:section> inside <loext:section-list>
+class SdXMLSectionContext : public SvXMLImportContext
+{
+    OUString maSectionName;
+    OUString maSectionId;
+    std::vector<OUString> maSlideNames;
+
+public:
+    SdXMLSectionContext(SvXMLImport& rImport,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+        : SvXMLImportContext(rImport)
+    {
+        for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
+        {
+            if (aIter.getToken() == XML_ELEMENT(LO_EXT, XML_NAME))
+                maSectionName = aIter.toString();
+            else if (aIter.getToken() == XML_ELEMENT(LO_EXT, XML_IDENTIFIER))
+                maSectionId = aIter.toString();
+        }
+    }
+
+    css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
+    {
+        if (nElement == XML_ELEMENT(LO_EXT, XML_SECTION_SLIDE))
+        {
+            for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
+            {
+                if (aIter.getToken() == XML_ELEMENT(LO_EXT, XML_NAME))
+                    maSlideNames.push_back(aIter.toString());
+            }
+        }
+        return nullptr;
+    }
+
+    const OUString& getSectionName() const { return maSectionName; }
+    const OUString& getSectionId() const { return maSectionId; }
+    const std::vector<OUString>& getSlideNames() const { return maSlideNames; }
+};
+
+/// Handles <loext:section-list> inside <office:presentation>
+class SdXMLSectionListContext : public SvXMLImportContext
+{
+    std::vector<rtl::Reference<SdXMLSectionContext>> maSections;
+
+public:
+    SdXMLSectionListContext(SvXMLImport& rImport)
+        : SvXMLImportContext(rImport)
+    {
+    }
+
+    css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
+    {
+        if (nElement == XML_ELEMENT(LO_EXT, XML_SECTION))
+        {
+            rtl::Reference<SdXMLSectionContext> pSection(new SdXMLSectionContext(GetImport(), xAttrList));
+            maSections.push_back(pSection);
+            return pSection;
+        }
+        return nullptr;
+    }
+
+    void SAL_CALL endFastElement(sal_Int32) override
+    {
+        if (maSections.empty())
+            return;
+
+        try
+        {
+            uno::Reference<beans::XPropertySet> xDocProps(GetImport().GetModel(), uno::UNO_QUERY);
+            if (!xDocProps.is())
+                return;
+
+            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+            if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
+                return;
+
+            comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
+
+            // Store sections with slide names directly
+            std::vector<beans::PropertyValue> aSectionsList;
+            for (size_t i = 0; i < maSections.size(); ++i)
+            {
+                const auto& pSection = maSections[i];
+
+                std::vector<beans::PropertyValue> aProps;
+                aProps.push_back(comphelper::makePropertyValue(u"Name"_ustr, pSection->getSectionName()));
+                aProps.push_back(comphelper::makePropertyValue(u"Id"_ustr, pSection->getSectionId()));
+                aProps.push_back(comphelper::makePropertyValue(u"SlideNameList"_ustr,
+                                                               comphelper::containerToSequence(pSection->getSlideNames())));
+                uno::Sequence<beans::PropertyValue> aSectionProps(comphelper::containerToSequence(aProps));
+
+                aSectionsList.push_back(
+                    comphelper::makePropertyValue(u"Section"_ustr + OUString::number(i), aSectionProps));
+            }
+
+            aGrabBag[u"OOXSectionList"_ustr] <<= comphelper::containerToSequence(aSectionsList);
+            xDocProps->setPropertyValue(u"InteropGrabBag"_ustr,
+                                        uno::Any(aGrabBag.getAsConstPropertyValueList()));
+        }
+        catch (const uno::Exception&)
+        {
+            SAL_WARN("xmloff.draw", "Failed to import sections to grab bag");
+        }
+    }
+};
+
+} // anonymous namespace
+
 SdXMLBodyContext::SdXMLBodyContext( SdXMLImport& rImport )
 :   SvXMLImportContext( rImport )
 {
@@ -356,6 +476,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext::crea
         case XML_ELEMENT(PRESENTATION, XML_DATE_TIME_DECL):
         {
             return new SdXMLHeaderFooterDeclContext( GetImport(), xAttrList );
+        }
+        case XML_ELEMENT(LO_EXT, XML_SECTION_LIST):
+        {
+            return new SdXMLSectionListContext( GetImport() );
         }
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
