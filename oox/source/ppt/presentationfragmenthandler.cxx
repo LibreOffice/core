@@ -424,6 +424,78 @@ void PresentationFragmentHandler::saveColorMapToGrabBag(const oox::drawingml::Cl
     }
 }
 
+void PresentationFragmentHandler::saveSectionsToGrabBag()
+{
+    if (maSectionList.empty())
+        return;
+
+    try
+    {
+        uno::Reference<beans::XPropertySet> xDocProps(getFilter().getModel(), uno::UNO_QUERY);
+        if (!xDocProps.is())
+            return;
+
+        uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+        static constexpr OUString aGrabBagPropName = u"InteropGrabBag"_ustr;
+        if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(aGrabBagPropName))
+            return;
+
+        // Get draw pages to resolve slide IDs to page names
+        uno::Reference<drawing::XDrawPagesSupplier> xDPS(getFilter().getModel(), uno::UNO_QUERY);
+        if (!xDPS.is())
+            return;
+        uno::Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages());
+        if (!xDrawPages.is())
+            return;
+
+        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
+
+        // Build a sequence of sections, each section containing name, id, and slide names
+        std::vector<beans::PropertyValue> aSectionsList;
+        for (size_t i = 0; i < maSectionList.size(); ++i)
+        {
+            const SectionData& rSection = maSectionList[i];
+
+            // Convert slide IDs to page names (stable across edits)
+            std::vector<OUString> aSlideNames;
+            for (sal_Int32 nSldId : rSection.maSldIdList)
+            {
+                auto it = maSlideIdToIndexMap.find(nSldId);
+                if (it != maSlideIdToIndexMap.end())
+                {
+                    sal_Int32 nIndex = it->second;
+                    if (nIndex < xDrawPages->getCount())
+                    {
+                        uno::Reference<drawing::XDrawPage> xPage;
+                        xDrawPages->getByIndex(nIndex) >>= xPage;
+                        uno::Reference<container::XNamed> xNamed(xPage, uno::UNO_QUERY);
+                        if (xNamed.is())
+                            aSlideNames.push_back(xNamed->getName());
+                    }
+                }
+            }
+
+            uno::Sequence<beans::PropertyValue> aSectionProps{
+                comphelper::makePropertyValue(u"Name"_ustr, rSection.maName),
+                comphelper::makePropertyValue(u"Id"_ustr, rSection.maId),
+                comphelper::makePropertyValue(u"SlideNameList"_ustr,
+                                              comphelper::containerToSequence(aSlideNames))
+            };
+
+            aSectionsList.push_back(
+                comphelper::makePropertyValue(u"Section"_ustr + OUString::number(i), aSectionProps));
+        }
+
+        aGrabBag[u"OOXSectionList"_ustr] <<= comphelper::containerToSequence(aSectionsList);
+        xDocProps->setPropertyValue(aGrabBagPropName,
+                                    uno::Any(aGrabBag.getAsConstPropertyValueList()));
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveSectionsToGrabBag, Failed to save grab bag");
+    }
+}
+
 void PresentationFragmentHandler::importMasterSlides()
 {
     OUString aMasterFragmentPath;
@@ -655,6 +727,8 @@ void PresentationFragmentHandler::finalizeImport()
             importSlideNames( rFilter, rFilter.getDrawPages());
             if (!maCustomShowList.empty())
                 importCustomSlideShow(maCustomShowList);
+
+            saveSectionsToGrabBag();
         }
         catch( uno::Exception& )
         {
@@ -694,8 +768,13 @@ void PresentationFragmentHandler::finalizeImport()
         maSlideMasterVector.push_back( rAttribs.getStringDefaulted( R_TOKEN( id )) );
         return this;
     case PPT_TOKEN( sldId ):
+    {
         maSlidesVector.push_back( rAttribs.getStringDefaulted( R_TOKEN( id )) );
+        sal_Int32 nSldId = rAttribs.getInteger( XML_id, 0 );
+        if ( nSldId )
+            maSlideIdToIndexMap[ nSldId ] = maSlidesVector.size() - 1;
         return this;
+    }
     case PPT_TOKEN( notesMasterId ):
         maNotesMasterVector.push_back( rAttribs.getStringDefaulted( R_TOKEN( id )) );
         return this;
@@ -713,6 +792,49 @@ void PresentationFragmentHandler::finalizeImport()
     {
         uno::Reference<beans::XPropertySet> xDocSettings(getFilter().getModelFactory()->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
         return new EmbeddedFontListContext(*this, mbEmbedTrueTypeFonts, xDocSettings);
+    }
+    case PPT_TOKEN( extLst ):
+        return this;
+    case PPT_TOKEN( ext ):
+    {
+        mbInSectionExtension = false;
+        // https://learn.microsoft.com/en-us/openspecs/office_standards/ms-pptx/1f21a089-944d-410b-bd47-4f5e692c2532
+        static constexpr OUString aSectionExtUri
+            = u"{521415D9-36F7-43E2-AB2F-B90AF26B5E84}"_ustr;
+        OUString sUri = rAttribs.getStringDefaulted( XML_uri );
+        if ( sUri == aSectionExtUri )
+        {
+            mbInSectionExtension = true;
+            return this;
+        }
+        return nullptr;
+    }
+    case P14_TOKEN( sectionLst ):
+        if ( !mbInSectionExtension )
+            return nullptr;
+        return this;
+    case P14_TOKEN( section ):
+    {
+        if ( !mbInSectionExtension )
+            return nullptr;
+        SectionData aSection;
+        aSection.maName = rAttribs.getStringDefaulted( XML_name );
+        aSection.maId = rAttribs.getStringDefaulted( XML_id );
+        maSectionList.push_back( aSection );
+        return this;
+    }
+    case P14_TOKEN( sldIdLst ):
+        if ( !mbInSectionExtension )
+            return nullptr;
+        return this;
+    case P14_TOKEN( sldId ):
+    {
+        if ( !mbInSectionExtension || maSectionList.empty() )
+            return nullptr;
+        sal_Int32 nSldId = rAttribs.getInteger( XML_id, 0 );
+        if ( nSldId )
+            maSectionList.back().maSldIdList.push_back( nSldId );
+        return this;
     }
     case PPT_TOKEN( modifyVerifier ):
         OUString sAlgorithmClass = rAttribs.getStringDefaulted(XML_cryptAlgorithmClass);

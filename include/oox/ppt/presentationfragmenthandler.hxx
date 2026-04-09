@@ -20,6 +20,7 @@
 #ifndef INCLUDED_OOX_PPT_PRESENTATIONFRAGMENTHANDLER_HXX
 #define INCLUDED_OOX_PPT_PRESENTATIONFRAGMENTHANDLER_HXX
 
+#include <unordered_map>
 #include <vector>
 
 #include <com/sun/star/awt/Size.hpp>
@@ -59,10 +60,20 @@ private:
     void saveColorMapToGrabBag(const oox::drawingml::ClrMapPtr& pClrMapPtr);
     void importCustomSlideShow(std::vector<CustomShow>& rCustomShowList);
     static void importSlideNames(const ::oox::core::XmlFilterBase& rFilter, const std::vector<SlidePersistPtr>& rSlidePersist);
+    void saveSectionsToGrabBag();
+
+    struct SectionData
+    {
+        OUString maName;
+        OUString maId;
+        std::vector<sal_Int32> maSldIdList;
+    };
 
     std::vector< OUString > maSlideMasterVector;
     std::vector< OUString > maSlidesVector;
     std::vector< OUString > maNotesMasterVector;
+    std::unordered_map< sal_Int32, sal_Int32 > maSlideIdToIndexMap;
+    std::vector< SectionData > maSectionList;
     ::oox::drawingml::TextListStylePtr mpTextListStyle;
 
     css::awt::Size              maSlideSize;
@@ -74,6 +85,7 @@ private:
     bool                        mbCommentAuthorsRead; // read commentAuthors.xml only once
 
     bool mbEmbedTrueTypeFonts = false;
+    bool mbInSectionExtension = false;
 };
 
 }
