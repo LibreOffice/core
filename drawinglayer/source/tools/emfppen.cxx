@@ -97,7 +97,7 @@ namespace emfplushelper
 
     void EMFPPen::Read(SvStream& s, EmfPlusHelperData const & rR)
     {
-        sal_uInt32 graphicsVersion, penType;
+        sal_uInt32 graphicsVersion(0), penType(0);
         s.ReadUInt32(graphicsVersion).ReadUInt32(penType).ReadUInt32(penDataFlags).ReadUInt32(penUnit).ReadFloat(penWidth);
         SAL_INFO("drawinglayer", "EMF+\tpen");
         SAL_INFO("drawinglayer", "EMF+\t graphics version: 0x" << std::hex << graphicsVersion << " type (must be set to zero): " << penType <<
@@ -191,10 +191,16 @@ namespace emfplushelper
         if (penDataFlags & PenDataDashedLine)
         {
             dashStyle = EmfPlusLineStyleCustom;
-            sal_uInt32 dashPatternLen;
+            sal_uInt32 dashPatternLen(0);
 
             s.ReadUInt32(dashPatternLen);
             SAL_INFO("drawinglayer", "EMF+\t\tdashPatternLen: " << dashPatternLen);
+
+            if (dashPatternLen > s.remainingSize() / sizeof(float))
+            {
+                SAL_WARN("drawinglayer.emf", "EMF+\t\t\tTruncated dash pattern");
+                return;
+            }
 
             dashPattern.resize( dashPatternLen );
 
@@ -217,8 +223,14 @@ namespace emfplushelper
 
         if (penDataFlags & PenDataCompoundLine)
         {
-            sal_uInt32 compoundArrayLen;
+            sal_uInt32 compoundArrayLen(0);
             s.ReadUInt32(compoundArrayLen);
+
+            if (compoundArrayLen > s.remainingSize() / sizeof(float))
+            {
+                SAL_WARN("drawinglayer.emf", "EMF+\t\t\tTruncated compound array");
+                return;
+            }
 
             compoundArray.resize(compoundArrayLen);
 
