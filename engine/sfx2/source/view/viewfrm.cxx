@@ -2104,6 +2104,7 @@ SfxViewFrame::~SfxViewFrame()
         // The Bindings delete the Frame!
         KillDispatcher_Impl();
 
+    m_pCommandPopupHandler.reset();
     m_pImpl->pWindow.disposeAndClear();
 
     if ( GetFrame().GetCurrentViewFrame() == this )
