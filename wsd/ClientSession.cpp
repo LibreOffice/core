@@ -1365,6 +1365,10 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         LOG_DBG("Resetting access token for " << getName() << " with expiry at " << expiryEpoch
                                               << ": " << tokens[1]);
         _auth.resetAccessToken(tokens[1], expiryEpoch);
+
+        // Notify the DocumentBroker in case a save is waiting for a token refresh.
+        docBroker->onTokenRefreshed(client_from_this());
+
         return true;
     }
 #if !MOBILEAPP && !WASMAPP

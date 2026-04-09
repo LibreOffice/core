@@ -1155,6 +1155,13 @@ class Socket {
 		} else if (textMsg.startsWith('migrate:') && window.indirectSocket) {
 			this._onMigrateMsg(textMsg);
 			return;
+		} else if (textMsg.startsWith('tokenexpired')) {
+			// Server got a 401 on save. Ask the host for a fresh token.
+			this._map.fire('postMessage', {
+				msgId: 'App_TokenExpired',
+				args: {},
+			});
+			return;
 		} else if (textMsg.startsWith('close: ')) {
 			this._onCloseMsg(textMsg);
 			return;

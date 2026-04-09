@@ -199,6 +199,23 @@ public:
         _auth.expire();
     }
 
+    /// Start waiting for a token refresh from the host.
+    void startTokenRefresh(const std::chrono::seconds timeout = std::chrono::seconds(30))
+    {
+        LOG_DBG("Session [" << getId() << "] starting token refresh wait");
+        _auth.startTokenRefresh(timeout);
+    }
+
+    /// Returns true iff this session is waiting for a token refresh.
+    bool isRefreshingToken() const { return _auth.isRefreshingToken(); }
+
+    /// Returns true if the token refresh wait has timed out.
+    bool isTokenRefreshTimedOut(
+        const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now()) const
+    {
+        return _auth.isTokenRefreshTimedOut(now);
+    }
+
     /// Set WOPI fileinfo object
     void setWopiFileInfo(std::unique_ptr<WopiStorage::WOPIFileInfo> wopiFileInfo) { _wopiFileInfo = std::move(wopiFileInfo); }
 

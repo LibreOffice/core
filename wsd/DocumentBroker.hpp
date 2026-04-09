@@ -335,6 +335,10 @@ public:
     /// The current state of uploading must be introspected separately.
     void checkAndUploadToStorage(const std::shared_ptr<ClientSession>& session, bool justSaved);
 
+    /// Called when a session receives a fresh access token.
+    /// If a save is pending retry after 401, retries the upload.
+    void onTokenRefreshed(const std::shared_ptr<ClientSession>& session);
+
     /// Upload the document to Storage if it needs persisting.
     /// Results are logged and broadcast to users.
     void uploadToStorage(const std::shared_ptr<ClientSession>& session, bool force);
