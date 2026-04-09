@@ -296,22 +296,24 @@ class Socket {
 
 		this._connectCount++;
 		this._faultInjection();
-		if (
-			map.options.docParams.access_token &&
-			parseInt(map.options.docParams.access_token_ttl as string)
-		) {
-			const tokenExpiryWarning = 900 * 1000; // Warn when 15 minutes remain
-			clearTimeout(this._accessTokenExpireTimeout);
-			this._accessTokenExpireTimeout = setTimeout(
-				this._sessionExpiredWarning.bind(this),
-				parseInt(map.options.docParams.access_token_ttl as string) -
-					Date.now() -
-					tokenExpiryWarning,
-			);
-		}
+		this.resetTokenExpiryTimer();
 
 		// process messages for early socket connection
 		this._emptyQueue();
+	}
+
+	public resetTokenExpiryTimer(): void {
+		clearTimeout(this._accessTokenExpireTimeout); // Always clear the old timer.
+		const ttl = parseInt(
+			this._map.options.docParams.access_token_ttl as string,
+		);
+		if (this._map.options.docParams.access_token && ttl) {
+			const tokenExpiryWarning = 900 * 1000; // Warn when 15 minutes remain
+			this._accessTokenExpireTimeout = setTimeout(
+				this._sessionExpiredWarning.bind(this),
+				ttl - Date.now() - tokenExpiryWarning,
+			);
+		}
 	}
 
 	public close(code?: number, reason?: string): void {
