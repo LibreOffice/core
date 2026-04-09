@@ -63,7 +63,7 @@ namespace emfplushelper
 
     void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR)
     {
-        sal_uInt32 header;
+        sal_uInt32 header(0);
 
         s.ReadUInt32(header).ReadUInt32(type);
 
@@ -74,7 +74,7 @@ namespace emfplushelper
         {
             case BrushTypeSolidColor:
             {
-                sal_uInt32 color;
+                sal_uInt32 color(0);
                 s.ReadUInt32(color);
 
                 solidColor = ::Color(ColorAlpha, (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
@@ -83,9 +83,9 @@ namespace emfplushelper
             }
             case BrushTypeHatchFill:
             {
-                sal_uInt32 style;
-                sal_uInt32 foregroundColor;
-                sal_uInt32 backgroundColor;
+                sal_uInt32 style(0);
+                sal_uInt32 foregroundColor(0);
+                sal_uInt32 backgroundColor(0);
                 s.ReadUInt32(style);
                 s.ReadUInt32(foregroundColor);
                 s.ReadUInt32(backgroundColor);
@@ -107,7 +107,7 @@ namespace emfplushelper
             {
                 s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
                 SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tAdditional flags: 0x" << std::hex << additionalFlags << std::dec);
-                sal_uInt32 color;
+                sal_uInt32 color(0);
                 s.ReadUInt32(color);
                 solidColor = ::Color(ColorAlpha, (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                 SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tCenter color: 0x" << std::hex << color << std::dec);
@@ -115,6 +115,12 @@ namespace emfplushelper
                 SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tCenter point: " << firstPointX << "," << firstPointY);
                 s.ReadUInt32(surroundColorsNumber);
                 SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\t number of surround colors: " << surroundColorsNumber);
+
+                if (surroundColorsNumber > s.remainingSize() / sizeof(sal_uInt32))
+                {
+                    SAL_WARN("drawinglayer.emf", "EMF+\t\t\t\tTruncated surround colors");
+                    return;
+                }
 
                 surroundColors.reset( new ::Color[surroundColorsNumber] );
 
@@ -129,15 +135,15 @@ namespace emfplushelper
 
                 if (additionalFlags & 0x01) // BrushDataPath
                 {
-                    sal_Int32 pathLength;
+                    sal_Int32 pathLength(0);
 
                     s.ReadInt32(pathLength);
                     SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tPath length: " << pathLength);
 
                     sal_uInt64 const pos = s.Tell();
 
-                    sal_uInt32 pathHeader;
-                    sal_Int32 pathPoints, pathFlags;
+                    sal_uInt32 pathHeader(0);
+                    sal_Int32 pathPoints(0), pathFlags(0);
                     s.ReadUInt32(pathHeader).ReadInt32(pathPoints).ReadInt32(pathFlags);
 
                     SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tPath (brush path gradient)");
@@ -158,7 +164,7 @@ namespace emfplushelper
                 }
                 else
                 {
-                    sal_Int32 boundaryPointCount;
+                    sal_Int32 boundaryPointCount(0);
                     s.ReadInt32(boundaryPointCount);
 
                     sal_uInt64 const pos = s.Tell();
@@ -192,6 +198,13 @@ namespace emfplushelper
                 {
                     s.ReadUInt32(blendPoints);
                     SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tuse blend, points: " << blendPoints);
+
+                    if (blendPoints > s.remainingSize() / (2 * sizeof(float)))
+                    {
+                        SAL_WARN("drawinglayer.emf", "EMF+\t\t\t\tTruncated blend points");
+                        return;
+                    }
+
                     blendPositions.reset( new float[2 * blendPoints] );
                     blendFactors = blendPositions.get() + blendPoints;
 
@@ -212,6 +225,13 @@ namespace emfplushelper
                 {
                     s.ReadUInt32(colorblendPoints);
                     SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tUse color blend, points: " << colorblendPoints);
+
+                    if (colorblendPoints > s.remainingSize() / (sizeof(float) + sizeof(sal_uInt32)))
+                    {
+                        SAL_WARN("drawinglayer.emf", "EMF+\t\t\t\tTruncated color blend points");
+                        return;
+                    }
+
                     colorblendPositions.reset( new float[colorblendPoints] );
                     colorblendColors.reset( new ::Color[colorblendPoints] );
 
@@ -238,7 +258,7 @@ namespace emfplushelper
                 s.ReadFloat(firstPointX).ReadFloat(firstPointY).ReadFloat(aWidth).ReadFloat(aHeight);
                 SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tFirst gradient point: " << firstPointX << ":" << firstPointY
                                          << ", size " << aWidth << "x" << aHeight);
-                sal_uInt32 color;
+                sal_uInt32 color(0);
                 s.ReadUInt32(color);
                 solidColor = ::Color(ColorAlpha, (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                 SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tfirst color: 0x" << std::hex << color << std::dec);
@@ -267,6 +287,13 @@ namespace emfplushelper
                 {
                     s.ReadUInt32(blendPoints);
                     SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tUse blend, points: " << blendPoints);
+
+                    if (blendPoints > s.remainingSize() / (2 * sizeof(float)))
+                    {
+                        SAL_WARN("drawinglayer.emf", "EMF+\t\t\t\tTruncated blend points");
+                        return;
+                    }
+
                     blendPositions.reset( new float[2 * blendPoints] );
                     blendFactors = blendPositions.get() + blendPoints;
 
@@ -287,6 +314,13 @@ namespace emfplushelper
                 {
                     s.ReadUInt32(colorblendPoints);
                     SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tUse color blend, points: " << colorblendPoints);
+
+                    if (colorblendPoints > s.remainingSize() / (sizeof(float) + sizeof(sal_uInt32)))
+                    {
+                        SAL_WARN("drawinglayer.emf", "EMF+\t\t\t\tTruncated color blend points");
+                        return;
+                    }
+
                     colorblendPositions.reset( new float[colorblendPoints] );
                     colorblendColors.reset( new ::Color[colorblendPoints] );
 
