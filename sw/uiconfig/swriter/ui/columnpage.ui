@@ -550,10 +550,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="linecolorft">
+              <object class="GtkLabel" id="columnlinecolorft">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="columnpage|linecolorft">_Color:</property>
+                <property name="label" translatable="yes" context="columnpage|columnlinecolorft">_Color:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">colorlb</property>
                 <property name="xalign">0</property>
@@ -908,7 +908,7 @@
       <widget name="linewidthft"/>
       <widget name="lineheightft"/>
       <widget name="lineposft"/>
-      <widget name="linecolorft"/>
+      <widget name="columnlinecolorft"/>
       <widget name="columnlabel3"/>
       <widget name="applytoft"/>
       <widget name="textdirectionft"/>

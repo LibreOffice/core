@@ -389,7 +389,7 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xLineTypeLbl(m_xBuilder->weld_label(u"linestyleft"_ustr))
     , m_xLineWidthLbl(m_xBuilder->weld_label(u"linewidthft"_ustr))
     , m_xLineWidthEdit(m_xBuilder->weld_metric_spin_button(u"linewidthmf"_ustr, FieldUnit::POINT))
-    , m_xLineColorLbl(m_xBuilder->weld_label(u"linecolorft"_ustr))
+    , m_xLineColorLbl(m_xBuilder->weld_label(u"columnlinecolorft"_ustr))
     , m_xLineHeightLbl(m_xBuilder->weld_label(u"lineheightft"_ustr))
     , m_xLineHeightEdit(m_xBuilder->weld_metric_spin_button(u"lineheightmf"_ustr, FieldUnit::PERCENT))
     , m_xLinePosLbl(m_xBuilder->weld_label(u"lineposft"_ustr))
