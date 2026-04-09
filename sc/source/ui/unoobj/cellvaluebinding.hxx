@@ -33,16 +33,17 @@ namespace com::sun::star::text { class XTextRange; }
 
 namespace calc
 {
-
-    class OCellValueBinding final
-        : public comphelper::OPropertyContainerImplHelper<
+    using OCellValueBinding_Base = comphelper::OPropertyContainerImplHelper<
               comphelper::WeakComponentImplHelper<
                   css::form::binding::XValueBinding,
                   css::lang::XServiceInfo,
                   css::util::XModifyBroadcaster,
                   css::util::XModifyListener,
                   css::lang::XInitialization>,
-              OCellValueBinding>
+              class OCellValueBinding>;
+
+    class OCellValueBinding final
+        : public OCellValueBinding_Base
     {
     private:
         css::uno::Reference< css::sheet::XSpreadsheetDocument >
@@ -80,6 +81,7 @@ namespace calc
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // OPropertyImplHelper
+        using OCellValueBinding_Base::getFastPropertyValue;
         virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
         // ::comphelper::OPropertyArrayUsageHelper

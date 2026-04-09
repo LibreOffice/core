@@ -34,12 +34,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
-
-/**
- * This sequence object does store actual values within, hence "cached".
- */
-class CachedDataSequence final
-    : public comphelper::OPropertyContainerImplHelper<
+using CachedDataSequence_Base = comphelper::OPropertyContainerImplHelper<
           comphelper::WeakComponentImplHelper<
               css::chart2::data::XDataSequence,
               css::chart2::data::XNumericalDataSequence,
@@ -48,7 +43,13 @@ class CachedDataSequence final
               css::util::XModifyBroadcaster,
               css::lang::XInitialization,
               css::lang::XServiceInfo>,
-          CachedDataSequence>
+          class CachedDataSequence>;
+
+/**
+ * This sequence object does store actual values within, hence "cached".
+ */
+class CachedDataSequence final
+    : public CachedDataSequence_Base
 {
 public:
     /** constructs an empty sequence

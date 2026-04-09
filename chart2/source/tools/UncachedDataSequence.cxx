@@ -79,7 +79,8 @@ UncachedDataSequence::UncachedDataSequence(
 }
 
 UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource )
-        : m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
+        : UncachedDataSequence_Base(),
+          m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
           m_aChartExFormula( rSource.m_aChartExFormula ),
           m_aChartExNFormula( rSource.m_aChartExNFormula ),

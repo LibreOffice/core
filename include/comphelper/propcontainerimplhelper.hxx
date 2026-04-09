@@ -63,6 +63,7 @@ protected:
         OPropertyContainerHelper::setFastPropertyValue(nHandle, rValue);
     }
 
+    using OPropertyImplHelper<BaseClass, Ifc...>::getFastPropertyValue;
     void getFastPropertyValue(std::unique_lock<std::mutex>&, css::uno::Any& rValue,
                               sal_Int32 nHandle) const override
     {

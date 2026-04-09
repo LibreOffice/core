@@ -87,14 +87,15 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScChartObj final
-    : public comphelper::OPropertyContainerImplHelper<
+using ScChartObj_Base = comphelper::OPropertyContainerImplHelper<
           comphelper::WeakComponentImplHelper<
               css::table::XTableChart,
               css::document::XEmbeddedObjectSupplier,
               css::container::XNamed,
               css::lang::XServiceInfo>,
-          ScChartObj>,
+          class ScChartObj>;
+class ScChartObj final
+    : public ScChartObj_Base,
       public SfxListener
 {
 private:
@@ -108,6 +109,7 @@ private:
     // ::comphelper::OPropertyImplHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
     virtual void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    using ScChartObj_Base::getFastPropertyValue;
     virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
 public:

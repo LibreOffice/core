@@ -67,7 +67,8 @@ CachedDataSequence::CachedDataSequence( const OUString & rSingleText )
 }
 
 CachedDataSequence::CachedDataSequence( const CachedDataSequence & rSource )
-        : m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
+        : CachedDataSequence_Base(),
+          m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
           m_eCurrentDataType( rSource.m_eCurrentDataType ),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
