@@ -57,7 +57,7 @@ namespace emfplushelper
             else if (pathFlags & 0x4000)
             {
                 // EMFPlusPoint: stored in signed short 16bit integer format
-                sal_Int16 x, y;
+                sal_Int16 x(0), y(0);
 
                 s.ReadInt16( x ).ReadInt16( y );
                 SAL_INFO ("drawinglayer", "EMF+\t EMFPlusPoint [x,y]: " << x << "," << y);
@@ -67,6 +67,8 @@ namespace emfplushelper
             else
             {
                 // EMFPlusPointF: stored in Single (float) format
+                pPoints [i*2] = 0.0;
+                pPoints [i*2 + 1] = 0.0;
                 s.ReadFloat( pPoints [i*2] ).ReadFloat( pPoints [i*2 + 1] );
                 SAL_INFO ("drawinglayer", "EMF+\t EMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
             }
