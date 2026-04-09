@@ -1975,6 +1975,110 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testChartExExport)
     assertXPath(pDoc, "/cx:chartSpace/c:date1904", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSections)
+{
+    createSdImpressDoc("pptx/slide-sections.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+
+    // The test file has 2 sections:
+    // "Default Section" with 3 slides, "section-demo" with 4 slides
+    static constexpr OString sSectionLstPath = "/p:presentation/p:extLst/p:ext/p14:sectionLst"_ostr;
+    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section", 2);
+
+    // Verify section names
+    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]", "name", u"Default Section");
+    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[2]", "name", u"section-demo");
+
+    // Verify section GUIDs are preserved
+    OUString sId1 = getXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]", "id");
+    OUString sId2 = getXPath(pXmlDoc, sSectionLstPath + "/p14:section[2]", "id");
+    CPPUNIT_ASSERT(!sId1.isEmpty());
+    CPPUNIT_ASSERT(!sId2.isEmpty());
+
+    // Verify slide counts per section
+    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]/p14:sldIdLst/p14:sldId", 3);
+    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[2]/p14:sldIdLst/p14:sldId", 4);
+
+    // Verify slide IDs are non-zero
+    OUString sSldId
+        = getXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]/p14:sldIdLst/p14:sldId[1]", "id");
+    CPPUNIT_ASSERT(!sSldId.isEmpty());
+    CPPUNIT_ASSERT(sSldId.toInt32() > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsODP)
+{
+    // Load PPTX with sections, save to ODP, verify sections in ODP XML
+    createSdImpressDoc("pptx/slide-sections.pptx");
+    skipValidation();
+    save(TestFilter::ODP);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+
+    static constexpr OString sBasePath
+        = "/office:document-content/office:body/office:presentation/loext:section-list"_ostr;
+    assertXPath(pXmlDoc, sBasePath + "/loext:section", 2);
+
+    // Verify section names
+    assertXPath(pXmlDoc, sBasePath + "/loext:section[1]", "name", u"Default Section");
+    assertXPath(pXmlDoc, sBasePath + "/loext:section[2]", "name", u"section-demo");
+
+    // Verify slide counts per section
+    assertXPath(pXmlDoc, sBasePath + "/loext:section[1]/loext:section-slide", 3);
+    assertXPath(pXmlDoc, sBasePath + "/loext:section[2]/loext:section-slide", 4);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsODPRoundTrip)
+{
+    // Load PPTX with sections, save to ODP, reload ODP, export to PPTX, verify sections
+    createSdImpressDoc("pptx/slide-sections.pptx");
+    skipValidation();
+    saveAndReload(TestFilter::ODP);
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+
+    static constexpr OString sSectionLstPath = "/p:presentation/p:extLst/p:ext/p14:sectionLst"_ostr;
+    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section", 2);
+
+    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]", "name", u"Default Section");
+    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[2]", "name", u"section-demo");
+
+    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]/p14:sldIdLst/p14:sldId", 3);
+    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[2]/p14:sldIdLst/p14:sldId", 4);
+
+    // Verify slide IDs are non-zero after round-trip
+    OUString sSldId
+        = getXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]/p14:sldIdLst/p14:sldId[1]", "id");
+    CPPUNIT_ASSERT(!sSldId.isEmpty());
+    CPPUNIT_ASSERT(sSldId.toInt32() > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsODPtoODP)
+{
+    // Load PPTX with sections, save to ODP, reload ODP, save to ODP again, verify sections
+    createSdImpressDoc("pptx/slide-sections.pptx");
+    skipValidation();
+    saveAndReload(TestFilter::ODP);
+    save(TestFilter::ODP);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+
+    static constexpr OString sBasePath
+        = "/office:document-content/office:body/office:presentation/loext:section-list"_ostr;
+    assertXPath(pXmlDoc, sBasePath + "/loext:section", 2);
+
+    // Verify section names survive ODP round-trip
+    assertXPath(pXmlDoc, sBasePath + "/loext:section[1]", "name", u"Default Section");
+    assertXPath(pXmlDoc, sBasePath + "/loext:section[2]", "name", u"section-demo");
+
+    // Verify slide counts per section
+    assertXPath(pXmlDoc, sBasePath + "/loext:section[1]/loext:section-slide", 3);
+    assertXPath(pXmlDoc, sBasePath + "/loext:section[2]/loext:section-slide", 4);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
