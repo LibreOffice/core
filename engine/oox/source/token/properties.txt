@@ -112,6 +112,7 @@ CompileEnglish
 ComplexColor
 ConditionalFormat
 ConnectBars
+ConnectorLines
 ContainsHeader
 Coordinates
 CopyBack
@@ -366,6 +367,8 @@ MajorTickmarks
 MarkPosition
 MaxFieldCount
 MaxTextLen
+MeanLine
+MeanMarker
 MediaType
 MediaMimeType
 MediaURL
@@ -386,6 +389,7 @@ MultiSelection
 Name
 NamedRanges
 NegativeError
+Nonoutliers
 NullDate
 NumberFormat
 NumberFormatKey
@@ -401,6 +405,7 @@ Orientation
 Origin
 OutputPosition
 Outline
+Outliers
 OverlapSequence
 Overlay
 PageScale

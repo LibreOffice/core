@@ -195,6 +195,14 @@ struct LayoutPropsModel
     // There's also a CT_Aggregation but no content given
 
     BinningRef          mxBinning;          // Binning settings.
+
+    // Chartex visibility flags, from CT_SeriesElementVisibilities
+    std::optional<bool> mobVisibilityConnectorLines;
+    std::optional<bool> mobVisibilityMeanLine;
+    std::optional<bool> mobVisibilityMeanMarker;
+    std::optional<bool> mobVisibilityNonoutliers;
+    std::optional<bool> mobVisibilityOutliers;
+
 };
 
 enum class DataSourceType: sal_Int32

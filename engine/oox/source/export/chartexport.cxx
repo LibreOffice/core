@@ -4005,24 +4005,72 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                     OString::number(nSeriesCnt++));
 
             // layoutPr
-            PropertySet aSeriesProp(rSeries);
-            sal_uInt32 nIntervalClosedChar = '\0';
-            if (aSeriesProp.getProperty(nIntervalClosedChar, PROP_IntervalClosed)) {
-                pFS->startElement(FSNS(XML_cx, XML_layoutPr));
+            // Maybe factor this into another function. TODO
+            Reference<beans::XPropertySet> xSeriesProp(rSeries, uno::UNO_QUERY);
+            if (xSeriesProp.is())
+            {
+                uno::Any aConnLines = xSeriesProp->getPropertyValue(
+                    u"ConnectorLines"_ustr);
+                uno::Any aMeanLine = xSeriesProp->getPropertyValue(
+                    u"MeanLine"_ustr);
+                uno::Any aMeanMarker = xSeriesProp->getPropertyValue(
+                    u"MeanMarker"_ustr);
+                uno::Any aNonoutliers = xSeriesProp->getPropertyValue(
+                    u"Nonoutliers"_ustr);
+                uno::Any aOutliers = xSeriesProp->getPropertyValue(
+                    u"Outliers"_ustr);
 
-                switch (nIntervalClosedChar) {
-                    case 'l' :
-                        pFS->singleElement(FSNS(XML_cx, XML_binning), XML_intervalClosed, "l");
-                        break;
-                    case 'r' :
-                        pFS->singleElement(FSNS(XML_cx, XML_binning), XML_intervalClosed, "r");
-                        break;
-                    default:
-                        assert(false);
-                        break;
+                const bool bHasAny = aConnLines.hasValue() || aMeanLine.hasValue()
+                            || aMeanMarker.hasValue() || aNonoutliers.hasValue()
+                            || aOutliers.hasValue();
+
+                uno::Any aIntervalClosed = xSeriesProp->getPropertyValue(
+                            u"IntervalClosed"_ustr);
+                const bool bHasIC = aIntervalClosed.hasValue();
+
+                if (bHasAny || bHasIC)
+                {
+                    pFS->startElement(FSNS(XML_cx, XML_layoutPr));
+
+                    if (bHasAny)
+                    {
+                        bool bConnLines = false, bMeanLine = false,
+                                 bMeanMarker = false, bNonoutliers = false,
+                                 bOutliers = false;
+                        bool bHasConnLines = (aConnLines >>= bConnLines);
+                        bool bHasMeanLine = (aMeanLine >>= bMeanLine);
+                        bool bHasMeanMarker = (aMeanMarker >>= bMeanMarker);
+                        bool bHasNonoutliers = (aNonoutliers >>= bNonoutliers);
+                        bool bHasOutliers = (aOutliers >>= bOutliers);
+
+                        pFS->singleElement(FSNS(XML_cx, XML_visibility),
+                            XML_connectorLines, bHasConnLines ? ToPsz10(bConnLines) : nullptr,
+                            XML_meanLine, bHasMeanLine ? ToPsz10(bMeanLine) : nullptr,
+                            XML_meanMarker, bHasMeanMarker ? ToPsz10(bMeanMarker) : nullptr,
+                            XML_nonoutliers, bHasNonoutliers ? ToPsz10(bNonoutliers) : nullptr,
+                            XML_outliers, bHasOutliers ? ToPsz10(bOutliers) : nullptr);
+                    }
+
+                    if (bHasIC)
+                    {
+                        sal_uInt32 nIntervalClosedChar = '\0';
+                        aIntervalClosed >>= nIntervalClosedChar;
+
+                        switch (nIntervalClosedChar) {
+                            case 'l' :
+                                pFS->singleElement(FSNS(XML_cx, XML_binning), XML_intervalClosed, "l");
+                                break;
+                            case 'r' :
+                                pFS->singleElement(FSNS(XML_cx, XML_binning), XML_intervalClosed, "r");
+                                break;
+                            default:
+                                assert(false);
+                                break;
+                        }
+                    }
+
+                    pFS->endElement(FSNS(XML_cx, XML_layoutPr));
                 }
-
-                pFS->endElement(FSNS(XML_cx, XML_layoutPr));
             }
 
             // axisId

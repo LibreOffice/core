@@ -87,6 +87,36 @@ void DataSeriesProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
+    rOutProperties.emplace_back( "ConnectorLines",
+                  PROP_DATASERIES_CONNECTOR_LINES,
+                  cppu::UnoType<sal_Bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "MeanLine",
+                  PROP_DATASERIES_MEAN_LINE,
+                  cppu::UnoType<sal_Bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "MeanMarker",
+                  PROP_DATASERIES_MEAN_MARKER,
+                  cppu::UnoType<sal_Bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "Nonoutliers",
+                  PROP_DATASERIES_NONOUTLIERS,
+                  cppu::UnoType<sal_Bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "Outliers",
+                  PROP_DATASERIES_OUTLIERS,
+                  cppu::UnoType<sal_Bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
     // add properties of service DataPointProperties
     DataPointProperties::AddPropertiesToVector( rOutProperties );
 }

@@ -150,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenODS)
                 u"between");
 }
 
-CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexElementsXLSX_boxWhisker)
 {
     xmlDocUniquePtr pXmlDoc;
 
@@ -160,10 +160,29 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
     pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
+    // Check title
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 3, 0,
                 "layoutId", u"boxWhisker");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"BoxWhisker");
+
+    // Check visibility
+    //
+    // boxWhisker.xlsx has 3 series, each with visibility attributes.
+    // Verify the first series's visibility attributes round-trip correctly.
+    OString sSeriesPath = "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series[1]"_ostr;
+
+    assertXPathNoAttribute(pXmlDoc, sSeriesPath + "/cx:layoutPr/cx:visibility", "connectorLines");
+    assertXPath(pXmlDoc, sSeriesPath + "/cx:layoutPr/cx:visibility", "meanLine", u"0");
+    assertXPath(pXmlDoc, sSeriesPath + "/cx:layoutPr/cx:visibility", "meanMarker", u"1");
+    assertXPath(pXmlDoc, sSeriesPath + "/cx:layoutPr/cx:visibility", "nonoutliers", u"0");
+    assertXPath(pXmlDoc, sSeriesPath + "/cx:layoutPr/cx:visibility", "outliers", u"1");
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_clusteredColumn)
+{
+    xmlDocUniquePtr pXmlDoc;
+
     // ====
     loadFromFile(u"xlsx/clusteredColumn.xlsx");
     save(TestFilter::XLSX);

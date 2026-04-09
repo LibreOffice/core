@@ -963,14 +963,30 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     }
 
     // Layout properties
-    if (mrModel.mxLayoutPr.is() && mrModel.mxLayoutPr->mxBinning.is()) {
-        ModelRef<BinningModel> xBinning = mrModel.mxLayoutPr->mxBinning;
+    if (mrModel.mxLayoutPr.is())
+    {
+        SeriesModel::LayoutPropsRef &rLPR = mrModel.mxLayoutPr;
+        if (rLPR->mxBinning.is()) {
+            ModelRef<BinningModel> xBinning = rLPR->mxBinning;
 
-        if (xBinning->meIntervalClosed) {
-            sal_uInt32 nBinSideChar = xBinning->meIntervalClosed.value() ==
-                BinningModel::ClosedSide::L ? 'l' : 'r';
-            aSeriesProp.setProperty(PROP_IntervalClosed, nBinSideChar);
+            if (xBinning->meIntervalClosed) {
+                sal_uInt32 nBinSideChar = xBinning->meIntervalClosed.value() ==
+                    BinningModel::ClosedSide::L ? 'l' : 'r';
+                aSeriesProp.setProperty(PROP_IntervalClosed, nBinSideChar);
+            }
         }
+        // chartex series layout visibility
+        if (rLPR->mobVisibilityConnectorLines.has_value())
+            aSeriesProp.setProperty(PROP_ConnectorLines, rLPR->mobVisibilityConnectorLines.value());
+        if (rLPR->mobVisibilityMeanLine.has_value())
+            aSeriesProp.setProperty(PROP_MeanLine, rLPR->mobVisibilityMeanLine.value());
+        if (rLPR->mobVisibilityMeanMarker.has_value())
+            aSeriesProp.setProperty(PROP_MeanMarker, rLPR->mobVisibilityMeanMarker.value());
+        if (rLPR->mobVisibilityNonoutliers.has_value())
+            aSeriesProp.setProperty(PROP_Nonoutliers, rLPR->mobVisibilityNonoutliers.value());
+        if (rLPR->mobVisibilityOutliers.has_value())
+            aSeriesProp.setProperty(PROP_Outliers, rLPR->mobVisibilityOutliers.value());
+
     }
 
     return xDataSeries;

@@ -1396,6 +1396,7 @@ connections
 connectloc
 connectlocs
 connector
+connectorLines
 connectortype
 connecttype
 consecutive
@@ -3425,6 +3426,8 @@ measureFilter
 measureGroup
 measureGroups
 measures
+meanLine
+meanMarker
 med
 medAquamarine
 medBlue
@@ -3660,6 +3663,7 @@ nodePh
 nodeType
 nodeVertAlign
 nonAsst
+nonoutliers
 nonAutoSortDefault
 nonIsoscelesTrapezoid
 nonNegativeInteger
@@ -3876,6 +3880,7 @@ outlineViewPr
 outset
 outside
 outsideMargin
+outliers
 oval
 ovals
 over

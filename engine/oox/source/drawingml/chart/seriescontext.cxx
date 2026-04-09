@@ -836,7 +836,11 @@ ContextHandlerRef LayoutPropsContext::onCreateContext( sal_Int32 nElement, const
                     // TODO
                     return nullptr;
                 case CX_TOKEN( visibility ):
-                    // TODO
+                    mrModel.mobVisibilityConnectorLines = rAttribs.getBool( XML_connectorLines );
+                    mrModel.mobVisibilityMeanLine = rAttribs.getBool( XML_meanLine );
+                    mrModel.mobVisibilityMeanMarker = rAttribs.getBool( XML_meanMarker );
+                    mrModel.mobVisibilityNonoutliers = rAttribs.getBool( XML_nonoutliers );
+                    mrModel.mobVisibilityOutliers = rAttribs.getBool( XML_outliers );
                     return nullptr;
                 case CX_TOKEN( aggregation ):
                     // The schema gives an empty definition for this type??
@@ -911,6 +915,7 @@ ContextHandlerRef ChartexSeriesContext::onCreateContext( sal_Int32 nElement, con
                     mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
                     return nullptr;
             }
+            break;
     }
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
