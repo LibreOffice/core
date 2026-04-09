@@ -554,13 +554,17 @@ void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXF
 void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const DXFTransform & rTransform )
 {
     sal_Int32 nPolySize = rE.aP.size();
-    if (!nPolySize)
-        return;
-
-    tools::Polygon aPoly( static_cast<sal_uInt16>(nPolySize));
-    for (sal_Int32 i = 0; i < nPolySize; ++i)
+    if (nPolySize <= 0 || nPolySize > SAL_MAX_UINT16)
     {
-        rTransform.Transform( rE.aP[ static_cast<sal_uInt16>(i) ], aPoly[ static_cast<sal_uInt16>(i) ] );
+        SAL_WARN("vcl.filter", "DXF2GDIMetaFile::DrawLWPolyLineEntity: invalid num of points: " << nPolySize);
+        return;
+    }
+
+    sal_uInt16 nSize = static_cast<sal_uInt16>(nPolySize);
+    tools::Polygon aPoly(nSize);
+    for (sal_uInt16 i = 0; i < nSize; ++i)
+    {
+        rTransform.Transform( rE.aP[i], aPoly[i] );
     }
     if ( SetLineAttribute( rE ) )
     {
