@@ -10711,6 +10711,11 @@ internal)
     if test "$OS" = LINUX -o "$OS" = WNT ; then
         BUILD_TYPE="$BUILD_TYPE LIBFFI"
     fi
+    if test "$OS" = LINUX ; then
+        PKG_CHECK_MODULES(_UUID, uuid, [], [
+            AC_MSG_ERROR([uuid is required for internal Python])
+        ])
+    fi
     ;;
 no)
     DISABLE_PYTHON=TRUE
