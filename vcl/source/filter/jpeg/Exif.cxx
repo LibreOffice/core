@@ -229,6 +229,9 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
 
     sal_uInt16 aLength = aSectionLength - 6; // Length = Section - Header
 
+    if (aLength < sizeof(TiffHeader))
+        return false;
+
     std::unique_ptr<sal_uInt8[]> aExifData(new sal_uInt8[aLength]);
     sal_uInt64 aExifDataBeginPosition = rStream.Tell();
 
@@ -269,6 +272,9 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
     }
 
     sal_uInt16 aOffset = aTiffHeader->offset;
+
+    if (aOffset + 2 > aLength)
+        return false;
 
     sal_uInt16 aNumberOfTags = aExifData[aOffset];
     if (bSwap)
