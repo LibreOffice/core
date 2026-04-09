@@ -1027,19 +1027,29 @@ path.leaflet-pane-splitter:hover {
 .input-help {
 	box-sizing: content-box;
 	border: 1px solid var(--color-border-dark);
+	border-radius: 6px;
 	color: var(--color-text-dark);
 	background-color: var(--color-background-dark);
 	min-width: 200px;
-	text-align: center;
+	max-width: 300px;
+	padding: 8px 12px;
+	margin-inline-start: 2px;
+	text-align: left;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .input-help > h4 {
 	display: block;
-	font-weight: 900;
+	font-weight: 600;
+	font-size: 0.8rem;
+	margin: 0 0 4px;
+	color: var(--color-text-darker);
 }
 
 .input-help > p {
 	display: block;
-	text-indent: 20px;
-	text-align: justify;
+	font-size: 0.75rem;
+	margin: 4px 0 0;
+	text-align: left;
+	color: var(--color-text-dark);
 }
