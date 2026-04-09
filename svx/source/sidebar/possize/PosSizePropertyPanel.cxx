@@ -63,8 +63,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     SfxBindings* pBindings,
     css::uno::Reference<css::ui::XSidebar> xSidebar)
 :   PanelLayout(pParent, u"PosSizePropertyPanel"_ustr, u"svx/ui/sidebarpossize.ui"_ustr),
-    m_aRatioTop(ConnectorType::Top),
-    m_aRatioBottom(ConnectorType::Bottom),
     mxFtPosX(m_xBuilder->weld_label(u"horizontallabel"_ustr)),
     mxMtrPosX(m_xBuilder->weld_metric_spin_button(u"horizontalpos"_ustr, FieldUnit::CM)),
     mxFtPosY(m_xBuilder->weld_label(u"verticallabel"_ustr)),
