@@ -24,7 +24,7 @@
 
 std::unique_ptr<std::unique_ptr<double[]>[]> mgcLinearSystemD::NewMatrix (int N)
 {
-  std::unique_ptr<std::unique_ptr<double[]>[]> A(new std::unique_ptr<double[]>);
+  std::unique_ptr<std::unique_ptr<double[]>[]> A(new std::unique_ptr<double[]>[N]);
 
   for (int row = 0; row < N; row++)
   {
