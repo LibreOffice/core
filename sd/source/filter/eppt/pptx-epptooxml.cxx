@@ -37,6 +37,8 @@
 #include <editeng/section.hxx>
 #include <editeng/editeng.hxx>
 
+#include <map>
+#include <o3tl/safeint.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
@@ -533,6 +535,8 @@ bool PowerPointExport::exportDocument()
 
     WriteModifyVerifier();
 
+    WriteSections();
+
     mPresentationFS->endElementNS(XML_p, XML_presentation);
     mPresentationFS->endDocument();
     mPresentationFS.reset();
@@ -919,6 +923,96 @@ void PowerPointExport::WriteCustomSlideShow()
         mPresentationFS->endElementNS(XML_p, XML_custShow);
     }
     mPresentationFS->endElementNS(XML_p, XML_custShowLst);
+}
+
+void PowerPointExport::WriteSections()
+{
+    uno::Sequence<beans::PropertyValue> aGrabBag;
+    if (!mXModel->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+        return;
+    mXModel->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+
+    uno::Sequence<beans::PropertyValue> aSectionList;
+    for (const auto& rProp : aGrabBag)
+    {
+        if (rProp.Name == "OOXSectionList")
+        {
+            rProp.Value >>= aSectionList;
+            break;
+        }
+    }
+
+    if (!aSectionList.hasElements())
+        return;
+
+    // Build page-name-to-index map for resolving slide names to IDs
+    Reference<XDrawPages> xDrawPages(mXModel->getDrawPages(), uno::UNO_SET_THROW);
+    std::map<OUString, sal_Int32> aNameToIndex;
+    for (sal_Int32 i = 0; i < xDrawPages->getCount(); ++i)
+    {
+        Reference<XDrawPage> xPage;
+        xDrawPages->getByIndex(i) >>= xPage;
+        Reference<XNamed> xNamed(xPage, UNO_QUERY);
+        if (xNamed.is())
+            aNameToIndex[xNamed->getName()] = i;
+    }
+
+    // https://learn.microsoft.com/en-us/openspecs/office_standards/ms-pptx/1f21a089-944d-410b-bd47-4f5e692c2532
+    static constexpr OUString aSectionExtUri = u"{521415D9-36F7-43E2-AB2F-B90AF26B5E84}"_ustr;
+    mPresentationFS->startElementNS(XML_p, XML_extLst);
+    mPresentationFS->startElementNS(XML_p, XML_ext, XML_uri, aSectionExtUri);
+    mPresentationFS->startElementNS(XML_p14, XML_sectionLst);
+
+    for (const auto& rSectionProp : aSectionList)
+    {
+        uno::Sequence<beans::PropertyValue> aSectionProps;
+        rSectionProp.Value >>= aSectionProps;
+
+        OUString sSectionName;
+        OUString sSectionId;
+        uno::Sequence<OUString> aSlideNames;
+
+        for (const auto& rProp : aSectionProps)
+        {
+            if (rProp.Name == "Name")
+                rProp.Value >>= sSectionName;
+            else if (rProp.Name == "Id")
+                rProp.Value >>= sSectionId;
+            else if (rProp.Name == "SlideNameList")
+                rProp.Value >>= aSlideNames;
+        }
+
+        if (sSectionId.isEmpty())
+            sSectionId = OStringToOUString(comphelper::xml::generateGUIDString(),
+                                           RTL_TEXTENCODING_ASCII_US);
+
+        mPresentationFS->startElementNS(XML_p14, XML_section,
+                                        XML_name, sSectionName,
+                                        XML_id, sSectionId);
+        mPresentationFS->startElementNS(XML_p14, XML_sldIdLst);
+
+        for (const OUString& rSlideName : aSlideNames)
+        {
+            auto it = aNameToIndex.find(rSlideName);
+            if (it != aNameToIndex.end())
+            {
+                sal_Int32 nSlideIndex = it->second;
+                if (nSlideIndex >= 0
+                    && o3tl::make_unsigned(nSlideIndex) < maSlideIdsInOrder.size())
+                {
+                    mPresentationFS->singleElementNS(XML_p14, XML_sldId,
+                                                     XML_id, OString::number(maSlideIdsInOrder[nSlideIndex]));
+                }
+            }
+        }
+
+        mPresentationFS->endElementNS(XML_p14, XML_sldIdLst);
+        mPresentationFS->endElementNS(XML_p14, XML_section);
+    }
+
+    mPresentationFS->endElementNS(XML_p14, XML_sectionLst);
+    mPresentationFS->endElementNS(XML_p, XML_ext);
+    mPresentationFS->endElementNS(XML_p, XML_extLst);
 }
 
 void PowerPointExport::ImplWriteBackground(const FSHelperPtr& pFS, const Reference< XPropertySet >& rXPropSet)
@@ -1690,8 +1784,10 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
                                   oox::getRelationship(Relationship::SLIDE),
                                   Concat2View("slides/slide" + OUString::number(nPageNum + 1) +".xml"));
 
+    sal_uInt32 nSlideId = GetNewSlideId();
+    maSlideIdsInOrder.push_back(nSlideId);
     mPresentationFS->singleElementNS(XML_p, XML_sldId,
-                                     XML_id, OString::number(GetNewSlideId()),
+                                     XML_id, OString::number(nSlideId),
                                      FSNS(XML_r, XML_id), sRelId);
 
     maRelId.push_back(sRelId);

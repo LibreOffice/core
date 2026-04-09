@@ -119,6 +119,7 @@ private:
     void writeDocumentProperties();
 
     void WriteCustomSlideShow();
+    void WriteSections();
 
     void AddLayoutIdAndRelation( const ::sax_fastparser::FSHelperPtr& pFS, sal_Int32 nLayoutFileId );
 
@@ -164,6 +165,7 @@ private:
     sal_Int32 mnDiagramId;
 
     std::vector<OUString> maRelId;
+    std::vector<sal_uInt32> maSlideIdsInOrder;
 
     bool mbCreateNotes;
 
