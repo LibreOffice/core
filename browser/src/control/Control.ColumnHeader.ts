@@ -49,6 +49,7 @@ export class ColumnHeader extends Header {
 
 		super.onInitialize();
 
+		this._headerMenuID = 'col-header-menu';
 		this._menuItem = {
 			'.uno:InsertColumnsBefore': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:InsertColumnsBefore', 'spreadsheet', true), 'InsertColumnsBefore'),

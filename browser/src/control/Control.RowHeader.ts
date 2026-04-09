@@ -51,6 +51,7 @@ export class RowHeader extends cool.Header {
 
 		super.onInitialize();
 
+		this._headerMenuID = 'row-header-menu';
 		this._menuItem = {
 			'.uno:InsertRowsBefore': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:InsertRowsBefore', 'spreadsheet', true), 'InsertRowsBefore'),

@@ -17,6 +17,9 @@
  */
 /* global $ L app */
 
+declare var JSDialog: any;
+declare var _UNO: any;
+
 namespace cool {
 
 export interface SelectionRange {
@@ -45,6 +48,8 @@ export class Header extends CanvasSectionObject {
 	_lastSelectedIndex: number;
 	_hitResizeArea: boolean;
 	_menuItem: any;
+	_headerMenuID: string;
+	_menuPosEl: HTMLElement;
 	_dragDistance: number[];
 	_isColumn: boolean;
 	cursor: string;
@@ -151,13 +156,26 @@ export class Header extends CanvasSectionObject {
 	}
 
 	onContextMenu(point: cool.SimplePoint, evt: MouseEvent): void {
-		if ((window as any).mode.isSmallScreenDevice() && this._map.isEditMode()) {
+		if (!this._map.isEditMode())
+			return;
+
+		if ((window as any).mode.isSmallScreenDevice()) {
 			(window as any).contextMenuWizard = true;
 			this._map.fire('mobilewizard', {data: this._menuData});
 		}
-		else if (this._map.isEditMode()) {
-			this._bindContextMenu();
-			$('#canvas-container').contextMenu({x: evt.clientX, y: evt.clientY});
+		else {
+			const posEl = this._createMenuPositionElement(evt);
+			const entries = this._getDropdownEntries();
+			const callback = this._handleDropdownCallback.bind(this);
+			JSDialog.OpenDropdown(
+				this._headerMenuID,
+				posEl,
+				entries,
+				callback,
+				'',
+				false,
+				true,
+			);
 		}
 	}
 
@@ -530,32 +548,50 @@ export class Header extends CanvasSectionObject {
 		this._hitResizeArea = false;
 	}
 
-	_bindContextMenu(): void {
-		if ((window as any).mode.isSmallScreenDevice()) {
-			// On mobile, we use the mobile wizard rather than the context menu
-			return;
+	private _createMenuPositionElement(evt: MouseEvent): HTMLElement {
+		const container = document.getElementById('canvas-container');
+		if (!this._menuPosEl) {
+			this._menuPosEl = document.createElement('div');
+			this._menuPosEl.id = this._headerMenuID + '-pos';
+			container.append(this._menuPosEl);
 		}
-
-		this._unBindContextMenu();
-		const map = this._map;
-		$.contextMenu({
-			selector: '#canvas-container',
-			className: 'cool-font',
-			zIndex: 1500,
-			items: this._menuItem,
-			callback: function() { return; },
-			build: function() {
-				if (map.isReadOnlyMode())
-					return false;
-				return { };
-			}
-		});
-		$('#canvas-container').contextMenu('update');
-		this._map._contextMenu.stopRightMouseUpEvent();
+		const rect = container.getBoundingClientRect();
+		this._menuPosEl.style.position = 'absolute';
+		this._menuPosEl.style.zIndex = '1500';
+		this._menuPosEl.style.left = (evt.clientX - rect.left) + 'px';
+		this._menuPosEl.style.top = (evt.clientY - rect.top) + 'px';
+		return this._menuPosEl;
 	}
 
-	_unBindContextMenu(): void {
-		$.contextMenu('destroy', '#canvas-container');
+	private _getDropdownEntries(): any[] {
+		const entries: any[] = [];
+		for (const command of Object.keys(this._menuItem)) {
+			entries.push({
+				id: command,
+				uno: command,
+				type: 'comboboxentry',
+				text: _UNO(command, 'spreadsheet', true),
+				img: command,
+			});
+		}
+		return entries;
+	}
+
+	private _handleDropdownCallback(
+		objectType: string,
+		eventType: string,
+		object: any,
+		data: any,
+		entry: any,
+	): boolean {
+		if (eventType !== 'selected')
+			return false;
+
+		const command = entry.id || entry.uno;
+		if (command && this._menuItem[command] && this._menuItem[command].callback) {
+			this._menuItem[command].callback();
+		}
+		return true;
 	}
 
 	inResize(): boolean {
