@@ -374,9 +374,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggle)
     // SUBTOTAL formula in C10 should also be restored with same value
     double fRestoredValue = pDoc->GetValue(ScAddress(2, 9, 0));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(fAvgValue, fRestoredValue, 0.0);
-    // TODO: number format (e.g. "Ft" currency) on total row cells is lost
-    // after toggle off/on cycle — this is a known limitation to fix later.
-    // CPPUNIT_ASSERT_EQUAL(u" 2.75 Ft "_ustr, pDoc->GetString(ScAddress(2, 9, 0)));
+    // Number format (e.g. "Ft" currency) on total row cells is preserved
+    // after toggle off/on cycle.
+    CPPUNIT_ASSERT_EQUAL(u" 2.75 Ft "_ustr, pDoc->GetString(ScAddress(2, 9, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoRedo)

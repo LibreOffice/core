@@ -41,14 +41,17 @@ struct SC_DLLPUBLIC ScSubTotalParam
         SCCOL nSubTotals = 0;     ///< number of SubTotals
         SCCOL nCustFuncs = 0;     ///< number of Custom Functions
         SCCOL nSubLabels = 0;     ///< number of SubLabels
+        SCCOL nNumFmts   = 0;     ///< number of Number Formats
 
         using Pair = std::pair<SCCOL, ScSubTotalFunc>;
         using FuncPair = std::pair<SCCOL, std::unique_ptr<ScTokenArray>>;
         using LabelPair = std::pair<SCCOL, rtl::OUString>;
+        using NumFmtPair = std::pair<SCCOL, sal_uInt32>;
         // array of columns to be calculated, and associated functions
         std::unique_ptr<Pair[]> pSubTotals;
         std::unique_ptr<FuncPair[]> pCustFuncs; // custom functions
         std::unique_ptr<LabelPair[]> pSubLabels; // Total labels
+        std::unique_ptr<NumFmtPair[]> pNumFmts; // Total number formats
 
         SubtotalGroup() = default;
         SubtotalGroup(const SubtotalGroup& r);
@@ -59,6 +62,7 @@ struct SC_DLLPUBLIC ScSubTotalParam
         void AllocSubTotals(SCCOL n);
         void AllocCustFuncs(SCCOL n);
         void AllocSubLabels(SCCOL n);
+        void AllocNumFmts(SCCOL n);
         void SetSubtotals(const css::uno::Sequence<css::sheet::SubTotalColumn>& seq);
         //void SetCustFuncs(const css::uno::Sequence<css::sheet::SubTotalColumn>& seq);
         //void SetSublabels(const css::uno::Sequence<css::sheet::SubTotalColumn>& seq);
@@ -81,6 +85,12 @@ struct SC_DLLPUBLIC ScSubTotalParam
         SCCOL& collabels(SCCOL n) { return sublabels()[n].first; }
         SCCOL collabels(SCCOL n) const { return sublabels()[n].first; }
         rtl::OUString label(SCCOL n) const { return sublabels()[n].second; }
+        // Number Formats
+        std::span<NumFmtPair> numfmts() { return std::span(pNumFmts.get(), nNumFmts); }
+        std::span<const NumFmtPair> numfmts() const { return std::span(pNumFmts.get(), nNumFmts); }
+        SCCOL& colnumfmt(SCCOL n) { return numfmts()[n].first; }
+        SCCOL colnumfmt(SCCOL n) const { return numfmts()[n].first; }
+        sal_uInt32 numfmt(SCCOL n) const { return numfmts()[n].second; }
     };
     SubtotalGroup aGroups[MAXSUBTOTAL];
 
@@ -102,6 +112,9 @@ struct SC_DLLPUBLIC ScSubTotalParam
     void SetSubLabels( sal_uInt16 nGroupIdx,
                        std::vector<std::pair<SCCOL, rtl::OUString>>& rColLabels,
                        sal_uInt16 nCount );
+    void SetNumFmts( sal_uInt16 nGroupIdx,
+                     std::vector<std::pair<SCCOL, sal_uInt32>>& rColNumFmts,
+                     sal_uInt16 nCount );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

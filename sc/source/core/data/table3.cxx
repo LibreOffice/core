@@ -2460,6 +2460,17 @@ bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam )
         }
     }
 
+    // restore number formats
+    if (group.nNumFmts > 0)
+    {
+        for (SCCOL nResult = 0; nResult < group.nNumFmts; ++nResult)
+        {
+            rDocument.SetNumberFormat(
+                ScAddress(group.colnumfmt(nResult), aRowEntry.nDestRow, nTab),
+                group.numfmt(nResult));
+        }
+    }
+
     return bRet;
 }
 

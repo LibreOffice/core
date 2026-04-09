@@ -910,6 +910,7 @@ void ScDBData::CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const
         SCROW nRow;
         std::vector<std::pair<SCCOL, OUString>> vColLabels;
         std::vector<std::pair<SCCOL, std::unique_ptr<ScTokenArray>>> vColFuncs;
+        std::vector<std::pair<SCCOL, sal_uInt32>> vColNumFmts;
         while ((pCell = aIter.GetNext(nCol, nRow)) != nullptr)
         {
             if (pCell->getType() != CELLTYPE_FORMULA)
@@ -929,9 +930,14 @@ void ScDBData::CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const
                     }
                 }
             }
+
+            sal_uInt32 nNumFmt = rDoc.GetNumberFormat(nCol, nRow, nTable);
+            if (nNumFmt)
+                vColNumFmts.push_back(std::make_pair(nCol, nNumFmt));
         }
         rSubTotalParam.SetSubLabels(static_cast<sal_uInt16>(0), vColLabels, vColLabels.size());
         rSubTotalParam.SetCustFuncs(static_cast<sal_uInt16>(0), vColFuncs, vColFuncs.size());
+        rSubTotalParam.SetNumFmts(static_cast<sal_uInt16>(0), vColNumFmts, vColNumFmts.size());
     }
 }
 
