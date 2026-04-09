@@ -1646,11 +1646,14 @@ void JSToolbar::set_menu_item_active(const OUString& rIdent, bool bActive)
     if (!pFloat)
         return;
 
-    // The popover DockingWindow's first child is the "container" widget
-    // from the .ui file. This is the correct serialization root for both:
-    // - ToolbarPopupContainer (VclBox "container" holding moved-in content)
-    // - Direct WeldToolbarPopup (VclGrid "container" with the actual UI)
+    // Find the popup root: the widget with a KitNotifier set by weld_popover().
+    // For direct WeldToolbarPopup: pFloat->GetChild(0) has the notifier.
+    // For ToolbarPopupContainer: the moved-in content at GetChild(0)->GetChild(0)
+    // has it, because weld_popover() set the notifier on the WeldToolbarPopup's
+    // DockingWindow child, and that widget was then moved into the container.
     vcl::Window* pPopupRoot = pFloat->GetChild(0);
+    if (pPopupRoot && !pPopupRoot->GetKitNotifier() && pPopupRoot->GetChild(0))
+        pPopupRoot = pPopupRoot->GetChild(0);
 
     if (pPopupRoot)
     {
