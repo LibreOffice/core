@@ -83,7 +83,7 @@ namespace emfplushelper
 
     void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags)
     {
-        float fx, fy;
+        float fx(0), fy(0);
         for (sal_uInt32 i = 0; i < nPoints; i++)
         {
             if (pathFlags & 0x800)
@@ -100,7 +100,7 @@ namespace emfplushelper
             else if (pathFlags & 0x4000)
             {
                 // EMFPlusPoint: stored in signed short 16bit integer format
-                sal_Int16 x, y;
+                sal_Int16 x(0), y(0);
 
                 s.ReadInt16(x).ReadInt16(y);
                 SAL_INFO("drawinglayer.emf", "EMF+\t\t\t" << i << ". EmfPlusPoint [x,y]: " << x << ", " << y);
@@ -260,6 +260,8 @@ namespace emfplushelper
         ::basegfx::B2DPolygon polygon;
         matrix mat;
         double x, y;
+        if (nPoints < 1)
+            return aPolygon;
         if (aNumSegments >= nPoints)
             aNumSegments = nPoints - 1;
         GetCardinalMatrix(fTension, mat);
@@ -291,6 +293,8 @@ namespace emfplushelper
         ::basegfx::B2DPolygon polygon;
         matrix mat;
         double x, y;
+        if (nPoints < 3)
+            return aPolygon;
         GetCardinalMatrix(fTension, mat);
         // add three first points at the end
         xPoints.push_back(xPoints[0]);
