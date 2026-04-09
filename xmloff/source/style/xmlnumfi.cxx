@@ -895,7 +895,7 @@ void lcl_InsertBlankWidthChars( std::u16string_view rBlankWidthString, OUStringB
                 nPositionContent = o3tl::toInt32( rBlankWidthString.substr( i ) );
         }
         nPositionContent += nShiftPosition;
-        if ( nPositionContent >= 0 )
+        if ( nPositionContent >= 0 && nPositionContent <= rContent.getLength() )
         {
             rContent.remove( nPositionContent, aBlanks.getLength() );
             if ( nPositionContent >= 1 && rContent[ nPositionContent-1 ] == '\"' )
@@ -916,11 +916,10 @@ void lcl_InsertBlankWidthChars( std::u16string_view rBlankWidthString, OUStringB
         }
     }
     // remove empty string at the end of rContent
-    if ( std::u16string_view( rContent ).substr( rContent.getLength() - 2 ) == u"\"\"" )
+    sal_Int32 nLen = rContent.getLength();
+    if ( nLen >= 3 && std::u16string_view( rContent ).substr( nLen - 2 ) == u"\"\"" && rContent[ nLen-3 ] != '\\' )
     {
-        sal_Int32 nLen = rContent.getLength();
-        if ( nLen >= 3 && rContent[ nLen-3 ] != '\\' )
-            rContent.truncate( nLen - 2 );
+        rContent.truncate( nLen - 2 );
     }
 }
 }
