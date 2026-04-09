@@ -811,7 +811,6 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
     }
 
     size_t inBufferSize = socket->getInBuffer().size();
-    Poco::MemoryInputStream startmessage(socket->getInBuffer().data(), inBufferSize);
 
 #if 0 // debug a specific command's payload
         if (Util::findInVector(socket->getInBuffer(), "insertfile") != std::string::npos)
@@ -823,7 +822,7 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
         }
 #endif
 
-    headerSize = socket->readHeader("Client", startmessage, inBufferSize, request, delayMs);
+    headerSize = readHeader(socket, request, delayMs);
     if (headerSize < 0)
         return;
 
@@ -921,6 +920,93 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
     }
     socket->getInBuffer().clear();
 #endif // MOBILEAPP
+}
+
+ssize_t ClientRequestDispatcher::readHeader(const std::shared_ptr<StreamSocket>& socket,
+                                            Poco::Net::HTTPRequest& request,
+                                            std::chrono::duration<float, std::milli> delayMs)
+{
+    constexpr std::chrono::duration<float, std::milli> DelayMax =
+        std::chrono::duration_cast<std::chrono::milliseconds>(SocketPoll::DefaultPollTimeoutMicroS);
+
+    // Find the end of the header, if any.
+    constexpr std::string_view marker("\r\n\r\n");
+    const auto headerSize = socket->getInBuffer().view().find(marker);
+    if (headerSize == std::string_view::npos)
+    {
+        LOG_TRC("parseHeader: doesn't have enough data for the header yet. delay "
+                << delayMs.count() << "ms");
+        return -1;
+    }
+
+    const size_t messagesize = socket->getInBuffer().size();
+    try
+    {
+        // Include the marker.
+        Poco::MemoryInputStream startmessage(socket->getInBuffer().data(),
+                                             headerSize + marker.size());
+        request.read(startmessage);
+    }
+    catch (const Poco::Net::NotAuthenticatedException& exc)
+    {
+        LOG_DBG("parseHeader: Exception caught with "
+                << messagesize << " bytes, shutdown: " << exc.displayText() << ", delay "
+                << delayMs.count() << "ms");
+        socket->asyncShutdown();
+        return 0; //FIXME: Why not -1 as we've closed the socket already?
+    }
+    catch (const Poco::Net::UnsupportedRedirectException& exc)
+    {
+        LOG_DBG("parseHeader: Exception caught with "
+                << messagesize << " bytes, shutdown: " << exc.displayText() << ", delay "
+                << delayMs.count() << "ms");
+        socket->asyncShutdown();
+        return -1;
+    }
+    catch (const Poco::Net::HTTPException& exc)
+    {
+        LOG_DBG("parseHeader: Exception caught with "
+                << messagesize << " bytes, shutdown: " << exc.displayText() << ", delay "
+                << delayMs.count() << "ms");
+        socket->asyncShutdown();
+        return -1;
+    }
+    catch (const Poco::Exception& exc)
+    {
+        if (delayMs > DelayMax)
+        {
+            LOG_DBG("parseHeader: Exception caught with "
+                    << messagesize << " bytes, shutdown: " << exc.displayText() << ", delay "
+                    << delayMs.count() << "ms");
+            socket->asyncShutdown();
+        }
+        else
+        {
+            LOG_DBG("parseHeader: Exception caught with "
+                    << messagesize << " bytes, continue: " << exc.displayText() << ", delay "
+                    << delayMs.count() << "ms");
+        }
+        return -1;
+    }
+    catch (const std::exception& exc)
+    {
+        if (delayMs > DelayMax)
+        {
+            LOG_DBG("parseHeader: Exception caught with "
+                    << messagesize << " bytes, shutdown: " << exc.what() << ", delay "
+                    << delayMs.count() << "ms");
+            socket->asyncShutdown();
+        }
+        else
+        {
+            LOG_DBG("parseHeader: Exception caught with "
+                    << messagesize << " bytes, continue: " << exc.what() << ", delay "
+                    << delayMs.count() << "ms");
+        }
+        return -1;
+    }
+
+    return headerSize + marker.size();
 }
 
 namespace

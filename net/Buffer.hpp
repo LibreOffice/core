@@ -66,6 +66,11 @@ public:
         return size();
     }
 
+    std::string_view view() const
+    {
+        return !empty() ? std::string_view(&_buffer[_offset], size()) : std::string_view();
+    }
+
     void eraseFirst(std::size_t len)
     {
         if (len <= 0)
