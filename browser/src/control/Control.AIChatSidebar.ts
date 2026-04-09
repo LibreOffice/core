@@ -1291,6 +1291,8 @@ namespace cool {
 				cleaned,
 			]);
 			app.socket.sendMessage(blob);
+			app.map.fire('editorgotfocus');
+			app.map.focus();
 		}
 
 		private base64ToUint8Array(data: string): Uint8Array {
@@ -1306,6 +1308,8 @@ namespace cool {
 			const bytes = this.base64ToUint8Array(base64Data);
 			const blob = new Blob(['paste mimetype=image/png\n', bytes.buffer]);
 			app.socket.sendMessage(blob);
+			app.map.fire('editorgotfocus');
+			app.map.focus();
 		}
 
 		private copyImageToClipboard(base64Data: string, index: number): void {

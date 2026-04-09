@@ -256,7 +256,7 @@
 	align-items: center;
 	justify-content: center;
 	pointer-events: auto;
-	transform: translate(calc(-100% - 3px), 0);
+	transform: translate(calc(-100% - 3px), -100%);
 	cursor: pointer;
 	animation: formula-help-fade-in 0.12s ease-out;
 }

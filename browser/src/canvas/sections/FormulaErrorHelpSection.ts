@@ -95,7 +95,7 @@ class FormulaErrorHelpSection extends HTMLObjectSection {
 
 		// AI help (conditional)
 		if (app.map.isAIConfigured) {
-			this.addMenuItem(menu, _('Help fix this error'), () => {
+			this.addMenuItem(menu, _('Help fix this error with AI'), () => {
 				app.dispatcher.dispatch('helpfixformulaerror');
 			});
 		}

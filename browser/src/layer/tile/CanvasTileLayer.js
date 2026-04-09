@@ -1492,7 +1492,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (!this._pendingCellError || !app.calc.cellCursorVisible)
 			return;
 		var rect = app.calc.cellCursorRectangle;
-		var pos = new cool.SimplePoint(rect.x1, rect.y1);
+		var pos = new cool.SimplePoint(rect.x1, rect.y2);
 		app.definitions.formulaErrorHelpSection.show(pos, this._pendingCellError);
 	},
 
