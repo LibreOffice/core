@@ -84,6 +84,7 @@
 #include <linguistic/misc.hxx>
 #include <salhelper/timer.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <comphelper/random.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -8757,6 +8758,19 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
                 setLanguageAndLocale(u"en-US"_ustr);
 
                 preloadData();
+
+                // Configure the certificate directory before
+                // initializing NSS so SEInitializer can find it.
+                setCertificateDir();
+
+                // Initialize NSS before the kit chroots. After chroot,
+                // NSS cannot find libsoftokn3.so (loaded on demand, not
+                // a direct dependency of libmergedlo.so). Use
+                // SEInitializer (which calls NSS_InitReadWrite) rather
+                // than NSS_NoDB_Init so that certificate databases are
+                // available for digital signatures.
+                css::xml::crypto::SEInitializer::create(xContext)
+                    ->createSecurityContext(OUString());
 
                 // Release Solar Mutex, lo_startmain thread should acquire it.
                 Application::ReleaseSolarMutex();
