@@ -181,7 +181,7 @@ namespace emfplushelper
     void EMFPPen::Read(SvMemoryStream& s, EmfPlusHelperData const & rR, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_Int32 lineJoin = EmfPlusLineJoinTypeMiter;
-        sal_uInt32 graphicsVersion, penType;
+        sal_uInt32 graphicsVersion(0), penType(0);
         s.ReadUInt32(graphicsVersion).ReadUInt32(penType).ReadUInt32(penDataFlags).ReadUInt32(penUnit).ReadFloat(penWidth);
         SAL_INFO("drawinglayer.emf", "EMF+\t\tGraphics version: 0x" << std::hex << graphicsVersion);
         SAL_INFO("drawinglayer.emf", "EMF+\t\tType: " << penType);
@@ -246,7 +246,7 @@ namespace emfplushelper
 
         if (penDataFlags & EmfPlusPenDataMiterLimit)
         {
-            float miterLimit;
+            float miterLimit(0);
             s.ReadFloat(miterLimit);
 
             // EMF+ JoinTypeMiterClipped is working as our B2DLineJoin::Miter
@@ -300,10 +300,16 @@ namespace emfplushelper
         if (penDataFlags & EmfPlusPenDataDashedLine)
         {
             dashStyle = EmfPlusLineStyleCustom;
-            sal_uInt32 dashPatternLen;
+            sal_uInt32 dashPatternLen(0);
 
             s.ReadUInt32(dashPatternLen);
             SAL_INFO("drawinglayer.emf", "EMF+\t\t\tdashPatternLen: " << dashPatternLen);
+
+            if (dashPatternLen > s.remainingSize() / sizeof(float))
+            {
+                SAL_WARN("drawinglayer.emf", "EMF+\t\t\tTruncated dash pattern");
+                return;
+            }
 
             dashPattern.resize( dashPatternLen );
 
@@ -327,8 +333,14 @@ namespace emfplushelper
         if (penDataFlags & EmfPlusPenDataCompoundLine)
         {
             SAL_WARN("drawinglayer.emf", "EMF+\t\t\tTODO PenDataCompoundLine");
-            sal_uInt32 compoundArrayLen;
+            sal_uInt32 compoundArrayLen(0);
             s.ReadUInt32(compoundArrayLen);
+
+            if (compoundArrayLen > s.remainingSize() / sizeof(float))
+            {
+                SAL_WARN("drawinglayer.emf", "EMF+\t\t\tTruncated compound array");
+                return;
+            }
 
             compoundArray.resize(compoundArrayLen);
 
