@@ -1393,20 +1393,20 @@ void TileCacheTests::requestTiles(std::shared_ptr<http::WebSocketSession>& socke
             // expected tile: part= width= height= tileposx= tileposy= tilewidth= tileheight=
             StringVector tokens(StringVector::tokenize(tile, ' '));
             LOK_ASSERT_EQUAL_STR("tile:", tokens[0]);
-            LOK_ASSERT_EQUAL(1000, NumUtil::stoi(tokens[1].substr(std::string("nviewid=").size())));
-            LOK_ASSERT_EQUAL(part, NumUtil::stoi(tokens[2].substr(std::string("part=").size())));
+            LOK_ASSERT_EQUAL(1000, NumUtil::stoi(tokens[1].substr(std::string_view("nviewid=").size())));
+            LOK_ASSERT_EQUAL(part, NumUtil::stoi(tokens[2].substr(std::string_view("part=").size())));
             LOK_ASSERT_EQUAL(pixTileSize,
-                             NumUtil::stoi(tokens[3].substr(std::string("width=").size())));
+                             NumUtil::stoi(tokens[3].substr(std::string_view("width=").size())));
             LOK_ASSERT_EQUAL(pixTileSize,
-                             NumUtil::stoi(tokens[4].substr(std::string("height=").size())));
+                             NumUtil::stoi(tokens[4].substr(std::string_view("height=").size())));
             LOK_ASSERT_EQUAL(tileX,
-                             NumUtil::stoi(tokens[5].substr(std::string("tileposx=").size())));
+                             NumUtil::stoi(tokens[5].substr(std::string_view("tileposx=").size())));
             LOK_ASSERT_EQUAL(tileY,
-                             NumUtil::stoi(tokens[6].substr(std::string("tileposy=").size())));
+                             NumUtil::stoi(tokens[6].substr(std::string_view("tileposy=").size())));
             LOK_ASSERT_EQUAL(tileWidth,
-                             NumUtil::stoi(tokens[7].substr(std::string("tileWidth=").size())));
+                             NumUtil::stoi(tokens[7].substr(std::string_view("tileWidth=").size())));
             LOK_ASSERT_EQUAL(tileHeight,
-                             NumUtil::stoi(tokens[8].substr(std::string("tileHeight=").size())));
+                             NumUtil::stoi(tokens[8].substr(std::string_view("tileHeight=").size())));
         }
     }
 
@@ -1646,8 +1646,8 @@ void TileCacheTests::testTileInvalidatedOutside()
     LOK_ASSERT_MESSAGE("Expected invalidatetiles message.", !sInvalidate.empty());
     StringVector tokens(StringVector::tokenize(sInvalidate, ' '));
     LOK_ASSERT_MESSAGE("Expected at least 6 tokens.", tokens.size() >= 6);
-    const int y = NumUtil::stoi(tokens[3].substr(std::string("y=").size()));
-    const int height = NumUtil::stoi(tokens[5].substr(std::string("height=").size()));
+    const int y = NumUtil::stoi(tokens[3].substr(std::string_view("y=").size()));
+    const int height = NumUtil::stoi(tokens[5].substr(std::string_view("height=").size()));
 
     // Set client visible area to make it not having intersection with the invalidate rectangle, but having shared tiles
     std::ostringstream oss;

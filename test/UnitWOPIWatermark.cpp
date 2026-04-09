@@ -74,7 +74,7 @@ public:
                 if (!tile.empty())
                 {
                     StringVector tokens(StringVector::tokenize(tile, ' '));
-                    std::string nviewid = tokens[1].substr(std::string("nviewid=").size());
+                    std::string nviewid = tokens[1].substr(std::string_view("nviewid=").size());
                     if (!nviewid.empty() && nviewid != "0")
                     {
                         LOG_INF(

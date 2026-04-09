@@ -2149,7 +2149,7 @@ bool ChildSession::dialogEvent(const StringVector& tokens)
 bool ChildSession::formFieldEvent(const char* buffer, int length, const StringVector& /*tokens*/)
 {
     std::string firstLine = getFirstLine(buffer, length);
-    std::string arguments = firstLine.substr(std::string("formfieldevent ").size());
+    std::string arguments = firstLine.substr(std::string_view("formfieldevent ").size());
 
     if (arguments.empty())
     {
