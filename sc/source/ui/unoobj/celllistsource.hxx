@@ -33,15 +33,16 @@ namespace com::sun::star::table { class XCellRange; }
 
 namespace calc
 {
-
-    class OCellListSource final
-        : public comphelper::OPropertyContainerImplHelper<
+    using OCellListSource_Base = comphelper::OPropertyContainerImplHelper<
               comphelper::WeakComponentImplHelper<
                   css::form::binding::XListEntryTypedSource,
                   css::util::XModifyListener,
                   css::lang::XServiceInfo,
                   css::lang::XInitialization>,
-              OCellListSource>
+              class OCellListSource>;
+
+    class OCellListSource final
+        : public OCellListSource_Base
     {
     private:
         css::uno::Reference< css::sheet::XSpreadsheetDocument >
@@ -79,6 +80,7 @@ namespace calc
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // OPropertyImplHelper
+        using OCellListSource_Base::getFastPropertyValue;
         virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
         // OPropertyArrayUsageHelper

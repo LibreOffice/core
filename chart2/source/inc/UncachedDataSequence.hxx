@@ -37,6 +37,18 @@ namespace chart
 class InternalDataProvider;
 class ModifyEventForwarder;
 
+using UncachedDataSequence_Base = comphelper::OPropertyContainerImplHelper<
+          comphelper::WeakComponentImplHelper<
+              css::chart2::data::XDataSequence,
+              css::chart2::data::XNumericalDataSequence,
+              css::chart2::data::XTextualDataSequence,
+              css::util::XCloneable,
+              css::util::XModifiable,
+              css::container::XIndexReplace,
+              css::container::XNamed,
+              css::lang::XServiceInfo>,
+          class UncachedDataSequence>;
+
 /**
  * This sequence object does NOT store actual sequence data.  Instead, it
  * references a column inside the internal data table (represented by class
@@ -48,17 +60,7 @@ class ModifyEventForwarder;
  * 'label 2', ...</p>
  */
 class UncachedDataSequence final
-    : public comphelper::OPropertyContainerImplHelper<
-          comphelper::WeakComponentImplHelper<
-              css::chart2::data::XDataSequence,
-              css::chart2::data::XNumericalDataSequence,
-              css::chart2::data::XTextualDataSequence,
-              css::util::XCloneable,
-              css::util::XModifiable,
-              css::container::XIndexReplace,
-              css::container::XNamed,
-              css::lang::XServiceInfo>,
-          UncachedDataSequence>
+    : public UncachedDataSequence_Base
 {
 public:
     /** The referring data provider is held as uno reference to ensure its

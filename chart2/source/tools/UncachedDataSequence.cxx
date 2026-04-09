@@ -74,7 +74,8 @@ UncachedDataSequence::UncachedDataSequence(
 }
 
 UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource )
-        : m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
+        : UncachedDataSequence_Base(),
+          m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
           m_xDataProvider( rSource.m_xDataProvider ),
           m_aSourceRepresentation( rSource.m_aSourceRepresentation ),
