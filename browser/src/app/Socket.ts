@@ -656,6 +656,17 @@ class Socket {
 		const timerepr = dateTime.toLocaleDateString(String.locale, dateOptions);
 		this._map.fire('warn', { msg: expirymsg.replace('{time}', timerepr) });
 
+		// Notify the host so it can refresh the token programmatically.
+		const remainingMs =
+			parseInt(this._map.options.docParams.access_token_ttl as string) -
+			Date.now();
+		this._map.fire('postMessage', {
+			msgId: 'App_TokenExpiring',
+			args: {
+				Timeout: Math.max(remainingMs, 0),
+			},
+		});
+
 		// If user still doesn't refresh the session, warn again periodically
 		this._accessTokenExpireTimeout = setTimeout(
 			this._sessionExpiredWarning.bind(this),
