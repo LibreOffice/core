@@ -728,12 +728,16 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testAutofilterShowButton)
     xmlDocUniquePtr pDocXml = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDocXml);
 
-    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn", 2);
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn", 4);
 
-    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[1]", "colId", u"4");
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[1]", "colId", u"3");
     assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[1]", "hiddenButton", u"1");
-    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[2]", "colId", u"9");
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[2]", "colId", u"4");
     assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[2]", "hiddenButton", u"1");
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[3]", "colId", u"8");
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[3]", "hiddenButton", u"1");
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[4]", "colId", u"9");
+    assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[4]", "hiddenButton", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testShapeStyles)

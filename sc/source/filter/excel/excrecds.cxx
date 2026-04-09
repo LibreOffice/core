@@ -997,6 +997,24 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
         {
             auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ).GetValue();
             bool bIsButtonHidden = !( nFlag & ScMF::Auto );
+
+            // For merged cells, during import, we don't remove the dropdown button for merge master
+            // If the last cell in the merged cells has the flag `ScMF::Auto` then remove the
+            // dropdown button for merge master
+            if (!bIsButtonHidden)
+            {
+                const ScMergeAttr& rMerge
+                    = rDoc.GetAttr(nCol, nRow, nTab, ATTR_MERGE);
+                SCCOL nColSpan = rMerge.GetColMerge();
+                if (nColSpan > 1)
+                {
+                    auto nLastColFlag
+                        = rDoc.GetAttr(nCol + nColSpan - 1, nRow, nTab, ATTR_MERGE_FLAG).GetValue();
+                    if (nLastColFlag & ScMF::Auto)
+                        bIsButtonHidden = true;
+                }
+            }
+
             if ( bIsButtonHidden )
             {
                 // Create filter column with hiddenButton=1 attribute if it doesn't exist
