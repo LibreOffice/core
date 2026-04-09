@@ -2102,7 +2102,8 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                                 pShapeContext->setWriterShape();
                         }
                         uno::Reference< xml::sax::XFastContextHandler > newWrapper = lcl_createFastChildContext(nElement, rAttribs);
-                        static_cast<OOXMLFastContextHandlerWrapper*>(newWrapper.get())->mbIsWriterFrameDetected = mbIsWriterFrameDetected;
+                        if (OOXMLFastContextHandlerWrapper* pWrapper = dynamic_cast<OOXMLFastContextHandlerWrapper*>(newWrapper.get()))
+                            pWrapper->mbIsWriterFrameDetected = mbIsWriterFrameDetected;
                         aLocalHandlers.push_back(newWrapper);
                     }
                     break;
@@ -2161,7 +2162,10 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                             = callDataIt->getAttributes();
                         uno::Reference< xml::sax::XFastContextHandler > newContext = aLocalHandlers.back()->createFastChildContext(nElement, rAttrs);
                         if (nElement == Token_t(NMSP_vml | XML_textbox))
-                            static_cast<OOXMLFastContextHandlerWrapper*>(newContext.get())->mbIsWriterFrameDetected = mbIsWriterFrameDetected;
+                        {
+                            if (OOXMLFastContextHandlerWrapper* pWrapper = dynamic_cast<OOXMLFastContextHandlerWrapper*>(newContext.get()))
+                                pWrapper->mbIsWriterFrameDetected = mbIsWriterFrameDetected;
+                        }
                         aLocalHandlers.push_back(newContext);
                     }
                     break;
