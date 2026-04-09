@@ -4604,6 +4604,8 @@ seconds
 sectEnd
 sectPr
 sectPrChange
+section
+sectionLst
 securityDescriptor
 seek
 segments
