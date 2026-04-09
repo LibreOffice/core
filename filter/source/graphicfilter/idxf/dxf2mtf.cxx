@@ -19,6 +19,7 @@
 
 
 #include <string.h>
+#include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
@@ -548,20 +549,24 @@ void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXF
 void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const DXFTransform & rTransform )
 {
     sal_Int32 nPolySize = rE.aP.size();
-    if (nPolySize)
+    if (nPolySize <= 0 || nPolySize > SAL_MAX_UINT16)
     {
-        tools::Polygon aPoly( static_cast<sal_uInt16>(nPolySize));
-        for (sal_Int32 i = 0; i < nPolySize; ++i)
-        {
-            rTransform.Transform( rE.aP[ static_cast<sal_uInt16>(i) ], aPoly[ static_cast<sal_uInt16>(i) ] );
-        }
-        if ( SetLineAttribute( rE ) )
-        {
-            if ( ( rE.nFlags & 1 ) != 0 )
-                pVirDev->DrawPolygon( aPoly );
-            else
-                pVirDev->DrawPolyLine( aPoly );
-        }
+        SAL_WARN("vcl.filter", "DXF2GDIMetaFile::DrawLWPolyLineEntity: invalid num of points: " << nPolySize);
+        return;
+    }
+
+    sal_uInt16 nSize = static_cast<sal_uInt16>(nPolySize);
+    tools::Polygon aPoly(nSize);
+    for (sal_uInt16 i = 0; i < nSize; ++i)
+    {
+        rTransform.Transform( rE.aP[i], aPoly[i] );
+    }
+    if ( SetLineAttribute( rE ) )
+    {
+        if ( ( rE.nFlags & 1 ) != 0 )
+            pVirDev->DrawPolygon( aPoly );
+        else
+            pVirDev->DrawPolyLine( aPoly );
     }
 }
 
