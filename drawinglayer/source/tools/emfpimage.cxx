@@ -24,7 +24,7 @@ namespace emfplushelper
 {
     void EMFPImage::Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream)
     {
-        sal_uInt32 header, bitmapType;
+        sal_uInt32 header(0), bitmapType(0);
         s.ReadUInt32(header).ReadUInt32(type);
         SAL_INFO("drawinglayer.emf", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
@@ -45,13 +45,17 @@ namespace emfplushelper
         else if (ImageDataTypeMetafile == type)
         {
             // metafile
-            sal_uInt32 mfType, mfSize;
+            sal_uInt32 mfType(0), mfSize(0);
             s.ReadUInt32(mfType).ReadUInt32(mfSize);
 
             if (bUseWholeStream)
                 dataSize = s.remainingSize();
             else
+            {
+                if (dataSize < 16)
+                    return;
                 dataSize -= 16;
+            }
 
             SAL_INFO("drawinglayer.emf", "EMF+\tmetafile type: " << mfType << " dataSize: " << mfSize << " real size calculated from record dataSize: " << dataSize);
 
@@ -64,8 +68,8 @@ namespace emfplushelper
             // 1 = Wmf, 2 = WmfPlaceable, 3 = Emf, 4 = EmfPlusOnly, 5 = EmfPlusDual
             if (mfType == 3 || mfType == 4 || mfType == 5)
             {
-                sal_uInt32 dwRecordType, dwRecordSize, dSignature, nVersion;
-                sal_Int32 rclFrameLeft, rclFrameTop, rclFrameRight, rclFrameBottom;
+                sal_uInt32 dwRecordType(0), dwRecordSize(0), dSignature(0), nVersion(0);
+                sal_Int32 rclFrameLeft(0), rclFrameTop(0), rclFrameRight(0), rclFrameBottom(0);
 
                 mfStream.ReadUInt32(dwRecordType);
                 mfStream.ReadUInt32(dwRecordSize);
@@ -83,8 +87,8 @@ namespace emfplushelper
                 {
                     mfStream.SeekRel(24);
 
-                    sal_Int32 szlDeviceWidth, szlDeviceHeight;
-                    sal_Int32 szlMillimetersWidth, szlMillimetersHeight;
+                    sal_Int32 szlDeviceWidth(0), szlDeviceHeight(0);
+                    sal_Int32 szlMillimetersWidth(0), szlMillimetersHeight(0);
 
                     mfStream.ReadInt32(szlDeviceWidth);
                     mfStream.ReadInt32(szlDeviceHeight);
