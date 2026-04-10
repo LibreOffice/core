@@ -36,13 +36,20 @@ namespace emfplushelper
     {
     }
 
-    ::basegfx::B2DPolyPolygon EMFPRegion::ReadRegionNode(SvStream& s, EmfPlusHelperData& rR)
+    ::basegfx::B2DPolyPolygon EMFPRegion::ReadRegionNode(SvStream& s, EmfPlusHelperData& rR, int nDepth)
     {
         // Regions are specified as a binary tree of region nodes, and each node must either be a terminal node
         // (RegionNodeDataTypeRect, RegionNodeDataTypePath, RegionNodeDataTypeEmpty, RegionNodeDataTypeInfinite)
         // or specify one or two child nodes
         // (RegionNodeDataTypeAnd, RegionNodeDataTypeOr, RegionNodeDataTypeXor,
         // RegionNodeDataTypeExclude, RegionNodeDataTypeComplement).
+        constexpr int nMaxDepth = 2048;
+        if (nDepth >= nMaxDepth)
+        {
+            SAL_WARN("drawinglayer.emf", "EMF+\t Region node too deeply nested (>" << nMaxDepth << ")");
+            return {};
+        }
+
         sal_uInt32 dataType(0);
         ::basegfx::B2DPolyPolygon polygon;
         s.ReadUInt32(dataType);
@@ -56,8 +63,8 @@ namespace emfplushelper
         case RegionNodeDataTypeExclude: // CombineModeExclude
         case RegionNodeDataTypeComplement: // CombineModeComplement
         {
-            ::basegfx::B2DPolyPolygon leftPolygon = ReadRegionNode(s, rR);
-            ::basegfx::B2DPolyPolygon rightPolygon = ReadRegionNode(s, rR);
+            ::basegfx::B2DPolyPolygon leftPolygon = ReadRegionNode(s, rR, nDepth + 1);
+            ::basegfx::B2DPolyPolygon rightPolygon = ReadRegionNode(s, rR, nDepth + 1);
             polygon = EmfPlusHelperData::combineClip(leftPolygon, dataType, rightPolygon);
             break;
         }
@@ -127,7 +134,7 @@ namespace emfplushelper
         // An array should be RegionNodeCount+1 of EmfPlusRegionNode objects.
         SAL_INFO("drawinglayer.emf", "EMF+\t version: 0x" << std::hex << header << std::dec << ", region node count: " << count);
 
-        regionPolyPolygon = ReadRegionNode(s, rR);
+        regionPolyPolygon = ReadRegionNode(s, rR, 0);
     }
 }
 

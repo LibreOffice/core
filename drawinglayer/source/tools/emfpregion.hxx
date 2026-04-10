@@ -43,7 +43,7 @@ namespace emfplushelper
         EMFPRegion();
         virtual ~EMFPRegion() override;
         void ReadRegion(SvStream& s, EmfPlusHelperData& rR);
-        ::basegfx::B2DPolyPolygon ReadRegionNode(SvStream& s, EmfPlusHelperData& rR);
+        ::basegfx::B2DPolyPolygon ReadRegionNode(SvStream& s, EmfPlusHelperData& rR, int nDepth);
     };
 }
 
