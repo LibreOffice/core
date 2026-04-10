@@ -1598,6 +1598,11 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
 
     // Read and decompress it.
     rStream.Seek(pStream->GetOffset());
+    if (nLength > rStream.remainingSize())
+    {
+        SAL_WARN("vcl.filter", "PDFDocument::ReadXRefStream: stream length truncated");
+        nLength = rStream.remainingSize();
+    }
     std::vector<char> aBuf(nLength);
     rStream.ReadBytes(aBuf.data(), aBuf.size());
 
@@ -2593,6 +2598,11 @@ void PDFObjectElement::ParseStoredObjects()
     // Read and decompress it.
     SvMemoryStream& rEditBuffer = m_rDoc.GetEditBuffer();
     rEditBuffer.Seek(m_pStreamElement->GetOffset());
+    if (nLength > rEditBuffer.remainingSize())
+    {
+        SAL_WARN("vcl.filter", "PDFObjectElement::ParseStoredObjects: stream length truncated");
+        nLength = rEditBuffer.remainingSize();
+    }
     std::vector<char> aBuf(nLength);
     rEditBuffer.ReadBytes(aBuf.data(), aBuf.size());
     SvMemoryStream aSource(aBuf.data(), aBuf.size(), StreamMode::READ);
@@ -2637,7 +2647,15 @@ void PDFObjectElement::ParseStoredObjects()
         if (aOffsets.size() > 1)
             aLengths.push_back(aOffsets.back() - aOffsets[aOffsets.size() - 2]);
         if (nObject + 1 == nN)
+        {
+            if (aOffsets.back() > nLength)
+            {
+                SAL_WARN("vcl.filter",
+                         "PDFObjectElement::ParseStoredObjects: offset beyond stream length");
+                return;
+            }
             aLengths.push_back(nLength - aOffsets.back());
+        }
 
         PDFDocument::SkipWhitespace(aStream);
     }
