@@ -67,7 +67,7 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentW
     // Override InterimItemWindow's SetPaintTransparent(true) so background paints.
     SetPaintTransparent(false);
     {
-        const Color aDeckBg(0x28, 0x2A, 0x36);
+        const Color aDeckBg = GetOLColors().surface;
         SetBackground(Wallpaper(aDeckBg));
         m_xVclContentArea->SetBackground(Wallpaper(aDeckBg));
         m_xContainer->set_background(aDeckBg);
@@ -133,6 +133,11 @@ tools::Rectangle Deck::GetContentArea() const
 
 void Deck::DataChanged(const DataChangedEvent&)
 {
+    const Color aDeckBg = GetOLColors().surface;
+    SetBackground(Wallpaper(aDeckBg));
+    m_xVclContentArea->SetBackground(Wallpaper(aDeckBg));
+    m_xContainer->set_background(aDeckBg);
+
     if (mxTitleBar)
         mxTitleBar->DataChanged();
 

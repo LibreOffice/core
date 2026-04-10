@@ -167,23 +167,16 @@ void Theme::UpdateTheme()
             return p ? std::string(p) : std::string();
         }();
         const bool bOfficeLabs = !s_olThemeSidebar.empty();
-        const bool bDark = bOfficeLabs ? (s_olThemeSidebar == "dark")
+        const bool bDark = bOfficeLabs ? (s_olThemeSidebar != "light")
                                        : rStyle.GetFaceColor().IsDark();
 
         Color aBaseBackgroundColor, aSecondColor, aHighlight;
 
         if (bOfficeLabs)
         {
-            if (bDark)
-            {
-                aBaseBackgroundColor = Color(0x28, 0x2A, 0x36); // #282A36 Dracula bg
-                aSecondColor = Color(0x34, 0x37, 0x47);         // #343747 Dracula surface
-            }
-            else
-            {
-                aBaseBackgroundColor = Color(0xFA, 0xFA, 0xFA); // #FAFAFA
-                aSecondColor = Color(0xF0, 0xF1, 0xF3);         // #F0F1F3
-            }
+            auto olc = GetOLColors();
+            aBaseBackgroundColor = olc.bg;
+            aSecondColor = olc.surface;
             aHighlight = Color(0x0D, 0x94, 0x88); // #0D9488 teal accent
         }
         else

@@ -82,8 +82,8 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     // we have this widget just so we can measure best width for static TabBar::GetDefaultWidth
     mxMeasureBox->hide();
 
-    // OfficeLabs: hardcode dark background on all VCL layers.
-    const Color aTabBg(0x28, 0x2A, 0x36);
+    // OfficeLabs: theme-aware background on all VCL layers.
+    const Color aTabBg = GetOLColors().bg;
     SetPaintTransparent(false);
     SetBackground(Wallpaper(aTabBg));
     m_xVclContentArea->SetBackground(Wallpaper(aTabBg));
@@ -183,7 +183,7 @@ void TabBar::RemoveDeckHighlight()
 
 void TabBar::DataChanged(const DataChangedEvent& rDataChangedEvent)
 {
-    const Color aTabBg(0x28, 0x2A, 0x36);
+    const Color aTabBg = GetOLColors().bg;
     SetBackground(aTabBg);
     m_xVclContentArea->SetBackground(Wallpaper(aTabBg));
     m_xContainer->set_background(aTabBg);
