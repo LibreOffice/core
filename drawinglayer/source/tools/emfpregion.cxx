@@ -44,7 +44,7 @@ namespace emfplushelper
         // or specify one or two child nodes
         // (RegionNodeDataTypeAnd, RegionNodeDataTypeOr, RegionNodeDataTypeXor,
         // RegionNodeDataTypeExclude, RegionNodeDataTypeComplement).
-        sal_uInt32 dataType;
+        sal_uInt32 dataType(0);
         ::basegfx::B2DPolyPolygon polygon;
         s.ReadUInt32(dataType);
         SAL_INFO("drawinglayer", "EMF+\t Region node data type 0x" << std::hex << dataType << std::dec);
@@ -64,7 +64,7 @@ namespace emfplushelper
         }
         case RegionNodeDataTypeRect:
         {
-            float dx, dy, dw, dh;
+            float dx(0), dy(0), dw(0), dh(0);
             s.ReadFloat(dx).ReadFloat(dy).ReadFloat(dw).ReadFloat(dh);
             SAL_INFO("drawinglayer", "EMF+\t\t RegionNodeDataTypeRect x:" << dx << ", y:" << dy <<
                      ", width:" << dw << ", height:" << dh);
@@ -83,12 +83,12 @@ namespace emfplushelper
         }
         case RegionNodeDataTypePath:
         {
-            sal_Int32 pathLength;
+            sal_Int32 pathLength(0);
             s.ReadInt32(pathLength);
             SAL_INFO("drawinglayer", "EMF+\t\t RegionNodeDataTypePath, Path Length: " << pathLength << " bytes");
 
-            sal_uInt32 header, pathFlags;
-            sal_Int32 points;
+            sal_uInt32 header(0), pathFlags(0);
+            sal_Int32 points(0);
 
             s.ReadUInt32(header).ReadInt32(points).ReadUInt32(pathFlags);
             SAL_INFO("drawinglayer", "EMF+\t\t header: 0x" << std::hex << header <<
@@ -124,7 +124,7 @@ namespace emfplushelper
 
     void EMFPRegion::ReadRegion(SvStream& s, EmfPlusHelperData& rR)
     {
-        sal_uInt32 header, count;
+        sal_uInt32 header(0), count(0);
         s.ReadUInt32(header).ReadUInt32(count);
         // An array should be RegionNodeCount+1 of EmfPlusRegionNode objects.
         SAL_INFO("drawinglayer", "EMF+\t version: 0x" << std::hex << header << std::dec << ", region node count: " << count);
