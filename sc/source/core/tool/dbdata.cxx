@@ -2303,27 +2303,18 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     return nullptr;
 }
 
-namespace {
 
-bool intersectsRange(const ScDBData* pDBData, const ScRange& rRange)
+std::vector<const ScDBData*> ScDBCollection::GetAllNamedDBsInArea(const ScRange& rRange) const
 {
-    ScRange aRange;
-    pDBData->GetArea(aRange);
-    return rRange.Intersects(aRange);
-}
-
-}
-
-std::vector<const ScDBData*> ScDBCollection::GetAllNamedDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab) const
-{
-    ScRange aTargetRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
     std::vector<const ScDBData*> aDBData;
     for (const auto& rxNamedDB: maNamedDBs)
     {
-        if (rxNamedDB->GetTab() != nTab)
+        if (rxNamedDB->GetTab() != rRange.aStart.Tab())
             continue;
 
-        if (intersectsRange(rxNamedDB.get(), aTargetRange))
+        ScRange aArea;
+        rxNamedDB->GetArea(aArea);
+        if (rRange.Intersects(aArea))
         {
             aDBData.emplace_back(rxNamedDB.get());
         }

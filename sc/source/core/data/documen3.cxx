@@ -373,10 +373,10 @@ ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nC
         return nullptr;
 }
 
-std::vector<const ScDBData*> ScDocument::GetAllNamedDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab) const
+std::vector<const ScDBData*> ScDocument::GetAllNamedDBsInArea(const ScRange& rRange) const
 {
     if (pDBCollection)
-        return pDBCollection->GetAllNamedDBsInArea(nCol1, nRow1, nCol2, nRow2, nTab);
+        return pDBCollection->GetAllNamedDBsInArea(rRange);
     else
         return std::vector<const ScDBData*>();
 }

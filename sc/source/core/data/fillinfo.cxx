@@ -412,7 +412,7 @@ void ScDocument::FillInfo(
 
     ScRange aTargetRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
     std::vector<const ScDBData*> aDBData
-        = pDBCollection->GetAllNamedDBsInArea(nCol1, nRow1, nCol2, nRow2, nTab);
+        = pDBCollection->GetAllNamedDBsInArea(aTargetRange);
     for (const ScDBData* pDBData : aDBData)
     {
         const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo();

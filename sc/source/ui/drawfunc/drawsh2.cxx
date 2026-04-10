@@ -582,18 +582,28 @@ const OUString & ScDrawShell::GetSidebarContextName()
     if (eContext == vcl::EnumContext::Context::Unknown)
     {
         ScDocument& rDocument = rViewData.GetDocument();
-        if (!rDocument.HasDataPilotAtPosition(rViewData.GetCurPos()))
+        const ScAddress aAddr = rViewData.GetCurPos();
+        if (rDocument.HasDataPilotAtPosition(aAddr))
         {
-            const ScAddress aAddr = rViewData.GetCurPos();
-            if (!rDocument.HasSparkline(aAddr))
-            {
-                const ScDBData* pDbData = rDocument.GetTableDBAtCursor(
-                    aAddr.Col(), aAddr.Row(), aAddr.Tab(), ScDBDataPortion::AREA);
-                if (pDbData)
-                {
-                    eContext = vcl::EnumContext::Context::Table;
-                }
-            }
+            eContext = vcl::EnumContext::Context::Pivot;
+            // TODO: multiple context subshells at the same time (pivot and sparkline)
+            if (rDocument.HasSparkline(aAddr))
+                eContext = vcl::EnumContext::Context::Sparkline;
+        }
+        else if (rDocument.GetTableDBAtCursor(aAddr.Col(), aAddr.Row(), aAddr.Tab(), ScDBDataPortion::AREA))
+        {
+            eContext = vcl::EnumContext::Context::Table;
+            // TODO: multiple context subshells at the same time (table and sparkline)
+            if (rDocument.HasSparkline(aAddr))
+                eContext = vcl::EnumContext::Context::Sparkline;
+        }
+        else if (rDocument.HasSparkline(rViewData.GetCurPos()))
+        {
+            eContext = vcl::EnumContext::Context::Sparkline;
+        }
+        else
+        {
+            // keep Context::Unknown, which fallbacks to default context in the caller
         }
     }
     return vcl::EnumContext::GetContextName(eContext);

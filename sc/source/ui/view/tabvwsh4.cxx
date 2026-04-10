@@ -779,22 +779,30 @@ void ScTabViewShell::SetTableShell(bool bActive)
 void ScTabViewShell::UpdateContextShells()
 {
     ScDocument& rDoc = GetViewData().GetDocument();
-    bool bDataPilot = rDoc.HasDataPilotAtPosition(GetViewData().GetCurPos());
-    SetPivotShell(bDataPilot);
-
-    if (!bDataPilot)
+    const ScAddress rAddr = GetViewData().GetCurPos();
+    if (rDoc.HasDataPilotAtPosition(rAddr))
     {
-        const ScAddress rAddr = GetViewData().GetCurPos();
-        bool bSparkline = rDoc.HasSparkline(rAddr);
-        SetSparklineShell(bSparkline);
-        if (!bSparkline)
-        {
-            if (rDoc.GetTableDBAtCursor(rAddr.Col(), rAddr.Row(), rAddr.Tab(),
-                                        ScDBDataPortion::AREA))
-                SetTableShell(true);
-            else
-                SetTableShell(false);
-        }
+        SetPivotShell(true);
+        // TODO: multiple context subshells at the same time (pivot and sparkline)
+        if (rDoc.HasSparkline(rAddr))
+            SetSparklineShell(true);
+    }
+    else if (rDoc.GetTableDBAtCursor(rAddr.Col(), rAddr.Row(), rAddr.Tab(),
+                                     ScDBDataPortion::AREA))
+    {
+        SetTableShell(true);
+        // TODO: multiple context subshells at the same time (table and sparkline)
+        if (rDoc.HasSparkline(rAddr))
+            SetSparklineShell(true);
+    }
+    else if (rDoc.HasSparkline(rAddr))
+    {
+        SetSparklineShell(true);
+    }
+    else
+    {
+        // Fallback to SetCurSubShell(OST_Cell);
+        SetSparklineShell(false);
     }
 }
 
