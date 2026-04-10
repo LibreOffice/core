@@ -289,6 +289,23 @@ bool SdrObject::isDiagram() const
     return false;
 }
 
+bool SdrObject::useAdvancedDiagramFeatures()
+{
+    static bool bChecked(false);
+    static bool bUse(false);
+
+    if (!bChecked)
+    {
+        // NOTE: We could also use
+        //     officecfg::Office::Common::Misc::ExperimentalMode::get()
+        // but for now env var will do...
+        bUse = (nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
+        bChecked = true;
+    }
+
+    return bUse;
+}
+
 const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObject::getDiagramHelper() const
 {
     const SdrObject* pCurrent(this);

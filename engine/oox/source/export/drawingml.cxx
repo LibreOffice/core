@@ -259,6 +259,7 @@ DrawingML::DrawingML(::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBa
     , mbIsBackgroundDark(false)
     , mbPlaceholder(false)
     , mbDiagaramExport(false)
+    , mbDiagaramReplacementExport(false)
 {
     uno::Reference<beans::XPropertySet> xSettings(pFB->getModelFactory()->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     if (xSettings.is())
@@ -1877,7 +1878,10 @@ void DrawingML::WriteBlipFill(const Reference<XPropertySet>& rXPropSet, const aw
         bool bWriteMode = false;
         if (sURLPropName == "FillBitmap" || sURLPropName == "BackGraphic")
             bWriteMode = true;
-        WriteXGraphicBlipFill(rXPropSet, xGraphic, nXmlNamespace, bWriteMode, false, rSize);
+
+        // we need to use bRelPathToMedia when DiagramExport and it contains media data
+        // or links
+        WriteXGraphicBlipFill(rXPropSet, xGraphic, nXmlNamespace, bWriteMode, isDiagaramExport(), rSize);
     }
 }
 
@@ -2272,7 +2276,10 @@ void DrawingML::WriteTransformation(const Reference< XShape >& xShape, const too
 
     sal_Int32 nLeft = rRect.Left();
     sal_Int32 nTop = rRect.Top();
-    if (GetDocumentType() == DOCUMENT_DOCX && !m_xParent.is())
+
+    // do *not* fallback to (0, 0) again when in DiagaramReplacementExport, that
+    // works more like a GraphicReplacement ObjectHierarchy snippet
+    if (GetDocumentType() == DOCUMENT_DOCX && !m_xParent.is() && !isDiagaramReplacementExport())
     {
         nLeft = 0;
         nTop = 0;
@@ -6853,7 +6860,6 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     uno::Reference<xml::dom::XDocument> drawingDom;
     rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawing) >>= drawingDom;
     static bool bForceAlwaysReCreate(nullptr != std::getenv("FORCE_RECREATE_DIAGRAM_DATADOMS"));
-    static bool bActivateAdvancedDiagramFeatures(nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
 
     // check if re-creation is forced (for test purposes)
     if (drawingDom && bForceAlwaysReCreate)
@@ -6873,7 +6879,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     const OUString sRelationCompPrefix(GetRelationCompPrefix());
     const OUString sDir(GetComponentDir());
 
-    if (bActivateAdvancedDiagramFeatures || drawingDom.is())
+    if (SdrObject::useAdvancedDiagramFeatures() || drawingDom.is())
     {
         // only add Relation if we write a DrawingDom
         drawingRelId = mpFB->addRelation(
@@ -6881,7 +6887,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
             Concat2View(sRelationCompPrefix + drawingFileName));
     }
 
-    if (!drawingDom && bActivateAdvancedDiagramFeatures)
+    if (!drawingDom && SdrObject::useAdvancedDiagramFeatures())
     {
         // no drawingDom exists, so it was either not originally imported or the
         // Diagram was changed, so it got deleted. write drawingDom directly as
@@ -7017,8 +7023,8 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     {
         if (!drawingRelId.isEmpty())
         {
-            // NOTE: drawingRelId may be empty if bActivateAdvancedDiagramFeatures is
-            // set, see comments above
+            // NOTE: drawingRelId may be empty if SdrObject::useAdvancedDiagramFeatures()
+            // is set, see comments above
             // the original and unchanged dataDom contains a reference to the drawing
             // relation. We need to update it with the new generated relation value
             // before writing the dom to the file

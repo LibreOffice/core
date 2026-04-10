@@ -239,6 +239,9 @@ public:
     bool isDiagramTextNode() const;
     bool removeDiagramNode();
 
+    // temporary check if to use AdvancedDiagramFeatures
+    static bool useAdvancedDiagramFeatures();
+
 private:
     // check if a ObjectName is set and it is in DiagramModelID syntax
     bool ObjectNameIsDiagramModelID();

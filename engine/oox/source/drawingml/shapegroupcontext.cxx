@@ -26,6 +26,7 @@
 #include <oox/drawingml/graphicshapecontext.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
+#include <drawingml/fillproperties.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <sal/log.hxx>
@@ -99,10 +100,24 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
         return new ShapeGroupContext( *this, mpGroupShapePtr, std::make_shared<Shape>( "com.sun.star.drawing.GroupShape" ) );
     case XML_sp:            // shape
     case XML_wsp:
+    {
         // Don't set default character height for WPS shapes, Writer has its
         // own way to set the default, and if we don't set it here, editing
         // properly inherits it.
-        return new ShapeContext( *this, mpGroupShapePtr, std::make_shared<Shape>( "com.sun.star.drawing.CustomShape", getBaseToken(aElementToken) == XML_sp ) );
+
+        auto pShape = std::make_shared<Shape>( "com.sun.star.drawing.CustomShape", getBaseToken(aElementToken) == XML_sp );
+        const OUString aModelID(rAttribs.getStringDefaulted( XML_modelId ));
+
+        // not sure if this is needed in Writer import, it *is* used in Impress import
+        // pShape->setModelId(aModelID);
+
+        // also set DataModelID to have these also available for the imported
+        // replacement visualization. This is key to allow changes to
+        // DiagramHelper model changes
+        pShape->setDiagramDataModelID(aModelID);
+
+        return new ShapeContext( *this, mpGroupShapePtr, pShape );
+    }
     case XML_pic:           // CT_Picture
         return new GraphicShapeContext( *this, mpGroupShapePtr, std::make_shared<Shape>( "com.sun.star.drawing.GraphicObjectShape" ) );
     case XML_graphicFrame:  // CT_GraphicalObjectFrame

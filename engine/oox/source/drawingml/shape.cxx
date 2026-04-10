@@ -487,12 +487,28 @@ void Shape::addShape(
                 // set DiagramHelper at SdrObjGroup
                 propagateDiagramHelper();
 
-                // Check if this is the PPTX import, so far converting SmartArt to a non-editable
-                // metafile is only implemented for DOCX.
-                bool bPowerPoint = dynamic_cast<oox::ppt::PowerPointImport*>(&rFilterBase) != nullptr;
+                // SmartArtToShapes == true means to get the Group while false did
+                // convert that content to a GraphicObject containing a metafile,
+                // and false is the default.
+                // When we have AdvancedDiagramFeatures this destroys part of the model
+                // that is in that group hosting the diagram and it's hierarchy.
+                // At the same time there are UnitTests that use false, but still do want
+                // to export the unchanged diagram, so it is not possible to just
+                // delete the DiagramHelper_svx again, that would also make the
+                // original data DomTrees vanish.
+                // I think best solution is to not convert to graphic object at
+                // all when AdvancedDiagramFeatures are active, that just makes
+                // no longer sense when we want to be able to do more with the
+                // diagram - and is also already deactivated for Draw/Ipress
+                if (!SdrObject::useAdvancedDiagramFeatures())
+                {
+                    // Check if this is the PPTX import, so far converting SmartArt to a non-editable
+                    // metafile is only implemented for DOCX.
+                    bool bPowerPoint = dynamic_cast<oox::ppt::PowerPointImport*>(&rFilterBase) != nullptr;
 
-                if (!officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get() && !bPowerPoint)
-                    convertSmartArtToMetafile( rFilterBase );
+                    if (!officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get() && !bPowerPoint)
+                        convertSmartArtToMetafile( rFilterBase );
+                }
 
                 // propagateDiagramHelper() already synced and cleared the font
                 // heights map via syncDiagramFontHeights().  Reset the filter's

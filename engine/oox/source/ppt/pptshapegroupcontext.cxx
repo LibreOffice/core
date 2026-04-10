@@ -106,7 +106,7 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
     case PPT_TOKEN( sp ):           // Shape
         {
             auto pShape = std::make_shared<PPTShape>( meShapeLocation, u"com.sun.star.drawing.CustomShape"_ustr );
-            bool bUseBgFill = rAttribs.getBool(XML_useBgFill, false);
+            const bool bUseBgFill(rAttribs.getBool(XML_useBgFill, false));
             pShape->getFillProperties().moUseBgFill = bUseBgFill;
             if (bUseBgFill)
             {

@@ -333,10 +333,7 @@ drawinglayer::primitive2d::Primitive2DContainer OverlayDiagramFrame::createOverl
 {
     drawinglayer::primitive2d::Primitive2DContainer aReturnContainer;
 
-    if ( !officecfg::Office::Common::Misc::ExperimentalMode::get() )
-        return aReturnContainer;
-
-    if (getOverlayManager())
+    if (SdrObject::useAdvancedDiagramFeatures() && getOverlayManager())
     {
         aReturnContainer = drawinglayer::primitive2d::Primitive2DContainer {
             new OverlayDiagramPrimitive(

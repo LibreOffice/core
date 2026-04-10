@@ -100,6 +100,8 @@
 #include <svx/xflgrit.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/unobrushitemhelper.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <svl/grabbagitem.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
@@ -6685,9 +6687,22 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                 const SdrObject* pSdrObj = rFrame.GetFrameFormat().FindRealSdrObject();
                 if ( pSdrObj )
                 {
-                    const bool bIsDiagram(nullptr != pSdrObj && pSdrObj->isDiagram());
+                    bool bSaveAsDiagram(false);
+                    const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(pSdrObj));
 
-                    if (bIsDiagram)
+                    if (nullptr != pDiagramCandidate)
+                    {
+                        const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rIDiagramHelper(pDiagramCandidate->getDiagramHelper());
+
+                        if (rIDiagramHelper)
+                        {
+                            // check if all needed data exists to either write unchanged/untouched
+                            // Diagram or with re-creation of some DataDoms
+                            bSaveAsDiagram = rIDiagramHelper->checkMinimalDataDoms();
+                        }
+                    }
+
+                    if (bSaveAsDiagram)
                     {
                         if ( !m_oPostponedDiagrams )
                         {

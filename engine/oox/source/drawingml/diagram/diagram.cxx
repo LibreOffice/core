@@ -287,9 +287,7 @@ void SmartArtDiagram::resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags)
 bool SmartArtDiagram::checkMinimalDataDoms() const
 {
     // check if re-creation is activated
-    static bool bActivateAdvancedDiagramFeatures(nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
-
-    if (!bActivateAdvancedDiagramFeatures && maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
+    if (!SdrObject::useAdvancedDiagramFeatures() && maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
         return false;
 
     if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXLayout))
