@@ -528,7 +528,7 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, 
     }
     else
     {
-        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+        rRenderContext.SetLineColor(rStyleSettings.GetWindowTextColor());
     }
 
     if (bNoTicks)
@@ -574,7 +574,7 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, 
             double aStep = nTick / nTick4;
             double aRest = std::abs(aStep - std::floor(aStep));
             double nAcceptanceDelta = 0.0001;
-            rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
+            rRenderContext.SetFillColor(rStyleSettings.GetWindowTextColor());
 
             if (aRest < nAcceptanceDelta)
             {
@@ -674,7 +674,7 @@ void Ruler::ImplDrawBorders(vcl::RenderContext& rRenderContext, tools::Long nMin
                 ImplVDrawLine(rRenderContext, n1,     nVirBottom, n2,     nVirBottom);
                 ImplVDrawLine(rRenderContext, n2 - 1, nVirTop,    n2 - 1, nVirBottom);
 
-                rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+                rRenderContext.SetLineColor(rStyleSettings.GetWindowTextColor());
                 ImplVDrawLine(rRenderContext, n2, nVirTop, n2, nVirBottom);
 
                 if (mpData->pBorders[i].nStyle & RulerBorderStyle::Variable)
@@ -736,8 +736,8 @@ void Ruler::ImplDrawIndent(vcl::RenderContext& rRenderContext, const tools::Poly
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
-    rRenderContext.SetFillColor(bIsHit ? rStyleSettings.GetDarkShadowColor() : rStyleSettings.GetWorkspaceColor());
+    rRenderContext.SetLineColor(rStyleSettings.GetWindowTextColor());
+    rRenderContext.SetFillColor(bIsHit ? rStyleSettings.GetWindowTextColor() : rStyleSettings.GetWorkspaceColor());
     tools::Polygon aPolygon(rPoly);
     aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
     rRenderContext.DrawPolygon(aPolygon);
@@ -942,7 +942,7 @@ void Ruler::ImplDrawTab(vcl::RenderContext& rRenderContext, const Point& rPos, s
     if (nStyle & RULER_STYLE_DONTKNOW)
         rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetFaceColor());
     else
-        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetDarkShadowColor());
+        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowTextColor());
 
     if (mpData->bTextRTL)
         nStyle |= RULER_TAB_RTL;
@@ -986,7 +986,7 @@ void Ruler::ApplySettings(vcl::RenderContext& rRenderContext)
 
     ApplyControlFont(rRenderContext, aFont);
 
-    ApplyControlForeground(*GetOutDev(), rStyleSettings.GetDarkShadowColor());
+    ApplyControlForeground(*GetOutDev(), rStyleSettings.GetWindowTextColor());
     SetTextFillColor();
 
     Color aColor;
@@ -1017,7 +1017,7 @@ void Ruler::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
 
     if (bForeground || bFont)
     {
-        ApplyControlForeground(*GetOutDev(), rStyleSettings.GetDarkShadowColor());
+        ApplyControlForeground(*GetOutDev(), rStyleSettings.GetWindowTextColor());
         SetTextFillColor();
     }
 
@@ -1180,7 +1180,7 @@ void Ruler::ImplFormat(vcl::RenderContext const & rRenderContext)
     }
 
     // top/bottom border
-    maVirDev->SetLineColor(rStyleSettings.GetShadowColor());
+    maVirDev->SetLineColor(rStyleSettings.GetDarkShadowColor());
     ImplVDrawLine(*maVirDev, nVirLeft, nVirTop + 1, nM1,     nVirTop + 1); //top left line
     ImplVDrawLine(*maVirDev, nM2,      nVirTop + 1, nP2 - 1, nVirTop + 1); //top right line
 
@@ -1212,7 +1212,7 @@ void Ruler::ImplFormat(vcl::RenderContext const & rRenderContext)
         maVirDev->SetFillColor(aRulerColor);
         ImplVDrawRect(*maVirDev, nM1 + 1, nVirTop, nM2 - 1, nVirBottom); //center rectangle
     }
-    maVirDev->SetLineColor(rStyleSettings.GetShadowColor());
+    maVirDev->SetLineColor(rStyleSettings.GetDarkShadowColor());
     if (nM1 > nVirLeft)
     {
         ImplVDrawLine(*maVirDev, nM1, nVirTop + 1, nM1, nVirBottom); //right line of the left rectangle
