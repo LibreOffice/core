@@ -2409,12 +2409,7 @@ AC_ARG_WITH(templates,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *breeze, *breeze_dark, *breeze_dark_svg, *breeze_svg,
-         *colibre, *colibre_svg, *colibre_dark, *colibre_dark_svg,
-         *elementary, *elementary_svg,
-         *karasa_jaga, *karasa_jaga_svg,
-         *sifr, *sifr_dark, *sifr_dark_svg, *sifr_svg,
-         *sukapura, *sukapura_dark, *sukapura_dark_svg, *sukapura_svg.]),
+         Possible choices: *colibre, *colibre_svg, *colibre_dark, *colibre_dark_svg.]),
 ,)
 
 libo_FUZZ_ARG_WITH(helppack-integration,
@@ -14342,14 +14337,14 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="breeze breeze_dark breeze_dark_svg breeze_svg colibre colibre_svg colibre_dark colibre_dark_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark sifr_dark_svg sukapura sukapura_dark sukapura_dark_svg sukapura_svg"
+    with_theme="colibre colibre_svg colibre_dark colibre_dark_svg"
 fi
 
 WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-        breeze|breeze_dark|breeze_dark_svg|breeze_svg|colibre|colibre_svg|colibre_dark|colibre_dark_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|sukapura|sukapura_dark|sukapura_dark_svg|sukapura_svg) WITH_THEMES="${WITH_THEMES:+$WITH_THEMES }$theme" ;;
+        colibre|colibre_svg|colibre_dark|colibre_dark_svg) WITH_THEMES="${WITH_THEMES:+$WITH_THEMES }$theme" ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
     done
@@ -15892,23 +15887,6 @@ if test "$enable_mpl_subset" = "yes"; then
     if test "x$WITH_EXTRA_EXTENSIONS" != "x"; then
         mpl_error_string="$mpl_error_string$newline Need to disable extra extensions enabled using --enable-ext-XXXX."
     fi
-    denied_themes=
-    filtered_themes=
-    for theme in $WITH_THEMES; do
-        case $theme in
-        breeze|breeze_dark|breeze_dark_svg|breeze_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg) #denylist of icon themes under GPL or LGPL
-            denied_themes="${denied_themes:+$denied_themes }$theme" ;;
-        *)
-            filtered_themes="${filtered_themes:+$filtered_themes }$theme" ;;
-        esac
-    done
-    if test "x$denied_themes" != "x"; then
-        if test "x$filtered_themes" == "x"; then
-            filtered_themes="colibre"
-        fi
-        mpl_error_string="$mpl_error_string$newline Need to disable icon themes: $denied_themes, use --with-theme=$filtered_themes."
-    fi
-
     if test "$enable_lpsolve" != "no" -o "x$ENABLE_LPSOLVE" = "xTRUE"; then
         mpl_error_string="$mpl_error_string$newline Need to --disable-lpsolve - calc linear programming solver."
     fi

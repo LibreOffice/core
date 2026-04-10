@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <IconThemeSelector.hxx>
 #include <QtCustomStyle.hxx>
 #include <QtTools.hxx>
 #include <QtWidgets/qdrawutil.h>
@@ -139,8 +138,7 @@ void QtCustomStyle::LoadCustomStyle(bool bDarkMode)
     if (!(m_bIsCustomStyleSet && IsSystemThemeChanged()))
         QApplication::setPalette(QtCustomStyle::customPalette());
 
-    QIcon::setThemeName(toQString(vcl::IconThemeSelector::GetIconThemeForDesktopEnvironment(
-        Application::GetDesktopEnvironment(), bDarkMode)));
+    QIcon::setThemeName(toQString(bDarkMode ? u"colibre_dark"_ustr : u"colibre"_ustr));
 
     if (m_bIsCustomStyleSet)
         return;

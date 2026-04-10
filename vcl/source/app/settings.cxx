@@ -2822,8 +2822,7 @@ OUString
 StyleSettings::GetAutomaticallyChosenIconTheme() const
 {
     return mxData->mIconThemeSelector.SelectIconThemeForDesktopEnvironment(
-            GetInstalledIconThemes(),
-            Application::GetDesktopEnvironment());
+            GetInstalledIconThemes());
 }
 
 void

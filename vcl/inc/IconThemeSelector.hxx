@@ -55,8 +55,7 @@ public:
      */
     OUString
     SelectIconThemeForDesktopEnvironment(
-            const std::vector<IconThemeInfo>& installedThemes,
-            const OUString& desktopEnvironment) const;
+            const std::vector<IconThemeInfo>& installedThemes) const;
 
     void
     SetUseHighContrastTheme(bool);
@@ -67,9 +66,6 @@ public:
 
     bool
     operator==(const vcl::IconThemeSelector&) const = default;
-
-    static OUString
-    GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment, bool bPreferDarkIconTheme);
 
 private:
     /** Return the first element of the themes, or the fallback if the vector is empty */

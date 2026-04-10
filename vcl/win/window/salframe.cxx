@@ -23,8 +23,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
-#include <IconThemeSelector.hxx>
-
 #include <officecfg/Office/Common.hxx>
 
 #include <memory>
@@ -2749,8 +2747,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     }
     else
     {
-        aStyleSettings.SetPreferredIconTheme(vcl::IconThemeSelector::GetIconThemeForDesktopEnvironment(
-            Application::GetDesktopEnvironment(), ThemeColors::GetThemeColors().GetWindowColor().IsDark()));
+        aStyleSettings.SetPreferredIconTheme(ThemeColors::GetThemeColors().GetWindowColor().IsDark()
+            ? u"colibre_dark"_ustr : u"colibre"_ustr);
     }
 
     if (bUseDarkMode)

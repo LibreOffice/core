@@ -342,10 +342,6 @@ OUString ImplImageTree::fallbackStyle(std::u16string_view rsStyle)
 
     if (rsStyle == u"colibre" || rsStyle == u"helpimg")
         sResult = "";
-    else if (rsStyle == u"sifr" || rsStyle == u"breeze_dark")
-        sResult = "breeze";
-    else if (rsStyle == u"sifr_dark" )
-        sResult = "breeze_dark";
     else
         sResult = "colibre";
 

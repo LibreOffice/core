@@ -7,15 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/kit.hxx>
-
 #include <IconThemeSelector.hxx>
 
 #include <tools/color.hxx>
 #include <vcl/IconThemeInfo.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <config_mpl.h>
 
 #include <algorithm>
 
@@ -50,61 +47,9 @@ IconThemeSelector::IconThemeSelector()
 {
 }
 
-/*static*/ OUString
-IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment, bool bPreferDarkIconTheme)
-{
-    if (comphelper::COKit::isActive())
-    {
-        if (!bPreferDarkIconTheme)
-            return u"colibre"_ustr;
-        else
-            return u"colibre_dark"_ustr;
-    }
-
-#ifdef _WIN32
-    (void)desktopEnvironment;
-    if (!bPreferDarkIconTheme)
-        return "colibre";
-    else
-        return "colibre_dark";
-#else
-    OUString r;
-    if ( desktopEnvironment.equalsIgnoreAsciiCase("plasma5") ||
-         desktopEnvironment.equalsIgnoreAsciiCase("plasma6") ||
-         desktopEnvironment.equalsIgnoreAsciiCase("lxqt") ) {
-        if (!bPreferDarkIconTheme)
-            r = "breeze";
-        else
-            r = "breeze_dark";
-    }
-    else if ( desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
-        if (!bPreferDarkIconTheme)
-            r = "sukapura_svg";
-        else
-            r = "sukapura_dark_svg";
-    }
-    else if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ||
-         desktopEnvironment.equalsIgnoreAsciiCase("mate") ||
-         desktopEnvironment.equalsIgnoreAsciiCase("unity") ) {
-        if (!bPreferDarkIconTheme)
-            r = "elementary";
-        else
-            r = "sifr_dark";
-    } else
-    {
-        if (!bPreferDarkIconTheme)
-            r = FALLBACK_LIGHT_ICON_THEME_ID;
-        else
-            r = FALLBACK_DARK_ICON_THEME_ID;
-    }
-    return r;
-#endif // _WIN32
-}
-
 OUString
 IconThemeSelector::SelectIconThemeForDesktopEnvironment(
-        const std::vector<IconThemeInfo>& installedThemes,
-        const OUString& desktopEnvironment) const
+        const std::vector<IconThemeInfo>& installedThemes) const
 {
     if (!mPreferredIconTheme.isEmpty()) {
         if (icon_theme_is_in_installed_themes(mPreferredIconTheme, installedThemes)) {
@@ -112,7 +57,7 @@ IconThemeSelector::SelectIconThemeForDesktopEnvironment(
         }
     }
 
-    OUString themeForDesktop = GetIconThemeForDesktopEnvironment(desktopEnvironment, mPreferDarkIconTheme);
+    OUString themeForDesktop = mPreferDarkIconTheme ? FALLBACK_DARK_ICON_THEME_ID : FALLBACK_LIGHT_ICON_THEME_ID;
     if (icon_theme_is_in_installed_themes(themeForDesktop, installedThemes)) {
         return themeForDesktop;
     }

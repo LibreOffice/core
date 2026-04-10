@@ -70,7 +70,7 @@ namespace toolkit
             INetURLObject aURL( i_imageURL );
             if ( aURL.GetProtocol() != INetProtocol::PrivSoffice )
             {
-                OSL_VERIFY( aURL.insertName( u"sifr", false, 0 ) );
+                OSL_VERIFY( aURL.insertName( u"colibre", false, 0 ) );
                 return aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
             // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the
@@ -78,7 +78,7 @@ namespace toolkit
             const sal_Int32 separatorPos = i_imageURL.indexOf( '/' );
             ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsupported URL scheme - cannot automatically determine HC version!", i_imageURL );
 
-            OUString composer = OUString::Concat(i_imageURL.subView(0, separatorPos)) + "/sifr" +
+            OUString composer = OUString::Concat(i_imageURL.subView(0, separatorPos)) + "/colibre" +
                 i_imageURL.subView(separatorPos);
             return composer;
         }

@@ -26,7 +26,6 @@
 #include <o3tl/string_view.hxx>
 #include <scrollbarvalue.hxx>
 
-#include <IconThemeSelector.hxx>
 #include "custom-theme.hxx"
 #include <vcl/themecolors.hxx>
 #include "gtkcairo.hxx"
@@ -2692,8 +2691,8 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     }
     else
     {
-        aStyleSet.SetPreferredIconTheme(vcl::IconThemeSelector::GetIconThemeForDesktopEnvironment(
-            Application::GetDesktopEnvironment(), ThemeColors::GetThemeColors().GetWindowColor().IsDark()));
+        aStyleSet.SetPreferredIconTheme(ThemeColors::GetThemeColors().GetWindowColor().IsDark()
+            ? u"colibre_dark"_ustr : u"colibre"_ustr);
     }
 
     aStyleSet.SetToolbarIconSize( ToolbarIconSize::Large );

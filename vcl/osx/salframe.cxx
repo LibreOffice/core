@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <IconThemeSelector.hxx>
 #include <string>
 
 #include <comphelper/fileurl.hxx>
@@ -1611,10 +1610,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     else
     {
-        aStyleSettings.SetPreferredIconTheme(
-            vcl::IconThemeSelector::GetIconThemeForDesktopEnvironment(
-                Application::GetDesktopEnvironment(),
-                ThemeColors::GetThemeColors().GetWindowColor().IsDark()));
+        aStyleSettings.SetPreferredIconTheme(ThemeColors::GetThemeColors().GetWindowColor().IsDark()
+            ? u"colibre_dark"_ustr : u"colibre"_ustr);
     }
 
     Color aControlBackgroundColor(getNSBoxBackgroundColor([NSColor controlBackgroundColor]));
