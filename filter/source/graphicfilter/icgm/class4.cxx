@@ -22,6 +22,9 @@
 #include "chart.hxx"
 #include "outact.hxx"
 #include <math.h>
+
+#include <sal/log.hxx>
+
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -122,6 +125,11 @@ void CGM::ImplDoClass4()
             case 0x01 : /*PolyLine*/
             {
                 sal_uInt32 nPoints = mnElementSize / ImplGetPointSize();
+                if (nPoints > SAL_MAX_UINT16)
+                {
+                    SAL_WARN("filter.icgm", "CGM PolyLine too many points: " << nPoints);
+                    break;
+                }
                 tools::Polygon aPolygon( static_cast<sal_uInt16>(nPoints) );
                 for ( sal_uInt32 i = 0; i < nPoints; i++)
                 {
