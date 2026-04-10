@@ -42,9 +42,9 @@ namespace emfplushelper
 {
     void EMFPFont::Read(SvMemoryStream &s)
     {
-        sal_uInt32 header;
-        sal_uInt32 reserved;
-        sal_uInt32 length;
+        sal_uInt32 header(0);
+        sal_uInt32 reserved(0);
+        sal_uInt32 length(0);
         s.ReadUInt32(header).ReadFloat(emSize).ReadUInt32(sizeUnit).ReadInt32(fontFlags).ReadUInt32(reserved).ReadUInt32(length);
         SAL_WARN_IF((header >> 12) != 0xdbc01, "drawinglayer", "Invalid header - not 0xdbc01");
         SAL_INFO("drawinglayer", "EMF+\tfont\nEMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " size: " << std::dec << emSize << " unit: 0x" << std::hex << sizeUnit << std::dec);
