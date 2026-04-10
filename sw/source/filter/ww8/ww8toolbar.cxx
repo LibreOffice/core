@@ -11,6 +11,7 @@
 #include "ww8scan.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
+#include <o3tl/safeint.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
@@ -412,8 +413,12 @@ bool SwCTB::Read( SvStream &rS)
 
     rS.ReadInt32( iWCTBl ).ReadUInt16( reserved ).ReadUInt16( unused ).ReadInt32( cCtls );
 
-    if ( cCtls )
+    if ( cCtls > 0 )
     {
+        //each SwTBC is at least 10 bytes in size
+        size_t nMaxAvailableRecords = rS.remainingSize() / 10;
+        if (o3tl::make_unsigned(cCtls) > nMaxAvailableRecords)
+            return false;
         for ( sal_Int32 index = 0; index < cCtls; ++index )
         {
             SwTBC aTBC;
