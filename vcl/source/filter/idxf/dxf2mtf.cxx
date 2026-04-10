@@ -613,11 +613,12 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
                 }
             }
         }
-        sal_uInt16 i, nSize = static_cast<sal_uInt16>(aPtAry.size());
-        if ( nSize )
+        size_t nPtSize = aPtAry.size();
+        if ( nPtSize > 0 && nPtSize <= SAL_MAX_UINT16 )
         {
+            sal_uInt16 nSize = static_cast<sal_uInt16>(nPtSize);
             tools::Polygon aPoly( nSize );
-            for ( i = 0; i < nSize; i++ )
+            for ( sal_uInt16 i = 0; i < nSize; i++ )
                 aPoly[ i ] = aPtAry[ i ];
             aPolyPoly.Insert( aPoly );
         }
