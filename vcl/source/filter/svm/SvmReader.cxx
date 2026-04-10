@@ -1142,7 +1142,7 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
         double fOff, fR, fG, fB;
         mrStream.ReadUInt16(nTmp);
 
-        const size_t nMaxPossibleEntries = mrStream.remainingSize() / 4 * sizeof(double);
+        const size_t nMaxPossibleEntries = mrStream.remainingSize() / (4 * sizeof(double));
         if (nTmp > nMaxPossibleEntries)
         {
             SAL_WARN("vcl.gdi", "gradient record claims to have: " << nTmp << " entries, but only "
