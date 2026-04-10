@@ -648,6 +648,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
+    using FindTextToolbarController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
@@ -802,6 +803,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
+    using UpDownSearchToolboxController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
@@ -896,6 +898,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
+    using MatchCaseToolboxController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
@@ -999,6 +1002,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
+    using MatchDiacriticsToolboxController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
@@ -1102,6 +1106,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
+    using SearchFormattedToolboxController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
@@ -1194,6 +1199,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
+    using FindAllToolboxController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
@@ -1277,6 +1283,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
+    using ExitSearchToolboxController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
@@ -1371,6 +1378,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
+    using SearchLabelToolboxController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization

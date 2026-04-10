@@ -36,6 +36,7 @@ class LimitBoxController: public LimitBoxController_Base
         DECLARE_SERVICE_INFO();
 
         /// WeakComponentImplHelperBase
+        using LimitBoxController_Base::disposing;
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         /// XStatusListener

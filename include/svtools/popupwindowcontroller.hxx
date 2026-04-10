@@ -69,6 +69,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
 
     // WeakComponentImplHelperBase
+    using PopupWindowController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XStatusListener

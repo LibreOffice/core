@@ -44,6 +44,7 @@ class DropdownToolbarController final : public ComplexToolbarController
         virtual ~DropdownToolbarController() override;
 
         // WeakComponentImplHelperBase
+        using ComplexToolbarController::disposing;
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // called from ListBoxControl

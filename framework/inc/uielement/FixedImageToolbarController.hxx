@@ -38,6 +38,7 @@ public:
                                 ToolBox* pToolBar, ToolBoxItemId nID, const OUString& aCommand);
 
     // WeakComponentImplHelperBase
+    using ComplexToolbarController::disposing;
     void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     void CheckAndUpdateImages();

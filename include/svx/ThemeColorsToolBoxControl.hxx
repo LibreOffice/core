@@ -39,8 +39,10 @@ protected:
     void onColorSetActivated() override;
 };
 
-class SVX_DLLPUBLIC ThemeColorsToolBoxControl final
-    : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
+using ThemeColorsToolBoxControl_Base
+    = cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>;
+
+class SVX_DLLPUBLIC ThemeColorsToolBoxControl final : public ThemeColorsToolBoxControl_Base
 {
     VclPtr<ThemeColorsPaneWrapper> m_xVclBox;
 
@@ -57,6 +59,7 @@ public:
         SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // WeakComponentImplHelperBase
+    using ThemeColorsToolBoxControl_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XUpdatable

@@ -27,8 +27,10 @@ public:
     void SetOptimalSize(); // Add this method
 };
 
-class SlideTransitionsToolBoxControl final
-    : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
+using SlideTransitionsToolBoxControl_Base
+    = cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>;
+
+class SlideTransitionsToolBoxControl final : public SlideTransitionsToolBoxControl_Base
 {
     VclPtr<SlideTransitionsPaneWrapper> m_xVclBox;
 
@@ -47,6 +49,7 @@ public:
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     // WeakComponentImplHelperBase
+    using SlideTransitionsToolBoxControl_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XUpdatable

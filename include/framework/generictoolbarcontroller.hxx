@@ -41,6 +41,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) GenericToolbarController final : public sv
         virtual ~GenericToolbarController() override;
 
         // WeakComponentImplHelperBase
+        using svt::ToolboxController::disposing;
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XToolbarController
@@ -76,6 +77,7 @@ public:
                                const OUString& rModuleName);
 
     // WeakComponentImplHelperBase
+    using svt::ToolboxController::disposing;
     void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XStatusListener

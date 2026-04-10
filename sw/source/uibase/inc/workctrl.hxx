@@ -163,6 +163,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
+    using NavElementToolBoxControl_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XStatusListener

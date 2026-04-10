@@ -25,8 +25,10 @@
 #include "StylesPreviewWindow.hxx"
 #include <com/sun/star/frame/XModel.hpp>
 
-class StylesPreviewToolBoxControl final
-    : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
+using StylesPreviewToolBoxControl_Base
+    = cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>;
+
+class StylesPreviewToolBoxControl final : public StylesPreviewToolBoxControl_Base
 {
     VclPtr<StylesPreviewWindow_Impl> m_xVclBox;
     std::unique_ptr<StylesPreviewWindow_Base> m_xWeldBox;
@@ -48,6 +50,7 @@ public:
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     // WeakComponentImplHelperBase
+    using StylesPreviewToolBoxControl_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XUpdatable

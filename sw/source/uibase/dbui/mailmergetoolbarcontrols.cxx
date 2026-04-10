@@ -129,6 +129,7 @@ public:
     }
 
     // WeakComponentImplHelperBase
+    using MMCurrentEntryController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XToolbarController
@@ -221,6 +222,7 @@ public:
     }
 
     // WeakComponentImplHelperBase
+    using MMExcludeEntryController_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XToolbarController
