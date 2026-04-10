@@ -614,7 +614,9 @@ std::unique_ptr<SvStream> EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) co
     {
         SAL_INFO( "svtools.misc", "getting stream from container" );
         // try to get graphic stream from container storage
-        xStream = mpImpl->pContainer->GetGraphicStream(mpImpl->mxObj, &mpImpl->aMediaType);
+        // use persist name directly to avoid unordered_map lookup by Reference,
+        // which can crash on dangling pointers in the map
+        xStream = mpImpl->pContainer->GetGraphicStream(mpImpl->aPersistName, &mpImpl->aMediaType);
         if ( xStream.is() )
         {
             const sal_Int32 nConstBufferSize = 32000;
