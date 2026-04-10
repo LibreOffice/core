@@ -3501,7 +3501,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         double fOff, fR, fG, fB;
                         aMemStm.ReadUInt16( nTmp );
 
-                        const size_t nMaxPossibleEntries = aMemStm.remainingSize() / 4 * sizeof(double);
+                        const size_t nMaxPossibleEntries = aMemStm.remainingSize() / (4 * sizeof(double));
                         if (nTmp > nMaxPossibleEntries)
                         {
                             SAL_WARN("filter.svg", "gradient record claims to have: " << nTmp << " entries, but only " << nMaxPossibleEntries << " possible, clamping");
