@@ -5505,22 +5505,32 @@ void ChartExport::exportDataLabels(
     if (!bIsChartex) {
         bool bShowLeaderLines = false;
         xPropSet->getPropertyValue(u"ShowCustomLeaderLines"_ustr) >>= bShowLeaderLines;
-        pFS->singleElement(FSNS(XML_c, XML_showLeaderLines), XML_val, ToPsz10(bShowLeaderLines));
 
-        // Export LeaderLine properties
-        // TODO: import all kind of LeaderLine props (not just LineColor/LineWidth)
-        if (bShowLeaderLines)
+        bool bIsPieOrDoughnut = eChartType == chart::TYPEID_PIE
+                                || eChartType == chart::TYPEID_DOUGHNUT;
+
+        // showLeaderLines and leaderLines are only valid inside dLbls for
+        // pie and doughnut charts per the OOXML schema. Writing them for
+        // other chart types (e.g. barChart) causes Excel to crash.
+        if (bIsPieOrDoughnut)
         {
-            pFS->startElement(FSNS(XML_c, XML_leaderLines));
-            pFS->startElement(FSNS(XML_c, XML_spPr));
-            WriteOutline(xPropSet, getModel());
-            pFS->endElement(FSNS(XML_c, XML_spPr));
-            pFS->endElement(FSNS(XML_c, XML_leaderLines));
+            pFS->singleElement(FSNS(XML_c, XML_showLeaderLines),
+                               XML_val, ToPsz10(bShowLeaderLines));
+
+            // Export LeaderLine properties
+            // TODO: import all kind of LeaderLine props (not just LineColor/LineWidth)
+            if (bShowLeaderLines)
+            {
+                pFS->startElement(FSNS(XML_c, XML_leaderLines));
+                pFS->startElement(FSNS(XML_c, XML_spPr));
+                WriteOutline(xPropSet, getModel());
+                pFS->endElement(FSNS(XML_c, XML_spPr));
+                pFS->endElement(FSNS(XML_c, XML_leaderLines));
+            }
         }
-
-        // Export leader line
-        if( eChartType != chart::TYPEID_PIE )
+        else
         {
+            // For non-pie/doughnut charts, use the c15 extension for leader lines.
             pFS->startElement(FSNS(XML_c, XML_extLst));
             pFS->startElement(FSNS(XML_c, XML_ext), XML_uri, "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}", FSNS(XML_xmlns, XML_c15), GetFB()->getNamespaceURL(OOX_NS(c15)));
             pFS->singleElement(FSNS(XML_c15, XML_showLeaderLines), XML_val, ToPsz10(bShowLeaderLines));
