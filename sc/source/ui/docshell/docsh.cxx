@@ -2934,8 +2934,6 @@ ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags, const std::shar
     m_aDdeTextFmt(u"TEXT"_ustr),
     m_nPrtToScreenFactor( 1.0 ),
     m_pImpl           ( new DocShell_Impl ),
-    m_bHeaderOn       ( true ),
-    m_bFooterOn       ( true ),
     m_bIsEmpty        ( true ),
     m_bIsInUndo       ( false ),
     m_bDocumentModifiedPending( false ),

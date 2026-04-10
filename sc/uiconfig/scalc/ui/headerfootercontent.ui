@@ -87,12 +87,26 @@
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
-      <!-- n-columns=2 n-rows=1 -->
+      <!-- n-columns=3 n-rows=1 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="row-spacing">12</property>
         <property name="column-spacing">6</property>
+        <child>
+          <object class="GtkCheckButton" id="checkBTN_ENABLE_HF">
+            <property name="label">Enable</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="halign">start</property>
+            <property name="draw-indicator">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkComboBoxText" id="comboLB_DEFINED">
             <property name="visible">True</property>
@@ -104,7 +118,7 @@
             </child>
           </object>
           <packing>
-            <property name="left-attach">1</property>
+            <property name="left-attach">2</property>
             <property name="top-attach">0</property>
           </packing>
         </child>
@@ -117,7 +131,7 @@
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
+            <property name="left-attach">1</property>
             <property name="top-attach">0</property>
           </packing>
         </child>

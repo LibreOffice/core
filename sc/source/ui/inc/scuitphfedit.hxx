@@ -25,6 +25,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/Button.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Grid.hxx>
 #include <vcl/weld/Label.hxx>
@@ -87,6 +88,7 @@ private:
     std::unique_ptr<weld::ToggleButton> m_xBtnBold;
     std::unique_ptr<weld::ToggleButton> m_xBtnItalic;
     std::unique_ptr<weld::ToggleButton> m_xBtnUnderline;
+    std::unique_ptr<weld::CheckButton> m_xEnableHF;
 
     std::unique_ptr<weld::Label> m_xFtConfidential;
     std::unique_ptr<weld::Label> m_xFtPage;
@@ -133,6 +135,7 @@ private:
     DECL_LINK( ClickHdl, weld::Button&, void );
     DECL_LINK( ToggleHdl, weld::Toggleable&, void );
     DECL_LINK( MenuHdl, const OUString&, void );
+    DECL_LINK( ToggleEnableHdl, weld::Toggleable&, void );
 };
 
 class ScFirstHeaderEditPage : public ScHFEditPage

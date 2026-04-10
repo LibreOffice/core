@@ -2191,8 +2191,8 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                         auto xRequest = std::make_shared<SfxRequest>(rReq);
                         rReq.Ignore(); // the 'old' request is not relevant any more
                         pDlg->StartExecuteAsync([this, pDlg, xRequest=std::move(xRequest), pStyleSheet,
-                                                 xOldData=std::move(xOldData), aOldName, &rStyleSet,
-                                                 nCurTab, &rCaller, bUndo](sal_Int32 nResult) {
+                                                 xOldData=std::move(xOldData), aOldName,
+                                                 &rCaller, bUndo](sal_Int32 nResult) {
                             if ( nResult == RET_OK )
                             {
                                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
@@ -2214,8 +2214,6 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                                 if ( pOutSet )
                                     m_pDocument->ModifyStyleSheet( *pStyleSheet, *pOutSet );
 
-                                // memorizing for GetState():
-                                GetPageOnFromPageStyleSet( &rStyleSet, nCurTab, m_bHeaderOn, m_bFooterOn );
                                 rCaller.GetViewFrame().GetBindings().Invalidate( SID_HFEDIT );
 
                                 ScStyleSaveData aNewData;
@@ -2272,75 +2270,23 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                         {
                             case SvxPageUsage::Left:
                             case SvxPageUsage::Right:
-                            {
-                                if ( m_bHeaderOn && m_bFooterOn )
-                                    nResId = RID_SCDLG_HFEDIT;
-                                else if ( SvxPageUsage::Right == eUsage )
-                                {
-                                    if ( !m_bHeaderOn && m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT_RIGHTFOOTER;
-                                    else if ( m_bHeaderOn && !m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT_RIGHTHEADER;
-                                }
-                                else
-                                {
-                                    //  #69193a# respect "shared" setting
-                                    if ( !m_bHeaderOn && m_bFooterOn )
-                                        nResId = bShareFooter ?
-                                                    RID_SCDLG_HFEDIT_RIGHTFOOTER :
-                                                    RID_SCDLG_HFEDIT_LEFTFOOTER;
-                                    else if ( m_bHeaderOn && !m_bFooterOn )
-                                        nResId = bShareHeader ?
-                                                    RID_SCDLG_HFEDIT_RIGHTHEADER :
-                                                    RID_SCDLG_HFEDIT_LEFTHEADER;
-                                }
-                            }
-                            break;
+                                nResId = RID_SCDLG_HFEDIT;
+                                break;
 
                             case SvxPageUsage::Mirror:
                             case SvxPageUsage::All:
                             default:
                             {
                                 if ( !bShareHeader && !bShareFooter )
-                                {
-                                    if ( m_bHeaderOn && m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT_ALL;
-                                    else if ( !m_bHeaderOn && m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT_FOOTER;
-                                    else if ( m_bHeaderOn && !m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT_HEADER;
-                                }
+                                    nResId = RID_SCDLG_HFEDIT_ALL;
                                 else if ( bShareHeader && bShareFooter )
-                                {
-                                    if ( m_bHeaderOn && m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT;
-                                    else
-                                    {
-                                        if ( !m_bHeaderOn && m_bFooterOn )
-                                            nResId = RID_SCDLG_HFEDIT_RIGHTFOOTER;
-                                        else if ( m_bHeaderOn && !m_bFooterOn )
-                                            nResId = RID_SCDLG_HFEDIT_RIGHTHEADER;
-                                    }
-                                }
+                                    nResId = RID_SCDLG_HFEDIT;
                                 else if ( !bShareHeader &&  bShareFooter )
-                                {
-                                    if ( m_bHeaderOn && m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT_SFTR;
-                                    else if ( !m_bHeaderOn && m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT_RIGHTFOOTER;
-                                    else if ( m_bHeaderOn && !m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT_HEADER;
-                                }
+                                    nResId = RID_SCDLG_HFEDIT_SFTR;
                                 else if (  bShareHeader && !bShareFooter )
-                                {
-                                    if ( m_bHeaderOn && m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT_SHDR;
-                                    else if ( !m_bHeaderOn && m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT_FOOTER;
-                                    else if ( m_bHeaderOn && !m_bFooterOn )
-                                        nResId = RID_SCDLG_HFEDIT_RIGHTHEADER;
-                                }
+                                    nResId = RID_SCDLG_HFEDIT_SHDR;
                             }
+                            break;
                         }
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -2386,25 +2332,6 @@ void ScDocShell::GetStatePageStyle( SfxItemSet&     rSet,
         {
             case SID_STATUS_PAGESTYLE:
                 rSet.Put( SfxStringItem( nWhich, m_pDocument->GetPageStyle( nCurTab ) ) );
-                break;
-
-            case SID_HFEDIT:
-                {
-                    OUString            aStr        = m_pDocument->GetPageStyle( nCurTab );
-                    ScStyleSheetPool*   pStylePool  = m_pDocument->GetStyleSheetPool();
-                    SfxStyleSheetBase*  pStyleSheet = pStylePool->Find( aStr, SfxStyleFamily::Page );
-
-                    OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
-
-                    if ( pStyleSheet )
-                    {
-                        SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
-                        GetPageOnFromPageStyleSet( &rStyleSet, nCurTab, m_bHeaderOn, m_bFooterOn );
-
-                        if ( !m_bHeaderOn && !m_bFooterOn )
-                            rSet.DisableItem( nWhich );
-                    }
-                }
                 break;
         }
 
@@ -2846,42 +2773,6 @@ void ScDocShell::SnapVisArea( tools::Rectangle& rRect ) const
 
     if ( bNegativePage )
         ScDrawLayer::MirrorRectRTL( rRect );        // back to real rectangle
-}
-
-void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
-                                            SCTAB             nCurTab,
-                                            bool&             rbHeader,
-                                            bool&             rbFooter )
-{
-    if ( !pStyleSet )
-    {
-        ScStyleSheetPool*  pStylePool  = m_pDocument->GetStyleSheetPool();
-        SfxStyleSheetBase* pStyleSheet = pStylePool->
-                                            Find( m_pDocument->GetPageStyle( nCurTab ),
-                                                  SfxStyleFamily::Page );
-
-        OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
-
-        if ( pStyleSheet )
-            pStyleSet = &pStyleSheet->GetItemSet();
-        else
-            rbHeader = rbFooter = false;
-    }
-
-    OSL_ENSURE( pStyleSet, "PageStyle-Set not found! :-(" );
-    if (!pStyleSet)
-        return;
-
-    const SvxSetItem*   pSetItem = nullptr;
-    const SfxItemSet*   pSet     = nullptr;
-
-    pSetItem = &pStyleSet->Get( ATTR_PAGE_HEADERSET );
-    pSet     = &pSetItem->GetItemSet();
-    rbHeader = pSet->Get(ATTR_PAGE_ON).GetValue();
-
-    pSetItem = &pStyleSet->Get( ATTR_PAGE_FOOTERSET );
-    pSet     = &pSetItem->GetItemSet();
-    rbFooter = pSet->Get(ATTR_PAGE_ON).GetValue();
 }
 
 #if defined(_WIN32)

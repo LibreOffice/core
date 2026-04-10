@@ -42,6 +42,8 @@
 #include <editutil.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <scuitphfedit.hxx>
 #include <memory>
@@ -67,6 +69,7 @@ ScHFEditPage::ScHFEditPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xBtnBold(m_xBuilder->weld_toggle_button(u"buttonBTN_BOLD"_ustr))
     , m_xBtnItalic(m_xBuilder->weld_toggle_button(u"buttonBTN_ITALIC"_ustr))
     , m_xBtnUnderline(m_xBuilder->weld_toggle_button(u"buttonBTN_UNDERLINE"_ustr))
+    , m_xEnableHF(m_xBuilder->weld_check_button(u"checkBTN_ENABLE_HF"_ustr))
     , m_xFtConfidential(m_xBuilder->weld_label(u"labelSTR_HF_CONFIDENTIAL"_ustr))
     , m_xFtPage(m_xBuilder->weld_label(u"labelSTR_PAGE"_ustr))
     , m_xFtOfQuestion(m_xBuilder->weld_label(u"labelSTR_HF_OF_QUESTION"_ustr))
@@ -177,6 +180,18 @@ ScHFEditPage::ScHFEditPage(weld::Container* pPage, weld::DialogController* pCont
 
     if (const SvxFontHeightItem *pFontHeightItem = m_pEditFocus->GetEditView()->GetAttribs().GetItemIfSet( EE_CHAR_FONTHEIGHT ))
         m_xLbFontHeight->set_active_text( OUString::number(pFontHeightItem->GetHeight() / 20) );
+
+    bool bHeader = (nWhich == SID_SCATTR_PAGE_HEADERFIRST ||
+                    nWhich == SID_SCATTR_PAGE_HEADERRIGHT ||
+                    nWhich == SID_SCATTR_PAGE_HEADERLEFT);
+
+    const bool bOn = rCoreAttrs.Get( bHeader ? ATTR_PAGE_HEADERSET : ATTR_PAGE_FOOTERSET ).GetItemSet().Get( ATTR_PAGE_ON ).GetValue();
+
+    m_xEnableHF->set_label( ScResId( bHeader ? STR_HF_ENABLE_HEADER : STR_HF_ENABLE_FOOTER ) );
+    m_xEnableHF->set_active( bOn );
+    m_xEnableHF->connect_toggled( LINK( this, ScHFEditPage, ToggleEnableHdl ) );
+
+    ToggleEnableHdl( *m_xEnableHF );
 }
 
 IMPL_LINK_NOARG( ScHFEditPage, ObjectSelectHdl, ScEditWindow&, void )
@@ -223,6 +238,28 @@ bool ScHFEditPage::FillItemSet( SfxItemSet* rCoreSet )
     aItem.SetRightArea ( *pRight );
 
     rCoreSet->Put( aItem );
+
+    bool bHeader = (nWhich == SID_SCATTR_PAGE_HEADERFIRST ||
+                    nWhich == SID_SCATTR_PAGE_HEADERRIGHT ||
+                    nWhich == SID_SCATTR_PAGE_HEADERLEFT);
+
+    bool bIsOn = m_xEnableHF->get_active();
+    sal_uInt16 nSetId = bHeader ? ATTR_PAGE_HEADERSET : ATTR_PAGE_FOOTERSET;
+
+    const SfxPoolItem* pItem = nullptr;
+    std::unique_ptr<SvxSetItem> pNewItem;
+
+    if ( rCoreSet->GetItemState( nSetId, false, &pItem ) == SfxItemState::SET )
+        pNewItem.reset( static_cast<SvxSetItem*>( pItem->Clone() ) );
+    else
+        pNewItem.reset( static_cast<SvxSetItem*>( GetItemSet().Get( nSetId ).Clone() ) );
+
+    bool bOldOn = pNewItem->GetItemSet().Get( ATTR_PAGE_ON ).GetValue();
+    if ( bIsOn != bOldOn )
+    {
+        pNewItem->GetItemSet().Put( SfxBoolItem( ATTR_PAGE_ON, bIsOn ) );
+        rCoreSet->Put( *pNewItem );
+    }
 
     return true;
 }
@@ -816,6 +853,32 @@ IMPL_LINK_NOARG( ScHFEditPage, FontFamilyListHdl, weld::ComboBox&, void)
     aSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFont.GetFamilyName(), u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ) );
     m_pEditFocus->GetEditView()->SetAttribs(aSet);
     m_pEditFocus->GrabFocus();
+}
+
+IMPL_LINK_NOARG( ScHFEditPage, ToggleEnableHdl, weld::Toggleable&, void )
+{
+    bool bActive = m_xEnableHF->get_active();
+
+    m_xLbDefined->set_sensitive( bActive );
+    m_xLbFontFamily->set_sensitive( bActive );
+    m_xLbFontHeight->set_sensitive( bActive );
+    m_xBtnBold->set_sensitive( bActive );
+    m_xBtnItalic->set_sensitive( bActive );
+    m_xBtnUnderline->set_sensitive( bActive );
+
+    m_xBtnText->set_sensitive( bActive );
+    m_xBtnFile->set_sensitive( bActive );
+    m_xBtnTable->set_sensitive( bActive );
+    m_xBtnPage->set_sensitive( bActive );
+    m_xBtnLastPage->set_sensitive( bActive );
+    m_xBtnDate->set_sensitive( bActive );
+    m_xBtnTime->set_sensitive( bActive );
+
+    m_xWndLeftWnd->set_sensitive( bActive );
+    m_xWndCenterWnd->set_sensitive( bActive );
+    m_xWndRightWnd->set_sensitive( bActive );
+    m_xLeft->set_sensitive( bActive );
+    m_xRight->set_sensitive( bActive );
 }
 
 IMPL_LINK( ScHFEditPage, ClickHdl, weld::Button&, rBtn, void )
