@@ -167,8 +167,6 @@ void Theme::UpdateTheme()
             return p ? std::string(p) : std::string();
         }();
         const bool bOfficeLabs = !s_olThemeSidebar.empty();
-        const bool bDark = bOfficeLabs ? (s_olThemeSidebar != "light")
-                                       : rStyle.GetFaceColor().IsDark();
 
         Color aBaseBackgroundColor, aSecondColor, aHighlight;
 
