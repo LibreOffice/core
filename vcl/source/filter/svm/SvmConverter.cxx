@@ -60,7 +60,7 @@ static bool ImplReadPoly(SvStream& rIStm, tools::Polygon& rPoly)
     rIStm.ReadInt32(nSize32);
     sal_uInt16 nSize = nSize32;
 
-    const size_t nMaxPossiblePoints = rIStm.remainingSize() / 2 * sizeof(sal_Int32);
+    const size_t nMaxPossiblePoints = rIStm.remainingSize() / (2 * sizeof(sal_Int32));
     if (nSize > nMaxPossiblePoints)
     {
         SAL_WARN("vcl.gdi", "svm record claims to have: " << nSize << " points, but only " << nMaxPossiblePoints << " possible");
