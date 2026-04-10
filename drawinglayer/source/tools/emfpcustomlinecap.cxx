@@ -46,11 +46,11 @@ namespace emfplushelper
 
     void EMFPCustomLineCap::ReadPath(SvStream& s, EmfPlusHelperData const & rR, bool bFill)
     {
-        sal_Int32 pathLength;
+        sal_Int32 pathLength(0);
         s.ReadInt32(pathLength);
         SAL_INFO("drawinglayer.emf", "EMF+\t\tpath length: " << pathLength);
-        sal_uInt32 pathHeader;
-        sal_Int32 pathPoints, pathFlags;
+        sal_uInt32 pathHeader(0);
+        sal_Int32 pathPoints(0), pathFlags(0);
         s.ReadUInt32(pathHeader).ReadInt32(pathPoints).ReadInt32(pathFlags);
         SAL_INFO("drawinglayer.emf", "EMF+\t\tpath (custom cap line path)");
         SAL_INFO("drawinglayer.emf", "EMF+\t\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec);
@@ -65,16 +65,16 @@ namespace emfplushelper
 
     void EMFPCustomLineCap::Read(SvStream& s, EmfPlusHelperData const & rR)
     {
-        sal_uInt32 header;
+        sal_uInt32 header(0);
         s.ReadUInt32(header).ReadUInt32(type);
         SAL_INFO("drawinglayer.emf", "EMF+\t\tcustom cap");
         SAL_INFO("drawinglayer.emf", "EMF+\t\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
         if (type == EmfPlusCustomLineCapDataTypeDefault)
         {
-            sal_uInt32 customLineCapDataFlags, baseCap;
-            float baseInset;
-            float fillHotSpotX, fillHotSpotY, strokeHotSpotX, strokeHotSpotY;
+            sal_uInt32 customLineCapDataFlags(0), baseCap(0);
+            float baseInset(0);
+            float fillHotSpotX(0), fillHotSpotY(0), strokeHotSpotX(0), strokeHotSpotY(0);
 
             s.ReadUInt32(customLineCapDataFlags).ReadUInt32(baseCap).ReadFloat(baseInset)
                 .ReadUInt32(strokeStartCap).ReadUInt32(strokeEndCap).ReadUInt32(strokeJoin)
@@ -100,8 +100,8 @@ namespace emfplushelper
             // TODO only reads the data, does not use them [I've had
             // no test document to be able to implement it]
 
-            sal_Int32 fillState;
-            float width, height, middleInset, unusedHotSpot;
+            sal_Int32 fillState(0);
+            float width(0), height(0), middleInset(0), unusedHotSpot(0);
 
             s.ReadFloat(width).ReadFloat(height).ReadFloat(middleInset).ReadInt32(fillState).ReadUInt32(strokeStartCap)
                 .ReadUInt32(strokeEndCap).ReadUInt32(strokeJoin).ReadFloat(miterLimit).ReadFloat(widthScale)
