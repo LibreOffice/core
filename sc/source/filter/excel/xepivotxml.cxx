@@ -1068,45 +1068,45 @@ void writeRowColumnItems(sal_Int32 nItemElement, RowOrColumnMemberResultData& rM
                 bIsGrandTotal = true;
         }
 
+        // Count how many leading fields repeat from the previous column item.
+        // These are omitted and their count is stored in the "r" attribute.
+        size_t nRepeat = 0;
+        for (OUString const& rFieldName : rMemberResultData.maFieldOrder)
         {
-            OUString const& rFieldName = rMemberResultData.maFieldOrder[0];
             RowOrColumnItemsData const& rData = rItemMap[rFieldName];
-            sal_Int32 nIndex = -1;
-            if (!rData.msName.isEmpty())
-                nIndex = rMemberResultData.lookup(rFieldName, rData.msName);
-            if (bIsGrandTotal)
-            {
-                pStream->startElement(XML_i, XML_t, "grand");
-                pStream->singleElement(XML_x);
-            }
-            else if (bIsSubtotal)
-            {
-                pStream->startElement(XML_i, XML_t, "default");
-
-                if (nIndex == 0) // 0 is the default
-                    pStream->singleElement(XML_x);
-                else
-                    pStream->singleElement(XML_x, XML_v, OString::number(nIndex));
-            }
-            else if (rData.mbContinue)
-            {
-                pStream->startElement(XML_i, XML_r, "1");
-            }
-            else if (nIndex >= 0)
-            {
-                pStream->startElement(XML_i);
-                if (nIndex == 0) // 0 is the default
-                    pStream->singleElement(XML_x);
-                else
-                    pStream->singleElement(XML_x, XML_v, OString::number(nIndex));
-            }
-            else
-            {
-                pStream->startElement(XML_i);
-            }
+            if (!rData.mbContinue)
+                break;
+            nRepeat++;
         }
 
-        for (size_t i = 1; i < rMemberResultData.maFieldOrder.size(); i++)
+        // Write the <i> start element with optional t and r attributes.
+        if (bIsGrandTotal)
+        {
+            if (nRepeat > 0)
+                pStream->startElement(XML_i, XML_t, "grand",
+                                      XML_r, OString::number(nRepeat));
+            else
+                pStream->startElement(XML_i, XML_t, "grand");
+            pStream->singleElement(XML_x);
+        }
+        else if (bIsSubtotal)
+        {
+            if (nRepeat > 0)
+                pStream->startElement(XML_i, XML_t, "default",
+                                      XML_r, OString::number(nRepeat));
+            else
+                pStream->startElement(XML_i, XML_t, "default");
+        }
+        else
+        {
+            if (nRepeat > 0)
+                pStream->startElement(XML_i, XML_r, OString::number(nRepeat));
+            else
+                pStream->startElement(XML_i);
+        }
+
+        // Write <x> elements for all non-repeated fields that have a valid item index.
+        for (size_t i = nRepeat; i < rMemberResultData.maFieldOrder.size(); i++)
         {
             OUString const& rItemName = rMemberResultData.maFieldOrder[i];
             RowOrColumnItemsData const& rData = rItemMap[rItemName];

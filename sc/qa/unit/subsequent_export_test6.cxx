@@ -833,6 +833,47 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testErrorExternalsInDataValidation)
     CPPUNIT_ASSERT(pDocXml);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testPivotTablesWriteRowColumnItems)
+{
+    createScDoc("xlsx/forum-mso-de-104083.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pTable = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    CPPUNIT_ASSERT(pTable);
+
+    OString sPath1 = "/x:pivotTableDefinition/x:colItems/x:i[4]"_ostr;
+
+    /*
+        earlier
+        <i t="default">
+            <x v="-1"/>
+            <x v="1"/>
+        </i>
+
+        now
+        <i t="default" r="1">
+            <x v="1"/>
+        </i>
+     */
+    assertXPath(pTable, sPath1, "t", u"default");
+    assertXPath(pTable, sPath1, "r", u"1");
+    assertXPathChildren(pTable, sPath1, 1);
+    assertXPath(pTable, sPath1 + "/x:x", "v", u"1");
+
+    /*
+        earlier
+        <i r="1"> // r = 1 means repeat the years and use the item at index 9 of quarters field, but quarters has only 6 items
+            <x v="9"/>
+        </i>
+
+        now
+        <i r="2">
+            <x v="9"/>
+        </i>
+     */
+    assertXPath(pTable, "/x:pivotTableDefinition/x:colItems/x:i[3]", "r", u"2");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
