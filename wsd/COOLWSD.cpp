@@ -2243,6 +2243,9 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
 
     LOG_TRC("Initialize StorageConnectionManager");
     StorageConnectionManager::initialize();
+
+    LOG_TRC("Initialize Admin");
+    Admin::initialize();
 #endif
 
     PrisonerPoll = std::make_unique<PrisonPoll>();
@@ -3772,6 +3775,7 @@ void COOLWSD::innerMain()
 
     const auto fetchUpdateCheck = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::hours(std::max(ConfigUtil::getConfigValue<int>("fetch_update_check", 10), 0)));
+
 #endif
 
     ClientRequestDispatcher::InitStaticFileContentCache();
@@ -4183,8 +4187,6 @@ void COOLWSD::innerMain()
 
     SigUtil::addActivity("terminated unused children");
 
-    ClientRequestDispatcher::uninitialize();
-
 #if !MOBILEAPP
     if (!Util::isKitInProcess())
     {
@@ -4245,11 +4247,15 @@ int COOLWSD::cleanup(int returnValue)
 
         COOLWSDServer::WebServerPoll.reset();
 
+        ClientRequestDispatcher::uninitialize();
+
 #if !MOBILEAPP
         SavedClipboards.reset();
 
         FileRequestHandler.reset();
         JWTAuth::cleanup();
+
+        Admin::uninitialize();
 
         Util::forcedExit(returnValue);
 

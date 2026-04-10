@@ -21,6 +21,8 @@
 #include <net/WebSocketHandler.hpp>
 #include <common/ConfigUtil.hpp>
 
+#include <memory>
+
 class Admin;
 
 /// Handle admin client's Websocket requests & replies.
@@ -86,13 +88,32 @@ class Admin final : public SocketPoll
     Admin(const Admin &) = delete;
     Admin& operator = (const Admin &) = delete;
     Admin();
+
+    static std::unique_ptr<Admin> Instance;
+
 public:
     ~Admin() override;
 
+    static void initialize()
+    {
+        assert(Instance == nullptr && "Unexpected double initialization of Admin");
+        Instance.reset(new Admin);
+    }
+
+    static void uninitialize()
+    {
+        if (Instance)
+        {
+            Instance->stop();
+            Instance->joinThread();
+
+            Instance.reset();
+        }
+    }
     static Admin& instance()
     {
-        static std::shared_ptr<Admin> admin(new Admin);
-        return *admin;
+        assert(Instance && "Expected a valid Admin instance");
+        return *Instance;
     }
 
     void start();
