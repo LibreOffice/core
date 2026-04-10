@@ -1087,7 +1087,7 @@ QAbstractItemView::SelectionMode QtInstanceTreeView::mapSelectionMode(SelectionM
     }
 }
 
-QList<QList<Qt::ItemDataRole>> QtInstanceTreeView::columnRoles(QTreeView& rTreeView)
+QList<QList<Qt::ItemDataRole>> QtInstanceTreeView::columnRoles(const QTreeView& rTreeView)
 {
     QVariant aVariant = rTreeView.property(PROPERTY_COLUMN_ROLES);
     if (aVariant.isValid())
