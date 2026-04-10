@@ -174,8 +174,8 @@ namespace emfplushelper
             }
             case EmfPlusObjectTypePath:
             {
-                sal_uInt32 header, pathFlags;
-                sal_Int32 points;
+                sal_uInt32 header(0), pathFlags(0);
+                sal_Int32 points(0);
 
                 rObjectStream.ReadUInt32(header).ReadInt32(points).ReadUInt32(pathFlags);
                 SAL_INFO("drawinglayer", "EMF+\tpath");
@@ -1391,9 +1391,9 @@ namespace emfplushelper
                     case EmfPlusRecordTypeDrawString:
                     {
                         SAL_INFO("drawinglayer", "EMF+ DrawString");
-                        sal_uInt32 brushId;
-                        sal_uInt32 formatId;
-                        sal_uInt32 stringLength;
+                        sal_uInt32 brushId(0);
+                        sal_uInt32 formatId(0);
+                        sal_uInt32 stringLength(0);
                         rMS.ReadUInt32(brushId).ReadUInt32(formatId).ReadUInt32(stringLength);
                         SAL_INFO("drawinglayer", "EMF+ DrawString brushId: " << brushId << " formatId: " << formatId << " length: " << stringLength);
 
@@ -1829,17 +1829,19 @@ namespace emfplushelper
                     case EmfPlusRecordTypeDrawDriverString:
                     {
                         SAL_INFO("drawinglayer", "EMF+ DrawDriverString, flags: 0x" << std::hex << flags << std::dec);
-                        sal_uInt32 brushIndexOrColor;
-                        sal_uInt32 optionFlags;
-                        sal_uInt32 hasMatrix;
-                        sal_uInt32 glyphsCount;
+                        sal_uInt32 brushIndexOrColor(0);
+                        sal_uInt32 optionFlags(0);
+                        sal_uInt32 hasMatrix(0);
+                        sal_uInt32 glyphsCount(0);
                         rMS.ReadUInt32(brushIndexOrColor).ReadUInt32(optionFlags).ReadUInt32(hasMatrix).ReadUInt32(glyphsCount);
                         SAL_INFO("drawinglayer", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
                         SAL_INFO("drawinglayer", "EMF+\toption flags: 0x" << std::hex << optionFlags << std::dec);
                         SAL_INFO("drawinglayer", "EMF+\thas matrix: " << hasMatrix);
                         SAL_INFO("drawinglayer", "EMF+\tglyphs: " << glyphsCount);
 
-                        if ((optionFlags & 1) && glyphsCount > 0)
+                        // each glyph needs 2 bytes (UTF-16) + 2*4 bytes (X,Y floats) = 10 bytes
+                        if ((optionFlags & 1) && glyphsCount > 0
+                            && glyphsCount <= rMS.remainingSize() / 10)
                         {
                             std::unique_ptr<float[]> charsPosX(new float[glyphsCount]);
                             std::unique_ptr<float[]> charsPosY(new float[glyphsCount]);
