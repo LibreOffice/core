@@ -77,7 +77,7 @@ OString ExtractOLEClassName(const tools::SvRef<SotStorage>& xStorage)
     if (!pCompObj->good())
         return aRet;
 
-    sal_uInt32 nData;
+    sal_uInt32 nData(0);
     pCompObj->ReadUInt32(nData); // AnsiUserType
     pCompObj->SeekRel(nData);
     if (!pCompObj->good())
@@ -89,6 +89,8 @@ OString ExtractOLEClassName(const tools::SvRef<SotStorage>& xStorage)
         return aRet;
 
     pCompObj->ReadUInt32(nData); // Reserved1
+    if (nData == 0)
+        return aRet;
     return read_uInt8s_ToOString(*pCompObj, nData - 1); // -1 because it is null-terminated
 }
 
