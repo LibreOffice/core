@@ -2572,7 +2572,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
                 }
             }
         }
-        if (t->GetOpCode() == ocExternal && t->GetType() == svByte)
+        if ((t->GetOpCode() == ocExternal || t->GetOpCode() == ocPush) && t->GetType() == svByte)
         {
             rBuffer.append(GetNativeSymbol(ocErrRef));
             t = maArrIterator.Next();
