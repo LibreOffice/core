@@ -36,8 +36,8 @@ EMFPImageAttributes::~EMFPImageAttributes() {}
 
 void EMFPImageAttributes::Read(SvStream& s)
 {
-    sal_uInt32 graphicsVersion, reserved1, reserved2, tempClampColor;
-    sal_uInt8 clampColorBlue, clampColorGreen, clampColorRed, clampColorAlpha;
+    sal_uInt32 graphicsVersion(0), reserved1(0), reserved2(0), tempClampColor(0);
+    sal_uInt8 clampColorBlue(0), clampColorGreen(0), clampColorRed(0), clampColorAlpha(0);
 
     s.ReadUInt32(graphicsVersion)
         .ReadUInt32(reserved1)
