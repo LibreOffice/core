@@ -280,6 +280,115 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testBreakPageView)
     CPPUNIT_ASSERT_EQUAL(Color(255, 255, 255), aColor);
 }
 
+static void lcl_drag(ScModelObj* pModelObj, Point aFrom, Point aTo, int nModifier)
+{
+    // No modifiers in button down to start a drag
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, aFrom.getX(), aFrom.getY(), 1,
+                              MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    // Need a clear motion so it is detected as a drag
+    const int nSteps = 5;
+    for (int i = 1; i <= nSteps; ++i)
+    {
+        pModelObj->postMouseEvent(
+            KIT_MOUSEEVENT_MOUSEMOVE, aFrom.getX() + (aTo.getX() - aFrom.getX()) * i / nSteps,
+            aFrom.getY() + (aTo.getY() - aFrom.getY()) * i / nSteps, 1, MOUSE_LEFT, nModifier);
+        Scheduler::ProcessEventsToIdle();
+    }
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, aTo.getX(), aTo.getY(), 1, MOUSE_LEFT,
+                              nModifier);
+    Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropMove)
+{
+    // Document has A1=A, B1=B, A2=C, B2=D, D1=E, D2=F.
+    ScModelObj* pModelObj = createDoc("cell_drag.fods");
+    ScTestViewCallback aView;
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1"_ustr) });
+    Point aFrom = aView.m_aCellCursorBounds.TopLeft() + Point(10, 10);
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$D$1"_ustr) });
+    Point aTo = aView.m_aCellCursorBounds.TopLeft() + Point(10, 10);
+
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1:$B$2"_ustr) });
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_drag(pModelObj, aFrom, aTo, 0);
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pDoc->GetString(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pDoc->GetString(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"C"_ustr, pDoc->GetString(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"D"_ustr, pDoc->GetString(ScAddress(4, 1, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropCopy)
+{
+    ScModelObj* pModelObj = createDoc("cell_drag.fods");
+    ScTestViewCallback aView;
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1"_ustr) });
+    Point aFrom = aView.m_aCellCursorBounds.TopLeft() + Point(10, 10);
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$D$1"_ustr) });
+    Point aTo = aView.m_aCellCursorBounds.TopLeft() + Point(10, 10);
+
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1:$B$2"_ustr) });
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_drag(pModelObj, aFrom, aTo, KEY_MOD1); // Ctrl
+
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"C"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"D"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pDoc->GetString(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pDoc->GetString(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"C"_ustr, pDoc->GetString(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"D"_ustr, pDoc->GetString(ScAddress(4, 1, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropInsert)
+{
+    // Alt-drag A1:B1 to D2: insert-move into a different row.
+    // F at D2 should be pushed right, and A/B placed at D2:E2.
+    // Row 1 source is cleared; row 2 is not affected by the cleanup.
+    ScModelObj* pModelObj = createDoc("cell_drag.fods");
+    ScTestViewCallback aView;
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1"_ustr) });
+    Point aFrom = aView.m_aCellCursorBounds.TopLeft() + Point(10, 10);
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$D$2"_ustr) });
+    Point aTo = aView.m_aCellCursorBounds.TopLeft() + Point(10, 10);
+
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1:$B$1"_ustr) });
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_drag(pModelObj, aFrom, aTo, KEY_MOD2); // Alt
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 0, 0))); // A1
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(1, 0, 0))); // B1
+    CPPUNIT_ASSERT_EQUAL(u"E"_ustr, pDoc->GetString(ScAddress(3, 0, 0))); // D1
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pDoc->GetString(ScAddress(3, 1, 0))); // D2
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pDoc->GetString(ScAddress(4, 1, 0))); // E2
+    CPPUNIT_ASSERT_EQUAL(u"F"_ustr, pDoc->GetString(ScAddress(5, 1, 0))); // F2 (was D2)
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

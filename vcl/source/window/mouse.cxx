@@ -594,6 +594,10 @@ Window::PointerState Window::GetPointerState()
         aState.maPos = ScreenToOutputPixel( aSalPointerState.maPos );
         aState.mnState = aSalPointerState.mnState;
     }
+
+    if (comphelper::COKit::isActive() && !aState.mnState)
+        aState.mnState = ImplGetFrameData()->mnMouseCode;
+
     return aState;
 }
 

@@ -858,6 +858,10 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
     pFrameData->mbMouseIn = false;
 
     vcl::Window* pDragWin = pFrameData->mpMouseDownWin;
+
+    sal_Int8 nAction = (nCode & KEY_MOD1) ? css::datatransfer::dnd::DNDConstants::ACTION_COPY
+                                          : css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+
     if (pDragWin &&
         nEvent == NotifyEventType::MOUSEMOVE &&
         pFrameData->mbDragging)
@@ -876,14 +880,10 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
             return false;
         }
 
-        xDropTarget->fireDragOverEvent(
-            xDropTargetDragContext,
-            css::datatransfer::dnd::DNDConstants::ACTION_MOVE,
-            aWinPos.X(),
-            aWinPos.Y(),
-            (css::datatransfer::dnd::DNDConstants::ACTION_COPY |
-             css::datatransfer::dnd::DNDConstants::ACTION_MOVE |
-             css::datatransfer::dnd::DNDConstants::ACTION_LINK));
+        xDropTarget->fireDragOverEvent(xDropTargetDragContext, nAction, aWinPos.X(), aWinPos.Y(),
+                                       (css::datatransfer::dnd::DNDConstants::ACTION_COPY
+                                        | css::datatransfer::dnd::DNDConstants::ACTION_MOVE
+                                        | css::datatransfer::dnd::DNDConstants::ACTION_LINK));
 
         return true;
     }
@@ -905,15 +905,12 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
         }
 
         Point dragOverPos = pDragWin->ScreenToOutputPixel(aMousePos);
-        xDropTarget->fireDropEvent(
-            xDropTargetDropContext,
-            css::datatransfer::dnd::DNDConstants::ACTION_MOVE,
-            dragOverPos.X(),
-            dragOverPos.Y(),
-            (css::datatransfer::dnd::DNDConstants::ACTION_COPY |
-             css::datatransfer::dnd::DNDConstants::ACTION_MOVE |
-             css::datatransfer::dnd::DNDConstants::ACTION_LINK),
-            xTransfer);
+        xDropTarget->fireDropEvent(xDropTargetDropContext, nAction, dragOverPos.X(),
+                                   dragOverPos.Y(),
+                                   (css::datatransfer::dnd::DNDConstants::ACTION_COPY
+                                    | css::datatransfer::dnd::DNDConstants::ACTION_MOVE
+                                    | css::datatransfer::dnd::DNDConstants::ACTION_LINK),
+                                   xTransfer);
 
         pFrameData->mbStartDragCalled = pFrameData->mbDragging = false;
         return true;
