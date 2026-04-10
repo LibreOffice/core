@@ -409,8 +409,12 @@ bool SwCTB::Read( SvStream &rS)
 
     rS.ReadInt32( m_iWCTBl ).ReadUInt16( m_reserved ).ReadUInt16( m_unused ).ReadInt32( m_cCtls );
 
-    if ( m_cCtls )
+    if ( m_cCtls > 0 )
     {
+        //each SwTBC is at least 10 bytes in size
+        size_t nMaxAvailableRecords = rS.remainingSize() / 10;
+        if (o3tl::make_unsigned(m_cCtls) > nMaxAvailableRecords)
+            return false;
         for ( sal_Int32 index = 0; index < m_cCtls; ++index )
         {
             SwTBC aTBC;
