@@ -24,7 +24,7 @@ namespace emfplushelper
 {
     void EMFPImage::Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream)
     {
-        sal_uInt32 header, bitmapType;
+        sal_uInt32 header(0), bitmapType(0);
         s.ReadUInt32(header).ReadUInt32(type);
         SAL_INFO("drawinglayer.emf", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
@@ -45,13 +45,17 @@ namespace emfplushelper
         else if (ImageDataTypeMetafile == type)
         {
             // metafile
-            sal_uInt32 mfType, mfSize;
+            sal_uInt32 mfType(0), mfSize(0);
             s.ReadUInt32(mfType).ReadUInt32(mfSize);
 
             if (bUseWholeStream)
                 dataSize = s.remainingSize();
             else
+            {
+                if (dataSize < 16)
+                    return;
                 dataSize -= 16;
+            }
 
             SAL_INFO("drawinglayer.emf", "EMF+\tmetafile type: " << mfType << " dataSize: " << mfSize << " real size calculated from record dataSize: " << dataSize);
 
