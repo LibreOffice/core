@@ -116,15 +116,17 @@ mkdir -p afl-testcases && cd afl-testcases/ && tar xf $SRC/afl_testcases.tgz && 
     zip -q $SRC/webpfuzzer_seed_corpus.zip afl-testcases/webp*/full/images/*
 
 # TTF/OTF/SFT
-# using github's svn view to use svn export as a hack to just export part of the git repo
-# svn support turned off now: https://github.blog/2023-01-20-sunsetting-subversion-support/
-# and git sparse checkout is a total pain
-#svn export --force -q https://github.com/khaledhosny/ots/trunk/tests/fonts $SRC/sample-sft-fonts/ots
-#svn export --force -q https://github.com/unicode-org/text-rendering-tests/trunk/fonts/ $SRC/sample-sft-fonts/unicode-org
-#svn export --force -q https://github.com/harfbuzz/harfbuzz/trunk/test/shape/data/in-house/fonts $SRC/sample-sft-fonts/harfbuzz
 mkdir -p $SRC/sample-sft-fonts/adobe
 curl --no-progress-meter -S \
     -C - -o $SRC/sample-sft-fonts/adobe/AdobeVFPrototype.otf https://github.com/adobe-fonts/adobe-variable-font-prototype/releases/download/1.005a/AdobeVFPrototype.otf
+git clone --depth 1 --filter=blob:none --sparse https://github.com/khaledhosny/ots.git && \
+    cd ots && git sparse-checkout set tests/fonts && cd .. && \
+    cp -r ots/tests/fonts $SRC/sample-sft-fonts/ots && rm -rf ots
+git clone --depth 1 --filter=blob:none --sparse https://github.com/harfbuzz/harfbuzz.git && \
+    cd harfbuzz && git sparse-checkout set test/shape/data/in-house/fonts && cd .. && \
+    cp -r harfbuzz/test/shape/data/in-house/fonts $SRC/sample-sft-fonts/harfbuzz && rm -rf harfbuzz
+# exclude very large fonts that are slow to process under sanitizers
+find $SRC/sample-sft-fonts -size +1M -delete
 zip -qr $SRC/sftfuzzer_seed_corpus.zip $SRC/sample-sft-fonts
 
 # PDF

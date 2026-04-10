@@ -543,4 +543,6 @@ const sal_uInt8* TrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
 
 } // namespace vcl
 
+int VCL_DLLPUBLIC TestFontParsing(const void* data, sal_uInt32 size);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
