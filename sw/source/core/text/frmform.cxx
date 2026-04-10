@@ -1106,6 +1106,31 @@ static bool isFirstVisibleFrameInPageBody(const SwTextFrame* pFrame)
     }
 }
 
+static bool isEntirePageFullOfDummyLines(const SwTextFrame& rFrame)
+{
+    // GetPara would perhaps be better named GetFirstParaLine.
+    if (!rFrame.HasPara() || !rFrame.GetPara()->IsDummy())
+        return false;
+
+    // Floating tables should be considered as non-dummy content
+    // since they can easily span multiple pages, and typically take up the entire body width.
+    if (rFrame.HasNonLastSplitFlyDrawObj())
+        return false;
+
+    if (!isFirstVisibleFrameInPageBody(&rFrame))
+        return false;
+
+    const SwLineLayout* pLine = rFrame.GetPara()->GetNext();
+    while (pLine)
+    {
+        if (!pLine->IsDummy())
+            return false;
+        pLine = pLine->GetNext();
+    }
+
+    return true;
+}
+
 static bool hasFly(const SwTextFrame* pFrame)
 {
     if (auto pDrawObjs = pFrame->GetDrawObjs(); pDrawObjs && pDrawObjs->size())
@@ -1279,6 +1304,15 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         createNew = false;
     }
 
+    // Dummy lines are created if text wrap does not provide enough space for the next content.
+    // If the content supposedly doesn't fit anywhere on both the right and the left page,
+    // then stop splitting and just force it to exist as best it can. (tdf#38575)
+    const bool bTwoPagesOfDummyLines
+        = IsFollow() && nStrLen && isEntirePageFullOfDummyLines(*this)
+            && isEntirePageFullOfDummyLines(*static_cast<SwTextFrame*>(GetPrecede()));
+    if (bTwoPagesOfDummyLines)
+        createNew = false;
+
     if (createNew)
     {
         SplitFrame( nEnd );
@@ -1395,7 +1429,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             // content or contains no content, but has a numbering.
             // i#84870 - No split, if text frame only contains one
             // as-character anchored object.
-            if (!bLoneAsCharAnchoredObj
+            if (!bLoneAsCharAnchoredObj && !bTwoPagesOfDummyLines
                 && (bHasVisibleNumRule
                     || (nStrLen > TextFrameIndex(0)
                         && (nEnd != rLine.GetStart() || rInf.GetRest()

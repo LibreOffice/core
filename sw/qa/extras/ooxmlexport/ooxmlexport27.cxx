@@ -28,6 +28,16 @@ public:
     }
 };
 
+DECLARE_OOXMLEXPORT_TEST(testTdf38575_fullWidthLine, "tdf38575_fullWidthLine.docx")
+{
+    // given a document where the header contains a graphic that spans the entire left side,
+    // reducing the available body text area for every page in the document,
+    // and an AS_CHAR horizontal line that wants the entire width (and thus could never fit)
+
+    // for compatibilityMode 15, in MS Word 2024, this is 4 pages long (not infinitely long)
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf124398_groupshapeChart)
 {
     // given a document with grouped chart and textbox
