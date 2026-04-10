@@ -428,10 +428,10 @@
           <value>AIDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
-          <value>private:graphicrepository/cmd/lc_basicideappear.png</value>
+          <value>private:graphicrepository/cmd/lc_aideck.png</value>
         </prop>
         <prop oor:name="HighContrastIconURL" oor:type="xs:string">
-          <value>private:graphicrepository/cmd/lc_basicideappear.png</value>
+          <value>private:graphicrepository/cmd/lc_aideck.png</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
