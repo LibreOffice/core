@@ -87,6 +87,7 @@ public:
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
+    using ClassificationCategoriesControllerBase::disposing;
     void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XToolbarController

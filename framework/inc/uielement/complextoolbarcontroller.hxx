@@ -46,6 +46,7 @@ class ComplexToolbarController : public svt::ToolboxController
         virtual ~ComplexToolbarController() override;
 
         // WeakComponentImplHelperBase
+        using svt::ToolboxController::disposing;
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XToolbarController

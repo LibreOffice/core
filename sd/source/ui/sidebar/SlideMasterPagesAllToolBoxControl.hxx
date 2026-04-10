@@ -18,8 +18,9 @@ public:
     void SetOptimalSize();
 };
 
-class SlideMasterPagesAllToolBoxControl final
-    : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
+using SlideMasterPagesAllToolBoxControl_Base
+    = cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>;
+class SlideMasterPagesAllToolBoxControl final : public SlideMasterPagesAllToolBoxControl_Base
 {
     VclPtr<SlideMasterPagesAllWrapper> m_xVclBox;
 
@@ -38,6 +39,7 @@ public:
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     // WeakComponentImplHelperBase
+    using SlideMasterPagesAllToolBoxControl_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XServiceInfo

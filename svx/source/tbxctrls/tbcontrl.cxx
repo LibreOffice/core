@@ -290,8 +290,11 @@ private:
 class SvxFontNameBox_Impl;
 class SvxFontNameBox_Base;
 
-class SvxFontNameToolBoxControl final : public cppu::ImplInheritanceHelper<svt::ToolboxController,
-                                                                           css::lang::XServiceInfo>
+using SvxFontNameToolBoxControl_Base = cppu::ImplInheritanceHelper<svt::ToolboxController,
+                                                                   css::lang::XServiceInfo>;
+
+
+class SvxFontNameToolBoxControl final : public SvxFontNameToolBoxControl_Base
 {
 public:
     SvxFontNameToolBoxControl();
@@ -303,6 +306,7 @@ public:
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // WeakComponentImplHelperBase
+    using SvxFontNameToolBoxControl_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XServiceInfo

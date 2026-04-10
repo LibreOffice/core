@@ -44,6 +44,7 @@ class SpinfieldToolbarController final : public ComplexToolbarController
         virtual ~SpinfieldToolbarController() override;
 
         // WeakComponentImplHelperBase
+        using ComplexToolbarController::disposing;
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // called from SpinfieldControl
