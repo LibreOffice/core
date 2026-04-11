@@ -288,12 +288,6 @@ ScMatrix* FormulaToken::GetMatrix()
     return nullptr;
 }
 
-ScJumpMatrix* FormulaToken::GetJumpMatrix() const
-{
-    OSL_FAIL( "FormulaToken::GetJumpMatrix: virtual dummy called" );
-    return nullptr;
-}
-
 bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 {
     return *this == rToken;

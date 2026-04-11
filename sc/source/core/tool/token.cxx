@@ -953,7 +953,8 @@ ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const
 
 bool ScJumpMatrixToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaToken::operator==( r ) && mpJumpMatrix.get() == r.GetJumpMatrix();
+    return FormulaToken::operator==( r )
+        && mpJumpMatrix.get() == static_cast<const ScJumpMatrixToken&>(r).GetJumpMatrix();
 }
 
 ScJumpMatrixToken::~ScJumpMatrixToken()

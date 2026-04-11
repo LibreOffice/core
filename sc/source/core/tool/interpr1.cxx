@@ -490,7 +490,7 @@ static void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, SCSIZE nParmCols, SCSIZE
 
 bool ScInterpreter::JumpMatrix( short nStackLevel )
 {
-    pJumpMatrix = pStack[sp-nStackLevel]->GetJumpMatrix();
+    pJumpMatrix = static_cast<const ScJumpMatrixToken*>(pStack[sp-nStackLevel])->GetJumpMatrix();
     bool bHasResMat = pJumpMatrix->HasResultMatrix();
     SCSIZE nC, nR;
     if ( nStackLevel == 2 )
@@ -1695,7 +1695,7 @@ void ScInterpreter::ScRandomImpl( const std::function<double( double fFirst, dou
         if (GetStackType(1) == svJumpMatrix)
         {
             SCSIZE nC, nR;
-            pStack[sp-1]->GetJumpMatrix()->GetDimensions( nC, nR);
+            static_cast<const ScJumpMatrixToken*>(pStack[sp-1])->GetJumpMatrix()->GetDimensions( nC, nR);
             nCols = std::max<SCCOL>(0, static_cast<SCCOL>(nC));
             nRows = std::max<SCROW>(0, static_cast<SCROW>(nR));
         }
