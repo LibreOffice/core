@@ -306,13 +306,10 @@ public:
     explicit Subscriber(std::weak_ptr<WebSocketHandler> ws)
         : _ws(std::move(ws))
     {
-        LOG_INF("Subscriber ctor.");
+        LOG_DBG("Subscriber ctor");
     }
 
-    ~Subscriber()
-    {
-        LOG_INF("Subscriber dtor.");
-    }
+    ~Subscriber() { LOG_DBG("Subscriber dtor"); }
 
     bool notify(const std::string& message);
 
