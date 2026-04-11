@@ -533,13 +533,13 @@ Admin::Admin()
     , _totalAvailMemKb(_totalSysMemKb)
     , _lastTotalMemory(0)
     , _lastJiffies(0)
-    , _cleanupIntervalMs(DefStatsIntervalMs * 10)
     , _lastSentCount(0)
     , _lastRecvCount(0)
-    , _forKitPid(-1)
     , _cpuStatsTaskIntervalMs(DefStatsIntervalMs)
     , _memStatsTaskIntervalMs(DefStatsIntervalMs * 2)
     , _netStatsTaskIntervalMs(DefStatsIntervalMs * 2)
+    , _cleanupIntervalMs(DefStatsIntervalMs * 10)
+    , _forKitPid(-1)
 {
     LOG_INF("Admin ctor");
 
@@ -621,16 +621,20 @@ void Admin::pollingThread()
     std::chrono::steady_clock::time_point lastNet = lastCPU;
     std::chrono::steady_clock::time_point lastCleanup = lastCPU;
 
+    const static auto SystemClockTicks = sysconf(_SC_CLK_TCK);
+    constexpr auto MaxProximityToTargetPeriod = MinStatsIntervalMs / 8;
+
     while (!isStop() && !SigUtil::getShutdownRequestFlag())
     {
         const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 
         auto cpuWait = _cpuStatsTaskIntervalMs -
             std::chrono::duration_cast<std::chrono::milliseconds>(now - lastCPU);
-        if (cpuWait <= MinStatsIntervalMs / 2) // Close enough
+        if (cpuWait <= MaxProximityToTargetPeriod) // Close enough
         {
             const size_t currentJiffies = getTotalCpuUsage();
-            const size_t cpuPercent = 100 * 1000 * currentJiffies / (sysconf (_SC_CLK_TCK) * _cpuStatsTaskIntervalMs.count());
+            const size_t cpuPercent =
+                100 * 1000 * currentJiffies / (SystemClockTicks * _cpuStatsTaskIntervalMs.count());
             _model.addCpuStats(cpuPercent);
 
             cpuWait += _cpuStatsTaskIntervalMs;
@@ -639,7 +643,7 @@ void Admin::pollingThread()
 
         auto memWait = _memStatsTaskIntervalMs -
             std::chrono::duration_cast<std::chrono::milliseconds>(now - lastMem);
-        if (memWait <= MinStatsIntervalMs / 2) // Close enough
+        if (memWait <= MaxProximityToTargetPeriod) // Close enough
         {
             // disable watchdog to avoid Document::updateMemoryDirty noise
             disableWatchdog();
@@ -665,7 +669,7 @@ void Admin::pollingThread()
 
         auto netWait = _netStatsTaskIntervalMs -
             std::chrono::duration_cast<std::chrono::milliseconds>(now - lastNet);
-        if (netWait <= MinStatsIntervalMs / 2) // Close enough
+        if (netWait <= MaxProximityToTargetPeriod) // Close enough
         {
             const uint64_t sentCount = _model.getSentBytesTotal();
             const uint64_t recvCount = _model.getRecvBytesTotal();
@@ -694,7 +698,7 @@ void Admin::pollingThread()
                     std::chrono::duration_cast<std::chrono::milliseconds>(now - lastCleanup);
             }
 
-            if (cleanupWait <= MinStatsIntervalMs / 2) // Close enough
+            if (cleanupWait <= MaxProximityToTargetPeriod) // Close enough
             {
                 cleanupResourceConsumingDocs();
                 if (_defDocProcSettings.getCleanupSettings().getLostKitGracePeriod())

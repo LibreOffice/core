@@ -265,7 +265,6 @@ private:
 
     size_t _lastTotalMemory;
     mutable size_t _lastJiffies;
-    std::chrono::milliseconds _cleanupIntervalMs;
     uint64_t _lastSentCount;
     uint64_t _lastRecvCount;
     std::string _forkitLogLevel;
@@ -284,11 +283,12 @@ private:
     };
     std::vector<MonitorConnectRecord> _pendingConnects;
 
-    int _forKitPid;
-
     std::chrono::milliseconds _cpuStatsTaskIntervalMs;
     std::chrono::milliseconds _memStatsTaskIntervalMs;
     std::chrono::milliseconds _netStatsTaskIntervalMs;
+    std::chrono::milliseconds _cleanupIntervalMs;
+
+    int _forKitPid;
 
     /// When set, the metrics will be dumped into the log and stderr.
     std::atomic_bool _dumpMetrics;
