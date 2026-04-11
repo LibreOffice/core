@@ -53,12 +53,12 @@ const char* startsWith(const char* line, std::string_view tag)
     if (!std::strncmp(line, tag.data(), tag.size()))
     {
         const char* p = line + tag.size();
-        while (*p != '\0' && !std::isdigit(static_cast<unsigned char>(*p)))
+        while (*p != '\0' && *p != '\n' && !std::isdigit(static_cast<unsigned char>(*p)))
         {
             ++p;
         }
 
-        return (*p != '\0') ? p : nullptr;
+        return (*p != '\0' && *p != '\n') ? p : nullptr;
     }
 
     return nullptr;
@@ -286,24 +286,53 @@ std::pair<std::size_t, std::size_t> getPssAndDirtyFromSMaps(FILE* file)
     std::size_t numDirtyKb = 0;
     if (file)
     {
-        rewind(file);
-        char line[4096] = { 0 };
-        while (fgets(line, sizeof(line), file))
+        const int fd = fileno(file);
+
+        // Read the whole file in one go to minimize kernel page-table walks,
+        // since /proc/pid/smaps[_rollup] is regenerated on each read() call.
+        std::string buf(64 * 1024, '\0');
+        std::size_t total = 0;
+        for (;;)
         {
-            if (line[0] != 'P')
-                continue;
+            if (total == buf.size())
+                buf.resize(buf.size() * 2);
 
-            const char* value;
+            const ssize_t n = pread(fd, buf.data() + total, buf.size() - total, total);
+            if (n <= 0)
+                break;
+            total += n;
+        }
 
-            // Shared_Dirty is accounted for by forkit's RSS
-            if ((value = startsWith(line, "Private_Dirty:")))
+        buf[total] = '\0'; // Ensure null-termination for strncmp/atoi.
+
+        const char* pos = buf.data();
+        const char* const end = pos + total;
+        while (pos < end)
+        {
+            if (pos[0] == 'P')
             {
-                numDirtyKb += atoi(value);
+                const char* value;
+
+                // Shared_Dirty is accounted for by forkit's RSS
+                if ((value = startsWith(pos, "Private_Dirty:")))
+                {
+                    numDirtyKb += atoi(value);
+                    pos = value;
+                }
+                else if ((value = startsWith(pos, "Pss:")))
+                {
+                    pos = value;
+                    numPSSKb += atoi(value);
+                }
             }
-            else if ((value = startsWith(line, "Pss:")))
+
+            do
             {
-                numPSSKb += atoi(value);
-            }
+                // Skip the rest of the line.
+                ++pos;
+            } while (pos < end && *pos != '\0' && *pos != '\n');
+            if (pos < end)
+                ++pos; // Skip the end-of-line.
         }
     }
 
