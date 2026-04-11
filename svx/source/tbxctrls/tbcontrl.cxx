@@ -2581,8 +2581,8 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     //bParagraphMode should have been set in StateChanged
     if ( !bParagraphMode )
         // when multiple cell selected:
-        // Writer has 12 border types and Calc has 15 of them.
-        for ( i = (m_bIsCalc ? 11 : 9); i < (m_bIsCalc ? 16 : 13); i++ )
+        // Writer and Calc have 12 border types.
+        for ( i = 9; i < 13; i++ )
         {
             auto pVDev = GetVirtualDevice(aImgVec[i-1].first);
             Bitmap aScaledBmp = pVDev->GetBitmap(Point(0,0), pVDev->GetOutputSizePixel());
