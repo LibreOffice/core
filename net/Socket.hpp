@@ -879,10 +879,31 @@ public:
     /// Returns the return-value of poll(2): 0 on timeout,
     /// -1 for error, and otherwise the number of events signalled.
     /// Takes the deadline, instead of a timeout.
-    int poll(std::chrono::steady_clock::time_point deadline)
+    /// Note: will *not* return until the deadline expires, or upon
+    /// hitting an error. Always polls at least once. Returns last rc.
+    int pollUntilDeadline(std::chrono::steady_clock::time_point deadline)
     {
-        const auto now = std::chrono::steady_clock::now();
-        return poll(std::chrono::duration_cast<std::chrono::microseconds>(deadline - now));
+        constexpr auto zero = std::chrono::microseconds::zero();
+        auto timeoutMax = std::max(std::chrono::duration_cast<std::chrono::microseconds>(
+                                       deadline - std::chrono::steady_clock::now()),
+                                   zero);
+        int rc = 0;
+        do
+        {
+            // Always poll at least once.
+            rc = poll(timeoutMax);
+            if (timeoutMax == zero || rc < 0)
+            {
+                return rc; // Return on error or if we're out of time.
+            }
+
+            timeoutMax = std::max(std::chrono::duration_cast<std::chrono::microseconds>(
+                                      deadline - std::chrono::steady_clock::now()),
+                                  zero);
+
+        } while (timeoutMax > zero && !_stop && !SigUtil::getShutdownRequestFlag());
+
+        return rc;
     }
 
     /// Write to a wakeup descriptor

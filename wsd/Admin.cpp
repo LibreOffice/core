@@ -735,7 +735,7 @@ void Admin::pollingThread()
         const auto timeout =
             capAndRoundInterval(std::min({ cpuWait, memWait, netWait, cleanupWait }));
         LOGA_TRC(Admin, "Admin poll for " << timeout);
-        poll(timeout); // continue with ms for admin, settings etc.
+        pollUntilDeadline(now + timeout); // continue with ms for admin, settings etc.
     }
 
     if (!COOLWSD::IndirectionServerEnabled)
