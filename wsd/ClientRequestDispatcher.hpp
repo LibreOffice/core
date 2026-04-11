@@ -206,6 +206,9 @@ private:
     std::streamsize _postContentPending = 0;
 #endif // !MOBILEAPP
 
+    /// The current position while reading the header.
+    std::size_t _headerPos = 0;
+
     /// The minimum number of RVS instances in flight to trigger cleanup.
     static constexpr std::size_t RvsLowWatermark = 1 * 1024;
 

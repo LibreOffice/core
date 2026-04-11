@@ -926,20 +926,29 @@ ssize_t ClientRequestDispatcher::readHeader(const std::shared_ptr<StreamSocket>&
                                             Poco::Net::HTTPRequest& request,
                                             std::chrono::duration<float, std::milli> delayMs)
 {
-    constexpr std::chrono::duration<float, std::milli> DelayMax =
-        std::chrono::duration_cast<std::chrono::milliseconds>(SocketPoll::DefaultPollTimeoutMicroS);
+    const std::string_view buffer = socket->getInBuffer().view();
+    assert(_headerPos <= buffer.size() &&
+           "Unexpected buffer shrunk under us — _headerPos is stale");
+    _headerPos = _headerPos > buffer.size() ? 0 : _headerPos; // Recover in release builds.
 
     // Find the end of the header, if any.
     constexpr std::string_view marker("\r\n\r\n");
-    const auto headerSize = socket->getInBuffer().view().find(marker);
+    const auto headerSize = buffer.find(marker, _headerPos);
     if (headerSize == std::string_view::npos)
     {
+        // A partial marker could span the boundary, so back up by marker.size()-1.
+        _headerPos = buffer.size() >= marker.size() ? buffer.size() - marker.size() + 1 : 0;
         LOG_TRC("parseHeader: doesn't have enough data for the header yet. delay "
                 << delayMs.count() << "ms");
         return -1;
     }
 
-    const size_t messagesize = socket->getInBuffer().size();
+    // We found the end-of-header marker; Clear to allow for scanning again.
+    _headerPos = 0;
+
+    constexpr std::chrono::duration<float, std::milli> DelayMax =
+        std::chrono::duration_cast<std::chrono::milliseconds>(SocketPoll::DefaultPollTimeoutMicroS);
+    const size_t messagesize = buffer.size();
     try
     {
         // Include the marker.
