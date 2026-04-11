@@ -583,9 +583,9 @@ FormulaTokenRef extendRangeReference( ScSheetLimits& rLimits, FormulaToken & rTo
             sv2 = svUnknown;    // mark as handled
         }
         else if (sv1 == svRefList)
-            pRefList = rTok1.GetRefList();
+            pRefList = static_cast<const ScRefListToken&>(rTok1).GetRefList();
         else if (sv2 == svRefList)
-            pRefList = rTok2.GetRefList();
+            pRefList = static_cast<const ScRefListToken&>(rTok2).GetRefList();
         if (pRefList)
         {
             if (pRefList->empty())
@@ -611,7 +611,7 @@ FormulaTokenRef extendRangeReference( ScSheetLimits& rLimits, FormulaToken & rTo
                     break;
                 case svRefList:
                     {
-                        const ScRefList* p = pt[i]->GetRefList();
+                        const ScRefList* p = static_cast<const ScRefListToken*>(pt[i])->GetRefList();
                         if (p->empty())
                             return nullptr;
                         for (const auto& rRefData : *p)
@@ -673,10 +673,12 @@ const ScRefList*        ScRefListToken::GetRefList() const  { return &aRefList; 
       bool              ScRefListToken::IsArrayResult() const { return mbArrayResult; }
 bool ScRefListToken::operator==( const FormulaToken& r ) const
 {
-    if (!FormulaToken::operator==( r ) || &aRefList != r.GetRefList())
+    if (!FormulaToken::operator==( r ))
         return false;
-    const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(&r);
-    return p && mbArrayResult == p->IsArrayResult();
+    const ScRefListToken* p = static_cast<const ScRefListToken*>(&r);
+    if (&aRefList != p->GetRefList())
+        return false;
+    return mbArrayResult == p->IsArrayResult();
 }
 
 ScMatrixToken::ScMatrixToken( ScMatrixRef p ) :

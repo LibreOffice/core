@@ -805,7 +805,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                 !FormulaCompiler::IsOpCodeJumpCommand( pJumpMatrix->GetOpCode()) &&
                 aCode.PeekNextOperator())
         {
-            FormulaTokenRef xRef = new ScRefListToken(true);
+            ::boost::intrusive_ptr<ScRefListToken> xRef = new ScRefListToken(true);
             *(xRef->GetRefList()) = pJumpMatrix->GetRefList();
             pJumpMatrix = nullptr;
             Pop();
@@ -2686,7 +2686,7 @@ void ScInterpreter::ScIsRef()
         break;
         case svRefList :
         {
-            FormulaConstTokenRef x = PopToken();
+            auto x = PopToken<ScRefListToken>();
             if ( nGlobalError == FormulaError::NONE )
                 bRes = !x->GetRefList()->empty();
         }
@@ -11280,7 +11280,7 @@ void ScInterpreter::ScIndex()
         return;
     }
     if (GetStackType() == svRefList)
-        nAreaCount = (sp ? pStack[sp-1]->GetRefList()->size() : 0);
+        nAreaCount = (sp ? static_cast<const ScRefListToken*>(pStack[sp-1])->GetRefList()->size() : 0);
     else
         nAreaCount = 1;     // one reference or array or whatever
     if (nGlobalError != FormulaError::NONE || nAreaCount == 0 || o3tl::make_unsigned(nArea) > nAreaCount)
@@ -11429,7 +11429,7 @@ void ScInterpreter::ScIndex()
                 bool bRowArray = false;
                 if (GetStackType() == svRefList)
                 {
-                    FormulaConstTokenRef xRef = PopToken();
+                    auto xRef = PopToken<ScRefListToken>();
                     if (nGlobalError != FormulaError::NONE || !xRef)
                     {
                         PushError( FormulaError::NoRef);
@@ -11529,7 +11529,7 @@ void ScInterpreter::ScAreas()
             break;
         case svRefList:
             {
-                FormulaConstTokenRef xT = PopToken();
+                auto xT = PopToken<ScRefListToken>();
                 ValidateRef( *(xT->GetRefList()));
                 nCount += xT->GetRefList()->size();
             }
@@ -12473,7 +12473,7 @@ FormulaError ScInterpreter::GetErrorType()
     {
         case svRefList :
         {
-            FormulaConstTokenRef x = PopToken();
+            auto x = PopToken<ScRefListToken>();
             if (nGlobalError != FormulaError::NONE)
                 nErr = nGlobalError;
             else

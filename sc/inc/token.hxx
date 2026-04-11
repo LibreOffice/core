@@ -267,10 +267,10 @@ public:
             explicit            ScRefListToken( bool bArrayResult ) :
                                     FormulaToken( formula::svRefList ), mbArrayResult( bArrayResult ) {}
             bool                IsArrayResult() const;
-    virtual const ScRefList*    GetRefList() const override;
-    virtual       ScRefList*    GetRefList() override;
+    const ScRefList*            GetRefList() const;
+    ScRefList*                  GetRefList();
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
-    virtual FormulaToken*       Clone() const override { return new ScRefListToken(*this); }
+    virtual ScRefListToken*     Clone() const override { return new ScRefListToken(*this); }
 };
 
 class ScEmptyCellToken final : public formula::FormulaToken

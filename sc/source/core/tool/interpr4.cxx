@@ -777,7 +777,7 @@ void ScInterpreter::PopError()
         SetError(FormulaError::UnknownStackVariable);
 }
 
-FormulaConstTokenRef ScInterpreter::PopToken()
+FormulaConstTokenRef ScInterpreter::PopTokenImpl()
 {
     if (sp)
     {
@@ -1082,7 +1082,7 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
             }
             case svRefList:
                 {
-                    const ScRefList* pList = pToken->GetRefList();
+                    const ScRefList* pList = static_cast<const ScRefListToken*>(pToken)->GetRefList();
                     if (rRefInList < pList->size())
                     {
                         DoubleRefToRange( (*pList)[rRefInList], rRange);
@@ -1143,7 +1143,7 @@ const ScComplexRefData* ScInterpreter::GetStackDoubleRef(size_t rRefInList)
                 return p->GetDoubleRef();
             case svRefList:
             {
-                const ScRefList* pList = p->GetRefList();
+                const ScRefList* pList = static_cast<const ScRefListToken*>(p)->GetRefList();
                 if (rRefInList < pList->size())
                     return &(*pList)[rRefInList];
                 break;
@@ -1396,7 +1396,7 @@ void ScInterpreter::PopRefListPushMatrixOrRef()
 {
     if ( GetStackType() == svRefList )
     {
-        FormulaConstTokenRef xTok = pStack[sp-1];
+        ::boost::intrusive_ptr<const ScRefListToken> xTok = static_cast<const ScRefListToken*>(pStack[sp-1]);
         const std::vector<ScComplexRefData>* pv = xTok->GetRefList();
         if (pv)
         {
