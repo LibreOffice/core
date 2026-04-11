@@ -241,8 +241,6 @@ public:
     virtual const ScMatrix*     GetMatrix() const;
     virtual ScMatrix*           GetMatrix();
     virtual ScJumpMatrix*       GetJumpMatrix() const;
-    virtual const std::vector<ScComplexRefData>* GetRefList() const;
-    virtual       std::vector<ScComplexRefData>* GetRefList();
 
     virtual FormulaToken*       Clone() const { return new FormulaToken(*this); }
 

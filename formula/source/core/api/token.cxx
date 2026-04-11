@@ -330,17 +330,6 @@ ScJumpMatrix* FormulaToken::GetJumpMatrix() const
     OSL_FAIL( "FormulaToken::GetJumpMatrix: virtual dummy called" );
     return nullptr;
 }
-const std::vector<ScComplexRefData>* FormulaToken::GetRefList() const
-{
-    OSL_FAIL( "FormulaToken::GetRefList: virtual dummy called" );
-    return nullptr;
-}
-
-std::vector<ScComplexRefData>* FormulaToken::GetRefList()
-{
-    OSL_FAIL( "FormulaToken::GetRefList: virtual dummy called" );
-    return nullptr;
-}
 
 bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 {

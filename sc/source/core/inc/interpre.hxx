@@ -379,7 +379,14 @@ private:
     void PushCellResultToken( bool bDisplayEmptyAsString, const ScAddress & rAddress,
             SvNumFormatType * pRetTypeExpr, sal_uInt32 * pRetIndexExpr, bool bFinalResult = false );
 
-    formula::FormulaConstTokenRef PopToken();
+    formula::FormulaConstTokenRef PopTokenImpl();
+    template<typename T = formula::FormulaToken>
+    ::boost::intrusive_ptr<const T> PopToken()
+    {
+        auto p = PopTokenImpl();
+        assert(!p || dynamic_cast<const T*>(p.get()));
+        return static_cast<const T*>(p.get());
+    }
     void Pop();
     void PopError();
     double PopDouble();

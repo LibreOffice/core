@@ -2437,7 +2437,7 @@ void ScInterpreter::ScIntersect()
         StackVar sv[2] = { sv1, sv2 };
         // There may only be one reference; the other is necessarily a list
         // Ensure converted list proper destruction
-        std::unique_ptr<formula::FormulaToken> p;
+        std::unique_ptr<ScRefListToken> p;
         for (size_t i=0; i<2; ++i)
         {
             if (sv[i] == svSingleRef)
@@ -2459,13 +2459,13 @@ void ScInterpreter::ScIntersect()
         x1 = xt[0];
         x2 = xt[1];
 
-        ScTokenRef xRes = new ScRefListToken;
+        ::boost::intrusive_ptr<ScRefListToken> xRes = new ScRefListToken;
         ScRefList* pRefList = xRes->GetRefList();
-        for (const auto& rRef1 : *x1->GetRefList())
+        for (const auto& rRef1 : *static_cast<const ScRefListToken*>(x1)->GetRefList())
         {
             const ScAddress r11 = rRef1.Ref1.toAbs(mrDoc, aPos);
             const ScAddress r12 = rRef1.Ref2.toAbs(mrDoc, aPos);
-            for (const auto& rRef2 : *x2->GetRefList())
+            for (const auto& rRef2 : *static_cast<const ScRefListToken*>(x2)->GetRefList())
             {
                 const ScAddress r21 = rRef2.Ref1.toAbs(mrDoc, aPos);
                 const ScAddress r22 = rRef2.Ref2.toAbs(mrDoc, aPos);
@@ -2596,16 +2596,16 @@ void ScInterpreter::ScUnionFunc()
     const formula::FormulaToken* x1 = p1st.get();
     const formula::FormulaToken* x2 = p2nd.get();
 
-    ScTokenRef xRes;
+    ::boost::intrusive_ptr<ScRefListToken> xRes;
     // Append to an existing RefList if there is one.
     if (sv1 == svRefList)
     {
-        xRes = x1->Clone();
+        xRes = static_cast<const ScRefListToken*>(x1)->Clone();
         sv1 = svUnknown;    // mark as handled
     }
     else if (sv2 == svRefList)
     {
-        xRes = x2->Clone();
+        xRes = static_cast<const ScRefListToken*>(x2)->Clone();
         sv2 = svUnknown;    // mark as handled
     }
     else
@@ -2631,7 +2631,7 @@ void ScInterpreter::ScUnionFunc()
                 break;
             case svRefList:
                 {
-                    const ScRefList* p = pt[i]->GetRefList();
+                    const ScRefList* p = static_cast<const ScRefListToken*>(pt[i])->GetRefList();
                     for (const auto& rRef : *p)
                     {
                         pRes->push_back( rRef);
