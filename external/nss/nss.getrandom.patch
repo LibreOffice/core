@@ -11,10 +11,10 @@
  
  static PRStatus OpenDevURandom(void) {
 -  fdDevURandom = open("/dev/urandom", O_RDONLY);
-+    static int (*lok_open_urandom)();
-+    if (!lok_open_urandom)
-+      lok_open_urandom = dlsym(RTLD_DEFAULT, "lok_open_urandom");
-+    if (!lok_open_urandom || (fdDevURandom = lok_open_urandom()) < 0)
++    static int (*kit_open_urandom)();
++    if (!kit_open_urandom)
++      kit_open_urandom = dlsym(RTLD_DEFAULT, "kit_open_urandom");
++    if (!kit_open_urandom || (fdDevURandom = kit_open_urandom()) < 0)
 +      fdDevURandom = open( "/dev/urandom", O_RDONLY );
    return ((-1 == fdDevURandom) ? PR_FAILURE : PR_SUCCESS);
  } /* end OpenDevURandom() */
@@ -55,10 +55,10 @@
      size_t fileBytes = 0;
      unsigned char *buffer = dest;
  
-+    static int (*lok_open_urandom)();
-+    if (!lok_open_urandom)
-+      lok_open_urandom = dlsym(NULL, "lok_open_urandom");
-+    if (!lok_open_urandom || (fd = lok_open_urandom()) < 0)
++    static int (*kit_open_urandom)();
++    if (!kit_open_urandom)
++      kit_open_urandom = dlsym(NULL, "kit_open_urandom");
++    if (!kit_open_urandom || (fd = kit_open_urandom()) < 0)
 +    {
      file = fopen("/dev/urandom", "r");
      if (file == NULL) {
@@ -86,10 +86,10 @@
      fileBytes = 0;
  #endif /* platorm has getentropy */
 -    fd = open("/dev/urandom", O_RDONLY);
-+    static int (*lok_open_urandom)();
-+    if (!lok_open_urandom)
-+      lok_open_urandom = dlsym(NULL, "lok_open_urandom");
-+    if (!lok_open_urandom || (fd = lok_open_urandom()) < 0)
++    static int (*kit_open_urandom)();
++    if (!kit_open_urandom)
++      kit_open_urandom = dlsym(NULL, "kit_open_urandom");
++    if (!kit_open_urandom || (fd = kit_open_urandom()) < 0)
 +        fd = open("/dev/urandom", O_RDONLY);
      if (fd < 0) {
          PORT_SetError(SEC_ERROR_NEED_RANDOM);
