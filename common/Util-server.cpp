@@ -47,17 +47,18 @@ extern char** environ;
 
 namespace
 {
-const char* startsWith(const char* line, const char* tag, std::size_t tagLen)
+/// If line starts with tag, return a pointer to the first digit after the tag.
+const char* startsWith(const char* line, std::string_view tag)
 {
-    assert(strlen(tag) == tagLen);
-
-    std::size_t len = tagLen;
-    if (!strncmp(line, tag, len))
+    if (!std::strncmp(line, tag.data(), tag.size()))
     {
-        while (!isdigit(line[len]) && line[len] != '\0')
-            ++len;
+        const char* p = line + tag.size();
+        while (*p != '\0' && !std::isdigit(static_cast<unsigned char>(*p)))
+        {
+            ++p;
+        }
 
-        return line + len;
+        return (*p != '\0') ? p : nullptr;
     }
 
     return nullptr;
@@ -230,8 +231,7 @@ std::size_t getTotalSystemMemoryKb()
         // coverity[tainted_data_argument : FALSE] - we trust the kernel-provided data
         while (fgets(line, sizeof(line), file))
         {
-            const char* value;
-            if ((value = startsWith(line, "MemTotal:", 9)))
+            if (const char* value = startsWith(line, "MemTotal:"))
             {
                 totalMemKb = atoll(value);
                 break;
@@ -296,11 +296,11 @@ std::pair<std::size_t, std::size_t> getPssAndDirtyFromSMaps(FILE* file)
             const char* value;
 
             // Shared_Dirty is accounted for by forkit's RSS
-            if ((value = startsWith(line, "Private_Dirty:", 14)))
+            if ((value = startsWith(line, "Private_Dirty:")))
             {
                 numDirtyKb += atoi(value);
             }
-            else if ((value = startsWith(line, "Pss:", 4)))
+            else if ((value = startsWith(line, "Pss:")))
             {
                 numPSSKb += atoi(value);
             }
