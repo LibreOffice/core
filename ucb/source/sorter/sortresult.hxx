@@ -75,7 +75,7 @@ public:
 
     sal_uInt32      Count() const { return static_cast<sal_uInt32>(maData.size()); }
 
-    void            AddEvent( sal_IntPtr nType, sal_Int32 nPos );
+    void            AddEvent( sal_Int32 nType, sal_Int32 nPos );
     void            Insert( const css::ucb::ListAction& rAction ) { maData.push_back( rAction ); }
     void            Clear();
     css::ucb::ListAction&  GetAction( sal_Int32 nIndex ) { return maData[ nIndex ]; }
@@ -106,7 +106,7 @@ class SortedResultSet: public cppu::WeakImplHelper <
     SortInfo*           mpSortInfo;
     std::mutex          maMutex;
     SortedEntryList     maS2O;          // maps the sorted entries to the original ones
-    std::deque<sal_IntPtr> m_O2S;       /// maps the original Entries to the sorted ones
+    std::deque<sal_Int32> m_O2S;       /// maps the original Entries to the sorted ones
     std::deque<SortListData*> m_ModList; /// keeps track of modified entries
     sal_Int32          mnLastSort;     // index of the last sorted entry;
     sal_Int32          mnCurEntry;     // index of the current entry
@@ -117,7 +117,7 @@ class SortedResultSet: public cppu::WeakImplHelper <
 private:
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    sal_Int32          FindPos( SortListData const *pEntry, sal_IntPtr nStart, sal_IntPtr nEnd );
+    sal_Int32          FindPos( SortListData const *pEntry, sal_Int32 nStart, sal_Int32 nEnd );
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
     sal_Int32          Compare( SortListData const *pOne,

@@ -449,7 +449,7 @@ void EventList::Clear()
     maData.clear();
 }
 
-void EventList::AddEvent( sal_IntPtr nType, sal_Int32 nPos )
+void EventList::AddEvent( sal_Int32 nType, sal_Int32 nPos )
 {
     ListAction aAction;
     aAction.Position = nPos;
