@@ -1180,10 +1180,8 @@ tools::Polygon OutputDevice::PixelToLogic( const tools::Polygon& rDevicePoly,
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.setX( lcl_pixelToLogic( pPt->X(), GetDPIX(),
-                                    aMapRes.mfMapScX ) - aMapRes.mnMapOfsX - mpMapper->GetLogicalXOffset() );
-        aPt.setY( lcl_pixelToLogic( pPt->Y(), GetDPIY(),
-                                    aMapRes.mfMapScY ) - aMapRes.mnMapOfsY - mpMapper->GetLogicalYOffset() );
+        aPt.setX(lcl_pixelToLogic(pPt->X(), GetDPIX(), aMapRes.mfMapScX) - aMapRes.mnMapOfsX - mpMapper->GetLogicalXOffset());
+        aPt.setY(lcl_pixelToLogic(pPt->Y(), GetDPIY(), aMapRes.mfMapScY) - aMapRes.mnMapOfsY - mpMapper->GetLogicalYOffset());
         aPoly[i] = aPt;
     }
 
