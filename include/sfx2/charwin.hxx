@@ -26,7 +26,7 @@
 #include <vcl/weld.hxx>
 #include <deque>
 
-class SAL_DLLPUBLIC_RTTI SvxCharView final : public weld::CustomWidgetController
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SvxCharView final : public weld::CustomWidgetController
 {
 private:
     VclPtr<VirtualDevice> mxVirDev;

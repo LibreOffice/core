@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -46,7 +47,7 @@ typedef ::cppu::ImplInheritanceHelper< SfxStyleSheetPool,
                                         css::container::XNameAccess,
                                         css::lang::XComponent > SdStyleSheetPoolBase;
 
-class SAL_DLLPUBLIC_RTTI SdStyleSheetPool final : public SdStyleSheetPoolBase, public SfxListener
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SdStyleSheetPool final : public SdStyleSheetPoolBase, public SfxListener
 {
     friend class SdDrawDocument;
 public:

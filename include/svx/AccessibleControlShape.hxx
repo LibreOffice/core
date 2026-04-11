@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_ACCESSIBLECONTROLSHAPE_HXX
 #define INCLUDED_SVX_ACCESSIBLECONTROLSHAPE_HXX
 
+#include <config_options.h>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
@@ -60,7 +61,7 @@ namespace accessibility {
                                 >   AccessibleControlShape_Base;
 /** @descr
 */
-class SAL_DLLPUBLIC_RTTI AccessibleControlShape final
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) AccessibleControlShape final
         :public AccessibleShape
         ,public AccessibleControlShape_Base
 {

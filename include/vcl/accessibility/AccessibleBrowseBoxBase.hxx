@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>
@@ -41,7 +42,7 @@ namespace vcl {
 
 /** The BrowseBox accessible objects inherit from this base class. It
     implements basic functionality for various Accessibility interfaces. */
-class VCL_DLLPUBLIC AccessibleBrowseBoxBase
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) AccessibleBrowseBoxBase
     : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::awt::XFocusListener,
                                          css::lang::XServiceInfo>
 {

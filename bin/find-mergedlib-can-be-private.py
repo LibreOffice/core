@@ -102,22 +102,34 @@ print("exported       = " + str(len(exported_symbols2)))
 print("imported       = " + str(len(imported_symbols2)))
 print("unused_exports = " + str(len(unused_exports)))
 
+# Extract the class name from the symbol name.
+def find_class(sym):
+    if sym.startswith("typeinfo for "):
+        return sym[13:]
+    i = sym.rfind("(")
+    if i == -1:
+        i = sym.rfind("::")
+    else:
+        sym = sym[:i]
+        i = sym.rfind("::")
+    if i == -1:
+        return None
+    return sym[:i]
+
 # for each class, count how many symbols will become hidden if we mark the class as hidden
 can_be_hidden_count = dict()
 for sym in exported_symbols2:
-    i = sym.rfind("::")
-    if i == -1:
+    clz = find_class(sym)
+    if clz is None:
         continue
-    clz = sym[:i]
     if clz in can_be_hidden_count:
         can_be_hidden_count[clz] = can_be_hidden_count[clz] + 1
     else:
         can_be_hidden_count[clz] = 1
 for sym in imported_symbols2:
-    i = sym.rfind("::")
-    if i == -1:
+    clz = find_class(sym)
+    if clz is None:
         continue
-    clz = sym[:i]
     if clz in can_be_hidden_count:
         can_be_hidden_count[clz] = can_be_hidden_count[clz] - 1
     else:
@@ -134,6 +146,33 @@ with open("bin/find-mergedlib-can-be-private-symbols.classes.results", "wt") as 
         if i[0] < 10:
             break
         f.write(str(i[0]) + " " + i[1] + "\n")
+
+whole_class_can_be_hidden = set()
+for sym in exported_symbols2:
+    clz = find_class(sym)
+    if clz is None:
+        continue
+    whole_class_can_be_hidden.add(clz)
+for sym in imported_symbols2:
+    clz = find_class(sym)
+    if clz is None:
+        continue
+    whole_class_can_be_hidden.discard(clz)
+with open("bin/find-mergedlib-can-be-private-symbols.whole-class.results", "wt") as f:
+    for i in sorted(whole_class_can_be_hidden):
+        # ignore some external libraries
+        if i.startswith("antlr4::"):
+            continue
+        if i.startswith("lucene::"):
+            continue
+        if i.startswith("Sk"):
+            continue
+        if i.startswith("Qt"):
+            continue
+        cnt = can_be_hidden_count[i]
+        if cnt > 20:
+            f.write(i + " " + str(can_be_hidden_count[i]) + "\n")
+
 
 
 with open("bin/find-mergedlib-can-be-private-symbols.functions.results", "wt") as f:

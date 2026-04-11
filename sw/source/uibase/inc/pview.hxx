@@ -37,7 +37,7 @@ class CommandEvent;
 class SwPagePreviewLayout;
 
 /// Provides the VCL widget that is used for the main area of the File -> Print Preview window.
-class SAL_DLLPUBLIC_RTTI SwPagePreviewWin final : public vcl::Window
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwPagePreviewWin final : public vcl::Window
 {
     SwViewShell* mpViewShell;
     sal_uInt16 mnSttPage;

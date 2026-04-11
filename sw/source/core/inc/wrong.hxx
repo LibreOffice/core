@@ -258,7 +258,7 @@ private:
 
 };
 
-class SAL_DLLPUBLIC_RTTI SwWrongList
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwWrongList
 {
     std::vector<SwWrongArea> maList;
     WrongListType            meType;

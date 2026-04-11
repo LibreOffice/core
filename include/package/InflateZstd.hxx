@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <memory>
 #include <package/Inflater.hxx>
 #include <zstd.h>
@@ -16,7 +17,7 @@
 
 namespace ZipUtils
 {
-class DLLPUBLIC_PACKAGE InflateZstd : public Inflater
+class UNLESS_MERGELIBS_MORE(DLLPUBLIC_PACKAGE) InflateZstd : public Inflater
 {
 private:
     bool bFinished;

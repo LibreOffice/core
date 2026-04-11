@@ -19,6 +19,7 @@
 #pragma once
 
 
+#include <config_options.h>
 // helper classes
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -34,7 +35,7 @@
 namespace property
 {
 
-class SAL_DLLPUBLIC_RTTI OPropertySet :
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) OPropertySet :
     protected cppu::BaseMutex,
     public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet

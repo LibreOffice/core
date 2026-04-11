@@ -18,11 +18,12 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <comphelper/accessibletexthelper.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 
 // implementation of a table cell of BrowseBox
-class VCL_DLLPUBLIC AccessibleBrowseBoxTableCell final
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) AccessibleBrowseBoxTableCell final
     : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxCell,
                                          css::accessibility::XAccessibleText>,
       public ::comphelper::OCommonAccessibleText

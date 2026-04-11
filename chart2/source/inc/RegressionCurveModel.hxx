@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include "OPropertySet.hxx"
 
 #include <cppuhelper/implbase.hxx>
@@ -47,7 +48,7 @@ typedef ::cppu::WeakImplHelper<
     RegressionCurveModel_Base;
 }
 
-class SAL_DLLPUBLIC_RTTI RegressionCurveModel :
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) RegressionCurveModel :
         public impl::RegressionCurveModel_Base,
         public ::property::OPropertySet
 {

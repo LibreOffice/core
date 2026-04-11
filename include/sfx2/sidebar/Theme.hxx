@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <sfx2/dllapi.h>
 
 #include <tools/color.hxx>
@@ -39,7 +40,7 @@ typedef comphelper::WeakComponentImplHelper <
 /** Simple collection of colors, gradients, fonts that define the
     look of the sidebar and its controls.
 */
-class SFX2_DLLPUBLIC Theme final
+class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) Theme final
     : public ThemeInterfaceBase
 {
 public:

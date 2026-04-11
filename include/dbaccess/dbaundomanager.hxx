@@ -20,6 +20,7 @@
 #ifndef INCLUDED_DBACCESS_DBAUNDOMANAGER_HXX
 #define INCLUDED_DBACCESS_DBAUNDOMANAGER_HXX
 
+#include <config_options.h>
 #include <memory>
 
 #include <com/sun/star/document/XUndoManager.hpp>
@@ -47,17 +48,17 @@ namespace dbaui
 
     struct UndoManager_Impl;
     typedef ::cppu::ImplHelper1< css::document::XUndoManager > UndoManager_Base;
-    class SAL_DLLPUBLIC_RTTI UndoManager final : public UndoManager_Base
+    class UNLESS_MERGELIBS_MORE(DBACCESS_DLLPUBLIC) UndoManager final : public UndoManager_Base
     {
     public:
-        DBACCESS_DLLPUBLIC UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex );
+        UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex );
         ~UndoManager();
 
-        DBACCESS_DLLPUBLIC SfxUndoManager& GetSfxUndoManager() const;
+        SfxUndoManager& GetSfxUndoManager() const;
 
         // XInterface
-        DBACCESS_DLLPUBLIC virtual void SAL_CALL acquire(  ) noexcept override;
-        DBACCESS_DLLPUBLIC virtual void SAL_CALL release(  ) noexcept override;
+        virtual void SAL_CALL acquire(  ) noexcept override;
+        virtual void SAL_CALL release(  ) noexcept override;
 
         // XComponent equivalents
         void disposing();

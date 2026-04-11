@@ -70,7 +70,7 @@ namespace o3tl
 class SvxRectCtlAccessibleContext;
 class SvxPixelCtlAccessible;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRectCtl : public weld::CustomWidgetController
+class SAL_WARN_UNUSED UNLESS_MERGELIBS_MORE(SVX_DLLPUBLIC) SvxRectCtl : public weld::CustomWidgetController
 {
 private:
     SvxTabPage* m_pPage;

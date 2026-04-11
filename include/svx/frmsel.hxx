@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_FRMSEL_HXX
 #define INCLUDED_SVX_FRMSEL_HXX
 
+#include <config_options.h>
 #include <memory>
 #include <vcl/customweld.hxx>
 #include <editeng/borderline.hxx>
@@ -79,7 +80,7 @@ namespace a11y
     class AccFrameSelector;
 }
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameSelector final : public weld::CustomWidgetController
+class SAL_WARN_UNUSED UNLESS_MERGELIBS_MORE(SVX_DLLPUBLIC) FrameSelector final : public weld::CustomWidgetController
 {
 public:
     FrameSelector();

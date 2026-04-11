@@ -24,7 +24,7 @@ class SwTextNode;
 struct SwPosition;
 class SwNumRule;
 
-class SAL_DLLPUBLIC_RTTI SwNodeNum final : public SwNumberTreeNode
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwNodeNum final : public SwNumberTreeNode
 {
 public:
     explicit SwNodeNum(SwTextNode* pTextNode, bool isHiddenRedlines);

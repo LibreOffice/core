@@ -300,7 +300,7 @@ bool CheckControlLayer( const SdrObject *pObj );
 /** ContactObject for connection of formats as representatives of draw objects
  in SwClient and the objects themselves in Drawing (SDrObjUserCall). */
 
-class SAL_DLLPUBLIC_RTTI SwDrawContact final : public SwContact
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwDrawContact final : public SwContact
 {
     private:
         /** anchored drawing object instance for the

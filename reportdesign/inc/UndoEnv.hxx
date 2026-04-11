@@ -37,7 +37,7 @@ namespace rptui
     class OXUndoEnvironmentImpl;
 
 
-    class SAL_DLLPUBLIC_RTTI OXUndoEnvironment final
+    class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) OXUndoEnvironment final
         : public ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
                                         ,   css::container::XContainerListener
                                         ,   css::util::XModifyListener

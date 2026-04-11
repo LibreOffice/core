@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_NUMFMTSH_HXX
 #define INCLUDED_SVX_NUMFMTSH_HXX
 
+#include <config_options.h>
 #include <i18nlangtag/lang.h>
 
 #include <svx/svxdllapi.h>
@@ -58,7 +59,7 @@ enum SvxNumberFormatCategory
 #define NUMBERFORMAT_ENTRY_NEW_CURRENCY     NUMBERFORMAT_ENTRY_NOT_FOUND-1
 
 
-class SVX_DLLPUBLIC SvxNumberFormatShell
+class UNLESS_MERGELIBS_MORE(SVX_DLLPUBLIC) SvxNumberFormatShell
 {
 public:
                         SvxNumberFormatShell( SvNumberFormatter* pNumFormatter,

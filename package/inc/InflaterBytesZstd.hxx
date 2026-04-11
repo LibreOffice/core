@@ -9,13 +9,14 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <memory>
 #include <package/Inflater.hxx>
 #include <zstd.h>
 
 namespace ZipUtils
 {
-class DLLPUBLIC_PACKAGE InflaterBytesZstd : public InflaterBytes
+class UNLESS_MERGELIBS_MORE(DLLPUBLIC_PACKAGE) InflaterBytesZstd : public InflaterBytes
 {
 private:
     bool bFinished;

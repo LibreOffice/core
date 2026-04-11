@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include "basctldllapi.h"
 
 #include <sal/types.h>
@@ -67,7 +68,7 @@ namespace basctl
 
     /** encapsulates a document which contains Basic scripts and dialogs
     */
-    class BASCTL_DLLPUBLIC ScriptDocument
+    class UNLESS_MERGELIBS_MORE(BASCTL_DLLPUBLIC) ScriptDocument
     {
     private:
         class Impl;

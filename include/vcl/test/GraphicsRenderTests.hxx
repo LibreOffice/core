@@ -9,6 +9,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <utility>
 #include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
@@ -36,7 +37,7 @@ public:
     const Bitmap& getBitmap() const { return m_aResultantBitmap; }
 };
 
-class SAL_DLLPUBLIC_RTTI GraphicsRenderTests
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) GraphicsRenderTests
 {
     bool m_aStoreResultantBitmap;
 

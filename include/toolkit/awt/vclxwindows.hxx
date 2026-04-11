@@ -345,7 +345,7 @@ public:
 
 //  class VCLXEdit
 
-class SAL_DLLPUBLIC_RTTI VCLXEdit :  public cppu::ImplInheritanceHelper<
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) VCLXEdit :  public cppu::ImplInheritanceHelper<
                     VCLXWindow,
                     css::awt::XTextComponent,
                     css::awt::XTextEditField,

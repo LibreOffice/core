@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include "OPropertySet.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
@@ -46,7 +47,7 @@ typedef ::cppu::WeakImplHelper
     BaseCoordinateSystem_Base;
 }
 
-class SAL_DLLPUBLIC_RTTI BaseCoordinateSystem :
+class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) BaseCoordinateSystem :
         public impl::BaseCoordinateSystem_Base,
         public ::property::OPropertySet
 {

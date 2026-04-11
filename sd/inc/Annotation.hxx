@@ -45,7 +45,7 @@ rtl::Reference<sdr::annotation::Annotation> createAnnotation(SdPage* pPage);
 
 std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert);
 
-class SAL_DLLPUBLIC_RTTI Annotation final : public sdr::annotation::Annotation
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) Annotation final : public sdr::annotation::Annotation
 {
 public:
     explicit Annotation(const css::uno::Reference<css::uno::XComponentContext>& context, SdrPage* pPage);

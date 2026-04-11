@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <unotools/confignode.hxx>
 #include <map>
 #include <vector>
@@ -39,7 +40,7 @@ class ContextList;
     methods so that the sidebar can easily decide which content panels
     to display for a certain context.
 */
-class SFX2_DLLPUBLIC ResourceManager
+class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) ResourceManager
 {
 public:
 
