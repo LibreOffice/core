@@ -245,10 +245,11 @@ tools::Rectangle OutputDevice::ImplDevicePixelToLogic( const tools::Rectangle& r
     if ( !mpMapper->IsMapModeEnabled() )
     {
         aRetval = tools::Rectangle(
-            rPixelRect.Left()-mpMapper->GetDeviceOriginX(),
-            rPixelRect.Top()-mpMapper->GetDeviceOriginY(),
-            rPixelRect.IsWidthEmpty() ? 0 : rPixelRect.Right()-mpMapper->GetDeviceOriginX(),
-            rPixelRect.IsHeightEmpty() ? 0 : rPixelRect.Bottom()-mpMapper->GetDeviceOriginY() );
+            mpMapper->DeviceToWindowUnitsX(rPixelRect.Left()),
+            mpMapper->DeviceToWindowUnitsY(rPixelRect.Top()),
+            rPixelRect.IsWidthEmpty() ? 0 : mpMapper->DeviceToWindowUnitsX(rPixelRect.Right()),
+            rPixelRect.IsHeightEmpty() ? 0 : mpMapper->DeviceToWindowUnitsY(rPixelRect.Bottom())
+        );
     }
     else
     {
