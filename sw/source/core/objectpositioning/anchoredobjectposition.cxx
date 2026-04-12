@@ -975,22 +975,23 @@ SwTwips SwAnchoredObjectPosition::CalcRelPosX(
         // If compat flag is active, then disable automatic mirroring for RTL.
         bool bMirrorRtlDrawObjs = !rIDSA.get(DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS);
         const bool bR2L = rAnchorFrame.IsRightToLeft() && bMirrorRtlDrawObjs;
+        SwTwips nHoriPos = _rHoriOrient.getPosition().as_twip<SwTwips>();
         if( IsAnchoredToChar() && text::RelOrientation::CHAR == eRelOrient )
         {
             if( bR2L )
-                nRelPosX -= _rHoriOrient.GetPos();
+                nRelPosX -= nHoriPos;
             else
-                nRelPosX += _rHoriOrient.GetPos();
+                nRelPosX += nHoriPos;
         }
         else if ( bToggle || ( !_rHoriOrient.IsPosToggle() && bR2L ) )
         {
             // Correction: consider <nOffset> also for
             // toggling from left to right.
-            nRelPosX += nWidth - nObjWidth - _rHoriOrient.GetPos();
+            nRelPosX += nWidth - nObjWidth - nHoriPos;
         }
         else
         {
-            nRelPosX += _rHoriOrient.GetPos();
+            nRelPosX += nHoriPos;
         }
     }
     else if ( text::HoriOrientation::CENTER == eHoriOrient )

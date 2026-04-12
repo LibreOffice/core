@@ -1443,7 +1443,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
             aVert.SetRelationOrient( text::RelOrientation::FRAME );
         }
     }
-    aVert.SetPos( nTmpY );
+    aVert.setPosition(gfx::Length::twip(nTmpY));
     aSet.Put( aVert );
 
     // For Flys in the Cnt, the horizontal orientation is of no interest,
@@ -1491,7 +1491,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
                 aHori.SetRelationOrient( text::RelOrientation::FRAME );
             aHori.SetPosToggle( false );
         }
-        aHori.SetPos( nTmpX );
+        aHori.setPosition(gfx::Length::twip(nTmpX));
         aSet.Put( aHori );
     }
     SetCurrRelPos( rNewPos );

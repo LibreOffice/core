@@ -381,15 +381,16 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
 
             if (text::HoriOrientation::NONE == aOldH.GetHoriOrient() && pHoriOrientItem
                 && text::HoriOrientation::NONE == pHoriOrientItem->GetHoriOrient()
-                && aOldH.GetPos() == pHoriOrientItem->GetPos())
+                && aOldH.getPosition() == pHoriOrientItem->getPosition())
             {
-                SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldH.GetPos();
-                nPos += aOldAnchorPos.getX() - aNewAnchorPos.getX();
+                gfx::Length nPosition
+                    = (RndStdIds::FLY_AS_CHAR == nOld) ? 0_emu : aOldH.getPosition();
+                nPosition += gfx::Length::twip(aOldAnchorPos.getX() - aNewAnchorPos.getX());
 
                 assert(aOldH.GetRelationOrient() != pHoriOrientItem->GetRelationOrient());
                 aOldH.SetRelationOrient(pHoriOrientItem->GetRelationOrient());
 
-                aOldH.SetPos( nPos );
+                aOldH.setPosition(nPosition);
                 bPutOldH = true;
             }
             if (nNew == RndStdIds::FLY_AT_PAGE)
@@ -414,15 +415,16 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
 
             if (text::VertOrientation::NONE == aOldV.GetVertOrient() && pVertOrientItem
                 && text::VertOrientation::NONE == pVertOrientItem->GetVertOrient()
-                && aOldV.GetPos() == pVertOrientItem->GetPos())
+                && aOldV.getPosition() == pVertOrientItem->getPosition())
             {
-                SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldV.GetPos();
-                nPos += aOldAnchorPos.getY() - aNewAnchorPos.getY();
+                gfx::Length nPosition
+                    = (RndStdIds::FLY_AS_CHAR == nOld) ? 0_emu : aOldV.getPosition();
+                nPosition += gfx::Length::twip(aOldAnchorPos.getY() - aNewAnchorPos.getY());
 
                 assert(aOldV.GetRelationOrient() != pVertOrientItem->GetRelationOrient());
                 aOldV.SetRelationOrient(pVertOrientItem->GetRelationOrient());
 
-                aOldV.SetPos( nPos );
+                aOldV.setPosition(nPosition);
                 rSet.Put( aOldV );
             }
         }

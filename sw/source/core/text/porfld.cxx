@@ -868,7 +868,7 @@ SwGrfNumPortion::SwGrfNumPortion(
     }
     if( pGrfOrient )
     {
-        m_nYPos = pGrfOrient->GetPos();
+        m_nYPos = pGrfOrient->getPosition().as_twip<SwTwips>();
         m_eOrient = pGrfOrient->GetVertOrient();
     }
     else
