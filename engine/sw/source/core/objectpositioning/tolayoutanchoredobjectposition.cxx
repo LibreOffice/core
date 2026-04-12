@@ -86,11 +86,11 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // keep the calculated relative vertical position - needed for filters
         // (including the xml-filter)
         {
-            SwTwips nAttrRelPosY = nRelPosY - nVertOffsetToFrameAnchorPos;
-            if ( aVert.GetVertOrient() != text::VertOrientation::NONE &&
-                 aVert.GetPos() != nAttrRelPosY )
+            gfx::Length nAttrRelPosY = gfx::Length::twip(nRelPosY - nVertOffsetToFrameAnchorPos);
+            if (aVert.GetVertOrient() != text::VertOrientation::NONE &&
+                aVert.getPosition() != nAttrRelPosY)
             {
-                aVert.SetPos( nAttrRelPosY );
+                aVert.setPosition(nAttrRelPosY);
                 const_cast<SwFrameFormat&>(rFrameFormat).LockModify();
                 const_cast<SwFrameFormat&>(rFrameFormat).SetFormatAttr( aVert );
                 const_cast<SwFrameFormat&>(rFrameFormat).UnlockModify();
@@ -146,71 +146,78 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // <nWidth>: 'width' of the alignment area
         // <nOffset>: offset of alignment area, relative to 'left' of
         //            frame anchor position
-        SwTwips nWidth, nOffset;
+        SwTwips nWidthTwips, nOffsetTwips;
         {
             bool bDummy; // in this context irrelevant output parameter
             GetHoriAlignmentValues( GetAnchorFrame(), GetAnchorFrame(),
                                      eRelOrient, false,
-                                     nWidth, nOffset, bDummy );
+                                     nWidthTwips, nOffsetTwips, bDummy );
         }
-
-        SwTwips nObjWidth = aRectFnSet.GetWidth(aObjBoundRect);
+        gfx::Length nWidth = gfx::Length::twip(nWidthTwips);
+        gfx::Length nOffset = gfx::Length::twip(nOffsetTwips);
+        gfx::Length nObjWidth = gfx::Length::twip(aRectFnSet.GetWidth(aObjBoundRect));
 
         // determine relative horizontal position
-        SwTwips nRelPosX;
+        gfx::Length nRelPosX;
         if ( text::HoriOrientation::NONE == eHoriOrient )
         {
             if( bToggle ||
                 ( !aHori.IsPosToggle() && GetAnchorFrame().IsRightToLeft() ) )
             {
-                nRelPosX = nWidth - nObjWidth - aHori.GetPos();
+                nRelPosX = nWidth - nObjWidth - aHori.getPosition();
             }
             else
             {
-                nRelPosX = aHori.GetPos();
+                nRelPosX = aHori.getPosition();
             }
         }
         else if ( text::HoriOrientation::CENTER == eHoriOrient )
             nRelPosX = (nWidth / 2) - (nObjWidth / 2);
         else if (text::HoriOrientation::RIGHT == eHoriOrient)
-            nRelPosX
-                = nWidth
-                  - (nObjWidth + (aRectFnSet.IsVert() ? rUL.GetLower() : rLR.ResolveRight({})));
+        {
+            SwTwips nRightSpace = aRectFnSet.IsVert() ? rUL.GetLower() : rLR.ResolveRight({});
+            nRelPosX = nWidth - nObjWidth - gfx::Length::twip(nRightSpace);
+        }
         else
-            nRelPosX = aRectFnSet.IsVert() ? rUL.GetUpper() : rLR.ResolveLeft({});
+        {
+            SwTwips nLeftSpace = aRectFnSet.IsVert() ? rUL.GetUpper() : rLR.ResolveLeft({});
+            nRelPosX = gfx::Length::twip(nLeftSpace);
+        }
         nRelPosX += nOffset;
 
         // no 'negative' relative horizontal position
         // OD 06.11.2003 #FollowTextFlowAtFrame# - negative positions allow for
         // to frame anchored objects.
-        if ( !bFlyAtFly && nRelPosX < 0 )
+        if (!bFlyAtFly && nRelPosX < 0_emu)
         {
-            nRelPosX = 0;
+            nRelPosX = 0_emu;
         }
+
+        // The object is laid out on whole twips, so the position stays on that grid.
+        nRelPosX = gfx::Length::twip(nRelPosX.as_twip<SwTwips>());
 
         // determine absolute 'horizontal' position, depending on layout-direction
         // #i26791# - determine offset to 'horizontal' frame
         // anchor position, depending on layout-direction
         if( aRectFnSet.IsVert() || aRectFnSet.IsVertL2R() )
         {
-
-            aRelPos.setY( nRelPosX );
-            maOffsetToFrameAnchorPos.setY( nOffset );
+            aRelPos.setY(nRelPosX.as_twip<tools::Long>());
+            maOffsetToFrameAnchorPos.setY(nOffset.as_twip<tools::Long>());
         }
         else
         {
-            aRelPos.setX( nRelPosX );
-            maOffsetToFrameAnchorPos.setX( nOffset );
+            aRelPos.setX(nRelPosX.as_twip<tools::Long>());
+            maOffsetToFrameAnchorPos.setX(nOffset.as_twip<tools::Long>());
         }
 
         // keep the calculated relative horizontal position - needed for filters
         // (including the xml-filter)
         {
-            SwTwips nAttrRelPosX = nRelPosX - nOffset;
-            if ( text::HoriOrientation::NONE != aHori.GetHoriOrient() &&
-                 aHori.GetPos() != nAttrRelPosX )
+            gfx::Length nAttrRelPosX = nRelPosX - nOffset;
+            if (text::HoriOrientation::NONE != aHori.GetHoriOrient() &&
+                aHori.getPosition() != nAttrRelPosX)
             {
-                aHori.SetPos( nAttrRelPosX );
+                aHori.setPosition(nAttrRelPosX);
                 const_cast<SwFrameFormat&>(rFrameFormat).LockModify();
                 const_cast<SwFrameFormat&>(rFrameFormat).SetFormatAttr( aHori );
                 const_cast<SwFrameFormat&>(rFrameFormat).UnlockModify();

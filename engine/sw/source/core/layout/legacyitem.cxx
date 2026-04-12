@@ -59,17 +59,18 @@ namespace legacy::SwFormatVert
 
             rStrm.ReadInt16( orient ).ReadInt16( relation );
 
-            rItem.SetPos(yPos);
+            rItem.setPosition(gfx::Length::twip(yPos));
             rItem.SetVertOrient(orient);
             rItem.SetRelationOrient(relation);
         }
 
         SvStream& Store(const SwFormatVertOrient& rItem, SvStream& rStrm, sal_uInt16)
         {
-            if constexpr(sizeof(rItem.GetPos()) >= 8)
-                rStrm.WriteInt64(rItem.GetPos());
+            SwTwips nPos = rItem.getPosition().as_twip<SwTwips>();
+            if constexpr(sizeof(nPos) >= 8)
+                rStrm.WriteInt64(nPos);
             else
-                rStrm.WriteInt32(rItem.GetPos());
+                rStrm.WriteInt32(nPos);
             rStrm.WriteInt16(rItem.GetVertOrient()).WriteInt16(rItem.GetRelationOrient());
             return rStrm;
         }

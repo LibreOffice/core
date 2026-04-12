@@ -686,24 +686,22 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         if ( !pDesc->GetHOrient() )
         {
             SwFormatHoriOrient* pHori = pDesc->GetHOrient( true );
-            SwTwips nHoriPos = o3tl::toTwips(aMM100Pos.X, o3tl::Length::mm100);
-            pHori->SetPos( nHoriPos );
+            pHori->setPosition(gfx::Length::hmm(aMM100Pos.X));
         }
         {
             if(pDesc->GetHOrient()->GetHoriOrient() == text::HoriOrientation::NONE)
-                aMM100Pos.X = convertTwipToMm100(pDesc->GetHOrient()->GetPos());
+                aMM100Pos.X = std::round(pDesc->GetHOrient()->getPosition().as_hmm());
             aSet.Put( *pDesc->GetHOrient() );
         }
         // #i32349# - if no vertical position exists, create one
         if ( !pDesc->GetVOrient() )
         {
             SwFormatVertOrient* pVert = pDesc->GetVOrient( true );
-            SwTwips nVertPos = o3tl::toTwips(aMM100Pos.Y, o3tl::Length::mm100);
-            pVert->SetPos( nVertPos );
+            pVert->setPosition(gfx::Length::hmm(aMM100Pos.Y));
         }
         {
             if(pDesc->GetVOrient()->GetVertOrient() == text::VertOrientation::NONE)
-                aMM100Pos.Y = convertTwipToMm100(pDesc->GetVOrient()->GetPos());
+                aMM100Pos.Y = std::round(pDesc->GetVOrient()->getPosition().as_hmm());
             aSet.Put( *pDesc->GetVOrient() );
         }
 

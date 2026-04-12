@@ -718,24 +718,21 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         tools::Long lYDiff = aNewPos.Y() - aOldPos.Y();
         if( GetFlyFrame()->GetAnchorFrame()->IsVertical() )
         {
-            //lXDiff -= rVert.GetPos();
-            //lYDiff += rHori.GetPos();
-
             if ( GetFlyFrame()->GetAnchorFrame()->IsVertLR() )
             {
-                lXDiff += rVert.GetPos();
+                lXDiff += rVert.getPosition().as_twip<SwTwips>();
                 lXDiff = -lXDiff;
             }
             else
             {
-                lXDiff -= rVert.GetPos();
-                lYDiff += rHori.GetPos();
+                lXDiff -= rVert.getPosition().as_twip<SwTwips>();
+                lYDiff += rHori.getPosition().as_twip<SwTwips>();
             }
         }
         else
         {
-            lXDiff += rHori.GetPos();
-            lYDiff += rVert.GetPos();
+            lXDiff += rHori.getPosition().as_twip<SwTwips>();
+            lYDiff += rVert.getPosition().as_twip<SwTwips>();
         }
 
         if( GetFlyFrame()->GetAnchorFrame()->IsRightToLeft() &&

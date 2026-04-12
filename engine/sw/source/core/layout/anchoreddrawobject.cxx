@@ -978,15 +978,17 @@ void SwAnchoredDrawObject::SetPositioningAttr()
         // only change position - do not lose other attributes
 
         SwFormatHoriOrient aHori(pObjFormat->GetHoriOrient());
-        if (nHoriPos != aHori.GetPos()) {
-            aHori.SetPos( nHoriPos );
+        if (nHoriPos != aHori.getPosition().as_twip<SwTwips>())
+        {
+            aHori.setPosition(gfx::Length::twip(nHoriPos));
             InvalidateObjRectWithSpaces();
             pObjFormat->SetFormatAttr(aHori);
         }
 
         SwFormatVertOrient aVert(pObjFormat->GetVertOrient());
-        if (nVertPos != aVert.GetPos()) {
-            aVert.SetPos( nVertPos );
+        if (nVertPos != aVert.getPosition().as_twip<SwTwips>())
+        {
+            aVert.setPosition(gfx::Length::twip(nVertPos));
             InvalidateObjRectWithSpaces();
             pObjFormat->SetFormatAttr(aVert);
         }

@@ -235,10 +235,12 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             // in order to avoid a switch to 'manual' vertical positioning in
             // <SwDrawContact::Changed_(..)>.
             const sal_Int16 eVertOrient = rVert.GetVertOrient();
-            if( rVert.GetPos() != nRelPos && eVertOrient != text::VertOrientation::NONE )
+            gfx::Length nRelativePosition = gfx::Length::twip(nRelPos);
+            if (rVert.getPosition() != nRelativePosition
+                && eVertOrient != text::VertOrientation::NONE)
             {
                 SwFormatVertOrient aVert( rVert );
-                aVert.SetPos( nRelPos );
+                aVert.setPosition(nRelativePosition);
                 const_cast<SwFrameFormat&>(rFrameFormat).LockModify();
                 const_cast<SwFrameFormat&>(rFrameFormat).SetFormatAttr( aVert );
                 const_cast<SwFrameFormat&>(rFrameFormat).UnlockModify();
@@ -371,7 +373,7 @@ SwTwips SwAsCharAnchoredObjectPosition::GetRelPosToBase(
     const sal_Int16 eVertOrient = _rVert.GetVertOrient();
 
     if ( eVertOrient == text::VertOrientation::NONE )
-        nRelPosToBase = _rVert.GetPos();
+        nRelPosToBase = _rVert.getPosition().as_twip<SwTwips>();
     else
     {
         if ( eVertOrient == text::VertOrientation::CENTER )

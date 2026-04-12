@@ -1961,7 +1961,7 @@ void SwRootFrame::ImplCalcBrowseWidth()
                                 switch ( rHori.GetHoriOrient() )
                                 {
                                     case text::HoriOrientation::NONE:
-                                        nWidth += rHori.GetPos();
+                                        nWidth += rHori.getPosition().as_twip<SwTwips>();
                                         break;
                                     case text::HoriOrientation::INSIDE:
                                     case text::HoriOrientation::LEFT:

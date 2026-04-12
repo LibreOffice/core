@@ -33,7 +33,7 @@ SwFlyInContentFrame::SwFlyInContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pS
     SwFlyFrame( pFormat, pSib, pAnch )
 {
     m_bInCnt = true;
-    SwTwips nRel = pFormat->GetVertOrient().GetPos();
+    SwTwips nRel = pFormat->GetVertOrient().getPosition().as_twip<SwTwips>();
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     Point aRelPos;
     if( pAnch && pAnch->IsVertical() )
@@ -203,12 +203,12 @@ void SwFlyInContentFrame::MakeObjPos()
     //Update the current values in the format if needed, during this we of
     //course must not send any Modify.
     const bool bVert = GetAnchorFrame()->IsVertical();
-    SwTwips nOld = rVert.GetPos();
-    SwTwips nAct = bVert ? -GetCurrRelPos().X() : GetCurrRelPos().Y();
+    gfx::Length nOld = rVert.getPosition();
+    gfx::Length nAct = gfx::Length::twip(bVert ? -GetCurrRelPos().X() : GetCurrRelPos().Y());
     if( nAct != nOld )
     {
         SwFormatVertOrient aVert( rVert );
-        aVert.SetPos( nAct );
+        aVert.setPosition(nAct);
         pFormat->LockModify();
         pFormat->SetFormatAttr( aVert );
         pFormat->UnlockModify();

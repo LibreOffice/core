@@ -1530,8 +1530,8 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             const SwFormatHoriOrient &rHori = pFormat->GetHoriOrient();
             const tools::Long lXDiff = aPt.getX() - pFly->getFrameArea().Left();
             const tools::Long lYDiff = aPt.getY() - pFly->getFrameArea().Top();
-            const Point aTmp( rHori.GetPos() + lXDiff,
-                              rVert.GetPos() + lYDiff );
+            const Point aTmp(rHori.getPosition().as_twip<SwTwips>() + lXDiff,
+                             rVert.getPosition().as_twip<SwTwips>() + lYDiff);
             pFly->ChgRelPos( aTmp );
         }
     }
@@ -2245,7 +2245,7 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
 
     const SwFormatVertOrient &rVert = pFrameFormat->GetVertOrient();
     SwFormatVertOrient aVert( rVert );
-    aVert.SetPos( -nBaseline );
+    aVert.setPosition( gfx::Length::twip(-nBaseline) );
     aVert.SetVertOrient( css::text::VertOrientation::NONE );
 
     pFrameFormat->LockModify();
