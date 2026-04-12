@@ -75,6 +75,11 @@ public:
         ASSERT_CHANGE_REFCOUNTED_ITEM;
         m_nYPos = nNew;
     }
+    void adjustPosition(gfx::Length nDelta)
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        m_nYPos += nDelta;
+    }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
@@ -127,6 +132,11 @@ public:
     {
         ASSERT_CHANGE_REFCOUNTED_ITEM;
         m_nXPos = nNew;
+    }
+    void adjustPosition(gfx::Length nDelta)
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        m_nXPos += nDelta;
     }
 
     bool IsPosToggle() const { return m_bPosToggle; }

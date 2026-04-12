@@ -289,14 +289,14 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 {
                     SwFormatVertOrient aVertOrient(pFormat->GetVertOrient());
                     aVertOrient.SetVertOrient(text::VertOrientation::NONE);
-                    aVertOrient.setPosition(aVertOrient.getPosition() + gfx::Length::twip(nDeltaX));
+                    aVertOrient.adjustPosition(gfx::Length::twip(nDeltaX));
                     aSet.Put( aVertOrient );
                 }
                 else
                 {
                     SwFormatHoriOrient aHoriOrient( pFormat->GetHoriOrient() );
                     aHoriOrient.SetHoriOrient( text::HoriOrientation::NONE );
-                    aHoriOrient.setPosition(aHoriOrient.getPosition() + gfx::Length::twip(nDeltaX));
+                    aHoriOrient.adjustPosition(gfx::Length::twip(nDeltaX));
                     aSet.Put( aHoriOrient );
                 }
 
@@ -440,14 +440,14 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 {
                     SwFormatHoriOrient aHoriOrient(pFormat->GetHoriOrient());
                     aHoriOrient.SetHoriOrient(text::HoriOrientation::NONE);
-                    aHoriOrient.setPosition(aHoriOrient.getPosition() + gfx::Length::twip(nDeltaY));
+                    aHoriOrient.adjustPosition(gfx::Length::twip(nDeltaY));
                     aSet.Put( aHoriOrient );
                 }
                 else
                 {
                     SwFormatVertOrient aVertOrient(pFormat->GetVertOrient());
                     aVertOrient.SetVertOrient(text::VertOrientation::NONE);
-                    aVertOrient.setPosition(aVertOrient.getPosition() + gfx::Length::twip(nDeltaY));
+                    aVertOrient.adjustPosition(gfx::Length::twip(nDeltaY));
                     aSet.Put( aVertOrient );
                 }
                 SwFormatFrameSize aSize(pFormat->GetFrameSize());

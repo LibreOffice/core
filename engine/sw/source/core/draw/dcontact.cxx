@@ -1289,7 +1289,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                         nYPosDiff = -nYPosDiff;
                     }
                     SwFormatVertOrient aVert(rVert);
-                    aVert.setPosition(rVert.getPosition() + gfx::Length::twip(nYPosDiff));
+                    aVert.adjustPosition(gfx::Length::twip(nYPosDiff));
                     aVert.SetVertOrient(text::VertOrientation::NONE);
                     aSet.Put(aVert);
                 }
@@ -1298,7 +1298,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 if ( !bAnchoredAsChar && nXPosDiff != 0 )
                 {
                     SwFormatHoriOrient aHori(rHori);
-                    aHori.setPosition(rHori.getPosition() + gfx::Length::twip(nXPosDiff));
+                    aHori.adjustPosition(gfx::Length::twip(nXPosDiff));
                     aHori.SetHoriOrient(text::HoriOrientation::NONE);
                     // A dragged object keeps the position it was dropped at on every page.
                     aHori.SetPosToggle(false);
