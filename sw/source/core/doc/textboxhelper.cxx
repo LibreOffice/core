@@ -1084,7 +1084,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 tools::Rectangle aRect
                     = getRelativeTextRectangle(pObj ? pObj : rShape.FindRealSdrObject());
                 if (!aRect.IsEmpty())
-                    aOrient.setPosition(aOrient.getPosition() + gfx::Length::twip(aRect.Top()));
+                    aOrient.adjustPosition(gfx::Length::twip(aRect.Top()));
 
                 if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE
                     && rShape.GetAnchor().GetPageNum() != 0)
@@ -1114,7 +1114,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 tools::Rectangle aRect
                     = getRelativeTextRectangle(pObj ? pObj : rShape.FindRealSdrObject());
                 if (!aRect.IsEmpty())
-                    aOrient.setPosition(aOrient.getPosition() + gfx::Length::twip(aRect.Left()));
+                    aOrient.adjustPosition(gfx::Length::twip(aRect.Left()));
 
                 if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE
                     && rShape.GetAnchor().GetPageNum() != 0)
@@ -1147,10 +1147,8 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                         }
                         else
                         {
-                            aVertOrient.setPosition(aVertOrient.getPosition()
-                                                    + gfx::Length::twip(aRect.Top()));
-                            aHoriOrient.setPosition(aHoriOrient.getPosition()
-                                                    + gfx::Length::twip(aRect.Left()));
+                            aVertOrient.adjustPosition(gfx::Length::twip(aRect.Top()));
+                            aHoriOrient.adjustPosition(gfx::Length::twip(aRect.Left()));
                         }
 
                         aTextBoxSet.Put(aVertOrient);
@@ -1453,7 +1451,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                     case text::VertOrientation::CHAR_TOP:
                     case text::VertOrientation::LINE_TOP:
                     {
-                        aNewVOri.setPosition(aNewVOri.getPosition() - nShapeHeight);
+                        aNewVOri.adjustPosition(-nShapeHeight);
                         break;
                     }
                     // Bottom aligned shape
@@ -1461,7 +1459,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                     case text::VertOrientation::CHAR_BOTTOM:
                     case text::VertOrientation::LINE_BOTTOM:
                     {
-                        aNewVOri.setPosition(aNewVOri.getPosition() + nShapeHeight);
+                        aNewVOri.adjustPosition(nShapeHeight);
                         break;
                     }
                     // Center aligned shape
@@ -1471,9 +1469,8 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                     {
                         // The shape height is a whole number of twips, so halve it there
                         // to keep the offset on the same grid.
-                        aNewVOri.setPosition(
-                            aNewVOri.getPosition()
-                            + gfx::Length::twip(pShape->GetFrameSize().GetHeight() / 2));
+                        aNewVOri.adjustPosition(
+                            gfx::Length::twip(pShape->GetFrameSize().GetHeight() / 2));
                         break;
                     }
                     default:
@@ -1506,8 +1503,8 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             }
             else
             {
-                aNewHOri.setPosition(aNewHOri.getPosition() + gfx::Length::twip(aRect.Left()));
-                aNewVOri.setPosition(aNewVOri.getPosition() + gfx::Length::twip(aRect.Top()));
+                aNewHOri.adjustPosition(gfx::Length::twip(aRect.Left()));
+                aNewVOri.adjustPosition(gfx::Length::twip(aRect.Top()));
             }
 
             // Get the distance of the child shape inside its parent
