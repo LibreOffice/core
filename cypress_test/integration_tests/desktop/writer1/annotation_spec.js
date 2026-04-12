@@ -1008,4 +1008,14 @@ describe(['tagdesktop'], 'Annotation with @mention', function() {
 		cy.cGet('#mentionPopup').should('not.exist');
 		cy.cGet('#annotation-modify-textarea-new').should('have.focus');
 	});
+
+	it('Unselect comment on scroll', function() {
+		desktopHelper.insertComment('test comment');
+		cy.cGet('#comment-container-1').should('exist');
+		cy.cGet('#comment-container-1').should('exist').should('not.have.class', 'annotation-active');
+		cy.cGet('#comment-container-1').click();
+		cy.cGet('#comment-container-1').should('exist').should('have.class', 'annotation-active');
+		cy.getFrameWindow().then(function(win) { win.app.sectionContainer.getSectionWithName('scroll').scrollVerticalWithOffset(10); });
+		cy.cGet('#comment-container-1').should('exist').should('not.have.class', 'annotation-active');
+	})
 });
