@@ -164,7 +164,8 @@ inline const SvxBoxItem &SwFlyFrameAttrMgr::GetBox() const
 }
 inline Point SwFlyFrameAttrMgr::GetPos() const
 {
-    return Point( GetHoriOrient().GetPos(), GetVertOrient().GetPos() );
+    return Point(GetHoriOrient().getPosition().as_twip<tools::Long>(),
+                 GetVertOrient().getPosition().as_twip<tools::Long>());
 }
 inline RndStdIds SwFlyFrameAttrMgr::GetAnchor()  const
 {

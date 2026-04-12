@@ -573,10 +573,10 @@ void SwFlyFrameAttrMgr::SetPos( const Point& rPoint )
     SwFormatVertOrient aVertOrient( GetVertOrient() );
     SwFormatHoriOrient aHoriOrient( GetHoriOrient() );
 
-    aHoriOrient.SetPos       ( rPoint.X() );
+    aHoriOrient.setPosition(gfx::Length::twip(rPoint.X()));
     aHoriOrient.SetHoriOrient( text::HoriOrientation::NONE  );
 
-    aVertOrient.SetPos       ( rPoint.Y() );
+    aVertOrient.setPosition(gfx::Length::twip(rPoint.Y()));
     aVertOrient.SetVertOrient( text::VertOrientation::NONE  );
 
     m_aSet.Put( aVertOrient );
