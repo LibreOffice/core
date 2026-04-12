@@ -1067,6 +1067,8 @@ void SocketDisposition::execute()
     ASSERT_CORRECT_SOCKET_THREAD(_socket);
     if (_socketMove)
     {
+        assert(_disposition == Type::TRANSFER);
+
         // Drop pretentions of ownership before _socketMove.
         SocketThreadOwnerChange::resetThreadOwner(*_socket);
 
@@ -1098,6 +1100,10 @@ void SocketDisposition::execute()
                                     << "] is not alive after adding transfer callback");
 
         _toPoll = nullptr;
+    }
+    else
+    {
+        assert(_disposition != Type::TRANSFER);
     }
 }
 
