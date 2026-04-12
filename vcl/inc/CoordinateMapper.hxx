@@ -134,8 +134,8 @@ public:
     basegfx::B2DHomMatrix GetInverseViewTransformation(const MapMode& rMapMode) const;
     basegfx::B2DHomMatrix GetDeviceTransformation() const;
 
-    tools::Long LogicToViewX(tools::Long n, double fMapResolutionScale) const;
-    tools::Long LogicToViewY(tools::Long n, double fMapResolutionScale) const;
+    tools::Long LogicToViewDistanceX(tools::Long n, double fMapResolutionScale) const;
+    tools::Long LogicToViewDistanceY(tools::Long n, double fMapResolutionScale) const;
 
     double LogicToViewDistanceSubPixelX(tools::Long n, double fMapResolutionScale) const;
     double LogicToViewDistanceSubPixelY(tools::Long n, double fMapResolutionScale) const;
@@ -149,8 +149,8 @@ public:
     double ViewToLogicDistanceDoubleX(double n, double fMapResolutionScale) const;
     double ViewToLogicDistanceDoubleY(double n, double fMapResolutionScale) const;
 
-    tools::Long LogicToViewX(tools::Long n) const;
-    tools::Long LogicToViewY(tools::Long n) const;
+    tools::Long LogicToViewDistanceX(tools::Long n) const;
+    tools::Long LogicToViewDistanceY(tools::Long n) const;
 
     double LogicToViewDistanceSubPixelX(tools::Long n) const;
     double LogicToViewDistanceSubPixelY(tools::Long n) const;
@@ -169,12 +169,28 @@ public:
     tools::Long LogicToOffsetLogicY(tools::Long nY) const;
 
     // Viewport (view space)
-    tools::Long LogicToViewPixelX(tools::Long nX) const;
-    tools::Long LogicToViewPixelY(tools::Long nY) const;
 
     // Physical window (device space)
     tools::Long LogicToDevicePixelX(tools::Long nX) const;
     tools::Long LogicToDevicePixelY(tools::Long nY) const;
+
+    // Device <-> Window (Strip/Apply OutputDevice screen origin)
+    tools::Long DeviceToWindowUnitsX(tools::Long nX) const;
+    tools::Long DeviceToWindowUnitsY(tools::Long nY) const;
+    tools::Long WindowToDeviceUnitsX(tools::Long nX) const;
+    tools::Long WindowToDeviceUnitsY(tools::Long nY) const;
+
+    // Window <-> View (Strip/Apply VCL internal Pixel Offset)
+    tools::Long WindowToViewUnitsX(tools::Long nX) const;
+    tools::Long WindowToViewUnitsY(tools::Long nY) const;
+    tools::Long ViewToWindowUnitsX(tools::Long nX) const;
+    tools::Long ViewToWindowUnitsY(tools::Long nY) const;
+
+    // View <-> LogicUnits (Scale and apply Logical Mapping Offset)
+    tools::Long ViewToLogicUnitsX(tools::Long nX) const;
+    tools::Long ViewToLogicUnitsY(tools::Long nY) const;
+    tools::Long LogicUnitsToViewUnitsX(tools::Long nX) const;
+    tools::Long LogicUnitsToViewUnitsY(tools::Long nY) const;
 
 private:
     tools::Long ImplCalcDevicePixelX(tools::Long nX) const;

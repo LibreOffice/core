@@ -191,18 +191,6 @@ tools::Long CoordinateMapper::LogicToOffsetLogicY(tools::Long nY) const
 }
 
 // Viewport (view space)
-tools::Long CoordinateMapper::LogicToViewPixelX(tools::Long nX) const
-{
-    const double nViewLogicX = nX + maMapRes.mnMapOfsX;
-    return std::llround(nViewLogicX * maMapRes.mfMapScX * mnDPIX);
-}
-
-tools::Long CoordinateMapper::LogicToViewPixelY(tools::Long nY) const
-{
-    const double nViewLogicY = nY + maMapRes.mnMapOfsY;
-    return std::llround(nViewLogicY * maMapRes.mfMapScY * mnDPIY);
-}
-
 // Physical window (device space)
 tools::Long CoordinateMapper::LogicToDevicePixelX(tools::Long nX) const
 {
@@ -222,15 +210,15 @@ tools::Long CoordinateMapper::LogicToDevicePixelY(tools::Long nY) const
 
 tools::Long CoordinateMapper::ImplCalcDevicePixelX(tools::Long nX) const
 {
-    return LogicToViewPixelX(nX) + mnOutOffX + mnOutOffOrigX;
+    return LogicUnitsToViewUnitsX(nX) + mnOutOffX + mnOutOffOrigX;
 }
 
 tools::Long CoordinateMapper::ImplCalcDevicePixelY(tools::Long nY) const
 {
-    return LogicToViewPixelY(nY) + mnOutOffY + mnOutOffOrigY;
+    return LogicUnitsToViewUnitsY(nY) + mnOutOffY + mnOutOffOrigY;
 }
 
-tools::Long CoordinateMapper::LogicToViewX(tools::Long n, double fMapResolutionScale) const
+tools::Long CoordinateMapper::LogicToViewDistanceX(tools::Long n, double fMapResolutionScale) const
 {
     assert(GetDPIX() > 0);
     assert(fMapResolutionScale >= 0);
@@ -239,7 +227,7 @@ tools::Long CoordinateMapper::LogicToViewX(tools::Long n, double fMapResolutionS
     return std::llround(nRes);
 }
 
-tools::Long CoordinateMapper::LogicToViewY(tools::Long n, double fMapResolutionScale) const
+tools::Long CoordinateMapper::LogicToViewDistanceY(tools::Long n, double fMapResolutionScale) const
 {
     assert(GetDPIY() > 0);
     assert(fMapResolutionScale >= 0);
@@ -312,14 +300,14 @@ double CoordinateMapper::ViewToLogicDistanceDoubleY(double n, double fMapResolut
     return n / fMapResolutionScale / GetDPIY();
 }
 
-tools::Long CoordinateMapper::LogicToViewX(tools::Long n) const
+tools::Long CoordinateMapper::LogicToViewDistanceX(tools::Long n) const
 {
-    return LogicToViewX(n, GetMapResolutionScaleX());
+    return LogicToViewDistanceX(n, GetMapResolutionScaleX());
 }
 
-tools::Long CoordinateMapper::LogicToViewY(tools::Long n) const
+tools::Long CoordinateMapper::LogicToViewDistanceY(tools::Long n) const
 {
-    return LogicToViewY(n, GetMapResolutionScaleY());
+    return LogicToViewDistanceY(n, GetMapResolutionScaleY());
 }
 
 double CoordinateMapper::LogicToViewDistanceSubPixelX(tools::Long n) const
@@ -360,6 +348,54 @@ double CoordinateMapper::ViewToLogicDistanceDoubleX(double n) const
 double CoordinateMapper::ViewToLogicDistanceDoubleY(double n) const
 {
     return ViewToLogicDistanceDoubleY(n, GetMapResolutionScaleY());
+}
+
+tools::Long CoordinateMapper::DeviceToWindowUnitsX(tools::Long nX) const { return nX - mnOutOffX; }
+
+tools::Long CoordinateMapper::DeviceToWindowUnitsY(tools::Long nY) const { return nY - mnOutOffY; }
+
+tools::Long CoordinateMapper::WindowToDeviceUnitsX(tools::Long nX) const { return nX + mnOutOffX; }
+
+tools::Long CoordinateMapper::WindowToDeviceUnitsY(tools::Long nY) const { return nY + mnOutOffY; }
+
+tools::Long CoordinateMapper::WindowToViewUnitsX(tools::Long nX) const
+{
+    return nX - mnOutOffOrigX;
+}
+
+tools::Long CoordinateMapper::WindowToViewUnitsY(tools::Long nY) const
+{
+    return nY - mnOutOffOrigY;
+}
+
+tools::Long CoordinateMapper::ViewToWindowUnitsX(tools::Long nX) const
+{
+    return nX + mnOutOffOrigX;
+}
+
+tools::Long CoordinateMapper::ViewToWindowUnitsY(tools::Long nY) const
+{
+    return nY + mnOutOffOrigY;
+}
+
+tools::Long CoordinateMapper::ViewToLogicUnitsX(tools::Long nX) const
+{
+    return ViewToLogicDistanceX(nX) - maMapRes.mnMapOfsX;
+}
+
+tools::Long CoordinateMapper::ViewToLogicUnitsY(tools::Long nY) const
+{
+    return ViewToLogicDistanceY(nY) - maMapRes.mnMapOfsY;
+}
+
+tools::Long CoordinateMapper::LogicUnitsToViewUnitsX(tools::Long nX) const
+{
+    return LogicToViewDistanceX(nX + maMapRes.mnMapOfsX);
+}
+
+tools::Long CoordinateMapper::LogicUnitsToViewUnitsY(tools::Long nY) const
+{
+    return LogicToViewDistanceY(nY + maMapRes.mnMapOfsY);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
