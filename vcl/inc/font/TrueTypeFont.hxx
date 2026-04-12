@@ -155,9 +155,6 @@ constexpr int POST_isFixedPitch_offset = 12;
 constexpr int HEAD_xMin_offset = 36;
 constexpr int HEAD_yMax_offset = 42;
 
-bool ConvertCFFfontToType1(const unsigned char* pFontBytes, int nByteLength,
-                           std::vector<sal_uInt8>& rOutBuffer, FontSubsetInfo& rInfo);
-
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TrueTypeFont
 {
     hb_face_t* m_pFace = nullptr;

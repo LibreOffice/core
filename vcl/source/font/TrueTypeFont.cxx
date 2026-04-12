@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <hb-ot.h>
+#include <font/CFFCharset.hxx>
 #include <font/TrueTypeFont.hxx>
 #include <font/TTFStructure.hxx>
 #ifdef SYSTEM_LIBFIXMATH
@@ -217,15 +218,11 @@ FontWeight TrueTypeFont::getFontWeight() const
 
 int TestFontParsing(const void* data, sal_uInt32 size)
 {
-    // Exercise TrueType/OpenType parsing
+    // Exercise CFF parsing
     if (data && size > 0)
     {
-        FontSubsetInfo aInfo;
-        aInfo.m_nFontType = FontType::TYPE1_PFB;
-
-        std::vector<sal_uInt8> aOutBuffer;
-        vcl::ConvertCFFfontToType1(static_cast<const unsigned char*>(data), size, aOutBuffer,
-                                   aInfo);
+        std::vector<sal_uInt16> aCIDs;
+        vcl::font::ReadCFFGlyphCIDs(static_cast<const sal_uInt8*>(data), size, aCIDs);
     }
     return 0;
 }
