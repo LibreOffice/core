@@ -1222,7 +1222,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         }
         else
         {
-            aVert.SetPos( aDiff );
+            aVert.setPosition(gfx::Length::twip(aDiff));
             eNew = text::VertOrientation::NONE;
         }
         aVert.SetVertOrient( eNew );

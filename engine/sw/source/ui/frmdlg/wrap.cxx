@@ -405,9 +405,9 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aVal.nHoriOrient = static_cast<short>(rHori.GetHoriOrient());
         aVal.nVertOrient = static_cast<short>(rVert.GetVertOrient());
 
-        aVal.nHPos = rHori.GetPos();
+        aVal.nHPos = rHori.getPosition().as_twip<sal_Int32>();
         aVal.nHRelOrient = rHori.GetRelationOrient();
-        aVal.nVPos = rVert.GetPos();
+        aVal.nVPos = rVert.getPosition().as_twip<sal_Int32>();
         aVal.nVRelOrient = rVert.GetRelationOrient();
 
         if (rFrameSize.GetWidthPercent() && rFrameSize.GetWidthPercent() != SwFormatFrameSize::SYNCED)

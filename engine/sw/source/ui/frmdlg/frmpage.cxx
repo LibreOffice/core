@@ -1200,7 +1200,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
              (m_bNew || (m_bAtHorzPosModified || bMod) || m_nOldH != eHOri ) )
         {
             SwTwips nX = static_cast< SwTwips >(m_xAtHorzPosED->denormalize(m_xAtHorzPosED->get_value(FieldUnit::TWIP)));
-            aHoriOrient.SetPos( nX );
+            aHoriOrient.setPosition(gfx::Length::twip(nX));
         }
 
         pOldItem = GetOldItem(*rSet, FN_HORI_ORIENT);
@@ -1239,7 +1239,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
             {
                 nY *= -1;
             }
-            aVertOrient.SetPos( nY );
+            aVertOrient.setPosition(gfx::Length::twip(nY));
         }
         pOldItem = GetOldItem(*rSet, FN_VERT_ORIENT);
         bool bSame = false;
@@ -1248,7 +1248,8 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
              bSame = m_bFormat ?
                       aVertOrient.GetVertOrient() == static_cast<const SwFormatVertOrient*>(pOldItem)->GetVertOrient() &&
                       aVertOrient.GetRelationOrient() == static_cast<const SwFormatVertOrient*>(pOldItem)->GetRelationOrient() &&
-                      aVertOrient.GetPos() == static_cast<const SwFormatVertOrient*>(pOldItem)->GetPos()
+                      aVertOrient.getPosition()
+                          == static_cast<const SwFormatVertOrient*>(pOldItem)->getPosition()
                     : aVertOrient == static_cast<const SwFormatVertOrient&>(*pOldItem);
         }
         if( ( m_bNew && !m_bFormat ) || ((m_bAtVertPosModified || bMod) && !bSame ))
@@ -2423,8 +2424,8 @@ void SwFramePage::Init(const SfxItemSet& rSet)
                 m_nOldHRel,
                 m_nOldV,
                 m_nOldVRel,
-                rHori.GetPos(),
-                rVert.GetPos());
+                rHori.getPosition().as_twip<tools::Long>(),
+                rVert.getPosition().as_twip<tools::Long>());
     }
 
     // transparent for example
