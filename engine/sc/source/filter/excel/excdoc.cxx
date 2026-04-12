@@ -646,6 +646,9 @@ void ExcTable::FillAsTableXml()
     // <tableParts> after <drawing> and before <extLst>
     aRecList.AppendRecord( GetTablesManager().GetTablesBySheet( mnScTab));
 
+    // queryTable parts (no wrapper element in sheet XML, only .rels entries)
+    aRecList.AppendRecord( GetQueryTablesManager().GetQueryTablesBySheet( mnScTab ));
+
     aRecList.AppendNewRecord(new xcl::exp::NamedSheetViews(GetRoot(), mnScTab));
 
     aRecList.AppendRecord( xExtLst );
@@ -743,6 +746,7 @@ void ExcDocument::ReadDoc()
         aHeader.FillAsHeaderXml(maBoundsheetList);
         GetXmlPivotTableManager().Initialize();
         GetTablesManager().Initialize();    // Move outside conditions if we wanted to support BIFF.
+        GetQueryTablesManager().Initialize();
     }
 
     SCTAB nScTab = 0, nScTabCount = GetTabInfo().GetScTabCount();

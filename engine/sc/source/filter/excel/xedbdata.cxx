@@ -11,7 +11,9 @@
 #include <excrecds.hxx>
 #include <dbdata.hxx>
 #include <document.hxx>
+#include <querytablebuffer.hxx>
 #include <tablestyle.hxx>
+#include <xelink.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <sax/fastattribs.hxx>
@@ -352,6 +354,134 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
     }
 
     pTableStrm->endElement( XML_table);
+}
+
+
+// --- XclExpQueryTables ---
+
+XclExpQueryTables::Entry::Entry( std::shared_ptr<oox::xls::QueryTableModel> pModel, sal_Int32 nId ) :
+    mpModel(std::move(pModel)), mnQueryTableId(nId)
+{
+}
+
+XclExpQueryTables::XclExpQueryTables( const XclExpRoot& rRoot ) :
+    XclExpRoot(rRoot)
+{
+}
+
+XclExpQueryTables::~XclExpQueryTables()
+{
+}
+
+void XclExpQueryTables::AppendQueryTable( std::shared_ptr<oox::xls::QueryTableModel> pModel, sal_Int32 nQueryTableId )
+{
+    maQueryTables.emplace_back( std::move(pModel), nQueryTableId );
+}
+
+void XclExpQueryTables::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& pWorksheetStrm = rStrm.GetCurrentStream();
+
+    for (const auto& rEntry : maQueryTables)
+    {
+        sax_fastparser::FSHelperPtr pQTStrm = rStrm.CreateOutputStream(
+                XclXmlUtils::GetStreamName("xl/queryTables/", "queryTable", rEntry.mnQueryTableId),
+                XclXmlUtils::GetStreamName("../queryTables/", "queryTable", rEntry.mnQueryTableId),
+                pWorksheetStrm->getOutputStream(),
+                CREATE_XL_CONTENT_TYPE("queryTable"),
+                CREATE_OFFICEDOC_RELATION_TYPE("queryTable"));
+
+        rStrm.PushStream( pQTStrm );
+        SaveQueryTableXml( rStrm, rEntry );
+        rStrm.PopStream();
+    }
+}
+
+void XclExpQueryTables::SaveQueryTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
+{
+    const oox::xls::QueryTableModel& rModel = *rEntry.mpModel;
+    sax_fastparser::FSHelperPtr& pStream = rStrm.GetCurrentStream();
+
+    const char* pGrowShrinkType = nullptr;
+    if (rModel.mnGrowShrinkType == XML_insertClear)
+        pGrowShrinkType = "insertClear";
+    else if (rModel.mnGrowShrinkType == XML_overwriteClear)
+        pGrowShrinkType = "overwriteClear";
+    // XML_insertDelete is the default, omit
+
+    std::optional<OString> aAutoFormatId;
+    if (rModel.mnAutoFormatId != 0)
+        aAutoFormatId = OString::number(rModel.mnAutoFormatId);
+
+    pStream->singleElement( XML_queryTable,
+        XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
+        XML_name, rModel.maDefName.toUtf8(),
+        XML_connectionId, OString::number(rModel.mnConnId),
+        XML_autoFormatId, aAutoFormatId,
+        XML_growShrinkType, pGrowShrinkType,
+        XML_headers, rModel.mbHeaders ? nullptr : ToPsz10(false),
+        XML_rowNumbers, rModel.mbRowNumbers ? ToPsz10(true) : nullptr,
+        XML_disableRefresh, rModel.mbDisableRefresh ? ToPsz10(true) : nullptr,
+        XML_backgroundRefresh, rModel.mbBackground ? nullptr : ToPsz10(false),
+        XML_firstBackgroundRefresh, rModel.mbFirstBackground ? ToPsz10(true) : nullptr,
+        XML_refreshOnLoad, rModel.mbRefreshOnLoad ? ToPsz10(true) : nullptr,
+        XML_fillFormulas, rModel.mbFillFormulas ? ToPsz10(true) : nullptr,
+        XML_removeDataOnSave, rModel.mbRemoveDataOnSave ? ToPsz10(true) : nullptr,
+        XML_disableEdit, rModel.mbDisableEdit ? ToPsz10(true) : nullptr,
+        XML_preserveFormatting, rModel.mbPreserveFormat ? nullptr : ToPsz10(false),
+        XML_adjustColumnWidth, rModel.mbAdjustColWidth ? nullptr : ToPsz10(false),
+        XML_intermediate, rModel.mbIntermediate ? ToPsz10(true) : nullptr,
+        XML_applyNumberFormats, ToPsz10(rModel.mbApplyNumFmt),
+        XML_applyBorderFormats, ToPsz10(rModel.mbApplyBorder),
+        XML_applyFontFormats, ToPsz10(rModel.mbApplyFont),
+        XML_applyPatternFormats, ToPsz10(rModel.mbApplyFill),
+        XML_applyAlignmentFormats, ToPsz10(rModel.mbApplyAlignment),
+        XML_applyWidthHeightFormats, ToPsz10(rModel.mbApplyProtection));
+}
+
+
+// --- XclExpQueryTablesManager ---
+
+XclExpQueryTablesManager::XclExpQueryTablesManager( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot )
+{
+}
+
+XclExpQueryTablesManager::~XclExpQueryTablesManager()
+{
+}
+
+void XclExpQueryTablesManager::Initialize()
+{
+    ScDocument& rDoc = GetDoc();
+    if (!rDoc.hasAnyQueryTables())
+        return;
+
+    sal_Int32 nQueryTableId = 0;
+    SCTAB nScTabCount = GetTabInfo().GetScTabCount();
+
+    for (SCTAB nScTab = 0; nScTab < nScTabCount; ++nScTab)
+    {
+        if (!GetTabInfo().IsExportTab(nScTab))
+            continue;
+
+        const QueryTableModelVector* pModels = rDoc.getSheetQueryTables(nScTab);
+        if (!pModels || pModels->empty())
+            continue;
+
+        rtl::Reference< XclExpQueryTables > pNew = new XclExpQueryTables( GetRoot() );
+        for (const auto& pModel : *pModels)
+        {
+            pNew->AppendQueryTable( pModel, ++nQueryTableId );
+        }
+        maQueryTablesMap.insert( ::std::make_pair( nScTab, pNew ) );
+    }
+}
+
+rtl::Reference< XclExpQueryTables > XclExpQueryTablesManager::GetQueryTablesBySheet( SCTAB nTab )
+{
+    QueryTablesMapType::iterator it = maQueryTablesMap.find(nTab);
+    return it == maQueryTablesMap.end() ? nullptr : it->second;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

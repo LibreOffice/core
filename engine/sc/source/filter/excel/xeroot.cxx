@@ -182,6 +182,12 @@ XclExpTablesManager& XclExpRoot::GetTablesManager()
     return *mrExpData.mxTablesMgr;
 }
 
+XclExpQueryTablesManager& XclExpRoot::GetQueryTablesManager()
+{
+    assert(mrExpData.mxQueryTablesMgr);
+    return *mrExpData.mxQueryTablesMgr;
+}
+
 void XclExpRoot::InitializeConvert()
 {
     mrExpData.mxTabInfo = std::make_shared<XclExpTabInfo>( GetRoot() );
@@ -221,6 +227,7 @@ void XclExpRoot::InitializeGlobals()
     {
         mrExpData.mxXmlPTableMgr = std::make_shared<XclExpXmlPivotTableManager>(GetRoot());
         mrExpData.mxTablesMgr = std::make_shared<XclExpTablesManager>(GetRoot());
+        mrExpData.mxQueryTablesMgr = std::make_shared<XclExpQueryTablesManager>(GetRoot());
         mrExpData.mxTableStyles = new XclExpXmlTableStyles( GetRoot() );
 
         do

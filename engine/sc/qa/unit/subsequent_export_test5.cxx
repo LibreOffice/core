@@ -1480,6 +1480,27 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf170963_row_breaks)
     CPPUNIT_ASSERT_EQUAL(nMaxRowBreaks, countXPathNodes(pSheet, "/x:worksheet/x:rowBreaks/x:brk"));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testQueryTableExport)
+{
+    createScDoc("xlsx/queryTableExport.xlsx");
+    save(TestFilter::XLSX);
+
+    // The file has 32 queryTables; verify the first one has correct attributes
+    xmlDocUniquePtr pQT = parseExport(u"xl/queryTables/queryTable1.xml"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("queryTable1.xml was not exported", pQT);
+    assertXPath(pQT, "/x:queryTable", "name", u"conn_with_delim");
+    assertXPath(pQT, "/x:queryTable", "connectionId", u"1");
+    assertXPath(pQT, "/x:queryTable", "autoFormatId", u"16");
+    assertXPath(pQT, "/x:queryTable", "applyNumberFormats", u"0");
+    assertXPath(pQT, "/x:queryTable", "applyFontFormats", u"1");
+    assertXPath(pQT, "/x:queryTable", "applyPatternFormats", u"1");
+
+    // Verify connections.xml delimiter is not double-escaped
+    xmlDocUniquePtr pConn = parseExport(u"xl/connections.xml"_ustr);
+    CPPUNIT_ASSERT(pConn);
+    assertXPath(pConn, "/x:connections/x:connection[1]/x:textPr", "delimiter", u"_x0000_");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

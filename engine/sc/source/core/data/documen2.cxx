@@ -805,6 +805,8 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
                 pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_REORDER,
                             aSourceRange, 0,0,nDz ) );
 
+            UpdateQueryTables(aCxt);
+
             ScTableUniquePtr pSaveTab = std::move(maTabs[nOldPos]);
             maTabs.erase(maTabs.begin()+nOldPos);
             maTabs.insert(maTabs.begin()+nNewPos, std::move(pSaveTab));
@@ -951,6 +953,8 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
                 if (pValidationList)
                     pValidationList->UpdateInsertTab(aCxt);
+
+                UpdateQueryTables(aCxt);
             }
             else
                 bValid = false;

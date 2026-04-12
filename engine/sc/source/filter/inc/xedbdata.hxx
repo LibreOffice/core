@@ -64,4 +64,44 @@ private:
     TablesMapType maTablesMap;
 };
 
+namespace oox::xls { struct QueryTableModel; }
+
+class XclExpQueryTables : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    explicit            XclExpQueryTables( const XclExpRoot& rRoot );
+    virtual             ~XclExpQueryTables() override;
+
+    void                AppendQueryTable( std::shared_ptr<oox::xls::QueryTableModel> pModel, sal_Int32 nQueryTableId );
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
+
+private:
+    struct Entry
+    {
+        std::shared_ptr<oox::xls::QueryTableModel> mpModel;
+        sal_Int32       mnQueryTableId;
+
+        Entry( std::shared_ptr<oox::xls::QueryTableModel> pModel, sal_Int32 nId );
+    };
+
+    std::vector<Entry>  maQueryTables;
+
+    static void         SaveQueryTableXml( XclExpXmlStream& rStrm, const Entry& rEntry );
+};
+
+class XclExpQueryTablesManager : protected XclExpRoot
+{
+public:
+    explicit            XclExpQueryTablesManager( const XclExpRoot& rRoot );
+    virtual             ~XclExpQueryTablesManager() override;
+
+    void                Initialize();
+    rtl::Reference< XclExpQueryTables > GetQueryTablesBySheet( SCTAB nTab );
+
+private:
+    typedef ::std::map< SCTAB, rtl::Reference< XclExpQueryTables > > QueryTablesMapType;
+    QueryTablesMapType  maQueryTablesMap;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -560,6 +560,8 @@ bool ScDocument::InsertTab(
                     pValidationList->UpdateInsertTab(aCxt);
                 }
 
+                UpdateQueryTables(aCxt);
+
                 bValid = true;
             }
             else
@@ -649,6 +651,8 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                     ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
                     pValidationList->UpdateInsertTab(aCxt);
                 }
+
+                UpdateQueryTables(aCxt);
 
                 bValid = true;
             }
@@ -752,6 +756,8 @@ bool ScDocument::DeleteTab( SCTAB nTab )
             maTabs.erase(maTabs.begin() + nTab);
             delete pErasedTab.release();
 
+            UpdateQueryTables(aCxt);
+
             // UpdateBroadcastAreas must be called between UpdateDeleteTab,
             // which ends listening, and StartAllListeners, to not modify
             // areas that are to be inserted by starting listeners.
@@ -843,6 +849,9 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                     pTab->UpdateDeleteTab(aCxt);
 
             maTabs.erase(maTabs.begin() + nTab, maTabs.begin() + nTab + nSheets);
+
+            UpdateQueryTables(aCxt);
+
             // UpdateBroadcastAreas must be called between UpdateDeleteTab,
             // which ends listening, and StartAllListeners, to not modify
             // areas that are to be inserted by starting listeners.
@@ -873,6 +882,63 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
         }
     }
     return bValid;
+}
+
+void ScDocument::UpdateQueryTables(const sc::RefUpdateInsertTabContext& rCxt)
+{
+    if (maSheetQueryTables.empty())
+        return;
+
+    std::map<SCTAB, QueryTableModelVector> aNew;
+    for (auto& [nTab, rVec] : maSheetQueryTables)
+    {
+        if (nTab >= rCxt.mnInsertPos)
+            aNew[nTab + rCxt.mnSheets] = std::move(rVec);
+        else
+            aNew[nTab] = std::move(rVec);
+    }
+    maSheetQueryTables = std::move(aNew);
+}
+
+void ScDocument::UpdateQueryTables(const sc::RefUpdateDeleteTabContext& rCxt)
+{
+    if (maSheetQueryTables.empty())
+        return;
+
+    std::map<SCTAB, QueryTableModelVector> aNew;
+    for (auto& [nTab, rVec] : maSheetQueryTables)
+    {
+        if (nTab >= rCxt.mnDeletePos && nTab < rCxt.mnDeletePos + rCxt.mnSheets)
+            continue; // deleted sheet
+        if (nTab >= rCxt.mnDeletePos + rCxt.mnSheets)
+            aNew[nTab - rCxt.mnSheets] = std::move(rVec);
+        else
+            aNew[nTab] = std::move(rVec);
+    }
+    maSheetQueryTables = std::move(aNew);
+}
+
+void ScDocument::UpdateQueryTables(const sc::RefUpdateMoveTabContext& rCxt)
+{
+    if (maSheetQueryTables.empty())
+        return;
+
+    SCTAB nLower = std::min(rCxt.mnOldPos, rCxt.mnNewPos);
+    SCTAB nUpper = std::max(rCxt.mnOldPos, rCxt.mnNewPos);
+
+    std::map<SCTAB, QueryTableModelVector> aNew;
+    for (auto& [nTab, rVec] : maSheetQueryTables)
+    {
+        if (nTab < nLower || nTab > nUpper)
+            aNew[nTab] = std::move(rVec);
+        else if (nTab == rCxt.mnOldPos)
+            aNew[rCxt.mnNewPos] = std::move(rVec);
+        else if (rCxt.mnOldPos < rCxt.mnNewPos)
+            aNew[nTab - 1] = std::move(rVec);
+        else
+            aNew[nTab + 1] = std::move(rVec);
+    }
+    maSheetQueryTables = std::move(aNew);
 }
 
 bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDocument )

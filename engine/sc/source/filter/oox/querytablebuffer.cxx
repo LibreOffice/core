@@ -34,6 +34,7 @@
 #include <biffhelper.hxx>
 #include <connectionsbuffer.hxx>
 #include <defnamesbuffer.hxx>
+#include <document.hxx>
 #include <docuno.hxx>
 
 namespace oox::xls {
@@ -279,6 +280,17 @@ QueryTable& QueryTableBuffer::createQueryTable()
 void QueryTableBuffer::finalizeImport()
 {
     maQueryTables.forEachMem( &QueryTable::finalizeImport );
+
+    // Persist QueryTableModel data on ScDocument for round-trip XLSX export
+    if (!maQueryTables.empty())
+    {
+        QueryTableModelVector aModels;
+        aModels.reserve(maQueryTables.size());
+        for (const auto& rxQueryTable : maQueryTables)
+            aModels.push_back(
+                std::make_shared<QueryTableModel>(rxQueryTable->getModel()));
+        getScDocument().setSheetQueryTables(getSheetIndex(), std::move(aModels));
+    }
 }
 
 } // namespace oox::xls

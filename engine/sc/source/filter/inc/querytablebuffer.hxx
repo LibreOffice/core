@@ -58,6 +58,9 @@ public:
     /** Inserts a web query into the sheet. */
     void                finalizeImport();
 
+    /** Returns the query table model data. */
+    const QueryTableModel& getModel() const { return maModel; }
+
 private:
     QueryTableModel     maModel;
 };

@@ -54,6 +54,7 @@ class XclExpDxfs;
 class XclExpXmlTableStyles;
 class XclExpXmlPivotTableManager;
 class XclExpTablesManager;
+class XclExpQueryTablesManager;
 namespace sc { class CompileFormulaContext; }
 
 /** Stores global buffers and data needed for Excel export filter. */
@@ -98,6 +99,7 @@ struct XclExpRootData : public XclRootData
 
     std::shared_ptr<XclExpXmlPivotTableManager> mxXmlPTableMgr;
     std::shared_ptr<XclExpTablesManager> mxTablesMgr;
+    std::shared_ptr<XclExpQueryTablesManager> mxQueryTablesMgr;
     std::shared_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
 
     ScCompiler::OpCodeMapPtr  mxOpCodeMap;  /// mapping between op-codes and names
@@ -163,6 +165,7 @@ public:
     XclExpXmlPivotTableManager& GetXmlPivotTableManager();
 
     XclExpTablesManager& GetTablesManager();
+    XclExpQueryTablesManager& GetQueryTablesManager();
 
     /** Is called when export filter starts to create the Excel document (all BIFF versions). */
     void                InitializeConvert();
