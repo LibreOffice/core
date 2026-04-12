@@ -1822,37 +1822,6 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
     return true;
 }
 
-typedef int ThreeInts[3];
-static bool getPfbSegmentLengths( const unsigned char* pFontBytes, int nByteLen,
-    ThreeInts& rSegmentLengths )
-{
-    if( !pFontBytes || (nByteLen < 0) )
-        return false;
-    const unsigned char* pPtr = pFontBytes;
-    const unsigned char* pEnd = pFontBytes + nByteLen;
-
-    for(int & rSegmentLength : rSegmentLengths) {
-        // read segment1 header
-        if( pPtr+6 >= pEnd )
-            return false;
-        if( (pPtr[0] != 0x80) || (pPtr[1] >= 0x03) )
-            return false;
-        const int nLen = (pPtr[5]<<24) + (pPtr[4]<<16) + (pPtr[3]<<8) + pPtr[2];
-        if( nLen <= 0)
-            return false;
-        rSegmentLength = nLen;
-        pPtr += nLen + 6;
-    }
-
-    // read segment-end header
-    if( pPtr+2 >= pEnd )
-        return false;
-    if( (pPtr[0] != 0x80) || (pPtr[1] != 0x03) )
-        return false;
-
-    return true;
-}
-
 static void appendSubsetName( int nSubsetID, std::u16string_view rPSName, OStringBuffer& rBuffer )
 {
     if( nSubsetID )
@@ -2223,8 +2192,6 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const vcl::font::PhysicalFontFace* 
             case FontType::CFF_FONT:
                 aLine.append( '3' );
                 break;
-            case FontType::TYPE1_PFB:
-                break;
             default:
                 OSL_FAIL( "unknown fonttype in PDF font descriptor" );
                 return 0;
@@ -2325,31 +2292,6 @@ bool PDFWriterImpl::emitFonts()
                     checkAndEnableStreamEncryption( nFontStream );
                     if (!writeBufferBytes(aBuffer.data(), aBuffer.size()))
                         return false;
-                }
-                else if( aSubsetInfo.m_nFontType & FontType::TYPE1_PFB) // TODO: also support PFA?
-                {
-                    // get the PFB-segment lengths
-                    ThreeInts aSegmentLengths = {0,0,0};
-                    getPfbSegmentLengths(aBuffer.data(), aBuffer.size(), aSegmentLengths);
-                    // the lengths below are mandatory for PDF-exported Type1 fonts
-                    // because the PFB segment headers get stripped! WhyOhWhy.
-                    aLine.append("/Length1 "
-                        + OString::number(aSegmentLengths[0] )
-                        + "/Length2 "
-                        + OString::number( aSegmentLengths[1] )
-                        + "/Length3 "
-                        + OString::number( aSegmentLengths[2] )
-                        + ">>\n"
-                          "stream\n" );
-                    if ( !writeBuffer( aLine ) ) return false;
-                    if ( osl::File::E_None != m_aFile.getPos(nStartPos) ) return false;
-
-                    // emit PFB-sections without section headers
-                    beginCompression();
-                    checkAndEnableStreamEncryption( nFontStream );
-                    if ( !writeBufferBytes( &aBuffer[6], aSegmentLengths[0] ) ) return false;
-                    if ( !writeBufferBytes( &aBuffer[12] + aSegmentLengths[0], aSegmentLengths[1] ) ) return false;
-                    if ( !writeBufferBytes( &aBuffer[18] + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) ) return false;
                 }
                 else
                 {
