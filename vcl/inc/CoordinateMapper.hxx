@@ -168,11 +168,13 @@ public:
     tools::Long LogicToOffsetLogicX(tools::Long nX) const;
     tools::Long LogicToOffsetLogicY(tools::Long nY) const;
 
-    // Viewport (view space)
-
-    // Physical window (device space)
+    // Device <-> LogicUnits
     tools::Long LogicToDevicePixelX(tools::Long nX) const;
     tools::Long LogicToDevicePixelY(tools::Long nY) const;
+    tools::Long DevicePixelToLogicX(tools::Long nX) const;
+    tools::Long DevicePixelToLogicY(tools::Long nY) const;
+
+    // Pipeline is: Device -> Window -> View -> LogicUnits
 
     // Device <-> Window (Strip/Apply OutputDevice screen origin)
     tools::Long DeviceToWindowUnitsX(tools::Long nX) const;

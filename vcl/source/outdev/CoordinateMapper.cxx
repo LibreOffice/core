@@ -398,4 +398,26 @@ tools::Long CoordinateMapper::LogicUnitsToViewUnitsY(tools::Long nY) const
     return LogicToViewDistanceY(nY + maMapRes.mnMapOfsY);
 }
 
+tools::Long CoordinateMapper::DevicePixelToLogicX(tools::Long nX) const
+{
+    // If MapMode is disabled, Logic Space and Window Space are identical
+    // (we just strip the physical screen offset).
+    if (!IsMapModeEnabled())
+        return DeviceToWindowUnitsX(nX);
+
+    const tools::Long nWindowX = DeviceToWindowUnitsX(nX);
+    const tools::Long nViewX = WindowToViewUnitsX(nWindowX);
+    return ViewToLogicUnitsX(nViewX);
+}
+
+tools::Long CoordinateMapper::DevicePixelToLogicY(tools::Long nY) const
+{
+    if (!IsMapModeEnabled())
+        return DeviceToWindowUnitsY(nY);
+
+    const tools::Long nWindowY = DeviceToWindowUnitsY(nY);
+    const tools::Long nViewY = WindowToViewUnitsY(nWindowY);
+    return ViewToLogicUnitsY(nViewY);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
