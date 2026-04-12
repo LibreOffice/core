@@ -180,34 +180,6 @@ basegfx::B2DHomMatrix CoordinateMapper::GetInverseViewTransformation(const MapMo
     return aMatrix;
 }
 
-tools::Long CoordinateMapper::LogicToOffsetLogicX(tools::Long nX) const
-{
-    return nX + maMapRes.mnMapOfsX;
-}
-
-tools::Long CoordinateMapper::LogicToOffsetLogicY(tools::Long nY) const
-{
-    return nY + maMapRes.mnMapOfsY;
-}
-
-// Viewport (view space)
-// Physical window (device space)
-tools::Long CoordinateMapper::LogicToDevicePixelX(tools::Long nX) const
-{
-    if (!IsMapModeEnabled())
-        return nX + GetDeviceOriginX();
-
-    return ImplCalcDevicePixelX(nX);
-}
-
-tools::Long CoordinateMapper::LogicToDevicePixelY(tools::Long nY) const
-{
-    if (!IsMapModeEnabled())
-        return nY + GetDeviceOriginY();
-
-    return ImplCalcDevicePixelY(nY);
-}
-
 tools::Long CoordinateMapper::ImplCalcDevicePixelX(tools::Long nX) const
 {
     return LogicUnitsToViewUnitsX(nX) + mnOutOffX + mnOutOffOrigX;
@@ -218,166 +190,35 @@ tools::Long CoordinateMapper::ImplCalcDevicePixelY(tools::Long nY) const
     return LogicUnitsToViewUnitsY(nY) + mnOutOffY + mnOutOffOrigY;
 }
 
-tools::Long CoordinateMapper::LogicToViewDistanceX(tools::Long n, double fMapResolutionScale) const
-{
-    assert(GetDPIX() > 0);
-    assert(fMapResolutionScale >= 0);
-    double nRes = n * fMapResolutionScale * GetDPIX();
-    assert(std::abs(nRes) < static_cast<double>(std::numeric_limits<tools::Long>::max()));
-    return std::llround(nRes);
-}
+// ========================================================================
+// PIPELINE STAGES (Coordinate Transitions)
+// ========================================================================
 
-tools::Long CoordinateMapper::LogicToViewDistanceY(tools::Long n, double fMapResolutionScale) const
-{
-    assert(GetDPIY() > 0);
-    assert(fMapResolutionScale >= 0);
-    double nRes = n * fMapResolutionScale * GetDPIY();
-    assert(std::abs(nRes) < static_cast<double>(std::numeric_limits<tools::Long>::max()));
-    return std::llround(nRes);
-}
-
-double CoordinateMapper::LogicToViewDistanceSubPixelX(tools::Long n,
-                                                      double fMapResolutionScale) const
-{
-    assert(GetDPIX() > 0);
-    assert(fMapResolutionScale != 0);
-    return n * fMapResolutionScale * GetDPIX();
-}
-
-double CoordinateMapper::LogicToViewDistanceSubPixelY(tools::Long n,
-                                                      double fMapResolutionScale) const
-{
-    assert(GetDPIY() > 0);
-    assert(fMapResolutionScale != 0);
-    return n * fMapResolutionScale * GetDPIY();
-}
-
-tools::Long CoordinateMapper::ViewSubPixelToLogicDistanceX(double n,
-                                                           double fMapResolutionScale) const
-{
-    assert(GetDPIX() > 0);
-    assert(fMapResolutionScale != 0);
-    return std::llround(n / fMapResolutionScale / GetDPIX());
-}
-
-tools::Long CoordinateMapper::ViewSubPixelToLogicDistanceY(double n,
-                                                           double fMapResolutionScale) const
-{
-    assert(GetDPIY() > 0);
-    assert(fMapResolutionScale != 0);
-    return std::llround(n / fMapResolutionScale / GetDPIY());
-}
-
-tools::Long CoordinateMapper::ViewToLogicDistanceX(tools::Long n, double fMapResolutionScale) const
-{
-    assert(GetDPIX() > 0);
-    if (fMapResolutionScale == 0)
-        return 0;
-    return std::llround(n / fMapResolutionScale / GetDPIX());
-}
-
-tools::Long CoordinateMapper::ViewToLogicDistanceY(tools::Long n, double fMapResolutionScale) const
-{
-    assert(GetDPIY() > 0);
-    if (fMapResolutionScale == 0)
-        return 0;
-    return std::llround(n / fMapResolutionScale / GetDPIY());
-}
-
-double CoordinateMapper::ViewToLogicDistanceDoubleX(double n, double fMapResolutionScale) const
-{
-    assert(GetDPIX() > 0);
-    if (fMapResolutionScale == 0)
-        return 0;
-    return n / fMapResolutionScale / GetDPIX();
-}
-
-double CoordinateMapper::ViewToLogicDistanceDoubleY(double n, double fMapResolutionScale) const
-{
-    assert(GetDPIY() > 0);
-    if (fMapResolutionScale == 0)
-        return 0;
-    return n / fMapResolutionScale / GetDPIY();
-}
-
-tools::Long CoordinateMapper::LogicToViewDistanceX(tools::Long n) const
-{
-    return LogicToViewDistanceX(n, GetMapResolutionScaleX());
-}
-
-tools::Long CoordinateMapper::LogicToViewDistanceY(tools::Long n) const
-{
-    return LogicToViewDistanceY(n, GetMapResolutionScaleY());
-}
-
-double CoordinateMapper::LogicToViewDistanceSubPixelX(tools::Long n) const
-{
-    return LogicToViewDistanceSubPixelX(n, GetMapResolutionScaleX());
-}
-
-double CoordinateMapper::LogicToViewDistanceSubPixelY(tools::Long n) const
-{
-    return LogicToViewDistanceSubPixelY(n, GetMapResolutionScaleY());
-}
-
-tools::Long CoordinateMapper::ViewSubPixelToLogicDistanceX(double n) const
-{
-    return ViewSubPixelToLogicDistanceX(n, GetMapResolutionScaleX());
-}
-
-tools::Long CoordinateMapper::ViewSubPixelToLogicDistanceY(double n) const
-{
-    return ViewSubPixelToLogicDistanceY(n, GetMapResolutionScaleY());
-}
-
-tools::Long CoordinateMapper::ViewToLogicDistanceX(tools::Long n) const
-{
-    return ViewToLogicDistanceX(n, GetMapResolutionScaleX());
-}
-
-tools::Long CoordinateMapper::ViewToLogicDistanceY(tools::Long n) const
-{
-    return ViewToLogicDistanceY(n, GetMapResolutionScaleY());
-}
-
-double CoordinateMapper::ViewToLogicDistanceDoubleX(double n) const
-{
-    return ViewToLogicDistanceDoubleX(n, GetMapResolutionScaleX());
-}
-
-double CoordinateMapper::ViewToLogicDistanceDoubleY(double n) const
-{
-    return ViewToLogicDistanceDoubleY(n, GetMapResolutionScaleY());
-}
-
+// Device <-> Window (Apply/Strip Screen Origin: mnOutOffX/Y)
 tools::Long CoordinateMapper::DeviceToWindowUnitsX(tools::Long nX) const { return nX - mnOutOffX; }
-
 tools::Long CoordinateMapper::DeviceToWindowUnitsY(tools::Long nY) const { return nY - mnOutOffY; }
-
 tools::Long CoordinateMapper::WindowToDeviceUnitsX(tools::Long nX) const { return nX + mnOutOffX; }
-
 tools::Long CoordinateMapper::WindowToDeviceUnitsY(tools::Long nY) const { return nY + mnOutOffY; }
 
+// Window <-> View (Apply/Strip Internal Pixel Offset: mnOutOffOrigX/Y)
 tools::Long CoordinateMapper::WindowToViewUnitsX(tools::Long nX) const
 {
     return nX - mnOutOffOrigX;
 }
-
 tools::Long CoordinateMapper::WindowToViewUnitsY(tools::Long nY) const
 {
     return nY - mnOutOffOrigY;
 }
-
 tools::Long CoordinateMapper::ViewToWindowUnitsX(tools::Long nX) const
 {
     return nX + mnOutOffOrigX;
 }
-
 tools::Long CoordinateMapper::ViewToWindowUnitsY(tools::Long nY) const
 {
     return nY + mnOutOffOrigY;
 }
 
+// View <-> LogicUnits (Scale and Mapping Offset: mnMapOfsX/Y)
 tools::Long CoordinateMapper::ViewToLogicUnitsX(tools::Long nX) const
 {
     return ViewToLogicDistanceX(nX) - maMapRes.mnMapOfsX;
@@ -398,16 +239,47 @@ tools::Long CoordinateMapper::LogicUnitsToViewUnitsY(tools::Long nY) const
     return LogicToViewDistanceY(nY + maMapRes.mnMapOfsY);
 }
 
+tools::Long CoordinateMapper::LogicUnitsToViewUnitsX(tools::Long nX, const ImplMapRes& rRes) const
+{
+    return LogicToViewDistanceX(nX + rRes.mnMapOfsX, rRes.mfMapScX);
+}
+
+tools::Long CoordinateMapper::LogicUnitsToViewUnitsY(tools::Long nY, const ImplMapRes& rRes) const
+{
+    return LogicToViewDistanceY(nY + rRes.mnMapOfsY, rRes.mfMapScY);
+}
+
+// Sub-Pixel Pipeline Stages
+double CoordinateMapper::ViewSubPixelToLogicUnitsX(double fX) const
+{
+    return ViewToLogicDistanceDoubleX(fX, maMapRes.mfMapScX) - maMapRes.mnMapOfsX;
+}
+
+double CoordinateMapper::ViewSubPixelToLogicUnitsY(double fY) const
+{
+    return ViewToLogicDistanceDoubleY(fY, maMapRes.mfMapScY) - maMapRes.mnMapOfsY;
+}
+
+double CoordinateMapper::LogicUnitsToViewSubPixelX(double fX) const
+{
+    return LogicToViewDistanceSubPixelX(std::llround(fX + maMapRes.mnMapOfsX), maMapRes.mfMapScX);
+}
+
+double CoordinateMapper::LogicUnitsToViewSubPixelY(double fY) const
+{
+    return LogicToViewDistanceSubPixelY(std::llround(fY + maMapRes.mnMapOfsY), maMapRes.mfMapScY);
+}
+
+// ========================================================================
+// MASTER WRAPPERS (Multi-space Positional Transformations)
+// ========================================================================
+
 tools::Long CoordinateMapper::DevicePixelToLogicX(tools::Long nX) const
 {
-    // If MapMode is disabled, Logic Space and Window Space are identical
-    // (we just strip the physical screen offset).
     if (!IsMapModeEnabled())
         return DeviceToWindowUnitsX(nX);
 
-    const tools::Long nWindowX = DeviceToWindowUnitsX(nX);
-    const tools::Long nViewX = WindowToViewUnitsX(nWindowX);
-    return ViewToLogicUnitsX(nViewX);
+    return ViewToLogicX(WindowToViewUnitsX(DeviceToWindowUnitsX(nX)));
 }
 
 tools::Long CoordinateMapper::DevicePixelToLogicY(tools::Long nY) const
@@ -415,28 +287,302 @@ tools::Long CoordinateMapper::DevicePixelToLogicY(tools::Long nY) const
     if (!IsMapModeEnabled())
         return DeviceToWindowUnitsY(nY);
 
-    const tools::Long nWindowY = DeviceToWindowUnitsY(nY);
-    const tools::Long nViewY = WindowToViewUnitsY(nWindowY);
-    return ViewToLogicUnitsY(nViewY);
+    return ViewToLogicY(WindowToViewUnitsY(DeviceToWindowUnitsY(nY)));
+}
+
+tools::Long CoordinateMapper::LogicToDevicePixelX(tools::Long nX) const
+{
+    if (!IsMapModeEnabled())
+        return nX + mnOutOffX;
+
+    return WindowToDeviceUnitsX(ViewToWindowUnitsX(LogicUnitsToViewUnitsX(nX + mnOutOffLogicX)));
+}
+
+tools::Long CoordinateMapper::LogicToDevicePixelY(tools::Long nY) const
+{
+    if (!IsMapModeEnabled())
+        return nY + mnOutOffY;
+
+    return WindowToDeviceUnitsY(ViewToWindowUnitsY(LogicUnitsToViewUnitsY(nY + mnOutOffLogicY)));
+}
+
+tools::Long CoordinateMapper::WindowToLogicX(tools::Long nX) const
+{
+    if (!IsMapModeEnabled())
+        return nX;
+
+    return ViewToLogicX(WindowToViewUnitsX(nX));
+}
+
+tools::Long CoordinateMapper::WindowToLogicY(tools::Long nY) const
+{
+    if (!IsMapModeEnabled())
+        return nY;
+
+    return ViewToLogicY(WindowToViewUnitsY(nY));
+}
+
+tools::Long CoordinateMapper::LogicToWindowX(tools::Long nX) const
+{
+    if (!IsMapModeEnabled())
+        return nX;
+
+    return ViewToWindowUnitsX(LogicUnitsToViewUnitsX(nX + mnOutOffLogicX));
+}
+
+tools::Long CoordinateMapper::LogicToWindowY(tools::Long nY) const
+{
+    if (!IsMapModeEnabled())
+        return nY;
+
+    return ViewToWindowUnitsY(LogicUnitsToViewUnitsY(nY + mnOutOffLogicY));
+}
+
+tools::Long CoordinateMapper::ViewToLogicX(tools::Long nX) const
+{
+    return ViewToLogicUnitsX(nX) - mnOutOffLogicX;
+}
+
+tools::Long CoordinateMapper::ViewToLogicY(tools::Long nY) const
+{
+    return ViewToLogicUnitsY(nY) - mnOutOffLogicY;
 }
 
 tools::Long CoordinateMapper::LogicToWindowUnitsX(tools::Long nX) const
 {
     if (!IsMapModeEnabled())
         return nX;
-
-    const tools::Long nViewX = LogicUnitsToViewUnitsX(nX);
-
-    return ViewToWindowUnitsX(nViewX);
+    return ViewToWindowUnitsX(LogicUnitsToViewUnitsX(nX));
 }
 
 tools::Long CoordinateMapper::LogicToWindowUnitsY(tools::Long nY) const
 {
     if (!IsMapModeEnabled())
         return nY;
+    return ViewToWindowUnitsY(LogicUnitsToViewUnitsY(nY));
+}
 
-    const tools::Long nViewY = LogicUnitsToViewUnitsY(nY);
-    return ViewToWindowUnitsY(nViewY);
+// ========================================================================
+// DISTANCE SCALING (Raw Scalar Conversion)
+// ========================================================================
+
+tools::Long CoordinateMapper::LogicToViewDistanceX(tools::Long n, double fScale) const
+{
+    assert(GetDPIX() > 0);
+    return std::llround(n * fScale * GetDPIX());
+}
+
+tools::Long CoordinateMapper::LogicToViewDistanceY(tools::Long n, double fScale) const
+{
+    assert(GetDPIY() > 0);
+    return std::llround(n * fScale * GetDPIY());
+}
+
+tools::Long CoordinateMapper::ViewToLogicDistanceX(tools::Long n, double fScale) const
+{
+    assert(GetDPIX() > 0);
+    return (fScale == 0) ? 0 : std::llround(n / fScale / GetDPIX());
+}
+
+tools::Long CoordinateMapper::ViewToLogicDistanceY(tools::Long n, double fScale) const
+{
+    assert(GetDPIY() > 0);
+    return (fScale == 0) ? 0 : std::llround(n / fScale / GetDPIY());
+}
+
+tools::Long CoordinateMapper::LogicToViewDistanceX(tools::Long n) const
+{
+    return LogicToViewDistanceX(n, maMapRes.mfMapScX);
+}
+tools::Long CoordinateMapper::LogicToViewDistanceY(tools::Long n) const
+{
+    return LogicToViewDistanceY(n, maMapRes.mfMapScY);
+}
+tools::Long CoordinateMapper::ViewToLogicDistanceX(tools::Long n) const
+{
+    return ViewToLogicDistanceX(n, maMapRes.mfMapScX);
+}
+tools::Long CoordinateMapper::ViewToLogicDistanceY(tools::Long n) const
+{
+    return ViewToLogicDistanceY(n, maMapRes.mfMapScY);
+}
+
+double CoordinateMapper::LogicToViewDistanceSubPixelX(tools::Long n) const
+{
+    return LogicToViewDistanceSubPixelX(n, maMapRes.mfMapScX);
+}
+
+double CoordinateMapper::LogicToViewDistanceSubPixelY(tools::Long n) const
+{
+    return LogicToViewDistanceSubPixelY(n, maMapRes.mfMapScY);
+}
+
+double CoordinateMapper::LogicToViewDistanceSubPixelX(tools::Long n, double fScale) const
+{
+    assert(GetDPIX() > 0);
+    return static_cast<double>(n) * fScale * GetDPIX();
+}
+
+double CoordinateMapper::LogicToViewDistanceSubPixelY(tools::Long n, double fScale) const
+{
+    assert(GetDPIY() > 0);
+    return static_cast<double>(n) * fScale * GetDPIY();
+}
+
+double CoordinateMapper::ViewToLogicDistanceDoubleX(double n) const
+{
+    return ViewToLogicDistanceDoubleX(n, maMapRes.mfMapScX);
+}
+
+double CoordinateMapper::ViewToLogicDistanceDoubleY(double n) const
+{
+    return ViewToLogicDistanceDoubleY(n, maMapRes.mfMapScY);
+}
+
+double CoordinateMapper::ViewToLogicDistanceDoubleX(double n, double fScale) const
+{
+    assert(GetDPIX() > 0);
+    return (fScale == 0) ? 0.0 : (n / fScale / GetDPIX());
+}
+
+double CoordinateMapper::ViewToLogicDistanceDoubleY(double n, double fScale) const
+{
+    assert(GetDPIY() > 0);
+    return (fScale == 0) ? 0.0 : (n / fScale / GetDPIY());
+}
+
+tools::Long CoordinateMapper::ViewSubPixelToLogicDistanceX(double n) const
+{
+    return ViewSubPixelToLogicDistanceX(n, maMapRes.mfMapScX);
+}
+
+tools::Long CoordinateMapper::ViewSubPixelToLogicDistanceY(double n) const
+{
+    return ViewSubPixelToLogicDistanceY(n, maMapRes.mfMapScY);
+}
+
+tools::Long CoordinateMapper::ViewSubPixelToLogicDistanceX(double n, double fScale) const
+{
+    return std::llround(ViewToLogicDistanceDoubleX(n, fScale));
+}
+
+tools::Long CoordinateMapper::ViewSubPixelToLogicDistanceY(double n, double fScale) const
+{
+    return std::llround(ViewToLogicDistanceDoubleY(n, fScale));
+}
+
+double CoordinateMapper::DeviceToWindowSubPixelX(double fX) const
+{
+    return fX - static_cast<double>(mnOutOffX);
+}
+
+double CoordinateMapper::DeviceToWindowSubPixelY(double fY) const
+{
+    return fY - static_cast<double>(mnOutOffY);
+}
+
+double CoordinateMapper::WindowToDeviceSubPixelX(double fX) const
+{
+    return fX + static_cast<double>(mnOutOffX);
+}
+
+double CoordinateMapper::WindowToDeviceSubPixelY(double fY) const
+{
+    return fY + static_cast<double>(mnOutOffY);
+}
+
+double CoordinateMapper::WindowToLogicSubPixelX(double fX) const
+{
+    return fX - static_cast<double>(mnOutOffOrigX);
+}
+
+double CoordinateMapper::WindowToLogicSubPixelY(double fY) const
+{
+    return fY - static_cast<double>(mnOutOffOrigY);
+}
+
+double CoordinateMapper::LogicToWindowSubPixelX(double fX) const
+{
+    return fX + static_cast<double>(mnOutOffOrigX);
+}
+
+double CoordinateMapper::LogicToWindowSubPixelY(double fY) const
+{
+    return fY + static_cast<double>(mnOutOffOrigY);
+}
+
+// Device -> Logic (Inverse Path: Strip Screen -> Strip Pixel -> Strip Mapping -> Strip Logical)
+double CoordinateMapper::DevicePixelToLogicSubPixelX(double fX) const
+{
+    if (!IsMapModeEnabled())
+        return fX - static_cast<double>(mnOutOffX);
+
+    const double fWindowX = DeviceToWindowSubPixelX(fX);
+    const double fViewX = WindowToLogicSubPixelX(fWindowX);
+    const double fLogicU = ViewSubPixelToLogicUnitsX(fViewX);
+
+    return fLogicU - static_cast<double>(mnOutOffLogicX);
+}
+
+double CoordinateMapper::DevicePixelToLogicSubPixelY(double fY) const
+{
+    if (!IsMapModeEnabled())
+        return fY - static_cast<double>(mnOutOffY);
+
+    const double fWindowY = DeviceToWindowSubPixelY(fY);
+    const double fViewY = WindowToLogicSubPixelY(fWindowY);
+    const double fLogicU = ViewSubPixelToLogicUnitsY(fViewY);
+
+    return fLogicU - static_cast<double>(mnOutOffLogicY);
+}
+
+// Logic -> Device (Forward Path: Add Logical -> Add Mapping/Scale -> Add Pixel -> Add Screen)
+double CoordinateMapper::LogicToDeviceSubPixelX(double fX) const
+{
+    if (!IsMapModeEnabled())
+        return fX + static_cast<double>(mnOutOffX);
+
+    const double fViewX = LogicUnitsToViewSubPixelX(fX + static_cast<double>(mnOutOffLogicX));
+    const double fWindowX = LogicToWindowSubPixelX(fViewX); // Uses your new name
+
+    return WindowToDeviceSubPixelX(fWindowX);
+}
+
+double CoordinateMapper::LogicToDeviceSubPixelY(double fY) const
+{
+    if (!IsMapModeEnabled())
+        return fY + static_cast<double>(mnOutOffY);
+
+    const double fViewY = LogicUnitsToViewSubPixelY(fY + static_cast<double>(mnOutOffLogicY));
+    const double fWindowY = LogicToWindowSubPixelY(fViewY);
+
+    return WindowToDeviceSubPixelY(fWindowY);
+}
+
+// View -> Absolute Logic (Inverse: Strip Scale/Mapping -> Strip Logical)
+double CoordinateMapper::ViewSubPixelToLogicX(double fX) const
+{
+    const double fLogicUnits = ViewSubPixelToLogicUnitsX(fX);
+    return fLogicUnits - static_cast<double>(mnOutOffLogicX);
+}
+
+double CoordinateMapper::ViewSubPixelToLogicY(double fY) const
+{
+    const double fLogicUnits = ViewSubPixelToLogicUnitsY(fY);
+    return fLogicUnits - static_cast<double>(mnOutOffLogicY);
+}
+
+// Absolute Logic -> View (Forward: Add Logical -> Add Mapping/Scale)
+double CoordinateMapper::LogicToViewSubPixelX(double fX) const
+{
+    const double fLogicUnits = fX + static_cast<double>(mnOutOffLogicX);
+    return LogicUnitsToViewSubPixelX(fLogicUnits);
+}
+
+double CoordinateMapper::LogicToViewSubPixelY(double fY) const
+{
+    const double fLogicUnits = fY + static_cast<double>(mnOutOffLogicY);
+    return LogicUnitsToViewSubPixelY(fLogicUnits);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

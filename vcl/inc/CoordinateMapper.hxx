@@ -134,59 +134,23 @@ public:
     basegfx::B2DHomMatrix GetInverseViewTransformation(const MapMode& rMapMode) const;
     basegfx::B2DHomMatrix GetDeviceTransformation() const;
 
-    tools::Long LogicToViewDistanceX(tools::Long n, double fMapResolutionScale) const;
-    tools::Long LogicToViewDistanceY(tools::Long n, double fMapResolutionScale) const;
+    // ========================================================================
+    // PIPELINE STAGES (Coordinate Transitions)
+    // ========================================================================
 
-    double LogicToViewDistanceSubPixelX(tools::Long n, double fMapResolutionScale) const;
-    double LogicToViewDistanceSubPixelY(tools::Long n, double fMapResolutionScale) const;
-
-    tools::Long ViewSubPixelToLogicDistanceX(double n, double fMapResolutionScale) const;
-    tools::Long ViewSubPixelToLogicDistanceY(double n, double fMapResolutionScale) const;
-
-    tools::Long ViewToLogicDistanceX(tools::Long n, double fMapResolutionScale) const;
-    tools::Long ViewToLogicDistanceY(tools::Long n, double fMapResolutionScale) const;
-
-    double ViewToLogicDistanceDoubleX(double n, double fMapResolutionScale) const;
-    double ViewToLogicDistanceDoubleY(double n, double fMapResolutionScale) const;
-
-    tools::Long LogicToViewDistanceX(tools::Long n) const;
-    tools::Long LogicToViewDistanceY(tools::Long n) const;
-
-    double LogicToViewDistanceSubPixelX(tools::Long n) const;
-    double LogicToViewDistanceSubPixelY(tools::Long n) const;
-
-    tools::Long ViewSubPixelToLogicDistanceX(double n) const;
-    tools::Long ViewSubPixelToLogicDistanceY(double n) const;
-
-    tools::Long ViewToLogicDistanceX(tools::Long n) const;
-    tools::Long ViewToLogicDistanceY(tools::Long n) const;
-
-    double ViewToLogicDistanceDoubleX(double n) const;
-    double ViewToLogicDistanceDoubleY(double n) const;
-
-    // Document model coordinates (logical space)
-    tools::Long LogicToOffsetLogicX(tools::Long nX) const;
-    tools::Long LogicToOffsetLogicY(tools::Long nY) const;
-
-    // Device <-> LogicUnits
-    tools::Long LogicToDevicePixelX(tools::Long nX) const;
-    tools::Long LogicToDevicePixelY(tools::Long nY) const;
-    tools::Long DevicePixelToLogicX(tools::Long nX) const;
-    tools::Long DevicePixelToLogicY(tools::Long nY) const;
-
-    // Logic -> Window units
-    tools::Long LogicToWindowUnitsX(tools::Long nX) const;
-    tools::Long LogicToWindowUnitsY(tools::Long nY) const;
-
-    // Pipeline is: Device -> Window -> View -> LogicUnits
-
-    // Device <-> Window (Strip/Apply OutputDevice screen origin)
+    // Device <-> Window (Integer)
     tools::Long DeviceToWindowUnitsX(tools::Long nX) const;
     tools::Long DeviceToWindowUnitsY(tools::Long nY) const;
     tools::Long WindowToDeviceUnitsX(tools::Long nX) const;
     tools::Long WindowToDeviceUnitsY(tools::Long nY) const;
 
-    // Window <-> View (Strip/Apply VCL internal Pixel Offset)
+    // Device <-> Window (Sub-pixel)
+    double DeviceToWindowSubPixelX(double fX) const;
+    double DeviceToWindowSubPixelY(double fY) const;
+    double WindowToDeviceSubPixelX(double fX) const;
+    double WindowToDeviceSubPixelY(double fY) const;
+
+    // Window <-> View (Integer)
     tools::Long WindowToViewUnitsX(tools::Long nX) const;
     tools::Long WindowToViewUnitsY(tools::Long nY) const;
     tools::Long ViewToWindowUnitsX(tools::Long nX) const;
@@ -197,6 +161,82 @@ public:
     tools::Long ViewToLogicUnitsY(tools::Long nY) const;
     tools::Long LogicUnitsToViewUnitsX(tools::Long nX) const;
     tools::Long LogicUnitsToViewUnitsY(tools::Long nY) const;
+    tools::Long LogicUnitsToViewUnitsX(tools::Long nX, const ImplMapRes& rRes) const;
+    tools::Long LogicUnitsToViewUnitsY(tools::Long nY, const ImplMapRes& rRes) const;
+
+    // View <-> LogicUnits (Sub-pixel)
+    double ViewSubPixelToLogicUnitsX(double fX) const;
+    double ViewSubPixelToLogicUnitsY(double fY) const;
+    double LogicUnitsToViewSubPixelX(double fX) const;
+    double LogicUnitsToViewSubPixelY(double fY) const;
+
+    // ========================================================================
+    // MASTER WRAPPERS (Multi-space Positional Transformations)
+    // ========================================================================
+
+    // Device <-> Logic (Full journey)
+    tools::Long DevicePixelToLogicX(tools::Long nX) const;
+    tools::Long DevicePixelToLogicY(tools::Long nY) const;
+    tools::Long LogicToDevicePixelX(tools::Long nX) const;
+    tools::Long LogicToDevicePixelY(tools::Long nY) const;
+
+    double DevicePixelToLogicSubPixelX(double fX) const;
+    double DevicePixelToLogicSubPixelY(double fY) const;
+    double LogicToDeviceSubPixelX(double fX) const;
+    double LogicToDeviceSubPixelY(double fY) const;
+
+    // Window <-> Logic
+    tools::Long WindowToLogicX(tools::Long nX) const;
+    tools::Long WindowToLogicY(tools::Long nY) const;
+    tools::Long LogicToWindowX(tools::Long nX) const;
+    tools::Long LogicToWindowY(tools::Long nY) const;
+
+    double WindowToLogicSubPixelX(double fX) const;
+    double WindowToLogicSubPixelY(double fY) const;
+    double LogicToWindowSubPixelX(double fX) const;
+    double LogicToWindowSubPixelY(double fY) const;
+
+    // View <-> Absolute Logic (Includes mnOutOffLogicX/Y)
+    tools::Long ViewToLogicX(tools::Long nX) const;
+    tools::Long ViewToLogicY(tools::Long nY) const;
+
+    // To resolve the return-type conflict, these now return double
+    double ViewSubPixelToLogicX(double fX) const;
+    double ViewSubPixelToLogicY(double fY) const;
+    double LogicToViewSubPixelX(double fX) const;
+    double LogicToViewSubPixelY(double fY) const;
+
+    // Logic -> Window units (Commonly used in OutputDevice::LogicToPixel)
+    tools::Long LogicToWindowUnitsX(tools::Long nX) const;
+    tools::Long LogicToWindowUnitsY(tools::Long nY) const;
+
+    // ========================================================================
+    // DISTANCE SCALING (Raw Scalar Conversion, NO offsets applied)
+    // ========================================================================
+
+    // Integer Distances
+    tools::Long LogicToViewDistanceX(tools::Long n) const;
+    tools::Long LogicToViewDistanceY(tools::Long n) const;
+    tools::Long LogicToViewDistanceX(tools::Long n, double fScale) const;
+    tools::Long LogicToViewDistanceY(tools::Long n, double fScale) const;
+    tools::Long ViewToLogicDistanceX(tools::Long n) const;
+    tools::Long ViewToLogicDistanceY(tools::Long n) const;
+    tools::Long ViewToLogicDistanceX(tools::Long n, double fScale) const;
+    tools::Long ViewToLogicDistanceY(tools::Long n, double fScale) const;
+
+    // Double/Sub-Pixel Distances
+    double LogicToViewDistanceSubPixelX(tools::Long n) const;
+    double LogicToViewDistanceSubPixelY(tools::Long n) const;
+    double LogicToViewDistanceSubPixelX(tools::Long n, double fScale) const;
+    double LogicToViewDistanceSubPixelY(tools::Long n, double fScale) const;
+    double ViewToLogicDistanceDoubleX(double n) const;
+    double ViewToLogicDistanceDoubleY(double n) const;
+    double ViewToLogicDistanceDoubleX(double n, double fScale) const;
+    double ViewToLogicDistanceDoubleY(double n, double fScale) const;
+    tools::Long ViewSubPixelToLogicDistanceX(double n) const;
+    tools::Long ViewSubPixelToLogicDistanceY(double n) const;
+    tools::Long ViewSubPixelToLogicDistanceX(double n, double fScale) const;
+    tools::Long ViewSubPixelToLogicDistanceY(double n, double fScale) const;
 
 private:
     tools::Long ImplCalcDevicePixelX(tools::Long nX) const;

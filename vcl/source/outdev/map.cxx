@@ -593,8 +593,10 @@ Point OutputDevice::LogicToPixel( const Point& rLogicPt,
     ImplMapRes          aMapRes;
     aMapRes.CalcMapResolution(rMapMode, mpMapper->GetDPIX(), mpMapper->GetDPIY());
 
-    return Point(mpMapper->LogicToViewDistanceX(rLogicPt.X() + aMapRes.mnMapOfsX, aMapRes.mfMapScX) + mpMapper->GetPixelXOffset(),
-                 mpMapper->LogicToViewDistanceY(rLogicPt.Y() + aMapRes.mnMapOfsY, aMapRes.mfMapScY) + mpMapper->GetPixelYOffset());
+    return Point(
+        mpMapper->ViewToWindowUnitsX(mpMapper->LogicUnitsToViewUnitsX(rLogicPt.X(), aMapRes)),
+        mpMapper->ViewToWindowUnitsY(mpMapper->LogicUnitsToViewUnitsY(rLogicPt.Y(), aMapRes))
+    );
 }
 
 Size OutputDevice::LogicToPixel( const Size& rLogicSize,
@@ -624,15 +626,16 @@ tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect,
     aMapRes.CalcMapResolution(rMapMode, mpMapper->GetDPIX(), mpMapper->GetDPIY());
 
     tools::Rectangle aRetval(
-        mpMapper->LogicToViewDistanceX(rLogicRect.Left() + aMapRes.mnMapOfsX, aMapRes.mfMapScX) + mpMapper->GetPixelXOffset(),
-        mpMapper->LogicToViewDistanceY(rLogicRect.Top() + aMapRes.mnMapOfsY, aMapRes.mfMapScY) + mpMapper->GetPixelYOffset(),
-        rLogicRect.IsWidthEmpty() ? 0 : mpMapper->LogicToViewDistanceX(rLogicRect.Right() + aMapRes.mnMapOfsX, aMapRes.mfMapScX) + mpMapper->GetPixelXOffset(),
-        rLogicRect.IsHeightEmpty() ? 0 : mpMapper->LogicToViewDistanceY(rLogicRect.Bottom() + aMapRes.mnMapOfsY, aMapRes.mfMapScY) + mpMapper->GetPixelYOffset());
+        mpMapper->ViewToWindowUnitsX(mpMapper->LogicUnitsToViewUnitsX(rLogicRect.Left(), aMapRes)),
+        mpMapper->ViewToWindowUnitsY(mpMapper->LogicUnitsToViewUnitsY(rLogicRect.Top(), aMapRes)),
+        rLogicRect.IsWidthEmpty() ? 0 : mpMapper->ViewToWindowUnitsX(mpMapper->LogicUnitsToViewUnitsX(rLogicRect.Right(), aMapRes)),
+        rLogicRect.IsHeightEmpty() ? 0 : mpMapper->ViewToWindowUnitsY(mpMapper->LogicUnitsToViewUnitsY(rLogicRect.Bottom(), aMapRes))
+    );
 
-    if(rLogicRect.IsWidthEmpty())
+    if (rLogicRect.IsWidthEmpty())
         aRetval.SetWidthEmpty();
 
-    if(rLogicRect.IsHeightEmpty())
+    if (rLogicRect.IsHeightEmpty())
         aRetval.SetHeightEmpty();
 
     return aRetval;
@@ -659,8 +662,8 @@ tools::Polygon OutputDevice::LogicToPixel( const tools::Polygon& rLogicPoly,
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.setX(mpMapper->LogicToViewDistanceX(pPt->X() + aMapRes.mnMapOfsX, aMapRes.mfMapScX) + mpMapper->GetPixelXOffset());
-        aPt.setY(mpMapper->LogicToViewDistanceY(pPt->Y() + aMapRes.mnMapOfsY, aMapRes.mfMapScY) + mpMapper->GetPixelYOffset());
+        aPt.setX(mpMapper->ViewToWindowUnitsX(mpMapper->LogicUnitsToViewUnitsX(pPt->X(), aMapRes)));
+        aPt.setY(mpMapper->ViewToWindowUnitsY(mpMapper->LogicUnitsToViewUnitsY(pPt->Y(), aMapRes)));
         aPoly[i] = aPt;
     }
 
@@ -682,8 +685,10 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
     if ( !mpMapper->IsMapModeEnabled() )
         return rDevicePt;
 
-    return Point(mpMapper->ViewToLogicDistanceX(rDevicePt.X()) - mpMapper->GetMappingXOffset() - mpMapper->GetLogicalXOffset(),
-                 mpMapper->ViewToLogicDistanceY(rDevicePt.Y()) - mpMapper->GetMappingYOffset() - mpMapper->GetLogicalYOffset());
+    return Point(
+        mpMapper->ViewToLogicUnitsX(rDevicePt.X()) - mpMapper->GetLogicalXOffset(),
+        mpMapper->ViewToLogicUnitsY(rDevicePt.Y()) - mpMapper->GetLogicalYOffset()
+    );
 }
 
 Point OutputDevice::SubPixelToLogic(const basegfx::B2DPoint& rDevicePt) const
@@ -1249,9 +1254,11 @@ basegfx::B2DPoint OutputDevice::LogicToDeviceSubPixel(const Point& rPoint) const
     if (!mpMapper->IsMapModeEnabled())
         return basegfx::B2DPoint(rPoint.X() + GetDeviceOriginX(), rPoint.Y() + GetDeviceOriginY());
 
+    // Use the master wrapper that handles the full transformation chain:
+    // Logic -> Window -> Device (with all offsets applied)
     return basegfx::B2DPoint(
-        mpMapper->LogicToViewDistanceSubPixelX(mpMapper->LogicToOffsetLogicX(rPoint.X())) + GetDeviceOriginX() + mpMapper->GetPixelXOffset(),
-        mpMapper->LogicToViewDistanceSubPixelY(mpMapper->LogicToOffsetLogicY(rPoint.Y())) + GetDeviceOriginY() + mpMapper->GetPixelYOffset()
+        mpMapper->LogicToDeviceSubPixelX(rPoint.X()),
+        mpMapper->LogicToDeviceSubPixelY(rPoint.Y())
     );
 }
 
