@@ -484,10 +484,11 @@ tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect 
         return rLogicRect;
 
     tools::Rectangle aRetval(
-        mpMapper->LogicToViewDistanceX(mpMapper->LogicToOffsetLogicX(rLogicRect.Left())) + mpMapper->GetPixelXOffset(),
-        mpMapper->LogicToViewDistanceY(mpMapper->LogicToOffsetLogicY(rLogicRect.Top())) + mpMapper->GetPixelYOffset(),
-        rLogicRect.IsWidthEmpty() ? 0 : mpMapper->LogicToViewDistanceX(mpMapper->LogicToOffsetLogicX(rLogicRect.Right())) + mpMapper->GetPixelXOffset(),
-        rLogicRect.IsHeightEmpty() ? 0 : mpMapper->LogicToViewDistanceY(mpMapper->LogicToOffsetLogicY(rLogicRect.Bottom())) + mpMapper->GetPixelYOffset());
+        mpMapper->LogicToWindowUnitsX(rLogicRect.Left()),
+        mpMapper->LogicToWindowUnitsY(rLogicRect.Top()),
+        rLogicRect.IsWidthEmpty() ? 0 : mpMapper->LogicToWindowUnitsX(rLogicRect.Right()),
+        rLogicRect.IsHeightEmpty() ? 0 : mpMapper->LogicToWindowUnitsY(rLogicRect.Bottom())
+    );
 
     if(rLogicRect.IsWidthEmpty())
         aRetval.SetWidthEmpty();
@@ -514,8 +515,8 @@ tools::Polygon OutputDevice::LogicToPixel( const tools::Polygon& rLogicPoly ) co
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.setX(mpMapper->LogicToViewDistanceX(mpMapper->LogicToOffsetLogicX(pPt->X())) + mpMapper->GetPixelXOffset());
-        aPt.setY(mpMapper->LogicToViewDistanceY(mpMapper->LogicToOffsetLogicY(pPt->Y())) + mpMapper->GetPixelYOffset());
+        aPt.setX(mpMapper->LogicToWindowUnitsX(pPt->X()));
+        aPt.setY(mpMapper->LogicToWindowUnitsY(pPt->Y()));
         aPoly[i] = aPt;
     }
 

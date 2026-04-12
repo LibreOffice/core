@@ -420,4 +420,23 @@ tools::Long CoordinateMapper::DevicePixelToLogicY(tools::Long nY) const
     return ViewToLogicUnitsY(nViewY);
 }
 
+tools::Long CoordinateMapper::LogicToWindowUnitsX(tools::Long nX) const
+{
+    if (!IsMapModeEnabled())
+        return nX;
+
+    const tools::Long nViewX = LogicUnitsToViewUnitsX(nX);
+
+    return ViewToWindowUnitsX(nViewX);
+}
+
+tools::Long CoordinateMapper::LogicToWindowUnitsY(tools::Long nY) const
+{
+    if (!IsMapModeEnabled())
+        return nY;
+
+    const tools::Long nViewY = LogicUnitsToViewUnitsY(nY);
+    return ViewToWindowUnitsY(nViewY);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -174,6 +174,10 @@ public:
     tools::Long DevicePixelToLogicX(tools::Long nX) const;
     tools::Long DevicePixelToLogicY(tools::Long nY) const;
 
+    // Logic -> Window units
+    tools::Long LogicToWindowUnitsX(tools::Long nX) const;
+    tools::Long LogicToWindowUnitsY(tools::Long nY) const;
+
     // Pipeline is: Device -> Window -> View -> LogicUnits
 
     // Device <-> Window (Strip/Apply OutputDevice screen origin)
