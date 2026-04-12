@@ -400,6 +400,9 @@ AFL_FUZZER_NAMES = $(foreach f,$(AFL_FUZZERS),$(word 1,$(subst =, ,$f)))
 # Generate all target names: <name>_fuzzer_<variant>.afl
 AFL_FUZZER_TARGETS = $(foreach v,$(AFL_VARIANTS),$(foreach n,$(AFL_FUZZER_NAMES),$(n)_fuzzer_$(v).afl))
 
+clean-fuzzers:
+	rm -f $(AFL_FUZZER_TARGETS)
+
 # Per-variant common object files
 afl_common_objs = $(common_fuzzer_cpp:%.cpp=.afl-$(1)/%.o) $(common_fuzzer_c:%.c=.afl-$(1)/%.o)
 
@@ -435,8 +438,7 @@ $(foreach f,$(AFL_FUZZERS),\
 clean-afl:
 	rm -rf $(foreach v,$(AFL_VARIANTS),.afl-$(v)) $(AFL_LIBS) $(AFL_FUZZER_TARGETS)
 
-else
-# libFuzzer build (original)
+else # !ENABLE_AFL (libFuzzer build)
 
 LIBFUZZER_LDFLAGS = -fsanitize=fuzzer
 
@@ -481,9 +483,12 @@ httpecho_fuzzer_SOURCES = \
 httpecho_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
 httpecho_fuzzer_LDADD = libsimd.a
 
-endif # ENABLE_AFL
+clean-fuzzers: ;
 
-endif # ENABLE_LIBFUZZER
+endif # !ENABLE_AFL
+else # !ENABLE_LIBFUZZER
+clean-fuzzers: ;
+endif # !ENABLE_LIBFUZZER
 
 clientnb_SOURCES = \
                    $(util_platform_cpp) \
@@ -791,7 +796,7 @@ cleanup:
 # Note: this can break with -j option!
 clean-am: cleanup clean-binPROGRAMS clean-generic clean-libtool clean-local clean-noinstPROGRAMS mostlyclean-am clean-afl
 
-clean-local:
+clean-local: clean-fuzzers
 	$(CLEANUP_COMMAND)
 	if test "z@SYSTEMPLATE_PATH@" != "z"; then rm -rf "@SYSTEMPLATE_PATH@" || echo "WARNING: failed to remove the systemplate"; fi
 	if test "z@JAILS_PATH@" != "z"; then rm -rf "@JAILS_PATH@" || echo "WARNING: failed to remove all jails cleanly"; fi
@@ -935,11 +940,6 @@ else
 
 SYSTEM_STAMP =
 
-endif
-
-if ENABLE_AFL
-all-local: $(AFL_FUZZER_TARGETS)
-clean-local: clean-afl
 endif
 
 .PHONY: cleanup setup-wsd clean-afl
