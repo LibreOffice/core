@@ -285,4 +285,15 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testMissingEndIf)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testVbaOptionalArrayParameterIsSyntaxError)
+{
+    MacroSnippet aMacro(u"Option VBASupport 1\n"
+                        "Function doUnitTest(Optional A() As Integer) As Integer\n"
+                        "  doUnitTest = 0\n"
+                        "End Function\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_SYNTAX, aMacro.getError().GetCode());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -99,14 +99,14 @@ Sub verify_testOptionalsVba()
     ' TestUtil.AssertEqual(TestOptArray(), 0, "TestOptArray()")
     ' TestUtil.AssertEqual(TestOptArray(aA), 579, "TestOptArray(A)")
     ' TestUtil.AssertEqualApprox(TestOptArray(, aB), 691.2, 1E-5, "TestOptArray(, B)")
-    TestUtil.AssertEqualApprox(TestOptArray(aA, aB), 1270.2, 1E-5, "TestOptArray(A, B)")
+    ' TestUtil.AssertEqualApprox(TestOptArray(aA, aB), 1270.2, 1E-5, "TestOptArray(A, B)")
 
     ' optionals with array datatypes (ByRef and ByVal)
     ' TODO - New bug report? Scanner initializes variable not as an array
     ' TestUtil.AssertEqual(TestOptArrayByRefByVal(), 0, "TestOptArrayByRefByVal()")
     ' TestUtil.AssertEqual(TestOptArrayByRefByVal(aA), 579, "TestOptArrayByRefByVal(A)")
     ' TestUtil.AssertEqualApprox(TestOptArrayByRefByVal(, aB), 691.2, 1E-5, "TestOptArrayByRefByVal(, B)")
-    TestUtil.AssertEqualApprox(TestOptArrayByRefByVal(aA, aB), 1270.2, 1E-5, "TestOptArrayByRefByVal(A, B)")
+    ' TestUtil.AssertEqualApprox(TestOptArrayByRefByVal(aA, aB), 1270.2, 1E-5, "TestOptArrayByRefByVal(A, B)")
 
     ' tdf#143707 - check correct initialization of default value for optionals
     ' Without the fix in place, this test would have failed with
@@ -167,14 +167,6 @@ Function TestOptObjectByRefByVal(Optional ByRef A As Collection, Optional ByVal 
     TestOptObjectByRefByVal = 0
     If Not IsNull(A) Then TestOptObjectByRefByVal = CollectionSum(A)
     If Not IsNull(B) Then TestOptObjectByRefByVal = TestOptObjectByRefByVal + CollectionSum(B)
-End Function
-
-Function TestOptArray(Optional A() As Integer, Optional B() As Variant)
-    TestOptArray = ArraySum(IsMissing(A), A) + ArraySum(IsMissing(B), B)
-End Function
-
-Function TestOptArrayByRefByVal(Optional ByRef A() As Integer, Optional ByVal B() As Variant)
-    TestOptArrayByRefByVal = ArraySum(IsMissing(A), A) + ArraySum(IsMissing(B), B)
 End Function
 
 Function OptNumberSum(is_missingA As Boolean, A, is_missingB As Boolean, B)

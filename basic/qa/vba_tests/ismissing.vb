@@ -106,14 +106,14 @@ Sub verify_testIsMissingVba()
     ' TestUtil.AssertEqual(TestOptArray(), IsMissingAB, "TestOptArray()")
     ' TestUtil.AssertEqual(TestOptArray(aA), IsMissingB, "TestOptArray(A)")
     ' TestUtil.AssertEqual(TestOptArray(, aB), IsMissingA, "TestOptArray(, B)")
-    TestUtil.AssertEqual(TestOptArray(aA, aB), IsMissingNone, "TestOptArray(A, B)")
+    ' TestUtil.AssertEqual(TestOptArray(aA, aB), IsMissingNone, "TestOptArray(A, B)")
 
     ' optionals with array datatypes (ByRef and ByVal)
     ' TODO - New bug report? Scanner initializes variable not as an array
     ' TestUtil.AssertEqual(TestOptArrayByRefByVal(), IsMissingAB, "TestOptArrayByRefByVal()")
     ' TestUtil.AssertEqual(TestOptArrayByRefByVal(aA), IsMissingB, "TestOptArrayByRefByVal(A)")
     ' TestUtil.AssertEqual(TestOptArrayByRefByVal(, aB), IsMissingA, "TestOptArrayByRefByVal(, B)")
-    TestUtil.AssertEqual(TestOptArrayByRefByVal(aA, aB), IsMissingNone, "TestOptArrayByRefByVal(A, B)")
+    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(aA, aB), IsMissingNone, "TestOptArrayByRefByVal(A, B)")
 
     ' tdf#143706 - optionals with named arguments (:= syntax)
     ' Without the fix in place, this test would have failed with:
@@ -167,14 +167,6 @@ End Function
 
 Function TestOptObjectByRefByVal(Optional ByRef A As Collection, Optional ByVal B As Collection)
     TestOptObjectByRefByVal = WhatIsMissing(IsNull(A), IsNull(B))
-End Function
-
-Function TestOptArray(Optional A() As Integer, Optional B() As Variant)
-    TestOptArray = WhatIsMissing(IsEmpty(A), IsEmpty(B))
-End Function
-
-Function TestOptArrayByRefByVal(Optional ByRef A() As Integer, Optional ByVal B() As Variant)
-    TestOptArrayByRefByVal = WhatIsMissing(IsEmpty(A), IsEmpty(B))
 End Function
 
 Function WhatIsMissing(is_missingA, is_missingB)

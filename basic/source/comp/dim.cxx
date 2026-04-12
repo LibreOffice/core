@@ -961,6 +961,12 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                 {
                     break;
                 }
+                if( bVBASupportOn && bOptional && pPar->IsWithBrackets() )
+                {
+                    Error( ERRCODE_BASIC_SYNTAX );
+                    delete pPar;
+                    break;
+                }
                 if( bByVal )
                 {
                     pPar->SetByVal(true);
