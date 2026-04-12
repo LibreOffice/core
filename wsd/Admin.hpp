@@ -159,11 +159,11 @@ public:
     /// Callers must ensure that modelMutex is acquired
     AdminModel& getModel();
 
-    unsigned getMemStatsInterval() const;
+    std::chrono::milliseconds getMemStatsInterval() const;
 
-    unsigned getCpuStatsInterval() const;
+    std::chrono::milliseconds getCpuStatsInterval() const;
 
-    unsigned getNetStatsInterval() const;
+    std::chrono::milliseconds getNetStatsInterval() const;
 
     /// Returns the log levels of wsd and forkit & kits.
     std::string getChannelLogLevels() const;
@@ -173,9 +173,9 @@ public:
 
     std::string getLogLines() const;
 
-    void rescheduleMemTimer(unsigned interval);
+    void rescheduleMemTimer(std::chrono::milliseconds interval);
 
-    void rescheduleCpuTimer(unsigned interval);
+    void rescheduleCpuTimer(std::chrono::milliseconds interval);
 
     void updateLastActivityTime(const std::string& docKey);
     void addBytes(const std::string& docKey, uint64_t sent, uint64_t recv);
@@ -187,7 +187,8 @@ public:
     {
         _defDocProcSettings = docProcSettings;
         _model.setDefDocProcSettings(docProcSettings);
-        _cleanupIntervalMs = _defDocProcSettings.getCleanupSettings().getCleanupInterval();
+        _cleanupIntervalMs = std::chrono::milliseconds(
+            _defDocProcSettings.getCleanupSettings().getCleanupInterval());
         if (notifyKit)
             notifyForkit();
     }
@@ -238,10 +239,11 @@ private:
 
     /// Round the interval up to multiples of MinStatsIntervalMs.
     /// This is to avoid arbitrarily small intervals that hammer the server.
-    static int capAndRoundInterval(const unsigned interval)
+    static std::chrono::milliseconds capAndRoundInterval(std::chrono::milliseconds interval)
     {
-        const int value = std::max<int>(interval, MinStatsIntervalMs);
-        return ((value + MinStatsIntervalMs - 1) / MinStatsIntervalMs) * MinStatsIntervalMs;
+        const auto value = std::max(interval, MinStatsIntervalMs);
+        constexpr auto d = MinStatsIntervalMs.count();
+        return std::chrono::milliseconds(((value.count() + d - 1) / d) * d);
     }
 
     /// Synchronous connection setup to remote monitoring server
@@ -263,7 +265,7 @@ private:
 
     size_t _lastTotalMemory;
     mutable size_t _lastJiffies;
-    size_t _cleanupIntervalMs;
+    std::chrono::milliseconds _cleanupIntervalMs;
     uint64_t _lastSentCount;
     uint64_t _lastRecvCount;
     std::string _forkitLogLevel;
@@ -284,9 +286,9 @@ private:
 
     int _forKitPid;
 
-    int _cpuStatsTaskIntervalMs;
-    int _memStatsTaskIntervalMs;
-    int _netStatsTaskIntervalMs;
+    std::chrono::milliseconds _cpuStatsTaskIntervalMs;
+    std::chrono::milliseconds _memStatsTaskIntervalMs;
+    std::chrono::milliseconds _netStatsTaskIntervalMs;
 
     /// When set, the metrics will be dumped into the log and stderr.
     std::atomic_bool _dumpMetrics;
@@ -294,8 +296,8 @@ private:
     std::atomic<bool> _closeMonitor = false;
 
     // Don't update any more frequently than this since it's excessive.
-    static constexpr int MinStatsIntervalMs = 50;
-    static constexpr int DefStatsIntervalMs = 1000;
+    static constexpr std::chrono::milliseconds MinStatsIntervalMs{ 50 };
+    static constexpr std::chrono::milliseconds DefStatsIntervalMs{ 1000 };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
