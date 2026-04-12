@@ -368,6 +368,11 @@ class ViewLayoutBase {
 		return false;
 	}
 
+	// virtual function implemented by the children
+	public unselectCommentOnScroll() {
+		return;
+	}
+
 	private addToMoveBy(pX: number, pY: number) {
 		if (this.scrollProperties.moveBy !== null) {
 			// Add offset to the pending move event.
@@ -489,6 +494,7 @@ class ViewLayoutBase {
 			this.scrollVertical(pY);
 
 		this.refreshCurrentCoordList();
+		this.unselectCommentOnScroll();
 		app.sectionContainer.requestReDraw();
 	}
 

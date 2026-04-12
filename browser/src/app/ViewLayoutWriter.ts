@@ -31,6 +31,16 @@ class ViewLayoutWriter extends ViewLayoutBase {
 		);
 	}
 
+	public unselectCommentOnScroll() {
+		const commentSection = app.sectionContainer.getSectionWithName(
+			app.CSections.CommentList.name,
+		) as cool.CommentSection;
+
+		if (commentSection && commentSection.sectionProperties.selectedComment) {
+			commentSection.unselect();
+		}
+	}
+
 	private getCommentAndDocumentSpacingInfo(): DocumentSpacingInfo {
 		const commentSection = app.sectionContainer.getSectionWithName(
 			app.CSections.CommentList.name,
