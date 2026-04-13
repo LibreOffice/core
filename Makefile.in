@@ -9,7 +9,7 @@
 
 gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uicheck screenshot
 
-.PHONY : check-if-root check-makefile-version bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch get-submodules id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo coverage internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+.PHONY : check-if-root check-makefile-version bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch fetch-repos id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo coverage internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
 DISABLE_GUI := @DISABLE_GUI@
 
@@ -267,14 +267,14 @@ cmd:
 ifneq ($(DO_FETCH_TARBALLS),)
 include $(SRCDIR)/Makefile.fetch
 fetch: download
-fetch: get-submodules
+fetch: fetch-repos
 
 ifneq (,$(wildcard $(SRCDIR)/.git))
-get-submodules:
+fetch-repos:
 	@cd $(SRCDIR) && ./g -z # make sure the git hooks are in place
 
 else # these sources are from a tarball; dictionaries are bundled in the monorepo tarball, nothing to fetch
-get-submodules: | download
+fetch-repos: | download
 
 endif
 

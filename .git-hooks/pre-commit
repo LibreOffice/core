@@ -178,7 +178,7 @@ sub check_style($)
 {
     if (! -e "solenv/clang-format/ClangFormat.pm")
     {
-        # Commit happens in a submodule.
+        # Not in the main repo.
         return;
     }
 
@@ -315,63 +315,6 @@ sub check_style($)
     }
 }
 
-sub check_submodules($)
-{
-    my ($h) = @_;
-
-    my $toplevel = `git rev-parse --show-toplevel`;
-    chomp $toplevel;
-
-    # trick to get a list of submodules - directly read from the .gitmodules
-    open(SUBMODULES, "git config --file '$toplevel'/.gitmodules --get-regexp path | awk '{ print \$2 }' |" ) ||  die "Cannot run git config on the .gitmodules.";
-    while (<SUBMODULES>)
-    {
-        chomp;
-
-        my $ignore = `git config submodule.$_.ignore`;
-        chomp $ignore;
-        if ($ignore eq 'all')
-        {
-            print <<EOM;
-Error: Your git configuration has submodule.$_.ignore set to 'all'.
-
-This is dangerous and can lead to accidentally pushing unwanted changes to
-submodules.
-
-To fix it, please do:
-
-  git config --unset submodule.$_.ignore
-
-EOM
-            exit(1);
-        }
-
-        my $diff = `git diff --cached --name-only -z $h -- $_`;
-        chomp $diff;
-        if ($diff ne '')
-        {
-            print <<EOM;
-Error: You are trying to commit changes to submodule $_ from the main repo.
-
-Please do not do that, commit only to the submodule, the git hook on the
-server will make sure the appropriate change is mirrored in the main repo.
-
-To remove the change, you can do:
-
-  git submodule update $_
-
-If it fails with 'error: Server does not allow request for unadvertised object',
-run the following:
-
-  git submodule sync
-  git submodule update $_
-
-EOM
-            exit(1);
-        }
-    }
-}
-
 # Do the work :-)
 
 # Initial commit: diff against an empty tree object
@@ -442,9 +385,6 @@ check_style($against);
 
 # catch missing author info
 check_author();
-
-# catch commits to the submodules
-check_submodules($against);
 
 # all OK
 exit( 0 );
