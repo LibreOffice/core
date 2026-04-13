@@ -658,7 +658,7 @@ AC_DEFUN([CHK_FILE_VAR], dnl $1:env-var, $2:filename-to-match, $3:cleartext-name
            fi
        done
        if test -n "$found_file"; then
-           AC_MSG_RESULT([$found_file])
+           AC_MSG_RESULT([$[$1][$4]])
        else
            AC_MSG_ERROR([This is not a [$3] [$4] directory, none of ($2) found in $[$1][$4]])
        fi
@@ -857,8 +857,7 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_m
 
    # Sanity checks
    if test "$enable_windowsapp" = "yes"; then
-      CHK_FILE_VAR(POCOLIB,PocoFoundationmd.lib,Poco lib)
-      CHK_FILE_VAR(POCOLIB,PocoFoundationmdd.lib,Poco lib)
+      CHK_FILE_VAR(POCOLIB,PocoFoundationmd.lib PocoFoundationmdd.lib,Poco lib)
    else
       CHK_FILE_VAR(POCOLIB,libPocoFoundation.a libPocoFoundation.so libPocoFoundation.dylib,Poco lib)
       CHK_FILE_VAR(POCOLIB,libPocoFoundation.a,Poco lib,_ARM64_V8A)
