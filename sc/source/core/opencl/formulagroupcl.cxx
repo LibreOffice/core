@@ -2371,7 +2371,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
             case ocExternal:
             case ocUDExternal:
 #define EXTCASE( name, createCode ) \
-                else if (pChild->GetExternal() == name) \
+                else if (static_cast<const FormulaExternalToken*>(pChild)->GetExternal() == name) \
                 { \
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], createCode, nResultSize)); \
                 }
@@ -2422,7 +2422,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 EXTCASE("com.sun.star.sheet.addin.Analysis.getYielddisc", std::make_shared<OpYielddisc>())
                 EXTCASE("com.sun.star.sheet.addin.Analysis.getYieldmat", std::make_shared<OpYieldmat>())
                 else
-                    throw UnhandledToken(OUString("unhandled external " + pChild->GetExternal()).toUtf8().getStr(), __FILE__, __LINE__);
+                    throw UnhandledToken(OUString("unhandled external " + static_cast<FormulaExternalToken*>(pChild)->GetExternal()).toUtf8().getStr(), __FILE__, __LINE__);
                 break;
 #undef EXTCASE
 

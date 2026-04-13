@@ -5247,7 +5247,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
         case svExternal:
         {
             // mapped or translated name of AddIns
-            OUString aAddIn = rToken.GetExternal();
+            OUString aAddIn = static_cast<const FormulaExternalToken&>(rToken).GetExternal();
             bool bMapped = rCxt.mxOpCodeMap->isPODF();     // ODF 1.1 directly uses programmatical name
             if (!bMapped && rCxt.mxOpCodeMap->hasExternals())
             {
