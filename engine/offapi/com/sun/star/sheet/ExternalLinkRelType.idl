@@ -19,26 +19,20 @@
 
 module com {  module sun {  module star {  module sheet {
 
-/** Primary interface for the com::sun::star::sheet::ExternalDocLinks service.
-
-    @see com::sun::star::sheet::ExternalDocLinks
+/** Constants designating the type of an external link relationship
+    added via XExternalDocLinks::addSpecialDocLink().
  */
-interface XExternalDocLinks
+constants ExternalLinkRelType
 {
-    interface com::sun::star::container::XNameAccess;
-    interface com::sun::star::container::XIndexAccess;
-    interface com::sun::star::container::XEnumerationAccess;
 
-    /** This method adds a new external document link by its URL, and returns
-        its instance.  If a document instance already exists for the specified URL,
-        then that instance gets returned instead of creating a new one.
-
-        @param aDocName document URL (e.g. file:///path/to/document.ods)
-
-        @return com::sun::star::sheet::XExternalDocLink external document link instance
+    /** The external document path is missing.
      */
-    com::sun::star::sheet::XExternalDocLink addDocLink( [in] string aDocName );
-    com::sun::star::sheet::XExternalDocLink addSpecialDocLink( [in] string aDocName, [in] short nLinkType);
+    const short PATH_MISSING = 0;
+
+    /** The external document is in Excel's Startup folder.
+     */
+    const short XL_STARTUP = 1;
+
 };
 
 }; }; }; };

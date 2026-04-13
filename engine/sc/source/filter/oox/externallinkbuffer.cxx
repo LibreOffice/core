@@ -24,6 +24,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DDELinkInfo.hpp>
+#include <com/sun/star/sheet/ExternalLinkRelType.hpp>
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
 #include <com/sun/star/sheet/XDDELinks.hpp>
 #include <com/sun/star/sheet/XDDELinkResults.hpp>
@@ -420,6 +421,7 @@ ExternalLinkInfo ExternalLink::getLinkInfo() const
             aLinkInfo.Data <<= maTargetUrl;
         break;
         case ExternalLinkType::PathMissing:
+        case ExternalLinkType::XlStartup:
             aLinkInfo.Type = css::sheet::ExternalLinkType::MISSINGDOCUMENT;
             aLinkInfo.Data <<= maTargetUrl;
         break;
@@ -456,7 +458,8 @@ FunctionLibraryType ExternalLink::getFuncLibraryType() const
 sal_Int32 ExternalLink::getDocumentLinkIndex() const
 {
     OSL_ENSURE(meLinkType == ExternalLinkType::External
-                   || meLinkType == ExternalLinkType::PathMissing,
+                   || meLinkType == ExternalLinkType::PathMissing
+                   || meLinkType == ExternalLinkType::XlStartup,
                "ExternalLink::getDocumentLinkIndex - invalid link type");
     return mxDocLink.is() ? mxDocLink->getTokenIndex() : -1;
 }
@@ -464,7 +467,8 @@ sal_Int32 ExternalLink::getDocumentLinkIndex() const
 sal_Int32 ExternalLink::getSheetCacheIndex( sal_Int32 nTabId ) const
 {
     OSL_ENSURE(meLinkType == ExternalLinkType::External
-                   || meLinkType == ExternalLinkType::PathMissing,
+                   || meLinkType == ExternalLinkType::PathMissing
+                   || meLinkType == ExternalLinkType::XlStartup,
                "ExternalLink::getSheetCacheIndex - invalid link type");
     return ContainerHelper::getVectorElement( maSheetCaches, nTabId, -1 );
 }
@@ -498,6 +502,7 @@ void ExternalLink::getSheetRange( LinkSheetRange& orSheetRange, sal_Int32 nTabId
 
         case ExternalLinkType::External:
         case ExternalLinkType::PathMissing:
+        case ExternalLinkType::XlStartup:
         {
             sal_Int32 nDocLinkIdx = getDocumentLinkIndex();
             // BIFF12: passed indexes point into sheet list of EXTSHEETLIST
@@ -533,6 +538,11 @@ void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUStr
         maTargetUrl = rTargetUrl;
         meLinkType = ExternalLinkType::PathMissing;
     }
+    else if( rTargetType == CREATE_MSOFFICE_RELATION_TYPE( "xlExternalLinkPath/xlStartup" ) )
+    {
+        maTargetUrl = rTargetUrl;
+        meLinkType = ExternalLinkType::XlStartup;
+    }
     else if( rTargetType == CREATE_MSOFFICE_RELATION_TYPE( "xlExternalLinkPath/xlLibrary" ) )
     {
         meLinkType = ExternalLinkType::Library;
@@ -541,12 +551,15 @@ void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUStr
     SAL_WARN_IF( meLinkType == ExternalLinkType::Unknown, "sc.filter", "Empty target URL or unknown target type, URL='" << rTargetUrl << "', type='" << rTargetType << "'" );
 
     // create the external document link API object that will contain the sheet caches
-    if( meLinkType == ExternalLinkType::External || meLinkType == ExternalLinkType::PathMissing ) try
+    if (meLinkType == ExternalLinkType::External || meLinkType == ExternalLinkType::PathMissing
+        || meLinkType == ExternalLinkType::XlStartup) try
     {
         PropertySet aDocProps(( Reference< css::beans::XPropertySet >(getDocument()) ));
         Reference< XExternalDocLinks > xDocLinks( aDocProps.getAnyProperty( PROP_ExternalDocLinks ), UNO_QUERY_THROW );
         if (meLinkType == ExternalLinkType::PathMissing)
-            mxDocLink = xDocLinks->addMissingDocLink(maTargetUrl);
+            mxDocLink = xDocLinks->addSpecialDocLink(maTargetUrl, ExternalLinkRelType::PATH_MISSING);
+        else if (meLinkType == ExternalLinkType::XlStartup)
+            mxDocLink = xDocLinks->addSpecialDocLink(maTargetUrl, ExternalLinkRelType::XL_STARTUP);
         else
             mxDocLink = xDocLinks->addDocLink(maTargetUrl);
     }

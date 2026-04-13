@@ -161,8 +161,9 @@ enum class ExternalLinkType
     Self,          /// Link refers to the current workbook.
     Same,          /// Link refers to the current sheet.
     External,      /// Link refers to an external spreadsheet document.
-    // let's ignore xlStartup and xlAlternateStartup for now
+    // let's ignore xlAlternateStartup for now
     PathMissing,   /// Just for round-tripping (FIXME: Functionality not actually implemented after all.)
+    XlStartup,     /// Link refers to a document in the XLSTART folder.
     Library,       /// Link refers to an external add-in.
     DDE,           /// DDE link.
     OLE,           /// OLE link.
@@ -178,6 +179,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case ExternalLinkType::Self: return stream << "self";
     case ExternalLinkType::Same: return stream << "same";
     case ExternalLinkType::External: return stream << "external";
+    case ExternalLinkType::XlStartup: return stream << "xlstartup";
     case ExternalLinkType::PathMissing: return stream << "pathmissing";
     case ExternalLinkType::Library: return stream << "library";
     case ExternalLinkType::DDE: return stream << "dde";

@@ -434,6 +434,7 @@ public:
         OUString maFilterName;
         OUString maFilterOptions;
         bool mbPathMissing = false;  /// true if external relation is (xlPathMissing).
+        bool mbXlStartup = false;    /// true if path is relative to XLSTART folder.
 
         void maybeCreateRealFileName(std::u16string_view rOwnDocName);
     };
@@ -650,6 +651,9 @@ public:
 
     SC_DLLPUBLIC bool isPathMissing(sal_uInt16 nFileId);
     void setPathMissing(sal_uInt16 nFileId);
+
+    SC_DLLPUBLIC bool isXlStartup(sal_uInt16 nFileId);
+    SC_DLLPUBLIC void setXlStartup(sal_uInt16 nFileId);
 
     void clear();
 

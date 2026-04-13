@@ -652,6 +652,36 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testMissingPathExternal)
     assertXPath(pExternalRel, "/rels:Relationships/rels:Relationship", "Target", u"Tabelle1");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testXlStartupExternalXLS)
+{
+    createScDoc("xls/XlStartupExternal.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pExternalRel
+        = parseExport(u"xl/externalLinks/_rels/externalLink1.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pExternalRel);
+
+    assertXPath(
+        pExternalRel, "/rels:Relationships/rels:Relationship", "Type",
+        u"http://schemas.microsoft.com/office/2006/relationships/xlExternalLinkPath/xlStartup");
+    assertXPath(pExternalRel, "/rels:Relationships/rels:Relationship", "Target", u"personal.xls");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testXlStartupExternalXLSX)
+{
+    createScDoc("xlsx/XlStartupExternal.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pExternalRel
+        = parseExport(u"xl/externalLinks/_rels/externalLink1.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pExternalRel);
+
+    assertXPath(
+        pExternalRel, "/rels:Relationships/rels:Relationship", "Type",
+        u"http://schemas.microsoft.com/office/2006/relationships/xlExternalLinkPath/xlStartup");
+    assertXPath(pExternalRel, "/rels:Relationships/rels:Relationship", "Target", u"personal.xls");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testQueryTableHeaders)
 {
     createScDoc("xlsx/TableEmptyHeaders.xlsx");

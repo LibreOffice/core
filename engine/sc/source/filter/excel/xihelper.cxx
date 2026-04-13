@@ -610,9 +610,9 @@ void lclAppendUrlChar( OUString& rUrl, sal_Unicode cChar )
 
 } // namespace
 
-void XclImpUrlHelper::DecodeUrl(
-        OUString& rUrl, OUString& rTabName, bool& rbSameWb,
-        const XclImpRoot& rRoot, const OUString& rEncodedUrl )
+void XclImpUrlHelper::DecodeUrl(OUString& rUrl, OUString& rTabName, bool& rbSameWb,
+                                const XclImpRoot& rRoot, const OUString& rEncodedUrl,
+                                bool* pbXlStartup)
 {
     enum
     {
@@ -625,6 +625,9 @@ void XclImpUrlHelper::DecodeUrl(
 
     bool bEncoded = true;
     rbSameWb = false;
+
+    if (pbXlStartup)
+        *pbXlStartup = false;
 
     sal_Unicode cCurrDrive = 0;
     OUString aDosBase( INetURLObject( rRoot.GetBasePath() ).getFSysPath( FSysStyle::Dos ) );
@@ -716,6 +719,10 @@ void XclImpUrlHelper::DecodeUrl(
                         }
                     }
                     break;
+                    case EXC_URL_XLSTART:
+                        if( pbXlStartup )
+                            *pbXlStartup = true;
+                    break;
                     case '[':
                         eState = xlUrlFileName;
                     break;
@@ -754,12 +761,12 @@ void XclImpUrlHelper::DecodeUrl(
     }
 }
 
-void XclImpUrlHelper::DecodeUrl(
-    OUString& rUrl, bool& rbSameWb, const XclImpRoot& rRoot, const OUString& rEncodedUrl )
+void XclImpUrlHelper::DecodeUrl(OUString& rUrl, bool& rbSameWb, const XclImpRoot& rRoot,
+                                const OUString& rEncodedUrl, bool* const pbXlStartup)
 {
     OUString aTabName;
     OUString aUrl;
-    DecodeUrl( aUrl, aTabName, rbSameWb, rRoot, rEncodedUrl );
+    DecodeUrl( aUrl, aTabName, rbSameWb, rRoot, rEncodedUrl, pbXlStartup );
     rUrl = aUrl;
     OSL_ENSURE( aTabName.isEmpty(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
 }

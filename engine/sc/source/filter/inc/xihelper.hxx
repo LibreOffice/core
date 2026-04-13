@@ -268,24 +268,27 @@ public:
         @param rUrl  Returns the decoded file name incl. path.
         @param rTabName  Returns the decoded sheet name.
         @param rbSameWb  Returns true, if the URL is a reference to the own workbook.
-        @param rEncodedUrl   An encoded URL from Excel. */
+        @param rEncodedUrl   An encoded URL from Excel.
+        @param pbXlStartup   If non-null, returns true if the path is relative to XLSTART folder. */
     static void         DecodeUrl(
                             OUString& rUrl,
                             OUString& rTabName,
                             bool& rbSameWb,
                             const XclImpRoot& rRoot,
-                            const OUString& rEncodedUrl );
+                            const OUString& rEncodedUrl,
+                            bool* pbXlStartup = nullptr );
 
     /** Decodes an encoded external document URL without sheet name.
         @param rUrl  Returns the decoded file name incl. path.
         @param rbSameWb  Returns true, if the URL is a reference to the own workbook.
-        @param rEncodedUrl   An encoded URL from Excel. */
-
+        @param rEncodedUrl   An encoded URL from Excel.
+        @param pbXlStartup   If non-null, returns true if the path is relative to XLSTART folder. */
     static void         DecodeUrl(
                             OUString& rUrl,
                             bool& rbSameWb,
                             const XclImpRoot& rRoot,
-                            const OUString& rEncodedUrl );
+                            const OUString& rEncodedUrl,
+                            bool* pbXlStartup = nullptr );
 
     /** Decodes the passed URL to OLE or DDE link components.
         @descr  For DDE links: Decodes to application name and topic.

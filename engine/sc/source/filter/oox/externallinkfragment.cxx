@@ -196,7 +196,10 @@ ContextHandlerRef ExternalLinkFragment::onCreateContext( sal_Int32 nElement, con
             if( nElement == XLS_TOKEN( definedName ) ) mrExtLink.importDefinedName( rAttribs );
         break;
         case XLS_TOKEN( sheetDataSet ):
-            if( (nElement == XLS_TOKEN( sheetData )) && (mrExtLink.getLinkType() == ExternalLinkType::External) )
+            if ((nElement == XLS_TOKEN(sheetData))
+                && (mrExtLink.getLinkType() == ExternalLinkType::External
+                    || mrExtLink.getLinkType() == ExternalLinkType::PathMissing
+                    || mrExtLink.getLinkType() == ExternalLinkType::XlStartup))
                 return createSheetDataContext( rAttribs.getInteger( XML_sheetId, -1 ) );
         break;
 
@@ -284,7 +287,9 @@ ContextHandlerRef ExternalLinkFragment::onCreateRecordContext( sal_Int32 nRecId,
             switch( nRecId )
             {
                 case BIFF12_ID_EXTSHEETDATA:
-                    if( mrExtLink.getLinkType() == ExternalLinkType::External )
+                    if (mrExtLink.getLinkType() == ExternalLinkType::External
+                        || mrExtLink.getLinkType() == ExternalLinkType::XlStartup
+                        || mrExtLink.getLinkType() == ExternalLinkType::PathMissing)
                         return createSheetDataContext( rStrm.readInt32() );
                 break;
 

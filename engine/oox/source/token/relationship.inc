@@ -21,6 +21,7 @@
 {Relationship::ENDNOTES, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes"},
 {Relationship::EXTERNALLINKPATH, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/externalLinkPath"},
 {Relationship::MISSINGEXTERNALLINKPATH, u"http://schemas.microsoft.com/office/2006/relationships/xlExternalLinkPath/xlPathMissing"},
+{Relationship::XLSTARTUPEXTERNALLINKPATH, u"http://schemas.microsoft.com/office/2006/relationships/xlExternalLinkPath/xlStartup"},
 {Relationship::FONT, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/font"},
 {Relationship::FONTTABLE, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable"},
 {Relationship::FOOTER, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer"},

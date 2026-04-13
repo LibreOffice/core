@@ -210,6 +210,8 @@ public:
 
     const OUString* GetSupbookUrl( sal_uInt16 nXtiIndex ) const;
 
+    bool IsSupbookXlStartup( sal_uInt16 nXtiIndex ) const;
+
     OUString GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const;
 
     /** Tries to decode the URL of the specified XTI entry to OLE or DDE link components.

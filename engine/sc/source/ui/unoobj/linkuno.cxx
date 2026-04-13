@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/sheet/ExternalLinkRelType.hpp>
 #include <comphelper/sequence.hxx>
 #include <formula/token.hxx>
 #include <svl/hint.hxx>
@@ -1612,11 +1613,16 @@ uno::Reference< sheet::XExternalDocLink > SAL_CALL ScExternalDocLinksObj::addDoc
 }
 
 uno::Reference<sheet::XExternalDocLink>
-    SAL_CALL ScExternalDocLinksObj::addMissingDocLink(const OUString& aDocName)
+    SAL_CALL ScExternalDocLinksObj::addSpecialDocLink(const OUString& aDocName, sal_Int16 nLinkType)
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aDocName);
-    mpRefMgr->setPathMissing(nFileId);
+
+    if (nLinkType == sheet::ExternalLinkRelType::XL_STARTUP)
+        mpRefMgr->setXlStartup(nFileId);
+    else if (nLinkType == sheet::ExternalLinkRelType::PATH_MISSING)
+        mpRefMgr->setPathMissing(nFileId);
+
     uno::Reference<sheet::XExternalDocLink> aDocLink(
         new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
     return aDocLink;

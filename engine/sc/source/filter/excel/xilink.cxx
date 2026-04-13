@@ -110,6 +110,9 @@ public:
     /** Returns the URL of the external document. */
     const OUString& GetXclUrl() const { return maXclUrl; }
 
+    /** Returns true if the path is relative to the XLSTARTUP folder. */
+    bool IsXlStartup() const { return mbXlStartup; }
+
     /** Returns the external name specified by an index from the Excel document (one-based). */
     const XclImpExtName* GetExternName( sal_uInt16 nXclIndex ) const;
     /** Tries to decode the URL to OLE or DDE link components.
@@ -137,6 +140,8 @@ private:
     OUString            maXclUrl;           /// URL of the external document (Excel mode).
     XclSupbookType      meType;             /// Type of the supbook record.
     sal_uInt16          mnSBTab;            /// Current Excel sheet index from SUPBOOK for XCT/CRN records.
+
+    bool                mbXlStartup = false;  /// true if path is relative to XLSTART folder.
 };
 
 // Import link manager ========================================================
@@ -194,6 +199,8 @@ public:
     /** Returns the absolute file URL of a supporting workbook specified by
         the index. */
     const OUString*       GetSupbookUrl( sal_uInt16 nXtiIndex ) const;
+
+    bool                  IsSupbookXlStartup( sal_uInt16 nXtiIndex ) const;
 
     OUString       GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const;
 
@@ -668,7 +675,7 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
 
     OUString aEncUrl( rStrm.ReadUniString() );
     bool bSelf = false;
-    XclImpUrlHelper::DecodeUrl( maXclUrl, bSelf, GetRoot(), aEncUrl );
+    XclImpUrlHelper::DecodeUrl( maXclUrl, bSelf, GetRoot(), aEncUrl, &mbXlStartup );
 
     if( maXclUrl.equalsIgnoreAsciiCase( "\010EUROTOOL.XLA" ) )
     {
@@ -775,10 +782,17 @@ void XclImpSupbook::LoadCachedValues()
     if (meType != XclSupbookType::Extern || GetExtDocOptions().GetDocSettings().mnLinkCnt > 0 || !GetDocShell())
         return;
 
-    OUString aAbsUrl( ScGlobal::GetAbsDocName(maXclUrl, GetDocShell()) );
+    OUString aUrl;
+    if (mbXlStartup)
+        aUrl = maXclUrl;
+    else
+        aUrl = ScGlobal::GetAbsDocName(maXclUrl, GetDocShell());
 
     ScExternalRefManager* pRefMgr = GetRoot().GetDoc().GetExternalRefManager();
-    sal_uInt16 nFileId = pRefMgr->getExternalFileId(aAbsUrl);
+    sal_uInt16 nFileId = pRefMgr->getExternalFileId(aUrl);
+
+    if (mbXlStartup)
+        pRefMgr->setXlStartup(nFileId);
 
     for (auto& rxTab : maSupbTabList)
     {
@@ -882,6 +896,12 @@ const OUString* XclImpLinkManagerImpl::GetSupbookUrl( sal_uInt16 nXtiIndex ) con
     return &p->GetXclUrl();
 }
 
+bool XclImpLinkManagerImpl::IsSupbookXlStartup( sal_uInt16 nXtiIndex ) const
+{
+    const XclImpSupbook* p = GetSupbook( nXtiIndex );
+    return p && p->IsXlStartup();
+}
+
 OUString XclImpLinkManagerImpl::GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const
 {
     const XclImpSupbook* p = GetSupbook(nXti);
@@ -977,6 +997,11 @@ const XclImpExtName* XclImpLinkManager::GetExternName( sal_uInt16 nXtiIndex, sal
 const OUString* XclImpLinkManager::GetSupbookUrl( sal_uInt16 nXtiIndex ) const
 {
     return mxImpl->GetSupbookUrl(nXtiIndex);
+}
+
+bool XclImpLinkManager::IsSupbookXlStartup( sal_uInt16 nXtiIndex ) const
+{
+    return mxImpl->IsSupbookXlStartup(nXtiIndex);
 }
 
 OUString XclImpLinkManager::GetSupbookTabName( sal_uInt16 nXti,  sal_uInt16 nXtiTab ) const

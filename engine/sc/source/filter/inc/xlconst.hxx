@@ -95,6 +95,7 @@ const sal_Unicode EXC_URL_DRIVEROOT         = '\x02';   /// Root directory of cu
 const sal_Unicode EXC_URL_SUBDIR            = '\x03';   /// Directory name delimiter.
 const sal_Unicode EXC_URL_PARENTDIR         = '\x04';   /// Parent directory.
 const sal_Unicode EXC_URL_RAW               = '\x05';   /// Unencoded URL.
+const sal_Unicode EXC_URL_XLSTART           = '\x06';   /// XLSTART folder path.
 const sal_Unicode EXC_URL_SHEETNAME         = '\x09';   /// Sheet name starts here (BIFF4).
 
 const sal_Unicode EXC_DDE_DELIM             = '\x03';   /// DDE application-topic delimiter

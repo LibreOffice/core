@@ -86,7 +86,11 @@ bool ExcelToSc8::GetExternalFileIdFromXti( sal_uInt16 nIxti, sal_uInt16& rFileId
     if (!pFileUrl || pFileUrl->isEmpty() || !GetDocShell())
         return false;
 
-    OUString aFileUrl = ScGlobal::GetAbsDocName(*pFileUrl, GetDocShell());
+    OUString aFileUrl;
+    if (rLinkMan.IsSupbookXlStartup(nIxti))
+        aFileUrl = *pFileUrl;
+    else
+        aFileUrl = ScGlobal::GetAbsDocName(*pFileUrl, GetDocShell());
     ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
     rFileId = pRefMgr->getExternalFileId(aFileUrl);
 
