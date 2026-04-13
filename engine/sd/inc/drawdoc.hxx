@@ -76,6 +76,7 @@ typedef rtl::Reference<DrawDocShell> DrawDocShellRef;
 class UndoManager;
 class ShapeList;
 class FrameView;
+class SlideSectionManager;
 }
 
 class ImpDrawPageListWatcher;
@@ -358,6 +359,7 @@ private:
     std::vector<std::unique_ptr<sd::FrameView>>
                         maFrameViewList;
     std::unique_ptr<SdCustomShowList>   mpCustomShowList;
+    std::unique_ptr<sd::SlideSectionManager> mpSectionManager;
     ::sd::DrawDocShell* mpDocSh;
     SdTransferable *    mpCreatingTransferable;
     bool                mbHasOnlineSpellErrors;
@@ -863,6 +865,7 @@ public:
 
     SAL_DLLPRIVATE std::vector<std::unique_ptr<sd::FrameView>>& GetFrameViewList() { return maFrameViewList; }
     SdCustomShowList* GetCustomShowList(bool bCreate = false);
+    sd::SlideSectionManager& GetSectionManager();
 
     SAL_DLLPRIVATE void                NbcSetChanged(bool bFlag);
 

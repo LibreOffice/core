@@ -70,6 +70,7 @@
 
 #include <editeng/outliner.hxx>
 #include <drawdoc.hxx>
+#include <SlideSectionManager.hxx>
 #include <sdpage.hxx>
 #include <strings.hrc>
 #include <glob.hxx>
