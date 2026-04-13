@@ -286,7 +286,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
             if( text::HoriOrientation::NONE == rHoriOri.GetHoriOrient() )
             {
                 SwFormatHoriOrient aHoriOri( rHoriOri );
-                aHoriOri.SetPos( aHoriOri.GetPos() + nLeftSpace );
+                aHoriOri.adjustPosition(gfx::Length::twip(nLeftSpace));
                 rFlyItemSet.Put( aHoriOri );
             }
         }
@@ -322,7 +322,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         if( text::VertOrientation::NONE == rVertOri.GetVertOrient() )
         {
             SwFormatVertOrient aVertOri( rVertOri );
-            aVertOri.SetPos( aVertOri.GetPos() + nUpperSpace );
+            aVertOri.adjustPosition(gfx::Length::twip(nUpperSpace));
             rFlyItemSet.Put( aVertOri );
         }
     }
