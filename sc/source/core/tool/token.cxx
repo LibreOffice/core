@@ -694,7 +694,7 @@ bool ScMatrixToken::operator==( const FormulaToken& r ) const
 }
 
 ScMatrixRangeToken::ScMatrixRangeToken( const sc::RangeMatrix& rMat ) :
-    FormulaToken(formula::svMatrix), mpMatrix(rMat.mpMat)
+    ScMatrixToken(rMat.mpMat)
 {
     maRef.InitRange(rMat.mnCol1, rMat.mnRow1, rMat.mnTab1, rMat.mnCol2, rMat.mnRow2, rMat.mnTab2);
 }
@@ -706,16 +706,6 @@ sal_uInt8 ScMatrixRangeToken::GetByte() const
     return MATRIX_TOKEN_HAS_RANGE;
 }
 
-const ScMatrix* ScMatrixRangeToken::GetMatrix() const
-{
-    return mpMatrix.get();
-}
-
-ScMatrix* ScMatrixRangeToken::GetMatrix()
-{
-    return mpMatrix.get();
-}
-
 const ScComplexRefData* ScMatrixRangeToken::GetDoubleRef() const
 {
     return &maRef;
@@ -724,11 +714,6 @@ const ScComplexRefData* ScMatrixRangeToken::GetDoubleRef() const
 ScComplexRefData* ScMatrixRangeToken::GetDoubleRef()
 {
     return &maRef;
-}
-
-bool ScMatrixRangeToken::operator==( const FormulaToken& r ) const
-{
-    return FormulaToken::operator==(r) && mpMatrix == r.GetMatrix();
 }
 
 FormulaToken* ScMatrixRangeToken::Clone() const

@@ -90,7 +90,7 @@ public:
     virtual FormulaToken*       Clone() const override { return new ScDoubleRefToken(*this); }
 };
 
-class ScMatrixToken final : public formula::FormulaToken
+class ScMatrixToken : public formula::FormulaToken
 {
 private:
             ScMatrixRef         pMatrix;
@@ -109,20 +109,16 @@ public:
  * both the values in matrix form, and the range address the matrix
  * represents.
  */
-class ScMatrixRangeToken final : public formula::FormulaToken
+class ScMatrixRangeToken final : public ScMatrixToken
 {
-    ScMatrixRef mpMatrix;
     ScComplexRefData maRef;
 public:
     ScMatrixRangeToken( const sc::RangeMatrix& rMat );
     ScMatrixRangeToken( const ScMatrixRangeToken& );
 
     virtual sal_uInt8 GetByte() const override;
-    virtual const ScMatrix* GetMatrix() const override;
-    virtual ScMatrix* GetMatrix() override;
     virtual const ScComplexRefData* GetDoubleRef() const override;
     virtual ScComplexRefData* GetDoubleRef() override;
-    virtual bool operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken* Clone() const override;
 };
 
