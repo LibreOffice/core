@@ -55,9 +55,9 @@ class SvtLanguageTableImpl
 private:
     std::vector<std::pair<OUString, LanguageType>> m_aStrings;
     OUString m_aUILanguage; // UI language used to build the table
-    void            AddItem(const OUString& rLanguage, const LanguageType eType)
+    const OUString& AddItem(const OUString& rLanguage, const LanguageType eType)
     {
-        m_aStrings.emplace_back(rLanguage, eType);
+        return m_aStrings.emplace_back(rLanguage, eType).first;
     }
     void            Build();
 
@@ -69,7 +69,7 @@ public:
     void            RebuildIfNeeded();
 
     bool            HasType( const LanguageType eType ) const;
-    OUString        GetString( const LanguageType eType ) const;
+    const OUString& GetString( const LanguageType eType ) const;
     LanguageType    GetType( std::u16string_view rStr ) const;
     sal_uInt32      GetEntryCount() const;
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
@@ -87,7 +87,7 @@ public:
         }
         return RESARRAY_INDEX_NOTFOUND;
     }
-    void            AddEntry( const OUString& rString, const LanguageType eType);
+    const OUString& AddEntry( const OUString& rString, const LanguageType eType);
 };
 
 SvtLanguageTableImpl& theLanguageTable()
@@ -257,7 +257,7 @@ bool SvtLanguageTable::HasLanguageType( const LanguageType eType )
     return theLanguageTable().HasType( eType );
 }
 
-OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
+const OUString& SvtLanguageTableImpl::GetString( const LanguageType eType ) const
 {
     const LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eType);
     const sal_uInt32 nPos = (eType == LANGUAGE_PROCESS_OR_USER_DEFAULT ?
@@ -274,9 +274,7 @@ OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
         << sLangTag);
 
     // And add it to the table, so it is available in all subsequent language boxes.
-    const_cast<SvtLanguageTableImpl*>(this)->AddEntry( sLangTag, nLang);
-
-    return sLangTag;
+    return const_cast<SvtLanguageTableImpl*>(this)->AddEntry( sLangTag, nLang);
 }
 
 OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
@@ -329,7 +327,7 @@ LanguageType SvtLanguageTable::GetLanguageTypeAtIndex( sal_uInt32 nIndex )
     return theLanguageTable().GetTypeAtIndex( nIndex);
 }
 
-void SvtLanguageTableImpl::AddEntry( const OUString& rString, const LanguageType eType )
+const OUString& SvtLanguageTableImpl::AddEntry( const OUString& rString, const LanguageType eType )
 {
     if (LanguageTag::isOnTheFlyID(eType)
             && LanguageTag::getOnTheFlyScriptType(eType) == LanguageTag::ScriptType::UNKNOWN)
@@ -362,7 +360,7 @@ void SvtLanguageTableImpl::AddEntry( const OUString& rString, const LanguageType
         }
         aLanguageTag.setScriptType( eScriptType);
     }
-    AddItem( rString, eType);
+    return AddItem( rString, eType);
 }
 
 void SvtLanguageTable::AddLanguageTag( const LanguageTag& rLanguageTag )
