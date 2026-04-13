@@ -142,35 +142,24 @@ namespace frm
 
     ::comphelper::OPropertyArrayAggregationHelper& PropertyBagHelper::impl_ts_getArrayHelper() const
     {
-        OPropertyArrayAggregationHelper* p = m_pPropertyArrayHelper.get();
-        if ( !p )
+        ::osl::MutexGuard aGuard( m_rContext.getMutex() );
+        if (!m_pPropertyArrayHelper)
         {
-            ::osl::MutexGuard aGuard( m_rContext.getMutex() );
-            p = m_pPropertyArrayHelper.get();
-            if ( !p )
-            {
-                // our own fixed and our aggregate's properties
-                Sequence< Property > aFixedProps;
-                Sequence< Property > aAggregateProps;
-                m_rContext.describeFixedAndAggregateProperties( aFixedProps, aAggregateProps );
+            // our own fixed and our aggregate's properties
+            Sequence< Property > aFixedProps;
+            Sequence< Property > aAggregateProps;
+            m_rContext.describeFixedAndAggregateProperties( aFixedProps, aAggregateProps );
 
-                // our dynamic properties
-                Sequence< Property > aDynamicProps;
-                m_aDynamicProperties.describeProperties( aDynamicProps );
+            // our dynamic properties
+            Sequence< Property > aDynamicProps;
+            m_aDynamicProperties.describeProperties( aDynamicProps );
 
-                Sequence< Property > aOwnProps(
-                    ::comphelper::concatSequences( aFixedProps, aDynamicProps ) );
+            Sequence< Property > aOwnProps(
+                ::comphelper::concatSequences( aFixedProps, aDynamicProps ) );
 
-                p = new OPropertyArrayAggregationHelper( aOwnProps, aAggregateProps, &lcl_getPropertyInfos(), NEW_HANDLE_BASE );
-                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-                const_cast< PropertyBagHelper* >( this )->m_pPropertyArrayHelper.reset( p );
-            }
-        } // if ( !p )
-        else
-        {
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            const_cast<PropertyBagHelper*>(this)->m_pPropertyArrayHelper = std::make_unique<OPropertyArrayAggregationHelper>( aOwnProps, aAggregateProps, &lcl_getPropertyInfos(), NEW_HANDLE_BASE );
         }
-        return *p;
+        return *m_pPropertyArrayHelper;
     }
 
 
