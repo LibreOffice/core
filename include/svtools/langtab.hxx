@@ -32,7 +32,7 @@ public:
     /** Obtain the UI name for a LanguageType of a language/locale (string
         resource STR_ARR_SVT_LANGUAGE_TABLE).
      */
-    static OUString     GetLanguageString( const LanguageType eType );
+    static const OUString& GetLanguageString( const LanguageType eType );
     /** Obtain the LanguageType for a UI name of a language/locale (string
         resource STR_ARR_SVT_LANGUAGE_TABLE).
      */

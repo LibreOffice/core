@@ -277,7 +277,7 @@ const OUString& SvtLanguageTableImpl::GetString( const LanguageType eType ) cons
     return const_cast<SvtLanguageTableImpl*>(this)->AddEntry( sLangTag, nLang);
 }
 
-OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
+const OUString& SvtLanguageTable::GetLanguageString( const LanguageType eType )
 {
     return theLanguageTable().GetString( eType );
 }
