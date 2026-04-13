@@ -57,6 +57,8 @@ $(call gb_ExternalProject_get_state_target,pixman,build) :
 			$(if $(filter MACOSX,$(OS)),-Da64-neon=disabled) \
 			-Dbuildtype=$(if $(ENABLE_DBGUTIL),debug,$(if $(ENABLE_DEBUG),debugoptimized,release)) \
 			-Dauto_features=disabled \
+			$(if $(filter X86_64,$(RTL_ARCH)),-Dsse2=enabled -Dssse3=enabled) \
+			$(if $(filter x86,$(RTL_ARCH)),-Dsse2=enabled -Dmmx=enabled) \
 			-Dtests=disabled \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
