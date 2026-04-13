@@ -33,8 +33,6 @@ ThemeColorsPaneBase::~ThemeColorsPaneBase() = default;
 void ThemeColorsPaneBase::initColorSets(const model::Theme* pTheme)
 {
     maColorSets.clear();
-    if (mxIconViewThemeColors)
-        mxIconViewThemeColors->clear();
 
     if (pTheme)
         maColorSets.push_back(*pTheme->getColorSet());
@@ -44,6 +42,9 @@ void ThemeColorsPaneBase::initColorSets(const model::Theme* pTheme)
 
     if (mxIconViewThemeColors)
     {
+        mxIconViewThemeColors->freeze();
+        mxIconViewThemeColors->clear();
+
         for (size_t i = 0; i < maColorSets.size(); ++i)
         {
             auto const& rColorSet = maColorSets[i];
@@ -54,6 +55,8 @@ void ThemeColorsPaneBase::initColorSets(const model::Theme* pTheme)
             OUString sName = rColorSet.getName();
             mxIconViewThemeColors->insert(-1, &sName, &sId, &aBitmap, nullptr);
         }
+
+        mxIconViewThemeColors->thaw();
 
         if (!maColorSets.empty())
         {
