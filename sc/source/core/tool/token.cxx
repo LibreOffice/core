@@ -3235,6 +3235,23 @@ bool isDBDataModified( const ScDocument& rDoc, const formula::FormulaToken& rTok
 
 }
 
+namespace {
+
+void lcl_accumulateRefError(sc::RefErrorContext& rCtx, const ScAddress& rFormulaPos,
+                            bool bOldError, bool bNewError)
+{
+    if (bOldError || !bNewError)
+        return;
+
+    if (!rCtx.mbErrorCreated)
+    {
+        rCtx.mbErrorCreated = true;
+        rCtx.maFormulaCell = rFormulaPos;
+    }
+}
+
+}
+
 sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos )
 {
     ScRange aSelectedRange = getSelectedRange(rCxt);
@@ -3271,9 +3288,11 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 
                         if (rCxt.isDeleted() && aSelectedRange.Contains(aAbs))
                         {
+                            bool bOldError = rRef.IsDeleted();
                             // This reference is in the deleted region.
                             setRefDeleted(rRef, rCxt);
                             aRes.mbValueChanged = true;
+                            lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, rRef.IsDeleted());
                             break;
                         }
 
@@ -3309,13 +3328,17 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         {
                             if (aSelectedRange.Contains(aAbs))
                             {
+                                bool bOldError = rRef.Ref1.IsDeleted() || rRef.Ref2.IsDeleted();
                                 // This reference is in the deleted region.
                                 setRefDeleted(rRef, rCxt);
                                 aRes.mbValueChanged = true;
+                                bool bNewError = rRef.Ref1.IsDeleted() || rRef.Ref2.IsDeleted();
+                                lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, bNewError);
                                 break;
                             }
                             else if (aSelectedRange.Intersects(aAbs))
                             {
+                                bool bOldError = rRef.Ref1.IsDeleted() || rRef.Ref2.IsDeleted();
                                 const ShrinkResult eSR = shrinkRange(rCxt, aAbs, aSelectedRange, rRef);
                                 if (eSR == SHRUNK)
                                 {
@@ -3323,6 +3346,11 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                                     rRef.SetRange(*mxSheetLimits, aAbs, aNewPos);
                                     aRes.mbValueChanged = true;
                                     aRes.mbReferenceModified = true;
+                                    // shrinkRange may have set the range invalid if it
+                                    // was fully covered in col+row but not in tab (3D
+                                    // refs, partial-tab delete). Treat that as #REF!.
+                                    bool bNewError = rRef.Ref1.IsDeleted() || rRef.Ref2.IsDeleted() || !aAbs.IsValid();
+                                    lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, bNewError);
                                     break;
                                 }
                                 else if (eSR == STICKY)
@@ -4382,14 +4410,23 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( const sc::RefUpda
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
+                        bool bOldError = rRef.IsTabDeleted();
+
                         if (adjustSingleRefOnDeletedTab(*mxSheetLimits, rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
                             aRes.mbReferenceModified = true;
+
+                        lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, rRef.IsTabDeleted());
                     }
                     break;
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
+                        bool bOldError = rRef.Ref1.IsTabDeleted() || rRef.Ref2.IsTabDeleted();
+
                         aRes.mbReferenceModified |= adjustDoubleRefOnDeleteTab(*mxSheetLimits, rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos);
+
+                        bool bNewError = rRef.Ref1.IsTabDeleted() || rRef.Ref2.IsTabDeleted();
+                        lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, bNewError);
                     }
                     break;
                 default:

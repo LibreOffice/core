@@ -458,4 +458,9 @@
 #define STR_TABLE_STYLE_MEDIUM                      NC_("STR_TABLE_STYLE_MEDIUM", "Table Style Medium")
 #define STR_TABLE_STYLE_DARK                        NC_("STR_TABLE_STYLE_DARK", "Table Style Dark")
 
+/* Reference Warning Infobar */
+#define STR_REF_ERROR_TITLE                         NC_("STR_REF_ERROR_TITLE", "Broken References")
+#define STR_REF_ERROR_MSG                           NC_("STR_REF_ERROR_MSG", "The deletion created reference errors in your spreadsheet. Use Undo to restore the deleted cells.")
+#define STR_REF_ERROR_GOTO                          NC_("STR_REF_ERROR_GOTO", "Go to First Error")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

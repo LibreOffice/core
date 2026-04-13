@@ -721,6 +721,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="WarnOnDeleteCellReferences" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether a warning infobar will appear when deleting cells breaks references in other cells.</desc>
+          <label>Warn when deletion breaks cell references</label>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="UseScrollLock" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Toggles the scroll lock behavior allowing to disable it for special keyboards</desc>

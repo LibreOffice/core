@@ -118,6 +118,7 @@ class SheetView;
 class SheetViewManager;
 class AutoCalcSwitch;
 struct RefUpdateInsertTabContext;
+struct RefErrorContext;
 }
 
 class OutputDevice;
@@ -360,7 +361,6 @@ friend class sc::EditTextIterator;
 friend class sc::TableContentCopier;
 friend struct ScMutationGuard;
 friend struct ScMutationDisable;
-
 
 public:
     enum class HardRecalcState
@@ -2498,6 +2498,11 @@ public:
                             Preferred.
                          */
     void                Broadcast( const ScHint& rHint );
+
+    /** Broadcast SfxHintId::ScRefErrorCreated for a completed reference
+        update pass, if any #REF! errors were created. No-op if the
+        context reports no errors. */
+    void                BroadcastRefError( const sc::RefErrorContext& rCtx );
 
     void BroadcastCells( const ScRange& rRange, SfxHintId nHint, bool bBroadcastSingleBroadcasters = true );
 

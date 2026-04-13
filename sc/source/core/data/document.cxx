@@ -105,6 +105,8 @@
 #include <sfx2/kit/helper.hxx>
 #include <SheetViewManager.hxx>
 
+#include <brdcst.hxx>
+
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
@@ -775,6 +777,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 KitHelper::notifyDocumentSizeChangedAllViews(pModel);
             }
 
+            BroadcastRefError(aCxt.maRefErrors);
             bValid = true;
         }
     }
@@ -865,6 +868,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 KitHelper::notifyDocumentSizeChangedAllViews(pModel);
             }
 
+            BroadcastRefError(aCxt.maRefErrors);
             bValid = true;
         }
     }
@@ -1503,6 +1507,8 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
 
     if (pChartListenerCollection)
         pChartListenerCollection->UpdateDirtyCharts();
+
+    BroadcastRefError(aCxt.maRefErrors);
 }
 
 void ScDocument::DeleteRow( const ScRange& rRange )
@@ -1719,6 +1725,8 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
 
     if (pChartListenerCollection)
         pChartListenerCollection->UpdateDirtyCharts();
+
+    BroadcastRefError(aCxt.maRefErrors);
 }
 
 void ScDocument::DeleteCol( const ScRange& rRange )
@@ -6951,6 +6959,16 @@ void ScDocument::MergeContextBackIntoNonThreadedContext(ScInterpreterContext& th
         std::make_move_iterator(threadedContext.maDelayedSetNumberFormat.end()));
     // lookup cache is now only in pooled ScInterpreterContext's
     threadedContext.MergeDefaultFormatKeys(*GetFormatTable());
+}
+
+void ScDocument::BroadcastRefError(const sc::RefErrorContext& rCtx)
+{
+    if (!rCtx.mbErrorCreated)
+        return;
+
+    ScHint aHint(SfxHintId::ScRefErrorCreated, rCtx.maFormulaCell);
+    if (ScDocShell* pDocSh = GetDocumentShell())
+        pDocSh->Broadcast(aHint);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

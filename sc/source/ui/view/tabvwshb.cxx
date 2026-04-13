@@ -826,6 +826,13 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                         else
                             pUndoManager->RedoWithContext(aUndoRedoContext);
                     }
+                    if ( bIsUndo )
+                    {
+                        // Dismiss the #REF! warning infobar if the user
+                        // undoes. Redo re-runs the delete, which naturally
+                        // re-broadcasts via Delete{Row,Col,Tab,Tabs}().
+                        GetViewFrame().RemoveInfoBar(u"ref_logic_error");
+                    }
                 }
                 catch ( const uno::Exception& )
                 {

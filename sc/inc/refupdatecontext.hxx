@@ -46,6 +46,18 @@ private:
 };
 
 /**
+ * Accumulates information about #REF! errors created during a single
+ * reference-update pass (e.g. one row/column/sheet deletion). Lives on
+ * the RefUpdate*Context for the duration of that operation; its value
+ * is passed to the UI layer via an ScHint after the pass completes.
+ */
+struct RefErrorContext
+{
+    bool mbErrorCreated = false;
+    ScAddress maFormulaCell; ///< first formula cell with new #REF! error
+};
+
+/**
  * Context for reference update during shifting, moving or copying of cell
  * ranges.
  */
@@ -82,6 +94,11 @@ struct RefUpdateContext
     ColumnSet maRegroupCols;
 
     ColumnBlockPositionSet* mpBlockPos; // not owning
+
+    /// First #REF! error created by this update pass, if any.
+    /// Mutable because it is output accumulated during traversal,
+    /// not part of the logical input configuration.
+    mutable RefErrorContext maRefErrors;
 
     RefUpdateContext(ScDocument& rDoc, ScDocument* pClipdoc = nullptr);
 
@@ -134,6 +151,11 @@ struct SC_DLLPUBLIC RefUpdateDeleteTabContext
     SCTAB mnDeletePos;
     SCTAB mnSheets;
     UpdatedRangeNames maUpdatedNames;
+
+    /// First #REF! error created by this sheet-delete pass, if any.
+    /// Mutable because it is output accumulated during traversal,
+    /// not part of the logical input configuration.
+    mutable RefErrorContext maRefErrors;
 
     RefUpdateDeleteTabContext(ScDocument& rDoc, SCTAB nInsertPos, SCTAB nSheets);
 };
