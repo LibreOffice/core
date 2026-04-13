@@ -38,6 +38,11 @@
 #include <cellvalue.hxx>
 #include <svl/numformat.hxx>
 #include <svl/sharedstring.hxx>
+#include <sfx2/infobar.hxx>
+#include <officecfg/Office/Calc.hxx>
+#include <strings.hrc>
+#include <scresid.hxx>
+#include <brdcst.hxx>
 
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
@@ -212,6 +217,12 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             default: break;
         }
+    }
+    else if (rHint.GetId() == SfxHintId::ScRefErrorCreated)
+    {
+        assert(dynamic_cast<const ScHint*>(&rHint));
+        const ScHint& rScHint = static_cast<const ScHint&>(rHint);
+        ShowRefErrorInfoBar(rScHint.GetStartAddress());
     }
     else                       // without parameter
     {
@@ -395,6 +406,50 @@ void ScTabViewShell::UpdateNumberFormatter(
 {
     for ( sal_uInt32 key : rInfoItem.GetDelFormats() )
         rInfoItem.GetNumberFormatter()->DeleteEntry( key );
+}
+
+void ScTabViewShell::ShowRefErrorInfoBar(const ScAddress& rFormulaCell)
+{
+    // Note: in Online, desktop-style infobars are not forwarded to
+    // the browser client. A future COOL implementation could hook into
+    // SfxHintId::ScRefErrorCreated at the kit protocol layer and surface this
+    // as a suggestion popup instead. The ScHint already carries the formula
+    // cell address, so all the data needed is available in the hint.
+    if (!officecfg::Office::Calc::Input::WarnOnDeleteCellReferences::get())
+        return;
+
+    // Remember the target so the "Go to First Error" button handler can
+    // navigate to it. Overwritten each time the infobar is (re-)shown, so
+    // the button always points at the most recent delete operation's first
+    // error.
+    m_aRefErrorCell = rFormulaCell;
+
+    auto pInfoBar = GetViewFrame().AppendInfoBar(
+        u"ref_logic_error"_ustr,
+        ScResId(STR_REF_ERROR_TITLE),
+        ScResId(STR_REF_ERROR_MSG),
+        InfobarType::WARNING,
+        true);
+
+    // AppendInfoBar returns nullptr if an infobar with this ID already
+    // exists. In that case the existing infobar still has its button, so we
+    // just keep it — m_aRefErrorCell update above is enough.
+    if (pInfoBar)
+    {
+        weld::Button& rBtn = pInfoBar->addButton();
+        rBtn.set_label(ScResId(STR_REF_ERROR_GOTO));
+        rBtn.connect_clicked(LINK(this, ScTabViewShell, GoToRefErrorHdl));
+    }
+}
+
+IMPL_LINK_NOARG(ScTabViewShell, GoToRefErrorHdl, weld::Button&, void)
+{
+    if (!m_aRefErrorCell.IsValid())
+        return;
+
+    SetTabNo(m_aRefErrorCell.Tab());
+    AlignToCursor(m_aRefErrorCell.Col(), m_aRefErrorCell.Row(), SC_FOLLOW_JUMP);
+    SetCursor(m_aRefErrorCell.Col(), m_aRefErrorCell.Row());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
