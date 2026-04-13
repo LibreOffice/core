@@ -638,8 +638,8 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                     const SwFormatHoriOrient &rHori = pOldFlyFormat->GetHoriOrient();
                     if( text::RelOrientation::FRAME == rHori.GetRelationOrient() )
                     {
-                        aAttrSet.Put( SwFormatHoriOrient( rHori.GetPos(),
-                            text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ) );
+                        aAttrSet.Put(SwFormatHoriOrient(rHori.getPosition().as_twip<SwTwips>(),
+                            text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA));
                     }
                 }
 
