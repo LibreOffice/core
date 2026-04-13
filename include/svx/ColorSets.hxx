@@ -10,12 +10,13 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
+#include <svl/SfxBroadcaster.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 
 namespace svx
 {
 
-class SVXCORE_DLLPUBLIC ColorSets
+class SVXCORE_DLLPUBLIC ColorSets : public SfxBroadcaster
 {
 private:
     std::vector<model::ColorSet> maColorSets;
