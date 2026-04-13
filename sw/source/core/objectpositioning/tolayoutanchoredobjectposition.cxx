@@ -80,7 +80,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         SwTwips nVertOffsetToFrameAnchorPos( 0 );
         SwTwips nRelPosY =
                 GetVertRelPos( GetAnchorFrame(), GetAnchorFrame(), eVertOrient,
-                                aVert.GetRelationOrient(), aVert.GetPos(),
+                                aVert.GetRelationOrient(), aVert.getPosition().as_twip<SwTwips>(),
                                 rLR, rUL, nVertOffsetToFrameAnchorPos );
 
         // keep the calculated relative vertical position - needed for filters

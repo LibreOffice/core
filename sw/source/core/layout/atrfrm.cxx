@@ -1435,7 +1435,7 @@ size_t SwFormatVertOrient::hashCode() const
 {
     std::size_t seed(0);
     o3tl::hash_combine(seed, Which());
-    o3tl::hash_combine(seed, GetPos());
+    o3tl::hash_combine(seed, getPosition().data());
     o3tl::hash_combine(seed, GetVertOrient());
     o3tl::hash_combine(seed, GetRelationOrient());
     return seed;
@@ -1553,7 +1553,7 @@ size_t SwFormatHoriOrient::hashCode() const
 {
     std::size_t seed(0);
     o3tl::hash_combine(seed, Which());
-    o3tl::hash_combine(seed, GetPos());
+    o3tl::hash_combine(seed, getPosition().data());
     o3tl::hash_combine(seed, GetHoriOrient());
     o3tl::hash_combine(seed, GetRelationOrient());
     o3tl::hash_combine(seed, IsPosToggle());

@@ -62,13 +62,6 @@ public:
     void   SetRelationOrient( sal_Int16 eNew )
     { ASSERT_CHANGE_REFCOUNTED_ITEM; m_eRelation = eNew; }
 
-    SwTwips GetPos() const { return std::round(m_nYPos.as_twip()); }
-    void    SetPos( SwTwips nNew )
-    {
-        ASSERT_CHANGE_REFCOUNTED_ITEM;
-        m_nYPos = gfx::Length::twip(nNew);
-    }
-
     gfx::Length getPosition() const { return m_nYPos; }
     void setPosition(gfx::Length nNew)
     {
@@ -119,13 +112,6 @@ public:
     sal_Int16 GetRelationOrient() const { return m_eRelation; }
     void SetHoriOrient( sal_Int16 eNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_eOrient = eNew; }
     void SetRelationOrient( sal_Int16 eNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_eRelation = eNew; }
-
-    SwTwips GetPos() const { return std::round(m_nXPos.as_twip()); }
-    void SetPos(SwTwips nNew)
-    {
-        ASSERT_CHANGE_REFCOUNTED_ITEM;
-        m_nXPos = gfx::Length::twip(nNew);
-    }
 
     gfx::Length getPosition() const { return m_nXPos; }
     void setPosition(gfx::Length nNew)

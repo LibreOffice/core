@@ -342,7 +342,8 @@ bool SwFormatVertOrient::GetPresentation
         case text::VertOrientation::NONE:
         {
             rText += SwResId( STR_POS_Y ) + " " +
-                    ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, &rIntl ) +
+                    ::GetMetricText(getPosition().as_twip<SwTwips>(), eCoreUnit, ePresUnit,
+                                    &rIntl) +
                     " " + EditResId( ::GetMetricId( ePresUnit ) );
         }
         break;
@@ -388,7 +389,8 @@ bool SwFormatHoriOrient::GetPresentation
         case text::HoriOrientation::NONE:
         {
             rText += SwResId( STR_POS_X ) + " " +
-                    ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, &rIntl ) +
+                    ::GetMetricText(getPosition().as_twip<SwTwips>(), eCoreUnit, ePresUnit,
+                                    &rIntl) +
                     " " + EditResId( ::GetMetricId( ePresUnit ) );
         }
         break;
