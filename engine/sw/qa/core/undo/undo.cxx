@@ -174,7 +174,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testAnchorTypeChangePosition)
     {
         const SwFormatHoriOrient& rHoriOrient = rFormats[0]->GetHoriOrient();
         const SwFormatVertOrient& rVertOrient = rFormats[0]->GetVertOrient();
-        aOldPos = Point(rHoriOrient.GetPos(), rVertOrient.GetPos());
+        aOldPos = Point(rHoriOrient.getPosition().as_twip<tools::Long>(),
+                        rVertOrient.getPosition().as_twip<tools::Long>());
     }
 
     // When changing the anchor type + undo:
@@ -184,7 +185,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testAnchorTypeChangePosition)
     // Then make sure the old position is also restored:
     const SwFormatHoriOrient& rHoriOrient = rFormats[0]->GetHoriOrient();
     const SwFormatVertOrient& rVertOrient = rFormats[0]->GetVertOrient();
-    Point aNewPos(rHoriOrient.GetPos(), rVertOrient.GetPos());
+    Point aNewPos(rHoriOrient.getPosition().as_twip<tools::Long>(),
+                  rVertOrient.getPosition().as_twip<tools::Long>());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 789,213
     // - Actual  : 1578,3425
