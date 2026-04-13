@@ -18,6 +18,7 @@
  */
 
 #include <utility>
+#include <vector>
 #include <view/SlsPageObjectLayouter.hxx>
 #include <view/SlsTheme.hxx>
 #include <view/SlsLayouter.hxx>
@@ -61,6 +62,10 @@ public:
     Size maPageObjectSize;
     std::unique_ptr<PageObjectLayouter> mpPageObjectLayouter;
     std::shared_ptr<view::Theme> mpTheme;
+    static const sal_Int32 gnSectionHeaderHeight = 20;
+    std::vector<sal_Int32> maSectionStartIndices;
+    // Cumulative Y offset for each row due to section headers above it
+    std::vector<sal_Int32> maSectionRowOffsets;
 
     /** Specify how the gap between two page objects is associated with the
       page objects.
@@ -196,6 +201,13 @@ public:
         const sal_Int32 nColumn) const;
 
     ::tools::Rectangle GetTotalBoundingBox() const;
+
+    void SetSectionStarts(const std::vector<sal_Int32>& rSectionStartIndices);
+    void ComputeSectionRowOffsets();
+    sal_Int32 GetSectionOffsetForRow(sal_Int32 nRow) const;
+
+    /// Returns the section index at the given Y position, or -1 if not on a header.
+    sal_Int32 GetSectionIndexAtPoint(sal_Int32 nYPosition) const;
 
     virtual ~Implementation();
 
@@ -416,6 +428,18 @@ sal_Int32 Layouter::GetIndexAtPoint(const Point& rPosition) const
     return mpImplementation->GetIndex(nRow,nColumn, /*bClampToValidRange*/ false);
 }
 
+void Layouter::SetSectionStarts(const std::vector<sal_Int32>& rSectionStartIndices)
+{
+    mpImplementation->SetSectionStarts(rSectionStartIndices);
+}
+
+sal_Int32 Layouter::GetSectionIndexAtPoint(const Point& rModelPosition) const
+{
+    return mpImplementation->GetSectionIndexAtPoint(rModelPosition.Y());
+}
+
+sal_Int32 Layouter::GetSectionHeaderHeight() { return Implementation::gnSectionHeaderHeight; }
+
 //===== Layouter::Implementation ==============================================
 
 Layouter::Implementation* Layouter::Implementation::Create (
@@ -454,24 +478,26 @@ Layouter::Implementation::Implementation (
 {
 }
 
-Layouter::Implementation::Implementation (const Implementation& rImplementation)
-    : mpWindow(rImplementation.mpWindow),
-      mnLeftBorder(rImplementation.mnLeftBorder),
-      mnRightBorder(rImplementation.mnRightBorder),
-      mnTopBorder(rImplementation.mnTopBorder),
-      mnBottomBorder(rImplementation.mnBottomBorder),
-      maMinimalSize(rImplementation.maMinimalSize),
-      maPreferredSize(rImplementation.maPreferredSize),
-      maMaximalSize(rImplementation.maMaximalSize),
-      mnMinimalColumnCount(rImplementation.mnMinimalColumnCount),
-      mnMaximalColumnCount(rImplementation.mnMaximalColumnCount),
-      mnPageCount(rImplementation.mnPageCount),
-      mnColumnCount(rImplementation.mnColumnCount),
-      mnRowCount(rImplementation.mnRowCount),
-      mnMaxColumnCount(rImplementation.mnMaxColumnCount),
-      mnMaxRowCount(rImplementation.mnMaxRowCount),
-      maPageObjectSize(rImplementation.maPageObjectSize),
-      mpTheme(rImplementation.mpTheme)
+Layouter::Implementation::Implementation(const Implementation& rImplementation)
+    : mpWindow(rImplementation.mpWindow)
+    , mnLeftBorder(rImplementation.mnLeftBorder)
+    , mnRightBorder(rImplementation.mnRightBorder)
+    , mnTopBorder(rImplementation.mnTopBorder)
+    , mnBottomBorder(rImplementation.mnBottomBorder)
+    , maMinimalSize(rImplementation.maMinimalSize)
+    , maPreferredSize(rImplementation.maPreferredSize)
+    , maMaximalSize(rImplementation.maMaximalSize)
+    , mnMinimalColumnCount(rImplementation.mnMinimalColumnCount)
+    , mnMaximalColumnCount(rImplementation.mnMaximalColumnCount)
+    , mnPageCount(rImplementation.mnPageCount)
+    , mnColumnCount(rImplementation.mnColumnCount)
+    , mnRowCount(rImplementation.mnRowCount)
+    , mnMaxColumnCount(rImplementation.mnMaxColumnCount)
+    , mnMaxRowCount(rImplementation.mnMaxRowCount)
+    , maPageObjectSize(rImplementation.maPageObjectSize)
+    , mpTheme(rImplementation.mpTheme)
+    , maSectionStartIndices(rImplementation.maSectionStartIndices)
+    , maSectionRowOffsets(rImplementation.maSectionRowOffsets)
 {
 }
 
@@ -540,30 +566,63 @@ sal_Int32 Layouter::Implementation::GetRowAtPosition (
     const sal_Int32 nY = nYPosition - mnTopBorder;
     if (nY >= 0)
     {
-        // Vertical distance from one row to the next.
-        const sal_Int32 nRowOffset (maPageObjectSize.Height() + gnVerticalGap);
-
-        // Calculate row consisting of page objects and gap below.
-        nRow = nY / nRowOffset;
-
-        const sal_Int32 nDistanceIntoGap ((nY - nRow*nRowOffset) - maPageObjectSize.Height());
-        // When inside the gap below then nYPosition is not over a page
-        // object.
-        if (nDistanceIntoGap > 0)
+        if (maSectionRowOffsets.empty())
         {
-            sal_Int32 nResolvedRow = ResolvePositionInGap(
-                nDistanceIntoGap,
-                eGapMembership,
-                nRow,
-                gnVerticalGap);
-            if (!bIncludeBordersAndGaps || nResolvedRow != -1)
-                nRow = nResolvedRow;
+            // Original fast path: no section headers
+            const sal_Int32 nRowOffset(maPageObjectSize.Height() + gnVerticalGap);
+            nRow = nY / nRowOffset;
+        }
+        else
+        {
+            // With section headers, iterate rows to find the right one
+            sal_Int32 nRowCount = (mnPageCount + mnColumnCount - 1) / mnColumnCount;
+            for (sal_Int32 r = 0; r < nRowCount; ++r)
+            {
+                sal_Int32 nRowTop = r * maPageObjectSize.Height()
+                                    + std::max<sal_Int32>(r, 0) * gnVerticalGap
+                                    + GetSectionOffsetForRow(r);
+                sal_Int32 nRowBottom = nRowTop + maPageObjectSize.Height();
+                if (nY >= nRowTop && nY < nRowBottom)
+                {
+                    nRow = r;
+                    break;
+                }
+                // Check gap area
+                if (nY >= nRowBottom && nY < nRowTop + maPageObjectSize.Height() + gnVerticalGap)
+                {
+                    sal_Int32 nDistanceIntoGap = nY - nRowBottom;
+                    sal_Int32 nResolvedRow
+                        = ResolvePositionInGap(nDistanceIntoGap, eGapMembership, r, gnVerticalGap);
+                    if (bIncludeBordersAndGaps || nResolvedRow != -1)
+                    {
+                        nRow = (nResolvedRow != -1) ? nResolvedRow : r;
+                        break;
+                    }
+                }
+            }
+            if (nRow == -1 && bIncludeBordersAndGaps && nRowCount > 0)
+                nRow = nRowCount - 1;
+        }
+
+        if (!maSectionRowOffsets.empty())
+        {
+            // Already handled gap resolution above
+        }
+        else
+        {
+            const sal_Int32 nRowOffset(maPageObjectSize.Height() + gnVerticalGap);
+            const sal_Int32 nDistanceIntoGap((nY - nRow * nRowOffset) - maPageObjectSize.Height());
+            if (nDistanceIntoGap > 0)
+            {
+                sal_Int32 nResolvedRow
+                    = ResolvePositionInGap(nDistanceIntoGap, eGapMembership, nRow, gnVerticalGap);
+                if (!bIncludeBordersAndGaps || nResolvedRow != -1)
+                    nRow = nResolvedRow;
+            }
         }
     }
     else if (bIncludeBordersAndGaps)
     {
-        // We are in the top border area.  Set nRow to the first row when
-        // the top border shall be considered to belong to the first row.
         nRow = 0;
     }
 
@@ -902,14 +961,12 @@ sal_Int32 Layouter::Implementation::GetIndex (
     const sal_Int32 nRow,
     const sal_Int32 nColumn) const
 {
-    return ::tools::Rectangle(
-        Point (mnLeftBorder
-            + nColumn * maPageObjectSize.Width()
-            + std::max<sal_Int32>(nColumn,0) * gnHorizontalGap,
-            mnTopBorder
-            + nRow * maPageObjectSize.Height()
-            + std::max<sal_Int32>(nRow,0) * gnVerticalGap),
-        maPageObjectSize);
+    return ::tools::Rectangle(Point(mnLeftBorder + nColumn * maPageObjectSize.Width()
+                                        + std::max<sal_Int32>(nColumn, 0) * gnHorizontalGap,
+                                    mnTopBorder + nRow * maPageObjectSize.Height()
+                                        + std::max<sal_Int32>(nRow, 0) * gnVerticalGap
+                                        + GetSectionOffsetForRow(nRow)),
+                              maPageObjectSize);
 }
 
 ::tools::Rectangle Layouter::Implementation::AddBorderAndGap (
@@ -959,10 +1016,89 @@ sal_Int32 Layouter::Implementation::GetIndex (
             nVerticalSize += (nRowCount-1) * gnVerticalGap;
     }
 
+    // Add extra height for section headers
+    sal_Int32 nTotalSectionOffset = 0;
+    if (!maSectionRowOffsets.empty())
+    {
+        sal_Int32 nRowCount2 = (mnPageCount + mnColumnCount - 1) / mnColumnCount;
+        if (nRowCount2 > 0 && o3tl::make_unsigned(nRowCount2 - 1) < maSectionRowOffsets.size())
+            nTotalSectionOffset = maSectionRowOffsets[nRowCount2 - 1];
+    }
+    nVerticalSize += nTotalSectionOffset;
+
     return ::tools::Rectangle (
         Point(0,0),
         Size (nHorizontalSize, nVerticalSize)
         );
+}
+
+void Layouter::Implementation::SetSectionStarts(const std::vector<sal_Int32>& rSectionStartIndices)
+{
+    maSectionStartIndices = rSectionStartIndices;
+    ComputeSectionRowOffsets();
+}
+
+void Layouter::Implementation::ComputeSectionRowOffsets()
+{
+    maSectionRowOffsets.clear();
+    if (mnColumnCount <= 0 || mnPageCount <= 0)
+        return;
+
+    sal_Int32 nRowCount = (mnPageCount + mnColumnCount - 1) / mnColumnCount;
+    maSectionRowOffsets.resize(nRowCount, 0);
+
+    // For each section start, find which row it falls on and add header height
+    sal_Int32 nCumulativeOffset = 0;
+    // Track which rows have headers
+    std::vector<bool> aRowHasHeader(nRowCount, false);
+    for (sal_Int32 nStartIdx : maSectionStartIndices)
+    {
+        if (nStartIdx < 0 || nStartIdx >= mnPageCount)
+            continue;
+        sal_Int32 nRow = nStartIdx / mnColumnCount;
+        if (nRow < nRowCount)
+            aRowHasHeader[nRow] = true;
+    }
+
+    // Compute cumulative offsets
+    for (sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
+    {
+        if (aRowHasHeader[nRow])
+            nCumulativeOffset += gnSectionHeaderHeight;
+        maSectionRowOffsets[nRow] = nCumulativeOffset;
+    }
+}
+
+sal_Int32 Layouter::Implementation::GetSectionOffsetForRow(sal_Int32 nRow) const
+{
+    if (nRow < 0 || maSectionRowOffsets.empty())
+        return 0;
+    if (o3tl::make_unsigned(nRow) >= maSectionRowOffsets.size())
+        return maSectionRowOffsets.back();
+    return maSectionRowOffsets[nRow];
+}
+
+sal_Int32 Layouter::Implementation::GetSectionIndexAtPoint(sal_Int32 nYPosition) const
+{
+    if (maSectionStartIndices.empty() || mnColumnCount <= 0)
+        return -1;
+
+    // Use GetPageObjectBox as the single source of truth for position.
+    // The header is drawn immediately above the first slide of each section.
+    for (size_t i = 0; i < maSectionStartIndices.size(); ++i)
+    {
+        sal_Int32 nStartIdx = maSectionStartIndices[i];
+        if (nStartIdx < 0 || nStartIdx >= mnPageCount)
+            continue;
+
+        ::tools::Rectangle aSlideBox = GetPageObjectBox(nStartIdx);
+        sal_Int32 nHeaderBottom = aSlideBox.Top();
+        sal_Int32 nHeaderTop = nHeaderBottom - gnSectionHeaderHeight;
+
+        if (nYPosition >= nHeaderTop && nYPosition < nHeaderBottom)
+            return static_cast<sal_Int32>(i);
+    }
+    return -1;
 }
 
 void Layouter::Implementation::CalculateVerticalLogicalInsertPosition (

@@ -28,6 +28,7 @@
 #include <view/SlsPageObjectPainter.hxx>
 #include <view/SlsILayerPainter.hxx>
 #include <view/SlsToolTip.hxx>
+#include "SlsSectionHeaderPainter.hxx"
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsClipboard.hxx>
 #include <model/SlideSorterModel.hxx>
@@ -38,6 +39,8 @@
 #include <titledockwin.hxx>
 
 #include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <SlideSectionManager.hxx>
 #include <Window.hxx>
 
 #include <comphelper/kit.hxx>
@@ -146,6 +149,10 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     // a little faster during animations because the previews are painted
     // directly into the window, not via the buffer.
     mpLayeredDevice->RegisterPainter(pPainter, 1);
+
+    // Register the section header painter on level 1 (same as slides).
+    mpSectionHeaderPainter = std::make_shared<SectionHeaderPainter>(mrSlideSorter);
+    mpLayeredDevice->RegisterPainter(mpSectionHeaderPainter, 1);
 }
 
 SlideSorterView::~SlideSorterView()
@@ -298,6 +305,18 @@ void SlideSorterView::Rearrange()
     if (bRearrangeSuccess)
     {
         mbIsRearrangePending = false;
+
+        // Pass section start indices to the layouter for header offset computation
+        SdDrawDocument* pDocument = mrModel.GetDocument();
+        if (pDocument)
+        {
+            sd::SlideSectionManager& rSectionMgr = pDocument->GetSectionManager();
+            // If sections haven't been loaded yet, load from grab bag.
+            // Once loaded, in-memory state is authoritative (updated by
+            // AddSection/RemoveSection/MoveSection etc.)
+            mpLayouter->SetSectionStarts(rSectionMgr.GetSectionStartIndices());
+        }
+
         Layout();
         UpdatePageUnderMouse();
         //        RequestRepaint();

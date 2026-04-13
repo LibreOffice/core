@@ -207,6 +207,7 @@ private:
     std::shared_ptr<PageObjectPainter> mpPageObjectPainter;
     vcl::Region maRedrawRegion;
     SharedILayerPainter mpBackgroundPainter;
+    SharedILayerPainter mpSectionHeaderPainter;
     std::unique_ptr<ToolTip, o3tl::default_delete<ToolTip>> mpToolTip;
     bool mbIsRearrangePending;
     ::std::vector<Link<LinkParamNone*,void>> maVisibilityChangeListeners;

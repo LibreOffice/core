@@ -173,6 +173,16 @@ public:
     Range GetValidHorizontalSizeRange() const;
     Range GetValidVerticalSizeRange() const;
 
+    /** Set the slide indices where sections start.
+        This triggers recomputation of section header Y offsets.
+    */
+    void SetSectionStarts(const std::vector<sal_Int32>& rSectionStartIndices);
+
+    /** Returns the section index at the given model Y position, or -1. */
+    sal_Int32 GetSectionIndexAtPoint(const Point& rModelPosition) const;
+
+    static sal_Int32 GetSectionHeaderHeight();
+
     class Implementation;
 
 private:

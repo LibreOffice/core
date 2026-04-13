@@ -417,6 +417,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/slidesorter/view/SlsFramePainter \
 	sd/source/ui/slidesorter/view/SlsInsertAnimator \
 	sd/source/ui/slidesorter/view/SlsInsertionIndicatorOverlay \
+	sd/source/ui/slidesorter/view/SlsSectionHeaderPainter \
 	sd/source/ui/slidesorter/view/SlsLayeredDevice \
 	sd/source/ui/slidesorter/view/SlsLayouter \
 	sd/source/ui/slidesorter/view/SlsPageObjectLayouter \
