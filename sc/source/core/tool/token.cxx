@@ -701,11 +701,6 @@ ScMatrixRangeToken::ScMatrixRangeToken( const sc::RangeMatrix& rMat ) :
 
 ScMatrixRangeToken::ScMatrixRangeToken( const ScMatrixRangeToken& ) = default;
 
-sal_uInt8 ScMatrixRangeToken::GetByte() const
-{
-    return MATRIX_TOKEN_HAS_RANGE;
-}
-
 const ScComplexRefData* ScMatrixRangeToken::GetDoubleRef() const
 {
     return &maRef;

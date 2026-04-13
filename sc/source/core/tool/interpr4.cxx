@@ -1718,7 +1718,7 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
                 if (aRet.mpMat)
                 {
                     aRet.mpMat->SetErrorInterpreter(this);
-                    if (p->GetByte() == MATRIX_TOKEN_HAS_RANGE)
+                    if (static_cast<const ScMatrixToken*>(p)->IsMatrixRangeToken())
                     {
                         const ScComplexRefData& rRef = *p->GetDoubleRef();
                         if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel())
