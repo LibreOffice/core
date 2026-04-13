@@ -47,7 +47,6 @@ CXX_BASE=`first_arg_basename "$CXX"`
 
 BUILD_TYPE="LibO"
 SCPDEFS=""
-GIT_NEEDED_SUBMODULES=""
 LO_PATH= # used by path_munge to construct a PATH variable
 
 
@@ -2375,21 +2374,6 @@ AC_ARG_WITH(external-tar,
     AS_HELP_STRING([--with-external-tar=<TARFILE_PATH>],
         [Specify an absolute path of where to find (and store) tarfiles.]),
     TARFILE_LOCATION=$withval ,
-)
-
-AC_ARG_WITH(referenced-git,
-    AS_HELP_STRING([--with-referenced-git=<OTHER_CHECKOUT_DIR>],
-        [Specify another checkout directory to reference. This makes use of
-                 git submodule update --reference, and saves a lot of diskspace
-                 when having multiple trees side-by-side.]),
-    GIT_REFERENCE_SRC=$withval ,
-)
-
-AC_ARG_WITH(linked-git,
-    AS_HELP_STRING([--with-linked-git=<submodules repo basedir>],
-        [Specify a directory where the repositories of submodules are located.
-         This uses a method similar to git-new-workdir to get submodules.]),
-    GIT_LINK_SRC=$withval ,
 )
 
 AC_ARG_WITH(galleries,
@@ -6063,9 +6047,13 @@ HELP_OMINDEX_PAGE=
 HELP_ONLINE=
 WITH_HELPPACKS=
 
+if test -n "$with_help" -a "$with_help" != "no"; then
+    AC_MSG_WARN([--with-help is not supported in this branch (helpcontent2 is not part of the monorepo yet); falling back to --without-help])
+    with_help=no
+fi
+
 AC_MSG_CHECKING([which help to build])
 if test -n "$with_help" -a "$with_help" != "no"; then
-    GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
     BUILD_TYPE="$BUILD_TYPE HELP"
     case "$with_help" in
     "html")
@@ -6694,7 +6682,6 @@ if test "$with_myspell_dicts" = "yes"; then
     AC_MSG_RESULT([yes])
     WITH_MYSPELL_DICTS=TRUE
     BUILD_TYPE="$BUILD_TYPE DICTIONARIES"
-    GIT_NEEDED_SUBMODULES="dictionaries $GIT_NEEDED_SUBMODULES"
 else
     AC_MSG_RESULT([no])
     WITH_MYSPELL_DICTS=
@@ -15220,11 +15207,15 @@ if test "$WITH_LANG" = "no"; then
     WITH_LANG=
 fi
 
+if test -n "$WITH_LANG" -a "$WITH_LANG" != "en-US"; then
+    AC_MSG_WARN([--with-lang is not supported in this branch (translations is not part of the monorepo yet); falling back to en-US])
+    WITH_LANG=
+fi
+
 if test -z "$WITH_LANG" -o "$WITH_LANG" = "en-US"; then
     AC_MSG_RESULT([en-US])
 else
     AC_MSG_RESULT([$WITH_LANG])
-    GIT_NEEDED_SUBMODULES="translations $GIT_NEEDED_SUBMODULES"
     if test -z "$MSGFMT"; then
         if test -n "$LODE_HOME" -a -x "$LODE_HOME/opt/bin/msgfmt" ; then
             MSGFMT="$LODE_HOME/opt/bin/msgfmt"
@@ -15283,7 +15274,6 @@ AC_SUBST(ALL_LANGS)
 AC_DEFINE_UNQUOTED(WITH_LANG,"$WITH_LANG")
 AC_SUBST(WITH_LANG)
 AC_SUBST(WITH_LANG_LIST)
-AC_SUBST(GIT_NEEDED_SUBMODULES)
 
 WITH_POOR_HELP_LOCALIZATIONS=
 if test -d "$SRC_ROOT/translations/source"; then
@@ -15325,28 +15315,6 @@ else
     AC_DEFINE(WITH_LOCALE_ALL)
 fi
 AC_SUBST(WITH_LOCALES)
-
-dnl git submodule update --reference
-dnl ===================================================================
-if test -n "${GIT_REFERENCE_SRC}"; then
-    for repo in ${GIT_NEEDED_SUBMODULES}; do
-        if ! test -d "${GIT_REFERENCE_SRC}"/${repo}; then
-            AC_MSG_ERROR([referenced git: required repository does not exist: ${GIT_REFERENCE_SRC}/${repo}])
-        fi
-    done
-fi
-AC_SUBST(GIT_REFERENCE_SRC)
-
-dnl git submodules linked dirs
-dnl ===================================================================
-if test -n "${GIT_LINK_SRC}"; then
-    for repo in ${GIT_NEEDED_SUBMODULES}; do
-        if ! test -d "${GIT_LINK_SRC}"/${repo}; then
-            AC_MSG_ERROR([linked git: required repository does not exist: ${GIT_LINK_SRC}/${repo}])
-        fi
-    done
-fi
-AC_SUBST(GIT_LINK_SRC)
 
 dnl branding
 dnl ===================================================================
