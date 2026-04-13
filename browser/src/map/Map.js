@@ -263,18 +263,20 @@ window.L.Map = window.L.Evented.extend({
 			fireDocPartChanged(e.currentPage, e.pages, e.docType);
 		}, this);
 
-		this.on('updateparts', function(e) {
-			if (!e) {
+		this.on('setpart', function(e) {
+			if (!e || e.selectedPart === undefined || e.parts === undefined || e.docType === undefined) {
 				return;
 			}
 
-			// Fall back to the docLayer's current values so we still emit Doc_PartChanged
-			var docLayer = this._docLayer;
-			var selectedPart = e.selectedPart !== undefined ? e.selectedPart : (docLayer ? docLayer._selectedPart : undefined);
-			var parts = e.parts !== undefined ? e.parts : (docLayer ? docLayer._parts : undefined);
-			var docType = e.docType !== undefined ? e.docType : (docLayer ? docLayer._docType : undefined);
+			fireDocPartChanged(e.selectedPart, e.parts, e.docType);
+		}, this);
 
-			fireDocPartChanged(selectedPart, parts, docType);
+		this.on('updateparts', function(e) {
+			if (!e || e.selectedPart === undefined || e.parts === undefined || e.docType === undefined) {
+				return;
+			}
+
+			fireDocPartChanged(e.selectedPart, e.parts, e.docType);
 		}, this);
 
 		this.on('commandstatechanged', function(e) {

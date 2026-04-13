@@ -225,7 +225,11 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		if (part !== this._selectedPart) {
 			this._map.deselectAll(); // Deselect all first. This is a single selection.
 			this._map.setPart(part, true);
-			this._map.fire('setpart', {selectedPart: this._selectedPart});
+			this._map.fire('setpart', {
+				selectedPart: this._selectedPart,
+				parts: this._parts,
+				docType: this._docType
+			});
 		}
 	},
 
@@ -321,7 +325,11 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 				app.activeDocument.activeModes = [mode];
 				this._map.fire('impressmodechanged', {mode: mode});
 
-				this._map.fire('updateparts', {});
+				this._map.fire('updateparts', {
+					selectedPart: this._selectedPart,
+					parts: this._parts,
+					docType: this._docType
+				});
 
 				if (refreshAnnotation)
 					app.socket.sendMessage('commandvalues command=.uno:ViewAnnotations');
