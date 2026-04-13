@@ -464,7 +464,7 @@ algned to the bottom */
 	margin-bottom: 14px !important;
 }
 
-#table-style-options .notebookbar.ui-overflow-group-inner,
+#table-options .notebookbar.ui-overflow-group-inner,
 .unotoolbutton.notebookbar.ui-content.has-label > *:not(.arrowbackground) {
 	height: var(--notebookbar-element-height) !important;
 	align-content: center;

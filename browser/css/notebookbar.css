@@ -369,8 +369,8 @@ label.notebookbar.ui-checkbox-label {
 	padding-left: 0;
 }
 
-.notebookbar #table-style-options #chk_filter_buttons2 {
-	margin-bottom: 23px;
+.notebookbar #table-options #chk_empty_row {
+	visibility: hidden;
 }
 
 #table-HomeTab .unospan-uptoolbar:not(.disabled) {

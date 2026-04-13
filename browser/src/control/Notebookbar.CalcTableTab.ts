@@ -181,16 +181,32 @@ class CalcTableTab implements NotebookbarTab {
 						vertical: 'true',
 					},
 					{
-						type: 'toolbox',
+						type: 'container',
 						children: [
 							{
-								id: 'chk_filter_buttons2',
-								type: 'checkbox',
-								command: '.uno:DatabaseSettings',
-								text: _('Filter Buttons'),
-								accessibility: { focusBack: true, combination: 'SF' },
+								type: 'toolbox',
+								children: [
+									{
+										id: 'chk_filter_buttons2',
+										type: 'checkbox',
+										command: '.uno:DatabaseSettings',
+										text: _('Filter Buttons'),
+										accessibility: { focusBack: true, combination: 'SF' },
+									},
+								],
+							},
+							{
+								type: 'toolbox',
+								children: [
+									{
+										id: 'chk_empty_row',
+										type: 'checkbox',
+										text: ' ',
+									},
+								],
 							},
 						],
+						vertical: 'true',
 					},
 				],
 			},
