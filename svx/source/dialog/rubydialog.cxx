@@ -428,10 +428,10 @@ void SvxRubyData_Impl::AssertOneEntry()
 SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Window* pParent)
     : SfxModelessDialogController(pBind, pCW, pParent, u"svx/ui/asianphoneticguidedialog.ui"_ustr,
                                   u"AsianPhoneticGuideDialog"_ustr)
-    , nLastPos(0)
-    , nCurrentEdit(0)
-    , bModified(false)
-    , pBindings(pBind)
+    , m_nLastPos(0)
+    , m_nCurrentEdit(0)
+    , m_bModified(false)
+    , m_pBindings(pBind)
     , m_pImpl(new SvxRubyData_Impl)
     , m_xLeft1ED(m_xBuilder->weld_entry(u"Left1ED"_ustr))
     , m_xRight1ED(m_xBuilder->weld_entry(u"Right1ED"_ustr))
@@ -461,14 +461,14 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Wind
     m_xScrolledWindow->set_size_request(-1, m_xGrid->get_preferred_size().Height());
     m_xScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
 
-    aEditArr[0] = m_xLeft1ED.get();
-    aEditArr[1] = m_xRight1ED.get();
-    aEditArr[2] = m_xLeft2ED.get();
-    aEditArr[3] = m_xRight2ED.get();
-    aEditArr[4] = m_xLeft3ED.get();
-    aEditArr[5] = m_xRight3ED.get();
-    aEditArr[6] = m_xLeft4ED.get();
-    aEditArr[7] = m_xRight4ED.get();
+    m_aEditArr[0] = m_xLeft1ED.get();
+    m_aEditArr[1] = m_xRight1ED.get();
+    m_aEditArr[2] = m_xLeft2ED.get();
+    m_aEditArr[3] = m_xRight2ED.get();
+    m_aEditArr[4] = m_xLeft3ED.get();
+    m_aEditArr[5] = m_xRight3ED.get();
+    m_aEditArr[6] = m_xLeft4ED.get();
+    m_aEditArr[7] = m_xRight4ED.get();
 
     m_xSelectionGroupPB->connect_clicked(LINK(this, SvxRubyDialog, SelectionGroup_Impl));
     m_xSelectionMonoPB->connect_clicked(LINK(this, SvxRubyDialog, SelectionMono_Impl));
@@ -488,12 +488,12 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Wind
     Link<const KeyEvent&, bool> aKeyTabUpDownLk(LINK(this, SvxRubyDialog, KeyUpDownTabHdl_Impl));
     for (sal_uInt16 i = 0; i < 8; i++)
     {
-        aEditArr[i]->connect_changed(aEditLk);
-        aEditArr[i]->connect_focus_in(aFocusLk);
+        m_aEditArr[i]->connect_changed(aEditLk);
+        m_aEditArr[i]->connect_focus_in(aFocusLk);
         if (!i || 7 == i)
-            aEditArr[i]->connect_key_press(aKeyTabUpDownLk);
+            m_aEditArr[i]->connect_key_press(aKeyTabUpDownLk);
         else
-            aEditArr[i]->connect_key_press(aKeyUpDownLk);
+            m_aEditArr[i]->connect_key_press(aKeyUpDownLk);
     }
 }
 
@@ -630,18 +630,18 @@ void SvxRubyDialog::GetRubyText()
     auto aRubyValuesRange = asNonConstRange(aRubyValues);
     for (int i = 0; i < 8; i += 2)
     {
-        if (aEditArr[i]->get_sensitive()
-            && (aEditArr[i]->get_value_changed_from_saved()
-                || aEditArr[i + 1]->get_value_changed_from_saved()))
+        if (m_aEditArr[i]->get_sensitive()
+            && (m_aEditArr[i]->get_value_changed_from_saved()
+                || m_aEditArr[i + 1]->get_value_changed_from_saved()))
         {
             DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index");
             SetModified(true);
             for (PropertyValue& propVal : asNonConstRange(aRubyValuesRange[i / 2 + nTempLastPos]))
             {
                 if (propVal.Name == cRubyBaseText)
-                    propVal.Value <<= aEditArr[i]->get_text();
+                    propVal.Value <<= m_aEditArr[i]->get_text();
                 else if (propVal.Name == cRubyText)
-                    propVal.Value <<= aEditArr[i + 1]->get_text();
+                    propVal.Value <<= m_aEditArr[i + 1]->get_text();
             }
         }
     }
@@ -734,8 +734,8 @@ void SvxRubyDialog::Update()
 
 void SvxRubyDialog::GetCurrentText(OUString& rBase, OUString& rRuby)
 {
-    rBase = aEditArr[nCurrentEdit * 2]->get_text();
-    rRuby = aEditArr[nCurrentEdit * 2 + 1]->get_text();
+    rBase = m_aEditArr[m_nCurrentEdit * 2]->get_text();
+    rRuby = m_aEditArr[m_nCurrentEdit * 2 + 1]->get_text();
 }
 
 IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, weld::ScrolledWindow&, rScroll, void)
@@ -798,11 +798,11 @@ IMPL_LINK_NOARG(SvxRubyDialog, CloseHdl_Impl, weld::Button&, void) { Close(); }
 IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl, weld::Button&, void)
 {
     std::unique_ptr<SfxBoolItem> pState;
-    SfxItemState eState = pBindings->QueryState(SID_STYLE_DESIGNER, pState);
+    SfxItemState eState = m_pBindings->QueryState(SID_STYLE_DESIGNER, pState);
     if (eState <= SfxItemState::SET || !pState || !pState->GetValue())
     {
-        pBindings->GetDispatcher()->Execute(SID_STYLE_DESIGNER,
-                                            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+        m_pBindings->GetDispatcher()->Execute(SID_STYLE_DESIGNER,
+                                              SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
     }
 }
 
@@ -861,9 +861,9 @@ IMPL_LINK(SvxRubyDialog, EditFocusHdl_Impl, weld::Widget&, rEdit, void)
 {
     for (sal_uInt16 i = 0; i < 8; i++)
     {
-        if (&rEdit == aEditArr[i])
+        if (&rEdit == m_aEditArr[i])
         {
-            nCurrentEdit = i / 2;
+            m_nCurrentEdit = i / 2;
             break;
         }
     }
@@ -879,7 +879,7 @@ bool SvxRubyDialog::EditScrollHdl_Impl(sal_Int32 nParam)
 {
     bool bRet = false;
     //scroll forward
-    if (nParam > 0 && (aEditArr[7]->has_focus() || aEditArr[6]->has_focus()))
+    if (nParam > 0 && (m_aEditArr[7]->has_focus() || m_aEditArr[6]->has_focus()))
     {
         if (m_xScrolledWindow->vadjustment_get_upper()
             > m_xScrolledWindow->vadjustment_get_value()
@@ -887,16 +887,16 @@ bool SvxRubyDialog::EditScrollHdl_Impl(sal_Int32 nParam)
         {
             m_xScrolledWindow->vadjustment_set_value(m_xScrolledWindow->vadjustment_get_value()
                                                      + 1);
-            aEditArr[6]->grab_focus();
+            m_aEditArr[6]->grab_focus();
             bRet = true;
         }
     }
     //scroll backward
     else if (m_xScrolledWindow->vadjustment_get_value()
-             && (aEditArr[0]->has_focus() || aEditArr[1]->has_focus()))
+             && (m_aEditArr[0]->has_focus() || m_aEditArr[1]->has_focus()))
     {
         m_xScrolledWindow->vadjustment_set_value(m_xScrolledWindow->vadjustment_get_value() - 1);
-        aEditArr[1]->grab_focus();
+        m_aEditArr[1]->grab_focus();
         bRet = true;
     }
     if (bRet)
@@ -910,7 +910,7 @@ bool SvxRubyDialog::EditJumpHdl_Impl(sal_Int32 nParam)
     sal_uInt16 nIndex = USHRT_MAX;
     for (sal_uInt16 i = 0; i < 8; i++)
     {
-        if (aEditArr[i]->has_focus())
+        if (m_aEditArr[i]->has_focus())
             nIndex = i;
     }
     if (nIndex < 8)
@@ -918,16 +918,16 @@ bool SvxRubyDialog::EditJumpHdl_Impl(sal_Int32 nParam)
         if (nParam > 0)
         {
             if (nIndex < 6)
-                aEditArr[nIndex + 2]->grab_focus();
+                m_aEditArr[nIndex + 2]->grab_focus();
             else if (EditScrollHdl_Impl(nParam))
-                aEditArr[nIndex]->grab_focus();
+                m_aEditArr[nIndex]->grab_focus();
         }
         else
         {
             if (nIndex > 1)
-                aEditArr[nIndex - 2]->grab_focus();
+                m_aEditArr[nIndex - 2]->grab_focus();
             else if (EditScrollHdl_Impl(nParam))
-                aEditArr[nIndex]->grab_focus();
+                m_aEditArr[nIndex]->grab_focus();
         }
         bHandled = true;
     }

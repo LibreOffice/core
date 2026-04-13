@@ -57,12 +57,12 @@ class SvxRubyDialog final : public SfxModelessDialogController
     friend class RubyPreview;
 
 
-    tools::Long                nLastPos;
-    tools::Long                nCurrentEdit;
-    bool                bModified;
-    SfxBindings*        pBindings;
+    tools::Long                m_nLastPos;
+    tools::Long                m_nCurrentEdit;
+    bool                m_bModified;
+    SfxBindings*        m_pBindings;
     rtl::Reference<SvxRubyData_Impl> m_pImpl;
-    weld::Entry* aEditArr[8];
+    weld::Entry* m_aEditArr[8];
 
     std::unique_ptr<weld::Entry> m_xLeft1ED;
     std::unique_ptr<weld::Entry> m_xRight1ED;
@@ -120,11 +120,11 @@ class SvxRubyDialog final : public SfxModelessDialogController
     void                Update();
     virtual void        Close() override;
 
-    tools::Long                GetLastPos() const {return nLastPos;}
-    void                SetLastPos(tools::Long nSet) {nLastPos = nSet;}
+    tools::Long                GetLastPos() const {return m_nLastPos;}
+    void                SetLastPos(tools::Long nSet) {m_nLastPos = nSet;}
 
-    bool                IsModified() const {return bModified;}
-    void                SetModified(bool bSet) {bModified = bSet;}
+    bool                IsModified() const {return m_bModified;}
+    void                SetModified(bool bSet) {m_bModified = bSet;}
 
     void EnableControls(bool bEnable);
 
