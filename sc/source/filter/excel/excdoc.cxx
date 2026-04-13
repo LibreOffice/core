@@ -55,6 +55,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <o3tl/safeint.hxx>
+#include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
@@ -1399,14 +1400,23 @@ void ExcDocument::addElemensToAttrList(const rtl::Reference<sax_fastparser::Fast
         if (a >>= aFastSeq)
         {
             for (const auto& rAttr : aFastSeq)
-                pAttrList->add(rAttr.Token, rAttr.Value);
+            {
+                // Decode OOXML _xHHHH_ escape sequences so the serializer
+                // re-encodes them correctly instead of double-escaping
+                // (e.g. _x0000_ -> _x005F_x0000_).
+                OUString aDecoded = oox::AttributeConversion::decodeXString(rAttr.Value);
+                pAttrList->add(rAttr.Token, aDecoded);
+            }
         }
         else if (a >>= aUnkSeq)
         {
             for (const auto& rAttr : aUnkSeq)
+            {
+                OUString aDecoded = oox::AttributeConversion::decodeXString(rAttr.Value);
                 pAttrList->addUnknown(rAttr.NamespaceURL,
                                       OUStringToOString(rAttr.Name, RTL_TEXTENCODING_UTF8),
-                                      OUStringToOString(rAttr.Value, RTL_TEXTENCODING_UTF8));
+                                      OUStringToOString(aDecoded, RTL_TEXTENCODING_UTF8));
+            }
         }
     }
 }
