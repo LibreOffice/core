@@ -1740,7 +1740,7 @@ void FormulaCompiler::Factor()
                     // know, classify as ONLOAD_LENIENT.
                 case ocExternal:
                 case ocUDExternal:
-                    if (mpToken->GetExternal() == "com.sun.star.sheet.addin.Analysis.getRandbetween")
+                    if (static_cast<FormulaExternalToken*>(mpToken.get())->GetExternal() == "com.sun.star.sheet.addin.Analysis.getRandbetween")
                         pArr->SetExclusiveRecalcModeAlways();
                     else
                         pArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
@@ -2791,7 +2791,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             case svExternal:
             {
                 // mapped or translated name of AddIns
-                OUString aAddIn( t->GetExternal() );
+                OUString aAddIn( static_cast<const FormulaExternalToken*>(t)->GetExternal() );
                 bool bMapped = mxSymbols->isPODF();     // ODF 1.1 directly uses programmatical name
                 if (!bMapped && mxSymbols->hasExternals())
                 {

@@ -1031,7 +1031,7 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                 }
                 else if (t->GetOpCode() == ocUDExternal && t->GetType() == formula::svExternal)
                 {
-                    OUString sUDName(t->GetExternal());
+                    OUString sUDName(static_cast<formula::FormulaExternalToken*>(t)->GetExternal());
                     OUString sSanitizedName = sUDName.replaceAll(" ", "_");
                     if (sUDName != sSanitizedName)
                     {

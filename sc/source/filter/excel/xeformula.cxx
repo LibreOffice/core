@@ -128,7 +128,6 @@ public:
                             const XclFunctionInfo& rFuncInfo,
                             XclExpExtFuncData aExtFuncData );
 
-    const FormulaToken& GetScToken() const { return *mrTokData.mpScToken; }
     OpCode       GetOpCode() const { return mrFuncInfo.meOpCode; }
     sal_uInt16   GetXclFuncIdx() const { return mrFuncInfo.mnXclFunc; }
     bool         IsVolatile() const { return mrFuncInfo.IsVolatile(); }
@@ -172,8 +171,9 @@ XclExpFuncData::XclExpFuncData( const XclExpScToken& rTokData,
 {
     OSL_ENSURE( mrTokData.mpScToken, "XclExpFuncData::XclExpFuncData - missing core token" );
     // set name of an add-in function
-    if( (maExtFuncData.maFuncName.isEmpty()) && dynamic_cast< const FormulaExternalToken* >( mrTokData.mpScToken ) )
-        maExtFuncData.Set( GetScToken().GetExternal(), true, false );
+    if( maExtFuncData.maFuncName.isEmpty() )
+        if( auto pFEToken = dynamic_cast< const FormulaExternalToken* >( mrTokData.mpScToken ) )
+            maExtFuncData.Set( pFEToken->GetExternal(), true, false );
 }
 
 const XclFuncParamInfo& XclExpFuncData::GetParamInfo() const
@@ -1312,7 +1312,7 @@ void XclExpFmlaCompImpl::ProcessExternal( const XclExpScToken& rTokData )
         token is processed as external function call, otherwise as undefined name. */
     const FormulaToken* pNextScToken = PeekNextRawToken();
     if( !pNextScToken || (pNextScToken->GetOpCode() != ocOpen) )
-        AppendMissingNameToken( rTokData.mpScToken->GetExternal(), rTokData.mnSpaces );
+        AppendMissingNameToken( static_cast<const FormulaExternalToken*>(rTokData.mpScToken)->GetExternal(), rTokData.mnSpaces );
     else
         ProcessFunction( rTokData );
 }

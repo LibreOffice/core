@@ -226,7 +226,6 @@ public:
     virtual sal_Int16           GetSheet() const;
     virtual void                SetSheet( sal_Int16 n );
     virtual short*              GetJump() const;
-    virtual const OUString&     GetExternal() const;
     virtual FormulaToken*       GetFAPOrigToken() const;
     virtual FormulaError        GetError() const;
     virtual void                SetError( FormulaError );
@@ -446,7 +445,7 @@ public:
                                     FormulaByteToken( r ), aExternal( r.aExternal ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaExternalToken(*this); }
-    virtual const OUString&     GetExternal() const override;
+    const OUString&             GetExternal() const;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 

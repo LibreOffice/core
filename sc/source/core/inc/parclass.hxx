@@ -39,6 +39,7 @@
 namespace formula
 {
     class FormulaToken;
+    class FormulaExternalToken;
 }
 
 class ScParameterClassification
@@ -98,7 +99,7 @@ private:
 
     // ocExternal AddIns
     static  formula::ParamClass GetExternalParameterType(
-                                    const formula::FormulaToken* pToken, sal_uInt16 nParameter);
+                                    const formula::FormulaExternalToken* pToken, sal_uInt16 nParameter);
 
 #if DEBUG_SC_PARCLASSDOC
     // Generate documentation to stdout if environment variable

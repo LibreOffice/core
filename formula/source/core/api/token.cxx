@@ -245,14 +245,6 @@ short* FormulaToken::GetJump() const
     return nullptr;
 }
 
-
-const OUString& FormulaToken::GetExternal() const
-{
-    SAL_WARN( "formula.core", "FormulaToken::GetExternal: virtual dummy called" );
-    static  OUString              aDummyString;
-    return aDummyString;
-}
-
 FormulaToken* FormulaToken::GetFAPOrigToken() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetFAPOrigToken: virtual dummy called" );
@@ -1289,7 +1281,7 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                         break;
 
                     case ocExternal:
-                        if (mpFunc->GetExternal().equalsIgnoreAsciiCase(
+                        if (static_cast<const FormulaExternalToken*>(mpFunc)->GetExternal().equalsIgnoreAsciiCase(
                                 "com.sun.star.sheet.addin.Analysis.getAccrintm"))
                         {
                             if (mnCurArg == 2)
@@ -1323,7 +1315,7 @@ bool FormulaMissingContext::AddMissingExternal( FormulaTokenArray *pNewArr ) con
 {
     // Only called for PODF, not ODFF. No need to distinguish.
 
-    const OUString &rName = mpFunc->GetExternal();
+    const OUString &rName = static_cast<const FormulaExternalToken*>(mpFunc)->GetExternal();
 
     // initial (fast) checks:
     sal_Int32 nLength = rName.getLength();
@@ -2140,7 +2132,8 @@ bool FormulaIndexToken::operator==( const FormulaToken& r ) const
 const OUString& FormulaExternalToken::GetExternal() const       { return aExternal; }
 bool FormulaExternalToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaByteToken::operator==( r ) && aExternal == r.GetExternal();
+    return FormulaByteToken::operator==( r )
+        && aExternal == static_cast<const FormulaExternalToken&>(r).GetExternal();
 }
 
 

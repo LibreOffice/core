@@ -392,7 +392,7 @@ formula::ParamClass ScParameterClassification::GetParameterType(
     {
         case ocExternal:
         case ocUDExternal:
-            return GetExternalParameterType( pToken, nParameter);
+            return GetExternalParameterType( static_cast<const FormulaExternalToken*>(pToken), nParameter);
         case ocMacro:
             return (nParameter == SAL_MAX_UINT16 ? Value : Reference);
         default:
@@ -425,7 +425,7 @@ formula::ParamClass ScParameterClassification::GetParameterType(
     return Unknown;
 }
 
-formula::ParamClass ScParameterClassification::GetExternalParameterType( const formula::FormulaToken* pToken,
+formula::ParamClass ScParameterClassification::GetExternalParameterType( const FormulaExternalToken* pToken,
         sal_uInt16 nParameter)
 {
     formula::ParamClass eRet = Unknown;

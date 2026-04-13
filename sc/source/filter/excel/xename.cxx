@@ -366,7 +366,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
                 name should follow OOXML conventions */
                 if (!pNext || (pNext->GetOpCode() != ocOpen))
                 {
-                    msSymbol = ScCompiler::SanitizeDefinedName(t->GetExternal(), GetDoc());
+                    msSymbol = ScCompiler::SanitizeDefinedName(static_cast<formula::FormulaExternalToken*>(t)->GetExternal(), GetDoc());
                     break;
                 }
             }

@@ -2574,7 +2574,7 @@ void ScInterpreter::ScExternal()
 {
     sal_uInt8 nParamCount = GetByte();
     OUString aUnoName;
-    OUString aFuncName( pCur->GetExternal().toAsciiUpperCase());    // programmatic name
+    OUString aFuncName( static_cast<const FormulaExternalToken*>(pCur)->GetExternal().toAsciiUpperCase());    // programmatic name
     LegacyFuncData* pLegacyFuncData = ScGlobal::GetLegacyFuncCollection()->findByName(aFuncName);
     if (pLegacyFuncData)
     {
@@ -3258,7 +3258,7 @@ void ScInterpreter::ScMacro()
     SbxBase::ResetError();
 
     sal_uInt8 nParamCount = GetByte();
-    OUString aMacro( pCur->GetExternal() );
+    OUString aMacro( static_cast<const FormulaExternalToken*>(pCur)->GetExternal() );
 
     ScDocShell* pDocSh = mrDoc.GetDocumentShell();
     if ( !pDocSh )
