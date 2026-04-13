@@ -525,6 +525,18 @@ class DebugManager {
 		});
 
 		this._addDebugTool({
+			name: 'Verbose JSDialog log',
+			category: 'Logging',
+			startsOn: false,
+			onAdd: function () {
+				JSDialog.verbose = true;
+			},
+			onRemove: function () {
+				JSDialog.verbose = false;
+			},
+		});
+
+		this._addDebugTool({
 			name: 'Tile Dumping',
 			category: 'Logging',
 			startsOn: false,
