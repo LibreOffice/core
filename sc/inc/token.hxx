@@ -29,9 +29,6 @@
 #include "calcmacros.hxx"
 #include "types.hxx"
 
-// Matrix token constants.
-#define MATRIX_TOKEN_HAS_RANGE 1
-
 class ScJumpMatrix;
 class ScMatrix;
 struct ScSheetLimits;
@@ -102,6 +99,7 @@ public:
     virtual ScMatrix*           GetMatrix() override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScMatrixToken(*this); }
+    virtual bool IsMatrixRangeToken() const { return false; }
 };
 
 /**
@@ -116,10 +114,10 @@ public:
     ScMatrixRangeToken( const sc::RangeMatrix& rMat );
     ScMatrixRangeToken( const ScMatrixRangeToken& );
 
-    virtual sal_uInt8 GetByte() const override;
     virtual const ScComplexRefData* GetDoubleRef() const override;
     virtual ScComplexRefData* GetDoubleRef() override;
     virtual FormulaToken* Clone() const override;
+    virtual bool IsMatrixRangeToken() const override { return true; }
 };
 
 class SC_DLLPUBLIC ScExternalSingleRefToken final : public formula::FormulaToken
