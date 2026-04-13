@@ -2482,7 +2482,7 @@ void WW8TabDesc::CreateSwTable()
             {
                 //With multiple table, use last table settings. Perhaps
                 //the maximum is what word does ?
-                aHori.SetPos(m_pIo->m_xSFlyPara->nXPos + GetMinLeft());
+                aHori.setPosition(gfx::Length::twip(m_pIo->m_xSFlyPara->nXPos + GetMinLeft()));
                 aHori.SetHoriOrient(text::HoriOrientation::NONE);
                 m_pIo->m_xSFlyPara->GetFlyFormat()->SetFormatAttr(aHori);
             }

@@ -1117,7 +1117,8 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
 
     const SwFormatHoriOrient& rHoriOrient = pFrameFormat->GetHoriOrient();
     const SwFormatVertOrient& rVertOrient = pFrameFormat->GetVertOrient();
-    awt::Point aPos(rHoriOrient.GetPos(), rVertOrient.GetPos());
+    awt::Point aPos(rHoriOrient.getPosition().as_twip<sal_Int32>(),
+                    rVertOrient.getPosition().as_twip<sal_Int32>());
 
     // A few assumptions need to be made here, because framePr is a confused mixture
     // of (multiple) paragraph's border properties being transferred to/from a frame.
@@ -6542,8 +6543,10 @@ OString DocxAttributeOutput::GetOLEStyle(const SwFlyFrameFormat& rFormat, const 
             bInsideFrame = pAnchorNode->FindFlyStartNode() != nullptr;
 
         aPos = (bInsideFrame ? OString() : "position:absolute;"_ostr) + "margin-left:"
-               + OString::number(double(rFormat.GetHoriOrient().GetPos()) / 20) + "pt;margin-top:"
-               + OString::number(double(rFormat.GetVertOrient().GetPos()) / 20) + "pt;";
+               + OString::number(rFormat.GetHoriOrient().getPosition().as_twip<sal_Int32>() / 20.0)
+               + "pt;margin-top:"
+               + OString::number(rFormat.GetVertOrient().getPosition().as_twip<sal_Int32>() / 20.0)
+               + "pt;";
     }
 
     OString sShapeStyle = "width:" + OString::number( double( rSize.Width() ) / 20 ) +
@@ -6890,10 +6893,10 @@ void DocxAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Po
         {
             if (auto pParentFly = rFrame.GetContentNode()->GetFlyFormat())
             {
-                auto aHori(rFrame.GetFrameFormat().GetHoriOrient());
-                aHori.SetPos(aHori.GetPos() + pParentFly->GetHoriOrient().GetPos());
-                auto aVori(rFrame.GetFrameFormat().GetVertOrient());
-                aVori.SetPos(aVori.GetPos() + pParentFly->GetVertOrient().GetPos());
+                SwFormatHoriOrient aHori(rFrame.GetFrameFormat().GetHoriOrient());
+                aHori.adjustPosition(pParentFly->GetHoriOrient().getPosition());
+                SwFormatVertOrient aVori(rFrame.GetFrameFormat().GetVertOrient());
+                aVori.adjustPosition(pParentFly->GetVertOrient().getPosition());
 
                 const_cast<SwFrameFormat&>(rFrame.GetFrameFormat()).SetFormatAttr(aHori);
                 const_cast<SwFrameFormat&>(rFrame.GetFrameFormat()).SetFormatAttr(aVori);
@@ -10195,7 +10198,9 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyV
 
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        m_rExport.SdrExporter().getTextFrameStyle().append(";margin-top:" + OString::number(double(rFlyVert.GetPos()) / 20) + "pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(
+            ";margin-top:" + OString::number(rFlyVert.getPosition().as_twip<sal_Int32>() / 20.0)
+            + "pt");
         if ( !sAlign.isEmpty() )
             m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-vertical:" + sAlign);
         m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-vertical-relative:" + sVAnchor);
@@ -10209,7 +10214,7 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyV
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_yAlign ), sAlign );
         else
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_y ),
-                OString::number( rFlyVert.GetPos() ) );
+                OString::number(rFlyVert.getPosition().as_twip<sal_Int32>()));
         AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_vAnchor ), sVAnchor );
     }
 }
@@ -10221,7 +10226,9 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFly
 
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        m_rExport.SdrExporter().getTextFrameStyle().append(";margin-left:" + OString::number(double(rFlyHori.GetPos()) / 20) + "pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(
+            ";margin-left:" + OString::number(rFlyHori.getPosition().as_twip<sal_Int32>() / 20.0)
+            + "pt");
         if ( !sAlign.isEmpty() )
             m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-horizontal:" + sAlign);
         m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-horizontal-relative:" + sHAnchor);
@@ -10235,7 +10242,7 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFly
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_xAlign ), sAlign );
         else
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_x ),
-                OString::number( rFlyHori.GetPos() ) );
+                OString::number(rFlyHori.getPosition().as_twip<sal_Int32>()));
         AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_hAnchor ), sHAnchor );
     }
 }

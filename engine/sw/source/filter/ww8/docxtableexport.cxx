@@ -139,7 +139,7 @@ void CollectFloatingTableAttributes(DocxExport& rExport, const ww8::Frame& rFram
 
     if (sTblpXSpec.isEmpty()) // do not write tblpX if tblpXSpec is present
     {
-        nValue = rFrame.GetFrameFormat().GetHoriOrient().GetPos();
+        nValue = rFrame.GetFrameFormat().GetHoriOrient().getPosition().as_twip<sal_Int32>();
         // we need to revert the additional shift introduced by
         // lcl_DecrementHoriOrientPosition() in writerfilter
         // 1st: left distance of the table
@@ -166,7 +166,7 @@ void CollectFloatingTableAttributes(DocxExport& rExport, const ww8::Frame& rFram
 
     if (sTblpYSpec.isEmpty()) // do not write tblpY if tblpYSpec is present
     {
-        nValue = rFrame.GetFrameFormat().GetVertOrient().GetPos();
+        nValue = rFrame.GetFrameFormat().GetVertOrient().getPosition().as_twip<sal_Int32>();
         pAttributes->add(FSNS(XML_w, XML_tblpY), OString::number(nValue));
     }
 }

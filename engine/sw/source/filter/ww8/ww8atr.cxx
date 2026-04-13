@@ -4642,11 +4642,11 @@ void WW8AttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyVe
     if ( !m_rWW8Export.m_bOutFlyFrameAttrs )
         return;
 
-    short nPos;
+    sal_Int16 nPos;
     switch( rFlyVert.GetVertOrient() )
     {
         case text::VertOrientation::NONE:
-            nPos = static_cast<short>(rFlyVert.GetPos());
+            nPos = MakeSafePositioningValue(rFlyVert.getPosition().as_twip<SwTwips>());
             break;
         case text::VertOrientation::CENTER:
         case text::VertOrientation::LINE_CENTER:
@@ -4680,11 +4680,11 @@ void WW8AttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFlyH
     if ( !m_rWW8Export.m_bOutFlyFrameAttrs )
         return;
 
-    short nPos;
+    sal_Int16 nPos;
     switch( rFlyHori.GetHoriOrient() )
     {
         case text::HoriOrientation::NONE:
-            nPos = static_cast<short>(rFlyHori.GetPos());
+            nPos = MakeSafePositioningValue(rFlyHori.getPosition().as_twip<SwTwips>());
             if( !nPos )
                 nPos = 1;   // WW: 0 is reserved
             break;
