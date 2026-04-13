@@ -11,6 +11,7 @@
 
 #include <svx/svxdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/vclptr.hxx>
@@ -20,7 +21,8 @@
 // Used to put theme colors pane to the notebookbar
 
 class SVX_DLLPUBLIC ThemeColorsPaneWrapper final : public InterimItemWindow,
-                                                   public svx::ThemeColorsPaneBase
+                                                   public svx::ThemeColorsPaneBase,
+                                                   public SfxListener
 {
 private:
     css::uno::Reference<css::frame::XFrame> m_xFrame;
@@ -31,7 +33,8 @@ public:
     virtual ~ThemeColorsPaneWrapper() override;
     virtual void dispose() override;
     void SetOptimalSize();
-    void refreshThemeColors();
+
+    void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     DECL_LINK(SelectionChangedHdl, weld::IconView&, void);
 
@@ -54,7 +57,6 @@ public:
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     // XToolbarController
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
     virtual css::uno::Reference<css::awt::XWindow>
         SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 

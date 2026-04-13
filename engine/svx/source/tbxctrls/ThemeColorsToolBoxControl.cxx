@@ -8,6 +8,7 @@
  */
 
 #include <svx/ThemeColorsToolBoxControl.hxx>
+#include <svx/ColorSets.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
@@ -35,22 +36,8 @@ void ThemeColorsToolBoxControl::disposing(std::unique_lock<std::mutex>& rGuard)
 }
 
 void SAL_CALL
-ThemeColorsToolBoxControl::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+ThemeColorsToolBoxControl::statusChanged(const css::frame::FeatureStateEvent& /*rEvent*/)
 {
-    svt::ToolboxController::initialize(rArguments);
-
-    // Register to listen for AddTheme command changes
-    addStatusListener(".uno:AddTheme");
-}
-
-void SAL_CALL ThemeColorsToolBoxControl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
-{
-    SolarMutexGuard aSolarMutexGuard;
-
-    if (m_xVclBox && rEvent.FeatureURL.Complete == ".uno:AddTheme")
-        m_xVclBox->refreshThemeColors();
-
-    svt::ToolboxController::statusChanged(rEvent);
 }
 
 css::uno::Reference<css::awt::XWindow>
@@ -106,6 +93,7 @@ ThemeColorsPaneWrapper::ThemeColorsPaneWrapper(
         mxIconViewThemeColors->connect_selection_changed(
             LINK(this, ThemeColorsPaneWrapper, SelectionChangedHdl));
 
+    StartListening(svx::ColorSets::get());
     initColorSets();
     SetOptimalSize();
 }
@@ -114,10 +102,11 @@ ThemeColorsPaneWrapper::~ThemeColorsPaneWrapper() { disposeOnce(); }
 
 void ThemeColorsPaneWrapper::SetOptimalSize() { SetSizePixel(GetOptimalSize()); }
 
-void ThemeColorsPaneWrapper::refreshThemeColors() { initColorSets(); }
+void ThemeColorsPaneWrapper::Notify(SfxBroadcaster&, const SfxHint&) { initColorSets(); }
 
 void ThemeColorsPaneWrapper::dispose()
 {
+    EndListeningAll();
     mxIconViewThemeColors.reset();
     InterimItemWindow::dispose();
 }

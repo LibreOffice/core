@@ -10,6 +10,7 @@
 
 #include <svx/ColorSets.hxx>
 
+#include <svl/hint.hxx>
 #include <optional>
 #include <unordered_set>
 #include <vector>
@@ -174,10 +175,8 @@ model::ColorSet const* ColorSets::getDefault()
 
 ColorSets& ColorSets::get()
 {
-    static std::optional<ColorSets> sColorSets;
-    if (!sColorSets)
-        sColorSets = ColorSets();
-    return *sColorSets;
+    static ColorSets sColorSets;
+    return sColorSets;
 }
 
 void ColorSets::init()
@@ -243,6 +242,7 @@ void ColorSets::insert(model::ColorSet const& rNewColorSet)
 
     maColorSets.push_back(aNewColorSet);
     writeToUserFolder(aNewColorSet);
+    Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
 void ColorSets::writeToUserFolder(model::ColorSet const& rNewColorSet)
