@@ -222,12 +222,9 @@ function createAutoColorButton(
 	data: ColorPaletteWidgetData,
 	builder: JSBuilder,
 ) {
-	// Create a div container for the button
-	const buttonContainer = window.L.DomUtil.create(
-		'div',
-		'auto-color-button-container',
-		parentContainer,
-	);
+	const label = window.L.DomUtil.create('label', '', parentContainer);
+	label.textContent = _('Color') + ':';
+	label.htmlFor = 'transparent-color-button';
 
 	const hasTransparent =
 		data.command !== '.uno:FontColor' && data.command !== '.uno:Color';
@@ -235,7 +232,7 @@ function createAutoColorButton(
 	const autoButton = window.L.DomUtil.create(
 		'button',
 		builder.options.cssClass + ' ui-pushbutton auto-color-button',
-		buttonContainer, // Append button to the newly created div
+		parentContainer, // Append button to the newly created div
 	);
 	autoButton.id = 'transparent-color-button';
 	autoButton.innerText = buttonText;
@@ -252,6 +249,10 @@ function createPaletteSwitch(
 	parentContainer: HTMLElement,
 	builder: JSBuilder,
 ): HTMLSelectElement {
+	const label = window.L.DomUtil.create('label', '', parentContainer);
+	label.textContent = _('Palette') + ':';
+	label.htmlFor = 'color-palette-listbox';
+
 	const paletteListbox = window.L.DomUtil.create(
 		'div',
 		builder.options.cssClass + ' ui-listbox-container color-palette-selector',
@@ -405,9 +406,15 @@ JSDialog.colorPicker = function (
 	container.id = data.id;
 	container.tabIndex = '-1'; // focus should be on first element in grid for color picker
 
-	createAutoColorButton(container, data, builder);
+	const header = window.L.DomUtil.create(
+		'div',
+		'ui-color-picker-header',
+		container,
+	);
 
-	const listbox = createPaletteSwitch(container, builder);
+	createAutoColorButton(header, data, builder);
+
+	const listbox = createPaletteSwitch(header, builder);
 
 	const paletteContainer = window.L.DomUtil.create(
 		'div',

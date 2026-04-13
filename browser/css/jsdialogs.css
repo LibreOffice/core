@@ -2034,6 +2034,13 @@ button.has-img img {
 	padding: 4px;
 }
 
+.ui-color-picker-header {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	gap: 8px;
+}
+
 .ui-color-picker,
 #ui-color-picker-custom,
 #ui-color-picker-recent {
