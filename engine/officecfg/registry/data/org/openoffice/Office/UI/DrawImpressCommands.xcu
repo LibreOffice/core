@@ -1202,6 +1202,31 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:AddSlideSection" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Add Section</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RemoveSlideSection" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Remove Section</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RenameSlideSection" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Rename Section...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MoveSlideSectionUp" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Move Section Up</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MoveSlideSectionDown" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Move Section Down</value>
+        </prop>
+      </node>
       <node oor:name=".uno:DeleteLayer" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Delete Layer</value>

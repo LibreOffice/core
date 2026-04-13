@@ -429,4 +429,10 @@
 
 #define FN_TRANSFORM_DOCUMENT_STRUCTURE     (SID_SD_START+452)
 
+#define SID_ADD_SLIDE_SECTION               (SID_SD_START+453)
+#define SID_REMOVE_SLIDE_SECTION            (SID_SD_START+454)
+#define SID_RENAME_SLIDE_SECTION            (SID_SD_START+455)
+#define SID_MOVE_SLIDE_SECTION_UP           (SID_SD_START+456)
+#define SID_MOVE_SLIDE_SECTION_DOWN         (SID_SD_START+457)
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

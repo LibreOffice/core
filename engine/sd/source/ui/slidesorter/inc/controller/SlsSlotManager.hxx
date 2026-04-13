@@ -87,6 +87,13 @@ private:
 
     void DuplicateSelectedSlides(SfxRequest& rRequest);
 
+    void AddSection();
+    void RemoveSection();
+    void RenameSection();
+    void MoveSectionUp();
+    void MoveSectionDown();
+    void NotifySectionChange();
+
     /** Use one of several ways to determine where to insert a new page.
         This can be the current selection or the insertion indicator.
     */

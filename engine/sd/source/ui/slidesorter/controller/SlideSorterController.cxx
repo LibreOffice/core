@@ -46,6 +46,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <drawdoc.hxx>
+#include <SlideSectionManager.hxx>
 #include <ViewShellBase.hxx>
 #include <Window.hxx>
 #include <FrameView.hxx>
@@ -304,7 +305,39 @@ bool SlideSorterController::Command (
                         aPopupId = "pagepane";
                 }
                 else
-                    aPopupId = "pagepanenosel";
+                {
+                    // Check if the click is on a section header
+                    bool bOnSectionHeader = false;
+                    if (rEvent.IsMouseEvent())
+                    {
+                        Point aModelPos = pWindow->PixelToLogic(rEvent.GetMousePosPixel());
+                        sal_Int32 nSectionIdx
+                            = mrView.GetLayouter().GetSectionIndexAtPoint(aModelPos);
+                        if (nSectionIdx >= 0)
+                        {
+                            bOnSectionHeader = true;
+                            // Select the first slide of this section so
+                            // section commands can operate on it
+                            SdDrawDocument* pDoc = mrModel.GetDocument();
+                            if (pDoc)
+                            {
+                                sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+                                if (nSectionIdx < rMgr.GetSectionCount())
+                                {
+                                    sal_Int32 nStartIdx = rMgr.GetSection(nSectionIdx).mnStartIndex;
+                                    model::SharedPageDescriptor pDesc(
+                                        mrModel.GetPageDescriptor(nStartIdx));
+                                    if (pDesc)
+                                    {
+                                        GetPageSelector().DeselectAllPages();
+                                        GetPageSelector().SelectPage(pDesc);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    aPopupId = bOnSectionHeader ? "sectionheader" : "pagepanenosel";
+                }
             }
             else if (pPage != nullptr)
             {
@@ -317,7 +350,7 @@ bool SlideSorterController::Command (
                 aPopupId = "pagepanenoselmaster";
 
             std::unique_ptr<InsertionIndicatorHandler::ForceShowContext, o3tl::default_delete<InsertionIndicatorHandler::ForceShowContext>> xContext;
-            if (pPage == nullptr)
+            if (pPage == nullptr && aPopupId != "sectionheader")
             {
                 // When there is no selection, then we show the insertion
                 // indicator so that the user knows where a page insertion

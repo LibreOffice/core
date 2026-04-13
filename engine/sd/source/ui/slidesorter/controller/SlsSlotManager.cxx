@@ -46,6 +46,7 @@
 #include <unokywds.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
+#include <SlideSectionManager.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellImplementation.hxx>
 #include <sdpage.hxx>
@@ -76,6 +77,7 @@
 #include <tools/debug.hxx>
 
 #include <memory>
+#include <optional>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -279,6 +281,31 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_RENAME_MASTER_PAGE:
             RenameSlide (rRequest);
             rRequest.Done ();
+            break;
+
+        case SID_ADD_SLIDE_SECTION:
+            AddSection();
+            rRequest.Done();
+            break;
+
+        case SID_REMOVE_SLIDE_SECTION:
+            RemoveSection();
+            rRequest.Done();
+            break;
+
+        case SID_RENAME_SLIDE_SECTION:
+            RenameSection();
+            rRequest.Done();
+            break;
+
+        case SID_MOVE_SLIDE_SECTION_UP:
+            MoveSectionUp();
+            rRequest.Done();
+            break;
+
+        case SID_MOVE_SLIDE_SECTION_DOWN:
+            MoveSectionDown();
+            rRequest.Done();
             break;
 
         case SID_ASSIGN_LAYOUT:
@@ -671,6 +698,59 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
         }
     }
 
+    if (rSet.GetItemState(SID_ADD_SLIDE_SECTION) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_REMOVE_SLIDE_SECTION) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_RENAME_SLIDE_SECTION) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_MOVE_SLIDE_SECTION_UP) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_MOVE_SLIDE_SECTION_DOWN) == SfxItemState::DEFAULT)
+    {
+        int nSelected = mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
+        if (nSelected != 1)
+        {
+            rSet.DisableItem(SID_ADD_SLIDE_SECTION);
+            rSet.DisableItem(SID_REMOVE_SLIDE_SECTION);
+            rSet.DisableItem(SID_RENAME_SLIDE_SECTION);
+            rSet.DisableItem(SID_MOVE_SLIDE_SECTION_UP);
+            rSet.DisableItem(SID_MOVE_SLIDE_SECTION_DOWN);
+        }
+        else
+        {
+            // Get the selected slide's page index
+            model::PageEnumeration aSelectedPages(
+                model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
+                    mrSlideSorter.GetModel()));
+            if (aSelectedPages.HasMoreElements())
+            {
+                SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
+                SdDrawDocument* pDoc = mrSlideSorter.GetModel().GetDocument();
+                sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+                sal_Int32 nPageIndex
+                    = model::FromCoreIndex(pPage->GetPageNum());
+
+                // Disable "Add Section" if this slide already starts a section
+                if (rMgr.IsSectionStart(nPageIndex))
+                    rSet.DisableItem(SID_ADD_SLIDE_SECTION);
+
+                // Disable "Remove/Rename Section" if this slide is NOT a section start
+                if (!rMgr.IsSectionStart(nPageIndex))
+                {
+                    rSet.DisableItem(SID_REMOVE_SLIDE_SECTION);
+                    rSet.DisableItem(SID_RENAME_SLIDE_SECTION);
+                    rSet.DisableItem(SID_MOVE_SLIDE_SECTION_UP);
+                    rSet.DisableItem(SID_MOVE_SLIDE_SECTION_DOWN);
+                }
+                else
+                {
+                    sal_Int32 nSectionIdx = rMgr.GetSectionIndexForSlide(nPageIndex);
+                    if (nSectionIdx <= 0)
+                        rSet.DisableItem(SID_MOVE_SLIDE_SECTION_UP);
+                    if (nSectionIdx < 0 || nSectionIdx >= rMgr.GetSectionCount() - 1)
+                        rSet.DisableItem(SID_MOVE_SLIDE_SECTION_DOWN);
+                }
+            }
+        }
+    }
+
     if (rSet.GetItemState(SID_HIDE_SLIDE) == SfxItemState::DEFAULT
         || rSet.GetItemState(SID_SHOW_SLIDE)  == SfxItemState::DEFAULT)
     {
@@ -1056,6 +1136,113 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
     }
 
     return bSuccess;
+}
+
+namespace
+{
+struct SectionContext
+{
+    sd::SlideSectionManager* pMgr;
+    sal_Int32 nPageIndex;
+    sal_Int32 nSectionIndex;
+};
+
+/** Get the section context for the currently selected slide.
+    Returns std::nullopt if no single slide is selected or the document is unavailable. */
+std::optional<SectionContext> GetSelectedSectionContext(SlideSorter& rSlideSorter)
+{
+    model::PageEnumeration aSelectedPages(
+        model::PageEnumerationProvider::CreateSelectedPagesEnumeration(rSlideSorter.GetModel()));
+    if (!aSelectedPages.HasMoreElements())
+        return std::nullopt;
+
+    SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
+    SdDrawDocument* pDoc = rSlideSorter.GetModel().GetDocument();
+    if (!pDoc)
+        return std::nullopt;
+
+    SectionContext aCtx;
+    aCtx.pMgr = &pDoc->GetSectionManager();
+    aCtx.nPageIndex = model::FromCoreIndex(pPage->GetPageNum());
+    aCtx.nSectionIndex = aCtx.pMgr->GetSectionIndexForSlide(aCtx.nPageIndex);
+    return aCtx;
+}
+} // anonymous namespace
+
+void SlotManager::NotifySectionChange()
+{
+    mrSlideSorter.GetView().HandleModelChange();
+    mrSlideSorter.GetView().RequestRepaint();
+}
+
+void SlotManager::AddSection()
+{
+    auto oCtx = GetSelectedSectionContext(mrSlideSorter);
+    if (!oCtx)
+        return;
+
+    oCtx->pMgr->AddSection(oCtx->nPageIndex, SdResId(STR_DEFAULT_SLIDE_SECTION_NAME));
+    NotifySectionChange();
+}
+
+void SlotManager::RemoveSection()
+{
+    auto oCtx = GetSelectedSectionContext(mrSlideSorter);
+    if (!oCtx)
+        return;
+
+    if (oCtx->nSectionIndex >= 0 && oCtx->pMgr->IsSectionStart(oCtx->nPageIndex))
+    {
+        oCtx->pMgr->RemoveSection(oCtx->nSectionIndex);
+        NotifySectionChange();
+    }
+}
+
+void SlotManager::RenameSection()
+{
+    auto oCtx = GetSelectedSectionContext(mrSlideSorter);
+    if (!oCtx || oCtx->nSectionIndex < 0)
+        return;
+
+    const sd::SlideSection& rSection = oCtx->pMgr->GetSection(oCtx->nSectionIndex);
+    OUString aOldName = rSection.maName;
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    vcl::Window* pWin = mrSlideSorter.GetContentWindow().get();
+    VclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
+        pWin ? pWin->GetFrameWeld() : nullptr, aOldName, SdResId(STR_RENAME_SLIDE_SECTION)));
+
+    if (aNameDlg->Execute() == RET_OK)
+    {
+        OUString aNewName = aNameDlg->GetName();
+        if (!aNewName.isEmpty() && aNewName != aOldName)
+        {
+            oCtx->pMgr->RenameSection(oCtx->nSectionIndex, aNewName);
+            NotifySectionChange();
+        }
+    }
+    aNameDlg.disposeAndClear();
+}
+
+void SlotManager::MoveSectionUp()
+{
+    auto oCtx = GetSelectedSectionContext(mrSlideSorter);
+    if (!oCtx || oCtx->nSectionIndex <= 0)
+        return;
+
+    oCtx->pMgr->MoveSection(oCtx->nSectionIndex, oCtx->nSectionIndex - 1);
+    NotifySectionChange();
+}
+
+void SlotManager::MoveSectionDown()
+{
+    auto oCtx = GetSelectedSectionContext(mrSlideSorter);
+    if (!oCtx || oCtx->nSectionIndex < 0
+        || oCtx->nSectionIndex >= oCtx->pMgr->GetSectionCount() - 1)
+        return;
+
+    oCtx->pMgr->MoveSection(oCtx->nSectionIndex, oCtx->nSectionIndex + 1);
+    NotifySectionChange();
 }
 
 /** Insert a slide.  The insertion position depends on a) the selection and
