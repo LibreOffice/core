@@ -66,7 +66,8 @@ public:
 
 private:
     void SavePivotTableXml(XclExpXmlStream& rStrm, const ScDPObject& rObj, sal_Int32 nCacheId);
-    void savePivotTableFormats(XclExpXmlStream& rStrm, ScDPObject const& rDPObject);
+    void savePivotTableFormats(XclExpXmlStream& rStrm, ScDPObject const& rDPObject,
+                               size_t nFieldCount);
 };
 
 class XclExpXmlPivotTableManager : protected XclExpRoot

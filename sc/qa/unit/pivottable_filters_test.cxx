@@ -2980,6 +2980,20 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testDatesDiscreteGrouping)
                 "count", u"2");
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testInvalidFormats)
+{
+    createScDoc("xlsx/pivottable_invalid_formats.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDoc = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the fix in place, this would have failed with
+    // - Expected: 7
+    // - Actual  : 9
+    assertXPath(pDoc, "/x:pivotTableDefinition/x:formats", "count", u"7");
+}
+
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testNumberGroupingXLS)
 {
     createScDoc("xls/pivottable_number_grouping.xls");

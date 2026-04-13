@@ -1659,7 +1659,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     }
 
     // <formats>
-    savePivotTableFormats(rStrm, rDPObj);
+    savePivotTableFormats(rStrm, rDPObj, nFieldCount);
 
     // Now add style info (use grab bag, or just a set which is default on Excel 2007 through 2016)
     auto const& rStyleInfo = rDPObj.getStyleInfo();
@@ -1692,7 +1692,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     pPivotStrm->endElement(XML_pivotTableDefinition);
 }
 
-void XclExpXmlPivotTables::savePivotTableFormats(XclExpXmlStream& rStream, ScDPObject const& rDPObject)
+void XclExpXmlPivotTables::savePivotTableFormats(XclExpXmlStream& rStream,
+                                                 ScDPObject const& rDPObject, size_t nFieldCount)
 {
     sax_fastparser::FSHelperPtr& pPivotStream = rStream.GetCurrentStream();
 
@@ -1700,18 +1701,41 @@ void XclExpXmlPivotTables::savePivotTableFormats(XclExpXmlStream& rStream, ScDPO
     if (pSaveData && pSaveData->hasFormats())
     {
         sc::PivotTableFormats const& rFormats = pSaveData->getFormats();
-        if (rFormats.size() > 0)
+
+        // Skip formats that reference fields outside cache range.
+        std::vector<std::reference_wrapper<sc::PivotTableFormat const>> aValidFormats;
+        for (auto const& rFormat : rFormats.getVector())
         {
-            pPivotStream->startElement(XML_formats, XML_count, OString::number(rFormats.size()));
+            if (!rFormat.pPattern)
+                continue;
 
-            for (auto const& rFormat : rFormats.getVector())
+            if (GetDxfs().GetDxfIdForPattern(rFormat.pPattern.get()) == -1)
+                continue;
+
+            // Check that all field references are within range.
+            bool bValid = true;
+            for (sc::Selection const& rSelection : rFormat.getSelections())
             {
-                if (!rFormat.pPattern)
-                    continue;
+                if (rSelection.nField >= 0 && o3tl::make_unsigned(rSelection.nField) >= nFieldCount)
+                {
+                    bValid = false;
+                    break;
+                }
+            }
+            if (!bValid)
+                continue;
 
+            aValidFormats.push_back(std::cref(rFormat));
+        }
+
+        if (aValidFormats.size())
+        {
+            pPivotStream->startElement(XML_formats, XML_count,
+                                       OString::number(aValidFormats.size()));
+
+            for (sc::PivotTableFormat const& rFormat : aValidFormats)
+            {
                 sal_Int32 nDxf = GetDxfs().GetDxfIdForPattern(rFormat.pPattern.get());
-                if (nDxf == -1)
-                    continue;
 
                 pPivotStream->startElement(XML_format, XML_dxfId, OString::number(nDxf));
                 {
