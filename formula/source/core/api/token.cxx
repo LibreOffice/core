@@ -193,17 +193,6 @@ void FormulaToken::SetDouble(double)
     assert( !"virtual dummy called" );
 }
 
-sal_Int16 FormulaToken::GetDoubleType() const
-{
-    SAL_WARN( "formula.core", "FormulaToken::GetDoubleType: virtual dummy called" );
-    return 0;
-}
-
-void FormulaToken::SetDoubleType( sal_Int16 )
-{
-    assert( !"virtual dummy called" );
-}
-
 const svl::SharedString INVALID_STRING;
 
 const svl::SharedString & FormulaToken::GetString() const
@@ -2073,7 +2062,8 @@ void FormulaTypedDoubleToken::SetDoubleType( sal_Int16 nType )
 
 bool FormulaTypedDoubleToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaDoubleToken::operator==( r ) && mnType == r.GetDoubleType();
+    return FormulaDoubleToken::operator==( r )
+        && mnType == static_cast<const FormulaTypedDoubleToken&>(r).GetDoubleType();
 }
 
 FormulaStringToken::FormulaStringToken( svl::SharedString r ) :

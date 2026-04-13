@@ -807,7 +807,8 @@ double ScInterpreter::PopDouble()
                 break;
             case svDouble:
                 {
-                    SvNumFormatType nType = static_cast<SvNumFormatType>(p->GetDoubleType());
+                    auto pDToken = static_cast<const FormulaDoubleToken*>(p);
+                    SvNumFormatType nType = static_cast<SvNumFormatType>(pDToken->GetDoubleType());
                     if (nType != SvNumFormatType::ALL && nType != SvNumFormatType::UNDEFINED)
                         nCurFmtType = nType;
                     return p->GetDouble();
@@ -4704,11 +4705,12 @@ StackVar ScInterpreter::Interpret()
                 break;
                 case svDouble :
                     {
+                        auto pDToken = static_cast<const FormulaDoubleToken*>(pCur);
                         // If typed, pop token to obtain type information and
                         // push a plain untyped double so the result token to
                         // be transferred to the formula cell result does not
                         // unnecessarily duplicate the information.
-                        if (pCur->GetDoubleType() != 0)
+                        if (pDToken->GetDoubleType() != 0)
                         {
                             double fVal = PopDouble();
                             if (!bForcedResultType)
