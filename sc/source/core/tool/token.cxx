@@ -5367,7 +5367,7 @@ OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddre
         }
         else if (eOp == ocWhitespace)
         {
-            aBuf.append( pToken->GetChar());
+            aBuf.append( static_cast<const FormulaSpaceToken*>(pToken)->GetChar());
             continue;
         }
 

@@ -239,13 +239,6 @@ void FormulaToken::SetSheet( sal_Int16 )
     assert( !"virtual dummy called" );
 }
 
-sal_Unicode FormulaToken::GetChar() const
-{
-    // This Get is worth an assert.
-    assert( !"virtual dummy called" );
-    return 0;
-}
-
 short* FormulaToken::GetJump() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetJump: virtual dummy called" );
@@ -344,7 +337,7 @@ sal_Unicode FormulaSpaceToken::GetChar() const  { return cChar; }
 bool FormulaSpaceToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
-        cChar == r.GetChar();
+        cChar == static_cast<const FormulaSpaceToken&>(r).GetChar();
 }
 
 

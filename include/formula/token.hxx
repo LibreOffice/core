@@ -225,7 +225,6 @@ public:
     virtual void                SetIndex( sal_uInt16 n );
     virtual sal_Int16           GetSheet() const;
     virtual void                SetSheet( sal_Int16 n );
-    virtual sal_Unicode         GetChar() const;
     virtual short*              GetJump() const;
     virtual const OUString&     GetExternal() const;
     virtual FormulaToken*       GetFAPOrigToken() const;
@@ -277,7 +276,7 @@ public:
 
     virtual FormulaToken*       Clone() const override { return new FormulaSpaceToken(*this); }
     virtual sal_uInt8           GetByte() const override;
-    virtual sal_Unicode         GetChar() const override;
+    sal_Unicode                 GetChar() const;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 

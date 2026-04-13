@@ -2664,7 +2664,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             for ( sal_uInt8 j=0; j<n; ++j )
             {
                 if (eOp == ocWhitespace)
-                    rBuffer.append( t->GetChar());
+                    rBuffer.append( static_cast<const FormulaSpaceToken*>(t)->GetChar());
                 else
                     rBuffer.append( ' ');
             }

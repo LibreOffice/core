@@ -405,13 +405,14 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                         rAPI.Data <<= static_cast<sal_Int32>(rToken.GetByte());
                     else if (eOpCode == ocWhitespace)
                     {
+                        auto const & rSToken = static_cast<const FormulaSpaceToken&>(rToken);
                         // Convention is one character repeated.
                         if (rToken.GetByte() == 1)
-                            rAPI.Data <<= OUString( rToken.GetChar());
+                            rAPI.Data <<= OUString( rSToken.GetChar());
                         else
                         {
                             OUStringBuffer aBuf( rToken.GetByte());
-                            comphelper::string::padToLength( aBuf, rToken.GetByte(), rToken.GetChar());
+                            comphelper::string::padToLength( aBuf, rToken.GetByte(), rSToken.GetChar());
                             rAPI.Data <<= aBuf.makeStringAndClear();
                         }
                     }
