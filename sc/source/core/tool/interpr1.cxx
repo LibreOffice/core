@@ -2607,7 +2607,7 @@ void ScInterpreter::ScCellExternal()
                 PushString(OUString::number(pToken->GetDouble()));
             break;
             case svError:
-                PushString(ScGlobal::GetErrorString(pToken->GetError()));
+                PushString(ScGlobal::GetErrorString(static_cast<FormulaErrorToken*>(pToken.get())->GetError()));
             break;
             default:
                 PushString(OUString());
@@ -2958,7 +2958,7 @@ void ScInterpreter::ScIsNV()
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
             if (nGlobalError == FormulaError::NotAvailable ||
-                    (pToken && pToken->GetType() == svError && pToken->GetError() == FormulaError::NotAvailable))
+                    (pToken && pToken->GetType() == svError && static_cast<FormulaErrorToken*>(pToken.get())->GetError() == FormulaError::NotAvailable))
                 bRes = true;
         }
         break;
@@ -3015,7 +3015,7 @@ void ScInterpreter::ScIsErr()
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
             if ((nGlobalError != FormulaError::NONE && nGlobalError != FormulaError::NotAvailable) || !pToken ||
-                    (pToken->GetType() == svError && pToken->GetError() != FormulaError::NotAvailable))
+                    (pToken->GetType() == svError && static_cast<FormulaErrorToken*>(pToken.get())->GetError() != FormulaError::NotAvailable))
                 bRes = true;
         }
         break;
@@ -7911,7 +7911,10 @@ void ScInterpreter::ScXLookup()
     if ( nParamCount >= 4 && GetStackType() != svEmptyCell )
     {
         xNotFound = PopToken();
-        nFirstMatchError = xNotFound->GetError();
+        if (xNotFound->GetType() == svError)
+            nFirstMatchError = static_cast<const FormulaErrorToken*>(xNotFound.get())->GetError();
+        else
+            nFirstMatchError = FormulaError::NONE;
         nGlobalError = FormulaError::NONE; // propagate only for match or active result path
     }
 
@@ -10073,7 +10076,10 @@ void ScInterpreter::ScLet()
         const formula::FormulaConstTokenRef& xLambdaResult(aInt.GetResultToken());
         if (xLambdaResult)
         {
-            nGlobalError = xLambdaResult->GetError();
+            if (xLambdaResult->GetType() == svError)
+                nGlobalError = static_cast<const FormulaErrorToken*>(xLambdaResult.get())->GetError();
+            else
+                nGlobalError = FormulaError::NONE;
             if (nGlobalError == FormulaError::NONE)
                 PushTokenRef(xLambdaResult);
             else

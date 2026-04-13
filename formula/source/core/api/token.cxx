@@ -240,17 +240,6 @@ FormulaToken* FormulaToken::GetFAPOrigToken() const
     return nullptr;
 }
 
-FormulaError FormulaToken::GetError() const
-{
-    SAL_WARN( "formula.core", "FormulaToken::GetError: virtual dummy called" );
-    return FormulaError::NONE;
-}
-
-void FormulaToken::SetError( FormulaError )
-{
-    assert( !"virtual dummy called" );
-}
-
 const ScSingleRefData* FormulaToken::GetSingleRef() const
 {
     OSL_FAIL( "FormulaToken::GetSingleRef: virtual dummy called" );

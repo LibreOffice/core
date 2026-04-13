@@ -2544,7 +2544,8 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         }
         // #NAME? followed by a ref produces invalid OOXML like "#NAME?$C7"
         if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocPush
-            && t->GetError() == FormulaError::NoName)
+            && t->GetType() == svError
+            && static_cast<const FormulaErrorToken*>(t)->GetError() == FormulaError::NoName)
         {
             FormulaToken* pNextToken = maArrIterator.PeekNext();
             if (pNextToken && pNextToken->IsRef())
@@ -2824,7 +2825,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             }
             break;
             case svError:
-                AppendErrorConstant( rBuffer, t->GetError());
+                AppendErrorConstant( rBuffer, static_cast<const FormulaErrorToken*>(t)->GetError());
             break;
             case svByte:
             case svJump:

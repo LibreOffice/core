@@ -225,8 +225,6 @@ public:
     virtual void                SetSheet( sal_Int16 n );
     virtual short*              GetJump() const;
     virtual FormulaToken*       GetFAPOrigToken() const;
-    virtual FormulaError        GetError() const;
-    virtual void                SetError( FormulaError );
 
     virtual const ScSingleRefData*  GetSingleRef() const;
     virtual ScSingleRefData*        GetSingleRef();
@@ -517,8 +515,8 @@ public:
                                     FormulaToken( r ), nError( r.nError) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaErrorToken(*this); }
-    virtual FormulaError        GetError() const override;
-    virtual void                SetError( FormulaError nErr ) override;
+    FormulaError                GetError() const;
+    void                        SetError( FormulaError nErr );
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 
     // we do some performance stuff in ScInterpreter::PushError that needs this

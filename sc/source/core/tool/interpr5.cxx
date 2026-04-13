@@ -550,7 +550,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             switch (pToken->GetType())
             {
                 case svError:
-                    pMat->PutError( pToken->GetError(), 0, 0);
+                    pMat->PutError( static_cast<FormulaErrorToken*>(pToken.get())->GetError(), 0, 0);
                 break;
                 case svDouble:
                     pMat->PutDouble( pToken->GetDouble(), 0, 0);
