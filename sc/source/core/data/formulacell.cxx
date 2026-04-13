@@ -4180,7 +4180,8 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaC
             break;
             case formula::svError:
             {
-                if (pThisTok->GetError() != pOtherTok->GetError())
+                if (static_cast<FormulaErrorToken*>(pThisTok)->GetError()
+                    != static_cast<FormulaErrorToken*>(pOtherTok)->GetError())
                     return NotEqual;
             }
             break;

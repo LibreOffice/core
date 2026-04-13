@@ -6142,7 +6142,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                                 CreateStringFromDoubleRef( aBuffer, pRef);
                                 break;
                             case svError:
-                                AppendErrorConstant( aBuffer, pRef->GetError());
+                                AppendErrorConstant( aBuffer, static_cast<const FormulaErrorToken*>(pRef)->GetError());
                                 break;
                             default:
                                 AppendErrorConstant( aBuffer, FormulaError::NoCode);

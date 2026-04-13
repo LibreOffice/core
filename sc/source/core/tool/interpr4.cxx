@@ -628,7 +628,7 @@ void ScInterpreter::PushTempToken( FormulaToken* p )
         {
             if (p->GetType() == svError)
             {
-                p->SetError( nGlobalError);
+                static_cast<FormulaErrorToken*>(p)->SetError( nGlobalError);
                 PushTempTokenWithoutError( p);
             }
             else
@@ -673,7 +673,7 @@ void ScInterpreter::PushTokenRef( const formula::FormulaConstTokenRef& x )
     {
         if (nGlobalError != FormulaError::NONE)
         {
-            if (x->GetType() == svError && x->GetError() == nGlobalError)
+            if (x->GetType() == svError && static_cast<const FormulaErrorToken*>(x.get())->GetError() == nGlobalError)
                 PushTempTokenWithoutError( x.get());
             else
                 PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
@@ -756,7 +756,7 @@ void ScInterpreter::PopError()
     {
         sp--;
         if (pStack[sp]->GetType() == svError)
-            nGlobalError = pStack[sp]->GetError();
+            nGlobalError = static_cast<const FormulaErrorToken*>(pStack[sp])->GetError();
     }
     else
         SetError(FormulaError::UnknownStackVariable);
@@ -769,7 +769,7 @@ FormulaConstTokenRef ScInterpreter::PopTokenImpl()
         sp--;
         const FormulaToken* p = pStack[ sp ];
         if (p->GetType() == svError)
-            nGlobalError = p->GetError();
+            nGlobalError = static_cast<const FormulaErrorToken*>(p)->GetError();
         return p;
     }
     else
@@ -788,7 +788,7 @@ double ScInterpreter::PopDouble()
         switch (p->GetType())
         {
             case svError:
-                nGlobalError = p->GetError();
+                nGlobalError = static_cast<const FormulaErrorToken*>(p)->GetError();
                 break;
             case svDouble:
                 {
@@ -821,7 +821,7 @@ const svl::SharedString & ScInterpreter::PopString()
         switch (p->GetType())
         {
             case svError:
-                nGlobalError = p->GetError();
+                nGlobalError = static_cast<const FormulaErrorToken*>(p)->GetError();
                 break;
             case svString:
             case svStringName:
@@ -915,7 +915,7 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
         switch (p->GetType())
         {
             case svError:
-                nGlobalError = p->GetError();
+                nGlobalError = static_cast<const FormulaErrorToken*>(p)->GetError();
                 break;
             case svSingleRef:
                 {
@@ -1012,7 +1012,7 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         switch (p->GetType())
         {
             case svError:
-                nGlobalError = p->GetError();
+                nGlobalError = static_cast<const FormulaErrorToken*>(p)->GetError();
                 break;
             case svDoubleRef:
                 DoubleRefToVars( p, rCol1, rRow1, rTab1, rCol2, rRow2, rTab2);
@@ -1051,7 +1051,7 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
         switch (pToken->GetType())
         {
             case svError:
-                nGlobalError = pToken->GetError();
+                nGlobalError = static_cast<const FormulaErrorToken*>(pToken)->GetError();
                 break;
             case svDoubleRef:
             {
@@ -1104,7 +1104,7 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, bool bDontCheckForTableOp )
         switch (p->GetType())
         {
             case svError:
-                nGlobalError = p->GetError();
+                nGlobalError = static_cast<const FormulaErrorToken*>(p)->GetError();
                 break;
             case svDoubleRef:
                 DoubleRefToRange( *p->GetDoubleRef(), rRange, bDontCheckForTableOp);
@@ -1154,7 +1154,7 @@ void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName
 
     if (eType == svError)
     {
-        nGlobalError = p->GetError();
+        nGlobalError = static_cast<const FormulaErrorToken*>(p)->GetError();
         return;
     }
 
@@ -1212,7 +1212,7 @@ void ScInterpreter::PopExternalSingleRef(
     }
 
     if (xNew->GetType() == svError)
-        SetError( xNew->GetError());
+        SetError( static_cast<FormulaErrorToken*>(xNew.get())->GetError());
 
     rToken = std::move(xNew);
     if (pFmt)
@@ -1233,7 +1233,7 @@ void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName
 
     if (eType == svError)
     {
-        nGlobalError = p->GetError();
+        nGlobalError = static_cast<const FormulaErrorToken*>(p)->GetError();
         return;
     }
 
@@ -1322,7 +1322,7 @@ void ScInterpreter::GetExternalDoubleRef(
     assert(pToken);
     if (pToken->GetType() == svError)
     {
-        SetError( pToken->GetError());
+        SetError( static_cast<FormulaErrorToken*>(pToken)->GetError());
         return;
     }
     if (pToken->GetType() != svMatrix)
@@ -1665,7 +1665,7 @@ ScMatrixRef ScInterpreter::PopMatrix()
         switch (p->GetType())
         {
             case svError:
-                nGlobalError = p->GetError();
+                nGlobalError = static_cast<const FormulaErrorToken*>(p)->GetError();
                 break;
             case svMatrix:
                 {
@@ -4685,7 +4685,7 @@ StackVar ScInterpreter::Interpret()
                     ;   // nothing
                 break;
                 case svError:
-                    nGlobalError = pCur->GetError();
+                    nGlobalError = static_cast<const FormulaErrorToken*>(pCur)->GetError();
                 break;
                 case svDouble :
                     {

@@ -5304,7 +5304,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
         break;
         case svError:
         {
-            FormulaError nErr = rToken.GetError();
+            FormulaError nErr = static_cast<const FormulaErrorToken&>(rToken).GetError();
             OpCode eOpErr;
             switch (nErr)
             {
