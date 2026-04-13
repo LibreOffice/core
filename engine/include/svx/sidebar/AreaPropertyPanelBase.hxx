@@ -131,13 +131,19 @@ protected:
     std::unique_ptr<weld::Toolbar> mxToolBoxColor; // for new color picker
     std::unique_ptr<ToolbarUnoDispatcher> mxColorDispatch;
     std::unique_ptr<weld::Label> mxTrspTextFT;
+    std::unique_ptr<weld::Label> mxTrspRTextFT;
+    std::unique_ptr<weld::Label> mxGradStyleTextFT;
+    std::unique_ptr<weld::Label> mxGradAngleTextFT;
+    std::unique_ptr<weld::Label> mxGradFromTextFT;
+    std::unique_ptr<weld::Label> mxGradToTextFT;
     std::unique_ptr<weld::ComboBox> mxLBTransType;
     std::unique_ptr<weld::MetricSpinButton> mxMTRTransparent;
-    std::unique_ptr<weld::Scale> mxSldTransparent;
     std::unique_ptr<weld::Toolbar> mxBTNGradient;
     std::unique_ptr<weld::MetricSpinButton> mxMTRAngle;
     std::unique_ptr<weld::ComboBox> mxGradientStyle;
     std::unique_ptr<weld::Button> mxBmpImport;
+    std::unique_ptr<weld::Widget> mxGradOrImportBox;
+    std::unique_ptr<weld::Widget> mxFillEffectBox;
     std::unique_ptr<AreaTransparencyGradientPopup> mxTrGrPopup;
 
     std::unique_ptr< XFillStyleItem >               mpStyleItem;
@@ -151,7 +157,8 @@ protected:
     OUString maImgQuad;
     OUString maImgRadial;
     OUString maImgSquare;
-    OUString  maImgLinear;
+    OUString maImgLinear;
+    OUString maFrom;
 
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
     std::unique_ptr< XFillTransparenceItem >        mpTransparenceItem;
@@ -165,7 +172,6 @@ protected:
     DECL_DLLPRIVATE_LINK(ChangeGradientAngle, weld::MetricSpinButton&, void);
     DECL_DLLPRIVATE_LINK(ChangeTrgrTypeHdl_Impl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_DLLPRIVATE_LINK(ModifyTransSliderHdl, weld::Scale&, void);
     DECL_DLLPRIVATE_LINK(ClickImportBitmapHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(ToolbarHdl_Impl, const OUString&, void);
 

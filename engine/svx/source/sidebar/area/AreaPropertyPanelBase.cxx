@@ -80,19 +80,26 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       mxToolBoxColor(m_xBuilder->weld_toolbar(u"selectcolor"_ustr)),
       mxColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxColor, *m_xBuilder, rxFrame)),
       mxTrspTextFT(m_xBuilder->weld_label(u"transparencylabel"_ustr)),
+      mxTrspRTextFT(m_xBuilder->weld_label(u"transparencyratelabel"_ustr)),
+      mxGradStyleTextFT(m_xBuilder->weld_label(u"gradientstylelabel"_ustr)),
+      mxGradAngleTextFT(m_xBuilder->weld_label(u"gradanglelabel"_ustr)),
+      mxGradFromTextFT(m_xBuilder->weld_label(u"filleffectlabel"_ustr)),
+      mxGradToTextFT(m_xBuilder->weld_label(u"fillgrad2label"_ustr)),
       mxLBTransType(m_xBuilder->weld_combo_box(u"transtype"_ustr)),
       mxMTRTransparent(m_xBuilder->weld_metric_spin_button(u"settransparency"_ustr, FieldUnit::PERCENT)),
-      mxSldTransparent(m_xBuilder->weld_scale(u"transparencyslider"_ustr)),
       mxBTNGradient(m_xBuilder->weld_toolbar(u"selectgradient"_ustr)),
       mxMTRAngle(m_xBuilder->weld_metric_spin_button(u"gradangle"_ustr, FieldUnit::DEGREE)),
       mxGradientStyle(m_xBuilder->weld_combo_box(u"gradientstyle"_ustr)),
       mxBmpImport(m_xBuilder->weld_button(u"bmpimport"_ustr)),
+      mxGradOrImportBox(m_xBuilder->weld_widget(u"gradorimportbox"_ustr)),
+      mxFillEffectBox(m_xBuilder->weld_widget(u"filleffectbox"_ustr)),
       maImgAxial(BMP_AXIAL),
       maImgElli(BMP_ELLI),
       maImgQuad(BMP_QUAD),
       maImgRadial(BMP_RADIAL),
       maImgSquare(BMP_SQUARE),
-      maImgLinear(BMP_LINEAR)
+      maImgLinear(BMP_LINEAR),
+      maFrom(u"From:"_ustr)
 {
     Initialize();
 }
@@ -106,15 +113,21 @@ AreaPropertyPanelBase::~AreaPropertyPanelBase()
     mxColorDispatch.reset();
     mxToolBoxColor.reset();
     mxTrspTextFT.reset();
+    mxTrspRTextFT.reset();
+    mxGradStyleTextFT.reset();
+    mxGradAngleTextFT.reset();
+    mxGradFromTextFT.reset();
+    mxGradToTextFT.reset();
     mxLBTransType.reset();
     mxMTRTransparent.reset();
-    mxSldTransparent.reset();
     mxBTNGradient.reset();
     mxMTRAngle.reset();
     mxLbFillGradFrom.reset();
     mxLbFillGradTo.reset();
     mxGradientStyle.reset();
     mxBmpImport.reset();
+    mxGradOrImportBox.reset();
+    mxFillEffectBox.reset();
 }
 
 void AreaPropertyPanelBase::Initialize()
@@ -167,7 +180,6 @@ void AreaPropertyPanelBase::Initialize()
 
     SetTransparency( 50 );
     mxMTRTransparent->connect_value_changed(LINK(this, AreaPropertyPanelBase, ModifyTransparentHdl_Impl));
-    mxSldTransparent->connect_value_changed(LINK(this, AreaPropertyPanelBase, ModifyTransSliderHdl));
 
     mxTrGrPopup = std::make_unique<AreaTransparencyGradientPopup>(mxFrame, *this, mxBTNGradient.get());
 
@@ -186,7 +198,6 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ToolbarHdl_Impl, const OUString&, void)
 
 void AreaPropertyPanelBase::SetTransparency(sal_uInt16 nVal)
 {
-    mxSldTransparent->set_value(nVal);
     mxMTRTransparent->set_value(nVal, FieldUnit::PERCENT);
 }
 
@@ -460,6 +471,14 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
             bShowGradientStyle = true;
             bShowMTRAngle = true;
 
+            mxGradStyleTextFT->set_sensitive(true);
+            mxGradAngleTextFT->set_sensitive(true);
+            mxGradFromTextFT->set_sensitive(true);
+            mxGradToTextFT->set_sensitive(true);
+
+            mxGradFromTextFT->set_mnemonic_widget(&mxLbFillGradFrom->get_widget());
+            mxGradFromTextFT->set_label(maFrom);
+
             mxLbFillAttr->set_sensitive(true);
             mxLbFillGradTo->set_sensitive(true);
             mxLbFillGradFrom->set_sensitive(true);
@@ -546,6 +565,9 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
         {
             bShowLbFillAttr = true;
 
+            mxGradFromTextFT->set_mnemonic_widget(mxLbFillAttr.get());
+            mxGradFromTextFT->set_label(mxLbFillType->get_active_text() + ":");
+
             const SvxHatchListItem* pItem(pSh->GetItem(SID_HATCH_LIST));
             if (pItem)
             {
@@ -582,6 +604,8 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
         case PATTERN:
         {
             bShowLbFillAttr = true;
+            mxGradFromTextFT->set_mnemonic_widget(mxLbFillAttr.get());
+            mxGradFromTextFT->set_label(mxLbFillType->get_active_text() + ":");
             mxLbFillAttr->set_sensitive(true);
             mxLbFillAttr->clear();
 
@@ -652,8 +676,8 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
             // No transparencies here
             mxLBTransType->hide();
             mxTrspTextFT->hide();
+            mxTrspRTextFT->hide();
             mxMTRTransparent->hide();
-            mxSldTransparent->hide();
             mxBTNGradient->hide();
             if (bUpdateModel)
             {
@@ -667,11 +691,18 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
 
     mxLbFillAttr->set_visible(bShowLbFillAttr);
     mxLbFillGradFrom->set_visible(bShowLbFillGradFrom);
+    mxGradFromTextFT->set_visible(bShowLbFillGradFrom || bShowLbFillAttr);
     mxLbFillGradTo->set_visible(bShowLbFillGradTo);
+    mxGradToTextFT->set_visible(bShowLbFillGradTo);
     mxGradientStyle->set_visible(bShowGradientStyle);
+    mxGradStyleTextFT->set_visible(bShowGradientStyle);
     mxMTRAngle->set_visible(bShowMTRAngle);
+    mxGradAngleTextFT->set_visible(bShowMTRAngle);
     mxToolBoxColor->set_visible(bShowToolBoxColor);
     mxBmpImport->set_visible(bShowBmpImport);
+
+    mxGradOrImportBox->set_visible(bShowGradientStyle || bShowBmpImport);
+    mxFillEffectBox->set_visible(bShowToolBoxColor || bShowLbFillAttr || bShowLbFillGradFrom);
 
     meLastXFS = static_cast<sal_uInt16>(nPos);
 
@@ -700,9 +731,9 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
                 mxLBTransType->set_active(1);
                 mxBTNGradient->hide();
                 mxMTRTransparent->show();
-                mxSldTransparent->show();
+                mxTrspRTextFT->show();
                 mxMTRTransparent->set_sensitive(true);
-                mxSldTransparent->set_sensitive(true);
+                mxTrspRTextFT->set_sensitive(true);
                 SetTransparency(nValue);
             }
 
@@ -723,7 +754,7 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
                 mxLBTransType->set_sensitive(true);
                 mxTrspTextFT->set_sensitive(true);
                 mxMTRTransparent->hide();
-                mxSldTransparent->hide();
+                mxTrspRTextFT->hide();
                 mxBTNGradient->set_sensitive(true);
                 mxBTNGradient->show();
 
@@ -785,9 +816,9 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
             mxLBTransType->set_active(0);
             mxBTNGradient->hide();
             mxMTRTransparent->set_sensitive(true);
-            mxSldTransparent->set_sensitive(true);
+            mxTrspRTextFT->set_sensitive(true);
             mxMTRTransparent->show();
-            mxSldTransparent->show();
+            mxTrspRTextFT->show();
             SetTransparency(0);
         }
     }
@@ -798,9 +829,9 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
         mxLBTransType->set_sensitive(false);
         mxTrspTextFT->set_sensitive(false);
         mxMTRTransparent->set_sensitive(false);
-        mxSldTransparent->set_sensitive(false);
+        mxTrspRTextFT->set_sensitive(false);
         mxMTRTransparent->show();
-        mxSldTransparent->show();
+        mxTrspRTextFT->show();
         mxBTNGradient->set_sensitive(false);
         mxBTNGradient->hide();
     }
@@ -948,6 +979,12 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefaultOrSe
         mxLbFillGradTo->show();
         mxMTRAngle->show();
         mxGradientStyle->show();
+
+        mxGradStyleTextFT->show();
+        mxGradAngleTextFT->show();
+        mxGradFromTextFT->show();
+        mxGradToTextFT->show();
+
         mxToolBoxColor->hide();
 
         if (bDefaultOrSet)
@@ -963,6 +1000,11 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefaultOrSe
             mxLbFillGradTo->set_sensitive(false);
             mxMTRAngle->set_sensitive(false);
             mxGradientStyle->set_sensitive(false);
+
+            mxGradStyleTextFT->set_sensitive(false);
+            mxGradAngleTextFT->set_sensitive(false);
+            mxGradFromTextFT->set_sensitive(false);
+            mxGradToTextFT->set_sensitive(false);
         }
         else
         {
@@ -1197,14 +1239,6 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
     FillStyleChanged(false);
 }
 
-IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransSliderHdl, weld::Scale&, void)
-{
-    const sal_uInt16 nVal = mxSldTransparent->get_value();
-    SetTransparency(nVal);
-    const XFillTransparenceItem aLinearItem(nVal);
-    setFillTransparence(aLinearItem);
-}
-
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, weld::ComboBox&, void)
 {
     sal_Int32 nSelectType = mxLBTransType->get_active();
@@ -1215,21 +1249,21 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, weld::ComboBox&, 
     {
         mxBTNGradient->hide();
         mxMTRTransparent->show();
-        mxSldTransparent->show();
+        mxTrspRTextFT->show();
         mxMTRTransparent->set_sensitive(true);
-        mxSldTransparent->set_sensitive(true);
+        mxTrspRTextFT->set_sensitive(true);
         SetTransparency(0);
     }
     else if(1 == nSelectType)
     {
         mxBTNGradient->hide();
         mxMTRTransparent->show();
-        mxSldTransparent->show();
+        mxTrspRTextFT->show();
         nTrans = mnLastTransSolid;
         mxMTRTransparent->set_value(nTrans, FieldUnit::PERCENT);
         mxLBTransType->set_active(1);
         mxMTRTransparent->set_sensitive(true);
-        mxSldTransparent->set_sensitive(true);
+        mxTrspRTextFT->set_sensitive(true);
     }
     else
     {
@@ -1258,7 +1292,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, weld::ComboBox&, 
         }
 
         mxMTRTransparent->hide();
-        mxSldTransparent->hide();
+        mxTrspRTextFT->hide();
         mxBTNGradient->set_sensitive(true);
         bGradient = true;
     }
