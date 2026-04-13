@@ -961,8 +961,13 @@ void PowerPointExport::WriteSections()
     static constexpr OUString aSectionExtUri = u"{521415D9-36F7-43E2-AB2F-B90AF26B5E84}"_ustr;
     mPresentationFS->startElementNS(XML_p, XML_extLst);
     mPresentationFS->startElementNS(XML_p, XML_ext, XML_uri, aSectionExtUri);
-    mPresentationFS->startElementNS(XML_p14, XML_sectionLst);
+    mPresentationFS->startElementNS(XML_p14, XML_sectionLst, FSNS(XML_xmlns, XML_p14),
+                                    getNamespaceURL(OOX_NS(p14)));
 
+    // Resolve slide names to IDs via name lookup. If names don't match
+    // (e.g. after ODP round-trip where names change), fall back to
+    // position-based resolution.
+    sal_Int32 nFallbackIdx = 0;
     for (const auto& rSectionProp : aSectionList)
     {
         uno::Sequence<beans::PropertyValue> aSectionProps;
@@ -993,17 +998,21 @@ void PowerPointExport::WriteSections()
 
         for (const OUString& rSlideName : aSlideNames)
         {
+            sal_Int32 nSlideIndex = -1;
+
+            // Try name-based lookup first
             auto it = aNameToIndex.find(rSlideName);
             if (it != aNameToIndex.end())
+                nSlideIndex = it->second;
+            else
+                nSlideIndex = nFallbackIdx; // Position fallback for name mismatches
+
+            if (nSlideIndex >= 0 && o3tl::make_unsigned(nSlideIndex) < maSlideIdsInOrder.size())
             {
-                sal_Int32 nSlideIndex = it->second;
-                if (nSlideIndex >= 0
-                    && o3tl::make_unsigned(nSlideIndex) < maSlideIdsInOrder.size())
-                {
-                    mPresentationFS->singleElementNS(XML_p14, XML_sldId,
-                                                     XML_id, OString::number(maSlideIdsInOrder[nSlideIndex]));
-                }
+                mPresentationFS->singleElementNS(XML_p14, XML_sldId, XML_id,
+                                                 OString::number(maSlideIdsInOrder[nSlideIndex]));
             }
+            ++nFallbackIdx;
         }
 
         mPresentationFS->endElementNS(XML_p14, XML_sldIdLst);
