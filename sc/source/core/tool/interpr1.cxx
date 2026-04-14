@@ -10029,7 +10029,7 @@ void ScInterpreter::ScLet()
 
             if (aIntType == formula::svMatrixCell)
             {
-                ScConstMatrixRef xMat(aInt.GetResultToken()->GetMatrix());
+                ScConstMatrixRef xMat(static_cast<const ScMatrixCellResultToken*>(aInt.GetResultToken().get())->GetMatrix());
                 if (!nResultIndexes.insert(std::make_pair(aStrName, new ScMatrixToken(xMat->Clone()))).second)
                 {
                     PushIllegalParameter();
@@ -10068,7 +10068,7 @@ void ScInterpreter::ScLet()
 
     if (aIntType == formula::svMatrixCell)
     {
-        ScConstMatrixRef xMat(aInt.GetResultToken()->GetMatrix());
+        ScConstMatrixRef xMat(static_cast<const ScMatrixCellResultToken*>(aInt.GetResultToken().get())->GetMatrix());
         PushTokenRef(new ScMatrixToken(xMat->Clone()));
     }
     else

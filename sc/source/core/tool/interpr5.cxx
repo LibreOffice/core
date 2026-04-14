@@ -344,7 +344,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
          * TODO: a matrix already stored in pTokenMatrixMap should be
          * read-only and have a copy-on-write mechanism. Previously all tokens
          * were modifiable so we're already better than before ... */
-        return const_cast<FormulaToken*>((*aIter).second.get())->GetMatrix();
+        return static_cast<ScMatrixToken*>(const_cast<FormulaToken*>((*aIter).second.get()))->GetMatrix();
     }
 
     ScMatrixRef pMat = GetNewMat( nMatCols, nMatRows, true);

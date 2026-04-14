@@ -690,7 +690,8 @@ const ScMatrix* ScMatrixToken::GetMatrix() const        { return pMatrix.get(); 
 ScMatrix*       ScMatrixToken::GetMatrix()              { return pMatrix.get(); }
 bool ScMatrixToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaToken::operator==( r ) && pMatrix == r.GetMatrix();
+    return FormulaToken::operator==( r )
+        && pMatrix == static_cast<const ScMatrixToken&>(r).GetMatrix();
 }
 
 ScMatrixRangeToken::ScMatrixRangeToken( const sc::RangeMatrix& rMat ) :
@@ -979,12 +980,6 @@ const svl::SharedString & ScMatrixCellResultToken::GetString() const
 }
 
 const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix.get(); }
-// Non-const GetMatrix() is private and unused but must be implemented to
-// satisfy vtable linkage.
-ScMatrix* ScMatrixCellResultToken::GetMatrix()
-{
-    return const_cast<ScMatrix*>(xMatrix.get());
-}
 
 bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
 {
@@ -1055,7 +1050,7 @@ void ScMatrixFormulaCellToken::Assign( const formula::FormulaToken& r )
         if (r.GetType() == svMatrix)
         {
             xUpperLeft = nullptr;
-            xMatrix = r.GetMatrix();
+            xMatrix = static_cast<const ScMatrixToken&>(r).GetMatrix();
         }
         else
         {
@@ -5101,7 +5096,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
         break;
         case svMatrix:
         {
-            const ScMatrix* pMat = rToken.GetMatrix();
+            const ScMatrix* pMat = static_cast<const ScMatrixToken&>(rToken).GetMatrix();
             if (!pMat)
                 return;
 

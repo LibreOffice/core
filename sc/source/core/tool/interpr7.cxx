@@ -73,7 +73,7 @@ void ScInterpreter::ScFilterXML()
         }
         else if (GetStackType() == formula::svMatrix)
         {
-            const ScMatrix* pPathMatrix = pStack[sp-1]->GetMatrix();
+            const ScMatrix* pPathMatrix = static_cast<const ScMatrixToken*>(pStack[sp-1])->GetMatrix();
             if (!pPathMatrix)
             {
                 PushIllegalParameter();

@@ -546,7 +546,7 @@ const svl::SharedString & ScFormulaResult::GetString() const
 ScConstMatrixRef ScFormulaResult::GetMatrix() const
 {
     if (GetType() == formula::svMatrixCell)
-        return mpToken->GetMatrix();
+        return static_cast<const ScMatrixCellResultToken*>(mpToken)->GetMatrix();
     return nullptr;
 }
 
