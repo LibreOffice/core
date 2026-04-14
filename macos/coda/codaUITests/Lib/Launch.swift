@@ -34,6 +34,7 @@ final class Launch {
 
         app.launchArguments = [
             "--uitesting", "--testFile", path,
+            "--testDriverPort=\(JSBridge.port)",
             "-ApplePersistenceIgnoreState", "YES",
         ]
         app.launch()
