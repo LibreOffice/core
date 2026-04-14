@@ -26,6 +26,7 @@
 #include "hintids.hxx"
 #include "swtypes.hxx"
 #include "format.hxx"
+#include <basegfx/units/Length.hxx>
 #include <svl/poolitem.hxx>
 
 /// Defines the vertical position of a fly frame.
@@ -33,7 +34,7 @@
 /// For example: from top (orientation), by 1cm (relative position), to the entire page (relation).
 class SW_DLLPUBLIC SwFormatVertOrient final : public SfxPoolItem
 {
-    SwTwips         m_nYPos;  ///< Contains *always* the current RelPos.
+    gfx::Length m_nYPos; ///< Contains *always* the current RelPos.
     sal_Int16       m_eOrient;
     sal_Int16       m_eRelation;
 public:
@@ -61,9 +62,19 @@ public:
     void   SetRelationOrient( sal_Int16 eNew )
     { ASSERT_CHANGE_REFCOUNTED_ITEM; m_eRelation = eNew; }
 
-    SwTwips GetPos() const { return m_nYPos; }
+    SwTwips GetPos() const { return std::round(m_nYPos.as_twip()); }
     void    SetPos( SwTwips nNew )
-    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nYPos = nNew; }
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        m_nYPos = gfx::Length::twip(nNew);
+    }
+
+    gfx::Length getPosition() const { return m_nYPos; }
+    void setPosition(gfx::Length nNew)
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        m_nYPos = nNew;
+    }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
@@ -77,7 +88,7 @@ protected:
 /// (relation).
 class SW_DLLPUBLIC SwFormatHoriOrient final : public SfxPoolItem
 {
-    SwTwips         m_nXPos;              ///< Contains *always* the current RelPos.
+    gfx::Length m_nXPos; ///< Contains *always* the current RelPos.
     sal_Int16       m_eOrient;
     sal_Int16       m_eRelation;
     bool            m_bPosToggle : 1; ///< Flip position on even pages.
@@ -104,8 +115,19 @@ public:
     void SetHoriOrient( sal_Int16 eNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_eOrient = eNew; }
     void SetRelationOrient( sal_Int16 eNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_eRelation = eNew; }
 
-    SwTwips GetPos() const { return m_nXPos; }
-    void    SetPos( SwTwips nNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nXPos = nNew; }
+    SwTwips GetPos() const { return std::round(m_nXPos.as_twip()); }
+    void SetPos(SwTwips nNew)
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        m_nXPos = gfx::Length::twip(nNew);
+    }
+
+    gfx::Length getPosition() const { return m_nXPos; }
+    void setPosition(gfx::Length nNew)
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        m_nXPos = nNew;
+    }
 
     bool IsPosToggle() const { return m_bPosToggle; }
     void SetPosToggle( bool bNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_bPosToggle = bNew; }
