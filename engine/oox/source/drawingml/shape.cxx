@@ -493,6 +493,11 @@ void Shape::addShape(
 
                 if (!officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get() && !bPowerPoint)
                     convertSmartArtToMetafile( rFilterBase );
+
+                // propagateDiagramHelper() already synced and cleared the font
+                // heights map via syncDiagramFontHeights().  Reset the filter's
+                // raw pointer so it cannot dangle if the Diagram is freed later.
+                rFilterBase.setDiagramFontHeights(nullptr);
             }
 
             NamedShapePairs* pNamedShapePairs = rFilterBase.getDiagramFontHeights();
