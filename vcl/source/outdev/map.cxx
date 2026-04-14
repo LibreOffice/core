@@ -825,17 +825,18 @@ vcl::Region OutputDevice::PixelToLogic( const vcl::Region& rDeviceRegion ) const
 Point OutputDevice::PixelToLogic( const Point& rDevicePt,
                                   const MapMode& rMapMode ) const
 {
-
     // calculate nothing if default-MapMode
     if ( rMapMode.IsDefault() )
         return rDevicePt;
 
-    // calculate MapMode-resolution and convert
-    ImplMapRes          aMapRes;
+    // calculate MapMode-resolution
+    ImplMapRes aMapRes;
     aMapRes.CalcMapResolution(rMapMode, mpMapper->GetDPIX(), mpMapper->GetDPIY());
 
-    return Point(mpMapper->ViewToLogicDistanceX(rDevicePt.X(), aMapRes.mfMapScX) - aMapRes.mnMapOfsX - mpMapper->GetLogicalXOffset(),
-                 mpMapper->ViewToLogicDistanceY(rDevicePt.Y(), aMapRes.mfMapScY) - aMapRes.mnMapOfsY - mpMapper->GetLogicalYOffset());
+    return Point(
+        mpMapper->ViewSubPixelToLogicIntX(rDevicePt.X(), aMapRes),
+        mpMapper->ViewSubPixelToLogicIntY(rDevicePt.Y(), aMapRes)
+    );
 }
 
 Size OutputDevice::PixelToLogic( const Size& rDeviceSize,

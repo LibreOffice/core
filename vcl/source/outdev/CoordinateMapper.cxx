@@ -272,6 +272,17 @@ tools::Long CoordinateMapper::ViewSubPixelToLogicUnitsIntY(double fY) const
     return ViewSubPixelToLogicDistanceY(fY) - maMapRes.mnMapOfsY;
 }
 
+tools::Long CoordinateMapper::ViewSubPixelToLogicIntX(double fX, const ImplMapRes& rRes) const
+{
+    // Round distance (using custom scale), strip custom MapOfs, then strip internal OutOffLogic
+    return ViewToLogicDistanceX(std::llround(fX), rRes.mfMapScX) - rRes.mnMapOfsX - mnOutOffLogicX;
+}
+
+tools::Long CoordinateMapper::ViewSubPixelToLogicIntY(double fY, const ImplMapRes& rRes) const
+{
+    return ViewToLogicDistanceY(std::llround(fY), rRes.mfMapScY) - rRes.mnMapOfsY - mnOutOffLogicY;
+}
+
 double CoordinateMapper::LogicUnitsToViewSubPixelX(double fX) const
 {
     return LogicToViewDistanceSubPixelX(std::llround(fX + maMapRes.mnMapOfsX), maMapRes.mfMapScX);

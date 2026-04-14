@@ -209,6 +209,8 @@ public:
     // Note: This rounds the distance before stripping offsets to satisfy legacy test parity.
     tools::Long ViewSubPixelToLogicIntX(double fX) const;
     tools::Long ViewSubPixelToLogicIntY(double fY) const;
+    tools::Long ViewSubPixelToLogicIntX(double fX, const ImplMapRes& rRes) const;
+    tools::Long ViewSubPixelToLogicIntY(double fY, const ImplMapRes& rRes) const;
     double LogicToViewSubPixelX(double fX) const;
     double LogicToViewSubPixelY(double fY) const;
 
