@@ -107,15 +107,17 @@ PdfPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewIn
     calculateDiscreteVisibleRanges(rViewInformation, getTransform(), aDiscreteRange,
                                    aVisibleDiscreteRange, aUnitVisibleRange);
 
-    const double fDeviceScale = rViewInformation.getDeviceScaleFactor();
+    basegfx::B2DTuple const& rDeviceScale = rViewInformation.getDeviceScaleFactor();
 
     // full page size in pixels (for PDFium startX/startY calculation)
-    sal_Int32 nFullWidth = basegfx::fround(aDiscreteRange.getWidth() * fDeviceScale);
-    sal_Int32 nFullHeight = basegfx::fround(aDiscreteRange.getHeight() * fDeviceScale);
+    sal_Int32 nFullWidth = basegfx::fround(aDiscreteRange.getWidth() * rDeviceScale.getX());
+    sal_Int32 nFullHeight = basegfx::fround(aDiscreteRange.getHeight() * rDeviceScale.getY());
 
     // render only the visible portion at full resolution
-    sal_Int32 nVisibleWidth = basegfx::fround(aVisibleDiscreteRange.getWidth() * fDeviceScale);
-    sal_Int32 nVisibleHeight = basegfx::fround(aVisibleDiscreteRange.getHeight() * fDeviceScale);
+    sal_Int32 nVisibleWidth
+        = basegfx::fround(aVisibleDiscreteRange.getWidth() * rDeviceScale.getX());
+    sal_Int32 nVisibleHeight
+        = basegfx::fround(aVisibleDiscreteRange.getHeight() * rDeviceScale.getY());
 
     // if view information is not available, fall back to a fixed size based on the page dimensions
     if (nFullWidth <= 0 || nFullHeight <= 0)
@@ -132,6 +134,10 @@ PdfPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewIn
     if (nVisibleWidth > nMaxPixels || nVisibleHeight > nMaxPixels)
     {
         const double fScale = double(nMaxPixels) / std::max(nVisibleWidth, nVisibleHeight);
+        // Scale the full page render size too, otherwise PDFium renders at
+        // the original resolution and only the top-left portion fits in the bitmap.
+        nFullWidth = basegfx::fround(nFullWidth * fScale);
+        nFullHeight = basegfx::fround(nFullHeight * fScale);
         nVisibleWidth = basegfx::fround(nVisibleWidth * fScale);
         nVisibleHeight = basegfx::fround(nVisibleHeight * fScale);
     }

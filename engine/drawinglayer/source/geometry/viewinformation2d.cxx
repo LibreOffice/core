@@ -20,6 +20,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -106,8 +107,8 @@ protected:
     // determine if to use PixelSnapHairline on target pixel device
     bool mbPixelSnapHairline : 1;
 
-    // device scale factor of the target device (1.0 = no scaling)
-    double mfDeviceScaleFactor = 1.0;
+    // device scale factor of the target device (1.0, 1.0 = no scaling)
+    basegfx::B2DTuple maDeviceScaleFactor = { 1.0, 1.0 };
 
 public:
     ImpViewInformation2D()
@@ -223,8 +224,8 @@ public:
 
     bool getEditViewActive() const { return mbEditViewActive; }
     void setEditViewActive(bool bNew) { mbEditViewActive = bNew; }
-    double getDeviceScaleFactor() const { return mfDeviceScaleFactor; }
-    void setDeviceScaleFactor(double fFactor) { mfDeviceScaleFactor = fFactor; }
+    basegfx::B2DTuple const& getDeviceScaleFactor() const { return maDeviceScaleFactor; }
+    void setDeviceScaleFactor(basegfx::B2DTuple const& rFactor) { maDeviceScaleFactor = rFactor; }
 
     bool getReducedDisplayQuality() const { return mbReducedDisplayQuality; }
     void setReducedDisplayQuality(bool bNew) { mbReducedDisplayQuality = bNew; }
@@ -247,7 +248,8 @@ public:
                 && mbEditViewActive == rCandidate.mbEditViewActive
                 && mbReducedDisplayQuality == rCandidate.mbReducedDisplayQuality
                 && mbUseAntiAliasing == rCandidate.mbUseAntiAliasing
-                && mbPixelSnapHairline == rCandidate.mbPixelSnapHairline);
+                && mbPixelSnapHairline == rCandidate.mbPixelSnapHairline
+                && maDeviceScaleFactor == rCandidate.maDeviceScaleFactor);
     }
 };
 
@@ -408,14 +410,14 @@ void ViewInformation2D::setEditViewActive(bool bNew)
     mpViewInformation2D->setEditViewActive(bNew);
 }
 
-double ViewInformation2D::getDeviceScaleFactor() const
+basegfx::B2DTuple const& ViewInformation2D::getDeviceScaleFactor() const
 {
     return mpViewInformation2D->getDeviceScaleFactor();
 }
 
-void ViewInformation2D::setDeviceScaleFactor(double fFactor)
+void ViewInformation2D::setDeviceScaleFactor(basegfx::B2DTuple const& rFactor)
 {
-    mpViewInformation2D->setDeviceScaleFactor(fFactor);
+    mpViewInformation2D->setDeviceScaleFactor(rFactor);
 }
 
 bool ViewInformation2D::getPixelSnapHairline() const

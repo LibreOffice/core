@@ -1134,7 +1134,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(OutputDevice& rOutputDevice,
     cairo_surface_get_device_scale(cairo_get_target(mpRT), &fSurfaceScaleX, &fSurfaceScaleY);
     {
         geometry::ViewInformation2D aUpdatedViewInfo(rViewInformation);
-        aUpdatedViewInfo.setDeviceScaleFactor(fSurfaceScaleX);
+        aUpdatedViewInfo.setDeviceScaleFactor(basegfx::B2DTuple(fSurfaceScaleX, fSurfaceScaleY));
         setViewInformation2D(aUpdatedViewInfo);
     }
 
@@ -1342,9 +1342,14 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const Bitmap& rBitmap,
         return;
     }
 
-    // work with dimensions in discrete target pixels to use evtl. MipMap pre-scale
-    const tools::Long nDestWidth((aLocalTransform * basegfx::B2DVector(1.0, 0.0)).getLength());
-    const tools::Long nDestHeight((aLocalTransform * basegfx::B2DVector(0.0, 1.0)).getLength());
+    // Work with dimensions in discrete target pixels to use evtl. MipMap pre-scale
+    // Account for device scale factor so we don't downscale a bitmap that was
+    // rendered at device resolution and then upscale it again at paint time.
+    basegfx::B2DTuple const& rDeviceScale = getViewInformation2D().getDeviceScaleFactor();
+    const tools::Long nDestWidth(basegfx::fround(
+        (aLocalTransform * basegfx::B2DVector(1.0, 0.0)).getLength() * rDeviceScale.getX()));
+    const tools::Long nDestHeight(basegfx::fround(
+        (aLocalTransform * basegfx::B2DVector(0.0, 1.0)).getLength() * rDeviceScale.getY()));
 
     // tdf#167831 check for output size, may have zero discrete dimension in X and/or Y
     if (0 == nDestWidth || 0 == nDestHeight)

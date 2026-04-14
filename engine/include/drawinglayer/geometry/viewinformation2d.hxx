@@ -36,6 +36,7 @@ namespace basegfx
 {
 class B2DHomMatrix;
 class B2DRange;
+class B2DTuple;
 }
 
 namespace com::sun::star::beans
@@ -176,12 +177,12 @@ public:
     bool getEditViewActive() const;
     void setEditViewActive(bool bNew);
 
-    /// Device scale factor of the target device (default 1.0)
+    /// Device scale factor of the target device (default 1.0, 1.0)
     /// Many backends handle this internally, so the user of the backend doesn't
     /// need to know this. However there are cases it is needed - for example when
     /// rendering to an intermediate bitmap.
-    double getDeviceScaleFactor() const;
-    void setDeviceScaleFactor(double fFactor);
+    basegfx::B2DTuple const& getDeviceScaleFactor() const;
+    void setDeviceScaleFactor(basegfx::B2DTuple const& rFactor);
 
     static void setGlobalAntiAliasing(bool bAntiAliasing, bool bTemporary);
     static bool getGlobalAntiAliasing();
