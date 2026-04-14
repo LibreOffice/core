@@ -260,7 +260,7 @@ rtl::Reference< ChartTypeTemplate > ChartTypeDialogController::getCurrentTemplat
     rtl::Reference< ChartTypeTemplate > xTemplate;
 
     OUString aServiceName( getServiceNameForParameter( rParameter ) );
-    if(!aServiceName.isEmpty())
+    if(!aServiceName.isEmpty() && xTemplateManager.is())
     {
         xTemplate = xTemplateManager->createTemplate( aServiceName );
         if(xTemplate.is())
