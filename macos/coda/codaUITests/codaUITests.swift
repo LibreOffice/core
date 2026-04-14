@@ -36,7 +36,8 @@ final class codaUITests: XCTestCase {
         Launch.openTestFile(app: app, filename: "hello.odt")
         Launch.waitForDocumentLoad(app: app)
 
-        Input.clickWebView(app: app)
+        JSBridge.switchToEditMode(app: app)
+        JSBridge.focusWebView()
         app.typeText("some text")
 
         // Wait for the document to become modified
