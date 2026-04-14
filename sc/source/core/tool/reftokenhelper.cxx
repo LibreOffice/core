@@ -110,7 +110,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 {
                     if (p->GetOpCode() == ocName)
                     {
-                        ScRangeData* pNameRange = rDoc.FindRangeNameBySheetAndIndex(p->GetSheet(), p->GetIndex());
+                        ScRangeData* pNameRange = rDoc.FindRangeNameBySheetAndIndex(static_cast<const FormulaIndexToken*>(p)->GetSheet(), p->GetIndex());
                         if (!pNameRange->HasReferences())
                             bFailure = true;
                     }
@@ -162,7 +162,7 @@ bool ScRefTokenHelper::getRangeFromToken(
         {
             if (pToken->GetOpCode() == ocName)
             {
-                ScRangeData* pNameRange = pDoc->FindRangeNameBySheetAndIndex(pToken->GetSheet(), pToken->GetIndex());
+                ScRangeData* pNameRange = pDoc->FindRangeNameBySheetAndIndex(static_cast<FormulaIndexToken*>(pToken.get())->GetSheet(), pToken->GetIndex());
                 if (pNameRange->IsReference(rRange, rPos))
                     return true;
             }

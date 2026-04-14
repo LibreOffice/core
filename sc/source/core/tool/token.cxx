@@ -905,15 +905,6 @@ void ScTableRefToken::SetIndex( sal_uInt16 n )
     mnIndex = n;
 }
 
-sal_Int16 ScTableRefToken::GetSheet() const
-{
-    // Code asking for this may have to be adapted as it might assume an
-    // svIndex token would always be ocName or ocDBArea.
-    SAL_WARN("sc.core","ScTableRefToken::GetSheet - maybe adapt caller to know about TableRef?");
-    // Database range is always global.
-    return -1;
-}
-
 ScTableRefToken::Item ScTableRefToken::GetItem() const
 {
     return meItem;
@@ -3179,7 +3170,7 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
     return false;
 }
 
-bool isNameModified( const sc::UpdatedRangeNames& rUpdatedNames, SCTAB nOldTab, const formula::FormulaToken& rToken )
+bool isNameModified( const sc::UpdatedRangeNames& rUpdatedNames, SCTAB nOldTab, const FormulaIndexToken& rToken )
 {
     SCTAB nTab = -1;
     if (rToken.GetSheet() >= 0)
@@ -3406,14 +3397,15 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                 {
                     case ocName:
                         {
-                            SCTAB nOldTab = (*pp)->GetSheet();
-                            if (isNameModified(rCxt.maUpdatedNames, nOldTab, **pp))
+                            auto pIToken = static_cast<FormulaIndexToken*>(*pp);
+                            SCTAB nOldTab = pIToken->GetSheet();
+                            if (isNameModified(rCxt.maUpdatedNames, nOldTab, *pIToken))
                                 aRes.mbNameModified = true;
                             if (rCxt.mnTabDelta &&
                                     rCxt.maRange.aStart.Tab() <= nOldTab && nOldTab <= rCxt.maRange.aEnd.Tab())
                             {
                                 aRes.mbNameModified = true;
-                                (*pp)->SetSheet( nOldTab + rCxt.mnTabDelta);
+                                static_cast<FormulaIndexToken*>(*pp)->SetSheet( nOldTab + rCxt.mnTabDelta);
                             }
                         }
                         break;
@@ -3575,8 +3567,9 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                 {
                     case ocName:
                         {
-                            SCTAB nOldTab = (*pp)->GetSheet();
-                            if (isNameModified(rCxt.maUpdatedNames, nOldTab, **pp))
+                            auto pIToken = static_cast<FormulaIndexToken*>(*pp);
+                            SCTAB nOldTab = pIToken->GetSheet();
+                            if (isNameModified(rCxt.maUpdatedNames, nOldTab, *pIToken))
                                 aRes.mbNameModified = true;
                         }
                         break;
@@ -4370,17 +4363,18 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( const sc::RefUpda
                 {
                     case ocName:
                         {
-                            SCTAB nOldTab = (*pp)->GetSheet();
-                            if (isNameModified(rCxt.maUpdatedNames, nOldTab, **pp))
+                            auto pIToken = static_cast<FormulaIndexToken*>(*pp);
+                            SCTAB nOldTab = pIToken->GetSheet();
+                            if (isNameModified(rCxt.maUpdatedNames, nOldTab, *pIToken))
                                 aRes.mbNameModified = true;
                             if (rCxt.mnDeletePos <= nOldTab)
                             {
                                 aRes.mbNameModified = true;
                                 if (rCxt.mnDeletePos + rCxt.mnSheets <= nOldTab)
-                                    (*pp)->SetSheet( nOldTab - rCxt.mnSheets);
+                                    static_cast<FormulaIndexToken*>(*pp)->SetSheet( nOldTab - rCxt.mnSheets);
                                 else
                                     // Would point to a deleted sheet. Invalidate.
-                                    (*pp)->SetSheet( SCTAB_MAX);
+                                    static_cast<FormulaIndexToken*>(*pp)->SetSheet( SCTAB_MAX);
                             }
                         }
                         break;
@@ -4446,13 +4440,14 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( const sc::RefUpd
                 {
                     case ocName:
                         {
-                            SCTAB nOldTab = (*pp)->GetSheet();
-                            if (isNameModified(rCxt.maUpdatedNames, nOldTab, **pp))
+                            auto pIToken = static_cast<FormulaIndexToken*>(*pp);
+                            SCTAB nOldTab = pIToken->GetSheet();
+                            if (isNameModified(rCxt.maUpdatedNames, nOldTab, *pIToken))
                                 aRes.mbNameModified = true;
                             if (rCxt.mnInsertPos <= nOldTab)
                             {
                                 aRes.mbNameModified = true;
-                                (*pp)->SetSheet( nOldTab + rCxt.mnSheets);
+                                pIToken->SetSheet( nOldTab + rCxt.mnSheets);
                             }
                         }
                         break;
@@ -4543,14 +4538,15 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( const sc::RefUpdate
                 {
                     case ocName:
                         {
-                            SCTAB nOldTab = (*pp)->GetSheet();
-                            if (isNameModified(rCxt.maUpdatedNames, nOldTab, **pp))
+                            auto pIToken = static_cast<FormulaIndexToken*>(*pp);
+                            SCTAB nOldTab = pIToken->GetSheet();
+                            if (isNameModified(rCxt.maUpdatedNames, nOldTab, *pIToken))
                                 aRes.mbNameModified = true;
                             SCTAB nNewTab = rCxt.getNewTab( nOldTab);
                             if (nNewTab != nOldTab)
                             {
                                 aRes.mbNameModified = true;
-                                (*pp)->SetSheet( nNewTab);
+                                pIToken->SetSheet( nNewTab);
                             }
                         }
                         break;
@@ -5183,7 +5179,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
             {
                 case ocName:
                 {
-                    SCTAB nTab = rToken.GetSheet();
+                    SCTAB nTab = static_cast<const FormulaIndexToken&>(rToken).GetSheet();
                     if (nTab < 0)
                     {
                         // global named range

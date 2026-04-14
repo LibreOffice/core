@@ -884,7 +884,7 @@ public:
         // Check there is a valid reference in named range
         if (!bValidToken && rToken->GetType() == svIndex && rToken->GetOpCode() == ocName)
         {
-            ScRangeData* pNameRange = mpDoc->FindRangeNameBySheetAndIndex(rToken->GetSheet(), rToken->GetIndex());
+            ScRangeData* pNameRange = mpDoc->FindRangeNameBySheetAndIndex(static_cast<FormulaIndexToken*>(rToken.get())->GetSheet(), rToken->GetIndex());
             if (pNameRange->HasReferences())
             {
                 const ScTokenRef aTempToken = pNameRange->GetCode()->FirstToken();
@@ -1688,7 +1688,7 @@ void RangeAnalyzer::initRangeAnalyzer( const ScDocument* pDoc, const std::vector
         }
         else if (eVar == svIndex && aRefToken->GetOpCode() == ocName)
         {
-            ScRangeData* pNameRange = pDoc->FindRangeNameBySheetAndIndex(aRefToken->GetSheet(), aRefToken->GetIndex());
+            ScRangeData* pNameRange = pDoc->FindRangeNameBySheetAndIndex(static_cast<FormulaIndexToken*>(aRefToken.get())->GetSheet(), aRefToken->GetIndex());
             ScRange aRange;
             if (pNameRange->IsReference(aRange))
             {
@@ -1815,7 +1815,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     {
                         if (rxToken->GetType() == svIndex && rxToken->GetOpCode() == ocName)
                         {
-                            ScRangeData* pNameRange = m_pDocument->FindRangeNameBySheetAndIndex(rxToken->GetSheet(), rxToken->GetIndex());
+                            ScRangeData* pNameRange = m_pDocument->FindRangeNameBySheetAndIndex(static_cast<FormulaIndexToken*>(rxToken.get())->GetSheet(), rxToken->GetIndex());
                             if (pNameRange->HasReferences())
                             {
                                 const ScTokenRef aTempToken = pNameRange->GetCode()->FirstToken();
@@ -1845,7 +1845,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     {
                         if (rxToken->GetType() == svIndex && rxToken->GetOpCode() == ocName)
                         {
-                            ScRangeData* pNameRange = m_pDocument->FindRangeNameBySheetAndIndex(rxToken->GetSheet(), rxToken->GetIndex());
+                            ScRangeData* pNameRange = m_pDocument->FindRangeNameBySheetAndIndex(static_cast<FormulaIndexToken*>(rxToken.get())->GetSheet(), rxToken->GetIndex());
                             if (pNameRange->HasReferences())
                             {
                                 const ScTokenRef aTempToken = pNameRange->GetCode()->FirstToken();

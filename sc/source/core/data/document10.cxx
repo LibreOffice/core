@@ -650,7 +650,7 @@ bool ScDocument::FindRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes
         {
             if (p->GetOpCode() == ocName)
             {
-                bRef |= FindRangeNamesReferencingSheet( rIndexes, p->GetSheet(), p->GetIndex(),
+                bRef |= FindRangeNamesReferencingSheet( rIndexes, static_cast<const formula::FormulaIndexToken*>(p)->GetSheet(), p->GetIndex(),
                         nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, bSameDoc, nRecursion+1);
             }
         }
@@ -941,10 +941,10 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
                     {
                         if (p->GetOpCode() == ocName)
                         {
-                            auto it = aSheetIndexMap.find( SheetIndex( p->GetSheet(), p->GetIndex()));
+                            auto it = aSheetIndexMap.find( SheetIndex( static_cast<formula::FormulaIndexToken*>(p)->GetSheet(), p->GetIndex()));
                             if (it != aSheetIndexMap.end())
                             {
-                                p->SetSheet( it->second.mnSheet);
+                                static_cast<formula::FormulaIndexToken*>(p)->SetSheet( it->second.mnSheet);
                                 p->SetIndex( it->second.mnIndex);
                             }
                             else if (!bSameDoc)

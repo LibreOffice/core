@@ -216,18 +216,6 @@ void FormulaToken::SetIndex( sal_uInt16 )
 {
     assert( !"virtual dummy called" );
 }
-
-sal_Int16 FormulaToken::GetSheet() const
-{
-    SAL_WARN( "formula.core", "FormulaToken::GetSheet: virtual dummy called" );
-    return -1;
-}
-
-void FormulaToken::SetSheet( sal_Int16 )
-{
-    assert( !"virtual dummy called" );
-}
-
 const ScSingleRefData* FormulaToken::GetSingleRef() const
 {
     OSL_FAIL( "FormulaToken::GetSingleRef: virtual dummy called" );
@@ -2118,8 +2106,9 @@ sal_Int16   FormulaIndexToken::GetSheet() const             { return mnSheet; }
 void        FormulaIndexToken::SetSheet( sal_Int16 n )      { mnSheet = n; }
 bool FormulaIndexToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaToken::operator==( r ) && nIndex == r.GetIndex() &&
-        mnSheet == r.GetSheet();
+    return FormulaToken::operator==( r )
+        && nIndex == static_cast<const FormulaIndexToken&>(r).GetIndex()
+        && mnSheet == static_cast<const FormulaIndexToken&>(r).GetSheet();
 }
 const OUString& FormulaExternalToken::GetExternal() const       { return aExternal; }
 bool FormulaExternalToken::operator==( const FormulaToken& r ) const
