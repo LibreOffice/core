@@ -45,8 +45,18 @@
 	align-items: baseline;
 	justify-content: center;
 	flex-direction: row;
+	flex-wrap: wrap;
 	flex: 1 1 auto;
 	gap: 4px;
+	position: relative;
+}
+
+.document-title > .loading-bar-container,
+.document-title > .progress-bar {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 100%;
 }
 
 .document-title:focus-within > label[for='document-name-input'] {
