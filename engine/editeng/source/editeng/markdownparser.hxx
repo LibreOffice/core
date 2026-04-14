@@ -32,7 +32,7 @@ class MarkdownParser
 public:
     MarkdownParser(EditEngine* pEditEngine, const EditPaM& rPaM);
 
-    EditPaM Parse(const OString& rMarkdown);
+    const EditPaM& Parse(const OString& rMarkdown);
 
     const EditSelection& GetCurSelection() const { return maCurSel; }
 

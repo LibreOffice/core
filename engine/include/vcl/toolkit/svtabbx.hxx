@@ -93,11 +93,11 @@ public:
     void             SetTabEditable( sal_uInt16 nTab, bool bEditable );
 
     void             SetColumnTitle( sal_uInt16 nCol, const OUString& rTitle );
-    OUString         GetColumnTitle( sal_uInt16 nCol ) const;
+    const OUString & GetColumnTitle( sal_uInt16 nCol ) const;
     bool             HasColumnTitles() const { return !m_aColumnTitles.empty(); }
 
     void             SetColumnHeaderName( sal_uInt16 nCol, const OUString& rName );
-    OUString         GetColumnHeaderName( sal_uInt16 nCol ) const;
+    const OUString & GetColumnHeaderName( sal_uInt16 nCol ) const;
 
     void             SetColumnColor( sal_uInt16 nCol, const Color& rColor );
     Color            GetColumnColor( sal_uInt16 nCol ) const;

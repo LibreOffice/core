@@ -577,11 +577,11 @@ void SvTabListBox::SetColumnHeaderName(sal_uInt16 nCol, const OUString& rName)
     m_aColumnHeaderNames[nCol] = rName;
 }
 
-OUString SvTabListBox::GetColumnHeaderName(sal_uInt16 nCol) const
+const OUString & SvTabListBox::GetColumnHeaderName(sal_uInt16 nCol) const
 {
     if (nCol < m_aColumnHeaderNames.size())
         return m_aColumnHeaderNames[nCol];
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void SvTabListBox::SetColumnCount(sal_uInt16 nCount)
@@ -608,11 +608,11 @@ Color SvTabListBox::GetColumnColor(sal_uInt16 nCol) const
     return COL_AUTO;
 }
 
-OUString SvTabListBox::GetColumnTitle(sal_uInt16 nCol) const
+const OUString & SvTabListBox::GetColumnTitle(sal_uInt16 nCol) const
 {
     if (nCol < m_aColumnTitles.size())
         return m_aColumnTitles[nCol];
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 tools::Long SvTabListBox::GetLogicTab( sal_uInt16 nTab )

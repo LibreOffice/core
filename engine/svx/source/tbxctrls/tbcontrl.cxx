@@ -482,7 +482,7 @@ private:
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
-    OUString GetBorderTypeTooltip(sal_uInt16 nBorderType) const;
+    const OUString & GetBorderTypeTooltip(sal_uInt16 nBorderType) const;
 
 
     void SetDiagonalDownBorder(const SvxLineItem& dDownLineItem);
@@ -2392,7 +2392,7 @@ OUString ColorWindow::QueryTooltipHdl_Impl(weld::IconView* pIconView, std::u16st
     return OUString();
 }
 
-std::vector<NamedColor> ColorWindow::GetColors(weld::IconView* pIconView)
+const std::vector<NamedColor> & ColorWindow::GetColors(weld::IconView* pIconView)
 {
     if(mxRecentColorIconView.get() == pIconView) {
         vRecentColors = vRecentColors.size() > 0 ? vRecentColors : mxPaletteManager->GetRecentColors();
@@ -2901,14 +2901,14 @@ IMPL_LINK(SvxFrameWindow_Impl, QueryTooltipHdl, const weld::TreeIter&, iter, OUS
     return OUString();
 }
 
-OUString SvxFrameWindow_Impl::GetBorderTypeTooltip(sal_uInt16 nBorderType) const
+const OUString & SvxFrameWindow_Impl::GetBorderTypeTooltip(sal_uInt16 nBorderType) const
 {
     if (nBorderType > 0 && nBorderType <= aImgVec.size())
     {
         return aImgVec[nBorderType - 1].second;
     }
 
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void SvxFrameWindow_Impl::SetDiagonalDownBorder(const SvxLineItem& dDownLineItem)

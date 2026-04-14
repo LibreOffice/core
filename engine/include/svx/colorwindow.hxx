@@ -110,7 +110,7 @@ private:
     bool SelectIconViewEntry(weld::IconView* pIconView, const Color& rColor);
     NamedColor GetSelectEntryColor(weld::IconView* pIconView);
     NamedColor GetAutoColor() const;
-    std::vector<NamedColor> GetColors(weld::IconView* pIconView);
+    const std::vector<NamedColor> & GetColors(weld::IconView* pIconView);
 
 public:
     ColorWindow(OUString  rCommand,

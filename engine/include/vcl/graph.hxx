@@ -85,7 +85,7 @@ private:
 
 public:
     SAL_DLLPRIVATE ImpGraphic* ImplGetImpGraphic() const { return mxImpGraphic.get(); }
-    SAL_DLLPRIVATE std::shared_ptr<ImpGraphic> ImplGetSharedImpGraphic() const { return mxImpGraphic; }
+    SAL_DLLPRIVATE const std::shared_ptr<ImpGraphic>& ImplGetSharedImpGraphic() const { return mxImpGraphic; }
 
                     Graphic();
     SAL_DLLPRIVATE  Graphic(std::shared_ptr<GfxLink> const & rGfxLink, sal_Int32 nPageIndex = 0);

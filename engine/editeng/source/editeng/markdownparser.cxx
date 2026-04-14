@@ -41,7 +41,7 @@ MarkdownParser::MarkdownParser(EditEngine* pEditEngine, const EditPaM& rPaM)
 {
 }
 
-EditPaM MarkdownParser::Parse(const OString& rMarkdown)
+const EditPaM& MarkdownParser::Parse(const OString& rMarkdown)
 {
     MD_PARSER parser
         = { 0,      MD_DIALECT_GITHUB, EnterBlockCb, LeaveBlockCb, EnterSpanCb, LeaveSpanCb,
