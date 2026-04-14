@@ -679,13 +679,12 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygo
 
 Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
 {
-
     if ( !mpMapper->IsMapModeEnabled() )
         return rDevicePt;
 
     return Point(
-        mpMapper->ViewToLogicUnitsX(rDevicePt.X()) - mpMapper->GetLogicalXOffset(),
-        mpMapper->ViewToLogicUnitsY(rDevicePt.Y()) - mpMapper->GetLogicalYOffset()
+        mpMapper->ViewToLogicX(rDevicePt.X()),
+        mpMapper->ViewToLogicY(rDevicePt.Y())
     );
 }
 
