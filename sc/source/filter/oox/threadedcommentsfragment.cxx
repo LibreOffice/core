@@ -62,7 +62,7 @@ core::ContextHandlerRef ThreadedCommentsFragment::onCreateContext(sal_Int32 nEle
 void ThreadedCommentsFragment::onCharacters(const OUString& rChars)
 {
     if (isCurrentElement(XTHREADED_TOKEN(text)) && mpCurrentEntry)
-        mpCurrentEntry->maText = rChars;
+        mpCurrentEntry->maText += rChars;
 }
 
 void ThreadedCommentsFragment::onEndElement()
