@@ -153,8 +153,7 @@ basegfx::B2DHomMatrix CoordinateMapper::GetInverseViewTransformation() const
 basegfx::B2DHomMatrix CoordinateMapper::GetViewTransformation(const MapMode& rMapMode) const
 {
     // #i82615#
-    ImplMapRes aMapRes;
-    aMapRes.CalcMapResolution(rMapMode, GetDPIX(), GetDPIY());
+    ImplMapRes aMapRes(rMapMode, GetDPIX(), GetDPIY());
 
     basegfx::B2DHomMatrix aTransform;
 

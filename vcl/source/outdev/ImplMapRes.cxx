@@ -29,6 +29,16 @@
 
 #include <svdata.hxx>
 
+ImplMapRes::ImplMapRes(const MapMode& rMapMode, tools::Long nDPIX, tools::Long nDPIY)
+{
+    // Delegate the complex scaling math to the mutator
+    CalcMapResolution(rMapMode, nDPIX, nDPIY);
+
+    // Because this is a fresh object, the origin is always absolute
+    mnMapOfsX = rMapMode.GetOrigin().X();
+    mnMapOfsY = rMapMode.GetOrigin().Y();
+}
+
 void ImplMapRes::SetMapRes(const o3tl::Length eUnit)
 {
     const auto[nNum, nDen] = o3tl::getConversionMulDiv(eUnit, o3tl::Length::in);

@@ -27,6 +27,8 @@ class MapMode;
 struct ImplMapRes
 {
     ImplMapRes() = default;
+    ImplMapRes(const MapMode& rMapMode, tools::Long nDPIX, tools::Long nDPIY);
+
     void SetMapRes(const o3tl::Length eUnit);
     void CalcMapResolution(const MapMode& rMapMode, tools::Long nDPIX, tools::Long nDPIY);
     ImplMapRes ResolveMapRes(const MapMode* pMode, const MapMode& rDefaultMapMode, bool bMap,
