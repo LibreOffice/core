@@ -1234,7 +1234,7 @@ export class CommentSection extends CanvasSectionObject {
 			}
 
 			if (app.map._docLayer._docType !== 'spreadsheet') {
-				this.sectionProperties.selectedComment.setContainerPos(true, this.sectionProperties.canvasContainerBounds);
+				this.sectionProperties.selectedComment?.setContainerPos(true, this.sectionProperties.canvasContainerBounds);
 			}
 
 			this.update();
