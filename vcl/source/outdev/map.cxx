@@ -881,28 +881,23 @@ tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect
 tools::Polygon OutputDevice::PixelToLogic( const tools::Polygon& rDevicePoly,
                                            const MapMode& rMapMode ) const
 {
-
     // calculate nothing if default-MapMode
     if ( rMapMode.IsDefault() )
         return rDevicePoly;
 
-    // calculate MapMode-resolution and convert
-    ImplMapRes          aMapRes;
+    // calculate MapMode-resolution
+    ImplMapRes aMapRes;
     aMapRes.CalcMapResolution(rMapMode, mpMapper->GetDPIX(), mpMapper->GetDPIY());
 
     const sal_uInt16 nPoints = rDevicePoly.GetSize();
     tools::Polygon aPoly( rDevicePoly );
 
-    // get pointer to Point-array (copy data)
-    const Point* pPointAry = aPoly.GetConstPointAry();
-
-    for (sal_uInt16 i = 0; i < nPoints; i++)
+    for (sal_uInt16 i = 0; i < nPoints; ++i)
     {
-        const Point* pPt = &(pPointAry[i]);
-        Point aPt;
-        aPt.setX(mpMapper->ViewToLogicDistanceX(pPt->X(), aMapRes.mfMapScX) - aMapRes.mnMapOfsX - mpMapper->GetLogicalXOffset());
-        aPt.setY(mpMapper->ViewToLogicDistanceY(pPt->Y(), aMapRes.mfMapScY) - aMapRes.mnMapOfsY - mpMapper->GetLogicalYOffset());
-        aPoly[i] = aPt;
+        aPoly[i] = Point(
+            mpMapper->ViewSubPixelToLogicIntX(aPoly[i].X(), aMapRes),
+            mpMapper->ViewSubPixelToLogicIntY(aPoly[i].Y(), aMapRes)
+        );
     }
 
     return aPoly;
