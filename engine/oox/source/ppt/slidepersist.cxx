@@ -19,6 +19,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <oox/ppt/timenode.hxx>
@@ -32,6 +33,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/core/xmlfilterbase.hxx>
+#include <drawingml/textbody.hxx>
 #include <drawingml/textliststyle.hxx>
 #include <drawingml/textparagraphproperties.hxx>
 #include <drawingml/connectorhelper.hxx>
@@ -86,6 +88,25 @@ css::uno::WeakReference< css::drawing::XDrawPage > SlidePersist::mxDebugPage;
 
 SlidePersist::~SlidePersist()
 {
+}
+
+void SlidePersist::releaseShapes()
+{
+    for (const auto& [sId, pShape] : maShapeMap)
+    {
+        if (pShape
+            && (pShape->getSubType() == XML_title || pShape->getSubType() == XML_ctrTitle))
+        {
+            css::uno::Reference<css::text::XTextRange> xText(pShape->getXShape(), css::uno::UNO_QUERY);
+            if (xText.is())
+                maTitleText = xText->getString();
+            if (!maTitleText.isEmpty())
+                break;
+        }
+    }
+    maShapesPtr.reset();
+    maShapeMap.clear();
+    mpBackgroundPropertiesPtr.reset();
 }
 
 // the list 'const PPTXLayoutInfo aLayoutInfo[...]' used in PowerPointExport

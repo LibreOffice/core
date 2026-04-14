@@ -133,19 +133,9 @@ void PresentationFragmentHandler::importSlideNames(const XmlFilterBase& rFilter,
     sal_Int32 nMaxPages = rSlidePersist.size();
     for (sal_Int32 nPage = 0; nPage < nMaxPages; nPage++)
     {
-        auto aShapeMap = rSlidePersist[nPage]->getShapeMap();
-        auto aIter = std::find_if(aShapeMap.begin(), aShapeMap.end(),
-                                  [](const std::pair<OUString, ShapePtr>& element) {
-                                      auto pShapePtr = element.second;
-                                      return (pShapePtr
-                                              && (pShapePtr->getSubType() == XML_title
-                                                  || pShapePtr->getSubType() == XML_ctrTitle));
-                                  });
-        if (aIter != aShapeMap.end())
+        OUString aTitleText = rSlidePersist[nPage]->getTitleText();
+        if (!aTitleText.isEmpty())
         {
-            OUString aTitleText;
-            Reference<text::XTextRange> xText(aIter->second->getXShape(), UNO_QUERY_THROW);
-            aTitleText = xText->getString();
             // just a magic value but we don't want to drop out slide names which are too long
             if (aTitleText.getLength() > 63)
                 aTitleText = aTitleText.copy(0, 63);
@@ -567,6 +557,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Int32 nPage
             importSlide( xSlideFragmentHandler, pSlidePersistPtr );
             pSlidePersistPtr->createBackground( rFilter );
             pSlidePersistPtr->createXShapes( rFilter );
+            pSlidePersistPtr->releaseShapes();
 
             if(bImportNotesPage) {
 
@@ -588,6 +579,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Int32 nPage
                             importSlide( xNotesFragmentHandler, pNotesPersistPtr );
                             pNotesPersistPtr->createBackground( rFilter );
                             pNotesPersistPtr->createXShapes( rFilter );
+                            pNotesPersistPtr->releaseShapes();
                         }
                     }
                 }
