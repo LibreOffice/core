@@ -4368,7 +4368,18 @@ Size SdXImpressDocument::getPartSize(int part)
         return Size(0,0);
 
     const sal_uInt16 nSlideIndex = static_cast<sal_uInt16>(part);
-    SdPage* pPage = mpDoc ? mpDoc->GetSdPage(nSlideIndex, PageKind::Standard) : nullptr;
+    SdPage* pPage = nullptr;
+    if (mpDoc)
+    {
+        if (isMasterViewMode())
+            pPage = mpDoc->GetMasterSdPage(nSlideIndex, PageKind::Standard);
+        else
+        {
+            DrawViewShell* pViewSh = GetViewShell();
+            PageKind ePageKind = pViewSh ? pViewSh->GetPageKind() : PageKind::Standard;
+            pPage = mpDoc->GetSdPage(nSlideIndex, ePageKind);
+        }
+    }
 
     if (pPage == nullptr)
         return Size(0,0);
