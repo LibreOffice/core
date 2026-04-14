@@ -53,6 +53,7 @@
 #include <scmatrix.hxx>
 #include <cellvalue.hxx>
 #include <simpleformulacalc.hxx>
+#include <token.hxx>
 
 #include <math.h>
 #include <memory>
@@ -881,9 +882,19 @@ bool ScValidationData::GetSelectionFromFormula(
         if (t)
         {
             OpCode eOpCode = t->GetOpCode();
-            if (eOpCode == ocDBArea || eOpCode == ocTableRef)
+            if (eOpCode == ocDBArea)
             {
-                if (const ScDBData* pDBData = rDocument.GetDBCollection()->getNamedDBs().findByIndex(t->GetIndex()))
+                auto pIndexToken = static_cast<FormulaIndexToken*>(t);
+                if (const ScDBData* pDBData = rDocument.GetDBCollection()->getNamedDBs().findByIndex(pIndexToken->GetIndex()))
+                {
+                    pDBData->GetArea(aRange);
+                    bRef = true;
+                }
+            }
+            else if (eOpCode == ocTableRef)
+            {
+                auto pTRToken = static_cast<ScTableRefToken*>(t);
+                if (const ScDBData* pDBData = rDocument.GetDBCollection()->getNamedDBs().findByIndex(pTRToken->GetIndex()))
                 {
                     pDBData->GetArea(aRange);
                     bRef = true;
@@ -891,7 +902,8 @@ bool ScValidationData::GetSelectionFromFormula(
             }
             else if (eOpCode == ocName)
             {
-                const ScRangeData* pName = rDocument.FindRangeNameBySheetAndIndex( static_cast<FormulaIndexToken*>(t)->GetSheet(), t->GetIndex());
+                auto pIndexToken = static_cast<FormulaIndexToken*>(t);
+                const ScRangeData* pName = rDocument.FindRangeNameBySheetAndIndex( pIndexToken->GetSheet(), pIndexToken->GetIndex());
                 if (pName && pName->IsReference(aRange))
                 {
                     bRef = true;

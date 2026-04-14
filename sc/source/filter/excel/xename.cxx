@@ -380,27 +380,30 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
                         formula::StackVar eType = t->GetType();
                         OUString aSheetName;
                         if (eType == formula::svExternalSingleRef)
-                            aSheetName = static_cast<ScExternalSingleRefToken*>(t)->GetString().getString();
+                            aSheetName = static_cast<ScExternalSingleRefToken*>(t)->GetTableName().getString();
                         else
-                            aSheetName = static_cast<ScExternalDoubleRefToken*>(t)->GetString().getString();
+                            aSheetName = static_cast<ScExternalDoubleRefToken*>(t)->GetTableName().getString();
                         if (aSheetName.getLength() > MAX_TAB_NAME_LENGTH)
                         {
+                            sal_uInt16 nFileId = static_cast<ScExternalToken*>(t)->GetFileId();
                             const auto& aTruncatedMap
-                                = GetRoot().GetGlobalLinkManager().GetTruncatedSheetMap(t->GetIndex());
+                                = GetRoot().GetGlobalLinkManager().GetTruncatedSheetMap(nFileId);
                             if (auto it = aTruncatedMap.find(aSheetName); it != aTruncatedMap.end())
                             {
                                 formula::FormulaToken* pNewToken = nullptr;
                                 if (eType == formula::svExternalSingleRef)
                                 {
+                                    auto pESRToken = static_cast<ScExternalSingleRefToken*>(t);
                                     pNewToken = new ScExternalSingleRefToken(
-                                        t->GetIndex(), svl::SharedString(it->second),
-                                        *t->GetSingleRef());
+                                        nFileId, svl::SharedString(it->second),
+                                        *pESRToken->GetSingleRef());
                                 }
                                 else if (eType == formula::svExternalDoubleRef)
                                 {
+                                    auto pEDRToken = static_cast<ScExternalDoubleRefToken*>(t);
                                     pNewToken = new ScExternalDoubleRefToken(
-                                        t->GetIndex(), svl::SharedString(it->second),
-                                        static_cast<ScExternalDoubleRefToken*>(t)->GetDoubleRef());
+                                        nFileId, svl::SharedString(it->second),
+                                        pEDRToken->GetDoubleRef());
                                 }
 
                                 if (pNewToken)

@@ -120,9 +120,26 @@ public:
     virtual bool IsMatrixRangeToken() const override { return true; }
 };
 
-class SC_DLLPUBLIC ScExternalSingleRefToken final : public formula::FormulaToken
+class SC_DLLPUBLIC ScExternalToken : public formula::FormulaToken
 {
     sal_uInt16                  mnFileId;
+protected:
+    ScExternalToken( formula::StackVar eTypeP, OpCode e, sal_uInt16 nFileId );
+public:
+    ScExternalToken() = delete;
+    virtual ~ScExternalToken() override;
+
+    ScExternalToken(ScExternalToken const &) = default;
+    ScExternalToken(ScExternalToken &&) = default;
+    ScExternalToken & operator =(ScExternalToken const &) = delete; // due to FormulaToken
+    ScExternalToken & operator =(ScExternalToken &&) = delete; // due to FormulaToken
+
+    sal_uInt16                  GetFileId() const { return mnFileId; }
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
+};
+
+class SC_DLLPUBLIC ScExternalSingleRefToken final : public ScExternalToken
+{
     svl::SharedString           maTabName;
     ScSingleRefData             maSingleRef;
 
@@ -136,17 +153,15 @@ public:
     ScExternalSingleRefToken & operator =(ScExternalSingleRefToken const &) = delete; // due to FormulaToken
     ScExternalSingleRefToken & operator =(ScExternalSingleRefToken &&) = delete; // due to FormulaToken
 
-    virtual sal_uInt16                  GetIndex() const override;
-    const svl::SharedString & GetString() const { return maTabName; }
+    const svl::SharedString & GetTableName() const { return maTabName; }
     virtual const ScSingleRefData*  GetSingleRef() const override;
     virtual ScSingleRefData*          GetSingleRef() override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScExternalSingleRefToken(*this); }
 };
 
-class SC_DLLPUBLIC ScExternalDoubleRefToken final : public formula::FormulaToken
+class SC_DLLPUBLIC ScExternalDoubleRefToken final : public ScExternalToken
 {
-    sal_uInt16                  mnFileId;
     svl::SharedString           maTabName;  // name of the first sheet
     ScComplexRefData            maDoubleRef;
 
@@ -160,8 +175,7 @@ public:
     ScExternalDoubleRefToken & operator =(ScExternalDoubleRefToken const &) = delete; // due to FormulaToken
     ScExternalDoubleRefToken & operator =(ScExternalDoubleRefToken &&) = delete; // due to FormulaToken
 
-    virtual sal_uInt16                 GetIndex() const override;
-    const svl::SharedString & GetString() const { return maTabName; }
+    const svl::SharedString & GetTableName() const { return maTabName; }
     virtual const ScSingleRefData* GetSingleRef() const override;
     virtual ScSingleRefData*       GetSingleRef() override;
     virtual const ScSingleRefData* GetSingleRef2() const override;
@@ -172,9 +186,8 @@ public:
     virtual FormulaToken*       Clone() const override { return new ScExternalDoubleRefToken(*this); }
 };
 
-class SAL_DLLPUBLIC_RTTI ScExternalNameToken final : public formula::FormulaToken
+class SAL_DLLPUBLIC_RTTI ScExternalNameToken final : public ScExternalToken
 {
-    sal_uInt16                  mnFileId;
     svl::SharedString           maName;
 
 public:
@@ -187,8 +200,7 @@ public:
     ScExternalNameToken & operator =(ScExternalNameToken const &) = delete; // due to FormulaToken
     ScExternalNameToken & operator =(ScExternalNameToken &&) = delete; // due to FormulaToken
 
-    virtual sal_uInt16              GetIndex() const override;
-    const svl::SharedString & GetString() const { return maName; }
+    const svl::SharedString & GetName() const { return maName; }
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScExternalNameToken(*this); }
 };
@@ -215,8 +227,8 @@ public:
     ScTableRefToken( const ScTableRefToken& r );
     virtual ~ScTableRefToken() override;
 
-    virtual sal_uInt16          GetIndex() const override;
-    virtual void                SetIndex( sal_uInt16 n ) override;
+    sal_uInt16                  GetIndex() const;
+    void                        SetIndex( sal_uInt16 n );
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScTableRefToken(*this); }
 

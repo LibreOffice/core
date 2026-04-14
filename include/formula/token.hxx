@@ -215,8 +215,6 @@ public:
     virtual void                SetByte( sal_uInt8 n );
     virtual ParamClass          GetInForceArray() const;
     virtual void                SetInForceArray( ParamClass c );
-    virtual sal_uInt16          GetIndex() const;
-    virtual void                SetIndex( sal_uInt16 n );
 
     virtual const ScSingleRefData*  GetSingleRef() const;
     virtual ScSingleRefData*        GetSingleRef();
@@ -411,8 +409,8 @@ public:
                                     FormulaToken( r ), nIndex( r.nIndex ), mnSheet( r.mnSheet ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaIndexToken(*this); }
-    virtual sal_uInt16          GetIndex() const override;
-    virtual void                SetIndex( sal_uInt16 n ) override;
+    sal_uInt16                  GetIndex() const;
+    void                        SetIndex( sal_uInt16 n );
     sal_Int16                   GetSheet() const;
     void                        SetSheet( sal_Int16 n );
     virtual bool                operator==( const FormulaToken& rToken ) const override;
