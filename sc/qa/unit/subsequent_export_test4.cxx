@@ -1151,6 +1151,22 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testUserDefinedFunctions)
                        u"[1]!_xludf.WEEKNUM(B2,2)-1");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testEmptyExternalDefinedNames)
+{
+    createScDoc("xlsx/empty_ext_defined_name.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pExt1 = parseExport(u"xl/externalLinks/externalLink1.xml"_ustr);
+    CPPUNIT_ASSERT(pExt1);
+    xmlDocUniquePtr pExt2 = parseExport(u"xl/externalLinks/externalLink2.xml"_ustr);
+    CPPUNIT_ASSERT(pExt2);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[2]/x:f", u"[1]!HelloWorld");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[2]/x:f",
+                       u"TRIM([2]!_xludf.SplitsItems($A1,\",\",COLUMN()-1))");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testLocalePrefix)
 {
     createScDoc("ods/fdo67682-2.ods");

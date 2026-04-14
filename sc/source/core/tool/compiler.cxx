@@ -3915,9 +3915,6 @@ bool ScCompiler::ParseExternalNamedRange( const OUString& rSymbol, bool& rbInval
         return false;
 
     ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
-    OUString aTmp = aFile;
-    pRefMgr->convertToAbsName(aTmp);
-    aFile = aTmp;
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aFile);
     if (!pRefMgr->isValidRangeName(nFileId, aName))
     {
@@ -3927,7 +3924,7 @@ bool ScCompiler::ParseExternalNamedRange( const OUString& rSymbol, bool& rbInval
     }
 
     const OUString* pRealName = pRefMgr->getRealRangeName(nFileId, aName);
-    maRawToken.SetExternalName(nFileId, pRealName ? *pRealName : aTmp);
+    maRawToken.SetExternalName(nFileId, pRealName ? *pRealName : aFile);
     maExternalFiles.push_back(nFileId);
     return true;
 }

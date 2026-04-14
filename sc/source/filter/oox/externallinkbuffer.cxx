@@ -88,9 +88,20 @@ void ExternalName::importDefinedName( const AttributeList& rAttribs )
     maModel.maName = rAttribs.getXString( XML_name, OUString() );
     OSL_ENSURE( !maModel.maName.isEmpty(), "ExternalName::importDefinedName - empty name" );
     maModel.maFormula = rAttribs.getXString(XML_refersTo, OUString());
-    OSL_ENSURE( !maModel.maFormula.isEmpty(), "ExternalName::importDefinedName - empty formula" );
     // zero-based index into sheet list of externalBook
     maModel.mnSheet = rAttribs.getInteger( XML_sheetId, -1 );
+
+    ScExternalRefManager* pRefMgr = getScDocument().GetExternalRefManager();
+    sal_uInt16 nFileId = pRefMgr->getExternalFileId(mrParentLink.getTargetUrl());
+
+    if (maModel.maFormula.isEmpty())
+    {
+        // Store the name with an empty token array so it survives roundtrip
+        ScTokenArray aEmpty(getScDocument());
+        pRefMgr->storeRangeNameTokens(nFileId, maModel.maName, aEmpty);
+        return;
+    }
+
     // cache external defined names and formulas
     ScCompiler aComp(getScDocument(), ScAddress(0, 0, maModel.mnSheet), formula::FormulaGrammar::GRAM_OOXML);
     aComp.SetExternalLinks(getExternalLinks().getLinkInfos());
@@ -101,12 +112,7 @@ void ExternalName::importDefinedName( const AttributeList& rAttribs )
     pArray->DelRPN();
     pArray->SetCodeError(nErr);
 
-    if (pArray->HasReferences())
-    {
-        ScExternalRefManager* pRefMgr = getScDocument().GetExternalRefManager();
-        sal_uInt16 nFileId = pRefMgr->getExternalFileId(mrParentLink.getTargetUrl());
-        pRefMgr->storeRangeNameTokens(nFileId, maModel.maName, *pArray);
-    }
+    pRefMgr->storeRangeNameTokens(nFileId, maModel.maName, *pArray);
 }
 
 void ExternalName::importDdeItem( const AttributeList& rAttribs )

@@ -655,10 +655,13 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         // Use the current tab, it needs to be passed in. : aEnd.SetTab( .. );
     }
 
-    if (!bMissingPath && !rExternDocName.isEmpty())
+    if (!rExternDocName.isEmpty())
     {
-        ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
-        pRefMgr->convertToAbsName(rExternDocName);
+        if (!bMissingPath)
+        {
+            ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
+            pRefMgr->convertToAbsName(rExternDocName);
+        }
     }
     else
     {
