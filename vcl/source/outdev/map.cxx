@@ -257,11 +257,14 @@ tools::Rectangle OutputDevice::ImplDevicePixelToLogic( const tools::Rectangle& r
 
 vcl::Region OutputDevice::ImplPixelToDevicePixel( const vcl::Region& rRegion ) const
 {
-    if ( !mpMapper->GetDeviceOriginX() && !mpMapper->GetDeviceOriginY() )
+    tools::Long nDeltaX = mpMapper->WindowToDeviceUnitsX(mpMapper->ViewToWindowUnitsX(0));
+    tools::Long nDeltaY = mpMapper->WindowToDeviceUnitsY(mpMapper->ViewToWindowUnitsY(0));
+
+    if (nDeltaX == 0 && nDeltaY == 0)
         return rRegion;
 
     vcl::Region aRegion( rRegion );
-    aRegion.Move( mpMapper->GetDeviceOriginX()+mpMapper->GetPixelXOffset(), mpMapper->GetDeviceOriginY()+mpMapper->GetPixelYOffset() );
+    aRegion.Move(nDeltaX, nDeltaY);
     return aRegion;
 }
 
