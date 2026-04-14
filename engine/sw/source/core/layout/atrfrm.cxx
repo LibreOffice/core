@@ -1443,10 +1443,10 @@ size_t SwFormatVertOrient::hashCode() const
 // Partially implemented inline in hxx
 SwFormatVertOrient::SwFormatVertOrient( SwTwips nY, sal_Int16 eVert,
                                   sal_Int16 eRel )
-    : SfxPoolItem( RES_VERT_ORIENT ),
-    m_nYPos( nY ),
-    m_eOrient( eVert ),
-    m_eRelation( eRel )
+    : SfxPoolItem(RES_VERT_ORIENT)
+    , m_nYPos(gfx::Length::twip(nY))
+    , m_eOrient(eVert)
+    , m_eRelation(eRel)
 {}
 
 bool SwFormatVertOrient::operator==( const SfxPoolItem& rAttr ) const
@@ -1478,7 +1478,7 @@ bool SwFormatVertOrient::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) 
                 rVal <<= m_eRelation;
         break;
         case MID_VERTORIENT_POSITION:
-                rVal <<= static_cast<sal_Int32>(convertTwipToMm100(GetPos()));
+                rVal <<= sal_Int32(std::round(m_nYPos.as_hmm()));
                 break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -1511,8 +1511,9 @@ bool SwFormatVertOrient::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberI
             sal_Int32 nVal = 0;
             rVal >>= nVal;
             if(bConvert)
-                nVal = o3tl::toTwips(nVal, o3tl::Length::mm100);
-            SetPos( nVal );
+                m_nYPos = gfx::Length::hmm(nVal);
+            else
+                m_nYPos = gfx::Length::twip(nVal);
         }
         break;
         default:
@@ -1526,7 +1527,7 @@ void SwFormatVertOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatVertOrient"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nYPos"), BAD_CAST(OString::number(m_nYPos).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nYPos"), BAD_CAST(OString::number(m_nYPos.data()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eOrient"), BAD_CAST(OString::number(m_eOrient).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eRelation"), BAD_CAST(OString::number(m_eRelation).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
@@ -1551,11 +1552,11 @@ size_t SwFormatHoriOrient::hashCode() const
 // Partially implemented inline in hxx
 SwFormatHoriOrient::SwFormatHoriOrient( SwTwips nX, sal_Int16 eHori,
                               sal_Int16 eRel, bool bPos )
-    : SfxPoolItem( RES_HORI_ORIENT ),
-    m_nXPos( nX ),
-    m_eOrient( eHori ),
-    m_eRelation( eRel ),
-    m_bPosToggle( bPos )
+    : SfxPoolItem(RES_HORI_ORIENT)
+    , m_nXPos(gfx::Length::twip(nX))
+    , m_eOrient(eHori)
+    , m_eRelation(eRel)
+    , m_bPosToggle(bPos)
 {}
 
 bool SwFormatHoriOrient::operator==( const SfxPoolItem& rAttr ) const
@@ -1588,7 +1589,7 @@ bool SwFormatHoriOrient::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) 
             rVal <<= m_eRelation;
         break;
         case MID_HORIORIENT_POSITION:
-                rVal <<= static_cast<sal_Int32>(convertTwipToMm100(GetPos()));
+                rVal <<= sal_Int32(std::round(m_nXPos.as_hmm()));
                 break;
         case MID_HORIORIENT_PAGETOGGLE:
             rVal <<= IsPosToggle();
@@ -1625,8 +1626,9 @@ bool SwFormatHoriOrient::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberI
             if(!(rVal >>= nVal))
                 bRet = false;
             if(bConvert)
-                nVal = o3tl::toTwips(nVal, o3tl::Length::mm100);
-            SetPos( nVal );
+                m_nXPos = gfx::Length::hmm(nVal);
+            else
+                m_nXPos = gfx::Length::twip(nVal);
         }
         break;
         case MID_HORIORIENT_PAGETOGGLE:
@@ -1643,7 +1645,7 @@ void SwFormatHoriOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatHoriOrient"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nXPos"), BAD_CAST(OString::number(m_nXPos).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nXPos"), BAD_CAST(OString::number(m_nXPos.data()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eOrient"), BAD_CAST(OString::number(m_eOrient).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eRelation"), BAD_CAST(OString::number(m_eRelation).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bPosToggle"), BAD_CAST(OString::boolean(m_bPosToggle).getStr()));

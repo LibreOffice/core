@@ -520,7 +520,7 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTablePosition, "floating-table-position.doc
     // Position of shape was wrong, because some conversion was missing.
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
     // This was 3295.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5964), getProperty<sal_Int32>(xShape, u"HoriOrientPosition"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5963), getProperty<sal_Int32>(xShape, u"HoriOrientPosition"_ustr));
     // This was 4611.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8133), getProperty<sal_Int32>(xShape, u"VertOrientPosition"_ustr));
 }

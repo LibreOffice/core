@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166201_simplePosCM)
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
                          getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
     // Without the fix, this was 0 - at the top left, instead of 5cm - at the bottom right
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001),
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5000),
                          getProperty<sal_Int32>(getShape(1), u"VertOrientPosition"_ustr));
 }
 
