@@ -92,52 +92,32 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame3">
+      <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="margin-start">12</property>
+        <property name="margin-top">6</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="label-xalign">0</property>
-        <property name="shadow-type">none</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="GtkBox" id="box1">
+          <object class="GtkDrawingArea" id="preview">
+            <property name="width-request">150</property>
+            <property name="height-request">260</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="spacing">12</property>
-            <child>
-              <object class="GtkDrawingArea" id="preview">
-                <property name="width-request">150</property>
-                <property name="height-request">260</property>
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="preview-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="outlinenumberingpage|preview-atkobject">Preview</property>
-                    <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|preview-atkobject">Header preview</property>
-                  </object>
-                </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="preview-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="outlinenumberingpage|preview-atkobject">Preview</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|preview-atkobject">Header preview</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label17">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="outlinenumberingpage|label17">Preview</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
         </child>
       </object>
       <packing>
