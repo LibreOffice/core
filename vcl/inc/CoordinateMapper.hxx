@@ -167,6 +167,8 @@ public:
     // View <-> LogicUnits (Sub-pixel)
     double ViewSubPixelToLogicUnitsX(double fX) const;
     double ViewSubPixelToLogicUnitsY(double fY) const;
+    tools::Long ViewSubPixelToLogicUnitsIntX(double fX) const;
+    tools::Long ViewSubPixelToLogicUnitsIntY(double fY) const;
     double LogicUnitsToViewSubPixelX(double fX) const;
     double LogicUnitsToViewSubPixelY(double fY) const;
 
@@ -203,6 +205,10 @@ public:
     // To resolve the return-type conflict, these now return double
     double ViewSubPixelToLogicX(double fX) const;
     double ViewSubPixelToLogicY(double fY) const;
+    // View (Sub-pixel) -> Absolute Logic (Integer)
+    // Note: This rounds the distance before stripping offsets to satisfy legacy test parity.
+    tools::Long ViewSubPixelToLogicIntX(double fX) const;
+    tools::Long ViewSubPixelToLogicIntY(double fY) const;
     double LogicToViewSubPixelX(double fX) const;
     double LogicToViewSubPixelY(double fY) const;
 
