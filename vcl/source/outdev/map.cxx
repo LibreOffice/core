@@ -851,27 +851,28 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize,
 }
 
 tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect,
-                                      const MapMode& rMapMode ) const
+                                             const MapMode& rMapMode ) const
 {
     // calculate nothing if default-MapMode
     // tdf#141761 see comments above, IsEmpty() removed
     if ( rMapMode.IsDefault() )
         return rDeviceRect;
 
-    // calculate MapMode-resolution and convert
-    ImplMapRes          aMapRes;
+    // calculate MapMode-resolution
+    ImplMapRes aMapRes;
     aMapRes.CalcMapResolution(rMapMode, mpMapper->GetDPIX(), mpMapper->GetDPIY());
 
     tools::Rectangle aRetval(
-        mpMapper->ViewToLogicDistanceX(rDeviceRect.Left(), aMapRes.mfMapScX) - aMapRes.mnMapOfsX - mpMapper->GetLogicalXOffset(),
-        mpMapper->ViewToLogicDistanceY(rDeviceRect.Top(), aMapRes.mfMapScY) - aMapRes.mnMapOfsY - mpMapper->GetLogicalYOffset(),
-        rDeviceRect.IsWidthEmpty() ? 0 : mpMapper->ViewToLogicDistanceX(rDeviceRect.Right(), aMapRes.mfMapScX) - aMapRes.mnMapOfsX - mpMapper->GetLogicalXOffset(),
-        rDeviceRect.IsHeightEmpty() ? 0 : mpMapper->ViewToLogicDistanceY(rDeviceRect.Bottom(), aMapRes.mfMapScY) - aMapRes.mnMapOfsY - mpMapper->GetLogicalYOffset());
+        mpMapper->ViewSubPixelToLogicIntX(rDeviceRect.Left(), aMapRes),
+        mpMapper->ViewSubPixelToLogicIntY(rDeviceRect.Top(), aMapRes),
+        rDeviceRect.IsWidthEmpty()  ? 0 : mpMapper->ViewSubPixelToLogicIntX(rDeviceRect.Right(), aMapRes),
+        rDeviceRect.IsHeightEmpty() ? 0 : mpMapper->ViewSubPixelToLogicIntY(rDeviceRect.Bottom(), aMapRes)
+    );
 
-    if(rDeviceRect.IsWidthEmpty())
+    if (rDeviceRect.IsWidthEmpty())
         aRetval.SetWidthEmpty();
 
-    if(rDeviceRect.IsHeightEmpty())
+    if (rDeviceRect.IsHeightEmpty())
         aRetval.SetHeightEmpty();
 
     return aRetval;
