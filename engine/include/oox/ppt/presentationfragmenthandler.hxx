@@ -51,7 +51,7 @@ public:
 private:
     void importSlide( const ::oox::core::FragmentHandlerRef& rSlideFragmentHandler,
                         const oox::ppt::SlidePersistPtr& rPersist );
-    void importSlide(sal_uInt32 nSlide, bool bFirstSlide, bool bImportNotes);
+    void importSlide(sal_uInt32 nSlide, sal_Int32 nPagesImported, bool bImportNotes);
     void importMasterSlides();
     void importMasterSlide(const css::uno::Reference<css::frame::XModel>& xModel,
                            ::oox::ppt::PowerPointImport& rFilter,
