@@ -151,6 +151,8 @@ public:
 
     const SfxItemSet& GetActiveCellItemSet() const;
 
+    virtual std::optional<Color> GetActiveTextBackgroundColor(const SdrText* pSdrText) const override;
+
      void setTableStyle( const css::uno::Reference< css::container::XIndexAccess >& xAutoFormatStyle );
      const css::uno::Reference< css::container::XIndexAccess >& getTableStyle() const;
 
