@@ -1464,7 +1464,6 @@ body {
 	overflow: hidden;
 	position: relative;
 	display: none;
-	margin-block-end: -7px;
 	appearance: none;
 }
 
