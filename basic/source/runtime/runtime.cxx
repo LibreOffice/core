@@ -364,13 +364,6 @@ SbiDllMgr* SbiInstance::GetDllMgr()
     return pDllMgr.get();
 }
 
-#else
-
-bool SbiRuntime::isVBAEnabled()
-{
-    return false;
-}
-
 #endif
 
 bool SbiRuntime::isVBAEnabled()
