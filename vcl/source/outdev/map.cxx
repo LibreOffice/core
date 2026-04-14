@@ -647,27 +647,22 @@ tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect,
 tools::Polygon OutputDevice::LogicToPixel( const tools::Polygon& rLogicPoly,
                                            const MapMode& rMapMode ) const
 {
-
     if ( rMapMode.IsDefault() )
         return rLogicPoly;
 
-    // convert MapMode resolution and convert
-    ImplMapRes          aMapRes;
+    ImplMapRes aMapRes;
     aMapRes.CalcMapResolution(rMapMode, mpMapper->GetDPIX(), mpMapper->GetDPIY());
 
     const sal_uInt16 nPoints = rLogicPoly.GetSize();
     tools::Polygon aPoly( rLogicPoly );
 
-    // get pointer to Point-array (copy data)
-    const Point* pPointAry = aPoly.GetConstPointAry();
-
-    for (sal_uInt16 i = 0; i < nPoints; i++)
+    // Apply the custom mapping resolution to each point in the polygon
+    for (sal_uInt16 i = 0; i < nPoints; ++i)
     {
-        const Point* pPt = &(pPointAry[i]);
-        Point aPt;
-        aPt.setX(mpMapper->ViewToWindowUnitsX(mpMapper->LogicUnitsToViewUnitsX(pPt->X(), aMapRes)));
-        aPt.setY(mpMapper->ViewToWindowUnitsY(mpMapper->LogicUnitsToViewUnitsY(pPt->Y(), aMapRes)));
-        aPoly[i] = aPt;
+        aPoly[i] = Point(
+            mpMapper->LogicToWindowUnitsX(aPoly[i].X(), aMapRes),
+            mpMapper->LogicToWindowUnitsY(aPoly[i].Y(), aMapRes)
+        );
     }
 
     return aPoly;
