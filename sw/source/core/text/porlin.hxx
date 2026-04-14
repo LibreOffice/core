@@ -187,8 +187,8 @@ public:
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
                            TextFrameIndex& rOffset) const;
-    void dumpAsXmlAttributes(xmlTextWriterPtr writer, std::u16string_view rText,
-                             TextFrameIndex nOffset) const;
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer, std::u16string_view rText,
+                                     TextFrameIndex nOffset) const;
 };
 
 inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)

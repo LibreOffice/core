@@ -806,6 +806,14 @@ void SwLineLayout::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
     (void)xmlTextWriterEndElement(pWriter);
 }
 
+void SwLineLayout::dumpAsXmlAttributes(xmlTextWriterPtr pWriter, std::u16string_view rText,
+                                       TextFrameIndex nOffset) const
+{
+    SwTextPortion::dumpAsXmlAttributes(pWriter, rText, nOffset);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("dummy"),
+                                      BAD_CAST(OString::boolean(m_bDummy).getStr()));
+}
+
 void SwLineLayout::ResetFlags()
 {
     m_bFormatAdj = m_bDummy = m_bEndHyph = m_bMidHyph = m_bLastHyph = m_bFly = m_bRest = m_bBlinking

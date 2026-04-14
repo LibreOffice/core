@@ -272,6 +272,8 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
                    TextFrameIndex& nOffset) const override;
+    void dumpAsXmlAttributes(xmlTextWriterPtr pWriter, std::u16string_view rText,
+                             TextFrameIndex nOffset) const override;
 };
 
 /// Collection of SwLineLayout instances, represents the paragraph text in Writer layout.
