@@ -29,21 +29,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // We have to set the product name in the menu entries explicitly, there seems to be no automatic way to do that
         updateProductName()
 
-        // Check for --testFile launch argument (used by XCUITests)
-        let args = ProcessInfo.processInfo.arguments
-        if let idx = args.firstIndex(of: "--testFile"), idx + 1 < args.count {
-            let testFileURL = URL(fileURLWithPath: args[idx + 1])
-            NSDocumentController.shared.openDocument(withContentsOf: testFileURL, display: true) { _, _, error in
-                if let error {
-                    NSLog("CollaboraOffice: Failed to open test file: \(error)")
-                }
-            }
-        } else {
-            // Schedule opening of the Open panel if no document is open in 100ms
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.documentController.presentStartupBackstage(calledFromStartup: true)
-            }
+        // Schedule opening of the Open panel if no document is open in 100ms
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.documentController.presentStartupBackstage(calledFromStartup: true)
         }
+
         // Now remove the Share menu item, as we haven't implemented sharing yet.
         if let mainMenu = NSApp.mainMenu,
             let fileMenuItem = mainMenu.item(withTitle: "File"),

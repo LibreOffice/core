@@ -13,6 +13,9 @@
  */
 final class DocumentController: NSDocumentController {
 
+    /// Whether UI testing mode is active.
+    private static let isUITesting = ProcessInfo.processInfo.arguments.contains("--uitesting")
+
     /**
      * The current, live NSOpenPanel instance that was open during the app startup.
      *
@@ -84,6 +87,23 @@ final class DocumentController: NSDocumentController {
                                display displayDocument: Bool,
                                completionHandler: @escaping (NSDocument?, Bool, Error?) -> Void) {
         closeLiveOpenPanel()
+
+        // During UI testing the file comes from the test runner's sandbox,
+        // which the app cannot write to.  Copy it into the app's own temp
+        // directory so NSDocument considers it writable.
+        if DocumentController.isUITesting {
+            let appTmpDir = FileManager.default.temporaryDirectory
+                .appendingPathComponent("codaUITest-\(UUID().uuidString)")
+            do {
+                try FileManager.default.createDirectory(at: appTmpDir, withIntermediateDirectories: true)
+                let destURL = appTmpDir.appendingPathComponent(url.lastPathComponent)
+                try FileManager.default.copyItem(at: url, to: destURL)
+                super.openDocument(withContentsOf: destURL, display: displayDocument, completionHandler: completionHandler)
+                return
+            } catch {
+                NSLog("DocumentController: failed to copy test file: %@", error.localizedDescription)
+            }
+        }
 
         super.openDocument(withContentsOf: url, display: displayDocument, completionHandler: completionHandler)
     }

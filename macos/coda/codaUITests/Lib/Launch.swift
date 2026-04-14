@@ -15,8 +15,10 @@ final class Launch {
     /**
      * Launch the app with a test document opened directly, skipping the backstage.
      *
-     * The file is located in the test bundle's resources and its path is passed
-     * to the app via the `--testFile` launch argument.
+     * The file path is passed as a bare launch argument so that
+     * NSDocumentController opens it via the standard macOS mechanism.
+     * DocumentController copies it into the app's own temp directory
+     * so that NSDocument considers it writable.
      *
      * - Parameters:
      *   - app: The XCUIApplication instance.
@@ -33,9 +35,10 @@ final class Launch {
         }
 
         app.launchArguments = [
-            "--uitesting", "--testFile", path,
+            "--uitesting",
             "--testDriverPort=\(JSBridge.port)",
             "-ApplePersistenceIgnoreState", "YES",
+            path,
         ]
         app.launch()
     }
