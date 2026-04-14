@@ -1433,15 +1433,14 @@ void ScUndoDragDrop::Undo()
         aCxt.mnTabDelta = nTabDelta;
 
         // Global range names.
-        ScRangeName* pName = rDoc.GetRangeName();
-        if (pName)
-            pName->UpdateReference(aCxt);
+        ScRangeName& rName = rDoc.GetRangeName();
+        rName.UpdateReference(aCxt);
 
         SCTAB nTabCount = rDoc.GetTableCount();
         for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
         {
             // Sheet-local range names.
-            pName = rDoc.GetRangeName(nTab);
+            ScRangeName* pName = rDoc.GetRangeName(nTab);
             if (pName)
                 pName->UpdateReference(aCxt, nTab);
         }

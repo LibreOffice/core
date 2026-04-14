@@ -530,9 +530,9 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
                 rDoc.CopyToDocument(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), nTabCount-1, InsertDeleteFlags::FORMULA, false, *pUndoDoc);
 
                 //  ranges of DB and other
-                ScRangeName* pDocRange = rDoc.GetRangeName();
-                if (!pDocRange->empty())
-                    pUndoRange.reset(new ScRangeName( *pDocRange ));
+                ScRangeName& rDocRange = rDoc.GetRangeName();
+                if (!rDocRange.empty())
+                    pUndoRange.reset(new ScRangeName( rDocRange ));
                 ScDBCollection* pDocDB = rDoc.GetDBCollection();
                 if (!pDocDB->empty())
                     pUndoDB.reset(new ScDBCollection( *pDocDB ));

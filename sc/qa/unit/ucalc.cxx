@@ -1970,13 +1970,12 @@ CPPUNIT_TEST_FIXTURE(Test, testNamedRange)
     CPPUNIT_ASSERT_MESSAGE("Failed to insert range names.", bSuccess);
     m_pDoc->SetRangeName(std::move(pNames));
 
-    ScRangeName* pNewRanges = m_pDoc->GetRangeName();
-    CPPUNIT_ASSERT(pNewRanges);
+    ScRangeName& rNewRanges = m_pDoc->GetRangeName();
 
     // Make sure the index lookup does the right thing.
     for (const auto& rName : aNames)
     {
-        const ScRangeData* p = pNewRanges->findByIndex(rName.mnIndex);
+        const ScRangeData* p = rNewRanges.findByIndex(rName.mnIndex);
         CPPUNIT_ASSERT_MESSAGE("lookup of range name by index failed.", p);
         OUString aName = p->GetName();
         CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved.", aName.equalsAscii(rName.mpName));
@@ -1990,12 +1989,12 @@ CPPUNIT_TEST_FIXTURE(Test, testNamedRange)
     ASSERT_DOUBLES_EQUAL_MESSAGE ("calculation failed", 1.0, result);
 
     // Test copy-ability of range names.
-    std::unique_ptr<ScRangeName> pCopiedRanges(new ScRangeName(*pNewRanges));
+    std::unique_ptr<ScRangeName> pCopiedRanges(new ScRangeName(rNewRanges));
     m_pDoc->SetRangeName(std::move(pCopiedRanges));
     // Make sure the index lookup still works.
     for (const auto& rName : aNames)
     {
-        const ScRangeData* p = m_pDoc->GetRangeName()->findByIndex(rName.mnIndex);
+        const ScRangeData* p = m_pDoc->GetRangeName().findByIndex(rName.mnIndex);
         CPPUNIT_ASSERT_MESSAGE("lookup of range name by index failed with the copied instance.", p);
         OUString aName = p->GetName();
         CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved with the copied instance.", aName.equalsAscii(rName.mpName));

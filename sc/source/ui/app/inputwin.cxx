@@ -2360,8 +2360,8 @@ void ScPosWnd::FillRangeNames(bool initialize)
         ScDocument& rDoc = pDocShell->GetDocument();
 
         ScRange aDummy;
-        ScRangeName* pRangeNames = rDoc.GetRangeName();
-        for (const auto& rEntry : *pRangeNames)
+        ScRangeName& rRangeNames = rDoc.GetRangeName();
+        for (const auto& rEntry : rRangeNames)
         {
             if (rEntry.second->IsValidReference(aDummy))
                 aSet.insert(rEntry.second->GetName());
@@ -2633,12 +2633,12 @@ void ScPosWnd::DoEnter()
                 }
                 else if ( eType == SC_NAME_INPUT_DEFINE )
                 {
-                    ScRangeName* pNames = rDoc.GetRangeName();
+                    ScRangeName& rNames = rDoc.GetRangeName();
                     ScRange aSelection;
-                    if ( pNames && !pNames->findByUpperName(ScGlobal::getCharClass().uppercase(aText)) &&
+                    if ( !rNames.findByUpperName(ScGlobal::getCharClass().uppercase(aText)) &&
                             (rViewData.GetSimpleArea( aSelection ) == SC_MARK_SIMPLE) )
                     {
-                        ScRangeName aNewRanges( *pNames );
+                        ScRangeName aNewRanges( rNames );
                         ScAddress aCursor( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData() );
                         OUString aContent(aSelection.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
                         ScRangeData* pNew = new ScRangeData( rDoc, aText, aContent, aCursor );

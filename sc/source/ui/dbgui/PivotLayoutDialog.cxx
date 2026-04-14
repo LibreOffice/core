@@ -52,11 +52,9 @@ namespace
 ScRange lclGetRangeForNamedRange(OUString const & aName, const ScDocument& rDocument)
 {
     ScRange aInvalidRange(ScAddress::INITIALIZE_INVALID);
-    ScRangeName* pRangeName = rDocument.GetRangeName();
-    if (pRangeName == nullptr)
-        return aInvalidRange;
+    ScRangeName& rRangeName = rDocument.GetRangeName();
 
-    const ScRangeData* pData = pRangeName->findByUpperName(aName.toAsciiUpperCase());
+    const ScRangeData* pData = rRangeName.findByUpperName(aName.toAsciiUpperCase());
     if (pData == nullptr)
         return aInvalidRange;
 

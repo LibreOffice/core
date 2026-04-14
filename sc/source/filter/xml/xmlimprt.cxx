@@ -1312,9 +1312,9 @@ void ScXMLImport::SetNamedRanges()
         return;
 
     // Insert the namedRanges
-    ScRangeName* pRangeNames = mpDoc->GetRangeName();
+    ScRangeName& rRangeNames = mpDoc->GetRangeName();
     ::std::for_each(m_aMyNamedExpressions.begin(), m_aMyNamedExpressions.end(),
-            RangeNameInserter(*mpDoc, *pRangeNames, -1));
+            RangeNameInserter(*mpDoc, rRangeNames, -1));
 }
 
 void ScXMLImport::SetSheetNamedRanges()

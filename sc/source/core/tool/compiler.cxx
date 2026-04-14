@@ -3802,9 +3802,8 @@ const ScRangeData* ScCompiler::GetRangeData( SCTAB& rSheet, const OUString& rUpp
         pData = pRangeName->findByUpperName(rUpperName);
     if (!pData)
     {
-        pRangeName = rDoc.GetRangeName();
-        if (pRangeName)
-            pData = pRangeName->findByUpperName(rUpperName);
+        pRangeName = &rDoc.GetRangeName();
+        pData = pRangeName->findByUpperName(rUpperName);
         if (pData)
             rSheet = -1;
     }
@@ -3813,8 +3812,8 @@ const ScRangeData* ScCompiler::GetRangeData( SCTAB& rSheet, const OUString& rUpp
 
 bool ScCompiler::HasPossibleNamedRangeConflict( SCTAB nTab ) const
 {
-    const ScRangeName* pRangeName = rDoc.GetRangeName();
-    if (pRangeName && pRangeName->hasPossibleAddressConflict())
+    const ScRangeName* pRangeName = &rDoc.GetRangeName();
+    if (pRangeName->hasPossibleAddressConflict())
         return true;
     pRangeName = rDoc.GetRangeName(nTab);
     if (pRangeName && pRangeName->hasPossibleAddressConflict())

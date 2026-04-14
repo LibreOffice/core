@@ -2132,9 +2132,9 @@ namespace {
 
 bool hasRangeName(const ScDocument& rDoc, const OUString& rName)
 {
-    ScRangeName* pExtNames = rDoc.GetRangeName();
+    ScRangeName& rExtNames = rDoc.GetRangeName();
     OUString aUpperName = ScGlobal::getCharClass().uppercase(rName);
-    const ScRangeData* pRangeData = pExtNames->findByUpperName(aUpperName);
+    const ScRangeData* pRangeData = rExtNames.findByUpperName(aUpperName);
     return pRangeData != nullptr;
 }
 
@@ -2353,9 +2353,9 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
 ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSrcDoc(
     sal_uInt16 nFileId, const ScDocument& rSrcDoc, OUString& rName)
 {
-    ScRangeName* pExtNames = rSrcDoc.GetRangeName();
+    ScRangeName& rExtNames = rSrcDoc.GetRangeName();
     OUString aUpperName = ScGlobal::getCharClass().uppercase(rName);
-    const ScRangeData* pRangeData = pExtNames->findByUpperName(aUpperName);
+    const ScRangeData* pRangeData = rExtNames.findByUpperName(aUpperName);
     if (!pRangeData)
         return ScExternalRefCache::TokenArrayRef();
 
@@ -3059,14 +3059,13 @@ void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
     // Remove all named ranges that reference this document.
 
     // Global named ranges.
-    ScRangeName* pRanges = mrDoc.GetRangeName();
-    if (pRanges)
-        removeRangeNamesBySrcDoc(*pRanges, nFileId);
+    ScRangeName& rRanges = mrDoc.GetRangeName();
+    removeRangeNamesBySrcDoc(rRanges, nFileId);
 
     // Sheet-local named ranges.
     for (SCTAB i = 0, n = mrDoc.GetTableCount(); i < n; ++i)
     {
-        pRanges = mrDoc.GetRangeName(i);
+        ScRangeName* pRanges = mrDoc.GetRangeName(i);
         if (pRanges)
             removeRangeNamesBySrcDoc(*pRanges, nFileId);
     }

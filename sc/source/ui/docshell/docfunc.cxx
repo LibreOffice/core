@@ -2221,7 +2221,7 @@ void ScDocFunc::SetNewRangeNames( std::unique_ptr<ScRangeName> pNewRanges, bool 
         }
         else
         {
-            pOld = rDoc.GetRangeName();
+            pOld = &rDoc.GetRangeName();
         }
         std::unique_ptr<ScRangeName> pUndoRanges(new ScRangeName(*pOld));
         std::unique_ptr<ScRangeName> pRedoRanges(new ScRangeName(*pNewRanges));
@@ -2366,7 +2366,7 @@ bool ScDocFunc::CreateNames( const ScRange& rRange, CreateNameFlags nFlags, bool
         if (aTab >=0)
             pNames = rDoc.GetRangeName(nTab);
         else
-            pNames = rDoc.GetRangeName();
+            pNames = &rDoc.GetRangeName();
 
         if (!pNames)
             return false;   // shouldn't happen

@@ -1042,7 +1042,7 @@ bool ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
                     const ScRangeName* pNames = rSrcDoc.GetRangeName( nSrcPos);
                     if (pNames)
                         pNames->CopyUsedNames( nSrcPos, nSrcPos, nDestPos, rSrcDoc, *this, bGlobalNamesToLocal);
-                    rSrcDoc.GetRangeName()->CopyUsedNames( -1, nSrcPos, nDestPos, rSrcDoc, *this, bGlobalNamesToLocal);
+                    rSrcDoc.GetRangeName().CopyUsedNames( -1, nSrcPos, nDestPos, rSrcDoc, *this, bGlobalNamesToLocal);
                 }
                 rSrcDoc.maTabs[nSrcPos]->CopyToTable(aCxt, 0, 0, MaxCol(), MaxRow(),
                         ( bResultsOnly ? InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA : InsertDeleteFlags::ALL),

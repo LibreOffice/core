@@ -247,10 +247,10 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
         }
 
         // tdf#142600 - list tables in order of their appearance in the document's source
-        const ScRangeName* pRangeName = m_pSourceShell->GetDocument().GetRangeName();
-        for (size_t i = 1; i <= pRangeName->index_size(); i++)
+        const ScRangeName& rRangeName = m_pSourceShell->GetDocument().GetRangeName();
+        for (size_t i = 1; i <= rRangeName.index_size(); i++)
         {
-            if (const ScRangeData* pRangeData = pRangeName->findByIndex(i))
+            if (const ScRangeData* pRangeData = rRangeName.findByIndex(i))
             {
                 m_xLbRanges->append_text(pRangeData->GetName());
             }

@@ -3108,7 +3108,7 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     SCTAB nTab = GetViewData().CurrentTabForData();
-    ScRangeName* pList = rDoc.GetRangeName();
+    ScRangeName& rList = rDoc.GetRangeName();
 
     ScRangeData::Type nType = ScRangeData::Type::Name;
     auto pNewEntry = std::make_unique<ScRangeData>(
@@ -3132,15 +3132,15 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
         rDoc.PreprocessRangeNameUpdate();
 
         // input available yet? Then remove beforehand (=change)
-        ScRangeData* pData = pList->findByUpperName(ScGlobal::getCharClass().uppercase(rName));
+        ScRangeData* pData = rList.findByUpperName(ScGlobal::getCharClass().uppercase(rName));
         if (pData)
         {                                   // take old Index
             pNewEntry->SetIndex(pData->GetIndex());
-            pList->erase(*pData);
+            rList.erase(*pData);
         }
 
         // don't delete, insert took ownership, even on failure!
-        if ( pList->insert( pNewEntry.release() ) )
+        if ( rList.insert( pNewEntry.release() ) )
             bOk = true;
 
         rDoc.CompileHybridFormula();

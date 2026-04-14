@@ -519,9 +519,9 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
                                     InsertDeleteFlags::FORMULA, false, *pUndoDoc );
 
         // database and other ranges
-        ScRangeName* pDocRange = rDoc.GetRangeName();
-        if (!pDocRange->empty())
-            pUndoRange.reset(new ScRangeName( *pDocRange ));
+        ScRangeName& rDocRange = rDoc.GetRangeName();
+        if (!rDocRange.empty())
+            pUndoRange.reset(new ScRangeName( rDocRange ));
         ScDBCollection* pDocDB = rDoc.GetDBCollection();
         if (!pDocDB->empty())
             pUndoDB.reset(new ScDBCollection( *pDocDB ));
@@ -2311,9 +2311,9 @@ void ScDBFunc::RepeatDB( bool bRecord )
             rDoc.CopyToDocument( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),nTabCount-1, InsertDeleteFlags::FORMULA, false, *pUndoDoc );
 
             // data base and other ranges
-            ScRangeName* pDocRange = rDoc.GetRangeName();
-            if (!pDocRange->empty())
-                pUndoRange.reset(new ScRangeName( *pDocRange ));
+            ScRangeName& rDocRange = rDoc.GetRangeName();
+            if (!rDocRange.empty())
+                pUndoRange.reset(new ScRangeName( rDocRange ));
             ScDBCollection* pDocDB = rDoc.GetDBCollection();
             if (!pDocDB->empty())
                 pUndoDB.reset(new ScDBCollection( *pDocDB ));

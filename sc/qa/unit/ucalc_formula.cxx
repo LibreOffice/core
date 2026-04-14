@@ -112,9 +112,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaCreateStringFromTokens)
         { false, "sheetx", "Test.J1" }
     };
 
-    ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
+    ScRangeName& rGlobalNames = m_pDoc->GetRangeName();
     ScRangeName* pSheetNames = m_pDoc->GetRangeName(0);
-    CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
     CPPUNIT_ASSERT_MESSAGE("Failed to obtain sheet-local named expression object.", pSheetNames);
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
@@ -125,7 +124,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaCreateStringFromTokens)
 
         if (aNames[i].bGlobal)
         {
-            bool bInserted = pGlobalNames->insert(pName);
+            bool bInserted = rGlobalNames.insert(pName);
             CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
         }
         else
@@ -2473,7 +2472,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateInsertColumns)
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3,3,0)));
 
     // Check that the named reference points to the moved cell, now D2.
-    ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName(u"ROWRELATIVERANGE"_ustr);
+    ScRangeData* pName = m_pDoc->GetRangeName().findByUpperName(u"ROWRELATIVERANGE"_ustr);
     CPPUNIT_ASSERT(pName);
     OUString aSymbol = pName->GetSymbol(aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL(u"$Formula.$D2"_ustr, aSymbol);
@@ -2484,7 +2483,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateInsertColumns)
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4,1,0)));
 
     // Check that the named column reference points to the moved column, now D.
-    pName = m_pDoc->GetRangeName()->findByUpperName(u"ENTIRECOLUMN"_ustr);
+    pName = m_pDoc->GetRangeName().findByUpperName(u"ENTIRECOLUMN"_ustr);
     CPPUNIT_ASSERT(pName);
     aSymbol = pName->GetSymbol(aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL(u"$D:$D"_ustr, aSymbol);
@@ -2496,7 +2495,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateInsertColumns)
 
     // Check that the named row reference still points to the same entire row
     // and does not have a #REF! error due to inserted columns.
-    pName = m_pDoc->GetRangeName()->findByUpperName(u"ENTIREROW"_ustr);
+    pName = m_pDoc->GetRangeName().findByUpperName(u"ENTIREROW"_ustr);
     CPPUNIT_ASSERT(pName);
     aSymbol = pName->GetSymbol(aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL(u"$2:$2"_ustr, aSymbol);
@@ -3372,13 +3371,12 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateName)
     m_pDoc->SetValue(ScAddress(2,4,0), 4);
 
     // Add a named expression that references the immediate left cell.
-    ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
-    CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
+    ScRangeName& rGlobalNames = m_pDoc->GetRangeName();
     ScRangeData* pName = new ScRangeData(
         *m_pDoc, u"ToLeft"_ustr, u"RC[-1]"_ustr, ScAddress(2,1,0),
         ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
 
-    bool bInserted = pGlobalNames->insert(pName);
+    bool bInserted = rGlobalNames.insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
 
     // Insert formulas in D2:D5 using the named expression.
@@ -3419,7 +3417,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateName)
     // Insert a new named expression that references these values as absolute range.
     pName = new ScRangeData(
         *m_pDoc, u"MyRange"_ustr, u"$B$10:$B$12"_ustr, ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
-    bInserted = pGlobalNames->insert(pName);
+    bInserted = rGlobalNames.insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
 
     // Set formula at C8 that references this named expression.
@@ -3430,7 +3428,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateName)
     m_pDoc->InsertCol(ScRange(1,9,0,2,11,0));
 
     // This should shift the absolute range B10:B12 that MyRange references.
-    pName = pGlobalNames->findByUpperName(u"MYRANGE"_ustr);
+    pName = rGlobalNames.findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Failed to find named expression 'MyRange' in the global scope.", pName);
     OUString aExpr = pName->GetSymbol();
     CPPUNIT_ASSERT_EQUAL(u"$D$10:$D$12"_ustr, aExpr);
@@ -3450,7 +3448,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateName)
     m_pDoc->GetName(1, aName);
     CPPUNIT_ASSERT_EQUAL(u"Formula"_ustr, aName);
 
-    pName = pGlobalNames->findByUpperName(u"MYRANGE"_ustr);
+    pName = rGlobalNames.findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Failed to find named expression 'MyRange' in the global scope.", pName);
 
     m_pDoc->SetValue(ScAddress(3,9,1), 10);
@@ -3463,7 +3461,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateName)
     m_pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_EQUAL(u"Formula"_ustr, aName);
 
-    pName = pGlobalNames->findByUpperName(u"MYRANGE"_ustr);
+    pName = rGlobalNames.findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Failed to find named expression 'MyRange' in the global scope.", pName);
 
     m_pDoc->SetValue(ScAddress(3,9,0), 11);
@@ -3471,11 +3469,11 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateName)
 
     // Clear all and start over.
     clearRange(m_pDoc, ScRange(0,0,0,100,100,0));
-    pGlobalNames->clear();
+    rGlobalNames.clear();
 
     pName = new ScRangeData(
         *m_pDoc, u"MyRange"_ustr, u"$B$1:$C$6"_ustr, ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
-    bInserted = pGlobalNames->insert(pName);
+    bInserted = rGlobalNames.insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
     aExpr = pName->GetSymbol();
     CPPUNIT_ASSERT_EQUAL(u"$B$1:$C$6"_ustr, aExpr);
@@ -3509,7 +3507,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameMove)
     m_pDoc->SetString(ScAddress(0,9,0), u"=SUM(MyRange)"_ustr);
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,9,0)));
 
-    ScRangeData* pData = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    ScRangeData* pData = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pData);
     OUString aSymbol = pData->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2:$B$4"_ustr, aSymbol);
@@ -3532,7 +3530,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameMove)
     // Undo and check.
     pUndoMgr->Undo();
 
-    pData = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    pData = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pData);
     aSymbol = pData->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2:$B$4"_ustr, aSymbol);
@@ -3541,7 +3539,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameMove)
     // Redo and check.
     pUndoMgr->Redo();
 
-    pData = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    pData = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pData);
     aSymbol = pData->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(u"$Test.$D$3:$D$5"_ustr, aSymbol);
@@ -3568,7 +3566,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameMove)
 
     // Clear and start over.
     clearSheet(m_pDoc, 0);
-    m_pDoc->GetRangeName()->clear();
+    m_pDoc->GetRangeName().clear();
 
     // Set value to B2.
     m_pDoc->SetValue(ScAddress(1,1,0), 2.0);
@@ -3615,7 +3613,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameExpandRef)
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange(0,3,0,m_pDoc->MaxCol(),3,0), &aMark, INS_INSROWS_BEFORE, false, true);
-    ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    ScRangeData* pName = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pName);
     OUString aSymbol = pName->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(u"$A$1:$A$4"_ustr, aSymbol);
@@ -3628,7 +3626,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameExpandRef)
     // Insert a new column at column 2, which should not expand the named
     // range as it is only one column wide.
     rFunc.InsertCells(ScRange(1,0,0,1,m_pDoc->MaxRow(),0), &aMark, INS_INSCOLS_BEFORE, false, true);
-    pName = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    pName = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pName);
     aSymbol = pName->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(u"$A$1:$A$4"_ustr, aSymbol);
@@ -3640,7 +3638,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameExpandRef)
     CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(0,6,0)));
 
     // Clear the document and start over.
-    m_pDoc->GetRangeName()->clear();
+    m_pDoc->GetRangeName().clear();
     clearSheet(m_pDoc, 0);
 
     // Set values to B4:B6.
@@ -3658,14 +3656,14 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameExpandRef)
     // Insert rows over 3:5 which should expand the range by 3 rows.
     rFunc.InsertCells(ScRange(0,2,0,m_pDoc->MaxCol(),4,0), &aMark, INS_INSROWS_BEFORE, false, true);
 
-    pName = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    pName = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pName);
 
     aSymbol = pName->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(u"$B$4:$B$9"_ustr, aSymbol);
 
     // Clear the document and start over.
-    m_pDoc->GetRangeName()->clear();
+    m_pDoc->GetRangeName().clear();
     clearSheet(m_pDoc, 0);
 
     // Set values to A1:A3.
@@ -3730,7 +3728,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameExpandRef2)
 
     // Insert a new column at column 3, which should expand the named
     rFunc.InsertCells(ScRange(1,0,0,1,m_pDoc->MaxRow(),0), &aMark, INS_INSCOLS_BEFORE, false, true);
-    ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    ScRangeData* pName = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pName);
     OUString aSymbol = pName->GetSymbol(m_pDoc->GetGrammar());
     CPPUNIT_ASSERT_EQUAL(u"$A$1:$C$3"_ustr, aSymbol);
@@ -3746,7 +3744,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameDeleteRow)
     bool bInserted = m_pDoc->InsertNewRangeName(u"MyRange"_ustr, ScAddress(0,0,0), u"$B$2:$B$4"_ustr);
     CPPUNIT_ASSERT(bInserted);
 
-    const ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    const ScRangeData* pName = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pName);
 
     sc::TokenStringContext aCxt(*m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
@@ -3758,7 +3756,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameDeleteRow)
     bInserted = m_pDoc->InsertNewRangeName(u"MyAddress"_ustr, ScAddress(0,0,0), u"$B$3"_ustr);
     CPPUNIT_ASSERT(bInserted);
 
-    const ScRangeData* pName2 = m_pDoc->GetRangeName()->findByUpperName(u"MYADDRESS"_ustr);
+    const ScRangeData* pName2 = m_pDoc->GetRangeName().findByUpperName(u"MYADDRESS"_ustr);
     CPPUNIT_ASSERT(pName2);
 
     sc::TokenStringContext aCxt2(*m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
@@ -3792,7 +3790,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameDeleteRow)
 
     pUndoMgr->Undo();
 
-    pName = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    pName = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pName);
     pCode = pName->GetCode();
 
@@ -3802,7 +3800,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameDeleteRow)
     // Undo again and check.
     pUndoMgr->Undo();
 
-    pName = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    pName = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pName);
     pCode = pName->GetCode();
 
@@ -3818,14 +3816,14 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameDeleteRow)
     // Undo and check.
     pUndoMgr->Undo();
 
-    pName = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    pName = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pName);
     pCode = pName->GetCode();
 
     aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(u"$B$2:$B$4"_ustr, aExpr);
 
-    pName2 = m_pDoc->GetRangeName()->findByUpperName(u"MYADDRESS"_ustr);
+    pName2 = m_pDoc->GetRangeName().findByUpperName(u"MYADDRESS"_ustr);
     CPPUNIT_ASSERT(pName2);
     pCode2 = pName2->GetCode();
 
@@ -3838,14 +3836,14 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameDeleteRow)
     aMark2.SelectOneTable(1);
     rFunc.DeleteCells(ScRange(0,2,1,m_pDoc->MaxCol(),2,1), &aMark2, DelCellCmd::CellsUp, true);
 
-    pName = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    pName = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pName);
     pCode = pName->GetCode();
 
     aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(u"$B$2:$B$4"_ustr, aExpr);
 
-    pName2 = m_pDoc->GetRangeName()->findByUpperName(u"MYADDRESS"_ustr);
+    pName2 = m_pDoc->GetRangeName().findByUpperName(u"MYADDRESS"_ustr);
     CPPUNIT_ASSERT(pName2);
     pCode2 = pName2->GetCode();
 
@@ -4193,7 +4191,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateNameDelete)
     bool bInserted = m_pDoc->InsertNewRangeName(u"MyRange"_ustr, ScAddress(0,0,0), u"$Test.$B$1"_ustr);
     CPPUNIT_ASSERT(bInserted);
 
-    const ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    const ScRangeData* pName = m_pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pName);
 
     m_pDoc->DeleteCol(1, 0, 3, 0, 0, 1);
@@ -4770,13 +4768,12 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFuncSUBTOTAL)
         m_pDoc->SetValue(ScAddress(2, i, 0), i + 1);
 
     // Add a named expression for a function.
-    ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
-    CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
+    ScRangeName& rGlobalNames = m_pDoc->GetRangeName();
     ScRangeData* pName = new ScRangeData(
         *m_pDoc, u"MyRelative"_ustr, u"$C1:$C$1000"_ustr, ScAddress(2, 999, 0),
         ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
 
-    bool bInserted = pGlobalNames->insert(pName);
+    bool bInserted = rGlobalNames.insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
 
     for (size_t i = 0; i < 1025; i++)

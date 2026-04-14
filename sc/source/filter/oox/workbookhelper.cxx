@@ -368,7 +368,7 @@ Reference< XStyle > WorkbookGlobals::getStyleObject( const OUString& rStyleName,
 
 namespace {
 
-WorkbookHelper::RangeDataRet lcl_addNewByName(ScDocument& rDoc, ScRangeName* pNames, const OUString& rName, sal_Int16 nIndex, sal_Int32 nUnoType)
+WorkbookHelper::RangeDataRet lcl_addNewByName(ScDocument& rDoc, ScRangeName& rNames, const OUString& rName, sal_Int16 nIndex, sal_Int32 nUnoType)
 {
     bool bDone = false;
     ScRangeData::Type nNewType = ScRangeData::Type::Name;
@@ -388,7 +388,7 @@ WorkbookHelper::RangeDataRet lcl_addNewByName(ScDocument& rDoc, ScRangeName* pNa
     {
         return WorkbookHelper::RangeDataRet(pNew, true);
     }
-    if ( pNames->insert(pNew) )
+    if ( rNames.insert(pNew) )
         bDone = true;
     if (!bDone)
     {
@@ -398,11 +398,11 @@ WorkbookHelper::RangeDataRet lcl_addNewByName(ScDocument& rDoc, ScRangeName* pNa
     return WorkbookHelper::RangeDataRet(pNew, false);
 }
 
-OUString findUnusedName( const ScRangeName* pRangeName, const OUString& rSuggestedName )
+OUString findUnusedName( const ScRangeName& rRangeName, const OUString& rSuggestedName )
 {
     OUString aNewName = rSuggestedName;
     sal_Int32 nIndex = 0;
-    while(pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(aNewName)))
+    while(rRangeName.findByUpperName(ScGlobal::getCharClass().uppercase(aNewName)))
         aNewName = rSuggestedName + OUStringChar('_') + OUString::number( nIndex++ );
 
     return aNewName;
@@ -418,11 +418,11 @@ WorkbookHelper::RangeDataRet WorkbookGlobals::createNamedRangeObject(
     if( !orName.isEmpty() )
     {
         ScDocument& rDoc =  getScDocument();
-        ScRangeName* pNames = rDoc.GetRangeName();
+        ScRangeName& rNames = rDoc.GetRangeName();
         // find an unused name
-        orName = findUnusedName( pNames, orName );
+        orName = findUnusedName( rNames, orName );
         // create the named range
-        aScRangeData = lcl_addNewByName(rDoc, pNames, orName, nIndex, nNameFlags);
+        aScRangeData = lcl_addNewByName(rDoc, rNames, orName, nIndex, nNameFlags);
     }
     return aScRangeData;
 }
@@ -439,9 +439,9 @@ WorkbookHelper::RangeDataRet WorkbookGlobals::createLocalNamedRangeObject(
         if(!pNames)
             throw RuntimeException(u"invalid sheet index used"_ustr);
         // find an unused name
-        orName = findUnusedName( pNames, orName );
+        orName = findUnusedName( *pNames, orName );
         // create the named range
-        aScRangeData = lcl_addNewByName(rDoc, pNames, orName, nIndex, nNameFlags);
+        aScRangeData = lcl_addNewByName(rDoc, *pNames, orName, nIndex, nNameFlags);
     }
     return aScRangeData;
 }

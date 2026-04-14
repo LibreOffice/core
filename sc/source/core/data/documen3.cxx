@@ -181,11 +181,11 @@ ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const
     return nullptr;
 }
 
-ScRangeName* ScDocument::GetRangeName() const
+ScRangeName& ScDocument::GetRangeName() const
 {
     if (!pRangeName)
         pRangeName.reset(new ScRangeName);
-    return pRangeName.get();
+    return *pRangeName;
 }
 
 void ScDocument::SetRangeName(SCTAB nTab, std::unique_ptr<ScRangeName> pNew)
@@ -205,7 +205,7 @@ bool ScDocument::IsAddressInRangeName( RangeNameScope eScope, const ScAddress& r
     ScRange aNameRange;
 
     if (eScope == RangeNameScope::GLOBAL)
-        pRangeNames= GetRangeName();
+        pRangeNames= &GetRangeName();
     else
         pRangeNames= GetRangeName(rAddress.Tab());
 
@@ -223,12 +223,10 @@ bool ScDocument::IsAddressInRangeName( RangeNameScope eScope, const ScAddress& r
 
 bool ScDocument::InsertNewRangeName( const OUString& rName, const ScAddress& rPos, const OUString& rExpr )
 {
-    ScRangeName* pGlobalNames = GetRangeName();
-    if (!pGlobalNames)
-        return false;
+    ScRangeName& rGlobalNames = GetRangeName();
 
     ScRangeData* pName = new ScRangeData(*this, rName, rExpr, rPos, ScRangeData::Type::Name, GetGrammar());
-    return pGlobalNames->insert(pName);
+    return rGlobalNames.insert(pName);
 }
 
 bool ScDocument::InsertNewRangeName( SCTAB nTab, const OUString& rName, const ScAddress& rPos, const OUString& rExpr )
@@ -274,7 +272,7 @@ const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString&
 
 ScRangeData* ScDocument::FindRangeNameBySheetAndIndex( SCTAB nTab, sal_uInt16 nIndex ) const
 {
-    const ScRangeName* pRN = (nTab < 0 ? GetRangeName() : GetRangeName(nTab));
+    const ScRangeName* pRN = (nTab < 0 ?& GetRangeName() : GetRangeName(nTab));
     return (pRN ? pRN->findByIndex( nIndex) : nullptr);
 }
 

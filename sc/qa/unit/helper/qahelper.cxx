@@ -907,7 +907,7 @@ bool ScUcalcTestBase::insertRangeNames(
 
 OUString ScUcalcTestBase::getRangeByName(const ScDocument* pDoc, const OUString& aRangeName)
 {
-    ScRangeData* pName = pDoc->GetRangeName()->findByUpperName(aRangeName.toAsciiUpperCase());
+    ScRangeData* pName = pDoc->GetRangeName().findByUpperName(aRangeName.toAsciiUpperCase());
     CPPUNIT_ASSERT(pName);
     return pName->GetSymbol(pDoc->GetGrammar());
 }

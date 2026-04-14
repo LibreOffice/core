@@ -37,9 +37,9 @@ ScRefUndoData::ScRefUndoData( ScDocument& rDoc ) :
     if (pOldDBColl && !pOldDBColl->empty())
         pDBCollection.reset(new ScDBCollection(*pOldDBColl));
 
-    const ScRangeName* pOldRanges = rDoc.GetRangeName();
-    if (pOldRanges && !pOldRanges->empty())
-        pRangeName.reset(new ScRangeName(*pOldRanges));
+    const ScRangeName& rOldRanges = rDoc.GetRangeName();
+    if (!rOldRanges.empty())
+        pRangeName.reset(new ScRangeName(rOldRanges));
 
     // when handling Pivot solely keep the range?
 
@@ -81,8 +81,8 @@ void ScRefUndoData::DeleteUnchanged( ScDocument& rDoc )
     }
     if (pRangeName)
     {
-        ScRangeName* pNewRanges = rDoc.GetRangeName();
-        if ( pNewRanges && *pRangeName == *pNewRanges )
+        ScRangeName& rNewRanges = rDoc.GetRangeName();
+        if ( *pRangeName == rNewRanges )
             pRangeName.reset();
     }
 

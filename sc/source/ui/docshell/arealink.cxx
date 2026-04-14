@@ -184,13 +184,13 @@ bool ScAreaLink::FindExtRange( ScRange& rRange, const ScDocument& rSrcDoc, const
 {
     bool bFound = false;
     OUString aUpperName = ScGlobal::getCharClass().uppercase(rAreaName);
-    ScRangeName* pNames = rSrcDoc.GetRangeName();
-    if (pNames)         // named ranges
-    {
-        const ScRangeData* p = pNames->findByUpperName(aUpperName);
-        if (p && p->IsValidReference(rRange))
-            bFound = true;
-    }
+    ScRangeName& rNames = rSrcDoc.GetRangeName();
+
+    // named ranges
+    const ScRangeData* p = rNames.findByUpperName(aUpperName);
+    if (p && p->IsValidReference(rRange))
+        bFound = true;
+
     if (!bFound)        // database ranges
     {
         ScDBCollection* pDBColl = rSrcDoc.GetDBCollection();

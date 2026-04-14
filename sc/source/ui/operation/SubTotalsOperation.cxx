@@ -136,9 +136,9 @@ bool SubTotalsOperation::runImplementation()
                             InsertDeleteFlags::FORMULA, false, *pUndoDoc);
 
         //  ranges of DB and other
-        ScRangeName* pDocRange = rDoc.GetRangeName();
-        if (!pDocRange->empty())
-            pUndoRange.reset(new ScRangeName(*pDocRange));
+        ScRangeName& rDocRange = rDoc.GetRangeName();
+        if (!rDocRange.empty())
+            pUndoRange.reset(new ScRangeName(rDocRange));
         ScDBCollection* pDocDB = rDoc.GetDBCollection();
         if (!pDocDB->empty())
             pUndoDB.reset(new ScDBCollection(*pDocDB));

@@ -3103,9 +3103,9 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertNameList_DefaultAndSheetView)
     int nView3ID = aView3.getViewID();
 
     // Add a named range so InsertNameList has something to insert
-    ScRangeName* pGlobalNames = pDocument->GetRangeName();
+    ScRangeName& rGlobalNames = pDocument->GetRangeName();
     ScRangeData* pRangeData = new ScRangeData(*pDocument, u"TestRange"_ustr, u"$A$10:$B$20"_ustr);
-    pGlobalNames->insert(pRangeData);
+    rGlobalNames.insert(pRangeData);
 
     // Create sheet view 1
     {

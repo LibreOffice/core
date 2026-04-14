@@ -793,8 +793,8 @@ void ScContentTree::GetAreaNames()
 
     ScRange aDummy;
     std::set<OUString> aSet;
-    ScRangeName* pRangeNames = pDoc->GetRangeName();
-    for (const auto& rEntry : *pRangeNames)
+    ScRangeName& rRangeNames = pDoc->GetRangeName();
+    for (const auto& rEntry : rRangeNames)
     {
         if (rEntry.second->IsValidReference(aDummy))
             aSet.insert(rEntry.second->GetName());
@@ -1111,13 +1111,10 @@ static bool lcl_GetRange( const ScDocument& rDoc, ScContentId nType, const OUStr
 
     if ( nType == ScContentId::RANGENAME )
     {
-        ScRangeName* pList = rDoc.GetRangeName();
-        if (pList)
-        {
-            const ScRangeData* p = pList->findByUpperName(ScGlobal::getCharClass().uppercase(rName));
-            if (p && p->IsValidReference(rRange))
-                bFound = true;
-        }
+        ScRangeName& rList = rDoc.GetRangeName();
+        const ScRangeData* p = rList.findByUpperName(ScGlobal::getCharClass().uppercase(rName));
+        if (p && p->IsValidReference(rRange))
+            bFound = true;
     }
     else if ( nType == ScContentId::DBAREA )
     {

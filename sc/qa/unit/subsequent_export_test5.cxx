@@ -962,7 +962,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf157318)
 
     // Check if there is one global named range
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1),
-                         static_cast<sal_uInt16>(pDoc->GetRangeName()->size()));
+                         static_cast<sal_uInt16>(pDoc->GetRangeName().size()));
 
     // Check if there is one named range in the first sheet
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1),

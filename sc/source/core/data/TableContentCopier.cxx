@@ -38,8 +38,8 @@ void sc::TableContentCopier::performCopy(const ScMarkData* pOnlyMarked, ScCloneF
     if (pNames)
         pNames->CopyUsedNames(mnSourceTabNo, nPreviousSourceTabNo, mnTargetTabNo, mrDoc, mrDoc,
                               bGlobalNamesToLocal);
-    mrDoc.GetRangeName()->CopyUsedNames(-1, nPreviousSourceTabNo, mnTargetTabNo, mrDoc, mrDoc,
-                                        bGlobalNamesToLocal);
+    mrDoc.GetRangeName().CopyUsedNames(-1, nPreviousSourceTabNo, mnTargetTabNo, mrDoc, mrDoc,
+                                       bGlobalNamesToLocal);
 
     sc::CopyToDocContext aCopyDocCxt(mrDoc);
     if (mrDoc.pDBCollection)

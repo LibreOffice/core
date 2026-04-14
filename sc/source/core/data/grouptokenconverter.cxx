@@ -282,12 +282,9 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
                 }
 
                 // Named range.
-                ScRangeName* pNames = mrDoc.GetRangeName();
-                if (!pNames)
-                    // This should never fail.
-                    return false;
+                ScRangeName& rNames = mrDoc.GetRangeName();
 
-                ScRangeData* pRange = pNames->findByIndex(p->GetIndex());
+                ScRangeData* pRange = rNames.findByIndex(p->GetIndex());
                 if (!pRange)
                     // No named range exists by that index.
                     return false;

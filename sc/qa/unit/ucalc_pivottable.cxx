@@ -742,11 +742,10 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNamedSource)
 
     // Name this range.
     OUString aRangeName(u"MyData"_ustr);
-    ScRangeName* pNames = m_pDoc->GetRangeName();
-    CPPUNIT_ASSERT_MESSAGE("Failed to get global range name container.", pNames);
+    ScRangeName& rNames = m_pDoc->GetRangeName();
     ScRangeData* pName = new ScRangeData(
         *m_pDoc, aRangeName, aRangeStr);
-    bool bSuccess = pNames->insert(pName);
+    bool bSuccess = rNames.insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bSuccess);
 
     ScSheetSourceDesc aSheetDesc(m_pDoc);
@@ -809,7 +808,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNamedSource)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
                            size_t(0), pDPs->GetNameCaches().size());
 
-    pNames->clear();
+    rNames.clear();
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }

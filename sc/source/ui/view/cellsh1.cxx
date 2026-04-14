@@ -3732,13 +3732,10 @@ void ScCellShell::ExecuteDataPilotDialog()
                 pTabViewShell->GetFrameWeld(), bEnableExt));
 
         // Populate named ranges (if any).
-        ScRangeName* pRangeName = rDoc.GetRangeName();
-        if (pRangeName)
-        {
-            ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
-            for (; itr != itrEnd; ++itr)
-                pTypeDlg->AppendNamedRange(itr->second->GetName());
-        }
+        ScRangeName& rRangeName = rDoc.GetRangeName();
+        ScRangeName::const_iterator itr = rRangeName.begin(), itrEnd = rRangeName.end();
+        for (; itr != itrEnd; ++itr)
+            pTypeDlg->AppendNamedRange(itr->second->GetName());
 
         pTypeDlg->StartExecuteAsync([this, pTypeDlg, pTabViewShell,
                                     pScMod, pFact, &rDoc, &rMark, aDestPos](int nResult) mutable {

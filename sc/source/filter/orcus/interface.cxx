@@ -201,7 +201,7 @@ void ScOrcusNamedExpression::set_named_range(std::string_view /*name*/, std::str
 void ScOrcusNamedExpression::commit()
 {
     ScRangeName* pNames
-        = mnTab >= 0 ? mrDoc.getDoc().GetRangeName(mnTab) : mrDoc.getDoc().GetRangeName();
+        = mnTab >= 0 ? mrDoc.getDoc().GetRangeName(mnTab) : &mrDoc.getDoc().GetRangeName();
     if (!pNames)
         return;
 

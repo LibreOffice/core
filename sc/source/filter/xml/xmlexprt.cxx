@@ -4230,8 +4230,8 @@ void ScXMLExport::WritePersons(const ScDocument& rDoc)
 
 void ScXMLExport::WriteNamedExpressions(const ScDocument& rDoc)
 {
-    ScRangeName* pNamedRanges = rDoc.GetRangeName();
-    WriteNamedRange(rDoc, pNamedRanges);
+    ScRangeName& rNamedRanges = rDoc.GetRangeName();
+    WriteNamedRange(rDoc, &rNamedRanges);
 }
 
 void ScXMLExport::WriteExternalDataMapping(ScDocument& rDoc)

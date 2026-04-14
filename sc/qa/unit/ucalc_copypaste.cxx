@@ -394,7 +394,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     m_pDoc->CopyFromClip(aRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc2);
 
     // The global2 range must not have changed.
-    pGlobal2 = m_pDoc->GetRangeName()->findByUpperName(u"GLOBAL2"_ustr);
+    pGlobal2 = m_pDoc->GetRangeName().findByUpperName(u"GLOBAL2"_ustr);
     CPPUNIT_ASSERT_MESSAGE("GLOBAL2 name not found", pGlobal2);
     OUString aSymbol = pGlobal2->GetSymbol();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("GLOBAL2 named range changed", aGlobal2Symbol, aSymbol);

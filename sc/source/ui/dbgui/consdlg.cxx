@@ -171,9 +171,9 @@ void ScConsolidateDlg::Init()
     // Use the ScAreaData helper class to save those range names from the
     // RangeNames and database ranges that appear in the ListBoxes.
 
-    ScRangeName*    pRangeNames  = rDoc.GetRangeName();
+    ScRangeName&    rRangeNames  = rDoc.GetRangeName();
     ScDBCollection* pDbNames     = rDoc.GetDBCollection();
-    size_t nRangeCount = pRangeNames ? pRangeNames->size() : 0;
+    size_t nRangeCount = rRangeNames.size();
     size_t nDbCount = pDbNames ? pDbNames->getNamedDBs().size() : 0;
 
     nAreaDataCount = nRangeCount+nDbCount;

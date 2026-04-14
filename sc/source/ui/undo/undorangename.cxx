@@ -90,7 +90,7 @@ void ScUndoAddRangeData::Undo()
     ScRangeName* pRangeName = nullptr;
     if (mnTab == -1)
     {
-        pRangeName = rDoc.GetRangeName();
+        pRangeName = &rDoc.GetRangeName();
     }
     else
     {
@@ -107,7 +107,7 @@ void ScUndoAddRangeData::Redo()
     ScRangeName* pRangeName = nullptr;
     if (mnTab == -1)
     {
-        pRangeName = rDoc.GetRangeName();
+        pRangeName = &rDoc.GetRangeName();
     }
     else
     {

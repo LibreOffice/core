@@ -729,7 +729,7 @@ ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDo
 
     bool bInserted;
     if (nNewSheet < 0)
-        bInserted = rNewDoc.GetRangeName()->insert(pRangeData);
+        bInserted = rNewDoc.GetRangeName().insert(pRangeData);
     else
         bInserted = rNewDoc.GetRangeName(nNewSheet)->insert(pRangeData);
 
@@ -761,10 +761,10 @@ ScRangeData* copyRangeNames( SheetIndexMap& rSheetIndexMap, std::vector<ScRangeD
         const SCTAB nOldSheet, const SCTAB nNewSheet, bool bSameDoc)
 {
     ScRangeData* pRangeData = nullptr;
-    const ScRangeName* pOldRangeName = (nTab < 0 ? rOldDoc.GetRangeName() : rOldDoc.GetRangeName(nTab));
+    const ScRangeName* pOldRangeName = (nTab < 0 ? &rOldDoc.GetRangeName() : rOldDoc.GetRangeName(nTab));
     if (pOldRangeName)
     {
-        const ScRangeName* pNewRangeName = (nNewSheet < 0 ? rNewDoc.GetRangeName() : rNewDoc.GetRangeName(nNewSheet));
+        const ScRangeName* pNewRangeName = (nNewSheet < 0 ? &rNewDoc.GetRangeName() : rNewDoc.GetRangeName(nNewSheet));
         sc::UpdatedRangeNames::NameIndicesType aSet( rReferencingNames.getUpdatedNames(nTab));
         for (auto const & rIndex : aSet)
         {
@@ -864,7 +864,7 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
     }
     else
     {
-        pOldRangeData = GetRangeName()->findByIndex(nOldIndex);
+        pOldRangeData = GetRangeName().findByIndex(nOldIndex);
         if (!pOldRangeData)
             return false;     // might be an error in the formula array
         aRangeName = pOldRangeData->GetUpperName();
@@ -883,9 +883,8 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
     if (!rpRangeData && !bGlobalNamesToLocal)
     {
         nNewSheet = -1;
-        pNewNames = rNewDoc.GetRangeName();
-        if (pNewNames)
-            rpRangeData = pNewNames->findByUpperName(aRangeName);
+        pNewNames = &rNewDoc.GetRangeName();
+        rpRangeData = pNewNames->findByUpperName(aRangeName);
     }
     // If no range name was found copy it.
     if (!rpRangeData)

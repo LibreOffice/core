@@ -120,7 +120,7 @@ ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
         if (nTab >= 0)
             pNames = pDocShell->GetDocument().GetRangeName(nTab);
         else
-            pNames = pDocShell->GetDocument().GetRangeName();
+            pNames = &pDocShell->GetDocument().GetRangeName();
         if (pNames)
         {
             pRet = pNames->findByUpperName(ScGlobal::getCharClass().uppercase(aName));
@@ -163,7 +163,7 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     if (nTab >= 0)
         pNames = rDoc.GetRangeName(nTab);
     else
-        pNames = rDoc.GetRangeName();
+        pNames = &rDoc.GetRangeName();
     if (!pNames)
         return;
 
@@ -785,12 +785,10 @@ rtl::Reference<ScNamedRangeObj> ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sa
     if (!pDocShell)
         return nullptr;
 
-    ScRangeName* pNames = pDocShell->GetDocument().GetRangeName();
-    if (!pNames)
-        return nullptr;
+    ScRangeName& rNames = pDocShell->GetDocument().GetRangeName();
 
     sal_uInt16 nPos = 0;
-    for (const auto& rName : *pNames)
+    for (const auto& rName : rNames)
     {
         if (lcl_UserVisibleName(*rName.second))
         {
@@ -811,7 +809,7 @@ rtl::Reference<ScNamedRangeObj> ScGlobalNamedRangesObj::GetObjectByName_Impl(con
 
 ScRangeName* ScGlobalNamedRangesObj::GetRangeName_Impl()
 {
-    return pDocShell->GetDocument().GetRangeName();
+    return &pDocShell->GetDocument().GetRangeName();
 }
 
 SCTAB ScGlobalNamedRangesObj::GetTab_Impl()

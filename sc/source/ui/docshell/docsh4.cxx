@@ -3002,17 +3002,14 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
 
     //  named range?
     OUString aPos = rItem;
-    ScRangeName* pRange = m_pDocument->GetRangeName();
-    if( pRange )
+    ScRangeName& rRange = m_pDocument->GetRangeName();
+    const ScRangeData* pData = rRange.findByUpperName(ScGlobal::getCharClass().uppercase(aPos));
+    if (pData)
     {
-        const ScRangeData* pData = pRange->findByUpperName(ScGlobal::getCharClass().uppercase(aPos));
-        if (pData)
-        {
-            if( pData->HasType( ScRangeData::Type::RefArea    )
-                || pData->HasType( ScRangeData::Type::AbsArea )
-                || pData->HasType( ScRangeData::Type::AbsPos  ) )
-                aPos = pData->GetSymbol();           // continue with the name's contents
-        }
+        if( pData->HasType( ScRangeData::Type::RefArea    )
+            || pData->HasType( ScRangeData::Type::AbsArea )
+            || pData->HasType( ScRangeData::Type::AbsPos  ) )
+            aPos = pData->GetSymbol();           // continue with the name's contents
     }
 
     // Address in DDE function must be always parsed as CONV_OOO so that it

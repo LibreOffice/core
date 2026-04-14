@@ -1066,7 +1066,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf118983)
 
     xGlobalSheetSettings->setExpandReferences(true);
 
-    const ScRangeData* pRD = pDoc->GetRangeName()->findByUpperName(u"TEST"_ustr);
+    const ScRangeData* pRD = pDoc->GetRangeName().findByUpperName(u"TEST"_ustr);
     CPPUNIT_ASSERT(pRD);
     CPPUNIT_ASSERT_EQUAL(u"$Test.$A$3:$D$7"_ustr, pRD->GetSymbol());
 

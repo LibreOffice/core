@@ -120,11 +120,11 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
     if(rDoc.GetChangeTrack()!=nullptr) m_xBtnCopyResult->set_sensitive(false);
 
-    ScRangeName* pRangeNames = rDoc.GetRangeName();
+    ScRangeName& rRangeNames = rDoc.GetRangeName();
     m_xLbFilterArea->clear();
     m_xLbFilterArea->append_text(aStrUndefined);
 
-    for (const auto& rEntry : *pRangeNames)
+    for (const auto& rEntry : rRangeNames)
     {
         if (!rEntry.second->HasType(ScRangeData::Type::Criteria))
             continue;

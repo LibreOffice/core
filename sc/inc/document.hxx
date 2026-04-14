@@ -740,7 +740,7 @@ public:
     SC_DLLPUBLIC void          SetAllRangeNames(const std::map<OUString, ScRangeName>& rRangeMap);
     SC_DLLPUBLIC void          GetRangeNameMap(std::map<OUString, ScRangeName*>& rRangeName);
     SC_DLLPUBLIC ScRangeName*  GetRangeName(SCTAB nTab) const;
-    SC_DLLPUBLIC ScRangeName*  GetRangeName() const;
+    SC_DLLPUBLIC ScRangeName&  GetRangeName() const;
     void                       SetRangeName(SCTAB nTab, std::unique_ptr<ScRangeName> pNew);
     void                       SetRangeName( std::unique_ptr<ScRangeName> pNewRangeName );
     bool                       IsAddressInRangeName( RangeNameScope eScope, const ScAddress& rAddress);

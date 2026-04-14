@@ -135,8 +135,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf94627)
 
     ScDocument* pDoc = getScDoc();
 
-    ScRangeName* pRangeName = pDoc->GetRangeName();
-    ScRangeData* pRangeData = pRangeName->findByUpperName("NAME1");
+    ScRangeName& rRangeName = pDoc->GetRangeName();
+    ScRangeData* pRangeData = rRangeName.findByUpperName("NAME1");
     CPPUNIT_ASSERT(pRangeData);
 
     OUString aFormula = pRangeData->GetSymbol();

@@ -513,7 +513,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx,
 {
     sal_uInt16 nNameIdx = 0;
     const ScRangeData* pData = nullptr;
-    ScRangeName* pRN = (nTab == SCTAB_GLOBAL) ? GetDoc().GetRangeName() : GetDoc().GetRangeName(nTab);
+    ScRangeName* pRN = (nTab == SCTAB_GLOBAL) ? &GetDoc().GetRangeName() : GetDoc().GetRangeName(nTab);
     if (pRN)
         pData = pRN->findByIndex(nScNameIdx);
 

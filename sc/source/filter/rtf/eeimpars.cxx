@@ -143,7 +143,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         // Automatic language option selected.  Check for the global 'use US English' option.
         bNumbersEnglishUS = officecfg::Office::Common::Filter::HTML::Import::NumbersEnglishUS::get();
     }
-    ScRangeName* pRangeNames = mrDoc.GetRangeName();
+    ScRangeName& rRangeNames = mrDoc.GetRangeName();
     for ( size_t i = 0, n = mpParser->ListSize(); i < n; ++i )
     {
         pE = mpParser->ListEntry( i );
@@ -422,11 +422,11 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 bHasGraphics |= GraphicSize( nCol, nRow, pE );
             if ( pE->pName )
             {   // Anchor Name => RangeName
-                if (!pRangeNames->findByUpperName(ScGlobal::getCharClass().uppercase(*pE->pName)))
+                if (!rRangeNames.findByUpperName(ScGlobal::getCharClass().uppercase(*pE->pName)))
                 {
                     ScRangeData* pData = new ScRangeData( mrDoc, *pE->pName,
                         ScAddress( nCol, nRow, nTab ) );
-                    pRangeNames->insert( pData );
+                    rRangeNames.insert( pData );
                 }
             }
         }

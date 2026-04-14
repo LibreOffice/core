@@ -387,13 +387,13 @@ void ScPrintAreasDlg::Impl_FillLists()
 
     // Get ranges and remember in ListBoxen
 
-    ScRangeName* pRangeNames = rDoc.GetRangeName();
+    ScRangeName& rRangeNames = rDoc.GetRangeName();
 
-    if (!pRangeNames || pRangeNames->empty())
+    if (rRangeNames.empty())
         // No range names to process.
         return;
 
-    for (const auto& rEntry : *pRangeNames)
+    for (const auto& rEntry : rRangeNames)
     {
         if (!rEntry.second->HasType(ScRangeData::Type::AbsArea   )
             && !rEntry.second->HasType(ScRangeData::Type::RefArea)

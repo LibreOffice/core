@@ -44,7 +44,7 @@ void testRangeNameImpl(const ScDocument& rDoc)
 {
     //check one range data per sheet and one global more detailed
     //add some more checks here
-    ScRangeData* pRangeData = rDoc.GetRangeName()->findByUpperName(u"GLOBAL1"_ustr);
+    ScRangeData* pRangeData = rDoc.GetRangeName().findByUpperName(u"GLOBAL1"_ustr);
     CPPUNIT_ASSERT_MESSAGE("range name Global1 not found", pRangeData);
     double aValue = rDoc.GetValue(1, 0, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Global1 should reference Sheet1.A1", 1.0, aValue);
@@ -478,12 +478,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameODS)
     ScDocument* pDoc = getScDoc();
 
     // This named range is set to "hidden"
-    ScRangeData* pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
+    ScRangeData* pRangeData1 = pDoc->GetRangeName().findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
                          pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
     // This named range is visible
-    ScRangeData* pRangeData2 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE2"_ustr);
+    ScRangeData* pRangeData2 = pDoc->GetRangeName().findByUpperName(u"NAMEDRANGE2"_ustr);
     CPPUNIT_ASSERT(pRangeData2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0),
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
@@ -496,11 +496,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameODS)
     // Check if both named ranges are hidden after saving and reloading
     saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
-    pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
+    pRangeData1 = pDoc->GetRangeName().findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
                          pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
-    pRangeData2 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE2"_ustr);
+    pRangeData2 = pDoc->GetRangeName().findByUpperName(u"NAMEDRANGE2"_ustr);
     CPPUNIT_ASSERT(pRangeData2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
@@ -512,12 +512,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameXLSX)
     ScDocument* pDoc = getScDoc();
 
     // This named range is set to "hidden"
-    ScRangeData* pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
+    ScRangeData* pRangeData1 = pDoc->GetRangeName().findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
                          pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
     // This named range is visible
-    ScRangeData* pRangeData2 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE2"_ustr);
+    ScRangeData* pRangeData2 = pDoc->GetRangeName().findByUpperName(u"NAMEDRANGE2"_ustr);
     CPPUNIT_ASSERT(pRangeData2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0),
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
@@ -525,11 +525,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameXLSX)
     // Save as ODS and test if the named ranges are still with the correct hidden flag
     saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
-    pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
+    pRangeData1 = pDoc->GetRangeName().findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
                          pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
-    pRangeData2 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE2"_ustr);
+    pRangeData2 = pDoc->GetRangeName().findByUpperName(u"NAMEDRANGE2"_ustr);
     CPPUNIT_ASSERT(pRangeData2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0),
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
@@ -541,7 +541,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenNamedExpression)
     ScDocument* pDoc = getScDoc();
 
     // Adds two hidden named expressions and two non-hidden named expressions
-    ScRangeName* pNamedRanges = pDoc->GetRangeName();
+    ScRangeName* pNamedRanges = &pDoc->GetRangeName();
     ScRangeData* pRangeData1 = new ScRangeData(*pDoc, u"NAME1"_ustr, u"100"_ustr);
     pRangeData1->AddType(ScRangeData::Type::Hidden);
     pNamedRanges->insert(pRangeData1);
@@ -557,7 +557,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenNamedExpression)
     // Save and reload to test whether the named expressions retain the hidden  where applicable
     saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
-    pNamedRanges = pDoc->GetRangeName();
+    pNamedRanges = &pDoc->GetRangeName();
     CPPUNIT_ASSERT_EQUAL(size_t(4), pNamedRanges->size());
     pRangeData1 = pNamedRanges->findByUpperName(u"NAME1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
@@ -583,12 +583,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenNamedExpressionODS)
     ScDocument* pDoc = getScDoc();
 
     // The document has 2 named expressions; the first is hidden; the second is visible
-    ScRangeName* pNamedRanges = pDoc->GetRangeName();
-    ScRangeData* pRangeData1 = pNamedRanges->findByUpperName(u"NAME1"_ustr);
+    ScRangeName& rNamedRanges = pDoc->GetRangeName();
+    ScRangeData* pRangeData1 = rNamedRanges.findByUpperName(u"NAME1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
     CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Hidden, pRangeData1->GetType());
     CPPUNIT_ASSERT_EQUAL(u"100"_ustr, pRangeData1->GetSymbol());
-    ScRangeData* pRangeData2 = pNamedRanges->findByUpperName(u"NAME2"_ustr);
+    ScRangeData* pRangeData2 = rNamedRanges.findByUpperName(u"NAME2"_ustr);
     CPPUNIT_ASSERT(pRangeData2);
     CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Name, pRangeData2->GetType());
     CPPUNIT_ASSERT_EQUAL(u"200"_ustr, pRangeData2->GetSymbol());
