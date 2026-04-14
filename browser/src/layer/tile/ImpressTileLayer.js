@@ -237,10 +237,23 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		textMsg = textMsg.replace('status: ', '');
 		textMsg = textMsg.replace('statusupdate: ', '');
 		if (statusJSON.width && statusJSON.height && this._documentInfo !== textMsg) {
+			let dimensionsChanged = false;
 			if (statusJSON.partdimensions) {
+				const oldDims = this._partDimensions;
 				this._partDimensions = [];
 				for (let i = 0; i < statusJSON.partdimensions.length; i++) {
 					this._partDimensions.push(new cool.SimplePoint(statusJSON.partdimensions[i].width, statusJSON.partdimensions[i].height));
+				}
+				if (!oldDims || oldDims.length !== this._partDimensions.length) {
+					dimensionsChanged = true;
+				} else {
+					for (let i = 0; i < oldDims.length; i++) {
+						if (oldDims[i].x !== this._partDimensions[i].x ||
+							oldDims[i].y !== this._partDimensions[i].y) {
+							dimensionsChanged = true;
+							break;
+						}
+					}
 				}
 			}
 
@@ -315,6 +328,10 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			}
 
 			this._documentInfo = textMsg;
+
+			if (dimensionsChanged) {
+				this._invalidateAllPreviews();
+			}
 		}
 
 		if (app.file.fileBasedView)

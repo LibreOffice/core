@@ -938,11 +938,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		for (var part = 0; part < this._previewTiles.length; part++) {
 			this._previewTiles[part].fetched = false;
-			this._map.getPreview(part, part,
+			var imgSize = this._map.getPreview(part, part,
 					     this.options.maxWidth,
 					     this.options.maxHeight,
 					     {autoUpdate: this.options.autoUpdate,
 					      fetchThumbnail: this.options.fetchThumbnail});
+			window.L.DomUtil.setStyle(this._previewTiles[part], 'width', imgSize.width + 'px');
+			window.L.DomUtil.setStyle(this._previewTiles[part], 'height', imgSize.height + 'px');
 		}
 
 	},
