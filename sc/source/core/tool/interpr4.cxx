@@ -1277,7 +1277,7 @@ void ScInterpreter::PopExternalDoubleRef(ScMatrixRef& rMat)
         SetError( FormulaError::IllegalParameter);
     else
     {
-        rMat = p->GetMatrix();
+        rMat = static_cast<ScMatrixToken*>(p)->GetMatrix();
         if (!rMat)
             SetError( FormulaError::UnknownVariable);
     }
@@ -1490,7 +1490,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                     if ( ScParameterClassification::GetParameterType( pCur, nParams - i)
                             == formula::ParamClass::Value )
                     {   // only if single value expected
-                        ScConstMatrixRef pMat = p->GetMatrix();
+                        ScConstMatrixRef pMat = static_cast<const ScMatrixToken*>(p)->GetMatrix();
                         if ( !pMat )
                             SetError( FormulaError::UnknownVariable);
                         else
@@ -1572,7 +1572,8 @@ bool ScInterpreter::ConvertMatrixParameters()
                         if (!pTemp)
                             break;
 
-                        ScMatrixRef pMat = pTemp->GetMatrix();
+                        assert(dynamic_cast<ScMatrixToken*>(pTemp));
+                        ScMatrixRef pMat = static_cast<ScMatrixToken*>(pTemp)->GetMatrix();
                         if (pMat)
                         {
                             if (eType == formula::ParamClass::Value)
@@ -1672,7 +1673,7 @@ ScMatrixRef ScInterpreter::PopMatrix()
                     // ScMatrix itself maintains an im/mutable flag that should
                     // be obeyed where necessary... so we can return ScMatrixRef
                     // here instead of ScConstMatrixRef.
-                    ScMatrix* pMat = const_cast<FormulaToken*>(p)->GetMatrix();
+                    ScMatrix* pMat = static_cast<ScMatrixToken*>(const_cast<FormulaToken*>(p))->GetMatrix();
                     if ( pMat )
                         pMat->SetErrorInterpreter( this);
                     else
@@ -1699,7 +1700,7 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
             {
                 --sp;
                 const FormulaToken* p = pStack[sp];
-                aRet.mpMat = const_cast<FormulaToken*>(p)->GetMatrix();
+                aRet.mpMat = static_cast<ScMatrixToken*>(const_cast<FormulaToken*>(p))->GetMatrix();
                 if (aRet.mpMat)
                 {
                     aRet.mpMat->SetErrorInterpreter(this);
@@ -4842,7 +4843,7 @@ StackVar ScInterpreter::Interpret()
     if (eType == svMatrix)
         // Results are immutable in case they would be reused as input for new
         // interpreters.
-        xResult->GetMatrix()->SetImmutable();
+        static_cast<const ScMatrixToken*>(xResult.get())->GetMatrix()->SetImmutable();
     return eType;
 }
 

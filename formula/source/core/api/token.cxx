@@ -252,18 +252,6 @@ ScSingleRefData* FormulaToken::GetSingleRef2()
     return nullptr;
 }
 
-const ScMatrix* FormulaToken::GetMatrix() const
-{
-    OSL_FAIL( "FormulaToken::GetMatrix: virtual dummy called" );
-    return nullptr;
-}
-
-ScMatrix* FormulaToken::GetMatrix()
-{
-    OSL_FAIL( "FormulaToken::GetMatrix: virtual dummy called" );
-    return nullptr;
-}
-
 bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 {
     return *this == rToken;

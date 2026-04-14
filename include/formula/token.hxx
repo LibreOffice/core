@@ -228,8 +228,6 @@ public:
     virtual ScComplexRefData*       GetDoubleRef();
     virtual const ScSingleRefData*  GetSingleRef2() const;
     virtual ScSingleRefData*        GetSingleRef2();
-    virtual const ScMatrix*     GetMatrix() const;
-    virtual ScMatrix*           GetMatrix();
 
     virtual FormulaToken*       Clone() const { return new FormulaToken(*this); }
 

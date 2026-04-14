@@ -95,8 +95,8 @@ public:
     ScMatrixToken( ScMatrixRef p );
     ScMatrixToken( const ScMatrixToken& );
 
-    virtual const ScMatrix*     GetMatrix() const override;
-    virtual ScMatrix*           GetMatrix() override;
+    SC_DLLPUBLIC const ScMatrix* GetMatrix() const;
+    ScMatrix*                   GetMatrix();
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScMatrixToken(*this); }
     virtual bool IsMatrixRangeToken() const { return false; }
@@ -286,10 +286,6 @@ public:
 /**  Transports the result from the interpreter to the formula cell. */
 class ScMatrixCellResultToken : public formula::FormulaToken
 {
-    // No non-const access implemented, silence down unxsols4 complaining about
-    // the public GetMatrix() hiding the one from FormulaToken.
-    virtual ScMatrix*           GetMatrix() override;
-
 protected:
     ScConstMatrixRef xMatrix;
     formula::FormulaConstTokenRef     xUpperLeft;
@@ -299,7 +295,7 @@ public:
     virtual ~ScMatrixCellResultToken() override;
     virtual double              GetDouble() const override;
     virtual const svl::SharedString & GetString() const override;
-    virtual const ScMatrix*     GetMatrix() const override;
+    const ScMatrix*             GetMatrix() const;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override;
     formula::StackVar           GetUpperLeftType() const

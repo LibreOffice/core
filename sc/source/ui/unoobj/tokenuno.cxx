@@ -486,7 +486,7 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     }
                     break;
                 case svMatrix:
-                    if (!ScRangeToSequence::FillMixedArray( rAPI.Data, rToken.GetMatrix(), true))
+                    if (!ScRangeToSequence::FillMixedArray( rAPI.Data, static_cast<const ScMatrixToken&>(rToken).GetMatrix(), true))
                         rAPI.Data.clear();
                     break;
                 case svExternalSingleRef:

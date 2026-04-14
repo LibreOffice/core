@@ -1085,7 +1085,7 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 
     if (pCode->GetCodeError() == FormulaError::NONE && aResult.GetType() == svMatrixCell)
     {
-        const ScMatrix* pMat = aResult.GetToken()->GetMatrix();
+        const ScMatrix* pMat = static_cast<const ScMatrixCellResultToken*>(aResult.GetToken().get())->GetMatrix();
         if (pMat)
         {
             pMat->GetDimensions( rCols, rRows );

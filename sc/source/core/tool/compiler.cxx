@@ -5702,7 +5702,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
 
 void ScCompiler::CreateStringFromMatrix( OUStringBuffer& rBuffer, const FormulaToken* pTokenP ) const
 {
-    const ScMatrix* pMatrix = pTokenP->GetMatrix();
+    const ScMatrix* pMatrix = static_cast<const ScMatrixToken*>(pTokenP)->GetMatrix();
     SCSIZE nC, nMaxC, nR, nMaxR;
 
     pMatrix->GetDimensions( nMaxC, nMaxR);

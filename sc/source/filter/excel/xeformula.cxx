@@ -1319,7 +1319,7 @@ void XclExpFmlaCompImpl::ProcessExternal( const XclExpScToken& rTokData )
 
 void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
 {
-    const ScMatrix* pMatrix = rTokData.mpScToken->GetMatrix();
+    const ScMatrix* pMatrix = static_cast<const ScMatrixToken*>(rTokData.mpScToken)->GetMatrix();
     if( pMatrix && mxData->mrCfg.mbAllowArrays )
     {
         SCSIZE nScCols, nScRows;

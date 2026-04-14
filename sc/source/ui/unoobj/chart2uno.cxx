@@ -2704,7 +2704,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
             continue;
         }
 
-        const ScMatrix* pMat = p->GetMatrix();
+        const ScMatrix* pMat = static_cast<ScMatrixToken*>(p)->GetMatrix();
         SCSIZE nCSize, nRSize;
         pMat->GetDimensions(nCSize, nRSize);
         for (SCSIZE nC = 0; nC < nCSize; ++nC)
