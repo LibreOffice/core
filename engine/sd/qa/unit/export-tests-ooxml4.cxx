@@ -34,6 +34,8 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 
 #include <sdpage.hxx>
+#include <SlideSectionManager.hxx>
+#include <unomodel.hxx>
 
 class SdOOXMLExportTest4 : public SdModelTestBase
 {
@@ -1975,108 +1977,261 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testChartExExport)
     assertXPath(pDoc, "/cx:chartSpace/c:date1904", 0);
 }
 
-CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSections)
+// 1. Open PPTX with sections, re-export to PPTX, verify sections preserved
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsPPTXImport)
 {
-    createSdImpressDoc("pptx/slide-sections.pptx");
+    createSdImpressDoc("pptx/slide-section-test.pptx");
     save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
 
-    // The test file has 2 sections:
-    // "Default Section" with 3 slides, "section-demo" with 4 slides
-    static constexpr OString sSectionLstPath = "/p:presentation/p:extLst/p:ext/p14:sectionLst"_ostr;
-    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section", 2);
+    static constexpr OString sPath = "/p:presentation/p:extLst/p:ext/p14:sectionLst"_ostr;
+    assertXPath(pXmlDoc, sPath + "/p14:section", 3);
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]", "name", u"Section-1");
+    assertXPath(pXmlDoc, sPath + "/p14:section[2]", "name", u"Section-2");
+    assertXPath(pXmlDoc, sPath + "/p14:section[3]", "name", u"Section-3");
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]/p14:sldIdLst/p14:sldId", 4);
+    assertXPath(pXmlDoc, sPath + "/p14:section[2]/p14:sldIdLst/p14:sldId", 7);
+    assertXPath(pXmlDoc, sPath + "/p14:section[3]/p14:sldIdLst/p14:sldId", 2);
 
-    // Verify section names
-    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]", "name", u"Default Section");
-    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[2]", "name", u"section-demo");
+    // GUIDs preserved
+    for (sal_Int32 i = 1; i <= 3; ++i)
+    {
+        OUString sId = getXPath(pXmlDoc, sPath + "/p14:section[" + OString::number(i) + "]", "id");
+        CPPUNIT_ASSERT(!sId.isEmpty());
+        CPPUNIT_ASSERT(sId.startsWith("{"));
+    }
 
-    // Verify section GUIDs are preserved
-    OUString sId1 = getXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]", "id");
-    OUString sId2 = getXPath(pXmlDoc, sSectionLstPath + "/p14:section[2]", "id");
-    CPPUNIT_ASSERT(!sId1.isEmpty());
-    CPPUNIT_ASSERT(!sId2.isEmpty());
-
-    // Verify slide counts per section
-    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]/p14:sldIdLst/p14:sldId", 3);
-    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[2]/p14:sldIdLst/p14:sldId", 4);
-
-    // Verify slide IDs are non-zero
-    OUString sSldId
-        = getXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]/p14:sldIdLst/p14:sldId[1]", "id");
-    CPPUNIT_ASSERT(!sSldId.isEmpty());
+    // Slide IDs non-zero
+    OUString sSldId = getXPath(pXmlDoc, sPath + "/p14:section[1]/p14:sldIdLst/p14:sldId[1]", "id");
     CPPUNIT_ASSERT(sSldId.toInt32() > 0);
 }
 
-CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsODP)
+// 2. Export PPTX with sections to ODP
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsPPTXToODP)
 {
-    // Load PPTX with sections, save to ODP, verify sections in ODP XML
-    createSdImpressDoc("pptx/slide-sections.pptx");
+    createSdImpressDoc("pptx/slide-section-test.pptx");
     skipValidation();
     save(TestFilter::ODP);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
-    static constexpr OString sBasePath
+    static constexpr OString sPath
         = "/office:document-content/office:body/office:presentation/loext:section-list"_ostr;
-    assertXPath(pXmlDoc, sBasePath + "/loext:section", 2);
-
-    // Verify section names
-    assertXPath(pXmlDoc, sBasePath + "/loext:section[1]", "name", u"Default Section");
-    assertXPath(pXmlDoc, sBasePath + "/loext:section[2]", "name", u"section-demo");
-
-    // Verify slide counts per section
-    assertXPath(pXmlDoc, sBasePath + "/loext:section[1]/loext:section-slide", 3);
-    assertXPath(pXmlDoc, sBasePath + "/loext:section[2]/loext:section-slide", 4);
+    assertXPath(pXmlDoc, sPath + "/loext:section", 3);
+    assertXPath(pXmlDoc, sPath + "/loext:section[1]", "name", u"Section-1");
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]", "name", u"Section-2");
+    assertXPath(pXmlDoc, sPath + "/loext:section[3]", "name", u"Section-3");
+    assertXPath(pXmlDoc, sPath + "/loext:section[1]/loext:section-slide", 4);
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]/loext:section-slide", 7);
+    assertXPath(pXmlDoc, sPath + "/loext:section[3]/loext:section-slide", 2);
 }
 
-CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsODPRoundTrip)
+// 3. Open ODP with sections (PPTX -> ODP -> reload ODP)
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsODPImport)
 {
-    // Load PPTX with sections, save to ODP, reload ODP, export to PPTX, verify sections
-    createSdImpressDoc("pptx/slide-sections.pptx");
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    skipValidation();
+    saveAndReload(TestFilter::ODP);
+
+    // Verify the in-memory model loaded from ODP
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Section-1"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-2"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-3"_ustr, rMgr.GetSection(2).maName);
+}
+
+// 4. Export ODP with sections to PPTX
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsODPToPPTX)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
     skipValidation();
     saveAndReload(TestFilter::ODP);
     save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
 
-    static constexpr OString sSectionLstPath = "/p:presentation/p:extLst/p:ext/p14:sectionLst"_ostr;
-    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section", 2);
+    static constexpr OString sPath = "/p:presentation/p:extLst/p:ext/p14:sectionLst"_ostr;
+    assertXPath(pXmlDoc, sPath + "/p14:section", 3);
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]", "name", u"Section-1");
+    assertXPath(pXmlDoc, sPath + "/p14:section[2]", "name", u"Section-2");
+    assertXPath(pXmlDoc, sPath + "/p14:section[3]", "name", u"Section-3");
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]/p14:sldIdLst/p14:sldId", 4);
+    assertXPath(pXmlDoc, sPath + "/p14:section[2]/p14:sldIdLst/p14:sldId", 7);
+    assertXPath(pXmlDoc, sPath + "/p14:section[3]/p14:sldIdLst/p14:sldId", 2);
 
-    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]", "name", u"Default Section");
-    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[2]", "name", u"section-demo");
-
-    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]/p14:sldIdLst/p14:sldId", 3);
-    assertXPath(pXmlDoc, sSectionLstPath + "/p14:section[2]/p14:sldIdLst/p14:sldId", 4);
-
-    // Verify slide IDs are non-zero after round-trip
-    OUString sSldId
-        = getXPath(pXmlDoc, sSectionLstPath + "/p14:section[1]/p14:sldIdLst/p14:sldId[1]", "id");
-    CPPUNIT_ASSERT(!sSldId.isEmpty());
+    // Slide IDs non-zero after ODP round-trip
+    OUString sSldId = getXPath(pXmlDoc, sPath + "/p14:section[1]/p14:sldIdLst/p14:sldId[1]", "id");
     CPPUNIT_ASSERT(sSldId.toInt32() > 0);
+
+    // GUIDs survive ODP round-trip (generated if missing)
+    for (sal_Int32 i = 1; i <= 3; ++i)
+    {
+        OUString sId = getXPath(pXmlDoc, sPath + "/p14:section[" + OString::number(i) + "]", "id");
+        CPPUNIT_ASSERT(!sId.isEmpty());
+    }
 }
 
-CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsODPtoODP)
+// 5. Rename section in PPTX
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsRenamePPTX)
 {
-    // Load PPTX with sections, save to ODP, reload ODP, save to ODP again, verify sections
-    createSdImpressDoc("pptx/slide-sections.pptx");
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::SlideSectionManager& rMgr = pXImpressDocument->GetDoc()->GetSectionManager();
+
+    rMgr.RenameSection(1, u"Renamed-Section"_ustr);
+
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+
+    static constexpr OString sPath = "/p:presentation/p:extLst/p:ext/p14:sectionLst"_ostr;
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]", "name", u"Section-1");
+    assertXPath(pXmlDoc, sPath + "/p14:section[2]", "name", u"Renamed-Section");
+    assertXPath(pXmlDoc, sPath + "/p14:section[3]", "name", u"Section-3");
+
+    // Slide counts unchanged
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]/p14:sldIdLst/p14:sldId", 4);
+    assertXPath(pXmlDoc, sPath + "/p14:section[2]/p14:sldIdLst/p14:sldId", 7);
+    assertXPath(pXmlDoc, sPath + "/p14:section[3]/p14:sldIdLst/p14:sldId", 2);
+}
+
+// 6. Move section up in PPTX
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsMoveSectionUpPPTX)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::SlideSectionManager& rMgr = pXImpressDocument->GetDoc()->GetSectionManager();
+
+    // Move Section-2 (index 1) up to index 0
+    rMgr.MoveSection(1, 0);
+
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+
+    static constexpr OString sPath = "/p:presentation/p:extLst/p:ext/p14:sectionLst"_ostr;
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]", "name", u"Section-2");
+    assertXPath(pXmlDoc, sPath + "/p14:section[2]", "name", u"Section-1");
+    assertXPath(pXmlDoc, sPath + "/p14:section[3]", "name", u"Section-3");
+
+    // Slide counts follow their sections
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]/p14:sldIdLst/p14:sldId", 7);
+    assertXPath(pXmlDoc, sPath + "/p14:section[2]/p14:sldIdLst/p14:sldId", 4);
+    assertXPath(pXmlDoc, sPath + "/p14:section[3]/p14:sldIdLst/p14:sldId", 2);
+}
+
+// 7. Move section down in PPTX
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsMoveSectionDownPPTX)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::SlideSectionManager& rMgr = pXImpressDocument->GetDoc()->GetSectionManager();
+
+    // Move Section-1 (index 0) down to index 1
+    rMgr.MoveSection(0, 1);
+
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+
+    static constexpr OString sPath = "/p:presentation/p:extLst/p:ext/p14:sectionLst"_ostr;
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]", "name", u"Section-2");
+    assertXPath(pXmlDoc, sPath + "/p14:section[2]", "name", u"Section-1");
+    assertXPath(pXmlDoc, sPath + "/p14:section[3]", "name", u"Section-3");
+
+    // Slide counts follow their sections
+    assertXPath(pXmlDoc, sPath + "/p14:section[1]/p14:sldIdLst/p14:sldId", 7);
+    assertXPath(pXmlDoc, sPath + "/p14:section[2]/p14:sldIdLst/p14:sldId", 4);
+    assertXPath(pXmlDoc, sPath + "/p14:section[3]/p14:sldIdLst/p14:sldId", 2);
+}
+
+// 8. Rename section in ODP
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsRenameODP)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
     skipValidation();
     saveAndReload(TestFilter::ODP);
-    save(TestFilter::ODP);
 
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::SlideSectionManager& rMgr = pXImpressDocument->GetDoc()->GetSectionManager();
+
+    rMgr.RenameSection(0, u"ODP-Renamed"_ustr);
+
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
-    static constexpr OString sBasePath
+    static constexpr OString sPath
         = "/office:document-content/office:body/office:presentation/loext:section-list"_ostr;
-    assertXPath(pXmlDoc, sBasePath + "/loext:section", 2);
+    assertXPath(pXmlDoc, sPath + "/loext:section[1]", "name", u"ODP-Renamed");
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]", "name", u"Section-2");
+    assertXPath(pXmlDoc, sPath + "/loext:section[3]", "name", u"Section-3");
+}
 
-    // Verify section names survive ODP round-trip
-    assertXPath(pXmlDoc, sBasePath + "/loext:section[1]", "name", u"Default Section");
-    assertXPath(pXmlDoc, sBasePath + "/loext:section[2]", "name", u"section-demo");
+// 9. Move section up in ODP
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsMoveSectionUpODP)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    skipValidation();
+    saveAndReload(TestFilter::ODP);
 
-    // Verify slide counts per section
-    assertXPath(pXmlDoc, sBasePath + "/loext:section[1]/loext:section-slide", 3);
-    assertXPath(pXmlDoc, sBasePath + "/loext:section[2]/loext:section-slide", 4);
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::SlideSectionManager& rMgr = pXImpressDocument->GetDoc()->GetSectionManager();
+
+    // Move Section-3 (index 2) up to index 1
+    rMgr.MoveSection(2, 1);
+
+    save(TestFilter::ODP);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+
+    static constexpr OString sPath
+        = "/office:document-content/office:body/office:presentation/loext:section-list"_ostr;
+    assertXPath(pXmlDoc, sPath + "/loext:section[1]", "name", u"Section-1");
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]", "name", u"Section-3");
+    assertXPath(pXmlDoc, sPath + "/loext:section[3]", "name", u"Section-2");
+
+    assertXPath(pXmlDoc, sPath + "/loext:section[1]/loext:section-slide", 4);
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]/loext:section-slide", 2);
+    assertXPath(pXmlDoc, sPath + "/loext:section[3]/loext:section-slide", 7);
+}
+
+// 10. Move section down in ODP
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSlideSectionsMoveSectionDownODP)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    skipValidation();
+    saveAndReload(TestFilter::ODP);
+
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::SlideSectionManager& rMgr = pXImpressDocument->GetDoc()->GetSectionManager();
+
+    // Move Section-1 (index 0) down to index 1
+    rMgr.MoveSection(0, 1);
+
+    save(TestFilter::ODP);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+
+    static constexpr OString sPath
+        = "/office:document-content/office:body/office:presentation/loext:section-list"_ostr;
+    assertXPath(pXmlDoc, sPath + "/loext:section[1]", "name", u"Section-2");
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]", "name", u"Section-1");
+    assertXPath(pXmlDoc, sPath + "/loext:section[3]", "name", u"Section-3");
+
+    assertXPath(pXmlDoc, sPath + "/loext:section[1]/loext:section-slide", 7);
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]/loext:section-slide", 4);
+    assertXPath(pXmlDoc, sPath + "/loext:section[3]/loext:section-slide", 2);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
