@@ -365,6 +365,9 @@ public:
 
     bool IsTextEditActive() const { return mpEditingOutliner != nullptr; }
 
+    /** Returns the background color behind the given text for auto color calculation.*/
+    virtual std::optional<Color> GetActiveTextBackgroundColor(const SdrText* pSdrText) const;
+
     /** returns the currently active text. */
     virtual SdrText* getActiveText() const;
 

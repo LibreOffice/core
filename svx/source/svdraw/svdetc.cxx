@@ -52,7 +52,6 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdotable.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -695,15 +694,9 @@ Color GetTextEditBackgroundColor(const SdrObjEditView& rView)
     {
         SdrTextObj* pText = rView.GetTextEditObject();
 
-        if(pText && pText->IsClosedObj())
+        if (pText && pText->IsClosedObj())
         {
-            sdr::table::SdrTableObj* pTable = dynamic_cast< sdr::table::SdrTableObj * >( pText );
-
-            if( pTable )
-                if (auto oColor = GetDraftFillColor(pTable->GetActiveCellItemSet()))
-                    return *oColor;
-
-            if (auto oColor = GetDraftFillColor(pText->GetMergedItemSet()))
+            if (auto oColor = pText->GetActiveTextBackgroundColor(pText->getActiveText()))
                 return *oColor;
         }
 

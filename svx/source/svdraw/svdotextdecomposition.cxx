@@ -420,7 +420,16 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // That color needs to be restored on leaving this method
     Color aOriginalBackColor(rOutliner.GetBackgroundColor());
-    setSuitableOutlinerBg(rOutliner);
+
+    if (bIsCell)
+    {
+        if (auto oColor = GetActiveTextBackgroundColor(rSdrBlockTextPrimitive.getSdrText()))
+            rOutliner.SetBackgroundColor(*oColor);
+    }
+    else
+    {
+        setSuitableOutlinerBg(rOutliner);
+    }
 
     // add one to range sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(basegfx::fround<sal_uInt32>(aAnchorTextRange.getWidth() + 1));

@@ -20,6 +20,7 @@
 
 #include <comphelper/string.hxx>
 #include <svl/stritem.hxx>
+#include <svx/svdetc.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoutl.hxx>
@@ -2008,6 +2009,11 @@ rtl::Reference<SdrObject> SdrTextObj::getFullDragClone() const
  }
 
 /* End chaining code */
+
+std::optional<Color> SdrTextObj::GetActiveTextBackgroundColor(const SdrText* /*pSdrText*/) const
+{
+    return GetDraftFillColor(GetMergedItemSet());
+}
 
 /** returns the currently active text. */
 SdrText* SdrTextObj::getActiveText() const
