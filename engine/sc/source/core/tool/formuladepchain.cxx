@@ -15,6 +15,7 @@
 #include <token.hxx>
 #include <refdata.hxx>
 #include <global.hxx>
+#include <token.hxx>
 
 #include <formula/token.hxx>
 #include <formula/errorcodes.hxx>
@@ -57,11 +58,11 @@ void DepChainWriter::writeExternalRefInfo(formula::FormulaToken* pToken)
 {
     m_rJsonWriter.put("type", "external");
 
-    OUString aTabName = static_cast<ScExternalSingleRefToken*>(pToken)->GetString().getString();
+    OUString aTabName = static_cast<ScExternalSingleRefToken*>(pToken)->GetTableName().getString();
     if (!aTabName.isEmpty())
         m_rJsonWriter.put("sheet", aTabName);
 
-    sal_uInt16 nFileId = pToken->GetIndex();
+    sal_uInt16 nFileId = static_cast<ScExternalToken*>(pToken)->GetFileId();
     ScExternalRefManager* pRefMgr = m_rDoc.GetExternalRefManager();
     if (pRefMgr)
     {

@@ -110,7 +110,8 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 {
                     if (p->GetOpCode() == ocName)
                     {
-                        ScRangeData* pNameRange = rDoc.FindRangeNameBySheetAndIndex(static_cast<const FormulaIndexToken*>(p)->GetSheet(), p->GetIndex());
+                        auto pIndexToken = static_cast<const FormulaIndexToken*>(p);
+                        ScRangeData* pNameRange = rDoc.FindRangeNameBySheetAndIndex(pIndexToken->GetSheet(), pIndexToken->GetIndex());
                         if (!pNameRange->HasReferences())
                             bFailure = true;
                     }
@@ -169,7 +170,8 @@ bool ScRefTokenHelper::getRangeFromToken(
         {
             if (pToken->GetOpCode() == ocName)
             {
-                ScRangeData* pNameRange = pDoc->FindRangeNameBySheetAndIndex(static_cast<FormulaIndexToken*>(pToken.get())->GetSheet(), pToken->GetIndex());
+                auto pIndexToken = static_cast<FormulaIndexToken*>(pToken.get());
+                ScRangeData* pNameRange = pDoc->FindRangeNameBySheetAndIndex(pIndexToken->GetSheet(), pIndexToken->GetIndex());
                 if (pNameRange->IsReference(rRange, rPos))
                     return true;
             }
@@ -256,7 +258,9 @@ bool ScRefTokenHelper::intersects(
         return false;
 
     bool bExternal = isExternalRef(pToken);
-    sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
+    sal_uInt16 nFileId = 0;
+    if (bExternal)
+        nFileId = static_cast<ScExternalToken*>(pToken.get())->GetFileId();
 
     ScRange aRange;
     getRangeFromToken(pDoc, aRange, pToken, rPos, bExternal);
@@ -272,9 +276,13 @@ bool ScRefTokenHelper::intersects(
         ScRange aRange2;
         getRangeFromToken(pDoc, aRange2, p, rPos, bExternal);
 
-        if (bExternal && nFileId != p->GetIndex())
-            // different external file
-            continue;
+        if (bExternal)
+        {
+            sal_uInt16 nOtherFileId = static_cast<ScExternalToken*>(p.get())->GetFileId();
+            if (nFileId != nOtherFileId)
+                // different external file
+                continue;
+        }
 
         if (aRange.Intersects(aRange2))
             return true;
@@ -338,14 +346,14 @@ private:
 
         // Get the information of the new token.
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
-        sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
+        sal_uInt16 nFileId = bExternal ? static_cast<ScExternalToken*>(pToken.get())->GetFileId() : 0;
         svl::SharedString aTabName;
         if (bExternal)
         {
             if (pToken->GetType() == svExternalDoubleRef)
-                aTabName = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetString();
+                aTabName = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetTableName();
             else
-                aTabName = static_cast<ScExternalSingleRefToken*>(pToken.get())->GetString();
+                aTabName = static_cast<ScExternalSingleRefToken*>(pToken.get())->GetTableName();
         }
         else
             aTabName = svl::SharedString::getEmptyString();
@@ -364,13 +372,13 @@ private:
 
             if (bExternal)
             {
-                if (nFileId != pOldToken->GetIndex())
+                if (nFileId != static_cast<ScExternalToken*>(pOldToken.get())->GetFileId())
                     // Different external files.
                     continue;
 
                 auto aNewTabName = pOldToken->GetType() == svExternalSingleRef
-                    ? static_cast<ScExternalSingleRefToken*>(pOldToken.get())->GetString()
-                    : static_cast<ScExternalDoubleRefToken*>(pOldToken.get())->GetString();
+                    ? static_cast<ScExternalSingleRefToken*>(pOldToken.get())->GetTableName()
+                    : static_cast<ScExternalDoubleRefToken*>(pOldToken.get())->GetTableName();
                 if (aTabName != aNewTabName)
                     // Different table names.
                     continue;

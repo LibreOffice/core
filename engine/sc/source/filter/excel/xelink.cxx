@@ -982,7 +982,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
                 if (bColRel) nCol |= 0x4000;
                 if (bRowRel) nCol |= 0x8000;
 
-                OUString aTabName = static_cast<const ScExternalSingleRefToken*>(p)->GetString().getString();
+                OUString aTabName = static_cast<const ScExternalSingleRefToken*>(p)->GetTableName().getString();
                 sal_uInt16 nSBTab = mrSupbook.GetTabIndex(aTabName);
 
                 // size is always 9
@@ -1018,7 +1018,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
                 if (bCol2Rel) nCol2 |= 0x4000;
                 if (bRow2Rel) nCol2 |= 0x8000;
 
-                OUString aTabName = pEDRToken->GetString().getString();
+                OUString aTabName = pEDRToken->GetTableName().getString();
                 sal_uInt16 nSBTab = mrSupbook.GetTabIndex(aTabName);
 
                 // size is always 13 (0x0D)

@@ -564,7 +564,7 @@ FormulaTokenRef extendRangeReference( ScSheetLimits& rLimits, FormulaToken & rTo
         aRef.Ref2.SetFlag3D( false);
         aRef.Extend(rLimits, rRef2, rPos);
         if (bExternal)
-            xRes = new ScExternalDoubleRefToken( rTok1.GetIndex(), static_cast<ScExternalDoubleRefToken&>(rTok1).GetString(), aRef);
+            xRes = new ScExternalDoubleRefToken( static_cast<ScExternalSingleRefToken&>(rTok1).GetFileId(), static_cast<ScExternalDoubleRefToken&>(rTok1).GetTableName(), aRef);
         else
             xRes = new ScDoubleRefToken(rLimits, aRef);
     }
@@ -706,9 +706,26 @@ FormulaToken* ScMatrixRangeToken::Clone() const
     return new ScMatrixRangeToken(*this);
 }
 
+ScExternalToken::ScExternalToken(formula::StackVar eTypeP, OpCode e, sal_uInt16 nFileId) :
+    FormulaToken(eTypeP, e),
+    mnFileId(nFileId)
+{
+}
+
+ScExternalToken::~ScExternalToken()
+{
+}
+
+bool ScExternalToken::operator ==( const FormulaToken& r ) const
+{
+    if (!FormulaToken::operator==(r))
+        return false;
+
+    return mnFileId == static_cast<const ScExternalToken&>(r).mnFileId;
+}
+
 ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, svl::SharedString aTabName, const ScSingleRefData& r ) :
-    FormulaToken( svExternalSingleRef, ocPush),
-    mnFileId(nFileId),
+    ScExternalToken( svExternalSingleRef, ocPush, nFileId ),
     maTabName(std::move(aTabName)),
     maSingleRef(r)
 {
@@ -716,11 +733,6 @@ ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, svl::Sha
 
 ScExternalSingleRefToken::~ScExternalSingleRefToken()
 {
-}
-
-sal_uInt16 ScExternalSingleRefToken::GetIndex() const
-{
-    return mnFileId;
 }
 
 const ScSingleRefData* ScExternalSingleRefToken::GetSingleRef() const
@@ -735,21 +747,17 @@ ScSingleRefData* ScExternalSingleRefToken::GetSingleRef()
 
 bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 {
-    if (!FormulaToken::operator==(r))
+    if (!ScExternalToken::operator==(r))
         return false;
 
-    if (mnFileId != r.GetIndex())
-        return false;
-
-    if (maTabName != static_cast<const ScExternalSingleRefToken&>(r).GetString())
+    if (maTabName != static_cast<const ScExternalSingleRefToken&>(r).GetTableName())
         return false;
 
     return maSingleRef == *r.GetSingleRef();
 }
 
 ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, svl::SharedString aTabName, const ScComplexRefData& r ) :
-    FormulaToken( svExternalDoubleRef, ocPush),
-    mnFileId(nFileId),
+    ScExternalToken( svExternalDoubleRef, ocPush, nFileId),
     maTabName(std::move(aTabName)),
     maDoubleRef(r)
 {
@@ -757,11 +765,6 @@ ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, svl::Sha
 
 ScExternalDoubleRefToken::~ScExternalDoubleRefToken()
 {
-}
-
-sal_uInt16 ScExternalDoubleRefToken::GetIndex() const
-{
-    return mnFileId;
 }
 
 const ScSingleRefData* ScExternalDoubleRefToken::GetSingleRef() const
@@ -786,43 +789,31 @@ ScSingleRefData* ScExternalDoubleRefToken::GetSingleRef2()
 
 bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
 {
-    if (!FormulaToken::operator==(r))
-        return false;
-
-    if (mnFileId != r.GetIndex())
+    if (!ScExternalToken::operator==(r))
         return false;
 
     auto rhs = static_cast<const ScExternalDoubleRefToken&>(r);
 
-    if (maTabName != rhs.GetString())
+    if (maTabName != rhs.maTabName)
         return false;
 
     return maDoubleRef == rhs.GetDoubleRef();
 }
 
 ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, svl::SharedString aName ) :
-    FormulaToken( svExternalName, ocPush),
-    mnFileId(nFileId),
+    ScExternalToken( svExternalName, ocPush, nFileId),
     maName(std::move(aName))
 {
 }
 
 ScExternalNameToken::~ScExternalNameToken() {}
 
-sal_uInt16 ScExternalNameToken::GetIndex() const
-{
-    return mnFileId;
-}
-
 bool ScExternalNameToken::operator==( const FormulaToken& r ) const
 {
-    if ( !FormulaToken::operator==(r) )
+    if ( !ScExternalToken::operator==(r) )
         return false;
 
-    if (mnFileId != r.GetIndex())
-        return false;
-
-    return maName == static_cast<const ScExternalNameToken&>(r).GetString();
+    return maName == static_cast<const ScExternalNameToken&>(r).maName;
 }
 
 ScTableRefToken::ScTableRefToken( sal_uInt16 nIndex, ScTableRefToken::Item eItem ) :
@@ -877,21 +868,19 @@ bool ScTableRefToken::operator==( const FormulaToken& r ) const
     if ( !FormulaToken::operator==(r) )
         return false;
 
-    if (mnIndex != r.GetIndex())
+    auto const & rhs = static_cast<const ScTableRefToken&>(r);
+
+    if (mnIndex != rhs.GetIndex())
         return false;
 
-    const ScTableRefToken* p = dynamic_cast<const ScTableRefToken*>(&r);
-    if (!p)
+    if (meItem != rhs.GetItem())
         return false;
 
-    if (meItem != p->GetItem())
-        return false;
-
-    if (!mxAreaRefRPN && !p->mxAreaRefRPN)
+    if (!mxAreaRefRPN && !rhs.mxAreaRefRPN)
         ;   // nothing
-    else if (!mxAreaRefRPN || !p->mxAreaRefRPN)
+    else if (!mxAreaRefRPN || !rhs.mxAreaRefRPN)
         return false;
-    else if (!(*mxAreaRefRPN == *(p->mxAreaRefRPN)))
+    else if (!(*mxAreaRefRPN == *(rhs.mxAreaRefRPN)))
         return false;
 
     return true;
@@ -3173,8 +3162,17 @@ bool isNameModified( const sc::UpdatedRangeNames& rUpdatedNames, SCTAB nOldTab, 
 
 bool isDBDataModified( const ScDocument& rDoc, const formula::FormulaToken& rToken )
 {
+    auto nOpCode = rToken.GetOpCode();
+    sal_uInt16 nIndex;
+    if (nOpCode == ocDBArea)
+        nIndex = static_cast<const FormulaIndexToken&>(rToken).GetIndex();
+    else
+    {
+        assert(nOpCode == ocTableRef);
+        nIndex = static_cast<const ScTableRefToken&>(rToken).GetIndex();
+    }
     // Check if this DBData has been modified.
-    const ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByIndex( rToken.GetIndex());
+    const ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByIndex( nIndex);
     if (!pDBData)
         return true;
 
@@ -5073,7 +5071,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
 {
     if (rToken.IsExternalRef())
     {
-        size_t nFileId = rToken.GetIndex();
+        size_t nFileId = static_cast<const ScExternalToken&>(rToken).GetFileId();
         if (nFileId >= rCxt.maExternalFileNames.size())
             // out of bound
             return;
@@ -5084,13 +5082,13 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
         {
             case svExternalName:
             {
-                OUString aTabName = static_cast<const ScExternalNameToken&>(rToken).GetString().getString();
+                OUString aTabName = static_cast<const ScExternalNameToken&>(rToken).GetName().getString();
                 rBuf.append(rCxt.mpRefConv->makeExternalNameStr(nFileId, aFileName, aTabName));
             }
             break;
             case svExternalSingleRef:
             {
-                OUString aTabName = static_cast<const ScExternalSingleRefToken&>(rToken).GetString().getString();
+                OUString aTabName = static_cast<const ScExternalSingleRefToken&>(rToken).GetTableName().getString();
                 rCxt.mpRefConv->makeExternalRefStr(
                        rLimits, rBuf, rPos, nFileId, aFileName, aTabName, *rToken.GetSingleRef());
             }
@@ -5103,7 +5101,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
                 if (it == rCxt.maExternalCachedTabNames.end())
                     return;
 
-                OUString aTabName = static_cast<const ScExternalDoubleRefToken&>(rToken).GetString().getString();
+                OUString aTabName = static_cast<const ScExternalDoubleRefToken&>(rToken).GetTableName().getString();
                 rCxt.mpRefConv->makeExternalRefStr(
                         rLimits, rBuf, rPos, nFileId, aFileName, it->second, aTabName,
                         static_cast<const ScExternalDoubleRefToken&>(rToken).GetDoubleRef());
@@ -5217,12 +5215,13 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
         {
             typedef sc::TokenStringContext::IndexNameMapType NameType;
 
-            sal_uInt16 nIndex = rToken.GetIndex();
             switch (eOp)
             {
                 case ocName:
                 {
-                    SCTAB nTab = static_cast<const FormulaIndexToken&>(rToken).GetSheet();
+                    const auto & rIndexToken = static_cast<const FormulaIndexToken&>(rToken);
+                    sal_uInt16 nIndex = rIndexToken.GetIndex();
+                    SCTAB nTab = rIndexToken.GetSheet();
                     if (nTab < 0)
                     {
                         // global named range
@@ -5274,8 +5273,18 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
                 }
                 break;
                 case ocDBArea:
+                {
+                    const auto & rIndexToken = static_cast<const FormulaIndexToken&>(rToken);
+                    sal_uInt16 nIndex = rIndexToken.GetIndex();
+                    NameType::const_iterator it = rCxt.maNamedDBs.find(nIndex);
+                    if (it != rCxt.maNamedDBs.end())
+                        rBuf.append(it->second);
+                }
+                break;
                 case ocTableRef:
                 {
+                    const auto & rTRToken = static_cast<const ScTableRefToken&>(rToken);
+                    sal_uInt16 nIndex = rTRToken.GetIndex();
                     NameType::const_iterator it = rCxt.maNamedDBs.find(nIndex);
                     if (it != rCxt.maNamedDBs.end())
                         rBuf.append(it->second);

@@ -1166,8 +1166,8 @@ void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName
         return;
     }
 
-    rFileId = p->GetIndex();
-    rTabName = static_cast<const ScExternalSingleRefToken*>(p)->GetString().getString();
+    rFileId = static_cast<const ScExternalSingleRefToken*>(p)->GetFileId();
+    rTabName = static_cast<const ScExternalSingleRefToken*>(p)->GetTableName().getString();
     rRef = *p->GetSingleRef();
 }
 
@@ -1245,8 +1245,8 @@ void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName
         return;
     }
 
-    rFileId = p->GetIndex();
-    rTabName = static_cast<const ScExternalDoubleRefToken*>(p)->GetString().getString();
+    rFileId = static_cast<const ScExternalDoubleRefToken*>(p)->GetFileId();
+    rTabName = static_cast<const ScExternalDoubleRefToken*>(p)->GetTableName().getString();
     rRef = static_cast<const ScExternalDoubleRefToken*>(p)->GetDoubleRef();
 }
 
@@ -1563,9 +1563,9 @@ bool ScInterpreter::ConvertMatrixParameters()
                     formula::ParamClass eType = ScParameterClassification::GetParameterType( pCur, nParams - i);
                     if (eType == formula::ParamClass::Value || eType == formula::ParamClass::Array)
                     {
-                        sal_uInt16 nFileId = p->GetIndex();
                         auto pEDRToken = static_cast<const ScExternalDoubleRefToken*>(p);
-                        OUString aTabName = pEDRToken->GetString().getString();
+                        sal_uInt16 nFileId = pEDRToken->GetFileId();
+                        OUString aTabName = pEDRToken->GetTableName().getString();
                         const ScComplexRefData& rRef = pEDRToken->GetDoubleRef();
                         ScExternalRefCache::TokenArrayRef pArray;
                         GetExternalDoubleRef(nFileId, aTabName, rRef, pArray);
@@ -3730,7 +3730,7 @@ void ScInterpreter::ScTableOp()
 
 void ScInterpreter::ScDBArea()
 {
-    ScDBData* pDBData = mrDoc.GetDBCollection()->getNamedDBs().findByIndex(pCur->GetIndex());
+    ScDBData* pDBData = mrDoc.GetDBCollection()->getNamedDBs().findByIndex(static_cast<const FormulaIndexToken*>(pCur)->GetIndex());
     if (pDBData)
     {
         ScComplexRefData aRefData;

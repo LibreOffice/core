@@ -182,16 +182,6 @@ void FormulaToken::SetInForceArray( ParamClass )
 
 const svl::SharedString INVALID_STRING;
 
-sal_uInt16 FormulaToken::GetIndex() const
-{
-    SAL_WARN( "formula.core", "FormulaToken::GetIndex: virtual dummy called" );
-    return 0;
-}
-
-void FormulaToken::SetIndex( sal_uInt16 )
-{
-    assert( !"virtual dummy called" );
-}
 const ScSingleRefData* FormulaToken::GetSingleRef() const
 {
     OSL_FAIL( "FormulaToken::GetSingleRef: virtual dummy called" );

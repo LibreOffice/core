@@ -867,8 +867,11 @@ void lclAddDoubleRefData(
     OSL_ENSURE( (rToken.GetType() == ::formula::svDoubleRef) || (rToken.GetType() == ::formula::svExternalDoubleRef),
         "lclAddDoubleRefData - double reference token expected");
     if( rToken.GetType() == ::formula::svExternalDoubleRef )
+    {
+        auto rEDRToken = static_cast<const ScExternalDoubleRefToken&>(rToken);
         orArray.AddExternalDoubleReference(
-            rToken.GetIndex(), static_cast<const ScExternalDoubleRefToken&>(rToken).GetString(), aComplexRef);
+            rEDRToken.GetFileId(), rEDRToken.GetTableName(), aComplexRef);
+    }
     else
         orArray.AddDoubleReference( aComplexRef );
 }

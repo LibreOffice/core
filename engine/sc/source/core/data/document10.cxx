@@ -661,7 +661,8 @@ bool ScDocument::FindRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes
         {
             if (p->GetOpCode() == ocName)
             {
-                bRef |= FindRangeNamesReferencingSheet( rIndexes, static_cast<const formula::FormulaIndexToken*>(p)->GetSheet(), p->GetIndex(),
+                auto pIndexToken = static_cast<const formula::FormulaIndexToken*>(p);
+                bRef |= FindRangeNamesReferencingSheet( rIndexes, pIndexToken->GetSheet(), pIndexToken->GetIndex(),
                         nGlobalRefTab, nLocalRefTab, nOldTokenTab, nOldTokenTabReplacement, bSameDoc, nRecursion+1);
             }
         }
@@ -951,16 +952,17 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
                     {
                         if (p->GetOpCode() == ocName)
                         {
-                            auto it = aSheetIndexMap.find( SheetIndex( static_cast<formula::FormulaIndexToken*>(p)->GetSheet(), p->GetIndex()));
+                            auto pIndexToken = static_cast<formula::FormulaIndexToken*>(p);
+                            auto it = aSheetIndexMap.find( SheetIndex( pIndexToken->GetSheet(), pIndexToken->GetIndex()));
                             if (it != aSheetIndexMap.end())
                             {
-                                static_cast<formula::FormulaIndexToken*>(p)->SetSheet( it->second.mnSheet);
-                                p->SetIndex( it->second.mnIndex);
+                                pIndexToken->SetSheet( it->second.mnSheet);
+                                pIndexToken->SetIndex( it->second.mnIndex);
                             }
                             else if (!bSameDoc)
                             {
                                 SAL_WARN("sc.core","adjustCopyRangeName - mapping to new name in other doc missing");
-                                p->SetIndex(0);     // #NAME? error instead of arbitrary name.
+                                pIndexToken->SetIndex(0);     // #NAME? error instead of arbitrary name.
                             }
                         }
                     }

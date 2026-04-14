@@ -208,7 +208,7 @@ bool hasRefsToSrcDoc(ScRangeData& rData, sal_uInt16 nFileId)
         if (!p->IsExternalRef())
             continue;
 
-        if (p->GetIndex() == nFileId)
+        if (static_cast<ScExternalToken*>(p)->GetFileId() == nFileId)
             return true;
     }
     return false;

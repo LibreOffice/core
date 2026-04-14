@@ -167,9 +167,12 @@ static bool HasRelRefIgnoringSheet0Relative( ScDocument* pDoc, const ScTokenArra
                 case formula::svIndex:
                 {
                     if( t->GetOpCode() == ocName )      // DB areas always absolute
-                        if( ScRangeData* pRangeData = pDoc->FindRangeNameBySheetAndIndex( static_cast<formula::FormulaIndexToken*>(t)->GetSheet(), t->GetIndex()) )
+                    {
+                        auto pIndexToken = static_cast<formula::FormulaIndexToken*>(t);
+                        if( ScRangeData* pRangeData = pDoc->FindRangeNameBySheetAndIndex( pIndexToken->GetSheet(), pIndexToken->GetIndex()) )
                             if( (nRecursion < 42) && HasRelRefIgnoringSheet0Relative( pDoc, pRangeData->GetCode(), nRecursion + 1 ) )
                                 return true;
+                    }
                 }
                 break;
 

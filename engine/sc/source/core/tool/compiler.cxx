@@ -4991,7 +4991,7 @@ void ScCompiler::CreateStringFromXMLTokenArray( OUString& rFormula, OUString& rF
         // string tokens expected, GetString() will assert if token type is wrong
         rFormula = static_cast<FormulaStringToken*>(ppTokens[0])->GetString().getString();
         if( bExternal )
-            rFormulaNmsp = static_cast<ScExternalNameToken*>(ppTokens[1])->GetString().getString();
+            rFormulaNmsp = static_cast<ScExternalNameToken*>(ppTokens[1])->GetName().getString();
     }
 }
 
@@ -5264,7 +5264,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
             const FormulaToken* pPrev = pArr->PeekPrev( nIdx);
             if (pPrev && pPrev->GetOpCode() == ocDBArea)
             {
-                ScTableRefToken* pTableRefToken = new ScTableRefToken( pPrev->GetIndex(), ScTableRefToken::TABLE);
+                ScTableRefToken* pTableRefToken = new ScTableRefToken( static_cast<const FormulaIndexToken*>(pPrev)->GetIndex(), ScTableRefToken::TABLE);
                 maTableRefs.emplace_back( pTableRefToken);
                 // pPrev may be dead hereafter.
                 static_cast<ScTokenArray*>(pArr)->ReplaceToken( nIdx, pTableRefToken,
@@ -5479,17 +5479,18 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
             break;
         case svExternalName:
         {
+            const auto & rExtToken = static_cast<const ScExternalNameToken&>(_aToken);
             ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
-            const OUString* pFile = pRefMgr->getExternalFileName(_aToken.GetIndex());
+            const OUString* pFile = pRefMgr->getExternalFileName(rExtToken.GetFileId());
             if (!pFile)
             {
                 SetError(FormulaError::NoName);
                 return true;
             }
 
-            OUString aName = static_cast<const ScExternalNameToken&>(_aToken).GetString().getString();
+            OUString aName = rExtToken.GetName().getString();
             ScExternalRefCache::TokenArrayRef xNew = pRefMgr->getRangeNameTokens(
-                _aToken.GetIndex(), aName, &aPos);
+                rExtToken.GetFileId(), aName, &aPos);
 
             if (!xNew)
             {
@@ -5653,7 +5654,14 @@ OUString ScCompiler::SanitizeDefinedName(const OUString& rStr, const ScDocument&
 void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const FormulaToken* pTokenP ) const
 {
     const FormulaToken* t = pTokenP;
-    sal_uInt16 nFileId = t->GetIndex();
+    sal_uInt16 nFileId;
+    switch (t->GetType())
+    {
+        case svExternalName: nFileId = static_cast<const ScExternalNameToken*>(t)->GetFileId(); break;
+        case svExternalSingleRef: nFileId = static_cast<const ScExternalSingleRefToken*>(t)->GetFileId(); break;
+        case svExternalDoubleRef: nFileId = static_cast<const ScExternalDoubleRefToken*>(t)->GetFileId(); break;
+        default: assert(false); nFileId = 0;
+    }
     ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
     sal_uInt16 nUsedFileId = pRefMgr->convertFileIdToUsedFileId(nFileId);
     const OUString* pFileName = pRefMgr->getExternalFileName(nFileId);
@@ -5665,7 +5673,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
         case svExternalName:
         {
             FormulaToken* p = maArrIterator.PeekNextNoSpaces();
-            OUString sName = static_cast<const ScExternalNameToken*>(t)->GetString().getString();
+            OUString sName = static_cast<const ScExternalNameToken*>(t)->GetName().getString();
             if (p && p->GetOpCode() == ocOpen)
             {
                 OUString sUDPrefix = mxSymbols->getSymbol(ocUDExternal);
@@ -5678,7 +5686,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
         break;
         case svExternalSingleRef:
             pConv->makeExternalRefStr(rDoc.GetSheetLimits(),
-                   rBuffer, GetPos(), nUsedFileId, *pFileName, static_cast<const ScExternalSingleRefToken*>(t)->GetString().getString(),
+                   rBuffer, GetPos(), nUsedFileId, *pFileName, static_cast<const ScExternalSingleRefToken*>(t)->GetTableName().getString(),
                    *t->GetSingleRef());
         break;
         case svExternalDoubleRef:
@@ -5690,10 +5698,10 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
             // cached in this document and external document is not reachable,
             // else not and worth to be investigated.
             SAL_WARN_IF( aTabNames.empty(), "sc.core", "wrecked cache of external document? '" <<
-                    *pFileName << "' '" << pEDRToken->GetString().getString() << "'");
+                    *pFileName << "' '" << pEDRToken->GetTableName().getString() << "'");
 
             pConv->makeExternalRefStr(
-                rDoc.GetSheetLimits(), rBuffer, GetPos(), nUsedFileId, *pFileName, aTabNames, pEDRToken->GetString().getString(),
+                rDoc.GetSheetLimits(), rBuffer, GetPos(), nUsedFileId, *pFileName, aTabNames, pEDRToken->GetTableName().getString(),
                 pEDRToken->GetDoubleRef());
         }
         break;
@@ -6119,7 +6127,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
         break;
         case ocDBArea:
         {
-            const ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByIndex(_pTokenP->GetIndex());
+            const ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByIndex(static_cast<const FormulaIndexToken*>(_pTokenP)->GetIndex());
             if (pDBData)
                 aBuffer.append(pDBData->GetName());
         }
@@ -6158,7 +6166,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
             }
             else
             {
-                const ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByIndex(_pTokenP->GetIndex());
+                const ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByIndex(static_cast<const ScTableRefToken*>(_pTokenP)->GetIndex());
                 if (pDBData)
                     aBuffer.append(pDBData->GetName());
             }
@@ -6266,7 +6274,7 @@ bool ScCompiler::HandleColRowName()
 
 bool ScCompiler::HandleDbData()
 {
-    ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByIndex(mpToken->GetIndex());
+    ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByIndex(static_cast<FormulaIndexToken*>(mpToken.get())->GetIndex());
     if ( !pDBData )
         SetError(FormulaError::NoName);
     else if (mbJumpCommandReorder)

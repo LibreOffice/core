@@ -26,6 +26,7 @@
 #include <document.hxx>
 #include <reftokenhelper.hxx>
 #include <formula/token.hxx>
+#include <token.hxx>
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 
 using namespace com::sun::star;
@@ -211,7 +212,7 @@ public:
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         if (bExternal)
         {
-            sal_uInt16 nFileId = pToken->GetIndex();
+            sal_uInt16 nFileId = static_cast<ScExternalToken*>(pToken.get())->GetFileId();
             ScExternalRefManager* pRefMgr = mrDoc.GetExternalRefManager();
             ScChartListener::ExternalRefListener* pExtRefListener = mrParent.GetExtRefListener();
             if (mbStart)

@@ -453,8 +453,18 @@ void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScD
     ScDBCollection* pOldDBCollection = rOldDoc.GetDBCollection();
     if (!pOldDBCollection)
         return;//strange error case, don't do anything
+
+    auto eOpCode = pToken->GetOpCode();
+    sal_uInt16 nIndex = 0;
+    if (eOpCode == ocDBArea)
+        nIndex = static_cast<FormulaIndexToken*>(pToken)->GetIndex();
+    else if (eOpCode == ocTableRef)
+        nIndex = static_cast<ScTableRefToken*>(pToken)->GetIndex();
+    else
+        assert(false);
+
     ScDBCollection::NamedDBs& aOldNamedDBs = pOldDBCollection->getNamedDBs();
-    ScDBData* pDBData = aOldNamedDBs.findByIndex(pToken->GetIndex());
+    ScDBData* pDBData = aOldNamedDBs.findByIndex(nIndex);
     if (!pDBData)
         return; //invalid index
     OUString aDBName = pDBData->GetUpperName();
@@ -474,7 +484,12 @@ void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScD
         bool ins = aNewNamedDBs.insert(std::unique_ptr<ScDBData>(pNewDBData));
         assert(ins); (void)ins;
     }
-    pToken->SetIndex(pNewDBData->GetIndex());
+    if (eOpCode == ocDBArea)
+        static_cast<FormulaIndexToken*>(pToken)->SetIndex(pNewDBData->GetIndex());
+    else if (eOpCode == ocTableRef)
+        static_cast<ScTableRefToken*>(pToken)->SetIndex(pNewDBData->GetIndex());
+    else
+        assert(false);
 }
 
 }
@@ -3862,7 +3877,8 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     {
         if( t->GetOpCode() == ocName )
         {
-            const ScRangeData* pName = rDocument.FindRangeNameBySheetAndIndex( static_cast<FormulaIndexToken*>(t)->GetSheet(), t->GetIndex());
+            auto pIndexToken = static_cast<FormulaIndexToken*>(t);
+            const ScRangeData* pName = rDocument.FindRangeNameBySheetAndIndex( pIndexToken->GetSheet(), pIndexToken->GetIndex());
             if (pName && pName->IsModified())
                 bRefChanged = true;
         }
@@ -3923,7 +3939,8 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
     {
         if( t->GetOpCode() == ocName )
         {
-            const ScRangeData* pName = rDocument.FindRangeNameBySheetAndIndex( static_cast<FormulaIndexToken*>(t)->GetSheet(), t->GetIndex());
+            auto pIndexToken = static_cast<FormulaIndexToken*>(t);
+            const ScRangeData* pName = rDocument.FindRangeNameBySheetAndIndex( pIndexToken->GetSheet(), pIndexToken->GetIndex());
             if (pName && pName->IsModified())
                 bRefChanged = true;
         }
@@ -3960,8 +3977,9 @@ static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, const ScTok
     {
         if (p->GetOpCode() == ocName)
         {
-            sal_uInt16 nTokenIndex = p->GetIndex();
-            SCTAB nTab = static_cast<FormulaIndexToken*>(p)->GetSheet();
+            auto pIndexToken = static_cast<FormulaIndexToken*>(p);
+            sal_uInt16 nTokenIndex = pIndexToken->GetIndex();
+            SCTAB nTab = pIndexToken->GetSheet();
             rIndexes.setUpdatedName( nTab, nTokenIndex);
 
             if (nRecursion < 126)   // whatever... 42*3
@@ -4291,20 +4309,26 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaC
             // different OpCode values.
             case formula::svIndex:
                 {
-                    if (pThisTok->GetIndex() != pOtherTok->GetIndex())
-                        return NotEqual;
                     switch (pThisTok->GetOpCode())
                     {
                         case ocTableRef:
+                        {
+                            if (static_cast<ScTableRefToken*>(pThisTok)->GetIndex()
+                                != static_cast<ScTableRefToken*>(pOtherTok)->GetIndex())
+                                return NotEqual;
                             // nothing, sheet value assumed as -1, silence
                             // ScTableRefToken::GetSheet() SAL_WARN about
                             // unhandled
                             ;
                             break;
+                        }
                         default:    // ocName, ocDBArea
-                            if (static_cast<FormulaIndexToken*>(pThisTok)->GetSheet()
-                                != static_cast<FormulaIndexToken*>(pOtherTok)->GetSheet())
+                        {
+                            auto lhs = static_cast<FormulaIndexToken*>(pThisTok);
+                            auto rhs = static_cast<FormulaIndexToken*>(pOtherTok);
+                            if (lhs->GetIndex() != rhs->GetIndex() || lhs->GetSheet() != rhs->GetSheet())
                                 return NotEqual;
+                        }
                     }
                 }
                 break;

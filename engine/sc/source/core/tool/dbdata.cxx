@@ -1115,7 +1115,8 @@ OUString ScDBData::GetSimpleSubTotalFunction(const ScTokenArray* pTokens, SCCOL 
             }
             else if (nIdx == 4) // { ocTableRef, formula::svIndex }
             {
-                sal_uInt16 nDbIndex = t->GetIndex();
+                assert(eOpCode == ocTableRef);
+                sal_uInt16 nDbIndex = static_cast<ScTableRefToken*>(t)->GetIndex();
                 if (GetIndex() != nDbIndex)
                 {
                     return u"custom"_ustr;
