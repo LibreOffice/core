@@ -50,6 +50,14 @@ namespace weld
 
 namespace svt
 {
+    class ToolboxController;
+}
+
+// extern template otherwise the ref-counting magic here ends up duplicated across multiple libraries
+extern template class SAL_DLLPUBLIC_TEMPLATE comphelper::OPropertyArrayUsageHelper<svt::ToolboxController>;
+
+namespace svt
+{
 
 typedef comphelper::WeakComponentImplHelper<
         css::frame::XStatusListener, css::frame::XToolbarController,

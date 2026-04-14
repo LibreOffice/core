@@ -47,6 +47,8 @@ using namespace css::beans;
 using namespace css::lang;
 using namespace css::frame;
 
+template class comphelper::OPropertyArrayUsageHelper<svt::ToolboxController>;
+
 namespace svt
 {
 

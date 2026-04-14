@@ -100,7 +100,7 @@ template <class TYPE>
 OPropertyArrayUsageHelper<TYPE>::~OPropertyArrayUsageHelper()
 {
     std::unique_lock aGuard(theMutex());
-    OSL_ENSURE(s_nRefCount > 0, "OPropertyArrayUsageHelper::~OPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
+    assert(s_nRefCount > 0 && "OPropertyArrayUsageHelper::~OPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
     if (!--s_nRefCount)
     {
         delete s_pProps;
@@ -111,12 +111,12 @@ OPropertyArrayUsageHelper<TYPE>::~OPropertyArrayUsageHelper()
 template <class TYPE>
 ::cppu::IPropertyArrayHelper* OPropertyArrayUsageHelper<TYPE>::getArrayHelper()
 {
-    OSL_ENSURE(s_nRefCount, "OPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
     std::unique_lock aGuard(theMutex());
+    assert(s_nRefCount && "OPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
     if (!s_pProps)
     {
         s_pProps = createArrayHelper();
-        OSL_ENSURE(s_pProps, "OPropertyArrayUsageHelper::getArrayHelper : createArrayHelper returned nonsense !");
+        assert(s_pProps && "OPropertyArrayUsageHelper::getArrayHelper : createArrayHelper returned nonsense !");
     }
     return s_pProps;
 }
