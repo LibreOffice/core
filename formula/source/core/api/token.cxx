@@ -234,12 +234,6 @@ short* FormulaToken::GetJump() const
     return nullptr;
 }
 
-FormulaToken* FormulaToken::GetFAPOrigToken() const
-{
-    SAL_WARN( "formula.core", "FormulaToken::GetFAPOrigToken: virtual dummy called" );
-    return nullptr;
-}
-
 const ScSingleRefData* FormulaToken::GetSingleRef() const
 {
     OSL_FAIL( "FormulaToken::GetSingleRef: virtual dummy called" );
@@ -319,7 +313,8 @@ bool FormulaByteToken::operator==( const FormulaToken& r ) const
 FormulaToken* FormulaFAPToken::GetFAPOrigToken() const  { return pOrigToken.get(); }
 bool FormulaFAPToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaByteToken::operator==( r ) && pOrigToken == r.GetFAPOrigToken();
+    return FormulaByteToken::operator==( r )
+        && pOrigToken == static_cast<const FormulaFAPToken&>(r).GetFAPOrigToken();
 }
 
 

@@ -599,7 +599,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, cons
     OpCode eOp = _pToken->GetOpCode();
 
     // #i101512# for output, the original token is needed
-    const FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? _pToken->GetFAPOrigToken() : _pToken;
+    const FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? static_cast<const FormulaFAPToken*>(_pToken)->GetFAPOrigToken() : _pToken;
     ::std::map<const FormulaToken*, sheet::FormulaToken>::const_iterator itr = m_aTokenMap.find(pOrigToken);
     if (itr == m_aTokenMap.end())
         return;
