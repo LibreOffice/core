@@ -618,21 +618,21 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize,
 }
 
 tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect,
-                                      const MapMode& rMapMode ) const
+                                             const MapMode& rMapMode ) const
 {
     // tdf#141761 see comments above, IsEmpty() removed
     if ( rMapMode.IsDefault() )
         return rLogicRect;
 
-    // convert MapMode resolution and convert
-    ImplMapRes          aMapRes;
+    // convert MapMode resolution
+    ImplMapRes aMapRes;
     aMapRes.CalcMapResolution(rMapMode, mpMapper->GetDPIX(), mpMapper->GetDPIY());
 
     tools::Rectangle aRetval(
-        mpMapper->ViewToWindowUnitsX(mpMapper->LogicUnitsToViewUnitsX(rLogicRect.Left(), aMapRes)),
-        mpMapper->ViewToWindowUnitsY(mpMapper->LogicUnitsToViewUnitsY(rLogicRect.Top(), aMapRes)),
-        rLogicRect.IsWidthEmpty() ? 0 : mpMapper->ViewToWindowUnitsX(mpMapper->LogicUnitsToViewUnitsX(rLogicRect.Right(), aMapRes)),
-        rLogicRect.IsHeightEmpty() ? 0 : mpMapper->ViewToWindowUnitsY(mpMapper->LogicUnitsToViewUnitsY(rLogicRect.Bottom(), aMapRes))
+        mpMapper->LogicToWindowUnitsX(rLogicRect.Left(), aMapRes),
+        mpMapper->LogicToWindowUnitsY(rLogicRect.Top(), aMapRes),
+        rLogicRect.IsWidthEmpty()  ? 0 : mpMapper->LogicToWindowUnitsX(rLogicRect.Right(), aMapRes),
+        rLogicRect.IsHeightEmpty() ? 0 : mpMapper->LogicToWindowUnitsY(rLogicRect.Bottom(), aMapRes)
     );
 
     if (rLogicRect.IsWidthEmpty())

@@ -209,6 +209,8 @@ public:
     // Logic -> Window units (Commonly used in OutputDevice::LogicToPixel)
     tools::Long LogicToWindowUnitsX(tools::Long nX) const;
     tools::Long LogicToWindowUnitsY(tools::Long nY) const;
+    tools::Long LogicToWindowUnitsX(tools::Long nX, const ImplMapRes& rRes) const;
+    tools::Long LogicToWindowUnitsY(tools::Long nY, const ImplMapRes& rRes) const;
 
     // ========================================================================
     // DISTANCE SCALING (Raw Scalar Conversion, NO offsets applied)

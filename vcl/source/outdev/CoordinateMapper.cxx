@@ -362,6 +362,16 @@ tools::Long CoordinateMapper::LogicToWindowUnitsY(tools::Long nY) const
     return ViewToWindowUnitsY(LogicUnitsToViewUnitsY(nY));
 }
 
+tools::Long CoordinateMapper::LogicToWindowUnitsX(tools::Long nX, const ImplMapRes& rRes) const
+{
+    return ViewToWindowUnitsX(LogicUnitsToViewUnitsX(nX, rRes));
+}
+
+tools::Long CoordinateMapper::LogicToWindowUnitsY(tools::Long nY, const ImplMapRes& rRes) const
+{
+    return ViewToWindowUnitsY(LogicUnitsToViewUnitsY(nY, rRes));
+}
+
 // ========================================================================
 // DISTANCE SCALING (Raw Scalar Conversion)
 // ========================================================================
