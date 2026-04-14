@@ -86,7 +86,7 @@ using namespace formula;
 
 void ScInterpreter::ScIfJump()
 {
-    const short* pJump = pCur->GetJump();
+    const short* pJump = static_cast<const FormulaJumpToken*>(pCur)->GetJump();
     short nJumpCount = pJump[ 0 ];
     MatrixJumpConditionToMatrix();
     if ( GetStackType() != svMatrix )
@@ -194,7 +194,7 @@ static void lcl_storeJumpMatResult(
 
 void ScInterpreter::ScIfError( bool bNAonly )
 {
-    const short* pJump = pCur->GetJump();
+    const short* pJump = static_cast<const FormulaJumpToken*>(pCur)->GetJump();
     short nJumpCount = pJump[ 0 ];
     if (!sp || nJumpCount != 2)
     {
@@ -364,7 +364,7 @@ void ScInterpreter::ScChooseJump()
     // We have to set a jump, if there was none chosen because of an error set
     // it to endpoint.
     bool bHaveJump = false;
-    const short* pJump = pCur->GetJump();
+    const short* pJump = static_cast<const FormulaJumpToken*>(pCur)->GetJump();
     short nJumpCount = pJump[ 0 ];
     MatrixJumpConditionToMatrix();
     switch ( GetStackType() )
@@ -9954,7 +9954,7 @@ ScTokenArray ScInterpreter::checkPushTokens(const ScTokenArray& rTokens, short n
 
 void ScInterpreter::ScLet()
 {
-    const short* pJump = pCur->GetJump();
+    const short* pJump = static_cast<const FormulaJumpToken*>(pCur)->GetJump();
     short nJumpCount = pJump[0];
     short nOrgJumpCount = nJumpCount;
 

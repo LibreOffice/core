@@ -223,7 +223,6 @@ public:
     virtual void                SetIndex( sal_uInt16 n );
     virtual sal_Int16           GetSheet() const;
     virtual void                SetSheet( sal_Int16 n );
-    virtual short*              GetJump() const;
 
     virtual const ScSingleRefData*  GetSingleRef() const;
     virtual ScSingleRefData*        GetSingleRef();
@@ -480,7 +479,8 @@ public:
                                     memcpy( pJump.get(), r.pJump.get(), (r.pJump[0] + 1) * sizeof(short) );
                                 }
     virtual                     ~FormulaJumpToken() override;
-    virtual short*              GetJump() const override;
+    const short*                GetJump() const { return pJump.get(); }
+    short*                      GetJump() { return pJump.get(); }
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new FormulaJumpToken(*this); }
     virtual ParamClass          GetInForceArray() const override;

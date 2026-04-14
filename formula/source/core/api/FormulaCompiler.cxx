@@ -1980,20 +1980,21 @@ void FormulaCompiler::Factor()
         {
             // the PC counters are -1
             pFacToken = mpToken;
+            auto pJumpToken = static_cast<FormulaJumpToken*>(&*pFacToken);
             switch (eOp)
             {
                 case ocIf:
-                    pFacToken->GetJump()[ 0 ] = 3;  // if, else, behind
+                    pJumpToken->GetJump()[ 0 ] = 3;  // if, else, behind
                     break;
                 case ocChoose:
-                    pFacToken->GetJump()[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
+                    pJumpToken->GetJump()[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
                     break;
                 case ocLet:
-                    pFacToken->GetJump()[ 0 ] = FORMULA_MAXPARAMS + 1;
+                    pJumpToken->GetJump()[ 0 ] = FORMULA_MAXPARAMS + 1;
                     break;
                 case ocIfError:
                 case ocIfNA:
-                    pFacToken->GetJump()[ 0 ] = 2;  // if, behind
+                    pJumpToken->GetJump()[ 0 ] = 2;  // if, behind
                     break;
                 default:
                     SAL_WARN("formula.core","Jump OpCode: " << +eOp);
@@ -2045,7 +2046,7 @@ void FormulaCompiler::Factor()
                     && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
             {
                 if ( ++nJumpCount <= nJumpMax )
-                    pFacToken->GetJump()[nJumpCount] = pc-1;
+                    static_cast<FormulaJumpToken*>(&*pFacToken)->GetJump()[nJumpCount] = pc-1;
                 NextToken();
                 CheckSetForceArrayParameter( mpToken, nJumpCount - 1);
                 eOp = Expression();
@@ -2059,7 +2060,7 @@ void FormulaCompiler::Factor()
                 NextToken();
                 // always limit to nJumpMax, no arbitrary overwrites
                 if ( ++nJumpCount <= nJumpMax )
-                    pFacToken->GetJump()[ nJumpCount ] = pc-1;
+                    static_cast<FormulaJumpToken*>(&*pFacToken)->GetJump()[ nJumpCount ] = pc-1;
                 eFacOpCode = pFacToken->GetOpCode();
                 bool bLimitOk;
                 switch (eFacOpCode)
@@ -2091,7 +2092,7 @@ void FormulaCompiler::Factor()
                         assert(!"FormulaCompiler::Factor: someone forgot to add a jump limit case");
                 }
                 if (bLimitOk)
-                    pFacToken->GetJump()[ 0 ] = nJumpCount;
+                    static_cast<FormulaJumpToken*>(&*pFacToken)->GetJump()[ 0 ] = nJumpCount;
                 else
                     SetError( FormulaError::IllegalParameter);
             }

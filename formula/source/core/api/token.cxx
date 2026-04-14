@@ -228,12 +228,6 @@ void FormulaToken::SetSheet( sal_Int16 )
     assert( !"virtual dummy called" );
 }
 
-short* FormulaToken::GetJump() const
-{
-    SAL_WARN( "formula.core", "FormulaToken::GetJump: virtual dummy called" );
-    return nullptr;
-}
-
 const ScSingleRefData* FormulaToken::GetSingleRef() const
 {
     OSL_FAIL( "FormulaToken::GetSingleRef: virtual dummy called" );
@@ -318,14 +312,16 @@ bool FormulaFAPToken::operator==( const FormulaToken& r ) const
 }
 
 
-short*      FormulaJumpToken::GetJump() const                   { return pJump.get(); }
 ParamClass  FormulaJumpToken::GetInForceArray() const           { return eInForceArray; }
 void        FormulaJumpToken::SetInForceArray( ParamClass c )   { eInForceArray = c; }
 bool FormulaJumpToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaToken::operator==( r ) && pJump[0] == r.GetJump()[0] &&
-        memcmp( pJump.get()+1, r.GetJump()+1, pJump[0] * sizeof(short) ) == 0 &&
-        eInForceArray == r.GetInForceArray();
+    if (!FormulaToken::operator==( r ))
+        return false;
+    auto const & rhs = static_cast<const FormulaJumpToken&>(r);
+    return pJump[0] == rhs.GetJump()[0] &&
+        memcmp( pJump.get()+1, rhs.GetJump()+1, pJump[0] * sizeof(short) ) == 0 &&
+        eInForceArray == rhs.GetInForceArray();
 }
 FormulaJumpToken::~FormulaJumpToken()
 {
