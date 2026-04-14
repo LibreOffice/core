@@ -224,7 +224,6 @@ public:
     virtual sal_Int16           GetSheet() const;
     virtual void                SetSheet( sal_Int16 n );
     virtual short*              GetJump() const;
-    virtual FormulaToken*       GetFAPOrigToken() const;
 
     virtual const ScSingleRefData*  GetSingleRef() const;
     virtual ScSingleRefData*        GetSingleRef();
@@ -320,7 +319,7 @@ public:
                                     FormulaByteToken( r ), pOrigToken( r.pOrigToken ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaFAPToken(*this); }
-    virtual FormulaToken*       GetFAPOrigToken() const override;
+    FormulaToken*               GetFAPOrigToken() const;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
