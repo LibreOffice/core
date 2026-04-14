@@ -783,7 +783,7 @@ bool ScDocument::MarkUsedExternalReferences( const ScTokenArray& rArr, const ScA
         {
             // this is a named range.  Check if the range contains an external
             // reference.
-            ScRangeData* pRangeData = GetRangeName()->findByIndex(static_cast<FormulaIndexToken*>(t)->GetIndex());
+            ScRangeData* pRangeData = GetRangeName().findByIndex(static_cast<FormulaIndexToken*>(t)->GetIndex());
             if (!pRangeData)
                 continue;
 

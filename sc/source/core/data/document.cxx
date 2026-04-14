@@ -2447,7 +2447,7 @@ void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags,
 
     if (pRangeName)
     {
-        pTransClip->GetRangeName()->clear();
+        pTransClip->GetRangeName().clear();
         for (const auto& rEntry : *pRangeName)
         {
             sal_uInt16 nIndex = rEntry.second->GetIndex();
@@ -2545,10 +2545,10 @@ void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags,
 
 namespace {
 
-void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName,
+void copyUsedNamesToClip(ScRangeName& rClipRangeName, ScRangeName* pRangeName,
         const sc::UpdatedRangeNames::NameIndicesType& rUsedNames)
 {
-    pClipRangeName->clear();
+    rClipRangeName.clear();
     for (const auto& rEntry : *pRangeName)        //TODO: also DB and Pivot regions!!!
     {
         sal_uInt16 nIndex = rEntry.second->GetIndex();
@@ -2557,7 +2557,7 @@ void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName,
             continue;
 
         ScRangeData* pData = new ScRangeData(*rEntry.second);
-        if (pClipRangeName->insert(pData))
+        if (rClipRangeName.insert(pData))
             pData->SetIndex(nIndex);
     }
 }

@@ -256,7 +256,7 @@ public:
 class SC_DLLPUBLIC ScAreaNameIterator
 {
 private:
-    ScRangeName*    pRangeName;
+    ScRangeName&    rRangeName;
     ScDBCollection* pDBCollection;
     ScRangeName::const_iterator maRNPos;
     ScRangeName::const_iterator maRNEnd;

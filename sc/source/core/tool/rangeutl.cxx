@@ -286,7 +286,7 @@ bool ScRangeUtil::MakeRangeFromName (
                 pData = pRangeNames->findByUpperName(aName);
         }
         if (!pData && eScope != RUTL_NAMES_LOCAL)
-            pData = rDoc.GetRangeName()->findByUpperName(aName);
+            pData = rDoc.GetRangeName().findByUpperName(aName);
         if (pData)
         {
             OUString         aStrArea;
@@ -964,11 +964,8 @@ ScRangeData* ScRangeStringConverter::GetRangeDataFromString( const OUString& rSt
     }
     if (!pData)
     {
-        ScRangeName* pGlobalRangeName = rDoc.GetRangeName();
-        if (pGlobalRangeName)
-        {
-            pData = pGlobalRangeName->findByUpperName(aUpperName);
-        }
+        ScRangeName& rGlobalRangeName = rDoc.GetRangeName();
+        pData = rGlobalRangeName.findByUpperName(aUpperName);
     }
     return pData;
 }
@@ -992,15 +989,12 @@ bool ScArea::operator==( const ScArea& r ) const
 }
 
 ScAreaNameIterator::ScAreaNameIterator( const ScDocument& rDoc ) :
-    pRangeName(rDoc.GetRangeName()),
+    rRangeName(rDoc.GetRangeName()),
     pDBCollection(rDoc.GetDBCollection()),
     bFirstPass(true)
 {
-    if (pRangeName)
-    {
-        maRNPos = pRangeName->begin();
-        maRNEnd = pRangeName->end();
-    }
+    maRNPos = rRangeName.begin();
+    maRNEnd = rRangeName.end();
 }
 
 bool ScAreaNameIterator::Next( OUString& rName, ScRange& rRange )
@@ -1009,7 +1003,7 @@ bool ScAreaNameIterator::Next( OUString& rName, ScRange& rRange )
     {
         if ( bFirstPass )                                   // first the area names
         {
-            if ( pRangeName && maRNPos != maRNEnd )
+            if ( maRNPos != maRNEnd )
             {
                 const ScRangeData& rData = *maRNPos->second;
                 ++maRNPos;

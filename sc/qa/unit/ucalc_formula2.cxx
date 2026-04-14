@@ -1296,9 +1296,9 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFunc_MATCH_INDIRECT)
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
-    ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
+    ScRangeName& rGlobalNames = m_pDoc->GetRangeName();
     ScRangeData* pRangeData = new ScRangeData(*m_pDoc, u"RoleAssignment"_ustr, u"$D$4:$D$13"_ustr);
-    pGlobalNames->insert(pRangeData);
+    rGlobalNames.insert(pRangeData);
 
     // D6: data to match, in 3rd row of named range.
     m_pDoc->SetString(3, 5, 0, u"Test1"_ustr);
@@ -1905,9 +1905,9 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRangeName)
     rExtDoc.InsertTab(0, u"Data1"_ustr);
     rExtDoc.SetValue(0, 0, 0, 123.456);
 
-    ScRangeName* pRangeName = rExtDoc.GetRangeName();
+    ScRangeName& rRangeName = rExtDoc.GetRangeName();
     ScRangeData* pRangeData = new ScRangeData(rExtDoc, u"ExternalName"_ustr, u"$Data1.$A$1"_ustr);
-    pRangeName->insert(pRangeData);
+    rRangeName.insert(pRangeData);
 
     m_pDoc->InsertTab(0, u"Test Sheet"_ustr);
     m_pDoc->SetString(0, 1, 0, u"='file:///extdata.fake'#ExternalName"_ustr);
@@ -2487,8 +2487,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRef)
 
     {
         // Insert named expressions.
-        ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
-        CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
+        ScRangeName& rGlobalNames = m_pDoc->GetRangeName();
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
         {
@@ -2499,7 +2498,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRef)
                 = new ScRangeData(*m_pDoc, OUString::createFromAscii(aNames[i].pName),
                                   OUString::createFromAscii(aNames[i].pExpr), ScAddress(2, 4, 0),
                                   ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
-            bool bInserted = pGlobalNames->insert(pName);
+            bool bInserted = rGlobalNames.insert(pName);
             CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("Failed to insert named expression ")
                                            + aNames[i].pName + ".")
                                        .getStr(),
@@ -2665,8 +2664,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRef)
 
     {
         // Insert named expressions.
-        ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
-        CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
+        ScRangeName& rGlobalNames = m_pDoc->GetRangeName();
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
         {
@@ -2677,7 +2675,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRef)
                 = new ScRangeData(*m_pDoc, OUString::createFromAscii(aHlNames[i].pName),
                                   OUString::createFromAscii(aHlNames[i].pExpr), ScAddress(6, 12, 0),
                                   ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
-            bool bInserted = pGlobalNames->insert(pName);
+            bool bInserted = rGlobalNames.insert(pName);
             CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("Failed to insert named expression ")
                                            + aHlNames[i].pName + ".")
                                        .getStr(),
@@ -4186,11 +4184,11 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testIntersectionOpExcel)
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab(0, u"Test"_ustr));
 
-    ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
+    ScRangeName& rGlobalNames = m_pDoc->GetRangeName();
     // Horizontal cell range covering C2.
-    pGlobalNames->insert(new ScRangeData(*m_pDoc, u"horz"_ustr, u"$B$2:$D$2"_ustr));
+    rGlobalNames.insert(new ScRangeData(*m_pDoc, u"horz"_ustr, u"$B$2:$D$2"_ustr));
     // Vertical cell range covering C2.
-    pGlobalNames->insert(new ScRangeData(*m_pDoc, u"vert"_ustr, u"$C$1:$C$3"_ustr));
+    rGlobalNames.insert(new ScRangeData(*m_pDoc, u"vert"_ustr, u"$C$1:$C$3"_ustr));
     // Data in C2.
     m_pDoc->SetValue(2, 1, 0, 1.0);
 
@@ -6963,7 +6961,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testImplicitIntersectionTakesOperandWhole)
 {
     // The wrapper encloses the whole operand, whatever form the operand takes.
     m_pDoc->InsertTab(0, u"Sheet1"_ustr);
-    m_pDoc->GetRangeName()->insert(
+    m_pDoc->GetRangeName().insert(
         new ScRangeData(*m_pDoc, u"myrange"_ustr, u"$Sheet1.$A$1:$A$3"_ustr, ScAddress(1, 0, 0)));
 
     // A name reaches the writer as its own token rather than as a push.

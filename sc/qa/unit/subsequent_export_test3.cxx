@@ -1350,7 +1350,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testAbsNamedRangeHTML)
     pDocSh->DoHardRecalc();
 
     ScDocument* pDoc = getScDoc();
-    ScRangeData* pRangeData = pDoc->GetRangeName()->findByUpperName(u"HTML_1"_ustr);
+    ScRangeData* pRangeData = pDoc->GetRangeName().findByUpperName(u"HTML_1"_ustr);
     ScSingleRefData& rRef
         = static_cast<ScDoubleRefToken*>(pRangeData->GetCode()->FirstToken())->GetSingleRef();
     // see tdf#119141 for the reason why this isn't Sheet1.HTML_1

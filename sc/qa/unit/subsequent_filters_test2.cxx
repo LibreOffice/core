@@ -1507,9 +1507,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testNamedExpressionsXLSXML_Global)
     CPPUNIT_ASSERT_EQUAL(u"=SUM(MyRange2)"_ustr,
                          pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));
 
-    const ScRangeData* pRD = pDoc->GetRangeName()->findByUpperName(u"MYRANGE"_ustr);
+    const ScRangeData* pRD = pDoc->GetRangeName().findByUpperName(u"MYRANGE"_ustr);
     CPPUNIT_ASSERT(pRD);
-    pRD = pDoc->GetRangeName()->findByUpperName(u"MYRANGE2"_ustr);
+    pRD = pDoc->GetRangeName().findByUpperName(u"MYRANGE2"_ustr);
     CPPUNIT_ASSERT(pRD);
 }
 

@@ -1247,7 +1247,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testNamedRangeBugfdo62729)
     createScDoc("ods/fdo62729.ods");
     ScDocument* pDoc = getScDoc();
 
-    ScRangeName* pNames = pDoc->GetRangeName();
+    ScRangeName* pNames = &pDoc->GetRangeName();
     //should be just a single named range
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNames->size());
     pDoc->DeleteTab(0);
@@ -1257,7 +1257,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testNamedRangeBugfdo62729)
 
     pDoc = getScDoc();
 
-    pNames = pDoc->GetRangeName();
+    pNames = &pDoc->GetRangeName();
     //after reload should still have a named range
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNames->size());
 #endif

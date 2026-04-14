@@ -241,7 +241,7 @@ void XclImpName::InsertName(const ScTokenArray* pArray)
     pData->SetIndex( mnNameIndex );     // used as unique identifier in formulas
     if (mnXclTab == EXC_NAME_GLOBAL)
     {
-        if (!GetDoc().GetRangeName()->insert(pData))
+        if (!GetDoc().GetRangeName().insert(pData))
             pData = nullptr;
     }
     else

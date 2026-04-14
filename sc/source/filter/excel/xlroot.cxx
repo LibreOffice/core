@@ -309,7 +309,7 @@ ScStyleSheetPool& XclRoot::GetStyleSheetPool() const
 
 ScRangeName& XclRoot::GetNamedRanges() const
 {
-    return *GetDoc().GetRangeName();
+    return GetDoc().GetRangeName();
 }
 
 SdrPage* XclRoot::GetSdrPage( SCTAB nScTab ) const

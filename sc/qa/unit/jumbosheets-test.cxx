@@ -165,7 +165,7 @@ void ScJumboSheetsTest::testRoundtripNamedRanges(const char* name, TestFilter eF
         ScDocument* pDoc = getScDoc();
         for (const auto& range : ranges)
         {
-            ScRangeData* rangeData = pDoc->GetRangeName()->findByUpperName(range.first);
+            ScRangeData* rangeData = pDoc->GetRangeName().findByUpperName(range.first);
             CPPUNIT_ASSERT(rangeData);
             CPPUNIT_ASSERT_EQUAL(range.second, rangeData->GetSymbol());
         }
@@ -176,7 +176,7 @@ void ScJumboSheetsTest::testRoundtripNamedRanges(const char* name, TestFilter eF
         ScDocument* pDoc = getScDoc();
         for (const auto& range : ranges)
         {
-            ScRangeData* rangeData = pDoc->GetRangeName()->findByUpperName(range.first);
+            ScRangeData* rangeData = pDoc->GetRangeName().findByUpperName(range.first);
             CPPUNIT_ASSERT(rangeData);
             CPPUNIT_ASSERT_EQUAL(range.second, rangeData->GetSymbol());
         }

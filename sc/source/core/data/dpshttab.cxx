@@ -262,14 +262,11 @@ const ScRange& ScSheetSourceDesc::GetSourceRange() const
     {
         // Obtain the source range from the range name first.
         maSourceRange = ScRange();
-        ScRangeName* pRangeName = mpDoc->GetRangeName();
+        ScRangeName& rRangeName = mpDoc->GetRangeName();
         do
         {
-            if (!pRangeName)
-                break;
-
             OUString aUpper = ScGlobal::getCharClass().uppercase(maRangeName);
-            const ScRangeData* pData = pRangeName->findByUpperName(aUpper);
+            const ScRangeData* pData = rRangeName.findByUpperName(aUpper);
             if (!pData)
                 break;
 
