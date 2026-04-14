@@ -2151,7 +2151,7 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
 
 void XclExpFmlaCompImpl::ProcessDefinedName( const XclExpScToken& rTokData )
 {
-    sal_Int16 nSheet = rTokData.mpScToken->GetSheet();
+    sal_Int16 nSheet = static_cast<const FormulaIndexToken*>(rTokData.mpScToken)->GetSheet();
     SCTAB nTab = (nSheet < 0 ? SCTAB_GLOBAL : nSheet);
 
     XclExpNameManager& rNameMgr = GetNameManager();

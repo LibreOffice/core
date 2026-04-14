@@ -5380,7 +5380,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
     return CompileString( rFormula );
 }
 
-ScRangeData* ScCompiler::GetRangeData( const FormulaToken& rToken ) const
+ScRangeData* ScCompiler::GetRangeData( const FormulaIndexToken& rToken ) const
 {
     return rDoc.FindRangeNameBySheetAndIndex( rToken.GetSheet(), rToken.GetIndex());
 }
@@ -5404,7 +5404,7 @@ bool ScCompiler::HandleDPFieldName()
 bool ScCompiler::HandleRange()
 {
     ScTokenArray* pNew;
-    const ScRangeData* pRangeData = GetRangeData( *mpToken);
+    const ScRangeData* pRangeData = GetRangeData( static_cast<FormulaIndexToken&>(*mpToken));
     if (pRangeData)
     {
         FormulaError nErr = pRangeData->GetErrCode();
@@ -5440,7 +5440,8 @@ bool ScCompiler::HandleRange()
                 // shall still point to the same sheet as if used on the
                 // original sheet, not shifted to the current position where
                 // they are used.
-                SCTAB nSheetTab = mpToken->GetSheet();
+                assert(dynamic_cast<FormulaIndexToken*>(mpToken.get()));
+                SCTAB nSheetTab = static_cast<FormulaIndexToken*>(mpToken.get())->GetSheet();
                 if (nSheetTab >= 0 && nSheetTab != aPos.Tab())
                     AdjustSheetLocalNameRelReferences( nSheetTab - aPos.Tab());
 
@@ -6081,10 +6082,10 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
     {
         case ocName:
         {
-            const ScRangeData* pData = GetRangeData( *_pTokenP);
+            const ScRangeData* pData = GetRangeData( static_cast<const FormulaIndexToken&>(*_pTokenP));
             if (pData)
             {
-                SCTAB nTab = _pTokenP->GetSheet();
+                SCTAB nTab = static_cast<const FormulaIndexToken*>(_pTokenP)->GetSheet();
                 if (nTab >= 0 && (nTab != aPos.Tab() || mbRefConventionChartOOXML))
                 {
                     // Sheet-local on other sheet.

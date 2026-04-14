@@ -447,9 +447,9 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     break;
                 case svIndex:
                     {
-                        const ScTableRefToken* pTR;
-                        if (rToken.GetOpCode() == ocTableRef && (pTR = dynamic_cast<const ScTableRefToken*>(&rToken)))
+                        if (rToken.GetOpCode() == ocTableRef)
                         {
+                            const ScTableRefToken* pTR = static_cast<const ScTableRefToken*>(&rToken);
                             sheet::TableRefToken aTableRefToken;
                             aTableRefToken.Index = static_cast<sal_Int32>( pTR->GetIndex());
                             aTableRefToken.Item = static_cast<sal_Int16>( pTR->GetItem());
@@ -477,9 +477,10 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                         }
                         else
                         {
+                            auto const & rIndexToken = static_cast<const FormulaIndexToken&>(rToken);
                             sheet::NameToken aNameToken;
-                            aNameToken.Index = static_cast<sal_Int32>( rToken.GetIndex() );
-                            aNameToken.Sheet = rToken.GetSheet();
+                            aNameToken.Index = static_cast<sal_Int32>( rIndexToken.GetIndex() );
+                            aNameToken.Sheet = rIndexToken.GetSheet();
                             rAPI.Data <<= aNameToken;
                         }
                     }

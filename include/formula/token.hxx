@@ -221,8 +221,6 @@ public:
     virtual void                SetString( const svl::SharedString& rStr );
     virtual sal_uInt16          GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
-    virtual sal_Int16           GetSheet() const;
-    virtual void                SetSheet( sal_Int16 n );
 
     virtual const ScSingleRefData*  GetSingleRef() const;
     virtual ScSingleRefData*        GetSingleRef();
@@ -417,8 +415,8 @@ public:
     virtual FormulaToken*       Clone() const override { return new FormulaIndexToken(*this); }
     virtual sal_uInt16          GetIndex() const override;
     virtual void                SetIndex( sal_uInt16 n ) override;
-    virtual sal_Int16           GetSheet() const override;
-    virtual void                SetSheet( sal_Int16 n ) override;
+    sal_Int16                   GetSheet() const;
+    void                        SetSheet( sal_Int16 n );
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 

@@ -885,7 +885,7 @@ bool ScValidationData::GetSelectionFromFormula(
             }
             else if (eOpCode == ocName)
             {
-                const ScRangeData* pName = rDocument.FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex());
+                const ScRangeData* pName = rDocument.FindRangeNameBySheetAndIndex( static_cast<FormulaIndexToken*>(t)->GetSheet(), t->GetIndex());
                 if (pName && pName->IsReference(aRange))
                 {
                     bRef = true;

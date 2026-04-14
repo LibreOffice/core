@@ -217,7 +217,6 @@ public:
 
     virtual sal_uInt16          GetIndex() const override;
     virtual void                SetIndex( sal_uInt16 n ) override;
-    virtual sal_Int16           GetSheet() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScTableRefToken(*this); }
 
