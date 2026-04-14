@@ -3739,6 +3739,100 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testValidationCellCrash)
     // Without the fix this will crash.
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
+{
+    comphelper::COKit::setTiledAnnotations(false);
+    // Reset the static counter so the first note gets a predictable id.
+    ScPostIt::mnLastPostItId = 1;
+
+    // A scope to destroy ScTestViewCallback objects before setTiledAnnotations(true)
+    {
+        ScModelObj* pModelObj = createDoc("small.ods");
+        ScTestViewCallback aView1;
+
+        KitHelper::createView();
+        pModelObj->initializeForTiledRendering({});
+        ScTestViewCallback aView2;
+
+        KitHelper::setView(aView1.getViewID());
+
+        ScTabViewShell* pTabViewShell = aView1.getTabViewShell();
+        CPPUNIT_ASSERT(pTabViewShell);
+        pTabViewShell->SetCursor(2, 3);
+
+        // 1) Insert a threaded comment via .uno:InsertThreadedComment
+        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        {
+            {"Text", uno::Any(u"Threaded comment text"_ustr)},
+            {"Author", uno::Any(u"Kit Author"_ustr)},
+        }));
+        dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgs);
+
+        // Both views receive KIT_CALLBACK_COMMENT with action "Add"
+        CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(std::string("1"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
+
+        // The callback must carry threaded-comment-specific fields
+        CPPUNIT_ASSERT_EQUAL(std::string("Threaded comment text"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Kit Author"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL(std::string("true"), aView1.m_aCommentCallbackResult.get<std::string>("threaded"));
+        CPPUNIT_ASSERT_EQUAL(std::string("false"), aView1.m_aCommentCallbackResult.get<std::string>("resolved"));
+        CPPUNIT_ASSERT_EQUAL(std::string("2 3 2 3"), aView1.m_aCommentCallbackResult.get<std::string>("cellRange"));
+
+        std::string aCommentId = aView1.m_aCommentCallbackResult.get<std::string>("id");
+
+        // 2) Verify getPostIts() includes threaded/resolved fields
+        {
+            tools::JsonWriter aJsonWriter;
+            pModelObj->getPostIts(aJsonWriter);
+            std::string aJson(aJsonWriter.finishAndGetAsOString());
+            std::stringstream aStream(aJson);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+
+            auto aComments = aTree.get_child("comments");
+            CPPUNIT_ASSERT_EQUAL(size_t(1), aComments.size());
+            const auto& rComment = aComments.begin()->second;
+            CPPUNIT_ASSERT_EQUAL(std::string("Threaded comment text"), rComment.get<std::string>("text"));
+            CPPUNIT_ASSERT_EQUAL(std::string("true"), rComment.get<std::string>("threaded"));
+            CPPUNIT_ASSERT_EQUAL(std::string("false"), rComment.get<std::string>("resolved"));
+        }
+
+        // 3) Resolve the threaded comment via .uno:ResolveComment
+        aArgs = comphelper::InitPropertySequence(
+        {
+            {"Id", uno::Any(OUString::createFromAscii(aCommentId))},
+        });
+        dispatchCommand(mxComponent, u".uno:ResolveComment"_ustr, aArgs);
+
+        // Both views receive KIT_CALLBACK_COMMENT with action "Modify"
+        CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(std::string("true"), aView1.m_aCommentCallbackResult.get<std::string>("resolved"));
+
+        // 4) Verify getPostIts() now shows resolved=true
+        {
+            tools::JsonWriter aJsonWriter;
+            pModelObj->getPostIts(aJsonWriter);
+            std::string aJson(aJsonWriter.finishAndGetAsOString());
+            std::stringstream aStream(aJson);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+
+            const auto& rComment = aTree.get_child("comments").begin()->second;
+            CPPUNIT_ASSERT_EQUAL(std::string("true"), rComment.get<std::string>("resolved"));
+        }
+
+        // 5) Toggle resolve back (unresolve)
+        dispatchCommand(mxComponent, u".uno:ResolveComment"_ustr, aArgs);
+
+        CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(std::string("false"), aView1.m_aCommentCallbackResult.get<std::string>("resolved"));
+    }
+    comphelper::COKit::setTiledAnnotations(true);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
