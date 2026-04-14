@@ -32,7 +32,10 @@ final class Launch {
             return
         }
 
-        app.launchArguments = ["--uitesting", "--testFile", path]
+        app.launchArguments = [
+            "--uitesting", "--testFile", path,
+            "-ApplePersistenceIgnoreState", "YES",
+        ]
         app.launch()
     }
 

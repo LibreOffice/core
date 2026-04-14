@@ -23,6 +23,7 @@ final class codaUITestsLaunchTests: XCTestCase {
     @MainActor
     func testBackstageAfterStartup() throws {
         let app = XCUIApplication()
+        app.launchArguments = ["-ApplePersistenceIgnoreState", "YES"]
         app.launch()
 
         // Wait until the main window exists
