@@ -950,13 +950,14 @@ static std::pair<ImplMapRes, ImplMapRes> lcl_calcConversionMapRes(const MapMode&
     return result;
 }
 
-static tools::Long lcl_scaleLogicValue( const tools::Long n1,
-                 const double n2,
-                 const double n3 )
+static tools::Long lcl_scaleLogicValue( const tools::Long nSourceValue,
+                                        const double fSourceScale,
+                                        const double fDestScale )
 {
-    if (n3 == 0.0)
+    if (fDestScale == 0.0)
         return 0;
-    return std::llround(n1 * n2 / n3);
+
+    return std::llround(nSourceValue * fSourceScale / fDestScale);
 }
 
 static tools::Long lcl_convertLogicValue(const tools::Long n1, const o3tl::Length eFrom, const o3tl::Length eTo)
