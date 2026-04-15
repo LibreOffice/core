@@ -24,6 +24,18 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 
 	it("Insert multimedia", function () {
 		desktopHelper.insertVideo();
+
+		// The video foreignObject lives inside a nested <svg> wrapper.
+		// Verify the wrapper has explicit dimensions so it does not
+		// fall back to the SVG default 300x150 and clip the video.
+		cy.cGet('#document-container svg svg').should('have.attr', 'width');
+		cy.cGet('#document-container svg svg').should('have.attr', 'height');
+		cy.cGet('#document-container svg svg foreignObject').then(function ($fo) {
+			var foWidth = $fo.attr('width');
+			var foHeight = $fo.attr('height');
+			cy.cGet('#document-container svg svg').should('have.attr', 'width', foWidth);
+			cy.cGet('#document-container svg svg').should('have.attr', 'height', foHeight);
+		});
 	});
 
 	it.skip('Crop Image', function () {

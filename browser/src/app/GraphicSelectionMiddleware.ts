@@ -65,7 +65,11 @@ class GraphicSelection {
 
 		var videoToInsert =
 			'<?xml version="1.0" encoding="UTF-8"?>\
-		<svg xmlns="http://www.w3.org/2000/svg">\
+		<svg xmlns="http://www.w3.org/2000/svg" width="' +
+			videoDesc.width +
+			'" height="' +
+			videoDesc.height +
+			'">\
 		<foreignObject overflow="visible" width="' +
 			videoDesc.width +
 			'" height="' +
