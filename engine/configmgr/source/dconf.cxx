@@ -302,7 +302,7 @@ bool getDouble(
             "bad key " << key << " does not match double property");
         return false;
     }
-    *value <<= double(g_variant_get_double(variant.get()));
+    *value <<= g_variant_get_double(variant.get());
     return true;
 }
 
