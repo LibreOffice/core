@@ -519,6 +519,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTFKeyword::INTBL:
         {
+            // buffer must be set for direct \intbl and indirect \itap (in
+            // case table def follows row content)
             m_aStates.top().setCurrentBuffer(&m_aTableBufferStack.back());
             nParam = NS_ooxml::LN_inTbl;
         }
@@ -588,16 +590,10 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().getParagraphSprms() = m_aDefaultState.getParagraphSprms();
             m_aStates.top().getParagraphAttributes() = m_aDefaultState.getParagraphAttributes();
 
-            if (m_nTopLevelCells == 0 && m_nNestedCells == 0)
+            if (m_nTopLevelCells != 0 || m_nNestedCells != 0)
             {
-                // Reset that we're in a table.
-                m_aStates.top().setCurrentBuffer(nullptr);
-            }
-            else
-            {
-                // We are still in a table.
-                m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_inTbl, new RTFValue(1));
                 // Ideally getDefaultSPRM() would take care of this, but it would not when we're buffering.
+                // TODO: is this the right place to do this?
                 m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_tabs,
                                                         new RTFValue());
             }
@@ -634,6 +630,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             // In case the table definition is in the middle of the row
             // (invalid), make sure table definition is emitted.
             m_bNeedPap = true;
+            m_aStates.top().setCurrentBuffer(&m_aTableBufferStack.back());
         }
         break;
         case RTFKeyword::WIDCTLPAR:

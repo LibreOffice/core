@@ -101,8 +101,39 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 break; // just ignore it - only thing we read in here is CHFTNSEP
             checkFirstRun();
             checkNeedPap();
-            runProps(); // tdf#152872 paragraph marker formatting
-            if (!m_aStates.top().getCurrentBuffer())
+            if (!m_bParAtEndOfSection)
+            { // testTdf148515 Word special handling for *last* body para
+                runProps(); // tdf#152872 paragraph marker formatting
+            }
+            if (auto const pCurrentBuffer{ m_aStates.top().getCurrentBuffer() })
+            {
+                auto const isTable{ std::find_if(
+                                        pCurrentBuffer->begin(), pCurrentBuffer->end(),
+                                        [](auto const& it) {
+                                            return ::std::get<0>(it) == RTFBufferTypes::PAR
+                                                   || (::std::get<0>(it) == RTFBufferTypes::Props
+                                                       && ::std::get<1>(it)->getSprms().find(
+                                                              NS_ooxml::LN_inTbl)
+                                                              != nullptr);
+                                        })
+                                    != pCurrentBuffer->end() };
+
+                if (m_aStates.top().getDestination() != Destination::SHAPETEXT)
+                {
+                    RTFValue::Pointer_t pValue;
+                    pCurrentBuffer->push_back(Buf_t(RTFBufferTypes::PAR, pValue, nullptr));
+                }
+
+                if (!isTable)
+                {
+                    // Not actually in table!
+                    // Clear the buffer so this new \par will not be seen
+                    // when next \par or \cell checks the buffer.
+                    replayBuffer(*pCurrentBuffer, nullptr, nullptr);
+                    assert(pCurrentBuffer->empty());
+                }
+            }
+            else
             {
                 parBreak();
                 // Not in table? Reset max width.
@@ -118,12 +149,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
                 m_nCellxMax = 0;
             }
-            else if (m_aStates.top().getDestination() != Destination::SHAPETEXT)
-            {
-                RTFValue::Pointer_t pValue;
-                m_aStates.top().getCurrentBuffer()->push_back(
-                    Buf_t(RTFBufferTypes::PAR, pValue, nullptr));
-            }
+
             // but don't emit properties yet, since they may change till the first text token arrives
             m_bNeedPap = true;
             if (!m_aStates.top().getFrame().hasProperties())
@@ -197,11 +223,34 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTFKeyword::NESTCELL:
         {
             checkFirstRun();
-            if (m_bNeedPap)
+            ::std::optional<RTFSprms> oSprms;
+            if (auto const pCurrentBuffer{ m_aStates.top().getCurrentBuffer() })
             {
-                // There were no runs in the cell, so we need to send paragraph and character properties here.
+                auto const iter{ std::find_if(
+                    pCurrentBuffer->begin(), pCurrentBuffer->end(), [](auto const& it) {
+                        return ::std::get<0>(it) == RTFBufferTypes::PAR
+                               || (::std::get<0>(it) == RTFBufferTypes::Props
+                                   && ::std::get<1>(it)->getSprms().find(NS_ooxml::LN_inTbl)
+                                          != nullptr);
+                    }) };
+                // if there was an \intbl already, it is a table
+                //   (that needs to be checked or testTdf113550 fails)
+                // if there was no \par, it is also a table regardless of \itap
+                if (iter == pCurrentBuffer->end() || ::std::get<0>(*iter) == RTFBufferTypes::Props)
+                {
+                    // must send *all* paragraph properties (testTdf164945),
+                    // else getDefaultSPRM() will overwrite things
+                    oSprms.emplace(m_aStates.top().getParagraphSprms());
+                    oSprms->set(NS_ooxml::LN_inTbl, new RTFValue{ 1 });
+                }
+            }
+
+            if (m_bNeedPap || oSprms)
+            {
+                // TableManager resets its mnTableDepthNew on a paragraph
+                // break so we must send paragraph properties again here.
                 auto pPValue = new RTFValue(m_aStates.top().getParagraphAttributes(),
-                                            m_aStates.top().getParagraphSprms());
+                                            oSprms ? *oSprms : m_aStates.top().getParagraphSprms());
                 bufferProperties(m_aTableBufferStack.back(), pPValue, nullptr);
                 auto pCValue = new RTFValue(m_aStates.top().getCharacterAttributes(),
                                             m_aStates.top().getCharacterSprms());
@@ -414,6 +463,16 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             m_bNeedFinalPar = true;
             m_aTableBufferStack.back().clear();
             m_nTopLevelCells = 0;
+            // reset buffer => outside of table, until next \trowd
+            // table buffer is our own concept, doesn't map to RTF pushState/popState
+            // ... see test165805Tdf where \row is in deeper scope than \intbl
+            for (std::size_t i = 0; i < m_aStates.size(); ++i)
+            {
+                if (m_aStates[i].getCurrentBuffer() == &m_aTableBufferStack.back())
+                {
+                    m_aStates[i].setCurrentBuffer(nullptr);
+                }
+            }
 
             if (bRestored)
                 // We restored cell definitions, clear these now.
