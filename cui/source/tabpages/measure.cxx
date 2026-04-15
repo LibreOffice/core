@@ -568,12 +568,14 @@ IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, weld::Toggleable&, rBox, void )
             default: ;//prevent warning
         }
     }
-    ChangeAttrHdl_Impl(&rBox);
+    // tdf#171747 - fix checkbox handling to ensure preview updates correctly
+    ChangeAttrHdl_Impl(dynamic_cast<weld::CheckButton*>(&rBox));
 }
 
-IMPL_LINK(SvxMeasurePage, ChangeAttrClickHdl_Impl, weld::Toggleable&, r, void)
+IMPL_LINK(SvxMeasurePage, ChangeAttrClickHdl_Impl, weld::Toggleable&, rBox, void)
 {
-    ChangeAttrHdl_Impl(&r);
+    // tdf#171747 - fix checkbox handling to ensure preview updates correctly
+    ChangeAttrHdl_Impl(dynamic_cast<weld::CheckButton*>(&rBox));
 }
 
 IMPL_LINK(SvxMeasurePage, ChangeAttrListBoxHdl_Impl, weld::ComboBox&, rBox, void)

@@ -15,10 +15,13 @@ class dimensionLinesTabPage(UITestCase):
 
     def test_tdf171746_number_decimal_places_limit(self):
         with self.ui_test.create_doc_in_start_center("draw"):
+            # Insert a dimension line using CTRL key
             xArgs = mkPropertyValues({"KeyModifier": 8192})
             self.xUITest.executeCommandWithParameters(".uno:MeasureLine", xArgs)
 
+            # Open the dimension lines tab page
             with self.ui_test.execute_dialog_through_command(".uno:measureAttributes") as xDialog:
+                # Increase decimal places 5 times (starting from default = 2)
                 xDecimalPlaces = xDialog.getChild("MTR_FLD_DECIMALPLACES")
                 for _ in range(5):
                     xDecimalPlaces.executeAction("UP", tuple())
