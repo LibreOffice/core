@@ -7035,7 +7035,16 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
     // OpCode of the "root" operator (which is already in RPN array).
     OpCode eOpCode = (*(mpCode - 1))->GetOpCode();
     // Param number of the "root" operator (which is already in RPN array).
-    sal_uInt8 nRootParam = (*(mpCode - 1))->GetByte();
+    auto p = *(mpCode - 1);
+    sal_uInt8 nRootParam = 0;
+    if (p->GetType() == svExternal)
+        nRootParam = static_cast<FormulaExternalToken*>(p)->GetByte();
+    else if (eOpCode == ocBad)
+        nRootParam = static_cast<FormulaStringOpToken*>(p)->GetByte();
+    else if (p->GetType() == svFAP)
+        nRootParam = static_cast<FormulaFAPToken*>(p)->GetByte();
+    else if (p->GetType() == svByte)
+        nRootParam = static_cast<FormulaByteToken*>(p)->GetByte();
     // eOpCode can be some operator which does not change with operands with or contains zero values.
     if (eOpCode == ocSum)
     {

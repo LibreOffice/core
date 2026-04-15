@@ -4214,17 +4214,17 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaC
             break;
             case formula::svByte:
             {
-                if(pThisTok->GetByte() != pOtherTok->GetByte())
+                if(static_cast<FormulaByteToken*>(pThisTok)->GetByte() != static_cast<FormulaByteToken*>(pOtherTok)->GetByte())
                     return NotEqual;
             }
             break;
             case formula::svExternal:
             {
-                if (static_cast<FormulaExternalToken*>(pThisTok)->GetExternal()
-                    != static_cast<FormulaExternalToken*>(pOtherTok)->GetExternal())
+                auto lhs = static_cast<FormulaExternalToken*>(pThisTok);
+                auto rhs = static_cast<FormulaExternalToken*>(pOtherTok);
+                if (lhs->GetExternal() != rhs->GetExternal())
                     return NotEqual;
-
-                if (pThisTok->GetByte() != pOtherTok->GetByte())
+                if (lhs->GetByte() != rhs->GetByte())
                     return NotEqual;
             }
             break;

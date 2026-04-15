@@ -4026,7 +4026,7 @@ StackVar ScInterpreter::Interpret()
         if (!pCur || (nGlobalError != FormulaError::NONE && nErrorFunction > nErrorFunctionCount) )
             break;
         eOp = pCur->GetOpCode();
-        cPar = pCur->GetByte();
+        cPar = pCur->GetParamCount();
         if ( eOp == ocPush )
         {
             // RPN code push without error

@@ -211,8 +211,6 @@ public:
         Any other non-overridden method pops up an assertion.
      */
 
-    virtual sal_uInt8           GetByte() const;
-    virtual void                SetByte( sal_uInt8 n );
     virtual ParamClass          GetInForceArray() const;
     virtual void                SetInForceArray( ParamClass c );
 
@@ -255,37 +253,37 @@ public:
                                     nByte( r.nByte ), cChar( r.cChar ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaSpaceToken(*this); }
-    virtual sal_uInt8           GetByte() const override;
+    sal_uInt8                   GetByte() const;
     sal_Unicode                 GetChar() const;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
-class FORMULA_DLLPUBLIC FormulaByteToken : public FormulaToken
+class FORMULA_DLLPUBLIC FormulaByteToken final : public FormulaToken
 {
 private:
-            sal_uInt8           nByte;
+            sal_uInt8           mnByte;
             ParamClass          eInForceArray;
 protected:
                                 FormulaByteToken( OpCode e, sal_uInt8 n, StackVar v, ParamClass c ) :
-                                    FormulaToken( v,e ), nByte( n ),
+                                    FormulaToken( v,e ), mnByte( n ),
                                     eInForceArray( c ) {}
 public:
                                 FormulaByteToken( OpCode e, sal_uInt8 n, ParamClass c ) :
-                                    FormulaToken( svByte,e ), nByte( n ),
+                                    FormulaToken( svByte,e ), mnByte( n ),
                                     eInForceArray( c ) {}
                                 FormulaByteToken( OpCode e, sal_uInt8 n ) :
-                                    FormulaToken( svByte,e ), nByte( n ),
+                                    FormulaToken( svByte,e ), mnByte( n ),
                                     eInForceArray( ParamClass::Unknown ) {}
                                 FormulaByteToken( OpCode e ) :
-                                    FormulaToken( svByte,e ), nByte( 0 ),
+                                    FormulaToken( svByte,e ), mnByte( 0 ),
                                     eInForceArray( ParamClass::Unknown ) {}
                                 FormulaByteToken( const FormulaByteToken& r ) :
-                                    FormulaToken( r ), nByte( r.nByte ),
+                                    FormulaToken( r ), mnByte( r.mnByte ),
                                     eInForceArray( r.eInForceArray ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaByteToken(*this); }
-    virtual sal_uInt8           GetByte() const override final;
-    virtual void                SetByte( sal_uInt8 n ) override final;
+    sal_uInt8                   GetByte() const { return mnByte; }
+    void                        SetByte( sal_uInt8 n ) { mnByte = n; }
     virtual ParamClass          GetInForceArray() const override final;
     virtual void                SetInForceArray( ParamClass c ) override final;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
@@ -294,19 +292,21 @@ public:
 
 // A special token for the FormulaAutoPilot only. Keeps a reference pointer of
 // the token of which it was created for comparison.
-class FORMULA_DLLPUBLIC FormulaFAPToken final : public FormulaByteToken
+class FORMULA_DLLPUBLIC FormulaFAPToken final : public FormulaToken
 {
 private:
+            sal_uInt8           mnByte;
             FormulaTokenRef     pOrigToken;
 public:
                                 FormulaFAPToken( OpCode e, sal_uInt8 n, FormulaToken* p ) :
-                                    FormulaByteToken( e, n, svFAP, ParamClass::Unknown ),
-                                    pOrigToken( p ) {}
+                                    FormulaToken(svFAP, e), mnByte(n), pOrigToken( p ) {}
                                 FormulaFAPToken( const FormulaFAPToken& r ) :
-                                    FormulaByteToken( r ), pOrigToken( r.pOrigToken ) {}
+                                    FormulaToken( r ), mnByte(r.mnByte), pOrigToken( r.pOrigToken ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaFAPToken(*this); }
     FormulaToken*               GetFAPOrigToken() const;
+    sal_uInt8                   GetByte() const { return mnByte; }
+    void                        SetByte( sal_uInt8 n ) { mnByte = n; }
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
@@ -375,8 +375,8 @@ public:
     FormulaStringOpToken( const FormulaStringOpToken& r );
 
     virtual FormulaToken* Clone() const override;
-    virtual sal_uInt8           GetByte() const override final { return nByte; }
-    virtual void                SetByte( sal_uInt8 n ) override final { nByte = n; }
+    sal_uInt8                   GetByte() const { return nByte; }
+    void                        SetByte( sal_uInt8 n ) { nByte = n; }
     virtual ParamClass          GetInForceArray() const override final { return eInForceArray; }
     virtual void                SetInForceArray( ParamClass c ) override final { eInForceArray = c; }
     virtual bool operator==( const FormulaToken& rToken ) const override;
@@ -417,22 +417,28 @@ public:
 };
 
 
-class FORMULA_DLLPUBLIC FormulaExternalToken final : public FormulaByteToken
+class FORMULA_DLLPUBLIC FormulaExternalToken final : public FormulaToken
 {
 private:
-            OUString            aExternal;
+    sal_uInt8         mnByte;
+    ParamClass        eInForceArray;
+    OUString          aExternal;
 public:
                                 FormulaExternalToken( OpCode e, sal_uInt8 n, OUString  r ) :
-                                    FormulaByteToken( e, n, svExternal, ParamClass::Unknown ),
+                                    FormulaToken( svExternal, e), mnByte(n), eInForceArray( ParamClass::Unknown ),
                                     aExternal(std::move( r )) {}
                                 FormulaExternalToken( OpCode e, OUString  r ) :
-                                    FormulaByteToken( e, 0, svExternal, ParamClass::Unknown ),
+                                    FormulaToken( svExternal, e), mnByte(0), eInForceArray( ParamClass::Unknown ),
                                     aExternal(std::move( r )) {}
                                 FormulaExternalToken( const FormulaExternalToken& r ) :
-                                    FormulaByteToken( r ), aExternal( r.aExternal ) {}
+                                    FormulaToken( r ), mnByte(r.mnByte), eInForceArray(r.eInForceArray), aExternal( r.aExternal ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaExternalToken(*this); }
     const OUString&             GetExternal() const;
+    sal_uInt8                   GetByte() const { return mnByte; }
+    void                        SetByte( sal_uInt8 n ) { mnByte = n; }
+    virtual ParamClass          GetInForceArray() const override final { return eInForceArray; }
+    virtual void                SetInForceArray( ParamClass c ) override final { eInForceArray = c; }
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 

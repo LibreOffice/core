@@ -70,11 +70,12 @@ FormulaToken::~FormulaToken()
 
 bool FormulaToken::IsFunction() const
 {
-    return (eOp != ocPush && eOp != ocBad && eOp != ocColRowName &&
+    if (!(eOp != ocPush && eOp != ocBad && eOp != ocColRowName &&
             eOp != ocColRowNameAuto && eOp != ocName && eOp != ocDBArea &&
             eOp != ocTableRef &&
-           (GetByte() != 0                                                  // x parameters
-        || (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)   // no parameter
+            eOp != ocSep && eOp != ocDPFieldName && eOp != ocClose && eOp != ocOpen))
+        return false;
+    if ((SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)   // no parameter
         || FormulaCompiler::IsOpCodeJumpCommand( eOp )                      // @ jump commands
         || (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)     // one parameter
         || (SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)     // x parameters (cByte==0 in
@@ -82,7 +83,11 @@ bool FormulaToken::IsFunction() const
         || eOp == ocMacro || eOp == ocExternal || eOp == ocUDExternal       // macros, AddIns
         || eOp == ocAnd || eOp == ocOr                          // former binary, now x parameters
         || (eOp >= ocInternalBegin && eOp <= ocInternalEnd)     // internal
-        ));
+        )
+        return true;
+    if (eOp == ocWhitespace)
+        return (static_cast<const FormulaSpaceToken*>(this)->GetByte() != 0); // x parameters
+    return (static_cast<const FormulaByteToken*>(this)->GetByte() != 0); // x parameters
 }
 
 
@@ -92,9 +97,6 @@ sal_uInt8 FormulaToken::GetParamCount() const
         && !FormulaCompiler::IsOpCodeJumpCommand(eOp) && eOp != ocPercentSign)
         return 0;       // parameters and specials
                         // ocIf... jump commands not for FAP, have cByte then
-//2do: bool parameter whether FAP or not?
-    else if (GetByte())
-        return GetByte();   // all functions, also ocExternal and ocMacro
     else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP && eOp != ocAnd && eOp != ocOr)
         return 2;           // binary operators, compiler checked; OR and AND legacy but are functions
     else if ((SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP) || eOp == ocPercentSign)
@@ -103,9 +105,30 @@ sal_uInt8 FormulaToken::GetParamCount() const
         return 0;           // no parameter
     else if (FormulaCompiler::IsOpCodeJumpCommand( eOp ))
         return 1;           // only the condition counts as parameter
-    else
-        return 0;           // all the rest, no Parameter, or
-                            // if so then it should be in cByte
+
+    //2do: bool parameter whether FAP or not?
+    if (GetType() == svByte)
+    {
+        if (auto n = static_cast<const FormulaByteToken*>(this)->GetByte())
+            return n;   // all functions, also ocExternal and ocMacro
+    }
+    if (GetType() == svFAP)
+    {
+        if (auto n = static_cast<const FormulaFAPToken*>(this)->GetByte())
+            return n;   // all functions, also ocExternal and ocMacro
+    }
+    if (GetType() == svExternal)
+    {
+        if (auto n = static_cast<const FormulaExternalToken*>(this)->GetByte())
+            return n;
+    }
+    if (GetType() == svString && (eOp == ocBad || eOp == ocStringXML || eOp == ocStringName || eOp == ocDPFieldName))
+    {
+        if (auto n = static_cast<const FormulaStringOpToken*>(this)->GetByte())
+            return n;
+    }
+    return 0;           // all the rest, no Parameter, or
+                        // if so then it should be in cByte
 }
 
 bool FormulaToken::IsExternalRef() const
@@ -158,17 +181,6 @@ bool FormulaToken::operator==( const FormulaToken& rToken ) const
 
 // --- virtual dummy methods -------------------------------------------------
 
-sal_uInt8 FormulaToken::GetByte() const
-{
-    // ok to be called for any derived class
-    return 0;
-}
-
-void FormulaToken::SetByte( sal_uInt8 )
-{
-    assert( !"virtual dummy called" );
-}
-
 ParamClass FormulaToken::GetInForceArray() const
 {
     // ok to be called for any derived class
@@ -218,18 +230,18 @@ sal_uInt8   FormulaSpaceToken::GetByte() const  { return nByte; }
 sal_Unicode FormulaSpaceToken::GetChar() const  { return cChar; }
 bool FormulaSpaceToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
-        cChar == static_cast<const FormulaSpaceToken&>(r).GetChar();
+    return FormulaToken::operator==( r )
+        && nByte == static_cast<const FormulaSpaceToken&>(r).GetByte()
+        && cChar == static_cast<const FormulaSpaceToken&>(r).GetChar();
 }
 
 
-sal_uInt8   FormulaByteToken::GetByte() const           { return nByte; }
-void        FormulaByteToken::SetByte( sal_uInt8 n )    { nByte = n; }
 ParamClass  FormulaByteToken::GetInForceArray() const    { return eInForceArray; }
 void        FormulaByteToken::SetInForceArray( ParamClass c ) { eInForceArray = c; }
 bool FormulaByteToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
+    return FormulaToken::operator==( r )
+        && mnByte == static_cast<const FormulaByteToken&>(r).mnByte &&
         eInForceArray == r.GetInForceArray();
 }
 
@@ -237,7 +249,8 @@ bool FormulaByteToken::operator==( const FormulaToken& r ) const
 FormulaToken* FormulaFAPToken::GetFAPOrigToken() const  { return pOrigToken.get(); }
 bool FormulaFAPToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaByteToken::operator==( r )
+    return FormulaToken::operator==( r )
+        && mnByte == static_cast<const FormulaFAPToken&>(r).mnByte
         && pOrigToken == static_cast<const FormulaFAPToken&>(r).GetFAPOrigToken();
 }
 
@@ -1478,7 +1491,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
         {
             OpCode eOp = pCur->GetOpCode();
             if ( ( eOp == ocCeil || eOp == ocFloor ||
-                   ( eOp == ocLogNormDist && pCur->GetByte() == 4 ) ) &&
+                   ( eOp == ocLogNormDist && static_cast<FormulaByteToken*>(pCur)->GetByte() == 4 ) ) &&
                  rConv.getConvention() == MissingConvention::FORMULA_MISSING_CONVENTION_OOXML )
             {
                 switch ( eOp )
@@ -2046,7 +2059,9 @@ bool FormulaIndexToken::operator==( const FormulaToken& r ) const
 const OUString& FormulaExternalToken::GetExternal() const       { return aExternal; }
 bool FormulaExternalToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaByteToken::operator==( r )
+    return FormulaToken::operator==( r )
+        && mnByte == static_cast<const FormulaExternalToken&>(r).mnByte
+        && eInForceArray == static_cast<const FormulaExternalToken&>(r).eInForceArray
         && aExternal == static_cast<const FormulaExternalToken&>(r).GetExternal();
 }
 

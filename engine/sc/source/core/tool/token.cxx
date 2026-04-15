@@ -1729,7 +1729,7 @@ void ScTokenArray::GenHash()
                 case svByte:
                 {
                     // Constant value.
-                    sal_uInt8 nVal = p->GetByte();
+                    sal_uInt8 nVal = static_cast<const FormulaByteToken*>(p)->GetByte();
                     nHash += static_cast<size_t>(nVal);
                 }
                 break;
@@ -2367,7 +2367,7 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
         FormulaToken* t = pRPN[nRPN-1];
         if ( t->GetType() == svByte )
         {
-            sal_uInt8 nParamCount = t->GetByte();
+            sal_uInt8 nParamCount = static_cast<FormulaByteToken*>(t)->GetByte();
             if ( nParamCount && nRPN > nParamCount )
             {
                 bool bRet = false;

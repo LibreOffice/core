@@ -1825,7 +1825,7 @@ void FormulaCompiler::Factor()
                     SetError( FormulaError::PairExpected);
                 else
                     NextToken();
-                pFacToken->SetByte( nSepCount );
+                static_cast<FormulaByteToken*>(&*pFacToken)->SetByte( nSepCount );
                 if (nSepCount == 2)
                 {
                     // An old mode!=1 indicates ISO week, remove argument if
@@ -1847,7 +1847,7 @@ void FormulaCompiler::Factor()
                         // the compiler local RPN array.
                         --mpCode; --mnPC;
                         (*mpCode)->DecRef(); // may be dead now
-                        pFacToken->SetByte( nSepCount - 1 );
+                        static_cast<FormulaByteToken*>(&*pFacToken)->SetByte( nSepCount - 1 );
                     }
                     else
                     {
@@ -1877,7 +1877,7 @@ void FormulaCompiler::Factor()
                     SetError( FormulaError::PairExpected);
                 else if ( mpArr->GetCodeError() == FormulaError::NONE )
                 {
-                    pFacToken->SetByte( 1 );
+                    static_cast<FormulaByteToken*>(&*pFacToken)->SetByte( 1 );
                     if (mbComputeII)
                     {
                         FormulaToken** pArg = mpCode - 1;
@@ -1969,8 +1969,12 @@ void FormulaCompiler::Factor()
             // Jumps are just normal functions for the FunctionAutoPilot tree view
             if (!mbJumpCommandReorder && pFacToken->GetType() == svJump)
                 pFacToken = new FormulaFAPToken( pFacToken->GetOpCode(), nSepCount, pFacToken );
+            else if (pFacToken->GetType() == svExternal)
+                static_cast<FormulaExternalToken*>(&*pFacToken)->SetByte( nSepCount );
+            else if (pFacToken->GetType() == svString)
+                static_cast<FormulaStringOpToken*>(&*pFacToken)->SetByte( nSepCount );
             else
-                pFacToken->SetByte( nSepCount );
+                static_cast<FormulaByteToken*>(&*pFacToken)->SetByte( nSepCount );
             PutCode( pFacToken );
 
             if (bDone)
@@ -2346,7 +2350,7 @@ OpCode FormulaCompiler::Expression()
     while (mpToken->GetOpCode() == ocAnd || mpToken->GetOpCode() == ocOr)
     {
         FormulaTokenRef p = mpToken;
-        mpToken->SetByte( 2 );       // 2 parameters!
+        static_cast<FormulaByteToken*>(mpToken.get())->SetByte( 2 );       // 2 parameters!
         FormulaToken** pArgArray[2];
         if (mbComputeII)
             pArgArray[0] = mpCode - 1; // Add first argument
@@ -2662,7 +2666,13 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
         if (bWriteSpaces)
         {
             // most times it's just one blank
-            sal_uInt8 n = t->GetByte();
+            sal_uInt8 n = 0;
+            if (t->GetOpCode() == ocWhitespace)
+                n = static_cast<const FormulaSpaceToken*>(t)->GetByte();
+            else if (t->GetOpCode() == ocSpaces)
+                n = static_cast<const FormulaByteToken*>(t)->GetByte();
+            else
+                assert(false);
             for ( sal_uInt8 j=0; j<n; ++j )
             {
                 if (eOp == ocWhitespace)
