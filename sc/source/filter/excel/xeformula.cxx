@@ -846,7 +846,7 @@ bool XclExpFmlaCompImpl::GetNextToken( XclExpScToken& rTokData )
     /* TODO: handle ocWhitespace characters? */
     while (rTokData.GetOpCode() == ocSpaces || rTokData.GetOpCode() == ocWhitespace)
     {
-        rTokData.mnSpaces += rTokData.mpScToken->GetByte();
+        rTokData.mnSpaces += static_cast<const FormulaByteToken*>(rTokData.mpScToken)->GetByte();
         rTokData.mpScToken = GetNextRawToken();
     }
     return rTokData.Is();

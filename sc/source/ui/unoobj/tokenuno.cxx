@@ -402,17 +402,17 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                 case svByte:
                     // Only the count of spaces is stored as "long". Parameter count is ignored.
                     if ( eOpCode == ocSpaces )
-                        rAPI.Data <<= static_cast<sal_Int32>(rToken.GetByte());
+                        rAPI.Data <<= static_cast<sal_Int32>(static_cast<const FormulaByteToken&>(rToken).GetByte());
                     else if (eOpCode == ocWhitespace)
                     {
                         auto const & rSToken = static_cast<const FormulaSpaceToken&>(rToken);
                         // Convention is one character repeated.
-                        if (rToken.GetByte() == 1)
+                        if (rSToken.GetByte() == 1)
                             rAPI.Data <<= OUString( rSToken.GetChar());
                         else
                         {
-                            OUStringBuffer aBuf( rToken.GetByte());
-                            comphelper::string::padToLength( aBuf, rToken.GetByte(), rSToken.GetChar());
+                            OUStringBuffer aBuf(rSToken.GetByte());
+                            comphelper::string::padToLength( aBuf, rSToken.GetByte(), rSToken.GetChar());
                             rAPI.Data <<= aBuf.makeStringAndClear();
                         }
                     }
