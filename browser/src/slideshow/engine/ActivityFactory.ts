@@ -461,6 +461,6 @@ function evalValuesAttribute(
 	};
 	for (let i = 0; i < aValueSet.length; ++i) {
 		const sValue: string = aValueSet[i];
-		aValueList.push(sValue ? evalAnimFormula(sValue, vars) : Number(sValue));
+		aValueList.push(sValue ? evalAnimFormula(sValue, vars) : undefined);
 	}
 }
