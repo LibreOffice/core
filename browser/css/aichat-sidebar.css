@@ -165,27 +165,42 @@
 
 #aichat-messages-list:has(#aichat-empty-state) {
 	flex: 1;
+	align-items: center;
+	gap: 0;
 }
 
 /* -- Empty state -- */
 
+#aichat-empty-state-group {
+	display: flex !important;
+	grid-auto-flow: unset !important;
+	flex-direction: column;
+	align-items: center;
+	gap: 0 !important;
+	row-gap: 0 !important;
+	flex: 1;
+	justify-content: center;
+	padding-bottom: 24px;
+}
+
+#aichat-empty-state-icon {
+	display: block;
+	width: 96px;
+	height: 96px;
+	padding: 0;
+	margin-bottom: 0;
+	opacity: 0.7;
+	animation: aichat-pulse 3s ease-in-out infinite;
+}
+
 #aichat-empty-state {
 	color: var(--color-text-lighter);
 	text-align: center;
-	padding: 24px 20px 12px;
-	margin: auto;
+	padding: 0 20px;
+	margin: 0;
 	font-size: 12.5px;
 	line-height: 1.6;
 	opacity: 0.8;
-}
-
-#aichat-empty-state::before {
-	content: '\2728';
-	display: block;
-	font-size: 28px;
-	margin-bottom: 12px;
-	opacity: 0.5;
-	animation: aichat-pulse 3s ease-in-out infinite;
 }
 
 #aichat-eu-notice {
@@ -910,7 +925,7 @@
 		animation: none;
 	}
 
-	#aichat-empty-state::before {
+	#aichat-empty-state-icon {
 		animation: none;
 		opacity: 0.7;
 	}

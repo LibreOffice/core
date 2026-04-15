@@ -414,10 +414,23 @@ namespace cool {
 
 			if (this.messages.length === 0) {
 				children.push({
-					id: 'aichat-empty-state',
-					type: 'fixedtext',
-					text: _('Ask AI anything about your document...'),
-					enabled: true,
+					id: 'aichat-empty-state-group',
+					type: 'container',
+					vertical: true,
+					children: [
+						{
+							id: 'aichat-empty-state-icon',
+							type: 'image',
+							image: app.LOUtil.getImageURL('lc_aichat_sparkle.svg'),
+							text: '',
+						},
+						{
+							id: 'aichat-empty-state',
+							type: 'fixedtext',
+							text: _('Ask AI anything about your document...'),
+							enabled: true,
+						},
+					],
 				});
 				children.push(this.getPromptChipsJSON());
 			} else {
