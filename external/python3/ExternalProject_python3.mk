@@ -110,7 +110,9 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		CC="$(strip $(CC) \
 			$(if $(filter -fsanitize=undefined,$(CC)),-fno-sanitize=function) \
 			$(if $(SYSTEM_BZIP2),,-I$(gb_UnpackedTarball_workdir)/bzip2) \
-			$(if $(SYSTEM_EXPAT),,-I$(gb_UnpackedTarball_workdir)/expat/lib) \
+			$(if $(SYSTEM_EXPAT),, \
+				-I$(gb_UnpackedTarball_workdir)/expat \
+				-I$(gb_UnpackedTarball_workdir)/expat/lib) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
