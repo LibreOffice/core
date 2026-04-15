@@ -613,7 +613,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 else if (eType == svDouble)
                 {
                     nCount++;
-                    fVal = pToken->GetDouble();
+                    fVal = static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble();
                     if (aFmt.mbIsSet)
                     {
                         nFuncFmtType = aFmt.mnType;

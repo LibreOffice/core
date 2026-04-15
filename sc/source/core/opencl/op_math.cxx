@@ -1001,7 +1001,7 @@ void OpCountIf::GenSlidingWindowFunction(outputstream &ss,
         else if(tmpCur->GetType() == formula::svDouble)
         {
             ss << "    varb = ";
-            ss << tmpCur->GetDouble() << ";\n";
+            ss << static_cast<FormulaDoubleToken*>(tmpCur)->GetDouble() << ";\n";
         }
     }
     else
@@ -1099,7 +1099,7 @@ void OpSumIf::GenSlidingWindowFunction(outputstream &ss,
         else if(tmpCur->GetType() == formula::svDouble)
         {
             ss << "    varb = ";
-            ss << tmpCur->GetDouble() << ";\n";
+            ss << static_cast<FormulaDoubleToken*>(tmpCur)->GetDouble() << ";\n";
         }
     }
     else

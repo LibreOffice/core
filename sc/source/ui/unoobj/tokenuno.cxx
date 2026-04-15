@@ -420,7 +420,7 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                         rAPI.Data.clear();      // no data
                     break;
                 case formula::svDouble:
-                    rAPI.Data <<= rToken.GetDouble();
+                    rAPI.Data <<= static_cast<const FormulaDoubleToken&>(rToken).GetDouble();
                     break;
                 case formula::svString:
                     rAPI.Data <<= rToken.GetString().getString();

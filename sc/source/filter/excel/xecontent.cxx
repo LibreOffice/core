@@ -1073,7 +1073,8 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
             {
                 case formula::svDouble:
                 {
-                    aText = OString::number(pTokenArray->FirstToken()->GetDouble());
+                    auto pDoubleToken = static_cast<formula::FormulaDoubleToken*>(pTokenArray->FirstToken());
+                    aText = OString::number(pDoubleToken->GetDouble());
                     break;
                 }
                 default:

@@ -121,7 +121,7 @@ void ScFormulaResult::ResolveToken( const formula::FormulaToken * p )
                 mbValueCached = true;
                 break;
             case formula::svDouble:
-                mfValue = p->GetDouble();
+                mfValue = static_cast<const formula::FormulaDoubleToken*>(p)->GetDouble();
                 p->DecRef();
                 mbToken = false;
                 meMultiline = MULTILINE_FALSE;
@@ -497,13 +497,13 @@ double ScFormulaResult::GetDouble() const
             switch (mpToken->GetType())
             {
                 case formula::svHybridCell:
-                    return mpToken->GetDouble();
+                    return static_cast<const ScHybridCellToken*>(mpToken)->GetDouble();
                 case formula::svMatrixCell:
                     {
                         const ScMatrixCellResultToken* p =
                             static_cast<const ScMatrixCellResultToken*>(mpToken);
                         if (p->GetUpperLeftType() == formula::svDouble)
-                            return p->GetUpperLeftToken()->GetDouble();
+                            return static_cast<const formula::FormulaDoubleToken*>(p->GetUpperLeftToken().get())->GetDouble();
                     }
                     break;
                 default:

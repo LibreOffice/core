@@ -683,7 +683,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         switch (pToken->GetType())
                         {
                             case svDouble:
-                                pJumpMatrix->PutResultDouble( pToken->GetDouble(), nC, nR );
+                                pJumpMatrix->PutResultDouble( static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble(), nC, nR );
                             break;
                             case svString:
                                 pJumpMatrix->PutResultString( pToken->GetString(), nC, nR );
@@ -2603,7 +2603,7 @@ void ScInterpreter::ScCellExternal()
                 PushString(pToken->GetString());
             break;
             case svDouble:
-                PushString(OUString::number(pToken->GetDouble()));
+                PushString(OUString::number(static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble()));
             break;
             case svError:
                 PushString(ScGlobal::GetErrorString(static_cast<FormulaErrorToken*>(pToken.get())->GetError()));
@@ -3161,7 +3161,7 @@ bool ScInterpreter::IsEven()
             PopExternalSingleRef(pToken);
             if (nGlobalError == FormulaError::NONE && pToken->GetType() == svDouble)
             {
-                fVal = pToken->GetDouble();
+                fVal = static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble();
                 bRes = true;
             }
         }
@@ -5065,7 +5065,7 @@ void ScInterpreter::ScMatch()
                 if (pToken->GetType() == svDouble)
                 {
                     vsa.isStringSearch = false;
-                    vsa.fSearchVal = pToken->GetDouble();
+                    vsa.fSearchVal = static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble();
                 }
                 else
                 {
@@ -5245,7 +5245,7 @@ void ScInterpreter::ScXMatch()
                 if (pToken->GetType() == svDouble)
                 {
                     vsa.isStringSearch = false;
-                    vsa.fSearchVal = pToken->GetDouble();
+                    vsa.fSearchVal = static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble();
                 }
                 else
                 {
@@ -5451,7 +5451,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                     }
 
                     if (pToken->GetType() == svDouble)
-                        pSumExtraMatrix->PutDouble(pToken->GetDouble(), 0, 0);
+                        pSumExtraMatrix->PutDouble(static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble(), 0, 0);
                     else
                         pSumExtraMatrix->PutString(pToken->GetString(), 0, 0);
                 }
@@ -5524,7 +5524,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                 {
                     if (pToken->GetType() == svDouble)
                     {
-                        fVal = pToken->GetDouble();
+                        fVal = static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble();
                         bIsString = false;
                     }
                     else
@@ -6171,7 +6171,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     {
                         if (pToken->GetType() == svDouble)
                         {
-                            fVal = pToken->GetDouble();
+                            fVal = static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble();
                             bIsString = false;
                         }
                         else
@@ -8087,7 +8087,7 @@ void ScInterpreter::ScXLookup()
                 if (pToken->GetType() == svDouble)
                 {
                     vsa.isStringSearch = false;
-                    vsa.fSearchVal = pToken->GetDouble();
+                    vsa.fSearchVal = static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble();
                 }
                 else
                 {

@@ -1838,7 +1838,7 @@ void FormulaCompiler::Factor()
                     // we just called NextToken() to move away from it.
                     if (pc >= 2 && (maArrIterator.GetIndex() == nSepPos + 3 || maArrIterator.GetIndex() == nSepPos + 4) &&
                             pArr->TokenAt(nSepPos+1)->GetType() == svDouble &&
-                            pArr->TokenAt(nSepPos+1)->GetDouble() != 1.0 &&
+                            static_cast<FormulaDoubleToken*>(pArr->TokenAt(nSepPos+1))->GetDouble() != 1.0 &&
                             pArr->TokenAt(nSepPos+2)->GetOpCode() == ocClose &&
                             pArr->RemoveToken( nSepPos, 2) == 2)
                     {
@@ -2723,7 +2723,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             switch( t->GetType() )
             {
             case svDouble:
-                AppendDouble( rBuffer, t->GetDouble() );
+                AppendDouble( rBuffer, static_cast<const FormulaDoubleToken*>(t)->GetDouble() );
             break;
 
             case svString:

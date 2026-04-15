@@ -180,19 +180,6 @@ void FormulaToken::SetInForceArray( ParamClass )
     assert( !"virtual dummy called" );
 }
 
-double FormulaToken::GetDouble() const
-{
-    // This Get is worth an assert.
-    assert( !"virtual dummy called" );
-    return 0.0;
-}
-
-void FormulaToken::SetDouble(double)
-{
-    // This Get is worth an assert.
-    assert( !"virtual dummy called" );
-}
-
 const svl::SharedString INVALID_STRING;
 
 const svl::SharedString & FormulaToken::GetString() const
@@ -1434,7 +1421,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
             {
                 // Omit only a literal 0 value, nothing else.
                 if (pOcds[ i ] == nFn && pCur->GetOpCode() == ocPush && pCur->GetType() == svDouble &&
-                        pCur->GetDouble() == 0.0)
+                        static_cast<FormulaDoubleToken*>(pCur)->GetDouble() == 0.0)
                 {
                     // No other expression, between separators.
                     FormulaToken* p = aIter.PeekPrevNoSpaces();
@@ -1958,7 +1945,7 @@ sal_Int16 FormulaDoubleToken::GetDoubleType() const
 
 bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaToken::operator==( r ) && fDouble == r.GetDouble();
+    return FormulaToken::operator==( r ) && fDouble == static_cast<const FormulaDoubleToken&>(r).GetDouble();
 }
 
 sal_Int16 FormulaTypedDoubleToken::GetDoubleType() const
@@ -2085,7 +2072,6 @@ bool FormulaErrorToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) &&
         nError == static_cast< const FormulaErrorToken & >(r).GetError();
 }
-double          FormulaMissingToken::GetDouble() const       { return 0.0; }
 
 const svl::SharedString & FormulaMissingToken::GetString() const
 {

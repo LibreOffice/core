@@ -265,7 +265,7 @@ void SlidingFunctionBase::GenerateArg( const char* name, int arg, SubArguments& 
         }
         else if(token->GetType() == formula::svDouble)
         {
-            ss << "    double " << name << " = " << token->GetDouble() << ";\n";
+            ss << "    double " << name << " = " << static_cast<FormulaDoubleToken*>(token)->GetDouble() << ";\n";
             if( generateType == GenerateArgType )
                 ss << "    bool " << name << "_is_string = "
                     << vSubArguments[arg]->GenIsString() << ";\n";
@@ -379,7 +379,7 @@ void SlidingFunctionBase::GenerateRangeArgs( int firstArg, int lastArg, SubArgum
             else if(token->GetType() == formula::svDouble)
             {
                 ss << "    {\n";
-                ss << "        double arg = " << token->GetDouble() << ";\n";
+                ss << "        double arg = " << static_cast<FormulaDoubleToken*>(token)->GetDouble() << ";\n";
                 ss << code;
                 ss << "    }\n";
             }
