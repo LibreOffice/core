@@ -45,6 +45,8 @@ window.L.Control.Tabs = window.L.Control.extend({
 			return true;
 		}
 
+		this._menuPosEl = null;
+
 		// Only for small-screen devices.
 		this._menuItem = {
 			'insertsheetbefore': {
@@ -242,7 +244,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 											window.contextMenuWizard = true;
 											this._map.fire('mobilewizard', {data: menuData});
 										} else {
-											this._openTabContextMenu(e.target);
+											this._openTabContextMenu(e);
 										}
 									}
 								};
@@ -265,7 +267,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 							return function(e) {
 								e.preventDefault();
 								this._tabForContextMenu = j;
-								this._openTabContextMenu(e.currentTarget);
+								this._openTabContextMenu(e);
 							};
 						}(i).bind(this));
 					}
@@ -362,11 +364,28 @@ window.L.Control.Tabs = window.L.Control.extend({
 		return entries;
 	},
 
-	_openTabContextMenu: function(tabElement) {
+	_createMenuPositionElement(evt) {
+		const container = document.body;
+		if (!this._menuPosEl) {
+			this._menuPosEl = document.createElement('div');
+			container.append(this._menuPosEl);
+		}
+		const rect = container.getBoundingClientRect();
+		this._menuPosEl.style.position = 'absolute';
+		this._menuPosEl.style.zIndex = '1500';
+		this._menuPosEl.style.left = (evt.clientX - rect.left) + 'px';
+		this._menuPosEl.style.top = (evt.clientY - rect.top) + 'px';
+
+		return this._menuPosEl;
+	},
+
+	_openTabContextMenu: function(evt) {
 		if (this._map.isReadOnlyMode())
 			return;
 
 		JSDialog.CloseAllDropdowns();
+		const menuPosEl = this._createMenuPositionElement(evt);
+
 		const entries = this._buildMenuEntries();
 		const callback = (objectType, eventType, object, data, entry) => {
 			if (eventType !== 'selected')
@@ -381,10 +400,10 @@ window.L.Control.Tabs = window.L.Control.extend({
 		};
 		JSDialog.OpenDropdown(
 			'spreadsheet-tab-menu',
-			tabElement,
+			menuPosEl,
 			entries,
 			callback,
-			'',
+			'bottom',
 			false,
 		);
 	},
