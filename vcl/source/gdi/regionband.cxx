@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cstdlib>
+#include <limits>
 
 #include <tools/stream.hxx>
 #include <regionband.hxx>
@@ -727,7 +728,8 @@ void RegionBand::InsertBands(tools::Long nTop, tools::Long nBottom)
     }
 
     // find/insert bands for the boundaries of the rectangle
-    bool bTopBoundaryInserted = false;
+    // (no row possible before LONG_MIN)
+    bool bTopBoundaryInserted = nTop == std::numeric_limits<tools::Long>::min();
     bool bTop2BoundaryInserted = false;
     bool bBottomBoundaryInserted = false;
 
