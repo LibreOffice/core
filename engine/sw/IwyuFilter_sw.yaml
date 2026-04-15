@@ -1,0 +1,867 @@
+---
+assumeFilename: sw/source/core/doc/docnew.cxx
+customAssumeFilenames:
+    # Need -I/.../sw/source/writerfilter/inc
+    sw/source/writerfilter: sw/source/writerfilter/dmapper/DomainMapper.cxx
+    # Need -I/.../workdir/UnpackedTarball/cppunit/include to work
+    sw/qa/inc: sw/qa/core/test_ToxMiscTest.cxx
+    # Needs -I/...workdir/CustomTarget/oox/generated
+    sw/source/filter/ww8: sw/source/filter/ww8/docxattributeoutput.cxx
+excludelist:
+    sw/sdi/swslots.hrc:
+    # Needed for sdi files to compile
+    - editeng/memberids.h
+    - editeng/editids.hrc
+    - svx/svxids.hrc
+    - svx/unomid.hxx
+    - globals.hrc
+    - cmdid.h
+    - unomid.h
+    sw/inc/calbck.hxx:
+    # Needed in --fwdecl mode
+    - 'template <typename TElementType, typename TSource, sw::IteratorMode eMode> class SwIterator'
+    sw/inc/cmdid.h:
+    # Needed in --fwdecl mode
+    - class SvxFrameDirectionItem
+    - class SwAddPrinterItem
+    - class SwPageFootnoteInfoItem
+    - class SwPtrItem
+    - class SwUINumRuleItem
+    sw/inc/extinput.hxx:
+    - vector
+    sw/inc/fmtmeta.hxx:
+    - vector
+    sw/inc/istyleaccess.hxx:
+    - vector
+    sw/inc/shellres.hxx:
+    - memory
+    sw/inc/docary.hxx:
+    # Complete type is needed here:
+    # fldbas.hxx brings in SwTOXType, which is needed by SwTOXTypes, as SwVectorModifyBase's dtor wants to delete it
+    - fldbas.hxx
+    # numrule.hxx brings in SwNumRule, which is needed by SwNumRuleTable, as SwVectorModifyBase's dtor wants to delete it
+    - numrule.hxx
+    # tox.hxx brings in SwTOXType, which is needed by SwTOXTypes, as SwVectorModifyBase's dtor wants to delete it
+    - tox.hxx
+    # section.hxx brings in SwSectionFormat, which is needed by SwSectionFormats, as SwFormatsModifyBase's type param has to be complete
+    - section.hxx
+    sw/inc/docfac.hxx:
+    # Complete type is needed by rtl::Reference<SwDoc>.
+    - doc.hxx
+    sw/inc/swmodule.hxx:
+    # Needed for macro #define
+    - sfx2/app.hxx
+    sw/inc/swtypes.hxx:
+    # Needed for macro #define
+    - com/sun/star/i18n/CollatorOptions.hpp
+    sw/inc/pagedesc.hxx:
+    - boost/multi_index/identity.hpp
+    sw/inc/rdfhelper.hxx:
+    - com/sun/star/uno/Reference.h
+    sw/inc/ring.hxx:
+    - utility
+    sw/inc/shellid.hxx:
+    - sfx2/shell.hxx
+    sw/inc/breakit.hxx:
+    # std::unique_ptr dtor requires complete type
+    - com/sun/star/i18n/ForbiddenCharacters.hpp
+    sw/inc/dbmgr.hxx:
+    # uno::Sequence ctor needs the complete type
+    - com/sun/star/beans/PropertyValue.hpp
+    sw/inc/dlelstnr.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XTerminateListener.hpp
+    - com/sun/star/linguistic2/XLinguServiceEventListener.hpp
+    sw/inc/finalthreadmanager.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XTerminateListener2.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XJobManager.hpp
+    sw/inc/splargs.hxx:
+    # inline dtor, complete type is needed
+    - com/sun/star/linguistic2/XSpellAlternatives.hpp
+    - com/sun/star/linguistic2/XSpellChecker1.hpp
+    sw/inc/unocoll.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XNameAccess.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sw/inc/unobaseclass.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/container/XEnumeration.hpp
+    sw/inc/unofieldcoll.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XRefreshable.hpp
+    sw/inc/unochart.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/chart2/data/XDataProvider.hpp
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/chart2/data/XLabeledDataSequence2.hpp
+    - com/sun/star/chart2/data/XNumericalDataSequence.hpp
+    - com/sun/star/chart2/data/XRangeXMLConversion.hpp
+    - com/sun/star/chart2/data/XTextualDataSequence.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XEventListener.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifiable.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    sw/inc/unodraw.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/text/XTextContent.hpp
+    sw/inc/unoframe.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/document/XEmbeddedObjectSupplier2.hpp
+    - com/sun/star/document/XEventsSupplier.hpp
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/text/XTextFrame.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    sw/inc/unosrch.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XPropertyReplace.hpp
+    sw/inc/unoparagraph.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/beans/XTolerantMultiPropertySet.hpp
+    - com/sun/star/container/XContentEnumerationAccess.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/text/XTextContent.hpp
+    - com/sun/star/text/XTextRange.hpp
+    sw/inc/unosett.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XIndexReplace.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/text/XTextColumns.hpp
+    # sw::UnoImplPtr typedef
+    - unobaseclass.hxx
+    sw/inc/unotbl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart/XChartDataArray.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/sheet/XCellRangeData.hpp
+    - com/sun/star/table/XAutoFormattable.hpp
+    - com/sun/star/table/XCellRange.hpp
+    - com/sun/star/text/XTextTable.hpp
+    - com/sun/star/text/XTextTableCursor.hpp
+    - com/sun/star/util/XSortable.hpp
+    sw/inc/unotextbodyhf.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    sw/inc/unotextcursor.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XMultiPropertyStates.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/container/XContentEnumerationAccess.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/document/XDocumentInsertable.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/text/XMarkingAccess.hpp
+    - com/sun/star/text/XParagraphCursor.hpp
+    - com/sun/star/text/XRedline.hpp
+    - com/sun/star/text/XSentenceCursor.hpp
+    - com/sun/star/text/XWordCursor.hpp
+    - com/sun/star/util/XSortable.hpp
+    sw/inc/unoredlines.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XEnumerationAccess.hpp
+    sw/inc/unotxdoc.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/document/XDocumentLanguages.hpp
+    - com/sun/star/document/XLinkTargetSupplier.hpp
+    - com/sun/star/document/XRedlinesSupplier.hpp
+    - com/sun/star/drawing/XDrawPageSupplier.hpp
+    - com/sun/star/drawing/XDrawPagesSupplier.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/style/XAutoStylesSupplier.hpp
+    - com/sun/star/style/XStyleFamiliesSupplier.hpp
+    - com/sun/star/text/XBookmarksSupplier.hpp
+    - com/sun/star/text/XChapterNumberingSupplier.hpp
+    - com/sun/star/text/XDocumentIndexesSupplier.hpp
+    - com/sun/star/text/XEndnotesSupplier.hpp
+    - com/sun/star/text/XFlatParagraphIteratorProvider.hpp
+    - com/sun/star/text/XFootnotesSupplier.hpp
+    - com/sun/star/text/XLineNumberingProperties.hpp
+    - com/sun/star/text/XNumberingRulesSupplier.hpp
+    - com/sun/star/text/XPagePrintable.hpp
+    - com/sun/star/text/XReferenceMarksSupplier.hpp
+    - com/sun/star/text/XTextDocument.hpp
+    - com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp
+    - com/sun/star/text/XTextFieldsSupplier.hpp
+    - com/sun/star/text/XTextFramesSupplier.hpp
+    - com/sun/star/text/XTextGraphicObjectsSupplier.hpp
+    - com/sun/star/text/XTextSectionsSupplier.hpp
+    - com/sun/star/text/XTextTablesSupplier.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XLinkUpdate.hpp
+    - com/sun/star/util/XRefreshable.hpp
+    - com/sun/star/util/XReplaceable.hpp
+    - com/sun/star/view/XRenderable.hpp
+    - com/sun/star/xforms/XFormsSupplier.hpp
+    # sw::UnoImplPtr typedef
+    - unobaseclass.hxx
+    sw/inc/hintids.hxx:
+    # used as template parameter of TypedWhichId
+    - class SfxStringItem
+    - class SvXMLAttrContainerItem
+    - class SwFormatChg
+    - class SwFormatMeta
+    - class SwMsgPoolItem
+    - class SwUpdateAttr
+    - class SfxBoolItem
+    - class SvxColorItem
+    # used in extern declaration
+    - struct SfxItemInfo
+    sw/inc/textboxhelper.hxx:
+    # used as a template parameter
+    - class SwFormatContent
+    sw/qa/extras/rtfexport/rtfexport.cxx:
+    # complete type is wanted
+    - com/sun/star/awt/XBitmap.hpp
+    - com/sun/star/text/XTextColumns.hpp
+    sw/inc/pagepreviewlayout.hxx:
+    - vector
+    sw/inc/unostyle.hxx:
+    # Base class needs complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/style/XAutoStyle.hpp
+    - com/sun/star/style/XAutoStyleFamily.hpp
+    - com/sun/star/style/XAutoStyles.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/style/XStyle.hpp
+    - com/sun/star/style/XStyleLoader.hpp
+    sw/inc/unotextrange.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XContentEnumerationAccess.hpp
+    - com/sun/star/text/XTextRange.hpp
+    - com/sun/star/text/XRedline.hpp
+    # sw::UnoImplPtr typedef
+    - unobaseclass.hxx
+    sw/source/core/access/acccontext.hxx:
+    # Base class needs complete type
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    sw/source/core/access/acchyperlink.hxx:
+    # Base class needs complete type
+    - com/sun/star/accessibility/XAccessibleHyperlink.hpp
+    sw/source/core/access/accnotexthyperlink.hxx:
+    # Base class needs complete type
+    - com/sun/star/accessibility/XAccessibleHyperlink.hpp
+    sw/source/core/docnode/cancellablejob.hxx:
+    # Base class needs complete type
+    - com/sun/star/util/XCancellable.hpp
+    sw/source/core/inc/acorrect.hxx:
+    # Needed for implicit dtor
+    - svl/itemset.hxx
+    sw/source/core/inc/dumpfilter.hxx:
+    # Base class needs complete type
+    - com/sun/star/document/XExporter.hpp
+    - com/sun/star/document/XFilter.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sw/source/core/inc/frame.hxx:
+    # Needed for direct member access
+    - com/sun/star/style/TabStop.hpp
+    sw/source/core/inc/SwXTextDefaults.hxx:
+    # Base class needs complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sw/source/core/inc/unobookmark.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/text/XTextContent.hpp
+    - com/sun/star/text/XFormField.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unofield.hxx:
+    # Base class needs complete type
+    - com/sun/star/container/XEnumeration.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/text/XDependentTextField.hpp
+    - com/sun/star/util/XUpdatable.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unoflatpara.hxx:
+    # Base class needs complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/text/XFlatParagraph.hpp
+    - com/sun/star/text/XFlatParagraphIterator.hpp
+    sw/source/core/inc/unofootnote.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/text/XFootnote.hpp
+    sw/source/core/inc/unoidx.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/util/XRefreshable.hpp
+    - com/sun/star/text/XDocumentIndexMark.hpp
+    - com/sun/star/text/XDocumentIndex.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unolinebreak.hxx:
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unometa.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XChild.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/text/XTextContent.hpp
+    - com/sun/star/text/XTextField.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unorefmark.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/text/XTextContent.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unoport.hxx:
+    # Base class needs complete type
+    - com/sun/star/text/XTextRange.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XEnumeration.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/container/XContentEnumerationAccess.hpp
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/beans/XTolerantMultiPropertySet.hpp
+    sw/source/core/inc/unotextmarkup.hxx:
+    # Base class needs complete type
+    - com/sun/star/text/XTextMarkup.hpp
+    - com/sun/star/text/XMultiTextMarkup.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/source/core/inc/unosection.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/text/XTextSection.hpp
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
+    sw/qa/extras/odfexport/odfexport.cxx:
+    # Needed for getProperty template
+    - com/sun/star/graphic/XGraphic.hpp
+    sw/qa/extras/odfimport/odfimport.cxx:
+    # Needed for direct member access
+    - com/sun/star/text/XTextSection.hpp
+    sw/qa/extras/ooxmlexport/ooxmlexport.cxx:
+    # Needed for direct member access
+    - com/sun/star/text/TableColumnSeparator.hpp
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sw/qa/extras/ooxmlexport/ooxmlexport2.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XBitmap.hpp
+    sw/qa/extras/ooxmlexport/ooxmlexport3.cxx:
+    # Needed for direct member access
+    - com/sun/star/xml/dom/XDocument.hpp
+    sw/qa/extras/ooxmlexport/ooxmlexport4.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XBitmap.hpp
+    sw/qa/extras/ooxmlexport/ooxmlexport10.cxx:
+    # Needed for direct member access
+    - com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp
+    - com/sun/star/text/TableColumnSeparator.hpp
+    - com/sun/star/text/XTextColumns.hpp
+    sw/qa/extras/ooxmlimport/ooxmlimport2.cxx:
+    # Needed for direct member access
+    - com/sun/star/document/XEmbeddedObjectSupplier2.hpp
+    - com/sun/star/embed/Aspects.hpp
+    sw/qa/extras/rtfimport/rtfimport.cxx:
+    # Needed for direct member access
+    - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/text/XDocumentIndexMark.hpp
+    # Needed in C++20 mode
+    - o3tl/cppunittraitshelper.hxx
+    sw/qa/extras/uiwriter/uiwriter4.cxx:
+    # Needed in C++20 mode
+    - o3tl/cppunittraitshelper.hxx
+    sw/qa/extras/uiwriter/uiwriter6.cxx:
+    # Needed in C++20 mode
+    - o3tl/cppunittraitshelper.hxx
+    sw/qa/extras/unowriter/unowriter.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XDevice.hpp
+    # Needed for for-loop range
+    - com/sun/star/graphic/XGraphic.hpp
+    sw/qa/extras/ww8export/ww8export.cxx:
+    # Needed for direct member access
+    - com/sun/star/graphic/XGraphic.hpp
+    sw/qa/extras/ww8import/ww8import.cxx:
+    # Needed for for-loop range
+    - com/sun/star/graphic/XGraphic.hpp
+    sw/source/core/access/AccessibilityCheck.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/core/access/accnotextframe.cxx:
+    # Actually used
+    - com/sun/star/accessibility/XAccessibleRelationSet.hpp
+    sw/source/core/access/accpara.cxx:
+    # Actually used
+    - com/sun/star/accessibility/AccessibleScrollType.hpp
+    sw/source/core/access/acctextframe.cxx:
+    # Actually used
+    - com/sun/star/accessibility/XAccessibleRelationSet.hpp
+    sw/source/core/doc/DocumentStatisticsManager.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/core/doc/docbm.cxx:
+    # Needed for implicit dtor SwHistoryTextFieldmark
+    - rolbck.hxx
+    sw/source/core/doc/docredln.cxx:
+    # Needed for linker visibility of sw_DebugRedline
+    - docredln.hxx
+    sw/source/core/doc/doccomp.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/core/doc/docglbl.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/core/doc/docglos.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/core/docnode/threadmanager.cxx:
+    # Actually used
+    - com/sun/star/util/XJobManager.hpp
+    sw/source/core/draw/drawdoc.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/core/crsr/paminit.cxx:
+    # Needed for linker visibility of extern functions
+    - cshtyp.hxx
+    sw/source/core/undo/untbl.cxx:
+    # Needed for linker visibility of sw_DebugRedline
+    - docredln.hxx
+    sw/source/core/fields/textapi.cxx:
+    # Needed for macros to work
+    - editeng/unoprnms.hxx
+    - com/sun/star/lang/Locale.hpp
+    sw/source/core/swg/SwXMLBlockExport.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XDocumentHandler.hpp
+    sw/source/core/swg/SwXMLSectionList.cxx:
+    # Actually used
+    - vector
+    sw/source/core/text/txtftn.cxx:
+    # Needed for template
+    - com/sun/star/text/XTextRange.hpp
+    sw/source/core/unocore/unomap1.cxx:
+    # Needed for UnoType macro
+    - com/sun/star/container/XIndexReplace.hpp
+    - com/sun/star/container/XIndexContainer.hpp
+    - com/sun/star/drawing/LineStyle.hpp
+    - com/sun/star/lang/Locale.hpp
+    - com/sun/star/style/DropCapFormat.hpp
+    - com/sun/star/style/LineSpacing.hpp
+    - com/sun/star/style/TabStop.hpp
+    - com/sun/star/text/XDocumentIndexMark.hpp
+    - com/sun/star/text/XFootnote.hpp
+    - com/sun/star/text/XTextField.hpp
+    - com/sun/star/util/DateTime.hpp
+    sw/source/core/unocore/unoport.cxx:
+    # Actually used
+    - com/sun/star/text/XFootnote.hpp
+    - com/sun/star/text/XTextField.hpp
+    - com/sun/star/beans/SetPropertyTolerantFailed.hpp
+    - com/sun/star/beans/GetPropertyTolerantResult.hpp
+    sw/source/core/unocore/unoparagraph.cxx:
+    # Actually used
+    - com/sun/star/beans/SetPropertyTolerantFailed.hpp
+    - com/sun/star/beans/GetPropertyTolerantResult.hpp
+    sw/source/core/unocore/unotextmarkup.cxx:
+    # Actually used
+    - com/sun/star/text/TextMarkupDescriptor.hpp
+    - com/sun/star/text/XTextRange.hpp
+    sw/source/core/unocore/unoredline.cxx:
+    # Needed for template
+    - com/sun/star/text/XTextSection.hpp
+    sw/source/core/unocore/unostyle.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/basflt/iodetect.cxx:
+    # Actually used
+    - com/sun/star/embed/XStorage.hpp
+    sw/source/filter/html/SwAppletImpl.cxx:
+    # Needed for direct member access
+    - com/sun/star/embed/XEmbeddedObject.hpp
+    sw/source/filter/html/htmlfld.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/html/htmlforw.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/html/wrthtml.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/html/swhtml.cxx:
+    # Actually used
+    - com/sun/star/document/XDocumentProperties.hpp
+    sw/source/filter/ww8/docxtablestyleexport.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/ww8/docxexport.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/frame/XModel.hpp
+    - com/sun/star/awt/XControlModel.hpp
+    sw/source/filter/ww8/wrtw8nds.cxx:
+    # Actually used
+    - com/sun/star/i18n/BreakIterator.hpp
+    sw/source/filter/ww8/ww8graf.cxx:
+    # Needed for implicit dtor
+    - ww8par2.hxx
+    sw/source/filter/ww8/wrtww8.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/xml/xmlbrsh.cxx:
+    # Needed for XMLOFF_WARN_UNKNOWN_ELEMENT
+    - sal/log.hxx
+    sw/source/filter/xml/xmlexp.hxx:
+    # Needed for typedef
+    - vector
+    sw/source/filter/xml/xmlfmt.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/xml/xmlitem.cxx:
+    # Needed for XMLOFF_WARN_UNKNOWN_ELEMENT
+    - sal/log.hxx
+    sw/source/filter/xml/xmlmeta.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/xml/xmltbli.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/xml/wrtxml.cxx:
+    # Actually used
+    - com/sun/star/task/XStatusIndicator.hpp
+    sw/source/filter/xml/xmlimp.cxx:
+    # Actually used
+    - com/sun/star/text/XTextRange.hpp
+    sw/source/uibase/inc/basesh.hxx:
+    # Needed in --fwdecl mode to avoid "externally available entity "DBTextStruct_Impl" is not previously declared in an included file" error
+    - struct DBTextStruct_Impl
+    sw/source/uibase/app/docsh2.cxx:
+    # Needed for direct member access
+    - ooo/vba/word/XDocument.hpp
+    sw/source/uibase/app/docst.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/uibase/config/modcfg.cxx:
+    # Needed for TypedWhichId macros in editeng/editids.hrc
+    - svl/typedwhich.hxx
+    sw/source/uibase/dbui/mmconfigitem.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XDataSource.hpp
+    sw/source/uibase/dochdl/gloshdl.cxx:
+    # Needed for direct member access
+    - docsh.hxx
+    sw/source/uibase/docvw/edtdd.cxx:
+    # Needed for extern variable
+    - edtdd.hxx
+    sw/source/uibase/docvw/srcedtw.cxx:
+    # Needed for template
+    - com/sun/star/container/XHierarchicalNameAccess.hpp
+    sw/source/uibase/misc/glshell.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/uibase/shells/slotadd.cxx:
+    # Needed for swslots.hxx
+    - config_options.h
+    - cmdid.h
+    - unomid.h
+    - svx/unomid.hxx
+    - svl/globalnameitem.hxx
+    - editeng/memberids.h
+    - svl/imageitm.hxx
+    - svl/rectitem.hxx
+    - sfx2/objitem.hxx
+    - sfx2/objsh.hxx
+    - svx/rulritem.hxx
+    - sfx2/zoomitem.hxx
+    - svx/viewlayoutitem.hxx
+    - svx/zoomslideritem.hxx
+    - svx/hlnkitem.hxx
+    - svx/SmartTagItem.hxx
+    - svl/ptitem.hxx
+    - svx/pageitem.hxx
+    - svl/srchitem.hxx
+    - sfx2/tplpitem.hxx
+    - sfx2/watermarkitem.hxx
+    - editeng/wrlmitem.hxx
+    - editeng/protitem.hxx
+    - editeng/opaqitem.hxx
+    - editeng/tstpitem.hxx
+    - editeng/autokernitem.hxx
+    - editeng/keepitem.hxx
+    - editeng/kernitem.hxx
+    - editeng/spltitem.hxx
+    - editeng/brushitem.hxx
+    - editeng/wghtitem.hxx
+    - editeng/shaditem.hxx
+    - editeng/pbinitem.hxx
+    - editeng/ulspitem.hxx
+    - editeng/prntitem.hxx
+    - editeng/orphitem.hxx
+    - editeng/widwitem.hxx
+    - editeng/lineitem.hxx
+    - editeng/pmdlitem.hxx
+    - editeng/cmapitem.hxx
+    - editeng/langitem.hxx
+    - editeng/formatbreakitem.hxx
+    - editeng/hyphenzoneitem.hxx
+    - editeng/escapementitem.hxx
+    - editeng/lspcitem.hxx
+    - editeng/adjustitem.hxx
+    - editeng/crossedoutitem.hxx
+    - editeng/fontitem.hxx
+    - editeng/shdditem.hxx
+    - editeng/udlnitem.hxx
+    - editeng/postitem.hxx
+    - editeng/fhgtitem.hxx
+    - editeng/contouritem.hxx
+    - editeng/colritem.hxx
+    - editeng/boxitem.hxx
+    - editeng/sizeitem.hxx
+    - editeng/lrspitem.hxx
+    - svx/sdmetitm.hxx
+    - svx/sdprcitm.hxx
+    - svx/xlnstit.hxx
+    - svx/xlnedit.hxx
+    - svx/xfillit0.hxx
+    - svx/xflclit.hxx
+    - svx/xflgrit.hxx
+    - svx/xflhtit.hxx
+    - svx/xbtmpit.hxx
+    - svx/xlineit0.hxx
+    - svx/xlnwtit.hxx
+    - svx/xlndsit.hxx
+    - svx/xlnclit.hxx
+    - svx/xtextit0.hxx
+    - svx/xftadit.hxx
+    - svx/xftdiit.hxx
+    - svx/xftstit.hxx
+    - svx/xftmrit.hxx
+    - svx/xftouit.hxx
+    - svx/xftshit.hxx
+    - svx/xftshcit.hxx
+    - svx/xftshxy.hxx
+    - svx/grafctrl.hxx
+    - paratr.hxx
+    - fmtinfmt.hxx
+    - fmtsrnd.hxx
+    - envimg.hxx
+    - fmtline.hxx
+    - svx/clipfmtitem.hxx
+    - editeng/blinkitem.hxx
+    - svl/slstitm.hxx
+    - editeng/paravertalignitem.hxx
+    - editeng/charreliefitem.hxx
+    - editeng/charrotateitem.hxx
+    - editeng/charscaleitem.hxx
+    - svx/postattr.hxx
+    - sfx2/frame.hxx
+    - svx/chrtitem.hxx
+    - svx/drawitem.hxx
+    - svx/xflftrit.hxx
+    - svx/xlncapit.hxx
+    - svx/xlinjoit.hxx
+    - svx/galleryitem.hxx
+    - svx/sdangitm.hxx
+    - sfx2/msg.hxx
+    sw/source/uibase/shells/textsh.cxx:
+    # Needed for defines in swslots.hxx
+    - globals.hrc
+    sw/source/uibase/uiview/srcview.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/uibase/uiview/view0.cxx:
+    # Needed for defines in swslots.hxx
+    - globals.hrc
+    sw/source/uibase/utlui/content.cxx:
+    # Needed for implicit dtor
+    - AnnotationWin.hxx
+    sw/source/uibase/web/wformsh.cxx:
+    # Needed for defines in swslots.hxx
+    - sfx2/sfxsids.hrc
+    sw/source/uibase/web/wfrmsh.cxx:
+    # Needed for defines in swslots.hxx
+    - cmdid.h
+    sw/source/uibase/web/wtextsh.cxx:
+    # Needed for defines in swslots.hxx
+    - globals.hrc
+    sw/source/uibase/web/wdocsh.cxx:
+    # Needed for defines in swslots.hxx
+    - svx/svxids.hrc
+    sw/source/uibase/web/wlistsh.cxx:
+    # Needed for defines in swslots.hxx
+    - cmdid.h
+    sw/source/uibase/web/wtabsh.cxx:
+    # Needed for defines in swslots.hxx
+    - cmdid.h
+    sw/source/uibase/web/wgrfsh.cxx:
+    # Needed for defines in swslots.hxx
+    - cmdid.h
+    sw/source/uibase/web/wview.cxx:
+    # Needed for defines in swslots.hxx
+    - cmdid.h
+    - globals.hrc
+    sw/source/ui/fldui/fldedt.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/fldui/flddinf.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/XPropertySet.hpp
+    sw/source/ui/vba/vbacolumn.cxx:
+    # Actually needed
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/vba/vbafield.cxx:
+    # Actually needed
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/vba/vbafind.cxx:
+    # Actually needed
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/vba/vbaframe.cxx:
+    # Actually needed
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/vba/vbafont.cxx:
+    # Actually needed
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    sw/source/ui/vba/vbaheaderfooter.cxx:
+    # Actually needed
+    - com/sun/star/beans/XPropertySet.hpp
+    sw/source/ui/vba/vbalisttemplate.cxx:
+    # Actually needed
+    - com/sun/star/beans/XPropertySet.hpp
+    sw/source/ui/vba/vbaparagraphformat.cxx:
+    # Actually needed
+    - com/sun/star/style/ParagraphAdjust.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    sw/source/ui/vba/vbasystem.cxx:
+    # Needed on WIN
+    - o3tl/char16_t2wchar_t.hxx
+    sw/source/ui/vba/vbarow.cxx:
+    # Actually needed
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/vba/vbatabstops.cxx:
+    # Actually needed
+    - com/sun/star/beans/XPropertySet.hpp
+    sw/source/filter/rtf/swparrtf.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/ww8/rtfexport.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/docx/swdocxreader.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/core/fields/docufld.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/xml/xmltexti.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/fldui/fldtdlg.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/uibase/uno/dlelstnr.cxx:
+    - com/sun/star/linguistic2/XProofreadingIterator.hpp
+    sw/qa/extras/ooxmlimport/ooxmlimport.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sw/qa/extras/ooxmlexport/ooxmlexport5.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sw/qa/extras/rtfexport/rtfexport4.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sw/source/writerfilter/dmapper/BorderHandler.cxx:
+    # Needed for method parameter type
+    - tools/color.hxx
+    sw/source/writerfilter/dmapper/ConversionHelper.cxx:
+    # Actually used
+    - com/sun/star/table/BorderLine2.hpp
+    - com/sun/star/lang/Locale.hpp
+    sw/source/writerfilter/dmapper/GraphicImport.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    sw/source/writerfilter/dmapper/NumberingManager.cxx:
+    # Actually used
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    sw/source/writerfilter/dmapper/OLEHandler.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/text/XTextDocument.hpp
+    - com/sun/star/text/WrapTextMode.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    sw/source/writerfilter/dmapper/TDefTableHandler.cxx:
+    # Needed for method parameter type
+    - tools/color.hxx
+    sw/source/writerfilter/dmapper/TablePositionHandler.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    sw/source/writerfilter/dmapper/PropertyMap.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/text/XTextColumns.hpp
+    sw/source/writerfilter/dmapper/StyleSheetTable.cxx:
+    # Actually used
+    - com/sun/star/text/XTextDocument.hpp
+    sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    sw/source/writerfilter/rtftok/rtfsdrimport.hxx:
+    # IWYU assumes std::stack<IncompleteType> in a header is OK, but that's not
+    # the case for all of LO's supported platforms.
+    # See <https://github.com/include-what-you-use/include-what-you-use/issues/175>.
+    - dmapper/GraphicZOrderHelper.hxx
+    sw/source/writerfilter/rtftok/rtfvalue.cxx:
+    # complete type is needed
+    - com/sun/star/embed/XEmbeddedObject.hpp
+    sw/source/writerfilter/rtftok/rtftokenizer.cxx:
+    # Actually used
+    - com/sun/star/task/XStatusIndicator.hpp

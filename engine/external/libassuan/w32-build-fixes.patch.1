@@ -1,0 +1,59 @@
+--- libassuan.orig/src/assuan.h.in.back	2024-06-20 17:52:17.473923519 +0200
++++ libassuan/src/assuan.h.in	2024-06-20 21:32:24.589095787 +0200
+@@ -33,7 +33,7 @@
+ 
+ #include <stdio.h>
+ #include <sys/types.h>
+-#include <unistd.h>
++#include <io.h>
+ #include <stdarg.h>
+ 
+ #ifndef _ASSUAN_NO_SOCKET_WRAPPER
+diff -ru libassuan.orig/src/Makefile.in libassuan/src/Makefile.in
+--- libassuan.orig/src/Makefile.in	2020-06-10 17:26:08.699728800 +0200
++++ libassuan/src/Makefile.in	2020-06-10 17:22:11.066865300 +0200
+@@ -462,7 +462,7 @@
+ 	assuan-pipe-connect.c assuan-socket-connect.c assuan-uds.c \
+ 	assuan-logging.c assuan-socket.c $(am__append_1) \
+ 	$(am__append_2)
+-@HAVE_W32_SYSTEM_TRUE@LTRCCOMPILE = $(LIBTOOL) --mode=compile $(RC) \
++@HAVE_W32_SYSTEM_TRUE@LTRCCOMPILE = $(LIBTOOL) --mode=compile --tag=RC $(RC) \
+ @HAVE_W32_SYSTEM_TRUE@     `echo $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) | \
+ @HAVE_W32_SYSTEM_TRUE@     sed -e 's/-I/--include-dir /g;s/-D/--define /g'`
+ 
+diff -ru libassuan.orig/src/Makefile.am libassuan/src/Makefile.am
+--- libassuan.orig/src/Makefile.am	2017-09-24 14:20:05.906065400 +0200
++++ libassuan/src/Makefile.am	2017-09-24 14:40:59.038850200 +0200
+@@ -87,7 +87,7 @@
+ 
+ if HAVE_W32_SYSTEM
+ 
++LTRCCOMPILE = $(LIBTOOL) --mode=compile --tag=RC $(RC) \
+-LTRCCOMPILE = $(LIBTOOL) --mode=compile $(RC) \
+      `echo $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) | \
+      sed -e 's/-I/--include-dir /g;s/-D/--define /g'`
+ 
+diff -ru libassuan.orig/src/assuan-handler.c libassuan/src/assuan-handler.c
+--- libassuan.orig/src/assuan-handler.c 2016-06-25 16:27:49.000000000 +0200
++++ libassuan/src/assuan-handler.c      2017-09-24 15:32:51.200956200 +0200
+@@ -414,7 +414,7 @@
+ #if HAVE_W32_SYSTEM
+   { "SENDFD",  w32_handler_sendfd, w32_help_sendfd, 1 },
+ #endif
+-  { } };
++};
+ 
+ 
+ /**
+diff -ru libassuan.orig/Makefile.am libassuan/Makefile.am
+--- libassuan.orig/Makefile.am	2016-07-14 10:09:22.000000000 +0200
++++ libassuan/Makefile.am	2017-09-25 21:20:19.928317500 +0200
+@@ -35,7 +35,7 @@
+ doc =
+ endif
+ 
+-SUBDIRS = m4 src $(doc) tests
++SUBDIRS = m4 src $(doc)
+ 
+ 
+ dist-hook: gen-ChangeLog

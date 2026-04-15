@@ -1,0 +1,15 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module excel {
+    constants XlBordersIndex {
+        const long xlDiagonalDown = 5;
+        const long xlDiagonalUp = 6;
+        const long xlEdgeBottom = 9;
+        const long xlEdgeLeft = 7;
+        const long xlEdgeRight = 10;
+        const long xlEdgeTop = 8;
+        const long xlInsideHorizontal = 12;
+        const long xlInsideVertical = 11;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,1306 @@
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+
+# Format:
+
+# Start
+# scpModule
+# shellscript file (optional)
+# solarispackagename
+# solarisreplaces (optional)
+# solarisincompat (optional)
+# solarisrequires (optional)
+# solarisprovides (optional)
+# freebsdrequires (optional)
+# freebsdprovides (optional)
+# packagename
+# linuxreplaces (optional)
+# linuxincompat (optional)
+# requires (optional)
+# provides (optional)
+# copyright
+# vendor
+# description
+# destpath
+# End
+
+Start
+module = "gid_Module_Optional_Gnome"
+solarispackagename = "%BASISPACKAGEPREFIX-gnome-integratn"
+solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWgnome-config, SUNWgnome-vfs, SUNWlibC"
+packagename = "%BASISPACKAGEPREFIX-gnome-integration"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+findrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "GNOME integration module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-evolution libreoffice-gnome"
+End
+
+Start
+module = "gid_Module_Optional_Tde"
+solarispackagename = "%BASISPACKAGEPREFIX-tde-integration"
+solarisrequires = "%BASISPACKAGEPREFIX-core"
+packagename = "%BASISPACKAGEPREFIX-tde-integration"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "TDE integration module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Optional_Kde"
+solarispackagename = "%BASISPACKAGEPREFIX-kde-integration"
+solarisrequires = "%BASISPACKAGEPREFIX-core"
+packagename = "%BASISPACKAGEPREFIX-kde-integration"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "KDE integration module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root"
+solarispackagename = "%BASISPACKAGEPREFIX-core"
+packagename = "%BASISPACKAGEPREFIX-core"
+linuxreplaces = "%BASISPACKAGEPREFIX-core01, %BASISPACKAGEPREFIX-core02, %BASISPACKAGEPREFIX-core03, %BASISPACKAGEPREFIX-core04, %BASISPACKAGEPREFIX-core05, %BASISPACKAGEPREFIX-core06, %BASISPACKAGEPREFIX-core07"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION, %BASISPACKAGEPREFIX-ooofonts %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarisrequires = "SUNWcar, SUNWkvm, SUNWcsr, SUNWcsu, SUNWcsd, SUNWcsl,
+SUNWxwrtl, SUNWxwplt, SUNWlibC, %SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-ooofonts"
+freebsdrequires = "%BASISPACKAGEPREFIX-ooofonts"
+findrequires = "find-requires-x11.sh"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Core module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-common"
+End
+
+Start
+module = "gid_Module_Prg_Wrt_Bin"
+solarispackagename = "%BASISPACKAGEPREFIX-writer"
+packagename = "%BASISPACKAGEPREFIX-writer"
+solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWlibC"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Writer module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Prg_Calc_Bin"
+solarispackagename = "%BASISPACKAGEPREFIX-calc"
+solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWlibC"
+packagename = "%BASISPACKAGEPREFIX-calc"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Calc module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Prg_Draw_Bin"
+solarispackagename = "%BASISPACKAGEPREFIX-draw"
+solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWlibC"
+packagename = "%BASISPACKAGEPREFIX-draw"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Draw module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Prg_Impress_Bin"
+solarispackagename = "%BASISPACKAGEPREFIX-impress"
+solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWlibC"
+packagename = "%BASISPACKAGEPREFIX-impress"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Impress module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Prg_Base_Bin"
+solarispackagename = "%BASISPACKAGEPREFIX-base"
+solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWlibC"
+packagename = "%BASISPACKAGEPREFIX-base"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Base module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Prg_Math_Bin"
+solarispackagename = "%BASISPACKAGEPREFIX-math"
+solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWlibC"
+packagename = "%BASISPACKAGEPREFIX-math"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Math module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Optional_Firebird"
+solarispackagename = "%BASISPACKAGEPREFIX-Firebird"
+solarisrequires = "%BASISPACKAGEPREFIX-core"
+packagename = "%BASISPACKAGEPREFIX-firebird"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Firebird module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Optional_Grfflt"
+solarispackagename = "%BASISPACKAGEPREFIX-graphicfilter"
+solarisrequires = "%BASISPACKAGEPREFIX-core"
+packagename = "%BASISPACKAGEPREFIX-graphicfilter"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Graphic filter module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Optional_Xsltfiltersamples"
+solarispackagename = "%BASISPACKAGEPREFIX-xsltfilter"
+solarisrequires = "%BASISPACKAGEPREFIX-core"
+packagename = "%BASISPACKAGEPREFIX-xsltfilter"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "XSLT filter samples module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Optional_Activexcontrol"
+solarispackagename = "%BASISPACKAGEPREFIX-activex"
+solarisrequires = "%BASISPACKAGEPREFIX-core"
+packagename = "%BASISPACKAGEPREFIX-activex"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "ActiveX control for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Optional_Onlineupdate"
+solarispackagename = "%BASISPACKAGEPREFIX-onlineupdate"
+solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWlibC, SUNWgzip"
+packagename = "%BASISPACKAGEPREFIX-onlineupdate"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Online update module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Pyuno"
+solarispackagename = "%BASISPACKAGEPREFIX-pyuno"
+solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWPython"
+packagename = "%BASISPACKAGEPREFIX-pyuno"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Pyuno module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Optional_Pyuno_LibreLogo"
+solarispackagename = "%BASISPACKAGEPREFIX-librelogo"
+solarisrequires = "%BASISPACKAGEPREFIX-pyuno,%BASISPACKAGEPREFIX-writer,SUNWPython"
+packagename = "%BASISPACKAGEPREFIX-librelogo"
+freebsdrequires = "%BASISPACKAGEPREFIX-pyuno,%BASISPACKAGEPREFIX-writer"
+requires = "%BASISPACKAGEPREFIX-pyuno %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-writer %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "LibreLogo toolbar for %PRODUCTNAME %PRODUCTVERSION Writer"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Script_Provider_For_Python"
+solarispackagename = "%BASISPACKAGEPREFIX-python-script-provider"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-python-script-provider"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Script provider for Python for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Files_Images"
+solarispackagename = "%BASISPACKAGEPREFIX-images"
+solarisrequires = "%BASISPACKAGEPREFIX-core"
+packagename = "%BASISPACKAGEPREFIX-images"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Images module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Fonts_OOo_Hidden"
+solarispackagename = "%BASISPACKAGEPREFIX-ooofonts"
+solarisrequires = ""
+packagename = "%BASISPACKAGEPREFIX-ooofonts"
+freebsdrequires = ""
+requires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "3rd party free fonts for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Oo_Linguistic"
+solarispackagename = "%BASISPACKAGEPREFIX-ooolinguistic"
+solarisrequires = "%BASISPACKAGEPREFIX-core"
+packagename = "%BASISPACKAGEPREFIX-ooolinguistic"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Linguistic module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Af"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-af"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-af"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Afrikaans dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_An"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-an"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-an"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2011 Santiago Paricio, Juan Pablo Martinez"
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Aragonese dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Ar"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-ar"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-ar"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2006-2008 by Mohamed Kebdani, 2006-2009 Taha Zerrouki"
+solariscopyright = "solariscopyrightfile"
+vendor = "Ayaspell"
+description = "Arabic dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Be"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-be"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-be"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "Copyright (C) 2005 Mikalai Udodau"
+solariscopyright = "solariscopyrightfile"
+vendor = "Mikalai Udodau"
+description = "Belarusian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Bg"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-bg"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-bg"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "Copyright (C) 2001 Anton Zinoviev, Borislav Mitev, Radostin Radnev"
+solariscopyright = "solariscopyrightfile"
+vendor = "Radostin Radnev"
+description = "Bulgarian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Bn"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-bn"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-bn"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2002 Dr Abhijit Das, 2002 Taneem Ahmed, 2008 Jamil Ahmed"
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Bengali dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Bo"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-bo"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-bo"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2016 Elie Roux"
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Tibetan dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Br"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-br"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-br"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2009-2011 by An Drouizig"
+solariscopyright = "solariscopyrightfile"
+vendor = "An Drouizig"
+description = "Breton dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Bs"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-bs"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-bs"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2013 by Vedran Ljubović"
+solariscopyright = "solariscopyrightfile"
+vendor = "Vedran Ljubović"
+description = "Bosnian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Ca"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-ca"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-ca"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Catalan dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Ckb"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-ckb"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-ckb"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Central Kurdish (Sorani) dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Cs"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-cs"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-cs"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Czech dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Da"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-da"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-da"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Danish dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_De"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-de"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-de"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "German dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_En"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-en"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-en"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "English dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_El"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-el"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-el"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2002 by Evripidis Papakostas, 2006 by Steve Stavropoulos"
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Greek dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Eo"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-eo"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-eo"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Esperanto dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Es"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-es"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-es"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Spanish dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Et"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-et"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-et"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Estonian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Fa"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-fa"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-fa"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2015 Mostafa Sedaghat Joo"
+solariscopyright = "solariscopyrightfile"
+vendor = "Mostafa Sedaghat Joo"
+description = "Persian (Farsi) dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Fr"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-fr"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-fr"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "French dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Gd"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-gd"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-gd"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2010 by Am Faclair Beag"
+solariscopyright = "solariscopyrightfile"
+vendor = "Kevin Scannel"
+description = "Scottish Gaelic dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Gl"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-gl"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-gl"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Galician dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Gu"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-gu"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-gu"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2009 by Kartik Mistry"
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Gujarati dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_He"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-he"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-he"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Hebrew dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Hi"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-hi"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-hi"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2005 Swapnil {Hajare, Sant}"
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Hindi dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Hu"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-hu"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-hu"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Hungarian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Hr"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-hr"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-hr"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2003-2010 by Denis Lackovic"
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Croatian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Id"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-id"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-id"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Indonesian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Is"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-is"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-is"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "The hunspell-is project"
+description = "Icelandic dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_It"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-it"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-it"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Italian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Kmr_Latn"
+solarispackagename = "%PACKAGEPREFIX%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION-dict-kmr-Latn"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-kmr-Latn"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Northern Kurdish dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Ko"
+solarispackagename = "%PACKAGEPREFIX%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION-dict-ko"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-ko"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Korean dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Lo"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-lo"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-lo"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2013 by Brian Eugene Wilson, Robert Martin Campbell"
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Lao dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Lt"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-lt"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-lt"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Lithuanian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Lv"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-lv"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-lv"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2004-2005 Janis Vilims, 2002-2010 Janis Eisaks"
+solariscopyright = "solariscopyrightfile"
+vendor = "Dicollecte-LV"
+description = "Latvian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Ne"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-ne"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-ne"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Nepali dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Nl"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-nl"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-nl"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Dutch dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Mn"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-mn"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION-dict-mn"
+requires = "%UREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME%BRANDPACKAGEVERSION %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Mongolian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_No"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-no"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-no"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Norwegian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Oc"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-oc"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-oc"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2006-2011 by Bruno Gallart"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOc.org"
+description = "Occitan-languedocian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Pl"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-pl"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-pl"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Polish dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Pt_Br"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-pt-BR"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-pt-BR"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Portuguese (Brazil) dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Pt_Pt"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-pt-PT"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-pt-PT"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Portuguese (Portugal) dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Ro"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-ro"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-ro"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Romanian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Ru"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-ru"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-ru"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Russian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Si"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-si"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-si"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2010 by Laknath Semage"
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Sinhala dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Sk"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-sk"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-sk"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Slovak dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Sl"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-sl"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-sl"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Slovenian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Sq"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-sq"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-sq"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2011 by Luan Kelmendi"
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Albanian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Sr"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-sr"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-sr"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Serbian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Sv"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-sv"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-sv"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Swedish dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Sw"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-sw"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-sw"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Swahili dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Te"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-te"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-te"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2005 by IndLinux, Khadir, 2010 by Arjuna Rao Chavala, 2009 by Santhosh Thottingal"
+solariscopyright = "solariscopyrightfile"
+vendor = "Arjuna Rao Chavala"
+description = "Telugu dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Th"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-th"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-th"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Thai dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Tr"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-tr"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-tr"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2014-2018 by Harun Resit Zafer, Muhammet Kara"
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Turkish dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Uk"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-uk"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-uk"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "1999-2009 by Vladimir Yakovchuk, Oleg Podgurniy, Dmytro Kovalyov, Maksym Polyakov, Andriy Rysin, Valentyn Solomko, Volodymyr M. Lisivka, Eugeniy Meshcheryakov"
+solariscopyright = "solariscopyrightfile"
+vendor = "Document Foundation"
+description = "Ukrainian dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Vi"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-vi"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-vi"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Vietnamese dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Root_Extension_Dictionary_Zu"
+solarispackagename = "%PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION-dict-zu"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure, %BASISPACKAGEPREFIX-core, %PACKAGEPREFIX%SOLARISBRANDPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME-dict-zu"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Zulu dictionary for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+
+Start
+module = "gid_Module_Optional_PostgresqlSdbc"
+solarispackagename = "%BASISPACKAGEPREFIX-postgresql-sdbc"
+solarisrequires = "%BASISPACKAGEPREFIX-base"
+packagename = "%BASISPACKAGEPREFIX-postgresql-sdbc"
+freebsdrequires = "%BASISPACKAGEPREFIX-base"
+requires = "%BASISPACKAGEPREFIX-base %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "PostgreSQL Connector driver for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Pdfimport"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-pdf-import"
+solarisrequires = "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-extension-pdf-import"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "PDF import extension for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Reportbuilder"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-report-builder"
+solarisrequires = "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-extension-report-builder"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Report Builder extension for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Libreofficekit"
+solarispackagename = "%BASISPACKAGEPREFIX-kit-data"
+solarisrequires = "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-kit-data"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Libreofficekit data files for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End

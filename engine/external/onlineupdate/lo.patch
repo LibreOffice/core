@@ -1,0 +1,398 @@
+--- onlineupdate/source/libmar/tool/mar.c
++++ onlineupdate/source/libmar/tool/mar.c
+@@ -14,7 +14,9 @@
+ #  include <windows.h>
+ #  include <direct.h>
+ #  define chdir _chdir
++#  define PATH_MAX MAX_PATH
+ #else
++#  include <limits.h>
+ #  include <unistd.h>
+ #endif
+ 
+@@ -39,7 +41,7 @@
+   printf("Create a MAR file:\n");
+   printf(
+       "  mar -H MARChannelID -V ProductVersion [-C workingDir] "
+-      "-c archive.mar [files...]\n");
++      "-c archive.mar [files...|-f files]\n");
+ 
+   printf("Extract a MAR file:\n");
+   printf("  mar [-C workingDir] -x archive.mar\n");
+@@ -244,6 +246,8 @@
+ 
+   switch (argv[1][1]) {
+     case 'c': {
++      int numfiles;
++      char** files;
+       struct ProductInformationBlock infoBlock;
+       if (!productVersion) {
+         fprintf(stderr,
+@@ -256,9 +260,61 @@
+                 "<mar-channel-id>`).\n");
+         return -1;
+       }
++      if (argc == 5 && !strcmp(argv[3], "-f")) {
++        FILE* in;
++        in = fopen(argv[4], "r");
++        if (!in) {
++          fprintf(stderr,
++                  "ERROR: Cannot open file `%s` for reading.\n", argv[4]);
++          return -1;
++        }
++        numfiles = 0;
++        files = malloc(sizeof(char*) * 10000); /*TODO*/
++        if (!files) {
++          fprintf(stderr,
++                  "ERROR: Cannot allocate memory");
++          return -1;
++        }
++        for (;;) {
++          char buf[PATH_MAX + 1];
++          size_t len;
++          if (!fgets(buf, PATH_MAX + 1, in)) {
++            if (feof(in)) {
++              break;
++            }
++            fprintf(stderr,
++                    "ERROR: Cannot read from file `%s`.\n", argv[4]);
++            return -1;
++          }
++          len = strlen(buf);
++          if (len != 0 && buf[len - 1] == '\n') {
++            buf[len - 1] = '\0';
++          } else if (!feof(in)) {
++            fprintf(stderr,
++                    "ERROR: Too long line in file `%s`.\n", argv[4]);
++            return -1;
++          }
++          if (numfiles == 10000) { /*TODO*/
++            fprintf(stderr,
++                    "ERROR: Too many lines in file `%s`.\n", argv[4]);
++            return -1;
++          }
++          files[numfiles] = strdup(buf);
++          if (!files[numfiles]) {
++            fprintf(stderr,
++                    "ERROR: Cannot allocate memory");
++            return -1;
++          }
++          ++numfiles;
++        }
++        fclose(in);
++      } else {
++        numfiles = argc - 3;
++        files = argv + 3;
++      }
+       infoBlock.MARChannelID = MARChannelID;
+       infoBlock.productVersion = productVersion;
+-      return mar_create(argv[2], argc - 3, argv + 3, &infoBlock);
++      return mar_create(argv[2], numfiles, files, &infoBlock);
+     }
+     case 'i': {
+       if (!productVersion) {
+--- onlineupdate/source/service/serviceinstall.cpp
++++ onlineupdate/source/service/serviceinstall.cpp
+@@ -25,7 +25,7 @@
+ 
+ // This uninstall key is defined originally in maintenanceservice_installer.nsi
+ #define MAINT_UNINSTALL_KEY                                                    \
+-  L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\MozillaMaintenan" \
++  L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\LibreOfficeMaintenan" \
+   L"ceService"
+ 
+ static BOOL UpdateUninstallerVersionString(LPWSTR versionString) {
+@@ -201,7 +201,7 @@
+   size_t currentServicePathLen = wcslen(currentServicePath);
+   bool doesServiceHaveCorrectPath =
+       currentServicePathLen > 2 &&
+-      !wcsstr(currentServicePath, L"maintenanceservice_tmp.exe") &&
++      !wcsstr(currentServicePath, L"update_service_tmp.exe") &&
+       currentServicePath[0] == L'\"' &&
+       currentServicePath[currentServicePathLen - 1] == L'\"';
+ 
+@@ -222,7 +222,7 @@
+     LOG_WARN(("Couldn't remove file spec.  (%lu)", GetLastError()));
+     return FALSE;
+   }
+-  if (!PathAppendSafe(fixedPath, L"maintenanceservice.exe")) {
++  if (!PathAppendSafe(fixedPath, L"update_service.exe")) {
+     LOG_WARN(("Couldn't append file spec.  (%lu)", GetLastError()));
+     return FALSE;
+   }
+@@ -561,7 +561,7 @@
+ 
+   // The service can be in a stopped state but the exe still in use
+   // so make sure the process is really gone before proceeding
+-  WaitForProcessExit(L"maintenanceservice.exe", 30);
++  WaitForProcessExit(L"update_service.exe", 30);
+   LOG(("Done waiting for service stop, last service state: %lu", lastState));
+ 
+   return lastState == SERVICE_STOPPED;
+--- onlineupdate/source/service/serviceinstall.h
++++ onlineupdate/source/service/serviceinstall.h
+@@ -4,7 +4,7 @@
+ 
+ #include "readstrings.h"
+ 
+-#define SVC_DISPLAY_NAME L"Mozilla Maintenance Service"
++#define SVC_DISPLAY_NAME L"LibreOffice Maintenance Service"
+ 
+ enum SvcInstallAction { UpgradeSvc, InstallSvc, ForceInstallSvc };
+ BOOL SvcInstall(SvcInstallAction action);
+--- onlineupdate/source/update/common/pathhash.cpp
++++ onlineupdate/source/update/common/pathhash.cpp
+@@ -119,7 +119,7 @@
+   delete[] lowercasePath;
+ 
+   LPCWSTR baseRegPath =
+-      L"SOFTWARE\\Mozilla\\"
++      L"SOFTWARE\\LibreOffice\\"
+       L"MaintenanceService\\";
+   wcsncpy(registryPath, baseRegPath, MAX_PATH);
+   BinaryDataToHexString(hash, hashSize, registryPath + wcslen(baseRegPath));
+--- onlineupdate/source/update/common/updatehelper.cpp
++++ onlineupdate/source/update/common/updatehelper.cpp
+@@ -78,7 +78,7 @@
+   wcsncpy(outBuf, progFilesX86, MAX_PATH + 1);
+   CoTaskMemFree(progFilesX86);
+ 
+-  if (!PathAppendSafe(outBuf, L"Mozilla Maintenance Service")) {
++  if (!PathAppendSafe(outBuf, L"LibreOffice Maintenance Service")) {
+     return FALSE;
+   }
+ 
+@@ -311,7 +311,7 @@
+   // Obtain the temp path of the maintenance service binary
+   WCHAR tmpService[MAX_PATH + 1] = {L'\0'};
+   if (!PathGetSiblingFilePath(tmpService, serviceConfig.lpBinaryPathName,
+-                              L"maintenanceservice_tmp.exe")) {
++                              L"update_service_tmp.exe")) {
+     return FALSE;
+   }
+ 
+@@ -322,7 +322,7 @@
+   // Get the new maintenance service path from the install dir
+   WCHAR newMaintServicePath[MAX_PATH + 1] = {L'\0'};
+   wcsncpy(newMaintServicePath, installDir, MAX_PATH);
+-  PathAppendSafe(newMaintServicePath, L"maintenanceservice.exe");
++  PathAppendSafe(newMaintServicePath, L"update_service.exe");
+ 
+   // Copy the temp file in alongside the maintenace service.
+   // This is a requirement for maintenance service upgrades.
+@@ -429,7 +429,7 @@
+   // 2) The command being executed, which is "software-update"
+   // 3) The path to updater.exe (from argv[0])
+   LPCWSTR* updaterServiceArgv = new LPCWSTR[argc + 2];
+-  updaterServiceArgv[0] = L"MozillaMaintenance";
++  updaterServiceArgv[0] = L"LibreOfficeMaintenance";
+   updaterServiceArgv[1] = L"software-update";
+ 
+   for (int i = 0; i < argc; ++i) {
+--- onlineupdate/source/update/common/updatehelper.h
++++ onlineupdate/source/update/common/updatehelper.h
+@@ -24,9 +24,9 @@
+ #define PATCH_DIR_PATH L"\\updates\\0"
+ 
+ #ifdef MOZ_MAINTENANCE_SERVICE
+-#  define SVC_NAME L"MozillaMaintenance"
++#  define SVC_NAME L"LibreOfficeMaintenance"
+ 
+-#  define BASE_SERVICE_REG_KEY L"SOFTWARE\\Mozilla\\MaintenanceService"
++#  define BASE_SERVICE_REG_KEY L"SOFTWARE\\LibreOffice\\MaintenanceService"
+ 
+ // The test only fallback key, as its name implies, is only present on machines
+ // that will use automated tests.  Since automated tests always run from a
+--- onlineupdate/source/service/workmonitor.cpp
++++ onlineupdate/source/service/workmonitor.cpp
+@@ -328,7 +328,7 @@
+   // The installation dir that we are installing to is installDir.
+   WCHAR installDirUpdater[MAX_PATH + 1] = {L'\0'};
+   wcsncpy(installDirUpdater, installDir, MAX_PATH);
+-  if (!PathAppendSafe(installDirUpdater, L"updater.exe")) {
++  if (!PathAppendSafe(installDirUpdater, L"program\\updater.exe")) {
+     LOG_WARN(("Install directory updater could not be determined."));
+     return false;
+   }
+@@ -746,7 +746,7 @@
+ 
+     WCHAR installDirUpdater[MAX_PATH + 1] = {L'\0'};
+     wcsncpy(installDirUpdater, installDir, MAX_PATH);
+-    if (!PathAppendSafe(installDirUpdater, L"updater.exe")) {
++    if (!PathAppendSafe(installDirUpdater, L"program\\updater.exe")) {
+       LOG_WARN(("Install directory updater could not be determined."));
+       result = FALSE;
+     }
+--- onlineupdate/source/update/updater/updater.cpp
++++ onlineupdate/source/update/updater/updater.cpp
+@@ -4174,6 +4174,10 @@
+         NS_tmkdir(gDeleteDirPath, 0755);
+       }
+     }
++
++    if (_setmaxstdio(8192) == -1) {
++        LOG(("_setmaxstdio failed"));
++    }
+ #endif /* XP_WIN */
+ 
+     // Run update process on a background thread. ShowProgressUI may return
+--- tools/update-packaging/common.sh
++++ tools/update-packaging/common.sh
+@@ -76,17 +76,8 @@
+     forced=
+   fi
+ 
+-  is_extension=$(echo "$f" | grep -c 'distribution/extensions/.*/')
+-  if [ $is_extension = "1" ]; then
+-    # Use the subdirectory of the extensions folder as the file to test
+-    # before performing this add instruction.
+-    testdir=$(echo "$f" | sed 's/\(.*distribution\/extensions\/[^\/]*\)\/.*/\1/')
+-    verbose_notice "     add-if \"$testdir\" \"$f\""
+-    echo "add-if \"$testdir\" \"$f\"" >> "$filev3"
+-  else
+-    verbose_notice "        add \"$f\"$forced"
+-    echo "add \"$f\"" >> "$filev3"
+-  fi
++  verbose_notice "     add-if \"$f\" \"$f\"$forced"
++  echo "add-if \"$f\" \"$f\"" >> "$filev3"
+ }
+ 
+ check_for_add_if_not_update() {
+@@ -113,17 +104,8 @@
+   f="$1"
+   filev3="$2"
+ 
+-  is_extension=$(echo "$f" | grep -c 'distribution/extensions/.*/')
+-  if [ $is_extension = "1" ]; then
+-    # Use the subdirectory of the extensions folder as the file to test
+-    # before performing this add instruction.
+-    testdir=$(echo "$f" | sed 's/\(.*distribution\/extensions\/[^\/]*\)\/.*/\1/')
+-    verbose_notice "   patch-if \"$testdir\" \"$f.patch\" \"$f\""
+-    echo "patch-if \"$testdir\" \"$f.patch\" \"$f\"" >> "$filev3"
+-  else
+-    verbose_notice "      patch \"$f.patch\" \"$f\""
+-    echo "patch \"$f.patch\" \"$f\"" >> "$filev3"
+-  fi
++  verbose_notice "   patch-if \"$f\" \"$f.patch\" \"$f\""
++  echo "patch-if \"$f\" \"$f.patch\" \"$f\"" >> "$filev3"
+ }
+ 
+ append_remove_instructions() {
+--- tools/update-packaging/make_full_update.sh
++++ tools/update-packaging/make_full_update.sh
+@@ -53,9 +53,10 @@
+ fi
+ workdir="$targetdir.work"
+ updatemanifestv3="$workdir/updatev3.manifest"
+-targetfiles="updatev3.manifest"
+ 
+ mkdir -p "$workdir"
++
++printf 'updatev3.manifest\n' >"$workdir/files.txt"
+ 
+ # Generate a list of all files in the target directory.
+ pushd "$targetdir"
+@@ -66,7 +67,6 @@
+ if [ ! -f "precomplete" ]; then
+   if [ ! -f "Contents/Resources/precomplete" ]; then
+     notice "precomplete file is missing!"
+-    exit 1
+   fi
+ fi
+ 
+@@ -99,7 +99,7 @@
+   $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force --stdout "$targetdir/$f" > "$workdir/$f"
+   copy_perm "$targetdir/$f" "$workdir/$f"
+ 
+-  targetfiles="$targetfiles \"$f\""
++  printf '%s\n' "$f" >>"$workdir/files.txt"
+ done
+ 
+ # Append remove instructions for any dead files.
+@@ -110,7 +110,7 @@
+ $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force "$updatemanifestv3" && mv -f "$updatemanifestv3.xz" "$updatemanifestv3"
+ 
+ mar_command="$mar_command -C \"$workdir\" -c output.mar"
+-eval "$mar_command $targetfiles"
++eval "$mar_command -f $workdir/files.txt"
+ mv -f "$workdir/output.mar" "$archive"
+ 
+ # cleanup
+--- tools/update-packaging/make_incremental_update.sh
++++ tools/update-packaging/make_incremental_update.sh
+@@ -112,9 +112,10 @@
+ fi
+ workdir="$(mktemp -d)"
+ updatemanifestv3="$workdir/updatev3.manifest"
+-archivefiles="updatev3.manifest"
+ 
+ mkdir -p "$workdir"
++
++printf 'updatev3.manifest\n' >"$workdir/files.txt"
+ 
+ # Generate a list of all files in the target directory.
+ pushd "$olddir"
+@@ -135,7 +136,6 @@
+ if [ ! -f "precomplete" ]; then
+   if [ ! -f "Contents/Resources/precomplete" ]; then
+     notice "precomplete file is missing!"
+-    exit 1
+   fi
+ fi
+ 
+@@ -170,7 +170,7 @@
+       $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force --stdout "$newdir/$f" > "$workdir/$f"
+       copy_perm "$newdir/$f" "$workdir/$f"
+       make_add_if_not_instruction "$f" "$updatemanifestv3"
+-      archivefiles="$archivefiles \"$f\""
++      printf '%s\n' "$f" >>"$workdir/files.txt"
+       continue 1
+     fi
+ 
+@@ -180,7 +180,7 @@
+       $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force --stdout "$newdir/$f" > "$workdir/$f"
+       copy_perm "$newdir/$f" "$workdir/$f"
+       make_add_instruction "$f" "$updatemanifestv3" 1
+-      archivefiles="$archivefiles \"$f\""
++      printf '%s\n' "$f" >>"$workdir/files.txt"
+       continue 1
+     fi
+ 
+@@ -227,11 +227,11 @@
+         make_patch_instruction "$f" "$updatemanifestv3"
+         mv -f "$patchfile" "$workdir/$f.patch"
+         rm -f "$workdir/$f"
+-        archivefiles="$archivefiles \"$f.patch\""
++        printf '%s\n' "$f.patch" >>"$workdir/files.txt"
+       else
+         make_add_instruction "$f" "$updatemanifestv3"
+         rm -f "$patchfile"
+-        archivefiles="$archivefiles \"$f\""
++        printf '%s\n' "$f" >>"$workdir/files.txt"
+       fi
+     fi
+   else
+@@ -266,11 +266,12 @@
+   if check_for_add_if_not_update "$f"; then
+     make_add_if_not_instruction "$f" "$updatemanifestv3"
+   else
+-    make_add_instruction "$f" "$updatemanifestv3"
++    verbose_notice "     add \"$f\""
++    echo "add \"$f\"" >> "$updatemanifestv3"
+   fi
+ 
+ 
+-  archivefiles="$archivefiles \"$f\""
++  printf '%s\n' "$f" >>"$workdir/files.txt"
+ done
+ 
+ notice ""
+@@ -302,7 +302,7 @@
+ $XZ $XZ_OPT --compress $BCJ_OPTIONS --lzma2 --format=xz --check=crc64 --force "$updatemanifestv3" && mv -f "$updatemanifestv3.xz" "$updatemanifestv3"
+ 
+ mar_command="$mar_command -C \"$workdir\" -c output.mar"
+-eval "$mar_command $archivefiles"
++eval "$mar_command -f $workdir/files.txt"
+ mv -f "$workdir/output.mar" "$archive"
+ 
+ # cleanup

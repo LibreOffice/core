@@ -1,0 +1,102 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module accessibility {
+
+/** Implement this interface to give access to a single numerical value.
+
+    <p>The XAccessibleValue interface represents a single
+    numerical value and should be implemented by any class that supports
+    numerical value like scroll bars and spin boxes.  This interface lets
+    you access the value and its upper and lower bounds.</p>
+*/
+interface XAccessibleValue : ::com::sun::star::uno::XInterface
+{
+    /** Returns the value of this object as a number.
+
+        <p>The exact return type is implementation dependent.  Typical types
+        are long and double.</p>
+
+        @return
+            Returns the current value represented by this object.
+    */
+    any getCurrentValue ();
+
+    /** Sets the value of this object to the given number.
+
+        <p>The argument is clipped to the valid interval whose upper and
+        lower bounds are returned by the methods
+        getMaximumValue() and getMinimumValue(), i.e. if it is lower than
+        the minimum value the new value will be the minimum and if it is
+        greater than the maximum then the new value will be the maximum.</p>
+
+        @param aNumber
+            The new value represented by this object.  The set of admissible
+            types for this argument is implementation dependent.
+
+        @return
+            Returns `TRUE` if the new value could successfully be set and
+            `FALSE` otherwise.
+    */
+    boolean setCurrentValue ([in] any aNumber);
+
+    /** Returns the maximum value that can be represented by this object.
+
+        <p>The type of the returned value is implementation dependent.  It
+        does not have to be the same type as that returned by
+        getCurrentValue().</p>
+
+        @return
+            Returns the maximum value in an implementation dependent type.
+            If this object has no upper bound then an empty object is
+            returned.
+    */
+    any getMaximumValue ();
+
+    /** Returns the minimum value that can be represented by this object.
+
+        <p>The type of the returned value is implementation dependent.  It
+        does not have to be the same type as that returned by
+        getCurrentValue().</p>
+
+        @return
+            Returns the minimum value in an implementation dependent type.
+            If this object has no lower bound then an empty object is
+            returned.
+    */
+    any getMinimumValue ();
+
+    /** Returns the minimum increment by which the value represented by this
+        object can be adjusted.
+
+        <p>The type of the returned value is implementation dependent. It
+        does not have to be the same type as that returned by
+        getCurrentValue().</p>
+
+        @return
+            Returns the minimum increment value in an implementation dependent type.
+            If this object has no minimum increment value, then an empty object is
+            returned.
+    */
+    any getMinimumIncrement ();
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

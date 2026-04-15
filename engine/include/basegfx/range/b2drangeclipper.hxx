@@ -1,0 +1,42 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include <vector>
+#include <basegfx/basegfxdllapi.h>
+
+namespace basegfx { class B2DPolyPolygon; }
+namespace basegfx { class B2DRange; }
+namespace basegfx { enum class B2VectorOrientation; }
+
+namespace basegfx::utils
+{
+        /** Extract poly-polygon w/o self-intersections from poly-range
+
+            Similar to the solveCrossovers(const B2DPolyPolygon&)
+            method, this one calculates a self-intersection-free
+            poly-polygon with the same topology, and encoding
+            inside/outsidedness via polygon orientation and layering.
+         */
+        BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const std::vector<B2DRange>& rRanges,
+                                       const std::vector<B2VectorOrientation>& rOrientations);
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

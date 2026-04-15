@@ -1,0 +1,1927 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <memory>
+#include <utility>
+#include <scitems.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lineitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/contouritem.hxx>
+#include <svtools/colorcfg.hxx>
+#include <basegfx/color/bcolortools.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/postitem.hxx>
+#include <svx/rotmodit.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/justifyitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/numformat.hxx>
+#include <svl/zforlist.hxx>
+#include <vcl/outdev.hxx>
+#include <tools/fract.hxx>
+#include <tools/UnitConversion.hxx>
+#include <osl/diagnose.h>
+
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <stlsheet.hxx>
+#include <stlpool.hxx>
+#include <document.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
+#include <validat.hxx>
+#include <scmod.hxx>
+#include <fillinfo.hxx>
+#include <comphelper/kit.hxx>
+#include <tabvwsh.hxx>
+
+CellAttributeHelper::CellAttributeHelper(SfxItemPool& rSfxItemPool)
+: mrSfxItemPool(rSfxItemPool)
+, mpDefaultCellAttribute(nullptr)
+, maRegisteredCellAttributes()
+, mpLastHit(nullptr)
+, mnCurrentMaxKey(0)
+{
+}
+
+CellAttributeHelper::~CellAttributeHelper()
+{
+    delete mpDefaultCellAttribute;
+}
+
+const ScPatternAttr* CellAttributeHelper::registerAndCheck(const ScPatternAttr& rCandidate, bool bPassingOwnership) const
+{
+    if (&rCandidate == &getDefaultCellAttribute())
+        return &rCandidate;
+
+    assert(rCandidate.pCellAttributeHelper == this && "WRONG CellAttributeHelper in ScPatternAttr (!)");
+
+    if (rCandidate.isRegistered())
+    {
+        assert(!bPassingOwnership && "Trying to register an already registered CellAttribute with ownership change (!)");
+        rCandidate.mnRefCount++;
+        return &rCandidate;
+    }
+
+    if (ScPatternAttr::areSame(mpLastHit, &rCandidate))
+    {
+        // hit for single-entry cache, make use of it
+        mpLastHit->mnRefCount++;
+        if (bPassingOwnership)
+            delete &rCandidate;
+        return mpLastHit;
+    }
+    const OUString* pCandidateStyleName = rCandidate.GetStyleName();
+    auto it = maRegisteredCellAttributes.find(pCandidateStyleName ? std::optional<OUString>(*pCandidateStyleName) : std::nullopt);
+    if (it != maRegisteredCellAttributes.end())
+    {
+        const size_t nCandidateHashCode = rCandidate.GetHashCode();
+        for (const ScPatternAttr* pCheck : it->second)
+        {
+            if (nCandidateHashCode == pCheck->GetHashCode()
+                && ScPatternAttr::areSame(pCheck, &rCandidate))
+            {
+                pCheck->mnRefCount++;
+                if (bPassingOwnership)
+                    delete &rCandidate;
+                mpLastHit = pCheck;
+                return pCheck;
+            }
+        }
+    }
+
+    const ScPatternAttr* pCandidate(bPassingOwnership ? &rCandidate : new ScPatternAttr(rCandidate));
+    pCandidate->mnRefCount++;
+    const_cast<ScPatternAttr*>(pCandidate)->SetPAKey(mnCurrentMaxKey++);
+    const OUString* pStyleName = pCandidate->GetStyleName();
+    maRegisteredCellAttributes[pStyleName ? std::optional<OUString>(*pStyleName) : std::nullopt].insert(pCandidate);
+    mpLastHit = pCandidate;
+    return pCandidate;
+}
+
+void CellAttributeHelper::doUnregister(const ScPatternAttr& rCandidate)
+{
+    if (&rCandidate == mpDefaultCellAttribute)
+        return;
+
+    assert(rCandidate.isRegistered());
+    rCandidate.mnRefCount--;
+
+    if (0 != rCandidate.mnRefCount)
+        return;
+
+    if (mpLastHit == &rCandidate)
+        mpLastHit = nullptr;
+
+    const OUString* pStyleName = rCandidate.GetStyleName();
+    auto it = maRegisteredCellAttributes.find(pStyleName ? std::optional<OUString>(*pStyleName) : std::nullopt);
+    assert(it != maRegisteredCellAttributes.end());
+    it->second.erase(&rCandidate);
+    if (it->second.empty())
+        maRegisteredCellAttributes.erase(it);
+    delete &rCandidate;
+}
+
+const ScPatternAttr& CellAttributeHelper::getDefaultCellAttribute() const
+{
+    // *have* to create on-demand due to mrScDocument.GetPool() *can* be nullptr
+    // since mxPoolHelper is *only* created for SCDOCMODE_DOCUMENT and
+    // SCDOCMODE_FUNCTIONACCESS (!)
+    if (!mpDefaultCellAttribute)
+    {
+        // GetRscString only works after ScGlobal::Init (indicated by the EmptyBrushItem)
+        // TODO: Write additional method ScGlobal::IsInit() or somesuch
+        //       or detect whether this is the Secondary Pool for a MessagePool
+        if (ScGlobal::GetEmptyBrushItem())
+        {
+            const OUString aInitialStyle(ScResId(STR_STYLENAME_STANDARD));
+            mpDefaultCellAttribute = new ScPatternAttr(
+                *const_cast<CellAttributeHelper*>(this),
+                nullptr, // no SfxItemSet
+                &aInitialStyle);
+        }
+        else
+        {
+            mpDefaultCellAttribute = new ScPatternAttr(*const_cast<CellAttributeHelper*>(this));
+        }
+    }
+    return *mpDefaultCellAttribute;
+}
+
+void CellAttributeHelper::CellStyleDeleted(const ScStyleSheet& rStyle)
+{
+    const OUString& rCandidateStyleName = rStyle.GetName();
+    auto it = maRegisteredCellAttributes.find(rCandidateStyleName);
+    if (it != maRegisteredCellAttributes.end())
+        for (const ScPatternAttr* pCheck : it->second)
+        {
+            if (&rStyle == pCheck->GetStyleSheet())
+                const_cast<ScPatternAttr*>(pCheck)->StyleToName();
+        }
+}
+
+void CellAttributeHelper::RenameCellStyle(ScStyleSheet& rStyle, const OUString& rNewName)
+{
+    std::vector<const ScPatternAttr*> aChanged;
+
+    const OUString& rCandidateStyleName = rStyle.GetName();
+    auto it = maRegisteredCellAttributes.find(rCandidateStyleName);
+    if (it != maRegisteredCellAttributes.end())
+    {
+        for (auto it2 = it->second.begin(); it2 != it->second.end();)
+        {
+            const ScPatternAttr* pCheck = *it2;
+            if (&rStyle == pCheck->GetStyleSheet())
+            {
+                aChanged.push_back(pCheck);
+                // The name will change, we have to re-insert it
+                it2 = it->second.erase(it2);
+            }
+            else
+                ++it2;
+        }
+        if (it->second.empty())
+            maRegisteredCellAttributes.erase(it);
+    }
+
+    rStyle.SetName(rNewName);
+
+    for (const ScPatternAttr* p : aChanged)
+    {
+        const OUString* pStyleName = p->GetStyleName();
+        maRegisteredCellAttributes[pStyleName ? std::optional<OUString>(*pStyleName) : std::nullopt].insert(p);
+    }
+}
+
+void CellAttributeHelper::CellStyleCreated(const ScDocument& rDoc, const OUString& rName)
+{
+    // If a style was created, don't keep any pattern with its name string in the pool,
+    // because it would compare equal to a pattern with a pointer to the new style.
+    // Calling StyleSheetChanged isn't enough because the pool may still contain items
+    // for undo or clipboard content.
+    std::vector<const ScPatternAttr*> aChanged;
+    auto it = maRegisteredCellAttributes.find(rName);
+    if (it == maRegisteredCellAttributes.end())
+        return;
+
+    for (auto it2 = it->second.begin(); it2 != it->second.end();)
+    {
+        const ScPatternAttr* pCheck = *it2;
+        // tdf#163831 Invalidate cache if the style is modified/created
+        const_cast<ScPatternAttr*>(pCheck)->InvalidateCaches();
+        if (nullptr == pCheck->GetStyleSheet())
+            if (const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc)) // find and store style pointer
+            {
+                aChanged.push_back(pCheck);
+                // if the name changed, we have to re-insert it
+                it2 = it->second.erase(it2);
+            }
+            else
+                ++it2;
+        else
+            ++it2;
+    }
+    if (it->second.empty())
+        maRegisteredCellAttributes.erase(it);
+
+    for (const ScPatternAttr* p : aChanged)
+    {
+        const OUString* pStyleName = p->GetStyleName();
+        maRegisteredCellAttributes[pStyleName ? std::optional<OUString>(*pStyleName) : std::nullopt].insert(p);
+    }
+}
+
+void CellAttributeHelper::UpdateAllStyleSheets(const ScDocument& rDoc)
+{
+    bool bNameChanged = false;
+    for (const auto & rPair : maRegisteredCellAttributes)
+        for (const ScPatternAttr* pCheck : rPair.second)
+            bNameChanged |= const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc);
+    if (bNameChanged)
+        ReIndexRegistered();
+
+    // force existence, then access
+    getDefaultCellAttribute();
+    mpDefaultCellAttribute->UpdateStyleSheet(rDoc);
+}
+
+void CellAttributeHelper::AllStylesToNames()
+{
+    for (const auto & rPair : maRegisteredCellAttributes)
+        for (const ScPatternAttr* pCheck : rPair.second)
+            const_cast<ScPatternAttr*>(pCheck)->StyleToName();
+
+    // force existence, then access
+    getDefaultCellAttribute();
+    mpDefaultCellAttribute->StyleToName();
+}
+
+/// If the style name changed, we need to reindex.
+void CellAttributeHelper::ReIndexRegistered()
+{
+    RegisteredAttrMap aNewMap;
+    for (const auto & rPair : maRegisteredCellAttributes)
+        for (const ScPatternAttr* p : rPair.second)
+        {
+            const OUString* pStyleName = p->GetStyleName();
+            aNewMap[pStyleName ? std::optional<OUString>(*pStyleName) : std::nullopt].insert(p);
+        }
+
+    maRegisteredCellAttributes = std::move(aNewMap);
+}
+
+size_t CellAttributeHelper::RegisteredAttrMapHash::operator()(const std::optional<OUString>& p) const
+{
+    if (!p)
+        return 0;
+    return p->hashCode();
+}
+
+
+CellAttributeHolder::CellAttributeHolder(const ScPatternAttr* pNew, bool bPassingOwnership)
+: mpScPatternAttr(nullptr)
+{
+    if (nullptr != pNew)
+        suppress_fun_call_w_exception(mpScPatternAttr = pNew->getCellAttributeHelper().registerAndCheck(*pNew, bPassingOwnership));
+}
+
+CellAttributeHolder::CellAttributeHolder(const CellAttributeHolder& rHolder)
+: mpScPatternAttr(nullptr)
+{
+    if (rHolder.getScPatternAttr())
+        suppress_fun_call_w_exception(mpScPatternAttr = rHolder.getScPatternAttr()->getCellAttributeHelper().registerAndCheck(*rHolder.getScPatternAttr(), false));
+}
+
+CellAttributeHolder::~CellAttributeHolder()
+{
+    if (nullptr != mpScPatternAttr)
+        suppress_fun_call_w_exception(mpScPatternAttr->getCellAttributeHelper().doUnregister(*mpScPatternAttr));
+}
+
+CellAttributeHolder& CellAttributeHolder::operator=(const CellAttributeHolder& rHolder)
+{
+    if (nullptr != mpScPatternAttr)
+    {
+        mpScPatternAttr->getCellAttributeHelper().doUnregister(*mpScPatternAttr);
+        mpScPatternAttr = nullptr;
+    }
+
+    if (rHolder.getScPatternAttr())
+        mpScPatternAttr = rHolder.getScPatternAttr()->getCellAttributeHelper().registerAndCheck(*rHolder.getScPatternAttr(), false);
+
+    return *this;
+}
+
+bool CellAttributeHolder::operator==(const CellAttributeHolder& rHolder) const
+{
+    // here we have registered entries, so no need to test for equality
+    return mpScPatternAttr == rHolder.mpScPatternAttr;
+}
+
+void CellAttributeHolder::setScPatternAttr(const ScPatternAttr* pNew, bool bPassingOwnership)
+{
+    if (nullptr != mpScPatternAttr)
+        mpScPatternAttr->getCellAttributeHelper().doUnregister(*mpScPatternAttr);
+
+    mpScPatternAttr = nullptr;
+
+    if (nullptr != pNew)
+        mpScPatternAttr = pNew->getCellAttributeHelper().registerAndCheck(*pNew, bPassingOwnership);
+}
+
+bool CellAttributeHolder::areSame(const CellAttributeHolder* p1, const CellAttributeHolder* p2)
+{
+    if (p1 == p2)
+        // pointer compare, this handles already
+        // nullptr and if indeed handed over twice
+        return true;
+
+    if (nullptr == p1 || nullptr == p2)
+        // one ptr is nullptr, not both, that would
+        // have triggered above
+        return false;
+
+    // return content compare using operator== at last
+    return *p1 == *p2;
+}
+
+#ifdef DBG_UTIL
+static size_t nUsedScPatternAttr(0);
+#endif
+
+const WhichRangesContainer aScPatternAttrSchema(svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>);
+
+ScPatternAttr::ScPatternAttr(CellAttributeHelper& rHelper, const SfxItemSet* pItemSet, const OUString* pStyleName)
+: maLocalSfxItemSet(rHelper.GetPool(), aScPatternAttrSchema)
+, mxVisible()
+, pStyle(nullptr)
+, pCellAttributeHelper(&rHelper)
+, mnPAKey(0)
+, mnRefCount(0)
+#ifdef DBG_UTIL
+, m_nSerialNumber(nUsedScPatternAttr++)
+, m_bDeleted(false)
+#endif
+{
+    if (nullptr != pStyleName)
+        moName = *pStyleName;
+
+    // We need to ensure that ScPatternAttr is using the correct WhichRange,
+    // see comments in commit message. This does transfers the items with
+    // minimized overhead, too
+    if (nullptr != pItemSet)
+    {
+        // CAUTION: Use bInvalidAsDefault == false for the ::Put,
+        // we *need* to take over also Items/Slots in state
+        // SfxItemState::INVALID aka IsInvalidItem, this is a precious
+        // value/information e.g. in ScDocument::CreateSelectionPattern
+        maLocalSfxItemSet.Put(*pItemSet, false);
+    }
+}
+
+ScPatternAttr::ScPatternAttr(const ScPatternAttr& rPatternAttr)
+: maLocalSfxItemSet(rPatternAttr.maLocalSfxItemSet)
+, moName(rPatternAttr.moName)
+, mxVisible(rPatternAttr.mxVisible)
+, mxNumberFormatKey(rPatternAttr.mxNumberFormatKey)
+, mxLanguageType(rPatternAttr.mxLanguageType)
+, pStyle(rPatternAttr.pStyle)
+, pCellAttributeHelper(rPatternAttr.pCellAttributeHelper)
+, mnPAKey(rPatternAttr.mnPAKey)
+, mnRefCount(0)
+#ifdef DBG_UTIL
+, m_nSerialNumber(nUsedScPatternAttr++)
+, m_bDeleted(false)
+#endif
+{
+}
+
+ScPatternAttr::~ScPatternAttr()
+{
+#ifdef DBG_UTIL
+    m_bDeleted = true;
+#endif
+    // should no longer be referenced, complain if not so
+    assert(!isRegistered());
+}
+
+static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
+{
+    if (pStr1 == pStr2)
+        return true;
+    if (pStr1 == nullptr || pStr2 == nullptr)
+        return false; // one ptr is nullptr, not both, that would have triggered above
+    return *pStr1 == *pStr2;
+}
+
+bool ScPatternAttr::operator==(const ScPatternAttr& rCmp) const
+{
+    // check if same incarnation
+    if (this == &rCmp)
+        return true;
+
+    // check everything except the SfxItemSet from base class SfxSetItem
+    if (!StrCmp(GetStyleName(), rCmp.GetStyleName()))
+        return false;
+
+    // use SfxItemSet::operator==, does the same as locally done here before,
+    // including pool compare (default). It also compares parent, not used here.
+    // There was the old comment from
+    //   "Actually test_tdf133629 from UITest_calc_tests9 somehow manages to have
+    //   a different range (and I don't understand enough why), so better be safe and compare fully."
+    // that hints to different WhichRanges, but WhichRanges are not compared in
+    // the std-operator (but the Items - if needed - as was here done locally)
+    return maLocalSfxItemSet == rCmp.maLocalSfxItemSet;
+}
+
+void ScPatternAttr::CalcHashCode() const
+{
+    size_t nHash = 0;
+    if (const OUString* pName = GetStyleName())
+        nHash = pName->hashCode();
+    o3tl::hash_combine(nHash, maLocalSfxItemSet.GetHashCode());
+    moHashCode = nHash;
+}
+
+bool ScPatternAttr::areSame(const ScPatternAttr* pItem1, const ScPatternAttr* pItem2)
+{
+    if (pItem1 == pItem2)
+        // pointer compare, this handles already
+        // nullptr and if indeed handed over twice
+        return true;
+
+    if (nullptr == pItem1 || nullptr == pItem2)
+        // one ptr is nullptr, not both, that would
+        // have triggered above
+        return false;
+
+    // return content compare using operator== at last
+    return *pItem1 == *pItem2;
+}
+
+SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
+{
+    SvxCellOrientation eOrient = SvxCellOrientation::Standard;
+
+    if( GetItem( ATTR_STACKED, rItemSet, pCondSet ).GetValue() )
+    {
+        eOrient = SvxCellOrientation::Stacked;
+    }
+    else
+    {
+        Degree100 nAngle = GetItem( ATTR_ROTATE_VALUE, rItemSet, pCondSet ).GetValue();
+        if( nAngle == 9000_deg100 )
+            eOrient = SvxCellOrientation::BottomUp;
+        else if( nAngle == 27000_deg100 )
+            eOrient = SvxCellOrientation::TopBottom;
+    }
+
+    return eOrient;
+}
+
+SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet* pCondSet ) const
+{
+    return GetCellOrientation( GetItemSet(), pCondSet );
+}
+
+namespace {
+
+void getFontIDsByScriptType(SvtScriptType nScript,
+        TypedWhichId<SvxFontItem>& nFontId,
+        TypedWhichId<SvxFontHeightItem>& nHeightId,
+        TypedWhichId<SvxWeightItem>& nWeightId,
+        TypedWhichId<SvxPostureItem>& nPostureId,
+        TypedWhichId<SvxLanguageItem>& nLangId)
+{
+    if ( nScript == SvtScriptType::ASIAN )
+    {
+        nFontId    = ATTR_CJK_FONT;
+        nHeightId  = ATTR_CJK_FONT_HEIGHT;
+        nWeightId  = ATTR_CJK_FONT_WEIGHT;
+        nPostureId = ATTR_CJK_FONT_POSTURE;
+        nLangId    = ATTR_CJK_FONT_LANGUAGE;
+    }
+    else if ( nScript == SvtScriptType::COMPLEX )
+    {
+        nFontId    = ATTR_CTL_FONT;
+        nHeightId  = ATTR_CTL_FONT_HEIGHT;
+        nWeightId  = ATTR_CTL_FONT_WEIGHT;
+        nPostureId = ATTR_CTL_FONT_POSTURE;
+        nLangId    = ATTR_CTL_FONT_LANGUAGE;
+    }
+    else
+    {
+        nFontId    = ATTR_FONT;
+        nHeightId  = ATTR_FONT_HEIGHT;
+        nWeightId  = ATTR_FONT_WEIGHT;
+        nPostureId = ATTR_FONT_POSTURE;
+        nLangId    = ATTR_FONT_LANGUAGE;
+    }
+}
+
+}
+
+void ScPatternAttr::fillFont(
+        vcl::Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
+        const OutputDevice* pOutDev, const double* pScale,
+        const SfxItemSet* pCondSet, const SfxItemSet* pTableSet, SvtScriptType nScript,
+        const Color* pBackConfigColor, const Color* pTextConfigColor)
+{
+    model::ComplexColor aComplexColor;
+
+    //  determine effective font color
+    ScPatternAttr::fillFontOnly(rFont, rItemSet, pOutDev, pScale, pCondSet, pTableSet, nScript);
+    ScPatternAttr::fillColor(aComplexColor, rItemSet, eAutoMode, pCondSet, pTableSet, pBackConfigColor, pTextConfigColor);
+
+    //  set font effects
+    rFont.SetColor(aComplexColor.getFinalColor());
+}
+
+template <class T>
+static const T* lcl_populateresult( TypedWhichId<T> nWhich, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet = nullptr )
+{
+    const T* pItem = nullptr;
+
+    if (pCondSet)
+        pItem = pCondSet->GetItemIfSet(nWhich);
+
+    if (!pItem && pTableSet)
+    {
+        const SfxPoolItem* pThisItem;
+        if (rSrcSet.GetItemState(nWhich, false, &pThisItem) == SfxItemState::SET
+            && *pThisItem != rSrcSet.GetPool()->GetUserOrPoolDefaultItem(nWhich))
+        {
+            // use the direct cell format value againts the Table style format
+            // if it not a default one (COL_BLACK is the default in case of Table Styles)
+            // on the cell level
+            if (sal_uInt16(nWhich) == ATTR_FONT_COLOR
+                && rSrcSet.GetItem(ATTR_FONT_COLOR)->getColor() == COL_BLACK)
+                pItem = pTableSet->GetItemIfSet(nWhich);
+            else
+                pItem = &rSrcSet.Get(nWhich);
+        }
+        else
+            pItem = pTableSet->GetItemIfSet(nWhich);
+    }
+
+    if (!pItem)
+        pItem = &rSrcSet.Get(nWhich);
+
+    return pItem;
+}
+
+void ScPatternAttr::fillFontOnly(
+        vcl::Font& rFont, const SfxItemSet& rItemSet,
+        const OutputDevice* pOutDev, const double* pScale,
+        const SfxItemSet* pCondSet, const SfxItemSet* pTableSet, SvtScriptType nScript)
+{
+    // Read items
+
+    const SvxFontItem* pFontAttr;
+    sal_uInt32 nFontHeight;
+    FontWeight eWeight;
+    FontItalic eItalic;
+    FontLineStyle eUnder;
+    FontLineStyle eOver;
+    bool bWordLine;
+    FontStrikeout eStrike;
+    bool bOutline;
+    bool bShadow;
+    FontEmphasisMark eEmphasis;
+    FontRelief eRelief;
+    LanguageType eLang;
+
+    TypedWhichId<SvxFontItem> nFontId(0);
+    TypedWhichId<SvxFontHeightItem> nHeightId(0);
+    TypedWhichId<SvxWeightItem> nWeightId(0);
+    TypedWhichId<SvxPostureItem> nPostureId(0);
+    TypedWhichId<SvxLanguageItem> nLangId(0);
+    getFontIDsByScriptType(nScript, nFontId, nHeightId, nWeightId, nPostureId, nLangId);
+
+    if (pCondSet)
+    {
+        pFontAttr = lcl_populateresult( nFontId, rItemSet, pCondSet, pTableSet );
+
+        const SvxFontHeightItem* pFontHeightItem = lcl_populateresult( nHeightId, rItemSet, pCondSet, pTableSet );
+        nFontHeight = pFontHeightItem->GetHeight();
+
+        const SvxWeightItem* pFontHWeightItem = lcl_populateresult( nWeightId, rItemSet, pCondSet, pTableSet );
+        eWeight = pFontHWeightItem->GetValue();
+
+        const SvxPostureItem* pPostureItem = pCondSet->GetItemIfSet( nPostureId );
+        if ( !pPostureItem )
+            pPostureItem = &rItemSet.Get( nPostureId );
+        eItalic = pPostureItem->GetValue();
+
+        const SvxUnderlineItem* pUnderlineItem = pCondSet->GetItemIfSet( ATTR_FONT_UNDERLINE );
+        if ( !pUnderlineItem )
+            pUnderlineItem = &rItemSet.Get( ATTR_FONT_UNDERLINE );
+        eUnder = pUnderlineItem->GetValue();
+
+        const SvxOverlineItem* pOverlineItem = pCondSet->GetItemIfSet( ATTR_FONT_OVERLINE );
+        if ( !pOverlineItem )
+            pOverlineItem = &rItemSet.Get( ATTR_FONT_OVERLINE );
+        eOver = pOverlineItem->GetValue();
+
+        const SvxWordLineModeItem* pWordlineItem = pCondSet->GetItemIfSet( ATTR_FONT_WORDLINE );
+        if ( !pWordlineItem )
+            pWordlineItem = &rItemSet.Get( ATTR_FONT_WORDLINE );
+        bWordLine = pWordlineItem->GetValue();
+
+        const SvxCrossedOutItem* pCrossedOutItem = pCondSet->GetItemIfSet( ATTR_FONT_CROSSEDOUT );
+        if ( !pCrossedOutItem )
+            pCrossedOutItem = &rItemSet.Get( ATTR_FONT_CROSSEDOUT );
+        eStrike = pCrossedOutItem->GetValue();
+
+        const SvxContourItem* pContourItem = pCondSet->GetItemIfSet( ATTR_FONT_CONTOUR );
+        if ( !pContourItem )
+            pContourItem = &rItemSet.Get( ATTR_FONT_CONTOUR );
+        bOutline = pContourItem->GetValue();
+
+        const SvxShadowedItem* pShadowedItem = pCondSet->GetItemIfSet( ATTR_FONT_SHADOWED );
+        if ( !pShadowedItem )
+            pShadowedItem = &rItemSet.Get( ATTR_FONT_SHADOWED );
+        bShadow = pShadowedItem->GetValue();
+
+        const SvxEmphasisMarkItem* pEmphasisMarkItem = pCondSet->GetItemIfSet( ATTR_FONT_EMPHASISMARK );
+        if ( !pEmphasisMarkItem )
+            pEmphasisMarkItem = &rItemSet.Get( ATTR_FONT_EMPHASISMARK );
+        eEmphasis = pEmphasisMarkItem->GetEmphasisMark();
+
+        const SvxCharReliefItem* pCharReliefItem = pCondSet->GetItemIfSet( ATTR_FONT_RELIEF );
+        if ( !pCharReliefItem )
+            pCharReliefItem = &rItemSet.Get( ATTR_FONT_RELIEF );
+        eRelief = pCharReliefItem->GetValue();
+
+        const SvxLanguageItem* pLanguageItem = pCondSet->GetItemIfSet( nLangId );
+        if ( !pLanguageItem )
+            pLanguageItem = &rItemSet.Get( nLangId );
+        eLang = pLanguageItem->GetLanguage();
+    }
+    else    // Everything from rItemSet
+    {
+        pFontAttr = lcl_populateresult( nFontId, rItemSet, pCondSet, pTableSet );
+
+        const SvxFontHeightItem* pFontHeightItem = lcl_populateresult( nHeightId, rItemSet, pCondSet, pTableSet );
+        nFontHeight = pFontHeightItem->GetHeight();
+
+        const SvxWeightItem* pFontHWeightItem = lcl_populateresult( nWeightId, rItemSet, pCondSet, pTableSet );
+        eWeight = pFontHWeightItem->GetValue();
+
+        eItalic = rItemSet.Get( nPostureId ).GetValue();
+        eUnder = rItemSet.Get( ATTR_FONT_UNDERLINE ).GetValue();
+        eOver = rItemSet.Get( ATTR_FONT_OVERLINE ).GetValue();
+        bWordLine = rItemSet.Get( ATTR_FONT_WORDLINE ).GetValue();
+        eStrike = rItemSet.Get( ATTR_FONT_CROSSEDOUT ).GetValue();
+        bOutline = rItemSet.Get( ATTR_FONT_CONTOUR ).GetValue();
+        bShadow = rItemSet.Get( ATTR_FONT_SHADOWED ).GetValue();
+        eEmphasis = rItemSet.Get( ATTR_FONT_EMPHASISMARK ).GetEmphasisMark();
+        eRelief = rItemSet.Get( ATTR_FONT_RELIEF ).GetValue();
+        // for graphite language features
+        eLang = rItemSet.Get( nLangId ).GetLanguage();
+    }
+    OSL_ENSURE(pFontAttr,"Oops?");
+
+    //  Evaluate
+
+    //  FontItem:
+
+    if (rFont.GetFamilyName() != pFontAttr->GetFamilyName())
+        rFont.SetFamilyName( pFontAttr->GetFamilyName() );
+    if (rFont.GetStyleName() != pFontAttr->GetStyleName())
+        rFont.SetStyleName( pFontAttr->GetStyleName() );
+
+    rFont.SetFamily( pFontAttr->GetFamily() );
+    rFont.SetCharSet( pFontAttr->GetCharSet() );
+    rFont.SetPitch( pFontAttr->GetPitch() );
+
+    rFont.SetLanguage(eLang);
+
+    //  Size
+
+    if ( pOutDev != nullptr )
+    {
+        Size aEffSize;
+        double fFraction( 1.0 );
+        if (pScale)
+            fFraction = *pScale;
+        Size aSize( 0, static_cast<tools::Long>(nFontHeight) );
+        MapMode aDestMode = pOutDev->GetMapMode();
+        MapMode aSrcMode( MapUnit::MapTwip, Point(), fFraction, fFraction );
+        if (aDestMode.GetMapUnit() == MapUnit::MapPixel && pOutDev->GetDPIX() > 0)
+            aEffSize = pOutDev->LogicToPixel( aSize, aSrcMode );
+        else
+        {
+            double fFractOne(1.0);
+            aDestMode.SetScaleX( fFractOne );
+            aDestMode.SetScaleY( fFractOne );
+            aEffSize = OutputDevice::LogicToLogic( aSize, aSrcMode, aDestMode );
+        }
+        rFont.SetFontSize( aEffSize );
+    }
+    else /* if pOutDev != NULL */
+    {
+        rFont.SetFontSize( Size( 0, static_cast<tools::Long>(nFontHeight) ) );
+    }
+
+    //  set font effects
+    rFont.SetWeight( eWeight );
+    rFont.SetItalic( eItalic );
+    rFont.SetUnderline( eUnder );
+    rFont.SetOverline( eOver );
+    rFont.SetWordLineMode( bWordLine );
+    rFont.SetStrikeout( eStrike );
+    rFont.SetOutline( bOutline );
+    rFont.SetShadow( bShadow );
+    rFont.SetEmphasisMark( eEmphasis );
+    rFont.SetRelief( eRelief );
+    rFont.SetTransparent( true );
+}
+
+void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet, const Color* pBackConfigColor, const Color* pTextConfigColor)
+{
+    const SvxColorItem* pColorItem
+        = lcl_populateresult(ATTR_FONT_COLOR, rItemSet, pCondSet, pTableSet);
+
+    Color aColor;
+    model::ComplexColor aComplexColor;
+    if (pColorItem)
+    {
+        aComplexColor = pColorItem->getComplexColor();
+        aColor = pColorItem->GetValue();
+    }
+
+    if (aComplexColor.getType() == model::ColorType::Unused)
+    {
+        aComplexColor.setColor(aColor);
+    }
+
+    if ((aColor == COL_AUTO && eAutoMode != ScAutoFontColorMode::Raw)
+        || eAutoMode == ScAutoFontColorMode::IgnoreFont
+        || eAutoMode == ScAutoFontColorMode::IgnoreAll)
+    {
+        //  get background color from conditional or own set
+        const SvxBrushItem* pItem
+            = lcl_populateresult(ATTR_BACKGROUND, rItemSet, pCondSet, pTableSet);
+
+        Color aBackColor;
+        if (pItem)
+            aBackColor = pItem->GetColor();
+
+        //  if background color attribute is transparent, use window color for brightness comparisons
+        if (aBackColor == COL_TRANSPARENT
+            || eAutoMode == ScAutoFontColorMode::IgnoreBack
+            || eAutoMode == ScAutoFontColorMode::IgnoreAll)
+        {
+            if (!comphelper::COKit::isActive())
+            {
+                if ( eAutoMode == ScAutoFontColorMode::Print )
+                    aBackColor = COL_WHITE;
+                else if ( pBackConfigColor )
+                {
+                    // pBackConfigColor can be used to avoid repeated lookup of the configured color
+                    aBackColor = *pBackConfigColor;
+                }
+                else
+                    aBackColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            }
+            else
+            {
+                // Get document color from current view instead
+                SfxViewShell* pSfxViewShell = SfxViewShell::Current();
+                ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
+                if (pViewShell)
+                {
+                    const ScViewRenderingOptions& rViewRenderingOptions = pViewShell->GetViewRenderingData();
+                    aBackColor = eAutoMode == ScAutoFontColorMode::Print ? COL_WHITE :
+                        rViewRenderingOptions.GetDocColor();
+                }
+            }
+        }
+
+        //  get system text color for comparison
+        Color aSysTextColor;
+        if (eAutoMode == ScAutoFontColorMode::Print)
+        {
+            aSysTextColor = COL_BLACK;
+        }
+        else if (pTextConfigColor)
+        {
+            // pTextConfigColor can be used to avoid repeated lookup of the configured color
+            aSysTextColor = *pTextConfigColor;
+            if (ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor == COL_AUTO)
+            {
+                if ( aBackColor.IsDark() && aSysTextColor.IsDark() )
+                    aSysTextColor = COL_WHITE;
+                else
+                    aSysTextColor = COL_BLACK;
+            }
+        }
+        else
+        {
+            aSysTextColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+        }
+
+        if (SfxViewShell::Current())
+        {
+            if (aBackColor.IsDark())
+                aColor = COL_WHITE;
+            else
+                aColor = COL_BLACK;
+        }
+        else
+        {
+            aColor = aSysTextColor;
+        }
+    }
+    else if (svtools::ColorConfig::IsDarkMode())
+    {
+        const SvxBrushItem* pItem
+            = lcl_populateresult(ATTR_BACKGROUND, rItemSet, pCondSet, pTableSet);
+
+        Color aBackColor;
+        if (pItem)
+            aBackColor = pItem->GetColor();
+
+        if (aBackColor == COL_TRANSPARENT)
+        {
+            if (pBackConfigColor)
+                aBackColor = *pBackConfigColor;
+            else if (SfxViewShell::Current())
+            {
+                ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+                if (pViewShell)
+                    aBackColor = pViewShell->GetViewRenderingData().GetDocColor();
+                else
+                    aBackColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            }
+            else
+                aBackColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+        }
+
+        if (aBackColor.IsDark())
+        {
+            const sal_uInt8 nOriginalAlpha = aColor.GetAlpha();
+            aColor = Color(basegfx::utils::getLightVariant(aColor.getBColor()));
+            aColor.SetAlpha(nOriginalAlpha);
+        }
+    }
+
+    aComplexColor.setFinalColor(aColor);
+    rComplexColor = std::move(aComplexColor);
+}
+
+ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, SvtScriptType nScript)
+{
+    TypedWhichId<SvxFontItem> nFontId(0);
+    TypedWhichId<SvxFontHeightItem> nHeightId(0);
+    TypedWhichId<SvxWeightItem> nWeightId(0);
+    TypedWhichId<SvxPostureItem> nPostureId(0);
+    TypedWhichId<SvxLanguageItem> nLangId(0);
+    getFontIDsByScriptType(nScript, nFontId, nHeightId, nWeightId, nPostureId, nLangId);
+
+    ScDxfFont aReturn;
+
+    if ( const SvxFontItem* pItem = rItemSet.GetItemIfSet( nFontId ) )
+    {
+        aReturn.pFontAttr = pItem;
+    }
+
+    if ( const SvxFontHeightItem* pItem = rItemSet.GetItemIfSet( nHeightId ) )
+    {
+        aReturn.nFontHeight = pItem->GetHeight();
+    }
+
+    if ( const SvxWeightItem* pItem = rItemSet.GetItemIfSet( nWeightId ) )
+    {
+        aReturn.eWeight = pItem->GetValue();
+    }
+
+    if ( const SvxPostureItem* pItem = rItemSet.GetItemIfSet( nPostureId ) )
+    {
+        aReturn.eItalic = pItem->GetValue();
+    }
+
+    if ( const SvxUnderlineItem* pItem = rItemSet.GetItemIfSet( ATTR_FONT_UNDERLINE ) )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_UNDERLINE );
+        aReturn.eUnder = pItem->GetValue();
+    }
+
+    if ( const SvxOverlineItem* pItem = rItemSet.GetItemIfSet( ATTR_FONT_OVERLINE ) )
+    {
+        aReturn.eOver = pItem->GetValue();
+    }
+
+    if ( const SvxWordLineModeItem* pItem = rItemSet.GetItemIfSet( ATTR_FONT_WORDLINE ) )
+    {
+        aReturn.bWordLine = pItem->GetValue();
+    }
+
+    if ( const SvxCrossedOutItem* pItem = rItemSet.GetItemIfSet( ATTR_FONT_CROSSEDOUT ) )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_CROSSEDOUT );
+        aReturn.eStrike = pItem->GetValue();
+    }
+
+    if ( const SvxContourItem* pItem = rItemSet.GetItemIfSet( ATTR_FONT_CONTOUR ) )
+    {
+        aReturn.bOutline = pItem->GetValue();
+    }
+
+    if ( const SvxShadowedItem* pItem = rItemSet.GetItemIfSet( ATTR_FONT_SHADOWED ) )
+    {
+        pItem = &rItemSet.Get( ATTR_FONT_SHADOWED );
+        aReturn.bShadow = pItem->GetValue();
+    }
+
+    if ( const SvxEmphasisMarkItem* pItem = rItemSet.GetItemIfSet( ATTR_FONT_EMPHASISMARK ) )
+    {
+        aReturn.eEmphasis = pItem->GetEmphasisMark();
+    }
+
+    if ( const SvxCharReliefItem* pItem = rItemSet.GetItemIfSet( ATTR_FONT_RELIEF ) )
+    {
+        aReturn.eRelief = pItem->GetValue();
+    }
+
+    if ( const SvxColorItem* pItem = rItemSet.GetItemIfSet( ATTR_FONT_COLOR ) )
+    {
+        aReturn.aColor = pItem->GetValue();
+    }
+
+    if ( const SvxLanguageItem* pItem = rItemSet.GetItemIfSet( nLangId ) )
+    {
+        aReturn.eLang = pItem->GetLanguage();
+    }
+
+    return aReturn;
+}
+
+template <class T>
+static void lcl_populate( std::optional<T>& rxItem, TypedWhichId<T> nWhich, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet = nullptr )
+{
+    const T* pItem = nullptr;
+
+    if (pCondSet)
+        pItem = pCondSet->GetItemIfSet(nWhich);
+
+    if (!pItem && pTableSet)
+    {
+        const SfxPoolItem* pThisItem;
+        if (rSrcSet.GetItemState(nWhich, false, &pThisItem) == SfxItemState::SET
+            && *pThisItem != rSrcSet.GetPool()->GetUserOrPoolDefaultItem(nWhich))
+        {
+            // use the direct cell format value againts the Table style format
+            // if it not a default one (COL_BLACK is the default in case of Table Styles)
+            // on the cell level
+            if (sal_uInt16(nWhich) == ATTR_FONT_COLOR
+                && rSrcSet.GetItem(ATTR_FONT_COLOR)->getColor() == COL_BLACK)
+                pItem = pTableSet->GetItemIfSet(nWhich);
+            else
+                pItem = &rSrcSet.Get(nWhich);
+        }
+        else
+            pItem = pTableSet->GetItemIfSet(nWhich);
+    }
+
+    if (!pItem)
+        pItem = &rSrcSet.Get(nWhich);
+
+    rxItem.emplace(*pItem);
+}
+
+void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet )
+{
+    //  Read Items
+
+    std::optional<SvxColorItem> oColorItem(std::in_place, EE_CHAR_COLOR);              // use item as-is
+    std::optional<SvxFontItem> oFontItem(std::in_place, EE_CHAR_FONTINFO);            // use item as-is
+    std::optional<SvxFontItem> oCjkFontItem(std::in_place, EE_CHAR_FONTINFO_CJK);            // use item as-is
+    std::optional<SvxFontItem> oCtlFontItem(std::in_place, EE_CHAR_FONTINFO_CTL);            // use item as-is
+    tools::Long            nTHeight, nCjkTHeight, nCtlTHeight;     // Twips
+    FontWeight      eWeight, eCjkWeight, eCtlWeight;
+    std::optional<SvxUnderlineItem> oUnderlineItem(std::in_place, LINESTYLE_NONE, EE_CHAR_UNDERLINE);
+    std::optional<SvxOverlineItem> oOverlineItem(std::in_place, LINESTYLE_NONE, EE_CHAR_OVERLINE);
+    bool            bWordLine;
+    FontStrikeout   eStrike;
+    FontItalic      eItalic, eCjkItalic, eCtlItalic;
+    bool            bOutline;
+    bool            bShadow;
+    bool            bForbidden;
+    FontEmphasisMark eEmphasis;
+    FontRelief      eRelief;
+    LanguageType    eLang, eCjkLang, eCtlLang;
+    bool            bHyphenate;
+    SvxFrameDirection eDirection;
+
+    //TODO: additional parameter to control if language is needed?
+
+    if ( pCondSet )
+    {
+        lcl_populate(oColorItem, ATTR_FONT_COLOR, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oFontItem, ATTR_FONT, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oCjkFontItem, ATTR_CJK_FONT, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oCtlFontItem, ATTR_CTL_FONT, rSrcSet, pCondSet, pTableSet);
+
+        const SvxFontHeightItem* pFontHeightItem = lcl_populateresult( ATTR_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet );
+        nTHeight = pFontHeightItem->GetHeight();
+        pFontHeightItem = lcl_populateresult( ATTR_CJK_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet );
+        nCjkTHeight = pFontHeightItem->GetHeight();
+        pFontHeightItem = lcl_populateresult( ATTR_CTL_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet );
+        nCtlTHeight = pFontHeightItem->GetHeight();
+
+        const SvxWeightItem* pWeightItem = lcl_populateresult( ATTR_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet );
+        eWeight = pWeightItem->GetValue();
+        pWeightItem = lcl_populateresult( ATTR_CJK_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet );
+        eCjkWeight = pWeightItem->GetValue();
+        pWeightItem = lcl_populateresult( ATTR_CTL_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet );
+        eCtlWeight = pWeightItem->GetValue();
+
+        const SvxPostureItem* pPostureItem = pCondSet->GetItemIfSet( ATTR_FONT_POSTURE );
+        if ( !pPostureItem )
+            pPostureItem = &rSrcSet.Get( ATTR_FONT_POSTURE );
+        eItalic = pPostureItem->GetValue();
+        pPostureItem = pCondSet->GetItemIfSet( ATTR_CJK_FONT_POSTURE );
+        if ( !pPostureItem )
+            pPostureItem = &rSrcSet.Get( ATTR_CJK_FONT_POSTURE );
+        eCjkItalic = pPostureItem->GetValue();
+        pPostureItem = pCondSet->GetItemIfSet( ATTR_CTL_FONT_POSTURE );
+        if ( !pPostureItem )
+            pPostureItem = &rSrcSet.Get( ATTR_CTL_FONT_POSTURE );
+        eCtlItalic = pPostureItem->GetValue();
+
+        lcl_populate(oUnderlineItem, ATTR_FONT_UNDERLINE, rSrcSet, pCondSet);
+        lcl_populate(oOverlineItem, ATTR_FONT_OVERLINE, rSrcSet, pCondSet);
+
+        const SvxWordLineModeItem* pWordLineModeItem = pCondSet->GetItemIfSet( ATTR_FONT_WORDLINE );
+        if ( !pWordLineModeItem )
+            pWordLineModeItem = &rSrcSet.Get( ATTR_FONT_WORDLINE );
+        bWordLine = pWordLineModeItem->GetValue();
+
+        const SvxCrossedOutItem* pCrossedOutItem = pCondSet->GetItemIfSet( ATTR_FONT_CROSSEDOUT );
+        if ( !pCrossedOutItem )
+            pCrossedOutItem = &rSrcSet.Get( ATTR_FONT_CROSSEDOUT );
+        eStrike = pCrossedOutItem->GetValue();
+
+        const SvxContourItem* pContourItem = pCondSet->GetItemIfSet( ATTR_FONT_CONTOUR );
+        if ( !pContourItem )
+            pContourItem = &rSrcSet.Get( ATTR_FONT_CONTOUR );
+        bOutline = pContourItem->GetValue();
+
+        const SvxShadowedItem* pShadowedItem = pCondSet->GetItemIfSet( ATTR_FONT_SHADOWED );
+        if ( !pShadowedItem )
+            pShadowedItem = &rSrcSet.Get( ATTR_FONT_SHADOWED );
+        bShadow = pShadowedItem->GetValue();
+
+        const SvxForbiddenRuleItem* pForbiddenRuleItem = pCondSet->GetItemIfSet( ATTR_FORBIDDEN_RULES );
+        if ( !pForbiddenRuleItem )
+            pForbiddenRuleItem = &rSrcSet.Get( ATTR_FORBIDDEN_RULES );
+        bForbidden = pForbiddenRuleItem->GetValue();
+
+        const SvxEmphasisMarkItem* pEmphasisMarkItem = pCondSet->GetItemIfSet( ATTR_FONT_EMPHASISMARK );
+        if ( !pEmphasisMarkItem )
+            pEmphasisMarkItem = &rSrcSet.Get( ATTR_FONT_EMPHASISMARK );
+        eEmphasis = pEmphasisMarkItem->GetEmphasisMark();
+        const SvxCharReliefItem* pCharReliefItem = pCondSet->GetItemIfSet( ATTR_FONT_RELIEF );
+        if ( !pCharReliefItem )
+            pCharReliefItem = &rSrcSet.Get( ATTR_FONT_RELIEF );
+        eRelief = pCharReliefItem->GetValue();
+
+        const SvxLanguageItem* pLanguageItem = pCondSet->GetItemIfSet( ATTR_FONT_LANGUAGE );
+        if ( !pLanguageItem )
+            pLanguageItem = &rSrcSet.Get( ATTR_FONT_LANGUAGE );
+        eLang = pLanguageItem->GetLanguage();
+        pLanguageItem = pCondSet->GetItemIfSet( ATTR_CJK_FONT_LANGUAGE );
+        if ( !pLanguageItem )
+            pLanguageItem = &rSrcSet.Get( ATTR_CJK_FONT_LANGUAGE );
+        eCjkLang = pLanguageItem->GetLanguage();
+        pLanguageItem = pCondSet->GetItemIfSet( ATTR_CTL_FONT_LANGUAGE );
+        if ( !pLanguageItem )
+            pLanguageItem = &rSrcSet.Get( ATTR_CTL_FONT_LANGUAGE );
+        eCtlLang = pLanguageItem->GetLanguage();
+
+        const ScHyphenateCell* pHyphenateCell = pCondSet->GetItemIfSet( ATTR_HYPHENATE );
+        if ( !pHyphenateCell )
+            pHyphenateCell = &rSrcSet.Get( ATTR_HYPHENATE );
+        bHyphenate = pHyphenateCell->GetValue();
+
+        const SvxFrameDirectionItem* pFrameDirectionItem = pCondSet->GetItemIfSet( ATTR_WRITINGDIR );
+        if ( !pFrameDirectionItem )
+            pFrameDirectionItem = &rSrcSet.Get( ATTR_WRITINGDIR );
+        eDirection = pFrameDirectionItem->GetValue();
+    }
+    else        // Everything directly from Pattern
+    {
+        lcl_populate(oColorItem, ATTR_FONT_COLOR, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oFontItem, ATTR_FONT, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oCjkFontItem, ATTR_CJK_FONT, rSrcSet, pCondSet, pTableSet);
+        lcl_populate(oCtlFontItem, ATTR_CTL_FONT, rSrcSet, pCondSet, pTableSet);
+
+        const SvxFontHeightItem* pFontHeightItem = lcl_populateresult(ATTR_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet);
+        nTHeight = pFontHeightItem->GetHeight();
+        pFontHeightItem = lcl_populateresult(ATTR_CJK_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet);
+        nCjkTHeight = pFontHeightItem->GetHeight();
+        pFontHeightItem = lcl_populateresult(ATTR_CTL_FONT_HEIGHT, rSrcSet, pCondSet, pTableSet);
+        nCtlTHeight = pFontHeightItem->GetHeight();
+
+        const SvxWeightItem* pWeightItem = lcl_populateresult(ATTR_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet);
+        eWeight = pWeightItem->GetValue();
+        pWeightItem = lcl_populateresult(ATTR_CJK_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet);
+        eCjkWeight = pWeightItem->GetValue();
+        pWeightItem = lcl_populateresult(ATTR_CTL_FONT_WEIGHT, rSrcSet, pCondSet, pTableSet);
+        eCtlWeight = pWeightItem->GetValue();
+
+        eItalic = rSrcSet.Get( ATTR_FONT_POSTURE ).GetValue();
+        eCjkItalic = rSrcSet.Get( ATTR_CJK_FONT_POSTURE ).GetValue();
+        eCtlItalic = rSrcSet.Get( ATTR_CTL_FONT_POSTURE ).GetValue();
+        oUnderlineItem.emplace(rSrcSet.Get(ATTR_FONT_UNDERLINE));
+        oOverlineItem.emplace(rSrcSet.Get(ATTR_FONT_OVERLINE));
+        bWordLine = rSrcSet.Get( ATTR_FONT_WORDLINE ).GetValue();
+        eStrike = rSrcSet.Get( ATTR_FONT_CROSSEDOUT ).GetValue();
+        bOutline = rSrcSet.Get( ATTR_FONT_CONTOUR ).GetValue();
+        bShadow = rSrcSet.Get( ATTR_FONT_SHADOWED ).GetValue();
+        bForbidden = rSrcSet.Get( ATTR_FORBIDDEN_RULES ).GetValue();
+        eEmphasis = rSrcSet.Get( ATTR_FONT_EMPHASISMARK ).GetEmphasisMark();
+        eRelief = rSrcSet.Get( ATTR_FONT_RELIEF ).GetValue();
+        eLang = rSrcSet.Get( ATTR_FONT_LANGUAGE ).GetLanguage();
+        eCjkLang = rSrcSet.Get( ATTR_CJK_FONT_LANGUAGE ).GetLanguage();
+        eCtlLang = rSrcSet.Get( ATTR_CTL_FONT_LANGUAGE ).GetLanguage();
+        bHyphenate = rSrcSet.Get( ATTR_HYPHENATE ).GetValue();
+        eDirection = rSrcSet.Get( ATTR_WRITINGDIR ).GetValue();
+    }
+
+    // Expect to be compatible to LogicToLogic, ie. 2540/1440 = 127/72, and round
+
+    tools::Long nHeight = convertTwipToMm100(nTHeight);
+    tools::Long nCjkHeight = convertTwipToMm100(nCjkTHeight);
+    tools::Long nCtlHeight = convertTwipToMm100(nCtlTHeight);
+
+    //  put items into EditEngine ItemSet
+
+    if ( oColorItem->GetValue() == COL_AUTO )
+    {
+        //  When cell attributes are converted to EditEngine paragraph attributes,
+        //  don't create a hard item for automatic color, because that would be converted
+        //  to black when the item's Store method is used in CreateTransferable/WriteBin.
+        //  COL_AUTO is the EditEngine's pool default, so ClearItem will result in automatic
+        //  color, too, without having to store the item.
+        rEditSet.ClearItem( EE_CHAR_COLOR );
+    }
+    else
+    {
+        // tdf#125054 adapt WhichID
+        rEditSet.PutAsTargetWhich( *oColorItem, EE_CHAR_COLOR );
+    }
+
+    // tdf#125054 adapt WhichID
+    rEditSet.PutAsTargetWhich( *oFontItem, EE_CHAR_FONTINFO );
+    rEditSet.PutAsTargetWhich( *oCjkFontItem, EE_CHAR_FONTINFO_CJK );
+    rEditSet.PutAsTargetWhich( *oCtlFontItem, EE_CHAR_FONTINFO_CTL );
+
+    rEditSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
+    rEditSet.Put( SvxFontHeightItem( nCjkHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+    rEditSet.Put( SvxFontHeightItem( nCtlHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+    rEditSet.Put( SvxWeightItem ( eWeight,      EE_CHAR_WEIGHT ) );
+    rEditSet.Put( SvxWeightItem ( eCjkWeight,   EE_CHAR_WEIGHT_CJK ) );
+    rEditSet.Put( SvxWeightItem ( eCtlWeight,   EE_CHAR_WEIGHT_CTL ) );
+
+    // tdf#125054 adapt WhichID
+    rEditSet.PutAsTargetWhich( *oUnderlineItem, EE_CHAR_UNDERLINE );
+    rEditSet.PutAsTargetWhich( *oOverlineItem, EE_CHAR_OVERLINE );
+
+    rEditSet.Put( SvxWordLineModeItem( bWordLine,   EE_CHAR_WLM ) );
+    rEditSet.Put( SvxCrossedOutItem( eStrike,       EE_CHAR_STRIKEOUT ) );
+    rEditSet.Put( SvxPostureItem    ( eItalic,      EE_CHAR_ITALIC ) );
+    rEditSet.Put( SvxPostureItem    ( eCjkItalic,   EE_CHAR_ITALIC_CJK ) );
+    rEditSet.Put( SvxPostureItem    ( eCtlItalic,   EE_CHAR_ITALIC_CTL ) );
+    rEditSet.Put( SvxContourItem    ( bOutline,     EE_CHAR_OUTLINE ) );
+    rEditSet.Put( SvxShadowedItem   ( bShadow,      EE_CHAR_SHADOW ) );
+    rEditSet.Put( SvxForbiddenRuleItem(bForbidden, EE_PARA_FORBIDDENRULES) );
+    rEditSet.Put( SvxEmphasisMarkItem( eEmphasis,   EE_CHAR_EMPHASISMARK ) );
+    rEditSet.Put( SvxCharReliefItem( eRelief,       EE_CHAR_RELIEF ) );
+    rEditSet.Put( SvxLanguageItem   ( eLang,        EE_CHAR_LANGUAGE ) );
+    rEditSet.Put( SvxLanguageItem   ( eCjkLang,     EE_CHAR_LANGUAGE_CJK ) );
+    rEditSet.Put( SvxLanguageItem   ( eCtlLang,     EE_CHAR_LANGUAGE_CTL ) );
+    rEditSet.Put( SfxBoolItem       ( EE_PARA_HYPHENATE, bHyphenate ) );
+    rEditSet.Put( SvxFrameDirectionItem( eDirection, EE_PARA_WRITINGDIR ) );
+
+    // Script spacing is always off.
+    // The cell attribute isn't used here as long as there is no UI to set it
+    // (don't evaluate attributes that can't be changed).
+    // If a locale-dependent default is needed, it has to go into the cell
+    // style, like the fonts.
+    rEditSet.Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
+}
+
+void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet ) const
+{
+    if( pEditSet )
+        FillToEditItemSet( *pEditSet, GetItemSet(), pCondSet, pTableSet );
+}
+
+void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& rEditSet )
+{
+    if (const SvxColorItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_COLOR))
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_FONT_COLOR );
+
+    if (const SvxFontItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_FONTINFO))
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_FONT );
+    if (const SvxFontItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_FONTINFO_CJK))
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_CJK_FONT );
+    if (const SvxFontItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_FONTINFO_CTL))
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_CTL_FONT );
+
+    if (const SvxFontHeightItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_FONTHEIGHT))
+        rDestSet.Put( SvxFontHeightItem(o3tl::toTwips(pItem->GetHeight(), o3tl::Length::mm100),
+                        100, ATTR_FONT_HEIGHT ) );
+    if (const SvxFontHeightItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_FONTHEIGHT_CJK))
+        rDestSet.Put( SvxFontHeightItem(o3tl::toTwips(pItem->GetHeight(), o3tl::Length::mm100),
+                        100, ATTR_CJK_FONT_HEIGHT ) );
+    if (const SvxFontHeightItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_FONTHEIGHT_CTL))
+        rDestSet.Put( SvxFontHeightItem(o3tl::toTwips(pItem->GetHeight(), o3tl::Length::mm100),
+                        100, ATTR_CTL_FONT_HEIGHT ) );
+
+    if (const SvxWeightItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_WEIGHT))
+        rDestSet.Put( SvxWeightItem( pItem->GetValue(),
+                        ATTR_FONT_WEIGHT) );
+    if (const SvxWeightItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_WEIGHT_CJK))
+        rDestSet.Put( SvxWeightItem( pItem->GetValue(),
+                        ATTR_CJK_FONT_WEIGHT) );
+    if (const SvxWeightItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_WEIGHT_CTL))
+        rDestSet.Put( SvxWeightItem( pItem->GetValue(),
+                        ATTR_CTL_FONT_WEIGHT) );
+
+    // SvxTextLineItem contains enum and color
+    if (const SvxUnderlineItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_UNDERLINE))
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_FONT_UNDERLINE );
+    if (const SvxOverlineItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_OVERLINE))
+        rDestSet.PutAsTargetWhich( *pItem, ATTR_FONT_OVERLINE );
+    if (const SvxWordLineModeItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_WLM))
+        rDestSet.Put( SvxWordLineModeItem( pItem->GetValue(),
+                        ATTR_FONT_WORDLINE) );
+
+    if (const SvxCrossedOutItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_STRIKEOUT))
+        rDestSet.Put( SvxCrossedOutItem( pItem->GetValue(),
+                        ATTR_FONT_CROSSEDOUT) );
+
+    if (const SvxPostureItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_ITALIC))
+        rDestSet.Put( SvxPostureItem( pItem->GetValue(),
+                        ATTR_FONT_POSTURE) );
+    if (const SvxPostureItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_ITALIC_CJK))
+        rDestSet.Put( SvxPostureItem( pItem->GetValue(),
+                        ATTR_CJK_FONT_POSTURE) );
+    if (const SvxPostureItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_ITALIC_CTL))
+        rDestSet.Put( SvxPostureItem( pItem->GetValue(),
+                        ATTR_CTL_FONT_POSTURE) );
+
+    if (const SvxContourItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_OUTLINE))
+        rDestSet.Put( SvxContourItem( pItem->GetValue(),
+                        ATTR_FONT_CONTOUR) );
+    if (const SvxShadowedItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_SHADOW))
+        rDestSet.Put( SvxShadowedItem( pItem->GetValue(),
+                        ATTR_FONT_SHADOWED) );
+    if (const SvxEmphasisMarkItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_EMPHASISMARK))
+        rDestSet.Put( SvxEmphasisMarkItem( pItem->GetEmphasisMark(),
+                        ATTR_FONT_EMPHASISMARK) );
+    if (const SvxCharReliefItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_RELIEF))
+        rDestSet.Put( SvxCharReliefItem( pItem->GetValue(),
+                        ATTR_FONT_RELIEF) );
+
+    if (const SvxLanguageItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_LANGUAGE))
+        rDestSet.Put( SvxLanguageItem(pItem->GetValue(), ATTR_FONT_LANGUAGE) );
+    if (const SvxLanguageItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_LANGUAGE_CJK))
+        rDestSet.Put( SvxLanguageItem(pItem->GetValue(), ATTR_CJK_FONT_LANGUAGE) );
+    if (const SvxLanguageItem* pItem = rEditSet.GetItemIfSet(EE_CHAR_LANGUAGE_CTL))
+        rDestSet.Put( SvxLanguageItem(pItem->GetValue(), ATTR_CTL_FONT_LANGUAGE) );
+
+    const SvxAdjustItem* pAdjustItem = rEditSet.GetItemIfSet(EE_PARA_JUST);
+
+    if (!pAdjustItem)
+        return;
+
+    SvxCellHorJustify eVal;
+    switch ( pAdjustItem->GetAdjust() )
+    {
+        case SvxAdjust::Left:
+            // EditEngine Default is always set in the GetAttribs() ItemSet !
+            // whether left or right, is decided in text / number
+            eVal = SvxCellHorJustify::Standard;
+            break;
+        case SvxAdjust::Right:
+            eVal = SvxCellHorJustify::Right;
+            break;
+        case SvxAdjust::Block:
+            eVal = SvxCellHorJustify::Block;
+            break;
+        case SvxAdjust::Center:
+            eVal = SvxCellHorJustify::Center;
+            break;
+        case SvxAdjust::BlockLine:
+            eVal = SvxCellHorJustify::Block;
+            break;
+        case SvxAdjust::End:
+            eVal = SvxCellHorJustify::Right;
+            break;
+        default:
+            eVal = SvxCellHorJustify::Standard;
+    }
+    if ( eVal != SvxCellHorJustify::Standard )
+        rDestSet.Put( SvxHorJustifyItem( eVal, ATTR_HOR_JUSTIFY) );
+}
+
+void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
+{
+    if( !pEditSet )
+        return;
+    GetFromEditItemSet(maLocalSfxItemSet, *pEditSet);
+    InvalidateCaches();
+}
+
+void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
+{
+    //  already there in GetFromEditItemSet, but not in FillEditItemSet
+    //  Default horizontal alignment is always implemented as left
+
+    const SfxItemSet& rMySet = GetItemSet();
+
+    SvxCellHorJustify eHorJust = rMySet.Get(ATTR_HOR_JUSTIFY).GetValue();
+
+    SvxAdjust eSvxAdjust;
+    switch (eHorJust)
+    {
+        case SvxCellHorJustify::Right:  eSvxAdjust = SvxAdjust::Right;  break;
+        case SvxCellHorJustify::Center: eSvxAdjust = SvxAdjust::Center; break;
+        case SvxCellHorJustify::Block:  eSvxAdjust = SvxAdjust::Block;  break;
+        default:                     eSvxAdjust = SvxAdjust::Left;   break;
+    }
+    pEditSet->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
+}
+
+void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
+{
+    const SfxItemSet& rOldSet = pOldAttrs->GetItemSet();
+
+    const SfxPoolItem* pThisItem;
+    const SfxPoolItem* pOldItem;
+
+    for ( sal_uInt16 nSubWhich=ATTR_PATTERN_START; nSubWhich<=ATTR_PATTERN_END; nSubWhich++ )
+    {
+        //  only items that are set are interesting
+        if ( maLocalSfxItemSet.GetItemState( nSubWhich, false, &pThisItem ) == SfxItemState::SET )
+        {
+            SfxItemState eOldState = rOldSet.GetItemState( nSubWhich, true, &pOldItem );
+            if ( eOldState == SfxItemState::SET )
+            {
+                //  item is set in OldAttrs (or its parent) -> compare pointers
+                if (SfxPoolItem::areSame( pThisItem, pOldItem ))
+                {
+                    maLocalSfxItemSet.ClearItem( nSubWhich );
+                    InvalidateCaches();
+                }
+            }
+            else if ( eOldState != SfxItemState::INVALID )
+            {
+                //  not set in OldAttrs -> compare item value to default item
+                if ( *pThisItem == maLocalSfxItemSet.GetPool()->GetUserOrPoolDefaultItem( nSubWhich ) )
+                {
+                    maLocalSfxItemSet.ClearItem( nSubWhich );
+                    InvalidateCaches();
+                }
+            }
+        }
+    }
+}
+
+bool ScPatternAttr::HasItemsSet( const sal_uInt16* pWhich ) const
+{
+    for (sal_uInt16 i=0; pWhich[i]; i++)
+        if ( maLocalSfxItemSet.GetItemState( pWhich[i], false ) == SfxItemState::SET )
+            return true;
+    return false;
+}
+
+void ScPatternAttr::ClearItems( const sal_uInt16* pWhich )
+{
+    for (sal_uInt16 i=0; pWhich[i]; i++)
+        maLocalSfxItemSet.ClearItem(pWhich[i]);
+    InvalidateCaches();
+}
+
+static SfxStyleSheetBase* lcl_CopyStyleToPool
+    (
+        SfxStyleSheetBase*      pSrcStyle,
+        SfxStyleSheetBasePool*  pSrcPool,
+        SfxStyleSheetBasePool*  pDestPool,
+        const SvNumberFormatterIndexTable*     pFormatExchangeList
+    )
+{
+    if ( !pSrcStyle || !pDestPool || !pSrcPool )
+    {
+        OSL_FAIL( "CopyStyleToPool: Invalid Arguments :-/" );
+        return nullptr;
+    }
+
+    const OUString       aStrSrcStyle = pSrcStyle->GetName();
+    const SfxStyleFamily eFamily      = pSrcStyle->GetFamily();
+    SfxStyleSheetBase*   pDestStyle   = pDestPool->Find( aStrSrcStyle, eFamily );
+
+    if ( !pDestStyle )
+    {
+        const OUString   aStrParent = pSrcStyle->GetParent();
+        const SfxItemSet& rSrcSet = pSrcStyle->GetItemSet();
+
+        pDestStyle = &pDestPool->Make( aStrSrcStyle, eFamily, SfxStyleSearchBits::UserDefined );
+        SfxItemSet& rDestSet = pDestStyle->GetItemSet();
+        rDestSet.Put( rSrcSet );
+
+        // number format exchange list has to be handled here, too
+        // (only called for cell styles)
+
+        const SfxUInt32Item* pSrcItem;
+        if ( pFormatExchangeList &&
+             (pSrcItem = rSrcSet.GetItemIfSet( ATTR_VALUE_FORMAT, false )) )
+        {
+            sal_uInt32 nOldFormat = pSrcItem->GetValue();
+            SvNumberFormatterIndexTable::const_iterator it = pFormatExchangeList->find(nOldFormat);
+            if (it != pFormatExchangeList->end())
+            {
+                sal_uInt32 nNewFormat = it->second;
+                rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+            }
+        }
+
+        // if necessary create derivative Styles, if not available:
+
+        if ( ScResId(STR_STYLENAME_STANDARD) != aStrParent &&
+             aStrSrcStyle != aStrParent &&
+             !pDestPool->Find( aStrParent, eFamily ) )
+        {
+            lcl_CopyStyleToPool( pSrcPool->Find( aStrParent, eFamily ),
+                                 pSrcPool, pDestPool, pFormatExchangeList );
+        }
+
+        pDestStyle->SetParent( aStrParent );
+    }
+
+    return pDestStyle;
+}
+
+CellAttributeHolder ScPatternAttr::MigrateToDocument( ScDocument* pDestDoc, ScDocument* pSrcDoc ) const
+{
+    const SfxItemSet* pSrcSet = &GetItemSet();
+    ScPatternAttr* pDestPattern(new ScPatternAttr(pDestDoc->getCellAttributeHelper()));
+    SfxItemSet* pDestSet(&pDestPattern->GetItemSetWritable());
+
+    // Copy cell pattern style to other document:
+    if ( pDestDoc != pSrcDoc )
+    {
+        OSL_ENSURE( pStyle, "Missing Pattern-Style! :-/" );
+
+        // if pattern in DestDoc is available, use this, otherwise copy
+        // parent style to style or create if necessary and attach DestDoc
+
+        SfxStyleSheetBase* pStyleCpy = lcl_CopyStyleToPool( pStyle,
+                                                            pSrcDoc->GetStyleSheetPool(),
+                                                            pDestDoc->GetStyleSheetPool(),
+                                                            pDestDoc->GetFormatExchangeList() );
+
+        pDestPattern->SetStyleSheet( static_cast<ScStyleSheet*>(pStyleCpy) );
+    }
+
+    for ( sal_uInt16 nAttrId = ATTR_PATTERN_START; nAttrId <= ATTR_PATTERN_END; nAttrId++ )
+    {
+        const SfxPoolItem* pSrcItem;
+        SfxItemState eItemState = pSrcSet->GetItemState( nAttrId, false, &pSrcItem );
+        if (eItemState==SfxItemState::SET)
+        {
+            std::unique_ptr<SfxPoolItem> pNewItem;
+
+            if ( nAttrId == ATTR_VALIDDATA )
+            {
+                // Copy validity to the new document
+
+                sal_uInt32 nNewIndex = 0;
+                ScValidationDataList* pSrcList = pSrcDoc->GetValidationList();
+                if ( pSrcList )
+                {
+                    sal_uInt32 nOldIndex = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
+                    const ScValidationData* pOldData = pSrcList->GetData( nOldIndex );
+                    if ( pOldData )
+                        nNewIndex = pDestDoc->AddValidationEntry( *pOldData );
+                }
+                pNewItem.reset(new SfxUInt32Item( ATTR_VALIDDATA, nNewIndex ));
+            }
+            else if ( nAttrId == ATTR_VALUE_FORMAT && pDestDoc->GetFormatExchangeList() )
+            {
+                //  Number format to Exchange List
+
+                sal_uInt32 nOldFormat = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
+                SvNumberFormatterIndexTable::const_iterator it = pDestDoc->GetFormatExchangeList()->find(nOldFormat);
+                if (it != pDestDoc->GetFormatExchangeList()->end())
+                {
+                    sal_uInt32 nNewFormat = it->second;
+                    pNewItem.reset(new SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ));
+                }
+            }
+
+            if ( pNewItem )
+            {
+                pDestSet->Put(std::move(pNewItem));
+            }
+            else
+                pDestSet->Put(*pSrcItem);
+        }
+    }
+
+    return CellAttributeHolder(pDestPattern, true);
+}
+
+bool ScPatternAttr::IsVisible() const
+{
+    if (!mxVisible.has_value())
+        mxVisible = CalcVisible();
+    return *mxVisible;
+}
+
+bool ScPatternAttr::CalcVisible() const
+{
+    const SfxItemSet& rSet = GetItemSet();
+
+    if ( const SvxBrushItem* pItem = rSet.GetItemIfSet( ATTR_BACKGROUND ) )
+        if ( pItem->GetColor() != COL_TRANSPARENT )
+            return true;
+
+    if ( const SvxBoxItem* pBoxItem = rSet.GetItemIfSet( ATTR_BORDER ) )
+    {
+        if ( pBoxItem->GetTop() || pBoxItem->GetBottom() ||
+             pBoxItem->GetLeft() || pBoxItem->GetRight() )
+            return true;
+    }
+
+    if ( const SvxLineItem* pItem = rSet.GetItemIfSet( ATTR_BORDER_TLBR ) )
+        if( pItem->GetLine() )
+            return true;
+
+    if ( const SvxLineItem* pItem = rSet.GetItemIfSet( ATTR_BORDER_BLTR ) )
+        if( pItem->GetLine() )
+            return true;
+
+    if ( const SvxShadowItem* pItem = rSet.GetItemIfSet( ATTR_SHADOW ) )
+        if ( pItem->GetLocation() != SvxShadowLocation::NONE )
+            return true;
+
+    return false;
+}
+
+static bool OneEqual( const SfxItemSet& rSet1, const SfxItemSet& rSet2, sal_uInt16 nId )
+{
+    const SfxPoolItem* pItem1 = &rSet1.Get(nId);
+    const SfxPoolItem* pItem2 = &rSet2.Get(nId);
+    return ( pItem1 == pItem2 || *pItem1 == *pItem2 );
+}
+
+bool ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
+{
+    const SfxItemSet& rThisSet = GetItemSet();
+    const SfxItemSet& rOtherSet = rOther.GetItemSet();
+
+    return OneEqual( rThisSet, rOtherSet, ATTR_BACKGROUND ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_BORDER ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_BORDER_TLBR ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_BORDER_BLTR ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_SHADOW );
+
+    //TODO: also here only check really visible values !!!
+}
+
+const OUString* ScPatternAttr::GetStyleName() const
+{
+    return moName ? &*moName : ( pStyle ? &pStyle->GetName() : nullptr );
+}
+
+void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFormat )
+{
+    if (pNewStyle)
+    {
+        const SfxItemSet& rStyleSet = pNewStyle->GetItemSet();
+
+        if (bClearDirectFormat)
+        {
+            for (sal_uInt16 i=ATTR_PATTERN_START; i<=ATTR_PATTERN_END; i++)
+            {
+                if (rStyleSet.GetItemState(i) == SfxItemState::SET)
+                    maLocalSfxItemSet.ClearItem(i);
+            }
+        }
+        maLocalSfxItemSet.SetParent(&pNewStyle->GetItemSet());
+        pStyle = pNewStyle;
+        moName.reset();
+    }
+    else
+    {
+        OSL_FAIL( "ScPatternAttr::SetStyleSheet( NULL ) :-|" );
+        maLocalSfxItemSet.SetParent(nullptr);
+        pStyle = nullptr;
+    }
+    InvalidateCaches();
+}
+
+bool ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
+{
+    bool bNameChanged = false;
+    if (moName)
+    {
+        pStyle = static_cast<ScStyleSheet*>(rDoc.GetStyleSheetPool()->Find(*moName, SfxStyleFamily::Para));
+
+        //  use Standard if Style is not found,
+        //  to avoid empty display in Toolbox-Controller
+        //  Assumes that "Standard" is always the 1st entry!
+        if (!pStyle)
+        {
+            std::unique_ptr<SfxStyleSheetIterator> pIter = rDoc.GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Para);
+            pStyle = dynamic_cast< ScStyleSheet* >(pIter->First());
+        }
+
+        if (pStyle)
+        {
+            maLocalSfxItemSet.SetParent(&pStyle->GetItemSet());
+            moName.reset();
+        }
+    }
+    else
+    {
+        pStyle = nullptr;
+        bNameChanged = true;
+    }
+    InvalidateCaches();
+    return bNameChanged;
+}
+
+void ScPatternAttr::StyleToName()
+{
+    // Style was deleted, remember name:
+
+    if ( pStyle )
+    {
+        moName = pStyle->GetName();
+        pStyle = nullptr;
+        maLocalSfxItemSet.SetParent( nullptr );
+        InvalidateCaches();
+    }
+}
+
+bool ScPatternAttr::IsSymbolFont() const
+{
+    if( const SvxFontItem* pItem = GetItemSet().GetItemIfSet( ATTR_FONT ) )
+        return pItem->GetCharSet() == RTL_TEXTENCODING_SYMBOL;
+    else
+        return false;
+}
+
+namespace {
+
+sal_uInt32 getNumberFormatKey(const SfxItemSet& rSet)
+{
+    return rSet.Get(ATTR_VALUE_FORMAT).GetValue();
+}
+
+LanguageType getLanguageType(const SfxItemSet& rSet)
+{
+    return rSet.Get(ATTR_LANGUAGE_FORMAT).GetLanguage();
+}
+
+}
+
+bool ScPatternAttr::HasValidNumberFormat() const
+{
+    // If either ATTR_VALUE_FORMAT or ATTR_LANGUAGE_FORMAT are invalid in the pattern,
+    // it means a multiselection with different formats
+    return GetItemSet().GetItemState(ATTR_VALUE_FORMAT) != SfxItemState::INVALID
+           && GetItemSet().GetItemState(ATTR_LANGUAGE_FORMAT) != SfxItemState::INVALID;
+}
+
+sal_uInt32 ScPatternAttr::GetNumberFormatKey() const
+{
+    if (!mxNumberFormatKey.has_value())
+        mxNumberFormatKey = getNumberFormatKey(GetItemSet());
+    return *mxNumberFormatKey;
+}
+
+LanguageType ScPatternAttr::GetLanguageType() const
+{
+    if (!mxLanguageType.has_value())
+        mxLanguageType = getLanguageType(GetItemSet());
+    return *mxLanguageType;
+}
+
+sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
+{
+    sal_uInt32 nFormat = GetNumberFormatKey();
+    LanguageType eLang = GetLanguageType();
+    if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
+        ;       // it remains as it is
+    else if ( pFormatter )
+        nFormat = pFormatter->GetFormatForLanguageIfBuiltIn( nFormat, eLang );
+    return nFormat;
+}
+
+sal_uInt32 ScPatternAttr::GetNumberFormat( const ScInterpreterContext& rContext ) const
+{
+    sal_uInt32 nFormat = GetNumberFormatKey();
+    LanguageType eLang = GetLanguageType();
+    if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
+        ;       // it remains as it is
+    else
+        nFormat = rContext.NFGetFormatForLanguageIfBuiltIn( nFormat, eLang );
+    return nFormat;
+}
+
+// the same if conditional formatting is in play:
+
+sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
+                                           const SfxItemSet* pCondSet ) const
+{
+    assert(pFormatter);
+    if (!pCondSet || !pCondSet->HasItem(ATTR_VALUE_FORMAT))
+        return GetNumberFormat(pFormatter);
+
+    // Conditional format takes precedence over style and even hard format.
+
+    sal_uInt32 nFormat = getNumberFormatKey(*pCondSet);
+    LanguageType eLang = pCondSet->HasItem(ATTR_LANGUAGE_FORMAT) ? getLanguageType(*pCondSet)
+                                                                 : GetLanguageType();
+
+    return pFormatter->GetFormatForLanguageIfBuiltIn(nFormat, eLang);
+}
+
+sal_uInt32 ScPatternAttr::GetNumberFormat( const ScInterpreterContext& rContext,
+                                           const SfxItemSet* pCondSet ) const
+{
+    if (!pCondSet || !pCondSet->HasItem(ATTR_VALUE_FORMAT))
+        return GetNumberFormat(rContext);
+
+    // Conditional format takes precedence over style and even hard format.
+
+    sal_uInt32 nFormat = getNumberFormatKey(*pCondSet);
+    LanguageType eLang = pCondSet->HasItem(ATTR_LANGUAGE_FORMAT) ? getLanguageType(*pCondSet)
+                                                                 : GetLanguageType();
+
+    return rContext.NFGetFormatForLanguageIfBuiltIn(nFormat, eLang);
+}
+
+const SfxPoolItem& ScPatternAttr::GetItem( sal_uInt16 nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
+{
+    const SfxPoolItem* pCondItem;
+    if ( pCondSet && pCondSet->GetItemState( nWhich, true, &pCondItem ) == SfxItemState::SET )
+        return *pCondItem;
+    return rItemSet.Get(nWhich);
+}
+
+const SfxPoolItem& ScPatternAttr::GetItem( sal_uInt16 nSubWhich, const SfxItemSet* pCondSet ) const
+{
+    return GetItem( nSubWhich, GetItemSet(), pCondSet );
+}
+
+//  GetRotateVal is tested before ATTR_ORIENTATION
+
+Degree100 ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
+{
+    Degree100 nAttrRotate(0);
+    if ( GetCellOrientation() == SvxCellOrientation::Standard )
+    {
+        bool bRepeat = ( GetItem(ATTR_HOR_JUSTIFY, pCondSet).
+                            GetValue() == SvxCellHorJustify::Repeat );
+        // ignore orientation/rotation if "repeat" is active
+        if ( !bRepeat )
+            nAttrRotate = GetItem( ATTR_ROTATE_VALUE, pCondSet ).GetValue();
+    }
+    return nAttrRotate;
+}
+
+ScRotateDir ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
+{
+    ScRotateDir nRet = ScRotateDir::NONE;
+
+    Degree100 nAttrRotate = GetRotateVal( pCondSet );
+    if ( nAttrRotate )
+    {
+        SvxRotateMode eRotMode = GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
+
+        if ( eRotMode == SVX_ROTATE_MODE_STANDARD || nAttrRotate == 18000_deg100 )
+            nRet = ScRotateDir::Standard;
+        else if ( eRotMode == SVX_ROTATE_MODE_CENTER )
+            nRet = ScRotateDir::Center;
+        else if ( eRotMode == SVX_ROTATE_MODE_TOP || eRotMode == SVX_ROTATE_MODE_BOTTOM )
+        {
+            Degree100 nRot180 = nAttrRotate % 18000_deg100;     // 1/100 degrees
+            if ( nRot180 == 9000_deg100 )
+                nRet = ScRotateDir::Center;
+            else if ( ( eRotMode == SVX_ROTATE_MODE_TOP && nRot180 < 9000_deg100 ) ||
+                      ( eRotMode == SVX_ROTATE_MODE_BOTTOM && nRot180 > 9000_deg100 ) )
+                nRet = ScRotateDir::Left;
+            else
+                nRet = ScRotateDir::Right;
+        }
+    }
+
+    return nRet;
+}
+
+void ScPatternAttr::SetPAKey(sal_uInt64 nKey)
+{
+    mnPAKey = nKey;
+}
+
+sal_uInt64 ScPatternAttr::GetPAKey() const
+{
+    return mnPAKey;
+}
+
+void ScPatternAttr::InvalidateCaches()
+{
+    mxVisible.reset();
+    mxNumberFormatKey.reset();
+    mxLanguageType.reset();
+    moHashCode.reset();
+}
+
+SfxItemSet& ScPatternAttr::GetItemSetWritable()
+{
+    // Generally have to assume that caches are invalid
+    // after this is used.
+    InvalidateCaches();
+    return maLocalSfxItemSet;
+}
+
+void ScPatternAttr::InvalidateCacheFor(sal_uInt16 nWhich)
+{
+    switch (nWhich)
+    {
+        case ATTR_LANGUAGE_FORMAT:
+            mxLanguageType.reset();
+            break;
+        case ATTR_VALUE_FORMAT:
+            mxNumberFormatKey.reset();
+            break;
+        case ATTR_BACKGROUND:
+        case ATTR_BORDER:
+        case ATTR_BORDER_TLBR:
+        case ATTR_BORDER_BLTR:
+        case ATTR_SHADOW:
+            mxVisible.reset();
+            break;
+    }
+}
+
+void ScPatternAttr::ItemSetPut(const SfxPoolItem& rItem)
+{
+    InvalidateCacheFor(rItem.Which());
+    maLocalSfxItemSet.Put(rItem);
+}
+
+void ScPatternAttr::ItemSetPut(std::unique_ptr<SfxPoolItem> xItem)
+{
+    InvalidateCacheFor(xItem->Which());
+    maLocalSfxItemSet.Put(std::move(xItem));
+}
+
+void ScPatternAttr::ItemSetClearItem(sal_uInt16 nWhich)
+{
+    InvalidateCacheFor(nWhich);
+    maLocalSfxItemSet.ClearItem(nWhich);
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

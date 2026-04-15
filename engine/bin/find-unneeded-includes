@@ -1,0 +1,717 @@
+#!/usr/bin/env python3
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This parses the output of 'include-what-you-use', focusing on just removing
+# not needed includes and providing a relatively conservative output by
+# filtering out a number of LibreOffice-specific false positives.
+#
+# It assumes you have a 'compile_commands.json' around (similar to clang-tidy),
+# you can generate one with 'make vim-ide-integration'.
+#
+# Design goals:
+# - excludelist mechanism, so a warning is either fixed or excluded
+# - works in a plugins-enabled clang build
+# - no custom configure options required
+# - no need to generate a dummy library to build a header
+
+import json
+import multiprocessing
+import os
+import queue
+import re
+import subprocess
+import sys
+import threading
+import yaml
+import argparse
+import pathlib
+
+
+def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
+    # global rules
+
+    # Avoid replacing .hpp with .hdl in the com::sun::star and  ooo::vba namespaces.
+    if ( include.startswith("com/sun/star") or include.startswith("ooo/vba") ) and include.endswith(".hpp"):
+        hdl = include.replace(".hpp", ".hdl")
+        if hdl in toAdd:
+            return True
+
+    # Avoid proposing o3tl fw declaration
+    o3tl = {
+        "o3tl/typed_flags_set.hxx" : "namespace o3tl { template <typename T> struct typed_flags; }",
+        "o3tl/deleter.hxx" : "namespace o3tl { template <typename T> struct default_delete; }",
+    }
+    for k, v, in o3tl.items():
+        if include == k and v in toAdd:
+            return True
+
+    # Follow boost documentation.
+    if include == "boost/optional.hpp" and "boost/optional/optional.hpp" in toAdd:
+        return True
+    if include == "boost/intrusive_ptr.hpp" and "boost/smart_ptr/intrusive_ptr.hpp" in toAdd:
+        return True
+    if include == "boost/shared_ptr.hpp" and "boost/smart_ptr/shared_ptr.hpp" in toAdd:
+        return True
+    if include == "boost/variant.hpp" and "boost/variant/variant.hpp" in toAdd:
+        return True
+    if include == "boost/unordered_map.hpp" and "boost/unordered/unordered_map.hpp" in toAdd:
+        return True
+    if include == "boost/functional/hash.hpp" and "boost/container_hash/extensions.hpp" in toAdd:
+        return True
+
+    # Avoid .hxx to .h proposals in basic css/uno/* and basic URE API
+    unoapi = {
+        "com/sun/star/uno/Any.hxx": "com/sun/star/uno/Any.h",
+        "com/sun/star/uno/Reference.hxx": "com/sun/star/uno/Reference.h",
+        "com/sun/star/uno/Sequence.hxx": "com/sun/star/uno/Sequence.h",
+        "com/sun/star/uno/Type.hxx": "com/sun/star/uno/Type.h",
+        "rtl/bootstrap.hxx": "rtl/bootstrap.h",
+        "rtl/byteseq.hxx": "rtl/byteseq.h",
+        "typelib/typedescription.hxx": "typelib/typedescription.h",
+        "cppuhelper/interfacecontainer.hxx": "cppuhelper/interfacecontainer.h",
+        "osl/file.hxx": "osl/file.h",
+        "osl/module.hxx": "osl/module.h",
+        "osl/pipe.hxx": "osl/pipe.h",
+        "osl/pipe.hxx": "osl/pipe_decl.hxx",
+        "osl/socket.hxx": "osl/socket.h",
+        "osl/socket.hxx": "osl/socket_decl.hxx",
+        "osl/thread.hxx": "osl/thread.h"
+    }
+    for k, v in unoapi.items():
+        if include == k and v in toAdd:
+            return True
+
+    # Most Qt headers are used as <QtLib/QClass> and IWYU suggests
+    # them to be replaced with QtLib/qclass.h, these could be skipped
+    # BUT: Several Qt 6 minor versions are supported,
+    # making testing of false positives over-expensive
+    # so just skip all those headers for now
+    if include.startswith("Qt") and '/' in include:
+        return True
+
+    # 3rd-party, non-self-contained headers.
+    if include == "libepubgen/libepubgen.h" and "libepubgen/libepubgen-decls.h" in toAdd:
+        return True
+    if include == "librevenge/librevenge.h" and "librevenge/RVNGPropertyList.h" in toAdd:
+        return True
+    if include == "libetonyek/libetonyek.h" and "libetonyek/EtonyekDocument.h" in toAdd:
+        return True
+    if include == "box2d/box2d.h" and "box2d/b2_world.h" in toAdd:
+        return True
+
+    # Skip forward declaration of versioned namespaces
+    # see https://gerrit.libreoffice.org/c/core/+/72972
+    # for an example of breakage caused by this
+    if include == "unicode/regex.h":
+        for item in toAdd:
+            match = re.search(r'namespace icu.* class RegexMatcher', item)
+            if match:
+                return True
+
+    noRemove = (
+        # <https://www.openoffice.org/tools/CodingGuidelines.sxw> insists on not
+        # removing this.
+        "sal/config.h",
+        # Works around a build breakage specific to the broken Android
+        # toolchain.
+        "android/compatibility.hxx",
+        # Removing this would change the meaning of '#if defined OSL_BIGENDIAN'.
+        "osl/endian.h",
+    )
+    if include in noRemove:
+        return True
+
+    # Ignore when <foo> is to be replaced with "foo".
+    if include in toAdd:
+        return True
+
+    fileName = os.path.relpath(absFileName, os.getcwd())
+
+    # Skip headers used only for compile test
+    if fileName == "cppu/qa/cppumaker/test_cppumaker.cxx":
+        if include.endswith(".hpp"):
+            return True
+
+    # yaml rules, except when --noexclude is given
+
+    if "excludelist" in moduleRules.keys() and not noexclude:
+        excludelistRules = moduleRules["excludelist"]
+        if fileName in excludelistRules.keys():
+            if include in excludelistRules[fileName]:
+                return True
+
+    return False
+
+
+def unwrapInclude(include):
+    # Drop <> or "" around the include.
+    return include[1:-1]
+
+
+def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespaces, finderrors, removefwdd):
+    inAdd = False
+    toAdd = []
+    inRemove = False
+    toRemove = []
+    inFull = False
+    currentFileName = None
+
+    for line in iwyuOutput:
+        line = line.strip()
+
+        # Bail out if IWYU gave an error due to non self-containedness
+        if re.match ("(.*): error: (.*)", line):
+            return -1
+
+        # Bail out if we are in finderrors mode
+        if finderrors:
+            return -2
+
+        if len(line) == 0:
+            if inRemove:
+                inRemove = False
+                continue
+            if inAdd:
+                inAdd = False
+                continue
+            if inFull:
+                inFull = False
+                continue
+
+        shouldAdd = fileName + " should add these lines:"
+        match = re.match(shouldAdd, line)
+        if match:
+            currentFileName = match.group(0).split(' ')[0]
+            inAdd = True
+            continue
+
+        shouldRemove = fileName + " should remove these lines:"
+        match = re.match(shouldRemove, line)
+        if match:
+            currentFileName = match.group(0).split(' ')[0]
+            inRemove = True
+            continue
+
+        # Process the full include list to check for
+        # - obsolete namespace declarations in --ns mode
+        # - obsolete exclusions in the yaml file
+        match = re.match("The full include-list for " + fileName, line)
+        if match:
+            inFull = True
+            continue
+
+        # Check if IWYU considers the header as having correct
+        # list of includes - this would make all exclusions obsolete
+        match = re.match(".*has correct #includes/fwd-decls.*", line)
+        if match:
+            if "excludelist" in moduleRules.keys():
+                excludelistRules = moduleRules["excludelist"]
+                realFileName = os.path.relpath(fileName, os.getcwd())
+                if realFileName in excludelistRules.keys():
+                    print("WARNING:", "File has correct #includes/fwd-decls; all excluded headers can be removed from exclusion list of:", realFileName)
+            continue
+
+        if inAdd:
+            match = re.match('#include ([^ ]+)', line)
+            if match:
+                include = unwrapInclude(match.group(1))
+                toAdd.append(include)
+            else:
+                # Forward declaration.
+                toAdd.append(line)
+
+        if inRemove and not checknamespaces:
+            if not removefwdd:
+                match = re.match("- #include (.*)  // lines (.*)-.*", line)
+                if match:
+                    include = unwrapInclude(match.group(1))
+                    lineno = match.group(2)
+                    if not ignoreRemoval(include, toAdd, currentFileName, moduleRules, noexclude):
+                        toRemove.append("%s:%s: %s" % (currentFileName, lineno, include))
+                    continue
+            else:
+                # Search for obsolete forward declarations, but not header -> fwdecl replacements
+                match = re.match("- (.*;(?: })*)*  // lines (.*)-.*", line)
+                if match:
+                    fwdDecl = match.group(1)
+                    # Bug: IWYU 0.23 gives "-   // lines 76-76" on basctl/source/inc/layout.hxx in --fwdecl mode
+                    if fwdDecl is None:
+                        continue
+                    if fwdDecl.endswith(";"):
+                        # Remove trailing semicolon.
+                        fwdDecl = fwdDecl[:-1]
+                    lineno = match.group(2)
+                    if not ignoreRemoval(fwdDecl, toAdd, currentFileName, moduleRules, noexclude):
+                        toRemove.append("%s:%s: %s" % (currentFileName, lineno, fwdDecl))
+                    continue
+
+        if inFull:
+            # Check if a formerly excluded header is now considered
+            # as necessary for the full include list,
+            # thereby making the IWYU exclusion unnecessary
+            # This can happen if a newer IWYU no longer gives a false warning
+            match = re.match("#include\\s+[\"<]([^\">]+)[\">]", line)
+            if match and "excludelist" in moduleRules.keys():
+                include = match.group(1)
+                excludelistRules = moduleRules["excludelist"]
+                realFileName = os.path.relpath(fileName, os.getcwd())
+                if realFileName in excludelistRules.keys():
+                    if include in excludelistRules[realFileName]:
+                        print("WARNING:", include, "excluded header can be removed from exclusion list of file:", realFileName)
+
+            if checknamespaces:
+                # match for all possible URE/UNO namespaces, created with:
+                # find udkapi/com/sun/star/ -type d | sort| xargs basename -a | tr '\012' '|'
+                # find offapi/com/sun/star/ -type d | sort | xargs basename -a | tr '\012' '|'
+                # and ooo::vba namespaces
+                # plus a few popular ones about other modules
+                ns = re.compile(
+                                '.*for\\ ('
+                                    # URE namespaces
+                                    'beans|'
+                                    'bridge|oleautomation|'
+                                    'connection|'
+                                    'container|'
+                                    'io|'
+                                    'java|'
+                                    'lang|'
+                                    'loader|'
+                                    'reflection|'
+                                    'registry|'
+                                    'script|'
+                                    'security|'
+                                    'task|'
+                                    'uno|'
+                                    'uri|'
+                                    'util|'
+                                    # UNO namespaces
+                                    'accessibility|'
+                                    'animations|'
+                                    'auth|'
+                                    'awt|tab|tree|grid|'
+                                    'chart|'
+                                    'chart2|data|'
+                                    'configuration|bootstrap|backend|xml|'
+                                    'cui|'
+                                    'datatransfer|clipboard|dnd|'
+                                    'deployment|test|ui|'
+                                    'document|'
+                                    'drawing|framework|'
+                                    'embed|'
+                                    'form|binding|runtime|control|inspection|submission|component|validation|'
+                                    'formula|'
+                                    'frame|status|'
+                                    'gallery|'
+                                    'geometry|'
+                                    'graphic|'
+                                    'i18n|'
+                                    'image|'
+                                    'inspection|'
+                                    'ldap|'
+                                    'linguistic2|'
+                                    'logging|'
+                                    'mail|'
+                                    'media|'
+                                    'mozilla|'
+                                    'office|'
+                                    'packages|zip|manifest|'
+                                    'presentation|textfield|'
+                                    'qa|'
+                                    'rdf|'
+                                    'rendering|'
+                                    'report|inspection|meta|'
+                                    'resource|'
+                                    'scanner|'
+                                    'script|vba|browse|provider|'
+                                    'sdb|application|tools|'
+                                    'sdbc|'
+                                    'sdbcx|'
+                                    'security|'
+                                    'setup|'
+                                    'sheet|opencl|'
+                                    'smarttags|'
+                                    'style|'
+                                    'svg|'
+                                    'system|windows|'
+                                    'table|'
+                                    'task|'
+                                    'text|textfield|docinfo|fieldmaster|'
+                                    'tiledrendering|'
+                                    'ucb|'
+                                    'ui|dialogs|test|'
+                                    'util|'
+                                    'view|'
+                                    'xforms|'
+                                    'xml|xslt|wrapper|csax|sax|input|xpath|dom|views|events|crypto|sax|'
+                                    'xsd|'
+                                     # ooo::vba and its namespaces
+                                    'ooo|vba|excel|powerpoint|adodb|access|office|word|stdole|msforms|dao|'
+                                     # use of module namespaces, as spotted in the code
+                                    'analysis|pricing' # sca internals
+                                    'apphelper|CloneHelper|DataSeriesProperties|SceneProperties|wrapper|' # for chart internals
+                                    'basegfx|utils|'
+                                    'boost|posix_time|gregorian'
+                                    'cairo|'
+                                    'canvas|'
+                                    'chelp|'
+                                    'comphelper|'
+                                    'connectivity|'
+                                    'cpp|java|' # for codemaker::
+                                    'cppu|'
+                                    'dbaccess|dbahsql|dbaui|dbtools|'
+                                    'desktop|dp_misc|'
+                                    'drawinglayer|attribute|geometry|primitive2d|processor2d|'
+                                    'editeng|'
+                                    'emscripten|'
+                                    'formula|'
+                                    'framework|'
+                                    'frm|'
+                                    'http_dav_ucp|tdoc_ucp|package_ucp|hierarchy_ucp|gio|fileaccess|ucb_impl|hcp_impl|ucb_cmdenv|' # for ucb internal
+                                    'i18npool|'
+                                    'internal|ColorComponentTag|' # for slideshow internals
+                                    'jfw_plugin|'
+                                    'jni_uno|'
+                                    'librevenge|'
+                                    'linguistic|'
+                                    'kit|'
+                                    'mtv|' # for mdds::mtv
+                                    'nsSwDocInfoSubType|SWUnoHelper|nsHdFtFlags|' # sw internal
+                                    'o3tl|'
+                                    'odfflatxml|' # filter internal
+                                    'oox|core|drawingml|ole|vml|'
+                                    'OpenStormBento|'
+                                    'osl|'
+                                    'pdfi|pdfparse|'
+                                    'ppt|'
+                                    'pyuno|'
+                                    'reportdesign|'
+                                    'rptui|'
+                                    'rtl|math|textenc|'
+                                    'salhelper|'
+                                    'sax_fastparser|'
+                                    'sax|' # for xml::sax
+                                    'sc|'
+                                    'SchXMLTools|' # for xmloff
+                                    'sd|slidesorter|cache|controller|model|view|'
+                                    'sf_misc|'
+                                    'sfx2|DocTempl|'
+                                    'sidebar|' # for sfx2::sidebar
+                                    'star|' # for com::sun::star
+                                    'std|chrono_literals|literals|'
+                                    'stoc_sec|'
+                                    'store|'
+                                    'svl|impl|'
+                                    'svt|'
+                                    'svtools|'
+                                    'svx|sdr|contact|table|'
+                                    'sw|access|annotation|mark|types|util|'
+                                    'toolkit|'
+                                    'treeview|'
+                                    'ucbhelper|'
+                                    'unopkg|'
+                                    'util|db|qe|' # for xmlsearch::
+                                    'utl|'
+                                    'vcl|psp|x11|'
+                                    'writerfilter|'
+                                    'xforms|'
+                                    'xmloff|token|EnhancedCustomShapeToken' # for xmloff::
+                                    'ZipUtils'
+                                    ')$', re.VERBOSE
+                                )
+
+                reason = re.match(ns, line)
+                if reason:
+                    # Warn about namespaces: if a header is suggested only '// for $namespace', then the namespace is not used
+                    # otherwise the used classes name would show up after the '// for'
+                    # Cleaning out the respective header (if there is any
+                    # - which is not always the case) is for the next run!
+                    nameSpace = reason.group(1).split(' ')[0]
+                    print("WARNING:", fileName, "This 'using namespace' is likely unnecessary:", nameSpace)
+
+                    # Get the row number, normal IWYU output does not contain this info
+                    subprocess.run(["git", "grep", "-n", "namespace.*[^a-zA-Z]"+nameSpace+" *;", fileName])
+
+    if removefwdd:
+        for remove in sorted(toRemove, key=lambda x: int(x.split(":")[1])):
+            print("ERROR: %s: remove not needed forward declaration" % remove)
+    else:
+        for remove in sorted(toRemove, key=lambda x: int(x.split(":")[1])):
+            print("ERROR: %s: remove not needed include" % remove)
+    return len(toRemove)
+
+
+def run_tool(task_queue, failed_files, noexclude, checknamespaces, finderrors, removefwdd):
+    while True:
+        invocation, moduleRules = task_queue.get()
+        if not len(failed_files):
+            print("[IWYU] " + invocation.split(' ')[-1])
+            p = subprocess.Popen(invocation, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1], noexclude, checknamespaces, finderrors, removefwdd)
+            if finderrors:
+                if p.returncode == 1:
+                    print("Running the IWYU process returned error code:\n" + invocation)
+            if retcode == -1 and not checknamespaces and not removefwdd:
+                print("WARNING: A file is probably not self contained, check this commands output:\n" + invocation)
+            elif retcode > 0:
+                if not removefwdd:
+                    print("ERROR: The following command found unused includes:\n" + invocation)
+                else:
+                    print("ERROR: The following command found unused forward declarations:\n" + invocation)
+        task_queue.task_done()
+    if checknamespaces:
+        # Workaround: sometimes running git grep makes the letters typed into the terminal disappear after the script is finished
+        os.system('stty sane')
+
+
+def isInUnoIncludeFile(path):
+    return path.startswith("include/com/") \
+            or path.startswith("include/cppu/") \
+            or path.startswith("include/cppuhelper/") \
+            or path.startswith("include/osl/") \
+            or path.startswith("include/rtl/") \
+            or path.startswith("include/sal/") \
+            or path.startswith("include/salhelper/") \
+            or path.startswith("include/systools/") \
+            or path.startswith("include/typelib/") \
+            or path.startswith("include/uno/")
+
+# Don't bother with non-linux specific paths,
+# useful for automatically checking headers
+def isNonLinuxPath(path):
+    return path.startswith("avmedia/source/win/") \
+        or path.startswith("avmedia/source/macavf/") \
+        or path.startswith("include/apple_remote/")
+
+def isNonLinuxFile(path):
+    NonLinuxFiles = (
+        "include/comphelper/windowserrorstring.hxx",
+        "include/comphelper/windowsdebugoutput.hxx",
+        "include/comphelper/windowsStart.hxx",
+        "include/drawinglayer/processor2d/d2dpixelprocessor2d.hxx",
+        "include/static/unoembindhelpers/PrimaryBindings.hxx",
+        "include/version.hrc",
+        "include/vcl/winscheduler.hxx",
+    )
+    if path in NonLinuxFiles:
+        return True
+
+def tidy(compileCommands, paths, noexclude, checknamespaces, finderrors, removefwdd, debug, headersfwd):
+    return_code = 0
+
+    try:
+        max_task = multiprocessing.cpu_count()
+        task_queue = queue.Queue(max_task)
+        failed_files = []
+        for _ in range(max_task):
+            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, noexclude, checknamespaces, finderrors, removefwdd))
+            t.daemon = True
+            t.start()
+
+        for path in sorted(paths):
+            if isInUnoIncludeFile(path) or isNonLinuxFile(path) or isNonLinuxPath(path):
+                continue
+
+            # IWYU fails on these with #error: don't use this in new code
+            if path.startswith("include/vcl/toolkit"):
+                continue
+
+            moduleName = path.split("/")[0]
+
+            rulePath = os.path.join(moduleName, "IwyuFilter_" + moduleName + ".yaml")
+            moduleRules = {}
+            if os.path.exists(rulePath):
+                moduleRules = yaml.full_load(open(rulePath))
+            assume = None
+            pathAbs = os.path.abspath(path)
+            compileFile = pathAbs
+            matches = [i for i in compileCommands if i["file"] == compileFile]
+            if not len(matches):
+                # Only use assume-filename for headers, so we don't try to analyze e.g. Windows-only
+                # code on Linux.
+                if "assumeFilename" in moduleRules.keys() and not path.endswith("cxx"):
+                    assume = moduleRules["assumeFilename"]
+                    # Check for lower level assume file name
+                    if "customAssumeFilenames" in moduleRules:
+                        customAssumeRules = moduleRules["customAssumeFilenames"]
+                        for dirName in customAssumeRules.keys():
+                            if path.startswith(dirName):
+                                assume = customAssumeRules[dirName]
+
+                if assume:
+                    assumeAbs = os.path.abspath(assume)
+                    compileFile = assumeAbs
+                    matches = [i for i in compileCommands if i["file"] == compileFile]
+                    if not len(matches):
+                        print("WARNING: no compile commands for '" + path + "' (assumed filename: '" + assume + "'")
+                        continue
+                else:
+                    print("WARNING: no compile commands for '" + path + "'")
+                    continue
+
+            _, _, args = matches[0]["command"].partition(" ")
+            if assume:
+                args = args.replace(assumeAbs, "-x c++ " + pathAbs)
+
+            if not removefwdd and not headersfwd:
+            # Do not suggest forward declarations in headers
+                invocation = "include-what-you-use -Xiwyu --no_fwd_decls -Xiwyu --max_line_length=200 " + args
+            # Suggest headers' replacement with forward declarations
+            elif headersfwd:
+                invocation = "include-what-you-use -Xiwyu --cxx17ns -Xiwyu --max_line_length=200 " + args
+            # In --fwdecl mode we ask for fw declaration removal suggestions.
+            # In this mode obsolete fw declarations are suggested for removal.
+            # Later we ignore the header removal suggestions, which may be
+            # there because of possibility of replacement with fw declarations
+            # but those and our CI are not reliable enough yet for use
+            else:
+                invocation = "include-what-you-use -Xiwyu --cxx17ns -Xiwyu --max_line_length=200 " + args
+
+            if debug:
+                print(invocation)
+                sys.exit(0)
+
+            task_queue.put((invocation, moduleRules))
+
+        task_queue.join()
+        if len(failed_files):
+            return_code = 1
+
+    except KeyboardInterrupt:
+        print('\nCtrl-C detected, goodbye.')
+        os.kill(0, 9)
+
+    sys.exit(return_code)
+
+
+def main(argv):
+    parser = argparse.ArgumentParser(description='Check source files for unneeded includes.')
+    parser.add_argument('Files' , nargs='*',
+                    help='The files to be checked')
+    parser.add_argument('--recursive', metavar='DIR', nargs=1, type=str,
+                    help='Recursively search a directory for source files to check')
+    hgroup = parser.add_mutually_exclusive_group()
+    hgroup.add_argument('--headers', action='store_true',
+                    help='Check header files. If omitted, check source files. Use with --recursive.')
+    hgroup.add_argument('--headersfwd', action='store_true',
+                    help='Check header files, suggest fw declaration replacements. If omitted, check source files. Use with --recursive.')
+    parser.add_argument('--noexclude', action='store_true',
+                    help='Ignore excludelist. Useful to check whether its exclusions are still all valid.')
+    parser.add_argument('--ns', action='store_true',
+                    help='Warn about unused "using namespace" statements. '
+                         'Removing these may uncover more removable headers '
+                         'in a subsequent normal run')
+    parser.add_argument('--finderrors', action='store_true',
+                   help='Report IWYU failures when it returns with -1 error code. '
+                        'Use only for debugging this script!')
+    parser.add_argument('-d', action='store_true',
+                   help='Print the full IWYU invocation of a given file. '
+                        'Use only for debugging this script!')
+    parser.add_argument('--fwdecl', action='store_true',
+                    help='Suggest removal of obsolete forward declarations')
+    parser.add_argument('--sanitycheck', action='store_true',
+                    help='Sanity check of IwyuFilter_foo.yaml of a module')
+
+    args = parser.parse_args()
+
+    if not len(argv):
+        parser.print_help()
+        return
+
+    list_of_files = []
+    if args.recursive:
+        for root, dirs, files in os.walk(args.recursive[0]):
+            for file in files:
+                if args.headers:
+                    if not args.fwdecl:
+                        if (file.endswith(".hxx") or file.endswith(".hrc") or file.endswith(".h")):
+                            list_of_files.append(os.path.join(root,file))
+                    else:
+                        # In fwdecl mode don't check hrc files as they contain a lot of fw declarations
+                        # used in defines and iwyu (0.21 at least) can not yet understand those properly
+                        if (file.endswith(".hxx") or file.endswith(".h")):
+                            list_of_files.append(os.path.join(root,file))
+                elif args.headersfwd:
+                    if (file.endswith(".hxx") or file.endswith(".hrc") or file.endswith(".h")):
+                        # Peek inside the file to check for code behind #ifdef or similar
+                        # This is the fragile part, skip forward declaration suggestions for such
+                        p1 = subprocess.Popen(['git', 'grep', '-v', '-e', 'INCLUDED', os.path.join(root,file) ], stdout=subprocess.PIPE)
+                        p2 = subprocess.Popen(['grep', '-e', '#if'], stdin=p1.stdout, stdout=subprocess.PIPE)
+                        p1.stdout.close()
+                        output, _ = p2.communicate()
+                        if not output:
+                            list_of_files.append(os.path.join(root,file))
+                        else:
+                            continue
+                else:
+                    if (file.endswith(".cxx") or file.endswith(".c")):
+                        list_of_files.append(os.path.join(root,file))
+    else:
+        list_of_files = args.Files
+
+    try:
+        with open("compile_commands.json", 'r') as compileCommandsSock:
+            compileCommands = json.load(compileCommandsSock)
+    except FileNotFoundError:
+        print ("File 'compile_commands.json' does not exist, please run:\nmake vim-ide-integration")
+        sys.exit(-1)
+
+    # quickly sanity check whether files with exceptions in yaml still exists
+    # only check for the module of the very first filename passed
+
+    # Verify there are files selected for checking, with --recursive it
+    # may happen that there are in fact no C/C++ files in a module directory
+    if not list_of_files:
+        print("No files found to check!")
+        sys.exit(-2)
+
+    if args.sanitycheck:
+        moduleName = sorted(list_of_files)[0].split("/")[0]
+        rulePath = os.path.join(moduleName, "IwyuFilter_" + moduleName + ".yaml")
+        moduleRules = {}
+        if os.path.exists(rulePath):
+            moduleRules = yaml.full_load(open(rulePath))
+            # Check for duplicate file name entries in the yaml file
+            p1 = subprocess.Popen(['git', 'grep', '-h', ':$', rulePath ], stdout=subprocess.PIPE)
+            p2 = subprocess.Popen(['sort'], stdin=p1.stdout, stdout=subprocess.PIPE)
+            p3 = subprocess.Popen(['uniq', '-d'], stdin=p2.stdout, stdout=subprocess.PIPE)
+            p1.stdout.close()
+            p2.stdout.close()
+            output, _ = p3.communicate()
+            if output:
+                print("WARNING: The following files have duplicate entries - Please merge them - in:", rulePath, "\n", re.sub(r'[: ]+', '', output.decode()).strip())
+        if "excludelist" in moduleRules.keys():
+            excludelistRules = moduleRules["excludelist"]
+            for pathname in excludelistRules.keys():
+                file = pathlib.Path(pathname)
+                if not file.exists():
+                    print("WARNING: File listed in " + rulePath + " no longer exists: " + pathname)
+                # If the file mentioned in the IwyuFilter file exists,
+                # check that the excluded files / forward declarations are still present
+                # to avoid stale exclusion rules lingering forever
+                else:
+                    try:
+                        for exclusion in excludelistRules[pathname]:
+                            # class names behind namespace prefixes may be in separate lines
+                            c=re.match(r"(?:namespace.*{ )(class.*|struct .*); }.*", exclusion)
+                            if c:
+                                classname=c.group(1)
+                                p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, "-e", classname, file])
+                                if p.returncode == 1 :
+                                    print("WARNING:", file, ":", exclusion, "line is not present anymore, remove it from:", rulePath)
+                            else:
+                                p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, file])
+                                if p.returncode == 1 :
+                                    print("WARNING:", file, ":", exclusion, "line is not present anymore, remove it from:", rulePath)
+                    except TypeError:
+                        print("WARNING: no exclusions are defined for:", file)
+        sys.exit(0)
+
+    tidy(compileCommands, paths=list_of_files, noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl, debug=args.d, headersfwd=args.headersfwd)
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

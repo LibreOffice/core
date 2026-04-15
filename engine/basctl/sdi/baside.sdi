@@ -1,0 +1,712 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+interface BasicIDEView
+{
+}
+
+shell basctl_Shell
+{
+    import BasicIDEView;
+
+
+    // Current, according to current window:
+
+    SID_SHOWLINES
+    [
+        StateMethod = GetState;
+        ExecMethod  = ExecuteCurrent;
+    ]
+
+    SID_BASICIDE_HIDECURPAGE
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_DELETECURRENT
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_RENAMECURRENT
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    SID_SELECTALL
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    SID_CUT
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    SID_COPY
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    SID_PASTE
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    SID_UNDO
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    SID_REDO
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    SID_DELETE
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    SID_BACKSPACE
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    SID_GOTOLINE
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+
+    // Search in IDE Basic
+
+    SID_SEARCH_OPTIONS
+    [
+        ExecMethod  = ExecuteSearch;
+        StateMethod = GetState;
+    ]
+
+    SID_SEARCH_ITEM
+    [
+        ExecMethod  = ExecuteSearch;
+        StateMethod = GetState;
+    ]
+
+    FID_SEARCH_NOW
+    [
+        ExecMethod  = ExecuteSearch;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_REPEAT_SEARCH
+    [
+        ExecMethod  = ExecuteSearch;
+        StateMethod = GetState;
+    ]
+
+    FID_SEARCH_ON // status()
+    [
+        ExecMethod = ExecuteSearch;
+    ]
+
+    FID_SEARCH_OFF
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+
+    // Global: Whatever, which window is currently active:
+
+    SID_BASICIDE_LIBSELECTOR
+    [
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_LIBSELECTED
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_LIBLOADED
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_LIBREMOVED
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_SBXDELETED
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_SBXINSERTED
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_SBXRENAMED
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_SHOWSBX
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_NEWWINDOW
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_DOCINFO
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_NEWDOCDIRECT
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_SAVEDOC
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_SIGNATURE
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_SAVEASDOC
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    // From here on normal ...
+    SID_BASICIDE_CHOOSEMACRO
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_MODULEDLG
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_OBJECT_BROWSER
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_OBJCAT
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_WATCH
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_STACK
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_CREATEMACRO
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_EDITMACRO
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_NAMECHANGEDONTAB
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_STOREMODULESOURCE
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_STOREALLMODULESOURCES
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_UPDATEMODULESOURCE
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_UPDATEALLMODULESOURCES
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICSTOP
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_NEWMODULE
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_NEWDIALOG
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_SHOW_PROPERTYBROWSER
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_SHOWWINDOW
+    [
+        ExecMethod  = ExecuteGlobal;
+    ]
+
+    SID_BASICIDE_MANAGE_LANG
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_CURRENT_LANG
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_COLOR_SCHEME_DLG
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_ATTR_ZOOMSLIDER
+    [
+        ExecMethod      = ExecuteGlobal;
+        StateMethod     = GetState;
+    ]
+
+    SID_ZOOM_IN
+    [
+        ExecMethod      = ExecuteGlobal;
+        StateMethod     = GetState;
+    ]
+
+    SID_ZOOM_OUT
+    [
+        ExecMethod      = ExecuteGlobal;
+        StateMethod     = GetState;
+    ]
+
+    SID_BASICIDE_CURRENT_ZOOM
+    [
+        StateMethod     = GetState;
+    ]
+
+    // Only, when BasicWindow up
+
+    SID_BASICRUN
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICCOMPILE
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICLOAD
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICSAVEAS
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_MATCHGROUP
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICSTEPINTO
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICSTEPOVER
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICSTEPOUT
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_TOGGLEBRKPNT
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_MANAGEBRKPNTS
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_TOGGLEBRKPNTENABLED
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_ADDWATCH
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_REMOVEWATCH
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_BRKPNTSCHANGED
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+
+    // Only, when dialog window up
+
+    SID_CHOOSE_CONTROLS
+    [
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_PUSHBUTTON
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_CHECKBOX
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_RADIOBUTTON
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_SPINBUTTON
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_FIXEDTEXT
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_GROUPBOX
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_LISTBOX
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_COMBOBOX
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_EDIT
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_HSCROLLBAR
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_VSCROLLBAR
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_SELECT
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_IMAGECONTROL
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_PROGRESSBAR
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_HFIXEDLINE
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_VFIXEDLINE
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_DATEFIELD
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_TIMEFIELD
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_NUMERICFIELD
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_CURRENCYFIELD
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_FORMATTEDFIELD
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_PATTERNFIELD
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_FILECONTROL
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+    SID_INSERT_TREECONTROL
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_GRIDCONTROL
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_HYPERLINKCONTROL
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_EXPORT_DIALOG
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_IMPORT_DIALOG
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_DIALOG_TESTMODE
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_BASICIDE_STAT_POS
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_STAT_DATE
+    [
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_STAT_TITLE
+    [
+        StateMethod = GetState;
+    ]
+
+    SID_DOC_MODIFIED
+    [
+        StateMethod = GetState;
+    ]
+
+    SID_ATTR_INSERT
+    [
+        StateMethod = GetState;
+    ]
+
+    SID_ATTR_SIZE
+    [
+        StateMethod = GetState;
+    ]
+
+    SID_INSERT_FORM_RADIO
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_FORM_CHECK
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_FORM_LIST
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_FORM_COMBO
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_FORM_VSCROLL
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_FORM_HSCROLL
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_FORM_SPIN
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_TOGGLE_COMMENT
+    [
+        StateMethod = GetState;
+        ExecMethod  = ExecuteGlobal;
+    ]
+}
+
+interface BasicIDEDocument
+{
+}
+
+shell basctl_DocShell
+{
+    import BasicIDEDocument;
+}

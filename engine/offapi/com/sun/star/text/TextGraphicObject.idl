@@ -1,0 +1,134 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module text {
+
+
+/** specifies a graphic which can be embedded in Text.
+ */
+published service TextGraphicObject
+{
+    /** contains the definition of interfaces and properties that are supported by text frames,
+     graphic objects and embedded objects.
+     */
+    service BaseFrame;
+    /** returns the client-side image map if one is assigned to the object.
+     */
+    [property] com::sun::star::container::XIndexContainer ImageMap;
+
+
+    /** determines if the content is protected against changes from the user interface.
+     */
+    [property] boolean ContentProtected;
+
+
+    /** determines if the text wraps around the contour of the object.
+     */
+    [property] boolean SurroundContour;
+
+    /** the text flows only around the contour of the object.
+     */
+    [property] boolean ContourOutside;
+    /** contains the contour of the object as PolyPolygon.
+     */
+    [optional, property] com::sun::star::drawing::PointSequenceSequence ContourPolyPolygon;
+
+    /** contains the cropping of the object.@see GraphicCrop
+     */
+    [property] com::sun::star::text::GraphicCrop GraphicCrop;
+
+    /** determines if the object is horizontally mirrored on even pages.
+     */
+    [property] boolean HoriMirroredOnEvenPages;
+    /** determines if the object is horizontally mirrored on odd pages.
+     */
+    [property] boolean HoriMirroredOnOddPages;
+    /** determines if the object is mirrored vertically.
+     */
+    [property] boolean VertMirrored;
+
+    /** contains the URL of the background graphic of the object
+
+        @deprecated as of LibreOffice 6.1 - use Graphic instead
+
+        Note the new behaviour since it was deprecated:
+        This property can only be set and only external URLs are
+        supported (no more vnd.sun.star.GraphicObject scheme). When a
+        URL is set, then it will load the image and set the Graphic
+        property.
+     */
+    [property] string GraphicURL;
+
+
+    /** contains the name of the filter of the background graphic of the object.
+     */
+    [property] string GraphicFilter;
+
+    /** contains the original size of the bitmap in the graphic object.
+     */
+    [property] com::sun::star::awt::Size ActualSize;
+    /** changes the display of the luminance.
+         It contains percentage values between -100 and +100.
+     */
+    [property] short AdjustLuminance;
+    /** changes the display of contrast.
+         It contains percentage values between -100 and +100.
+     */
+    [property] short AdjustContrast;
+    /** changes the display of the red color channel.
+         It contains percentage values between -100 and +100.
+     */
+    [property] short AdjustRed;
+    /** changes the display of the green color channel.
+         It contains percentage values between -100 and +100.
+     */
+    [property] short AdjustGreen;
+    /** changes the display of the blue color channel.
+         It contains percentage values between -100 and +100.
+     */
+    [property] short AdjustBlue;
+    /** determines the gamma value of the graphic.
+     */
+    [property] double Gamma;
+    /** determines if the graphic is display in inverted colors.
+         It contains percentage values between -100 and +100.
+     */
+    [property] boolean GraphicIsInverted;
+
+    /** contains percentage values between -100 and +100.
+     */
+    [property] short Transparency;
+    /** contains the ColorMode as com::sun::star::drawing::ColorMode.
+     */
+    [property] com::sun::star::drawing::ColorMode  GraphicColorMode;
+
+    /** contains the background graphic of the object.
+     */
+    [optional, property] com::sun::star::graphic::XGraphic Graphic;
+
+    /** if this is `FALSE`, the graphic is not visible.
+     */
+    [ optional, property ] boolean Visible;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

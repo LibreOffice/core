@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widgets>
+    <style>
+        <faceColor value="#123456"/>
+        <checkedColor value="#234567"/>
+        <lightColor value="#345678"/>
+        <lightBorderColor value="#FFFFFF"/>
+        <shadowColor value="#FFFFFF"/>
+        <darkShadowColor value="#FFFFFF"/>
+        <buttonTextColor value="#FFFFFF"/>
+        <buttonRolloverTextColor value="#FFFFFF"/>
+        <radioCheckTextColor value="#FFFFFF"/>
+        <groupTextColor value="#FFFFFF"/>
+        <labelTextColor value="#FFFFFF"/>
+        <windowColor value="#FFFFFF"/>
+        <windowTextColor value="#FFFFFF"/>
+        <dialogColor value="#FFFFFF"/>
+        <dialogTextColor value="#FFFFFF"/>
+        <workspaceColor value="#FFFFFF"/>
+        <monoColor value="#FFFFFF"/>
+        <fieldColor value="#FFFFFF"/>
+        <fieldTextColor value="#FFFFFF"/>
+        <fieldRolloverTextColor value="#FFFFFF"/>
+        <activeColor value="#FFFFFF"/>
+        <activeTextColor value="#FFFFFF"/>
+        <activeBorderColor value="#FFFFFF"/>
+        <deactiveColor value="#FFFFFF"/>
+        <deactiveTextColor value="#FFFFFF"/>
+        <deactiveBorderColor value="#FFFFFF"/>
+        <menuColor value="#FFFFFF"/>
+        <menuBarColor value="#FFFFFF"/>
+        <menuBarRolloverColor value="#FFFFFF"/>
+        <menuBorderColor value="#FFFFFF"/>
+        <menuTextColor value="#FFFFFF"/>
+        <menuBarTextColor value="#FFFFFF"/>
+        <menuBarRolloverTextColor value="#FFFFFF"/>
+        <menuBarHighlightTextColor value="#FFFFFF"/>
+        <menuHighlightColor value="#FFFFFF"/>
+        <menuHighlightTextColor value="#FFFFFF"/>
+        <highlightColor value="#FFFFFF"/>
+        <highlightTextColor value="#FFFFFF"/>
+        <activeTabColor value="#FFFFFF"/>
+        <inactiveTabColor value="#FFFFFF"/>
+        <tabTextColor value="#FFFFFF"/>
+        <tabRolloverTextColor value="#FFFFFF"/>
+        <tabHighlightTextColor value="#FFFFFF"/>
+        <disableColor value="#FFFFFF"/>
+        <helpColor value="#FFFFFF"/>
+        <helpTextColor value="#FFFFFF"/>
+        <linkColor value="#FFFFFF"/>
+        <visitedLinkColor value="#FFFFFF"/>
+        <toolTextColor value="#FFFFFF"/>
+    </style>
+    <pushbutton>
+        <part value="Entire">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#808080" fill="#FFFFFF" stroke-width="1.0" rx="5" ry="5" margin="1"/>
+                <line stroke="#808080" fill="#808080" stroke-width="1.0"/>
+            </state>
+            <state enabled="true" focused="any" pressed="any" rollover="true" default="true" selected="any" button-value="any">
+                <rect stroke="#808080" fill="#808080" stroke-width="1.0" rx="5" ry="5" margin="1"/>
+            </state>
+        </part>
+        <part value="Focus">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+                <rect stroke="#808080" fill="#FFFFFF" stroke-width="1.0" rx="5" ry="5" margin="1"/>
+            </state>
+        </part>
+    </pushbutton>
+    <radiobutton>
+        <part value="Entire">
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="false">
+                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" margin="0"/>
+            </state>
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="true">
+                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" margin="0"/>
+                <rect stroke="#007AFF" fill="#007AFF" stroke-width="1" margin="3"/>
+            </state>
+        </part>
+    </radiobutton>
+</widgets>

@@ -1,0 +1,2115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Génération automatique de graphiques SVG interactifs
+(c) Insee 2012, 2016     = BH  : bernard.hennequin@insee.fr 
+fonds de carte, concepts = CY  : christophe.yon@insee.fr 
+            cartographie = ADS : alain.da-silva@insee.fr
+[4G 23/11/2016]
+	onload="evt => {console.log('onload', evt) init('{$graph_id}',evt)}"
+		-->
+
+<svg
+   id="G_G0000101001"
+   aria-label=""
+   role="img"
+   viewBox="0 0 630 550"
+   width="100%"
+   onload="console.log('dfjdsvldvlnvds')"
+   xml:space="default"
+   preserveAspectRatio="xMinYMin meet"
+   version="1.1"
+   sodipodi:docname="teste03.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview319"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="2.4273047"
+     inkscape:cx="363.77798"
+     inkscape:cy="309.80865"
+     inkscape:window-width="1920"
+     inkscape:window-height="2123"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="G_G0000101001_graphique" />
+  <script
+     type="text/javascript"
+     id="script2">
+{
+				
+				 	 
+var G_G0000101001_graph_l = 630 ;
+var G_G0000101001_help_nblig=3;
+var G_G0000101001_help_fontsize=12;
+var G_G0000101001_help_last=0;
+var G_G0000101001_keep_title=1;
+var G_G0000101001_prefixegeo=&quot;france_regions&quot;;
+var G_G0000101001_lib_colonne_brut=[&quot;&quot;,&quot;Emploi salarié total - Pays de la Loire&quot;,&quot;Emploi salarié total - France hors Mayotte&quot;,&quot;Emploi salarié privé - Pays de la Loire&quot;,&quot;Emploi salarié privé - France hors Mayotte&quot;]
+var G_G0000101001_graph_data=[ [&quot;&quot;,&quot;Emploi salarié total - Pays de la Loire&quot;,&quot;Emploi salarié total - France hors Mayotte&quot;,&quot;Emploi salarié privé - Pays de la Loire&quot;,&quot;Emploi salarié privé - France hors Mayotte&quot;],[&quot;4ᵉ trim. 2017&quot;,&quot;100,0&quot;,&quot;100,0&quot;,&quot;100,0&quot;,&quot;100,0&quot;],[&quot;1ᵉ trim. 2018&quot;,&quot;100,3&quot;,&quot;100,2&quot;,&quot;100,3&quot;,&quot;100,3&quot;],[&quot;2ᵉ trim. 2018&quot;,&quot;100,4&quot;,&quot;100,2&quot;,&quot;100,6&quot;,&quot;100,4&quot;],[&quot;3ᵉ trim. 2018&quot;,&quot;100,6&quot;,&quot;100,3&quot;,&quot;100,9&quot;,&quot;100,6&quot;],[&quot;4ᵉ trim. 2018&quot;,&quot;101,0&quot;,&quot;100,6&quot;,&quot;101,3&quot;,&quot;100,9&quot;],
+[&quot;1ᵉ trim. 2019&quot;,&quot;101,7&quot;,&quot;101,3&quot;,&quot;102,1&quot;,&quot;101,7&quot;],[&quot;2ᵉ trim. 2019&quot;,&quot;101,9&quot;,&quot;101,4&quot;,&quot;102,2&quot;,&quot;101,9&quot;],[&quot;3ᵉ trim. 2019&quot;,&quot;102,1&quot;,&quot;101,6&quot;,&quot;102,5&quot;,&quot;102,2&quot;],[&quot;4ᵉ trim. 2019&quot;,&quot;102,7&quot;,&quot;102,0&quot;,&quot;103,2&quot;,&quot;102,6&quot;],[&quot;1ᵉ trim. 2020&quot;,&quot;100,7&quot;,&quot;100,3&quot;,&quot;100,6&quot;,&quot;100,3&quot;],
+[&quot;2ᵉ trim. 2020&quot;,&quot;100,6&quot;,&quot;99,7&quot;,&quot;100,7&quot;,&quot;99,9&quot;],[&quot;3ᵉ trim. 2020&quot;,&quot;102,6&quot;,&quot;101,7&quot;,&quot;102,9&quot;,&quot;102,1&quot;],[&quot;4ᵉ trim. 2020&quot;,&quot;102,9&quot;,&quot;101,8&quot;,&quot;103,3&quot;,&quot;102,1&quot;],[&quot;1ᵉ trim. 2021&quot;,&quot;103,8&quot;,&quot;102,6&quot;,&quot;104,5&quot;,&quot;103,2&quot;],[&quot;2ᵉ trim. 2021&quot;,&quot;104,9&quot;,&quot;103,6&quot;,&quot;105,7&quot;,&quot;104,5&quot;],
+[&quot;3ᵉ trim. 2021&quot;,&quot;105,7&quot;,&quot;104,5&quot;,&quot;106,7&quot;,&quot;105,4&quot;],[&quot;4ᵉ trim. 2021&quot;,&quot;106,5&quot;,&quot;105,0&quot;,&quot;107,6&quot;,&quot;106,2&quot;],[&quot;1ᵉ trim. 2022&quot;,&quot;106,9&quot;,&quot;105,3&quot;,&quot;108,1&quot;,&quot;106,6&quot;],[&quot;2ᵉ trim. 2022&quot;,&quot;107,3&quot;,&quot;105,8&quot;,&quot;108,5&quot;,&quot;107,2&quot;],[&quot;3ᵉ trim. 2022&quot;,&quot;107,7&quot;,&quot;106,2&quot;,&quot;109,1&quot;,&quot;107,7&quot;],
+[&quot;4ᵉ trim. 2022&quot;,&quot;108,2&quot;,&quot;106,5&quot;,&quot;109,6&quot;,&quot;108,2&quot;],[&quot;1ᵉ trim. 2023&quot;,&quot;108,6&quot;,&quot;106,7&quot;,&quot;109,9&quot;,&quot;108,3&quot;],[&quot;2ᵉ trim. 2023&quot;,&quot;108,9&quot;,&quot;106,9&quot;,&quot;110,2&quot;,&quot;108,5&quot;],[&quot;3ᵉ trim. 2023&quot;,&quot;109,0&quot;,&quot;107,1&quot;,&quot;110,4&quot;,&quot;108,7&quot;],[&quot;4ᵉ trim. 2023&quot;,&quot;109,2&quot;,&quot;107,1&quot;,&quot;110,4&quot;,&quot;108,6&quot;],
+[&quot;1ᵉ trim. 2024&quot;,&quot;109,5&quot;,&quot;107,4&quot;,&quot;110,7&quot;,&quot;109,0&quot;]
+];
+}
+			</script>
+  <defs
+     id="defs7">
+    <clipPath
+       id="G_G0000101001_clipRectGraph">
+      <rect
+         x="10"
+         y="95"
+         width="610"
+         height="445"
+         id="rect4" />
+    </clipPath>
+  </defs>
+  <style
+     type="text/css"
+     id="style9">
+	/* Styles statiques par défaut extraits d'un fichier XML */
+					
+svg {max-width: 656px;}
+text {stroke:none}
+.G_G0000101001_sens-line {stroke:gray;stroke-width:5;opacity:0}
+.G_G0000101001_gridline { stroke:gray; stroke-width :0.5; }
+.G_G0000101001_gridlinelog { stroke:silver; stroke-width :0.5; }
+#G_G0000101001_axes { stroke:navy; stroke-width:1 }
+#G_G0000101001_axes-titres {fill:black}
+#G_G0000101001_axex-titre2 {text-anchor:start}
+#G_G0000101001_axex-titre {text-anchor:end}
+#G_G0000101001_axey-titre-pyramide {text-anchor:middle}
+#G_G0000101001_sources {font-style:italic}
+#G_G0000101001_extra_elements {pointer-events:none}
+#G_G0000101001_help-lib1b {text-anchor:end}
+#G_G0000101001_help-lib2b {text-anchor:end}
+@media print {use[class*=&quot;marque&quot;],path[class*=&quot;surface&quot;],rect[class*=&quot;surface&quot;] {opacity:1 !important}}
+@media print {path[class*=&quot;pie-slice&quot;] {stroke:white;stroke-width:1.5}}
+
+	/* Styles multiples pour les lignes, surfaces, marques à partir des paramètres (couleurs, traits, largeurs, tailles, marques ...) 
+		générés par la transformation */
+					
+.G_G0000101001_courbe1 { stroke-opacity:1; fill:none; stroke:#0AA4B0; stroke-width:2; stroke-dasharray: ; }
+.G_G0000101001_courbe2 { stroke-opacity:1; fill:none; stroke:#0F417A; stroke-width:2; stroke-dasharray: ; }
+.G_G0000101001_courbe3 { stroke-opacity:1; fill:none; stroke:#0AA4B0; stroke-width:2; stroke-dasharray:4 2; }
+.G_G0000101001_courbe4 { stroke-opacity:1; fill:none; stroke:#0F417A; stroke-width:2; stroke-dasharray:4 2; }
+
+#G_G0000101001_axes-titres { fill:black; font-size:13px; }
+#G_G0000101001_axey-titre1 { fill:black; text-anchor:start; }
+#G_G0000101001_ticks { font-size:10px; }
+#G_G0000101001_ticks-axe1 { fill:black; text-anchor:end; }
+.G_G0000101001_tick-label { text-anchor:end; font-size:10px; }
+.G_G0000101001_tick-bar { text-anchor:end; font-size:10px; }
+
+#G_G0000101001_graphique { font-family:&quot;Open Sans&quot;,Verdana, &quot;Bitstream Vera Sans&quot;, sans-serif; stroke-linejoin:round; stroke-linecap:butt; }
+#G_G0000101001_cadre { stroke-width:0.7; fill:none; stroke:white; }
+#G_G0000101001_titre { font-weight:bolder; font-size:12px; fill:black; text-anchor:start; }
+#G_G0000101001_soustitre { font-size:12px; text-anchor:start; }
+#G_G0000101001_legende { stroke-width:1; text-anchor:start; font-size:12px; }
+#G_G0000101001_unite { font-size:13px; text-anchor:start; }
+#G_G0000101001_notes-sources { text-anchor:start; fill:black; font-size:11px; }
+#G_G0000101001_help-bubble { fill:#FFE070; stroke:gray; stroke-width:0.5; stroke-opacity:0.8; fill-opacity:0.8; }
+#G_G0000101001_help { pointer-events:none; font-size:12px; }
+
+#G_G0000101001_legende&gt;g&gt;g:hover {cursor:pointer; font-weight:bold}</style>
+  <g
+     id="G_G0000101001_graphique"
+     aria-hidden="true">
+    <text
+       id="G_G0000101001_debug"
+       x="100"
+       y="590" />
+    <rect
+       id="G_G0000101001_cadre"
+       x="1"
+       y="1"
+       width="628"
+       height="548" />
+    <g
+       id="G_G0000101001_notes-sources"
+       transform="translate(15,549)">
+      <!--Notes-->
+      <g
+         id="G_G0000101001_notes" />
+      <!--Sources-->
+      <g
+         id="G_G0000101001_sources"
+         transform="translate(0,0)" />
+    </g>
+    <!--Ticks-->
+    <g
+       id="G_G0000101001_ticks">
+      <!--Axe principal-->
+      <g
+         id="G_G0000101001_ticks-axe1">
+        <!--ticks à partir de l'axe et au-dessus-->
+        <g
+           id="G_G0000101001_tick-axe1-1"
+           transform="translate(41,394)">
+          <line
+             id="G_G0000101001_tick-axe1-1-line"
+             x2="559"
+             class="G_G0000101001_gridline" />
+          <text
+             id="G_G0000101001_tick-axe1-1-text"
+             x="-5"
+             y="3">100</text>
+        </g>
+        <g
+           id="G_G0000101001_tick-axe1-2"
+           transform="translate(41,349)">
+          <line
+             id="G_G0000101001_tick-axe1-2-line"
+             x2="559"
+             class="G_G0000101001_gridline" />
+          <text
+             id="G_G0000101001_tick-axe1-2-text"
+             x="-5"
+             y="3">102</text>
+        </g>
+        <g
+           id="G_G0000101001_tick-axe1-3"
+           transform="translate(41,304)">
+          <line
+             id="G_G0000101001_tick-axe1-3-line"
+             x2="559"
+             class="G_G0000101001_gridline" />
+          <text
+             id="G_G0000101001_tick-axe1-3-text"
+             x="-5"
+             y="3">104</text>
+        </g>
+        <g
+           id="G_G0000101001_tick-axe1-4"
+           transform="translate(41,260)">
+          <line
+             id="G_G0000101001_tick-axe1-4-line"
+             x2="559"
+             class="G_G0000101001_gridline" />
+          <text
+             id="G_G0000101001_tick-axe1-4-text"
+             x="-5"
+             y="3">106</text>
+        </g>
+        <g
+           id="G_G0000101001_tick-axe1-5"
+           transform="translate(41,215)">
+          <line
+             id="G_G0000101001_tick-axe1-5-line"
+             x2="559"
+             class="G_G0000101001_gridline" />
+          <text
+             id="G_G0000101001_tick-axe1-5-text"
+             x="-5"
+             y="3">108</text>
+        </g>
+        <g
+           id="G_G0000101001_tick-axe1-6"
+           transform="translate(41,170)">
+          <line
+             id="G_G0000101001_tick-axe1-6-line"
+             x2="559"
+             class="G_G0000101001_gridline" />
+          <text
+             id="G_G0000101001_tick-axe1-6-text"
+             x="-5"
+             y="3">110</text>
+        </g>
+        <g
+           id="G_G0000101001_tick-axe1-7"
+           transform="translate(41,125)">
+          <line
+             id="G_G0000101001_tick-axe1-7-line"
+             x2="559"
+             class="G_G0000101001_gridline" />
+          <text
+             id="G_G0000101001_tick-axe1-7-text"
+             x="-5"
+             y="3">112</text>
+        </g>
+        <!--ticks en-dessous de l'axe-->
+        <g
+           id="G_G0000101001_tick-axe1-8"
+           transform="translate(41,439)">
+          <line
+             id="G_G0000101001_tick-axe1-8-line"
+             x2="559"
+             class="G_G0000101001_gridline" />
+          <text
+             id="G_G0000101001_tick-axe1-8-text"
+             x="-5"
+             y="3">98</text>
+        </g>
+      </g>
+    </g>
+    <g
+       id="G_G0000101001_axes-titres">
+      <!--Titres axe vertical-->
+      <text
+         id="G_G0000101001_axey-titre1"
+         x="12"
+         y="111">Even more tests</text>
+    </g>
+    <!--Axes-->
+    <g
+       id="G_G0000101001_axes"
+       style=";stroke:navy;  stroke-width :1; ">
+      <line
+         id="G_G0000101001_axe-x"
+         x1="46"
+         y1="394"
+         x2="605"
+         y2="394" />
+      <line
+         id="G_G0000101001_axe-y1"
+         x1="46"
+         y1="439"
+         x2="46"
+         y2="115" />
+    </g>
+    <!--Séries-->
+    <g
+       id="G_G0000101001_graph">
+      <!--Repères axe X     periodex=4-->
+      <g
+         id="G_G0000101001_courbes-ticks"
+         class="G_G0000101001_tick-label">
+        <line
+           id="G_G0000101001_courbes-tick-1"
+           x1="46"
+           x2="46"
+           y1="444"
+           y2="120"
+           class="G_G0000101001_gridline" />
+        <g
+           id="G_G0000101001_courbes-tick-1-text"
+           transform="translate(46,454) rotate(-45)">
+          <text
+             id="G_G0000101001_courbes-tick-1-text-1">4ᵉ trim.0000</text>
+        </g>
+        <line
+           id="G_G0000101001_courbes-tick-5"
+           x1="135"
+           x2="135"
+           y1="444"
+           y2="120"
+           class="G_G0000101001_gridline" />
+        <g
+           id="G_G0000101001_courbes-tick-5-text"
+           transform="translate(135,454) rotate(-45)">
+          <text
+             id="G_G0000101001_courbes-tick-5-text-1">4ᵉ trim.0000</text>
+        </g>
+        <line
+           id="G_G0000101001_courbes-tick-9"
+           x1="223"
+           x2="223"
+           y1="444"
+           y2="120"
+           class="G_G0000101001_gridline" />
+        <g
+           id="G_G0000101001_courbes-tick-9-text"
+           transform="translate(223,454) rotate(-45)">
+          <text
+             id="G_G0000101001_courbes-tick-9-text-1">4ᵉ trim.0000</text>
+        </g>
+        <line
+           id="G_G0000101001_courbes-tick-13"
+           x1="312"
+           x2="312"
+           y1="444"
+           y2="120"
+           class="G_G0000101001_gridline" />
+        <g
+           id="G_G0000101001_courbes-tick-13-text"
+           transform="translate(312,454) rotate(-45)">
+          <text
+             id="G_G0000101001_courbes-tick-13-text-1">4ᵉ trim.0000</text>
+        </g>
+        <line
+           id="G_G0000101001_courbes-tick-17"
+           x1="401"
+           x2="401"
+           y1="444"
+           y2="120"
+           class="G_G0000101001_gridline" />
+        <g
+           id="G_G0000101001_courbes-tick-17-text"
+           transform="translate(401,454) rotate(-45)">
+          <text
+             id="G_G0000101001_courbes-tick-17-text-1">4ᵉ trim.0000</text>
+        </g>
+        <line
+           id="G_G0000101001_courbes-tick-21"
+           x1="489"
+           x2="489"
+           y1="444"
+           y2="120"
+           class="G_G0000101001_gridline" />
+        <g
+           id="G_G0000101001_courbes-tick-21-text"
+           transform="translate(489,454) rotate(-45)">
+          <text
+             id="G_G0000101001_courbes-tick-21-text-1">4ᵉ trim.0000</text>
+        </g>
+        <line
+           id="G_G0000101001_courbes-tick-26"
+           x1="600"
+           x2="600"
+           y1="444"
+           y2="120"
+           class="G_G0000101001_gridline" />
+        <g
+           id="G_G0000101001_courbes-tick-26-text"
+           transform="translate(600,454) rotate(-45)">
+          <text
+             id="G_G0000101001_courbes-tick-26-text-1">1ᵉ trim.0000</text>
+        </g>
+      </g>
+      <g
+         id="G_G0000101001_courbes">
+        <!--Courbe colonne numéro 1-->
+        <path
+           id="G_G0000101001_courbe-C1"
+           d="M 46,394 L 68,387 L 90,385 L 112,381 L 135,372 L 157,356 L 179,352 L 201,347 L 223,334 L 245,378 L 268,381 L 290,336 L 312,329 L 334,309 L 356,284 L 378,266 L 401,248 L 423,239 L 445,230 L 467,221 L 489,210 L 511,201 L 534,195 L 556,192 L 578,188 L 600,181 "
+           class="G_G0000101001_courbe1" />
+        <!--Courbe colonne numéro 2-->
+        <path
+           id="G_G0000101001_courbe-C2"
+           d="M 46,394 L 68,390 L 90,390 L 112,387 L 135,381 L 157,365 L 179,363 L 201,358 L 223,349 L 245,387 L 268,401 L 290,356 L 312,354 L 334,336 L 356,313 L 378,293 L 401,282 L 423,275 L 445,264 L 467,255 L 489,248 L 511,244 L 534,239 L 556,235 L 578,235 L 600,228 "
+           class="G_G0000101001_courbe2" />
+        <!--Courbe colonne numéro 3-->
+        <path
+           id="G_G0000101001_courbe-C3"
+           d="M 46,394 L 68,387 L 90,381 L 112,374 L 135,365 L 157,347 L 179,345 L 201,338 L 223,322 L 245,381 L 268,378 L 290,329 L 312,320 L 334,293 L 356,266 L 378,244 L 401,224 L 423,212 L 445,204 L 467,190 L 489,179 L 511,172 L 534,165 L 556,161 L 578,161 L 600,154 "
+           class="G_G0000101001_courbe3" />
+        <!--Courbe colonne numéro 4-->
+        <path
+           id="G_G0000101001_courbe-C4"
+           d="M 46,394 L 68,387 L 90,385 L 112,381 L 135,374 L 157,356 L 179,352 L 201,345 L 223,336 L 245,387 L 268,396 L 290,347 L 312,347 L 334,322 L 356,293 L 378,273 L 401,255 L 423,246 L 445,233 L 467,221 L 489,210 L 511,208 L 534,204 L 556,199 L 578,201 L 600,192 "
+           class="G_G0000101001_courbe4" />
+      </g>
+      <g
+         id="G_G0000101001_courbes-lignes"
+         class="G_G0000101001_sens-line">
+        <!--Segments colonne numéro 1-->
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L2"
+           x1="46"
+           y1="394"
+           x2="68"
+           y2="387"
+           onmouseout="hide_help_line('G_G0000101001',2,1)"
+           onmousemove="show_help_line('G_G0000101001',2,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L3"
+           x1="68"
+           y1="387"
+           x2="90"
+           y2="385"
+           onmouseout="hide_help_line('G_G0000101001',3,1)"
+           onmousemove="show_help_line('G_G0000101001',3,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L4"
+           x1="90"
+           y1="385"
+           x2="112"
+           y2="381"
+           onmouseout="hide_help_line('G_G0000101001',4,1)"
+           onmousemove="show_help_line('G_G0000101001',4,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L5"
+           x1="112"
+           y1="381"
+           x2="135"
+           y2="372"
+           onmouseout="hide_help_line('G_G0000101001',5,1)"
+           onmousemove="show_help_line('G_G0000101001',5,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L6"
+           x1="135"
+           y1="372"
+           x2="157"
+           y2="356"
+           onmouseout="hide_help_line('G_G0000101001',6,1)"
+           onmousemove="show_help_line('G_G0000101001',6,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L7"
+           x1="157"
+           y1="356"
+           x2="179"
+           y2="352"
+           onmouseout="hide_help_line('G_G0000101001',7,1)"
+           onmousemove="show_help_line('G_G0000101001',7,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L8"
+           x1="179"
+           y1="352"
+           x2="201"
+           y2="347"
+           onmouseout="hide_help_line('G_G0000101001',8,1)"
+           onmousemove="show_help_line('G_G0000101001',8,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L9"
+           x1="201"
+           y1="347"
+           x2="223"
+           y2="334"
+           onmouseout="hide_help_line('G_G0000101001',9,1)"
+           onmousemove="show_help_line('G_G0000101001',9,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L10"
+           x1="223"
+           y1="334"
+           x2="245"
+           y2="378"
+           onmouseout="hide_help_line('G_G0000101001',10,1)"
+           onmousemove="show_help_line('G_G0000101001',10,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L11"
+           x1="245"
+           y1="378"
+           x2="268"
+           y2="381"
+           onmouseout="hide_help_line('G_G0000101001',11,1)"
+           onmousemove="show_help_line('G_G0000101001',11,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L12"
+           x1="268"
+           y1="381"
+           x2="290"
+           y2="336"
+           onmouseout="hide_help_line('G_G0000101001',12,1)"
+           onmousemove="show_help_line('G_G0000101001',12,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L13"
+           x1="290"
+           y1="336"
+           x2="312"
+           y2="329"
+           onmouseout="hide_help_line('G_G0000101001',13,1)"
+           onmousemove="show_help_line('G_G0000101001',13,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L14"
+           x1="312"
+           y1="329"
+           x2="334"
+           y2="309"
+           onmouseout="hide_help_line('G_G0000101001',14,1)"
+           onmousemove="show_help_line('G_G0000101001',14,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L15"
+           x1="334"
+           y1="309"
+           x2="356"
+           y2="284"
+           onmouseout="hide_help_line('G_G0000101001',15,1)"
+           onmousemove="show_help_line('G_G0000101001',15,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L16"
+           x1="356"
+           y1="284"
+           x2="378"
+           y2="266"
+           onmouseout="hide_help_line('G_G0000101001',16,1)"
+           onmousemove="show_help_line('G_G0000101001',16,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L17"
+           x1="378"
+           y1="266"
+           x2="401"
+           y2="248"
+           onmouseout="hide_help_line('G_G0000101001',17,1)"
+           onmousemove="show_help_line('G_G0000101001',17,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L18"
+           x1="401"
+           y1="248"
+           x2="423"
+           y2="239"
+           onmouseout="hide_help_line('G_G0000101001',18,1)"
+           onmousemove="show_help_line('G_G0000101001',18,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L19"
+           x1="423"
+           y1="239"
+           x2="445"
+           y2="230"
+           onmouseout="hide_help_line('G_G0000101001',19,1)"
+           onmousemove="show_help_line('G_G0000101001',19,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L20"
+           x1="445"
+           y1="230"
+           x2="467"
+           y2="221"
+           onmouseout="hide_help_line('G_G0000101001',20,1)"
+           onmousemove="show_help_line('G_G0000101001',20,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L21"
+           x1="467"
+           y1="221"
+           x2="489"
+           y2="210"
+           onmouseout="hide_help_line('G_G0000101001',21,1)"
+           onmousemove="show_help_line('G_G0000101001',21,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L22"
+           x1="489"
+           y1="210"
+           x2="511"
+           y2="201"
+           onmouseout="hide_help_line('G_G0000101001',22,1)"
+           onmousemove="show_help_line('G_G0000101001',22,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L23"
+           x1="511"
+           y1="201"
+           x2="534"
+           y2="195"
+           onmouseout="hide_help_line('G_G0000101001',23,1)"
+           onmousemove="show_help_line('G_G0000101001',23,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L24"
+           x1="534"
+           y1="195"
+           x2="556"
+           y2="192"
+           onmouseout="hide_help_line('G_G0000101001',24,1)"
+           onmousemove="show_help_line('G_G0000101001',24,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L25"
+           x1="556"
+           y1="192"
+           x2="578"
+           y2="188"
+           onmouseout="hide_help_line('G_G0000101001',25,1)"
+           onmousemove="show_help_line('G_G0000101001',25,1)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C1-L26"
+           x1="578"
+           y1="188"
+           x2="600"
+           y2="181"
+           onmouseout="hide_help_line('G_G0000101001',26,1)"
+           onmousemove="show_help_line('G_G0000101001',26,1)" />
+        <!--Segments colonne numéro 2-->
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L2"
+           x1="46"
+           y1="394"
+           x2="68"
+           y2="390"
+           onmouseout="hide_help_line('G_G0000101001',2,2)"
+           onmousemove="show_help_line('G_G0000101001',2,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L3"
+           x1="68"
+           y1="390"
+           x2="90"
+           y2="390"
+           onmouseout="hide_help_line('G_G0000101001',3,2)"
+           onmousemove="show_help_line('G_G0000101001',3,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L4"
+           x1="90"
+           y1="390"
+           x2="112"
+           y2="387"
+           onmouseout="hide_help_line('G_G0000101001',4,2)"
+           onmousemove="show_help_line('G_G0000101001',4,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L5"
+           x1="112"
+           y1="387"
+           x2="135"
+           y2="381"
+           onmouseout="hide_help_line('G_G0000101001',5,2)"
+           onmousemove="show_help_line('G_G0000101001',5,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L6"
+           x1="135"
+           y1="381"
+           x2="157"
+           y2="365"
+           onmouseout="hide_help_line('G_G0000101001',6,2)"
+           onmousemove="show_help_line('G_G0000101001',6,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L7"
+           x1="157"
+           y1="365"
+           x2="179"
+           y2="363"
+           onmouseout="hide_help_line('G_G0000101001',7,2)"
+           onmousemove="show_help_line('G_G0000101001',7,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L8"
+           x1="179"
+           y1="363"
+           x2="201"
+           y2="358"
+           onmouseout="hide_help_line('G_G0000101001',8,2)"
+           onmousemove="show_help_line('G_G0000101001',8,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L9"
+           x1="201"
+           y1="358"
+           x2="223"
+           y2="349"
+           onmouseout="hide_help_line('G_G0000101001',9,2)"
+           onmousemove="show_help_line('G_G0000101001',9,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L10"
+           x1="223"
+           y1="349"
+           x2="245"
+           y2="387"
+           onmouseout="hide_help_line('G_G0000101001',10,2)"
+           onmousemove="show_help_line('G_G0000101001',10,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L11"
+           x1="245"
+           y1="387"
+           x2="268"
+           y2="401"
+           onmouseout="hide_help_line('G_G0000101001',11,2)"
+           onmousemove="show_help_line('G_G0000101001',11,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L12"
+           x1="268"
+           y1="401"
+           x2="290"
+           y2="356"
+           onmouseout="hide_help_line('G_G0000101001',12,2)"
+           onmousemove="show_help_line('G_G0000101001',12,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L13"
+           x1="290"
+           y1="356"
+           x2="312"
+           y2="354"
+           onmouseout="hide_help_line('G_G0000101001',13,2)"
+           onmousemove="show_help_line('G_G0000101001',13,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L14"
+           x1="312"
+           y1="354"
+           x2="334"
+           y2="336"
+           onmouseout="hide_help_line('G_G0000101001',14,2)"
+           onmousemove="show_help_line('G_G0000101001',14,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L15"
+           x1="334"
+           y1="336"
+           x2="356"
+           y2="313"
+           onmouseout="hide_help_line('G_G0000101001',15,2)"
+           onmousemove="show_help_line('G_G0000101001',15,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L16"
+           x1="356"
+           y1="313"
+           x2="378"
+           y2="293"
+           onmouseout="hide_help_line('G_G0000101001',16,2)"
+           onmousemove="show_help_line('G_G0000101001',16,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L17"
+           x1="378"
+           y1="293"
+           x2="401"
+           y2="282"
+           onmouseout="hide_help_line('G_G0000101001',17,2)"
+           onmousemove="show_help_line('G_G0000101001',17,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L18"
+           x1="401"
+           y1="282"
+           x2="423"
+           y2="275"
+           onmouseout="hide_help_line('G_G0000101001',18,2)"
+           onmousemove="show_help_line('G_G0000101001',18,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L19"
+           x1="423"
+           y1="275"
+           x2="445"
+           y2="264"
+           onmouseout="hide_help_line('G_G0000101001',19,2)"
+           onmousemove="show_help_line('G_G0000101001',19,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L20"
+           x1="445"
+           y1="264"
+           x2="467"
+           y2="255"
+           onmouseout="hide_help_line('G_G0000101001',20,2)"
+           onmousemove="show_help_line('G_G0000101001',20,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L21"
+           x1="467"
+           y1="255"
+           x2="489"
+           y2="248"
+           onmouseout="hide_help_line('G_G0000101001',21,2)"
+           onmousemove="show_help_line('G_G0000101001',21,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L22"
+           x1="489"
+           y1="248"
+           x2="511"
+           y2="244"
+           onmouseout="hide_help_line('G_G0000101001',22,2)"
+           onmousemove="show_help_line('G_G0000101001',22,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L23"
+           x1="511"
+           y1="244"
+           x2="534"
+           y2="239"
+           onmouseout="hide_help_line('G_G0000101001',23,2)"
+           onmousemove="show_help_line('G_G0000101001',23,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L24"
+           x1="534"
+           y1="239"
+           x2="556"
+           y2="235"
+           onmouseout="hide_help_line('G_G0000101001',24,2)"
+           onmousemove="show_help_line('G_G0000101001',24,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L25"
+           x1="556"
+           y1="235"
+           x2="578"
+           y2="235"
+           onmouseout="hide_help_line('G_G0000101001',25,2)"
+           onmousemove="show_help_line('G_G0000101001',25,2)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C2-L26"
+           x1="578"
+           y1="235"
+           x2="600"
+           y2="228"
+           onmouseout="hide_help_line('G_G0000101001',26,2)"
+           onmousemove="show_help_line('G_G0000101001',26,2)" />
+        <!--Segments colonne numéro 3-->
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L2"
+           x1="46"
+           y1="394"
+           x2="68"
+           y2="387"
+           onmouseout="hide_help_line('G_G0000101001',2,3)"
+           onmousemove="show_help_line('G_G0000101001',2,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L3"
+           x1="68"
+           y1="387"
+           x2="90"
+           y2="381"
+           onmouseout="hide_help_line('G_G0000101001',3,3)"
+           onmousemove="show_help_line('G_G0000101001',3,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L4"
+           x1="90"
+           y1="381"
+           x2="112"
+           y2="374"
+           onmouseout="hide_help_line('G_G0000101001',4,3)"
+           onmousemove="show_help_line('G_G0000101001',4,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L5"
+           x1="112"
+           y1="374"
+           x2="135"
+           y2="365"
+           onmouseout="hide_help_line('G_G0000101001',5,3)"
+           onmousemove="show_help_line('G_G0000101001',5,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L6"
+           x1="135"
+           y1="365"
+           x2="157"
+           y2="347"
+           onmouseout="hide_help_line('G_G0000101001',6,3)"
+           onmousemove="show_help_line('G_G0000101001',6,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L7"
+           x1="157"
+           y1="347"
+           x2="179"
+           y2="345"
+           onmouseout="hide_help_line('G_G0000101001',7,3)"
+           onmousemove="show_help_line('G_G0000101001',7,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L8"
+           x1="179"
+           y1="345"
+           x2="201"
+           y2="338"
+           onmouseout="hide_help_line('G_G0000101001',8,3)"
+           onmousemove="show_help_line('G_G0000101001',8,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L9"
+           x1="201"
+           y1="338"
+           x2="223"
+           y2="322"
+           onmouseout="hide_help_line('G_G0000101001',9,3)"
+           onmousemove="show_help_line('G_G0000101001',9,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L10"
+           x1="223"
+           y1="322"
+           x2="245"
+           y2="381"
+           onmouseout="hide_help_line('G_G0000101001',10,3)"
+           onmousemove="show_help_line('G_G0000101001',10,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L11"
+           x1="245"
+           y1="381"
+           x2="268"
+           y2="378"
+           onmouseout="hide_help_line('G_G0000101001',11,3)"
+           onmousemove="show_help_line('G_G0000101001',11,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L12"
+           x1="268"
+           y1="378"
+           x2="290"
+           y2="329"
+           onmouseout="hide_help_line('G_G0000101001',12,3)"
+           onmousemove="show_help_line('G_G0000101001',12,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L13"
+           x1="290"
+           y1="329"
+           x2="312"
+           y2="320"
+           onmouseout="hide_help_line('G_G0000101001',13,3)"
+           onmousemove="show_help_line('G_G0000101001',13,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L14"
+           x1="312"
+           y1="320"
+           x2="334"
+           y2="293"
+           onmouseout="hide_help_line('G_G0000101001',14,3)"
+           onmousemove="show_help_line('G_G0000101001',14,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L15"
+           x1="334"
+           y1="293"
+           x2="356"
+           y2="266"
+           onmouseout="hide_help_line('G_G0000101001',15,3)"
+           onmousemove="show_help_line('G_G0000101001',15,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L16"
+           x1="356"
+           y1="266"
+           x2="378"
+           y2="244"
+           onmouseout="hide_help_line('G_G0000101001',16,3)"
+           onmousemove="show_help_line('G_G0000101001',16,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L17"
+           x1="378"
+           y1="244"
+           x2="401"
+           y2="224"
+           onmouseout="hide_help_line('G_G0000101001',17,3)"
+           onmousemove="show_help_line('G_G0000101001',17,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L18"
+           x1="401"
+           y1="224"
+           x2="423"
+           y2="212"
+           onmouseout="hide_help_line('G_G0000101001',18,3)"
+           onmousemove="show_help_line('G_G0000101001',18,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L19"
+           x1="423"
+           y1="212"
+           x2="445"
+           y2="204"
+           onmouseout="hide_help_line('G_G0000101001',19,3)"
+           onmousemove="show_help_line('G_G0000101001',19,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L20"
+           x1="445"
+           y1="204"
+           x2="467"
+           y2="190"
+           onmouseout="hide_help_line('G_G0000101001',20,3)"
+           onmousemove="show_help_line('G_G0000101001',20,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L21"
+           x1="467"
+           y1="190"
+           x2="489"
+           y2="179"
+           onmouseout="hide_help_line('G_G0000101001',21,3)"
+           onmousemove="show_help_line('G_G0000101001',21,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L22"
+           x1="489"
+           y1="179"
+           x2="511"
+           y2="172"
+           onmouseout="hide_help_line('G_G0000101001',22,3)"
+           onmousemove="show_help_line('G_G0000101001',22,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L23"
+           x1="511"
+           y1="172"
+           x2="534"
+           y2="165"
+           onmouseout="hide_help_line('G_G0000101001',23,3)"
+           onmousemove="show_help_line('G_G0000101001',23,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L24"
+           x1="534"
+           y1="165"
+           x2="556"
+           y2="161"
+           onmouseout="hide_help_line('G_G0000101001',24,3)"
+           onmousemove="show_help_line('G_G0000101001',24,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L25"
+           x1="556"
+           y1="161"
+           x2="578"
+           y2="161"
+           onmouseout="hide_help_line('G_G0000101001',25,3)"
+           onmousemove="show_help_line('G_G0000101001',25,3)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C3-L26"
+           x1="578"
+           y1="161"
+           x2="600"
+           y2="154"
+           onmouseout="hide_help_line('G_G0000101001',26,3)"
+           onmousemove="show_help_line('G_G0000101001',26,3)" />
+        <!--Segments colonne numéro 4-->
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L2"
+           x1="46"
+           y1="394"
+           x2="68"
+           y2="387"
+           onmouseout="hide_help_line('G_G0000101001',2,4)"
+           onmousemove="show_help_line('G_G0000101001',2,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L3"
+           x1="68"
+           y1="387"
+           x2="90"
+           y2="385"
+           onmouseout="hide_help_line('G_G0000101001',3,4)"
+           onmousemove="show_help_line('G_G0000101001',3,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L4"
+           x1="90"
+           y1="385"
+           x2="112"
+           y2="381"
+           onmouseout="hide_help_line('G_G0000101001',4,4)"
+           onmousemove="show_help_line('G_G0000101001',4,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L5"
+           x1="112"
+           y1="381"
+           x2="135"
+           y2="374"
+           onmouseout="hide_help_line('G_G0000101001',5,4)"
+           onmousemove="show_help_line('G_G0000101001',5,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L6"
+           x1="135"
+           y1="374"
+           x2="157"
+           y2="356"
+           onmouseout="hide_help_line('G_G0000101001',6,4)"
+           onmousemove="show_help_line('G_G0000101001',6,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L7"
+           x1="157"
+           y1="356"
+           x2="179"
+           y2="352"
+           onmouseout="hide_help_line('G_G0000101001',7,4)"
+           onmousemove="show_help_line('G_G0000101001',7,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L8"
+           x1="179"
+           y1="352"
+           x2="201"
+           y2="345"
+           onmouseout="hide_help_line('G_G0000101001',8,4)"
+           onmousemove="show_help_line('G_G0000101001',8,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L9"
+           x1="201"
+           y1="345"
+           x2="223"
+           y2="336"
+           onmouseout="hide_help_line('G_G0000101001',9,4)"
+           onmousemove="show_help_line('G_G0000101001',9,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L10"
+           x1="223"
+           y1="336"
+           x2="245"
+           y2="387"
+           onmouseout="hide_help_line('G_G0000101001',10,4)"
+           onmousemove="show_help_line('G_G0000101001',10,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L11"
+           x1="245"
+           y1="387"
+           x2="268"
+           y2="396"
+           onmouseout="hide_help_line('G_G0000101001',11,4)"
+           onmousemove="show_help_line('G_G0000101001',11,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L12"
+           x1="268"
+           y1="396"
+           x2="290"
+           y2="347"
+           onmouseout="hide_help_line('G_G0000101001',12,4)"
+           onmousemove="show_help_line('G_G0000101001',12,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L13"
+           x1="290"
+           y1="347"
+           x2="312"
+           y2="347"
+           onmouseout="hide_help_line('G_G0000101001',13,4)"
+           onmousemove="show_help_line('G_G0000101001',13,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L14"
+           x1="312"
+           y1="347"
+           x2="334"
+           y2="322"
+           onmouseout="hide_help_line('G_G0000101001',14,4)"
+           onmousemove="show_help_line('G_G0000101001',14,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L15"
+           x1="334"
+           y1="322"
+           x2="356"
+           y2="293"
+           onmouseout="hide_help_line('G_G0000101001',15,4)"
+           onmousemove="show_help_line('G_G0000101001',15,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L16"
+           x1="356"
+           y1="293"
+           x2="378"
+           y2="273"
+           onmouseout="hide_help_line('G_G0000101001',16,4)"
+           onmousemove="show_help_line('G_G0000101001',16,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L17"
+           x1="378"
+           y1="273"
+           x2="401"
+           y2="255"
+           onmouseout="hide_help_line('G_G0000101001',17,4)"
+           onmousemove="show_help_line('G_G0000101001',17,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L18"
+           x1="401"
+           y1="255"
+           x2="423"
+           y2="246"
+           onmouseout="hide_help_line('G_G0000101001',18,4)"
+           onmousemove="show_help_line('G_G0000101001',18,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L19"
+           x1="423"
+           y1="246"
+           x2="445"
+           y2="233"
+           onmouseout="hide_help_line('G_G0000101001',19,4)"
+           onmousemove="show_help_line('G_G0000101001',19,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L20"
+           x1="445"
+           y1="233"
+           x2="467"
+           y2="221"
+           onmouseout="hide_help_line('G_G0000101001',20,4)"
+           onmousemove="show_help_line('G_G0000101001',20,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L21"
+           x1="467"
+           y1="221"
+           x2="489"
+           y2="210"
+           onmouseout="hide_help_line('G_G0000101001',21,4)"
+           onmousemove="show_help_line('G_G0000101001',21,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L22"
+           x1="489"
+           y1="210"
+           x2="511"
+           y2="208"
+           onmouseout="hide_help_line('G_G0000101001',22,4)"
+           onmousemove="show_help_line('G_G0000101001',22,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L23"
+           x1="511"
+           y1="208"
+           x2="534"
+           y2="204"
+           onmouseout="hide_help_line('G_G0000101001',23,4)"
+           onmousemove="show_help_line('G_G0000101001',23,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L24"
+           x1="534"
+           y1="204"
+           x2="556"
+           y2="199"
+           onmouseout="hide_help_line('G_G0000101001',24,4)"
+           onmousemove="show_help_line('G_G0000101001',24,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L25"
+           x1="556"
+           y1="199"
+           x2="578"
+           y2="201"
+           onmouseout="hide_help_line('G_G0000101001',25,4)"
+           onmousemove="show_help_line('G_G0000101001',25,4)" />
+        <line
+           id="G_G0000101001_courbes-ligne-C4-L26"
+           x1="578"
+           y1="201"
+           x2="600"
+           y2="192"
+           onmouseout="hide_help_line('G_G0000101001',26,4)"
+           onmousemove="show_help_line('G_G0000101001',26,4)" />
+      </g>
+      <g
+         id="G_G0000101001_courbes-points"
+         style="stroke:none; fill:orange; fill-opacity:0; ">
+        <g
+           id="G_G0000101001_courbe-C1-points">
+          <!--Points colonne numéro 1-->
+          <circle
+             id="G_G0000101001_point-C1-L1"
+             cx="46"
+             cy="394"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',1,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,1,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L2"
+             cx="68"
+             cy="387"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',2,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,2,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L3"
+             cx="90"
+             cy="385"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',3,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,3,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L4"
+             cx="112"
+             cy="381"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',4,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,4,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L5"
+             cx="135"
+             cy="372"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',5,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,5,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L6"
+             cx="157"
+             cy="356"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',6,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,6,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L7"
+             cx="179"
+             cy="352"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',7,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,7,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L8"
+             cx="201"
+             cy="347"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',8,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,8,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L9"
+             cx="223"
+             cy="334"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',9,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,9,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L10"
+             cx="245"
+             cy="378"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',10,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,10,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L11"
+             cx="268"
+             cy="381"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',11,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,11,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L12"
+             cx="290"
+             cy="336"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',12,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,12,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L13"
+             cx="312"
+             cy="329"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',13,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,13,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L14"
+             cx="334"
+             cy="309"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',14,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,14,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L15"
+             cx="356"
+             cy="284"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',15,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,15,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L16"
+             cx="378"
+             cy="266"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',16,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,16,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L17"
+             cx="401"
+             cy="248"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',17,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,17,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L18"
+             cx="423"
+             cy="239"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',18,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,18,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L19"
+             cx="445"
+             cy="230"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',19,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,19,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L20"
+             cx="467"
+             cy="221"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',20,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,20,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L21"
+             cx="489"
+             cy="210"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',21,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,21,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L22"
+             cx="511"
+             cy="201"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',22,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,22,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L23"
+             cx="534"
+             cy="195"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',23,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,23,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L24"
+             cx="556"
+             cy="192"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',24,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,24,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L25"
+             cx="578"
+             cy="188"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',25,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,25,1)" />
+          <circle
+             id="G_G0000101001_point-C1-L26"
+             cx="600"
+             cy="181"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',26,1)"
+             onmousemove="show_help_dot('G_G0000101001',evt,26,1)" />
+        </g>
+        <g
+           id="G_G0000101001_courbe-C2-points">
+          <!--Points colonne numéro 2-->
+          <circle
+             id="G_G0000101001_point-C2-L1"
+             cx="46"
+             cy="394"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',1,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,1,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L2"
+             cx="68"
+             cy="390"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',2,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,2,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L3"
+             cx="90"
+             cy="390"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',3,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,3,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L4"
+             cx="112"
+             cy="387"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',4,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,4,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L5"
+             cx="135"
+             cy="381"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',5,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,5,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L6"
+             cx="157"
+             cy="365"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',6,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,6,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L7"
+             cx="179"
+             cy="363"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',7,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,7,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L8"
+             cx="201"
+             cy="358"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',8,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,8,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L9"
+             cx="223"
+             cy="349"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',9,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,9,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L10"
+             cx="245"
+             cy="387"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',10,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,10,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L11"
+             cx="268"
+             cy="401"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',11,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,11,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L12"
+             cx="290"
+             cy="356"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',12,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,12,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L13"
+             cx="312"
+             cy="354"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',13,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,13,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L14"
+             cx="334"
+             cy="336"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',14,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,14,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L15"
+             cx="356"
+             cy="313"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',15,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,15,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L16"
+             cx="378"
+             cy="293"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',16,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,16,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L17"
+             cx="401"
+             cy="282"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',17,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,17,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L18"
+             cx="423"
+             cy="275"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',18,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,18,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L19"
+             cx="445"
+             cy="264"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',19,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,19,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L20"
+             cx="467"
+             cy="255"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',20,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,20,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L21"
+             cx="489"
+             cy="248"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',21,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,21,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L22"
+             cx="511"
+             cy="244"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',22,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,22,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L23"
+             cx="534"
+             cy="239"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',23,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,23,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L24"
+             cx="556"
+             cy="235"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',24,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,24,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L25"
+             cx="578"
+             cy="235"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',25,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,25,2)" />
+          <circle
+             id="G_G0000101001_point-C2-L26"
+             cx="600"
+             cy="228"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',26,2)"
+             onmousemove="show_help_dot('G_G0000101001',evt,26,2)" />
+        </g>
+        <g
+           id="G_G0000101001_courbe-C3-points">
+          <!--Points colonne numéro 3-->
+          <circle
+             id="G_G0000101001_point-C3-L1"
+             cx="46"
+             cy="394"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',1,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,1,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L2"
+             cx="68"
+             cy="387"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',2,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,2,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L3"
+             cx="90"
+             cy="381"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',3,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,3,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L4"
+             cx="112"
+             cy="374"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',4,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,4,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L5"
+             cx="135"
+             cy="365"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',5,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,5,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L6"
+             cx="157"
+             cy="347"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',6,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,6,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L7"
+             cx="179"
+             cy="345"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',7,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,7,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L8"
+             cx="201"
+             cy="338"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',8,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,8,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L9"
+             cx="223"
+             cy="322"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',9,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,9,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L10"
+             cx="245"
+             cy="381"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',10,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,10,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L11"
+             cx="268"
+             cy="378"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',11,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,11,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L12"
+             cx="290"
+             cy="329"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',12,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,12,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L13"
+             cx="312"
+             cy="320"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',13,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,13,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L14"
+             cx="334"
+             cy="293"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',14,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,14,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L15"
+             cx="356"
+             cy="266"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',15,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,15,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L16"
+             cx="378"
+             cy="244"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',16,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,16,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L17"
+             cx="401"
+             cy="224"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',17,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,17,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L18"
+             cx="423"
+             cy="212"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',18,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,18,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L19"
+             cx="445"
+             cy="204"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',19,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,19,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L20"
+             cx="467"
+             cy="190"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',20,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,20,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L21"
+             cx="489"
+             cy="179"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',21,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,21,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L22"
+             cx="511"
+             cy="172"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',22,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,22,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L23"
+             cx="534"
+             cy="165"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',23,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,23,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L24"
+             cx="556"
+             cy="161"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',24,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,24,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L25"
+             cx="578"
+             cy="161"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',25,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,25,3)" />
+          <circle
+             id="G_G0000101001_point-C3-L26"
+             cx="600"
+             cy="154"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',26,3)"
+             onmousemove="show_help_dot('G_G0000101001',evt,26,3)" />
+        </g>
+        <g
+           id="G_G0000101001_courbe-C4-points">
+          <!--Points colonne numéro 4-->
+          <circle
+             id="G_G0000101001_point-C4-L1"
+             cx="46"
+             cy="394"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',1,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,1,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L2"
+             cx="68"
+             cy="387"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',2,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,2,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L3"
+             cx="90"
+             cy="385"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',3,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,3,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L4"
+             cx="112"
+             cy="381"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',4,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,4,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L5"
+             cx="135"
+             cy="374"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',5,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,5,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L6"
+             cx="157"
+             cy="356"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',6,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,6,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L7"
+             cx="179"
+             cy="352"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',7,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,7,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L8"
+             cx="201"
+             cy="345"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',8,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,8,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L9"
+             cx="223"
+             cy="336"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',9,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,9,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L10"
+             cx="245"
+             cy="387"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',10,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,10,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L11"
+             cx="268"
+             cy="396"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',11,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,11,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L12"
+             cx="290"
+             cy="347"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',12,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,12,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L13"
+             cx="312"
+             cy="347"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',13,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,13,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L14"
+             cx="334"
+             cy="322"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',14,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,14,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L15"
+             cx="356"
+             cy="293"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',15,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,15,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L16"
+             cx="378"
+             cy="273"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',16,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,16,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L17"
+             cx="401"
+             cy="255"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',17,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,17,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L18"
+             cx="423"
+             cy="246"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',18,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,18,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L19"
+             cx="445"
+             cy="233"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',19,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,19,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L20"
+             cx="467"
+             cy="221"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',20,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,20,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L21"
+             cx="489"
+             cy="210"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',21,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,21,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L22"
+             cx="511"
+             cy="208"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',22,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,22,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L23"
+             cx="534"
+             cy="204"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',23,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,23,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L24"
+             cx="556"
+             cy="199"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',24,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,24,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L25"
+             cx="578"
+             cy="201"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',25,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,25,4)" />
+          <circle
+             id="G_G0000101001_point-C4-L26"
+             cx="600"
+             cy="192"
+             r="5"
+             onmouseout="hide_help_dot('G_G0000101001',26,4)"
+             onmousemove="show_help_dot('G_G0000101001',evt,26,4)" />
+        </g>
+      </g>
+    </g>
+    <!--Legende-->
+    <g
+       id="G_G0000101001_legende">
+      <g
+         id="G_G0000101001_legende_items"
+         transform="translate(15,11)">
+        <g
+           id="G_G0000101001_legende-C1"
+           transform="translate(0,0)"
+           onclick="show_hide_objet('G_G0000101001','courbe',1)"
+           onmouseover="maximize_objet('G_G0000101001','courbe',1,1)"
+           onmouseout="normalize_objet('G_G0000101001','courbe',1)">
+          <line
+             id="G_G0000101001_legende-C1-line"
+             x1="0"
+             y1="10"
+             x2="27"
+             y2="10"
+             class="G_G0000101001_courbe1" />
+          <g
+             id="G_G0000101001_legende-C1-text"
+             transform="translate(34,14)"
+             title="Emploi salarié total - Pays de la Loire">
+            <text
+               id="G_G0000101001_legende-C1-text-1">test04</text>
+          </g>
+        </g>
+        <g
+           id="G_G0000101001_legende-C2"
+           transform="translate(0,19)"
+           onclick="show_hide_objet('G_G0000101001','courbe',2)"
+           onmouseover="maximize_objet('G_G0000101001','courbe',2,1)"
+           onmouseout="normalize_objet('G_G0000101001','courbe',2)">
+          <line
+             id="G_G0000101001_legende-C2-line"
+             x1="0"
+             y1="10"
+             x2="27"
+             y2="10"
+             class="G_G0000101001_courbe2" />
+          <g
+             id="G_G0000101001_legende-C2-text"
+             transform="translate(34,14)"
+             title="Emploi salarié total - France hors Mayotte">
+            <text
+               id="G_G0000101001_legende-C2-text-1">test03</text>
+          </g>
+        </g>
+        <g
+           id="G_G0000101001_legende-C3"
+           transform="translate(0,38)"
+           onclick="show_hide_objet('G_G0000101001','courbe',3)"
+           onmouseover="maximize_objet('G_G0000101001','courbe',3,1)"
+           onmouseout="normalize_objet('G_G0000101001','courbe',3)">
+          <line
+             id="G_G0000101001_legende-C3-line"
+             x1="0"
+             y1="10"
+             x2="27"
+             y2="10"
+             class="G_G0000101001_courbe3" />
+          <g
+             id="G_G0000101001_legende-C3-text"
+             transform="translate(34,14)"
+             title="Emploi salarié privé - Pays de la Loire">
+            <text
+               id="G_G0000101001_legende-C3-text-1">Test02</text>
+          </g>
+        </g>
+        <g
+           id="G_G0000101001_legende-C4"
+           transform="translate(0,57)"
+           onclick="show_hide_objet('G_G0000101001','courbe',4)"
+           onmouseover="maximize_objet('G_G0000101001','courbe',4,1)"
+           onmouseout="normalize_objet('G_G0000101001','courbe',4)">
+          <line
+             id="G_G0000101001_legende-C4-line"
+             x1="0"
+             y1="10"
+             x2="27"
+             y2="10"
+             class="G_G0000101001_courbe4" />
+          <g
+             id="G_G0000101001_legende-C4-text"
+             transform="translate(34,14)"
+             title="Emploi salarié privé - France hors Mayotte">
+            <text
+               id="G_G0000101001_legende-C4-text-1">Test01</text>
+          </g>
+        </g>
+      </g>
+    </g>
+    <g
+       id="G_G0000101001_extra_elements"
+       style=";pointer-events:none; " />
+    <g
+       id="G_G0000101001_help"
+       opacity="0"
+       style="pointer-events:none; font-size:12px; ">
+      <rect
+         id="G_G0000101001_help-rect"
+         x="0"
+         y="0"
+         rx="3"
+         ry="3"
+         width="150"
+         height="70"
+         visibility="hidden" />
+      <g
+         id="G_G0000101001_help-libs"
+         transform="translate(0,0)">
+        <text
+           id="G_G0000101001_help-lib1"
+           x="10"
+           y="15"
+           style="">lib1</text>
+        <text
+           id="G_G0000101001_help-lib1b"
+           x="100"
+           y="15"
+           style=";text-anchor:end; ">lib1b</text>
+        <text
+           id="G_G0000101001_help-lib2"
+           x="10"
+           y="29"
+           style="">lib2</text>
+        <text
+           id="G_G0000101001_help-lib2b"
+           x="100"
+           y="26"
+           style=";text-anchor:end; ">lib2b</text>
+        <text
+           id="G_G0000101001_help-lib3"
+           x="10"
+           y="43"
+           style="">lib3</text>
+      </g>
+    </g>
+    <text
+       id="G_G0000101001_last-val"
+       opacity="0">109,0-----109,0-----109.0-----</text>
+    <text
+       id="G_G0000101001_last-valbrute"
+       opacity="0">109.0</text>
+    <text
+       id="G_G0000101001_first-date"
+       opacity="0">4ᵉ trim. 2017</text>
+    <text
+       id="G_G0000101001_last-date"
+       opacity="0">1ᵉ trim. 2024</text>
+  </g>
+  <!--chargement paramètres=0 millisecondes-->
+  <!--                suite=0 millisecondes-->
+</svg>

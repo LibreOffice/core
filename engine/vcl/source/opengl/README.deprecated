@@ -1,0 +1,23 @@
+deprecated features
+
+GL_LIGHTING
+GL_TEXTURE_2D
+GL_POINT_SMOOTH
+GL_TEXTURE_WRAP_S
+GL_TEXTURE_WRAP_T
+glBegin
+glEnd
+
+
+GLSL
+
+texture*D
+varying
+attribute
+missing version string
+
+gl_FragColor
+gl_FragData
+gl_Normal
+gl_NormalMatrix
+gl_Vertex

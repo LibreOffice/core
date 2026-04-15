@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:ooow="http://openoffice.org/2004/writer" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:user-field-decls>
+    <text:user-field-decl office:value-type="float" office:value="111" text:name="aaa"/>
+    <text:user-field-decl office:value-type="float" office:value="222" text:name="bbb"/>
+   </text:user-field-decls>
+   <table:table table:name="Table1">
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell table:formula="ooow:aaa+bbb*2" office:value-type="float" office:value="111">
+      <text:p>111</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p/>
+  </office:text>
+ </office:body>
+</office:document>

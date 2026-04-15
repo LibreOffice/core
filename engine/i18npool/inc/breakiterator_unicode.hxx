@@ -1,0 +1,121 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#pragma once
+
+#include "breakiteratorImpl.hxx"
+
+#include <unicode/brkiter.h>
+#include <unicode/utext.h>
+#include <memory>
+#include <unordered_map>
+
+namespace i18npool {
+
+#define LOAD_CHARACTER_BREAKITERATOR    0
+#define LOAD_WORD_BREAKITERATOR         1
+#define LOAD_SENTENCE_BREAKITERATOR     2
+#define LOAD_LINE_BREAKITERATOR         3
+
+
+
+class BreakIterator_Unicode : public BreakIteratorImpl
+{
+public:
+    BreakIterator_Unicode();
+    virtual ~BreakIterator_Unicode() override;
+
+    virtual sal_Int32 SAL_CALL previousCharacters( const OUString& Text, sal_Int32 nStartPos,
+        const css::lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
+        sal_Int32& nDone ) override;
+    virtual sal_Int32 SAL_CALL nextCharacters( const OUString& Text, sal_Int32 nStartPos,
+        const css::lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
+        sal_Int32& nDone ) override;
+
+    virtual css::i18n::Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
+        const css::lang::Locale& nLocale, sal_Int16 WordType) override;
+    virtual css::i18n::Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
+        const css::lang::Locale& nLocale, sal_Int16 WordType) override;
+    virtual css::i18n::Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
+        const css::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection ) override;
+
+    virtual sal_Int32 SAL_CALL beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
+        const css::lang::Locale& nLocale ) override;
+    virtual sal_Int32 SAL_CALL endOfSentence( const OUString& Text, sal_Int32 nStartPos,
+        const css::lang::Locale& nLocale ) override;
+
+    virtual css::i18n::LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
+        const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
+        const css::i18n::LineBreakHyphenationOptions& hOptions,
+        const css::i18n::LineBreakUserOptions& bOptions ) override;
+
+    //XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+protected:
+    OUString cBreakIterator;
+    const char *lineRule;
+
+    /** Used as map value. */
+    struct BI_ValueData
+    {
+        OUString                                maICUText;
+        UText*                                  mpUt;
+        std::shared_ptr< icu::BreakIterator >   mpBreakIterator;
+
+        BI_ValueData() : mpUt(nullptr)
+        {
+        }
+        ~BI_ValueData()
+        {
+            utext_close(mpUt);
+        }
+    };
+
+    struct BI_Data
+    {
+        std::shared_ptr< BI_ValueData > mpValue;
+        OString                         maBIMapKey;
+    } character, sentence, line, *icuBI;
+    BI_Data words[4]; // 4 is css::i18n::WordType enumeration size
+
+    /// @throws css::uno::RuntimeException
+    void loadICUBreakIterator(const css::lang::Locale& rLocale,
+        sal_Int16 rBreakType, sal_Int16 rWordType, const char* name, const OUString& rText);
+
+public:
+    struct StringHash
+    {
+        using is_transparent = void;
+        std::size_t operator()(const OString& v) const
+        {
+            return v.hashCode();
+        }
+        std::size_t operator()(std::string_view s) const
+        {
+            return rtl_str_hashCode_WithLength(s.data(), s.size());
+        }
+    };
+    typedef std::unordered_map< OString, std::shared_ptr< BI_ValueData >, StringHash, std::equal_to<> > BIMap;
+};
+
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

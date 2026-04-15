@@ -1,0 +1,6 @@
+"SimpleCommandMail";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
+"SimpleCommandMail";"com::sun::star::lang::XServiceInfo";"supportsService()"
+"SimpleCommandMail";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
+"SimpleCommandMail";"com::sun::star::lang::XTypeProvider";"getTypes()"
+"SimpleCommandMail";"com::sun::star::lang::XTypeProvider";"getImplementationId()"
+"SimpleCommandMail";"com::sun::star::system::XSimpleMailClientSupplier";"querySimpleMailClient()"

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <registration>
+        <simple-license accept-by="admin" suppress-on-update="true">
+            <license-text xlink:href="license.txt" lang="en" />
+        </simple-license>
+    </registration>
+
+    <version value="2016.03.13" />
+
+    <identifier value="org.openoffice.is-IS.hunspell.dictionaries" />
+
+    <display-name>
+        <name lang="en-US">Icelandic spelling dictionary, hyphenation rules and thesaurus</name>
+    </display-name>
+
+    <platform value="all" />
+
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+
+    <publisher>
+        <name xlink:href="http://github.com/nifgraup/hunspell-is#readme" lang="is">The hunspell-is project</name>
+    </publisher>
+
+</description>

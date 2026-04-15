@@ -1,0 +1,99 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module graphic
+{
+
+/** This interface acts as the main interface to handle graphic
+    content. It is used to load graphics, store graphics and
+    to get information about unloaded graphics
+  */
+published interface XGraphicProvider : ::com::sun::star::uno::XInterface
+{
+    /** Calling this method returns a
+        com::sun::star::beans::XPropertySet
+        interface that gives access to the properties of the
+        unloaded graphic
+
+        <p>In most cases, this method will be used to query the
+        mime type of the graphic and, in the case of pixel graphics,
+        the resulting size after loading</p>
+
+        @param MediaProperties
+            A sequence of property values to describe the location
+            of the graphic, for which the attributes should be returned
+
+        @returns
+            A com::sun::star::beans::XPropertySet interface
+            to get access to the different graphic properties
+
+        @see MediaProperties
+        @see GraphicDescriptor
+        @see com::sun::star::beans::PropertyValues
+    */
+    ::com::sun::star::beans::XPropertySet   queryGraphicDescriptor( [in] ::com::sun::star::beans::PropertyValues MediaProperties )
+                                                raises( ::com::sun::star::io::IOException,
+                                                        ::com::sun::star::lang::IllegalArgumentException,
+                                                        ::com::sun::star::lang::WrappedTargetException );
+
+
+
+    /** Calling this method returns a XGraphic interface
+        that holds the graphic content after loading the graphic
+
+        @param MediaProperties
+            A sequence of property values to describe the location
+            of the graphic from which the graphic is to be loaded
+
+        @returns
+            The XGraphic interface
+
+        @see MediaProperties
+        @see XGraphic
+        @see com::sun::star::beans::PropertyValues
+    */
+    XGraphic    queryGraphic( [in] ::com::sun::star::beans::PropertyValues MediaProperties )
+                     raises( ::com::sun::star::io::IOException,
+                              ::com::sun::star::lang::IllegalArgumentException,
+                             ::com::sun::star::lang::WrappedTargetException );
+
+    /** Store the graphic content, represented through the XGraphic
+        interface at the specified location
+
+        @param Graphic
+            The graphic that should be stored
+
+        @param MediaProperties
+            A sequence of property values to describe the destination
+            location of the graphic
+
+        @see XGraphic
+        @see MediaProperties
+        @see com::sun::star::beans::PropertyValues
+    */
+    void        storeGraphic( [in] ::com::sun::star::graphic::XGraphic Graphic,
+                              [in] ::com::sun::star::beans::PropertyValues MediaProperties  )
+                    raises( ::com::sun::star::io::IOException,
+                             ::com::sun::star::lang::IllegalArgumentException,
+                            ::com::sun::star::lang::WrappedTargetException );
+};
+
+} ; } ; } ; } ;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

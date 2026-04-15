@@ -1,0 +1,432 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include <svl/solar.hrc>
+
+// Helper IDs for templates
+#define HID_STANDARD_STYLESHEET_NAME        (HID_SD_START + 70)
+#define HID_POOLSHEET_OBJWITHOUTFILL        (HID_SD_START + 73)
+#define HID_POOLSHEET_OBJNOLINENOFILL       (HID_SD_START + 74)
+#define HID_POOLSHEET_TEXT                  (HID_SD_START + 71)
+#define HID_POOLSHEET_A4                    (HID_SD_START + 104)
+#define HID_POOLSHEET_A4_TITLE              (HID_SD_START + 72)
+#define HID_POOLSHEET_A4_HEADLINE           (HID_SD_START + 75)
+#define HID_POOLSHEET_A4_TEXT               (HID_SD_START + 105)
+#define HID_POOLSHEET_A0                    (HID_SD_START + 109)
+#define HID_POOLSHEET_A0_TITLE              (HID_SD_START + 110)
+#define HID_POOLSHEET_A0_HEADLINE           (HID_SD_START + 111)
+#define HID_POOLSHEET_A0_TEXT               (HID_SD_START + 112)
+#define HID_POOLSHEET_GRAPHIC               (HID_SD_START + 106)
+#define HID_POOLSHEET_SHAPES                (HID_SD_START + 107)
+#define HID_POOLSHEET_FILLED                (HID_SD_START + 77)
+#define HID_POOLSHEET_FILLED_BLUE           (HID_SD_START + 78)
+#define HID_POOLSHEET_FILLED_GREEN          (HID_SD_START + 79)
+#define HID_POOLSHEET_FILLED_RED            (HID_SD_START + 80)
+#define HID_POOLSHEET_FILLED_YELLOW         (HID_SD_START + 81)
+#define HID_POOLSHEET_OUTLINE               (HID_SD_START + 82)
+#define HID_POOLSHEET_OUTLINE_BLUE          (HID_SD_START + 83)
+#define HID_POOLSHEET_OUTLINE_GREEN         (HID_SD_START + 84)
+#define HID_POOLSHEET_OUTLINE_RED           (HID_SD_START + 102)
+#define HID_POOLSHEET_OUTLINE_YELLOW        (HID_SD_START + 103)
+#define HID_POOLSHEET_LINES                 (HID_SD_START + 108)
+#define HID_POOLSHEET_MEASURE               (HID_SD_START + 76)
+#define HID_POOLSHEET_LINES_DASHED          (HID_SD_START + 113) //dummy
+#define HID_POOLSHEET_LAST                  (HID_SD_START + 114) //dummy
+
+#define HID_PSEUDOSHEET_TITLE               (HID_SD_START + 85)
+#define HID_PSEUDOSHEET_OUTLINE             (HID_SD_START + 86)
+#define HID_PSEUDOSHEET_OUTLINE1            (HID_SD_START + 87)
+#define HID_PSEUDOSHEET_OUTLINE2            (HID_SD_START + 88)
+#define HID_PSEUDOSHEET_OUTLINE3            (HID_SD_START + 89)
+#define HID_PSEUDOSHEET_OUTLINE4            (HID_SD_START + 90)
+#define HID_PSEUDOSHEET_OUTLINE5            (HID_SD_START + 91)
+#define HID_PSEUDOSHEET_OUTLINE6            (HID_SD_START + 92)
+#define HID_PSEUDOSHEET_OUTLINE7            (HID_SD_START + 93)
+#define HID_PSEUDOSHEET_OUTLINE8            (HID_SD_START + 94)
+#define HID_PSEUDOSHEET_OUTLINE9            (HID_SD_START + 95)
+#define HID_PSEUDOSHEET_BACKGROUNDOBJECTS   (HID_SD_START + 96)
+#define HID_PSEUDOSHEET_BACKGROUND          (HID_SD_START + 97)
+#define HID_PSEUDOSHEET_NOTES               (HID_SD_START + 98)
+#define HID_PSEUDOSHEET_SUBTITLE            (HID_SD_START + 101)
+
+#define SID_PAGESETUP                       (SID_SD_START+2)
+    // FREE
+#define SID_COPYOBJECTS                     (SID_SD_START+4)
+#define SID_MANAGE_LINKS                    (SID_SD_START+5)
+    // FREE
+#define SID_CONVERT_TO_3D_LATHE             (SID_SD_START+8)
+#define SID_DRAWINGMODE                     (SID_SD_START+9)
+#define SID_OUTLINE_MODE                    (SID_SD_START+10)
+#define SID_SLIDE_SORTER_MODE               (SID_SD_START+11)
+#define SID_DISPLAY_MODE                    (SID_SD_START+12)
+#define SID_TOGGLE_TABBAR_VISIBILITY        (SID_SD_START+13)
+#define SID_INSERTPAGE                      (SID_SD_START+14)
+#define SID_INSERTFILE                      (SID_SD_START+15)
+    // FREE
+#define SID_ZOOM_PANNING                    (SID_SD_START+17)
+#define SID_PRESENTATION_END                (SID_SD_START+18)
+    // FREE
+#define SID_POSITION                        (SID_SD_START+22)
+    // FREE
+#define SID_TEXT_COMBINE                    (SID_SD_START+25)
+#define SID_COMBINE                         (SID_SD_START+26)
+#define SID_NAME_GROUP                      (SID_SD_START+27)
+    // FREE
+// In svxids.hrc: SID_BEZIER_ELIMINATE_POINTS   (SID_SD_START+30)
+#define SID_MOREFRONT                       (SID_SD_START+31)
+#define SID_MOREBACK                        (SID_SD_START+32)
+// #i68101#
+#define SID_OBJECT_TITLE_DESCRIPTION        (SID_SD_START+33)
+#define SID_VERTICAL                        (SID_SD_START+34)
+#define SID_HORIZONTAL                      (SID_SD_START+35)
+#define SID_CHANGEBEZIER                    (SID_SD_START+36)
+#define SID_CHANGEPOLYGON                   (SID_SD_START+37)
+#define SID_CAPTUREPOINT                    (SID_SD_START+38)
+#define SID_INSERTLAYER                     (SID_SD_START+39)
+// In svxids.hrc: SID_RULER                     (SID_SD_START+40)
+#define SID_EDIT_OUTLINER                   (SID_SD_START+41)
+#define SID_SWITCHPAGE                      (SID_SD_START+42)
+#define SID_MODIFYPAGE                      (SID_SD_START+43)
+#define SID_SWITCHLAYER                     (SID_SD_START+44)
+#define SID_MODIFYLAYER                     (SID_SD_START+45)
+#define SID_PAGEMODE                        (SID_SD_START+46)
+#define SID_LAYERMODE                       (SID_SD_START+47)
+#define SID_TOGGLELAYERVISIBILITY           (SID_SD_START+48)
+#define SID_SETLAYER                        (SID_SD_START+49)
+#define SID_MASTERPAGE                      (SID_SD_START+50)
+// Navigation between slides
+#define SID_GO_TO_NEXT_PAGE                 (SID_SD_START+51)
+#define SID_GO_TO_PREVIOUS_PAGE             (SID_SD_START+52)
+#define SID_GO_TO_FIRST_PAGE                (SID_SD_START+53)
+#define SID_GO_TO_LAST_PAGE                 (SID_SD_START+54)
+// Slide sorting
+#define SID_MOVE_PAGE_UP                    (SID_SD_START+55)
+#define SID_MOVE_PAGE_DOWN                  (SID_SD_START+56)
+#define SID_MOVE_PAGE_FIRST                 (SID_SD_START+57)
+#define SID_MOVE_PAGE_LAST                  (SID_SD_START+58)
+    // FREE
+#define SID_ANIMATION_OBJECTS               (SID_SD_START+62)
+#define SID_ANIMATION_EFFECTS               (SID_SD_START+63)
+#define SID_PRESENTATION_LAYOUT             (SID_SD_START+64)
+// In svxids.hrc: SID_BEZIER_CONVERT        (SID_SD_START+65)
+// In svxids.hrc: SID_BEZIER_EDGE           (SID_SD_START+66)
+// In svxids.hrc: SID_BEZIER_SYMMTR         (SID_SD_START+67)
+#define SID_NOTES_MODE                      TypedWhichId<SfxBoolItem>(SID_SD_START+69)
+#define SID_HANDOUT_MASTER_MODE             (SID_SD_START+70)
+#define SID_LINEEND_POLYGON                 (SID_SD_START+71)
+#define SID_EXECUTE_ANIMATION_EFFECT        (SID_SD_START+72)
+    // FREE
+#define SID_SWITCH_POINTEDIT                (SID_SD_START+74)
+    // FREE
+// In svxids.hrc: SID_TEXTEDIT              (SID_SD_START+76)
+#define SID_SET_SNAPITEM                    TypedWhichId<SfxStringItem>(SID_SD_START+77)
+    // FREE
+#define SID_DELETE_PAGE                     (SID_SD_START+80)
+#define SID_DELETE_LAYER                    (SID_SD_START+81)
+#define SID_DISMANTLE                       (SID_SD_START+82)
+    // FREE
+#define SID_SCALE                           TypedWhichId<SfxStringItem>(SID_SD_START+85)
+#define SID_STATUS_PAGE                     TypedWhichId<SfxStringItem>(SID_SD_START+86)
+#define SID_STATUS_LAYOUT                   TypedWhichId<SfxStringItem>(SID_SD_START+87)
+#define SID_STATUS_SELMODE                  (SID_SD_START+88)
+// In sfxsids.hrc: SID_MODIFIED              TypedWhichId<SfxBoolItem>(SID_SD_START+89)
+#define SID_OBJECT_CROOK_ROTATE             (SID_SD_START+90)
+#define SID_OBJECT_CROOK_SLANT              (SID_SD_START+91)
+#define SID_OBJECT_CROOK_STRETCH            (SID_SD_START+92)
+#define SID_CONNECT                         (SID_SD_START+93)
+#define SID_BREAK                           (SID_SD_START+94)
+#define SID_OBJECT_CHOOSE_MODE              (SID_SD_START+95)
+// In svxids.hrc:  SID_ENTER_GROUP              (SID_SD_START+96)
+// In svxids.hrc:  SID_LEAVE_GROUP              (SID_SD_START+97)
+// In svxids.hrc:  SID_SIZE_PAGE_WIDTH          (SID_SD_START+98)
+// In sfxsids.hrc: SID_SIZE_OPTIMAL             (SID_SD_START+99)
+#define SID_OBJECT_TRANSPARENCE             (SID_SD_START+100)
+#define SID_OBJECT_GRADIENT                 (SID_SD_START+101)
+    // FREE
+// In svxids.hrc:  SID_INSERT_MATH              (SID_SD_START+106)
+#define SID_OBJECT_SHEAR                    (SID_SD_START+107)
+#define SID_DELETE_SNAPITEM                 TypedWhichId<SfxStringItem>(SID_SD_START+108)
+#define SID_OBJECT_CLOSE                    (SID_SD_START+109)
+#define SID_ANIMATOR_ADD                    (SID_SD_START+110)
+#define SID_ANIMATOR_CREATE                 (SID_SD_START+111)
+#define SID_ANIMATOR_STATE                  TypedWhichId<SfxUInt16Item>(SID_SD_START+112)
+#define SID_PRESENTATIONOBJECT              (SID_SD_START+113)
+// In svxids.hrc:  SID_SIZE_VISAREA             (SID_SD_START+114)
+// In svxids.hrc:  SID_ATTR_SYMBOLTYPE          (SID_SD_START+115)
+// In svxids.hrc:  SID_ATTR_SYMBOLSIZE          (SID_SD_START+116)
+#define SID_REVERSE_ORDER                   (SID_SD_START+117)
+#define SID_CLEAR_UNDO_STACK                (SID_SD_START+118)
+#define SID_BEHIND_OBJ                      (SID_SD_START+146)
+    // FREE
+// Option pane slot IDs
+#define SID_SOLID_CREATE                    (SID_SD_START+151)
+#define SID_HELPLINES_USE                   (SID_SD_START+152)
+// In svxids.hrc:  SID_HELPLINES_MOVE           (SID_SD_START+153)
+// In svxids.hrc:  SID_GRID_USE                 (SID_SD_START+154)
+#define SID_SNAP_BORDER                     (SID_SD_START+155)
+#define SID_SNAP_FRAME                      (SID_SD_START+156)
+#define SID_SNAP_POINTS                     (SID_SD_START+157)
+#define SID_QUICKEDIT                       (SID_SD_START+158)
+#define SID_PICK_THROUGH                    (SID_SD_START+159)
+    // FREE 160 - 168
+#define SID_DOUBLECLICK_TEXTEDIT            (SID_SD_START+169)
+// In svxids.hrc: #define SID_CLICK_CHANGE_ROTATION           (SID_SD_START+170)
+#define SID_HELPLINES_VISIBLE               (SID_SD_START+179)
+#define SID_HELPLINES_FRONT                 (SID_SD_START+180)
+#define SID_BEFORE_OBJ                      (SID_SD_START+181)
+    // FREE
+#define SID_CUSTOM_ANIMATION_PANEL          (SID_SD_START+183)
+#define SID_MASTER_SLIDES_PANEL             (SID_SD_START+184)
+    // FREE
+// and even more...
+#define ID_VAL_ENDINTENS                    (SID_SD_START+197)
+#define ID_VAL_STARTINTENS                  (SID_SD_START+198)
+#define ID_VAL_BORDER                       (SID_SD_START+199)
+// In svxids.hrc: ID_VAL_MOUSESTART_X           (SID_SD_START+200)
+// In svxids.hrc: ID_VAL_MOUSESTART_Y           (SID_SD_START+201)
+// In svxids.hrc: ID_VAL_MOUSEEND_X             (SID_SD_START+204)
+// In svxids.hrc: ID_VAL_MOUSEEND_Y             (SID_SD_START+205)
+// In svxids.hrc: ID_VAL_AXIS_X                 (SID_SD_START+206)
+// In svxids.hrc: ID_VAL_AXIS_Y                 (SID_SD_START+207)
+// In svxids.hrc: ID_VAL_ANGLESTART             (SID_SD_START+208)
+// In svxids.hrc: ID_VAL_ANGLEEND               (SID_SD_START+209)
+// In svxids.hrc: ID_VAL_CENTER_X               (SID_SD_START+210)
+// In svxids.hrc: ID_VAL_CENTER_Y               (SID_SD_START+211)
+#define ID_VAL_WHATPAGE                     TypedWhichId<SfxUInt32Item>(SID_SD_START+212)
+#define ID_VAL_WHATLAYER                    (SID_SD_START+213)
+#define ID_VAL_ANGLE                        (SID_SD_START+214)
+#define ID_VAL_MIRRORVERT                   (SID_SD_START+215)
+#define ID_VAL_ISACTIVE                     (SID_SD_START+216)
+#define ID_VAL_WHATKIND                     (SID_SD_START+217)
+#define ID_VAL_PAGEWIDTH                    (SID_SD_START+218)
+#define ID_INSERT_POS                       (SID_SD_START+219)
+#define ID_VAL_PAGETOP                      (SID_SD_START+220)
+#define ID_VAL_PAGEBOTTOM                   (SID_SD_START+221)
+#define ID_VAL_PAGELEFT                     (SID_SD_START+222)
+#define ID_VAL_PAGERIGHT                    (SID_SD_START+223)
+#define ID_VAL_SCALEOBJECTS                 (SID_SD_START+224)
+#define ID_VAL_PAGENAME                     TypedWhichId<SfxStringItem>(SID_SD_START+225)
+#define ID_VAL_WHATLAYOUT                   TypedWhichId<SfxUInt32Item>(SID_SD_START+226)
+#define ID_VAL_ISPAGEBACK                   (SID_SD_START+227)
+#define ID_VAL_ISPAGEOBJ                    (SID_SD_START+228)
+#define ID_VAL_LAYERNAME                    (SID_SD_START+229)
+
+// just for tests, namely that APP:HRC ff. has not to be build every time
+// In sfxsids.hrc: ID_VAL_DUMMY0                (SID_SD_START+230)
+#define ID_VAL_ISLOCKED                     (SID_SD_START+231)
+#define ID_VAL_ISPRINTABLE                  (SID_SD_START+232)
+#define ID_VAL_PAGEHEIGHT                   (SID_SD_START+233)
+#define ID_VAL_ZOOM                         (SID_SD_START+234)
+#define ID_VAL_RED                          (SID_SD_START+237)
+#define ID_VAL_GREEN                        (SID_SD_START+238)
+#define ID_VAL_BLUE                         (SID_SD_START+239)
+// In svxids.hrc: ID_VAL_STYLE                  (SID_SD_START+240)
+// In svxids.hrc: ID_VAL_DOTS                   (SID_SD_START+241)
+// In svxids.hrc: ID_VAL_DOTLEN                 (SID_SD_START+242)
+// In svxids.hrc: ID_VAL_DASHES                 (SID_SD_START+243)
+// In svxids.hrc: ID_VAL_DASHLEN                (SID_SD_START+244)
+// In svxids.hrc: ID_VAL_DISTANCE               (SID_SD_START+245)
+// In svxids.hrc: ID_VAL_INDEX                  (SID_SD_START+246)
+#define ID_VAL_WIDTH                        (SID_SD_START+247)
+#define SID_GRID_FRONT                      (SID_SD_START+248)
+#define ID_VAL_ISVISIBLE                    (SID_SD_START+249)
+#define SID_MOVETO                          (SID_SD_START+250)
+#define SID_LINETO                          (SID_SD_START+251)
+// In svxids.hrc: SID_BEZIERTO                  (SID_SD_START+252)
+#define SID_PAGESIZE                        (SID_SD_START+253)
+#define SID_PAGEMARGIN                      (SID_SD_START+254)
+    // FREE
+#define SID_COLORVIEW                       (SID_SD_START+257)
+    // FREE
+#define SID_GETRED                          (SID_SD_START+259)
+#define SID_GETBLUE                         (SID_SD_START+260)
+#define SID_GETGREEN                        (SID_SD_START+261)
+#define SID_SETFILLSTYLE                    (SID_SD_START+262)
+#define SID_SETFILLCOLOR                    (SID_SD_START+263)
+#define SID_GRADIENT                        (SID_SD_START+264)
+#define SID_SETLINESTYLE                    (SID_SD_START+265)
+#define SID_SETLINEWIDTH                    (SID_SD_START+266)
+// In svxids.hrc: SID_DASH                      (SID_SD_START+267)
+#define SID_RENAMEPAGE                      (SID_SD_START+268)
+#define SID_RENAMELAYER                     (SID_SD_START+269)
+#define SID_HATCH                           (SID_SD_START+270)
+#define SID_GETFILLSTYLE                    TypedWhichId<SfxUInt32Item>(SID_SD_START+271)
+#define SID_GETLINESTYLE                    TypedWhichId<SfxUInt32Item>(SID_SD_START+272)
+#define SID_GETLINEWIDTH                    TypedWhichId<SfxUInt32Item>(SID_SD_START+273)
+#define SID_SETLINECOLOR                    (SID_SD_START+274)
+#define SID_SETHATCHCOLOR                   (SID_SD_START+275)
+#define SID_SETGRADSTARTCOLOR               (SID_SD_START+276)
+#define SID_SETGRADENDCOLOR                 (SID_SD_START+277)
+#define SID_SELECTGRADIENT                  (SID_SD_START+278)
+#define SID_SELECTHATCH                     (SID_SD_START+279)
+#define SID_UNSELECT                        (SID_SD_START+280)
+#define SID_TEXTATTR_DLG                    (SID_SD_START+281)
+#define SID_ORIGINAL_SIZE                   (SID_SD_START+282)
+#define SID_PAGES_PER_ROW                   TypedWhichId<SfxUInt16Item>(SID_SD_START+284)
+#define SID_TEXT_FITTOSIZE                  (SID_SD_START+285)
+// In svxids.hrc: SID_TEXT_FITTOSIZE_VERTICAL   (SID_SD_START+286)
+#define SID_NAVIGATOR_PAGENAME              TypedWhichId<SfxStringItem>(SID_SD_START+287)
+#define SID_NAVIGATOR_STATE                 TypedWhichId<SfxUInt32Item>(SID_SD_START+288)
+#define SID_NAVIGATOR_INIT                  (SID_SD_START+289)
+    // FREE
+#define SID_NAVIGATOR_PAGE                  TypedWhichId<SfxUInt16Item>(SID_SD_START+292)
+#define SID_NAVIGATOR_OBJECT                TypedWhichId<SfxStringItem>(SID_SD_START+293)
+#define SID_ANIMATOR_INIT                   (SID_SD_START+294)
+#define SID_DRAWTBX_3D_OBJECTS              (SID_SD_START+295)
+#define SID_3D_CUBE                         (SID_SD_START+296)
+#define SID_3D_SPHERE                       (SID_SD_START+297)
+#define SID_3D_CYLINDER                     (SID_SD_START+298)
+#define SID_3D_CONE                         (SID_SD_START+299)
+#define SID_3D_PYRAMID                      (SID_SD_START+300)
+#define SID_GLUE_EDITMODE                   (SID_SD_START+301)
+#define SID_GLUE_INSERT_POINT               (SID_SD_START+302)
+#define SID_GLUE_PERCENT                    (SID_SD_START+303)
+#define SID_GLUE_ESCDIR                     TypedWhichId<SfxUInt16Item>(SID_SD_START+304)
+#define SID_GLUE_HORZALIGN_CENTER           (SID_SD_START+305)
+#define SID_GLUE_HORZALIGN_LEFT             (SID_SD_START+306)
+#define SID_GLUE_HORZALIGN_RIGHT            (SID_SD_START+307)
+#define SID_GLUE_VERTALIGN_CENTER           (SID_SD_START+308)
+#define SID_GLUE_VERTALIGN_TOP              (SID_SD_START+309)
+#define SID_GLUE_VERTALIGN_BOTTOM           (SID_SD_START+310)
+#define SID_3D_SHELL                        (SID_SD_START+311)
+#define SID_3D_TORUS                        (SID_SD_START+312)
+#define SID_3D_HALF_SPHERE                  (SID_SD_START+313)
+#define SID_GLUE_ESCDIR_LEFT                (SID_SD_START+314)
+#define SID_GLUE_ESCDIR_RIGHT               (SID_SD_START+315)
+#define SID_GLUE_ESCDIR_TOP                 (SID_SD_START+316)
+#define SID_GLUE_ESCDIR_BOTTOM              (SID_SD_START+317)
+#define SID_DRAWTBX_INSERT                  (SID_SD_START+318)
+#define SID_POLYGON_MORPHING                (SID_SD_START+319)
+    // FREE
+// In svxids.hrc: SID_GRID_VISIBLE              (SID_SD_START+322)
+// In svxids.hrc: ID_VAL_USEFIRSTROWSTYLE       (SID_SD_START+323)
+// In svxids.hrc: ID_VAL_USELASTROWSTYLE        (SID_SD_START+324)
+// In svxids.hrc: ID_VAL_USEBANDINGROWSTYLE     (SID_SD_START+325)
+// In svxids.hrc: ID_VAL_USEFIRSTCOLUMNSTYLE    (SID_SD_START+326)
+// In svxids.hrc: ID_VAL_USELASTCOLUMNSTYLE     (SID_SD_START+327)
+// In svxids.hrc: ID_VAL_USEBANDINGCOLUMNSTYLE  (SID_SD_START+328)
+
+
+#define SID_PREVIEW_STATE                   (SID_SD_START+329)
+    // FREE
+#define SID_SLIDE_TRANSITIONS_PANEL         (SID_SD_START+334)
+    // FREE
+#define SID_PHOTOALBUM                      (SID_SD_START+336)
+#define SID_REMOTE_DLG                      (SID_SD_START+337)
+#define SID_PRESENTATION_DLG                (SID_SD_START+339)
+#define SID_HYPHENATION                     (SID_SD_START+340)
+#define SID_CONNECTION_NEW_ROUTING          (SID_SD_START+341)
+#define SID_DUPLICATE_PAGE                  (SID_SD_START+342)
+#define SID_EXPAND_PAGE                     (SID_SD_START+343)
+#define SID_SUMMARY_PAGE                    (SID_SD_START+344)
+#define SID_LEAVE_ALL_GROUPS                (SID_SD_START+345)
+#define SID_COPY_SLIDE                      (SID_SD_START+346)
+#define SID_PASTE_SLIDE                     (SID_SD_START+347)
+    // FREE
+#define SID_SLIDE_MASTER_MODE               TypedWhichId<SfxBoolItem>(SID_SD_START+348)
+    // FREE
+#define SID_NOTES_MASTER_MODE               (SID_SD_START+350)
+    // FREE
+#define SID_INSERTPAGE_QUICK                (SID_SD_START+352)
+#define SID_INSERT_CANVAS_SLIDE             (SID_SD_START+353)
+#define SID_SHUFFLE_PAGES                   (SID_SD_START+354)
+    // FREE
+#define SID_INSERT_FLD_PAGE_TITLE           (SID_SD_START+356)
+#define SID_INSERT_FLD_DATE_VAR             (SID_SD_START+357)
+#define SID_INSERT_FLD_DATE_FIX             (SID_SD_START+358)
+#define SID_INSERT_FLD_TIME_VAR             (SID_SD_START+359)
+#define SID_INSERT_FLD_TIME_FIX             (SID_SD_START+360)
+#define SID_INSERT_FLD_PAGE                 (SID_SD_START+361)
+#define SID_MODIFY_FIELD                    (SID_SD_START+362)
+#define SID_INSERT_FLD_FILE                 (SID_SD_START+363)
+#define SID_INSERT_FLD_AUTHOR               (SID_SD_START+364)
+#define SID_CUSTOMSHOW_DLG                  (SID_SD_START+365)
+#define SID_OUTPUT_QUALITY_COLOR            (SID_SD_START+366)
+#define SID_OUTPUT_QUALITY_GRAYSCALE        (SID_SD_START+367)
+#define SID_OUTPUT_QUALITY_BLACKWHITE       (SID_SD_START+368)
+#define SID_PREVIEW_QUALITY_COLOR           (SID_SD_START+369)
+    // FREE
+#define SID_INSERT_FLD_PAGES                (SID_SD_START+373)
+    // FREE
+#define SID_CONVERT_TO_BITMAP               (SID_SD_START+378)
+#define SID_CONVERT_TO_METAFILE             (SID_SD_START+379)
+    // FREE
+#define SID_CONVERT_TO_CONTOUR              (SID_SD_START+381)
+    // FREE
+#define ID_VAL_DUMMY1                       (SID_SD_START+383)
+#define ID_VAL_DUMMY2                       (SID_SD_START+384)
+#define ID_VAL_DUMMY3                       (SID_SD_START+385)
+#define ID_VAL_DUMMY4                       (SID_SD_START+386)
+#define ID_VAL_DUMMY5                       (SID_SD_START+387)
+#define ID_VAL_DUMMY6                       (SID_SD_START+388)
+    // FREE
+#define SID_OUTPUT_QUALITY_CONTRAST         (SID_SD_START+400)
+#define SID_PREVIEW_QUALITY_CONTRAST        (SID_SD_START+401)
+    // FREE
+#define SID_RENAMEPAGE_QUICK                (SID_SD_START+405)
+#define SID_SWITCH_SHELL                    (SID_SD_START+406)
+#define SID_HEADER_AND_FOOTER               (SID_SD_START+407)
+#define SID_MASTER_LAYOUTS                  (SID_SD_START+408)
+    // FREE
+#define SID_INSERT_PAGE_NUMBER              (SID_SD_START+411)
+#define SID_INSERT_DATE_TIME                (SID_SD_START+412)
+#define SID_SDMODE_FLAG                     TypedWhichId<SfxUInt32Item>(SID_SD_START+413)
+// Enum in the middle of IDs...
+#define SD_DRAW_MODE        1
+#define SD_IMPRESS_MODE     2
+
+#define SID_LEFT_PANE_IMPRESS               (SID_SD_START+414)
+#define SID_LEFT_PANE_DRAW                  (SID_SD_START+415)
+#define SID_BOTTOM_PANE_IMPRESS             (SID_SD_START+416)
+        // FREE
+#define SID_NORMAL_MULTI_PANE_GUI           TypedWhichId<SfxBoolItem>(SID_SD_START+420)
+#define SID_SLIDE_SORTER_MULTI_PANE_GUI     (SID_SD_START+421)
+
+#define SID_SELECT_BACKGROUND               (SID_SD_START+422)
+#define SID_SAVE_BACKGROUND                 (SID_SD_START+423)
+        // FREE
+// Slots for the tool pane popup
+        // FREE
+#define SID_INSERT_MASTER_PAGE              (SID_SD_START+431)
+#define SID_DELETE_MASTER_PAGE              (SID_SD_START+432)
+#define SID_RENAME_MASTER_PAGE              (SID_SD_START+433)
+#define SID_CLOSE_MASTER_VIEW               (SID_SD_START+434)
+#define SID_ASSIGN_LAYOUT                   TypedWhichId<SfxUInt32Item>(SID_SD_START+435)
+#define SID_DISPLAY_MASTER_BACKGROUND       (SID_SD_START+436)
+#define SID_DISPLAY_MASTER_OBJECTS          (SID_SD_START+437)
+#define SID_INSERTPAGE_LAYOUT_MENU          (SID_SD_START+438)
+    // FREE
+#define SID_OUTLINE_TEXT_AUTOFIT            (SID_SD_START+440)
+
+// Add companion for the SID_HIDE_SLIDE (that is defined in svx)
+#define SID_SHOW_SLIDE                      (SID_SD_START+441)
+#define SID_ADD_MOTION_PATH                 TypedWhichId<SfxUnoAnyItem>(SID_SD_START+442)
+
+    // FREE
+#define SID_ZOOM_MODE                       (SID_SD_START+447)
+#define SID_HIDE_LAST_LEVEL                 (SID_SD_START+448)
+#define SID_SHOW_NEXT_LEVEL                 (SID_SD_START+449)
+#define SID_PRESENTATION_MINIMIZER          (SID_SD_START+450)
+#define SID_ALIGN_PAGE                      (SID_SD_START+451)
+
+#define FN_TRANSFORM_DOCUMENT_STRUCTURE     (SID_SD_START+452)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

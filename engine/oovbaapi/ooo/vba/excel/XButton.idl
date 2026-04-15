@@ -1,0 +1,59 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+/*  Note: This is a compatibility interface for drawing objects and drawing
+    controls embedded in sheets. All these symbols are deprecated
+    in VBA and kept for compatibility with old VBA scripts. */
+
+module ooo {  module vba { module excel {
+
+/** Additional attributes for a push button drawing control (this interface
+    does not belong to ActiveX form controls).
+ */
+interface XButton : com::sun::star::uno::XInterface
+{
+    /** Visible caption of the button. */
+    [attribute] string Caption;
+
+    /** Font settings for the entire caption text. */
+    [attribute] XFont Font;
+
+    /** Horizontal alignment of the caption. */
+    [attribute] long HorizontalAlignment;
+
+    /** Vertical alignment of the caption. */
+    [attribute] long VerticalAlignment;
+
+    /** Orientation (rotation) of the text. Must be a value from
+        ooo::vba::excel::XlOrientation. */
+    [attribute] long Orientation;
+
+    /** OptionButton only hack - are we checked */
+    [attribute] any Value;
+
+    /** OptionButton only hack - another way to get the text */
+    [attribute] string Text;
+
+    /** Access to text and text formatting of the button caption. */
+    XCharacters Characters( [in] any Start, [in] any Length );
+};
+
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

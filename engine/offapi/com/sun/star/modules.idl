@@ -1,0 +1,446 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+/* note: this file contains documentation of the modules.
+         sub-modules of modules are documented here too so there aren't
+         lots of tiny documentation only files everywhere.
+*/
+
+module com { module sun { module star {
+
+/** UNO Accessibility API
+
+    <p>This modules contains the basic interfaces of the UAA (UNO
+    Accessibility API).  Services that describe how these interfaces are
+    implemented can be found in other modules.  The services in this module
+    describe only what every accessible object has to support.</p>
+
+    <p>Making a class accessible starts by supporting the
+    ::com::sun::star::accessibility::XAccessible interface.
+    This interface's only method returns the actual accessibility object, an
+    instance of ::com::sun::star::accessibility::XAccessibleContext.
+    These two interfaces may be implemented by the same class in which case
+    a call to ::com::sun::star::accessibility::XAccessible getAccessible()
+    returns the same object that is
+    called.  Alternatively the implementation of the
+    ::com::sun::star::accessibility::XAccessibleContext
+    interface can be done by another class.  This makes it possible to put
+    all accessibility implementations into their own library which has only
+    to be loaded when necessary.</p>
+
+    <p>Note that all other interfaces have to be implemented by the same
+    class that implements the
+    ::com::sun::star::accessibility::XAccessibleContext
+    interface.  Note also that there is no way back from an accessibility
+    object to the object from which it has been obtained by means of the
+    UAA.  If you need such a back-link you have to provide one on your
+    own.</p>
+*/
+module accessibility {};
+
+/// interfaces for SMIL animations.
+module animations {};
+
+/// security and authenticates interfaces
+module auth {};
+
+/// Java AWT-like user interface toolkit interface specifications for UNO.
+module awt {
+
+    /// grid control.
+    module grid {};
+
+    /// tab pages.
+    module tab {};
+
+    /// hierarchical (tree) control.
+    module tree {};
+
+};
+
+/// Charting diagram interfaces.
+module chart {};
+
+/** New implementation of Charting diagram interfaces.  This module
+    contains only a rather small public API.  In addition there is a
+    private API in the chart2 project.
+ */
+module chart2 {
+
+    /// Chart data provider interfaces.
+    module data {};
+};
+
+/// Access to the tree of configuration data.
+module configuration {
+
+    /// interfaces for configuration backends.
+    module backend {
+        /// XML files backend.
+        module xml {};
+    };
+
+    /// deprecated bootstrapping mechanism.
+    module bootstrap {};
+
+};
+
+/// Common user interface elements
+module cui {};
+
+/// Clipboard and Drag&amp;Drop interfaces.
+module datatransfer {
+
+    /// Clipboard specific interfaces.
+    module clipboard {};
+
+    /// Drag&amp;Drop specific interfaces.
+    module dnd {};
+
+};
+
+/// interfaces for extension management.
+module deployment {
+
+    // this looks like it should not be documented
+    module test {};
+
+    /// interfaces for extension management dialogs.
+    module ui {};
+
+};
+
+/// Office document related interfaces.
+module document {};
+
+/// Drawing and shape specific interfaces.
+module drawing {
+
+    /// Draw/Impress user interface framework.
+    module framework {};
+
+};
+
+/// interfaces related to embedded objects, both native UNO and OLE.
+module embed {};
+
+/// Interfaces for managing forms and controls.
+module form {
+
+    /// form bindings.
+    module binding {};
+
+    /// form components (model part of the controls).
+    module component {};
+
+    /// form components (view part of the controls).
+    module control {};
+
+    /// various property handlers for forms.
+    module inspection {};
+
+    /// core components of forms.
+    module runtime {};
+
+    /// for submission of data from forms.
+    module submission {};
+
+    /// for validation of form data.
+    module validation {};
+
+};
+
+/// Interfaces for mathematical formulas.
+module formula {};
+
+/// Desktop environment framework interfaces.
+module frame {
+
+    /// various status properties.
+    module status {};
+
+};
+
+/// interfaces for galleries of images and media objects.
+module gallery {};
+
+/// Interfaces and data types to deal with basic geometric entities
+module geometry {};
+
+/// Interfaces for graphic handling
+module graphic {};
+
+/** Interface for internationalization. Regard this as an internal API,
+    subject to change. */
+module i18n {};
+
+/// interfaces for HTML image maps.
+module image {};
+
+/// interfaces for inspecting UNO objects via property handlers.
+module inspection {};
+
+/// lightweight directory access protocol (LDAP)
+module ldap {};
+
+/// Spell checker, hyphenation and thesaurus interfaces.
+module linguistic2 {};
+
+/// logging of events.
+module logging {};
+
+/// Interfaces for Email connectivity
+module mail {};
+
+/// Media type interfaces
+module media {};
+
+/// Interfaces for Mozilla integration.
+module mozilla {};
+
+/// Office document content related interfaces.
+module office {};
+
+/// Package file format interfaces.
+module packages {
+
+    /// interfaces for reading and writing manifest.xml files in ODF packages.
+    module manifest {};
+
+    /// for direct access to ZIP packages.
+    module zip {};
+
+};
+
+/// Netscape-like plugin interfaces.
+module plugin {};
+
+/// Presentation specific interfaces.
+module presentation {
+
+    /// for text fields in presentation documents.
+    module textfield {};
+
+};
+
+/// Interfaces for QA and automated tests
+module qa {};
+
+/** RDF (Resource Description Framework) and metadata interfaces.
+
+    <p>
+    This module provides interfaces for storing and accessing metadata
+    in <a href="http://www.w3.org/RDF/">Resource Description Framework</a>
+    format.
+    The API consists of two main parts: the RDF data model and the ODF
+    document integration.
+    </p>
+
+    <p>
+    The <a href="http://www.w3.org/TR/rdf-concepts/">RDF data model</a>
+    describes graphs of statements.
+    The nodes in the graph are of type rdf::XNode,
+    which has several subtypes: rdf::XResource,
+    rdf::XBlankNode,
+    rdf::XURI and rdf::XLiteral.
+    Statements are then triples of nodes, and have type
+    rdf::Statement.
+    </p>
+
+    <p>
+    The main part of the RDF data model is the
+    rdf::XRepository, which consists of a set of graphs.
+    The repository allows for importing/exporting graphs from/to files,
+    as well as querying the contents of the repository.
+    The type of the graphs is rdf::XNamedGraph.
+    </p>
+
+    <p>
+    Documents that support metadata implement the interfaces
+    rdf::XRepositorySupplier and
+    rdf::XDocumentMetadataAccess.
+    Furthermore, all elements of ODF documents that may have metadata attached
+    implement the interface rdf::XMetadatable.
+    </p>
+
+ */
+module rdf {};
+
+/// Interfaces and data structures for rendering
+module rendering {};
+
+/// interfaces for reports generated from data sources.
+module report {
+
+    /// property handlers for reports.
+    module inspection {};
+
+    /// report meta data.
+    module meta {};
+
+};
+
+/// Interfaces to access (UI) resource files.
+module resource {};
+
+/// Interfaces for scanner control.
+module scanner {};
+
+/// Scripting language bindings.
+module script {
+
+    /// manage available scripts in some sort of hierarchy.
+    module browse {};
+
+    /// interfaces for scripting providers.
+    module provider {};
+
+    /// VBA scripting.
+    module vba {};
+
+};
+
+/// Basic interfaces for database access.
+module sdb {
+
+    /// application UI.
+    module application {};
+
+    /// misc stuff.
+    module tools {};
+
+};
+
+/// Database component interfaces.
+module sdbc {};
+
+/// High-level database component interfaces.
+module sdbcx {};
+
+/// cryptographic interfaces.
+module security {};
+
+/// Setup specific interfaces
+module setup {};
+
+/// Spreadsheet specific interfaces.
+module sheet {};
+
+/// allows to put smart tags in document content.
+module smarttags {};
+
+/// Formatting and layout style and style sheet interfaces.
+module style {};
+
+/// Interfaces for import/export of Scalable Vector Format.
+module svg {};
+
+/// Host operating system integration interfaces.
+module system {};
+
+/// Table specific interfaces (for text and spreadsheet).
+module table {};
+
+/// Task management interfaces.
+module task {};
+
+/// Text specific interfaces.
+module text {
+
+    /// text field masters.
+    module fieldmaster {};
+
+    /// text fields.
+    module textfield {
+
+        /// Document Properties text fields.
+        module docinfo {};
+
+    };
+
+};
+
+/// Universal Content Broker interfaces.
+module ucb {};
+
+/// Dialogs and other UI elements.
+module ui {
+
+    /// dialogs.
+    module dialogs {};
+
+};
+
+/// Miscellaneous interfaces for sorting, connecting objects etc.
+module util {};
+
+/// Document view specific interfaces (e.g. selection access and printing).
+module view {};
+
+/// interfaces for XForms (XML-based forms) implementation
+module xforms {};
+
+/// XML related interfaces.
+module xml {
+
+    /// XML encryption interfaces.
+    module crypto {
+
+        /// XML encryption SAX interfaces.
+        module sax {};
+
+    };
+
+    /// Compressed SAX interfaces.
+    module csax {};
+
+    /// XML Document Object Model.
+    module dom {
+
+        /// XML Document Object Model events.
+        module events {};
+
+        /// XML Document Object Model views.
+        module views {};
+
+    };
+
+    /// no idea what this does but it's all marked "internal".
+    module input {};
+
+    /// SAX interfaces.
+    module sax {};
+
+    /// something related to creating DOMs from SAX interfaces?
+    module wrapper {};
+
+    /// XPath interfaces.
+    module xpath {};
+
+    /// XSLT interfaces.
+    module xslt {};
+
+};
+
+/// W3C XML Schema-2 data type related interfaces.
+module xsd {};
+
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

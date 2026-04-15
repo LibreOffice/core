@@ -1,0 +1,70 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+module com { module sun { module star { module linguistic2 {
+
+/** structure representing a dictionary-list event.
+
+    <P>This structure is used by the dictionary-list to inform
+    its listeners about certain events.
+    Since the dictionary-list is able to collect several single
+    events before broadcasting them to its listeners the
+    integer argument may be a combination (logical or) of several
+    event types.
+    If more specific information about the events is requested by a
+    listener, a sequence of all dictionary-list events since the
+    last broadcasting will be supplied. Otherwise, that list will
+    be empty.</P>
+
+    @see    com::sun::star::linguistic2::DictionaryList
+    @see    com::sun::star::linguistic2::XDictionaryListEventListener
+    @see    com::sun::star::lang::EventObject
+*/
+published struct DictionaryListEvent : com::sun::star::lang::EventObject
+{
+    /** the combined type of the accumulated events.
+
+    <p>The value can be the combination of multiple
+     com::sun::star::linguistic2::DictionaryListEventFlags
+     by applying the logical OR to them.</p>
+
+    @see    com::sun::star::linguistic2::DictionaryListEventFlags
+
+    */
+    short nCondensedEvent;
+
+    /** list of accumulated dictionary events.
+
+         <p>It will be empty if all
+        com::sun::star::linguistic2::XDictionaryListEventListener
+         are satisfied with the condensed representation of the
+        com::sun::star::linguistic2::DictionaryListEvent::nCondensedEvent().</p>
+
+        @see    com::sun::star::linguistic2::DictionaryEvent
+    */
+    sequence< com::sun::star::linguistic2::DictionaryEvent > aDictionaryEvents;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

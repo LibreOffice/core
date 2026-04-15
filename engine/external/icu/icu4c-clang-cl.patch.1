@@ -1,0 +1,28 @@
+diff -ur icu.org/source/config/mh-cygwin-msvc icu/source/config/mh-cygwin-msvc
+--- icu.org/source/config/mh-cygwin-msvc	2017-01-23 01:38:28.000000000 +0100
++++ icu/source/config/mh-cygwin-msvc	2017-04-21 23:07:28.482892025 +0200
+@@ -55,8 +55,8 @@
+ LDFLAGS+=-nologo
+ 
+ # Commands to compile
+-COMPILE.c=	$(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c
+-COMPILE.cc=	$(CXX) $(CPPFLAGS) $(DEFS) $(CXXFLAGS) -c
++COMPILE.c=	true && $(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c
++COMPILE.cc=	true && $(CXX) $(CPPFLAGS) $(DEFS) $(CXXFLAGS) -c
+ 
+ # Commands to link
+ LINK.c=		LINK.EXE -subsystem:console $(LDFLAGS)
+diff -ur icu.org/source/runConfigureICU icu/source/runConfigureICU
+--- icu.org/source/runConfigureICU	2017-01-23 01:38:28.000000000 +0100
++++ icu/source/runConfigureICU	2017-04-21 23:07:28.482892025 +0200
+@@ -261,8 +261,8 @@
+     Cygwin/MSVC)
+         THE_OS="Windows with Cygwin"
+         THE_COMP="Microsoft Visual C++"
+-        CC=cl; export CC
+-        CXX=cl; export CXX
++        CC=${CC-cl}; export CC
++        CXX=${CXX-cl}; export CXX
+         RELEASE_CFLAGS='-Gy -MD'
+         RELEASE_CXXFLAGS='-Gy -MD'
+         DEBUG_CFLAGS='-FS -Zi -MDd'

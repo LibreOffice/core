@@ -1,0 +1,29 @@
+--- ./src/ports/SkFontHost_win.cpp
++++ ./src/ports/SkFontHost_win.cpp
+@@ -357,7 +357,7 @@ static bool FindByLogFont(SkTypeface* face, void* ctx) {
+  */
+ sk_sp<SkTypeface> SkCreateTypefaceFromLOGFONT(const LOGFONT& origLF) {
+     LOGFONT lf = origLF;
+-    make_canonical(&lf);
++//    make_canonical(&lf);
+     sk_sp<SkTypeface> face = SkTypefaceCache::FindByProcAndRef(FindByLogFont, &lf);
+     if (!face) {
+         face = LogFontTypeface::Make(lf);
+@@ -363,7 +363,7 @@ SkTypeface* SkCreateTypefaceFromLOGFONT(const LOGFONT& origLF) {
+  */
+ sk_sp<SkTypeface> SkCreateFontMemResourceTypefaceFromLOGFONT(const LOGFONT& origLF, HANDLE fontMemResource) {
+     LOGFONT lf = origLF;
+-    make_canonical(&lf);
++//    make_canonical(&lf);
+     // We'll never get a cache hit, so no point in putting this in SkTypefaceCache.
+     return FontMemResourceTypeface::Make(lf, fontMemResource);
+ }
+@@ -686,7 +686,7 @@ SkScalerContext_GDI::SkScalerContext_GDI(sk_sp<LogFontTypeface> rawTypeface,
+ 
+     LOGFONT lf = typeface->fLogFont;
+     lf.lfHeight = -SkScalarTruncToInt(gdiTextSize);
+-    lf.lfQuality = compute_quality(fRec);
++//    lf.lfQuality = compute_quality(fRec);
+     fFont = CreateFontIndirect(&lf);
+     if (!fFont) {
+         return;

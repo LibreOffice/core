@@ -1,0 +1,264 @@
+From 6fc47d83edee9e13e09a96b1e719c2bf8cadcb43 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Tue, 22 Jul 2025 19:54:24 +0100
+Subject: [PATCH] const up these arrays
+
+and move them out of the .data section
+---
+ src/lib/StarCellFormula.cxx        |  8 ++++----
+ src/lib/StarFileManager.cxx        |  2 +-
+ src/lib/StarFormatManager.cxx      |  2 +-
+ src/lib/StarItem.cxx               |  2 +-
+ src/lib/StarObject.cxx             |  6 +++---
+ src/lib/StarObjectChart.cxx        | 10 +++++-----
+ src/lib/StarObjectModel.cxx        |  2 +-
+ src/lib/StarObjectNumericRuler.cxx |  2 +-
+ src/lib/StarObjectSpreadsheet.cxx  |  8 ++++----
+ src/lib/libstaroffice_internal.cxx |  4 ++--
+ 10 files changed, 23 insertions(+), 23 deletions(-)
+
+diff --git a/src/lib/StarCellFormula.cxx b/src/lib/StarCellFormula.cxx
+index b994e13..a8e3bfc 100644
+--- a/src/lib/StarCellFormula.cxx
++++ b/src/lib/StarCellFormula.cxx
+@@ -216,7 +216,7 @@ bool Token::updateFunction()
+     instr.m_content=nOp==33 ? "and" : "or";
+   }
+   else if (nOp>=21 && nOp<=37) {
+-    static char const *wh[]=
++    static char const* const wh[]=
+     {"+", "-", "*", "/", "&", "^", "=", "<>", "<", ">", "<=", ">=", "OR", "AND", "!", "~", ":"};
+     m_content=StarCellFormulaInternal::Token::C_FunctionOperator;
+     m_longValue=2;
+@@ -238,7 +238,7 @@ bool Token::updateFunction()
+   }
+   // function no parameter
+   else if (nOp>=46 && nOp<=53) {  // 60 endNoPar
+-    static char const *wh[]= {
++    static char const* const wh[]= {
+       "Pi", "Random", "True", "False", "Today"/*getActDate*/, "Now"/*getActTime*/,
+       "NA", "Current"
+     };
+@@ -255,7 +255,7 @@ bool Token::updateFunction()
+   else if (nOp>=61 && nOp<=131) { // 200 endOnePar
+     m_content=StarCellFormulaInternal::Token::C_FunctionOperator;
+     m_longValue=1;
+-    static char const *wh[]= {
++    static char const* const wh[]= {
+       "Degrees", "Radians", "Sin", "Cos", "Tan", "Cot", "Asin", "Acos", "Atan", "ACot", // 70
+       "SinH", "CosH", "TanH", "CotH", "AsinH", "ACosH", "ATanH", "ACosH", // 78
+       "Exp", "Ln", "Sqrt", "Fact", // 82
+@@ -273,7 +273,7 @@ bool Token::updateFunction()
+   // multiple
+   else if (nOp>=201 && nOp<=386) {
+     m_content=StarCellFormulaInternal::Token::C_FunctionOperator;
+-    static char const *wh[]= {
++    static char const* const wh[]= {
+       "Atan2", "Ceil", "Floor", "Round", "RoundUp", "RoundDown", "Trunc", "Log", // 208
+       "Power", "GCD", "LCM", "Mod", "SumProduct", "SumSQ", "SumX2MY2", "SumX2PY2", "SumXMY2", // 217
+       "Date", "Time", "Days", "Days360", "Min", "Max", "Sum", "Product", "Average", "Count", // 227
+diff --git a/src/lib/StarFileManager.cxx b/src/lib/StarFileManager.cxx
+index f0587a9..e9d9471 100644
+--- a/src/lib/StarFileManager.cxx
++++ b/src/lib/StarFileManager.cxx
+@@ -886,7 +886,7 @@ bool StarFileManager::readJobSetUp(StarZone &zone, bool useJobLen)
+         name+=ch;
+       }
+       if (!name.empty()) {
+-        static char const *wh[]= { "printerName", "deviceName", "portName", "driverName" };
++        static char const* const wh[]= { "printerName", "deviceName", "portName", "driverName" };
+         f << wh[i] << "=" << name << ",";
+       }
+       input->seek(actPos+length, librevenge::RVNG_SEEK_SET);
+diff --git a/src/lib/StarFormatManager.cxx b/src/lib/StarFormatManager.cxx
+index b92bc41..6211406 100644
+--- a/src/lib/StarFormatManager.cxx
++++ b/src/lib/StarFormatManager.cxx
+@@ -311,7 +311,7 @@ bool NumberFormatter::FormatItem::updateNumberingProperties(librevenge::RVNGProp
+     if (m_text.empty()) break;
+     auto fChar=int(m_text.cstr()[0]);
+     if (fChar>=32) {
+-      static int cCharWidths[ 128-32 ] = {
++      static const int cCharWidths[ 128-32 ] = {
+         1,1,1,2,2,3,2,1,1,1,1,2,1,1,1,1,
+         2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,
+         3,2,2,2,2,2,2,3,2,1,2,2,2,3,3,3,
+diff --git a/src/lib/StarItem.cxx b/src/lib/StarItem.cxx
+index 1dda45e..a48f5a1 100644
+--- a/src/lib/StarItem.cxx
++++ b/src/lib/StarItem.cxx
+@@ -70,7 +70,7 @@ std::ostream &operator<<(std::ostream &o, StarItemStyle const &style)
+ {
+   for (int i=0; i<4; ++i) {
+     if (style.m_names[i].empty()) continue;
+-    static char const *wh[]= {"name","parent","follow","help"};
++    static char const* const wh[]= {"name","parent","follow","help"};
+     o << wh[i] << "=" << style.m_names[i].cstr() << ",";
+   }
+   switch (style.m_family&0xff) {
+diff --git a/src/lib/StarObject.cxx b/src/lib/StarObject.cxx
+index a915b79..3820686 100644
+--- a/src/lib/StarObject.cxx
++++ b/src/lib/StarObject.cxx
+@@ -533,7 +533,7 @@ bool StarObject::readSfxDocumentInformation(STOFFInputStreamPtr input, std::stri
+     f << "SfxDocInfo-A" << i << ":";
+     auto dSz=int(input->readULong(2));
+     int expectedSz= i < 3 ? 33 : i < 5 ? 65 : i==5 ? 257 : i==6 ? 129 : i<15 ? 21 : 2;
+-    static char const *wh[]= {
++    static char const* const wh[]= {
+       "time[creation]","time[mod]","time[print]","title","subject","comment","keyword",
+       "user0[name]", "user0[data]","user1[name]", "user1[data]","user2[name]", "user2[data]","user3[name]", "user3[data]",
+       "template[name]", "template[filename]"
+@@ -559,7 +559,7 @@ bool StarObject::readSfxDocumentInformation(STOFFInputStreamPtr input, std::stri
+     if (StarEncoding::convert(string, encoding, finalString, srcPositions)) {
+       auto attrib=libstoff::getString(finalString);
+       f << attrib.cstr() << ",";
+-      static char const *attribNames[] = {
++      static char const* const attribNames[] = {
+         "meta:initial-creator", "dc:creator", "", "dc:title", "dc:subject", "dc:description"/*comment*/, "meta:keywords",
+         "", "user", "", "user", "", "user", "", "user",
+         "librevenge:template-name", "librevenge:template-filename"
+@@ -590,7 +590,7 @@ bool StarObject::readSfxDocumentInformation(STOFFInputStreamPtr input, std::stri
+       f << "date=" << date << ", time=" << time << ",";
+       std::string dateTime;
+       if (date && libstoff::convertToDateTime(date,time, dateTime)) {
+-        static char const *attribNames[]= { "meta:creation-date", "dc:date", "meta:print-date" };
++        static char const* const attribNames[]= { "meta:creation-date", "dc:date", "meta:print-date" };
+         m_metaData.insert(attribNames[i], dateTime.c_str());
+       }
+     }
+diff --git a/src/lib/StarObjectChart.cxx b/src/lib/StarObjectChart.cxx
+index 9af3f8f..e26f35b 100644
+--- a/src/lib/StarObjectChart.cxx
++++ b/src/lib/StarObjectChart.cxx
+@@ -496,7 +496,7 @@ bool StarObjectChart::readSCHAttributes(StarZone &zone)
+       zone.closeSCHHeader("SCHAttributes");
+       return true;
+     }
+-    static char const *wh[]= {"mainTitle", "subTitle", "xAxisTitle", "yAxisTitle", "zAxisTitle" };
++    static char const* const wh[]= {"mainTitle", "subTitle", "xAxisTitle", "yAxisTitle", "zAxisTitle" };
+     f << wh[i] << "=" << libstoff::getString(string).cstr();
+     if (bShow) f << ":show";
+     f << ",";
+@@ -506,7 +506,7 @@ bool StarObjectChart::readSCHAttributes(StarZone &zone)
+       bool bShow;
+       *input>>bShow;
+       if (!bShow) continue;
+-      static char const *wh[]= {"Axis", "GridMain", "GridHelp", "Descr"};
++      static char const* const wh[]= {"Axis", "GridMain", "GridHelp", "Descr"};
+       f << "show" << char('X'+i) << wh[j] << ",";
+     }
+   }
+@@ -772,7 +772,7 @@ bool StarObjectChart::readSCHAttributes(StarZone &zone)
+       for (int i=0; i<7; ++i) {
+         *input >> nInt16;
+         if (!nInt16) continue;
+-        static char const *wh[]= {"useRelPosForChartGroup","adjMargForLegend","adjMargForTitle","adjMargForSubTitle",
++        static char const* const wh[]= {"useRelPosForChartGroup","adjMargForLegend","adjMargForTitle","adjMargForSubTitle",
+                                   "adjMargForXAxisTitle","adjMargForYAxisTitle","adjMargForZAxisTitle"
+                                  };
+         f << wh[i] << ",";
+@@ -797,7 +797,7 @@ bool StarObjectChart::readSCHAttributes(StarZone &zone)
+         bool hasMoved;
+         *input>>hasMoved;
+         if (!hasMoved) continue;
+-        static char const *wh[]= {"diagram", "title", "subTitle", "legend", "XAxis", "YAxis", "ZAxis"};
++        static char const* const wh[]= {"diagram", "title", "subTitle", "legend", "XAxis", "YAxis", "ZAxis"};
+         f << wh[i] << "HasMoved,";
+       }
+     }
+@@ -978,7 +978,7 @@ bool StarObjectChart::readSCHMemChart(StarZone &zone)
+     }
+     if (string.empty()) continue;
+     if (i<5) {
+-      static char const *wh[]= {"mainTitle","subTitle","xAxisTitle","yAxisTitle","zAxisTitle"};
++      static char const* const wh[]= {"mainTitle","subTitle","xAxisTitle","yAxisTitle","zAxisTitle"};
+       f << wh[i] << "=" << libstoff::getString(string).cstr() << ",";
+     }
+     else if (i<5+int(nCol))
+diff --git a/src/lib/StarObjectModel.cxx b/src/lib/StarObjectModel.cxx
+index 9d9c4f8..761b167 100644
+--- a/src/lib/StarObjectModel.cxx
++++ b/src/lib/StarObjectModel.cxx
+@@ -669,7 +669,7 @@ bool StarObjectModel::read(StarZone &zone)
+           break;
+         }
+         if (string.empty()) continue;
+-        static char const *wh[]= {"cTableName", "dashName", "lineEndName", "hashName", "gradientName", "bitmapName"};
++        static char const* const wh[]= {"cTableName", "dashName", "lineEndName", "hashName", "gradientName", "bitmapName"};
+         f << wh[i] << "=" << libstoff::getString(string).cstr() << ",";
+       }
+     }
+diff --git a/src/lib/StarObjectNumericRuler.cxx b/src/lib/StarObjectNumericRuler.cxx
+index 75a620b..48c91b0 100644
+--- a/src/lib/StarObjectNumericRuler.cxx
++++ b/src/lib/StarObjectNumericRuler.cxx
+@@ -233,7 +233,7 @@ bool StarObjectNumericRuler::readLevel(StarZone &zone, STOFFListLevel &level)
+       return true;
+     }
+     if (string.empty()) continue;
+-    static char const *wh[]= {"prefix", "postfix", "fontname", "fontstyle"};
++    static char const* const wh[]= {"prefix", "postfix", "fontname", "fontstyle"};
+     f << wh[i] << "=" << libstoff::getString(string).cstr() << ",";
+     if (i==0) level.m_propertyList.insert("style:num-prefix",libstoff::getString(string));
+     else if (i==1) level.m_propertyList.insert("style:num-suffix",libstoff::getString(string));
+diff --git a/src/lib/StarObjectSpreadsheet.cxx b/src/lib/StarObjectSpreadsheet.cxx
+index 4723f33..a8419a4 100644
+--- a/src/lib/StarObjectSpreadsheet.cxx
++++ b/src/lib/StarObjectSpreadsheet.cxx
+@@ -1172,7 +1172,7 @@ try
+                 break;
+               }
+               if (string.empty()) continue;
+-              static char const *wh[]= {"serviceName","source","name","user","pass"};
++              static char const* const wh[]= {"serviceName","source","name","user","pass"};
+               f << wh[j] << "=" << libstoff::getString(string).cstr() << ",";
+             }
+             break;
+@@ -1946,7 +1946,7 @@ bool StarObjectSpreadsheet::readSCTable(StarZone &zone, StarObjectSpreadsheetInt
+           break;
+         }
+         if (!string.empty()) {
+-          static char const *wh[]= {"name", "comment", "pass"};
++          static char const* const wh[]= {"name", "comment", "pass"};
+           f << wh[i] << "=" << libstoff::getString(string).cstr() << ",";
+           if (i==0 && !m_spreadsheetState->m_tableList.empty() && m_spreadsheetState->m_tableList.back())
+             m_spreadsheetState->m_tableList.back()->m_name=libstoff::getString(string);
+@@ -2036,7 +2036,7 @@ bool StarObjectSpreadsheet::readSCTable(StarZone &zone, StarObjectSpreadsheetInt
+           break;
+         }
+         if (string.empty()) continue;
+-        static char const *wh[]= {"doc", "flt", "tab"};
++        static char const* const wh[]= {"doc", "flt", "tab"};
+         f << "link[" << wh[i] << "]=" << libstoff::getString(string).cstr() << ",";
+       }
+       if (!ok) break;
+@@ -2121,7 +2121,7 @@ bool StarObjectSpreadsheet::readSCColumn(StarZone &zone, StarObjectSpreadsheetIn
+             break;
+           }
+           if (string.empty()) continue;
+-          static char const *wh[]= {"note","date","author"};
++          static char const* const wh[]= {"note","date","author"};
+           cell.m_notes[j]=libstoff::getString(string);
+           f << wh[j] << "=" << cell.m_notes[j].cstr()  << ",";
+         }
+diff --git a/src/lib/libstaroffice_internal.cxx b/src/lib/libstaroffice_internal.cxx
+index c23880a..0894c7a 100644
+--- a/src/lib/libstaroffice_internal.cxx
++++ b/src/lib/libstaroffice_internal.cxx
+@@ -164,10 +164,10 @@ std::string numberingValueToString(NumberingType type, int value)
+     return s;
+   case LOWERCASE_ROMAN:
+   case UPPERCASE_ROMAN: {
+-    static char const *romanS[] = {"M", "CM", "D", "CD", "C", "XC", "L",
++    static char const* const romanS[] = {"M", "CM", "D", "CD", "C", "XC", "L",
+                                    "XL", "X", "IX", "V", "IV", "I"
+                                   };
+-    static char const *romans[] = {"m", "cm", "d", "cd", "c", "xc", "l",
++    static char const* const romans[] = {"m", "cm", "d", "cd", "c", "xc", "l",
+                                    "xl", "x", "ix", "v", "iv", "i"
+                                   };
+     static int const romanV[] = {1000, 900, 500, 400,  100, 90, 50,
+-- 
+2.49.0
+

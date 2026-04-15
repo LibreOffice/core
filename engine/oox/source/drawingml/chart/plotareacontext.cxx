@@ -1,0 +1,250 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <drawingml/chart/plotareacontext.hxx>
+
+#include <drawingml/shapepropertiescontext.hxx>
+#include <drawingml/chart/axiscontext.hxx>
+#include <drawingml/chart/plotareamodel.hxx>
+#include <drawingml/chart/seriescontext.hxx>
+#include <drawingml/chart/typegroupcontext.hxx>
+#include <drawingml/chart/datatablecontext.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
+
+namespace oox::drawingml::chart {
+
+using ::oox::core::ContextHandler2Helper;
+using ::oox::core::ContextHandlerRef;
+
+View3DContext::View3DContext( ContextHandler2Helper& rParent, View3DModel& rModel ) :
+    ContextBase< View3DModel >( rParent, rModel )
+{
+}
+
+View3DContext::~View3DContext()
+{
+}
+
+ContextHandlerRef View3DContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
+    switch( getCurrentElement() )
+    {
+        case C_TOKEN( view3D ):
+            switch( nElement )
+            {
+                case C_TOKEN( depthPercent ):
+                    mrModel.mnDepthPercent = rAttribs.getInteger( XML_val, 100 );
+                    return nullptr;
+                case C_TOKEN( hPercent ):
+                    mrModel.monHeightPercent = rAttribs.getInteger( XML_val, 100 );
+                    return nullptr;
+                case C_TOKEN( perspective ):
+                    mrModel.mnPerspective = rAttribs.getInteger( XML_val, 30 );
+                    return nullptr;
+                case C_TOKEN( rAngAx ):
+                    mrModel.mbRightAngled = rAttribs.getBool( XML_val, !bMSO2007Doc );
+                    return nullptr;
+                case C_TOKEN( rotX ):
+                    // default value dependent on chart type
+                    mrModel.monRotationX = rAttribs.getInteger( XML_val );
+                    return nullptr;
+                case C_TOKEN( rotY ):
+                    // default value dependent on chart type
+                    mrModel.monRotationY = rAttribs.getInteger( XML_val );
+                    return nullptr;
+            }
+        break;
+    }
+    return nullptr;
+}
+
+WallFloorContext::WallFloorContext( ContextHandler2Helper& rParent, WallFloorModel& rModel ) :
+    ContextBase< WallFloorModel >( rParent, rModel )
+{
+}
+
+WallFloorContext::~WallFloorContext()
+{
+}
+
+ContextHandlerRef WallFloorContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+{
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
+    switch( getCurrentElement() )
+    {
+        case C_TOKEN( backWall ):
+        case C_TOKEN( floor ):
+        case C_TOKEN( sideWall ):
+            switch( nElement )
+            {
+                case C_TOKEN( pictureOptions ):
+                    return new PictureOptionsContext( *this, mrModel.mxPicOptions.create(bMSO2007Doc) );
+                case C_TOKEN( spPr ):
+                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
+            }
+        break;
+    }
+    return nullptr;
+}
+
+PlotAreaContext::PlotAreaContext( ContextHandler2Helper& rParent, PlotAreaModel& rModel ) :
+    ContextBase< PlotAreaModel >( rParent, rModel )
+{
+}
+
+PlotAreaContext::~PlotAreaContext()
+{
+}
+
+ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_unused]]const AttributeList& rAttribs)
+{
+    bool bMSO2007Doc = getFilter().isMSO2007Document();
+    switch( getCurrentElement() )
+    {
+        case C_TOKEN( plotArea ):
+            switch( nElement )
+            {
+                case C_TOKEN( area3DChart ):
+                case C_TOKEN( areaChart ):
+                    return new AreaTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( bar3DChart ):
+                case C_TOKEN( barChart ):
+                    return new BarTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( bubbleChart ):
+                    return new BubbleTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( line3DChart ):
+                case C_TOKEN( lineChart ):
+                case C_TOKEN( stockChart ):
+                    return new LineTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( ofPieChart ):
+                    return new OfPieTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( doughnutChart ):
+                case C_TOKEN( pie3DChart ):
+                case C_TOKEN( pieChart ):
+                    return new PieTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( radarChart ):
+                    return new RadarTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( scatterChart ):
+                    return new ScatterTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( surface3DChart ):
+                case C_TOKEN( surfaceChart ):
+                    return new SurfaceTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, bMSO2007Doc ) );
+
+                case C_TOKEN( catAx ):
+                    return new CatAxisContext( *this, mrModel.maAxes.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( dateAx ):
+                    return new DateAxisContext( *this, mrModel.maAxes.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( serAx ):
+                    return new SerAxisContext( *this, mrModel.maAxes.create( nElement, bMSO2007Doc ) );
+                case C_TOKEN( valAx ):
+                    return new ValAxisContext( *this, mrModel.maAxes.create( nElement, bMSO2007Doc ) );
+
+                case C_TOKEN( layout ):
+                    return new LayoutContext( *this, mrModel.mxLayout.create() );
+                case C_TOKEN( spPr ):
+                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
+                case C_TOKEN(dTable):
+                    return new DataTableContext( *this, mrModel.mxDataTable.create() );
+            }
+            break;
+        case CX_TOKEN(plotArea) :
+            switch (nElement) {
+                case CX_TOKEN(plotAreaRegion) :
+                    return this;
+                case CX_TOKEN(axis) :
+                    if (rAttribs.hasAttribute(XML_id)) {
+                        sal_Int32 nId = rAttribs.getInteger(XML_id, -1);
+                        // TODO: also handle attribute "hidden"
+
+                        // Add the id to the axis id list in the (fictitious)
+                        // type group
+                        std::shared_ptr<TypeGroupModel> aTGM =
+                            mrModel.maTypeGroups.get(mrModel.maTypeGroups.size() - 1);
+                        aTGM->maAxisIds.push_back(nId);
+
+                        return new CxAxisContext(*this, mrModel.maAxes.create(nElement, false), nId);
+                    } else {
+                        return nullptr;
+                    }
+                case CX_TOKEN(spPr) :
+                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.getOrCreate() );
+                case CX_TOKEN(extLst) :
+                    // TODO
+                    return nullptr;
+            }
+            break;
+        case CX_TOKEN(plotAreaRegion):
+            switch (nElement) {
+                case CX_TOKEN(series):
+                    if (rAttribs.hasAttribute(XML_layoutId)) {
+                        sal_Int32 nTypeId = 0;
+                        OUString sChartId = rAttribs.getStringDefaulted(XML_layoutId);
+                        assert(!sChartId.isEmpty());
+
+                        if (sChartId == "boxWhisker") {
+                            nTypeId = CX_TOKEN(boxWhisker);
+                        } else if (sChartId == "clusteredColumn") {
+                            nTypeId = CX_TOKEN(clusteredColumn);
+                        } else if (sChartId == "funnel") {
+                            nTypeId = CX_TOKEN(funnel);
+                        } else if (sChartId == "paretoLine") {
+                            nTypeId = CX_TOKEN(paretoLine);
+                        } else if (sChartId == "regionMap") {
+                            nTypeId = CX_TOKEN(regionMap);
+                        } else if (sChartId == "sunburst") {
+                            nTypeId = CX_TOKEN(sunburst);
+                        } else if (sChartId == "treemap") {
+                            nTypeId = CX_TOKEN(treemap);
+                        } else if (sChartId == "waterfall") {
+                            nTypeId = CX_TOKEN(waterfall);
+                        } else {
+                            assert(false);
+                        }
+
+                        // The chartex schema doesn't have the same structure as
+                        // chart. Specifically, there's not a chart type tag
+                        // (which corresponds to the "type group" used in oox)
+                        // plus enclosed series tags. Instead, in chartex, each
+                        // series has an attribute specifying the chart type. As
+                        // a result, we don't want to call the type group
+                        // context handler, but we still need to create a type
+                        // group in the model tree, since much of the existing
+                        // machinery depends on it.
+                        mrModel.maTypeGroups.create(nTypeId, false);
+                        std::shared_ptr<TypeGroupModel> aTGM =
+                            mrModel.maTypeGroups.get(mrModel.maTypeGroups.size() - 1);
+                        return new ChartexSeriesContext(*this, aTGM->maSeries.create(false), mrModel.mnCurSeriesIdx++);
+                    }
+                    return nullptr;
+                case CX_TOKEN(plotSurface) :
+                    // TODO
+                    return nullptr;
+
+            }
+    }
+    return nullptr;
+}
+
+} // namespace oox::drawingml::chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

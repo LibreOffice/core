@@ -1,0 +1,27 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {  module sun {  module star {  module beans {
+
+published interface XIntrospection;
+
+/** provides functionality to get information about an object's
+    properties and methods.
+
+    <p><strong>Important note:</strong>An object can only be inspected
+    completely if it supports the com::sun::star::lang::XTypeProvider
+    interface.</p>
+
+    <p>For details, see method XIntrospection::inspect().</p>
+*/
+published singleton theIntrospection: XIntrospection;
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

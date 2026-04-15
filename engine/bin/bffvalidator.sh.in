@@ -1,0 +1,3 @@
+#!/bin/sh
+
+wine @BFFVALIDATOR_EXE@ `winepath -w $1`

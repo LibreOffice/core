@@ -1,0 +1,110 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef INCLUDED_SW_INC_TXTFLD_HXX
+#define INCLUDED_SW_INC_TXTFLD_HXX
+
+#include "txatbase.hxx"
+#include <rtl/ustring.hxx>
+
+#include <memory>
+#include <cassert>
+
+class SwPaM;
+class SwTextNode;
+
+/// SwTextAttr subclass for fields, i.e. this is a 'hint' on a dummy character that will be expanded
+/// to a string by the layout. GetFormatField() gives access to the underlying SwFormatField.
+class SAL_DLLPUBLIC_RTTI SwTextField : public virtual SwTextAttr
+{
+    mutable OUString m_aExpand; // only used to determine, if field content is changing in <ExpandTextField()>
+    SwTextNode * m_pTextNode;
+
+public:
+    SwTextField(
+        const SfxPoolItemHolder& rAttr,
+        sal_Int32 const nStart,
+        bool const bInClipboard );
+
+    virtual ~SwTextField() override;
+
+    void CopyTextField( SwTextField *pDest ) const;
+
+    void ExpandTextField( const bool bForceNotify = false ) const;
+
+    // get and set TextNode pointer
+    SwTextNode* GetpTextNode() const
+    {
+        return m_pTextNode;
+    }
+    SwTextNode& GetTextNode() const
+    {
+        assert(m_pTextNode);
+        return *m_pTextNode;
+    }
+    void ChgTextNode( SwTextNode* pNew )
+    {
+        m_pTextNode = pNew;
+    }
+
+    bool IsFieldInDoc() const;
+
+    // enable notification that field content has changed and needs reformatting
+    virtual void NotifyContentChange( SwFormatField& rFormatField );
+
+    // deletes the given field via removing the corresponding text selection from the document's content
+    static void DeleteTextField( const SwTextField& rTextField );
+
+    // return text selection for the given field
+    static void GetPamForTextField( const SwTextField& rTextField,
+                                 std::shared_ptr< SwPaM >& rPamForTextField );
+
+};
+
+/// SwTextAttr subclass that tracks the location of the wrapped SwFormatField, when the format
+/// field's field is an SwInputField.
+class SwTextInputField final
+    : public SwTextAttrNesting
+    , public SwTextField
+{
+public:
+    SwTextInputField(
+        const SfxPoolItemHolder& rAttr,
+        sal_Int32 const nStart,
+        sal_Int32 const nEnd,
+        bool const bInClipboard );
+
+    virtual ~SwTextInputField() override;
+
+    bool LockNotifyContentChange();
+    void UnlockNotifyContentChange();
+    virtual void NotifyContentChange( SwFormatField& rFormatField ) override;
+
+    void UpdateTextNodeContent( const OUString& rNewContent );
+
+    OUString GetFieldContent() const;
+    void UpdateFieldContent();
+
+private:
+
+    bool m_bLockNotifyContentChange;
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

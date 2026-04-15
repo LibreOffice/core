@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40">
+  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+    <Author>moggi</Author>
+    <LastAuthor>moggi</LastAuthor>
+    <Created>2013-09-05T11:50:47Z</Created>
+    <Version>14.00</Version>
+  </DocumentProperties>
+  <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+    <AllowPNG/>
+  </OfficeDocumentSettings>
+  <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+    <WindowHeight>8190</WindowHeight>
+    <WindowWidth>16380</WindowWidth>
+    <WindowTopX>0</WindowTopX>
+    <WindowTopY>0</WindowTopY>
+    <TabRatio>141</TabRatio>
+    <ProtectStructure>False</ProtectStructure>
+    <ProtectWindows>False</ProtectWindows>
+  </ExcelWorkbook>
+  <Styles>
+    <Style ss:ID="Default" ss:Name="Normal">
+      <Alignment ss:Vertical="Bottom"/>
+      <Borders/>
+      <Font ss:FontName="Arial" x:Family="Swiss"/>
+      <Interior/>
+      <NumberFormat/>
+      <Protection/>
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table ss:ExpandedColumnCount="8" ss:ExpandedRowCount="4" x:FullColumns="1" x:FullRows="1" ss:DefaultColumnWidth="60.75">
+      <Row>
+        <Cell>
+          <Data ss:Type="Number">1</Data>
+        </Cell>
+        <Cell>
+          <Data ss:Type="String">String1</Data>
+        </Cell>
+        <Cell ss:Formula="=2*3">
+          <Data ss:Type="Number">6</Data>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell>
+          <Data ss:Type="Number">2</Data>
+        </Cell>
+        <Cell>
+          <Data ss:Type="String">String2</Data>
+        </Cell>
+        <Cell ss:Formula="=2+3">
+          <Data ss:Type="Number">5</Data>
+        </Cell>
+        <Cell ss:Index="5" ss:MergeAcross="1" ss:MergeDown="1"/>
+      </Row>
+      <Row>
+        <Cell ss:Index="3" ss:Formula="=2-3">
+          <Data ss:Type="Number">-1</Data>
+        </Cell>
+        <Cell ss:Index="8">
+          <Comment ss:Author="">
+            <ss:Data xmlns="http://www.w3.org/TR/REC-html40">
+              <Font html:Face="Tahoma" x:CharSet="1" html:Size="9" html:Color="#000000">Test</Font>
+            </ss:Data>
+          </Comment>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell ss:Index="3" ss:Formula="=R[-3]C+R[-2]C">
+          <Data ss:Type="Number">11</Data>
+        </Cell>
+      </Row>
+    </Table>
+    <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+      <PageSetup>
+        <Layout x:StartPageNumber="1"/>
+        <Header x:Margin="0.78749999999999998" x:Data="&amp;C&amp;A"/>
+        <Footer x:Margin="0.78749999999999998" x:Data="&amp;CPage &amp;P"/>
+        <PageMargins x:Bottom="1.0249999999999999" x:Left="0.78749999999999998" x:Right="0.78749999999999998" x:Top="1.0249999999999999"/>
+      </PageSetup>
+      <Print>
+        <ValidPrinterInfo/>
+        <HorizontalResolution>300</HorizontalResolution>
+        <VerticalResolution>300</VerticalResolution>
+      </Print>
+      <Selected/>
+      <Panes>
+        <Pane>
+          <Number>3</Number>
+          <ActiveRow>6</ActiveRow>
+          <ActiveCol>3</ActiveCol>
+        </Pane>
+      </Panes>
+      <ProtectObjects>False</ProtectObjects>
+      <ProtectScenarios>False</ProtectScenarios>
+      <EnableSelection>NoSelection</EnableSelection>
+    </WorksheetOptions>
+  </Worksheet>
+  <Worksheet ss:Name="Sheet2">
+    <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1" x:FullRows="1" ss:DefaultColumnWidth="60.75">
+  </Table>
+    <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+      <PageSetup>
+        <Header x:Margin="0.78749999999999998" x:Data="&amp;C&amp;A"/>
+        <Footer x:Margin="0.78749999999999998" x:Data="&amp;CPage &amp;P"/>
+        <PageMargins x:Bottom="1.0249999999999999" x:Left="0.78749999999999998" x:Right="0.78749999999999998" x:Top="1.0249999999999999"/>
+      </PageSetup>
+      <Print>
+        <ValidPrinterInfo/>
+        <HorizontalResolution>300</HorizontalResolution>
+        <VerticalResolution>300</VerticalResolution>
+      </Print>
+      <ProtectObjects>False</ProtectObjects>
+      <ProtectScenarios>False</ProtectScenarios>
+      <EnableSelection>NoSelection</EnableSelection>
+    </WorksheetOptions>
+  </Worksheet>
+</Workbook>

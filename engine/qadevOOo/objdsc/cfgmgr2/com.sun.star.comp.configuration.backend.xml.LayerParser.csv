@@ -1,0 +1,4 @@
+"LayerParser";"com::sun::star::configuration::backend::XLayer";"readData()"
+"LayerParser";"com::sun::star::lang::XInitialization";"initialize()"
+"LayerParser";"com::sun::star::io::XActiveDataSink";"setInputStream()"
+"LayerParser";"com::sun::star::io::XActiveDataSink";"getInputStream()"

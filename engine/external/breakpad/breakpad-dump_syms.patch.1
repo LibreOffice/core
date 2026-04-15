@@ -1,0 +1,34 @@
+diff -ur breakpad.org/src/common/windows/pdb_source_line_writer.cc breakpad/src/common/windows/pdb_source_line_writer.cc
+--- breakpad.org/src/common/windows/pdb_source_line_writer.cc	2021-06-11 12:37:22.682324700 +0200
++++ breakpad/src/common/windows/pdb_source_line_writer.cc	2021-06-11 12:44:24.480184800 +0200
+@@ -34,7 +34,7 @@
+ #include <atlbase.h>
+ #include <dia2.h>
+ #include <diacreate.h>
+-#include <ImageHlp.h>
++#include <dbghelp.h>
+ #include <stdio.h>
+ 
+ #include <algorithm>
+diff -ur breakpad.org/src/common/windows/pe_util.cc breakpad/src/common/windows/pe_util.cc
+--- breakpad.org/src/common/windows/pe_util.cc	2021-06-11 12:37:22.682324700 +0200
++++ breakpad/src/common/windows/pe_util.cc	2021-06-11 12:52:34.542708600 +0200
+@@ -35,6 +35,7 @@
+ #include <ImageHlp.h>
+ 
+ #include <functional>
++#include <memory>
+ 
+ #include "common/windows/string_utils-inl.h"
+ #include "common/windows/guid_string.h"
+diff -ur breakpad.org/src/tools/windows/dump_syms/dump_syms.cc breakpad/src/tools/windows/dump_syms/dump_syms.cc
+--- breakpad.org/src/tools/windows/dump_syms/dump_syms.cc	2021-06-11 12:37:20.697959400 +0200
++++ breakpad/src/tools/windows/dump_syms/dump_syms.cc	2021-06-11 12:41:16.922559700 +0200
+@@ -33,6 +33,7 @@
+ #include <stdio.h>
+ #include <wchar.h>
+ 
++#include <memory>
+ #include <string>
+ 
+ #include "common/windows/pdb_source_line_writer.h"

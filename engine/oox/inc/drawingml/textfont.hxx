@@ -1,0 +1,79 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_OOX_DRAWINGML_TEXTFONT_HXX
+#define INCLUDED_OOX_DRAWINGML_TEXTFONT_HXX
+
+#include <rtl/ustring.hxx>
+
+namespace oox { class AttributeList; }
+namespace oox::core { class XmlFilterBase; }
+namespace model { struct ThemeFont; }
+
+namespace oox::drawingml {
+
+
+/** carries a CT_TextFont*/
+class TextFont
+{
+public:
+    explicit            TextFont();
+
+    /** Sets attributes from the passed attribute list. */
+    void                setAttributes( const AttributeList& rAttribs );
+
+    /** Sets font name and init other attributes. */
+    void                setAttributes( const OUString& rFontName );
+
+    /** Overwrites this text font with the passed text font, if it is used. */
+    void                assignIfUsed( const TextFont& rTextFont );
+
+    /** Returns the font name, pitch, and family; tries to resolve theme
+        placeholder names, e.g. '+mj-lt' for the major latin theme font. */
+    bool                getFontData(
+                            OUString& rFontName,
+                            sal_Int16& rnFontPitch,
+                            sal_Int16& rnFontFamily,
+                            bool* pbSymbol,
+                            const ::oox::core::XmlFilterBase& rFilter ) const;
+
+    void fillThemeFont(model::ThemeFont& rThemeFont) const;
+
+    static void resolvePitch(sal_Int32 nOoxPitch, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily);
+
+private:
+    bool                implGetFontData(
+                            OUString& rFontName,
+                            sal_Int16& rnFontPitch,
+                            sal_Int16& rnFontFamily,
+                            bool* pbSymbol ) const;
+
+private:
+    OUString maTypeface;
+    OUString maPanose;
+    sal_Int32 mnPitchFamily;
+    sal_Int32 mnCharset;
+};
+
+
+} // namespace oox::drawingml
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

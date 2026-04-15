@@ -1,0 +1,360 @@
+SET UTF-8
+MAXCPDSUGS 0
+
+TRY आईऊऐऔखघछझठढणनथधफभशषक्षज्ञ
+
+IGNORE ॑
+
+BREAK 35
+BREAK -
+BREAK ऽ$
+BREAK ः$
+BREAK ाः$
+BREAK ैः$
+BREAK ं$
+BREAK ां$
+BREAK े$
+BREAK ेन$
+BREAK ्स$
+BREAK ्य$
+BREAK ैव$
+BREAK ेण$
+BREAK ीय$
+BREAK त्व$
+BREAK च$
+BREAK ता$
+BREAK ति$
+BREAK तः$
+BREAK तं$
+BREAK त्$
+BREAK तु$
+BREAK म्$
+BREAK ^सु
+BREAK ^अ
+BREAK ^प्र
+BREAK ाभ्याम्$
+BREAK भ्याम्$
+BREAK भ्यः$
+BREAK भिः$
+BREAK षु$
+BREAK ाव$
+BREAK नाम्$
+BREAK योः$
+BREAK ेभ्यः$
+
+SFX e Y 155
+SFX e ा ः ा
+SFX e ा योः ा
+SFX e ा ि ा
+SFX e ा े ा
+SFX e ा ेभ्यः ा
+SFX e ा ै ा
+SFX e ा ोः ा
+SFX e ा ौ ा
+SFX e ि यः ि
+SFX e ि ये ि
+SFX e ि यो ि
+SFX e ि ी ि
+SFX e ि ीणाम् ि
+SFX e ि ीनाम् ि
+SFX e ि ीन् ि
+SFX e ि ीभ्यः ि
+SFX e ि ीभ्याम् ि
+SFX e ि ीषु ि
+SFX e ि े ि
+SFX e ि ेः ि
+SFX e ि ौ ि
+SFX e ि ्या ि
+SFX e ि ्याः ि
+SFX e ि ्याम् ि
+SFX e ि ्युः ि
+SFX e ि ्ये ि
+SFX e ि ्योः ि
+SFX e ि ्यौ ि
+SFX e ी ा ी
+SFX e ी ायः ी
+SFX e ी ायम् ी
+SFX e ी ायौ ी
+SFX e ी ि ी
+SFX e ी ्यः ी
+SFX e ी ्या ी
+SFX e ी ्याः ी
+SFX e ी ्याम् ी
+SFX e ी ्यि ी
+SFX e ी ्युः ी
+SFX e ी ्ये ी
+SFX e ी ्यै ी
+SFX e ी ्योः ी
+SFX e ी ्यौ ी
+SFX e ीभ ः ीभ
+SFX e ु वः ु
+SFX e ु वे ु
+SFX e ु ू ु
+SFX e ु ूः ु
+SFX e ु ूनाम् ु
+SFX e ु ूनि ु
+SFX e ु ून् ु
+SFX e ु ो ु
+SFX e ु ोः ु
+SFX e ु ौ ु
+SFX e ु ौः ु
+SFX e ु ्वा ु
+SFX e ु ्वोः ु
+SFX e ुन : ुन
+SFX e ू ु ू
+SFX e ू ुवः ू
+SFX e ू ुवम् ू
+SFX e ू ुवा ू
+SFX e ू ुवि ू
+SFX e ू ुवे ू
+SFX e ू ुवोः ू
+SFX e ू ुवौ ू
+SFX e ू ुषु ू
+SFX e ू ्वः ू
+SFX e ू ्वा ू
+SFX e ू ्वाः ू
+SFX e ू ्वाम् ू
+SFX e ू ्वै ू
+SFX e ू ्वोः ू
+SFX e ू ्वौ ू
+SFX e ृ ः ृ
+SFX e ृ रः ृ
+SFX e ृ रम् ृ
+SFX e ृ रि ृ
+SFX e ृ रौ ृ
+SFX e ृ ा ृ
+SFX e ृ ारः ृ
+SFX e ृ ारम् ृ
+SFX e ृ ाराः ृ
+SFX e ृ ारौ ृ
+SFX e ृ ुः ृ
+SFX e ृ ्रा ृ
+SFX e ृ ्रे ृ
+SFX e ृ ्रोः ृ
+SFX e ै ा: ै
+SFX e ै ाभि: ै
+SFX e ै ाभ्यः ै
+SFX e ै ाभ्याम् ै
+SFX e ै ायः ै
+SFX e ै ायम् ै
+SFX e ै ाया ै
+SFX e ै ायाम् ै
+SFX e ै ायि ै
+SFX e ै ायु ै
+SFX e ै ाये ै
+SFX e ै ायो: ै
+SFX e ै ायौ ै
+SFX e ै ासु ै
+SFX e ै ि ै
+SFX e ै िण: ै
+SFX e ै िणः ै
+SFX e ै िणा ै
+SFX e ै िणि ै
+SFX e ै िणी ै
+SFX e ै िणे ै
+SFX e ै िणो: ै
+SFX e ै ीणाम् ै
+SFX e ै ीणि ै
+SFX e ै े ै
+SFX e ो वा ो
+SFX e ो वाम् ो
+SFX e ो वि ो
+SFX e ो वे ो
+SFX e ो ाः ो
+SFX e ो ाम् ो
+SFX e ो ावः ो
+SFX e ो ावौ ो
+SFX e ो ु ो
+SFX e ो ुनः ो
+SFX e ो ुना ो
+SFX e ो ुनि ो
+SFX e ो ुनी ो
+SFX e ो ुने ो
+SFX e ो ुभि: ो
+SFX e ो ुभ्यः ो
+SFX e ो ुभ्याम् ो
+SFX e ो ुषु ो
+SFX e ो ूनाम् ो
+SFX e ो ूनि ो
+SFX e ो ौः ो
+SFX e ौ ावः ौ
+SFX e ौ ावम् ौ
+SFX e ौ ावा ौ
+SFX e ौ ावाम् ौ
+SFX e ौ ावि ौ
+SFX e ौ ावे ौ
+SFX e ौ ावोः ौ
+SFX e ौ ु ौ
+SFX e ौ ुनः ौ
+SFX e ौ ुना ौ
+SFX e ौ ुनाम् ौ
+SFX e ौ ुनि ौ
+SFX e ौ ुनी ौ
+SFX e ौ ुने ौ
+SFX e ौ ुनो: ौ
+SFX e ौ ुभि: ौ
+SFX e ौ ुभ्यः ौ
+SFX e ौ ुभ्याम् ौ
+SFX e ौ ुषु ौ
+SFX e ौ ूनि ौ
+SFX e ौ ैभिः ौ
+
+ICONV 46
+ICONV क्‍ क्
+ICONV ख्‍ ख्
+ICONV ग्‍ ग्
+ICONV घ्‍ घ्
+ICONV च्‍ च्
+ICONV छ्‍ छ्
+ICONV ज्‍ ज्
+ICONV झ्‍ झ्
+ICONV ट्‍ ट्
+ICONV ठ्‍ ठ्
+ICONV ड्‍ ड्
+ICONV ढ्‍ ढ्
+ICONV ण्‍ ण्
+ICONV त्‍ त्
+ICONV थ्‍ थ्
+ICONV द्‍ द्
+ICONV ध्‍ ध्
+ICONV न्‍ न्
+ICONV प्‍ प्
+ICONV फ्‍ फ्
+ICONV ब्‍ ब्
+ICONV भ्‍ भ्
+ICONV म्‍ म्
+ICONV य्‍ य्
+ICONV र्‍ ऱ्
+ICONV ल्‍ ल्
+ICONV व्‍ व्
+ICONV श्‍ श्
+ICONV स्‍ स्
+ICONV ह्‍ ह्
+ICONV ह्र हृ
+ICONV ळ्‍ ळ्
+ICONV ्‌स ्स
+ICONV ॅन् ँ
+ICONV ॅण् ँ
+ICONV ॅम्प ँप
+ICONV क़ क
+ICONV ख़ ख
+ICONV ग़ ग
+ICONV ज़ ज
+ICONV ड़ ड
+ICONV ढ़ ढ
+ICONV फ़ फ
+ICONV य़ य
+ICONV ऩ न
+ICONV ऴ ळ
+
+REP 109
+REP र्क ःक
+REP र्ख ःख
+REP र्च ःच
+REP र्छ ःछ
+REP र्ट ःट
+REP र्ठ ःठ
+REP र्त ःत
+REP र्थ ःथ
+REP र्प ःप
+REP र्फ ःफ
+REP र्श ःश
+REP र्ष ःष
+REP र्स ःस
+REP ा ां
+REP ाना ांना
+REP ानो ांनो
+REP ानी ांनी
+REP ए ॲ
+REP रुप$ रूप
+REP रुपा रूपा
+REP त्व त्त्व
+REP क़ क
+REP ख़ ख
+REP ग़ ग
+REP ज़ ज
+REP ढ़ ढ
+REP ऩ न
+REP फ़ फ
+REP य़ य
+REP ऴ ळ
+REP आय ऐ
+REP ॆ े
+REP ं े
+REP ण्  ं
+REP न्  ं
+REP म्  ं
+REP टय़ ट्य
+REP ठय़ ठ्य
+REP डय़ ड्य
+REP ढय़ ढ्य
+REP हय़ ह्य
+REP दय़ द्य
+REP स श
+REP स ष
+REP श ष
+REP प फ
+REP ज झ
+REP ल ळ
+REP न ण
+REP त ट
+REP ड ढ
+REP ण्ट ंट
+REP ण्ठ ंठ
+REP ण्ड ंड
+REP ण्ढ ंढ
+REP न्त ंत
+REP न्थ ंथ
+REP न्द ंद
+REP न्ध ंध
+REP ध्द द्ध
+REP ग्य ज्ञ
+REP द्न्य ज्ञ
+REP रि ऋ
+REP ि ी
+REP ी ि
+REP ु ू
+REP ू ु
+REP ॊ ो
+REP ो ौ
+REP ाे ो
+REP ॉं ाँ
+REP ाँ ॉं
+REP ॅं ँ
+REP ंॅ ँ
+REP ँ ॅं
+REP ाॅ ॉ
+REP अॉ ऑ
+REP अॅ ॲ
+REP अ‍ॅ ॲ
+REP : ः
+REP ्रु ृ
+REP ्रू ृ
+REP ै ॅ
+REP स्त्र स्र
+REP स्र स्त्र
+REP ल लं
+REP द्या _द्या
+REP या _या
+REP त्या त्या_
+REP ज्या ज्या_
+REP लु लू
+REP वू ऊ
+REP उ ऊ
+REP ऊ उ
+REP रि री
+REP र्य ऱ्य
+REP र्या ऱ्या
+REP र्ह ऱ्ह
+REP क्रु कृ
+REP क्रू कृ
+REP व्रु वृ
+REP व्रू वृ
+REP म भ
+REP ब ब
+REP न्य ऱ्य
+REP -य ऱ्य
+REP -ह ऱ्ह
+REP ऍ अ‍ॅ
+REP अा आ
+

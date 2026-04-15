@@ -1,0 +1,10 @@
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkLabel[@id='headerLabel'] orphan-label
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkComboBoxText[@id='typeCombobox'] no-labelled-by
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkComboBoxText[@id='opCombobox'] no-labelled-by
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkEntry[@id='lhsEntry'] no-labelled-by
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkLabel[@id='andLabel'] orphan-label
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkEntry[@id='rhsEntry'] no-labelled-by
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkButton[@id='upButton'] button-no-label
+reportdesign/uiconfig/dbreport/ui/conditionwin.ui://GtkButton[@id='downButton'] button-no-label
+reportdesign/uiconfig/dbreport/ui/floatingfield.ui://GtkLabel[@id='helptext'] orphan-label
+reportdesign/uiconfig/dbreport/ui/floatingsort.ui://GtkLabel[@id='helptext'] orphan-label

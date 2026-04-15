@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=".*-&gt;.*" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=".*..." block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name=".*(c)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(e)" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=".*(r)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=".*(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=".*&lt;-.*" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="байнуу" block-list:name="байна уу"/>
+  <block-list:block block-list:abbreviated-name="идэвхи" block-list:name="идэвх"/>
+  <block-list:block block-list:abbreviated-name="идэвхитэй" block-list:name="идэвхтэй"/>
+  <block-list:block block-list:abbreviated-name="томъёо" block-list:name="томьёо"/>
+  <block-list:block block-list:abbreviated-name="бйа" block-list:name="бай"/>
+  <block-list:block block-list:abbreviated-name="бйав" block-list:name="байв"/>
+  <block-list:block block-list:abbreviated-name="бйана" block-list:name="байна"/>
+  <block-list:block block-list:abbreviated-name="бйасан" block-list:name="байсан"/>
+  <block-list:block block-list:abbreviated-name="авъяас" block-list:name="авьяас"/>
+  <block-list:block block-list:abbreviated-name="ажилын" block-list:name="ажлын"/>
+  <block-list:block block-list:abbreviated-name="суртчилгаа" block-list:name="сурталчилгаа"/>
+  <block-list:block block-list:abbreviated-name="эрх зүй" block-list:name="эрхзүй"/>
+  <block-list:block block-list:abbreviated-name="эмэгнэлт" block-list:name="эмгэнэлт"/>
+  <block-list:block block-list:abbreviated-name="эрвээхий" block-list:name="эрвээхэй"/>
+  <block-list:block block-list:abbreviated-name="мэрэглэх" block-list:name="мэргэлэх"/>
+  <block-list:block block-list:abbreviated-name="хальтирах" block-list:name="халтирах"/>
+  <block-list:block block-list:abbreviated-name="сургааль" block-list:name="сургаал"/>
+  <block-list:block block-list:abbreviated-name="корпорацийн" block-list:name="корпорацын"/>
+  <block-list:block block-list:abbreviated-name="галарей" block-list:name="галерей"/>
+  <block-list:block block-list:abbreviated-name="уулзая" block-list:name="уулзъя"/>
+  <block-list:block block-list:abbreviated-name="номхотгох" block-list:name="номхтгох"/>
+  <block-list:block block-list:abbreviated-name="амьтаны" block-list:name="амьтны"/>
+  <block-list:block block-list:abbreviated-name="аравдахь" block-list:name="арав дахь"/>
+  <block-list:block block-list:abbreviated-name="арав дугаар" block-list:name="аравдугаар"/>
+  <block-list:block block-list:abbreviated-name="асуултанд" block-list:name="асуултад"/>
+  <block-list:block block-list:abbreviated-name="ашиглалтанд" block-list:name="ашиглалтад"/>
+  <block-list:block block-list:abbreviated-name="бадируун" block-list:name="бадриун"/>
+  <block-list:block block-list:abbreviated-name="байнаа" block-list:name="байна аа"/>
+  <block-list:block block-list:abbreviated-name="байхав" block-list:name="байх вэ"/>
+  <block-list:block block-list:abbreviated-name="батлая" block-list:name="баталъя"/>
+  <block-list:block block-list:abbreviated-name="бизээ" block-list:name="биз ээ"/>
+  <block-list:block block-list:abbreviated-name="бодоё" block-list:name="бодъё"/>
+  <block-list:block block-list:abbreviated-name="бодьё" block-list:name="бодъё"/>
+  <block-list:block block-list:abbreviated-name="бодьтой" block-list:name="бодитой"/>
+  <block-list:block block-list:abbreviated-name="болчхов" block-list:name="болчихов"/>
+  <block-list:block block-list:abbreviated-name="болчоод" block-list:name="болчихоод"/>
+  <block-list:block block-list:abbreviated-name="бүрт" block-list:name="бүрд"/>
+  <block-list:block block-list:abbreviated-name="вэб" block-list:name="веб"/>
+  <block-list:block block-list:abbreviated-name="гадны" block-list:name="гаднын"/>
+  <block-list:block block-list:abbreviated-name="гараж" block-list:name="гарааш"/>
+  <block-list:block block-list:abbreviated-name="голдирол" block-list:name="голдрил"/>
+  <block-list:block block-list:abbreviated-name="гольдрил" block-list:name="голдрил"/>
+  <block-list:block block-list:abbreviated-name="гуравдахь" block-list:name="гурав дахь"/>
+  <block-list:block block-list:abbreviated-name="гурав дугаар" block-list:name="гуравдугаар"/>
+  <block-list:block block-list:abbreviated-name="гүйцэт" block-list:name="гүйцэд"/>
+  <block-list:block block-list:abbreviated-name="гэлүү" block-list:name="гэнэ билээ үү"/>
+  <block-list:block block-list:abbreviated-name="гэнээ" block-list:name="гэнэ ээ"/>
+  <block-list:block block-list:abbreviated-name="давалгаа" block-list:name="давлагаа"/>
+  <block-list:block block-list:abbreviated-name="давалгааг" block-list:name="давлагааг"/>
+  <block-list:block block-list:abbreviated-name="давалгаанд" block-list:name="давлагаанд"/>
+  <block-list:block block-list:abbreviated-name="давалгаанууд" block-list:name="давлагаанууд"/>
+  <block-list:block block-list:abbreviated-name="давалгаануудыг" block-list:name="давлагаануудыг"/>
+  <block-list:block block-list:abbreviated-name="давалгаатай" block-list:name="давлагаатай"/>
+  <block-list:block block-list:abbreviated-name="давилуун" block-list:name="давлиун"/>
+  <block-list:block block-list:abbreviated-name="давхрага" block-list:name="давхарга"/>
+  <block-list:block block-list:abbreviated-name="давхцана" block-list:name="давхацна"/>
+  <block-list:block block-list:abbreviated-name="давцан" block-list:name="тавцан"/>
+  <block-list:block block-list:abbreviated-name="дараахь" block-list:name="дараах"/>
+  <block-list:block block-list:abbreviated-name="долоодахь" block-list:name="долоо дахь"/>
+  <block-list:block block-list:abbreviated-name="долоодугаар" block-list:name="долдугаар"/>
+  <block-list:block block-list:abbreviated-name="долоо дугаар" block-list:name="долдугаар"/>
+  <block-list:block block-list:abbreviated-name="дөрөвдэх" block-list:name="дөрөв дэх"/>
+  <block-list:block block-list:abbreviated-name="дөрөв дүгээр" block-list:name="дөрөвдүгээр"/>
+  <block-list:block block-list:abbreviated-name="дууриал" block-list:name="дуурайл"/>
+  <block-list:block block-list:abbreviated-name="дэгдээхий" block-list:name="дэгдээхэй"/>
+  <block-list:block block-list:abbreviated-name="дэхь" block-list:name="дэх"/>
+  <block-list:block block-list:abbreviated-name="есдэх" block-list:name="ес дэх"/>
+  <block-list:block block-list:abbreviated-name="ес дүгээр" block-list:name="есдүгээр"/>
+  <block-list:block block-list:abbreviated-name="засч" block-list:name="засаж"/>
+  <block-list:block block-list:abbreviated-name="зовиур" block-list:name="зовуурь"/>
+  <block-list:block block-list:abbreviated-name="зургаадахь" block-list:name="зургаа дахь"/>
+  <block-list:block block-list:abbreviated-name="зургаадугаар" block-list:name="зургадугаар"/>
+  <block-list:block block-list:abbreviated-name="зургаа дугаар" block-list:name="зургадугаар"/>
+  <block-list:block block-list:abbreviated-name="компьютераар" block-list:name="компьютероор"/>
+  <block-list:block block-list:abbreviated-name="компьютераас" block-list:name="компьютероос"/>
+  <block-list:block block-list:abbreviated-name="компьютерийг" block-list:name="компьютерыг"/>
+  <block-list:block block-list:abbreviated-name="компьютерийн" block-list:name="компьютерын"/>
+  <block-list:block block-list:abbreviated-name="компьютертай" block-list:name="компьютертой"/>
+  <block-list:block block-list:abbreviated-name="компьютертэй" block-list:name="компьютертой"/>
+  <block-list:block block-list:abbreviated-name="компьютерүүд" block-list:name="компьютерууд"/>
+  <block-list:block block-list:abbreviated-name="компьютерүүдийг" block-list:name="компьютеруудыг"/>
+  <block-list:block block-list:abbreviated-name="компьютерүүдийн" block-list:name="компьютеруудын"/>
+  <block-list:block block-list:abbreviated-name="компьютерүүдэд" block-list:name="компьютеруудад"/>
+  <block-list:block block-list:abbreviated-name="компьютерээр" block-list:name="компьютероор"/>
+  <block-list:block block-list:abbreviated-name="компьютерээс" block-list:name="компьютероос"/>
+  <block-list:block block-list:abbreviated-name="луу" block-list:name="уруу"/>
+  <block-list:block block-list:abbreviated-name="луугаа" block-list:name="уруугаа"/>
+  <block-list:block block-list:abbreviated-name="лүү" block-list:name="уруу"/>
+  <block-list:block block-list:abbreviated-name="лүүгээ" block-list:name="уруугаа"/>
+  <block-list:block block-list:abbreviated-name="магадлгаа" block-list:name="магадалгаа"/>
+  <block-list:block block-list:abbreviated-name="магадлагаа" block-list:name="магадалгаа"/>
+  <block-list:block block-list:abbreviated-name="моньд" block-list:name="монди"/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөө." block-list:name="мөрдлөг."/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөөг" block-list:name="мөрдлөгийг"/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөөнүүд" block-list:name="мөрдлөгүүд"/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөөнүүдийг" block-list:name="мөрдлөгүүдийг"/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөөнүүдийн" block-list:name="мөрдлөгүүдийн"/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөөнүүдтэй" block-list:name="мөрдлөгүүдтэй"/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөөнүүдэд" block-list:name="мөрдлөгүүдэд"/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөөнүүдээ" block-list:name="мөрдлөгүүдээ"/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөөнүүдээр" block-list:name="мөрдлөгүүдээр"/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөөнүүдээс" block-list:name="мөрдлөгүүдээс"/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөөр" block-list:name="мөрдлөгөөр"/>
+  <block-list:block block-list:abbreviated-name="мөрдөлгөөс" block-list:name="мөрдлөгөөс"/>
+  <block-list:block block-list:abbreviated-name="муруйг" block-list:name="мурийг"/>
+  <block-list:block block-list:abbreviated-name="муруйгаа" block-list:name="мурийгаа"/>
+  <block-list:block block-list:abbreviated-name="муруйд" block-list:name="мурийд"/>
+  <block-list:block block-list:abbreviated-name="муруйн" block-list:name="мурийн"/>
+  <block-list:block block-list:abbreviated-name="мяраалаг" block-list:name="мариалаг"/>
+  <block-list:block block-list:abbreviated-name="надыг" block-list:name="намайг"/>
+  <block-list:block block-list:abbreviated-name="надын" block-list:name="миний"/>
+  <block-list:block block-list:abbreviated-name="наймдахь" block-list:name="найм дахь"/>
+  <block-list:block block-list:abbreviated-name="найм дугаар" block-list:name="наймдугаар"/>
+  <block-list:block block-list:abbreviated-name="нилээд" block-list:name="нэлээд"/>
+  <block-list:block block-list:abbreviated-name="нилээн" block-list:name="нэлээн"/>
+  <block-list:block block-list:abbreviated-name="нисч" block-list:name="нисэж"/>
+  <block-list:block block-list:abbreviated-name="нисч," block-list:name="нисэж,"/>
+  <block-list:block block-list:abbreviated-name="номнууд" block-list:name="номууд"/>
+  <block-list:block block-list:abbreviated-name="номонд" block-list:name="номд"/>
+  <block-list:block block-list:abbreviated-name="номондоо" block-list:name="номдоо"/>
+  <block-list:block block-list:abbreviated-name="ном зүй" block-list:name="номзүй"/>
+  <block-list:block block-list:abbreviated-name="ном зүйг" block-list:name="номзүйг"/>
+  <block-list:block block-list:abbreviated-name="ном зүйд" block-list:name="номзүйд"/>
+  <block-list:block block-list:abbreviated-name="ном зүйн" block-list:name="номзүйн"/>
+  <block-list:block block-list:abbreviated-name="ноогдвор" block-list:name="ногдвор"/>
+  <block-list:block block-list:abbreviated-name="ноогдвороо" block-list:name="ногдвороо"/>
+  <block-list:block block-list:abbreviated-name="ноогдвороор" block-list:name="ногдвороор"/>
+  <block-list:block block-list:abbreviated-name="ноогдвороос" block-list:name="ногдвороос"/>
+  <block-list:block block-list:abbreviated-name="ноогдворт" block-list:name="ногдворт"/>
+  <block-list:block block-list:abbreviated-name="ноогдворууд" block-list:name="ногдворууд"/>
+  <block-list:block block-list:abbreviated-name="ноогдворуудаа" block-list:name="ногдворуудаа"/>
+  <block-list:block block-list:abbreviated-name="ноогдворуудаар" block-list:name="ногдворуудаар"/>
+  <block-list:block block-list:abbreviated-name="ноогдворуудаас" block-list:name="ногдворуудаас"/>
+  <block-list:block block-list:abbreviated-name="ноогдворуудад" block-list:name="ногдворуудад"/>
+  <block-list:block block-list:abbreviated-name="ноогдворуудтай" block-list:name="ногдворуудтай"/>
+  <block-list:block block-list:abbreviated-name="ноогдворуудтайгаа" block-list:name="ногдворуудтайгаа"/>
+  <block-list:block block-list:abbreviated-name="ноогдворуудыг" block-list:name="ногдворуудыг"/>
+  <block-list:block block-list:abbreviated-name="ноогдворыг" block-list:name="ногдворыг"/>
+  <block-list:block block-list:abbreviated-name="нөхөддөө" block-list:name="нөхдөдөө"/>
+  <block-list:block block-list:abbreviated-name="нөхцлийг" block-list:name="нөхцөлийг"/>
+  <block-list:block block-list:abbreviated-name="нөхцлийн" block-list:name="нөхцөлийн"/>
+  <block-list:block block-list:abbreviated-name="нөхцлөөр" block-list:name="нөхцөлөөр"/>
+  <block-list:block block-list:abbreviated-name="нөхцлөөс" block-list:name="нөхцөлөөс"/>
+  <block-list:block block-list:abbreviated-name="нөхцлүүд" block-list:name="нөхцөлүүд"/>
+  <block-list:block block-list:abbreviated-name="нөхцлүүдийг" block-list:name="нөхцөлүүдийг"/>
+  <block-list:block block-list:abbreviated-name="нөхцлүүдийн" block-list:name="нөхцөлүүдийн"/>
+  <block-list:block block-list:abbreviated-name="нөхцлүүдтэй" block-list:name="нөхцөлүүдтэй"/>
+  <block-list:block block-list:abbreviated-name="нөхцлүүдэд" block-list:name="нөхцөлүүдэд"/>
+  <block-list:block block-list:abbreviated-name="нөхцлүүдээр" block-list:name="нөхцөлүүдээр"/>
+  <block-list:block block-list:abbreviated-name="нөхцлүүдээс" block-list:name="нөхцөлүүдээс"/>
+  <block-list:block block-list:abbreviated-name="нэг дүгээр" block-list:name="нэгдүгээр"/>
+  <block-list:block block-list:abbreviated-name="оронг" block-list:name="орныг"/>
+  <block-list:block block-list:abbreviated-name="өвчтөнг" block-list:name="өвчтөнийг"/>
+  <block-list:block block-list:abbreviated-name="өсч" block-list:name="өсөж"/>
+  <block-list:block block-list:abbreviated-name="өсч," block-list:name="өсөж,"/>
+  <block-list:block block-list:abbreviated-name="руу" block-list:name="уруу"/>
+  <block-list:block block-list:abbreviated-name="руугаа" block-list:name="уруугаа"/>
+  <block-list:block block-list:abbreviated-name="рүү" block-list:name="уруу"/>
+  <block-list:block block-list:abbreviated-name="рүүгээ" block-list:name="уруугаа"/>
+  <block-list:block block-list:abbreviated-name="сонголтонд" block-list:name="сонголтод"/>
+  <block-list:block block-list:abbreviated-name="сонсдов" block-list:name="сонстов"/>
+  <block-list:block block-list:abbreviated-name="сонсдож" block-list:name="сонстож"/>
+  <block-list:block block-list:abbreviated-name="сонсдон" block-list:name="сонстон"/>
+  <block-list:block block-list:abbreviated-name="сонсдоно" block-list:name="сонстоно"/>
+  <block-list:block block-list:abbreviated-name="сонсдох" block-list:name="сонстох"/>
+  <block-list:block block-list:abbreviated-name="судлаж" block-list:name="судалж"/>
+  <block-list:block block-list:abbreviated-name="судлая" block-list:name="судалъя"/>
+  <block-list:block block-list:abbreviated-name="тавдахь" block-list:name="тав дахь"/>
+  <block-list:block block-list:abbreviated-name="тав дугаар" block-list:name="тавдугаар"/>
+  <block-list:block block-list:abbreviated-name="таньд" block-list:name="танд"/>
+  <block-list:block block-list:abbreviated-name="таньдаа" block-list:name="тандаа"/>
+  <block-list:block block-list:abbreviated-name="тиймээ" block-list:name="тийм ээ"/>
+  <block-list:block block-list:abbreviated-name="төвшингийн" block-list:name="төвшний"/>
+  <block-list:block block-list:abbreviated-name="төлвийг" block-list:name="төлөвийг"/>
+  <block-list:block block-list:abbreviated-name="төлвийн" block-list:name="төлөвийн"/>
+  <block-list:block block-list:abbreviated-name="төрөгдмөл" block-list:name="төрмөл"/>
+  <block-list:block block-list:abbreviated-name="төрөгдөнө" block-list:name="төрнө"/>
+  <block-list:block block-list:abbreviated-name="төрөгдөх" block-list:name="төрөх"/>
+  <block-list:block block-list:abbreviated-name="төрөгдсөн" block-list:name="төрсөн"/>
+  <block-list:block block-list:abbreviated-name="тус бүр" block-list:name="тусбүр"/>
+  <block-list:block block-list:abbreviated-name="тус бүрд" block-list:name="тусбүрд"/>
+  <block-list:block block-list:abbreviated-name="тус бүрийг" block-list:name="тусбүрийг"/>
+  <block-list:block block-list:abbreviated-name="тус бүрийн" block-list:name="тусбүрийн"/>
+  <block-list:block block-list:abbreviated-name="тус бүрт" block-list:name="тусбүрд"/>
+  <block-list:block block-list:abbreviated-name="тус бүртэй" block-list:name="тусбүртэй"/>
+  <block-list:block block-list:abbreviated-name="тус бүрээр" block-list:name="тусбүрээр"/>
+  <block-list:block block-list:abbreviated-name="тус бүрээс" block-list:name="тусбүрээс"/>
+  <block-list:block block-list:abbreviated-name="түвшин" block-list:name="төвшин"/>
+  <block-list:block block-list:abbreviated-name="түвшин," block-list:name="төвшин,"/>
+  <block-list:block block-list:abbreviated-name="түвшингүүдийн" block-list:name="төвшнүүдийн"/>
+  <block-list:block block-list:abbreviated-name="түвшнээс" block-list:name="төвшнөөс"/>
+  <block-list:block block-list:abbreviated-name="түвэгтэй" block-list:name="төвөгтэй"/>
+  <block-list:block block-list:abbreviated-name="тэрнийг" block-list:name="түүнийг"/>
+  <block-list:block block-list:abbreviated-name="тэрнийхээ" block-list:name="түүнийхээ"/>
+  <block-list:block block-list:abbreviated-name="утгандаа" block-list:name="утгадаа"/>
+  <block-list:block block-list:abbreviated-name="уушиг" block-list:name="уушги"/>
+  <block-list:block block-list:abbreviated-name="үгий" block-list:name="үгийг"/>
+  <block-list:block block-list:abbreviated-name="үзэмжиндээ" block-list:name="үзэмждээ"/>
+  <block-list:block block-list:abbreviated-name="үнсэв" block-list:name="үнэсэв"/>
+  <block-list:block block-list:abbreviated-name="үнсэж" block-list:name="үнэсэж"/>
+  <block-list:block block-list:abbreviated-name="үнсэх" block-list:name="үнэсэх"/>
+  <block-list:block block-list:abbreviated-name="үүсч" block-list:name="үүсэж"/>
+  <block-list:block block-list:abbreviated-name="функцаа" block-list:name="функцээ"/>
+  <block-list:block block-list:abbreviated-name="функцаар" block-list:name="функцээр"/>
+  <block-list:block block-list:abbreviated-name="функцаараа" block-list:name="функцээрээ"/>
+  <block-list:block block-list:abbreviated-name="функцаас" block-list:name="функцээс"/>
+  <block-list:block block-list:abbreviated-name="функцаасаа" block-list:name="функцээсээ"/>
+  <block-list:block block-list:abbreviated-name="функцад" block-list:name="функцэд"/>
+  <block-list:block block-list:abbreviated-name="функцуудаар" block-list:name="функцүүдээр"/>
+  <block-list:block block-list:abbreviated-name="функцуудаараа" block-list:name="функцүүдээрээ"/>
+  <block-list:block block-list:abbreviated-name="функцуудаас" block-list:name="функцүүдээс"/>
+  <block-list:block block-list:abbreviated-name="функцуудаасаа" block-list:name="функцүүдээсээ"/>
+  <block-list:block block-list:abbreviated-name="функцуудад" block-list:name="функцүүдэд"/>
+  <block-list:block block-list:abbreviated-name="функцуудтай" block-list:name="функцүүдтэй"/>
+  <block-list:block block-list:abbreviated-name="функцуудтайгаа" block-list:name="функцүүдтэйгээ"/>
+  <block-list:block block-list:abbreviated-name="функцуудыг" block-list:name="функцүүдийг"/>
+  <block-list:block block-list:abbreviated-name="функцуудын" block-list:name="функцүүдийн"/>
+  <block-list:block block-list:abbreviated-name="функцуудынх" block-list:name="функцүүдийнх"/>
+  <block-list:block block-list:abbreviated-name="функцуудынхаа" block-list:name="функцүүдийнхээ"/>
+  <block-list:block block-list:abbreviated-name="функцыг" block-list:name="функцийг"/>
+  <block-list:block block-list:abbreviated-name="функцын" block-list:name="функцийн"/>
+  <block-list:block block-list:abbreviated-name="хаалтанд" block-list:name="хаалтад"/>
+  <block-list:block block-list:abbreviated-name="хайрцагнаас" block-list:name="хайрцгаас"/>
+  <block-list:block block-list:abbreviated-name="хайрцагнаасаа" block-list:name="хайрцгаасаа"/>
+  <block-list:block block-list:abbreviated-name="хайрцагнууд" block-list:name="хайрцгууд"/>
+  <block-list:block block-list:abbreviated-name="хайрцагнуудаас" block-list:name="хайрцгуудаас"/>
+  <block-list:block block-list:abbreviated-name="хайрцагнуудын" block-list:name="хайрцгуудын"/>
+  <block-list:block block-list:abbreviated-name="хайрцагны" block-list:name="хайрцгийн"/>
+  <block-list:block block-list:abbreviated-name="хайрцганд" block-list:name="хайрцагт"/>
+  <block-list:block block-list:abbreviated-name="халтиргаа" block-list:name="халтираа"/>
+  <block-list:block block-list:abbreviated-name="халтиргаатай" block-list:name="халтираатай"/>
+  <block-list:block block-list:abbreviated-name="хандалдат" block-list:name="хандалтат"/>
+  <block-list:block block-list:abbreviated-name="харуулая" block-list:name="харуулъя"/>
+  <block-list:block block-list:abbreviated-name="хасч" block-list:name="хасаж"/>
+  <block-list:block block-list:abbreviated-name="хоёрдахь" block-list:name="хоёр дахь"/>
+  <block-list:block block-list:abbreviated-name="хоёр дугаар" block-list:name="хоёрдугаар"/>
+  <block-list:block block-list:abbreviated-name="хойт" block-list:name="хойд"/>
+  <block-list:block block-list:abbreviated-name="хүртлэх" block-list:name="хүртэлх"/>
+  <block-list:block block-list:abbreviated-name="хүртэлхи" block-list:name="хүртэлх"/>
+  <block-list:block block-list:abbreviated-name="хүсч" block-list:name="хүсэж"/>
+  <block-list:block block-list:abbreviated-name="хүүхэддээ" block-list:name="хүүхдэдээ"/>
+  <block-list:block block-list:abbreviated-name="хэнч" block-list:name="хэн ч"/>
+  <block-list:block block-list:abbreviated-name="хэр" block-list:name="хир"/>
+  <block-list:block block-list:abbreviated-name="хэрнээ" block-list:name="хирнээ"/>
+  <block-list:block block-list:abbreviated-name="хэрээр" block-list:name="хирээр"/>
+  <block-list:block block-list:abbreviated-name="цөмий нь" block-list:name="цөмийг нь"/>
+  <block-list:block block-list:abbreviated-name="шавьж" block-list:name="шавж"/>
+  <block-list:block block-list:abbreviated-name="шалгалтанд" block-list:name="шалгалтад"/>
+  <block-list:block block-list:abbreviated-name="шалгалтандаа" block-list:name="шалгалтдаа"/>
+  <block-list:block block-list:abbreviated-name="шудрага" block-list:name="шударга"/>
+  <block-list:block block-list:abbreviated-name="шургуу" block-list:name="шаргуу"/>
+  <block-list:block block-list:abbreviated-name="энүүнийг" block-list:name="үүнийг"/>
+  <block-list:block block-list:abbreviated-name="энүүнээс" block-list:name="үүнээс"/>
+  <block-list:block block-list:abbreviated-name="юмуу" block-list:name="юм уу"/>
+  <block-list:block block-list:abbreviated-name="яасанч" block-list:name="яасан ч"/>
+  <block-list:block block-list:abbreviated-name="яахав" block-list:name="яах вэ"/>
+  <block-list:block block-list:abbreviated-name="ямарч" block-list:name="ямар ч"/>
+  <block-list:block block-list:abbreviated-name="дотны" block-list:name="дотнын"/>
+  <block-list:block block-list:abbreviated-name="хэзээч" block-list:name="хэзээ ч"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":100 Оноо:" block-list:name="💯"/>
+  <block-list:block block-list:abbreviated-name=":!!:" block-list:name="‼"/>
+  <block-list:block block-list:abbreviated-name=":!:" block-list:name="❕"/>
+  <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
+  <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
+  <block-list:block block-list:abbreviated-name=":---:" block-list:name="—"/>
+  <block-list:block block-list:abbreviated-name=":--:" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name=":-:" block-list:name="−"/>
+  <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
+  <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
+  <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
+  <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
+  <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
+  <block-list:block block-list:abbreviated-name=":_(:" block-list:name="₍"/>
+  <block-list:block block-list:abbreviated-name=":_):" block-list:name="₎"/>
+  <block-list:block block-list:abbreviated-name=":_-:" block-list:name="₋"/>
+  <block-list:block block-list:abbreviated-name=":Camera:" block-list:name="📷"/>
+  <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
+  <block-list:block block-list:abbreviated-name=":Instrction:" block-list:name="🚧"/>
+  <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
+  <block-list:block block-list:abbreviated-name=":Make:" block-list:name="🍰"/>
+  <block-list:block block-list:abbreviated-name=":Parallel:" block-list:name="∥"/>
+  <block-list:block block-list:abbreviated-name=":ажиллаж байгаа:" block-list:name="😀"/>
+  <block-list:block block-list:abbreviated-name=":алга:" block-list:name="😗"/>
+  <block-list:block block-list:abbreviated-name=":Алмааз:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":алхам:" block-list:name="🍲"/>
+  <block-list:block block-list:abbreviated-name=":альфа:" block-list:name="α"/>
+  <block-list:block block-list:abbreviated-name=":Альфа:" block-list:name="Α"/>
+  <block-list:block block-list:abbreviated-name=":анхааруулга:" block-list:name="⚠"/>
+  <block-list:block block-list:abbreviated-name=":арга хэмжээ:" block-list:name="👸"/>
+  <block-list:block block-list:abbreviated-name=":ба:" block-list:name="∧"/>
+  <block-list:block block-list:abbreviated-name=":байхгүй:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":баруун:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":Баруун:" block-list:name="🌃"/>
+  <block-list:block block-list:abbreviated-name=":Баруун дээд:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=":бета:" block-list:name="β"/>
+  <block-list:block block-list:abbreviated-name=":бичвэр:" block-list:name="⛺"/>
+  <block-list:block block-list:abbreviated-name=":блок:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":богино:" block-list:name="👕"/>
+  <block-list:block block-list:abbreviated-name=":Боолт:" block-list:name="🚢"/>
+  <block-list:block block-list:abbreviated-name=":Бор:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":Буцах:" block-list:name="🂫"/>
+  <block-list:block block-list:abbreviated-name=":буюу:" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=":Бүрхүүл:" block-list:name="🐚"/>
+  <block-list:block block-list:abbreviated-name=":бүтэгдэхүүн:" block-list:name="∏"/>
+  <block-list:block block-list:abbreviated-name=":Валоон хэл:" block-list:name="🎈"/>
+  <block-list:block block-list:abbreviated-name=":гадас:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":гамма:" block-list:name="γ"/>
+  <block-list:block block-list:abbreviated-name=":Гамма:" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=":Ганда хэл:" block-list:name="🐼"/>
+  <block-list:block block-list:abbreviated-name=":Гар:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":Гар утас:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":гол:" block-list:name="☔"/>
+  <block-list:block block-list:abbreviated-name=":Градус:" block-list:name="°"/>
+  <block-list:block block-list:abbreviated-name=":Гэгээ:" block-list:name="🔅"/>
+  <block-list:block block-list:abbreviated-name=":Гэр бүл:" block-list:name="👪"/>
+  <block-list:block block-list:abbreviated-name=":Далбаа:" block-list:name="🎌"/>
+  <block-list:block block-list:abbreviated-name=":Дел:" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name=":дельта:" block-list:name="Δ"/>
+  <block-list:block block-list:abbreviated-name=":диаграмм:" block-list:name="📉"/>
+  <block-list:block block-list:abbreviated-name=":доогуур:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":доош:" block-list:name="☟"/>
+  <block-list:block block-list:abbreviated-name=":дотор:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":дөрвөлжин:" block-list:name="🐗"/>
+  <block-list:block block-list:abbreviated-name=":дугтуй:" block-list:name="✉"/>
+  <block-list:block block-list:abbreviated-name=":Дугуй:" block-list:name="🂮"/>
+  <block-list:block block-list:abbreviated-name=":дундаж:" block-list:name="🍖"/>
+  <block-list:block block-list:abbreviated-name=":Дусаагуур:" block-list:name="💧"/>
+  <block-list:block block-list:abbreviated-name=":дуу:" block-list:name="🔉"/>
+  <block-list:block block-list:abbreviated-name=":Дуу:" block-list:name="🎶"/>
+  <block-list:block block-list:abbreviated-name=":Дуугүй:" block-list:name="🔇"/>
+  <block-list:block block-list:abbreviated-name=":Дүүргэх:" block-list:name="💊"/>
+  <block-list:block block-list:abbreviated-name=":Дэд олонлог:" block-list:name="⊂"/>
+  <block-list:block block-list:abbreviated-name=":Дэд олонлог биш:" block-list:name="⊄"/>
+  <block-list:block block-list:abbreviated-name=":дэс дараалалын тэмдэг:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":дээш:" block-list:name="☝"/>
+  <block-list:block block-list:abbreviated-name=":дээш доош гүйлгэх:" block-list:name="📜"/>
+  <block-list:block block-list:abbreviated-name=":жил:" block-list:name="⚙"/>
+  <block-list:block block-list:abbreviated-name=":захиа:" block-list:name="🚮"/>
+  <block-list:block block-list:abbreviated-name=":зета:" block-list:name="ζ"/>
+  <block-list:block block-list:abbreviated-name=":зөвшөөрөл:" block-list:name="🍎"/>
+  <block-list:block block-list:abbreviated-name=":Зөөх:" block-list:name="💘"/>
+  <block-list:block block-list:abbreviated-name=":зурвас:" block-list:name="💆"/>
+  <block-list:block block-list:abbreviated-name=":Зургаан өнцөгт:" block-list:name="⬡"/>
+  <block-list:block block-list:abbreviated-name=":Зүрх:" block-list:name="❤"/>
+  <block-list:block block-list:abbreviated-name=":зүүн:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":Зэрэг:" block-list:name="🗼"/>
+  <block-list:block block-list:abbreviated-name=":зэрэгцүүлэх:" block-list:name="👽"/>
+  <block-list:block block-list:abbreviated-name=":имэйл:" block-list:name="📧"/>
+  <block-list:block block-list:abbreviated-name=":Интеграл:" block-list:name="∫"/>
+  <block-list:block block-list:abbreviated-name=":инч:" block-list:name="″"/>
+  <block-list:block block-list:abbreviated-name=":иота:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":каппа:" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=":квадрат:" block-list:name="■"/>
+  <block-list:block block-list:abbreviated-name=":клипборд:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":Компьютер:" block-list:name="💻"/>
+  <block-list:block block-list:abbreviated-name=":кси:" block-list:name="ξ"/>
+  <block-list:block block-list:abbreviated-name=":Лугшилт:" block-list:name="💓"/>
+  <block-list:block block-list:abbreviated-name=":Лямбда:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":Масштаб:" block-list:name="💥"/>
+  <block-list:block block-list:abbreviated-name=":Мат:" block-list:name="🛀"/>
+  <block-list:block block-list:abbreviated-name=":Милл:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":муж:" block-list:name="😡"/>
+  <block-list:block block-list:abbreviated-name=":мэдээлэл:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":Нар:" block-list:name="☉"/>
+  <block-list:block block-list:abbreviated-name=":нийлбэр:" block-list:name="∑"/>
+  <block-list:block block-list:abbreviated-name=":ном:" block-list:name="📚"/>
+  <block-list:block block-list:abbreviated-name=":нууц үг:" block-list:name="🛂"/>
+  <block-list:block block-list:abbreviated-name=":Нүд:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":Нэгдэл:" block-list:name="∪"/>
+  <block-list:block block-list:abbreviated-name=":нэрс:" block-list:name="📛"/>
+  <block-list:block block-list:abbreviated-name=":ню:" block-list:name="ν"/>
+  <block-list:block block-list:abbreviated-name=":Огтлолцол:" block-list:name="∩"/>
+  <block-list:block block-list:abbreviated-name=":олдсон:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":омега:" block-list:name="Ω"/>
+  <block-list:block block-list:abbreviated-name=":омикрон:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":офис:" block-list:name="🏢"/>
+  <block-list:block block-list:abbreviated-name=":өнцөг:" block-list:name="∠"/>
+  <block-list:block block-list:abbreviated-name=":өөрийн:" block-list:name="🛃"/>
+  <block-list:block block-list:abbreviated-name=":өөрчлөх:" block-list:name="⚖"/>
+  <block-list:block block-list:abbreviated-name=":Параллелограмм:" block-list:name="▰"/>
+  <block-list:block block-list:abbreviated-name=":пи:" block-list:name="π"/>
+  <block-list:block block-list:abbreviated-name=":пси:" block-list:name="ψ"/>
+  <block-list:block block-list:abbreviated-name=":~Радио товч:" block-list:name="🔘"/>
+  <block-list:block block-list:abbreviated-name=":ро:" block-list:name="ρ"/>
+  <block-list:block block-list:abbreviated-name=":Саарал:" block-list:name="📤"/>
+  <block-list:block block-list:abbreviated-name=":Санго хэл:" block-list:name="🍡"/>
+  <block-list:block block-list:abbreviated-name=":сар:" block-list:name="👄"/>
+  <block-list:block block-list:abbreviated-name=":Сар:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":Сигма:" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=":Таван өнцөгт:" block-list:name="⬟"/>
+  <block-list:block block-list:abbreviated-name=":тайлбар:" block-list:name="☡"/>
+  <block-list:block block-list:abbreviated-name=":тау:" block-list:name="τ"/>
+  <block-list:block block-list:abbreviated-name=":тета:" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name=":Тийм:" block-list:name="👀"/>
+  <block-list:block block-list:abbreviated-name=":Товч:" block-list:name="🔲"/>
+  <block-list:block block-list:abbreviated-name=":товшилт:" block-list:name="👗"/>
+  <block-list:block block-list:abbreviated-name=":тодруулах:" block-list:name="😷"/>
+  <block-list:block block-list:abbreviated-name=":тойрог:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":Тоо:" block-list:name="μ"/>
+  <block-list:block block-list:abbreviated-name=":тор:" block-list:name="😁"/>
+  <block-list:block block-list:abbreviated-name=":түлхүүр:" block-list:name="🔑"/>
+  <block-list:block block-list:abbreviated-name=":тэгш өнцөгт:" block-list:name="▬"/>
+  <block-list:block block-list:abbreviated-name=":Тэгш өнцөгт гурвалжин:" block-list:name="⊿"/>
+  <block-list:block block-list:abbreviated-name=":тэлэлт:" block-list:name="✊"/>
+  <block-list:block block-list:abbreviated-name=":тэмдэглэгээ:" block-list:name="📑"/>
+  <block-list:block block-list:abbreviated-name=":тэмдэглэл:" block-list:name="¬"/>
+  <block-list:block block-list:abbreviated-name=":тэнцүү биш:" block-list:name="≠"/>
+  <block-list:block block-list:abbreviated-name=":уншилт:" block-list:name="🍞"/>
+  <block-list:block block-list:abbreviated-name=":үгүй:" block-list:name="👎"/>
+  <block-list:block block-list:abbreviated-name=":үнэн:" block-list:name="🌳"/>
+  <block-list:block block-list:abbreviated-name=":үсэглэл:" block-list:name="🌱"/>
+  <block-list:block block-list:abbreviated-name=":Үүл:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":файл:" block-list:name="🔥"/>
+  <block-list:block block-list:abbreviated-name=":факс:" block-list:name="📠"/>
+  <block-list:block block-list:abbreviated-name=":фи:" block-list:name="φ"/>
+  <block-list:block block-list:abbreviated-name=":Франц хэл:" block-list:name="🔧"/>
+  <block-list:block block-list:abbreviated-name=":Фут:" block-list:name="🐾"/>
+  <block-list:block block-list:abbreviated-name=":Хавирган сар:" block-list:name="🌙"/>
+  <block-list:block block-list:abbreviated-name=":хавтас:" block-list:name="📁"/>
+  <block-list:block block-list:abbreviated-name=":Хавтгай:" block-list:name="♭"/>
+  <block-list:block block-list:abbreviated-name=":Хадгалах:" block-list:name="👋"/>
+  <block-list:block block-list:abbreviated-name=":хадгалсан:" block-list:name="🏪"/>
+  <block-list:block block-list:abbreviated-name=":Хана:" block-list:name="⛹"/>
+  <block-list:block block-list:abbreviated-name=":Ханш:" block-list:name="🍚"/>
+  <block-list:block block-list:abbreviated-name=":харьцуулан тохируулах:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":хи:" block-list:name="χ"/>
+  <block-list:block block-list:abbreviated-name=":Холбоос:" block-list:name="😉"/>
+  <block-list:block block-list:abbreviated-name=":хоосон:" block-list:name="🏦"/>
+  <block-list:block block-list:abbreviated-name=":Хоосон олонлог:" block-list:name="∅"/>
+  <block-list:block block-list:abbreviated-name=":Хошоонгор:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":Хөл:" block-list:name="👢"/>
+  <block-list:block block-list:abbreviated-name=":Хуваагч:" block-list:name="∣"/>
+  <block-list:block block-list:abbreviated-name=":хулгана:" block-list:name="🏠"/>
+  <block-list:block block-list:abbreviated-name=":хуудас:" block-list:name="📟"/>
+  <block-list:block block-list:abbreviated-name=":хуулах:" block-list:name="👮"/>
+  <block-list:block block-list:abbreviated-name=":хүснэгт:" block-list:name="🐑"/>
+  <block-list:block block-list:abbreviated-name=":Хүү:" block-list:name="🐀"/>
+  <block-list:block block-list:abbreviated-name=":хүчин зүйл:" block-list:name="🏭"/>
+  <block-list:block block-list:abbreviated-name=":хэвлэж байгаа:" block-list:name="✍"/>
+  <block-list:block block-list:abbreviated-name=":хэдийнэ байгаа:" block-list:name="∃"/>
+  <block-list:block block-list:abbreviated-name=":хэсэг:" block-list:name="§"/>
+  <block-list:block block-list:abbreviated-name=":хязгааргүй:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":цагийн байдал:" block-list:name="🗿"/>
+  <block-list:block block-list:abbreviated-name=":Цаглабар:" block-list:name="📅"/>
+  <block-list:block block-list:abbreviated-name=":цахим холбоос:" block-list:name="🔗"/>
+  <block-list:block block-list:abbreviated-name=":цэс:" block-list:name="🚹"/>
+  <block-list:block block-list:abbreviated-name=":шалгах:" block-list:name="🐣"/>
+  <block-list:block block-list:abbreviated-name=":шиг:" block-list:name="🚲"/>
+  <block-list:block block-list:abbreviated-name=":шугам:" block-list:name="📏"/>
+  <block-list:block block-list:abbreviated-name=":Шулуун:" block-list:name="🌲"/>
+  <block-list:block block-list:abbreviated-name=":эллипс:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":эпсилон:" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name=":Эргүүлэлт:" block-list:name="🚉"/>
+  <block-list:block block-list:abbreviated-name=":эрэмбэлэх:" block-list:name="√"/>
+  <block-list:block block-list:abbreviated-name=":эта:" block-list:name="Β"/>
+  <block-list:block block-list:abbreviated-name=":эхлэл:" block-list:name="★"/>
+  <block-list:block block-list:abbreviated-name=":Эх олонлог:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":Эх олонлог биш:" block-list:name="⊅"/>
+  <block-list:block block-list:abbreviated-name=":юпсилон:" block-list:name="υ"/>
+  <block-list:block block-list:abbreviated-name=":язгуур:" block-list:name="📻"/>
+</block-list:block-list>

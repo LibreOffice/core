@@ -1,0 +1,24 @@
+/*
+  This file is for the Dialog commands.
+  It handles all types of Dialog: the Modeless and the Modal.
+  It also handles the Close Dialog commands.
+*/
+DialogCommand:
+  OpenDialog | CloseDialog
+;
+
+OpenDialog:
+  OpenModalDialog | OpenModelessDialog
+;
+OpenModalDialog :
+  'Open Modal ' dialog_name=ID
+;
+OpenModelessDialog :
+  'Open Modeless ' dialog_name=ID
+;
+
+CloseDialog:
+  // If there is a need to match a dialog name in the future, additional_note=STRING? can be used.
+  // It is also used to make an instance of the command of type CloseDialog.
+  'Close Dialog' additional_note=STRING?
+;

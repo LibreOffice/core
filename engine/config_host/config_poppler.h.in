@@ -1,0 +1,10 @@
+/*
+Settings for poppler header file detection
+*/
+
+#ifndef CONFIG_POPPLER_H
+#define CONFIG_POPPLER_H
+
+#define ENABLE_PDFIMPORT 0
+
+#endif

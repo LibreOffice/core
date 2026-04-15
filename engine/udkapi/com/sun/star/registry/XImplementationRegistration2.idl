@@ -1,0 +1,54 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+ module com {  module sun {  module star {  module registry {
+
+
+/** extends the functionality of com::sun::star::registry::XImplementationRegistration. It can be useful to specify a complete Url to a component but register the components name only (library or jar name).
+ */
+interface XImplementationRegistration2: com::sun::star::registry::XImplementationRegistration
+{
+
+    /** registers a component which provides one or more implementations.
+
+        @param aImplementationLoader
+            the URL of the implementation loader.
+
+        @param aLocation
+            specifies the location of the component with the URL.
+
+        @param aRegisteredLocation
+            the URL with which the component is actually registered.
+
+        @param xReg
+            specifies the registry where the component should be installed.
+            If it is a NULL interface, then the component will be installed
+            in the system registry (if this feature is supported).
+     */
+    void registerImplementationWithLocation( [in] string aImplementationLoader,
+             [in] string aLocation, [in] string aRegisteredLocation,
+             [in] com::sun::star::registry::XSimpleRegistry xReg )
+            raises( com::sun::star::registry::CannotRegisterImplementationException );
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

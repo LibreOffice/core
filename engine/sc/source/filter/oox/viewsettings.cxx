@@ -1,0 +1,652 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <viewsettings.hxx>
+
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/document/NamedPropertyValues.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <comphelper/indexedpropertyvalues.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <osl/diagnose.h>
+#include <unotools/mediadescriptor.hxx>
+#include <oox/core/filterbase.hxx>
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
+#include <addressconverter.hxx>
+#include <workbooksettings.hxx>
+#include <worksheetbuffer.hxx>
+#include <vcl/svapp.hxx>
+#include <docuno.hxx>
+#include <cellsuno.hxx>
+
+namespace com::sun::star::container { class XNameContainer; }
+
+namespace oox::xls {
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::FilterBase;
+
+namespace {
+
+const sal_Int32 OOX_BOOKVIEW_TABBARRATIO_DEF        = 600;      /// Default tabbar ratio.
+const sal_Int32 OOX_SHEETVIEW_NORMALZOOM_DEF        = 100;      /// Default zoom for normal view.
+const sal_Int32 OOX_SHEETVIEW_SHEETLAYZOOM_DEF      = 60;       /// Default zoom for pagebreak preview.
+
+const sal_uInt8 BIFF12_PANE_FROZEN                  = 0x01;
+const sal_uInt8 BIFF12_PANE_FROZENNOSPLIT           = 0x02;
+
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWFORMULAS      = 0x0002;
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWGRID          = 0x0004;
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWHEADINGS      = 0x0008;
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWZEROS         = 0x0010;
+const sal_uInt16 BIFF12_SHEETVIEW_RIGHTTOLEFT       = 0x0020;
+const sal_uInt16 BIFF12_SHEETVIEW_SELECTED          = 0x0040;
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWOUTLINE       = 0x0100;
+const sal_uInt16 BIFF12_SHEETVIEW_DEFGRIDCOLOR      = 0x0200;
+
+const sal_uInt16 BIFF12_CHARTSHEETVIEW_SELECTED     = 0x0001;
+const sal_uInt16 BIFF12_CHARTSHEETVIEW_ZOOMTOFIT    = 0x0002;
+
+const sal_uInt8 BIFF12_WBVIEW_HIDDEN                = 0x01;
+const sal_uInt8 BIFF12_WBVIEW_MINIMIZED             = 0x02;
+const sal_uInt8 BIFF12_WBVIEW_SHOWHORSCROLL         = 0x08;
+const sal_uInt8 BIFF12_WBVIEW_SHOWVERSCROLL         = 0x10;
+const sal_uInt8 BIFF12_WBVIEW_SHOWTABBAR            = 0x20;
+
+// Attention: view settings in Calc do not use com.sun.star.view.DocumentZoomType!
+const sal_Int16 API_ZOOMTYPE_PERCENT                = 0;        /// Zoom value in percent.
+
+const sal_Int32 API_ZOOMVALUE_MIN                   = 20;       /// Minimum zoom in Calc.
+const sal_Int32 API_ZOOMVALUE_MAX                   = 400;      /// Maximum zoom in Calc.
+
+// no predefined constants for split mode
+const sal_Int16 API_SPLITMODE_NONE                  = 0;        /// No splits in window.
+const sal_Int16 API_SPLITMODE_SPLIT                 = 1;        /// Window is split.
+const sal_Int16 API_SPLITMODE_FREEZE                = 2;        /// Window has frozen panes.
+
+// no predefined constants for pane identifiers
+const sal_Int16 API_SPLITPANE_TOPLEFT               = 0;        /// Top-left, or top pane.
+const sal_Int16 API_SPLITPANE_TOPRIGHT              = 1;        /// Top-right pane.
+const sal_Int16 API_SPLITPANE_BOTTOMLEFT            = 2;        /// Bottom-left, bottom, left, or single pane.
+const sal_Int16 API_SPLITPANE_BOTTOMRIGHT           = 3;        /// Bottom-right, or right pane.
+
+/** Returns the OOXML pane identifier from the passed BIFF pane id. */
+sal_Int32 lclGetOoxPaneId( sal_Int32 nBiffPaneId, sal_Int32 nDefaultPaneId )
+{
+    static const sal_Int32 spnPaneIds[] = { XML_bottomRight, XML_topRight, XML_bottomLeft, XML_topLeft };
+    return STATIC_ARRAY_SELECT( spnPaneIds, nBiffPaneId, nDefaultPaneId );
+}
+
+} // namespace
+
+PaneSelectionModel::PaneSelectionModel() :
+    mnActiveCellId( 0 )
+{
+}
+
+SheetViewModel::SheetViewModel() :
+    mnWorkbookViewId( 0 ),
+    mnViewType( XML_normal ),
+    mnActivePaneId( XML_topLeft ),
+    mnPaneState( XML_split ),
+    mfSplitX( 0.0 ),
+    mfSplitY( 0.0 ),
+    mnCurrentZoom( 0 ),
+    mnNormalZoom( 0 ),
+    mnSheetLayoutZoom( 0 ),
+    mnPageLayoutZoom( 0 ),
+    mbSelected( false ),
+    mbRightToLeft( false ),
+    mbDefGridColor( true ),
+    mbShowFormulas( false ),
+    mbShowGrid( true ),
+    mbShowHeadings( true ),
+    mbShowZeros( true ),
+    mbShowOutline( true ),
+    mbZoomToFit( false )
+{
+    maGridColor.setIndexed( OOX_COLOR_WINDOWTEXT );
+}
+
+bool SheetViewModel::isPageBreakPreview() const
+{
+    return mnViewType == XML_pageBreakPreview;
+}
+
+sal_Int32 SheetViewModel::getNormalZoom() const
+{
+    const sal_Int32& rnZoom = isPageBreakPreview() ? mnNormalZoom : mnCurrentZoom;
+    sal_Int32 nZoom = (rnZoom > 0) ? rnZoom : OOX_SHEETVIEW_NORMALZOOM_DEF;
+    return getLimitedValue< sal_Int32 >( nZoom, API_ZOOMVALUE_MIN, API_ZOOMVALUE_MAX );
+}
+
+sal_Int32 SheetViewModel::getPageBreakZoom() const
+{
+    const sal_Int32& rnZoom = isPageBreakPreview() ? mnCurrentZoom : mnSheetLayoutZoom;
+    sal_Int32 nZoom = (rnZoom > 0) ? rnZoom : OOX_SHEETVIEW_SHEETLAYZOOM_DEF;
+    return getLimitedValue< sal_Int32 >( nZoom, API_ZOOMVALUE_MIN, API_ZOOMVALUE_MAX );
+}
+
+::Color SheetViewModel::getGridColor( const FilterBase& rFilter ) const
+{
+    return mbDefGridColor ? API_RGB_TRANSPARENT : maGridColor.getColor( rFilter.getGraphicHelper() );
+}
+
+const PaneSelectionModel* SheetViewModel::getActiveSelection() const
+{
+    return maPaneSelMap.get( mnActivePaneId ).get();
+}
+
+PaneSelectionModel& SheetViewModel::createPaneSelection( sal_Int32 nPaneId )
+{
+    PaneSelectionModelMap::mapped_type& rxPaneSel = maPaneSelMap[ nPaneId ];
+    if( !rxPaneSel )
+        rxPaneSel = std::make_shared<PaneSelectionModel>();
+    return *rxPaneSel;
+}
+
+SheetViewSettings::SheetViewSettings( const WorksheetHelper& rHelper ) :
+    WorksheetHelper( rHelper )
+{
+}
+
+void SheetViewSettings::importSheetView( const AttributeList& rAttribs )
+{
+    SheetViewModelRef xModel = createSheetView();
+    xModel->maGridColor.setIndexed( rAttribs.getInteger( XML_colorId, OOX_COLOR_WINDOWTEXT ) );
+    xModel->maFirstPos        = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_topLeftCell, OUString() ), getSheetIndex(), false );
+    xModel->mnWorkbookViewId  = rAttribs.getToken( XML_workbookViewId, 0 );
+    xModel->mnViewType        = rAttribs.getToken( XML_view, XML_normal );
+    xModel->mnCurrentZoom     = rAttribs.getInteger( XML_zoomScale, 100 );
+    xModel->mnNormalZoom      = rAttribs.getInteger( XML_zoomScaleNormal, 0 );
+    xModel->mnSheetLayoutZoom = rAttribs.getInteger( XML_zoomScaleSheetLayoutView, 0 );
+    xModel->mnPageLayoutZoom  = rAttribs.getInteger( XML_zoomScalePageLayoutView, 0 );
+    xModel->mbSelected        = rAttribs.getBool( XML_tabSelected, false );
+    xModel->mbRightToLeft     = rAttribs.getBool( XML_rightToLeft, false );
+    xModel->mbDefGridColor    = rAttribs.getBool( XML_defaultGridColor, true );
+    xModel->mbShowFormulas    = rAttribs.getBool( XML_showFormulas, false );
+    xModel->mbShowGrid        = rAttribs.getBool( XML_showGridLines, true );
+    xModel->mbShowHeadings    = rAttribs.getBool( XML_showRowColHeaders, true );
+    xModel->mbShowZeros       = rAttribs.getBool( XML_showZeros, true );
+    xModel->mbShowOutline     = rAttribs.getBool( XML_showOutlineSymbols, true );
+}
+
+void SheetViewSettings::importPane( const AttributeList& rAttribs )
+{
+    OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importPane - missing sheet view model" );
+    if( !maSheetViews.empty() )
+    {
+        SheetViewModel& rModel = *maSheetViews.back();
+        rModel.maSecondPos    = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_topLeftCell, OUString() ), getSheetIndex(), false );
+        rModel.mnActivePaneId = rAttribs.getToken( XML_activePane, XML_topLeft );
+        rModel.mnPaneState    = rAttribs.getToken( XML_state, XML_split );
+        rModel.mfSplitX       = rAttribs.getDouble( XML_xSplit, 0.0 );
+        rModel.mfSplitY       = rAttribs.getDouble( XML_ySplit, 0.0 );
+    }
+}
+
+void SheetViewSettings::importSelection( const AttributeList& rAttribs )
+{
+    OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importSelection - missing sheet view model" );
+    if( !maSheetViews.empty() )
+    {
+        // pane this selection belongs to
+        sal_Int32 nPaneId = rAttribs.getToken( XML_pane, XML_topLeft );
+        PaneSelectionModel& rSelData = maSheetViews.back()->createPaneSelection( nPaneId );
+        // cursor position
+        rSelData.maActiveCell = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_activeCell, OUString() ), getSheetIndex(), false );
+        rSelData.mnActiveCellId = rAttribs.getInteger( XML_activeCellId, 0 );
+        // selection
+        rSelData.maSelection.RemoveAll();
+        getAddressConverter().convertToCellRangeList( rSelData.maSelection, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), false );
+    }
+}
+
+void SheetViewSettings::importChartSheetView( const AttributeList& rAttribs )
+{
+    SheetViewModelRef xModel = createSheetView();
+    xModel->mnWorkbookViewId = rAttribs.getToken( XML_workbookViewId, 0 );
+    xModel->mnCurrentZoom    = rAttribs.getInteger( XML_zoomScale, 100 );
+    xModel->mbSelected       = rAttribs.getBool( XML_tabSelected, false );
+    xModel->mbZoomToFit      = rAttribs.getBool( XML_zoomToFit, false );
+}
+
+void SheetViewSettings::importSheetView( SequenceInputStream& rStrm )
+{
+    SheetViewModelRef xModel = createSheetView();
+    sal_uInt16 nFlags;
+    sal_Int32 nViewType;
+    BinAddress aFirstPos;
+    nFlags = rStrm.readuInt16();
+    nViewType = rStrm.readInt32();
+    rStrm >> aFirstPos;
+    xModel->maGridColor.importColorId( rStrm );
+    xModel->mnCurrentZoom = rStrm.readuInt16();
+    xModel->mnNormalZoom = rStrm.readuInt16();
+    xModel->mnSheetLayoutZoom = rStrm.readuInt16();
+    xModel->mnPageLayoutZoom = rStrm.readuInt16();
+    xModel->mnWorkbookViewId = rStrm.readInt32();
+
+    xModel->maFirstPos = getAddressConverter().createValidCellAddress( aFirstPos, getSheetIndex(), false );
+    static const sal_Int32 spnViewTypes[] = { XML_normal, XML_pageBreakPreview, XML_pageLayout };
+    xModel->mnViewType = STATIC_ARRAY_SELECT( spnViewTypes, nViewType, XML_normal );
+    xModel->mbSelected     = getFlag( nFlags, BIFF12_SHEETVIEW_SELECTED );
+    xModel->mbRightToLeft  = getFlag( nFlags, BIFF12_SHEETVIEW_RIGHTTOLEFT );
+    xModel->mbDefGridColor = getFlag( nFlags, BIFF12_SHEETVIEW_DEFGRIDCOLOR );
+    xModel->mbShowFormulas = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWFORMULAS );
+    xModel->mbShowGrid     = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWGRID );
+    xModel->mbShowHeadings = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWHEADINGS );
+    xModel->mbShowZeros    = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWZEROS );
+    xModel->mbShowOutline  = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWOUTLINE );
+}
+
+void SheetViewSettings::importPane( SequenceInputStream& rStrm )
+{
+    OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importPane - missing sheet view model" );
+    if( maSheetViews.empty() )
+        return;
+
+    SheetViewModel& rModel = *maSheetViews.back();
+
+    BinAddress aSecondPos;
+    sal_Int32 nActivePaneId;
+    sal_uInt8 nFlags;
+    rModel.mfSplitX = rStrm.readDouble();
+    rModel.mfSplitY = rStrm.readDouble();
+    rStrm >> aSecondPos;
+    nActivePaneId = rStrm.readInt32();
+    nFlags = rStrm.readuChar();
+
+    rModel.maSecondPos    = getAddressConverter().createValidCellAddress( aSecondPos, getSheetIndex(), false );
+    rModel.mnActivePaneId = lclGetOoxPaneId( nActivePaneId, XML_topLeft );
+    rModel.mnPaneState    = getFlagValue( nFlags, BIFF12_PANE_FROZEN, getFlagValue( nFlags, BIFF12_PANE_FROZENNOSPLIT, XML_frozen, XML_frozenSplit ), XML_split );
+}
+
+void SheetViewSettings::importSelection( SequenceInputStream& rStrm )
+{
+    OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importSelection - missing sheet view model" );
+    if( maSheetViews.empty() )
+        return;
+
+    // pane this selection belongs to
+    sal_Int32 nPaneId = rStrm.readInt32();
+    PaneSelectionModel& rPaneSel = maSheetViews.back()->createPaneSelection( lclGetOoxPaneId( nPaneId, -1 ) );
+    // cursor position
+    BinAddress aActiveCell;
+    rStrm >> aActiveCell;
+    rPaneSel.mnActiveCellId = rStrm.readInt32();
+    rPaneSel.maActiveCell = getAddressConverter().createValidCellAddress( aActiveCell, getSheetIndex(), false );
+    // selection
+    BinRangeList aSelection;
+    rStrm >> aSelection;
+    rPaneSel.maSelection.RemoveAll();
+    getAddressConverter().convertToCellRangeList( rPaneSel.maSelection, aSelection, getSheetIndex(), false );
+}
+
+void SheetViewSettings::importChartSheetView( SequenceInputStream& rStrm )
+{
+    SheetViewModelRef xModel = createSheetView();
+    sal_uInt16 nFlags;
+    nFlags = rStrm.readuInt16();
+    xModel->mnCurrentZoom = rStrm.readInt32();
+    xModel->mnWorkbookViewId = rStrm.readInt32();
+
+    xModel->mbSelected  = getFlag( nFlags, BIFF12_CHARTSHEETVIEW_SELECTED );
+    xModel->mbZoomToFit = getFlag( nFlags, BIFF12_CHARTSHEETVIEW_ZOOMTOFIT );
+}
+
+void SheetViewSettings::finalizeImport()
+{
+    // force creation of sheet view model to get the Excel defaults
+    SheetViewModelRef xModel = maSheetViews.empty() ? createSheetView() : maSheetViews.front();
+
+    // #i59590# #158194# special handling for chart sheets (Excel ignores some settings in chart sheets)
+    if( getSheetType() == WorksheetType::Chart )
+    {
+        xModel->maPaneSelMap.clear();
+        xModel->maFirstPos = xModel->maSecondPos = ScAddress( SCCOL ( 0 ), SCROW ( 0 ), getSheetIndex() );
+        xModel->mnViewType = XML_normal;
+        xModel->mnActivePaneId = XML_topLeft;
+        xModel->mnPaneState = XML_split;
+        xModel->mfSplitX = xModel->mfSplitY = 0.0;
+        xModel->mbRightToLeft = false;
+        xModel->mbDefGridColor = true;
+        xModel->mbShowFormulas = false;
+        xModel->mbShowGrid = true;
+        xModel->mbShowHeadings = true;
+        xModel->mbShowZeros = true;
+        xModel->mbShowOutline = true;
+    }
+
+    // sheet selected (active sheet must be selected)
+    bool bSelected = xModel->mbSelected || (getSheetIndex() == getViewSettings().getActiveCalcSheet());
+    if ( bSelected )
+    {
+        // active tab/sheet cannot be hidden
+        // always force it to be displayed
+        getSheet()->setPropertyValue( u"IsVisible"_ustr, Any(true) );
+    }
+    // visible area and current cursor position (selection not supported via API)
+    ScAddress aFirstPos = xModel->maFirstPos;
+    const PaneSelectionModel* pPaneSel = xModel->getActiveSelection();
+    ScAddress aCursor = pPaneSel ? pPaneSel->maActiveCell : aFirstPos;
+
+    // freeze/split position default
+    sal_Int16 nHSplitMode = API_SPLITMODE_NONE;
+    sal_Int16 nVSplitMode = API_SPLITMODE_NONE;
+    sal_Int32 nHSplitPos = 0;
+    sal_Int32 nVSplitPos = 0;
+    // active pane default
+    sal_Int16 nActivePane = API_SPLITPANE_BOTTOMLEFT;
+
+    // freeze/split position
+    if( (xModel->mnPaneState == XML_frozen) || (xModel->mnPaneState == XML_frozenSplit) )
+    {
+        /*  Frozen panes: handle split position as row/column positions.
+            #i35812# Excel uses number of visible rows/columns in the
+                frozen area (rows/columns scrolled outside are not included),
+                Calc uses absolute position of first unfrozen row/column. */
+        const ScAddress& rMaxApiPos = getAddressConverter().getMaxApiAddress();
+        if( (xModel->mfSplitX >= 1.0) && ( xModel->maFirstPos.Col() + xModel->mfSplitX <= rMaxApiPos.Col() ) )
+            nHSplitPos = static_cast< sal_Int32 >( xModel->maFirstPos.Col() + xModel->mfSplitX );
+        nHSplitMode = (nHSplitPos > 0) ? API_SPLITMODE_FREEZE : API_SPLITMODE_NONE;
+        if( (xModel->mfSplitY >= 1.0) && ( xModel->maFirstPos.Row() + xModel->mfSplitY <= rMaxApiPos.Row() ) )
+            nVSplitPos = static_cast< sal_Int32 >( xModel->maFirstPos.Row() + xModel->mfSplitY );
+        nVSplitMode = (nVSplitPos > 0) ? API_SPLITMODE_FREEZE : API_SPLITMODE_NONE;
+    }
+    else if( xModel->mnPaneState == XML_split )
+    {
+        // split window: view settings API uses twips...
+        nHSplitPos = getLimitedValue< sal_Int32, double >( xModel->mfSplitX + 0.5, 0, SAL_MAX_INT32 );
+        nHSplitMode = (nHSplitPos > 0) ? API_SPLITMODE_SPLIT : API_SPLITMODE_NONE;
+        nVSplitPos = getLimitedValue< sal_Int32, double >( xModel->mfSplitY + 0.5, 0, SAL_MAX_INT32 );
+        nVSplitMode = (nVSplitPos > 0) ? API_SPLITMODE_SPLIT : API_SPLITMODE_NONE;
+    }
+
+    // active pane
+    switch( xModel->mnActivePaneId )
+    {
+        // no horizontal split -> always use left panes
+        // no vertical split -> always use *bottom* panes
+        case XML_topLeft:
+            nActivePane = (nVSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMLEFT : API_SPLITPANE_TOPLEFT;
+        break;
+        case XML_topRight:
+            nActivePane = (nHSplitMode == API_SPLITMODE_NONE) ?
+                ((nVSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMLEFT : API_SPLITPANE_TOPLEFT) :
+                ((nVSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMRIGHT : API_SPLITPANE_TOPRIGHT);
+        break;
+        case XML_bottomLeft:
+            nActivePane = API_SPLITPANE_BOTTOMLEFT;
+        break;
+        case XML_bottomRight:
+            nActivePane = (nHSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMLEFT : API_SPLITPANE_BOTTOMRIGHT;
+        break;
+    }
+
+    // write the sheet view settings into the property sequence
+    PropertyMap aPropMap;
+    aPropMap.setProperty( PROP_TableSelected, bSelected);
+    aPropMap.setProperty( PROP_CursorPositionX, aCursor.Col() );
+    aPropMap.setProperty( PROP_CursorPositionY, aCursor.Row() );
+    aPropMap.setProperty( PROP_HorizontalSplitMode, nHSplitMode);
+    aPropMap.setProperty( PROP_VerticalSplitMode, nVSplitMode);
+    aPropMap.setProperty( PROP_HorizontalSplitPositionTwips, nHSplitPos);
+    aPropMap.setProperty( PROP_VerticalSplitPositionTwips, nVSplitPos);
+    aPropMap.setProperty( PROP_ActiveSplitRange, nActivePane);
+    aPropMap.setProperty( PROP_PositionLeft, aFirstPos.Col() );
+    aPropMap.setProperty( PROP_PositionTop, aFirstPos.Row() );
+    aPropMap.setProperty( PROP_PositionRight, xModel->maSecondPos.Col() );
+    aPropMap.setProperty( PROP_PositionBottom, ((nVSplitPos > 0) ? xModel->maSecondPos.Row() : xModel->maFirstPos.Row() ) );
+    aPropMap.setProperty( PROP_ZoomType, API_ZOOMTYPE_PERCENT);
+    aPropMap.setProperty( PROP_ZoomValue, static_cast< sal_Int16 >( xModel->getNormalZoom() ));
+    aPropMap.setProperty( PROP_PageViewZoomValue, static_cast< sal_Int16 >( xModel->getPageBreakZoom() ));
+    aPropMap.setProperty( PROP_GridColor, xModel->getGridColor( getBaseFilter() ));
+    aPropMap.setProperty( PROP_ShowPageBreakPreview, xModel->isPageBreakPreview());
+    aPropMap.setProperty( PROP_ShowFormulas, xModel->mbShowFormulas);
+    aPropMap.setProperty( PROP_ShowGrid, xModel->mbShowGrid);
+    aPropMap.setProperty( PROP_HasColumnRowHeaders, xModel->mbShowHeadings);
+    aPropMap.setProperty( PROP_ShowZeroValues, xModel->mbShowZeros);
+    aPropMap.setProperty( PROP_IsOutlineSymbolsSet, xModel->mbShowOutline);
+
+    // store sheet view settings in global view settings object
+    getViewSettings().setSheetViewSettings( getSheetIndex(), xModel, Any( aPropMap.makePropertyValueSequence() ) );
+}
+
+bool SheetViewSettings::isSheetRightToLeft() const
+{
+    return !maSheetViews.empty() && maSheetViews.front()->mbRightToLeft;
+}
+
+// private --------------------------------------------------------------------
+
+SheetViewModelRef SheetViewSettings::createSheetView()
+{
+    SheetViewModelRef xModel = std::make_shared<SheetViewModel>();
+    maSheetViews.push_back( xModel );
+    return xModel;
+}
+
+WorkbookViewModel::WorkbookViewModel() :
+    mnWinX( 0 ),
+    mnWinY( 0 ),
+    mnWinWidth( 0 ),
+    mnWinHeight( 0 ),
+    mnActiveSheet( 0 ),
+    mnFirstVisSheet( 0 ),
+    mnTabBarWidth( OOX_BOOKVIEW_TABBARRATIO_DEF ),
+    mnVisibility( XML_visible ),
+    mbShowTabBar( true ),
+    mbShowHorScroll( true ),
+    mbShowVerScroll( true ),
+    mbMinimized( false )
+{
+}
+
+ViewSettings::ViewSettings( const WorkbookHelper& rHelper ) :
+    WorkbookHelper( rHelper ),
+    mbValidOleSize( false )
+{
+}
+
+void ViewSettings::importWorkbookView( const AttributeList& rAttribs )
+{
+    WorkbookViewModel& rModel = createWorkbookView();
+    rModel.mnWinX          = rAttribs.getInteger( XML_xWindow, 0 );
+    rModel.mnWinY          = rAttribs.getInteger( XML_yWindow, 0 );
+    rModel.mnWinWidth      = rAttribs.getInteger( XML_windowWidth, 0 );
+    rModel.mnWinHeight     = rAttribs.getInteger( XML_windowHeight, 0 );
+    rModel.mnActiveSheet   = rAttribs.getInteger( XML_activeTab, 0 );
+    rModel.mnFirstVisSheet = rAttribs.getInteger( XML_firstSheet, 0 );
+    rModel.mnTabBarWidth   = rAttribs.getInteger( XML_tabRatio, 600 );
+    rModel.mnVisibility    = rAttribs.getToken( XML_visibility, XML_visible );
+    rModel.mbShowTabBar    = rAttribs.getBool( XML_showSheetTabs, true );
+    rModel.mbShowHorScroll = rAttribs.getBool( XML_showHorizontalScroll, true );
+    rModel.mbShowVerScroll = rAttribs.getBool( XML_showVerticalScroll, true );
+    rModel.mbMinimized     = rAttribs.getBool( XML_minimized, false );
+}
+
+void ViewSettings::importOleSize( const AttributeList& rAttribs )
+{
+    OUString aRange = rAttribs.getString( XML_ref, OUString() );
+    mbValidOleSize = getAddressConverter().convertToCellRange( maOleSize, aRange, 0, true, false );
+}
+
+void ViewSettings::importWorkbookView( SequenceInputStream& rStrm )
+{
+    WorkbookViewModel& rModel = createWorkbookView();
+    sal_uInt8 nFlags;
+    rModel.mnWinX = rStrm.readInt32();
+    rModel.mnWinY = rStrm.readInt32();
+    rModel.mnWinWidth = rStrm.readInt32();
+    rModel.mnWinHeight = rStrm.readInt32();
+    rModel.mnTabBarWidth = rStrm.readInt32();
+    rModel.mnFirstVisSheet = rStrm.readInt32();
+    rModel.mnActiveSheet = rStrm.readInt32();
+    nFlags = rStrm.readuChar();
+    rModel.mnVisibility    = getFlagValue( nFlags, BIFF12_WBVIEW_HIDDEN, XML_hidden, XML_visible );
+    rModel.mbShowTabBar    = getFlag( nFlags, BIFF12_WBVIEW_SHOWTABBAR );
+    rModel.mbShowHorScroll = getFlag( nFlags, BIFF12_WBVIEW_SHOWHORSCROLL );
+    rModel.mbShowVerScroll = getFlag( nFlags, BIFF12_WBVIEW_SHOWVERSCROLL );
+    rModel.mbMinimized     = getFlag( nFlags, BIFF12_WBVIEW_MINIMIZED );
+}
+
+void ViewSettings::importOleSize( SequenceInputStream& rStrm )
+{
+    BinRange aBinRange;
+    rStrm >> aBinRange;
+    mbValidOleSize = getAddressConverter().convertToCellRange( maOleSize, aBinRange, 0, true, false );
+}
+
+void ViewSettings::setSheetViewSettings( sal_Int16 nSheet, const SheetViewModelRef& rxSheetView, const Any& rProperties )
+{
+    maSheetViews[ nSheet ] = rxSheetView;
+    maSheetProps[ nSheet ] = rProperties;
+}
+
+void ViewSettings::setSheetUsedArea( const ScRange& rUsedArea )
+{
+    assert( rUsedArea.IsValid() );
+    maSheetUsedAreas[ rUsedArea.aStart.Tab() ] = rUsedArea;
+}
+
+void ViewSettings::finalizeImport()
+{
+    const WorksheetBuffer& rWorksheets = getWorksheets();
+    if( rWorksheets.getWorksheetCount() <= 0 ) return;
+
+    // force creation of workbook view model to get the Excel defaults
+    const WorkbookViewModel& rModel = maBookViews.empty() ? createWorkbookView() : *maBookViews.front();
+
+    // show object mode is part of workbook settings
+    sal_Int16 nShowMode = getWorkbookSettings().getApiShowObjectMode();
+
+    // view settings for all sheets
+    Reference< XNameContainer > xSheetsNC = NamedPropertyValues::create( getBaseFilter().getComponentContext() );
+    if( !xSheetsNC.is() ) return;
+    for( const auto& [rWorksheet, rObj] : maSheetProps )
+        ContainerHelper::insertByName( xSheetsNC, rWorksheets.getCalcSheetName( rWorksheet ), rObj );
+
+    // use active sheet to set sheet properties that are document-global in Calc
+    sal_Int16 nActiveSheet = getActiveCalcSheet();
+    SheetViewModelRef& rxActiveSheetView = maSheetViews[ nActiveSheet ];
+    OSL_ENSURE( rxActiveSheetView, "ViewSettings::finalizeImport - missing active sheet view settings" );
+    if( !rxActiveSheetView )
+        rxActiveSheetView = std::make_shared<SheetViewModel>();
+
+    rtl::Reference< comphelper::IndexedPropertyValuesContainer > xContainer = new comphelper::IndexedPropertyValuesContainer();
+    try
+    {
+        PropertyMap aPropMap;
+        aPropMap.setProperty( PROP_Tables, xSheetsNC);
+        aPropMap.setProperty( PROP_ActiveTable, rWorksheets.getCalcSheetName( nActiveSheet ));
+        aPropMap.setProperty( PROP_HasHorizontalScrollBar, rModel.mbShowHorScroll);
+        aPropMap.setProperty( PROP_HasVerticalScrollBar, rModel.mbShowVerScroll);
+        aPropMap.setProperty( PROP_HasSheetTabs, rModel.mbShowTabBar);
+        aPropMap.setProperty( PROP_RelativeHorizontalTabbarWidth, rModel.mnTabBarWidth / 1000.0);
+        aPropMap.setProperty( PROP_ShowObjects, nShowMode);
+        aPropMap.setProperty( PROP_ShowCharts, nShowMode);
+        aPropMap.setProperty( PROP_ShowDrawing, nShowMode);
+        aPropMap.setProperty( PROP_GridColor, rxActiveSheetView->getGridColor( getBaseFilter() ));
+        aPropMap.setProperty( PROP_ShowPageBreakPreview, rxActiveSheetView->isPageBreakPreview());
+        aPropMap.setProperty( PROP_ShowFormulas, rxActiveSheetView->mbShowFormulas);
+        if (!Application::IsHeadlessModeEnabled())
+        {
+            // tdf#126541 sheet based grid visibility shouldn't overwrite the global grid visibility
+            aPropMap.setProperty(PROP_ShowGrid, true);
+        }
+        else
+        {
+            // tdf#142854 except for headless mode, otherwise we could get a regression here:
+            // The sheet based grid visibility (bShowGrid) is stored in view settings. Headless
+            // mode means not to export view setting, including sheet based grid visibility.
+            // As the old workaround, use global visibility to keep the losing sheet visibility.
+            // FIXME: this only works correctly if all sheets have the same grid visibility.
+            // The sheet based bShowGrid should be moved to another location, which is supported
+            // by the headless mode, too.
+            aPropMap.setProperty(PROP_ShowGrid, rxActiveSheetView->mbShowGrid);
+        }
+        aPropMap.setProperty( PROP_HasColumnRowHeaders, rxActiveSheetView->mbShowHeadings);
+        aPropMap.setProperty( PROP_ShowZeroValues, rxActiveSheetView->mbShowZeros);
+        aPropMap.setProperty( PROP_IsOutlineSymbolsSet, rxActiveSheetView->mbShowOutline);
+
+        xContainer->insertByIndex( 0, Any( aPropMap.makePropertyValueSequence() ) );
+        getDocument()->setViewData( xContainer );
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL( "ViewSettings::finalizeImport - cannot create document view settings" );
+    }
+
+    /*  Set visible area to be used if this document is an embedded OLE object.
+        #i44077# If a new OLE object is inserted from file, there is no OLESIZE
+        record in the Excel file. In this case, use the used area calculated
+        from file contents (used cells and drawing objects). */
+    maOleSize.aStart.SetTab( nActiveSheet );
+    maOleSize.aEnd.SetTab( nActiveSheet );
+    const ScRange* pVisibleArea = mbValidOleSize ?
+        &maOleSize : ContainerHelper::getMapElement( maSheetUsedAreas, nActiveSheet );
+    if( !pVisibleArea )
+        return;
+
+    // calculate the visible area in units of 1/100 mm
+    PropertySet aRangeProp( getCellRangeFromDoc( *pVisibleArea ) );
+    css::awt::Point aPos;
+    css::awt::Size aSize;
+    if( aRangeProp.getProperty( aPos, PROP_Position ) && aRangeProp.getProperty( aSize, PROP_Size ) )
+    {
+        // set the visible area as sequence of long at the media descriptor
+        Sequence< sal_Int32 > aWinExtent{ aPos.X, aPos.Y,
+                                          aPos.X + aSize.Width, aPos.Y + aSize.Height };
+        getBaseFilter().getMediaDescriptor()[ u"WinExtent"_ustr ] <<= aWinExtent;
+    }
+}
+
+sal_Int16 ViewSettings::getActiveCalcSheet() const
+{
+    return maBookViews.empty() ? 0 : ::std::max< sal_Int16 >( getWorksheets().getCalcSheetIndex( maBookViews.front()->mnActiveSheet ), 0 );
+}
+
+// private --------------------------------------------------------------------
+
+WorkbookViewModel& ViewSettings::createWorkbookView()
+{
+    WorkbookViewModelRef xModel = std::make_shared<WorkbookViewModel>();
+    maBookViews.push_back( xModel );
+    return *xModel;
+}
+
+} // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

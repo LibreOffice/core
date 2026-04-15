@@ -1,0 +1,69 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module i18n {
+
+
+/** Extra transliteration module enumeration to use with
+    XTransliteration::loadModule()
+
+    The values used in this group need to be different from the ones in
+    TransliterationModules and TransliterationModulesNew!
+ */
+
+
+// using a constant group instead of enum leaves room for additional values later on...
+constants TransliterationModulesExtra
+{
+    /** The first character of the sentence is put in upper case
+     */
+    const short SENTENCE_CASE = 200;
+
+
+    /** The first character of the word is put in upper case.
+     * This one is part
+     */
+    const short TITLE_CASE = 201;
+
+
+    /** All characters of the word are to change their case from small letters
+     * to capital letters and vice versa.
+     */
+    const short TOGGLE_CASE = 202;
+
+    /** Ignore diacritics. Despite the _CTL name suffix this is not only
+        about CTL/Arabic diacritic characters, though these are handled
+        as well, but the transliteration decomposes and removes any
+        diacritic from characters.
+
+        Because we cannot extend the TransliterationModules enum we use
+        TransliterationModulesExtra and it will act the same way.
+     */
+    const long IGNORE_DIACRITICS_CTL   = 0x40000000;
+
+    /** Ignore Kashida mark. */
+    const long IGNORE_KASHIDA_CTL      = 0x00000800;
+
+    const long END_OF_MODULE    = 0;
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

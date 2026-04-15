@@ -1,0 +1,3 @@
+"MailToDispatcher";"com::sun::star::lang::XInitialization#optional";"initialize()"
+"MailToDispatcher";"com::sun::star::frame::XDispatchProvider";"queryDispatch()"
+"MailToDispatcher";"com::sun::star::frame::XDispatchProvider";"queryDispatches()"

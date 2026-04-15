@@ -1,0 +1,25 @@
+--- libwpd/src/lib/libwpd_math.h
++++ libwpd/src/lib/libwpd_math.h
+@@ -31,9 +31,9 @@
+ 
+ #include <math.h>
+ 
+-#if defined(_WIN32) && !defined(__MINGW32__)
++#if defined(_MSC_VER) && _MSC_VER < 1800
+ double rint(double x);
+-#endif /* _WIN32 */
++#endif /* _MSC_VER < 1800 */
+ 
+ #endif /* LIBWPD_MATH_H */
+ /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
+--- libwpd/src/lib/libwpd_math.cpp
++++ libwpd/src/lib/libwpd_math.cpp
+@@ -26,7 +26,7 @@
+ 
+ #include "libwpd_math.h"
+ 
+-#if defined(_WIN32) && !defined(__MINGW32__)
++#if defined(_MSC_VER) && _MSC_VER < 1800
+ 
+ double rint(double x)
+ {

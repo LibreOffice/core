@@ -1,0 +1,12 @@
+--- src/Numbertext.cxx
++++ src/Numbertext.cxx
+@@ -1,6 +1,9 @@
+  * 2018 (c) László Németh
+  * License: LGPL/BSD dual license */
+ 
++#if defined __GNUC__
++#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++#endif
+ #include <codecvt>
+ #include <locale>
+ #include <sstream>

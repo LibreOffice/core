@@ -1,0 +1,11 @@
+--- source/configure.ac
++++ source/configure.ac
+@@ -195,7 +195,7 @@
+ fi
+ 
+ # TODO(ICU-20301): Remove fallback to Python 2.
+-AC_CHECK_PROGS(PYTHON, python3 "py -3" python "py")
++PYTHON=
+ AC_SUBST(PYTHON)
+ 
+ # Check for the platform make

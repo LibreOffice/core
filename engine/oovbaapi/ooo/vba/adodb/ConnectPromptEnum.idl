@@ -1,0 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module adodb {
+    constants ConnectPromptEnum {
+        const long adPromptAlways = 1;
+        const long adPromptComplete = 2;
+        const long adPromptCompleteRequired = 3;
+        const long adPromptNever = 4;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

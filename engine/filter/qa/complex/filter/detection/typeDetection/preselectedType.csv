@@ -1,0 +1,6 @@
+fileAlias;preselectFileType;expectFileType
+csv1;generic_Text;generic_Text
+csv1;generic_Text;generic_Text
+#csv2;generic_Text
+#csv2;generic_Text
+text1;generic_Text;generic_Text

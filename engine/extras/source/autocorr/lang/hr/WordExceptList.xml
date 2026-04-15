@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+﻿<!-- V. https://github.com/krunose/libo-acorr-hr/blob/master/dokumentacija.md#wordexceptlistxml -->
+	<block-list:block block-list:abbreviated-name="CTa"/><!-- [engl.] Computed Tomography [pogreška: CT-a] -->
+	<block-list:block block-list:abbreviated-name="CTom"/><!-- [engl.] Computed Tomography [pogreška: CT-om] -->
+	<block-list:block block-list:abbreviated-name="CTu"/><!-- [engl.] Computed Tomography [pogreška: CT-u] -->
+	<block-list:block block-list:abbreviated-name="CVa"/><!-- lat. curriculum vitae [pogreška: CV-a] -->
+	<block-list:block block-list:abbreviated-name="CVom"/><!-- lat. curriculum vitae [pogreška: CV-om -->
+	<block-list:block block-list:abbreviated-name="CVu"/><!-- lat. curriculum vitae [pogreška: CV-u -->
+	<block-list:block block-list:abbreviated-name="EUa"/><!-- Europska unija [pogreška: EU-a] -->
+	<block-list:block block-list:abbreviated-name="EUem"/><!-- Europska unija [pogreška: EU-om] -->
+	<block-list:block block-list:abbreviated-name="EUi"/><!-- Europska unija [pogreška: EU-a] -->
+	<block-list:block block-list:abbreviated-name="EUom"/><!-- Europska unija [pogreška: EU-om] -->
+	<block-list:block block-list:abbreviated-name="EUu"/><!-- Europska unija [pogreška: EU-u] -->
+	<block-list:block block-list:abbreviated-name="GHz"/><!-- gigaherc -->
+	<block-list:block block-list:abbreviated-name="HPa"/><!-- Hrvatska pošta [pogreška: HP-a] -->
+	<block-list:block block-list:abbreviated-name="HPom"/><!-- Hrvatska pošta [pogreška: HP-om] -->
+	<block-list:block block-list:abbreviated-name="HPu"/><!-- Hrvatska pošta [pogreška: HP-u] -->
+	<block-list:block block-list:abbreviated-name="HVa"/><!-- Hrvatska vojska [pogreška: HV-a] -->
+	<block-list:block block-list:abbreviated-name="HVom"/><!-- Hrvatska vojska [pogreška: HV-om] -->
+	<block-list:block block-list:abbreviated-name="HVu"/><!-- Hrvatska vojska [pogreška: HV-u] -->
+	<block-list:block block-list:abbreviated-name="HŽa"/><!-- Hrvatske željeznice [pogreška: HŽ-a] -->
+	<block-list:block block-list:abbreviated-name="HŽom"/><!-- Hrvatske željeznice [pogreška: HŽ-om] -->
+	<block-list:block block-list:abbreviated-name="HŽu"/><!-- Hrvatske željeznice [pogreška: HŽ-u] -->
+	<block-list:block block-list:abbreviated-name="MHz"/><!-- megaherc -->
+	<block-list:block block-list:abbreviated-name="MWh"/><!-- megavatsat -->
+	<block-list:block block-list:abbreviated-name="OOo"/><!-- OpenOffice -->
+	<block-list:block block-list:abbreviated-name="PCa"/><!-- engl. Personal Computer [pogreška: PC-a] -->
+	<block-list:block block-list:abbreviated-name="PCja"/><!-- engl. Personal Computer [pogreška: PC-a] -->
+	<block-list:block block-list:abbreviated-name="PCjem"/><!-- engl. Personal Computer [pogreška: PC-om] -->
+	<block-list:block block-list:abbreviated-name="PCjom"/><!-- engl. Personal Computer [pogreška: PC-om] -->
+	<block-list:block block-list:abbreviated-name="PCju"/><!-- engl. Personal Computer [pogreška: PC-u] -->
+	<block-list:block block-list:abbreviated-name="PCom"/><!-- engl. Personal Computer [pogreška: PC-om] -->
+	<block-list:block block-list:abbreviated-name="PCu"/><!-- engl. Personal Computer [pogreška: PC-u] -->
+	<block-list:block block-list:abbreviated-name="THz"/><!-- teraherc -->
+	<block-list:block block-list:abbreviated-name="TVa"/><!-- televizor [pogreška: TV-a] -->
+	<block-list:block block-list:abbreviated-name="TVom"/><!-- televizor [pogreška: TV-om] -->
+	<block-list:block block-list:abbreviated-name="TVu"/><!-- televizor [pogreška: TV-u] -->
+</block-list:block-list>

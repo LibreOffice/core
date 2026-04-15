@@ -1,0 +1,6 @@
+"ModuleManager";"com::sun::star::container::XNameAccess";"getByName()"
+"ModuleManager";"com::sun::star::container::XNameAccess";"getElementNames()"
+"ModuleManager";"com::sun::star::container::XNameAccess";"hasByName()"
+"ModuleManager";"com::sun::star::frame::XModuleManager";"identify()"
+"ModuleManager";"com::sun::star::container::XElementAccess";"getElementType()"
+"ModuleManager";"com::sun::star::container::XElementAccess";"hasElements()"

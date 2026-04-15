@@ -1,0 +1,30 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+
+
+
+module com { module sun { module star { module util {
+
+/** enables an object to search in its content.
+
+    Derived from com::sun::star::util::XTextSearch this interface adds
+    simple wildcard search capabilities using
+    com::sun::star::util::SearchOptions2 options.
+ */
+interface XTextSearch2 : com::sun::star::util::XTextSearch
+{
+    /** set the options for the forward or backward search.
+     */
+    void setOptions2 ([in] SearchOptions2 options);
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

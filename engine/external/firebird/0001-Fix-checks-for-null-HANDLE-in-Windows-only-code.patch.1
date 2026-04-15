@@ -1,0 +1,41 @@
+From f4c0aa3ba070e5c3ce996b33a31323a3a6820f0c Mon Sep 17 00:00:00 2001
+From: Stephan Bergmann <sbergman@redhat.com>
+Date: Wed, 2 Dec 2020 10:44:28 +0100
+Subject: Fix checks for null HANDLE in Windows-only code
+
+clang-cl failed with "error: unordered comparison between pointer and zero
+('HANDLE' (aka 'void *') and 'int')" in these two places introduced with
+f219283b72ab537c2b5938222708f35227c1ebde "Sub-task CORE-4463: Windows
+implementation for CORE-4462 (Make it possible to restore compressed .nbk files
+without explicitly decompressing them)" and
+c2cfa7824189ed7c3e5a19721effdf97c07dadfd "Prevent child process hung if it
+writes too much data to the pipe and overflow the pipe buffer".
+---
+ src/utilities/nbackup/nbackup.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/utilities/nbackup/nbackup.cpp b/src/utilities/nbackup/nbackup.cpp
+index 6598b6e331..4703079d67 100644
+--- a/src/utilities/nbackup/nbackup.cpp
++++ b/src/utilities/nbackup/nbackup.cpp
+@@ -385,7 +385,7 @@ FB_SIZE_T NBackup::read_file(FILE_HANDLE &file, void *buffer, FB_SIZE_T bufsize)
+ #ifdef WIN_NT
+ 		// Read child's stderr often to prevent child process hung if it writes
+ 		// too much data to the pipe and overflow the pipe buffer.
+-		const bool checkChild = (childStdErr > 0 && file == backup);
++		const bool checkChild = (childStdErr != 0 && file == backup);
+ 		if (checkChild)
+ 			print_child_stderr();
+ 
+@@ -790,7 +790,7 @@ void NBackup::close_backup()
+ 		return;
+ #ifdef WIN_NT
+ 	CloseHandle(backup);
+-	if (childId > 0)
++	if (childId != 0)
+ 	{
+ 		const bool killed = (WaitForSingleObject(childId, 5000) != WAIT_OBJECT_0);
+ 		if (killed)
+-- 
+2.28.0
+

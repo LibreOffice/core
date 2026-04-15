@@ -1,0 +1,413 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <vcl/svapp.hxx>
+#include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/queryinterface.hxx>
+#include <cursuno.hxx>
+#include <cellsuno.hxx>
+#include <docsh.hxx>
+#include <markdata.hxx>
+
+using namespace com::sun::star;
+
+constexpr OUString SCSHEETCELLCURSOR_SERVICE = u"com.sun.star.sheet.SheetCellCursor"_ustr;
+constexpr OUString SCCELLCURSOR_SERVICE = u"com.sun.star.table.CellCursor"_ustr;
+
+ScCellCursorObj::ScCellCursorObj(ScDocShell* pDocSh, const ScRange& rR) :
+    ScCellCursorObj_BASE( pDocSh, rR )
+{
+}
+
+ScCellCursorObj::~ScCellCursorObj()
+{
+}
+
+// XSheetCellCursor
+
+void SAL_CALL ScCellCursorObj::collapseToCurrentRegion()
+{
+    SolarMutexGuard aGuard;
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( rRanges[ 0 ] );
+
+    aOneRange.PutInOrder();
+    ScDocShell* pDocSh = GetDocShell();
+    if ( !pDocSh )
+        return;
+
+    SCCOL nStartCol = aOneRange.aStart.Col();
+    SCROW nStartRow = aOneRange.aStart.Row();
+    SCCOL nEndCol = aOneRange.aEnd.Col();
+    SCROW nEndRow = aOneRange.aEnd.Row();
+    SCTAB nTab = aOneRange.aStart.Tab();
+
+    pDocSh->GetDocument().GetDataArea(
+                    nTab, nStartCol, nStartRow, nEndCol, nEndRow, true, false );
+
+    ScRange aNew( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab );
+    SetNewRange( aNew );
+}
+
+void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
+{
+    SolarMutexGuard aGuard;
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( rRanges[ 0 ] );
+
+    aOneRange.PutInOrder();
+    ScAddress aCursor(aOneRange.aStart);        //  use the start address of the range
+
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+    {
+        ScDocument& rDoc = pDocSh->GetDocument();
+        ScRange aMatrix;
+
+        // finding the matrix range is now in GetMatrixFormulaRange in the document
+        if ( rDoc.GetMatrixFormulaRange( aCursor, aMatrix ) )
+        {
+            SetNewRange( aMatrix );
+        }
+    }
+    // that's a Bug, that this assertion comes; the API Reference says, that
+    // if there is no Matrix, the Range is left unchanged; they say nothing
+    // about an exception
+    /*if (!bFound)
+    {
+        OSL_FAIL("no matrix");
+        //! Exception, or what?
+    }*/
+}
+
+void SAL_CALL ScCellCursorObj::collapseToMergedArea()
+{
+    SolarMutexGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+    {
+        const ScRangeList& rRanges = GetRangeList();
+        OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+        ScRange aNewRange( rRanges[ 0 ] );
+
+        ScDocument& rDoc = pDocSh->GetDocument();
+        rDoc.ExtendOverlapped( aNewRange );
+        rDoc.ExtendMerge( aNewRange );                 // after ExtendOverlapped!
+
+        SetNewRange( aNewRange );
+    }
+}
+
+void SAL_CALL ScCellCursorObj::expandToEntireColumns()
+{
+    SolarMutexGuard aGuard;
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aNewRange( rRanges[ 0 ] );
+
+    aNewRange.aStart.SetRow( 0 );
+    aNewRange.aEnd.SetRow( GetDocShell()->GetDocument().MaxRow() );
+
+    SetNewRange( aNewRange );
+}
+
+void SAL_CALL ScCellCursorObj::expandToEntireRows()
+{
+    SolarMutexGuard aGuard;
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aNewRange( rRanges[ 0 ] );
+
+    aNewRange.aStart.SetCol( 0 );
+    aNewRange.aEnd.SetCol( GetDocShell()->GetDocument().MaxCol() );
+
+    SetNewRange( aNewRange );
+}
+
+void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRows )
+{
+    SolarMutexGuard aGuard;
+    if ( nColumns <= 0 || nRows <= 0 )
+    {
+        OSL_FAIL("Empty range not allowed");
+        //! and then?
+    }
+    else
+    {
+        const ScRangeList& rRanges = GetRangeList();
+        OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+        ScRange aNewRange( rRanges[ 0 ] );
+
+        aNewRange.PutInOrder();    //! really?
+
+        const auto & rDoc = GetDocShell()->GetDocument();
+        tools::Long nEndX = aNewRange.aStart.Col() + nColumns - 1;
+        tools::Long nEndY = aNewRange.aStart.Row() + nRows - 1;
+        if ( nEndX < 0 )      nEndX = 0;
+        if ( nEndX > rDoc.MaxCol() ) nEndX = rDoc.MaxCol();
+        if ( nEndY < 0 )      nEndY = 0;
+        if ( nEndY > rDoc.MaxRow() ) nEndY = rDoc.MaxRow();
+        //! error/exception or so, if too big/small
+
+        aNewRange.aEnd.SetCol(static_cast<SCCOL>(nEndX));
+        aNewRange.aEnd.SetRow(static_cast<SCROW>(nEndY));
+
+        aNewRange.PutInOrder();    //! really?
+
+        SetNewRange( aNewRange );
+    }
+}
+
+// XUsedAreaCursor
+
+void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(sal_Bool bExpand)
+{
+    SolarMutexGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( !pDocSh )
+        return;
+
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aNewRange( rRanges[0] );
+    SCTAB nTab = aNewRange.aStart.Tab();
+
+    SCCOL nUsedX = 0;       // fetch the beginning
+    SCROW nUsedY = 0;
+    if (!pDocSh->GetDocument().GetDataStart( nTab, nUsedX, nUsedY ))
+    {
+        nUsedX = 0;
+        nUsedY = 0;
+    }
+
+    aNewRange.aStart.SetCol( nUsedX );
+    aNewRange.aStart.SetRow( nUsedY );
+    if (!bExpand)
+        aNewRange.aEnd = aNewRange.aStart;
+    SetNewRange( aNewRange );
+}
+
+void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
+{
+    SolarMutexGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( !pDocSh )
+        return;
+
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aNewRange( rRanges[ 0 ]);
+    SCTAB nTab = aNewRange.aStart.Tab();
+
+    SCCOL nUsedX = 0;       // fetch the end
+    SCROW nUsedY = 0;
+    if (!pDocSh->GetDocument().GetTableArea( nTab, nUsedX, nUsedY, true ))
+    {
+        nUsedX = 0;
+        nUsedY = 0;
+    }
+
+    aNewRange.aEnd.SetCol( nUsedX );
+    aNewRange.aEnd.SetRow( nUsedY );
+    if (!bExpand)
+        aNewRange.aStart = aNewRange.aEnd;
+    SetNewRange( aNewRange );
+}
+
+// XCellCursor
+
+void SAL_CALL ScCellCursorObj::gotoStart()
+{
+    //  this is similar to collapseToCurrentRegion
+    //! something like gotoEdge with 4 possible directions is needed
+
+    SolarMutexGuard aGuard;
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( rRanges[ 0 ]);
+
+    aOneRange.PutInOrder();
+    ScDocShell* pDocSh = GetDocShell();
+    if ( !pDocSh )
+        return;
+
+    SCCOL nStartCol = aOneRange.aStart.Col();
+    SCROW nStartRow = aOneRange.aStart.Row();
+    SCCOL nEndCol = aOneRange.aEnd.Col();
+    SCROW nEndRow = aOneRange.aEnd.Row();
+    SCTAB nTab = aOneRange.aStart.Tab();
+
+    pDocSh->GetDocument().GetDataArea(
+                    nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, false );
+
+    ScRange aNew( nStartCol, nStartRow, nTab );
+    SetNewRange( aNew );
+}
+
+void SAL_CALL ScCellCursorObj::gotoEnd()
+{
+    //  this is similar to collapseToCurrentRegion
+    //! something like gotoEdge with 4 possible directions is needed
+
+    SolarMutexGuard aGuard;
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( rRanges[ 0 ] );
+
+    aOneRange.PutInOrder();
+    ScDocShell* pDocSh = GetDocShell();
+    if ( !pDocSh )
+        return;
+
+    SCCOL nStartCol = aOneRange.aStart.Col();
+    SCROW nStartRow = aOneRange.aStart.Row();
+    SCCOL nEndCol = aOneRange.aEnd.Col();
+    SCROW nEndRow = aOneRange.aEnd.Row();
+    SCTAB nTab = aOneRange.aStart.Tab();
+
+    pDocSh->GetDocument().GetDataArea(
+                    nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, false );
+
+    ScRange aNew( nEndCol, nEndRow, nTab );
+    SetNewRange( aNew );
+}
+
+void SAL_CALL ScCellCursorObj::gotoNext()
+{
+    SolarMutexGuard aGuard;
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( rRanges[ 0 ] );
+
+    aOneRange.PutInOrder();
+    ScAddress aCursor(aOneRange.aStart);        //  always use start of block
+
+    ScMarkData aMark(GetDocument()->GetSheetLimits());   // not used with bMarked=FALSE
+    SCCOL nNewX = aCursor.Col();
+    SCROW nNewY = aCursor.Row();
+    SCTAB nTab  = aCursor.Tab();
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+        pDocSh->GetDocument().GetNextPos( nNewX,nNewY, nTab,  1,0, false,true, aMark );
+    //! otherwise exception or so
+
+    SetNewRange( ScRange( nNewX, nNewY, nTab ) );
+}
+
+void SAL_CALL ScCellCursorObj::gotoPrevious()
+{
+    SolarMutexGuard aGuard;
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( rRanges[ 0 ] );
+
+    aOneRange.PutInOrder();
+    ScAddress aCursor(aOneRange.aStart);        //  always use start of block
+
+    ScMarkData aMark(GetDocument()->GetSheetLimits());   // not used with bMarked=FALSE
+    SCCOL nNewX = aCursor.Col();
+    SCROW nNewY = aCursor.Row();
+    SCTAB nTab  = aCursor.Tab();
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+        pDocSh->GetDocument().GetNextPos( nNewX,nNewY, nTab, -1,0, false,true, aMark );
+    //! otherwise exception or so
+
+    SetNewRange( ScRange( nNewX, nNewY, nTab ) );
+}
+
+void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset )
+{
+    SolarMutexGuard aGuard;
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( rRanges[ 0 ] );
+    aOneRange.PutInOrder();
+
+    const auto & rDoc = GetDocShell()->GetDocument();
+    if ( aOneRange.aStart.Col() + nColumnOffset >= 0 &&
+         aOneRange.aEnd.Col()   + nColumnOffset <= rDoc.MaxCol() &&
+         aOneRange.aStart.Row() + nRowOffset    >= 0 &&
+         aOneRange.aEnd.Row()   + nRowOffset    <= rDoc.MaxRow() )
+    {
+        ScRange aNew( static_cast<SCCOL>(aOneRange.aStart.Col() + nColumnOffset),
+                      static_cast<SCROW>(aOneRange.aStart.Row() + nRowOffset),
+                      aOneRange.aStart.Tab(),
+                      static_cast<SCCOL>(aOneRange.aEnd.Col() + nColumnOffset),
+                      static_cast<SCROW>(aOneRange.aEnd.Row() + nRowOffset),
+                      aOneRange.aEnd.Tab() );
+        SetNewRange( aNew );
+    }
+}
+
+// XSheetCellRange
+
+uno::Reference<sheet::XSpreadsheet> SAL_CALL ScCellCursorObj::getSpreadsheet()
+{
+    SolarMutexGuard aGuard;
+    return ScCellRangeObj::getSpreadsheet();
+}
+
+// XCellRange
+
+uno::Reference<table::XCell> SAL_CALL ScCellCursorObj::getCellByPosition(
+                                        sal_Int32 nColumn, sal_Int32 nRow )
+{
+    SolarMutexGuard aGuard;
+    return ScCellRangeObj::getCellByPosition(nColumn,nRow);
+}
+
+uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByPosition(
+                sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
+{
+    SolarMutexGuard aGuard;
+    return ScCellRangeObj::getCellRangeByPosition(nLeft,nTop,nRight,nBottom);
+}
+
+uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByName(
+                        const OUString& rRange )
+{
+    SolarMutexGuard aGuard;
+    return ScCellRangeObj::getCellRangeByName(rRange);
+}
+
+// XServiceInfo
+
+OUString SAL_CALL ScCellCursorObj::getImplementationName()
+{
+    return u"ScCellCursorObj"_ustr;
+}
+
+sal_Bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
+{
+    //  SheetCellCursor should be first (?)
+    return comphelper::concatSequences<OUString>(
+        { SCSHEETCELLCURSOR_SERVICE, SCCELLCURSOR_SERVICE },
+        ScCellRangeObj::getSupportedServiceNames());
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

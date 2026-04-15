@@ -1,0 +1,58 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_VCL_DOCKINGAREA_HXX
+#define INCLUDED_VCL_DOCKINGAREA_HXX
+
+#include <config_options.h>
+#include <vcl/window.hxx>
+#include <memory>
+
+//  A simple container for docked toolbars
+//  - its main purpose is theming support
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DockingAreaWindow final : public vcl::Window
+{
+    class SAL_DLLPRIVATE ImplData;
+
+private:
+    std::unique_ptr<ImplData> mpImplData;
+
+                    DockingAreaWindow (const DockingAreaWindow &) = delete;
+                    DockingAreaWindow & operator= (const DockingAreaWindow &) = delete;
+
+public:
+    explicit        DockingAreaWindow( vcl::Window* pParent );
+    virtual         ~DockingAreaWindow() override;
+    virtual void    dispose() override;
+
+    void            SetAlign( WindowAlign eNewAlign );
+    WindowAlign     GetAlign() const;
+    bool            IsHorizontal() const;
+
+    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Resize() override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void    StateChanged( StateChangedType nType ) override;
+
+};
+
+#endif // INCLUDED_VCL_DOCKINGAREA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

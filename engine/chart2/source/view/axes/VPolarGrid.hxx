@@ -1,0 +1,70 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#pragma once
+
+#include "VAxisOrGridBase.hxx"
+#include "Tickmarks.hxx"
+#include <PlottingPositionHelper.hxx>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+
+namespace chart { struct VLineProperties; }
+
+namespace chart
+{
+class GridProperties;
+
+class VPolarGrid : public VAxisOrGridBase
+{
+// public methods
+public:
+    VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
+        , std::vector<
+            rtl::Reference< ::chart::GridProperties > > aGridPropertiesList //main grid, subgrid, subsubgrid etc
+        );
+    virtual ~VPolarGrid() override;
+
+    virtual void createShapes() override;
+
+    void setIncrements( std::vector< ExplicitIncrementData >&& rIncrements );
+
+    static void createLinePointSequence_ForAngleAxis(
+                    css::drawing::PointSequenceSequence& rPoints
+                    , TickInfoArraysType& rAllTickInfos
+                    , const ExplicitIncrementData& rIncrement
+                    , const ExplicitScaleData& rScale
+                    , PolarPlottingPositionHelper const * pPosHelper
+                    , double fLogicRadius, double fLogicZ );
+
+private: //member
+    std::vector<
+        rtl::Reference< ::chart::GridProperties > > m_aGridPropertiesList;//main grid, subgrid, subsubgrid etc
+    PolarPlottingPositionHelper m_aPosHelper;
+    std::vector< ExplicitIncrementData >   m_aIncrements;
+
+    void getAllTickInfos( sal_Int32 nDimensionIndex, TickInfoArraysType& rAllTickInfos ) const;
+
+    void create2DRadiusGrid( const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget
+                    , TickInfoArraysType& rRadiusTickInfos
+                    , TickInfoArraysType& rAngleTickInfos
+                    , const std::vector<VLineProperties>& rLinePropertiesList );
+};
+
+} //namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

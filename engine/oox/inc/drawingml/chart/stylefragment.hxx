@@ -1,0 +1,105 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include <drawingml/chart/chartcontextbase.hxx>
+
+namespace model
+{
+struct StyleRef;
+struct FontRef;
+}
+
+namespace oox::drawingml::chart
+{
+/** Handler for a cs:CT_StyleReference element.
+ */
+class StyleReferenceContext final : public ContextBase<model::StyleRef>
+{
+public:
+    StyleReferenceContext(ContextHandler2Helper& rParent, const sal_Int32 nIdx,
+                          model::StyleRef& rModel);
+    virtual ~StyleReferenceContext() override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
+                                                           const AttributeList& rAttribs) override;
+};
+
+/** Handler for a cs:CT_FontReference element.
+ */
+class FontReferenceContext final : public ContextBase<model::FontRef>
+{
+public:
+    FontReferenceContext(ContextHandler2Helper& rParent, std::u16string_view sIdx,
+                         model::FontRef& rModel);
+    virtual ~FontReferenceContext() override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
+                                                           const AttributeList& rAttribs) override;
+};
+
+struct StyleEntryModel;
+
+/** Handler for a cs:CT_StyleEntry element.
+ */
+class StyleEntryContext final : public ContextBase<StyleEntryModel>
+{
+public:
+    StyleEntryContext(ContextHandler2Helper& rParent, StyleEntryModel& rModel);
+    virtual ~StyleEntryContext() override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
+                                                           const AttributeList& rAttribs) override;
+    virtual void onCharacters(const OUString& rChars) override;
+};
+
+struct StyleModel;
+
+/** Handler for a style fragment (cs:chartStyle root element).
+ */
+class StyleFragment final : public FragmentBase<StyleModel>
+{
+public:
+    explicit StyleFragment(::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath,
+                           StyleModel& rModel);
+    virtual ~StyleFragment() override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
+                                                           const AttributeList& rAttribs) override;
+};
+
+struct ColorStyleModel;
+
+/** Handler for a color fragment (cs:colorStyle root element).
+ */
+class ColorsFragment final : public FragmentBase<ColorStyleModel>
+{
+public:
+    explicit ColorsFragment(::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath,
+                            ColorStyleModel& rModel);
+    virtual ~ColorsFragment() override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
+                                                           const AttributeList& rAttribs) override;
+};
+
+} // namespace oox::drawingml::chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

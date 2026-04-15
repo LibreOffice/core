@@ -1,0 +1,274 @@
+= How to add a new Writer filter test
+
+The `sw/qa/extras/` subdirectory has multiple import and export filter unit
+tests. This file documents how to add new testcases to this framework.
+
+== Import tests
+
+Import tests are the easier ones. First you need to use
+`CPPUNIT_TEST_FIXTURE()` and `load()`, so the framework will load the
+specified file to `mxComponent`, which represents the UNO model of the
+document.
+
+The rest of the testcase is about implementing the test method asserting this
+document model: use the UNO API to retrieve properties, then use
+`CPPUNIT_ASSERT_EQUAL()` to test against an expected value.
+
+See below for more details on writing the UNO code see below.
+
+=== Direct XPath assertions on the layout dump
+
+In most cases you want to assert the document model, but sometimes asserting
+the layout is easier. If you want to do so, check the methods in
+test/source/xmltesttools.cxx. If you want
+to have a look at the XML document that can be asserted, start soffice with the
+`SW_DEBUG=1` environment variable, load a document, press F12, and have a look
+at the `layout.xml` file in the current directory. Once you find the needed
+information in that file, you can write your XPath expression to turn that into
+a testcase.
+
+(Similarly, Shift-F12 produces a `nodes.xml` for the document model dump, but
+it's unlikely that you'll need that in a unit test.)
+
+== Export tests
+
+Export tests are similar. Given that test documents are easier to provide in
+some format (instead of writing code to build the documents from scratch) in
+most cases, we will do an import, then do an export (to invoke the code we want
+to test) and then do an import again, so we can do the testing by asserting the
+document model, just like we did for import tests.
+
+Yes, this means that you can only test the export code (using this framework)
+if the importer is working correctly. (But that's not so bad, users usually
+expect a feature to work in both the importer and the exporter.)
+
+The only difference is that in these tests the test method is called twice:
+once after the initial import -- so you can see if the export fails due to an
+import problem in fact -- and once after the export and import.
+
+=== Direct XPath assertions
+
+Another alternative is to assert the resulted export document directly.
+Currently this is only implemented for DOCX, which is a zipped XML, so it's
+possible to evaluate XPath checks. A check looks like this:
+
+xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+assertXPath(pXmlDoc, <xpath selecting the node>, <attribute>, <value>);
+
+It's important to check for the NULL pointer here, it's expected that it'll be
+NULL when the test runs first (after the first import), as there is nothing
+exported yet. For other XPath assert variants, see the `XmlTestTools` class.
+
+== Helper methods
+
+When two or more tests do the same (for example determine the number of
+characters in the document), helper methods are introduced to avoid code
+duplication. When you need something more complex, check if there is already a
+helper method, they are also good examples.
+
+Helper methods which are used by more than one testsuite are in the
+`SwModelTestBase` class. For example the `getLength()` method uses the trick
+that you can simply enumerate over the document model, getting the paragraphs
+of it; and inside those, you can enumerate over their runs. That alone is
+enough if you want to test a paragraph or character property.
+
+== Using UNO for tests
+
+Figuring out the UNO API just by reading the idl files under `offapi/` is not
+that productive. Xray can help in this case. Download it from:
+
+https://dev-www.libreoffice.org/extern/XrayTool52_en.sxw
+
+It's a document file, start Writer, Tools -> Options -> LibreOffice -> Security,
+Macro Security, and there choose Low. Then open the document, and click `Install
+Xray`. Now you can close the file. Open your testcase, which is imported
+correctly (from a fixed bugs's point of view). Then open the basic editor
+(Tools -> Macros -> LibreOffice Basic -> Organize Macros, Edit), and start to
+write your testcase as `Sub Main`. You don't have to know much about basic, for
+a typical testcase you need no `if`, `for`, or anything like that.
+
+NOTE: Once you restart Writer, xray will no longer be loaded automatically. For
+subsequent starts, place the following line in `Main` before you do anything
+else:
+
+----
+GlobalScope.BasicLibraries.LoadLibrary("XrayTool")
+----
+
+The above `mxComponent` is available as `ThisComponent` in basic, and if you
+want to inspect a variable here, you can use the `xray` command to inspect
+properties, methods, interfaces, etc.
+
+Let's take for example fdo#49501. The problem there was the page was not
+landscape (and a few more, let's ignore that).
+
+You can start with:
+
+----
+xray ThisComponent
+----
+
+and navigate around (it is a good idea to click Configuration and enable
+alphabetical sorting). The good thing is that once you write the code, you can
+just start F5 without restarting LibreOffice to see the result, so you can
+develop quickly.
+
+With some experimenting, you'll end up with something like this:
+
+----
+oStyle = ThisComponent.StyleFamilies.PageStyles.getByName("Default Style")
+xray oStyle.IsLandscape
+----
+
+Now all left is to rewrite that in cpp, where it'll be much easier to debug
+when later this test fails for some reason. In cpp, you typically need to be
+more verbose, so the code will look like:
+
+----
+uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
+----
+
+== CppUnit tips
+
+=== sal_Bool
+
+In case a UNO method returns sal_Bool, and the assert fails, CppUnit won't be
+able to print a usable error message, as it will think that the value is a
+printable character. Best to use `bool` for the expected value and cast the
+actual value to `bool` as well before comparing.
+
+=== Running only a single test
+
+If you want to run only a single test to allow quick development iteration,
+then use `CPPUNIT_TEST_NAME` to specify the name of the single test:
+
+----
+CPPUNIT_TEST_NAME="testTdf91074" make -sr CppunitTest_sw_rtfexport6
+----
+
+== UNO, in more details, various tips:
+
+=== writing code based xray inspection:
+
+In general, if you want to access a property, in Basic it's enough to write 'object.property',
+such as printing character count that 'xray ThisComponent' prints as 'CharacterCount':
+
+count = ThisComponent.CharacterCount
+text = paragraph.String
+
+In C++, this can get more complicated, as you need to use the right interface for access. Xray
+prints the internal name of the object (e.g. 'SwXTextDocument' for 'xray ThisComponent')
+above the list of its properties. Inspect this class/interface in the code (that is,
+under offapi/, udkapi/, or wherever it is implemented) and search for a function named
+similarly to the property you want (getXYZ()). If there is none, it is most
+probably a property that can be read using XPropertySet or using the getProperty helper:
+
+sal_Int32 val = getProperty< sal_Int32 >( textDocument, "CharacterCount" );
+
+If there is a function to obtain the property, you need access it using the right interface.
+If the class itself is not the right interface, then it is one of the classes it inherits
+from, usually the block of functions that are implemented for this interface starts with
+stating the name. For example see sw/inc/unoparagraph.hxx for class SwXParagraph, it has
+function getString() in a block introduced with 'XTextRange', so XTextRange is the interface
+it inherits from:
+
+// text of the paragraph
+uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
+OUString value = text->getString();
+
+Some properties may be more complicated to access, such as using XEnumerationAccess, XIndexAccess
+or XNamedAccess to enumerate items, index them by number of name (clicking 'Dbg_SupportedInterfaces'
+in xray gives a list of interfaces the object implements, and 'Count' shows the number of items).
+
+=== XEnumerationAccess (e.g. get the 2nd paragraph of the document):
+
+Basic:
+
+enum = ThisComponent.Text.createEnumeration
+para = enum.NextElement
+para = enum.NextElement
+xray para
+
+C++:
+
+uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+// list of paragraphs
+uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+// go to 1st paragraph
+(void) paraEnum->nextElement();
+// get the 2nd paragraph
+uno::Reference<uno::XInterface> paragraph(paraEnum->nextElement(), uno::UNO_QUERY);
+
+Note that for paragraphs it's easier to use getParagraph(), which gets the given
+paragraph (counted from 1) and optionally checks the paragraph text.
+
+uno::Reference< text::XTextRange > paragraph = getParagraph( 2, "TEXT" )
+
+=== XNamedAccess (e.g. get a bookmark named 'position1'):
+
+Basic:
+
+bookmark = ThisComponent.Bookmarks.getByName("position1")
+
+or even simpler
+
+bookmark = ThisComponent.Bookmarks.position1
+
+C++:
+
+uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+// XBookmarksSupplier interface will be needed to access the bookmarks
+uno::Reference<text::XBookmarksSupplier> bookmarksSupplier(textDocument, uno::UNO_QUERY);
+// get the bookmarks
+uno::Reference<container::XNameAccess> bookmarks(bookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+uno::Reference<uno::XInterface> bookmark;
+// get the bookmark by name
+bookmarks->getByName("position1") >>= bookmark;
+
+=== XIndexAccess (e.g. get the first bookmark):
+
+Basic:
+
+bookmark = ThisComponent.Bookmarks.getByIndex(0)
+
+C++:
+
+uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+// XBookmarksSupplier interface will be needed to access the bookmarks
+uno::Reference<text::XBookmarksSupplier> bookmarksSupplier(textDocument, uno::UNO_QUERY);
+// get the bookmarks
+uno::Reference<container::XIndexAccess> bookmarks(bookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+uno::Reference<uno::XInterface> bookmark;
+// get the bookmark by index
+bookmarks->getByIndex(0) >>= bookmark;
+
+=== Images
+
+Embedded images seem to be accessed like this:
+
+Basic:
+
+image = ThisComponent.DrawPage.getByIndex(0)
+graphic = image.Graphic
+
+C++:
+
+uno::Reference<drawing::XShape> image = getShape(1);
+uno::Reference<graphic::XGraphic> graphic = getProperty< uno::Reference< graphic::XGraphic > >( image, "Graphic" );
+
+
+=== Styles
+
+Styles provide information about many properties of (parts of) the document, for example
+page width:
+
+Basic:
+
+ThisComponent.StyleFamilies.PageStyles.getByName("Default Style").Width
+
+C++:
+
+getStyles("PageStyles")->getByName("Standard") >>= defaultStyle;
+sal_Int32 width = getProperty< sal_Int32 >( defaultStyle, "Width" );

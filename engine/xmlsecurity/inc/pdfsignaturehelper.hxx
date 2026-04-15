@@ -1,0 +1,75 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#pragma once
+
+#include "xmlsecuritydllapi.h"
+
+#include <svl/sigstruct.hxx>
+
+#include <vcl/filter/PDFiumLibrary.hxx>
+
+namespace com::sun::star
+{
+namespace frame
+{
+class XModel;
+}
+namespace io
+{
+class XInputStream;
+}
+namespace security
+{
+struct DocumentSignatureInformation;
+}
+namespace xml::crypto
+{
+class XSecurityEnvironment;
+}
+}
+namespace svl::crypto
+{
+class SigningContext;
+}
+class SvStream;
+
+/// Handles signatures of a PDF file.
+class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
+{
+    SignatureInformations m_aSignatureInfos;
+
+    svl::crypto::SigningContext* m_pSigningContext = nullptr;
+    OUString m_aDescription;
+
+public:
+    PDFSignatureHelper();
+    bool ReadAndVerifySignature(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+    bool ReadAndVerifySignatureSvStream(SvStream& rStream);
+    css::uno::Sequence<css::security::DocumentSignatureInformation>
+    GetDocumentSignatureInformations(
+        const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& xSecEnv) const;
+    SignatureInformations const& GetSignatureInformations() const;
+
+    /// Return the ID of the next created signature.
+    sal_Int32 GetNewSecurityId() const;
+    /// Certificate to be used next time signing is performed.
+    void SetX509Certificate(svl::crypto::SigningContext& rSigningContext);
+    /// Comment / reason to be used next time signing is performed.
+    void SetDescription(const OUString& rDescription);
+    /// Append a new signature at the end of xInputStream.
+    bool Sign(const css::uno::Reference<css::frame::XModel>& xModel,
+              const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bAdES);
+    /// Remove the signature at nPosition (and all dependent signatures) from xInputStream.
+    static bool RemoveSignature(const css::uno::Reference<css::io::XInputStream>& xInputStream,
+                                sal_uInt16 nPosition);
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

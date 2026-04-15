@@ -1,0 +1,20 @@
+---
+assumeFilename: lingucomponent/source/spellcheck/spell/sspellimp.cxx
+excludelist:
+    lingucomponent/source/lingutil/lingutil.hxx:
+    # Needed on WIN
+    - rtl/string.hxx
+    lingucomponent/source/languageguessing/guesslang.cxx:
+    # Needed for code protected by EXTTEXTCAT_VERSION_MAJOR
+    - libexttextcat/textcat.h
+    - tools/debug.hxx
+    - sal/macros.h
+    lingucomponent/source/numbertext/numbertext.cxx:
+    # Needed on WIN
+    - o3tl/char16_t2wchar_t.hxx
+    lingucomponent/source/spellcheck/spell/sspellimp.cxx:
+    # Needed for SpellFailure::SPELLING_ERROR
+    - com/sun/star/linguistic2/SpellFailure.hpp
+    lingucomponent/source/hyphenator/hyphen/hyphenimp.cxx:
+    # Actually used
+    - com/sun/star/linguistic2/XLinguProperties.hpp

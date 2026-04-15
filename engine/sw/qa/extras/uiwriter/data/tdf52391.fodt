@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties fo:background-color="#fff200"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:tracked-changes text:track-changes="false">
+    <text:changed-region xml:id="ct94610104150512" text:id="ct94610104150512">
+     <text:format-change>
+      <office:change-info>
+       <dc:creator>anonymous</dc:creator>
+       <dc:date>2019-01-29T12:09:20</dc:date>
+      </office:change-info>
+     </text:format-change>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94610081735200" text:id="ct94610081735200">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>anonymous</dc:creator>
+       <dc:date>2018-12-03T20:35:00</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94610081779760" text:id="ct94610081779760">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>anonymous</dc:creator>
+       <dc:date>2018-12-03T20:34:58</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+   </text:tracked-changes>
+   <text:sequence-decls>
+    <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+   </text:sequence-decls>
+   <text:p text:style-name="Standard"><text:change-start text:change-id="ct94610104150512"/><text:span text:style-name="T2">Portion1</text:span><text:change-end text:change-id="ct94610104150512"/><text:change-start text:change-id="ct94610081735200"/>Portion2<text:change-end text:change-id="ct94610081735200"/><text:change-start text:change-id="ct94610081779760"/></text:p>
+   <text:p text:style-name="Standard"/>
+   <text:p text:style-name="Standard"><text:change-end text:change-id="ct94610081779760"/>Format-only change in Portion1...</text:p>
+   <text:p text:style-name="Standard">...its rejection results also acception, but now rejection clears direct formatting in its text area.</text:p>
+   <text:p text:style-name="Standard"/>
+  </office:text>
+ </office:body>
+</office:document>

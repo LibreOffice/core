@@ -1,0 +1,11 @@
+---
+assumeFilename: binaryurp/source/bridge.cxx
+excludelist:
+    binaryurp/source/bridgefactory.cxx:
+    # Actually needed
+    - com/sun/star/connection/XConnection.hpp
+    binaryurp/source/bridge.cxx:
+    # Actually needed
+    - com/sun/star/bridge/XInstanceProvider.hpp
+    - com/sun/star/connection/XConnection.hpp
+    - com/sun/star/lang/XEventListener.hpp

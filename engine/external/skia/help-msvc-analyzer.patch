@@ -1,0 +1,42 @@
+diff -ur skia.org/include/private/base/SkAssert.h skia/include/private/base/SkAssert.h
+--- skia.org/include/private/base/SkAssert.h	2024-10-07 14:41:12.295957640 +0200
++++ skia/include/private/base/SkAssert.h	2024-10-07 14:44:36.271140309 +0200
+@@ -60,6 +60,13 @@
+     } while (false)
+ #endif
+ 
++// when building with msvc and only when using these headers outside the skia build
++#if defined(_MSC_VER) && !SKIA_IMPLEMENTATION
++#    define SkANALYSIS_ASSUME(condition) __analysis_assume(condition)
++#else
++#    define SkANALYSIS_ASSUME(condition) static_cast<void>(0)
++#endif
++
+ // SkASSERT, SkASSERTF and SkASSERT_RELEASE can be used as standalone assertion expressions, e.g.
+ //    uint32_t foo(int x) {
+ //        SkASSERT(x > 4);
+@@ -74,20 +81,20 @@
+ #define SkASSERT_RELEASE(cond) \
+     static_cast<void>( __builtin_expect(static_cast<bool>(cond), 1) \
+         ? static_cast<void>(0) \
+-        : []{ SK_ABORT("check(%s)", #cond); }() )
++        : [&]{ SK_ABORT("check(%s)", #cond); SkANALYSIS_ASSUME(cond); }() )
+
+ #define SkASSERTF_RELEASE(cond, fmt, ...)                                  \
+     static_cast<void>( __builtin_expect(static_cast<bool>(cond), 1)        \
+         ? static_cast<void>(0)                                             \
+-        : [&]{ SK_ABORT("assertf(%s): " fmt, #cond, ##__VA_ARGS__); }() )
++        : [&]{ SK_ABORT("assertf(%s): " fmt, #cond, ##__VA_ARGS__); SkANALYSIS_ASSUME(cond); }() )
+ #else
+ #define SkASSERT_RELEASE(cond) \
+-    static_cast<void>( (cond) ? static_cast<void>(0) : []{ SK_ABORT("check(%s)", #cond); }() )
++    static_cast<void>( (cond) ? static_cast<void>(0) : [&]{ SK_ABORT("check(%s)", #cond); SkANALYSIS_ASSUME(cond); }() )
+
+ #define SkASSERTF_RELEASE(cond, fmt, ...)                                   \
+     static_cast<void>( (cond)                                               \
+         ? static_cast<void>(0)                                              \
+-        : [&]{ SK_ABORT("assertf(%s): " fmt, #cond, ##__VA_ARGS__); }() )
++        : [&]{ SK_ABORT("assertf(%s): " fmt, #cond, ##__VA_ARGS__); SkANALYSIS_ASSUME(cond); }() )
+ #endif
+
+ #if defined(SK_DEBUG)

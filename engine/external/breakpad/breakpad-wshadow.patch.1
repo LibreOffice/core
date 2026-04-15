@@ -1,0 +1,65 @@
+diff -u -p -d -N -r breakpad.sav/src/client/linux/handler/minidump_descriptor.h breakpad/src/client/linux/handler/minidump_descriptor.h
+--- breakpad.sav/src/client/linux/handler/minidump_descriptor.h	2021-04-07 19:12:50.329462509 +0200
++++ breakpad/src/client/linux/handler/minidump_descriptor.h	2021-04-07 19:29:58.526084027 +0200
+@@ -57,27 +57,27 @@ class MinidumpDescriptor {
+         address_within_principal_mapping_(0),
+         skip_dump_if_principal_mapping_not_referenced_(false) {}
+ 
+-  explicit MinidumpDescriptor(const string& directory)
++  explicit MinidumpDescriptor(const string& dir)
+       : mode_(kWriteMinidumpToFile),
+         fd_(-1),
+-        directory_(directory),
++        directory_(dir),
+         c_path_(NULL),
+         size_limit_(-1),
+         address_within_principal_mapping_(0),
+         skip_dump_if_principal_mapping_not_referenced_(false),
+         sanitize_stacks_(false) {
+-    assert(!directory.empty());
++    assert(!dir.empty());
+   }
+ 
+-  explicit MinidumpDescriptor(int fd)
++  explicit MinidumpDescriptor(int file_descriptor)
+       : mode_(kWriteMinidumpToFd),
+-        fd_(fd),
++        fd_(file_descriptor),
+         c_path_(NULL),
+         size_limit_(-1),
+         address_within_principal_mapping_(0),
+         skip_dump_if_principal_mapping_not_referenced_(false),
+         sanitize_stacks_(false) {
+-    assert(fd != -1);
++    assert(file_descriptor != -1);
+   }
+ 
+   explicit MinidumpDescriptor(const MicrodumpOnConsole&)
+diff -u -p -d -N -r breakpad.sav/src/client/linux/minidump_writer/linux_dumper.h breakpad/src/client/linux/minidump_writer/linux_dumper.h
+--- breakpad.sav/src/client/linux/minidump_writer/linux_dumper.h	2021-04-07 19:12:50.329462509 +0200
++++ breakpad/src/client/linux/minidump_writer/linux_dumper.h	2021-04-07 19:27:50.808928572 +0200
+@@ -176,12 +176,12 @@ class LinuxDumper {
+   void SetCrashInfoFromSigInfo(const siginfo_t& siginfo);
+ 
+   uintptr_t crash_address() const { return crash_address_; }
+-  void set_crash_address(uintptr_t crash_address) {
+-    crash_address_ = crash_address;
++  void set_crash_address(uintptr_t crash_addr) {
++    crash_address_ = crash_addr;
+   }
+ 
+   int crash_signal() const { return crash_signal_; }
+-  void set_crash_signal(int crash_signal) { crash_signal_ = crash_signal; }
++  void set_crash_signal(int crash_sig) { crash_signal_ = crash_sig; }
+   const char* GetCrashSignalString() const;
+ 
+   void set_crash_signal_code(int code) { crash_signal_code_ = code; }
+@@ -196,7 +196,7 @@ class LinuxDumper {
+   }
+ 
+   pid_t crash_thread() const { return crash_thread_; }
+-  void set_crash_thread(pid_t crash_thread) { crash_thread_ = crash_thread; }
++  void set_crash_thread(pid_t thread) { crash_thread_ = thread; }
+ 
+   // Concatenates the |root_prefix_| and |mapping| path. Writes into |path| and
+   // returns true unless the string is too long.

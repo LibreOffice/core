@@ -1,0 +1,8 @@
+MariaDB Connector/C
+
+https://mariadb.com/kb/en/mariadb-connector-c-release-notes/
+https://downloads.mariadb.com/Connectors/c/
+
+configs/ generated like this:
+
+(cd workdir/UnpackedTarball/mariadb-connector-c/ && cmake -DWITH_CURL=OFF -DWITH_SSL=OFF -DWITH_UNIT_TESTS=OFF -DWITH_DYNCOL=OFF)

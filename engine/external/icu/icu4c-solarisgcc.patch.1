@@ -1,0 +1,12 @@
+diff -ur icu.org/source/common/uposixdefs.h icu/source/common/uposixdefs.h
+--- icu.org/source/common/uposixdefs.h	2017-03-09 03:12:45.000000000 +0100
++++ icu/source/common/uposixdefs.h	2017-04-21 22:23:11.857926971 +0200
+@@ -54,7 +54,7 @@
+  *
+  * z/OS needs this definition for timeval and to get usleep.
+  */
+-#if !defined(_XOPEN_SOURCE_EXTENDED) && defined(__TOS_MVS__)
++#if !defined(_XOPEN_SOURCE_EXTENDED) && (defined(__TOS_MVS__) || defined(__IBMC__) || defined(__IBMCPP__))
+ #   define _XOPEN_SOURCE_EXTENDED 1
+ #endif
+ 

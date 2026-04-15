@@ -1,0 +1,487 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		29F88F762A554D6B00C77A3F /* starmath */ = {isa = PBXFileReference; lastKnownFileType = folder; name = starmath; path = ../starmath; sourceTree = "<group>"; };
+		29F88F772A554D6B00C77A3F /* postprocess */ = {isa = PBXFileReference; lastKnownFileType = folder; name = postprocess; path = ../postprocess; sourceTree = "<group>"; };
+		29F88F782A554D6B00C77A3F /* sot */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sot; path = ../sot; sourceTree = "<group>"; };
+		29F88F792A554D6B00C77A3F /* pyuno */ = {isa = PBXFileReference; lastKnownFileType = folder; name = pyuno; path = ../pyuno; sourceTree = "<group>"; };
+		29F88F7A2A554D6B00C77A3F /* cppuhelper */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cppuhelper; path = ../cppuhelper; sourceTree = "<group>"; };
+		29F88F7B2A554D6B00C77A3F /* basctl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = basctl; path = ../basctl; sourceTree = "<group>"; };
+		29F88F7C2A554D6B00C77A3F /* embedserv */ = {isa = PBXFileReference; lastKnownFileType = folder; name = embedserv; path = ../embedserv; sourceTree = "<group>"; };
+		29F88F7D2A554D6B00C77A3F /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../include; sourceTree = "<group>"; };
+		29F88F7E2A554D6B00C77A3F /* cui */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cui; path = ../cui; sourceTree = "<group>"; };
+		29F88F7F2A554D6C00C77A3F /* remotebridges */ = {isa = PBXFileReference; lastKnownFileType = folder; name = remotebridges; path = ../remotebridges; sourceTree = "<group>"; };
+		29F88F802A554D6C00C77A3F /* msicreator */ = {isa = PBXFileReference; lastKnownFileType = folder; name = msicreator; path = ../msicreator; sourceTree = "<group>"; };
+		29F88F812A554D6C00C77A3F /* helpcompiler */ = {isa = PBXFileReference; lastKnownFileType = folder; name = helpcompiler; path = ../helpcompiler; sourceTree = "<group>"; };
+		29F88F822A554D6C00C77A3F /* io */ = {isa = PBXFileReference; lastKnownFileType = folder; name = io; path = ../io; sourceTree = "<group>"; };
+		29F88F832A554D6C00C77A3F /* idl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = idl; path = ../idl; sourceTree = "<group>"; };
+		29F88F842A554D6C00C77A3F /* i18nutil */ = {isa = PBXFileReference; lastKnownFileType = folder; name = i18nutil; path = ../i18nutil; sourceTree = "<group>"; };
+		29F88F852A554D6C00C77A3F /* editeng */ = {isa = PBXFileReference; lastKnownFileType = folder; name = editeng; path = ../editeng; sourceTree = "<group>"; };
+		29F88F862A554D6C00C77A3F /* scaddins */ = {isa = PBXFileReference; lastKnownFileType = folder; name = scaddins; path = ../scaddins; sourceTree = "<group>"; };
+		29F88F872A554D6C00C77A3F /* comphelper */ = {isa = PBXFileReference; lastKnownFileType = folder; name = comphelper; path = ../comphelper; sourceTree = "<group>"; };
+		29F88F882A554D6C00C77A3F /* jvmaccess */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jvmaccess; path = ../jvmaccess; sourceTree = "<group>"; };
+		29F88F892A554D6C00C77A3F /* accessibility */ = {isa = PBXFileReference; lastKnownFileType = folder; name = accessibility; path = ../accessibility; sourceTree = "<group>"; };
+		29F88F8A2A554D6C00C77A3F /* i18nlangtag */ = {isa = PBXFileReference; lastKnownFileType = folder; name = i18nlangtag; path = ../i18nlangtag; sourceTree = "<group>"; };
+		29F88F8B2A554D6C00C77A3F /* solenv */ = {isa = PBXFileReference; lastKnownFileType = folder; name = solenv; path = ../solenv; sourceTree = "<group>"; };
+		29F88F8C2A554D6C00C77A3F /* smoketest */ = {isa = PBXFileReference; lastKnownFileType = folder; name = smoketest; path = ../smoketest; sourceTree = "<group>"; };
+		29F88F8D2A554D6C00C77A3F /* writerfilter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = writerfilter; path = ../writerfilter; sourceTree = "<group>"; };
+		29F88F8E2A554D6C00C77A3F /* animations */ = {isa = PBXFileReference; lastKnownFileType = folder; name = animations; path = ../animations; sourceTree = "<group>"; };
+		29F88F8F2A554D6D00C77A3F /* extensions */ = {isa = PBXFileReference; lastKnownFileType = folder; name = extensions; path = ../extensions; sourceTree = "<group>"; };
+		29F88F912A554D6D00C77A3F /* emfio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = emfio; path = ../emfio; sourceTree = "<group>"; };
+		29F88F922A554D6D00C77A3F /* cpputools */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cpputools; path = ../cpputools; sourceTree = "<group>"; };
+		29F88F932A554D6D00C77A3F /* svl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = svl; path = ../svl; sourceTree = "<group>"; };
+		29F88F942A554D6D00C77A3F /* swext */ = {isa = PBXFileReference; lastKnownFileType = folder; name = swext; path = ../swext; sourceTree = "<group>"; };
+		29F88F972A554D6D00C77A3F /* xmlhelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xmlhelp; path = ../xmlhelp; sourceTree = "<group>"; };
+		29F88F992A554D6D00C77A3F /* embeddedobj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = embeddedobj; path = ../embeddedobj; sourceTree = "<group>"; };
+		29F88F9A2A554D6D00C77A3F /* schema */ = {isa = PBXFileReference; lastKnownFileType = folder; name = schema; path = ../schema; sourceTree = "<group>"; };
+		29F88F9B2A554D6E00C77A3F /* linguistic */ = {isa = PBXFileReference; lastKnownFileType = folder; name = linguistic; path = ../linguistic; sourceTree = "<group>"; };
+		29F88F9C2A554D6E00C77A3F /* lotuswordpro */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lotuswordpro; path = ../lotuswordpro; sourceTree = "<group>"; };
+		29F88F9D2A554D6E00C77A3F /* fpicker */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fpicker; path = ../fpicker; sourceTree = "<group>"; };
+		29F88F9E2A554D6E00C77A3F /* reportdesign */ = {isa = PBXFileReference; lastKnownFileType = folder; name = reportdesign; path = ../reportdesign; sourceTree = "<group>"; };
+		29F88F9F2A554D6E00C77A3F /* jvmfwk */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jvmfwk; path = ../jvmfwk; sourceTree = "<group>"; };
+		29F88FA02A554D6E00C77A3F /* soltools */ = {isa = PBXFileReference; lastKnownFileType = folder; name = soltools; path = ../soltools; sourceTree = "<group>"; };
+		29F88FA12A554D6E00C77A3F /* xmlscript */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xmlscript; path = ../xmlscript; sourceTree = "<group>"; };
+		29F88FA22A554D6E00C77A3F /* sccomp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sccomp; path = ../sccomp; sourceTree = "<group>"; };
+		29F88FA32A554D6E00C77A3F /* uui */ = {isa = PBXFileReference; lastKnownFileType = folder; name = uui; path = ../uui; sourceTree = "<group>"; };
+		29F88FA42A554D6E00C77A3F /* store */ = {isa = PBXFileReference; lastKnownFileType = folder; name = store; path = ../store; sourceTree = "<group>"; };
+		29F88FA52A554D6E00C77A3F /* vbahelper */ = {isa = PBXFileReference; lastKnownFileType = folder; name = vbahelper; path = ../vbahelper; sourceTree = "<group>"; };
+		29F88FA72A554D6F00C77A3F /* pch */ = {isa = PBXFileReference; lastKnownFileType = folder; name = pch; path = ../pch; sourceTree = "<group>"; };
+		29F88FA82A554D6F00C77A3F /* salhelper */ = {isa = PBXFileReference; lastKnownFileType = folder; name = salhelper; path = ../salhelper; sourceTree = "<group>"; };
+		29F88FA92A554D6F00C77A3F /* wizards */ = {isa = PBXFileReference; lastKnownFileType = folder; name = wizards; path = ../wizards; sourceTree = "<group>"; };
+		29F88FAA2A554D6F00C77A3F /* unotest */ = {isa = PBXFileReference; lastKnownFileType = folder; name = unotest; path = ../unotest; sourceTree = "<group>"; };
+		29F88FAB2A554D6F00C77A3F /* ure */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ure; path = ../ure; sourceTree = "<group>"; };
+		29F88FAC2A554D6F00C77A3F /* sax */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sax; path = ../sax; sourceTree = "<group>"; };
+		29F88FAD2A554D6F00C77A3F /* lingucomponent */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lingucomponent; path = ../lingucomponent; sourceTree = "<group>"; };
+		29F88FAE2A554D6F00C77A3F /* test */ = {isa = PBXFileReference; lastKnownFileType = folder; name = test; path = ../test; sourceTree = "<group>"; };
+		29F88FAF2A554D6F00C77A3F /* cli_ure */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cli_ure; path = ../cli_ure; sourceTree = "<group>"; };
+		29F88FB02A554D6F00C77A3F /* ucbhelper */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ucbhelper; path = ../ucbhelper; sourceTree = "<group>"; };
+		29F88FB12A554D6F00C77A3F /* javaunohelper */ = {isa = PBXFileReference; lastKnownFileType = folder; name = javaunohelper; path = ../javaunohelper; sourceTree = "<group>"; };
+		29F88FB22A554D6F00C77A3F /* udkapi */ = {isa = PBXFileReference; lastKnownFileType = folder; name = udkapi; path = ../udkapi; sourceTree = "<group>"; };
+		29F88FB32A554D7000C77A3F /* shell */ = {isa = PBXFileReference; lastKnownFileType = folder; name = shell; path = ../shell; sourceTree = "<group>"; };
+		29F88FB42A554D7000C77A3F /* sdext */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sdext; path = ../sdext; sourceTree = "<group>"; };
+		29F88FB62A554D7000C77A3F /* qadevOOo */ = {isa = PBXFileReference; lastKnownFileType = folder; name = qadevOOo; path = ../qadevOOo; sourceTree = "<group>"; };
+		29F88FB72A554D7000C77A3F /* setup_native */ = {isa = PBXFileReference; lastKnownFileType = folder; name = setup_native; path = ../setup_native; sourceTree = "<group>"; };
+		29F88FB82A554D7000C77A3F /* sysui */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sysui; path = ../sysui; sourceTree = "<group>"; };
+		29F88FB92A554D7000C77A3F /* librelogo */ = {isa = PBXFileReference; lastKnownFileType = folder; name = librelogo; path = ../librelogo; sourceTree = "<group>"; };
+		29F88FBA2A554D7000C77A3F /* kit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = kit; path = ../kit; sourceTree = "<group>"; };
+		29F88FBB2A554D7100C77A3F /* oox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = oox; path = ../oox; sourceTree = "<group>"; };
+		29F88FBC2A554D7100C77A3F /* binaryurp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = binaryurp; path = ../binaryurp; sourceTree = "<group>"; };
+		29F88FBD2A554D7100C77A3F /* configmgr */ = {isa = PBXFileReference; lastKnownFileType = folder; name = configmgr; path = ../configmgr; sourceTree = "<group>"; };
+		29F88FBE2A554D7100C77A3F /* bridges */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bridges; path = ../bridges; sourceTree = "<group>"; };
+		29F88FBF2A554D7100C77A3F /* basegfx */ = {isa = PBXFileReference; lastKnownFileType = folder; name = basegfx; path = ../basegfx; sourceTree = "<group>"; };
+		29F88FC02A554D7100C77A3F /* drawinglayer */ = {isa = PBXFileReference; lastKnownFileType = folder; name = drawinglayer; path = ../drawinglayer; sourceTree = "<group>"; };
+		29F88FC12A554D7200C77A3F /* slideshow */ = {isa = PBXFileReference; lastKnownFileType = folder; name = slideshow; path = ../slideshow; sourceTree = "<group>"; };
+		29F88FC22A554D7200C77A3F /* package */ = {isa = PBXFileReference; lastKnownFileType = folder; name = package; path = ../package; sourceTree = "<group>"; };
+		29F88FC32A554D7200C77A3F /* unotools */ = {isa = PBXFileReference; lastKnownFileType = folder; name = unotools; path = ../unotools; sourceTree = "<group>"; };
+		29F88FC42A554D7200C77A3F /* cppcanvas */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cppcanvas; path = ../cppcanvas; sourceTree = "<group>"; };
+		29F88FC52A554D7200C77A3F /* registry */ = {isa = PBXFileReference; lastKnownFileType = folder; name = registry; path = ../registry; sourceTree = "<group>"; };
+		29F88FC62A554D7200C77A3F /* formula */ = {isa = PBXFileReference; lastKnownFileType = folder; name = formula; path = ../formula; sourceTree = "<group>"; };
+		29F88FC72A554D7200C77A3F /* idlc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = idlc; path = ../idlc; sourceTree = "<group>"; };
+		29F88FC82A554D7200C77A3F /* jurt */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jurt; path = ../jurt; sourceTree = "<group>"; };
+		29F88FC92A554D7200C77A3F /* unoxml */ = {isa = PBXFileReference; lastKnownFileType = folder; name = unoxml; path = ../unoxml; sourceTree = "<group>"; };
+		29F88FCA2A554D7200C77A3F /* docmodel */ = {isa = PBXFileReference; lastKnownFileType = folder; name = docmodel; path = ../docmodel; sourceTree = "<group>"; };
+		29F88FCB2A554D7300C77A3F /* stoc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = stoc; path = ../stoc; sourceTree = "<group>"; };
+		29F88FCC2A554D7300C77A3F /* ucb */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ucb; path = ../ucb; sourceTree = "<group>"; };
+		29F88FCD2A554D7300C77A3F /* bean */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bean; path = ../bean; sourceTree = "<group>"; };
+		29F88FCE2A554D7300C77A3F /* ridljar */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ridljar; path = ../ridljar; sourceTree = "<group>"; };
+		29F88FCF2A554D7300C77A3F /* nlpsolver */ = {isa = PBXFileReference; lastKnownFileType = folder; name = nlpsolver; path = ../nlpsolver; sourceTree = "<group>"; };
+		29F88FD02A554D7300C77A3F /* UnoControls */ = {isa = PBXFileReference; lastKnownFileType = folder; name = UnoControls; path = ../UnoControls; sourceTree = "<group>"; };
+		29F88FD12A554D7300C77A3F /* offapi */ = {isa = PBXFileReference; lastKnownFileType = folder; name = offapi; path = ../offapi; sourceTree = "<group>"; };
+		29F88FD22A554D7300C77A3F /* svx */ = {isa = PBXFileReference; lastKnownFileType = folder; name = svx; path = ../svx; sourceTree = "<group>"; };
+		29F88FD32A554D7300C77A3F /* connectivity */ = {isa = PBXFileReference; lastKnownFileType = folder; name = connectivity; path = ../connectivity; sourceTree = "<group>"; };
+		29F88FD42A554D7300C77A3F /* reportbuilder */ = {isa = PBXFileReference; lastKnownFileType = folder; name = reportbuilder; path = ../reportbuilder; sourceTree = "<group>"; };
+		29F88FD52A554D7400C77A3F /* codemaker */ = {isa = PBXFileReference; lastKnownFileType = folder; name = codemaker; path = ../codemaker; sourceTree = "<group>"; };
+		29F88FD62A554D7400C77A3F /* scripting */ = {isa = PBXFileReference; lastKnownFileType = folder; name = scripting; path = ../scripting; sourceTree = "<group>"; };
+		29F88FD72A554D7400C77A3F /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; name = static; path = ../static; sourceTree = "<group>"; };
+		29F88FD82A554D7400C77A3F /* winaccessibility */ = {isa = PBXFileReference; lastKnownFileType = folder; name = winaccessibility; path = ../winaccessibility; sourceTree = "<group>"; };
+		29F88FD92A554D7400C77A3F /* avmedia */ = {isa = PBXFileReference; lastKnownFileType = folder; name = avmedia; path = ../avmedia; sourceTree = "<group>"; };
+		29F88FDA2A554D7400C77A3F /* svgio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = svgio; path = ../svgio; sourceTree = "<group>"; };
+		29F88FDB2A554D7400C77A3F /* testtools */ = {isa = PBXFileReference; lastKnownFileType = folder; name = testtools; path = ../testtools; sourceTree = "<group>"; };
+		29F88FDC2A554D7500C77A3F /* compilerplugins */ = {isa = PBXFileReference; lastKnownFileType = folder; name = compilerplugins; path = ../compilerplugins; sourceTree = "<group>"; };
+		29F88FDD2A554D7500C77A3F /* framework */ = {isa = PBXFileReference; lastKnownFileType = folder; name = framework; path = ../framework; sourceTree = "<group>"; };
+		29F88FDE2A554D7500C77A3F /* tools */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tools; path = ../tools; sourceTree = "<group>"; };
+		29F88FDF2A554D7500C77A3F /* svtools */ = {isa = PBXFileReference; lastKnownFileType = folder; name = svtools; path = ../svtools; sourceTree = "<group>"; };
+		29F88FE02A554D7600C77A3F /* sfx2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sfx2; path = ../sfx2; sourceTree = "<group>"; };
+		29F88FE12A554D7600C77A3F /* onlineupdate */ = {isa = PBXFileReference; lastKnownFileType = folder; name = onlineupdate; path = ../onlineupdate; sourceTree = "<group>"; };
+		29F88FE22A554D7600C77A3F /* writerperfect */ = {isa = PBXFileReference; lastKnownFileType = folder; name = writerperfect; path = ../writerperfect; sourceTree = "<group>"; };
+		29F88FE32A554D7600C77A3F /* filter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = filter; path = ../filter; sourceTree = "<group>"; };
+		29F88FE42A554D7700C77A3F /* opencl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = opencl; path = ../opencl; sourceTree = "<group>"; };
+		29F88FE52A554D7700C77A3F /* unoil */ = {isa = PBXFileReference; lastKnownFileType = folder; name = unoil; path = ../unoil; sourceTree = "<group>"; };
+		29F88FE62A554D7700C77A3F /* helpcontent2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = helpcontent2; path = ../helpcontent2; sourceTree = "<group>"; };
+		29F88FE72A554D7700C77A3F /* cppu */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cppu; path = ../cppu; sourceTree = "<group>"; };
+		29F88FE82A554D7700C77A3F /* dbaccess */ = {isa = PBXFileReference; lastKnownFileType = folder; name = dbaccess; path = ../dbaccess; sourceTree = "<group>"; };
+		29F88FE92A554D7700C77A3F /* officecfg */ = {isa = PBXFileReference; lastKnownFileType = folder; name = officecfg; path = ../officecfg; sourceTree = "<group>"; };
+		29F88FEA2A554D7800C77A3F /* desktop */ = {isa = PBXFileReference; lastKnownFileType = folder; name = desktop; path = ../desktop; sourceTree = "<group>"; };
+		29F88FEB2A554D7800C77A3F /* xmloff */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xmloff; path = ../xmloff; sourceTree = "<group>"; };
+		29F88FEC2A554D7800C77A3F /* basic */ = {isa = PBXFileReference; lastKnownFileType = folder; name = basic; path = ../basic; sourceTree = "<group>"; };
+		29F88FED2A554D7800C77A3F /* vcl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = vcl; path = ../vcl; sourceTree = "<group>"; };
+		29F88FEF2A554D7800C77A3F /* chart2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = chart2; path = ../chart2; sourceTree = "<group>"; };
+		29F88FF02A554D7800C77A3F /* xmlreader */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xmlreader; path = ../xmlreader; sourceTree = "<group>"; };
+		29F88FF12A554D7900C77A3F /* extras */ = {isa = PBXFileReference; lastKnownFileType = folder; name = extras; path = ../extras; sourceTree = "<group>"; };
+		29F88FF22A554D7900C77A3F /* forms */ = {isa = PBXFileReference; lastKnownFileType = folder; name = forms; path = ../forms; sourceTree = "<group>"; };
+		29F88FF32A554D7900C77A3F /* ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ios; path = ../ios; sourceTree = "<group>"; };
+		29F88FF42A554D7900C77A3F /* hwpfilter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = hwpfilter; path = ../hwpfilter; sourceTree = "<group>"; };
+		29F88FF52A554D7A00C77A3F /* sd */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sd; path = ../sd; sourceTree = "<group>"; };
+		29F88FF62A554D7A00C77A3F /* scp2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = scp2; path = ../scp2; sourceTree = "<group>"; };
+		29F88FF72A554D7A00C77A3F /* eventattacher */ = {isa = PBXFileReference; lastKnownFileType = folder; name = eventattacher; path = ../eventattacher; sourceTree = "<group>"; };
+		29F88FF82A554D7A00C77A3F /* oovbaapi */ = {isa = PBXFileReference; lastKnownFileType = folder; name = oovbaapi; path = ../oovbaapi; sourceTree = "<group>"; };
+		29F88FF92A554D7A00C77A3F /* l10ntools */ = {isa = PBXFileReference; lastKnownFileType = folder; name = l10ntools; path = ../l10ntools; sourceTree = "<group>"; };
+		29F88FFA2A554D7B00C77A3F /* sw */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sw; path = ../sw; sourceTree = "<group>"; };
+		29F88FFB2A554D7B00C77A3F /* readlicense_oo */ = {isa = PBXFileReference; lastKnownFileType = folder; name = readlicense_oo; path = ../readlicense_oo; sourceTree = "<group>"; };
+		29F88FFC2A554D7B00C77A3F /* o3tl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = o3tl; path = ../o3tl; sourceTree = "<group>"; };
+		29F88FFD2A554D7D00C77A3F /* i18npool */ = {isa = PBXFileReference; lastKnownFileType = folder; name = i18npool; path = ../i18npool; sourceTree = "<group>"; };
+		29F88FFE2A554D8000C77A3F /* canvas */ = {isa = PBXFileReference; lastKnownFileType = folder; name = canvas; path = ../canvas; sourceTree = "<group>"; };
+		29F88FFF2A554D8000C77A3F /* sal */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sal; path = ../sal; sourceTree = "<group>"; };
+		29F890002A554D8000C77A3F /* toolkit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = toolkit; path = ../toolkit; sourceTree = "<group>"; };
+		29F890012A554D8100C77A3F /* uitest */ = {isa = PBXFileReference; lastKnownFileType = folder; name = uitest; path = ../uitest; sourceTree = "<group>"; };
+		29F890022A554D8300C77A3F /* unoidl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = unoidl; path = ../unoidl; sourceTree = "<group>"; };
+		29F890032A554D8300C77A3F /* sc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sc; path = ../sc; sourceTree = "<group>"; };
+		29F890042A554D8300C77A3F /* xmlsecurity */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xmlsecurity; path = ../xmlsecurity; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		BEC3D9171710B0390030AD56 = {
+			isa = PBXGroup;
+			children = (
+				29F88F892A554D6C00C77A3F /* accessibility */,
+				29F88F8E2A554D6C00C77A3F /* animations */,
+				29F88FD92A554D7400C77A3F /* avmedia */,
+				29F88F7B2A554D6B00C77A3F /* basctl */,
+				29F88FBF2A554D7100C77A3F /* basegfx */,
+				29F88FEC2A554D7800C77A3F /* basic */,
+				29F88FCD2A554D7300C77A3F /* bean */,
+				29F88FBC2A554D7100C77A3F /* binaryurp */,
+				29F88FBE2A554D7100C77A3F /* bridges */,
+				29F88FFE2A554D8000C77A3F /* canvas */,
+				29F88FEF2A554D7800C77A3F /* chart2 */,
+				29F88FAF2A554D6F00C77A3F /* cli_ure */,
+				29F88FD52A554D7400C77A3F /* codemaker */,
+				29F88F872A554D6C00C77A3F /* comphelper */,
+				29F88FDC2A554D7500C77A3F /* compilerplugins */,
+				29F88FBD2A554D7100C77A3F /* configmgr */,
+				29F88FD32A554D7300C77A3F /* connectivity */,
+				29F88FC42A554D7200C77A3F /* cppcanvas */,
+				29F88FE72A554D7700C77A3F /* cppu */,
+				29F88F7A2A554D6B00C77A3F /* cppuhelper */,
+				29F88F922A554D6D00C77A3F /* cpputools */,
+				29F88F7E2A554D6B00C77A3F /* cui */,
+				29F88FE82A554D7700C77A3F /* dbaccess */,
+				29F88FEA2A554D7800C77A3F /* desktop */,
+				29F88FCA2A554D7200C77A3F /* docmodel */,
+				29F88FC02A554D7100C77A3F /* drawinglayer */,
+				29F88F852A554D6C00C77A3F /* editeng */,
+				29F88F992A554D6D00C77A3F /* embeddedobj */,
+				29F88F7C2A554D6B00C77A3F /* embedserv */,
+				29F88F912A554D6D00C77A3F /* emfio */,
+				29F88FF72A554D7A00C77A3F /* eventattacher */,
+				29F88F8F2A554D6D00C77A3F /* extensions */,
+				29F88FF12A554D7900C77A3F /* extras */,
+				29F88FE32A554D7600C77A3F /* filter */,
+				29F88FF22A554D7900C77A3F /* forms */,
+				29F88FC62A554D7200C77A3F /* formula */,
+				29F88F9D2A554D6E00C77A3F /* fpicker */,
+				29F88FDD2A554D7500C77A3F /* framework */,
+				29F88F812A554D6C00C77A3F /* helpcompiler */,
+				29F88FE62A554D7700C77A3F /* helpcontent2 */,
+				29F88FF42A554D7900C77A3F /* hwpfilter */,
+				29F88F8A2A554D6C00C77A3F /* i18nlangtag */,
+				29F88FFD2A554D7D00C77A3F /* i18npool */,
+				29F88F842A554D6C00C77A3F /* i18nutil */,
+				29F88F832A554D6C00C77A3F /* idl */,
+				29F88FC72A554D7200C77A3F /* idlc */,
+				29F88F7D2A554D6B00C77A3F /* include */,
+				29F88F822A554D6C00C77A3F /* io */,
+				29F88FF32A554D7900C77A3F /* ios */,
+				29F88FB12A554D6F00C77A3F /* javaunohelper */,
+				29F88FC82A554D7200C77A3F /* jurt */,
+				29F88F882A554D6C00C77A3F /* jvmaccess */,
+				29F88F9F2A554D6E00C77A3F /* jvmfwk */,
+				29F88FF92A554D7A00C77A3F /* l10ntools */,
+				29F88FB92A554D7000C77A3F /* librelogo */,
+				29F88FBA2A554D7000C77A3F /* kit */,
+				29F88FAD2A554D6F00C77A3F /* lingucomponent */,
+				29F88F9B2A554D6E00C77A3F /* linguistic */,
+				29F88F9C2A554D6E00C77A3F /* lotuswordpro */,
+				29F88F802A554D6C00C77A3F /* msicreator */,
+				29F88FCF2A554D7300C77A3F /* nlpsolver */,
+				29F88FFC2A554D7B00C77A3F /* o3tl */,
+				29F88FD12A554D7300C77A3F /* offapi */,
+				29F88FE92A554D7700C77A3F /* officecfg */,
+				29F88FE12A554D7600C77A3F /* onlineupdate */,
+				29F88FF82A554D7A00C77A3F /* oovbaapi */,
+				29F88FBB2A554D7100C77A3F /* oox */,
+				29F88FE42A554D7700C77A3F /* opencl */,
+				29F88FC22A554D7200C77A3F /* package */,
+				29F88FA72A554D6F00C77A3F /* pch */,
+				29F88F772A554D6B00C77A3F /* postprocess */,
+				29F88F792A554D6B00C77A3F /* pyuno */,
+				29F88FB62A554D7000C77A3F /* qadevOOo */,
+				29F88FFB2A554D7B00C77A3F /* readlicense_oo */,
+				29F88FC52A554D7200C77A3F /* registry */,
+				29F88F7F2A554D6C00C77A3F /* remotebridges */,
+				29F88FD42A554D7300C77A3F /* reportbuilder */,
+				29F88F9E2A554D6E00C77A3F /* reportdesign */,
+				29F88FCE2A554D7300C77A3F /* ridljar */,
+				29F88FFF2A554D8000C77A3F /* sal */,
+				29F88FA82A554D6F00C77A3F /* salhelper */,
+				29F88FAC2A554D6F00C77A3F /* sax */,
+				29F890032A554D8300C77A3F /* sc */,
+				29F88F862A554D6C00C77A3F /* scaddins */,
+				29F88FA22A554D6E00C77A3F /* sccomp */,
+				29F88F9A2A554D6D00C77A3F /* schema */,
+				29F88FF62A554D7A00C77A3F /* scp2 */,
+				29F88FD62A554D7400C77A3F /* scripting */,
+				29F88FF52A554D7A00C77A3F /* sd */,
+				29F88FB42A554D7000C77A3F /* sdext */,
+				29F88FB72A554D7000C77A3F /* setup_native */,
+				29F88FE02A554D7600C77A3F /* sfx2 */,
+				29F88FB32A554D7000C77A3F /* shell */,
+				29F88FC12A554D7200C77A3F /* slideshow */,
+				29F88F8C2A554D6C00C77A3F /* smoketest */,
+				29F88F8B2A554D6C00C77A3F /* solenv */,
+				29F88FA02A554D6E00C77A3F /* soltools */,
+				29F88F782A554D6B00C77A3F /* sot */,
+				29F88F762A554D6B00C77A3F /* starmath */,
+				29F88FD72A554D7400C77A3F /* static */,
+				29F88FCB2A554D7300C77A3F /* stoc */,
+				29F88FA42A554D6E00C77A3F /* store */,
+				29F88FDA2A554D7400C77A3F /* svgio */,
+				29F88F932A554D6D00C77A3F /* svl */,
+				29F88FDF2A554D7500C77A3F /* svtools */,
+				29F88FD22A554D7300C77A3F /* svx */,
+				29F88FFA2A554D7B00C77A3F /* sw */,
+				29F88F942A554D6D00C77A3F /* swext */,
+				29F88FB82A554D7000C77A3F /* sysui */,
+				29F88FAE2A554D6F00C77A3F /* test */,
+				29F88FDB2A554D7400C77A3F /* testtools */,
+				29F890002A554D8000C77A3F /* toolkit */,
+				29F88FDE2A554D7500C77A3F /* tools */,
+				29F88FCC2A554D7300C77A3F /* ucb */,
+				29F88FB02A554D6F00C77A3F /* ucbhelper */,
+				29F88FB22A554D6F00C77A3F /* udkapi */,
+				29F890012A554D8100C77A3F /* uitest */,
+				29F88FD02A554D7300C77A3F /* UnoControls */,
+				29F890022A554D8300C77A3F /* unoidl */,
+				29F88FE52A554D7700C77A3F /* unoil */,
+				29F88FAA2A554D6F00C77A3F /* unotest */,
+				29F88FC32A554D7200C77A3F /* unotools */,
+				29F88FC92A554D7200C77A3F /* unoxml */,
+				29F88FAB2A554D6F00C77A3F /* ure */,
+				29F88FA32A554D6E00C77A3F /* uui */,
+				29F88FA52A554D6E00C77A3F /* vbahelper */,
+				29F88FED2A554D7800C77A3F /* vcl */,
+				29F88FD82A554D7400C77A3F /* winaccessibility */,
+				29F88FA92A554D6F00C77A3F /* wizards */,
+				29F88F8D2A554D6C00C77A3F /* writerfilter */,
+				29F88FE22A554D7600C77A3F /* writerperfect */,
+				29F88F972A554D6D00C77A3F /* xmlhelp */,
+				29F88FEB2A554D7800C77A3F /* xmloff */,
+				29F88FF02A554D7800C77A3F /* xmlreader */,
+				29F88FA12A554D6E00C77A3F /* xmlscript */,
+				29F890042A554D8300C77A3F /* xmlsecurity */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		BEC3D91E1710B11E0030AD56 /* soffice */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "";
+			buildConfigurationList = BEC3D9211710B11E0030AD56 /* Build configuration list for PBXLegacyTarget "soffice" */;
+			buildPhases = (
+			);
+			buildToolPath = /opt/homebrew/bin/gmake;
+			buildWorkingDirectory = ..;
+			dependencies = (
+			);
+			name = soffice;
+			passBuildSettingsInEnvironment = 0;
+			productName = soffice;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		BEC3D9181710B0390030AD56 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0930;
+			};
+			buildConfigurationList = BEC3D91B1710B0390030AD56 /* Build configuration list for PBXProject "soffice" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				en,
+			);
+			mainGroup = BEC3D9171710B0390030AD56;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BEC3D91E1710B11E0030AD56 /* soffice */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		BEC3D91C1710B0390030AD56 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+			};
+			name = Debug;
+		};
+		BEC3D91D1710B0390030AD56 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+			};
+			name = Release;
+		};
+		BEC3D91F1710B11E0030AD56 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LO_CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				LO_CLANG_CXX_LIBRARY = "libc++";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		BEC3D9201710B11E0030AD56 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LO_CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				LO_CLANG_CXX_LIBRARY = "libc++";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BEC3D91B1710B0390030AD56 /* Build configuration list for PBXProject "soffice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEC3D91C1710B0390030AD56 /* Debug */,
+				BEC3D91D1710B0390030AD56 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BEC3D9211710B11E0030AD56 /* Build configuration list for PBXLegacyTarget "soffice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEC3D91F1710B11E0030AD56 /* Debug */,
+				BEC3D9201710B11E0030AD56 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BEC3D9181710B0390030AD56 /* Project object */;
+}

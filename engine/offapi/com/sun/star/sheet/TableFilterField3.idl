@@ -1,0 +1,34 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {  module sun {  module star {  module sheet {
+
+struct TableFilterField3
+{
+    /** specifies how the condition is connected to the previous condition.
+     */
+    FilterConnection Connection;
+
+    /** specifies which field (column) is used for the condition.
+     */
+    long Field;
+
+    /** specifies the type of the condition as defined in
+        FilterOperator2.
+    */
+    long Operator;
+
+    /** specifies values to match against.  Each filter field may have one or
+        more values.*/
+    sequence<FilterFieldValue> Values;
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

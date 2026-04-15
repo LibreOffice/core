@@ -1,0 +1,13 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module access {
+    constants AcCurrentView {
+        const long acCurViewDatasheet = 2;
+        const long acCurViewDesign = 0;
+        const long acCurViewFormBrowse = 1;
+        const long acCurViewPivotChart = 4;
+        const long acCurViewPivotTable = 3;
+        const long acCurViewPreview = 5;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

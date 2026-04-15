@@ -1,0 +1,63 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module logging {
+
+
+/** specifies the interface to be used for formatting log records
+
+    @see XLogHandler
+*/
+interface XLogFormatter
+{
+    /** returns the header string for the log
+
+        <p>This can be used to generate a header string, which by the XLogHandler
+        is emitted to its output channel before actually logging any concrete
+        LogRecord.</p>
+
+        <p>For instance, a formatter might produce table-like plain text output,
+        and could return a table-head string (potentially including line breaks)
+        here.</p>
+    */
+    string  getHead();
+
+    /** formats the given log record for output
+
+        <p>A XLogHandler will call this method to format a given
+        log record. The resulting string will be emitted to the handler's output
+        channel, without processing it any further (except possibly encoding it with
+        the handler's <code>Encoding</code>).</p>
+    */
+    string  format( [in] LogRecord Record );
+
+    /** returns the footer string for the log
+
+        <p>This can be used to generate a footer string, which by the XLogHandler
+        is emitted to its output channel before it is finally being closed.</p>
+    */
+    string  getTail();
+};
+
+
+}; }; }; };
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module adodb {
+    constants AffectEnum {
+        const long adAffectAll = 3;
+        const long adAffectAllChapters = 4;
+        const long adAffectCurrent = 1;
+        const long adAffectGroup = 2;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

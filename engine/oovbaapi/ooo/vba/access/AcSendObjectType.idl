@@ -1,0 +1,14 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module access {
+    constants AcSendObjectType {
+        const long acSendDataAccessPage = 6;
+        const long acSendForm = 2;
+        const long acSendModule = 5;
+        const long acSendNoObject = -1;
+        const long acSendQuery = 1;
+        const long acSendReport = 3;
+        const long acSendTable = 0;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,60 @@
+diff -ur icu.org/source/extra/scrptrun/scrptrun.cpp icu/source/extra/scrptrun/scrptrun.cpp
+--- icu.org/source/extra/scrptrun/scrptrun.cpp	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/extra/scrptrun/scrptrun.cpp	2017-04-21 22:59:31.708037770 +0200
+@@ -153,7 +153,11 @@
+         // characters above it on the stack will be poped.
+         if (pairIndex >= 0) {
+             if ((pairIndex & 1) == 0) {
+-                parenStack[++parenSP].pairIndex = pairIndex;
++                ++parenSP;
++                int32_t nVecSize = parenStack.size();
++                if (parenSP == nVecSize)
++                    parenStack.resize(nVecSize + 128);
++                parenStack[parenSP].pairIndex = pairIndex;
+                 parenStack[parenSP].scriptCode  = scriptCode;
+                 startSP = parenSP;
+             } else if (parenSP >= 0) {
+@@ -185,7 +189,14 @@
+             // pop it from the stack
+             if (pairIndex >= 0 && (pairIndex & 1) != 0 && parenSP >= 0) {
+                 parenSP -= 1;
+-                startSP -= 1;
++                /* decrement startSP only if it is >= 0,
++                   decrementing it unnecessarily will lead to memory corruption
++                   while processing the above while block.
++                   e.g. startSP = -4 , parenSP = -1
++                */
++                if (startSP >= 0) {
++                    startSP -= 1;
++                }
+             }
+         } else {
+             // if the run broke on a surrogate pair,
+diff -ur icu.org/source/extra/scrptrun/scrptrun.h icu/source/extra/scrptrun/scrptrun.h
+--- icu.org/source/extra/scrptrun/scrptrun.h	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/extra/scrptrun/scrptrun.h	2017-04-21 22:59:31.708037770 +0200
+@@ -19,6 +19,7 @@
+ #include "unicode/utypes.h"
+ #include "unicode/uobject.h"
+ #include "unicode/uscript.h"
++#include <vector>
+ 
+ U_NAMESPACE_BEGIN
+ 
+@@ -81,7 +82,7 @@
+     int32_t scriptEnd;
+     UScriptCode scriptCode;
+ 
+-    ParenStackEntry parenStack[128];
++    std::vector<ParenStackEntry> parenStack;
+     int32_t parenSP;
+ 
+     static int8_t highBit(int32_t value);
+@@ -135,6 +136,7 @@
+     scriptEnd   = charStart;
+     scriptCode  = USCRIPT_INVALID_CODE;
+     parenSP     = -1;
++    parenStack.resize(128);
+ }
+ 
+ inline void ScriptRun::reset(int32_t start, int32_t length)

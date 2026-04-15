@@ -1,0 +1,258 @@
+--- a/hsqldb/src/org/hsqldb/jdbc/jdbcBlob.java	2025-03-04 11:32:55.310782336 +0100
++++ b/hsqldb/src/org/hsqldb/jdbc/jdbcBlob.java	2025-03-04 11:38:16.091870265 +0100
+@@ -462,7 +462,6 @@
+     }
+
+ //#ifdef JAVA6
+-/*
+     public void free() throws SQLException
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+@@ -472,7 +471,6 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+
+ //#endif JAVA6
+
+--- a/hsqldb/src/org/hsqldb/jdbc/jdbcCallableStatement.java	2025-03-04 11:32:55.310782336 +0100
++++ b/hsqldb/src/org/hsqldb/jdbc/jdbcCallableStatement.java	2025-03-04 11:36:43.563015884 +0100
+@@ -37,11 +37,9 @@
+ import java.sql.CallableStatement;
+ import java.sql.Date;
+ //#ifdef JAVA6
+-/*
+ import java.sql.NClob;
+ import java.sql.RowId;
+ import java.sql.SQLXML;
+-*/
+ //#endif JAVA6
+ import java.sql.Time;
+ import java.sql.Timestamp;
+@@ -3106,7 +3104,6 @@
+     
+ //#endif JAVA4
+ //#ifdef JAVA6
+-/*
+     public void setPoolable(boolean poolable) throws SQLException
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+@@ -3376,7 +3373,6 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+
+ //#endif JAVA6
+
+--- a/hsqldb/src/org/hsqldb/jdbc/jdbcClob.java	2025-03-04 11:32:55.310782336 +0100
++++ b/hsqldb/src/org/hsqldb/jdbc/jdbcClob.java	2025-03-04 11:38:25.799540307 +0100
+@@ -464,7 +464,6 @@
+     }
+
+ //#ifdef JAVA6
+-/*
+     public void free() throws SQLException
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+@@ -474,6 +473,5 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+ //#endif JAVA6
+ }
+
+--- a/hsqldb/src/org/hsqldb/jdbc/jdbcConnection.java	2025-03-04 11:32:55.310782336 +0100
++++ b/hsqldb/src/org/hsqldb/jdbc/jdbcConnection.java	2025-03-04 11:37:01.878393123 +0100
+@@ -43,11 +43,9 @@
+ import java.sql.DatabaseMetaData;
+
+ //#ifdef JAVA6
+-/*
+ import java.sql.NClob;
+ import java.sql.SQLClientInfoException;
+ import java.sql.SQLXML;
+-*/
+
+ //#endif JAVA6
+
+@@ -2735,7 +2733,6 @@
+     }
+
+ //#ifdef JAVA6
+-/*
+     public Clob createClob() throws SQLException
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+@@ -2800,7 +2797,6 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+
+ //#endif JAVA6
+
+--- a/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java	2025-03-04 11:32:55.310782336 +0100
++++ b/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java	2025-03-04 11:38:04.956248763 +0100
+@@ -37,9 +37,7 @@
+ import java.sql.SQLException;
+
+ //#ifdef JAVA6
+-/*
+ import java.sql.RowIdLifetime;
+-*/
+
+ //#endif JAVA6
+ import org.hsqldb.Column;
+@@ -5650,7 +5648,6 @@
+     }
+
+ //#ifdef JAVA6
+-/*
+     public RowIdLifetime getRowIdLifetime() throws SQLException
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+@@ -5694,7 +5691,6 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+
+ //#endif JAVA6
+
+--- a/hsqldb/src/org/hsqldb/jdbc/jdbcDataSource.java	2025-03-04 11:32:55.310782336 +0100
++++ b/hsqldb/src/org/hsqldb/jdbc/jdbcDataSource.java	2025-03-04 11:37:51.484706686 +0100
+@@ -317,7 +317,6 @@
+     }
+
+ //#ifdef JAVA6
+-/*
+     public <T> T unwrap(Class<T> iface) throws SQLException
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+@@ -327,7 +326,6 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+
+ //#endif JAVA6
+
+--- a/hsqldb/src/org/hsqldb/jdbc/jdbcParameterMetaData.java	2025-03-04 11:32:55.310782336 +0100
++++ b/hsqldb/src/org/hsqldb/jdbc/jdbcParameterMetaData.java	2025-03-04 11:38:40.575038128 +0100
+@@ -383,7 +383,6 @@
+     }
+
+ //#ifdef JAVA6
+-/*
+     public <T> T unwrap(Class<T> iface) throws SQLException
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+@@ -393,7 +392,6 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+
+ //#endif JAVA6
+ }
+
+--- a/hsqldb/src/org/hsqldb/jdbc/jdbcPreparedStatement.java	2025-03-04 11:32:55.310782336 +0100
++++ b/hsqldb/src/org/hsqldb/jdbc/jdbcPreparedStatement.java	2025-03-04 11:36:10.900126629 +0100
+@@ -39,11 +39,9 @@
+ import java.sql.Date;
+
+ //#ifdef JAVA6
+-/*
+ import java.sql.NClob;
+ import java.sql.RowId;
+ import java.sql.SQLXML;
+-*/
+
+ //#endif JAVA6
+ import java.sql.PreparedStatement;
+@@ -2293,7 +2291,6 @@
+     }
+
+ //#ifdef JAVA6
+-/*
+     public void setPoolable(boolean poolable) throws SQLException
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+@@ -2403,7 +2400,6 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+
+ //#endif JAVA6
+ }
+
+--- a/hsqldb/src/org/hsqldb/jdbc/jdbcResultSet.java	2025-03-04 11:32:55.310782336 +0100
++++ b/hsqldb/src/org/hsqldb/jdbc/jdbcResultSet.java	2025-03-04 11:37:32.153363834 +0100
+@@ -76,11 +76,9 @@
+ import java.sql.ResultSetMetaData;
+
+ //#ifdef JAVA6
+-/*
+ import java.sql.RowId;
+ import java.sql.NClob;
+ import java.sql.SQLXML;
+-*/
+
+ //#endif JAVA6
+ import java.sql.SQLException;
+@@ -5075,7 +5073,6 @@
+     }
+
+ //#ifdef JAVA6
+-/*
+     public RowId getRowId(int columnIndex) throws SQLException
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+@@ -5325,7 +5322,6 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+
+ //#endif JAVA6
+
+--- a/hsqldb/src/org/hsqldb/jdbc/jdbcResultSetMetaData.java	2025-03-04 11:32:55.310782336 +0100
++++ b/hsqldb/src/org/hsqldb/jdbc/jdbcResultSetMetaData.java	2025-03-04 11:37:13.441999969 +0100
+@@ -1145,7 +1145,6 @@
+         }
+     }
+ //#ifdef JAVA6
+-/*
+     public <T> T unwrap(Class<T> iface) throws SQLException
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+@@ -1155,6 +1154,5 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+ //#endif JAVA6
+ }
+
+--- a/hsqldb/src/org/hsqldb/jdbc/jdbcStatement.java	2025-03-04 11:32:55.310782336 +0100
++++ b/hsqldb/src/org/hsqldb/jdbc/jdbcStatement.java	2025-03-04 11:35:45.348995657 +0100
+@@ -1588,7 +1588,6 @@
+         }
+     }
+ //#ifdef JAVA6
+-/*
+     public void setPoolable(boolean poolable) throws SQLException
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+@@ -1608,7 +1607,6 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+ //#endif JAVA6
+
+ //#ifdef JAVA7

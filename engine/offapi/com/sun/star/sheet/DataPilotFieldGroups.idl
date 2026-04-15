@@ -1,0 +1,96 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** represents a collection of groups in a data pilot field.
+
+    <p>The members of this collection are instances of DataPilotFieldGroup
+    containing the names of all items in the group.</p>
+
+    @see DataPilotField
+    @see DataPilotFieldGroup
+    @see DataPilotFieldGroupInfo
+ */
+published service DataPilotFieldGroups
+{
+
+    /** provides access to the data pilot field groups in the collection via
+        index.
+     */
+    interface com::sun::star::container::XIndexAccess;
+
+
+    /** creates an enumeration of all data pilot field groups.
+
+        @see DataPilotFieldGroupsEnumeration
+     */
+    interface com::sun::star::container::XEnumerationAccess;
+
+
+    /** provides access to the data pilot field groups in the collection via
+        name.
+     */
+    interface com::sun::star::container::XNameAccess;
+
+
+    /** provides read/write access to the data pilot field groups in the
+        collection via name.
+
+        <p>The com::sun::star::container::XNameContainer
+        and com::sun::star::container::XNameReplace
+        interfaces can be used to manage the item groups. It is possible to
+        insert, remove, and replace item groups.</p>
+
+        <p>The method com::sun::star::container::XNameReplace::replaceByName()
+        can be used to replace the item
+        names in an existing group with a new collection of item names. An
+        implementation should support the following data types:
+
+        <ul>
+        <li>an empty `any` to remove all items and leave the
+        group empty. The group can be filled later with new item names.</li>
+        <li>a `string[]` containing all item names that will
+        be part of the group.</li>
+        <li>an object supporting com::sun::star::container::XIndexAccess
+        containing elements that provide an item name per element via the
+        interface com::sun::star::container::XNamed,
+        for example an instance of DataPilotFieldGroup.</li>
+        </ul></p>
+
+        <p>The method com::sun::star::container::XNameContainer::insertByName()
+        can be used to insert a new
+        field group with the passed collection of item names. An
+        implementation should support the same data types as described above
+        for the method
+        com::sun::star::container::XNameReplace::replaceByName().</p>
+
+        <p>The method com::sun::star::container::XNameContainer::removeByName()
+        can be used to remove an existing field group.</p>
+     */
+    [optional] interface com::sun::star::container::XNameContainer;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

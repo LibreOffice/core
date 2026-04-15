@@ -1,0 +1,72 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+ifeq (,$(gb_Side))
+gb_Side := host
+endif
+ifeq (,$(BUILDDIR))
+BUILDDIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+endif
+
+include $(BUILDDIR)/config_$(gb_Side).mk
+
+include $(SRCDIR)/solenv/gbuild/gbuild.mk
+
+$(eval $(call gb_Module_make_global_targets,$(SRCDIR)/RepositoryModule_$(gb_Side).mk))
+
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+$(if $(gb_LinkTarget__Lock),$(shell rm -f $(gb_LinkTarget__Lock)))
+ifeq ($(ENABLE_CUSTOMTARGET_COMPONENTS),TRUE)
+include $(SRCDIR)/solenv/gbuild/static.mk
+$(if $(filter a,$(gb_DEBUG_STATIC)),$(error Abort after static.mk))
+endif
+endif
+
+upload-symbols:
+	bin/upload_symbols.py $(WORKDIR)/symbols.zip $(BREAKPAD_SYMBOL_CONFIG) "$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)"
+
+create-update-info:
+	$(eval BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H))
+	$(eval VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX))
+	$(eval PLATFORM := $(RTL_OS)_$(RTL_ARCH))
+	$(eval MAR_NAME_PREFIX := $(PRODUCTNAME)_$(VERSION)_$(PLATFORM)_$(BUILDID))
+	$(eval UPDATE_DIR := $(WORKDIR)/update-info)
+	$(eval MAR_DIR := $(WORKDIR)/mar)
+	rm -rf $(MAR_DIR) || true
+	rm -rf $(UPDATE_DIR) || true
+	mkdir -p $(MAR_DIR)/language
+	MAR=$(INSTDIR)/program/mar $(if $(filter WNT,$(OS)),$(shell cygpath -u $(SRCDIR)/bin/update/create_full_mar.py),$(SRCDIR)/bin/update/create_full_mar.py) "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)'
+
+# target-variables also will apply to the target's prerequisites (i.e. the individual platform targets)
+# arch is taken from the stem of the rule
+# MSIDIR and OLD_VER are expected to be specified on the make commandline but others like VERSION,
+# BUILDID, ONLINEUPDATE_MAR_NEWMSI and ONLINEUPDATE_MAR_OLDMSI can be overridden as well if needed.
+# If VERSION is specified on the commandline, BUILDID defaults to the corresponding libreoffice tag
+create-partial-info: export ARCH = $*
+create-partial-info: PLATFORM = $(RTL_OS)_$(ARCH)
+create-partial-info: VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)
+create-partial-info: VERSION_FULL := $(VERSION)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)
+create-partial-info: BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H$(if $(filter command line,$(origin VERSION)), libreoffice-$(VERSION)))
+create-partial-info: MAR_NAME_PREFIX = $(PRODUCTNAME)_$(VERSION_FULL)_$(PLATFORM)_$(BUILDID)
+create-partial-info: ONLINEUPDATE_MAR_OLDMSI = $(MSIDIR)$(PRODUCTNAME)_$(OLD_VER)_Win_$(subst AARCH64,aarch64,$(subst X86_64,x86-64,$(ARCH))).msi
+create-partial-info: ONLINEUPDATE_MAR_NEWMSI = $(MSIDIR)$(PRODUCTNAME)_$(VERSION)_Win_$(subst AARCH64,aarch64,$(subst X86_64,x86-64,$(ARCH))).msi
+create-partial-info: export MBSDIFF := $(gb_Executable_BINDIR)/mbsdiff
+create-partial-info: export MAR := $(INSTDIR)/program/mar
+
+create-partial-info: create-partial-info-AARCH64 create-partial-info-X86_64 create-partial-info-x86
+
+create-partial-info-%:
+	$(if $(filter WNT,$(OS)),$(shell cygpath -u $(SRCDIR)/bin/update/create_partial_update.py),$(SRCDIR)/bin/update/create_partial_update.py) "$(WORKDIR)" "$(MAR_NAME_PREFIX)" LOOnlineUpdater "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)$(VERSION)/" "$(PRODUCTNAME)" '$(VERSION)' "$(ONLINEUPDATE_MAR_OLDMSI)" "$(ONLINEUPDATE_MAR_NEWMSI)"
+
+# also possible to bypass the dependencies/the gbuild processing by just running
+# LD_LIBRARY_PATH=instdir/program make cmd cmd='ALL_LANGS="$(ALL_LANGS)" workdir/LinkTarget/Executable/pocheck'
+pocheck: | $(call gb_Executable_get_runtime_target,pocheck)
+	ALL_LANGS="$(ALL_LANGS)" $(call gb_Executable_get_command,pocheck) 2>&1 | tee $${POCHECK_LOG:-/tmp/pocheck.log}
+
+# vim: set noet sw=4 ts=4:

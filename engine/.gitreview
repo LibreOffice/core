@@ -1,0 +1,6 @@
+[gerrit]
+host=gerrit.collaboraoffice.com
+port=29418
+project=core
+defaultremote=cogerrit
+defaultbranch=main

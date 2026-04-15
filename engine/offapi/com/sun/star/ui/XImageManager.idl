@@ -1,0 +1,208 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module ui {
+
+/** specifies access functions to an images manager interface to add,
+    replace and remove images associations to command URLs.
+
+    <p>
+    An image manager controls a number of image sets which are specified
+    by an ImageType.
+    </p>
+*/
+
+interface XImageManager
+{
+    /** resets the image manager to default data.
+
+        <p>
+        This means that all user images of the instance will be removed.
+        </p>
+    */
+    void reset() raises ( com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IllegalAccessException );
+
+    /** retrieves the list of command URLs which have images associated.
+
+        @param nImageType
+            specifies the image type for this operation.
+
+        @return
+            all command URLs within the images manager that have an image
+            associated.
+    */
+    sequence< string > getAllImageNames( [in] short nImageType );
+
+    /** determines if a command URL has an associated image.
+
+        @param nImageType
+            specifies the image type for this operation.
+
+        @param CommandURL
+            a command URL that should be checked for an associated image.
+
+        @return
+            `TRUE` if an image is associated, otherwise `FALSE`.
+    */
+    boolean hasImage( [in] short nImageType, [in] string CommandURL ) raises ( com::sun::star::lang::IllegalArgumentException );
+
+    /** retrieves the associated images of command URLs.
+
+        @param nImageType
+            specifies the image type for this association operation.
+
+        @param aCommandURLSequence
+            a sequence of command URLs for which the images are requested.
+
+        @return
+            a sequence of graphics object which are associated with the
+            provided command URLs. If an unknown command URL is provided or
+            a command URL has no associated image a graphics object with an
+            empty image is provided. If the sequence
+            <var>aCommandURLSequence</var> contains an invalid command
+            URL a com::sun::star::lang::IllegalArgumentException
+            is thrown.
+    */
+    sequence< ::com::sun::star::graphic::XGraphic > getImages( [in] short nImageType, [in] sequence< string > aCommandURLSequence ) raises ( com::sun::star::lang::IllegalArgumentException );
+
+    /** replaces the associated images of command URLs.
+
+        @param nImageType
+            specifies the image type for this association operation.
+
+        @param aCommandURLSequence
+            a sequence of command URLs for which images should be replaced.
+
+        @param aGraphicsSequence
+            a sequence of graphic objects which should replace the old images
+            of the provided command URLs.
+
+        <p>
+        If a command URL cannot be found the replace call will be omitted. If
+        <var>aCommandURLSequence</var> contains an invalid command URL a
+        com::sun::star::lang::IllegalArgumentException
+        is thrown. If the image manager is  associated with a read-only configuration
+        manager a com::sun::star::lang::IllegalAccessException
+        is thrown.
+        </p>
+    */
+    void replaceImages( [in] short nImageType, [in] sequence< string > aCommandURLSequence, [in] sequence< ::com::sun::star::graphic::XGraphic > aGraphicsSequence ) raises ( com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IllegalAccessException );
+
+    /** removes associated images to a command URL.
+
+        @param nImageType
+            specifies the image type for this association operation.
+
+        @param CommandURLs
+            a sequence of command URLs for which the images should be removed.
+
+        <p>
+        If the <var>aCommandURLSequence</var> contains an invalid command URL a
+        com::sun::star::lang::IllegalArgumentException is
+        thrown. If  the image manager is associated with a read-only configuration
+        manager a com::sun::star::lang::IllegalAccessException
+        is thrown.
+        </p>
+    */
+    void removeImages( [in] short nImageType, [in] sequence< string > CommandURLs ) raises ( com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IllegalAccessException );
+
+    /** inserts new image/command associations to an image manager.
+
+        @param nImageType
+            specifies the image type for this association operation.
+
+        @param aCommandURLSequence
+            a sequence of command URLs which specify which commands get a new image.
+
+        @param aGraphicSequence
+            a sequence of graphic objects which should be associated with the provided
+            command URLs.
+
+        <p>
+        If an association is already present it is replaced. If
+        <var>aCommandURLSequence</var> contains an invalid command URL a
+        com::sun::star::lang::IllegalArgumentException
+        is thrown. If the configuration manager is read-only a
+        com::sun::star::lang::IllegalAccessException is
+        thrown.
+        </p>
+    */
+    void insertImages( [in] short nImageType, [in] sequence< string > aCommandURLSequence, [in] sequence< ::com::sun::star::graphic::XGraphic > aGraphicSequence ) raises ( com::sun::star::container::ElementExistException, com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IllegalAccessException );
+
+    /** provides access to persistence functions to load/store images
+        data from a storage.
+    */
+    interface com::sun::star::ui::XUIConfigurationPersistence;
+
+    /** provides functions to add and remove listeners for changes within an
+        image manager.
+
+        <p>
+        An image manager implementation notifies its listener whenever an image
+        set has been changed, due to insert, remove or replace operations. To
+        minimize the overhead for notifications an image manager places all
+        inserted and/or replaced images into a single notify call. A container
+        which implements com::sun::star::container::XNameAccess
+        holds the information. The access key is a command URL and provides a
+        ::com::sun::star::graphic::XGraphic. This container
+        is placed into  the
+        com::sun::star::ui::ConfigurationEvent::Element.
+        The image set which has been changed is put into the
+        com::sun::star::ui::ConfigurationEvent::aInfo().
+        </p>
+    */
+    interface com::sun::star::ui::XUIConfiguration;
+
+    /** allows controlling or observing the lifetime of an image manager
+        instance.
+
+    <p>The owner of the object may dispose of this object using
+    com::sun::star::lang::XComponent::dispose().
+    </p>
+    */
+    interface ::com::sun::star::lang::XComponent;
+
+    /** initializes an image manager instance.
+
+        An image manager instance must be initialized using
+        com::sun::star::lang::XInitialization::initialize()
+        before it can be used.<br>
+        The following property must be provided if the image manager is
+        related to a module:
+        <ul>
+            <li><b>ModuleIdentifier</b>specifies a string property which is the
+            unique identifier of module.
+            </li>
+            <li><b>UserConfigStorage</b>specifies a
+            com::sun::star::embed::XStorage property which
+            provides access to the configuration storage of the module.
+            </li>
+            <li><b>UserRootCommit</b>specifies an optional
+            com::sun::star::embed::XTransactedObject
+            property which makes it possible to commit a root storage.
+            </li>
+        </ul>
+    */
+    interface ::com::sun::star::lang::XInitialization;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

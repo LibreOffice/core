@@ -1,0 +1,5 @@
+"ObjectMenuController";"com::sun::star::frame::XPopupMenuController";"setPopupMenu()"
+"ObjectMenuController";"com::sun::star::frame::XPopupMenuController";"updatePopupMenu()"
+"ObjectMenuController";"com::sun::star::lang::XEventListener";"disposing()"
+"ObjectMenuController";"com::sun::star::lang::XInitialization";"initialize()"
+"ObjectMenuController";"com::sun::star::frame::XStatusListener";"statusChanged()"

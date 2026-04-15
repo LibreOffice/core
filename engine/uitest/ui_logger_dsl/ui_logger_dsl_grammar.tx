@@ -1,0 +1,29 @@
+/*
+  This file is for defining the DSL grammar.
+  This file imports all grammar rules from all the other files.
+  The compiler works with this file.
+  Each imported file has comments related to its content.
+*/
+
+import dialog_commands
+import starter_commands
+import uno_commands
+import UI_Object_commands
+import Special_commands
+import General_commands
+
+UILogger:
+    commands*=Command
+;
+
+Command:
+  UNOCommand | StarterCommand | UIObjectCommand | DialogCommand  |
+  SpecialCommand | GeneralCommand | Comment
+;
+/*
+  The Comment rule is for having an ability to write a comment,
+  if you want to write a test case in the DSL
+*/
+Comment:
+  /\/\/.*$/
+;

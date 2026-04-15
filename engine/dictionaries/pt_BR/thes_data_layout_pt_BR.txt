@@ -1,0 +1,129 @@
+Descrição da estrutura dos dados necessários para MyThes
+-------------------------------------------------- ------
+
+MyThes é muito simples. Quase todos os "smarts" são realmente
+no próprio arquivo de dados do dicionário de sinônimos.
+
+O formato deste arquivo é o seguinte:
+
+- sem dados binários
+
+- o final da linha é uma nova linha '\n' e não um retorno de carro/avanços de linha
+
+- A linha 1 é uma string de caracteres que descreve a codificação usada para o arquivo. Cabe ao programa de chamada converter
+de e para esta codificação, se necessário.
+
+     ISO8859-1 é usado pelo arquivo th_en_US_new.dat.
+
+     Strings atualmente reconhecidas pelo OpenOffice.org são:
+
+     ISO8859-1
+     ISO8859-2
+     ISO8859-3
+     ISO8859-4
+     ISO8859-5
+     ISO8859-6
+     ISO8859-7
+     ISO8859-8
+     ISO8859-9
+     ISO8859-10
+     KOI8-R
+     CP-1251
+     ISO8859-14
+     ISCII-DEVANAGARI
+     UTF8
+
+
+- Todas as linhas remanescentes do arquivo seguem esta estrutura
+
+entrada|num_mean
+pos|syn1_mean|syn2|...
+.
+.
+.
+pos|mean_syn1|syn2|...
+
+
+Onde:
+
+   entrada - todas as versões em minúsculas da palavra ou frase que está sendo descrita
+   num_mean - número de significados para esta entrada
+
+   Há um significado por linha e cada significado é composto por
+
+   pos - classe gramatical ou outra descrição específica de significado
+   syn1_mean - sinônimo 1 também usado para descrever o próprio significado
+   syn2 - sinônimo 2 para esse significado etc.
+
+
+Para tornar isso ainda mais claro, aqui estão os dados reais para o
+entrada "simples".
+
+simples|9
+(adj)|simples|elementar|final|supersimplificado|simplista|simplex|simplificado|não analisável |
+não decomposto|não complicado|não sofisticado|fácil|simples|não subdividido
+(adj)|elementar|simples|não problemático|fácil
+(adj)|nua|mera|simples
+(adj)|infantil|olhos arregalados|olhos orvalhados|ingênuo|naif
+(adj)|estúpido|estúpido|simplório|retardado
+(adj)|simples|não subdividido|sem lóbulo|suave
+(adj)|simples
+(substantivo)|erva|planta herbácea
+(substantivo)|simplório|pessoa|indivíduo|alguém|alguém|mortal|humano|alma
+
+
+Diz que "simples" tem 9 significados diferentes e cada
+o significado terá sua classe gramatical e pelo menos 1 sinônimo
+com outro se predefinido seguindo na mesma linha.
+
+
+
+Depois de criar seu próprio arquivo de texto estruturado, você pode usar
+o programa perl "th_gen_idx.pl" que pode ser encontrado neste
+diretório para criar um arquivo de índice que é usado para buscar em
+seu arquivo de dados pelo código MyThes.
+
+A maneira correta de executar o programa perl é a seguinte:
+
+cat th_en_US_new.dat|./th_gen_idx.pl> th_en_US_new.idx
+
+
+
+Então, se você liderar o arquivo de índice resultante, deverá ver o
+Segue:
+
+ISO8859-1
+142689
+'capô|10
+Gravenhage de|88
+'tween|173
+'tween decks|196
+.22|231
+.22 calibre|319
+.22 calibre|365
+Calibre 38|411
+Calibre 38|457
+Calibre .45|503
+Calibre .45|549
+0|595
+1|666
+1 crônicas|6283
+1 esdras|6336
+
+
+A linha 1 é a mesma string de codificação tirada do
+arquivo de dados de dicionário de sinônimos estruturado.
+
+A linha 2 é uma contagem do número total de entradas
+em seu dicionário de sinônimos.
+
+Todas as linhas restantes são do formulário
+
+entrada|byte_offset_into_data_file_where_entry_is_found
+
+
+Isso é tudo que existe também.
+
+
+Kevin
+kevin.hendricks@sympatico.ca

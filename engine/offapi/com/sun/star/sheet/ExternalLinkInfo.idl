@@ -1,0 +1,56 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+/** describes an external link in a formula.
+ */
+struct ExternalLinkInfo
+{
+    /** Link type, one of ExternalLinkType constants.
+     */
+    long Type;
+
+    /** Location of this link type.
+
+        <p>Modes used:
+
+        <ol>
+        <li>If #Type is ExternalLinkType::EXTERNAL,
+        this member shall contain a `string` with the
+        <em>URI</em> of a document. The formula that would need this
+        information for example would contain <code>=[1]Sheet1!A1</code> or
+        <code>='[1]Sheet name'!A1</code> where <em>[1]</em> does resolve to
+        the URI contained in the member #Data. Note that the
+        quotes cover both, the document name and the sheet name.</li>
+
+        <li>If #Type is ExternalLinkType::DDE,
+        this member shall contain a DDELinkInfo describing
+        service name, topic, and all known items of a DDE link.</li>
+        </ol></p>
+     */
+    any Data;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

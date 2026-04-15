@@ -1,0 +1,11 @@
+--- lang/cpp/src/keylistresult.cpp
++++ lang/cpp/src/keylistresult.cpp
+@@ -77,7 +77,7 @@
+ 
+ void GpgME::KeyListResult::detach()
+ {
+-    if (!d || d.unique()) {
++    if (!d || d.use_count() == 1) {
+         return;
+     }
+     d.reset(new Private(*d));

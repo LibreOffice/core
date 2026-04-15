@@ -1,0 +1,4 @@
+"SwXTextRanges";"com::sun::star::container::XIndexAccess";"getCount()"
+"SwXTextRanges";"com::sun::star::container::XIndexAccess";"getByIndex()"
+"SwXTextRanges";"com::sun::star::container::XElementAccess";"getElementType()"
+"SwXTextRanges";"com::sun::star::container::XElementAccess";"hasElements()"

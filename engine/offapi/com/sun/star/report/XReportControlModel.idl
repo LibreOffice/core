@@ -1,0 +1,87 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+ module com {  module sun {  module star {  module report {
+
+interface XReportControlModel
+{
+    /** allows the creation of sub reports.
+    */
+    interface XReportComponent;
+
+    interface XReportControlFormat;
+
+    /** allows to register listeners to be notified of changes in the container.
+    */
+    interface com::sun::star::container::XContainer;
+
+    /** gives access to the com::sun::star::report::XFormatCondition elements by index.
+    */
+    interface com::sun::star::container::XIndexContainer;
+
+    /** Creates a format condition.
+        @return
+               report component
+    */
+    XFormatCondition createFormatCondition() raises( com::sun::star::uno::Exception );
+
+
+    /** Specifies which content should be shown.
+
+        The value can be
+
+        - the name of a database column.
+          The format to use is <code>field:[name]</code>
+        - the name of a function defined in the report or a group.
+          The format to use is <code>rpt:[functionName]</code>
+        - an expression like <code>rpt:24+24-47</code>
+
+        @see http://wiki.openoffice.org/wiki/SUN_Report_Builder
+        @see http://wiki.openoffice.org/wiki/SUN_Report_Builder#Syntax
+        @see http://wiki.openoffice.org/wiki/Base/Reports/Functions
+    */
+    [attribute,bound] string DataField
+    {
+        set raises ( com::sun::star::lang::IllegalArgumentException,com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** Specifies that the element gets printed when the group changes.
+        The default value is `TRUE`.
+    */
+    [attribute,bound] boolean PrintWhenGroupChange
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** Describes the print expression of the report control model.
+        If the expression evaluates to true than the report control model will be printed otherwise not.
+    */
+    [attribute,bound] string ConditionalPrintExpression
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

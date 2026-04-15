@@ -1,0 +1,101 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module chart {
+
+
+/** the base service for the diagram of the chart document.
+
+    <p>The diagram is the object that contains the actual plot.</p>
+
+    <p>Different Diagram Types, e.g., PieDiagram or
+    LineDiagram, can be instantiated by the
+    com::sun::star::lang::XMultiServiceFactory of
+    the XChartDocument.</p>
+
+ */
+published service Diagram
+{
+
+    interface com::sun::star::chart::XDiagram;
+
+    /** Provides easier access to the different axes and their sub elements.
+    */
+    [optional] interface com::sun::star::chart::XAxisSupplier;
+
+    /** Provides access to the titles of the secondary X axis and Y axis.
+     */
+    [optional] interface com::sun::star::chart::XSecondAxisTitleSupplier;
+
+    [optional] interface com::sun::star::chart::XDiagramPositioning;
+
+
+    /** If this property is `TRUE` the position is calculated by the application automatically.
+        Setting this property to false will have no effect. Instead use the interface com::sun::star::drawing::XShape
+        to set a concrete position (note com::sun::star::chart::XDiagram is derived from com::sun::star::drawing::XShape).
+     */
+    [optional, property] boolean AutomaticPosition;
+
+
+    /** If this property is `TRUE` the size is calculated by the application automatically.
+        Setting this property to false will have no effect. Instead use the interface com::sun::star::drawing::XShape
+        to set a concrete size (note com::sun::star::chart::XDiagram is derived from com::sun::star::drawing::XShape).
+     */
+    [optional, property] boolean AutomaticSize;
+
+
+    interface com::sun::star::beans::XPropertySet;
+
+
+    /** If a Diagram may be stored as XML file, this
+        service should be supported in order to preserve unparsed XML
+        attributes.
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
+
+
+    /** determines if the data for a data row is contained in the
+        columns or in the rows of the data array.
+
+        @see ChartDataRowSource
+        @see ChartDataArray
+     */
+    [property] com::sun::star::chart::ChartDataRowSource DataRowSource;
+
+
+    /** specifies how the caption of data points is displayed.
+
+        @see ChartDataCaption
+     */
+    [property] long DataCaption;
+
+
+    /** specifies how empty or invalid cells in the provided data should be handled when displayed
+
+        @see MissingValueTreatment
+     */
+    [optional, property] long MissingValueTreatment;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

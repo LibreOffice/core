@@ -1,0 +1,22 @@
+--- lp_presolve.c
++++ lp_presolve.c
+@@ -168,7 +168,7 @@
+   if(isprimal) {
+     if(psdata->primalundo != NULL)
+       mat = psdata->primalundo->tracker;
+-    solution = lp->full_solution + lp->presolve_undo->orig_rows;
++    solution = lp->full_solution == NULL ? NULL : lp->full_solution + lp->presolve_undo->orig_rows;
+     slacks   = lp->full_solution;
+   }
+   else {
+--- lp_pricePSE.c
++++ lp_pricePSE.c
+@@ -145,7 +147,7 @@
+ 
+   /* Store the active/current pricing type */
+   if(isdual == AUTOMATIC)
+-    isdual = (MYBOOL) lp->edgeVector[0];
++    isdual = lp->edgeVector[0] != 0.0;
+   else
+     lp->edgeVector[0] = isdual;
+ 

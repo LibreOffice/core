@@ -1,0 +1,11 @@
+--- build.xml
++++ build.xml
+@@ -219,8 +219,6 @@
+ 			debug="on"
+ 			includes="**/*.java"
+ 			excludes="${excludes},**/bak/**"
+-			source="1.6"
+-			target="1.6"
+ 		>
+ 			<classpath>
+ 				<fileset refid="lib-fileset"/>

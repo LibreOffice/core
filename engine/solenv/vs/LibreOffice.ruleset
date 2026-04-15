@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="LibreOffice Rule Set" Description=" " ToolsVersion="15.0">
+ <Rules AnalyzerId="Microsoft.Analyzers.NativeCodeAnalysis" RuleNamespace="Microsoft.Rules.Native">
+  <Rule Id="C6011" Action="Warning"/>
+ </Rules>
+</RuleSet>

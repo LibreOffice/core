@@ -1,0 +1,21 @@
+/*
+
+Settings related to Clang compiler plugins.
+
+*/
+
+#ifndef CONFIG_CLANG_H
+#define CONFIG_CLANG_H
+
+#undef BUILDDIR
+#undef SDKDIR
+#undef SRCDIR
+#undef WORKDIR
+
+#undef CLANG_VERSION
+
+/* This is actually unused, but it should change whenever Clang changes,
+thus causing update of this .h file and triggering rebuild of our Clang plugin. */
+#undef CLANG_FULL_VERSION
+
+#endif

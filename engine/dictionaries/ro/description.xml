@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <identifier value="romanian.contemporary.dictionaries.by.lucian" />
+    <version value="1.6" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+    <publisher>
+      <name lang="en-US" xlink:href="http://rospell.sourceforge.net">rospell</name>
+    </publisher>
+    <display-name>
+      <name lang="en-US">Romanian spelling dictionary, hyphenation rules, and thesaurus</name>
+    </display-name>
+    <platform value="all" />
+</description>

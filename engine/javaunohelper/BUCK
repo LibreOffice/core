@@ -1,0 +1,21 @@
+genrule(
+  name = 'juh-src',
+  cmd = ' && '.join([
+    'cd $TMP',
+    'echo "FAKE SOURCE ARCHIVE" > README',
+    'zip -qr $OUT *',
+  ]),
+  out = 'juh-src.jar',
+  visibility = ['PUBLIC'],
+)
+
+genrule(
+  name = 'juh-javadoc',
+  cmd = ' && '.join([
+    'cd $TMP',
+    'echo "FAKE JAVADOC ARCHIVE" > README',
+    'zip -qr $OUT *',
+  ]),
+  out = 'juh-javadoc.jar',
+  visibility = ['PUBLIC'],
+)

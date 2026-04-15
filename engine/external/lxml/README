@@ -1,0 +1,7 @@
+LXML XML processing python Library from [https://lxml.de/].
+
+This library is used for the .ui accessibility checker bin/gla11y
+
+The archive was downloaded from:
+[https://lxml.de/files/lxml-4.9.2.tgz]
+on 2023-07-17.

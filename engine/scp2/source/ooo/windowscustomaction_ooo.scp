@@ -1,0 +1,287 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "config_features.h"
+#include "macros.inc"
+
+WindowsCustomAction gid_Customaction_Regallmsdocdll
+	Name = "Regallmsdocdll";
+	Typ = "65";
+	Source = "reg4allmsdoc.dll";
+	Target = "FindRegisteredExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH And _IsSetupTypeMin<>\"Custom\"", "CostFinalize");
+End
+
+WindowsCustomAction gid_Customaction_Restoreregallmsdocdll
+    Name = "Restoreregallmsdocdll";
+    Typ = "65";
+    Source = "reg4allmsdoc.dll";
+    Target = "RestoreRegAllMSDoc";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Regactivexdll1
+	Name = "Regactivexdll1";
+	Typ = "65";
+	Source = "regactivex.dll";
+	Target = "InstallActiveXControl";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "(\&FEATURETEMPLATE=3 Or (\!FEATURETEMPLATE=3 And \&FEATURETEMPLATE=-1)) And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Regactivexdll2
+	Name = "Regactivexdll2";
+	Typ = "65";
+	Source = "regactivex.dll";
+	Target = "DeinstallActiveXControl";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "RemoveExistingProducts");
+End
+
+#ifdef HAVE_WINDOWS_SDK
+
+WindowsCustomAction gid_Customaction_sdqsmsidll
+	Name = "sdqsmsidll";
+	Typ = "65";
+	Source = "sdqsmsi.dll";
+	Target = "ShutDownQuickstarter";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "", "CCPSearch");
+End
+
+WindowsCustomAction gid_Customaction_qslnkmsidll
+	Name = "qslnkmsidll";
+	Typ = "65";
+	Source = "qslnkmsi.dll";
+	Target = "RemoveQuickstarterLink";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "sdqsmsidll");
+End
+
+#endif /* HAVE_WINDOWS_SDK */
+
+WindowsCustomAction gid_Customaction_Instooofiltmsidll2
+	Name = "Instooofiltmsidll";
+	Typ = "65";
+	Source = "instooofiltmsi.dll";
+	Target = "RestartIndexingService";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Shellextensionsdll3
+	Name = "Shellextensionsdll3";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "InstallStartmenuFolderIcon";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Shellextensionsdll4
+	Name = "Shellextensionsdll4";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "DeinstallStartmenuFolderIcon";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "MigrateFeatureStates");
+End
+
+WindowsCustomAction gid_Customaction_Shellextensionsdll5
+	Name = "Shellextensionsdll5";
+	Typ = "321";
+	Source = "shlxtmsi.dll";
+	Target = "SetProductInstallMode";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "FindRelatedProducts");
+	Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "FindRelatedProducts");
+End
+
+WindowsCustomAction gid_Customaction_Check_Install_Directory
+	Name = "CheckInstallDirectory";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "CheckInstallDirectory";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed", "CheckVersions");
+	Assignment2 = ("ControlEvent", "SetupType", "Next", "DoAction", "CheckInstallDirectory", "_IsSetupTypeMin = \"Typical\" And Not Installed", "2");
+	Assignment3 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "CheckInstallDirectory", "Not Installed", "2");
+End
+
+WindowsCustomAction gid_Customaction_CheckPatchList
+	Name = "CheckPatchList";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "CheckPatchList";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "PATCH", "Patch1NotInstalled");
+End
+
+WindowsCustomAction gid_Customaction_MigrateInstallPath
+      Name = "MigrateInstallPath";
+      Typ = "321";
+      Source = "shlxtmsi.dll";
+      Target = "MigrateInstallPath";
+      Inbinarytable = 1;
+      Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
+      Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
+End
+
+WindowsCustomAction gid_Customaction_CompleteInstallPath
+      Name = "CompleteInstallPath";
+      Typ = "321";
+      Source = "shlxtmsi.dll";
+      Target = "CompleteInstallPath";
+      Inbinarytable = 1;
+      Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "MigrateInstallPath");
+      Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "MigrateInstallPath");
+End
+
+#ifdef HAVE_WINDOWS_SDK
+
+WindowsCustomAction gid_Customaction_CheckVersions
+	Name = "CheckVersions";
+	Typ = "321";
+	Source = "sn_tools.dll";
+	Target = "CheckVersions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "NOT Installed", "NewProductFound");
+	Assignment2 = ("InstallUISequence", "NOT Installed", "NewProductFound");
+End
+
+WindowsCustomAction gid_Customaction_SelectLanguage
+    Name = "SelectLanguage";
+    Typ = "321";
+    Source = "sellangmsi.dll";
+    Target = "SelectLanguage";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "NOT Installed And (ADDLOCAL=\"\" Or NOT UI_LANGS=\"\")", "MigrateFeatureStates");
+    Assignment2 = ("InstallUISequence", "NOT Installed And (ADDLOCAL=\"\" Or NOT UI_LANGS=\"\")", "MigrateFeatureStates");
+End
+
+WindowsCustomAction gid_Customaction_SortTree
+    Name = "SortTree";
+    Typ = "321";
+    Source = "sellangmsi.dll";
+    Target = "SortTree";
+    Inbinarytable = 1;
+    Assignment1 = ("ControlEvent", "CustomSetup", "Tree", "DoAction", "SortTree", "1", "1");
+End
+
+WindowsCustomAction gid_Customaction_LookForRegisteredExtensions
+	Name = "LookForRegisteredExtensions";
+	Typ = "65";
+	Source = "reg4allmsdoc.dll";
+	Target = "LookForRegisteredExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "LookForRegisteredExtensions", "1", "2");
+End
+
+WindowsCustomAction gid_Customaction_RegisterSomeExtensions
+	Name = "RegisterSomeExtensions";
+	Typ = "65";
+	Source = "reg4allmsdoc.dll";
+	Target = "RegisterSomeExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "FileTypeDialog", "Next", "DoAction", "RegisterSomeExtensions", "1", "1");
+End
+
+#endif /* HAVE_WINDOWS_SDK */
+
+/* Deferred not-impersonated actions that will call regsvr32 to (un)register DLLs.
+ * Custom action type 1 (msidbCustomActionTypeDll + msidbCustomActionTypeBinaryData)
+ * + 64 (msidbCustomActionTypeContinue) + 1024 (msidbCustomActionTypeInScript)
+ * + 2048 (msidbCustomActionTypeNoImpersonate).
+ * Since deferred actions don't have access to current DB, the actions depend on
+ * immediate-executed action prep_reg_unreg_dlls (see below) that precedes it, and
+ * sets this action's CustomActionData property.
+ */
+
+WindowsCustomAction gid_Customaction_reg_dlls
+    Name = "reg_dlls";
+    Typ = "3137";
+    Source = "reg_dlls.dll";
+    Target = "RegDLLs";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "reg_dlls", "InstallFinalize");
+End
+
+WindowsCustomAction gid_Customaction_unreg_dlls
+    Name = "unreg_dlls";
+    Typ = "3137";
+    Source = "reg_dlls.dll";
+    Target = "UnregDLLs";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "unreg_dlls", "UnpublishComponents");
+End
+
+/* Immediately-executed action that adds registration command lines for spsupp_x*.dll
+ * to "[un]reg_dlls" properties.
+ * Custom action type 1 (msidbCustomActionTypeDll + msidbCustomActionTypeBinaryData)
+ * + 64 (msidbCustomActionTypeContinue).
+ */
+WindowsCustomAction gid_Customaction_prep_reg_dlls
+    Name = "prep_reg_unreg_dlls";
+    Typ = "65";
+    Source = "reg_dlls.dll";
+    Target = "PrepRegUnregDLLs";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "", "behind_CostFinalize");
+End
+
+#if HAVE_FEATURE_UPDATE_MAR
+
+WindowsCustomAction gid_Customaction_prepare_updateservice
+    Name = "prepare_updateservice";
+    Typ = "65";
+    Source = "install_updateservice.dll";
+    Target = "PrepareUpdateservice";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "", "behind_CostFinalize");
+End
+
+WindowsCustomAction gid_Customaction_install_updateservice
+    Name = "install_updateservice";
+    Typ = "3137";
+    Source = "install_updateservice.dll";
+    Target = "InstallUpdateservice";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "(\&gm_o_Onlineupdate=3 Or (\!gm_o_Onlineupdate=3 And \&gm_o_Onlineupdate=-1)) And Not REMOVE=\"ALL\"", "InstallFinalize");
+End
+
+WindowsCustomAction gid_Customaction_remove_updateservice
+    Name = "remove_updateservice";
+    Typ = "3137";
+    Source = "install_updateservice.dll";
+    Target = "RemoveUpdateservice";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "Not (\&gm_o_Onlineupdate=3 Or (\!gm_o_Onlineupdate=3 And \&gm_o_Onlineupdate=-1)) And Not REMOVE=\"ALL\"", "InstallFinalize");
+End
+
+WindowsCustomAction gid_Customaction_uninstall_updateservice
+    Name = "uninstall_updateservice";
+    Typ = "3137";
+    Source = "install_updateservice.dll";
+    Target = "UninstallUpdateservice";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "(\&gm_o_Onlineupdate=3 Or (\!gm_o_Onlineupdate=3 And \&gm_o_Onlineupdate=-1)) And REMOVE=\"ALL\"", "UnpublishComponents");
+End
+
+#endif

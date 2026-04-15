@@ -1,0 +1,96 @@
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+
+# This file defines the languages of the spellchecker, that are
+# included into the language specific installation sets.
+# First column: Language in the installation set.
+# Second column: Assigned spellchecker languages. Comma separated list.
+
+# The first entry after the "=" is the entry, that will be included into
+# a language pack of the corresponding language. If no spellchecker
+# shall be included into the language pack, the keyword "EMPTY" can
+# be used as first entry.
+
+af = "af"
+ar = "ar,fa"
+be = "be"
+bg = "bg"
+bn = "bn"
+bo = "bo"
+br = "br,fr"
+bs = "bs"
+ca = "ca,an,es,fr,it,oc"
+ca-valencia = "ca,an,es,fr,it,oc"
+ckb = "ckb"
+cs = "cs"
+da = "da,de"
+de = "de,fr,it"
+el = "el"
+en-US = "en,es,fr"
+en-GB = "en,es,fr"
+en-ZA = "en,es,fr"
+eo = "eo"
+es = "es,an,ca,fr,gl,oc,pt-PT"
+et = "et"
+fa = "fa"
+fr = "fr,es"
+gd = "gd"
+gl = "gl,pt-PT,es"
+gu = "gu"
+he = "he"
+hi = "hi"
+hu = "hu,de"
+hr = "hr,de"
+id = "id"
+is = "is"
+it = "it,de,fr"
+ja = "EMPTY"
+kmr-Latn = "kmr-Latn-TR"
+ko = "ko"
+lo = "lo"
+lt = "lt,de,pl,ru"
+lv = "lv"
+mn = "mn"
+nb = "no,fr,de,es"
+ne = "ne"
+nl = "nl,fr,de"
+nn = "no,fr,de,es"
+oc = "oc,fr"
+pl = "pl,de,ru"
+pt-BR = "pt-BR,es"
+pt = "pt-PT,es"
+ro = "ro,de,hu"
+ru = "ru,de,uk"
+si = "si"
+sk = "sk"
+sl = "sl"
+sq = "sq"
+sv = "sv,de"
+sr = "sr"
+# ! Note the package 'sr' also holds the dictionaries for 'sr-Latn' (formerly 'sh') !
+sr-Latn = "sr"
+sw = "sw"
+te = "te"
+th = "th"
+tr = "tr"
+uk = "uk,ru"
+vi = "vi,fr"
+zh-TW = "EMPTY"
+zh-CN = "EMPTY"
+zu = "zu"
+

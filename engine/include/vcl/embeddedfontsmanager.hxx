@@ -1,0 +1,134 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include <vcl/dllapi.h>
+
+#include <com/sun/star/uno/Reference.hxx>
+
+#include <rtl/ustring.hxx>
+#include <tools/fontenum.hxx>
+#include <tools/long.hxx>
+
+#include <string_view>
+#include <vector>
+
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::task { class XInteractionHandler; }
+
+/** Helper functions for handling embedded fonts in documents. */
+class VCL_DLLPUBLIC EmbeddedFontsManager
+{
+private:
+    css::uno::Reference<css::frame::XModel> m_xDocumentModel;
+    std::vector<std::pair<OUString, OUString>> m_aAccumulatedFonts;
+
+public:
+    /// Specification of what kind of operation is allowed when embedding a font
+    enum class FontRights
+    {
+        ViewingAllowed, ///< Font may be embedded for viewing the document (but not editing)
+        EditingAllowed ///< Font may be embedded for editing document (implies viewing)
+    };
+
+    /**
+      Returns URL for a font file for the given font, or empty if it does not exist.
+    */
+    static OUString fontFileUrl(
+        std::u16string_view familyName, FontFamily family, FontItalic italic,
+        FontWeight weight, FontPitch pitch, FontRights rights );
+
+    /**
+      Reads a font from the input stream, saves it to a temporary font file and adds it to the list of
+      fonts that activateFonts will activate.
+      @param stream stream of font data
+      @param fontName name of the font (e.g. 'Times New Roman')
+      @param extra additional text to use for name (e.g. to distinguish regular from bold, italic,...), "?" for unique
+      @param key key to xor the data with, from the start until the key's length (not repeated)
+      @param eot whether the data is compressed in Embedded OpenType format
+    */
+    bool addEmbeddedFont( const css::uno::Reference< css::io::XInputStream >& stream,
+        const OUString& fontName, std::u16string_view extra,
+        std::vector< unsigned char > const & key, bool eot = false,
+        bool bSubsetted = false);
+
+    /**
+      fileUrl needs to be created via getFileUrlForTemporaryFont
+    */
+    bool addEmbeddedFont( const OUString& fileUrl, const OUString& fontName, bool sufficientFontRights );
+
+    /**
+      Adds the passed fonts to the list of known fonts. The fonts are used only until application
+      exit.
+
+      If some fonts are restricted (i.e., block document editing), and 'silentlyAllowRestricted' is
+      false, it checks if interaction handle is set; if it is, then asks user to approve read-only
+      mode. If 'silentlyAllowRestricted' is true; or if user approved switching to read-only mode,
+      then it activates all the fonts (and sets 'activatedRestrictedFonts' to true). Otherwise, it
+      removes these fonts from 'fonts', releases them, and only activates unrestricted fonts.
+    */
+    static void activateFonts(std::vector<std::pair<OUString, OUString>>& fonts,
+                              bool silentlyAllowRestrictedFonts,
+                              const css::uno::Reference<css::task::XInteractionHandler>& xHandler,
+                              bool& activatedRestrictedFonts);
+
+    static bool analyzeTTF(const void* data, tools::Long size, FontWeight& weight);
+
+    /**
+      Removes all temporary fonts in the path used by getFileUrlForTemporaryFont().
+      @internal
+    */
+    static void clearTemporaryFontFiles();
+
+    /** True if the font is common and doesn't need to be embedded
+     *
+     * A font is common is a font that is available or can be substituted
+     * for a metric compatible font on common platforms and editors. Not
+     * embedding such a font should not cause any issues with the document
+     * format and rendering.
+     *
+     * For example "Liberation Serif" is a common font because it's available
+     * in any typical LibreOffice installation or is substituted for the
+     * "Times New Roman" metric compatible font for compatibility with other
+     * editors.
+     */
+    static bool isCommonFont(std::u16string_view aFontName);
+
+    /**
+      Returns true, only if the passed font family is among the embedded fonts, and is restricted.
+      Since the "restricted" flag is always set after checking that there was no such family
+      prior to adding the new embedded font file, this flag means that the family is definitely
+      from an opened document, and is not available locally.
+    */
+    static bool isEmbeddedAndRestricted(std::u16string_view familyName);
+
+    static void releaseFonts(const std::vector<std::pair<OUString, OUString>>& fonts);
+
+    EmbeddedFontsManager(const css::uno::Reference<css::frame::XModel>& xModel);
+    ~EmbeddedFontsManager();
+
+    static OUString getFileUrlForTemporaryFont(std::u16string_view name, std::u16string_view suffix);
+
+    // write text dump
+    static bool tx_dump(const OUString& srcFontUrl, const OUString& destFileUrl);
+    // write Type 1 font
+    static bool tx_t1(const OUString& srcFontUrl, const OUString& destFontUrl);
+    // merge fonts together (can also be used to convert a name keyed font to a cid keyed font)
+    // each font in fonts is glyphaliasfile, mergefontfile
+    static bool mergefonts(const OUString& cidFontInfoUrl, const OUString& destFileUrl,
+                           const std::vector<std::pair<OUString, OUString>>& fonts);
+    // write OTF font, features is optional
+    static bool makeotf(const OUString& srcFontUrl, const OUString& destFileUrl,
+                        const OUString& fontMenuNameDBUrl, const OUString& charMapUrl,
+                        const OUString& featuresUrl);
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

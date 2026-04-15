@@ -1,0 +1,85 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, you can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+$(eval $(call gb_Library_Library,mysqlc))
+
+$(eval $(call gb_Library_use_externals,mysqlc,\
+	boost_headers \
+	mariadb-connector-c \
+	openssl \
+))
+
+$(eval $(call gb_Library_set_include,mysqlc,\
+	-I$(SRCDIR)/connectivity/inc \
+	-I$(SRCDIR)/connectivity/source/inc \
+	$$(INCLUDE) \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
+))
+
+$(eval $(call gb_Library_add_libs,mysqlc,\
+	$(if $(WITH_GSSAPI),$(GSSAPI_LIBS)) \
+	$(if $(filter-out WNT,$(OS)),$(if $(filter HAIKU MACOSX SOLARIS,$(OS)),\
+	-lz -lm,-rdynamic -lz -lm)) \
+	$(if $(filter LINUX,$(OS)),-ldl,) \
+))
+
+$(eval $(call gb_Library_use_sdk_api,mysqlc))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_system_win32_libs,mysqlc,\
+	Secur32 \
+))
+endif
+
+$(eval $(call gb_Library_use_libraries,mysqlc,\
+	comphelper \
+	cppu \
+	cppuhelper \
+	dbtools \
+	sal \
+	salhelper \
+))
+
+$(eval $(call gb_Library_add_defs,mysqlc,\
+	-DCPPDBC_EXPORTS \
+	-DCPPCONN_LIB_BUILD \
+	-DMARIADBC_VERSION_MAJOR=$(MARIADBC_MAJOR) \
+	-DMARIADBC_VERSION_MINOR=$(MARIADBC_MINOR) \
+	-DMARIADBC_VERSION_MICRO=$(MARIADBC_MICRO) \
+	$(if $(BUNDLE_MARIADB_CONNECTOR_C),-DBUNDLE_MARIADB=\"$(LIBMARIADB)\") \
+))
+
+$(eval $(call gb_Library_add_exception_objects,mysqlc,\
+	connectivity/source/drivers/mysqlc/mysqlc_catalog \
+	connectivity/source/drivers/mysqlc/mysqlc_column \
+	connectivity/source/drivers/mysqlc/mysqlc_columns \
+	connectivity/source/drivers/mysqlc/mysqlc_connection \
+	connectivity/source/drivers/mysqlc/mysqlc_databasemetadata \
+	connectivity/source/drivers/mysqlc/mysqlc_driver \
+	connectivity/source/drivers/mysqlc/mysqlc_general \
+	connectivity/source/drivers/mysqlc/mysqlc_indexes \
+	connectivity/source/drivers/mysqlc/mysqlc_keys \
+	connectivity/source/drivers/mysqlc/mysqlc_prepared_resultset \
+	connectivity/source/drivers/mysqlc/mysqlc_preparedstatement \
+	connectivity/source/drivers/mysqlc/mysqlc_resultset \
+	connectivity/source/drivers/mysqlc/mysqlc_resultsetmetadata \
+	connectivity/source/drivers/mysqlc/mysqlc_services \
+	connectivity/source/drivers/mysqlc/mysqlc_statement \
+	connectivity/source/drivers/mysqlc/mysqlc_table \
+	connectivity/source/drivers/mysqlc/mysqlc_tables \
+	connectivity/source/drivers/mysqlc/mysqlc_types \
+	connectivity/source/drivers/mysqlc/mysqlc_user \
+	connectivity/source/drivers/mysqlc/mysqlc_users \
+	connectivity/source/drivers/mysqlc/mysqlc_view \
+	connectivity/source/drivers/mysqlc/mysqlc_views \
+))
+
+$(eval $(call gb_Library_set_componentfile,mysqlc,connectivity/source/drivers/mysqlc/mysqlc,services))
+
+# vim: set noet sw=4 ts=4:

@@ -1,0 +1,77 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "macros.inc"
+
+/* *** Additional Extensions *** */
+
+#ifdef WITH_EXTENSION_INTEGRATION
+
+/* ** MediaWiki Publisher** */
+
+#ifndef WITHOUT_EXTENSION_MEDIAWIKI
+
+File gid_File_Oxt_MediaWiki
+    TXT_FILE_BODY;
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "Extension/wiki-publisher.filelist";
+End
+
+#endif
+
+/* ** NLPSolver ** */
+
+#ifdef WITH_EXTENSION_NLPSOLVER
+
+File gid_File_Oxt_NLPSolver
+    TXT_FILE_BODY;
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "Extension/nlpsolver.filelist";
+End
+
+#endif
+
+/* ** Script provider for BeanShell ** */
+
+#if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
+
+File gid_File_Rdb_Scriptproviderforbeanshell
+    TXT_FILE_BODY;
+    Name = "scriptproviderforbeanshell.rdb";
+    Dir = gid_Brand_Dir_Program_Services;
+    Styles = (PACKED);
+End
+
+#endif
+
+/* ** Script provider for JavaScript ** */
+
+#if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_JAVASCRIPT
+
+File gid_File_Rdb_Scriptproviderforjavascript
+    TXT_FILE_BODY;
+    Name = "scriptproviderforjavascript.rdb";
+    Dir = gid_Brand_Dir_Program_Services;
+    Styles = (PACKED);
+End
+
+#endif
+
+#endif

@@ -1,0 +1,11 @@
+--- builds/posix/make.defaults
++++ builds/posix/make.defaults
+@@ -102,7 +102,7 @@
+ #____________________________________________________________________________
+ 
+ # Firebird needs no RTTI
+-RTTI_FLAG:= -fno-rtti
++RTTI_FLAG:=
+ 
+ # If this is defined then we use special rules useful for developers only
+ IsDeveloper = @DEVEL_FLG@

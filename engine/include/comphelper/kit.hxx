@@ -1,0 +1,192 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_COMPHELPER_KIT_HXX
+#define INCLUDED_COMPHELPER_KIT_HXX
+
+#include <functional>
+
+#include <config_features.h>
+#include <comphelper/comphelperdllapi.h>
+#include <o3tl/strong_int.hxx>
+#include <rtl/ustring.hxx>
+
+typedef o3tl::strong_int<int, struct ViewShellDocIdTag> ViewShellDocId;
+
+class LanguageTag;
+namespace com::sun::star::awt
+{
+struct Rectangle;
+}
+
+// Interface between the COKit implementation called by COKit clients and other
+// LibreOffice code.
+
+namespace comphelper::COKit
+{
+/// interface for allowing threads to be transiently shutdown.
+class COMPHELPER_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ThreadJoinable
+{
+public:
+    /// shutdown and join threads, @returns true on success
+    virtual bool joinThreads() = 0;
+    /// restart any required threads, usually are demand-restarted
+    virtual void startThreads() {}
+};
+
+// Functions to be called only from the COKit implementation in desktop, not from other
+// places in LibreOffice code.
+
+#if KIT_ALWAYS_ACTIVE
+inline void setActive(bool bActive = true) { (void)bActive; }
+#else
+COMPHELPER_DLLPUBLIC void setActive(bool bActive = true);
+#endif
+
+COMPHELPER_DLLPUBLIC void setForkedChild(bool bIsChild = true);
+
+enum class statusIndicatorCallbackType
+{
+    Start,
+    SetValue,
+    Finish
+};
+
+COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(
+    void (*callback)(void* data, statusIndicatorCallbackType type, int percent, const char* pText),
+    void* data);
+
+// Functions that can be called from arbitrary places in LibreOffice.
+
+// Check whether the code is running as invoked through COKit.
+#if KIT_ALWAYS_ACTIVE
+constexpr bool isActive() { return true; }
+#else
+COMPHELPER_DLLPUBLIC bool isActive();
+#endif
+
+/// Is this a transient forked child process, that shares many
+/// eg. file-system resources with its parent process?
+COMPHELPER_DLLPUBLIC bool isForkedChild();
+
+/// Shift the coordinates before rendering each bitmap.
+/// Used by Calc to render each tile separately.
+/// This should be unnecessary (and removed) once Calc
+/// moves to using 100MM Unit.
+COMPHELPER_DLLPUBLIC void setLocalRendering(bool bLocalRendering = true);
+COMPHELPER_DLLPUBLIC bool isLocalRendering();
+
+/// Used by SlideshowLayerRenderer for signaling that a slide rendering is occurring.
+COMPHELPER_DLLPUBLIC void setSlideshowRendering(bool bSlideshowRendering);
+COMPHELPER_DLLPUBLIC bool isSlideshowRendering();
+
+/// Check whether clients want a part number in an invalidation payload.
+COMPHELPER_DLLPUBLIC bool isPartInInvalidation();
+/// Set whether clients want a part number in an invalidation payload.
+COMPHELPER_DLLPUBLIC void setPartInInvalidation(bool bPartInInvalidation);
+
+/// Check if we are doing tiled painting.
+COMPHELPER_DLLPUBLIC bool isTiledPainting();
+/// Set if we are doing tiled painting.
+COMPHELPER_DLLPUBLIC void setTiledPainting(bool bTiledPainting);
+/// Set if we are doing idle layout.
+COMPHELPER_DLLPUBLIC void setIdleLayouting(bool bIdleLayouting);
+/// Check if we are painting the dialog.
+COMPHELPER_DLLPUBLIC bool isDialogPainting();
+/// Set if we are painting the dialog.
+COMPHELPER_DLLPUBLIC void setDialogPainting(bool bDialogPainting);
+/// Set the DPI scale for rendering for HiDPI displays.
+COMPHELPER_DLLPUBLIC void setDPIScale(double fDPIScale);
+/// Get the DPI scale for rendering for HiDPI displays.
+COMPHELPER_DLLPUBLIC double getDPIScale();
+/// Set if we want no annotations rendering
+COMPHELPER_DLLPUBLIC void setTiledAnnotations(bool bTiledAnnotations);
+/// Check if annotations rendering is turned off
+COMPHELPER_DLLPUBLIC bool isTiledAnnotations();
+/// Set if we want range based header data
+COMPHELPER_DLLPUBLIC void setRangeHeaders(bool bTiledAnnotations);
+/// Check if range based header data is enabled
+COMPHELPER_DLLPUBLIC bool isRangeHeaders();
+
+enum Compat : sal_uInt32
+{
+    none = 0,
+    scNoGridBackground = 1,
+    scPrintTwipsMsgs = 2,
+};
+/// Set compatibility flags
+COMPHELPER_DLLPUBLIC void setCompatFlag(Compat flag);
+/// Get compatibility flags
+COMPHELPER_DLLPUBLIC bool isCompatFlagSet(Compat flag);
+/// Reset compatibility flags
+COMPHELPER_DLLPUBLIC void resetCompatFlag();
+
+/// Check whether clients want viewId in visible cursor invalidation payload.
+COMPHELPER_DLLPUBLIC bool isViewIdForVisCursorInvalidation();
+/// Set whether clients want viewId in visible cursor invalidation payload.
+COMPHELPER_DLLPUBLIC void setViewIdForVisCursorInvalidation(bool bViewIdForVisCursorInvalidation);
+
+/// Update the current Kit's locale.
+COMPHELPER_DLLPUBLIC void setLocale(const LanguageTag& languageTag);
+/// Get the current Kit's locale.
+COMPHELPER_DLLPUBLIC const LanguageTag& getLocale();
+
+/// Update the current Kit's language.
+COMPHELPER_DLLPUBLIC void setLanguageTag(const LanguageTag& languageTag);
+/// Get the current Kit's language.
+COMPHELPER_DLLPUBLIC const LanguageTag& getLanguageTag();
+/// If the language name should be used for this Kit instance.
+COMPHELPER_DLLPUBLIC bool isAllowlistedLanguage(const OUString& lang);
+
+/// Update the current Kit's timezone.
+COMPHELPER_DLLPUBLIC void setTimezone(bool isSet, std::u16string_view rTimezone);
+
+// Status indicator handling. Even if in theory there could be several status indicators active at
+// the same time, in practice there is only one at a time, so we don't handle any identification of
+// status indicator in this API.
+COMPHELPER_DLLPUBLIC void statusIndicatorStart(const OUString& sText);
+COMPHELPER_DLLPUBLIC void statusIndicatorSetValue(int percent);
+COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
+
+COMPHELPER_DLLPUBLIC void setBlockedCommandList(const char* blockedCommandList);
+
+COMPHELPER_DLLPUBLIC void
+setAnyInputCallback(const std::function<bool(void*, int)>& pAnyInputCallback, void* pData,
+                    const std::function<int()>& pMostUrgentPriorityGetter);
+COMPHELPER_DLLPUBLIC bool anyInput();
+
+COMPHELPER_DLLPUBLIC void setFileSaveDialogCallback(
+    const std::function<void(const char*, char*, size_t)>& pFileSaveDialogCallback);
+COMPHELPER_DLLPUBLIC bool fileSaveDialog(const OUString& rSuggested, OUString& rResult);
+
+// These allow setting callbacks, so that set/get of a view is possible even in code that is
+// below sfx2.
+COMPHELPER_DLLPUBLIC void setViewSetter(const std::function<void(int)>& pViewSetter);
+COMPHELPER_DLLPUBLIC void setView(int nView);
+COMPHELPER_DLLPUBLIC void setViewGetter(const std::function<int()>& pViewGetter);
+COMPHELPER_DLLPUBLIC int getView();
+
+/// Set the current DocId, which is used by Mobile COKit to
+/// load multiple documents and yet identify the views of each.
+/// There are events that are fired while creating a new view,
+/// and if we don't have a DocId, we can't know which other views
+/// within the same document (if any) should get those events.
+/// By setting this static value, we are able to set the DocId
+/// of each SfxViewShell at construction time.
+COMPHELPER_DLLPUBLIC void setDocId(ViewShellDocId nDocId);
+COMPHELPER_DLLPUBLIC ViewShellDocId getDocId();
+
+COMPHELPER_DLLPUBLIC void
+setInitialClientVisibleArea(const css::awt::Rectangle& rClientVisibleArea);
+COMPHELPER_DLLPUBLIC const css::awt::Rectangle& getInitialClientVisibleArea();
+}
+
+#endif // INCLUDED_COMPHELPER_KIT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

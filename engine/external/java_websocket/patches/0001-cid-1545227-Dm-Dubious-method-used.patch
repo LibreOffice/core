@@ -1,0 +1,55 @@
+From 695aacc67345bf1f9d311972f864751c135d4047 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sun, 1 Oct 2023 19:42:26 +0100
+Subject: [PATCH] cid#1545227 Dm: Dubious method used
+
+and
+
+cid#1545310 Dm: Dubious method used
+cid#1545513 Dm: Dubious method used
+---
+ src/main/java/org/java_websocket/drafts/Draft_6455.java | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/src/main/java/org/java_websocket/drafts/Draft_6455.java b/src/main/java/org/java_websocket/drafts/Draft_6455.java
+index f9f960d..1e08448 100644
+--- a/src/main/java/org/java_websocket/drafts/Draft_6455.java
++++ b/src/main/java/org/java_websocket/drafts/Draft_6455.java
+@@ -26,6 +26,7 @@
+ package org.java_websocket.drafts;
+ 
+ import java.math.BigInteger;
++import java.nio.charset.StandardCharsets;
+ import java.nio.ByteBuffer;
+ import java.security.MessageDigest;
+ import java.security.NoSuchAlgorithmException;
+@@ -470,7 +471,7 @@
+     if (log.isLoggable(Level.FINE)) {
+       log.fine("afterEnconding({}): {}" + " : " + framedata.getPayloadData().remaining() + " : " +
+           (framedata.getPayloadData().remaining() > 1000 ? "too big to display"
+-              : new String(framedata.getPayloadData().array())));
++              : new String(framedata.getPayloadData().array(), StandardCharsets.US_ASCII)));
+     }
+     return createByteBufferFromFramedata(framedata);
+   }
+@@ -590,7 +591,7 @@
+     if (log.isLoggable(Level.FINE)) {
+       log.fine("afterDecoding({}): {}" + " : " + frame.getPayloadData().remaining() + " : " +
+           (frame.getPayloadData().remaining() > 1000 ? "too big to display"
+-              : new String(frame.getPayloadData().array())));
++              : new String(frame.getPayloadData().array(), StandardCharsets.US_ASCII)));
+     }
+     frame.isValid();
+     return frame;
+@@ -838,7 +839,7 @@
+     } catch (NoSuchAlgorithmException e) {
+       throw new IllegalStateException(e);
+     }
+-    return Base64.encodeBytes(sh1.digest(acc.getBytes()));
++    return Base64.encodeBytes(sh1.digest(acc.getBytes(StandardCharsets.US_ASCII)));
+   }
+ 
+   private byte[] toByteArray(long val, int bytecount) {
+-- 
+2.41.0
+

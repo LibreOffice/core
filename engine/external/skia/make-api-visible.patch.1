@@ -1,0 +1,168 @@
+diff -ur skia.org/tools/window/WindowContext.h skia/tools/window/WindowContext.h
+--- skia.org/tools/window/WindowContext.h	2024-10-12 15:57:21
++++ skia/tools/window/WindowContext.h	2024-10-12 15:58:48
+@@ -23,7 +23,7 @@
+
+ namespace skwindow {
+
+-class WindowContext {
++class SK_API WindowContext {
+ public:
+     WindowContext(std::unique_ptr<const DisplayParams>);
+
+diff -ur skia.org/tools/window/mac/GaneshMetalWindowContext_mac.h skia/tools/window/mac/GaneshMetalWindowContext_mac.h
+--- skia.org/tools/window/mac/GaneshMetalWindowContext_mac.h	2024-10-12 15:57:21
++++ skia/tools/window/mac/GaneshMetalWindowContext_mac.h	2024-10-12 15:59:18
+@@ -8,6 +8,7 @@
+ #ifndef GaneshMetalWindowContext_mac_DEFINED
+ #define GaneshMetalWindowContext_mac_DEFINED
+
++#include "include/private/base/SkAPI.h"
+ #include <memory>
+
+ namespace skwindow {
+@@ -15,8 +16,8 @@
+ class DisplayParams;
+ struct MacWindowInfo;
+
+-std::unique_ptr<WindowContext> MakeGaneshMetalForMac(const MacWindowInfo&,
+-                                                     std::unique_ptr<const DisplayParams>);
++SK_API std::unique_ptr<WindowContext> MakeGaneshMetalForMac(const MacWindowInfo&,
++                                                     std::unique_ptr<const DisplayParams>);
+ }  // namespace skwindow
+
+ #endif
+diff -ur skia.org/tools/window/unix/GaneshGLWindowContext_unix.h skia/tools/window/unix/GaneshGLWindowContext_unix.h
+--- skia.org/tools/window/unix/GaneshGLWindowContext_unix.h	2024-10-12 15:57:21
++++ skia/tools/window/unix/GaneshGLWindowContext_unix.h	2024-10-12 15:59:44
+@@ -8,6 +8,7 @@
+ #ifndef GaneshGLWindowContext_unix_DEFINED
+ #define GaneshGLWindowContext_unix_DEFINED
+
++#include "include/private/base/SkAPI.h"
+ #include <memory>
+
+ namespace skwindow {
+@@ -15,8 +16,8 @@
+ class DisplayParams;
+ struct XlibWindowInfo;
+
+-std::unique_ptr<WindowContext> MakeGaneshGLForXlib(const XlibWindowInfo&,
+-                                                   std::unique_ptr<const DisplayParams>);
++SK_API std::unique_ptr<WindowContext> MakeGaneshGLForXlib(const XlibWindowInfo&,
++                                                   std::unique_ptr<const DisplayParams>);
+ }  // namespace skwindow
+
+ #endif
+diff -ur skia.org/tools/window/unix/GaneshVulkanWindowContext_unix.h skia/tools/window/unix/GaneshVulkanWindowContext_unix.h
+--- skia.org/tools/window/unix/GaneshVulkanWindowContext_unix.h	2024-10-12 15:57:21
++++ skia/tools/window/unix/GaneshVulkanWindowContext_unix.h	2024-10-12 15:58:48
+@@ -8,6 +8,7 @@
+ #ifndef GaneshVulkanWindowContext_unix_DEFINED
+ #define GaneshVulkanWindowContext_unix_DEFINED
+
++#include "include/private/base/SkAPI.h"
+ #include <memory>
+
+ namespace skwindow {
+@@ -15,8 +16,8 @@
+ class DisplayParams;
+ struct XlibWindowInfo;
+
+-std::unique_ptr<WindowContext> MakeGaneshVulkanForXlib(const XlibWindowInfo&,
+-                                                       std::unique_ptr<const DisplayParams>);
++SK_API std::unique_ptr<WindowContext> MakeGaneshVulkanForXlib(const XlibWindowInfo&,
++                                                       std::unique_ptr<const DisplayParams>);
+ }  // namespace skwindow
+
+ #endif
+diff -ur skia.org/tools/window/unix/GraphiteDawnVulkanWindowContext_unix.h skia/tools/window/unix/GraphiteDawnVulkanWindowContext_unix.h
+--- skia.org/tools/window/unix/GraphiteDawnVulkanWindowContext_unix.h	2024-10-12 15:57:21
++++ skia/tools/window/unix/GraphiteDawnVulkanWindowContext_unix.h	2024-10-12 15:58:48
+@@ -8,6 +8,7 @@
+ #ifndef GraphiteDawnVulkanWindowContext_unix_DEFINED
+ #define GraphiteDawnVulkanWindowContext_unix_DEFINED
+
++#include "include/private/base/SkAPI.h"
+ #include <memory>
+
+ namespace skwindow {
+@@ -15,7 +16,7 @@
+ class DisplayParams;
+ struct XlibWindowInfo;
+
+-std::unique_ptr<WindowContext> MakeGraphiteDawnVulkanForXlib(const XlibWindowInfo&,
++SK_API std::unique_ptr<WindowContext> MakeGraphiteDawnVulkanForXlib(const XlibWindowInfo&,
+                                                              std::unique_ptr<const DisplayParams>);
+ }  // namespace skwindow
+
+diff -ur skia.org/tools/window/unix/RasterWindowContext_unix.h skia/tools/window/unix/RasterWindowContext_unix.h
+--- skia.org/tools/window/unix/RasterWindowContext_unix.h	2024-10-12 15:57:21
++++ skia/tools/window/unix/RasterWindowContext_unix.h	2024-10-12 15:58:48
+@@ -8,6 +8,7 @@
+ #ifndef RasterWindowContext_unix_DEFINED
+ #define RasterWindowContext_unix_DEFINED
+
++#include "include/private/base/SkAPI.h"
+ #include <memory>
+
+ namespace skwindow {
+@@ -15,8 +16,8 @@
+ class DisplayParams;
+ struct XlibWindowInfo;
+
+-std::unique_ptr<WindowContext> MakeRasterForXlib(const XlibWindowInfo&,
+-                                                 std::unique_ptr<const DisplayParams>);
++SK_API std::unique_ptr<WindowContext> MakeRasterForXlib(const XlibWindowInfo&,
++                                                 std::unique_ptr<const DisplayParams>);
+ }  // namespace skwindow
+
+ #endif
+diff -ur skia.org/tools/window/win/WindowContextFactory_win.h skia/tools/window/win/WindowContextFactory_win.h
+--- skia.org/tools/window/win/WindowContextFactory_win.h	2024-10-12 15:57:21
++++ skia/tools/window/win/WindowContextFactory_win.h	2024-10-12 16:00:18
+@@ -13,28 +13,31 @@
+
+ #include <memory>
+
++#include "include/private/base/SkAPI.h"
++#include "include/core/SkTypes.h"
++
+ namespace skwindow {
+
+ class WindowContext;
+ class DisplayParams;
+
+ #ifdef SK_VULKAN
+-std::unique_ptr<WindowContext> MakeVulkanForWin(HWND, std::unique_ptr<const DisplayParams>);
++SK_API std::unique_ptr<WindowContext> MakeVulkanForWin(HWND, std::unique_ptr<const DisplayParams>);
+ #if defined(SK_GRAPHITE)
+ std::unique_ptr<WindowContext> MakeGraphiteVulkanForWin(HWND, std::unique_ptr<const DisplayParams>);
+ #endif
+ #endif
+
+ #ifdef SK_GL
+-std::unique_ptr<WindowContext> MakeGLForWin(HWND, std::unique_ptr<const DisplayParams>);
++SK_API std::unique_ptr<WindowContext> MakeGLForWin(HWND, std::unique_ptr<const DisplayParams>);
+ #endif
+
+ #ifdef SK_ANGLE
+-std::unique_ptr<WindowContext> MakeANGLEForWin(HWND, std::unique_ptr<const DisplayParams>);
++SK_API std::unique_ptr<WindowContext> MakeANGLEForWin(HWND, std::unique_ptr<const DisplayParams>);
+ #endif
+
+ #ifdef SK_DIRECT3D
+-std::unique_ptr<WindowContext> MakeD3D12ForWin(HWND, std::unique_ptr<const DisplayParams>);
++SK_API std::unique_ptr<WindowContext> MakeD3D12ForWin(HWND, std::unique_ptr<const DisplayParams>);
+ #endif
+
+ #ifdef SK_DAWN
+@@ -43,7 +46,7 @@
+ #endif
+ #endif
+
+-std::unique_ptr<WindowContext> MakeRasterForWin(HWND, std::unique_ptr<const DisplayParams>);
++SK_API std::unique_ptr<WindowContext> MakeRasterForWin(HWND, std::unique_ptr<const DisplayParams>);
+
+ }  // namespace skwindow
+

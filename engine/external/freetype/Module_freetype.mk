@@ -1,0 +1,30 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+$(eval $(call gb_Module_Module,freetype))
+
+$(eval $(call gb_Module_add_targets,freetype,\
+	UnpackedTarball_freetype \
+))
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Module_add_targets,freetype,\
+	StaticLibrary_freetype \
+))
+
+else
+
+$(eval $(call gb_Module_add_targets,freetype,\
+	ExternalProject_freetype \
+))
+
+endif
+
+# vim: set noet sw=4 ts=4:

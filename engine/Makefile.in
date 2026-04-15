@@ -1,0 +1,560 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uicheck screenshot
+
+.PHONY : check-if-root check-makefile-version bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch fetch-repos id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo coverage internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+
+DISABLE_GUI := @DISABLE_GUI@
+
+MAKECMDGOALS?=build
+build_goal:=$(if $(filter build uicheck,$(MAKECMDGOALS)),build)\
+ $(if $(filter check,$(MAKECMDGOALS)),unitcheck slowcheck subsequentcheck \
+	 $(if $(and $(filter Linux, $(shell uname)),$(if $(DISABLE_GUI),,1)), uicheck)) \
+ $(filter build-l10n-only build-non-l10n-only debugrun help showmodules translations $(gb_Top_MODULE_CHECK_TARGETS) check packageinfo gbuildtojson,$(MAKECMDGOALS))
+
+SRCDIR := @SRC_ROOT@
+BUILDDIR := @BUILDDIR@
+COMPILER_PLUGINS := @COMPILER_PLUGINS@
+GIT_BUILD := $(if $(wildcard $(SRCDIR)/.git),T)
+
+# Run autogen.sh if needed and force make to restart itself.
+# ... but there are several cases where we do not want to run
+# autogen.sh:
+# 1. if we are building from tarballs, not git checkout (I do not
+#    think packagers would ever want that. I certainly do not.)
+# 2. if we are making help, clean or distclean, because they do not
+#    need updated configuration
+ifeq (,$(MAKE_RESTARTS)$(if $(GIT_BUILD),,T)$(if $(filter-out help showmodules clean distclean,$(MAKECMDGOALS)),,T))
+
+# note: this must touch both Makefile and $(BUILDDIR)/Makefile, because make
+# may be invoked using either of these paths, and it will restart itself only
+# if the updated target is exactly the same path as the Makefile it is using
+.PHONY : force-restart
+Makefile $(BUILDDIR)/Makefile: $(BUILDDIR)/config_host.mk $(BUILDDIR)/config_host_lang.mk force-restart
+	@touch $@
+
+# run configure in an environment not polluted by config_host.mk
+ifneq ($(MSYSTEM),)
+WSL:=@WSL@
+# wsl needs unix-style path into windows realm, use long form to avoid confusing autogen.sh wrt
+# builddir != srcdir when in actually it is just srcdir-in-shortform vs srcdir-in-longform
+# for the same reason cd to the longform of BUILDDIR
+$(BUILDDIR)/config_host.mk : SRCDIR:=/$(shell $(WSL) wslpath -u $(shell cygpath -ml $(SRCDIR)))
+endif
+$(BUILDDIR)/config_host.mk : $(wildcard \
+		$(SRCDIR)/autogen.sh \
+		$(SRCDIR)/config_host.mk.in \
+		$(SRCDIR)/config_host_lang.mk.in \
+		$(SRCDIR)/Makefile.in \
+		$(SRCDIR)/instsetoo_native/util/openoffice.lst.in \
+		$(SRCDIR)/configure.ac \
+		$(SRCDIR)/config_host/*.h.in \
+		$(SRCDIR)/distro-configs/*.conf $(SRCDIR)/distro-configs/Jenkins/* \
+		$(SRCDIR)/download.lst \
+		$(SRCDIR)/m4/*.m4 \
+		$(BUILDDIR)/autogen.input \
+		$(BUILDDIR)/autogen.lastrun \
+		) \
+		$(shell if test -n '$(JAVA_HOME)' -a ! -d '$(JAVA_HOME)'; then echo force-restart; fi)
+	sh -c "$(if $(MSYSTEM),cd $(shell cygpath -ml $(BUILDDIR)); $(WSL) )$(SRCDIR)/autogen.sh"
+
+else # MAKE_RESTARTS
+
+.DEFAULT_GOAL := build
+
+# Nested test is to check if the systemd-detect-virt command doesn't exist or it reports we're not
+# in a container:
+check-if-root:
+	@if test ! `uname` = 'Haiku' -a `id -u` = 0 && test -z $$container; then \
+		if test ! -x "$$(command -v systemd-detect-virt)" || ! systemd-detect-virt -c -q; then \
+			echo; \
+			echo 'Building LibreOffice as root is a very bad idea, use a regular user.'; \
+			echo; \
+			exit 1; \
+		fi \
+	fi
+
+check-makefile-version:
+	@if awk 'BEGIN {exit ($(MAKE_VERSION) >= 4.0) ;}' ; then \
+		echo; \
+		echo "Running with make $(MAKE_VERSION) is likely to cause problems, try with $$GNUMAKE instead."; \
+		echo; \
+		exit 1; \
+	fi
+
+gb_Side ?= host
+
+include $(BUILDDIR)/config_$(gb_Side).mk
+
+export GMAKE_OPTIONS?=-r$(if $(verbose),,s)$(value $(MAKEFLAGS))
+
+PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)
+
+#
+# Partial Build
+#
+define gb_Top_GbuildModuleRules
+.PHONY: $(1) $(1).build $(1).all $(1).check $(1).clean $(1).showdeliverables $(1).coverage $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target))
+.PHONY: $(1).allbuild $(1).buildall $(1).allcheck $(1).checkall
+
+$(1): bootstrap fetch
+	$(KEEP_AWAKE_CMD) cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
+
+$(1).build $(1).check $(1).coverage $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target)): bootstrap fetch
+	$(KEEP_AWAKE_CMD) cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
+
+$(1).clean $(1).showdeliverables:
+	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
+
+$(1).allbuild $(1).buildall: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
+	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1)
+
+$(1).allcheck $(1).checkall: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
+	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)
+
+$(1).all:
+	@echo "'make $(1).all' was renamed to 'make $(1).allcheck' (or use 'make $(1).allbuild' to build without unit tests)"
+	@exit 42
+
+endef
+
+define gb_Top_GbuildModulesRules
+$(foreach m,$(1),$(call gb_Top_GbuildModuleRules,$(notdir $(m)),$(m)))
+endef
+
+gbuild_modules := $(patsubst $(SRCDIR)/%/,%,$(dir $(wildcard $(SRCDIR)/*/Module_*.mk $(SRCDIR)/external/*/Module_*.mk)))
+
+gbuild_internal_modules := $(filter-out external,$(patsubst $(SRCDIR)/%/,%,$(dir $(wildcard $(SRCDIR)/*/Module_*.mk))))
+
+internal.clean: $(addsuffix .clean,$(gbuild_internal_modules))
+
+
+$(eval $(call gb_Top_GbuildModulesRules,$(gbuild_modules)))
+
+gbuild_TARGETS := AllLangHelp \
+	AllLangMoTarget \
+	AllLangPackage \
+	AutoInstall \
+	CliLibrary \
+	CliNativeLibrary \
+	CliUnoApi \
+	CompilerTest \
+    ComponentTarget \
+	Configuration \
+	CppunitTest \
+	CustomTarget \
+	Dictionary \
+	DotnetLibrary \
+	DotnetTest \
+	Executable \
+	Extension \
+	ExtensionPackage \
+	ExtensionPackageSet \
+	ExternalPackage \
+	ExternalProject \
+	Gallery \
+	GeneratedPackage \
+	InstallModule \
+	InstallScript \
+	InternalUnoApi \
+	Jar \
+	JunitTest \
+	Library \
+	Module \
+	Package \
+	PackageSet \
+	Pagein \
+	Postprocess \
+	Pyuno \
+	PythonTest \
+	Rdb \
+	SdiTarget \
+	StaticLibrary \
+	UIConfig \
+	UITest \
+	UnoApi \
+	UnpackedTarball \
+	WinResTarget \
+	Zip \
+
+# build a generic gbuild target
+$(foreach target,$(gbuild_TARGETS),$(target)_% $(foreach module,$(gbuild_modules),$(target)_$(module)/%)) UIConfig_modules/% %.genpatch: bootstrap fetch
+	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+
+$(gbuild_TARGETS):
+	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+
+#
+# Clean
+#
+clean: clean-host clean-build
+
+clean-host:
+	rm -fr $(TESTINSTALLDIR)
+	rm -fr $(INSTDIR)
+	rm -fr $(WORKDIR)
+	rm -fr $(SRCDIR)/rust_uno/src/generated $(SRCDIR)/rust_uno/target
+
+clean-build:
+ifneq ($(CROSS_COMPILING),)
+	rm -fr $(INSTDIR_FOR_BUILD)
+	rm -fr $(WORKDIR_FOR_BUILD)
+ifeq ($(OS),ANDROID)
+	rm -fr $(BUILDDIR)/android/obj
+	rm -fr $(BUILDDIR)/android/jniLibs
+	rm -fr $(SRCDIR)/android/source/build
+	rm -fr $(SRCDIR)/android/source/assets
+	rm -fr $(SRCDIR)/android/source/assets_strippedUI
+	rm -fr $(SRCDIR)/android/source/res_generated
+endif
+endif
+
+include $(SRCDIR)/compilerplugins/Makefile.mk
+
+#
+# Distclean
+#
+distclean : clean compilerplugins-clean mac-app-store-package.clean
+	rm -fr \
+        $(BUILDDIR)/Makefile \
+        $(BUILDDIR)/aclocal.m4 \
+        $(BUILDDIR)/autom4te.cache \
+        $(BUILDDIR)/bin/bffvalidator.sh \
+        $(BUILDDIR)/bin/odfvalidator.sh \
+        $(BUILDDIR)/bin/officeotron.sh \
+        $(BUILDDIR)/bin/verapdf.sh \
+        $(BUILDDIR)/config.Build.log \
+        $(BUILDDIR)/config.Build.warn \
+        $(BUILDDIR)/config.log \
+        $(BUILDDIR)/config.status \
+        $(BUILDDIR)/config.warn \
+        $(BUILDDIR)/config_build.mk \
+        $(BUILDDIR)/config_build_lang.mk \
+        $(BUILDDIR)/config_build \
+        $(BUILDDIR)/config_host.mk \
+        $(BUILDDIR)/config_host.mk.stamp \
+        $(BUILDDIR)/config_host_lang.mk \
+        $(BUILDDIR)/config_host_lang.mk.stamp \
+        $(BUILDDIR)/config_host/*.h \
+        $(BUILDDIR)/configure \
+        $(BUILDDIR)/hardened_runtime.xcent \
+        $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
+        $(BUILDDIR)/solenv/lockfile/autoconf.h \
+        $(BUILDDIR)/lo.xcent \
+        $(BUILDDIR)/sysui/desktop/macosx/Info.plist \
+        $(BUILDDIR)/sysui/desktop/macosx/LaunchConstraint.plist \
+        $(BUILDDIR)/vs-code*.code-workspace* \
+        $(BUILDDIR)/extensions/source/macosx/quicklookpreview/appex/Info.plist \
+        $(BUILDDIR)/extensions/source/macosx/quicklookthumbnail/appex/Info.plist
+	$(if $(filter WNT,$(OS)),env -i PATH="$$PATH") $(FIND) $(SRCDIR)/solenv/gdb -name \*.pyc -exec rm -f {} \;
+
+#
+# custom command
+#
+cmd:
+	$(if $(verbose),echo "custom cmd" &&) ( $(cmd) )
+
+#
+# Fetch
+#
+ifneq ($(DO_FETCH_TARBALLS),)
+include $(SRCDIR)/Makefile.fetch
+fetch: download
+fetch: fetch-repos
+
+ifneq (,$(wildcard $(SRCDIR)/.git))
+fetch-repos:
+	@cd $(SRCDIR) && ./g -z # make sure the git hooks are in place
+
+else # these sources are from a tarball; dictionaries are bundled in the monorepo tarball, nothing to fetch
+fetch-repos: | download
+
+endif
+
+else
+fetch:
+	@echo "Automatic fetching of external tarballs is disabled."
+
+endif
+
+#
+# Bootstrap
+#
+bootstrap: check-if-root check-makefile-version compilerplugins
+
+#
+# Build
+#
+# Note: this will pipe through all gbuild targets to ... gbuild
+#       with some translations like "check"->"unitcheck subsequentcheck uicheck" for historic reasons
+#
+build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset,install-gdb-printers) \
+    $(if $(filter check,$(MAKECMDGOALS)),$(if $(COMPILER_PLUGINS),$(if $(LODE_HOME),clang-format-check)))
+	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal)
+ifeq ($(OS),iOS)
+	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
+endif
+
+build-non-l10n-only build-l10n-only check debugrun translations packageinfo coverage $(gb_Top_MODULE_CHECK_TARGETS): build
+
+help showmodules gbuildtojson pocheck:
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+
+cross-toolset: bootstrap fetch install-gdb-printers
+# fetch again in case there are externals only needed on build platform
+ifneq ($(OS),iOS)
+	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(BUILDDIR)/Makefile fetch
+endif
+	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
+
+install-gdb-printers:
+ifneq ($(filter-out WNT MACOSX iOS,$(OS)),)
+ifneq ($(INSTDIR_FOR_BUILD),$(INSTDIR))
+	mkdir -p $(INSTDIR_FOR_BUILD)
+	$(SRCDIR)/solenv/bin/install-gdb-printers -a $(INSTDIR_FOR_BUILD) -c
+endif
+	mkdir -p $(INSTDIR)
+	$(SRCDIR)/solenv/bin/install-gdb-printers -a $(INSTDIR) -c
+endif
+
+
+#
+# Install
+#
+
+define gb_Top_DoInstall
+echo "$(1) in $(INSTALLDIR) ..." && \
+WITH_LANG_LIST="$(WITH_LANG_LIST)" $(SRCDIR)/solenv/bin/ooinstall $(2) "$(INSTALLDIR)"
+
+endef
+
+ifneq ($(OS),MACOSX)
+define gb_Top_InstallFinished
+echo && echo "$(1) finished, you can now execute:" && \
+echo "$(2)/program/soffice"
+
+endef
+else
+define gb_Top_InstallFinished
+echo && echo "$(1) finished, you can now run: " && \
+echo "open $(2)/$(PRODUCTNAME).app" && \
+echo "" && \
+echo "To debug: gdb $(2)/$(PRODUCTNAME).app/Contents/MacOS/soffice"
+
+endef
+endif
+
+ifneq ($(OS),MACOSX)
+install:
+	@$(call gb_Top_DoInstall,Installing,)
+	@$(call gb_Top_InstallFinished,Installation,$(INSTALLDIR))
+
+install-strip:
+	@$(call gb_Top_DoInstall,Installing and stripping binaries,--strip)
+	@$(call gb_Top_InstallFinished,Installation,$(INSTALLDIR))
+endif # !MACOSX
+
+test-install: build
+	@rm -rf $(TESTINSTALLDIR)
+	@mkdir -p $(TESTINSTALLDIR)
+ifeq ($(OS_FOR_BUILD),WNT)
+	cd $(SRCDIR)/instsetoo_native && $(MAKE) LIBO_TEST_INSTALL=TRUE $(GMAKE_OPTIONS)
+else
+	@WITH_LANG_LIST="$(WITH_LANG_LIST)" $(SRCDIR)/solenv/bin/ooinstall $(TESTINSTALLDIR)
+ifeq ($(OS),MACOSX)
+#
+# Create Resources/*.lproj directories for languages supported by macOS
+	set -x; for lang in ca cs da de el en es fi fr hr hu id it ja ko ms nl no pl pt pt_PT ro ru sk sv th tr uk vi zh_CN zh_TW; do \
+		lproj=$(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/Resources/$$lang.lproj; \
+		mkdir "$$lproj"; \
+	done
+#
+# Remove unnecessary executables in the LibreOfficePython framework
+	rm -rf $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/Frameworks/LibreOfficePython.framework/Versions/[1-9]*/bin
+#
+# Remove the python.o object file which is weird and interferes with app store uploading
+# And with it removed, presumably the other stuff in the Python lib/python3.3/config-3.3m probably does not make sense either.
+	rm -rf $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/Frameworks/LibreOfficePython.framework/Versions/[1-9]*/lib/python[1-9]*/config-[1-9]*
+#
+ifneq ($(ENABLE_MACOSX_SANDBOX),)
+
+# Remove the gengal binary that we hardly need and the shell scripts
+# for which code signatures (stored as extended attributes) won't
+# survive upload to the App Store anyway. See
+# https://developer.apple.com/library/content/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html#//apple_ref/doc/uid/TP40005929-CH4-TNTAG201
+# We could put the shell scripts somewhere in Resources instead, but
+# no 3rd-party code that would be interested in them would look there
+# anyway.
+	rm $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/MacOS/gengal
+	rm $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/MacOS/unopkg
+	rm $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/MacOS/unoinfo
+endif
+ifneq ($(MACOSX_PROVISIONING_PROFILE),)
+	cp "$(MACOSX_PROVISIONING_PROFILE)" $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/embedded.provisionprofile
+endif
+ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
+# Then use the macosx-codesign-app-bundle script
+	@$(SRCDIR)/solenv/bin/macosx-codesign-app-bundle $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app
+endif
+endif
+endif
+	@$(call gb_Top_InstallFinished,Test Installation,$(TESTINSTALLDIR))
+
+# target to bypass the packaging steps/to only assemble the package
+mac-app-store-package.prepare: $(BUILDDIR)/$(PLATFORMID)/done
+
+# shorthand target to build a complete package for the currently building architecture
+mac-app-store-package: mac-app-store-package.$(PLATFORMID)
+
+# recipe/targets to do the actual packaging
+# the symbolication switch to productbuild unfortunately is undocumented, but that is what XCode
+# uses when it creates a package with symbols for uploading to the appstore
+mac-app-store-package.$(PLATFORMID) mac-app-store-package.universal: mac-app-store-package.%: $(BUILDDIR)/%/done
+ifneq ($(MACOSX_PACKAGE_SIGNING_IDENTITY),)
+	$(SRCDIR)/solenv/bin/macosx-codesign-app-bundle $*/"$(PRODUCTNAME)".app
+	productbuild $(if $(ENABLE_SYMBOLS_FOR),--symbolication $*/Symbols) --component $*/"$(PRODUCTNAME)".app /Applications --sign $(MACOSX_PACKAGE_SIGNING_IDENTITY) $(PRODUCTNAME_WITHOUT_SPACES).pkg
+else
+	@echo You did not provide an installer signing identity with --enable-macosx-package-signing
+	@exit 1
+endif
+
+# the builds need to persist a standard "make clean" to be able to combine them into a universal
+# binary, so provide an additional target that can be used standalone or via make distclean
+mac-app-store-package.clean:
+	rm -rf \
+	    $(BUILDDIR)/macosx_x86_64 \
+	    $(BUILDDIR)/macosx_aarch64 \
+	    $(BUILDDIR)/universal \
+	    $(BUILDDIR)/$(PRODUCTNAME_WITHOUT_SPACES).pkg
+
+# used by the mac-app-store targets
+$(BUILDDIR)/$(PLATFORMID)/done: test-install
+	rm -rf   $(PLATFORMID)
+	mkdir -p $(PLATFORMID)/Symbols
+	mv $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app $(PLATFORMID)/"$(PRODUCTNAME)".app
+ifneq ($(ENABLE_SYMBOLS_FOR),)
+	symbols -arch all -symbolsPackageDir $(PLATFORMID)/Symbols $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/[^Li]* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/intl/l* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/MacOS/*
+	strip -S                                                   $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/[^Li]* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/intl/l* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/MacOS/*
+endif
+	touch $@
+
+# build one arch using the mac-app-store-package.prepare target, make clean and change the autogen.input
+# to build for the other target, then use mac-app-store-package.universal to build for the other arch and
+# combine the two into a universal binary
+$(BUILDDIR)/universal/done: $(BUILDDIR)/macosx_x86_64/done $(BUILDDIR)/macosx_aarch64/done
+	rm -rf universal
+	mkdir -p universal/Symbols
+ifneq ($(ENABLE_SYMBOLS_FOR),)
+	cp -a macosx_x86_64/Symbols/* macosx_aarch64/Symbols/* universal/Symbols/
+endif
+	$(SRCDIR)/bin/merge-app-bundles macosx_x86_64/"$(PRODUCTNAME)".app macosx_aarch64/"$(PRODUCTNAME)".app universal/"$(PRODUCTNAME)".app
+	touch $@
+
+distro-pack-install: install
+	WITH_LANG_LIST="$(WITH_LANG_LIST)" WITH_POOR_HELP_LOCALIZATIONS="$(WITH_POOR_HELP_LOCALIZATIONS)" $(SRCDIR)/bin/distro-install-clean-up
+	$(SRCDIR)/bin/distro-install-desktop-integration
+	WITH_LANG_LIST="$(WITH_LANG_LIST)" $(SRCDIR)/bin/distro-install-file-lists
+
+install-package-%:
+	$(MAKE) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+
+id:
+	@$(SRCDIR)/solenv/bin/create-ids
+
+tags:
+	@$(SRCDIR)/solenv/bin/create-tags
+
+etags:
+	@$(SRCDIR)/solenv/bin/create-tags -e
+
+docs:
+	@$(SRCDIR)/solenv/bin/mkdocs.sh $(SRCDIR)/docs $(SRCDIR)/solenv/inc/doxygen.cfg
+
+findunusedheaders:
+	$(SRCDIR)/bin/find-unusedheaders.py
+
+symbols:
+	rm -fr $(WORKDIR)/symbols/
+	mkdir -p $(WORKDIR)/symbols/
+ifeq ($(OS),WNT)
+	$(SRCDIR)/bin/symbolstore.py $(WORKDIR)/UnpackedTarball/breakpad/src/tools/windows/dump_syms/Release/dump_syms.exe $(WORKDIR)/symbols/ $(INSTDIR)/program/
+	$(SRCDIR)/bin/symstore.sh
+else
+	$(SRCDIR)/bin/symbolstore.py $(WORKDIR)/UnpackedTarball/breakpad/src/tools/linux/dump_syms/dump_syms $(WORKDIR)/symbols/ $(INSTDIR)/program/*
+endif
+
+	cd $(WORKDIR)/symbols/ && zip -r $(WORKDIR)/symbols.zip *
+
+create-mar:
+	rm -fr $(WORKDIR)/installation/mar/
+	rm -fr $(WORKDIR)/installation/temp/
+	mkdir -p $(WORKDIR)/installation/temp/
+	mkdir -p $(WORKDIR)/installation/mar/
+	tar -xzf $(WORKDIR)/installation/LibreOfficeDev/archive/install/en-US/LibreOffice* -C $(WORKDIR)/installation/temp/
+	$(SRCDIR)/bin/update/make_full_update.sh $(WORKDIR)/installation/mar/test.mar $(WORKDIR)/installation/temp/*/
+
+upload-symbols:
+	$(MAKE) -f $(SRCDIR)/Makefile.gbuild upload-symbols
+
+create-update-info:
+	$(MAKE) -f $(SRCDIR)/Makefile.gbuild create-update-info
+
+create-partial-info:
+	$(MAKE) -f $(SRCDIR)/Makefile.gbuild create-partial-info
+
+dump-deps:
+	@$(SRCDIR)/bin/module-deps.pl $(if $(verbose),-v) $(MAKE) $(SRCDIR)/Makefile.gbuild
+
+dump-deps-png:
+	@$(SRCDIR)/bin/module-deps.pl $(if $(verbose),-v) $(MAKE) $(SRCDIR)/Makefile.gbuild | dot -Tpng -o lo.png
+
+dump-deps-sort:
+	@$(SRCDIR)/bin/module-deps.pl -t $(if $(verbose),-v) $(MAKE) $(SRCDIR)/Makefile.gbuild
+
+clang-format-check:
+	@$(SRCDIR)/solenv/clang-format/check-last-commit
+
+define gb_Top_GbuildToIdeIntegration
+$(1)-ide-integration: gbuildtojson $(if $(filter MACOSX,$(OS_FOR_BUILD)),python3.allbuild)
+	cd $(SRCDIR) && CC="$(filter-out %ccache,$(CC))" CXX="$(filter-out %ccache,$(CXX))" \
+		$(if $(filter MACOSX,$(OS_FOR_BUILD)),PATH="$(INSTROOT_FOR_BUILD)/Frameworks/LibreOfficePython.framework/Versions/Current/bin:$(PATH)") \
+		$(if $(filter WNT,$(OS_FOR_BUILD)$(PYTHON_FOR_BUILD)),$(INSTROOT_FOR_BUILD)/program/python.exe) \
+		bin/gbuild-to-ide --ide $(1) --make $(MAKE)
+
+endef
+
+$(foreach ide,\
+	codelite \
+	vs \
+	kdevelop \
+	vim \
+	qtcreator \
+	xcode \
+        eclipsecdt,\
+$(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
+
+# vscode integration is based on compile_commands.json, which is generated by vim-ide-integration
+# the workspace template created by configure doesn't provide advanced/fine grained targets but
+# rather supplies some useful settings and basic examples for run/debug configurations
+# this target is provided primarily for consistency with the other ide-integrations
+vscode-ide-integration: $(BUILDDIR)/vs-code.code-workspace vim-ide-integration
+
+# ToDo: there probably is a way to have it at least create the compile-commands.json file
+# for the vim/vs-code integration without building the registry stuff
+Rdb:| fetch
+gbuildtojson: Rdb
+
+$(BUILDDIR)/vs-code.code-workspace: $(BUILDDIR)/vs-code.code-workspace.template
+	@test -e $@ || cp $< $@ && \
+	cmp -s $@ $< || echo "ATTN: $(@F) differs from $(<F), please check yourself for changes"
+
+endif # MAKE_RESTARTS
+
+# vim: set noet sw=4 ts=4:

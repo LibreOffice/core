@@ -1,0 +1,3 @@
+Dutch spell checker 2.00g for OpenOffice.org 3.2 and later.
+Conforms to the official standard for Dutch. 
+Made by OpenTaal (www.opentaal.org)

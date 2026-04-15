@@ -1,0 +1,10 @@
+/*
+Optional Build ID displayed in the about dialog
+*/
+
+#ifndef CONFIG_BUILDID_H
+#define CONFIG_BUILDID_H
+
+#undef EXTRA_BUILDID
+
+#endif

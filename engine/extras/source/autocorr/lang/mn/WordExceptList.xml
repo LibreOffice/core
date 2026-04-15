@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="ГГц"/>
+  <block-list:block block-list:abbreviated-name="МГц"/>
+  <block-list:block block-list:abbreviated-name="КД-үүд"/>
+  <block-list:block block-list:abbreviated-name="КД-ний"/>
+  <block-list:block block-list:abbreviated-name="ПК-ууд"/>
+</block-list:block-list>

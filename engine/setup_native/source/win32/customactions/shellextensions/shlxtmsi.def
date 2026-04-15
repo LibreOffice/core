@@ -1,0 +1,9 @@
+LIBRARY		"shlxtmsi.dll"
+EXPORTS
+			CheckInstallDirectory
+			CheckPatchList
+			CompleteInstallPath
+			MigrateInstallPath
+			InstallStartmenuFolderIcon
+			DeinstallStartmenuFolderIcon
+			SetProductInstallMode

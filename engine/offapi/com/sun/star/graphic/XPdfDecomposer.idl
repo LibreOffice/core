@@ -1,0 +1,36 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {  module sun {  module star {  module graphic {
+
+interface XPrimitive2D;
+
+/** XPdfDecomposer interface
+
+    This renders a PDF data into a bitmap and returns it as a primitive.
+ */
+interface XPdfDecomposer : ::com::sun::star::uno::XInterface
+{
+    /** Retrieve decomposed list - in this case a bitmap with the rendered PDF.
+
+        @param xDataContainer
+        The PDF data in a data container
+
+        @param xDecompositionParameters
+        Parameters for decomposition. Parameters include:
+
+        sal_Int32 PageIndex - which page to use
+     */
+    sequence<XPrimitive2D> getDecomposition([in] com::sun::star::util::XBinaryDataContainer xDataContainer,
+                                            [in] sequence<com::sun::star::beans::PropertyValue> xDecompositionParameters);
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

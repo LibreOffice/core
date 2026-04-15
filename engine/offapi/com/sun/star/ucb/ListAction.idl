@@ -1,0 +1,105 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+module com { module sun { module star { module ucb {
+
+/** This struct contains information needed in the notifications of a
+    XDynamicResultSet.
+
+    @see ListEvent
+*/
+
+published struct ListAction
+{
+    /** The position where something has happened (index begins with
+        <code>1</code> as usual with JDBC ).
+
+        <p>Its value does not necessary indicate the new position in the new
+        com::sun::star::sdbc::XResultSet, but a position
+        while doing the changes step by step beginning with the old
+        com::sun::star::sdbc::XResultSet.
+    */
+    long Position;
+
+    /** The count of involved rows.
+    */
+    long Count;
+
+
+    /** specifies the kind of modification happened to all assigned rows.
+
+        <p>The value of the other members of this struct depend on the value
+        of this member:
+
+        <table border=1>
+        <tr align=left> <th>ListActionType</th>
+                        <th>Position</th>
+                        <th>Count</th>
+                        <th>ActionInfo</th></tr>
+
+        <tr align=left> <td>WELCOME</td>
+                        <td>n/a</td>
+                        <td>n/a</td>
+                        <td>WelcomeDynamicResultSetStruct required</td></tr>
+
+        <tr align=left> <td>CLEARED</td>
+                        <td>n/a</td>
+                        <td>n/a</td>
+                        <td>n/a</td></tr>
+
+        <tr align=left> <td>INSERTED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>allowed but not required... @todo </td></tr>
+
+        <tr align=left> <td>REMOVED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>n/a</td></tr>
+
+        <tr align=left> <td>MOVED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>type long required</td></tr>
+
+        <tr align=left> <td>PROPERTIES_CHANGED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>allowed but not required... @todo</td></tr>
+        </table>
+
+        <p>The value for this member can be one of the
+        ListActionType constants group.
+    */
+    long ListActionType;
+
+    /** depending on the content of ListAction::ListActionType
+        the ListAction::ActionInfo could contain additional
+        information about the changes happened (see table above).
+    */
+
+    any ActionInfo;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

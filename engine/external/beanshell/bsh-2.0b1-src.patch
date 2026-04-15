@@ -1,0 +1,50 @@
+--- misc/BeanShell/build.xml	Fri Dec 19 17:14:27 2003
++++ misc/build/BeanShell/build.xml	Fri Mar 28 15:55:04 2008
+@@ -10,7 +10,7 @@
+ 		- Why can't I nest filesets?  This seems like it would be so easy and
+ 		useful...
+ -->
+-<project name="beanshell" default="compile-all" basedir=".">
++<project name="beanshell" default="jarall" basedir=".">
+ 
+ <!-- Project Configuration -->
+ 
+@@ -65,6 +65,9 @@
+ 	<property name="exclude-engine" value="bsh/engine/**"/>
+ 	-->
+ 
++	<property name="exclude-bsf" 
++		value="bsh/util/BeanShellBSFEngine.java,TestBshBSF.java"/>
++
+ 	<!-- Uncomment to build without the ASM class generator code.
+ 	<property name="exclude-classgen" 
+ 		value="bsh/org/objectweb/asm/**,bsh/ClassGeneratorImpl.java,bsh/ClassGeneratorUtil.java,bsh/DelayedEvalBshMethod.java"/>
+@@ -75,6 +78,9 @@
+ 		value="bsh/servlet/*"/>
+ 	-->
+ 
++	<property name="exclude-servlet" 
++		value="bsh/servlet/*"/>
++
+ 	<!-- Legacy excludes.  Comment this *out* to build these legacy items -->
+ 	<property name="excludes-legacy" 
+ 		value="bsh/JThis.java"/>
+--- misc/BeanShell/src/bsh/classpath/BshClassPath.java	2003-12-19 17:14:28.000000000 +0100
++++ misc/build/BeanShell/src/bsh/classpath/BshClassPath.java	2014-07-22 21:02:52.000000000 +0200
+@@ -36,6 +36,7 @@
+ import bsh.StringUtil;
+ import bsh.ClassPathException;
+ import java.lang.ref.WeakReference;
++import java.lang.SecurityException;
+ import bsh.NameSource;
+ 
+ /**
+@@ -661,6 +661,8 @@
+ 					URL url = new File(rtjar).toURI().toURL();
+ 					bootClassPath = new BshClassPath("Boot Class Path", new URL[]{url});
+ 				}
++                        } catch ( SecurityException e ) {
++                               throw new ClassPathException(" can't access to boot jar: "+e);
+ 			} catch ( MalformedURLException e ) {
+ 				throw new ClassPathException(" can't find boot jar: "+e);
+ 			}

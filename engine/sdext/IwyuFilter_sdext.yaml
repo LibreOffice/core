@@ -1,0 +1,12 @@
+---
+assumeFilename: sdext/source/pdfimport/pdfiadaptor.cxx
+excludelist:
+    sdext/source/pdfimport/odf/odfemitter.cxx:
+    # Actually in use
+    - com/sun/star/io/XOutputStream.hpp
+    sdext/source/pdfimport/tree/imagecontainer.cxx:
+    # Actually in use
+    - com/sun/star/beans/PropertyValue.hpp
+    sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx:
+    # Actually in use
+    - vector

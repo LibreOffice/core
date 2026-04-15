@@ -1,0 +1,29 @@
+# Thesuarus italiano
+#
+# Copyright (C) 2004,2005,2006,2007,2008 Daniela Volta
+# Copyright (C) 2008 Giovanni Zuliani
+# Copyright (C) 2006,2007,2008 Davide Prina
+#
+# E-Mail: openoffice(chiocciola)keynes(punto)scuole(punto)bo(punto)it
+#         DavidePrina(chiocciola)yahoo(punto)com
+#
+# Version 2.07.gh (10/02/2008) (dd/mm/yyyy)
+#
+# This file is distributed under GPL license
+#
+# This file is part of the Thesaurus italiano.
+#
+# The "Thesaurus italiano" is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# The "Thesaurus italiano" is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public 
+# License along with the "Thesaurus italiano",
+# if not, see <http://www.gnu.org/licenses/>.
+

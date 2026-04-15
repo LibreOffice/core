@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" version="1.1">
+<symbol overflow="visible" id="glyph">
+<path style="stroke:none;" d="M 1.3125 -11.671875 L 8.8125 -11.671875 L 8.8125 -11 L 4.578125 0 L 2.9375 0 L 6.921875 -10.34375 L 1.3125 -10.34375 Z M 1.3125 -11.671875 "/>
+</symbol>
+<use xlink:href="#glyph" x="40" y="30"/>
+</svg>

@@ -1,0 +1,587 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+interface TextDraw : TextDrawBase
+{
+    SID_ATTR_LINEEND_STYLE
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = DisableState ;
+    ]
+
+    SID_ATTR_LINE_START
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_ATTR_LINE_END
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_ATTR_LINE_STYLE
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_LINE_DASH
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_LINE_TRANSPARENCE
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_LINE_JOINT
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_LINE_CAP
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_DASH_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_LINEEND_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_COLOR_TABLE
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_GRADIENT_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_HATCH_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_BITMAP_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_PATTERN_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_ATTR_LINE_WIDTH
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_LINE_COLOR
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_FILL_STYLE
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_FILL_COLOR
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_FILL_GRADIENT
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_FILL_HATCH
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_FILL_BITMAP
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_FILL_TRANSPARENCE
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_FILL_FLOATTRANSPARENCE
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_GLOW_COLOR
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_GLOW_RADIUS
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_GLOW_TRANSPARENCY
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_GLOW_TEXT_COLOR
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_GLOW_TEXT_RADIUS
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_GLOW_TEXT_TRANSPARENCY
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_SOFTEDGE_RADIUS
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTRIBUTES_LINE
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
+    SID_ATTRIBUTES_AREA
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
+    SID_MEASURE_DLG
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
+    SID_CONNECTION_DLG
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
+    FN_DRAWTEXT_ATTR_DLG
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
+    SID_FLIP_VERTICAL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FLIP_HORIZONTAL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_OBJECT_ROTATE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_BEZIER_EDIT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FONTWORK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_OBJECT_HELL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_OBJECT_HEAVEN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_TOOL_HIERARCHIE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_EXTRUSION_TOGGLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_DOWN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_UP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_LEFT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_RIGHT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DEPTH_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DEPTH_DIALOG
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DIRECTION_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_LIGHTING_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_SURFACE_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_3D_COLOR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DEPTH
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DIRECTION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_PROJECTION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_LIGHTING_DIRECTION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_LIGHTING_INTENSITY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_SURFACE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_SHAPE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_SHAPE_TYPE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_ALIGNMENT_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_CHARACTER_SPACING_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_ALIGNMENT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_SAME_LETTER_HEIGHTS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_CHARACTER_SPACING
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_KERN_CHARACTER_PAIRS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_CHARACTER_SPACING_DIALOG
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_INSERT_GRAPHIC
+    [
+        // #i123922# Add Exec and State methods for the case where Graphic DrawObjects are selected (SdrGrafObj)
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_TWAIN_SELECT
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_TWAIN_TRANSFER
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_ATTR_TEXTCOLUMNS_NUMBER
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_TEXTCOLUMNS_SPACING
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+}
+
+shell SwDrawShell : SwDrawBaseShell
+{
+        import TextDraw;
+
+    SID_FORMTEXT_STYLE
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FORMTEXT_ADJUST
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FORMTEXT_DISTANCE
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FORMTEXT_START
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FORMTEXT_MIRROR
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FORMTEXT_HIDEFORM
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FORMTEXT_OUTLINE
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FORMTEXT_SHDWXVAL
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FORMTEXT_SHADOW
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FORMTEXT_SHDWCOLOR
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FORMTEXT_SHDWYVAL
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_FORMAT_FOOTNOTE_DLG // status()
+    [
+        ExecMethod = Execute;
+    ]
+
+    SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+    ]
+
+    FN_WORDCOUNT_DIALOG
+    [
+        ExecMethod = Execute;
+    ]
+
+       FN_NUMBERING_OUTLINE_DLG   // status(final|play)
+    [
+        ExecMethod = Execute ;
+    ]
+
+    FN_ADD_TEXT_BOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_REMOVE_TEXT_BOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_MOVE_SHAPE_HANDLE
+    [
+        ExecMethod = Execute ;
+    ]
+}
+

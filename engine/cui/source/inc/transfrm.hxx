@@ -1,0 +1,255 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#pragma once
+
+#include <svx/dlgctrl.hxx>
+#include <svx/dlgutil.hxx>
+#include <svx/dialcontrol.hxx>
+#include <svx/anchorid.hxx>
+#include <basegfx/range/b2drange.hxx>
+
+// predefines
+class SdrView;
+
+/*************************************************************************
+|*
+|* Transform-Tab-Dialog
+|*
+\************************************************************************/
+
+struct SvxSwFrameValidation;
+class SvxTransformTabDialog : public SfxTabDialogController
+{
+private:
+    const SdrView*      pView;
+
+    SvxAnchorIds        nAnchorCtrls;
+    Link<SvxSwFrameValidation&,void> aValidateLink;
+
+    virtual void        PageCreated(const OUString& rId, SfxTabPage &rPage) override;
+
+public:
+    SvxTransformTabDialog(weld::Window* pParent, const SfxItemSet* pAttr,
+                          const SdrView* pView,
+                          SvxAnchorIds nAnchorTypes);
+
+    //link for the Writer to validate positions
+    void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink );
+};
+
+/*************************************************************************
+|*
+|* position and size tab page
+|*
+\************************************************************************/
+
+class SvxPositionSizeTabPage : public SvxTabPage
+{
+    static const WhichRangesContainer pPosSizeRanges;
+
+private:
+    const SfxItemSet&   mrOutAttrs;
+
+    const SdrView*      mpView;
+
+    // #i75273#
+    basegfx::B2DRange   maRange;
+    basegfx::B2DRange   maWorkRange;
+    basegfx::B2DPoint   maAnchor;
+
+    MapUnit             mePoolUnit;
+    FieldUnit           meDlgUnit;
+    TriState            mnProtectSizeState;
+    bool                mbPageDisabled;
+    bool                mbProtectDisabled;
+    bool                mbSizeDisabled;
+    bool                mbAdjustDisabled;
+    bool                mbIgnoreAutoGrowWidth;
+    bool                mbIgnoreAutoGrowHeight;
+
+    // from size
+    // #i75273#
+    double              mfOldWidth;
+    double              mfOldHeight;
+    RectPoint           meRP;
+
+    SvxRectCtl          m_aCtlPos;
+    SvxRectCtl          m_aCtlSize;
+
+    SvxRatioConnector m_aRatioTop;
+    SvxRatioConnector m_aRatioBottom;
+
+    // position
+    std::unique_ptr<weld::Container> m_xFlPosition;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrPosX;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrPosY;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPos;
+
+    // size
+    std::unique_ptr<weld::Container> m_xFlSize;
+    std::unique_ptr<weld::Label> m_xFtWidth;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrWidth;
+    std::unique_ptr<weld::Label> m_xFtHeight;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrHeight;
+    std::unique_ptr<weld::CheckButton> m_xCbxScale;
+    std::unique_ptr<weld::Image> m_xCbxScaleImg;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioTop;
+    std::unique_ptr<weld::CustomWeld> m_xImgRatioBottom;
+    std::unique_ptr<weld::CustomWeld> m_xCtlSize;
+
+    // protect
+    std::unique_ptr<weld::Container> m_xFlProtect;
+    std::unique_ptr<weld::CheckButton> m_xTsbPosProtect;
+    std::unique_ptr<weld::CheckButton> m_xTsbSizeProtect;
+
+    // adjust
+    std::unique_ptr<weld::Container> m_xFlAdjust;
+    std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowWidth;
+    std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowHeight;
+
+    DECL_LINK(ChangePosProtectHdl, weld::Toggleable&, void);
+    DECL_LINK(ChangeSizeProtectHdl, weld::Toggleable&, void);
+
+    void SetMinMaxPosition();
+    void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
+
+    DECL_LINK( ChangeWidthHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ChangeHeightHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ClickSizeProtectHdl, weld::Toggleable&, void );
+    DECL_LINK( ClickAutoHdl, weld::Toggleable&, void );
+
+public:
+    SvxPositionSizeTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
+    virtual ~SvxPositionSizeTabPage() override;
+
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
+    static const WhichRangesContainer & GetRanges() {  return pPosSizeRanges; }
+
+    virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual void Reset( const SfxItemSet * ) override;
+
+    virtual void ActivatePage( const SfxItemSet& rSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
+
+    virtual void PointChanged(weld::DrawingArea* pWindow, RectPoint eRP) override;
+
+    void         Construct();
+    void         SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
+
+    virtual void FillUserData() override;
+
+    void        DisableResize();
+    void        DisableProtect();
+
+    void        UpdateControlStates();
+};
+
+/*************************************************************************
+|*
+|* rotation angle tab page
+|*
+\************************************************************************/
+class SvxAngleTabPage : public SvxTabPage
+{
+    static const WhichRangesContainer pAngleRanges;
+
+private:
+    const SdrView*      pView;
+
+    // #i75273#
+    basegfx::B2DRange   maRange;
+    basegfx::B2DPoint   maAnchor;
+
+    MapUnit             ePoolUnit;
+    FieldUnit           eDlgUnit;
+
+    SvxRectCtl m_aCtlRect;
+
+    std::unique_ptr<weld::Widget> m_xFlPosition;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrPosX;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrPosY;
+    std::unique_ptr<weld::CustomWeld> m_xCtlRect;
+    std::unique_ptr<weld::Widget> m_xFlAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xNfAngle;
+    std::unique_ptr<svx::DialControl> m_xCtlAngle;
+    std::unique_ptr<weld::CustomWeld> m_xCtlAngleWin;
+
+public:
+    SvxAngleTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
+    virtual ~SvxAngleTabPage() override;
+
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
+    static const WhichRangesContainer & GetRanges() { return pAngleRanges; }
+
+    virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual void Reset( const SfxItemSet * ) override;
+
+    virtual void ActivatePage( const SfxItemSet& rSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
+
+    virtual void PointChanged(weld::DrawingArea* pWindow, RectPoint eRP) override;
+
+    void         Construct();
+    void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+};
+
+/*************************************************************************
+|*
+|* slant/corner radius tab page
+|*
+\************************************************************************/
+class SvxSlantTabPage : public SfxTabPage
+{
+    static const WhichRangesContainer pSlantRanges;
+
+private:
+    const SdrView*      pView;
+
+    MapUnit             ePoolUnit;
+    FieldUnit           eDlgUnit;
+
+    std::unique_ptr<weld::Widget> m_xFlRadius;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrRadius;
+    std::unique_ptr<weld::Widget> m_xFlAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrAngle;
+    std::unique_ptr<weld::Widget> m_aControlGroups[2];
+    std::unique_ptr<weld::Widget> m_aControlGroupX[2];
+    std::unique_ptr<weld::MetricSpinButton> m_aControlX[2];
+    std::unique_ptr<weld::Widget> m_aControlGroupY[2];
+    std::unique_ptr<weld::MetricSpinButton> m_aControlY[2];
+
+public:
+    SvxSlantTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
+    virtual ~SvxSlantTabPage() override;
+
+    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
+    static const WhichRangesContainer & GetRanges() {  return pSlantRanges; }
+
+    virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual void Reset( const SfxItemSet * ) override;
+
+    virtual void ActivatePage( const SfxItemSet& rSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
+
+    void         Construct();
+    void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+};
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

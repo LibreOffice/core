@@ -1,0 +1,151 @@
+--- Makefile.vc.sav	2021-07-30 00:55:37.000000000 +0200
++++ Makefile.vc	2022-01-25 17:35:30.206117700 +0100
+@@ -8,13 +8,13 @@
+ LIBSHARPYUV_BASENAME = libsharpyuv
+ 
+ !IFNDEF ARCH
+-!IF ! [ cl 2>&1 | find "x86" > NUL ]
++!IF ! [ $(CC) 2>&1 | grep -q "x86" > NUL ]
+ ARCH = x86
+-!ELSE IF ! [ cl 2>&1 | find "x64" > NUL ]
++!ELSE IF ! [ $(CC) 2>&1 | grep -q "x64" > NUL ]
+ ARCH = x64
+-!ELSE IF ! [ cl 2>&1 | find "ARM64" > NUL ]
++!ELSE IF ! [ $(CC) 2>&1 | grep -q "ARM64" > NUL ]
+ ARCH = ARM64
+-!ELSE IF ! [ cl 2>&1 | find "ARM" > NUL ]
++!ELSE IF ! [ $(CC) 2>&1 | grep -q "ARM" > NUL ]
+ ARCH = ARM
+ !ELSE
+ !ERROR Unable to auto-detect toolchain architecture! \
+@@ -30,8 +30,8 @@
+ ## Nothing more to do below this line!
+ 
+ NOLOGO     = /nologo
+-CCNODBG    = cl.exe $(NOLOGO) /O2 /DNDEBUG
+-CCDEBUG    = cl.exe $(NOLOGO) /Od /Zi /D_DEBUG /RTC1
++CCNODBG    = $(CC) $(NOLOGO) /O2 /DNDEBUG
++CCDEBUG    = $(CC) $(NOLOGO) /Od /Zi /D_DEBUG /RTC1
+ CFLAGS     = /I. /Isrc $(NOLOGO) /MP /W3 /EHsc /c
+ CFLAGS     = $(CFLAGS) /DWIN32 /D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN
+ LDFLAGS    = /LARGEADDRESSAWARE /MANIFEST:EMBED /NXCOMPAT /DYNAMICBASE
+@@ -69,7 +69,7 @@
+ RTLIB   = /MD
+ RTLIBD  = /MDd
+ !ENDIF
+-DIRBASE = $(OUTDIR)\$(CFG)\$(ARCH)
++DIRBASE = $(OUTDIR)
+ DIROBJ = $(DIRBASE)\obj
+ DIRLIB = $(DIRBASE)\lib
+ DIRINC = $(DIRBASE)\include
+@@ -89,10 +89,10 @@
+ 
+ # Target configuration
+ !IF "$(CFG)" == "release-static"
+-CC             = $(CCNODBG)
++CC_             = $(CCNODBG)
+ STATICLIBBUILD = TRUE
+ !ELSE IF "$(CFG)" == "debug-static"
+-CC             = $(CCDEBUG)
++CC_             = $(CCDEBUG)
+ RTLIB          = $(RTLIBD)
+ STATICLIBBUILD = TRUE
+ LIBWEBPDECODER_BASENAME = $(LIBWEBPDECODER_BASENAME)_debug
+@@ -101,11 +101,11 @@
+ LIBWEBPDEMUX_BASENAME = $(LIBWEBPDEMUX_BASENAME)_debug
+ LIBSHARPYUV_BASENAME = $(LIBSHARPYUV_BASENAME)_debug
+ !ELSE IF "$(CFG)" == "release-dynamic"
+-CC        = $(CCNODBG)
++CC_        = $(CCNODBG)
+ RC        = $(RCNODBG)
+ DLLBUILD  = TRUE
+ !ELSE IF "$(CFG)" == "debug-dynamic"
+-CC        = $(CCDEBUG)
++CC_        = $(CCDEBUG)
+ RC        = $(RCDEBUG)
+ RTLIB     = $(RTLIBD)
+ DLLBUILD  = TRUE
+@@ -117,7 +117,7 @@
+ !ENDIF
+ 
+ !IF "$(STATICLIBBUILD)" == "TRUE"
+-CC     = $(CC) $(RTLIB)
++CC_     = $(CC_) $(RTLIB)
+ CFGSET = TRUE
+ LIBWEBPDECODER = $(DIRLIB)\$(LIBWEBPDECODER_BASENAME).lib
+ LIBWEBP = $(DIRLIB)\$(LIBWEBP_BASENAME).lib
+@@ -125,7 +125,7 @@
+ LIBWEBPDEMUX = $(DIRLIB)\$(LIBWEBPDEMUX_BASENAME).lib
+ LIBSHARPYUV = $(DIRLIB)\$(LIBSHARPYUV_BASENAME).lib
+ !ELSE IF "$(DLLBUILD)" == "TRUE"
+-CC     = $(CC) /I$(DIROBJ) $(RTLIB) /DWEBP_DLL
++CC_     = $(CC_) /I$(DIROBJ) $(RTLIB) /DWEBP_DLL
+ LIBWEBPDECODER = $(DIRLIB)\$(LIBWEBPDECODER_BASENAME)_dll.lib
+ LIBWEBP = $(DIRLIB)\$(LIBWEBP_BASENAME)_dll.lib
+ LIBWEBPMUX = $(DIRLIB)\$(LIBWEBPMUX_BASENAME)_dll.lib
+@@ -438,7 +438,7 @@
+ 
+ !IF "$(DLLBUILD)" == "TRUE"
+ {$(DIROBJ)}.c{$(DIROBJ)}.obj:
+-	$(CC) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$@  $<
++	$(CC_) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$@  $<
+ 
+ {src}.rc{$(DIROBJ)}.res:
+ 	$(RC) /fo$@ $<
+@@ -471,41 +471,41 @@
+ # File-specific flag builds. Note batch rules take precedence over wildcards,
+ # so for now name each file individually.
+ $(DIROBJ)\examples\anim_diff.obj: examples\anim_diff.c
+-	$(CC) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
++	$(CC_) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
+ 	  /Fo$(DIROBJ)\examples\ examples\$(@B).c
+ $(DIROBJ)\examples\anim_dump.obj: examples\anim_dump.c
+-	$(CC) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
++	$(CC_) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
+ 	  /Fo$(DIROBJ)\examples\ examples\$(@B).c
+ $(DIROBJ)\examples\anim_util.obj: examples\anim_util.c
+-	$(CC) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
++	$(CC_) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
+ 	  /Fo$(DIROBJ)\examples\ examples\$(@B).c
+ $(DIROBJ)\examples\gif2webp.obj: examples\gif2webp.c
+-	$(CC) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
++	$(CC_) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
+ 	  /Fo$(DIROBJ)\examples\ examples\$(@B).c
+ $(DIROBJ)\examples\gifdec.obj: examples\gifdec.c
+-	$(CC) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
++	$(CC_) $(CFLAGS) /DWEBP_HAVE_GIF /Fd$(LIBWEBP_PDBNAME) \
+ 	  /Fo$(DIROBJ)\examples\ examples\$(@B).c
+ # Batch rules
+ {examples}.c{$(DIROBJ)\examples}.obj::
+-	$(CC) $(CFLAGS) /Fd$(DIROBJ)\examples\ /Fo$(DIROBJ)\examples\ $<
++	$(CC_) $(CFLAGS) /Fd$(DIROBJ)\examples\ /Fo$(DIROBJ)\examples\ $<
+ {extras}.c{$(DIROBJ)\extras}.obj::
+-	$(CC) $(CFLAGS) /Fd$(DIROBJ)\extras\ /Fo$(DIROBJ)\extras\ $<
++	$(CC_) $(CFLAGS) /Fd$(DIROBJ)\extras\ /Fo$(DIROBJ)\extras\ $<
+ {imageio}.c{$(DIROBJ)\imageio}.obj::
+-	$(CC) $(CFLAGS) /Fd$(DIROBJ)\imageio\ /Fo$(DIROBJ)\imageio\ $<
++	$(CC_) $(CFLAGS) /Fd$(DIROBJ)\imageio\ /Fo$(DIROBJ)\imageio\ $<
+ {sharpyuv}.c{$(DIROBJ)\sharpyuv}.obj::
+-	$(CC) $(CFLAGS) /Fd$(DIROBJ)\sharpyuv\ /Fo$(DIROBJ)\sharpyuv\ $<
++	$(CC_) $(CFLAGS) /Fd$(DIROBJ)\sharpyuv\ /Fo$(DIROBJ)\sharpyuv\ $<
+ {src\dec}.c{$(DIROBJ)\dec}.obj::
+-	$(CC) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\dec\ $<
++	$(CC_) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\dec\ $<
+ {src\demux}.c{$(DIROBJ)\demux}.obj::
+-	$(CC) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\demux\ $<
++	$(CC_) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\demux\ $<
+ {src\dsp}.c{$(DIROBJ)\dsp}.obj::
+-	$(CC) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\dsp\ $<
++	$(CC_) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\dsp\ $<
+ {src\enc}.c{$(DIROBJ)\enc}.obj::
+-	$(CC) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\enc\ $<
++	$(CC_) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\enc\ $<
+ {src\mux}.c{$(DIROBJ)\mux}.obj::
+-	$(CC) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\mux\ $<
++	$(CC_) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\mux\ $<
+ {src\utils}.c{$(DIROBJ)\utils}.obj::
+-	$(CC) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\utils\ $<
++	$(CC_) $(CFLAGS) /Fd$(LIBWEBP_PDBNAME) /Fo$(DIROBJ)\utils\ $<
+ 
+ LNKLIBS     = ole32.lib windowscodecs.lib shlwapi.lib
+ !IF "$(UNICODE)" == "1"

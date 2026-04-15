@@ -1,0 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module excel {
+    constants XlBorderWeight {
+        const long xlHairline = 1;
+        const long xlMedium = -4138;
+        const long xlThick = 4;
+        const long xlThin = 2;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

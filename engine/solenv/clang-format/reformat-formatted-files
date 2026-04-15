@@ -1,0 +1,49 @@
+#!/usr/bin/env perl
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Reformat files which are not excluded. This is interesting if the
+# clang-format version or config changes.
+# -n allows just listing the formatted files.
+
+use strict;
+use warnings;
+use lib "solenv/clang-format";
+use ClangFormat;
+
+my $clang_format = ClangFormat::find();
+my $src = ClangFormat::get_extension_regex();
+my $excluded_list_names = ClangFormat::get_excludelist();
+my @filenames = ();
+my $dry_run = 0;
+
+# Get a list of files.
+open (FILES, "git ls-files |") ||  die "Cannot run git ls-files.";
+while (my $filename = <FILES>)
+{
+    chomp $filename;
+    if ($filename =~ /\.($src)$/ and !exists($excluded_list_names->{$filename}))
+    {
+        push @filenames, $filename;
+    }
+}
+
+if ($#ARGV ge 0 && $ARGV[0] eq "-n")
+{
+    $dry_run = 1;
+}
+
+foreach my $filename (@filenames)
+{
+    my $command = $clang_format . " -i " . $filename;
+    print($filename . "\n");
+    if (!$dry_run)
+    {
+        system($command) == 0 or die "failed to execute \"$command\": $?";
+    }
+}
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="MathCommands" oor:package="org.openoffice.Office.UI">
+  <node oor:name="UserInterface">
+    <node oor:name="Commands">
+      <node oor:name=".uno:ChangeFont" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Fonts...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ChangeFontSize" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">F~ont Size...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ChangeDistance" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Spacing...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ChangeAlignment" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">A~lignment...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RedrawAutomatic" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~AutoUpdate Display</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Textmode" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Text Mode</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ImportFormula" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Import Formula...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ImportMathMLClipboard" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Import MathML from Clipboard</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FitInWindow" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Fit To Window</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertConfigName" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Text</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertCommand" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Command</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ModifyStatus" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Modified</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TextStatus" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Text Status</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:NextError" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Ne~xt Error</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:PrevError" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Pr~evious Error</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:NextMark" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Next Marker</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:PrevMark" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Previous ~Marker</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SymbolCatalogue" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Symbols…</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ZoomIn" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Z~oom In</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ZoomOut" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Zoo~m Out</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Draw" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">U~pdate</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ZoomOptimal" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Sho~w All</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:CommandWindow" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Command Window</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ElementsDockingWindow" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Elements</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FormelCursor" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Formula Cursor</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertCommandText?Text:string=newline " oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">New Line</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertCommandText?Text:string=`" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Small Gap</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertCommandText?Text:string=~" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Gap</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SaveFormula" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Save as User-defined Formula</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Popups">
+      <node oor:name=".uno:UnaryBinaryMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Unary/Binary Operators</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RelationsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Relations</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SetOperationsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Set Operations</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FunctionsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Functions</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:OperatorsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">O~perators</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AttributesMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Attributes</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:BracketsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Brackets</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FormatsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">For~mats</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:OthersMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Others</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SidebarDeck.ElementsDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Open the Elements Deck</value>
+        </prop>
+      </node>
+    </node>
+  </node>
+</oor:component-data>

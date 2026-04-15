@@ -1,0 +1,17 @@
+--- src/lib/EBOOKDocument.cpp
++++ src/lib/EBOOKDocument.cpp
+@@ -147,11 +147,11 @@
+         {
+           const char *const name = char_cast(xmlTextReaderConstLocalName(reader.get()));
+           const char *const uri = char_cast(xmlTextReaderConstNamespaceUri(reader.get()));
+-          if ((EBOOKHTMLToken::html | EBOOKHTMLToken::NS_html) == getHTMLTokenId(name, uri))
++          if ((+EBOOKHTMLToken::html | EBOOKHTMLToken::NS_html) == getHTMLTokenId(name, uri))
+             type = EBOOKDocument::TYPE_XHTML;
+-          else if ((EPubToken::container | EPubToken::NS_container) == getEPubTokenId(name, uri))
++          else if ((+EPubToken::container | EPubToken::NS_container) == getEPubTokenId(name, uri))
+             type = EBOOKDocument::TYPE_EPUB;
+-          else if ((EBOOKOPFToken::package | EBOOKOPFToken::NS_opf) == getOPFTokenId(name, uri))
++          else if ((+EBOOKOPFToken::package | EBOOKOPFToken::NS_opf) == getOPFTokenId(name, uri))
+             type = EBOOKDocument::TYPE_EPUB;
+           else if (EBOOKOPFToken::package == getOPFTokenId(name, uri))
+             type = EBOOKDocument::TYPE_OPENEBOOK;

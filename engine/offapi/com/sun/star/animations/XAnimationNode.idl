@@ -1,0 +1,236 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module animations {
+
+
+interface XAnimationNode : ::com::sun::star::container::XChild
+{
+    /**  a value from AnimationNodeType.
+
+        @see http://www.w3.org/TR/smil20/smil-timing.html#adef-timeContainer
+    */
+    [readonly, attribute] short Type;
+
+    /** a sequence of values that define the beginning of this element
+        <br>
+        #Begin is
+            <ul>
+            <li>`double` describes the element begin as an offset in seconds from an implicit syncbase.
+                The definition of the implicit syncbase depends upon the element's parent time container.
+                The offset is measured in parent simple time.</li>
+            <li>Event describes an event and an optional offset that determine the
+                element begin. The element begin is defined relative to the time that the event
+                is raised.</li>
+            <li>Timing::INDEFINITE the begin of the element will be determined by an
+                external event to the element.</li>
+            <li>sequence&lt;any&gt; a sequence of values described above if more than
+                one begin value is defined for this element.</li>
+            <li>`VOID` if no begin behavior is defined for this element.</li>
+            </ul>
+
+        @see http://www.w3.org/TR/smil20/smil-timing.html#adef-begin
+    */
+    [attribute] any Begin;
+
+    /** defines the length of the simple duration.
+        <br>
+        #Duration is
+            <ul>
+            <li>`double` specifies the length of the simple duration in seconds.</li>
+            <li>Timing::INDEFINITE specifies the simple duration as indefinite.</li>
+            <li>Timing::MEDIA specifies the simple duration as the intrinsic media duration. This is only valid for elements that define media.</li>
+            <li>`VOID` the simple duration for the element is defined to be the implicit duration of the element.</li>
+            </ul>
+
+        @see http://www.w3.org/TR/smil20/smil-timing.html#adef-dur
+    */
+    [attribute] any Duration;
+
+    /** a sequence of values that define the ending of this element
+        <br>
+        #End is
+            <ul>
+            <li>`double` describes the element end as an offset in seconds from an implicit syncbase.
+                The definition of the implicit syncbase depends upon the element's parent time container.
+                The offset is measured in parent simple time.</li>
+            <li>Event describes an event and an optional offset that determine the
+                element end. The element end is defined relative to the time that the event
+                is raised.</li>
+            <li>Timing::INDEFINITE the end of the element will be determined by an
+                external event to the element.</li>
+            <li>sequence&lt;any&gt; a sequence of values described above if more than
+                one begin value is defined for this element.</li>
+            <li>`VOID` if no end behavior is defined for this element.</li>
+            </ul>
+
+        @see http://www.w3.org/TR/smil20/smil-timing.html#adef-end
+    */
+    [attribute] any End;
+
+    /** controls the implicit duration of time containers,
+        as a function of the children.
+        <br>
+        The EndSync attribute is only valid for
+        par and excl time container elements, and media elements with timed
+        children (e.g. animate or area elements).
+
+        #EndSync is
+            either a `short` constant from EndSync,
+            an interface reference to a child XTimeContainer
+            or `VOID`.
+
+        @see http://www.w3.org/TR/smil20/smil-timing.html#adef-endsync
+    */
+    [attribute] any EndSync;
+
+    /** the number of iterations of the simple duration.
+        <br>
+        #RepeatCount is
+            <ul>
+            <li>`double`
+                this is a numeric value that specifies the number of iterations.
+                It can include partial iterations expressed as fraction values.
+                A fractional value describes a portion of the simple duration.
+                Values must be greater than 0.</li>
+            <li>Timing::INDEFINITE the element is defined to repeat indefinitely
+                (subject to the constraints of the parent time container).</li>
+            <li>`VOID`
+                no repeat count is defined for this element.</li>
+            </ul>
+
+        @see EndSync
+        @see http://www.w3.org/TR/smil20/smil-timing.html#adef-repeatCount
+    */
+    [attribute] any RepeatCount;
+
+    /** the total duration for repeat.
+        <br>
+        #RepeatDuration is
+            <ul>
+            <li>`double`
+                specifies the duration in element active time
+                to repeat the simple duration in seconds.</li>
+            <li>Timing::INDEFINITE the element is defined to repeat indefinitely
+                (subject to the constraints of the parent time container).</li>
+            <li>`VOID`
+                No repeat duration is defined for this element. </li>
+            </ul>
+
+        @see http://www.w3.org/TR/smil20/smil-timing.html#adef-repeatDur
+    */
+    [attribute] any RepeatDuration;
+
+    /** the attribute that specify the behavior how an element
+        should be extended beyond the active duration by freezing the final
+        state of the element.
+        <br>
+        #Fill is
+            a value from AnimationFill.
+
+        @see Fill
+        @see http://www.w3.org/TR/smil20/smil-timing.html#adef-fill
+    */
+    [attribute] short Fill;
+
+    /** the default value for the fill behavior for this element and all
+        descendants.
+        <br>
+        #FillDefault is
+            <ul>
+            <li>The values AnimationFill::REMOVE, AnimationFill::FREEZE,
+            AnimationFill::HOLD, AnimationFill::TRANSITION and AnimationFill::AUTO
+            specify that the element fill behavior is the respective value.</li>
+            <li>The value AnimationFill::INHERIT specifies that the value of this attribute
+            (and of the fill behavior) are inherited from the #FillDefault value of the parent
+            element. If there is no parent element, the value is AnimationFill::AUTO.</li>
+            </ul>
+
+        @see Fill
+        @see http://www.w3.org/TR/smil20/smil-timing.html#adef-fillDefault
+    */
+    [attribute] short FillDefault;
+
+    /** defines the restart behavior of this element.
+        <br>
+        #Restart is
+            a `short` value from AnimationRestart.
+
+        @see AnimationRestart
+        @see http://www.w3.org/TR/smil20/smil-timing.html#adef-restart
+    */
+    [attribute] short Restart;
+
+    /** defines the default restart behavior for this element and all descendants.
+
+        @returns
+            a value from Restart.
+
+        @see AnimationRestart
+        @see http://www.w3.org/TR/smil20/smil-timing.html#adef-restartDefault
+    */
+    [attribute] short RestartDefault;
+
+    /** defines the acceleration for this element.
+        <br>
+        Element time will accelerate from a rate of 0 at the beginning up
+        to a run rate, over the course of the specified proportion of the
+        simple duration.
+
+        #Acceleration is
+            a value between 0 (no acceleration) and 1 (acceleration until end
+            of the elements duration).
+
+        @see http://www.w3.org/TR/smil20/smil-timemanip.html#adef-accelerate
+    */
+    [attribute] double Acceleration;
+
+    /** defines the deceleration for this element.
+        Element time will deceleration from a run rate to a rate of 0 at the
+        ending, over the course of the specified proportion of the
+        simple duration.
+
+        #Decelerate is
+            a value between 0 (no deceleration) and 1 (deceleration from beginning
+            of the elements duration).
+
+        @see http://www.w3.org/TR/smil20/smil-timemanip.html#adef-decelerate
+    */
+    [attribute] double Decelerate;
+
+    /** defines the auto reverse settings for this element.
+
+        #AutoReverse is
+            <ul>
+            <li>`FALSE` if the animation is played normal.</li>
+            <li>`TRUE` if the animation is played forwards and then backwards. This doubles the duration</li>
+            </ul>
+
+        @see http://www.w3.org/TR/smil20/smil-timemanip.html#adef-autoReverse
+    */
+    [attribute] boolean AutoReverse;
+
+    [attribute] sequence< ::com::sun::star::beans::NamedValue > UserData;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

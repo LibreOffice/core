@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:default-style style:family="paragraph">
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="text">
+  </style:style>
+  <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+  </style:style>
+  <style:style style:name="Table_20_Contents" style:display-name="Table Contents" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Table1" style:family="table">
+   <style:table-properties style:width="11.509cm" table:align="left"/>
+  </style:style>
+  <style:style style:name="Table2" style:family="table" style:master-page-name="Landscape">
+   <style:table-properties style:page-number="auto" table:align="margins"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21.59cm" fo:page-height="27.94cm" style:print-orientation="portrait"/>
+  </style:page-layout>
+  <style:page-layout style:name="pm2">
+   <style:page-layout-properties fo:page-height="21.59cm" fo:page-width="27.94cm" style:print-orientation="landscape"/>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+  <style:master-page style:name="Landscape" style:page-layout-name="pm2"/>
+ </office:master-styles>
+ <office:body>
+  <office:text text:use-soft-page-breaks="true">
+   <text:p>Two tables, one pagebreak:</text:p>
+   <table:table table:name="Table1" table:style-name="Table1">
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell office:value-type="string">
+      <text:p>Hello1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p text:style-name="Table_20_Contents"/>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell office:value-type="string">
+      <text:p>World1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p text:style-name="Table_20_Contents"/>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <table:table table:name="Table2" table:style-name="Table2">
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell office:value-type="string">
+      <text:p>Hello2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p text:style-name="Table_20_Contents"/>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell office:value-type="string">
+      <text:p>World2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p text:style-name="Table_20_Contents"/>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p/>
+  </office:text>
+ </office:body>
+</office:document>

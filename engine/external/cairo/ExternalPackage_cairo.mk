@@ -1,0 +1,22 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+$(eval $(call gb_ExternalPackage_ExternalPackage,cairo,cairo))
+
+$(eval $(call gb_ExternalPackage_use_external_project,cairo,cairo))
+
+ifneq ($(DISABLE_DYNLOADING),TRUE)
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo-lo.2.dylib,builddir/src/libcairo-lo.2.dylib))
+else
+$(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo-lo.so.2,builddir/src/libcairo-lo.so.2.1180$(CAIRO_VERSION_MICRO).$(CAIRO_VERSION_MICRO)))
+endif
+endif
+
+# vim: set noet sw=4 ts=4:

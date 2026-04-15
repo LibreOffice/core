@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE office:document-content PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "../../../../../../../xmloff/dtd/office.dtd">
+<office:document-content xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" office:class="text" office:version="1.0">
+  <office:script/>
+  <office:font-decls>
+    <style:font-decl style:name="Andale Sans UI" fo:font-family="'Andale Sans UI'" style:font-pitch="variable"/>
+    <style:font-decl style:name="Thorndale" fo:font-family="Thorndale" style:font-family-generic="roman" style:font-pitch="variable"/>
+  </office:font-decls>
+  <office:automatic-styles/>
+  <office:body>
+    <text:sequence-decls>
+      <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+      <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+      <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+      <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    </text:sequence-decls>
+    <text:p text:style-name="Standard">He leído con gran interés su anuncio en el &lt;placeholder:"Diario de la tarde":"Pulse sobre el comodín y sobrescriba"&gt; del &lt;placeholder:"21.10.99":"Pulse sobre el comodín y sobrescriba"&gt;. Como creo que reúno las condiciones descritas en el anuncio para ocupar dicha plaza, me he decidido a enviarles esta solicitud.</text:p>
+    <text:p text:style-name="Standard">Trabajo desde hace &lt;placeholder:"ocho años":"Pulse sobre el comodín y sobrescriba"&gt; como &lt;placeholder:"secretaria en una empresa mediana":"Pulse sobre el comodín y sobrescriba"&gt;. En los últimos años he realizado &lt;placeholder:"sobre todo tareas de redacción técnica":"Pulse sobre el comodín y sobrescriba"&gt;. Aunque me siento muy bien en mi puesto de trabajo, deseo ampliar mi carrera profesional, especialmente en el terreno de las actividades &lt;placeholder:"de secretariado general":"Pulse sobre el comodín y sobrescriba"&gt; así como mis conocimientos &lt;placeholder:"en el área comercial":"Pulse sobre el comodín y sobrescriba"&gt; y mis capacidades de &lt;placeholder:"organización":"Pulse sobre el comodín y sobrescriba"&gt; dentro de una tarea exigente.</text:p>
+    <text:p text:style-name="Standard">Mi sueldo actual asciende a &lt;placeholder:"2.400 €.":"Pulse sobre el comodín y sobrescriba"&gt;. Fecha posible de incorporación &lt;placeholder:"1.1.2000":"Pulse sobre el comodín y sobrescriba"&gt;.</text:p>
+    <text:p text:style-name="Standard">Me alegraría una invitación a una entrevista personal, en la que podré exponer otros detalles convincentes.</text:p>
+  </office:body>
+</office:document-content>

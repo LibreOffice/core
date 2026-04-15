@@ -1,0 +1,460 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<office:document xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:styles>
+    <style:default-style style:family="graphic">
+      <style:graphic-properties svg:stroke-color="#3465a4" draw:fill-color="#729fcf" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:start-line-spacing-horizontal="0.283cm" draw:start-line-spacing-vertical="0.283cm" draw:end-line-spacing-horizontal="0.283cm" draw:end-line-spacing-vertical="0.283cm" style:writing-mode="lr-tb" style:flow-with-text="false"/>
+      <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" style:font-independent-line-spacing="false">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" loext:color-lum-mod="100%" loext:color-lum-off="0%" style:font-name="Liberation Sans" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="Noto Serif CJK SC" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lohit Devanagari" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN"/>
+    </style:default-style>
+    <style:default-style style:family="paragraph">
+      <style:paragraph-properties fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="1.251cm" style:writing-mode="lr-tb"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Sans" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="Noto Serif CJK SC" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lohit Devanagari" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="no-limit" loext:hyphenation-zone="no-limit"/>
+    </style:default-style>
+    <style:default-style style:family="table">
+      <style:table-properties table:border-model="collapsing"/>
+    </style:default-style>
+    <style:default-style style:family="table-row">
+      <style:table-row-properties fo:keep-together="auto"/>
+    </style:default-style>
+    <style:style style:name="Standard" style:family="paragraph" style:default-outline-level="" style:class="text" style:master-page-name="">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.25cm" style:contextual-spacing="false" fo:line-height="120%" fo:text-align="start" style:justify-single-word="false" fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0cm" style:auto-text-indent="false" style:page-number="auto" style:punctuation-wrap="simple" style:writing-mode="lr-tb"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="swiss" fo:font-size="10.5pt" fo:letter-spacing="0.014cm" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK SC Regular" style:font-family-asian="'Noto Sans CJK SC Regular'" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="FreeSans" style:font-family-complex="FreeSans" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="no-limit" loext:hyphenation-zone="no-limit"/>
+    </style:style>
+    <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:default-outline-level="" style:class="text">
+      <style:paragraph-properties fo:margin-top="0.423cm" fo:margin-bottom="0.212cm" style:contextual-spacing="false" fo:keep-with-next="always"/>
+      <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="swiss" fo:font-size="14pt" style:font-name-asian="Noto Sans CJK SC Regular" style:font-family-asian="'Noto Sans CJK SC Regular'" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="14pt" style:font-name-complex="FreeSans" style:font-family-complex="FreeSans" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="Heading_20_2" style:display-name="Heading 2" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:default-outline-level="2" style:class="text" style:master-page-name="">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.353cm" fo:margin-bottom="0.212cm" style:contextual-spacing="false" fo:keep-together="always" fo:orphans="0" fo:widows="0" fo:text-indent="0cm" style:auto-text-indent="false" style:page-number="auto"/>
+      <style:text-properties fo:font-size="16pt" fo:font-weight="bold" style:font-size-asian="16pt" style:font-weight-asian="bold" style:font-size-complex="16pt" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="Table_20_Contents" style:display-name="Table Contents" style:family="paragraph" style:parent-style-name="Standard" style:default-outline-level="" style:class="extra">
+      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.101cm" style:contextual-spacing="false" text:number-lines="false" text:line-number="0"/>
+    </style:style>
+    <style:style style:name="Heading_20_3" style:display-name="Heading 3" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:default-outline-level="3" style:class="text">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.247cm" fo:margin-bottom="0.212cm" style:contextual-spacing="false" fo:text-indent="0cm" style:auto-text-indent="false"/>
+      <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="600"/>
+    </style:style>
+    <style:style style:name="Heading_20_4" style:display-name="Heading 4" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:default-outline-level="4" style:class="text">
+      <style:paragraph-properties fo:margin-top="0.212cm" fo:margin-bottom="0.212cm" style:contextual-spacing="false"/>
+      <style:text-properties fo:font-size="13pt" fo:font-style="normal" fo:font-weight="bold" style:font-size-asian="13.5pt" style:font-style-asian="italic" style:font-weight-asian="bold" style:font-size-complex="13.5pt" style:font-style-complex="italic" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="Contents_20_Heading" style:display-name="Contents Heading" style:family="paragraph" style:parent-style-name="Heading" style:class="index">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.101cm" style:contextual-spacing="false" fo:text-align="center" style:justify-single-word="false" fo:text-indent="0cm" style:auto-text-indent="false" text:number-lines="false" text:line-number="0"/>
+      <style:text-properties fo:font-size="13pt" fo:font-weight="bold" style:font-size-asian="16pt" style:font-weight-asian="bold" style:font-size-complex="16pt" style:font-weight-complex="600"/>
+    </style:style>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="Table1" style:family="table">
+      <style:table-properties style:width="17cm" table:align="margins" style:may-break-between-rows="true" style:writing-mode="lr-tb" table:border-model="collapsing"/>
+    </style:style>
+    <style:style style:name="Table1.A" style:family="table-column">
+      <style:table-column-properties style:column-width="17cm" style:rel-column-width="65535*"/>
+    </style:style>
+    <style:style style:name="Table1.1" style:family="table-row">
+      <style:table-row-properties fo:keep-together="always"/>
+    </style:style>
+    <style:style style:name="Table1.A1" style:family="table-cell">
+      <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border="none" style:writing-mode="lr-tb">
+        <style:background-image/>
+      </style:table-cell-properties>
+    </style:style>
+    <style:style style:name="Table2" style:family="table">
+      <style:table-properties style:width="17cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" table:align="margins" style:may-break-between-rows="true" style:writing-mode="lr-tb" table:border-model="collapsing"/>
+    </style:style>
+    <style:style style:name="Table2.A" style:family="table-column">
+      <style:table-column-properties style:column-width="17cm" style:rel-column-width="65535*"/>
+    </style:style>
+    <style:style style:name="Table2.1" style:family="table-row">
+      <style:table-row-properties fo:keep-together="always"/>
+    </style:style>
+    <style:style style:name="Table2.A1" style:family="table-cell">
+      <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border="none" style:writing-mode="lr-tb">
+        <style:background-image/>
+      </style:table-cell-properties>
+    </style:style>
+    <style:style style:name="Table3" style:family="table">
+      <style:table-properties style:width="8.251cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" table:align="margins" style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="Table3.A" style:family="table-column">
+      <style:table-column-properties style:column-width="8.251cm" style:rel-column-width="65535*"/>
+    </style:style>
+    <style:style style:name="Table3.A1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.097cm" fo:border="none"/>
+    </style:style>
+    <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Graphics">
+      <style:graphic-properties style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard"/>
+    </style:style>
+    <style:style style:name="fr2" style:family="graphic" style:parent-style-name="Graphics">
+      <style:graphic-properties style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard"/>
+    </style:style>
+    <style:style style:name="Sect1" style:family="section">
+      <style:section-properties style:editable="false">
+        <style:columns fo:column-count="1" fo:column-gap="0cm"/>
+      </style:section-properties>
+    </style:style>
+    <style:style style:name="Sect2" style:family="section">
+      <style:section-properties fo:margin-left="0cm" fo:margin-right="0cm" style:editable="false">
+        <style:columns fo:column-count="1" fo:column-gap="0cm"/>
+      </style:section-properties>
+    </style:style>
+    <style:style style:name="Sect3" style:family="section">
+      <style:section-properties text:dont-balance-text-columns="false" style:editable="false">
+        <style:columns fo:column-count="2" fo:column-gap="0.497cm">
+          <style:column style:rel-width="32767*" fo:start-indent="0cm" fo:end-indent="0.248cm"/>
+          <style:column style:rel-width="32768*" fo:start-indent="0.248cm" fo:end-indent="0cm"/>
+        </style:columns>
+      </style:section-properties>
+    </style:style>
+    <style:page-layout style:name="pm1">
+      <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="23" style:layout-grid-base-height="1.058cm" style:layout-grid-ruby-height="0cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.704cm" style:layout-grid-snap-to="true" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+        <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+      </style:page-layout-properties>
+      <style:header-style/>
+      <style:footer-style>
+        <style:header-footer-properties fo:min-height="0.998cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.9cm" style:dynamic-spacing="true"/>
+      </style:footer-style>
+    </style:page-layout>
+    <style:page-layout style:name="pm2">
+      <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="44" style:layout-grid-base-height="0.55cm" style:layout-grid-ruby-height="0cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.37cm" style:layout-grid-snap-to="true" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+        <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+      </style:page-layout-properties>
+      <style:header-style/>
+      <style:footer-style>
+        <style:header-footer-properties fo:min-height="0.998cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.9cm" style:dynamic-spacing="true"/>
+      </style:footer-style>
+    </style:page-layout>
+    <style:page-layout style:name="pm3">
+      <style:page-layout-properties fo:page-width="21.59cm" fo:page-height="27.94cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2.54cm" fo:margin-bottom="1.27cm" fo:margin-left="3.175cm" fo:margin-right="3.175cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="22860" style:layout-grid-base-height="0.176cm" style:layout-grid-ruby-height="0cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.37cm" style:layout-grid-snap-to="true" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+        <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+      </style:page-layout-properties>
+      <style:header-style/>
+      <style:footer-style>
+        <style:header-footer-properties fo:min-height="1.27cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="1.169cm" style:dynamic-spacing="true"/>
+      </style:footer-style>
+    </style:page-layout>
+    <style:page-layout style:name="pm4">
+      <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="1cm" fo:margin-bottom="1cm" fo:margin-left="2cm" fo:margin-right="1cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.706cm" style:layout-grid-snap-to="true" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+        <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+      </style:page-layout-properties>
+      <style:header-style/>
+      <style:footer-style/>
+    </style:page-layout>
+    <style:style style:name="dp1" style:family="drawing-page">
+      <style:drawing-page-properties draw:background-size="full"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="pm1" draw:style-name="dp1">
+      <style:footer>
+        <text:p/>
+      </style:footer>
+    </style:master-page>
+  </office:master-styles>
+  <office:body>
+    <office:text text:use-soft-page-breaks="true">
+      <text:p text:style-name="P6">2022-04-24_Quirk<text:span text:style-name="T2">s</text:span> in the focusing property of the Navigator</text:p>
+      <text:p text:style-name="P10">This example file shows several bugs. It was written as an example to #148755. But I also recorded all other surprising things in order to report them on separate bug reports. Don’t mind if they appear here, it is just just to catch some of them in order to report them.</text:p>
+      <text:p text:style-name="P10">This report was written with </text:p>
+      <text:p text:style-name="P11">Version: 7.4.0.0.alpha0+ / LibreOffice Community<text:line-break/>Build ID: f775b625b497b4fa6731bddd433916dde52fbb2e<text:line-break/>CPU threads: 4; OS: Linux 5.4; UI render: default; VCL: gtk3<text:line-break/>Locale: de-DE (de_DE.UTF-8); UI: en-US<text:line-break/>Calc: threaded</text:p>
+      <text:p text:style-name="P12">but I have seen some of these glitches also in other versions of LO Writer!</text:p>
+      <text:table-of-content text:style-name="Sect1" text:protected="true" text:name="Table of Contents1">
+        <text:table-of-content-source text:outline-level="10">
+          <text:index-title-template text:style-name="Contents_20_Heading">Table of Contents</text:index-title-template>
+          <text:table-of-content-entry-template text:outline-level="1" text:style-name="Contents_20_1">
+            <text:index-entry-link-start text:style-name="Index_20_Link"/>
+            <text:index-entry-chapter/>
+            <text:index-entry-text/>
+            <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+            <text:index-entry-page-number/>
+            <text:index-entry-link-end/>
+          </text:table-of-content-entry-template>
+        </text:table-of-content-source>
+        <text:index-body>
+          <text:index-title text:style-name="Sect1" text:name="Table of Contents1_Head">
+            <text:p text:style-name="Contents_20_Heading">Table of Contents</text:p>
+          </text:index-title>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+          <text:p/>
+        </text:index-body>
+      </text:table-of-content>
+      <text:p/>
+      <text:h text:style-name="P19" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc71113_2824860697"/>Original Post <text:span text:style-name="T5">#148755</text:span><text:bookmark-end text:name="__RefHeading___Toc71113_2824860697"/></text:h>
+      <text:h text:style-name="P22" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc71115_2824860697"/><text:span text:style-name="T5">P</text:span>receding events<text:bookmark-end text:name="__RefHeading___Toc71115_2824860697"/></text:h>
+      <text:p/>
+      <text:section text:style-name="Sect2" text:name="c0">
+        <text:h text:style-name="P22" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc71117_2824860697"/>New findings<text:bookmark-end text:name="__RefHeading___Toc71117_2824860697"/></text:h>
+        <text:p/>
+        <text:p/>
+        <text:p/>
+        <text:p text:style-name="P4">Sometimes I use tables because they make the location of inserted images more predictable than if I insert them into the text (e.g. anchored to paragraphs). If - as e.g. often in user manuals - many short text passages and corresponding illustrations follow one after another, it may even make sense to place headings in tables as well. If you do this, however, you lose the nice feature of the navigator that you can continuously see how a text is positioned in the hierarchy of associated headings: The navigator suddenly shows the position in the hierarchy of tables (or sections, if the text passage is in a section).</text:p>
+        <text:h text:style-name="P22" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc71119_2824860697"/>Expected behavior:<text:bookmark-end text:name="__RefHeading___Toc71119_2824860697"/></text:h>
+        <text:p text:style-name="P18">I expect the navigator to always show the location of the bookmark in the editing window with respect to the category selected in the navigator's drop-down list of categories at the top left (really useful there are headings, tables, maybe sections. For hyperlinks, I can only imagine that it might make sense to highlight the next hyperlink before the position of the bookmark in the editing window).</text:p>
+      </text:section>
+      <text:h text:style-name="P20" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc71121_2824860697"/>An example<text:bookmark-end text:name="__RefHeading___Toc71121_2824860697"/></text:h>
+      <text:p text:style-name="P3">In order to demonstrate the to be shown behavior, I add some headlines such that navigator really has some structure to show. Then I also add the original post, but this time arranged in a table:</text:p>
+      <text:h text:style-name="P21" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc71123_2824860697"/>Original Post <text:span text:style-name="T5">#148755 in a table</text:span><text:bookmark-end text:name="__RefHeading___Toc71123_2824860697"/></text:h>
+      <table:table table:name="Table1" table:style-name="Table1" table:template-name="Standardtabelle">
+        <table:table-column table:style-name="Table1.A"/>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:h text:style-name="Heading_20_3" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc71125_2824860697"/><text:span text:style-name="T5">P</text:span>receding events<text:span text:style-name="T5"> in a table</text:span><text:bookmark-end text:name="__RefHeading___Toc71125_2824860697"/></text:h>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="Text_20_body">End of June 2021 I first observed that the Navigator adjusts itself to the proper headline associated to the current editing position. The item belonging to the edit position in the Edit window gets highlighted. That's something which has long been missing and which is very useful.</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:h text:style-name="Heading_20_3" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc71127_2824860697"/>New findings<text:span text:style-name="T5"> in a table</text:span><text:bookmark-end text:name="__RefHeading___Toc71127_2824860697"/></text:h>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="Text_20_body">Now I found something inconsistent with that: If the edit position in the edit window is in a table, the highlight moves to the relevant entry in the Tables category, if it is in a section, the highlight jumps to the proper entry in the Sections category.</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <text:soft-page-break/>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="Text_20_body">When writing a larger document, the main hierarchy of things is by headline order. Being able to associate some place in the document to the surrounding headlines hierarchy is the main concern. Only in very special cases one might want to locate an image in the list of all images or a table in the list of all tables and so on.</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="Text_20_body">Locating something in another category than the one highlighted (Headings/Images/Sections/Table, ..., topmost drop-down setting of Navigator) is not meaningful, especially jumping to sections instead of headlines is bizarre.</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="Text_20_body">Sometimes I use tables because they make the location of inserted images more predictable than if I insert them into the text (e.g. anchored to paragraphs). If - as e.g. often in user manuals - many short text passages and corresponding illustrations follow one after another, it may even make sense to place headings in tables as well. If you do this, however, you lose the nice feature of the navigator that you can continuously see how a text is positioned in the hierarchy of associated headings: The navigator suddenly shows the position in the hierarchy of tables (or sections, if the text passage is in a section).</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:h text:style-name="Heading_20_3" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc71129_2824860697"/>Expected behavior<text:span text:style-name="T5"> in a table</text:span>:<text:bookmark-end text:name="__RefHeading___Toc71129_2824860697"/></text:h>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table1.1">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p text:style-name="Text_20_body">I expect the navigator to always show the location of the bookmark in the editing window with respect to the category selected in the navigator's drop-down list of categories at the top left (really useful there are headings, tables, maybe sections. For hyperlinks, I can only imagine that it might make sense to highlight the next hyperlink before the position of the bookmark in the editing window).</text:p>
+          </table:table-cell>
+        </table:table-row>
+      </table:table>
+      <text:h text:style-name="P20" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc71131_2824860697"/>Some screenshots demonstrating what goes wrong<text:bookmark-end text:name="__RefHeading___Toc71131_2824860697"/></text:h>
+      <table:table table:name="Table2" table:style-name="Table2" table:template-name="Standardtabelle">
+        <table:table-column table:style-name="Table2.A"/>
+        <table:table-row table:style-name="Table2.1">
+          <table:table-cell table:style-name="Table2.A1" office:value-type="string">
+            <text:h text:style-name="Heading_20_3" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc72157_2824860697"/>What goes right<text:bookmark-end text:name="__RefHeading___Toc72157_2824860697"/></text:h>
+            <text:p text:style-name="Text_20_body">Before I’ll show what goes wrong, I’ll precede my examples with one showing that Navigator’s reflection of edit places goes right, as long as one navigates in text which is not part of a table <text:span text:style-name="T7">(or a section, which we will encounter soon)</text:span>: I go some lines up, add the word HERE to some place and make a screenshot:</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <text:soft-page-break/>
+        <table:table-row table:style-name="Table2.1">
+          <table:table-cell table:style-name="Table2.A1" office:value-type="string">
+            <text:p text:style-name="Text_20_body"><draw:frame draw:style-name="fr2" draw:name="Image3" text:anchor-type="char" svg:width="16.806cm" svg:height="10.834cm" draw:z-index="2"><draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
+UkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAA
+AAJiS0dEAACqjSMyAAAACW9GRnMAAAAGAAAAAAAMc1XTAAAACXBIWXMAAA3XAAAN1wFCKJt4
+AAAACXZwQWcAAABMAAAAQACdMTgbAAABzUlEQVRo3u3ZPU/CQBjA8X+Jxs3ESUDj4iK+LA5+
+BBfjqBE1cXB2MlFAEqMgxvhNNL4sLsK3UPQL6ObkoAETz+FKW2mxCPRYnucWUu76/OC59C49
+cGOCKqrD9kHRc6ddPv7oW2WCwMh0nF63Myz7Tm8hPTNu0pgHMER3scepTbgK6enJNND83RLn
+/878yRaPmgBZFDuMsNLeWB9gmFQHP77MIg9gsYciR50NFKvtjIy10yk84pSZA7DYpwR8scmF
+QQCMuoQMpzbh0iAARrlnVn90CWHTsZcAiHPPdINQAuqsc2MQAAnKDUKWEhZ10twaBEDSJWQo
+YlFj7S9CzwEegkXWIbQsRAQASFJhpplwbRAACS+hANRJBxMiAkDcJeQ4sQkBhYgMoJ+Ozlwo
+2YQ7AJ6CRxyiUGnVy3hVKb0Af9v7hUG2Wy9TEQCUelFTDULB2S+YKYGOMcpM6UIccOQnRA6A
+cSp6ibfI+wkGADBGpTEd8xz1AaAfTQ7huA8AvUw5hVjuA0D/C5OaMN8XACRZ8F0zCggKAQhA
+AAIQgAAEIAABCEAAAhCAAAQgAAH4zg3feY4w3Xs44M5+oW0qvCWoGcvaIlM3x/f/ab+O738A
+hOCNQr34oD4AAAAldEVYdGNyZWF0ZS1kYXRlADIwMTAtMTItMjBUMTc6MDg6MzYrMDE6MDB6
+5RscAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDEwLTEyLTIwVDE3OjA4OjM3KzAxOjAwgyNmnAAA
+AABJRU5ErkJggg==</office:binary-data></draw:image></draw:frame>The highlighted word HERE is in the paragraph with headline “An example“: the right paragraph is highlighted in the <text:span text:style-name="T7">N</text:span>avigator. That’s <text:span text:style-name="T7">re</text:span>ally helpful. In order to show that this is not just an accidental r<text:span text:style-name="T7">e</text:span>sult, I’ll remove the highlighted word and transplant it to some other paragraph:</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <text:soft-page-break/>
+        <table:table-row table:style-name="Table2.1">
+          <table:table-cell table:style-name="Table2.A1" office:value-type="string">
+            <text:p text:style-name="Text_20_body"><draw:frame draw:style-name="fr1" draw:name="Image4" text:anchor-type="paragraph" svg:width="16.806cm" svg:height="10.834cm" draw:z-index="3"><draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
+UkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAA
+AAJiS0dEAACqjSMyAAAACW9GRnMAAAAGAAAAAAAMc1XTAAAACXBIWXMAAA3XAAAN1wFCKJt4
+AAAACXZwQWcAAABMAAAAQACdMTgbAAABzUlEQVRo3u3ZPU/CQBjA8X+Jxs3ESUDj4iK+LA5+
+BBfjqBE1cXB2MlFAEqMgxvhNNL4sLsK3UPQL6ObkoAETz+FKW2mxCPRYnucWUu76/OC59C49
+cGOCKqrD9kHRc6ddPv7oW2WCwMh0nF63Myz7Tm8hPTNu0pgHMER3scepTbgK6enJNND83RLn
+/878yRaPmgBZFDuMsNLeWB9gmFQHP77MIg9gsYciR50NFKvtjIy10yk84pSZA7DYpwR8scmF
+QQCMuoQMpzbh0iAARrlnVn90CWHTsZcAiHPPdINQAuqsc2MQAAnKDUKWEhZ10twaBEDSJWQo
+YlFj7S9CzwEegkXWIbQsRAQASFJhpplwbRAACS+hANRJBxMiAkDcJeQ4sQkBhYgMoJ+Ozlwo
+2YQ7AJ6CRxyiUGnVy3hVKb0Af9v7hUG2Wy9TEQCUelFTDULB2S+YKYGOMcpM6UIccOQnRA6A
+cSp6ibfI+wkGADBGpTEd8xz1AaAfTQ7huA8AvUw5hVjuA0D/C5OaMN8XACRZ8F0zCggKAQhA
+AAIQgAAEIAABCEAAAhCAAAQgAAH4zg3feY4w3Xs44M5+oW0qvCWoGcvaIlM3x/f/ab+O738A
+hOCNQr34oD4AAAAldEVYdGNyZWF0ZS1kYXRlADIwMTAtMTItMjBUMTc6MDg6MzYrMDE6MDB6
+5RscAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDEwLTEyLTIwVDE3OjA4OjM3KzAxOjAwgyNmnAAA
+AABJRU5ErkJggg==</office:binary-data></draw:image></draw:frame>Again the highlighted portion in the Navigator shows the position in the edit window. Now I’ll test it with yet another place.</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table2.1">
+          <table:table-cell table:style-name="Table2.A1" office:value-type="string">
+            <text:h text:style-name="Heading_20_3" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc72159_2824860697"/>But this one will go wrong:<text:bookmark-end text:name="__RefHeading___Toc72159_2824860697"/></text:h>
+          </table:table-cell>
+        </table:table-row>
+        <text:soft-page-break/>
+        <table:table-row table:style-name="Table2.1">
+          <table:table-cell table:style-name="Table2.A1" office:value-type="string">
+            <text:h text:style-name="Heading_20_4" text:outline-level="4"><draw:frame draw:style-name="fr1" draw:name="Image5" text:anchor-type="paragraph" svg:width="16.806cm" svg:height="10.834cm" draw:z-index="4"><draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
+UkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAA
+AAJiS0dEAACqjSMyAAAACW9GRnMAAAAGAAAAAAAMc1XTAAAACXBIWXMAAA3XAAAN1wFCKJt4
+AAAACXZwQWcAAABMAAAAQACdMTgbAAABzUlEQVRo3u3ZPU/CQBjA8X+Jxs3ESUDj4iK+LA5+
+BBfjqBE1cXB2MlFAEqMgxvhNNL4sLsK3UPQL6ObkoAETz+FKW2mxCPRYnucWUu76/OC59C49
+cGOCKqrD9kHRc6ddPv7oW2WCwMh0nF63Myz7Tm8hPTNu0pgHMER3scepTbgK6enJNND83RLn
+/878yRaPmgBZFDuMsNLeWB9gmFQHP77MIg9gsYciR50NFKvtjIy10yk84pSZA7DYpwR8scmF
+QQCMuoQMpzbh0iAARrlnVn90CWHTsZcAiHPPdINQAuqsc2MQAAnKDUKWEhZ10twaBEDSJWQo
+YlFj7S9CzwEegkXWIbQsRAQASFJhpplwbRAACS+hANRJBxMiAkDcJeQ4sQkBhYgMoJ+Ozlwo
+2YQ7AJ6CRxyiUGnVy3hVKb0Af9v7hUG2Wy9TEQCUelFTDULB2S+YKYGOMcpM6UIccOQnRA6A
+cSp6ibfI+wkGADBGpTEd8xz1AaAfTQ7huA8AvUw5hVjuA0D/C5OaMN8XACRZ8F0zCggKAQhA
+AAIQgAAEIAABCEAAAhCAAAQgAAH4zg3feY4w3Xs44M5+oW0qvCWoGcvaIlM3x/f/ab+O738A
+hOCNQr34oD4AAAAldEVYdGNyZWF0ZS1kYXRlADIwMTAtMTItMjBUMTc6MDg6MzYrMDE6MDB6
+5RscAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDEwLTEyLTIwVDE3OjA4OjM3KzAxOjAwgyNmnAAA
+AABJRU5ErkJggg==</office:binary-data></draw:image></draw:frame><text:bookmark-start text:name="__RefHeading___Toc72161_2824860697"/>1. Expec<text:span text:style-name="T7">t</text:span>ed result<text:bookmark-end text:name="__RefHeading___Toc72161_2824860697"/></text:h>
+            <text:p text:style-name="Text_20_body">This time, the highlight is in section c0! This is really surprising! I have not created any section c0 active at all. Even when LO Writer created one for internal organizational reasons: my text is under the heading “New findings”!</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table2.1">
+          <table:table-cell table:style-name="Table2.A1" office:value-type="string">
+            <text:h text:style-name="Heading_20_3" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc72673_2824860697"/>Continued examples<text:bookmark-end text:name="__RefHeading___Toc72673_2824860697"/></text:h>
+            <text:p text:style-name="Text_20_body">In order to avoid any difficulty of pasted screenshots appearing on arbitrary places (another bug, but not the issue of this error report, I place all my text and screenshots to just another table: In the next picture, you see the navigator when the focus in the text field is HERE</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <text:soft-page-break/>
+        <table:table-row table:style-name="Table2.1">
+          <table:table-cell table:style-name="Table2.A1" office:value-type="string">
+            <text:p text:style-name="Text_20_body"><draw:frame draw:style-name="fr1" draw:name="Image1" text:anchor-type="paragraph" svg:width="16.806cm" svg:height="10.834cm" draw:z-index="0"><draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
+UkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAA
+AAJiS0dEAACqjSMyAAAACW9GRnMAAAAGAAAAAAAMc1XTAAAACXBIWXMAAA3XAAAN1wFCKJt4
+AAAACXZwQWcAAABMAAAAQACdMTgbAAABzUlEQVRo3u3ZPU/CQBjA8X+Jxs3ESUDj4iK+LA5+
+BBfjqBE1cXB2MlFAEqMgxvhNNL4sLsK3UPQL6ObkoAETz+FKW2mxCPRYnucWUu76/OC59C49
+cGOCKqrD9kHRc6ddPv7oW2WCwMh0nF63Myz7Tm8hPTNu0pgHMER3scepTbgK6enJNND83RLn
+/878yRaPmgBZFDuMsNLeWB9gmFQHP77MIg9gsYciR50NFKvtjIy10yk84pSZA7DYpwR8scmF
+QQCMuoQMpzbh0iAARrlnVn90CWHTsZcAiHPPdINQAuqsc2MQAAnKDUKWEhZ10twaBEDSJWQo
+YlFj7S9CzwEegkXWIbQsRAQASFJhpplwbRAACS+hANRJBxMiAkDcJeQ4sQkBhYgMoJ+Ozlwo
+2YQ7AJ6CRxyiUGnVy3hVKb0Af9v7hUG2Wy9TEQCUelFTDULB2S+YKYGOMcpM6UIccOQnRA6A
+cSp6ibfI+wkGADBGpTEd8xz1AaAfTQ7huA8AvUw5hVjuA0D/C5OaMN8XACRZ8F0zCggKAQhA
+AAIQgAAEIAABCEAAAhCAAAQgAAH4zg3feY4w3Xs44M5+oW0qvCWoGcvaIlM3x/f/ab+O738A
+hOCNQr34oD4AAAAldEVYdGNyZWF0ZS1kYXRlADIwMTAtMTItMjBUMTc6MDg6MzYrMDE6MDB6
+5RscAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDEwLTEyLTIwVDE3OjA4OjM3KzAxOjAwgyNmnAAA
+AABJRU5ErkJggg==</office:binary-data></draw:image></draw:frame>As you see, Table2 under Tables is highlighted. You might argue, ok, the focus is really in Table2, just go to Headings in Navigator. I’ll do that now:</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <text:soft-page-break/>
+        <table:table-row table:style-name="Table2.1">
+          <table:table-cell table:style-name="Table2.A1" office:value-type="string">
+            <text:p text:style-name="Text_20_body"><draw:frame draw:style-name="fr2" draw:name="Image2" text:anchor-type="char" svg:width="16.806cm" svg:height="10.834cm" draw:z-index="1"><draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
+UkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAA
+AAJiS0dEAACqjSMyAAAACW9GRnMAAAAGAAAAAAAMc1XTAAAACXBIWXMAAA3XAAAN1wFCKJt4
+AAAACXZwQWcAAABMAAAAQACdMTgbAAABzUlEQVRo3u3ZPU/CQBjA8X+Jxs3ESUDj4iK+LA5+
+BBfjqBE1cXB2MlFAEqMgxvhNNL4sLsK3UPQL6ObkoAETz+FKW2mxCPRYnucWUu76/OC59C49
+cGOCKqrD9kHRc6ddPv7oW2WCwMh0nF63Myz7Tm8hPTNu0pgHMER3scepTbgK6enJNND83RLn
+/878yRaPmgBZFDuMsNLeWB9gmFQHP77MIg9gsYciR50NFKvtjIy10yk84pSZA7DYpwR8scmF
+QQCMuoQMpzbh0iAARrlnVn90CWHTsZcAiHPPdINQAuqsc2MQAAnKDUKWEhZ10twaBEDSJWQo
+YlFj7S9CzwEegkXWIbQsRAQASFJhpplwbRAACS+hANRJBxMiAkDcJeQ4sQkBhYgMoJ+Ozlwo
+2YQ7AJ6CRxyiUGnVy3hVKb0Af9v7hUG2Wy9TEQCUelFTDULB2S+YKYGOMcpM6UIccOQnRA6A
+cSp6ibfI+wkGADBGpTEd8xz1AaAfTQ7huA8AvUw5hVjuA0D/C5OaMN8XACRZ8F0zCggKAQhA
+AAIQgAAEIAABCEAAAhCAAAQgAAH4zg3feY4w3Xs44M5+oW0qvCWoGcvaIlM3x/f/ab+O738A
+hOCNQr34oD4AAAAldEVYdGNyZWF0ZS1kYXRlADIwMTAtMTItMjBUMTc6MDg6MzYrMDE6MDB6
+5RscAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDEwLTEyLTIwVDE3OjA4OjM3KzAxOjAwgyNmnAAA
+AABJRU5ErkJggg==</office:binary-data></draw:image></draw:frame>but as soon as I continue writing in the text area, Table2 is highlighted again!</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="Table2.1">
+          <table:table-cell table:style-name="Table2.A1" office:value-type="string">
+            <text:h text:style-name="Heading_20_4" text:outline-level="4"><text:bookmark-start text:name="__RefHeading___Toc71133_2824860697"/><text:span text:style-name="T6">2</text:span>. Expected behavior<text:bookmark-end text:name="__RefHeading___Toc71133_2824860697"/></text:h>
+            <text:p text:style-name="Text_20_body"><text:span text:style-name="T9">If the focus in Navigator is on Headings, it should not jump to tables when I continue to edit text which is in a table</text:span>.</text:p>
+          </table:table-cell>
+        </table:table-row>
+      </table:table>
+      <text:section text:style-name="Sect3" text:name="section 2">
+        <text:h text:style-name="Heading_20_3" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc74207_2824860697"/>Now I create a section<text:bookmark-end text:name="__RefHeading___Toc74207_2824860697"/></text:h>
+        <table:table table:name="Table3" table:style-name="Table3">
+          <table:table-column table:style-name="Table3.A"/>
+          <table:table-row>
+            <table:table-cell table:style-name="Table3.A1" office:value-type="string">
+              <text:p text:style-name="P14">To make it appear differently, I make it a two column one. Right now, the focus in the editing window is HERE, <text:span text:style-name="T8">but although “H Headings” is selected in the upper left corner of Navigator, the highlight jumps down to section 2! (Btw: when I tried to paste the screenshot below this text, it went to a completely different page, which is yet another bug in LO Writer, which is not subject of this bug report, but I keep note of it to report it in another bug report soon). In order to paste my picture where I want it to appear, I rearranged my text into a table and pasted the picture to a cell below. </text:span><text:span text:style-name="T10">Strangely, this picture goes to the next page in this section!</text:span><text:span text:style-name="T8">)</text:span></text:p>
+            </table:table-cell>
+          </table:table-row>
+          <text:soft-page-break/>
+          <table:table-row>
+            <table:table-cell table:style-name="Table3.A1" office:value-type="string">
+              <text:p text:style-name="Table_20_Contents"><draw:frame draw:style-name="fr1" draw:name="Image7" text:anchor-type="paragraph" svg:width="4.78cm" svg:height="9.999cm" draw:z-index="6"><draw:image draw:mime-type="image/png"></draw:image><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
+UkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAA
+AAJiS0dEAACqjSMyAAAACW9GRnMAAAAGAAAAAAAMc1XTAAAACXBIWXMAAA3XAAAN1wFCKJt4
+AAAACXZwQWcAAABMAAAAQACdMTgbAAABzUlEQVRo3u3ZPU/CQBjA8X+Jxs3ESUDj4iK+LA5+
+BBfjqBE1cXB2MlFAEqMgxvhNNL4sLsK3UPQL6ObkoAETz+FKW2mxCPRYnucWUu76/OC59C49
+cGOCKqrD9kHRc6ddPv7oW2WCwMh0nF63Myz7Tm8hPTNu0pgHMER3scepTbgK6enJNND83RLn
+/878yRaPmgBZFDuMsNLeWB9gmFQHP77MIg9gsYciR50NFKvtjIy10yk84pSZA7DYpwR8scmF
+QQCMuoQMpzbh0iAARrlnVn90CWHTsZcAiHPPdINQAuqsc2MQAAnKDUKWEhZ10twaBEDSJWQo
+YlFj7S9CzwEegkXWIbQsRAQASFJhpplwbRAACS+hANRJBxMiAkDcJeQ4sQkBhYgMoJ+Ozlwo
+2YQ7AJ6CRxyiUGnVy3hVKb0Af9v7hUG2Wy9TEQCUelFTDULB2S+YKYGOMcpM6UIccOQnRA6A
+cSp6ibfI+wkGADBGpTEd8xz1AaAfTQ7huA8AvUw5hVjuA0D/C5OaMN8XACRZ8F0zCggKAQhA
+AAIQgAAEIAABCEAAAhCAAAQgAAH4zg3feY4w3Xs44M5+oW0qvCWoGcvaIlM3x/f/ab+O738A
+hOCNQr34oD4AAAAldEVYdGNyZWF0ZS1kYXRlADIwMTAtMTItMjBUMTc6MDg6MzYrMDE6MDB6
+5RscAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDEwLTEyLTIwVDE3OjA4OjM3KzAxOjAwgyNmnAAA
+AABJRU5ErkJggg==</office:binary-data></draw:frame></text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="Table3.A1" office:value-type="string">
+              <text:h text:style-name="Heading_20_4" text:outline-level="4"><text:bookmark-start text:name="__RefHeading___Toc74209_2824860697"/><text:span text:style-name="T11">3. </text:span>Expected Behavior<text:bookmark-end text:name="__RefHeading___Toc74209_2824860697"/></text:h>
+              <text:p text:style-name="P15"><text:span text:style-name="T12">1.</text:span> Since “H Headings” is highlighted, I would expect this one highlighted:</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="Table3.A1" office:value-type="string">
+              <text:p text:style-name="P16"><draw:frame draw:style-name="fr1" draw:name="Image8" text:anchor-type="paragraph" svg:width="5.02cm" svg:height="9.999cm" draw:z-index="5"><draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
+UkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAA
+AAJiS0dEAACqjSMyAAAACW9GRnMAAAAGAAAAAAAMc1XTAAAACXBIWXMAAA3XAAAN1wFCKJt4
+AAAACXZwQWcAAABMAAAAQACdMTgbAAABzUlEQVRo3u3ZPU/CQBjA8X+Jxs3ESUDj4iK+LA5+
+BBfjqBE1cXB2MlFAEqMgxvhNNL4sLsK3UPQL6ObkoAETz+FKW2mxCPRYnucWUu76/OC59C49
+cGOCKqrD9kHRc6ddPv7oW2WCwMh0nF63Myz7Tm8hPTNu0pgHMER3scepTbgK6enJNND83RLn
+/878yRaPmgBZFDuMsNLeWB9gmFQHP77MIg9gsYciR50NFKvtjIy10yk84pSZA7DYpwR8scmF
+QQCMuoQMpzbh0iAARrlnVn90CWHTsZcAiHPPdINQAuqsc2MQAAnKDUKWEhZ10twaBEDSJWQo
+YlFj7S9CzwEegkXWIbQsRAQASFJhpplwbRAACS+hANRJBxMiAkDcJeQ4sQkBhYgMoJ+Ozlwo
+2YQ7AJ6CRxyiUGnVy3hVKb0Af9v7hUG2Wy9TEQCUelFTDULB2S+YKYGOMcpM6UIccOQnRA6A
+cSp6ibfI+wkGADBGpTEd8xz1AaAfTQ7huA8AvUw5hVjuA0D/C5OaMN8XACRZ8F0zCggKAQhA
+AAIQgAAEIAABCEAAAhCAAAQgAAH4zg3feY4w3Xs44M5+oW0qvCWoGcvaIlM3x/f/ab+O738A
+hOCNQr34oD4AAAAldEVYdGNyZWF0ZS1kYXRlADIwMTAtMTItMjBUMTc6MDg6MzYrMDE6MDB6
+5RscAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDEwLTEyLTIwVDE3OjA4OjM3KzAxOjAwgyNmnAAA
+AABJRU5ErkJggg==</office:binary-data></draw:image></draw:frame>However, whatever I do, as soon as I continue editing, Table3 is highlighted again in the editor window.</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="Table3.A1" office:value-type="string">
+              <text:p text:style-name="P17"><text:span text:style-name="T12">2.</text:span> I would have expected the <text:span text:style-name="T11">column to continue on the last page (which again is another quirk which I’ll report in another bug report).</text:span></text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="Table3.A1" office:value-type="string">
+              <text:p text:style-name="P15"><text:span text:style-name="T12">3.</text:span> <text:span text:style-name="T9">When editing this part, LibreOffice Writer started flickering</text:span> (a phenomemon which I also observed earlier but for which I was missing reproducible examples – and of course, this bug is not subject of this report, but I note it in order to use this file for a demonstration.</text:p>
+            </table:table-cell>
+          </table:table-row>
+        </table:table>
+        <text:p text:style-name="P13"/>
+      </text:section>
+    </office:text>
+  </office:body>
+</office:document>

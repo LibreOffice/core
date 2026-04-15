@@ -1,0 +1,165 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module security {
+
+/** Interface for signing and verifying digital signatures in office documents
+
+    <p>
+    This interface can be used to digitally sign different content in an office document.
+    It can also be used to verify digital signatures.
+    </p>
+ */
+
+interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
+{
+    /** Signs the content of the document including text and pictures
+        using the given XCertificate.
+
+        Also adds the given Signature Line Id and the signed and unsigned graphics to
+        the signature.
+
+       Macros will not be signed.
+     */
+    boolean signSignatureLine( [in] ::com::sun::star::embed::XStorage xStorage,
+                               [in] ::com::sun::star::io::XStream xSignStream,
+                               [in] string signatureLineId,
+                               [in] ::com::sun::star::security::XCertificate xCertificate,
+                               [in] ::com::sun::star::graphic::XGraphic xValidGraphic,
+                               [in] ::com::sun::star::graphic::XGraphic xInvalidGraphic,
+                               [in] string comment);
+
+    /** checks for digital signatures and their status.
+
+        <p>Only document content will be checked.</p>
+     */
+    sequence< com::sun::star::security::DocumentSignatureInformation > verifyDocumentContentSignatures(
+                                [in] ::com::sun::star::embed::XStorage xStorage,
+                                [in] ::com::sun::star::io::XInputStream xSignInStream );
+
+    /** shows the digital signatures of the document content
+     */
+    void showDocumentContentSignatures(
+                                [in] ::com::sun::star::embed::XStorage xStorage,
+                                [in] ::com::sun::star::io::XInputStream xSignInStream );
+
+    /** allows to get the default stream name for storing of the signature of
+        the document content.
+     */
+    string getDocumentContentSignatureDefaultStreamName();
+
+    /** checks for digital signatures and their status.
+
+        <p>Only Scripting content will be checked.</p>
+     */
+    sequence< com::sun::star::security::DocumentSignatureInformation > verifyScriptingContentSignatures(
+                                [in] ::com::sun::star::embed::XStorage xStorage,
+                                [in] ::com::sun::star::io::XInputStream xSignInStream );
+
+    /** shows the digital signatures of the scripting content
+     */
+    void showScriptingContentSignatures(
+                                [in] ::com::sun::star::embed::XStorage xStorage,
+                                [in] ::com::sun::star::io::XInputStream xSignInStream );
+
+    /** allows to get the default stream name for storing of the signature of
+        the scripting content.
+     */
+    string getScriptingContentSignatureDefaultStreamName();
+
+    void showCertificate( [in] com::sun::star::security::XCertificate Certificate );
+
+
+    /** manages trusted sources (Authors and paths )
+     */
+    void    manageTrustedSources();
+    boolean isAuthorTrusted( [in] com::sun::star::security::XCertificate Author );
+    boolean isLocationTrusted( [in] string Location );
+
+    // These methods should raise a confirmation dialog, so they can not be misused from bad macros.
+    void    addAuthorToTrustedSources( [in] com::sun::star::security::XCertificate Author );
+    void    addLocationToTrustedSources( [in] string Location );
+
+    /**  This method shows the CertificateChooser dialog, used by document and PDF signing
+         Shows only private certificates
+     */
+    com::sun::star::security::XCertificate chooseCertificate( [out] string Description );
+
+    /**  This is an alias for 'chooseCertificate', shows the CertificateChooser dialog
+         with private certificates
+     */
+    com::sun::star::security::XCertificate chooseSigningCertificate( [out] string Description );
+
+    /**  This shows the certificate selection dialog and allows to only select the certificate
+         without actually signing the document.
+     */
+    com::sun::star::security::XCertificate selectSigningCertificate( [out] string Description );
+
+    /**  This shows the certificate selection dialog and allows to only select the certificate
+         without actually signing the document. Only certificates of the given type will be shown.
+
+        @param certificateKind
+               com::sun::star::security::CertificateKind ENUM to choose only from certificates of a certain type.
+               CertificateKind_NONE lists all types of certificates for choosing.
+     */
+    com::sun::star::security::XCertificate selectSigningCertificateWithType(
+        [in] CertificateKind certificateKind,
+        [out] string Description);
+
+    /**  This method shows the CertificateChooser dialog with all certificates, private and
+         other people's. Useful when choosing certificate/key for encryption.
+
+        @param certificateKind
+               com::sun::star::security::CertificateKind ENUM to choose only from certificates of a certain type.
+               CertificateKind_NONE lists all types of certificates for choosing.
+     */
+    sequence< com::sun::star::security::XCertificate > chooseEncryptionCertificate(
+        [in] CertificateKind certificateKind);
+
+    /**  This method shows the CertificateChooser dialog, used by document and PDF signing
+         Shows only private certificates and returns usage string in addition to description.
+     */
+    com::sun::star::security::XCertificate chooseCertificateWithProps( [out] sequence<::com::sun::star::beans::PropertyValue> Properties);
+
+    /** Signs the content of the document with the provided certificate.
+     */
+    boolean signDocumentWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
+                                        [in] ::com::sun::star::embed::XStorage xStorage,
+                                        [in] ::com::sun::star::io::XStream xStream);
+
+    /** Set parent window to use when showing dialogs
+    */
+    void setParentWindow([in] ::com::sun::star::awt::XWindow xParentWindow);
+
+    /** signs the content of the Scripting including macros and basic dialogs with the provided certificate.
+
+        <p>The rest of document content will not be signed.</p>
+    */
+    boolean signScriptingContentWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
+                                                [in] ::com::sun::star::embed::XStorage xStorage,
+                                                [in] ::com::sun::star::io::XStream xStream);
+
+    /** queries the user if they want to trust an untrusted certificate.
+    */
+    boolean trustUntrustedCertificate([in] ::com::sun::star::security::XCertificate xCertificate);
+};
+
+} ; } ; } ; } ;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

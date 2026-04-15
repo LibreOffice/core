@@ -1,0 +1,14 @@
+diff -ur icu.org/source/config/mh-linux icu/source/config/mh-linux
+--- icu.org/source/config/mh-linux	2017-04-21 23:09:57.588533707 +0200
++++ icu/source/config/mh-linux	2017-04-21 23:11:38.075292226 +0200
+@@ -27,7 +27,9 @@
+ RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN'
+ 
+ ## These are the library specific LDFLAGS
+-LDFLAGSICUDT=-nodefaultlibs -nostdlib
++#LDFLAGSICUDT=-nodefaultlibs -nostdlib
++# Debian change: linking icudata as data only causes too many problems.
++LDFLAGSICUDT=
+ 
+ ## Compiler switch to embed a library name
+ # The initial tab in the next line is to prevent icu-config from reading it.

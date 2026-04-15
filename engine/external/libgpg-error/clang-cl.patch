@@ -1,0 +1,11 @@
+--- src/gpg-error.h.in
++++ src/gpg-error.h.in
+@@ -152,7 +152,7 @@
+ /*
+  * GCC feature test.
+  */
+-#if __GNUC__
++#ifdef __GNUC__
+ # define _GPG_ERR_GCC_VERSION (__GNUC__ * 10000 \
+                                + __GNUC_MINOR__ * 100 \
+                                + __GNUC_PATCHLEVEL__)

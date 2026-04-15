@@ -1,0 +1,222 @@
+From c86638560b3cb39b847d4e84ae9b8492f0c5fa22 Mon Sep 17 00:00:00 2001
+From: Mike Kaganski <mikekaganski@hotmail.com>
+Date: Thu, 22 Feb 2024 20:47:48 +0600
+Subject: [PATCH] Fix warning C4589 when building with MSVC
+
+C:\libcmis\inc\libcmis/document.hxx(51): warning C4589: Constructor of abstract class 'libcmis::Document' ignores initializer for virtual base class 'libcmis::Object'
+C:\libcmis\inc\libcmis/document.hxx(51): note: virtual base classes are only initialized by the most-derived type
+C:\libcmis\inc\libcmis/folder.hxx(58): warning C4589: Constructor of abstract class 'libcmis::Folder' ignores initializer for virtual base class 'libcmis::Object'
+C:\libcmis\inc\libcmis/folder.hxx(58): note: virtual base classes are only initialized by the most-derived type
+---
+ inc/libcmis/document.hxx            | 1 -
+ inc/libcmis/folder.hxx              | 1 -
+ src/libcmis/atom-document.cxx       | 2 --
+ src/libcmis/atom-folder.cxx         | 1 -
+ src/libcmis/gdrive-document.cxx     | 2 --
+ src/libcmis/gdrive-folder.cxx       | 2 --
+ src/libcmis/onedrive-document.cxx   | 2 --
+ src/libcmis/onedrive-folder.cxx     | 2 --
+ src/libcmis/sharepoint-document.cxx | 2 --
+ src/libcmis/sharepoint-folder.cxx   | 2 --
+ src/libcmis/ws-document.cxx         | 1 -
+ src/libcmis/ws-folder.cxx           | 1 -
+ 12 files changed, 19 deletions(-)
+
+diff --git a/inc/libcmis/document.hxx b/inc/libcmis/document.hxx
+index 8f44313..ca18a84 100644
+--- a/inc/libcmis/document.hxx
++++ b/inc/libcmis/document.hxx
+@@ -48,7 +48,6 @@ namespace libcmis
+     class LIBCMIS_API Document : public virtual Object
+     {
+         public:
+-            Document( Session* session ) : Object( session ) { }
+             virtual ~Document( ) { }
+ 
+             /** Get the folder parents for the document.
+diff --git a/inc/libcmis/folder.hxx b/inc/libcmis/folder.hxx
+index 0010dbd..24f4ac4 100644
+--- a/inc/libcmis/folder.hxx
++++ b/inc/libcmis/folder.hxx
+@@ -55,7 +55,6 @@ namespace libcmis
+     class LIBCMIS_API Folder : public virtual Object
+     {
+         public:
+-            Folder( Session* session ) : Object( session ) { }
+             virtual ~Folder() { }
+ 
+             virtual std::vector< std::string > getPaths( );
+diff --git a/src/libcmis/atom-document.cxx b/src/libcmis/atom-document.cxx
+index e0400b1..8871dbc 100644
+--- a/src/libcmis/atom-document.cxx
++++ b/src/libcmis/atom-document.cxx
+@@ -43,7 +43,6 @@ using namespace libcmis;
+ 
+ AtomDocument::AtomDocument( AtomPubSession* session ) :
+     libcmis::Object( session ),
+-    libcmis::Document( session ),
+     AtomObject( session ),
+     m_contentUrl( )
+ {
+@@ -52,7 +51,6 @@ AtomDocument::AtomDocument( AtomPubSession* session ) :
+ 
+ AtomDocument::AtomDocument( AtomPubSession* session, xmlNodePtr entryNd ) :
+     libcmis::Object( session ),
+-    libcmis::Document( session ),
+     AtomObject( session ),
+     m_contentUrl( )
+ {
+diff --git a/src/libcmis/atom-folder.cxx b/src/libcmis/atom-folder.cxx
+index 5e41194..25276a1 100644
+--- a/src/libcmis/atom-folder.cxx
++++ b/src/libcmis/atom-folder.cxx
+@@ -46,7 +46,6 @@ namespace
+ 
+ AtomFolder::AtomFolder( AtomPubSession* session, xmlNodePtr entryNd ) :
+     libcmis::Object( session ),
+-    libcmis::Folder( session ),
+     AtomObject( session )
+ {
+     xmlDocPtr doc = libcmis::wrapInDoc( entryNd );
+diff --git a/src/libcmis/gdrive-document.cxx b/src/libcmis/gdrive-document.cxx
+index ecb13d6..a826cf7 100644
+--- a/src/libcmis/gdrive-document.cxx
++++ b/src/libcmis/gdrive-document.cxx
+@@ -40,7 +40,6 @@ using namespace libcmis;
+ 
+ GDriveDocument::GDriveDocument( GDriveSession* session ) :
+     libcmis::Object( session),
+-    libcmis::Document( session ),
+     GDriveObject( session ),
+     m_isGoogleDoc( false )
+ {
+@@ -48,7 +47,6 @@ GDriveDocument::GDriveDocument( GDriveSession* session ) :
+ 
+ GDriveDocument::GDriveDocument( GDriveSession* session, Json json, string id, string name ) :
+     libcmis::Object( session),
+-    libcmis::Document( session ),
+     GDriveObject( session, json, id, name ),
+     m_isGoogleDoc( false )
+ {
+diff --git a/src/libcmis/gdrive-folder.cxx b/src/libcmis/gdrive-folder.cxx
+index 26de89b..3aa5faf 100644
+--- a/src/libcmis/gdrive-folder.cxx
++++ b/src/libcmis/gdrive-folder.cxx
+@@ -38,14 +38,12 @@ using namespace libcmis;
+ 
+ GDriveFolder::GDriveFolder( GDriveSession* session ):
+     libcmis::Object( session ),
+-    libcmis::Folder( session ),
+     GDriveObject( session )
+ {
+ }
+ 
+ GDriveFolder::GDriveFolder( GDriveSession* session, Json json ):
+     libcmis::Object( session ),
+-    libcmis::Folder( session ),
+     GDriveObject( session, json )
+ {
+ }
+diff --git a/src/libcmis/onedrive-document.cxx b/src/libcmis/onedrive-document.cxx
+index 863a92f..ced64e0 100644
+--- a/src/libcmis/onedrive-document.cxx
++++ b/src/libcmis/onedrive-document.cxx
+@@ -40,14 +40,12 @@ using namespace libcmis;
+ 
+ OneDriveDocument::OneDriveDocument( OneDriveSession* session ) :
+     libcmis::Object( session),
+-    libcmis::Document( session ),
+     OneDriveObject( session )
+ {
+ }
+ 
+ OneDriveDocument::OneDriveDocument( OneDriveSession* session, Json json, string id, string name ) :
+     libcmis::Object( session),
+-    libcmis::Document( session ),
+     OneDriveObject( session, json, id, name )
+ {
+ }
+diff --git a/src/libcmis/onedrive-folder.cxx b/src/libcmis/onedrive-folder.cxx
+index c1980c8..3fa455a 100644
+--- a/src/libcmis/onedrive-folder.cxx
++++ b/src/libcmis/onedrive-folder.cxx
+@@ -38,14 +38,12 @@ using namespace libcmis;
+ 
+ OneDriveFolder::OneDriveFolder( OneDriveSession* session ):
+     libcmis::Object( session ),
+-    libcmis::Folder( session ),
+     OneDriveObject( session )
+ {
+ }
+ 
+ OneDriveFolder::OneDriveFolder( OneDriveSession* session, Json json ):
+     libcmis::Object( session ),
+-    libcmis::Folder( session ),
+     OneDriveObject( session, json )
+ {
+ }
+diff --git a/src/libcmis/sharepoint-document.cxx b/src/libcmis/sharepoint-document.cxx
+index dec5527..61b4431 100644
+--- a/src/libcmis/sharepoint-document.cxx
++++ b/src/libcmis/sharepoint-document.cxx
+@@ -37,14 +37,12 @@ using namespace libcmis;
+ 
+ SharePointDocument::SharePointDocument( SharePointSession* session ) :
+     libcmis::Object( session),
+-    libcmis::Document( session ),
+     SharePointObject( session )
+ {
+ }
+ 
+ SharePointDocument::SharePointDocument( SharePointSession* session, Json json, string parentId, string name ) :
+     libcmis::Object( session),
+-    libcmis::Document( session ),
+     SharePointObject( session, json, parentId, name )
+ {
+ }
+diff --git a/src/libcmis/sharepoint-folder.cxx b/src/libcmis/sharepoint-folder.cxx
+index e4da4a3..8bcb2db 100644
+--- a/src/libcmis/sharepoint-folder.cxx
++++ b/src/libcmis/sharepoint-folder.cxx
+@@ -38,14 +38,12 @@ using namespace libcmis;
+ 
+ SharePointFolder::SharePointFolder( SharePointSession* session ):
+     libcmis::Object( session ),
+-    libcmis::Folder( session ),
+     SharePointObject( session )
+ {
+ }
+ 
+ SharePointFolder::SharePointFolder( SharePointSession* session, Json json, string parentId ):
+     libcmis::Object( session ),
+-    libcmis::Folder( session ),
+     SharePointObject( session, json, parentId )
+ {
+ }
+diff --git a/src/libcmis/ws-document.cxx b/src/libcmis/ws-document.cxx
+index ba2f2bc..c085d5b 100644
+--- a/src/libcmis/ws-document.cxx
++++ b/src/libcmis/ws-document.cxx
+@@ -33,7 +33,6 @@ using libcmis::PropertyPtrMap;
+ 
+ WSDocument::WSDocument( const WSObject& object ) :
+     libcmis::Object( object ),
+-    libcmis::Document( const_cast< WSObject& >( object ).getSession( ) ),
+     WSObject( object )
+ {
+ }
+diff --git a/src/libcmis/ws-folder.cxx b/src/libcmis/ws-folder.cxx
+index 4e82ac2..aca0543 100644
+--- a/src/libcmis/ws-folder.cxx
++++ b/src/libcmis/ws-folder.cxx
+@@ -33,7 +33,6 @@ using libcmis::PropertyPtrMap;
+ 
+ WSFolder::WSFolder( const WSObject& object ) :
+     libcmis::Object( object ),
+-    libcmis::Folder( const_cast< WSObject& >( object ).getSession( ) ),
+     WSObject( object )
+ {
+ }
+-- 
+2.43.0.windows.1
+

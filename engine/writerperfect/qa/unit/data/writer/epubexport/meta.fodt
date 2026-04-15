@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document office:mimetype="application/vnd.oasis.opendocument.text" office:version="1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <office:meta>
+    <meta:initial-creator>A U Thor</meta:initial-creator>
+    <dc:title>Title</dc:title>
+    <dc:language>hu</dc:language>
+    <dc:date>2017-09-27T09:51:19.243117081</dc:date>
+  </office:meta>
+  <office:body>
+    <office:text>
+      <text:p><text:span>Hello world!</text:span></text:p>
+    </office:text>
+  </office:body>
+</office:document>

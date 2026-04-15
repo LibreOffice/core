@@ -1,0 +1,327 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_SFX2_LOKHELPER_HXX
+#define INCLUDED_SFX2_LOKHELPER_HXX
+
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
+#include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
+
+#include <vcl/IDialogRenderable.hxx>
+#include <vcl/ITiledRenderable.hxx>
+#include <vcl/event.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
+#include <sfx2/dllapi.h>
+#include <sfx2/viewsh.hxx>
+#include <tools/gen.hxx>
+#include <cstddef>
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <list>
+#include <optional>
+#include <string_view>
+#include <unordered_map>
+
+#include <boost/property_tree/ptree_fwd.hpp>
+
+#define KIT_NOTIFY_LOG_TO_CLIENT 1
+
+#define KIT_LOG_STREAM(level, area, stream) \
+    do { \
+            ::std::ostringstream kit_detail_stream; \
+            kit_detail_stream << level << ':'; \
+            if (std::strcmp(level, "debug") != 0) \
+                kit_detail_stream << area << ':'; \
+            const char* const where = SAL_WHERE; \
+            kit_detail_stream << where << stream; \
+            KitHelper::notifyLog(kit_detail_stream); \
+        } while (false)
+
+#if KIT_NOTIFY_LOG_TO_CLIENT > 0
+#define KIT_INFO(area, stream) \
+    KIT_LOG_STREAM("info", area, stream) \
+
+#define KIT_WARN(area, stream) \
+    KIT_LOG_STREAM("warn", area, stream)
+
+#else
+#define KIT_INFO(area, stream) \
+    SAL_INFO(area, stream) \
+
+#define KIT_WARN(area, stream) \
+    SAL_WARN(area, stream)
+
+#endif
+
+struct SFX2_DLLPUBLIC KitMouseEventData
+{
+    int mnType;
+    Point maPosition;
+    int mnCount;
+    MouseEventModifiers meModifiers;
+    int mnButtons;
+    int mnModifier;
+    std::optional<Point> maLogicPosition;
+
+    KitMouseEventData(int nType, Point aPosition, int nCount, MouseEventModifiers eModifiers, int nButtons, int nModifier)
+        : mnType(nType)
+        , maPosition(aPosition)
+        , mnCount(nCount)
+        , meModifiers(eModifiers)
+        , mnButtons(nButtons)
+        , mnModifier(nModifier)
+    {}
+};
+
+namespace com::sun::star::ui { struct ContextChangeEventObject; };
+
+class SFX2_DLLPUBLIC KitHelper
+{
+public:
+    /// Gets the short cut accelerators.
+    static std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& getAcceleratorConfs();
+    /// Create a new view shell from the current view frame.
+    /// This assumes a single document is ever loaded.
+    static int createView();
+    /// Create a new view shell for the given DocId, for multi-document support.
+    static int createView(int nDocId);
+    /// Destroy a view shell from the global shell list.
+    static void destroyView(int nId);
+    /// Set a view shell as current one.
+    static void setView(int nId);
+    /// Determines if a call to setView() is in progress or not.
+    static bool isSettingView();
+    /// Set the edit mode for a document with callbacks disabled.
+    static void setEditMode(int nMode, vcl::ITiledRenderable* pDoc);
+    /// Get view shell with id
+    static SfxViewShell* getViewOfId(int nId);
+    /// Get view id of view shell
+    static int getView(const SfxViewShell& rViewShell);
+    /// Get the currently active view shell id
+    static int getCurrentView();
+    /// Get the number of views of the current DocId.
+    static std::size_t getViewsCount(int nDocId);
+    /// Get the number of docs
+    static std::size_t getDocsCount();
+    /// Get the most recently active viewId of the DocId.
+    static int getViewId(int nDocId);
+    /// Get viewIds of views of the DocId.
+    static bool getViewIds(int nDocId, int* pArray, size_t nSize);
+    /// Set View Blocked for some uno commands
+    static void setBlockedCommandList(int nViewId, const char* blockedCommandList);
+    /// Get the document id for a view
+    static int getDocumentIdOfView(int nViewId);
+    /// Get the default language that should be used for views
+    static const LanguageTag & getDefaultLanguage();
+    /// Set language of the given view.
+    static void setViewLanguage(int nId, const OUString& rBcp47LanguageTag);
+    /// Set the default language for views.
+    static void setDefaultLanguage(const OUString& rBcp47LanguageTag);
+    /// Enable/Disable AT support for the given view.
+    static void setAccessibilityState(int nId, bool nEnabled);
+    // Set the readonly state of the view.
+    static void setViewReadOnly(int nId, bool readOnly);
+    // In readonly view, can user add / modify comments or not.
+    static void setAllowChangeComments(int nId, bool allow);
+    // In readonly view, can user accept / reject tracked changes or not.
+    static void setAllowManageRedlines(int nId, bool allow);
+    /// Get the language used by the loading view (used for all save operations).
+    static const LanguageTag & getLoadLanguage();
+    /// Set the language used by the loading view (used for all save operations).
+    static void setLoadLanguage(const OUString& rBcp47LanguageTag);
+    /// Set the locale for the given view.
+    static void setViewLocale(int nId, const OUString& rBcp47LanguageTag);
+    /// Set the language and locale for the given view.
+    static void setViewLanguageAndLocale(int nId, const OUString& rBcp47LanguageTag);
+    /// Get the device form factor that should be used for a new view.
+    static KitDeviceFormFactor getDeviceFormFactor();
+    /// Set the device form factor that should be used for a new view.
+    static void setDeviceFormFactor(std::u16string_view rDeviceFormFactor);
+    /// Set color preview state for the given view.
+    static void setColorPreviewState(int nId, bool nEnabled);
+
+    /// Set timezone of the given view.
+    /// @isSet true to use @rTimezone, even if it's empty. Otherwise, no timezone.
+    /// @rTimezone the value to set (which could be empty).
+    static void setDefaultTimezone(bool isSet, const OUString& rTimezone);
+    /// Get timezone of the given view. See @setDefaultTimezone.
+    static std::pair<bool, OUString> getDefaultTimezone();
+    /// Set the timezone of the given view.
+    static void setViewTimezone(int nId, bool isSet, const OUString& rTimezone);
+    /// Get the timezone of the given view.
+    static std::pair<bool, OUString> getViewTimezone(int nId);
+
+    /// Iterate over any view shell, except pThisViewShell, passing it to the f function.
+    template<typename ViewShellType, typename FunctionType>
+    static void forEachOtherView(ViewShellType* pThisViewShell, FunctionType f);
+
+    /// Invoke the Kit callback of all other views showing the same document as pThisView, with a payload of rKey-rPayload.
+    static void notifyOtherViews(const SfxViewShell* pThisView, int nType, std::string_view rKey,
+                                 const OString& rPayload);
+    /// Invoke the Kit callback of all views except pThisView, with a JSON payload created from the given property tree.
+    static void notifyOtherViews(const SfxViewShell* pThisView, int nType,
+                                 const boost::property_tree::ptree& rTree);
+    /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
+    static void notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
+                                int nType, std::string_view rKey, const OString& rPayload);
+    /// Same as notifyOtherViews(), the property-tree version, but works on a selected "other" view, not on all of them.
+    static void notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
+                                int nType, const boost::property_tree::ptree& rTree);
+
+    /// Emits a KIT_CALLBACK_STATE_CHANGED
+    static void sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem);
+    /// Emits a KIT_CALLBACK_WINDOW
+    static void notifyWindow(const SfxViewShell* pThisView,
+                             vcl::KitWindowId nWindowId,
+                             std::u16string_view rAction,
+                             const std::vector<vcl::KitPayloadItem>& rPayload = std::vector<vcl::KitPayloadItem>());
+    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED - if @bInvalidateAll - first invalidates all parts
+    static void notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
+    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAll - first invalidates all parts
+    static void notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
+    /// Emits a KIT_CALLBACK_STATE_CHANGED for all views of the same document - with payload ".uno:CurrentPageResize"
+    static void notifyCurrentPageSizeChangedAllViews(const vcl::ITiledRenderable* pDoc);
+    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document with the same part
+    static void notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart);
+    /// Emits a KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR
+    static void notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const * pRect, bool bControlEvent, int windowID);
+    /// Emits a KIT_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
+    static void notifyInvalidation(SfxViewShell const* pThisView, int nPart, tools::Rectangle const *);
+    /// Emits a KIT_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed
+    /// uses the Part reported by pThisView
+    static void notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const *);
+    /// Notifies all views with the given type and payload.
+    static void notifyAllViews(int nType, const OString& rPayload);
+
+    /// Notify about the editing context change.
+    static void notifyContextChange(const css::ui::ContextChangeEventObject& rEvent);
+
+    /// Emits an KIT_CALLBACK_VIEW_RENDER_STATE
+    static void notifyViewRenderState(SfxViewShell const* pViewShell, vcl::ITiledRenderable* pDoc);
+
+    // Notify about the given type needing an update.
+    static void notifyUpdate(SfxViewShell const* pViewShell, int nType);
+    // Notify about the given type needing a per-viewid update.
+    static void notifyUpdatePerViewId(SfxViewShell const& rViewShell, int nType);
+    /// Same as notifyUpdatePerViewId(), pTargetShell will be notified, relevant viewId in pViewShell,
+    /// pSourceView->getKitPayload() will be called to get the data.
+    static void notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxViewShell const* pViewShell,
+        SfxViewShell const& rSourceShell, int nType);
+    // Notify other views about the given type needing a per-viewid update.
+    static void notifyOtherViewsUpdatePerViewId(SfxViewShell const* pViewShell, int nType);
+
+    static OString makePayloadJSON(const SfxViewShell* pThisView, int nViewId, std::string_view rKey, const OString& rPayload);
+    /// Makes a KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR payload, but tweaks it according to setOptionalFeatures() if needed.
+    static OString makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
+                                             bool bMispelledWord = false, const OString& rHyperlink = ""_ostr);
+
+    /// Helper for posting async key event
+    static void postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
+                                  int nType, int nCharCode, int nKeyCode, int nRepeat = 0);
+
+    /// Helper for posting input event
+    static void postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
+                                      int nType, const OUString &rText);
+
+    /// Helper for posting async mouse event
+    static void postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, KitMouseEventData const & rKitMouseEventData);
+
+    /// A special value to signify 'infinity'.
+    /// This value is chosen such that sal_Int32 will not overflow when manipulated.
+    static const tools::Long MaxTwips = 1e9;
+
+    /// Helper for diagnosing run-time problems
+    static void dumpState(rtl::OStringBuffer &rState);
+
+    /// Process the mouse event in the currently active in-place component (if any).
+    /// Returns true if the event has been processed, and no further processing is necessary.
+    static bool testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int nType, int nX,
+                                                  int nY, int nCount, int nButtons, int nModifier,
+                                                  double fScaleX, double fScaleY,
+                                                  bool bNegativeX = false);
+
+    static VclPtr<vcl::Window> getInPlaceDocWindow(SfxViewShell* pViewShell);
+
+    /// Sends Network Access error to Kit
+    static void sendNetworkAccessError(std::string_view rAction);
+
+    static void notifyLog(const std::ostringstream& stream);
+
+    /// Extracts base64 data inside begin/end markers.
+    static std::string extractCertificate(const std::string& rCert);
+    /// Extracts multiple certificates in base64 from inside begin/end markers.
+    static std::vector<std::string> extractCertificates(const std::string& rCerts);
+    /// Takes a single CA certificate to add them to the list of trusted certificates.
+    static css::uno::Reference<css::security::XCertificate> addCertificate(const css::uno::Reference<css::xml::crypto::XCertificateCreator>& xCertificateCreator, const css::uno::Sequence<sal_Int8>& rCert);
+    /// Takes a CA chain to add them to the list of trusted certificates.
+    static void addCertificates(const std::vector<std::string>& rCerts);
+    /// Parses a private key + certificate pair.
+    static css::uno::Reference<css::security::XCertificate> getSigningCertificate(const std::string& rCert, const std::string& rKey);
+    /// Decides if it's OK to call getCommandValues(rCommand).
+    static bool supportsCommand(std::u16string_view rCommand);
+    /// Returns information about a given command in JSON format.
+    static void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand);
+    /// Parses key-value parameters of rCommand.
+    static std::map<OUString, OUString> parseCommandParameters(std::u16string_view rCommand);
+    /// Registers function pointers in comphelper/ to set/get of the current COKit view.
+    static void registerViewCallbacks();
+
+    static void dispatchUnoCommand(const boost::property_tree::ptree& tree);
+
+private:
+    static int createView(SfxViewFrame& rViewFrame, ViewShellDocId docId);
+};
+
+template<typename ViewShellType, typename FunctionType>
+void KitHelper::forEachOtherView(ViewShellType* pThisViewShell, FunctionType f)
+{
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        auto pOtherViewShell = dynamic_cast<ViewShellType*>(pViewShell);
+        if (pOtherViewShell != nullptr && pOtherViewShell != pThisViewShell && pOtherViewShell->GetDocId() == pThisViewShell->GetDocId())
+        {
+            f(pOtherViewShell);
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
+/// If Kit is active, switch to the language/locale of the provided shell and back on delete.
+class SfxKitLanguageGuard
+{
+    bool m_bSetLanguage;
+    const SfxViewShell* m_pOldShell;
+
+public:
+    SfxKitLanguageGuard(const SfxViewShell* pNewShell);
+    ~SfxKitLanguageGuard();
+};
+
+typedef std::list<SfxViewShell*> ViewShellList;
+
+/// Used to keep track of the last N views that text edited a document through an EditView
+class SFX2_DLLPUBLIC KitEditViewHistory
+{
+public:
+    typedef std::list<SfxViewShell*> ViewShellList;
+    typedef std::unordered_map<int, ViewShellList> EditViewHistoryMap;
+
+    static void Update(bool bRemove = false);
+    static ViewShellList GetHistoryForDoc(ViewShellDocId aDocId);
+    static ViewShellList GetSortedViewsForDoc(ViewShellDocId aDocId);
+private:
+    static EditViewHistoryMap maEditViewHistory;
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

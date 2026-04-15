@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="en" fo:country="US"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard" style:master-page-name="Style1">
+   <style:paragraph-properties style:page-number="5"/>
+   <style:text-properties text:display="none"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="210mm" fo:page-height="297mm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="1cm" fo:margin-left="0" fo:margin-right="0" fo:margin-bottom="5mm"/>
+   </style:header-style>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1">
+   <style:header>
+    <text:p>right</text:p>
+   </style:header>
+   <style:header-left>
+    <text:p>left</text:p>
+   </style:header-left>
+   <style:header-first>
+    <text:p>first</text:p>
+   </style:header-first>
+  </style:master-page>
+  <style:master-page style:name="Style1" style:page-layout-name="pm1">
+   <style:header>
+    <text:p>right (Style1)</text:p>
+   </style:header>
+   <style:header-left>
+    <text:p>left (Style1)</text:p>
+   </style:header-left>
+   <style:header-first>
+    <text:p>first (Style1)</text:p>
+   </style:header-first>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p>1</text:p>
+   <text:p>2</text:p>
+   <text:p>3</text:p>
+   <text:p>4</text:p>
+   <text:p>5</text:p>
+   <text:p>6</text:p>
+   <text:p>7</text:p>
+   <text:p>8</text:p>
+   <text:p>9</text:p>
+   <text:p>10</text:p>
+   <text:p>11</text:p>
+   <text:p>12</text:p>
+   <text:p>13</text:p>
+   <text:p>14</text:p>
+   <text:p>15</text:p>
+   <text:p>16</text:p>
+   <text:p>17</text:p>
+   <text:p>18</text:p>
+   <text:p>19</text:p>
+   <text:p>20</text:p>
+   <text:p>21</text:p>
+   <text:p>22</text:p>
+   <text:p>23</text:p>
+   <text:p>24</text:p>
+   <text:p>25</text:p>
+   <text:p>26</text:p>
+   <text:p>27</text:p>
+   <text:p>28</text:p>
+   <text:p>29</text:p>
+   <text:p>30</text:p>
+   <text:p>31</text:p>
+   <text:p>32</text:p>
+   <text:p>33</text:p>
+   <text:p>34</text:p>
+   <text:p>35</text:p>
+   <text:p>36</text:p>
+   <text:p>37</text:p>
+   <text:p>38</text:p>
+   <text:p>39</text:p>
+   <text:p>40</text:p>
+   <text:p>41</text:p>
+   <text:p>42</text:p>
+   <text:p>43</text:p>
+   <text:p>44</text:p>
+   <text:p>45</text:p>
+   <text:p text:style-name="P1">hidden paragraph with page break with page style and number</text:p>
+   <table:table>
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell>
+       <text:p>table (must be after page break, on page with style Style1 and number 5)</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>

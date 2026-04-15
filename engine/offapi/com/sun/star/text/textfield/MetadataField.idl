@@ -1,0 +1,66 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+module com { module sun { module star { module text { module textfield {
+
+/** is a com::sun::star::text::TextField whose content
+    is specified by RDF metadata.
+
+    @see com::sun::star::rdf
+*/
+service MetadataField
+{
+    /** None of the properties of
+        com::sun::star::text::TextContent are supported. */
+    service  com::sun::star::text::TextField;
+
+    /** The MetadataField can have RDF metadata attached. */
+    interface com::sun::star::rdf::XMetadatable;
+
+    /** Allows for insertion of text content into, and creating cursors
+        that are bound within, the MetadataField. */
+    interface com::sun::star::text::XText;
+
+    /** The com::sun::star::text::TextContents that are
+        contained in the MetadataField can be enumerated. */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    /** The com::sun::star::text::TextContent
+        that is the parent of this MetadataField.
+     */
+    interface com::sun::star::container::XChild;
+
+    /** this is the number format for this field.
+        @see com::sun::star::util::NumberFormatter
+    */
+    [optional, property] long NumberFormat;
+
+    /** determines whether changes in language attributes at the
+        position of the text field also change the number format
+        as appropriate for this language.
+     */
+    [optional, property] boolean IsFixedLanguage;
+};
+
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

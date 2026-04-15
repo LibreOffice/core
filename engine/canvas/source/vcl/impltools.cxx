@@ -1,0 +1,264 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <sal/config.h>
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/utils/canvastools.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
+#include <rtl/math.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <sal/log.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/BitmapTools.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
+
+#include <canvas/canvastools.hxx>
+
+#include "canvasbitmap.hxx"
+#include "impltools.hxx"
+#include "spritecanvas.hxx"
+
+
+using namespace ::com::sun::star;
+
+namespace vclcanvastools
+{
+using namespace vclcanvas;
+        ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
+        {
+            // TODO(F3): CanvasCustomSprite should also be tunnelled
+            // through (also implements XIntegerBitmap interface)
+            CanvasBitmap* pBitmapImpl = dynamic_cast< CanvasBitmap* >( xBitmap.get() );
+
+            if( pBitmapImpl )
+            {
+                return pBitmapImpl->getBitmap();
+            }
+            else
+            {
+                SpriteCanvas* pCanvasImpl = dynamic_cast< SpriteCanvas* >( xBitmap.get() );
+                if( pCanvasImpl && pCanvasImpl->getBackBuffer() )
+                {
+                    // TODO(F3): mind the plain Canvas impl. Consolidate with CWS canvas05
+                    const ::OutputDevice& rDev( pCanvasImpl->getBackBuffer()->getOutDev() );
+                    const ::Point aEmptyPoint;
+                    return rDev.GetBitmap( aEmptyPoint, rDev.GetOutputSizePixel() );
+                }
+
+                // TODO(F2): add support for floating point bitmap formats
+                uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
+                    xBitmap, uno::UNO_QUERY_THROW );
+
+                ::Bitmap aBmp = vcl::unotools::bitmapFromXBitmap( xIntBmp );
+                if( !aBmp.IsEmpty() )
+                    return aBmp;
+
+                // TODO(F1): extract pixel from XBitmap interface
+                ENSURE_OR_THROW( false,
+                                  "bitmapExFromXBitmap(): could not extract bitmap" );
+            }
+
+            return ::Bitmap();
+        }
+
+        bool setupFontTransform( ::Point&                       o_rPoint,
+                                 vcl::Font&                    io_rVCLFont,
+                                 const rendering::ViewState&    rViewState,
+                                 const rendering::RenderState&  rRenderState,
+                                 ::OutputDevice const &         rOutDev )
+        {
+            ::basegfx::B2DHomMatrix aMatrix;
+
+            ::canvastools::mergeViewAndRenderTransform(aMatrix,
+                                                         rViewState,
+                                                         rRenderState);
+
+            ::basegfx::B2DTuple aScale;
+            ::basegfx::B2DTuple aTranslate;
+            double nRotate, nShearX;
+
+            aMatrix.decompose( aScale, aTranslate, nRotate, nShearX );
+
+            // query font metric _before_ tampering with width and height
+            if( !::rtl::math::approxEqual(aScale.getX(), aScale.getY()) )
+            {
+                // retrieve true font width
+                const sal_Int32 nFontWidth( rOutDev.GetFontMetric( io_rVCLFont ).GetAverageFontWidth() );
+
+                const sal_Int32 nScaledFontWidth( ::basegfx::fround(nFontWidth * aScale.getX()) );
+
+                if( !nScaledFontWidth )
+                {
+                    // scale is smaller than one pixel - disable text
+                    // output altogether
+                    return false;
+                }
+
+                io_rVCLFont.SetAverageFontWidth( nScaledFontWidth );
+            }
+
+            if( !::rtl::math::approxEqual(aScale.getY(), 1.0) )
+            {
+                const sal_Int32 nFontHeight( io_rVCLFont.GetFontHeight() );
+                io_rVCLFont.SetFontHeight( ::basegfx::fround<::tools::Long>(nFontHeight * aScale.getY()) );
+            }
+
+            io_rVCLFont.SetOrientation( Degree10( ::basegfx::fround(-basegfx::rad2deg<10>(fmod(nRotate, 2*M_PI))) ) );
+
+            // TODO(F2): Missing functionality in VCL: shearing
+            o_rPoint.setX( ::basegfx::fround<::tools::Long>(aTranslate.getX()) );
+            o_rPoint.setY( ::basegfx::fround<::tools::Long>(aTranslate.getY()) );
+
+            return true;
+        }
+
+        void setupFontWidth(const css::geometry::Matrix2D& rFontMatrix,
+                            vcl::Font&                     rFont,
+                            OutputDevice&                  rOutDev)
+        {
+            rFont.SetFontSize(Size(0, rFont.GetFontHeight()));
+
+            if (!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
+            {
+                const bool bOldMapState(rOutDev.IsMapModeEnabled());
+                rOutDev.EnableMapMode(false);
+
+                const Size aSize = rOutDev.GetFontMetric(rFont).GetFontSize();
+
+                const double fDividend(rFontMatrix.m10 + rFontMatrix.m11);
+                double fStretch = rFontMatrix.m00 + rFontMatrix.m01;
+
+                if (!::basegfx::fTools::equalZero(fDividend))
+                    fStretch /= fDividend;
+
+                const ::tools::Long nNewWidth = ::basegfx::fround<::tools::Long>(aSize.Width() * fStretch);
+
+                rFont.SetAverageFontWidth(nNewWidth);
+
+                rOutDev.EnableMapMode(bOldMapState);
+            }
+        }
+
+        bool isRectangle( const ::tools::PolyPolygon& rPolyPoly )
+        {
+            // exclude some cheap cases first
+            if( rPolyPoly.Count() != 1 )
+                return false;
+
+            const ::tools::Polygon& rPoly( rPolyPoly[0] );
+
+            sal_uInt16 nCount( rPoly.GetSize() );
+            if( nCount < 4 )
+                return false;
+
+            // delegate to basegfx
+            return ::basegfx::utils::isRectangle( rPoly.getB2DPolygon() );
+        }
+
+
+        // VCL-Canvas related
+
+
+        ::Point mapRealPoint2D( const geometry::RealPoint2D&    rPoint,
+                                const rendering::ViewState&     rViewState,
+                                const rendering::RenderState&   rRenderState )
+        {
+            ::basegfx::B2DPoint aPoint( ::basegfx::unotools::b2DPointFromRealPoint2D(rPoint) );
+
+            ::basegfx::B2DHomMatrix aMatrix;
+            aPoint *= ::canvastools::mergeViewAndRenderTransform(aMatrix,
+                                                                   rViewState,
+                                                                   rRenderState);
+
+            return vcl::unotools::pointFromB2DPoint( aPoint );
+        }
+
+        ::tools::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&  rPoly,
+                                      const rendering::ViewState&       rViewState,
+                                      const rendering::RenderState&     rRenderState )
+        {
+            ::basegfx::B2DHomMatrix aMatrix;
+            ::canvastools::mergeViewAndRenderTransform(aMatrix,
+                                                         rViewState,
+                                                         rRenderState);
+
+            ::basegfx::B2DPolyPolygon aTemp( rPoly );
+
+            aTemp.transform( aMatrix );
+
+            return ::tools::PolyPolygon( aTemp );
+        }
+
+        ::Bitmap transformBitmap( const ::Bitmap&                 rBitmap,
+                                  const ::basegfx::B2DHomMatrix&  rTransform )
+        {
+            SAL_INFO( "canvas.vcl", "::vclcanvastools::transformBitmap()" );
+            SAL_INFO( "canvas.vcl", "::vclcanvastools::transformBitmap: 0x" << std::hex << &rBitmap );
+
+            // calc transformation and size of bitmap to be
+            // generated. Note, that the translational components are
+            // deleted from the transformation; this can be handled by
+            // an offset when painting the bitmap
+            const Size                  aBmpSize( rBitmap.GetSizePixel() );
+
+            // calc effective transformation for bitmap
+            const ::basegfx::B2DRectangle aSrcRect( 0, 0,
+                                                    aBmpSize.Width(),
+                                                    aBmpSize.Height() );
+            ::basegfx::B2DRectangle     aDestRect = ::canvastools::calcTransformedRectBounds(
+                                                        aSrcRect,
+                                                        rTransform );
+
+            // re-center bitmap, such that it's left, top border is
+            // aligned with (0,0). The method takes the given
+            // rectangle, and calculates a transformation that maps
+            // this rectangle unscaled to the origin.
+            ::basegfx::B2DHomMatrix aLocalTransform = ::canvastools::calcRectToOriginTransform(
+                                                        aSrcRect,
+                                                        rTransform );
+
+            return vcl::bitmap::CanvasTransformBitmap(rBitmap, rTransform, aDestRect, aLocalTransform);
+        }
+
+        void SetDefaultDeviceAntiAliasing( OutputDevice* pDevice )
+        {
+#if defined( MACOSX )
+            // use AA on VCLCanvas for Mac
+            pDevice->SetAntialiasing( AntialiasingFlags::Enable | pDevice->GetAntialiasing() );
+#else
+            // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
+            // is not required to do AA. It would need to be adapted to use it correctly
+            // (especially gradient painting). This will need extra work.
+            if( SkiaHelper::isVCLSkiaEnabled()) // But Skia handles AA fine.
+                pDevice->SetAntialiasing( AntialiasingFlags::Enable | pDevice->GetAntialiasing() );
+            else
+                pDevice->SetAntialiasing(pDevice->GetAntialiasing() & ~AntialiasingFlags::Enable);
+#endif
+        }
+
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

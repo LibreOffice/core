@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=oasis-spreadsheet
+Type=MimeType
+Patterns=*.fods
+MimeType=application/vnd.oasis.opendocument.spreadsheet-flat-xml
+Comment=OpenDocument Spreadsheet (Flat XML)

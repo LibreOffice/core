@@ -1,0 +1,17 @@
+---
+assumeFilename: testtools/source/bridgetest/cppobj.cxx
+excludelist:
+    testtools/source/bridgetest/currentcontextchecker.hxx:
+    # Actually used
+    - test/testtools/bridgetest/XCurrentContextChecker.hpp
+    testtools/source/bridgetest/bridgetest.cxx:
+    # Needed for fw decl
+    - com/sun/star/lang/XSingleComponentFactory.hpp
+    # Actually used
+    - test/testtools/bridgetest/BadConstructorArguments.hpp
+    testtools/source/bridgetest/cppobj.cxx:
+    # Actually used
+    - test/testtools/bridgetest/XMulti.hpp
+    testtools/source/bridgetest/constructors.cxx:
+    # Actually used
+    - test/testtools/bridgetest/TestEnum.hpp

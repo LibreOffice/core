@@ -1,0 +1,2252 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include "StyleSheetTable.hxx"
+#include "util.hxx"
+#include "ConversionHelper.hxx"
+#include "TblStylePrHandler.hxx"
+#include "TagLogger.hxx"
+#include "BorderHandler.hxx"
+#include "LatentStyleHandler.hxx"
+#include <ooxml/resourceids.hxx>
+#include <utility>
+#include <vector>
+#include <iterator>
+#include <com/sun/star/beans/Pair.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <map>
+#include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <o3tl/sorted_vector.hxx>
+#include <unobasestyle.hxx>
+#include <unotxdoc.hxx>
+#include <unoxstyle.hxx>
+#include <unostyle.hxx>
+#include <unosett.hxx>
+#include <unotextbodyhf.hxx>
+#include <SwXTextDefaults.hxx>
+
+using namespace ::com::sun::star;
+
+namespace writerfilter::dmapper
+{
+
+StyleSheetEntry::StyleSheetEntry() :
+        m_bIsDefaultStyle(false)
+        ,m_bAssignedAsChapterNumbering(false)
+        ,m_bInvalidHeight(false)
+        ,m_bHasUPE(false)
+        ,m_nStyleTypeCode(StyleType::Unknown)
+        ,m_pProperties(new StyleSheetPropertyMap)
+        ,m_bAutoRedefine(false)
+{
+}
+
+StyleSheetEntry::~StyleSheetEntry()
+{
+}
+
+TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry )
+{
+    m_bIsDefaultStyle = rEntry.m_bIsDefaultStyle;
+    m_bInvalidHeight = rEntry.m_bInvalidHeight;
+    m_bHasUPE = rEntry.m_bHasUPE;
+    m_nStyleTypeCode = StyleType::Table;
+    m_sBaseStyleIdentifier = rEntry.m_sBaseStyleIdentifier;
+    m_sNextStyleIdentifier = rEntry.m_sNextStyleIdentifier;
+    m_sLinkStyleIdentifier = rEntry.m_sLinkStyleIdentifier;
+    m_sStyleName = rEntry.m_sStyleName;
+    m_sStyleIdentifierD = rEntry.m_sStyleIdentifierD;
+}
+
+TableStyleSheetEntry::~TableStyleSheetEntry( )
+{
+}
+
+void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, const PropertyMapPtr& pProps )
+{
+    static const int nTypesProps = 4;
+    static const TblStyleType pTypesToFix[nTypesProps] =
+    {
+        TblStyleType::FirstRow,
+        TblStyleType::LastRow,
+        TblStyleType::FirstCol,
+        TblStyleType::LastCol
+    };
+
+    static const PropertyIds pPropsToCheck[nTypesProps] =
+    {
+        PROP_BOTTOM_BORDER,
+        PROP_TOP_BORDER,
+        PROP_RIGHT_BORDER,
+        PROP_LEFT_BORDER
+    };
+
+    for (int i=0; i < nTypesProps; ++i )
+    {
+        if ( nType == pTypesToFix[i] )
+        {
+            PropertyIds nChecked = pPropsToCheck[i];
+            std::optional<PropertyMap::Property> pChecked = pProps->getProperty(nChecked);
+
+            PropertyIds nInsideProp = ( i < 2 ) ? META_PROP_HORIZONTAL_BORDER : META_PROP_VERTICAL_BORDER;
+            std::optional<PropertyMap::Property> pInside = pProps->getProperty(nInsideProp);
+
+            if ( pChecked && pInside )
+            {
+                // In this case, remove the inside border
+                pProps->Erase( nInsideProp );
+            }
+
+            break;
+        }
+    }
+
+    // Append the tblStylePr
+    m_aStyles[nType] = pProps;
+}
+
+PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask )
+{
+    PropertyMapPtr pProps( new PropertyMap );
+
+    // And finally get the mask ones
+    pProps->InsertProps(GetLocalPropertiesFromMask(nMask));
+
+    return pProps;
+}
+
+bool TableStyleSheetEntry::Has(sal_Int32 nMask)
+{
+    return GetProperties(nMask)->GetPropertyIds().size();
+}
+
+beans::PropertyValues StyleSheetEntry::GetInteropGrabBagSeq() const
+{
+    return comphelper::containerToSequence(m_aInteropGrabBag);
+}
+
+beans::PropertyValue StyleSheetEntry::GetInteropGrabBag()
+{
+    beans::PropertyValue aRet;
+    aRet.Name = m_sStyleIdentifierD;
+
+    beans::PropertyValues aSeq = GetInteropGrabBagSeq();
+    aRet.Value <<= aSeq;
+    return aRet;
+}
+
+void StyleSheetEntry::AppendInteropGrabBag(const beans::PropertyValue& rValue)
+{
+    m_aInteropGrabBag.push_back(rValue);
+}
+
+PropertyMapPtr StyleSheetEntry::GetMergedInheritedProperties(const StyleSheetTablePtr& pStyleSheetTable)
+{
+    PropertyMapPtr pRet;
+    if ( pStyleSheetTable && !m_sBaseStyleIdentifier.isEmpty() && m_sBaseStyleIdentifier != m_sStyleIdentifierD )
+    {
+        const StyleSheetEntryPtr pParentStyleSheet = pStyleSheetTable->FindStyleSheetByISTD(m_sBaseStyleIdentifier);
+        if ( pParentStyleSheet )
+            pRet = pParentStyleSheet->GetMergedInheritedProperties(pStyleSheetTable);
+    }
+
+    if ( !pRet )
+        pRet = new PropertyMap;
+
+    pRet->InsertProps(m_pProperties.get());
+
+    return pRet;
+}
+
+static void lcl_mergeProps( const PropertyMapPtr& pToFill, const PropertyMapPtr& pToAdd, TblStyleType nStyleId )
+{
+    static const PropertyIds pPropsToCheck[] =
+    {
+        PROP_BOTTOM_BORDER,
+        PROP_TOP_BORDER,
+        PROP_RIGHT_BORDER,
+        PROP_LEFT_BORDER,
+    };
+
+    bool pRemoveInside[] =
+    {
+        ( nStyleId == TblStyleType::FirstRow ),
+        ( nStyleId == TblStyleType::LastRow ),
+        ( nStyleId == TblStyleType::LastCol ),
+        ( nStyleId == TblStyleType::FirstCol )
+    };
+
+    for ( unsigned i = 0 ; i != SAL_N_ELEMENTS(pPropsToCheck); i++ )
+    {
+        PropertyIds nId = pPropsToCheck[i];
+        std::optional<PropertyMap::Property> pProp = pToAdd->getProperty(nId);
+
+        if ( pProp )
+        {
+            if ( pRemoveInside[i] )
+            {
+                // Remove the insideH and insideV depending on the cell pos
+                PropertyIds nInsideProp = ( i < 2 ) ? META_PROP_HORIZONTAL_BORDER : META_PROP_VERTICAL_BORDER;
+                pToFill->Erase(nInsideProp);
+            }
+        }
+    }
+
+    pToFill->InsertProps(pToAdd);
+}
+
+PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask )
+{
+    // Order from right to left
+    struct TblStyleTypeAndMask {
+        sal_Int32       mask;
+        TblStyleType    type;
+    };
+
+    static const TblStyleTypeAndMask aOrderedStyleTable[] =
+    {
+        { 0x010, TblStyleType::Band2Horz },
+        { 0x020, TblStyleType::Band1Horz },
+        { 0x040, TblStyleType::Band2Vert },
+        { 0x080, TblStyleType::Band1Vert },
+        { 0x100, TblStyleType::LastCol  },
+        { 0x200, TblStyleType::FirstCol },
+        { 0x400, TblStyleType::LastRow  },
+        { 0x800, TblStyleType::FirstRow },
+        { 0x001, TblStyleType::SWCell },
+        { 0x002, TblStyleType::SECell },
+        { 0x004, TblStyleType::NWCell },
+        { 0x008, TblStyleType::NECell }
+    };
+
+    // Get the properties applying according to the mask
+    PropertyMapPtr pProps( new PropertyMap( ) );
+    for (const TblStyleTypeAndMask & i : aOrderedStyleTable)
+    {
+        TblStylePrs::iterator pIt = m_aStyles.find( i.type );
+        if ( ( nMask & i.mask ) && ( pIt != m_aStyles.end( ) ) )
+            lcl_mergeProps( pProps, pIt->second, i.type );
+    }
+    return pProps;
+}
+
+OUString StyleSheetTable::HasListCharStyle( const PropertyValueVector_t& rPropValues )
+{
+    for( const auto& rListVector : m_aListCharStylePropertyVector )
+    {
+        const auto& rPropertyValues = rListVector.aPropertyValues;
+        //if size is identical
+        if( rPropertyValues.size() == rPropValues.size() )
+        {
+            bool bBreak = false;
+            //then search for all contained properties
+            for( const auto& rPropVal1 : rPropValues)
+            {
+                //find the property
+                auto aListIter = std::find_if(rPropertyValues.begin(), rPropertyValues.end(),
+                    [&rPropVal1](const css::beans::PropertyValue& rPropVal2) { return rPropVal2.Name == rPropVal1.Name; });
+                //set break flag if property hasn't been found
+                bBreak = (aListIter == rPropertyValues.end()) || (aListIter->Value != rPropVal1.Value);
+                if( bBreak )
+                    break;
+            }
+            if( !bBreak )
+                return rListVector.sCharStyleName;
+        }
+    }
+    return OUString();
+}
+
+void StyleSheetTable::AppendLatentStyleProperty(const OUString& aName, Value const & rValue)
+{
+    beans::PropertyValue aValue;
+    aValue.Name = aName;
+    aValue.Value <<= rValue.getString();
+    m_pCurrentEntry->m_aLatentStyles.push_back(aValue);
+}
+
+void StyleSheetTable::SetPropertiesToDefault(const rtl::Reference<SwXBaseStyle>& xStyle)
+{
+    // See if the existing style has any non-default properties. If so, reset them back to default.
+    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xStyle->getPropertySetInfo();
+    const uno::Sequence<beans::Property> aProperties = xPropertySetInfo->getProperties();
+    std::vector<OUString> aPropertyNames;
+    aPropertyNames.reserve(aProperties.getLength());
+    std::transform(aProperties.begin(), aProperties.end(), std::back_inserter(aPropertyNames),
+        [](const beans::Property& rProp) { return rProp.Name; });
+
+    uno::Reference<beans::XPropertyState> xPropertyState(static_cast<cppu::OWeakObject*>(xStyle.get()), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyState> aStates = xPropertyState->getPropertyStates(comphelper::containerToSequence(aPropertyNames));
+    for (sal_Int32 i = 0; i < aStates.getLength(); ++i)
+    {
+        if (aStates[i] == beans::PropertyState_DIRECT_VALUE)
+        {
+            try
+            {
+                xPropertyState->setPropertyToDefault(aPropertyNames[i]);
+            }
+            catch(const uno::Exception&)
+            {
+                TOOLS_INFO_EXCEPTION("writerfilter", "setPropertyToDefault(" << aPropertyNames[i] << ") failed");
+            }
+        }
+    }
+}
+
+StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper,
+        rtl::Reference< SwXTextDocument> const& xTextDocument,
+        bool const bIsNewDoc)
+: LoggedProperties("StyleSheetTable")
+, LoggedTable("StyleSheetTable")
+, m_rDMapper( rDMapper )
+, m_xTextDocument( xTextDocument )
+, m_pDefaultParaProps(new PropertyMap)
+, m_pDefaultCharProps(new PropertyMap)
+, m_sDefaultParaStyleName(u"Normal"_ustr)
+, m_bHasImportedDefaultParaProps(false)
+, m_bIsNewDoc(bIsNewDoc)
+{
+    //set font height default to 10pt
+    uno::Any aVal( 10.0 );
+    m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT, aVal );
+    m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
+    m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_COMPLEX, aVal );
+
+    // See SwDoc::RemoveAllFormatLanguageDependencies(), internal filters
+    // disable kerning by default, do the same here.
+    m_pDefaultCharProps->Insert(PROP_CHAR_AUTO_KERNING, uno::Any(false));
+}
+
+
+StyleSheetTable::~StyleSheetTable()
+{
+}
+
+void StyleSheetTable::SetDefaultParaProps(PropertyIds eId, const css::uno::Any& rAny)
+{
+    m_pDefaultParaProps->Insert(eId, rAny, /*bOverwrite=*/false, NO_GRAB_BAG, /*bDocDefault=*/true);
+}
+
+PropertyMapPtr const & StyleSheetTable::GetDefaultParaProps() const
+{
+    return m_pDefaultParaProps;
+}
+
+PropertyMapPtr const & StyleSheetTable::GetDefaultCharProps() const
+{
+    return m_pDefaultCharProps;
+}
+
+void StyleSheetTable::lcl_attribute(Id Name, const Value & val)
+{
+    OSL_ENSURE( m_pCurrentEntry, "current entry has to be set here");
+    if(!m_pCurrentEntry)
+        return ;
+    int nIntValue = val.getInt();
+    OUString sValue = val.getString();
+
+    // The default type is paragraph, and it needs to be processed first,
+    // because the NS_ooxml::LN_CT_Style_type handling may set m_pCurrentEntry
+    // to point to a different object.
+    if( m_pCurrentEntry->m_nStyleTypeCode == StyleType::Unknown )
+    {
+        if( Name != NS_ooxml::LN_CT_Style_type )
+            m_pCurrentEntry->m_nStyleTypeCode = StyleType::Paragraph;
+    }
+    switch(Name)
+    {
+        case NS_ooxml::LN_CT_Style_type:
+        {
+            SAL_WARN_IF( m_pCurrentEntry->m_nStyleTypeCode != StyleType::Unknown,
+                "writerfilter", "Style type needs to be processed first" );
+            StyleType nType(StyleType::Unknown);
+            switch (nIntValue)
+            {
+                case NS_ooxml::LN_Value_ST_StyleType_paragraph:
+                    nType = StyleType::Paragraph;
+                    break;
+                case NS_ooxml::LN_Value_ST_StyleType_character:
+                    nType = StyleType::Character;
+                    break;
+                case NS_ooxml::LN_Value_ST_StyleType_table:
+                    nType = StyleType::Table;
+                    break;
+                case NS_ooxml::LN_Value_ST_StyleType_numbering:
+                    nType = StyleType::List;
+                    break;
+                default:
+                    SAL_WARN("writerfilter", "unknown LN_CT_Style_type " << static_cast<int>(nType));
+                    [[fallthrough]];
+                case 0: // explicit unknown set by tokenizer
+                    break;
+
+            }
+            if ( nType == StyleType::Table )
+            {
+                StyleSheetEntryPtr pEntry = m_pCurrentEntry;
+                tools::SvRef<TableStyleSheetEntry> pTableEntry( new TableStyleSheetEntry( *pEntry ) );
+                m_pCurrentEntry = pTableEntry.get();
+            }
+            else
+                m_pCurrentEntry->m_nStyleTypeCode = nType;
+        }
+        break;
+        case NS_ooxml::LN_CT_Style_default:
+            m_pCurrentEntry->m_bIsDefaultStyle = (nIntValue != 0);
+
+            if (m_pCurrentEntry->m_nStyleTypeCode != StyleType::Unknown)
+            {
+                // "If this attribute is specified by multiple styles, then the last instance shall be used."
+                if (m_pCurrentEntry->m_bIsDefaultStyle
+                    && m_pCurrentEntry->m_nStyleTypeCode == StyleType::Paragraph
+                    && !m_pCurrentEntry->m_sStyleIdentifierD.isEmpty())
+                {
+                    m_sDefaultParaStyleName = m_pCurrentEntry->m_sStyleIdentifierD;
+                }
+
+                beans::PropertyValue aValue;
+                aValue.Name = "default";
+                aValue.Value <<= m_pCurrentEntry->m_bIsDefaultStyle;
+                m_pCurrentEntry->AppendInteropGrabBag(aValue);
+            }
+        break;
+        case NS_ooxml::LN_CT_Style_customStyle:
+            if (m_pCurrentEntry->m_nStyleTypeCode != StyleType::Unknown)
+            {
+                beans::PropertyValue aValue;
+                aValue.Name = "customStyle";
+                aValue.Value <<= (nIntValue != 0);
+                m_pCurrentEntry->AppendInteropGrabBag(aValue);
+            }
+        break;
+        case NS_ooxml::LN_CT_Style_styleId:
+            m_pCurrentEntry->m_sStyleIdentifierD = sValue;
+            if(m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
+            {
+                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pCurrentEntry.get());
+                beans::PropertyValue aValue;
+                aValue.Name = "styleId";
+                aValue.Value <<= sValue;
+                pTableEntry->AppendInteropGrabBag(aValue);
+            }
+        break;
+        case NS_ooxml::LN_CT_TblWidth_w:
+        break;
+        case NS_ooxml::LN_CT_TblWidth_type:
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_defQFormat:
+            AppendLatentStyleProperty(u"defQFormat"_ustr, val);
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_defUnhideWhenUsed:
+            AppendLatentStyleProperty(u"defUnhideWhenUsed"_ustr, val);
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_defSemiHidden:
+            AppendLatentStyleProperty(u"defSemiHidden"_ustr, val);
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_count:
+            AppendLatentStyleProperty(u"count"_ustr, val);
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_defUIPriority:
+            AppendLatentStyleProperty(u"defUIPriority"_ustr, val);
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_defLockedState:
+            AppendLatentStyleProperty(u"defLockedState"_ustr, val);
+        break;
+        default:
+        {
+#ifdef DBG_UTIL
+            TagLogger::getInstance().element("unhandled");
+#endif
+        }
+        break;
+    }
+}
+
+
+void StyleSheetTable::lcl_sprm(Sprm & rSprm)
+{
+    sal_uInt32 nSprmId = rSprm.getId();
+    const Value* pValue = rSprm.getValue();
+    sal_Int32 nIntValue = pValue ? pValue->getInt() : 0;
+    OUString sStringValue = pValue ? pValue->getString() : OUString();
+
+    switch(nSprmId)
+    {
+        case NS_ooxml::LN_CT_Style_name:
+            //this is only a UI name!
+            m_pCurrentEntry->m_sStyleName = sStringValue;
+            if(m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
+            {
+                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pCurrentEntry.get());
+                beans::PropertyValue aValue;
+                aValue.Name = "name";
+                aValue.Value <<= sStringValue;
+                pTableEntry->AppendInteropGrabBag(aValue);
+            }
+            break;
+        case NS_ooxml::LN_CT_Style_basedOn:
+            m_pCurrentEntry->m_sBaseStyleIdentifier = sStringValue;
+            if(m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
+            {
+                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pCurrentEntry.get());
+                beans::PropertyValue aValue;
+                aValue.Name = "basedOn";
+                aValue.Value <<= sStringValue;
+                pTableEntry->AppendInteropGrabBag(aValue);
+            }
+            break;
+        case NS_ooxml::LN_CT_Style_link:
+            m_pCurrentEntry->m_sLinkStyleIdentifier = sStringValue;
+            break;
+        case NS_ooxml::LN_CT_Style_next:
+            m_pCurrentEntry->m_sNextStyleIdentifier = sStringValue;
+            break;
+        case NS_ooxml::LN_CT_Style_aliases:
+        case NS_ooxml::LN_CT_Style_hidden:
+        case NS_ooxml::LN_CT_Style_personal:
+        case NS_ooxml::LN_CT_Style_personalCompose:
+        case NS_ooxml::LN_CT_Style_personalReply:
+        break;
+        case NS_ooxml::LN_CT_Style_autoRedefine:
+        m_pCurrentEntry->m_bAutoRedefine = nIntValue;
+        break;
+        case NS_ooxml::LN_CT_Style_tcPr:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties && m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
+            {
+                auto pTblStylePrHandler = std::make_shared<TblStylePrHandler>(m_rDMapper);
+                pProperties->resolve(*pTblStylePrHandler);
+                StyleSheetEntry* pEntry = m_pCurrentEntry.get();
+                TableStyleSheetEntry& rTableEntry = dynamic_cast<TableStyleSheetEntry&>(*pEntry);
+                rTableEntry.AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag(u"tcPr"_ustr));
+
+                // This is a <w:tcPr> directly under <w:style>, so it affects the whole table.
+                rTableEntry.m_pProperties->InsertProps(pTblStylePrHandler->getProperties());
+            }
+        }
+        break;
+        case NS_ooxml::LN_CT_Style_trPr:
+        break;
+        case NS_ooxml::LN_CT_Style_rsid:
+        case NS_ooxml::LN_CT_Style_qFormat:
+        case NS_ooxml::LN_CT_Style_semiHidden:
+        case NS_ooxml::LN_CT_Style_unhideWhenUsed:
+        case NS_ooxml::LN_CT_Style_uiPriority:
+        case NS_ooxml::LN_CT_Style_locked:
+            if (m_pCurrentEntry->m_nStyleTypeCode != StyleType::Unknown)
+            {
+                StyleSheetEntryPtr pEntry = m_pCurrentEntry;
+                beans::PropertyValue aValue;
+                switch (nSprmId)
+                {
+                case NS_ooxml::LN_CT_Style_rsid:
+                {
+                    // We want the rsid as a hex string, but always with the length of 8.
+                    auto aBuf = OUString::number(nIntValue, 16);
+
+                    aValue.Name = "rsid";
+                    aValue.Value <<= OUString(RepeatedUChar('0', 8 - aBuf.length) + aBuf);
+                }
+                break;
+                case NS_ooxml::LN_CT_Style_qFormat:
+                    aValue.Name = "qFormat";
+                    aValue.Value <<= nIntValue;
+                break;
+                case NS_ooxml::LN_CT_Style_semiHidden:
+                    aValue.Name = "semiHidden";
+                break;
+                case NS_ooxml::LN_CT_Style_unhideWhenUsed:
+                    aValue.Name = "unhideWhenUsed";
+                break;
+                case NS_ooxml::LN_CT_Style_uiPriority:
+                {
+                    aValue.Name = "uiPriority";
+                    aValue.Value <<= OUString::number(nIntValue);
+                }
+                break;
+                case NS_ooxml::LN_CT_Style_locked:
+                    aValue.Name = "locked";
+                break;
+                }
+                pEntry->AppendInteropGrabBag(aValue);
+            }
+        break;
+        case NS_ooxml::LN_CT_Style_tblPr: //contains table properties
+        case NS_ooxml::LN_CT_Style_tblStylePr: //contains  to table properties
+        case NS_ooxml::LN_CT_TblPrBase_tblInd: //table properties - at least width value and type
+        case NS_ooxml::LN_EG_RPrBase_rFonts: //table fonts
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties )
+            {
+                auto pTblStylePrHandler = std::make_shared<TblStylePrHandler>( m_rDMapper );
+                pProperties->resolve( *pTblStylePrHandler );
+
+                // Add the properties to the table style
+                TblStyleType nType = pTblStylePrHandler->getType( );
+                PropertyMapPtr pProps = pTblStylePrHandler->getProperties( );
+                StyleSheetEntry *  pEntry = m_pCurrentEntry.get();
+
+                TableStyleSheetEntry * pTableEntry = dynamic_cast<TableStyleSheetEntry*>( pEntry );
+                if (nType == TblStyleType::Unknown)
+                {
+                    pEntry->m_pProperties->InsertProps(pProps);
+                }
+                else
+                {
+                    if (pTableEntry != nullptr)
+                        pTableEntry->AddTblStylePr( nType, pProps );
+                }
+
+                if (nSprmId == NS_ooxml::LN_CT_Style_tblPr)
+                {
+                    if (pTableEntry != nullptr)
+                        pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag(u"tblPr"_ustr));
+                }
+                else if (nSprmId == NS_ooxml::LN_CT_Style_tblStylePr)
+                {
+                    pTblStylePrHandler->appendInteropGrabBag(u"type"_ustr, pTblStylePrHandler->getTypeString());
+                    if (pTableEntry != nullptr)
+                        pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag(u"tblStylePr"_ustr));
+                }
+            }
+            break;
+        }
+        case NS_ooxml::LN_CT_PPrDefault_pPr:
+        case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
+            if (nSprmId == NS_ooxml::LN_CT_DocDefaults_pPrDefault)
+                m_rDMapper.SetDocDefaultsImport(true);
+
+            m_rDMapper.PushStyleSheetProperties( m_pDefaultParaProps );
+            resolveSprmProps( m_rDMapper, rSprm );
+            if ( nSprmId == NS_ooxml::LN_CT_DocDefaults_pPrDefault && m_pDefaultParaProps &&
+                !m_pDefaultParaProps->isSet( PROP_PARA_TOP_MARGIN ) )
+            {
+                SetDefaultParaProps( PROP_PARA_TOP_MARGIN, uno::Any( sal_Int32(0) ) );
+            }
+            m_rDMapper.PopStyleSheetProperties();
+            applyDefaults( true );
+            m_bHasImportedDefaultParaProps = true;
+            if (nSprmId == NS_ooxml::LN_CT_DocDefaults_pPrDefault)
+                m_rDMapper.SetDocDefaultsImport(false);
+        break;
+        case NS_ooxml::LN_CT_RPrDefault_rPr:
+        case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
+            if (nSprmId == NS_ooxml::LN_CT_DocDefaults_rPrDefault)
+                m_rDMapper.SetDocDefaultsImport(true);
+
+            m_rDMapper.PushStyleSheetProperties( m_pDefaultCharProps );
+            resolveSprmProps( m_rDMapper, rSprm );
+            m_rDMapper.PopStyleSheetProperties();
+            applyDefaults( false );
+            if (nSprmId == NS_ooxml::LN_CT_DocDefaults_rPrDefault)
+                m_rDMapper.SetDocDefaultsImport(false);
+        break;
+        case NS_ooxml::LN_CT_TblPrBase_jc:     //table alignment - row properties!
+             m_pCurrentEntry->m_pProperties->Insert( PROP_HORI_ORIENT,
+                uno::Any( ConversionHelper::convertTableJustification( nIntValue )));
+        break;
+        case NS_ooxml::LN_CT_TrPrBase_jc:     //table alignment - row properties!
+        break;
+        case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders, might be defined in table style
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties )
+            {
+                auto pBorderHandler = std::make_shared<BorderHandler>(m_rDMapper.IsOOXMLImport());
+                pProperties->resolve(*pBorderHandler);
+                m_pCurrentEntry->m_pProperties->InsertProps(
+                        pBorderHandler->getProperties());
+            }
+        }
+        break;
+        case NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize:
+        case NS_ooxml::LN_CT_TblPrBase_tblStyleColBandSize:
+        break;
+        case NS_ooxml::LN_CT_TblPrBase_tblCellMar:
+            //no cell margins in styles
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_lsdException:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if (pProperties)
+            {
+                tools::SvRef<LatentStyleHandler> pLatentStyleHandler(new LatentStyleHandler());
+                pProperties->resolve(*pLatentStyleHandler);
+                beans::PropertyValue aValue;
+                aValue.Name = "lsdException";
+                aValue.Value <<= comphelper::containerToSequence(pLatentStyleHandler->getAttributes());
+                m_pCurrentEntry->m_aLsdExceptions.push_back(aValue);
+            }
+        }
+        break;
+        case NS_ooxml::LN_CT_Style_pPr:
+            // no break
+        case NS_ooxml::LN_CT_Style_rPr:
+            // no break
+        default:
+            {
+                if (!m_pCurrentEntry)
+                    break;
+
+                tools::SvRef<TablePropertiesHandler> pTblHandler(new TablePropertiesHandler());
+                pTblHandler->SetProperties( m_pCurrentEntry->m_pProperties.get() );
+                if ( !pTblHandler->sprm( rSprm ) )
+                {
+                    m_rDMapper.PushStyleSheetProperties( m_pCurrentEntry->m_pProperties.get() );
+
+                    PropertyMapPtr pProps(new PropertyMap());
+                    if (m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
+                    {
+                        if (nSprmId == NS_ooxml::LN_CT_Style_pPr)
+                            m_rDMapper.enableInteropGrabBag(u"pPr"_ustr);
+                        else if (nSprmId == NS_ooxml::LN_CT_Style_rPr)
+                            m_rDMapper.enableInteropGrabBag(u"rPr"_ustr);
+                    }
+                    m_rDMapper.sprmWithProps( rSprm, pProps );
+                    if (m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
+                    {
+                        if (nSprmId == NS_ooxml::LN_CT_Style_pPr || nSprmId == NS_ooxml::LN_CT_Style_rPr)
+                        {
+                            TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pCurrentEntry.get());
+                            pTableEntry->AppendInteropGrabBag(m_rDMapper.getInteropGrabBag());
+                        }
+                    }
+
+                    m_pCurrentEntry->m_pProperties->InsertProps(pProps);
+
+                    m_rDMapper.PopStyleSheetProperties( );
+                }
+            }
+            break;
+}
+}
+
+
+void StyleSheetTable::lcl_entry(const writerfilter::Reference<Properties>::Pointer_t& ref)
+{
+    //create a new style entry
+    OSL_ENSURE( !m_pCurrentEntry, "current entry has to be NULL here");
+    m_pCurrentEntry = StyleSheetEntryPtr(new StyleSheetEntry);
+    m_rDMapper.PushStyleSheetProperties( m_pCurrentEntry->m_pProperties.get() );
+    ref->resolve(*this);
+    m_rDMapper.ProcessDeferredStyleCharacterProperties();
+    //append it to the table
+    m_rDMapper.PopStyleSheetProperties();
+    if( !m_rDMapper.IsOOXMLImport() || !m_pCurrentEntry->m_sStyleName.isEmpty())
+    {
+        m_pCurrentEntry->m_sConvertedStyleName = ConvertStyleName(m_pCurrentEntry->m_sStyleName).first;
+        m_aStyleSheetEntries.push_back( m_pCurrentEntry );
+        m_aStyleSheetEntriesMap.emplace( m_pCurrentEntry->m_sStyleIdentifierD, m_pCurrentEntry );
+    }
+    else
+    {
+        //TODO: this entry contains the default settings - they have to be added to the settings
+    }
+
+    if (!m_pCurrentEntry->m_aLatentStyles.empty())
+    {
+        // We have latent styles for this entry, then process them.
+        std::vector<beans::PropertyValue>& rLatentStyles = m_pCurrentEntry->m_aLatentStyles;
+
+        if (!m_pCurrentEntry->m_aLsdExceptions.empty())
+        {
+            std::vector<beans::PropertyValue>& rLsdExceptions = m_pCurrentEntry->m_aLsdExceptions;
+            beans::PropertyValue aValue;
+            aValue.Name = "lsdExceptions";
+            aValue.Value <<= comphelper::containerToSequence(rLsdExceptions);
+            rLatentStyles.push_back(aValue);
+        }
+
+        uno::Sequence<beans::PropertyValue> aLatentStyles( comphelper::containerToSequence(rLatentStyles) );
+
+        // We can put all latent style info directly to the document interop
+        // grab bag, as we can be sure that only a single style entry has
+        // latent style info.
+        auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(m_xTextDocument->getPropertyValue(u"InteropGrabBag"_ustr).get< uno::Sequence<beans::PropertyValue> >());
+        beans::PropertyValue aValue;
+        aValue.Name = "latentStyles";
+        aValue.Value <<= aLatentStyles;
+        aGrabBag.push_back(aValue);
+        m_xTextDocument->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(comphelper::containerToSequence(aGrabBag)));
+    }
+
+    m_pCurrentEntry = StyleSheetEntryPtr();
+}
+/*-------------------------------------------------------------------------
+    sorting helper
+  -----------------------------------------------------------------------*/
+namespace {
+
+class PropValVector
+{
+    std::vector<beans::PropertyValue> m_aValues;
+public:
+    PropValVector(){}
+
+    void Insert(const beans::PropertyValue& rVal);
+    uno::Sequence< uno::Any > getValues();
+    uno::Sequence< OUString > getNames();
+    const std::vector<beans::PropertyValue>& getProperties() const { return m_aValues; };
+};
+
+}
+
+void PropValVector::Insert(const beans::PropertyValue& rVal)
+{
+    auto aIt = std::find_if(m_aValues.begin(), m_aValues.end(),
+        [&rVal](beans::PropertyValue& rPropVal) { return rPropVal.Name > rVal.Name; });
+    if (aIt != m_aValues.end())
+    {
+        m_aValues.insert( aIt, rVal );
+        return;
+    }
+    m_aValues.push_back(rVal);
+}
+
+uno::Sequence< uno::Any > PropValVector::getValues()
+{
+    std::vector<uno::Any> aRet;
+    std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet),
+            [](const beans::PropertyValue& rValue) -> const uno::Any& { return rValue.Value; });
+    return comphelper::containerToSequence(aRet);
+}
+
+uno::Sequence< OUString > PropValVector::getNames()
+{
+    std::vector<OUString> aRet;
+    std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet),
+            [](const beans::PropertyValue& rValue) -> const OUString& { return rValue.Name; });
+    return comphelper::containerToSequence(aRet);
+}
+
+void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
+{
+    if (!m_xTextDocument)
+        return;
+    try
+    {
+        rtl::Reference<SwXStyleFamilies> xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
+        rtl::Reference<SwXStyleFamily> xParaStyles = xStyleFamilies->GetParagraphStyles();
+
+        if ( !xParaStyles.is() )
+            return;
+
+        for ( const auto& pEntry : m_aStyleSheetEntries )
+        {
+            StyleSheetPropertyMap* pStyleSheetProperties = nullptr;
+            if ( pEntry->m_nStyleTypeCode == StyleType::Paragraph && (pStyleSheetProperties = pEntry->m_pProperties.get()) )
+            {
+                // ListId 0 means turn off numbering - to cancel inheritance - so make sure that can be set.
+                if (pStyleSheetProperties->props().GetListId() > -1)
+                {
+                    rtl::Reference< SwXBaseStyle > xStyle = xParaStyles->getStyleByName(ConvertStyleName(pEntry->m_sStyleName).first);
+
+                    if ( !xStyle.is() )
+                        break;
+
+                    const OUString sNumberingStyleName = m_rDMapper.GetListStyleName( pStyleSheetProperties->props().GetListId() );
+                    if ( !sNumberingStyleName.isEmpty()
+                         || !pStyleSheetProperties->props().GetListId() )
+                        xStyle->setPropertyValue( getPropertyName(PROP_NUMBERING_STYLE_NAME), uno::Any(sNumberingStyleName) );
+
+                    // Word 2010+ (not Word 2003, and Word 2007 is completely broken)
+                    // does something rather strange. It does not allow two paragraph styles
+                    // to share the same listLevel on a numbering rule.
+                    // Consider this style to just be body level if already used previously.
+                    m_rDMapper.ValidateListLevel(pEntry->m_sStyleIdentifierD);
+                }
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("writerfilter", "Failed applying numbering style name to Paragraph styles");
+    }
+}
+
+/* Counteract the destructive tendencies of LibreOffice's Chapter Numbering
+ *
+ * Any assignment to Chapter Numbering will erase the numbering-like properties of inherited styles.
+ * So go through the list of styles and any that inherit from a Chapter Numbering style
+ * should have the Outline Level reapplied.
+ */
+void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
+{
+    if (!m_xTextDocument)
+        return;
+    try
+    {
+        rtl::Reference<SwXStyleFamilies> xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
+        rtl::Reference<SwXStyleFamily> xParaStyles = xStyleFamilies->GetParagraphStyles();
+
+        if (!xParaStyles.is())
+            return;
+
+        for (const auto& pEntry : m_aStyleSheetEntries)
+        {
+            if (pEntry->m_nStyleTypeCode != StyleType::Paragraph || pEntry->m_sBaseStyleIdentifier.isEmpty())
+                continue;
+
+            StyleSheetEntryPtr pParent = FindStyleSheetByISTD(pEntry->m_sBaseStyleIdentifier);
+            if (!pParent || !pParent->m_bAssignedAsChapterNumbering)
+                continue;
+
+            rtl::Reference< SwXBaseStyle > xStyle = xParaStyles->getStyleByName(pEntry->m_sConvertedStyleName);
+            if (!xStyle.is())
+                continue;
+
+            const sal_Int16 nListId = pEntry->m_pProperties->props().GetListId();
+            const OUString sParentNumberingStyleName
+                = m_rDMapper.GetListStyleName(pParent->m_pProperties->props().GetListId());
+            if (nListId == -1 && !sParentNumberingStyleName.isEmpty())
+            {
+                xStyle->setPropertyValue(getPropertyName(PROP_NUMBERING_STYLE_NAME),
+                                               uno::Any(sParentNumberingStyleName));
+            }
+
+            sal_Int16 nOutlineLevel = pEntry->m_pProperties->GetOutlineLevel();
+            if (nOutlineLevel != -1)
+                continue;
+
+            nOutlineLevel = pParent->m_pProperties->GetOutlineLevel();
+            assert(nOutlineLevel >= WW_OUTLINE_MIN && nOutlineLevel < WW_OUTLINE_MAX);
+
+            // convert MS level to LO equivalent outline level
+            ++nOutlineLevel;
+
+            xStyle->setPropertyValue(getPropertyName(PROP_OUTLINE_LEVEL), uno::Any(nOutlineLevel));
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("writerfilter", "Failed applying outlineLevel to Paragraph styles");
+    }
+}
+
+void StyleSheetTable::ApplyClonedTOCStylesToXText(uno::Reference<text::XText> const& xText)
+{
+    uno::Reference<container::XEnumerationAccess> const xEA(xText, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> const xParaEnum(xEA->createEnumeration());
+
+    while (xParaEnum->hasMoreElements())
+    {
+        uno::Reference<lang::XServiceInfo> const xElem(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+        if (xElem->supportsService(u"com.sun.star.text.Paragraph"_ustr))
+        {
+            uno::Reference<beans::XPropertySet> const xPara(xElem, uno::UNO_QUERY_THROW);
+            OUString styleName;
+            if (xPara->getPropertyValue(u"ParaStyleName"_ustr) >>= styleName)
+            {
+                auto const it(m_ClonedTOCStylesMap.find(styleName));
+                if (it != m_ClonedTOCStylesMap.end())
+                {
+                    xPara->setPropertyValue(u"ParaStyleName"_ustr, uno::Any(it->second));
+                }
+            }
+            uno::Reference<container::XEnumerationAccess> const xParaEA{xPara, uno::UNO_QUERY_THROW};
+            uno::Reference<container::XEnumeration> const xEnum{xParaEA->createEnumeration()};
+            while (xEnum->hasMoreElements())
+            {
+                uno::Reference<beans::XPropertySet> const xPortion{xEnum->nextElement(), uno::UNO_QUERY_THROW};
+                if (xPortion->getPropertyValue(u"CharStyleName"_ustr) >>= styleName)
+                {
+                    auto const it{m_ClonedTOCStylesMap.find(styleName)};
+                    if (it != m_ClonedTOCStylesMap.end())
+                    {
+                        xPortion->setPropertyValue(u"CharStyleName"_ustr, uno::Any(it->second));
+                    }
+                }
+            }
+        }
+        else if (xElem->supportsService(u"com.sun.star.text.TextTable"_ustr))
+        {
+            uno::Reference<text::XTextTable> const xTable(xElem, uno::UNO_QUERY_THROW);
+            uno::Sequence<OUString> const cells(xTable->getCellNames());
+            for (OUString const& rCell : cells)
+            {
+                uno::Reference<text::XText> const xCell(xTable->getCellByName(rCell), uno::UNO_QUERY_THROW);
+                ApplyClonedTOCStylesToXText(xCell);
+            }
+        }
+    }
+}
+
+/**
+ Replace the applied en-US Word built-in styles that were referenced from
+ TOC fields (also STYLEREF and likely AUTOTEXTLIST) with the localised clones.
+
+ With the style cloned, and the clone referenced, the ToX should work in
+ Writer and also, when exported to DOCX, in Word.
+ */
+void StyleSheetTable::ApplyClonedTOCStyles()
+{
+    if (m_ClonedTOCStylesMap.empty()
+        || !m_bIsNewDoc) // avoid modifying pre-existing content
+    {
+        return;
+    }
+    SAL_INFO("writerfilter.dmapper", "Applying cloned styles to make TOC work");
+    // ignore header / footer, irrelevant for ToX
+    // text frames
+    if (!m_xTextDocument)
+        throw uno::RuntimeException();
+    rtl::Reference<SwXTextFrames> const xFrames(m_xTextDocument->getSwTextFrames());
+    uno::Reference<container::XEnumeration> const xFramesEnum(xFrames->createEnumeration());
+    while (xFramesEnum->hasMoreElements())
+    {
+        uno::Reference<text::XText> const xFrame(xFramesEnum->nextElement(), uno::UNO_QUERY_THROW);
+        ApplyClonedTOCStylesToXText(xFrame);
+    }
+    // body
+    rtl::Reference<SwXBodyText> const xBody(m_xTextDocument->getBodyText());
+    ApplyClonedTOCStylesToXText(xBody);
+}
+
+OUString StyleSheetTable::CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEntryPtr const pStyle, OUString const& rNewName)
+{
+    auto const it = m_ClonedTOCStylesMap.find(pStyle->m_sConvertedStyleName);
+    if (it != m_ClonedTOCStylesMap.end())
+    {
+        return it->second;
+    }
+    SAL_INFO("writerfilter.dmapper", "cloning TOC paragraph style (presumed built-in) " << rNewName << " from " << pStyle->m_sStyleName);
+    StyleSheetEntryPtr const pClone(new StyleSheetEntry(*pStyle));
+    pClone->m_sStyleIdentifierD = rNewName;
+    pClone->m_sStyleName = rNewName;
+    pClone->m_sConvertedStyleName = ConvertStyleName(rNewName).first;
+    m_aStyleSheetEntries.push_back(pClone);
+    // the old converted name is what is applied to paragraphs
+    m_ClonedTOCStylesMap.emplace(pStyle->m_sConvertedStyleName, pClone->m_sConvertedStyleName);
+    std::vector<StyleSheetEntryPtr> const styles{ pClone };
+    ApplyStyleSheetsImpl(rFontTable, styles);
+    return pClone->m_sConvertedStyleName;
+}
+
+void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
+{
+    return ApplyStyleSheetsImpl(rFontTable, m_aStyleSheetEntries);
+}
+
+void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::vector<StyleSheetEntryPtr> const& rEntries)
+{
+    if (!m_xTextDocument)
+        return;
+    try
+    {
+        rtl::Reference< SwXStyleFamilies > xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
+        rtl::Reference<SwXStyleFamily> xCharStyles = xStyleFamilies->GetCharacterStyles();
+        rtl::Reference<SwXStyleFamily> xParaStyles = xStyleFamilies->GetParagraphStyles();
+        rtl::Reference<SwXStyleFamily> xNumberingStyles = xStyleFamilies->GetNumberingStyles();
+
+        if(xCharStyles.is() && xParaStyles.is())
+        {
+            std::vector< ::std::pair<OUString, rtl::Reference<SwXBaseStyle>> > aMissingParent;
+            std::vector< ::std::pair<OUString, rtl::Reference<SwXBaseStyle>> > aMissingFollow;
+            std::vector<std::pair<OUString, rtl::Reference<SwXBaseStyle>>> aMissingLink;
+            std::vector<beans::PropertyValue> aTableStylesVec;
+            for (auto& pEntry : rEntries)
+            {
+                if( pEntry->m_nStyleTypeCode == StyleType::Unknown && !pEntry->m_sStyleName.isEmpty() )
+                    pEntry->m_nStyleTypeCode = StyleType::Paragraph; // unspecified style types are considered paragraph styles
+
+                if( pEntry->m_nStyleTypeCode == StyleType::Character || pEntry->m_nStyleTypeCode == StyleType::Paragraph || pEntry->m_nStyleTypeCode == StyleType::List )
+                {
+                    bool bParaStyle = pEntry->m_nStyleTypeCode == StyleType::Paragraph;
+                    bool bCharStyle = pEntry->m_nStyleTypeCode == StyleType::Character;
+                    bool bListStyle = pEntry->m_nStyleTypeCode == StyleType::List;
+                    bool bInsert = false;
+                    rtl::Reference< SwXStyleFamily > xStyles = bParaStyle ? xParaStyles : (bListStyle ? xNumberingStyles : xCharStyles);
+                    rtl::Reference< SwXBaseStyle > xStyle;
+                    const OUString sConvertedStyleName(ConvertStyleName(pEntry->m_sStyleName).first);
+
+                    if(xStyles->hasByName( sConvertedStyleName ))
+                    {
+                        // When pasting, don't update existing styles.
+                        if (!m_bIsNewDoc)
+                        {
+                            continue;
+                        }
+                        xStyle = xStyles->getStyleByName( sConvertedStyleName );
+
+                        {
+                            SetPropertiesToDefault(xStyle);
+
+                            // resolve import conflicts with built-in styles (only if defaults have been defined)
+                            if ( m_bHasImportedDefaultParaProps
+                                && pEntry->m_sBaseStyleIdentifier.isEmpty()   //imported style has no inheritance
+                                && !xStyle->getParentStyle().isEmpty() )    //built-in style has a default inheritance
+                            {
+                                xStyle->setParentStyle( u""_ustr );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        bInsert = true;
+                        rtl::Reference<SwXStyle> xNewStyle;
+                        if (bParaStyle)
+                            xNewStyle = m_xTextDocument->createParagraphStyle();
+                        else if (bListStyle)
+                            xNewStyle = m_xTextDocument->createNumberingStyle();
+                        else
+                            xNewStyle = m_xTextDocument->createCharacterStyle();
+                        xStyle = xNewStyle;
+
+                        // Numbering styles have to be inserted early, as e.g. the NumberingRules property is only available after insertion.
+                        if (bListStyle)
+                        {
+                            xStyles->insertStyleByName( sConvertedStyleName, static_cast<SwXStyle*>(xStyle.get()) );
+                            xStyle = xStyles->getStyleByName(sConvertedStyleName);
+
+                            StyleSheetPropertyMap* pPropertyMap = pEntry->m_pProperties.get();
+                            if (pPropertyMap && pPropertyMap->props().GetListId() == -1)
+                            {
+                                // No properties? Word default is 'none', Writer one is 'arabic', handle this.
+                                rtl::Reference<SwXNumberingRules> xNumberingRules = xNewStyle->getNumberingRules();
+                                for (sal_Int32 i = 0; i < xNumberingRules->getCount(); ++i)
+                                {
+                                    uno::Sequence< beans::PropertyValue > aLvlProps{
+                                        comphelper::makePropertyValue(
+                                            u"NumberingType"_ustr, style::NumberingType::NUMBER_NONE)
+                                    };
+                                    xNumberingRules->replaceByIndex(i, uno::Any(aLvlProps));
+                                }
+                            }
+                        }
+                    }
+                    if( !pEntry->m_sBaseStyleIdentifier.isEmpty() )
+                    {
+                        try
+                        {
+                            //TODO: Handle cases where a paragraph <> character style relation is needed
+                            StyleSheetEntryPtr pParent = FindStyleSheetByISTD( pEntry->m_sBaseStyleIdentifier );
+                            // Writer core doesn't support numbering styles having a parent style, it seems
+                            if (pParent && !bListStyle)
+                            {
+                                const OUString sParentStyleName(ConvertStyleName(pParent->m_sStyleName).first);
+                                if ( !sParentStyleName.isEmpty() && !xStyles->hasByName( sParentStyleName ) )
+                                    aMissingParent.emplace_back( sParentStyleName, xStyle );
+                                else
+                                    xStyle->setParentStyle( sParentStyleName );
+                            }
+                        }
+                        catch( const uno::RuntimeException& )
+                        {
+                            OSL_FAIL( "Styles parent could not be set");
+                        }
+                    }
+                    else if( bParaStyle )
+                    {
+                        // Paragraph styles that don't inherit from some parent need to apply the DocDefaults
+                        pEntry->m_pProperties->InsertProps( m_pDefaultParaProps, /*bOverwrite=*/false );
+
+                        //now it's time to set the default parameters - for paragraph styles
+                        //Fonts: Western first entry in font table
+                        //CJK: second entry
+                        //CTL: third entry, if it exists
+
+                        sal_uInt32 nFontCount = rFontTable->size();
+                        if( !m_rDMapper.IsOOXMLImport() && nFontCount > 2 )
+                        {
+                            uno::Any aTwoHundredFortyTwip(12.);
+
+                            // font size to 240 twip (12 pts) for all if not set
+                            pEntry->m_pProperties->Insert(PROP_CHAR_HEIGHT, aTwoHundredFortyTwip, false);
+
+                            // western font not already set -> apply first font
+                            const FontEntry::Pointer_t pWesternFontEntry(rFontTable->getFontEntry( 0 ));
+                            OUString sWesternFontName = pWesternFontEntry->sFontName;
+                            pEntry->m_pProperties->Insert(PROP_CHAR_FONT_NAME, uno::Any( sWesternFontName ), false);
+
+                            // CJK  ... apply second font
+                            const FontEntry::Pointer_t pCJKFontEntry(rFontTable->getFontEntry( 2 ));
+                            pEntry->m_pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::Any( pCJKFontEntry->sFontName ), false);
+                            pEntry->m_pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN, aTwoHundredFortyTwip, false);
+
+                            // CTL  ... apply third font, if available
+                            if( nFontCount > 3 )
+                            {
+                                const FontEntry::Pointer_t pCTLFontEntry(rFontTable->getFontEntry( 3 ));
+                                pEntry->m_pProperties->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::Any( pCTLFontEntry->sFontName ), false);
+                                pEntry->m_pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, aTwoHundredFortyTwip, false);
+                            }
+                        }
+                    }
+
+                    std::vector<beans::PropertyValue> aPropValues = pEntry->m_pProperties->GetPropertyValues();
+
+                    if (bParaStyle || bCharStyle)
+                    {
+                        // delay adding LinkStyle property: all styles need to be created first
+                        if (!pEntry->m_sLinkStyleIdentifier.isEmpty())
+                        {
+                            StyleSheetEntryPtr pLinkStyle
+                                = FindStyleSheetByISTD(pEntry->m_sLinkStyleIdentifier);
+                            if (pLinkStyle && !pLinkStyle->m_sStyleName.isEmpty())
+                                aMissingLink.emplace_back(ConvertStyleName(pLinkStyle->m_sStyleName).first,
+                                                          xStyle);
+                        }
+                    }
+
+                    if( bParaStyle )
+                    {
+                        // delay adding FollowStyle property: all styles need to be created first
+                        if ( !pEntry->m_sNextStyleIdentifier.isEmpty() )
+                        {
+                            StyleSheetEntryPtr pFollowStyle = FindStyleSheetByISTD( pEntry->m_sNextStyleIdentifier );
+                            if ( pFollowStyle && !pFollowStyle->m_sStyleName.isEmpty() )
+                                aMissingFollow.emplace_back(ConvertStyleName(pFollowStyle->m_sStyleName).first, xStyle);
+                        }
+
+                        // Set the outline levels
+                        StyleSheetPropertyMap* pStyleSheetProperties = pEntry ? pEntry->m_pProperties.get() : nullptr;
+
+                        if ( pStyleSheetProperties )
+                        {
+                            sal_Int16 nLvl = pStyleSheetProperties->GetOutlineLevel();
+                            // convert MS body Level (9) to LO body level (0) and equivalent outline levels
+                            if (nLvl != -1)
+                            {
+                                if (nLvl == WW_OUTLINE_MAX)
+                                    nLvl = 0;
+                                else
+                                    ++nLvl;
+
+                                beans::PropertyValue aLvlVal(getPropertyName(PROP_OUTLINE_LEVEL), 0,
+                                                             uno::Any(nLvl),
+                                                             beans::PropertyState_DIRECT_VALUE);
+                                aPropValues.push_back(aLvlVal);
+                            }
+                        }
+
+                        uno::Reference< beans::XPropertyState >xState( static_cast<cppu::OWeakObject*>(xStyle.get()), uno::UNO_QUERY_THROW );
+                        if( sConvertedStyleName == "Contents Heading" ||
+                            sConvertedStyleName == "User Index Heading" ||
+                            sConvertedStyleName == "Index Heading" )
+                        {
+                            // remove Left/RightMargin values from TOX heading styles
+                            //left margin is set to NULL by default
+                            xState->setPropertyToDefault(getPropertyName( PROP_PARA_LEFT_MARGIN ));
+                        }
+                        else if ( sConvertedStyleName == "Text body" )
+                            xState->setPropertyToDefault(getPropertyName( PROP_PARA_BOTTOM_MARGIN ));
+                        else if ( sConvertedStyleName == "Heading 1" ||
+                                  sConvertedStyleName == "Heading 2" ||
+                                  sConvertedStyleName == "Heading 3" ||
+                                  sConvertedStyleName == "Heading 4" ||
+                                  sConvertedStyleName == "Heading 5" ||
+                                  sConvertedStyleName == "Heading 6" ||
+                                  sConvertedStyleName == "Heading 7" ||
+                                  sConvertedStyleName == "Heading 8" ||
+                                  sConvertedStyleName == "Heading 9" )
+                        {
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_WEIGHT ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_WEIGHT_ASIAN ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_WEIGHT_COMPLEX ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_POSTURE ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_POSTURE_ASIAN ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_POSTURE_COMPLEX ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_PROP_HEIGHT        ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_PROP_HEIGHT_ASIAN  ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_PROP_HEIGHT_COMPLEX));
+
+                        }
+
+                        // w:leftChars overrides w:left - even if leftChars is only inherited.
+                        // NOTE: unlike paragraphs, when a STYLE encounters a disabling leftChars=0,
+                        // it is not supposed to inherit the parent style's w:left.
+                        if (pStyleSheetProperties)
+                        {
+                            bool bLeftChSet = pStyleSheetProperties->isSet(PROP_PARA_LEFT_MARGIN_UNIT);
+                            bool bRightChSet = pStyleSheetProperties->isSet(PROP_PARA_RIGHT_MARGIN_UNIT);
+                            bool bFirstChSet = pStyleSheetProperties->isSet(PROP_PARA_FIRST_LINE_INDENT_UNIT);
+
+                            bool bLeftSet = pStyleSheetProperties->isSet(PROP_PARA_LEFT_MARGIN);
+                            bool bRightSet = pStyleSheetProperties->isSet(PROP_PARA_RIGHT_MARGIN);
+                            bool bFirstSet = pStyleSheetProperties->isSet(PROP_PARA_FIRST_LINE_INDENT);
+
+                            const css::beans::Pair<double, sal_Int16> stZero{
+                                0.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
+                            };
+
+                            auto stLeftCh = stZero;
+                            auto stRightCh = stZero;
+                            auto stFirstCh = stZero;
+
+                            // Is a leftChars actually provided?
+                            if (bLeftChSet)
+                            {
+                                pStyleSheetProperties->getProperty(PROP_PARA_LEFT_MARGIN_UNIT)->second
+                                    >>= stLeftCh;
+                                bLeftChSet = stLeftCh != stZero;
+
+                                if (!bLeftChSet) // special case: disables leftChars
+                                {
+                                    // Implementation note: when leftChars was imported as zero,
+                                    // a fall-back w:left=0 was force-inserted
+                                    // by DomainMapper::lcl_attribute
+                                    assert(bLeftSet && "where is the fall-back w:left info?");
+
+                                    // do not write this disabled leftChars margin into the style
+                                    std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                    {
+                                        return aItem.Name
+                                            == getPropertyName(PROP_PARA_LEFT_MARGIN_UNIT);
+                                    });
+                                }
+                            }
+
+                            if (bLeftSet && bLeftChSet)
+                            {
+                                // A valid leftChars negates the w:left - so drop it.
+                                std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                {
+                                    return aItem.Name == getPropertyName(PROP_PARA_LEFT_MARGIN);
+                                });
+                            }
+
+                            if (bRightChSet)
+                            {
+                                pStyleSheetProperties->getProperty(PROP_PARA_RIGHT_MARGIN_UNIT)->second
+                                    >>= stRightCh;
+                                bRightChSet = stRightCh != stZero;
+
+                                if (!bRightChSet) // special case: disables rightChars
+                                {
+                                    assert(bRightSet && "where is the fall-back w:right info?");
+                                    std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                    {
+                                        return aItem.Name
+                                            == getPropertyName(PROP_PARA_RIGHT_MARGIN_UNIT);
+                                    });
+                                }
+                            }
+
+                            if (bRightSet && bRightChSet)
+                            {
+                                std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                {
+                                    return aItem.Name == getPropertyName(PROP_PARA_RIGHT_MARGIN);
+                                });
+                            }
+
+                            if (bFirstChSet)
+                            {
+                                pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT_UNIT)->second
+                                    >>= stFirstCh;
+                                bFirstChSet = stFirstCh != stZero;
+
+                                // special case: zero value disables firstLineChars/hangingChars
+                                if (!bFirstChSet)
+                                {
+                                    assert(bFirstSet && "where is the fall-back firstLine info?");
+                                    std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                    {
+                                        return aItem.Name
+                                            == getPropertyName(PROP_PARA_FIRST_LINE_INDENT_UNIT);
+                                    });
+                                }
+
+                                // hanging margins need to alter the left margin
+                                if (bLeftChSet && stFirstCh.First < 0.0)
+                                {
+                                    stLeftCh.First -= stFirstCh.First;
+                                    beans::PropertyValue aPV(
+                                        getPropertyName(PROP_PARA_LEFT_MARGIN_UNIT), 0,
+                                        uno::Any(stLeftCh), beans::PropertyState_DIRECT_VALUE);
+                                    aPropValues.push_back(aPV);
+                                }
+                            }
+
+                            if (bFirstSet && bFirstChSet)
+                            {
+                                std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                {
+                                    return
+                                        aItem.Name == getPropertyName(PROP_PARA_FIRST_LINE_INDENT);
+                                });
+                            }
+                        }
+                    }
+
+                    if ( !aPropValues.empty() )
+                    {
+                        PropValVector aSortedPropVals;
+                        for (const beans::PropertyValue& rValue : aPropValues)
+                        {
+                            // Don't add the style name properties
+                            bool bIsParaStyleName = rValue.Name == "ParaStyleName";
+                            bool bIsCharStyleName = rValue.Name == "CharStyleName";
+                            if ( !bIsParaStyleName && !bIsCharStyleName )
+                            {
+                                aSortedPropVals.Insert(rValue);
+                            }
+                        }
+
+                        try
+                        {
+                            uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( static_cast<cppu::OWeakObject*>(xStyle.get()), uno::UNO_QUERY_THROW);
+                            try
+                            {
+                                xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
+                            }
+                            catch ( const uno::Exception& )
+                            {
+                                for ( const beans::PropertyValue& rValue : aSortedPropVals.getProperties() )
+                                {
+                                    try
+                                    {
+                                       xStyle->setPropertyValue( rValue.Name, rValue.Value );
+                                    }
+                                    catch ( const uno::Exception& )
+                                    {
+                                        SAL_WARN( "writerfilter", "StyleSheetTable::ApplyStyleSheets could not set property " << rValue.Name );
+                                    }
+                                }
+                            }
+                            // Duplicate MSWord's single footnote reference into Footnote Characters and Footnote anchor
+                            if( pEntry->m_sStyleName.equalsIgnoreAsciiCase("footnote reference")
+                                || pEntry->m_sStyleName.equalsIgnoreAsciiCase("endnote reference") )
+                            {
+                                rtl::Reference< SwXBaseStyle > xCopyStyle;
+                                if( pEntry->m_sStyleName.equalsIgnoreAsciiCase("footnote reference") )
+                                    xCopyStyle = xStyles->getStyleByName( u"Footnote anchor"_ustr );
+                                else
+                                    xCopyStyle = xStyles->getStyleByName( u"Endnote anchor"_ustr );
+
+                                xMultiPropertySet.set( static_cast<cppu::OWeakObject*>(xCopyStyle.get()), uno::UNO_QUERY_THROW);
+                                xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
+                            }
+                        }
+                        catch( const lang::WrappedTargetException& rWrapped)
+                        {
+#ifdef DBG_UTIL
+                            OUString aMessage(u"StyleSheetTable::ApplyStyleSheets: Some style properties could not be set"_ustr);
+                            beans::UnknownPropertyException aUnknownPropertyException;
+
+                            if (rWrapped.TargetException >>= aUnknownPropertyException)
+                                aMessage += ": " + aUnknownPropertyException.Message;
+
+                            SAL_WARN("writerfilter", aMessage);
+#else
+                            (void) rWrapped;
+#endif
+                        }
+                        catch( const uno::Exception& )
+                        {
+                            OSL_FAIL( "Some style properties could not be set");
+                        }
+                    }
+                    // Numbering style got inserted earlier.
+                    if(bInsert && !bListStyle)
+                    {
+                        const OUString sParentStyle = xStyle->getParentStyle();
+                        if( !sParentStyle.isEmpty() && !xStyles->hasByName( sParentStyle ) )
+                            aMissingParent.emplace_back( sParentStyle, xStyle );
+
+                        xStyles->insertStyleByName( sConvertedStyleName, static_cast<SwXStyle*>(xStyle.get()) );
+
+                        if (!m_bIsNewDoc && bParaStyle)
+                        {
+                            // Remember the inserted style, which may or may not be referred during
+                            // pasting content.
+                            m_aInsertedParagraphStyles.insert(sConvertedStyleName);
+                        }
+                    }
+
+                    beans::PropertyValues aGrabBag = pEntry->GetInteropGrabBagSeq();
+                    if (aGrabBag.hasElements())
+                    {
+                        xStyle->setPropertyValue(u"StyleInteropGrabBag"_ustr, uno::Any(aGrabBag));
+                    }
+
+                    // Only paragraph styles support automatic updates.
+                    if (pEntry->m_bAutoRedefine && bParaStyle)
+                        xStyle->setPropertyValue(u"IsAutoUpdate"_ustr, uno::Any(true));
+                }
+                else if(pEntry->m_nStyleTypeCode == StyleType::Table)
+                {
+                    // If this is a table style, save its contents as-is for roundtrip purposes.
+                    TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(pEntry.get());
+                    aTableStylesVec.push_back(pTableEntry->GetInteropGrabBag());
+
+                    // if DocDefaults exist, MS Word includes these in the table style definition.
+                    pEntry->m_pProperties->InsertProps( m_pDefaultCharProps, /*bOverwrite=*/false );
+                    pEntry->m_pProperties->InsertProps( m_pDefaultParaProps, /*bOverwrite=*/false );
+                }
+            }
+
+            // Update the styles that were created before their parents or next-styles
+            for( auto const & iter : aMissingParent )
+            {
+                iter.second->setParentStyle( iter.first );
+            }
+
+            for( auto const & iter : aMissingFollow )
+            {
+                try
+                {
+                    iter.second->setPropertyValue( u"FollowStyle"_ustr, uno::Any(iter.first) );
+                }
+                catch( uno::Exception & ) {}
+            }
+
+            // Update the styles that were created before their linked styles.
+            for (auto const& rLinked : aMissingLink)
+            {
+                try
+                {
+                    rLinked.second->setPropertyValue(u"LinkStyle"_ustr, uno::Any(rLinked.first));
+                }
+                catch (uno::Exception&)
+                {
+                    TOOLS_WARN_EXCEPTION(
+                        "writerfilter",
+                        "StyleSheetTable::ApplyStyleSheets: failed to set LinkStyle");
+                }
+            }
+
+            if (!aTableStylesVec.empty())
+            {
+                // If we had any table styles, add a new document-level InteropGrabBag entry for them.
+                uno::Any aAny = m_xTextDocument->getPropertyValue(u"InteropGrabBag"_ustr);
+                auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< uno::Sequence<beans::PropertyValue> >());
+                beans::PropertyValue aValue;
+                aValue.Name = "tableStyles";
+                aValue.Value <<= comphelper::containerToSequence(aTableStylesVec);
+                aGrabBag.push_back(aValue);
+                m_xTextDocument->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(comphelper::containerToSequence(aGrabBag)));
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("writerfilter", "Styles could not be imported completely");
+    }
+}
+
+
+StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const OUString& sIndex)
+{
+    auto findIt = m_aStyleSheetEntriesMap.find(sIndex);
+    if (findIt != m_aStyleSheetEntriesMap.end())
+        return findIt->second;
+    return StyleSheetEntryPtr();
+}
+
+
+StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(std::u16string_view sIndex)
+{
+    StyleSheetEntryPtr pRet;
+    for(const StyleSheetEntryPtr & rpEntry : m_aStyleSheetEntries)
+    {
+        if( rpEntry->m_sConvertedStyleName == sIndex)
+        {
+            pRet = rpEntry;
+            break;
+        }
+    }
+    return pRet;
+}
+
+
+StyleSheetEntryPtr StyleSheetTable::FindDefaultParaStyle()
+{
+    return FindStyleSheetByISTD( m_sDefaultParaStyleName );
+}
+
+const StyleSheetEntryPtr & StyleSheetTable::GetCurrentEntry() const
+{
+    return m_pCurrentEntry;
+}
+
+OUString StyleSheetTable::ConvertStyleNameExt(const OUString& rWWName)
+{
+    OUString sRet( rWWName );
+    {
+        //search for the rWWName in the IdentifierD of the existing styles and convert the sStyleName member
+        auto findIt = m_aStyleSheetEntriesMap.find(rWWName);
+        if (findIt != m_aStyleSheetEntriesMap.end())
+        {
+            if (!findIt->second->m_sConvertedStyleName.isEmpty())
+                return findIt->second->m_sConvertedStyleName;
+            sRet = findIt->second->m_sStyleName;
+        }
+    }
+
+    return ConvertStyleName(sRet).first;
+}
+
+std::pair<OUString, bool>
+StyleSheetTable::ConvertStyleName(const OUString& rWWName)
+{
+    OUString sRet(rWWName);
+
+    // create a map only once
+    // This maps Word's special style names to Writer's (the opposite to what MSWordStyles::GetWWId
+    // and ww::GetEnglishNameFromSti do on export). The mapping gives a Writer's style name, which
+    // will point to a style with specific RES_POOL* in its m_nPoolFormatId. Then on export, the
+    // pool format id will map to a ww::sti enum value, and finally to a Word style name. Keep this
+    // part in sync with the export functions mentioned above!
+    // In addition to "standard" names, some case variations are handled here.
+    // It's required to know all the Word paragraph/character styles for
+    // STYLEREF/TOC fields; the ones that don't have a Writer equivalent have
+    // an empty string in the map, and the code should return the original name.
+    // Also very unclear: at least in DOCX, style names appear to be case
+    // sensitive; if Word imports 2 styles that have the same case-insensitive
+    // name as a built-in style, it renames one of them by appending a number.
+    // These are from the w:latentStyles in the styles.xml of a Word 15.0 DOCX,
+    // plus some pre-existing additions and variants.
+    static const std::map< OUString, OUString> StyleNameMap {
+        { "Normal", "Standard" }, // SwPoolFormatId::COLL_STANDARD
+        { "heading 1", "Heading 1" }, // SwPoolFormatId::COLL_HEADLINE1
+        { "heading 2", "Heading 2" }, // SwPoolFormatId::COLL_HEADLINE2
+        { "heading 3", "Heading 3" }, // SwPoolFormatId::COLL_HEADLINE3
+        { "heading 4", "Heading 4" }, // SwPoolFormatId::COLL_HEADLINE4
+        { "heading 5", "Heading 5" }, // SwPoolFormatId::COLL_HEADLINE5
+        { "heading 6", "Heading 6" }, // SwPoolFormatId::COLL_HEADLINE6
+        { "heading 7", "Heading 7" }, // SwPoolFormatId::COLL_HEADLINE7
+        { "heading 8", "Heading 8" }, // SwPoolFormatId::COLL_HEADLINE8
+        { "heading 9", "Heading 9" }, // SwPoolFormatId::COLL_HEADLINE9
+        { "Heading 1", "Heading 1" }, // SwPoolFormatId::COLL_HEADLINE1
+        { "Heading 2", "Heading 2" }, // SwPoolFormatId::COLL_HEADLINE2
+        { "Heading 3", "Heading 3" }, // SwPoolFormatId::COLL_HEADLINE3
+        { "Heading 4", "Heading 4" }, // SwPoolFormatId::COLL_HEADLINE4
+        { "Heading 5", "Heading 5" }, // SwPoolFormatId::COLL_HEADLINE5
+        { "Heading 6", "Heading 6" }, // SwPoolFormatId::COLL_HEADLINE6
+        { "Heading 7", "Heading 7" }, // SwPoolFormatId::COLL_HEADLINE7
+        { "Heading 8", "Heading 8" }, // SwPoolFormatId::COLL_HEADLINE8
+        { "Heading 9", "Heading 9" }, // SwPoolFormatId::COLL_HEADLINE9
+        { "Index 1", "Index 1" }, // SwPoolFormatId::COLL_TOX_IDX1
+        { "Index 2", "Index 2" }, // SwPoolFormatId::COLL_TOX_IDX2
+        { "Index 3", "Index 3" }, // SwPoolFormatId::COLL_TOX_IDX3
+        { "Index 4", "" },
+        { "Index 5", "" },
+        { "Index 6", "" },
+        { "Index 7", "" },
+        { "Index 8", "" },
+        { "Index 9", "" },
+        { "index 1", "Index 1" }, // SwPoolFormatId::COLL_TOX_IDX1
+        { "index 2", "Index 2" }, // SwPoolFormatId::COLL_TOX_IDX2
+        { "index 3", "Index 3" }, // SwPoolFormatId::COLL_TOX_IDX3
+        { "index 4", "" },
+        { "index 5", "" },
+        { "index 6", "" },
+        { "index 7", "" },
+        { "index 8", "" },
+        { "index 9", "" },
+        { "TOC 1", "Contents 1" }, // SwPoolFormatId::COLL_TOX_CNTNT1
+        { "TOC 2", "Contents 2" }, // SwPoolFormatId::COLL_TOX_CNTNT2
+        { "TOC 3", "Contents 3" }, // SwPoolFormatId::COLL_TOX_CNTNT3
+        { "TOC 4", "Contents 4" }, // SwPoolFormatId::COLL_TOX_CNTNT4
+        { "TOC 5", "Contents 5" }, // SwPoolFormatId::COLL_TOX_CNTNT5
+        { "TOC 6", "Contents 6" }, // SwPoolFormatId::COLL_TOX_CNTNT6
+        { "TOC 7", "Contents 7" }, // SwPoolFormatId::COLL_TOX_CNTNT7
+        { "TOC 8", "Contents 8" }, // SwPoolFormatId::COLL_TOX_CNTNT8
+        { "TOC 9", "Contents 9" }, // SwPoolFormatId::COLL_TOX_CNTNT9
+        { "toc 1", "Contents 1" }, // SwPoolFormatId::COLL_TOX_CNTNT1
+        { "toc 2", "Contents 2" }, // SwPoolFormatId::COLL_TOX_CNTNT2
+        { "toc 3", "Contents 3" }, // SwPoolFormatId::COLL_TOX_CNTNT3
+        { "toc 4", "Contents 4" }, // SwPoolFormatId::COLL_TOX_CNTNT4
+        { "toc 5", "Contents 5" }, // SwPoolFormatId::COLL_TOX_CNTNT5
+        { "toc 6", "Contents 6" }, // SwPoolFormatId::COLL_TOX_CNTNT6
+        { "toc 7", "Contents 7" }, // SwPoolFormatId::COLL_TOX_CNTNT7
+        { "toc 8", "Contents 8" }, // SwPoolFormatId::COLL_TOX_CNTNT8
+        { "toc 9", "Contents 9" }, // SwPoolFormatId::COLL_TOX_CNTNT9
+        { "TOC1", "Contents 1" }, // SwPoolFormatId::COLL_TOX_CNTNT1
+        { "TOC2", "Contents 2" }, // SwPoolFormatId::COLL_TOX_CNTNT2
+        { "TOC3", "Contents 3" }, // SwPoolFormatId::COLL_TOX_CNTNT3
+        { "TOC4", "Contents 4" }, // SwPoolFormatId::COLL_TOX_CNTNT4
+        { "TOC5", "Contents 5" }, // SwPoolFormatId::COLL_TOX_CNTNT5
+        { "TOC6", "Contents 6" }, // SwPoolFormatId::COLL_TOX_CNTNT6
+        { "TOC7", "Contents 7" }, // SwPoolFormatId::COLL_TOX_CNTNT7
+        { "TOC8", "Contents 8" }, // SwPoolFormatId::COLL_TOX_CNTNT8
+        { "TOC9", "Contents 9" }, // SwPoolFormatId::COLL_TOX_CNTNT9
+        { "Normal Indent", "" },
+        { "footnote text", "Footnote" }, // SwPoolFormatId::COLL_FOOTNOTE
+        { "Footnote Text", "Footnote" }, // SwPoolFormatId::COLL_FOOTNOTE
+        { "Annotation Text", "Marginalia" }, // SwPoolFormatId::COLL_MARGINAL
+        { "annotation text", "Marginalia" }, // SwPoolFormatId::COLL_MARGINAL
+        { "Header", "Header" }, // SwPoolFormatId::COLL_HEADER
+        { "header", "Header" }, // SwPoolFormatId::COLL_HEADER
+        { "Footer", "Footer" }, // SwPoolFormatId::COLL_FOOTER
+        { "footer", "Footer" }, // SwPoolFormatId::COLL_FOOTER
+        { "Index Heading", "Index Heading" }, // SwPoolFormatId::COLL_TOX_IDXH
+        { "index heading", "Index Heading" }, // SwPoolFormatId::COLL_TOX_IDXH
+        { "Caption", "Caption" }, // SwPoolFormatId::COLL_LABEL
+        { "caption", "Caption" }, // SwPoolFormatId::COLL_LABEL
+        { "table of figures", "Figure Index 1" }, // SwPoolFormatId::COLL_TOX_ILLUS1
+        { "Table of Figures", "Figure Index 1" }, // SwPoolFormatId::COLL_TOX_ILLUS1
+        { "Envelope Address", "Addressee" }, // SwPoolFormatId::COLL_ENVELOPE_ADDRESS
+        { "envelope address", "Addressee" }, // SwPoolFormatId::COLL_ENVELOPE_ADDRESS
+        { "Envelope Return", "Sender" }, // SwPoolFormatId::COLL_SEND_ADDRESS
+        { "envelope return", "Sender" }, // SwPoolFormatId::COLL_SEND_ADDRESS
+        { "footnote reference", "Footnote Symbol" }, // SwPoolFormatId::CHR_FOOTNOTE; tdf#82173 tdf#162884
+        { "Footnote Reference", "Footnote Symbol" }, // SwPoolFormatId::CHR_FOOTNOTE; tdf#82173 tdf#162884
+        { "Annotation Reference", "" },
+        { "annotation reference", "" },
+        { "Line Number", "Line numbering" }, // SwPoolFormatId::CHR_LINENUM
+        { "line number", "Line numbering" }, // SwPoolFormatId::CHR_LINENUM
+        { "Page Number", "Page Number" }, // SwPoolFormatId::CHR_PAGENO
+        { "page number", "Page Number" }, // SwPoolFormatId::CHR_PAGENO
+        { "PageNumber", "Page Number" }, // SwPoolFormatId::CHR_PAGENO
+        { "endnote reference", "Endnote Symbol" }, // SwPoolFormatId::CHR_ENDNOTE; tdf#82173 tdf#162884
+        { "Endnote Reference", "Endnote Symbol" }, // SwPoolFormatId::CHR_ENDNOTE; tdf#82173 tdf#162884
+        { "endnote text", "Endnote" }, // SwPoolFormatId::COLL_ENDNOTE
+        { "Endnote Text", "Endnote" }, // SwPoolFormatId::COLL_ENDNOTE
+        { "Table of Authorities", "Bibliography Heading" }, // SwPoolFormatId::COLL_TOX_AUTHORITIESH
+        { "table of authorities", "Bibliography Heading" }, // SwPoolFormatId::COLL_TOX_AUTHORITIESH
+        { "macro", "" },
+        { "TOA Heading", "" },
+        { "toa heading", "" },
+        { "List", "List" }, // SwPoolFormatId::COLL_NUMBER_BULLET_BASE
+        { "List 2", "" },
+        { "List 3", "" },
+        { "List 4", "" },
+        { "List 5", "" },
+        { "List Bullet", "List 1" }, // SwPoolFormatId::COLL_BULLET_LEVEL1
+        { "List Bullet 2", "List 2" }, // SwPoolFormatId::COLL_BULLET_LEVEL2
+        { "List Bullet 3", "List 3" }, // SwPoolFormatId::COLL_BULLET_LEVEL3
+        { "List Bullet 4", "List 4" }, // SwPoolFormatId::COLL_BULLET_LEVEL4
+        { "List Bullet 5", "List 5" }, // SwPoolFormatId::COLL_BULLET_LEVEL5
+        { "List Number", "Numbering 1" }, // SwPoolFormatId::COLL_NUM_LEVEL1
+        { "List Number 2", "Numbering 2" }, // SwPoolFormatId::COLL_NUM_LEVEL2
+        { "List Number 3", "Numbering 3" }, // SwPoolFormatId::COLL_NUM_LEVEL3
+        { "List Number 4", "Numbering 4" }, // SwPoolFormatId::COLL_NUM_LEVEL4
+        { "List Number 5", "Numbering 5" }, // SwPoolFormatId::COLL_NUM_LEVEL5
+        { "Title", "Title" }, // SwPoolFormatId::COLL_DOC_TITLE
+        { "Closing", "Appendix" }, // SwPoolFormatId::COLL_DOC_APPENDIX
+        { "Signature", "Signature" }, // SwPoolFormatId::COLL_SIGNATURE
+        { "Default Paragraph Font", "" },
+        { "DefaultParagraphFont", "" },
+        { "Body Text", "Text body" }, // SwPoolFormatId::COLL_TEXT
+        { "BodyText", "Text body" }, // SwPoolFormatId::COLL_TEXT
+        { "BodyTextIndentItalic", "" },
+        { "Body Text Indent", "Text body indent" }, // SwPoolFormatId::COLL_TEXT_MOVE
+        { "BodyTextIndent", "Text body indent" }, // SwPoolFormatId::COLL_TEXT_MOVE
+        { "BodyTextIndent2", "" },
+        { "List Continue", "List 1 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM1
+        { "List Continue 2", "List 2 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM2
+        { "List Continue 3", "List 3 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM3
+        { "List Continue 4", "List 4 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM4
+        { "List Continue 5", "List 5 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM5
+        { "Message Header", "" },
+        { "Subtitle", "Subtitle" }, // SwPoolFormatId::COLL_DOC_SUBTITLE
+        { "Salutation", "Salutation" }, // SwPoolFormatId::COLL_GREETING
+        { "Date", "" },
+        { "Body Text First Indent", "First line indent" }, // SwPoolFormatId::COLL_TEXT_IDENT
+        { "Body Text First Indent 2", "" },
+        { "Note Heading", "" },
+        { "Body Text 2", "" },
+        { "Body Text 3", "" },
+        { "Body Text Indent 2", "" },
+        { "Body Text Indent 3", "" },
+        { "Block Text", "" },
+        { "Hyperlink", "Internet link" }, // SwPoolFormatId::CHR_INET_NORMAL
+        { "FollowedHyperlink", "Visited Internet Link" }, // SwPoolFormatId::CHR_INET_VISIT
+        { "Strong", "Strong Emphasis" }, // SwPoolFormatId::CHR_HTML_STRONG
+        { "Emphasis", "Emphasis" }, // SwPoolFormatId::CHR_HTML_EMPHASIS
+        { "Document Map", "" },
+        { "DocumentMap", "" },
+        { "Plain Text", "" },
+        { "E-mail Signature", "" },
+        { "HTML Top of Form", "" },
+        { "HTML Bottom of Form", "" },
+        { "Normal (Web)", "" },
+        { "HTML Acronym", "" },
+        { "HTML Address", "" },
+        { "HTML Cite", "" },
+        { "HTML Code", "" },
+        { "HTML Definition", "" },
+        { "HTML Keyboard", "" },
+        { "HTML Preformatted", "" },
+        { "HTML Sample", "" },
+        { "HTML Typewriter", "" },
+        { "HTML Variable", "" },
+        { "", "" },
+        { "", "" },
+        { "", "" },
+        { "Normal Table", "" },
+        { "annotation subject", "" },
+        { "No List", "No List" }, // SwPoolFormatId::NUMRULE_NOLIST
+        { "NoList", "No List" }, // SwPoolFormatId::NUMRULE_NOLIST
+        { "Outline List 1", "" },
+        { "Outline List 2", "" },
+        { "Outline List 3", "" },
+        { "Table Simple 1", "" },
+        { "Table Simple 2", "" },
+        { "Table Simple 3", "" },
+        { "Table Classic 1", "" },
+        { "Table Classic 2", "" },
+        { "Table Classic 3", "" },
+        { "Table Classic 4", "" },
+        { "Table Colorful 1", "" },
+        { "Table Colorful 2", "" },
+        { "Table Colorful 3", "" },
+        { "Table Columns 1", "" },
+        { "Table Columns 2", "" },
+        { "Table Columns 3", "" },
+        { "Table Columns 4", "" },
+        { "Table Columns 5", "" },
+        { "Table Grid 1", "" },
+        { "Table Grid 2", "" },
+        { "Table Grid 3", "" },
+        { "Table Grid 4", "" },
+        { "Table Grid 5", "" },
+        { "Table Grid 6", "" },
+        { "Table Grid 7", "" },
+        { "Table Grid 8", "" },
+        { "Table List 1", "" },
+        { "Table List 2", "" },
+        { "Table List 3", "" },
+        { "Table List 4", "" },
+        { "Table List 5", "" },
+        { "Table List 6", "" },
+        { "Table List 7", "" },
+        { "Table List 8", "" },
+        { "Table 3D effects 1", "" },
+        { "Table 3D effects 2", "" },
+        { "Table 3D effects 3", "" },
+        { "Table Contemporary", "" },
+        { "Table Elegant", "" },
+        { "Table Professional", "" },
+        { "Table Subtle 1", "" },
+        { "Table Subtle 2", "" },
+        { "Table Web 1", "" },
+        { "Table Web 2", "" },
+        { "Table Web 3", "" },
+        { "Balloon Text", "" },
+        { "Table Grid", "" },
+        { "Table Theme", "" },
+        { "Placeholder Text", "" },
+        { "No Spacing", "" },
+        { "Light Shading", "" },
+        { "Light List", "" },
+        { "Light Grid", "" },
+        { "Medium Shading 1", "" },
+        { "Medium Shading 2", "" },
+        { "Medium List 1", "" },
+        { "Medium List 2", "" },
+        { "Medium Grid 1", "" },
+        { "Medium Grid 2", "" },
+        { "Medium Grid 3", "" },
+        { "Dark List", "" },
+        { "Colorful Shading", "" },
+        { "Colorful List", "" },
+        { "Colorful Grid", "" },
+        { "Light Shading Accent 1", "" },
+        { "Light List Accent 1", "" },
+        { "Light Grid Accent 1", "" },
+        { "Medium Shading 1 Accent 1", "" },
+        { "Medium Shading 2 Accent 1", "" },
+        { "Medium List 1 Accent 1", "" },
+        { "Revision", "" },
+        { "List Paragraph", "" },
+        { "Quote", "" },
+        { "Intense Quote", "" },
+        { "Medium List 2 Accent 1", "" },
+        { "Medium Grid 1 Accent 1", "" },
+        { "Medium Grid 2 Accent 1", "" },
+        { "Medium Grid 3 Accent 1", "" },
+        { "Dark List Accent 1", "" },
+        { "Colorful Shading Accent 1", "" },
+        { "Colorful List Accent 1", "" },
+        { "Colorful Grid Accent 1", "" },
+        { "Light Shading Accent 2", "" },
+        { "Light List Accent 2", "" },
+        { "Light Grid Accent 2", "" },
+        { "Medium Shading 1 Accent 2", "" },
+        { "Medium Shading 2 Accent 2", "" },
+        { "Medium List 1 Accent 2", "" },
+        { "Medium List 2 Accent 2", "" },
+        { "Medium Grid 1 Accent 2", "" },
+        { "Medium Grid 2 Accent 2", "" },
+        { "Medium Grid 3 Accent 2", "" },
+        { "Dark List Accent 2", "" },
+        { "Colorful Shading Accent 2", "" },
+        { "Colorful List Accent 2", "" },
+        { "Colorful Grid Accent 2", "" },
+        { "Light Shading Accent 3", "" },
+        { "Light List Accent 3", "" },
+        { "Light Grid Accent 3", "" },
+        { "Medium Shading 1 Accent 3", "" },
+        { "Medium Shading 2 Accent 3", "" },
+        { "Medium List 1 Accent 3", "" },
+        { "Medium List 2 Accent 3", "" },
+        { "Medium Grid 1 Accent 3", "" },
+        { "Medium Grid 2 Accent 3", "" },
+        { "Medium Grid 3 Accent 3", "" },
+        { "Dark List Accent 3", "" },
+        { "Colorful Shading Accent 3", "" },
+        { "Colorful List Accent 3", "" },
+        { "Colorful Grid Accent 3", "" },
+        { "Light Shading Accent 4", "" },
+        { "Light List Accent 4", "" },
+        { "Light Grid Accent 4", "" },
+        { "Medium Shading 1 Accent 4", "" },
+        { "Medium Shading 2 Accent 4", "" },
+        { "Medium List 1 Accent 4", "" },
+        { "Medium List 2 Accent 4", "" },
+        { "Medium Grid 1 Accent 4", "" },
+        { "Medium Grid 2 Accent 4", "" },
+        { "Medium Grid 3 Accent 4", "" },
+        { "Dark List Accent 4", "" },
+        { "Colorful Shading Accent 4", "" },
+        { "Colorful List Accent 4", "" },
+        { "Colorful Grid Accent 4", "" },
+        { "Light Shading Accent 5", "" },
+        { "Light List Accent 5", "" },
+        { "Light Grid Accent 5", "" },
+        { "Medium Shading 1 Accent 5", "" },
+        { "Medium Shading 2 Accent 5", "" },
+        { "Medium List 1 Accent 5", "" },
+        { "Medium List 2 Accent 5", "" },
+        { "Medium Grid 1 Accent 5", "" },
+        { "Medium Grid 2 Accent 5", "" },
+        { "Medium Grid 3 Accent 5", "" },
+        { "Dark List Accent 5", "" },
+        { "Colorful Shading Accent 5", "" },
+        { "Colorful List Accent 5", "" },
+        { "Colorful Grid Accent 5", "" },
+        { "Light Shading Accent 6", "" },
+        { "Light List Accent 6", "" },
+        { "Light Grid Accent 6", "" },
+        { "Medium Shading 1 Accent 6", "" },
+        { "Medium Shading 2 Accent 6", "" },
+        { "Medium List 1 Accent 6", "" },
+        { "Medium List 2 Accent 6", "" },
+        { "Medium Grid 1 Accent 6", "" },
+        { "Medium Grid 2 Accent 6", "" },
+        { "Medium Grid 3 Accent 6", "" },
+        { "Dark List Accent 6", "" },
+        { "Colorful Shading Accent 6", "" },
+        { "Colorful List Accent 6", "" },
+        { "Colorful Grid Accent 6", "" },
+        { "Subtle Emphasis", "" },
+        { "Intense Emphasis", "" },
+        { "Subtle Reference", "" },
+        { "Intense Reference", "" },
+        { "Book Title", "" },
+        { "Bibliography", "" },
+        { "TOC Heading", "Contents Heading" }, // SwPoolFormatId::COLL_TOX_CNTNTH
+        { "TOCHeading", "Contents Heading" }, // SwPoolFormatId::COLL_TOX_CNTNTH
+        { "Plain Table 1", "" },
+        { "Plain Table 2", "" },
+        { "Plain Table 3", "" },
+        { "Plain Table 4", "" },
+        { "Plain Table 5", "" },
+        { "Grid Table Light", "" },
+        { "Grid Table 1 Light", "" },
+        { "Grid Table 2", "" },
+        { "Grid Table 3", "" },
+        { "Grid Table 4", "" },
+        { "Grid Table 5 Dark", "" },
+        { "Grid Table 6 Colorful", "" },
+        { "Grid Table 7 Colorful", "" },
+        { "Grid Table 1 Light Accent 1", "" },
+        { "Grid Table 2 Accent 1", "" },
+        { "Grid Table 3 Accent 1", "" },
+        { "Grid Table 4 Accent 1", "" },
+        { "Grid Table 5 Dark Accent 1", "" },
+        { "Grid Table 6 Colorful Accent 1", "" },
+        { "Grid Table 7 Colorful Accent 1", "" },
+        { "Grid Table 1 Light Accent 2", "" },
+        { "Grid Table 2 Accent 2", "" },
+        { "Grid Table 3 Accent 2", "" },
+        { "Grid Table 4 Accent 2", "" },
+        { "Grid Table 5 Dark Accent 2", "" },
+        { "Grid Table 6 Colorful Accent 2", "" },
+        { "Grid Table 7 Colorful Accent 2", "" },
+        { "Grid Table 1 Light Accent 3", "" },
+        { "Grid Table 2 Accent 3", "" },
+        { "Grid Table 3 Accent 3", "" },
+        { "Grid Table 4 Accent 3", "" },
+        { "Grid Table 5 Dark Accent 3", "" },
+        { "Grid Table 6 Colorful Accent 3", "" },
+        { "Grid Table 7 Colorful Accent 3", "" },
+        { "Grid Table 1 Light Accent 4", "" },
+        { "Grid Table 2 Accent 4", "" },
+        { "Grid Table 3 Accent 4", "" },
+        { "Grid Table 4 Accent 4", "" },
+        { "Grid Table 5 Dark Accent 4", "" },
+        { "Grid Table 6 Colorful Accent 4", "" },
+        { "Grid Table 7 Colorful Accent 4", "" },
+        { "Grid Table 1 Light Accent 5", "" },
+        { "Grid Table 2 Accent 5", "" },
+        { "Grid Table 3 Accent 5", "" },
+        { "Grid Table 4 Accent 5", "" },
+        { "Grid Table 5 Dark Accent 5", "" },
+        { "Grid Table 6 Colorful Accent 5", "" },
+        { "Grid Table 7 Colorful Accent 5", "" },
+        { "Grid Table 1 Light Accent 6", "" },
+        { "Grid Table 2 Accent 6", "" },
+        { "Grid Table 3 Accent 6", "" },
+        { "Grid Table 4 Accent 6", "" },
+        { "Grid Table 5 Dark Accent 6", "" },
+        { "Grid Table 6 Colorful Accent 6", "" },
+        { "Grid Table 7 Colorful Accent 6", "" },
+        { "List Table 1 Light", "" },
+        { "List Table 2", "" },
+        { "List Table 3", "" },
+        { "List Table 4", "" },
+        { "List Table 5 Dark", "" },
+        { "List Table 6 Colorful", "" },
+        { "List Table 7 Colorful", "" },
+        { "List Table 1 Light Accent 1", "" },
+        { "List Table 2 Accent 1", "" },
+        { "List Table 3 Accent 1", "" },
+        { "List Table 4 Accent 1", "" },
+        { "List Table 5 Dark Accent 1", "" },
+        { "List Table 6 Colorful Accent 1", "" },
+        { "List Table 7 Colorful Accent 1", "" },
+        { "List Table 1 Light Accent 2", "" },
+        { "List Table 2 Accent 2", "" },
+        { "List Table 3 Accent 2", "" },
+        { "List Table 4 Accent 2", "" },
+        { "List Table 5 Dark Accent 2", "" },
+        { "List Table 6 Colorful Accent 2", "" },
+        { "List Table 7 Colorful Accent 2", "" },
+        { "List Table 1 Light Accent 3", "" },
+        { "List Table 2 Accent 3", "" },
+        { "List Table 3 Accent 3", "" },
+        { "List Table 4 Accent 3", "" },
+        { "List Table 5 Dark Accent 3", "" },
+        { "List Table 6 Colorful Accent 3", "" },
+        { "List Table 7 Colorful Accent 3", "" },
+        { "List Table 1 Light Accent 4", "" },
+        { "List Table 2 Accent 4", "" },
+        { "List Table 3 Accent 4", "" },
+        { "List Table 4 Accent 4", "" },
+        { "List Table 5 Dark Accent 4", "" },
+        { "List Table 6 Colorful Accent 4", "" },
+        { "List Table 7 Colorful Accent 4", "" },
+        { "List Table 1 Light Accent 5", "" },
+        { "List Table 2 Accent 5", "" },
+        { "List Table 3 Accent 5", "" },
+        { "List Table 4 Accent 5", "" },
+        { "List Table 5 Dark Accent 5", "" },
+        { "List Table 6 Colorful Accent 5", "" },
+        { "List Table 7 Colorful Accent 5", "" },
+        { "List Table 1 Light Accent 6", "" },
+        { "List Table 2 Accent 6", "" },
+        { "List Table 3 Accent 6", "" },
+        { "List Table 4 Accent 6", "" },
+        { "List Table 5 Dark Accent 6", "" },
+        { "List Table 6 Colorful Accent 6", "" },
+        { "List Table 7 Colorful Accent 6", "" },
+
+        // ??? unsure what these are, they are not in Word's styles.xml
+        { "AbstractHeading", "Abstract Heading" },
+        { "AbstractBody", "Abstract Body" },
+        { "TableNormal", "Normal Table" },
+    };
+
+    // find style-name using map
+    if (const auto aIt = StyleNameMap.find(sRet); aIt != StyleNameMap.end() && !aIt->second.isEmpty())
+    {
+        // if there's no Writer built-in to map to, aIt.second is empty!
+        // if it's a Word built-in but not Writer built-in, it can still collide (e.g. "List 5").
+        sRet = aIt->second;
+        return { sRet, true };
+    }
+    else
+    {
+        // Style names which should not be used without a " (user)" suffix
+        static const o3tl::sorted_vector<OUString> ReservedStyleNames = [] {
+            o3tl::sorted_vector<OUString> set;
+            for (const auto& pair : StyleNameMap)
+                set.insert(pair.second);
+            return set;
+        }();
+        // Similar to SwStyleNameMapper convention (where a " (user)" suffix is used to
+        // disambiguate user styles with reserved names in localization where respective
+        // built-in styles have different UI names), we add a " (WW)" suffix here. Unlike
+        // the " (user)" suffix, it is not hidden from the UI; it will be handled when
+        // exported to Word formats - see MSWordStyles::BuildWwNames.
+        // We can't use the " (user)" suffix, because that system is built upon the assumption
+        // that UI names of respective built-in styles are different from the user style name.
+        // That is not necessarily true here, since the current localization may not change
+        // the UI names of built-in styles.
+        if (ReservedStyleNames.find(sRet) != ReservedStyleNames.end() || sRet.endsWith(" (WW)"))
+            sRet += " (WW)";
+        return { sRet, aIt != StyleNameMap.end() };
+    }
+}
+
+void StyleSheetTable::applyDefaults(bool bParaProperties)
+{
+    try{
+
+        if (!m_bIsNewDoc)
+        {
+            // tdf#72942: do not corrupts original styles in master document
+            // during inserting of text from second document
+            return;
+        }
+
+        if(!m_xTextDefaults.is())
+        {
+            m_xTextDefaults = m_rDMapper.GetTextDocument()->createTextDefaults();
+        }
+
+        // WARNING: these defaults only take effect IF there is a DocDefaults style section. Normally there is, but not always.
+        if( bParaProperties && m_pDefaultParaProps)
+        {
+            // tdf#87533 LO will have different defaults here, depending on the locale. Import with documented defaults
+            SetDefaultParaProps(PROP_WRITING_MODE, uno::Any(sal_Int16(text::WritingMode_LR_TB)));
+            SetDefaultParaProps(PROP_PARA_ADJUST, uno::Any(sal_Int16(style::ParagraphAdjust_LEFT)));
+
+            // Widow/Orphan -> set both to two if not already set
+            uno::Any aTwo(sal_Int8(2));
+            SetDefaultParaProps(PROP_PARA_WIDOWS, aTwo);
+            SetDefaultParaProps(PROP_PARA_ORPHANS, aTwo);
+
+            rtl::Reference<SwXStyleFamilies> xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
+            rtl::Reference<SwXStyleFamily> xParagraphStyles = xStyleFamilies->GetParagraphStyles();
+            // This is the built-in default style that every style inherits from
+            rtl::Reference<SwXBaseStyle> xDefault = xParagraphStyles->getStyleByName(u"Paragraph style"_ustr);
+
+            const std::vector< beans::PropertyValue >& rPropValues = m_pDefaultParaProps->GetPropertyValues();
+            for( const auto& rPropValue : rPropValues )
+            {
+                try
+                {
+                    xDefault->setPropertyValue(rPropValue.Name, rPropValue.Value);
+                }
+                catch( const uno::Exception& )
+                {
+                    TOOLS_WARN_EXCEPTION( "writerfilter", "setPropertyValue");
+                }
+            }
+        }
+        if( !bParaProperties && m_pDefaultCharProps )
+        {
+            // tdf#108350: Earlier in DomainMapper for DOCX, Calibri/11pt was set to match MSWord 2007+,
+            // but that is valid only if DocDefaults_rPrDefault is omitted.
+            // Now that DocDefaults_rPrDefault is known, the defaults should be reset to Times New Roman/10pt.
+            if ( m_rDMapper.IsOOXMLImport() )
+                m_xTextDefaults->setPropertyValue( getPropertyName(PROP_CHAR_FONT_NAME), css::uno::Any(u"Times New Roman"_ustr) );
+
+            const std::vector< beans::PropertyValue >& rPropValues = m_pDefaultCharProps->GetPropertyValues();
+            for( const auto& rPropValue : rPropValues )
+            {
+                try
+                {
+                    m_xTextDefaults->setPropertyValue( rPropValue.Name, rPropValue.Value );
+                }
+                catch( const uno::Exception& )
+                {
+                    TOOLS_WARN_EXCEPTION( "writerfilter", "exception");
+                }
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+    }
+}
+
+
+OUString StyleSheetTable::getOrCreateCharStyle( const PropertyValueVector_t& rCharProperties, bool bAlwaysCreate )
+{
+    if (!bAlwaysCreate)
+    {
+        //find out if any of the styles already has the required properties then return its name
+        OUString sListLabel = HasListCharStyle(rCharProperties);
+        // Don't try to reuse an existing character style if requested.
+        if( !sListLabel.isEmpty())
+            return sListLabel;
+    }
+
+    //create a new one otherwise
+    const rtl::Reference< SwXStyleFamily >& xCharStyles = m_rDMapper.GetCharacterStyles();
+    OUString sListLabel = m_rDMapper.GetUnusedCharacterStyleName();
+    if (!m_xTextDocument)
+        throw uno::RuntimeException();
+    try
+    {
+        rtl::Reference< SwXStyle > xStyle = m_xTextDocument->createCharacterStyle();
+        for( const auto& rCharProp : rCharProperties)
+        {
+            try
+            {
+                xStyle->setPropertyValueIgnoreUnknown( rCharProp.Name, rCharProp.Value );
+            }
+            catch( const uno::Exception& )
+            {
+                TOOLS_WARN_EXCEPTION( "writerfilter", "StyleSheetTable::getOrCreateCharStyle - Style::setPropertyValue");
+            }
+        }
+        xCharStyles->insertStyleByName( sListLabel, xStyle );
+        m_aListCharStylePropertyVector.emplace_back( sListLabel, std::vector(rCharProperties) );
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "writerfilter", "StyleSheetTable::getOrCreateCharStyle");
+    }
+
+    return sListLabel;
+}
+
+void StyleSheetTable::MarkParagraphStyleAsUsed(const OUString& rName)
+{
+    m_aUsedParagraphStyles.insert(rName);
+}
+
+void StyleSheetTable::RemoveUnusedParagraphStyles()
+{
+    rtl::Reference< SwXStyleFamilies > xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
+    rtl::Reference<SwXStyleFamily> xParaStyles = xStyleFamilies->GetParagraphStyles();
+    for (const auto& rName : m_aInsertedParagraphStyles)
+    {
+        if (m_aUsedParagraphStyles.contains(rName))
+        {
+            continue;
+        }
+
+        xParaStyles->removeByName(rName);
+    }
+}
+
+}//namespace writerfilter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

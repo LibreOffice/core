@@ -1,0 +1,2542 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <o3tl/safeint.hxx>
+#include <sal/log.hxx>
+#include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <officecfg/VCL.hxx>
+
+#include <utility>
+#include <vcl/QueueInfo.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/decoview.hxx>
+#include <vcl/help.hxx>
+#include <vcl/naturalsort.hxx>
+#include <vcl/print.hxx>
+#include <vcl/printer/Options.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/wall.hxx>
+#include <vcl/weldutils.hxx>
+#include <vcl/windowstate.hxx>
+
+#include <bitmaps.hlst>
+#include <printdlg.hxx>
+#include <strings.hrc>
+#include <svdata.hxx>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
+
+using namespace vcl;
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::container;
+using namespace com::sun::star::beans;
+
+enum
+{
+    ORIENTATION_AUTOMATIC,
+    ORIENTATION_PORTRAIT,
+    ORIENTATION_LANDSCAPE
+};
+
+namespace {
+   bool lcl_ListBoxCompare( const OUString& rStr1, const OUString& rStr2 )
+   {
+       return vcl::NaturalSortCompare( rStr1, rStr2 ) < 0;
+   }
+}
+
+PrintDialog::PrintPreviewWindow::PrintPreviewWindow(PrintDialog* pDialog)
+    : mpDialog(pDialog)
+    , maOrigSize( 10, 10 )
+    , mnDPIX(Application::GetDefaultDevice()->GetDPIX())
+    , mnDPIY(Application::GetDefaultDevice()->GetDPIY())
+    , mbGreyscale( false )
+{
+}
+
+PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
+{
+}
+
+void PrintDialog::PrintPreviewWindow::Resize()
+{
+    Size aNewSize(GetOutputSizePixel());
+    tools::Long nTextHeight = GetDrawingArea()->get_text_height();
+    // leave small space for decoration
+    aNewSize.AdjustWidth( -(nTextHeight + 2) );
+    aNewSize.AdjustHeight( -(nTextHeight + 2) );
+    Size aScaledSize;
+    double fScale = 1.0;
+
+    // #i106435# catch corner case of Size(0,0)
+    Size aOrigSize( maOrigSize );
+    if( aOrigSize.Width() < 1 )
+        aOrigSize.setWidth( aNewSize.Width() );
+    if( aOrigSize.Height() < 1 )
+        aOrigSize.setHeight( aNewSize.Height() );
+    if( aOrigSize.Width() > aOrigSize.Height() )
+    {
+        aScaledSize = Size( aNewSize.Width(), aNewSize.Width() * aOrigSize.Height() / aOrigSize.Width() );
+        if( aScaledSize.Height() > aNewSize.Height() )
+            fScale = double(aNewSize.Height())/double(aScaledSize.Height());
+    }
+    else
+    {
+        aScaledSize = Size( aNewSize.Height() * aOrigSize.Width() / aOrigSize.Height(), aNewSize.Height() );
+        if( aScaledSize.Width() > aNewSize.Width() )
+            fScale = double(aNewSize.Width())/double(aScaledSize.Width());
+    }
+    aScaledSize.setWidth( tools::Long(aScaledSize.Width()*fScale) );
+    aScaledSize.setHeight( tools::Long(aScaledSize.Height()*fScale) );
+
+    maPreviewSize = aScaledSize;
+
+    // check and evtl. recreate preview bitmap
+    preparePreviewBitmap();
+}
+
+void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
+    auto popIt = rRenderContext.ScopedPush();
+    weld::SetPointFont(rRenderContext, rRenderContext.GetSettings().GetStyleSettings().GetLabelFont());
+    rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetLabelTextColor());
+    rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetDialogColor()));
+    rRenderContext.Erase();
+
+    auto nTextHeight = rRenderContext.GetTextHeight();
+    Size aSize(GetOutputSizePixel());
+    Point aOffset((aSize.Width()  - maPreviewSize.Width()  + nTextHeight) / 2,
+                  (aSize.Height() - maPreviewSize.Height() + nTextHeight) / 2);
+
+    // horizontal line
+    {
+        auto nWidth = rRenderContext.GetTextWidth(maHorzText);
+
+        auto nStart = aOffset.X() + (maPreviewSize.Width() - nWidth) / 2;
+        rRenderContext.DrawText(Point(nStart, aOffset.Y() - nTextHeight), maHorzText, 0, maHorzText.getLength());
+
+        DecorationView aDecoView(&rRenderContext);
+        auto nTop = aOffset.Y() - (nTextHeight / 2);
+        aDecoView.DrawSeparator(Point(aOffset.X(), nTop), Point(nStart - 2, nTop), false);
+        aDecoView.DrawSeparator(Point(nStart + nWidth + 2, nTop), Point(aOffset.X() + maPreviewSize.Width(), nTop), false);
+    }
+
+    // vertical line
+    {
+        auto popIt2 = rRenderContext.ScopedPush(PushFlags::FONT);
+        vcl::Font aFont(rRenderContext.GetFont());
+        aFont.SetOrientation(900_deg10);
+        rRenderContext.SetFont(aFont);
+
+        auto nLeft = aOffset.X() - nTextHeight;
+
+        auto nWidth = rRenderContext.GetTextWidth(maVertText);
+        auto nStart = aOffset.Y() + (maPreviewSize.Height() + nWidth) / 2;
+
+        rRenderContext.DrawText(Point(nLeft, nStart), maVertText, 0, maVertText.getLength());
+
+        DecorationView aDecoView(&rRenderContext);
+        nLeft = aOffset.X() - (nTextHeight / 2);
+        aDecoView.DrawSeparator(Point(nLeft, aOffset.Y()), Point(nLeft, nStart - nWidth - 2), true);
+        aDecoView.DrawSeparator(Point(nLeft, nStart + 2), Point(nLeft, aOffset.Y() + maPreviewSize.Height()), true);
+    }
+
+    if (!maReplacementString.isEmpty())
+    {
+        // replacement is active
+        tools::Rectangle aTextRect(aOffset + Point(2, 2), Size(maPreviewSize.Width() - 4, maPreviewSize.Height() - 4));
+        rRenderContext.DrawText(aTextRect, maReplacementString,
+                                DrawTextFlags::Center | DrawTextFlags::VCenter |
+                                DrawTextFlags::WordBreak | DrawTextFlags::MultiLine);
+    }
+    else
+    {
+        Bitmap aPreviewBitmap(maPreviewBitmap);
+
+        // This explicit force-to-scale allows us to get the
+        // mentioned best quality here. Unfortunately this is
+        // currently not sure when using just ::DrawBitmap with
+        // a defined size or ::DrawOutDev
+        aPreviewBitmap.Scale(maPreviewSize, BmpScaleFlag::BestQuality);
+        rRenderContext.DrawBitmap(aOffset, aPreviewBitmap);
+    }
+
+    tools::Rectangle aFrameRect(aOffset + Point(-1, -1), Size(maPreviewSize.Width() + 2, maPreviewSize.Height() + 2));
+    DecorationView aDecorationView(&rRenderContext);
+    aDecorationView.DrawFrame(aFrameRect, DrawFrameStyle::Group);
+}
+
+bool PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
+{
+    if( rEvt.GetCommand() == CommandEventId::Wheel )
+    {
+        const CommandWheelData* pWheelData = rEvt.GetWheelData();
+        if(pWheelData->GetDelta() > 0)
+            mpDialog->previewBackward();
+        else if (pWheelData->GetDelta() < 0)
+            mpDialog->previewForward();
+        return true;
+    }
+    return CustomWidgetController::Command(rEvt);
+}
+
+void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview,
+                                                  const Size& i_rOrigSize,
+                                                  std::u16string_view i_rPaperName,
+                                                  const OUString& i_rReplacement,
+                                                  sal_Int32 i_nDPIX,
+                                                  sal_Int32 i_nDPIY,
+                                                  bool i_bGreyscale
+                                                 )
+{
+    maMtf = i_rNewPreview;
+    mnDPIX = i_nDPIX;
+    mnDPIY = i_nDPIY;
+    maOrigSize = i_rOrigSize;
+    maReplacementString = i_rReplacement;
+    mbGreyscale = i_bGreyscale;
+
+    // use correct measurements
+    const LocaleDataWrapper& rLocWrap(Application::GetSettings().GetLocaleDataWrapper());
+    o3tl::Length eUnit = o3tl::Length::mm;
+    int nDigits = 0;
+    if( rLocWrap.getMeasurementSystemEnum() == MeasurementSystem::US )
+    {
+        eUnit = o3tl::Length::in100;
+        nDigits = 2;
+    }
+    Size aLogicPaperSize(o3tl::convert(i_rOrigSize, o3tl::Length::mm100, eUnit));
+    OUString aNumText( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
+    OUStringBuffer aBuf( aNumText + " " );
+    aBuf.appendAscii( eUnit == o3tl::Length::mm ? "mm" : "in" );
+    if( !i_rPaperName.empty() )
+    {
+        aBuf.append( OUString::Concat(" (")  + i_rPaperName + ")" );
+    }
+    maHorzText = aBuf.makeStringAndClear();
+
+    aNumText = rLocWrap.getNum( aLogicPaperSize.Height(), nDigits );
+    aBuf.append( aNumText + " " );
+    aBuf.appendAscii( eUnit == o3tl::Length::mm ? "mm" : "in" );
+    maVertText = aBuf.makeStringAndClear();
+
+    // We have a new Metafile and evtl. a new page, so we need to reset
+    // the PreviewBitmap to force new creation
+    maPreviewBitmap = Bitmap();
+
+    // sets/calculates e.g. maPreviewSize
+    // also triggers preparePreviewBitmap()
+    Resize();
+
+    Invalidate();
+}
+
+void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
+{
+    if(maPreviewSize.IsEmpty())
+    {
+        // not yet fully initialized, no need to prepare anything
+        return;
+    }
+
+    // define an allowed number of pixels, also see
+    // defaults for primitive renderers and similar. This
+    // might be centralized and made dependent of 32/64bit
+    const sal_uInt32 nMaxSquarePixels(500000);
+
+    // check how big (squarePixels) the preview is currently (with
+    // max value of MaxSquarePixels)
+    const sal_uInt32 nCurrentSquarePixels(
+        std::min(
+            nMaxSquarePixels,
+            static_cast<sal_uInt32>(maPreviewBitmap.GetSizePixel().getWidth())
+            * static_cast<sal_uInt32>(maPreviewBitmap.GetSizePixel().getHeight())));
+
+    // check how big (squarePixels) the preview needs to be (with
+    // max value of MaxSquarePixels)
+    const sal_uInt32 nRequiredSquarePixels(
+        std::min(
+            nMaxSquarePixels,
+            static_cast<sal_uInt32>(maPreviewSize.getWidth())
+            * static_cast<sal_uInt32>(maPreviewSize.getHeight())));
+
+    // check if preview is big enough. Use a scaling value in
+    // the comparison to not get bigger at the last possible moment
+    // what may look awkward and pixelated (again). This means
+    // to use a percentage value - if we have at least
+    // that value of required pixels, we are good.
+    static const double fPreventAwkwardFactor(1.35); // 35%
+    if(nCurrentSquarePixels >= static_cast<sal_uInt32>(nRequiredSquarePixels * fPreventAwkwardFactor))
+    {
+        // at this place we also could add a mechanism to let the preview
+        // bitmap 'shrink' again if it is currently 'too big' -> bigger
+        // than required. I think this is not necessary for now.
+
+        // already sufficient, done.
+        return;
+    }
+
+    // check if we have enough square pixels e.g for 8x8 pixels
+    if(nRequiredSquarePixels < 64)
+    {
+        // too small preview - let it empty
+        return;
+    }
+
+    // Calculate nPlannedSquarePixels which is the required size
+    // expanded by a percentage (with max value of MaxSquarePixels)
+    static const double fExtraSpaceFactor(1.65); // 65%
+    const sal_uInt32 nPlannedSquarePixels(
+        std::min(
+            nMaxSquarePixels,
+            static_cast<sal_uInt32>(maPreviewSize.getWidth() * fExtraSpaceFactor)
+            * static_cast<sal_uInt32>(maPreviewSize.getHeight() * fExtraSpaceFactor)));
+
+    // calculate back new width and height - it might have been
+    // truncated by MaxSquarePixels.
+    // We know that w*h == nPlannedSquarePixels and w/h == ratio
+    const double fRatio(static_cast<double>(maPreviewSize.getWidth()) / static_cast<double>(maPreviewSize.getHeight()));
+    const double fNewWidth(sqrt(static_cast<double>(nPlannedSquarePixels) * fRatio));
+    const double fNewHeight(sqrt(static_cast<double>(nPlannedSquarePixels) / fRatio));
+    const Size aScaledSize(basegfx::fround<tools::Long>(fNewWidth), basegfx::fround<tools::Long>(fNewHeight));
+
+    // check if this eventual maximum is already reached
+    // due to having hit the MaxSquarePixels. Due to using
+    // an integer AspectRatio, we cannot make a numeric exact
+    // comparison - we need to compare if we are close
+    const double fScaledSizeSquare(static_cast<double>(aScaledSize.getWidth() * aScaledSize.getHeight()));
+    const double fPreviewSizeSquare(static_cast<double>(maPreviewBitmap.GetSizePixel().getWidth() * maPreviewBitmap.GetSizePixel().getHeight()));
+
+    // test as equal up to 0.1% (0.001)
+    if(fPreviewSizeSquare != 0.0 && fabs((fScaledSizeSquare / fPreviewSizeSquare) - 1.0) < 0.001)
+    {
+        // maximum is reached, avoid bigger scaling
+        return;
+    }
+
+    // create temporary VDev with requested Size and DPI.
+    // CAUTION: DPI *is* important here - it DIFFERS from 75x75, usually 600x600 is used
+    ScopedVclPtrInstance<VirtualDevice> pPrerenderVDev(*Application::GetDefaultDevice());
+    pPrerenderVDev->SetOutputSizePixel(aScaledSize, false);
+    pPrerenderVDev->SetReferenceDevice( mnDPIX, mnDPIY );
+
+    // calculate needed Scale for Metafile (using Size and DPI from VDev)
+    Size aLogicSize( pPrerenderVDev->PixelToLogic( pPrerenderVDev->GetOutputSizePixel(), MapMode( MapUnit::Map100thMM ) ) );
+    Size aOrigSize( maOrigSize );
+    if( aOrigSize.Width() < 1 )
+        aOrigSize.setWidth( aLogicSize.Width() );
+    if( aOrigSize.Height() < 1 )
+        aOrigSize.setHeight( aLogicSize.Height() );
+    double fScale = double(aLogicSize.Width())/double(aOrigSize.Width());
+
+    // tdf#141761
+    // The display quality of the Preview is pretty ugly when
+    // FormControls are used. I made a deep-dive why this happens,
+    // and in principle the reason is the Mteafile::Scale used
+    // below. Since Metafile actions are integer, that floating point
+    // scale leads to rounding errors that make the lines painting
+    // the FormControls disappear in the surrounding ClipRegions.
+    // That Scale cannot be avoided since the Metafile contains it's
+    // own SetMapMode commands which *will* be executed on ::Play,
+    // so the ::Scale is the only possibility fr Metafile currently:
+    // Giving a Size as parameter in ::Play will *not* work due to
+    // the relativeMapMode that gets created will fail on
+    // ::SetMapMode actions in the Metafile - and FormControls DO
+    // use ::SetMapMode(MapPixel).
+    // This can only be solved better in the future using Primitives
+    // which would allow any scale by embedding to a Transformation,
+    // but that would be a bigger rework.
+    // Until then, use this little 'trick' to improve quality.
+    // It uses the fact to empirically having tested that the quality
+    // gets really bad for FormControls starting by a scale factor
+    // smaller than 0.2 - that makes the ClipRegion overlap start.
+    // So - for now - try not to go below that.
+    static const double fMinimumScale(0.2);
+    double fFactor(0.0);
+    if(fScale < fMinimumScale)
+    {
+        fFactor = fMinimumScale / fScale;
+        fScale = fMinimumScale;
+
+        double fWidth(aScaledSize.getWidth() * fFactor);
+        double fHeight(aScaledSize.getHeight() * fFactor);
+        const double fNewNeededPixels(fWidth * fHeight);
+
+        // to not risk using too big bitmaps and running into
+        // memory problems, still limit to a useful factor is
+        // necessary, also empirically estimated to
+        // avoid the quality from collapsing (using a direct
+        // in-between , ceil'd result)
+        static const double fMaximumQualitySquare(1396221.0);
+
+        if(fNewNeededPixels > fMaximumQualitySquare)
+        {
+            const double fCorrection(fMaximumQualitySquare/fNewNeededPixels);
+            fWidth *= fCorrection;
+            fHeight *= fCorrection;
+            fScale *= fCorrection;
+        }
+
+        const Size aScaledSize2(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight));
+        pPrerenderVDev->SetOutputSizePixel(aScaledSize2, false);
+        aLogicSize = pPrerenderVDev->PixelToLogic( aScaledSize2, MapMode( MapUnit::Map100thMM ) );
+    }
+
+    pPrerenderVDev->EnableOutput();
+    pPrerenderVDev->SetBackground( Wallpaper(COL_WHITE) );
+    pPrerenderVDev->Erase();
+    pPrerenderVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
+    if( mbGreyscale )
+        pPrerenderVDev->SetDrawMode( pPrerenderVDev->GetDrawMode() |
+                                ( DrawModeFlags::GrayLine | DrawModeFlags::GrayFill | DrawModeFlags::GrayText |
+                                  DrawModeFlags::GrayBitmap | DrawModeFlags::GrayGradient ) );
+
+    // Copy, Scale and Paint Metafile
+    GDIMetaFile aMtf( maMtf );
+    aMtf.WindStart();
+    aMtf.Scale( fScale, fScale );
+    aMtf.WindStart();
+    aMtf.Play(*pPrerenderVDev, Point(0, 0), aLogicSize);
+
+    pPrerenderVDev->SetMapMode(MapMode(MapUnit::MapPixel));
+    maPreviewBitmap = pPrerenderVDev->GetBitmap(Point(0, 0), pPrerenderVDev->GetOutputSizePixel());
+
+    if(0.0 != fFactor)
+    {
+        // Correct to needed size, BmpScaleFlag::Interpolate is acceptable,
+        // but BmpScaleFlag::BestQuality is just better. In case of time
+        // constraints, change to Interpolate would be possible
+        maPreviewBitmap.Scale(aScaledSize, BmpScaleFlag::BestQuality);
+    }
+}
+
+PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow()
+    : mnOrderMode( NupOrderType::LRTB )
+    , mnRows( 1 )
+    , mnColumns( 1 )
+{
+}
+
+void PrintDialog::ShowNupOrderWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    Size aSize(70, 70);
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    SetOutputSizePixel(aSize);
+}
+
+void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*i_rRect*/)
+{
+    rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
+    rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetFieldTextColor());
+    rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetFieldColor()));
+    rRenderContext.Erase();
+
+    int nPages = mnRows * mnColumns;
+    Font aFont(rRenderContext.GetSettings().GetStyleSettings().GetFieldFont());
+    aFont.SetFontSize(Size(0, 24));
+    rRenderContext.SetFont(aFont);
+    Size aSampleTextSize(rRenderContext.GetTextWidth(OUString::number(nPages + 1)), rRenderContext.GetTextHeight());
+    Size aOutSize(GetOutputSizePixel());
+    Size aSubSize(aOutSize.Width() / mnColumns, aOutSize.Height() / mnRows);
+    // calculate font size: shrink the sample text so it fits
+    double fX = double(aSubSize.Width()) / double(aSampleTextSize.Width());
+    double fY = double(aSubSize.Height()) / double(aSampleTextSize.Height());
+    double fScale = (fX < fY) ? fX : fY;
+    tools::Long nFontHeight = tools::Long(24.0 * fScale) - 3;
+    if (nFontHeight < 5)
+        nFontHeight = 5;
+    aFont.SetFontSize(Size( 0, nFontHeight));
+    rRenderContext.SetFont(aFont);
+    tools::Long nTextHeight = rRenderContext.GetTextHeight();
+    for (int i = 0; i < nPages; i++)
+    {
+        OUString aPageText(OUString::number(i + 1));
+        int nX = 0, nY = 0;
+        switch (mnOrderMode)
+        {
+        case NupOrderType::LRTB:
+            nX = (i % mnColumns);
+            nY = (i / mnColumns);
+            break;
+        case NupOrderType::TBLR:
+            nX = (i / mnRows);
+            nY = (i % mnRows);
+            break;
+        case NupOrderType::RLTB:
+            nX = mnColumns - 1 - (i % mnColumns);
+            nY = (i / mnColumns);
+            break;
+        case NupOrderType::TBRL:
+            nX = mnColumns - 1 - (i / mnRows);
+            nY = (i % mnRows);
+            break;
+        }
+        Size aTextSize(rRenderContext.GetTextWidth(aPageText), nTextHeight);
+        int nDeltaX = (aSubSize.Width() - aTextSize.Width()) / 2;
+        int nDeltaY = (aSubSize.Height() - aTextSize.Height()) / 2;
+        rRenderContext.DrawText(Point(nX * aSubSize.Width() + nDeltaX,
+                                      nY * aSubSize.Height() + nDeltaY), aPageText);
+    }
+    DecorationView aDecorationView(&rRenderContext);
+    aDecorationView.DrawFrame(tools::Rectangle(Point(0, 0), aOutSize), DrawFrameStyle::Group);
+}
+
+Size const & PrintDialog::getJobPageSize()
+{
+    if( maFirstPageSize.IsEmpty() )
+    {
+        maFirstPageSize = maNupPortraitSize;
+        GDIMetaFile aMtf;
+        if( maPController->getPageCountProtected() > 0 )
+        {
+            PrinterController::PageSize aPageSize = maPController->getPageFile( 0, aMtf, true );
+            maFirstPageSize = aPageSize.aSize;
+        }
+    }
+    return maFirstPageSize;
+}
+
+PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterController> i_xController)
+    : GenericDialogController(i_pWindow, u"vcl/ui/printdialog.ui"_ustr, u"PrintDialog"_ustr)
+    , maPController(std::move( i_xController ))
+    , mxTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
+    , mxScrolledWindow(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr))
+    , mxPageLayoutFrame(m_xBuilder->weld_frame(u"layoutframe"_ustr))
+    , mxPrinters(m_xBuilder->weld_combo_box(u"printersbox"_ustr))
+    , mxStatusTxt(m_xBuilder->weld_label(u"status"_ustr))
+    , mxSetupButton(m_xBuilder->weld_button(u"setup"_ustr))
+    , mxCopyCountField(m_xBuilder->weld_spin_button(u"copycount"_ustr))
+    , mxCollateBox(m_xBuilder->weld_check_button(u"collate"_ustr))
+    , mxCollateImage(m_xBuilder->weld_image(u"collateimage"_ustr))
+    , mxPageRangeEdit(m_xBuilder->weld_entry(u"pagerange"_ustr))
+    , mxPageRangesRadioButton(m_xBuilder->weld_radio_button(u"rbRangePages"_ustr))
+    , mxPaperSidesBox(m_xBuilder->weld_combo_box(u"sidesbox"_ustr))
+    , mxSingleJobsBox(m_xBuilder->weld_check_button(u"singlejobs"_ustr))
+    , mxReverseOrderBox(m_xBuilder->weld_check_button(u"reverseorder"_ustr))
+    , mxOKButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , mxCancelButton(m_xBuilder->weld_button(u"cancel"_ustr))
+    , mxBackwardBtn(m_xBuilder->weld_button(u"backward"_ustr))
+    , mxForwardBtn(m_xBuilder->weld_button(u"forward"_ustr))
+    , mxFirstBtn(m_xBuilder->weld_button(u"btnFirst"_ustr))
+    , mxLastBtn(m_xBuilder->weld_button(u"btnLast"_ustr))
+    , mxPreviewBox(m_xBuilder->weld_check_button(u"previewbox"_ustr))
+    , mxNumPagesText(m_xBuilder->weld_label(u"totalnumpages"_ustr))
+    , mxPreview(new PrintPreviewWindow(this))
+    , mxPreviewWindow(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, *mxPreview))
+    , mxPageEdit(m_xBuilder->weld_entry(u"pageedit"_ustr))
+    , mxPagesBtn(m_xBuilder->weld_radio_button(u"pagespersheetbtn"_ustr))
+    , mxBrochureBtn(m_xBuilder->weld_radio_button(u"brochure"_ustr))
+    , mxPagesBoxTitleTxt(m_xBuilder->weld_label(u"pagespersheettxt"_ustr))
+    , mxNupPagesBox(m_xBuilder->weld_combo_box(u"pagespersheetbox"_ustr))
+    , mxNupNumPagesTxt(m_xBuilder->weld_label(u"pagestxt"_ustr))
+    , mxNupColEdt(m_xBuilder->weld_spin_button(u"pagecols"_ustr))
+    , mxNupTimesTxt(m_xBuilder->weld_label(u"by"_ustr))
+    , mxNupRowsEdt(m_xBuilder->weld_spin_button(u"pagerows"_ustr))
+    , mxPageMarginTxt1(m_xBuilder->weld_label(u"pagemargintxt1"_ustr))
+    , mxPageMarginEdt(m_xBuilder->weld_metric_spin_button(u"pagemarginsb"_ustr, FieldUnit::MM))
+    , mxPageMarginTxt2(m_xBuilder->weld_label(u"pagemargintxt2"_ustr))
+    , mxSheetMarginTxt1(m_xBuilder->weld_label(u"sheetmargintxt1"_ustr))
+    , mxSheetMarginEdt(m_xBuilder->weld_metric_spin_button(u"sheetmarginsb"_ustr, FieldUnit::MM))
+    , mxSheetMarginTxt2(m_xBuilder->weld_label(u"sheetmargintxt2"_ustr))
+    , mxPaperSizeBox(m_xBuilder->weld_combo_box(u"papersizebox"_ustr))
+    , mxOrientationBox(m_xBuilder->weld_combo_box(u"pageorientationbox"_ustr))
+    , mxNupOrderTxt(m_xBuilder->weld_label(u"labelorder"_ustr))
+    , mxNupOrderBox(m_xBuilder->weld_combo_box(u"orderbox"_ustr))
+    , mxNupOrder(new ShowNupOrderWindow)
+    , mxNupOrderWin(new weld::CustomWeld(*m_xBuilder, u"orderpreview"_ustr, *mxNupOrder))
+    , mxBorderCB(m_xBuilder->weld_check_button(u"bordercb"_ustr))
+    , mxRangeExpander(m_xBuilder->weld_expander(u"exRangeExpander"_ustr))
+    , mxLayoutExpander(m_xBuilder->weld_expander(u"exLayoutExpander"_ustr))
+    , mxCustom(m_xBuilder->weld_widget(u"customcontents"_ustr))
+    , maPrintToFileText( VclResId( SV_PRINT_TOFILE_TXT ) )
+    , maDefPrtText( VclResId( SV_PRINT_DEFPRT_TXT ) )
+    , maNoPageStr( VclResId( SV_PRINT_NOPAGES ) )
+    , maNoPreviewStr( VclResId( SV_PRINT_NOPREVIEW ) )
+    , mnCurPage( 0 )
+    , mnCachedPages( 0 )
+    , mbShowLayoutFrame( true )
+    , mbHasCustomPaperEntry( false )
+    , maUpdatePreviewIdle("Print Dialog Update Preview Idle")
+{
+    // save printbutton text, gets exchanged occasionally with print to file
+    maPrintText = mxOKButton->get_label();
+
+    maPageStr = mxNumPagesText->get_label();
+
+    mxPrinters->append_text(maPrintToFileText);
+    // fill printer listbox
+    std::vector< OUString > rQueues( Printer::GetPrinterQueues() );
+    std::sort( rQueues.begin(), rQueues.end(), lcl_ListBoxCompare );
+    for( const auto& rQueue : rQueues )
+    {
+        mxPrinters->append_text(rQueue);
+    }
+    // select current printer
+    if (mxPrinters->find_text(maPController->getPrinter()->GetName()) != -1)
+        mxPrinters->set_active_text(maPController->getPrinter()->GetName());
+    else
+    {
+        // fall back to last printer
+        OUString aValue( officecfg::VCL::VCLSettings::PrintDialog::LastPrinter::get() );
+        if (mxPrinters->find_text(aValue) != -1)
+        {
+            mxPrinters->set_active_text(aValue);
+            maPController->setPrinter( VclPtrInstance<Printer>( aValue ) );
+        }
+        else
+        {
+            // fall back to default printer
+            mxPrinters->set_active_text(Printer::GetDefaultPrinterName());
+            maPController->setPrinter( VclPtrInstance<Printer>( Printer::GetDefaultPrinterName() ) );
+        }
+    }
+
+    // not printing to file
+    maPController->resetPrinterOptions( false );
+
+    // update the text fields for the printer
+    updatePrinterText();
+
+    // setup dependencies
+    checkControlDependencies();
+
+    // setup paper sides box
+    setupPaperSidesBox();
+
+    // set initial focus to "Printer"
+    mxPrinters->grab_focus();
+
+    // setup sizes for N-Up
+    Size aNupSize( maPController->getPrinter()->PixelToLogic(
+                         maPController->getPrinter()->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) ) );
+    if( maPController->getPrinter()->GetOrientation() == Orientation::Landscape )
+    {
+        maNupLandscapeSize = aNupSize;
+        // coverity[swapped_arguments : FALSE] - this is in the correct order
+        maNupPortraitSize = Size( aNupSize.Height(), aNupSize.Width() );
+    }
+    else
+    {
+        maNupPortraitSize = aNupSize;
+        // coverity[swapped_arguments : FALSE] - this is in the correct order
+        maNupLandscapeSize = Size( aNupSize.Height(), aNupSize.Width() );
+    }
+
+    maUpdatePreviewIdle.SetPriority(TaskPriority::POST_PAINT);
+    maUpdatePreviewIdle.SetInvokeHandler(LINK( this, PrintDialog, updatePreviewIdle));
+
+    initFromMultiPageSetup( maPController->getMultipage() );
+
+    // setup optional UI options set by application
+    setupOptionalUI();
+
+    // hide layout frame if unwanted
+    mxPageLayoutFrame->set_visible(mbShowLayoutFrame);
+
+    // restore settings from last run
+    readFromSettings();
+
+    // setup click hdl
+    mxOKButton->connect_clicked(LINK(this, PrintDialog, ClickOKCancelHdl));
+    mxCancelButton->connect_clicked(LINK(this, PrintDialog, ClickOKCancelHdl));
+    mxSetupButton->connect_clicked(LINK(this, PrintDialog, ClickSetupHdl));
+    mxBackwardBtn->connect_clicked(LINK(this, PrintDialog, ClickBackwardHdl));
+    mxForwardBtn->connect_clicked(LINK(this, PrintDialog, ClickForwardHdl));
+    mxFirstBtn->connect_clicked(LINK(this, PrintDialog, ClickFirstHdl));
+    mxLastBtn->connect_clicked(LINK(this, PrintDialog, ClickLastHdl));
+
+    // setup toggle hdl
+    mxReverseOrderBox->connect_toggled(LINK(this, PrintDialog, ToggleReverseOrderHdl));
+    mxCollateBox->connect_toggled(LINK(this, PrintDialog, ToggleCollateHdl));
+    mxSingleJobsBox->connect_toggled(LINK(this, PrintDialog, ToggleSingleJobsHdl));
+    mxBrochureBtn->connect_toggled(LINK(this, PrintDialog, ToggleBrochureHdl));
+    mxPreviewBox->connect_toggled(LINK(this, PrintDialog, TogglePreviewHdl));
+    mxBorderCB->connect_toggled(LINK(this, PrintDialog, ToggleBorderHdl));
+
+    // setup select hdl
+    mxPrinters->connect_changed(LINK(this, PrintDialog, SelectPrinterHdl));
+    mxPaperSidesBox->connect_changed(LINK(this, PrintDialog, SelectPaperSidesHdl));
+    mxNupPagesBox->connect_changed(LINK(this, PrintDialog, SelectNupPagesHdl));
+    mxOrientationBox->connect_changed(LINK(this, PrintDialog, SelectOrientationHdl));
+    mxNupOrderBox->connect_changed(LINK(this, PrintDialog, SelectNupOrderHdl));
+    mxPaperSizeBox->connect_changed(LINK(this, PrintDialog, SelectPaperSizeHdl));
+
+    // setup modify hdl
+    mxPageEdit->connect_activate( LINK( this, PrintDialog, ActivateHdl ) );
+    mxPageEdit->connect_focus_out( LINK( this, PrintDialog, FocusOutHdl ) );
+    mxCopyCountField->connect_value_changed( LINK( this, PrintDialog, SpinModifyHdl ) );
+    mxNupColEdt->connect_value_changed( LINK( this, PrintDialog, SpinModifyHdl ) );
+    mxNupRowsEdt->connect_value_changed( LINK( this, PrintDialog, SpinModifyHdl ) );
+    mxPageMarginEdt->connect_value_changed( LINK( this, PrintDialog, MetricSpinModifyHdl ) );
+    mxSheetMarginEdt->connect_value_changed( LINK( this, PrintDialog, MetricSpinModifyHdl ) );
+
+    updateNupFromPages();
+
+    // tdf#129180 Delay setting the default value in the Paper Size list
+    // set paper sizes listbox
+    setPaperSizes();
+    // Sync selected paper size with the controller for preview.
+    if (mxPaperSizeBox->get_sensitive() && mxPaperSizeBox->get_active() != -1)
+        SelectPaperSizeHdl(*mxPaperSizeBox);
+
+    mxRangeExpander->set_expanded(
+        officecfg::Office::Common::Print::Dialog::RangeSectionExpanded::get());
+    mxLayoutExpander->set_expanded(
+        officecfg::Office::Common::Print::Dialog::LayoutSectionExpanded::get());
+
+    // lock the dialog height, regardless of later expander state
+    mxScrolledWindow->set_size_request(
+        mxScrolledWindow->get_preferred_size().Width() + mxScrolledWindow->get_scroll_thickness(),
+        450);
+
+    m_xDialog->set_centered_on_parent(true);
+}
+
+void PrintDialog::ImplDestroy()
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Print::Dialog::RangeSectionExpanded::set(mxRangeExpander->get_expanded(), batch);
+    officecfg::Office::Common::Print::Dialog::LayoutSectionExpanded::set(mxLayoutExpander->get_expanded(), batch);
+    batch->commit();
+}
+
+PrintDialog::~PrintDialog()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
+}
+
+void PrintDialog::setupPaperSidesBox()
+{
+    DuplexMode eDuplex = maPController->getPrinter()->GetDuplexMode();
+
+    if ( eDuplex == DuplexMode::Unknown || isPrintToFile() )
+    {
+        mxPaperSidesBox->set_active( 0 );
+        mxPaperSidesBox->set_sensitive( false );
+    }
+    else
+    {
+        mxPaperSidesBox->set_active( static_cast<sal_Int32>(eDuplex) - 1 );
+        mxPaperSidesBox->set_sensitive( true );
+    }
+}
+
+void PrintDialog::storeToSettings()
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+
+    officecfg::VCL::VCLSettings::PrintDialog::LastPrinter::set(
+                      isPrintToFile() ? Printer::GetDefaultPrinterName()
+                                      : mxPrinters->get_active_text(), batch );
+
+    officecfg::VCL::VCLSettings::PrintDialog::LastPage::set(
+                     mxTabCtrl->get_tab_label_text(mxTabCtrl->get_current_page_ident()), batch);
+
+    officecfg::VCL::VCLSettings::PrintDialog::WindowState::set(
+                     m_xDialog->get_window_state(vcl::WindowDataMask::All), batch );
+
+    officecfg::VCL::VCLSettings::PrintDialog::Collate::set( mxCollateBox->get_active(), batch );
+
+    officecfg::VCL::VCLSettings::PrintDialog::CollateSingleJobs::set(
+                     mxSingleJobsBox->get_active(), batch );
+
+    officecfg::VCL::VCLSettings::PrintDialog::HasPreview::set( hasPreview(), batch);
+
+    batch->commit();
+}
+
+void PrintDialog::readFromSettings()
+{
+    // read last selected tab page; if it exists, activate it
+    OUString aValue = officecfg::VCL::VCLSettings::PrintDialog::LastPage::get();
+    sal_uInt16 nCount = mxTabCtrl->get_n_pages();
+    for (sal_uInt16 i = 0; i < nCount; ++i)
+    {
+        OUString sPageId = mxTabCtrl->get_page_ident(i);
+        if (aValue == mxTabCtrl->get_tab_label_text(sPageId))
+        {
+            mxTabCtrl->set_current_page(sPageId);
+            break;
+        }
+    }
+
+    // persistent window state
+    aValue = officecfg::VCL::VCLSettings::PrintDialog::WindowState::get();
+    if (!aValue.isEmpty())
+        m_xDialog->set_window_state(aValue);
+
+    // collate
+    mxCollateBox->set_sensitive( officecfg::VCL::VCLSettings::PrintDialog::Collate::isReadOnly() );
+    mxCollateBox->set_active( officecfg::VCL::VCLSettings::PrintDialog::Collate::get() );
+
+    // collate single jobs
+    mxSingleJobsBox->set_active( officecfg::VCL::VCLSettings::PrintDialog::CollateSingleJobs::get() );
+
+    // preview box
+    mxPreviewBox->set_active( officecfg::VCL::VCLSettings::PrintDialog::HasPreview::get() );
+
+}
+
+void PrintDialog::setPaperSizes()
+{
+    mxPaperSizeBox->clear();
+    mxPaperSizeBox->set_active(-1);
+    mbHasCustomPaperEntry = false;
+
+    VclPtr<Printer> aPrt( maPController->getPrinter() );
+    mePaper = aPrt->GetPaper();
+
+    // Related: tdf#159995 allow setting the page size when printing to file
+    // On macOS, printing to file just saves to PDF using a native print
+    // job just like the native print dialog's PDF > Save as PDF... option.
+    // Also, as noted in tdf#163558, the native print dialog could support
+    // changing the page size eventually (and already does in Apple's
+    // Safari and TextEdit applications) so allow changing of the page
+    // size in the non-native print dialog on macOS as well.
+#ifndef MACOSX
+    if ( isPrintToFile() )
+    {
+        mxPaperSizeBox->set_sensitive( false );
+    }
+    else
+#endif
+    {
+        int nExactMatch = -1;
+        int nExactRotatedMatch = -1;
+        int nSizeMatch = -1;
+        int nRotatedSizeMatch = -1;
+        Size aSizeOfPaper = aPrt->GetSizeOfPaper();
+        PaperInfo aPaperInfo(aSizeOfPaper.getWidth(), aSizeOfPaper.getHeight());
+        // coverity[swapped_arguments : FALSE] - this is in the correct order
+        PaperInfo aRotatedPaperInfo(aSizeOfPaper.getHeight(), aSizeOfPaper.getWidth());
+        const LocaleDataWrapper& rLocWrap(Application::GetSettings().GetLocaleDataWrapper());
+        o3tl::Length eUnit = o3tl::Length::mm;
+        int nDigits = 0;
+        if( rLocWrap.getMeasurementSystemEnum() == MeasurementSystem::US )
+        {
+            eUnit = o3tl::Length::in100;
+            nDigits = 2;
+        }
+
+        // Also match by document page dimensions, not just Paper enum
+        // (e.g. a card printer whose paper has no matching enum).
+        Size aDocSize = getJobPageSize();
+        PaperInfo aDocPaperInfo(aDocSize.getWidth(), aDocSize.getHeight());
+        PaperInfo aDocRotatedInfo(aDocSize.getHeight(), aDocSize.getWidth());
+        int nDocDimMatch = -1;
+        int nDocDimRotatedMatch = -1;
+
+        for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++)
+        {
+            PaperInfo aInfo = aPrt->GetPaperInfo( nPaper );
+            aInfo.doSloppyFit(true);
+            Paper ePaper = aInfo.getPaper();
+
+            // Use PaperInfo directly (1/100th mm); GetPaperSize() uses
+            // PixelToLogic which can return wrong values.
+            Size aSize(aInfo.getWidth(), aInfo.getHeight());
+            Size aLogicPaperSize( o3tl::convert(aSize, o3tl::Length::mm100, eUnit) );
+
+            OUString aWidth( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
+            OUString aHeight( rLocWrap.getNum( aLogicPaperSize.Height(), nDigits ) );
+            OUString aUnit = eUnit == o3tl::Length::mm ? u"mm"_ustr : u"in"_ustr;
+            OUString aPaperName;
+
+            // Paper sizes that we don't know of but the system printer driver lists are not "User
+            // Defined". Displaying them as such is just confusing.
+            if (ePaper != PAPER_USER)
+                aPaperName = Printer::GetPaperName( ePaper ) + " ";
+
+            aPaperName += aWidth + aUnit + " x " + aHeight + aUnit;
+
+            mxPaperSizeBox->append_text(aPaperName);
+
+            // For exact match, check that paper orientation also matches
+            if (ePaper != PAPER_USER && ePaper == mePaper)
+            {
+                // Only get the first match, in case there are multiple papers with the same size
+                if (nExactMatch == -1 && aInfo.sloppyEqual(aPaperInfo))
+                    nExactMatch = nPaper;
+                else if (nExactRotatedMatch == -1 && aInfo.sloppyEqual(aRotatedPaperInfo))
+                    nExactRotatedMatch = nPaper;
+            }
+
+            if (ePaper == PAPER_USER && aInfo.sloppyEqual(aPaperInfo))
+                nSizeMatch = nPaper;
+
+            if (ePaper == PAPER_USER && aInfo.sloppyEqual(aRotatedPaperInfo))
+                nRotatedSizeMatch = nPaper;
+
+            // Match by document page dimensions
+            if (!aDocSize.IsEmpty())
+            {
+                if (nDocDimMatch == -1 && aInfo.sloppyEqual(aDocPaperInfo))
+                    nDocDimMatch = nPaper;
+                if (nDocDimRotatedMatch == -1 && aInfo.sloppyEqual(aDocRotatedInfo))
+                    nDocDimRotatedMatch = nPaper;
+            }
+        }
+
+        // Select the best match: exact enum > exact rotated > size > rotated size
+        if (nExactMatch != -1)
+            mxPaperSizeBox->set_active(nExactMatch);
+        else if (nExactRotatedMatch != -1)
+            mxPaperSizeBox->set_active(nExactRotatedMatch);
+        else if (nSizeMatch != -1)
+            mxPaperSizeBox->set_active(nSizeMatch);
+        else if (nRotatedSizeMatch != -1)
+            mxPaperSizeBox->set_active(nRotatedSizeMatch);
+
+        // Override with document dimension match if enum matching failed.
+        if (nDocDimMatch != -1)
+        {
+            mxPaperSizeBox->set_active(nDocDimMatch);
+        }
+        else if (nDocDimRotatedMatch != -1)
+        {
+            mxPaperSizeBox->set_active(nDocDimRotatedMatch);
+        }
+
+        // No printer paper matches — probe the driver for custom size.
+        // If rejected (e.g. size below driver minimum), fall back to
+        // the driver's chosen paper.
+        if (!aDocSize.IsEmpty() && nDocDimMatch == -1 && nDocDimRotatedMatch == -1)
+        {
+            // Save orientation: SetPaperSizeUser forces Portrait.
+            Orientation eOrientBeforeProbe = aPrt->GetOrientation();
+            {
+                auto popIt = aPrt->ScopedPush();
+                aPrt->SetMapMode(MapMode(MapUnit::Map100thMM));
+                aPrt->SetPaperSizeUser(aDocSize);
+            }
+            // MapMode restored by ScopedPush; paper size persists.
+            Size aDriverSize = aPrt->GetSizeOfPaper();
+            PaperInfo aDriverInfo(aDriverSize.getWidth(), aDriverSize.getHeight());
+            aDriverInfo.doSloppyFit(true);
+            bool bDriverAccepted = aDriverInfo.sloppyEqual(aDocPaperInfo)
+                                || aDriverInfo.sloppyEqual(aDocRotatedInfo);
+
+            if (bDriverAccepted)
+            {
+                Size aLogicDocSize(o3tl::convert(aDocSize, o3tl::Length::mm100, eUnit));
+                OUString aWidth(rLocWrap.getNum(aLogicDocSize.Width(), nDigits));
+                OUString aHeight(rLocWrap.getNum(aLogicDocSize.Height(), nDigits));
+                OUString aUnitStr = eUnit == o3tl::Length::mm ? u"mm"_ustr : u"in"_ustr;
+
+                OUString aPaperName = Printer::GetPaperName(PAPER_USER) + " "
+                                    + aWidth + aUnitStr + " x " + aHeight + aUnitStr;
+
+                mxPaperSizeBox->append_text(aPaperName);
+                mxPaperSizeBox->set_active(aPrt->GetPaperInfoCount());
+                maCustomPaperSize = aDocSize;
+                mbHasCustomPaperEntry = true;
+            }
+            else
+            {
+                // Driver rejected/clamped — fall back to driver's paper
+                // and restore orientation clobbered by SetPaperSizeUser.
+                aPrt->SetOrientation(eOrientBeforeProbe);
+                mePaper = aPrt->GetPaper();
+                PaperInfo aFallbackInfo(aDriverSize.getWidth(), aDriverSize.getHeight());
+                PaperInfo aFallbackRotated(aDriverSize.getHeight(), aDriverSize.getWidth());
+                for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++)
+                {
+                    PaperInfo aInfo = aPrt->GetPaperInfo(nPaper);
+                    aInfo.doSloppyFit(true);
+                    if (aInfo.sloppyEqual(aFallbackInfo) || aInfo.sloppyEqual(aFallbackRotated))
+                    {
+                        mxPaperSizeBox->set_active(nPaper);
+                        break;
+                    }
+                }
+            }
+        }
+
+        mxPaperSizeBox->set_sensitive( true );
+    }
+}
+
+void PrintDialog::updatePrinterText()
+{
+    const OUString aDefPrt( Printer::GetDefaultPrinterName() );
+    const QueueInfo* pInfo = Printer::GetQueueInfo( mxPrinters->get_active_text(), true );
+    if( pInfo )
+    {
+        // FIXME: status text
+        OUString aStatus;
+        if( aDefPrt == pInfo->GetPrinterName() )
+            aStatus = maDefPrtText;
+        mxStatusTxt->set_label( aStatus );
+    }
+    else
+    {
+        mxStatusTxt->set_label( OUString() );
+    }
+}
+
+void PrintDialog::setPreviewText()
+{
+    OUString aNewText( maPageStr.replaceFirst( "%n", OUString::number( mnCachedPages ) ) );
+    mxNumPagesText->set_label( aNewText );
+}
+
+void PrintDialog::schedulePreviewUpdate(bool i_bMayUseCache)
+{
+    if (!i_bMayUseCache)
+        mbUseCacheForPreview = false; // Disable cache once
+    maUpdatePreviewIdle.Start();
+}
+
+IMPL_LINK_NOARG(PrintDialog, updatePreviewIdle, Timer*, void)
+{
+    // cache is allowed, unless explicitly disabled for this update
+    preparePreview(std::exchange(mbUseCacheForPreview, true));
+}
+
+void PrintDialog::preparePreview( bool i_bMayUseCache )
+{
+    VclPtr<Printer> aPrt( maPController->getPrinter() );
+    // Prefer maSelectedPaperSize (stable 1/100th mm) over PixelToLogic
+    // which can return wrong values during MapMode transitions.
+    Size aCurPageSize = !maSelectedPaperSize.IsEmpty()
+        ? maSelectedPaperSize
+        : aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) );
+    // maSelectedPaperSize is always portrait-order; swap to landscape
+    // based on the orientation dropdown (not GetOrientation() which
+    // can be clobbered by SetPaper/SetPaperSizeUser).
+    if (!maSelectedPaperSize.IsEmpty()
+        && aCurPageSize.Width() < aCurPageSize.Height())
+    {
+        int nOrient = mxOrientationBox->get_active();
+        bool bSwapToLandscape = false;
+        if (nOrient == ORIENTATION_AUTOMATIC)
+        {
+            Size aDocPageSize = getJobPageSize();
+            bSwapToLandscape = !aDocPageSize.IsEmpty()
+                             && aDocPageSize.getWidth() > aDocPageSize.getHeight();
+        }
+        else if (nOrient == ORIENTATION_LANDSCAPE)
+        {
+            bSwapToLandscape = true;
+        }
+        if (bSwapToLandscape)
+            aCurPageSize = Size(aCurPageSize.Height(), aCurPageSize.Width());
+    }
+    // tdf#123076 Get paper size for the preview top label
+    mePaper = aPrt->GetPaper();
+    GDIMetaFile aMtf;
+
+    // Use custom paper size for preview even if the driver rejected it
+    // (e.g. "Print to PDF" reverts DMPAPER_USER to A4).
+    const bool bUseCustomPreviewSize = mbHasCustomPaperEntry
+        && mxPaperSizeBox->get_active() == aPrt->GetPaperInfoCount();
+    if (bUseCustomPreviewSize)
+    {
+        aCurPageSize = maCustomPaperSize;
+        mePaper = PAPER_USER;
+    }
+
+    // page range may have changed depending on options
+    sal_Int32 nPages = maPController->getFilteredPageCount();
+    mnCachedPages = nPages;
+
+    if (!i_bMayUseCache)
+        updatePageRange(nPages);
+
+    setPreviewText();
+
+    if ( !hasPreview() )
+    {
+        mxPreview->setPreview( aMtf, aCurPageSize,
+                            Printer::GetPaperName( mePaper ),
+                            maNoPreviewStr,
+                            aPrt->GetDPIX(), aPrt->GetDPIY(),
+                            aPrt->GetPrinterOptions().IsConvertToGreyscales()
+                            );
+
+        mxForwardBtn->set_sensitive( false );
+        mxBackwardBtn->set_sensitive( false );
+        mxFirstBtn->set_sensitive( false );
+        mxLastBtn->set_sensitive( false );
+
+        mxPageEdit->set_sensitive( false );
+
+        return;
+    }
+
+    if( mnCurPage >= nPages )
+        mnCurPage = nPages-1;
+    if( mnCurPage < 0 )
+        mnCurPage = 0;
+    mxPageEdit->set_text(OUString::number(mnCurPage + 1));
+
+    if( nPages > 0 )
+    {
+        PrinterController::PageSize aPageSize =
+            maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
+
+        if (!bUseCustomPreviewSize
+            && mxOrientationBox->get_active() == ORIENTATION_AUTOMATIC)
+        {
+            aCurPageSize = !maSelectedPaperSize.IsEmpty()
+                ? maSelectedPaperSize
+                : aPrt->PixelToLogic(aPrt->GetPaperSizePixel(), MapMode(MapUnit::Map100thMM));
+            // Swap to landscape if document requires it.
+            if (!maSelectedPaperSize.IsEmpty())
+            {
+                Size aDocPageSize = getJobPageSize();
+                bool bDocLandscape = !aDocPageSize.IsEmpty()
+                                   && aDocPageSize.getWidth() > aDocPageSize.getHeight();
+                if (bDocLandscape && aCurPageSize.Width() < aCurPageSize.Height())
+                    aCurPageSize = Size(aCurPageSize.Height(), aCurPageSize.Width());
+            }
+        }
+
+        if( ! aPageSize.bFullPaper )
+        {
+            const MapMode aMapMode( MapUnit::Map100thMM );
+            Point aOff( aPrt->PixelToLogic( aPrt->GetPageOffsetPixel(), aMapMode ) );
+            aMtf.Move( aOff.X(), aOff.Y() );
+        }
+        // tdf#150561: page size may have changed so sync mePaper with it
+        if (!bUseCustomPreviewSize)
+            mePaper = aPrt->GetPaper();
+    }
+
+    mxPreview->setPreview( aMtf, aCurPageSize,
+                                Printer::GetPaperName( mePaper ),
+                                nPages > 0 ? OUString() : maNoPageStr,
+                                aPrt->GetDPIX(), aPrt->GetDPIY(),
+                                aPrt->GetPrinterOptions().IsConvertToGreyscales()
+                               );
+
+    mxForwardBtn->set_sensitive( mnCurPage < nPages-1 );
+    mxBackwardBtn->set_sensitive( mnCurPage != 0 );
+    mxFirstBtn->set_sensitive( mnCurPage != 0 );
+    mxLastBtn->set_sensitive( mnCurPage < nPages-1 );
+    mxPageEdit->set_sensitive( nPages > 1 );
+}
+
+void PrintDialog::updatePageRange(sal_Int32 nPages)
+{
+    if (nPages > 0 && !mxPageRangesRadioButton->get_active())
+    {
+        OUStringBuffer aBuf(32);
+        aBuf.append("1");
+        if (nPages > 1)
+        {
+            aBuf.append("-" + OUString::number(nPages));
+        }
+        OUString sRange = aBuf.makeStringAndClear();
+        mxPageRangeEdit->set_text(sRange);
+        maPController->setValue(u"PageRange"_ustr, Any(sRange));
+    }
+}
+
+void PrintDialog::updatePageSize(int nOrientation)
+{
+    VclPtr<Printer> aPrt(maPController->getPrinter());
+
+    Size aSize;
+    if (mxNupPagesBox->get_active_id() == "1")
+    {
+        int nActive = mxPaperSizeBox->get_active();
+        // Custom entry is beyond GetPaperInfoCount(); use stored size.
+        if (mbHasCustomPaperEntry && nActive == aPrt->GetPaperInfoCount())
+        {
+            aSize = maCustomPaperSize;
+        }
+        else if (nActive >= 0 && nActive < aPrt->GetPaperInfoCount())
+        {
+            PaperInfo aInfo = aPrt->GetPaperInfo(nActive);
+            aSize = Size(aInfo.getWidth(), aInfo.getHeight());
+        }
+        if (aSize.IsEmpty())
+            aSize = aPrt->GetSizeOfPaper();
+
+        if (nOrientation != ORIENTATION_AUTOMATIC)
+        {
+            if ((nOrientation == ORIENTATION_PORTRAIT && aSize.Width() > aSize.Height())
+                || (nOrientation == ORIENTATION_LANDSCAPE && aSize.Width() < aSize.Height()))
+            {
+                // coverity[swapped_arguments : FALSE] - this is in the intended order
+                aSize = Size(aSize.Height(), aSize.Width());
+            }
+        }
+    }
+    else
+        aSize = getJobPageSize();
+
+    aPrt->SetPrintPageSize(aSize);
+    aPrt->SetUsePrintDialogSetting(nOrientation != ORIENTATION_AUTOMATIC);
+}
+
+void PrintDialog::updateOrientationBox( const bool bAutomatic )
+{
+    if ( !bAutomatic )
+    {
+        Orientation eOrientation = maPController->getPrinter()->GetOrientation();
+        mxOrientationBox->set_active( static_cast<sal_Int32>(eOrientation) + 1 );
+    }
+    else if ( hasOrientationChanged() )
+    {
+        mxOrientationBox->set_active( ORIENTATION_AUTOMATIC );
+    }
+}
+
+bool PrintDialog::hasOrientationChanged() const
+{
+    const int nOrientation = mxOrientationBox->get_active();
+    const Orientation eOrientation = maPController->getPrinter()->GetOrientation();
+
+    return (nOrientation == ORIENTATION_LANDSCAPE && eOrientation == Orientation::Portrait)
+        || (nOrientation == ORIENTATION_PORTRAIT && eOrientation == Orientation::Landscape);
+}
+
+// Always use this function to set paper orientation to make sure everything behaves well
+void PrintDialog::setPaperOrientation( Orientation eOrientation, bool fromUser )
+{
+    VclPtr<Printer> aPrt( maPController->getPrinter() );
+    aPrt->SetOrientation( eOrientation );
+    maPController->setOrientationFromUser( eOrientation, fromUser );
+}
+
+void PrintDialog::checkControlDependencies()
+{
+    if (mxCopyCountField->get_value() > 1)
+    {
+        mxCollateBox->set_sensitive( officecfg::VCL::VCLSettings::PrintDialog::Collate::isReadOnly() );
+        mxSingleJobsBox->set_sensitive( mxCollateBox->get_active() );
+    }
+    else
+    {
+        mxCollateBox->set_sensitive( false );
+        mxSingleJobsBox->set_sensitive( false );
+    }
+
+    OUString aImg(mxCollateBox->get_active() ? SV_PRINT_COLLATE_BMP : SV_PRINT_NOCOLLATE_BMP);
+
+    mxCollateImage->set_from_icon_name(aImg);
+
+    // enable setup button only for printers that can be setup
+    bool bHaveSetup = maPController->getPrinter()->HasSupport( PrinterSupport::SetupDialog );
+    mxSetupButton->set_sensitive(bHaveSetup);
+}
+
+void PrintDialog::checkOptionalControlDependencies()
+{
+    for( const auto& rEntry : maControlToPropertyMap )
+    {
+        assert(rEntry.first);
+
+        bool bShouldbeEnabled = maPController->isUIOptionEnabled( rEntry.second );
+
+        if (bShouldbeEnabled && dynamic_cast<weld::RadioButton*>(rEntry.first))
+        {
+            auto r_it = maControlToNumValMap.find( rEntry.first );
+            if( r_it != maControlToNumValMap.end() )
+            {
+                bShouldbeEnabled = maPController->isUIChoiceEnabled( rEntry.second, r_it->second );
+            }
+        }
+
+        bool bIsEnabled = rEntry.first->get_sensitive();
+        // Enable does not do a change check first, so can be less cheap than expected
+        if (bShouldbeEnabled != bIsEnabled)
+            rEntry.first->set_sensitive( bShouldbeEnabled );
+    }
+}
+
+void PrintDialog::initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& i_rMPS )
+{
+    mxNupOrderWin->show();
+    mxPagesBtn->set_active(true);
+    mxBrochureBtn->hide();
+
+    // setup field units for metric fields
+    const LocaleDataWrapper& rLocWrap(Application::GetSettings().GetLocaleDataWrapper());
+    FieldUnit eUnit = FieldUnit::MM;
+    sal_uInt16 nDigits = 0;
+    if( rLocWrap.getMeasurementSystemEnum() == MeasurementSystem::US )
+    {
+        eUnit = FieldUnit::INCH;
+        nDigits = 2;
+    }
+    // set units
+    mxPageMarginEdt->set_unit( eUnit );
+    mxSheetMarginEdt->set_unit( eUnit );
+
+    // set precision
+    mxPageMarginEdt->set_digits( nDigits );
+    mxSheetMarginEdt->set_digits( nDigits );
+
+    mxSheetMarginEdt->set_value( mxSheetMarginEdt->normalize( i_rMPS.nLeftMargin ), FieldUnit::MM_100TH );
+    mxPageMarginEdt->set_value( mxPageMarginEdt->normalize( i_rMPS.nHorizontalSpacing ), FieldUnit::MM_100TH );
+    mxBorderCB->set_active( i_rMPS.bDrawBorder );
+    mxNupRowsEdt->set_value( i_rMPS.nRows );
+    mxNupColEdt->set_value( i_rMPS.nColumns );
+    mxNupOrderBox->set_active( static_cast<sal_Int32>(i_rMPS.nOrder) );
+    if( i_rMPS.nRows != 1 || i_rMPS.nColumns != 1 )
+    {
+        mxNupPagesBox->set_active( mxNupPagesBox->get_count()-1 );
+        showAdvancedControls( true );
+        mxNupOrder->setValues( i_rMPS.nOrder, i_rMPS.nColumns, i_rMPS.nRows );
+    }
+}
+
+void PrintDialog::updateNup( bool i_bMayUseCache )
+{
+    int nRows         = mxNupRowsEdt->get_value();
+    int nCols         = mxNupColEdt->get_value();
+    tools::Long nPageMargin  = mxPageMarginEdt->denormalize(mxPageMarginEdt->get_value( FieldUnit::MM_100TH ));
+    tools::Long nSheetMargin = mxSheetMarginEdt->denormalize(mxSheetMarginEdt->get_value( FieldUnit::MM_100TH ));
+
+    PrinterController::MultiPageSetup aMPS;
+    aMPS.nRows         = nRows;
+    aMPS.nColumns      = nCols;
+    aMPS.nLeftMargin   =
+    aMPS.nTopMargin    =
+    aMPS.nRightMargin  =
+    aMPS.nBottomMargin = nSheetMargin;
+
+    aMPS.nHorizontalSpacing =
+    aMPS.nVerticalSpacing   = nPageMargin;
+
+    aMPS.bDrawBorder        = mxBorderCB->get_active();
+
+    aMPS.nOrder = static_cast<NupOrderType>(mxNupOrderBox->get_active());
+
+    int nOrientationMode = mxOrientationBox->get_active();
+    if( nOrientationMode == ORIENTATION_LANDSCAPE )
+        aMPS.aPaperSize = maNupLandscapeSize;
+    else if( nOrientationMode == ORIENTATION_PORTRAIT )
+        aMPS.aPaperSize = maNupPortraitSize;
+    else // automatic mode
+    {
+        // get size of first real page to see if it is portrait or landscape
+        // we assume same page sizes for all the pages for this
+        Size aPageSize = getJobPageSize();
+
+        Size aMultiSize( aPageSize.Width() * nCols, aPageSize.Height() * nRows );
+        if( aMultiSize.Width() > aMultiSize.Height() ) // fits better on landscape
+        {
+            aMPS.aPaperSize = maNupLandscapeSize;
+            setPaperOrientation( Orientation::Landscape, false );
+        }
+        else
+        {
+            aMPS.aPaperSize = maNupPortraitSize;
+            setPaperOrientation( Orientation::Portrait, false );
+        }
+    }
+
+    maPController->setMultipage( aMPS );
+
+    mxNupOrder->setValues( aMPS.nOrder, nCols, nRows );
+
+    schedulePreviewUpdate(i_bMayUseCache);
+}
+
+void PrintDialog::updateNupFromPages( bool i_bMayUseCache )
+{
+    int nPages = mxNupPagesBox->get_active_id().toInt32();
+    int nRows   = mxNupRowsEdt->get_value();
+    int nCols   = mxNupColEdt->get_value();
+    tools::Long nPageMargin  = mxPageMarginEdt->denormalize(mxPageMarginEdt->get_value( FieldUnit::MM_100TH ));
+    tools::Long nSheetMargin = mxSheetMarginEdt->denormalize(mxSheetMarginEdt->get_value( FieldUnit::MM_100TH ));
+    bool bCustom = false;
+
+    if( nPages == 1 )
+    {
+        nRows = nCols = 1;
+        nSheetMargin = 0;
+        nPageMargin = 0;
+    }
+    else if( nPages == 2 || nPages == 4 || nPages == 6 || nPages == 9 || nPages == 16 )
+    {
+        Size aJobPageSize( getJobPageSize() );
+        bool bPortrait = aJobPageSize.Width() < aJobPageSize.Height();
+        if( nPages == 2 )
+        {
+            if( bPortrait )
+            {
+                nRows = 1;
+                nCols = 2;
+            }
+            else
+            {
+                nRows = 2;
+                nCols = 1;
+            }
+        }
+        else if( nPages == 4 )
+            nRows = nCols = 2;
+        else if( nPages == 6 )
+        {
+            if( bPortrait )
+            {
+                nRows = 2;
+                nCols = 3;
+            }
+            else
+            {
+                nRows = 3;
+                nCols = 2;
+            }
+        }
+        else if( nPages == 9 )
+            nRows = nCols = 3;
+        else if( nPages == 16 )
+            nRows = nCols = 4;
+        nPageMargin = 0;
+        nSheetMargin = 0;
+    }
+    else
+        bCustom = true;
+
+    if( nPages > 1 )
+    {
+        // set upper limits for margins based on job page size and rows/columns
+        Size aSize( getJobPageSize() );
+
+        // maximum sheet distance: 1/2 sheet
+        tools::Long nHorzMax = aSize.Width()/2;
+        tools::Long nVertMax = aSize.Height()/2;
+        if( nSheetMargin > nHorzMax )
+            nSheetMargin = nHorzMax;
+        if( nSheetMargin > nVertMax )
+            nSheetMargin = nVertMax;
+
+        mxSheetMarginEdt->set_max(
+                  mxSheetMarginEdt->normalize(
+                           std::min(nHorzMax, nVertMax) ), FieldUnit::MM_100TH );
+
+        // maximum page distance
+        nHorzMax = (aSize.Width() - 2*nSheetMargin);
+        if( nCols > 1 )
+            nHorzMax /= (nCols-1);
+        nVertMax = (aSize.Height() - 2*nSheetMargin);
+        if( nRows > 1 )
+            nHorzMax /= (nRows-1);
+
+        if( nPageMargin > nHorzMax )
+            nPageMargin = nHorzMax;
+        if( nPageMargin > nVertMax )
+            nPageMargin = nVertMax;
+
+        mxPageMarginEdt->set_max(
+                 mxSheetMarginEdt->normalize(
+                           std::min(nHorzMax, nVertMax ) ), FieldUnit::MM_100TH );
+    }
+
+    mxNupRowsEdt->set_value( nRows );
+    mxNupColEdt->set_value( nCols );
+    mxPageMarginEdt->set_value( mxPageMarginEdt->normalize( nPageMargin ), FieldUnit::MM_100TH );
+    mxSheetMarginEdt->set_value( mxSheetMarginEdt->normalize( nSheetMargin ), FieldUnit::MM_100TH );
+
+    showAdvancedControls( bCustom );
+    updateNup( i_bMayUseCache );
+}
+
+void PrintDialog::enableNupControls( bool bEnable )
+{
+    mxNupPagesBox->set_sensitive( bEnable );
+    mxNupNumPagesTxt->set_sensitive( bEnable );
+    mxNupColEdt->set_sensitive( bEnable );
+    mxNupTimesTxt->set_sensitive( bEnable );
+    mxNupRowsEdt->set_sensitive( bEnable );
+    mxPageMarginTxt1->set_sensitive( bEnable );
+    mxPageMarginEdt->set_sensitive( bEnable );
+    mxPageMarginTxt2->set_sensitive( bEnable );
+    mxSheetMarginTxt1->set_sensitive( bEnable );
+    mxSheetMarginEdt->set_sensitive( bEnable );
+    mxSheetMarginTxt2->set_sensitive( bEnable );
+    mxNupOrderTxt->set_sensitive( bEnable );
+    mxNupOrderBox->set_sensitive( bEnable );
+    mxNupOrderWin->set_sensitive( bEnable );
+    mxBorderCB->set_sensitive( bEnable );
+}
+
+void PrintDialog::showAdvancedControls( bool i_bShow )
+{
+    mxNupNumPagesTxt->set_visible( i_bShow );
+    mxNupColEdt->set_visible( i_bShow );
+    mxNupTimesTxt->set_visible( i_bShow );
+    mxNupRowsEdt->set_visible( i_bShow );
+    mxPageMarginTxt1->set_visible( i_bShow );
+    mxPageMarginEdt->set_visible( i_bShow );
+    mxPageMarginTxt2->set_visible( i_bShow );
+    mxSheetMarginTxt1->set_visible( i_bShow );
+    mxSheetMarginEdt->set_visible( i_bShow );
+    mxSheetMarginTxt2->set_visible( i_bShow );
+}
+
+namespace
+{
+    void setHelpId( weld::Widget* i_pWindow, const Sequence< OUString >& i_rHelpIds, sal_Int32 i_nIndex )
+    {
+        if( i_nIndex >= 0 && i_nIndex < i_rHelpIds.getLength() )
+            i_pWindow->set_help_id( i_rHelpIds.getConstArray()[i_nIndex] );
+    }
+
+    void setHelpText( weld::Widget* i_pWindow, const Sequence< OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
+    {
+        // without a help text set and the correct smartID,
+        // help texts will be retrieved from the online help system
+        if( i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength() )
+            i_pWindow->set_tooltip_text(i_rHelpTexts.getConstArray()[i_nIndex]);
+    }
+}
+
+void PrintDialog::setupOptionalUI()
+{
+    const Sequence< PropertyValue >& rOptions( maPController->getUIOptions() );
+    for( const auto& rOption : rOptions )
+    {
+        if (rOption.Name == "OptionsUIFile")
+        {
+            OUString sOptionsUIFile;
+            rOption.Value >>= sOptionsUIFile;
+            mxCustomOptionsUIBuilder = Application::CreateBuilder(mxCustom.get(), sOptionsUIFile);
+            std::unique_ptr<weld::Container> xWindow = mxCustomOptionsUIBuilder->weld_container(u"box"_ustr);
+            xWindow->set_help_id(u"vcl/ui/printdialog/PrintDialog"_ustr);
+            xWindow->show();
+            continue;
+        }
+
+        Sequence< beans::PropertyValue > aOptProp;
+        rOption.Value >>= aOptProp;
+
+        // extract ui element
+        OUString aCtrlType;
+        OUString aID;
+        OUString aText;
+        OUString aPropertyName;
+        Sequence< OUString > aChoices;
+        Sequence< sal_Bool > aChoicesDisabled;
+        Sequence< OUString > aHelpTexts;
+        Sequence< OUString > aIDs;
+        Sequence< OUString > aHelpIds;
+        sal_Int64 nMinValue = 0, nMaxValue = 0;
+        OUString aGroupingHint;
+
+        for (const beans::PropertyValue& rEntry : aOptProp)
+        {
+            if ( rEntry.Name == "ID" )
+            {
+                rEntry.Value >>= aIDs;
+                aID = aIDs[0];
+            }
+            if ( rEntry.Name == "Text" )
+            {
+                rEntry.Value >>= aText;
+            }
+            else if ( rEntry.Name == "ControlType" )
+            {
+                rEntry.Value >>= aCtrlType;
+            }
+            else if ( rEntry.Name == "Choices" )
+            {
+                rEntry.Value >>= aChoices;
+            }
+            else if ( rEntry.Name == "ChoicesDisabled" )
+            {
+                rEntry.Value >>= aChoicesDisabled;
+            }
+            else if ( rEntry.Name == "Property" )
+            {
+                PropertyValue aVal;
+                rEntry.Value >>= aVal;
+                aPropertyName = aVal.Name;
+            }
+            else if ( rEntry.Name == "Enabled" )
+            {
+            }
+            else if ( rEntry.Name == "GroupingHint" )
+            {
+                rEntry.Value >>= aGroupingHint;
+            }
+            else if ( rEntry.Name == "DependsOnName" )
+            {
+            }
+            else if ( rEntry.Name == "DependsOnEntry" )
+            {
+            }
+            else if ( rEntry.Name == "AttachToDependency" )
+            {
+            }
+            else if ( rEntry.Name == "MinValue" )
+            {
+                rEntry.Value >>= nMinValue;
+            }
+            else if ( rEntry.Name == "MaxValue" )
+            {
+                rEntry.Value >>= nMaxValue;
+            }
+            else if ( rEntry.Name == "HelpText" )
+            {
+                if( ! (rEntry.Value >>= aHelpTexts) )
+                {
+                    OUString aHelpText;
+                    if( rEntry.Value >>= aHelpText )
+                    {
+                        aHelpTexts.realloc( 1 );
+                        *aHelpTexts.getArray() = aHelpText;
+                    }
+                }
+            }
+            else if ( rEntry.Name == "HelpId" )
+            {
+                if( ! (rEntry.Value >>= aHelpIds ) )
+                {
+                    OUString aHelpId;
+                    if( rEntry.Value >>= aHelpId )
+                    {
+                        aHelpIds.realloc( 1 );
+                        *aHelpIds.getArray() = aHelpId;
+                    }
+                }
+            }
+            else if ( rEntry.Name == "HintNoLayoutPage" )
+            {
+                bool bHasLayoutFrame = false;
+                rEntry.Value >>= bHasLayoutFrame;
+                mbShowLayoutFrame = !bHasLayoutFrame;
+            }
+        }
+
+        if (aCtrlType == "Group")
+        {
+            aID = "custom";
+
+            weld::Container* pPage = mxTabCtrl->get_page(aID);
+            if (!pPage)
+                continue;
+
+            mxTabCtrl->set_tab_label_text(aID, aText);
+
+            // set help id
+            if (aHelpIds.hasElements())
+                pPage->set_help_id(aHelpIds[0]);
+
+            // set help text
+            if (aHelpTexts.hasElements())
+                pPage->set_tooltip_text(aHelpTexts[0]);
+
+            pPage->show();
+        }
+        else if (aCtrlType == "Subgroup" && !aID.isEmpty())
+        {
+            std::unique_ptr<weld::Widget> xWidget;
+            // since 'New Print Dialog Design' fromwhich in calc is not a frame anymore
+            if (aID == "fromwhich")
+            {
+                std::unique_ptr<weld::Label> xLabel = m_xBuilder->weld_label(aID);
+                xLabel->set_label(aText);
+                xWidget = std::move(xLabel);
+            }
+            else
+            {
+                std::unique_ptr<weld::Frame> xFrame = m_xBuilder->weld_frame(aID);
+                if (!xFrame && mxCustomOptionsUIBuilder)
+                    xFrame = mxCustomOptionsUIBuilder->weld_frame(aID);
+                if (xFrame)
+                {
+                    xFrame->set_label(aText);
+                    xWidget = std::move(xFrame);
+                }
+            }
+
+            if (!xWidget)
+                continue;
+
+            // set help id
+            setHelpId(xWidget.get(), aHelpIds, 0);
+            // set help text
+            setHelpText(xWidget.get(), aHelpTexts, 0);
+
+            xWidget->show();
+        }
+        // EVIL
+        else if( aCtrlType == "Bool" && aGroupingHint == "LayoutPage" && aPropertyName == "PrintProspect" )
+        {
+            mxBrochureBtn->set_label(aText);
+            mxBrochureBtn->show();
+
+            bool bVal = false;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal )
+                pVal->Value >>= bVal;
+            mxBrochureBtn->set_active( bVal );
+            mxBrochureBtn->set_sensitive( maPController->isUIOptionEnabled( aPropertyName ) && pVal != nullptr );
+
+            maPropertyToWindowMap[aPropertyName].emplace_back(mxBrochureBtn.get());
+            maControlToPropertyMap[mxBrochureBtn.get()] = aPropertyName;
+
+            // set help id
+            setHelpId( mxBrochureBtn.get(), aHelpIds, 0 );
+            // set help text
+            setHelpText( mxBrochureBtn.get(), aHelpTexts, 0 );
+        }
+        else if (aCtrlType == "Bool")
+        {
+            // add a check box
+            std::unique_ptr<weld::CheckButton> xNewBox = m_xBuilder->weld_check_button(aID);
+            if (!xNewBox && mxCustomOptionsUIBuilder)
+                xNewBox = mxCustomOptionsUIBuilder->weld_check_button(aID);
+            if (!xNewBox)
+                continue;
+
+            xNewBox->set_label( aText );
+            xNewBox->show();
+
+            bool bVal = false;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal )
+                pVal->Value >>= bVal;
+            xNewBox->set_active( bVal );
+            xNewBox->connect_toggled( LINK( this, PrintDialog, UIOption_CheckHdl ) );
+
+            maExtraControls.emplace_back(std::move(xNewBox));
+
+            weld::Widget* pWidget = maExtraControls.back().get();
+
+            maPropertyToWindowMap[aPropertyName].emplace_back(pWidget);
+            maControlToPropertyMap[pWidget] = aPropertyName;
+
+            // set help id
+            setHelpId(pWidget, aHelpIds, 0);
+            // set help text
+            setHelpText(pWidget, aHelpTexts, 0);
+        }
+        else if (aCtrlType == "Radio")
+        {
+            sal_Int32 nCurHelpText = 0;
+
+            // iterate options
+            sal_Int32 nSelectVal = 0;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= nSelectVal;
+            for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
+            {
+                aID = aIDs[m];
+                std::unique_ptr<weld::RadioButton> xBtn = m_xBuilder->weld_radio_button(aID);
+                if (!xBtn && mxCustomOptionsUIBuilder)
+                    xBtn = mxCustomOptionsUIBuilder->weld_radio_button(aID);
+                if (!xBtn)
+                    continue;
+
+                xBtn->set_label( aChoices[m] );
+                xBtn->set_active( m == nSelectVal );
+                xBtn->connect_toggled( LINK( this, PrintDialog, UIOption_RadioHdl ) );
+                if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] )
+                    xBtn->set_sensitive( false );
+                xBtn->show();
+
+                maExtraControls.emplace_back(std::move(xBtn));
+
+                weld::Widget* pWidget = maExtraControls.back().get();
+
+                maPropertyToWindowMap[ aPropertyName ].emplace_back(pWidget);
+                maControlToPropertyMap[pWidget] = aPropertyName;
+                maControlToNumValMap[pWidget] = m;
+
+                // set help id
+                setHelpId( pWidget, aHelpIds, nCurHelpText );
+                // set help text
+                setHelpText( pWidget, aHelpTexts, nCurHelpText );
+                nCurHelpText++;
+            }
+        }
+        else if ( aCtrlType == "List" )
+        {
+            std::unique_ptr<weld::ComboBox> xList = m_xBuilder->weld_combo_box(aID);
+            if (!xList && mxCustomOptionsUIBuilder)
+                xList = mxCustomOptionsUIBuilder->weld_combo_box(aID);
+            if (!xList)
+                continue;
+
+            // iterate options
+            for (const auto& rChoice : aChoices)
+                xList->append_text(rChoice);
+
+            sal_Int32 nSelectVal = 0;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= nSelectVal;
+            xList->set_active(nSelectVal);
+            xList->connect_changed( LINK( this, PrintDialog, UIOption_SelectHdl ) );
+            xList->show();
+
+            maExtraControls.emplace_back(std::move(xList));
+
+            weld::Widget* pWidget = maExtraControls.back().get();
+
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(pWidget);
+            maControlToPropertyMap[pWidget] = aPropertyName;
+
+            // set help id
+            setHelpId( pWidget, aHelpIds, 0 );
+            // set help text
+            setHelpText( pWidget, aHelpTexts, 0 );
+        }
+        else if ( aCtrlType == "Range" )
+        {
+            std::unique_ptr<weld::SpinButton> xField = m_xBuilder->weld_spin_button(aID);
+            if (!xField && mxCustomOptionsUIBuilder)
+                xField = mxCustomOptionsUIBuilder->weld_spin_button(aID);
+            if (!xField)
+                continue;
+
+            // set min/max and current value
+            if(nMinValue != nMaxValue)
+                xField->set_range(nMinValue, nMaxValue);
+
+            sal_Int64 nCurVal = 0;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= nCurVal;
+            xField->set_value( nCurVal );
+            xField->connect_value_changed( LINK( this, PrintDialog, UIOption_SpinModifyHdl ) );
+            xField->show();
+
+            maExtraControls.emplace_back(std::move(xField));
+
+            weld::Widget* pWidget = maExtraControls.back().get();
+
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(pWidget);
+            maControlToPropertyMap[pWidget] = aPropertyName;
+
+            // set help id
+            setHelpId( pWidget, aHelpIds, 0 );
+            // set help text
+            setHelpText( pWidget, aHelpTexts, 0 );
+        }
+        else if (aCtrlType == "Edit")
+        {
+            std::unique_ptr<weld::Entry> xField = m_xBuilder->weld_entry(aID);
+            if (!xField && mxCustomOptionsUIBuilder)
+                xField = mxCustomOptionsUIBuilder->weld_entry(aID);
+            if (!xField)
+                continue;
+
+            OUString aCurVal;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= aCurVal;
+            xField->set_text( aCurVal );
+            xField->connect_changed( LINK( this, PrintDialog, UIOption_EntryModifyHdl ) );
+            xField->show();
+
+            maExtraControls.emplace_back(std::move(xField));
+
+            weld::Widget* pWidget = maExtraControls.back().get();
+
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(pWidget);
+            maControlToPropertyMap[pWidget] = aPropertyName;
+
+            // set help id
+            setHelpId( pWidget, aHelpIds, 0 );
+            // set help text
+            setHelpText( pWidget, aHelpTexts, 0 );
+        }
+        else
+        {
+            SAL_WARN( "vcl", "Unsupported UI option: \"" << aCtrlType << '"');
+        }
+    }
+
+    // #i106506# if no brochure button, then the singular Pages radio button
+    // makes no sense, so replace it by a FixedText label
+    if (!mxBrochureBtn->get_visible() && mxPagesBtn->get_visible())
+    {
+        mxPagesBoxTitleTxt->set_label(mxPagesBtn->get_label());
+        mxPagesBoxTitleTxt->show();
+        mxPagesBtn->hide();
+
+        mxNupPagesBox->set_accessible_relation_labeled_by(mxPagesBoxTitleTxt.get());
+    }
+
+    // update enable states
+    checkOptionalControlDependencies();
+
+    // print range not shown (currently math only) -> hide spacer line and reverse order
+    if (!mxPageRangeEdit->get_visible())
+    {
+        mxReverseOrderBox->hide();
+    }
+
+    if (!mxCustomOptionsUIBuilder)
+        mxTabCtrl->remove_page(mxTabCtrl->get_page_ident(1));
+}
+
+void PrintDialog::makeEnabled( weld::Widget* i_pWindow )
+{
+    auto it = maControlToPropertyMap.find( i_pWindow );
+    if( it != maControlToPropertyMap.end() )
+    {
+        OUString aDependency( maPController->makeEnabled( it->second ) );
+        if( !aDependency.isEmpty() )
+            updateWindowFromProperty( aDependency );
+    }
+}
+
+void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
+{
+    beans::PropertyValue* pValue = maPController->getValue( i_rProperty );
+    auto it = maPropertyToWindowMap.find( i_rProperty );
+    if( !(pValue && it != maPropertyToWindowMap.end()) )
+        return;
+
+    const auto& rWindows( it->second );
+    if(  rWindows.empty() )
+        return;
+
+    bool bVal = false;
+    sal_Int32 nVal = -1;
+    if( pValue->Value >>= bVal )
+    {
+        // we should have a CheckBox for this one
+        weld::CheckButton* pBox = dynamic_cast<weld::CheckButton*>(rWindows.front());
+        if( pBox )
+        {
+            pBox->set_active( bVal );
+        }
+        else if ( i_rProperty == "PrintProspect" )
+        {
+            // EVIL special case
+            if( bVal )
+                mxBrochureBtn->set_active(true);
+            else
+                mxPagesBtn->set_active(true);
+        }
+        else
+        {
+            SAL_WARN( "vcl", "missing a checkbox" );
+        }
+    }
+    else if( pValue->Value >>= nVal )
+    {
+        // this could be a ListBox or a RadioButtonGroup
+        weld::ComboBox* pList = dynamic_cast<weld::ComboBox*>(rWindows.front());
+        if( pList )
+        {
+            pList->set_active( static_cast< sal_uInt16 >(nVal) );
+        }
+        else if( nVal >= 0 && o3tl::make_unsigned(nVal) < rWindows.size() )
+        {
+            weld::RadioButton* pBtn = dynamic_cast<weld::RadioButton*>(rWindows[nVal]);
+            SAL_WARN_IF( !pBtn, "vcl", "unexpected control for property" );
+            if( pBtn )
+                pBtn->set_active(true);
+        }
+    }
+}
+
+bool PrintDialog::isPrintToFile() const
+{
+    return ( mxPrinters->get_active() == 0 );
+}
+
+bool PrintDialog::isCollate() const
+{
+    return mxCopyCountField->get_value() > 1 && mxCollateBox->get_active();
+}
+
+bool PrintDialog::isSingleJobs() const
+{
+    return mxSingleJobsBox->get_active();
+}
+
+bool PrintDialog::hasPreview() const
+{
+    return mxPreviewBox->get_active();
+}
+
+PropertyValue* PrintDialog::getValueForWindow( weld::Widget* i_pWindow ) const
+{
+    PropertyValue* pVal = nullptr;
+    auto it = maControlToPropertyMap.find( i_pWindow );
+    if( it != maControlToPropertyMap.end() )
+    {
+        pVal = maPController->getValue( it->second );
+        SAL_WARN_IF( !pVal, "vcl", "property value not found" );
+    }
+    else
+    {
+        OSL_FAIL( "changed control not in property map" );
+    }
+    return pVal;
+}
+
+IMPL_LINK_NOARG(PrintDialog, TogglePreviewHdl, weld::Toggleable&, void)
+{
+    schedulePreviewUpdate(true);
+}
+
+IMPL_LINK_NOARG(PrintDialog, ToggleBorderHdl, weld::Toggleable&, void)
+{
+    updateNup();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ToggleSingleJobsHdl, weld::Toggleable&, void)
+{
+    maPController->setValue(u"SinglePrintJobs"_ustr, Any(isSingleJobs()));
+    checkControlDependencies();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ToggleCollateHdl, weld::Toggleable&, void)
+{
+    maPController->setValue(u"Collate"_ustr, Any(isCollate()));
+    checkControlDependencies();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ToggleReverseOrderHdl, weld::Toggleable&, void)
+{
+    bool bChecked = mxReverseOrderBox->get_active();
+    maPController->setReversePrint(bChecked);
+    maPController->setValue(u"PrintReverse"_ustr, Any(bChecked));
+    schedulePreviewUpdate(true);
+}
+
+IMPL_LINK_NOARG(PrintDialog, ToggleBrochureHdl, weld::Toggleable&, void)
+{
+    PropertyValue* pVal = getValueForWindow(mxBrochureBtn.get());
+    if (pVal)
+    {
+        bool bVal = mxBrochureBtn->get_active();
+        pVal->Value <<= bVal;
+
+        checkOptionalControlDependencies();
+
+        // update preview and page settings
+        schedulePreviewUpdate(false);
+    }
+    if (mxBrochureBtn->get_active())
+    {
+        mxOrientationBox->set_sensitive(false);
+        mxOrientationBox->set_active(ORIENTATION_LANDSCAPE);
+        mxNupPagesBox->set_active(0);
+        updateNupFromPages();
+        showAdvancedControls(false);
+        enableNupControls(false);
+    }
+    else
+    {
+        mxOrientationBox->set_sensitive(true);
+        mxOrientationBox->set_active(ORIENTATION_AUTOMATIC);
+        updatePageSize(mxOrientationBox->get_active());
+        enableNupControls(true);
+        updateNupFromPages();
+    }
+}
+
+IMPL_LINK(PrintDialog, ClickOKCancelHdl, weld::Button&, rButton, void)
+{
+    storeToSettings();
+    m_xDialog->response(&rButton == mxOKButton.get() ? RET_OK : RET_CANCEL);
+}
+
+IMPL_LINK_NOARG(PrintDialog, ClickForwardHdl, weld::Button&, void)
+{
+    previewForward();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ClickBackwardHdl, weld::Button&, void)
+{
+    previewBackward();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ClickFirstHdl, weld::Button&, void)
+{
+    previewFirst();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ClickLastHdl, weld::Button&, void)
+{
+    previewLast();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ClickSetupHdl, weld::Button&, void)
+{
+    const Size aSavedCustomSize = maCustomPaperSize;
+    const bool bHadCustomEntry = mbHasCustomPaperEntry;
+    // Save orientation dropdown — Properties dialog can clobber it.
+    const int nSavedOrient = mxOrientationBox->get_active();
+
+    maPController->setupPrinter(m_xDialog.get());
+
+    VclPtr<Printer> aPrt(maPController->getPrinter());
+    if (!isPrintToFile())
+    {
+        // Rebuild paper size list to restore custom entry if needed.
+        setPaperSizes();
+
+        // Restore lost custom entry from saved document page size.
+        if (bHadCustomEntry && !mbHasCustomPaperEntry
+            && !aSavedCustomSize.IsEmpty())
+        {
+            maFirstPageSize = aSavedCustomSize;
+            setPaperSizes();
+        }
+    }
+
+    // Sync maSelectedPaperSize with current combobox selection.
+    if (mxPaperSizeBox->get_sensitive() && mxPaperSizeBox->get_active() >= 0)
+        SelectPaperSizeHdl(*mxPaperSizeBox);
+
+    updateOrientationBox(false);
+
+    // Restore orientation dropdown — Properties dialog may have
+    // clobbered the printer's orientation as a side effect.
+    if (mxOrientationBox->get_active() != nSavedOrient)
+    {
+        mxOrientationBox->set_active(nSavedOrient);
+    }
+
+    updatePageSize(mxOrientationBox->get_active());
+
+    setupPaperSidesBox();
+
+    // tdf#63905 don't use cache: page size may change
+    schedulePreviewUpdate(false);
+    checkControlDependencies();
+}
+
+IMPL_LINK_NOARG( PrintDialog, SelectPrinterHdl, weld::ComboBox&, void )
+{
+    // Save custom size — setPrinter() resets mbPapersizeFromUser.
+    const Size aSavedCustomSize = maCustomPaperSize;
+    const bool bHadCustomEntry = mbHasCustomPaperEntry;
+
+    if (!isPrintToFile())
+    {
+        OUString aNewPrinter(mxPrinters->get_active_text());
+        // set new printer
+        maPController->setPrinter(VclPtrInstance<Printer>(aNewPrinter));
+        maPController->resetPrinterOptions(false);
+        // invalidate page cache and start fresh
+        maPController->invalidatePageCache();
+        maFirstPageSize = Size();
+
+        updateOrientationBox();
+
+        // update text fields
+        mxOKButton->set_label(maPrintText);
+        updatePrinterText();
+        updateNup(false);
+        setPaperSizes();
+
+        // Restore lost custom entry from saved document page size.
+        if (bHadCustomEntry && !mbHasCustomPaperEntry
+            && !aSavedCustomSize.IsEmpty())
+        {
+            maCustomPaperSize = aSavedCustomSize;
+            maFirstPageSize = aSavedCustomSize;
+            setPaperSizes();
+        }
+
+        schedulePreviewUpdate(true);
+    }
+    else // print to file
+    {
+        // use the default printer or FIXME: the last used one?
+        maPController->setPrinter(VclPtrInstance<Printer>(Printer::GetDefaultPrinterName()));
+        mxOKButton->set_label(maPrintToFileText);
+        maPController->resetPrinterOptions(true);
+
+        setPaperSizes();
+
+        if (bHadCustomEntry && !mbHasCustomPaperEntry
+            && !aSavedCustomSize.IsEmpty())
+        {
+            maCustomPaperSize = aSavedCustomSize;
+            maFirstPageSize = aSavedCustomSize;
+            setPaperSizes();
+        }
+
+        updateOrientationBox();
+        schedulePreviewUpdate(true);
+    }
+
+    setupPaperSidesBox();
+
+    // Related: tdf#159995 changing a listbox's active item does not
+    // trigger an update to the preview so force an update to the
+    // preview by calling each active listbox's select handler after
+    // changing the active printer.
+    if (mxOrientationBox->get_sensitive())
+        SelectOrientationHdl(*mxOrientationBox);
+    if (mxPaperSizeBox->get_sensitive())
+        SelectPaperSizeHdl(*mxPaperSizeBox);
+}
+
+IMPL_LINK_NOARG(PrintDialog, SelectPaperSidesHdl, weld::ComboBox&, void)
+{
+    DuplexMode eDuplex = static_cast<DuplexMode>(mxPaperSidesBox->get_active() + 1);
+    maPController->getPrinter()->SetDuplexMode(eDuplex);
+}
+
+IMPL_LINK_NOARG(PrintDialog, SelectOrientationHdl, weld::ComboBox&, void)
+{
+    int nOrientation = mxOrientationBox->get_active();
+    if (nOrientation != ORIENTATION_AUTOMATIC)
+        setPaperOrientation(static_cast<Orientation>(nOrientation - 1), true);
+
+    updatePageSize(nOrientation);
+    updateNup(false);
+}
+
+IMPL_LINK_NOARG(PrintDialog, SelectNupOrderHdl, weld::ComboBox&, void)
+{
+    updateNup();
+}
+
+IMPL_LINK_NOARG(PrintDialog, SelectNupPagesHdl, weld::ComboBox&, void)
+{
+    if (!mxPagesBtn->get_active())
+        mxPagesBtn->set_active(true);
+    updatePageSize(mxOrientationBox->get_active());
+    updateNupFromPages(false);
+}
+
+IMPL_LINK_NOARG(PrintDialog, SelectPaperSizeHdl, weld::ComboBox&, void)
+{
+    VclPtr<Printer> aPrt(maPController->getPrinter());
+    int nActive = mxPaperSizeBox->get_active();
+
+    // Save orientation — SetPaper/SetPaperSizeUser can clobber it.
+    Orientation eOrientBefore = aPrt->GetOrientation();
+
+    // Custom entry is beyond GetPaperInfoCount(); handle separately.
+    if (mbHasCustomPaperEntry && nActive == aPrt->GetPaperInfoCount())
+    {
+        mePaper = PAPER_USER;
+        // SetPaperSizeUser needs logical units; set Map100thMM.
+        {
+            auto popIt = aPrt->ScopedPush();
+            aPrt->SetMapMode(MapMode(MapUnit::Map100thMM));
+            aPrt->SetPaperSizeUser(maCustomPaperSize);
+        }
+        maPController->setPaperSizeFromUser(maCustomPaperSize);
+        maSelectedPaperSize = maCustomPaperSize;
+    }
+    else
+    {
+        PaperInfo aInfo = aPrt->GetPaperInfo(nActive);
+        aInfo.doSloppyFit(true);
+        mePaper = aInfo.getPaper();
+        Size aSelectedSize(aInfo.getWidth(), aInfo.getHeight());
+        if (mePaper == PAPER_USER)
+            aPrt->SetPaperSizeUser(aSelectedSize);
+        else
+            aPrt->SetPaper(mePaper);
+
+        maPController->setPaperSizeFromUser(aSelectedSize);
+        maSelectedPaperSize = aSelectedSize;
+    }
+
+    // In Automatic mode, restore orientation that SetPaper/SetPaperSizeUser
+    // may have changed — orientation should follow the document.
+    if (mxOrientationBox->get_active() == ORIENTATION_AUTOMATIC
+        && aPrt->GetOrientation() != eOrientBefore)
+    {
+        aPrt->SetOrientation(eOrientBefore);
+    }
+
+    updatePageSize(mxOrientationBox->get_active());
+
+    schedulePreviewUpdate(false);
+}
+
+IMPL_LINK_NOARG(PrintDialog, MetricSpinModifyHdl, weld::MetricSpinButton&, void)
+{
+    checkControlDependencies();
+    updateNupFromPages();
+}
+
+IMPL_LINK_NOARG(PrintDialog, FocusOutHdl, weld::Widget&, void)
+{
+    ActivateHdl(*mxPageEdit);
+}
+
+IMPL_LINK_NOARG(PrintDialog, ActivateHdl, weld::Entry&, bool)
+{
+    sal_Int32 nPage = mxPageEdit->get_text().toInt32();
+    if (nPage < 1)
+    {
+        nPage = 1;
+        mxPageEdit->set_text(u"1"_ustr);
+    }
+    else if (nPage > mnCachedPages)
+    {
+        nPage = mnCachedPages;
+        mxPageEdit->set_text(OUString::number(mnCachedPages));
+    }
+    int nNewCurPage = nPage - 1;
+    if (nNewCurPage != mnCurPage)
+    {
+        mnCurPage = nNewCurPage;
+        schedulePreviewUpdate(true);
+    }
+    return true;
+}
+
+IMPL_LINK( PrintDialog, SpinModifyHdl, weld::SpinButton&, rEdit, void )
+{
+    checkControlDependencies();
+    if (&rEdit == mxNupRowsEdt.get() || &rEdit == mxNupColEdt.get())
+    {
+       updateNupFromPages();
+    }
+    else if( &rEdit == mxCopyCountField.get() )
+    {
+        maPController->setValue( u"CopyCount"_ustr,
+                               Any( sal_Int32(mxCopyCountField->get_value()) ) );
+        maPController->setValue( u"Collate"_ustr,
+                               Any( isCollate() ) );
+    }
+}
+
+IMPL_LINK( PrintDialog, UIOption_CheckHdl, weld::Toggleable&, i_rBox, void )
+{
+    PropertyValue* pVal = getValueForWindow( &i_rBox );
+    if( pVal )
+    {
+        makeEnabled( &i_rBox );
+
+        bool bVal = i_rBox.get_active();
+        pVal->Value <<= bVal;
+
+        checkOptionalControlDependencies();
+
+        // update preview and page settings
+        schedulePreviewUpdate(false);
+    }
+}
+
+IMPL_LINK( PrintDialog, UIOption_RadioHdl, weld::Toggleable&, i_rBtn, void )
+{
+    // this handler gets called for all radiobuttons that get unchecked, too
+    // however we only want one notification for the new value (that is for
+    // the button that gets checked)
+    if( !i_rBtn.get_active() )
+        return;
+
+    PropertyValue* pVal = getValueForWindow( &i_rBtn );
+    auto it = maControlToNumValMap.find( &i_rBtn );
+    if( !(pVal && it != maControlToNumValMap.end()) )
+        return;
+
+    makeEnabled( &i_rBtn );
+
+    sal_Int32 nVal = it->second;
+    pVal->Value <<= nVal;
+
+    updateOrientationBox();
+
+    checkOptionalControlDependencies();
+
+    // tdf#41205 give focus to the page range edit if the corresponding radio button was selected
+    if (pVal->Name == "PrintContent" && mxPageRangesRadioButton->get_active())
+        mxPageRangeEdit->grab_focus();
+
+    // update preview and page settings
+    schedulePreviewUpdate(false);
+}
+
+IMPL_LINK( PrintDialog, UIOption_SelectHdl, weld::ComboBox&, i_rBox, void )
+{
+    PropertyValue* pVal = getValueForWindow( &i_rBox );
+    if( !pVal )
+        return;
+
+    makeEnabled( &i_rBox );
+
+    sal_Int32 nVal( i_rBox.get_active() );
+    pVal->Value <<= nVal;
+
+    //If we are in impress we start in print slides mode and get a
+    //maFirstPageSize for slides which are usually landscape mode, if we
+    //change to notes which are usually in portrait mode, and then visit
+    //n-up print, we will assume notes are in landscape unless we throw
+    //away maFirstPageSize when we change page content type
+    if (pVal->Name == "PageContentType")
+    {
+        maFirstPageSize = Size();
+
+        css::uno::Sequence<sal_Bool> aChoicesDisabled{
+            false, // Original size
+            false, // Fit to printable page
+            (nVal == 2) /*Notes*/ ? true : false, // disable/enable Multiple sheets of paper
+            (nVal == 2) /*Notes*/ ? true : false  // disable/enable Tile sheet of paper
+        };
+        maPController->setUIChoicesDisabled(u"PageOptions"_ustr, aChoicesDisabled);
+    }
+
+    checkOptionalControlDependencies();
+
+    updatePageSize(mxOrientationBox->get_active());
+
+    // update preview and page settings
+    schedulePreviewUpdate(false);
+}
+
+IMPL_LINK( PrintDialog, UIOption_SpinModifyHdl, weld::SpinButton&, i_rBox, void )
+{
+    PropertyValue* pVal = getValueForWindow( &i_rBox );
+    if( pVal )
+    {
+        makeEnabled( &i_rBox );
+
+        sal_Int64 nVal = i_rBox.get_value();
+        pVal->Value <<= nVal;
+
+        checkOptionalControlDependencies();
+
+        // update preview and page settings
+        schedulePreviewUpdate(false);
+    }
+}
+
+IMPL_LINK( PrintDialog, UIOption_EntryModifyHdl, weld::Entry&, i_rBox, void )
+{
+    PropertyValue* pVal = getValueForWindow( &i_rBox );
+    if( pVal && mxPageRangesRadioButton->get_active() )
+    {
+        makeEnabled( &i_rBox );
+
+        OUString aVal( i_rBox.get_text() );
+        pVal->Value <<= aVal;
+
+        checkOptionalControlDependencies();
+
+        // update preview and page settings
+        schedulePreviewUpdate(false);
+    }
+}
+
+void PrintDialog::previewForward()
+{
+    sal_Int32 nValue = mxPageEdit->get_text().toInt32() + 1;
+    if (nValue <= mnCachedPages)
+    {
+        mxPageEdit->set_text(OUString::number(nValue));
+        ActivateHdl(*mxPageEdit);
+    }
+}
+
+void PrintDialog::previewBackward()
+{
+    sal_Int32 nValue = mxPageEdit->get_text().toInt32() - 1;
+    if (nValue >= 1)
+    {
+        mxPageEdit->set_text(OUString::number(nValue));
+        ActivateHdl(*mxPageEdit);
+    }
+}
+
+void PrintDialog::previewFirst()
+{
+    mxPageEdit->set_text(u"1"_ustr);
+    ActivateHdl(*mxPageEdit);
+}
+
+void PrintDialog::previewLast()
+{
+    mxPageEdit->set_text(OUString::number(mnCachedPages));
+    ActivateHdl(*mxPageEdit);
+}
+
+
+static OUString getNewLabel(const OUString& aLabel, int i_nCurr, int i_nMax)
+{
+    OUString aNewText( aLabel.replaceFirst( "%p", OUString::number( i_nCurr ) ) );
+    aNewText = aNewText.replaceFirst( "%n", OUString::number( i_nMax ) );
+
+    return aNewText;
+}
+
+// PrintProgressDialog
+PrintProgressDialog::PrintProgressDialog(weld::Window* i_pParent, int i_nMax)
+    : GenericDialogController(i_pParent, u"vcl/ui/printprogressdialog.ui"_ustr, u"PrintProgressDialog"_ustr)
+    , mbCanceled(false)
+    , mnCur(0)
+    , mnMax(i_nMax)
+    , mxText(m_xBuilder->weld_label(u"label"_ustr))
+    , mxProgress(m_xBuilder->weld_progress_bar(u"progressbar"_ustr))
+    , mxButton(m_xBuilder->weld_button(u"cancel"_ustr))
+{
+    if( mnMax < 1 )
+        mnMax = 1;
+
+    maStr = mxText->get_label();
+
+    //just multiply largest value by 10 and take the width of that string as
+    //the max size we will want
+    mxText->set_label(getNewLabel(maStr, mnMax * 10, mnMax * 10));
+    mxText->set_size_request(mxText->get_preferred_size().Width(), -1);
+
+    //Pick a useful max width
+    mxProgress->set_size_request(mxProgress->get_approximate_digit_width() * 25, -1);
+
+    mxButton->connect_clicked( LINK( this, PrintProgressDialog, ClickHdl ) );
+
+    // after this patch f7157f04fab298423e2c4f6a7e5f8e361164b15f, we have seen the calc Max string (sometimes) look above
+    // now init to the right start values
+    mxText->set_label(getNewLabel(maStr, mnCur, mnMax));
+}
+
+PrintProgressDialog::~PrintProgressDialog()
+{
+}
+
+IMPL_LINK_NOARG(PrintProgressDialog, ClickHdl, weld::Button&, void)
+{
+    mbCanceled = true;
+}
+
+void PrintProgressDialog::setProgress( int i_nCurrent )
+{
+    mnCur = i_nCurrent;
+
+    if( mnMax < 1 )
+        mnMax = 1;
+
+    mxText->set_label(getNewLabel(maStr, mnCur, mnMax));
+
+    // here view the dialog, with the right label
+    mxProgress->set_percentage(mnCur*100/mnMax);
+}
+
+void PrintProgressDialog::tick()
+{
+    if( mnCur < mnMax )
+        setProgress( ++mnCur );
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,5 @@
+Contains ppds for use by vcl when not using CUPS
+
+This is used for the print-to-file functionality. These two PPDs
+describe the range of paper sizes and postscript options necessary for
+printing to postscript without a configured printer.

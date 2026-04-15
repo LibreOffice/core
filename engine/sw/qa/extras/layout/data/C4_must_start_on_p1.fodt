@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:margin-top="0" fo:margin-bottom="0.3cm" style:contextual-spacing="false" fo:line-height="108%" fo:orphans="2" fo:widows="2"/>
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt"/>
+  </style:default-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Table1" style:family="table">
+   <style:table-properties style:width="8cm" fo:margin-left="0" fo:margin-top="0" fo:margin-bottom="0" table:align="left" style:writing-mode="page"/>
+  </style:style>
+  <style:style style:name="Table1.A" style:family="table-column">
+   <style:table-column-properties style:column-width="1cm"/>
+  </style:style>
+  <style:style style:name="Table1.B" style:family="table-column">
+   <style:table-column-properties style:column-width="2cm"/>
+  </style:style>
+  <style:style style:name="Table1.C" style:family="table-column">
+   <style:table-column-properties style:column-width="5cm"/>
+  </style:style>
+  <style:style style:name="Table1.1" style:family="table-row">
+   <style:table-row-properties style:min-row-height="1.5cm" fo:keep-together="auto"/>
+  </style:style>
+  <style:style style:name="Table1.2" style:family="table-row">
+   <style:table-row-properties style:min-row-height="0.5cm" fo:keep-together="auto"/>
+  </style:style>
+  <style:style style:name="Table1.4" style:family="table-row">
+   <style:table-row-properties style:min-row-height="1cm" fo:keep-together="auto"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:margin-top="0" fo:margin-bottom="0" fo:line-height="100%"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="8cm" fo:page-height="5cm" fo:margin-top="0" fo:margin-bottom="0" fo:margin-left="0" fo:margin-right="0"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="P1"/>
+   <table:table table:name="Table1" table:style-name="Table1">
+    <table:table-column table:style-name="Table1.A"/>
+    <table:table-column table:style-name="Table1.B"/>
+    <table:table-column table:style-name="Table1.C"/>
+    <table:table-header-rows>
+     <table:table-row table:style-name="Table1.1">
+      <table:table-cell>
+       <text:p>A1</text:p>
+      </table:table-cell>
+      <table:table-cell>
+       <text:p>B1</text:p>
+      </table:table-cell>
+      <table:table-cell>
+       <text:p>C1_repeated_header</text:p>
+      </table:table-cell>
+     </table:table-row>
+    </table:table-header-rows>
+    <table:table-row table:style-name="Table1.2">
+     <table:table-cell table:number-columns-spanned="3">
+      <text:p>A2</text:p>
+     </table:table-cell>
+     <table:covered-table-cell/>
+     <table:covered-table-cell/>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.2">
+     <table:table-cell>
+      <text:p>A3</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-rows-spanned="3">
+      <text:p>B3</text:p>
+     </table:table-cell>
+     <table:table-cell>
+      <text:p>C3_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.4">
+     <table:table-cell>
+      <text:p>A4</text:p>
+     </table:table-cell>
+     <table:covered-table-cell/>
+     <table:table-cell>
+      <text:p>C4_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>

@@ -1,0 +1,111 @@
+# "#pragma deprecated" and "#pragma intrinsic" not (yet?) handled in the "if
+# (LangOpts.MicrosoftExt)" block in Preprocessor::RegisterBuiltinPragmas in
+# Clang's lib/Lex/Pragma.cpp:
+--- nspr/pr/include/pratom.h
++++ nspr/pr/include/pratom.h
+@@ -83,7 +83,7 @@
+ 
+ #include <intrin.h>
+ 
+-#ifdef _MSC_VER
++#if defined _WIN32 && !defined __clang__
+ #pragma intrinsic(_InterlockedIncrement)
+ #pragma intrinsic(_InterlockedDecrement)
+ #pragma intrinsic(_InterlockedExchange)
+--- nspr/pr/include/prbit.h
++++ nspr/pr/include/prbit.h
+@@ -15,7 +15,7 @@
+ */
+ #if defined(_WIN32) && (_MSC_VER >= 1300) && \
+     (defined(_M_IX86) || defined(_M_X64) || defined(_M_ARM) || \
+-     defined(_M_ARM64))
++     defined(_M_ARM64)) && !defined __clang__
+ # include <intrin.h>
+ # pragma  intrinsic(_BitScanForward,_BitScanReverse)
+ __forceinline static int __prBitScanForward32(unsigned int val)
+@@ -33,7 +33,7 @@
+ # define pr_bitscan_ctz32(val)  __prBitScanForward32(val)
+ # define pr_bitscan_clz32(val)  __prBitScanReverse32(val)
+ # define  PR_HAVE_BUILTIN_BITSCAN32
+-#elif ((__GNUC__ >= 4) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)) && \
++#elif defined __GNUC__ && ((__GNUC__ >= 4) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)) && \
+        (defined(__i386__) || defined(__x86_64__) || defined(__arm__) || \
+         defined(__aarch64__))
+ # define pr_bitscan_ctz32(val)  __builtin_ctz(val)
+@@ -138,7 +138,7 @@
+ */
+ 
+ #if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64) || \
+-    defined(_M_X64) || defined(_M_ARM) || defined(_M_ARM64))
++    defined(_M_X64) || defined(_M_ARM) || defined(_M_ARM64)) && !defined __clang__
+ #include <stdlib.h>
+ #pragma intrinsic(_rotl, _rotr)
+ #define PR_ROTATE_LEFT32(a, bits) _rotl(a, bits)
+--- nss/lib/certdb/certdb.h
++++ nss/lib/certdb/certdb.h
+@@ -21,7 +21,7 @@
+ /* On Windows, Mac, and Linux (and other gcc platforms), we can give compile
+  * time deprecation warnings when applications use the old CERTDB_VALID_PEER
+  * define */
+-#if __GNUC__ > 3
++#if defined __GNUC__ && __GNUC__ > 3
+ #if (__GNUC__ == 4) && (__GNUC_MINOR__ < 5)
+ typedef unsigned int __CERTDB_VALID_PEER __attribute__((deprecated));
+ #else
+@@ -30,7 +30,7 @@
+ #endif
+ #define CERTDB_VALID_PEER ((__CERTDB_VALID_PEER)CERTDB_TERMINAL_RECORD)
+ #else
+-#ifdef _WIN32
++#if defined _WIN32 && !defined __clang__
+ #pragma deprecated(CERTDB_VALID_PEER)
+ #endif
+ #define CERTDB_VALID_PEER CERTDB_TERMINAL_RECORD
+--- nss/lib/freebl/blapit.h
++++ nss/lib/freebl/blapit.h
+@@ -53,7 +53,7 @@
+  * Mark the old defines as deprecated. This will warn code that expected
+  * DSA1 only that they need to change if the are to support DSA2.
+  */
+-#if defined(__GNUC__) && (__GNUC__ > 3)
++#if defined(__GNUC__) && (__GNUC__ > 3) || defined __clang__
+ /* make GCC warn when we use these #defines */
+ typedef int __BLAPI_DEPRECATED __attribute__((deprecated));
+ #define DSA_SUBPRIME_LEN ((__BLAPI_DEPRECATED)DSA1_SUBPRIME_LEN)
+
+# While MSVC uses
+#  #pragma warning(disable : 4103)
+# in the inner pkcs11p.h, clang-cl wants
+#  #pragma clang diagnostic ignored "-Wpragma-pack"
+# in the outer pkcs11t.h:
+--- nss/lib/util/pkcs11t.h
++++ nss/lib/util/pkcs11t.h
+@@ -78,7 +78,14 @@
+ #define CK_INVALID_HANDLE 0
+ 
+ /* pack */
++#if defined __clang__ && defined _MSC_VER
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wpragma-pack"
++#endif
+ #include "pkcs11p.h"
++#if defined __clang__ && defined _MSC_VER
++#pragma clang diagnostic pop
++#endif
+ 
+ typedef struct CK_VERSION {
+     CK_BYTE major; /* integer portion of version number */
+@@ -2586,6 +2593,13 @@
+ #include "pkcs11n.h"
+ 
+ /* undo packing */
++#if defined __clang__ && defined _MSC_VER
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wpragma-pack"
++#endif
+ #include "pkcs11u.h"
++#if defined __clang__ && defined _MSC_VER
++#pragma clang diagnostic pop
++#endif
+ 
+ #endif

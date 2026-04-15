@@ -1,0 +1,20 @@
+--- src/w32-util.c
++++ src/w32-util.c
+@@ -173,7 +173,7 @@
+    NULL; caller may use GetLastError to get the actual error number.
+    Calling this function with STRING set to NULL is not defined. */
+ static wchar_t *
+-utf8_to_wchar (const char *string)
++utf8_to_wchar_ (const char *string)
+ {
+   int n;
+   wchar_t *result;
+@@ -206,7 +206,7 @@
+   if (!string)
+     return NULL;
+ 
+-  return utf8_to_wchar (string);
++  return utf8_to_wchar_ (string);
+ }
+ 
+ 

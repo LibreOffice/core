@@ -1,0 +1,13 @@
+--- configure
++++ configure
+@@ -4433,6 +4433,10 @@
+   hp*|HP*)
+     define_xopen_source=no
+     ;;
++
++  Linux*)
++    define_xopen_source=no
++    ;;
+ 
+ esac
+ 

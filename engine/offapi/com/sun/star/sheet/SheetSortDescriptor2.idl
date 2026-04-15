@@ -1,0 +1,91 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** a description of how a cell range is to be sorted.
+
+    <p>This service extends the com::sun::star::table::TableSortDescriptor2
+    service with spreadsheet specific properties.</p>
+ */
+published service SheetSortDescriptor2
+{
+
+    /** provides common sorting properties.
+
+    The fields in the SortFields property are not fully supported at the moment.
+    IsCaseSensitive, CollatorLocale and CollatorAlgorithm are only supported once and if
+    every field contains different of this it gives undefined results.
+
+     */
+    service com::sun::star::table::TableSortDescriptor2;
+
+
+    /** specifies if cell formats are moved with the contents
+        they belong to.
+     */
+    [property] boolean BindFormatsToContent;
+
+
+    /** specifies if a user defined sorting list is used.
+     */
+    [property] boolean IsUserListEnabled;
+
+
+    /** specifies which user defined sorting list is used.
+
+        <p>This property is only used, if
+        SheetSortDescriptor::IsUserListEnabled is `TRUE`.</p>
+     */
+    [property] long UserListIndex;
+
+
+    /** specifies if the sorted data should be copied to another
+        position in the document.
+     */
+    [property] boolean CopyOutputData;
+
+
+    /** specifies the position where sorted data are to be copied.
+
+        <p>This property is only used, if
+        SheetSortDescriptor::CopyOutputData is `TRUE`.</p>
+     */
+    [property] com::sun::star::table::CellAddress OutputPosition;
+
+
+    /** specifies whether the first row or column (depending on
+        com::sun::star::table::TableSortDescriptor::Orientation) is a header which
+        should not be sorted.
+     */
+    [property] boolean ContainsHeader;
+
+
+    /** specifies how numbers inside text are handled in text comparisons
+        @see com::sun::star::sheet::SortNumberBehavior
+    */
+    [optional, property] long NumberBehavior;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

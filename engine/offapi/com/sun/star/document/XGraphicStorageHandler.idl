@@ -1,0 +1,44 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+module com {  module sun {  module star {  module document {
+
+/** interface for loading, saving and serializing of XGraphic objects to
+    a document storage
+ */
+interface XGraphicStorageHandler : com::sun::star::uno::XInterface
+{
+    /** load a graphic defined by the URL from the storage
+    */
+    com::sun::star::graphic::XGraphic loadGraphic([in] string aURL);
+
+    /** load a graphic from the output stream
+    */
+    com::sun::star::graphic::XGraphic loadGraphicFromOutputStream([in] com::sun::star::io::XOutputStream xOutputStream);
+
+    /** save the graphic to the storage and return the URL reference to
+        its location inside the storage
+    */
+    string saveGraphic([in] com::sun::star::graphic::XGraphic xGraphic);
+
+    /** save the graphic to the storage with a requested name and return
+        the URL reference to its location inside the storage and the mime
+        type of the format that the graphic was saved to as an output parameter
+    */
+    string saveGraphicByName([in] com::sun::star::graphic::XGraphic xGraphic, [out] string savedMimeType, [in] string aRequestedName);
+
+    /** create an input stream from the input graphic
+    */
+    com::sun::star::io::XInputStream createInputStream([in] com::sun::star::graphic::XGraphic xGraphic);
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

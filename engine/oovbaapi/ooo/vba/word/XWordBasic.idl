@@ -1,0 +1,51 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+module ooo {  module vba {  module word {
+
+interface XWordBasic
+{
+    [attribute] long MailMergeMainDocumentType;
+
+    void FileOpen( [in] string Name, [in] any ConfirmConversions, [in] any ReadOnly, [in] any AddToMru, [in] any PasswordDoc, [in] any PasswordDot, [in] any Revert, [in] any WritePasswordDoc, [in] any WritePasswordDot );
+    void FileSave();
+    void FileSaveAs( [in] any Name, [in] any Format, [in] any LockAnnot, [in] any Password, [in] any AddToMru, [in] any WritePassword, [in] any RecommendReadOnly, [in] any EmbedFonts, [in] any NativePictureFormat, [in] any FormsData, [in] any SaveAsAOCELetter );
+    void FileClose( [in] any Save );
+    void ToolsOptionsView( [in] any DraftFont, [in] any WrapToWindow, [in] any PicturePlaceHolders, [in] any FieldCodes, [in] any BookMarks, [in] any FieldShading, [in] any StatusBar, [in] any HScroll, [in] any VScroll, [in] any StyleAreaWidth, [in] any Tabs, [in] any Spaces, [in] any Paras, [in] any Hyphens, [in] any Hidden, [in] any ShowAll, [in] any Drawings, [in] any Anchors, [in] any TextBoundaries, [in] any VRuler, [in] any Highlight );
+    any WindowName( [in] any Number );
+    any ExistingBookmark( [in] string Name );
+    void MailMergeOpenDataSource( [in] string Name,
+                                  [in] any Format,
+                                  [in] any ConfirmConversions,
+                                  [in] any ReadOnly,
+                                  [in] any LinkToSource,
+                                  [in] any AddToRecentFiles,
+                                  [in] any PasswordDocument,
+                                  [in] any PasswordTemplate,
+                                  [in] any Revert,
+                                  [in] any WritePasswordDocument,
+                                  [in] any WritePasswordTemplate,
+                                  [in] any Connection,
+                                  [in] any SQLStatement,
+                                  [in] any SQLStatement1,
+                                  [in] any OpenExclusive,
+                                  [in] any SubType );
+
+    any AppMaximize( [in] any WindowName, [in] any State );
+    any DocMaximize( [in] any State );
+    void AppShow( [in] any WindowName );
+    any AppCount();
+    void MsgBox( [in] string Prompt );
+    void ScreenUpdating( [in] /*optional*/ any On );
+};
+
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

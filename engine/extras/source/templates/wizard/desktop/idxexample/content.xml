@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
+  <office:scripts/>
+  <office:automatic-styles>
+    <style:style style:name="Table1" style:family="table">
+      <style:table-properties style:width="6.6924in" table:align="margins" fo:keep-with-next="always"/>
+    </style:style>
+    <style:style style:name="Table1.A" style:family="table-column">
+      <style:table-column-properties style:column-width="1.3382in" style:rel-column-width="13107*"/>
+    </style:style>
+    <style:style style:name="Table1.A1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="0.05pt solid #000000"/>
+    </style:style>
+    <style:style style:name="Table1.E1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border="0.05pt solid #000000"/>
+    </style:style>
+    <style:style style:name="Table1.A2" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="none" fo:border-bottom="0.05pt solid #000000"/>
+    </style:style>
+    <style:style style:name="Table1.E2" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="0.05pt solid #000000" fo:border-top="none" fo:border-bottom="0.05pt solid #000000"/>
+    </style:style>
+    <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard"/>
+    <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
+      <style:paragraph-properties fo:text-align="start" style:justify-single-word="false"/>
+    </style:style>
+    <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Standard">
+      <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
+      <style:text-properties fo:font-size="10pt" fo:font-style="italic" officeooo:rsid="002c87d2" officeooo:paragraph-rsid="002c87d2" style:font-size-asian="10pt" style:font-style-asian="italic" style:font-size-complex="10pt" style:font-style-complex="italic"/>
+    </style:style>
+    <style:style style:name="P4" style:family="paragraph" style:parent-style-name="Table"/>
+    <style:style style:name="P5" style:family="paragraph" style:parent-style-name="Heading_20_1">
+      <style:paragraph-properties fo:break-before="page"/>
+      <style:text-properties officeooo:paragraph-rsid="001ecf70"/>
+    </style:style>
+    <style:style style:name="P6" style:family="paragraph" style:parent-style-name="Heading_20_2" style:master-page-name="">
+      <style:paragraph-properties style:page-number="auto" fo:break-before="page"/>
+    </style:style>
+    <style:style style:name="P7" style:family="paragraph" style:parent-style-name="Heading_20_2" style:master-page-name="">
+      <style:paragraph-properties style:page-number="auto" fo:break-before="page"/>
+    </style:style>
+    <style:style style:name="P8" style:family="paragraph" style:parent-style-name="Table_20_Contents"/>
+    <style:style style:name="P9" style:family="paragraph" style:parent-style-name="Table_20_Heading"/>
+    <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
+      <style:graphic-properties style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" fo:padding="0in" fo:border="none"/>
+    </style:style>
+    <style:style style:name="fr2" style:family="graphic" style:parent-style-name="Graphics">
+      <style:graphic-properties style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="from-left" style:horizontal-rel="paragraph" style:mirror="none" fo:clip="rect(0in, 0in, 0in, 0in)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="99%" draw:color-mode="standard"/>
+    </style:style>
+    <style:style style:name="Sect1" style:family="section">
+      <style:section-properties style:editable="false">
+        <style:columns fo:column-count="1" fo:column-gap="0in"/>
+      </style:section-properties>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:text text:use-soft-page-breaks="true">
+      <text:sequence-decls>
+        <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+      </text:sequence-decls>
+      <text:section text:style-name="Sect1" text:name="IndexSection_0" text:display="none">
+        <text:p text:style-name="Standard"/>
+      </text:section>
+      <text:section text:style-name="Sect1" text:name="IndexSection_1" text:display="none">
+        <text:p text:style-name="Standard"/>
+      </text:section>
+      <text:section text:style-name="Sect1" text:name="IndexSection_2" text:display="none">
+        <text:p text:style-name="Standard"/>
+      </text:section>
+      <text:section text:style-name="Sect1" text:name="IndexSection_3" text:display="none">
+        <text:p text:style-name="Standard"/>
+      </text:section>
+      <text:section text:style-name="Sect1" text:name="IndexSection_4" text:display="none">
+        <text:p text:style-name="Standard"/>
+      </text:section>
+      <text:section text:style-name="Sect1" text:name="IndexSection_5" text:display="none">
+        <text:p text:style-name="Standard"/>
+      </text:section>
+      <text:section text:style-name="Sect1" text:name="IndexSection_6">
+        <text:p text:style-name="P1"/>
+      </text:section>
+      <text:section text:style-name="Sect1" text:name="IndexContentSection">
+        <text:h text:style-name="P5" text:outline-level="1">HEADING1</text:h>
+        <text:p text:style-name="P1">ENTRY1<text:line-break/> <text:alphabetical-index-mark text:string-value="Chapter"/><text:s text:c="2"/><text:user-index-mark text:string-value="User Directory Entry" text:index-name="User-Defined" text:outline-level="1"/></text:p>
+        <text:h text:style-name="P6" text:outline-level="2">HEADING11</text:h>
+        <text:p text:style-name="P1">ENTRY11<text:line-break/> <text:toc-mark text:string-value="Entry" text:outline-level="1"/></text:p>
+        <text:h text:style-name="P6" text:outline-level="2">HEADING12</text:h>
+        <text:p text:style-name="P1">ENTRY12<text:line-break/> <text:alphabetical-index-mark text:string-value="this" text:key1="Primary key" text:key2="Secondary key"/><text:s text:c="2"/><text:alphabetical-index-mark text:string-value="Keyword"/></text:p>
+        <text:p text:style-name="P1"/>
+      </text:section>
+      <text:p text:style-name="P1"/>
+      <table:table table:name="Table1" table:style-name="Table1">
+        <table:table-column table:style-name="Table1.A" table:number-columns-repeated="5"/>
+        <table:table-header-rows>
+          <table:table-row>
+            <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+              <text:p text:style-name="P9"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+              <text:p text:style-name="P9"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+              <text:p text:style-name="P9"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+              <text:p text:style-name="P9"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="Table1.E1" office:value-type="string">
+              <text:p text:style-name="P9"/>
+            </table:table-cell>
+          </table:table-row>
+        </table:table-header-rows>
+        <table:table-row>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+            <text:p text:style-name="P8"/>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+            <text:p text:style-name="P8"/>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+            <text:p text:style-name="P8"/>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+            <text:p text:style-name="P8"/>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.E2" office:value-type="string">
+            <text:p text:style-name="P8"/>
+          </table:table-cell>
+        </table:table-row>
+      </table:table>
+      <text:p text:style-name="P4">TABLE1</text:p>
+      <text:p text:style-name="P1">
+        <draw:frame draw:style-name="fr1" draw:name="Rahmen1" text:anchor-type="paragraph" svg:y="0.0409in" svg:width="1.952in" draw:z-index="0">
+          <draw:text-box fo:min-height="0.8126in">
+            <text:p text:style-name="Illustration">
+              <draw:frame draw:style-name="fr2" draw:name="Graphic1" text:anchor-type="paragraph" svg:x="0.4335in" svg:y="0.0626in" svg:width="1.089in" svg:height="0.8126in" draw:z-index="1">
+                <draw:image xlink:href="Pictures/2000008600001923000012C24E0D0895.wmf" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+              </draw:frame>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+      </text:p>
+      <text:p text:style-name="P1"/>
+      <text:p text:style-name="P1"/>
+      <text:p text:style-name="P1"/>
+      <text:p text:style-name="P1"/>
+      <text:p text:style-name="P2"/>
+      <text:p text:style-name="P3">IMAGE1</text:p>
+    </office:text>
+  </office:body>
+</office:document-content>

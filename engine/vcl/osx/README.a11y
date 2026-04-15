@@ -1,0 +1,7 @@
+Naming scheme:
+
+a11yXYZhelper:           Helper class providing static methods
+
+a11yXYZwrapper:          Wrapper around one (or two) UNO-interfaces
+
+a11ywrapperXYZ:          Subclass of a11ywrapper for a specific AXRole

@@ -1,0 +1,81 @@
+#!/bin/sh
+
+# When lacking a proper cross-compilation package system from Linux
+# (or some other Unix) to Raspbian, instead create a tarball of
+# headers, libraries and pkg-config files on a Raspbian system and
+# unpack that then on the build system, and pass in a -sysroot switch
+# to the cross-compiler.
+
+cd /
+
+# Exclude irrelevant stuff, like shared libraries that actually are
+# "modules" loaded at run-time by some software.
+
+EXCLUDE='lib/ld-linux \
+lib/klibc- \
+lib/arm-linux-gnueabihf/security/ \
+usr/lib/arm-linux-gnueabihf/ImageMagick- \
+usr/lib/arm-linux-gnueabihf/autofs/ \
+usr/lib/arm-linux-gnueabihf/directfb- \
+usr/lib/arm-linux-gnueabihf/gconv/ \
+usr/lib/arm-linux-gnueabihf/gdbus- \
+usr/lib/arm-linux-gnueabihf/gdk-pixbuf- \
+usr/lib/arm-linux-gnueabihf/gio/ \
+usr/lib/arm-linux-gnueabihf/gvfs/ \
+usr/lib/arm-linux-gnueabihf/jack/ \
+usr/lib/arm-linux-gnueabihf/libgphoto2/ \
+usr/lib/arm-linux-gnueabihf/libgphoto2_port/ \
+usr/lib/arm-linux-gnueabihf/libgtk-2.0/ \
+usr/lib/arm-linux-gnueabihf/libgtk-3.0/ \
+usr/lib/arm-linux-gnueabihf/libproxy/ \
+usr/lib/arm-linux-gnueabihf/odbc/ \
+usr/lib/arm-linux-gnueabihf/pango/ \
+usr/lib/arm-linux-gnueabihf/plymouth/ \
+usr/lib/arm-linux-gnueabihf/qt4/ \
+usr/lib/arm-linux-gnueabihf/sane \
+usr/lib/libblas.so \
+usr/lib/liblapack.so'
+
+EXCLUDE=`echo "$EXCLUDE" | tr -d '
+' | sed -e 's/ /|/g'`
+
+FILELIST=`mktemp`
+STAGINGDIR=`mktemp -d`
+
+find lib/*.so* \
+     lib/arm-linux-gnueabihf \
+     usr/include \
+     usr/lib/liblpsolve*.a \
+     usr/lib/*.so* \
+     usr/lib/arm-linux-gnueabihf \
+     usr/lib/jvm/java-6-openjdk-armhf/include \
+     usr/lib/jvm/java-6-openjdk-armhf/jre/lib/arm \
+     usr/lib/pkgconfig \
+     usr/share/pkgconfig \
+    -type f -o -type l |
+    grep -v -E "^($EXCLUDE)" >$FILELIST
+
+tar -c --files-from=$FILELIST -f - | (cd $STAGINGDIR && tar xf -)
+
+rm $FILELIST
+
+cd $STAGINGDIR
+# Change absolute symlinks to relative
+find . -type l -print0 | xargs -0 ls -ld | grep -- '-> /' | 
+    while read mode links user group size month day yearortime link arrow target; do
+	target=`echo "$target" | sed -e 's,/,..;,'`
+	while test `expr index $target /` -gt 0; do
+	    target=`echo "$target" | sed -e 's,/,;,'`
+	    target="..;$target"
+	done
+	target=`echo "$target" | sed -e 's,;,/,g'`
+	ln -f -s $target $link
+    done
+
+RESULT=/tmp/raspbian-root-`date +%Y%m%d`.tar.gz
+tar czf $RESULT .
+
+cd /
+rm -rf $STAGINGDIR
+
+echo === Result in $RESULT ===

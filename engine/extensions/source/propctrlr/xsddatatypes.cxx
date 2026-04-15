@@ -1,0 +1,182 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "xsddatatypes.hxx"
+
+#include <com/sun/star/xsd/DataTypeClass.hpp>
+#include <com/sun/star/xsd/XDataType.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/debug.hxx>
+#include <osl/diagnose.h>
+#include <comphelper/diagnose_ex.hxx>
+
+
+namespace pcr
+{
+
+
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::xsd;
+    using namespace ::com::sun::star::beans;
+
+    template< typename INTERFACE, typename ARGUMENT >
+    static ARGUMENT getSave( INTERFACE* pObject, ARGUMENT ( SAL_CALL INTERFACE::*pGetter )( ) )
+    {
+        ARGUMENT aReturn = ARGUMENT();
+        try
+        {
+            aReturn = (pObject->*pGetter)( );
+        }
+        catch( const Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType: getSave" );
+        }
+        return aReturn;
+    }
+
+    XSDDataType::XSDDataType( const Reference< XDataType >& _rxDataType )
+        :m_xDataType( _rxDataType )
+    {
+        DBG_ASSERT( m_xDataType.is(), "XSDDataType::XSDDataType: invalid UNO object!" );
+        if ( m_xDataType.is() )
+            m_xFacetInfo = m_xDataType->getPropertySetInfo();
+    }
+
+
+    XSDDataType::~XSDDataType()
+    {
+    }
+
+
+    sal_Int16 XSDDataType::classify() const
+    {
+        sal_Int16 nTypeClass = DataTypeClass::STRING;
+        try
+        {
+            if ( m_xDataType.is() )
+                nTypeClass = m_xDataType->getTypeClass();
+        }
+        catch( const Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::classify" );
+        }
+        return nTypeClass;
+    }
+
+
+    bool XSDDataType::isBasicType() const
+    {
+        return getSave( m_xDataType.get(), &XDataType::getIsBasic );
+    }
+
+
+    OUString XSDDataType::getName() const
+    {
+        return getSave( m_xDataType.get(), &XDataType::getName );
+    }
+
+
+    void XSDDataType::setFacet( const OUString& _rFacetName, const Any& _rValue )
+    {
+        try
+        {
+            m_xDataType->setPropertyValue( _rFacetName, _rValue );
+        }
+        catch( const Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::setFacet: caught an exception - sure this is the right data type class for this property?" );
+        }
+    }
+
+
+    bool XSDDataType::hasFacet( const OUString& _rFacetName ) const
+    {
+        bool bReturn = false;
+        try
+        {
+            bReturn = m_xFacetInfo.is() && m_xFacetInfo->hasPropertyByName( _rFacetName );
+        }
+        catch( const Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::hasFacet" );
+        }
+        return bReturn;
+    }
+
+    Any XSDDataType::getFacet( const OUString& _rFacetName )
+    {
+        Any aReturn;
+        try
+        {
+            aReturn = m_xDataType->getPropertyValue( _rFacetName );
+        }
+        catch( const Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::getFacet: caught an exception - sure this is the right data type class for this property?" );
+        }
+        return aReturn;
+    }
+
+
+    namespace
+    {
+        void lcl_copyProperties( const Reference< XPropertySet >& _rxSource, const Reference< XPropertySet >& _rxDest )
+        {
+            Reference< XPropertySetInfo > xSourceInfo;
+            if ( _rxSource.is() )
+                xSourceInfo = _rxSource->getPropertySetInfo();
+            Reference< XPropertySetInfo > xDestInfo;
+            if ( _rxDest.is() )
+                xDestInfo = _rxDest->getPropertySetInfo();
+            OSL_ENSURE( xSourceInfo.is() && xDestInfo.is(), "lcl_copyProperties: invalid property set( info)s!" );
+            if ( !xSourceInfo.is() || !xDestInfo.is() )
+                return;
+
+            for (const Property& rProp : xSourceInfo->getProperties())
+            {
+                if (xDestInfo->hasPropertyByName(rProp.Name))
+                    _rxDest->setPropertyValue(rProp.Name, _rxSource->getPropertyValue(rProp.Name));
+            }
+        }
+    }
+
+
+    void XSDDataType::copyFacetsFrom( const ::rtl::Reference< XSDDataType >& _pSourceType )
+    {
+        OSL_ENSURE( _pSourceType.is(), "XSDDataType::copyFacetsFrom: invalid source type!" );
+        if ( !_pSourceType.is() )
+            return;
+
+        try
+        {
+            Reference< XPropertySet > xSource = _pSourceType->getUnoDataType();
+            Reference< XPropertySet > xDest = getUnoDataType();
+            lcl_copyProperties( xSource, xDest );
+        }
+        catch( const Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::copyFacetsFrom" );
+        }
+    }
+
+
+} // namespace pcr
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

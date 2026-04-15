@@ -1,0 +1,24 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+#define STR_ENCODING_DIALOG_TITLE               NC_("STR_ENCODING_DIALOG_TITLE", "Import file")
+#define STR_ENCODING_DIALOG_TITLE_MSMULTIPLAN   NC_("STR_ENCODING_DIALOG_TITLE_MSMULTIPLAN", "Import MS Multiplan for DOS file")
+#define STR_ENCODING_DIALOG_TITLE_MSWORKS       NC_("STR_ENCODING_DIALOG_TITLE_MSWORKS", "Import MS Works file")
+#define STR_ENCODING_DIALOG_TITLE_MSWRITE       NC_("STR_ENCODING_DIALOG_TITLE_MSWRITE", "Import MS Write file")
+#define STR_ENCODING_DIALOG_TITLE_DOSWORD       NC_("STR_ENCODING_DIALOG_TITLE_DOSWORD", "Import MS Word for DOS file")
+#define STR_ENCODING_DIALOG_TITLE_LOTUS         NC_("STR_ENCODING_DIALOG_TITLE_LOTUS", "Import Lotus file")
+#define STR_ENCODING_DIALOG_TITLE_SYMPHONY      NC_("STR_ENCODING_DIALOG_TITLE_SYMPHONY", "Import Symphony file")
+#define STR_ENCODING_DIALOG_TITLE_QUATTROPRO    NC_("STR_ENCODING_DIALOG_TITLE_QUATTROPRO", "Import Quattro Pro file")
+#define STR_EPUB_EXPORTING_PAGES                NC_("STR_ENCODING_DIALOG_TITLE", "Exporting pages")
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

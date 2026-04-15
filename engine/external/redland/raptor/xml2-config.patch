@@ -1,0 +1,22 @@
+--- configure
++++ configure
+@@ -16004,6 +16004,11 @@
+   test -n "$XML_CONFIG" && break
+ done
+ 
++    if test -n "$XML_CONFIG"; then
++      if ! "$XML_CONFIG" --version; then
++        XML_CONFIG=
++      fi
++    fi
+   fi
+ fi
+ 
+@@ -16104,6 +16109,7 @@
+ 
+     LIBXML_VERSION=`$PKG_CONFIG libxml-2.0 --modversion`
+     libxml_source="pkg-config"
++    XML_CONFIG="$PKG_CONFIG libxml-2.0"
+ 
+ fi
+   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libxml via pkg-config" >&5

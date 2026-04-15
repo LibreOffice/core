@@ -1,0 +1,29 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com { module sun { module star { module lang {
+    published interface XMultiServiceFactory;
+}; }; }; };
+
+module com { module sun { module star { module configuration {
+
+/**
+   The default ConfigurationProvider.
+
+   <p>This singleton somewhat arbitrarily makes available the
+   com::sun::star::lang::XMultiServiceFactory interface of
+   the (old-style) DefaultProvider service, as it is the most
+   frequently used one.  See the DefaultProvider service for
+   details.</p>
+*/
+published singleton theDefaultProvider:
+    com::sun::star::lang::XMultiServiceFactory;
+
+}; }; }; };
+

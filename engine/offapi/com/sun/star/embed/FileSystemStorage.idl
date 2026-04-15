@@ -1,0 +1,97 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module embed {
+
+/** This is a service that allows to get access to a file system folder using
+    storage hierarchy.
+ */
+published service FileSystemStorage
+{
+    /** This service describes the base functionality of storages.
+
+        <p>
+        Please see below the description of additional requirements for the
+        file system storage implementation.
+        </p>
+
+        <dl>
+            <dt>interface com::sun::star::lang::XComponent
+            </dt>
+            <dd>
+                <p>
+                A file system storage is created either by
+                StorageFactory or by XStorage
+                interface and is controlled by refcounting. In case
+                refcounting is decreased to zero the storage will be
+                disposed automatically.
+                </p>
+
+                <p>
+                In case a storage object is disposed the elements
+                ( substorages and substreams ) are not affected.
+                </p>
+            </dd>
+            <dt>interface XStorage</dt>
+            <dd>
+                <dl>
+                    <dt>XStorage::openStorageElement()</dt>
+                    <dd>
+                        This method returns FileSystemStorage
+                        service implementation.
+                    </dd>
+
+                    <dt>XStorage::copyLastCommitTo()</dt>
+                    <dd>
+                        Since this service implementation supports no transaction
+                        this method just creates a copy of the storage in its
+                        current state.
+                    </dd>
+
+                    <dt>XStorage::copyStorageElementLastCommitTo()</dt>
+                    <dd>
+                        Since this service implementation supports no transaction
+                        this method just creates a copy of the storage in its
+                        current state.
+                    </dd>
+
+                    <dt>XStorage::removeStorageElement()</dt>
+                    <dd>
+                        If the element is opened and it is a stream element
+                        the removing will fail. If the element is opened and
+                        it is a storage element, all the contents that can be
+                        removed will be removed.
+                    </dd>
+                </dl>
+            </dd>
+            <dt>property URL</dt>
+            <dd>
+                This property is not optional for this service.
+            </dd>
+        </dl>
+
+     */
+    service BaseStorage;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

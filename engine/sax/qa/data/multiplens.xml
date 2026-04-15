@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<Athletes>
+    <Player xmlns:Player="xyzsports.com/players/football/">
+        <Player:Name>Lionel Messi</Player:Name>
+        <Player:Height>1.70 m</Player:Height>
+        <Player:Position>Forward</Player:Position>
+    </Player>
+    <Player xmlns:Player="xyzsports.com/players/Cricket/">
+        <Player:Name>Sachin Ramesh Tendulkar</Player:Name>
+        <Player:Height>165 cm</Player:Height>
+        <Player:Style>Right handed</Player:Style>
+    </Player>
+</Athletes>

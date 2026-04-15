@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Standardno">
+  <block-list:block block-list:abbreviated-name="A" block-list:package-name="A" block-list:name="V vednost:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="BW" block-list:package-name="BW" block-list:name="Z najboljšimi željami," block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="C" block-list:package-name="C" block-list:name="ZAUPNO" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CAN" block-list:package-name="CAN" block-list:name="Preklic, splošno" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="CD" block-list:package-name="CD" block-list:name="S prisrčnimi pozdravi," block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CM" block-list:package-name="CM" block-list:name="S POVRATNICO" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CNL" block-list:package-name="CNL" block-list:name="Avtorska klavzula za literaturo" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="DMS" block-list:package-name="DMS" block-list:name="Spoštovani" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="DT" block-list:package-name="DT" block-list:name="Primer besedila" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="Oštevilčevanje formule" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="IRT" block-list:package-name="IRT" block-list:name="Odgovor na:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="J" block-list:package-name="J" block-list:name="Prijava za službo: zavrnitev, hramba prijavnega gradiva" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="JACL" block-list:package-name="JACL" block-list:name="Prijava za službo: naslovnica" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="JACR" block-list:package-name="JACR" block-list:name="Prijava za službo: potrdilo prejema" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="JAINV" block-list:package-name="JAINV" block-list:name="Prijava za službo: povabilo na pogovor" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="JARL" block-list:package-name="JARL" block-list:name="Prijava za službo: pismo zavrnitve" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="LAG" block-list:package-name="LAG" block-list:name="Dame in gospodje:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="LIC" block-list:package-name="LIC" block-list:name="Licenčna pogodba za programsko opremo" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="P" block-list:package-name="P" block-list:name="OSEBNO" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="R1" block-list:package-name="R1" block-list:name="Prvi opomin" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="R2" block-list:package-name="R2" block-list:name="Drugi opomin" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="RE" block-list:package-name="RE" block-list:name="Sklic:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="RF" block-list:package-name="RF" block-list:name="S spoštovanjem" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="RG" block-list:package-name="RG" block-list:name="S pozdravi" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="RM" block-list:package-name="RM" block-list:name="PRIPOROČENA POŠTA" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="S" block-list:package-name="S" block-list:name="Zadeva:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="SD" block-list:package-name="SD" block-list:name="POSEBNA DOSTAVA" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="SI" block-list:package-name="SI" block-list:name="Z iskrenimi pozdravi" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="TC" block-list:package-name="TC" block-list:name="Pazi nase" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="TOP" block-list:package-name="TOP" block-list:name="Pogoji plačila" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="TWIMC" block-list:package-name="TWIMC" block-list:name="Kogar zanima:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="TY" block-list:package-name="TY" block-list:name="Najlepša hvala" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="VA" block-list:package-name="VA" block-list:name="LETALSKO / AIR MAIL" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="VOM" block-list:package-name="VOM" block-list:name="HITRA POŠTA" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="YT" block-list:package-name="YT" block-list:name="Vdano vaš(a)" block-list:unformatted-text="false"/>
+</block-list:block-list>

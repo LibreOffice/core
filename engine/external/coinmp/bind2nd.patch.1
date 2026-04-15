@@ -1,0 +1,13 @@
+--- a/Osi/src/OsiCommonTest/OsiSolverInterfaceTest.cpp
++++ b/Osi/src/OsiCommonTest/OsiSolverInterfaceTest.cpp
+@@ -1313,8 +1313,8 @@
+   int rows_to_delete_arr[] = { 0 } ;
+   si->deleteRows(1,rows_to_delete_arr) ;
+ 
+-  std::transform(objective,objective+4,objective,
+-		 std::bind2nd(std::plus<double>(),0.15)) ;
++  for (int i = 0; i != 4; ++i)
++    objective[i] += 0.15;
+   si->setObjective(objective) ;
+   si->resolve() ;
+   OSIUNITTEST_ASSERT_ERROR(si->isProvenOptimal(),          return false, *si, "test16SebastianNowozin second resolve");

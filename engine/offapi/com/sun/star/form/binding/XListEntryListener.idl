@@ -1,0 +1,68 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module form { module binding {
+
+
+/** specifies a listener for changes in a string entry list
+*/
+interface XListEntryListener : com::sun::star::lang::XEventListener
+{
+    /** notifies the listener that a single entry in the list has change
+
+        @param Source
+            is the event describing the change. The ListEntryEvent::Position
+            member denotes the position of the changed entry, the first (and only) element
+            of the ListEntryEvent::Entries member denotes the new string
+    */
+    void    entryChanged( [in] ListEntryEvent Source );
+
+    /** notifies the listener that a range of entries has been inserted into the list
+
+        @param Source
+            is the event describing the change. The ListEntryEvent::Position
+            member denotes the position of the first inserted entry, the
+            ListEntryEvent::Entries member contains the strings which have
+            been inserted.
+    */
+    void    entryRangeInserted( [in] ListEntryEvent Source );
+
+    /** notifies the listener that a range of entries has been removed from the list
+
+        @param Source
+            is the event describing the change. The ListEntryEvent::Position
+            member denotes the position of the first removed entry, the
+            ListEntryEvent::Count member the number of removed entries.
+    */
+    void    entryRangeRemoved( [in] ListEntryEvent Source );
+
+    /** notifies the listener that all entries of the list have changed.
+
+        <p>The listener should retrieve the complete new list by calling the
+        XListEntrySource::getAllListEntries() method of the event source
+        (which is denoted by com::sun::star::lang::EventObject::Source).
+    */
+    void    allEntriesChanged( [in] com::sun::star::lang::EventObject Source );
+};
+
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

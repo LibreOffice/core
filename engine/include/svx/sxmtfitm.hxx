@@ -1,0 +1,75 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef INCLUDED_SVX_SXMTFITM_HXX
+#define INCLUDED_SVX_SXMTFITM_HXX
+
+#include <svx/svddef.hxx>
+#include <svx/sdynitm.hxx>
+#include <svx/sdangitm.hxx>
+
+// The two following are not implemented yet!
+// Nail text down to a fix angle.
+// The text angle is independent of the dimension line.
+// Abrogate TextUpsideDown, TextRota90 and TextAutoAngle. (n.i.)
+class SdrMeasureTextIsFixedAngleItem final : public SdrYesNoItem {
+public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrMeasureTextIsFixedAngleItem)
+    SdrMeasureTextIsFixedAngleItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,bOn) {}
+    virtual ~SdrMeasureTextIsFixedAngleItem() override;
+    virtual SdrMeasureTextIsFixedAngleItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrMeasureTextIsFixedAngleItem(SdrMeasureTextIsFixedAngleItem const &) = default;
+    SdrMeasureTextIsFixedAngleItem(SdrMeasureTextIsFixedAngleItem &&) = default;
+    SdrMeasureTextIsFixedAngleItem & operator =(SdrMeasureTextIsFixedAngleItem const &) = delete; // due to SdrYesNoItem
+    SdrMeasureTextIsFixedAngleItem & operator =(SdrMeasureTextIsFixedAngleItem &&) = delete; // due to SdrYesNoItem
+};
+
+//Angle of the text in 1/100deg. 0=horizontal; read from left to right. (n.i.)
+class SdrMeasureTextFixedAngleItem final : public SdrAngleItem {
+public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrMeasureTextFixedAngleItem)
+    SdrMeasureTextFixedAngleItem(Degree100 nVal=0_deg100)
+        : SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal)  {}
+    virtual ~SdrMeasureTextFixedAngleItem() override;
+    virtual SdrMeasureTextFixedAngleItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrMeasureTextFixedAngleItem(SdrMeasureTextFixedAngleItem const &) = default;
+    SdrMeasureTextFixedAngleItem(SdrMeasureTextFixedAngleItem &&) = default;
+    SdrMeasureTextFixedAngleItem & operator =(SdrMeasureTextFixedAngleItem const &) = delete; // due to SdrAngleItem
+    SdrMeasureTextFixedAngleItem & operator =(SdrMeasureTextFixedAngleItem &&) = delete; // due to SdrAngleItem
+};
+
+// The decimal places used for the measure value
+class SVXCORE_DLLPUBLIC SdrMeasureDecimalPlacesItem final : public SfxInt16Item {
+public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrMeasureDecimalPlacesItem)
+    SdrMeasureDecimalPlacesItem(sal_Int16 nVal=2)
+        : SfxInt16Item(SDRATTR_MEASUREDECIMALPLACES, nVal)  {}
+    virtual ~SdrMeasureDecimalPlacesItem() override;
+    virtual SdrMeasureDecimalPlacesItem* Clone(SfxItemPool* pPool=nullptr) const override;
+
+    SdrMeasureDecimalPlacesItem(SdrMeasureDecimalPlacesItem const &) = default;
+    SdrMeasureDecimalPlacesItem(SdrMeasureDecimalPlacesItem &&) = default;
+    SdrMeasureDecimalPlacesItem & operator =(SdrMeasureDecimalPlacesItem const &) = delete; // due to SfxInt16Item
+    SdrMeasureDecimalPlacesItem & operator =(SdrMeasureDecimalPlacesItem &&) = delete; // due to SfxInt16Item
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

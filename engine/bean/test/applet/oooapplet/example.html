@@ -1,0 +1,22 @@
+<html>
+  <head>
+      <title></title>
+  </head>
+  <body>
+      <h1>OOoBean used by applet</h1>
+      <hr>
+<script type="text/javascript">
+function writeApplet() {
+  var office = window.location.search.substring(1);
+  document.write("<applet code=\"oooapplet/OOoViewer.class\" archive=\"oooapplet.jar\" width=800 height=600>");
+  document.write("<param name=\"office\" value=\"" + office + "\" >" );
+  document.write("</applet>");
+}
+writeApplet();
+</script>
+      <hr>
+
+  </body>
+</html>
+ 
+  

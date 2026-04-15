@@ -1,0 +1,11 @@
+--- tools/update-packaging/make_incremental_update.sh
++++ tools/update-packaging/make_incremental_update.sh
+@@ -110,7 +110,7 @@
+   # Remove the /
+   newdir=$(echo "$newdir" | sed -e 's:\/$::')
+ fi
+-workdir="$(mktemp -d)"
++workdir=$(cygpath -m "$(mktemp -d)")
+ updatemanifestv3="$workdir/updatev3.manifest"
+ 
+ mkdir -p "$workdir"

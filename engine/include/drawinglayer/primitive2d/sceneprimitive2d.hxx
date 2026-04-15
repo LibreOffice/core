@@ -1,0 +1,147 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include <drawinglayer/drawinglayerdllapi.h>
+
+#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
+#include <drawinglayer/primitive3d/baseprimitive3d.hxx>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <vcl/bitmap.hxx>
+#include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
+#include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
+
+namespace drawinglayer::primitive2d
+{
+        // TODO: find a less hacky way to make chart thumnbail render to lower resolution
+        // Set this to true only while a thumbnail of a chart is rendered, and set it back to false
+        // used in drawinglayer/source/primitive2d/sceneprimitive2d.cxx to save performance.
+        extern DRAWINGLAYER_DLLPUBLIC bool bChartThumbnailRendered;
+
+        /** ScenePrimitive2D class
+
+            This primitive defines a 3D scene as a 2D primitive and is the anchor point
+            for a 3D visualisation. The decomposition is view-dependent and will try to
+            re-use already rendered 3D content.
+
+            The rendering is done using the default-3D renderer from basegfx which supports
+            AntiAliasing.
+
+            The 2D primitive's geometric range is defined completely by the
+            ObjectTransformation combined with evtl. 2D shadows from the 3D objects. The
+            shadows of 3D objects are 2D polygons, projected with the 3D transformation.
+
+            This is the class a renderer may process directly when he wants to implement
+            an own (e.g. system-specific) 3D renderer.
+         */
+        class DRAWINGLAYER_DLLPUBLIC ScenePrimitive2D final : public BufferedDecompositionPrimitive2D
+        {
+        private:
+            /// the 3D geometry definition
+            primitive3d::Primitive3DContainer                    mxChildren3D;
+
+            /// 3D scene attribute set
+            attribute::SdrSceneAttribute                        maSdrSceneAttribute;
+
+            /// lighting attribute set
+            attribute::SdrLightingAttribute                     maSdrLightingAttribute;
+
+            /// object transformation for scene for 2D definition
+            basegfx::B2DHomMatrix                               maObjectTransformation;
+
+            /// scene transformation set and object transformation
+            geometry::ViewInformation3D                         maViewInformation3D;
+
+            /// the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
+            Primitive2DContainer                                   maShadowPrimitives;
+
+            /** flag if given 3D geometry is already checked for shadow definitions and 2d shadows
+                are created in maShadowPrimitives
+             */
+            bool                                                mbShadow3DChecked : 1;
+
+            /// the last used NewDiscreteSize and NewUnitVisiblePart definitions for decomposition
+            double                                              mfOldDiscreteSizeX;
+            double                                              mfOldDiscreteSizeY;
+            basegfx::B2DRange                                   maOldUnitVisiblePart;
+
+            /** the last created Bitmap, e.g. for fast HitTest. This does not really need
+                memory since Bitmap is internally RefCounted
+             */
+            Bitmap                                              maOldRenderedBitmap;
+
+            /// private helpers
+            bool impGetShadow3D() const;
+
+            /// local decomposition.
+            virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+
+        public:
+            /// public helpers
+            /** Geometry extractor. Shadow will be added as in create2DDecomposition, but
+                the 3D content is not converted to a bitmap visualisation but to projected 2D geometry. This
+                helper is useful e.g. for Contour extraction or HitTests.
+              */
+            Primitive2DContainer getGeometry2D() const;
+            Primitive2DContainer getShadow2D() const;
+
+            /** Fast HitTest which uses the last buffered Bitmap from the last
+                rendered area if available. The return value describes if the check
+                could be done with the current information, so do NOT use o_rResult
+                when it returns false. o_rResult will be changed on return true and
+                then contains a definitive answer if content of this scene is hit or
+                not. On return false, it is normally necessary to use the geometric
+                HitTest (see CutFindProcessor usages). The given HitPoint
+                has to be in logic coordinates in scene's ObjectCoordinateSystem.
+             */
+            bool tryToCheckLastVisualisationDirectHit(const basegfx::B2DPoint& rLogicHitPoint, bool& o_rResult) const;
+
+            /// constructor
+            ScenePrimitive2D(
+                primitive3d::Primitive3DContainer xChildren3D,
+                attribute::SdrSceneAttribute aSdrSceneAttribute,
+                attribute::SdrLightingAttribute aSdrLightingAttribute,
+                basegfx::B2DHomMatrix aObjectTransformation,
+                geometry::ViewInformation3D aViewInformation3D);
+
+            /// data read access
+            const primitive3d::Primitive3DContainer& getChildren3D() const { return mxChildren3D; }
+            const attribute::SdrSceneAttribute& getSdrSceneAttribute() const { return maSdrSceneAttribute; }
+            const attribute::SdrLightingAttribute& getSdrLightingAttribute() const { return maSdrLightingAttribute; }
+            const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
+            const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }
+
+            /// compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+            /// get range
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+
+            /// provide unique ID
+            virtual sal_uInt32 getPrimitive2DID() const override;
+
+            /// get local decomposition. Override since this decomposition is view-dependent
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
+        };
+} // end of namespace drawinglayer::primitive2d
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

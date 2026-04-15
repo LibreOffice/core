@@ -1,0 +1,17 @@
+/// CID/D=0:CS=0:Axis=0,0:Grid=0
+// aGridPosition.X
+3620
+// aGridPosition.Y
+1343
+// aGridSize.Height
+6120
+// aGridSize.Width
+15109
+// aGridTransformation
+15110;0;3620;0;6121;1343;0;0;1
+// sGridLineDash
+0;1;201;20;20
+// static_cast<sal_Int32>(aLineColor)
+11776947
+// nLineWidth
+0

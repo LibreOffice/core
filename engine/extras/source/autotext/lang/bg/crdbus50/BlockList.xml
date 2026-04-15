@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Визитки, служебни (3 ½ x 2 инча)">
+  <block-list:block block-list:abbreviated-name="ЕЛЕ1" block-list:package-name="+BBUEGwQV-1" block-list:name="Елегантна, само фирма" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="ЕЛЕ2" block-list:package-name="+BBUEGwQV-2" block-list:name="Елегантна, с име" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="ЕЛЕ3" block-list:package-name="+BBUEGwQV-3" block-list:name="Елегантна, с име, без мото" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="СЪВ1" block-list:package-name="+BCEEKgQS-1" block-list:name="Съвременна, само фирма" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="СЪВ2" block-list:package-name="+BCEEKgQS-2" block-list:name="Съвременна, с име" block-list:unformatted-text="false"/>
+</block-list:block-list>

@@ -1,0 +1,88 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "macros.inc"
+
+#include "AutoInstall/calc"
+#include "AutoInstall/calc_brand"
+
+Module gid_Module_Prg_Calc
+    MOD_NAME_DESC ( MODULE_PRG_CALC );
+    ParentID = gid_Module_Prg;
+    Sortkey = "200";
+    Styles =(APPLICATIONMODULE);
+End
+
+Module gid_Module_Prg_Calc_Bin
+    PackageInfo = "packinfo_office.txt";
+    MOD_NAME_DESC ( MODULE_PRG_CALC_BIN );
+    ParentID = gid_Module_Prg_Calc;
+    Sortkey = "100";
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (auto_calc_ALL,
+    gid_File_Share_Registry_Calc_Xcd,
+    gid_File_Lib_Lpsolve);
+End
+
+Module gid_Module_Prg_Calc_Addins
+    MOD_NAME_DESC ( MODULE_OPTIONAL_ADDINS );
+    Styles = (HIDDEN_ROOT);
+    ParentID = gid_Module_Prg_Calc_Bin;
+    Sortkey = "700";
+    Default = YES;
+    Files = (gid_File_Zip_Addin,gid_File_Lib_Rot);
+End
+
+Module gid_Module_Brand_Prg_Calc
+    PackageInfo = "packinfo_brand.txt";
+    Name = "gid_Module_Brand_Prg_Calc";
+    Description = "gid_Module_Brand_Prg_Calc";
+    ParentID = gid_Module_Prg_Calc;
+    Sortkey = "100";
+    InstallOrder = "1040";
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (auto_calc_brand_ALL);
+End
+
+Module gid_Module_Langpack_Calc_Template
+    ParentID = gid_Module_Prg_Calc_Bin;
+    Name = "gid_Module_Langpack_Calc_Template";
+    Description = "gid_Module_Langpack_Calc_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = ();
+End
+
+Module gid_Module_Prg_Calc_MSO_Reg
+    ParentID = gid_Module_Prg_Calc;
+    Name = "gid_Module_Prg_Calc_MSO_Reg";
+    Description = "gid_Module_Prg_Calc_MSO_Reg";
+    Styles = (HIDDEN_ROOT);
+    Default = YES;
+End
+
+Module gid_Module_Prg_Calc_Other_Reg
+    ParentID = gid_Module_Prg_Calc;
+    Name = "gid_Module_Prg_Calc_Other_Reg";
+    Description = "gid_Module_Prg_Calc_Other_Reg";
+    Styles = (HIDDEN_ROOT);
+    Default = YES;
+End
+
+#include "alllangmodules_calc.inc"

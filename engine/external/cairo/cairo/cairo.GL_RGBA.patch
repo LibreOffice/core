@@ -1,0 +1,119 @@
+--- misc/cairo-1.10.2/src/cairo-image-surface.c
++++ misc/cairo-1.10.2/src/cairo-image-surface.c
+@@ -97,11 +97,11 @@
+ 	return CAIRO_FORMAT_RGBA128F;
+     case PIXMAN_rgb_float:
+ 	return CAIRO_FORMAT_RGB96F;
+-    case PIXMAN_a8r8g8b8:
++    case PIXMAN_a8b8g8r8: //tweaked
+ 	return CAIRO_FORMAT_ARGB32;
+     case PIXMAN_x2r10g10b10:
+ 	return CAIRO_FORMAT_RGB30;
+-    case PIXMAN_x8r8g8b8:
++    case PIXMAN_x8b8g8r8: //tweaked
+ 	return CAIRO_FORMAT_RGB24;
+     case PIXMAN_a8:
+ 	return CAIRO_FORMAT_A8;
+@@ -109,15 +109,15 @@
+ 	return CAIRO_FORMAT_A1;
+     case PIXMAN_r5g6b5:
+ 	return CAIRO_FORMAT_RGB16_565;
+-    case PIXMAN_r8g8b8:
++    case PIXMAN_b8g8r8: //tweaked
+ 	return CAIRO_FORMAT_RGB24_888;
+     case PIXMAN_r8g8b8a8: case PIXMAN_r8g8b8x8:
+     case PIXMAN_a8r8g8b8_sRGB:
+ #if HAS_PIXMAN_r8g8b8_sRGB
+     case PIXMAN_r8g8b8_sRGB:
+ #endif
+-    case PIXMAN_a8b8g8r8: case PIXMAN_x8b8g8r8:
+-    case PIXMAN_b8g8r8:   case PIXMAN_b5g6r5:
++    case PIXMAN_a8r8g8b8: case PIXMAN_x8r8g8b8: //tweaked
++    case PIXMAN_r8g8b8:   case PIXMAN_b5g6r5:
+     case PIXMAN_a1r5g5b5: case PIXMAN_x1r5g5b5: case PIXMAN_a1b5g5r5:
+     case PIXMAN_x1b5g5r5: case PIXMAN_a4r4g4b4: case PIXMAN_x4r4g4b4:
+     case PIXMAN_a4b4g4r4: case PIXMAN_x4b4g4r4: case PIXMAN_r3g3b2:
+@@ -335,7 +335,7 @@
+ 	ret = PIXMAN_a8;
+ 	break;
+     case CAIRO_FORMAT_RGB24:
+-	ret = PIXMAN_x8r8g8b8;
++	ret = PIXMAN_x8b8g8r8; //tweaked
+ 	break;
+     case CAIRO_FORMAT_RGB30:
+ 	ret = PIXMAN_x2r10g10b10;
+@@ -350,12 +350,12 @@
+ 	ret = PIXMAN_rgba_float;
+ 	break;
+ 	case CAIRO_FORMAT_RGB24_888:
+-	ret = PIXMAN_r8g8b8;
++	ret = PIXMAN_b8g8r8; // tweaked
+ 	break;
+     case CAIRO_FORMAT_ARGB32:
+     case CAIRO_FORMAT_INVALID:
+     default:
+-	ret = PIXMAN_a8r8g8b8;
++	ret = PIXMAN_a8b8g8r8; //tweaked
+ 	break;
+     }
+     return ret;
+--- misc/cairo-1.10.2/src/cairo-ft-font.c
++++ misc/cairo-1.10.2/src/cairo-ft-font.c
+@@ -1331,6 +1331,19 @@
+ 	    memcpy (data, bitmap->buffer, (size_t)stride * height);
+ 	}
+ 
++	{
++	    /* swizzle to rgba */
++	    unsigned int i, count = height * width;
++	    unsigned char *p = data;
++	    for (i = 0; i < count; i++)
++	    {
++		unsigned char tmp = p[0];
++		p[0] = p[2];
++		p[2] = tmp;
++		p+=4;
++	    }
++	}
++
+ 	if (!_cairo_is_little_endian ())
+ 	{
+ 	    /* Byteswap. */
+@@ -2679,7 +2692,7 @@
+ 	/* We tried loading a color glyph and can now check if we got
+ 	 * a color glyph and set scaled_glyph->color_glyph
+ 	 * accordingly */
+-	if (pixman_image_get_format (surface->pixman_image) == PIXMAN_a8r8g8b8 &&
++	if (pixman_image_get_format (surface->pixman_image) == PIXMAN_a8b8g8r8 &&
+ 	    !pixman_image_get_component_alpha (surface->pixman_image))
+ 	{
+ 	    _cairo_scaled_glyph_set_color_surface (scaled_glyph,
+--- misc/cairo-1.10.2/src/cairo-image-compositor.c
++++ misc/cairo-1.10.2/src/cairo-image-compositor.c
+@@ -1074,7 +1074,7 @@
+     format = PIXMAN_a8;
+     i = (info->extents.width + 3) & ~3;
+     if (scaled_glyph->surface->base.content & CAIRO_CONTENT_COLOR) {
+-	format = PIXMAN_a8r8g8b8;
++	format = PIXMAN_a8b8g8r8;
+ 	i = info->extents.width * 4;
+     }
+ 
+@@ -1126,7 +1126,7 @@
+ 		format == PIXMAN_a8) {
+ 		pixman_image_t *ca_mask;
+ 
+-		format = PIXMAN_a8r8g8b8;
++		format = PIXMAN_a8b8g8r8;
+ 		ca_mask = pixman_image_create_bits (format,
+ 						    info->extents.width,
+ 						    info->extents.height,
+@@ -1175,7 +1175,7 @@
+ 	}
+     }
+ 
+-    if (format == PIXMAN_a8r8g8b8)
++    if (format == PIXMAN_a8b8g8r8)
+ 	pixman_image_set_component_alpha (mask, TRUE);
+ 
+     pixman_image_composite32 (_pixman_operator (op),

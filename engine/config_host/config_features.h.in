@@ -1,0 +1,159 @@
+/* Configuration of high-level features that either 1) depend on the
+ * platform (but are common to several platforms so just checking for
+ * the feature is simpler than checking for several platforms), or 2)
+ * are build-time configurable.
+ */
+
+#ifndef CONFIG_FEATURES_H
+#define CONFIG_FEATURES_H
+
+/* AFDKO - Whether to have functionality to convert and merge
+ * embedded fonts of documents
+ */
+
+#define HAVE_FEATURE_AFDKO 0
+
+/* AVMEDIA - Whether to have functionality to display and manipulate
+ * embedded AV media in documents
+ */
+
+#define HAVE_FEATURE_AVMEDIA 0
+
+/* DBCONNECTIVITY - Whether to have functionality to connect to
+ * databases.
+ */
+
+#define HAVE_FEATURE_DBCONNECTIVITY 0
+
+/* SCRIPTING - Whether we have any mechanism to execute user-provided scripts
+ *
+ * Primarily intended for the iOS App Store where the
+ * rules prohibit user-accessible scripting features.
+ * Sure, it would be nice to still be able to have internal features
+ * implemented in some scripting language. Later, if necessary.
+ */
+
+#define HAVE_FEATURE_SCRIPTING 0
+
+/* MULTIUSER_ENVIRONMENT - Whether running on a "normal" multi-user
+ * desktop (or server) OS
+ *
+ * Non-MULTIUSER implies that the OS makes sure that only one
+ * Collabora Office-based process at a time can be running that could
+ * access the same local documents, and that thus no locking of local
+ * documents is needed, and that no "shared documents" in Calc
+ * is meaningful.
+ *
+ * Non-MULTIUSER in practice means Android or iOS for now, so thus is
+ * work in progress.
+ */
+
+#define HAVE_FEATURE_MULTIUSER_ENVIRONMENT 0
+
+/*
+ * Whether the OS has Avahi support,
+ * This library is used for zeroconf service publication on the local network
+ * for the Impress remote control, so that the remote can automatically
+ * discover the running libO instance and its IP address.
+ *
+ * This library should be present on most modern linux distributions
+ * but not on "all" of them. For now, you should add --enable-avahi for
+ * this to be taken into account. Otherwise the test of its presence
+ * will not take place.
+ */
+
+#define HAVE_FEATURE_AVAHI 0
+
+/* MACOSX_SANDBOX - whether Collabora Office runs in a macOS sandbox
+ *
+ * When building Collabora Office for distribution through the Mac App Store,
+ * it must be sandboxed.
+ */
+
+#define HAVE_FEATURE_MACOSX_SANDBOX 0
+
+/* READONLY_INSTALLSET - whether to treat the installation as read-only
+ *
+ * Prevents attempts by Collabora Office to write into its installation. That means
+ * at least that no "system-wide" extensions can be added, if the location for
+ * them is the traditional one right in the middle of the installation.
+ * Probably not completely implemented.
+ */
+
+#define HAVE_FEATURE_READONLY_INSTALLSET 0
+
+/*
+ * Whether curl is available
+ */
+#define HAVE_FEATURE_CURL 0
+
+/*
+ * Whether we support breakpad as crash reporting lib.
+ */
+#define HAVE_FEATURE_BREAKPAD 0
+
+/* BACKTRACE - whether a GNU backtrace implementation is available.
+ */
+#define HAVE_FEATURE_BACKTRACE 0
+
+/*
+ *  Whether OpenGL is enabled
+ */
+#define HAVE_FEATURE_OPENGL 0
+
+/*
+ * Whether Skia is enabled
+ */
+#define HAVE_FEATURE_SKIA 0
+
+/*
+ * Whether User Interface is available
+ */
+#define HAVE_FEATURE_UI 0
+
+/*
+ * Whether PDF import is available
+ */
+#define HAVE_FEATURE_PDFIMPORT 0
+
+/*
+ * Whether poppler is available
+ */
+#define HAVE_FEATURE_POPPLER 0
+
+/*
+ * Whether the automatic online updater is available
+ */
+#define HAVE_FEATURE_UPDATE_MAR 0
+
+/*
+ * Whether we are avoiding the tweaks needed for the Android app from the
+ * android/ subdir.
+ */
+#define HAVE_FEATURE_ANDROID_KIT 0
+
+/*
+ * Whether COKit::isActive() is a compile-time constant.
+ * Enables dead code elimination for non-COKit code paths.
+ */
+#define KIT_ALWAYS_ACTIVE 0
+
+/* XMLHELP - whether we include the XML help mechanisms
+ *
+ * Can be turned off with --without-xmlhelp
+ */
+#define HAVE_FEATURE_XMLHELP 0
+
+/*
+ * Whether oosplash calls pagein binaries to speed up library loading.
+ * Probably not useful nowadays with SSD based systems.
+ */
+#define HAVE_FEATURE_PAGEIN 0
+
+/*
+ * Whether Calc supports jumbo sheets (more than 1m rows), which can overflow
+ * 32bit drawing coordinates (see tools::Long definition).
+ */
+#define HAVE_FEATURE_JUMBO_SHEETS 0
+
+#endif

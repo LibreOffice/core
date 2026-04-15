@@ -1,0 +1,156 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SVX_SOURCE_INC_STYLES_PREVIEW_WINDOW_HXX
+#define INCLUDED_SVX_SOURCE_INC_STYLES_PREVIEW_WINDOW_HXX
+
+#include <vcl/InterimItemWindow.hxx>
+#include <svl/style.hxx>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <sfx2/sfxstatuslistener.hxx>
+
+// pair of id and name, name can be translated to other language
+struct StylePreviewDescriptor
+{
+    OUString commonName; // English: Heading 1
+    OUString translatedName; //  German: Überschrift 1
+};
+typedef std::vector<StylePreviewDescriptor> StylePreviewList;
+
+class StylesPreviewWindow_Base;
+
+/// Listener for style selection
+class StyleStatusListener final : public SfxStatusListener
+{
+    StylesPreviewWindow_Base* m_pPreviewControl;
+
+public:
+    StyleStatusListener(
+        StylesPreviewWindow_Base* pPreviewControl,
+        const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
+
+    void StateChangedAtStatusListener(SfxItemState eState, const SfxPoolItem* pState) override;
+};
+
+/// Listener for styles creation or modification
+class StylePoolChangeListener final : public SfxListener
+{
+    StylesPreviewWindow_Base* m_pPreviewControl;
+    SfxStyleSheetBasePool* m_pStyleSheetPool;
+
+public:
+    StylePoolChangeListener(StylesPreviewWindow_Base* pPreviewControl);
+    ~StylePoolChangeListener();
+
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+};
+
+class StyleItemController
+{
+    static constexpr unsigned LEFT_MARGIN = 8;
+
+    SfxStyleFamily m_eStyleFamily;
+    StylePreviewDescriptor m_aStyleName;
+
+public:
+    StyleItemController(StylePreviewDescriptor aStyleName);
+
+    void Paint(vcl::RenderContext& rRenderContext);
+
+private:
+    void DrawEntry(vcl::RenderContext& rRenderContext);
+    void DrawText(vcl::RenderContext& rRenderContext);
+    void DrawHighlight(vcl::RenderContext& rRenderContext, Color aFontBack);
+    static void DrawContentBackground(vcl::RenderContext& rRenderContext,
+                                      const tools::Rectangle& rContentRect, const Color& rColor);
+};
+
+class StylesListUpdateTask final : public Idle
+{
+    StylesPreviewWindow_Base& m_rStylesList;
+
+public:
+    StylesListUpdateTask(StylesPreviewWindow_Base& rStylesList)
+        : Idle("StylesListUpdateTask")
+        , m_rStylesList(rStylesList)
+    {
+        SetPriority(TaskPriority::DEFAULT_IDLE);
+    }
+
+    virtual void Invoke() override;
+};
+
+class StylesPreviewWindow_Base
+{
+    friend class StylesListUpdateTask;
+
+protected:
+    static constexpr unsigned STYLES_COUNT = 6;
+
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
+
+    std::unique_ptr<weld::IconView> m_xStylesView;
+
+    StylesListUpdateTask m_aUpdateTask;
+
+    rtl::Reference<StyleStatusListener> m_xStatusListener;
+    std::unique_ptr<StylePoolChangeListener> m_pStylePoolChangeListener;
+
+    StylePreviewList m_aDefaultStyles;
+    StylePreviewList m_aAllStyles;
+
+    OUString m_sSelectedStyle;
+
+    DECL_LINK(Selected, weld::IconView&, void);
+    DECL_LINK(DoubleClick, weld::IconView&, bool);
+    DECL_LINK(DoCommand, const CommandEvent&, bool);
+    DECL_LINK(GetPreviewImage, const weld::encoded_image_query&, bool);
+
+public:
+    StylesPreviewWindow_Base(weld::Builder& xBuilder, const StylePreviewList& rDefaultStyles,
+                             const css::uno::Reference<css::frame::XFrame>& xFrame);
+    ~StylesPreviewWindow_Base();
+
+    void Select(const OUString& rStyleName);
+    void RequestStylesListUpdate();
+    static Bitmap GetCachedPreview(const StylePreviewDescriptor& rStyle, int nDpiScale = 100);
+    static OString GetCachedPreviewJson(const StylePreviewDescriptor& rStyle, int nDpiScale = 100);
+
+private:
+    void UpdateStylesList();
+    void UpdateSelection();
+    bool Command(const CommandEvent& rEvent);
+};
+
+class StylesPreviewWindow_Impl final : public InterimItemWindow, public StylesPreviewWindow_Base
+{
+public:
+    StylesPreviewWindow_Impl(vcl::Window* pParent, const StylePreviewList& rDefaultStyles,
+                             const css::uno::Reference<css::frame::XFrame>& xFrame);
+    ~StylesPreviewWindow_Impl();
+
+    void dispose();
+
+    void SetOptimalSize();
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

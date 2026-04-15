@@ -1,0 +1,9 @@
+---
+assumeFilename: registry/source/registry.cxx
+excludelist:
+    registry/source/regimpl.hxx:
+    # Needed for correct linker visibility
+    - regapi.hxx
+    registry/source/reflread.cxx:
+    # Needed for correct linker visibility
+    - registry/typereg_reader.hxx

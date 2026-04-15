@@ -1,0 +1,51 @@
+diff -ru boost.orig/boost/libs/locale/src/encoding/codepage.cpp boost/boost/libs/locale/src/encoding/codepage.cpp
+--- foo/misc/boost.orig/libs/locale/src/encoding/codepage.cpp
++++ foo/misc/boost/libs/locale/src/boost/locale/encoding/codepage.cpp
+@@ -29,6 +29,7 @@
+                         const std::string& from_charset,
+                         method_type how)
+     {
++#if defined(BOOST_LOCALE_WITH_ICONV) || defined(BOOST_LOCALE_WITH_ICU) || defined(BOOST_LOCALE_WITH_WCONV)
+ #ifdef BOOST_LOCALE_WITH_ICONV
+         {
+             impl::iconv_between cvt;
+@@ -50,6 +51,7 @@
+                 return cvt.convert(begin, end);
+         }
+ #endif
++#endif
+         throw invalid_charset_error(std::string(to_charset) + " or " + from_charset);
+     }
+ 
+@@ -56,6 +58,7 @@
+     template<typename CharType>
+     std::basic_string<CharType> to_utf(const char* begin, const char* end, const std::string& charset, method_type how)
+     {
++#if defined(BOOST_LOCALE_WITH_ICONV) || defined(BOOST_LOCALE_WITH_ICU) || defined(BOOST_LOCALE_WITH_WCONV)
+ #ifdef BOOST_LOCALE_WITH_ICONV
+         {
+             impl::iconv_to_utf<CharType> cvt;
+@@ -77,6 +80,7 @@
+                 return cvt.convert(begin, end);
+         }
+ #endif
++#endif
+         throw invalid_charset_error(charset);
+     }
+ 
+@@ -83,6 +87,7 @@
+     template<typename CharType>
+     std::string from_utf(const CharType* begin, const CharType* end, const std::string& charset, method_type how)
+     {
++#if defined(BOOST_LOCALE_WITH_ICONV) || defined(BOOST_LOCALE_WITH_ICU) || defined(BOOST_LOCALE_WITH_WCONV)
+ #ifdef BOOST_LOCALE_WITH_ICONV
+         {
+             impl::iconv_from_utf<CharType> cvt;
+@@ -104,6 +109,7 @@
+                 return cvt.convert(begin, end);
+         }
+ #endif
++#endif
+         throw invalid_charset_error(charset);
+     }
+ 

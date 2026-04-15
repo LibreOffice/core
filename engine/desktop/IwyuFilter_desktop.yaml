@@ -1,0 +1,84 @@
+---
+assumeFilename: desktop/source/lib/init.cxx
+excludelist:
+    desktop/inc/lib/init.hxx:
+    # Complete type is needed
+    - boost/property_tree/ptree.hpp
+    desktop/qa/desktop_lib/test_desktop_lib.cxx:
+    # Actually used
+    - rtl/math.hxx
+    desktop/source/app/app.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    # Needed for HAVE_FEATURE_UPDATE_MAR
+    - com/sun/star/system/XSystemShellExecute.hpp
+    - com/sun/star/system/SystemShellExecute.hpp
+    - officecfg/Office/Update.hxx
+    desktop/source/app/appinit.cxx:
+    # Needed on IOS
+    - rtl/bootstrap.hxx
+    desktop/source/app/cmdlineargs.cxx:
+    # Don't propose hxx -> h change in URE libs
+    - osl/thread.hxx
+    desktop/source/app/cmdlinehelp.cxx:
+    # Needed on WIN32
+    - comphelper/string.hxx
+    desktop/source/app/crashreport.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    desktop/source/app/sofficemain.cxx:
+    # Might be needed on WIN32
+    - prewin.h
+    - postwin.h
+    # Needed on ANDROID
+    - rtl/bootstrap.hxx
+    desktop/source/lib/init.cxx:
+    # Needed for boost::trim_copy
+    - boost/algorithm/string.hpp
+    # Needed on IOS & ANDROID
+    - officecfg/Office/Impress.hxx
+    desktop/source/minidump/minidump.cxx:
+    # Needed for ostringstream
+    - sstream
+    desktop/source/deployment/gui/dp_gui_updatedialog.cxx:
+    # Actually used
+    - vector
+    desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:
+    # Actually used
+    - vector
+    desktop/source/deployment/manager/dp_properties.cxx:
+    # Actually used
+    - com/sun/star/ucb/XCommandEnvironment.hpp
+    desktop/source/deployment/manager/dp_extensionmanager.cxx:
+    # Actually used
+    - com/sun/star/deployment/XPackage.hpp
+    - com/sun/star/deployment/XPackageManager.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    desktop/source/deployment/misc/lockfile.cxx:
+    # Needed on WIN32
+    - memory
+    desktop/source/deployment/registry/executable/dp_executablebackenddb.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    desktop/source/deployment/registry/component/dp_compbackenddb.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    desktop/source/deployment/registry/script/dp_scriptbackenddb.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    desktop/source/deployment/registry/package/dp_extbackenddb.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    desktop/source/deployment/registry/configuration/dp_configurationbackenddb.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    desktop/source/deployment/registry/help/dp_helpbackenddb.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    desktop/source/deployment/registry/script/dp_lib_container.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    - com/sun/star/ucb/XCommandEnvironment.hpp
+    desktop/source/deployment/registry/help/dp_help.cxx:
+    # Actually used
+    - com/sun/star/util/XMacroExpander.hpp

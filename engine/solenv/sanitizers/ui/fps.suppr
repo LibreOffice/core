@@ -1,0 +1,4 @@
+fpicker/uiconfig/ui/breadcrumb.ui://GtkLabel[@id='label'] orphan-label
+fpicker/uiconfig/ui/explorerfiledialog.ui://GtkCheckButton[@id='link'] button-no-label
+fpicker/uiconfig/ui/explorerfiledialog.ui://GtkCheckButton[@id='cb_preview'] button-no-label
+fpicker/uiconfig/ui/explorerfiledialog.ui://GtkMenuToolButton[@id='up_btn'] button-no-label

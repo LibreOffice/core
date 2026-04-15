@@ -1,0 +1,32 @@
+From 48829f87ebafbb9938d23a8f0bff4d11d770690e Mon Sep 17 00:00:00 2001
+From: Patrick Steinhardt <ps@pks.im>
+Date: Thu, 20 Feb 2020 17:37:32 +0100
+Subject: [PATCH] Fix possible compiler error due to undefined _MSC_VER
+
+In order to determine how to set up the ARGON2_PUBLIC and ARGON2_LOCAL
+macros, we check for various different environments via preprocessor
+defines. For Microsoft Visual Studio, we check that the macro _MSC_VER
+evaluates to non-zero via `#elif _MSC_VER`. This may raise a compile
+error when compiling with "-Werror=undef" if the variable isn't defined.
+
+Fix the issue by using `#elif defined(_MSC_VER)` instead.
+---
+ include/argon2.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/argon2.h b/include/argon2.h
+index fc8682c..1b471f6 100644
+--- a/include/argon2.h
++++ b/include/argon2.h
+@@ -30,7 +30,7 @@ extern "C" {
+ #ifdef A2_VISCTL
+ #define ARGON2_PUBLIC __attribute__((visibility("default")))
+ #define ARGON2_LOCAL __attribute__ ((visibility ("hidden")))
+-#elif _MSC_VER
++#elif defined(_MSC_VER)
+ #define ARGON2_PUBLIC __declspec(dllexport)
+ #define ARGON2_LOCAL
+ #else
+-- 
+2.43.0
+

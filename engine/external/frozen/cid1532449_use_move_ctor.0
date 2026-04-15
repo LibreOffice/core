@@ -1,0 +1,29 @@
+--- include/frozen/unordered_map.h	2023-06-25 14:47:35.486459668 +0100
++++ include/frozen/unordered_map.h	2023-06-25 14:55:58.787858570 +0100
+@@ -78,14 +78,24 @@
+ public:
+   /* constructors */
+   unordered_map(unordered_map const &) = default;
+-  constexpr unordered_map(container_type items,
++  constexpr unordered_map(container_type&& items,
++                          Hash const &hash, KeyEqual const &equal)
++      : KeyEqual{equal}
++      , items_(std::move(items))
++      , tables_{
++            bits::make_pmh_tables<storage_size>(
++                items_, hash, bits::GetKey{}, default_prg_t{})} {}
++  explicit constexpr unordered_map(container_type&& items)
++      : unordered_map{items, Hash{}, KeyEqual{}} {}
++
++  constexpr unordered_map(const container_type& items,
+                           Hash const &hash, KeyEqual const &equal)
+       : KeyEqual{equal}
+       , items_{items}
+       , tables_{
+             bits::make_pmh_tables<storage_size>(
+                 items_, hash, bits::GetKey{}, default_prg_t{})} {}
+-  explicit constexpr unordered_map(container_type items)
++  explicit constexpr unordered_map(const container_type& items)
+       : unordered_map{items, Hash{}, KeyEqual{}} {}
+ 
+   constexpr unordered_map(std::initializer_list<value_type> items,

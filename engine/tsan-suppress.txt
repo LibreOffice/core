@@ -1,0 +1,129 @@
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# Use via environment variable TSAN_OPTIONS=suppressions=.../tsan-suppress.txt
+
+# There looks to be a lock ordering problem here, but I can't see how it could
+# actually be hit in practice.
+deadlock:cppuhelper::ServiceManager::disposing()
+deadlock:cppuhelper::ServiceManager::loadImplementation
+deadlock:AffineBridge::v_callInto_v
+
+# Ignore stuff in external DBUS library.
+# Some kind of dbus lock issue when we call it from psp::CUPSManager.
+deadlock:_dbus_lock
+race:g_dbus_connection_signal_unsubscribe
+race:g_path_get_basename
+race:g_date_time_format_iso8601
+race:g_realloc
+
+# inside an assert so I don't care.
+race:cppu::OWeakConnectionPoint::acquire
+race:AffineBridge::v_enter
+race:__vsnprintf_chk
+
+# right now, I'm not interested in deadlocks at all, too many false+
+deadlock:
+
+# This is checking SAL_STRING_IS_STATIC, which is safe because that is written at compile time.
+# Depending on the optimisation/debug level, the call stack may have different leaves, hence
+# specifying this in more than one way.
+race:rtl::str::acquire<_rtl_uString>
+race:rtl::str::release<_rtl_uString>
+race:rtl_uString_acquire
+race:rtl_uString_release
+race:rtl_uString_assign
+# similar static flag
+race:SimpleReferenceObject::acquire
+race:SimpleReferenceObject::release
+
+# I've convinced myself this is a false+, caused by ping-ponging the buffer between two
+# threads, but I might be wrong.
+race:XBufferedThreadedStream::getNextBlock
+
+# I am not interested in stuff the embedded JVM does.
+race:libjvm.so
+
+# I think this is OK, because at this point we are doing
+#  if (nRefCount > 1)
+# and we know from our callers that the refcount must be at least one
+# so there is no failure mode.
+race:ireallocSequence
+
+# TODO There appears to be a race here, initialising the
+#   ::com::sun::star::uno::Sequence< T >::s_pType
+# field. But no idea at all how to fix it.
+race:cppu::getTypeFavourUnsigned
+
+
+# This is all inside GIO/Glib, no idea what it is doing.
+#
+race:slab_allocator_alloc_chunk
+race:g_source_destroy_internal
+race:g_source_unref_internal
+race:g_task_finalize
+race:g_socket_send_message_with_timeout
+race:g_idle_source_new
+race:g_slice_alloc0
+race:g_str_has_suffix
+race:g_str_equal
+race:g_strsplit
+race:g_variant_store
+
+# Python build, lock order inversion
+deadlock:take_gil
+
+# Not interested in deadlock issues when they involve the shutdown path 
+# - the shutdown path is special, so if we see a lock-ordering here that conflicts with
+# a "normal" lock-ordering path, that is highly unlikely to result in a real issue.
+deadlock:DeInitVCL
+
+# Sometimes tsan will report data-races in these, who knows why, they should be thread-safe
+race:malloc
+race:free
+race:close
+
+# There is a lock-cycle here, together with the mutexes acquired in
+#    SvtSysLocaleOptions::SvtSysLocaleOptions
+#    SvtSysLocale::SvtSysLocale
+# but I can't see how it could lead to a problem in practice
+deadlock:ItemHolder1::impl_addItem
+
+# ignore warning about nRefCount in sal_Sequence.
+# <sberg> noelgrandin, we generally assume that sal_Int32 is small enough, and hardware sane enough,
+#      that reading it will always give a sane value, i.e., if the read happens in parallel with a write,
+#      the read produces either the old, original value, or the newly written one.
+race:cppu::createEmptySequence
+race:uno_type_sequence_reference2One
+
+# ignore harmless data race on m_nTimeoutMS
+race:GtkSalTimer::Start
+
+# TODO data-race with fields on salhelper::Timer, but I see no way of fixing this because this class
+# is in URE
+race:salhelper::Timer
+
+# TODO LanguageTag is copying data around without any locking at all, but it seems to be touched
+# from multiple threads. I am nervous to randomly add locks because it is performance sensitive.
+race:LanguageTag::
+
+# harmless race on m_storedTypeRefs
+race:cppu::getTypeEntries
+
+# double-checked locking in our 
+#    inline ::css::uno::Type const & cppu_detail_getUnoType(css:uno:Foo const *)
+# generated code
+race:typelib_typedescription_newEmpty
+race:typelib_typedescriptionreference_getByName
+
+# harmless race where two fields are sharing an address slot/word
+race:ScFormulaCell::GetMatrixFlag
+race:ScFormulaCell::InterpretTail
+
+# some gstreamer stuff
+race:gst_buffer_fill

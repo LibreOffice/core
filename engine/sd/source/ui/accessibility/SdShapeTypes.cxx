@@ -1,0 +1,132 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <svx/ShapeTypeHandler.hxx>
+#include <SdShapeTypes.hxx>
+#include <AccessiblePresentationShape.hxx>
+#include <AccessiblePresentationGraphicShape.hxx>
+#include <AccessiblePresentationOLEShape.hxx>
+
+namespace accessibility {
+
+static rtl::Reference<AccessibleShape>
+    CreateSdAccessibleShape (
+        const AccessibleShapeInfo& rShapeInfo,
+        const AccessibleShapeTreeInfo& rShapeTreeInfo,
+        ShapeTypeId nId)
+{
+    switch (nId)
+    {
+        case PRESENTATION_TITLE:
+        case PRESENTATION_OUTLINER:
+        case PRESENTATION_SUBTITLE:
+        case PRESENTATION_PAGE:
+        case PRESENTATION_NOTES:
+        case PRESENTATION_HANDOUT:
+        case PRESENTATION_HEADER:
+        case PRESENTATION_FOOTER:
+        case PRESENTATION_DATETIME:
+        case PRESENTATION_PAGENUMBER:
+            return new AccessiblePresentationShape (rShapeInfo, rShapeTreeInfo);
+
+        case PRESENTATION_GRAPHIC_OBJECT:
+            return new AccessiblePresentationGraphicShape (rShapeInfo, rShapeTreeInfo);
+
+        case PRESENTATION_OLE:
+        case PRESENTATION_CHART:
+        case PRESENTATION_TABLE:
+            return new AccessiblePresentationOLEShape (rShapeInfo, rShapeTreeInfo);
+
+        default:
+            return new AccessibleShape (rShapeInfo, rShapeTreeInfo);
+    }
+}
+
+void RegisterImpressShapeTypes()
+{
+    /** List of shape type descriptors corresponding to the
+        <type>SdShapeTypes</type> enum.
+    */
+    ShapeTypeDescriptor aSdShapeTypeList[] = {
+        ShapeTypeDescriptor (
+            PRESENTATION_OUTLINER,
+            u"com.sun.star.presentation.OutlinerShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_SUBTITLE,
+            u"com.sun.star.presentation.SubtitleShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_GRAPHIC_OBJECT,
+            u"com.sun.star.presentation.GraphicObjectShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_PAGE,
+            u"com.sun.star.presentation.PageShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_OLE,
+            u"com.sun.star.presentation.OLE2Shape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_CHART,
+            u"com.sun.star.presentation.ChartShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_TABLE,
+            u"com.sun.star.presentation.TableShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_NOTES,
+            u"com.sun.star.presentation.NotesShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_TITLE,
+            u"com.sun.star.presentation.TitleTextShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_HANDOUT,
+            u"com.sun.star.presentation.HandoutShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_HEADER,
+            u"com.sun.star.presentation.HeaderShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_FOOTER,
+            u"com.sun.star.presentation.FooterShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_DATETIME,
+            u"com.sun.star.presentation.DateTimeShape"_ustr,
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_PAGENUMBER,
+            u"com.sun.star.presentation.SlideNumberShape"_ustr,
+            CreateSdAccessibleShape )
+    };
+
+    ShapeTypeHandler::Instance().AddShapeTypeList (
+        PRESENTATION_PAGENUMBER - PRESENTATION_OUTLINER + 1,
+        aSdShapeTypeList);
+}
+
+} // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

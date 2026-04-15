@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<office:document xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta><meta:creation-date>2024-07-23T06:07:05.802370280</meta:creation-date><dc:date>2024-07-24T00:55:47.337561889</dc:date><meta:editing-duration>PT45M9S</meta:editing-duration><meta:editing-cycles>14</meta:editing-cycles><meta:generator>LibreOfficeDev/25.2.0.0.alpha0$Linux_X86_64 LibreOffice_project/e9bd8614e28421d4907b06ed2e84bda9ba08e12f</meta:generator><meta:print-date>2024-07-23T06:49:26.331205263</meta:print-date><meta:printed-by>PDF files</meta:printed-by><meta:document-statistic meta:table-count="1" meta:image-count="0" meta:object-count="0" meta:page-count="1" meta:paragraph-count="3" meta:word-count="12" meta:character-count="12" meta:non-whitespace-character-count="12"/></office:meta>
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+  <style:font-face style:name="Noto Sans" svg:font-family="'Noto Sans'"/>
+  <style:font-face style:name="Noto Sans JP" svg:font-family="'Noto Sans JP'" style:font-family-generic="swiss" style:font-pitch="fixed">
+   <svg:font-face-src>
+    <svg:font-face-uri loext:font-style="normal" loext:font-weight="normal">
+     <office:binary-data>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
+      AAEECQAGACQBlAADAAEECQEBAAwBuAAoAGMAKQAgADIAMAAxADQALQAyADAAMgAxACAAQQBk
+      AG8AYgBlACAAKABoAHQAdABwADoALwAvAHcAdwB3AC4AYQBkAG8AYgBlAC4AYwBvAG0ALwAp
+      ACwAIAB3AGkAdABoACAAUgBlAHMAZQByAHYAZQBkACAARgBvAG4AdAAgAE4AYQBtAGUAIAAn
+      AFMAbwB1AHIAYwBlACcALgBOAG8AdABvACAAUwBhAG4AcwAgAEoAUABSAGUAZwB1AGwAYQBy
+      ADIALgAwADAANAAtAEgAMgA7AEEARABCAE8AOwBOAG8AdABvAFMAYQBuAHMASgBQAC0AUgBl
+      AGcAdQBsAGEAcgBOAG8AdABvACAAUwBhAG4AcwAgAEoAUAAgAFIAZQBnAHUAbABhAHIAVgBl
+      AHIAcwBpAG8AbgAgADIALgAwADAANAAtAEgAMgA7AGgAbwB0AGMAbwBuAHYAIAAxAC4AMAAu
+      ADEAMQA4ADsAbQBhAGsAZQBvAHQAZgBlAHgAZQAgADIALgA1AC4ANgA1ADYAMAAzAE4AbwB0
+      AG8AUwBhAG4AcwBKAFAALQBSAGUAZwB1AGwAYQByAFcAZQBpAGcAaAB0AAAAAwAAAAAAAP+D
+      ADIAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAH//wAPAAEAAAAKAKgBfAAGREZMVAAmY3lybAA6
+      Z3JlawBOaGFuaQBia2FuYQB2bGF0bgCKAAQAAAAA//8ABQAAAAYADAASABgABAAAAAD//wAF
+      AAEABwANABMAGQAEAAAAAP//AAUAAgAIAA4AFAAaAAQAAAAA//8ABQADAAkADwAVABsABAAA
+      AAD//wAFAAQACgAQABYAHAAEAAAAAP//AAUABQALABEAFwAdAB5oYWx0ALZoYWx0ALZoYWx0
+      ALZoYWx0ALZoYWx0ALZoYWx0ALZrZXJuALxrZXJuALxrZXJuALxrZXJuALxrZXJuALxrZXJu
+      ALx2aGFsAMJ2aGFsAMJ2aGFsAMJ2aGFsAMJ2aGFsAMJ2aGFsAMJ2a3JuAMh2a3JuAMh2a3Ju
+      AMh2a3JuAMh2a3JuAMh2a3JuAMh2cGFsAM52cGFsAM52cGFsAM52cGFsAM52cGFsAM52cGFs
+      AM4AAAABAAAAAAABAAEAAAABAAMAAAABAAQAAAABAAIABQAMAC4AfgCYAMAAAQAAAAIACgAU
+      AAEApAAF/wb+DAABAAgABP4MAAEAAQAFAAIAAAABAAgAAgAoAAQAAAAyADwAAwAEAAAAAAAA
+      AAAAAAAAAAAAAAAAAAAAAAAAAAEAAwACAAMABAABAAMAAgABAAIAAQACAAMAAQACAAMACQAA
+      AAIACgASAAEAAQAAAEgAAQABAAAATgABAAAAAgAKABgAAQAIAAj+DAABAAEACgABAAoACgD6
+      /gwAAQABAA0ACQAAAAEACAABAAIAAAA0AAEACAAI/gwAAQABAAoAAgAUAAoAAwD6/gwAVP96
+      ABz/zwABAAMADQAOAA8AAQAOAAgAAAACABYAHAABAAIADgAPAAEACv/EAAEACv/YAAAAAQAA
+      AAoA3gGOAAZERkxUACZjeXJsADRncmVrAFRoYW5pAHRrYW5hAJRsYXRuALQABAAAAAD//wAC
+      AAUAEAAKAAFKQU4gABQAAP//AAIABgARAAD//wADAAAABwASAAoAAUpBTiAAFAAA//8AAgAI
+      ABMAAP//AAMAAQAJABQACgABSkFOIAAUAAD//wACAAoAFQAA//8AAwACAAsAFgAKAAFKQU4g
+      ABQAAP//AAIADAAXAAD//wADAAMADQAYAAoAAUpBTiAAFAAA//8AAgAOABkAAP//AAMABAAP
+      ABoAG2xvY2wApGxvY2wApGxvY2wApGxvY2wApGxvY2wApHZlcnQAqnZlcnQAqnZlcnQAqnZl
+      cnQAqnZlcnQAqnZlcnQAqnZlcnQAqnZlcnQAqnZlcnQAqnZlcnQAqnZlcnQAqnZydDIAqnZy
+      dDIAqnZydDIAqnZydDIAqnZydDIAqnZydDIAqnZydDIAqnZydDIAqnZydDIAqnZydDIAqnZy
+      dDIAqgAAAAEAAAAAAAEAAQACAAYAGgABAAAAAQAIAAEABgAJAAEAAQADAAEAAAABAAgAAgAM
+      AAMACgAOAA8AAQADAAUABgAHAAAAAQABAAgAAQAAABQAAQAAABwAAndnaHQBAQAAAAIAAwAA
+      AAIAAgGQAAACvAAAAAAD6AAAA3AAgwBtAb4CkAC0AH4AKAAoADgAIwAAAW4AuQCEAAAAARAA
+      AfT+DAAAC7j/Nv1bC3AAAAABAAAAAAAAAAAAAAAAAAE=
+     </office:binary-data>
+     <svg:font-face-format svg:string="truetype"/>
+    </svg:font-face-uri>
+   </svg:font-face-src>
+  </style:font-face>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties svg:stroke-color="#3465a4" draw:fill-color="#729fcf" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.1181in" draw:shadow-offset-y="0.1181in" draw:start-line-spacing-horizontal="0.1114in" draw:start-line-spacing-vertical="0.1114in" draw:end-line-spacing-horizontal="0.1114in" draw:end-line-spacing-vertical="0.1114in" style:writing-mode="lr-tb" style:flow-with-text="false"/>
+   <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" loext:tab-stop-distance="0in" style:writing-mode="lr-tb" style:font-independent-line-spacing="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="Noto Sans" style:font-size-asian="10.5pt" style:language-asian="ja" style:country-asian="JP"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="0.4925in" style:writing-mode="page"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="Noto Sans" style:font-size-asian="10.5pt" style:language-asian="ja" style:country-asian="JP" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text">
+   <style:text-properties style:font-name-asian="Noto Sans JP" style:font-family-asian="'Noto Sans JP'" style:font-style-name-asian="Regular" style:font-family-generic-asian="swiss" style:font-pitch-asian="fixed"/>
+  </style:style>
+  <text:outline-style style:name="Outline">
+   <text:outline-level-style text:level="1" loext:num-list-format="%1%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="2" loext:num-list-format="%2%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="3" loext:num-list-format="%3%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="4" loext:num-list-format="%4%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="5" loext:num-list-format="%5%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="6" loext:num-list-format="%6%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="7" loext:num-list-format="%7%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="8" loext:num-list-format="%8%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="9" loext:num-list-format="%9%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="10" loext:num-list-format="%10%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+  </text:outline-style>
+  <text:notes-configuration text:note-class="footnote" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
+  <text:notes-configuration text:note-class="endnote" style:num-format="i" text:start-value="0"/>
+  <text:linenumbering-configuration text:number-lines="false" text:offset="0.1965in" style:num-format="1" text:number-position="left" text:increment="5"/>
+  </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Table1" style:family="table">
+   <style:table-properties style:width="6.6931in" table:align="margins"/>
+  </style:style>
+  <style:style style:name="Table1.A" style:family="table-column">
+   <style:table-column-properties style:column-width="2.2313in" style:rel-column-width="21845*"/>
+  </style:style>
+  <style:style style:name="Table1.1" style:family="table-row">
+   <style:table-row-properties style:min-row-height="0.7882in"/>
+  </style:style>
+  <style:style style:name="Table1.A1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.5pt solid #000000" fo:border-right="none" fo:border-top="0.5pt solid #000000" fo:border-bottom="0.5pt solid #000000" style:writing-mode="tb-rl"/>
+  </style:style>
+  <style:style style:name="Table1.B1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.5pt solid #000000" fo:border-right="none" fo:border-top="0.5pt solid #000000" fo:border-bottom="0.5pt solid #000000"/>
+  </style:style>
+  <style:style style:name="Table1.C1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.0382in" fo:border="0.5pt solid #000000" style:writing-mode="tb-rl"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties style:font-name-asian="Noto Sans JP"/>
+  </style:style>
+  <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties style:font-name-asian="Noto Sans"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="8.2681in" fo:page-height="11.6929in" style:num-format="1" style:print-orientation="portrait" fo:margin-top="0.7874in" fo:margin-bottom="0.7874in" fo:margin-left="0.7874in" fo:margin-right="0.7874in" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.278in" style:layout-grid-ruby-height="0.139in" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:footnote-max-height="0in" loext:margin-gutter="0in">
+    <style:footnote-sep style:width="0.0071in" style:distance-before-sep="0.0398in" style:distance-after-sep="0.0398in" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:background-size="full"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:sequence-decls>
+    <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+   </text:sequence-decls>
+   <table:table table:name="Table1" table:style-name="Table1">
+    <table:table-column table:style-name="Table1.A" table:number-columns-repeated="3"/>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+      <text:p text:style-name="P1">有る</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Table1.B1" office:value-type="string">
+      <text:p text:style-name="P1">無い有る有る</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Table1.C1" office:value-type="string">
+      <text:p text:style-name="P1">有る無い</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="P2"/>
+  </office:text>
+ </office:body>
+</office:document>

@@ -1,0 +1,59 @@
+<svg
+  width="100%"
+  height="100%"
+  viewBox="0 0 150 500"
+  preserveAspectRatio="xMidYMid meet"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- ref -->
+  <defs>
+    <g id="circles">
+      <circle cx="30" cy="30" r="20" fill="blue" fill-opacity="0.5" />
+    </g>
+  </defs>
+  <use href="#circles" />
+  <text x="70" y="50">Reference</text>
+
+  <!-- Combine RGB into green matrix -->
+  <filter id="colorMeGreen">
+    <feColorMatrix
+      in="SourceGraphic"
+      values="0 0 0 0 0
+              1 1 1 1 0
+              0 0 0 0 0
+              0 0 0 1 0" />
+  </filter>
+  <use
+    href="#circles"
+    transform="translate(0 70)"
+    filter="url(#colorMeGreen)" />
+  <text x="70" y="120">rgbToGreen</text>
+
+  <!-- saturate -->
+  <filter id="colorMeSaturate">
+    <feColorMatrix in="SourceGraphic" type="saturate" values="0.2" />
+  </filter>
+  <use
+    href="#circles"
+    transform="translate(0 140)"
+    filter="url(#colorMeSaturate)" />
+  <text x="70" y="190">saturate</text>
+
+  <!-- hueRotate -->
+  <filter id="colorMeHueRotate">
+    <feColorMatrix in="SourceGraphic" type="hueRotate" values="180" />
+  </filter>
+  <use
+    href="#circles"
+    transform="translate(0 210)"
+    filter="url(#colorMeHueRotate)" />
+  <text x="70" y="260">hueRotate</text>
+
+  <!-- luminanceToAlpha -->
+  <filter id="colorMeLTA">
+    <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" />
+  </filter>
+  <use href="#circles" transform="translate(0 280)" filter="url(#colorMeLTA)" />
+  <text x="70" y="330">luminanceToAlpha</text>
+</svg>
+

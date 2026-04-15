@@ -1,0 +1,40 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#pragma once
+
+#include <osl/thread.hxx>
+
+namespace sd { class ZeroconfService; }
+
+namespace sd
+{
+    class DiscoveryService : public osl::Thread
+    {
+        public:
+            static void setup();
+
+        private:
+            DiscoveryService();
+            virtual ~DiscoveryService() override;
+
+            /**
+             * Networking related setup -- must be run within our own thread
+             * to prevent the application blocking (fdo#75328).
+             */
+            void setupSockets();
+
+            static DiscoveryService *spService;
+            virtual void SAL_CALL run() override;
+            int mSocket;
+
+            ZeroconfService * zService;
+    };
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

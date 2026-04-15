@@ -1,0 +1,3 @@
+"row 1","Character 0x16 is here ->><<--", "File opens in libre office, but can't be saved as xlsx"
+"row 2","Subsequent rows get truncated", "This cell goes missing"
+"row 3","Subsequent rows get truncated", "This cell goes missing"

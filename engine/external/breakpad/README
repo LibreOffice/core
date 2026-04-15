@@ -1,0 +1,21 @@
+Google breakpad crash-reporting library
+
+https://chromium.googlesource.com/breakpad/breakpad
+
+When this is enabled and soffice.bin crashes, a "mini-dump" file is written
+as "instdir/crash/*.dmp".
+
+There is an UI to upload the mini-dump to a TDF server but of course
+that only makes sense if the server has symbols available that match
+the build, which is not the case if you have built LO yourself.
+
+If you want to get the backtrace from local mini-dump files:
+
+* with Visual Studio:
+  1. open the *.dmp file from the Visual Studio IDE File->Open->File
+  2. then click "Debug Native Only"
+
+* otherwise:
+  1. run "make symbols" to extract the debuginfo from the binaries
+  2. run "workdir/UnpackedTarball/breakpad/src/processor/minidump_stackwalk foo.dmp workdir/symbols"
+

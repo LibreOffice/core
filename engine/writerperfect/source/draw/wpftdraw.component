@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Draw.CDRImportFilter"
+      constructor="com_sun_star_comp_Draw_CDRImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Draw.CMXImportFilter"
+      constructor="com_sun_star_comp_Draw_CMXImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Draw.FreehandImportFilter"
+      constructor="com_sun_star_comp_Draw_FreehandImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Draw.MSPUBImportFilter"
+      constructor="com_sun_star_comp_Draw_MSPUBImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Draw.MWAWDrawImportFilter"
+      constructor="com_sun_star_comp_Draw_MWAWDrawImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="org.libreoffice.comp.Draw.StarOfficeDrawImportFilter"
+      constructor="org_libreoffice_comp_Draw_StarOfficeDrawImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Draw.VisioImportFilter"
+      constructor="com_sun_star_comp_Draw_VisioImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Draw.WPGImportFilter"
+     constructor="com_sun_star_comp_Draw_WPGImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="org.libreoffice.comp.Draw.PageMakerImportFilter"
+      constructor="org_libreoffice_comp_Draw_PageMakerImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="org.libreoffice.comp.Draw.QXPImportFilter"
+      constructor="org_libreoffice_comp_Draw_QXPImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="org.libreoffice.comp.Draw.ZMFImportFilter"
+      constructor="org_libreoffice_comp_Draw_ZMFImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+</component>

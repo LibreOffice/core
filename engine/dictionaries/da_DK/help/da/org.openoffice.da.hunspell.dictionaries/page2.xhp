@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<helpdocument version="1.0">
+<meta>
+<topic id="Dansk_stavekontrol" indexer="include" status="PUBLISH">
+<title id="title">Dansk stavekontrol</title>
+<filename>/org.openoffice.da.hunspell.dictionaries/page2.xhp</filename>
+</topic>
+</meta>
+<body>
+
+<bookmark xml-lang="da-DK" branch="index" id="bm1">
+<bookmark_value>stavekontrol</bookmark_value>
+<bookmark_value>ordbog; stavekontrol</bookmark_value>
+<bookmark_value>dansk stavekontrol</bookmark_value>
+<bookmark_value>sprog;stavekontrol</bookmark_value>
+</bookmark>
+
+
+<paragraph role="heading" level="1">Dansk stavekontrol
+</paragraph>
+<paragraph role="paragraph">
+<image id="img_idtrold" src="desktop/res/extension_32.png" width="1.2156cm" height="0.6888cm"><alt id="alt_idext">Udvidelse</alt></image>
+</paragraph>
+<paragraph role="paragraph">
+Denne side vedrøre udvidelsen med den danske stavekontrol, som går under navnet <emph>Stavekontrolden</emph>. 
+</paragraph>
+<paragraph role="paragraph">
+<emph>Stavekontrolden</emph> udvikles og vedligeholdes af <emph>Foreningen for frit tilgængelige sprogværktøjer</emph>. 
+</paragraph>
+<paragraph role="paragraph">
+Grundstammen i <emph>Stavekontrolden</emph> er baseret på data fra <emph>Det Danske Sprog- og Litteraturselskab (DSL)</emph>, samt en del egennavne fra <emph>Familiestyrelsen</emph> og <emph>Stednavneudvalget</emph>.
+</paragraph>
+<paragraph role="paragraph">
+DSL's data stammer fra forskningsprojekter, hvor de har afdækket hvordan folk skriver. Det vil sige, at ord man normalt ville betragte som stavefejl, er med i datasættet, og disse kan have sneget sig med ind i <emph>Stavekontrolden</emph>. I takt med at vi finder disse alternative stavemåder, fjernes de.
+</paragraph>
+<paragraph role="paragraph">
+<emph>Stavekontrolden</emph> udvikles ud fra princippet, at <emph>Retskrivningsordbogen</emph> har ret, med mindre der blandt bidragyderne er bred enighed om at den ikke har. Vi tillader nye og moderne ord, men prøver ikke på at dække ord der er på vej ud af sproget.
+</paragraph>
+<paragraph role="paragraph">
+<emph>Stavekontrolden</emph> er ikke komplet, men vi arbejder ihærdigt for at forbedre indholdet.
+</paragraph>
+<paragraph role="paragraph">
+<image id="img_idtrold02" src="org.openoffice.da.hunspell.dictionaries/Trold.png" width="1.2156cm" height="0.6888cm"><alt id="alt_idtrold">Trolden</alt></image>
+</paragraph>
+
+<paragraph role="heading" level="2">Links
+</paragraph>
+<paragraph role="paragraph">
+Stavekontrolden: <link href="http://www.stavekontrolden.dk" name="http://www.stavekontrolden.dk">http://www.stavekontrolden.dk</link></paragraph>
+<paragraph role="paragraph">
+Det Danske Sprog- og Litteraturselskab: <link href="https://dsl.dk" name="https://dsl.dk">https://dsl.dk</link></paragraph>
+<paragraph role="paragraph">
+Retskrivningsordbogen: <link href="https://dsn.dk" name="https://dsn.dk">https://dsn.dk</link></paragraph>
+
+<paragraph role="paragraph">
+<br/>
+Hjælp med at gøre Stavekontrolden bedre! Kig forbi vores hjemmeside.
+
+</paragraph>
+</body>
+</helpdocument>

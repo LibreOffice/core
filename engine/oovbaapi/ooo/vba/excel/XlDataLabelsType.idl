@@ -1,0 +1,13 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module excel {
+    constants XlDataLabelsType {
+        const long xlDataLabelsShowBubbleSizes = 6;
+        const long xlDataLabelsShowLabel = 4;
+        const long xlDataLabelsShowLabelAndPercent = 5;
+        const long xlDataLabelsShowNone = -4142;
+        const long xlDataLabelsShowPercent = 3;
+        const long xlDataLabelsShowValue = 2;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,2 @@
+Library for parsing Embedded OpenType files (Microsoft embedded font
+"standard"), and converting them to other formats.

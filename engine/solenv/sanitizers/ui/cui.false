@@ -1,0 +1,4 @@
+cui/uiconfig/ui/aboutdialog.ui://GtkImage[@id='imAbout'] no-labelled-by
+cui/uiconfig/ui/aboutdialog.ui://GtkImage[@id='imBrand'] no-labelled-by
+cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='lbAbout'] orphan-label
+cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='lbCopyright'] orphan-label

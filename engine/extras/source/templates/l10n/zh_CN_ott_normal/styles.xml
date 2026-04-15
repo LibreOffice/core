@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-styles xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" office:version="1.3">
+  <office:font-face-decls>
+    <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'"/>
+    <style:font-face style:name="Noto Serif CJK SC" svg:font-family="'Noto Serif CJK SC'"/>
+  </office:font-face-decls>
+
+  <office:styles>
+    <draw:gradient draw:name="gradient" draw:style="linear" draw:start-color="#000000" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0deg" draw:border="0%"/>
+    <draw:hatch draw:name="hatch" draw:style="single" draw:color="#3465a4" draw:distance="0.02cm" draw:rotation="0"/>
+
+<!-- Default Styles -->
+
+    <style:default-style style:family="graphic">
+      <style:graphic-properties svg:stroke-color="#3465a4" draw:fill-color="#729fcf" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:start-line-spacing-horizontal="0.283cm" draw:start-line-spacing-vertical="0.283cm" draw:end-line-spacing-horizontal="0.283cm" draw:end-line-spacing-vertical="0.283cm" style:flow-with-text="false"/>
+      <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" style:font-independent-line-spacing="false">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" loext:color-lum-mod="100%" loext:color-lum-off="0%" style:font-name="Liberation Serif" fo:font-size="10pt" style:letter-kerning="true" style:font-name-asian="Noto Serif CJK SC" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
+    </style:default-style>
+
+    <style:default-style style:family="paragraph">
+      <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="1.27cm" style:writing-mode="lr-tb"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="12pt" style:letter-kerning="true" style:font-name-asian="Noto Serif CJK SC" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
+    </style:default-style>
+
+    <style:default-style style:family="table">
+      <style:table-properties table:border-model="collapsing"/>
+    </style:default-style>
+
+    <style:default-style style:family="table-row">
+      <style:table-row-properties fo:keep-together="auto"/>
+    </style:default-style>
+
+<!-- End Default Styles -->
+
+<!-- Paragraph Styles -->
+
+    <style:style style:name="Standard" style:family="paragraph" style:default-outline-level="" style:class="text">
+      <style:paragraph-properties fo:text-align="start" style:justify-single-word="false" style:shadow="none" style:punctuation-wrap="simple" style:writing-mode="lr-tb"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-family="'Liberation Serif'" fo:font-size="12pt" style:font-name-asian="Noto Serif CJK SC" style:font-family-asian="'Noto Serif CJK SC'" style:font-size-asian="12pt" style:font-size-complex="12pt" fo:hyphenate="false" style:contextual-spacing="false" fo:text-align="start"/>
+    </style:style>
+
+    <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="First_20_line_20_indent" style:list-style-name="">
+      <style:paragraph-properties fo:margin-top="0.199cm" fo:margin-bottom="0.199cm" fo:line-height="120%" fo:text-indent="0.84cm" fo:keep-with-next="always" style:writing-mode="lr-tb"/>
+    </style:style>
+
+    <style:style style:name="Title" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="First_20_line_20_indent" style:class="chapter">
+      <style:paragraph-properties fo:margin-bottom="0.4cm" fo:text-align="center" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="15pt" fo:font-weight="bold" style:font-size-asian="15pt" style:font-weight-asian="bold" style:font-size-complex="15pt" style:font-weight-complex="bold"/>
+    </style:style>
+
+    <style:style style:name="Subtitle" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="First_20_line_20_indent" style:class="chapter">
+      <style:paragraph-properties fo:margin-bottom="0.4cm" fo:line-height="150%" fo:text-align="center" fo:text-indent="0cm"/>
+    </style:style>
+
+    <style:style style:name="Heading_20_1" style:display-name="Heading 1" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="First_20_line_20_indent" style:default-outline-level="1" style:class="text">
+      <style:paragraph-properties fo:line-height="150%"/>
+      <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+    </style:style>
+
+    <style:style style:name="Heading_20_2" style:display-name="Heading 2" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="First_20_line_20_indent" style:default-outline-level="2" style:class="text">
+      <style:paragraph-properties fo:line-height="150%"/>
+      <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+    </style:style>
+
+    <style:style style:name="Heading_20_3" style:display-name="Heading 3" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="First_20_line_20_indent" style:default-outline-level="3" style:class="text">
+      <style:paragraph-properties fo:line-height="150%"/>
+      <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+    </style:style>
+
+    <style:style style:name="Heading_20_4" style:display-name="Heading 4" style:family="paragraph" style:parent-style-name="Heading" style:class="text"/>
+    <style:style style:name="Heading_20_5" style:display-name="Heading 5" style:family="paragraph" style:parent-style-name="Heading" style:class="text"/>
+    <style:style style:name="Heading_20_6" style:display-name="Heading 6" style:family="paragraph" style:parent-style-name="Heading" style:class="text"/>
+    <style:style style:name="Heading_20_7" style:display-name="Heading 7" style:family="paragraph" style:parent-style-name="Heading" style:class="text"/>
+    <style:style style:name="Heading_20_8" style:display-name="Heading 8" style:family="paragraph" style:parent-style-name="Heading" style:class="text"/>
+    <style:style style:name="Heading_20_9" style:display-name="Heading 9" style:family="paragraph" style:parent-style-name="Heading" style:class="text"/>
+    <style:style style:name="Heading_20_10" style:display-name="Heading 10" style:family="paragraph" style:parent-style-name="Heading" style:class="text"/>
+
+    <style:style style:name="Quotations" style:family="paragraph" style:parent-style-name="Standard" style:class="html">
+      <style:paragraph-properties fo:margin-left="1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:color="#999999" loext:opacity="100%"/>
+    </style:style>
+
+    <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard">
+      <style:paragraph-properties fo:text-align="justify"/>
+    </style:style>
+
+    <style:style style:name="First_20_line_20_indent" style:display-name="First line indent" style:family="paragraph" style:parent-style-name="Text_20_body" style:class="text">
+      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="120%" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0.84cm" style:page-number="auto" style:punctuation-wrap="hanging" style:snap-to-layout-grid="false"/>
+      <style:text-properties fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="4" loext:hyphenation-zone="no-limit"/>
+    </style:style>
+
+    <style:style style:name="Hanging_20_indent" style:display-name="Hanging indent" style:family="paragraph" style:parent-style-name="Text_20_body" style:class="text"/>
+
+    <style:style style:name="List" style:family="paragraph" style:parent-style-name="Text_20_body" style:class="list">
+      <style:text-properties/>
+    </style:style>
+
+    <style:style style:name="Numbering_20_1" style:display-name="Numbering 1" style:family="paragraph" style:parent-style-name="List" style:class="list"/>
+
+    <style:style style:name="Table_20_Contents" style:display-name="Table Contents" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:text-properties fo:font-size="10.5pt" style:font-size-asian="10.5pt" style:font-size-complex="10.5pt"/>
+    </style:style>
+
+    <style:style style:name="Table_20_Heading" style:display-name="Table Heading" style:family="paragraph" style:parent-style-name="Table_20_Contents" style:class="extra">
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+
+    <style:style style:name="Footnote" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:paragraph-properties fo:margin-left="0.85cm" fo:text-indent="-0.85cm">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+      <style:text-properties fo:color="#808080" loext:opacity="100%" fo:font-size="9pt" style:font-size-asian="9pt" style:font-size-complex="9pt"/>
+    </style:style>
+
+    <style:style style:name="Endnote" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:paragraph-properties fo:margin-left="0.85cm" fo:text-indent="-0.85cm"/>
+    </style:style>
+
+    <style:style style:name="Header_20_and_20_Footer" style:display-name="Header and Footer" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"/>
+
+    <style:style style:name="Header" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"/>
+
+    <style:style style:name="Footer" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+
+    <style:style style:name="Horizontal_20_Line" style:display-name="Horizontal Line" style:family="paragraph" style:parent-style-name="Standard" style:class="html">
+      <style:paragraph-properties style:contextual-spacing="true" fo:padding="0.049cm" fo:border-bottom="0.06pt solid #000000"/>
+    </style:style>
+
+    <style:style style:name="Sender" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"/>
+
+    <style:style style:name="Signature" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="9.299cm" style:auto-text-indent="false" text:number-lines="false" text:line-number="0"/>
+    </style:style>
+    <style:style style:name="Addressee" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:paragraph-properties fo:line-height="120%" text:number-lines="false" text:line-number="0"/>
+    </style:style>
+
+    <style:style style:name="Caption" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:paragraph-properties fo:line-height="120%" fo:text-align="center"/>
+    </style:style>
+
+    <style:style style:name="Table" style:family="paragraph" style:parent-style-name="Caption" style:class="extra">
+      <style:paragraph-properties fo:margin-top="0.199cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:text-align="center" style:justify-single-word="false"/>
+    </style:style>
+
+    <style:style style:name="Figure" style:family="paragraph" style:parent-style-name="Caption" style:class="extra"/>
+
+    <style:style style:name="Index" style:family="paragraph" style:parent-style-name="Standard" style:class="index">
+      <style:text-properties fo:line-height="120%"/>
+    </style:style>
+
+    <style:style style:name="Appendix" style:family="paragraph" style:parent-style-name="Heading" style:class="chapter">
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+
+    <style:style style:name="Index_20_Heading" style:display-name="Index Heading" style:family="paragraph" style:parent-style-name="Heading" style:class="index">
+      <style:paragraph-properties/>
+    </style:style>
+
+    <style:style style:name="Table_20_index_20_heading" style:display-name="Table index heading" style:family="paragraph" style:parent-style-name="Index_20_Heading" style:class="index"/>
+    <style:style style:name="Bibliography_20_Heading" style:display-name="Bibliography Heading" style:family="paragraph" style:parent-style-name="Index_20_Heading" style:class="index"/>
+    <style:style style:name="Object_20_index_20_heading" style:display-name="Object index heading" style:family="paragraph" style:parent-style-name="Index_20_Heading" style:class="index"/>
+    <style:style style:name="Contents_20_Heading" style:display-name="Contents Heading" style:family="paragraph" style:parent-style-name="Index_20_Heading" style:class="index"/>
+    <style:style style:name="Figure_20_Index_20_Heading" style:display-name="Figure Index Heading" style:family="paragraph" style:parent-style-name="Index_20_Heading" style:class="index"/>
+    <style:style style:name="User_20_Index_20_Heading" style:display-name="User Index Heading" style:family="paragraph" style:parent-style-name="Index_20_Heading" style:class="index"/>
+    <style:style style:name="Illustration" style:family="paragraph" style:parent-style-name="Caption" style:class="extra"/>
+
+<!-- End Paragraph Styles -->
+
+<!-- Character (Text) Styles -->
+
+    <style:style style:name="Emphasis" style:family="text">
+      <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-size-complex="12pt"/>
+    </style:style>
+    <style:style style:name="Strong_20_Emphasis" style:display-name="Strong Emphasis" style:family="text">
+      <style:text-properties style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="Placeholder" style:family="text">
+      <style:text-properties fo:font-variant="small-caps" fo:color="#008080" loext:opacity="100%" style:text-underline-style="dotted" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Internet_20_link" style:display-name="Internet link" style:family="text">
+      <style:text-properties fo:color="#000080" loext:opacity="100%" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Footnote_20_Symbol" style:display-name="Footnote Symbol" style:family="text">
+      <style:text-properties style:text-position="0% 100%" loext:padding="0cm" loext:border="none" loext:shadow="none"/>
+    </style:style>
+    <style:style style:name="Footnote_20_anchor" style:display-name="Footnote anchor" style:family="text">
+      <style:text-properties style:text-position="super 58%"/>
+    </style:style>
+    <style:style style:name="Visited_20_Internet_20_Link" style:display-name="Visited Internet Link" style:family="text">
+      <style:text-properties fo:color="#800080" loext:opacity="100%" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+    </style:style>
+    <style:style style:name="Numbering_20_Symbols" style:display-name="Numbering Symbols" style:family="text"/>
+    <style:style style:name="Endnote_20_Symbol" style:display-name="Endnote Symbol" style:family="text"/>
+    <style:style style:name="Endnote_20_anchor" style:display-name="Endnote anchor" style:family="text">
+      <style:text-properties style:text-position="super 58%"/>
+    </style:style>
+
+<!-- End Character (Text) Styles -->
+
+<!-- Graphic Styles -->
+
+    <style:style style:name="Graphics" style:family="graphic">
+      <style:graphic-properties text:anchor-type="as-char" svg:x="0cm" svg:y="0cm" style:wrap="none" style:vertical-pos="top" style:vertical-rel="baseline" style:horizontal-pos="center" style:horizontal-rel="paragraph" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true"/>
+    </style:style>
+    <style:style style:name="Marginalia" style:family="graphic">
+      <style:graphic-properties svg:width="3.5cm" fo:min-height="0.499cm" text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" style:wrap="parallel" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="left" style:horizontal-rel="paragraph"/>
+    </style:style>
+    <style:style style:name="Watermark" style:family="graphic">
+      <style:graphic-properties text:anchor-type="page" svg:x="0cm" svg:y="0cm" style:run-through="background" style:wrap="run-through" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="middle" style:vertical-rel="page" style:horizontal-pos="center" style:horizontal-rel="paragraph"/>
+    </style:style>
+
+<!-- End Graphic Styles -->
+
+<!-- Outline Styles -->
+
+    <text:outline-style style:name="Outline">
+      <text:outline-level-style text:level="1" loext:num-list-format="%1%、" style:num-suffix="、" style:num-format="一, 二, 三, ...">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="nothing" fo:text-indent="-0.6cm" fo:margin-left="0.6cm"/>
+        </style:list-level-properties>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="2" loext:num-list-format="（%2%）" style:num-prefix="（" style:num-suffix="）" style:num-format="一, 二, 三, ...">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="nothing" fo:text-indent="-0.831cm" fo:margin-left="0.831cm"/>
+        </style:list-level-properties>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="3" loext:num-list-format="%3%." style:num-suffix="." style:num-format="1">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.6cm" fo:text-indent="-0.769cm" fo:margin-left="1.6cm"/>
+        </style:list-level-properties>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="4" loext:num-list-format="%4%." style:num-suffix="." style:num-format="A">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.524cm" fo:text-indent="-1.524cm" fo:margin-left="1.524cm"/>
+        </style:list-level-properties>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="5" loext:num-list-format="%5%." style:num-suffix="." style:num-format="a">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.778cm" fo:text-indent="-1.778cm" fo:margin-left="1.778cm"/>
+        </style:list-level-properties>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="6" loext:num-list-format="%6%" style:num-format="">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.032cm" fo:text-indent="-2.032cm" fo:margin-left="2.032cm"/>
+        </style:list-level-properties>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="7" loext:num-list-format="%7%" style:num-format="">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.286cm" fo:text-indent="-2.286cm" fo:margin-left="2.286cm"/>
+        </style:list-level-properties>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="8" loext:num-list-format="%8%" style:num-format="">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.54cm" fo:text-indent="-2.54cm" fo:margin-left="2.54cm"/>
+        </style:list-level-properties>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="9" loext:num-list-format="%9%" style:num-format="">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.794cm" fo:text-indent="-2.794cm" fo:margin-left="2.794cm"/>
+        </style:list-level-properties>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="10" loext:num-list-format="%10%" style:num-format="">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="3.048cm" fo:text-indent="-3.048cm" fo:margin-left="3.048cm"/>
+        </style:list-level-properties>
+      </text:outline-level-style>
+    </text:outline-style>
+
+<!-- End Outline Styles -->
+
+<!-- List Styles -->
+
+    <text:list-style style:name="Numbering_20_123" style:display-name="Numbering 123">
+      <text:list-level-style-number text:level="1" text:style-name="Numbering_20_Symbols" loext:num-list-format="%1%." style:num-suffix="." style:num-format="1">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.33cm" fo:text-indent="-0.499cm" fo:margin-left="1.33cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-number>
+      <text:list-level-style-number text:level="2" text:style-name="Numbering_20_Symbols" loext:num-list-format="(%2%)" style:num-prefix="(" style:num-suffix=")" style:num-format="1">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.401cm" fo:text-indent="-0.7cm" fo:margin-left="2.03cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-number>
+      <text:list-level-style-number text:level="3" text:style-name="Numbering_20_Symbols" loext:num-list-format="%3%." style:num-suffix="." style:num-format="a">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.101cm" fo:text-indent="-0.7cm" fo:margin-left="2.731cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-number>
+      <text:list-level-style-number text:level="4" text:style-name="Numbering_20_Symbols" loext:num-list-format="%4%." style:num-suffix="." style:num-format="i">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.801cm" fo:text-indent="-0.7cm" fo:margin-left="3.431cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-number>
+      <text:list-level-style-number text:level="5" text:style-name="Numbering_20_Symbols" loext:num-list-format="%5%." style:num-suffix="." style:num-format="1">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="3.501cm" fo:text-indent="-0.7cm" fo:margin-left="4.131cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-number>
+      <text:list-level-style-number text:level="6" text:style-name="Numbering_20_Symbols" loext:num-list-format="%6%." style:num-suffix="." style:num-format="1">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="4.2cm" fo:text-indent="-0.7cm" fo:margin-left="4.83cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-number>
+      <text:list-level-style-number text:level="7" text:style-name="Numbering_20_Symbols" loext:num-list-format="%7%." style:num-suffix="." style:num-format="1">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="4.9cm" fo:text-indent="-0.7cm" fo:margin-left="5.53cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-number>
+      <text:list-level-style-number text:level="8" text:style-name="Numbering_20_Symbols" loext:num-list-format="%8%." style:num-suffix="." style:num-format="1">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="5.6cm" fo:text-indent="-0.7cm" fo:margin-left="6.23cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-number>
+      <text:list-level-style-number text:level="9" text:style-name="Numbering_20_Symbols" loext:num-list-format="%9%." style:num-suffix="." style:num-format="1">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="6.301cm" fo:text-indent="-0.7cm" fo:margin-left="6.93cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-number>
+      <text:list-level-style-number text:level="10" text:style-name="Numbering_20_Symbols" loext:num-list-format="%10%." style:num-suffix="." style:num-format="1">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="7.001cm" fo:text-indent="-0.7cm" fo:margin-left="7.631cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-number>
+    </text:list-style>
+
+    <text:list-style style:name="List_20_1" style:display-name="List 1">
+      <text:list-level-style-bullet text:level="1" text:style-name="Numbering_20_Symbols" loext:num-list-format="%1%" text:bullet-char="•">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.401cm" fo:text-indent="-0.57cm" fo:margin-left="1.401cm"/>
+        </style:list-level-properties>
+        <style:text-properties fo:font-family="OpenSymbol" style:font-charset="x-symbol"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="2" text:style-name="Numbering_20_Symbols" loext:num-list-format="%2%" text:bullet-char="∘">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2cm" fo:text-indent="-0.6cm" fo:margin-left="2cm"/>
+        </style:list-level-properties>
+        <style:text-properties fo:font-family="OpenSymbol" style:font-style-name="Regular" style:font-charset="x-symbol"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="3" text:style-name="Numbering_20_Symbols" loext:num-list-format="%3%" text:bullet-char="•">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.199cm" fo:text-indent="-0.4cm" fo:margin-left="1.199cm"/>
+        </style:list-level-properties>
+        <style:text-properties fo:font-family="OpenSymbol" style:font-charset="x-symbol"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="4" text:style-name="Numbering_20_Symbols" loext:num-list-format="%4%" text:bullet-char="•">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.6cm" fo:text-indent="-0.4cm" fo:margin-left="1.6cm"/>
+        </style:list-level-properties>
+        <style:text-properties fo:font-family="OpenSymbol" style:font-charset="x-symbol"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="5" text:style-name="Numbering_20_Symbols" loext:num-list-format="%5%" text:bullet-char="•">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2cm" fo:text-indent="-0.4cm" fo:margin-left="2cm"/>
+        </style:list-level-properties>
+        <style:text-properties fo:font-family="OpenSymbol" style:font-charset="x-symbol"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="6" text:style-name="Numbering_20_Symbols" loext:num-list-format="%6%" text:bullet-char="•">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.401cm" fo:text-indent="-0.4cm" fo:margin-left="2.401cm"/>
+        </style:list-level-properties>
+        <style:text-properties fo:font-family="OpenSymbol" style:font-charset="x-symbol"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="7" text:style-name="Numbering_20_Symbols" loext:num-list-format="%7%" text:bullet-char="•">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.799cm" fo:text-indent="-0.4cm" fo:margin-left="2.799cm"/>
+        </style:list-level-properties>
+        <style:text-properties fo:font-family="OpenSymbol" style:font-charset="x-symbol"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="8" text:style-name="Numbering_20_Symbols" loext:num-list-format="%8%" text:bullet-char="•">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="3.2cm" fo:text-indent="-0.4cm" fo:margin-left="3.2cm"/>
+        </style:list-level-properties>
+        <style:text-properties fo:font-family="OpenSymbol" style:font-charset="x-symbol"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="9" text:style-name="Numbering_20_Symbols" loext:num-list-format="%9%" text:bullet-char="•">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="3.6cm" fo:text-indent="-0.4cm" fo:margin-left="3.6cm"/>
+        </style:list-level-properties>
+        <style:text-properties fo:font-family="OpenSymbol" style:font-charset="x-symbol"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="10" text:style-name="Numbering_20_Symbols" loext:num-list-format="%10%" text:bullet-char="•">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="4.001cm" fo:text-indent="-0.4cm" fo:margin-left="4.001cm"/>
+        </style:list-level-properties>
+        <style:text-properties fo:font-family="OpenSymbol" style:font-charset="x-symbol"/>
+      </text:list-level-style-bullet>
+    </text:list-style>
+
+<!-- End List Styles -->
+
+    <text:notes-configuration text:note-class="footnote" text:default-style-name="Footnote" text:citation-style-name="Footnote_20_Symbol" text:citation-body-style-name="Footnote_20_anchor" text:master-page-name="Footnote" style:num-prefix="[" style:num-suffix="]" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
+    <text:notes-configuration text:note-class="endnote" text:default-style-name="Endnote" text:citation-style-name="Endnote_20_Symbol" text:citation-body-style-name="Endnote_20_anchor" text:master-page-name="Endnote" style:num-prefix="[" style:num-suffix="]" style:num-format="1" text:start-value="0"/>
+    <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
+    <style:default-page-layout>
+      <style:page-layout-properties style:writing-mode="lr-tb" style:layout-grid-standard-mode="true"/>
+    </style:default-page-layout>
+  </office:styles>
+
+  <office:automatic-styles>
+
+    <style:page-layout style:name="Mpm1">
+      <style:page-layout-properties style:num-format="1" style:print-orientation="portrait" fo:margin-top="25.4mm" fo:margin-bottom="20.4mm" fo:margin-left="32.92mm" fo:margin-right="32.92mm" style:shadow="none" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="23940" style:layout-grid-base-height="0.423cm" style:layout-grid-ruby-height="0cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.37cm" style:layout-grid-snap-to="true" draw:fill-image-width="0cm" draw:fill-image-height="0mm" style:footnote-max-height="0mm" loext:margin-gutter="0mm">
+        <style:columns fo:column-count="1" fo:column-gap="0mm"/>
+        <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.199cm" style:distance-after-sep="0.199cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+      </style:page-layout-properties>
+      <style:header-style/>
+      <style:footer-style>
+        <style:header-footer-properties fo:min-height="0.998cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.499cm" fo:background-color="transparent" style:dynamic-spacing="true" draw:fill="none" draw:fill-color="#729fcf"/>
+      </style:footer-style>
+    </style:page-layout>
+
+    <style:page-layout style:name="Mpm2">
+      <style:page-layout-properties fo:page-width="210mm" fo:page-height="297mm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="20mm" fo:margin-bottom="20mm" fo:margin-left="20mm" fo:margin-right="20mm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.706cm" style:layout-grid-snap-to="true" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+        <style:footnote-sep style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+      </style:page-layout-properties>
+      <style:header-style/>
+      <style:footer-style/>
+    </style:page-layout>
+
+    <style:style style:name="Mdp1" style:family="drawing-page">
+      <style:drawing-page-properties draw:background-size="full" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
+    </style:style>
+
+    <style:style style:name="Mdp2" style:family="drawing-page">
+      <style:drawing-page-properties draw:background-size="full"/>
+    </style:style>
+
+  </office:automatic-styles>
+
+  <office:master-styles>
+
+    <style:master-page style:name="Standard" style:page-layout-name="Mpm1" draw:style-name="Mdp1">
+    </style:master-page>
+
+    <style:master-page style:name="Footnote" style:page-layout-name="Mpm2" draw:style-name="Mdp2"/>
+    <style:master-page style:name="Endnote" style:page-layout-name="Mpm2" draw:style-name="Mdp2"/>
+
+  </office:master-styles>
+
+
+</office:document-styles>

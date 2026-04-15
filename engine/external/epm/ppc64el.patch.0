@@ -1,0 +1,11 @@
+--- deb.c.orig	2022-08-01 14:50:38.593375838 +0200
++++ deb.c	2022-08-01 14:58:08.000000000 +0200
+@@ -163,6 +163,8 @@
+ #endif
+   else if (!strcmp(platform->machine, "ppc"))
+     fputs("Architecture: powerpc\n", fp);
++  else if (!strcmp(platform->machine, "ppc64le"))
++    fputs("Architecture: ppc64el\n", fp);
+   else
+     fprintf(fp, "Architecture: %s\n", platform->machine);
+

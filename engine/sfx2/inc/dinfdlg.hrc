@@ -1,0 +1,87 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SFX2_INC_DINFDLG_HRC
+#define INCLUDED_SFX2_INC_DINFDLG_HRC
+
+#include <unotools/resmgr.hxx>
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+const TranslateId SFX_CB_PROPERTY_STRINGARRAY[] =
+{
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Checked by"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Client"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Date completed"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Department"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Destinations"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Disposition"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Division"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Document number"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Editor"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Email"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Forward to"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Group"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Info"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Language"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Mailstop"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Matter"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Office"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Owner"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Project"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Publisher"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Purpose"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Received from"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Recorded by"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Recorded date"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Reference"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Source"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Status"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Telephone number"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Typist"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "URL")
+};
+
+enum CustomProperties : sal_Int32 {
+    Custom_Type_Unknown = 0,
+    Custom_Type_Text = 1,
+    Custom_Type_Number = 2,
+    Custom_Type_Date = 3,
+    Custom_Type_Boolean = 4,
+    Custom_Type_Duration = 5,
+    Custom_Type_Datetime = 6
+};
+
+const std::pair<TranslateId, CustomProperties> SFX_LB_PROPERTY_STRINGARRAY[] =
+{
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Text")        , Custom_Type_Text },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "DateTime")    , Custom_Type_Datetime },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Date")        , Custom_Type_Date },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Duration")    , Custom_Type_Duration },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Number")      , Custom_Type_Number },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Yes or no")   , Custom_Type_Boolean }
+};
+
+// accessibility descriptions that use %PRODUCTNAME, we set these explicitly because querying a11y descs
+// in order to change %PRODUCTNAME at runtime is expensive, so limit doing that as much as possible.
+#define STR_A11Y_DESC_USERDATA                      NC_("documentinfopage|extended_tip|userdatacb", "Saves the user's full name with the file. You can edit the name by choosing Tools - Options - %PRODUCTNAME - User Data.")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

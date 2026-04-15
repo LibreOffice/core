@@ -1,0 +1,6309 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+[CENT_SIGN]
+x-comment = "¢ (U+000A2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cent"
+
+[POUND_SIGN]
+x-comment = "£ (U+000A3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pound"
+
+[YEN_SIGN]
+x-comment = "¥ (U+000A5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "yen"
+
+[SECTION_SIGN]
+x-comment = "§ (U+000A7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "section"
+
+[COPYRIGHT_SIGN]
+x-comment = "© (U+000A9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "copyright"
+
+[NOT_SIGN]
+x-comment = "¬ (U+000AC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "not"
+
+[REGISTERED_SIGN]
+x-comment = "® (U+000AE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "registered"
+
+[DEGREE_SIGN]
+x-comment = "° (U+000B0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "degree"
+
+[PLUS-MINUS_SIGN]
+x-comment = "± (U+000B1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "+-"
+
+[MIDDLE_DOT]
+x-comment = "· (U+000B7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "middle dot"
+
+[MULTIPLICATION_SIGN]
+x-comment = "× (U+000D7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "x"
+
+[GREEK_CAPITAL_LETTER_ALPHA]
+x-comment = "Α (U+00391), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Alpha"
+
+[GREEK_CAPITAL_LETTER_BETA]
+x-comment = "Β (U+00392), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Beta"
+
+[GREEK_CAPITAL_LETTER_GAMMA]
+x-comment = "Γ (U+00393), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Gamma"
+
+[GREEK_CAPITAL_LETTER_DELTA]
+x-comment = "Δ (U+00394), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Delta"
+
+[GREEK_CAPITAL_LETTER_EPSILON]
+x-comment = "Ε (U+00395), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Epsilon"
+
+[GREEK_CAPITAL_LETTER_ZETA]
+x-comment = "Ζ (U+00396), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Zeta"
+
+[GREEK_CAPITAL_LETTER_ETA]
+x-comment = "Η (U+00397), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Eta"
+
+[GREEK_CAPITAL_LETTER_THETA]
+x-comment = "Θ (U+00398), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Theta"
+
+[GREEK_CAPITAL_LETTER_IOTA]
+x-comment = "Ι (U+00399), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Iota"
+
+[GREEK_CAPITAL_LETTER_KAPPA]
+x-comment = "Κ (U+0039A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Kappa"
+
+[GREEK_CAPITAL_LETTER_LAMDA]
+x-comment = "Λ (U+0039B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Lambda"
+
+[GREEK_CAPITAL_LETTER_MU]
+x-comment = "Μ (U+0039C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Mu"
+
+[GREEK_CAPITAL_LETTER_NU]
+x-comment = "Ν (U+0039D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Nu"
+
+[GREEK_CAPITAL_LETTER_XI]
+x-comment = "Ξ (U+0039E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Xi"
+
+[GREEK_CAPITAL_LETTER_OMICRON]
+x-comment = "Ο (U+0039F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Omicron"
+
+[GREEK_CAPITAL_LETTER_PI]
+x-comment = "Π (U+003A0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Pi"
+
+[GREEK_CAPITAL_LETTER_RHO]
+x-comment = "Ρ (U+003A1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Rho"
+
+[GREEK_CAPITAL_LETTER_SIGMA]
+x-comment = "Σ (U+003A3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Sigma"
+
+[GREEK_CAPITAL_LETTER_TAU]
+x-comment = "Τ (U+003A4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Tau"
+
+[GREEK_CAPITAL_LETTER_UPSILON]
+x-comment = "Υ (U+003A5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Upsilon"
+
+[GREEK_CAPITAL_LETTER_PHI]
+x-comment = "Φ (U+003A6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Phi"
+
+[GREEK_CAPITAL_LETTER_CHI]
+x-comment = "Χ (U+003A7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Chi"
+
+[GREEK_CAPITAL_LETTER_PSI]
+x-comment = "Ψ (U+003A8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Psi"
+
+[GREEK_CAPITAL_LETTER_OMEGA]
+x-comment = "Ω (U+003A9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Omega"
+
+[GREEK_SMALL_LETTER_ALPHA]
+x-comment = "α (U+003B1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "alpha"
+
+[GREEK_SMALL_LETTER_BETA]
+x-comment = "β (U+003B2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "beta"
+
+[GREEK_SMALL_LETTER_GAMMA]
+x-comment = "γ (U+003B3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "gamma"
+
+[GREEK_SMALL_LETTER_DELTA]
+x-comment = "δ (U+003B4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "delta"
+
+[GREEK_SMALL_LETTER_EPSILON]
+x-comment = "ε (U+003B5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "epsilon"
+
+[GREEK_SMALL_LETTER_ZETA]
+x-comment = "ζ (U+003B6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "zeta"
+
+[GREEK_SMALL_LETTER_ETA]
+x-comment = "η (U+003B7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "eta"
+
+[GREEK_SMALL_LETTER_THETA]
+x-comment = "θ (U+003B8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "theta"
+
+[GREEK_SMALL_LETTER_IOTA]
+x-comment = "ι (U+003B9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "iota"
+
+[GREEK_SMALL_LETTER_KAPPA]
+x-comment = "κ (U+003BA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "kappa"
+
+[GREEK_SMALL_LETTER_LAMDA]
+x-comment = "λ (U+003BB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lambda"
+
+[GREEK_SMALL_LETTER_MU]
+x-comment = "μ (U+003BC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mu"
+
+[GREEK_SMALL_LETTER_NU]
+x-comment = "ν (U+003BD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "nu"
+
+[GREEK_SMALL_LETTER_XI]
+x-comment = "ξ (U+003BE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "xi"
+
+[GREEK_SMALL_LETTER_OMICRON]
+x-comment = "ο (U+003BF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "omicron"
+
+[GREEK_SMALL_LETTER_PI]
+x-comment = "π (U+003C0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pi"
+
+[GREEK_SMALL_LETTER_RHO]
+x-comment = "ρ (U+003C1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rho"
+
+[GREEK_SMALL_LETTER_FINAL_SIGMA]
+x-comment = "ς (U+003C2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sigma2"
+
+[GREEK_SMALL_LETTER_SIGMA]
+x-comment = "σ (U+003C3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sigma"
+
+[GREEK_SMALL_LETTER_TAU]
+x-comment = "τ (U+003C4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tau"
+
+[GREEK_SMALL_LETTER_UPSILON]
+x-comment = "υ (U+003C5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "upsilon"
+
+[GREEK_SMALL_LETTER_PHI]
+x-comment = "φ (U+003C6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "phi"
+
+[GREEK_SMALL_LETTER_CHI]
+x-comment = "χ (U+003C7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chi"
+
+[GREEK_SMALL_LETTER_PSI]
+x-comment = "ψ (U+003C8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "psi"
+
+[GREEK_SMALL_LETTER_OMEGA]
+x-comment = "ω (U+003C9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "omega"
+
+[THAI_CURRENCY_SYMBOL_BAHT]
+x-comment = "฿ (U+00E3F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "baht"
+
+[EN_DASH]
+x-comment = "– (U+02013), see http://wiki.documentfoundation.org/Emoji"
+en-US = "--"
+
+[EM_DASH]
+x-comment = "— (U+02014), see http://wiki.documentfoundation.org/Emoji"
+en-US = "---"
+
+[RIGHT_SINGLE_QUOTATION_MARK]
+x-comment = "’ (U+02019), see http://wiki.documentfoundation.org/Emoji"
+en-US = "'"
+
+[DAGGER]
+x-comment = "† (U+02020), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dagger"
+
+[DOUBLE_DAGGER]
+x-comment = "‡ (U+02021), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dagger2"
+
+[BULLET]
+x-comment = "• (U+02022), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bullet"
+
+[TRIANGULAR_BULLET]
+x-comment = "‣ (U+02023), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bullet2"
+
+[HORIZONTAL_ELLIPSIS]
+x-comment = "… (U+02026), see http://wiki.documentfoundation.org/Emoji"
+en-US = "."
+
+[PER_MILLE_SIGN]
+x-comment = "‰ (U+02030), see http://wiki.documentfoundation.org/Emoji"
+en-US = "per mille"
+
+[PER_TEN_THOUSAND_SIGN]
+x-comment = "‱ (U+02031), see http://wiki.documentfoundation.org/Emoji"
+en-US = "basis point"
+
+[PRIME]
+x-comment = "′ (U+02032), see http://wiki.documentfoundation.org/Emoji"
+en-US = "prime"
+
+[DOUBLE_PRIME]
+x-comment = "″ (U+02033), see http://wiki.documentfoundation.org/Emoji"
+en-US = "inch"
+
+[DOUBLE_EXCLAMATION_MARK]
+x-comment = "‼ (U+0203C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "!!"
+
+[EXCLAMATION_QUESTION_MARK]
+x-comment = "⁉ (U+02049), see http://wiki.documentfoundation.org/Emoji"
+en-US = "!?"
+
+[LIRA_SIGN]
+x-comment = "₤ (U+020A4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lira"
+
+[WON_SIGN]
+x-comment = "₩ (U+020A9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "won"
+
+[NEW_SHEQEL_SIGN]
+x-comment = "₪ (U+020AA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shekel"
+
+[EURO_SIGN]
+x-comment = "€ (U+020AC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "euro"
+
+[PESO_SIGN]
+x-comment = "₱ (U+020B1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "peso"
+
+[HRYVNIA_SIGN]
+x-comment = "₴ (U+020B4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hryvnia"
+
+[INDIAN_RUPEE_SIGN]
+x-comment = "₹ (U+020B9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rupee"
+
+[TURKISH_LIRA_SIGN]
+x-comment = "₺ (U+020BA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Turkish lira"
+
+[TRADE_MARK_SIGN]
+x-comment = "™ (U+02122), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tm"
+
+[INFORMATION_SOURCE]
+x-comment = "ℹ (U+02139), see http://wiki.documentfoundation.org/Emoji"
+en-US = "information"
+
+[LEFTWARDS_ARROW]
+x-comment = "← (U+02190), see http://wiki.documentfoundation.org/Emoji"
+en-US = "W"
+
+[UPWARDS_ARROW]
+x-comment = "↑ (U+02191), see http://wiki.documentfoundation.org/Emoji"
+en-US = "N"
+
+[RIGHTWARDS_ARROW]
+x-comment = "→ (U+02192), see http://wiki.documentfoundation.org/Emoji"
+en-US = "E"
+
+[DOWNWARDS_ARROW]
+x-comment = "↓ (U+02193), see http://wiki.documentfoundation.org/Emoji"
+en-US = "S"
+
+[LEFT_RIGHT_ARROW]
+x-comment = "↔ (U+02194), see http://wiki.documentfoundation.org/Emoji"
+en-US = "EW"
+
+[UP_DOWN_ARROW]
+x-comment = "↕ (U+02195), see http://wiki.documentfoundation.org/Emoji"
+en-US = "NS"
+
+[NORTH_WEST_ARROW]
+x-comment = "↖ (U+02196), see http://wiki.documentfoundation.org/Emoji"
+en-US = "NW"
+
+[NORTH_EAST_ARROW]
+x-comment = "↗ (U+02197), see http://wiki.documentfoundation.org/Emoji"
+en-US = "NE"
+
+[SOUTH_EAST_ARROW]
+x-comment = "↘ (U+02198), see http://wiki.documentfoundation.org/Emoji"
+en-US = "SE"
+
+[SOUTH_WEST_ARROW]
+x-comment = "↙ (U+02199), see http://wiki.documentfoundation.org/Emoji"
+en-US = "SW"
+
+[LEFTWARDS_DOUBLE_ARROW]
+x-comment = "⇐ (U+021D0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "W2"
+
+[UPWARDS_DOUBLE_ARROW]
+x-comment = "⇑ (U+021D1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "N2"
+
+[RIGHTWARDS_DOUBLE_ARROW]
+x-comment = "⇒ (U+021D2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "E2"
+
+[DOWNWARDS_DOUBLE_ARROW]
+x-comment = "⇓ (U+021D3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "S2"
+
+[LEFT_RIGHT_DOUBLE_ARROW]
+x-comment = "⇔ (U+021D4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "EW2"
+
+[UP_DOWN_DOUBLE_ARROW]
+x-comment = "⇕ (U+021D5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "NS2"
+
+[NORTH_WEST_DOUBLE_ARROW]
+x-comment = "⇖ (U+021D6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "NW2"
+
+[NORTH_EAST_DOUBLE_ARROW]
+x-comment = "⇗ (U+021D7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "NE2"
+
+[SOUTH_EAST_DOUBLE_ARROW]
+x-comment = "⇘ (U+021D8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "SE2"
+
+[SOUTH_WEST_DOUBLE_ARROW]
+x-comment = "⇙ (U+021D9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "SW2"
+
+[FOR_ALL]
+x-comment = "∀ (U+02200), see http://wiki.documentfoundation.org/Emoji"
+en-US = "for all"
+
+[PARTIAL_DIFFERENTIAL]
+x-comment = "∂ (U+02202), see http://wiki.documentfoundation.org/Emoji"
+en-US = "partial"
+
+[THERE_EXISTS]
+x-comment = "∃ (U+02203), see http://wiki.documentfoundation.org/Emoji"
+en-US = "exists"
+
+[THERE_DOES_NOT_EXIST]
+x-comment = "∄ (U+02204), see http://wiki.documentfoundation.org/Emoji"
+en-US = "not exists"
+
+[EMPTY_SET]
+x-comment = "∅ (U+02205), see http://wiki.documentfoundation.org/Emoji"
+en-US = "empty set"
+
+[ELEMENT_OF]
+x-comment = "∈ (U+02208), see http://wiki.documentfoundation.org/Emoji"
+en-US = "in"
+
+[NOT_AN_ELEMENT_OF]
+x-comment = "∉ (U+02209), see http://wiki.documentfoundation.org/Emoji"
+en-US = "not in"
+
+[SMALL_ELEMENT_OF]
+x-comment = "∊ (U+0220A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "small in"
+
+[CONTAINS_AS_MEMBER]
+x-comment = "∋ (U+0220B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ni"
+
+[DOES_NOT_CONTAIN_AS_MEMBER]
+x-comment = "∌ (U+0220C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "not ni"
+
+[SMALL_CONTAINS_AS_MEMBER]
+x-comment = "∍ (U+0220D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "small ni"
+
+[END_OF_PROOF]
+x-comment = "∎ (U+0220E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "end of proof"
+
+[N-ARY_PRODUCT]
+x-comment = "∏ (U+0220F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "product"
+
+[N-ARY_SUMMATION]
+x-comment = "∑ (U+02211), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sum"
+
+[MINUS_SIGN]
+x-comment = "− (U+02212), see http://wiki.documentfoundation.org/Emoji"
+en-US = "-"
+
+[MINUS-OR-PLUS_SIGN]
+x-comment = "∓ (U+02213), see http://wiki.documentfoundation.org/Emoji"
+en-US = "-+"
+
+[DIVISION_SLASH]
+x-comment = "∕ (U+02215), see http://wiki.documentfoundation.org/Emoji"
+en-US = "/"
+
+[SET_MINUS]
+x-comment = "∖ (U+02216), see http://wiki.documentfoundation.org/Emoji"
+en-US = "\"
+
+[SQUARE_ROOT]
+x-comment = "√ (U+0221A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sqrt"
+
+[CUBE_ROOT]
+x-comment = "∛ (U+0221B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cube root"
+
+[FOURTH_ROOT]
+x-comment = "∜ (U+0221C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fourth root"
+
+[INFINITY]
+x-comment = "∞ (U+0221E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "infinity"
+
+[ANGLE]
+x-comment = "∠ (U+02220), see http://wiki.documentfoundation.org/Emoji"
+en-US = "angle"
+
+[MEASURED_ANGLE]
+x-comment = "∡ (U+02221), see http://wiki.documentfoundation.org/Emoji"
+en-US = "angle2"
+
+[DIVIDES]
+x-comment = "∣ (U+02223), see http://wiki.documentfoundation.org/Emoji"
+en-US = "divides"
+
+[DOES_NOT_DIVIDE]
+x-comment = "∤ (U+02224), see http://wiki.documentfoundation.org/Emoji"
+en-US = "not divides"
+
+[PARALLEL_TO]
+x-comment = "∥ (U+02225), see http://wiki.documentfoundation.org/Emoji"
+en-US = "parallel"
+
+[NOT_PARALLEL_TO]
+x-comment = "∦ (U+02226), see http://wiki.documentfoundation.org/Emoji"
+en-US = "nparallel"
+
+[LOGICAL_AND]
+x-comment = "∧ (U+02227), see http://wiki.documentfoundation.org/Emoji"
+en-US = "and"
+
+[LOGICAL_OR]
+x-comment = "∨ (U+02228), see http://wiki.documentfoundation.org/Emoji"
+en-US = "or"
+
+[INTERSECTION]
+x-comment = "∩ (U+02229), see http://wiki.documentfoundation.org/Emoji"
+en-US = "intersection"
+
+[UNION]
+x-comment = "∪ (U+0222A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "union"
+
+[INTEGRAL]
+x-comment = "∫ (U+0222B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "integral"
+
+[DOUBLE_INTEGRAL]
+x-comment = "∬ (U+0222C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "integral2"
+
+[TRIPLE_INTEGRAL]
+x-comment = "∭ (U+0222D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "integral3"
+
+[CONTOUR_INTEGRAL]
+x-comment = "∮ (U+0222E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "integral4"
+
+[VOLUME_INTEGRAL]
+x-comment = "∰ (U+02230), see http://wiki.documentfoundation.org/Emoji"
+en-US = "integral5"
+
+[ALMOST_EQUAL_TO]
+x-comment = "≈ (U+02248), see http://wiki.documentfoundation.org/Emoji"
+en-US = "~"
+
+[NOT_EQUAL_TO]
+x-comment = "≠ (U+02260), see http://wiki.documentfoundation.org/Emoji"
+en-US = "not equal"
+
+[LESS-THAN_OR_EQUAL_TO]
+x-comment = "≤ (U+02264), see http://wiki.documentfoundation.org/Emoji"
+en-US = "<="
+
+[GREATER-THAN_OR_EQUAL_TO]
+x-comment = "≥ (U+02265), see http://wiki.documentfoundation.org/Emoji"
+en-US = ">="
+
+[MUCH_LESS-THAN]
+x-comment = "≪ (U+0226A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "<<"
+
+[MUCH_GREATER-THAN]
+x-comment = "≫ (U+0226B), see http://wiki.documentfoundation.org/Emoji"
+en-US = ">>"
+
+[SUBSET_OF]
+x-comment = "⊂ (U+02282), see http://wiki.documentfoundation.org/Emoji"
+en-US = "subset"
+
+[SUPERSET_OF]
+x-comment = "⊃ (U+02283), see http://wiki.documentfoundation.org/Emoji"
+en-US = "superset"
+
+[NOT_A_SUBSET_OF]
+x-comment = "⊄ (U+02284), see http://wiki.documentfoundation.org/Emoji"
+en-US = "not subset"
+
+[NOT_A_SUPERSET_OF]
+x-comment = "⊅ (U+02285), see http://wiki.documentfoundation.org/Emoji"
+en-US = "not superset"
+
+[RIGHT_TRIANGLE]
+x-comment = "⊿ (U+022BF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "right triangle"
+
+[WATCH]
+x-comment = "⌚ (U+0231A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "watch"
+
+[HOURGLASS]
+x-comment = "⌛ (U+0231B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hourglass"
+
+[KEYBOARD]
+x-comment = "⌨ (U+02328), see http://wiki.documentfoundation.org/Emoji"
+en-US = "keyboard"
+
+[WHITE_TRAPEZIUM]
+x-comment = "⏢ (U+023E2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "trapezium"
+
+[ALARM_CLOCK]
+x-comment = "⏰ (U+023F0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "alarm clock"
+
+[STOPWATCH]
+x-comment = "⏱ (U+023F1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "stopwatch"
+
+[TIMER_CLOCK]
+x-comment = "⏲ (U+023F2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "timer clock"
+
+[HOURGLASS_WITH_FLOWING_SAND]
+x-comment = "⏳ (U+023F3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hourglass2"
+
+[BLACK_SQUARE]
+x-comment = "■ (U+025A0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "square2"
+
+[WHITE_SQUARE]
+x-comment = "□ (U+025A1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "square"
+
+[BLACK_SMALL_SQUARE]
+x-comment = "▪ (U+025AA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "small square2"
+
+[WHITE_SMALL_SQUARE]
+x-comment = "▫ (U+025AB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "small square"
+
+[BLACK_RECTANGLE]
+x-comment = "▬ (U+025AC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rectangle2"
+
+[WHITE_RECTANGLE]
+x-comment = "▭ (U+025AD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rectangle"
+
+[BLACK_PARALLELOGRAM]
+x-comment = "▰ (U+025B0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "parallelogram2"
+
+[WHITE_PARALLELOGRAM]
+x-comment = "▱ (U+025B1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "parallelogram"
+
+[BLACK_UP-POINTING_TRIANGLE]
+x-comment = "▲ (U+025B2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "triangle2"
+
+[WHITE_UP-POINTING_TRIANGLE]
+x-comment = "△ (U+025B3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "triangle"
+
+[LOZENGE]
+x-comment = "◊ (U+025CA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lozenge"
+
+[WHITE_CIRCLE]
+x-comment = "○ (U+025CB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "circle"
+
+[BLACK_CIRCLE]
+x-comment = "● (U+025CF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "circle2"
+
+[WHITE_BULLET]
+x-comment = "◦ (U+025E6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bullet3"
+
+[LARGE_CIRCLE]
+x-comment = "◯ (U+025EF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "large circle"
+
+[WHITE_MEDIUM_SQUARE]
+x-comment = "◻ (U+025FB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "medium square"
+
+[BLACK_MEDIUM_SQUARE]
+x-comment = "◼ (U+025FC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "medium square2"
+
+[WHITE_MEDIUM_SMALL_SQUARE]
+x-comment = "◽ (U+025FD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smaller square"
+
+[BLACK_MEDIUM_SMALL_SQUARE]
+x-comment = "◾ (U+025FE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smaller square2"
+
+[BLACK_SUN_WITH_RAYS]
+x-comment = "☀ (U+02600), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sunny"
+
+[CLOUD]
+x-comment = "☁ (U+02601), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cloud"
+
+[UMBRELLA]
+x-comment = "☂ (U+02602), see http://wiki.documentfoundation.org/Emoji"
+en-US = "umbrella"
+
+[SNOWMAN]
+x-comment = "☃ (U+02603), see http://wiki.documentfoundation.org/Emoji"
+en-US = "snowman"
+
+[COMET]
+x-comment = "☄ (U+02604), see http://wiki.documentfoundation.org/Emoji"
+en-US = "comet"
+
+[BLACK_STAR]
+x-comment = "★ (U+02605), see http://wiki.documentfoundation.org/Emoji"
+en-US = "star"
+
+[WHITE_STAR]
+x-comment = "☆ (U+02606), see http://wiki.documentfoundation.org/Emoji"
+en-US = "star2"
+
+[LIGHTNING]
+x-comment = "☇ (U+02607), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lightning3"
+
+[THUNDERSTORM]
+x-comment = "☈ (U+02608), see http://wiki.documentfoundation.org/Emoji"
+en-US = "storm2"
+
+[SUN]
+x-comment = "☉ (U+02609), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Sun"
+
+[BLACK_TELEPHONE]
+x-comment = "☎ (U+0260E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "phone"
+
+[WHITE_TELEPHONE]
+x-comment = "☏ (U+0260F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "phone2"
+
+[BALLOT_BOX]
+x-comment = "☐ (U+02610), see http://wiki.documentfoundation.org/Emoji"
+en-US = "checkbox"
+
+[BALLOT_BOX_WITH_CHECK]
+x-comment = "☑ (U+02611), see http://wiki.documentfoundation.org/Emoji"
+en-US = "checkbox2"
+
+[BALLOT_BOX_WITH_X]
+x-comment = "☒ (U+02612), see http://wiki.documentfoundation.org/Emoji"
+en-US = "checkbox3"
+
+[SALTIRE]
+x-comment = "☓ (U+02613), see http://wiki.documentfoundation.org/Emoji"
+en-US = "saltire"
+
+[UMBRELLA_WITH_RAIN_DROPS]
+x-comment = "☔ (U+02614), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rain"
+
+[HOT_BEVERAGE]
+x-comment = "☕ (U+02615), see http://wiki.documentfoundation.org/Emoji"
+en-US = "coffee"
+
+[BLACK_LEFT_POINTING_INDEX]
+x-comment = "☚ (U+0261A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "left3"
+
+[BLACK_RIGHT_POINTING_INDEX]
+x-comment = "☛ (U+0261B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "right3"
+
+[WHITE_LEFT_POINTING_INDEX]
+x-comment = "☜ (U+0261C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "left"
+
+[WHITE_UP_POINTING_INDEX]
+x-comment = "☝ (U+0261D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "up"
+
+[WHITE_RIGHT_POINTING_INDEX]
+x-comment = "☞ (U+0261E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "right"
+
+[WHITE_DOWN_POINTING_INDEX]
+x-comment = "☟ (U+0261F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "down"
+
+[SKULL_AND_CROSSBONES]
+x-comment = "☠ (U+02620), see http://wiki.documentfoundation.org/Emoji"
+en-US = "poison"
+
+[CAUTION_SIGN]
+x-comment = "☡ (U+02621), see http://wiki.documentfoundation.org/Emoji"
+en-US = "caution"
+
+[RADIOACTIVE_SIGN]
+x-comment = "☢ (U+02622), see http://wiki.documentfoundation.org/Emoji"
+en-US = "radioactive"
+
+[BIOHAZARD_SIGN]
+x-comment = "☣ (U+02623), see http://wiki.documentfoundation.org/Emoji"
+en-US = "biohazard"
+
+[CADUCEUS]
+x-comment = "☤ (U+02624), see http://wiki.documentfoundation.org/Emoji"
+en-US = "caduceus"
+
+[ANKH]
+x-comment = "☥ (U+02625), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ankh"
+
+[ORTHODOX_CROSS]
+x-comment = "☦ (U+02626), see http://wiki.documentfoundation.org/Emoji"
+en-US = "orthodox cross"
+
+[CHI_RHO]
+x-comment = "☧ (U+02627), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chi rho"
+
+[CROSS_OF_LORRAINE]
+x-comment = "☨ (U+02628), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cross of Lorraine"
+
+[CROSS_OF_JERUSALEM]
+x-comment = "☩ (U+02629), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cross of Jerusalem"
+
+[STAR_AND_CRESCENT]
+x-comment = "☪ (U+0262A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "star and crescent"
+
+[FARSI_SYMBOL]
+x-comment = "☫ (U+0262B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Farsi"
+
+[ADI_SHAKTI]
+x-comment = "☬ (U+0262C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Adi Shakti"
+
+[HAMMER_AND_SICKLE]
+x-comment = "☭ (U+0262D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hammer and sickle"
+
+[PEACE_SYMBOL]
+x-comment = "☮ (U+0262E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "peace"
+
+[YIN_YANG]
+x-comment = "☯ (U+0262F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "yin yang"
+
+[WHITE_FROWNING_FACE]
+x-comment = "☹ (U+02639), see http://wiki.documentfoundation.org/Emoji"
+en-US = "frown"
+
+[WHITE_SMILING_FACE]
+x-comment = "☺ (U+0263A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smiling"
+
+[BLACK_SMILING_FACE]
+x-comment = "☻ (U+0263B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smiling2"
+
+[WHITE_SUN_WITH_RAYS]
+x-comment = "☼ (U+0263C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Sun2"
+
+[FIRST_QUARTER_MOON]
+x-comment = "☽ (U+0263D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Moon"
+
+[LAST_QUARTER_MOON]
+x-comment = "☾ (U+0263E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Moon2"
+
+[MERCURY]
+x-comment = "☿ (U+0263F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mercury"
+
+[FEMALE_SIGN]
+x-comment = "♀ (U+02640), see http://wiki.documentfoundation.org/Emoji"
+en-US = "female"
+
+[EARTH]
+x-comment = "♁ (U+02641), see http://wiki.documentfoundation.org/Emoji"
+en-US = "earth"
+
+[MALE_SIGN]
+x-comment = "♂ (U+02642), see http://wiki.documentfoundation.org/Emoji"
+en-US = "male"
+
+[JUPITER]
+x-comment = "♃ (U+02643), see http://wiki.documentfoundation.org/Emoji"
+en-US = "jupiter"
+
+[SATURN]
+x-comment = "♄ (U+02644), see http://wiki.documentfoundation.org/Emoji"
+en-US = "saturn"
+
+[URANUS]
+x-comment = "♅ (U+02645), see http://wiki.documentfoundation.org/Emoji"
+en-US = "uranus"
+
+[NEPTUNE]
+x-comment = "♆ (U+02646), see http://wiki.documentfoundation.org/Emoji"
+en-US = "neptune"
+
+[PLUTO]
+x-comment = "♇ (U+02647), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pluto"
+
+[ARIES]
+x-comment = "♈ (U+02648), see http://wiki.documentfoundation.org/Emoji"
+en-US = "aries"
+
+[TAURUS]
+x-comment = "♉ (U+02649), see http://wiki.documentfoundation.org/Emoji"
+en-US = "taurus"
+
+[GEMINI]
+x-comment = "♊ (U+0264A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "gemini"
+
+[CANCER]
+x-comment = "♋ (U+0264B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cancer"
+
+[LEO]
+x-comment = "♌ (U+0264C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "leo"
+
+[VIRGO]
+x-comment = "♍ (U+0264D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "virgo"
+
+[LIBRA]
+x-comment = "♎ (U+0264E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "libra"
+
+[SCORPIUS]
+x-comment = "♏ (U+0264F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scorpius"
+
+[SAGITTARIUS]
+x-comment = "♐ (U+02650), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sagittarius"
+
+[CAPRICORN]
+x-comment = "♑ (U+02651), see http://wiki.documentfoundation.org/Emoji"
+en-US = "capricorn"
+
+[AQUARIUS]
+x-comment = "♒ (U+02652), see http://wiki.documentfoundation.org/Emoji"
+en-US = "aquarius"
+
+[PISCES]
+x-comment = "♓ (U+02653), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pisces"
+
+[WHITE_CHESS_KING]
+x-comment = "♔ (U+02654), see http://wiki.documentfoundation.org/Emoji"
+en-US = "white king"
+
+[WHITE_CHESS_QUEEN]
+x-comment = "♕ (U+02655), see http://wiki.documentfoundation.org/Emoji"
+en-US = "white queen"
+
+[WHITE_CHESS_ROOK]
+x-comment = "♖ (U+02656), see http://wiki.documentfoundation.org/Emoji"
+en-US = "white rook"
+
+[WHITE_CHESS_BISHOP]
+x-comment = "♗ (U+02657), see http://wiki.documentfoundation.org/Emoji"
+en-US = "white bishop"
+
+[WHITE_CHESS_KNIGHT]
+x-comment = "♘ (U+02658), see http://wiki.documentfoundation.org/Emoji"
+en-US = "white knight"
+
+[WHITE_CHESS_PAWN]
+x-comment = "♙ (U+02659), see http://wiki.documentfoundation.org/Emoji"
+en-US = "white pawn"
+
+[BLACK_CHESS_KING]
+x-comment = "♚ (U+0265A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "black king"
+
+[BLACK_CHESS_QUEEN]
+x-comment = "♛ (U+0265B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "black queen"
+
+[BLACK_CHESS_ROOK]
+x-comment = "♜ (U+0265C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "black rook"
+
+[BLACK_CHESS_BISHOP]
+x-comment = "♝ (U+0265D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "black bishop"
+
+[BLACK_CHESS_KNIGHT]
+x-comment = "♞ (U+0265E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "black knight"
+
+[BLACK_CHESS_PAWN]
+x-comment = "♟ (U+0265F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "black pawn"
+
+[BLACK_SPADE_SUIT]
+x-comment = "♠ (U+02660), see http://wiki.documentfoundation.org/Emoji"
+en-US = "spades"
+
+[WHITE_HEART_SUIT]
+x-comment = "♡ (U+02661), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hearts2"
+
+[WHITE_DIAMOND_SUIT]
+x-comment = "♢ (U+02662), see http://wiki.documentfoundation.org/Emoji"
+en-US = "diamonds2"
+
+[BLACK_CLUB_SUIT]
+x-comment = "♣ (U+02663), see http://wiki.documentfoundation.org/Emoji"
+en-US = "clubs"
+
+[WHITE_SPADE_SUIT]
+x-comment = "♤ (U+02664), see http://wiki.documentfoundation.org/Emoji"
+en-US = "spades2"
+
+[BLACK_HEART_SUIT]
+x-comment = "♥ (U+02665), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hearts"
+
+[BLACK_DIAMOND_SUIT]
+x-comment = "♦ (U+02666), see http://wiki.documentfoundation.org/Emoji"
+en-US = "diamonds"
+
+[WHITE_CLUB_SUIT]
+x-comment = "♧ (U+02667), see http://wiki.documentfoundation.org/Emoji"
+en-US = "clubs2"
+
+[HOT_SPRINGS]
+x-comment = "♨ (U+02668), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hot springs"
+
+[QUARTER_NOTE]
+x-comment = "♩ (U+02669), see http://wiki.documentfoundation.org/Emoji"
+en-US = "note"
+
+[EIGHTH_NOTE]
+x-comment = "♪ (U+0266A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "note2"
+
+[BEAMED_EIGHTH_NOTES]
+x-comment = "♫ (U+0266B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "notes"
+
+[BEAMED_SIXTEENTH_NOTES]
+x-comment = "♬ (U+0266C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "notes2"
+
+[MUSIC_FLAT_SIGN]
+x-comment = "♭ (U+0266D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flat"
+
+[MUSIC_NATURAL_SIGN]
+x-comment = "♮ (U+0266E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "natural"
+
+[MUSIC_SHARP_SIGN]
+x-comment = "♯ (U+0266F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sharp"
+
+[UNIVERSAL_RECYCLING_SYMBOL]
+x-comment = "♲ (U+02672), see http://wiki.documentfoundation.org/Emoji"
+en-US = "recycling"
+
+[BLACK_UNIVERSAL_RECYCLING_SYMBOL]
+x-comment = "♻ (U+0267B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "recycling2"
+
+[RECYCLED_PAPER]
+x-comment = "♼ (U+0267C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "recycled paper"
+
+[PERMANENT_PAPER]
+x-comment = "♾ (U+0267E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "permanent paper"
+
+[WHEELCHAIR_SYMBOL]
+x-comment = "♿ (U+0267F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "wheelchair"
+
+[DIE_FACE-1]
+x-comment = "⚀ (U+02680), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dice1"
+
+[DIE_FACE-2]
+x-comment = "⚁ (U+02681), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dice2"
+
+[DIE_FACE-3]
+x-comment = "⚂ (U+02682), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dice3"
+
+[DIE_FACE-4]
+x-comment = "⚃ (U+02683), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dice4"
+
+[DIE_FACE-5]
+x-comment = "⚄ (U+02684), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dice5"
+
+[DIE_FACE-6]
+x-comment = "⚅ (U+02685), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dice6"
+
+[WHITE_FLAG]
+x-comment = "⚐ (U+02690), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flag4"
+
+[BLACK_FLAG]
+x-comment = "⚑ (U+02691), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flag3"
+
+[HAMMER_AND_PICK]
+x-comment = "⚒ (U+02692), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hammer and pick"
+
+[ANCHOR]
+x-comment = "⚓ (U+02693), see http://wiki.documentfoundation.org/Emoji"
+en-US = "anchor"
+
+[CROSSED_SWORDS]
+x-comment = "⚔ (U+02694), see http://wiki.documentfoundation.org/Emoji"
+en-US = "swords"
+
+[STAFF_OF_AESCULAPIUS]
+x-comment = "⚕ (U+02695), see http://wiki.documentfoundation.org/Emoji"
+en-US = "medical"
+
+[SCALES]
+x-comment = "⚖ (U+02696), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scales"
+
+[ALEMBIC]
+x-comment = "⚗ (U+02697), see http://wiki.documentfoundation.org/Emoji"
+en-US = "alembic"
+
+[FLOWER]
+x-comment = "⚘ (U+02698), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flower"
+
+[GEAR]
+x-comment = "⚙ (U+02699), see http://wiki.documentfoundation.org/Emoji"
+en-US = "gear"
+
+[STAFF_OF_HERMES]
+x-comment = "⚚ (U+0269A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "staff"
+
+[ATOM_SYMBOL]
+x-comment = "⚛ (U+0269B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "atom"
+
+[FLEUR-DE-LIS]
+x-comment = "⚜ (U+0269C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fleur de lis"
+
+[WARNING_SIGN]
+x-comment = "⚠ (U+026A0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "warning"
+
+[HIGH_VOLTAGE_SIGN]
+x-comment = "⚡ (U+026A1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "zap"
+
+[MEDIUM_WHITE_CIRCLE]
+x-comment = "⚪ (U+026AA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "white circle"
+
+[MEDIUM_BLACK_CIRCLE]
+x-comment = "⚫ (U+026AB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "black circle"
+
+[MARRIAGE_SYMBOL]
+x-comment = "⚭ (U+026AD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "marriage"
+
+[DIVORCE_SYMBOL]
+x-comment = "⚮ (U+026AE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "divorce"
+
+[COFFIN]
+x-comment = "⚰ (U+026B0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "coffin"
+
+[FUNERAL_URN]
+x-comment = "⚱ (U+026B1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "urn"
+
+[SOCCER_BALL]
+x-comment = "⚽ (U+026BD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "soccer"
+
+[BASEBALL]
+x-comment = "⚾ (U+026BE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "baseball"
+
+[SNOWMAN_WITHOUT_SNOW]
+x-comment = "⛄ (U+026C4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "snowman2"
+
+[SUN_BEHIND_CLOUD]
+x-comment = "⛅ (U+026C5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cloud2"
+
+[RAIN]
+x-comment = "⛆ (U+026C6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rain2"
+
+[THUNDER_CLOUD_AND_RAIN]
+x-comment = "⛈ (U+026C8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cloud3"
+
+[OPHIUCHUS]
+x-comment = "⛎ (U+026CE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ophiuchus"
+
+[PICK]
+x-comment = "⛏ (U+026CF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pick"
+
+[CAR_SLIDING]
+x-comment = "⛐ (U+026D0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sliding car"
+
+[HELMET_WITH_WHITE_CROSS]
+x-comment = "⛑ (U+026D1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "helmet"
+
+[CHAINS]
+x-comment = "⛓ (U+026D3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chains"
+
+[NO_ENTRY]
+x-comment = "⛔ (U+026D4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no entry"
+
+[BLACK_TRUCK]
+x-comment = "⛟ (U+026DF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "truck"
+
+[PENTAGRAM]
+x-comment = "⛤ (U+026E4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pentagram"
+
+[BLACK_CROSS_ON_SHIELD]
+x-comment = "⛨ (U+026E8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shield2"
+
+[CHURCH]
+x-comment = "⛪ (U+026EA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "church"
+
+[MOUNTAIN]
+x-comment = "⛰ (U+026F0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mountain"
+
+[UMBRELLA_ON_GROUND]
+x-comment = "⛱ (U+026F1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "umbrella3"
+
+[FOUNTAIN]
+x-comment = "⛲ (U+026F2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fountain"
+
+[FLAG_IN_HOLE]
+x-comment = "⛳ (U+026F3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "golf2"
+
+[FERRY]
+x-comment = "⛴ (U+026F4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ferry"
+
+[SAILBOAT]
+x-comment = "⛵ (U+026F5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sailboat"
+
+[TENT]
+x-comment = "⛺ (U+026FA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tent"
+
+[SKIER]
+x-comment = "⛷ (U+026F7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "skier"
+
+[ICE_SKATE]
+x-comment = "⛸ (U+026F8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "skate"
+
+[PERSON_WITH_BALL]
+x-comment = "⛹ (U+026F9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ball"
+
+[FUEL_PUMP]
+x-comment = "⛽ (U+026FD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fuelpump"
+
+[UPPER_BLADE_SCISSORS]
+x-comment = "✁ (U+02701), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scissors3"
+
+[BLACK_SCISSORS]
+x-comment = "✂ (U+02702), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scissors"
+
+[LOWER_BLADE_SCISSORS]
+x-comment = "✃ (U+02703), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scissors4"
+
+[WHITE_SCISSORS]
+x-comment = "✄ (U+02704), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scissors2"
+
+[WHITE_HEAVY_CHECK_MARK]
+x-comment = "✅ (U+02705), see http://wiki.documentfoundation.org/Emoji"
+en-US = "check mark3"
+
+[TELEPHONE_LOCATION]
+x-comment = "✆ (U+02706), see http://wiki.documentfoundation.org/Emoji"
+en-US = "telephone"
+
+[AIRPLANE]
+x-comment = "✈ (U+02708), see http://wiki.documentfoundation.org/Emoji"
+en-US = "airplane"
+
+[ENVELOPE]
+x-comment = "✉ (U+02709), see http://wiki.documentfoundation.org/Emoji"
+en-US = "envelope"
+
+[RAISED_FIST]
+x-comment = "✊ (U+0270A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fist"
+
+[RAISED_HAND]
+x-comment = "✋ (U+0270B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hand"
+
+[VICTORY_HAND]
+x-comment = "✌ (U+0270C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "victory"
+
+[WRITING_HAND]
+x-comment = "✍ (U+0270D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "writing"
+
+[LOWER_RIGHT_PENCIL]
+x-comment = "✎ (U+0270E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pencil"
+
+[PENCIL]
+x-comment = "✏ (U+0270F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pencil2"
+
+[UPPER_RIGHT_PENCIL]
+x-comment = "✐ (U+02710), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pencil3"
+
+[WHITE_NIB]
+x-comment = "✑ (U+02711), see http://wiki.documentfoundation.org/Emoji"
+en-US = "nib"
+
+[BLACK_NIB]
+x-comment = "✒ (U+02712), see http://wiki.documentfoundation.org/Emoji"
+en-US = "nib2"
+
+[CHECK_MARK]
+x-comment = "✓ (U+02713), see http://wiki.documentfoundation.org/Emoji"
+en-US = "check mark"
+
+[HEAVY_CHECK_MARK]
+x-comment = "✔ (U+02714), see http://wiki.documentfoundation.org/Emoji"
+en-US = "check mark2"
+
+[HEAVY_MULTIPLICATION_X]
+x-comment = "✖ (U+02716), see http://wiki.documentfoundation.org/Emoji"
+en-US = "times2"
+
+[OUTLINED_GREEK_CROSS]
+x-comment = "✙ (U+02719), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Greek cross2"
+
+[HEAVY_GREEK_CROSS]
+x-comment = "✚ (U+0271A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Greek cross"
+
+[LATIN_CROSS]
+x-comment = "✝ (U+0271D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Latin cross"
+
+[MALTESE_CROSS]
+x-comment = "✠ (U+02720), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Maltese cross"
+
+[STAR_OF_DAVID]
+x-comment = "✡ (U+02721), see http://wiki.documentfoundation.org/Emoji"
+en-US = "star of David"
+
+[SPARKLES]
+x-comment = "✨ (U+02728), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sparkles"
+
+[SNOWFLAKE]
+x-comment = "❄ (U+02744), see http://wiki.documentfoundation.org/Emoji"
+en-US = "snowflake"
+
+[SPARKLE]
+x-comment = "❇ (U+02747), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sparkle"
+
+[CROSS_MARK]
+x-comment = "❌ (U+0274C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "x2"
+
+[NEGATIVE_SQUARED_CROSS_MARK]
+x-comment = "❎ (U+0274E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "x3"
+
+[BLACK_QUESTION_MARK_ORNAMENT]
+x-comment = "❓ (U+02753), see http://wiki.documentfoundation.org/Emoji"
+en-US = "?"
+
+[WHITE_QUESTION_MARK_ORNAMENT]
+x-comment = "❔ (U+02754), see http://wiki.documentfoundation.org/Emoji"
+en-US = "?2"
+
+[WHITE_EXCLAMATION_MARK_ORNAMENT]
+x-comment = "❕ (U+02755), see http://wiki.documentfoundation.org/Emoji"
+en-US = "!"
+
+[HEAVY_EXCLAMATION_MARK_SYMBOL]
+x-comment = "❗ (U+02757), see http://wiki.documentfoundation.org/Emoji"
+en-US = "!2"
+
+[HEAVY_BLACK_HEART]
+x-comment = "❤ (U+02764), see http://wiki.documentfoundation.org/Emoji"
+en-US = "heart"
+
+[CURLY_LOOP]
+x-comment = "➰ (U+027B0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "loop"
+
+[DOUBLE_CURLY_LOOP]
+x-comment = "➿ (U+027BF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "loop2"
+
+[BLACK_LARGE_SQUARE]
+x-comment = "⬛ (U+02B1B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "large square2"
+
+[WHITE_LARGE_SQUARE]
+x-comment = "⬜ (U+02B1C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "large square"
+
+[BLACK_PENTAGON]
+x-comment = "⬟ (U+02B1F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pentagon2"
+
+[WHITE_PENTAGON]
+x-comment = "⬠ (U+02B20), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pentagon"
+
+[WHITE_HEXAGON]
+x-comment = "⬡ (U+02B21), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hexagon"
+
+[BLACK_HEXAGON]
+x-comment = "⬢ (U+02B22), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hexagon2"
+
+[BLACK_LARGE_CIRCLE]
+x-comment = "⬤ (U+02B24), see http://wiki.documentfoundation.org/Emoji"
+en-US = "large circle2"
+
+[WHITE_HORIZONTAL_ELLIPSE]
+x-comment = "⬭ (U+02B2D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ellipse"
+
+[WHITE_MEDIUM_STAR]
+x-comment = "⭐ (U+02B50), see http://wiki.documentfoundation.org/Emoji"
+en-US = "medium star"
+
+[BLACK_SMALL_STAR]
+x-comment = "⭑ (U+02B51), see http://wiki.documentfoundation.org/Emoji"
+en-US = "small star2"
+
+[WHITE_SMALL_STAR]
+x-comment = "⭒ (U+02B52), see http://wiki.documentfoundation.org/Emoji"
+en-US = "small star"
+
+[LATIN_SMALL_LIGATURE_FF]
+x-comment = "ﬀ (U+0FB00), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ff"
+
+[LATIN_SMALL_LIGATURE_FI]
+x-comment = "ﬁ (U+0FB01), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fi"
+
+[LATIN_SMALL_LIGATURE_FL]
+x-comment = "ﬂ (U+0FB02), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fl"
+
+[LATIN_SMALL_LIGATURE_FFI]
+x-comment = "ﬃ (U+0FB03), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ffi"
+
+[LATIN_SMALL_LIGATURE_FFL]
+x-comment = "ﬄ (U+0FB04), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ffl"
+
+[MUSICAL_SYMBOL_G_CLEF]
+x-comment = "𝄞 (U+1D11E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "clef"
+
+[MUSICAL_SYMBOL_DOUBLE_SHARP]
+x-comment = "𝄪 (U+1D12A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "double sharp"
+
+[MUSICAL_SYMBOL_DOUBLE_FLAT]
+x-comment = "𝄫 (U+1D12B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "double flat"
+
+[WHOLE_REST]
+x-comment = "𝄻 (U+1D13B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "whole rest"
+
+[HALF_REST]
+x-comment = "𝄼 (U+1D13C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "half rest"
+
+[QUARTER_REST]
+x-comment = "𝄽 (U+1D13D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "quarter rest"
+
+[EIGHTH_REST]
+x-comment = "𝄾 (U+1D13E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "eighth rest"
+
+[MUSICAL_SYMBOL_WHOLE_NOTE]
+x-comment = "𝅝 (U+1D15D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "whole note"
+
+[MUSICAL_SYMBOL_HALF_NOTE]
+x-comment = "𝅗𝅥 (U+1D15E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "half note"
+
+[MUSICAL_SYMBOL_QUARTER_NOTE]
+x-comment = "𝅘𝅥 (U+1D15F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "quarter note"
+
+[MUSICAL_SYMBOL_EIGHTH_NOTE]
+x-comment = "𝅘𝅥𝅮 (U+1D160), see http://wiki.documentfoundation.org/Emoji"
+en-US = "eighth note"
+
+[MUSICAL_SYMBOL_SIXTEENTH_NOTE]
+x-comment = "𝅘𝅥𝅯 (U+1D161), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sixteenth note"
+
+[MAHJONG_TILE_RED_DRAGON]
+x-comment = "🀄 (U+1F004), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mahjong"
+
+[DOMINO_TILE_HORIZONTAL-06-05]
+x-comment = "🁠 (U+1F060), see http://wiki.documentfoundation.org/Emoji"
+en-US = "domino"
+
+[PLAYING_CARD_ACE_OF_SPADES]
+x-comment = "🂡 (U+1F0A1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ace"
+
+[PLAYING_CARD_JACK_OF_SPADES]
+x-comment = "🂫 (U+1F0AB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "jack"
+
+[PLAYING_CARD_QUEEN_OF_SPADES]
+x-comment = "🂭 (U+1F0AD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "queen"
+
+[PLAYING_CARD_KING_OF_SPADES]
+x-comment = "🂮 (U+1F0AE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "king"
+
+[PLAYING_CARD_BLACK_JOKER]
+x-comment = "🃏 (U+1F0CF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "joker"
+
+[CYCLONE]
+x-comment = "🌀 (U+1F300), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cyclone"
+
+[FOGGY]
+x-comment = "🌁 (U+1F301), see http://wiki.documentfoundation.org/Emoji"
+en-US = "foggy"
+
+[CLOSED_UMBRELLA]
+x-comment = "🌂 (U+1F302), see http://wiki.documentfoundation.org/Emoji"
+en-US = "umbrella2"
+
+[NIGHT_WITH_STARS]
+x-comment = "🌃 (U+1F303), see http://wiki.documentfoundation.org/Emoji"
+en-US = "night"
+
+[SUNRISE_OVER_MOUNTAINS]
+x-comment = "🌄 (U+1F304), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sunrise2"
+
+[SUNRISE]
+x-comment = "🌅 (U+1F305), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sunrise"
+
+[CITYSCAPE_AT_DUSK]
+x-comment = "🌆 (U+1F306), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sunset"
+
+[SUNSET_OVER_BUILDINGS]
+x-comment = "🌇 (U+1F307), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sunrise3"
+
+[RAINBOW]
+x-comment = "🌈 (U+1F308), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rainbow"
+
+[BRIDGE_AT_NIGHT]
+x-comment = "🌉 (U+1F309), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bridge"
+
+[WATER_WAVE]
+x-comment = "🌊 (U+1F30A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ocean"
+
+[VOLCANO]
+x-comment = "🌋 (U+1F30B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "volcano"
+
+[MILKY_WAY]
+x-comment = "🌌 (U+1F30C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "milky way"
+
+[EARTH_GLOBE_EUROPE-AFRICA]
+x-comment = "🌍 (U+1F30D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "globe"
+
+[EARTH_GLOBE_AMERICAS]
+x-comment = "🌎 (U+1F30E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "globe2"
+
+[EARTH_GLOBE_ASIA-AUSTRALIA]
+x-comment = "🌏 (U+1F30F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "globe3"
+
+[GLOBE_WITH_MERIDIANS]
+x-comment = "🌐 (U+1F310), see http://wiki.documentfoundation.org/Emoji"
+en-US = "globe4"
+
+[NEW_MOON_SYMBOL]
+x-comment = "🌑 (U+1F311), see http://wiki.documentfoundation.org/Emoji"
+en-US = "new moon"
+
+[WAXING_CRESCENT_MOON_SYMBOL]
+x-comment = "🌒 (U+1F312), see http://wiki.documentfoundation.org/Emoji"
+en-US = "waxing crescent moon"
+
+[FIRST_QUARTER_MOON_SYMBOL]
+x-comment = "🌓 (U+1F313), see http://wiki.documentfoundation.org/Emoji"
+en-US = "first quarter"
+
+[WAXING_GIBBOUS_MOON_SYMBOL]
+x-comment = "🌔 (U+1F314), see http://wiki.documentfoundation.org/Emoji"
+en-US = "waxing gibbous moon"
+
+[FULL_MOON_SYMBOL]
+x-comment = "🌕 (U+1F315), see http://wiki.documentfoundation.org/Emoji"
+en-US = "full moon"
+
+[WANING_GIBBOUS_MOON_SYMBOL]
+x-comment = "🌖 (U+1F316), see http://wiki.documentfoundation.org/Emoji"
+en-US = "waning gibbous moon"
+
+[LAST_QUARTER_MOON_SYMBOL]
+x-comment = "🌗 (U+1F317), see http://wiki.documentfoundation.org/Emoji"
+en-US = "last quarter"
+
+[WANING_CRESCENT_MOON_SYMBOL]
+x-comment = "🌘 (U+1F318), see http://wiki.documentfoundation.org/Emoji"
+en-US = "waning crescent moon"
+
+[CRESCENT_MOON]
+x-comment = "🌙 (U+1F319), see http://wiki.documentfoundation.org/Emoji"
+en-US = "crescent moon"
+
+[NEW_MOON_WITH_FACE]
+x-comment = "🌚 (U+1F31A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "new moon2"
+
+[FIRST_QUARTER_MOON_WITH_FACE]
+x-comment = "🌛 (U+1F31B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "moon"
+
+[LAST_QUARTER_MOON_WITH_FACE]
+x-comment = "🌜 (U+1F31C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "moon2"
+
+[FULL_MOON_WITH_FACE]
+x-comment = "🌝 (U+1F31D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "full moon2"
+
+[SUN_WITH_FACE]
+x-comment = "🌞 (U+1F31E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sun"
+
+[GLOWING_STAR]
+x-comment = "🌟 (U+1F31F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "star3"
+
+[SHOOTING_STAR]
+x-comment = "🌠 (U+1F320), see http://wiki.documentfoundation.org/Emoji"
+en-US = "star4"
+
+[CHESTNUT]
+x-comment = "🌰 (U+1F330), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chestnut"
+
+[SEEDLING]
+x-comment = "🌱 (U+1F331), see http://wiki.documentfoundation.org/Emoji"
+en-US = "seedling"
+
+[EVERGREEN_TREE]
+x-comment = "🌲 (U+1F332), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pine"
+
+[DECIDUOUS_TREE]
+x-comment = "🌳 (U+1F333), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tree"
+
+[PALM_TREE]
+x-comment = "🌴 (U+1F334), see http://wiki.documentfoundation.org/Emoji"
+en-US = "palm"
+
+[CACTUS]
+x-comment = "🌵 (U+1F335), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cactus"
+
+[TULIP]
+x-comment = "🌷 (U+1F337), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tulip"
+
+[CHERRY_BLOSSOM]
+x-comment = "🌸 (U+1F338), see http://wiki.documentfoundation.org/Emoji"
+en-US = "blossom2"
+
+[ROSE]
+x-comment = "🌹 (U+1F339), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rose"
+
+[HIBISCUS]
+x-comment = "🌺 (U+1F33A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hibiscus"
+
+[SUNFLOWER]
+x-comment = "🌻 (U+1F33B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sunflower"
+
+[BLOSSOM]
+x-comment = "🌼 (U+1F33C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "blossom"
+
+[EAR_OF_MAIZE]
+x-comment = "🌽 (U+1F33D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "corn"
+
+[EAR_OF_RICE]
+x-comment = "🌾 (U+1F33E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "grass"
+
+[HERB]
+x-comment = "🌿 (U+1F33F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "herb"
+
+[FOUR_LEAF_CLOVER]
+x-comment = "🍀 (U+1F340), see http://wiki.documentfoundation.org/Emoji"
+en-US = "clover"
+
+[MAPLE_LEAF]
+x-comment = "🍁 (U+1F341), see http://wiki.documentfoundation.org/Emoji"
+en-US = "leaf"
+
+[FALLEN_LEAF]
+x-comment = "🍂 (U+1F342), see http://wiki.documentfoundation.org/Emoji"
+en-US = "leaf2"
+
+[LEAF_FLUTTERING_IN_WIND]
+x-comment = "🍃 (U+1F343), see http://wiki.documentfoundation.org/Emoji"
+en-US = "leaf3"
+
+[MUSHROOM]
+x-comment = "🍄 (U+1F344), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mushroom"
+
+[TOMATO]
+x-comment = "🍅 (U+1F345), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tomato"
+
+[AUBERGINE]
+x-comment = "🍆 (U+1F346), see http://wiki.documentfoundation.org/Emoji"
+en-US = "eggplant"
+
+[GRAPES]
+x-comment = "🍇 (U+1F347), see http://wiki.documentfoundation.org/Emoji"
+en-US = "grapes"
+
+[MELON]
+x-comment = "🍈 (U+1F348), see http://wiki.documentfoundation.org/Emoji"
+en-US = "melon"
+
+[WATERMELON]
+x-comment = "🍉 (U+1F349), see http://wiki.documentfoundation.org/Emoji"
+en-US = "watermelon"
+
+[TANGERINE]
+x-comment = "🍊 (U+1F34A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tangerine"
+
+[LEMON]
+x-comment = "🍋 (U+1F34B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lemon"
+
+[BANANA]
+x-comment = "🍌 (U+1F34C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "banana"
+
+[PINEAPPLE]
+x-comment = "🍍 (U+1F34D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pineapple"
+
+[RED_APPLE]
+x-comment = "🍎 (U+1F34E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "apple"
+
+[GREEN_APPLE]
+x-comment = "🍏 (U+1F34F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "green apple"
+
+[PEAR]
+x-comment = "🍐 (U+1F350), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pear"
+
+[PEACH]
+x-comment = "🍑 (U+1F351), see http://wiki.documentfoundation.org/Emoji"
+en-US = "peach"
+
+[CHERRIES]
+x-comment = "🍒 (U+1F352), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cherry"
+
+[STRAWBERRY]
+x-comment = "🍓 (U+1F353), see http://wiki.documentfoundation.org/Emoji"
+en-US = "strawberry"
+
+[HAMBURGER]
+x-comment = "🍔 (U+1F354), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hamburger"
+
+[SLICE_OF_PIZZA]
+x-comment = "🍕 (U+1F355), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pizza"
+
+[MEAT_ON_BONE]
+x-comment = "🍖 (U+1F356), see http://wiki.documentfoundation.org/Emoji"
+en-US = "meat"
+
+[POULTRY_LEG]
+x-comment = "🍗 (U+1F357), see http://wiki.documentfoundation.org/Emoji"
+en-US = "poultry leg"
+
+[RICE_CRACKER]
+x-comment = "🍘 (U+1F358), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rice cracker"
+
+[RICE_BALL]
+x-comment = "🍙 (U+1F359), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rice ball"
+
+[COOKED_RICE]
+x-comment = "🍚 (U+1F35A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rice"
+
+[CURRY_AND_RICE]
+x-comment = "🍛 (U+1F35B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "curry"
+
+[STEAMING_BOWL]
+x-comment = "🍜 (U+1F35C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ramen"
+
+[SPAGHETTI]
+x-comment = "🍝 (U+1F35D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "spaghetti"
+
+[BREAD]
+x-comment = "🍞 (U+1F35E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bread"
+
+[FRENCH_FRIES]
+x-comment = "🍟 (U+1F35F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fries"
+
+[ROASTED_SWEET_POTATO]
+x-comment = "🍠 (U+1F360), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sweet potato"
+
+[DANGO]
+x-comment = "🍡 (U+1F361), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dango"
+
+[ODEN]
+x-comment = "🍢 (U+1F362), see http://wiki.documentfoundation.org/Emoji"
+en-US = "oden"
+
+[SUSHI]
+x-comment = "🍣 (U+1F363), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sushi"
+
+[FRIED_SHRIMP]
+x-comment = "🍤 (U+1F364), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fried shrimp"
+
+[FISH_CAKE_WITH_SWIRL_DESIGN]
+x-comment = "🍥 (U+1F365), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fish cake"
+
+[SOFT_ICE_CREAM]
+x-comment = "🍦 (U+1F366), see http://wiki.documentfoundation.org/Emoji"
+en-US = "icecream"
+
+[SHAVED_ICE]
+x-comment = "🍧 (U+1F367), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shaved ice"
+
+[ICE_CREAM]
+x-comment = "🍨 (U+1F368), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ice cream"
+
+[DOUGHNUT]
+x-comment = "🍩 (U+1F369), see http://wiki.documentfoundation.org/Emoji"
+en-US = "doughnut"
+
+[COOKIE]
+x-comment = "🍪 (U+1F36A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cookie"
+
+[CHOCOLATE_BAR]
+x-comment = "🍫 (U+1F36B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chocolate"
+
+[CANDY]
+x-comment = "🍬 (U+1F36C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "candy"
+
+[LOLLIPOP]
+x-comment = "🍭 (U+1F36D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lollipop"
+
+[CUSTARD]
+x-comment = "🍮 (U+1F36E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "custard"
+
+[HONEY_POT]
+x-comment = "🍯 (U+1F36F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "honey"
+
+[SHORTCAKE]
+x-comment = "🍰 (U+1F370), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cake"
+
+[BENTO_BOX]
+x-comment = "🍱 (U+1F371), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bento"
+
+[POT_OF_FOOD]
+x-comment = "🍲 (U+1F372), see http://wiki.documentfoundation.org/Emoji"
+en-US = "stew"
+
+[COOKING]
+x-comment = "🍳 (U+1F373), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cooking"
+
+[FORK_AND_KNIFE]
+x-comment = "🍴 (U+1F374), see http://wiki.documentfoundation.org/Emoji"
+en-US = "restaurant"
+
+[TEACUP_WITHOUT_HANDLE]
+x-comment = "🍵 (U+1F375), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tea"
+
+[SAKE_BOTTLE_AND_CUP]
+x-comment = "🍶 (U+1F376), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sake"
+
+[WINE_GLASS]
+x-comment = "🍷 (U+1F377), see http://wiki.documentfoundation.org/Emoji"
+en-US = "glass"
+
+[COCKTAIL_GLASS]
+x-comment = "🍸 (U+1F378), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cocktail"
+
+[TROPICAL_DRINK]
+x-comment = "🍹 (U+1F379), see http://wiki.documentfoundation.org/Emoji"
+en-US = "drink2"
+
+[BEER_MUG]
+x-comment = "🍺 (U+1F37A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "beer"
+
+[CLINKING_BEER_MUGS]
+x-comment = "🍻 (U+1F37B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "beer2"
+
+[BABY_BOTTLE]
+x-comment = "🍼 (U+1F37C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "baby bottle"
+
+[RIBBON]
+x-comment = "🎀 (U+1F380), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ribbon2"
+
+[WRAPPED_PRESENT]
+x-comment = "🎁 (U+1F381), see http://wiki.documentfoundation.org/Emoji"
+en-US = "gift"
+
+[BIRTHDAY_CAKE]
+x-comment = "🎂 (U+1F382), see http://wiki.documentfoundation.org/Emoji"
+en-US = "birthday"
+
+[JACK-O-LANTERN]
+x-comment = "🎃 (U+1F383), see http://wiki.documentfoundation.org/Emoji"
+en-US = "halloween"
+
+[CHRISTMAS_TREE]
+x-comment = "🎄 (U+1F384), see http://wiki.documentfoundation.org/Emoji"
+en-US = "christmas"
+
+[FATHER_CHRISTMAS]
+x-comment = "🎅 (U+1F385), see http://wiki.documentfoundation.org/Emoji"
+en-US = "santa"
+
+[FIREWORKS]
+x-comment = "🎆 (U+1F386), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fireworks"
+
+[FIREWORK_SPARKLER]
+x-comment = "🎇 (U+1F387), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sparkler"
+
+[BALLOON]
+x-comment = "🎈 (U+1F388), see http://wiki.documentfoundation.org/Emoji"
+en-US = "balloon"
+
+[PARTY_POPPER]
+x-comment = "🎉 (U+1F389), see http://wiki.documentfoundation.org/Emoji"
+en-US = "party"
+
+[CONFETTI_BALL]
+x-comment = "🎊 (U+1F38A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "party2"
+
+[TANABATA_TREE]
+x-comment = "🎋 (U+1F38B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tanabata tree"
+
+[CROSSED_FLAGS]
+x-comment = "🎌 (U+1F38C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flags"
+
+[PINE_DECORATION]
+x-comment = "🎍 (U+1F38D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bamboo"
+
+[JAPANESE_DOLLS]
+x-comment = "🎎 (U+1F38E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dolls"
+
+[CARP_STREAMER]
+x-comment = "🎏 (U+1F38F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flags2"
+
+[WIND_CHIME]
+x-comment = "🎐 (U+1F390), see http://wiki.documentfoundation.org/Emoji"
+en-US = "wind chime"
+
+[MOON_VIEWING_CEREMONY]
+x-comment = "🎑 (U+1F391), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rice scene"
+
+[SCHOOL_SATCHEL]
+x-comment = "🎒 (U+1F392), see http://wiki.documentfoundation.org/Emoji"
+en-US = "school satchel"
+
+[GRADUATION_CAP]
+x-comment = "🎓 (U+1F393), see http://wiki.documentfoundation.org/Emoji"
+en-US = "graduation"
+
+[CAROUSEL_HORSE]
+x-comment = "🎠 (U+1F3A0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fair2"
+
+[FERRIS_WHEEL]
+x-comment = "🎡 (U+1F3A1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fair"
+
+[ROLLER_COASTER]
+x-comment = "🎢 (U+1F3A2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "roller coaster"
+
+[FISHING_POLE_AND_FISH]
+x-comment = "🎣 (U+1F3A3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fishing"
+
+[MICROPHONE]
+x-comment = "🎤 (U+1F3A4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "microphone"
+
+[MOVIE_CAMERA]
+x-comment = "🎥 (U+1F3A5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "movie camera"
+
+[CINEMA]
+x-comment = "🎦 (U+1F3A6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cinema"
+
+[HEADPHONE]
+x-comment = "🎧 (U+1F3A7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "headphone"
+
+[ARTIST_PALETTE]
+x-comment = "🎨 (U+1F3A8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "art"
+
+[TOP_HAT]
+x-comment = "🎩 (U+1F3A9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "top hat"
+
+[CIRCUS_TENT]
+x-comment = "🎪 (U+1F3AA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "circus"
+
+[TICKET]
+x-comment = "🎫 (U+1F3AB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ticket"
+
+[CLAPPER_BOARD]
+x-comment = "🎬 (U+1F3AC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "clapper"
+
+[PERFORMING_ARTS]
+x-comment = "🎭 (U+1F3AD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "theatre"
+
+[VIDEO_GAME]
+x-comment = "🎮 (U+1F3AE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "video game"
+
+[DIRECT_HIT]
+x-comment = "🎯 (U+1F3AF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hit"
+
+[SLOT_MACHINE]
+x-comment = "🎰 (U+1F3B0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "slot machine"
+
+[BILLIARDS]
+x-comment = "🎱 (U+1F3B1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "billiards"
+
+[GAME_DIE]
+x-comment = "🎲 (U+1F3B2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dice"
+
+[BOWLING]
+x-comment = "🎳 (U+1F3B3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bowling"
+
+[FLOWER_PLAYING_CARDS]
+x-comment = "🎴 (U+1F3B4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cards"
+
+[MUSICAL_NOTE]
+x-comment = "🎵 (U+1F3B5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "music2"
+
+[MULTIPLE_MUSICAL_NOTES]
+x-comment = "🎶 (U+1F3B6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "music"
+
+[SAXOPHONE]
+x-comment = "🎷 (U+1F3B7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "saxophone"
+
+[GUITAR]
+x-comment = "🎸 (U+1F3B8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "guitar"
+
+[MUSICAL_KEYBOARD]
+x-comment = "🎹 (U+1F3B9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "piano"
+
+[TRUMPET]
+x-comment = "🎺 (U+1F3BA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "trumpet"
+
+[VIOLIN]
+x-comment = "🎻 (U+1F3BB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "violin"
+
+[MUSICAL_SCORE]
+x-comment = "🎼 (U+1F3BC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "score"
+
+[RUNNING_SHIRT_WITH_SASH]
+x-comment = "🎽 (U+1F3BD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shirt2"
+
+[TENNIS_RACQUET_AND_BALL]
+x-comment = "🎾 (U+1F3BE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tennis"
+
+[SKI_AND_SKI_BOOT]
+x-comment = "🎿 (U+1F3BF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ski"
+
+[BASKETBALL_AND_HOOP]
+x-comment = "🏀 (U+1F3C0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "basketball"
+
+[CHEQUERED_FLAG]
+x-comment = "🏁 (U+1F3C1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "race"
+
+[SNOWBOARDER]
+x-comment = "🏂 (U+1F3C2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "snowboarder"
+
+[RUNNER]
+x-comment = "🏃 (U+1F3C3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "runner"
+
+[SURFER]
+x-comment = "🏄 (U+1F3C4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "surfer"
+
+[TROPHY]
+x-comment = "🏆 (U+1F3C6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "trophy"
+
+[HORSE_RACING]
+x-comment = "🏇 (U+1F3C7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "horse3"
+
+[AMERICAN_FOOTBALL]
+x-comment = "🏈 (U+1F3C8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "football"
+
+[RUGBY_FOOTBALL]
+x-comment = "🏉 (U+1F3C9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rugby football"
+
+[SWIMMER]
+x-comment = "🏊 (U+1F3CA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "swimmer"
+
+[HOUSE_BUILDING]
+x-comment = "🏠 (U+1F3E0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "house"
+
+[HOUSE_WITH_GARDEN]
+x-comment = "🏡 (U+1F3E1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "house2"
+
+[OFFICE_BUILDING]
+x-comment = "🏢 (U+1F3E2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "office"
+
+[JAPANESE_POST_OFFICE]
+x-comment = "🏣 (U+1F3E3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "post office2"
+
+[EUROPEAN_POST_OFFICE]
+x-comment = "🏤 (U+1F3E4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "post office"
+
+[HOSPITAL]
+x-comment = "🏥 (U+1F3E5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hospital"
+
+[BANK]
+x-comment = "🏦 (U+1F3E6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bank"
+
+[AUTOMATED_TELLER_MACHINE]
+x-comment = "🏧 (U+1F3E7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "atm"
+
+[HOTEL]
+x-comment = "🏨 (U+1F3E8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hotel"
+
+[LOVE_HOTEL]
+x-comment = "🏩 (U+1F3E9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hotel2"
+
+[CONVENIENCE_STORE]
+x-comment = "🏪 (U+1F3EA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "store"
+
+[SCHOOL]
+x-comment = "🏫 (U+1F3EB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "school"
+
+[DEPARTMENT_STORE]
+x-comment = "🏬 (U+1F3EC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "store2"
+
+[FACTORY]
+x-comment = "🏭 (U+1F3ED), see http://wiki.documentfoundation.org/Emoji"
+en-US = "factory"
+
+[IZAKAYA_LANTERN]
+x-comment = "🏮 (U+1F3EE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lantern"
+
+[JAPANESE_CASTLE]
+x-comment = "🏯 (U+1F3EF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "castle2"
+
+[EUROPEAN_CASTLE]
+x-comment = "🏰 (U+1F3F0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "castle"
+
+[RAT]
+x-comment = "🐀 (U+1F400), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rat"
+
+[MOUSE]
+x-comment = "🐁 (U+1F401), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mouse"
+
+[OX]
+x-comment = "🐂 (U+1F402), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ox"
+
+[WATER_BUFFALO]
+x-comment = "🐃 (U+1F403), see http://wiki.documentfoundation.org/Emoji"
+en-US = "water buffalo"
+
+[COW]
+x-comment = "🐄 (U+1F404), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cow"
+
+[TIGER]
+x-comment = "🐅 (U+1F405), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tiger"
+
+[LEOPARD]
+x-comment = "🐆 (U+1F406), see http://wiki.documentfoundation.org/Emoji"
+en-US = "leopard"
+
+[RABBIT]
+x-comment = "🐇 (U+1F407), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rabbit"
+
+[CAT]
+x-comment = "🐈 (U+1F408), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cat"
+
+[DRAGON]
+x-comment = "🐉 (U+1F409), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dragon"
+
+[CROCODILE]
+x-comment = "🐊 (U+1F40A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "crocodile"
+
+[WHALE]
+x-comment = "🐋 (U+1F40B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "whale2"
+
+[SNAIL]
+x-comment = "🐌 (U+1F40C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "snail"
+
+[SNAKE]
+x-comment = "🐍 (U+1F40D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "snake"
+
+[HORSE]
+x-comment = "🐎 (U+1F40E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "horse"
+
+[RAM]
+x-comment = "🐏 (U+1F40F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ram"
+
+[GOAT]
+x-comment = "🐐 (U+1F410), see http://wiki.documentfoundation.org/Emoji"
+en-US = "goat"
+
+[SHEEP]
+x-comment = "🐑 (U+1F411), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sheep"
+
+[MONKEY]
+x-comment = "🐒 (U+1F412), see http://wiki.documentfoundation.org/Emoji"
+en-US = "monkey"
+
+[ROOSTER]
+x-comment = "🐓 (U+1F413), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rooster"
+
+[CHICKEN]
+x-comment = "🐔 (U+1F414), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chicken"
+
+[DOG]
+x-comment = "🐕 (U+1F415), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dog"
+
+[PIG]
+x-comment = "🐖 (U+1F416), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pig"
+
+[BOAR]
+x-comment = "🐗 (U+1F417), see http://wiki.documentfoundation.org/Emoji"
+en-US = "boar"
+
+[ELEPHANT]
+x-comment = "🐘 (U+1F418), see http://wiki.documentfoundation.org/Emoji"
+en-US = "elephant"
+
+[OCTOPUS]
+x-comment = "🐙 (U+1F419), see http://wiki.documentfoundation.org/Emoji"
+en-US = "octopus"
+
+[SPIRAL_SHELL]
+x-comment = "🐚 (U+1F41A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shell"
+
+[BUG]
+x-comment = "🐛 (U+1F41B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bug"
+
+[ANT]
+x-comment = "🐜 (U+1F41C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ant"
+
+[HONEYBEE]
+x-comment = "🐝 (U+1F41D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bee"
+
+[LADY_BEETLE]
+x-comment = "🐞 (U+1F41E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ladybug"
+
+[FISH]
+x-comment = "🐟 (U+1F41F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fish"
+
+[TROPICAL_FISH]
+x-comment = "🐠 (U+1F420), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fish2"
+
+[BLOWFISH]
+x-comment = "🐡 (U+1F421), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fish3"
+
+[TURTLE]
+x-comment = "🐢 (U+1F422), see http://wiki.documentfoundation.org/Emoji"
+en-US = "turtle"
+
+[HATCHING_CHICK]
+x-comment = "🐣 (U+1F423), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chick"
+
+[BABY_CHICK]
+x-comment = "🐤 (U+1F424), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chick2"
+
+[FRONT-FACING_BABY_CHICK]
+x-comment = "🐥 (U+1F425), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chick3"
+
+[BIRD]
+x-comment = "🐦 (U+1F426), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bird"
+
+[PENGUIN]
+x-comment = "🐧 (U+1F427), see http://wiki.documentfoundation.org/Emoji"
+en-US = "penguin"
+
+[KOALA]
+x-comment = "🐨 (U+1F428), see http://wiki.documentfoundation.org/Emoji"
+en-US = "koala"
+
+[POODLE]
+x-comment = "🐩 (U+1F429), see http://wiki.documentfoundation.org/Emoji"
+en-US = "poodle"
+
+[DROMEDARY_CAMEL]
+x-comment = "🐪 (U+1F42A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "camel"
+
+[BACTRIAN_CAMEL]
+x-comment = "🐫 (U+1F42B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "camel2"
+
+[DOLPHIN]
+x-comment = "🐬 (U+1F42C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dolphin"
+
+[MOUSE_FACE]
+x-comment = "🐭 (U+1F42D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mouse2"
+
+[COW_FACE]
+x-comment = "🐮 (U+1F42E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cow2"
+
+[TIGER_FACE]
+x-comment = "🐯 (U+1F42F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tiger2"
+
+[RABBIT_FACE]
+x-comment = "🐰 (U+1F430), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rabbit2"
+
+[CAT_FACE]
+x-comment = "🐱 (U+1F431), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cat2"
+
+[DRAGON_FACE]
+x-comment = "🐲 (U+1F432), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dragon2"
+
+[SPOUTING_WHALE]
+x-comment = "🐳 (U+1F433), see http://wiki.documentfoundation.org/Emoji"
+en-US = "whale"
+
+[HORSE_FACE]
+x-comment = "🐴 (U+1F434), see http://wiki.documentfoundation.org/Emoji"
+en-US = "horse2"
+
+[MONKEY_FACE]
+x-comment = "🐵 (U+1F435), see http://wiki.documentfoundation.org/Emoji"
+en-US = "monkey2"
+
+[DOG_FACE]
+x-comment = "🐶 (U+1F436), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dog2"
+
+[PIG_FACE]
+x-comment = "🐷 (U+1F437), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pig2"
+
+[FROG_FACE]
+x-comment = "🐸 (U+1F438), see http://wiki.documentfoundation.org/Emoji"
+en-US = "frog"
+
+[HAMSTER_FACE]
+x-comment = "🐹 (U+1F439), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hamster"
+
+[WOLF_FACE]
+x-comment = "🐺 (U+1F43A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "wolf"
+
+[BEAR_FACE]
+x-comment = "🐻 (U+1F43B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bear"
+
+[PANDA_FACE]
+x-comment = "🐼 (U+1F43C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "panda"
+
+[PIG_NOSE]
+x-comment = "🐽 (U+1F43D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pig nose"
+
+[PAW_PRINTS]
+x-comment = "🐾 (U+1F43E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "feet"
+
+[EYES]
+x-comment = "👀 (U+1F440), see http://wiki.documentfoundation.org/Emoji"
+en-US = "eyes"
+
+[EAR]
+x-comment = "👂 (U+1F442), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ear"
+
+[NOSE]
+x-comment = "👃 (U+1F443), see http://wiki.documentfoundation.org/Emoji"
+en-US = "nose"
+
+[MOUTH]
+x-comment = "👄 (U+1F444), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mouth"
+
+[TONGUE]
+x-comment = "👅 (U+1F445), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tongue"
+
+[WHITE_UP_POINTING_BACKHAND_INDEX]
+x-comment = "👆 (U+1F446), see http://wiki.documentfoundation.org/Emoji"
+en-US = "up2"
+
+[WHITE_DOWN_POINTING_BACKHAND_INDEX]
+x-comment = "👇 (U+1F447), see http://wiki.documentfoundation.org/Emoji"
+en-US = "down2"
+
+[WHITE_LEFT_POINTING_BACKHAND_INDEX]
+x-comment = "👈 (U+1F448), see http://wiki.documentfoundation.org/Emoji"
+en-US = "left2"
+
+[WHITE_RIGHT_POINTING_BACKHAND_INDEX]
+x-comment = "👉 (U+1F449), see http://wiki.documentfoundation.org/Emoji"
+en-US = "right2"
+
+[FISTED_HAND_SIGN]
+x-comment = "👊 (U+1F44A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fist2"
+
+[WAVING_HAND_SIGN]
+x-comment = "👋 (U+1F44B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "wave"
+
+[OK_HAND_SIGN]
+x-comment = "👌 (U+1F44C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ok"
+
+[THUMBS_UP_SIGN]
+x-comment = "👍 (U+1F44D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "yes"
+
+[THUMBS_DOWN_SIGN]
+x-comment = "👎 (U+1F44E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no"
+
+[CLAPPING_HANDS_SIGN]
+x-comment = "👏 (U+1F44F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "clap"
+
+[OPEN_HANDS_SIGN]
+x-comment = "👐 (U+1F450), see http://wiki.documentfoundation.org/Emoji"
+en-US = "open hands"
+
+[CROWN]
+x-comment = "👑 (U+1F451), see http://wiki.documentfoundation.org/Emoji"
+en-US = "crown"
+
+[WOMANS_HAT]
+x-comment = "👒 (U+1F452), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hat"
+
+[EYEGLASSES]
+x-comment = "👓 (U+1F453), see http://wiki.documentfoundation.org/Emoji"
+en-US = "eyeglasses"
+
+[NECKTIE]
+x-comment = "👔 (U+1F454), see http://wiki.documentfoundation.org/Emoji"
+en-US = "necktie"
+
+[T-SHIRT]
+x-comment = "👕 (U+1F455), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shirt"
+
+[JEANS]
+x-comment = "👖 (U+1F456), see http://wiki.documentfoundation.org/Emoji"
+en-US = "jeans"
+
+[DRESS]
+x-comment = "👗 (U+1F457), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dress"
+
+[KIMONO]
+x-comment = "👘 (U+1F458), see http://wiki.documentfoundation.org/Emoji"
+en-US = "kimono"
+
+[BIKINI]
+x-comment = "👙 (U+1F459), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bikini"
+
+[WOMANS_CLOTHES]
+x-comment = "👚 (U+1F45A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "clothes"
+
+[PURSE]
+x-comment = "👛 (U+1F45B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "purse"
+
+[HANDBAG]
+x-comment = "👜 (U+1F45C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "handbag"
+
+[POUCH]
+x-comment = "👝 (U+1F45D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pouch"
+
+[MANS_SHOE]
+x-comment = "👞 (U+1F45E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shoe"
+
+[ATHLETIC_SHOE]
+x-comment = "👟 (U+1F45F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shoe2"
+
+[HIGH-HEELED_SHOE]
+x-comment = "👠 (U+1F460), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shoe3"
+
+[WOMANS_SANDAL]
+x-comment = "👡 (U+1F461), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sandal"
+
+[WOMANS_BOOTS]
+x-comment = "👢 (U+1F462), see http://wiki.documentfoundation.org/Emoji"
+en-US = "boot"
+
+[FOOTPRINTS]
+x-comment = "👣 (U+1F463), see http://wiki.documentfoundation.org/Emoji"
+en-US = "footprints"
+
+[BUST_IN_SILHOUETTE]
+x-comment = "👤 (U+1F464), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bust"
+
+[BUSTS_IN_SILHOUETTE]
+x-comment = "👥 (U+1F465), see http://wiki.documentfoundation.org/Emoji"
+en-US = "busts"
+
+[BOY]
+x-comment = "👦 (U+1F466), see http://wiki.documentfoundation.org/Emoji"
+en-US = "boy"
+
+[GIRL]
+x-comment = "👧 (U+1F467), see http://wiki.documentfoundation.org/Emoji"
+en-US = "girl"
+
+[MAN]
+x-comment = "👨 (U+1F468), see http://wiki.documentfoundation.org/Emoji"
+en-US = "man"
+
+[WOMAN]
+x-comment = "👩 (U+1F469), see http://wiki.documentfoundation.org/Emoji"
+en-US = "woman"
+
+[FAMILY]
+x-comment = "👪 (U+1F46A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "family"
+
+[MAN_AND_WOMAN_HOLDING_HANDS]
+x-comment = "👫 (U+1F46B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "couple"
+
+[TWO_MEN_HOLDING_HANDS]
+x-comment = "👬 (U+1F46C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "couple2"
+
+[TWO_WOMEN_HOLDING_HANDS]
+x-comment = "👭 (U+1F46D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "couple3"
+
+[POLICE_OFFICER]
+x-comment = "👮 (U+1F46E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cop"
+
+[WOMAN_WITH_BUNNY_EARS]
+x-comment = "👯 (U+1F46F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bunny ears"
+
+[BRIDE_WITH_VEIL]
+x-comment = "👰 (U+1F470), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bride"
+
+[PERSON_WITH_BLOND_HAIR]
+x-comment = "👱 (U+1F471), see http://wiki.documentfoundation.org/Emoji"
+en-US = "blond hair"
+
+[MAN_WITH_GUA_PI_MAO]
+x-comment = "👲 (U+1F472), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hat2"
+
+[MAN_WITH_TURBAN]
+x-comment = "👳 (U+1F473), see http://wiki.documentfoundation.org/Emoji"
+en-US = "turban"
+
+[OLDER_MAN]
+x-comment = "👴 (U+1F474), see http://wiki.documentfoundation.org/Emoji"
+en-US = "older man"
+
+[OLDER_WOMAN]
+x-comment = "👵 (U+1F475), see http://wiki.documentfoundation.org/Emoji"
+en-US = "older woman"
+
+[BABY]
+x-comment = "👶 (U+1F476), see http://wiki.documentfoundation.org/Emoji"
+en-US = "baby"
+
+[CONSTRUCTION_WORKER]
+x-comment = "👷 (U+1F477), see http://wiki.documentfoundation.org/Emoji"
+en-US = "worker"
+
+[PRINCESS]
+x-comment = "👸 (U+1F478), see http://wiki.documentfoundation.org/Emoji"
+en-US = "princess"
+
+[JAPANESE_OGRE]
+x-comment = "👹 (U+1F479), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ogre"
+
+[JAPANESE_GOBLIN]
+x-comment = "👺 (U+1F47A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "goblin"
+
+[GHOST]
+x-comment = "👻 (U+1F47B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ghost"
+
+[BABY_ANGEL]
+x-comment = "👼 (U+1F47C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "angel"
+
+[EXTRATERRESTRIAL_ALIEN]
+x-comment = "👽 (U+1F47D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "alien"
+
+[ALIEN_MONSTER]
+x-comment = "👾 (U+1F47E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "alien2"
+
+[IMP]
+x-comment = "👿 (U+1F47F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "imp"
+
+[SKULL]
+x-comment = "💀 (U+1F480), see http://wiki.documentfoundation.org/Emoji"
+en-US = "skull"
+
+[INFORMATION_DESK_PERSON]
+x-comment = "💁 (U+1F481), see http://wiki.documentfoundation.org/Emoji"
+en-US = "information2"
+
+[GUARDSMAN]
+x-comment = "💂 (U+1F482), see http://wiki.documentfoundation.org/Emoji"
+en-US = "guard"
+
+[DANCER]
+x-comment = "💃 (U+1F483), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dancer"
+
+[LIPSTICK]
+x-comment = "💄 (U+1F484), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lipstick"
+
+[NAIL_POLISH]
+x-comment = "💅 (U+1F485), see http://wiki.documentfoundation.org/Emoji"
+en-US = "nail care"
+
+[FACE_MASSAGE]
+x-comment = "💆 (U+1F486), see http://wiki.documentfoundation.org/Emoji"
+en-US = "massage"
+
+[HAIRCUT]
+x-comment = "💇 (U+1F487), see http://wiki.documentfoundation.org/Emoji"
+en-US = "haircut"
+
+[BARBER_POLE]
+x-comment = "💈 (U+1F488), see http://wiki.documentfoundation.org/Emoji"
+en-US = "barber"
+
+[SYRINGE]
+x-comment = "💉 (U+1F489), see http://wiki.documentfoundation.org/Emoji"
+en-US = "syringe"
+
+[PILL]
+x-comment = "💊 (U+1F48A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pill"
+
+[KISS_MARK]
+x-comment = "💋 (U+1F48B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "kiss mark"
+
+[LOVE_LETTER]
+x-comment = "💌 (U+1F48C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "love letter"
+
+[RING]
+x-comment = "💍 (U+1F48D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ring"
+
+[GEM_STONE]
+x-comment = "💎 (U+1F48E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "gem"
+
+[KISS]
+x-comment = "💏 (U+1F48F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "kiss"
+
+[BOUQUET]
+x-comment = "💐 (U+1F490), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bouquet"
+
+[COUPLE_WITH_HEART]
+x-comment = "💑 (U+1F491), see http://wiki.documentfoundation.org/Emoji"
+en-US = "couple4"
+
+[WEDDING]
+x-comment = "💒 (U+1F492), see http://wiki.documentfoundation.org/Emoji"
+en-US = "wedding"
+
+[BEATING_HEART]
+x-comment = "💓 (U+1F493), see http://wiki.documentfoundation.org/Emoji"
+en-US = "heartbeat"
+
+[BROKEN_HEART]
+x-comment = "💔 (U+1F494), see http://wiki.documentfoundation.org/Emoji"
+en-US = "broken heart"
+
+[TWO_HEARTS]
+x-comment = "💕 (U+1F495), see http://wiki.documentfoundation.org/Emoji"
+en-US = "two hearts"
+
+[SPARKLING_HEART]
+x-comment = "💖 (U+1F496), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sparkling heart"
+
+[GROWING_HEART]
+x-comment = "💗 (U+1F497), see http://wiki.documentfoundation.org/Emoji"
+en-US = "heartpulse"
+
+[HEART_WITH_ARROW]
+x-comment = "💘 (U+1F498), see http://wiki.documentfoundation.org/Emoji"
+en-US = "love"
+
+[HEART_WITH_RIBBON]
+x-comment = "💝 (U+1F49D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "gift heart"
+
+[REVOLVING_HEARTS]
+x-comment = "💞 (U+1F49E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "revolving hearts"
+
+[HEART_DECORATION]
+x-comment = "💟 (U+1F49F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "heart decoration"
+
+[DIAMOND_SHAPE_WITH_A_DOT_INSIDE]
+x-comment = "💠 (U+1F4A0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cuteness"
+
+[ELECTRIC_LIGHT_BULB]
+x-comment = "💡 (U+1F4A1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bulb"
+
+[ANGER_SYMBOL]
+x-comment = "💢 (U+1F4A2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "anger"
+
+[BOMB]
+x-comment = "💣 (U+1F4A3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bomb"
+
+[SLEEPING_SYMBOL]
+x-comment = "💤 (U+1F4A4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "zzz"
+
+[COLLISION_SYMBOL]
+x-comment = "💥 (U+1F4A5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "boom"
+
+[SPLASHING_SWEAT_SYMBOL]
+x-comment = "💦 (U+1F4A6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sweat drops"
+
+[DROPLET]
+x-comment = "💧 (U+1F4A7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "droplet"
+
+[DASH_SYMBOL]
+x-comment = "💨 (U+1F4A8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dash"
+
+[PILE_OF_POO]
+x-comment = "💩 (U+1F4A9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "poo"
+
+[FLEXED_BICEPS]
+x-comment = "💪 (U+1F4AA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "muscle"
+
+[DIZZY_SYMBOL]
+x-comment = "💫 (U+1F4AB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dizzy"
+
+[SPEECH_BALLOON]
+x-comment = "💬 (U+1F4AC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "speech balloon"
+
+[THOUGHT_BALLOON]
+x-comment = "💭 (U+1F4AD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "thought balloon"
+
+[WHITE_FLOWER]
+x-comment = "💮 (U+1F4AE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "white flower"
+
+[HUNDRED_POINTS_SYMBOL]
+x-comment = "💯 (U+1F4AF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "100"
+
+[MONEY_BAG]
+x-comment = "💰 (U+1F4B0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "money2"
+
+[CURRENCY_EXCHANGE]
+x-comment = "💱 (U+1F4B1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "exchange"
+
+[HEAVY_DOLLAR_SIGN]
+x-comment = "💲 (U+1F4B2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "heavy dollar sign"
+
+[CREDIT_CARD]
+x-comment = "💳 (U+1F4B3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "credit card"
+
+[BANKNOTE_WITH_YEN_SIGN]
+x-comment = "💴 (U+1F4B4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "yen2"
+
+[BANKNOTE_WITH_DOLLAR_SIGN]
+x-comment = "💵 (U+1F4B5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dollar2"
+
+[BANKNOTE_WITH_EURO_SIGN]
+x-comment = "💶 (U+1F4B6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "euro2"
+
+[BANKNOTE_WITH_POUND_SIGN]
+x-comment = "💷 (U+1F4B7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pound2"
+
+[MONEY_WITH_WINGS]
+x-comment = "💸 (U+1F4B8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "money"
+
+[CHART_WITH_UPWARDS_TREND_AND_YEN_SIGN]
+x-comment = "💹 (U+1F4B9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chart4"
+
+[SEAT]
+x-comment = "💺 (U+1F4BA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "seat"
+
+[PERSONAL_COMPUTER]
+x-comment = "💻 (U+1F4BB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "computer"
+
+[BRIEFCASE]
+x-comment = "💼 (U+1F4BC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "briefcase"
+
+[MINIDISC]
+x-comment = "💽 (U+1F4BD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "md"
+
+[FLOPPY_DISK]
+x-comment = "💾 (U+1F4BE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "floppy"
+
+[OPTICAL_DISC]
+x-comment = "💿 (U+1F4BF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cd"
+
+[DVD]
+x-comment = "📀 (U+1F4C0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dvd"
+
+[FILE_FOLDER]
+x-comment = "📁 (U+1F4C1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "folder"
+
+[OPEN_FILE_FOLDER]
+x-comment = "📂 (U+1F4C2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "folder2"
+
+[PAGE_WITH_CURL]
+x-comment = "📃 (U+1F4C3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "page3"
+
+[PAGE_FACING_UP]
+x-comment = "📄 (U+1F4C4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "page"
+
+[CALENDAR]
+x-comment = "📅 (U+1F4C5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "calendar"
+
+[TEAR-OFF_CALENDAR]
+x-comment = "📆 (U+1F4C6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "calendar2"
+
+[CARD_INDEX]
+x-comment = "📇 (U+1F4C7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "card index"
+
+[CHART_WITH_UPWARDS_TREND]
+x-comment = "📈 (U+1F4C8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chart"
+
+[CHART_WITH_DOWNWARDS_TREND]
+x-comment = "📉 (U+1F4C9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chart2"
+
+[BAR_CHART]
+x-comment = "📊 (U+1F4CA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chart3"
+
+[CLIPBOARD]
+x-comment = "📋 (U+1F4CB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "clipboard"
+
+[PUSHPIN]
+x-comment = "📌 (U+1F4CC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pushpin"
+
+[ROUND_PUSHPIN]
+x-comment = "📍 (U+1F4CD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "round pushpin"
+
+[PAPERCLIP]
+x-comment = "📎 (U+1F4CE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "paperclip"
+
+[STRAIGHT_RULER]
+x-comment = "📏 (U+1F4CF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ruler"
+
+[TRIANGULAR_RULER]
+x-comment = "📐 (U+1F4D0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ruler2"
+
+[BOOKMARK_TABS]
+x-comment = "📑 (U+1F4D1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bookmark"
+
+[LEDGER]
+x-comment = "📒 (U+1F4D2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ledger"
+
+[NOTEBOOK]
+x-comment = "📓 (U+1F4D3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "notebook"
+
+[NOTEBOOK_WITH_DECORATIVE_COVER]
+x-comment = "📔 (U+1F4D4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "notebook2"
+
+[CLOSED_BOOK]
+x-comment = "📕 (U+1F4D5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "book2"
+
+[OPEN_BOOK]
+x-comment = "📖 (U+1F4D6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "book3"
+
+[BOOKS]
+x-comment = "📚 (U+1F4DA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "books"
+
+[NAME_BADGE]
+x-comment = "📛 (U+1F4DB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "name"
+
+[SCROLL]
+x-comment = "📜 (U+1F4DC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scroll"
+
+[MEMO]
+x-comment = "📝 (U+1F4DD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "memo"
+
+[TELEPHONE_RECEIVER]
+x-comment = "📞 (U+1F4DE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "receiver"
+
+[PAGER]
+x-comment = "📟 (U+1F4DF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pager"
+
+[FAX_MACHINE]
+x-comment = "📠 (U+1F4E0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fax"
+
+[SATELLITE_ANTENNA]
+x-comment = "📡 (U+1F4E1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "antenna"
+
+[PUBLIC_ADDRESS_LOUDSPEAKER]
+x-comment = "📢 (U+1F4E2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "loudspeaker"
+
+[CHEERING_MEGAPHONE]
+x-comment = "📣 (U+1F4E3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mega"
+
+[OUTBOX_TRAY]
+x-comment = "📤 (U+1F4E4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tray"
+
+[INBOX_TRAY]
+x-comment = "📥 (U+1F4E5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tray2"
+
+[PACKAGE]
+x-comment = "📦 (U+1F4E6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "package"
+
+[E-MAIL_SYMBOL]
+x-comment = "📧 (U+1F4E7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "e-mail"
+
+[INCOMING_ENVELOPE]
+x-comment = "📨 (U+1F4E8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "envelope7"
+
+[ENVELOPE_WITH_DOWNWARDS_ARROW_ABOVE]
+x-comment = "📩 (U+1F4E9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "envelope8"
+
+[CLOSED_MAILBOX_WITH_LOWERED_FLAG]
+x-comment = "📪 (U+1F4EA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mailbox"
+
+[CLOSED_MAILBOX_WITH_RAISED_FLAG]
+x-comment = "📫 (U+1F4EB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mailbox2"
+
+[OPEN_MAILBOX_WITH_RAISED_FLAG]
+x-comment = "📬 (U+1F4EC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mailbox3"
+
+[OPEN_MAILBOX_WITH_LOWERED_FLAG]
+x-comment = "📭 (U+1F4ED), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mailbox4"
+
+[POSTBOX]
+x-comment = "📮 (U+1F4EE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "postbox"
+
+[POSTAL_HORN]
+x-comment = "📯 (U+1F4EF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "horn"
+
+[NEWSPAPER]
+x-comment = "📰 (U+1F4F0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "newspaper"
+
+[MOBILE_PHONE]
+x-comment = "📱 (U+1F4F1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mobile"
+
+[MOBILE_PHONE_WITH_RIGHTWARDS_ARROW_AT_LEFT]
+x-comment = "📲 (U+1F4F2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "calling"
+
+[VIBRATION_MODE]
+x-comment = "📳 (U+1F4F3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "vibration mode"
+
+[MOBILE_PHONE_OFF]
+x-comment = "📴 (U+1F4F4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mobile phone off"
+
+[NO_MOBILE_PHONES]
+x-comment = "📵 (U+1F4F5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no mobile"
+
+[ANTENNA_WITH_BARS]
+x-comment = "📶 (U+1F4F6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "signal strength"
+
+[CAMERA]
+x-comment = "📷 (U+1F4F7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "camera"
+
+[VIDEO_CAMERA]
+x-comment = "📹 (U+1F4F9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "video camera"
+
+[TELEVISION]
+x-comment = "📺 (U+1F4FA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tv"
+
+[RADIO]
+x-comment = "📻 (U+1F4FB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "radio"
+
+[VIDEOCASSETTE]
+x-comment = "📼 (U+1F4FC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "vhs"
+
+[LOW_BRIGHTNESS_SYMBOL]
+x-comment = "🔅 (U+1F505), see http://wiki.documentfoundation.org/Emoji"
+en-US = "brightness"
+
+[HIGH_BRIGHTNESS_SYMBOL]
+x-comment = "🔆 (U+1F506), see http://wiki.documentfoundation.org/Emoji"
+en-US = "brightness2"
+
+[SPEAKER_WITH_CANCELLATION_STROKE]
+x-comment = "🔇 (U+1F507), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mute"
+
+[SPEAKER]
+x-comment = "🔈 (U+1F508), see http://wiki.documentfoundation.org/Emoji"
+en-US = "speaker"
+
+[SPEAKER_WITH_ONE_SOUND_WAVE]
+x-comment = "🔉 (U+1F509), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sound"
+
+[SPEAKER_WITH_THREE_SOUND_WAVES]
+x-comment = "🔊 (U+1F50A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "loud sound"
+
+[BATTERY]
+x-comment = "🔋 (U+1F50B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "battery"
+
+[ELECTRIC_PLUG]
+x-comment = "🔌 (U+1F50C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "plug"
+
+[LEFT-POINTING_MAGNIFYING_GLASS]
+x-comment = "🔍 (U+1F50D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mag"
+
+[RIGHT-POINTING_MAGNIFYING_GLASS]
+x-comment = "🔎 (U+1F50E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mag2"
+
+[LOCK_WITH_INK_PEN]
+x-comment = "🔏 (U+1F50F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lock2"
+
+[CLOSED_LOCK_WITH_KEY]
+x-comment = "🔐 (U+1F510), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lock3"
+
+[KEY]
+x-comment = "🔑 (U+1F511), see http://wiki.documentfoundation.org/Emoji"
+en-US = "key"
+
+[LOCK]
+x-comment = "🔒 (U+1F512), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lock"
+
+[OPEN_LOCK]
+x-comment = "🔓 (U+1F513), see http://wiki.documentfoundation.org/Emoji"
+en-US = "unlock"
+
+[BELL]
+x-comment = "🔔 (U+1F514), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bell"
+
+[BELL_WITH_CANCELLATION_STROKE]
+x-comment = "🔕 (U+1F515), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no bell"
+
+[BOOKMARK]
+x-comment = "🔖 (U+1F516), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bookmark2"
+
+[LINK_SYMBOL]
+x-comment = "🔗 (U+1F517), see http://wiki.documentfoundation.org/Emoji"
+en-US = "link"
+
+[RADIO_BUTTON]
+x-comment = "🔘 (U+1F518), see http://wiki.documentfoundation.org/Emoji"
+en-US = "radio button"
+
+[NO_ONE_UNDER_EIGHTEEN_SYMBOL]
+x-comment = "🔞 (U+1F51E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "underage"
+
+[INPUT_SYMBOL_FOR_LATIN_LETTERS]
+x-comment = "🔤 (U+1F524), see http://wiki.documentfoundation.org/Emoji"
+en-US = "abc"
+
+[FIRE]
+x-comment = "🔥 (U+1F525), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fire"
+
+[ELECTRIC_TORCH]
+x-comment = "🔦 (U+1F526), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flashlight"
+
+[WRENCH]
+x-comment = "🔧 (U+1F527), see http://wiki.documentfoundation.org/Emoji"
+en-US = "wrench"
+
+[HAMMER]
+x-comment = "🔨 (U+1F528), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hammer"
+
+[NUT_AND_BOLT]
+x-comment = "🔩 (U+1F529), see http://wiki.documentfoundation.org/Emoji"
+en-US = "nut and bolt"
+
+[HOCHO]
+x-comment = "🔪 (U+1F52A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "knife"
+
+[PISTOL]
+x-comment = "🔫 (U+1F52B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pistol"
+
+[MICROSCOPE]
+x-comment = "🔬 (U+1F52C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "microscope"
+
+[TELESCOPE]
+x-comment = "🔭 (U+1F52D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "telescope"
+
+[CRYSTAL_BALL]
+x-comment = "🔮 (U+1F52E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "crystal ball"
+
+[JAPANESE_SYMBOL_FOR_BEGINNER]
+x-comment = "🔰 (U+1F530), see http://wiki.documentfoundation.org/Emoji"
+en-US = "beginner"
+
+[TRIDENT_EMBLEM]
+x-comment = "🔱 (U+1F531), see http://wiki.documentfoundation.org/Emoji"
+en-US = "trident"
+
+[BLACK_SQUARE_BUTTON]
+x-comment = "🔲 (U+1F532), see http://wiki.documentfoundation.org/Emoji"
+en-US = "button2"
+
+[WHITE_SQUARE_BUTTON]
+x-comment = "🔳 (U+1F533), see http://wiki.documentfoundation.org/Emoji"
+en-US = "button"
+
+[CLOCK_FACE_ONE_OCLOCK]
+x-comment = "🕐 (U+1F550), see http://wiki.documentfoundation.org/Emoji"
+en-US = "1 h"
+
+[CLOCK_FACE_TWO_OCLOCK]
+x-comment = "🕑 (U+1F551), see http://wiki.documentfoundation.org/Emoji"
+en-US = "2 h"
+
+[CLOCK_FACE_THREE_OCLOCK]
+x-comment = "🕒 (U+1F552), see http://wiki.documentfoundation.org/Emoji"
+en-US = "3 h"
+
+[CLOCK_FACE_FOUR_OCLOCK]
+x-comment = "🕓 (U+1F553), see http://wiki.documentfoundation.org/Emoji"
+en-US = "4 h"
+
+[CLOCK_FACE_FIVE_OCLOCK]
+x-comment = "🕔 (U+1F554), see http://wiki.documentfoundation.org/Emoji"
+en-US = "5 h"
+
+[CLOCK_FACE_SIX_OCLOCK]
+x-comment = "🕕 (U+1F555), see http://wiki.documentfoundation.org/Emoji"
+en-US = "6 h"
+
+[CLOCK_FACE_SEVEN_OCLOCK]
+x-comment = "🕖 (U+1F556), see http://wiki.documentfoundation.org/Emoji"
+en-US = "7 h"
+
+[CLOCK_FACE_EIGHT_OCLOCK]
+x-comment = "🕗 (U+1F557), see http://wiki.documentfoundation.org/Emoji"
+en-US = "8 h"
+
+[CLOCK_FACE_NINE_OCLOCK]
+x-comment = "🕘 (U+1F558), see http://wiki.documentfoundation.org/Emoji"
+en-US = "9 h"
+
+[CLOCK_FACE_TEN_OCLOCK]
+x-comment = "🕙 (U+1F559), see http://wiki.documentfoundation.org/Emoji"
+en-US = "10 h"
+
+[CLOCK_FACE_ELEVEN_OCLOCK]
+x-comment = "🕚 (U+1F55A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "11 h"
+
+[CLOCK_FACE_TWELVE_OCLOCK]
+x-comment = "🕛 (U+1F55B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "12 h"
+
+[CLOCK_FACE_ONE-THIRTY]
+x-comment = "🕜 (U+1F55C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "1.30"
+
+[CLOCK_FACE_TWO-THIRTY]
+x-comment = "🕝 (U+1F55D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "2.30"
+
+[CLOCK_FACE_THREE-THIRTY]
+x-comment = "🕞 (U+1F55E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "3.30"
+
+[CLOCK_FACE_FOUR-THIRTY]
+x-comment = "🕟 (U+1F55F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "4.30"
+
+[CLOCK_FACE_FIVE-THIRTY]
+x-comment = "🕠 (U+1F560), see http://wiki.documentfoundation.org/Emoji"
+en-US = "5.30"
+
+[CLOCK_FACE_SIX-THIRTY]
+x-comment = "🕡 (U+1F561), see http://wiki.documentfoundation.org/Emoji"
+en-US = "6.30"
+
+[CLOCK_FACE_SEVEN-THIRTY]
+x-comment = "🕢 (U+1F562), see http://wiki.documentfoundation.org/Emoji"
+en-US = "7.30"
+
+[CLOCK_FACE_EIGHT-THIRTY]
+x-comment = "🕣 (U+1F563), see http://wiki.documentfoundation.org/Emoji"
+en-US = "8.30"
+
+[CLOCK_FACE_NINE-THIRTY]
+x-comment = "🕤 (U+1F564), see http://wiki.documentfoundation.org/Emoji"
+en-US = "9.30"
+
+[CLOCK_FACE_TEN-THIRTY]
+x-comment = "🕥 (U+1F565), see http://wiki.documentfoundation.org/Emoji"
+en-US = "10.30"
+
+[CLOCK_FACE_ELEVEN-THIRTY]
+x-comment = "🕦 (U+1F566), see http://wiki.documentfoundation.org/Emoji"
+en-US = "11.30"
+
+[CLOCK_FACE_TWELVE-THIRTY]
+x-comment = "🕧 (U+1F567), see http://wiki.documentfoundation.org/Emoji"
+en-US = "12.30"
+
+[MOUNT_FUJI]
+x-comment = "🗻 (U+1F5FB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Fuji"
+
+[TOKYO_TOWER]
+x-comment = "🗼 (U+1F5FC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tower"
+
+[STATUE_OF_LIBERTY]
+x-comment = "🗽 (U+1F5FD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "liberty"
+
+[SILHOUETTE_OF_JAPAN]
+x-comment = "🗾 (U+1F5FE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Japan"
+
+[MOYAI]
+x-comment = "🗿 (U+1F5FF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "statue"
+
+[GRINNING_FACE]
+x-comment = "😀 (U+1F600), see http://wiki.documentfoundation.org/Emoji"
+en-US = "grinning"
+
+[GRINNING_FACE_WITH_SMILING_EYES]
+x-comment = "😁 (U+1F601), see http://wiki.documentfoundation.org/Emoji"
+en-US = "grin"
+
+[FACE_WITH_TEARS_OF_JOY]
+x-comment = "😂 (U+1F602), see http://wiki.documentfoundation.org/Emoji"
+en-US = "joy"
+
+[SMILING_FACE_WITH_OPEN_MOUTH]
+x-comment = "😃 (U+1F603), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smiley"
+
+[SMILING_FACE_WITH_OPEN_MOUTH_AND_SMILING_EYES]
+x-comment = "😄 (U+1F604), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smile"
+
+[SMILING_FACE_WITH_OPEN_MOUTH_AND_COLD_SWEAT]
+x-comment = "😅 (U+1F605), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sweat smile"
+
+[SMILING_FACE_WITH_OPEN_MOUTH_AND_TIGHTLY-CLOSED_EYES]
+x-comment = "😆 (U+1F606), see http://wiki.documentfoundation.org/Emoji"
+en-US = "laugh"
+
+[SMILING_FACE_WITH_HALO]
+x-comment = "😇 (U+1F607), see http://wiki.documentfoundation.org/Emoji"
+en-US = "innocent"
+
+[SMILING_FACE_WITH_HORNS]
+x-comment = "😈 (U+1F608), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smiling imp"
+
+[WINKING_FACE]
+x-comment = "😉 (U+1F609), see http://wiki.documentfoundation.org/Emoji"
+en-US = "wink"
+
+[SMILING_FACE_WITH_SMILING_EYES]
+x-comment = "😊 (U+1F60A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "blush"
+
+[FACE_SAVOURING_DELICIOUS_FOOD]
+x-comment = "😋 (U+1F60B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "yum"
+
+[RELIEVED_FACE]
+x-comment = "😌 (U+1F60C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "relieved"
+
+[SMILING_FACE_WITH_HEART-SHAPED_EYES]
+x-comment = "😍 (U+1F60D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "heart eyes"
+
+[SMILING_FACE_WITH_SUNGLASSES]
+x-comment = "😎 (U+1F60E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sunglasses2"
+
+[SMIRKING_FACE]
+x-comment = "😏 (U+1F60F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smirk"
+
+[NEUTRAL_FACE]
+x-comment = "😐 (U+1F610), see http://wiki.documentfoundation.org/Emoji"
+en-US = "neutral face"
+
+[EXPRESSIONLESS_FACE]
+x-comment = "😑 (U+1F611), see http://wiki.documentfoundation.org/Emoji"
+en-US = "expressionless"
+
+[UNAMUSED_FACE]
+x-comment = "😒 (U+1F612), see http://wiki.documentfoundation.org/Emoji"
+en-US = "unamused"
+
+[FACE_WITH_COLD_SWEAT]
+x-comment = "😓 (U+1F613), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sweat"
+
+[PENSIVE_FACE]
+x-comment = "😔 (U+1F614), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pensive"
+
+[CONFUSED_FACE]
+x-comment = "😕 (U+1F615), see http://wiki.documentfoundation.org/Emoji"
+en-US = "confused"
+
+[CONFOUNDED_FACE]
+x-comment = "😖 (U+1F616), see http://wiki.documentfoundation.org/Emoji"
+en-US = "confounded"
+
+[KISSING_FACE]
+x-comment = "😗 (U+1F617), see http://wiki.documentfoundation.org/Emoji"
+en-US = "kissing"
+
+[FACE_THROWING_A_KISS]
+x-comment = "😘 (U+1F618), see http://wiki.documentfoundation.org/Emoji"
+en-US = "kiss2"
+
+[KISSING_FACE_WITH_SMILING_EYES]
+x-comment = "😙 (U+1F619), see http://wiki.documentfoundation.org/Emoji"
+en-US = "kiss3"
+
+[KISSING_FACE_WITH_CLOSED_EYES]
+x-comment = "😚 (U+1F61A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "kiss4"
+
+[FACE_WITH_STUCK-OUT_TONGUE]
+x-comment = "😛 (U+1F61B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tongue2"
+
+[FACE_WITH_STUCK-OUT_TONGUE_AND_WINKING_EYE]
+x-comment = "😜 (U+1F61C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tongue3"
+
+[FACE_WITH_STUCK-OUT_TONGUE_AND_TIGHTLY-CLOSED_EYES]
+x-comment = "😝 (U+1F61D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tongue4"
+
+[DISAPPOINTED_FACE]
+x-comment = "😞 (U+1F61E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "disappointed"
+
+[WORRIED_FACE]
+x-comment = "😟 (U+1F61F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "worried"
+
+[ANGRY_FACE]
+x-comment = "😠 (U+1F620), see http://wiki.documentfoundation.org/Emoji"
+en-US = "angry"
+
+[POUTING_FACE]
+x-comment = "😡 (U+1F621), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rage"
+
+[CRYING_FACE]
+x-comment = "😢 (U+1F622), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cry"
+
+[PERSEVERING_FACE]
+x-comment = "😣 (U+1F623), see http://wiki.documentfoundation.org/Emoji"
+en-US = "persevere"
+
+[FACE_WITH_LOOK_OF_TRIUMPH]
+x-comment = "😤 (U+1F624), see http://wiki.documentfoundation.org/Emoji"
+en-US = "triumph"
+
+[DISAPPOINTED_BUT_RELIEVED_FACE]
+x-comment = "😥 (U+1F625), see http://wiki.documentfoundation.org/Emoji"
+en-US = "disappointed relieved"
+
+[FROWNING_FACE_WITH_OPEN_MOUTH]
+x-comment = "😦 (U+1F626), see http://wiki.documentfoundation.org/Emoji"
+en-US = "frowning"
+
+[ANGUISHED_FACE]
+x-comment = "😧 (U+1F627), see http://wiki.documentfoundation.org/Emoji"
+en-US = "anguished"
+
+[FEARFUL_FACE]
+x-comment = "😨 (U+1F628), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fearful"
+
+[WEARY_FACE]
+x-comment = "😩 (U+1F629), see http://wiki.documentfoundation.org/Emoji"
+en-US = "weary"
+
+[SLEEPY_FACE]
+x-comment = "😪 (U+1F62A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sleepy"
+
+[TIRED_FACE]
+x-comment = "😫 (U+1F62B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tired face"
+
+[GRIMACING_FACE]
+x-comment = "😬 (U+1F62C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "grimacing"
+
+[LOUDLY_CRYING_FACE]
+x-comment = "😭 (U+1F62D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sob"
+
+[FACE_WITH_OPEN_MOUTH]
+x-comment = "😮 (U+1F62E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "open mouth"
+
+[HUSHED_FACE]
+x-comment = "😯 (U+1F62F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hushed"
+
+[FACE_WITH_OPEN_MOUTH_AND_COLD_SWEAT]
+x-comment = "😰 (U+1F630), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cold sweat"
+
+[FACE_SCREAMING_IN_FEAR]
+x-comment = "😱 (U+1F631), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scream"
+
+[ASTONISHED_FACE]
+x-comment = "😲 (U+1F632), see http://wiki.documentfoundation.org/Emoji"
+en-US = "astonished"
+
+[FLUSHED_FACE]
+x-comment = "😳 (U+1F633), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flushed"
+
+[SLEEPING_FACE]
+x-comment = "😴 (U+1F634), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sleeping"
+
+[DIZZY_FACE]
+x-comment = "😵 (U+1F635), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dizzy face"
+
+[FACE_WITHOUT_MOUTH]
+x-comment = "😶 (U+1F636), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no mouth"
+
+[FACE_WITH_MEDICAL_MASK]
+x-comment = "😷 (U+1F637), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mask"
+
+[GRINNING_CAT_FACE_WITH_SMILING_EYES]
+x-comment = "😸 (U+1F638), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smile cat"
+
+[CAT_FACE_WITH_TEARS_OF_JOY]
+x-comment = "😹 (U+1F639), see http://wiki.documentfoundation.org/Emoji"
+en-US = "joy cat"
+
+[SMILING_CAT_FACE_WITH_OPEN_MOUTH]
+x-comment = "😺 (U+1F63A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smiley cat"
+
+[SMILING_CAT_FACE_WITH_HEART-SHAPED_EYES]
+x-comment = "😻 (U+1F63B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "heart eyes cat"
+
+[CAT_FACE_WITH_WRY_SMILE]
+x-comment = "😼 (U+1F63C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smirk cat"
+
+[KISSING_CAT_FACE_WITH_CLOSED_EYES]
+x-comment = "😽 (U+1F63D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "kissing cat"
+
+[POUTING_CAT_FACE]
+x-comment = "😾 (U+1F63E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pouting cat"
+
+[CRYING_CAT_FACE]
+x-comment = "😿 (U+1F63F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "crying cat"
+
+[WEARY_CAT_FACE]
+x-comment = "🙀 (U+1F640), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scream cat"
+
+[FACE_WITH_NO_GOOD_GESTURE]
+x-comment = "🙅 (U+1F645), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no good"
+
+[FACE_WITH_OK_GESTURE]
+x-comment = "🙆 (U+1F646), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ok3"
+
+[PERSON_BOWING_DEEPLY]
+x-comment = "🙇 (U+1F647), see http://wiki.documentfoundation.org/Emoji"
+en-US = "prostration"
+
+[SEE-NO-EVIL_MONKEY]
+x-comment = "🙈 (U+1F648), see http://wiki.documentfoundation.org/Emoji"
+en-US = "see no evil"
+
+[HEAR-NO-EVIL_MONKEY]
+x-comment = "🙉 (U+1F649), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hear no evil"
+
+[SPEAK-NO-EVIL_MONKEY]
+x-comment = "🙊 (U+1F64A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "speak no evil"
+
+[HAPPY_PERSON_RAISING_ONE_HAND]
+x-comment = "🙋 (U+1F64B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "happiness"
+
+[PERSON_RAISING_BOTH_HANDS_IN_CELEBRATION]
+x-comment = "🙌 (U+1F64C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "celebration"
+
+[PERSON_FROWNING]
+x-comment = "🙍 (U+1F64D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "person frowning"
+
+[PERSON_WITH_POUTING_FACE]
+x-comment = "🙎 (U+1F64E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "person pouting"
+
+[PERSON_WITH_FOLDED_HANDS]
+x-comment = "🙏 (U+1F64F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pray"
+
+[ROCKET]
+x-comment = "🚀 (U+1F680), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rocket"
+
+[HELICOPTER]
+x-comment = "🚁 (U+1F681), see http://wiki.documentfoundation.org/Emoji"
+en-US = "helicopter"
+
+[STEAM_LOCOMOTIVE]
+x-comment = "🚂 (U+1F682), see http://wiki.documentfoundation.org/Emoji"
+en-US = "locomotive"
+
+[RAILWAY_CAR]
+x-comment = "🚃 (U+1F683), see http://wiki.documentfoundation.org/Emoji"
+en-US = "railway car"
+
+[HIGH-SPEED_TRAIN]
+x-comment = "🚄 (U+1F684), see http://wiki.documentfoundation.org/Emoji"
+en-US = "train2"
+
+[HIGH-SPEED_TRAIN_WITH_BULLET_NOSE]
+x-comment = "🚅 (U+1F685), see http://wiki.documentfoundation.org/Emoji"
+en-US = "train3"
+
+[TRAIN]
+x-comment = "🚆 (U+1F686), see http://wiki.documentfoundation.org/Emoji"
+en-US = "train"
+
+[METRO]
+x-comment = "🚇 (U+1F687), see http://wiki.documentfoundation.org/Emoji"
+en-US = "metro"
+
+[LIGHT_RAIL]
+x-comment = "🚈 (U+1F688), see http://wiki.documentfoundation.org/Emoji"
+en-US = "light rail"
+
+[STATION]
+x-comment = "🚉 (U+1F689), see http://wiki.documentfoundation.org/Emoji"
+en-US = "station"
+
+[TRAM]
+x-comment = "🚊 (U+1F68A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tram"
+
+[TRAM_CAR]
+x-comment = "🚋 (U+1F68B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tram2"
+
+[BUS]
+x-comment = "🚌 (U+1F68C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bus"
+
+[ONCOMING_BUS]
+x-comment = "🚍 (U+1F68D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bus2"
+
+[TROLLEYBUS]
+x-comment = "🚎 (U+1F68E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "trolleybus"
+
+[BUS_STOP]
+x-comment = "🚏 (U+1F68F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "busstop"
+
+[MINIBUS]
+x-comment = "🚐 (U+1F690), see http://wiki.documentfoundation.org/Emoji"
+en-US = "minibus"
+
+[AMBULANCE]
+x-comment = "🚑 (U+1F691), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ambulance"
+
+[FIRE_ENGINE]
+x-comment = "🚒 (U+1F692), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fire engine"
+
+[POLICE_CAR]
+x-comment = "🚓 (U+1F693), see http://wiki.documentfoundation.org/Emoji"
+en-US = "police car"
+
+[ONCOMING_POLICE_CAR]
+x-comment = "🚔 (U+1F694), see http://wiki.documentfoundation.org/Emoji"
+en-US = "police car2"
+
+[TAXI]
+x-comment = "🚕 (U+1F695), see http://wiki.documentfoundation.org/Emoji"
+en-US = "taxi"
+
+[ONCOMING_TAXI]
+x-comment = "🚖 (U+1F696), see http://wiki.documentfoundation.org/Emoji"
+en-US = "taxi2"
+
+[AUTOMOBILE]
+x-comment = "🚗 (U+1F697), see http://wiki.documentfoundation.org/Emoji"
+en-US = "car"
+
+[ONCOMING_AUTOMOBILE]
+x-comment = "🚘 (U+1F698), see http://wiki.documentfoundation.org/Emoji"
+en-US = "car2"
+
+[RECREATIONAL_VEHICLE]
+x-comment = "🚙 (U+1F699), see http://wiki.documentfoundation.org/Emoji"
+en-US = "car3"
+
+[DELIVERY_TRUCK]
+x-comment = "🚚 (U+1F69A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "truck2"
+
+[ARTICULATED_LORRY]
+x-comment = "🚛 (U+1F69B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lorry"
+
+[TRACTOR]
+x-comment = "🚜 (U+1F69C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tractor"
+
+[MONORAIL]
+x-comment = "🚝 (U+1F69D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "monorail"
+
+[MOUNTAIN_RAILWAY]
+x-comment = "🚞 (U+1F69E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mountain railway"
+
+[SUSPENSION_RAILWAY]
+x-comment = "🚟 (U+1F69F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "suspension railway"
+
+[MOUNTAIN_CABLEWAY]
+x-comment = "🚠 (U+1F6A0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mountain cableway"
+
+[AERIAL_TRAMWAY]
+x-comment = "🚡 (U+1F6A1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "aerial tramway"
+
+[SHIP]
+x-comment = "🚢 (U+1F6A2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ship"
+
+[ROWBOAT]
+x-comment = "🚣 (U+1F6A3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rowboat"
+
+[SPEEDBOAT]
+x-comment = "🚤 (U+1F6A4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "speedboat"
+
+[HORIZONTAL_TRAFFIC_LIGHT]
+x-comment = "🚥 (U+1F6A5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "traffic light"
+
+[VERTICAL_TRAFFIC_LIGHT]
+x-comment = "🚦 (U+1F6A6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "traffic light2"
+
+[CONSTRUCTION_SIGN]
+x-comment = "🚧 (U+1F6A7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "construction"
+
+[POLICE_CARS_REVOLVING_LIGHT]
+x-comment = "🚨 (U+1F6A8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rotating light"
+
+[TRIANGULAR_FLAG_ON_POST]
+x-comment = "🚩 (U+1F6A9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "triangular flag"
+
+[DOOR]
+x-comment = "🚪 (U+1F6AA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "door"
+
+[NO_ENTRY_SIGN]
+x-comment = "🚫 (U+1F6AB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no entry sign"
+
+[SMOKING_SYMBOL]
+x-comment = "🚬 (U+1F6AC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smoking"
+
+[NO_SMOKING_SYMBOL]
+x-comment = "🚭 (U+1F6AD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no smoking"
+
+[PUT_LITTER_IN_ITS_PLACE_SYMBOL]
+x-comment = "🚮 (U+1F6AE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "litter"
+
+[DO_NOT_LITTER_SYMBOL]
+x-comment = "🚯 (U+1F6AF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "do not litter"
+
+[POTABLE_WATER_SYMBOL]
+x-comment = "🚰 (U+1F6B0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "potable water"
+
+[NON-POTABLE_WATER_SYMBOL]
+x-comment = "🚱 (U+1F6B1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "non-potable water"
+
+[BICYCLE]
+x-comment = "🚲 (U+1F6B2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bike"
+
+[NO_BICYCLES]
+x-comment = "🚳 (U+1F6B3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no bicycles"
+
+[BICYCLIST]
+x-comment = "🚴 (U+1F6B4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bicyclist"
+
+[MOUNTAIN_BICYCLIST]
+x-comment = "🚵 (U+1F6B5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bicyclist2"
+
+[PEDESTRIAN]
+x-comment = "🚶 (U+1F6B6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "walking"
+
+[NO_PEDESTRIANS]
+x-comment = "🚷 (U+1F6B7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no pedestrians"
+
+[CHILDREN_CROSSING]
+x-comment = "🚸 (U+1F6B8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "crosswalk"
+
+[MENS_SYMBOL]
+x-comment = "🚹 (U+1F6B9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mens"
+
+[WOMENS_SYMBOL]
+x-comment = "🚺 (U+1F6BA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "womens"
+
+[RESTROOM]
+x-comment = "🚻 (U+1F6BB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "restroom"
+
+[BABY_SYMBOL]
+x-comment = "🚼 (U+1F6BC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "baby2"
+
+[TOILET]
+x-comment = "🚽 (U+1F6BD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "toilet"
+
+[WATER_CLOSET]
+x-comment = "🚾 (U+1F6BE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "toilet2"
+
+[SHOWER]
+x-comment = "🚿 (U+1F6BF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shower"
+
+[BATH]
+x-comment = "🛀 (U+1F6C0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bath"
+
+[BATHTUB]
+x-comment = "🛁 (U+1F6C1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bathtub"
+
+[PASSPORT_CONTROL]
+x-comment = "🛂 (U+1F6C2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "passport"
+
+[CUSTOMS]
+x-comment = "🛃 (U+1F6C3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "customs"
+
+[BAGGAGE_CLAIM]
+x-comment = "🛄 (U+1F6C4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "baggage"
+
+[LEFT_LUGGAGE]
+x-comment = "🛅 (U+1F6C5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "left luggage"
+
+[NOTCHED_LEFT_SEMICIRCLE_WITH_THREE_DOTS]
+x-comment = "🕃 (U+1F543), see http://wiki.documentfoundation.org/Emoji"
+en-US = "feast"
+
+[SLIGHTLY_SMILING_FACE]
+x-comment = "🙂 (U+1F642), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smiling3"
+
+[SLIGHTLY_FROWNING_FACE]
+x-comment = "🙁 (U+1F641), see http://wiki.documentfoundation.org/Emoji"
+en-US = "frowning2"
+
+[SLEUTH_OR_SPY]
+x-comment = "🕵 (U+1F575), see http://wiki.documentfoundation.org/Emoji"
+en-US = "detective"
+
+[SLEEPING_ACCOMMODATION]
+x-comment = "🛌 (U+1F6CC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sleep"
+
+[MAN_IN_BUSINESS_SUIT_LEVITATING]
+x-comment = "🕴 (U+1F574), see http://wiki.documentfoundation.org/Emoji"
+en-US = "suit"
+
+[SPEAKING_HEAD_IN_SILHOUETTE]
+x-comment = "🗣 (U+1F5E3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "head"
+
+[GOLFER]
+x-comment = "🏌 (U+1F3CC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "golf"
+
+[WEIGHT_LIFTER]
+x-comment = "🏋 (U+1F3CB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "weight lifter"
+
+[RACING_CAR]
+x-comment = "🏎 (U+1F3CE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "car4"
+
+[RACING_MOTORCYCLE]
+x-comment = "🏍 (U+1F3CD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "motorcycle"
+
+[REVERSED_HAND_WITH_MIDDLE_FINGER_EXTENDED]
+x-comment = "🖕 (U+1F595), see http://wiki.documentfoundation.org/Emoji"
+en-US = "finger"
+
+[RAISED_HAND_WITH_PART_BETWEEN_MIDDLE_AND_RING_FINGERS]
+x-comment = "🖖 (U+1F596), Mr. Spock's Vulcan salute from Star Trek, see also http://wiki.documentfoundation.org/Emoji"
+en-US = "spock"
+
+[RAISED_HAND_WITH_FINGERS_SPLAYED]
+x-comment = "🖐 (U+1F590), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hand2"
+
+[EYE]
+x-comment = "👁 (U+1F441), see http://wiki.documentfoundation.org/Emoji"
+en-US = "eye"
+
+[LEFT_SPEECH_BUBBLE]
+x-comment = "🗨 (U+1F5E8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bubble"
+
+[RIGHT_ANGER_BUBBLE]
+x-comment = "🗯 (U+1F5EF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bubble4"
+
+[HOLE]
+x-comment = "🕳 (U+1F573), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hole"
+
+[DARK_SUNGLASSES]
+x-comment = "🕶 (U+1F576), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sunglasses"
+
+[SHOPPING_BAGS]
+x-comment = "🛍 (U+1F6CD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shop"
+
+[CHIPMUNK]
+x-comment = "🐿 (U+1F43F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chipmunk"
+
+[DOVE_OF_PEACE]
+x-comment = "🕊 (U+1F54A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dove"
+
+[SPIDER]
+x-comment = "🕷 (U+1F577), see http://wiki.documentfoundation.org/Emoji"
+en-US = "spider"
+
+[SPIDER_WEB]
+x-comment = "🕸 (U+1F578), see http://wiki.documentfoundation.org/Emoji"
+en-US = "web"
+
+[ROSETTE]
+x-comment = "🏵 (U+1F3F5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rosette"
+
+[HOT_PEPPER]
+x-comment = "🌶 (U+1F336), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pepper"
+
+[FORK_AND_KNIFE_WITH_PLATE]
+x-comment = "🍽 (U+1F37D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "plate"
+
+[WORLD_MAP]
+x-comment = "🗺 (U+1F5FA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "map"
+
+[SNOW_CAPPED_MOUNTAIN]
+x-comment = "🏔 (U+1F3D4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mountain2"
+
+[CAMPING]
+x-comment = "🏕 (U+1F3D5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "camping"
+
+[BEACH_WITH_UMBRELLA]
+x-comment = "🏖 (U+1F3D6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "beach"
+
+[DESERT]
+x-comment = "🏜 (U+1F3DC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "desert"
+
+[DESERT_ISLAND]
+x-comment = "🏝 (U+1F3DD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "island"
+
+[NATIONAL_PARK]
+x-comment = "🏞 (U+1F3DE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "park"
+
+[STADIUM]
+x-comment = "🏟 (U+1F3DF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "stadium"
+
+[CLASSICAL_BUILDING]
+x-comment = "🏛 (U+1F3DB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "museum"
+
+[BUILDING_CONSTRUCTION]
+x-comment = "🏗 (U+1F3D7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "crane"
+
+[HOUSE_BUILDINGS]
+x-comment = "🏘 (U+1F3D8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "houses"
+
+[DERELICT_HOUSE_BUILDING]
+x-comment = "🏚 (U+1F3DA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "house3"
+
+[CITYSCAPE]
+x-comment = "🏙 (U+1F3D9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "city"
+
+[MOTORWAY]
+x-comment = "🛣 (U+1F6E3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "motorway"
+
+[RAILWAY_TRACK]
+x-comment = "🛤 (U+1F6E4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "track"
+
+[OIL_DRUM]
+x-comment = "🛢 (U+1F6E2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "drum"
+
+[PASSENGER_SHIP]
+x-comment = "🛳 (U+1F6F3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ship2"
+
+[MOTOR_BOAT]
+x-comment = "🛥 (U+1F6E5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "motor boat"
+
+[SMALL_AIRPLANE]
+x-comment = "🛩 (U+1F6E9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "airplane2"
+
+[AIRPLANE_DEPARTURE]
+x-comment = "🛫 (U+1F6EB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "departure"
+
+[AIRPLANE_ARRIVING]
+x-comment = "🛬 (U+1F6EC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "arrival"
+
+[SATELLITE]
+x-comment = "🛰 (U+1F6F0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "satellite"
+
+[BELLHOP_BELL]
+x-comment = "🛎 (U+1F6CE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bell2"
+
+[MANTELPIECE_CLOCK]
+x-comment = "🕰 (U+1F570), see http://wiki.documentfoundation.org/Emoji"
+en-US = "clock"
+
+[THERMOMETER]
+x-comment = "🌡 (U+1F321), see http://wiki.documentfoundation.org/Emoji"
+en-US = "thermometer"
+
+[WHITE_SUN_WITH_SMALL_CLOUD]
+x-comment = "🌤 (U+1F324), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cloudy"
+
+[WHITE_SUN_BEHIND_CLOUD]
+x-comment = "🌥 (U+1F325), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cloudy2"
+
+[WHITE_SUN_BEHIND_CLOUD_WITH_RAIN]
+x-comment = "🌦 (U+1F326), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rainy"
+
+[CLOUD_WITH_RAIN]
+x-comment = "🌧 (U+1F327), see http://wiki.documentfoundation.org/Emoji"
+en-US = "storm"
+
+[CLOUD_WITH_SNOW]
+x-comment = "🌨 (U+1F328), see http://wiki.documentfoundation.org/Emoji"
+en-US = "snow"
+
+[CLOUD_WITH_LIGHTNING]
+x-comment = "🌩 (U+1F329), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lightning"
+
+[CLOUD_WITH_TORNADO]
+x-comment = "🌪 (U+1F32A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tornado"
+
+[FOG]
+x-comment = "🌫 (U+1F32B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fog"
+
+[WIND_BLOWING_FACE]
+x-comment = "🌬 (U+1F32C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "wind"
+
+[REMINDER_RIBBON]
+x-comment = "🎗 (U+1F397), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ribbon"
+
+[ADMISSION_TICKETS]
+x-comment = "🎟 (U+1F39F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ticket2"
+
+[MILITARY_MEDAL]
+x-comment = "🎖 (U+1F396), see http://wiki.documentfoundation.org/Emoji"
+en-US = "medal2"
+
+[SPORTS_MEDAL]
+x-comment = "🏅 (U+1F3C5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "medal"
+
+[JOYSTICK]
+x-comment = "🕹 (U+1F579), see http://wiki.documentfoundation.org/Emoji"
+en-US = "joystick"
+
+[FRAME_WITH_PICTURE]
+x-comment = "🖼 (U+1F5BC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "picture"
+
+[STUDIO_MICROPHONE]
+x-comment = "🎙 (U+1F399), see http://wiki.documentfoundation.org/Emoji"
+en-US = "microphone2"
+
+[LEVEL_SLIDER]
+x-comment = "🎚 (U+1F39A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "slider"
+
+[CONTROL_KNOBS]
+x-comment = "🎛 (U+1F39B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "control"
+
+[DESKTOP_COMPUTER]
+x-comment = "🖥 (U+1F5A5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "computer2"
+
+[PRINTER]
+x-comment = "🖨 (U+1F5A8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "printer"
+
+[THREE_BUTTON_MOUSE]
+x-comment = "🖱 (U+1F5B1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mouse3"
+
+[TRACKBALL]
+x-comment = "🖲 (U+1F5B2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "trackball"
+
+[FILM_FRAMES]
+x-comment = "🎞 (U+1F39E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "film"
+
+[FILM_PROJECTOR]
+x-comment = "📽 (U+1F4FD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "projector"
+
+[CAMERA_WITH_FLASH]
+x-comment = "📸 (U+1F4F8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flash"
+
+[CANDLE]
+x-comment = "🕯 (U+1F56F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "candle"
+
+[ROLLED-UP_NEWSPAPER]
+x-comment = "🗞 (U+1F5DE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "newspaper2"
+
+[LABEL]
+x-comment = "🏷 (U+1F3F7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "label"
+
+[BALLOT_BOX_WITH_BALLOT]
+x-comment = "🗳 (U+1F5F3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ballot"
+
+[LOWER_LEFT_FOUNTAIN_PEN]
+x-comment = "🖋 (U+1F58B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pen2"
+
+[LOWER_LEFT_BALLPOINT_PEN]
+x-comment = "🖊 (U+1F58A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pen"
+
+[LOWER_LEFT_PAINTBRUSH]
+x-comment = "🖌 (U+1F58C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "paintbrush"
+
+[LOWER_LEFT_CRAYON]
+x-comment = "🖍 (U+1F58D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "crayon"
+
+[CARD_INDEX_DIVIDERS]
+x-comment = "🗂 (U+1F5C2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "index"
+
+[SPIRAL_NOTE_PAD]
+x-comment = "🗒 (U+1F5D2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "notepad"
+
+[SPIRAL_CALENDAR_PAD]
+x-comment = "🗓 (U+1F5D3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "calendar3"
+
+[LINKED_PAPERCLIPS]
+x-comment = "🖇 (U+1F587), see http://wiki.documentfoundation.org/Emoji"
+en-US = "paperclip2"
+
+[CARD_FILE_BOX]
+x-comment = "🗃 (U+1F5C3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "box"
+
+[FILE_CABINET]
+x-comment = "🗄 (U+1F5C4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cabinet"
+
+[WASTEBASKET]
+x-comment = "🗑 (U+1F5D1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "wastebasket"
+
+[OLD_KEY]
+x-comment = "🗝 (U+1F5DD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "key2"
+
+[HAMMER_AND_WRENCH]
+x-comment = "🛠 (U+1F6E0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hammer and wrench"
+
+[DAGGER_KNIFE]
+x-comment = "🗡 (U+1F5E1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "knife2"
+
+[SHIELD]
+x-comment = "🛡 (U+1F6E1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shield"
+
+[COMPRESSION]
+x-comment = "🗜 (U+1F5DC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "clamp"
+
+[BED]
+x-comment = "🛏 (U+1F6CF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bed"
+
+[COUCH_AND_LAMP]
+x-comment = "🛋 (U+1F6CB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "couch"
+
+[OM_SYMBOL]
+x-comment = "🕉 (U+1F549), see http://wiki.documentfoundation.org/Emoji"
+en-US = "om"
+
+[DOUBLE_VERTICAL_BAR]
+x-comment = "⏸ (U+23F8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pause"
+
+[BLACK_SQUARE_FOR_STOP]
+x-comment = "⏹ (U+23F9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "stop2"
+
+[BLACK_CIRCLE_FOR_RECORD]
+x-comment = "⏺ (U+23FA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "record"
+
+[WAVING_BLACK_FLAG]
+x-comment = "🏴 (U+1F3F4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flag"
+
+[WAVING_WHITE_FLAG]
+x-comment = "🏳 (U+1F3F3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flag2"
+
+[BALLOT_BOX_WITH_BOLD_SCRIPT_X]
+x-comment = "🗷 (U+1F5F7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "checkbox4"
+
+[BOYS_SYMBOL]
+x-comment = "🛉 (U+1F6C9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "boys"
+
+[CIRCLED_INFORMATION_SOURCE]
+x-comment = "🛈 (U+1F6C8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "information3"
+
+[GIRLS_SYMBOL]
+x-comment = "🛊 (U+1F6CA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "girls"
+
+[UP-POINTING_SMALL_AIRPLANE]
+x-comment = "🛨 (U+1F6E8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "airplane4"
+
+[DIESEL_LOCOMOTIVE]
+x-comment = "🛲 (U+1F6F2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "locomotive2"
+
+[UP-POINTING_AIRPLANE]
+x-comment = "🛧 (U+1F6E7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "airplane3"
+
+[ONCOMING_FIRE_ENGINE]
+x-comment = "🛱 (U+1F6F1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fire engine2"
+
+[UP-POINTING_MILITARY_AIRPLANE]
+x-comment = "🛦 (U+1F6E6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "airplane5"
+
+[NORTHEAST-POINTING_AIRPLANE]
+x-comment = "🛪 (U+1F6EA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "airplane6"
+
+[RIGHT_THOUGHT_BUBBLE]
+x-comment = "🗭 (U+1F5ED), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bubble5"
+
+[LIGHTNING_MOOD_BUBBLE]
+x-comment = "🗱 (U+1F5F1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bubble6"
+
+[LEFT_THOUGHT_BUBBLE]
+x-comment = "🗬 (U+1F5EC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bubble7"
+
+[STOCK_CHART]
+x-comment = "🗠 (U+1F5E0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chart5"
+
+[PAGE_WITH_CIRCLED_TEXT]
+x-comment = "🗟 (U+1F5DF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "page4"
+
+[LEFT_WRITING_HAND]
+x-comment = "🖎 (U+1F58E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "writing2"
+
+[THREE_RAYS_LEFT]
+x-comment = "🗦 (U+1F5E6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rays"
+
+[BEAMED_DESCENDING_MUSICAL_NOTES]
+x-comment = "🎝 (U+1F39D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "notes3"
+
+[LOWER_RIGHT_SHADOWED_WHITE_CIRCLE]
+x-comment = "🔾 (U+1F53E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "circle3"
+
+[BEAMED_ASCENDING_MUSICAL_NOTES]
+x-comment = "🎜 (U+1F39C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "notes4"
+
+[BOOK]
+x-comment = "🕮 (U+1F56E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "book"
+
+[DECREASE_FONT_SIZE_SYMBOL]
+x-comment = "🗛 (U+1F5DB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "font"
+
+[UPPER_RIGHT_SHADOWED_WHITE_CIRCLE]
+x-comment = "🔿 (U+1F53F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "circle4"
+
+[BULLHORN]
+x-comment = "🕫 (U+1F56B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bullhorn"
+
+[BULLHORN_WITH_SOUND_WAVES]
+x-comment = "🕬 (U+1F56C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bullhorn2"
+
+[LEFT_HAND_TELEPHONE_RECEIVER]
+x-comment = "🕻 (U+1F57B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "receiver2"
+
+[WHITE_TOUCHTONE_TELEPHONE]
+x-comment = "🕾 (U+1F57E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "phone3"
+
+[TELEPHONE_RECEIVER_WITH_PAGE]
+x-comment = "🕼 (U+1F57C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "receiver4"
+
+[RIGHT_HAND_TELEPHONE_RECEIVER]
+x-comment = "🕽 (U+1F57D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "receiver3"
+
+[BLACK_TOUCHTONE_TELEPHONE]
+x-comment = "🕿 (U+1F57F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "phone4"
+
+[SIDEWAYS_BLACK_LEFT_POINTING_INDEX]
+x-comment = "🖚 (U+1F59A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "left4"
+
+[TURNED_OK_HAND_SIGN]
+x-comment = "🖏 (U+1F58F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ok2"
+
+[BLACK_LEFT_POINTING_BACKHAND_INDEX]
+x-comment = "🖜 (U+1F59C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "left5"
+
+[THREE_RAYS_BELOW]
+x-comment = "🗥 (U+1F5E5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rays2"
+
+[SIDEWAYS_BLACK_RIGHT_POINTING_INDEX]
+x-comment = "🖛 (U+1F59B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "right4"
+
+[SIDEWAYS_WHITE_DOWN_POINTING_INDEX]
+x-comment = "🖟 (U+1F59F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "down3"
+
+[SIDEWAYS_WHITE_UP_POINTING_INDEX]
+x-comment = "🖞 (U+1F59E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "up3"
+
+[BLACK_DROPLET]
+x-comment = "🌢 (U+1F322), see http://wiki.documentfoundation.org/Emoji"
+en-US = "droplet2"
+
+[MUSICAL_KEYBOARD_WITH_JACKS]
+x-comment = "🎘 (U+1F398), see http://wiki.documentfoundation.org/Emoji"
+en-US = "synthesizer"
+
+[BOUQUET_OF_FLOWERS]
+x-comment = "🎕 (U+1F395), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bouquet2"
+
+[HEART_WITH_TIP_ON_THE_LEFT]
+x-comment = "🎔 (U+1F394), see http://wiki.documentfoundation.org/Emoji"
+en-US = "heart2"
+
+[BLACK_SKULL_AND_CROSSBONES]
+x-comment = "🕱 (U+1F571), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pirate"
+
+[TELEPHONE_ON_TOP_OF_MODEM]
+x-comment = "🖀 (U+1F580), see http://wiki.documentfoundation.org/Emoji"
+en-US = "modem"
+
+[NO_PIRACY]
+x-comment = "🕲 (U+1F572), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no piracy"
+
+[SYMBOL_FOR_MARKS_CHAPTER]
+x-comment = "🕅 (U+1F545), see http://wiki.documentfoundation.org/Emoji"
+en-US = "marks chapter"
+
+[CELTIC_CROSS]
+x-comment = "🕈 (U+1F548), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Celtic cross"
+
+[WHITE_DOWN_POINTING_LEFT_HAND_INDEX]
+x-comment = "🖗 (U+1F597), see http://wiki.documentfoundation.org/Emoji"
+en-US = "down4"
+
+[PEN_OVER_STAMPED_ENVELOPE]
+x-comment = "🖆 (U+1F586), see http://wiki.documentfoundation.org/Emoji"
+en-US = "envelope4"
+
+[STAMPED_ENVELOPE]
+x-comment = "🖃 (U+1F583), see http://wiki.documentfoundation.org/Emoji"
+en-US = "envelope2"
+
+[THREE_RAYS_ABOVE]
+x-comment = "🗤 (U+1F5E4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rays3"
+
+[LOWER_LEFT_PENCIL]
+x-comment = "🖉 (U+1F589), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pencil4"
+
+[BACK_OF_ENVELOPE]
+x-comment = "🖂 (U+1F582), see http://wiki.documentfoundation.org/Emoji"
+en-US = "envelope3"
+
+[BLACK_PUSHPIN]
+x-comment = "🖈 (U+1F588), see http://wiki.documentfoundation.org/Emoji"
+en-US = "tack"
+
+[ENVELOPE_WITH_LIGHTNING]
+x-comment = "🖄 (U+1F584), see http://wiki.documentfoundation.org/Emoji"
+en-US = "envelope5"
+
+[CLAMSHELL_MOBILE_PHONE]
+x-comment = "🖁 (U+1F581), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mobile2"
+
+[FLYING_ENVELOPE]
+x-comment = "🖅 (U+1F585), see http://wiki.documentfoundation.org/Emoji"
+en-US = "envelope6"
+
+[SIDEWAYS_WHITE_LEFT_POINTING_INDEX]
+x-comment = "🖘 (U+1F598), see http://wiki.documentfoundation.org/Emoji"
+en-US = "left6"
+
+[SIDEWAYS_WHITE_RIGHT_POINTING_INDEX]
+x-comment = "🖙 (U+1F599), see http://wiki.documentfoundation.org/Emoji"
+en-US = "right5"
+
+[MAXIMIZE]
+x-comment = "🗖 (U+1F5D6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "maximize"
+
+[OVERLAP]
+x-comment = "🗗 (U+1F5D7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "overlap"
+
+[PAGE]
+x-comment = "🗏 (U+1F5CF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "page2"
+
+[PAGES]
+x-comment = "🗐 (U+1F5D0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pages"
+
+[CLOCKWISE_RIGHT_AND_LEFT_SEMICIRCLE_ARROWS]
+x-comment = "🗘 (U+1F5D8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "arrows"
+
+[INCREASE_FONT_SIZE_SYMBOL]
+x-comment = "🗚 (U+1F5DA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "font2"
+
+[MINIMIZE]
+x-comment = "🗕 (U+1F5D5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "minimize"
+
+[CANCELLATION_X]
+x-comment = "🗙 (U+1F5D9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cancel"
+
+[DESKTOP_WINDOW]
+x-comment = "🗔 (U+1F5D4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "window"
+
+[EMPTY_PAGE]
+x-comment = "🗌 (U+1F5CC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "empty page"
+
+[EMPTY_DOCUMENT]
+x-comment = "🗋 (U+1F5CB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "empty document"
+
+[EMPTY_PAGES]
+x-comment = "🗍 (U+1F5CD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "empty pages"
+
+[DOCUMENT]
+x-comment = "🗎 (U+1F5CE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "document"
+
+[EMPTY_NOTE_PAGE]
+x-comment = "🗆 (U+1F5C6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "empty note page"
+
+[NOTE_PAD]
+x-comment = "🗊 (U+1F5CA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "note pad"
+
+[NOTE]
+x-comment = "🗈 (U+1F5C8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "note3"
+
+[EMPTY_NOTE_PAD]
+x-comment = "🗇 (U+1F5C7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "empty note pad"
+
+[NOTE_PAGE]
+x-comment = "🗉 (U+1F5C9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "note page"
+
+[OPTICAL_DISC_ICON]
+x-comment = "🖸 (U+1F5B8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "optical disc"
+
+[FOLDER]
+x-comment = "🗀 (U+1F5C0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "folder3"
+
+[BLACK_RIGHT_POINTING_BACKHAND_INDEX]
+x-comment = "🖝 (U+1F59D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "right6"
+
+[OPEN_FOLDER]
+x-comment = "🗁 (U+1F5C1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "folder4"
+
+[EMPTY_NOTE]
+x-comment = "🗅 (U+1F5C5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "empty note"
+
+[BLACK_FOLDER]
+x-comment = "🖿 (U+1F5BF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "folder5"
+
+[FRAME_WITH_AN_X]
+x-comment = "🖾 (U+1F5BE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "frame"
+
+[FRAME_WITH_TILES]
+x-comment = "🖽 (U+1F5BD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "frame2"
+
+[DOCUMENT_WITH_TEXT]
+x-comment = "🖹 (U+1F5B9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "document2"
+
+[DOCUMENT_WITH_PICTURE]
+x-comment = "🖻 (U+1F5BB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "document3"
+
+[DOCUMENT_WITH_TEXT_AND_PICTURE]
+x-comment = "🖺 (U+1F5BA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "document4"
+
+[PRINTER_ICON]
+x-comment = "🖶 (U+1F5B6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "printer2"
+
+[FAX_ICON]
+x-comment = "🖷 (U+1F5B7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fax2"
+
+[TWO_BUTTON_MOUSE]
+x-comment = "🖰 (U+1F5B0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mouse4"
+
+[OLD_PERSONAL_COMPUTER]
+x-comment = "🖳 (U+1F5B3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pc"
+
+[SCREEN]
+x-comment = "🖵 (U+1F5B5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "screen"
+
+[ONE_BUTTON_MOUSE]
+x-comment = "🖯 (U+1F5AF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mouse5"
+
+[HARD_DISK]
+x-comment = "🖴 (U+1F5B4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hard disk"
+
+[POCKET_CALCULATOR]
+x-comment = "🖩 (U+1F5A9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "calculator"
+
+[TAPE_CARTRIDGE]
+x-comment = "🖭 (U+1F5AD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cartridge"
+
+[SOFT_SHELL_FLOPPY_DISK]
+x-comment = "🖬 (U+1F5AC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "floppy2"
+
+[WHITE_HARD_SHELL_FLOPPY_DISK]
+x-comment = "🖫 (U+1F5AB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "floppy3"
+
+[WIRED_KEYBOARD]
+x-comment = "🖮 (U+1F5AE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "keyboard2"
+
+[REVERSED_VICTORY_HAND]
+x-comment = "🖔 (U+1F594), see http://wiki.documentfoundation.org/Emoji"
+en-US = "victory2"
+
+[THREE_NETWORKED_COMPUTERS]
+x-comment = "🖧 (U+1F5A7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "network"
+
+[BLACK_HARD_SHELL_FLOPPY_DISK]
+x-comment = "🖪 (U+1F5AA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "floppy4"
+
+[LIPS]
+x-comment = "🗢 (U+1F5E2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lips"
+
+[KEYBOARD_AND_MOUSE]
+x-comment = "🖦 (U+1F5A6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "keyboard3"
+
+[BLACK_DOWN_POINTING_BACKHAND_INDEX]
+x-comment = "🖣 (U+1F5A3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "down5"
+
+[SIDEWAYS_BLACK_DOWN_POINTING_INDEX]
+x-comment = "🖡 (U+1F5A1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "down6"
+
+[PORTABLE_STEREO]
+x-comment = "📾 (U+1F4FE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "stereo"
+
+[BLACK_ROSETTE]
+x-comment = "🏶 (U+1F3F6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rosette2"
+
+[BLACK_PENNANT]
+x-comment = "🏲 (U+1F3F2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pennant"
+
+[SIDEWAYS_BLACK_UP_POINTING_INDEX]
+x-comment = "🖠 (U+1F5A0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "up4"
+
+[BLACK_UP_POINTING_BACKHAND_INDEX]
+x-comment = "🖢 (U+1F5A2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "up5"
+
+[WHITE_PENNANT]
+x-comment = "🏱 (U+1F3F1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pennant2"
+
+[NOTCHED_RIGHT_SEMICIRCLE_WITH_THREE_DOTS]
+x-comment = "🕄 (U+1F544), see http://wiki.documentfoundation.org/Emoji"
+en-US = "feast2"
+
+[REVERSED_THUMBS_DOWN_SIGN]
+x-comment = "🖓 (U+1F593), see http://wiki.documentfoundation.org/Emoji"
+en-US = "no2"
+
+[REVERSED_RAISED_HAND_WITH_FINGERS_SPLAYED]
+x-comment = "🖑 (U+1F591), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hand3"
+
+[REVERSED_THUMBS_UP_SIGN]
+x-comment = "🖒 (U+1F592), see http://wiki.documentfoundation.org/Emoji"
+en-US = "yes2"
+
+[RIGHT_SPEAKER_WITH_ONE_SOUND_WAVE]
+x-comment = "🕩 (U+1F569), see http://wiki.documentfoundation.org/Emoji"
+en-US = "speaker2"
+
+[WHITE_LATIN_CROSS]
+x-comment = "🕆 (U+1F546), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Latin cross2"
+
+[HEAVY_LATIN_CROSS]
+x-comment = "🕇 (U+1F547), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Latin cross3"
+
+[RIGHT_SPEAKER]
+x-comment = "🕨 (U+1F568), see http://wiki.documentfoundation.org/Emoji"
+en-US = "speaker3"
+
+[RINGING_BELL]
+x-comment = "🕭 (U+1F56D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bell3"
+
+[WHITE_SUN]
+x-comment = "🌣 (U+1F323), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sun2"
+
+[PROHIBITED_SIGN]
+x-comment = "🛇 (U+1F6C7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "prohibited"
+
+[TRIANGLE_WITH_ROUNDED_CORNERS]
+x-comment = "🛆 (U+1F6C6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "triangle3"
+
+[THREE_SPEECH_BUBBLES]
+x-comment = "🗫 (U+1F5EB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bubble3"
+
+[RIGHT_SPEAKER_WITH_THREE_SOUND_WAVES]
+x-comment = "🕪 (U+1F56A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "speaker4"
+
+[LEFT_ANGER_BUBBLE]
+x-comment = "🗮 (U+1F5EE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bubble8"
+
+[THREE_RAYS_RIGHT]
+x-comment = "🗧 (U+1F5E7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rays4"
+
+[LIGHTNING_MOOD]
+x-comment = "🗲 (U+1F5F2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lightning2"
+
+[MOOD_BUBBLE]
+x-comment = "🗰 (U+1F5F0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bubble9"
+
+[BALLOT_BOX_WITH_BOLD_CHECK]
+x-comment = "🗹 (U+1F5F9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "checkbox5"
+
+[BALLOT_SCRIPT_X]
+x-comment = "🗴 (U+1F5F4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "check mark4"
+
+[TWO_SPEECH_BUBBLES]
+x-comment = "🗪 (U+1F5EA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bubble2"
+
+[BALLOT_BOLD_SCRIPT_X]
+x-comment = "🗶 (U+1F5F6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "x4"
+
+[RIGHT_SPEECH_BUBBLE]
+x-comment = "🗩 (U+1F5E9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bubble10"
+
+[BALLOT_BOX_WITH_SCRIPT_X]
+x-comment = "🗵 (U+1F5F5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "checkbox6"
+
+[LIGHT_CHECK_MARK]
+x-comment = "🗸 (U+1F5F8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "check mark5"
+
+[HUGGING_FACE]
+x-comment = "🤗 (U+1F917), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hugging"
+
+[THINKING_FACE]
+x-comment = "🤔 (U+1F914), see http://wiki.documentfoundation.org/Emoji"
+en-US = "thinking"
+
+[FACE_WITH_ROLLING_EYES]
+x-comment = "🙄 (U+1F644), see http://wiki.documentfoundation.org/Emoji"
+en-US = "eye roll"
+
+[ZIPPER-MOUTH_FACE]
+x-comment = "🤐 (U+1F910), see http://wiki.documentfoundation.org/Emoji"
+en-US = "zipper"
+
+[UPSIDE-DOWN_FACE]
+x-comment = "🙃 (U+1F643), see http://wiki.documentfoundation.org/Emoji"
+en-US = "upside-down"
+
+[MONEY-MOUTH_FACE]
+x-comment = "🤑 (U+1F911), see http://wiki.documentfoundation.org/Emoji"
+en-US = "money3"
+
+[FACE_WITH_THERMOMETER]
+x-comment = "🤒 (U+1F912), see http://wiki.documentfoundation.org/Emoji"
+en-US = "thermometer2"
+
+[FACE_WITH_HEAD-BANDAGE]
+x-comment = "🤕 (U+1F915), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bandage"
+
+[NERD_FACE]
+x-comment = "🤓 (U+1F913), see http://wiki.documentfoundation.org/Emoji"
+en-US = "nerd"
+
+[ROBOT_FACE]
+x-comment = "🤖 (U+1F916), see http://wiki.documentfoundation.org/Emoji"
+en-US = "robot"
+
+[EMOJI_MODIFIER_FITZPATRICK_TYPE-1-2]
+x-comment = "🏻 (U+1F3FB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "skin1"
+
+[EMOJI_MODIFIER_FITZPATRICK_TYPE-3]
+x-comment = "🏼 (U+1F3FC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "skin2"
+
+[EMOJI_MODIFIER_FITZPATRICK_TYPE-4]
+x-comment = "🏽 (U+1F3FD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "skin3"
+
+[EMOJI_MODIFIER_FITZPATRICK_TYPE-5]
+x-comment = "🏾 (U+1F3FE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "skin4"
+
+[EMOJI_MODIFIER_FITZPATRICK_TYPE-6]
+x-comment = "🏿 (U+1F3FF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "skin5"
+
+[SIGN_OF_THE_HORNS]
+x-comment = "🤘 (U+1F918), see http://wiki.documentfoundation.org/Emoji"
+en-US = "horns"
+
+[PRAYER_BEADS]
+x-comment = "📿 (U+1F4FF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "beads"
+
+[LION_FACE]
+x-comment = "🦁 (U+1F981), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lion"
+
+[UNICORN_FACE]
+x-comment = "🦄 (U+1F984), see http://wiki.documentfoundation.org/Emoji"
+en-US = "unicorn"
+
+[TURKEY]
+x-comment = "🦃 (U+1F983), see http://wiki.documentfoundation.org/Emoji"
+en-US = "turkey"
+
+[CRAB]
+x-comment = "🦀 (U+1F980), see http://wiki.documentfoundation.org/Emoji"
+en-US = "crab"
+
+[SCORPION]
+x-comment = "🦂 (U+1F982), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scorpion"
+
+[CHEESE_WEDGE]
+x-comment = "🧀 (U+1F9C0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cheese"
+
+[HOT_DOG]
+x-comment = "🌭 (U+1F32D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hot dog"
+
+[TACO]
+x-comment = "🌮 (U+1F32E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "taco"
+
+[BURRITO]
+x-comment = "🌯 (U+1F32F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "burrito"
+
+[POPCORN]
+x-comment = "🍿 (U+1F37F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "popcorn"
+
+[BOTTLE_WITH_POPPING_CORK]
+x-comment = "🍾 (U+1F37E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "party4"
+
+[AMPHORA]
+x-comment = "🏺 (U+1F3FA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "amphora"
+
+[MOSQUE]
+x-comment = "🕌 (U+1F54C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mosque"
+
+[SYNAGOGUE]
+x-comment = "🕍 (U+1F54D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "synagogue"
+
+[KAABA]
+x-comment = "🕋 (U+1F54B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "Kaaba"
+
+[VOLLEYBALL]
+x-comment = "🏐 (U+1F3D0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "volleyball"
+
+[CRICKET_BAT_AND_BALL]
+x-comment = "🏏 (U+1F3CF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cricket"
+
+[FIELD_HOCKEY_STICK_AND_BALL]
+x-comment = "🏑 (U+1F3D1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hockey2"
+
+[ICE_HOCKEY_STICK_AND_PUCK]
+x-comment = "🏒 (U+1F3D2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hockey"
+
+[TABLE_TENNIS_PADDLE_AND_BALL]
+x-comment = "🏓 (U+1F3D3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ping pong"
+
+[BADMINTON_RACQUET_AND_SHUTTLECOCK]
+x-comment = "🏸 (U+1F3F8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "badminton"
+
+[BOW_AND_ARROW]
+x-comment = "🏹 (U+1F3F9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bow"
+
+[PLACE_OF_WORSHIP]
+x-comment = "🛐 (U+1F6D0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "worship"
+
+[MENORAH_WITH_NINE_BRANCHES]
+x-comment = "🕎 (U+1F54E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "menorah"
+
+[ROLLING_ON_THE_FLOOR_LAUGHING]
+x-comment = "🤣 (U+1F923), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lol"
+
+[DROOLING_FACE]
+x-comment = "🤤 (U+1F924), see http://wiki.documentfoundation.org/Emoji"
+en-US = "drool"
+
+[NAUSEATED_FACE]
+x-comment = "🤢 (U+1F922), see http://wiki.documentfoundation.org/Emoji"
+en-US = "nausea"
+
+[SNEEZING_FACE]
+x-comment = "🤧 (U+1F927), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sneeze"
+
+[COWBOY_HAT_FACE]
+x-comment = "🤠 (U+1F920), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cowboy"
+
+[CLOWN_FACE]
+x-comment = "🤡 (U+1F921), see http://wiki.documentfoundation.org/Emoji"
+en-US = "clown"
+
+[LYING_FACE]
+x-comment = "🤥 (U+1F925), see http://wiki.documentfoundation.org/Emoji"
+en-US = "liar"
+
+[PRINCE]
+x-comment = "🤴 (U+1F934), see http://wiki.documentfoundation.org/Emoji"
+en-US = "prince"
+
+[MAN_IN_TUXEDO]
+x-comment = "🤵 (U+1F935), see http://wiki.documentfoundation.org/Emoji"
+en-US = "groom"
+
+[PREGNANT_WOMAN]
+x-comment = "🤰 (U+1F930), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pregnant"
+
+[MRS._CLAUS]
+x-comment = "🤶 (U+1F936), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mrs. claus"
+
+[PERSON_FACEPALMING]
+x-comment = "🤦 (U+1F926), see http://wiki.documentfoundation.org/Emoji"
+en-US = "facepalm"
+
+[PERSON_SHRUGGING]
+x-comment = "🤷 (U+1F937), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shrugging"
+
+[MAN_DANCING]
+x-comment = "🕺 (U+1F57A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dancer2"
+
+[PERSON_FENCING]
+x-comment = "🤺 (U+1F93A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fencer"
+
+[PERSON_CARTWHEELING]
+x-comment = "🤸 (U+1F938), see http://wiki.documentfoundation.org/Emoji"
+en-US = "gymnast"
+
+[PEOPLE_WRESTLING]
+x-comment = "🤼 (U+1F93C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "wrestling"
+
+[PERSON_PLAYING_WATER_POLO]
+x-comment = "🤽 (U+1F93D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "water polo"
+
+[PERSON_PLAYING_HANDBALL]
+x-comment = "🤾 (U+1F93E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "handball"
+
+[PERSON_JUGGLING]
+x-comment = "🤹 (U+1F939), see http://wiki.documentfoundation.org/Emoji"
+en-US = "juggling"
+
+[SELFIE]
+x-comment = "🤳 (U+1F933), see http://wiki.documentfoundation.org/Emoji"
+en-US = "selfie"
+
+[CROSSED_FINGERS]
+x-comment = "🤞 (U+1F91E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "good luck"
+
+[CALL_ME_HAND]
+x-comment = "🤙 (U+1F919), see http://wiki.documentfoundation.org/Emoji"
+en-US = "call"
+
+[LEFT-FACING_FIST]
+x-comment = "🤛 (U+1F91B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fist3"
+
+[RIGHT-FACING_FIST]
+x-comment = "🤜 (U+1F91C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fist4"
+
+[RAISED_BACK_OF_HAND]
+x-comment = "🤚 (U+1F91A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hand4"
+
+[HANDSHAKE]
+x-comment = "🤝 (U+1F91D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "handshake"
+
+[BLACK_HEART]
+x-comment = "🖤 (U+1F5A4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "black heart"
+
+[GORILLA]
+x-comment = "🦍 (U+1F98D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "gorilla"
+
+[FOX_FACE]
+x-comment = "🦊 (U+1F98A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fox"
+
+[DEER]
+x-comment = "🦌 (U+1F98C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "deer"
+
+[RHINOCEROS]
+x-comment = "🦏 (U+1F98F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "rhinoceros"
+
+[BAT]
+x-comment = "🦇 (U+1F987), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bat"
+
+[EAGLE]
+x-comment = "🦅 (U+1F985), see http://wiki.documentfoundation.org/Emoji"
+en-US = "eagle"
+
+[DUCK]
+x-comment = "🦆 (U+1F986), see http://wiki.documentfoundation.org/Emoji"
+en-US = "duck"
+
+[OWL]
+x-comment = "🦉 (U+1F989), see http://wiki.documentfoundation.org/Emoji"
+en-US = "owl"
+
+[LIZARD]
+x-comment = "🦎 (U+1F98E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "lizard"
+
+[SHARK]
+x-comment = "🦈 (U+1F988), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shark"
+
+[SHRIMP]
+x-comment = "🦐 (U+1F990), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shrimp"
+
+[SQUID]
+x-comment = "🦑 (U+1F991), see http://wiki.documentfoundation.org/Emoji"
+en-US = "squid"
+
+[BUTTERFLY]
+x-comment = "🦋 (U+1F98B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "butterfly"
+
+[WILTED_FLOWER]
+x-comment = "🥀 (U+1F940), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flower2"
+
+[KIWI_FRUIT]
+x-comment = "🥝 (U+1F95D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "kiwi"
+
+[AVOCADO]
+x-comment = "🥑 (U+1F951), see http://wiki.documentfoundation.org/Emoji"
+en-US = "avocado"
+
+[POTATO]
+x-comment = "🥔 (U+1F954), see http://wiki.documentfoundation.org/Emoji"
+en-US = "potato"
+
+[CARROT]
+x-comment = "🥕 (U+1F955), see http://wiki.documentfoundation.org/Emoji"
+en-US = "carrot"
+
+[CUCUMBER]
+x-comment = "🥒 (U+1F952), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cucumber"
+
+[PEANUTS]
+x-comment = "🥜 (U+1F95C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "peanuts"
+
+[CROISSANT]
+x-comment = "🥐 (U+1F950), see http://wiki.documentfoundation.org/Emoji"
+en-US = "croissant"
+
+[BAGUETTE_BREAD]
+x-comment = "🥖 (U+1F956), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bread2"
+
+[PANCAKES]
+x-comment = "🥞 (U+1F95E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pancakes"
+
+[BACON]
+x-comment = "🥓 (U+1F953), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bacon"
+
+[STUFFED_FLATBREAD]
+x-comment = "🥙 (U+1F959), see http://wiki.documentfoundation.org/Emoji"
+en-US = "flatbread"
+
+[EGG]
+x-comment = "🥚 (U+1F95A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "egg"
+
+[SHALLOW_PAN_OF_FOOD]
+x-comment = "🥘 (U+1F958), see http://wiki.documentfoundation.org/Emoji"
+en-US = "food"
+
+[GREEN_SALAD]
+x-comment = "🥗 (U+1F957), see http://wiki.documentfoundation.org/Emoji"
+en-US = "salad"
+
+[GLASS_OF_MILK]
+x-comment = "🥛 (U+1F95B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "milk"
+
+[CLINKING_GLASSES]
+x-comment = "🥂 (U+1F942), see http://wiki.documentfoundation.org/Emoji"
+en-US = "party3"
+
+[TUMBLER_GLASS]
+x-comment = "🥃 (U+1F943), see http://wiki.documentfoundation.org/Emoji"
+en-US = "glass3"
+
+[SPOON]
+x-comment = "🥄 (U+1F944), see http://wiki.documentfoundation.org/Emoji"
+en-US = "spoon"
+
+[SCOOTER]
+x-comment = "🛴 (U+1F6F4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scooter"
+
+[MOTOR_SCOOTER]
+x-comment = "🛵 (U+1F6F5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scooter2"
+
+[OCTAGONAL_SIGN]
+x-comment = "🛑 (U+1F6D1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "stop"
+
+[CANOE]
+x-comment = "🛶 (U+1F6F6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "canoe"
+
+[1ST_PLACE_MEDAL]
+x-comment = "🥇 (U+1F947), see http://wiki.documentfoundation.org/Emoji"
+en-US = "gold"
+
+[2ND_PLACE_MEDAL]
+x-comment = "🥈 (U+1F948), see http://wiki.documentfoundation.org/Emoji"
+en-US = "silver"
+
+[3RD_PLACE_MEDAL]
+x-comment = "🥉 (U+1F949), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bronze"
+
+[BOXING_GLOVE]
+x-comment = "🥊 (U+1F94A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "boxing"
+
+[MARTIAL_ARTS_UNIFORM]
+x-comment = "🥋 (U+1F94B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "judo"
+
+[GOAL_NET]
+x-comment = "🥅 (U+1F945), see http://wiki.documentfoundation.org/Emoji"
+en-US = "soccer2"
+
+[DRUM_WITH_DRUMSTICKS]
+x-comment = "🥁 (U+1F941), see http://wiki.documentfoundation.org/Emoji"
+en-US = "drum2"
+
+[SHOPPING_TROLLEY]
+x-comment = "🛒 (U+1F6D2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cart"
+
+[GRINNING_FACE_WITH_STAR_EYES]
+x-comment = "🤩 (U+1F929), see http://wiki.documentfoundation.org/Emoji"
+en-US = "excited"
+
+[FACE_WITH_ONE_EYEBROW_RAISED]
+x-comment = "🤨 (U+1F928), see http://wiki.documentfoundation.org/Emoji"
+en-US = "eyebrow"
+
+[SHOCKED_FACE_WITH_EXPLODING_HEAD]
+x-comment = "🤯 (U+1F92F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "shocked"
+
+[GRINNING_FACE_WITH_ONE_LARGE_AND_ONE_SMALL_EYE]
+x-comment = "🤪 (U+1F92A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "zany"
+
+[SERIOUS_FACE_WITH_SYMBOLS_COVERING_MOUTH]
+x-comment = "🤬 (U+1F92C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cursing"
+
+[FACE_WITH_OPEN_MOUTH_VOMITING]
+x-comment = "🤮 (U+1F92E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "vomit"
+
+[FACE_WITH_FINGER_COVERING_CLOSED_LIPS]
+x-comment = "🤫 (U+1F92B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hush"
+
+[SMILING_FACE_WITH_SMILING_EYES_AND_HAND_COVERING_MOUTH]
+x-comment = "🤭 (U+1F92D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "smiling4"
+
+[FACE_WITH_MONOCLE]
+x-comment = "🧐 (U+1F9D0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "monocle"
+
+[CHILD]
+x-comment = "🧒 (U+1F9D2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "child"
+
+[ADULT]
+x-comment = "🧑 (U+1F9D1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "adult"
+
+[OLDER_ADULT]
+x-comment = "🧓 (U+1F9D3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "old"
+
+[PERSON_WITH_HEADSCARF]
+x-comment = "🧕 (U+1F9D5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "headscarf"
+
+[BEARDED_PERSON]
+x-comment = "🧔 (U+1F9D4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "beard"
+
+[BREAST-FEEDING]
+x-comment = "🤱 (U+1F931), see http://wiki.documentfoundation.org/Emoji"
+en-US = "baby3"
+
+[MAGE]
+x-comment = "🧙 (U+1F9D9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "mage"
+
+[FAIRY]
+x-comment = "🧚 (U+1F9DA), see http://wiki.documentfoundation.org/Emoji"
+en-US = "fairy"
+
+[VAMPIRE]
+x-comment = "🧛 (U+1F9DB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "vampire"
+
+[MERPERSON]
+x-comment = "🧜 (U+1F9DC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "merperson"
+
+[ELF]
+x-comment = "🧝 (U+1F9DD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "elf"
+
+[GENIE]
+x-comment = "🧞 (U+1F9DE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "genie"
+
+[ZOMBIE]
+x-comment = "🧟 (U+1F9DF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "zombie"
+
+[PERSON_IN_STEAMY_ROOM]
+x-comment = "🧖 (U+1F9D6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sauna"
+
+[PERSON_CLIMBING]
+x-comment = "🧗 (U+1F9D7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "climber"
+
+[PERSON_IN_LOTUS_POSITION]
+x-comment = "🧘 (U+1F9D8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "yoga"
+
+[I_LOVE_YOU_HAND_SIGN]
+x-comment = "🤟 (U+1F91F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "love2"
+
+[PALMS_UP_TOGETHER]
+x-comment = "🤲 (U+1F932), see http://wiki.documentfoundation.org/Emoji"
+en-US = "palm2"
+
+[BRAIN]
+x-comment = "🧠 (U+1F9E0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "brain"
+
+[ORANGE_HEART]
+x-comment = "🧡 (U+1F9E1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "orange heart"
+
+[SCARF]
+x-comment = "🧣 (U+1F9E3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "scarf"
+
+[GLOVES]
+x-comment = "🧤 (U+1F9E4), see http://wiki.documentfoundation.org/Emoji"
+en-US = "gloves"
+
+[COAT]
+x-comment = "🧥 (U+1F9E5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "coat"
+
+[SOCKS]
+x-comment = "🧦 (U+1F9E6), see http://wiki.documentfoundation.org/Emoji"
+en-US = "socks"
+
+[BILLED_CAP]
+x-comment = "🧢 (U+1F9E2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cap"
+
+[ZEBRA]
+x-comment = "🦓 (U+1F993), see http://wiki.documentfoundation.org/Emoji"
+en-US = "zebra"
+
+[GIRAFFE]
+x-comment = "🦒 (U+1F992), see http://wiki.documentfoundation.org/Emoji"
+en-US = "giraffe"
+
+[HEDGEHOG]
+x-comment = "🦔 (U+1F994), see http://wiki.documentfoundation.org/Emoji"
+en-US = "hedgehog"
+
+[SAUROPOD]
+x-comment = "🦕 (U+1F995), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dinosaur"
+
+[T-REX]
+x-comment = "🦖 (U+1F996), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dinosaur2"
+
+[CRICKET]
+x-comment = "🦗 (U+1F997), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cricket2"
+
+[COCONUT]
+x-comment = "🥥 (U+1F965), see http://wiki.documentfoundation.org/Emoji"
+en-US = "coconut"
+
+[BROCCOLI]
+x-comment = "🥦 (U+1F966), see http://wiki.documentfoundation.org/Emoji"
+en-US = "broccoli"
+
+[PRETZEL]
+x-comment = "🥨 (U+1F968), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pretzel"
+
+[CUT_OF_MEAT]
+x-comment = "🥩 (U+1F969), see http://wiki.documentfoundation.org/Emoji"
+en-US = "steak"
+
+[SANDWICH]
+x-comment = "🥪 (U+1F96A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sandwich"
+
+[BOWL_WITH_SPOON]
+x-comment = "🥣 (U+1F963), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bowl"
+
+[CANNED_FOOD]
+x-comment = "🥫 (U+1F96B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "can"
+
+[DUMPLING]
+x-comment = "🥟 (U+1F95F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "dumpling"
+
+[FORTUNE_COOKIE]
+x-comment = "🥠 (U+1F960), see http://wiki.documentfoundation.org/Emoji"
+en-US = "cookie2"
+
+[TAKEOUT_BOX]
+x-comment = "🥡 (U+1F961), see http://wiki.documentfoundation.org/Emoji"
+en-US = "takeout"
+
+[PIE]
+x-comment = "🥧 (U+1F967), see http://wiki.documentfoundation.org/Emoji"
+en-US = "pie"
+
+[CUP_WITH_STRAW]
+x-comment = "🥤 (U+1F964), see http://wiki.documentfoundation.org/Emoji"
+en-US = "drink"
+
+[CHOPSTICKS]
+x-comment = "🥢 (U+1F962), see http://wiki.documentfoundation.org/Emoji"
+en-US = "chopsticks"
+
+[FLYING_SAUCER]
+x-comment = "🛸 (U+1F6F8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "ufo"
+
+[SLED]
+x-comment = "🛷 (U+1F6F7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "sled"
+
+[CURLING_STONE]
+x-comment = "🥌 (U+1F94C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "curling"
+
+[BITCOIN_SIGN]
+x-comment = "₿ (U+20BF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "bitcoin"
+
+[VULGAR_FRACTION_ONE_HALF]
+x-comment = "½ (U+000BD), see http://wiki.documentfoundation.org/Emoji"
+en-US = "1/2"
+
+[VULGAR_FRACTION_ONE_THIRD]
+x-comment = "⅓ (U+02153), see http://wiki.documentfoundation.org/Emoji"
+en-US = "1/3"
+
+[VULGAR_FRACTION_ONE_QUARTER]
+x-comment = "¼ (U+000BC), see http://wiki.documentfoundation.org/Emoji"
+en-US = "1/4"
+
+[VULGAR_FRACTION_TWO_THIRDS]
+x-comment = "⅔ (U+02154), see http://wiki.documentfoundation.org/Emoji"
+en-US = "2/3"
+
+[VULGAR_FRACTION_THREE_QUARTERS]
+x-comment = "¾ (U+000BE), see http://wiki.documentfoundation.org/Emoji"
+en-US = "3/4"
+
+[VULGAR_FRACTION_ONE_EIGHTH]
+x-comment = "⅛ (U+0215B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "1/8"
+
+[VULGAR_FRACTION_THREE_EIGHTHS]
+x-comment = "⅜ (U+0215C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "3/8"
+
+[VULGAR_FRACTION_FIVE_EIGHTHS]
+x-comment = "⅝ (U+0215D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "5/8"
+
+[VULGAR_FRACTION_SEVEN_EIGHTHS]
+x-comment = "⅞ (U+0215E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "7/8"
+
+[SUPERSCRIPT_ONE]
+x-comment = "¹ (U+000B9), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^1"
+
+[SUPERSCRIPT_TWO]
+x-comment = "² (U+000B2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^2"
+
+[SUPERSCRIPT_THREE]
+x-comment = "³ (U+000B3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^3"
+
+[SUPERSCRIPT_FOUR]
+x-comment = "⁴ (U+02074), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^4"
+
+[SUPERSCRIPT_FIVE]
+x-comment = "⁵ (U+02075), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^5"
+
+[SUPERSCRIPT_SIX]
+x-comment = "⁶ (U+02076), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^6"
+
+[SUPERSCRIPT_SEVEN]
+x-comment = "⁷ (U+02077), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^7"
+
+[SUPERSCRIPT_EIGHT]
+x-comment = "⁸ (U+02078), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^8"
+
+[SUPERSCRIPT_NINE]
+x-comment = "⁹ (U+02079), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^9"
+
+[SUPERSCRIPT_ZERO]
+x-comment = "⁰ (U+02070), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^0"
+
+[SUPERSCRIPT_PLUS_SIGN]
+x-comment = "⁺ (U+0207A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^+"
+
+[SUPERSCRIPT_MINUS]
+x-comment = "⁻ (U+0207B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^-"
+
+[SUPERSCRIPT_EQUALS_SIGN]
+x-comment = "⁼ (U+0207C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^="
+
+[SUPERSCRIPT_LEFT_PARENTHESIS]
+x-comment = "⁽ (U+0207D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^("
+
+[SUPERSCRIPT_RIGHT_PARENTHESIS]
+x-comment = "⁾ (U+0207E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^)"
+
+[SUBSCRIPT_ONE]
+x-comment = "₁ (U+02081), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_1"
+
+[SUBSCRIPT_TWO]
+x-comment = "₂ (U+02082), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_2"
+
+[SUBSCRIPT_THREE]
+x-comment = "₃ (U+02083), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_3"
+
+[SUBSCRIPT_FOUR]
+x-comment = "₄ (U+02084), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_4"
+
+[SUBSCRIPT_FIVE]
+x-comment = "₅ (U+02085), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_5"
+
+[SUBSCRIPT_SIX]
+x-comment = "₆ (U+02086), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_6"
+
+[SUBSCRIPT_SEVEN]
+x-comment = "₇ (U+02087), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_7"
+
+[SUBSCRIPT_EIGHT]
+x-comment = "₈ (U+02088), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_8"
+
+[SUBSCRIPT_NINE]
+x-comment = "₉ (U+02089), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_9"
+
+[SUBSCRIPT_ZERO]
+x-comment = "₀ (U+02080), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_0"
+
+[SUBSCRIPT_PLUS_SIGN]
+x-comment = "₊ (U+0208A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_+"
+
+[SUBSCRIPT_MINUS]
+x-comment = "₋ (U+0208B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_-"
+
+[SUBSCRIPT_EQUALS_SIGN]
+x-comment = "₌ (U+0208C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_="
+
+[SUBSCRIPT_LEFT_PARENTHESIS]
+x-comment = "₍ (U+0208D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_("
+
+[SUBSCRIPT_RIGHT_PARENTHESIS]
+x-comment = "₎ (U+0208E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_)"
+
+[MODIFIER_LETTER_SMALL_A]
+x-comment = "ᵃ (U+01D43), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^a"
+
+[MODIFIER_LETTER_SMALL_B]
+x-comment = "ᵇ (U+01D47), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^b"
+
+[MODIFIER_LETTER_SMALL_C]
+x-comment = "ᶜ (U+01D9C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^c"
+
+[MODIFIER_LETTER_SMALL_D]
+x-comment = "ᵈ (U+01D48), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^d"
+
+[MODIFIER_LETTER_SMALL_E]
+x-comment = "ᵉ (U+01D49), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^e"
+
+[MODIFIER_LETTER_SMALL_F]
+x-comment = "ᶠ (U+01DA0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^f"
+
+[MODIFIER_LETTER_SMALL_G]
+x-comment = "ᵍ (U+01D4D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^g"
+
+[MODIFIER_LETTER_SMALL_H]
+x-comment = "ʰ (U+002B0), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^h"
+
+[SUPERSCRIPT_LATIN_SMALL_LETTER_I]
+x-comment = "ⁱ (U+02071), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^i"
+
+[MODIFIER_LETTER_SMALL_J]
+x-comment = "ʲ (U+002B2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^j"
+
+[MODIFIER_LETTER_SMALL_K]
+x-comment = "ᵏ (U+01D4F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^k"
+
+[MODIFIER_LETTER_SMALL_L]
+x-comment = "ˡ (U+002E1), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^l"
+
+[MODIFIER_LETTER_SMALL_M]
+x-comment = "ᵐ (U+01D50), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^m"
+
+[SUPERSCRIPT_LATIN_SMALL_LETTER_N]
+x-comment = "ⁿ (U+0207F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^n"
+
+[MODIFIER_LETTER_SMALL_O]
+x-comment = "ᵒ (U+01D52), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^o"
+
+[MODIFIER_LETTER_SMALL_P]
+x-comment = "ᵖ (U+01D56), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^p"
+
+[MODIFIER_LETTER_SMALL_R]
+x-comment = "ʳ (U+002B3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^r"
+
+[MODIFIER_LETTER_SMALL_S]
+x-comment = "ˢ (U+002E2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^s"
+
+[MODIFIER_LETTER_SMALL_T]
+x-comment = "ᵗ (U+01D57), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^t"
+
+[MODIFIER_LETTER_SMALL_U]
+x-comment = "ᵘ (U+01D58), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^u"
+
+[MODIFIER_LETTER_SMALL_V]
+x-comment = "ᵛ (U+01D5B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^v"
+
+[MODIFIER_LETTER_SMALL_W]
+x-comment = "ʷ (U+002B7), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^w"
+
+[MODIFIER_LETTER_SMALL_X]
+x-comment = "ˣ (U+002E3), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^x"
+
+[MODIFIER_LETTER_SMALL_Y]
+x-comment = "ʸ (U+002B8), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^y"
+
+[MODIFIER_LETTER_SMALL_Z]
+x-comment = "ᶻ (U+01DBB), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^z"
+
+[MODIFIER_LETTER_CAPITAL_A]
+x-comment = "ᴬ (U+01D2C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^A"
+
+[MODIFIER_LETTER_CAPITAL_B]
+x-comment = "ᴮ (U+01D2E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^B"
+
+[MODIFIER_LETTER_CAPITAL_D]
+x-comment = "ᴰ (U+01D30), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^D"
+
+[MODIFIER_LETTER_CAPITAL_E]
+x-comment = "ᴱ (U+01D31), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^E"
+
+[MODIFIER_LETTER_CAPITAL_G]
+x-comment = "ᴳ (U+01D33), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^G"
+
+[MODIFIER_LETTER_CAPITAL_H]
+x-comment = "ᴴ (U+01D34), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^H"
+
+[MODIFIER_LETTER_CAPITAL_I]
+x-comment = "ᴵ (U+01D35), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^I"
+
+[MODIFIER_LETTER_CAPITAL_J]
+x-comment = "ᴶ (U+01D36), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^J"
+
+[MODIFIER_LETTER_CAPITAL_K]
+x-comment = "ᴷ (U+01D37), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^K"
+
+[MODIFIER_LETTER_CAPITAL_L]
+x-comment = "ᴸ (U+01D38), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^L"
+
+[MODIFIER_LETTER_CAPITAL_M]
+x-comment = "ᴹ (U+01D39), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^M"
+
+[MODIFIER_LETTER_CAPITAL_N]
+x-comment = "ᴺ (U+01D3A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^N"
+
+[MODIFIER_LETTER_CAPITAL_O]
+x-comment = "ᴼ (U+01D3C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^O"
+
+[MODIFIER_LETTER_CAPITAL_P]
+x-comment = "ᴾ (U+01D3E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^P"
+
+[MODIFIER_LETTER_CAPITAL_R]
+x-comment = "ᴿ (U+01D3F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^R"
+
+[MODIFIER_LETTER_CAPITAL_T]
+x-comment = "ᵀ (U+01D40), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^T"
+
+[MODIFIER_LETTER_CAPITAL_U]
+x-comment = "ᵁ (U+01D41), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^U"
+
+[MODIFIER_LETTER_CAPITAL_V]
+x-comment = "ⱽ (U+02C7D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^V"
+
+[MODIFIER_LETTER_CAPITAL_W]
+x-comment = "ᵂ (U+01D42), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^W"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_A]
+x-comment = "ₐ (U+02090), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_a"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_E]
+x-comment = "ₑ (U+02091), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_e"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_H]
+x-comment = "ₕ (U+02095), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_h"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_I]
+x-comment = "ᵢ (U+01D62), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_i"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_J]
+x-comment = "ⱼ (U+02C7C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_j"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_K]
+x-comment = "ₖ (U+02096), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_k"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_L]
+x-comment = "ₗ (U+02097), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_l"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_M]
+x-comment = "ₘ (U+02098), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_m"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_N]
+x-comment = "ₙ (U+02099), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_n"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_O]
+x-comment = "ₒ (U+02092), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_o"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_P]
+x-comment = "ₚ (U+0209A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_p"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_R]
+x-comment = "ᵣ (U+01D63), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_r"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_S]
+x-comment = "ₛ (U+0209B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_s"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_T]
+x-comment = "ₜ (U+0209C), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_t"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_U]
+x-comment = "ᵤ (U+01D64), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_u"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_V]
+x-comment = "ᵥ (U+01D65), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_v"
+
+[LATIN_SUBSCRIPT_SMALL_LETTER_X]
+x-comment = "ₓ (U+02093), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_x"
+
+[MODIFIER_LETTER_SMALL_ALPHA]
+x-comment = "ᵅ (U+01D45), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^alpha"
+
+[MODIFIER_LETTER_SMALL_BETA]
+x-comment = "ᵝ (U+01D5D), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^beta"
+
+[MODIFIER_LETTER_SMALL_GREEK_GAMMA]
+x-comment = "ᵞ (U+01D5E), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^gamma"
+
+[MODIFIER_LETTER_SMALL_DELTA]
+x-comment = "ᵟ (U+01D5F), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^delta"
+
+[MODIFIER_LETTER_SMALL_OPEN_E]
+x-comment = "ᵋ (U+01D4B), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^epsilon"
+
+[MODIFIER_LETTER_SMALL_THETA]
+x-comment = "ᶿ (U+01DBF), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^theta"
+
+[MODIFIER_LETTER_SMALL_IOTA]
+x-comment = "ᶥ (U+01DA5), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^iota"
+
+[MODIFIER_LETTER_SMALL_PHI]
+x-comment = "ᶲ (U+01DB2), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^Phi"
+
+[MODIFIER_LETTER_SMALL_GREEK_PHI]
+x-comment = "ᵠ (U+01D60), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^phi"
+
+[MODIFIER_LETTER_SMALL_CHI]
+x-comment = "ᵡ (U+01D61), see http://wiki.documentfoundation.org/Emoji"
+en-US = "^chi"
+
+[GREEK_SUBSCRIPT_SMALL_LETTER_BETA]
+x-comment = "ᵦ (U+01D66), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_beta"
+
+[GREEK_SUBSCRIPT_SMALL_LETTER_GAMMA]
+x-comment = "ᵧ (U+01D67), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_gamma"
+
+[GREEK_SUBSCRIPT_SMALL_LETTER_RHO]
+x-comment = "ᵨ (U+01D68), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_rho"
+
+[GREEK_SUBSCRIPT_SMALL_LETTER_PHI]
+x-comment = "ᵩ (U+01D69), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_phi"
+
+[GREEK_SUBSCRIPT_SMALL_LETTER_CHI]
+x-comment = "ᵪ (U+01D6A), see http://wiki.documentfoundation.org/Emoji"
+en-US = "_chi"
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

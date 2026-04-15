@@ -1,0 +1,42 @@
+Workaround for gcc-toolset-12 on almalinux8 on a release/optimized build:
+[build CXX] sc/source/core/data/column2.cxx
+In file included from /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/workdir/UnpackedTarball/mdds/include/mdds/flat_segment_tree.hpp:37,
+                 from /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/sc/inc/columnspanset.hxx:16,
+                 from /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/sc/inc/column.hxx:25,
+                 from /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/sc/source/core/data/column2.cxx:20:
+In function ‘void mdds::__st::intrusive_ptr_release(node<T>*) [with T = mdds::flat_segment_tree<int, bool>]’,
+    inlined from ‘boost::intrusive_ptr<T>::~intrusive_ptr() [with T = mdds::__st::node<mdds::flat_segment_tree<int, bool> >]’ at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/workdir/UnpackedTarball/boost/boost/smart_ptr/intrusive_ptr.hpp:100:44,
+    inlined from ‘std::pair<mdds::flat_segment_tree<Key, Value>::const_iterator, bool> mdds::flat_segment_tree<Key, Value>::insert_segment_impl(key_type, key_type, value_type, bool) [with Key = int; Value = bool]’ at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/workdir/UnpackedTarball/mdds/include/mdds/flat_segment_tree_def.inl:225:1:
+/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/workdir/UnpackedTarball/mdds/include/mdds/node.hpp:247:10: error: pointer used after ‘void operator delete(void*, std::size_t)’ [-Werror=use-after-free]
+  247 |     --p->refcount;
+      |       ~~~^~~~~~~~
+In function ‘void mdds::__st::intrusive_ptr_release(node<T>*) [with T = mdds::flat_segment_tree<int, bool>]’,
+    inlined from ‘void mdds::__st::intrusive_ptr_release(node<T>*) [with T = mdds::flat_segment_tree<int, bool>]’ at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/workdir/UnpackedTarball/mdds/include/mdds/node.hpp:245:13,
+    inlined from ‘boost::intrusive_ptr<T>::~intrusive_ptr() [with T = mdds::__st::node<mdds::flat_segment_tree<int, bool> >]’ at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/workdir/UnpackedTarball/boost/boost/smart_ptr/intrusive_ptr.hpp:100:44,
+    inlined from ‘std::pair<mdds::flat_segment_tree<Key, Value>::const_iterator, bool> mdds::flat_segment_tree<Key, Value>::insert_segment_impl(key_type, key_type, value_type, bool) [with Key = int; Value = bool]’ at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/workdir/UnpackedTarball/mdds/include/mdds/flat_segment_tree_def.inl:224:93:
+/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/workdir/UnpackedTarball/mdds/include/mdds/node.hpp:249:9: note: call to ‘void operator delete(void*, std::size_t)’ here
+  249 |         delete p;
+      |         ^~~~~~~~
+cc1plus: all warnings being treated as errors
+
+diff -ur mdds.org/include/mdds/node.hpp mdds/include/mdds/node.hpp
+--- mdds.org/include/mdds/node.hpp	2023-07-24 18:27:14.427139325 +0000
++++ mdds/include/mdds/node.hpp	2023-07-24 18:26:54.554461294 +0000
+@@ -210,9 +210,15 @@
+ template<typename KeyT, typename ValueT>
+ inline void intrusive_ptr_release(node<KeyT, ValueT>* p)
+ {
+-    --p->refcount;
+-    if (!p->refcount)
++#if defined __GNUC__ && __GNUC__ == 12 && __GNUC_MINOR__ <= 3 && !defined __clang__
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wuse-after-free"
++#endif
++    if(--p->refcount == 0)
+         delete p;
++#if defined __GNUC__ && __GNUC__ == 12 && __GNUC_MINOR__ <= 3 && !defined __clang__
++#pragma GCC diagnostic pop
++#endif
+ }
+ 
+ template<typename NodePtrT>

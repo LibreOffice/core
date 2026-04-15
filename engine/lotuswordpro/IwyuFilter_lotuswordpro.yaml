@@ -1,0 +1,123 @@
+---
+assumeFilename: lotuswordpro/source/filter/lwplayout.cxx
+excludelist:
+    lotuswordpro/inc/lwpatomholder.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpbasetype.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpcolor.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpbookmarkmgr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpfont.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpidxmgr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpfoundry.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpchangemgr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpfrib.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpdocdata.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpobj.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpobjfactory.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpglobalmgr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpsvstream.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpobjstrm.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpobjid.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpobjhdr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwptools.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwp9reader.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpbulletstylemgr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpcontent.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpdivinfo.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpdivopts.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpdoc.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwplayout.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpgrfobj.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwppara.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwprowlayout.hxx:
+    # Complete type is needed for dynamic_cast
+    - lwptablelayout.hxx
+    lotuswordpro/source/filter/lwpsdwdrawheader.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpsdwfileloader.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpsdwrect.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpsdwgrouploaderv0102.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpsortopt.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpsilverbullet.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpuidoc.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpusewhen.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpusrdicts.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/LotusWordProImportFilter.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    lotuswordpro/source/filter/lwppara1.cxx:
+    # Needed for boost::polymorphic_downcast
+    - boost/cast.hpp
+    lotuswordpro/source/filter/xfilter/xfsaxstream.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XDocumentHandler.hpp

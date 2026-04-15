@@ -1,0 +1,61 @@
+diff -ur clucene.org/src/core/CLucene/index/IndexWriter.cpp clucene/src/core/CLucene/index/IndexWriter.cpp
+--- clucene.org/src/core/CLucene/index/IndexWriter.cpp	2023-11-02 17:31:00.110168174 +0100
++++ clucene/src/core/CLucene/index/IndexWriter.cpp	2023-11-02 17:33:22.507665912 +0100
+@@ -366,6 +366,10 @@
+   }
+ }
+ 
++void IndexWriter::setSegmentInfoStartVersion(int64_t startVersion) {
++  this->segmentInfos->setStartVersion(startVersion);
++}
++
+ int32_t IndexWriter::getMaxBufferedDocs() {
+   ensureOpen();
+   return docWriter->getMaxBufferedDocs();
+diff -ur clucene.org/src/core/CLucene/index/IndexWriter.h clucene/src/core/CLucene/index/IndexWriter.h
+--- clucene.org/src/core/CLucene/index/IndexWriter.h	2023-11-02 17:31:00.113501525 +0100
++++ clucene/src/core/CLucene/index/IndexWriter.h	2023-11-02 17:33:43.547787510 +0100
+@@ -336,6 +336,12 @@
+   int64_t getWriteLockTimeout();
+ 
+   /**
++   * Sets the 0th segmentinfo version. Default is current system time
++   * in milliseconds
++   */
++  void setSegmentInfoStartVersion(int64_t startVersion);
++
++  /**
+    * Sets the maximum time to wait for a commit lock (in milliseconds).
+    */
+   void setCommitLockTimeout(int64_t commitLockTimeout);
+diff -ur clucene.org/src/core/CLucene/index/SegmentInfos.cpp clucene/src/core/CLucene/index/SegmentInfos.cpp
+--- clucene.org/src/core/CLucene/index/SegmentInfos.cpp	2023-11-02 17:31:00.110168174 +0100
++++ clucene/src/core/CLucene/index/SegmentInfos.cpp	2023-11-02 18:04:43.855243418 +0100
+@@ -662,6 +662,10 @@
+ 	  return IndexFileNames::fileNameFromGeneration( IndexFileNames::SEGMENTS, "", nextGeneration );
+   }
+ 
++  void SegmentInfos::setStartVersion(int64_t version) {
++      this->version = version;
++  }
++
+   void SegmentInfos::clearto(size_t from, size_t end){
+ 	size_t range = end - from;
+       if ( (infos.size() - from) >= range) { // Make sure we actually need to remove
+diff -ur clucene.org/src/core/CLucene/index/_SegmentInfos.h clucene/src/core/CLucene/index/_SegmentInfos.h
+--- clucene.org/src/core/CLucene/index/_SegmentInfos.h	2023-11-02 17:31:00.106834824 +0100
++++ clucene/src/core/CLucene/index/_SegmentInfos.h	2023-11-02 18:04:51.178598463 +0100
+@@ -347,6 +347,13 @@
+ 		*/
+ 		std::string getNextSegmentFileName();
+ 
++		/**
++		* Set version value to start from
++
++          Defaults to current time in milliseconds
++		*/
++        void setStartVersion(int64_t version);
++
+ 		/* public vector-like operations */
+ 		//delete and clears objects 'from' from to 'to'
+ 		void clearto(size_t to, size_t end);

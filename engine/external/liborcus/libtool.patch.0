@@ -1,0 +1,11 @@
+--- ltmain.sh.orig	2025-08-18 22:24:46.033069332 -0400
++++ ltmain.sh	2025-08-18 22:27:25.705417808 -0400
+@@ -7555,7 +7555,7 @@
+       -64|-mips[0-9]|-r[0-9][0-9]*|-xarch=*|-xtarget=*|+DA*|+DD*|-q*|-m*| \
+       -t[45]*|-txscale*|-p|-pg|--coverage|-fprofile-*|-F*|@*|-tp=*|--sysroot=*| \
+       -O*|-g*|-flto*|-fwhopr*|-fuse-linker-plugin|-fstack-protector*|-stdlib=*| \
+-      -specs=*|-fsanitize=*|-fuse-ld=*|-static-*|-fcilkplus|-Wa,*)
++      -specs=*|-fsanitize=*|-fuse-ld=*|--ld-path=*|-static-*|-fcilkplus|-Wa,*)
+         func_quote_arg pretty "$arg"
+ 	arg=$func_quote_arg_result
+         func_append compile_command " $arg"

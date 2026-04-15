@@ -1,0 +1,11 @@
+--- ltmain.sh.sav	2023-05-03 21:29:15.000000000 +0900
++++ ltmain.sh	2023-09-21 20:13:31.766938069 +0900
+@@ -7277,7 +7277,7 @@ func_mode_link ()
+       -64|-mips[0-9]|-r[0-9][0-9]*|-xarch=*|-xtarget=*|+DA*|+DD*|-q*|-m*| \
+       -t[45]*|-txscale*|-p|-pg|--coverage|-fprofile-*|-F*|@*|-tp=*|--sysroot=*| \
+       -O*|-g*|-flto*|-fwhopr*|-fuse-linker-plugin|-fstack-protector*|-stdlib=*| \
+-      -fsanitize=*)
++      -fsanitize=*|-fuse-ld=*|--ld-path=*)
+         func_quote_for_eval "$arg"
+ 	arg=$func_quote_for_eval_result
+         func_append compile_command " $arg"

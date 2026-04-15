@@ -1,0 +1,59 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module lang {
+
+
+/** interface to get information about the types
+    (usually interface types) supported by an object.
+ */
+published interface XTypeProvider: com::sun::star::uno::XInterface
+{
+
+    /** returns
+        a sequence of all types (usually interface types) provided by the object.
+        @attention
+        If the object aggregates other objects the sequence also has
+        to contain all types supported by the aggregated objects.
+     */
+    sequence<type> getTypes();
+
+
+    /** Obsolete unique identifier.
+
+        Originally returned a sequence of bytes which, when non-empty, was used
+        as an ID to distinguish unambiguously between two sets of types, for
+        example to realise hashing functionality when the object is
+        introspected. Two objects that returned the same non-empty ID had to
+        return the same set of types in getTypes().  (If a unique ID could not
+        be provided, this method was always allowed to return an empty sequence,
+        though).
+
+        @deprecated This feature should no longer be used, and implementations
+        are encouraged to always return an empty sequence.
+    */
+    sequence<byte> getImplementationId();
+};
+
+
+}; }; }; };
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

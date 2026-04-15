@@ -1,0 +1,930 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <config_poppler.h>
+#include <test/unoapixml_test.hxx>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+
+#include <extendedprimitive2dxmldump.hxx>
+#include <rtl/ustring.hxx>
+#include <vcl/virdev.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdorect.hxx>
+#include <svx/unopage.hxx>
+#include <svx/svdview.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/svdogrp.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <sfx2/viewsh.hxx>
+#include <svl/itempool.hxx>
+#include <svx/svdomedia.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <sfx2/sfxbasemodel.hxx>
+#include <svx/signaturelinehelper.hxx>
+#include <sfx2/objsh.hxx>
+
+#include <sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <tools/XPath.hxx>
+
+using namespace ::com::sun::star;
+
+namespace
+{
+/// Tests for svx/source/svdraw/ code.
+class SvdrawTest : public UnoApiXmlTest
+{
+private:
+    uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
+    uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
+
+public:
+    SvdrawTest()
+        : UnoApiXmlTest(u"svx/qa/unit/data/"_ustr)
+    {
+    }
+
+    void setUp() override;
+
+#if ENABLE_PDFIMPORT
+    uno::Reference<xml::crypto::XXMLSecurityContext>& getSecurityContext()
+    {
+        return mxSecurityContext;
+    }
+#endif
+
+protected:
+    SdrPage* getFirstDrawPageWithAssert();
+};
+
+void SvdrawTest::setUp()
+{
+    UnoApiTest::setUp();
+    MacrosTest::setUpX509(m_directories, "svx_unit");
+
+    mxSEInitializer = xml::crypto::SEInitializer::create(m_xContext);
+    mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
+}
+
+SdrPage* SvdrawTest::getFirstDrawPageWithAssert()
+{
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPage.is());
+
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pDrawPage);
+    return pDrawPage->GetSdrPage();
+}
+
+xmlDocUniquePtr lcl_dumpAndParseFirstObjectWithAssert(SdrPage* pSdrPage)
+{
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
+                                                               { pSdrPage->GetObj(0) }, nullptr);
+    const auto& rDrawPageVOContact
+        = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
+    sdr::contact::DisplayInfo aDisplayInfo;
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
+    rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
+
+    svx::ExtendedPrimitive2dXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
+    CPPUNIT_ASSERT(pXmlDoc);
+    return pXmlDoc;
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
+{
+    // Create a new Draw document with a rectangle.
+    loadFromURL(u"private:factory/sdraw"_ustr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(10000, 10000));
+    xShape->setPosition(awt::Point(1000, 1000));
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    xDrawPage->add(xShape);
+
+    // Add semi-transparent text on the rectangle.
+    uno::Reference<text::XTextRange> xShapeText(xShape, uno::UNO_QUERY);
+    xShapeText->getText()->setString(u"hello"_ustr);
+
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    xShapeProperties->setPropertyValue(u"CharColor"_ustr, uno::Any(COL_RED));
+    sal_Int16 nTransparence = 75;
+    xShapeProperties->setPropertyValue(u"CharTransparence"_ustr, uno::Any(nTransparence));
+
+    // Generates drawinglayer primitives for the page.
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pDrawPage);
+    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    xmlDocUniquePtr pDocument = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // Make sure the text is semi-transparent.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//unifiedtransparence' number of nodes is incorrect
+    // i.e. the text was just plain red, not semi-transparent.
+    sal_Int16 fTransparence
+        = getXPath(pDocument, "//unifiedtransparence", "transparence").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nTransparence, fTransparence);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
+{
+    // Given a path object:
+    loadFromURL(u"private:factory/sdraw"_ustr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.ClosedBezierShape"_ustr), uno::UNO_QUERY);
+
+    // When setting its scale by both using setSize() and scaling in a transform matrix:
+    // Set size and basic properties.
+    xShape->setPosition(awt::Point(2512, 6062));
+    xShape->setSize(awt::Size(112, 112));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    xShapeProps->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_SOLID));
+    xShapeProps->setPropertyValue(u"LineStyle"_ustr, uno::Any(drawing::LineStyle_SOLID));
+    xShapeProps->setPropertyValue(u"FillColor"_ustr, uno::Any(static_cast<sal_Int32>(0)));
+    // Add it to the draw page.
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    xDrawPage->add(xShape);
+    // Set polygon coordinates.
+    drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
+    aPolyPolygonBezierCoords.Coordinates = {
+        {
+            awt::Point(2624, 6118),
+            awt::Point(2624, 6087),
+            awt::Point(2599, 6062),
+            awt::Point(2568, 6062),
+            awt::Point(2537, 6062),
+            awt::Point(2512, 6087),
+            awt::Point(2512, 6118),
+            awt::Point(2512, 6149),
+            awt::Point(2537, 6175),
+            awt::Point(2568, 6174),
+            awt::Point(2599, 6174),
+            awt::Point(2625, 6149),
+            awt::Point(2624, 6118),
+        },
+    };
+    aPolyPolygonBezierCoords.Flags = {
+        {
+            drawing::PolygonFlags_NORMAL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_NORMAL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_NORMAL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_NORMAL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_NORMAL,
+        },
+    };
+    xShapeProps->setPropertyValue(u"PolyPolygonBezier"_ustr, uno::Any(aPolyPolygonBezierCoords));
+    drawing::HomogenMatrix3 aMatrix;
+    aMatrix.Line1.Column1 = 56;
+    aMatrix.Line2.Column1 = -97;
+    aMatrix.Line3.Column1 = 0;
+    aMatrix.Line1.Column2 = 97;
+    aMatrix.Line2.Column2 = 56;
+    aMatrix.Line3.Column2 = 0;
+    aMatrix.Line1.Column3 = 3317;
+    aMatrix.Line2.Column3 = 5583;
+    aMatrix.Line3.Column3 = 1;
+    xShapeProps->setPropertyValue(u"Transformation"_ustr, uno::Any(aMatrix));
+
+    // Then make sure the scaling is only applied once:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 113
+    // - Actual  : 12566
+    // i.e. the scaling was applied twice.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(113), xShape->getSize().Width);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
+{
+    // Adapted this test to work with a *real* SmartArt/Diagram (SA). The former
+    // test created a 'fake' one and checked if on TextEdit The GrabBag gets deleted.
+    // The updated SA text edit *tries* to keep the SA Data (in DiagramHelper_svx
+    // attached to SdrObjGroup). It clears the GrabBag, but only if a 'real' SA
+    // exists.
+    // Thus I added a bugdoc for that task which contains a 'real' SA to test
+    // if GrabBag gets cleared on change of the SA model data.
+
+    // load document
+    loadFromFile(u"tdf132368.pptx");
+
+    // get DrawPage
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // get 1st object, this is the SA. Get as GroupObject
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroupShape(xShape, uno::UNO_QUERY);
+
+    // get the GrabBag. After import there may be values, but none anymore
+    // starting with 'OOX.*', these are now at the DiagramHelper
+    uno::Sequence<beans::PropertyValue> aGrabBag;
+    uno::Reference<beans::XPropertySet> xGroupProps(xGroupShape, uno::UNO_QUERY);
+    xGroupProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+
+    if (aGrabBag.hasElements())
+    {
+        for (sal_Int32 i = 0; i < aGrabBag.getLength(); ++i)
+        {
+            if (aGrabBag[i].Name.startsWith("OOX"))
+                CPPUNIT_ASSERT(false);
+        }
+    }
+
+    // get the 1st text shape (containing 'A'). There is a BGShape and an Arrow
+    // in indices before
+    uno::Reference<drawing::XShape> xShapeA(xGroupShape->getByIndex(2), uno::UNO_QUERY);
+
+    // TextEdit: insert a char at the start
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShapeA);
+    pSdrView->SdrBeginTextEdit(pObject);
+    EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.InsertText(u"X"_ustr);
+    pSdrView->SdrEndTextEdit();
+
+    // make sure the grab-bag is empty after change
+    xGroupProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+    CPPUNIT_ASSERT(!aGrabBag.hasElements());
+
+    // get SdrObjGroup and check, it should still be a Diagram
+    SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(xShape));
+    CPPUNIT_ASSERT(nullptr != pGroup);
+    CPPUNIT_ASSERT(pGroup->isDiagram());
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
+{
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(1000, 1000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    tools::Rectangle aSize(Point(), Size(100, 100));
+    rtl::Reference<SdrRectObj> pRectangle = new SdrRectObj(*pModel, aSize);
+    pPage->NbcInsertObject(pRectangle.get());
+    pRectangle->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
+    pRectangle->SetMergedItem(XLineStartWidthItem(200));
+
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    aVirtualDevice->SetOutputSize(Size(2000, 2000));
+
+    SdrView aView(*pModel, aVirtualDevice);
+    aView.hideMarkHandles();
+    aView.ShowSdrPage(pPage.get());
+
+    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
+                                                               { pPage->GetObj(0) }, nullptr);
+    const sdr::contact::ViewObjectContact& rDrawPageVOContact
+        = pPage->GetViewContact().GetViewObjectContact(aObjectContact);
+
+    sdr::contact::DisplayInfo aDisplayInfo;
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
+    rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
+
+    svx::ExtendedPrimitive2dXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
+
+    tools::XPath aPath(pXmlDoc.get());
+    CPPUNIT_ASSERT(aPath.create("/primitive2D"));
+
+    auto aPolyPoly = aPath.create("/primitive2D/sdrrectangle/group/polypolygoncolor");
+    CPPUNIT_ASSERT(aPolyPoly);
+    CPPUNIT_ASSERT_EQUAL(u"#729fcf"_ustr, aPolyPoly->attribute("color"));
+
+    auto aPolyPolyPath = aPath.create(aPolyPoly, "/polypolygon");
+    CPPUNIT_ASSERT(aPolyPolyPath);
+    CPPUNIT_ASSERT_EQUAL(1, aPolyPolyPath->count());
+    auto aPolyPolyElement = aPolyPolyPath->at(0);
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPolyPolyElement->attribute(
+                                         "height")); // weird Rectangle is created with size 100
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPolyPolyElement->attribute("width"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPolyPolyElement->attribute("minx"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPolyPolyElement->attribute("miny"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPolyPolyElement->attribute("maxx"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPolyPolyElement->attribute("maxy"));
+
+    auto aPolyPath
+        = aPath.create("/primitive2D/sdrrectangle/group/polypolygoncolor/polypolygon/polygon");
+    CPPUNIT_ASSERT(aPolyPath);
+    auto aPoints = aPath.create(aPolyPath, "/point");
+    CPPUNIT_ASSERT_EQUAL(5, aPoints->count());
+    CPPUNIT_ASSERT_EQUAL(u"49.5"_ustr, aPoints->at(0)->attribute("x"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPoints->at(0)->attribute("y"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPoints->at(1)->attribute("x"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPoints->at(1)->attribute("y"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPoints->at(2)->attribute("x"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPoints->at(2)->attribute("y"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPoints->at(3)->attribute("x"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPoints->at(3)->attribute("y"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPoints->at(4)->attribute("x"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPoints->at(4)->attribute("y"));
+
+    auto aStrokePath = aPath.create("/primitive2D/sdrrectangle/group/polygonstroke");
+    CPPUNIT_ASSERT(aStrokePath);
+    CPPUNIT_ASSERT_EQUAL(1, aStrokePath->count());
+
+    auto aLinePath = aPath.create(aStrokePath, "/line");
+    CPPUNIT_ASSERT_EQUAL(u"#3465a4"_ustr, aLinePath->attribute("color"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aLinePath->attribute("width"));
+    CPPUNIT_ASSERT_EQUAL(u"Round"_ustr, aLinePath->attribute("linejoin"));
+    CPPUNIT_ASSERT_EQUAL(u"BUTT"_ustr, aLinePath->attribute("linecap"));
+
+    auto aLineContentPath = aPath.create(aStrokePath, "/polygon");
+    CPPUNIT_ASSERT_EQUAL(u"49.5,99 0,99 0,0 99,0 99,99"_ustr, aLineContentPath->content());
+
+    // If solid line, then there is no line stroke information
+    CPPUNIT_ASSERT_EQUAL(0, aPath.create(aStrokePath, "/stroke")->count());
+
+    pPage->RemoveObject(0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testAutoHeightMultiColShape)
+{
+    // Given a document containing a shape that has:
+    // 1) automatic height (resize shape to fix text)
+    // 2) multiple columns (2)
+    loadFromFile(u"auto-height-multi-col-shape.pptx");
+
+    // Make sure the in-file shape height is kept, even if nominally the shape height is
+    // automatic:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6882
+    // - Actual  : 3452
+    // i.e. the shape height was smaller than expected, leading to a 2 columns layout instead of
+    // laying out all the text in the first column.
+    // 2477601 is from slide1.xml, <a:ext cx="4229467" cy="2477601"/>.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        static_cast<sal_Int32>(o3tl::convert(2477601, o3tl::Length::emu, o3tl::Length::mm100)),
+        xShape->getSize().Height, 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
+{
+    loadFromFile(u"FontWork.odg");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPage.is());
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pDrawPage);
+    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    tools::XPath aXPath(pXmlDoc.get());
+    CPPUNIT_ASSERT_EQUAL(1, aXPath.create("/primitive2D")->count());
+    CPPUNIT_ASSERT_EQUAL(u"Perspective"_ustr,
+                         aXPath.create("//scene")->attribute("projectionMode"));
+
+    auto aFillPath = aXPath.create("//scene/extrude3D[1]/fill");
+    CPPUNIT_ASSERT_EQUAL(u"#ff0000"_ustr, aFillPath->attribute("color"));
+
+    auto aMaterialPath = aXPath.create("//scene/extrude3D[1]/object3Dattributes/material");
+    CPPUNIT_ASSERT_EQUAL(u"#ff0000"_ustr, aMaterialPath->attribute("color"));
+
+    // ODF default 50% is represented by Specular Intensity = 2^5. The relationship is not linear.
+    CPPUNIT_ASSERT_EQUAL(u"32"_ustr, aMaterialPath->attribute("specularIntensity"));
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
+{
+    std::vector<OUString> aFilenames
+        = { u"tdf148000_EOLinCurvedText.pptx"_ustr, u"tdf148000_EOLinCurvedText_New.odp"_ustr,
+            u"tdf148000_EOLinCurvedText_Legacy.odp"_ustr };
+
+    for (int i = 0; i < 3; i++)
+    {
+        loadFromFile(aFilenames[i]);
+
+        SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+        xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+        tools::XPath aXPath(pXmlDoc.get());
+
+        // this is a group shape, hence 2 nested objectinfo
+        auto aBasePath = aXPath.create("/primitive2D/objectinfo[4]/objectinfo/unhandled/group/"
+                                       "unhandled/group/polypolygoncolor/polypolygon");
+
+        // The text is: "O" + eop + "O" + eol + "O"
+        // It should be displayed as 3 line of text. (1 "O" letter in every line)
+
+        sal_Int32 nY1 = aXPath.create(aBasePath, "/polygon[1]/point[1]")->attribute("y").toInt32();
+        sal_Int32 nY2 = aXPath.create(aBasePath, "/polygon[3]/point[1]")->attribute("y").toInt32();
+        sal_Int32 nY3 = aXPath.create(aBasePath, "/polygon[5]/point[1]")->attribute("y").toInt32();
+
+        sal_Int32 nDiff21 = nY2 - nY1;
+        sal_Int32 nDiff32 = nY3 - nY2;
+
+        // the 2. "O" must be positioned much lower as the 1. "O". (the eop break the line)
+        CPPUNIT_ASSERT_GREATER(sal_Int32(300), nDiff21);
+        if (i < 2)
+        {
+            // the 3. "O" must be positioned even lower with 1 line. (the eol must break the line as well)
+            CPPUNIT_ASSERT_LESS(sal_Int32(50), abs(nDiff32 - nDiff21));
+        }
+        else
+        {
+            // In legacy mode, the 3. "O" must be positioned about the same high as the 2. "O"
+            // the eol not break the line.
+            CPPUNIT_ASSERT_LESS(sal_Int32(50), nDiff32);
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_CurvedTextWidth)
+{
+    std::vector<OUString> aFilenames
+        = { u"tdf148000_CurvedTextWidth.pptx"_ustr, u"tdf148000_CurvedTextWidth_New.odp"_ustr,
+            u"tdf148000_CurvedTextWidth_Legacy.odp"_ustr };
+
+    for (int i = 0; i < 3; i++)
+    {
+        loadFromFile(aFilenames[i]);
+
+        SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+        xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+        tools::XPath aXPath(pXmlDoc.get());
+
+        auto aBasePath = aXPath.create("/primitive2D/objectinfo[4]/objectinfo/unhandled/group/"
+                                       "unhandled/group/polypolygoncolor/polypolygon");
+
+        // The text is: 7 line od "OOOOOOO"
+        // Take the x coord of the 4 "O" on the corners
+        sal_Int32 nX1 = aXPath.create(aBasePath, "/polygon[1]/point[1]")->attribute("x").toInt32();
+        sal_Int32 nX2 = aXPath.create(aBasePath, "/polygon[13]/point[1]")->attribute("x").toInt32();
+        sal_Int32 nX3 = aXPath.create(aBasePath, "/polygon[85]/point[1]")->attribute("x").toInt32();
+        sal_Int32 nX4 = aXPath.create(aBasePath, "/polygon[97]/point[1]")->attribute("x").toInt32();
+
+        if (i < 2)
+        {
+            // All the lines should be positioned similar (start/end is similar)
+            CPPUNIT_ASSERT_LESS(sal_Int32(150), abs(nX3 - nX1));
+            CPPUNIT_ASSERT_LESS(sal_Int32(150), abs(nX4 - nX2));
+        }
+        else
+        {
+            // In legacy mode, the outer lines become much wider
+            CPPUNIT_ASSERT_GREATER(sal_Int32(1500), nX3 - nX1);
+            CPPUNIT_ASSERT_GREATER(sal_Int32(1500), nX2 - nX4);
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
+{
+    loadFromFile(u"tdf140321_metal.odp");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // ODF specifies for metal = true specular color as rgb(200,200,200) and adding 15 to specularity
+    // Together with extrusion-first-light-level 67% and extrusion-specularity 80% factor is
+    // 0.67*0.8 * 200/255 = 0.42 and color #6b6b6b
+    assertXPath(pXmlDoc, "(//material)[1]", "specular", u"#6b6b6b");
+    // 3D specularIntensity = 2^(50/10) + 15 = 47, with default extrusion-shininess 50%
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", u"47");
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testExtrusionPhong)
+{
+    loadFromFile(u"tdf140321_phong.odp");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // The rendering method and normals kind were always 'Flat' without the patch.
+    assertXPath(pXmlDoc, "//scene", "shadeMode", u"Phong");
+    assertXPath(pXmlDoc, "//object3Dattributes", "normalsKind", u"Specific");
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMattePPT)
+{
+    loadFromFile(u"tdf140321_Matte_import.ppt");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // The preset 'matte' sets the specularity of material to 0. But that alone does not make the
+    // rendering 'matte' in LO. To get a 'matte' effect in LO, specularity of the light need to be
+    // false in addition. To get this, first light is set off and values from first light are copied
+    // to forth light, as only first light is specular. Because first and third lights are off, the
+    // forth light is the second one in the dump. The gray color corresponding to
+    // FirstLightLevel = 38000/2^16 is #949494.
+    assertXPath(pXmlDoc, "(//material)[1]", "specular", u"#000000");
+    assertXPath(pXmlDoc, "(//light)[2]", "color", u"#949494");
+    // To make the second light soft, part of its intensity is moved to lights 5,6,7 and 8.
+    assertXPath(pXmlDoc, "(//light)[1]", "color", u"#1e1e1e");
+    assertXPath(pXmlDoc, "(//light)[3]", "color", u"#3b3b3b");
+    // The 3D property specularIntensity is not related to 'extrusion-specularity' but to
+    // 'extrusion-shininess'. specularIntensity = 2^(shininess/10), here default 32.
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", u"32");
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testMaterialSpecular)
+{
+    loadFromFile(u"tdf140321_material_specular.odp");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // 3D specular color is derived from properties 'extrusion-specularity' and 'extrusion-first-light
+    // -level'. 3D specularIntensity is derived from property 'draw:extrusion-shininess'. Both are
+    // object properties, not scene properties. Those were wrong in various forms before the patch.
+    // Specularity = 77% * first-light-level 67% = 0.5159, which corresponds to gray color #848484.
+    assertXPath(pXmlDoc, "(//material)[1]", "specular", u"#848484");
+    // extrusion-shininess 50% corresponds to 3D specularIntensity 32, use 2^(50/10).
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", u"32");
+    // extrusion-first-light-level 67% corresponds to gray color #ababab, use 255 * 0.67.
+    assertXPath(pXmlDoc, "(//light)[1]", "color", u"#ababab");
+    // The first light is harsh, the second light soft. So the 3D scene should have 6 lights (1+1+4).
+    assertXPath(pXmlDoc, "//light", 6);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testVideoSnapshot)
+{
+    // Given a slide with a media shape, containing a 4 sec video, red-green-blue-black being the 4
+    // seconds:
+    loadFromFile(u"video-snapshot.pptx");
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+    auto pSdrMediaObj = dynamic_cast<SdrMediaObj*>(pSdrPage->GetObj(0));
+
+    // When getting the red snapshot of the video:
+    Graphic aSnapshot(pSdrMediaObj->getSnapshot());
+
+    // Then make sure the color is correct:
+    const Bitmap& rBitmap = aSnapshot.GetBitmapRef();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: rgba[ff0000ff]
+    // - Actual  : rgba[000000ff]
+    // i.e. the preview was black, not ~red; since we seeked 3 secs into the video, while PowerPoint
+    // doesn't do that.
+    CPPUNIT_ASSERT_EQUAL(Color(0xfe, 0x0, 0x0), rBitmap.GetPixelColor(0, 0));
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 321
+    // - Actual  : 640
+    // i.e. ~25% crop from left and right should result in half width, but it was not reduced.
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(321), rBitmap.GetSizePixel().getWidth());
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testPageViewDrawLayerClip)
+{
+    // Given a document with 2 pages, first page footer has an off-page line shape:
+    loadFromFile(u"page-view-draw-layer-clip.docx");
+
+    // When saving that document to PDF:
+    save(TestFilter::PDF_WRITER);
+
+    // Then make sure that line shape gets clipped:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pDoc = parsePDFExport();
+    if (!pDoc)
+    {
+        return;
+    }
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage1 = pDoc->openPage(0);
+    CPPUNIT_ASSERT_EQUAL(3, pPage1->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage2 = pDoc->openPage(1);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. the 2nd page had a line shape from the first page's footer.
+    CPPUNIT_ASSERT_EQUAL(2, pPage2->getObjectCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectMove)
+{
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(50000, 50000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    tools::Rectangle aRect(Point(), Size(100, 100));
+    rtl::Reference<SdrRectObj> pRectangleObject = new SdrRectObj(*pModel, aRect);
+    pPage->NbcInsertObject(pRectangleObject.get());
+
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(), Size(100, 100)),
+                         pRectangleObject->GetLogicRect());
+    pRectangleObject->NbcMove({ 100, 100 });
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(100, 100), Size(100, 100)),
+                         pRectangleObject->GetLogicRect());
+
+    pPage->RemoveObject(0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectRotate)
+{
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(50000, 50000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    {
+        tools::Rectangle aObjectSize(Point(), Size(100, 100));
+        rtl::Reference<SdrRectObj> pRectangleObject = new SdrRectObj(*pModel, aObjectSize);
+        pPage->NbcInsertObject(pRectangleObject.get());
+
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(100, 100)),
+                             pRectangleObject->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(100, 100)),
+                             pRectangleObject->GetSnapRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(-1, -1), Size(102, 102)),
+                             pRectangleObject->GetCurrentBoundRect());
+
+        auto angle = 9000_deg100;
+        double angleRadians = toRadians(angle);
+        pRectangleObject->NbcRotate(aObjectSize.Center(), angle, std::sin(angleRadians),
+                                    std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 98), Size(100, 100)),
+                             pRectangleObject->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, -1), Size(100, 100)),
+                             pRectangleObject->GetSnapRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(-1, -2), Size(102, 102)),
+                             pRectangleObject->GetCurrentBoundRect());
+
+        pPage->RemoveObject(0);
+    }
+
+    {
+        tools::Rectangle aObjectSize(Point(), Size(100, 100));
+        rtl::Reference<SdrRectObj> pRectangleObject = new SdrRectObj(*pModel, aObjectSize);
+        pPage->NbcInsertObject(pRectangleObject.get());
+
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(100, 100)),
+                             pRectangleObject->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(100, 100)),
+                             pRectangleObject->GetSnapRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(-1, -1), Size(102, 102)),
+                             pRectangleObject->GetCurrentBoundRect());
+
+        auto angle = -4500_deg100;
+        double angleRadians = toRadians(angle);
+        pRectangleObject->NbcRotate(aObjectSize.Center(), angle, std::sin(angleRadians),
+                                    std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(49, -20), Size(100, 100)),
+                             pRectangleObject->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(-21, -20), Size(141, 141)),
+                             pRectangleObject->GetSnapRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(-22, -21), Size(143, 143)),
+                             pRectangleObject->GetCurrentBoundRect());
+
+        pPage->RemoveObject(0);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testRotatePoint)
+{
+    {
+        auto angle = 18000_deg100;
+        double angleRadians = toRadians(angle);
+        Point aPoint(2000, 1000);
+        Point aReference(1000, 1000);
+        RotatePoint(aPoint, aReference, std::sin(angleRadians), std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(Point(0, 1000), aPoint);
+    }
+
+    {
+        auto angle = 9000_deg100;
+        double angleRadians = toRadians(angle);
+        Point aPoint(2000, 1000);
+        Point aReference(1000, 1000);
+        RotatePoint(aPoint, aReference, std::sin(angleRadians), std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(Point(1000, 0), aPoint);
+    }
+
+    {
+        auto angle = 18000_deg100;
+        double angleRadians = toRadians(angle);
+        Point aPoint(100, 100);
+        Point aReference(200, 200);
+        RotatePoint(aPoint, aReference, std::sin(angleRadians), std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(Point(300, 300), aPoint);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testClipVerticalTextOverflow)
+{
+    // File contains a slide with 4 rectangle shapes with text inside
+    // each have <a:bodyPr vertOverflow="clip">
+    // 1-) Text overflowing the rectangle
+    // 2-) Text not overflowing the rectangle
+    // 3-) (Vertical text) Text overflowing the rectangle
+    // 4-) (Vertical text) Text not overflowing the rectangle
+    loadFromFile(u"clip-vertical-overflow.pptx");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+    xmlDocUniquePtr pDocument = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // Test vertically overflowing text
+    // Without the accompanying fix in place, this test would have failed with:
+    // equality assertion failed
+    // - Expected: 6
+    // - Actual  : 13
+    // - In <>, XPath contents of child does not match
+    // i.e. the vertically overflowing text wasn't clipped & overflowing text
+    // was drawn anyways.
+    assertXPathContent(pDocument, "count((//sdrblocktext)[4]//textsimpleportion)", u"6");
+
+    // make sure text is aligned correctly after the overflowing text is clipped
+    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[1]", "y", u"3749");
+    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[6]", "y", u"7559");
+
+    // make sure the text that isn't overflowing is still aligned properly
+    assertXPathContent(pDocument, "count((//sdrblocktext)[5]//textsimpleportion)", u"3");
+    assertXPathDoubleValue(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[1]", "y", 5073.5,
+                           0.001);
+    assertXPathDoubleValue(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[3]", "y", 6597.5,
+                           0.001);
+
+    // Test vertically overflowing text, with vertical text direction
+    assertXPathContent(pDocument, "count((//sdrblocktext)[6]//textsimpleportion)", u"12");
+    // make sure text is aligned correctly after the overflowing text is clipped
+    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[1]", "x", u"12964");
+    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[12]", "x", u"4582");
+
+    // make sure the text that isn't overflowing is still aligned properly
+    assertXPathContent(pDocument, "count((//sdrblocktext)[7]//textsimpleportion)", u"3");
+    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[1]", "x", u"25417");
+    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[3]", "x", u"23893");
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourText)
+{
+    loadFromFile(u"tdf84507_polygoncontourtext.fodg");
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // The shape is rotated by 180°. The rotated shape has position (10000|12000) and size 6000x4000.
+    // Text should be inside the shape and start at the bottom-right of the shape because of 180°
+    // rotation. Without fix the text was rotated but positioned left-top of the shape. The first
+    // line of text has started at (10000|7353), last line at (10000|5007).
+    assertXPath(pXmlDoc, "(//textsimpleportion)[1]", "x", u"15998");
+    assertXPath(pXmlDoc, "(//textsimpleportion)[1]", "y", u"11424");
+    assertXPath(pXmlDoc, "(//textsimpleportion)[4]", "x", u"15998");
+    assertXPath(pXmlDoc, "(//textsimpleportion)[4]", "y", u"9291");
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourTextCJK)
+{
+    loadFromFile(u"tdf128433_rectanglecontourtext_CJK.fodg");
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // The rectangle has position (10000|4000) and size 4000x6000. The text in the rectangle is set
+    // to tb-rl writing mode. Without fix the text was positioned left from the shape. The first line
+    // of text has started at (9327|4000), the last line at (8489|4000).
+    // The expected values are for font "Microsoft Yahei". Substitute fonts can have a different
+    // metric despite having the same font size. Thus test with tolerance.
+    // First line
+    assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[1]", "x", 13327.0, 150.0);
+    // Second line
+    assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[3]", "x", 12489.0, 300.0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf161724)
+{
+    loadFromFile(u"tdf161724.pptx");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    sal_Int16 nBmpPosX = getXPath(pXmlDoc, "//bitmap", "xy13").toInt32();
+    sal_Int16 nBmpPosY = getXPath(pXmlDoc, "//bitmap", "xy23").toInt32();
+    sal_Int16 nBmpWidth = getXPath(pXmlDoc, "//bitmap", "xy11").toInt32();
+    sal_Int16 nBmpHeight = getXPath(pXmlDoc, "//bitmap", "xy22").toInt32();
+
+    // Without the fix in place, all these values would have been completely different
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nBmpPosX);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(6356), nBmpPosY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(9901), nBmpWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(12693), nBmpHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
+{
+#if ENABLE_PDFIMPORT
+    // Given a read-only document with a just inserted signature line:
+    uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
+    loadWithParams(createFileURL(u"empty.pdf"), aArgs);
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    CPPUNIT_ASSERT(pObjectShell->IsReadOnly());
+    // Add a signature line to the 2nd page.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
+    xShape->setPosition(awt::Point(1000, 1000));
+    xShape->setSize(awt::Size(10000, 10000));
+    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xSupplier->getDrawPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPages->getCount());
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawView> xController(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    xController->setCurrentPage(xDrawPage);
+    xDrawPage->add(xShape);
+    // Select it and assign a certificate.
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(pBaseModel->getCurrentController(),
+                                                                uno::UNO_QUERY);
+    xSelectionSupplier->select(uno::Any(xShape));
+    auto xEnv = getSecurityContext()->getSecurityEnvironment();
+    auto xCert = GetValidCertificate(xEnv->getPersonalCertificates(), xEnv);
+    if (!xCert)
+    {
+        return;
+    }
+    SfxViewShell* pViewShell
+        = SfxViewShell::Get(uno::Reference<frame::XController>(xController, uno::UNO_QUERY));
+    svl::crypto::CertificateOrName aCertificateOrName;
+    aCertificateOrName.m_xCertificate = xCert;
+    svx::SignatureLineHelper::setShapeCertificate(pViewShell, aCertificateOrName);
+    pObjectShell->SetModified(false);
+
+    // When resizing the shape by moving the bottom right (last) handle towards top right:
+    aArgs = {
+        comphelper::makePropertyValue("HandleNum", static_cast<sal_Int32>(7)),
+        comphelper::makePropertyValue("NewPosX", static_cast<sal_Int32>(1500)),
+        comphelper::makePropertyValue("NewPosY", static_cast<sal_Int32>(1500)),
+    };
+    dispatchCommand(mxComponent, ".uno:MoveShapeHandle", aArgs);
+
+    // Then make sure the size decreases:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 10000
+    // - Actual  : 10000
+    // i.e. you could not resize even a just inserted signature line in a read-only view.
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(10000), xShape->getSize().Width);
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(10000), xShape->getSize().Height);
+#endif
+}
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Inet" oor:package="org.openoffice" xml:lang="en-US">
+  <info>
+    <desc>Contains Internet-related configurations (proxies, etc.).</desc>
+  </info>
+  <component>
+    <group oor:name="Settings">
+      <info>
+        <desc>Contains Internet-related configurations (servers, proxies, etc.).</desc>
+      </info>
+      <prop oor:name="ooInetNoProxy" oor:type="xs:string" oor:nillable="false">
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Enumerates the names of servers that do not require any proxies.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetProxyType" oor:type="xs:int">
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the type of proxy selection.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>No proxies</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>Automatic proxy configuration</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>Manual proxy configuration</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetFTPProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the FTP proxy server.</desc>
+          <deprecated>Not used anymore</deprecated>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetFTPProxyPort" oor:type="xs:int">
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the FTP proxy server.</desc>
+          <deprecated>Not used anymore</deprecated>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetHTTPProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the HTTP proxy server.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetHTTPProxyPort" oor:type="xs:int">
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the HTTP proxy server.</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetHTTPSProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the HTTPS proxy server.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetHTTPSProxyPort" oor:type="xs:int">
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the HTTPS proxy server.</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+      <prop oor:name="ConnectTimeout" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the timeout when first open a connection to a Web/WebDAV server. Time in seconds. Minimum allowed 5 sec maximum 180 sec.</desc>
+        </info>
+	<value>20</value>
+      </prop>
+      <prop oor:name="ReadTimeout" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the timeout when waiting for data from a Web/WebDAV server. Time in seconds. Minimum allowed 20 sec maximum 180 sec.</desc>
+        </info>
+	<value>60</value>
+      </prop>
+      <!-- WebDAV OPTIONS cache lifetime time values -->
+      <prop oor:name="OptsCacheLifeImplWeb" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the Web/DAV resource OPTIONS cache lifetime, when the web resource is Web only, implementing OPTIONS. Time in seconds. Min. 0 sec (no caching) max. 3600 sec (1h), default to 300 (5m).</desc>
+        </info>
+	<value>300</value>
+      </prop>
+      <prop oor:name="OptsCacheLifeDAV" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the Web/DAV resource OPTIONS cache lifetime, when the web resource is WebDAV. Time in seconds. Min. 0 sec (no caching) max. 3600 sec (1h), default to 60 (1m).</desc>
+        </info>
+	<value>60</value>
+      </prop>
+      <prop oor:name="OptsCacheLifeDAVLocked" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the Web/DAV resource OPTIONS cache lifetime, when the web resource is WebDAV and the resource is locked. Time in seconds. Min. 0 sec (no caching) max. 3600 sec (1h), default to 600 (10m).</desc>
+        </info>
+	<value>600</value>
+      </prop>
+      <prop oor:name="OptsCacheLifeNotImpl" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the Web/DAV resource OPTIONS cache lifetime, when the web resource does not implement OPTIONS method. Time in seconds. Min. 0 sec (no caching) max. 43200 sec (12h), default to 3600 (1h)</desc>
+        </info>
+	<value>3600</value>
+      </prop>
+      <prop oor:name="OptsCacheLifeNotFound" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the Web/DAV resource OPTIONS cache lifetime, when the web resource is not found on server. Time in seconds. Min. 0 sec (no caching) max. 30 sec, default to 15 (15 sec).</desc>
+        </info>
+	<value>15</value>
+      </prop>
+      <!-- End of WebDAV OPTIONS cache lifetime time values -->
+    </group>
+  </component>
+</oor:component-schema>

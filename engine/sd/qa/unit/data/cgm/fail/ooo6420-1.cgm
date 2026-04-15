@@ -1,0 +1,400 @@
+BEGMF 'xfig-fig012228';
+mfversion 1;
+mfdesc 'Converted from /tmp/xfig-fig012228 using fig2dev -Lcgm';
+mfelemlist 'DRAWINGPLUS';
+vdctype integer;
+fontlist 'Hardware',
+  'Times New Roman', 'Times New Roman Bold', 'Times New Roman Italic',
+  'Helvetica', 'Courier',
+  'Times-Roman', 'Times-Italic',
+  'Times-Bold', 'Times-BoldItalic',
+  'AvantGarde-Book', 'AvantGarde-BookOblique',
+  'AvantGarde-Demi', 'AvantGarde-DemiOblique',
+  'Bookman-light', 'Bookman-lightItalic',
+  'Bookman-Demi', 'Bookman-DemiItalic',
+  'Courier', 'Courier-Oblique',
+  'Courier-Bold', 'Courier-BoldOblique',
+  'Helvetica', 'Helvetica-Oblique',
+  'Helvetica-Bold', 'Helvetica-BoldOblique',
+  'Helvetica-Narrow', 'Helvetica-Narrow-Oblique',
+  'Helvetica-Narrow-Bold', 'Helvetica-Narrow-BoldOblique',
+  'NewCenturySchlbk-Roman', 'NewCenturySchlbk-Italic',
+  'NewCenturySchlbk-Bold', 'NewCenturySchlbk-BoldItalic',
+  'Palatino-Roman', 'Palatino-Italic',
+  'Palatino-Bold', 'Palatino-BoldItalic',
+  'Symbol', 'ZapfChancery-MediumItalic', 'ZapfDingbats';
+BEGMFDEFAULTS;
+  vdcext (0,0) (12974,8467);
+  clip off;
+  colrmode indexed;
+  colrtable 1
+    0 0 0
+    0 0 255
+    0 255 0
+    0 255 255
+    255 0 0
+    255 0 255
+    255 255 0
+    255 255 255
+    0 0 142
+    0 0 175
+    0 0 209
+    135 206 255
+    0 142 0
+    0 175 0
+    0 209 0
+    0 142 142
+    0 175 175
+    0 209 209
+    142 0 0
+    175 0 0
+    209 0 0
+    142 0 142
+    175 0 175
+    209 0 209
+    127 48 0
+    160 63 0
+    191 96 0
+    255 127 127
+    255 160 160
+    255 191 191
+    255 224 224
+    255 214 0;
+  linewidthmode abs;
+  edgewidthmode abs;
+  backcolr 255 255 255;
+  textprec stroke;
+  transparency ON;
+ENDMFDEFAULTS;
+BEGPIC 'xfig-fig012228';
+BEGPICBODY;
+% Circle %
+intstyle EMPTY;
+edgevis ON;
+edgetype 1;
+edgewidth 30;
+edgecolr 1;
+circle (7747,5647) 225;
+% Polygon %
+polygon (2797,6997) (3697,5197) (2797,3397) (2797,6997);
+% Polyline %
+linetype 1;
+linewidth 30;
+linecolr 1;
+line (3697,5197) (3907,5197);
+intstyle SOLID;
+fillcolr 1;
+polygon (3847,5257)(4087,5197)(3847,5137);
+% Polyline %
+line (772,4747) (2797,4747);
+% Polyline %
+line (772,3847) (2797,3847);
+% Polyline %
+line (997,472) (8422,472);
+% Polyline %
+line (997,1372) (8422,1372);
+% Polyline %
+line (6622,2272) (8422,2272);
+% Box %
+intstyle EMPTY;
+rect (5497,4522) (6622,3622);
+% Polyline %
+line (6622,4072) (6880,4072);
+intstyle SOLID;
+fillcolr 8;
+polygon (6772,4132)(7012,4072)(6772,4012)(6820,4072);
+% Polygon %
+intstyle EMPTY;
+polygon (8422,3622) (9322,1822) (8422,22) (8422,3622);
+% Polyline %
+line (9322,1822) (9532,1822);
+intstyle SOLID;
+fillcolr 1;
+polygon (9472,1882)(9712,1822)(9472,1762);
+% Polyline %
+line (9772,3397) (9772,4522) (7747,4522) (7747,5182);
+polygon (7687,5122)(7747,5362)(7807,5122);
+% Polyline %
+line (772,6322) (772,7387);
+line (712,7147)(772,7387)(832,7147);
+% Polyline %
+line (772,5647) (2797,5647);
+% Polyline %
+line (322,6322) (1672,6322) (1672,5647);
+% Polyline %
+line (9772,4522) (10222,4522);
+% Polyline %
+line (10447,4522) (12472,4522) (12472,8122) (322,8122) (322,6322);
+% Polyline %
+line (9772,3397) (9772,697) (11062,697);
+line (10822,757)(11062,697)(10822,637);
+% Polyline %
+line (9772,2722) (11962,2722);
+line (11722,2782)(11962,2722)(11722,2662);
+% Polyline %
+line (10537,3622) (10537,3847) (12022,3847);
+% Polyline %
+line (10222,4522) (10222,3397) (11962,3397);
+line (11722,3457)(11962,3397)(11722,3337);
+% Polyline %
+line (10222,4072) (11962,4072);
+line (11722,4132)(11962,4072)(11722,4012);
+% Polyline %
+line (4147,7222) (4147,4072) (5257,4072);
+polygon (5197,4132)(5437,4072)(5197,4012);
+% Polyline %
+line (4147,7222) (8182,7222);
+polygon (8122,7282)(8362,7222)(8122,7162);
+% Polyline %
+line (10837,7672) (8422,7672) (8422,6772) (10837,6772);
+line (10597,7732)(10837,7672)(10597,7612);
+line (10597,6832)(10837,6772)(10597,6712);
+% Polyline %
+line (4147,6322) (7747,6322) (7747,6112);
+polygon (7807,6172)(7747,5932)(7687,6172);
+% Polyline %
+line (7972,5647) (8182,5647);
+polygon (8122,5707)(8362,5647)(8122,5587);
+% Polyline %
+line (1672,6547) (1882,6547);
+polygon (1822,6607)(2062,6547)(1822,6487);
+% Polyline %
+line (10987,3847) (10777,3847);
+polygon (10837,3787)(10597,3847)(10837,3907);
+% Polyline %
+line (9772,4522) (9982,4522);
+polygon (9922,4582)(10162,4522)(9922,4462);
+% Polyline %
+line (10942,4522) (10732,4522);
+polygon (10792,4462)(10552,4522)(10792,4582);
+% Box %
+intstyle EMPTY;
+rect (5497,2722) (6622,1822);
+% Polyline %
+line (5047,2272) (5305,2272);
+intstyle SOLID;
+fillcolr 8;
+polygon (5197,2332)(5437,2272)(5197,2212)(5245,2272);
+% Polyline %
+line (1447,7447) (1447,6547) (2572,6547);
+% Polyline %
+line (10837,6097) (8422,6097) (8422,5197) (10837,5197);
+line (10597,6157)(10837,6097)(10597,6037);
+line (10597,5257)(10837,5197)(10597,5137);
+% Polyline %
+line (2077,6547) (2797,6547);
+% Text %
+textfontindex 25;
+textalign right base 0.0 0.0;
+textcolr 1;
+charheight 140;
+charori (0,1200) (1200,0);
+text (862,1282) final 'FMS_IN';
+% Text %
+text (862,382) final 'WFB_IN';
+% Text %
+textalign left base 0.0 0.0;
+text (7162,3982) final 'NET';
+% Text %
+text (5767,4207) final 'PCM';
+% Text %
+text (5767,3892) final 'capture';
+% Text %
+textalign ctr base 0.0 0.0;
+text (1222,7582) final 'DECRYPT';
+% Text %
+textalign left base 0.0 0.0;
+text (12067,3892) final 'CRYPT';
+% Text %
+text (10042,2047) final 'SE_OUT';
+% Text %
+text (9997,1012) final 'GS_OUT';
+% Text %
+textalign right base 0.0 0.0;
+text (8197,1642) final 'FMS_IN';
+% Text %
+text (8197,742) final 'WFB_IN';
+% Text %
+text (4912,2182) final 'NET';
+% Text %
+textalign left base 0.0 0.0;
+text (5767,2407) final 'PCM';
+% Text %
+text (5767,2092) final 'receive';
+% Text %
+text (4327,4612) final 'NET_CAPTURE';
+% Text %
+text (4372,6592) final 'LSTA_OUT';
+% Text %
+text (4372,7492) final 'FMS_OUT';
+% Text %
+textalign right base 0.0 0.0;
+text (2662,6817) final 'CYUN_IN';
+% Text %
+text (2572,5917) final 'SE_IN';
+% Text %
+text (2572,5017) final 'PA_IN';
+% Text %
+text (2572,4117) final 'GS_IN';
+% Text %
+text (8332,2542) final 'NET_RECEIVE';
+% Text %
+textalign left base 0.0 0.0;
+text (2932,5107) final 'LEFT';
+% Text %
+text (8512,1732) final 'RIGHT';
+% Text %
+textalign right base 0.0 0.0;
+text (682,4657) final 'PA_IN';
+% Text %
+text (682,3757) final 'GS_IN';
+% Text %
+text (682,5557) final 'SE_IN';
+% Text %
+textalign left base 0.0 0.0;
+text (10987,7582) final 'FMS_OUT';
+% Text %
+text (10987,6682) final 'WFB_OUT';
+% Text %
+text (10987,6007) final 'TA_OUT';
+% Text %
+text (10987,5107) final 'LS_OUT';
+% Text %
+text (12067,2632) final 'PA_OUT';
+% Text %
+text (11212,607) final 'GS_OUT';
+% Text %
+textalign ctr base 0.0 0.0;
+text (11302,3577) final 'OL-SE';
+% Text %
+text (9997,5377) final 'OL-LS';
+% Text %
+text (9997,6277) final 'OL-TA';
+% Text %
+text (6172,8302) final 'LOOP-RS';
+% Text %
+text (1222,5827) final 'IL-SE';
+% Text %
+text (11347,2902) final 'OL-PA';
+% Text %
+textalign left base 0.0 0.0;
+text (12067,3307) final 'SE_OUT';
+% Text %
+textalign ctr base 0.0 0.0;
+text (10312,4612) final 'RS1';
+% Text %
+textalign left base 0.0 0.0;
+text (8197,4657) final 'TA_BACK';
+% Text %
+textalign ctr base 0.0 0.0;
+text (9097,5512) final 'LS_ON';
+% Text %
+text (9097,6412) final 'TA_ON';
+% Text %
+text (10357,2992) final 'PA_ON';
+% Polygon %
+colrtable 33 255 255 255;
+fillcolr 33;
+polygon (2122,6772) (2122,6322) (2572,6547) (2122,6772);
+% Polygon %
+polygon (2122,5872) (2122,5422) (2572,5647) (2122,5872);
+% Polygon %
+polygon (2122,4972) (2122,4522) (2572,4747) (2122,4972);
+% Polygon %
+polygon (2122,4072) (2122,3622) (2572,3847) (2122,4072);
+% Polygon %
+polygon (4372,4297) (4372,3847) (4822,4072) (4372,4297);
+% Polygon %
+polygon (9997,922) (9997,472) (10447,697) (9997,922);
+% Polygon %
+polygon (7747,2497) (7747,2047) (8197,2272) (7747,2497);
+% Polygon %
+polygon (7747,1597) (7747,1147) (8197,1372) (7747,1597);
+% Polygon %
+polygon (7747,697) (7747,247) (8197,472) (7747,697);
+% Polygon %
+polygon (9547,2047) (9997,2047) (9772,2497) (9547,2047);
+% Box %
+rect (997,5782) (1447,5512);
+% Box %
+rect (5947,8257) (6397,7987);
+% Box %
+rect (11122,2857) (11572,2587);
+% Box %
+rect (11122,3532) (11572,3262);
+% Polygon %
+polygon (4372,7447) (4372,6997) (4822,7222) (4372,7447);
+% Polygon %
+polygon (4372,6547) (4372,6097) (4822,6322) (4372,6547);
+% Box %
+rect (9772,6232) (10222,5962);
+% Box %
+rect (9772,5332) (10222,5062);
+% Polyline %
+linewidth 45;
+linecolr 8;
+line (8332,4522) (8017,4522);
+% Polyline %
+line (10222,4207) (10222,4522);
+% Polyline %
+line (10222,2722) (10537,2722);
+% Polyline %
+line (10852,3397) (10537,3397);
+% Polyline %
+line (8917,5197) (9232,5197);
+% Polyline %
+line (8917,6097) (9232,6097);
+% Polyline %
+linewidth 30;
+linecolr 1;
+line (8332,4522) (8017,4657);
+% Polyline %
+line (10222,4207) (10357,4522);
+% Polyline %
+line (10222,2722) (10537,2857);
+% Polyline %
+line (10852,3397) (10537,3532);
+% Polyline %
+line (8917,5197) (9232,5332);
+% Polyline %
+line (8917,6097) (9232,6232);
+% Circle %
+edgewidth 15;
+circle (8332,4522) 45;
+% Circle %
+circle (8017,4522) 45;
+% Circle %
+circle (8017,4747) 45;
+% Circle %
+circle (10222,4207) 45;
+% Circle %
+circle (10222,4522) 45;
+% Circle %
+circle (10447,4522) 45;
+% Circle %
+circle (10222,2722) 45;
+% Circle %
+circle (10537,2722) 45;
+% Circle %
+circle (10537,2947) 45;
+% Circle %
+circle (10852,3397) 45;
+% Circle %
+circle (10537,3397) 45;
+% Circle %
+circle (10537,3622) 45;
+% Circle %
+circle (8917,5197) 45;
+% Circle %
+circle (9232,5197) 45;
+% Circle %
+circle (9232,5422) 45;
+% Circle %
+circle (8917,6097) 45;
+% Circle %
+circle (9232,6322) 45;
+% Circle %
+circle (9232,6097) 45;
+% End of Picture %
+ENDPIC;
+ENDMF;

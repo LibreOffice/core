@@ -1,0 +1,80 @@
+--- inc/librevenge/RVNGString.h	2023-05-17 15:48:15.373159469 +0200
++++ inc/librevenge/RVNGString.h	2023-05-17 15:49:00.781411917 +0200
+@@ -22,6 +22,7 @@
+ #define RVNGSTRING_H
+ 
+ #include "librevenge-api.h"
++#include <string>
+ 
+ namespace librevenge
+ {
+@@ -36,6 +37,7 @@
+ 	RVNGString();
+ 	RVNGString(const RVNGString &other);
+ 	RVNGString(const char *str);
++	RVNGString(std::string&&);
+ 	~RVNGString();
+ 
+ 	/** Create a new string from \a s as escaped XML.
+--- src/lib/RVNGBinaryData.cpp	2023-05-17 15:48:15.373159469 +0200
++++ src/lib/RVNGBinaryData.cpp	2023-05-17 15:49:00.773411873 +0200
+@@ -68,9 +68,9 @@
+ 	boost::archive::iterators::transform_width<std::vector<unsigned char>::const_iterator, 6, 8 > > base64_encoder;
+ 
+ 	// Encode the buffer and create a string
+-	std::copy(
++	result.insert(result.begin(),
+ 	    base64_encoder(source.begin()),
+-	    base64_encoder(source.end()), std::back_inserter(result));
++	    base64_encoder(source.end()));
+ 
+ 	result.append(numPadding, '=');  // add '=' for each padded character
+ }
+@@ -153,10 +153,10 @@
+ {
+ 	m_binaryDataImpl->makeUnique();
+ 
+-	unsigned long previousSize = m_binaryDataImpl->m_ptr->m_buf.size();
+-	m_binaryDataImpl->m_ptr->m_buf.reserve(previousSize + data.m_binaryDataImpl->m_ptr->m_buf.size());
+-	const auto &src = data.m_binaryDataImpl->m_ptr->m_buf;
+-	std::copy(src.begin(), src.end(), std::back_inserter(m_binaryDataImpl->m_ptr->m_buf));
++	m_binaryDataImpl->m_ptr->m_buf.insert(
++		m_binaryDataImpl->m_ptr->m_buf.end(),
++		data.m_binaryDataImpl->m_ptr->m_buf.begin(),
++		data.m_binaryDataImpl->m_ptr->m_buf.end());
+ }
+ 
+ void RVNGBinaryData::appendBase64Data(const RVNGString &base64)
+@@ -234,8 +234,9 @@
+ const RVNGString RVNGBinaryData::getBase64Data() const
+ {
+ 	std::string base64;
++	base64.reserve(m_binaryDataImpl->m_ptr->m_buf.size() / 4 * 3);
+ 	convertToBase64(base64, m_binaryDataImpl->m_ptr->m_buf);
+-	return RVNGString(base64.c_str());
++	return RVNGString(std::move(base64));
+ }
+ 
+ RVNGInputStream *RVNGBinaryData::getDataStream() const
+--- src/lib/RVNGString.cpp	2023-05-17 15:48:15.373159469 +0200
++++ src/lib/RVNGString.cpp	2023-05-17 15:49:00.773411873 +0200
+@@ -76,6 +76,7 @@
+ {
+ public:
+ 	RVNGStringImpl() : m_buf() {}
++	RVNGStringImpl(std::string&& str) : m_buf(std::move(str)) {}
+ 	bool empty() const
+ 	{
+ 		return m_buf.empty();
+@@ -200,6 +201,11 @@
+ 		m_stringImpl->append(str);
+ }
+ 
++RVNGString::RVNGString(std::string&& str) :
++	m_stringImpl(new RVNGStringImpl(std::move(str)))
++{
++}
++
+ RVNGString RVNGString::escapeXML(const RVNGString &s)
+ {
+ 	RVNGString escaped;

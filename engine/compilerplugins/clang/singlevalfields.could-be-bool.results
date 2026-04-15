@@ -1,0 +1,261 @@
+canvas/inc/spriteredrawmanager.hxx:170
+    canvas::SpriteRedrawManager::SpriteChangeRecord meChangeType
+    ChangeType
+configmgr/source/components.hxx:159
+    configmgr::Components modificationTarget_
+    ModificationTarget
+connectivity/source/inc/dbase/dindexnode.hxx:119
+    connectivity::dbase::ONDXPage bNoDelete
+    unsigned int
+cppu/source/AffineBridge/AffineBridge.cxx:46
+    (anonymous namespace)::AffineBridge m_message
+    Msg
+cui/source/inc/cfg.hxx:237
+    SvxConfigEntry nId
+    sal_uInt16
+dbaccess/source/core/api/query.hxx:67
+    dbaccess::OQuery m_eDoingCurrently
+    AggregateAction
+dbaccess/source/core/inc/querycontainer.hxx:65
+    dbaccess::OQueryContainer m_eDoingCurrently
+    AggregateAction
+desktop/source/app/main.c:30
+    /home/noel/libo-plugin/desktop/source/app/main.c g_Exiting
+    int
+editeng/source/misc/hangulhanja.cxx:78
+    editeng::HangulHanjaConversion_Impl m_eConvType
+    class HangulHanjaConversion::ConversionType
+editeng/source/misc/svxacorr.cxx:225
+    GetIgnoreTranslWrapper bIsInit
+    int
+emfio/inc/mtftools.hxx:406
+    emfio::WinMtfFillStyle aType
+    WinMtfFillStyleType
+filter/source/graphicfilter/icgm/elements.hxx:43
+    CGMElements eScalingMode
+    ScalingMode
+filter/source/graphicfilter/icgm/elements.hxx:46
+    CGMElements eVDCType
+    VDCType
+filter/source/graphicfilter/icgm/elements.hxx:48
+    CGMElements eVDCRealPrecision
+    RealPrecision
+filter/source/graphicfilter/icgm/elements.hxx:55
+    CGMElements eDeviceViewPortMap
+    DeviceViewPortMap
+filter/source/graphicfilter/icgm/elements.hxx:62
+    CGMElements eClipIndicator
+    ClipIndicator
+filter/source/graphicfilter/icgm/elements.hxx:65
+    CGMElements eColorSelectionMode
+    ColorSelectionMode
+filter/source/graphicfilter/icgm/elements.hxx:80
+    CGMElements eLineWidthSpecMode
+    SpecMode
+filter/source/graphicfilter/icgm/elements.hxx:87
+    CGMElements eMarkerSizeSpecMode
+    SpecMode
+filter/source/graphicfilter/icgm/elements.hxx:92
+    CGMElements eEdgeVisibility
+    EdgeVisibility
+filter/source/graphicfilter/icgm/elements.hxx:93
+    CGMElements eEdgeWidthSpecMode
+    SpecMode
+filter/source/graphicfilter/icgm/elements.hxx:119
+    CGMElements eTransparency
+    Transparency
+filter/source/xmlfilteradaptor/XmlFilterAdaptor.hxx:57
+    XmlFilterAdaptor meType
+    FilterType
+forms/source/richtext/rtattributehandler.hxx:147
+    frm::ParagraphDirectionHandler m_eParagraphDirection
+    SvxFrameDirection
+forms/source/richtext/rtattributehandler.hxx:148
+    frm::ParagraphDirectionHandler m_eDefaultAdjustment
+    SvxAdjust
+forms/source/richtext/rtattributehandler.hxx:149
+    frm::ParagraphDirectionHandler m_eOppositeDefaultAdjustment
+    SvxAdjust
+fpicker/source/office/iodlgimp.hxx:138
+    SvtExpFileDlg_Impl m_eDlgType
+    SvtFileDlgType
+include/opencl/openclwrapper.hxx:46
+    openclwrapper::GPUEnv mnIsUserCreated
+    int
+include/svtools/brwbox.hxx:311
+    BrowseBox bHideCursor
+    TriState
+include/svtools/ruler.hxx:524
+    RulerIndent nStyle
+    RulerIndentStyle
+include/svtools/ruler.hxx:621
+    Ruler mnBorderWidth
+    tools::Long
+include/tools/ref.hxx:126
+    SvRefBase bNoDelete
+    unsigned int
+include/vbahelper/vbapagesetupbase.hxx:50
+    VbaPageSetupBase mnOrientPortrait
+    sal_Int32
+include/vcl/headbar.hxx:208
+    HeaderBar mnBorderOff1
+    tools::Long
+include/vcl/headbar.hxx:209
+    HeaderBar mnBorderOff2
+    tools::Long
+include/vcl/toolkit/dialog.hxx:54
+    Dialog mnMousePositioned
+    tools::Long
+include/vcl/weldutils.hxx:327
+    weld::TimeFormatter m_eTimeFormat
+    TimeFormat
+jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:195
+    (anonymous) g_bInGetJavaVM
+    sig_atomic_t
+jvmfwk/source/fwkbase.cxx:379
+    jfw::getMode g_mode
+    JFW_MODE
+kit/source/gtk/tilebuffer.hxx:230
+    LOEvent m_nSetGraphicSelectionType
+    int
+oox/inc/drawingml/textspacing.hxx:62
+    oox::drawingml::TextSpacing nUnit
+    Unit
+sal/rtl/cipher.cxx:114
+    (anonymous namespace)::Cipher_Impl m_algorithm
+    rtlCipherAlgorithm
+sc/source/filter/inc/drawingbase.hxx:122
+    oox::xls::ShapeAnchor meCellAnchorType
+    CellAnchorType
+sc/source/filter/inc/orcusinterface.hxx:444
+    ScOrcusXf meHorAlignMethod
+    SvxCellJustifyMethod
+sc/source/filter/inc/orcusinterface.hxx:445
+    ScOrcusXf meVerAlignMethod
+    SvxCellJustifyMethod
+sc/source/filter/inc/stylesbuffer.hxx:292
+    oox::xls::ApiAlignmentData mnHorJustifyMethod
+    sal_Int32
+sc/source/filter/inc/stylesbuffer.hxx:294
+    oox::xls::ApiAlignmentData mnVerJustifyMethod
+    sal_Int32
+sc/source/filter/inc/xlroot.hxx:77
+    XclRootData meOutput
+    XclOutput
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1084
+    (anonymous namespace)::ScPagePreviewCountData nHeaders
+    tools::Long
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1085
+    (anonymous namespace)::ScPagePreviewCountData nTables
+    tools::Long
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1087
+    (anonymous namespace)::ScPagePreviewCountData nFooters
+    tools::Long
+sc/source/ui/inc/AnalysisOfVarianceDialog.hxx:33
+    ScAnalysisOfVarianceDialog meFactor
+    AnovaFactor
+sc/source/ui/inc/gridwin.hxx:163
+    ScGridWindow eHWhich
+    ScHSplitPos
+sc/source/ui/inc/gridwin.hxx:164
+    ScGridWindow eVWhich
+    ScVSplitPos
+sc/source/ui/inc/StatisticsInputOutputDialog.hxx:63
+    ScStatisticsInputOutputDialog mGroupedBy
+    GroupedBy
+sc/source/ui/inc/StatisticsTwoVariableDialog.hxx:65
+    ScStatisticsTwoVariableDialog mGroupedBy
+    GroupedBy
+sc/source/ui/inc/tabview.hxx:183
+    ScTabView meHighlightBlockMode
+    BlockMode
+sc/source/ui/vba/vbahyperlink.hxx:83
+    ScVbaHyperlink mnType
+    tools::Long
+sd/qa/unit/tiledrendering/tiledrendering.cxx:776
+    (anonymous namespace)::ViewCallback m_nPart
+    int
+sd/source/ui/slideshow/slideshowviewimpl.hxx:65
+    sd::WrappedMouseMotionEvent meType
+    EventType
+sdext/source/pdfimport/inc/genericelements.hxx:207
+    pdfi::ParagraphElement Type
+    ParagraphType
+soltools/cpp/cpp.h:121
+    includelist always
+    char
+svgio/inc/svgfeblendnode.hxx:39
+    svgio::svgreader::SvgFeBlendNode maMode
+    Mode
+svx/source/inc/cell.hxx:199
+    sdr::table::Cell mnCellContentType
+    css::table::CellContentType
+svx/source/table/tablertfimporter.cxx:58
+    sdr::table::(anonymous namespace)::RTFCellDefault mnRowSpan
+    sal_Int32
+sw/source/filter/html/parcss1.hxx:195
+    CSS1Parser m_eState
+    CSS1ParserState
+sw/source/filter/html/svxcss1.hxx:140
+    SvxCSS1PropertyInfo m_eLeftMarginType
+    SvxCSS1LengthType
+sw/source/filter/html/svxcss1.hxx:141
+    SvxCSS1PropertyInfo m_eRightMarginType
+    SvxCSS1LengthType
+sw/source/filter/ww8/docxexport.hxx:107
+    DocxExport m_nHeadersFootersInSection
+    sal_Int32
+sw/source/filter/ww8/ww8scan.hxx:58
+    SprmInfo nVari
+    unsigned int
+sw/source/uibase/inc/convert.hxx:48
+    SwConvertTableDlg m_nDfltStylePos
+    sal_uInt8
+sw/source/uibase/inc/edtwin.hxx:103
+    SwEditWin m_aActHitType
+    SdrHitKind
+sw/source/uibase/inc/tautofmt.hxx:48
+    SwAutoFormatDlg m_nDfltStylePos
+    sal_uInt8
+sw/source/writerfilter/dmapper/PageBordersHandler.hxx:47
+    writerfilter::dmapper::PageBordersHandler m_eOffsetFrom
+    class SectionPropertyMap::BorderOffsetFrom
+toolkit/inc/controls/table/tablecontrolinterface.hxx:86
+    svt::table::TableCell eArea
+    TableCellArea
+ucb/source/ucp/webdav-curl/webdavresponseparser.cxx:321
+    (anonymous namespace)::WebDAVResponseParser maLockScope
+    ucb::LockScope
+unotools/source/config/configvaluecontainer.cxx:51
+    utl::NodeValueAccessor eLocationType
+    LocationType
+vcl/inc/unx/i18n_ic.hxx:31
+    SalI18N_InputContext mbUseable
+    int
+vcl/inc/unx/salframe.h:127
+    X11SalFrame mbInputFocus
+    int
+vcl/skia/SkiaHelper.cxx:419
+    SkiaHelper methodToUse
+    RenderMethod
+vcl/source/filter/graphicfilter.cxx:503
+    (anonymous namespace)::GraphicImportContext m_nImportFlags
+    GraphicFilterImportFlags
+vcl/unx/generic/app/saldata.cxx:442
+    EmitFontpathWarning bOnce
+    int
+vcl/unx/generic/app/saldata.cxx:495
+    X11SalData::XError bOnce
+    int
+vcl/unx/generic/app/sm.cxx:185
+    /home/noel/libo-plugin/vcl/unx/generic/app/sm.cxx nSmDel
+    int
+vcl/workben/icontest.cxx:143
+    (anonymous namespace)::IconTestApp nRet
+    int
+vcl/workben/vcldemo.cxx:97
+    (anonymous namespace)::DemoRenderer::RenderContext meStyle
+    RenderStyle
+xmlsecurity/source/helper/ooxmlsecparser.cxx:965
+    OOXMLSecParser::DsSignaturePropertyContext m_Property
+    SignatureProperty

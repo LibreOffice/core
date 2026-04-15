@@ -1,0 +1,11 @@
+<?xml version="1.0" standalone="no"?>
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <defs>
+    <pattern id="Pattern" x=".05" y=".05" width=".25" height=".25">
+      <rect x="0" y="0" width="50" height="50" fill="skyblue"/>
+    </pattern>
+
+  </defs>
+
+  <rect fill='url("#Pattern")' stroke="black" x="0" y="0" width="200" height="200"/>
+</svg>

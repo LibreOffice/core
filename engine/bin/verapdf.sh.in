@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+@JAVAINTERPRETER@ -jar @TARFILE_LOCATION@/@VERAPDF_JAR@ --nonpdfext "$@"

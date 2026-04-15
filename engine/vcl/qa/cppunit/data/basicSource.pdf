@@ -1,0 +1,60 @@
+%PDF-1.2
+
+%Fix with "mutool clean vcl/qa/cppunit/data/basicSource.pdf vcl/qa/cppunit/data/basic.pdf"
+
+1 0 obj
+<< /Type /Page /Parent 5 0 R /Resources 3 0 R /Contents 2 0 R>>
+endobj
+
+2 0 obj
+<</Length 57>>
+stream
+BT
+/F1 24 Tf
+1 0 0 1 260 254 Tm
+0.5 g
+(Hello World)Tj
+ET
+endstream
+endobj
+
+3 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font << /F1 4 0 R >>
+/Test 7 0 R
+>>
+endobj
+
+4 0 obj
+<< /Type /Font /Subtype /Type1 /Name /F1 /BaseFont /Helvetica >>
+endobj
+
+5 0 obj
+<< /Type /Pages /Kids [ 1 0 R ] /Count 1 /MediaBox [ 0 0 612 446 ]>>
+endobj
+
+6 0 obj
+<< /Type /Catalog /Pages 5 0 R>>
+endobj
+
+7 0 obj
+<< /TestArray1 8 0 R /TestArray2 9 0 R /TestDictionary 10 0 R >>
+endobj
+
+8 0 obj
+[ /Inner1 /Inner2 [/Inner31] [/Inner41 /Inner42 [/Inner431 /Inner432] ] [ /Inner51 [/Inner521] ] ]
+endobj
+
+9 0 obj
+[ /TestReference 7 0 R ]
+endobj
+
+10 0 obj
+<< /TestReference 7 0 R /TestNumber 123 /TestName /SomeName /TestDictionary << /Key /Value >> /TestArray [1 2 3] >>
+endobj
+
+trailer
+<</Root 6 0 R>>
+
+%%EOF

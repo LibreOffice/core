@@ -1,0 +1,79 @@
+/*
+
+Settings for the Skia library. We compile the Skia library with these
+settings and also LO code uses this header to ensure the settings
+are the same.
+*/
+
+#ifndef CONFIG_SKIA_H
+#define CONFIG_SKIA_H
+
+// GPU support (set by configure).
+#undef SK_GANESH
+// Vulkan support enabled (set by configure).
+#undef SK_VULKAN
+// Metal support enabled (set by configure).
+#undef SK_METAL
+
+// Memory allocator for Vulkan.
+#define SK_USE_VMA 1
+
+// Enable Vulkan validation layers (set by configure).
+#undef SK_ENABLE_VK_LAYERS
+
+#define SK_CODEC_DECODES_PNG 1
+#define SK_ENCODE_PNG 1
+
+// tdf#166339: Gamma-correct text rendering is needed for subpixel antialiasing
+// to work properly. This option may make some text appear fainter than in other
+// backends, but that is because the other backends don't handle gamma correctly.
+#define SK_GAMMA_APPLY_TO_A8 1
+
+// Platform-specific font gamma tuning to recover some contrast while still
+// reducing artifacts. Most values are from BUILD.gn.
+#if defined(_WIN32)
+#define SK_GAMMA_SRGB 1
+#define SK_GAMMA_CONTRAST 0.75
+#elif defined(__APPLE__)
+#define SK_GAMMA_SRGB 1
+#define SK_GAMMA_CONTRAST 0.0
+#else
+#define SK_GAMMA_EXPONENT 1.2
+#define SK_GAMMA_CONTRAST 0.2
+#endif
+
+// These are just to avoid warnings (some headers use them even with GL disabled).
+#define SK_ASSUME_GL 1
+#define SK_ASSUME_GL_ES 0
+
+#define SK_ENABLE_SKSL 1
+
+// See https://codereview.chromium.org/2089583002 . This makes raster drawing
+// faster in some cases, it was made conditional because of some tests failing,
+// but if I'm reading the review correctly the code is in fact fine and just
+// those tests needed updating, which presumably has never happened.
+#define SK_DRAWBITMAPRECT_FAST_OFFSET 1
+
+// Default to BGRA. Skia already defaults to that on Windows, and it seems
+// the default X11 visual is actually also BGRA.
+#define SK_R32_SHIFT 16
+
+// Enable Skia's internal checks depending on DBG_UTIL mode.
+// ENABLE_SKIA_DEBUG controls whether to build with or without optimizations, and
+// is set by using --enable-skia=debug.
+#ifdef DBG_UTIL
+
+#define SK_DEBUG
+
+#define SK_ENABLE_DUMP_GPU
+
+#else
+
+#define SK_RELEASE
+
+#endif // DBG_UTIL
+
+// TODO ?
+//#define SK_R32_SHIFT 16
+
+#endif

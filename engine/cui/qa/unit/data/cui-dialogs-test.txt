@@ -1,0 +1,94 @@
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# This file contains all dialogs that the unit tests in the module
+# will work on if it is in script mode. It will read one-by-one,
+# try to open it and create a screenshot that will be saved in
+# workdir/screenshots using the pattern of the ui-file name.
+#
+# Syntax:
+# - empty lines are allowed
+# - lines starting with '#' are treated as comment
+# - all other lines should contain a *.ui filename in the same
+#   notation as in the dialog constructors (see code)
+
+#
+# The 'known' dialogs which have a hard-coded representation
+# in registerKnownDialogsByID/createDialogByID
+#
+
+cui/ui/formatcellsdialog.ui
+cui/ui/textdialog.ui
+
+#
+# Dialogs without a hard-coded representation. These will
+# be visualized using a fallback based on weld::Builder
+#
+
+# currently deactivated, leads to problems and the test to not work
+# This is typically a hint that these should be hard-coded in the
+# test case since they need some document and model data to work
+#
+# cui/ui/imagetabpage.ui
+# cui/ui/connpooloptions.ui <- not calling DriverListControl::Init for
+#   ConnectionPoolOptionsPage::m_pDriverList leaves its BrowseBox::mvCols empty, causing "implicit
+#   conversion from type 'int' of value -1 (32-bit, signed) to type 'sal_uInt16' (aka 'unsigned
+#   short') changed the value to 65535 (16-bit, unsigned)" when calling
+#     GetColumnId( static_cast<sal_uInt16>(mvCols.size()) - 1 );
+#   in BrowseBox::AutoSizeLastColumn (svtools/source/brwbox/brwbox1.cxx) with Clang
+#   -fsanitize=implicit-signed-integer-truncation
+# cui/ui/thesaurus.ui <- problems under Linux
+
+# this is part 1. in order to help the build time when building all
+# lang, the list of ui is split in multiple parts to balance the run time
+# or all the tests, which improve the overall elapsed time
+# of make screenshot on big machines
+# covering a to e
+
+
+cui/ui/aboutconfigdialog.ui
+cui/ui/aboutdialog.ui
+cui/ui/accelconfigpage.ui
+cui/ui/acorexceptpage.ui
+cui/ui/acoroptionspage.ui
+cui/ui/acorreplacepage.ui
+cui/ui/agingdialog.ui
+cui/ui/applyautofmtpage.ui
+cui/ui/applylocalizedpage.ui
+cui/ui/areadialog.ui
+cui/ui/areatabpage.ui
+cui/ui/asiantypography.ui
+cui/ui/assigncomponentdialog.ui
+cui/ui/autocorrectdialog.ui
+cui/ui/baselinksdialog.ui
+cui/ui/borderareatransparencydialog.ui
+cui/ui/borderbackgrounddialog.ui
+cui/ui/borderpage.ui
+cui/ui/breaknumberoption.ui
+cui/ui/calloutdialog.ui
+cui/ui/calloutpage.ui
+cui/ui/cellalignment.ui
+cui/ui/certdialog.ui
+cui/ui/charnamepage.ui
+cui/ui/colorpage.ui
+cui/ui/colorpickerdialog.ui
+cui/ui/comment.ui
+cui/ui/connectortabpage.ui
+cui/ui/croppage.ui
+cui/ui/cuiimapdlg.ui
+cui/ui/customizedialog.ui
+cui/ui/databaselinkdialog.ui
+cui/ui/dbregisterpage.ui
+cui/ui/dimensionlinestabpage.ui
+cui/ui/editdictionarydialog.ui
+cui/ui/editmodulesdialog.ui
+cui/ui/effectspage.ui
+cui/ui/embossdialog.ui
+cui/ui/eventassigndialog.ui
+cui/ui/eventassignpage.ui

@@ -1,0 +1,12 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module excel {
+    constants XlLegendPosition {
+        const long xlLegendPositionBottom = -4107;
+        const long xlLegendPositionCorner = 2;
+        const long xlLegendPositionLeft = -4131;
+        const long xlLegendPositionRight = -4152;
+        const long xlLegendPositionTop = -4160;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

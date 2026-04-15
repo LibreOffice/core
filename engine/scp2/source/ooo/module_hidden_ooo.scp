@@ -1,0 +1,59 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "macros.inc"
+#include "AutoInstall/ooo"
+#include "AutoInstall/ooo_fonts"
+#include "AutoInstall/ooo_images"
+#include "AutoInstall/ooobinarytable"
+
+Module gid_Module_Root_Files_Images
+    PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+    InstallOrder = "100";
+	Name = "gid_Module_Root_Files_Images";
+	Description = "gid_Module_Root_Files_Images";
+	Sortkey = "2050";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+	Files = (auto_ooo_images_ALL);
+End
+
+#ifndef WITHOUT_FONTS
+Module gid_Module_Root_Fonts_OOo_Hidden
+    PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+    InstallOrder = "100";
+	Name = "gid_Module_Root_Fonts_OOo_Hidden";
+	Description = "gid_Module_Root_Fonts_OOo_Hidden";
+	Sortkey = "2100";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+	Files = (auto_ooo_fonts_ALL);
+End
+#endif
+
+Module gid_Module_Oo_Linguistic
+    PackageInfo = "packinfo_office.txt";
+    Name = "gid_Module_Oo_Linguistic";
+    Description = "gid_Module_Oo_Linguistic";
+    ParentID = gid_Module_Root;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Share_Registry_Lingucomponent_Xcd);
+End

@@ -1,0 +1,69 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+ module com {  module sun {  module star {  module frame {
+
+/** This event is broadcast by a Controller whenever the state of
+    the feature changes
+
+    @see XController
+    @see XStatusListener
+ */
+published struct FeatureStateEvent: com::sun::star::lang::EventObject
+{
+    /** contains the URL of the feature.
+     */
+    com::sun::star::util::URL FeatureURL;
+
+    /** contains a descriptor of the feature for the user interface.
+     */
+    string FeatureDescriptor;
+
+    /** specifies whether the feature is currently enabled or disabled.
+     */
+    boolean IsEnabled;
+
+    /** specifies whether the XDispatch has to be required.
+
+        <p>
+        Interest code should listen for FrameActionEvent
+        too, to update own feature states and dispatch listener on
+        FrameAction::CONTEXT_CHANGED.
+        </p>
+     */
+    boolean Requery;
+
+    /** contains the state of the feature in this dispatch.
+
+        <p>
+        This can be, for example, simply `TRUE` for a boolean feature like
+        underline on/off. Some simple types like <code>string</code> or
+        `boolean` are useful here for generic UI elements, like
+        a checkmark in a menu.
+        </p>
+     */
+    any State;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="StringRepresentation"
+    constructor="extensions_propctrlr_StringRepresentation_get_implementation">
+    <service name="com.sun.star.inspection.StringRepresentation"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.extensions.ButtonNavigationHandler"
+    constructor="extensions_propctrlr_ButtonNavigationHandler_get_implementation">
+    <service name="com.sun.star.form.inspection.ButtonNavigationHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.extensions.CellBindingPropertyHandler"
+    constructor="extensions_propctrlr_CellBindingPropertyHandler_get_implementation">
+    <service name="com.sun.star.form.inspection.CellBindingPropertyHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.extensions.EFormsPropertyHandler"
+    constructor="extensions_propctrlr_EFormsPropertyHandler_get_implementation">
+    <service name="com.sun.star.form.inspection.XMLFormsPropertyHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.extensions.EditPropertyHandler"
+    constructor="extensions_propctrlr_EditPropertyHandler_get_implementation">
+    <service name="com.sun.star.form.inspection.EditPropertyHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.extensions.EventHandler"
+    constructor="extensions_propctrlr_EventHandler_get_implementation">
+    <service name="com.sun.star.form.inspection.EventHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.extensions.FormComponentPropertyHandler"
+    constructor="extensions_propctrlr_FormComponentPropertyHandler_get_implementation">
+    <service name="com.sun.star.form.inspection.FormComponentPropertyHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.extensions.FormGeometryHandler"
+    constructor="extensions_propctrlr_FormGeometryHandler_get_implementation">
+    <service name="com.sun.star.form.inspection.FormGeometryHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.extensions.GenericPropertyHandler"
+    constructor="extensions_propctrlr_GenericPropertyHandler_get_implementation">
+    <service name="com.sun.star.inspection.GenericPropertyHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.extensions.SubmissionPropertyHandler"
+    constructor="extensions_propctrlr_SubmissionPropertyHandler_get_implementation">
+    <service name="com.sun.star.form.inspection.SubmissionPropertyHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.extensions.XSDValidationPropertyHandler"
+    constructor="extensions_propctrlr_XSDValidationPropertyHandler_get_implementation">
+    <service name="com.sun.star.form.inspection.XSDValidationPropertyHandler"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.extensions.DefaultFormComponentInspectorModel"
+    constructor="extensions_propctrlr_DefaultFormComponentInspectorModel_get_implementation">
+    <service name="com.sun.star.form.inspection.DefaultFormComponentInspectorModel"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.extensions.DefaultHelpProvider"
+    constructor="extensions_propctrlr_DefaultHelpProvider_get_implementation">
+    <service name="com.sun.star.inspection.DefaultHelpProvider"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.extensions.DialogController"
+    constructor="extensions_propctrlr_DialogController_get_implementation">
+    <service name="com.sun.star.awt.PropertyBrowserController"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.extensions.FormController"
+    constructor="extensions_propctrlr_FormController_get_implementation">
+    <service name="com.sun.star.form.PropertyBrowserController"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.extensions.ObjectInspector"
+    constructor="extensions_propctrlr_OPropertyBrowserController_get_implementation">
+    <service name="com.sun.star.inspection.ObjectInspector"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.extensions.ObjectInspectorModel"
+    constructor="extensions_propctrlr_ObjectInspectorModel_get_implementation">
+    <service name="com.sun.star.inspection.ObjectInspectorModel"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.form.ui.MasterDetailLinkDialog"
+    constructor="extensions_propctrlr_MasterDetailLinkDialog_get_implementation">
+    <service name="com.sun.star.form.MasterDetailLinkDialog"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.form.ui.OControlFontDialog"
+    constructor="extensions_propctrlr_OControlFontDialog_get_implementation">
+    <service name="com.sun.star.form.ControlFontDialog"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.form.ui.OTabOrderDialog"
+    constructor="extensions_propcrltr_OTabOrderDialog_get_implementation">
+    <service name="com.sun.star.form.ui.TabOrderDialog"/>
+    <service name="com.sun.star.form.TabOrderDialog"/>
+  </implementation>
+</component>

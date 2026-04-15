@@ -1,0 +1,33 @@
+Contains the Network Security Services (NSS) libraries from Mozilla
+
+== ESR versions ==
+
+Upstream releases both regular and "ESR" versions, the latter go into Firefox
+ESR and Thunderbird.
+
+There is a new ESR version about once a year, and a ESR version gets micro
+updates only when there are security issues to fix, and it's not always obvious
+from the release notes of a regular release if there are security issues that
+are relevant to LibreOffice, hence it's probably best to bundle only the ESR
+versions and upgrade for every micro release (as recommended by upstream).
+
+== Fips 140 and signed libraries ==
+
+Fips 140 mode is not supported. That is, the *.chk files containing the
+checksums for the cryptographic module are not delivered into instdir and will
+not be part of the OOo installation sets.
+
+Signing has been turned off because
+- we change the rpath (install names)  after signing which breaks the signatures
+(Mac)
+- sqlite conflicts with the system sqlite when signing which breaks the build
+
+See also
+[https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6]
+
+== libsqlite3 ==
+
+With all supported macOS SDK we use
+NSS_USE_SYSTEM_SQLITE=1
+to build using the system sqlite.
+

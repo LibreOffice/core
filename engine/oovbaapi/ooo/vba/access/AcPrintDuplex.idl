@@ -1,0 +1,10 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module access {
+    constants AcPrintDuplex {
+        const long acPRDPHorizontal = 2;
+        const long acPRDPSimplex = 1;
+        const long acPRDPVertical = 3;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

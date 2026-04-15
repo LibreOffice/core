@@ -1,0 +1,18 @@
+// nLegendEntryCount
+2
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.RectangleShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+17798
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.RectangleShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16728590
+// xLegendEntryText->getString()
+A
+// xLegendEntryText->getString()
+C-B

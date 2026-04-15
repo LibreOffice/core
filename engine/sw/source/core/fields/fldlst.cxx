@@ -1,0 +1,149 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <editsh.hxx>
+#include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
+#include <docary.hxx>
+#include <fmtfld.hxx>
+#include <txtfld.hxx>
+#include <expfld.hxx>
+#include <docfld.hxx>
+#include <ndtxt.hxx>
+
+#include <osl/diagnose.h>
+
+// sort input values
+
+SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
+    : mpSh(pShell)
+{
+    // create sorted list of all  input fields
+    mpSrtLst.reset( new SetGetExpFields );
+
+    const SwFieldTypes& rFieldTypes = *mpSh->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+    const size_t nSize = rFieldTypes.size();
+
+    // iterate over all types
+    std::vector<SwFormatField*> vFields;
+    for(size_t i = 0; i < nSize; ++i)
+    {
+        SwFieldType* pFieldType = rFieldTypes[ i ].get();
+        const SwFieldIds nType = pFieldType->Which();
+        if(SwFieldIds::SetExp == nType || SwFieldIds::Input == nType || SwFieldIds::Dropdown == nType)
+            pFieldType->GatherFields(vFields);
+    }
+    for(auto pFormatField: vFields)
+    {
+        auto pSetExpField = dynamic_cast<SwSetExpField*>(pFormatField->GetField());
+        if(pSetExpField && !pSetExpField->GetInputFlag())
+            continue;
+        const SwTextField* pTextField = pFormatField->GetTextField();
+        if(bBuildTmpLst)
+            maTmpLst.insert(pTextField);
+        else
+        {
+            std::unique_ptr<SetGetExpField> pNew(new SetGetExpField(pTextField->GetTextNode(), pTextField));
+            mpSrtLst->insert(std::move(pNew));
+        }
+    }
+}
+
+SwInputFieldList::~SwInputFieldList()
+{
+}
+
+size_t SwInputFieldList::Count() const
+{
+    return mpSrtLst->size();
+}
+
+// get field from list in sorted order
+SwField* SwInputFieldList::GetField(size_t nId)
+{
+    const SwTextField* pTextField = (*mpSrtLst)[ nId ]->GetTextField();
+    assert(pTextField && "no TextField");
+    return const_cast<SwField*>(pTextField->GetFormatField().GetField());
+}
+
+/// save cursor
+void SwInputFieldList::PushCursor()
+{
+    mpSh->Push();
+    mpSh->ClearMark();
+}
+
+/// get cursor
+void SwInputFieldList::PopCursor()
+{
+    mpSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
+}
+
+/// go to position of a field
+void SwInputFieldList::GotoFieldPos(size_t nId)
+{
+    mpSh->StartAllAction();
+    (*mpSrtLst)[ nId ]->GetPosOfContent( *mpSh->GetCursor()->GetPoint() );
+    mpSh->EndAllAction();
+}
+
+/** Compare TmpLst with current fields.
+ *
+ * All new ones are added to SortList so that they can be updated.
+ * For text blocks: update only input fields.
+ *
+ * @return true if not empty
+ */
+bool SwInputFieldList::BuildSortLst()
+{
+    const SwFieldTypes& rFieldTypes = *mpSh->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+    const size_t nSize = rFieldTypes.size();
+
+    // iterate over all types
+    std::vector<SwFormatField*> vFields;
+    for(size_t i = 0; i < nSize; ++i)
+    {
+        SwFieldType* pFieldType = rFieldTypes[ i ].get();
+        const SwFieldIds nType = pFieldType->Which();
+        if(SwFieldIds::SetExp == nType || SwFieldIds::Input == nType)
+            pFieldType->GatherFields(vFields);
+    }
+    for(auto pFormatField: vFields)
+    {
+        auto pSetExpField = dynamic_cast<SwSetExpField*>(pFormatField->GetField());
+        if(pSetExpField && !pSetExpField->GetInputFlag())
+            continue;
+        const SwTextField* pTextField = pFormatField->GetTextField();
+        // not in TempList, thus add to SortList
+        auto it = maTmpLst.find(pTextField);
+        if(maTmpLst.end() == it)
+        {
+            std::unique_ptr<SetGetExpField> pNew(new SetGetExpField(pTextField->GetTextNode(), pTextField ));
+            mpSrtLst->insert(std::move(pNew));
+        }
+        else
+            maTmpLst.erase(it);
+    }
+
+    // the pointers are not needed anymore
+    maTmpLst.clear();
+    return !mpSrtLst->empty();
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

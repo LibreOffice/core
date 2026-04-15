@@ -1,0 +1,24 @@
+Redland RDF library (librdf) from [https://librdf.org/]
+
+== License ==
+[git:redland/LICENSE.txt]
+Triple-licensed: LGPL v2+/GPL v2+/Apache v2
+
+== Description ==
+This module contains the third-party Redland RDF / librdf library, which
+is needed to support data in RDF (Resource Description Framework) format.
+It consists of 3 parts:
+- raptor:  parsers and serializers for numerous RDF file formats
+- rasqal:  query engine which supports SPARQL queries
+- redland: librdf integrates raptor and rasqal, and provides numerous storage
+           engines for storing RDF graphs (in memory, SQL, ...)
+
+Libraries: libraptor, librasqal, librdf
+
+== Patches ==
+There are several patches, most of which contain only hacks to get it to
+build with the LO build system.
+
+Upstream may merge patches that are attached to the bug tracker, but don't
+send patches to the mailing list, those will most likely be ignored.
+

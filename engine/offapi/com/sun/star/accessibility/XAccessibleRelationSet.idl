@@ -1,0 +1,86 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module accessibility {
+
+/** Implement this interface to give access to an object's set of relations.
+
+    <p>Such relation are modeled with the AccessibleRelation
+    structure.  This interface is used for representing sets of relations
+    between Accessible objects.  Most of the convenience
+    methods of the corresponding AccessibleRelationSet interface of the Java
+    Accessibility API have been removed from this interface in order to
+    clean it up.  These methods are add(),
+    addAll(), clear(), and
+    remove().  The other methods have been renamed to achieve
+    a greater conformance with the other accessibility interfaces.</p>
+*/
+interface XAccessibleRelationSet : ::com::sun::star::uno::XInterface
+{
+    /** Returns the number of relations in this relation set.
+
+        @return
+            Returns the number of relations or zero if there are none.
+    */
+    long getRelationCount ();
+
+    /** Returns the relation of this relation set that is specified by
+        the given index.
+
+        @param nIndex
+            This index specifies the relation to return.
+
+        @return
+            For a valid index, i.e. inside the range 0 to the number of
+            relations minus one, the returned value is the requested
+            relation.  If the index is invalid then the returned relation
+            has the type INVALID.
+
+    */
+    AccessibleRelation getRelation ([in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Tests whether the relation set contains a relation matching the
+        specified key.
+
+        @param eRelationType
+            The type of relation to look for in this set of relations.
+
+        @return
+            Returns `TRUE` if there is a (at least one) relation of the
+            given type and `FALSE` if there is no such relation in the set.
+    */
+    boolean containsRelation ([in] ::com::sun::star::accessibility::AccessibleRelationType eRelationType);
+
+    /** Retrieve and return the relation with the given relation type.
+
+        @param eRelationType
+            The type of the relation to return.
+
+        @return
+            If a relation with the given type could be found than (a copy
+            of) this relation is returned.  Otherwise a relation with the
+            type INVALID is returned.
+    */
+    AccessibleRelation getRelationByType ([in] ::com::sun::star::accessibility::AccessibleRelationType eRelationType);
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

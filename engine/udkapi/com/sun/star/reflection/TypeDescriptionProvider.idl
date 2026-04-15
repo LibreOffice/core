@@ -1,0 +1,69 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module reflection {
+
+
+/** This service provides type descriptions, i.e. concrete
+    service implementations read from source like the persistent registry
+    database format.<br>
+
+    This old-style service definition mostly serves documentation purposes.  It
+    is not intended that an implementation of this service can be obtained at
+    the global service manager using this service identifier.
+
+    @see com::sun::star::reflection::TypeDescriptionManager
+    @see com::sun::star::reflection::XTypeDescription
+*/
+published service TypeDescriptionProvider
+{
+    /** Interface to retrieve type descriptions.
+
+        <p>Names are given in dotted notation, for example
+        <code>"com.sun.star.uno.XInterface"</code>.</p>
+
+        </p>The returned values are generally non-null references of type
+        XTypeDescription.  However, before LibreOffice&nbsp;4.1,
+        the value returned for a UNO constant was the value of the constant,
+        rather than a reference to an XConstantTypeDescription
+        object.  (It also appears that some implementations return values for
+        individual UNO enum members, e.g.
+        <code>"com.sun.star.uno.TypeClass.VOID"</code>, though this is probably
+        best treated as an implementation obscurity.)</p>
+    */
+    interface com::sun::star::container::XHierarchicalNameAccess;
+
+    /** Interface to signal shutdown to the provider.<br>
+        This has to be done manually, because usually each provider references
+        its manager (which may implement type caching) for late resolution of
+        partial types (e.g. parameter types).
+    */
+    interface com::sun::star::lang::XComponent;
+
+    /** Interface for creating enumerations for type descriptions supported
+        by this TypeDescriptionProvider
+    */
+    [optional] interface XTypeDescriptionEnumerationAccess;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     Open Document Format for Office Applications (OpenDocument) Version 1.4
+     OASIS Standard
+     11 March 2024
+     Copyright (c) OASIS Open 2024. All Rights Reserved.
+     Source: https://docs.oasis-open.org/office/OpenDocument/v1.4/csd01/schemas/
+     Latest stage of specification: https://docs.oasis-open.org/office/OpenDocument/v1.4/OpenDocument-v1.4-part1-introduction.html
+     TC IPR Statement: https://www.oasis-open.org/committees/office/ipr.php 
+
+        Open Document Format for Office Applications (OpenDocument) Version 1.4
+        OWL Package Metadata Manifest Description
+        OpenDocument-v1.4-package-metadata.owl
+-->
+
+<!-- https://issues.oasis-open.org/browse/OFFICE-2153 -->
+
+<rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:pkg="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/01/rdf-schema#">
+
+<owl:Ontology rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	<dc:title xml:lang="en">Open Document Package Metadata Manifest Ontology</dc:title>
+	<label xml:lang="en">ODF Package Metadata Manifest</label>
+</owl:Ontology>
+
+<owl:Class rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#Document">
+	<label xml:lang="en">OpenDocument Document</label>
+</owl:Class>
+
+<owl:Class rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#File">
+	<label xml:lang="en"> OpenDocument Document Package File</label>
+</owl:Class>
+
+<owl:ObjectProperty rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#hasPart">
+	<domain rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#Document"/>
+	<range rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#File"/>
+	<label xml:lang="en">contains</label>
+	<comment xml:lang="en">Related to dcterms:hasPart of the Dublin Core Metadata Initiative</comment>
+</owl:ObjectProperty>
+
+<owl:Class rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#MetadataFile">
+	<label xml:lang="en">An OpenDocument Metadata File</label>
+	<comment xml:lang="en">Used for any metadata file in the document</comment>
+	<subClassOf rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#File"/>
+</owl:Class>
+
+<owl:DatatypeProperty rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#mimeType">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+	<domain rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#File"/>
+	<range rdf:resource="http://www.w3.org/2001/XMLSchema-datatypes#string"/>
+	<label xml:lang="en">the MIME type</label>
+	<comment xml:lang="en">A string representing the MIME media type of a file (see RFC4288).</comment>
+</owl:DatatypeProperty>
+
+<owl:Class rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#Element">
+	<label xml:lang="en">OpenDocument Package XML Element</label>
+</owl:Class>
+
+</rdf:RDF>

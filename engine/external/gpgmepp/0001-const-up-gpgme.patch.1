@@ -1,0 +1,157 @@
+From 7b414525f301d13387814ef3aa8729db6762c2b2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sat, 26 Jul 2025 12:22:40 +0100
+Subject: [PATCH] const up gpgme
+
+---
+ src/engine-assuan.c   |  2 +-
+ src/engine-backend.h  | 14 +++++++-------
+ src/engine-g13.c      |  2 +-
+ src/engine-gpg.c      |  2 +-
+ src/engine-gpgconf.c  |  2 +-
+ src/engine-gpgsm.c    |  2 +-
+ src/engine-spawn.c    |  2 +-
+ src/engine-uiserver.c |  2 +-
+ src/engine.c          |  4 ++--
+ 9 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/src/engine-assuan.c b/src/engine-assuan.c
+index e96313ff..be13940d 100644
+--- a/src/engine-assuan.c
++++ b/src/engine-assuan.c
+@@ -801,7 +801,7 @@ llass_io_event (void *engine, gpgme_event_io_t type, void *type_data)
+ }
+ 
+ 
+-struct engine_ops _gpgme_engine_ops_assuan =
++const struct engine_ops _gpgme_engine_ops_assuan =
+   {
+     /* Static functions.  */
+     _gpgme_get_default_agent_socket,
+diff --git a/src/engine-backend.h b/src/engine-backend.h
+index b0533f77..9c3ee306 100644
+--- a/src/engine-backend.h
++++ b/src/engine-backend.h
+@@ -176,15 +176,15 @@ struct engine_ops
+ };
+ 
+ 
+-extern struct engine_ops _gpgme_engine_ops_gpg;		/* OpenPGP.  */
+-extern struct engine_ops _gpgme_engine_ops_gpgsm;	/* CMS.  */
+-extern struct engine_ops _gpgme_engine_ops_gpgconf;	/* gpg-conf.  */
+-extern struct engine_ops _gpgme_engine_ops_assuan;	/* Low-level Assuan. */
+-extern struct engine_ops _gpgme_engine_ops_g13;         /* Crypto VFS. */
++extern const struct engine_ops _gpgme_engine_ops_gpg;		/* OpenPGP.  */
++extern const struct engine_ops _gpgme_engine_ops_gpgsm;	/* CMS.  */
++extern const struct engine_ops _gpgme_engine_ops_gpgconf;	/* gpg-conf.  */
++extern const struct engine_ops _gpgme_engine_ops_assuan;	/* Low-level Assuan. */
++extern const struct engine_ops _gpgme_engine_ops_g13;         /* Crypto VFS. */
+ #ifdef ENABLE_UISERVER
+-extern struct engine_ops _gpgme_engine_ops_uiserver;
++extern const struct engine_ops _gpgme_engine_ops_uiserver;
+ #endif
+-extern struct engine_ops _gpgme_engine_ops_spawn;       /* Spawn engine. */
++extern const struct engine_ops _gpgme_engine_ops_spawn;       /* Spawn engine. */
+ 
+ 
+ /* Prototypes for extra functions in engine-gpgconf.c  */
+diff --git a/src/engine-g13.c b/src/engine-g13.c
+index e30c1834..4e18c52d 100644
+--- a/src/engine-g13.c
++++ b/src/engine-g13.c
+@@ -768,7 +768,7 @@ g13_io_event (void *engine, gpgme_event_io_t type, void *type_data)
+ }
+ 
+ 
+-struct engine_ops _gpgme_engine_ops_g13 =
++const struct engine_ops _gpgme_engine_ops_g13 =
+   {
+     /* Static functions.  */
+     _gpgme_get_default_g13_name,
+diff --git a/src/engine-gpg.c b/src/engine-gpg.c
+index c6c5c4e6..e4f10f55 100644
+--- a/src/engine-gpg.c
++++ b/src/engine-gpg.c
+@@ -4245,7 +4245,7 @@ gpg_getdirect (void *engine, const char *argv[],
+ 
+ 
+ 
+-struct engine_ops _gpgme_engine_ops_gpg =
++const struct engine_ops _gpgme_engine_ops_gpg =
+   {
+     /* Static functions.  */
+     _gpgme_get_default_gpg_name,
+diff --git a/src/engine-gpgconf.c b/src/engine-gpgconf.c
+index d1b977ad..e3d882cc 100644
+--- a/src/engine-gpgconf.c
++++ b/src/engine-gpgconf.c
+@@ -1272,7 +1272,7 @@ _gpgme_conf_release (gpgme_conf_comp_t conf)
+ }
+ 
+ 
+-struct engine_ops _gpgme_engine_ops_gpgconf =
++const struct engine_ops _gpgme_engine_ops_gpgconf =
+   {
+     /* Static functions.  */
+     _gpgme_get_default_gpgconf_name,
+diff --git a/src/engine-gpgsm.c b/src/engine-gpgsm.c
+index e9d69d7a..f274b416 100644
+--- a/src/engine-gpgsm.c
++++ b/src/engine-gpgsm.c
+@@ -2402,7 +2402,7 @@ gpgsm_passwd (void *engine, gpgme_key_t key, unsigned int flags)
+ 
+ 
+ 
+-struct engine_ops _gpgme_engine_ops_gpgsm =
++const struct engine_ops _gpgme_engine_ops_gpgsm =
+   {
+     /* Static functions.  */
+     _gpgme_get_default_gpgsm_name,
+diff --git a/src/engine-spawn.c b/src/engine-spawn.c
+index 7fdac9ca..0e3c09fa 100644
+--- a/src/engine-spawn.c
++++ b/src/engine-spawn.c
+@@ -432,7 +432,7 @@ engspawn_op_spawn (void *engine,
+ 
+ 
+ 
+-struct engine_ops _gpgme_engine_ops_spawn =
++const struct engine_ops _gpgme_engine_ops_spawn =
+   {
+     /* Static functions.  */
+     engspawn_get_file_name,
+diff --git a/src/engine-uiserver.c b/src/engine-uiserver.c
+index 6c89082e..c64bc18e 100644
+--- a/src/engine-uiserver.c
++++ b/src/engine-uiserver.c
+@@ -1415,7 +1415,7 @@ uiserver_io_event (void *engine, gpgme_event_io_t type, void *type_data)
+ }
+ 
+ 
+-struct engine_ops _gpgme_engine_ops_uiserver =
++const struct engine_ops _gpgme_engine_ops_uiserver =
+   {
+     /* Static functions.  */
+     _gpgme_get_default_uisrv_socket,
+diff --git a/src/engine.c b/src/engine.c
+index d341488e..1efbcca7 100644
+--- a/src/engine.c
++++ b/src/engine.c
+@@ -39,12 +39,12 @@
+ 
+ struct engine
+ {
+-  struct engine_ops *ops;
++  const struct engine_ops *ops;
+   void *engine;
+ };
+ 
+ 
+-static struct engine_ops *engine_ops[] =
++static const struct engine_ops* const engine_ops[] =
+   {
+     &_gpgme_engine_ops_gpg,		/* OpenPGP.  */
+     &_gpgme_engine_ops_gpgsm,		/* CMS.  */
+-- 
+2.49.0
+

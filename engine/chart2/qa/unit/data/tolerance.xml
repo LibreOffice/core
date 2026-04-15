@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tolerances>
+  <tolerance elementName="XShape" attribName="positionX" value="1.2" relative="true"/>
+  <tolerance elementName="XShape" attribName="positionY" value="1.2" relative="true"/>
+  <tolerance elementName="XShape" attribName="sizeX" value="1.2" relative="true"/>
+  <tolerance elementName="XShape" attribName="sizeY" value="1.2" relative="true"/>
+</tolerances>

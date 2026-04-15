@@ -1,0 +1,91 @@
+---
+assumeFilename: comphelper/source/misc/solarmutex.cxx
+excludelist:
+    comphelper/source/misc/instancelocker.hxx:
+    # Base class has to be a complete type
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloseListener.hpp
+    - com/sun/star/frame/XTerminateListener.hpp
+    comphelper/source/property/opropertybag.hxx:
+    # Base class has to be a complete type
+    - com/sun/star/beans/XPropertyBag.hpp
+    - com/sun/star/container/XSet.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XModifiable.hpp
+    comphelper/source/officeinstdir/officeinstallationdirectories.hxx:
+    # Base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XOfficeInstallationDirectories.hpp
+    comphelper/qa/unit/test_guards.cxx:
+        # Keep for system-cppunit; see also commit 456d61ec526e250fd1af894e109d5914ac9c9e6e
+    - unotest/bootstrapfixturebase.hxx
+    comphelper/source/container/embeddedobjectcontainer.cxx:
+    # Keep for OSL_DEBUG_LEVEL > 1
+    - com/sun/star/container/XNameAccess.hpp
+    comphelper/source/container/NamedPropertyValuesContainer.cxx:
+    # Needed for typedef
+    - com/sun/star/beans/PropertyValue.hpp
+    comphelper/source/container/enumerablemap.cxx:
+    # Needed for typedef
+    - com/sun/star/lang/XServiceInfo.hpp
+    comphelper/source/container/namecontainer.cxx:
+    # Needed for NameContainer_createInstance
+    - comphelper/namecontainer.hxx
+    comphelper/source/crypto/Crypto_NSS.cxx:
+    # Keep catch-all interface file of NSPR
+    - nspr.h
+    comphelper/source/eventattachermgr/eventattachermgr.cxx:
+    # Needed for linker visibility
+    - comphelper/eventattachermgr.hxx
+    comphelper/source/misc/fileurl.cxx:
+    # Needed for linker visibility
+    - comphelper/fileurl.hxx
+    comphelper/source/misc/AccessibleImplementationHelper.cxx:
+    # Needed for template
+    - com/sun/star/uno/Sequence.hxx
+    comphelper/source/misc/getexpandeduri.cxx:
+    # Needed for linker visibility
+    - comphelper/getexpandeduri.hxx
+    comphelper/source/misc/graphicmimetype.cxx:
+    # Needed for direct member access
+    - com/sun/star/io/XInputStream.hpp
+    comphelper/source/misc/hash.cxx:
+    # Keep catch-all interface file of NSPR
+    - nspr.h
+    comphelper/source/misc/instancelocker.cxx:
+    # Needed for template
+    - com/sun/star/embed/XActionsApproval.hpp
+    include/comphelper/interaction.hxx:
+    # Stop warnings about include/
+    - com/sun/star/task/XInteractionApprove.hpp
+    - com/sun/star/task/XInteractionDisapprove.hpp
+    - com/sun/star/task/XInteractionAbort.hpp
+    - com/sun/star/task/XInteractionRetry.hpp
+    include/comphelper/namedvaluecollection.hxx:
+    # Stop warnings about include/
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/beans/NamedValue.hpp
+    comphelper/source/misc/simplefileaccessinteraction.cxx:
+    # Needed for UnoType template
+    - com/sun/star/task/XInteractionAbort.hpp
+    - com/sun/star/task/XInteractionApprove.hpp
+    comphelper/source/misc/stillreadwriteinteraction.cxx:
+    # Needed for UnoType template
+    - com/sun/star/task/XInteractionAbort.hpp
+    - com/sun/star/task/XInteractionApprove.hpp
+    comphelper/source/misc/synchronousdispatch.cxx:
+    # Needed for direct member access
+    - com/sun/star/lang/XComponent.hpp
+    comphelper/source/processfactory/processfactory.cxx:
+    # Needed for linker visibility
+    - comphelper/processfactory.hxx
+    # Needed for direct member access
+    - com/sun/star/uno/XComponentContext.hpp
+    comphelper/source/property/genericpropertyset.cxx:
+    # Needed for linker visibility
+    - comphelper/genericpropertyset.hxx
+    # Needed for fw declared template
+    - rtl/ref.hxx

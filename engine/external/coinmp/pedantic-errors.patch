@@ -1,0 +1,11 @@
+--- Clp/src/ClpSimplex.cpp
++++ Clp/src/ClpSimplex.cpp
+@@ -6035,7 +6035,7 @@
+      assert (!doKKT);
+      ClpCholeskyTaucs * cholesky = new ClpCholeskyTaucs();
+      barrier.setCholesky(cholesky);
+-#elifdef COIN_HAS_MUMPS
++#elif defined COIN_HAS_MUMPS
+      if (!doKKT) {
+           ClpCholeskyMumps * cholesky = new ClpCholeskyMumps();
+           barrier.setCholesky(cholesky);

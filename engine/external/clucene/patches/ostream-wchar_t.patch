@@ -1,0 +1,29 @@
+--- src/core/CLucene/index/DocumentsWriterThreadState.cpp
++++ src/core/CLucene/index/DocumentsWriterThreadState.cpp
+@@ -484,7 +484,7 @@
+         last->next = fp->next;
+ 
+       if (_parent->infoStream != NULL)
+-        (*_parent->infoStream) << "  remove field=" << fp->fieldInfo->name << "\n";
++        (*_parent->infoStream) << "  remove field\n";
+ 
+       _CLDELETE(fp);
+     } else {
+@@ -557,7 +557,7 @@
+     fieldDataArray[i]->processField(analyzer);
+ 
+   if (maxTermPrefix != NULL && _parent->infoStream != NULL)
+-    (*_parent->infoStream) << "WARNING: document contains at least one immense term (longer than the max length " << MAX_TERM_LENGTH << "), all of which were skipped.  Please correct the analyzer to not produce such terms.  The prefix of the first immense term is: '" << maxTermPrefix << "...'\n";
++    (*_parent->infoStream) << "WARNING: document contains at least one immense term (longer than the max length " << MAX_TERM_LENGTH << "), all of which were skipped.  Please correct the analyzer to not produce such terms.\n";
+ 
+   if (_parent->ramBufferSize != IndexWriter::DISABLE_AUTO_FLUSH
+       && _parent->numBytesUsed > 0.95 * _parent->ramBufferSize)
+@@ -910,7 +910,7 @@
+ 					// truncate the token stream after maxFieldLength tokens.
+ 					if ( length >= maxFieldLength) {
+ 	          if (_parent->infoStream != NULL)
+-	            (*_parent->infoStream) << "maxFieldLength "  << maxFieldLength << " reached for field " << fieldInfo->name << ", ignoring following tokens\n";
++	            (*_parent->infoStream) << "maxFieldLength "  << maxFieldLength << " reached for field, ignoring following tokens\n";
+ 						break;
+ 					}
+ 				} else if (length > IndexWriter::DEFAULT_MAX_FIELD_LENGTH) {

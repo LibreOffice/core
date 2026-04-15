@@ -1,0 +1,6 @@
+fileAlias;serviceName;expectedType
+text1;com.sun.star.text.FormatDetector
+csv1;com.sun.star.text.FormatDetector;generic_Text
+csv1;com.sun.star.comp.filters.PlainTextFilterDetect;generic_Text
+csv2;com.sun.star.text.FormatDetector;generic_Text
+csv2;com.sun.star.comp.filters.PlainTextFilterDetect;generic_Text

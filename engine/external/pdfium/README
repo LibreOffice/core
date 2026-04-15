@@ -1,0 +1,18 @@
+External package containing pdfium.
+
+"Insert -> Picture -> From File..." uses this library when a PDF file is
+selected.
+
+https://pdfium.googlesource.com/pdfium/
+
+How to update the tarball:
+
+version=$(git for-each-ref|grep chromium/|tail -n 1|sed 's|.*/||')
+git checkout --track origin/chromium/$version
+gclient sync
+git archive --prefix=pdfium/ --format=tar origin/chromium/${version} > pdfium-${version}.tar
+(cd ..; tar --append --file pdfium/pdfium-${version}.tar pdfium/third_party/freetype/src/include/ pdfium/third_party/freetype/src/src/)
+(cd ..; tar --append --file pdfium/pdfium-${version}.tar pdfium/third_party/abseil-cpp/absl/)
+(cd ..; tar --append --file pdfium/pdfium-${version}.tar pdfium/build/build_config.h pdfium/build/buildflag.h)
+(cd ..; tar --append --file pdfium/pdfium-${version}.tar pdfium/third_party/fast_float/src/)
+bzip2 pdfium-${version}.tar

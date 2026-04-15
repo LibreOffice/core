@@ -1,0 +1,104 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com { module sun { module star { module sheet { module opencl {
+
+interface XOpenCLSelection : com::sun::star::uno::XInterface
+{
+
+    /**
+     * Returns true if calculation with OpenCL is enabled (at all).
+     * The actual use of OpenCL for a formula is also affected by the
+     * configuration settings specifying whether OpenCL is used for
+     * all opcodes or just for a subset, and the deny- and allowlists
+     * of OpenCL implementations that are in use.
+     */
+    boolean isOpenCLEnabled();
+
+    /**
+     * Enables or disables use of OpenCL for calculations. When using
+     * this API to enable OpenCL the configuration parameters are set
+     * to their built-in default values, not ones read from the
+     * installation of user-specific configuration.
+     */
+    void enableOpenCL( [in] boolean enable );
+
+    /**
+     * Enables automatic OpenCL Device Selection
+     * @param force forces a new evaluation of the best device
+     */
+    void enableAutomaticDeviceSelection( [in] boolean force );
+
+    /**
+     * Disables automatic OpenCL Device Selection
+     */
+    void disableAutomaticDeviceSelection();
+
+    /**
+     * Select the OpenCL device with the given platform and device
+     * number. The platform number corresponds to an index into the
+     * sequence returned by getOpenCLPlatforms, and the device number
+     * corresponds to an index into the sequence of devices in that
+     * platform.
+     */
+    void selectOpenCLDevice( [in] long platform, [in] long device );
+
+    /**
+     * returns the index of the platform of the currently selected
+     * device. This is an index into the sequence that
+     * getOpenCLPlatforms returns in the current instance of
+     * LibreOffice (and not some a priori defined identifier for an
+     * OpenCL platform).
+     */
+    long getPlatformID();
+
+    /**
+     * returns the index of the currently selected device. This is an
+     * index into the sequence of devices in the OpenCLPLatform object
+     * the device is part of in the current instance of LibreOffice
+     * (and not some a priori defined identifier for a specific model
+     * of device accessed through a specific platform).
+     */
+    long getDeviceID();
+
+    /**
+     * lists all OpenCL devices and platforms
+     */
+    sequence< OpenCLPlatform > getOpenCLPlatforms();
+
+    /*
+     * Sets OpenCL to be considered only for formulas that use only a specific subset of opcodes.
+     */
+    void enableOpcodeSubsetTest();
+
+    /*
+     * Sets OpenCL to be considered for formulas regardless of what opcodes they contain.
+     */
+    void disableOpcodeSubsetTest();
+
+    /*
+     * Returns whether OpenCL is considered or not depending on the opcodes a formula uses.
+     */
+    boolean isOpcodeSubsetTested();
+
+    /*
+     * Sets the lower limit on the size of a formula group for OpenCL to be considered. (Sorry, the name is misleading.)
+     */
+    void setFormulaCellNumberLimit( [in] long number );
+
+    /*
+     * Returns the lower limit on the size of a formula group for OpenCL to be considered.
+     */
+    long getFormulaCellNumberLimit();
+
+};
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

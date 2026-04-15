@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <ChartController.hxx>
+#include <ChartModel.hxx>
+
+#include <dlg_DataEditor.hxx>
+#include "UndoGuard.hxx"
+#include <ResId.hxx>
+#include <strings.hrc>
+
+#include <vcl/svapp.hxx>
+
+namespace chart
+{
+
+void ChartController::executeDispatch_EditData()
+{
+    if (rtl::Reference<::chart::ChartModel> xChartDoc = getChartModel())
+    {
+        auto xUndoGuard = std::make_shared<UndoLiveUpdateGuardWithData>(
+            SchResId( STR_ACTION_EDIT_CHART_DATA ),
+            m_xUndoManager );
+
+        SolarMutexGuard aSolarGuard;
+        auto xDlg = std::make_shared<DataEditor>(GetChartFrame(), xChartDoc, m_xCC);
+        weld::DialogController::runAsync(xDlg, [xDlg, xUndoGuard=std::move(xUndoGuard)](int) {
+            // Edits are applied live to the model, so always commit the
+            // undo guard regardless of how the dialog was closed.
+            xUndoGuard->commit();
+        });
+    }
+}
+
+} //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,532 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+interface _Annotation
+{
+    FN_DELETE_COMMENT
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_DELETE_COMMENT_THREAD
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_DELETE_NOTE_AUTHOR
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_DELETE_ALL_NOTES
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_FORMAT_ALL_NOTES
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_HIDE_NOTE
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_HIDE_NOTE_AUTHOR
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_HIDE_ALL_NOTES
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_RESOLVE_NOTE
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_RESOLVE_NOTE_THREAD
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_PROMOTE_COMMENT
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_POSTIT
+        [
+                ExecMethod = NoteExec ;
+                StateMethod = GetNoteState ;
+        ]
+
+    FN_REPLY
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+    FN_ESCAPE // api:
+    [
+        ExecMethod = NoteExec ;
+    ]
+
+    SfxVoidItem Cut SID_CUT ( )  // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_COPY // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+    ]
+
+    SID_PASTE   // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_PASTE_UNFORMATTED
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_PASTE_SPECIAL  // api:
+    [
+        StateMethod = StateClpbrd ;
+        ExecMethod = ExecClpbrd ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_CLIPBOARD_FORMAT_ITEMS  // status(final|play)
+    [
+        StateMethod = StateClpbrd ;
+        ExecMethod = ExecClpbrd ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_SELECTALL  // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = NoState ;
+    ]
+
+    SID_UNDO // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+
+        ToolBoxConfig , MenuConfig , AccelConfig;
+    ]
+
+    SID_REDO // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+
+    ]
+
+    SID_REPEAT // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+    ]
+    SID_GETUNDOSTRINGS
+    [
+        StateMethod = StateUndo ;
+    ]
+
+    SID_GETREDOSTRINGS
+    [
+        StateMethod = StateUndo ;
+    ]
+
+    FN_FORMAT_RESET  // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = NoState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_FORMAT_FOOTNOTE_DLG // status()
+    [
+        ExecMethod = Exec ;
+    ]
+
+    SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
+    [
+        ExecMethod = Exec ;
+    ]
+
+    FN_WORDCOUNT_DIALOG
+    [
+        ExecMethod = Exec;
+    ]
+
+       FN_NUMBERING_OUTLINE_DLG   // status(final|play)
+    [
+        ExecMethod = Exec ;
+    ]
+
+    SID_CHARMAP // api:
+    [
+        ExecMethod = Exec ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_CHARMAP_CONTROL
+    [
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_PARA_LRSPACE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_LEFTSPACE
+    [
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_RIGHTSPACE
+    [
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_FIRSTLINESPACE
+    [
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_LINESPACE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_ULSPACE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_ABOVESPACE
+    [
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_BELOWSPACE
+    [
+        StateMethod = GetState ;
+    ]
+
+    SID_PARASPACE_INCREASE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_PARASPACE_DECREASE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_INSERT_STRING
+    [
+            ExecMethod = Exec ;
+            StateMethod = NoState ;
+            DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_FONT // status()
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_FONTHEIGHT // status()
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_GROW_FONT_SIZE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_SHRINK_FONT_SIZE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_COLOR // api:
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_COLOR2
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_BACK_COLOR // api:
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_CHAR_DLG_EFFECT
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_CHAR_DLG_POSITION
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_WEIGHT // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_POSTURE // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_UNDERLINE // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_OVERLINE // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_CONTOUR
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_SHADOWED
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_STRIKEOUT
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_CHAR_LANGUAGE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_PARA_ADJUST_LEFT // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_PARA_ADJUST_CENTER // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_PARA_ADJUST_RIGHT // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_PARA_ADJUST_BLOCK // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_PARA_ADJUST_START // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_PARA_ADJUST_END // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_10 // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_115
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_15 // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_20 // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_CHAR_DLG  // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_PARA_DLG // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_SET_SUPER_SCRIPT
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_SET_SUB_SCRIPT
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_SEARCH_ITEM // status()
+    [
+        ExecMethod = ExecSearch ;
+        StateMethod = StateSearch ;
+    ]
+    FN_REPEAT_SEARCH // status(final|play)
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    FID_SEARCH_NOW // status()
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    SID_SEARCH_OPTIONS // status()
+    [
+        StateMethod = StateSearch ;
+    ]
+    FID_SEARCH_SEARCHSET // status()
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    FID_SEARCH_REPLACESET // status()
+    [
+        ExecMethod = ExecSearch ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    FID_SEARCH_ON // status()
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    FID_SEARCH_OFF // status()
+    [
+        ExecMethod = ExecSearch ;
+    ]
+}

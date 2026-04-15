@@ -1,0 +1,197 @@
+----------
+10/02/2008
+Emessa la versione 2.07.gh solo per il thesaurus ver. 2
+Tale versione contiene la revisione delle parole inizianti per ^[a-hA-H]
+Le parole inizianti per le altre lettere sono prese dal thesaurus 1.00
+
+Il thesaurus attuale è così composto:
+* 11.374    (+    938) n° parole distinte con sinonimi
+* 18.240    (+  1.669) n° parole e tipologia distinte con sinonimi
+* 69.331    (+  6.057) n° sinonimi
+*      6,10 (+   0,04) media sinonimi per parola
+*      3,80 (-   0,02) media sinonimi per parola e tipologia
+*  2.353    (+    230) n° definizioni in ^[a-fA-F]
+*  3.976    (+    119) n° totale definizioni ^[a-zA-Z] (con thesaurus 1.0)
+
+Per il grosso contributo che sta fornendo alla revisione del thesaurus è stato
+aggiunto tra i detentori del copyright anche Giovanni Zuliani.
+
+
+----------
+15/12/2007
+Emessa la versione 2.06.f solo per il thesaurus ver. 2
+Tale versione contiene la revisione delle parole inizianti per ^[a-fA-F]
+Le parole inizianti per le altre lettere sono prese dal thesaurus 1.00
+
+Il thesaurus attuale è così composto:
+* 10.436    (+  1.192) n° parole distinte con sinonimi
+* 16.571    (+  2.078) n° parole e tipologia distinte con sinonimi
+* 63.274    (+  7.598) n° sinonimi
+*      6,06 (+   0,04) media sinonimi per parola
+*      3,82 (-   0,02) media sinonimi per parola e tipologia
+*  2.123    (+    149) n° definizioni in ^[a-fA-F]
+*  3.857    (+     60) n° totale definizioni ^[a-zA-Z] (con thesaurus 1.0)
+
+
+----------
+14/10/2007
+Emessa la versione 2.05.e solo per il thesaurus ver. 2
+Tale versione contiene la revisione delle parole inizianti per ^[a-eA-E]
+Le parole inizianti per le altre lettere sono prese dal thesaurus 1.00
+
+Il thesaurus attuale è così composto:
+*  9.244    (+  1.041) n° parole distinte con sinonimi
+* 14.493    (+  1.581) n° parole e tipologia distinte con sinonimi
+* 55.676    (+  6.140) n° sinonimi
+*      6,02 (-   0,02) media sinonimi per parola
+*      3,84 (=   0,00) media sinonimi per parola e tipologia
+*  1.974    (+    229) n° definizioni in ^[a-eA-E]
+*  3.797    (+     87) n° totale definizioni ^[a-zA-Z] (con thesaurus 1.0)
+
+
+----------
+25/08/2007
+Emessa la versione 2.04.d solo per il thesaurus ver. 2
+Tale versione contiene la revisione delle parole inizianti per ^[a-d]
+Le parole inizianti per le altre lettere sono prese dal thesaurus 1.00
+
+La nuova licenza con cui è distribuito il thesaurus è la GPL 3.0 o superiore.
+
+Sono inoltre state reintrodotte alcune parole inizianti per maiuscola
+che erano state erroneamente non considerate.
+
+Sono stati rinominati tutti i file allegati al thesaurus anteponendo il
+prefisso th_it_IT in modo da poterli distinguere facilmente da file
+relativi ad altri prodotti analoghi.
+
+Il thesaurus attuale è così composto:
+*  8.203    (+  1.699) n° parole distinte con sinonimi
+* 12.912    (+  2.738) n° parole e tipologia distinte con sinonimi
+* 49.536    (+ 10.505) n° sinonimi
+*      6,04 (+   0,04) media sinonimi per parola
+*      3,84 (=   0,00) media sinonimi per parola e tipologia
+*  1.745    (+    340) n° definizioni in ^[a-d]
+*  3.710    (+    267) n° totale definizioni ^[a-z] (con thesaurus 1.0)
+
+----------
+06/05/2007
+Emessa la versione 2.03.c solo per il thesaurus ver. 2
+Tale versione contiene la revisione delle parole inizianti per ^[a-c]
+Le parole inizianti per le altre lettere sono prese dal thesaurus 1.00
+
+Sono inoltre state corrette circa 50 tipologie errate per le parole
+inizianti per ^[a-b]
+
+Il thesaurus attuale è così composto:
+*  6.504    (+  2.817) n° parole distinte con sinonimi
+* 10.174    (+  4.739) n° parole e tipologia distinte con sinonimi
+* 39.031    (+ 17.574) n° sinonimi
+*      6,00 (+   0,18) media sinonimi per parola
+*      3,84 (-   0,11) media sinonimi per parola e tipologia
+*  1.405    (+    387) n° definizioni in ^[a-c]
+*  3.443    (nn) n° totale definizioni ^[a-z] (con thesaurus 1.0)
+
+----------
+08/10/2006
+Emessa la versione 2.02.b solo per il thesaurus ver. 2
+Tale versione contiene la revisione delle parole inizianti per ^[a-b]
+Le parole inizianti per le altre lettere sono prese dal thesaurus 1.00
+
+I tipi di parola e le definizioni sono stati incluse in parentesi tonde per
+permettere a MyThes di funzionare correttamente: ignorare tutto quello che è
+compreso tra parentesi tonde e quindi permettere di passare da una parola ad
+un'altra con un doppio click e non riportare il tipo di parola e la
+definizione visualizzate.
+
+Il thesaurus attuale è così composto:
+*  3.687    (+ 1.012) n° parole distinte con sinonimi
+*  5.435    (+ 1.464) n° parole e tipologia distinte con sinonimi
+* 21.457    (+ 5.412) n° sinonimi
+*      5,82 (-  0,18) media sinonimi per parola
+*      3,95 (-  0,09) media sinonimi per parola e tipologia
+*  1.018    (+   137) n° definizioni in ^[a-b]
+
+----------
+01/10/2006
+Emessa la versione 2.01.a solo per il thesaurus ver. 2
+Tale versione è stata ottenuta dalla versione 2.00.a con l'aggiunta di
+circa 3.180 definizioni.
+
+Le definizioni sono state create per con la correzione del dizionario.
+Servono principalmente per indicare quali parole sono state controllate.
+Le definizioni sono scritte tutte su una riga, come un normale dizionario;
+per poterle estrarre e agganciare al thesaurus è stata creata una procedura
+automatica che però, per ora, non riesce a fare tutti gli agganci possibili.
+
+Il thesaurus attuale è così composto:
+*  2.675    numero parole distinte con sinonimi
+*  3.971    numero parole e tipologia distinte con sinonimi
+* 16.045    numero sinonimi
+*      6,00 media sinonimi per parola
+*      4,04 media sinonimi per parola e tipologia
+*    881    numero definizioni in ^[a]
+
+----------
+08/09/2006
+Emessa la versione 2.00.a solo per il thesaurus ver. 2
+Tale versione contiene la revisione totale delle parole inizianti per a-
+Le parole inizianti per le altre lettere sono prese dal thesaurus 1.00
+
+Da questa versione verranno emesse le revisioni del thesaurus.
+Le revisioni per la lettera A sono ottenute da:
+* thesaurus 1.00 (contribuisce per circa il 32-33%)
+* generazione di possibili sinonimi partendo dal thesaurus 1.0
+  (contribuisce per circa il 64-65%)
+* uso di un thesaurus GPL (contribuisce per circa il 2-4%)
+
+Aggiornati i file che accompagnano il thesaurus utilizzando i nomi standard.
+
+
+----------
+26/07/2005
+Emessa la versione 1.00 stable sia per il thesaurus ver. 1 che ver. 2
+Tale versione porta a conclusione la compilazione del thesaurus.
+
+
+----------
+10/07/2005
+Emessa la versione 1.00 beta (10/07/2005) per il thesaurus ver. 1
+Sono state aggiunte le parole inizianti per d-
+Mancano le parole inizianti per t-
+
+
+----------
+29/03/2005
+Emessa la versione 1.00 beta (29/03/2005) per il thesaurus ver. 1
+Sono state aggiunte le parole inizianti per r-
+
+
+----------
+08/01/2005
+Emessa la versione 1.00 beta (08/01/2005) per il thesaurus ver. 1
+
+
+----------
+14/11/2004
+Emessa la versione 1.00 beta (14/11/2004) per il thesaurus ver. 1
+
+
+----------
+18/08/2004
+Emessa la versione 1.00 beta (18/08/2004) per il thesaurus ver. 1
+
+
+----------
+10/07/2004
+Emessa la versione 1.00 beta (10/07/2004) per il thesaurus ver. 1
+
+
+----------
+29/02/2004
+Emessa la versione 1.00 alfa (29/02/2004) per il thesaurus ver. 1
+
+
+----------
+12/01/2004
+Emessa la versione 1.00 alfa (12/01/2004) per il thesaurus ver. 1
+

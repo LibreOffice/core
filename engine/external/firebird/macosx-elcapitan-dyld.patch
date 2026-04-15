@@ -1,0 +1,58 @@
+--- examples/empbuild/empbuild.e
++++ examples/empbuild/empbuild.e
+@@ -64,7 +64,7 @@
+  * Functional description
+  *
+  **************************************/
+-TEXT	cmd [140];
++TEXT	cmd [8000];
+ 
+ if (argc > 1)
+     strcpy (Db_name, argv[1]);
+@@ -94,7 +94,9 @@
+     }
+ 
+ printf ("Turning forced writes off\n");
++char const * lp = getenv("DYLD_LIBRARY_PATH");
++if (!lp) lp = "";
+-sprintf (cmd, "gfix -write async %s", Db_name);
++sprintf (cmd, "DYLD_LIBRARY_PATH=%s gfix -write async %s", lp, Db_name);
+ if (system (cmd))
+     {
+     printf ("Couldn't turn forced writes off\n");
+@@ -104,7 +106,7 @@
+     }
+ 
+ printf ("Creating tables\n");
+-sprintf (cmd, "isql %s -q -i empddl.sql", Db_name);
++sprintf (cmd, "DYLD_LIBRARY_PATH=%s isql %s -q -i empddl.sql", lp, Db_name);
+ if (system (cmd))
+     {
+     printf ("Couldn't create tables \n");
+@@ -120,7 +122,7 @@
+     }
+ 
+ printf ("Turning  off indices and triggers \n");
+-sprintf (cmd, "isql %s -i indexoff.sql", Db_name);
++sprintf (cmd, "DYLD_LIBRARY_PATH=%s isql %s -i indexoff.sql", lp, Db_name);
+ if (system (cmd))
+     {
+     printf ("Couldn't turn off indices and triggers \n");
+@@ -128,7 +130,7 @@
+     }
+
+ printf ("Loading  column data\n");
+-sprintf (cmd, "isql %s -i empdml.sql", Db_name);
++sprintf (cmd, "DYLD_LIBRARY_PATH=%s isql %s -i empdml.sql", lp, Db_name);
+ if (system (cmd))
+     {
+     printf ("Couldn't load column data \n");
+@@ -136,7 +138,7 @@
+     }
+ 
+ printf ("Turning  on indices and triggers \n");
+-sprintf (cmd, "isql %s -i indexon.sql", Db_name);
++sprintf (cmd, "DYLD_LIBRARY_PATH=%s isql %s -i indexon.sql", lp, Db_name);
+ if (system (cmd))
+     {
+     printf ("Couldn't turn on indices and triggers \n");

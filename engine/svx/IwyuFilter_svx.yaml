@@ -1,0 +1,147 @@
+---
+assumeFilename: svx/source/svdraw/svdobj.cxx
+excludelist:
+    svx/inc/lboxctrl.hxx:
+    # Needed for --fwdecl mode to avoid "externally available entity "SvxPopupWindowListBox" is not previously declared in an included file"
+    - class SvxPopupWindowListBox
+    svx/source/inc/tablemodel.hxx:
+    # Needed for --fwdecl mode
+    - struct _xmlTextWriter
+    svx/source/accessibility/AccessibleTextEventQueue.hxx:
+    # Needed for std::for_each
+    - algorithm
+    svx/source/accessibility/ChildrenManagerImpl.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    svx/source/accessibility/DescriptionGenerator.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:
+    # Boost wrapper is needed
+    - boost/spirit/include/classic_core.hpp
+    svx/source/customshapes/EnhancedCustomShapeEngine.cxx:
+    # Needed for SvxShape
+    - svx/unoshape.hxx
+    svx/source/engine3d/float3d.cxx:
+    # Needed for E3dObject instantiation
+    - svx/obj3d.hxx
+    svx/source/dialog/ClassificationCommon.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertyContainer.hpp
+    svx/source/form/fmmodel.cxx:
+    # Actually used
+    - com/sun/star/form/XForms.hpp
+    svx/source/fmcomp/dbaobjectex.cxx:
+    # Actually used
+    - com/sun/star/ucb/XContent.hpp
+    svx/source/fmcomp/dbaexchange.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XConnection.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    svx/source/fmcomp/gridcell.cxx:
+    # Needed to avoid mysterious linking error on WIN32 no-pch
+    - toolkit/helper/listenermultiplexer.hxx
+    svx/source/gallery2/galobj.cxx:
+    # Actually used
+    - com/sun/star/frame/XModel.hpp
+    svx/source/items/galleryitem.cxx:
+    # Actually used
+    - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/lang/XComponent.hpp
+    svx/source/form/formcontrolfactory.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XDataSource.hpp
+    svx/source/form/dataaccessdescriptor.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    svx/source/form/fmcontrolbordermanager.cxx:
+    # Actually used
+    - com/sun/star/form/validation/XValidatableFormComponent.hpp
+    svx/source/form/databaselocationinput.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    svx/source/form/tabwin.cxx:
+    # Needed for UnoType instantiation
+    - com/sun/star/sdbc/XConnection.hpp
+    svx/source/form/typemap.cxx:
+    # Needed for svxslots.hxx
+    - config_options.h
+    - sfx2/objitem.hxx
+    - sfx2/msg.hxx
+    - svl/memberid.h
+    - editeng/wghtitem.hxx
+    - editeng/udlnitem.hxx
+    - editeng/crossedoutitem.hxx
+    - editeng/contouritem.hxx
+    - editeng/shdditem.hxx
+    - editeng/postitem.hxx
+    - svx/clipfmtitem.hxx
+    - editeng/fhgtitem.hxx
+    - editeng/fontitem.hxx
+    - editeng/charreliefitem.hxx
+    - editeng/escapementitem.hxx
+    - editeng/colritem.hxx
+    - editeng/wrlmitem.hxx
+    - editeng/charscaleitem.hxx
+    - editeng/autokernitem.hxx
+    - editeng/ulspitem.hxx
+    - editeng/lrspitem.hxx
+    - editeng/lspcitem.hxx
+    - editeng/langitem.hxx
+    - editeng/kernitem.hxx
+    - editeng/adjustitem.hxx
+    - editeng/emphasismarkitem.hxx
+    - editeng/memberids.h
+    svx/source/sdr/contact/viewcontactofe3d.cxx:
+    # Needed for direct member access
+    - drawinglayer/attribute/sdrlightattribute3d.hxx
+    svx/source/sdr/contact/viewobjectcontactofunocontrol.cxx:
+    # Actually used
+    - com/sun/star/awt/XControlContainer.hpp
+    svx/source/svdraw/charthelper.cxx:
+    # Actually used
+    - com/sun/star/embed/XEmbeddedObject.hpp
+    svx/source/svdraw/svdocapt.cxx:
+    # Needed for direct member access
+    - svx/svdopath.hxx
+    svx/source/svdraw/svdoashp.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp
+    svx/source/svdraw/svdocirc.cxx:
+    # Needed for direct member access
+    - svx/svdopath.hxx
+    svx/source/svdraw/svdoedge.cxx:
+    # Needed for direct member access
+    - svx/svdopath.hxx
+    svx/source/svdraw/svdoole2.cxx:
+    # Actually used
+    - com/sun/star/embed/XEmbeddedObject.hpp
+    svx/source/svdraw/svdorect.cxx:
+    # Actually used
+    - svx/svdopath.hxx
+    svx/source/table/accessiblecell.cxx:
+    # Needed for SvxTextEditSource object instantiation
+    - svx/svdotext.hxx
+    svx/source/table/accessibletableshape.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    svx/source/table/tablecolumns.cxx:
+    # Complete type is needed for template class
+    - tablecolumn.hxx
+    svx/source/unodraw/recoveryui.cxx:
+    # Needed for LIBO_ETC_FOLDER on WIN32
+    - config_folders.h
+    svx/source/unodraw/unoprov.cxx:
+    # Needed for UnoType instantiation
+    - com/sun/star/lang/Locale.hpp
+    svx/qa/unit/XTableImportExportTest.cxx:
+    # Needed for --with-system-cppunit
+    - unotest/bootstrapfixturebase.hxx
+    svx/sdi/svxslots.hrc:
+    # Needed for building svx/sdi/svx.sdi
+    - sfx2/sfxsids.hrc
+    - editeng/memberids.h
+    - editeng/editids.hrc
+    - svx/svxids.hrc
+    - svx/unomid.hxx

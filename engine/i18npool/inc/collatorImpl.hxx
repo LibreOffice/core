@@ -1,0 +1,109 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#pragma once
+
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/i18n/XCollator.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+
+#include <utility>
+#include <vector>
+#include <optional>
+
+namespace com::sun::star::i18n { class XLocaleData5; }
+namespace com::sun::star::uno { class XComponentContext; }
+
+namespace i18npool {
+
+//      ----------------------------------------------------
+//      class CollatorImpl
+//      ----------------------------------------------------
+class CollatorImpl : public cppu::WeakImplHelper
+<
+    css::i18n::XCollator,
+    css::lang::XServiceInfo
+>
+{
+public:
+
+    // Constructors
+    CollatorImpl( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    // Destructor
+    virtual ~CollatorImpl() override;
+
+    virtual sal_Int32 SAL_CALL compareSubstring(const OUString& s1, sal_Int32 off1, sal_Int32 len1,
+        const OUString& s2, sal_Int32 off2, sal_Int32 len2) override;
+
+    virtual sal_Int32 SAL_CALL compareString( const OUString& s1,
+        const OUString& s2) override;
+
+    virtual sal_Int32 SAL_CALL loadDefaultCollator( const css::lang::Locale& rLocale,  sal_Int32 collatorOptions) override;
+
+    virtual sal_Int32 SAL_CALL loadCollatorAlgorithm(  const OUString& impl, const css::lang::Locale& rLocale,
+        sal_Int32 collatorOptions) override;
+
+    virtual void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const OUString& impl, const css::lang::Locale& rLocale,
+        const css::uno::Sequence< sal_Int32 >& collatorOptions) override;
+
+    virtual css::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const css::lang::Locale& rLocale ) override;
+
+    virtual css::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const OUString& collatorAlgorithmName ) override;
+
+    //XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+protected:
+    css::lang::Locale nLocale;
+private:
+    struct lookupTableItem {
+        css::lang::Locale aLocale;
+        OUString algorithm;
+        OUString service;
+        css::uno::Reference < XCollator > xC;
+        lookupTableItem(css::lang::Locale _aLocale, OUString _algorithm, OUString _service,
+                        css::uno::Reference < XCollator > _xC) : aLocale(std::move(_aLocale)), algorithm(std::move(_algorithm)), service(std::move(_service)), xC(std::move(_xC)) {}
+        bool equals(const css::lang::Locale& rLocale, std::u16string_view _algorithm) {
+        return aLocale.Language == rLocale.Language &&
+            aLocale.Country == rLocale.Country &&
+            aLocale.Variant == rLocale.Variant &&
+            algorithm == _algorithm;
+        }
+    };
+    std::vector<lookupTableItem>       lookupTable;
+    std::optional<lookupTableItem>     cachedItem;
+
+    // Service Factory
+    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    // lang::Locale Data
+    css::uno::Reference < css::i18n::XLocaleData5 >     mxLocaleData;
+
+    /// @throws css::uno::RuntimeException
+    bool createCollator(const css::lang::Locale& rLocale, const OUString& serviceName,
+        const OUString& rSortAlgorithm);
+    /// @throws css::uno::RuntimeException
+    void loadCachedCollator(const css::lang::Locale& rLocale, const OUString& rSortAlgorithm);
+};
+
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,60 @@
+# -*- Mode: Diff -*-
+--- src/base/ftsystem.c
++++ src/base/ftsystem.c
+@@ -24,6 +24,7 @@
+    *
+    */
+ 
++#include <unistd.h>
+ 
+ #include <ft2build.h>
+ #include FT_CONFIG_CONFIG_H
+@@ -238,6 +239,8 @@
+                   const char*  filepathname )
+   {
+     FT_FILE*  file;
++    int nFD;
++    int n;
+ 
+ 
+     if ( !stream )
+@@ -250,7 +253,13 @@
+     stream->read               = NULL;
+     stream->close              = NULL;
+ 
+-    file = ft_fopen( filepathname, "rb" );
++    if ( sscanf( filepathname, "/:FD:/%d%n", &nFD, &n ) == 1 && filepathname[n] == '\0')
++    {
++      lseek( nFD, 0, SEEK_SET );
++      file = fdopen( dup( nFD ), "rb" );
++    }
++    else
++      file = ft_fopen( filepathname, "rb" );
+     if ( !file )
+     {
+       FT_ERROR(( "FT_Stream_Open:"
+--- builds/unix/ftsystem.c
++++ builds/unix/ftsystem.c
+@@ -249,13 +249,21 @@
+   {
+     int          file;
+     struct stat  stat_buf;
++    int nFD;
++    int n;
+ 
+ 
+     if ( !stream )
+       return FT_THROW( Invalid_Stream_Handle );
+ 
+     /* open the file */
+-    file = open( filepathname, O_RDONLY );
++    if ( sscanf( filepathname, "/:FD:/%d%n", &nFD, &n ) == 1 && filepathname[n] == '\0')
++    {
++      lseek( nFD, 0, SEEK_SET );
++      file = dup( nFD );
++    }
++    else
++      file = open( filepathname, O_RDONLY );
+     if ( file < 0 )
+     {
+       FT_ERROR(( "FT_Stream_Open:" ));

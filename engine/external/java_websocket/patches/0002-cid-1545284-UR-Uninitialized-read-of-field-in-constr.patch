@@ -1,0 +1,26 @@
+From 04fa9cea4d9d14743ff54ad5faaf7e31f081bacb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sun, 1 Oct 2023 19:29:27 +0100
+Subject: [PATCH 2/2] cid#1545284 UR: Uninitialized read of field in
+ constructor
+
+---
+ src/main/java/org/java_websocket/SSLSocketChannel.java | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/main/java/org/java_websocket/SSLSocketChannel.java b/src/main/java/org/java_websocket/SSLSocketChannel.java
+index b402450..760f643 100644
+--- a/src/main/java/org/java_websocket/SSLSocketChannel.java
++++ b/src/main/java/org/java_websocket/SSLSocketChannel.java
+@@ -130,7 +130,7 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, ISSLCh
+ 
+   public SSLSocketChannel(SocketChannel inputSocketChannel, SSLEngine inputEngine,
+       ExecutorService inputExecutor, SelectionKey key) throws IOException {
+-    if (inputSocketChannel == null || inputEngine == null || executor == inputExecutor) {
++    if (inputSocketChannel == null || inputEngine == null || inputExecutor == null) {
+       throw new IllegalArgumentException("parameter must not be null");
+     }
+ 
+-- 
+2.41.0
+

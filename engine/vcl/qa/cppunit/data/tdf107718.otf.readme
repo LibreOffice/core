@@ -1,0 +1,11 @@
+This is a subset copy of Source Han Sans font licensed under Open Font License and
+obtained from (the Static Super OTC):
+
+  https://github.com/adobe-fonts/source-han-sans/releases/tag/2.004R
+
+And subset using hb-subset to contain only the one glyph used in the test:
+
+  hb-subset SourceHanSans.ttc --face-index=25 --unicodes="4E16,1109,1168,11BC,302E,C185,0020" -o tdf107718.otf
+
+U+C185 is not directly used in the test but we need its glyphs. The space is
+added to the subset as it seems needed to get the font to work on Windows.

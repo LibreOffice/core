@@ -1,0 +1,286 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+interface TableOLEObject
+{
+    SID_ACTIVE_OBJ_NAME [ StateMethod = GetObjectState; ]
+    SID_OLE_ACTIVATE    [ ExecMethod = ExecuteObject; ]
+    SID_OLE_DEACTIVATE  [ ExecMethod = ExecuteObject; ]
+    SID_OLE_SELECT      [ ExecMethod = ExecuteObject; ] // api:
+    SID_OBJECT_LEFT     [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
+    SID_OBJECT_TOP      [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
+    SID_OBJECT_WIDTH    [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
+    SID_OBJECT_HEIGHT   [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
+}
+
+
+interface Tables
+{
+    FID_TAB_SELECTALL   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TAB_DESELECTALL [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TAB_MENU_RENAME [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_APPEND      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_INS_TABLE       [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_INS_TABLE_EXT   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TABLE_HIDE      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TABLE_SHOW      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    SID_SELECT_TABLES   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TAB_MENU_SET_TAB_BG_COLOR   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_EVENTS      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+}
+
+
+interface BaseSelection
+{
+    // insert objects {
+
+    SID_INSERT_GRAPHIC          [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_FRAME            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_INSERT_OBJECT           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_FLOATINGFRAME    [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_AVMEDIA          [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_SIGNATURELINE    [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_EDIT_SIGNATURELINE      [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_SIGN_SIGNATURELINE      [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+
+    SID_INSERT_QRCODE           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_EDIT_QRCODE             [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+
+    SID_IMAP                    [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]
+    SID_IMAP_EXEC               [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]
+
+    SfxVoidItem InsertObjectChart SID_INSERT_DIAGRAM
+    (
+        SfxBoolItem InNewTable FN_PARAM_4,
+        SfxStringItem RangeList FN_PARAM_5
+    )
+    [
+        ExecMethod = ExecDrawIns ;
+        StateMethod = GetDrawInsState ;
+        Asynchron ;
+    ]
+
+    SID_INSERT_SMATH        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_GALLERY_FORMATS     [ ExecMethod = ExecGallery; ]
+    SID_GALLERY             [ ExecMethod = ExecChildWin; ]
+    SID_AVMEDIA_PLAYER      [ ExecMethod = ExecChildWin; ]
+    SID_DRAW_NOTEEDIT       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_OBJECTRESIZE        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+
+    SID_OBJECT_SELECT               [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_LINE                   [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_XLINE                  [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_LINE_ARROW_END              [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_LINE_ARROW_CIRCLE           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_LINE_ARROW_SQUARE           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_LINE_ARROW_START            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_LINE_CIRCLE_ARROW           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_LINE_SQUARE_ARROW           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_LINE_ARROWS                 [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_MEASURELINE            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_ARROWS              [ StateMethod = GetDrawState; ]
+    SID_DRAW_RECT                   [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_ELLIPSE                [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_LINES               [ StateMethod = GetDrawState; ]
+    SID_DRAW_POLYGON                [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_POLYGON_NOFILL         [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_BEZIER_FILL            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_BEZIER_NOFILL          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_FREELINE               [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_FREELINE_NOFILL        [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_XPOLYGON               [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_XPOLYGON_NOFILL        [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_ARC                    [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_PIE                    [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_CIRCLECUT              [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_TEXT                   [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_TEXT_VERTICAL          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_TEXT_MARQUEE           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_CAPTION                [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_CAPTION_VERTICAL       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_INSERT_DRAW                 []
+    SID_FONTWORK_GALLERY_FLOATER    [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_DRAWTBX_CS_BASIC            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_CS_SYMBOL           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_CS_ARROW            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_CS_FLOWCHART        [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_CS_CALLOUT          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_CS_STAR             [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_CS_ID                  [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+
+    SID_DRAWTBX_CONNECTORS           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_TOOL_CONNECTOR               [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_ARROW_START        [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_ARROW_END          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_ARROWS             [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_CIRCLE_START       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_CIRCLE_END         [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_CIRCLES            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINE               [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINE_ARROW_START   [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINE_ARROW_END     [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINE_ARROWS        [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINE_CIRCLE_START  [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINE_CIRCLE_END    [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINE_CIRCLES       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_CURVE              [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_CURVE_ARROW_START  [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_CURVE_ARROW_END    [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_CURVE_ARROWS       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_CURVE_CIRCLE_START [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_CURVE_CIRCLE_END   [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_CURVE_CIRCLES      [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINES              [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINES_ARROW_START  [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINES_ARROW_END    [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINES_ARROWS       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINES_CIRCLE_START [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINES_CIRCLE_END   [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_CONNECTOR_LINES_CIRCLES      [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+
+    SID_FM_CREATE_CONTROL   [ ExecMethod = ExecDraw ; ]
+    SID_LINKS               [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_DRAW_CHART          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_FM_CREATE_FIELDCONTROL [ ExecMethod = ExecDrawIns ; ]
+
+    // } insert objects
+
+}
+
+interface TableEditView
+{
+    FID_TOGGLEINPUTLINE     [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DEFINE_PRINTAREA    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ADD_PRINTAREA       [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_ADJUST_PRINTZOOM    [ ExecMethod = Execute; StateMethod = GetState; ]
+
+        SID_CURRENTDOC      [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_WINDOW_SPLIT    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_WINDOW_FIX      [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_WINDOW_FIX_ROW  [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_WINDOW_FIX_COL  [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_SAVEDOC
+    [
+        ExecMethod = ExecuteSave ;
+        StateMethod = GetSaveState ;
+    ]
+    SID_SAVEASDOC
+    [
+        ExecMethod = ExecuteSave ;
+        StateMethod = GetSaveState ;
+    ]
+    // has indeed a SW in his name but is also used in Calc
+    SID_CREATE_SW_DRAWVIEW [ ExecMethod = Execute; ]
+    SID_ATTR_ZOOM       [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ATTR_ZOOMSLIDER [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ZOOM_IN [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ZOOM_OUT [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_INSERT_FILE [ ExecMethod = Execute; StateMethod = GetState; ]
+
+    FID_SCALE           [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_FUNCTION_BOX    [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_CHG_SHOW        [ ExecMethod = Execute; StateMethod = GetState; ]
+    WID_SIMPLE_REF      [ ExecMethod = Execute; StateMethod = NoState; ]
+    FID_CHG_ACCEPT      [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_CHG_COMMENT     [ ExecMethod = Execute; StateMethod = GetState; ]
+
+    FID_SCALESTATUS     [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TOGGLESYNTAX    [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_HANDLEDUPLICATERECORDS [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TOGGLECOLROWHIGHLIGHTING [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TOGGLEHEADERS   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TOGGLEFORMULA   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_NEW_SHEET_VIEW  [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_REMOVE_SHEET_VIEW [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_EXIT_SHEET_VIEW [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_SELECT_SHEET_VIEW [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_NORMALVIEWMODE  [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_PAGEBREAKMODE   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_REPAINT         [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_CURRENTCELL     [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_CURRENTOBJECT   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_JUMPTOMARK      [ ExecMethod = Execute; StateMethod = NoState; ] // status(final|play)
+
+    SID_PRINTPREVIEW    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_THEME_DIALOG    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_APPLY_THEME     [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ADD_THEME       [ ExecMethod = Execute; StateMethod = GetState; ]
+
+    SID_NAVIGATOR_SELECT_COMMENT [ ExecMethod = ExecNavigatorWin; ]
+
+    // search/replace
+    SID_SEARCH_DLG      [ ExecMethod = SearchDialogHdl; StateMethod = GetState; ]
+    FID_SEARCH_NOW      [ ExecMethod = ExecSearch; StateMethod = NoState;  ]
+    SID_SEARCH_ITEM     [ ExecMethod = ExecSearch;  StateMethod = GetState; ]
+    SID_SEARCH_OPTIONS  [ ExecMethod = NoExec;      StateMethod = GetState; ]
+    // search/replace from Basic:
+    FID_SEARCH          [ ExecMethod = ExecSearch; ]
+    FID_REPLACE         [ ExecMethod = ExecSearch; ]
+    FID_SEARCH_ALL      [ ExecMethod = ExecSearch; ]
+    FID_REPLACE_ALL     [ ExecMethod = ExecSearch; ]
+    FID_REPEAT_SEARCH   [ ExecMethod = ExecSearch; ]
+
+    SID_CURRENTTAB      [ ExecMethod = Execute; StateMethod = GetState; ]
+
+    //  view options for drawing layer are needed here because they
+    //  can be set without a drawing object selected (#75361#)
+    SID_GRID_VISIBLE    [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; ]
+    SID_GRID_USE        [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; ]
+    SID_HELPLINES_MOVE  [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; ]
+
+    SID_STYLE_FAMILY2           [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_FAMILY3           [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_FAMILY4           [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_APPLY             [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_WATERCAN          [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_NEW_BY_EXAMPLE    [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_UPDATE_BY_EXAMPLE [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_NEW               [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_EDIT              [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_DELETE            [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_HIDE              [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_SHOW              [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+
+    SID_GETUNDOSTRINGS  [ StateMethod = GetUndoState; ]
+    SID_GETREDOSTRINGS  [ StateMethod = GetUndoState; ]
+    SID_UNDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; ]
+    SID_REDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; ]
+
+    SID_OPT_LOCALE_CHANGED  [ ExecMethod = Execute; ]
+
+    SID_READONLY_MODE   [ StateMethod = GetState; ]
+}
+
+
+
+shell ScTabViewShell
+{
+    import TableSelection "ActiveDocument.ActiveTable";
+    import TableOLEObject "SelectedObject";
+    import Tables "ActiveDocument.Tables";
+    import BaseSelection;
+    import TableEditView;
+
+
+    SID_STATUS_PAGESTYLE    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_TBXCTL_INSERT       []
+    SID_TBXCTL_INSCELLS     []
+
+}

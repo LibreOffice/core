@@ -1,0 +1,4 @@
+LLICÈNCIES:
+Corrector ortogràfic: LGPL, GPL
+Tesaurus (sinònims i termes relacionats): CC-BY 4.0
+Diccionari de partició de mots: LGPL, GPL

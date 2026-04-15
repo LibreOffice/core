@@ -1,0 +1,55 @@
+Disable all DLL init functions in libgpg-error, since they're
+not actually run in statically linked libs. And libtool seems
+to unconditionally set that flag on all Windows builds.
+
+diff -ur libgpg-error.org/src/init.c libgpg-error/src/init.c
+--- libgpg-error.org/src/init.c	2017-02-28 10:11:05.000000000 +0100
++++ libgpg-error/src/init.c	2017-11-23 16:44:56.850797400 +0100
+@@ -88,7 +88,7 @@
+ _gpg_err_init (void)
+ {
+ #ifdef HAVE_W32_SYSTEM
+-# ifdef DLL_EXPORT
++# ifdef HAVE_DLL_INIT
+   /* We always have a constructor and thus this function is called
+      automatically.  Due to the way the C init code of mingw works,
+      the constructors are called before our DllMain function is
+@@ -130,7 +130,7 @@
+ void
+ _gpg_err_deinit (int mode)
+ {
+-#if defined (HAVE_W32_SYSTEM) && !defined(DLL_EXPORT)
++#if defined (HAVE_W32_SYSTEM) && !defined(HAVE_DLL_INIT)
+   struct tls_space_s *tls;
+ 
+   tls = TlsGetValue (tls_index);
+@@ -473,7 +473,7 @@
+ 
+ 
+ /* Entry point called by the DLL loader.  */
+-#ifdef DLL_EXPORT
++#ifdef HAVE_DLL_INIT
+ int WINAPI
+ DllMain (HINSTANCE hinst, DWORD reason, LPVOID reserved)
+ {
+diff -ur libgpg-error.org/src/w32-gettext.c libgpg-error/src/w32-gettext.c
+--- libgpg-error.org/src/w32-gettext.c	2016-12-02 22:51:19.000000000 +0100
++++ libgpg-error/src/w32-gettext.c	2017-11-23 16:43:28.450453000 +0100
+@@ -1180,7 +1180,7 @@
+    DLL.  If used as a static lib we can't control the process set; for
+    example it might be used with a main module which is not build with
+    mingw and thus does not know how to call the constructors.  */
+-#ifdef DLL_EXPORT
++#ifdef HAVE_DLL_INIT
+ static void module_init (void) _GPG_ERR_CONSTRUCTOR;
+ #endif
+ static void
+@@ -1195,7 +1195,7 @@
+     }
+ }
+ 
+-#if !defined(DLL_EXPORT) || !defined(_GPG_ERR_HAVE_CONSTRUCTOR)
++#if !defined(HAVE_DLL_INIT) || !defined(_GPG_ERR_HAVE_CONSTRUCTOR)
+ void
+ _gpg_w32__init_gettext_module (void)
+ {

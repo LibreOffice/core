@@ -1,0 +1,10 @@
+--- src/rdf_log.c
++++ src/rdf_log.c
+@@ -136,6 +136,7 @@
+       char *buffer = LIBRDF_MALLOC(char*, slocator_len + 2);
+       *buffer=' ';
+       raptor_locator_format(buffer + 1, slocator_len, (raptor_locator*)locator);
++      buffer[slocator_len + 1] = '\0';
+       fputs(buffer, stderr);
+       LIBRDF_FREE(char*, buffer);
+     }

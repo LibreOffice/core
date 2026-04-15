@@ -1,0 +1,61 @@
+// Hint files help the Visual Studio IDE interpret Visual C++ identifiers
+// such as names of functions and macros.
+// For more information see https://go.microsoft.com/fwlink/?linkid=865984
+
+#define SAL_THROW_EXTERN_C()
+
+#define SAL_UNUSED_PARAMETER
+
+#define SAL_LOPLUGIN_ANNOTATE(id)
+
+#define DECL_LINK(Member, ArgType, RetType) \
+    RetType Member(ArgType)
+
+#define DECL_STATIC_LINK(Class, Member, ArgType, RetType) \
+    static RetType Member(Class *, ArgType)
+
+#define DECL_DLLPRIVATE_LINK(Member, ArgType, RetType) \
+    SAL_DLLPRIVATE RetType Member(ArgType)
+
+#define DECL_DLLPRIVATE_STATIC_LINK(Class, Member, ArgType, RetType) \
+    SAL_DLLPRIVATE static RetType Member(Class *, ArgType)
+
+#define IMPL_LINK(Class, Member, ArgType, ArgName, RetType) \
+    RetType Class::Member(ArgType ArgName)
+
+#define IMPL_LINK_NOARG(Class, Member, ArgType, RetType) \
+    RetType Class::Member(ArgType)
+
+#define IMPL_STATIC_LINK(Class, Member, ArgType, ArgName, RetType) \
+    RetType Class::Member(Class *, ArgType ArgName)
+
+#define IMPL_STATIC_LINK_NOARG(Class, Member, ArgType, RetType) \
+    RetType Class::Member(Class *, ArgType)
+
+// From workdir/UnpackedTarball/cppunit/include/cppunit/plugin/TestPlugIn.h
+
+#define CPPUNIT_PLUGIN_IMPLEMENT()
+
+// From workdir/UnpackedTarball/cppunit/include/cppunit/extensions/HelperMacros.h
+// To allow searching for the test names, where they are defined using the macros
+
+#define CPPUNIT_TEST_FIXTURE(TestClass, TestName)                              \
+    class TestName : public TestClass                                          \
+    {                                                                          \
+    public:                                                                    \
+        void TestBody();                                                       \
+    };                                                                         \
+    void TestName::TestBody()
+
+// From sw/qa/inc/swmodeltestbase.hxx
+// To allow searching for the test names, where they are defined using the macros
+#define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, password, BaseClass) \
+    class TestName : public BaseClass {                                    \
+    public:                                                                \
+        void verify() override;                                            \
+    };                                                                     \
+    void TestName::verify()
+
+#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)

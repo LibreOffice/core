@@ -1,0 +1,87 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module awt {
+
+
+/** allows converting between different measurement units
+ */
+interface XUnitConversion: com::sun::star::uno::XInterface
+{
+    /** converts the given Point, which is specified in pixels, into the given logical unit
+
+        @param Point
+            A given Point in a well known type
+        @param TargetUnit
+            A type from com::sun::star::util::MeasureUnit in which the Point will convert to.
+
+        @return
+            Returns a new Point in the TargetUnit type format.
+     */
+    com::sun::star::awt::Point convertPointToLogic( [in] com::sun::star::awt::Point Point, [in] short TargetUnit )
+            raises ( com::sun::star::lang::IllegalArgumentException );
+
+    /** converts the given Point, which is specified in the given logical unit, into pixels
+
+        @param Point
+            A given Point in the SourceUnit type
+        @param SourceUnit
+            The type from com::sun::star::util::MeasureUnit of the Point.
+
+        @return
+            Return a new Point in Pixel type format.
+     */
+    com::sun::star::awt::Point convertPointToPixel( [in] com::sun::star::awt::Point Point, [in] short SourceUnit )
+            raises ( com::sun::star::lang::IllegalArgumentException );
+
+
+    /** converts the given Size, which is specified in pixels, into the given logical unit
+
+        @param Size
+            A given Size in a well known type
+        @param TargetUnit
+            A type from com::sun::star::util::MeasureUnit in which the Size will convert to.
+
+        @return
+            Returns a new Size in the TargetUnit type format.
+     */
+    com::sun::star::awt::Size convertSizeToLogic( [in] com::sun::star::awt::Size Size, [in] short TargetUnit )
+            raises ( com::sun::star::lang::IllegalArgumentException );
+
+    /** converts the given Size, which is specified in the given logical unit, into pixels
+
+        @param Size
+            A given Size in a well known type
+        @param SourceUnit
+            The type from com::sun::star::util::MeasureUnit of the Size.
+
+        @return
+            Returns a new Size in the TargetUnit type format.
+     */
+    com::sun::star::awt::Size convertSizeToPixel( [in] com::sun::star::awt::Size Size, [in] short SourceUnit )
+            raises ( com::sun::star::lang::IllegalArgumentException );
+
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

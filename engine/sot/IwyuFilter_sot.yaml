@@ -1,0 +1,10 @@
+---
+assumeFilename: sot/source/base/object.cxx
+excludelist:
+    sot/source/unoolestorage/xolesimplestorage.hxx:
+    # Base class needs complete type
+    - com/sun/star/embed/XOLESimpleStorage.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sot/source/base/formats.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx

@@ -1,0 +1,50 @@
+<nat>
+  <rules>
+    <entry name="ZoneA-to-ZoneB">
+      <source-translation>
+        <dynamic-ip-and-port>
+          <translated-address>
+            IPPool_NAT-1.2.3
+          </translated-address>
+        </dynamic-ip-and-port>
+      </source-translation>
+      <to>
+        internet
+      </to>
+      <from>
+        INTRA
+      </from>
+      <source>
+        10.60.0.0/24
+        10.62.0.0/24
+      </source>
+      <destination>
+        any
+      </destination>
+      <service>any</service>
+    </entry>
+    <entry name="ZoneB2ZoneA">
+      <source-translation>
+        <dynamic-ip-and-port>
+          <translated-address>
+            NAT Pool 1
+          </translated-address>
+        </dynamic-ip-and-port>
+      </source-translation>
+      <to>
+        internet
+      </to>
+      <from>
+        INTRA
+      </from>
+      <source>
+        any
+      </source>
+      <destination>
+        any
+      </destination>
+      <service>any</service>
+      <disabled>no</disabled>
+    </entry>
+  </rules>
+</nat>

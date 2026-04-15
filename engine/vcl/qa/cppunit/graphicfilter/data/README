@@ -1,0 +1,16 @@
+Files with the string `BID`, `CVE`, `EDB` and `RC4` in their name
+are encrypted to avoid problems with virus checkers on source code download.
+
+# Installation on Debian/Ubuntu
+
+ $ sudo apt install mcrypt
+
+# Usage
+
+To get access to the plain files for manual testing (unencrypt):
+
+ $ mdecrypt --bare -a arcfour -o hex -k 435645 -s 3 CVE-2015-0848-1.wmf
+
+To create new tests (encrypt):
+
+ $ mcrypt --bare -a arcfour -o hex -k 435645 -s 3 foo.doc

@@ -1,0 +1,589 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module document {
+
+/** describes properties of a document, regarding the relationship
+    between the loaded document and the resource the document is
+    loaded from / stored to.
+
+    <p>
+    This service may be represented by a com::sun::star::beans::PropertyValue[].
+    Such descriptors will be passed to different functions, included into possible
+    load/save processes. Every member of such process can use this descriptor
+    and may change it if to actualize the information about the document.
+    So this descriptor should be used as an in/out parameter.
+    </p>
+
+    <p>
+    Note:<br>
+    It's not allowed to hold member of this descriptor by references longer than they
+    will be used (especially a possible stream). It's allowed to use it directly
+    or by copying it only.
+    </p>
+
+    @see com::sun::star::beans::PropertyValue
+ */
+service MediaDescriptor
+{
+    /** May be set by filters or detection services if user has chosen to
+        abort loading/saving, e.g. while entering a password.
+     */
+    [optional,property] boolean Aborted;
+
+    /** document is a template
+
+        <p>
+        Loading a component of type "template" creates a new untitled document
+        by default, but setting the "AsTemplate" property to `FALSE` loads the
+        template document for editing. Setting "AsTemplate" to `TRUE` creates a
+        new untitled document out of the loaded document, even if it has not
+        a "template" type.
+        </p>
+     */
+    [optional,property] boolean AsTemplate;
+
+    /** the author of the document
+
+        <p>
+        Only for storing versions in components supporting versioning:
+        author of version.
+        </p>
+     */
+    [optional,property] string Author;
+
+    /** identifier of used character set
+
+        <p>
+        Defines the character set for document formats that contain single
+        byte characters (if necessary).
+        </p>
+     */
+    [optional,property] string CharacterSet;
+
+    /** description of document
+
+        <p>
+        Only for storing versions in components supporting versioning:
+        comment (description) for stored version.
+        </p>
+     */
+    [optional,property] string Comment;
+
+    /** pack specific properties of caller
+
+        <p>
+        This is a parameter that can be used for any properties specific
+        for a special component type. Format of that depends from real
+        type of addressed component.
+        </p>
+
+        <p>
+        For extensibility, it is recommended to use values of type
+        sequence<com.sun.star.beans.NamedValue> with this property.
+        </p>
+     */
+    [optional,property] any ComponentData;
+
+    /** The base URL of the document to be used to resolve relative links.
+     */
+    [optional,property] string DocumentBaseURL;
+
+    /** document title
+
+        <p>
+        This parameter can be used to specify a title for a document.
+        </p>
+     */
+    [optional,property] string DocumentTitle;
+
+    /** encryption information for encryption/decryption of documents
+
+        <p>
+        It contains the necessary information for encryption/decryption of
+        a component (if necessary).
+        If neither password nor encryption data is specified, loading of
+        a password protected document will fail, storing will be done without
+        encryption. If both are provided, the encryption data is used
+        ( if the filter supports it ).
+        </p>
+        <p>
+        The encryption data is generated based on the password.
+        </p>
+     */
+    [optional,property] sequence< ::com::sun::star::beans::NamedValue > EncryptionData;
+
+    /** same as MediaDescriptor::URL
+
+        <p>
+        It will be supported for compatibility reasons only.
+        </p>
+
+        @deprecated
+     */
+    [optional,property] string FileName;
+
+    /** internal filter name
+
+        <p>
+        Name of a filter that should be used for loading or storing the component.
+        Names must match the names of the TypeDetection configuration,
+        invalid names are ignored. If a name is specified on loading,
+        it still will be verified by a filter detection, but in case of doubt
+        it will be preferred.
+
+        See this page for a list of internal filter names: https://help.libreoffice.org/latest/en-US/text/shared/guide/convertfilters.html
+        </p>
+     */
+    [optional,property] string FilterName;
+
+    /** same as MediaDescriptor::FilterOptions
+
+        <p>
+        It will be supported for compatibility reasons only.
+        </p>
+
+        @deprecated
+     */
+    [optional,property] string FilterFlags;
+
+    /** additional properties for filter
+
+        <p>
+        Some filters need additional parameters; use only together with property
+        MediaDescriptor::FilterName. Details must be documented
+        by the filter. This is an old format for some filters. If a string is not
+        enough, filters can use the property MediaDescriptor::FilterData.
+        </p>
+     */
+    [optional,property] string FilterOptions;
+
+    /** additional properties for filter
+
+        <p>
+        This is a parameter that can be used for any properties specific
+        for a special filter type. It should be used if
+        MediaDescriptor::FilterOptions isn't enough.
+        </p>
+     */
+    [optional,property] any FilterData;
+
+    /** load document invisible
+
+        <p>
+        Defines if the loaded component is made visible. If this property is not
+        specified, the component is made visible by default.
+        </p>
+     */
+    [optional,property] boolean Hidden;
+
+    /** The hierarchical path to the embedded document from topmost container.
+     */
+    [optional,property] string HierarchicalDocumentName;
+
+    /** a stream to receive the document data.
+
+        <p>
+        If used when storing a document: writing must be done using this stream.
+        If no stream is provided, the loader will create a stream by itself using
+        the other properties. It is not allowed to keep a reference to this
+        OutputStream after storing the component.
+        </p>
+     */
+    [optional,property] com::sun::star::io::XOutputStream OutputStream;
+
+    /** content of document
+
+        <p>
+        If used when loading a document: reading must be done using this stream.
+        If no stream is provided, the loader will create a stream by itself using
+        the other properties. It is not allowed to keep a reference to this
+        InputStream after loading the component, and it would be useless, because
+        in general an InputStream is usable for reading only once, except when it
+        also implements the com::sun::star::io::XSeekable interface.
+        </p>
+     */
+    [optional,property] com::sun::star::io::XInputStream InputStream;
+
+    /** handle exceptional situations
+
+        <p>
+        Object implementing the com::sun::star::task::InteractionHandler
+        service that is used to handle exceptional situations where proceeding with the task
+        is impossible without additional information or impossible at all.
+        The implemented API provides a default implementation for it that can handle many situations.
+        If no InteractionHandler is set, a suitable exception is thrown.
+        It is not allowed to keep a reference to this object, even not in the loaded
+        or stored component's copy of the MediaDescriptor provided by its arguments attribute.
+        </p>
+     */
+    [optional,property] com::sun::star::task::XInteractionHandler InteractionHandler;
+
+    /** jump to a marked position after loading
+
+        <p>
+        This is the same as the text behind a "#" in a http URL. But
+        this syntax with a "#" is not specified in most URL schemas.
+        </p>
+     */
+    [optional,property] string JumpMark;
+
+    /** specify mime type of content
+
+        <p>
+        Type of the medium to load, that must match to one of the types defined
+        in the TypeDetection configuration (otherwise it's ignored).
+        This bypasses the type detection of the com::sun::star::frame::Desktop environment,
+        so passing a wrong MediaType will cause failure of loading.
+        </p>
+     */
+    [optional,property] string MediaType;
+
+    /** please use the corresponding parameters of this descriptor instead
+
+        <p>
+        String that summarizes some flags for loading. The string contains capital
+        letters for the flags:<br>
+        <table border=1>
+            <tr>
+                <td><strong>flag</strong></td>
+                <td><strong>value</strong></td>
+                <td><strong>replacement</strong></td>
+            </tr>
+            <tr>
+                <td><em>ReadOnly</em></td>
+                <td>R</td>
+                <td>MediaDescriptor::ReadOnly</td>
+            </tr>
+            <tr>
+                <td><em>Preview</em></td>
+                <td>B</td>
+                <td>MediaDescriptor::Preview</td>
+            </tr>
+            <tr>
+                <td><em>AsTemplate</em></td>
+                <td>T</td>
+                <td>MediaDescriptor::AsTemplate</td>
+            </tr>
+            <tr>
+                <td><em>Hidden</em></td>
+                <td>H</td>
+                <td>MediaDescriptor::Hidden</td>
+            </tr>
+        </table>
+        </p>
+
+        @deprecated
+     */
+    [optional,property] string OpenFlags;
+
+    /** opens a new view for an already loaded document
+
+        <p>
+        Setting this to `TRUE` forces the component to create a new window on loading
+        in any case. If the component supports multiple views, a second view is
+        opened, if not, the component is loaded one more time. Otherwise the behavior
+        depends on the default window handling of the com::sun::star::frame::Desktop environment.
+        </p>
+     */
+    [optional,property] boolean OpenNewView;
+
+
+    /** overwrite any existing file
+
+        <p>
+        For storing only: overwrite any existing file, default is `TRUE`.
+        Setting this to `FALSE` raises an error, if the target file already exists.
+        </p>
+     */
+    [optional,property] boolean Overwrite;
+
+    /** password for loading or storing documents
+
+        <p>
+        It contains a password for loading or storing a component (if necessary).
+        If neither password nor encryption data is specified, loading of
+        a password protected document will fail, storing will be done without
+        encryption. If both are provided, the encryption data is used
+        ( if the filter supports it ).
+        </p>
+     */
+    [optional,property] string Password;
+
+    /** contains the data for HTTP post method as a sequence of bytes.
+
+        <p>
+        Data to send to a location described by the media descriptor to get
+        a result in return that will be loaded as a component
+        (usually in webforms). Default is: no PostData.
+        </p>
+     */
+    [optional,property] sequence< byte > PostData;
+
+    /** add loaded document to recent document list
+
+        <p>
+        Setting this to `FALSE` prevents the loaded document to be added to the recent documents list.
+        Default is `TRUE`.
+        </p>
+     */
+    [optional,property] boolean PickListEntry;
+
+    /** use MediaDescriptor::PostData instead of this
+
+        <p>
+        Same as PostData, but the data is transferred as a string
+        (just for compatibility).
+        </p>
+
+        @deprecated
+     */
+    [optional,property] string PostString;
+
+    /** show preview
+
+        <p>
+        Setting this to `TRUE` tells the a loaded component that it is loaded as
+        a preview, so it can optimize loading and viewing for this special purpose.
+        Default is `FALSE`.
+        </p>
+     */
+    [optional,property] boolean Preview;
+
+    /** open document readonly
+
+        <p>
+        Tells whether a document should be loaded in a (logical) readonly or in
+        read/write mode. If opening in the desired mode is impossible, an error occurs.
+        By default the loaded content decides what to do: if its UCB content supports
+        a "readonly" property, the logical open mode depends on that, otherwise
+        it will be read/write. This is only a UI related property, opening a
+        document in read only mode will not prevent the component from being
+        modified by API calls, but all modifying functionality in the UI will
+        be disabled or removed.
+        </p>
+     */
+    [optional,property] boolean ReadOnly;
+
+    /** start presentation from a document
+
+        <p>
+        Tells the component loading the document that a presentation that is in the
+        document is to be started right away.
+        </p>
+    */
+    [optional,property] boolean StartPresentation;
+
+    /** name of document referrer
+
+        <p>
+        A URL describing the environment of the request; e.g. a referrer may be a
+        URL of a document, if a hyperlink inside this document is clicked to load
+        another document. The referrer may be evaluated by the addressed UCB content
+        or the loaded document. Without a referrer the processing of URLs that
+        needs security checks will be denied, e.g. "macro:" URLs.
+        <br>
+        Don't be confused about the wrong spelling; it is kept for compatibility reasons.
+        </p>
+     */
+    [optional,property] string Referer;
+
+    /** let the document be opened in repair mode
+
+        <p>
+        For loading of corrupted zip packages: Setting this to `TRUE` let the document
+        be opened in repair mode, so as much as possible information will be retrieved.
+        </p>
+     */
+    [optional,property] boolean RepairPackage;
+
+    /** can be used for status information
+
+        <p>
+        Object implementing the com::sun::star::task::XStatusIndicator
+        interface that can be used to give status information (text or progress) for the task.
+        The office provides a default implementation for it. It is not allowed to keep
+        a reference to this object, even not in the loaded or stored component's
+        copy of the MediaDescriptor provided by its arguments attribute.
+        </p>
+     */
+    [optional,property] com::sun::star::task::XStatusIndicator StatusIndicator;
+
+    /** allows to specify the URL that is used next time SaveAs dialog is opened
+
+        <p>
+        If the parameter is specified, the URL will be used by SaveAs dialog
+        next time as target folder.
+        </p>
+     */
+    [optional,property] string SuggestedSaveAsDir;
+
+    /** allows to specify the suggested file name that is used next time SaveAs
+        dialog is opened
+
+        <p>
+        If the parameter is specified, the file name will be suggested by
+        SaveAs dialog next time.
+        </p>
+     */
+    [optional,property] string SuggestedSaveAsName;
+
+    /** Directory to be used when saving (save as, save a copy) or exporting (to PDF, epub, ...).
+        Defaults to the current document directory.
+     */
+    [optional,property] string ExportDirectory;
+
+    /** name of the template instead of the URL
+
+        <p>
+        The logical name of a template to load. Together with the MediaDescriptor::TemplateRegion
+        property it can be used instead of the URL of the template. Use always in conjunction with
+        MediaDescriptor::TemplateRegionName.
+        </p>
+     */
+    [optional,property] string TemplateName;
+
+    /** name of the template instead of the URL
+
+        <p>
+        See MediaDescriptor::TemplateName. The template region names are the folder names you see
+        in the templates dialog.
+        </p>
+     */
+    [optional,property] string TemplateRegionName;
+
+    /** regulate using of compressing
+
+        <p>
+        For storing: Setting this to `TRUE` means, don't use a zip file to save
+        the document, use a folder instead (only usable for UCB contents, that
+        support folders). Default is `FALSE`.
+        </p>
+     */
+    [optional,property] boolean Unpacked;
+
+    /** URL of the document
+
+        <p>
+        The location of the component in URL syntax. It must be a fully qualified URL.
+        </p>
+     */
+    [optional,property] string URL;
+
+    /** storage version
+
+        <p>
+        For components supporting versioning: the number of the version to be
+        loaded or saved. Default is zero and means: no version is created or
+        loaded, the "main" document is processed.
+        </p>
+     */
+    [optional,property] short Version;
+
+    /** set special view state
+        <p>
+        Data to set a special view state after loading. The type depends on
+        the component and is usually retrieved from a com::sun::star::frame::Controller
+        object by its com::sun::star::frame::XController
+        interface. Default is: no view data.
+        </p>
+     */
+    [optional,property] any ViewData;
+
+    /** id of the initial view
+
+        <p>
+        For components supporting different views: a number to define the view
+        that should be constructed after loading. Default is: zero, and this
+        should be treated by the component as the default view.
+        </p>
+     */
+    [optional,property] short ViewId;
+
+    /** should the macro be executed.
+        the value should be one from com::sun::star::document::MacroExecMode
+        constant list.
+     */
+    [optional,property] short MacroExecutionMode;
+
+    /** can the document be updated depending from links.
+        the value should be one from com::sun::star::document::UpdateDocMode
+        constant list.
+     */
+    [optional,property] short UpdateDocMode;
+
+    /** specifies the name of the view controller to create when loading a document
+
+        <p>If this property is used when loading a document into a frame, then it
+        specifies the name of the view controller to create. That is, the property
+        is passed to the document's com::sun::star::frame::XModel2::createViewController()
+        method.<br/>
+        If the loaded document does not support the <code>XModel2</code> interface,
+        the property is ignored.</p>
+
+        @see ::com::sun::star::frame::XModel2::createViewController
+        @see ::com::sun::star::frame::XController2::ViewControllerName
+     */
+    [optional,property] string ViewControllerName;
+
+    /** specifies the frame containing the document. May be empty.
+     */
+    [optional,property] com::sun::star::frame::XFrame Frame;
+
+    /** Setting this option will prevent copying/dragging any content anywhere.
+        The commands 'Copy' and 'Cut' will be disabled; selection clipboard won't work,
+        and dragging with mouse will also be disabled.
+     */
+    [optional,property] boolean LockContentExtraction;
+
+    /** Setting this option will prevent exporting document content to any file.
+        Export, Send, save as, etc will be disabled,
+        as well as individual graphic/chart export and mail merge.
+     */
+    [optional,property] boolean LockExport;
+
+    /** Setting this option will disable all print functions (including Printer setup)
+     */
+    [optional,property] boolean LockPrint;
+
+    /** Setting this option will disable the save function.
+     */
+    [optional,property] boolean LockSave;
+
+    /** Setting this option will disable switching to edit mode from read-only mode.
+     */
+    [optional,property] boolean LockEditDoc;
+
+    /** Mark the document as replaceable / a placeholder
+
+        <p>Normally a document is always opened in a new frame. If this property is
+        set to true, this document just acts as a placeholder while it's unmodified.
+        I.e. the next opened document from its frame will close and replace it.</p>
+
+        <p>This defaults to false, except for the default template of a LibreOffice
+        module, referenced as "private:factory/&lt;module&gt;".</p>
+     */
+    [optional,property] boolean Replaceable;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,77 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+ module com {  module sun {  module star {  module reflection {
+
+
+/** Deprecated, UNOIDL does not have a union concept.
+
+    @deprecated
+*/
+published interface XUnionTypeDescription: com::sun::star::reflection::XTypeDescription
+{
+    /** Returns the (ordinal) discriminant type.
+
+        @return
+                type of the discriminant
+    */
+    com::sun::star::reflection::XTypeDescription getDiscriminantType();
+
+    /** Returns the default discriminant value.
+
+        @return
+                default discriminant value
+    */
+    any getDefaultDiscriminant();
+
+    /** Returns the type of the default value.
+
+        @return
+                type of the default value
+    */
+    com::sun::star::reflection::XTypeDescription getDefaultMemberType();
+
+    /** Returns discriminants of all members in order of IDL declaration.
+
+        @return
+                discriminants of all members
+    */
+    sequence< any > getDiscriminants();
+
+    /** Returns types of all members in order of IDL declaration.
+
+        @return
+                types of all members
+    */
+    sequence< com::sun::star::reflection::XTypeDescription > getMemberTypes();
+
+    /** Returns names of all members in order of IDL declaration.
+
+        @return
+                names of all members
+    */
+    sequence< string > getMemberNames();
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

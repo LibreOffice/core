@@ -1,0 +1,125 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+module com {  module sun {  module star {  module xml {  module sax {
+
+
+/** receives notification of sax document events from a
+    XFastParser.
+
+    @see XFastDocumentHandler
+ */
+interface XFastContextHandler: com::sun::star::uno::XInterface
+{
+
+    /** receives notification of the beginning of an element .
+
+        @param Element
+            contains the integer token from the XFastTokenHandler
+            registered at the XFastParser.<br>
+
+            If the element has a namespace that was registered with the
+            XFastParser, <code>Element</code> contains the integer
+            token of the elements local name from the XFastTokenHandler
+            and the integer token of the namespace combined with an arithmetic
+            <b>or</b> operation.
+
+        @param Attribs
+            Contains a XFastAttributeList to access the attributes
+            from the element.
+
+    */
+    void startFastElement( [in] long Element, [in] XFastAttributeList Attribs )
+            raises( com::sun::star::xml::sax::SAXException );
+
+
+    /** receives notification of the beginning of an unknown element .
+
+        @param Namespace
+            contains the namespace url (not the prefix!) of this element.
+        @param Name
+            contains the elements local name.
+        @param Attribs
+            Contains a XFastAttributeList to access the attributes
+            from the element.
+     */
+    void startUnknownElement( [in] string Namespace, [in] string Name, [in] XFastAttributeList Attribs )
+            raises( com::sun::star::xml::sax::SAXException );
+
+
+    /** receives notification of the end of a known element.
+        @see startFastElement
+     */
+    void endFastElement( [in] long Element )
+            raises( com::sun::star::xml::sax::SAXException );
+
+
+    /** receives notification of the end of a known element.
+        @see startUnknownElement
+     */
+    void endUnknownElement( [in] string Namespace, [in] string Name )
+            raises( com::sun::star::xml::sax::SAXException );
+
+
+    /** receives notification of the beginning of a known child element.
+
+        @param Element
+            contains the integer token from the XFastTokenHandler
+            registered at the XFastParser.
+
+            <br>If the element has a namespace that was registered with the
+            XFastParser, <code>Element</code> contains the
+            integer token of the elements local name from the
+            XFastTokenHandler and the integer token of the
+            namespace combined with an arithmetic <b>or</b> operation.
+
+        @param Attribs
+            Contains a XFastAttributeList to access the attributes
+            from the element.
+     */
+    XFastContextHandler createFastChildContext( [in] long Element, [in] XFastAttributeList Attribs )
+            raises( com::sun::star::xml::sax::SAXException );
+
+
+    /** receives notification of the beginning of an unknown child element .
+
+        @param Namespace
+            contains the namespace url (not the prefix!) of this element.
+        @param Name
+            contains the elements local name.
+        @param Attribs
+            Contains a XFastAttributeList to access the attributes
+            the element.
+     */
+    XFastContextHandler createUnknownChildContext( [in] string Namespace, [in] string Name, [in] XFastAttributeList Attribs )
+            raises( com::sun::star::xml::sax::SAXException );
+
+
+    /** receives notification of character data.
+     */
+    void characters( [in] string aChars )
+            raises( com::sun::star::xml::sax::SAXException );
+  };
+
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

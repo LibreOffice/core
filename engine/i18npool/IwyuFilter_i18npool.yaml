@@ -1,0 +1,90 @@
+---
+assumeFilename: i18npool/source/localedata/localedata.cxx
+excludelist:
+    i18npool/inc/breakiterator_unicode.hxx:
+    # contains versioned namespace so cannot forward declare
+    - unicode/brkiter.h
+    i18npool/inc/breakiteratorImpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XBreakIterator.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/calendar_gregorian.hxx:
+    # Needed for unique_ptr
+    - unicode/calendar.h
+    i18npool/inc/cclass_unicode.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XCharacterClassification.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/characterclassificationImpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XCharacterClassification.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/collatorImpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XCollator.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/collator_unicode.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XCollator.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    # Needed for unique_ptr
+    - unicode/tblcoll.h
+    i18npool/inc/defaultnumberingprovider.hxx:
+    # Base class needs complete type
+    - com/sun/star/text/XDefaultNumberingProvider.hpp
+    - com/sun/star/text/XNumberingFormatter.hpp
+    - com/sun/star/text/XNumberingTypeInfo.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/indexentrysupplier.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/indexentrysupplier_common.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/inputsequencechecker.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XExtendedInputSequenceChecker.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/localedata.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XLocaleData5.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/numberformatcode.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XNumberFormatCode.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/ordinalsuffix.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XOrdinalSuffix.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/textconversion.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XExtendedTextConversion.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/transliterationImpl.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XExtendedTransliteration.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/transliteration_Ignore.hxx:
+    # Needed for variable type
+    - unicode/translit.h
+    i18npool/inc/transliteration_commonclass.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XExtendedTransliteration.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/inc/unoscripttypedetector.hxx:
+    # Base class needs complete type
+    - com/sun/star/i18n/XScriptTypeDetector.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/source/search/textsearch.hxx:
+    # Base class needs complete type
+    - com/sun/star/util/XTextSearch2.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    i18npool/source/collator/collator_unicode.cxx:
+    # Config options are used in #ifdef
+    - config_locales.h
+    i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp

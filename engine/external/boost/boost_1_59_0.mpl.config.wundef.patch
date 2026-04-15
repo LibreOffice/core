@@ -1,0 +1,11 @@
+diff -ru boost.orig/boost/mpl/aux_/config/operators.hpp boost/boost/mpl/aux_/config/operators.hpp
+--- foo/misc/boost.orig/boost/mpl/aux_/config/operators.hpp	2015-07-19 11:20:40.015955021 +0200
++++ foo/misc/boost/boost/mpl/aux_/config/operators.hpp	2015-07-19 11:33:14.342946543 +0200
+@@ -24,7 +24,6 @@
+         || BOOST_WORKAROUND(__EDG_VERSION__, <= 245) \
+         || BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, <= 0x0295) \
+         || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600)) \
+-        || BOOST_WORKAROUND(__NVCC__, BOOST_TESTED_AT(1)) \
+         )
+ 
+ #   define BOOST_MPL_CFG_USE_OPERATORS_OVERLOADING

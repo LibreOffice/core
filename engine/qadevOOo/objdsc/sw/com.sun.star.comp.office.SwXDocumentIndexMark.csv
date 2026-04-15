@@ -1,0 +1,8 @@
+"SwXDocumentIndexMark";"com::sun::star::lang::XComponent";"dispose()"
+"SwXDocumentIndexMark";"com::sun::star::lang::XComponent";"addEventListener()"
+"SwXDocumentIndexMark";"com::sun::star::lang::XComponent";"removeEventListener()"
+"SwXDocumentIndexMark";"com::sun::star::text::TextContent";"AnchorType#optional"
+"SwXDocumentIndexMark";"com::sun::star::text::TextContent";"AnchorTypes#optional"
+"SwXDocumentIndexMark";"com::sun::star::text::TextContent";"TextWrap#optional"
+"SwXDocumentIndexMark";"com::sun::star::text::XTextContent";"attach()"
+"SwXDocumentIndexMark";"com::sun::star::text::XTextContent";"getAnchor()"

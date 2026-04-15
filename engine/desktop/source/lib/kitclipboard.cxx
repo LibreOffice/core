@@ -1,0 +1,260 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "kitclipboard.hxx"
+#include <unordered_map>
+#include <tools/lazydelete.hxx>
+#include <vcl/svapp.hxx>
+#include <sfx2/kit/helper.hxx>
+#include <sal/log.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
+using namespace css;
+using namespace css::uno;
+
+/* static */ osl::Mutex KitClipboardFactory::gMutex;
+static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>& getClipboards()
+{
+    static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>
+        gClipboards{};
+    return gClipboards;
+}
+
+rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
+{
+    int nViewId = KitHelper::getCurrentView(); // currently active.
+
+    osl::MutexGuard aGuard(gMutex);
+
+    auto& gClipboards = getClipboards();
+    auto it = gClipboards.get()->find(nViewId);
+    if (it != gClipboards.get()->end())
+    {
+        SAL_INFO("kit", "Got clip: " << it->second.get() << " from " << nViewId);
+        return it->second;
+    }
+    rtl::Reference<KitClipboard> xClip(new KitClipboard());
+    (*gClipboards.get())[nViewId] = xClip;
+    SAL_INFO("kit", "Created clip: " << xClip.get() << " for viewId " << nViewId);
+    return xClip;
+}
+
+void KitClipboardFactory::releaseClipboardForView(int nViewId)
+{
+    osl::MutexGuard aGuard(gMutex);
+
+    auto& gClipboards = getClipboards();
+    if (nViewId < 0) // clear all
+    {
+        gClipboards.get()->clear();
+        SAL_INFO("kit", "Released all clipboards on doc destroy\n");
+    }
+    else if (gClipboards.get())
+    {
+        auto it = gClipboards.get()->find(nViewId);
+        if (it != gClipboards.get()->end())
+        {
+            SAL_INFO("kit", "Releasing clip: " << it->second.get() << " for destroyed " << nViewId);
+            gClipboards.get()->erase(it);
+        }
+    }
+}
+
+uno::Reference<uno::XInterface>
+    SAL_CALL KitClipboardFactory::createInstanceWithArguments(const Sequence<Any>& /* rArgs */)
+{
+    return { static_cast<cppu::OWeakObject*>(getClipboardForCurView().get()) };
+}
+
+KitClipboard::KitClipboard()
+    : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
+                                    css::lang::XServiceInfo>(m_aMutex)
+{
+    // Encourage 'paste' menu items to always show up.
+    uno::Reference<datatransfer::XTransferable> xTransferable(new KitTransferable());
+    setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
+}
+
+Sequence<OUString> KitClipboard::getSupportedServiceNames_static()
+{
+    Sequence<OUString> aRet{ u"com.sun.star.datatransfer.clipboard.KitClipboard"_ustr };
+    return aRet;
+}
+
+OUString KitClipboard::getImplementationName()
+{
+    return u"com.sun.star.datatransfer.KitClipboard"_ustr;
+}
+
+Sequence<OUString> KitClipboard::getSupportedServiceNames()
+{
+    return getSupportedServiceNames_static();
+}
+
+sal_Bool KitClipboard::supportsService(const OUString& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+Reference<css::datatransfer::XTransferable> KitClipboard::getContents() { return m_xTransferable; }
+
+void KitClipboard::setContents(
+    const Reference<css::datatransfer::XTransferable>& xTrans,
+    const Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+    Reference<datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
+    Reference<datatransfer::XTransferable> xOldContents(m_xTransferable);
+    m_xTransferable = xTrans;
+    m_aOwner = xClipboardOwner;
+
+    std::vector<Reference<datatransfer::clipboard::XClipboardListener>> aListeners(m_aListeners);
+    datatransfer::clipboard::ClipboardEvent aEv;
+    aEv.Contents = m_xTransferable;
+    SAL_INFO("kit", "Clip: " << this << " set contents to " << m_xTransferable);
+
+    aGuard.clear();
+
+    if (xOldOwner.is() && xOldOwner != xClipboardOwner)
+        xOldOwner->lostOwnership(this, xOldContents);
+    for (auto const& listener : aListeners)
+    {
+        listener->changedContents(aEv);
+    }
+}
+
+void KitClipboard::addClipboardListener(
+    const Reference<datatransfer::clipboard::XClipboardListener>& listener)
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+    m_aListeners.push_back(listener);
+}
+
+void KitClipboard::removeClipboardListener(
+    const Reference<datatransfer::clipboard::XClipboardListener>& listener)
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::erase(m_aListeners, listener);
+}
+KitTransferable::KitTransferable(const OUString& sMimeType,
+                                 const css::uno::Sequence<sal_Int8>& aSequence)
+{
+    m_aContent.reserve(1);
+    m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
+    initFlavourFromMime(m_aFlavors.getArray()[0], sMimeType);
+
+    uno::Any aContent;
+    if (m_aFlavors[0].DataType == cppu::UnoType<OUString>::get())
+    {
+        auto pText = reinterpret_cast<const char*>(aSequence.getConstArray());
+        aContent <<= OUString(pText, aSequence.getLength(), RTL_TEXTENCODING_UTF8);
+    }
+    else
+        aContent <<= aSequence;
+    m_aContent.push_back(aContent);
+}
+
+/// Use to ensure we have some dummy content on the clipboard to allow a 1st 'paste'
+KitTransferable::KitTransferable()
+{
+    m_aContent.reserve(1);
+    m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
+    initFlavourFromMime(m_aFlavors.getArray()[0], u"text/plain"_ustr);
+    uno::Any aContent;
+    aContent <<= OUString();
+    m_aContent.push_back(aContent);
+}
+
+// cf. sot/source/base/exchange.cxx for these two exceptional types.
+void KitTransferable::initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor,
+                                          OUString aMimeType)
+{
+    if (aMimeType.startsWith("text/plain"))
+    {
+        aMimeType = "text/plain;charset=utf-16";
+        rFlavor.DataType = cppu::UnoType<OUString>::get();
+    }
+    else if (aMimeType.startsWith("text/markdown"))
+    {
+        aMimeType = "text/markdown";
+        rFlavor.DataType = cppu::UnoType<OUString>::get();
+    }
+    else if (aMimeType == "application/x-libreoffice-markdown-annotated")
+        rFlavor.DataType = cppu::UnoType<OUString>::get();
+    else if (aMimeType == "application/x-libreoffice-tsvc")
+        rFlavor.DataType = cppu::UnoType<OUString>::get();
+    else
+        rFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+    rFlavor.MimeType = aMimeType;
+    rFlavor.HumanPresentableName = aMimeType;
+}
+
+KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeTypes,
+                                 const size_t* pInSizes, const char** pInStreams)
+{
+    m_aContent.reserve(nInCount);
+    m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(nInCount);
+    auto p_aFlavors = m_aFlavors.getArray();
+    for (size_t i = 0; i < nInCount; ++i)
+    {
+        initFlavourFromMime(p_aFlavors[i], OUString::fromUtf8(pInMimeTypes[i]));
+
+        uno::Any aContent;
+        if (m_aFlavors[i].DataType == cppu::UnoType<OUString>::get())
+            aContent <<= OUString(pInStreams[i], pInSizes[i], RTL_TEXTENCODING_UTF8);
+        else
+            aContent <<= css::uno::Sequence<sal_Int8>(
+                reinterpret_cast<const sal_Int8*>(pInStreams[i]), pInSizes[i]);
+        m_aContent.push_back(aContent);
+    }
+}
+
+uno::Any SAL_CALL KitTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
+{
+    assert(m_aContent.size() == static_cast<size_t>(m_aFlavors.getLength()));
+    for (size_t i = 0; i < m_aContent.size(); ++i)
+    {
+        if (m_aFlavors[i].MimeType == rFlavor.MimeType)
+        {
+            if (m_aFlavors[i].DataType != rFlavor.DataType)
+                SAL_WARN("kit", "Horror type mismatch!");
+            return m_aContent[i];
+        }
+    }
+    return {};
+}
+
+uno::Sequence<datatransfer::DataFlavor> SAL_CALL KitTransferable::getTransferDataFlavors()
+{
+    return m_aFlavors;
+}
+
+sal_Bool SAL_CALL KitTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
+{
+    return std::find_if(std::cbegin(m_aFlavors), std::cend(m_aFlavors),
+                        [&rFlavor](const datatransfer::DataFlavor& i) {
+                            return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType;
+                        })
+           != std::cend(m_aFlavors);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+desktop_KitClipboard_get_implementation(css::uno::XComponentContext*,
+                                        css::uno::Sequence<css::uno::Any> const& /*args*/)
+{
+    SolarMutexGuard aGuard;
+
+    cppu::OWeakObject* pClipboard = KitClipboardFactory::getClipboardForCurView().get();
+
+    pClipboard->acquire();
+    return pClipboard;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

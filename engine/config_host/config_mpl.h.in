@@ -1,0 +1,9 @@
+/* config_host/config_mpl.h.  Generated from config_mpl.h.in by configure.  */
+
+#ifndef CONFIG_MPL_H
+#define CONFIG_MPL_H
+
+#define MPL_HAVE_SUBSET 0
+
+#endif
+

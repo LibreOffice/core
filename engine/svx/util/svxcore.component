@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Draw.GraphicExporter"
+      constructor="com_sun_star_comp_Draw_GraphicExporter_get_implementation">
+    <service name="com.sun.star.drawing.GraphicExportFilter"/>
+    <optional/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.ExtrusionDepthController"
+      constructor="com_sun_star_comp_svx_ExtrusionDepthController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.ExtrusionDirectionController"
+      constructor="com_sun_star_comp_svx_ExtrusionDirectionControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.ExtrusionLightingController"
+      constructor="com_sun_star_comp_svx_ExtrusionLightingControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.ExtrusionSurfaceController"
+      constructor="com_sun_star_comp_svx_ExtrusionSurfaceControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.FontworkAlignmentController"
+      constructor="com_sun_star_comp_svx_FontworkAlignmentControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.FontworkCharacterSpacingController"
+      constructor="com_sun_star_comp_svx_FontworkCharacterSpacingControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.FrameToolBoxControl"
+    constructor="com_sun_star_comp_svx_FrameToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.ColorToolBoxControl"
+    constructor="com_sun_star_comp_svx_ColorToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.CurrencyToolBoxControl"
+    constructor="com_sun_star_comp_svx_CurrencyToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.FontNameToolBoxControl"
+    constructor="com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.StyleToolBoxControl"
+    constructor="com_sun_star_comp_svx_StyleToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.LineEndToolBoxControl"
+      constructor="com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.LineStyleToolBoxControl"
+      constructor="com_sun_star_comp_svx_LineStyleToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.graphic.PrimitiveFactory2D"
+      constructor="com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation">
+    <service name="com.sun.star.graphic.PrimitiveFactory2D"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.StylesPreviewToolBoxControl"
+    constructor="com_sun_star_comp_svx_StylesPreviewToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.TextColumns"
+    constructor="com_sun_star_comp_svx_TextColumns_get_implementation">
+    <service name="com.sun.star.text.TextColumns"/>
+  </implementation>
+  <implementation name="com.sun.star.drawing.EnhancedCustomShapeEngine"
+      constructor="com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation">
+    <service name="com.sun.star.drawing.CustomShapeEngine"/>
+  </implementation>
+</component>

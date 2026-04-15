@@ -1,0 +1,11 @@
+--- include/freetype/config/ftoption.h
++++ include/freetype/config/ftoption.h
+@@ -448,7 +448,7 @@
+    *
+    *   This option needs a C99 compiler.
+    */
+-/* #define FT_DEBUG_LOGGING */
++#define FT_DEBUG_LOGGING
+ 
+ 
+   /**************************************************************************

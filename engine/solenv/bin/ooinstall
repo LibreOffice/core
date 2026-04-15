@@ -1,0 +1,109 @@
+#!/usr/bin/env perl
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# This script has three uses:
+# 1. From the command line to install straight into a given directory:
+#    bin/ooinstall /opt/Foo
+# 2. From the command line to link into a given directory:
+#    bin/ooinstall -l /opt/FooLinked
+# 3. When packaging (called from package-ooo), to install to DESTDIR
+
+use File::Find;
+use File::Path qw(mkpath);
+use Cwd;
+
+$path = '';
+$strip = '';
+$is_windows = 0;
+my $tmp_dir;
+
+# FIXME: really we should hunt and parse / source the config_host.mk magic I guess.
+die "You need your environment setup right, eg. run make cmd cmd='ooinstall /path/to/install'" if (!defined $ENV{SRC_ROOT});
+
+if ($ENV{OS} eq 'WNT') {
+    $is_windows = 1;
+}
+
+if (defined($ENV{TMPDIR})) {
+    $tmp_dir = $ENV{TMPDIR};
+}
+if (!-d $tmp_dir) {die "Set TMPDIR!\n";}
+
+for $arg (@ARGV) {
+    if ($arg eq '-s' || $arg eq '--strip') {
+        $strip = "-strip";
+    } elsif ($arg eq '-h' || $arg eq '--help') {
+        $help = 1;
+    } else {
+        # Cwd::realpath does not work if the path does not exist
+        mkpath($ENV{DESTDIR} . $arg) unless -d $ENV{DESTDIR} . $arg;
+        $path = Cwd::realpath($ENV{DESTDIR} . $arg);
+    }
+}
+
+$help = 1 if $path eq '';
+
+if ($help) {
+    print "ooinstall [-s] <prefix to install to>\n";
+    print "  -s/--strip - strip the installed binaries\n";
+    exit 1;
+}
+
+my $BUILD=$ENV{LIBO_VERSION_PATCH};
+$ENV{OUT} = "../FIXME";
+$ENV{LOCAL_OUT} = $ENV{OUT};
+$ENV{LOCAL_COMMON_OUT} = $ENV{OUT};
+
+my @larr;
+$langs=$ENV{WITH_LANG_LIST};
+@larr = grep { $_ ne '' } split(/ /, $langs);
+$langs = join (",", @larr);
+
+$destdir='';
+if (defined $ENV{DESTDIR} &&
+    $ENV{DESTDIR} ne "" ) {
+    $destdir = "-destdir \"$ENV{DESTDIR}\"";
+}
+
+$msi='';
+if ($is_windows) {
+    $msi = "-msitemplate $ENV{SRC_ROOT}/workdir/CustomTarget/instsetoo_native/install/msi_templates " .
+           "-msilanguage $ENV{SRC_ROOT}/workdir/CustomTarget/instsetoo_native/install/win_ulffiles";
+}
+
+# FIXME: a better solution would be to fix installer to deal with broken symlinks
+# make distro-pack-install shuffle with the SDK installation to make it LSB compliant
+# it creates symlinks from the original path to /usr/share; they are not valid with $DESTDIR
+# and potential second ooinstall call fails with strange error messages if the old tree is still there
+if ($destdir && "$ENV{DESTDIR}" ne "/" && -d "$ENV{DESTDIR}") {
+    print "Cleaning destdir...\n";
+    system ("rm -rf \"$ENV{DESTDIR}\"") && die "Failed to clean up destdir: $!";
+}
+
+print "Running LibreOffice installer\n";
+
+my $PRODUCTNAME_no_spaces = $ENV{PRODUCTNAME};
+$PRODUCTNAME_no_spaces =~ s/ //g;
+
+system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
+        "perl " .
+        (scalar keys(%DB::sub) ? "-d " : "") .
+        "-w $ENV{SRCDIR}/solenv/bin/make_installer.pl " .
+        "-f $ENV{BUILDDIR}/instsetoo_native/util/openoffice.lst -l $langs -p $PRODUCTNAME_no_spaces " .
+        "-u $tmp_dir " .
+        "-buildid $BUILD $destdir $strip $msi " .
+        "-simple $path") && die "Failed to install: $!";
+
+print "Installer finished\n";
+
+# Local Variables:
+# cperl-indent-level: 4
+# indent-tabs-mode: nil
+# End:
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

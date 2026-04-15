@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<XShapes>
+ <XShape positionX="5357" positionY="4365" sizeX="5557" sizeY="1" type="com.sun.star.drawing.ConnectorShape" name="Straight Arrow Connector 4" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd>
+   <pointSequence>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+   </pointSequence>
+  </LineEnd>
+ </XShape>
+ <XShape positionX="5357" positionY="5159" sizeX="5557" sizeY="0" type="com.sun.star.drawing.ConnectorShape" name="Straight Arrow Connector 5" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd>
+   <pointSequence>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+   </pointSequence>
+  </LineEnd>
+ </XShape>
+ <XShape positionX="14485" positionY="4365" sizeX="5557" sizeY="1" type="com.sun.star.drawing.ConnectorShape" name="Straight Arrow Connector 6" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd>
+   <pointSequence>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+   </pointSequence>
+  </LineEnd>
+ </XShape>
+ <XShape positionX="14485" positionY="5159" sizeX="5557" sizeY="0" type="com.sun.star.drawing.ConnectorShape" name="Straight Arrow Connector 8" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd>
+   <pointSequence>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+   </pointSequence>
+  </LineEnd>
+ </XShape>
+</XShapes>

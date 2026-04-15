@@ -1,0 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba {
+    constants VbFirstWeekOfYear {
+        const long vbFirstFourDays = 2;
+        const long vbFirstFullWeek = 3;
+        const long vbFirstJan1 = 1;
+        const long vbUseSystem = 0;
+    };
+}; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

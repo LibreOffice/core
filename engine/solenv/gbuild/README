@@ -1,0 +1,17 @@
+
+GBuild is a set of makefile macros built on top of gmake that attempts to simplify LibreOffice development.
+
+See
+  https://wiki.documentfoundation.org/Development/Build_System
+for online build-system documentation.
+
+See
+	https://web.archive.org/web/20130911015536/http://wiki.openoffice.org/wiki/Build_Environment_Effort/Module_Migration
+for an archived overview of the new build system.
+
+See
+   ./solenv/doc/gbuild
+for a commented class/API hierarchy of gbuild written in C++ syntax. It was not
+intended for any use beyond to generate nicelooking docs with the doxygen
+doxygen documentation generator from it. It likely is quite outdated these
+days.

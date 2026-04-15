@@ -1,0 +1,26 @@
+From b6191d3422873648bebb322d85367647ae7d9dc0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sun, 1 Oct 2023 19:28:15 +0100
+Subject: [PATCH 1/2] cid#1545614 UR: Uninitialized read of field in
+ constructor
+
+---
+ src/main/java/org/java_websocket/WebSocketImpl.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main/java/org/java_websocket/WebSocketImpl.java b/src/main/java/org/java_websocket/WebSocketImpl.java
+index c2cd223..85fd413 100644
+--- a/src/main/java/org/java_websocket/WebSocketImpl.java
++++ b/src/main/java/org/java_websocket/WebSocketImpl.java
+@@ -205,7 +205,7 @@ public class WebSocketImpl implements WebSocket {
+    */
+   public WebSocketImpl(WebSocketListener listener, Draft draft) {
+     // socket can be null because we want do be able to create the object without already having a bound channel
+-    if (listener == null || (draft == null && role == Role.SERVER)) {
++    if (listener == null) {
+       throw new IllegalArgumentException("parameters must not be null");
+     }
+     this.outQueue = new LinkedBlockingQueue<>();
+-- 
+2.41.0
+

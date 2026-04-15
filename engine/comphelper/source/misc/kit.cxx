@@ -1,0 +1,474 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <comphelper/kit.hxx>
+
+#include <com/sun/star/awt/Rectangle.hpp>
+
+#include <osl/process.h>
+#include <osl/time.h>
+#include <i18nlangtag/languagetag.hxx>
+#include <sal/log.hxx>
+#ifdef _WIN32
+#include <tools/UnixWrappers.h>
+#else
+#include <limits.h>
+#endif
+#include <vcl/task.hxx>
+
+#include <iostream>
+
+using namespace com::sun::star;
+
+namespace comphelper::COKit
+{
+
+#if !KIT_ALWAYS_ACTIVE
+static bool g_bActive(false);
+#endif
+
+static bool g_bForkedChild(false);
+
+static bool g_bPartInInvalidation(false);
+
+static bool g_bTiledPainting(false);
+
+static bool g_bIdleLayouting(false);
+
+static bool g_bDialogPainting(false);
+
+static bool g_bTiledAnnotations(true);
+
+static bool g_bRangeHeaders(false);
+
+static bool g_bViewIdForVisCursorInvalidation(false);
+
+static bool g_bLocalRendering(false);
+
+static bool g_bSlideshowRendering(false);
+
+static Compat g_eCompatFlags(Compat::none);
+
+/// Used to set the DocId at ViewShell construction time.
+static ViewShellDocId g_nCurrentDocId;
+
+static std::function<bool(void*, int)> g_pAnyInputCallback;
+static void* g_pAnyInputCallbackData;
+static std::function<int()> g_pMostUrgentPriorityGetter;
+
+static std::function<void(const char*, char*, size_t)> g_pFileSaveDialogCallback;
+
+static std::function<void(int)> g_pViewSetter;
+static std::function<int()> g_pViewGetter;
+
+/// Visible area of the first view during document load.
+static awt::Rectangle g_aInitialClientVisibleArea;
+
+namespace
+{
+
+class LanguageAndLocale
+{
+private:
+    LanguageTag maLanguageTag;
+    LanguageTag maLocaleLanguageTag;
+
+public:
+
+    LanguageAndLocale()
+        : maLanguageTag(LANGUAGE_NONE)
+        , maLocaleLanguageTag(LANGUAGE_NONE)
+    {}
+
+    const LanguageTag& getLanguage() const
+    {
+        return maLanguageTag;
+    }
+
+    void setLanguage(const LanguageTag& rLanguageTag)
+    {
+        if (maLanguageTag != rLanguageTag)
+        {
+            SAL_INFO("comphelper.kit", "Setting language from " << maLanguageTag.getBcp47() << " to " << rLanguageTag.getBcp47());
+            maLanguageTag = rLanguageTag;
+        }
+    }
+
+    const LanguageTag& getLocale() const
+    {
+        return maLocaleLanguageTag;
+    }
+
+    void setLocale(const LanguageTag& rLocaleLanguageTag)
+    {
+        if (maLocaleLanguageTag != rLocaleLanguageTag)
+        {
+            SAL_INFO("comphelper.kit", "Setting locale from " << maLocaleLanguageTag.getBcp47() << " to " << rLocaleLanguageTag.getBcp47());
+            maLocaleLanguageTag = rLocaleLanguageTag;
+        }
+    }
+
+};
+
+}
+
+static LanguageAndLocale g_aLanguageAndLocale;
+
+/// Scaling of the cairo canvas painting for hi-dpi
+static double g_fDPIScale(1.0);
+
+#if !KIT_ALWAYS_ACTIVE
+void setActive(bool bActive)
+{
+    g_bActive = bActive;
+}
+
+bool isActive()
+{
+    return g_bActive;
+}
+#endif
+
+void setForkedChild(bool bIsChild)
+{
+    g_bForkedChild = bIsChild;
+}
+
+bool isForkedChild()
+{
+    return g_bForkedChild;
+}
+
+void setPartInInvalidation(bool bPartInInvalidation)
+{
+    g_bPartInInvalidation = bPartInInvalidation;
+}
+
+bool isPartInInvalidation()
+{
+    return g_bPartInInvalidation;
+}
+
+void setTiledPainting(bool bTiledPainting)
+{
+    g_bTiledPainting = bTiledPainting;
+}
+
+bool isTiledPainting()
+{
+    return g_bTiledPainting;
+}
+
+void setIdleLayouting(bool bIdleLayouting)
+{
+    g_bIdleLayouting = bIdleLayouting;
+}
+
+void setDialogPainting(bool bDialogPainting)
+{
+    g_bDialogPainting = bDialogPainting;
+}
+
+bool isDialogPainting()
+{
+    return g_bDialogPainting;
+}
+
+void setDPIScale(double fDPIScale)
+{
+    g_fDPIScale = fDPIScale;
+}
+
+double getDPIScale()
+{
+    return g_fDPIScale;
+}
+
+void setTiledAnnotations(bool bTiledAnnotations)
+{
+    g_bTiledAnnotations = bTiledAnnotations;
+}
+
+bool isTiledAnnotations()
+{
+    return g_bTiledAnnotations;
+}
+
+void setRangeHeaders(bool bRangeHeaders)
+{
+    g_bRangeHeaders = bRangeHeaders;
+}
+
+void setViewIdForVisCursorInvalidation(bool bViewIdForVisCursorInvalidation)
+{
+    g_bViewIdForVisCursorInvalidation = bViewIdForVisCursorInvalidation;
+}
+
+bool isViewIdForVisCursorInvalidation()
+{
+    return g_bViewIdForVisCursorInvalidation;
+}
+
+bool isRangeHeaders()
+{
+    return g_bRangeHeaders;
+}
+
+void setLocalRendering(bool bLocalRendering)
+{
+    g_bLocalRendering = bLocalRendering;
+}
+
+bool isLocalRendering()
+{
+    return g_bLocalRendering;
+}
+
+void setSlideshowRendering(bool bSlideshowRendering)
+{
+    g_bSlideshowRendering = bSlideshowRendering;
+}
+
+bool isSlideshowRendering()
+{
+    return g_bSlideshowRendering;
+}
+
+void setCompatFlag(Compat flag) { g_eCompatFlags = static_cast<Compat>(g_eCompatFlags | flag); }
+
+bool isCompatFlagSet(Compat flag) { return (g_eCompatFlags & flag) == flag; }
+
+void resetCompatFlag() { g_eCompatFlags = Compat::none; }
+
+void setLocale(const LanguageTag& rLanguageTag)
+{
+    g_aLanguageAndLocale.setLocale(rLanguageTag);
+}
+
+const LanguageTag& getLocale()
+{
+    const LanguageTag& rLocale = g_aLanguageAndLocale.getLocale();
+    SAL_INFO_IF(rLocale.getLanguageType() == LANGUAGE_NONE, "comphelper.kit", "Locale not set");
+    return rLocale;
+}
+
+void setLanguageTag(const LanguageTag& rLanguageTag)
+{
+    g_aLanguageAndLocale.setLanguage(rLanguageTag);
+}
+
+const LanguageTag& getLanguageTag()
+{
+    const LanguageTag& rLanguage = g_aLanguageAndLocale.getLanguage();
+    SAL_INFO_IF(rLanguage.getLanguageType() == LANGUAGE_NONE, "comphelper.kit", "Language not set");
+    return rLanguage;
+}
+
+bool isAllowlistedLanguage(const OUString& lang)
+{
+    if (!isActive())
+        return true;
+
+#if defined ANDROID || defined IOS
+    (void) lang;
+    return true;
+#else
+    static const std::vector<OUString> aAllowlist = [] {
+        std::vector<OUString> aList;
+        // coverity[tainted_data] - we trust the contents of this variable
+        const char* pAllowlist = getenv("KIT_ALLOWLIST_LANGUAGES");
+        if (pAllowlist)
+        {
+            std::stringstream stream(pAllowlist);
+            std::string s;
+
+            std::cerr << "Allowlisted languages: ";
+            while (getline(stream, s, ' ')) {
+                if (s.length() == 0)
+                    continue;
+
+                std::cerr << s << " ";
+                aList.emplace_back(OStringToOUString(s, RTL_TEXTENCODING_UTF8));
+            }
+            std::cerr << std::endl;
+        }
+        else
+        {
+            aList.emplace_back("*"); // KIT_ALLOWLIST_LANGUAGES not defined, allow all
+        }
+
+        if (aList.empty())
+            std::cerr << "No language allowlisted, turning off the language support." << std::endl;
+
+        return aList;
+    }();
+
+    if (aAllowlist.empty())
+        return false;
+
+    if (aAllowlist.size() == 1 && aAllowlist[0] == "*")
+        return true;
+
+    for (const auto& entry : aAllowlist)
+    {
+        if (lang.startsWith(entry))
+            return true;
+        if (lang.startsWith(entry.replace('_', '-')))
+            return true;
+    }
+
+    return false;
+#endif
+}
+
+void setTimezone(bool isSet, std::u16string_view rTimezone)
+{
+    if (isSet)
+    {
+        // Set the given timezone, even if empty.
+        OString aTZ = OUStringToOString(rTimezone, RTL_TEXTENCODING_UTF8);
+        osl_setTimezone(aTZ.getStr());
+    }
+    else
+    {
+        // Unset and empty aren't the same.
+        // When unset, it means default to the system configured timezone.
+        osl_resetTimezone();
+    }
+}
+
+static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent, const char* pText)(nullptr);
+static void *pStatusIndicatorCallbackData(nullptr);
+
+void setStatusIndicatorCallback(void (*callback)(void *data, statusIndicatorCallbackType type, int percent, const char* pText), void *data)
+{
+    pStatusIndicatorCallback = callback;
+    pStatusIndicatorCallbackData = data;
+}
+
+void statusIndicatorStart(const OUString& sText)
+{
+    if (pStatusIndicatorCallback)
+        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Start, 0, sText.toUtf8().getStr());
+}
+
+void statusIndicatorSetValue(int percent)
+{
+    if (pStatusIndicatorCallback)
+        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::SetValue, percent, nullptr);
+}
+
+void statusIndicatorFinish()
+{
+    if (pStatusIndicatorCallback)
+        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0, nullptr);
+}
+
+void setAnyInputCallback(const std::function<bool(void*, int)>& pAnyInputCallback, void* pData,
+                         const std::function<int()>& pMostUrgentPriorityGetter)
+{
+    g_pAnyInputCallback = pAnyInputCallback;
+    g_pAnyInputCallbackData = pData;
+    g_pMostUrgentPriorityGetter = pMostUrgentPriorityGetter;
+}
+
+bool anyInput()
+{
+    bool bRet = false;
+
+    // Ignore input events during background save.
+    if (!g_bForkedChild && g_pAnyInputCallback && g_pAnyInputCallbackData)
+    {
+        int nMostUrgentPriority;
+        if (g_bIdleLayouting)
+        {
+            // Report idle priority instead of querying the scheduler.  Various unrelated tasks
+            // (timers, paint idles) may be queued at high priority, which would cause the COKit
+            // client to not interrupt, preventing the idle layout from stopping.
+            nMostUrgentPriority = static_cast<int>(TaskPriority::DEFAULT_IDLE);
+        }
+        else
+        {
+            nMostUrgentPriority = g_pMostUrgentPriorityGetter();
+        }
+        bRet = g_pAnyInputCallback(g_pAnyInputCallbackData, nMostUrgentPriority);
+    }
+
+    return bRet;
+}
+
+void setFileSaveDialogCallback(const std::function<void(const char*, char*, size_t)>& pFileSaveDialogCallback)
+{
+    g_pFileSaveDialogCallback = pFileSaveDialogCallback;
+}
+
+bool fileSaveDialog(const OUString& rSuggested, OUString& rResult)
+{
+    if (!g_pFileSaveDialogCallback)
+    {
+        return false;
+    }
+
+    OString aSuggested = rSuggested.toUtf8();
+    char aResult[PATH_MAX];
+    g_pFileSaveDialogCallback(aSuggested.getStr(), aResult, PATH_MAX);
+    rResult = OUString::fromUtf8(aResult);
+    return true;
+}
+
+void setViewSetter(const std::function<void(int)>& pViewSetter)
+{
+    g_pViewSetter = pViewSetter;
+}
+
+void setView(int nView)
+{
+    if (!g_pViewSetter)
+    {
+        return;
+    }
+
+    g_pViewSetter(nView);
+}
+
+void setViewGetter(const std::function<int()>& pViewGetter)
+{
+    g_pViewGetter = pViewGetter;
+}
+
+int getView()
+{
+    if (!g_pViewGetter)
+    {
+        return -1;
+    }
+
+    return g_pViewGetter();
+}
+
+ViewShellDocId getDocId()
+{
+    return g_nCurrentDocId;
+}
+
+void setDocId(ViewShellDocId nDocId)
+{
+    g_nCurrentDocId = nDocId;
+}
+
+void setInitialClientVisibleArea(const awt::Rectangle& rClientVisibleArea)
+{
+    g_aInitialClientVisibleArea = rClientVisibleArea;
+}
+
+const awt::Rectangle & getInitialClientVisibleArea() { return g_aInitialClientVisibleArea; }
+
+} // namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

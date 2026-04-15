@@ -1,0 +1,72 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module report { module inspection {
+
+
+/** implements a com::sun::star::inspection::XObjectInspectorModel for
+    inspecting form components, in particular all components implementing the ReportComponent
+    service.
+
+    <p>A DefaultComponentInspectorModel provides the following handlers by default:
+    <ul><li>GeometryHandler</li>
+        <li>ReportComponentHandler</li>
+        <li>com::sun::star::form::inspection::EditPropertyHandler</li>
+    </ul></p>
+
+    @see com::sun::star::inspection::XObjectInspectorModel::HandlerFactories
+*/
+service DefaultComponentInspectorModel : com::sun::star::inspection::XObjectInspectorModel
+{
+    /** creates a default DefaultComponentInspectorModel, providing factories for all
+        handlers listed above.
+    */
+    createDefault();
+
+    /** creates a default DefaultComponentInspectorModel, providing factories for all
+        handlers listed above, and describing an ObjectInspector which has a help section.
+
+        @param minHelpTextLines
+            denotes the minimum number of lines of text to be reserved for the help
+            section.
+
+        @param maxHelpTextLines
+            denotes the maximum number of lines of text to be reserved for the help
+            section.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if minHelpTextLines or maxHelpTextLines are negative,
+            or if minHelpTextLines is greater than maxHelpTextLines.
+
+        @see XObjectInspectorModel::HasHelpSection
+        @see XObjectInspectorModel::MinHelpTextLines
+        @see XObjectInspectorModel::MaxHelpTextLines
+    */
+    createWithHelpSection(
+        [in] long minHelpTextLines,
+        [in] long maxHelpTextLines
+    )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

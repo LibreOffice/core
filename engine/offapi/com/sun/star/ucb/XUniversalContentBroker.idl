@@ -1,0 +1,115 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module ucb {
+
+published interface XUniversalContentBroker
+{
+    /** must be implemented to make it possible to resolve cyclic object
+        references.
+
+        <p>Those references i.e. may occur if content provider  implementations
+        hold references to the Broker. The Broker itself always holds its
+        providers. If the Broker shall be released,
+        com::sun::star::lang::XComponent::dispose()
+        must be called at the Broker. The implementation of this method must
+        call
+        com::sun::star::lang::XEventListener::disposing()
+        on the registered listeners (the providers holding the Broker must be
+        those listeners) and release the appropriate object references. At
+        the other hand, the implementation of XEventListener::disposing must
+        release its appropriate references.
+
+        <p>This interface is required.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    /** provides access to all kind of contents provided by the registered
+        content providers.
+
+        <p>This interface is required.
+     */
+    interface com::sun::star::ucb::XContentProvider;
+
+    /** provides access to a set of content providers registered with the UCB.
+
+        <p>This interface is required.
+     */
+    interface com::sun::star::ucb::XContentProviderManager;
+
+    /** creates XContentIdentifier implementation objects for
+        all kind of contents provided by the UCB.
+
+        <p>This interface is required.
+      */
+    interface com::sun::star::ucb::XContentIdentifierFactory;
+
+    /** Enables the caller to execute commands at the broker.
+
+        Is an enhanced version of XCommandProcessor that has an
+        additional method for releasing command identifiers obtained via
+        XCommandProcessor::createCommandIdentifier() to avoid
+        resource leaks. For a detailed description of the problem refer to
+        XCommandProcessor2::releaseCommandIdentifier().
+
+        <p>This interface is required.
+
+        <p><pre>
+        =======================================================================
+        Commands:
+        =======================================================================
+
+        [return type]
+            [command name]
+                [parameter type and name]
+
+        -----------------------------------------------------------------------
+        Required commands:
+        -----------------------------------------------------------------------
+
+        // This command obtains an interface which allows to query
+        // information on commands supported by the Content Broker.
+
+        XCommandInfo
+            getCommandInfo
+                void
+
+        // This command transfers Contents from one location to another.
+        // Additionally, it can be used to create a link to a Content.
+        // The implementation must be able to handle Contents provided
+        // by any Content Provider. This is different from the command
+        // "transfer" that can be supported by a Content. That command
+        // typically can only handle Contents provided by one
+        // ContentProvider.
+
+        void
+            globalTransfer
+                GlobalTransferCommandArgument
+        </pre>
+
+     */
+    interface com::sun::star::ucb::XCommandProcessor2;
+
+};
+
+
+}; }; }; };
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

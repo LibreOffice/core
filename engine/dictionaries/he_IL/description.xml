@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="2017.09.03" />
+    <identifier value="Hebrew.dictionary.from.hspell.ivrix.org.il" />
+    <display-name>
+        <name lang="en-US">Hebrew spelling dictionary</name>
+    </display-name>
+    <platform value="all" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+    <publisher>
+        <name xlink:href="http://hspell.ivrix.org.il/" lang="en-US">The Hspell Project</name>
+        <name xlink:href="http://hspell.ivrix.org.il/" lang="he">פרוייקט Hspell</name>
+     </publisher>
+     <icon>
+        <default xlink:href="alphabet.png" />
+     </icon>
+</description>

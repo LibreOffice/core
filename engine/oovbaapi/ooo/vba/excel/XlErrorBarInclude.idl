@@ -1,0 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module excel {
+    constants XlErrorBarInclude {
+        const long xlErrorBarIncludeBoth = 1;
+        const long xlErrorBarIncludeMinusValues = 3;
+        const long xlErrorBarIncludeNone = -4142;
+        const long xlErrorBarIncludePlusValues = 2;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,119 @@
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+
+# generic XML -----------------------------------------------------------------
+
+xml                     http://www.w3.org/XML/1998/namespace
+schema                  http://purl.oclc.org/ooxml/schemaLibrary/main
+xsi                     http://www.w3.org/2001/XMLSchema-instance
+
+# package ---------------------------------------------------------------------
+
+packageContentTypes     http://schemas.openxmlformats.org/package/2006/content-types
+packageMetaCorePr       http://schemas.openxmlformats.org/package/2006/metadata/core-properties
+packageRel              http://schemas.openxmlformats.org/package/2006/relationships
+
+# office shared ---------------------------------------------------------------
+
+officeCustomPr          http://purl.oclc.org/ooxml/officeDocument/custom-properties
+officeDocPropsVT        http://purl.oclc.org/ooxml/officeDocument/docPropsVTypes
+officeExtPr             http://purl.oclc.org/ooxml/officeDocument/extended-properties
+officeMath              http://purl.oclc.org/ooxml/officeDocument/math
+officeRel               http://purl.oclc.org/ooxml/officeDocument/relationships
+officeRelTheme          http://purl.oclc.org/ooxml/officeDocument/relationships/theme
+
+# applications ----------------------------------------------------------------
+
+doc                     http://purl.oclc.org/ooxml/wordprocessingml/main
+xls                     http://purl.oclc.org/ooxml/spreadsheetml/main
+ppt                     http://purl.oclc.org/ooxml/presentationml/main
+
+# drawing ---------------------------------------------------------------------
+
+dml                     http://purl.oclc.org/ooxml/drawingml/main
+dsp                     http://schemas.microsoft.com/office/drawing/2008/diagram
+dmlChart                http://purl.oclc.org/ooxml/drawingml/chart
+dmlChartex              http://purl.oclc.org/ooxml/drawingml/chartex
+dmlChartDr              http://purl.oclc.org/ooxml/drawingml/chartDrawing
+dmlDiagram              http://purl.oclc.org/ooxml/drawingml/diagram
+dmlLockedCanvas         http://purl.oclc.org/ooxml/drawingml/lockedCanvas
+dmlPicture              http://purl.oclc.org/ooxml/drawingml/picture
+dmlSpreadDr             http://purl.oclc.org/ooxml/drawingml/spreadsheetDrawing
+dmlWordDr               http://purl.oclc.org/ooxml/drawingml/wordprocessingDrawing
+
+
+# VML -------------------------------------------------------------------------
+
+vml                     urn:schemas-microsoft-com:vml
+vmlExcel                urn:schemas-microsoft-com:office:excel
+vmlOffice               urn:schemas-microsoft-com:office:office
+vmlPowerpoint           urn:schemas-microsoft-com:office:powerpoint
+vmlWord                 urn:schemas-microsoft-com:office:word
+
+# other -----------------------------------------------------------------------
+
+ax                      http://schemas.microsoft.com/office/2006/activeX
+dc                      http://purl.org/dc/elements/1.1/
+dcTerms                 http://purl.org/dc/terms/
+dcmiType                http://purl.org/dc/dcmitype/
+xm                      http://schemas.microsoft.com/office/excel/2006/main
+mce                     http://schemas.openxmlformats.org/markup-compatibility/2006
+mceTest                 http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2
+
+# MSO 2010 extensions ---------------------------------------------------------
+
+wps                     http://schemas.microsoft.com/office/word/2010/wordprocessingShape
+wpg                     http://schemas.microsoft.com/office/word/2010/wordprocessingGroup
+wp14                    http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing
+w14                     http://schemas.microsoft.com/office/word/2010/wordml
+a14                     http://schemas.microsoft.com/office/drawing/2010/main
+p14                     http://schemas.microsoft.com/office/powerpoint/2010/main
+wpc                     http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas
+
+# MSO 2012/2013 extensions ---------------------------------------------------------
+
+w15                     http://schemas.microsoft.com/office/word/2012/wordml
+p15                     http://schemas.microsoft.com/office/powerpoint/2012/main
+x12ac                   http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac
+c15                     http://schemas.microsoft.com/office/drawing/2012/chart
+x15                     http://schemas.microsoft.com/office/spreadsheetml/2010/11/main
+xr                      http://schemas.microsoft.com/office/spreadsheetml/2014/revision
+xr2                     http://schemas.microsoft.com/office/spreadsheetml/2015/revision2
+xr6                     http://schemas.microsoft.com/office/spreadsheetml/2016/revision6
+xr10                    http://schemas.microsoft.com/office/spreadsheetml/2016/revision10
+xr16                    http://schemas.microsoft.com/office/spreadsheetml/2017/revision16
+cs                      http://schemas.microsoft.com/office/drawing/2012/chartStyle
+
+# MSO 2014 extensions ---------------------------------------------------------
+
+cx                      http://schemas.microsoft.com/office/drawing/2014/chartex
+cs                      http://schemas.microsoft.com/office/drawing/2012/chartStyle
+a16                     http://schemas.microsoft.com/office/drawing/2014/main
+
+# extlst namespaces
+
+adec                    http://schemas.microsoft.com/office/drawing/2017/decorative
+asvg                    http://schemas.microsoft.com/office/drawing/2016/SVG/main
+xnsv                    http://schemas.microsoft.com/office/spreadsheetml/2019/namedsheetviews
+xthreaded               http://schemas.microsoft.com/office/spreadsheetml/2018/threadedcomments
+
+# xls14Lst for features introduced by excel 2010
+xls14Lst               http://schemas.microsoft.com/office/spreadsheetml/2009/9/main
+
+# LibreOffice's own extensions
+loext                  http://schemas.libreoffice.org/

@@ -1,0 +1,136 @@
+#!/bin/sh
+
+# Output a list of all our (static) libraries, to be used when
+# building the single executable or single dynamic object that is used
+# in an LO-based iOS or Android app. (All our libraries and bundled
+# 3rd-party ones are built as static archives for these platforms.)
+
+# This script is to be run once a full "make" for iOS or Android has
+# otherwise completed, when just building the actual apps is left.
+
+if test -z "$INSTDIR" ; then
+    echo This script should be invoked only in a build.
+    exit 1
+fi
+
+if test "$OS" != ANDROID -a "$OS" != iOS; then
+    echo This script makes sense only in Android or iOS builds.
+fi
+
+foolibs=
+for var in EBOOK_LIBS FREEHAND_LIBS HARFBUZZ_LIBS HUNSPELL_LIBS HYPHEN_LIB MYTHES_LIBS; do
+    dirs=
+    libs=
+    for i in `eval echo '$'$var`; do
+	case "$i" in
+	-L*) dirs="$dirs ${i#-L}";;
+        -l*) libs="$libs ${i#-l}";;
+	esac
+    done
+    for l in $libs; do
+	for d in $dirs; do
+	    test -f $d/lib$l.a && foolibs="$foolibs $d/lib$l.a"
+	done
+    done
+done
+
+case $OS in
+ANDROID)
+    oslibs="$WORKDIR/UnpackedTarball/curl/lib/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/fontconfig/src/.libs/libfontconfig.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/freetype/objs/.libs/libfreetype.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/pixman/builddir/pixman/libpixman-1.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/cairo/builddir/src/libcairo-lo.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/.libs/libxmlsec1.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/nss/.libs/libxmlsec1-nss.a"
+    # Only liblo-bootstrap.a ends up here:
+    oslibs="$oslibs $WORKDIR/LinkTarget/Library/lib*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/openssl/*.a"
+
+    # coinmp not used for iOS
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/Cbc/src/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/Cgl/src/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/Clp/src/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/Clp/src/OsiClp/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/CoinMP/src/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/CoinUtils/src/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/Osi/src/Osi/.libs/*.a"
+    ;;
+iOS)
+    oslibs="$WORKDIR/UnpackedTarball/icu/source/stubdata/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/cppunit/src/cppunit/.libs/*.a"
+
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nspr/out/lib/ds/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nspr/out/lib/libc/src/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nspr/out/pr/src/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/base/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/certdb/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/certhigh/out/*.a"
+
+	# Yes, individual object files here, these are not in any .a
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/ckfw/builtins/out/*.o"
+
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/ckfw/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/cryptohi/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/dev/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/Darwin_SINGLE_SHLIB/*.o"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/Darwin_SINGLE_SHLIB/deprecated/*.o"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/certsel/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/checker/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/crlsel/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/params/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/results/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/store/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/top/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/util/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix_pl_nss/module/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix_pl_nss/pki/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix_pl_nss/system/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/nss/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/pk11wrap/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/pkcs12/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/pkcs7/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/pki/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/smime/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/softoken/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/util/out/*.a"
+
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/curl/lib/.libs/*.a"
+
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/nss/.libs/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/.libs/*.a"
+    ;;
+*)
+    oslibs=
+    ;;
+esac
+
+echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
+     $foolibs \
+     $WORKDIR/LinkTarget/StaticLibrary/lib*.a \
+     $oslibs \
+     $WORKDIR/UnpackedTarball/argon2/libargon2.a \
+     $WORKDIR/UnpackedTarball/icu/source/lib/*.a \
+     $WORKDIR/UnpackedTarball/liblangtag/liblangtag/.libs/*.a \
+     $WORKDIR/UnpackedTarball/lcms2/src/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libabw/src/lib/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libcdr/src/lib/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libepubgen/src/lib/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libexttextcat/src/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libmspub/src/lib/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libmwaw/src/lib/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libnumbertext/src/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libodfgen/src/.libs/*.a \
+     $WORKDIR/UnpackedTarball/liborcus/src/*/.libs/*.a \
+     $WORKDIR/UnpackedTarball/librevenge/src/*/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libvisio/src/lib/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libtiff/libtiff/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libwebp/src/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libwebp/sharpyuv/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libwp?/src/lib/.libs/*.a \
+     $WORKDIR/UnpackedTarball/raptor/src/.libs/*.a \
+     $WORKDIR/UnpackedTarball/rasqal/src/.libs/*.a \
+     $WORKDIR/UnpackedTarball/redland/src/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libxml2/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libxslt/libxslt/.libs/*.a

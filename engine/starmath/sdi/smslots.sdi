@@ -1,0 +1,312 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module
+StarMath
+[
+    SlotIdFile ( "starmath.hrc" )
+    SlotIdFile ( "editeng/memberids.h" )
+    SlotIdFile ( "editeng/editids.hrc" )
+    SlotIdFile ( "sfx2/sfxsids.hrc" )
+    SlotIdFile ( "svx/svxids.hrc" )
+    SlotIdFile ( "svx/unomid.hxx" )
+]
+{
+    include "sfxitems.sdi"
+    include "sfx.sdi"
+    include "svxitems.sdi"
+    include "xoitems.sdi"
+    include "svx.sdi"
+    include "smath.sdi"
+    interface StarMath
+    {
+    SID_CONFIGEVENT //idlpp ole : no , status : no
+    [
+        StateMethod = GetState ;
+    ]
+}
+
+shell SmModule
+{
+    import StarMath;
+}
+
+interface FormulaDocument
+{
+    SID_DOCTEMPLATE //idlpp ole : no , status : no
+    [
+        StateMethod = GetState ;
+    ]
+    SID_AUTO_REDRAW //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp no menu entry, so no texts
+    SID_LOADSYMBOLS //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp no menu entry, so no texts
+    SID_SAVESYMBOLS //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTSIZE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_DISTANCE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ALIGN //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_TEXTMODE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp no menu entry, so no texts
+    SID_MODIFYSTATUS //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp no menu entry, so no texts
+    SID_TEXT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp no menu entry, so no texts
+        SID_GRAPHIC_SM //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_UNDO //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_REDO //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_GETUNDOSTRINGS //idlpp ole : no , status : no
+    [
+        StateMethod = GetState ;
+    ]
+    SID_GETREDOSTRINGS //idlpp ole : no , status : no
+    [
+        StateMethod = GetState ;
+    ]
+}
+
+shell SmDocShell
+{
+    import FormulaDocument;
+}
+
+
+interface FormulaView
+{
+    SID_FORMULACURSOR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_NEXTERR //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PREVERR //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_NEXTMARK //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PREVMARK //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ZOOMIN //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ZOOMOUT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_DRAW //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+        //idlpp no menu entry, so no texts
+        SID_COPYOBJECT //idlpp ole : no , status : no
+        [
+                ExecMethod = Execute ;
+                StateMethod = GetState ;
+        ]
+        //idlpp no menu entry, so no texts
+        SID_PASTEOBJECT //idlpp ole : no , status : no
+        [
+                ExecMethod = Execute ;
+                StateMethod = GetState ;
+        ]
+    SID_CUT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_COPY //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PASTE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_DELETE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_SELECT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_INSERTCOMMANDTEXT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp no menu entry, so no texts
+    SID_INSERTSPECIAL //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_IMPORT_FORMULA //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_IMPORT_MATHML_CLIPBOARD //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp no menu entry, so no texts
+    SID_ATTR_ZOOM //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_ZOOMSLIDER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp no menu entry, so no texts
+    SID_TEXTSTATUS //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp no menu entry, so no texts
+    SID_GETEDITTEXT //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //idlpp no menu entry, so no texts
+    SID_CMDBOXWINDOW //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ELEMENTSDOCKINGWINDOW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_UNICODE_NOTATION_TOGGLE
+    [
+        ExecMethod = Execute;
+    ]
+    SID_SYMBOLS_CATALOGUE //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_CHARMAP //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_PARA_LEFT_TO_RIGHT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_PARA_RIGHT_TO_LEFT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_SAVE_FORMULA
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+}
+
+shell SmViewShell
+{
+    import FormulaView;
+}
+
+}

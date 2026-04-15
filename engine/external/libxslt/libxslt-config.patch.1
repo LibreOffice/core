@@ -1,0 +1,35 @@
+Hack the xslt-config to return paths into WORKDIR.
+
+--- a/xslt-config.in	Wed Jan 17 14:18:26 2007
++++ b/xslt-config.in	Wed Jun 25 13:06:05 2008
+@@ -1,10 +1,16 @@
+ #! /bin/sh
+ 
+-prefix=@prefix@
+-exec_prefix=@exec_prefix@
++#prefix=@prefix@
++#exec_prefix=@exec_prefix@
++#exec_prefix_set=no
++#includedir=@includedir@
++#libdir=@libdir@
++
++prefix=${WORKDIR}/UnpackedTarball/libxslt
++exec_prefix=${WORKDIR}/UnpackedTarball/libxslt
+ exec_prefix_set=no
+-includedir=@includedir@
+-libdir=@libdir@
++includedir=${WORKDIR}/UnpackedTarball/libxslt
++libdir=${WORKDIR}/UnpackedTarball/libxslt
+ 
+ usage()
+ {
+@@ -92,7 +98,8 @@
+             libs="@XSLT_LIBDIR@ $libs"
+         fi
+ 
+-        libs="$libs @EXTRA_LIBS@"
++        #libs="$libs @EXTRA_LIBS@"
++        libs="-L${libdir}/libxslt/.libs -L${libdir}/libexslt/.libs -lxslt -lm"
+        	;;
+ 
+     *)

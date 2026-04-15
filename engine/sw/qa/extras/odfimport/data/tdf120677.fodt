@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p><draw:frame draw:name="Frame1" text:anchor-type="char" svg:width="0cm" svg:height="2cm">
+     <draw:text-box>
+      <text:p>. </text:p><!-- The "space" here is non-breaking space -->
+     </draw:text-box>
+    </draw:frame></text:p>
+  </office:text>
+ </office:body>
+</office:document>

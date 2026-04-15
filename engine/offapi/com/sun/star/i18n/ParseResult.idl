@@ -1,0 +1,70 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module i18n {
+
+
+/**
+    Parser results returned by
+    XCharacterClassification::parseAnyToken() and
+    XCharacterClassification::parsePredefinedToken().
+ */
+
+published struct ParseResult
+{
+    /** Count of ignored leading whitespace, in UTF-16 code units, not
+        Unicode code points. */
+    long    LeadingWhiteSpace;
+
+    /** UTF-16 code unit index of first unprocessed character. */
+    long    EndPos;
+
+    /** Number of code points (not UTF-16 code units) of the parsed token,
+        not including leading whitespace. */
+    long    CharLen;
+
+    /** Value of token in case of numeric. */
+    double  Value;
+
+    /** KParseType token type like
+        KParseType::IDENTNAME. */
+    long    TokenType;
+
+    /** KParseTokens flags of first character of actual
+        token matched. If <em>TokenType</em> is a
+        KParseType::SINGLE_QUOTE_NAME or a
+        KParseType::DOUBLE_QUOTE_STRING the first
+        character is the first character inside the quotes, not the
+        quote itself. */
+    long    StartFlags;
+
+    /** KParseTokens flags of remaining characters of
+        actual token matched. */
+    long    ContFlags;
+
+    /** If a quoted name or string is encountered the dequoted result
+        goes here. */
+    string  DequotedNameOrString;
+
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

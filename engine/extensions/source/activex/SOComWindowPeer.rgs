@@ -1,0 +1,23 @@
+HKCR
+{
+	so_activex.SOComWindowPeer.1 = s 'SOComWindowPeer Class'
+	{
+		CLSID = s '{EE51BD3E-8BB6-4FB8-B319-F65B1BE3B21D}'
+	}
+	so_activex.SOComWindowPeer = s 'SOComWindowPeer Class'
+	{
+		CLSID = s '{EE51BD3E-8BB6-4FB8-B319-F65B1BE3B21D}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {EE51BD3E-8BB6-4FB8-B319-F65B1BE3B21D} = s 'SOComWindowPeer Class'
+		{
+			ProgID = s 'so_activex.SOComWindowPeer.1'
+			VersionIndependentProgID = s 'so_activex.SOComWindowPeer'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

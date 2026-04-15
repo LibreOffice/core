@@ -1,0 +1,65 @@
+-*- Mode: diff -*-
+
+LO needs to build both against MacOSX SDK and not produce universal binaries.
+
+diff -ru python3.orig/configure python3/configure
+--- python3.orig/configure	2015-07-26 17:36:11.808497783 +0200
++++ python3/configure	2015-07-26 17:38:49.016508337 +0200
+@@ -7385,7 +7385,20 @@
+         then
+             case "$UNIVERSAL_ARCHS" in
+             32-bit)
+-               UNIVERSAL_ARCH_FLAGS="-arch ppc -arch i386"
++           # LO does not use Universal Binaries (but the only way to set a SDK
++           # here implies that, so de-universalize here...)
++           case `/usr/bin/arch` in
++           i386)
++               UNIVERSAL_ARCH_FLAGS="-arch i386"
++               ;;
++           ppc)
++               UNIVERSAL_ARCH_FLAGS=""
++               ;;
++           *)
++               as_fn_error $? "Unexpected output of 'arch' on OSX" "$LINENO" 5
++               ;;
++           esac
++
+                LIPO_32BIT_FLAGS=""
+                ARCH_RUN_32BIT=""
+                ;;
+diff -ru python3.orig/Mac/Makefile.in python3/Mac/Makefile.in
+--- python3.orig/Mac/Makefile.in	2015-07-05 18:50:07.000000000 +0200
++++ python3/Mac/Makefile.in	2015-07-26 17:40:14.860514100 +0200
+@@ -44,7 +44,7 @@
+ INSTALL_SCRIPT= @INSTALL_SCRIPT@
+ INSTALL_DATA=@INSTALL_DATA@
+ LN=@LN@
+-STRIPFLAG=-s
++STRIPFLAG=
+ CPMAC=CpMac
+ 
+ APPTEMPLATE=$(srcdir)/Resources/app
+diff -ru python3.orig/Mac/Resources/app/Info.plist.in python3/Mac/Resources/app/Info.plist.in
+--- python3.orig/Mac/Resources/app/Info.plist.in	2015-07-05 18:50:07.000000000 +0200
++++ python3/Mac/Resources/app/Info.plist.in	2015-07-26 17:42:00.974521224 +0200
+@@ -18,7 +18,7 @@
+ 		</dict>
+ 	</array>
+ 	<key>CFBundleExecutable</key>
+-	<string>Python</string>
++	<string>LibreOfficePython</string>
+ 	<key>CFBundleGetInfoString</key>
+ 	<string>%version%, (c) 2001-2023 Python Software Foundation.</string>
+ 	<key>CFBundleHelpBookFolder</key>
+diff -ru python3.orig/Mac/Resources/framework/Info.plist.in python3/Mac/Resources/framework/Info.plist.in
+--- python3.orig/Mac/Resources/framework/Info.plist.in	2015-07-05 18:50:07.000000000 +0200
++++ python3/Mac/Resources/framework/Info.plist.in	2015-07-26 17:41:15.996518204 +0200
+@@ -5,7 +5,7 @@
+ 	<key>CFBundleDevelopmentRegion</key>
+ 	<string>English</string>
+ 	<key>CFBundleExecutable</key>
+-	<string>Python</string>
++	<string>@PYTHONFRAMEWORK@</string>
+ 	<key>CFBundleGetInfoString</key>
+ 	<string>Python Runtime and Library</string>
+ 	<key>CFBundleIdentifier</key>

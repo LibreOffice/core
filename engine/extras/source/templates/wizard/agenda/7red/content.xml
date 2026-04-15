@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
+  <office:scripts/>
+  <office:font-face-decls>
+    <style:font-face style:name="Lucidasans1" svg:font-family="Lucidasans"/>
+    <style:font-face style:name="Lucidasans" svg:font-family="Lucidasans" style:font-pitch="variable"/>
+    <style:font-face style:name="Mincho" svg:font-family="Mincho" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Sans" svg:font-family="Liberation Sans" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Sans1" svg:font-family="Liberation Sans" style:font-adornments="Regular" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="DejaVu Sans" svg:font-family="'DejaVu Sans'" style:font-family-generic="system" style:font-pitch="variable"/>
+  </office:font-face-decls>
+  <office:automatic-styles>
+    <style:style style:name="Table2" style:family="table">
+      <style:table-properties style:width="6in" table:align="margins"/>
+    </style:style>
+    <style:style style:name="Table2.A" style:family="table-column">
+      <style:table-column-properties style:column-width="1.5111in" style:rel-column-width="16507*"/>
+    </style:style>
+    <style:style style:name="Table2.B" style:family="table-column">
+      <style:table-column-properties style:column-width="4.4889in" style:rel-column-width="49028*"/>
+    </style:style>
+    <style:style style:name="Table2.A1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="Table2.B1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="none" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="Table2.A2" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="none" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="Table2.B2" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS1" style:display-name="AGENDA_ITEMS1" style:family="table">
+      <style:table-properties style:width="6in" table:align="margins"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS1.A" style:display-name="AGENDA_ITEMS1.A" style:family="table-column">
+      <style:table-column-properties style:column-width="3in" style:rel-column-width="32767*"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS1.B" style:display-name="AGENDA_ITEMS1.B" style:family="table-column">
+      <style:table-column-properties style:column-width="3in" style:rel-column-width="32768*"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS1.A1" style:display-name="AGENDA_ITEMS1.A1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS1.B1" style:display-name="AGENDA_ITEMS1.B1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="none" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS1.A2" style:display-name="AGENDA_ITEMS1.A2" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="none" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS1.B2" style:display-name="AGENDA_ITEMS1.B2" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS2" style:display-name="AGENDA_ITEMS2" style:family="table">
+      <style:table-properties style:width="6in" table:align="margins"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS2.A" style:display-name="AGENDA_ITEMS2.A" style:family="table-column">
+      <style:table-column-properties style:column-width="1.5in" style:rel-column-width="16383*"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS2.D" style:display-name="AGENDA_ITEMS2.D" style:family="table-column">
+      <style:table-column-properties style:column-width="1.5in" style:rel-column-width="16386*"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS2.A1" style:display-name="AGENDA_ITEMS2.A1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS2.A2" style:display-name="AGENDA_ITEMS2.A2" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="none" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS" style:display-name="AGENDA_TOPICS" style:family="table">
+      <style:table-properties style:width="6in" table:align="margins"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS.A" style:display-name="AGENDA_TOPICS.A" style:family="table-column">
+      <style:table-column-properties style:column-width="2in" style:rel-column-width="21845*"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS.A1" style:display-name="AGENDA_TOPICS.A1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="none" fo:border-right="none" fo:border-top="none" fo:border-bottom="0.05pt solid #000000"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS.A2" style:display-name="AGENDA_TOPICS.A2" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="none" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS.B2" style:display-name="AGENDA_TOPICS.B2" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS.A4" style:display-name="AGENDA_TOPICS.A4" style:family="table-cell">
+      <style:table-cell-properties fo:background-color="transparent" fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="none" fo:border-bottom="none">
+        <style:background-image/>
+      </style:table-cell-properties>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS.A5" style:display-name="AGENDA_TOPICS.A5" style:family="table-cell">
+      <style:table-cell-properties fo:background-color="transparent" fo:padding="0.0382in" fo:border="none">
+        <style:background-image/>
+      </style:table-cell-properties>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS.A6" style:display-name="AGENDA_TOPICS.A6" style:family="table-cell">
+      <style:table-cell-properties fo:background-color="transparent" fo:padding="0.0382in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none">
+        <style:background-image/>
+      </style:table-cell-properties>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS.B6" style:display-name="AGENDA_TOPICS.B6" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="none" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS.C6" style:display-name="AGENDA_TOPICS.C6" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="none" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS.B10" style:display-name="AGENDA_TOPICS.B10" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="none" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_TOPICS.C10" style:display-name="AGENDA_TOPICS.C10" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="none" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS3" style:display-name="AGENDA_ITEMS3" style:family="table">
+      <style:table-properties style:width="6in" table:align="margins"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS3.A" style:display-name="AGENDA_ITEMS3.A" style:family="table-column">
+      <style:table-column-properties style:column-width="3in" style:rel-column-width="32767*"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS3.B" style:display-name="AGENDA_ITEMS3.B" style:family="table-column">
+      <style:table-column-properties style:column-width="3in" style:rel-column-width="32768*"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS3.A1" style:display-name="AGENDA_ITEMS3.A1" style:family="table-cell">
+      <style:table-cell-properties style:border-line-width-left="0.0007in 0.0347in 0.0007in" fo:padding="0.0382in" fo:border-left="2.6pt double #000000" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS3.B1" style:display-name="AGENDA_ITEMS3.B1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border-left="none" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS3.A2" style:display-name="AGENDA_ITEMS3.A2" style:family="table-cell">
+      <style:table-cell-properties style:border-line-width-left="0.0007in 0.0347in 0.0007in" fo:padding="0.0382in" fo:border-left="2.6pt double #000000" fo:border-right="none" fo:border-top="none" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="AGENDA_5f_ITEMS3.B2" style:display-name="AGENDA_ITEMS3.B2" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0382in" fo:border="none"/>
+    </style:style>
+    <style:style style:name="Table1" style:family="table">
+      <style:table-properties style:width="6in" fo:margin-top="0in" fo:margin-bottom="0in" table:align="margins" style:may-break-between-rows="false"/>
+    </style:style>
+    <style:style style:name="Table1.A" style:family="table-column">
+      <style:table-column-properties style:column-width="2.6924in" style:rel-column-width="29406*"/>
+    </style:style>
+    <style:style style:name="Table1.B" style:family="table-column">
+      <style:table-column-properties style:column-width="1.1215in" style:rel-column-width="12252*"/>
+    </style:style>
+    <style:style style:name="Table1.C" style:family="table-column">
+      <style:table-column-properties style:column-width="1.0319in" style:rel-column-width="11272*"/>
+    </style:style>
+    <style:style style:name="Table1.D" style:family="table-column">
+      <style:table-column-properties style:column-width="0.4938in" style:rel-column-width="5390*"/>
+    </style:style>
+    <style:style style:name="Table1.E" style:family="table-column">
+      <style:table-column-properties style:column-width="0.6604in" style:rel-column-width="7215*"/>
+    </style:style>
+    <style:style style:name="Table1.A1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0396in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="Table1.D1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0396in" fo:border-left="0.05pt solid #000000" fo:border-right="0.05pt solid #000000" fo:border-top="0.05pt solid #000000" fo:border-bottom="none"/>
+    </style:style>
+    <style:style style:name="Table1.A4" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0396in" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="0.05pt solid #000000"/>
+    </style:style>
+    <style:style style:name="Table1.E4" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.0396in" fo:border="0.05pt solid #000000"/>
+    </style:style>
+    <style:style style:name="P1" style:family="paragraph" style:parent-style-name="TopicsTextNum">
+      <style:text-properties fo:font-size="6pt" style:font-size-asian="6pt" style:font-size-complex="6pt"/>
+    </style:style>
+    <style:style style:name="P2" style:family="paragraph" style:parent-style-name="TopicsHeaderTopic">
+      <style:text-properties fo:font-size="6pt" style:font-size-asian="6pt" style:font-size-complex="6pt"/>
+    </style:style>
+    <style:style style:name="P3" style:family="paragraph" style:parent-style-name="TopicTextTopic">
+      <style:text-properties fo:font-size="6pt" style:font-size-asian="6pt" style:font-size-complex="6pt"/>
+    </style:style>
+    <style:style style:name="P4" style:family="paragraph" style:parent-style-name="AgendaTitles">
+      <style:paragraph-properties fo:keep-with-next="always"/>
+    </style:style>
+    <style:style style:name="P5" style:family="paragraph" style:parent-style-name="AgendaTitle">
+      <style:paragraph-properties fo:break-before="page"/>
+    </style:style>
+    <style:style style:name="P6" style:family="paragraph" style:parent-style-name="Text_20_body">
+      <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
+    </style:style>
+    <style:style style:name="P7" style:family="paragraph" style:parent-style-name="AgendaTitles" style:master-page-name="">
+      <style:paragraph-properties style:page-number="auto" fo:keep-with-next="always"/>
+    </style:style>
+    <style:style style:name="Sect1" style:family="section">
+      <style:section-properties style:editable="false">
+        <style:columns fo:column-count="1" fo:column-gap="0in"/>
+      </style:section-properties>
+    </style:style>
+    <style:style style:name="Sect2" style:family="section">
+      <style:section-properties text:dont-balance-text-columns="false" style:editable="false">
+        <style:columns fo:column-count="1" fo:column-gap="0in"/>
+      </style:section-properties>
+    </style:style>
+    <style:style style:name="Sect3" style:family="section">
+      <style:section-properties fo:background-color="transparent" text:dont-balance-text-columns="false" style:editable="false">
+        <style:columns fo:column-count="1" fo:column-gap="0in"/>
+        <style:background-image/>
+      </style:section-properties>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:text text:use-soft-page-breaks="true">
+      <text:sequence-decls>
+        <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+        <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+      </text:sequence-decls>
+      <text:user-field-decls>
+        <text:user-field-decl office:value-type="string" office:string-value="Agenda title" text:name="AGENDA_TITLE"/>
+        <text:user-field-decl office:value-type="float" office:value="0.593055555556" text:name="AGENDA_TIME"/>
+        <text:user-field-decl office:value-type="string" office:string-value="Agenda location" text:name="AGENDA_LOCATION"/>
+      </text:user-field-decls>
+      <text:p text:style-name="AgendaTitle">&lt;title&gt;</text:p>
+      <table:table table:name="Table2" table:style-name="Table2">
+        <table:table-column table:style-name="Table2.A"/>
+        <table:table-column table:style-name="Table2.B"/>
+        <table:table-header-rows>
+          <table:table-row>
+            <table:table-cell table:style-name="Table2.A1" office:value-type="string">
+              <text:p text:style-name="AgendaTitles">#datetitle#</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="Table2.B1" office:value-type="string">
+              <text:p text:style-name="AgendaDate">&lt;date&gt;</text:p>
+            </table:table-cell>
+          </table:table-row>
+        </table:table-header-rows>
+        <table:table-row>
+          <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+            <text:p text:style-name="AgendaTitles">#timetitle#</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table2.B2" office:value-type="string">
+            <text:p text:style-name="AgendaTime">&lt;time&gt;</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row>
+          <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+            <text:p text:style-name="AgendaTitles">#locationtitle#</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table2.B2" office:value-type="string">
+            <text:p text:style-name="AgendaLocation">&lt;location&gt;</text:p>
+          </table:table-cell>
+        </table:table-row>
+      </table:table>
+      <text:p text:style-name="Text_20_body"/>
+      <text:section text:style-name="Sect1" text:name="AGENDA_ITEMS1">
+        <table:table table:name="AGENDA_ITEMS1" table:style-name="AGENDA_5f_ITEMS1">
+          <table:table-column table:style-name="AGENDA_5f_ITEMS1.A"/>
+          <table:table-column table:style-name="AGENDA_5f_ITEMS1.B"/>
+          <table:table-header-rows>
+            <table:table-row>
+              <table:table-cell table:style-name="AGENDA_5f_ITEMS1.A1" office:value-type="string">
+                <text:p text:style-name="MeetingType">&lt;meeting-type&gt;</text:p>
+              </table:table-cell>
+              <table:table-cell table:style-name="AGENDA_5f_ITEMS1.B1" office:value-type="string">
+                <text:p text:style-name="MeetingTypeText"/>
+              </table:table-cell>
+            </table:table-row>
+          </table:table-header-rows>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS1.A2" office:value-type="string">
+              <text:p text:style-name="CalledBy">&lt;called-by&gt;</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS1.B2" office:value-type="string">
+              <text:p text:style-name="CalledByText"/>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS1.A2" office:value-type="string">
+              <text:p text:style-name="Facilitator"><text:bookmark text:name="AGENDA_PRESIDING"/>&lt;facilitator&gt;</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS1.B2" office:value-type="string">
+              <text:p text:style-name="FacilitatorText"/>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS1.A2" office:value-type="string">
+              <text:p text:style-name="Attendees">&lt;attendees&gt;</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS1.B2" office:value-type="string">
+              <text:p text:style-name="AttendeesText"/>
+            </table:table-cell>
+          </table:table-row>
+        </table:table>
+        <text:p text:style-name="Text_20_body"/>
+      </text:section>
+      <text:section text:style-name="Sect1" text:name="AGENDA_ITEMS2">
+        <table:table table:name="AGENDA_ITEMS2" table:style-name="AGENDA_5f_ITEMS2">
+          <table:table-column table:style-name="AGENDA_5f_ITEMS2.A" table:number-columns-repeated="3"/>
+          <table:table-column table:style-name="AGENDA_5f_ITEMS2.D"/>
+          <table:table-header-rows>
+            <table:table-row>
+              <table:table-cell table:style-name="AGENDA_5f_ITEMS2.A1" office:value-type="string">
+                <text:p text:style-name="Notetaker"><text:bookmark text:name="AGENDA_NOTETAKER"/>&lt;notetaker&gt;</text:p>
+              </table:table-cell>
+              <table:table-cell table:style-name="AGENDA_5f_ITEMS2.A1" office:value-type="string">
+                <text:p text:style-name="Table_20_Contents"/>
+              </table:table-cell>
+              <table:table-cell table:style-name="AGENDA_5f_ITEMS2.A1" office:value-type="string">
+                <text:p text:style-name="Timekeeper">&lt;timekeeper&gt;</text:p>
+              </table:table-cell>
+              <table:table-cell table:style-name="AGENDA_5f_ITEMS2.A1" office:value-type="string">
+                <text:p text:style-name="Table_20_Contents"/>
+              </table:table-cell>
+            </table:table-row>
+          </table:table-header-rows>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS2.A2" office:value-type="string">
+              <text:p text:style-name="Observers">&lt;observers&gt;</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS2.A2" office:value-type="string">
+              <text:p text:style-name="Table_20_Contents"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS2.A2" office:value-type="string">
+              <text:p text:style-name="ResourcePersons">&lt;resource-persons&gt;</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS2.A2" office:value-type="string">
+              <text:p text:style-name="Table_20_Contents"/>
+            </table:table-cell>
+          </table:table-row>
+        </table:table>
+        <text:p text:style-name="Text_20_body"/>
+      </text:section>
+      <text:section text:style-name="Sect2" text:name="AGENDA_TOPICS">
+        <text:p text:style-name="TopicsTitle">#topics#</text:p>
+        <table:table table:name="AGENDA_TOPICS" table:style-name="AGENDA_5f_TOPICS">
+          <table:table-column table:style-name="AGENDA_5f_TOPICS.A" table:number-columns-repeated="3"/>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A1" office:value-type="string">
+              <text:p text:style-name="P1"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A1" office:value-type="string">
+              <text:p text:style-name="P2"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A1" office:value-type="string">
+              <text:p text:style-name="P3"/>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A2" office:value-type="string">
+              <text:p text:style-name="TopicsTextNum">&lt;num&gt;</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderTopic">#topicheader#</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicTextTopic">&lt;topic&gt;</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A2" office:value-type="string">
+              <text:p text:style-name="Numbering_20_1"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderResponsible">#responsibleheader#</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicTextResponsible">&lt;responsible&gt;</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A4" office:value-type="string">
+              <text:p text:style-name="Numbering_20_1"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderTime">#timeheader#</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicTextTime">&lt;topic-time&gt;</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A5" office:value-type="string">
+              <text:p text:style-name="Numbering_20_1"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderTime"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicTextTime"/>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A6" office:value-type="string">
+              <text:p text:style-name="TopicsTextNum">&lt;num&gt;</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.C10" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderTopic">#topicheader#</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.C10" office:value-type="string">
+              <text:p text:style-name="TopicTextTopic">&lt;topic&gt;</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A4" office:value-type="string">
+              <text:p text:style-name="Numbering_20_1"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderResponsible">#Responsibleheader#</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicTextResponsible">&lt;responsible&gt;</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A4" office:value-type="string">
+              <text:p text:style-name="Numbering_20_1"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderTime">#timeheader#</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicTextTime">&lt;topic-time&gt;</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A5" office:value-type="string">
+              <text:p text:style-name="Numbering_20_1"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderTime"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicTextTime"/>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A6" office:value-type="string">
+              <text:p text:style-name="TopicsTextNum">&lt;num&gt;</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.C10" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderTopic">#topicheader#</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.C10" office:value-type="string">
+              <text:p text:style-name="TopicTextTopic">&lt;topic&gt;</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A4" office:value-type="string">
+              <text:p text:style-name="Numbering_20_1"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderResponsible">#responsiblehedaer#</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicTextResponsible">&lt;responsible&gt;</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A4" office:value-type="string">
+              <text:p text:style-name="Numbering_20_1"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderTime">#timeheader#</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicTextTime">&lt;topic-time&gt;</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.A5" office:value-type="string">
+              <text:p text:style-name="Numbering_20_1"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicsHeaderTime"/>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_TOPICS.B2" office:value-type="string">
+              <text:p text:style-name="TopicTextTime"/>
+            </table:table-cell>
+          </table:table-row>
+        </table:table>
+        <text:p text:style-name="Text_20_body"/>
+      </text:section>
+      <text:section text:style-name="Sect1" text:name="AGENDA_ITEMS3">
+        <text:p text:style-name="P7">#additional-information#</text:p>
+        <text:p text:style-name="P4"/>
+        <table:table table:name="AGENDA_ITEMS3" table:style-name="AGENDA_5f_ITEMS3">
+          <table:table-column table:style-name="AGENDA_5f_ITEMS3.A"/>
+          <table:table-column table:style-name="AGENDA_5f_ITEMS3.B"/>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS3.A1" office:value-type="string">
+              <text:p text:style-name="Bring"><text:bookmark text:name="AGENDA_PREPARE"/>&lt;bring&gt;</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS3.B1" office:value-type="string">
+              <text:p text:style-name="Table_20_Contents"/>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS3.A2" office:value-type="string">
+              <text:p text:style-name="Read">&lt;read&gt;</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS3.B2" office:value-type="string">
+              <text:p text:style-name="Table_20_Contents"/>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS3.A2" office:value-type="string">
+              <text:p text:style-name="Notes"><text:bookmark text:name="AGENDA_NOTES"/>&lt;notes&gt;</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="AGENDA_5f_ITEMS3.B2" office:value-type="string">
+              <text:p text:style-name="Table_20_Contents"/>
+            </table:table-cell>
+          </table:table-row>
+        </table:table>
+        <text:p text:style-name="Text_20_body"/>
+      </text:section>
+      <text:section text:style-name="Sect1" text:name="MINUTES_ALL">
+        <text:p text:style-name="P5">#minutes-for# &lt;minutes-title&gt;</text:p>
+        <text:p text:style-name="msubheader">&lt;minutes-location&gt;, &lt;minutes-date&gt; &lt;minutes-time&gt;</text:p>
+        <text:section text:style-name="Sect3" text:name="MINUTES">
+          <text:p text:style-name="P6"/>
+          <table:table table:name="Table1" table:style-name="Table1">
+            <table:table-column table:style-name="Table1.A"/>
+            <table:table-column table:style-name="Table1.B"/>
+            <table:table-column table:style-name="Table1.C"/>
+            <table:table-column table:style-name="Table1.D"/>
+            <table:table-column table:style-name="Table1.E"/>
+            <table:table-row>
+              <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+                <text:p text:style-name="mtopic">&lt;mtopic&gt;</text:p>
+              </table:table-cell>
+              <table:table-cell table:style-name="Table1.A1" table:number-columns-spanned="2" office:value-type="string">
+                <text:p text:style-name="mresponsible"><text:s/>&lt;mresponsible&gt;</text:p>
+              </table:table-cell>
+              <table:covered-table-cell/>
+              <table:table-cell table:style-name="Table1.D1" table:number-columns-spanned="2" office:value-type="string">
+                <text:p text:style-name="mtime">&lt;mtime&gt;</text:p>
+              </table:table-cell>
+              <table:covered-table-cell/>
+            </table:table-row>
+            <table:table-row>
+              <table:table-cell table:style-name="Table1.D1" table:number-columns-spanned="5" office:value-type="string">
+                <text:p text:style-name="Table_20_small_20_heading">#discussion#</text:p>
+                <text:p text:style-name="Table_20_agenda"/>
+                <text:p text:style-name="Table_20_agenda"/>
+                <text:p text:style-name="Table_20_agenda"/>
+              </table:table-cell>
+              <table:covered-table-cell/>
+              <table:covered-table-cell/>
+              <table:covered-table-cell/>
+              <table:covered-table-cell/>
+            </table:table-row>
+            <table:table-row>
+              <table:table-cell table:style-name="Table1.D1" table:number-columns-spanned="5" office:value-type="string">
+                <text:p text:style-name="Table_20_small_20_heading">#conclusion#</text:p>
+                <text:p text:style-name="Table_20_agenda"/>
+                <text:p text:style-name="Table_20_agenda"/>
+              </table:table-cell>
+              <table:covered-table-cell/>
+              <table:covered-table-cell/>
+              <table:covered-table-cell/>
+              <table:covered-table-cell/>
+            </table:table-row>
+            <table:table-row>
+              <table:table-cell table:style-name="Table1.A4" table:number-columns-spanned="2" office:value-type="string">
+                <text:p text:style-name="Table_20_small_20_heading">#to-do#</text:p>
+                <text:p text:style-name="Table_20_agenda"/>
+              </table:table-cell>
+              <table:covered-table-cell/>
+              <table:table-cell table:style-name="Table1.A4" table:number-columns-spanned="2" office:value-type="string">
+                <text:p text:style-name="Table_20_small_20_heading">#responsible-party#</text:p>
+                <text:p text:style-name="Table_20_agenda"/>
+              </table:table-cell>
+              <table:covered-table-cell/>
+              <table:table-cell table:style-name="Table1.E4" office:value-type="string">
+                <text:p text:style-name="Table_20_small_20_heading">#deadline#</text:p>
+                <text:p text:style-name="Table_20_agenda"/>
+                <text:p text:style-name="Table_20_agenda"/>
+              </table:table-cell>
+            </table:table-row>
+          </table:table>
+          <text:p text:style-name="Standard"/>
+          <text:p text:style-name="P6"/>
+        </text:section>
+      </text:section>
+      <text:p text:style-name="P6"/>
+    </office:text>
+  </office:body>
+</office:document-content>

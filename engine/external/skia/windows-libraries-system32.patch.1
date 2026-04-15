@@ -1,0 +1,12 @@
+diff -ur skia.org/tools/library/LoadDynamicLibrary_win.cpp skia/tools/library/LoadDynamicLibrary_win.cpp
+--- skia.org/tools/library/LoadDynamicLibrary_win.cpp	2024-10-10 13:48:13.491741916 +0200
++++ skia/tools/library/LoadDynamicLibrary_win.cpp	2024-10-10 13:48:43.266759521 +0200
+@@ -11,7 +11,7 @@
+ #include "tools/library/LoadDynamicLibrary.h"
+ 
+ void* SkLoadDynamicLibrary(const char* libraryName) {
+-    return LoadLibraryA(libraryName);
++    return LoadLibraryExA(libraryName, nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+ }
+ 
+ void* SkGetProcedureAddress(void* library, const char* functionName) {

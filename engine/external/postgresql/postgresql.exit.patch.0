@@ -1,0 +1,19 @@
+# error: implicitly declaring library function 'exit' with type 'void (int) __attribute__((noreturn))' [-Werror,-Wimplicit-function-declaration]
+--- configure
++++ configure
+@@ -16997,6 +16997,7 @@
+ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
++#include <stdlib.h>
+ typedef long int ac_int64;
+ 
+ /*
+@@ -17081,6 +17082,7 @@
+ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
++#include <stdlib.h>
+ typedef long long int ac_int64;
+ 
+ /*

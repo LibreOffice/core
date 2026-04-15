@@ -1,0 +1,27 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com { module sun { module star { module util
+{
+
+/** Container for binary data, typically an in-memory content of files.
+
+    The binary data in the container is regarded as read-only so no
+    access that would allow changing the data is allowed in this
+    interface.
+ */
+interface XBinaryDataContainer
+{
+    /** Get a copy of the contained data */
+    sequence<byte> getCopyAsByteSequence();
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

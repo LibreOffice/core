@@ -1,0 +1,23 @@
+--- src/contribs-lib/CMakeLists.txt	2012-05-24 22:38:20.002443317 +0200
++++ src/contribs-lib/CMakeLists.txt	2012-05-24 22:38:05.218443899 +0200
+@@ -113,3 +113,20 @@
+     COMPILE_DEFINITIONS_DEBUG _DEBUG
+ )
+
++#install lib
++install(TARGETS clucene-contribs-lib
++         DESTINATION ${LIB_DESTINATION}
++         COMPONENT runtime )
++
++#install public headers.
++FOREACH(file ${HEADERS})
++	get_filename_component(apath ${file} PATH)
++	get_filename_component(aname ${file} NAME)
++	file(RELATIVE_PATH relpath ${CMAKE_SOURCE_DIR}/src/contribs-lib ${apath})
++	IF ( NOT aname MATCHES "^_.*" )
++		install(FILES ${file}
++		        DESTINATION include/${relpath}
++		        COMPONENT development)
++	ENDIF ( NOT aname MATCHES "^_.*" )
++ENDFOREACH(file)
++

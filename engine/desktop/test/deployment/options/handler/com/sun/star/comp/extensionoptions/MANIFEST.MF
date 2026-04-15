@@ -1,0 +1,2 @@
+RegistrationClassName: com.sun.star.comp.extensionoptions.OptionsEventHandler
+

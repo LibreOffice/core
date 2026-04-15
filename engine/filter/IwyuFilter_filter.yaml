@@ -1,0 +1,41 @@
+---
+assumeFilename: filter/source/msfilter/msdffimp.cxx
+excludelist:
+    filter/source/msfilter/mscodec.cxx:
+    # Actually used
+    - com/sun/star/beans/NamedValue.hpp
+    filter/source/msfilter/mstoolbar.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    filter/source/pdf/impdialog.cxx:
+    # Actually used
+    - com/sun/star/beans/XMaterialHolder.hpp
+    filter/source/pdf/pdfexport.cxx:
+    # Needed for direct member access
+    - com/sun/star/security/XCertificate.hpp
+    filter/source/pdf/pdfinteract.cxx:
+    # Actually used
+    - com/sun/star/task/XInteractionRequest.hpp
+    filter/source/svg/svgfilter.cxx:
+    # Actually used
+    - com/sun/star/io/IOException.hpp
+    filter/source/xmlfilterdetect/filterdetect.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    filter/source/xsltdialog/typedetectionimport.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XAttributeList.hpp
+    filter/source/xsltdialog/xmlfilterjar.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    filter/source/xsltdialog/xmlfiltertabdialog.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    filter/source/xsltdialog/xmlfiltersettingsdialog.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    filter/source/xsltfilter/LibXSLTTransformer.cxx:
+    # Actually used
+    - com/sun/star/io/XInputStream.hpp
+    - com/sun/star/io/XOutputStream.hpp
+    - com/sun/star/io/XStreamListener.hpp

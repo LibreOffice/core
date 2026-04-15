@@ -1,0 +1,10 @@
+<svg width="100" height="120" viewBox="0 0 200 240"  xmlns="http://www.w3.org/2000/svg">
+  <defs>
+  <filter id="mode_normal" filterUnits="userSpaceOnUse" x="0" y="0" width="110%" height="110%">
+    <feFlood x="30" y="30" width="100" height="100" flood-color="#FFD700" flood-opacity="1" result="img1"></feFlood>
+    <feFlood x="70" y="70" width="100" height="100" flood-color="#8A2BE2" flood-opacity="1" result="img2"></feFlood>
+    <feBlend mode="normal" in="img1" in2="img2"></feBlend>
+  </filter>
+  </defs>
+  <use style="filter: url(#mode_normal);"></use>
+</svg>

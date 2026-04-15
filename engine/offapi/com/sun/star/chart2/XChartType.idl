@@ -1,0 +1,85 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+interface XChartType : com::sun::star::uno::XInterface
+{
+    /** A string representation of the chart type.
+        This needs to be the service-name which can be used to create a chart type.
+     */
+    string getChartType();
+
+    /** Creates a coordinate systems that fits the chart-type with its
+        current settings and for the given dimension.
+
+        @throws IllegalArgumentException
+            This chart type cannot be displayed in the given dimension.
+     */
+    XCoordinateSystem createCoordinateSystem( [in] long DimensionCount )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** Returns a sequence of roles that are understood by this chart
+        type.
+
+        <p>All roles must be listed in the order in which they are
+        usually parsed.  This ensures that gluing sequences together
+        and splitting them up apart again results in the same
+        structure as before.</p>
+
+        <p>Note, that this does not involve optional roles, like
+        error-bars.</p>
+     */
+    sequence< string >   getSupportedMandatoryRoles();
+
+    /** Returns a sequence of roles that are understood in addition to
+        the mandatory roles (see
+        XChartType::getSupportedMandatoryRoles()).
+
+        <p>An example for an optional role are error-bars.</p>
+     */
+    sequence< string >   getSupportedOptionalRoles();
+
+    /** Returns a sequence with supported property mapping roles.
+
+        <p>An example for a property mapping role is FillColor.</p>
+    */
+    sequence< string >  getSupportedPropertyRoles();
+
+    /** Returns the role of the XLabeledDataSequence of
+        which the label will be taken to identify the
+        DataSeries in dialogs or the legend.
+     */
+    string getRoleOfSequenceForSeriesLabel();
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

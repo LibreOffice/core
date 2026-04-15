@@ -1,0 +1,2033 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Calc" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains settings for the spreadsheet application.</desc>
+  </info>
+  <templates>
+    <group oor:name="ConversionRule">
+      <info>
+        <desc>Describes a conversion between two units.</desc>
+      </info>
+      <prop oor:name="FromUnit" oor:type="xs:string">
+        <info>
+          <desc>Specifies the name of the first unit.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ToUnit" oor:type="xs:string">
+        <info>
+          <desc>Specifies the name of the second unit.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Factor" oor:type="xs:double">
+        <info>
+          <desc>Specifies the conversion factor between the two units.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Date">
+      <info>
+        <desc>Describes a complete date value.</desc>
+      </info>
+      <prop oor:name="YY" oor:type="xs:int">
+        <info>
+          <desc>Specifies the year.</desc>
+          <label>1899-12-30 (Standard) 1900-01-01 (StarCalc 1.0) 1904-01-01</label>
+        </info>
+      </prop>
+      <prop oor:name="MM" oor:type="xs:int">
+        <info>
+          <desc>Specifies the month.</desc>
+          <label>1899-12-30 (Standard) 1900-01-01 (StarCalc 1.0) 1904-01-01</label>
+        </info>
+      </prop>
+      <prop oor:name="DD" oor:type="xs:int">
+        <info>
+          <desc>Specifies the day.</desc>
+          <label>1899-12-30 (Standard) 1900-01-01 (StarCalc 1.0) 1904-01-01</label>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="UnitConversion" oor:node-type="ConversionRule">
+      <!-- UIHints: function CONVERT -->
+      <info>
+        <desc>Specifies the Euro currency conversion rates and possibly other unit conversion rules for the CONVERT function.</desc>
+      </info>
+    </set>
+    <group oor:name="Content">
+      <info>
+        <desc>Contains settings for spreadsheet content.</desc>
+      </info>
+      <group oor:name="Display">
+        <info>
+          <desc>Specifies which contents are displayed in a spreadsheet.</desc>
+        </info>
+        <prop oor:name="Formula" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether formulas instead of results are displayed in the cells.</desc>
+            <label>Formulas</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="ZeroValue" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether numbers containing the 0 value are shown.</desc>
+            <label>Zero values</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="NoteTag" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether comments are marked.</desc>
+            <label>Comment tags</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="NoteIndicator" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>If less than 1, the size of comment indicator is calculated dynamically; otherwise this value will be used.</desc>
+            <label>Comment indicator size</label>
+          </info>
+          <value>0</value>
+        </prop>
+        <prop oor:name="NoteAuthor" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether authorship metadata for comments on hover are shown.</desc>
+            <label>Comment authorship</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="NoteTransparency" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Indicates whether temporary comments on hover are transparent.</desc>
+            <label>Comment transparency</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="FormulaMark" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether formulas are marked.</desc>
+            <label>Formula indicator and hint</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="ValueHighlighting" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether all values are highlighted in the sheet (text black, numbers blue, others green).</desc>
+            <label>Value highlighting</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="ColumnRowHighlighting" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether the column/row highlight has been enabled or not.</desc>
+            <label>Column/row highlighting</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="EditCellBackgroundHighlighting" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether the edit cell background highlighting is enabled or not.</desc>
+            <label>Edit cell background highlighting</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Anchor" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether anchor icons are displayed next to selected graphics in the document.</desc>
+            <label>Anchor</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="ObjectGraphic" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
+          <info>
+            <desc>Indicates whether objects and graphics are shown, hidden or replaced by a placeholder.</desc>
+            <label>Objects and Graphics</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Show</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Hide</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Show placeholders</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="Chart" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
+          <info>
+            <desc>Indicates whether charts are shown, hidden or replaced by a placeholder.</desc>
+            <label>Charts</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Show</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Hide</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Show placeholders</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="DrawingObject" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
+          <info>
+            <desc>Indicates whether drawing objects are shown, hidden or replaced by a placeholder.</desc>
+            <label>Drawing objects</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Show</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Hide</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Show placeholders</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>0</value>
+        </prop>
+      </group>
+      <group oor:name="Update" oor:nillable="false">
+        <info>
+          <desc>Contains settings that specify how contents are updated.</desc>
+        </info>
+        <prop oor:name="Link" oor:type="xs:int">
+          <!-- UIHints: Tools - Options - Spreadsheet  Other  [Section] Updating -->
+          <info>
+            <desc>Specifies if and how links are updated when loading a document.</desc>
+            <label>Update Links</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Update always</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Update never</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Update on request</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>2</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Layout">
+      <info>
+        <desc>Contains settings that affect the window layout.</desc>
+      </info>
+      <group oor:name="Line">
+        <info>
+          <desc>Contains settings that control visual aids.</desc>
+        </info>
+        <prop oor:name="GridLine" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
+          <info>
+            <desc>Specifies whether grid lines are displayed.</desc>
+            <label>Grid lines</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="GridOnColoredCells" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Visual Aids -->
+          <info>
+            <desc>Specifies whether grid lines should be displayed on top of colored cells.</desc>
+            <label>Grid lines on colored background</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="GridLineColor" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
+          <!--Default 12632256 = LightGray-->
+          <info>
+            <desc>Specifies the color of the grid lines.</desc>
+            <label>Color</label>
+          </info>
+          <value>12632256</value>
+        </prop>
+        <prop oor:name="PageBreak" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
+          <info>
+            <desc>Specifies whether page breaks are displayed.</desc>
+            <label>Page breaks</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Guide" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
+          <info>
+            <desc>Specifies whether helplines are displayed when moving objects.</desc>
+            <label>Helplines</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="Window">
+        <info>
+          <desc>Contains settings that control which windows are shown around the editing window.</desc>
+        </info>
+        <prop oor:name="ColumnRowHeader" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
+          <info>
+            <desc>Specifies whether row and column headers are displayed.</desc>
+            <label>Column/Row headers</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="HorizontalScroll" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
+          <info>
+            <desc>Specifies whether a horizontal scroll bar is displayed.</desc>
+            <label>Horizontal scroll</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="VerticalScroll" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
+          <info>
+            <desc>Specifies whether a vertical scroll bar is displayed.</desc>
+            <label>Vertical Scroll</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="SheetTab" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
+          <info>
+            <desc>Specifies whether sheet tabs are displayed.</desc>
+            <label>Sheet tabs</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="OutlineSymbol" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
+          <info>
+            <desc>Specifies whether outline symbols are displayed.</desc>
+            <label>Outline symbols</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="SearchSummary" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - View - [Section] Window -->
+          <info>
+            <desc>Specifies whether a summarizing dialog is displayed after search.</desc>
+            <label>Search summary</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="ThemedCursor" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - View - [Section] Window -->
+          <info>
+            <desc>If true, a themed cursor is used (fat cross) otherwise the system default (arrow).</desc>
+            <label>Themed cursor</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="Other">
+        <info>
+          <desc>Contains other layout settings.</desc>
+        </info>
+        <prop oor:name="StatusbarMultiFunction" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Selects a set of functions that are calculated for the selected cells, and which show the results in the status bar.</desc>
+            <label>Statusbar Functions</label>
+          </info>
+          <value>514</value>
+        </prop>
+        <prop oor:name="StatusbarFunction" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: (Status Bar) -->
+          <info>
+            <desc>Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
+            <label>Statusbar Function</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>No function</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Average</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Number count</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc>Count of all non-empty cells</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="4">
+              <info>
+                <desc>Maximum</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="5">
+              <info>
+                <desc>Minimum</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="9">
+              <info>
+                <desc>Sum</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>1</value>
+        </prop>
+        <prop oor:name="TabbarInlineWithScrollbar" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies if the tabbar should be shown inline with the scrollbar.</desc>
+            <label>Inline tabbar with scrollbar</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <group oor:name="TabStop">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Tab stops -->
+          <info>
+            <desc>Specifies the distance between tabulator stops in 1/100th millimeters.</desc>
+            <label>Tab stops</label>
+          </info>
+          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Specifies the tabulator distance with locales that use the metric system.</desc>
+              <label/>
+            </info>
+            <value>1250</value>
+          </prop>
+          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Specifies the tabulator distance with locales that don't use the metric system.</desc>
+              <label/>
+            </info>
+            <value>1270</value>
+          </prop>
+        </group>
+        <group oor:name="MeasureUnit">
+          <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Measurement unit -->
+          <info>
+            <desc>Specifies the measurement unit to be used in the user interface.</desc>
+            <label>Measurement unit</label>
+          </info>
+          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Specifies the measurement unit that is used with locales that use the metric system.</desc>
+            </info>
+            <constraints>
+              <enumeration oor:value="1">
+                <info>
+                  <desc>Millimeter</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc>Centimeter</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="6">
+                <info>
+                  <desc>Point</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="7">
+                <info>
+                  <desc>Pica</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="8">
+                <info>
+                  <desc>Inch</desc>
+                </info>
+              </enumeration>
+            </constraints>
+            <value>2</value>
+          </prop>
+          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Specifies the measurement unit that is used with locales that don't use the metric system.</desc>
+            </info>
+            <constraints>
+              <enumeration oor:value="1">
+                <info>
+                  <desc>Millimeter</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc>Centimeter</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="6">
+                <info>
+                  <desc>Point</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="7">
+                <info>
+                  <desc>Pica</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="8">
+                <info>
+                  <desc>Inch</desc>
+                </info>
+              </enumeration>
+            </constraints>
+            <value>8</value>
+          </prop>
+        </group>
+      </group>
+      <group oor:name="Zoom">
+        <info>
+          <desc>Specifies the zoom for new spreadsheet documents.</desc>
+        </info>
+        <prop oor:name="Type" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: (Status Bar) -->
+          <info>
+            <desc>Specifies the zoom type.</desc>
+            <label>Zoom Type</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Percentage value</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Whole page</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc>Width of a page</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="Value" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: (Status Bar) -->
+          <info>
+            <desc>Specifies the percentage value to which the view is scaled.</desc>
+            <label>Zoom Value</label>
+          </info>
+          <value>100</value>
+        </prop>
+        <prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Spreadsheets - View - [Section] Zoom -->
+          <info>
+            <desc>Specifies if zoom is applied to all sheets of a document.</desc>
+            <label>Synchronize sheets</label>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Input">
+      <info>
+        <desc>Contains settings that affect cell input.</desc>
+      </info>
+      <prop oor:name="MoveSelection" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
+        <info>
+          <desc>Specifies whether pressing the Enter key should move the selection.</desc>
+          <label>Press Enter to move selection</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="MoveSelectionDirection" oor:type="xs:int" oor:nillable="false">
+        <!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
+        <info>
+          <desc>Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
+          <label>Direction to move selection</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>Move down</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>Move right</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>Move up</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="3">
+            <info>
+              <desc>Move left</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>0</value>
+      </prop>
+      <prop oor:name="SwitchToEditMode" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
+        <info>
+          <desc>Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
+          <label>Press Enter to switch to edit mode</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="ExpandFormatting" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
+        <info>
+          <desc>Specifies whether formatting a cell also affects subsequently entered cells.</desc>
+          <label>Expand formatting</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="ShowReference" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
+        <info>
+          <desc>Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
+          <label>Show references in color</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="ExpandReference" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
+        <info>
+          <desc>Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
+          <label>Expand references if new columns/rows are inserted</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="UpdateReferenceOnSort" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
+        <info>
+          <desc>Specifies whether references get updated when performing sort on a range of cells.</desc>
+          <label>Update references when sorting range of cells</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="HighlightSelection" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
+        <info>
+          <desc>Specifies whether column and row headers are highlighted in the selected columns or rows.</desc>
+          <label>Highlight selection in column/row headings</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="UseTabCol" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: only API (see UseTabCol) -->
+        <info>
+          <desc>Specifies whether pressing Enter will move the cursor to the column where it was before the Tab key was used to change columns.</desc>
+          <label>Use Tab Column</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="ReplaceCellsWarning" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
+        <info>
+          <desc>Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
+          <label>Warn before replacing cells</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="LegacyCellSelection" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
+        <info>
+          <desc>Use legacy behaviour when selecting cells</desc>
+          <label>Use legacy behaviour when selecting cells</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="EnterPasteMode" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
+        <info>
+          <desc>Press Enter to paste and clear clipboard</desc>
+          <label>Press Enter to paste and clear clipboard</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="WarnActiveSheet" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
+        <info>
+          <desc>Specifies whether a warning is shown if saving a document works only for the active sheet, eg. in case of CSV.</desc>
+          <label>Warn when saving only the active sheet</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="WarnOnDeleteCellReferences" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether a warning infobar will appear when deleting cells breaks references in other cells.</desc>
+          <label>Warn when deletion breaks cell references</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="UseScrollLock" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Toggles the scroll lock behavior allowing to disable it for special keyboards</desc>
+          <label>Toggles the scroll lock behavior allowing to disable it for special keyboards</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="WrapNextPrevSheetTab" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>When switching to next / previous sheet, wrap from last to first tab (and vice versa)</desc>
+          <label>When switching to next / previous sheet, wrap from last to first tab (and vice versa)</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="LastFunctions" oor:type="oor:int-list" oor:nillable="false">
+        <info>
+          <desc>Specifies the functions last used.</desc>
+          <label>Last Used Functions</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="224">
+            <info>
+              <desc>SUM</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="226">
+            <info>
+              <desc>AVERAGE</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="222">
+            <info>
+              <desc>MIN</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="223">
+            <info>
+              <desc>MAX</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="6">
+            <info>
+              <desc>IF</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>224 226 222 223 6</value>
+      </prop>
+      <prop oor:name="FavouriteFunctions" oor:type="oor:int-list" oor:nillable="false">
+        <info>
+          <desc>Specifies the favourite functions.</desc>
+          <label>Favourite Functions</label>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="AutoInput" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools  Cell Contents  AutoInput -->
+        <info>
+          <desc>Specifies whether the AutoInput function is active.</desc>
+          <label>Auto Input</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="DetectiveAuto" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools  Detective  AutoRefresh -->
+        <info>
+          <desc>Specifies whether all the Detective traces in the sheet are automatically refreshed when modifying a formula.</desc>
+          <label>Detective Auto Refresh</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="SelectRangeBeforeAll" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Disable to always select all</desc>
+          <label>Select range before all</label>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
+    <group oor:name="Grid">
+      <info>
+        <desc>Contains settings for the grid.</desc>
+      </info>
+      <group oor:name="Option">
+        <info>
+          <desc>Contains settings that control the behavior of the grid.</desc>
+        </info>
+        <prop oor:name="SnapToGrid" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
+          <info>
+            <desc>Specifies whether frames, drawing elements and form functions are only movable between grid points.</desc>
+            <label>Snap to grid</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
+          <info>
+            <desc>Specifies whether the grid is displayed.</desc>
+            <label>Visible grid</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
+          <info>
+            <desc>Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes remain the same.</desc>
+            <label>Synchronize axes</label>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
+      <group oor:name="Resolution">
+        <info>
+          <desc>Specifies the grid's resolution.</desc>
+        </info>
+        <group oor:name="XAxis">
+          <!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
+          <!-- Notice: Default-value nonmetric 1270 1/100 mm) -->
+          <info>
+            <desc>Defines the distance between grid points on the X axis in 1/100th millimeters.</desc>
+            <label>X Axis Resolution</label>
+          </info>
+          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Specifies the distance that is used with locales that use the metric system.</desc>
+              <label/>
+            </info>
+            <value>1000</value>
+          </prop>
+          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Specifies the distance that is used with locales that don't use the metric system.</desc>
+              <label/>
+            </info>
+            <value>1270</value>
+          </prop>
+        </group>
+        <group oor:name="YAxis">
+          <!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
+          <!-- Notice: Default-value  nonmetric 1270 1/100 mm) -->
+          <info>
+            <desc>Defines the distance between grid points on the Y axis in 1/100th millimeters.</desc>
+            <label>Y Axis Resolution</label>
+          </info>
+          <prop oor:name="Metric" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Specifies the distance that is used with locales that use the metric system.</desc>
+              <label/>
+            </info>
+            <value>1000</value>
+          </prop>
+          <prop oor:name="NonMetric" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>Specifies the distance that is used with locales that don't use the metric system.</desc>
+              <label/>
+            </info>
+            <value>1270</value>
+          </prop>
+        </group>
+      </group>
+      <group oor:name="Subdivision">
+        <info>
+          <desc>Specifies how the grid is divided.</desc>
+        </info>
+        <prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
+          <info>
+            <desc>Specifies the number of intervals between two grid points on the X axis.</desc>
+            <label>X Axis Subdivision</label>
+          </info>
+          <value>1</value>
+        </prop>
+        <prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
+          <info>
+            <desc>Specifies the number of intervals between two grid points on the Y axis.</desc>
+            <label>Y Axis Subdivision</label>
+          </info>
+          <value>1</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="SortList">
+      <info>
+        <desc>Contains the sort list settings.</desc>
+      </info>
+      <prop oor:name="List" oor:type="oor:string-list" oor:nillable="false">
+        <!-- UIHints: Tools - Options  Spreadsheet  Sort lists  [List box] Lists -->
+        <!-- Notice: Defaults: Week and month names from system language -->
+        <info>
+          <desc>Specifies the available lists.</desc>
+          <label>Lists</label>
+        </info>
+        <value>NULL</value>
+      </prop>
+    </group>
+    <group oor:name="Dialogs">
+      <info>
+        <desc>Contains the dialogs settings.</desc>
+      </info>
+      <group oor:name="DBFImport">
+        <info>
+          <desc>Contains settings for DBF Import dialog</desc>
+        </info>
+        <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Charset/Language</desc>
+            <label>CharSet</label>
+          </info>
+          <value>-1</value>
+        </prop>
+      </group>
+      <group oor:name="DBFExport">
+        <info>
+          <desc>Contains settings for DBF Export dialog</desc>
+        </info>
+        <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Charset/Language</desc>
+            <label>CharSet</label>
+          </info>
+          <value>-1</value>
+        </prop>
+      </group>
+      <group oor:name="CSVExport">
+        <info>
+          <desc>Contains setting for Text CSV Export</desc>
+        </info>
+        <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Char Set</desc>
+            <label>CharSet</label>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="FieldSeparator" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Field delimiter</desc>
+            <label>FieldSeparator</label>
+          </info>
+          <value/>
+        </prop>
+        <prop oor:name="TextSeparator" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Text delimiter</desc>
+            <label>TextSeparator</label>
+          </info>
+          <value/>
+        </prop>
+        <prop oor:name="SaveTrueCellContent" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, formatted cell content is exported. If false, raw cell content is exported.</desc>
+            <label>SaveTrueCellContent</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="SaveCellFormulas" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, text formulas are exported instead of the calculated values.</desc>
+            <label>SaveCellFormulas</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="QuoteAllTextCells" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, text cells are always enclosed in quotes with no exception.</desc>
+            <label>QuoteAllTextCells</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="FixedWidth" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>All fields are exported having the same width</desc>
+            <label>FixedWidth</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="CSVImport">
+        <info>
+          <desc>Contains setting for Text CSV Import</desc>
+        </info>
+        <prop oor:name="MergeDelimiters" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Merge Delimiter check box status</desc>
+            <label>MergeDelimiters</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="RemoveSpace" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, leading and trailing white spaces are trimmed off.</desc>
+            <label>RemoveSpace</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="EvaluateFormulas" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, formula expressions are evaluated, else set as text cell content.</desc>
+            <label>EvaluateFormulas</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="SeparatorType" oor:type="xs:short" oor:nillable="false">
+          <info>
+            <desc>Fixed width, separator or detected separator</desc>
+            <label>SeparatorType</label>
+          </info>
+          <value>2</value>
+        </prop>
+        <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, quoted field is always imported as text with no exception.</desc>
+            <label>QuotedFieldAsText</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, Calc tries to detect special number format, such as date and scientific notation.</desc>
+            <label>DetectSpecialNumbers</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="DetectScientificNumbers" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, Calc tries to detect numbers in scientific notation.</desc>
+            <label>DetectScientificNumbers</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Language" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Language to use for CSV import.  This determines how the numbers are parsed.</desc>
+            <label>Language</label>
+          </info>
+          <value>0</value>
+        </prop>
+        <prop oor:name="Separators" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>List of Separators - as a String</desc>
+            <label>Separators</label>
+          </info>
+          <value>,;	</value>
+        </prop>
+        <prop oor:name="TextSeparators" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Text Separators</desc>
+            <label>TextSeparators</label>
+          </info>
+          <value>"</value>
+        </prop>
+        <prop oor:name="FixedWidth" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Fixed width</desc>
+            <label>FixedWidth</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="FromRow" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>From Row</desc>
+            <label>FromRow</label>
+          </info>
+          <value>1</value>
+        </prop>
+        <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Char Set (index of selected item in the dialog's list box; obsoleted by Encoding)</desc>
+            <label>CharSet</label>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="Encoding" oor:type="xs:short" oor:nillable="false">
+          <info>
+            <desc>Encoding (an rtl_TextEncoding value; default is "don't know")</desc>
+            <label>Encoding</label>
+          </info>
+          <value>0</value>
+        </prop>
+        <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Fixed Width List of separators</desc>
+            <label>FixedWidthList</label>
+          </info>
+          <value/>
+        </prop>
+      </group>
+      <group oor:name="ClipboardTextImport">
+        <info>
+          <desc>Contains setting for Unformatted Text Import from Clipboard</desc>
+        </info>
+        <prop oor:name="MergeDelimiters" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Merge Delimiter check box status</desc>
+            <label>MergeDelimiters</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="RemoveSpace" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, leading and trailing white spaces are trimmed off.</desc>
+            <label>RemoveSpace</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="EvaluateFormulas" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, formula expressions are evaluated, else set as text cell content.</desc>
+            <label>EvaluateFormulas</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="SeparatorType" oor:type="xs:short" oor:nillable="false">
+          <info>
+            <desc>Fixed width, separator or detected separator</desc>
+            <label>SeparatorType</label>
+          </info>
+          <value>2</value>
+        </prop>
+        <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, quoted field is always imported as text with no exception.</desc>
+            <label>QuotedFieldAsText</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, Calc tries to detect special number format, such as date and scientific notation.</desc>
+            <label>DetectSpecialNumbers</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="DetectScientificNumbers" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, Calc tries to detect numbers in scientific notation.</desc>
+            <label>DetectScientificNumbers</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="SkipEmptyCells" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, Calc preserves previous content of cells when pasting empty ones. If false, Calc delete content of previous cells.</desc>
+            <label>SkipEmptyCells</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Language" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Language to use for CSV import.  This determines how the numbers are parsed.</desc>
+            <label>Language</label>
+          </info>
+          <value>0</value>
+        </prop>
+        <prop oor:name="Separators" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>List of Separators - as a String</desc>
+            <label>Separators</label>
+          </info>
+          <value>	</value>
+        </prop>
+        <prop oor:name="TextSeparators" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Text Separators</desc>
+            <label>TextSeparators</label>
+          </info>
+          <value>"</value>
+        </prop>
+        <prop oor:name="FixedWidth" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Fixed width</desc>
+            <label>FixedWidth</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="FromRow" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>From Row</desc>
+            <label>FromRow</label>
+          </info>
+          <value>1</value>
+        </prop>
+        <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Char Set (index of selected item in the dialog's list box; obsoleted by Encoding)</desc>
+            <label>CharSet</label>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="Encoding" oor:type="xs:short" oor:nillable="false">
+          <info>
+            <desc>Encoding (an rtl_TextEncoding value; default is "don't know")</desc>
+            <label>Encoding</label>
+          </info>
+          <value>0</value>
+        </prop>
+        <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Fixed Width List of separators</desc>
+            <label>FixedWidthList</label>
+          </info>
+          <value/>
+        </prop>
+      </group>
+      <group oor:name="ClipboardHTMLImport">
+        <prop oor:name="Language" oor:type="xs:int" oor:nillable="false">
+          <value>0</value> <!-- LANGUAGE_SYSTEM -->
+        </prop>
+        <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean" oor:nillable="false">
+          <value>false</value>
+        </prop>
+        <prop oor:name="DetectScientificNumbers" oor:type="xs:boolean" oor:nillable="false">
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="TextToColumnsImport">
+        <info>
+          <desc>Contains setting for Text to Columns Import</desc>
+        </info>
+        <prop oor:name="MergeDelimiters" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Merge Delimiter check box status</desc>
+            <label>MergeDelimiters</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="RemoveSpace" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, leading and trailing white spaces are trimmed off.</desc>
+            <label>RemoveSpace</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="EvaluateFormulas" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, formula expressions are evaluated, else set as text cell content.</desc>
+            <label>EvaluateFormulas</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="SeparatorType" oor:type="xs:short" oor:nillable="false">
+          <info>
+            <desc>Fixed width, separator or detected separator</desc>
+            <label>SeparatorType</label>
+          </info>
+          <value>2</value>
+        </prop>
+        <prop oor:name="Separators" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>List of Separators - as a String</desc>
+            <label>Separators</label>
+          </info>
+          <value>	</value>
+        </prop>
+        <prop oor:name="SkipEmptyCells" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, Calc preserves previous content of cells when pasting empty ones. If false, Calc delete content of previous cells.</desc>
+            <label>SkipEmptyCells</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="TextSeparators" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Text Separators</desc>
+            <label>TextSeparators</label>
+          </info>
+          <value>"</value>
+        </prop>
+        <prop oor:name="FixedWidth" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Fixed width</desc>
+            <label>FixedWidth</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Fixed Width List of separators</desc>
+            <label>FixedWidthList</label>
+          </info>
+          <value/>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Calculate">
+      <info>
+        <desc>Contains settings that affect cell calculation.</desc>
+      </info>
+      <group oor:name="IterativeReference">
+        <info>
+          <desc>Contains settings for iterative calculation of circular references.</desc>
+        </info>
+        <prop oor:name="Iteration" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
+          <info>
+            <desc>Specifies whether iterative calculation is used for formulas with circular references.</desc>
+            <label>Iterations</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Steps" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
+          <info>
+            <desc>Specifies the maximum number of iteration steps.</desc>
+            <label>Steps</label>
+          </info>
+          <value>100</value>
+        </prop>
+        <prop oor:name="MinimumChange" oor:type="xs:double" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
+          <info>
+            <desc>Specifies the result change value below which iteration is stopped.</desc>
+            <label>Minimum Change</label>
+          </info>
+          <value>0.001</value>
+        </prop>
+      </group>
+      <group oor:name="Other">
+        <info>
+          <desc>Contains other calculation settings.</desc>
+        </info>
+        <prop oor:name="CaseSensitive" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Case sensitive -->
+          <info>
+            <desc>Specifies whether upper and lower case in texts are distinguished when comparing cell contents.</desc>
+            <label>Case sensitive</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Precision" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Precision as shown -->
+          <info>
+            <desc>Specifies whether the calculation uses the rounded values displayed in the sheet.</desc>
+            <label>Precision as shown</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="SearchCriteria" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Search criteria = and &lt;&gt; must apply to whole cells -->
+          <info>
+            <desc>Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
+            <label>Search criteria = and &lt;&gt; must apply to whole cells</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="FindLabel" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Automatically find column and row labels -->
+          <info>
+            <desc>Specifies whether column and row labels are used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
+            <label>Automatically find column and row labels</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="DecimalPlaces" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Combo box] Decimal places -->
+          <info>
+            <desc>Specifies the number of decimals to be displayed for the Standard number format.</desc>
+            <label>Decimal places</label>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="RegularExpressions" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Enable regular expressions in formulas -->
+          <info>
+            <desc>Specifies whether the calculation uses regular expressions in formulas, e.g. for functions which look up sheet contents.</desc>
+            <label>Enable regular expressions in formulas</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Wildcards" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Enable wildcards in formulas -->
+          <info>
+            <desc>Specifies whether the calculation uses wildcards in formulas, e.g. for functions which look up sheet contents.</desc>
+            <label>Enable wildcards in formulas</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <node-ref oor:name="Date" oor:node-type="Date">
+          <info>
+            <desc>Specifies the date that is represented by the number 0.</desc>
+          </info>
+        </node-ref>
+      </group>
+    </group>
+    <group oor:name="Formula">
+      <info>
+        <desc>Contains settings that affect formula handling.</desc>
+      </info>
+      <group oor:name="Calculation">
+        <info>
+          <desc>Contains settings for how to calculate formulae.</desc>
+        </info>
+	<prop oor:name="UseThreadedCalculationForFormulaGroups" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Whether to use threaded calculation of formula groups when applicable.</desc>
+          </info>
+          <value>true</value>
+	</prop>
+	<!-- Note: The default values below probably must correspond
+	to those assigned in setOpenCLConfigToDefault() in
+	sc/source/core/tool/calcconfig.cxx
+	-->
+        <prop oor:name="OpenCLSubsetOnly" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Whether to use OpenCL only when a formula uses only a subset of operator and function opcodes.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="OpenCLMinimumDataSize" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>An approximate lower limit on the number of data cells a spreadsheet formula should use for OpenCL to be considered.</desc>
+          </info>
+          <value>100</value>
+        </prop>
+        <prop oor:name="OpenCLSubsetOpCodes" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>The list of operator and function opcodes (in
+            English) for which to use OpenCL. If OpenCLSubsetOnly is
+            true, and a formula contains only these operators and
+            functions, it might be calculated using OpenCL.</desc>
+          </info>
+          <value>+;-;*;/;^;RAND;SIN;COS;TAN;ATAN;EXP;LN;SQRT;NORMSDIST;NORMSINV;ROUND;POWER;SUMPRODUCT;MIN;MAX;SUM;PRODUCT;AVERAGE;COUNT;VAR;NORMDIST;VLOOKUP;CORREL;COVAR;PEARSON;SLOPE;SUMIFS</value>
+        </prop>
+        <prop oor:name="OpenCLAutoSelect" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Whether to automatically select the OpenCL device</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="OpenCLDevice" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>The Device ID of the OpenCL device selected if OpenCLAutoSelect is false</desc>
+          </info>
+          <value/>
+        </prop>
+      </group>
+      <group oor:name="Syntax">
+        <info>
+          <desc>Contains settings for formula syntax.</desc>
+        </info>
+        <prop oor:name="Grammar" oor:type="xs:int">
+          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+          <info>
+            <desc>Specifies what formula syntax type to use.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Calc A1</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Excel A1</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Excel R1C1</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+        <prop oor:name="EnglishFunctionName" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+          <info>
+            <desc>Whether to use English function names or localized function names.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="SeparatorArg" oor:type="xs:string" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+          <info>
+            <desc>Argument separator in worksheet function</desc>
+          </info>
+          <value/>
+        </prop>
+        <prop oor:name="SeparatorArrayRow" oor:type="xs:string" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+          <info>
+            <desc>Row separator in array constant</desc>
+          </info>
+          <value/>
+        </prop>
+        <prop oor:name="SeparatorArrayCol" oor:type="xs:string" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+          <info>
+            <desc>Column separator in array constant</desc>
+          </info>
+          <value/>
+        </prop>
+        <prop oor:name="StringRefAddressSyntax" oor:type="xs:int">
+          <!-- UIHints: Tools - Options - Spreadsheet - Formula -->
+          <info>
+            <desc>Address syntax for reference in string for functions such as INDIRECT.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="-1">
+              <info>
+                <desc>same as formula grammar</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Calc A1</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Excel A1</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Excel R1C1</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+        <prop oor:name="EmptyStringAsZero" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+          <info>
+            <desc>Whether to treat empty string formula result as equivalent of having a numeric zero value.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="StringConversion" oor:type="xs:int">
+          <!-- UIHints: Tools - Options - Spreadsheet - Formula -->
+          <info>
+            <desc>How to treat text when encountered as operand in an arithmetic operation or as argument to a function that expects a number instead.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Generate #VALUE! error</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Treat as zero</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Convert only unambiguous</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc>Convert also locale dependent</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+      </group>
+      <group oor:name="Load">
+        <info>
+          <desc>Contains settings that affect formula handling while loading.</desc>
+        </info>
+        <prop oor:name="OOXMLRecalcMode" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHint: Tools - Options - Spreadsheet - Formula -->
+          <info>
+            <desc>Specifies whether to force a hard recalc after load on OOXML-based Excel documents (2007 and newer).</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Recalc always</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Recalc never</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Ask before Recalc</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>1</value>
+        </prop>
+        <prop oor:name="ODFRecalcMode" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHint: Tools - Options - Spreadsheet - Formula -->
+          <info>
+            <desc>Specifies whether to force a hard recalc after load on non-LibreOffice-generated ODF documents.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Recalc always</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Recalc never</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Ask before Recalc</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>1</value>
+        </prop>
+        <prop oor:name="RecalcOptimalRowHeightMode" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHint: Tools - Options - Spreadsheet - Formula -->
+          <info>
+            <desc>Specifies whether to force a hard recalc after load on optimal row heights.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Recalc always</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Recalc never</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Ask before Recalc</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>0</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Revision">
+      <info>
+        <desc>Contains settings that affect revision marking.</desc>
+      </info>
+      <group oor:name="Color">
+        <info>
+          <desc>Specifies the colors for revision marking.</desc>
+        </info>
+        <prop oor:name="Change" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
+          <!--Default -1 = Transparent-->
+          <info>
+            <desc>Specifies the modification color for changes of cell contents.</desc>
+            <label>Changes</label>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="Deletion" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
+          <!--Default -1 = Transparent-->
+          <info>
+            <desc>Specifies the color to highlight deletions.</desc>
+            <label>Deletions</label>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="Insertion" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
+          <!--Default -1 = Transparent-->
+          <info>
+            <desc>Specifies the color to highlight insertions.</desc>
+            <label>Insertions</label>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="MovedEntry" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
+          <!--Default -1 = Transparent-->
+          <info>
+            <desc>Specifies the color to highlight moved contents.</desc>
+            <label>Moved entries</label>
+          </info>
+          <value>-1</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Filter">
+      <info>
+        <desc>Contains settings for file format filters.</desc>
+      </info>
+      <group oor:name="Import">
+        <info>
+          <desc>Contains settings for import filters.</desc>
+        </info>
+        <group oor:name="VBA">
+          <info>
+            <desc>Specifies how VBA macros are treated in Excel files.</desc>
+          </info>
+          <prop oor:name="UseExport" oor:type="xs:boolean" oor:nillable="false">
+            <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
+            <info>
+              <desc>Indicates whether VBA macros are exported through the vba export code.</desc>
+              <label>Export VBA</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="Load" oor:type="xs:boolean" oor:nillable="false">
+            <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
+            <info>
+              <desc>Indicates whether VBA macros are imported as comments.</desc>
+              <label>Load Basic Code to edit</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="Executable" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Indicates whether VBA macros are imported without comments to be executable.</desc>
+              <label>Executable code</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="Save" oor:type="xs:boolean" oor:nillable="false">
+            <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
+            <info>
+              <desc>Indicates whether the original VBA storage is preserved while editing.</desc>
+              <label>Save Original Basic Code again</label>
+            </info>
+            <value>true</value>
+          </prop>
+        </group>
+        <group oor:name="Lotus123">
+          <info>
+            <desc>Contains settings for Lotus 1-2-3 import.</desc>
+          </info>
+          <prop oor:name="WK3" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Indicates whether the import of Lotus wk3 files is enabled.</desc>
+              <label>Enable WK3 Filter</label>
+            </info>
+            <value>false</value>
+          </prop>
+        </group>
+        <group oor:name="MS_Excel">
+          <info>
+            <desc>Contains settings for MS Excel import.</desc>
+          </info>
+          <prop oor:name="ColScale" oor:type="xs:double" oor:nillable="false">
+            <info>
+              <desc>Specifies the factor for multiplying the column width when importing Excel documents from Biff 5 format.</desc>
+              <label>Excel Column Width Scale</label>
+            </info>
+            <constraints>
+              <minExclusive oor:value="0.1">
+                <info>
+                  <desc>Specifies the minimum allowed value.</desc>
+                </info>
+              </minExclusive>
+            </constraints>
+            <value>1.0</value>
+          </prop>
+          <prop oor:name="RowScale" oor:type="xs:double" oor:nillable="false">
+            <info>
+              <desc>Specifies the factor for multiplying the row height when importing Excel documents from Biff 5 format.</desc>
+              <label>Excel Row Height Scale</label>
+            </info>
+            <constraints>
+              <minExclusive oor:value="0.1">
+                <info>
+                  <desc>Specifies the minimum allowed value.</desc>
+                </info>
+              </minExclusive>
+            </constraints>
+            <value>1.0</value>
+          </prop>
+        </group>
+      </group>
+      <group oor:name="Export">
+        <info>
+          <desc>Contains settings for export filters.</desc>
+        </info>
+        <group oor:name="MS_Excel">
+          <info>
+            <desc>Contains settings for MS Excel export.</desc>
+          </info>
+          <prop oor:name="TruncateLongSheetNames" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Indicates whether sheet names should be truncated to 31 characters.</desc>
+              <label>Truncate long sheet names</label>
+            </info>
+            <value>true</value>
+          </prop>
+        </group>
+      </group>
+    </group>
+    <group oor:name="Print">
+      <info>
+        <desc>Contains settings that affect printing.</desc>
+      </info>
+      <group oor:name="Page">
+        <info>
+          <desc>Contains settings that affect which pages are printed.</desc>
+        </info>
+        <prop oor:name="EmptyPages" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether empty pages are printed.</desc>
+            <label>Printing Empty Pages</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="ForceBreaks" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether manual row and column breaks should be forced, regardless of sheet scale settings.</desc>
+            <label>Force manual breaks</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="Other">
+        <info>
+          <desc>Contains other print settings.</desc>
+        </info>
+        <prop oor:name="AllSheets" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether all sheets are printed instead of only the selected sheets.</desc>
+            <label>Print all Sheets</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Misc">
+      <info>
+        <desc>Contains miscellaneous settings.</desc>
+      </info>
+      <group oor:name="HandleDuplicateRecords">
+        <info>
+          <desc>Defines the settings for 'handle duplicate records' dialog.</desc>
+          <label>Handle duplicate records settings</label>
+        </info>
+        <prop oor:name="DataIncludesHeaders" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Data - Duplicate Records... -->
+          <info>
+            <desc>Indicates whether selected data includes headers in the 'handle duplicate records' dialog.</desc>
+            <label>Data includes row/column headers</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="RemoveDuplicateRows" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Data - Duplicate Records... -->
+          <info>
+            <desc>Indicates whether to remove rows, or columns in the 'handle duplicate records' dialog.</desc>
+            <label>Compare rows</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="RemoveRecords" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Data - Duplicate Records... -->
+          <info>
+            <desc>Indicates whether to select or remove records in the 'handle duplicate records' dialog.</desc>
+            <label>Select or remove</label>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
+      <group oor:name="DefaultObjectSize">
+        <info>
+          <desc>Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object creating Button.</desc>
+          <label>Default Object Size</label>
+        </info>
+        <prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Specifies the default width in 1/100th millimeters.</desc>
+            <label/>
+          </info>
+          <value>8000</value>
+        </prop>
+        <prop oor:name="Height" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Specifies the default height in 1/100th millimeters.</desc>
+            <label/>
+          </info>
+          <value>5000</value>
+        </prop>
+      </group>
+      <group oor:name="SharedDocument">
+        <info>
+          <desc>Contains settings for shared documents.</desc>
+          <label>Shared document</label>
+        </info>
+        <prop oor:name="ShowWarning" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether the warning box for shared documents is shown.</desc>
+            <label>Show warning box</label>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
+      <group oor:name="Draw">
+        <prop oor:name="ClickChangeRotation" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Configured into draw toolbar -->
+          <info>
+            <desc>Enables to toggle rotate mode in shapes.</desc>
+            <label>ClickChangeRotation</label>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Compatibility">
+      <info>
+        <desc>Contains various compatibility settings.</desc>
+      </info>
+      <group oor:name="MergeCells">
+        <info>
+          <desc>Contains settings for merging cells.</desc>
+          <label>Merge cells</label>
+        </info>
+        <prop oor:name="ShowDialog" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether the Merge Cells dialog box is shown, when some cells are not empty.</desc>
+            <label>Show Merge Cells dialog</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="EmptyMergedCells" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether to empty the contents of the hidden cells (like Excel does).</desc>
+            <label>Empty merged cells</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="KeyBindings">
+        <info>
+          <desc>Contains options related to key bindings</desc>
+        </info>
+        <prop oor:name="BaseGroup" oor:type="xs:int">
+          <!-- UIHints: Tools - Options - Spreadsheet - Compatibility -->
+          <info>
+            <desc>Specifies baseline key binding group to use.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Default</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>OpenOffice.org legacy</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+      </group>
+      <prop oor:name="Links" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Insert link for the cell, instead of text fields in a cell.(Excel interopability options)</desc>
+          <label>Links like Excel</label>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+    <group oor:name="Defaults">
+      <info>
+        <desc>Contains various defaults settings.</desc>
+      </info>
+      <group oor:name="Sheet">
+        <info>
+          <desc>Sheet defaults</desc>
+        </info>
+        <prop oor:name="SheetCount" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
+          <info>
+            <desc>Option to set initial number of sheet tabs</desc>
+          </info>
+          <value>1</value>
+        </prop>
+        <prop oor:name="SheetPrefix" oor:type="xs:string">
+          <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
+          <info>
+            <desc>Option to set the prefix name for new sheet tabs</desc>
+          </info>
+        </prop>
+        <prop oor:name="JumboSheets" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
+          <info>
+            <desc>Enable very large spreadsheets (16m rows, 16384 cols)</desc>
+            <label>Jumbo sheets</label>
+          </info>
+          <value>false</value>
+        </prop>
+    </group>
+    </group>
+    <group oor:name="DataStream">
+        <info>
+          <desc>data stream</desc>
+        </info>
+        <prop oor:name="UpdateTimeout" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
+          <info>
+            <desc>set the Timeout of DataStream updating </desc>
+          </info>
+          <value>2000</value>
+        </prop>
+    </group>
+  </component>
+</oor:component-schema>

@@ -1,0 +1,72 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+module com { module sun { module star { module resource {
+
+/**
+    Extends XStringResourcePersistence by methods to handle an
+    associated com::sun::star::embed::XStorage instance.
+
+    @see XStringResourcePersistence.
+*/
+interface XStringResourceWithStorage: com::sun::star::resource::XStringResourcePersistence
+{
+    /**
+        Stores all string table data to a storage and associates this storage
+        to this instance as if setStorage() was called with
+        this storage. The modified state will be unmodified after the call.
+
+        This method can throw all exceptions thrown by the methods of
+        com::sun::star::embed::XStorage
+    */
+    void storeAsStorage( [in] ::com::sun::star::embed::XStorage Storage )
+        raises( com::sun::star::uno::Exception );
+
+
+    /**
+        Associates a storage to the StringResourceWithStorage instance
+        which is used on subsequent calls of store().
+
+        @param Storage
+            the storage to be associated to the StringResourceManager
+
+        <p>
+        This call has to be used carefully as it removes the storage
+        previously connected to the StringResourceWithStorage. It may
+        force the implementation to reload data from the previous storage
+        before releasing it. The StringResourceManager will be modified
+        after calling this method as the data isn't stored to the new
+        storage yet. storeAsStorage() should be preferred
+        as it directly stores the data to the new storage and afterwards
+        this storage is in sync with the resource data.
+        </p>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if a null interface is passed as Storage
+    */
+    void setStorage( [in] ::com::sun::star::embed::XStorage Storage )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

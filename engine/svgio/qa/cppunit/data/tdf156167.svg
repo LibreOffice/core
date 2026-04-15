@@ -1,0 +1,18 @@
+<svg id="svg-root" width="100%" height="100%"
+  viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="test-body-content" font-family="DejaVu Sans" font-size="18">
+
+    <g fill="orange">
+     <circle id="a" FiLl="red" cx="140" cy="100" r="50"/>
+    </g>
+    <circle id="b" fill="red" style="FiLl: oRaNgE" cx="340" cy="100" r="50"/>
+    <circle id="c" fill="blue" cx="140" cy="220" r="50"/>
+
+    <style type="text/css">
+        #c {fill: red }
+        #c {FiLl: oRaNgE }
+    </style>
+
+  </g>
+</svg>

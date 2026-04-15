@@ -1,0 +1,134 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+service Axis
+{
+    service ::com::sun::star::drawing::LineProperties;
+
+    service ::com::sun::star::style::CharacterProperties;
+    service ::com::sun::star::beans::PropertySet;
+    [optional] service ::com::sun::star::style::CharacterPropertiesAsian;
+    [optional] service ::com::sun::star::style::CharacterPropertiesComplex;
+
+    interface ::com::sun::star::chart2::XAxis;
+    [optional] interface ::com::sun::star::chart2::XTitled;
+
+    /** Determines, whether the axis should be rendered by the view.
+     */
+    [property]      boolean   Show;
+
+    /** Determines where the axis crosses the other axis.
+     */
+    [optional, property] com::sun::star::chart::ChartAxisPosition CrossoverPosition;
+
+    /** Determines the scale value on the other axis when CrossoverPosition is set to VALUE.
+     */
+    [optional, property] double CrossoverValue;
+
+    /** Determines whether to display text at the axis or not.
+     */
+    [property]      boolean   DisplayLabels;
+
+    /** Determines where the axis labels are placed.
+     */
+    [optional, property] com::sun::star::chart::ChartAxisLabelPosition LabelPosition;
+
+    /** Determines how to stagger the labels at the axis (side by side, even, odd, auto )
+    */
+    [property]      ::com::sun::star::chart::ChartAxisArrangeOrderType ArrangeOrder;
+
+    /** Determines whether the labels are allowed to break into more than one line
+    */
+    [property]      boolean   TextBreak;
+
+    /** Determines whether the labels are allowed to overlap
+    */
+    [property]      boolean   TextOverlap;
+
+    /** Determines whether the characters in a single labels should be stacked one upon each other
+    */
+    [property]      boolean   StackCharacters;
+
+    /** Determines the rotation of the text labels in degrees
+     */
+    [property]      double    TextRotation;
+
+    /** A NumberFormat key.
+
+        <p>If this property is not set, it is treated as auto.  This
+        means linked to the source format.</p>
+
+        <p>To determine a source format, the axis can query the
+        XDataSequences used by the data series attached
+        to it (see XDataSequence::getNumberFormatKeyByIndex()).
+        </p>
+     */
+    [property, maybevoid]      long      NumberFormat;
+
+    [property]      ::com::sun::star::awt::Size  ReferencePageSize;
+
+    /** determines what kind of tickmarks should be shown for major ticks.
+
+         @see TickmarkStyle.
+    */
+    [property]      long      MajorTickmarks;
+
+    /** determines what kind of tickmarks should be shown for minor ticks.
+
+        @see TickmarkStyle.
+     */
+    [property]      long      MinorTickmarks;
+
+    /** Determines where the interval marks are placed.
+     */
+    [optional, property] com::sun::star::chart::ChartAxisMarkPosition MarkPosition;
+
+    /** Determines display units are available for axis
+     */
+    [optional, property] boolean DisplayUnits;
+
+    /** Determines built in display unit value for axis
+     */
+    [optional, property] string BuiltInUnit;
+
+    /** Compatibility option: determines which strategy should be tried first for fixing axis labels overlapping issues
+     */
+    [optional, property] boolean TryStaggeringFirst;
+
+    /** This attribute specifies the shift of the first major tick from the origin.
+     */
+    [optional, property] long MajorOrigin;
+
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

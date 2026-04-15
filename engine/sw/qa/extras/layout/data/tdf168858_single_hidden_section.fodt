@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:ooow="http://openoffice.org/2004/writer" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:user-field-decls>
+    <text:user-field-decl office:value-type="float" office:value="0" text:name="foo"/>
+   </text:user-field-decls>
+   <text:section text:name="abc" text:condition="ooow:&quot;&quot; EQ &quot;&quot;" text:display="condition">
+    <text:p>hidden text</text:p>
+   </text:section>
+  </office:text>
+ </office:body>
+</office:document>

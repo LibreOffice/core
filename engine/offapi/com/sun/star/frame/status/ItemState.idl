@@ -1,0 +1,75 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+module com {  module sun {  module star {  module frame { module status {
+
+
+/** these constants describe a state of an ItemStatus.
+
+    @see ItemStatus
+ */
+constants ItemState
+{
+    /** specifies an unknown state.
+     */
+    const short UNKNOWN        = 0;
+
+    /** specifies that the property is currently disabled.
+     */
+    const short DISABLED       = 1;
+
+    /** specifies that the property is currently read-only.
+     *
+     * Deprecated: There is no equivalent in SfxItemState
+     * anymore due to not being used, so remove for simplification
+     * reasons and to prepare rework of Item/ItemSet/ItemPool stuff.
+     *
+     * There are only three usages of com::sun::star::frame::status::ItemState
+     * in the code which all set the internal SfxItem to SfxVoidItem when
+     * triggered, which is equivalent to state SfxItemState::DISABLED (see e.g.
+     * SfxItemSet::GetItemState), so READ_ONLY gets not used in internal
+     * handling, even when eventually existing UNO API usages hand it over the
+     * office.
+     */
+    const short READ_ONLY      = 2;
+
+    /** specifies that the property is currently in a don't care state.
+
+        <p>
+        This is normally used if a selection provides more than one state
+        for a property at the same time.
+        </p>
+     */
+    const short DONT_CARE      = 16;
+
+    /** specifies that the property is currently in a default state.
+    */
+    const short DEFAULT_VALUE  = 32;
+
+    /** specifies that the property is currently in a set state.
+    */
+    const short SET            = 64;
+};
+
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

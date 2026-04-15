@@ -1,0 +1,21 @@
+genrule(
+  name = 'unoil-src',
+  cmd = ' && '.join([
+    'cd $TMP',
+    'echo "FAKE SOURCE ARCHIVE" > README',
+    'zip -qr $OUT *',
+  ]),
+  out = 'unoil-src.jar',
+  visibility = ['PUBLIC'],
+)
+
+genrule(
+  name = 'unoil-javadoc',
+  cmd = ' && '.join([
+    'cd $TMP',
+    'echo "FAKE JAVADOC ARCHIVE" > README',
+    'zip -qr $OUT *',
+  ]),
+  out = 'unoil-javadoc.jar',
+  visibility = ['PUBLIC'],
+)

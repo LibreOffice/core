@@ -1,0 +1,20 @@
+--- boost/multi_array/base.hpp
++++ boost/multi_array/base.hpp
+@@ -222,7 +222,7 @@
+ // MSVC 2010 is broken in debug mode: it requires
+ // that an Output Iterator have output_iterator_tag in its iterator_category if 
+ // that iterator is not bidirectional_iterator or random_access_iterator.
+-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1600)
++#if BOOST_WORKAROUND(BOOST_MSVC, >= 1600) || defined __clang__
+ struct mutable_iterator_tag
+  : boost::random_access_traversal_tag, std::input_iterator_tag
+ {
+@@ -274,7 +274,7 @@
+   //
+   // iterator support
+   //
+-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1600)
++#if BOOST_WORKAROUND(BOOST_MSVC, >= 1600) || defined __clang__
+   // Deal with VC 2010 output_iterator_tag requirement
+   typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference,
+                          mutable_iterator_tag> iterator;

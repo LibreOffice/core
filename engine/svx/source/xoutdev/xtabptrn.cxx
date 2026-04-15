@@ -1,0 +1,149 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <XPropertyTable.hxx>
+
+#include <vcl/virdev.hxx>
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/xtable.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/BitmapTools.hxx>
+
+using namespace com::sun::star;
+
+XBitmapEntry* XPatternList::GetBitmap(tools::Long nIndex) const
+{
+    return static_cast<XBitmapEntry*>( XPropertyList::Get(nIndex) );
+}
+
+uno::Reference< container::XNameContainer > XPatternList::createInstance()
+{
+    return SvxUnoXBitmapTable_createInstance( *this );
+}
+
+bool XPatternList::Create()
+{
+    OUStringBuffer aStr(SvxResId(RID_SVXSTR_PATTERN));
+    std::array<sal_uInt8,64> aArray;
+    Bitmap aBitmap;
+    const sal_Int32 nLen(aStr.getLength() - 1);
+
+    aArray.fill(0);
+
+    // white/white bitmap
+    aStr.append(" 1");
+    aBitmap = vcl::bitmap::createHistorical8x8FromArray(aArray, COL_WHITE, COL_WHITE);
+    Insert(std::make_unique<XBitmapEntry>(Graphic(aBitmap), aStr.toString()));
+
+    // black/white bitmap
+    aArray[ 0] = 1; aArray[ 9] = 1; aArray[18] = 1; aArray[27] = 1;
+    aArray[36] = 1; aArray[45] = 1; aArray[54] = 1; aArray[63] = 1;
+    aStr[nLen] = '2';
+    aBitmap = vcl::bitmap::createHistorical8x8FromArray(aArray, COL_BLACK, COL_WHITE);
+    Insert(std::make_unique<XBitmapEntry>(Graphic(aBitmap), aStr.toString()));
+
+    // lightred/white bitmap
+    aArray[ 7] = 1; aArray[14] = 1; aArray[21] = 1; aArray[28] = 1;
+    aArray[35] = 1; aArray[42] = 1; aArray[49] = 1; aArray[56] = 1;
+    aStr[nLen] = '3';
+    aBitmap = vcl::bitmap::createHistorical8x8FromArray(aArray, COL_LIGHTRED, COL_WHITE);
+    Insert(std::make_unique<XBitmapEntry>(Graphic(aBitmap), aStr.toString()));
+
+    // lightblue/white bitmap
+    aArray[24] = 1; aArray[25] = 1; aArray[26] = 1;
+    aArray[29] = 1; aArray[30] = 1; aArray[31] = 1;
+    aStr[nLen] = '4';
+    aBitmap = vcl::bitmap::createHistorical8x8FromArray(aArray, COL_LIGHTBLUE, COL_WHITE);
+    Insert(std::make_unique<XBitmapEntry>(Graphic(aBitmap), aStr.toString()));
+
+    return true;
+}
+
+Bitmap XPatternList::CreateBitmap( tools::Long nIndex, const Size& rSize ) const
+{
+    assert( nIndex < Count() );
+
+    if(nIndex < Count())
+    {
+        Bitmap rBitmap(GetBitmap( nIndex )->GetGraphicObject().GetGraphic().GetBitmap());
+        ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
+        pVirtualDevice->SetOutputSizePixel(rSize);
+
+        if(rBitmap.HasAlpha())
+        {
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+            if(rStyleSettings.GetPreviewUsesCheckeredBackground())
+            {
+                const Point aNull(0, 0);
+                static const sal_uInt32 nLen(8);
+                static const Color aW(COL_WHITE);
+                static const Color aG(0xef, 0xef, 0xef);
+
+                pVirtualDevice->DrawCheckered(aNull, rSize, nLen, aW, aG);
+            }
+            else
+            {
+                pVirtualDevice->SetBackground(rStyleSettings.GetFieldColor());
+                pVirtualDevice->Erase();
+            }
+        }
+
+        if(rBitmap.GetSizePixel().Width() >= rSize.Width() && rBitmap.GetSizePixel().Height() >= rSize.Height())
+        {
+            rBitmap.Scale(rSize);
+            pVirtualDevice->DrawBitmap(Point(0, 0), rBitmap);
+        }
+        else
+        {
+            const Size aBitmapSize(rBitmap.GetSizePixel());
+
+            for(tools::Long y(0); y < rSize.Height(); y += aBitmapSize.Height())
+            {
+                for(tools::Long x(0); x < rSize.Width(); x += aBitmapSize.Width())
+                {
+                    pVirtualDevice->DrawBitmap(
+                        Point(x, y),
+                        rBitmap);
+                }
+            }
+        }
+        rBitmap = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
+        return rBitmap;
+    }
+    else
+        return Bitmap();
+}
+
+Bitmap XPatternList::CreateBitmapForUI( tools::Long nIndex )
+{
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
+    return CreateBitmap(nIndex, rSize);
+}
+
+Bitmap XPatternList::GetBitmapForPreview( tools::Long nIndex, const Size& rSize )
+{
+    return CreateBitmap(nIndex, rSize);
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

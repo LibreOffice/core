@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="7.0" />
+    <identifier value="French.linguistic.resources.from.Dicollecte.by.OlivierR" />
+    <display-name>
+        <name lang="en-US">French spelling dictionary, hyphenation rules, and thesaurus</name>
+    </display-name>
+    <platform value="all" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.2" d:name="OpenOffice.org 3.2" />
+    </dependencies>
+    <icon>
+        <default xlink:href="icon.png" />
+    </icon>
+    <publisher>
+        <name xlink:href="http://www.dicollecte.org/" lang="fr">Dicollecte</name>
+    </publisher>
+</description>

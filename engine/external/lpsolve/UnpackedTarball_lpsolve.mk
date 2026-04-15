@@ -1,0 +1,44 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,lpsolve))
+
+$(eval $(call gb_UnpackedTarball_set_tarball,lpsolve,$(LPSOLVE_TARBALL)))
+
+$(eval $(call gb_UnpackedTarball_set_patchlevel,lpsolve,3))
+
+# external/lpsolve/0001-const-up-some-statics.patch.1
+# upstreaming attempt as:
+# https://github.com/lp-solve/lp_solve/pull/1
+
+$(eval $(call gb_UnpackedTarball_add_patches,lpsolve,\
+	external/lpsolve/0001-const-up-some-statics.patch.1 \
+))
+
+ifeq ($(OS_FOR_BUILD),WNT)
+
+$(eval $(call gb_UnpackedTarball_set_patchflags,lpsolve,--binary))
+$(eval $(call gb_UnpackedTarball_add_patches,lpsolve,\
+	external/lpsolve/lp_solve_5.5-windows.patch \
+))
+
+else
+
+$(eval $(call gb_UnpackedTarball_add_patches,lpsolve,\
+	external/lpsolve/lp_solve_5.5.patch \
+	external/lpsolve/lpsolve-ubsan.patch.0 \
+	external/lpsolve/system-colamd.diff \
+))
+
+$(eval $(call gb_UnpackedTarball_add_file,lpsolve,lpsolve55/ccc.static,external/lpsolve/ccc.static))
+
+endif
+# vim: set noet sw=4 ts=4:
+
+

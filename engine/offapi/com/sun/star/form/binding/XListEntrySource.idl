@@ -1,0 +1,76 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module form { module binding {
+
+interface XListEntryListener;
+
+
+/** specifies a source of string list entries
+
+    <p>The interface supports foreign components which actively retrieve list entries,
+    as well as components which want to passively being notified of changes in the list.</p>
+
+    @see XListEntrySink
+*/
+interface XListEntrySource : com::sun::star::uno::XInterface
+{
+    /** retrieves the number of entries in the list
+    */
+    long    getListEntryCount( );
+
+    /** provides access to a single list entry
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+            if the given position does not denote a valid index in the list
+
+        @see getListEntryCount
+    */
+    string  getListEntry( [in] long Position )
+                raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** provides access to the entirety of all list entries
+    */
+    sequence< string >
+            getAllListEntries( );
+
+    /** adds a listener which will be notified about changes in the list
+        reflected by the component.
+
+        @throws com::sun::star::lang::NullPointerException
+            if the given listener is `NULL`
+    */
+    void    addListEntryListener( [in] XListEntryListener Listener )
+                raises( com::sun::star::lang::NullPointerException );
+
+    /** revokes the given listener from the list of components which will
+        be notified about changes in the entry list.
+
+        @throws com::sun::star::lang::NullPointerException
+            if the given listener is `NULL`
+    */
+    void    removeListEntryListener( [in] XListEntryListener Listener )
+                raises( com::sun::star::lang::NullPointerException );
+};
+
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

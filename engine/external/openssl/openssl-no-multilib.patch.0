@@ -1,0 +1,38 @@
+--- Configure.orig	2020-04-21 14:22:39.000000000 +0200
++++ Configure	2020-07-07 17:25:19.256297500 +0200
+@@ -27,7 +27,7 @@
+ my $orig_death_handler = $SIG{__DIE__};
+ $SIG{__DIE__} = \&death_handler;
+ 
+-my $usage="Usage: Configure [no-<feature> ...] [enable-<feature> ...] [-Dxxx] [-lxxx] [-Lxxx] [-fxxx] [-Kxxx] [no-hw-xxx|no-hw] [[no-]threads] [[no-]thread-pool] [[no-]default-thread-pool] [[no-]shared] [[no-]zlib|zlib-dynamic] [no-asm] [no-egd] [sctp] [386] [--prefix=DIR] [--openssldir=OPENSSLDIR] [--with-xxx[=vvv]] [--config=FILE] os/compiler[:flags]\n";
++my $usage="Usage: Configure [no-<feature> ...] [enable-<feature> ...] [-Dxxx] [-lxxx] [-Lxxx] [-fxxx] [-Kxxx] [no-hw-xxx|no-hw] [[no-]threads] [[no-]thread-pool] [[no-]default-thread-pool] [[no-]shared] [[no-]zlib|zlib-dynamic] [no-asm] [no-egd] [no-multilib] [sctp] [386] [--prefix=DIR] [--openssldir=OPENSSLDIR] [--with-xxx[=vvv]] [--config=FILE] os/compiler[:flags]\n";
+ 
+ my $banner = <<"EOF";
+ 
+@@ -99,6 +99,7 @@
+ #               If disabled, it also disables shared and dynamic-engine.
+ # no-asm        do not use assembler
+ # no-egd        do not compile support for the entropy-gathering daemon APIs
++# no-multilib   exclude multilib identifier from library name
+ # [no-]zlib     [don't] compile support for zlib compression.
+ # zlib-dynamic  Like "zlib", but the zlib library is expected to be a shared
+ #               library and will be loaded at run-time by the OpenSSL library.
+@@ -458,6 +459,7 @@
+     "module",
+     "msan",
+     "multiblock",
++    "multilib",
+     "nextprotoneg",
+     "ocb",
+     "ocsp",
+@@ -1907,6 +1909,10 @@
+ 
+     my @build_dirs = ( [ ] );   # current directory
+ 
++    if ($disabled{"multilib"}) {
++        $target{"multilib"} = "";
++    }
++    
+     $config{build_infos} = [ ];
+ 
+     # We want to detect configdata.pm in the source tree, so we

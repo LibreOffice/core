@@ -1,0 +1,6 @@
+--enable-dbgutil
+--disable-symbols
+--disable-dependency-tracking
+--enable-optimized
+--disable-online-update
+--without-export-validation

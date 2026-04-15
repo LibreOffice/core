@@ -1,0 +1,182 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+ module com {  module sun {  module star {  module sdbc {
+
+
+/** These constants are used to specify database data types which are used
+        to identify the generic SQL types. The definition is based on JDBC 3.0.
+
+        <p>
+        The actual type constant values are equivalent to those in the X/Open CLI.
+        </p>
+        <p>
+        Precise information about the specific types can be got from
+        XDatabaseMetaData::getTypeInfo().
+        </p>
+ */
+published constants DataType
+{
+    const long BIT                        =   -7;
+
+    const long TINYINT                    =   -6;
+
+    const long SMALLINT                   =    5;
+
+    const long INTEGER                    =    4;
+
+    const long BIGINT                     =   -5;
+
+    const long FLOAT                      =    6;
+
+    const long REAL                       =    7;
+
+    const long DOUBLE                     =    8;
+
+    const long NUMERIC                    =    2;
+
+    const long DECIMAL                    =    3;
+
+    const long CHAR                       =    1;
+
+    const long VARCHAR                    =   12;
+
+    const long LONGVARCHAR                =   -1;
+
+    const long DATE                       =   91;
+
+    const long TIME                       =   92;
+
+    const long TIMESTAMP                  =   93;
+
+    const long BINARY                     =   -2;
+
+    const long VARBINARY                  =   -3;
+
+    const long LONGVARBINARY              =   -4;
+
+    const long SQLNULL                    =    0;
+
+
+    /** indicates that the SQL type is database-specific and
+             gets mapped to an object that can be accessed via
+             the method com::sun::star::sdbc::XRow::getObject().
+     */
+    const long OTHER                      = 1111;
+
+
+    /** indicates a type which is represented by an object which implements
+             this type.
+     */
+    const long OBJECT                     = 2000;
+
+
+    /** describes a type based on a built-in type.
+                 It is a user-defined data type (UDT).
+     */
+    const long DISTINCT                   = 2001;
+
+
+    /** indicates a type consisting of attributes that may be any type.
+                 It is a user-defined data type (UDT).
+     */
+    const long STRUCT                     = 2002;
+
+
+    /** indicates a type representing an SQL ARRAY.
+     */
+    const long ARRAY                      = 2003;
+
+
+    /** indicates a type representing an SQL Binary Large Object.
+     */
+    const long BLOB                       = 2004;
+
+
+    /** indicates a type representing an SQL Character Large Object.
+     */
+    const long CLOB                       = 2005;
+
+
+    /** indicates a type representing an SQL REF, a referencing type.
+     */
+    const long REF                        = 2006;
+
+
+    /** identifies the generic SQL type
+     * <code>BOOLEAN</code>.
+     */
+    const long BOOLEAN                    =   16;
+
+
+    /** indicates a type representing an SQL DATALINK.
+     */
+    const long DATALINK                   =   70;
+
+
+    /** indicates a type representing an SQL ROWID.
+     */
+    const long ROWID                      =   -8;
+
+
+    /** indicates a type representing an SQL NCHAR.
+     */
+    const long NCHAR                      =  -15;
+
+
+    /** indicates a type representing an SQL NVARCHAR.
+     */
+    const long NVARCHAR                   =   -9;
+
+
+    /** indicates a type representing an SQL LONGNVARCHAR.
+     */
+    const long LONGNVARCHAR               =  -16;
+
+
+    /** indicates a type representing an SQL NCLOB.
+     */
+    const long NCLOB                      = 2011;
+
+
+    /** indicates a type representing an SQL XML.
+     */
+    const long SQLXML                     = 2009;
+
+
+    /** indicates a type representing an SQL REF CURSOR.
+     */
+    const long REF_CURSOR                 = 2012;
+
+
+    /** indicates a type representing an SQL TIME WITH TIMEZONE.
+     */
+    const long TIME_WITH_TIMEZONE         = 2013;
+
+
+    /** indicates a type representing an SQL TIMESTAMP WITH TIMEZONE.
+     */
+    const long TIMESTAMP_WITH_TIMEZONE    = 2014;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

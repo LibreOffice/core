@@ -1,0 +1,10 @@
+// This file is for the starter commands when you open any office application.
+// Button clicks for opening an application are automatically translated as coming from a starter button.
+
+StarterCommand:
+  'Start' program_name=Program
+;
+
+Program:
+  "writer"|"calc"|"impress"|"draw"|"math"|"database"
+;

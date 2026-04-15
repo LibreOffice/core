@@ -1,0 +1,192 @@
+--- src/blake2/blake2.h
++++ src/blake2/blake2.h
+@@ -67,15 +67,15 @@
+ };
+ 
+ /* Streaming API */
+-ARGON2_LOCAL int blake2b_init(blake2b_state *S, size_t outlen);
+-ARGON2_LOCAL int blake2b_init_key(blake2b_state *S, size_t outlen, const void *key,
++ARGON2_LOCAL int argon2_blake2b_init(blake2b_state *S, size_t outlen);
++static int blake2b_init_key(blake2b_state *S, size_t outlen, const void *key,
+                      size_t keylen);
+-ARGON2_LOCAL int blake2b_init_param(blake2b_state *S, const blake2b_param *P);
+-ARGON2_LOCAL int blake2b_update(blake2b_state *S, const void *in, size_t inlen);
+-ARGON2_LOCAL int blake2b_final(blake2b_state *S, void *out, size_t outlen);
++static int blake2b_init_param(blake2b_state *S, const blake2b_param *P);
++ARGON2_LOCAL int argon2_blake2b_update(blake2b_state *S, const void *in, size_t inlen);
++ARGON2_LOCAL int argon2_blake2b_final(blake2b_state *S, void *out, size_t outlen);
+ 
+ /* Simple API */
+-ARGON2_LOCAL int blake2b(void *out, size_t outlen, const void *in, size_t inlen,
++static int blake2b(void *out, size_t outlen, const void *in, size_t inlen,
+                          const void *key, size_t keylen);
+ 
+ /* Argon2 Team - Begin Code */
+--- src/blake2/blake2b.c
++++ src/blake2/blake2b.c
+@@ -88,7 +88,7 @@
+ }
+ 
+ /* Sequential blake2b initialization */
+-int blake2b_init(blake2b_state *S, size_t outlen) {
++int argon2_blake2b_init(blake2b_state *S, size_t outlen) {
+     blake2b_param P;
+ 
+     if (S == NULL) {
+@@ -156,7 +156,7 @@
+         uint8_t block[BLAKE2B_BLOCKBYTES];
+         memset(block, 0, BLAKE2B_BLOCKBYTES);
+         memcpy(block, key, keylen);
+-        blake2b_update(S, block, BLAKE2B_BLOCKBYTES);
++        argon2_blake2b_update(S, block, BLAKE2B_BLOCKBYTES);
+         /* Burn the key from stack */
+         clear_internal_memory(block, BLAKE2B_BLOCKBYTES);
+     }
+@@ -221,7 +221,7 @@
+ #undef ROUND
+ }
+ 
+-int blake2b_update(blake2b_state *S, const void *in, size_t inlen) {
++int argon2_blake2b_update(blake2b_state *S, const void *in, size_t inlen) {
+     const uint8_t *pin = (const uint8_t *)in;
+ 
+     if (inlen == 0) {
+@@ -261,7 +261,7 @@
+     return 0;
+ }
+ 
+-int blake2b_final(blake2b_state *S, void *out, size_t outlen) {
++int argon2_blake2b_final(blake2b_state *S, void *out, size_t outlen) {
+     uint8_t buffer[BLAKE2B_OUTBYTES] = {0};
+     unsigned int i;
+ 
+@@ -314,15 +314,15 @@
+             goto fail;
+         }
+     } else {
+-        if (blake2b_init(&S, outlen) < 0) {
++        if (argon2_blake2b_init(&S, outlen) < 0) {
+             goto fail;
+         }
+     }
+ 
+-    if (blake2b_update(&S, in, inlen) < 0) {
++    if (argon2_blake2b_update(&S, in, inlen) < 0) {
+         goto fail;
+     }
+-    ret = blake2b_final(&S, out, outlen);
++    ret = argon2_blake2b_final(&S, out, outlen);
+
+ fail:
+     clear_internal_memory(&S, sizeof(S));
+@@ -352,18 +352,18 @@
+     } while ((void)0, 0)
+ 
+     if (outlen <= BLAKE2B_OUTBYTES) {
+-        TRY(blake2b_init(&blake_state, outlen));
+-        TRY(blake2b_update(&blake_state, outlen_bytes, sizeof(outlen_bytes)));
+-        TRY(blake2b_update(&blake_state, in, inlen));
+-        TRY(blake2b_final(&blake_state, out, outlen));
++        TRY(argon2_blake2b_init(&blake_state, outlen));
++        TRY(argon2_blake2b_update(&blake_state, outlen_bytes, sizeof(outlen_bytes)));
++        TRY(argon2_blake2b_update(&blake_state, in, inlen));
++        TRY(argon2_blake2b_final(&blake_state, out, outlen));
+     } else {
+         uint32_t toproduce;
+         uint8_t out_buffer[BLAKE2B_OUTBYTES];
+         uint8_t in_buffer[BLAKE2B_OUTBYTES];
+-        TRY(blake2b_init(&blake_state, BLAKE2B_OUTBYTES));
+-        TRY(blake2b_update(&blake_state, outlen_bytes, sizeof(outlen_bytes)));
+-        TRY(blake2b_update(&blake_state, in, inlen));
+-        TRY(blake2b_final(&blake_state, out_buffer, BLAKE2B_OUTBYTES));
++        TRY(argon2_blake2b_init(&blake_state, BLAKE2B_OUTBYTES));
++        TRY(argon2_blake2b_update(&blake_state, outlen_bytes, sizeof(outlen_bytes)));
++        TRY(argon2_blake2b_update(&blake_state, in, inlen));
++        TRY(argon2_blake2b_final(&blake_state, out_buffer, BLAKE2B_OUTBYTES));
+         memcpy(out, out_buffer, BLAKE2B_OUTBYTES / 2);
+         out += BLAKE2B_OUTBYTES / 2;
+         toproduce = (uint32_t)outlen - BLAKE2B_OUTBYTES / 2;
+--- src/core.c
++++ src/core.c
+@@ -544,31 +544,31 @@
+         return;
+     }
+ 
+-    blake2b_init(&BlakeHash, ARGON2_PREHASH_DIGEST_LENGTH);
++    argon2_blake2b_init(&BlakeHash, ARGON2_PREHASH_DIGEST_LENGTH);
+ 
+     store32(&value, context->lanes);
+-    blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
++    argon2_blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
+ 
+     store32(&value, context->outlen);
+-    blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
++    argon2_blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
+ 
+     store32(&value, context->m_cost);
+-    blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
++    argon2_blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
+ 
+     store32(&value, context->t_cost);
+-    blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
++    argon2_blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
+ 
+     store32(&value, context->version);
+-    blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
++    argon2_blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
+ 
+     store32(&value, (uint32_t)type);
+-    blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
++    argon2_blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
+ 
+     store32(&value, context->pwdlen);
+-    blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
++    argon2_blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
+ 
+     if (context->pwd != NULL) {
+-        blake2b_update(&BlakeHash, (const uint8_t *)context->pwd,
++        argon2_blake2b_update(&BlakeHash, (const uint8_t *)context->pwd,
+                        context->pwdlen);
+ 
+         if (context->flags & ARGON2_FLAG_CLEAR_PASSWORD) {
+@@ -578,18 +578,18 @@
+     }
+ 
+     store32(&value, context->saltlen);
+-    blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
++    argon2_blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
+ 
+     if (context->salt != NULL) {
+-        blake2b_update(&BlakeHash, (const uint8_t *)context->salt,
++        argon2_blake2b_update(&BlakeHash, (const uint8_t *)context->salt,
+                        context->saltlen);
+     }
+ 
+     store32(&value, context->secretlen);
+-    blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
++    argon2_blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
+ 
+     if (context->secret != NULL) {
+-        blake2b_update(&BlakeHash, (const uint8_t *)context->secret,
++        argon2_blake2b_update(&BlakeHash, (const uint8_t *)context->secret,
+                        context->secretlen);
+ 
+         if (context->flags & ARGON2_FLAG_CLEAR_SECRET) {
+@@ -599,14 +599,14 @@
+     }
+ 
+     store32(&value, context->adlen);
+-    blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
++    argon2_blake2b_update(&BlakeHash, (const uint8_t *)&value, sizeof(value));
+ 
+     if (context->ad != NULL) {
+-        blake2b_update(&BlakeHash, (const uint8_t *)context->ad,
++        argon2_blake2b_update(&BlakeHash, (const uint8_t *)context->ad,
+                        context->adlen);
+     }
+ 
+-    blake2b_final(&BlakeHash, blockhash, ARGON2_PREHASH_DIGEST_LENGTH);
++    argon2_blake2b_final(&BlakeHash, blockhash, ARGON2_PREHASH_DIGEST_LENGTH);
+ }
+ 
+ int initialize(argon2_instance_t *instance, argon2_context *context) {

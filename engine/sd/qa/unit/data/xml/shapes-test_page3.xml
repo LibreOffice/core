@@ -1,0 +1,714 @@
+<?xml version="1.0"?>
+<XShapes>
+ <XShape positionX="2200" positionY="1800" sizeX="2600" sizeY="2800" type="com.sun.star.drawing.LineShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <PolyPolygon>
+   <pointSequence>
+    <point positionX="4800" positionY="1800"/>
+    <point positionX="2200" positionY="4600"/>
+   </pointSequence>
+  </PolyPolygon>
+  <Geometry>
+   <pointSequence>
+    <point positionX="2600" positionY="0"/>
+    <point positionX="0" positionY="2800"/>
+   </pointSequence>
+  </Geometry>
+  <Transformation>
+   <Line1 column1="2600.000000" column2="0.000000" column3="2200.000000"/>
+   <Line2 column1="0.000000" column2="2800.000000" column3="1800.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+ </XShape>
+ <XShape positionX="4800" positionY="3600" sizeX="1200" sizeY="200" type="com.sun.star.drawing.LineShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <PolyPolygon>
+   <pointSequence>
+    <point positionX="4800" positionY="3600"/>
+    <point positionX="6000" positionY="3800"/>
+   </pointSequence>
+  </PolyPolygon>
+  <Geometry>
+   <pointSequence>
+    <point positionX="0" positionY="0"/>
+    <point positionX="1200" positionY="200"/>
+   </pointSequence>
+  </Geometry>
+  <Transformation>
+   <Line1 column1="1200.000000" column2="0.000000" column3="4800.000000"/>
+   <Line2 column1="0.000000" column2="200.000000" column3="3600.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+ </XShape>
+ <XShape positionX="8629" positionY="86" sizeX="7592" sizeY="7398" type="com.sun.star.drawing.OpenBezierShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="0.000000" column2="7591.681979" column3="8629.325587"/>
+   <Line2 column1="-7398.482222" column2="0.000000" column3="7484.216507"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <pointSequence>
+   <point positionX="8632" positionY="7287" polygonFlags="NORMAL"/>
+   <point positionX="8587" positionY="6521" polygonFlags="CONTROL"/>
+   <point positionX="9125" positionY="5860" polygonFlags="CONTROL"/>
+   <point positionX="9109" positionY="5074" polygonFlags="NORMAL"/>
+   <point positionX="9094" positionY="4361" polygonFlags="CONTROL"/>
+   <point positionX="9252" positionY="3652" polygonFlags="CONTROL"/>
+   <point positionX="9369" positionY="2949" polygonFlags="NORMAL"/>
+   <point positionX="9463" positionY="2381" polygonFlags="CONTROL"/>
+   <point positionX="9761" positionY="1863" polygonFlags="CONTROL"/>
+   <point positionX="9890" positionY="1301" polygonFlags="NORMAL"/>
+   <point positionX="10046" positionY="619" polygonFlags="CONTROL"/>
+   <point positionX="10588" positionY="71" polygonFlags="CONTROL"/>
+   <point positionX="11191" positionY="86" polygonFlags="NORMAL"/>
+   <point positionX="11768" positionY="100" polygonFlags="CONTROL"/>
+   <point positionX="12092" positionY="810" polygonFlags="CONTROL"/>
+   <point positionX="12275" positionY="1344" polygonFlags="NORMAL"/>
+   <point positionX="12429" positionY="1795" polygonFlags="CONTROL"/>
+   <point positionX="12397" positionY="2270" polygonFlags="CONTROL"/>
+   <point positionX="12362" positionY="2732" polygonFlags="NORMAL"/>
+   <point positionX="12325" positionY="3216" polygonFlags="CONTROL"/>
+   <point positionX="12522" positionY="3633" polygonFlags="CONTROL"/>
+   <point positionX="12449" positionY="4120" polygonFlags="NORMAL"/>
+   <point positionX="12371" positionY="4635" polygonFlags="CONTROL"/>
+   <point positionX="12002" positionY="5300" polygonFlags="CONTROL"/>
+   <point positionX="12362" positionY="5682" polygonFlags="NORMAL"/>
+   <point positionX="12837" positionY="6186" polygonFlags="CONTROL"/>
+   <point positionX="13734" positionY="5831" polygonFlags="CONTROL"/>
+   <point positionX="14401" positionY="5682" polygonFlags="NORMAL"/>
+   <point positionX="15026" positionY="5542" polygonFlags="CONTROL"/>
+   <point positionX="15806" positionY="5330" polygonFlags="CONTROL"/>
+   <point positionX="16049" positionY="4684" polygonFlags="NORMAL"/>
+   <point positionX="16276" positionY="4079" polygonFlags="CONTROL"/>
+   <point positionX="16249" positionY="3402" polygonFlags="CONTROL"/>
+   <point positionX="16136" positionY="2776" polygonFlags="NORMAL"/>
+   <point positionX="16049" positionY="2294" polygonFlags="CONTROL"/>
+   <point positionX="16592" positionY="1463" polygonFlags="CONTROL"/>
+   <point positionX="15658" positionY="1344" polygonFlags="NORMAL"/>
+   <point positionX="14831" positionY="1238" polygonFlags="CONTROL"/>
+   <point positionX="15004" positionY="2018" polygonFlags="CONTROL"/>
+   <point positionX="14834" positionY="2429" polygonFlags="NORMAL"/>
+   <point positionX="14603" positionY="2986" polygonFlags="CONTROL"/>
+   <point positionX="14392" positionY="3574" polygonFlags="CONTROL"/>
+   <point positionX="13967" positionY="3990" polygonFlags="NORMAL"/>
+   <point positionX="13587" positionY="4362" polygonFlags="CONTROL"/>
+   <point positionX="12972" positionY="4385" polygonFlags="CONTROL"/>
+   <point positionX="12449" positionY="4380" polygonFlags="NORMAL"/>
+   <point positionX="11972" positionY="4375" polygonFlags="CONTROL"/>
+   <point positionX="11522" positionY="4205" polygonFlags="CONTROL"/>
+   <point positionX="11061" positionY="4033" polygonFlags="NORMAL"/>
+   <point positionX="10612" positionY="3865" polygonFlags="CONTROL"/>
+   <point positionX="10027" positionY="4118" polygonFlags="CONTROL"/>
+   <point positionX="9846" positionY="4727" polygonFlags="NORMAL"/>
+   <point positionX="9695" positionY="5235" polygonFlags="CONTROL"/>
+   <point positionX="9639" positionY="5679" polygonFlags="CONTROL"/>
+   <point positionX="9673" positionY="6159" polygonFlags="NORMAL"/>
+   <point positionX="9724" positionY="6890" polygonFlags="CONTROL"/>
+   <point positionX="10610" positionY="7073" polygonFlags="CONTROL"/>
+   <point positionX="11191" positionY="7243" polygonFlags="NORMAL"/>
+   <point positionX="11848" positionY="7435" polygonFlags="CONTROL"/>
+   <point positionX="12518" positionY="7533" polygonFlags="CONTROL"/>
+   <point positionX="13230" positionY="7460" polygonFlags="NORMAL"/>
+   <point positionX="13746" positionY="7407" polygonFlags="CONTROL"/>
+   <point positionX="14357" positionY="7495" polygonFlags="CONTROL"/>
+   <point positionX="14748" positionY="7070" polygonFlags="NORMAL"/>
+   <point positionX="14748" positionY="7070" polygonFlags="NORMAL"/>
+  </pointSequence>
+  <pointSequence>
+   <point positionX="197" positionY="3" polygonFlags="NORMAL"/>
+   <point positionX="963" positionY="-42" polygonFlags="CONTROL"/>
+   <point positionX="1624" positionY="496" polygonFlags="CONTROL"/>
+   <point positionX="2410" positionY="480" polygonFlags="NORMAL"/>
+   <point positionX="3123" positionY="465" polygonFlags="CONTROL"/>
+   <point positionX="3832" positionY="623" polygonFlags="CONTROL"/>
+   <point positionX="4535" positionY="740" polygonFlags="NORMAL"/>
+   <point positionX="5103" positionY="834" polygonFlags="CONTROL"/>
+   <point positionX="5621" positionY="1132" polygonFlags="CONTROL"/>
+   <point positionX="6183" positionY="1261" polygonFlags="NORMAL"/>
+   <point positionX="6865" positionY="1417" polygonFlags="CONTROL"/>
+   <point positionX="7413" positionY="1959" polygonFlags="CONTROL"/>
+   <point positionX="7398" positionY="2562" polygonFlags="NORMAL"/>
+   <point positionX="7384" positionY="3139" polygonFlags="CONTROL"/>
+   <point positionX="6674" positionY="3463" polygonFlags="CONTROL"/>
+   <point positionX="6140" positionY="3646" polygonFlags="NORMAL"/>
+   <point positionX="5689" positionY="3800" polygonFlags="CONTROL"/>
+   <point positionX="5214" positionY="3768" polygonFlags="CONTROL"/>
+   <point positionX="4752" positionY="3733" polygonFlags="NORMAL"/>
+   <point positionX="4268" positionY="3696" polygonFlags="CONTROL"/>
+   <point positionX="3851" positionY="3893" polygonFlags="CONTROL"/>
+   <point positionX="3364" positionY="3820" polygonFlags="NORMAL"/>
+   <point positionX="2849" positionY="3742" polygonFlags="CONTROL"/>
+   <point positionX="2184" positionY="3373" polygonFlags="CONTROL"/>
+   <point positionX="1802" positionY="3733" polygonFlags="NORMAL"/>
+   <point positionX="1298" positionY="4208" polygonFlags="CONTROL"/>
+   <point positionX="1653" positionY="5105" polygonFlags="CONTROL"/>
+   <point positionX="1802" positionY="5772" polygonFlags="NORMAL"/>
+   <point positionX="1942" positionY="6397" polygonFlags="CONTROL"/>
+   <point positionX="2154" positionY="7177" polygonFlags="CONTROL"/>
+   <point positionX="2800" positionY="7420" polygonFlags="NORMAL"/>
+   <point positionX="3405" positionY="7647" polygonFlags="CONTROL"/>
+   <point positionX="4082" positionY="7620" polygonFlags="CONTROL"/>
+   <point positionX="4708" positionY="7507" polygonFlags="NORMAL"/>
+   <point positionX="5190" positionY="7420" polygonFlags="CONTROL"/>
+   <point positionX="6021" positionY="7963" polygonFlags="CONTROL"/>
+   <point positionX="6140" positionY="7029" polygonFlags="NORMAL"/>
+   <point positionX="6246" positionY="6202" polygonFlags="CONTROL"/>
+   <point positionX="5466" positionY="6375" polygonFlags="CONTROL"/>
+   <point positionX="5055" positionY="6205" polygonFlags="NORMAL"/>
+   <point positionX="4498" positionY="5974" polygonFlags="CONTROL"/>
+   <point positionX="3910" positionY="5763" polygonFlags="CONTROL"/>
+   <point positionX="3494" positionY="5338" polygonFlags="NORMAL"/>
+   <point positionX="3122" positionY="4958" polygonFlags="CONTROL"/>
+   <point positionX="3099" positionY="4343" polygonFlags="CONTROL"/>
+   <point positionX="3104" positionY="3820" polygonFlags="NORMAL"/>
+   <point positionX="3109" positionY="3343" polygonFlags="CONTROL"/>
+   <point positionX="3279" positionY="2893" polygonFlags="CONTROL"/>
+   <point positionX="3451" positionY="2432" polygonFlags="NORMAL"/>
+   <point positionX="3619" positionY="1983" polygonFlags="CONTROL"/>
+   <point positionX="3366" positionY="1398" polygonFlags="CONTROL"/>
+   <point positionX="2757" positionY="1217" polygonFlags="NORMAL"/>
+   <point positionX="2249" positionY="1066" polygonFlags="CONTROL"/>
+   <point positionX="1805" positionY="1010" polygonFlags="CONTROL"/>
+   <point positionX="1325" positionY="1044" polygonFlags="NORMAL"/>
+   <point positionX="594" positionY="1095" polygonFlags="CONTROL"/>
+   <point positionX="411" positionY="1981" polygonFlags="CONTROL"/>
+   <point positionX="241" positionY="2562" polygonFlags="NORMAL"/>
+   <point positionX="49" positionY="3219" polygonFlags="CONTROL"/>
+   <point positionX="-49" positionY="3889" polygonFlags="CONTROL"/>
+   <point positionX="24" positionY="4601" polygonFlags="NORMAL"/>
+   <point positionX="77" positionY="5117" polygonFlags="CONTROL"/>
+   <point positionX="-11" positionY="5728" polygonFlags="CONTROL"/>
+   <point positionX="414" positionY="6119" polygonFlags="NORMAL"/>
+   <point positionX="414" positionY="6119" polygonFlags="NORMAL"/>
+  </pointSequence>
+ </XShape>
+ <XShape positionX="3800" positionY="6400" sizeX="1800" sizeY="1200" type="com.sun.star.drawing.LineShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd>
+   <pointSequence>
+    <point positionX="10" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="30" polygonFlags="NORMAL"/>
+    <point positionX="20" positionY="30" polygonFlags="NORMAL"/>
+    <point positionX="10" positionY="0" polygonFlags="NORMAL"/>
+   </pointSequence>
+  </LineEnd>
+  <PolyPolygon>
+   <pointSequence>
+    <point positionX="3800" positionY="7600"/>
+    <point positionX="5600" positionY="6400"/>
+   </pointSequence>
+  </PolyPolygon>
+  <Geometry>
+   <pointSequence>
+    <point positionX="0" positionY="1200"/>
+    <point positionX="1800" positionY="0"/>
+   </pointSequence>
+  </Geometry>
+  <Transformation>
+   <Line1 column1="1800.000000" column2="0.000000" column3="3800.000000"/>
+   <Line2 column1="0.000000" column2="1200.000000" column3="6400.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+ </XShape>
+ <XShape positionX="18348" positionY="525" sizeX="8645" sizeY="6751" type="com.sun.star.drawing.ClosedBezierShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="8645.321503" column2="0.000000" column3="18348.000000"/>
+   <Line2 column1="0.000000" column2="6751.172578" column3="525.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <pointSequence>
+   <point positionX="18348" positionY="7243" polygonFlags="NORMAL"/>
+   <point positionX="18951" positionY="7332" polygonFlags="CONTROL"/>
+   <point positionX="19562" positionY="7215" polygonFlags="CONTROL"/>
+   <point positionX="20169" positionY="7200" polygonFlags="NORMAL"/>
+   <point positionX="20809" positionY="7184" polygonFlags="CONTROL"/>
+   <point positionX="20839" positionY="6538" polygonFlags="CONTROL"/>
+   <point positionX="20950" positionY="6115" polygonFlags="NORMAL"/>
+   <point positionX="21085" positionY="5599" polygonFlags="CONTROL"/>
+   <point positionX="21023" positionY="5074" polygonFlags="CONTROL"/>
+   <point positionX="21037" positionY="4554" polygonFlags="NORMAL"/>
+   <point positionX="21049" positionY="4092" polygonFlags="CONTROL"/>
+   <point positionX="21033" positionY="3627" polygonFlags="CONTROL"/>
+   <point positionX="21037" positionY="3166" polygonFlags="NORMAL"/>
+   <point positionX="21042" positionY="2557" polygonFlags="CONTROL"/>
+   <point positionX="20311" positionY="2450" polygonFlags="CONTROL"/>
+   <point positionX="19866" positionY="2515" polygonFlags="NORMAL"/>
+   <point positionX="19390" positionY="2584" polygonFlags="CONTROL"/>
+   <point positionX="18645" positionY="2487" polygonFlags="CONTROL"/>
+   <point positionX="18608" positionY="1908" polygonFlags="NORMAL"/>
+   <point positionX="18578" positionY="1443" polygonFlags="CONTROL"/>
+   <point positionX="18333" positionY="866" polygonFlags="CONTROL"/>
+   <point positionX="19042" positionY="607" polygonFlags="NORMAL"/>
+   <point positionX="19599" positionY="403" polygonFlags="CONTROL"/>
+   <point positionX="20169" positionY="602" polygonFlags="CONTROL"/>
+   <point positionX="20560" positionY="954" polygonFlags="NORMAL"/>
+   <point positionX="20998" positionY="1348" polygonFlags="CONTROL"/>
+   <point positionX="21528" positionY="1585" polygonFlags="CONTROL"/>
+   <point positionX="21948" positionY="2038" polygonFlags="NORMAL"/>
+   <point positionX="22328" positionY="2448" polygonFlags="CONTROL"/>
+   <point positionX="22815" positionY="2752" polygonFlags="CONTROL"/>
+   <point positionX="23336" positionY="2992" polygonFlags="NORMAL"/>
+   <point positionX="23850" positionY="3228" polygonFlags="CONTROL"/>
+   <point positionX="24383" positionY="3468" polygonFlags="CONTROL"/>
+   <point positionX="24984" positionY="3426" polygonFlags="NORMAL"/>
+   <point positionX="25462" positionY="3392" polygonFlags="CONTROL"/>
+   <point positionX="26206" positionY="3798" polygonFlags="CONTROL"/>
+   <point positionX="26459" positionY="3253" polygonFlags="NORMAL"/>
+   <point positionX="26648" positionY="2847" polygonFlags="CONTROL"/>
+   <point positionX="26666" positionY="2292" polygonFlags="CONTROL"/>
+   <point positionX="26415" positionY="1908" polygonFlags="NORMAL"/>
+   <point positionX="26129" positionY="1470" polygonFlags="CONTROL"/>
+   <point positionX="25369" positionY="1324" polygonFlags="CONTROL"/>
+   <point positionX="25027" positionY="1648" polygonFlags="NORMAL"/>
+   <point positionX="24655" positionY="2001" polygonFlags="CONTROL"/>
+   <point positionX="25301" positionY="2552" polygonFlags="CONTROL"/>
+   <point positionX="25288" positionY="3036" polygonFlags="NORMAL"/>
+   <point positionX="25275" positionY="3508" polygonFlags="CONTROL"/>
+   <point positionX="25468" positionY="3950" polygonFlags="CONTROL"/>
+   <point positionX="25548" positionY="4424" polygonFlags="NORMAL"/>
+   <point positionX="25655" positionY="5059" polygonFlags="CONTROL"/>
+   <point positionX="26263" positionY="4848" polygonFlags="CONTROL"/>
+   <point positionX="26632" positionY="4988" polygonFlags="NORMAL"/>
+   <point positionX="27116" positionY="5171" polygonFlags="CONTROL"/>
+   <point positionX="27166" positionY="6200" polygonFlags="CONTROL"/>
+   <point positionX="26459" positionY="6289" polygonFlags="NORMAL"/>
+   <point positionX="25910" positionY="6358" polygonFlags="CONTROL"/>
+   <point positionX="25585" positionY="5832" polygonFlags="CONTROL"/>
+   <point positionX="25157" positionY="5595" polygonFlags="NORMAL"/>
+   <point positionX="24651" positionY="5315" polygonFlags="CONTROL"/>
+   <point positionX="24507" positionY="4749" polygonFlags="CONTROL"/>
+   <point positionX="24507" positionY="4250" polygonFlags="SMOOTH"/>
+   <point positionX="24507" positionY="3534" polygonFlags="CONTROL"/>
+   <point positionX="23865" positionY="3497" polygonFlags="CONTROL"/>
+   <point positionX="23422" positionY="3339" polygonFlags="NORMAL"/>
+   <point positionX="22949" positionY="3170" polygonFlags="CONTROL"/>
+   <point positionX="22437" positionY="3093" polygonFlags="CONTROL"/>
+   <point positionX="21991" positionY="3296" polygonFlags="NORMAL"/>
+   <point positionX="21380" positionY="3574" polygonFlags="CONTROL"/>
+   <point positionX="21765" positionY="4222" polygonFlags="CONTROL"/>
+   <point positionX="21644" positionY="4684" polygonFlags="NORMAL"/>
+   <point positionX="21542" positionY="5074" polygonFlags="CONTROL"/>
+   <point positionX="21980" positionY="5726" polygonFlags="CONTROL"/>
+   <point positionX="21167" positionY="5768" polygonFlags="NORMAL"/>
+   <point positionX="20654" positionY="5794" polygonFlags="CONTROL"/>
+   <point positionX="20256" positionY="5430" polygonFlags="CONTROL"/>
+   <point positionX="19779" positionY="5508" polygonFlags="NORMAL"/>
+   <point positionX="19306" positionY="5585" polygonFlags="CONTROL"/>
+   <point positionX="19067" positionY="6562" polygonFlags="CONTROL"/>
+   <point positionX="19866" positionY="6636" polygonFlags="NORMAL"/>
+   <point positionX="20348" positionY="6680" polygonFlags="CONTROL"/>
+   <point positionX="20787" positionY="6882" polygonFlags="CONTROL"/>
+   <point positionX="21254" positionY="6983" polygonFlags="NORMAL"/>
+   <point positionX="21739" positionY="7088" polygonFlags="CONTROL"/>
+   <point positionX="22200" positionY="6884" polygonFlags="CONTROL"/>
+   <point positionX="22642" positionY="6723" polygonFlags="NORMAL"/>
+   <point positionX="23076" positionY="6565" polygonFlags="CONTROL"/>
+   <point positionX="23842" positionY="6723" polygonFlags="CONTROL"/>
+   <point positionX="23813" positionY="5985" polygonFlags="NORMAL"/>
+   <point positionX="23769" positionY="5595" polygonFlags="NORMAL"/>
+   <point positionX="18348" positionY="7243" polygonFlags="NORMAL"/>
+  </pointSequence>
+  <pointSequence>
+   <point positionX="0" positionY="6718" polygonFlags="NORMAL"/>
+   <point positionX="603" positionY="6807" polygonFlags="CONTROL"/>
+   <point positionX="1214" positionY="6690" polygonFlags="CONTROL"/>
+   <point positionX="1821" positionY="6675" polygonFlags="NORMAL"/>
+   <point positionX="2461" positionY="6659" polygonFlags="CONTROL"/>
+   <point positionX="2491" positionY="6013" polygonFlags="CONTROL"/>
+   <point positionX="2602" positionY="5590" polygonFlags="NORMAL"/>
+   <point positionX="2737" positionY="5074" polygonFlags="CONTROL"/>
+   <point positionX="2675" positionY="4549" polygonFlags="CONTROL"/>
+   <point positionX="2689" positionY="4029" polygonFlags="NORMAL"/>
+   <point positionX="2701" positionY="3567" polygonFlags="CONTROL"/>
+   <point positionX="2685" positionY="3102" polygonFlags="CONTROL"/>
+   <point positionX="2689" positionY="2641" polygonFlags="NORMAL"/>
+   <point positionX="2694" positionY="2032" polygonFlags="CONTROL"/>
+   <point positionX="1963" positionY="1925" polygonFlags="CONTROL"/>
+   <point positionX="1518" positionY="1990" polygonFlags="NORMAL"/>
+   <point positionX="1042" positionY="2059" polygonFlags="CONTROL"/>
+   <point positionX="297" positionY="1962" polygonFlags="CONTROL"/>
+   <point positionX="260" positionY="1383" polygonFlags="NORMAL"/>
+   <point positionX="230" positionY="918" polygonFlags="CONTROL"/>
+   <point positionX="-15" positionY="341" polygonFlags="CONTROL"/>
+   <point positionX="694" positionY="82" polygonFlags="NORMAL"/>
+   <point positionX="1251" positionY="-122" polygonFlags="CONTROL"/>
+   <point positionX="1821" positionY="77" polygonFlags="CONTROL"/>
+   <point positionX="2212" positionY="429" polygonFlags="NORMAL"/>
+   <point positionX="2650" positionY="823" polygonFlags="CONTROL"/>
+   <point positionX="3180" positionY="1060" polygonFlags="CONTROL"/>
+   <point positionX="3600" positionY="1513" polygonFlags="NORMAL"/>
+   <point positionX="3980" positionY="1923" polygonFlags="CONTROL"/>
+   <point positionX="4467" positionY="2227" polygonFlags="CONTROL"/>
+   <point positionX="4988" positionY="2467" polygonFlags="NORMAL"/>
+   <point positionX="5502" positionY="2703" polygonFlags="CONTROL"/>
+   <point positionX="6035" positionY="2943" polygonFlags="CONTROL"/>
+   <point positionX="6636" positionY="2901" polygonFlags="NORMAL"/>
+   <point positionX="7114" positionY="2867" polygonFlags="CONTROL"/>
+   <point positionX="7858" positionY="3273" polygonFlags="CONTROL"/>
+   <point positionX="8111" positionY="2728" polygonFlags="NORMAL"/>
+   <point positionX="8300" positionY="2322" polygonFlags="CONTROL"/>
+   <point positionX="8318" positionY="1767" polygonFlags="CONTROL"/>
+   <point positionX="8067" positionY="1383" polygonFlags="NORMAL"/>
+   <point positionX="7781" positionY="945" polygonFlags="CONTROL"/>
+   <point positionX="7021" positionY="799" polygonFlags="CONTROL"/>
+   <point positionX="6679" positionY="1123" polygonFlags="NORMAL"/>
+   <point positionX="6307" positionY="1476" polygonFlags="CONTROL"/>
+   <point positionX="6953" positionY="2027" polygonFlags="CONTROL"/>
+   <point positionX="6940" positionY="2511" polygonFlags="NORMAL"/>
+   <point positionX="6927" positionY="2983" polygonFlags="CONTROL"/>
+   <point positionX="7120" positionY="3425" polygonFlags="CONTROL"/>
+   <point positionX="7200" positionY="3899" polygonFlags="NORMAL"/>
+   <point positionX="7307" positionY="4534" polygonFlags="CONTROL"/>
+   <point positionX="7915" positionY="4323" polygonFlags="CONTROL"/>
+   <point positionX="8284" positionY="4463" polygonFlags="NORMAL"/>
+   <point positionX="8768" positionY="4646" polygonFlags="CONTROL"/>
+   <point positionX="8818" positionY="5675" polygonFlags="CONTROL"/>
+   <point positionX="8111" positionY="5764" polygonFlags="NORMAL"/>
+   <point positionX="7562" positionY="5833" polygonFlags="CONTROL"/>
+   <point positionX="7237" positionY="5307" polygonFlags="CONTROL"/>
+   <point positionX="6809" positionY="5070" polygonFlags="NORMAL"/>
+   <point positionX="6303" positionY="4790" polygonFlags="CONTROL"/>
+   <point positionX="6159" positionY="4224" polygonFlags="CONTROL"/>
+   <point positionX="6159" positionY="3725" polygonFlags="SMOOTH"/>
+   <point positionX="6159" positionY="3009" polygonFlags="CONTROL"/>
+   <point positionX="5517" positionY="2972" polygonFlags="CONTROL"/>
+   <point positionX="5074" positionY="2814" polygonFlags="NORMAL"/>
+   <point positionX="4601" positionY="2645" polygonFlags="CONTROL"/>
+   <point positionX="4089" positionY="2568" polygonFlags="CONTROL"/>
+   <point positionX="3643" positionY="2771" polygonFlags="NORMAL"/>
+   <point positionX="3032" positionY="3049" polygonFlags="CONTROL"/>
+   <point positionX="3417" positionY="3697" polygonFlags="CONTROL"/>
+   <point positionX="3296" positionY="4159" polygonFlags="NORMAL"/>
+   <point positionX="3194" positionY="4549" polygonFlags="CONTROL"/>
+   <point positionX="3632" positionY="5201" polygonFlags="CONTROL"/>
+   <point positionX="2819" positionY="5243" polygonFlags="NORMAL"/>
+   <point positionX="2306" positionY="5269" polygonFlags="CONTROL"/>
+   <point positionX="1908" positionY="4905" polygonFlags="CONTROL"/>
+   <point positionX="1431" positionY="4983" polygonFlags="NORMAL"/>
+   <point positionX="958" positionY="5060" polygonFlags="CONTROL"/>
+   <point positionX="719" positionY="6037" polygonFlags="CONTROL"/>
+   <point positionX="1518" positionY="6111" polygonFlags="NORMAL"/>
+   <point positionX="2000" positionY="6155" polygonFlags="CONTROL"/>
+   <point positionX="2439" positionY="6357" polygonFlags="CONTROL"/>
+   <point positionX="2906" positionY="6458" polygonFlags="NORMAL"/>
+   <point positionX="3391" positionY="6563" polygonFlags="CONTROL"/>
+   <point positionX="3852" positionY="6359" polygonFlags="CONTROL"/>
+   <point positionX="4294" positionY="6198" polygonFlags="NORMAL"/>
+   <point positionX="4728" positionY="6040" polygonFlags="CONTROL"/>
+   <point positionX="5494" positionY="6198" polygonFlags="CONTROL"/>
+   <point positionX="5465" positionY="5460" polygonFlags="NORMAL"/>
+   <point positionX="5421" positionY="5070" polygonFlags="NORMAL"/>
+   <point positionX="0" positionY="6718" polygonFlags="NORMAL"/>
+  </pointSequence>
+ </XShape>
+ <XShape positionX="7400" positionY="7886" sizeX="4479" sizeY="6914" type="com.sun.star.drawing.ClosedBezierShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="4479.155188" column2="0.000000" column3="7400.000000"/>
+   <Line2 column1="0.000000" column2="6913.571703" column3="7886.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <pointSequence>
+   <point positionX="9200" positionY="13600" polygonFlags="NORMAL"/>
+   <point positionX="9200" positionY="12200" polygonFlags="CONTROL"/>
+   <point positionX="7600" positionY="10600" polygonFlags="CONTROL"/>
+   <point positionX="7600" positionY="10600" polygonFlags="NORMAL"/>
+   <point positionX="7600" positionY="10600" polygonFlags="CONTROL"/>
+   <point positionX="8600" positionY="9000" polygonFlags="CONTROL"/>
+   <point positionX="8200" positionY="9200" polygonFlags="SYMMETRIC"/>
+   <point positionX="7800" positionY="9400" polygonFlags="CONTROL"/>
+   <point positionX="9800" positionY="7800" polygonFlags="CONTROL"/>
+   <point positionX="9800" positionY="9800" polygonFlags="SYMMETRIC"/>
+   <point positionX="9800" positionY="11800" polygonFlags="CONTROL"/>
+   <point positionX="13600" positionY="11800" polygonFlags="CONTROL"/>
+   <point positionX="10800" positionY="8600" polygonFlags="SYMMETRIC"/>
+   <point positionX="8000" positionY="5400" polygonFlags="CONTROL"/>
+   <point positionX="10000" positionY="14000" polygonFlags="CONTROL"/>
+   <point positionX="11600" positionY="14000" polygonFlags="SYMMETRIC"/>
+   <point positionX="13200" positionY="14000" polygonFlags="CONTROL"/>
+   <point positionX="7400" positionY="14800" polygonFlags="CONTROL"/>
+   <point positionX="7400" positionY="14800" polygonFlags="NORMAL"/>
+   <point positionX="9200" positionY="13600" polygonFlags="NORMAL"/>
+  </pointSequence>
+  <pointSequence>
+   <point positionX="1800" positionY="5714" polygonFlags="NORMAL"/>
+   <point positionX="1800" positionY="4314" polygonFlags="CONTROL"/>
+   <point positionX="200" positionY="2714" polygonFlags="CONTROL"/>
+   <point positionX="200" positionY="2714" polygonFlags="NORMAL"/>
+   <point positionX="200" positionY="2714" polygonFlags="CONTROL"/>
+   <point positionX="1200" positionY="1114" polygonFlags="CONTROL"/>
+   <point positionX="800" positionY="1314" polygonFlags="SYMMETRIC"/>
+   <point positionX="400" positionY="1514" polygonFlags="CONTROL"/>
+   <point positionX="2400" positionY="-86" polygonFlags="CONTROL"/>
+   <point positionX="2400" positionY="1914" polygonFlags="SYMMETRIC"/>
+   <point positionX="2400" positionY="3914" polygonFlags="CONTROL"/>
+   <point positionX="6200" positionY="3914" polygonFlags="CONTROL"/>
+   <point positionX="3400" positionY="714" polygonFlags="SYMMETRIC"/>
+   <point positionX="600" positionY="-2486" polygonFlags="CONTROL"/>
+   <point positionX="2600" positionY="6114" polygonFlags="CONTROL"/>
+   <point positionX="4200" positionY="6114" polygonFlags="SYMMETRIC"/>
+   <point positionX="5800" positionY="6114" polygonFlags="CONTROL"/>
+   <point positionX="0" positionY="6914" polygonFlags="CONTROL"/>
+   <point positionX="0" positionY="6914" polygonFlags="NORMAL"/>
+   <point positionX="1800" positionY="5714" polygonFlags="NORMAL"/>
+  </pointSequence>
+ </XShape>
+ <XShape positionX="14800" positionY="9000" sizeX="3800" sizeY="4800" type="com.sun.star.drawing.PolyLineShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <PolyPolygon>
+   <pointSequence>
+    <point positionX="15000" positionY="13800"/>
+    <point positionX="16801" positionY="11800"/>
+    <point positionX="16400" positionY="9000"/>
+    <point positionX="18600" positionY="10000"/>
+    <point positionX="14800" positionY="11400"/>
+   </pointSequence>
+  </PolyPolygon>
+  <Geometry>
+   <pointSequence>
+    <point positionX="0" positionY="2171"/>
+    <point positionX="2691" positionY="2171"/>
+    <point positionX="4504" positionY="0"/>
+    <point positionX="5233" positionY="2304"/>
+    <point positionX="1650" positionY="416"/>
+   </pointSequence>
+  </Geometry>
+  <Transformation>
+   <Line1 column1="3500.881673" column2="1712.474725" column3="13386.648093"/>
+   <Line2 column1="-3889.487950" column2="1541.378057" column3="12347.841208"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+ </XShape>
+ <XShape positionX="1312" positionY="8865" sizeX="5636" sizeY="6339" type="com.sun.star.drawing.OpenBezierShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="1567.207856" column2="6230.915598" column3="41.872336"/>
+   <Line2 column1="-6267.085096" column2="1558.162962" column3="14880.349578"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <pointSequence>
+   <point positionX="1401" positionY="13600" polygonFlags="NORMAL"/>
+   <point positionX="2001" positionY="11200" polygonFlags="CONTROL"/>
+   <point positionX="6001" positionY="13600" polygonFlags="CONTROL"/>
+   <point positionX="2600" positionY="10600" polygonFlags="SYMMETRIC"/>
+   <point positionX="-801" positionY="7600" polygonFlags="CONTROL"/>
+   <point positionX="4600" positionY="9400" polygonFlags="CONTROL"/>
+   <point positionX="4600" positionY="9400" polygonFlags="NORMAL"/>
+   <point positionX="4600" positionY="9400" polygonFlags="CONTROL"/>
+   <point positionX="8001" positionY="10800" polygonFlags="CONTROL"/>
+   <point positionX="5601" positionY="11000" polygonFlags="SYMMETRIC"/>
+   <point positionX="3201" positionY="11200" polygonFlags="CONTROL"/>
+   <point positionX="5201" positionY="12600" polygonFlags="CONTROL"/>
+   <point positionX="5600" positionY="12000" polygonFlags="SYMMETRIC"/>
+   <point positionX="6000" positionY="11400" polygonFlags="CONTROL"/>
+   <point positionX="7401" positionY="13600" polygonFlags="CONTROL"/>
+   <point positionX="6801" positionY="14000" polygonFlags="SYMMETRIC"/>
+   <point positionX="6201" positionY="14399" polygonFlags="CONTROL"/>
+   <point positionX="1401" positionY="15001" polygonFlags="CONTROL"/>
+   <point positionX="1601" positionY="14000" polygonFlags="NORMAL"/>
+   <point positionX="1401" positionY="15001" polygonFlags="NORMAL"/>
+   <point positionX="1201" positionY="16000" polygonFlags="CONTROL"/>
+   <point positionX="1400" positionY="13000" polygonFlags="CONTROL"/>
+   <point positionX="1400" positionY="13000" polygonFlags="NORMAL"/>
+  </pointSequence>
+  <pointSequence>
+   <point positionX="1572" positionY="1008" polygonFlags="NORMAL"/>
+   <point positionX="4045" positionY="1008" polygonFlags="CONTROL"/>
+   <point positionX="2688" positionY="5471" polygonFlags="CONTROL"/>
+   <point positionX="4773" positionY="1444" polygonFlags="SYMMETRIC"/>
+   <point positionX="6858" positionY="-2583" polygonFlags="CONTROL"/>
+   <point positionX="6422" positionY="3093" polygonFlags="CONTROL"/>
+   <point positionX="6422" positionY="3093" polygonFlags="NORMAL"/>
+   <point positionX="6422" positionY="3093" polygonFlags="CONTROL"/>
+   <point positionX="5889" positionY="6732" polygonFlags="CONTROL"/>
+   <point positionX="5113" positionY="4452" polygonFlags="SYMMETRIC"/>
+   <point positionX="4337" positionY="2172" polygonFlags="CONTROL"/>
+   <point positionX="3464" positionY="4452" polygonFlags="CONTROL"/>
+   <point positionX="4143" positionY="4694" polygonFlags="SYMMETRIC"/>
+   <point positionX="4822" positionY="4936" polygonFlags="CONTROL"/>
+   <point positionX="3027" positionY="6829" polygonFlags="CONTROL"/>
+   <point positionX="2494" positionY="6344" polygonFlags="SYMMETRIC"/>
+   <point positionX="1961" positionY="5859" polygonFlags="CONTROL"/>
+   <point positionX="213" positionY="1348" polygonFlags="CONTROL"/>
+   <point positionX="1232" positionY="1299" polygonFlags="NORMAL"/>
+   <point positionX="213" positionY="1348" polygonFlags="NORMAL"/>
+   <point positionX="-805" positionY="1396" polygonFlags="CONTROL"/>
+   <point positionX="2154" positionY="862" polygonFlags="CONTROL"/>
+   <point positionX="2154" positionY="862" polygonFlags="NORMAL"/>
+  </pointSequence>
+ </XShape>
+ <XShape positionX="20400" positionY="9800" sizeX="7000" sizeY="6000" type="com.sun.star.drawing.PolyPolygonShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <PolyPolygon>
+   <pointSequence>
+    <point positionX="20400" positionY="13600"/>
+    <point positionX="20600" positionY="9800"/>
+    <point positionX="24200" positionY="11600"/>
+    <point positionX="27400" positionY="14400"/>
+    <point positionX="23000" positionY="15800"/>
+    <point positionX="20400" positionY="13600"/>
+   </pointSequence>
+  </PolyPolygon>
+  <Geometry>
+   <pointSequence>
+    <point positionX="0" positionY="3800"/>
+    <point positionX="200" positionY="0"/>
+    <point positionX="3800" positionY="1800"/>
+    <point positionX="7000" positionY="4600"/>
+    <point positionX="2600" positionY="6000"/>
+    <point positionX="0" positionY="3800"/>
+   </pointSequence>
+  </Geometry>
+  <Transformation>
+   <Line1 column1="7000.000000" column2="0.000000" column3="20400.000000"/>
+   <Line2 column1="0.000000" column2="6000.000000" column3="9800.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+ </XShape>
+ <XShape positionX="2200" positionY="16600" sizeX="7800" sizeY="3000" type="com.sun.star.drawing.PolyPolygonShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <PolyPolygon>
+   <pointSequence>
+    <point positionX="2200" positionY="16600"/>
+    <point positionX="2200" positionY="17800"/>
+    <point positionX="4000" positionY="19600"/>
+    <point positionX="4800" positionY="19600"/>
+    <point positionX="4800" positionY="18600"/>
+    <point positionX="5800" positionY="19600"/>
+    <point positionX="6400" positionY="19600"/>
+    <point positionX="7000" positionY="19000"/>
+    <point positionX="7600" positionY="19000"/>
+    <point positionX="8200" positionY="19600"/>
+    <point positionX="10000" positionY="17800"/>
+    <point positionX="4000" positionY="17800"/>
+    <point positionX="4000" positionY="16600"/>
+    <point positionX="2200" positionY="16600"/>
+   </pointSequence>
+  </PolyPolygon>
+  <Geometry>
+   <pointSequence>
+    <point positionX="0" positionY="7800"/>
+    <point positionX="1200" positionY="7800"/>
+    <point positionX="3000" positionY="6000"/>
+    <point positionX="3000" positionY="5200"/>
+    <point positionX="2000" positionY="5200"/>
+    <point positionX="3000" positionY="4200"/>
+    <point positionX="3000" positionY="3600"/>
+    <point positionX="2400" positionY="3000"/>
+    <point positionX="2400" positionY="2400"/>
+    <point positionX="3000" positionY="1800"/>
+    <point positionX="1200" positionY="0"/>
+    <point positionX="1200" positionY="6000"/>
+    <point positionX="0" positionY="6000"/>
+    <point positionX="0" positionY="7800"/>
+   </pointSequence>
+  </Geometry>
+  <Transformation>
+   <Line1 column1="0.000000" column2="-7800.000000" column3="10000.000000"/>
+   <Line2 column1="3000.000000" column2="0.000000" column3="16600.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+ </XShape>
+ <XShape positionX="12400" positionY="17200" sizeX="6200" sizeY="2600" type="com.sun.star.drawing.PolyPolygonShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <PolyPolygon>
+   <pointSequence>
+    <point positionX="14600" positionY="18000"/>
+    <point positionX="13200" positionY="18000"/>
+    <point positionX="12400" positionY="18800"/>
+    <point positionX="13400" positionY="19800"/>
+    <point positionX="15400" positionY="19800"/>
+    <point positionX="17600" positionY="19800"/>
+    <point positionX="18600" positionY="18800"/>
+    <point positionX="17800" positionY="18000"/>
+    <point positionX="16400" positionY="18000"/>
+    <point positionX="16400" positionY="17200"/>
+    <point positionX="15000" positionY="17200"/>
+    <point positionX="15000" positionY="17400"/>
+    <point positionX="13800" positionY="17400"/>
+    <point positionX="13800" positionY="17600"/>
+    <point positionX="15000" positionY="17600"/>
+    <point positionX="15000" positionY="18000"/>
+    <point positionX="14000" positionY="18000"/>
+    <point positionX="14600" positionY="18000"/>
+   </pointSequence>
+  </PolyPolygon>
+  <Geometry>
+   <pointSequence>
+    <point positionX="2200" positionY="800"/>
+    <point positionX="800" positionY="800"/>
+    <point positionX="0" positionY="1600"/>
+    <point positionX="1000" positionY="2600"/>
+    <point positionX="3000" positionY="2600"/>
+    <point positionX="5200" positionY="2600"/>
+    <point positionX="6200" positionY="1600"/>
+    <point positionX="5400" positionY="800"/>
+    <point positionX="4000" positionY="800"/>
+    <point positionX="4000" positionY="0"/>
+    <point positionX="2600" positionY="0"/>
+    <point positionX="2600" positionY="200"/>
+    <point positionX="1400" positionY="200"/>
+    <point positionX="1400" positionY="400"/>
+    <point positionX="2600" positionY="400"/>
+    <point positionX="2600" positionY="800"/>
+    <point positionX="1600" positionY="800"/>
+    <point positionX="2200" positionY="800"/>
+   </pointSequence>
+  </Geometry>
+  <Transformation>
+   <Line1 column1="6200.000000" column2="0.000000" column3="12400.000000"/>
+   <Line2 column1="0.000000" column2="2600.000000" column3="17200.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+ </XShape>
+</XShapes>

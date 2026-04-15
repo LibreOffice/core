@@ -1,0 +1,147 @@
+--- libcmis/src/libcmis/session-factory.cxx.orig	2024-06-21 17:40:02.696092806 +0200
++++ libcmis/src/libcmis/session-factory.cxx	2024-06-21 17:32:21.759833389 +0200
+@@ -75,12 +75,15 @@
+             if ( bindingUrl == "https://www.googleapis.com/drive/v3" )
+             {
+                 session = new GDriveSession( bindingUrl, username, password,
+-                                             oauth2, verbose );
++                                             oauth2, verbose,
++                                             g_CurlInitProtocolsFunction);
++
+             }
+             else if ( bindingUrl == "https://graph.microsoft.com/v1.0" )
+             {
+                 session = new OneDriveSession( bindingUrl, username, password,
+-                                               oauth2, verbose);
++                                               oauth2, verbose,
++                                               g_CurlInitProtocolsFunction);
+             }
+             else
+             {
+@@ -103,7 +106,7 @@
+                     }
+                     // Could be SharePoint - needs NTLM authentication
+                     session = new SharePointSession( bindingUrl, username,
+-                                                      password, verbose );
++                          password, verbose, g_CurlInitProtocolsFunction);
+                 }
+ 
+                 // Try the CMIS cases: we need to autodetect the binding type
+--- libcmis/src/libcmis/base-session.hxx.orig	2024-06-21 17:41:56.737651815 +0200
++++ libcmis/src/libcmis/base-session.hxx	2024-06-21 17:42:08.466709308 +0200
+@@ -59,7 +59,8 @@
+         BaseSession( std::string sBindingUrl, std::string repository,
+                      std::string username, std::string password,
+                      bool noSslCheck = false,
+-                     libcmis::OAuth2DataPtr oauth2 = libcmis::OAuth2DataPtr(), bool verbose = false );
++                     libcmis::OAuth2DataPtr oauth2 = libcmis::OAuth2DataPtr(), bool verbose = false,
++                     libcmis::CurlInitProtocolsFunction = nullptr);
+ 
+         /** This constructor copies an existing http session.
+             This has been mostly designed for SessionFactory to save
+--- libcmis/src/libcmis/base-session.cxx.orig	2024-06-21 17:42:28.593807967 +0200
++++ libcmis/src/libcmis/base-session.cxx	2024-06-21 17:43:37.051143529 +0200
+@@ -43,9 +43,10 @@
+ using namespace std;
+ 
+ BaseSession::BaseSession( string bindingUrl, string repositoryId, string username,
+-        string password, bool noSslCheck, libcmis::OAuth2DataPtr oauth2, bool verbose ) :
++        string password, bool noSslCheck, libcmis::OAuth2DataPtr oauth2, bool verbose,
++        libcmis::CurlInitProtocolsFunction initProtocolsFunction) :
+     Session( ),
+-    HttpSession( username, password, noSslCheck, oauth2, verbose ),
++    HttpSession( username, password, noSslCheck, oauth2, verbose, initProtocolsFunction ),
+     m_bindingUrl( bindingUrl ),
+     m_repositoryId( repositoryId ),
+     m_repositories( )
+--- libcmis/src/libcmis/gdrive-session.hxx.orig	2024-06-21 17:44:32.721416413 +0200
++++ libcmis/src/libcmis/gdrive-session.hxx	2024-06-21 17:39:01.143791090 +0200
+@@ -39,7 +39,8 @@
+                        std::string username,
+                        std::string password,
+                        libcmis::OAuth2DataPtr oauth2,
+-                       bool verbose = false );
++                       bool verbose = false,
++                       libcmis::CurlInitProtocolsFunction = nullptr);
+ 
+         ~GDriveSession ( );
+ 
+--- libcmis/src/libcmis/gdrive-session.cxx.orig	2024-06-21 17:44:59.947549870 +0200
++++ libcmis/src/libcmis/gdrive-session.cxx	2024-06-21 17:45:26.666680841 +0200
+@@ -43,9 +43,10 @@
+                                string username,
+                                string password,
+                                libcmis::OAuth2DataPtr oauth2,
+-                               bool verbose ) :
++                               bool verbose,
++                               libcmis::CurlInitProtocolsFunction initProtocolsFunction) :
+     BaseSession( baseUrl, string(), username, password, false,
+-                 libcmis::OAuth2DataPtr(), verbose )
++                 libcmis::OAuth2DataPtr(), verbose, initProtocolsFunction )
+ 
+ {
+     // Add the dummy repository, even if we don't have OAuth2
+--- libcmis/src/libcmis/onedrive-session.hxx.orig	2024-06-21 17:46:39.857039605 +0200
++++ libcmis/src/libcmis/onedrive-session.hxx	2024-06-21 17:46:59.045133662 +0200
+@@ -40,7 +40,8 @@
+                        std::string username, 
+                        std::string password,
+                        libcmis::OAuth2DataPtr oauth2,
+-                       bool verbose = false );
++                       bool verbose = false,
++                       libcmis::CurlInitProtocolsFunction = nullptr);
+ 
+         ~OneDriveSession ( );
+ 
+--- libcmis/src/libcmis/onedrive-session.cxx.orig	2024-06-21 17:47:35.187310824 +0200
++++ libcmis/src/libcmis/onedrive-session.cxx	2024-06-21 17:48:02.068442589 +0200
+@@ -41,9 +41,10 @@
+                                string username,
+                                string password,
+                                libcmis::OAuth2DataPtr oauth2,
+-                               bool verbose ) :
++                               bool verbose,
++                               libcmis::CurlInitProtocolsFunction initProtocolsFunction) :
+     BaseSession( baseUrl, string(), username, password, false,
+-                 libcmis::OAuth2DataPtr(), verbose )
++                 libcmis::OAuth2DataPtr(), verbose, initProtocolsFunction)
+ 
+ {
+     // Add the dummy repository
+--- libcmis/src/libcmis/sharepoint-session.hxx.orig	2024-06-21 18:02:35.120719197 +0200
++++ libcmis/src/libcmis/sharepoint-session.hxx	2024-06-21 18:02:54.288813088 +0200
+@@ -39,7 +39,8 @@
+         SharePointSession( std::string baseUrl,
+                        std::string username, 
+                        std::string password,
+-                       bool verbose = false );
++                       bool verbose = false,
++                       libcmis::CurlInitProtocolsFunction = nullptr);
+ 
+         SharePointSession( std::string baseUrl,
+                         const HttpSession& httpSession,
+--- libcmis/src/libcmis/sharepoint-session.cxx.orig	2024-06-21 16:02:24.597237776 +0200
++++ libcmis/src/libcmis/sharepoint-session.cxx	2024-06-21 18:03:48.109076715 +0200
+@@ -42,9 +42,10 @@
+ SharePointSession::SharePointSession ( string baseUrl,
+                                string username,
+                                string password,
+-                               bool verbose ) :
++                               bool verbose,
++                               libcmis::CurlInitProtocolsFunction initProtocolsFunction) :
+     BaseSession( baseUrl, string(), username, password, false,
+-                 libcmis::OAuth2DataPtr(), verbose ),
++                 libcmis::OAuth2DataPtr(), verbose, initProtocolsFunction ),
+     m_digestCode( string( ) ) 
+ 
+ {
+--- libcmis/src/libcmis/http-session.cxx.orig	2024-06-21 18:24:44.192002619 +0200
++++ libcmis/src/libcmis/http-session.cxx	2024-06-21 18:24:46.329012530 +0200
+@@ -981,6 +981,7 @@
+                 case CURLE_COULDNT_RESOLVE_HOST:
+                     type = "dnsFailed";
+                     break;
++                case CURLE_UNSUPPORTED_PROTOCOL:
+                 case CURLE_COULDNT_CONNECT:
+                 case CURLE_SSL_CONNECT_ERROR:
+                 case CURLE_SSL_CERTPROBLEM:

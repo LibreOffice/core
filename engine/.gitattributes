@@ -1,0 +1,13 @@
+*.doc binary
+*.ppt binary
+*.xls binary
+*.sdw binary
+*.jcs binary
+*.docx binary
+*.ppts binary
+*.xlsx binary
+*.odp binary
+*.ods binary
+*.odt binary
+*.rtf diff
+schema/*/* export-ignore

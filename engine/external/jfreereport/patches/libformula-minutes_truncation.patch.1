@@ -1,0 +1,14 @@
+diff -ur jfreereport_libformula.org/source/org/pentaho/reporting/libraries/formula/function/datetime/MinuteFunction.java jfreereport_libformula/source/org/pentaho/reporting/libraries/formula/function/datetime/MinuteFunction.java
+--- jfreereport_libformula.org/source/org/pentaho/reporting/libraries/formula/function/datetime/MinuteFunction.java	2015-07-13 15:55:31.752539618 +0200
++++ jfreereport_libformula/source/org/pentaho/reporting/libraries/formula/function/datetime/MinuteFunction.java	2015-07-13 15:56:27.084394065 +0200
+@@ -74,7 +74,7 @@
+     
+     // Multiply the minutes with 60 to get the minutes as ints 
+     final BigDecimal minutes = minutesFraction.multiply(MINUTES);
+-    final BigDecimal minutesAsInt = minutes.setScale(0, BigDecimal.ROUND_HALF_UP);
++    final BigDecimal minutesAsInt = NumberUtil.performIntRounding(minutes);
+     return new TypeValuePair(NumberType.GENERIC_NUMBER, minutesAsInt);
+   }
+-}
+\ Pas de fin de ligne à la fin du fichier
++}

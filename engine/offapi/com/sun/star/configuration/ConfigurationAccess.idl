@@ -1,0 +1,223 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module configuration {
+
+/** provides read access to a fragment of the configuration hierarchy.
+
+ <p>Values that are direct or indirect descendants of a root element can be
+ retrieved and, if themselves objects, navigated. Other interfaces provide
+ access to information about this element and its context.
+ Changes to values in the hierarchy can be monitored by event listeners.
+ </p>
+
+ <p>Descendants of this service also implement this service.
+ </p>
+
+ <p>Ultimately the configuration holds values. These values are organized into
+ a hierarchy using structural elements. The structure is defined in advance in
+ a schema. Necessary information from the schema is stored in the configuration
+ repository itself and is accessible through an implementation of this service.
+ </p>
+
+ <p>Two different kinds of structural elements are used in the configuration
+ hierarchy:
+ </p>
+ <dl>
+    <dt>Sets</dt>
+        <dd>are dynamic containers of homogeneous elements. Which elements
+        a <em>set</em> contains can vary. Their names are defined by the
+        clients that insert them. On the other hand, the <em>type</em> of
+        the elements is the same for all elements. In the case of elements
+        that are themselves hierarchy objects, the <em>type</em> includes
+        the structure of the hierarchy fragment they contain. Such types
+        are defined in the configuration schema as <em>templates</em>.
+        </dd>
+
+    <dt>Groups</dt>
+        <dd>are static collections of heterogeneous elements. The names and
+        types of the elements of a <em>group</em> are completely defined in the
+        configuration schema. Here each element may be of a different
+        <em>type</em>, allowing <em>groups</em> that contain a mix of
+        subobjects and simple values.
+        </dd>
+ </dl>
+
+ <p>Objects in the configuration hierarchy, for example, implementations of this service,
+ can thus be classified in the following ways:
+ </p>
+ <ul>
+    <li><em>Container</em> role:
+        An object that can hold child elements as a <em>set</em> or a <em>group</em>.
+    </li>
+    <li><em>Element</em> role:
+        An object may be an element of a <em>set</em> or a <em>group</em>
+        or else it may be the root element.
+    </li>
+ </ul>
+
+ <p>Several types of simple <em>values</em> can be used in the configuration.
+ In addition to the basic (scalar) types, sequences of the basic types are
+ supported. The basic types are:
+ </p>
+
+ <ul>
+    <li><strong>string</strong> can hold a human-readable text.
+        <p>Values are represented as `string`.</p>
+        <p>Sequences are represented as `string[]`.</p>
+        <p>"<em>human-readable</em>" here excludes non-printing characters
+        except for CR, LF and TAB [Unicode code points 9,10,13].
+        For binary data, use type <strong>binary</strong> instead.</p>
+    </li>
+    <li><strong>boolean</strong> can hold the values `TRUE` or `FALSE`.
+        <p>Values are represented as `boolean`.
+        <p>Sequences are represented as `boolean[]`.</p>
+    </li>
+    <li><strong>short</strong> can hold a 16-bit signed integer.
+        <p>Values are represented as `short`.</p>
+        <p>Sequences are represented as `short[]`.</p>
+    </li>
+    <li><strong>int</strong> can hold a 32-bit signed integer.
+        <p>Values are represented as `long`.</p>
+        <p>Sequences are represented as `long[]`.</p>
+    </li>
+    <li><strong>long</strong> can hold a 64-bit signed integer.
+        <p>Values are represented as `hyper`.</p>
+        <p>Sequences are represented as `hyper[]`.</p>
+    </li>
+    <li><strong>double</strong> can hold a floating point number.
+        <p>Values are represented as `double`.</p>
+        <p>Sequences are represented as `double[]`.</p>
+    </li>
+    <li><strong>binary</strong> can hold a sequence of octets.
+        <p>Values are represented as `byte[]`.</p>
+        <p>Sequences are represented as `byte[][]`.</p>
+    </li>
+ </ul>
+
+ <p>Within templates an additional type <strong>any</strong> can occur. When
+ such a template is used to create a new SetElement, the type
+ of the element is initially reported as `any` (having no value).
+ When the value of such an element is first set, it will assume the type used.
+ </p>
+
+ <p>If the schema marks a value as <em>nullable</em> (which is indicated by
+ attribute com::sun::star::beans::PropertyAttribute::MAYBEVOID ),
+ its contents may be `NULL`.
+ </p>
+
+ <p>The configuration should support explicit access to default values
+ (implementing com::sun::star::beans::XPropertyState
+ and  com::sun::star::beans::XPropertyWithState).
+ </p>
+
+ @see ConfigurationProvider
+    Root instances of this service can be requested from a
+    ConfigurationProvider.
+
+ @see ConfigurationUpdateAccess
+    an extended service that includes facilities for modifying
+    configuration data.
+*/
+published service ConfigurationAccess
+{
+    /** provides interfaces to access child and descendent elements.
+
+     <p>An implementation actually implements a specialization of this service,
+     which depends on its <em>Container</em> role.
+     </p>
+
+     <p>Implementations shall implement exactly one of:</p>
+     <ul>
+        <li>SetAccess if this element is a <em>Set</em>.</li>
+        <li>GroupAccess if this element is a <em>Group</em>.</li>
+     </ul>
+     */
+    service HierarchyAccess;
+
+    /** provides interfaces to obtain information about this element and its
+     role and context in the hierarchy.
+
+     <p>An implementation actually implements a specialization of this service,
+     which depends on its <em>Element</em> role.
+     </p>
+
+     <p>Implementations shall implement exactly one of:</p>
+     <ul>
+        <li>AccessRootElement if this element is the
+            <em>Root</em> of the whole hierarchy. Objects that can be
+            created directly by a ConfigurationProvider
+            implement this service.</li>
+        <li>SetElement if this element may be contained in a
+            <em>Set</em>.</li>
+        <li>GroupElement if this element is a child of a
+            <em>Group</em>.</li>
+     </ul>
+
+     */
+    service HierarchyElement;
+
+    /** specializes HierarchyAccess, if this element is a <em>Set</em>.
+
+         <p>This is an alternative to GroupAccess.
+        </p>
+    */
+    [optional] service SetAccess;
+
+    /** specializes HierarchyAccess,
+     if this element is a <em>Group</em>.
+     <p>This is an alternative to SetAccess.
+     </p>
+    */
+    [optional] service GroupAccess;
+
+    /** specializes HierarchyElement,
+     if this element is the <em>Root</em> of the whole hierarchy.
+     <p>This is an alternative to SetElement
+     or GroupElement.
+     </p>
+
+     @see ConfigurationProvider
+        Instances obtained from a ConfigurationProvider will
+        implement this version of HierarchyElement.
+    */
+    [optional] service AccessRootElement;
+
+    /** specializes HierarchyElement,
+     if this element may be contained in a <em>Set</em>.
+     <p>This is an alternative to AccessRootElement
+     or GroupElement.
+     </p>
+    */
+    [optional] service SetElement;
+
+    /** specializes HierarchyElement,
+     if this element is a child of a <em>Group</em>.
+     <p>This is an alternative to AccessRootElement
+     or SetElement.
+     </p>
+*/
+    [optional] service GroupElement;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

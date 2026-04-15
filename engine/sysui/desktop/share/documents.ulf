@@ -1,0 +1,134 @@
+[text]
+en-US = "OpenOffice.org 1.0 Text Document"
+
+[text-template]
+en-US = "OpenOffice.org 1.0 Text Document Template"
+
+[master-document]
+en-US = "OpenOffice.org 1.0 Master Document"
+
+[formula]
+en-US = "OpenOffice.org 1.0 Formula"
+
+[presentation]
+en-US = "OpenOffice.org 1.0 Presentation"
+
+[presentation-template]
+en-US = "OpenOffice.org 1.0 Presentation Template"
+
+[drawing]
+en-US = "OpenOffice.org 1.0 Drawing"
+
+[drawing-template]
+en-US = "OpenOffice.org 1.0 Drawing Template"
+
+[spreadsheet]
+en-US = "OpenOffice.org 1.0 Spreadsheet"
+
+[spreadsheet-template]
+en-US = "OpenOffice.org 1.0 Spreadsheet Template"
+
+[oasis-text]
+en-US = "OpenDocument Text"
+
+[oasis-text-flat-xml]
+en-US = "OpenDocument Text (Flat XML)"
+
+[oasis-text-template]
+en-US = "OpenDocument Text Template"
+
+[oasis-master-document]
+en-US = "OpenDocument Master Document"
+
+[oasis-master-document-template]
+en-US = "OpenDocument Master Document Template"
+
+[oasis-formula]
+en-US = "OpenDocument Formula"
+
+[oasis-presentation]
+en-US = "OpenDocument Presentation"
+
+[oasis-presentation-flat-xml]
+en-US = "OpenDocument Presentation (Flat XML)"
+
+[oasis-presentation-template]
+en-US = "OpenDocument Presentation Template"
+
+[oasis-drawing]
+en-US = "OpenDocument Drawing"
+
+[oasis-drawing-flat-xml]
+en-US = "OpenDocument Drawing (Flat XML)"
+
+[oasis-drawing-template]
+en-US = "OpenDocument Drawing Template"
+
+[oasis-spreadsheet]
+en-US = "OpenDocument Spreadsheet"
+
+[oasis-spreadsheet-flat-xml]
+en-US = "OpenDocument Spreadsheet (Flat XML)"
+
+[oasis-spreadsheet-template]
+en-US = "OpenDocument Spreadsheet Template"
+
+[oasis-database]
+en-US = "OpenDocument Database"
+
+[oasis-web-template]
+en-US = "HTML Document Template"
+
+[extension]
+en-US = "%PRODUCTNAME Extension"
+
+[ms-excel-sheet]
+en-US = "Microsoft Excel Worksheet"
+
+[ms-powerpoint-presentation]
+en-US = "Microsoft PowerPoint Presentation"
+
+[ms-word-document]
+en-US = "Microsoft Word Document"
+
+[ms-word-document2]
+en-US = "Microsoft Word Document"
+
+[ms-excel-sheet-12]
+en-US = "Microsoft Excel Worksheet"
+
+[ms-excel-template-12]
+en-US = "Microsoft Excel Worksheet Template"
+
+[ms-powerpoint-presentation-12]
+en-US = "Microsoft PowerPoint Presentation"
+
+[ms-powerpoint-template-12]
+en-US = "Microsoft PowerPoint Presentation Template"
+
+[ms-word-document-12]
+en-US = "Microsoft Word Document"
+
+[ms-word-template-12]
+en-US = "Microsoft Word Document Template"
+
+[openxmlformats-officedocument-presentationml-presentation]
+en-US = "Microsoft PowerPoint Presentation"
+
+[openxmlformats-officedocument-presentationml-template]
+en-US = "Microsoft PowerPoint Presentation Template"
+
+[openxmlformats-officedocument-spreadsheetml-sheet]
+en-US = "Microsoft Excel Worksheet"
+
+[openxmlformats-officedocument-spreadsheetml-template]
+en-US = "Microsoft Excel Worksheet Template"
+
+[openxmlformats-officedocument-wordprocessingml-document]
+en-US = "Microsoft Word Document"
+
+[openxmlformats-officedocument-wordprocessingml-template]
+en-US = "Microsoft Word Document Template"
+
+[ms-excel-sheet-binary-12]
+en-US = "Microsoft Excel Worksheet"

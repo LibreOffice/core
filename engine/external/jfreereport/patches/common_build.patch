@@ -1,0 +1,119 @@
+--- misc/libloader-1.1.3/common_build.xml	2009-11-16 10:25:34.000000000 +0100
++++ misc/build/libloader-1.1.3/common_build.xml	2009-12-04 10:22:24.277647200 +0100
+@@ -136,8 +136,6 @@
+   <property name="javac.deprecation"
+             value="true"
+             description="Indicates whether source should be compiled with deprecation information" />
+-  <property name="javac.source" value="1.5" description="Provide source compatibility with specified release" />
+-  <property name="javac.target" value="1.5" description="Generate class files for specific VM version" />
+ 
+   <!-- Build Cache properties -->
+   <property name="build.cache.dir"
+@@ -261,7 +261,7 @@ TYPICAL TARGET SEQUENCE
+   <property name="project.revision" value="${Implementation-Version}" description="Sets the version number of the project based on the Implementation-Version found in the manifest file (if one is supplied and nothing is specified in the build.properties)" />
+   <fail message="A project revision number has not been determined!">
+     <condition>
+-      <matches string="${project.revision}" pattern="\$\{.*\}" />
++      <contains string="${project.revision}" substring="\$\{" />
+     </condition>
+   </fail>
+ 
+@@ -270,7 +270,7 @@ TYPICAL TARGET SEQUENCE
+   <property name="impl.title" value="${Implementation-Title}" description="Sets the title of the project based on the Implementation-Title found in the manifest file (if one is supplied and nothing is specified in the build.properties)" />
+   <fail message="A project title has not been determined!">
+     <condition>
+-      <matches string="${impl.title}" pattern="\$\{.*\}" />
++      <contains string="${impl.title}" substring="\$\{" />
+     </condition>
+   </fail>
+ 
+@@ -497,7 +497,7 @@
+         Sets a property build.id to the either "development" or the svn revision
+         if in release mode
+         ====================================================================-->
+-  <target name="set-build.id" unless="build.id" depends="install-antcontrib">
++  <target name="set-build.id" unless="build.id" >
+     <if>
+       <istrue value="${release}" />
+       <then>
+@@ -1061,12 +1061,17 @@
+ 	    Performs the actual compile
+ 	    ====================================================================-->
+   <target name="compile.compile" depends="init">
++    <copy todir="${classes.dir}">
++      <fileset dir="source">
++        <include name="**/*.properties"/>
++      </fileset>
++    </copy>
+     <javac destdir="${classes.dir}"
+            debug="${javac.debug}"
+            deprecation="${javac.deprecation}"
+            fork="true"
+-           source="${javac.source}"
+-           target="${javac.target}">
++           source="${ant.build.javac.source}"
++           target="${ant.build.javac.target}">
+       <classpath>
+         <path refid="classpath" />
+       </classpath>
+@@ -1082,27 +1087,32 @@
+ 	    duplicate copying of resources from src tree (handled by compile.src_copy
+ 	    if jar.include.source is set.
+ 	    ====================================================================-->
+-  <target name="compile.res_copy" depends="install-antcontrib">
+-    <if>
+-      <available file="${res.dir}" />
+-      <then>
+-        <copy todir="${classes.dir}">
+-          <fileset dir="${res.dir}" />
+-        </copy>
+-      </then>
+-    </if>
++  <target name="compile.res_copy" >
++    <condition property="copy.res.available">
++        <available file="$(res.dir)" type="dir" />
++    </condition>
++    <antcall target="copy.res" />
+ 
+-    <if>
+-      <not>
+-        <isset property="jar.include.source" />
+-      </not>
+-      <then>
+-        <copy todir="${classes.dir}" flatten="false">
+-          <fileset dir="${src.dir}" excludes="**/*.java" />
+-        </copy>
+-      </then>
+-    </if>
+-  </target>
++    <condition property="copy.res.class.available">
++        <not>
++            <isset property="jar.include.source" />
++        </not>
++    </condition>
++    <antcall target="copy.res.class" />
++ </target>
++
++ <target name="copy.res" if="copy.res.available" >
++    <copy todir="${classes.dir}">
++        <fileset dir="${res.dir}"/>
++    </copy>
++ </target>
++
++ <target name="copy.res.class" if="copy.res.class.available" >
++    <uptodate targetfile="${classes.dir}" property="s">
++        <srcfiles dir= "${src.dir}" excludes="**/*.java" />
++        <flattenmapper/>
++    </uptodate>
++ </target>
+ 
+ 
+   <!--=======================================================================
+@@ -1167,7 +1177,6 @@
+   <target name="generate.manifest" depends="init,set-build.id">
+     <delete file="${dist.manifest.file}" />
+     <touch file="${dist.manifest.file}" />
+-    <copy file="${manifest.file}" tofile="${dist.manifest.file}" overwrite="true" failonerror="false" />
+ 
+     <manifest file="${dist.manifest.file}" mode="update">
+       <attribute name="Implementation-Title" value="${impl.title}" />

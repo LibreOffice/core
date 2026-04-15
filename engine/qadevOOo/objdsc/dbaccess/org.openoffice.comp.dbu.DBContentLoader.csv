@@ -1,0 +1,5 @@
+"DBContentLoader";"com::sun::star::lang::XInitialization#optional";"initialize()"
+"DBContentLoader";"com::sun::star::container::XNamed#optional";"getName()"
+"DBContentLoader";"com::sun::star::container::XNamed#optional";"setName()"
+"DBContentLoader";"com::sun::star::frame::XFrameLoader";"load()"
+"DBContentLoader";"com::sun::star::frame::XFrameLoader";"cancel()"

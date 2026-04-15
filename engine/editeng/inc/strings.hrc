@@ -1,0 +1,44 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include <unotools/resmgr.hxx>
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+const TranslateId RID_SVXITEMS_HORJUST[] =
+{
+    // enum SvxCellHorJustify ----------------------------------------------------
+    NC_("RID_SVXITEMS_HORJUST_STANDARD", "Horizontal alignment default"),
+    NC_("RID_SVXITEMS_HORJUST_LEFT", "Align left"),
+    NC_("RID_SVXITEMS_HORJUST_CENTER", "Centered horizontally"),
+    NC_("RID_SVXITEMS_HORJUST_RIGHT", "Align right"),
+    NC_("RID_SVXITEMS_HORJUST_BLOCK", "Justify horizontally"),
+    NC_("RID_SVXITEMS_HORJUST_REPEAT", "Repeat alignment")
+};
+
+const TranslateId RID_SVXITEMS_VERJUST[] =
+{
+    // enum SvxCellVerJustify ----------------------------------------------------
+    NC_("RID_SVXITEMS_VERJUST_STANDARD", "Vertical alignment default"),
+    NC_("RID_SVXITEMS_VERJUST_TOP", "Align to top"),
+    NC_("RID_SVXITEMS_VERJUST_CENTER", "Centered vertically"),
+    NC_("RID_SVXITEMS_VERJUST_BOTTOM", "Align to bottom"),
+    NC_("RID_SVXITEMS_HORJUST_BLOCK", "Justify vertically")
+};
+
+const TranslateId RID_SVXITEMS_JUSTMETHOD[] =
+{
+    // enum SvxCellJustifyMethod ----------------------------------------------------
+    NC_("RID_SVXITEMS_JUSTMETHOD_AUTO", "Automatic Justify"),
+    NC_("RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE", "Distributed Justify")
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

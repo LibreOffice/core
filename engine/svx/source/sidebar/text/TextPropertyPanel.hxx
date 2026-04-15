@@ -1,0 +1,80 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTPROPERTYPANEL_HXX
+#define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTPROPERTYPANEL_HXX
+
+#include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/weldutils.hxx>
+#include <vcl/EnumContext.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
+
+namespace svx::sidebar {
+
+class TextPropertyPanel
+    : public PanelLayout,
+      public ::sfx2::sidebar::IContextChangeReceiver
+{
+public:
+    virtual ~TextPropertyPanel() override;
+
+    static std::unique_ptr<PanelLayout> Create (
+        weld::Widget* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+    virtual void HandleContextChange (
+        const vcl::EnumContext& rContext) override;
+
+    TextPropertyPanel (
+        weld::Widget* pParent,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+private:
+    std::unique_ptr<weld::Label> mxFontnameFt;
+    std::unique_ptr<weld::Toolbar> mxFont;
+    std::unique_ptr<ToolbarUnoDispatcher> mxFontDispatch;
+    std::unique_ptr<weld::Label> mxFontsizeFt;
+    std::unique_ptr<weld::Toolbar> mxFontHeight;
+    std::unique_ptr<ToolbarUnoDispatcher> mxFontHeightDispatch;
+    std::unique_ptr<weld::Toolbar> mxFontEffects;
+    std::unique_ptr<ToolbarUnoDispatcher> mxFontEffectsDispatch;
+    std::unique_ptr<weld::Toolbar> mxFontAdjust;
+    std::unique_ptr<ToolbarUnoDispatcher> mxFontAdjustDispatch;
+    std::unique_ptr<weld::Toolbar> mxToolBoxFontColor;
+    std::unique_ptr<ToolbarUnoDispatcher> mxToolBoxFontColorDispatch;
+    std::unique_ptr<weld::Toolbar> mxToolBoxBackgroundColor;
+    std::unique_ptr<ToolbarUnoDispatcher> mxToolBoxBackgroundColorDispatch;
+    std::unique_ptr<weld::Toolbar> mxResetBar;
+    std::unique_ptr<ToolbarUnoDispatcher> mxResetBarDispatch;
+    std::unique_ptr<weld::Toolbar> mxDefaultBar;
+    std::unique_ptr<ToolbarUnoDispatcher> mxDefaultBarDispatch;
+    std::unique_ptr<weld::Toolbar> mxHyphenationBar;
+    std::unique_ptr<ToolbarUnoDispatcher> mxHyphenationBarDispatch;
+    std::unique_ptr<weld::Toolbar> mxPositionBar;
+    std::unique_ptr<ToolbarUnoDispatcher> mxPositionBarDispatch;
+    std::unique_ptr<weld::Toolbar> mxSpacingBar;
+    std::unique_ptr<ToolbarUnoDispatcher> mxSpacingBarDispatch;
+
+    vcl::EnumContext maContext;
+};
+
+} // end of namespace svx::sidebar
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

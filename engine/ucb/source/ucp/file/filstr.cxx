@@ -1,0 +1,282 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <sal/config.h>
+
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <osl/diagnose.h>
+#include "filstr.hxx"
+#include "filerror.hxx"
+
+using namespace fileaccess;
+using namespace com::sun::star;
+
+/******************************************************************************/
+/*                                                                            */
+/*               XStream_impl implementation                                  */
+/*                                                                            */
+/******************************************************************************/
+
+XStream_impl::XStream_impl( const OUString& aUncPath, bool bLock )
+    : m_bInputStreamCalled( false ),
+      m_bOutputStreamCalled( false ),
+      m_aFile( aUncPath ),
+      m_nErrorCode( TaskHandlerErr::NO_ERROR ),
+      m_nMinorErrorCode( 0 )
+{
+    sal_uInt32 nFlags = ( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
+    if ( !bLock )
+        nFlags |= osl_File_OpenFlag_NoLock;
+
+    osl::FileBase::RC err = m_aFile.open( nFlags );
+    if(  err != osl::FileBase::E_None )
+    {
+        m_nIsOpen = false;
+        m_aFile.close();
+
+        m_nErrorCode = TaskHandlerErr::OPEN_FOR_STREAM;
+        m_nMinorErrorCode = err;
+    }
+    else
+        m_nIsOpen = true;
+}
+
+
+XStream_impl::~XStream_impl()
+{
+    try
+    {
+        closeStream();
+    }
+    catch (const io::IOException&)
+    {
+        OSL_FAIL("unexpected situation");
+    }
+    catch (const uno::RuntimeException&)
+    {
+        OSL_FAIL("unexpected situation");
+    }
+}
+
+
+uno::Reference< io::XInputStream > SAL_CALL
+XStream_impl::getInputStream(  )
+{
+    {
+        std::scoped_lock aGuard( m_aMutex );
+        m_bInputStreamCalled = true;
+    }
+    return uno::Reference< io::XInputStream >( this );
+}
+
+
+uno::Reference< io::XOutputStream > SAL_CALL
+XStream_impl::getOutputStream(  )
+{
+    {
+        std::scoped_lock aGuard( m_aMutex );
+        m_bOutputStreamCalled = true;
+    }
+    return uno::Reference< io::XOutputStream >( this );
+}
+
+
+void SAL_CALL XStream_impl::truncate()
+{
+    if (osl::FileBase::E_None != m_aFile.setSize(0))
+        throw io::IOException();
+
+    if (osl::FileBase::E_None != m_aFile.setPos(osl_Pos_Absolut,sal_uInt64(0)))
+        throw io::IOException();
+}
+
+
+// XStream_impl private non interface methods
+
+
+sal_Int32 SAL_CALL
+XStream_impl::readBytes(
+    uno::Sequence< sal_Int8 >& aData,
+    sal_Int32 nBytesToRead )
+{
+    if( ! m_nIsOpen )
+        throw io::IOException();
+
+    try
+    {
+        aData.realloc(nBytesToRead);
+    }
+    catch (const std::bad_alloc&)
+    {
+        if( m_nIsOpen ) m_aFile.close();
+        throw io::BufferSizeExceededException();
+    }
+
+    sal_uInt64 nrc(0);
+    if(m_aFile.read( aData.getArray(), sal_uInt64(nBytesToRead), nrc )
+       != osl::FileBase::E_None)
+    {
+        throw io::IOException();
+    }
+    if (nrc != static_cast<sal_uInt64>(nBytesToRead))
+        aData.realloc(nrc);
+    return static_cast<sal_Int32>(nrc);
+}
+
+sal_Int32
+XStream_impl::readSomeBytes(
+    sal_Int8* pData,
+    sal_Int32 nBytesToRead )
+{
+    if( ! m_nIsOpen )
+        throw io::IOException();
+
+    sal_uInt64 nrc(0);
+    if(m_aFile.read( pData, sal_uInt64(nBytesToRead), nrc )
+       != osl::FileBase::E_None)
+    {
+        throw io::IOException();
+    }
+    return static_cast<sal_Int32>(nrc);
+}
+
+sal_Int32 SAL_CALL
+XStream_impl::readSomeBytes(
+    uno::Sequence< sal_Int8 >& aData,
+    sal_Int32 nMaxBytesToRead )
+{
+    return readBytes( aData,nMaxBytesToRead );
+}
+
+
+void SAL_CALL
+XStream_impl::skipBytes( sal_Int32 nBytesToSkip )
+{
+    m_aFile.setPos( osl_Pos_Current, sal_uInt64( nBytesToSkip ) );
+}
+
+
+sal_Int32 SAL_CALL
+XStream_impl::available()
+{
+    sal_Int64 avail = getLength() - getPosition();
+    return std::min<sal_Int64>(avail, SAL_MAX_INT32);
+}
+
+
+void SAL_CALL
+XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
+{
+    sal_uInt32 length = aData.getLength();
+    if(length)
+    {
+        sal_uInt64 nWrittenBytes(0);
+        const sal_Int8* p = aData.getConstArray();
+        if(osl::FileBase::E_None != m_aFile.write(static_cast<void const *>(p),sal_uInt64(length),nWrittenBytes) ||
+           nWrittenBytes != length )
+            throw io::IOException();
+    }
+}
+
+
+void
+XStream_impl::closeStream()
+{
+    if( m_nIsOpen )
+    {
+        osl::FileBase::RC err = m_aFile.close();
+
+        if( err != osl::FileBase::E_None ) {
+            throw io::IOException(u"could not close file"_ustr);
+        }
+
+        m_nIsOpen = false;
+    }
+}
+
+void SAL_CALL
+XStream_impl::closeInput()
+{
+    std::scoped_lock aGuard( m_aMutex );
+    m_bInputStreamCalled = false;
+
+    if( ! m_bOutputStreamCalled )
+        closeStream();
+}
+
+
+void SAL_CALL
+XStream_impl::closeOutput()
+{
+    std::scoped_lock aGuard( m_aMutex );
+    m_bOutputStreamCalled = false;
+
+    if( ! m_bInputStreamCalled )
+        closeStream();
+}
+
+
+void SAL_CALL
+XStream_impl::seek( sal_Int64 location )
+{
+    if( location < 0 )
+        throw lang::IllegalArgumentException( u""_ustr, uno::Reference< uno::XInterface >(), 0 );
+    if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( location ) ) )
+        throw io::IOException();
+}
+
+
+sal_Int64 SAL_CALL
+XStream_impl::getPosition()
+{
+    sal_uInt64 uPos;
+    if( osl::FileBase::E_None != m_aFile.getPos( uPos ) )
+        throw io::IOException();
+    return sal_Int64( uPos );
+}
+
+sal_Int64 SAL_CALL
+XStream_impl::getLength()
+{
+    sal_uInt64 uEndPos;
+    if ( m_aFile.getSize(uEndPos) != osl::FileBase::E_None )
+            throw io::IOException();
+    return sal_Int64( uEndPos );
+}
+
+void SAL_CALL
+XStream_impl::flush()
+{}
+
+void XStream_impl::waitForCompletion()
+{
+    // At least on UNIX, to reliably learn about any errors encountered by
+    // asynchronous NFS write operations, without closing the file directly
+    // afterwards, there appears to be no cheaper way than to call fsync:
+    if (m_nIsOpen && m_aFile.sync() != osl::FileBase::E_None) {
+        throw io::IOException(
+            u"could not synchronize file to disc"_ustr,
+            getXWeak());
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

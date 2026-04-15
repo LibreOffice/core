@@ -1,0 +1,86 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+#define STR_MENU_HEADFOOTALL                        NC_("STR_MENU_HEADFOOTALL", "All" )
+#define STR_UPDATEDOC                               NC_("STR_UPDATEDOC", "~Update" )
+#define STR_CLOSEDOC_ANDRETURN                      NC_("STR_CLOSEDOC_ANDRETURN", "~Close & Return to " )
+#define STR_TOOLBAR_VISIBLE_BUTTONS                 NC_("STR_TOOLBAR_VISIBLE_BUTTONS", "Visible ~Buttons")
+#define STR_TOOLBAR_CUSTOMIZE_TOOLBAR               NC_("STR_TOOLBAR_CUSTOMIZE_TOOLBAR", "~Customize Toolbar...")
+#define STR_TOOLBAR_UNDOCK_TOOLBAR                  NC_("STR_TOOLBAR_UNDOCK_TOOLBAR", "U~ndock Toolbar" )
+#define STR_TOOLBAR_DOCK_TOOLBAR                    NC_("STR_TOOLBAR_DOCK_TOOLBAR", "~Dock Toolbar" )
+#define STR_TOOLBAR_DOCK_ALL_TOOLBARS               NC_("STR_TOOLBAR_DOCK_ALL_TOOLBARS", "Dock ~All Toolbars" )
+#define STR_TOOLBAR_LOCK_TOOLBAR                    NC_("STR_TOOLBAR_LOCK_TOOLBAR", "~Lock Toolbar Position" )
+#define STR_TOOLBAR_CLOSE_TOOLBAR                   NC_("STR_TOOLBAR_CLOSE_TOOLBAR", "Close ~Toolbar" )
+#define STR_SAVECOPYDOC                             NC_("STR_SAVECOPYDOC", "Save Copy ~as..." )
+#define STR_NODOCUMENT                              NC_("STR_NODOCUMENT", "No Documents")
+#define STR_CLEAR_RECENT_FILES                      NC_("STR_CLEAR_RECENT_FILES", "Clear List")
+#define STR_CLEAR_RECENT_FILES_HELP                 NC_("STR_CLEAR_RECENT_FILES_HELP", "Clears the list with the most recently opened files. This action can not be undone.")
+#define STR_TOGGLE_CURRENT_MODULE                   NC_("STR_TOGGLE_CURRENT_MODULE", "Current Module Only")
+#define STR_TOGGLE_CURRENT_MODULE_HELP              NC_("STR_TOGGLE_CURRENT_MODULE_HELP", "Shows only documents from the current module")
+#define STR_REMOTE_TITLE                            NC_("STR_REMOTE_TITLE", " (Remote)")
+#define STR_EMDASH_SEPARATOR                        NC_("STR_EMDASH_SEPARATOR", " — ")
+#define STR_SAFEMODE_TITLE                          NC_("STR_SAFEMODE_TITLE", " (Safe Mode)")
+#define STR_TOOLBAR_TITLE_ADDON                     NC_("STR_TOOLBAR_TITLE_ADDON", "Add-On %num%")
+#define STR_FULL_DISC_RETRY_BUTTON                  NC_("STR_FULL_DISC_RETRY_BUTTON", "Retry" )
+#define STR_FULL_DISC_MSG                           NC_("STR_FULL_DISC_MSG", "%PRODUCTNAME could not save important internal information due to insufficient free disk space at the following location:\n%PATH\n\nYou will not be able to continue working with %PRODUCTNAME without allocating more free disk space at that location.\n\nPress the 'Retry' button after you have allocated more free disk space to retry saving the data.\n\n" )
+#define STR_RESTORE_TOOLBARS                        NC_("STR_RESTORE_TOOLBARS", "~Reset" )
+#define STR_LOCK_TOOLBARS                           NC_("STR_LOCK_TOOLBARS", "~Lock Toolbars" )
+#define STR_CORRUPT_UICFG_SHARE                     NC_("STR_CORRUPT_UICFG_SHARE", "An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to reinstall the application." )
+#define STR_CORRUPT_UICFG_USER                      NC_("STR_CORRUPT_UICFG_USER", "An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to remove your user profile for the application." )
+#define STR_CORRUPT_UICFG_GENERAL                   NC_("STR_CORRUPT_UICFG_GENERAL", "An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to remove your user profile for the application first or try to reinstall the application." )
+#define STR_UNTITLED_DOCUMENT                       NC_("STR_UNTITLED_DOCUMENT", "Untitled" )
+// To translators: for displaying 'Multiple Languages' in the language statusbar control
+#define STR_LANGSTATUS_MULTIPLE_LANGUAGES           NC_("STR_LANGSTATUS_MULTIPLE_LANGUAGES", "Multiple Languages" )
+#define STR_LANGSTATUS_NONE                         NC_("STR_LANGSTATUS_NONE", "None (Do not check spelling)" )
+#define STR_RESET_TO_DEFAULT_LANGUAGE               NC_("STR_RESET_TO_DEFAULT_LANGUAGE", "Reset to Default Language" )
+#define STR_LANGSTATUS_MORE                         NC_("STR_LANGSTATUS_MORE", "More..." )
+#define STR_SET_LANGUAGE_FOR_PARAGRAPH              NC_("STR_SET_LANGUAGE_FOR_PARAGRAPH", "Set Language for Paragraph" )
+#define STR_LANGSTATUS_HINT                         NC_("STR_LANGSTATUS_HINT", "Text Language. Right-click to set character or paragraph language" )
+
+#define RID_STR_PROPTITLE_EDIT                      NC_("RID_STR_PROPTITLE_EDIT", "Text Box")
+#define RID_STR_PROPTITLE_CHECKBOX                  NC_("RID_STR_PROPTITLE_CHECKBOX", "Check Box")
+#define RID_STR_PROPTITLE_COMBOBOX                  NC_("RID_STR_PROPTITLE_COMBOBOX", "Combo Box")
+#define RID_STR_PROPTITLE_LISTBOX                   NC_("RID_STR_PROPTITLE_LISTBOX", "List Box")
+#define RID_STR_PROPTITLE_DATEFIELD                 NC_("RID_STR_PROPTITLE_DATEFIELD", "Date Field")
+#define RID_STR_PROPTITLE_TIMEFIELD                 NC_("RID_STR_PROPTITLE_TIMEFIELD", "Time Field")
+#define RID_STR_PROPTITLE_NUMERICFIELD              NC_("RID_STR_PROPTITLE_NUMERICFIELD", "Numeric Field")
+#define RID_STR_PROPTITLE_CURRENCYFIELD             NC_("RID_STR_PROPTITLE_CURRENCYFIELD", "Currency Field")
+#define RID_STR_PROPTITLE_PATTERNFIELD              NC_("RID_STR_PROPTITLE_PATTERNFIELD", "Pattern Field")
+#define RID_STR_PROPTITLE_FORMATTED                 NC_("RID_STR_PROPTITLE_FORMATTED", "Formatted Field")
+
+#define RID_STR_PROPTITLE_PUSHBUTTON                NC_("RID_STR_PROPTITLE_PUSHBUTTON", "Push Button")
+#define RID_STR_PROPTITLE_RADIOBUTTON               NC_("RID_STR_PROPTITLE_RADIOBUTTON", "Option Button")
+#define RID_STR_PROPTITLE_FIXEDTEXT                 NC_("RID_STR_PROPTITLE_FIXEDTEXT", "Label Field")
+#define RID_STR_PROPTITLE_GROUPBOX                  NC_("RID_STR_PROPTITLE_GROUPBOX", "Group Box")
+#define RID_STR_PROPTITLE_IMAGEBUTTON               NC_("RID_STR_PROPTITLE_IMAGEBUTTON", "Image Button")
+#define RID_STR_PROPTITLE_IMAGECONTROL              NC_("RID_STR_PROPTITLE_IMAGECONTROL", "Image Control")
+#define RID_STR_PROPTITLE_FILECONTROL               NC_("RID_STR_PROPTITLE_FILECONTROL", "File Selection")
+#define RID_STR_PROPTITLE_SCROLLBAR                 NC_("RID_STR_PROPTITLE_SCROLLBAR", "Scrollbar")
+#define RID_STR_PROPTITLE_SPINBUTTON                NC_("RID_STR_PROPTITLE_SPINBUTTON", "Spin Button")
+#define RID_STR_PROPTITLE_NAVBAR                    NC_("RID_STR_PROPTITLE_NAVBAR", "Navigation Bar")
+
+#define STR_QUERY_CLR_RECENTS_DOCS_TITLE            NC_("STR_QUERY_CLR_RECENTS_DOCS_TITLE", "Clear Recent Documents")
+#define STR_QUERY_CLR_RECENTS_DOCS_TEXT             NC_("STR_QUERY_CLR_RECENTS_DOCS_TEXT", "This is an irreversible operation.")
+#define STR_QUERY_CLR_RECENTS_DOCS_QUESTION         NC_("STR_QUERY_CLR_RECENTS_DOCS_QUESTION", "Do you want to clear all recent Documents?")
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

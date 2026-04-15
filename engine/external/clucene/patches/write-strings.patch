@@ -1,0 +1,22 @@
+--- src/contribs-lib/CLucene/analysis/PorterStemmer.cpp
++++ src/contribs-lib/CLucene/analysis/PorterStemmer.cpp
+@@ -94,7 +94,7 @@
+     return true;
+   }
+ 
+-  bool PorterStemmer::ends(TCHAR *s) {
++  bool PorterStemmer::ends(const TCHAR *s) {
+ 	size_t l = _tcslen(s);
+     size_t o = k-l+1;
+     if (o < k0)
+--- src/contribs-lib/CLucene/analysis/PorterStemmer.h
++++ src/contribs-lib/CLucene/analysis/PorterStemmer.h
+@@ -68,7 +68,7 @@
+   */
+    bool cvc(size_t i);
+ 
+-  bool ends(TCHAR *s);
++  bool ends(const TCHAR *s);
+ 
+   /* setto(s) sets (j+1),...k to the characters in the string s, readjusting
+      k. */

@@ -1,0 +1,104 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SVX_SOURCE_DIALOG_PAGE_HRC
+#define INCLUDED_SVX_SOURCE_DIALOG_PAGE_HRC
+
+#include <i18nutil/paper.hxx>
+#include <unotools/resmgr.hxx>
+#include <utility>
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+const std::pair<TranslateId, int> RID_SVXSTRARY_PAPERSIZE_STD[] =
+{
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "A6") , PAPER_A6 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "A5") , PAPER_A5 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "A4") , PAPER_A4 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "A3") , PAPER_A3 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "B6 (ISO)") , PAPER_B6_ISO },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "B5 (ISO)") , PAPER_B5_ISO },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "B4 (ISO)") , PAPER_B4_ISO },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "Letter") , PAPER_LETTER },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "Legal") , PAPER_LEGAL },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "Long Bond") , PAPER_FANFOLD_LEGAL_DE },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "Tabloid") , PAPER_TABLOID },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "B6 (JIS)") , PAPER_B6_JIS },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "B5 (JIS)") , PAPER_B5_JIS },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "B4 (JIS)") , PAPER_B4_JIS },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "16 Kai") , PAPER_KAI16},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "32 Kai") , PAPER_KAI32},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "Big 32 Kai") , PAPER_KAI32BIG},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "User") , PAPER_USER },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "DL Envelope") , PAPER_ENV_DL },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "C6 Envelope") , PAPER_ENV_C6 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "C6/5 Envelope") , PAPER_ENV_C65 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "C5 Envelope") , PAPER_ENV_C5 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "C4 Envelope") , PAPER_ENV_C4 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "#6¾ Envelope") , PAPER_ENV_PERSONAL},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "#7¾ (Monarch) Envelope") , PAPER_ENV_MONARCH},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "#9 Envelope") , PAPER_ENV_9},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "#10 Envelope") , PAPER_ENV_10},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "#11 Envelope") , PAPER_ENV_11},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "#12 Envelope") , PAPER_ENV_12},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "Japanese Postcard") , PAPER_POSTCARD_JP}
+};
+
+const std::pair<TranslateId, int> RID_SVXSTRARY_PAPERSIZE_DRAW[] =
+{
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "A6") , PAPER_A6 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "A5") , PAPER_A5 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "A4") , PAPER_A4 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "A3") , PAPER_A3 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "A2") , PAPER_A2 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "A1") , PAPER_A1 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "A0") , PAPER_A0 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "B6 (ISO)") , PAPER_B6_ISO },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "B5 (ISO)") , PAPER_B5_ISO },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "B4 (ISO)") , PAPER_B4_ISO },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Letter") , PAPER_LETTER },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Legal") , PAPER_LEGAL },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Long Bond") , PAPER_FANFOLD_LEGAL_DE },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Tabloid") , PAPER_TABLOID },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "B6 (JIS)") , PAPER_B6_JIS },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "B5 (JIS)") , PAPER_B5_JIS },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "B4 (JIS)") , PAPER_B4_JIS },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "16 Kai") , PAPER_KAI16},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "32 Kai") , PAPER_KAI32},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Big 32 Kai") , PAPER_KAI32BIG},
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "User") , PAPER_USER },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "DL Envelope") , PAPER_ENV_DL },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "C6 Envelope") , PAPER_ENV_C6 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "C6/5 Envelope") , PAPER_ENV_C65 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "C5 Envelope") , PAPER_ENV_C5 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "C4 Envelope") , PAPER_ENV_C4 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Dia Slide") , PAPER_SLIDE_DIA },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Screen 4:3") , PAPER_SCREEN_4_3 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Screen 16:9") , PAPER_SCREEN_16_9 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Screen 16:10") , PAPER_SCREEN_16_10 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Widescreen") , PAPER_WIDESCREEN },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "On-screen Show (4:3)") , PAPER_ONSCREENSHOW_4_3 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "On-screen Show (16:9)") , PAPER_ONSCREENSHOW_16_9 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "On-screen Show (16:10)") , PAPER_ONSCREENSHOW_16_10 },
+    { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Japanese Postcard") , PAPER_POSTCARD_JP}
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

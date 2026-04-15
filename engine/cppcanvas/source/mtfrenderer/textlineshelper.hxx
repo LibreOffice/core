@@ -1,0 +1,79 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <basegfx/vector/b2dsize.hxx>
+#include <cppcanvas/canvas.hxx>
+
+namespace com::sun::star::rendering
+{
+class XPolyPolygon2D;
+}
+
+namespace cppcanvastools
+{
+struct TextLineInfo;
+}
+
+namespace cppcanvas
+{
+namespace internal
+{
+struct OutDevState;
+
+class TextLinesHelper
+{
+    const CanvasSharedPtr mpCanvas;
+    css::uno::Reference<css::rendering::XPolyPolygon2D> mxOverline;
+    css::uno::Reference<css::rendering::XPolyPolygon2D> mxUnderline;
+    css::uno::Reference<css::rendering::XPolyPolygon2D> mxStrikeout;
+
+    ::basegfx::B2DSize maOverallSize;
+
+    bool mbIsOverlineColorSet;
+    const css::uno::Sequence<double> maOverlineColor;
+
+    bool mbIsUnderlineColorSet;
+    const css::uno::Sequence<double> maUnderlineColor;
+
+    bool mbOverlineWaveline;
+    bool mbUnderlineWaveline;
+
+    bool mbOverlineWavelineBold;
+    bool mbUnderlineWavelineBold;
+
+public:
+    TextLinesHelper(CanvasSharedPtr xCanvas, const OutDevState& rState);
+
+    ::basegfx::B2DSize const& getOverallSize() const { return maOverallSize; }
+
+    /** Init textlines with specified linewidth and TextLineInfo.
+     */
+    void init(double nLineWidth, const cppcanvastools::TextLineInfo& rLineInfo);
+
+    /** Fill the textlines with colors.
+        OutDevState::textUnderlineColor.
+
+        @param rRenderState
+        Used to invoke XCanvas::fillPolyPolygon.
+
+        @param bNormalText
+        Use overline color and underline color if the value is true, ignore those
+        colors otherwise ( typical case is to render the shadow ).
+     */
+    void render(const css::rendering::RenderState& rRenderState, bool bNormalText) const;
+};
+}
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

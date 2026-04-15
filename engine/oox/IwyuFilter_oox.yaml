@@ -1,0 +1,174 @@
+---
+assumeFilename: oox/source/export/drawingml.cxx
+excludelist:
+    oox/source/docprop/docprophandler.hxx:
+    # Needed for macro defines
+    - oox/token/namespaces.hxx
+    oox/source/core/contexthandler2.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    oox/source/core/fragmenthandler2.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    oox/source/core/xmlfilterbase.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XFastSAXSerializable.hpp
+    oox/source/crypto/DocumentEncryption.cxx:
+    # Actually used
+    - com/sun/star/io/XStream.hpp
+    oox/source/crypto/DocumentDecryption.cxx:
+    # Actually used
+    - com/sun/star/beans/NamedValue.hpp
+    - com/sun/star/io/XStream.hpp
+    oox/source/docprop/ooxmldocpropimport.cxx:
+    # Actually used
+    - com/sun/star/embed/XStorage.hpp
+    oox/source/docprop/docprophandler.cxx:
+    # Actually used
+    - boost/algorithm/string.hpp
+    oox/source/drawingml/drawingmltypes.cxx:
+    # Actually used
+    - com/sun/star/drawing/Hatch.hpp
+    - com/sun/star/xml/sax/XFastAttributeList.hpp
+    oox/source/drawingml/customshapeproperties.cxx:
+    # Actually used
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/drawing/XShape.hpp
+    oox/source/drawingml/lineproperties.cxx:
+    # Actually used
+    - com/sun/star/drawing/LineCap.hpp
+    - com/sun/star/drawing/LineJoint.hpp
+    - com/sun/star/drawing/LineStyle.hpp
+    oox/source/drawingml/shape.cxx:
+    # Actually used
+    - diagram/datamodel_oox.hxx
+    # Needed for direct member access
+    - com/sun/star/xml/dom/XDocument.hpp
+    oox/source/drawingml/textparagraph.cxx:
+    # Actually used
+    - com/sun/star/text/XText.hpp
+    - com/sun/star/text/XTextCursor.hpp
+    oox/source/drawingml/textparagraphproperties.cxx:
+    # Actually used
+    - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/style/ParagraphAdjust.hpp
+    oox/source/drawingml/textrun.cxx:
+    # Actually used
+    - com/sun/star/frame/XModel.hpp
+    oox/source/drawingml/chart/axisconverter.cxx:
+    # Actually used
+    - com/sun/star/chart2/XCoordinateSystem.hpp
+    oox/source/drawingml/chart/chartconverter.cxx:
+    # Actually used
+    - com/sun/star/chart2/XChartDocument.hpp
+    oox/source/drawingml/chart/converterbase.cxx:
+    # Actually used
+    - com/sun/star/chart2/XChartDocument.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    oox/source/drawingml/chart/titleconverter.cxx:
+    # Actually used
+    - com/sun/star/chart2/XDiagram.hpp
+    - com/sun/star/chart2/XTitled.hpp
+    oox/source/drawingml/chart/typegroupconverter.cxx:
+    # Actually used
+    - com/sun/star/chart2/XCoordinateSystem.hpp
+    oox/source/drawingml/diagram/diagram.cxx:
+    # Actually used
+    - com/sun/star/xml/dom/XDocument.hpp
+    oox/source/export/drawingml.cxx:
+    # Needed for template
+    - com/sun/star/text/XTextFrame.hpp
+    oox/source/export/vmlexport.cxx:
+    # Needed for template
+    - com/sun/star/text/XTextFrame.hpp
+    oox/source/helper/binarystreambase.cxx:
+    # Actually used
+    - com/sun/star/io/XSeekable.hpp
+    oox/source/helper/binaryinputstream.cxx:
+    # Actually used
+    - com/sun/star/io/XInputStream.hpp
+    - vector
+    oox/source/helper/binaryoutputstream.cxx:
+    # Actually used
+    - com/sun/star/io/XOutputStream.hpp
+    oox/source/helper/progressbar.cxx:
+    # Actually used
+    - com/sun/star/task/XStatusIndicator.hpp
+    oox/source/helper/modelobjecthelper.cxx:
+    # Actually used
+    - com/sun/star/drawing/LineDash.hpp
+    - com/sun/star/drawing/Hatch.hpp
+    - com/sun/star/drawing/PolyPolygonBezierCoords.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/graphic/XGraphic.hpp
+    oox/source/helper/propertyset.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    oox/source/helper/storagebase.cxx:
+    # Actually used
+    - com/sun/star/io/XStream.hpp
+    oox/source/helper/zipstorage.cxx:
+    # Actually used
+    - com/sun/star/embed/XStorage.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    oox/source/helper/propertymap.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    oox/source/mathml/importutils.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XFastAttributeList.hpp
+    oox/source/ole/oleobjecthelper.cxx:
+    # Actually used
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    oox/source/ole/vbamodule.cxx:
+    # Actually used
+    - com/sun/star/container/XNameContainer.hpp
+    oox/source/ole/olestorage.cxx:
+    # Actually used
+     - com/sun/star/uno/XComponentContext.hpp
+    oox/source/ole/olehelper.cxx:
+    # Actually used
+     - com/sun/star/frame/XModel.hpp
+     - com/sun/star/awt/Size.hpp
+     - com/sun/star/uno/XComponentContext.hpp
+    oox/source/ole/vbaproject.cxx:
+    # Actually used
+     - com/sun/star/frame/XModel.hpp
+     - com/sun/star/uno/XComponentContext.hpp
+    oox/source/ole/vbacontrol.cxx:
+    # Actually used
+     - com/sun/star/uno/XComponentContext.hpp
+    oox/source/ppt/pptshape.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    - com/sun/star/drawing/XDrawPage.hpp
+    oox/source/ppt/presPropsfragmenthandler.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    oox/source/ppt/slidepersist.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    oox/source/ppt/slidetransition.cxx:
+    # Actually used
+    - com/sun/star/animations/XTransitionFilter.hpp
+    oox/source/shape/ShapeFilterBase.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    oox/source/shape/ShapeContextHandler.cxx:
+    # Actually used
+    - com/sun/star/xml/dom/XDocument.hpp
+    oox/source/token/propertynames.cxx:
+    # Auto-generated C array of property names
+    - propertynames.inc
+    oox/source/token/relationship.cxx:
+    # Auto-generated C array of relationship names
+    - relationship.inc
+    oox/source/token/namespacemap.cxx:
+    # Auto-generated C array of transitional and strict namespace names
+    - namespacenames.inc
+    - namespaces-strictnames.inc
+    oox/source/vml/vmlinputstream.cxx:
+    # Needed for direct member access
+    - com/sun/star/io/XTextInputStream2.hpp

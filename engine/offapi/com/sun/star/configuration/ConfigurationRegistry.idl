@@ -1,0 +1,86 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module configuration {
+
+
+
+/*  provides access to a configuration tree as a registry.
+
+    <p>This service is deprecated,
+    com.sun.star.configuration::ConfigurationProvider should
+    be used instead.</p>
+
+    <p> Using the com::sun::star::registry::XSimpleRegistry
+    interface, the service can be bound to a subtree within the
+    configuration tree, as provided by an
+    com.sun.star.configuration::ConfigurationProvider
+    service, which must be accessible from the service factory you use for the
+    creation of this service.
+    </p>
+    <p> There are some restrictions when accessing a configuration tree using a registry.
+    Most of them are implications of the fact that a configuration tree is very static in
+    it's structure. Removal and addition of sub nodes is allowed only for special
+    nodes, and even then the new elements have to comply to a given scheme (which is some
+    kind of attribute of the container node). So for instance the
+    com.sun.star.registry::XRegistryKey::createKey() method is not allowed
+    for some nodes.
+    </p><p>
+    Thus anybody using this service is strongly advised to read and understand the specification
+    of a configuration provider (com.sun.star.configuration::ConfigurationProvider)
+    and all of its aspects.
+    </p>
+
+    @version 1.0 2000/07/06
+*/
+
+published service ConfigurationRegistry
+{
+    /** controls the binding of the object to a configuration sub tree.
+        <p>com::sun::star::registry::XSimpleRegistry::open()
+        is used to open a special subtree within the configuration tree.
+        </p>
+        <p>The parameters of this method control the location of the root of the to-be-opened
+        configuration node and the access mode (read only or updatable).
+        </p>
+    */
+    interface com::sun::star::registry::XSimpleRegistry;
+
+    /** is used to commit changes to the configuration.
+        <p>As specified for the
+        com::sun::star::configuration::ConfigurationUpdateAccess
+        service, all changes made to a configuration subtree have to be committed
+        before they become persistent.
+        To do this for a configuration accessed as a registry, call
+        com::sun::star::util::XFlushable::flush().
+        </p>
+        <p><strong>Warning:</strong><em>Changes that are not flushed will be
+        lost.</em>
+        </p>
+    */
+    interface com::sun::star::util::XFlushable;
+};
+
+
+
+}; }; }; };
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

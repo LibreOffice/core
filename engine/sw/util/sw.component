@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="lo.writer.NavElementToolBoxController"
+      constructor="lo_writer_NavElementToolBoxController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="lo.writer.PreviousScrollToolboxController"
+      constructor="lo_writer_PreviousScrollToolboxController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="lo.writer.NextScrollToolboxController"
+      constructor="lo_writer_NextScrollToolboxController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="SwXAutoTextContainer"
+      constructor="SwXAutoTextContainer_get_implementation">
+    <service name="com.sun.star.text.AutoTextContainer"/>
+  </implementation>
+  <implementation name="SwXMailMerge"
+      constructor="SwXMailMerge_get_implementation">
+    <service name="com.sun.star.sdb.DataAccessDescriptor"/>
+    <service name="com.sun.star.text.MailMerge"/>
+  </implementation>
+  <implementation name="lo.writer.MMCurrentEntryController"
+      constructor="lo_writer_MMCurrentEntryController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+    <optional/>
+  </implementation>
+  <implementation name="lo.writer.MMExcludeEntryController"
+      constructor="lo_writer_MMExcludeEntryController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+    <optional/>
+  </implementation>
+  <implementation name="lo.writer.PageSizeToolBoxControl"
+    constructor="lo_writer_PageSizeToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="lo.writer.PageColumnToolBoxControl"
+    constructor="lo_writer_PageColumnToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="lo.writer.PageMarginToolBoxControl"
+    constructor="lo_writer_PageMarginToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="lo.writer.PageOrientationToolBoxControl"
+    constructor="lo_writer_PageOrientationToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="SwXModule"
+      constructor="SwXModule_get_implementation">
+    <service name="com.sun.star.text.GlobalSettings"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.FilterOptionsDialog"
+      constructor="com_sun_star_comp_Writer_FilterOptionsDialog_get_implementation">
+    <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.GlobalDocument"
+      constructor="com_sun_star_comp_Writer_GlobalDocument_get_implementation">
+    <service name="com.sun.star.text.GlobalDocument"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.TextDocument"
+    constructor="Writer_SwTextDocument_get_implementation">
+    <service name="com.sun.star.text.TextDocument"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.WebDocument"
+      constructor="com_sun_star_comp_Writer_WebDocument_get_implementation">
+    <service name="com.sun.star.text.WebDocument"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.WriterModule"
+      constructor="com_sun_star_comp_Writer_WriterModule_get_implementation">
+    <service name="com.sun.star.text.ModuleDispatcher"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLContentExporter"
+      constructor="com_sun_star_comp_Writer_XMLContentExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLContentExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLExporter"
+      constructor="com_sun_star_comp_Writer_XMLExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLMetaExporter"
+      constructor="com_sun_star_comp_Writer_XMLMetaExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLMetaExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisContentExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisContentExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisContentImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisContentImporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisImporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisImporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisMetaExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisMetaExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisMetaImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisMetaImporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisSettingsExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisSettingsExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisSettingsImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisSettingsImporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisStylesExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisStylesExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisStylesImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisStylesImporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLSettingsExporter"
+      constructor="com_sun_star_comp_Writer_XMLSettingsExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLSettingsExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLStylesExporter"
+      constructor="com_sun_star_comp_Writer_XMLStylesExporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLStylesExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.util.comp.FinalThreadManager"
+      constructor="com_sun_star_util_comp_FinalThreadManager_get_implementation">
+    <service name="com.sun.star.util.JobManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.IndexingExportFilter"
+      constructor="com_sun_star_comp_Writer_IndexingExportFilter_get_implementation">
+    <service name="com.sun.star.comp.Writer.IndexingExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.LayoutDump"
+      constructor="com_sun_star_comp_Writer_LayoutDump_get_implementation">
+    <service name="com.sun.star.comp.Writer.LayoutDump"/>
+  </implementation>
+  <implementation name="org.apache.openoffice.comp.sw.sidebar.SwPanelFactory"
+      constructor="org_apache_openoffice_comp_sw_sidebar_SwPanelFactory_get_implementation">
+    <service name="com.sun.star.ui.UIElementFactory"/>
+  </implementation>
+</component>

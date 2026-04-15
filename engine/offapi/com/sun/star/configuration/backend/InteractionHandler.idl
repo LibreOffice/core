@@ -1,0 +1,86 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star {
+    module lang { published interface XInitialization; };
+    module task { published interface XInteractionHandler; };
+}; }; };
+
+module com { module sun { module star { module configuration { module backend {
+
+/** An interaction request handler that lets the user handle a number of well
+    known requests via GUI dialogs.
+
+    <P>The well known requests handled by this service include
+    <UL>
+        <LI>MergeRecoveryRequest*</LI>
+    </UL>
+    The requests marked with an asterisk are only handled if (a) their
+    continuations match certain restrictions (see below), and (b) the
+    necessary resource strings are available (this can be exploited by
+    applications that carry only a subset of all resource files with
+    them).</P>
+
+    <P>The continuation restrictions are as follows:  Let <VAR>C</VAR> be the
+    subset of the provided continuations that are of type
+    com::sun::star::task::XInteractionApprove,
+    com::sun::star::task::XInteractionDisapprove,
+    com::sun::star::task::XInteractionRetry, or
+    com::sun::star::task::XInteractionAbort (or of a
+    derived type).  All other continuations are ignored for these requests.
+    The request is only handled if the set <VAR>C</VAR> is any of the
+    following:
+    <UL>
+        <LI>Abort</LI>
+        <LI>Retry, Abort</LI>
+        <LI>Approve</LI>
+        <LI>Approve, Abort</LI>
+        <LI>Approve, Disapprove</LI>
+        <LI>Approve, Disapprove, Abort</LI>
+    </UL></P>
+
+    @see com::sun::star::task::InteractionHandler
+ */
+published service InteractionHandler
+{
+    /** Handle an interaction request.
+     */
+    interface com::sun::star::task::XInteractionHandler;
+
+    /** Initialize the interaction handler.
+
+        <P>The arguments must be a sequence of
+        com::sun::star::beans::PropertyValues.  The
+        currently supported properties are:
+        <UL>
+            <LI><code>"Parent"</code> of type
+            com::sun::star::awt::XWindow denotes the
+            parent window for any GUI dialogs the interaction handler pops up;
+            it is strongly recommended that this property is supplied;</LI>
+            <LI><code>"Context"</code> of type `string` is a
+            textual description of the current context (used, e.g., as a first
+            line of text in error boxes); this property is optional.</LI>
+        </UL></P>
+     */
+    interface com::sun::star::lang::XInitialization;
+};
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

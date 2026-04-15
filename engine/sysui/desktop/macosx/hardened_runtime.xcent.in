@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <!-- AppleScript support -->
+        <key>com.apple.security.automation.apple-events</key>
+        <true/>
+        <!-- Needed for our C++/binary UNO bridge runtime machine code generation: -->
+        <key>com.apple.security.cs.allow-jit</key>
+        <true/>
+        <!-- Needed for our C++/binary UNO bridge runtime machine code generation on old macOS that
+             reject mmap MAP_JIT (macOS <= 10.13?); and for in-process JVM: -->
+        <key>com.apple.security.cs.disable-executable-page-protection</key>
+        <true/>
+        <!-- allow use of third-party plugins/frameworks (aka Java) -->
+        <key>com.apple.security.cs.disable-library-validation</key>
+        <true/>
+        <!-- Allow Base to import data from Address Book -->
+        <key>com.apple.security.personal-information.addressbook</key>
+        <true/>
+        @GET_TASK_ALLOW_ENTITLEMENT@
+    </dict>
+</plist>

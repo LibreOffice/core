@@ -1,0 +1,70 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include <osl/file.h>
+#include <sys/types.h>
+#include <rtl/string.hxx>
+
+struct DirectoryItem_Impl
+{
+    OString       m_strFilePath;       /* holds native file name */
+    sal_Int32     m_RefCount;
+    unsigned char m_DType;
+
+    explicit DirectoryItem_Impl(
+        OString strFilePath, unsigned char DType = 0);
+    ~DirectoryItem_Impl();
+
+    void acquire(); /* @see osl_acquireDirectoryItem() */
+    void release(); /* @see osl_releaseDirectoryItem() */
+
+    oslFileType getFileType() const;
+};
+
+/**
+   Determine if the passed in path is not contained inside
+   the allowed paths, or if no allowed paths are set it
+   will not forbid any access.
+
+   @param[in] filePath
+   A URL (or path) that we want to check if it is forbidden
+   to access.
+
+   @param[in] nFlags
+   Flags to determine what type of access is requested,
+   osl_File_OpenFlag_Read | Write, or 0x80 for 'execute'.
+
+   This method is Unix specific.
+
+   @see setAllowedPaths in sal/inc/setallowedpaths.hxx
+*/
+bool isForbidden(const OString &filePath, sal_uInt32 nFlags);
+
+oslFileError openFile(
+    rtl_uString * pustrFileURL, oslFileHandle * pHandle, sal_uInt32 uFlags,
+    mode_t mode);
+
+oslFileError openFilePath(
+    const OString& filePath,
+    oslFileHandle* pHandle,
+    sal_uInt32 uFlags, mode_t mode );
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,29 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include <sal/config.h>
+
+#include <opencl/opencldllapi.h>
+
+#include <comphelper/crashzone.hxx>
+
+class OPENCL_DLLPUBLIC OpenCLZone : public CrashZone<OpenCLZone>
+{
+public:
+    static void hardDisable();
+};
+
+// Used during initial testing of OpenCL.
+class OPENCL_DLLPUBLIC OpenCLInitialZone : public CrashZone<OpenCLInitialZone>
+{
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

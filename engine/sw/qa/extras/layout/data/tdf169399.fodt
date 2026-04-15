@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:style style:name="Frame" style:family="graphic"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="115%"/>
+  </style:style>
+  <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
+   <style:graphic-properties style:wrap="none" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="from-left" style:horizontal-rel="paragraph-content" fo:border="0.06pt solid #000000"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="210mm" fo:page-height="297mm" style:print-orientation="portrait" fo:margin-top="15mm" fo:margin-bottom="1cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p>p1</text:p>
+   <text:p><draw:frame draw:style-name="fr1" draw:name="Frame1" text:anchor-type="paragraph" svg:x="0" svg:y="0" svg:width="5cm" svg:height="78mm">
+     <draw:text-box/>
+    </draw:frame>p2</text:p>
+   <text:section text:name="Section1">
+    <text:p>p3</text:p>
+   </text:section>
+   <text:p>p4</text:p>
+   <text:section text:name="Section2">
+    <text:p>p5</text:p>
+   </text:section>
+   <text:section text:name="Section3">
+    <text:p>p6</text:p>
+   </text:section>
+   <text:p>p7</text:p>
+   <text:section text:name="Section4">
+    <text:p text:style-name="P1">p8<text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/></text:p>
+    <text:section text:name="Section5">
+     <text:p>p9 must be on page 1</text:p>
+     <text:p>p10</text:p>
+    </text:section>
+   </text:section>
+  </office:text>
+ </office:body>
+</office:document>

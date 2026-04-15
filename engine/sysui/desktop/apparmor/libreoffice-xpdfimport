@@ -1,0 +1,34 @@
+# ------------------------------------------------------------------
+#
+#    Copyright (C) 2016 Canonical Ltd.
+#    Copyright (C) 2017 Software in the Public Interest, Inc.
+#
+#    This Source Code Form is subject to the terms of the Mozilla Public
+#    License, v. 2.0. If a copy of the MPL was not distributed with this
+#    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+#    Authors: Bryan Quigley <bryan.quigley@canonical.com>
+#             Rene Engelhard <rene@debian.org>
+#
+# ------------------------------------------------------------------
+
+@{libo_inst_dir} = @INSTDIR@
+
+include <tunables/global>
+
+profile libreoffice-xpdfimport @{libo_inst_dir}/program/xpdfimport {
+  include <abstractions/base>
+  include <abstractions/user-tmp>
+
+  /usr/share/poppler/**     r,
+  /usr/share/libreoffice/share/config/* r,
+  owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
+
+  @{libo_inst_dir}/program/xpdfimport pxm,
+
+  #Uncomment for build testing (should be one directory <- of instdir)
+  #/mnt/store/git/libo/**    r,
+
+  # Site-specific additions and overrides. See local/README for details.
+  include if exists <local/libreoffice-xpdfimport>
+}

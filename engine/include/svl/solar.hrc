@@ -1,0 +1,96 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SVL_SOLAR_HRC
+#define INCLUDED_SVL_SOLAR_HRC
+
+// defines ------------------------------------------------------------------
+
+#define OWN_ATTR_VALUE_START                    3900
+#define OWN_ATTR_VALUE_END                      4020
+
+#define RID_LIB_START               10000
+#define RID_LIB_END                 19999
+
+#define RID_SVX_START               (RID_LIB_START)
+//      RID_SVX_END                 (RID_LIB_START+499)
+
+#define RID_OFA_START               (RID_LIB_START+6900)
+//      RID_OFA_END                 (RID_LIB_START+7399)
+
+// do *NOT* add more ranges here, RID_LIB_END is (RID_LIB_START + 10000)
+
+#define RID_APP_START               20000
+//      RID_APP_END                 31999
+
+#define RID_SW_START                            (20000)
+//      RID_SW_END                              (25999)
+
+// free: 26000-28199
+
+// Help-Ids --------------------------------------------------------------
+
+#define HID_START                   32768
+
+#define HID_SC_START                (HID_START+25000)
+//      HID_SC_END                  (HID_START+26999)
+
+#define HID_SD_START                (HID_START+27000)
+//      HID_SD_END                  (HID_START+27999)
+
+// Slot Ids
+
+#define SID_SFX_START                5000
+//      SID_SFX_END                  8999
+#define SID_DOCKWIN_START            9800
+//      SID_DOCKWIN_END              9999
+
+#define SID_LIB_START               10000
+//      SID_LIB_END                 19999
+// free: 20000-29999
+#define SID_OBJ_START               30000
+
+#define SID_SW_START                20000
+//      SID_SW_END                  25999
+#define SID_SC_START                26000
+//      SID_SC_END                  26999
+#define SID_SD_START                27000
+//      SID_SD_END                  27999
+
+#define SID_SMA_START               (SID_OBJ_START + 256)
+//      SID_SMA_END                 (SID_OBJ_START + 511)
+#define SID_BASICIDE_START          (SID_OBJ_START + 768)
+//      SID_BASICIDE_END            (SID_BASICIDE_START + 255)
+
+#define SID_SVX_START               SID_LIB_START               // 10000
+#define SID_SVX_END                 (SID_SVX_START + 1499)
+#define SID_EDIT_START              (SID_SVX_END + 1)           // 11500
+#define SID_EDIT_END                (SID_EDIT_START + 499)
+#define SID_OPTIONS_START           (SID_EDIT_END + 1)          // 12000
+#define SID_OPTIONS_END             (SID_OPTIONS_START + 100)
+#define SID_SBA_START               (SID_OPTIONS_END + 1)       // 12101
+#define SID_SBA_END                 (SID_SBA_START + 149)
+#define SID_DBACCESS_START          (SID_SBA_END + 1)           // 12251
+#define SID_DBACCESS_END            (SID_DBACCESS_START + 200)
+#define SID_RPTUI_START             (SID_DBACCESS_END + 1)      // 12452
+//      SID_RPTUI_END               (SID_RPTUI_START + 199)
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

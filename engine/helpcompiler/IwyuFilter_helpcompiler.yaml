@@ -1,0 +1,18 @@
+---
+assumeFilename: helpcompiler/source/HelpCompiler.cxx
+excludelist:
+    helpcompiler/inc/HelpCompiler.hxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    helpcompiler/source/LuceneHelper.hxx:
+    # Better to keep the generic header, MSVC problem
+    - CLucene.h
+    helpcompiler/source/HelpIndexer.cxx:
+    # Better to keep the generic, details are order-sensitive
+    - CLucene.h
+    helpcompiler/source/HelpSearch.cxx:
+    # Better to keep the generic, details are order-sensitive
+    - CLucene.h
+    helpcompiler/source/HelpLinker.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx

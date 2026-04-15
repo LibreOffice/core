@@ -1,0 +1,196 @@
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+
+# Format:
+
+# Start
+# scpModule
+# shellscript file (optional)
+# solarispackagename
+# solarisrequires (optional)
+# solarisprovides (optional)
+# packagename
+# linuxreplaces (optional)
+# requires (optional)
+# provides (optional)
+# copyright
+# vendor
+# description
+# destpath
+# End
+
+Start
+module = "gid_Module_Langpack_Basis"
+solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+solarisrequires = "%BASISPACKAGEPREFIX-core"
+packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX-core"
+End
+
+Start
+module = "gid_Module_Langpack_Fonts"
+solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-fonts"
+solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-fonts"
+provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-fonts"
+requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Language fonts module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX-core"
+End
+
+Start
+module = "gid_Module_Langpack_Resource"
+solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-res"
+solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-res"
+provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-res"
+requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Language resource module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX-core"
+End
+
+Start
+module = "gid_Module_Langpack_Writer"
+solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-writer"
+solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-writer"
+provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-writer"
+requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Writer language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX-writer"
+End
+
+Start
+module = "gid_Module_Langpack_Calc"
+solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-calc"
+solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-calc"
+provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-calc"
+requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Calc language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX-calc"
+End
+
+Start
+module = "gid_Module_Langpack_Impress"
+solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-impress"
+solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-impress"
+provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-impress"
+requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Impress language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX-impress"
+End
+
+Start
+module = "gid_Module_Langpack_Draw"
+solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-draw"
+solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-draw"
+provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-draw"
+requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Draw language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX-draw"
+End
+
+Start
+module = "gid_Module_Langpack_Math"
+solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-math"
+solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-math"
+provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-math"
+requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Math language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX-math"
+End
+
+Start
+module = "gid_Module_Langpack_Base"
+solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-base"
+solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-base"
+provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-base"
+requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Base language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX-base"
+End
+
+Start
+module = "gid_Module_Langpack_Onlineupdate"
+solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-onlineupd"
+solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-onlineupd"
+provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-onlineupd"
+requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Online update language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX-onlineupdate"
+End
+

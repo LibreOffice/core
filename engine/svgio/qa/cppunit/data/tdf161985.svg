@@ -1,0 +1,14 @@
+<svg viewBox="0 0 630 550" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+     #help { font-size:12px; }
+  </style>
+  <g>
+    <g id="help" opacity="0">
+      <path
+         d="M16 50 c-16 0 -16 -8 -16 -16 v-18 c0 -16 8 -16 16 -16 h300 c16 0 16 5 16 16 v18 c0 16 -8 16 -16 16 H60 L0 70 L36 50 H16"/>
+    </g>
+    <text>
+        <tspan x="101.0625" y="222.22849">This is a test file.</tspan>
+    </text>
+  </g>
+</svg>

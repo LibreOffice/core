@@ -1,0 +1,146 @@
+@CT 1
+@LM 5
+@RM 75
+@PL 60
+@TB -----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T-----T
+@MT 0
+@MB 2
+@PO 1
+@PN 1
+@LH 6
+
+
+      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      ³          Textovì  editor Text602          ³
+      ³                                                               ³
+      ³                           verze: 3.00                         ³
+      ³                                                               ³
+      ³                    Software602, spol. s r.o.                  ³
+      ³                                                               ³
+      ³                          Pod pramenem 3,                      ³
+      ³                          Praha 4, Nusle                       ³
+      ³                                                               ³
+      ³  Objedn vky ................. P.O.Box 1, 140 00  Praha 4      ³
+      ³  Prodejny :                                                   ³
+      ³               Praha 1, Sp len  19     (Po-P   9,00-17,00)     ³
+      ³               Praha 1, Biskupskì Dv…r (Po-P  10,00-18,00)     ³
+      ³                                                               ³
+      ³  éstıedna :    (02)423817      nebo           (02)421368      ³
+      ³                                                               ³
+      ³  Hotline a z znam hovor… v mimopracovn¡ dobØ                  ³
+      ³                                                               ³
+      ³                (02)422506      nebo           (02)420905      ³
+      ³                                                               ³
+      ³  Fax :         (02)421105      Mail602 :      (02)420448      ³
+      ³                                                               ³
+      ³  Expedice :    (02)421517                                     ³
+      ³                                                               ³
+      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+    Textovì editor Text602 verze 3.00 je souŸ st¡ dvou obchodn¡ch produkt…:
+
+                     - Text602 verze 3.00
+                     - Text602 KOMPLET
+
+    Doplåuj¡c¡ komponenty KOMPLETU jsou pops ny v kapitol ch informaŸn¡ho
+    souboru CTI_KOMP.602. SouŸ st¡ standardn¡ dod vky jsou v§dy tyto soubo­
+    ry:
+
+     o T602.EXE, T602.KLV
+    ExekuŸn¡ soubor editoru Text602 a pıipraven‚ kl vesnice KL8 a KL9 pro
+    pı¡padnou redefinici.
+
+     o T602.HLP
+    Soubor s n povØdou pro Text602.
+
+     o *.FNT
+    Soubory font… pro standardn¡ grafick‚ drivery dev¡ti a Ÿtyıiadvaceti­
+    jehliŸkovìch maticovìch tisk ren v kvalitØ: DRAFT, NLQ, LQ a pro trys­
+    kov‚ a laserov‚ tisk rny.
+
+     o *.DST
+    DefiniŸn¡ soubory pro tisk rny. Podrobnì pıehled a popis vlastnost¡ DST
+    soubor… najdete v informaŸn¡m souboru CTI_MATD.602.
+
+     o PREVIEW.DST
+    DefiniŸn¡ soubor pro tisk zrcadlov‚ho obrazu tiskov‚ str nky (A4) na
+    obrazovku.
+
+     o FAX.DST
+    DefiniŸn¡ soubor pro vìstup do faxov‚ho souboru.
+
+     o SLOV.MNU
+    Soubor pro slovensk  menu (aktivuje se pı¡kazem  T602 /SLOV.MNU).
+
+     o HC602.COM, PCXTF602.EXE, LOGO602.TIF
+    Program na sn¡m n¡ obsahu obrazovky a ukl d n¡ do soubor… ve form tu
+    TIFF. Pıevodn¡ program pro obr zky ulo§en‚ ve form tu PCX (napı.
+    z programu PaintBrush (Windows)) do form tu TIFF. Jako vzor je pıilo§en
+    soubor LOGO602.TIF, kterì obsahuje znak naç¡ firmy
+
+    Vçechny soubory jsou dod v ny v komprimovan‚ podobØ a je nutn‚ je in­
+    stalovat pomoc¡ programu INST602 (viz soubor CTI_1111.602).
+@LH 3
+
+@LH 6
+ZmØny a doplåky k manu lu
+
+    - spouçtØc¡ pı¡kaz  rezidentnØ instalovan‚ho programu  HC602 byl zmØnØn
+    z povelu <Ctrl O><L> na <Ctrl Alt><O>.
+
+    - pıi tisku v¡ce kopi¡ je mo§nost zvolit re§im "SpojitØ" nebo "Po
+      str nk ch". Bli§ç¡ informace najdete v n povØdØ k pı¡kazu poŸet
+      Kopi¡.
+
+    - Ka§d  kl vesnice si "pamatuje" polohu pıep¡naŸe Z > Y. Pıep¡naŸ se
+      nastav¡ podle polohy, kterou mØl naposledy pıi pou§it¡ t‚ kter‚ kl ­
+      vesnice. N povØda k rozlo§en¡ kl ves je zobrazena v§dy pro standardn¡
+    tvar; t.j. bez prohozen¡ "Z" a "Y".
+
+    - Vedle  programu HC602  (Orion)  je  zaıazena dalç¡  grafick  utilita:
+      program PCXTF602. Program je urŸen  ke konverzi soubor… obsahuj¡c¡ch
+      obrazov‚ informace ve form tu PCX do form tu TIFF. Program se spouçt¡
+      z pı¡kazov‚ ı dky operaŸn¡ho syst‚mu:
+
+           PCXTF602 PCX_SOUBOR TIFF_SOUBOR [/B|/C]
+
+      parametr /B znamen  b¡l‚ pozad¡ (default), /C znamen  Ÿern‚ pozad¡.
+
+    - Editor umo§åuje naŸ¡st soubory oznaŸen‚ atributem Read Only. Tyto
+      soubory jsou indikov ny hvØzdiŸkou, zobrazenou pıed n zvem souboru.
+      Soubor m…§ete pouze prohl¡§et, nem…§ete jej vçak ulo§it ! Pokud jste
+      vçak ji§ v souboru provedli "nenahraditeln‚" £pravy a t‚ hvØzdiŸky
+      jste si vçimli a§ pozdØ, porad¡me v m malì trik: oznaŸte text jako
+      blok a ulo§te jej do nov‚ho souboru.
+
+    - Pokud spust¡te Preview kl vesovìm povelem <Ctrl PrtScr>, ukazuje
+      aktu ln¡ str nku textu. Spust¡te-li jej pı¡kazem Preview z menu Tisk,
+      ukazuje str nky zvolen‚ pı¡kazy Od str nky a Do str nky.
+
+    - Budete-li cht¡t V ç Text602 trvale pou§¡vat ve slovensk‚m re§imu,
+      zadejte pı¡kaz:
+
+                 COPY /B T602.EXE + SLOV.MNU  T602.EXE
+
+@LH 3
+
+@LH 6
+Reklamace
+
+     Opr vnØn‚ reklamace budou vyı¡zeny vìmØnnìm zp…sobem. VymØåuje se z ­
+    sadnØ celì komplet dod vky (bez manu lu). Pıi telefonickìch dotazech
+    z sadnØ uv dØjte verzi editoru (3.00), sv‚ s‚riov‚ Ÿ¡slo (uveden‚ na
+    obalu diskety), pı¡padnØ verzi instalaŸn¡ho programu. Pıev §n  vØtçina
+    reklamac¡ je zp…sobena nekompatibilitou disketovìch mechanik. Pıi prv­
+    n¡m ne£spØchu proto nejprve zkuste instalovat z jin‚ disketov‚ mechani­
+    ky nebo na jin‚m zaı¡zen¡. Pıed prvn¡m spuçtØn¡m instalaŸn¡ch disket je
+    zajistØte proti pıepisu a tedy i zavirov n¡ (zalepte nebo u 3.5" pıe­
+    suåte çoup tko do "otevıen‚" polohy).
+
+    Pıi probl‚mech s instalac¡ (je hl çena hardwarov  chyba apod.) je (pod­
+    le naçich zkuçenost¡) mo§n‚ usuzovat na n kazu poŸ¡taŸe virem. Nepokra­
+    Ÿujte  v dalç¡  pr ci bez  d…kladn‚ho otestov n¡  vçech diskovìch m‚di¡
+    a pamØti poŸ¡taŸe !!!!!
+.ENDTEXT
+.STOP

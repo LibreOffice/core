@@ -1,0 +1,178 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/geometry/RealSize2D.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+
+#include <svx/svdundo.hxx>
+#include <svx/svxdllapi.h>
+
+#include <com/sun/star/office/XAnnotation.hpp>
+#include <comphelper/compbase.hxx>
+#include <cppuhelper/propertysetmixin.hxx>
+#include <svx/annotation/TextAPI.hxx>
+#include <tools/UniqueID.hxx>
+#include <vcl/bitmap.hxx>
+
+class SdrUndoAction;
+class SfxViewShell;
+class SdrPage;
+
+namespace sdr::annotation
+{
+class Annotation;
+
+/** Type of the annotation / comment change. */
+enum class CommentNotificationType
+{
+    Add,
+    Modify,
+    Remove
+};
+
+/** Kit notify for a view */
+SVXCORE_DLLPUBLIC void KitCommentNotify(CommentNotificationType nType,
+                                        const SfxViewShell* pViewShell, Annotation& rAnnotation);
+
+/** Kit notify for all views */
+SVXCORE_DLLPUBLIC void KitCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation);
+
+/** Type of the annotation (that is supported) */
+enum class AnnotationType
+{
+    None,
+    Square,
+    Polygon,
+    Circle,
+    Ink,
+    Highlight,
+    Line,
+    FreeText,
+    Stamp
+};
+
+/** Annotation data that is used at annotation creation */
+struct CreationInfo
+{
+    AnnotationType meType = AnnotationType::None;
+
+    std::vector<basegfx::B2DPolygon> maPolygons;
+    basegfx::B2DRectangle maRectangle;
+
+    float mnWidth = 0.0f;
+
+    bool mbFillColor = false;
+    Color maFillColor = COL_TRANSPARENT;
+
+    bool mbColor = false;
+    Color maColor = COL_TRANSPARENT;
+
+    Bitmap maBitmap;
+};
+
+/** Data of an annotation */
+struct SVXCORE_DLLPUBLIC AnnotationData
+{
+    css::geometry::RealPoint2D m_Position;
+    css::geometry::RealSize2D m_Size;
+    OUString m_Author;
+    OUString m_Initials;
+    css::util::DateTime m_DateTime;
+    OUString m_Text;
+};
+
+/** Annotation object, responsible for handling of the annotation.
+ *
+ * Implements the XAnnotation UNO API, handles undo/redo and notifications ()
+ *
+ **/
+class SVXCORE_DLLPUBLIC Annotation
+    : public ::comphelper::WeakComponentImplHelper<css::office::XAnnotation>,
+      public ::cppu::PropertySetMixin<css::office::XAnnotation>
+{
+private:
+    css::uno::Reference<css::text::XText> getTextRangeImpl(const std::unique_lock<std::mutex>& g);
+    OUString GetTextImpl(const std::unique_lock<std::mutex>& g);
+    void SetTextImpl(OUString const& rText, const std::unique_lock<std::mutex>& g);
+
+protected:
+    SdrPage* mpPage;
+    UniqueID maUniqueID;
+
+    css::geometry::RealPoint2D m_Position;
+    css::geometry::RealSize2D m_Size;
+    OUString m_Author;
+    OUString m_Initials;
+    css::util::DateTime m_DateTime;
+    rtl::Reference<sdr::annotation::TextApiObject> m_TextRange;
+
+    CreationInfo maCreationInfo;
+
+    std::unique_ptr<SdrUndoAction> createUndoAnnotation();
+
+public:
+    Annotation(const css::uno::Reference<css::uno::XComponentContext>& context, SdrPage* pPage);
+    Annotation(const Annotation&) = delete;
+    Annotation& operator=(const Annotation&) = delete;
+
+    // XInterface:
+    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const& type) override;
+    virtual void SAL_CALL acquire() noexcept override
+    {
+        comphelper::WeakComponentImplHelper<css::office::XAnnotation>::acquire();
+    }
+    virtual void SAL_CALL release() noexcept override
+    {
+        comphelper::WeakComponentImplHelper<css::office::XAnnotation>::release();
+    }
+
+    // Changes without triggering notification broadcast
+    void SetPosition(const css::geometry::RealPoint2D& rValue);
+    void SetSize(const css::geometry::RealSize2D& rValue);
+
+    virtual css::uno::Reference<css::text::XText> SAL_CALL getTextRange() override;
+
+    // override WeakComponentImplHelperBase::disposing()
+    // This function is called upon disposing the component,
+    // if your component needs special work when it becomes
+    // disposed, do it here.
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
+
+    OUString GetText();
+
+    OString ToJSON(CommentNotificationType nType);
+    void toData(AnnotationData& rData);
+    void fromData(const AnnotationData& rData);
+
+    const rtl::Reference<sdr::annotation::TextApiObject>& getTextApiObject() { return m_TextRange; }
+
+    SdrModel* GetModel() const;
+    SdrPage const* getPage() const { return mpPage; }
+    SdrPage* getPage() { return mpPage; }
+
+    // Unique ID of the annotation
+    sal_uInt64 GetId() const { return maUniqueID.getID(); }
+
+    CreationInfo const& getCreationInfo() { return maCreationInfo; }
+    void setCreationInfo(CreationInfo const& rCreationInfo) { maCreationInfo = rCreationInfo; }
+
+    SdrObject* findAnnotationObject();
+
+    virtual rtl::Reference<Annotation> clone(SdrPage* pTargetPage) = 0;
+};
+
+/** Vector of annotations */
+typedef std::vector<rtl::Reference<Annotation>> AnnotationVector;
+
+} // namespace sdr::annotation
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

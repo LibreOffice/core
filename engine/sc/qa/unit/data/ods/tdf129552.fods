@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ooo="http://openoffice.org/2004/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+  <office:font-face-decls>
+    <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  </office:font-face-decls>
+  <office:styles>
+    <style:default-style style:family="table-cell">
+      <style:table-cell-properties style:decimal-places="2"/>
+      <style:paragraph-properties style:tab-stop-distance="1.389in"/>
+      <style:text-properties style:font-name="Albany" fo:language="de" fo:country="DE" style:font-name-asian="Andale Sans UI" style:language-asian="zxx" style:country-asian="none" style:font-name-complex="Tahoma" style:language-complex="zxx" style:country-complex="none"/>
+    </style:default-style>
+    <style:style style:name="Default" style:family="table-cell">
+      <style:table-cell-properties style:cell-protect="protected formula-hidden" style:print-content="true"/>
+      <style:text-properties style:font-name="Arial" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    </style:style>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="co1" style:family="table-column">
+      <style:table-column-properties fo:break-before="auto" style:column-width="0.1965in"/>
+    </style:style>
+    <style:style style:name="ro1" style:family="table-row">
+      <style:table-row-properties style:row-height="0.1965in" fo:break-before="auto" style:use-optimal-row-height="false"/>
+    </style:style>
+    <style:style style:name="ta1" style:family="table" style:master-page-name="Default">
+      <style:table-properties table:display="true" style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:page-layout style:name="pm1">
+      <style:page-layout-properties fo:margin-top="0.5902in" fo:margin-bottom="0.7083in" fo:margin-left="0.8661in" fo:margin-right="0.3937in" style:scale-to-pages="1"/>
+      <style:header-style>
+        <style:header-footer-properties fo:min-height="0.1965in" fo:margin-left="0in" fo:margin-right="0in" fo:margin-bottom="0in"/>
+      </style:header-style>
+      <style:footer-style>
+        <style:header-footer-properties fo:min-height="0.2953in" fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0.0984in"/>
+      </style:footer-style>
+    </style:page-layout>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Default" style:page-layout-name="pm1">
+    </style:master-page>
+  </office:master-styles>
+  <office:body>
+    <office:spreadsheet>
+      <table:calculation-settings table:case-sensitive="false" table:search-criteria-must-apply-to-whole-cell="false" table:null-year="1919">
+        <table:iteration table:steps="10" table:maximum-difference="1"/>
+      </table:calculation-settings>
+      <table:table table:name="test" table:style-name="ta1" table:print="false">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false">
+          <form:form form:name="Standard" form:apply-filter="true" form:command-type="table" form:control-implementation="ooo:com.sun.star.form.component.Form" office:target-frame="">
+            <form:radio form:name="form-name" form:control-implementation="ooo:com.sun.star.form.component.RadioButton" xml:id="control1" form:id="control1" form:current-selected="true" form:value="0" form:input-required="false" form:image-position="center">
+              <form:properties>
+                <form:property form:property-name="ControlTypeinMSO" office:value-type="float" office:value="0"/>
+                <form:property form:property-name="DefaultControl" office:value-type="string" office:string-value="com.sun.star.form.control.RadioButton"/>
+                <form:property form:property-name="ObjIDinMSO" office:value-type="float" office:value="0"/>
+                <form:property form:property-name="SecondaryRefValue" office:value-type="string" office:string-value=""/>
+              </form:properties>
+            </form:radio>
+          </form:form>
+        </office:forms>
+        <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
+        <table:table-column table:style-name="co2" table:default-cell-style-name="Default"/>
+        <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
+        <table:table-column table:style-name="co3" table:default-cell-style-name="Default"/>
+        <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
+        <table:table-column table:style-name="co4" table:default-cell-style-name="Default"/>
+        <table:table-column table:style-name="co5" table:number-columns-repeated="58" table:default-cell-style-name="Default"/>
+        <table:table-row table:style-name="ro3">
+          <table:table-cell table:style-name="ce1"/>
+          <table:table-cell table:number-columns-repeated="2"/>
+          <table:table-cell>
+            <draw:control table:end-cell-address="test.D8" table:end-x="3.8406in" table:end-y="0.2772in" draw:z-index="1" draw:style-name="gr2" draw:text-style-name="P2" svg:width="1.5748in" svg:height="0.2559in" svg:x="2.2657in" svg:y="0.0213in" draw:control="control1"/>
+          </table:table-cell>
+          <table:table-cell table:style-name="ce111"/>
+          <table:table-cell table:style-name="ce1"/>
+          <table:table-cell table:style-name="ce135"/>
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="57"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro2" table:number-rows-repeated="5">
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="6"/>
+          <table:table-cell table:style-name="ce135"/>
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="57"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro6">
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="6"/>
+          <table:table-cell table:style-name="ce135"/>
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="57"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro2" table:number-rows-repeated="137">
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="6"/>
+          <table:table-cell table:style-name="ce135"/>
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="57"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro7" table:visibility="collapse">
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="6"/>
+          <table:table-cell table:style-name="ce135"/>
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="57"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro8" table:visibility="collapse">
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="64"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro8" table:visibility="collapse">
+          <table:table-cell table:style-name="ce1"/>
+          <table:table-cell table:style-name="ce45"/>
+          <table:table-cell table:style-name="ce63"/>
+          <table:table-cell table:style-name="ce94" table:number-columns-repeated="2"/>
+          <table:table-cell table:style-name="ce124"/>
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="58"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro8" table:visibility="collapse">
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="64"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro2" table:visibility="collapse" table:number-rows-repeated="31538">
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="6"/>
+          <table:table-cell table:style-name="ce135"/>
+          <table:table-cell table:style-name="ce1" table:number-columns-repeated="57"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro2" table:visibility="collapse" table:number-rows-repeated="1016529">
+          <table:table-cell table:number-columns-repeated="64"/>
+        </table:table-row>
+      </table:table>
+      <table:named-expressions/>
+    </office:spreadsheet>
+  </office:body>
+</office:document>

@@ -1,0 +1,75 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module beans {
+
+
+/** makes it possible to add and remove properties to or from an object.
+
+    <p>Some scripting engines cannot access properties directly when the
+    property set is changed.  Please use XPropertySet::getPropertyValue()
+    etc. in this case. </p>
+ */
+published interface XPropertyContainer: com::sun::star::uno::XInterface
+{
+
+    /** adds a property to the object.
+
+        @param Name
+            specifies the name of the new property.
+
+        @param Attributes
+            specifies the property attributes, see PropertyAttribute.
+
+        @param DefaultValue
+            specifies the type of the new property and a potential default value.
+
+        @throws PropertyExistException
+            if a property with the same name already exists.
+
+        @throws IllegalTypeException
+            if the specified type is not allowed.
+
+     */
+    void addProperty( [in] string Name,
+                       [in] short Attributes,
+                      [in] any DefaultValue )
+            raises( com::sun::star::beans::PropertyExistException,
+                    com::sun::star::beans::IllegalTypeException,
+                    com::sun::star::lang::IllegalArgumentException );
+
+
+    /** removes a property from the object.
+
+        @param Name
+            specified the name of the property.
+
+        @throws UnknownPropertyException
+            if the property does not exist.
+     */
+    void removeProperty( [in] string Name )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::beans::NotRemoveableException );
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

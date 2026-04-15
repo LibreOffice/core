@@ -1,0 +1,178 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module drawing {
+
+
+/** specifies a document which consists of multiple pages
+    with drawings.
+
+    <p>Because its function is needed more than once, it's defined as generic one.</p>
+ */
+service GenericDrawingDocument
+{
+    /** this base service describes storing and printing */
+    service com::sun::star::document::OfficeDocument;
+
+    /** this factory lets you create various services that are
+        used inside a drawing document
+
+        <p>The following services are Shapes.
+        They are created by the documents factory and must
+        be inserted into a DrawPage or MasterPage
+        of this document.
+
+        <ul>
+            <li>RectangleShape</li>
+            <li>EllipseShape</li>
+            <li>ControlShape</li>
+            <li>ConnectorShape</li>
+            <li>MeasureShape</li>
+            <li>LineShape</li>
+            <li>PolyPolygonShape</li>
+            <li>PolyLineShape</li>
+            <li>OpenBezierShape</li>
+            <li>ClosedBezierShape</li>
+            <li>GraphicObjectShape</li>
+            <li>GroupShape</li>
+            <li>TextShape</li>
+            <li>OLE2Shape</li>
+            <li>PageShape</li>
+            <li>CaptionShape</li>
+            <li>PluginShape</li>
+            <li>AppletShape</li>
+        </ul>
+
+        <p>The following services are all com::sun::star::text::TextField
+        and can be inserted into text as com::sun::star::text::TextContent.
+
+        <ul>
+            <li>com::sun::star::text::TextField::DateTime</li>
+            <li>com::sun::star::text::TextField::URL</li>
+            <li>com::sun::star::text::TextField::PageNumber</li>
+            <li>com::sun::star::text::TextField::PageCount</li>
+            <li>com::sun::star::text::TextField::SheetName</li>
+            <li>com::sun::star::text::TextField::FileName</li>
+            <li>com::sun::star::text::TextField::DocInfo.Title</li>
+            <li>com::sun::star::text::TextField::Author</li>
+            <li>com::sun::star::text::TextField::Measure</li>
+        </ul>
+
+        <p>The following services gives access to resources used inside the document
+        and let you add new resources.
+
+        <ul>
+            <li>com::sun::star::drawing::DashTable</li>
+            <li>com::sun::star::drawing::GradientTable</li>
+            <li>com::sun::star::drawing::HatchTable</li>
+            <li>com::sun::star::drawing::BitmapTable</li>
+            <li>com::sun::star::drawing::TransparencyGradientTable</li>
+            <li>com::sun::star::drawing::MarkerTable</li>
+        </ul>
+
+        <p>The following service can be set at the <code>Numbering</code> property
+        inside a com::sun::star::style::ParagraphProperties
+
+        <ul>
+            <li>com::sun::star::text::NumberingRules</li>
+        </ul>
+
+        <p>The following services can be used for a com::sun::star::image::ImageMap
+        inside the document.
+
+        <br>A com::sun::star::image::ImageMap can be obtained from a
+        GraphicObjectShape
+
+        <ul>
+            <li>com::sun::star::image::ImageMapRectangleObject</li>
+            <li>com::sun::star::image::ImageMapCircleObject</li>
+            <li>com::sun::star::image::ImageMapPolygonObject</li>
+        </ul>
+
+        <p>The following services lets you access the drawing property defaults
+        of a document.
+
+        <ul>
+            <li>com::sun::star::drawing::Defaults</li>
+        </ul>
+    */
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+    /** lets you access the properties of this service.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** lets you duplicate pages inside this document.
+     */
+    interface com::sun::star::drawing::XDrawPageDuplicator;
+
+
+    /** provides an object that is implementing the service
+                DrawPages. With this service you have access to the
+                DrawPages inside a document.
+     */
+    interface com::sun::star::drawing::XDrawPagesSupplier;
+
+
+    /** returns an object that is implementing the service
+                MasterPages. With this service you have access to the
+                MasterPages inside a document.
+     */
+    interface com::sun::star::drawing::XMasterPagesSupplier;
+
+
+    /** returns an object that is implementing the service
+                LayerManager. This service lets you manipulate the
+                Layers of this document.
+     */
+    interface com::sun::star::drawing::XLayerSupplier;
+
+    /** This interface lets you access the styles contained in this document
+     */
+    interface com::sun::star::style::XStyleFamiliesSupplier;
+
+
+    /** This property specifies the length between the default tab stops
+        inside text in this document in 1/100th mm.
+     */
+    [property] long TabStop;
+
+
+    /** contains the identifier of the default locale of the document.
+     */
+    [property] com::sun::star::lang::Locale CharLocale;
+
+
+    /** if this document is an OLE client, this is the current visible area
+        in 100th mm
+    */
+    [property] com::sun::star::awt::Rectangle VisibleArea;
+
+
+    /** This property gives the XForbiddenCharacters.
+     */
+    [readonly, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

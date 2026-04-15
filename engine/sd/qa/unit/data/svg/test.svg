@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg version="1.2" baseProfile="tiny" viewBox="0 0 28002 20999" preserveAspectRatio="xMidYMid" fill-rule="evenodd" clip-path="url(#presentation_clip_path)" stroke-width="28.222" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xml:space="preserve">
+ <defs>
+  <clipPath id="presentation_clip_path" clipPathUnits="userSpaceOnUse">
+   <rect x="0" y="0" width="28002" height="20999"/>
+  </clipPath>
+ </defs>
+ <g id="id2" class="Master_Slide" clip-path="url(#presentation_clip_path)">
+  <g id="bo-id2" visibility="visible" class="BackgroundObjects">
+   <g class="com.sun.star.presentation.TitleTextShape">
+    <g>
+     <rect fill="none" stroke="none" x="1400" y="837" width="25199" height="3507"/>
+     <g font-family="Liberation Sans" font-size="635px" font-style="normal" font-weight="400">
+      <g fill="rgb(0,0,0)" stroke="none">
+       <text x="9662" y="2844">C</text>
+       <text x="10119" y="2844">l</text>
+       <text x="10259" y="2844">i</text>
+       <text x="10399" y="2844">c</text>
+       <text x="10716" y="2844">k</text>
+       <text x="11034" y="2844"> </text>
+       <text x="11211" y="2844">t</text>
+       <text x="11389" y="2844">o</text>
+       <text x="11741" y="2844"> </text>
+       <text x="11918" y="2844">e</text>
+       <text x="12270" y="2844">d</text>
+       <text x="12621" y="2844">i</text>
+       <text x="12761" y="2844">t</text>
+       <text x="12939" y="2844"> </text>
+       <text x="13116" y="2844">t</text>
+       <text x="13294" y="2844">h</text>
+       <text x="13646" y="2844">e</text>
+       <text x="13997" y="2844"> </text>
+       <text x="14175" y="2844">t</text>
+       <text x="14353" y="2844">i</text>
+       <text x="14492" y="2844">t</text>
+       <text x="14670" y="2844">l</text>
+       <text x="14810" y="2844">e</text>
+       <text x="15161" y="2844"> </text>
+       <text x="15339" y="2844">t</text>
+       <text x="15517" y="2844">e</text>
+       <text x="15868" y="2844">x</text>
+       <text x="16181" y="2844">t</text>
+       <text x="16359" y="2844"> </text>
+       <text x="16537" y="2844">f</text>
+       <text x="16715" y="2844">o</text>
+       <text x="17066" y="2844">r</text>
+       <text x="17278" y="2844">m</text>
+       <text x="17807" y="2844">a</text>
+       <text x="18158" y="2844">t</text></g>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+ <g id="id1" class="Slide" visibility="visible" clip-path="url(#presentation_clip_path)">
+  <g class="com.sun.star.drawing.CustomShape">
+   <g>
+    <g font-family="Liberation Sans" font-size="635px" font-style="normal" font-weight="400">
+     <g fill="rgb(0,0,0)" stroke="none">
+      <text x="13280" y="2844">H</text>
+      <text x="13737" y="2844">e</text>
+      <text x="14089" y="2844">l</text>
+      <text x="14228" y="2844">l</text>
+      <text x="14368" y="2844">o</text></g>
+     <rect fill="none" stroke="none" x="1400" y="837" width="25199" height="3506"/>
+    </g>
+   </g>
+  </g>
+  <g class="com.sun.star.drawing.CustomShape">
+   <g>
+    <g font-family="Liberation Sans" font-size="635px" font-style="normal" font-weight="700">
+     <g fill="rgb(0,0,0)" stroke="none">
+      <text x="12200" y="12097">R</text>
+      <text x="12657" y="12097">a</text>
+      <text x="13009" y="12097">d</text>
+      <text x="13398" y="12097">e</text>
+      <text x="13749" y="12097">k</text>
+      <text x="14101" y="12097">s</text>
+      <text x="14452" y="12097">k</text>
+      <text x="14804" y="12097">i</text>
+      <text x="14981" y="12097"> </text>
+      <text x="15159" y="12097">:</text>
+      <text x="15375" y="12097">-</text>
+      <text x="15587" y="12097">)</text></g>
+     <rect fill="none" stroke="none" x="1400" y="4914" width="25199" height="13859"/>
+    </g>
+   </g>
+  </g>
+  <g class="Graphic">
+   <g>
+    <path fill="none" stroke="rgb(128,128,128)" d="M 12267,5588 L 15493,5588 15493,8761 12267,8761 12267,5588"/>
+    <g font-family="Liberation Sans" font-size="635px" font-style="normal" font-weight="400">
+     <g fill="rgb(255,0,0)" stroke="none">
+      <text x="12467" y="6364"> </text></g>
+     <g fill="rgb(255,0,0)" stroke="none">
+      <text x="12645" y="6364">.</text>
+      <text x="12823" y="6364">.</text>
+      <text x="13001" y="6364">.</text></g>
+     <rect fill="none" stroke="none" x="12267" y="5588" width="3227" height="3174"/>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>

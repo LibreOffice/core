@@ -1,0 +1,866 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+#include <svx/svdtrans.hxx>
+#include <math.h>
+#include <svx/xpoly.hxx>
+#include <rtl/ustrbuf.hxx>
+
+#include <vcl/virdev.hxx>
+#include <tools/bigint.hxx>
+#include <tools/UnitConversion.hxx>
+#include <unotools/syslocale.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <sal/log.hxx>
+
+void MoveXPoly(XPolygon& rPoly, const Size& S)
+{
+    rPoly.Move(S.Width(),S.Height());
+}
+
+void ResizeRect(tools::Rectangle& rRect, const Point& rRef, double aXFact, double aYFact)
+{
+    rRect.SetLeft( rRef.X() + basegfx::fround<tools::Long>( (rRect.Left()  - rRef.X()) * aXFact ) );
+    rRect.SetRight( rRef.X() + basegfx::fround<tools::Long>( (rRect.Right() - rRef.X()) * aXFact ) );
+
+    rRect.SetTop( rRef.Y() + basegfx::fround<tools::Long>( (rRect.Top()    - rRef.Y()) * aYFact ) );
+    rRect.SetBottom( rRef.Y() + basegfx::fround<tools::Long>( (rRect.Bottom() - rRef.Y()) * aYFact ) );
+
+    rRect.Normalize();
+}
+
+void ResizePoly(tools::Polygon& rPoly, const Point& rRef, double xFact, double yFact)
+{
+    sal_uInt16 nCount=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nCount; i++) {
+        ResizePoint(rPoly[i],rRef,xFact,yFact);
+    }
+}
+
+void ResizeXPoly(XPolygon& rPoly, const Point& rRef, double xFact, double yFact)
+{
+    sal_uInt16 nCount=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nCount; i++) {
+        ResizePoint(rPoly[i],rRef,xFact,yFact);
+    }
+}
+
+void RotatePoly(tools::Polygon& rPoly, const Point& rRef, double sn, double cs)
+{
+    sal_uInt16 nCount=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nCount; i++) {
+        RotatePoint(rPoly[i],rRef,sn,cs);
+    }
+}
+
+void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs)
+{
+    sal_uInt16 nCount=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nCount; i++) {
+        RotatePoint(rPoly[i],rRef,sn,cs);
+    }
+}
+
+void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs)
+{
+    sal_uInt16 nCount=rPoly.Count();
+    for (sal_uInt16 i=0; i<nCount; i++) {
+        RotateXPoly(rPoly[i],rRef,sn,cs);
+    }
+}
+
+void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
+{
+    tools::Long mx=rRef2.X()-rRef1.X();
+    tools::Long my=rRef2.Y()-rRef1.Y();
+    if (mx==0) { // vertical axis
+        tools::Long dx=rRef1.X()-rPnt.X();
+        rPnt.AdjustX(2*dx );
+    } else if (my==0) { // horizontal axis
+        tools::Long dy=rRef1.Y()-rPnt.Y();
+        rPnt.AdjustY(2*dy );
+    } else if (mx==my) { // diagonal axis '\'
+        tools::Long dx1=rPnt.X()-rRef1.X();
+        tools::Long dy1=rPnt.Y()-rRef1.Y();
+        rPnt.setX(rRef1.X()+dy1 );
+        rPnt.setY(rRef1.Y()+dx1 );
+    } else if (mx==-my) { // diagonal axis '/'
+        tools::Long dx1=rPnt.X()-rRef1.X();
+        tools::Long dy1=rPnt.Y()-rRef1.Y();
+        rPnt.setX(rRef1.X()-dy1 );
+        rPnt.setY(rRef1.Y()-dx1 );
+    } else { // arbitrary axis
+        // TODO: Optimize this! Raise perpendicular on the mirroring axis..?
+        Degree100 nRefAngle=GetAngle(rRef2-rRef1);
+        rPnt-=rRef1;
+        Degree100 nPntAngle=GetAngle(rPnt);
+        Degree100 nAngle=2_deg100*(nRefAngle-nPntAngle);
+        double a = toRadians(nAngle);
+        double nSin=sin(a);
+        double nCos=cos(a);
+        RotatePoint(rPnt,Point(),nSin,nCos);
+        rPnt+=rRef1;
+    }
+}
+
+void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2)
+{
+    sal_uInt16 nCount=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nCount; i++) {
+        MirrorPoint(rPoly[i],rRef1,rRef2);
+    }
+}
+
+void ShearPoly(tools::Polygon& rPoly, const Point& rRef, double tn)
+{
+    sal_uInt16 nCount=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nCount; i++) {
+        ShearPoint(rPoly[i],rRef,tn);
+    }
+}
+
+void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
+{
+    sal_uInt16 nCount=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nCount; i++) {
+        ShearPoint(rPoly[i],rRef,tn,bVShear);
+    }
+}
+
+double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
+                         const Point& rRad, double& rSin, double& rCos, bool bVert)
+{
+    bool bC1=pC1!=nullptr;
+    bool bC2=pC2!=nullptr;
+    tools::Long x0=rPnt.X();
+    tools::Long y0=rPnt.Y();
+    tools::Long cx=rCenter.X();
+    tools::Long cy=rCenter.Y();
+    double nAngle=GetCrookAngle(rPnt,rCenter,rRad,bVert);
+    double sn=sin(nAngle);
+    double cs=cos(nAngle);
+    RotatePoint(rPnt,rCenter,sn,cs);
+    if (bC1) {
+        if (bVert) {
+            // move into the direction of the center, as a basic position for the rotation
+            pC1->AdjustY( -y0 );
+            // resize, account for the distance from the center
+            pC1->setY(basegfx::fround<tools::Long>(static_cast<double>(pC1->Y()) /rRad.X()*(cx-pC1->X())) );
+            pC1->AdjustY(cy );
+        } else {
+            // move into the direction of the center, as a basic position for the rotation
+            pC1->AdjustX( -x0 );
+            // resize, account for the distance from the center
+            tools::Long nPntRad=cy-pC1->Y();
+            double nFact=static_cast<double>(nPntRad)/static_cast<double>(rRad.Y());
+            pC1->setX(basegfx::fround<tools::Long>(static_cast<double>(pC1->X()) * nFact));
+            pC1->AdjustX(cx );
+        }
+        RotatePoint(*pC1,rCenter,sn,cs);
+    }
+    if (bC2) {
+        if (bVert) {
+            // move into the direction of the center, as a basic position for the rotation
+            pC2->AdjustY( -y0 );
+            // resize, account for the distance from the center
+            pC2->setY(basegfx::fround<tools::Long>(static_cast<double>(pC2->Y()) /rRad.X()*(rCenter.X()-pC2->X())) );
+            pC2->AdjustY(cy );
+        } else {
+            // move into the direction of the center, as a basic position for the rotation
+            pC2->AdjustX( -x0 );
+            // resize, account for the distance from the center
+            tools::Long nPntRad=rCenter.Y()-pC2->Y();
+            double nFact=static_cast<double>(nPntRad)/static_cast<double>(rRad.Y());
+            pC2->setX(basegfx::fround<tools::Long>(static_cast<double>(pC2->X()) * nFact));
+            pC2->AdjustX(cx );
+        }
+        RotatePoint(*pC2,rCenter,sn,cs);
+    }
+    rSin=sn;
+    rCos=cs;
+    return nAngle;
+}
+
+double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
+                        const Point& rRad, double& rSin, double& rCos, bool bVert)
+{
+    bool bC1=pC1!=nullptr;
+    bool bC2=pC2!=nullptr;
+    tools::Long x0=rPnt.X();
+    tools::Long y0=rPnt.Y();
+    tools::Long dx1=0,dy1=0;
+    tools::Long dxC1=0,dyC1=0;
+    tools::Long dxC2=0,dyC2=0;
+    if (bVert) {
+        tools::Long nStart=rCenter.X()-rRad.X();
+        dx1=rPnt.X()-nStart;
+        rPnt.setX(nStart );
+        if (bC1) {
+            dxC1=pC1->X()-nStart;
+            pC1->setX(nStart );
+        }
+        if (bC2) {
+            dxC2=pC2->X()-nStart;
+            pC2->setX(nStart );
+        }
+    } else {
+        tools::Long nStart=rCenter.Y()-rRad.Y();
+        dy1=rPnt.Y()-nStart;
+        rPnt.setY(nStart );
+        if (bC1) {
+            dyC1=pC1->Y()-nStart;
+            pC1->setY(nStart );
+        }
+        if (bC2) {
+            dyC2=pC2->Y()-nStart;
+            pC2->setY(nStart );
+        }
+    }
+    double nAngle=GetCrookAngle(rPnt,rCenter,rRad,bVert);
+    double sn=sin(nAngle);
+    double cs=cos(nAngle);
+    RotatePoint(rPnt,rCenter,sn,cs);
+    if (bC1) { if (bVert) pC1->AdjustY( -(y0-rCenter.Y()) ); else pC1->AdjustX( -(x0-rCenter.X()) ); RotatePoint(*pC1,rCenter,sn,cs); }
+    if (bC2) { if (bVert) pC2->AdjustY( -(y0-rCenter.Y()) ); else pC2->AdjustX( -(x0-rCenter.X()) ); RotatePoint(*pC2,rCenter,sn,cs); }
+    if (bVert) {
+        rPnt.AdjustX(dx1 );
+        if (bC1) pC1->AdjustX(dxC1 );
+        if (bC2) pC2->AdjustX(dxC2 );
+    } else {
+        rPnt.AdjustY(dy1 );
+        if (bC1) pC1->AdjustY(dyC1 );
+        if (bC2) pC2->AdjustY(dyC2 );
+    }
+    rSin=sn;
+    rCos=cs;
+    return nAngle;
+}
+
+double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
+                          const Point& rRad, double& rSin, double& rCos, bool bVert,
+                          const tools::Rectangle& rRefRect)
+{
+    tools::Long y0=rPnt.Y();
+    CrookSlantXPoint(rPnt,pC1,pC2,rCenter,rRad,rSin,rCos,bVert);
+    if (bVert) {
+    } else {
+        tools::Long nTop=rRefRect.Top();
+        tools::Long nBtm=rRefRect.Bottom();
+        tools::Long nHgt=nBtm-nTop;
+        tools::Long dy=rPnt.Y()-y0;
+        double a=static_cast<double>(y0-nTop)/nHgt;
+        a*=dy;
+        rPnt.setY(y0 + basegfx::fround<tools::Long>(a));
+    }
+    return 0.0;
+}
+
+
+void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
+{
+    double nSin,nCos;
+    sal_uInt16 nPointCnt=rPoly.GetPointCount();
+    sal_uInt16 i=0;
+    while (i<nPointCnt) {
+        Point* pPnt=&rPoly[i];
+        Point* pC1=nullptr;
+        Point* pC2=nullptr;
+        if (i+1<nPointCnt && rPoly.IsControl(i)) { // control point to the left
+            pC1=pPnt;
+            i++;
+            pPnt=&rPoly[i];
+        }
+        i++;
+        if (i<nPointCnt && rPoly.IsControl(i)) { // control point to the right
+            pC2=&rPoly[i];
+            i++;
+        }
+        CrookRotateXPoint(*pPnt,pC1,pC2,rCenter,rRad,nSin,nCos,bVert);
+    }
+}
+
+void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
+{
+    double nSin,nCos;
+    sal_uInt16 nPointCnt=rPoly.GetPointCount();
+    sal_uInt16 i=0;
+    while (i<nPointCnt) {
+        Point* pPnt=&rPoly[i];
+        Point* pC1=nullptr;
+        Point* pC2=nullptr;
+        if (i+1<nPointCnt && rPoly.IsControl(i)) { // control point to the left
+            pC1=pPnt;
+            i++;
+            pPnt=&rPoly[i];
+        }
+        i++;
+        if (i<nPointCnt && rPoly.IsControl(i)) { // control point to the right
+            pC2=&rPoly[i];
+            i++;
+        }
+        CrookSlantXPoint(*pPnt,pC1,pC2,rCenter,rRad,nSin,nCos,bVert);
+    }
+}
+
+void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const tools::Rectangle& rRefRect)
+{
+    double nSin,nCos;
+    sal_uInt16 nPointCnt=rPoly.GetPointCount();
+    sal_uInt16 i=0;
+    while (i<nPointCnt) {
+        Point* pPnt=&rPoly[i];
+        Point* pC1=nullptr;
+        Point* pC2=nullptr;
+        if (i+1<nPointCnt && rPoly.IsControl(i)) { //  control point to the left
+            pC1=pPnt;
+            i++;
+            pPnt=&rPoly[i];
+        }
+        i++;
+        if (i<nPointCnt && rPoly.IsControl(i)) { // control point to the right
+            pC2=&rPoly[i];
+            i++;
+        }
+        CrookStretchXPoint(*pPnt,pC1,pC2,rCenter,rRad,nSin,nCos,bVert,rRefRect);
+    }
+}
+
+
+void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
+{
+    sal_uInt16 nPolyCount=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyCount; nPolyNum++) {
+        CrookRotatePoly(rPoly[nPolyNum],rCenter,rRad,bVert);
+    }
+}
+
+void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
+{
+    sal_uInt16 nPolyCount=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyCount; nPolyNum++) {
+        CrookSlantPoly(rPoly[nPolyNum],rCenter,rRad,bVert);
+    }
+}
+
+void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const tools::Rectangle& rRefRect)
+{
+    sal_uInt16 nPolyCount=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyCount; nPolyNum++) {
+        CrookStretchPoly(rPoly[nPolyNum],rCenter,rRad,bVert,rRefRect);
+    }
+}
+
+
+Degree100 GetAngle(const Point& rPnt)
+{
+    Degree100 a;
+    if (rPnt.Y()==0) {
+        if (rPnt.X()<0) a=-18000_deg100;
+    } else if (rPnt.X()==0) {
+        if (rPnt.Y()>0) a=-9000_deg100;
+        else a=9000_deg100;
+    } else {
+        a = Degree100(basegfx::fround(basegfx::rad2deg<100>(atan2(-static_cast<double>(rPnt.Y()), static_cast<double>(rPnt.X())))));
+    }
+    return a;
+}
+
+Degree100 NormAngle18000(Degree100 a)
+{
+    while (a<-18000_deg100) a+=36000_deg100;
+    while (a>=18000_deg100) a-=36000_deg100;
+    return a;
+}
+
+Degree100 NormAngle36000(Degree100 a)
+{
+    a %= 36000_deg100;
+    if (a < 0_deg100)
+        a += 36000_deg100;
+    return a;
+}
+
+sal_uInt16 GetAngleSector(Degree100 nAngle) { return (NormAngle36000(nAngle) / 9000_deg100).get(); }
+
+tools::Long GetLen(const Point& rPnt)
+{
+    tools::Long x=std::abs(rPnt.X());
+    tools::Long y=std::abs(rPnt.Y());
+    if (x+y<0x8000) { // because 7FFF * 7FFF * 2 = 7FFE0002
+        x*=x;
+        y*=y;
+        x+=y;
+        x = basegfx::fround<tools::Long>(sqrt(x));
+        return x;
+    } else {
+        double nx=x;
+        double ny=y;
+        nx*=nx;
+        ny*=ny;
+        nx+=ny;
+        nx=sqrt(nx);
+        if (nx>0x7FFFFFFF) {
+            return 0x7FFFFFFF; // we can't go any further, for fear of an overrun!
+        } else {
+            return basegfx::fround<tools::Long>(nx);
+        }
+    }
+}
+
+
+void GeoStat::RecalcSinCos()
+{
+    if (m_nRotationAngle==0_deg100) {
+        mfSinRotationAngle=0.0;
+        mfCosRotationAngle=1.0;
+    } else {
+        double a = toRadians(m_nRotationAngle);
+        mfSinRotationAngle=sin(a);
+        mfCosRotationAngle=cos(a);
+    }
+}
+
+void GeoStat::RecalcTan()
+{
+    if (m_nShearAngle==0_deg100) {
+        mfTanShearAngle=0.0;
+    } else {
+        double a = toRadians(m_nShearAngle);
+        mfTanShearAngle=tan(a);
+    }
+}
+
+
+tools::Polygon Rect2Poly(const tools::Rectangle& rRect, const GeoStat& rGeo)
+{
+    tools::Polygon aPol(5);
+    aPol[0]=rRect.TopLeft();
+    aPol[1]=rRect.TopRight();
+    aPol[2]=rRect.BottomRight();
+    aPol[3]=rRect.BottomLeft();
+    aPol[4]=rRect.TopLeft();
+    if (rGeo.m_nShearAngle) ShearPoly(aPol,rRect.TopLeft(),rGeo.mfTanShearAngle);
+    if (rGeo.m_nRotationAngle) RotatePoly(aPol,rRect.TopLeft(),rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle);
+    return aPol;
+}
+
+namespace svx
+{
+tools::Rectangle polygonToRectangle(const tools::Polygon& rPolygon, GeoStat& rGeo)
+{
+    rGeo.m_nRotationAngle = GetAngle(rPolygon[1] - rPolygon[0]);
+    rGeo.m_nRotationAngle = NormAngle36000(rGeo.m_nRotationAngle);
+
+    // rotation successful
+    rGeo.RecalcSinCos();
+
+    Point aPoint1(rPolygon[1] - rPolygon[0]);
+    if (rGeo.m_nRotationAngle)
+        RotatePoint(aPoint1, Point(0,0), -rGeo.mfSinRotationAngle, rGeo.mfCosRotationAngle); // -Sin to reverse rotation
+    tools::Long nWidth = aPoint1.X();
+
+    Point aPoint0(rPolygon[0]);
+    Point aPoint3(rPolygon[3] - rPolygon[0]);
+    if (rGeo.m_nRotationAngle)
+        RotatePoint(aPoint3, Point(0,0), -rGeo.mfSinRotationAngle, rGeo.mfCosRotationAngle); // -Sin to reverse rotation
+    tools::Long nHeight = aPoint3.Y();
+
+    Degree100 nShearAngle = GetAngle(aPoint3);
+    nShearAngle -= 27000_deg100; // ShearWink is measured against a vertical line
+    nShearAngle = -nShearAngle;  // negating, because '+' is shearing clock-wise
+
+    bool bMirror = aPoint3.Y() < 0;
+    if (bMirror)
+    {   // "exchange of points" when mirroring
+        nHeight = -nHeight;
+        nShearAngle += 18000_deg100;
+        aPoint0 = rPolygon[3];
+    }
+
+    nShearAngle = NormAngle18000(nShearAngle);
+    if (nShearAngle < -9000_deg100 || nShearAngle > 9000_deg100)
+    {
+        nShearAngle = NormAngle18000(nShearAngle + 18000_deg100);
+    }
+
+    if (nShearAngle < -SDRMAXSHEAR)
+        nShearAngle = -SDRMAXSHEAR; // limit ShearWinkel (shear angle) to +/- 89.00 deg
+
+    if (nShearAngle > SDRMAXSHEAR)
+        nShearAngle = SDRMAXSHEAR;
+
+    rGeo.m_nShearAngle = nShearAngle;
+    rGeo.RecalcTan();
+
+    Point aRU(aPoint0);
+    aRU.AdjustX(nWidth);
+    aRU.AdjustY(nHeight);
+
+    return tools::Rectangle(aPoint0, aRU);
+}
+
+} // end svx
+
+void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho)
+{
+    tools::Long dx=rPt.X()-rPt0.X();
+    tools::Long dy=rPt.Y()-rPt0.Y();
+    tools::Long dxa=std::abs(dx);
+    tools::Long dya=std::abs(dy);
+    if (dx==0 || dy==0 || dxa==dya) return;
+    if (dxa>=dya*2) { rPt.setY(rPt0.Y() ); return; }
+    if (dya>=dxa*2) { rPt.setX(rPt0.X() ); return; }
+    if ((dxa<dya) != bBigOrtho) {
+        rPt.setY(rPt0.Y()+(dxa* (dy>=0 ? 1 : -1) ) );
+    } else {
+        rPt.setX(rPt0.X()+(dya* (dx>=0 ? 1 : -1) ) );
+    }
+}
+
+void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho)
+{
+    tools::Long dx=rPt.X()-rPt0.X();
+    tools::Long dy=rPt.Y()-rPt0.Y();
+    tools::Long dxa=std::abs(dx);
+    tools::Long dya=std::abs(dy);
+    if ((dxa<dya) != bBigOrtho) {
+        rPt.setY(rPt0.Y()+(dxa* (dy>=0 ? 1 : -1) ) );
+    } else {
+        rPt.setX(rPt0.X()+(dya* (dx>=0 ? 1 : -1) ) );
+    }
+}
+
+
+tools::Long BigMulDiv(tools::Long nVal, tools::Long nMul, tools::Long nDiv)
+{
+    if (!nDiv)
+        return 0x7fffffff;
+    return BigInt::Scale(nVal, nMul, nDiv);
+}
+
+static FrPair toPair(o3tl::Length eFrom, o3tl::Length eTo)
+{
+    const auto [nNum, nDen] = o3tl::getConversionMulDiv(eFrom, eTo);
+    return FrPair(nNum, nDen, nNum, nDen);
+}
+
+// How many eU units fit into a mm, respectively an inch?
+// Or: How many mm, respectively inches, are there in an eU (and then give me the inverse)
+
+static FrPair GetInchOrMM(MapUnit eU)
+{
+    switch (eU) {
+        case MapUnit::Map1000thInch: return toPair(o3tl::Length::in, o3tl::Length::in1000);
+        case MapUnit::Map100thInch : return toPair(o3tl::Length::in, o3tl::Length::in100);
+        case MapUnit::Map10thInch  : return toPair(o3tl::Length::in, o3tl::Length::in10);
+        case MapUnit::MapInch       : return toPair(o3tl::Length::in, o3tl::Length::in);
+        case MapUnit::MapPoint      : return toPair(o3tl::Length::in, o3tl::Length::pt);
+        case MapUnit::MapTwip       : return toPair(o3tl::Length::in, o3tl::Length::twip);
+        case MapUnit::Map100thMM   : return toPair(o3tl::Length::mm, o3tl::Length::mm100);
+        case MapUnit::Map10thMM    : return toPair(o3tl::Length::mm, o3tl::Length::mm10);
+        case MapUnit::MapMM         : return toPair(o3tl::Length::mm, o3tl::Length::mm);
+        case MapUnit::MapCM         : return toPair(o3tl::Length::mm, o3tl::Length::cm);
+        case MapUnit::MapPixel      : {
+            ScopedVclPtrInstance< VirtualDevice > pVD;
+            pVD->SetMapMode(MapMode(MapUnit::Map100thMM));
+            Point aP(pVD->PixelToLogic(Point(64,64))); // 64 pixels for more accuracy
+            return FrPair(6400,aP.X(),6400,aP.Y());
+        }
+        case MapUnit::MapAppFont: case MapUnit::MapSysFont: {
+            ScopedVclPtrInstance< VirtualDevice > pVD;
+            pVD->SetMapMode(MapMode(eU));
+            Point aP(pVD->LogicToPixel(Point(32,32))); // 32 units for more accuracy
+            pVD->SetMapMode(MapMode(MapUnit::Map100thMM));
+            aP=pVD->PixelToLogic(aP);
+            return FrPair(3200,aP.X(),3200,aP.Y());
+        }
+        default: break;
+    }
+    return 1.0;
+}
+
+// Calculate the factor that we need to convert units from eS to eD.
+// e. g. GetMapFactor(UNIT_MM,UNIT_100TH_MM) => 100.
+
+FrPair GetMapFactor(MapUnit eS, MapUnit eD)
+{
+    if (eS==eD) return FrPair(1,1,1,1);
+    const auto eFrom = MapToO3tlLength(eS, o3tl::Length::invalid);
+    const auto eTo = MapToO3tlLength(eD, o3tl::Length::invalid);
+    if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
+        return toPair(eFrom, eTo);
+    FrPair aS(GetInchOrMM(eS));
+    FrPair aD(GetInchOrMM(eD));
+    bool bSInch=IsInch(eS);
+    bool bDInch=IsInch(eD);
+    FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
+    if (bSInch && !bDInch) { aRet.X() *= 127.0/5; aRet.Y() *= 127.0/5; }
+    if (!bSInch && bDInch) { aRet.X() *= 5.0/127; aRet.Y() *= 5.0/127; }
+    return aRet;
+};
+
+FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
+{
+    if (eS==eD) return FrPair(1,1,1,1);
+    auto eFrom = FieldToO3tlLength(eS), eTo = FieldToO3tlLength(eD);
+    if (eFrom == o3tl::Length::invalid)
+    {
+        if (eTo == o3tl::Length::invalid)
+            return FrPair(1,1,1,1);
+        eFrom = IsInch(eD) ? o3tl::Length::in : o3tl::Length::mm;
+    }
+    else if (eTo == o3tl::Length::invalid)
+        eTo = IsInch(eS) ? o3tl::Length::in : o3tl::Length::mm;
+    return toPair(eFrom, eTo);
+};
+
+void SdrFormatter::Undirty()
+{
+    const o3tl::Length eFrom = MapToO3tlLength(m_eSrcMU, o3tl::Length::invalid);
+    const o3tl::Length eTo = MapToO3tlLength(m_eDstMU, o3tl::Length::invalid);
+    if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
+    {
+        const auto [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
+        sal_Int64 nMul = mul;
+        sal_Int64 nDiv = div;
+        short nComma = 0;
+
+        // shorten trailing zeros for dividend
+        while (0 == (nMul % 10))
+        {
+            nComma--;
+            nMul /= 10;
+        }
+
+        // shorten trailing zeros for divisor
+        while (0 == (nDiv % 10))
+        {
+            nComma++;
+            nDiv /= 10;
+        }
+        m_nMul = nMul;
+        m_nDiv = nDiv;
+        m_nComma = nComma;
+    }
+    else
+    {
+        m_nMul = m_nDiv = 1;
+        m_nComma = 0;
+    }
+    m_bDirty=false;
+}
+
+
+OUString SdrFormatter::GetStr(tools::Long nVal) const
+{
+    static constexpr OUString aNullCode(u"0"_ustr);
+
+    if(!nVal)
+    {
+        return aNullCode;
+    }
+
+    // we may lose some decimal places here, because of MulDiv instead of Real
+    bool bNeg(nVal < 0);
+    SvtSysLocale aSysLoc;
+    const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
+
+    if (m_bDirty)
+        const_cast<SdrFormatter*>(this)->Undirty();
+
+    sal_Int16 nC(m_nComma);
+
+    if(bNeg)
+        nVal = -nVal;
+
+    while(nC <= -3)
+    {
+        nVal *= 1000;
+        nC += 3;
+    }
+
+    while(nC <= -1)
+    {
+        nVal *= 10;
+        nC++;
+    }
+
+    if(m_nMul != m_nDiv)
+        nVal = BigMulDiv(nVal, m_nMul, m_nDiv);
+
+    OUStringBuffer aStr = OUString::number(nVal);
+
+    if(nC > 0 && aStr.getLength() <= nC )
+    {
+        // decimal separator necessary
+        sal_Int32 nCount(nC - aStr.getLength());
+
+        if(nCount >= 0 && LocaleDataWrapper::isNumLeadingZero())
+            nCount++;
+
+        for(sal_Int32  i=0; i<nCount; i++)
+            aStr.insert(0, aNullCode);
+
+        // remove superfluous decimal points
+        sal_Int32 nNumDigits(LocaleDataWrapper::getNumDigits());
+        sal_Int32 nWeg(nC - nNumDigits);
+
+        if(nWeg > 0)
+        {
+            // TODO: we should round here
+            aStr.remove(aStr.getLength() - nWeg, nWeg);
+            nC = nNumDigits;
+        }
+    }
+
+    // remember everything before the decimal separator for later
+    sal_Int32 nForComma(aStr.getLength() - nC);
+
+    if(nC > 0)
+    {
+        // insert comma char (decimal separator)
+        // remove trailing zeros
+        while(nC > 0 && aStr[aStr.getLength() - 1] == aNullCode.getStr()[0])
+        {
+            aStr.remove(aStr.getLength() - 1, 1);
+            nC--;
+        }
+
+        if(nC > 0)
+        {
+            // do we still have decimal places?
+            sal_Unicode cDec(rLoc.getNumDecimalSep()[0]);
+            aStr.insert(nForComma, cDec);
+        }
+    }
+
+    // add in thousands separator (if necessary)
+    if( nForComma > 3 )
+    {
+        const OUString& aThoSep( rLoc.getNumThousandSep() );
+        if ( aThoSep.getLength() > 0 )
+        {
+            sal_Unicode cTho( aThoSep[0] );
+            sal_Int32 i(nForComma - 3);
+
+            while(i > 0)
+            {
+                aStr.insert(i, cTho);
+                i -= 3;
+            }
+        }
+    }
+
+    if(aStr.isEmpty())
+        aStr.append(aNullCode);
+
+    if(bNeg && (aStr.getLength() > 1 || aStr[0] != aNullCode.getStr()[0]))
+    {
+        aStr.insert(0, "-");
+    }
+
+    return aStr.makeStringAndClear();
+}
+
+OUString SdrFormatter::GetUnitStr(MapUnit eUnit)
+{
+    switch(eUnit)
+    {
+        // metrically
+        case MapUnit::Map100thMM   :
+            return u"/100mm"_ustr;
+        case MapUnit::Map10thMM    :
+            return u"/10mm"_ustr;
+        case MapUnit::MapMM         :
+            return u"mm"_ustr;
+        case MapUnit::MapCM         :
+            return u"cm"_ustr;
+
+        // Inch
+        case MapUnit::Map1000thInch:
+            return u"/1000\""_ustr;
+        case MapUnit::Map100thInch :
+            return u"/100\""_ustr;
+        case MapUnit::Map10thInch  :
+            return u"/10\""_ustr;
+        case MapUnit::MapInch       :
+            return u"\""_ustr;
+        case MapUnit::MapPoint      :
+            return u"pt"_ustr;
+        case MapUnit::MapTwip       :
+            return u"twip"_ustr;
+
+        // others
+        case MapUnit::MapPixel      :
+            return u"pixel"_ustr;
+        case MapUnit::MapSysFont    :
+            return u"sysfont"_ustr;
+        case MapUnit::MapAppFont    :
+            return u"appfont"_ustr;
+        case MapUnit::MapRelative   :
+            return u"%"_ustr;
+        default:
+            return OUString();
+    }
+}
+
+OUString SdrFormatter::GetUnitStr(FieldUnit eUnit)
+{
+    switch(eUnit)
+    {
+        default             :
+        case FieldUnit::NONE     :
+        case FieldUnit::CUSTOM   :
+            return OUString();
+
+        // metrically
+        case FieldUnit::MM_100TH:
+            return u"/100mm"_ustr;
+        case FieldUnit::MM     :
+            return u"mm"_ustr;
+        case FieldUnit::CM     :
+            return u"cm"_ustr;
+        case FieldUnit::M      :
+            return u"m"_ustr;
+        case FieldUnit::KM     :
+            return u"km"_ustr;
+
+        // Inch
+        case FieldUnit::TWIP   :
+            return u"twip"_ustr;
+        case FieldUnit::POINT  :
+            return u"pt"_ustr;
+        case FieldUnit::PICA   :
+            return u"pica"_ustr;
+        case FieldUnit::INCH   :
+            return u"\""_ustr;
+        case FieldUnit::FOOT   :
+            return u"ft"_ustr;
+        case FieldUnit::MILE   :
+            return u"mile(s)"_ustr;
+
+        // others
+        case FieldUnit::PERCENT:
+            return u"%"_ustr;
+    }
+}
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

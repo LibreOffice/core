@@ -1,0 +1,22 @@
+--- a/jfreereport_libformula/source/org/pentaho/reporting/libraries/formula/DefaultLocalizationContext.java	2010-06-01 17:15:52.000000000 +0200
++++ a/jfreereport_libformula.patched/source/org/pentaho/reporting/libraries/formula/DefaultLocalizationContext.java	2013-08-06 13:11:58.000000000 +0200
+@@ -162,11 +169,17 @@
+     final Locale activeLocale = getLocale();
+     datetimeFormats.add(DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, activeLocale));
+     dateFormats.add(DateFormat.getDateInstance(DateFormat.FULL, activeLocale));
+-    timeFormats.add(DateFormat.getTimeInstance(DateFormat.FULL, activeLocale));
++    // LEM: "FULL" does not really make sense for isolated times:
++    //      in the absence of a date, it cannot know whether it is meant in the winter-timezone
++    //      or in the summer (daylight saving time) timezone, and will always display the winter timezone.
++    // timeFormats.add(DateFormat.getTimeInstance(DateFormat.FULL, activeLocale));
+ 
+     datetimeFormats.add(DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, activeLocale));
+     dateFormats.add(DateFormat.getDateInstance(DateFormat.LONG, activeLocale));
+-    timeFormats.add(DateFormat.getTimeInstance(DateFormat.LONG, activeLocale));
++    // LEM: "LONG" does not really make sense for isolated times:
++    //      in the absence of a date, it cannot know whether it is meant in the winter-timezone
++    //      or in the summer (daylight saving time) timezone, and will always display the winter timezone.
++    // timeFormats.add(DateFormat.getTimeInstance(DateFormat.LONG, activeLocale));
+ 
+     datetimeFormats.add(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, activeLocale));
+     dateFormats.add(DateFormat.getDateInstance(DateFormat.MEDIUM, activeLocale));

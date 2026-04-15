@@ -1,0 +1,129 @@
+From 75ba3f247d6f0baa6dc83b7eca09ec67dabe0924 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Tue, 22 Jul 2025 13:12:12 +0100
+Subject: [PATCH] const up some statics
+
+---
+ lp_params.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/lp_params.c b/lp_params.c
+index e8fcd2e..c5de106 100644
+--- a/lp_params.c
++++ b/lp_params.c
+@@ -53,13 +53,13 @@
+     REAL_set_function *REAL_set_function;       /* set via setREALfunction */
+   } set_function;
+   int type;                                     /* set via set*function */
+-  struct _values *values;                       /* set via setvalues to a structure of _values */
++  const struct _values *values;                 /* set via setvalues to a structure of _values */
+   int elements;                                 /*  or via setNULLvalues if the value is shown as is */
+   unsigned int basemask;
+   int mask;                                     /* WRITE_ACTIVE or WRITE_COMMENTED */
+ };
+ 
+-static struct _values anti_degen[] =
++static const struct _values anti_degen[] =
+ {
+   { setvalue(ANTIDEGEN_NONE) },
+   { setvalue(ANTIDEGEN_FIXEDVARS) },
+@@ -74,7 +74,7 @@
+   { setvalue(ANTIDEGEN_BOUNDFLIP) },
+ };
+ 
+-static struct _values basiscrash[] =
++static const struct _values basiscrash[] =
+ {
+   { setvalue(CRASH_NONE) },
+   /* { setvalue(CRASH_NONBASICBOUNDS) }, */ /* not yet implemented */
+@@ -82,14 +82,14 @@
+   { setvalue(CRASH_LEASTDEGENERATE) },
+ };
+ 
+-static struct _values bb_floorfirst[] =
++static const struct _values bb_floorfirst[] =
+ {
+   { setvalue(BRANCH_CEILING) },
+   { setvalue(BRANCH_FLOOR) },
+   { setvalue(BRANCH_AUTOMATIC) },
+ };
+ 
+-static struct _values bb_rule[] =
++static const struct _values bb_rule[] =
+ {
+   { setvalue(NODE_FIRSTSELECT) },
+   { setvalue(NODE_GAPSELECT) },
+@@ -114,7 +114,7 @@
+   { setvalue(NODE_STRONGINIT) },
+ };
+ 
+-static struct _values improve[] =
++static const struct _values improve[] =
+ {
+   { setvalue(IMPROVE_NONE) },
+   { setvalue(IMPROVE_SOLUTION) },
+@@ -143,7 +143,7 @@
+   set_mip_gap(lp, FALSE, mip_gap);
+ }
+ 
+-static struct _values pivoting[] =
++static const struct _values pivoting[] =
+ {
+   { setvalue(PRICER_FIRSTINDEX) },
+   { setvalue(PRICER_DANTZIG) },
+@@ -161,7 +161,7 @@
+   { setvalue(PRICE_TRUENORMINIT) },
+ };
+ 
+-static struct _values presolving[] =
++static const struct _values presolving[] =
+ {
+   { setvalue(PRESOLVE_NONE) },
+   { setvalue(PRESOLVE_ROWS) },
+@@ -217,14 +217,14 @@
+   set_presolve(lp, get_presolve(lp), maxloops);
+ }
+ 
+-static struct _values print_sol[] =
++static const struct _values print_sol[] =
+ {
+   { FALSE, "0" },
+   { TRUE,  "1" },
+   { setvalue(AUTOMATIC) },
+ };
+ 
+-static struct _values scaling[] =
++static const struct _values scaling[] =
+ {
+   { setvalue(SCALE_NONE) },
+   { setvalue(SCALE_EXTREME) },
+@@ -243,7 +243,7 @@
+   { setvalue(SCALE_COLSONLY) },
+ };
+ 
+-static struct _values simplextype[] =
++static const struct _values simplextype[] =
+ {
+   { setvalue(SIMPLEX_PRIMAL_PRIMAL) },
+   { setvalue(SIMPLEX_DUAL_PRIMAL) },
+@@ -251,7 +251,7 @@
+   { setvalue(SIMPLEX_DUAL_DUAL) },
+ };
+ 
+-static struct _values verbose[] =
++static const struct _values verbose[] =
+ {
+   { setvalue(NEUTRAL) },
+   { setvalue(CRITICAL) },
+@@ -262,7 +262,7 @@
+   { setvalue(FULL) },
+ };
+ 
+-static struct _functions functions[] =
++static const struct _functions functions[] =
+ {
+   /* solve options */
+   { "ANTI_DEGEN", setintfunction(get_anti_degen, set_anti_degen), setvalues(anti_degen, ~0), WRITE_ACTIVE },
+-- 
+2.49.0
+

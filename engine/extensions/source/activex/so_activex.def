@@ -1,0 +1,13 @@
+; iervp.def : Declares the module parameters.
+
+LIBRARY
+
+EXPORTS
+	DllCanUnloadNow     PRIVATE
+	DllGetClassObject   PRIVATE
+	DllRegisterServer   PRIVATE
+	DllUnregisterServer	PRIVATE
+	DllRegisterServerNative		PRIVATE
+	DllRegisterServerDoc		PRIVATE
+	DllUnregisterServerNative	PRIVATE
+	DllUnregisterServerDoc		PRIVATE

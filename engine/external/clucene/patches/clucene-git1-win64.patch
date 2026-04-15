@@ -1,0 +1,45 @@
+--- src/shared/CLucene/config/threads.cpp	2013-06-06 16:25:23.014622397 +0200
++++ src/shared/CLucene/config/threads.cpp	2013-06-06 16:33:35.326048842 +0200
+@@ -63,14 +63,14 @@
+   }
+ 
+   int32_t mutex_thread::atomic_increment(_LUCENE_ATOMIC_INT *theInteger){
+-#ifdef _M_X64
++#ifdef _WIN64
+     return _InterlockedIncrement64(theInteger);
+ #else
+     return InterlockedIncrement(theInteger);
+ #endif
+   }
+   int32_t mutex_thread::atomic_decrement(_LUCENE_ATOMIC_INT *theInteger){
+-#ifdef _M_X64
++#ifdef _WIN64
+     return _InterlockedDecrement64(theInteger);
+ #else
+     return InterlockedDecrement(theInteger);
+--- src/shared/CLucene/config/_threads.h	2013-06-06 16:25:23.013622420 +0200
++++ src/shared/CLucene/config/_threads.h	2013-06-06 16:29:39.152601408 +0200
+@@ -34,9 +34,9 @@
+ 
+     	    __declspec(dllimport) unsigned long __stdcall GetCurrentThreadId();
+ 
+-#ifdef _M_X64
+-          __declspec(dllimport) long long __stdcall _InterlockedIncrement64(__inout long long volatile*);
+-          __declspec(dllimport) long long __stdcall _InterlockedDecrement64(__inout long long volatile*);
++#ifdef _WIN64
++          long long __stdcall _InterlockedIncrement64(long long volatile*);
++          long long __stdcall _InterlockedDecrement64(long long volatile*);
+ #else
+           __declspec(dllimport) long __stdcall InterlockedIncrement(long volatile*);
+           __declspec(dllimport) long __stdcall InterlockedDecrement(long volatile*);
+--- src/shared/CLucene/LuceneThreads.h	2013-06-06 16:25:23.014622397 +0200
++++ src/shared/CLucene/LuceneThreads.h	2013-06-06 16:37:45.490166481 +0200
+@@ -101,7 +101,7 @@
+        
+           #define _LUCENE_ATOMIC_INC(theInteger) CL_NS(util)::mutex_thread::atomic_increment(theInteger)
+           #define _LUCENE_ATOMIC_DEC(theInteger) CL_NS(util)::mutex_thread::atomic_decrement(theInteger)
+-#ifdef _M_X64
++#ifdef _WIN64
+           #define _LUCENE_ATOMIC_INT long long
+ #else
+           #define _LUCENE_ATOMIC_INT long

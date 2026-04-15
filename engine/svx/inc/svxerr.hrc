@@ -1,0 +1,78 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SVX_INC_SVXERR_HRC
+#define INCLUDED_SVX_INC_SVXERR_HRC
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+#include <svx/svxerr.hxx>
+#include <editeng/editerr.hxx>
+
+// Error-Context ---------------------------------------------------------
+const ErrMsgCode RID_SVXERRCTX[] =
+{
+    { NC_("RID_SVXERRCTX", "$(ERR) executing the thesaurus.") ,
+      ErrCode(ERRCTX_SVX_LINGU_THESAURUS) },
+    { NC_("RID_SVXERRCTX", "$(ERR) executing the spellcheck.") ,
+      ErrCode(ERRCTX_SVX_LINGU_SPELLING) },
+    { NC_("RID_SVXERRCTX", "$(ERR) executing the hyphenation.") ,
+      ErrCode(ERRCTX_SVX_LINGU_HYPHENATION) },
+    { NC_("RID_SVXERRCTX", "$(ERR) creating a dictionary.") ,
+      ErrCode(ERRCTX_SVX_LINGU_DICTIONARY) },
+    { NC_("RID_SVXERRCTX", "$(ERR) setting background attribute.") ,
+      ErrCode(ERRCTX_SVX_BACKGROUND) },
+    { NC_("RID_SVXERRCTX", "$(ERR) loading the graphics.") ,
+      ErrCode(ERRCTX_SVX_IMPORT_GRAPHIC) },
+    { {}, ERRCODE_NONE }
+};
+
+// Error-Code ------------------------------------------------------------
+const ErrMsgCode RID_SVXERRCODE[] =
+{
+    { NC_("RID_SVXERRCODE", "$(ARG1) is not supported by the spellcheck function or is not presently active.\nPlease check your installation and, if necessary, install the required language module\nor activate it under 'Tools - Options - Languages and Locales - Writing Aids'."),
+      ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS },
+    { NC_("RID_SVXERRCODE", "Spellcheck is not available.") ,
+      ERRCODE_SVX_LINGU_LINGUNOTEXISTS },
+    { NC_("RID_SVXERRCODE", "The custom dictionary $(ARG1) cannot be created.") ,
+      ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE },
+    { NC_("RID_SVXERRCODE", "The graphic $(ARG1) could not be found.") ,
+      ERRCODE_SVX_GRAPHIC_NOTREADABLE },
+    { NC_("RID_SVXERRCODE", "An unlinked graphic could not be loaded."),
+      ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT },
+    { NC_("RID_SVXERRCODE", "A language has not been fixed for the selected term."),
+      ERRCODE_SVX_LINGU_NOLANGUAGE },
+    { NC_("RID_SVXERRCODE", "All changes to the Basic Code are lost. The original VBA Macro Code is saved instead."),
+      ERRCODE_SVX_MODIFIED_VBASIC_STORAGE },
+    { NC_("RID_SVXERRCODE", "The original VBA Basic Code contained in the document will not be saved."),
+      ERRCODE_SVX_VBASIC_STORAGE_EXIST },
+    { NC_("RID_SVXERRCODE", "The password is incorrect. The document cannot be opened."),
+      ERRCODE_SVX_WRONGPASS },
+    { NC_("RID_SVXERRCODE", "The encryption method used in this document is not supported. Only Microsoft Office 97/2000 compatible password encryption is supported."),
+      ERRCODE_SVX_READ_FILTER_CRYPT },
+    { NC_("RID_SVXERRCODE", "The loading of password-encrypted Microsoft PowerPoint presentations is not supported."),
+      ERRCODE_SVX_READ_FILTER_PPOINT },
+    { NC_("RID_SVXERRCODE", "Password protection is not supported when documents are saved in a Microsoft Office format.\nDo you want to save the document without password protection?"),
+      ERRCODE_SVX_EXPORT_FILTER_CRYPT },
+    { {}, ERRCODE_NONE }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

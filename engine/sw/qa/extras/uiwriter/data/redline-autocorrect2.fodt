@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:officeooo="http://openoffice.org/2009/office" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <office:styles>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:default-style style:family="paragraph">
+   <style:text-properties fo:language="en" fo:country="GB"/>
+  </style:default-style>
+ </office:styles>
+ <office:body>
+  <office:text>
+   <text:tracked-changes text:track-changes="false">
+    <text:changed-region xml:id="ct94099223789984" text:id="ct94099223789984">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>Unknown Author</dc:creator>
+       <dc:date>2020-11-03T19:19:05</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+   </text:tracked-changes>
+   <text:p text:style-name="P1">Lorem<text:change-start text:change-id="ct94099223789984"/>,<text:change-end text:change-id="ct94099223789984"/></text:p>
+  </office:text>
+ </office:body>
+</office:document>

@@ -1,0 +1,175 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+interface WebEditView : BaseTextEditView
+{
+    SID_DRAW_TEXT_MARQUEE // status()
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+}
+
+shell SwWebView
+{
+    import WebEditView;
+}
+
+interface WebSourceView
+{
+    SID_TABLE_CELL // status()
+    [
+        StateMethod = GetState ;
+    ]
+    SID_SAVEASDOC // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_SAVEDOC // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTDOC // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTDOCDIRECT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_SEARCH_OPTIONS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_SEARCH_ITEM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FID_SEARCH_NOW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_REPEAT_SEARCH // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState ;
+    ]
+    SID_UNDO // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_REDO // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_REPEAT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_CUT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_COPY   // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_PASTE  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_SELECTALL // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+    SID_MAIL_SENDDOC
+    [
+        StateMethod = GetState ;
+    ]
+    SID_MAIL_SENDDOCASPDF
+    [
+        StateMethod = GetState ;
+    ]
+    SID_BLUETOOTH_SENDDOC
+    [
+        StateMethod = GetState ;
+    ]
+    SID_EXPORTDOC
+    [
+        StateMethod = GetState ;
+    ]
+    SID_EXPORTDOCASPDF
+    [
+        StateMethod = GetState ;
+    ]
+    SID_DIRECTEXPORTDOCASPDF
+    [
+        StateMethod = GetState ;
+    ]
+    SID_BROWSER_MODE
+    [
+        StateMethod = GetState;
+    ]
+    FN_PRINT_LAYOUT
+    [
+        StateMethod = GetState;
+    ]
+    FN_SINGLE_PAGE_PER_ROW
+    [
+        StateMethod = GetState;
+    ]
+    FN_MULTIPLE_PAGES_PER_ROW
+    [
+        StateMethod = GetState;
+    ]
+    FN_BOOKVIEW
+    [
+        StateMethod = GetState;
+    ]
+}
+
+shell SwSrcView
+
+{
+        import WebSourceView;
+}
+

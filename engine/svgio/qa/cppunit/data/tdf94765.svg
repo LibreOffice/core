@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="841.9px" height="595.3px" viewBox="0 0 841.9 595.3" style="enable-background:new 0 0 841.9 595.3;" xml:space="preserve"
+	>
+<style type="text/css">
+	.st1{fill:url(#SVGID_1_);stroke:#000000;stroke-miterlimit:10;}
+</style>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="432.1587" y1="340.3492" x2="770.254" y2="340.3492">
+	<stop  offset="0" style="stop-color:#DBDBDB"/>
+	<stop  offset="1" style="stop-color:#737373"/>
+</linearGradient>
+<rect x="70.3" y="48.3" fill="url(#SVGID_1_)" width="338.1" height="252.4"/>
+<rect x="432.2" y="214.2" class="st1" width="338.1" height="252.4"/>
+</svg>

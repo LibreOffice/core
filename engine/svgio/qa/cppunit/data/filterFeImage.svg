@@ -1,0 +1,16 @@
+<svg
+  viewBox="0 0 200 200"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="200"
+  height="200">
+  <defs>
+    <filter id="image">
+      <feImage
+             xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIEAAACBCAYAAADnoNlQAAAABHNCSVQICAgIfAhkiAAAAUJJREFUeJzt3EENAkEQRcG3aMAjMpYzBgjqSDCyWJhbZ5IqBf/w0sc+6rzaxnN6wLpzesC62/QA5okAESACEgGJgERAIiARkAhIBCQCEgGJgERAIiARkAhIBCQCEgGJgERAIiARkAhIBCQCEgGJgERAIiARkAhIBCQCEgGJgERAIiARkAiojvv12+at7aPP9IRlO211CRABIiARkAhIBCQCEgGJgERAIiARkAhIBCQCEgGJgERAIiARkAhIBCQCEgGJgERAIiARkAhIBCQCEgGJgERAIiARkAhIBCQCEgGJgERAdVzvtnlr22t6wLrnd3rBOpcAESACEgGJgERAIiARkAhIBCQCEgGJgERAIiARkAhIBCQCEgGJgERAIiARkAhIBCQCEgGJgERAIiARkAhIBCQCEgGJgERAIiARkAhIBFR/ALUM7y9VYLsAAAAASUVORK5CYII="/>
+    </filter>
+  </defs>
+
+  <rect x="10%" y="10%" width="80%" height="80%" style="filter:url(#image);" />
+</svg>
+

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<helpdocument version="1.0">
+<meta>
+<topic id="Magyar_szinonimaszotar" indexer="include" status="PUBLISH">
+<title id="title">Magyar szinonimaszótár</title>
+<filename>/org.openoffice.hu.hunspell.dictionaries/page1.xhp</filename>
+</topic>
+</meta>
+<body>
+
+<bookmark xml-lang="hu" branch="index" id="bm1">
+<bookmark_value>szinonimaszótár</bookmark_value>
+<bookmark_value>szinonimaszótár;magyar</bookmark_value>
+<bookmark_value>szókincstár</bookmark_value>
+<bookmark_value>szókincstár;magyar</bookmark_value>
+</bookmark>
+
+
+<paragraph role="heading" level="1" id="heading1">Magyar szinonimaszótár
+</paragraph>
+<paragraph role="paragraph" id="p01">
+A <item type="productname">%PRODUCTNAME</item> magyar szinonimaszótára mintegy 20 ezer szót tartalmaz. A rokon értelmű szavakon kívül benne vannak a szótárban a névnapok, a görög betűk és több száz fontos Unicode-karakter is. A névnaptár a Magyar Webkorpusz szerinti leggyakoribb 1500 magyar utónevet tartalmazza. Az utónevek és a többi szinonima is egy országos napilap utolsó 6 évfolyamának szókincse alapján lett gyakorisági sorrendbe állítva.
+</paragraph>
+<paragraph role="heading" level="2" id="heading2">Példák a használatra
+</paragraph>
+<paragraph role="paragraph" id="p02">
+Az „András”, „04-17”, „pi”, „jel” vagy „telefon” beírását és a Ctrl-F7 lenyomását követően az András névnapjait, az április 17-re eső névnapokat, a π jelet és nagybetűs változatát, a Π-t, a gyakrabban használt magyar írásjeleket és a telefonszámot bevezető telefonszimbólumokat (☏, ☎) lehet a dokumentumba beilleszteni.
+</paragraph>
+<paragraph role="paragraph" id="p03">
+A magyar szinonimaszótár kihasználja a <item type="productname">%PRODUCTNAME</item> tövezési és toldalékolási képességeit is. A képen látható példában a „nyiluktól” szóra kattintás és a szinonimaszótár előhívása után megjelenik a nyíl tőszó, és a nyílvesszőjüktől szinonima, ami a keresett szóalaknak megfelelően van toldalékolva. Láthatóak még az Unicode nyíl karakterek is, amelyek így nemcsak a speciális karakterek beillesztése párbeszédablak, hanem a szinonimaszótáron keresztül is elérhetővé váltak. <image id="img_idszinscrsht" src="org.openoffice.hu.hunspell.dictionaries/szinonima.png"><alt id="alt_idszinscrsht">Képernyőkép a magyar szinonimaszótár használatáról</alt></image>
+</paragraph>
+<paragraph role="heading" level="2" id="heading3">Támogató
+</paragraph>
+<paragraph role="paragraph" id="p04">
+A <item type="productname">%PRODUCTNAME</item> magyar szinonimaszótárának elkészítését az <link href="http://www.fsf.hu/" name="www.fsf.hu">FSF.hu Alapítvány</link> támogatta.
+</paragraph>
+<paragraph role="paragraph" id="p05">
+<image id="img_idfsfhu" src="org.openoffice.hu.hunspell.dictionaries/fsfhu.png" ><alt id="alt_idfsfhu">FSF.hu logó</alt></image>
+</paragraph>
+</body>
+</helpdocument>

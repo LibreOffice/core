@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<Students xmlns="http://xyzuniversity.org/student/">
+    <Student xmlns:ug="http://xyzuniversity.org/student/ug/">
+        <Name>ABC</Name>
+        <ug:Branch>Computer Science</ug:Branch>
+        <ug:Grade>7.9</ug:Grade>
+    </Student>
+    <Student  xmlns:pg="http://xyzuniversity.org/student/pg/">
+        <Name>PQR</Name>
+        <pg:Field>Artificial Intelligence</pg:Field>
+    </Student>
+</Students>

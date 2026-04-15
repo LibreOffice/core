@@ -1,0 +1,131 @@
+diff -ur icu.org/source/acinclude.m4 icu/source/acinclude.m4
+--- icu.org/source/acinclude.m4     2020-04-10 16:22:16.000000000 +0200
++++ icu/source/acinclude.m4 2020-04-21 22:14:09.940217733 +0200
+@@ -52,6 +52,12 @@
+ 	else
+ 		icu_cv_host_frag=mh-cygwin-msvc
+ 	fi ;;
++aarch64-*-cygwin)
++	if test "$GCC" = yes; then
++		icu_cv_host_frag=mh-cygwin64
++	else
++		icu_cv_host_frag=mh-cygwin-msvc
++	fi ;;
+ *-*-mingw*)
+ 	if test "$GCC" = yes; then
+                 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+--- icu/source/configure.ac.orig	2020-04-22 22:04:20.000000000 +0200
++++ icu/source/configure.ac	2020-10-01 09:39:05.570900400 +0200
+@@ -213,23 +213,33 @@
+ 	[cross_buildroot="${withval}"],
+         [cross_buildroot=""])
+ 
++cross_mixed_buildroot="$cross_buildroot"
++cross_unix_buildroot="$cross_buildroot"
+ if test "X$cross_buildroot" = "X"; then
+     if test "$cross_compiling" = "yes"; then
+         AC_MSG_ERROR([Error! Cross compiling but no --with-cross-build option specified - please supply the path to an executable ICU's build root])
+ 	dnl '
+     fi
+ else
+-    if test -f "${cross_buildroot}/config/icucross.mk"; then
++    case "${host}" in
++    *-*-cygwin*)
++        #M# -m isn't used because it doesn't work on Win98
++        cross_mixed_buildroot=$(cygpath -ad "$cross_buildroot" | tr '\\' '/')
++        cross_unix_buildroot=$(cygpath -au "$cross_buildroot")
++	;;
++    esac
++    if test -f "${cross_mixed_buildroot}/config/icucross.mk"; then
+         AC_MSG_RESULT([Using cross buildroot: $cross_buildroot])
+     else
+-        if test -d "${cross_buildroot}"; then
+-            AC_MSG_ERROR([${cross_buildroot}/config/icucross.mk not found. Please build ICU in ${cross_buildroot} first.])
++        if test -d "${cross_mixed_buildroot}"; then
++            AC_MSG_ERROR([${cross_mixed_buildroot}/config/icucross.mk not found. Please build ICU in ${cross_mixed_buildroot} first.])
+         else
+-            AC_MSG_ERROR([No such directory ${cross_buildroot} supplied as the argument to --with-cross-build. Use an absolute path.])
++            AC_MSG_ERROR([No such directory ${cross_mixed_buildroot} supplied as the argument to --with-cross-build. Use an absolute path.])
+         fi
+     fi
+ fi
+-AC_SUBST(cross_buildroot)
++AC_SUBST(cross_mixed_buildroot)
++AC_SUBST(cross_unix_buildroot)
+ 
+ # Check for doxygen to generate documentation
+ AC_PATH_PROG(DOXYGEN,doxygen,,$PATH:/usr/local/bin:/usr/bin)
+--- icu/source/test/testdata/Makefile.in.orig	2020-10-01 09:37:25.847888900 +0200
++++ icu/source/test/testdata/Makefile.in	2020-10-01 09:36:41.859996500 +0200
+@@ -82,7 +82,7 @@
+ # relative lib links from pkgdata are the same as for tmp
+ GENRBOPTS=-k
+ # use the cross root, in case we are cross compiling. Otherwise it is equal to top_builddir
+-TOOLDIR=$(cross_buildroot)/tools
++TOOLDIR=$(cross_mixed_buildroot)/tools
+ SRCDATADIR=$(top_srcdir)/data
+ UNICODEDATADIR=$(SRCDATADIR)/unidata
+ OUTDIR=$(top_builddir)/data/out
+--- icu/source/Makefile.in.orig	2020-04-22 22:04:20.000000000 +0200
++++ icu/source/Makefile.in	2020-10-01 09:29:36.642364000 +0200
+@@ -255,16 +255,16 @@
+ 	@(echo "CROSS_ICU_VERSION=$(VERSION)" ;\
+ 	  echo "TOOLEXEEXT=$(EXEEXT)" \
+ 	   ) > $@
+-	@(echo 'TOOLBINDIR=$$(cross_buildroot)/bin' ;\
+-	  echo 'TOOLLIBDIR=$$(cross_buildroot)/lib' ;\
+-	  echo "INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(TOOLLIBDIR):$$(cross_buildroot)/stubdata:$$(cross_buildroot)/tools/ctestfw:$$$$'"$(LDLIBRARYPATH_ENVVAR)" ;\
+-	  echo "PKGDATA_INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(cross_buildroot)/stubdata:$$(cross_buildroot)/tools/ctestfw:$$(TOOLLIBDIR):$$$$'"$(LDLIBRARYPATH_ENVVAR) " ;\
++	@(echo 'TOOLBINDIR=$$(cross_mixed_buildroot)/bin' ;\
++	  echo 'TOOLLIBDIR=$$(cross_mixed_buildroot)/lib' ;\
++	  echo "INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(cross_unix_buildroot)/lib:$$(cross_unix_buildroot)/stubdata:$$(cross_unix_buildroot)/tools/ctestfw:$$$$'"$(LDLIBRARYPATH_ENVVAR)" ;\
++	  echo "PKGDATA_INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(cross_unix_buildroot)/stubdata:$$(cross_unix_buildroot)/tools/ctestfw:$$(cross_unix_buildroot)/lib:$$$$'"$(LDLIBRARYPATH_ENVVAR) " ;\
+ 	  echo ) >> $@
+ 
+ config/icucross.inc: $(top_builddir)/icudefs.mk  $(top_builddir)/Makefile @platform_make_fragment@
+ 	@echo rebuilding $@
+-	@(grep '^CURR_FULL_DIR' $(top_builddir)/icudefs.mk ; \
+-	  grep '^CURR_FULL_DIR' @platform_make_fragment@ || echo ""; \
++	@(grep '^CURR_FULL_DIR' @platform_make_fragment@ || echo ""; \
++	  grep '^CURR_FULL_DIR' $(top_builddir)/icudefs.mk ; \
+ 	   ) > $@
+ 
+ config/icu.pc: $(srcdir)/config/icu.pc.in
+--- icu/source/icudefs.mk.in.orig	2020-04-22 22:04:20.000000000 +0200
++++ icu/source/icudefs.mk.in	2020-10-01 09:35:54.418128800 +0200
+@@ -35,7 +35,8 @@
+ sysconfdir = @sysconfdir@
+ # controls the include of $(top_builddir)/icucross.mk at bottom of file
+ cross_compiling = @cross_compiling@
+-cross_buildroot = @cross_buildroot@
++cross_mixed_buildroot = @cross_mixed_buildroot@
++cross_unix_buildroot = @cross_unix_buildroot@
+ 
+ # Package information
+ 
+@@ -303,8 +304,8 @@
+ INSTALLED_INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR)
+ 
+ # Current full path directory for cross compilation
+-ifneq ($(strip $(cross_buildroot)),)
+-include $(cross_buildroot)/config/icucross.inc
++ifneq ($(strip $(cross_mixed_buildroot)),)
++include $(cross_mixed_buildroot)/config/icucross.inc
+ endif
+ 
+ # Platform-specific setup
+@@ -323,10 +324,11 @@
+ 
+ # some imported things from the cross env
+ TOOLEXEEXT = $(EXEEXT)
+-ifneq ($(strip $(cross_buildroot)),)
+-include $(cross_buildroot)/config/icucross.mk
++ifneq ($(strip $(cross_mixed_buildroot)),)
++include $(cross_mixed_buildroot)/config/icucross.mk
+ else
+-cross_buildroot = $(top_builddir)
++cross_mixed_buildroot = $(top_builddir)
++cross_unix_buildroot = $(top_builddir)
+ endif
+ 
+ # for tests

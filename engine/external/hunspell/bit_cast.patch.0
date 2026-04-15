@@ -1,0 +1,22 @@
+--- src/hunspell/w_char.hxx
++++ src/hunspell/w_char.hxx
+@@ -42,9 +42,8 @@
+ 
+ #if __cplusplus >= 202002L
+ #include <bit>
+-#else
++#endif
+ #include <cstring>
+-#endif
+ 
+ #ifndef GCC
+ struct w_char {
+@@ -58,7 +57,7 @@
+   {
+ #if defined(__i386__) || defined(_M_IX86) || defined(_M_X64)
+     //use little-endian optimized version
+-#if __cplusplus >= 202002L
++#if __cplusplus >= 202002L && defined __cpp_lib_bit_cast && __cpp_lib_bit_cast >= 201806L
+     return std::bit_cast<unsigned short>(*this);
+ #else
+     unsigned short u;

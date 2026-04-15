@@ -1,0 +1,77 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module datatransfer {
+
+/** Interface to be implemented by objects used to provide data for a data
+    transfer operation.
+
+    @see com::sun::star::datatransfer::DataFlavor
+*/
+
+published interface XTransferable: com::sun::star::uno::XInterface
+{
+    /** Called by a data consumer to obtain data from the source in a specified
+        format.
+
+        @param aFlavor
+        Describes the requested data format
+
+        @returns
+        The data in the specified DataFlavor.
+
+        @throws com::sun::star::io::IOException
+        if the data is no longer available in the requested flavor.
+
+        @throws com::sun::star::datatransfer::UnsupportedFlavorException
+        if the requested DataFlavor is not supported.
+    */
+    any getTransferData( [in] DataFlavor aFlavor )
+        raises ( UnsupportedFlavorException, com::sun::star::io::IOException );
+
+    /** Returns a sequence of supported DataFlavor.
+
+        @returns
+        The sequence of supported DataFlavor.
+
+        @see com::sun::star::datatransfer::DataFlavor
+    */
+    sequence < DataFlavor > getTransferDataFlavors();
+
+    /** Checks if the data object supports the specified data flavor.
+
+        @param aFlavor
+        Describes the format that should be checked
+
+        @returns
+        A value of `TRUE` if the DataFlavor is supported by the transfer source.
+        <p>A value of `FALSE` if the DataFlavor is unsupported by the transfer source.</p>
+
+        <br/><br/><p><strong>Note: </strong>This method is only for analogy with the JAVA Clipboard interface. To
+        avoid many calls, the caller should instead use
+        com::sun::star::datatransfer::XTransferable::getTransferDataFlavors().
+    */
+    boolean isDataFlavorSupported( [in] DataFlavor aFlavor );
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

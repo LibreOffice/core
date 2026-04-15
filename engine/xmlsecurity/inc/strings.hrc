@@ -1,0 +1,75 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+#define STR_CERTIFICATE_NOT_VALIDATED               NC_("STR_CERTIFICATE_NOT_VALIDATED", "The certificate could not be validated.")
+#define STR_VERSION                                 NC_("STR_VERSION", "Version")
+#define STR_SERIALNUM                               NC_("STR_SERIALNUM", "Serial Number")
+#define STR_ISSUER                                  NC_("STR_ISSUER", "Issuer")
+#define STR_VALIDFROM                               NC_("STR_VALIDFROM", "Valid From")
+#define STR_VALIDTO                                 NC_("STR_VALIDTO", "Valid to")
+#define STR_SUBJECT                                 NC_("STR_SUBJECT", "Subject")
+#define STR_SUBJECT_PUBKEY_ALGO                     NC_("STR_SUBJECT_PUBKEY_ALGO", "Subject Algorithm")
+#define STR_SUBJECT_PUBKEY_VAL                      NC_("STR_SUBJECT_PUBKEY_VAL", "Public Key")
+#define STR_SIGNATURE_ALGO                          NC_("STR_SIGNATURE_ALGO", "Signature Algorithm")
+#define STR_USE                                     NC_("STR_USE", "Certificate Use")
+#define STR_THUMBPRINT_SHA1                         NC_("STR_THUMBPRINT_SHA1", "Thumbprint SHA1")
+#define STR_THUMBPRINT_MD5                          NC_("STR_THUMBPRINT_MD5", "Thumbprint MD5")
+
+#define STR_XMLSECDLG_OPENED_CRTMGR                 NC_("STR_XMLSECDLG_OPENED_CRTMGR", "You have opened the certificate manager at\n")
+#define STR_XMLSECDLG_OLD_ODF_FORMAT                NC_("STR_XMLSECDLG_OLD_ODF_FORMAT", "This document contains signatures in ODF 1.1 (OpenOffice.org 2.x) format. " \
+                                                       "Signing documents in %PRODUCTNAME %PRODUCTVERSION requires ODF 1.2 format version. " \
+                                                       "Thus no signatures can be added or removed to this document.\n\n" \
+                                                       "Save document in ODF 1.2 format and add all desired signatures again.")
+#define STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN NC_("STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN", "Adding or removing a macro signature will remove all document signatures.\n" \
+                                                       "Do you really want to continue?")
+#define STR_XMLSECDLG_QUERY_REALLYREMOVE            NC_("STR_XMLSECDLG_QUERY_REALLYREMOVE", "Document signature cannot be restored, once removed.\n" \
+                                                       "Do you really want to remove selected signature?")
+
+#define STR_XMLSECDLG_SIGNING_FAILED                NC_("STR_XMLSECDLG_SIGNING_FAILED", "An error occurred while adding the signature.")
+#define STR_XMLSECDLG_NO_CERT_MANAGER               NC_("STR_XMLSECDLG_NO_CERT_MANAGER", "Could not find any certificate manager.")
+#define STR_XMLSECDLG_NO_CERT_FOUND                 NC_("STR_XMLSECDLG_NO_CERT_FOUND", "Could not find the certificate.")
+
+#define RID_XMLSECWB_NO_MOZILLA_PROFILE             NC_("RID_XMLSECWB_NO_MOZILLA_PROFILE", "Digital signatures functionality could not be used, because no Mozilla user profile was found. Please check the Mozilla installation.")
+
+#define STR_DIGITAL_SIGNATURE                       NC_("selectcertificatedialog|STR_DIGITAL_SIGNATURE", "Digital signature")
+#define STR_NON_REPUDIATION                         NC_("selectcertificatedialog|STR_NON_REPUDIATION", "Non-repudiation")
+#define STR_KEY_ENCIPHERMENT                        NC_("selectcertificatedialog|STR_KEY_ENCIPHERMENT", "Key encipherment")
+#define STR_DATA_ENCIPHERMENT                       NC_("selectcertificatedialog|STR_DATA_ENCIPHERMENT", "Data encipherment")
+#define STR_KEY_AGREEMENT                           NC_("selectcertificatedialog|STR_KEY_AGREEMENT", "Key Agreement")
+#define STR_KEY_CERT_SIGN                           NC_("selectcertificatedialog|STR_KEY_CERT_SIGN", "Certificate signature verification")
+#define STR_CRL_SIGN                                NC_("selectcertificatedialog|STR_CRL_SIGN", "CRL signature verification")
+#define STR_ENCIPHER_ONLY                           NC_("selectcertificatedialog|STR_ENCIPHER_ONLY", "Only for encipherment")
+#define STR_SIGN                                    NC_("selectcertificatedialog|str_sign", "Sign")
+#define STR_SELECTSIGN                              NC_("selectcertificatedialog|str_selectsign", "Select")
+#define STR_ENCRYPT                                 NC_("selectcertificatedialog|str_encrypt", "Encrypt")
+
+#define STR_LOADED_CERTS_BASE                       NC_("selectcertificatedialog|str_loaded_certs_base", "Certificates are loaded from:\n")
+#define STR_LOADED_CERTS_OPENPGP_GPG                NC_("selectcertificatedialog|str_loaded_certs_openpgp_gpg", "GPG/GnuPG (OpenPGP)")
+#define STR_LOADED_CERTS_X509_MSCRYPT               NC_("selectcertificatedialog|str_loaded_certs_x509_mscrypt", "Windows Certificate Manager / CertMgr (X.509)")
+#define STR_LOADED_CERTS_X509_NSS_NEWLINE           NC_("selectcertificatedialog|str_loaded_certs_x509_nss", "NSS Certificate DB in the Mozilla Profile (X.509) at:\n")
+
+#define STR_BROKEN_MACRO_CERTIFICATE_DATA           NC_("STR_BROKEN_MACRO_CERTIFICATE_DATA", "Macro security problem!\n\nBroken certificate data: %{data}")
+#define STR_RELOAD_FILE_WARNING                     NC_("STR_RELOAD_FILE_WARNING", "Reload the file to apply the new macro security level")
+#define STR_TRUST_UNTRUSTED_PUBKEY                   NC_("STR_TRUST_UNTRUSTED_PUBKEY", "Security warning: the following OpenPGP public key is untrusted:\n\n%{data}\n\nEncrypting with an untrusted public key increases the risk of a \"man-in-the-middle\" attack. A successful \"man-in-the-middle\" attack gives malicious third parties the ability to decrypt your document.\n\nDo you really want to encrypt your document with this untrusted public key?")
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

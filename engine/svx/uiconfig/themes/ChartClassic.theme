@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Chart Classic">
+    <theme-colors name="Chart Classic">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#000000" />
+        <color name="light2" color="#FFFFFF" />
+        <color name="accent1" color="#004586" />
+        <color name="accent2" color="#FF420E" />
+        <color name="accent3" color="#FFD320" />
+        <color name="accent4" color="#579D1C" />
+        <color name="accent5" color="#7E0021" />
+        <color name="accent6" color="#83CAFF" />
+        <color name="hyperlink" color="#0000EE" />
+        <color name="followed-hyperlink" color="#551A8B" />
+    </theme-colors>
+</theme>

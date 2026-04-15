@@ -1,0 +1,1087 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <sfx2/dialoghelper.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/printer.hxx>
+#include <tools/debug.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
+#include <com/sun/star/i18n/ScriptType.hpp>
+
+#include <vector>
+#include <optional>
+#include <svtools/colorcfg.hxx>
+#include <svtools/sampletext.hxx>
+
+#include <svx/fntctrl.hxx>
+#include <svx/svxids.hrc>
+
+// Item set includes
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
+
+#include <editeng/editeng.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/editids.hrc>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/escapementitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/langitem.hxx>
+
+//TODO: remove this and calculate off the actual size of text, not
+//an arbitrary number of characters
+#define TEXT_WIDTH 80
+
+
+// small helper functions to set fonts
+
+namespace
+{
+void scaleFontWidth(vcl::Font& rFont, vcl::RenderContext const & rRenderContext,tools::Long& n100PercentFont)
+{
+    rFont.SetAverageFontWidth(0);
+    n100PercentFont = rRenderContext.GetFontMetric(rFont).GetAverageFontWidth();
+}
+
+void initFont(vcl::Font& rFont)
+{
+    rFont.SetTransparent(true);
+    rFont.SetAlignment(ALIGN_BASELINE);
+}
+
+void setFontSize(vcl::Font& rFont)
+{
+    Size aSize(rFont.GetFontSize());
+    aSize.setHeight( (aSize.Height() * 3) / 5 );
+    aSize.setWidth( (aSize.Width() * 3) / 5 );
+    rFont.SetFontSize(aSize);
+}
+
+void calcFontHeightAnyAscent(vcl::RenderContext& rRenderContext, const vcl::Font& rFont, tools::Long& nHeight, tools::Long& nAscent)
+{
+    if (!nHeight)
+    {
+        rRenderContext.SetFont(rFont);
+        FontMetric aMetric(rRenderContext.GetFontMetric());
+        nHeight = aMetric.GetLineHeight();
+        nAscent = aMetric.GetAscent();
+    }
+}
+
+void setFont(const SvxFont& rNewFont, SvxFont& rImplFont)
+{
+    rImplFont = rNewFont;
+    rImplFont.SetTransparent(true);
+    rImplFont.SetAlignment(ALIGN_BASELINE);
+}
+
+/*
+ * removes line feeds and carriage returns from string
+ * returns if param is empty
+ */
+OUString removeCRLF(const OUString& rText)
+{
+    return rText.replace(0xa, ' ').replace(0xd, ' ').trim();
+}
+
+struct ScriptInfo
+{
+    tools::Long textWidth;
+    SvtScriptType scriptType;
+    sal_Int32 changePos;
+    ScriptInfo(SvtScriptType scrptType, sal_Int32 position)
+        : textWidth(0)
+        , scriptType(scrptType)
+        , changePos(position)
+    {
+    }
+};
+
+} // end anonymous namespace
+
+class FontPrevWin_Impl
+{
+    friend class SvxFontPrevWindow;
+
+    SvxFont maFont;
+    VclPtr<Printer> mpPrinter;
+    bool mbDelPrinter;
+
+    std::vector<ScriptInfo> maScriptChanges;
+    SvxFont maCJKFont;
+    SvxFont maCTLFont;
+    OUString maText;
+    OUString maScriptText;
+    std::optional<Color> mxColor;
+    std::optional<Color> mxBackColor;
+    std::optional<Color> mxTextLineColor;
+    std::optional<Color> mxOverlineColor;
+    tools::Long mnAscent;
+    sal_Unicode mcStartBracket;
+    sal_Unicode mcEndBracket;
+
+    tools::Long mn100PercentFontWidth; // initial -1 -> not set yet
+    tools::Long mn100PercentFontWidthCJK;
+    tools::Long mn100PercentFontWidthCTL;
+    sal_uInt16 mnFontWidthScale;
+
+    bool mbSelection : 1;
+    bool mbGetSelection : 1;
+    bool mbTwoLines : 1;
+    bool mbUseFontNameAsText : 1;
+    bool mbTextInited : 1;
+
+    bool m_bCJKEnabled;
+    bool m_bCTLEnabled;
+
+
+public:
+    FontPrevWin_Impl() :
+        mpPrinter(nullptr),
+        mbDelPrinter(false),
+        mnAscent(0),
+        mcStartBracket(0),
+        mcEndBracket(0),
+        mnFontWidthScale(100),
+        mbSelection(false),
+        mbGetSelection(false),
+        mbTwoLines(false),
+        mbUseFontNameAsText(false),
+        mbTextInited(false)
+    {
+        m_bCJKEnabled = SvtCJKOptions::IsAnyEnabled();
+        m_bCTLEnabled = SvtCTLOptions::IsCTLFontEnabled();
+        mxBackColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+        Invalidate100PercentFontWidth();
+    }
+
+    ~FontPrevWin_Impl()
+    {
+        if (mbDelPrinter)
+            mpPrinter.disposeAndClear();
+    }
+
+    void CheckScript();
+    Size CalcTextSize(vcl::RenderContext& rRenderContext, OutputDevice const * pPrinter, const SvxFont& rFont);
+    void DrawPrev(vcl::RenderContext& rRenderContext, Printer* pPrinter, Point& rPt, const SvxFont& rFont);
+
+    bool SetFontWidthScale(sal_uInt16 nScaleInPercent);
+    inline void Invalidate100PercentFontWidth();
+    inline bool Is100PercentFontWidthValid() const;
+    void ScaleFontWidth(vcl::RenderContext const & rRenderContext);
+                            // scales rNonCJKFont and aCJKFont depending on nFontWidthScale and
+                            // sets the 100%-Font-Widths
+};
+
+inline void FontPrevWin_Impl::Invalidate100PercentFontWidth()
+{
+    mn100PercentFontWidth = mn100PercentFontWidthCJK = mn100PercentFontWidthCTL = -1;
+}
+
+inline bool FontPrevWin_Impl::Is100PercentFontWidthValid() const
+{
+    DBG_ASSERT( ( mn100PercentFontWidth == -1 && mn100PercentFontWidthCJK == -1 ) ||
+                ( mn100PercentFontWidth != -1 && mn100PercentFontWidthCJK != -1 ) ||
+                ( mn100PercentFontWidth == -1 && mn100PercentFontWidthCTL == -1 ) ||
+                ( mn100PercentFontWidth != -1 && mn100PercentFontWidthCTL != -1 ),
+                "*FontPrevWin_Impl::Is100PercentFontWidthValid(): 100PercentFontWidth's not synchronous" );
+    return mn100PercentFontWidth != -1;
+}
+
+/*
+ * evaluates the scripttypes of the actual string.
+ * Afterwards the positions of script change are notified in aScriptChg,
+ * the scripttypes in aScriptType.
+ * The aTextWidth array will be filled with zero.
+ */
+void FontPrevWin_Impl::CheckScript()
+{
+    assert(!maText.isEmpty()); // must have a preview text here!
+    if (maText == maScriptText)
+    {
+        return; // already initialized
+    }
+
+    maScriptText = maText;
+    maScriptChanges.clear();
+
+    auto aEditEngine = EditEngine(nullptr);
+    aEditEngine.SetText(maScriptText);
+
+    auto aScript = aEditEngine.GetScriptType({ 0, 0, 0, 0 });
+    for (sal_Int32 i = 1; i <= maScriptText.getLength(); i++)
+    {
+        auto aNextScript = aEditEngine.GetScriptType({ 0, i, 0, i });
+        if (aNextScript != aScript)
+            maScriptChanges.emplace_back(aScript, i - 1);
+        if (i == maScriptText.getLength())
+            maScriptChanges.emplace_back(aScript, i);
+        aScript = aNextScript;
+    }
+}
+
+/*
+ * Size FontPrevWin_Impl::CalcTextSize(..)
+ * fills the aTextWidth array with the text width of every part
+ * of the actual string without a script change inside.
+ * For Latin parts the given rFont will be used,
+ * for Asian parts the aCJKFont.
+ * The returned size contains the whole string.
+ * The member nAscent is calculated to the maximal ascent of all used fonts.
+ */
+
+Size FontPrevWin_Impl::CalcTextSize(vcl::RenderContext& rRenderContext, OutputDevice const * _pPrinter, const SvxFont& rInFont)
+{
+    SvtScriptType aScript;
+    sal_uInt16 nIdx = 0;
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd;
+    size_t nCnt = maScriptChanges.size();
+
+    if (nCnt)
+    {
+        nEnd = maScriptChanges[nIdx].changePos;
+        aScript = maScriptChanges[nIdx].scriptType;
+    }
+    else
+    {
+        nEnd = maText.getLength();
+        aScript = SvtScriptType::LATIN;
+    }
+    tools::Long nTxtWidth = 0;
+    tools::Long nCJKHeight = 0;
+    tools::Long nCTLHeight = 0;
+    tools::Long nHeight = 0;
+    mnAscent = 0;
+    tools::Long nCJKAscent = 0;
+    tools::Long nCTLAscent = 0;
+
+    do
+    {
+        const SvxFont& rFont = (aScript == SvtScriptType::ASIAN) ?
+                                    maCJKFont :
+                                    ((aScript == SvtScriptType::COMPLEX) ?
+                                        maCTLFont :
+                                        rInFont);
+        tools::Long nWidth = rFont.GetTextSize(*_pPrinter, maText, nStart, nEnd - nStart).Width();
+        if (nIdx >= maScriptChanges.size())
+            break;
+
+        maScriptChanges[nIdx++].textWidth = nWidth;
+        nTxtWidth += nWidth;
+
+        switch (aScript)
+        {
+            case SvtScriptType::ASIAN:
+                calcFontHeightAnyAscent(rRenderContext, maCJKFont, nCJKHeight, nCJKAscent);
+                break;
+            case SvtScriptType::COMPLEX:
+                calcFontHeightAnyAscent(rRenderContext, maCTLFont, nCTLHeight, nCTLAscent);
+                break;
+            default:
+                calcFontHeightAnyAscent(rRenderContext, rFont, nHeight, mnAscent);
+        }
+
+        if (nEnd < maText.getLength() && nIdx < nCnt)
+        {
+            nStart = nEnd;
+            nEnd = maScriptChanges[nIdx].changePos;
+            aScript = maScriptChanges[nIdx].scriptType;
+        }
+        else
+            break;
+    }
+    while(true);
+
+    nHeight -= mnAscent;
+    nCJKHeight -= nCJKAscent;
+    nCTLHeight -= nCTLAscent;
+
+    if (nHeight < nCJKHeight)
+        nHeight = nCJKHeight;
+
+    if (mnAscent < nCJKAscent)
+        mnAscent = nCJKAscent;
+
+    if (nHeight < nCTLHeight)
+        nHeight = nCTLHeight;
+
+    if (mnAscent < nCTLAscent)
+        mnAscent = nCTLAscent;
+
+    nHeight += mnAscent;
+
+    Size aTxtSize(nTxtWidth, nHeight);
+    return aTxtSize;
+}
+
+/*
+ * void FontPrevWin_Impl::DrawPrev(..)
+ * calls SvxFont::DrawPrev(..) for every part of the string without a script
+ * change inside, for Asian parts the aCJKFont will be used, otherwise the
+ * given rFont.
+ */
+
+void FontPrevWin_Impl::DrawPrev(vcl::RenderContext& rRenderContext, Printer* _pPrinter, Point &rPt, const SvxFont& rInFont)
+{
+    vcl::Font aOldFont = _pPrinter->GetFont();
+    SvtScriptType aScript;
+    sal_uInt16 nIdx = 0;
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd;
+    size_t nCnt = maScriptChanges.size();
+
+    if (nCnt)
+    {
+        nEnd = maScriptChanges[nIdx].changePos;
+        aScript = maScriptChanges[nIdx].scriptType;
+    }
+    else
+    {
+        nEnd = maText.getLength();
+        aScript = SvtScriptType::LATIN;
+    }
+    do
+    {
+        const SvxFont& rFont = (aScript == SvtScriptType::ASIAN)
+                                    ? maCJKFont
+                                    : ((aScript == SvtScriptType::COMPLEX)
+                                        ? maCTLFont
+                                        : rInFont);
+        _pPrinter->SetFont(rFont);
+
+        rFont.DrawPrev(&rRenderContext, _pPrinter, rPt, maText, nStart, nEnd - nStart);
+
+        rPt.AdjustX(maScriptChanges[nIdx++].textWidth);
+        if (nEnd < maText.getLength() && nIdx < nCnt)
+        {
+            nStart = nEnd;
+            nEnd = maScriptChanges[nIdx].changePos;
+            aScript = maScriptChanges[nIdx].scriptType;
+        }
+        else
+            break;
+    }
+    while(true);
+    _pPrinter->SetFont(aOldFont);
+}
+
+
+bool FontPrevWin_Impl::SetFontWidthScale(sal_uInt16 nScale)
+{
+    if (mnFontWidthScale != nScale)
+    {
+        mnFontWidthScale = nScale;
+        return true;
+    }
+
+    return false;
+}
+
+void FontPrevWin_Impl::ScaleFontWidth(vcl::RenderContext const & rOutDev)
+{
+    if (!Is100PercentFontWidthValid())
+    {
+        scaleFontWidth(maFont, rOutDev, mn100PercentFontWidth);
+        scaleFontWidth(maCJKFont, rOutDev, mn100PercentFontWidthCJK);
+        scaleFontWidth(maCTLFont, rOutDev, mn100PercentFontWidthCTL);
+    }
+
+    maFont.SetAverageFontWidth(mn100PercentFontWidth * mnFontWidthScale / 100);
+    maCJKFont.SetAverageFontWidth(mn100PercentFontWidthCJK * mnFontWidthScale / 100);
+    maCTLFont.SetAverageFontWidth(mn100PercentFontWidthCTL * mnFontWidthScale / 100);
+}
+
+static bool GetWhich (const SfxItemSet& rSet, sal_uInt16 nSlot, sal_uInt16& rWhich)
+{
+    rWhich = rSet.GetPool()->GetWhichIDFromSlotID(nSlot);
+    return rSet.GetItemState(rWhich) >= SfxItemState::DEFAULT;
+}
+
+static void SetPrevFont(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
+{
+    sal_uInt16 nWhich;
+    if (GetWhich(rSet, nSlot, nWhich))
+    {
+        const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(rSet.Get(nWhich));
+        rFont.SetFamily(rFontItem.GetFamily());
+        rFont.SetFamilyName(rFontItem.GetFamilyName());
+        rFont.SetPitch(rFontItem.GetPitch());
+        rFont.SetCharSet(rFontItem.GetCharSet());
+        rFont.SetStyleName(rFontItem.GetStyleName());
+    }
+}
+
+static void SetPrevFontStyle( const SfxItemSet& rSet, sal_uInt16 nPosture, sal_uInt16 nWeight, SvxFont& rFont )
+{
+    sal_uInt16 nWhich;
+    if( GetWhich( rSet, nPosture, nWhich ) )
+    {
+        const SvxPostureItem& rItem = static_cast<const SvxPostureItem&>( rSet.Get( nWhich ) );
+        rFont.SetItalic( rItem.GetValue() != ITALIC_NONE ? ITALIC_NORMAL : ITALIC_NONE );
+    }
+
+    if( GetWhich( rSet, nWeight, nWhich ) )
+    {
+        const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>( rSet.Get( nWhich ) );
+        rFont.SetWeight( rItem.GetValue() != WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL );
+    }
+}
+
+static void SetPrevFontEscapement(SvxFont& rFont, sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc)
+{
+    rFont.SetPropr(nProp);
+    rFont.SetProprRel(nEscProp);
+    rFont.SetEscapement(nEsc);
+}
+
+void SvxFontPrevWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    Color aBgColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    Color aFgColor = svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor;
+    if (aFgColor == COL_AUTO)
+        aFgColor = aBgColor.IsDark() ? COL_WHITE : COL_BLACK;
+    rRenderContext.SetBackground(aBgColor);
+    rRenderContext.SetTextColor(aFgColor);
+}
+
+void SvxFontPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    Size aPrefSize(getPreviewStripSize(pDrawingArea->get_ref_device()));
+    pDrawingArea->set_size_request(aPrefSize.Width(), aPrefSize.Height());
+
+    m_pImpl.reset(new FontPrevWin_Impl);
+    SfxViewShell* pSh = SfxViewShell::Current();
+
+    if (pSh)
+        m_pImpl->mpPrinter = pSh->GetPrinter();
+
+    if (!m_pImpl->mpPrinter)
+    {
+        m_pImpl->mpPrinter = VclPtr<Printer>::Create();
+        m_pImpl->mbDelPrinter = true;
+    }
+    initFont(m_pImpl->maFont);
+    initFont(m_pImpl->maCJKFont);
+    initFont(m_pImpl->maCTLFont);
+
+    Invalidate();
+}
+
+SvxFontPrevWindow::SvxFontPrevWindow()
+{
+}
+
+SvxFontPrevWindow::~SvxFontPrevWindow()
+{
+}
+
+SvxFont& SvxFontPrevWindow::GetCTLFont()
+{
+    return m_pImpl->maCTLFont;
+}
+
+SvxFont& SvxFontPrevWindow::GetCJKFont()
+{
+    return m_pImpl->maCJKFont;
+}
+
+SvxFont& SvxFontPrevWindow::GetFont()
+{
+    m_pImpl->Invalidate100PercentFontWidth();     // because the user might change the size
+    return m_pImpl->maFont;
+}
+
+const SvxFont& SvxFontPrevWindow::GetFont() const
+{
+    return m_pImpl->maFont;
+}
+
+void SvxFontPrevWindow::SetPreviewText( const OUString& rString )
+{
+    m_pImpl->maText = rString;
+    m_pImpl->mbTextInited = true;
+}
+
+void SvxFontPrevWindow::SetFontNameAsPreviewText()
+{
+    m_pImpl->mbUseFontNameAsText = true;
+}
+
+void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJKOutFont, const SvxFont& rCTLFont )
+{
+    setFont(rNormalOutFont, m_pImpl->maFont);
+    setFont(rCJKOutFont, m_pImpl->maCJKFont);
+    setFont(rCTLFont, m_pImpl->maCTLFont);
+
+    m_pImpl->Invalidate100PercentFontWidth();
+    Invalidate();
+}
+
+void SvxFontPrevWindow::SetColor(const Color &rColor)
+{
+    m_pImpl->mxColor = rColor;
+    Invalidate();
+}
+
+void SvxFontPrevWindow::ResetColor()
+{
+    m_pImpl->mxColor.reset();
+    Invalidate();
+}
+
+void SvxFontPrevWindow::SetTextLineColor(const Color &rColor)
+{
+    m_pImpl->mxTextLineColor = rColor;
+    Invalidate();
+}
+
+void SvxFontPrevWindow::SetOverlineColor(const Color &rColor)
+{
+    m_pImpl->mxOverlineColor = rColor;
+    Invalidate();
+}
+
+void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
+    rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
+
+    ApplySettings(rRenderContext);
+    rRenderContext.Erase();
+
+    Printer* pPrinter = m_pImpl->mpPrinter;
+    const SvxFont& rFont = m_pImpl->maFont;
+    const SvxFont& rCJKFont = m_pImpl->maCJKFont;
+    const SvxFont& rCTLFont = m_pImpl->maCTLFont;
+
+    if (!IsEnabled())
+    {
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        const Size aLogSize(rRenderContext.GetOutputSize());
+
+        tools::Rectangle aRect(Point(0, 0), aLogSize);
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(rStyleSettings.GetWindowColor());
+        rRenderContext.DrawRect(aRect);
+    }
+    else
+    {
+        if (!m_pImpl->mbSelection && !m_pImpl->mbTextInited)
+        {
+            using namespace css::i18n::ScriptType;
+
+            SfxViewShell* pSh = SfxViewShell::Current();
+
+            if (pSh && !m_pImpl->mbGetSelection && !m_pImpl->mbUseFontNameAsText)
+            {
+                m_pImpl->maText = removeCRLF(pSh->GetSelectionText(/*bCompleteWords*/false, /*bOnlyASample*/true));
+                m_pImpl->mbGetSelection = true;
+                m_pImpl->mbSelection = !(m_pImpl->maText.isEmpty());
+            }
+
+            if (!m_pImpl->mbSelection || m_pImpl->mbUseFontNameAsText)
+            {
+                //If we're showing multiple sample texts, then they're all
+                //sample texts. If only showing Latin, continue to use
+                //the fontname as the preview
+                if ((m_pImpl->m_bCJKEnabled) || (m_pImpl->m_bCTLEnabled))
+                    m_pImpl->maText = makeRepresentativeTextForFont(LATIN, rFont);
+                else
+                    m_pImpl->maText = rFont.GetFamilyName();
+
+                if (m_pImpl->m_bCJKEnabled)
+                {
+                    if (!m_pImpl->maText.isEmpty())
+                        m_pImpl->maText += "   ";
+                    m_pImpl->maText += makeRepresentativeTextForFont(ASIAN, rCJKFont);
+
+                }
+                if (m_pImpl->m_bCTLEnabled)
+                {
+                    if (!m_pImpl->maText.isEmpty())
+                        m_pImpl->maText += "   ";
+                    m_pImpl->maText += makeRepresentativeTextForFont(COMPLEX, rCTLFont);
+                }
+            }
+
+            if (m_pImpl->maText.isEmpty())
+            {   // fdo#58427: still no text? let's try that one...
+                m_pImpl->maText = makeRepresentativeTextForFont(LATIN, rFont);
+            }
+
+            m_pImpl->maText = removeCRLF(m_pImpl->maText);
+
+            if (m_pImpl->maText.getLength() > (TEXT_WIDTH - 1))
+            {
+                const sal_Int32 nSpaceIdx = m_pImpl->maText.indexOf(" ", TEXT_WIDTH);
+                if (nSpaceIdx != -1)
+                    m_pImpl->maText = m_pImpl->maText.copy(0, nSpaceIdx);
+                else
+                    m_pImpl->maText = m_pImpl->maText.copy(0, (TEXT_WIDTH - 1));
+            }
+        }
+
+        // calculate text width scaling
+        m_pImpl->ScaleFontWidth(rRenderContext);
+
+        m_pImpl->CheckScript();
+        Size aTxtSize = m_pImpl->CalcTextSize(rRenderContext, pPrinter, rFont);
+
+        const Size aLogSize(rRenderContext.GetOutputSize());
+
+        tools::Long nX = aLogSize.Width()  / 2 - aTxtSize.Width() / 2;
+        tools::Long nY = aLogSize.Height() / 2 - aTxtSize.Height() / 2;
+
+        if (nY + m_pImpl->mnAscent > aLogSize.Height())
+            nY = aLogSize.Height() - m_pImpl->mnAscent;
+
+        if (m_pImpl->mxBackColor)
+        {
+            tools::Rectangle aRect(Point(0, 0), aLogSize);
+            Color aLineCol = rRenderContext.GetLineColor();
+            Color aFillCol = rRenderContext.GetFillColor();
+            rRenderContext.SetLineColor();
+            rRenderContext.SetFillColor(*m_pImpl->mxBackColor);
+            rRenderContext.DrawRect(aRect);
+            rRenderContext.SetLineColor(aLineCol);
+            rRenderContext.SetFillColor(aFillCol);
+        }
+        if (m_pImpl->mxColor)
+        {
+            tools::Rectangle aRect(Point(nX, nY), aTxtSize);
+            Color aLineCol = rRenderContext.GetLineColor();
+            Color aFillCol = rRenderContext.GetFillColor();
+            rRenderContext.SetLineColor();
+            rRenderContext.SetFillColor(*m_pImpl->mxColor);
+            rRenderContext.DrawRect(aRect);
+            rRenderContext.SetLineColor(aLineCol);
+            rRenderContext.SetFillColor(aFillCol);
+        }
+
+        if (m_pImpl->mxTextLineColor)
+        {
+            rRenderContext.SetTextLineColor(*m_pImpl->mxTextLineColor);
+        }
+
+        if (m_pImpl->mxOverlineColor)
+        {
+            rRenderContext.SetOverlineColor(*m_pImpl->mxOverlineColor);
+        }
+
+        tools::Long nStdAscent = m_pImpl->mnAscent;
+        nY += nStdAscent;
+
+        if (IsTwoLines())
+        {
+            SvxFont aSmallFont(rFont);
+            Size aOldSize = m_pImpl->maCJKFont.GetFontSize();
+            setFontSize(aSmallFont);
+            setFontSize(m_pImpl->maCJKFont);
+
+            tools::Long nStartBracketWidth = 0;
+            tools::Long nEndBracketWidth = 0;
+            tools::Long nTextWidth = 0;
+            if (m_pImpl->mcStartBracket)
+            {
+                OUString sBracket(m_pImpl->mcStartBracket);
+                nStartBracketWidth = rFont.GetTextSize(*pPrinter, sBracket).Width();
+            }
+            if (m_pImpl->mcEndBracket)
+            {
+                OUString sBracket(m_pImpl->mcEndBracket);
+                nEndBracketWidth = rFont.GetTextSize(*pPrinter, sBracket).Width();
+            }
+            nTextWidth = m_pImpl->CalcTextSize(rRenderContext, pPrinter, aSmallFont).Width();
+            tools::Long nResultWidth = nStartBracketWidth;
+            nResultWidth += nEndBracketWidth;
+            nResultWidth += nTextWidth;
+
+            tools::Long _nX = (aLogSize.Width() - nResultWidth) / 2;
+            rRenderContext.DrawLine(Point(0,  nY), Point(_nX, nY));
+            rRenderContext.DrawLine(Point(_nX + nResultWidth, nY), Point(aLogSize.Width(), nY));
+
+            tools::Long nSmallAscent = m_pImpl->mnAscent;
+            tools::Long nOffset = (nStdAscent - nSmallAscent) / 2;
+
+            if (m_pImpl->mcStartBracket)
+            {
+                OUString sBracket(m_pImpl->mcStartBracket);
+                rFont.DrawPrev(&rRenderContext, pPrinter, Point(_nX, nY - nOffset - 4), sBracket);
+                _nX += nStartBracketWidth;
+            }
+
+            Point aTmpPoint1(_nX, nY - nSmallAscent - 2);
+            Point aTmpPoint2(_nX, nY);
+            m_pImpl->DrawPrev(rRenderContext, pPrinter, aTmpPoint1, aSmallFont);
+            m_pImpl->DrawPrev(rRenderContext, pPrinter, aTmpPoint2, aSmallFont);
+
+            _nX += nTextWidth;
+            if (m_pImpl->mcEndBracket)
+            {
+                Point aTmpPoint( _nX + 1, nY - nOffset - 4);
+                OUString sBracket(m_pImpl->mcEndBracket);
+                rFont.DrawPrev(&rRenderContext, pPrinter, aTmpPoint, sBracket);
+            }
+            m_pImpl->maCJKFont.SetFontSize(aOldSize);
+        }
+        else
+        {
+
+            Color aLineCol = rRenderContext.GetLineColor();
+
+            if (rFont.GetColor() == COL_TRANSPARENT)
+                rRenderContext.SetLineColor();
+            else if (!rRenderContext.HasAlpha() && rFont.GetColor().IsTransparent())
+                rRenderContext.SetLineColor(::Color(rFont.GetColor().GetRed(), rFont.GetColor().GetGreen(),
+                    rFont.GetColor().GetBlue()));
+            else
+                rRenderContext.SetLineColor(rFont.GetColor());
+            rRenderContext.DrawLine(Point(0,  nY), Point(nX, nY));
+            rRenderContext.DrawLine(Point(nX + aTxtSize.Width(), nY), Point(aLogSize.Width(), nY));
+            rRenderContext.SetLineColor(aLineCol);
+
+            Point aTmpPoint(nX, nY);
+            m_pImpl->DrawPrev(rRenderContext, pPrinter, aTmpPoint, rFont);
+        }
+    }
+}
+
+bool SvxFontPrevWindow::IsTwoLines() const
+{
+    return m_pImpl->mbTwoLines;
+}
+
+void SvxFontPrevWindow::SetTwoLines(bool bSet)
+{
+    m_pImpl->mbTwoLines = bSet;
+}
+
+void SvxFontPrevWindow::SetBrackets(sal_Unicode cStart, sal_Unicode cEnd)
+{
+    m_pImpl->mcStartBracket = cStart;
+    m_pImpl->mcEndBracket = cEnd;
+}
+
+void SvxFontPrevWindow::SetFontWidthScale( sal_uInt16 n )
+{
+    if (m_pImpl->SetFontWidthScale(n))
+        Invalidate();
+}
+
+void SvxFontPrevWindow::AutoCorrectFontColor()
+{
+    Color aColor(COL_AUTO);
+    if ( m_pImpl->mxBackColor ) aColor = *m_pImpl->mxBackColor;
+    const bool bIsDark(aColor.IsDark());
+
+    aColor = m_pImpl->maFont.GetColor();
+    if (aColor == COL_AUTO)
+        m_pImpl->maFont.SetColor( bIsDark ? COL_WHITE : COL_BLACK );
+    aColor = m_pImpl->maCJKFont.GetColor();
+    if (aColor == COL_AUTO)
+        m_pImpl->maCJKFont.SetColor( bIsDark ? COL_WHITE : COL_BLACK );
+    aColor = m_pImpl->maCTLFont.GetColor();
+    if (aColor == COL_AUTO)
+        m_pImpl->maCTLFont.SetColor( bIsDark ? COL_WHITE : COL_BLACK );
+}
+
+void SvxFontPrevWindow::SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont )
+{
+    sal_uInt16 nWhich;
+    tools::Long nH;
+    if (GetWhich(rSet, nSlot, nWhich))
+    {
+        nH = OutputDevice::LogicToLogic(static_cast<const SvxFontHeightItem&>(rSet.Get(nWhich)).GetHeight(),
+                          rSet.GetPool()->GetMetric(nWhich),
+                          MapUnit::MapTwip);
+    }
+    else
+        nH = 240;// as default 12pt
+
+    rFont.SetFontSize(Size(0, nH));
+}
+
+void SvxFontPrevWindow::SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
+{
+    sal_uInt16 nWhich;
+    LanguageType nLang;
+    if( GetWhich( rSet, nSlot, nWhich ) )
+        nLang = static_cast<const SvxLanguageItem&>(rSet.Get(nWhich)).GetLanguage();
+    else
+        nLang = LANGUAGE_NONE;
+    rFont.SetLanguage(nLang);
+}
+
+void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBackgroundToCharacter)
+{
+    sal_uInt16 nWhich;
+    SvxFont& rFont = GetFont();
+    SvxFont& rCJKFont = GetCJKFont();
+    SvxFont& rCTLFont = GetCTLFont();
+
+    // Preview string
+    if( GetWhich( rSet, SID_CHAR_DLG_PREVIEW_STRING, nWhich ) )
+    {
+        const SfxStringItem& rItem = static_cast<const SfxStringItem&>( rSet.Get( nWhich ) );
+        const OUString& aString = rItem.GetValue();
+        if( !aString.isEmpty() )
+            SetPreviewText( aString );
+        else
+            SetFontNameAsPreviewText();
+    }
+
+    // Underline
+    FontLineStyle eUnderline;
+    if( GetWhich( rSet, SID_ATTR_CHAR_UNDERLINE, nWhich ) )
+    {
+        const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>( rSet.Get( nWhich ) );
+        eUnderline = rItem.GetValue();
+    }
+    else
+        eUnderline = LINESTYLE_NONE;
+
+    rFont.SetUnderline( eUnderline );
+    rCJKFont.SetUnderline( eUnderline );
+    rCTLFont.SetUnderline( eUnderline );
+
+    // Overline
+    FontLineStyle eOverline;
+    if( GetWhich( rSet, SID_ATTR_CHAR_OVERLINE, nWhich ) )
+    {
+        const SvxOverlineItem& rItem = static_cast<const SvxOverlineItem&>( rSet.Get( nWhich ) );
+        eOverline = rItem.GetValue();
+    }
+    else
+        eOverline = LINESTYLE_NONE;
+
+    rFont.SetOverline( eOverline );
+    rCJKFont.SetOverline( eOverline );
+    rCTLFont.SetOverline( eOverline );
+
+    //  Strikeout
+    FontStrikeout eStrikeout;
+    if( GetWhich( rSet, SID_ATTR_CHAR_STRIKEOUT, nWhich ) )
+    {
+        const SvxCrossedOutItem& rItem = static_cast<const SvxCrossedOutItem&>( rSet.Get( nWhich ) );
+        eStrikeout = rItem.GetValue();
+    }
+    else
+        eStrikeout = STRIKEOUT_NONE;
+
+    rFont.SetStrikeout( eStrikeout );
+    rCJKFont.SetStrikeout( eStrikeout );
+    rCTLFont.SetStrikeout( eStrikeout );
+
+    // WordLineMode
+    if( GetWhich( rSet, SID_ATTR_CHAR_WORDLINEMODE, nWhich ) )
+    {
+        const SvxWordLineModeItem& rItem = static_cast<const SvxWordLineModeItem&>( rSet.Get( nWhich ) );
+        rFont.SetWordLineMode( rItem.GetValue() );
+        rCJKFont.SetWordLineMode( rItem.GetValue() );
+        rCTLFont.SetWordLineMode( rItem.GetValue() );
+    }
+
+    // Emphasis
+    if( GetWhich( rSet, SID_ATTR_CHAR_EMPHASISMARK, nWhich ) )
+    {
+        const SvxEmphasisMarkItem& rItem = static_cast<const SvxEmphasisMarkItem&>( rSet.Get( nWhich ) );
+        FontEmphasisMark eMark = rItem.GetEmphasisMark();
+        rFont.SetEmphasisMark( eMark );
+        rCJKFont.SetEmphasisMark( eMark );
+        rCTLFont.SetEmphasisMark( eMark );
+    }
+
+    // Relief
+    if( GetWhich( rSet, SID_ATTR_CHAR_RELIEF, nWhich ) )
+    {
+        const SvxCharReliefItem& rItem = static_cast<const SvxCharReliefItem&>( rSet.Get( nWhich ) );
+        FontRelief eFontRelief = rItem.GetValue();
+        rFont.SetRelief( eFontRelief );
+        rCJKFont.SetRelief( eFontRelief );
+        rCTLFont.SetRelief( eFontRelief );
+    }
+
+    // Effects
+    if( GetWhich( rSet, SID_ATTR_CHAR_CASEMAP, nWhich ) )
+    {
+        const SvxCaseMapItem& rItem = static_cast<const SvxCaseMapItem&>( rSet.Get( nWhich ) );
+        SvxCaseMap eCaseMap = rItem.GetValue();
+        rFont.SetCaseMap( eCaseMap );
+        rCJKFont.SetCaseMap( eCaseMap );
+        // #i78474# small caps do not exist in CTL fonts
+        rCTLFont.SetCaseMap( eCaseMap == SvxCaseMap::SmallCaps ? SvxCaseMap::NotMapped : eCaseMap );
+    }
+
+    // Outline
+    if( GetWhich( rSet, SID_ATTR_CHAR_CONTOUR, nWhich ) )
+    {
+        const SvxContourItem& rItem = static_cast<const  SvxContourItem&>( rSet.Get( nWhich ) );
+        bool bOutline = rItem.GetValue();
+        rFont.SetOutline( bOutline );
+        rCJKFont.SetOutline( bOutline );
+        rCTLFont.SetOutline( bOutline );
+    }
+
+    // Shadow
+    if( GetWhich( rSet, SID_ATTR_CHAR_SHADOWED, nWhich ) )
+    {
+        const SvxShadowedItem& rItem = static_cast<const  SvxShadowedItem&>( rSet.Get( nWhich ) );
+        bool bShadow = rItem.GetValue();
+        rFont.SetShadow( bShadow );
+        rCJKFont.SetShadow( bShadow );
+        rCTLFont.SetShadow( bShadow );
+    }
+
+    // Background
+    bool bTransparent;
+    if( GetWhich( rSet, bPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR, nWhich ) )
+    {
+         const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>( rSet.Get( nWhich ) );
+         const Color& rColor = rBrush.GetColor();
+         bTransparent = rColor.IsTransparent();
+         rFont.SetFillColor( rColor );
+         rCJKFont.SetFillColor( rColor );
+         rCTLFont.SetFillColor( rColor );
+    }
+    else
+        bTransparent = true;
+
+    rFont.SetTransparent( bTransparent );
+    rCJKFont.SetTransparent( bTransparent );
+    rCTLFont.SetTransparent( bTransparent );
+
+    if( !bPreviewBackgroundToCharacter )
+    {
+        bool bBackColorFound = false;
+        if( GetWhich( rSet, SID_ATTR_BRUSH, nWhich ) )
+        {
+            const SvxBrushItem& rBrush = static_cast<const  SvxBrushItem&>( rSet.Get( nWhich ) );
+            if (GPOS_NONE == rBrush.GetGraphicPos())
+            {
+                const Color& rBrushColor = rBrush.GetColor();
+                if (rBrushColor != COL_TRANSPARENT)
+                {
+                    m_pImpl->mxBackColor = rBrush.GetColor();
+                    bBackColorFound = true;
+                }
+            }
+        }
+        if (!bBackColorFound)
+            m_pImpl->mxBackColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    }
+
+    // Font
+    SetPrevFont( rSet, SID_ATTR_CHAR_FONT, rFont );
+    SetPrevFont( rSet, SID_ATTR_CHAR_CJK_FONT, rCJKFont );
+    SetPrevFont( rSet, SID_ATTR_CHAR_CTL_FONT, rCTLFont );
+
+    // Style
+    SetPrevFontStyle( rSet, SID_ATTR_CHAR_POSTURE, SID_ATTR_CHAR_WEIGHT, rFont );
+    SetPrevFontStyle( rSet, SID_ATTR_CHAR_CJK_POSTURE, SID_ATTR_CHAR_CJK_WEIGHT, rCJKFont );
+    SetPrevFontStyle( rSet, SID_ATTR_CHAR_CTL_POSTURE, SID_ATTR_CHAR_CTL_WEIGHT, rCTLFont );
+
+    // Size
+    SetFontSize( rSet, SID_ATTR_CHAR_FONTHEIGHT, rFont );
+    SetFontSize( rSet, SID_ATTR_CHAR_CJK_FONTHEIGHT, rCJKFont );
+    SetFontSize( rSet, SID_ATTR_CHAR_CTL_FONTHEIGHT, rCTLFont );
+
+    // Language
+    SetFontLang( rSet, SID_ATTR_CHAR_LANGUAGE, rFont );
+    SetFontLang( rSet, SID_ATTR_CHAR_CJK_LANGUAGE, rCJKFont );
+    SetFontLang( rSet, SID_ATTR_CHAR_CTL_LANGUAGE, rCTLFont );
+
+    // Color
+    if( GetWhich( rSet, SID_ATTR_CHAR_COLOR, nWhich ) )
+    {
+        const SvxColorItem& rItem = static_cast<const SvxColorItem&>( rSet.Get( nWhich ) );
+        Color aCol( rItem.GetValue() );
+        rFont.SetColor( aCol );
+
+        rCJKFont.SetColor( aCol );
+        rCTLFont.SetColor( aCol );
+
+        AutoCorrectFontColor(); // handle color COL_AUTO
+    }
+
+    // Kerning
+    if( GetWhich( rSet, SID_ATTR_CHAR_KERNING, nWhich ) )
+    {
+        const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>( rSet.Get( nWhich ) );
+        short nKern = static_cast<short>(OutputDevice::LogicToLogic(rItem.GetValue(), rSet.GetPool()->GetMetric(nWhich), MapUnit::MapTwip));
+        rFont.SetFixKerning( nKern );
+        rCJKFont.SetFixKerning( nKern );
+        rCTLFont.SetFixKerning( nKern );
+    }
+
+    // Escapement
+    const sal_uInt8 nProp = 100;
+    short nEsc;
+    sal_uInt8 nEscProp;
+    if( GetWhich( rSet, SID_ATTR_CHAR_ESCAPEMENT, nWhich ) )
+    {
+        const SvxEscapementItem& rItem = static_cast<const SvxEscapementItem&>( rSet.Get( nWhich ) );
+        nEsc = rItem.GetEsc();
+        nEscProp = rItem.GetProportionalHeight();
+
+        if( nEsc == DFLT_ESC_AUTO_SUPER )
+            nEsc = DFLT_ESC_SUPER;
+        else if( nEsc == DFLT_ESC_AUTO_SUB )
+            nEsc = DFLT_ESC_SUB;
+    }
+    else
+    {
+        nEsc  = 0;
+        nEscProp = 100;
+    }
+    SetPrevFontEscapement( rFont, nProp, nEscProp, nEsc );
+    SetPrevFontEscapement( rCJKFont, nProp, nEscProp, nEsc );
+    SetPrevFontEscapement( rCTLFont, nProp, nEscProp, nEsc );
+
+    // Font width scale
+    if( GetWhich( rSet, SID_ATTR_CHAR_SCALEWIDTH, nWhich ) )
+    {
+        const SvxCharScaleWidthItem&rItem = static_cast<const SvxCharScaleWidthItem&>( rSet.Get( nWhich ) );
+        SetFontWidthScale( rItem.GetValue() );
+    }
+
+    Invalidate();
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

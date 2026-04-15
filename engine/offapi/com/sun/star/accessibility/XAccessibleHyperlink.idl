@@ -1,0 +1,121 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module accessibility {
+
+/** Implement this interface to represent a hyperlink or a group of
+    hyperlinks.
+
+    <p>Single hyperlinks correspond to simple &lt;a href&gt; tags. Groups
+    of hyperlinks are contained in client side image maps. Linked objects
+    and anchors are implementation dependent. This interface inherits the
+    XAccessibleAction interface. Especially that interface's
+    XAccessibleAction::getActionCount() method is needed to
+    obtain a maximum value for the indices passed to the
+    XAccessibleHyperlink::getAccessibleActionAnchor() and
+    XAccessibleHyperlink::getAccessibleActionObject()
+    methods.</p>
+
+    <p>Furthermore, the object that implements this interface has to be
+    connected implicitly or explicitly with an object that implements the
+    XAccessibleText interface. The XAccessibleHyperlink::getStartIndex() and
+    XAccessibleHyperlink::getEndIndex() methods return
+    indices with respect to the text exposed by that interface.</p>
+*/
+interface XAccessibleHyperlink :
+    ::com::sun::star::accessibility::XAccessibleAction
+{
+    /** Returns an object that represents the link anchor, as appropriate
+        for that link.
+
+        <p>For an HTML link for example, this method would return the string
+        enclosed by the &lt&a href&gt; tag.</p>
+
+        @param nIndex
+            This index identifies the anchor when, as in the case of an
+            image map, there is more than one link represented by this
+            object. The valid maximal index can be determined by calling
+            the XAccessibleAction::getActionCount() method.
+
+        @return
+            If the index is not valid then an exception is thrown.
+            Otherwise it returns an implementation dependent value.
+    */
+    any getAccessibleActionAnchor ([in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns an object that represents the link target, as appropriate
+        for that link.
+
+        <p>For an HTML link for example, this method would return the URL of
+        the &lt&a href&gt; tag.</p>
+
+        @param nIndex
+            This index identifies the action object when, as in the case of
+            an image map, there is more than one link represented by this
+            object. The valid maximal index can be determined by calling
+            the XAccessibleAction::getActionCount() method.
+
+        @return
+            If the index is not valid then an exception is thrown.
+            Otherwise it returns an implementation dependent value.
+    */
+    any getAccessibleActionObject ([in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns the index at which the textual representation of the
+        hyperlink (group) starts.
+
+        <p>The returned value relates to the XAccessibleText
+        interface that owns this hyperlink.</p>
+
+        @return
+            The index relates to the text exposed by the
+            XAccessibleHypertext interface.
+    */
+    long getStartIndex ();
+
+    /** Returns the index at which the textual representation of the
+        hyperlink (group) ends.
+
+        <p>The returned value relates to the XAccessibleText
+        interface that owns this hyperlink.</p>
+
+        @return
+            The index relates to the text exposed by the
+            XAccessibleText interface.
+    */
+    long getEndIndex ();
+
+    /** Returns whether the document referenced by this links is
+        still valid.
+
+        <p>This is a volatile state that may change without further warning
+        like e.g. sending an appropriate event.</p>
+
+        @return
+            Returns `TRUE` if the referenced document is still valid and
+            `FALSE` otherwise.
+    */
+    boolean isValid ();
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

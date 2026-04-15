@@ -1,0 +1,190 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include "global.hxx"
+#include "address.hxx"
+#include "columnset.hxx"
+
+#include <unordered_map>
+#include <unordered_set>
+
+class ScDocument;
+
+namespace sc
+{
+struct ColumnBlockPosition;
+class ColumnBlockPositionSet;
+
+/**
+ * Keep track of all named expressions that have been updated during
+ * reference update.
+ *
+ * Can also be used to collect any set of named expressions / ranges.
+ */
+class UpdatedRangeNames
+{
+public:
+    typedef std::unordered_set<sal_uInt16> NameIndicesType;
+
+    void setUpdatedName(SCTAB nTab, sal_uInt16 nIndex);
+    bool isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const;
+    NameIndicesType getUpdatedNames(SCTAB nTab) const;
+    bool isEmpty(SCTAB nTab) const;
+
+private:
+    typedef std::unordered_map<SCTAB, NameIndicesType> UpdatedNamesType;
+
+    UpdatedNamesType maUpdatedNames;
+};
+
+/**
+ * Accumulates information about #REF! errors created during a single
+ * reference-update pass (e.g. one row/column/sheet deletion). Lives on
+ * the RefUpdate*Context for the duration of that operation; its value
+ * is passed to the UI layer via an ScHint after the pass completes.
+ */
+struct RefErrorContext
+{
+    bool mbErrorCreated = false;
+    ScAddress maFormulaCell; ///< first formula cell with new #REF! error
+};
+
+/**
+ * Context for reference update during shifting, moving or copying of cell
+ * ranges.
+ */
+struct RefUpdateContext
+{
+    ScDocument& mrDoc;
+
+    /**
+     * update mode - insert/delete, copy, or move. The reorder mode (which
+     * corresponds with the reordering of sheets) is not used with this
+     * context.
+     */
+    UpdateRefMode meMode;
+
+    /**
+     * Range of cells that are about to be moved for insert/delete/move modes.
+     * For copy mode, it's the destination range of cells that are about to be
+     * pasted.  When moving a range of cells, it's the destination range, not
+     * the source range.
+     */
+    ScRange maRange;
+
+    /** Are the data transposed? */
+    bool mbTransposed;
+
+    /** Amount and direction of movement in the column direction. */
+    SCCOL mnColDelta;
+    /** Amount and direction of movement in the row direction. */
+    SCROW mnRowDelta;
+    /** Amount and direction of movement in the sheet direction. */
+    SCTAB mnTabDelta;
+
+    UpdatedRangeNames maUpdatedNames;
+    ColumnSet maRegroupCols;
+
+    ColumnBlockPositionSet* mpBlockPos; // not owning
+
+    /// First #REF! error created by this update pass, if any.
+    /// Mutable because it is output accumulated during traversal,
+    /// not part of the logical input configuration.
+    mutable RefErrorContext maRefErrors;
+
+    RefUpdateContext(ScDocument& rDoc, ScDocument* pClipdoc = nullptr);
+
+    bool isInserted() const;
+    bool isDeleted() const;
+
+    void setBlockPositionReference(ColumnBlockPositionSet* blockPos);
+    ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
+};
+
+struct RefUpdateResult
+{
+    /**
+     * When this flag is true, the result of the formula needs to be
+     * re-calculated either because it contains a reference that's been
+     * deleted, or the size of a range reference has changed.
+     */
+    bool mbValueChanged;
+
+    /**
+     * This flag indicates whether any reference in the token array has been
+     * modified.
+     */
+    bool mbReferenceModified;
+
+    /**
+     * When this flag is true, it indicates that the token array contains a
+     * range name that's been updated.
+     */
+    bool mbNameModified;
+
+    SCTAB mnTab;
+
+    RefUpdateResult();
+};
+
+struct SC_DLLPUBLIC RefUpdateInsertTabContext
+{
+    ScDocument& mrDoc;
+    SCTAB mnInsertPos;
+    SCTAB mnSheets;
+    UpdatedRangeNames maUpdatedNames;
+
+    RefUpdateInsertTabContext(ScDocument& rDoc, SCTAB nInsertPos, SCTAB nSheets);
+};
+
+struct SC_DLLPUBLIC RefUpdateDeleteTabContext
+{
+    ScDocument& mrDoc;
+    SCTAB mnDeletePos;
+    SCTAB mnSheets;
+    UpdatedRangeNames maUpdatedNames;
+
+    /// First #REF! error created by this sheet-delete pass, if any.
+    /// Mutable because it is output accumulated during traversal,
+    /// not part of the logical input configuration.
+    mutable RefErrorContext maRefErrors;
+
+    RefUpdateDeleteTabContext(ScDocument& rDoc, SCTAB nInsertPos, SCTAB nSheets);
+};
+
+struct RefUpdateMoveTabContext
+{
+    ScDocument& mrDoc;
+    SCTAB mnOldPos;
+    SCTAB mnNewPos;
+    UpdatedRangeNames maUpdatedNames;
+
+    RefUpdateMoveTabContext(ScDocument& rDoc, SCTAB nOldPos, SCTAB nNewPos);
+
+    SCTAB getNewTab(SCTAB nOldTab) const;
+};
+
+struct SetFormulaDirtyContext
+{
+    SCTAB mnTabDeletedStart;
+    SCTAB mnTabDeletedEnd;
+
+    /**
+     * When true, go through all reference tokens and clears "sheet deleted"
+     * flag if its corresponding index falls within specified sheet range.
+     */
+    bool mbClearTabDeletedFlag;
+
+    SetFormulaDirtyContext();
+};
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

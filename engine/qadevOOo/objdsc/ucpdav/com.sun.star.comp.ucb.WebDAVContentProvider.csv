@@ -1,0 +1,2 @@
+"WebDAVContentProvider";"com::sun::star::ucb::XContentProvider";"queryContent()"
+"WebDAVContentProvider";"com::sun::star::ucb::XContentProvider";"compareContentIds()"

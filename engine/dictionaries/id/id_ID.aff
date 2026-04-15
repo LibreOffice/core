@@ -1,0 +1,767 @@
+## SPDX-FileCopyrightText: 2022 hunspell-id Authors
+## SPDX-License-Identifier: LGPL-3.0-only
+
+# Affix file for Indonesian dictionary version 2
+# Based on version 1, built from scratch for Myspell.
+# Released under GPL on 30 January 2004
+# Version 2 expanded and adapted for hunspell.
+# Released under GPL on 30 June 2014
+# See text of license at: http://www.gnu.org/copyleft/gpl.html.
+#
+# Benitius Brevoort E-mail: benitius.brevoort@kapusin.org
+# 30 June 2014
+# Uppercase letters indicate Prefixes;
+# undercase letters indicate suffixes.
+#
+# Daftar awalan dan akhiran untuk kamus Indonesia.
+# Versi 1 diciptakan dari dasarnya bagi Myspell.
+# Diterbitkan tanggal 30 Januari 2004 dibawah lisensi GPL.
+# Versi 2 disesuaikan dan diperluas bagi hunspell.
+# Diterbitkan tanggal 30 Juni 2014 dibawah lisensi GPL.
+#
+# Awalan disingkat dengan huruf BESAR
+# akhiran disingkat dengan huruf kecil.
+# Sejauh mungkin sesuai bunyinya,
+# misalnya: B = ber, T = ter, a = -an, k = -kan
+#
+# B0, D0 dst awalan asli (ber-, di-)
+# B1, B3 dst bagian pertama sirkumfiks (ber-an, dst)
+# Ba, Bk dst bagian kedua sirkumfiks (ber-an, ber-kan dst.)
+# BE, BI dst awalan dan imbuhan lain (be-, bersi- dst.)
+#
+# Pertama diberikan awalan murni
+# Kedua diberi awalan majemuk
+# Ketiga diberikan sirkumfiks (awalan-akhiran)
+# Keempat akhiran
+# disusun menurut abjad: Pertama HURUF BESAR lalu kecil
+
+# Nota: untuk menambahkan lebih dari satu bentuk (nya, nyakah dst) mulai yang kedua tidak diberi titik (.)
+
+SET ISO8859-1
+TRY aeinrstkumlgopbdhjcyfwzqvxAEINRSTKUMLGOPBDHJCYFWZQVX
+WORDCHARS -
+FLAG long
+# untuk bentuk awalan-akhiran terikat (ber-an)
+CIRCUMFIX A1
+# jenis membesituakan (jangan besitua tersendiri)
+NEEDAFFIX A2
+
+# Berikut PREFIX dan SIRKUMFIKS
+
+PFX B0 Y 2	# ber-
+PFX B0 0 ber  	[^r]
+PFX B0 0 be    	r
+
+PFX B1 Y 2	# ber-
+PFX B1 0 ber/A1  [^r]
+PFX B1 0 be/A1    r
+
+SFX Ba Y  1	    # -an (ber-an)	+ l0
+SFX Ba 0  an/B1l0A1  	.
+
+SFX Bb Y  1	    # -an (ber+l0)
+SFX Bb 0  /B1l0A1  	.
+
+SFX Bk Y  1	    # -kan (ber-kan) + n0
+SFX Bk 0  kan/B1n0A1  .
+
+PFX BE Y 1	# be- (be-)
+PFX BE 0 be     .
+
+PFX B3 Y 1	# be- (be-)
+PFX B3 0 be/A1     .
+
+SFX Bf Y 1	# -an (be-an)
+SFX Bf 0 an/B3A1 .
+
+SFX Bg Y 1	# -kan (be-kan)
+SFX Bg 0 kan/B3A1 .
+
+PFX BK Y 1	# berke- (berke-an)
+PFX BK 0 berke	.
+
+PFX B4 Y 1	# berke- (berke-an)
+PFX B4 0 berke/A1	.
+
+SFX Bl Y  1	# -an (berke-an)
+SFX Bl 0  an/B4A1  	.
+
+PFX BI Y 1	# bersi-
+PFX BI 0 bersi     .
+
+PFX BP Y 12	# berpe-
+PFX BP 0 berpe    [lmnryw]
+PFX BP 0 berpem   [bfv]
+PFX BP p berpem   p[^l^r]
+PFX BP 0 berpem   p[lr]
+PFX BP 0 berpen   [cdjz]
+PFX BP t berpen   t[^r]
+PFX BP 0 berpen   t[r]
+PFX BP 0 berpen   s[kmptwy]
+PFX BP s berpeny  s[^k^m^p^t^w^y]
+PFX BP 0 berpeng  [aeghiouq]
+PFX BP k berpeng  k[^h^l^r]
+PFX BP 0 berpeng  k[hlr]
+
+PFX B5 Y 12	# berpe-
+PFX B5 0 berpe/A1    [lmnryw]
+PFX B5 0 berpem/A1   [bfv]
+PFX B5 p berpem/A1   p[^l^r]
+PFX B5 0 berpem/A1   p[lr]
+PFX B5 0 berpen/A1   [cdjz]
+PFX B5 t berpen/A1   t[^r]
+PFX B5 0 berpen/A1   t[r]
+PFX B5 0 berpen/A1   s[kmptwy]
+PFX B5 s berpeny/A1  s[^k^m^p^t^w^y]
+PFX B5 0 berpeng/A1  [aeghiouq]
+PFX B5 k berpeng/A1  k[^h^l^r]
+PFX B5 0 berpeng/A1  k[hlr]
+
+SFX Bq Y 1	# -an (berpe-an)
+SFX Bq 0 an/B5A1 .
+
+PFX BS Y 1	# berse- (berse-an)
+PFX BS 0 berse .
+
+PFX B6 Y 1	# berse- (berse-an)
+PFX B6 0 berse/A1 .
+
+SFX Bt Y 1       # -an (berse-an)
+SFX Bt 0 an/B6A1   .
+
+PFX D0 Y 1	# di-
+PFX D0 0 di     .
+
+PFX D1 Y 1	# di-
+PFX D1 0 di/A1     .
+
+SFX Di Y 1	# -i (di-i) + nl
+SFX Di 0 i/D1nlA1   .
+
+SFX Dk Y 1	# -kan (di-kan) + nl
+SFX Dk 0 kan/D1nlA1   	.
+
+PFX DK Y 1	# dike-
+PFX DK 0 dike/A1     .
+
+SFX Dm Y 1	# -an (dike-i) + nl
+SFX Dm 0 i/DKnlA1 .
+
+SFX Dn Y 1	# -an (dike-kan) + nl
+SFX Dn 0 kan/DKnlA1 .
+
+PFX DR Y 2	# diper-
+PFX DR 0 diper  [^r]
+PFX DR 0 dipe   r
+
+PFX D3 Y 2	# diper-
+PFX D3 0 diper/A1 [^r]
+PFX D3 0 dipe/A1   r
+
+SFX Dt Y 1	# -i (diper-i) + nl
+SFX Dt 0 i/D3nlA1     .
+
+SFX Du Y 1	# -kan (diper-kan) + nl
+SFX Du 0 kan/D3nlA1   	.
+
+PFX DS Y 1	# dise-
+PFX DS 0 dise/A1     .
+
+SFX Dv Y 1	# -an (dise-kan) + nl
+SFX Dv 0 kan/DSnlA1 .
+
+PFX K0 Y 1	#ke
+PFX K0 0 ke     .
+
+PFX K1 Y 1	#ke
+PFX K1 0 ke/A1     .
+
+SFX Ka Y 1       # -an (ke-an) + o0
+SFX Ka 0 an/K1l0o0A1   .
+
+SFX Ki Y 1	# -i (ke-i)	+ n0
+SFX Ki 0 i/K1n0A1     .
+
+SFX Kn Y 1       # -an (ke-nya)
+SFX Kn 0 nya/K1A1   .
+
+PFX KB Y 2	# keber- (keber-an)
+PFX KB 0 keber/A1	[^r]
+PFX KB 0 kebe/A1	r
+
+SFX Kc Y 1       # -an (ke-an) + o0
+SFX Kc 0 an/KBo0A1   .
+
+PFX KM Y 12	# keme-
+PFX KM 0 keme/A1    [lmnryw]
+PFX KM 0 kemem/A1   [bfv]
+PFX KM p kemem/A1   p[^l^r]
+PFX KM 0 kemem/A1   p[lr]
+PFX KM 0 kemen/A1   [cdjz]
+PFX KM t kemen/A1   t[^r]
+PFX KM 0 kemen/A1   t[r]
+PFX KM 0 kemen/A1   s[kmptwy]
+PFX KM s kemeny/A1  s[^k^m^p^t^w^y]
+PFX KM 0 kemeng/A1  [aeghiouq]
+PFX KM k kemeng/A1  k[^h^l^r]
+PFX KM 0 kemeng/A1  k[hlr]
+
+SFX Ko Y 1       # -an (keme-an) + o0
+SFX Ko 0 an/KMo0A1   .
+
+PFX KP Y 12	# kepe- (kepe-an)
+PFX KP 0 kepe/A1    [lmnryw]
+PFX KP 0 kepem/A1   [bfv]
+PFX KP p kepem/A1   p[^l^r]
+PFX KP 0 kepem/A1   p[lr]
+PFX KP 0 kepen/A1   [cdjz]
+PFX KP t kepen/A1   t[^r]
+PFX KP 0 kepen/A1   t[r]
+PFX KP 0 kepen/A1   s[kmptwy]
+PFX KP s kepeny/A1  s[^k^m^p^t^w^y]
+PFX KP 0 kepeng/A1  [aeghiouq]
+PFX KP k kepeng/A1  k[^h^l^r]
+PFX KP 0 kepeng/A1  k[hlr]
+
+SFX Kq Y 1       # -an (kepe-an) + o0
+SFX Kq 0 an/KPo0A1  .
+
+PFX KS Y 1	# kese- (kese-an)
+PFX KS 0 kese/A1 .
+
+SFX Kt Y 1       # -an (kese-an) + o0
+SFX Kt 0 an/KSo0A1   .
+
+PFX KT Y 2	# keter- (keter-an)
+PFX KT 0 keter/A1	[^r]
+PFX KT 0 kete/A1	r
+
+SFX Ku Y 1       # -an (keter-an) + o0
+SFX Ku 0 an/KTo0A1   .
+
+PFX M0 Y 12	# me-
+PFX M0 0 me    	[lmnryw]
+PFX M0 0 mem   	[bfv]
+PFX M0 p mem   	p[^l^r]
+PFX M0 0 mem   	p[lr]
+PFX M0 0 men   	[cdjz]
+PFX M0 t men   	t[^r]
+PFX M0 0 men   	t[r]
+PFX M0 0 men   	s[kmptwy]
+PFX M0 s meny  	s[^k^m^p^t^w^y]
+PFX M0 0 meng  	[aeghiouq]
+PFX M0 k meng  	k[^h^l^r]
+PFX M0 0 meng  	k[hlr]
+
+PFX M1 Y 12	# me-
+PFX M1 0 me/A1    [lmnryw]
+PFX M1 0 mem/A1   [bfv]
+PFX M1 p mem/A1   p[^l^r]
+PFX M1 0 mem/A1   p[lr]
+PFX M1 0 men/A1   [cdjz]
+PFX M1 t men/A1   t[^r]
+PFX M1 0 men/A1   t[r]
+PFX M1 0 men/A1   s[kmptwy]
+PFX M1 s meny/A1  s[^k^m^p^t^w^y]
+PFX M1 0 meng/A1  [aeghiouq]
+PFX M1 k meng/A1  k[^h^l^r]
+PFX M1 0 meng/A1  k[hlr]
+
+SFX Mi Y 1	# -i (me-i)	+ o0
+SFX Mi 0 i/M1o0A1     .
+
+SFX Mk Y 1	# -kan (me-kan)	+ nl o0
+SFX Mk 0 kan/M1nlo0A1    .
+
+PFX MB Y 2	# member- (member-an)
+PFX MB 0 member/A1	[^r]
+PFX MB 0 membe/A1	r
+
+SFX Me Y 1   	# -an (ke-an)
+SFX Me 0 kan/MBA1   .
+
+PFX MG Y 1	# menge-
+PFX MG 0 menge  .
+
+PFX M3 Y 1	# menge-
+PFX M3 0 menge/A1     .
+
+SFX Mg Y 1	# -i (menge-i)	+ nl
+SFX Mg 0 i/M3nlA1    .
+
+SFX Mh Y 1	# -kan (menge-kan)
+SFX Mh 0 kan/M3A1    .
+
+PFX MM Y 1	# mem- (mem-)
+PFX MM 0 mem	.
+
+PFX M5 Y 1	# mem- (mem-)
+PFX M5 0 mem/A1	.
+
+SFX Mm Y 1	# -i (mem-i)
+SFX Mm 0 i/M5o0A1   .
+
+SFX Mo Y 1	# -kan (mem-kan)	+ nl
+SFX Mo 0 kan/M5nlA1   .
+
+PFX MP Y 1	# mempe- (mempe-an)
+PFX MP 0 mempe	.
+
+PFX M4 Y 1	# mempe- (mempe-an)
+PFX M4 0 mempe/A1	.
+
+SFX Mn Y 1       # -an (mempe-an)
+SFX Mn 0 an/M4A1   .
+
+SFX Mp Y 1       # -i (mempe-i)
+SFX Mp 0 i/M4nlA1   .
+
+SFX Mq Y 1       # -kan (mempe-kan)
+SFX Mq 0 kan/M4A1   .
+
+PFX MR Y 2	# memper-
+PFX MR 0 memper [^r]
+PFX MR 0 mempe  r
+
+PFX M6 Y 2	# memper-
+PFX M6 0 memper/A1 [^r]
+PFX M6 0 mempe/A1   r
+
+SFX Mt Y 1	# -i (memper-i)
+SFX Mt 0 i/M6n0A1     .
+
+SFX Mu Y 1	# -kan (memper-kan) + o0
+SFX Mu 0 kan/M6o0A1   .
+
+PFX MS Y 1	#menye-
+PFX MS 0 menye	.
+
+PFX M7 Y 1	#menye-
+PFX M7 0 menye/A1     .
+
+SFX Mw Y 1	# -i (menye-i)
+SFX Mw 0 i/M7A1     .
+
+SFX Mx Y 1	# -kan (menye-kan) + n0
+SFX Mx 0 kan/M7n0A1    .
+
+PFX O0 Y 2	# ku- kau-
+PFX O0 0 ku    .
+PFX O0 0 kau   .
+
+PFX O1 Y 2	# ku- kau-
+PFX O1 0 ku/A1    .
+PFX O1 0 kau/A1   .
+
+SFX Oi Y 1	# -i (ku-i kau-i)
+SFX Oi 0 i/O1A1     .
+
+SFX Ok Y 1	# -kan (menye-kan) + n0
+SFX Ok 0 kan/O1n0A1    .
+
+PFX P0 Y 13	# pe-
+PFX P0 0 pe     [lmnryw]
+PFX P0 0 pem   	[bfv]
+PFX P0 p pem   	p[^l^r]
+PFX P0 0 pem   	p[lr]
+PFX P0 0 pen   	[cdjz]
+PFX P0 t pen   	t[^r]
+PFX P0 0 pen   	t[r]
+PFX P0 0 pen   	s[kmptw]
+PFX P0 s pen   	s[y]
+PFX P0 s peny  	s[^k^m^p^t^w^y]
+PFX P0 0 peng  	[aeghiouq]
+PFX P0 k peng  	k[^h^l^r]
+PFX P0 0 peng  	k[hlr]
+
+PFX P1 Y 13	# pe-
+PFX P1 0 pe/A1    [lmnryw]
+PFX P1 0 pem/A1   [bfv]
+PFX P1 p pem/A1   p[^l]
+PFX P1 0 pem/A1   p[lr]
+PFX P1 0 pen/A1   [cdjz]
+PFX P1 t pen/A1   t[^r]
+PFX P1 0 pen/A1   t[r]
+PFX P1 0 pen/A1   s[kmptw]
+PFX P1 s pen/A1   s[y]
+PFX P1 s peny/A1  s[^k^m^p^t^w^y]
+PFX P1 0 peng/A1  [aeghiouq]
+PFX P1 k peng/A1  k[^h^l^r]
+PFX P1 0 peng/A1  k[hlr]
+
+SFX Pa Y 1	# -an (pe-an) + o0
+SFX Pa 0 an/P1o0A1 .
+
+PFX PB Y 2	# pember-
+PFX PB 0 pember/A1  [^r]
+PFX PB 0 pembe/A1    r
+
+SFX Pc Y 1	# -an (pember-an) + o0
+SFX Pc 0 an/PBo0A1 .
+
+PFX PE Y 1	# pe- (pe-)
+PFX PE 0 pe     .
+
+PFX P3 Y 1	# pe- (pe-)
+PFX P3 0 pe/A1     .
+
+SFX Pf Y 1	# -an (pe-an) + o0
+SFX Pf 0 an/P3o0A1 .
+
+PFX PG Y 1	# pen- (pen-)
+PFX PG 0 pen     .
+
+PFX P4 Y 1	# pen- (pen-)
+PFX P4 0 pen/A1     .
+
+SFX Pg Y 1	# -an (pen-an) + o0
+SFX Pg 0 an/P4o0A1 .
+
+PFX PK Y 1	# peng- (peng-)
+PFX PK 0 peng	.
+
+PFX P5 Y 1	# peng- (peng-)
+PFX P5 0 peng/A1	.
+
+SFX Pl Y 1	# -an (peng-an) + o0
+SFX Pl 0 an/P5o0A1 .
+
+PFX PM Y 12	# peme-
+PFX PM 0 peme    [lmnryw]
+PFX PM 0 pemem   [bfv]
+PFX PM p pemem   p[^l^r]
+PFX PM 0 pemem   p[lr]
+PFX PM 0 pemen   [cdjz]
+PFX PM t pemen   t[^r]
+PFX PM 0 pemen   t[r]
+PFX PM 0 pemen   s[kmptwy]
+PFX PM s pemeny  s[^k^m^p^t^w^y]
+PFX PM 0 pemeng  [aeghiouq]
+PFX PM k pemeng  k[^h^l^r]
+PFX PM 0 pemeng  k[hlr]
+
+PFX P6 Y 12	# peme-
+PFX P6 0 peme/A1    [lmnryw]
+PFX P6 0 pemem/A1   [bfv]
+PFX P6 p pemem/A1   p[^l^r]
+PFX P6 0 pemem/A1   p[lr]
+PFX P6 0 pemen/A1   [cdjz]
+PFX P6 t pemen/A1   t[^r]
+PFX P6 0 pemen/A1   t[r]
+PFX P6 0 pemen/A1   s[kmptwy]
+PFX P6 s pemeny/A1  s[^k^m^p^t^w^y]
+PFX P6 0 pemeng/A1  [aeghiouq]
+PFX P6 k pemeng/A1  k[^h^l^r]
+PFX P6 0 pemeng/A1  k[hlr]
+
+SFX Pn Y 1	# -an (peme-an) + o0
+SFX Pn 0 an/P6o0A1 .
+
+PFX PN Y 1	# penge-
+PFX PN 0 penge	.
+
+PFX P7 Y 1	# penge-
+PFX P7 0 penge/A1    .
+
+SFX Po Y 1	# -an (penge-an) + o0
+SFX Po 0 an/P7o0A1 .
+
+PFX PR Y 2	# pemer-
+PFX PR 0 pemer  [^r]
+PFX PR 0 peme   r
+
+PFX P8 Y 2	# pemer-
+PFX P8 0 pemer/A1  [^r]
+PFX P8 0 peme/A1    r
+
+SFX Ps Y 1	# -an (pemer-an) + o0
+SFX Ps 0 an/P8o0A1 .
+
+PFX PS Y 1	# penye-
+PFX PS 0 penye    .
+
+PFX P9 Y 1	# penye-
+PFX P9 0 penye/A1    .
+
+SFX Pv Y 1       # -an (penye-an) + o0
+SFX Pv 0 an/P9o0A1  .
+
+PFX R0 Y 6	# per-
+PFX R0 0 per   	[^r]
+PFX R0 0 pe     r
+PFX R0 0 kuper  [^r]
+PFX R0 0 kupe   r
+PFX R0 0 kauper [^r]
+PFX R0 0 kaupe  r
+
+PFX R1 Y 2	# per-
+PFX R1 0 per/A1   [^r]
+PFX R1 0 pe/A1     r
+
+SFX Ra Y 1	# -an (per-an) + l0 o0
+SFX Ra 0 an/R1l0o0A1 .
+
+SFX Ri Y 1	# -i (per-i) + nl
+SFX Ri 0 i/R1l0A1   .
+
+SFX Rk Y 1	# -kan (per-kan) + nl
+SFX Rk 0 kan/R1l0A1   .
+
+PFX RE Y 1	# re-
+PFX RE 0 re     .
+
+PFX R3 Y 1	# re-
+PFX R3 0 re/A1     .
+
+SFX Rf Y 1	# -an (re-an) + o0
+SFX Rf 0 an/R3A1 .
+
+PFX RP Y 12	# perpe-
+PFX RP 0 perpe/A1    [lmnryw]
+PFX RP 0 perpem/A1   [bfv]
+PFX RP p perpem/A1   p[^l^r]
+PFX RP 0 perpem/A1   p[lr]
+PFX RP 0 perpen/A1   [cdjz]
+PFX RP t perpen/A1   t[^r]
+PFX RP 0 perpen/A1   t[r]
+PFX RP 0 perpen/A1   s[kmptwy]
+PFX RP s perpeny/A1  s[^k^m^p^t^w^y]
+PFX RP 0 perpeng/A1  [aeghiouq]
+PFX RP k perpeng/A1  k[^h^l^r]
+PFX RP 0 perpeng/A1  k[hlr]
+
+SFX Rq Y 1	# -an (pe-an) + o0
+SFX Rq 0 an/RPo0A1 .
+
+PFX RS Y 1	# perse-
+PFX RS 0 perse	.
+
+PFX R4 Y 1	# perse-
+PFX R4 0 perse/A1     .
+
+SFX Rt Y 1	# -an (perse-an) + o0
+SFX Rt 0 an/R4o0A1 .
+
+PFX S0 Y 1	# se-
+PFX S0 0 se     .
+
+PFX S1 Y 1	# se-
+PFX S1 0 se/A1     .
+
+SFX Sa Y 1	# -an (se-an) 	+ o0
+SFX Sa 0 an/S1o0A1 .
+
+SFX Sn Y 1	# -nya (se-nya)
+SFX Sn 0 nya/S1l0A1     .
+
+PFX SB Y 2	# seber-
+PFX SB 0 seber  [^r]
+PFX SB 0 sebe   r
+
+PFX S3 Y 2	# seber-
+PFX S3 0 seber/A1  [^r]
+PFX S3 0 sebe/A1    r
+
+SFX Sb Y 1	# -nya (se-nya) 	+ l0
+SFX Sb 0 nya/S3l0A1     .
+
+PFX SK Y 1	#seke-
+PFX SK 0 seke	.
+
+PFX S4 Y 1	#seke-
+PFX S4 0 seke/A1     .
+
+SFX Sl Y 1       # -an (seke-an) + o0
+SFX Sl 0 an/S4o0A1   .
+
+PFX SP Y 12	 # sepe-
+PFX SP 0 sepe    [lmnryw]
+PFX SP 0 sepem   [bfv]
+PFX SP p sepem   p[^l^r]
+PFX SP 0 sepem   p[lr]
+PFX SP 0 sepen   [cdjz]
+PFX SP t sepen   t[^r]
+PFX SP 0 sepen   t[r]
+PFX SP 0 sepen   s[kmptwy]
+PFX SP s sepeny  s[^k^m^p^t^w^y]
+PFX SP 0 sepeng  [aeghiouq]
+PFX SP k sepeng  k[^h^l^r]
+PFX SP 0 sepeng  k[hlr]
+
+PFX S5 Y 12	# sepe-
+PFX S5 0 sepe/A1    [lmnryw]
+PFX S5 0 sepem/A1   [bfv]
+PFX S5 p sepem/A1   p[^l^r]
+PFX S5 0 sepem/A1   p[lr]
+PFX S5 0 sepen/A1   [cdjz]
+PFX S5 t sepen/A1   t[^r]
+PFX S5 0 sepen/A1   t[r]
+PFX S5 0 sepen/A1   s[kmptwy]
+PFX S5 s sepeny/A1  s[^k^m^p^t^w^y]
+PFX S5 0 sepeng/A1  [aeghiouq]
+PFX S5 k sepeng/A1  k[^h^l^r]
+PFX S5 0 sepeng/A1  k[hlr]
+
+SFX Sq Y 1	# -an (sepe-an) 	+ o0
+SFX Sq 0 an/S5o0A1 .
+
+PFX SR Y 2	# seper- (seper-an)
+PFX SR 0 seper  [^r]
+PFX SR 0 sepe   r
+
+PFX S6 Y 2	# seper- (seper-an)
+PFX S6 0 seper/A1  [^r]
+PFX S6 0 sepe/A1   r
+
+SFX Ss Y  1	    # -an (seper-an)
+SFX Ss 0  an/S6A1  	.
+
+PFX SQ Y 1	# seperse-
+PFX SQ 0 seperse .
+
+PFX SS Y 1	# sese-
+PFX SS 0 sese   .
+
+PFX ST Y 2	# seter-
+PFX ST 0 seter  [^r]
+PFX ST 0 sete   r
+
+PFX SI Y 1	# si-
+PFX SI 0 si     .
+
+PFX T0 Y 2	# ter-
+PFX T0 0 ter   	[^r]
+PFX T0 0 te     r
+
+PFX T1 Y 2	# ter-
+PFX T1 0 ter/A1   [^r]
+PFX T1 0 te/A1     r
+
+SFX Ta Y 1       # -an (ter-an) + o0
+SFX Ta 0 an/T1o0A1   .
+
+SFX Ti Y 1	# -i (ter-i)
+SFX Ti 0 i/T1A1     .
+
+SFX Tk Y  1	# -kan (ter-kan) + nl
+SFX Tk 0  kan/T1nlA1   .
+
+SFX Tn Y  1	# -kan (ter-kan) + nl
+SFX Tn 0  nya/T1nlA1   .
+
+PFX TB Y 1	# terbe-
+PFX TB 0 terbe	.
+
+PFX TE Y 1	# te-
+PFX TE 0 te/A1     .
+
+PFX T3 Y 1	# te-
+PFX T3 0 te/A1     .
+
+SFX Tf Y 1       # -an (te-an) 	+ o0
+SFX Tf 0 an/T3o0A1   .
+
+SFX Tg Y 1       # -i (te-i) 	+ nl
+SFX Tg 0 i/T3nlA1   .
+
+SFX Th Y 1	# -kan (te-kan) + nl
+SFX Th 0 kan/T3nlA1   	.
+
+PFX TK Y 1	# terke
+PFX TK 0 terke  .
+
+PFX TR Y 2	# teper-
+PFX TR 0 teper  [^r]
+PFX TR 0 tepe   r
+
+PFX WE Y 1	# we-
+PFX WE 0 we     .
+
+PFX W3 Y 1	# we-
+PFX W3 0 we/A1     .
+
+SFX We Y 1       # -an (we-an) 	+ o0
+SFX We 0 an/W3o0A1   .
+
+# Berikut ini semua akhiran
+
+SFX a0 Y 14         # -an
+SFX a0 0 an         .
+SFX a0 0 anlah      .
+SFX a0 0 ankah      .
+SFX a0 0 anku       .
+SFX a0 0 anmu       .
+SFX a0 0 annya      .
+SFX a0 0 annyalah   .
+SFX a0 0 annyakah   .
+SFX a0 0 anKu       .
+SFX a0 0 anMu       .
+SFX a0 0 anNya      .
+SFX a0 0 an-Ku      .
+SFX a0 0 an-Mu      .
+SFX a0 0 an-Nya     .
+
+SFX i0 Y 4	# -i -ilah -ikah
+SFX i0 0 i      .
+SFX i0 0 ilah   .
+SFX i0 0 ikah   .
+SFX i0 0 i/n0   .
+
+SFX k0 Y  3	  # -kan
+SFX k0 0  kan     .
+SFX k0 0  kanlah  .
+SFX k0 0  kankah  .
+
+SFX l0 Y 2	# -lah -kah
+SFX l0 0 lah    .
+SFX l0 0 kah    .
+
+SFX n0 Y 4	# -nya, -nyakah, -nyalah
+SFX n0 0 nya    .
+SFX n0 0 nyalah .
+SFX n0 0 nyakah .
+SFX n0 0 -Nya   .
+
+# pengganti orang bagi kata kerja berbentuk di- (diambilnyalah)
+SFX nl Y 7	# -lah -kah -nya -nyalah -nyakah -Nya --Nya
+SFX nl 0 lah    .
+SFX nl 0 kah    .
+SFX nl 0 nya    .
+SFX nl 0 nyalah .
+SFX nl 0 nyakah .
+SFX nl 0 Nya    .
+SFX nl 0 -Nya   .
+
+# akhiran pengganti orang
+SFX o0 Y 15	# -ku -mu -nya -Ku -Mu -Nya --Ku --Mu --Nya
+SFX o0 0 ku     .
+SFX o0 0 kulah  .
+SFX o0 0 kukah  .
+SFX o0 0 mu     .
+SFX o0 0 mulah  .
+SFX o0 0 mukah  .
+SFX o0 0 nya    .
+SFX o0 0 nyalah .
+SFX o0 0 nyakah .
+SFX o0 0 Ku     .
+SFX o0 0 Mu     .
+SFX o0 0 Nya    .
+SFX o0 0 -Ku    .
+SFX o0 0 -Mu    .
+SFX o0 0 -Nya   .
+
+# REP untuk mengganti huruf yang salah tek, demi sugesti benar
+REP 12
+REP p    v
+REP p    f
+REP f    p
+REP o    u
+REP kh   k
+REP g    j
+REP z    j
+REP e    a
+REP is   ik
+REP ua   au
+REP kna  kan
+REP dna  dan
+

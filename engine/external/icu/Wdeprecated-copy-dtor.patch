@@ -1,0 +1,25 @@
+--- source/common/unicode/uobject.h
++++ source/common/unicode/uobject.h
+@@ -245,10 +245,10 @@
+     // direct use of UObject itself
+ 
+     // default constructor
+-    // inline UObject() {}
++    UObject() = default;
+ 
+     // copy constructor
+-    // inline UObject(const UObject &other) {}
++    UObject(const UObject &other) = default;
+ 
+ #if 0
+     // TODO Sometime in the future. Implement operator==().
+@@ -280,8 +280,8 @@
+      * Subclasses need this assignment operator if they use compiler-provided
+      * assignment operators of their own. An alternative to not declaring one
+      * here would be to declare and empty-implement a protected or public one.
+-    UObject &UObject::operator=(const UObject &);
+      */
++    UObject &operator=(const UObject &) = default;
+ };
+ 
+ #ifndef U_HIDE_INTERNAL_API

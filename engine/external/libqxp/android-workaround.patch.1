@@ -1,0 +1,49 @@
+--- libqxp.orig/src/lib/QXP4Parser.cpp	2017-08-28 10:12:26.009868397 +0200
++++ libqxp/src/lib/QXP4Parser.cpp	2017-08-28 10:12:39.577681705 +0200
+@@ -16,6 +16,7 @@
+ #include "QXP4Header.h"
+ #include "QXPCollector.h"
+ #include "QXPMemoryStream.h"
++#include "android-compat.h"
+ 
+ namespace libqxp
+ {
+--- libqxp.orig/src/lib/QXPParser.cpp	2017-08-28 10:11:14.074858068 +0200
++++ libqxp/src/lib/QXPParser.cpp	2017-08-28 10:18:04.849203430 +0200
+@@ -14,6 +14,7 @@
+ 
+ #include <cmath>
+ #include <memory>
++#include "android-compat.h"
+ 
+ namespace libqxp
+ {
+--- libqxp.orig/src/lib/QXPTypes.cpp	2017-08-26 08:38:40.000000000 +0200
++++ libqxp/src/lib/QXPTypes.cpp	2017-08-28 10:18:37.784749714 +0200
+@@ -11,6 +11,7 @@
+ 
+ #include <boost/math/constants/constants.hpp>
+ #include <cmath>
++#include "android-compat.h"
+ 
+ namespace libqxp
+ {
+--- libqxp.orig/src/lib/android-compat.h	1970-01-01 01:00:00.000000000 +0100
++++ libqxp/src/lib/android-compat.h	2017-08-28 10:21:36.766283262 +0200
+@@ -0,0 +1,16 @@
++#if defined(__ANDROID__)
++namespace std
++{
++template<typename T>
++T round(T x)
++{
++  return ::round(x);
++}
++
++template<typename T>
++T hypot(T x, T y)
++{
++  return ::hypot(x, y);
++}
++}
++#endif

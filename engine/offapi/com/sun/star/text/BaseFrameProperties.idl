@@ -1,0 +1,361 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com {  module sun {  module star {  module text {
+
+/** specifies the properties that are provided by all text frames, graphic objects, embedded objects
+ and frame styles.
+ */
+published service BaseFrameProperties
+{
+    /** gives access to the UserDefinedAttributes property.
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
+
+    /** contains the number of the page where the objects are anchored.
+        <p> The value is valid only if the
+        AnchorType is
+        TextContentAnchorType::AT_PAGE.</p>
+     */
+    [property] short AnchorPageNo;
+    /** contains the text frame the current frame is anchored to.
+        <p> The value is valid only if the
+        AnchorType is TextContentAnchorType::AT_FRAME.</p>
+     */
+    [property] com::sun::star::text::XTextFrame AnchorFrame;
+
+    /** contains the color of the background of the object.
+     */
+    [property] com::sun::star::util::Color BackColor;
+
+    /** contains the URL for the background graphic.
+
+        @deprecated as of LibreOffice 6.1 - use BackGraphic instead
+
+        Note the new behaviour since it this was deprecated:
+        This property can only be set and only external URLs are
+        supported (no more vnd.sun.star.GraphicObject scheme). When an
+        URL is set, then it will load the graphic and set the BackGraphic
+        property.
+     */
+    [property] string BackGraphicURL;
+
+    /** contains the name of the file filter for the background graphic.
+     */
+    [property] string BackGraphicFilter;
+
+    /** determines the position of the background graphic.
+     */
+    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+
+    /** contains the left border of the object.
+
+        @see com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine LeftBorder;
+
+    /** contains the right border of the object.
+
+        @see com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine RightBorder;
+
+    /** contains the top border of the object.
+
+        @see com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine TopBorder;
+
+    /** contains the bottom border of the object.
+
+        @see com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine BottomBorder;
+
+    /** contains the distance from the border to the object.
+     */
+    [property] long BorderDistance;
+
+    /** contains the distance from the left border to the object.
+     */
+    [property] long LeftBorderDistance;
+
+    /** contains the distance from the right border to the object.
+     */
+    [property] long RightBorderDistance;
+
+    /** contains the distance from the top border to the object.
+     */
+    [property] long TopBorderDistance;
+
+    /** contains the distance from the bottom border to the object.
+     */
+    [property] long BottomBorderDistance;
+
+    /** If TRUE, the "BackColor" is ignored.
+     */
+    [property] boolean BackTransparent;
+
+
+    /** determines if the content is protected.
+     */
+    [property] boolean ContentProtected;
+    /** contains the left margin of the object.
+     */
+    [property] long LeftMargin;
+
+    /** contains the right margin of the object.
+     */
+    [property] long RightMargin;
+
+
+    /** contains the top margin of the object.
+     */
+    [property] long TopMargin;
+
+    /** contains the bottom margin of the object.
+     */
+    [property] long BottomMargin;
+
+    /** contains the height of the object (1/100 mm).
+        <p>It is only valid if TextEmbeddedObject::RelativeHeight is zero.</p>
+     */
+    [property] long Height;
+
+    /** contains the width of the object (1/100 mm).
+        <p>It is only valid if TextEmbeddedObject::RelativeWidth is zero.</p>
+     */
+    [property] long Width;
+    /** contains the relative height of the object.
+        <p> It is only valid if it is greater than zero.</p>
+     */
+    [property] short RelativeHeight;
+
+    /** contains the relative width of the object.
+        <p> It is only valid if it is greater than zero. </p>
+     */
+    [property] short RelativeWidth;
+    /** determines whether the width follows the height.
+     */
+    [property] boolean IsSyncWidthToHeight;
+    /** determines whether the height follows the width.
+     */
+    [property] boolean IsSyncHeightToWidth;
+    /** determines the horizontal orientation of the object.
+
+        @see com::sun::star::text::HoriOrientation
+     */
+    [property] short HoriOrient;
+    /** contains the horizontal position of the object (1/100 mm).
+        <p> It is only valid if HoriOrient is com::sun::star::text::HoriOrientation::NONE.</p>
+     */
+    [property] long HoriOrientPosition;
+
+    /** determines the environment of the object to which the orientation
+        is related.
+
+        @see com::sun::star::text::RelOrientation
+     */
+    [property] short HoriOrientRelation;
+
+    /** determines the vertical orientation of the object.
+
+        @see com::sun::star::text::VertOrientation
+     */
+    [property] short VertOrient;
+
+    /** contains the vertical position of the object (1/100 mm).
+
+        It is only valid if VertOrient is
+        com::sun::star::text::VertOrientation::NONE.
+     */
+    [property] long VertOrientPosition;
+
+
+    /** determines the environment of the object to which the orientation is related.
+
+        @see com::sun::star::text::RelOrientation
+     */
+    [property] short VertOrientRelation;
+
+    /** contains the URL of a hyperlink that is set at the object.
+     */
+    [property] string HyperLinkURL;
+
+    /** contains the name of the target for a hyperlink that is set at the object.
+     */
+    [property] string HyperLinkTarget;
+
+    /** contains the name of the hyperlink that is set at the object.
+     */
+    [property] string HyperLinkName;
+
+    /** determines if the object is opaque or transparent for text.
+     */
+    [property] boolean Opaque;
+
+    /** determines if the object is mirrored on even pages.
+     */
+    [property] boolean PageToggle;
+
+    /** determines if the position is protected.
+     */
+    [property] boolean PositionProtected;
+
+    /** determines if the object is included in printing.
+     */
+    [property] boolean Print;
+
+    /** contains the type of the shadow of the object.
+     */
+    [property] com::sun::star::table::ShadowFormat ShadowFormat;
+
+    /** determines if the object gets an image map from a server.
+     */
+    [property] boolean ServerMap;
+
+    /** contains the size of the object.
+
+        @see BaseFrame::Height
+        @see BaseFrame::Width
+     */
+    [property] com::sun::star::awt::Size Size;
+
+    /** determines if the size is protected.
+     */
+    [property] boolean SizeProtected;
+    /** determines the type of the surrounding text.
+
+        @deprecated
+     */
+        [property] com::sun::star::text::WrapTextMode Surround;
+
+    /** determines if the text of the paragraph in which the object
+        is anchored, wraps around the object.
+     */
+    [property] boolean SurroundAnchorOnly;
+
+    /** determines the influence of the text wrap on the positioning of the
+        shape
+
+        <p>The value of this property is only evaluated for the positioning
+        of the shape, if the text document setting ConsiderTextWrapOnObjPos
+        is `TRUE`. Valid values are given by #WrapInfluenceOnPosition</p>
+     */
+    [optional, property] short WrapInfluenceOnPosition;
+
+    /** returns the actual size of the object.
+
+        <p>Since to obtain the correct actual size of the object not only
+        the  layouting for the frame needs to be finished but the whole
+        document needs to be formatted as well. Thus if that was not done
+        previously it may take some while to retrieve this value.</p>
+     */
+    [optional, property, maybevoid] com::sun::star::awt::Size LayoutSize;
+
+        /** contains short title for the object
+
+            <p>This short title is visible as an alternative tag in HTML format.
+            Accessibility tools can read this text.</p>
+        */
+        [optional, property] string Title;
+
+        /** contains description for the object
+
+            <p>The long description text can be entered to describe an object in
+            more detail to users with screen reader software. The description is
+            visible as an alternative tag for accessibility tools.</p>
+        */
+        [optional, property] string Description;
+        /** This enumeration selects the style the area will be filled with.
+
+            <p>Currently only set for gradients.</p>
+        */
+        [optional, property] com::sun::star::drawing::FillStyle FillStyle;
+        /** If the property #FillStyle is set to
+            FillStyle::GRADIENT, this describes the gradient used.
+        */
+        [optional, property] com::sun::star::awt::Gradient FillGradient;
+        /** If the property #FillStyle is set to
+            FillStyle::GRADIENT, this is the name of the gradient used.
+        */
+        [optional, property] string FillGradientName;
+
+        /** This defines the degree of transparence of the shadow in percent.
+
+            <p>This is the same as setting the Color member of the
+            #ShadowFormat property to an ARGB color.</p>
+         */
+        [optional, property] short ShadowTransparence;
+
+        /** Grab bag of frame properties, used as a string-any map for interim interop purposes.
+
+            <p>This property is intentionally not handled by the ODF filter. Any
+            member that should be handled there should be first moved out from this grab
+            bag to a separate property.</p>
+        */
+        [optional, property] sequence<com::sun::star::beans::PropertyValue> FrameInteropGrabBag;
+
+        /** contains the relation of the relative height of the object.
+            <p> It is only valid if RelativeHeight is greater than zero.</p>
+
+            @see com::sun::star::text::RelOrientation
+         */
+        [optional, property] short RelativeHeightRelation;
+
+        /** contains the relation of the relative width of the object.
+            <p> It is only valid if RelativeWidth is greater than zero.</p>
+
+            @see com::sun::star::text::RelOrientation
+         */
+        [optional, property] short RelativeWidthRelation;
+
+    /** contains the graphic for the background.
+    */
+    [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
+
+    /** This defines if the frame is allowed to overlap with other anchored objects.
+    */
+    [optional, property] boolean AllowOverlap;
+
+    /** Contains popup text for the frame, used to for tooltip purposes if it's non-empty.
+    */
+    [optional, property] string Tooltip;
+
+    /** Determines if the frame is purely decorative.
+
+        If `TRUE`, it is considered not part of the document content,
+        and may be ignored by assistive technologies.
+    */
+    [optional, property] boolean Decorative;
+
+    /** If `TRUE`, the frame is allowed to be split at page breaks.
+     */
+    [optional, property] boolean IsSplitAllowed;
+
+    /** If `TRUE`, text wraps around a split fly on all pages.
+     */
+    [optional, property] boolean WrapTextAtFlyStart;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

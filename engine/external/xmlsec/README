@@ -1,0 +1,5 @@
+XML signing, etc. From [http://www.aleksey.com/xmlsec/].
+
+The certificate vertification functionality of libxmlsec is not used, both the
+mscng and nss backends specify the
+XMLSEC_KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS flag during verification.

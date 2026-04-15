@@ -1,0 +1,6 @@
+TextStyle	FaceName	Size	Color	StyleBits
+s72	s32	i2	I4	I2
+TextStyle	TextStyle
+DialogDefault	Segoe UI	9		
+DialogDefaultBold	Segoe UI	9		1
+DialogHeading	Segoe UI	11		1

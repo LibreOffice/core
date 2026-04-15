@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE abiword PUBLIC "-//ABISOURCE//DTD AWML 1.0 Strict//EN" "http://www.abisource.com/awml.dtd">
+<abiword template="false" styles="unlocked" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:math="http://www.w3.org/1998/Math/MathML" xid-max="602" xmlns:dc="http://purl.org/dc/elements/1.1/" fileformat="1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:awml="http://www.abisource.com/awml.dtd" xmlns="http://www.abisource.com/awml.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" version="0.99.2" xml:space="preserve" props="dom-dir:ltr; document-footnote-restart-section:0; document-endnote-type:numeric; document-endnote-place-enddoc:1; document-endnote-initial:1; lang:en-US; document-endnote-restart-section:0; document-footnote-restart-page:0; document-footnote-type:numeric; document-footnote-initial:1; document-endnote-place-endsection:0">
+<!-- ======================================================================== -->
+<!-- This file is an AbiWord document.                                        -->
+<!-- AbiWord is a free, Open Source word processor.                           -->
+<!-- More information about AbiWord is available at http://www.abisource.com/ -->
+<!-- You should not edit this file by hand.                                   -->
+<!-- ======================================================================== -->
+
+<metadata>
+<m key="dc.format">application/x-abiword</m>
+<m key="abiword.generator">AbiWord</m>
+</metadata>
+<history version="32" edit-time="22699" last-saved="1186591494" uid="cda1ddaa-271c-11dc-96cc-acc9743d883d">
+<version id="9" started="1183217258" uid="f7653120-2729-11dc-96cc-acc9743d883d" auto="0" top-xid="129"/>
+<version id="15" started="1183229488" uid="a162cfda-273d-11dc-9057-9d0956321a55" auto="0" top-xid="395"/>
+<version id="21" started="1183588421" uid="a208dbc8-2a80-11dc-81ef-aecf9c46b62f" auto="0" top-xid="538"/>
+<version id="28" started="1183595753" uid="eb9b7cce-2a9d-11dc-90b3-b9dc9cabd82a" auto="0" top-xid="558"/>
+<version id="29" started="1183748257" uid="c3b1a520-2bf2-11dc-810f-966d8748d82a" auto="0" top-xid="576"/>
+<version id="32" started="1186591321" uid="b0dcc786-45ce-11dc-95e7-b27653668118" auto="0" top-xid="602"/>
+</history>
+<styles>
+<s type="P" name="Normal" followedby="Current Settings" props="font-family:Times New Roman; margin-top:0pt; font-style:normal; font-weight:normal; color:000000; widows:2; margin-bottom:0pt; margin-left:0pt; text-position:normal; line-height:1.0; text-decoration:none; bgcolor:transparent; margin-right:0pt; font-variant:normal; font-size:12pt; text-indent:0in; text-align:left; lang:en-US; font-stretch:normal"/>
+<s type="C" name="Reference" props="font-size:10pt"/>
+</styles>
+<pagesize pagetype="Letter" orientation="portrait" width="8.500000" height="11.000000" units="in" page-scale="1.000000"/>
+<section xid="128" props="page-margin-footer:0.5in; page-margin-header:0.5in">
+<table xid="33" props="list-tag:1; table-column-props:3.8750in/0.9375in/1.6250in/">
+<cell xid="34" props="bg-style:1; left-color:000000; bot-style:1; right-attach:1; right-color:000000; top-color:000000; bot-color:000000; left-attach:0; top-style:0; right-style:0; left-style:0; bot-attach:1; top-attach:0">
+<p style="Normal" xid="35" props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:12pt; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:12pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Evan Rinehart</c></p>
+<p style="Normal" xid="599" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; lang:en-US; text-decoration:none; text-indent:0.0000in; text-position:normal; margin-top:0.0000in; font-weight:bold; margin-right:0.0000in; margin-bottom:0.0000in; font-size:12pt; line-height:1.000000; text-align:left"><c props="font-family:Times New Roman; font-size:12pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">P.O. Box 21456</c></p>
+<p style="Normal" xid="600" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; lang:en-US; text-decoration:none; text-indent:0.0000in; text-position:normal; margin-top:0.0000in; font-weight:bold; margin-right:0.0000in; margin-bottom:0.0000in; font-size:12pt; line-height:1.000000; text-align:left"><c props="font-family:Times New Roman; font-size:12pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Baton Rouge, LA 70894</c></p>
+<p style="Normal" xid="601" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; lang:en-US; text-decoration:none; text-indent:0.0000in; text-position:normal; margin-top:0.0000in; font-weight:bold; margin-right:0.0000in; margin-bottom:0.0000in; font-size:12pt; line-height:1.000000; text-align:left"><c props="font-family:Times New Roman; font-size:12pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">(985) 806 4063</c></p>
+<p style="Normal" xid="602" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; lang:en-US; text-decoration:none; text-indent:0.0000in; text-position:normal; margin-top:0.0000in; font-weight:bold; margin-right:0.0000in; margin-bottom:0.0000in; font-size:12pt; line-height:1.000000; text-align:left"><c props="font-family:Times New Roman; font-size:12pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">evanrinehart@gmail.com</c></p>
+</cell>
+<cell xid="37" props="bg-style:1; left-color:000000; bot-style:1; right-attach:3; right-color:000000; top-color:000000; bot-color:000000; left-attach:1; top-style:0; right-style:0; left-style:0; bot-attach:1; top-attach:0">
+<p style="Normal" xid="38"></p>
+</cell>
+<cell xid="40" props="bot-style:0; right-attach:3; bg-style:1; top-color:000000; bot-color:000000; left-attach:0; left-style:0; right-style:0; top-style:1; bot-attach:2; top-attach:1">
+<p style="Normal" xid="41"></p>
+<p style="Normal" xid="118"></p>
+</cell>
+<cell xid="46" props="bot-style:1; right-attach:1; bg-style:1; top-color:000000; bot-color:000000; left-attach:0; left-style:0; right-style:0; top-style:0; bot-attach:3; top-attach:2">
+<p style="Normal" xid="47"><c props="text-decoration:none; font-weight:bold">Work Experience</c></p>
+</cell>
+<cell xid="49" props="bot-style:1; right-attach:3; bg-style:1; top-color:000000; bot-color:000000; left-attach:1; left-style:0; right-style:0; top-style:0; bot-attach:3; top-attach:2">
+<p style="Normal" xid="50" props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:12pt; text-position:normal; font-weight:normal; font-style:normal"></p>
+</cell>
+<cell xid="587" props="left-color:000000; bot-style:0; right-attach:1; right-color:000000; bg-style:1; left-attach:0; top-attach:3; bot-attach:4; bot-color:000000; right-style:0; left-style:0">
+<p xid="588"><c props="font-style:italic; font-size:10pt">RageComm</c></p>
+<p xid="596"><c props="font-size:10pt">Aug 2007 - </c></p>
+<p xid="598"></p>
+</cell>
+<cell xid="590" props="bg-style:1; bot-style:0; right-attach:3; left-attach:1; right-style:0; left-style:0; bot-attach:4; top-attach:3">
+<p xid="591"><c props="font-size:10pt">Programmer</c></p>
+<p xid="597" props="font-size:8pt"><c props="font-size:8pt">Researching and implementing advanced graphics techniques using shaders; providing general support.</c></p>
+</cell>
+<cell xid="52" props="bg-style:1; bot-style:0; right-attach:1; top-color:000000; top-attach:4; left-attach:0; left-style:0; bot-attach:5; bot-color:000000; right-style:0; top-style:0">
+<p style="Normal" xid="53" props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:12pt; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; font-size:10pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:italic; lang:en-US">LSU Student Technical Application Resource Training</c></p>
+<p style="Normal" xid="574" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Aug 2006 - May 2007</c></p>
+<p style="Normal" xid="174" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; text-position:normal; lang:en-US; margin-bottom:0.0000in; text-indent:0.0000in; text-align:left; margin-top:0.0000in; font-weight:normal; line-height:1.000000; text-decoration:none; color:000000; margin-right:0.0000in; font-size:10pt"></p>
+</cell>
+<cell xid="92" props="bg-style:1; bot-style:0; right-attach:3; top-color:000000; top-attach:4; left-attach:1; left-style:0; bot-attach:5; bot-color:000000; right-style:0; top-style:0">
+<p xid="93" props="font-family:Times New Roman; font-size:12pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; font-size:10pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Software Trainer</c></p>
+<p style="Normal" xid="570" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; lang:en-US; text-decoration:none; text-indent:0.0000in; text-position:normal; margin-top:0.0000in; font-weight:normal; margin-right:0.0000in; margin-bottom:0.0000in; font-size:8pt; line-height:1.000000; text-align:left"><c props="font-family:Times New Roman; font-size:8pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Taught classes in MATLAB, Mathematica, web design, and Linux system administration.</c></p>
+</cell>
+<cell xid="58" props="bot-style:0; right-attach:1; bg-style:1; top-color:000000; bot-color:000000; left-attach:0; left-style:0; right-style:0; top-style:0; bot-attach:6; top-attach:5">
+<p style="Normal" xid="59" props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:12pt; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; font-size:10pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:italic; lang:en-US">LSU Department of Electrical and Computer Engineering</c></p>
+<p style="Normal" xid="576" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Jan 2006 - May 2007</c></p>
+<p style="Normal" xid="175" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; text-position:normal; lang:en-US; margin-bottom:0.0000in; text-indent:0.0000in; text-align:left; margin-top:0.0000in; font-weight:normal; line-height:1.0; text-decoration:none; color:000000; margin-right:0.0000in; font-size:10pt"></p>
+</cell>
+<cell xid="61" props="left-attach:1; right-attach:3; bot-style:0; bot-attach:6; top-attach:5; right-style:0; top-style:0; bg-style:1; left-style:0">
+<p style="Normal" xid="62" props="font-family:Times New Roman; font-size:12pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; font-size:10pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Engineering Tutor</c></p>
+<p style="Normal" xid="572" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; lang:en-US; text-decoration:none; text-indent:0.0000in; text-position:normal; margin-top:0.0000in; font-weight:normal; margin-right:-0.1250in; margin-bottom:0.0000in; font-size:8pt; line-height:1.000000; text-align:left"><c props="font-family:Times New Roman; font-size:8pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Tutored engineering students in circuits, digital logic, electronics, and software engineering.</c></p>
+</cell>
+<cell xid="64" props="bot-style:0; right-attach:1; bg-style:1; top-color:000000; bot-color:000000; left-attach:0; left-style:0; right-style:0; top-style:0; bot-attach:7; top-attach:6">
+<p style="Normal" xid="65" props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:12pt; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; font-size:10pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:italic; lang:en-US">LSU Department of Mathematics</c></p>
+<p style="Normal" xid="575" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Aug 2005 - May 2006</c></p>
+<p style="Normal" xid="176" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; text-position:normal; lang:en-US; margin-bottom:0.0000in; text-indent:0.0000in; text-align:left; margin-top:0.0000in; font-weight:normal; line-height:1.000000; text-decoration:none; color:000000; margin-right:0.0000in; font-size:10pt"></p>
+</cell>
+<cell xid="95" props="left-attach:1; right-attach:3; bot-style:0; bot-attach:7; top-attach:6; right-style:0; left-style:0; top-style:0">
+<p xid="96" props="font-family:Times New Roman; font-size:12pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; font-size:10pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Software Trainer / Math Tutor</c></p>
+<p style="Normal" xid="571" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; lang:en-US; text-decoration:none; text-indent:0.0000in; text-position:normal; margin-top:0.0000in; font-weight:normal; margin-right:0.0000in; margin-bottom:0.0000in; font-size:8pt; line-height:1.000000; text-align:left"><c props="font-family:Times New Roman; font-size:8pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Assisted students enrolled in computer-based college algebra program.</c></p>
+</cell>
+<cell xid="70" props="bot-style:0; right-attach:1; bg-style:1; top-color:000000; bot-color:000000; left-attach:0; left-style:0; right-style:0; top-style:0; bot-attach:8; top-attach:7">
+<p style="Normal" xid="71" props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:12pt; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; font-size:10pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:italic; lang:en-US">LSU School of Veterinary Medicine</c></p>
+<p style="Normal" xid="573" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Jun 2004 - Aug 2005</c></p>
+<p style="Normal" xid="177" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; text-position:normal; lang:en-US; margin-bottom:0.0000in; text-indent:0.0000in; text-align:left; margin-top:0.0000in; font-weight:normal; line-height:1.000000; text-decoration:none; color:000000; margin-right:0.0000in; font-size:10pt"></p>
+</cell>
+<cell xid="73" props="left-attach:1; right-attach:3; bot-style:0; bot-attach:8; top-attach:7; right-style:0; top-style:0; bg-style:1; left-style:0">
+<p style="Normal" xid="74" props="font-family:Times New Roman; font-size:12pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; font-size:10pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Entry-Level Network Technician</c></p>
+<p style="Normal" xid="569" props="font-family:Times New Roman; dom-dir:ltr; font-style:normal; margin-left:0.0000in; lang:en-US; text-decoration:none; text-indent:0.0000in; text-position:normal; margin-top:0.0000in; font-weight:normal; margin-right:-0.0625in; margin-bottom:0.0000in; font-size:8pt; line-height:1.000000; text-align:left"><c props="font-family:Times New Roman; font-size:8pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Installed and maintained network hardware throughout hospital and research facility.</c></p>
+</cell>
+</table>
+<p xid="369"></p>
+<table xid="130" props="list-tag:1; bot-style:0; table-column-props:3.8750in/2.5625in/; top-style:0; right-style:0; bg-style:1; left-style:0">
+<cell xid="152" props="bg-style:1; left-color:000000; bot-style:1; right-attach:2; right-color:000000; top-color:000000; top-attach:0; left-attach:0; left-style:0; bot-attach:1; bot-color:000000; right-style:0; top-style:0">
+<p xid="467"><c props="font-weight:bold; text-decoration:none">Education</c></p>
+</cell>
+<cell xid="134" props="bot-style:0; right-attach:1; bg-style:1; top-color:000000; left-style:0; left-attach:0; top-attach:1; bot-attach:2; bot-color:000000; right-style:0; top-style:1">
+<p style="Normal" xid="135"><c props="font-size:10pt">Bachelor of Science in Electrical Engineering</c></p>
+<p style="Normal" xid="559"><c props="font-size:10pt">Louisiana State University, 2007</c></p>
+</cell>
+<cell xid="137" props="bot-style:0; right-attach:2; bg-style:1; top-color:000000; left-style:0; left-attach:1; top-attach:1; bot-attach:2; bot-color:000000; right-style:0; top-style:1">
+<p style="Normal" xid="138"><c props="font-size:8pt">Concentration in Computer Engineering</c></p>
+<p style="Normal" xid="150"><c props="font-size:8pt">Minor in Physics</c></p>
+<p style="Normal" xid="151"><c props="font-size:8pt">Minor in Computer Science</c></p>
+<p style="Normal" xid="556"><c props="font-size:8pt">Major GPA: 3.24</c></p>
+<p style="Normal" xid="567"></p>
+</cell>
+<cell xid="143" props="bot-attach:3; left-attach:0; right-attach:1; top-attach:2">
+<p style="Normal" xid="144"><c props="font-size:10pt">Bachelor of Science in Mathematics</c></p>
+<p style="Normal" xid="560"><c props="font-size:10pt">Louisiana State University, Expected 2008</c></p>
+</cell>
+<cell xid="146" props="bot-attach:3; left-attach:1; right-attach:2; top-attach:2">
+<p style="Normal" xid="147"><c props="font-size:8pt">Concentration in Pure Math</c></p>
+<p style="Normal" xid="558"><c props="font-size:8pt">Major GPA: 3.44</c></p>
+</cell>
+</table>
+<p xid="370"></p>
+<table xid="506" props="list-tag:1; bg-style:1; left-color:000000; bot-style:0; table-column-props:3.8750in/2.5625in/; right-color:000000; top-color:000000; left-style:0; bot-color:000000; right-style:0; top-style:0">
+<cell xid="507" props="left-attach:0; right-attach:2; bot-style:1; bot-attach:1; top-attach:0; bot-color:000000; right-style:0; top-style:0; bg-style:1; left-style:0">
+<p style="Normal" xid="508" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:12pt; text-position:normal; font-weight:bold; font-style:normal; lang:en-US">Former Supervisors</c></p>
+</cell>
+<cell xid="513" props="left-attach:0; right-attach:1; bot-style:0; bot-attach:2; top-attach:1; right-style:0; left-style:0; bg-style:1; top-style:1">
+<p style="Normal" xid="514" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Mark Rabalais</c></p>
+<p style="Normal" xid="515" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Instructor</c></p>
+<p style="Normal" xid="516" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:italic; text-decoration:none">LSU Department of Electrical and Computer Engineering</c></p>
+</cell>
+<cell xid="518" props="left-attach:1; right-attach:2; bot-style:0; bot-attach:2; top-attach:1; right-style:0; left-style:0; bg-style:1; top-style:1">
+<p style="Normal" xid="519" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"></p>
+<p style="Normal" xid="545" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Phone: (225) 578 5200</c></p>
+<p style="Normal" xid="520" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Email: mrabal@lsu.edu</c></p>
+</cell>
+<cell xid="522" props="bot-attach:3; left-attach:0; right-attach:1; top-attach:2">
+<p style="Normal" xid="523" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Melissa Brocato</c></p>
+<p style="Normal" xid="524" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Director</c></p>
+<p style="Normal" xid="525" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:italic; text-decoration:none">LSU Student Technical Application Resource Training</c></p>
+</cell>
+<cell xid="527" props="bot-attach:3; left-attach:1; right-attach:2; top-attach:2">
+<p style="Normal" xid="528" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"></p>
+<p style="Normal" xid="546" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Phone: (225) 578 4526</c></p>
+<p style="Normal" xid="529" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">Email: mbrocato@lsu.edu</c></p>
+</cell>
+</table>
+<p xid="532" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"></p>
+<table xid="399" props="list-tag:1; bot-style:0; table-column-props:1.6250in/4.8125in/; top-style:0; top-color:000000; right-style:0; bg-style:1; left-style:0">
+<cell xid="455" props="left-attach:0; right-attach:1; bot-style:1; bot-attach:1; top-attach:0; bot-color:000000; right-style:0; left-style:0; bg-style:1; top-style:0">
+<p xid="456"><c props="font-weight:bold">Skills</c></p>
+</cell>
+<cell xid="458" props="left-attach:1; right-attach:2; bot-style:1; bot-attach:1; top-attach:0; bot-color:000000; right-style:0; left-style:0; bg-style:1; top-style:0">
+<p xid="459"></p>
+</cell>
+<cell xid="400" props="bot-style:0; right-attach:1; bg-style:1; top-color:000000; left-style:0; left-attach:0; top-attach:1; bot-attach:2; bot-color:000000; right-style:0; top-style:1">
+<p style="Normal" xid="401"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Languages</c></p>
+</cell>
+<cell xid="403" props="bot-style:0; right-attach:2; bg-style:1; top-color:000000; left-style:0; left-attach:1; top-attach:1; bot-attach:2; bot-color:000000; right-style:0; top-style:1">
+<p style="Normal" xid="404" props="font-family:Times New Roman; font-size:12pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">C, </c><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">C++, Java, Perl, Python, Lua, Cg, Others</c></p>
+</cell>
+<cell xid="406" props="bot-attach:3; left-attach:0; right-attach:1; top-attach:2">
+<p style="Normal" xid="407"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Server Software</c></p>
+</cell>
+<cell xid="409" props="bot-attach:3; left-attach:1; right-attach:2; top-attach:2">
+<p style="Normal" xid="410" props="font-family:Times New Roman; font-size:12pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Apache, </c><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">BIND, </c><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">CVS / SVN, </c><c props="font-family:Times New Roman; font-size:10pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">DHCP, </c><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">MySQL, Others</c></p>
+</cell>
+<cell xid="412" props="bot-attach:4; left-attach:0; right-attach:1; top-attach:3">
+<p style="Normal" xid="413"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Operating Systems</c></p>
+</cell>
+<cell xid="415" props="bot-attach:4; left-attach:1; right-attach:2; top-attach:3">
+<p style="Normal" xid="416" props="font-family:Times New Roman; font-size:12pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Linux, </c><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">OpenBSD, OpenSolaris, Windows XP / Server 2003, Others</c></p>
+</cell>
+<cell xid="418" props="bot-attach:5; left-attach:0; right-attach:1; top-attach:4">
+<p style="Normal" xid="419"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">WWW</c></p>
+</cell>
+<cell xid="421" props="bot-attach:5; left-attach:1; right-attach:2; top-attach:4">
+<p style="Normal" xid="422" props="font-family:Times New Roman; font-size:12pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">HTML, XHTML, </c><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">CSS, PHP</c></p>
+</cell>
+<cell xid="424" props="bot-attach:6; left-attach:0; right-attach:1; top-attach:5">
+<p style="Normal" xid="425"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Network</c></p>
+</cell>
+<cell xid="427" props="bot-attach:6; left-attach:1; right-attach:2; top-attach:5">
+<p style="Normal" xid="428" props="font-family:Times New Roman; font-size:12pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">iptables, packetfilter, </c><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">IPv6, SMB / CIFS, BSD sockets</c></p>
+</cell>
+<cell xid="430" props="bot-attach:7; left-attach:0; right-attach:1; top-attach:6">
+<p style="Normal" xid="431"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">Linux</c></p>
+</cell>
+<cell xid="433" props="bot-attach:7; left-attach:1; right-attach:2; top-attach:6">
+<p style="Normal" xid="434" props="font-family:Times New Roman; font-size:12pt; color:000000; text-decoration:none; text-position:normal; font-weight:normal; font-style:normal"><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">bash, </c><c props="font-family:Times New Roman; font-size:10pt; lang:en-US; text-position:normal; font-weight:normal; font-style:normal; text-decoration:none">dpkg, rpm, portage, pthreads, </c><c props="font-family:Times New Roman; text-decoration:none; color:000000; font-size:10pt; text-position:normal; font-weight:normal; font-style:normal; lang:en-US">kernel configuration, X window system</c></p>
+</cell>
+<cell xid="550" props="bot-attach:8; left-attach:0; right-attach:1; top-attach:7">
+<p xid="551"><c props="font-size:10pt">Engineering</c></p>
+</cell>
+<cell xid="553" props="bot-attach:8; left-attach:1; right-attach:2; top-attach:7">
+<p xid="554"><c props="font-size:10pt">Electronics, Logic Design, Computer Architecture, Communications Technology</c></p>
+</cell>
+</table>
+<p style="Normal" xid="129"></p>
+</section>
+</abiword>

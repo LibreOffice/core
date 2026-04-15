@@ -1,0 +1,28 @@
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+EXPECT FAILURE "conversion.tests 1":
+constants C { const byte C1 = 0.0; };
+
+EXPECT FAILURE "conversion.tests 2":
+constants C { const short C1 = 0.0; };
+
+EXPECT FAILURE "conversion.tests 3":
+constants C { const unsigned short C1 = 0.0; };
+
+EXPECT FAILURE "conversion.tests 4":
+constants C { const long C1 = 0.0; };
+
+EXPECT FAILURE "conversion.tests 5":
+constants C { const unsigned long C1 = 0.0; };
+
+EXPECT FAILURE "conversion.tests 6":
+constants C { const hyper C1 = 0.0; };
+
+EXPECT FAILURE "conversion.tests 7":
+constants C { const unsigned hyper C1 = 0.0; };

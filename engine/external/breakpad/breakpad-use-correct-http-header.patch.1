@@ -1,0 +1,14 @@
+diff -ur breakpad.org/src/tools/linux/symupload/minidump_upload.cc breakpad/src/tools/linux/symupload/minidump_upload.cc
+--- breakpad.org/src/tools/linux/symupload/minidump_upload.cc	2015-11-23 17:37:53.830558138 +0100
++++ breakpad/src/tools/linux/symupload/minidump_upload.cc	2015-11-23 17:38:59.559051874 +0100
+@@ -59,8 +59,8 @@
+ static void Start(Options *options) {
+   std::map<string, string> parameters;
+   // Add parameters
+-  parameters["prod"] = options->product;
+-  parameters["ver"] = options->version;
++  parameters["ProductName"] = options->product;
++  parameters["Version"] = options->version;
+ 
+   std::map<string, string> files;
+   files["upload_file_minidump"] = options->minidumpPath;

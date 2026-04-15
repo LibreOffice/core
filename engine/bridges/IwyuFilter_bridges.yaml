@@ -1,0 +1,13 @@
+---
+assumeFilename: bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx
+excludelist:
+    bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:
+    # Actually needed to not crash in fuzzing
+    - cxxabi.h
+    bridges/source/cpp_uno/gcc3_linux_x86-64/rtti.cxx:
+    # Actually needed for ifdefs to work in all cases
+    - share.hxx
+    bridges/source/cpp_uno/gcc3_linux_x86-64/uno2cpp.cxx:
+    # Actually needed
+    - callvirtualmethod.hxx
+    - share.hxx

@@ -1,0 +1,215 @@
+#!/usr/bin/env perl
+
+use strict;
+
+my $progname=$0; $progname = $& if $progname =~ m,[^/]+$,;
+
+my %PREFIX;   # used to search for prefix numbers
+my %ISOCODE;  # used to search for iso codes
+my %LANGUAGE; # used to search for language names
+
+#=======================================================================
+# initialisation code - stuff the DATA into the CODES hash
+#=======================================================================
+sub init {
+
+    my $prefix;
+    my $code;
+    my $name;
+
+
+    while (<DATA>)
+    {
+        next unless /\S/;
+        chop;
+        ($prefix, $code, $name ) = split(/:/, $_, 3);
+        $PREFIX{$prefix} = $prefix;
+        $PREFIX{$code} = $prefix;
+        $PREFIX{$name} = $prefix;
+
+        $ISOCODE{$prefix} = $code;
+        $ISOCODE{$code} = $code;
+        $ISOCODE{$name} = $code;
+	
+        $LANGUAGE{$prefix} = $name;
+        $LANGUAGE{$code} = $name;
+        $LANGUAGE{$name} = $name;
+    }
+}
+
+
+#=======================================================================
+# usage - error message
+#=======================================================================
+sub usage {
+    my $errmsg = shift;
+    my $errcode = shift;
+    print STDERR "$progname: $errmsg\n" if $errmsg;
+    print STDERR "$progname: Converts between prefix codes, iso codes and langnames\n";
+    print STDERR " Usage: $progname (-i|-l|-p|-h) <code>|all\n";
+    print STDERR "  -i <code>: convert prefix to iso code (ex: 03 -> pt)\n";
+    print STDERR "  -l <code>: convert iso code to language name (ex: pt -> portuguese)\n";
+    print STDERR "  -p <code>: convert iso code to prefix (ex: pt -> 03)\n";
+    print STDERR "  the code can either be an iso code, a prefix or even a language name\n";
+    print STDERR "  The special code \"all\" asks for all possible values.\n\n";
+    print STDERR "  -h : print this help\n";
+    exit $errcode;
+}
+
+#=======================================================================
+# main - 
+#=======================================================================
+init();
+
+my ($LanguageCode, $LanguageMap);
+
+while ($ARGV[0] =~ /^-/) {
+    $_ = shift;
+    if (m/^-i/) {
+	$LanguageMap = \%ISOCODE;
+    }
+    elsif (m/^-l/) {
+	$LanguageMap = \%LANGUAGE;
+    }
+    elsif (m/^-p/) {
+	$LanguageMap = \%PREFIX;
+    }
+    elsif (m/^-h/) {
+	usage("",0);
+    }
+    else {
+	usage ("unknown option $_",1);
+    }
+}
+
+usage ("no operation specified on command line",1)
+    if (!$LanguageMap);
+
+usage ("no language code specified on command line",1)
+    if (!($LanguageCode = shift));
+
+if ($LanguageCode =~ (m/^all$/)) {
+    # Asked for all codes
+    my $old="";
+    foreach my $key (sort values %$LanguageMap) {
+	if ($key ne $old) {
+	    print "$key ";
+	    $old=$key;
+	}
+    }
+    print "\n";
+    exit 0;
+}
+
+usage ("no mapping found for $LanguageCode\n",1)
+	if (!($LanguageMap->{$LanguageCode}));
+
+print $LanguageMap->{$LanguageCode}, "\n";
+
+1;
+
+# keep third column names here with openoffice-dir/share/*/<long lang name>/
+
+__DATA__
+:be:belarusian
+:bg:bulgarian
+:bn:bengali
+:bs:bosnian
+:en-GB:english_british
+:gu:gujarati
+:hr:croatian
+:km:khmer
+:kmr-Latn:Kurmanji
+:pa-IN:punjabi
+:rw:kinarwanda
+:xh:xhosa
+:lt:lithuanian
+:ne:nepali
+:vi:vietnamese
+:nso:northern_sotho
+:ss:swazi
+:sr:serbian
+:ve:venda
+:ts:tsonga
+:st:southern_sotho
+:tn:tswana
+:br:breton
+:ga:gaelic
+:gd:scottish_gaelic
+:th:thai
+:hi:hindi
+:bs-BA:bosnian
+:en-ZA:english_southafrican
+:mk:macedonian
+:as:assamese
+:ml:malayalam
+:mr:marathi
+:or:odia
+:ur:urdu
+:fa:farsi
+:lv:latvian
+:nr:ndebele
+:ne:nepalese
+:sh:serbian
+:te:telugu
+:ta:tamil
+:tg:tajik
+:ka:georgian
+:eo:esperanto
+:uk:ukrainian
+:kk:kazakh
+:dz:dzongkha
+:kn:kannada
+:gl:galician
+:uz:uzbek
+:oc:occitan
+:ro:romanian
+:eu:basque
+:mn:mongolian
+:om:oromo
+:bo:tibetan
+:ast:asturian
+:is:icelandic
+:ug:uighur
+:si:sinhala
+:id:indonesian
+:my:burmese
+:am:amharic
+:gug:guarani
+:szl:upper_silesian
+:hy:armenian
+:tl:tagalog
+01:en-US:english_american
+03:pt:portuguese
+07:ru:russian
+26:ns:northernsotho
+27:af:afrikaans
+28:zu:zulu
+30:el:greek
+31:nl:dutch
+33:fr:french
+34:es:spanish
+35:fi:finnish
+36:hu:hungarian
+37:ca:catalan
+39:it:italian
+42:cs:czech
+43:sk:slovak
+45:da:danish
+46:sv:swedish
+47:nb:norwegian_bokmal
+48:pl:polish
+49:de:german
+50:sl:slovenian
+53:cy:welsh
+55:pt-BR:portuguese_brazilian
+77:et:estonian
+79:nn:norwegian_nynorsk
+81:ja:japanese
+82:ko:korean
+86:zh-CN:chinese_simplified
+88:zh-TW:chinese_traditional
+90:tr:turkish
+91:hi:hindi
+96:ar:arabic
+97:he:hebrew

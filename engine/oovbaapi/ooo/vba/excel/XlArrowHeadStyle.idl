@@ -1,0 +1,12 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module excel {
+    constants XlArrowHeadStyle {
+        const long xlArrowHeadStyleClosed = 3;
+        const long xlArrowHeadStyleDoubleClosed = 5;
+        const long xlArrowHeadStyleDoubleOpen = 4;
+        const long xlArrowHeadStyleNone = -4142;
+        const long xlArrowHeadStyleOpen = 2;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

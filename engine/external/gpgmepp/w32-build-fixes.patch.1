@@ -1,0 +1,159 @@
+diff -ur gpgmepp.org/src/debug.h gpgmepp/src/debug.h
+--- gpgmepp.org/src/debug.h	2024-07-25 17:58:02.489364600 +0200
++++ gpgmepp/src/debug.h	2024-07-25 18:00:39.361407200 +0200
+@@ -180,7 +180,7 @@
+ _trace_sysres_ssize_t (gpgme_ssize_t res, int lvl, const char *func, int line)
+ {
+   if (res >= 0)
+-    _gpgme_debug (NULL, lvl, 3, func, NULL, NULL, "result=%zd", (ssize_t)res);
++    _gpgme_debug (NULL, lvl, 3, func, NULL, NULL, "result=%zd", res);
+   else
+     _gpgme_debug (NULL, lvl, -1, NULL, NULL, NULL,
+                   "%s:%d: error: %s (%d)\n",
+diff -ur gpgmepp.org/src/dirinfo.c gpgmepp/src/dirinfo.c
+--- gpgmepp.org/src/dirinfo.c	2024-07-25 17:58:02.484361100 +0200
++++ gpgmepp/src/dirinfo.c	2024-07-25 18:00:39.363419600 +0200
+@@ -40,6 +40,10 @@
+ 
+ DEFINE_STATIC_LOCK (dirinfo_lock);
+ 
++#ifndef F_OK
++#define F_OK 0
++#endif
++
+ /* Constants used internally to select the data.  */
+ enum
+   {
+diff -ur gpgmepp.org/src/gpgme-w32spawn.c gpgmepp/src/gpgme-w32spawn.c
+--- gpgmepp.org/src/gpgme-w32spawn.c	2024-07-25 17:58:02.487363200 +0200
++++ gpgmepp/src/gpgme-w32spawn.c	2024-07-25 18:00:39.365388700 +0200
+@@ -53,6 +53,9 @@
+ #define mystderr stderr
+ #endif
+ 
++#ifdef _MSC_VER
++#define snwprintf _snwprintf
++#endif
+ 
+ 
+ static wchar_t *
+diff -ur gpgmepp.org/src/Makefile.am gpgmepp/src/Makefile.am
+--- gpgmepp.org/src/Makefile.am	2024-07-25 17:58:02.485362200 +0200
++++ gpgmepp/src/Makefile.am	2024-07-25 18:00:39.375415900 +0200
+@@ -35,7 +35,7 @@
+ m4data_DATA = gpgme.m4
+ nodist_include_HEADERS = gpgme.h
+ 
+-bin_PROGRAMS = gpgme-tool gpgme-json
++bin_PROGRAMS =
+ 
+ if BUILD_W32_GLIB
+ ltlib_gpgme_glib = libgpgme-glib.la
+@@ -107,11 +107,11 @@
+ # versions, because then every object file is only compiled once.
+ AM_CFLAGS = @LIBASSUAN_CFLAGS@ @GPG_ERROR_CFLAGS@ @GLIB_CFLAGS@
+ 
+-gpgme_tool_SOURCES = gpgme-tool.c argparse.c argparse.h
+-gpgme_tool_LDADD = libgpgme.la @LIBASSUAN_LIBS@ @GPG_ERROR_LIBS@
++gpgme_tool_SOURCES =
++gpgme_tool_LDADD =
+ 
+-gpgme_json_SOURCES = gpgme-json.c cJSON.c cJSON.h
+-gpgme_json_LDADD = -lm libgpgme.la @LIBASSUAN_LIBS@ $(GPG_ERROR_LIBS)
++gpgme_json_SOURCES =
++gpgme_json_LDADD =
+ 
+ 
+ if HAVE_W32_SYSTEM
+@@ -128,7 +128,7 @@
+ SUFFIXES = .rc .lo
+ 
+ .rc.lo:
+-	$(LTRCCOMPILE) -i "$<" -o "$@"
++	$(LTRCCOMPILE) -i $< -o $@
+ 
+ gpgme_res = versioninfo.lo
+ no_undefined = -no-undefined
+diff -ur gpgmepp.org/src/mbox-util.c gpgmepp/src/mbox-util.c
+--- gpgmepp.org/src/mbox-util.c	2024-07-25 17:58:02.485362200 +0200
++++ gpgmepp/src/mbox-util.c	2024-07-25 18:00:39.368412500 +0200
+@@ -29,7 +29,9 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#if HAVE_UNISTD_H
+ #include <unistd.h>
++#endif
+ #include <errno.h>
+ 
+ #include "mbox-util.h"
+diff -ur gpgmepp.org/src/priv-io.h gpgmepp/src/priv-io.h
+--- gpgmepp.org/src/priv-io.h	2024-07-25 17:58:02.506376700 +0200
++++ gpgmepp/src/priv-io.h	2024-07-25 18:03:32.929548000 +0200
+@@ -33,6 +33,13 @@
+ #ifdef HAVE_SYS_TYPES_H
+ # include <sys/types.h>
+ #endif
++#if _MSC_VER
++#ifdef _WIN64
++typedef long long pid_t;
++#else
++typedef int pid_t;
++#endif
++#endif
+ 
+ 
+ /* A single file descriptor passed to spawn.  For child fds, dup_to
+diff -ur gpgmepp.org/src/util.h gpgmepp/src/util.h
+--- gpgmepp.org/src/util.h	2024-07-25 17:58:02.483361200 +0200
++++ gpgmepp/src/util.h	2024-07-25 18:02:24.250226500 +0200
+@@ -36,6 +36,13 @@
+ # include <unistd.h>
+ #endif
+ #include <stdint.h>
++#ifdef _MSC_VER
++#ifdef _WIN64
++typedef long long pid_t;
++#else
++typedef int pid_t;
++#endif
++#endif
+ 
+ 
+ #include "gpgme.h"
+diff -ur gpgmepp.org/src/vfs-mount.c gpgmepp/src/vfs-mount.c
+--- gpgmepp.org/src/vfs-mount.c	2024-07-25 17:58:02.496369600 +0200
++++ gpgmepp/src/vfs-mount.c	2024-07-25 18:00:39.377426000 +0200
+@@ -68,7 +68,7 @@
+   if (err)
+     return err;
+ 
+-  if (! strcasecmp ("MOUNTPOINT", code))
++  if (! _stricmp ("MOUNTPOINT", code))
+     {
+       if (opd->result.mount_dir)
+ 	free (opd->result.mount_dir);
+diff -ur gpgmepp.org/src/w32-glib-io.c gpgmepp/src/w32-glib-io.c
+--- gpgmepp.org/src/w32-glib-io.c	2024-07-25 17:58:02.497370300 +0200
++++ gpgmepp/src/w32-glib-io.c	2024-07-25 18:00:39.378415700 +0200
+@@ -37,6 +37,7 @@
+ #ifdef HAVE_SYS_TYPES_H
+ # include <sys/types.h>
+ #endif
++#include <winsock2.h>
+ #include <glib.h>
+ #include <windows.h>
+ #include <io.h>
+diff -ur gpgmepp.org/src/w32-util.c gpgmepp/src/w32-util.c
+--- gpgmepp.org/src/w32-util.c	2024-07-25 17:58:02.476355800 +0200
++++ gpgmepp/src/w32-util.c	2024-07-25 18:00:39.373425500 +0200
+@@ -877,7 +877,8 @@
+       v /= 62;
+       XXXXXX[5] = letters[v % 62];
+ 
+-      fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
++      //fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
++      fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL);
+       if (fd >= 0)
+ 	{
+ 	  gpg_err_set_errno (save_errno);

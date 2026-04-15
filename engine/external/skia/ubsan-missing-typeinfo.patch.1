@@ -1,0 +1,12 @@
+diff -ur skia.org/src/image/SkImage_Base.h skia/src/image/SkImage_Base.h
+--- skia.org/src/image/SkImage_Base.h	2023-07-12 10:59:47.006358109 +0200
++++ skia/src/image/SkImage_Base.h	2023-07-12 11:15:00.028292134 +0200
+@@ -34,7 +34,7 @@
+     kNeedNewImageUniqueID = 0
+ };
+ 
+-class SkImage_Base : public SkImage {
++class SK_API SkImage_Base : public SkImage {
+ public:
+     ~SkImage_Base() override;
+ 

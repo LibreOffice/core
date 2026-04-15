@@ -1,0 +1,27 @@
+--- /dev/null	1970-01-01 01:00:00.000000000 +0100
++++ b/build.xml	2023-08-30 11:43:05.152647141 +0100
+@@ -0,0 +1,24 @@
++<project default="all">
++    <target name="all" depends="jar" />
++
++    <target name="compile">
++        <mkdir dir="build/classes" />
++        <javac includeantruntime="false" srcdir="src/main/java"
++               destdir="build/classes" encoding="UTF-8">
++            <exclude name="**/PerMessageDeflateExtension.java"/>
++        </javac>
++    </target>
++
++    <target name="jar" depends="compile">
++        <mkdir dir="dist"/>
++        <jar destfile="dist/java_websocket.jar">
++            <fileset dir="build/classes" includes="**/*.class" />
++        </jar>
++    </target>
++
++    <target name="clean">
++        <delete dir="build" />
++        <delete dir="dist" />
++    </target>
++
++</project>

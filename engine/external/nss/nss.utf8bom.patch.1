@@ -1,0 +1,21 @@
+diff -ur nss.org/nss/lib/ckfw/builtins/certdata.perl nss/nss/lib/ckfw/builtins/certdata.perl
+--- nss.org/nss/lib/ckfw/builtins/certdata.perl	2016-03-31 18:26:07.890190900 +0800
++++ nss/nss/lib/ckfw/builtins/certdata.perl	2016-03-31 19:16:16.727269600 +0800
+@@ -122,6 +122,9 @@
+ sub doprint {
+ my $i;
+ 
++print chr(0xEF);
++print chr(0xBB);
++print chr(0xBF);
+ print <<EOD
+ /* THIS IS A GENERATED FILE */
+ /* This Source Code Form is subject to the terms of the Mozilla Public
+@@ -131,6 +134,7 @@
+ #ifndef BUILTINS_H
+ #include "builtins.h"
+ #endif /* BUILTINS_H */
++#pragma execution_character_set("utf-8")
+ 
+ EOD
+     ;

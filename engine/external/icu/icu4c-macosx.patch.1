@@ -1,0 +1,20 @@
+diff -ur icu.org/source/common/putil.cpp icu/source/common/putil.cpp
+--- icu.org/source/common/putil.cpp	2017-04-10 16:22:16.000000000 +0200
++++ icu/source/common/putil.cpp	2017-04-21 22:14:09.940217733 +0200
+@@ -1198,8 +1198,16 @@
+         static const time_t decemberSolstice=1198332540; /*2007-12-22 06:09 UT*/
+ 
+         /* This probing will tell us when daylight savings occurs.  */
++#if U_PLATFORM_IS_DARWIN_BASED
++        struct tm *tmp;
++        tmp = localtime(&juneSolstice);
++        juneSol = *tmp;
++        tmp = localtime(&decemberSolstice);
++        decemberSol = *tmp;
++#else
+         localtime_r(&juneSolstice, &juneSol);
+         localtime_r(&decemberSolstice, &decemberSol);
++#endif
+         if(decemberSol.tm_isdst > 0) {
+           daylightType = U_DAYLIGHT_DECEMBER;
+         } else if(juneSol.tm_isdst > 0) {

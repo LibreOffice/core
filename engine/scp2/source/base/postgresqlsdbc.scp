@@ -1,0 +1,43 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "macros.inc"
+
+#include "AutoInstall/postgresqlsdbc"
+
+#if defined WITH_POSTGRESQL_SDBC
+
+Module gid_Module_Optional_PostgresqlSdbc
+    PackageInfo = "packinfo_office.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_POSTGRESQLSDBC);
+    ParentID = gid_Module_Prg_Base_Bin;
+    Files = (auto_postgresqlsdbc_ALL,
+             gid_File_PostgresqlSdbc_Rdb,
+             gid_File_PostgresqlSdbc_Xcd);
+    Default = YES;
+    Styles = ();
+End
+
+File gid_File_PostgresqlSdbc_Rdb
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program_Services;
+    Name = "postgresql-sdbc.rdb";
+    Styles = (PACKED);
+End
+
+File gid_File_PostgresqlSdbc_Xcd
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Registry;
+    Name = "postgresql.xcd";
+    Styles = (PACKED);
+End
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

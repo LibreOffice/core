@@ -1,0 +1,896 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <boost/property_tree/json_parser.hpp>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+#include <jsdialog/jsdialogbuilder.hxx>
+#include <o3tl/string_view.hxx>
+#include <rtl/uri.hxx>
+#include <sal/log.hxx>
+#include <string_view>
+#include <vcl/jsdialog/executor.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
+#include <vcl/weld.hxx>
+
+/// returns true if execution was successful
+using JSWidgetExecutor = bool (*)(weld::Widget&, const StringMap&);
+
+namespace
+{
+bool EmptyExecutor(weld::Widget&, const StringMap&) { return false; };
+
+bool FocusExecutor(weld::Widget& rWidget, const StringMap&)
+{
+    rWidget.grab_focus();
+    return true;
+};
+
+bool CustomRendererExecutor(weld::Widget& rWidget, const StringMap& rData)
+{
+    auto pRenderer = dynamic_cast<OnDemandRenderingHandler*>(&rWidget);
+    if (!pRenderer)
+        return false;
+
+    // pos;dpix;dpiy
+    const OUString& sParams = rData.at(u"data"_ustr);
+    const OUString aPos = sParams.getToken(0, ';');
+    const OUString aDpiScale = sParams.getToken(1, ';');
+
+    pRenderer->render_entry(o3tl::toInt32(aPos), o3tl::toInt32(aDpiScale));
+
+    return true;
+};
+
+constexpr auto ActionExecutors
+    = frozen::make_unordered_map<std::u16string_view, const JSWidgetExecutor>({
+        { u"grab_focus", FocusExecutor },
+        { u"render_entry", CustomRendererExecutor },
+    });
+
+} // end of namespace
+
+namespace JSWidgetExecutorSelector
+{
+static JSWidgetExecutor get(const std::u16string_view& /*sControlType*/,
+                            const std::u16string_view& sAction)
+{
+    auto aFound = ActionExecutors.find(sAction);
+    if (aFound != ActionExecutors.end())
+        return aFound->second;
+
+    return EmptyExecutor;
+}
+
+} // end of namespace JSWidgetExecutorSelector
+
+namespace jsdialog
+{
+StringMap jsonToStringMap(const char* pJSON)
+{
+    StringMap aArgs;
+    if (pJSON && pJSON[0] != '\0')
+    {
+        std::stringstream aStream(pJSON);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        for (const auto& rPair : aTree)
+        {
+            aArgs[OUString::fromUtf8(rPair.first)]
+                = OUString::fromUtf8(rPair.second.get_value<std::string>("."));
+        }
+    }
+    return aArgs;
+}
+
+void SendNavigatorForView(const sal_uInt64 nShellId)
+{
+    jsdialog::SendFullUpdate(OUString::number(nShellId) + "navigator", "NavigatorPanel");
+}
+
+void SendSidebarForView(const sal_uInt64 nShellId)
+{
+    jsdialog::SendFullUpdate(OUString::number(nShellId) + "sidebar", "Panel");
+}
+
+void SendQuickFindForView(const sal_uInt64 nShellId)
+{
+    jsdialog::SendFullUpdate(OUString::number(nShellId) + "quickfind", "QuickFindPanel");
+}
+
+void SendFullUpdate(const OUString& nWindowId, const OUString& rWidget)
+{
+    auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);
+    weld::Widget* pWidget = aWidgetMap ? aWidgetMap->Find(rWidget) : nullptr;
+    if (auto pJSWidget = dynamic_cast<BaseJSWidget*>(pWidget))
+        pJSWidget->sendFullUpdate();
+}
+
+void SendFullUpdate(weld::Widget& rWidget)
+{
+    if (auto pJSWidget = dynamic_cast<BaseJSWidget*>(&rWidget))
+        pJSWidget->sendFullUpdate(true);
+}
+
+void SendAction(const OUString& nWindowId, const OUString& rWidget,
+                std::unique_ptr<ActionDataMap> pData)
+{
+    auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);
+    weld::Widget* pWidget = aWidgetMap ? aWidgetMap->Find(rWidget) : nullptr;
+    if (auto pJSWidget = dynamic_cast<BaseJSWidget*>(pWidget))
+        pJSWidget->sendAction(std::move(pData));
+}
+
+bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const StringMap& rData)
+{
+    auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);
+    weld::Widget* pWidget = aWidgetMap ? aWidgetMap->Find(rWidget) : nullptr;
+
+    OUString sControlType = rData.at(u"type"_ustr);
+    OUString sAction = rData.at(u"cmd"_ustr);
+
+    if (sControlType == "responsebutton")
+    {
+        auto pButton = dynamic_cast<weld::Button*>(pWidget);
+        if (pWidget == nullptr || (pButton && !pButton->is_custom_handler_set()))
+        {
+            // welded wrapper not found - use response code instead
+            auto aWindowMap = JSInstanceBuilder::Widgets().Find(nWindowId);
+            pWidget = aWindowMap ? aWindowMap->Find(u"__DIALOG__"_ustr) : nullptr;
+            sControlType = "dialog";
+            sAction = "response";
+        }
+        else
+        {
+            // welded wrapper for button found - use it
+            sControlType = "pushbutton";
+        }
+    }
+
+    if (pWidget == nullptr)
+    {
+        // weld::Menu doesn't have base of weld::Widget
+        if (rWidget == "__MENU__")
+        {
+            weld::Menu* pMenu = JSInstanceBuilder::Menus().Find(nWindowId);
+            if (pMenu && sAction == "select")
+            {
+                KitTrigger::trigger_activated(*pMenu, rData.at("data"));
+                return true;
+            }
+        }
+        return false;
+    }
+    else
+    {
+        assert(pWidget);
+
+        const JSWidgetExecutor rExecutor = JSWidgetExecutorSelector::get(sControlType, sAction);
+        if (rExecutor(*pWidget, rData))
+            return true;
+
+        // TODO: convert to executors like above
+        // depends on type
+
+        if (sControlType == "tabcontrol")
+        {
+            auto pNotebook = dynamic_cast<weld::Notebook*>(pWidget);
+            if (pNotebook)
+            {
+                if (sAction == "selecttab")
+                {
+                    sal_Int32 page = o3tl::toInt32(rData.at(u"data"_ustr));
+
+                    OUString aCurrentPage = pNotebook->get_current_page_ident();
+                    KitTrigger::leave_page(*pNotebook, aCurrentPage);
+                    pNotebook->set_current_page(page);
+                    KitTrigger::enter_page(*pNotebook, pNotebook->get_page_ident(page));
+
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "combobox")
+        {
+            auto pCombobox = dynamic_cast<weld::ComboBox*>(pWidget);
+            if (pCombobox)
+            {
+                if (sAction == "selected")
+                {
+                    OUString sSelectedData = rData.at(u"data"_ustr);
+                    int separatorPos = sSelectedData.indexOf(';');
+                    if (separatorPos > 0)
+                    {
+                        std::u16string_view entryPos = sSelectedData.subView(0, separatorPos);
+                        sal_Int32 pos = o3tl::toInt32(entryPos);
+                        pCombobox->set_active(pos);
+                        KitTrigger::trigger_changed(*pCombobox);
+                        return true;
+                    }
+                }
+                else if (sAction == "change")
+                {
+                    // it might be other class than JSComboBox
+                    auto pJSCombobox = dynamic_cast<JSComboBox*>(pWidget);
+                    if (pJSCombobox)
+                        pJSCombobox->set_entry_text_without_notify(rData.at(u"data"_ustr));
+                    else
+                        pCombobox->set_entry_text(rData.at(u"data"_ustr));
+                    KitTrigger::trigger_changed(*pCombobox);
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "pushbutton")
+        {
+            auto pButton = dynamic_cast<weld::Button*>(pWidget);
+            if (pButton)
+            {
+                if (sAction == "click")
+                {
+                    pButton->clicked();
+                    return true;
+                }
+                else if (sAction == "toggle")
+                {
+                    KitTrigger::trigger_toggled(dynamic_cast<weld::Toggleable&>(*pWidget));
+                    return true;
+                }
+                else if (sAction == "keypress")
+                {
+                    sal_uInt32 nKeyNo = rData.at(u"data"_ustr).toUInt32();
+                    KitTrigger::trigger_key_press(*pButton, KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    KitTrigger::trigger_key_release(*pButton,
+                                                    KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "linkbutton")
+        {
+            auto pButton = dynamic_cast<weld::LinkButton*>(pWidget);
+            if (pButton)
+            {
+                if (sAction == "click")
+                {
+                    KitTrigger::activate_link(*pButton);
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "menubutton")
+        {
+            auto pButton = dynamic_cast<weld::MenuButton*>(pWidget);
+            if (pButton)
+            {
+                if (sAction == "toggle")
+                {
+                    if (pButton->get_active())
+                        pButton->set_active(false);
+                    else
+                        pButton->set_active(true);
+
+                    BaseJSWidget* pMenuButton = dynamic_cast<BaseJSWidget*>(pButton);
+                    if (pMenuButton)
+                        pMenuButton->sendUpdate(true);
+
+                    return true;
+                }
+                else if (sAction == "select")
+                {
+                    KitTrigger::trigger_selected(*pButton, rData.at(u"data"_ustr));
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "checkbox")
+        {
+            auto pCheckButton = dynamic_cast<weld::CheckButton*>(pWidget);
+            if (pCheckButton)
+            {
+                if (sAction == "change")
+                {
+                    bool bChecked = rData.at(u"data"_ustr) == "true";
+                    pCheckButton->set_state(bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+                    KitTrigger::trigger_toggled(*static_cast<weld::Toggleable*>(pCheckButton));
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "drawingarea")
+        {
+            auto pArea = dynamic_cast<weld::DrawingArea*>(pWidget);
+            if (pArea)
+            {
+                if (sAction == "click" || sAction == "dblclick" || sAction == "mousemove"
+                    || sAction == "mousedown" || sAction == "mouseup")
+                {
+                    OUString sClickData = rData.at(u"data"_ustr);
+                    int nSeparatorPos = sClickData.indexOf(';');
+                    if (nSeparatorPos > 0)
+                    {
+                        // x;y
+                        std::u16string_view nClickPosX = sClickData.subView(0, nSeparatorPos);
+                        std::u16string_view nClickPosY = sClickData.subView(nSeparatorPos + 1);
+
+                        if (nClickPosX.empty() || nClickPosY.empty())
+                            return true;
+
+                        double fPosX = o3tl::toDouble(nClickPosX);
+                        double fPosY = o3tl::toDouble(nClickPosY);
+                        OutputDevice& rRefDevice = pArea->get_ref_device();
+                        // We send OutPutSize for the drawing area bitmap
+                        // get_size_request is not necessarily updated
+                        // therefore it may be incorrect.
+                        Size size = rRefDevice.GetOutputSizePixel();
+                        fPosX = fPosX * size.Width();
+                        fPosY = fPosY * size.Height();
+
+                        if (sAction == "click")
+                            KitTrigger::trigger_click(*pArea, Point(fPosX, fPosY));
+                        else if (sAction == "dblclick")
+                            KitTrigger::trigger_dblclick(*pArea, Point(fPosX, fPosY));
+                        else if (sAction == "mouseup")
+                            KitTrigger::trigger_mouse_up(*pArea, Point(fPosX, fPosY));
+                        else if (sAction == "mousedown")
+                            KitTrigger::trigger_mouse_down(*pArea, Point(fPosX, fPosY));
+                        else if (sAction == "mousemove")
+                            KitTrigger::trigger_mouse_move(*pArea, Point(fPosX, fPosY));
+                    }
+
+                    return true;
+                }
+                else if (sAction == "keypress")
+                {
+                    sal_uInt32 nKeyNo = rData.at(u"data"_ustr).toUInt32();
+                    KitTrigger::trigger_key_press(*pArea, KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    KitTrigger::trigger_key_release(*pArea, KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    return true;
+                }
+                else if (sAction == "textselection")
+                {
+                    OUString sTextData = rData.at(u"data"_ustr);
+                    int nSeparatorPos = sTextData.indexOf(';');
+                    if (nSeparatorPos <= 0)
+                        return true;
+
+                    int nSeparator2Pos = sTextData.indexOf(';', nSeparatorPos + 1);
+                    int nSeparator3Pos = 0;
+
+                    if (nSeparator2Pos > 0)
+                    {
+                        // start;end;startPara;endPara
+                        nSeparator3Pos = sTextData.indexOf(';', nSeparator2Pos + 1);
+                        if (nSeparator3Pos <= 0)
+                            return true;
+                    }
+                    else
+                    {
+                        // start;end
+                        nSeparator2Pos = 0;
+                        nSeparator3Pos = 0;
+                    }
+
+                    std::u16string_view aStartPos = sTextData.subView(0, nSeparatorPos);
+                    std::u16string_view aEndPos
+                        = sTextData.subView(nSeparatorPos + 1, nSeparator2Pos - nSeparatorPos + 1);
+
+                    if (aStartPos.empty() || aEndPos.empty())
+                        return true;
+
+                    sal_Int32 nStart = o3tl::toInt32(aStartPos);
+                    sal_Int32 nEnd = o3tl::toInt32(aEndPos);
+                    sal_Int32 nStartPara = 0;
+                    sal_Int32 nEndPara = 0;
+
+                    // multiline case
+                    if (nSeparator2Pos && nSeparator3Pos)
+                    {
+                        std::u16string_view aStartPara = sTextData.subView(
+                            nSeparator2Pos + 1, nSeparator3Pos - nSeparator2Pos + 1);
+                        std::u16string_view aEndPara = sTextData.subView(nSeparator3Pos + 1);
+
+                        if (aStartPara.empty() || aEndPara.empty())
+                            return true;
+
+                        nStartPara = o3tl::toInt32(aStartPara);
+                        nEndPara = o3tl::toInt32(aEndPara);
+                    }
+
+                    // pass information about paragraph number in the additional data
+                    // handled in sc/source/ui/app/inputwin.cxx
+                    Point* pParaPoint = new Point(nStartPara, nEndPara);
+                    const void* pCmdData = pParaPoint;
+
+                    Point aPos(nStart, nEnd);
+                    CommandEvent aCEvt(aPos, CommandEventId::CursorPos, false, pCmdData);
+                    KitTrigger::command(*pArea, aCEvt);
+
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "spinfield")
+        {
+            auto pSpinField = dynamic_cast<weld::SpinButton*>(pWidget);
+            if (pSpinField)
+            {
+                if (sAction == "change" || sAction == "value")
+                {
+                    if (rData.at(u"data"_ustr) == "undefined")
+                        return true;
+
+                    // The Document will not scroll if that is in focus
+                    // maybe we could send a message with: sAction == "grab_focus"
+                    pWidget->grab_focus();
+
+                    double nValue = o3tl::toDouble(rData.at(u"data"_ustr));
+                    pSpinField->set_value(nValue
+                                          * weld::SpinButton::Power10(pSpinField->get_digits()));
+                    KitTrigger::trigger_value_changed(*pSpinField);
+                    return true;
+                }
+                if (sAction == "plus")
+                {
+                    pSpinField->set_value(pSpinField->get_value() + 1);
+                    KitTrigger::trigger_value_changed(*pSpinField);
+                    return true;
+                }
+                else if (sAction == "minus")
+                {
+                    pSpinField->set_value(pSpinField->get_value() - 1);
+                    KitTrigger::trigger_value_changed(*pSpinField);
+                    return true;
+                }
+            }
+
+            auto pFormattedField = dynamic_cast<weld::FormattedSpinButton*>(pWidget);
+            if (pFormattedField)
+            {
+                if (sAction == "change")
+                {
+                    pFormattedField->set_text(rData.at(u"data"_ustr));
+                    KitTrigger::trigger_changed(*pFormattedField);
+                    KitTrigger::trigger_value_changed(*pFormattedField);
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "toolbox")
+        {
+            auto pToolbar = dynamic_cast<weld::Toolbar*>(pWidget);
+            if (pToolbar)
+            {
+                if (sAction == "click")
+                {
+                    KitTrigger::trigger_clicked(*pToolbar, rData.at(u"data"_ustr));
+                    return true;
+                }
+                else if (sAction == "togglemenu")
+                {
+                    const OUString& sId = rData.at(u"data"_ustr);
+                    bool bIsActive = pToolbar->get_menu_item_active(sId);
+                    pToolbar->set_menu_item_active(sId, !bIsActive);
+                    return true;
+                }
+                else if (sAction == "closemenu")
+                {
+                    pToolbar->set_menu_item_active(rData.at(u"data"_ustr), false);
+                    return true;
+                }
+                else if (sAction == "openmenu")
+                {
+                    pToolbar->set_menu_item_active(rData.at(u"data"_ustr), true);
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "edit")
+        {
+            auto pEdit = dynamic_cast<JSEntry*>(pWidget);
+            if (pEdit)
+            {
+                if (sAction == "change")
+                {
+                    pEdit->set_text_without_notify(rData.at(u"data"_ustr));
+                    KitTrigger::trigger_changed(*pEdit);
+                    return true;
+                }
+                if (sAction == "activate")
+                {
+                    KitTrigger::trigger_activated(*pEdit);
+                    return true;
+                }
+            }
+
+            auto pTextView = dynamic_cast<JSTextView*>(pWidget);
+            if (pTextView)
+            {
+                if (sAction == "change")
+                {
+                    int rStartPos, rEndPos;
+                    pTextView->get_selection_bounds(rStartPos, rEndPos);
+                    pTextView->set_text_without_notify(rData.at(u"data"_ustr));
+                    pTextView->select_region(rStartPos, rEndPos);
+                    KitTrigger::trigger_changed(*pTextView);
+                    return true;
+                }
+                else if (sAction == "textselection")
+                {
+                    // start;end
+                    OUString sTextData = rData.at(u"data"_ustr);
+                    int nSeparatorPos = sTextData.indexOf(';');
+                    if (nSeparatorPos <= 0)
+                        return true;
+
+                    std::u16string_view aStartPos = sTextData.subView(0, nSeparatorPos);
+                    std::u16string_view aEndPos = sTextData.subView(nSeparatorPos + 1);
+
+                    if (aStartPos.empty() || aEndPos.empty())
+                        return true;
+
+                    sal_Int32 nStart = o3tl::toInt32(aStartPos);
+                    sal_Int32 nEnd = o3tl::toInt32(aEndPos);
+
+                    pTextView->select_region(nStart, nEnd);
+                    KitTrigger::trigger_changed(*pTextView);
+
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "treeview")
+        {
+            auto pTreeView = dynamic_cast<JSTreeView*>(pWidget);
+            if (pTreeView)
+            {
+                if (sAction == "change")
+                {
+                    OUString sDataJSON = rtl::Uri::decode(
+                        rData.at(u"data"_ustr), rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
+                        RTL_TEXTENCODING_UTF8);
+                    StringMap aMap(jsonToStringMap(
+                        OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+
+                    sal_Int32 nRow = o3tl::toInt32(aMap[u"row"_ustr]);
+                    bool bValue = aMap[u"value"_ustr] == "true";
+
+                    pTreeView->set_toggle(nRow, bValue ? TRISTATE_TRUE : TRISTATE_FALSE);
+
+                    return true;
+                }
+                else if (sAction == "select")
+                {
+                    OUString sData = rData.at(u"data"_ustr);
+                    sal_Int32 nAbsPos = -1;
+                    sal_Int32 nCol = -1;
+
+                    // Data may be JSON {row:N,col:M} or a plain row number
+                    if (sData.startsWith("%7B") || sData.startsWith("{"))
+                    {
+                        OUString sDataJSON = rtl::Uri::decode(
+                            sData, rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
+                            RTL_TEXTENCODING_UTF8);
+                        StringMap aMap(jsonToStringMap(
+                            OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+                        nAbsPos = o3tl::toInt32(aMap[u"row"_ustr]);
+                        if (aMap.find(u"col"_ustr) != aMap.end())
+                            nCol = o3tl::toInt32(aMap[u"col"_ustr]);
+                    }
+                    else
+                    {
+                        nAbsPos = o3tl::toInt32(sData);
+                    }
+
+                    pTreeView->unselect_all();
+
+                    std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
+                    if (pTreeView->get_iter_abs_pos(*itEntry, nAbsPos))
+                    {
+                        pTreeView->select(*itEntry);
+                        pTreeView->set_cursor_without_notify(*itEntry);
+                    }
+                    else
+                        SAL_WARN("vcl",
+                                 "No absolute position found for " << nAbsPos << " in treeview");
+
+                    if (nCol >= 0)
+                        pTreeView->set_cursor_column(nCol);
+
+                    pTreeView->grab_focus();
+                    KitTrigger::trigger_changed(*pTreeView);
+                    return true;
+                }
+                else if (sAction == "activate")
+                {
+                    sal_Int32 nRow = o3tl::toInt32(rData.at(u"data"_ustr));
+
+                    pTreeView->unselect_all();
+                    std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
+                    if (pTreeView->get_iter_abs_pos(*itEntry, nRow))
+                    {
+                        pTreeView->select(nRow);
+                        pTreeView->set_cursor_without_notify(*itEntry);
+                    }
+                    else
+                        SAL_WARN("vcl",
+                                 "No absolute position found for " << nRow << " in treeview");
+                    pTreeView->grab_focus();
+                    KitTrigger::trigger_changed(*pTreeView);
+                    KitTrigger::trigger_row_activated(*pTreeView);
+                    return true;
+                }
+                else if (sAction == "expand")
+                {
+                    sal_Int32 nAbsPos = o3tl::toInt32(rData.at(u"data"_ustr));
+                    std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
+                    if (pTreeView->get_iter_abs_pos(*itEntry, nAbsPos))
+                    {
+                        pTreeView->set_cursor_without_notify(*itEntry);
+                        pTreeView->grab_focus();
+                        pTreeView->expand_row(*itEntry);
+                    }
+                    else
+                        SAL_WARN("vcl",
+                                 "No absolute position found for " << nAbsPos << " in treeview");
+                    return true;
+                }
+                else if (sAction == "collapse")
+                {
+                    sal_Int32 nAbsPos = o3tl::toInt32(rData.at(u"data"_ustr));
+                    std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
+                    if (pTreeView->get_iter_abs_pos(*itEntry, nAbsPos))
+                    {
+                        pTreeView->set_cursor_without_notify(*itEntry);
+                        pTreeView->grab_focus();
+                        pTreeView->collapse_row(*itEntry);
+                    }
+                    else
+                        SAL_WARN("vcl",
+                                 "No absolute position found for " << nAbsPos << " in treeview");
+                    return true;
+                }
+                else if (sAction == "dragstart")
+                {
+                    sal_Int32 nRow = o3tl::toInt32(rData.at(u"data"_ustr));
+
+                    pTreeView->select(nRow);
+                    pTreeView->drag_start();
+
+                    return true;
+                }
+                else if (sAction == "dragend")
+                {
+                    pTreeView->drag_end();
+                    return true;
+                }
+                else if (sAction == "contextmenu")
+                {
+                    sal_Int32 nEntryAbsPos = o3tl::toInt32(rData.at(u"data"_ustr));
+
+                    std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
+                    if (pTreeView->get_iter_abs_pos(*itEntry, nEntryAbsPos))
+                    {
+                        // avoid negative coordinates and crash
+                        pTreeView->scroll_to_row(*itEntry);
+
+                        tools::Rectangle aRect = pTreeView->get_row_area(*itEntry);
+                        Point aPoint = aRect.Center();
+                        assert(aPoint.getX() >= 0 && aPoint.getY() >= 0);
+
+                        CommandEvent aCommand(aPoint, CommandEventId::ContextMenu);
+
+                        KitTrigger::trigger_popup_menu(*pTreeView, aCommand);
+                    }
+                    else
+                        SAL_WARN("vcl", "No absolute position found for " << nEntryAbsPos
+                                                                          << " in treeview");
+                    return true;
+                }
+                else if (sAction == "editend")
+                {
+                    OUString sDataJSON = rtl::Uri::decode(
+                        rData.at(u"data"_ustr), rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
+                        RTL_TEXTENCODING_UTF8);
+                    StringMap aMap(jsonToStringMap(
+                        OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+
+                    sal_Int32 nRow = o3tl::toInt32(aMap[u"row"_ustr]);
+                    sal_Int32 nColumn = o3tl::toInt32(aMap[u"column"_ustr]);
+                    OUString sValue = aMap[u"value"_ustr];
+
+                    pTreeView->set_text(nRow, sValue, nColumn);
+
+                    pTreeView->set_editing_column(nColumn);
+                    SalInstanceTreeIter pEntry = pTreeView->getTreeView().GetEntry(nRow);
+                    KitTrigger::trigger_editing_done(*pTreeView,
+                                                     weld::TreeView::iter_string(pEntry, sValue));
+
+                    return true;
+                }
+                else if (sAction == "headernamechanged")
+                {
+                    OUString sDataJSON = rtl::Uri::decode(
+                        rData.at(u"data"_ustr), rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
+                        RTL_TEXTENCODING_UTF8);
+                    StringMap aMap(jsonToStringMap(
+                        OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+
+                    sal_Int32 nColumn = o3tl::toInt32(aMap[u"column"_ustr]);
+                    OUString sValue = aMap[u"value"_ustr];
+
+                    pTreeView->set_column_header_name(nColumn, sValue);
+                    KitTrigger::trigger_header_name_changed(*pTreeView, nColumn, sValue);
+
+                    return true;
+                }
+                else if (sAction == "columnclick")
+                {
+                    sal_Int32 nColumn = o3tl::toInt32(rData.at(u"data"_ustr));
+                    KitTrigger::trigger_column_clicked(*pTreeView, nColumn);
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "iconview")
+        {
+            auto pIconView = dynamic_cast<weld::IconView*>(pWidget);
+            if (pIconView)
+            {
+                sal_Int32 nPos = o3tl::toInt32(rData.at(u"data"_ustr));
+                if (sAction == "keypress")
+                {
+                    sal_uInt32 nKeyNo = rData.at(u"data"_ustr).toUInt32();
+                    KitTrigger::trigger_key_press(*pIconView,
+                                                  KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    return true;
+                }
+                else if (sAction == "keyrelease")
+                {
+                    sal_uInt32 nKeyNo = rData.at(u"data"_ustr).toUInt32();
+                    KitTrigger::trigger_key_release(*pIconView,
+                                                    KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    return true;
+                }
+                else if (sAction == "select")
+                {
+                    pIconView->select(nPos);
+                    KitTrigger::trigger_changed(*pIconView);
+
+                    return true;
+                }
+                else if (sAction == "activate")
+                {
+                    pIconView->select(nPos);
+                    KitTrigger::trigger_changed(*pIconView);
+                    KitTrigger::trigger_item_activated(*pIconView);
+
+                    return true;
+                }
+                else if (sAction == "contextmenu")
+                {
+                    tools::Rectangle aRect = pIconView->get_rect(nPos);
+                    Point aPoint = aRect.Center();
+                    assert(aPoint.getX() >= 0 && aPoint.getY() >= 0);
+
+                    MouseEvent aMouseEvent(aPoint, 1, MouseEventModifiers::NONE, MOUSE_RIGHT, 0);
+
+                    KitTrigger::trigger_mouse_press(*pIconView, aMouseEvent);
+
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "expander")
+        {
+            auto pExpander = dynamic_cast<weld::Expander*>(pWidget);
+            if (pExpander)
+            {
+                if (sAction == "toggle")
+                {
+                    pExpander->set_expanded(!pExpander->get_expanded());
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "dialog")
+        {
+            auto pDialog = dynamic_cast<weld::Dialog*>(pWidget);
+            if (pDialog)
+            {
+                if (sAction == "close")
+                {
+                    pDialog->response(RET_CANCEL);
+                    return true;
+                }
+                else if (sAction == "response")
+                {
+                    sal_Int32 nResponse = o3tl::toInt32(rData.at(u"data"_ustr));
+                    pDialog->response(nResponse);
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "popover")
+        {
+            auto pPopover = dynamic_cast<weld::Popover*>(pWidget);
+            if (pPopover)
+            {
+                if (sAction == "close")
+                {
+                    KitTrigger::trigger_closed(*pPopover);
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "radiobutton")
+        {
+            auto pRadioButton = dynamic_cast<weld::RadioButton*>(pWidget);
+            if (pRadioButton)
+            {
+                if (sAction == "change")
+                {
+                    bool bChecked = rData.at(u"data"_ustr) == "true";
+                    pRadioButton->set_active(bChecked);
+                    KitTrigger::trigger_toggled(*static_cast<weld::Toggleable*>(pRadioButton));
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "scrolledwindow")
+        {
+            auto pScrolledWindow = dynamic_cast<JSScrolledWindow*>(pWidget);
+            if (pScrolledWindow)
+            {
+                if (sAction == "scrollv")
+                {
+                    sal_Int32 nValue = o3tl::toInt32(rData.at(u"data"_ustr));
+                    pScrolledWindow->vadjustment_set_value_no_notification(nValue);
+                    KitTrigger::trigger_scrollv(*pScrolledWindow);
+                    return true;
+                }
+                else if (sAction == "scrollh")
+                {
+                    sal_Int32 nValue = o3tl::toInt32(rData.at(u"data"_ustr));
+                    pScrolledWindow->hadjustment_set_value_no_notification(nValue);
+                    KitTrigger::trigger_scrollh(*pScrolledWindow);
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "calendar")
+        {
+            auto pCalendar = dynamic_cast<weld::Calendar*>(pWidget);
+            if (pCalendar && sAction == "selectdate")
+            {
+                // MM/DD/YYYY
+                OUString aDate = rData.at(u"data"_ustr);
+
+                if (aDate.getLength() < 10)
+                    return false;
+
+                sal_Int32 aMonth = o3tl::toInt32(aDate.subView(0, 2));
+                sal_Int32 aDay = o3tl::toInt32(aDate.subView(3, 2));
+                sal_Int32 aYear = o3tl::toInt32(aDate.subView(6, 4));
+
+                pCalendar->set_date(Date(aDay, aMonth, aYear));
+                KitTrigger::trigger_selected(*pCalendar);
+                KitTrigger::trigger_activated(*pCalendar);
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

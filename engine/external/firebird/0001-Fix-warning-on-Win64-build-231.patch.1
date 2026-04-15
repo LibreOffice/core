@@ -1,0 +1,37 @@
+From 60cb8e07b17ad8533d7d13f52435aa11e48f4659 Mon Sep 17 00:00:00 2001
+From: Dimitry Sibiryakov <sd@ibphoenix.com>
+Date: Tue, 12 Nov 2019 13:42:49 +0100
+Subject: [PATCH] Fix warning on Win64 build (#231)
+
+---
+ src/common/ThreadStart.cpp | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/src/common/ThreadStart.cpp b/src/common/ThreadStart.cpp
+index 184c93a32b..758056432f 100644
+--- a/src/common/ThreadStart.cpp
++++ b/src/common/ThreadStart.cpp
+@@ -309,13 +309,16 @@ Thread Thread::start(ThreadEntryPoint* routine, void* arg, int priority_arg, Han
+ 	 * Advanced Windows by Richter pg. # 109. */
+ 
+ 	unsigned thread_id;
+-	unsigned long real_handle =
+-		_beginthreadex(NULL, 0, THREAD_ENTRYPOINT, THREAD_ARG, CREATE_SUSPENDED, &thread_id);
+-	if (!real_handle)
++	HANDLE handle =
++		reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, THREAD_ENTRYPOINT, THREAD_ARG, CREATE_SUSPENDED, &thread_id));
++	if (!handle)
+ 	{
++		// Though MSDN says that _beginthreadex() returns error in errno,
++		// GetLastError() still works because RTL call no other system
++		// functions after CreateThread() in the case of error.
++		// Watch out if it is ever changed.
+ 		Firebird::system_call_failed::raise("_beginthreadex", GetLastError());
+ 	}
+-	HANDLE handle = reinterpret_cast<HANDLE>(real_handle);
+ 
+ 	SetThreadPriority(handle, priority);
+ 
+-- 
+2.20.1
+

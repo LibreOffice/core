@@ -1,0 +1,269 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <vcl/dockwin.hxx>
+#include <vcl/event.hxx>
+#include <vcl/toolkit/floatwin.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/toolkit/MenuButton.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/uitest/uiobject.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
+#include <menutogglebutton.hxx>
+#include <tools/json_writer.hxx>
+
+namespace
+{
+void collectUIInformation( const OUString& aID, const OUString& aevent , const OUString& akey , const OUString& avalue)
+{
+    EventDescription aDescription;
+    aDescription.aID = aID;
+    aDescription.aParameters = {{ akey ,  avalue}};
+    aDescription.aAction = aevent;
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "MenuButton";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+}
+
+void MenuButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
+{
+    if ( !(nStyle & WB_NOTABSTOP) )
+        nStyle |= WB_TABSTOP;
+
+    PushButton::ImplInit( pParent, nStyle );
+    EnableRTL( AllSettings::GetLayoutRTL() );
+}
+
+void MenuButton::ExecuteMenu()
+{
+    mbStartingMenu = true;
+
+    PrepareExecute();
+
+    if (!mpMenu && !mpFloatingWindow)
+    {
+        mbStartingMenu = false;
+        return;
+    }
+
+    Size aSize = GetSizePixel();
+    SetPressed( true );
+    EndSelection();
+    if (mpMenu)
+    {
+        Point aPos(0, 1);
+        tools::Rectangle aRect(aPos, aSize );
+        mpMenu->Execute(this, aRect, PopupMenuFlags::ExecuteDown);
+
+        if (isDisposed())
+            return;
+
+        mnCurItemId = mpMenu->GetCurItemId();
+        msCurItemIdent = mpMenu->GetCurItemIdent();
+    }
+    else
+    {
+        Point aPos(GetParent()->OutputToScreenPixel(GetPosPixel()));
+        tools::Rectangle aRect(aPos, aSize );
+        FloatWinPopupFlags nFlags = FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus;
+        if (mpFloatingWindow->GetType() == WindowType::FLOATINGWINDOW)
+            static_cast<FloatingWindow*>(mpFloatingWindow.get())->StartPopupMode(aRect, nFlags);
+        else
+        {
+            mpFloatingWindow->EnableDocking();
+            vcl::Window::GetDockingManager()->StartPopupMode(mpFloatingWindow, aRect, nFlags);
+        }
+    }
+
+    Activate();
+
+    mbStartingMenu = false;
+
+    SetPressed(false);
+    OUString aID = get_id(); // tdf#136678 take a copy if we are destroyed by Select callback
+    if (mnCurItemId)
+    {
+        Select();
+        mnCurItemId = 0;
+        msCurItemIdent.clear();
+    }
+    collectUIInformation(aID,u"OPENLIST"_ustr,u""_ustr,u""_ustr);
+}
+
+void MenuButton::CancelMenu()
+{
+    if (!mpMenu && !mpFloatingWindow)
+        return;
+
+    if (mpMenu)
+    {
+        mpMenu->EndExecute();
+    }
+    else
+    {
+        if (mpFloatingWindow->GetType() == WindowType::FLOATINGWINDOW)
+            static_cast<FloatingWindow*>(mpFloatingWindow.get())->EndPopupMode();
+        else
+            vcl::Window::GetDockingManager()->EndPopupMode(mpFloatingWindow);
+    }
+    collectUIInformation(get_id(),u"CLOSELIST"_ustr,u""_ustr,u""_ustr);
+}
+
+bool MenuButton::InPopupMode() const
+{
+    if (mbStartingMenu)
+        return true;
+
+    if (!mpMenu && !mpFloatingWindow)
+        return false;
+
+    if (mpMenu)
+       return PopupMenu::GetActivePopupMenu() == mpMenu;
+    else
+    {
+        if (mpFloatingWindow->GetType() == WindowType::FLOATINGWINDOW)
+            return static_cast<const FloatingWindow*>(mpFloatingWindow.get())->IsInPopupMode();
+        else
+            return vcl::Window::GetDockingManager()->IsInPopupMode(mpFloatingWindow);
+    }
+}
+
+MenuButton::MenuButton( vcl::Window* pParent, WinBits nWinBits )
+    : PushButton(WindowType::MENUBUTTON)
+    , mnCurItemId(0)
+    , mbStartingMenu(false)
+{
+    mnDDStyle = PushButtonDropdownStyle::MenuButton;
+    ImplInit(pParent, nWinBits);
+}
+
+MenuButton::~MenuButton()
+{
+    disposeOnce();
+}
+
+void MenuButton::dispose()
+{
+    mpFloatingWindow.reset();
+    if (mpMenu && mbOwnPopupMenu)
+        mpMenu->dispose();
+    mpMenu.reset();
+    PushButton::dispose();
+}
+
+void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if ( PushButton::ImplHitTestPushButton( this, rMEvt.GetPosPixel() ) )
+    {
+        if ( !(GetStyle() & WB_NOPOINTERFOCUS) )
+            GrabFocus();
+        ExecuteMenu();
+    }
+}
+
+void MenuButton::KeyInput( const KeyEvent& rKEvt )
+{
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+    sal_uInt16 nCode = aKeyCode.GetCode();
+    if ( (nCode == KEY_DOWN) && aKeyCode.IsMod2() )
+        ExecuteMenu();
+    else if ( !aKeyCode.GetModifier() &&
+              ((nCode == KEY_RETURN) || (nCode == KEY_SPACE)) )
+        ExecuteMenu();
+    else
+        PushButton::KeyInput( rKEvt );
+}
+
+void MenuButton::Activate()
+{
+    maActivateHdl.Call( this );
+}
+
+void MenuButton::Select()
+{
+    if (mnCurItemId)
+        collectUIInformation(get_id(),u"OPENFROMLIST"_ustr,u"POS"_ustr,OUString::number(mnCurItemId));
+
+    maSelectHdl.Call( this );
+}
+
+void MenuButton::SetPopupMenu(PopupMenu* pNewMenu, bool bTakeOwnership)
+{
+    if (pNewMenu == mpMenu)
+        return;
+
+    if (mpMenu && mbOwnPopupMenu)
+        mpMenu->dispose();
+
+    mpMenu = pNewMenu;
+    mbOwnPopupMenu = bTakeOwnership;
+}
+
+void MenuButton::SetPopover(Window* pWindow)
+{
+    if (pWindow == mpFloatingWindow)
+        return;
+
+    mpFloatingWindow = pWindow;
+}
+
+
+FactoryFunction MenuButton::GetUITestFactory() const
+{
+    return MenuButtonUIObject::create;
+}
+
+void MenuButton::SetCurItemId(){
+    mnCurItemId = mpMenu->GetCurItemId();
+    msCurItemIdent = mpMenu->GetCurItemIdent();
+}
+
+void MenuButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    PushButton::DumpAsPropertyTree(rJsonWriter);
+
+    if (mpMenu)
+    {
+        auto aMenuNode = rJsonWriter.startArray("menu");
+        for (int i = 0; i < mpMenu->GetItemCount(); i++)
+        {
+            auto aEntryNode = rJsonWriter.startStruct();
+            auto sId = mpMenu->GetItemId(i);
+            rJsonWriter.put("id", mpMenu->GetItemIdent(sId));
+            rJsonWriter.put("text", mpMenu->GetItemText(sId));
+        }
+    }
+}
+
+//class MenuToggleButton ----------------------------------------------------
+
+MenuToggleButton::MenuToggleButton( vcl::Window* pParent, WinBits nWinBits )
+    : MenuButton( pParent, nWinBits )
+{
+}
+
+MenuToggleButton::~MenuToggleButton()
+{
+    disposeOnce();
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

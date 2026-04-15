@@ -1,0 +1,106 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+ module com {  module sun {  module star {  module style {
+
+/** These properties describe the numbering of a paragraph.
+
+    <p>NumberType determines the type of the numbering symbol.
+    Depending on this setting, some of the following values will be
+    ignored.</p>
+ */
+published service NumberingLevel
+{
+    /** specifies the type of numbering.@see NumberingType
+     */
+    [property] short NumberingType;
+
+    /** specifies the number of higher numbering levels that
+        are included in the representation of the current number.
+     */
+    [property] short ParentNumbering;
+
+    /** This prefix is inserted in front of the numbering symbol(s).
+
+        @deprecated as of LibreOffice 7.2, use ListFormat instead
+     */
+    [property] string Prefix;
+
+    /** This suffix is inserted after the numbering symbol(s).
+
+        @deprecated as of LibreOffice 7.2, use ListFormat instead
+     */
+    [property] string Suffix;
+
+    /** This is the name of the character style that is used for the symbol(s).
+     */
+    [property] string CharStyleName;
+
+    /** The bullet symbol with this code in the assigned font is used.
+     */
+    [property] short BulletId;
+
+    /** This is the name of the font that is used for the bullet.
+     */
+    [property] string BulletFontName;
+
+    /** This is the URL of a graphic file to use as a symbol.
+
+        @deprecated as of LibreOffice 6.1, use Graphic instead
+
+        Note the new behaviour since it this was deprecated:
+        This property can only be set and only external URLs are
+        supported (no more vnd.sun.star.GraphicObject scheme). When an
+        URL is set, then it will load the graphic and set the
+        GraphicBitmap property.
+     */
+    [property] string GraphicURL;
+
+    /** This specifies the start value for the numbering.
+     */
+    [property] short StartWith;
+
+    /** This is the graphic bitmap to use as a symbol.
+     */
+    [optional, property] com::sun::star::awt::XBitmap GraphicBitmap;
+
+    /** Format string used to generate actual numbering.
+
+        It contains placeholders (like %1%, %2%, etc) where corresponding
+        level numberings are inserted.
+
+        This is more flexible way to provide multilevel numbering with
+        complex format string. This property is a replacement for
+        Prefix and Suffix: if ListFormat is provided, they are not used
+        anymore.
+
+        Example: ListFormat "(%1% %2%.%3%)" can be resolved to numbering
+        in actual multilevel list like "(4 1.3)".
+     */
+    [optional, property] string ListFormat;
+
+    /** Specifies if this level should use Arabic numbers for all levels
+     */
+    [optional, property] boolean IsLegal;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

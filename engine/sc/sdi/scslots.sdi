@@ -1,0 +1,78 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module StarCalc
+[
+    SlotIdFile( "scslots.hrc" )
+]
+{
+    struct ScDatabaseSetting
+    {
+        BOOL HeaderRow              MID_1;
+        BOOL TotalRow               MID_2;
+        BOOL FirstCol               MID_3;
+        BOOL LastCol                MID_4;
+        BOOL StripedRows            MID_5;
+        BOOL StripedCols            MID_6;
+        BOOL ShowFilters            MID_7;
+        String StyleID              MID_8
+    };
+    item ScDatabaseSetting ScDatabaseSettingItem;
+
+    struct ScProtection
+    {
+        BOOL    Locked              MID_1;
+        BOOL    FormulasHidden      MID_2;
+        BOOL    Hidden              MID_3;
+        BOOL    HiddenInPrintout    MID_4
+    };
+    item ScProtection ScProtectionAttr;
+
+    item INT32 SfxIntegerListItem;
+
+
+    // in case of problems may be include (=copy/paste) manually
+    include "sfxitems.sdi"
+    include "sfx.sdi"
+    include "svxitems.sdi"
+    include "xoitems.sdi"
+    include "svx.sdi"
+
+    include "scalc.sdi"
+    include "docsh.sdi"
+    include "tabvwsh.sdi"
+    include "drawsh.sdi"
+    include "editsh.sdi"
+    include "pivotsh.sdi"
+    include "app.sdi"
+    include "drtxtob.sdi"
+    include "prevwsh.sdi"
+    include "auditsh.sdi"
+    include "drformsh.sdi"
+    include "formatsh.sdi"
+    include "cellsh.sdi"
+    include "oleobjsh.sdi"
+    include "chartsh.sdi"
+    include "graphsh.sdi"
+    include "pgbrksh.sdi"
+    include "mediash.sdi"
+    include "SparklineShell.sdi"
+    include "tableshell.sdi"
+
+}
+

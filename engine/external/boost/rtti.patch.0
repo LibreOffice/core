@@ -1,0 +1,13 @@
+Visible function type RTTI for Clang -fsanitize=function
+
+--- boost/function/function_base.hpp
++++ boost/function/function_base.hpp
+@@ -159,7 +159,7 @@
+       };
+ 
+       // The operation type to perform on the given functor/function pointer
+-      enum functor_manager_operation_type {
++      enum BOOST_SYMBOL_VISIBLE functor_manager_operation_type {
+         clone_functor_tag,
+         move_functor_tag,
+         destroy_functor_tag,

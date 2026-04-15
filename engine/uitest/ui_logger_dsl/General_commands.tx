@@ -1,0 +1,27 @@
+/*
+    This file is for the log statements that are general for all applications.
+    We can use them as general rules for commands and relate them to the
+    applications found in starter_commands.tx
+    Zoom is also general as it is better to treat it that way.
+*/
+
+import type_options
+
+GeneralCommand:
+    SideBar | setZoom_command | Select_command | General_type_command_on_UI_Object
+;
+SideBar:
+    'From SIDEBAR ' 'Choose ' '{"PANEL":' name=STRING '}'
+;
+setZoom_command:
+    'Set Zoom to ' zoom_value=INT
+;
+Select_command:
+    'Select ' '{"OBJECT":' name=STRING '}'
+;
+
+// This part is for typing text in any of these UI elements
+
+General_type_command_on_UI_Object:
+  'Type on' UI_Obj=STRING  what_to_type=Type_options 'from' parent_id=ID
+;

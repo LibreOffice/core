@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:settings>
+  <config:config-item-set config:name="ooo:configuration-settings">
+   <config:config-item config:name="MinRowHeightInclBorder" config:type="boolean">true</config:config-item>
+  </config:config-item-set>
+ </office:settings>
+ <office:styles>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Frame" style:family="graphic">
+   <style:graphic-properties text:anchor-type="paragraph" svg:x="0" svg:y="0" fo:margin-left="2mm" fo:margin-right="2mm" fo:margin-top="2mm" fo:margin-bottom="2mm" style:wrap="parallel" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" style:vertical-pos="top" style:vertical-rel="paragraph-content" style:horizontal-pos="center" style:horizontal-rel="paragraph-content" draw:fill="none" fo:padding="1.5mm" fo:border="0.06pt solid #000000"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Table1" style:family="table">
+   <style:table-properties style:width="277mm" style:rel-width="100%" table:align="left" style:writing-mode="lr-tb"/>
+  </style:style>
+  <style:style style:name="Table1.A" style:family="table-column">
+   <style:table-column-properties style:column-width="138.5mm" style:rel-column-width="6746*"/>
+  </style:style>
+  <style:style style:name="Table1.1" style:family="table-row">
+   <style:table-row-properties style:min-row-height="116mm" fo:keep-together="auto"/>
+  </style:style>
+  <style:style style:name="Table1.A1" style:family="table-cell">
+   <style:table-cell-properties style:vertical-align="top" fo:padding="4mm" fo:border="none" style:writing-mode="lr-tb"/>
+  </style:style>
+  <style:style style:name="Table1.2" style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:style>
+  <style:style style:name="Table1.A2" style:family="table-cell">
+   <style:table-cell-properties style:vertical-align="top" fo:padding-left="6mm" fo:padding-right="6mm" fo:padding-top="0mm" fo:padding-bottom="0mm" fo:border="none" style:writing-mode="lr-tb"/>
+  </style:style>
+  <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
+   <style:graphic-properties fo:margin-left="0" fo:margin-right="0" fo:margin-top="0" fo:margin-bottom="0" style:wrap="run-through" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" fo:background-color="#ffffff" style:background-transparency="100%" draw:fill="solid" draw:fill-color="#ffffff" fo:padding="0.5mm" fo:border="0.06pt solid #000000" style:flow-with-text="true"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="297mm" fo:page-height="210mm" style:print-orientation="landscape" fo:margin-top="30mm" fo:margin-bottom="40mm" fo:margin-left="10mm" fo:margin-right="10mm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p/>
+   <table:table table:name="Table1" table:style-name="Table1">
+    <table:table-column table:style-name="Table1.A"/>
+    <table:table-column table:style-name="Table1.A"/>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A1">
+      <text:p><draw:frame draw:style-name="fr1" draw:name="Frame1" text:anchor-type="char" svg:width="130mm" svg:height="108mm">
+        <draw:text-box draw:chain-next-name="Frame4">
+         <text:p/>
+        </draw:text-box>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Table1.A1">
+      <text:p><draw:frame draw:style-name="fr1" draw:name="Frame2" text:anchor-type="char" svg:width="130mm" svg:height="108mm">
+        <draw:text-box draw:chain-next-name="Frame3">
+         <text:p/>
+        </draw:text-box>
+       </draw:frame></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.2">
+     <table:table-cell table:style-name="Table1.A2">
+      <text:p/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Table1.A2">
+      <text:p/>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A1">
+      <text:p><draw:frame draw:style-name="fr1" draw:name="Frame3" text:anchor-type="char" svg:width="130mm" svg:height="108mm">
+        <draw:text-box>
+         <text:p/>
+        </draw:text-box>
+       </draw:frame></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Table1.A1">
+      <text:p><draw:frame draw:style-name="fr1" draw:name="Frame4" text:anchor-type="char" svg:width="130mm" svg:height="108mm">
+        <draw:text-box draw:chain-next-name="Frame2">
+         <text:p/>
+        </draw:text-box>
+       </draw:frame></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.2">
+     <table:table-cell table:style-name="Table1.A2">
+      <text:p/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Table1.A2">
+      <text:p/>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>

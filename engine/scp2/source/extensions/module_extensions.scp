@@ -1,0 +1,98 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "macros.inc"
+
+
+Module gid_Module_Optional_Extensions
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS);
+    ParentID = gid_Module_Optional;
+    Files = ( );
+    Default = YES;
+    Styles = ( );
+End
+
+/* *** Additional Extensions *** */
+
+#ifdef WITH_EXTENSION_INTEGRATION
+
+/* ** MediaWiki Publisher** */
+
+#ifndef WITHOUT_EXTENSION_MEDIAWIKI
+Module gid_Module_Optional_Extensions_MEDIAWIKI
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_MEDIAWIKI);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_MediaWiki );
+    Default = YES;
+    Styles = ( );
+End
+#endif
+
+/* ** NLPSolver ** */
+
+#ifdef WITH_EXTENSION_NLPSOLVER
+Module gid_Module_Optional_Extensions_NLPSolver
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_NLPSOLVER);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_NLPSolver );
+    Default = YES;
+    Styles = ( );
+End
+#endif
+
+/* ** Script provider for BeanShell ** */
+
+#if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
+
+#include "AutoInstall/extensions_bsh"
+
+Module gid_Module_Optional_Extensions_Script_Provider_For_BS
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_BEANSHELL);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (auto_extensions_bsh_ALL,
+        gid_File_Rdb_Scriptproviderforbeanshell );
+    Default = YES;
+    Styles = ( );
+End
+
+#endif
+
+/* ** Script provider for JavaScript ** */
+
+#if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_JAVASCRIPT
+
+#include "AutoInstall/extensions_rhino"
+
+Module gid_Module_Optional_Extensions_Script_Provider_For_JS
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_JAVASCRIPT);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (auto_extensions_rhino_ALL,
+        gid_File_Rdb_Scriptproviderforjavascript );
+    Default = YES;
+    Styles = ( );
+End
+
+#endif
+
+#endif

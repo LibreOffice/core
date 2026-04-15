@@ -1,0 +1,9 @@
+---
+assumeFilename: avmedia/source/gstreamer/gstplayer.cxx
+excludelist:
+    avmedia/source/gstreamer/gstframegrabber.hxx:
+    # Keep catch-all main gstreamer header
+    - gst/gst.h
+    avmedia/source/gstreamer/gstplayer.hxx:
+    # Keep catch-all main gstreamer header
+    - gst/gst.h

@@ -1,0 +1,4333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+        Open Document Format for Office Applications (OpenDocument) Version 1.3
+        OASIS Standard, In progress
+    Relax-NG Schema
+        Source: https://tools.oasis-open.org/version-control/svn/office/
+        Copyright (c) OASIS Open 2002-2015. All Rights Reserved.
+
+    All capitalized terms in the following text have the meanings assigned to them
+    in the OASIS Intellectual Property Rights Policy (the "OASIS IPR Policy"). The
+    full Policy may be found at the OASIS website.
+
+    This document and translations of it may be copied and furnished to others, and
+    derivative works that comment on or otherwise explain it or assist in its
+    implementation may be prepared, copied, published, and distributed, in whole or
+    in part, without restriction of any kind, provided that the above copyright
+    notice and this section are included on all such copies and derivative works.
+    However, this document itself may not be modified in any way, including by
+    removing the copyright notice or references to OASIS, except as needed for the
+    purpose of developing any document or deliverable produced by an OASIS
+    Technical Committee (in which case the rules applicable to copyrights, as set
+    forth in the OASIS IPR Policy, must be followed) or as required to translate it
+    into languages other than English.
+
+    The limited permissions granted above are perpetual and will not be revoked by
+    OASIS or its successors or assigns.
+
+    This document and the information contained herein is provided on an "AS IS"
+    basis and OASIS DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+    LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT
+    INFRINGE ANY OWNERSHIP RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
+    FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<rng:grammar xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:db="urn:oasis:names:tc:opendocument:xmlns:database:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+
+xmlns:officeooo="http://openoffice.org/2009/office"
+xmlns:tableooo="http://openoffice.org/2009/table"
+xmlns:chartooo="http://openoffice.org/2010/chart"
+xmlns:drawooo="http://openoffice.org/2010/draw"
+xmlns:css3t="http://www.w3.org/TR/css3-text/"
+xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0"
+xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"
+>
+  <rng:include href="../odf1.4/OpenDocument-v1.4-schema.rng">
+
+    <rng:define name="office-document-common-attrs">
+      <rng:interleave>
+        <rng:attribute name="office:version">
+      <!-- FIXME remove this hack once we write 1.3 -->
+          <rng:choice>
+          <rng:value>1.4</rng:value>
+          <rng:value>1.3</rng:value>
+          <rng:value>1.2</rng:value>
+          </rng:choice>
+        </rng:attribute>
+        <rng:optional>
+          <rng:attribute name="grddl:transformation">
+            <rng:list>
+              <rng:zeroOrMore>
+                <rng:ref name="anyIRI"/>
+              </rng:zeroOrMore>
+            </rng:list>
+          </rng:attribute>
+        </rng:optional>
+      </rng:interleave>
+    </rng:define>
+
+    <rng:define name="style-graphic-properties-attlist">
+      <rng:interleave>
+        <rng:optional>
+          <rng:attribute name="draw:stroke">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:value>dash</rng:value>
+              <rng:value>solid</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:stroke-dash">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:stroke-dash-names">
+            <rng:ref name="styleNameRefs"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:stroke-width">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:stroke-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-start">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-end">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-start-width">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-end-width">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-start-center">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:marker-end-center">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:stroke-opacity">
+            <rng:choice>
+              <rng:data type="double">
+                <rng:param name="minInclusive">0</rng:param>
+                <rng:param name="maxInclusive">1</rng:param>
+              </rng:data>
+              <rng:ref name="zeroToHundredPercent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:stroke-linejoin">
+            <rng:choice>
+              <rng:value>miter</rng:value>
+              <rng:value>round</rng:value>
+              <rng:value>bevel</rng:value>
+              <rng:value>middle</rng:value>
+              <rng:value>none</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:stroke-linecap">
+            <rng:choice>
+              <rng:value>butt</rng:value>
+              <rng:value>square</rng:value>
+              <rng:value>round</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:symbol-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:value>scroll</rng:value>
+              <rng:value>alternate</rng:value>
+              <rng:value>slide</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-direction">
+            <rng:choice>
+              <rng:value>left</rng:value>
+              <rng:value>right</rng:value>
+              <rng:value>up</rng:value>
+              <rng:value>down</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-start-inside">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-stop-inside">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-repeat">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-delay">
+            <rng:ref name="duration"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="text:animation-steps">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:auto-grow-width">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:auto-grow-height">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+        <!-- FIXME remove this once the export bug is fixed -->
+          <rng:attribute name="draw:fit-to-size">
+            <rng:choice>
+              <rng:value>true</rng:value>
+              <rng:value>false</rng:value>
+              <rng:value>all</rng:value>
+              <rng:value>shrink-to-fit</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fit-to-contour">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:textarea-vertical-align">
+            <rng:choice>
+              <rng:value>top</rng:value>
+              <rng:value>middle</rng:value>
+              <rng:value>bottom</rng:value>
+              <rng:value>justify</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:textarea-horizontal-align">
+            <rng:choice>
+              <rng:value>left</rng:value>
+              <rng:value>center</rng:value>
+              <rng:value>right</rng:value>
+              <rng:value>justify</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="fo:wrap-option">
+            <rng:choice>
+              <rng:value>no-wrap</rng:value>
+              <rng:value>wrap</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:shrink-to-fit">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:color-mode">
+            <rng:choice>
+              <rng:value>greyscale</rng:value>
+              <rng:value>mono</rng:value>
+              <rng:value>watermark</rng:value>
+              <rng:value>standard</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:color-inversion">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:luminance">
+            <rng:ref name="signedZeroToHundredPercent"/>
+          </rng:attribute>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-3821 -->
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:contrast">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:gamma">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:red">
+            <rng:ref name="signedZeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:green">
+            <rng:ref name="signedZeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:blue">
+            <rng:ref name="signedZeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:image-opacity">
+            <rng:ref name="zeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:shadow">
+            <rng:choice>
+              <rng:value>visible</rng:value>
+              <rng:value>hidden</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:shadow-offset-x">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:shadow-offset-y">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:shadow-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:shadow-opacity">
+            <rng:ref name="zeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <!-- TODO: no proposal for loext:shadow-blur -->
+        <rng:optional>
+          <rng:attribute name="loext:shadow-blur">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:start-line-spacing-horizontal">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:start-line-spacing-vertical">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:end-line-spacing-horizontal">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:end-line-spacing-vertical">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:line-distance">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:guide-overhang">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:guide-distance">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:start-guide">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:end-guide">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:placing">
+            <rng:choice>
+              <rng:value>below</rng:value>
+              <rng:value>above</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:parallel">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:measure-align">
+            <rng:choice>
+              <rng:value>automatic</rng:value>
+              <rng:value>left-outside</rng:value>
+              <rng:value>inside</rng:value>
+              <rng:value>right-outside</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:measure-vertical-align">
+            <rng:choice>
+              <rng:value>automatic</rng:value>
+              <rng:value>above</rng:value>
+              <rng:value>below</rng:value>
+              <rng:value>center</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:unit">
+            <rng:choice>
+              <rng:value>automatic</rng:value>
+              <rng:value>mm</rng:value>
+              <rng:value>cm</rng:value>
+              <rng:value>m</rng:value>
+              <rng:value>km</rng:value>
+              <rng:value>pt</rng:value>
+              <rng:value>pc</rng:value>
+              <rng:value>inch</rng:value>
+              <rng:value>ft</rng:value>
+              <rng:value>mi</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:show-unit">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:decimal-places">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-type">
+            <rng:choice>
+              <rng:value>straight-line</rng:value>
+              <rng:value>angled-line</rng:value>
+              <rng:value>angled-connector-line</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-angle-type">
+            <rng:choice>
+              <rng:value>fixed</rng:value>
+              <rng:value>free</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-angle">
+            <rng:ref name="angle"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-gap">
+            <rng:ref name="distance"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-escape-direction">
+            <rng:choice>
+              <rng:value>horizontal</rng:value>
+              <rng:value>vertical</rng:value>
+              <rng:value>auto</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-escape">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-line-length">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:caption-fit-line-length">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:horizontal-segments">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:vertical-segments">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:edge-rounding">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:edge-rounding-mode">
+            <rng:choice>
+              <rng:value>correct</rng:value>
+              <rng:value>attractive</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:back-scale">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:depth">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:backface-culling">
+            <rng:choice>
+              <rng:value>enabled</rng:value>
+              <rng:value>disabled</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:end-angle">
+            <rng:ref name="angle"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:close-front">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:close-back">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:lighting-mode">
+            <rng:choice>
+              <rng:value>standard</rng:value>
+              <rng:value>double-sided</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:normals-kind">
+            <rng:choice>
+              <rng:value>object</rng:value>
+              <rng:value>flat</rng:value>
+              <rng:value>sphere</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:normals-direction">
+            <rng:choice>
+              <rng:value>normal</rng:value>
+              <rng:value>inverse</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:texture-generation-mode-x">
+            <rng:choice>
+              <rng:value>object</rng:value>
+              <rng:value>parallel</rng:value>
+              <rng:value>sphere</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:texture-generation-mode-y">
+            <rng:choice>
+              <rng:value>object</rng:value>
+              <rng:value>parallel</rng:value>
+              <rng:value>sphere</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:texture-kind">
+            <rng:choice>
+              <rng:value>luminance</rng:value>
+              <rng:value>intensity</rng:value>
+              <rng:value>color</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:texture-filter">
+            <rng:choice>
+              <rng:value>enabled</rng:value>
+              <rng:value>disabled</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:texture-mode">
+            <rng:choice>
+              <rng:value>replace</rng:value>
+              <rng:value>modulate</rng:value>
+              <rng:value>blend</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:ambient-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:emissive-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:specular-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:diffuse-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:shininess">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="dr3d:shadow">
+            <rng:choice>
+              <rng:value>visible</rng:value>
+              <rng:value>hidden</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:ref name="common-draw-rel-size-attlist"/>
+        <rng:optional>
+          <rng:attribute name="fo:min-width">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="fo:min-height">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="fo:max-height">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="fo:max-width">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:ref name="common-horizontal-margin-attlist"/>
+        <rng:ref name="common-vertical-margin-attlist"/>
+        <rng:ref name="common-margin-attlist"/>
+        <rng:optional>
+          <rng:attribute name="style:print-content">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:protect">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:list>
+                <rng:oneOrMore>
+                  <rng:choice>
+                    <rng:value>content</rng:value>
+                    <rng:value>position</rng:value>
+                    <rng:value>size</rng:value>
+                  </rng:choice>
+                </rng:oneOrMore>
+              </rng:list>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:horizontal-pos">
+            <rng:choice>
+              <rng:value>left</rng:value>
+              <rng:value>center</rng:value>
+              <rng:value>right</rng:value>
+              <rng:value>from-left</rng:value>
+              <rng:value>inside</rng:value>
+              <rng:value>outside</rng:value>
+              <rng:value>from-inside</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:x">
+            <rng:ref name="coordinate"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:horizontal-rel">
+            <rng:choice>
+              <rng:value>page</rng:value>
+              <rng:value>page-content</rng:value>
+              <rng:value>page-start-margin</rng:value>
+              <rng:value>page-end-margin</rng:value>
+              <rng:value>frame</rng:value>
+              <rng:value>frame-content</rng:value>
+              <rng:value>frame-start-margin</rng:value>
+              <rng:value>frame-end-margin</rng:value>
+              <rng:value>paragraph</rng:value>
+              <rng:value>paragraph-content</rng:value>
+              <rng:value>paragraph-start-margin</rng:value>
+              <rng:value>paragraph-end-margin</rng:value>
+              <rng:value>char</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:ref name="common-vertical-pos-attlist"/>
+        <rng:ref name="common-vertical-rel-attlist"/>
+        <rng:ref name="common-text-anchor-attlist"/>
+        <rng:ref name="common-border-attlist"/>
+        <rng:ref name="common-border-line-width-attlist"/>
+        <rng:ref name="common-padding-attlist"/>
+        <rng:ref name="common-shadow-attlist"/>
+        <rng:ref name="common-background-color-attlist"/>
+        <rng:ref name="common-background-transparency-attlist"/>
+        <rng:ref name="common-editable-attlist"/>
+        <rng:optional>
+          <rng:attribute name="style:wrap">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:value>left</rng:value>
+              <rng:value>right</rng:value>
+              <rng:value>parallel</rng:value>
+              <rng:value>dynamic</rng:value>
+              <rng:value>run-through</rng:value>
+              <rng:value>biggest</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:wrap-dynamic-threshold">
+            <rng:ref name="nonNegativeLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:number-wrapped-paragraphs">
+            <rng:choice>
+              <rng:value>no-limit</rng:value>
+              <rng:ref name="positiveInteger"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:wrap-contour">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:wrap-contour-mode">
+            <rng:choice>
+              <rng:value>full</rng:value>
+              <rng:value>outside</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:run-through">
+            <rng:choice>
+              <rng:value>foreground</rng:value>
+              <rng:value>background</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:flow-with-text">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:overflow-behavior">
+            <rng:choice>
+              <rng:value>clip</rng:value>
+              <rng:value>auto-create-new-frame</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:mirror">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:value>vertical</rng:value>
+              <rng:ref name="horizontal-mirror"/>
+              <rng:list>
+                <rng:value>vertical</rng:value>
+                <rng:ref name="horizontal-mirror"/>
+              </rng:list>
+              <rng:list>
+                <rng:ref name="horizontal-mirror"/>
+                <rng:value>vertical</rng:value>
+              </rng:list>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="fo:clip">
+            <rng:choice>
+              <rng:value>auto</rng:value>
+              <rng:ref name="clipShape"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:wrap-influence-on-position">
+            <rng:choice>
+              <rng:value>iterative</rng:value>
+              <rng:value>once-concurrent</rng:value>
+              <rng:value>once-successive</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:ref name="common-writing-mode-attlist"/>
+        <rng:optional>
+          <rng:attribute name="draw:frame-display-scrollbar">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:frame-display-border">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:frame-margin-horizontal">
+            <rng:ref name="nonNegativePixelLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:frame-margin-vertical">
+            <rng:ref name="nonNegativePixelLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:visible-area-left">
+            <rng:ref name="nonNegativeLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:visible-area-top">
+            <rng:ref name="nonNegativeLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:visible-area-width">
+            <rng:ref name="positiveLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:visible-area-height">
+            <rng:ref name="positiveLength"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:draw-aspect">
+            <rng:choice>
+              <rng:value>content</rng:value>
+              <rng:value>thumbnail</rng:value>
+              <rng:value>icon</rng:value>
+              <rng:value>print-view</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:ole-draw-aspect">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+        <!-- https://issues.oasis-open.org/browse/OFFICE-4047 -->
+        <rng:optional>
+          <rng:attribute name="loext:allow-overlap">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+    <!-- https://issues.oasis-open.org/browse/OFFICE-4150 multi-page floating tables, wrap on all pages -->
+        <rng:optional>
+          <rng:attribute name="loext:wrap-text-at-frame-start">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <!-- TODO: no proposal for loext:glow* -->
+        <rng:optional>
+          <rng:attribute name="loext:glow-radius">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="loext:glow-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="loext:glow-transparency">
+            <rng:ref name="zeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <!-- TODO: no proposal for loext:softedge-radius -->
+        <rng:optional>
+          <rng:attribute name="loext:softedge-radius">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
+      </rng:interleave>
+    </rng:define>
+
+    <rng:define name="draw-text">
+      <rng:zeroOrMore>
+        <rng:choice>
+          <rng:ref name="text-p"/>
+          <rng:ref name="text-list"/>
+          <!-- https://issues.oasis-open.org/browse/OFFICE-3761 -->
+          <rng:ref name="loext-table"/>
+        </rng:choice>
+      </rng:zeroOrMore>
+    </rng:define>
+
+    <!-- Override spreadsheet epilogue to allow loext:persons -->
+    <rng:define name="office-spreadsheet-content-epilogue">
+      <rng:optional>
+        <rng:ref name="loext-persons"/>
+      </rng:optional>
+      <rng:ref name="table-functions"/>
+    </rng:define>
+
+    <!-- Override office-annotation to add loext:threaded-comment child element -->
+    <rng:define name="office-annotation">
+      <rng:element name="office:annotation">
+        <rng:ref name="office-annotation-attlist"/>
+        <rng:ref name="draw-caption-attlist"/>
+        <rng:ref name="common-draw-position-attlist"/>
+        <rng:ref name="common-draw-size-attlist"/>
+        <rng:ref name="common-draw-shape-with-text-and-styles-attlist"/>
+        <rng:optional><rng:ref name="dc-creator"/></rng:optional>
+        <rng:optional><rng:ref name="dc-date"/></rng:optional>
+        <rng:optional><rng:ref name="meta-date-string"/></rng:optional>
+        <rng:optional>
+          <rng:element name="meta:creator-initials"><rng:text/></rng:element>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="loext-threaded-comment"/>
+        </rng:optional>
+        <rng:zeroOrMore>
+          <rng:choice>
+            <rng:ref name="text-p"/>
+            <rng:ref name="text-list"/>
+          </rng:choice>
+        </rng:zeroOrMore>
+      </rng:element>
+    </rng:define>
+
+    <rng:define name="office-annotation-attlist" combine="interleave">
+      <rng:interleave>
+        <rng:optional>
+          <rng:attribute name="office:display">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="common-office-annotation-name-attlist"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="loext:resolved">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="loext:parent-name">
+            <rng:ref name="string"/>
+          </rng:attribute>
+        </rng:optional>
+      </rng:interleave>
+    </rng:define>
+
+    <rng:define name="style-style-content">
+      <rng:choice>
+        <rng:group>
+          <rng:attribute name="style:family">
+            <rng:value>text</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:ref name="style-text-properties"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="style:family">
+            <rng:value>paragraph</rng:value>
+          </rng:attribute>
+    <!-- TODO no proposal -->
+          <rng:optional>
+            <rng:ref name="loext-graphic-properties"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="style-paragraph-properties"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="style-text-properties"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="style:family">
+            <rng:value>section</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:ref name="style-section-properties"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="style:family">
+            <rng:value>ruby</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:ref name="style-ruby-properties"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="style:family">
+            <rng:value>table</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:ref name="style-table-properties"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="style:family">
+            <rng:value>table-column</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:ref name="style-table-column-properties"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="style:family">
+            <rng:value>table-row</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:ref name="style-table-row-properties"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="style:family">
+            <rng:value>table-cell</rng:value>
+          </rng:attribute>
+    <!-- TODO no proposal -->
+          <rng:optional>
+            <rng:ref name="loext-graphic-properties"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="style-table-cell-properties"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="style-paragraph-properties"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="style-text-properties"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="style:family">
+            <rng:choice>
+              <rng:value>graphic</rng:value>
+              <rng:value>presentation</rng:value>
+            </rng:choice>
+          </rng:attribute>
+          <rng:optional>
+            <rng:ref name="style-graphic-properties"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="style-paragraph-properties"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="style-text-properties"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="style:family">
+            <rng:value>drawing-page</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:ref name="style-drawing-page-properties"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="style:family">
+            <rng:value>chart</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:ref name="style-chart-properties"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="style-graphic-properties"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="style-paragraph-properties"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="style-text-properties"/>
+          </rng:optional>
+        </rng:group>
+      </rng:choice>
+    </rng:define>
+
+    <rng:define name="table-table-template">
+      <rng:element name="table:table-template">
+        <rng:ref name="table-table-template-attlist"/>
+        <rng:optional>
+          <rng:ref name="table-first-row"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-last-row"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-first-column"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-last-column"/>
+        </rng:optional>
+        <rng:ref name="table-body"/>
+        <rng:optional>
+          <rng:ref name="table-even-rows"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-odd-rows"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-even-columns"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-odd-columns"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-background"/>
+        </rng:optional>
+
+    <!-- TODO no proposal -->
+        <rng:optional>
+          <rng:ref name="table-first-row-even-column"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-last-row-even-column"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-first-row-end-column"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-first-row-start-column"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-last-row-end-column"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-last-row-start-column"/>
+        </rng:optional>
+
+      </rng:element>
+    </rng:define>
+
+    <rng:define name="draw-frame">
+      <rng:element name="draw:frame">
+        <rng:ref name="common-draw-shape-with-text-and-styles-attlist"/>
+        <rng:ref name="common-draw-position-attlist"/>
+        <rng:ref name="common-draw-rel-size-attlist"/>
+        <rng:ref name="common-draw-caption-id-attlist"/>
+        <rng:ref name="presentation-shape-attlist"/>
+        <rng:ref name="draw-frame-attlist"/>
+        <rng:zeroOrMore>
+          <rng:choice>
+            <rng:ref name="draw-text-box"/>
+            <rng:ref name="draw-image"/>
+            <rng:ref name="draw-object"/>
+            <rng:ref name="draw-object-ole"/>
+            <rng:ref name="draw-applet"/>
+            <rng:ref name="draw-floating-frame"/>
+            <rng:ref name="draw-plugin"/>
+            <rng:ref name="table-table"/>
+          </rng:choice>
+        </rng:zeroOrMore>
+        <rng:optional>
+          <rng:ref name="office-event-listeners"/>
+        </rng:optional>
+        <rng:zeroOrMore>
+          <rng:ref name="draw-glue-point"/>
+        </rng:zeroOrMore>
+        <rng:optional>
+          <rng:ref name="draw-image-map"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="svg-title"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="svg-desc"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:choice>
+            <rng:ref name="draw-contour-polygon"/>
+            <rng:ref name="draw-contour-path"/>
+          </rng:choice>
+        </rng:optional>
+
+    <!-- TODO no proposal -->
+        <rng:optional>
+          <rng:ref name="loext-signatureline"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="loext-qrcode"/>
+        </rng:optional>
+
+      </rng:element>
+    </rng:define>
+
+    <rng:define name="common-value-and-type-attlist">
+      <rng:choice>
+        <rng:group>
+          <rng:attribute name="office:value-type">
+            <rng:value>float</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:attribute name="calcext:value-type">
+              <rng:value>float</rng:value>
+            </rng:attribute>
+          </rng:optional>
+          <rng:attribute name="office:value">
+            <rng:ref name="double"/>
+          </rng:attribute>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="office:value-type">
+            <rng:value>percentage</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:attribute name="calcext:value-type">
+              <rng:value>percentage</rng:value>
+            </rng:attribute>
+          </rng:optional>
+          <rng:attribute name="office:value">
+            <rng:ref name="double"/>
+          </rng:attribute>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="office:value-type">
+            <rng:value>currency</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:attribute name="calcext:value-type">
+              <rng:value>currency</rng:value>
+            </rng:attribute>
+          </rng:optional>
+          <rng:attribute name="office:value">
+            <rng:ref name="double"/>
+          </rng:attribute>
+          <rng:optional>
+            <rng:attribute name="office:currency">
+              <rng:ref name="string"/>
+            </rng:attribute>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="office:value-type">
+            <rng:value>date</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:attribute name="calcext:value-type">
+              <rng:value>date</rng:value>
+            </rng:attribute>
+          </rng:optional>
+          <rng:attribute name="office:date-value">
+            <rng:ref name="dateOrDateTime"/>
+          </rng:attribute>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="office:value-type">
+            <rng:value>time</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:attribute name="calcext:value-type">
+              <rng:value>time</rng:value>
+            </rng:attribute>
+          </rng:optional>
+          <rng:attribute name="office:time-value">
+            <rng:ref name="duration"/>
+          </rng:attribute>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="office:value-type">
+            <rng:value>boolean</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <rng:attribute name="calcext:value-type">
+              <rng:value>boolean</rng:value>
+            </rng:attribute>
+          </rng:optional>
+          <rng:attribute name="office:boolean-value">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:group>
+        <rng:group>
+          <rng:attribute name="office:value-type">
+            <rng:value>string</rng:value>
+          </rng:attribute>
+          <rng:optional>
+            <!-- OFFICE-3759 -->
+            <rng:attribute name="calcext:value-type">
+              <rng:choice>
+                <rng:value>string</rng:value>
+                <rng:value>error</rng:value>
+              </rng:choice>
+            </rng:attribute>
+          </rng:optional>
+          <rng:optional>
+            <rng:attribute name="office:string-value">
+              <rng:ref name="string"/>
+            </rng:attribute>
+          </rng:optional>
+        </rng:group>
+      </rng:choice>
+    </rng:define>
+
+    <rng:define name="chart-chart">
+      <rng:element name="chart:chart">
+        <rng:ref name="chart-chart-attlist"/>
+        <rng:optional>
+          <rng:ref name="chart-title"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="chart-subtitle"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="chart-footer"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="chart-legend"/>
+        </rng:optional>
+        <!-- Chart Data Table - TODO no proposal -->
+        <rng:optional>
+          <rng:ref name="chart-data-table"/>
+        </rng:optional>
+        <rng:ref name="chart-plot-area"/>
+        <rng:zeroOrMore>
+          <rng:ref name="shape"/>
+        </rng:zeroOrMore>
+        <!-- https://issues.oasis-open.org/browse/OFFICE-2123 -->
+        <rng:optional>
+          <rng:ref name="table-table"/>
+        </rng:optional>
+      </rng:element>
+    </rng:define>
+
+    <rng:define name="chart-axis">
+      <rng:element name="chart:axis">
+        <rng:ref name="chart-axis-attlist"/>
+      <!-- OFFICE-2119 -->
+        <rng:optional>
+          <rng:choice>
+            <rng:group>
+              <rng:attribute name="chartooo:axis-type">
+                <rng:value>auto</rng:value>
+              </rng:attribute>
+              <rng:optional>
+                <rng:ref name="chartooo-date-scale"/>
+              </rng:optional>
+            </rng:group>
+            <rng:group>
+              <rng:attribute name="chartooo:axis-type">
+                <rng:value>date</rng:value>
+              </rng:attribute>
+              <rng:ref name="chartooo-date-scale"/>
+            </rng:group>
+            <rng:group>
+              <rng:attribute name="chartooo:axis-type">
+                <rng:value>text</rng:value>
+              </rng:attribute>
+            </rng:group>
+          </rng:choice>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="chart-title"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="chart-categories"/>
+        </rng:optional>
+        <rng:zeroOrMore>
+          <rng:ref name="chart-grid"/>
+        </rng:zeroOrMore>
+      </rng:element>
+    </rng:define>
+
+    <rng:define name="table-table">
+      <rng:element name="table:table">
+        <rng:ref name="table-table-attlist"/>
+        <rng:optional>
+          <rng:ref name="table-title"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-desc"/>
+        </rng:optional>
+        <!-- TODO add to proposal, OFFICE-2112 -->
+        <rng:optional>
+          <rng:ref name="table-table-protection"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-table-source"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="office-dde-source"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-scenario"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="office-forms"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="table-shapes"/>
+        </rng:optional>
+        <rng:ref name="table-columns-and-groups"/>
+        <rng:ref name="table-rows-and-groups"/>
+        <rng:optional>
+          <rng:ref name="table-named-expressions"/>
+        </rng:optional>
+        <!-- TODO no proposal, this is wild guessing, OFFICE-3785 -->
+        <rng:optional>
+          <rng:element name="calcext:conditional-formats">
+            <rng:oneOrMore>
+              <rng:element name="calcext:conditional-format">
+                <rng:attribute name="calcext:target-range-address">
+                  <rng:ref name="cellRangeAddress"/>
+                </rng:attribute>
+                <rng:choice>
+                  <rng:oneOrMore>
+                    <rng:element name="calcext:condition">
+                      <rng:attribute name="calcext:apply-style-name">
+                        <rng:ref name="styleNameRef"/>
+                      </rng:attribute>
+                      <rng:attribute name="calcext:value">
+                        <rng:ref name="string"/>
+                      </rng:attribute>
+                      <rng:attribute name="calcext:base-cell-address">
+                        <rng:ref name="cellAddress"/>
+                      </rng:attribute>
+                    </rng:element>
+                  </rng:oneOrMore>
+                  <rng:element name="calcext:data-bar">
+                    <rng:attribute name="calcext:max-length">
+                      <rng:ref name="string"/>
+                    </rng:attribute>
+                    <rng:attribute name="calcext:negative-color">
+                      <rng:ref name="color"/>
+                    </rng:attribute>
+                    <rng:attribute name="calcext:positive-color">
+                      <rng:ref name="color"/>
+                    </rng:attribute>
+                    <rng:attribute name="calcext:axis-color">
+                      <rng:ref name="color"/>
+                    </rng:attribute>
+                    <rng:optional>
+                      <rng:attribute name="calcext:axis-position">
+                        <rng:choice>
+                          <rng:value>middle</rng:value>
+                        </rng:choice>
+                      </rng:attribute>
+                    </rng:optional>
+                    <rng:element name="calcext:formatting-entry">
+                      <rng:attribute name="calcext:value">
+                        <rng:ref name="string"/>
+                      </rng:attribute>
+                      <rng:attribute name="calcext:type">
+                        <rng:choice>
+                          <rng:value>auto-minimum</rng:value>
+                          <rng:value>auto-maximum</rng:value>
+                          <rng:value>minimum</rng:value>
+                          <rng:value>maximum</rng:value>
+                          <rng:value>percent</rng:value>
+                          <rng:value>percentile</rng:value>
+                          <rng:value>number</rng:value>
+                          <rng:value>formula</rng:value>
+                        </rng:choice>
+                      </rng:attribute>
+                    </rng:element>
+                    <rng:element name="calcext:formatting-entry">
+                      <rng:attribute name="calcext:value">
+                        <rng:ref name="string"/>
+                      </rng:attribute>
+                      <rng:attribute name="calcext:type">
+                        <rng:choice>
+                          <rng:value>auto-minimum</rng:value>
+                          <rng:value>auto-maximum</rng:value>
+                          <rng:value>minimum</rng:value>
+                          <rng:value>maximum</rng:value>
+                          <rng:value>percent</rng:value>
+                          <rng:value>percentile</rng:value>
+                          <rng:value>number</rng:value>
+                          <rng:value>formula</rng:value>
+                        </rng:choice>
+                      </rng:attribute>
+                    </rng:element>
+                  </rng:element>
+                  <rng:element name="calcext:color-scale">
+                    <rng:element name="calcext:color-scale-entry">
+                      <rng:attribute name="calcext:value">
+                        <rng:ref name="string"/>
+                      </rng:attribute>
+                      <rng:attribute name="calcext:type">
+                        <rng:choice>
+                          <rng:value>minimum</rng:value>
+                          <rng:value>maximum</rng:value>
+                          <rng:value>percent</rng:value>
+                          <rng:value>percentile</rng:value>
+                          <rng:value>number</rng:value>
+                          <rng:value>formula</rng:value>
+                        </rng:choice>
+                      </rng:attribute>
+                      <rng:attribute name="calcext:color">
+                        <rng:ref name="color"/>
+                      </rng:attribute>
+                    </rng:element>
+                    <rng:element name="calcext:color-scale-entry">
+                      <rng:attribute name="calcext:value">
+                        <rng:ref name="string"/>
+                      </rng:attribute>
+                      <rng:attribute name="calcext:type">
+                        <rng:choice>
+                          <rng:value>minimum</rng:value>
+                          <rng:value>maximum</rng:value>
+                          <rng:value>percent</rng:value>
+                          <rng:value>percentile</rng:value>
+                          <rng:value>number</rng:value>
+                          <rng:value>formula</rng:value>
+                        </rng:choice>
+                      </rng:attribute>
+                      <rng:attribute name="calcext:color">
+                        <rng:ref name="color"/>
+                      </rng:attribute>
+                    </rng:element>
+                    <rng:optional>
+                      <rng:element name="calcext:color-scale-entry">
+                        <rng:attribute name="calcext:value">
+                          <rng:ref name="string"/>
+                        </rng:attribute>
+                        <rng:attribute name="calcext:type">
+                          <rng:choice>
+                            <rng:value>minimum</rng:value>
+                            <rng:value>maximum</rng:value>
+                            <rng:value>percent</rng:value>
+                            <rng:value>percentile</rng:value>
+                            <rng:value>number</rng:value>
+                            <rng:value>formula</rng:value>
+                          </rng:choice>
+                        </rng:attribute>
+                        <rng:attribute name="calcext:color">
+                          <rng:ref name="color"/>
+                        </rng:attribute>
+                      </rng:element>
+                    </rng:optional>
+                  </rng:element>
+                </rng:choice>
+              </rng:element>
+            </rng:oneOrMore>
+          </rng:element>
+        </rng:optional>
+        <!-- Sparklines-->
+        <rng:optional>
+          <rng:element name="calcext:sparkline-groups">
+            <rng:oneOrMore>
+              <rng:element name="calcext:sparkline-group">
+                <rng:attribute name="calcext:id">
+                  <rng:ref name="string"/>
+                </rng:attribute>
+                <rng:optional>
+                  <rng:attribute name="calcext:type">
+                    <rng:choice>
+                      <rng:value>line</rng:value>
+                      <rng:value>column</rng:value>
+                      <rng:value>stacked</rng:value>
+                    </rng:choice>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:line-width">
+                    <rng:ref name="length"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:date-axis">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:display-empty-cells-as">
+                    <rng:choice>
+                      <rng:value>zero</rng:value>
+                      <rng:value>gap</rng:value>
+                      <rng:value>span</rng:value>
+                    </rng:choice>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:markers">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:high">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:low">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:first">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:last">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:negative">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:display-x-axis">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:display-hidden">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:min-axis-type">
+                    <rng:choice>
+                      <rng:value>individual</rng:value>
+                      <rng:value>group</rng:value>
+                      <rng:value>custom</rng:value>
+                    </rng:choice>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:max-axis-type">
+                    <rng:choice>
+                      <rng:value>individual</rng:value>
+                      <rng:value>group</rng:value>
+                      <rng:value>custom</rng:value>
+                    </rng:choice>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:right-to-left">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:manual-max">
+                    <rng:ref name="double"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:manual-min">
+                    <rng:ref name="double"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-series">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-negative">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-axis">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-markers">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-first">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-last">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-high">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-low">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="calcext:sparkline-series-complex-color">
+                        <rng:ref name="loext-complex-color-definition"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="calcext:sparkline-negative-complex-color">
+                        <rng:ref name="loext-complex-color-definition"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="calcext:sparkline-axis-complex-color">
+                        <rng:ref name="loext-complex-color-definition"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="calcext:sparkline-markers-complex-color">
+                        <rng:ref name="loext-complex-color-definition"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="calcext:sparkline-first-complex-color">
+                        <rng:ref name="loext-complex-color-definition"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="calcext:sparkline-last-complex-color">
+                        <rng:ref name="loext-complex-color-definition"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="calcext:sparkline-high-complex-color">
+                        <rng:ref name="loext-complex-color-definition"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:optional>
+                    <rng:element name="calcext:sparkline-low-complex-color">
+                        <rng:ref name="loext-complex-color-definition"/>
+                    </rng:element>
+                </rng:optional>
+                <rng:element name="calcext:sparklines">
+                  <rng:oneOrMore>
+                    <rng:element name="calcext:sparkline">
+                      <rng:attribute name="calcext:cell-address">
+                        <rng:ref name="cellAddress"/>
+                      </rng:attribute>
+                      <rng:attribute name="calcext:data-range">
+                        <rng:ref name="cellRangeAddressList"/>
+                      </rng:attribute>
+                    </rng:element>
+                  </rng:oneOrMore>
+                </rng:element>
+              </rng:element>
+            </rng:oneOrMore>
+          </rng:element>
+        </rng:optional>
+      </rng:element>
+    </rng:define>
+
+    <!-- TODO no proposal -->
+    <rng:define name="draw-object">
+      <rng:element name="draw:object">
+        <rng:ref name="draw-object-attlist"/>
+        <rng:ref name="loext-text"/>
+        <rng:choice>
+          <rng:ref name="common-draw-data-attlist"/>
+          <rng:ref name="office-document"/>
+          <rng:ref name="math-math"/>
+        </rng:choice>
+      </rng:element>
+    </rng:define>
+    <rng:define name="draw-object-ole">
+      <rng:element name="draw:object-ole">
+        <rng:ref name="draw-object-ole-attlist"/>
+        <rng:ref name="loext-text"/>
+        <rng:choice>
+          <rng:ref name="common-draw-data-attlist"/>
+          <rng:ref name="office-binary-data"/>
+        </rng:choice>
+      </rng:element>
+    </rng:define>
+
+    <!-- FIXME: one test exports 250 here, which is probably a bug -->
+    <rng:define name="fontWeight">
+      <rng:choice>
+        <rng:value>normal</rng:value>
+        <rng:value>bold</rng:value>
+        <rng:value>100</rng:value>
+        <rng:value>200</rng:value>
+        <rng:value>250</rng:value>
+        <rng:value>300</rng:value>
+        <rng:value>400</rng:value>
+        <rng:value>500</rng:value>
+        <rng:value>600</rng:value>
+        <rng:value>700</rng:value>
+        <rng:value>800</rng:value>
+        <rng:value>900</rng:value>
+      </rng:choice>
+    </rng:define>
+
+    <rng:define name="style-graphic-fill-properties-attlist">
+      <rng:interleave>
+        <rng:optional>
+          <rng:attribute name="draw:fill">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:value>solid</rng:value>
+              <rng:value>bitmap</rng:value>
+              <rng:value>gradient</rng:value>
+              <rng:value>hatch</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <!-- TODO no proposal for fill-use-slide-background - should perhaps be added as draw:fill value -->
+        <rng:optional>
+          <rng:attribute name="loext:fill-use-slide-background">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:secondary-fill-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-gradient-name">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:gradient-step-count">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-hatch-name">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-hatch-solid">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-name">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:repeat">
+            <rng:choice>
+              <rng:value>no-repeat</rng:value>
+              <rng:value>repeat</rng:value>
+              <rng:value>stretch</rng:value>
+    <!-- OFFICE-4106 7a5d79f2297a43d0a854e304b0792164272edfe0 in xmloff/source/forms/formenums.cxx -->
+              <rng:value>scale</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-width">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-height">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-ref-point-x">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-ref-point-y">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-ref-point">
+            <rng:choice>
+              <rng:value>top-left</rng:value>
+              <rng:value>top</rng:value>
+              <rng:value>top-right</rng:value>
+              <rng:value>left</rng:value>
+              <rng:value>center</rng:value>
+              <rng:value>right</rng:value>
+              <rng:value>bottom-left</rng:value>
+              <rng:value>bottom</rng:value>
+              <rng:value>bottom-right</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:tile-repeat-offset">
+            <rng:list>
+              <rng:ref name="zeroToHundredPercent"/>
+              <rng:choice>
+                <rng:value>horizontal</rng:value>
+                <rng:value>vertical</rng:value>
+              </rng:choice>
+            </rng:list>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:opacity">
+            <rng:ref name="zeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:opacity-name">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:fill-rule">
+            <rng:choice>
+              <rng:value>nonzero</rng:value>
+              <rng:value>evenodd</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+      </rng:interleave>
+    </rng:define>
+
+    <!-- TODO no proposal -->
+    <rng:define name="text-illustration-index-source">
+      <rng:element name="text:illustration-index-source">
+        <rng:ref name="text-illustration-index-source-attrs"/>
+        <rng:optional>
+          <rng:ref name="text-index-title-template"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="text-illustration-index-entry-template"/>
+        </rng:optional>
+        <rng:optional>
+          <!-- <rng:ref name="text-index-source-style"/> -->
+          <rng:element name="loext:index-source-style">
+            <rng:attribute name="text:style-name">
+              <rng:ref name="styleNameRef"/>
+            </rng:attribute>
+            <rng:empty/>
+          </rng:element>
+        </rng:optional>
+      </rng:element>
+    </rng:define>
+    <rng:define name="text-object-index-source">
+      <rng:element name="text:object-index-source">
+        <rng:ref name="text-object-index-source-attrs"/>
+        <rng:optional>
+          <rng:ref name="text-index-title-template"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="text-object-index-entry-template"/>
+        </rng:optional>
+        <rng:optional>
+          <!-- <rng:ref name="text-index-source-style"/> -->
+          <rng:element name="loext:index-source-style">
+            <rng:attribute name="text:style-name">
+              <rng:ref name="styleNameRef"/>
+            </rng:attribute>
+            <rng:empty/>
+          </rng:element>
+        </rng:optional>
+      </rng:element>
+    </rng:define>
+    <rng:define name="text-table-index-source">
+      <rng:element name="text:table-index-source">
+        <rng:ref name="text-illustration-index-source-attrs"/>
+        <rng:optional>
+          <rng:ref name="text-index-title-template"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="text-table-index-entry-template"/>
+        </rng:optional>
+        <rng:optional>
+          <!-- <rng:ref name="text-index-source-style"/> -->
+          <rng:element name="loext:index-source-style">
+            <rng:attribute name="text:style-name">
+              <rng:ref name="styleNameRef"/>
+            </rng:attribute>
+            <rng:empty/>
+          </rng:element>
+        </rng:optional>
+      </rng:element>
+    </rng:define>
+
+    <!-- Belongs to project MCGR (Armin Le Grand) LO 7.6 -->
+    <rng:define name="draw-gradient">
+      <rng:element name="draw:gradient">
+        <rng:ref name="common-draw-gradient-attlist"/>
+        <rng:ref name="draw-gradient-attlist"/>
+        <rng:zeroOrMore>
+          <rng:ref name="loext-gradient-stop"/>
+        </rng:zeroOrMore>
+      </rng:element>
+    </rng:define>
+    <!-- Belongs to project MCGR (Armin Le Grand) LO 7.6 -->
+    <rng:define name="draw-opacity">
+      <rng:element name="draw:opacity">
+        <rng:ref name="common-draw-gradient-attlist"/>
+        <rng:ref name="draw-opacity-attlist"/>
+        <rng:zeroOrMore>
+          <rng:ref name="loext-opacity-stop"/>
+        </rng:zeroOrMore>
+      </rng:element>
+    </rng:define>
+
+    <rng:define name="number-scientific-number">
+      <rng:element name="number:scientific-number">
+        <rng:ref name="number-scientific-number-attlist"/>
+        <rng:ref name="common-decimal-places-attlist"/>
+        <rng:ref name="common-number-attlist"/>
+        <!-- TODO no proposal -->
+        <rng:zeroOrMore>
+          <rng:ref name="number-embedded-text"/>
+        </rng:zeroOrMore>
+        <rng:empty/>
+      </rng:element>
+    </rng:define>
+    <rng:define name="number-text">
+      <rng:element name="number:text">
+        <rng:optional>
+          <rng:ref name="number-text-attlist"/>
+         </rng:optional>
+        <rng:text/>
+      </rng:element>
+    </rng:define>
+
+    <!-- Adds hidden option to named ranges -->
+    <rng:define name="table-named-range-attlist">
+    <rng:attribute name="table:name">
+      <rng:ref name="string"/>
+    </rng:attribute>
+    <rng:attribute name="table:cell-range-address">
+      <rng:ref name="cellRangeAddress"/>
+    </rng:attribute>
+    <rng:optional>
+      <rng:attribute name="table:base-cell-address">
+        <rng:ref name="cellAddress"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="table:range-usable-as">
+        <rng:choice>
+          <rng:value>none</rng:value>
+          <rng:list>
+            <rng:oneOrMore>
+              <rng:choice>
+                <rng:value>print-range</rng:value>
+                <rng:value>filter</rng:value>
+                <rng:value>repeat-row</rng:value>
+                <rng:value>repeat-column</rng:value>
+                <!-- The option "hidden" is the new value for "range-usable-as" -->
+                <rng:value>hidden</rng:value>
+              </rng:choice>
+            </rng:oneOrMore>
+          </rng:list>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+    </rng:define>
+
+    <rng:define name="table-named-expression-attlist">
+    <rng:attribute name="table:name">
+      <rng:ref name="string"/>
+    </rng:attribute>
+    <rng:attribute name="table:expression">
+      <rng:ref name="string"/>
+    </rng:attribute>
+    <rng:optional>
+      <rng:attribute name="table:base-cell-address">
+        <rng:ref name="cellAddress"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:hidden">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+   </rng:include>
+
+    <!-- TODO no proposal -->
+  <rng:define name="loext-threaded-comment">
+    <rng:element name="loext:threaded-comment">
+      <rng:optional><rng:attribute name="loext:id"><rng:ref name="string"/></rng:attribute></rng:optional>
+      <rng:optional><rng:attribute name="loext:date-time"><rng:ref name="string"/></rng:attribute></rng:optional>
+      <rng:optional><rng:attribute name="loext:resolved"><rng:ref name="boolean"/></rng:attribute></rng:optional>
+      <rng:optional><rng:attribute name="loext:person-id"><rng:ref name="string"/></rng:attribute></rng:optional>
+      <rng:optional>
+        <rng:element name="loext:text"><rng:text/></rng:element>
+      </rng:optional>
+      <rng:zeroOrMore>
+        <rng:element name="loext:reply">
+          <rng:optional><rng:attribute name="loext:id"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional><rng:attribute name="loext:date-time"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional><rng:attribute name="loext:person-id"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional>
+            <rng:element name="loext:text"><rng:text/></rng:element>
+          </rng:optional>
+        </rng:element>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="loext-persons">
+    <rng:element name="loext:persons">
+      <rng:zeroOrMore>
+        <rng:element name="loext:person">
+          <rng:optional><rng:attribute name="loext:person-id"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional><rng:attribute name="loext:display-name"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional><rng:attribute name="loext:user-id"><rng:ref name="string"/></rng:attribute></rng:optional>
+          <rng:optional><rng:attribute name="loext:provider-id"><rng:ref name="string"/></rng:attribute></rng:optional>
+        </rng:element>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="loext-p">
+    <rng:element name="loext:p">
+      <rng:ref name="paragraph-attrs"/>
+      <rng:zeroOrMore>
+        <rng:ref name="paragraph-content-or-hyperlink"/>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+  <rng:define name="loext-text">
+    <rng:zeroOrMore>
+      <rng:choice>
+        <rng:ref name="loext-p"/>
+        <rng:ref name="text-list"/>
+        <rng:ref name="loext-table"/>
+      </rng:choice>
+    </rng:zeroOrMore>
+  </rng:define>
+
+    <!-- OFFICE-2119 -->
+  <rng:define name="chartooo-date-scale">
+    <rng:element name="chartooo:date-scale">
+      <rng:interleave>
+        <rng:optional>
+          <rng:attribute name="chart:base-time-unit">
+            <rng:ref name="chart-time-unit"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="chart:major-interval-value">
+            <rng:ref name="positiveInteger"/>
+          </rng:attribute>
+          <rng:attribute name="chart:major-interval-unit">
+            <rng:ref name="chart-time-unit"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="chart:minor-interval-value">
+            <rng:ref name="positiveInteger"/>
+          </rng:attribute>
+          <rng:attribute name="chart:minor-interval-unit">
+            <rng:ref name="chart-time-unit"/>
+          </rng:attribute>
+        </rng:optional>
+      </rng:interleave>
+    </rng:element>
+  </rng:define>
+  <rng:define name="chart-time-unit">
+    <rng:choice>
+      <rng:value>days</rng:value>
+      <rng:value>months</rng:value>
+      <rng:value>years</rng:value>
+    </rng:choice>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="loext-signatureline">
+    <rng:element name="loext:signatureline">
+      <rng:attribute name="loext:id">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="loext:suggested-signer-name">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="loext:suggested-signer-title">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="loext:suggested-signer-email">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="loext:signing-instructions">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="loext:show-sign-date">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+      <rng:attribute name="loext:can-add-comment">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:element>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="loext-style-reference">
+    <rng:element name="loext:style-ref">
+      <rng:interleave>
+        <rng:ref name="text-common-ref-content"/>
+        <rng:optional>
+          <rng:attribute name="text:reference-format">
+            <rng:choice>
+              <rng:value>text</rng:value>
+              <rng:value>direction</rng:value>
+              <rng:value>number</rng:value>
+              <rng:value>number-no-superior</rng:value>
+              <rng:value>number-all-superior</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="loext:reference-hide-non-numerical">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="loext:reference-from-bottom">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+      </rng:interleave>
+    </rng:element>
+  </rng:define>
+  <rng:define name="paragraph-content" combine="choice">
+    <rng:ref name="loext-style-reference"/>
+  </rng:define>
+
+  <rng:define name="loext-qrcode">
+    <rng:element name="loext:qrcode">
+      <rng:attribute name="office:string-value">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="loext:qrcode-errorcorrection">
+        <rng:choice>
+          <rng:value>low</rng:value>
+          <rng:value>medium</rng:value>
+          <rng:value>quartile</rng:value>
+          <rng:value>high</rng:value>
+        </rng:choice>
+      </rng:attribute>
+      <rng:attribute name="loext:qrcode-border">
+        <rng:ref name="nonNegativeInteger"/>
+      </rng:attribute>
+      <rng:attribute name="loext:qrcode-type">
+        <rng:ref name="nonNegativeInteger"/>
+      </rng:attribute>
+    </rng:element>
+  </rng:define>
+
+          <!-- https://issues.oasis-open.org/browse/OFFICE-3761 -->
+  <rng:define name="loext-table">
+    <rng:element name="loext:table">
+      <rng:ref name="table-table-attlist"/>
+      <rng:optional>
+        <rng:ref name="table-title"/>
+      </rng:optional>
+      <rng:optional>
+        <rng:ref name="table-desc"/>
+      </rng:optional>
+      <rng:optional>
+        <rng:ref name="table-table-source"/>
+      </rng:optional>
+      <rng:optional>
+        <rng:ref name="office-dde-source"/>
+      </rng:optional>
+      <rng:optional>
+        <rng:ref name="table-scenario"/>
+      </rng:optional>
+      <rng:optional>
+        <rng:ref name="office-forms"/>
+      </rng:optional>
+      <rng:optional>
+        <rng:ref name="table-shapes"/>
+      </rng:optional>
+      <rng:ref name="loext-columns-and-groups"/>
+      <rng:ref name="loext-rows-and-groups"/>
+      <rng:optional>
+        <rng:ref name="table-named-expressions"/>
+      </rng:optional>
+    </rng:element>
+  </rng:define>
+  <rng:define name="loext-rows-and-groups">
+    <rng:oneOrMore>
+      <rng:choice>
+        <rng:ref name="table-table-row-group"/>
+        <rng:ref name="loext-rows-no-group"/>
+      </rng:choice>
+    </rng:oneOrMore>
+  </rng:define>
+  <rng:define name="loext-rows-no-group">
+    <rng:choice>
+      <rng:group>
+        <rng:ref name="loext-rows"/>
+        <rng:optional>
+          <rng:ref name="table-table-header-rows"/>
+          <rng:optional>
+            <rng:ref name="loext-rows"/>
+          </rng:optional>
+        </rng:optional>
+      </rng:group>
+      <rng:group>
+        <rng:ref name="table-table-header-rows"/>
+        <rng:optional>
+          <rng:ref name="loext-rows"/>
+        </rng:optional>
+      </rng:group>
+    </rng:choice>
+  </rng:define>
+  <rng:define name="loext-rows">
+    <rng:choice>
+      <rng:ref name="table-table-rows"/>
+      <rng:oneOrMore>
+        <rng:optional>
+          <rng:ref name="text-soft-page-break"/>
+        </rng:optional>
+        <rng:ref name="loext-table-row"/>
+      </rng:oneOrMore>
+    </rng:choice>
+  </rng:define>
+  <rng:define name="loext-table-row">
+    <rng:element name="loext:table-row">
+      <rng:ref name="table-table-row-attlist"/>
+      <rng:oneOrMore>
+        <rng:choice>
+          <rng:ref name="loext-table-cell"/>
+          <rng:ref name="loext-covered-table-cell"/>
+        </rng:choice>
+      </rng:oneOrMore>
+    </rng:element>
+  </rng:define>
+  <rng:define name="loext-table-cell">
+    <rng:element name="loext:table-cell">
+      <rng:ref name="table-table-cell-attlist"/>
+      <rng:ref name="table-table-cell-attlist-extra"/>
+      <rng:ref name="table-table-cell-content"/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="loext-covered-table-cell">
+    <rng:element name="loext:covered-table-cell">
+      <rng:ref name="table-table-cell-attlist"/>
+      <rng:ref name="table-table-cell-content"/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="loext-columns-and-groups">
+    <rng:oneOrMore>
+      <rng:choice>
+        <rng:ref name="table-table-column-group"/>
+        <rng:ref name="loext-columns-no-group"/>
+      </rng:choice>
+    </rng:oneOrMore>
+  </rng:define>
+  <rng:define name="loext-columns-no-group">
+    <rng:choice>
+      <rng:group>
+        <rng:ref name="loext-columns"/>
+        <rng:optional>
+          <rng:ref name="table-table-header-columns"/>
+          <rng:optional>
+            <rng:ref name="loext-columns"/>
+          </rng:optional>
+        </rng:optional>
+      </rng:group>
+      <rng:group>
+        <rng:ref name="table-table-header-columns"/>
+        <rng:optional>
+          <rng:ref name="loext-columns"/>
+        </rng:optional>
+      </rng:group>
+    </rng:choice>
+  </rng:define>
+  <rng:define name="loext-columns">
+    <rng:choice>
+      <rng:ref name="loext-table-columns"/>
+      <rng:oneOrMore>
+        <rng:ref name="loext-table-column"/>
+      </rng:oneOrMore>
+    </rng:choice>
+  </rng:define>
+  <rng:define name="loext-table-columns">
+    <rng:element name="loext:table-columns">
+      <rng:oneOrMore>
+        <rng:ref name="loext-table-column"/>
+      </rng:oneOrMore>
+    </rng:element>
+  </rng:define>
+  <rng:define name="loext-table-column">
+    <rng:element name="loext:table-column">
+      <rng:ref name="table-table-column-attlist"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+
+  <rng:define name="loext-graphic-properties">
+    <rng:element name="loext:graphic-properties">
+      <rng:ref name="style-graphic-properties-content-strict"/>
+    </rng:element>
+  </rng:define>
+
+  <rng:define name="table-first-row-even-column">
+    <rng:element name="loext:first-row-even-column">
+      <rng:ref name="common-table-template-attlist"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="table-last-row-even-column">
+    <rng:element name="loext:last-row-even-column">
+      <rng:ref name="common-table-template-attlist"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="table-first-row-end-column">
+    <rng:element name="loext:first-row-end-column">
+      <rng:ref name="common-table-template-attlist"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="table-first-row-start-column">
+    <rng:element name="loext:first-row-start-column">
+      <rng:ref name="common-table-template-attlist"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="table-last-row-end-column">
+    <rng:element name="loext:last-row-end-column">
+      <rng:ref name="common-table-template-attlist"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="table-last-row-start-column">
+    <rng:element name="loext:last-row-start-column">
+      <rng:ref name="common-table-template-attlist"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+
+  <rng:define name="common-draw-rel-size-attlist" combine="interleave">
+    <!-- OFFICE-3854 -->
+    <rng:optional>
+      <rng:attribute name="loext:rel-width-rel">
+        <rng:choice>
+          <rng:value>page</rng:value>
+          <rng:value>paragraph</rng:value>
+          <!-- TODO layout-environment ? -->
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:rel-height-rel">
+        <rng:choice>
+          <rng:value>page</rng:value>
+          <rng:value>paragraph</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="common-svg-font-face-xlink-attlist" combine="interleave">
+    <!-- TODO no proposal -->
+    <rng:optional>
+      <rng:attribute name="loext:font-style">
+        <rng:ref name="fontStyle"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:font-weight">
+        <rng:ref name="fontWeight"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <!-- there's no ref-attrs so add it here -->
+  <rng:define name="text-common-ref-content" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:reference-language">
+        <rng:ref name="language"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="style-list-level-label-alignment-attlist" combine="interleave">
+    <rng:optional>
+    <!-- TODO no proposal -->
+      <rng:attribute name="loext:label-followed-by">
+        <rng:choice>
+          <rng:value>listtab</rng:value>
+          <rng:value>space</rng:value>
+          <rng:value>nothing</rng:value>
+          <rng:value>newline</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="style-ruby-properties-attlist" combine="interleave">
+    <rng:optional>
+    <!-- TODO proposal, OFFICE-3944 -->
+      <rng:attribute name="loext:ruby-position">
+        <rng:choice>
+          <rng:value>above</rng:value>
+          <rng:value>below</rng:value>
+          <rng:value>inter-character</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+    <!-- TODO no proposal -->
+      <rng:attribute name="officeooo:rsid">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="officeooo:paragraph-rsid">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+    <!-- https://issues.oasis-open.org/browse/OFFICE-4049 -->
+    <rng:optional>
+      <rng:attribute name="loext:opacity">
+        <rng:ref name="zeroToHundredPercent"/>
+      </rng:attribute>
+    </rng:optional>
+    <!-- TODO: no proposal for loext:glow-text* -->
+    <rng:optional>
+      <rng:attribute name="loext:glow-text-radius">
+        <rng:ref name="length"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:glow-text-color">
+        <rng:ref name="color"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:glow-text-transparency">
+        <rng:ref name="zeroToHundredPercent"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <!-- OFFICE-3843 -->
+    <rng:optional>
+      <rng:attribute name="loext:padding">
+        <rng:ref name="nonNegativeLength"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:padding-left">
+        <rng:ref name="nonNegativeLength"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:padding-right">
+        <rng:ref name="nonNegativeLength"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:padding-top">
+        <rng:ref name="nonNegativeLength"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:padding-bottom">
+        <rng:ref name="nonNegativeLength"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:border">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:border-left">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:border-right">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:border-top">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:border-bottom">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:shadow">
+        <rng:ref name="shadowType"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="style-chart-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:try-staggering-first">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="style-chart-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:std-weight">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="chart-series-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:label-string">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- OFFICE-1148 -->
+  <rng:define name="style-chart-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:regression-max-degree">
+        <rng:ref name="positiveInteger"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:regression-force-intercept">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:regression-intercept-value">
+        <rng:ref name="double"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:regression-name">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:regression-period">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:regression-extrapolate-forward">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:regression-extrapolate-backward">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- Chart Data Table - TODO no proposal -->
+  <rng:define name="chart-data-table">
+    <rng:element name="loext:data-table">
+      <rng:attribute name="chart:style-name">
+        <rng:ref name="styleNameRef"/>
+      </rng:attribute>
+    </rng:element>
+  </rng:define>
+
+    <!-- Chart Data Table Style Attributes - TODO no proposal -->
+  <rng:define name="style-chart-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:show-horizontal-border">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:show-vertical-border">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:show-outline">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:show-keys">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="table-data-pilot-field-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="tableooo:display-name">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal for pivot table calculated field -->
+  <rng:define name="table-data-pilot-field-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="calcext:formula">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="table-data-pilot-table-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:show-drill-down-buttons">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal for pivot table compact layout-->
+  <rng:define name="table-data-pilot-layout-info-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:layout-mode">
+        <rng:choice>
+          <rng:value>tabular-layout</rng:value>
+          <rng:value>outline-subtotals-top</rng:value>
+          <rng:value>outline-subtotals-bottom</rng:value>
+          <rng:value>compact-layout</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal, tdf#162262 -->
+  <rng:define name="table-subtotal-rules-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:summary-below">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal, 9009663d -->
+  <rng:define name="chart-chart-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:data-pilot-source">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="chart-chart-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:split-position">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="chart-chart-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:sub-bar">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:sub-pie">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- OFFICE-2112, TODO half of this missing in proposal -->
+  <rng:define name="table-table-protection">
+    <rng:element name="loext:table-protection">
+      <rng:optional>
+        <rng:attribute name="loext:select-protected-cells">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:select-unprotected-cells">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:insert-columns">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:insert-rows">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:delete-columns">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:delete-rows">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:use-autofilter">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:use-pivot">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:element>
+  </rng:define>
+  <rng:define name="office-spreadsheet-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:protection-key-digest-algorithm-2">
+        <rng:ref name="anyURI"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <rng:define name="table-table-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:protection-key-digest-algorithm-2">
+        <rng:ref name="anyURI"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-2317 -->
+  <rng:define name="vertJustifyValues">
+    <rng:choice>
+      <rng:value>auto</rng:value>
+      <rng:value>distribute</rng:value>
+    </rng:choice>
+  </rng:define>
+  <rng:define name="common-text-justify">
+    <rng:optional>
+      <rng:attribute name="css3t:text-justify">
+        <rng:ref name="vertJustifyValues"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <rng:define name="style-vertical-justify">
+    <rng:optional>
+      <rng:attribute name="loext:vertical-justify">
+        <rng:ref name="vertJustifyValues"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="style:vertical-justify">
+        <rng:ref name="vertJustifyValues"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:ref name="common-text-justify"/>
+      <rng:ref name="style-vertical-justify"/>
+    </rng:optional>
+    <!-- TODO no proposal to allow tab-stop-distance in arbitrary paragraph style properties -->
+    <rng:optional>
+      <rng:attribute name="loext:tab-stop-distance">
+        <rng:ref name="nonNegativeLength"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <rng:define name="style-table-cell-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:ref name="common-text-justify"/>
+      <rng:ref name="style-vertical-justify"/>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="number-fraction-attlist" combine="interleave">
+    <!-- OFFICE-3695 -->
+    <!-- TODO no proposal, 1544a26ac9f7dd60605dd21e9cbe29d490aafdce -->
+    <rng:optional>
+      <rng:attribute name="loext:max-numerator-digits">
+        <rng:ref name="positiveInteger"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="common-number-attlist" combine="interleave">
+    <!-- TODO no proposal,  -->
+    <rng:optional>
+      <rng:attribute name="loext:max-blank-integer-digits">
+        <rng:ref name="positiveInteger"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="number-embedded-text-attlist" combine="interleave">
+    <!-- TODO no proposal,  -->
+    <rng:optional>
+      <rng:attribute name="loext:blank-width-char">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal,  -->
+  <rng:define name="number-text-attlist">
+    <rng:interleave>
+      <rng:optional>
+        <rng:attribute name="loext:blank-width-char">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:interleave>
+  </rng:define>
+
+  <!-- TODO no proposal,  -->
+  <rng:define name="number-scientific-number-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:exponent-lowercase">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal,  -->
+  <rng:define name="number-scientific-number-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:blank-exponent-digits">
+        <rng:ref name="positiveInteger"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="table-data-pilot-level-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="calcext:repeat-item-labels">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="draw-enhanced-geometry-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="drawooo:sub-view-size">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+        <rng:attribute name="drawooo:enhanced-path">
+            <rng:ref name="string"/>
+        </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="draw-custom-shape-attlist" combine="interleave">
+    <rng:ref name="common-draw-rel-size-attlist"/>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-page-layout-properties-attlist" combine="interleave">
+    <rng:ref name="style-graphic-fill-properties-attlist"/>
+  </rng:define>
+  <rng:define name="style-header-footer-properties-attlist" combine="interleave">
+    <rng:ref name="style-graphic-fill-properties-attlist"/>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="text-index-entry-tab-stop-attrs" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="style:with-tab">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:char-shading-value">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="text-bookmark-start-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hidden">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+      <rng:optional>
+        <rng:attribute name="loext:condition">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal; see 7a5d79f2297a43d0a854e304b0792164272edfe0 -->
+  <!-- FIXME this is almost certainly incomplete: need to figure out which elements can have this and which named pattern can be extended with it to get exactly these elements -->
+  <rng:define name="form-checkbox-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="form:input-required">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <rng:define name="form-image-frame-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="form:input-required">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <rng:define name="form-listbox-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="form:input-required">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4030 -->
+  <rng:define name="common-writing-mode-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:writing-mode">
+        <rng:choice>
+          <rng:value>bt-lr</rng:value>
+          <rng:value>tb-rl90</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4073 -->
+  <rng:define name="common-vertical-rel-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:vertical-rel">
+        <rng:choice>
+          <rng:value>page-content-top</rng:value>
+          <rng:value>page-content-bottom</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4105 -->
+  <rng:define name="style-page-layout-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:margin-gutter">
+        <rng:choice>
+          <rng:ref name="length"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- just a test-case for user-defined attributes, move along, nothing to see here... -->
+  <rng:define name="style-table-cell-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="proName">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-compound-remain-char-count">
+        <rng:ref name="positiveInteger"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <!-- default value: column -->
+      <rng:attribute name="loext:hyphenation-keep-type">
+        <rng:choice>
+          <rng:value>auto</rng:value>
+          <rng:value>spread</rng:value>
+          <rng:value>page</rng:value>
+          <rng:value>column</rng:value>
+          <rng:value>always</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-keep-line">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4165 -->
+  <rng:define name="cssLength">
+    <rng:data type="string">
+      <rng:param name="pattern">-?([0-9]+(\.[0-9]*)?|\.[0-9]+)((cm)|(mm)|(in)|(pt)|(pc)|(px)|(ic)|(em))</rng:param>
+    </rng:data>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4165 -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:text-indent">
+        <rng:choice>
+          <rng:ref name="cssLength"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:margin-left">
+        <rng:choice>
+          <rng:ref name="cssLength"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:margin-right">
+        <rng:choice>
+          <rng:ref name="cssLength"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="chart-data-point-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:custom-label-field">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:word-spacing">
+        <rng:choice>
+          <rng:ref name="positiveLength"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:word-spacing-minimum">
+        <rng:choice>
+          <rng:ref name="positiveLength"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:word-spacing-maximum">
+        <rng:choice>
+          <rng:ref name="positiveLength"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:letter-spacing-minimum">
+        <rng:choice>
+          <rng:ref name="length"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:letter-spacing-maximum">
+        <rng:choice>
+          <rng:ref name="length"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:text-scale-minimum">
+        <rng:choice>
+          <rng:ref name="length"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:text-scale-maximum">
+        <rng:choice>
+          <rng:ref name="length"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-no-caps">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-no-last-word">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-word-char-count">
+        <rng:choice>
+          <rng:value>no-limit</rng:value>
+          <rng:ref name="positiveInteger"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-zone">
+        <rng:choice>
+          <rng:value>no-limit</rng:value>
+          <rng:ref name="positiveInteger"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-zone-always">
+        <rng:choice>
+          <rng:value>no-limit</rng:value>
+          <rng:ref name="positiveInteger"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-zone-column">
+        <rng:choice>
+          <rng:value>no-limit</rng:value>
+          <rng:ref name="positiveInteger"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-zone-page">
+        <rng:choice>
+          <rng:value>no-limit</rng:value>
+          <rng:ref name="positiveInteger"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-zone-spread">
+        <rng:choice>
+          <rng:value>no-limit</rng:value>
+          <rng:ref name="positiveInteger"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="chart-data-point-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:custom-label-pos-x">
+        <rng:ref name="double"/>
+      </rng:attribute>
+      <rng:attribute name="loext:custom-label-pos-y">
+        <rng:ref name="double"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="chart-legend-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:overlay">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-3936 -->
+  <rng:define name="style-chart-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:major-origin">
+        <rng:ref name="double"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="text-index-entry-chapter-attrs" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:outline-content-visible">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-2096 -->
+  <rng:define name="paragraph-content" combine="choice"
+   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
+    <rng:element name="field:fieldmark-start">
+      <rng:attribute name="text:name">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="field:type">
+        <!-- TODO <rng:ref name="namespacedToken"/> -->
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:zeroOrMore>
+        <rng:element name="field:param">
+          <rng:attribute name="field:name">
+            <rng:ref name="string"/>
+          </rng:attribute>
+          <rng:attribute name="field:value">
+            <rng:ref name="string"/>
+          </rng:attribute>
+        </rng:element>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+  <rng:define name="paragraph-content" combine="choice"
+   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
+    <rng:element name="field:fieldmark-separator">
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="paragraph-content" combine="choice"
+   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
+    <rng:element name="field:fieldmark-end">
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="paragraph-content" combine="choice"
+   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
+    <rng:element name="field:fieldmark">
+      <rng:attribute name="text:name">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="field:type">
+        <!-- TODO <rng:ref name="namespacedToken"/> -->
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:zeroOrMore>
+        <rng:element name="field:param">
+          <rng:attribute name="field:name">
+            <rng:ref name="string"/>
+          </rng:attribute>
+          <rng:attribute name="field:value">
+            <rng:ref name="string"/>
+          </rng:attribute>
+        </rng:element>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4124 -->
+  <rng:define name="paragraph-content" combine="choice">
+    <rng:element name="text:line-break">
+      <rng:optional>
+        <!-- default value: none -->
+        <rng:attribute name="loext:clear">
+          <rng:choice>
+            <rng:value>none</rng:value>
+            <rng:value>left</rng:value>
+            <rng:value>right</rng:value>
+            <rng:value>all</rng:value>
+          </rng:choice>
+        </rng:attribute>
+      </rng:optional>
+    </rng:element>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4131 Inline content controls for text documents -->
+  <rng:define name="paragraph-content" combine="choice">
+    <rng:element name="loext:content-control">
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:showing-place-holder">
+        <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:checkbox">
+        <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:checked">
+        <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:checked-state">
+        <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:unchecked-state">
+        <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:picture">
+        <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:date">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:date-format">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:date-rfc-language-tag">
+          <rng:ref name="language"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:current-date">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:plain-text">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:combobox">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:dropdown">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:alias">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:tag">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:id">
+          <rng:ref name="integer"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:tab-index">
+          <rng:ref name="nonNegativeInteger"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:lock">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:zeroOrMore>
+        <rng:element name="loext:list-item">
+          <rng:attribute name="loext:display-text">
+            <rng:ref name="string"/>
+          </rng:attribute>
+          <rng:attribute name="loext:value">
+            <rng:ref name="string"/>
+          </rng:attribute>
+        </rng:element>
+      </rng:zeroOrMore>
+      <rng:zeroOrMore>
+        <rng:ref name="paragraph-content-or-hyperlink"/>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="animation-element" combine="choice">
+    <rng:choice>
+      <rng:element name="loext:animatePhysics">
+        <rng:ref name="common-anim-target-attlist"/>
+        <rng:ref name="common-timing-attlist"/>
+        <rng:ref name="animate-physics-attlist"/>
+      </rng:element>
+    </rng:choice>
+  </rng:define>
+
+  <rng:define name="animate-physics-attlist">
+    <rng:optional>
+      <!-- default value: 0 -->
+      <rng:attribute name="loext:velocity-x">
+        <rng:ref name="double"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <!-- default value: 0 -->
+      <rng:attribute name="loext:velocity-y">
+        <rng:ref name="double"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <!-- default value: 0.1 -->
+      <rng:attribute name="loext:bounciness">
+        <rng:data type="double">
+          <rng:param name="minInclusive">0</rng:param>
+          <rng:param name="maxInclusive">1</rng:param>
+        </rng:data>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <!-- default value: 1 -->
+      <rng:attribute name="loext:density">
+        <rng:data type="double">
+          <rng:param name="minInclusive">0</rng:param>
+        </rng:data>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-chart-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:custom-leader-lines">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-chart-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:external-data">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4107 -->
+  <rng:define name="table-filter-condition-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:data-type">
+        <rng:choice>
+          <rng:value>background-color</rng:value>
+          <rng:value>text-color</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-table-row-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:text-changes-only">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-table-cell-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:text-changes-only">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4108 -->
+  <rng:define name="common-num-format-prefix-suffix-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:num-list-format">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="text-list-level-style-number-attr" combine="interleave">
+    <rng:ref name="common-level-attlist"/>
+  </rng:define>
+  <rng:define name="text-outline-level-style-attlist" combine="interleave">
+    <rng:ref name="common-level-attlist"/>
+  </rng:define>
+  <rng:define name="common-level-attlist">
+    <rng:optional>
+      <rng:attribute name="loext:is-legal">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="paragraph-content" combine="choice"
+   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
+    <rng:element name="text:bibliography-mark">
+      <rng:attribute name="text:bibliography-type">
+        <rng:ref name="text-bibliography-types"/>
+      </rng:attribute>
+      <rng:zeroOrMore>
+        <rng:attribute>
+          <rng:choice>
+            <rng:name>text:identifier</rng:name>
+            <rng:name>text:address</rng:name>
+            <rng:name>text:annote</rng:name>
+            <rng:name>text:author</rng:name>
+            <rng:name>text:booktitle</rng:name>
+            <rng:name>text:chapter</rng:name>
+            <rng:name>text:edition</rng:name>
+            <rng:name>text:editor</rng:name>
+            <rng:name>text:howpublished</rng:name>
+            <rng:name>text:institution</rng:name>
+            <rng:name>text:journal</rng:name>
+            <rng:name>text:month</rng:name>
+            <rng:name>text:note</rng:name>
+            <rng:name>text:number</rng:name>
+            <rng:name>text:organizations</rng:name>
+            <rng:name>text:pages</rng:name>
+            <rng:name>text:publisher</rng:name>
+            <rng:name>text:school</rng:name>
+            <rng:name>text:series</rng:name>
+            <rng:name>text:title</rng:name>
+            <rng:name>text:report-type</rng:name>
+            <rng:name>text:volume</rng:name>
+            <rng:name>text:year</rng:name>
+            <rng:name>text:url</rng:name>
+            <rng:name>text:custom1</rng:name>
+            <rng:name>text:custom2</rng:name>
+            <rng:name>text:custom3</rng:name>
+            <rng:name>text:custom4</rng:name>
+            <rng:name>text:custom5</rng:name>
+            <rng:name>text:isbn</rng:name>
+            <rng:name>text:issn</rng:name>
+            <rng:name>loext:local-url</rng:name>
+            <!-- TODO no proposal -->
+            <rng:name>loext:target-type</rng:name>
+            <rng:name>loext:target-url</rng:name>
+          </rng:choice>
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:zeroOrMore>
+      <rng:text/>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="chart-data-label-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:data-label-guid">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="loext:data-labels-cell-range">
+        <rng:ref name="cellRangeAddress"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-style-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:linked-style-name">
+        <rng:ref name="styleNameRef"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="loext-color-attlist">
+    <rng:interleave>
+      <rng:optional>
+        <rng:attribute name="loext:name">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:color">
+          <rng:ref name="color"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:interleave>
+  </rng:define>
+  <rng:define name="loext-color">
+    <rng:element name="loext:color">
+      <rng:ref name="loext-color-attlist"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="loext-theme-colors-attlist">
+    <rng:interleave>
+      <rng:optional>
+        <rng:attribute name="loext:name">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:interleave>
+  </rng:define>
+  <rng:define name="loext-theme-colors">
+    <rng:element name="loext:theme-colors">
+      <rng:ref name="loext-theme-colors-attlist"/>
+      <rng:zeroOrMore>
+        <rng:ref name="loext-color"/>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+  <rng:define name="loext-theme-attlist">
+    <rng:interleave>
+      <rng:optional>
+        <rng:attribute name="loext:name">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:interleave>
+  </rng:define>
+  <rng:define name="loext-theme">
+    <rng:element name="loext:theme">
+      <rng:ref name="loext-theme-attlist"/>
+      <rng:optional>
+        <rng:ref name="loext-theme-colors"/>
+      </rng:optional>
+    </rng:element>
+  </rng:define>
+
+  <rng:define name="office-styles" combine="choice">
+    <rng:optional>
+      <rng:element name="office:styles">
+        <rng:interleave>
+          <rng:ref name="styles"/>
+          <rng:zeroOrMore>
+            <rng:ref name="style-default-style"/>
+          </rng:zeroOrMore>
+          <rng:optional>
+            <rng:ref name="style-default-page-layout"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="text-outline-style"/>
+          </rng:optional>
+          <rng:zeroOrMore>
+            <rng:ref name="text-notes-configuration"/>
+          </rng:zeroOrMore>
+          <rng:optional>
+            <rng:ref name="text-bibliography-configuration"/>
+          </rng:optional>
+          <rng:optional>
+            <rng:ref name="text-linenumbering-configuration"/>
+          </rng:optional>
+          <rng:optional>
+            <!-- TODO no proposal for defining a theme -->
+            <rng:ref name="loext-theme"/>
+          </rng:optional>
+          <rng:zeroOrMore>
+            <rng:ref name="draw-gradient"/>
+          </rng:zeroOrMore>
+          <rng:zeroOrMore>
+            <rng:ref name="svg-linearGradient"/>
+          </rng:zeroOrMore>
+          <rng:zeroOrMore>
+            <rng:ref name="svg-radialGradient"/>
+          </rng:zeroOrMore>
+          <rng:zeroOrMore>
+            <rng:ref name="draw-hatch"/>
+          </rng:zeroOrMore>
+          <rng:zeroOrMore>
+            <rng:ref name="draw-fill-image"/>
+          </rng:zeroOrMore>
+          <rng:zeroOrMore>
+            <rng:ref name="draw-marker"/>
+          </rng:zeroOrMore>
+          <rng:zeroOrMore>
+            <rng:ref name="draw-stroke-dash"/>
+          </rng:zeroOrMore>
+          <rng:zeroOrMore>
+            <rng:ref name="draw-opacity"/>
+          </rng:zeroOrMore>
+          <rng:zeroOrMore>
+            <rng:ref name="style-presentation-page-layout"/>
+          </rng:zeroOrMore>
+          <rng:zeroOrMore>
+            <rng:ref name="table-table-template"/>
+          </rng:zeroOrMore>
+        </rng:interleave>
+      </rng:element>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="style-master-page" combine="choice">
+    <rng:element name="style:master-page">
+      <rng:ref name="style-master-page-attlist"/>
+      <rng:optional>
+        <rng:ref name="style-header"/>
+        <rng:optional>
+          <rng:ref name="style-header-left"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="style-header-first"/>
+        </rng:optional>
+      </rng:optional>
+      <rng:optional>
+        <rng:ref name="style-footer"/>
+        <rng:optional>
+          <rng:ref name="style-footer-left"/>
+        </rng:optional>
+        <rng:optional>
+          <rng:ref name="style-footer-first"/>
+        </rng:optional>
+      </rng:optional>
+      <rng:optional>
+        <rng:ref name="draw-layer-set"/>
+      </rng:optional>
+      <rng:optional>
+        <rng:ref name="office-forms"/>
+      </rng:optional>
+      <rng:optional>
+        <!-- TODO no proposal for defining a theme -->
+        <rng:ref name="loext-theme"/>
+      </rng:optional>
+      <rng:zeroOrMore>
+        <rng:ref name="shape"/>
+      </rng:zeroOrMore>
+      <rng:optional>
+        <rng:ref name="animation-element"/>
+      </rng:optional>
+      <rng:optional>
+        <rng:ref name="presentation-notes"/>
+      </rng:optional>
+    </rng:element>
+  </rng:define>
+
+  <!-- Theme Elements -->
+  <rng:define name="theme-color">
+    <rng:choice>
+      <rng:value>dark1</rng:value>
+      <rng:value>light1</rng:value>
+      <rng:value>dark2</rng:value>
+      <rng:value>light2</rng:value>
+      <rng:value>accent1</rng:value>
+      <rng:value>accent2</rng:value>
+      <rng:value>accent3</rng:value>
+      <rng:value>accent4</rng:value>
+      <rng:value>accent5</rng:value>
+      <rng:value>accent6</rng:value>
+      <rng:value>hyperlink</rng:value>
+      <rng:value>followed-hyperlink</rng:value>
+    </rng:choice>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-transformation">
+    <rng:element name="loext:transformation">
+        <rng:attribute name="loext:type">
+          <rng:ref name="string"/>
+        </rng:attribute>
+        <rng:attribute name="loext:value">
+          <rng:ref name="integer"/>
+        </rng:attribute>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-complex-color-attlist">
+    <rng:interleave>
+      <rng:attribute name="loext:color-type">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:optional>
+        <rng:attribute name="loext:theme-type">
+          <rng:ref name="theme-color"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:interleave>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-complex-color-definition">
+    <rng:ref name="loext-complex-color-attlist"/>
+    <rng:zeroOrMore>
+      <rng:ref name="loext-transformation"/>
+    </rng:zeroOrMore>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-char-complex-color">
+    <rng:element name="loext:char-complex-color">
+      <rng:ref name="loext-complex-color-definition"/>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-fill-complex-color">
+    <rng:element name="loext:fill-complex-color">
+      <rng:ref name="loext-complex-color-definition"/>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-stroke-complex-color">
+    <rng:element name="loext:stroke-complex-color">
+      <rng:ref name="loext-complex-color-definition"/>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-elements" combine="interleave">
+    <rng:optional>
+        <rng:ref name="loext-char-complex-color"/>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:font-optical-sizing">
+        <rng:choice>
+          <rng:value>auto</rng:value>
+          <rng:value>none</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-graphic-properties-elements" combine="interleave">
+    <rng:optional>
+        <rng:ref name="loext-stroke-complex-color"/>
+    </rng:optional>
+    <rng:optional>
+        <rng:ref name="loext-fill-complex-color"/>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-background-complex-color">
+    <rng:element name="loext:background-complex-color">
+      <rng:ref name="loext-complex-color-definition"/>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-border-bottom-complex-color">
+    <rng:element name="loext:border-bottom-complex-color">
+      <rng:ref name="loext-complex-color-definition"/>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-border-top-complex-color">
+    <rng:element name="loext:border-top-complex-color">
+      <rng:ref name="loext-complex-color-definition"/>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-border-left-complex-color">
+    <rng:element name="loext:border-left-complex-color">
+      <rng:ref name="loext-complex-color-definition"/>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-border-right-complex-color">
+    <rng:element name="loext:border-right-complex-color">
+      <rng:ref name="loext-complex-color-definition"/>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal - Document Themes-->
+  <rng:define name="style-table-cell-properties-elements" combine="interleave">
+    <rng:optional>
+        <rng:ref name="loext-background-complex-color"/>
+    </rng:optional>
+    <rng:optional>
+        <rng:ref name="loext-border-bottom-complex-color"/>
+    </rng:optional>
+    <rng:optional>
+        <rng:ref name="loext-border-top-complex-color"/>
+    </rng:optional>
+    <rng:optional>
+        <rng:ref name="loext-border-left-complex-color"/>
+    </rng:optional>
+    <rng:optional>
+        <rng:ref name="loext-border-right-complex-color"/>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="draw-frame-attlist" combine="interleave">
+    <!-- https://issues.oasis-open.org/browse/OFFICE-4150 Frames may break between pages in text documents -->
+    <rng:optional>
+      <rng:attribute name="loext:may-break-between-pages">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <rng:define name="style-graphic-properties-attlist" combine="interleave">
+    <!-- https://issues.oasis-open.org/browse/OFFICE-4142 -->
+    <rng:optional>
+      <rng:attribute name="loext:decorative">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="paragraph-attrs" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:marker-style-name">
+        <rng:ref name="styleNameRef"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO(aszucs) no proposal - unique identifier for move redline -->
+  <rng:define name="office-change-info" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:move-id">
+        <rng:ref name="integer"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- Belongs to project MCGR (Armin Le Grand) LO 7.6
+       Intended to be used for theme colors too  -->
+  <rng:define name="common-complex-color-attributes">
+    <rng:choice>
+      <rng:group>
+        <rng:attribute name="loext:color-type">
+          <rng:value>rgb</rng:value>
+        </rng:attribute>
+        <rng:attribute name="loext:color-value">
+          <rng:ref name="color"/>
+        </rng:attribute>
+      </rng:group>
+      <rng:group>
+        <rng:attribute name="loext:color-type">
+          <rng:value>theme</rng:value>
+        </rng:attribute>
+        <rng:attribute name="loext:color-value">
+        <!-- will become <rng:ref name="themeColorId"/>
+             when theme color related attributes are renamed -->
+          <rng:ref name="theme-color"/>
+        </rng:attribute>
+      </rng:group>
+    </rng:choice>
+  </rng:define>
+
+  <!-- Belongs to project MCGR (Armin Le Grand) LO 7.6 -->
+  <rng:define name="loext-gradient-stop">
+    <rng:element name="loext:gradient-stop">
+      <rng:attribute name="svg:offset">
+        <rng:ref name="zeroToOneDecimal"/>
+      </rng:attribute>
+      <rng:ref name="common-complex-color-attributes"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+
+  <!-- Belongs to project MCGR (Armin Le Grand) LO 7.6 -->
+  <rng:define name="loext-opacity-stop">
+    <rng:element name="loext:opacity-stop">
+      <rng:attribute name="svg:offset">
+        <rng:ref name="zeroToOneDecimal"/>
+      </rng:attribute>
+      <rng:attribute name="svg:stop-opacity">
+        <rng:ref name="zeroToOneDecimal"/>
+      </rng:attribute>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+
+  <!-- TODO no proposal, belongs to commit 33ef17ed, 2010-03-02 -->
+  <rng:define name="common-draw-shape-with-styles-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="drawooo:display">
+        <rng:choice>
+          <rng:value>always</rng:value>
+          <rng:value>screen</rng:value>
+          <rng:value>printer</rng:value>
+          <rng:value>none</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- OFFICE-4169, bug tdf#162963 -->
+  <rng:define name="table-database-range-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="calcext:contains-footer">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <!-- TODO no proposal for page number on multipage formats -->
+  <rng:define name="draw-image-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:page-number">
+        <rng:ref name="integer"/>
+      </rng:attribute>
+      </rng:optional>
+  </rng:define>
+  <!-- tdf#71583 -->
+  <rng:define name="paragraph-content" combine="choice">
+    <rng:element>
+        <rng:choice>
+            <rng:name>loext:page-count-range</rng:name>
+        </rng:choice>
+        <rng:ref name="common-field-num-format-attlist"/>
+        <rng:text/>
+    </rng:element>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4174 Hierarchical tracked changes -->
+  <rng:define name="text-changed-region" combine="choice">
+    <rng:element name="text:changed-region">
+      <rng:ref name="text-changed-region-attr"/>
+      <rng:choice>
+        <rng:ref name="text-changed-region-content-insertion"/>
+        <rng:group>
+          <rng:ref name="text-changed-region-content-deletion"/>
+          <rng:optional>
+            <rng:ref name="text-changed-region-content-insertion"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:ref name="text-changed-region-content-format-change"/>
+          <rng:optional>
+            <rng:choice>
+              <rng:ref name="text-changed-region-content-insertion"/>
+              <rng:ref name="text-changed-region-content-deletion"/>
+            </rng:choice>
+          </rng:optional>
+        </rng:group>
+      </rng:choice>
+    </rng:element>
+  </rng:define>
+  <rng:define name="text-changed-region-content-insertion">
+    <rng:element name="text:insertion">
+      <rng:ref name="office-change-info"/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="text-changed-region-content-deletion">
+    <rng:element name="text:deletion">
+      <rng:ref name="office-change-info"/>
+      <rng:zeroOrMore>
+        <rng:ref name="text-content"/>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+  <rng:define name="text-changed-region-content-format-change">
+    <rng:element name="text:format-change">
+      <rng:ref name="office-change-info"/>
+    </rng:element>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4173 Style on format changes -->
+  <rng:define name="text-changed-region-content" combine="choice">
+    <rng:element name="text:format-change">
+      <rng:optional>
+        <rng:attribute name="loext:style-name">
+          <rng:ref name="styleNameRef"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:ref name="office-change-info"/>
+    </rng:element>
+  </rng:define>
+</rng:grammar>

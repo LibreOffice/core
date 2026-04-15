@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="org.libreoffice.comp.Impress.KeynoteImportFilter"
+      constructor="org_libreoffice_comp_Impress_KeynoteImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Impress.MWAWPresentationImportFilter"
+      constructor="com_sun_star_comp_Impress_MWAWPresentationImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="org.libreoffice.comp.Impress.StarOfficePresentationImportFilter"
+      constructor="org_libreoffice_comp_Presentation_StarOfficePresentationImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+</component>

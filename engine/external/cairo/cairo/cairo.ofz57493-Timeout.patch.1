@@ -1,0 +1,14 @@
+--- a/src/cairo-bentley-ottmann-rectilinear.c	2023-05-11 10:34:16.206027850 +0100
++++ b/src/cairo-bentley-ottmann-rectilinear.c	2023-05-11 10:34:21.480787694 +0100
+@@ -455,6 +455,11 @@
+     if (unlikely (polygon->num_edges == 0))
+ 	return CAIRO_STATUS_SUCCESS;
+ 
++#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
++    if (unlikely (polygon->num_edges > 100000))
++	return CAIRO_STATUS_SUCCESS;
++#endif
++
+     num_events = 2 * polygon->num_edges;
+ 
+     events = stack_events;

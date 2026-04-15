@@ -1,0 +1,12 @@
+y-crdt - Rust port of Yjs
+
+[https://github.com/y-crdt/y-crdt/]
+
+The yffi crate and its dependency yrs crate are used by LO code.
+
+In order to download all the 144 (currently) dependencies with cargo, a bit
+of scaffolding is required: not only the Cargo.lock file that actually lists
+all the dependencies, but also all the Cargo.toml files from the tarball,
+and empty dummy src/lib.rs files are all required so that cargo fetch stops
+complaining and starts downloading.
+

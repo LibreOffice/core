@@ -1,0 +1,21 @@
+#!/usr/bin/perl -w
+
+use strict;
+use IO::Handle;
+
+die "Usage: $0 identifier\n" .
+    "(identifier is for example org.libreoffice)" unless $#ARGV == 0;
+
+my $id = $ARGV[0];
+
+open (LOGCAT, "adb logcat |") || die "Could not open pipe from adb logcat";
+my $pid = '';
+
+while (<LOGCAT>) {
+  if (m!^I/ActivityManager\( *\d+\): Start proc $id for activity .*: pid=(\d+)!) {
+    $pid = $1;
+  } elsif (m!^[EIWD]/[^(]+\( *$pid\)!) {
+    print $_;
+    STDOUT->flush();
+  }
+}

@@ -1,0 +1,101 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module frame {
+
+ published interface XFrame;
+ published interface XModel;
+
+/** With this interface, components viewed in a Frame can serve
+    events (by supplying dispatches).
+
+    @see XFrame
+    @see com::sun::star::awt::XWindow
+    @see XModel
+ */
+published interface XController: com::sun::star::lang::XComponent
+{
+    /** is called to attach the controller with its managing frame.
+
+        @param Frame
+            the new owner frame of this controller
+     */
+    void attachFrame( [in] XFrame Frame );
+
+    /** is called to attach the controller to a new model.
+
+        @param Model
+            the new model for this controller
+
+        @return
+            `TRUE` If attaching was successful
+            <br>
+            `FALSE` Otherwise
+     */
+    boolean attachModel( [in] XModel Model );
+
+    /** is called to prepare the controller for closing the view
+
+        @param Suspend
+            `TRUE` Force the controller to suspend his work
+            `FALSE` Try to reactivate the controller
+
+        @return
+            `TRUE` If request was accepted and successfully finished
+            <br>
+            `FALSE` Otherwise
+     */
+    boolean suspend( [in] boolean Suspend );
+
+    /** provides access to current view status
+
+        @returns
+            set of data that can be used to restore the current view status
+            at later time by using XController::restoreViewData()
+     */
+    any getViewData();
+
+    /** restores the view status using the data gotten from a previous call to
+        XController::getViewData().
+
+        @param Data
+            set of data to restore it
+     */
+    void restoreViewData( [in] any Data );
+
+    /** provides access to currently attached model
+
+        @returns
+            the currently attached model.
+     */
+    XModel getModel();
+
+    /** provides access to owner frame of this controller
+
+        @returns
+            the frame containing this controller.
+     */
+    XFrame getFrame();
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

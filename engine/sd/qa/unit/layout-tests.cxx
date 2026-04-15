@@ -1,0 +1,671 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#include "sdmodeltestbase.hxx"
+
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfxbasemodel.hxx>
+#include <svx/compatflags.hxx>
+
+#include <drawdoc.hxx>
+#include <unomodel.hxx>
+
+class SdLayoutTest : public SdModelTestBase
+{
+public:
+    SdLayoutTest()
+        : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
+    {
+    }
+
+    SdDrawDocument* getDoc()
+    {
+        auto* pImpress = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pImpress);
+        auto* pDoc = pImpress->GetDoc();
+        CPPUNIT_ASSERT(pDoc);
+        return pDoc;
+    }
+};
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf104722)
+{
+    createSdImpressDoc("pptx/tdf104722.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // Without the fix in place, this would have failed with
+    // - Expected: 2093
+    // - Actual  : -10276
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", u"2093");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", u"9273");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843)
+{
+    createSdImpressDoc("pptx/tdf135843.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // Without the fix, the test fails with:
+    // - Expected: 21165
+    // - Actual  : 4218
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]", "x", u"21165");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]", "y", u"3866");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "x", u"21165");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "y", u"5956");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146876)
+{
+    createSdImpressDoc("odp/tdf146876.odp");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // Check the shape is inside the (5000,8500) - (11500,12500) area
+    for (size_t i = 2; i < 4; ++i)
+    {
+        for (size_t j = 1; j < 6; ++j)
+        {
+            const OString xPath = "/metafile/push[1]/push[1]/push[" + OString::number(i)
+                                  + "]/polyline/point[" + OString::number(j) + "]";
+            const sal_Int32 nX = getXPath(pXmlDoc, xPath, "x").toInt32();
+            const sal_Int32 nY = getXPath(pXmlDoc, xPath, "y").toInt32();
+
+            // Without the fix in place, this test would have failed with
+            // - Expected greater or equal than: 5000
+            // - Actual  : 0
+            CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(5000), nX);
+            CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(11500), nX);
+
+            CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(8500), nY);
+            CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(12500), nY);
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf136949)
+{
+    createSdImpressDoc("odp/tdf136949.odp");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 13687
+    // - Actual  : 2832
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline/point[1]", "x", u"13687");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline/point[2]", "x", u"24759");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
+{
+    createSdImpressDoc("pptx/tdf128212.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // The position of the rotated text depends on the calculated text size. This depends on
+    // rendering, so it differs a bit on different platforms. Hence rather big delta here.
+
+    // translation
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 1);
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "mapunit", u"MapRelative");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        331.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x").toDouble(), 3.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        9420.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y").toDouble(), 10.0);
+    // no scaling
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scalex", u"(1/1)");
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scaley", u"(1/1)");
+
+    // text position
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        4760.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x").toDouble(), 3.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        -2250.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y").toDouble(), 3.0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)
+{
+    // This tests a 2-column text box's layout
+
+    const OUString sText[] = {
+        u"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat mi quis "
+        "pretium semper. Proin luctus orci ac neque venenatis, quis commodo dolor posuere. "
+        "Curabitur dignissim sapien quis cursus egestas. Donec blandit auctor arcu, nec "
+        "pellentesque eros molestie eget. In consectetur aliquam hendrerit. Sed cursus mauris "
+        "vitae ligula pellentesque, non pellentesque urna aliquet. Fusce placerat mauris enim, "
+        "nec rutrum purus semper vel. Praesent tincidunt neque eu pellentesque pharetra. Fusce "
+        "pellentesque est orci."_ustr,
+        u"Integer sodales tincidunt tristique. Sed a metus posuere, adipiscing nunc et, viverra "
+        "odio. Donec auctor molestie sem, sit amet tristique lectus hendrerit sed. Cras sodales "
+        "nisl sed orci mattis iaculis. Nunc eget dolor accumsan, pharetra risus a, vestibulum "
+        "mauris. Nunc vulputate lobortis mollis. Vivamus nec tellus faucibus, tempor magna nec, "
+        "facilisis felis. Donec commodo enim a vehicula pellentesque. Nullam vehicula vestibulum "
+        "est vel ultricies."_ustr,
+        u"Aliquam velit massa, laoreet vel leo nec, volutpat facilisis eros. Donec consequat arcu "
+        "ut diam tempor luctus. Cum sociis natoque penatibus et magnis dis parturient montes, "
+        "nascetur ridiculus mus. Praesent vitae lacus vel leo sodales pharetra a a nibh. "
+        "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; "
+        "Nam luctus tempus nibh, fringilla dictum augue consectetur eget. Curabitur at ante sit "
+        "amet tortor pharetra molestie eu nec ante. Mauris tincidunt, nibh eu sollicitudin "
+        "molestie, dolor sapien congue tortor, a pulvinar sapien turpis sed ante. Donec nec est "
+        "elementum, euismod nulla in, mollis nunc."_ustr
+    };
+
+    // sentence#, index, length, x, y
+    const std::tuple<int, int, int, int, int> strings[] = {
+        // Column 1
+        { 0, 0, 40, 3750, 3193 },
+        { 0, 40, 41, 3750, 3587 },
+        { 0, 81, 39, 3750, 3981 },
+        { 0, 120, 33, 3750, 4375 },
+        { 0, 153, 35, 3750, 4769 },
+        { 0, 188, 34, 3750, 5163 },
+        { 0, 222, 38, 3750, 5557 },
+        { 0, 260, 35, 3750, 5951 },
+        { 0, 295, 37, 3750, 6345 },
+        { 0, 332, 31, 3750, 6739 },
+        { 0, 363, 33, 3750, 7133 },
+        { 0, 396, 39, 3750, 7527 },
+        { 0, 435, 37, 3750, 7921 },
+        { 0, 472, 32, 3750, 8315 },
+        { 0, 504, 22, 3750, 8709 },
+        { 1, 0, 43, 3750, 9103 },
+        { 1, 43, 35, 3750, 9497 },
+        { 1, 78, 36, 3750, 9891 },
+        { 1, 114, 41, 3750, 10285 },
+        { 1, 155, 39, 3750, 10679 },
+        { 1, 194, 35, 3750, 11073 },
+        { 1, 229, 37, 3750, 11467 },
+        { 1, 266, 40, 3750, 11861 },
+        { 1, 306, 39, 3750, 12255 },
+        { 1, 345, 38, 3750, 12649 },
+        { 1, 383, 39, 3750, 13043 },
+        { 1, 422, 29, 3750, 13437 },
+        { 2, 0, 42, 3750, 13831 },
+        { 2, 42, 41, 3750, 14225 },
+        { 2, 83, 39, 3750, 14619 },
+        { 2, 122, 32, 3750, 15013 },
+        { 2, 154, 38, 3750, 15407 },
+        { 2, 192, 34, 3750, 15801 },
+        { 2, 226, 38, 3750, 16195 },
+        // Column 2
+        { 2, 264, 42, 10725, 3193 },
+        { 2, 306, 39, 10725, 3587 },
+        { 2, 345, 37, 10725, 3981 },
+        { 2, 382, 37, 10725, 4375 },
+        { 2, 419, 42, 10725, 4769 },
+        { 2, 461, 36, 10725, 5163 },
+        { 2, 497, 36, 10725, 5557 },
+        { 2, 533, 40, 10725, 5951 },
+        { 2, 573, 35, 10725, 6345 },
+        { 2, 608, 30, 10725, 6739 },
+    };
+
+    createSdDrawDoc("odg/two_columns.odg");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(strings); ++i)
+    {
+        const auto & [ sentence, index, length, x, y ] = strings[i];
+        OString sXPath = "/metafile/push[1]/push[1]/textarray[" + OString::number(i + 1) + "]";
+        assertXPathContent(pXmlDoc, sXPath + "/text", sText[sentence]);
+        assertXPath(pXmlDoc, sXPath, "index", OUString::number(index));
+        assertXPath(pXmlDoc, sXPath, "length", OUString::number(length));
+        assertXPath(pXmlDoc, sXPath, "x", OUString::number(x));
+        assertXPath(pXmlDoc, sXPath, "y", OUString::number(y));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, tdf143258_testTbRlLayout)
+{
+    // This tests a 1-column and a 2-column text boxes' layout
+
+    const OUString sText[] = {
+        u"tb-rl text within a small text box"_ustr, // Box 1
+        u"tb-rl text within a small 2-column text box"_ustr, // Box 2
+    };
+
+    // sentence#, index, length, x, y
+    const std::tuple<int, int, int, int, int> strings[] = {
+        // Box 1
+        { 0, 0, 11, 5346, 3250 },
+        { 0, 11, 9, 4635, 3250 },
+        { 0, 20, 6, 3924, 3250 },
+        { 0, 26, 8, 3213, 3250 },
+        // Box 2 column 1
+        { 1, 0, 6, 5346, 7250 },
+        { 1, 6, 5, 4635, 7250 },
+        { 1, 11, 7, 3924, 7250 },
+        { 1, 18, 8, 3213, 7250 },
+        // Box 2 column 2
+        { 1, 26, 2, 5346, 9600 },
+        { 1, 28, 7, 4635, 9600 },
+        { 1, 35, 5, 3924, 9600 },
+        { 1, 40, 3, 3213, 9600 },
+    };
+
+    createSdDrawDoc("odg/tb-rl-textbox.odg");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/font", SAL_N_ELEMENTS(strings));
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", SAL_N_ELEMENTS(strings));
+    for (size_t i = 0; i < SAL_N_ELEMENTS(strings); ++i)
+    {
+        const auto & [ sentence, index, length, x, y ] = strings[i];
+        OString sXPath = "/metafile/push[1]/push[1]/font[" + OString::number(i + 1) + "]";
+        assertXPath(pXmlDoc, sXPath, "orientation", u"-900");
+        assertXPath(pXmlDoc, sXPath, "vertical", u"true");
+        sXPath = "/metafile/push[1]/push[1]/textarray[" + OString::number(i + 1) + "]";
+        assertXPathContent(pXmlDoc, sXPath + "/text", sText[sentence]);
+        assertXPath(pXmlDoc, sXPath, "index", OUString::number(index));
+        assertXPath(pXmlDoc, sXPath, "length", OUString::number(length));
+
+        // Without the fix in place, this would have failed with
+        // - Expected: 5346
+        // - Actual  : 503924
+        // - In <>, attribute 'x' of '/metafile/push[1]/push[1]/textarray[1]' incorrect value.
+        assertXPath(pXmlDoc, sXPath, "x", OUString::number(x));
+        assertXPath(pXmlDoc, sXPath, "y", OUString::number(y));
+    }
+}
+
+// A test that tests some parts of numbered list behaviour
+// it's really the numbering we're interested in here
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, numberedList)
+{
+    const OUString sText[] = {
+        "1.",
+        "Outer, one",
+        "2.",
+        "Outer, two",
+        "a.",
+        "Second level, a",
+        "b.",
+        "Second level, b",
+        "Blank second level",
+        "a.",
+        "Second level restart, a",
+        "b.",
+        "Second level restart, b",
+        "3.",
+        "Outer, three",
+        "4.",
+        "Outer, four",
+    };
+
+    createSdImpressDoc("pptx/NumberedList-12ab-ab-34.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+    const OString sXPathBase = "/metafile/push[1]/push[1]/textarray["_ostr;
+
+    for (size_t i = 0; i < std::size(sText); i++)
+    {
+        assertXPathContent(pXmlDoc, sXPathBase + OString::number(i + 1) + "]/text", sText[i]);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146731)
+{
+    createSdImpressDoc("pptx/tdf146731.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[3]/polyline[1]", "width", u"187");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[4]/polyline[1]", "width", u"187");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]", "width", u"187");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 30
+    // - Actual  : 187
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[6]/polyline[1]", "width", u"30");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline[1]", "width", u"187");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843_InsideHBorders)
+{
+    createSdImpressDoc("pptx/tdf135843_insideH.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // Without the fix, the test fails with:
+    //- Expected: 34
+    //- Actual  : 36
+    // We shouldn't see two vertical borders inside the table on ui.
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push", 34);
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testBnc480256)
+{
+    createSdImpressDoc("pptx/bnc480256-2.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // Without the fix, the test fails with:
+    //- Expected: #ff0000
+    //- Actual  : #ffffff
+    // We should see the red vertical border inside the table.
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[8]/linecolor[1]", "color", u"#ff0000");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
+{
+    // This test checks that the text fitting is working correctly when
+    // the textbox is set to "fit to frame" by stretching the text to or
+    // near the textbox boundary. The problem is especially complicated
+    // when the font size is set to a higher number (like 999)
+    //
+    // The text fitting behaviour when "fit by frame" is enabled is to
+    // always fit the text into the text box (without forcing the text
+    // into new line) by shrinking or expanding the text horizontally
+    // and vertically.
+
+    createSdDrawDoc("odg/FitToFrameText.odg");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", u"0");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", u"406");
+#ifndef _WIN32 // FIXME: Windows seems to differ in text layouting
+    assertXPathDoubleValue(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "first",
+                           114.087, 0.001);
+    assertXPathDoubleValue(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "last",
+                           6983.573, 0.001);
+#else
+    assertXPathDoubleValue(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "first",
+                           113.64, 0.001);
+    assertXPathDoubleValue(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "last",
+                           6956.219, 0.001);
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf156955)
+{
+    createSdImpressDoc("odp/tdf156955.odp");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // Make sure text box has the right size - without the fix it was 2759.
+    assertXPath(pXmlDoc, "/metafile/push/push/textarray[3]", "y", u"3183");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
+{
+    // Test related to IgnoreBreakAfterMultilineField compatibility flag.
+    {
+        createSdImpressDoc("pptx/tdf148966.pptx");
+        xmlDocUniquePtr pXmlDoc = parseLayout();
+        // Without the accompanying fix, would fail with:
+        // - Expected: 5952
+        // - Actual  : 7814
+        // i.e. Line break after multiline field should have been ignored.
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"5952");
+    }
+    {
+        createSdImpressDoc("odp/tdf148966-withflag.odp");
+        xmlDocUniquePtr pXmlDoc = parseLayout();
+        // Without the accompanying fix, would fail with:
+        // - Expected: 5952
+        // - Actual  : 7814
+        // i.e. When IgnoreBreakAfterMultilineField flag is set, line break
+        // after multiline field should have been ignored.
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"5952");
+    }
+    {
+        createSdImpressDoc("odp/tdf148966-withoutflag.odp");
+        xmlDocUniquePtr pXmlDoc = parseLayout();
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"7814");
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTableVerticalText)
+{
+    createSdImpressDoc("pptx/tcPr-vert-roundtrip.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // Without the accompanying fix, would fail with:
+    // - Expected: -900
+    // - Actual  : 0
+    // - In <>, attribute 'orientation' of '//font[1]' incorrect value.
+    // i.e. table cell text that was supposed to be vertical (rotated 90
+    // degrees) was not vertical.
+    assertXPath(pXmlDoc, "//font[1]", "orientation", u"-900");
+    assertXPath(pXmlDoc, "//font[2]", "orientation", u"900");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf112594)
+{
+    createSdImpressDoc("odp/Tdf112594.fodp");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // Test that a NNBSP is grouped with the Mongolian characters after it, so
+    // we have two text arrays, one covering the digits, and the other with the rest.
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "index", u"0");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "length", u"2");
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]/text", u"11\u202f\u1824");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[4]", "index", u"2");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[4]", "length", u"2");
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/textarray[4]/text", u"11\u202f\u1824");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf152906_AdjustToContour)
+{
+    // Test that the text adjusts to contour properly
+
+    static constexpr OUString sText
+        = u"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat mi quis "
+          "pretium semper. Proin luctus orci ac neque venenatis, quis commodo dolor posuere. "
+          "Curabitur dignissim sapien quis cursus egestas. Donec blandit auctor arcu, nec "
+          "pellentesque eros molestie eget. In consectetur aliquam hendrerit. Sed cursus mauris "
+          "vitae ligula pellentesque, non pellentesque urna aliquet. Fusce placerat mauris enim, "
+          "nec rutrum purus semper vel. Praesent tincidunt neque eu pellentesque pharetra. Fusce "
+          "pellentesque est orci."_ustr;
+
+    // index, length, x, y
+    const std::tuple<int, int, int, int> strings[] = {
+        { 0, 6, 9600, 8647 }, //                        Lorem
+        { 6, 22, 7570, 9358 }, //               ipsum dolor sit amet,
+        { 28, 29, 6776, 10069 }, //         consectetur adipiscing elit.
+        { 57, 29, 6299, 10780 }, //         Vestibulum consequat mi quis
+        { 86, 37, 5453, 11491 }, //     pretium semper. Proin luctus orci ac
+        { 123, 36, 5134, 12202 }, //     neque venenatis, quis commodo dolor
+        { 159, 41, 4764, 12913 }, //  posuere. Curabitur dignissim sapien quis
+        { 200, 43, 4481, 13624 }, // cursus egestas. Donec blandit auctor arcu,
+        { 243, 40, 4975, 14335 }, //   nec pellentesque eros molestie eget. In
+        { 283, 42, 4552, 15046 }, //  consectetur aliquam hendrerit. Sed cursus
+        { 325, 38, 5363, 15757 }, //    mauris vitae ligula pellentesque, non
+        { 363, 42, 4693, 16468 }, //  pellentesque urna aliquet. Fusce placerat
+        { 405, 37, 5047, 17179 }, //    mauris enim, nec rutrum purus semper
+        { 442, 33, 5963, 17890 }, //      vel. Praesent tincidunt neque eu
+        { 475, 29, 6387, 18601 }, //        pellentesque pharetra. Fusce
+        { 504, 22, 7499, 19312 }, //           pellentesque est orci.
+    };
+
+    createSdDrawDoc("odg/adjust-to-contour.fodg");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", std::size(strings));
+    for (size_t i = 0; i < std::size(strings); ++i)
+    {
+        const auto & [ index, length, x, y ] = strings[i];
+        OString sXPath = "/metafile/push[1]/push[1]/textarray[" + OString::number(i + 1) + "]";
+        assertXPathContent(pXmlDoc, sXPath + "/text", sText);
+        assertXPath(pXmlDoc, sXPath, "index", OUString::number(index));
+        assertXPath(pXmlDoc, sXPath, "length", OUString::number(length));
+        assertXPath(pXmlDoc, sXPath, "x", OUString::number(x));
+        assertXPath(pXmlDoc, sXPath, "y", OUString::number(y));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf164622)
+{
+    createSdImpressDoc("pptx/tdf164622.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // Without the fix, the test fails with:
+    // - Expected: 8998
+    // - Actual  : 892
+    // - In <>, attribute 'y' of '/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[4]'
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[1]",
+                "x", u"7543");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[1]",
+                "y", u"879");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[2]",
+                "x", u"20453");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[2]",
+                "y", u"879");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[3]",
+                "x", u"20453");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[3]",
+                "y", u"8998");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[4]",
+                "x", u"7543");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[4]",
+                "y", u"8998");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[5]",
+                "x", u"7543");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[5]",
+                "y", u"879");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
+{
+    // Test UseTrailingEmptyLinesInLayout compatibility option.
+    // The test documents have an auto-shrink text "textbox\n\n"; the box itself is positioned
+    // identically in all cases; the text is aligned to bottom.
+    // When "UseTrailingEmptyLinesInLayout" is set, "textbox" string is placed higher, than when
+    // the setting is not set (y value ~6700 vs. ~8100).
+
+    // The existing ODPs have a standard draw:text-box. It produces three textarray elements,
+    // in order from bottom to top. We need the topmost, third.
+
+    // 1. UseTrailingEmptyLinesInLayout must be enabled in an existing ODP with respective option
+    // in settings.xml
+    loadFromFile(u"odp/trailing-paragraphs-compat.odp");
+    {
+        CPPUNIT_ASSERT(
+            getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['1']/push/push/textarray[3]", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100); // could be 6641 or 6760
+        assertXPathContent(pXml, "/metafile['1']/push/push/textarray[3]/text", u"textbox");
+    }
+
+    // 2. It must stay enabled after ODP round-trip
+    saveAndReload(TestFilter::ODP);
+    {
+        CPPUNIT_ASSERT(
+            getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['2']/push/push/textarray[3]", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        assertXPathContent(pXml, "/metafile['2']/push/push/textarray[3]/text", u"textbox");
+    }
+
+    // 3. It must be disabled in an existing ODP without that option in settings.xml
+    loadFromFile(u"odp/trailing-paragraphs.odp");
+    {
+        CPPUNIT_ASSERT(
+            !getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['3']/push/push/textarray[3]", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8100, y, 100);
+        assertXPathContent(pXml, "/metafile['3']/push/push/textarray[3]/text", u"textbox");
+    }
+
+    // 4. It must stay disabled after ODP round-trip
+    saveAndReload(TestFilter::ODP);
+    {
+        CPPUNIT_ASSERT(
+            !getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['4']/push/push/textarray[3]", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8100, y, 100);
+        assertXPathContent(pXml, "/metafile['4']/push/push/textarray[3]/text", u"textbox");
+    }
+
+    // Now test PPTX and its round-trip. The text there imports as draw:custom-shape; it generates
+    // a single textarray element.
+
+    // 5. It must be enabled for PPTX documents unconditionally
+    loadFromFile(u"pptx/trailing-paragraphs.pptx");
+    {
+        CPPUNIT_ASSERT(
+            getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['5']/push/push/textarray", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        assertXPathContent(pXml, "/metafile['5']/push/push/textarray/text", u"textbox");
+    }
+
+    // 6. Check PPTX round-trip
+    saveAndReload(TestFilter::PPTX);
+    {
+        CPPUNIT_ASSERT(
+            getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['6']/push/push/textarray", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        assertXPathContent(pXml, "/metafile['6']/push/push/textarray/text", u"textbox");
+    }
+
+    // For some reason, saving PPTX to ODT in step 7 below produces negative fo:padding-top, which
+    // fails validation; that is unrelated, so disable validation for now.
+    skipValidation();
+
+    // 7. It must round-trip to ODP
+    saveAndReload(TestFilter::ODP);
+    {
+        CPPUNIT_ASSERT(
+            getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['7']/push/push/textarray", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        assertXPathContent(pXml, "/metafile['7']/push/push/textarray/text", u"textbox");
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128206)
+{
+    createSdImpressDoc("pptx/tdf128206.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // translation
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 1);
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "mapunit", u"MapRelative");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        14416.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x").toDouble(), 3.0);
+    // Without the fix, this failed with
+    // - Expected: 1658
+    // - Actual  : 1415872
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        1658.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y").toDouble(), 3.0);
+    // no scaling
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scalex", u"(1/1)");
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scaley", u"(1/1)");
+
+    // text position
+    // Without the fix, this failed with
+    // - Expected: -11031
+    // - Actual  : -718138
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        -11031.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x").toDouble(), 3.0);
+    // Without the fix, this failed with
+    // - Expected: 3617
+    // - Actual  : -703490
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        3617.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y").toDouble(), 3.0);
+}
+
+CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

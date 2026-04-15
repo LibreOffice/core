@@ -1,0 +1,248 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: IBM Corporation
+ *
+ *  Copyright: 2008 by IBM Corporation
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+/*************************************************************************
+ * @file
+ *  the class for VO_FrameLayout
+ ************************************************************************/
+
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRAMELAYOUT_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRAMELAYOUT_HXX
+
+#include <memory>
+#include "lwplayout.hxx"
+#include "lwpstory.hxx"
+#include "lwpmarker.hxx"
+#include <xfilter/xfframestyle.hxx>
+#include <xfilter/xfframe.hxx>
+
+/**
+ * @brief       For register frame style and parse frame
+ *
+ */
+
+class LwpFrame
+{
+public:
+    explicit LwpFrame(LwpPlacableLayout* pLayout);
+    ~LwpFrame();
+    void RegisterStyle(std::unique_ptr<XFFrameStyle>& rFrameStyle);
+    void Parse(XFFrame* pXFFrame, sal_Int32 nPageNo);
+    void XFConvert(XFContentContainer* pCont);
+
+private:
+    void ApplyWrapType(XFFrameStyle* pFrameStyle);
+    void ApplyMargins(XFFrameStyle* pFrameStyle);
+    void ApplyPadding(XFFrameStyle* pFrameStyle);
+    void ApplyBorders(XFFrameStyle* pFrameStyle);
+    void ApplyColumns(XFFrameStyle* pFrameStyle);
+    void ApplyShadow(XFFrameStyle* pFrameStyle);
+    void ApplyBackColor(XFFrameStyle* pFrameStyle);
+    void ApplyProtect(XFFrameStyle* pFrameStyle);
+    void ApplyTextDir(XFFrameStyle* pFrameStyle);
+    void ApplyPosType(XFFrameStyle* pFrameStyle);
+    void ApplyWatermark(XFFrameStyle* pFrameStyle);
+    void ApplyPatternFill(XFFrameStyle* pFrameStyle);
+    void ApplyBackGround(XFFrameStyle* pFrameStyle);
+    void ParseAnchorType(XFFrame* pXFFrame);
+    bool IsLeftWider();
+
+private:
+    LwpPlacableLayout* m_pLayout;
+    OUString m_StyleName;
+};
+
+/**
+ * @brief       Frame link information
+ *
+ */
+class LwpFrameLink
+{
+public:
+    LwpFrameLink();
+    void Read(LwpObjectStream* pStrm);
+    LwpObjectID& GetNextLayout() { return m_NextLayout; }
+    LwpObjectID& GetPreviousLayout() { return m_PreviousLayout; }
+
+private:
+    LwpObjectID m_PreviousLayout;
+    LwpObjectID m_NextLayout;
+};
+
+/**
+ * @brief       VO_FRAMELAYOUT object
+ *
+ */
+class LwpFrameLayout : public LwpPlacableLayout
+{
+public:
+    LwpFrameLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
+    virtual ~LwpFrameLayout() override;
+    virtual LWP_LAYOUT_TYPE GetLayoutType() override { return LWP_FRAME_LAYOUT; }
+    virtual void RegisterStyle() override;
+    virtual void XFConvert(XFContentContainer* pCont) override;
+    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0,
+                        bool bAll = false) override;
+    OUString GetNextLinkName();
+    bool HasPreviousLinkLayout();
+    bool IsForWaterMark() override;
+    double GetWidth() override;
+    void ApplyGraphicSize(XFFrame* pXFFrame);
+
+protected:
+    void Read() override;
+
+private:
+    double GetMaxWidth();
+
+private:
+    LwpFrameLink m_Link;
+    std::unique_ptr<LwpFrame> m_pFrame;
+    bool m_bGettingMaxWidth;
+};
+
+/**
+ * @brief       VO_GROUPLAYOUT object , information for frame group layout
+ *
+ */
+class LwpGroupLayout : public LwpPlacableLayout
+{
+public:
+    LwpGroupLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
+    virtual ~LwpGroupLayout() override;
+    virtual LWP_LAYOUT_TYPE GetLayoutType() override { return LWP_GROUP_LAYOUT; }
+    virtual void RegisterStyle() override;
+    virtual void XFConvert(XFContentContainer* pCont) override;
+    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0,
+                        bool bAll = false) override;
+
+protected:
+    void Read() override;
+
+private:
+    std::unique_ptr<LwpFrame> m_pFrame;
+};
+
+/**
+ * @brief       VO_GROUPFRAME object , information for frame group contents
+ *
+ */
+class LwpGroupFrame : public LwpContent
+{
+public:
+    LwpGroupFrame(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
+    virtual ~LwpGroupFrame() override;
+    virtual void RegisterStyle() override;
+    virtual void XFConvert(XFContentContainer* pCont) override;
+
+protected:
+    void Read() override;
+};
+
+class LwpStory;
+class LwpFoundry;
+class LwpDropcapLayout : public LwpFrameLayout
+{
+public:
+    LwpDropcapLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
+    virtual LWP_LAYOUT_TYPE GetLayoutType() override { return LWP_DROPCAP_LAYOUT; }
+    virtual void Parse(IXFStream* pOutputStream) override;
+    virtual void XFConvert(XFContentContainer* pCont) override;
+    sal_uInt16 GetLines() const { return m_nLines; }
+    void SetChars(sal_uInt32 nChars) { m_nChars += nChars; }
+    sal_uInt32 GetChars() const { return m_nChars; }
+    void RegisterStyle(LwpFoundry* pFoundry);
+    void RegisterStyle() override;
+
+protected:
+    void Read() override;
+
+private:
+    sal_uInt16 m_nLines;
+    sal_uInt32 m_nChars;
+};
+
+class LwpRubyLayout : public LwpFrameLayout
+{
+public:
+    LwpRubyLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
+    LwpRubyMarker* GetMarker();
+    void ConvertContentText();
+    LwpStory* GetContentStory();
+    void RegisterStyle() override;
+    enum
+    {
+        LEFT = 4,
+        RIGHT = 5,
+        CENTER = 2,
+        TOP = 1,
+        BOTTOM = 3
+    };
+
+protected:
+    void Read() override;
+
+private:
+    sal_uInt8 m_nPlacement;
+    sal_uInt8 m_nAlignment;
+    sal_uInt16 m_nStateFlag;
+    sal_Int32 m_nXOffset;
+    sal_Int32 m_nYOffset;
+    LwpObjectID m_objRubyMarker;
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,11 @@
+SET UTF-8
+WORDCHARS 0123456789'.-’ ̃
+
+MAP 7
+MAP aáãAÁÃ
+MAP eéẽEÉẼ
+MAP iíĩIÍĨ
+MAP gg̃GG̃
+MAP oóõOÓÕ
+MAP uúũUÚŨ
+MAP yýỹYÝỸ

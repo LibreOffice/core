@@ -1,0 +1,128 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+ module com {  module sun {  module star {  module sheet {
+
+
+/** represents a database range in a spreadsheet document.
+
+    <p>A database range is a name for a cell range that also stores filtering,
+    sorting, subtotal and data import settings and options.</p>
+
+    @see com::sun::star::sheet::DatabaseRanges
+ */
+published service DatabaseRange
+{
+    interface com::sun::star::sheet::XDatabaseRange;
+    interface com::sun::star::sheet::XCellRangeReferrer;
+    interface com::sun::star::beans::XPropertySet;
+    interface com::sun::star::container::XNamed;
+
+    [optional] interface com::sun::star::util::XRefreshable;
+
+    /** if this property is set, columns or rows are inserted or deleted
+        when the size of the range is changed by an update operation.
+     */
+    [property] boolean MoveCells;
+
+    /** if this property is set, cell formats are extended
+        when the size of the range is changed by an update operation.
+     */
+    [property] boolean KeepFormats;
+
+    /** if this property is set, the cell contents within the database
+        range are left out when the document is saved.
+     */
+    [property] boolean StripData;
+
+
+    /** specifies whether the AutoFilter is enabled or not.
+     */
+    [optional, property] boolean AutoFilter;
+
+
+    /** specifies whether the filter criteria should be taken from a CellRange.
+     */
+    [optional, property] boolean UseFilterCriteriaSource;
+
+
+    /** specifies the range where the filter can find the filter criteria.
+        <p>This is only used if SheetFilterDescriptor::UseFilterCriteriaSource is `TRUE`.</p>
+     */
+    [optional, property] com::sun::star::table::CellRangeAddress FilterCriteriaSource;
+
+
+    /** specifies the time between two refresh actions in seconds.
+     */
+    [optional, property] long RefreshPeriod;
+
+
+    /** specifies whether the imported data is only a selection of the database.
+     */
+    [optional, property] boolean FromSelection;
+
+
+    /** returns the index used to refer to this range in token arrays.
+
+        <p>A token describing a database range shall contain the op-code
+        obtained from the FormulaMapGroupSpecialOffset::DB_AREA
+        and this index as data part.</p>
+
+        @see com::sun::star::sheet::FormulaToken
+        @see com::sun::star::sheet::FormulaMapGroupSpecialOffset::DB_AREA
+     */
+    [optional, readonly, property] long TokenIndex;
+
+
+    /** specifies whether this range includes a bottom row of totals.
+     */
+    [optional, property] boolean TotalsRow;
+
+
+    /** specifies whether this range includes a top row of headers.
+     */
+    [optional, property] boolean ContainsHeader;
+
+    /** specifies the name of the table style.
+     */
+    [optional, property] string TableStyleName;
+
+    /** specifies that the first and second row colors are different.
+     */
+    [optional, property] boolean UseRowStripes;
+
+    /** specifies that the first and second col colors are different.
+     */
+    [optional, property] boolean UseColStripes;
+
+    /** specifies that the first col has different format or not.
+     */
+    [optional, property] boolean UseFirstColumnFormatting;
+
+    /** specifies that the last col has different format or not.
+     */
+    [optional, property] boolean UseLastColumnFormatting;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

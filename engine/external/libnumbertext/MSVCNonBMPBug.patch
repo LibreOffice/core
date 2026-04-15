@@ -1,0 +1,69 @@
+MSVC's std::codecvt_utf8 has a bug converting non-BMP codepoints like U+10CFA.
+Use MultiByteToWideChar/WideCharToMultiByte instead on Windows.
+
+diff --git a/src/Numbertext.cxx b/src/Numbertext.cxx
+index 5f05b48579af..eb83e59f366f 100755
+--- a/src/Numbertext.cxx
++++ b/src/Numbertext.cxx
+@@ -7,6 +7,10 @@
+ #include <sstream>
+ #include <fstream>
+ 
++#ifdef _WIN32
++#include <Windows.h>
++#endif
++
+ #include "Numbertext.hxx"
+ 
+ #ifdef NUMBERTEXT_BOOST
+@@ -22,6 +26,14 @@
+ 
+ bool readfile(const std::string& filename, std::wstring& result)
+ {
++#ifdef _WIN32
++    std::ifstream ifs(filename);
++    if (ifs.fail())
++        return false;
++    std::stringstream ss;
++    ss << ifs.rdbuf();
++    result = Numbertext::string2wstring(ss.str());
++#else
+     std::wifstream wif(filename);
+     if (wif.fail())
+         return false;
+@@ -29,6 +44,7 @@ bool readfile(const std::string& filename, std::wstring& result)
+     std::wstringstream wss;
+     wss << wif.rdbuf();
+     result = wss.str();
++#endif
+     return true;
+ }
+ 
+@@ -99,7 +112,12 @@
+ 
+ std::wstring Numbertext::string2wstring(const std::string& s)
+ {
+-#ifndef NUMBERTEXT_BOOST
++#ifdef _WIN32
++    int nSize = MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, nullptr, 0);
++    std::unique_ptr<wchar_t[]> wstr(new wchar_t[nSize]);
++    MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, wstr.get(), nSize);
++    return wstr.get();
++#elif !defined NUMBERTEXT_BOOST
+     typedef std::codecvt_utf8<wchar_t> convert_type;
+     std::wstring_convert<convert_type, wchar_t> converter;
+     return converter.from_bytes( s );
+@@ -110,7 +128,12 @@
+ 
+ std::string Numbertext::wstring2string(const std::wstring& s)
+ {
+-#ifndef NUMBERTEXT_BOOST
++#ifdef _WIN32
++    int nSize = WideCharToMultiByte(CP_UTF8, 0, s.c_str(), -1, nullptr, 0, nullptr, nullptr);
++    std::unique_ptr<char[]> str(new char[nSize]);
++    WideCharToMultiByte(CP_UTF8, 0, s.c_str(), -1, str.get(), nSize, nullptr, nullptr);
++    return str.get();
++#elif !defined NUMBERTEXT_BOOST
+     typedef std::codecvt_utf8<wchar_t> convert_type;
+     std::wstring_convert<convert_type, wchar_t> converter;
+     return converter.to_bytes( s );

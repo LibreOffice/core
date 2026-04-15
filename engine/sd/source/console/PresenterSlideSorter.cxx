@@ -1,0 +1,1944 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <utility>
+#include <vcl/settings.hxx>
+
+#include "PresenterSlideSorter.hxx"
+#include "PresenterButton.hxx"
+#include "PresenterCanvasHelper.hxx"
+#include "PresenterGeometryHelper.hxx"
+#include "PresenterPaintManager.hxx"
+#include "PresenterPaneBase.hxx"
+#include "PresenterScrollBar.hxx"
+#include "PresenterUIPainter.hxx"
+#include "PresenterWindowManager.hxx"
+#include <DrawController.hxx>
+#include <framework/ConfigurationController.hxx>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/TextDirection.hpp>
+#include <algorithm>
+#include <math.h>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing::framework;
+
+namespace {
+    const sal_Int32 gnVerticalGap (10);
+    const sal_Int32 gnVerticalBorder (10);
+    const sal_Int32 gnHorizontalGap (10);
+    const sal_Int32 gnHorizontalBorder (10);
+
+    const double gnMinimalPreviewWidth (200);
+    const double gnPreferredPreviewWidth (300);
+    const double gnMaximalPreviewWidth (400);
+    const sal_Int32 gnPreferredColumnCount (6);
+    const double gnMinimalHorizontalPreviewGap(15);
+    const double gnPreferredHorizontalPreviewGap(25);
+    const double gnMaximalHorizontalPreviewGap(50);
+    const double gnPreferredVerticalPreviewGap(25);
+
+    const sal_Int32 gnHorizontalLabelBorder (3);
+    const sal_Int32 gnHorizontalLabelPadding (5);
+
+    const sal_Int32 gnVerticalButtonPadding (gnVerticalGap);
+}
+
+namespace sdext::presenter {
+
+namespace {
+    sal_Int32 round (const double nValue) { return sal::static_int_cast<sal_Int32>(0.5 + nValue); }
+    sal_Int32 floor (const double nValue) { return sal::static_int_cast<sal_Int32>(nValue); }
+}
+
+//===== PresenterSlideSorter::Layout ==========================================
+
+class PresenterSlideSorter::Layout
+{
+public:
+    explicit Layout (::rtl::Reference<PresenterScrollBar> xVerticalScrollBar);
+
+    void Update (const geometry::RealRectangle2D& rBoundingBox, const double nSlideAspectRatio);
+    void SetupVisibleArea();
+    void UpdateScrollBars();
+    bool IsScrollBarNeeded (const sal_Int32 nSlideCount);
+    geometry::RealPoint2D GetLocalPosition (const geometry::RealPoint2D& rWindowPoint) const;
+    geometry::RealPoint2D GetWindowPosition(const geometry::RealPoint2D& rLocalPoint) const;
+    sal_Int32 GetColumn (const geometry::RealPoint2D& rLocalPoint) const;
+    sal_Int32 GetRow (const geometry::RealPoint2D& rLocalPoint,
+        const bool bReturnInvalidValue = false) const;
+    sal_Int32 GetSlideIndexForPosition (const css::geometry::RealPoint2D& rPoint) const;
+    css::geometry::RealPoint2D GetPoint (
+        const sal_Int32 nSlideIndex,
+        const sal_Int32 nRelativeHorizontalPosition,
+        const sal_Int32 nRelativeVerticalPosition) const;
+    css::awt::Rectangle GetBoundingBox (const sal_Int32 nSlideIndex) const;
+    void ForAllVisibleSlides (const ::std::function<void (sal_Int32)>& rAction);
+    sal_Int32 GetFirstVisibleSlideIndex() const;
+    sal_Int32 GetLastVisibleSlideIndex() const;
+    bool SetHorizontalOffset (const double nOffset);
+    bool SetVerticalOffset (const double nOffset);
+
+    css::geometry::RealRectangle2D maBoundingBox;
+    css::geometry::IntegerSize2D maPreviewSize;
+    sal_Int32 mnHorizontalOffset;
+    sal_Int32 mnVerticalOffset;
+    sal_Int32 mnHorizontalGap;
+    sal_Int32 mnVerticalGap;
+    sal_Int32 mnHorizontalBorder;
+    sal_Int32 mnVerticalBorder;
+    sal_Int32 mnRowCount;
+    sal_Int32 mnColumnCount;
+    sal_Int32 mnSlideCount;
+    sal_Int32 mnFirstVisibleColumn;
+    sal_Int32 mnLastVisibleColumn;
+    sal_Int32 mnFirstVisibleRow;
+    sal_Int32 mnLastVisibleRow;
+
+private:
+    ::rtl::Reference<PresenterScrollBar> mpVerticalScrollBar;
+
+    sal_Int32 GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const;
+    sal_Int32 GetRow (const sal_Int32 nSlideIndex) const;
+    sal_Int32 GetColumn (const sal_Int32 nSlideIndex) const;
+};
+
+//==== PresenterSlideSorter::MouseOverManager =================================
+
+class PresenterSlideSorter::MouseOverManager
+{
+public:
+    MouseOverManager (
+        const Reference<container::XIndexAccess>& rxSlides,
+        const std::shared_ptr<PresenterTheme>& rpTheme,
+        const Reference<awt::XWindow>& rxInvalidateTarget,
+        std::shared_ptr<PresenterPaintManager> xPaintManager);
+    MouseOverManager(const MouseOverManager&) = delete;
+    MouseOverManager& operator=(const MouseOverManager&) = delete;
+
+    void Paint (
+        const sal_Int32 nSlideIndex,
+        const Reference<rendering::XCanvas>& rxCanvas,
+        const Reference<rendering::XPolyPolygon2D>& rxClip);
+
+    void SetSlide (
+        const sal_Int32 nSlideIndex,
+        const awt::Rectangle& rBox);
+
+private:
+    Reference<rendering::XCanvas> mxCanvas;
+    const Reference<container::XIndexAccess> mxSlides;
+    SharedBitmapDescriptor mpLeftLabelBitmap;
+    SharedBitmapDescriptor mpCenterLabelBitmap;
+    SharedBitmapDescriptor mpRightLabelBitmap;
+    PresenterTheme::SharedFontDescriptor mpFont;
+    sal_Int32 mnSlideIndex;
+    awt::Rectangle maSlideBoundingBox;
+    OUString msText;
+    Reference<rendering::XBitmap> mxBitmap;
+    Reference<awt::XWindow> mxInvalidateTarget;
+    std::shared_ptr<PresenterPaintManager> mpPaintManager;
+
+    void SetCanvas (
+        const Reference<rendering::XCanvas>& rxCanvas);
+    /** Create a bitmap that shows the given text and is not wider than the
+        given maximal width.
+    */
+    Reference<rendering::XBitmap> CreateBitmap (
+        const OUString& rsText,
+        const sal_Int32 nMaximalWidth) const;
+    void Invalidate();
+    geometry::IntegerSize2D CalculateLabelSize (
+        const OUString& rsText) const;
+    OUString GetFittingText (const OUString& rsText, const double nMaximalWidth) const;
+    void PaintButtonBackground (
+        const Reference<rendering::XCanvas>& rxCanvas,
+        const geometry::IntegerSize2D& rSize) const;
+};
+
+//==== PresenterSlideSorter::CurrentSlideFrameRenderer ========================
+
+class PresenterSlideSorter::CurrentSlideFrameRenderer
+{
+public:
+    CurrentSlideFrameRenderer (
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
+
+    void PaintCurrentSlideFrame (
+        const awt::Rectangle& rSlideBoundingBox,
+        const Reference<rendering::XCanvas>& rxCanvas,
+        const geometry::RealRectangle2D& rClipBox);
+
+    /** Enlarge the given rectangle to include the current slide indicator.
+    */
+    awt::Rectangle GetBoundingBox (
+        const awt::Rectangle& rSlideBoundingBox);
+
+private:
+    SharedBitmapDescriptor mpTopLeft;
+    SharedBitmapDescriptor mpTop;
+    SharedBitmapDescriptor mpTopRight;
+    SharedBitmapDescriptor mpLeft;
+    SharedBitmapDescriptor mpRight;
+    SharedBitmapDescriptor mpBottomLeft;
+    SharedBitmapDescriptor mpBottom;
+    SharedBitmapDescriptor mpBottomRight;
+    sal_Int32 mnTopFrameSize;
+    sal_Int32 mnLeftFrameSize;
+    sal_Int32 mnRightFrameSize;
+    sal_Int32 mnBottomFrameSize;
+
+    static void PaintBitmapOnce(
+        const css::uno::Reference<css::rendering::XBitmap>& rxBitmap,
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const Reference<rendering::XPolyPolygon2D>& rxClip,
+        const double nX,
+        const double nY);
+    static void PaintBitmapTiled(
+        const css::uno::Reference<css::rendering::XBitmap>& rxBitmap,
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const geometry::RealRectangle2D& rClipBox,
+        const double nX,
+        const double nY,
+        const double nWidth,
+        const double nHeight);
+};
+
+//===== PresenterSlideSorter ==================================================
+
+PresenterSlideSorter::PresenterSlideSorter (
+    const Reference<uno::XComponentContext>& rxContext,
+    const rtl::Reference<sd::framework::ResourceId>& rxViewId,
+    const rtl::Reference<::sd::DrawController>& rxController,
+    const ::rtl::Reference<PresenterController>& rpPresenterController)
+    : mxComponentContext(rxContext),
+      mxViewId(rxViewId),
+      mpPresenterController(rpPresenterController),
+      mxSlideShowController(mpPresenterController->GetSlideShowController()),
+      mbIsLayoutPending(true),
+      mnSlideIndexMousePressed(-1),
+      mnCurrentSlideIndex(-1),
+      mnSeparatorY(0),
+      maSeparatorColor(0x00ffffff)
+{
+    if ( ! rxContext.is()
+        || ! rxViewId.is()
+        || ! rxController.is()
+        || ! rpPresenterController)
+    {
+        throw lang::IllegalArgumentException();
+    }
+
+    if ( ! mxSlideShowController.is())
+        throw RuntimeException();
+
+    try
+    {
+        // Get pane and window.
+        rtl::Reference<sd::framework::ConfigurationController> xCC (rxController->getConfigurationController());
+        Reference<lang::XMultiComponentFactory> xFactory (
+            mxComponentContext->getServiceManager(), UNO_SET_THROW);
+
+        mxPane = dynamic_cast<sd::framework::AbstractPane*>(xCC->getResource(rxViewId->getAnchor()).get());
+        mxWindow = mxPane->getWindow();
+
+        // Add window listener.
+        mxWindow->addWindowListener(this);
+        mxWindow->addPaintListener(this);
+        mxWindow->addMouseListener(this);
+        mxWindow->addMouseMotionListener(this);
+        mxWindow->setVisible(true);
+
+        // Remember the current slide.
+        mnCurrentSlideIndex = mxSlideShowController->getCurrentSlideIndex();
+
+        // Create the scroll bar.
+        mpVerticalScrollBar.set(
+            new PresenterVerticalScrollBar(
+                rxContext,
+                mxWindow,
+                mpPresenterController->GetPaintManager(),
+                [this] (double const offset) { return this->SetVerticalOffset(offset); }));
+
+        mpCloseButton = PresenterButton::Create(
+            rxContext,
+            mpPresenterController,
+            mpPresenterController->GetTheme(),
+            mxWindow,
+            mxCanvas,
+            u"SlideSorterCloser"_ustr);
+
+        if (mpPresenterController->GetTheme() != nullptr)
+        {
+            PresenterTheme::SharedFontDescriptor pFont (
+                mpPresenterController->GetTheme()->GetFont(u"ButtonFont"_ustr));
+            if (pFont)
+                maSeparatorColor = pFont->mnColor;
+        }
+
+        // Create the layout.
+        mpLayout = std::make_shared<Layout>(mpVerticalScrollBar);
+
+        // Create the preview cache.
+        mxPreviewCache = new sd::presenter::PresenterPreviewCache();
+        Reference<container::XIndexAccess> xSlides (mxSlideShowController, UNO_QUERY);
+        mxPreviewCache->setDocumentSlides(xSlides, rxController->getModel());
+        mxPreviewCache->addPreviewCreationNotifyListener(this);
+        if (xSlides.is())
+        {
+            mpLayout->mnSlideCount = xSlides->getCount();
+        }
+
+        // Create the mouse over manager.
+        mpMouseOverManager.reset(new MouseOverManager(
+            Reference<container::XIndexAccess>(mxSlideShowController, UNO_QUERY),
+            mpPresenterController->GetTheme(),
+            mxWindow,
+            mpPresenterController->GetPaintManager()));
+
+        // Listen for changes of the current slide.
+        rxController->addPropertyChangeListener(
+            u"CurrentPage"_ustr,
+            this);
+
+        // Move the current slide in the center of the window.
+        const awt::Rectangle aCurrentSlideBBox (mpLayout->GetBoundingBox(mnCurrentSlideIndex));
+        const awt::Rectangle aWindowBox (mxWindow->getPosSize());
+        SetHorizontalOffset(aCurrentSlideBBox.X - aWindowBox.Width/2.0);
+    }
+    catch (RuntimeException&)
+    {
+        {
+            std::unique_lock l(m_aMutex);
+            disposing(l);
+        }
+        throw;
+    }
+}
+
+PresenterSlideSorter::~PresenterSlideSorter()
+{
+}
+
+void PresenterSlideSorter::disposing(std::unique_lock<std::mutex>&)
+{
+    mxComponentContext = nullptr;
+    mxViewId = nullptr;
+    mxPane = nullptr;
+
+    if (mpVerticalScrollBar.is())
+    {
+        rtl::Reference<PresenterScrollBar> xComponent = std::move(mpVerticalScrollBar);
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+    if (mpCloseButton.is())
+    {
+        rtl::Reference<PresenterButton> xComponent = std::move(mpCloseButton);
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+
+    if (mxCanvas.is())
+    {
+        Reference<lang::XComponent> xComponent (mxCanvas, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener(static_cast<awt::XWindowListener*>(this));
+        mxCanvas = nullptr;
+    }
+    mpPresenterController = nullptr;
+    mxSlideShowController = nullptr;
+    mpLayout.reset();
+    mpMouseOverManager.reset();
+
+    if (mxPreviewCache.is())
+    {
+        mxPreviewCache->removePreviewCreationNotifyListener(this);
+        if (mxPreviewCache.is())
+            mxPreviewCache->dispose();
+        mxPreviewCache = nullptr;
+    }
+
+    if (mxWindow.is())
+    {
+        mxWindow->removeWindowListener(this);
+        mxWindow->removePaintListener(this);
+        mxWindow->removeMouseListener(this);
+        mxWindow->removeMouseMotionListener(this);
+    }
+}
+
+//----- lang::XEventListener --------------------------------------------------
+
+void SAL_CALL PresenterSlideSorter::disposing (const lang::EventObject& rEventObject)
+{
+    if (rEventObject.Source == mxWindow)
+    {
+        mxWindow = nullptr;
+        dispose();
+    }
+    else if (rEventObject.Source == cppu::getXWeak(mxPreviewCache.get()))
+    {
+        mxPreviewCache = nullptr;
+        dispose();
+    }
+    else if (rEventObject.Source == mxCanvas)
+    {
+        mxCanvas = nullptr;
+        mbIsLayoutPending = true;
+
+        mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
+    }
+}
+
+//----- XWindowListener -------------------------------------------------------
+
+void SAL_CALL PresenterSlideSorter::windowResized (const awt::WindowEvent&)
+{
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
+    mbIsLayoutPending = true;
+    mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
+}
+
+void SAL_CALL PresenterSlideSorter::windowMoved (const awt::WindowEvent&)
+{
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
+}
+
+void SAL_CALL PresenterSlideSorter::windowShown (const lang::EventObject&)
+{
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
+    mbIsLayoutPending = true;
+    mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
+}
+
+void SAL_CALL PresenterSlideSorter::windowHidden (const lang::EventObject&)
+{
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
+}
+
+//----- XPaintListener --------------------------------------------------------
+
+void SAL_CALL PresenterSlideSorter::windowPaint (const css::awt::PaintEvent& rEvent)
+{
+    // Deactivated views must not be painted.
+    if ( ! mbIsPresenterViewActive)
+        return;
+
+    Paint(rEvent.UpdateRect);
+
+    Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
+    if (xSpriteCanvas.is())
+        xSpriteCanvas->updateScreen(false);
+}
+
+//----- XMouseListener --------------------------------------------------------
+
+void SAL_CALL PresenterSlideSorter::mousePressed (const css::awt::MouseEvent& rEvent)
+{
+    css::awt::MouseEvent rTemp =rEvent;
+    /// check whether RTL interface or not
+    if(AllSettings::GetLayoutRTL()){
+        awt::Rectangle aBox = mxWindow->getPosSize();
+        rTemp.X=aBox.Width-rEvent.X;
+    }
+    const geometry::RealPoint2D aPosition(rTemp.X, rEvent.Y);
+    mnSlideIndexMousePressed = mpLayout->GetSlideIndexForPosition(aPosition);
+}
+
+void SAL_CALL PresenterSlideSorter::mouseReleased (const css::awt::MouseEvent& rEvent)
+{
+    css::awt::MouseEvent rTemp =rEvent;
+    /// check whether RTL interface or not
+    if(AllSettings::GetLayoutRTL()){
+        awt::Rectangle aBox = mxWindow->getPosSize();
+        rTemp.X=aBox.Width-rEvent.X;
+    }
+    const geometry::RealPoint2D aPosition(rTemp.X, rEvent.Y);
+    const sal_Int32 nSlideIndex (mpLayout->GetSlideIndexForPosition(aPosition));
+
+    if (nSlideIndex != mnSlideIndexMousePressed || mnSlideIndexMousePressed < 0)
+        return;
+
+    switch (rEvent.ClickCount)
+    {
+        case 1:
+        default:
+            GotoSlide(nSlideIndex);
+            break;
+
+        case 2:
+            OSL_ASSERT(mpPresenterController);
+            OSL_ASSERT(mpPresenterController->GetWindowManager());
+            mpPresenterController->GetWindowManager()->SetSlideSorterState(false);
+            GotoSlide(nSlideIndex);
+            break;
+    }
+}
+
+void SAL_CALL PresenterSlideSorter::mouseEntered (const css::awt::MouseEvent&) {}
+
+void SAL_CALL PresenterSlideSorter::mouseExited (const css::awt::MouseEvent&)
+{
+    mnSlideIndexMousePressed = -1;
+    if (mpMouseOverManager != nullptr)
+        mpMouseOverManager->SetSlide(mnSlideIndexMousePressed, awt::Rectangle(0,0,0,0));
+}
+
+//----- XMouseMotionListener --------------------------------------------------
+
+void SAL_CALL PresenterSlideSorter::mouseMoved (const css::awt::MouseEvent& rEvent)
+{
+    if (mpMouseOverManager == nullptr)
+        return;
+
+    css::awt::MouseEvent rTemp =rEvent;
+    /// check whether RTL interface or not
+    if(AllSettings::GetLayoutRTL()){
+        awt::Rectangle aBox = mxWindow->getPosSize();
+        rTemp.X=aBox.Width-rEvent.X;
+    }
+    const geometry::RealPoint2D aPosition(rTemp.X, rEvent.Y);
+    sal_Int32 nSlideIndex (mpLayout->GetSlideIndexForPosition(aPosition));
+
+    if (nSlideIndex < 0)
+    {
+        mnSlideIndexMousePressed = -1;
+        mpMouseOverManager->SetSlide(nSlideIndex, awt::Rectangle(0,0,0,0));
+    }
+    else
+    {
+        mpMouseOverManager->SetSlide(
+            nSlideIndex,
+            mpLayout->GetBoundingBox(nSlideIndex));
+    }
+}
+
+void SAL_CALL PresenterSlideSorter::mouseDragged (const css::awt::MouseEvent&) {}
+
+//----- AbstractResource -----------------------------------------------------------
+
+rtl::Reference<sd::framework::ResourceId> PresenterSlideSorter::getResourceId()
+{
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
+    return mxViewId;
+}
+
+bool PresenterSlideSorter::isAnchorOnly()
+{
+    return false;
+}
+
+//----- XPropertyChangeListener -----------------------------------------------
+
+void SAL_CALL PresenterSlideSorter::propertyChange (
+    const css::beans::PropertyChangeEvent&)
+{}
+
+//----- XSlidePreviewCacheListener --------------------------------------------
+
+void SAL_CALL PresenterSlideSorter::notifyPreviewCreation (
+    sal_Int32 nSlideIndex)
+{
+    OSL_ASSERT(mpLayout != nullptr);
+
+    awt::Rectangle aBBox (mpLayout->GetBoundingBox(nSlideIndex));
+    mpPresenterController->GetPaintManager()->Invalidate(mxWindow, aBBox, true);
+}
+
+//----- XDrawView -------------------------------------------------------------
+
+void SAL_CALL PresenterSlideSorter::setCurrentPage (const Reference<drawing::XDrawPage>&)
+{
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
+    ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
+
+    if (!mxSlideShowController.is())
+        return;
+
+    const sal_Int32 nNewCurrentSlideIndex (mxSlideShowController->getCurrentSlideIndex());
+    if (nNewCurrentSlideIndex == mnCurrentSlideIndex)
+        return;
+
+    mnCurrentSlideIndex = nNewCurrentSlideIndex;
+
+    // Request a repaint of the previous current slide to hide its
+    // current slide indicator.
+    mpPresenterController->GetPaintManager()->Invalidate(
+        mxWindow,
+        maCurrentSlideFrameBoundingBox);
+
+    // Request a repaint of the new current slide to show its
+    // current slide indicator.
+    maCurrentSlideFrameBoundingBox = mpCurrentSlideFrameRenderer->GetBoundingBox(
+        mpLayout->GetBoundingBox(mnCurrentSlideIndex));
+    mpPresenterController->GetPaintManager()->Invalidate(
+        mxWindow,
+        maCurrentSlideFrameBoundingBox);
+
+    ScrollSlideIntoView(mnCurrentSlideIndex);
+}
+
+Reference<drawing::XDrawPage> SAL_CALL PresenterSlideSorter::getCurrentPage()
+{
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
+    return nullptr;
+}
+
+
+void PresenterSlideSorter::UpdateLayout()
+{
+    if ( ! mxWindow.is())
+        return;
+
+    mbIsLayoutPending = false;
+
+    const awt::Rectangle aWindowBox (mxWindow->getPosSize());
+    sal_Int32 nLeftBorderWidth (aWindowBox.X);
+
+    // Get border width.
+    PresenterPaneContainer::SharedPaneDescriptor pPane (
+        mpPresenterController->GetPaneContainer()->FindViewURL(
+            mxViewId->getResourceURL()));
+    do
+    {
+        if (!pPane)
+            break;
+        if ( ! pPane->mxPane.is())
+            break;
+
+        rtl::Reference<PresenterPaneBorderPainter> xBorderPainter (
+            pPane->mxPane->GetPaneBorderPainter());
+        if ( ! xBorderPainter.is())
+            break;
+        xBorderPainter->addBorder (
+            mxViewId->getAnchor()->getResourceURL(),
+            awt::Rectangle(0, 0, aWindowBox.Width, aWindowBox.Height),
+            BorderType::INNER);
+    }
+    while(false);
+
+    // Place vertical separator.
+    mnSeparatorY = aWindowBox.Height - mpCloseButton->GetSize().Height - gnVerticalButtonPadding;
+
+    PlaceCloseButton(pPane, aWindowBox, nLeftBorderWidth);
+
+    geometry::RealRectangle2D aUpperBox(
+        gnHorizontalBorder,
+        gnVerticalBorder,
+        aWindowBox.Width - 2*gnHorizontalBorder,
+        mnSeparatorY - gnVerticalGap);
+
+    // Determine whether the scroll bar has to be displayed.
+    aUpperBox = PlaceScrollBars(aUpperBox);
+
+    mpLayout->Update(aUpperBox, GetSlideAspectRatio());
+    mpLayout->SetupVisibleArea();
+    mpLayout->UpdateScrollBars();
+
+    // Tell the preview cache about some of the values.
+    mxPreviewCache->setPreviewSize(mpLayout->maPreviewSize);
+    mxPreviewCache->setVisibleRange(
+        mpLayout->GetFirstVisibleSlideIndex(),
+        mpLayout->GetLastVisibleSlideIndex());
+
+    // Clear the frame polygon so that it is re-created on the next paint.
+    mxPreviewFrame = nullptr;
+}
+
+geometry::RealRectangle2D PresenterSlideSorter::PlaceScrollBars (
+    const geometry::RealRectangle2D& rUpperBox)
+{
+    mpLayout->Update(rUpperBox, GetSlideAspectRatio());
+    bool bIsScrollBarNeeded (false);
+    Reference<container::XIndexAccess> xSlides (mxSlideShowController, UNO_QUERY_THROW);
+    bIsScrollBarNeeded = mpLayout->IsScrollBarNeeded(xSlides->getCount());
+    if (mpVerticalScrollBar)
+    {
+            if (bIsScrollBarNeeded)
+            {
+                    if(AllSettings::GetLayoutRTL())
+                    {
+                            mpVerticalScrollBar->SetPosSize(geometry::RealRectangle2D(
+                                                                                      rUpperBox.X1,
+                                                                                      rUpperBox.Y1,
+                                                                                      rUpperBox.X1 +  mpVerticalScrollBar->GetSize(),
+                                                                                      rUpperBox.Y2));
+                            mpVerticalScrollBar->SetVisible(true);
+                            // Reduce area covered by the scroll bar from the available
+                            // space.
+                            return geometry::RealRectangle2D(
+                                                             rUpperBox.X1 + gnHorizontalGap + mpVerticalScrollBar->GetSize(),
+                                                             rUpperBox.Y1,
+                                                             rUpperBox.X2,
+                                                             rUpperBox.Y2);
+                    }
+                    else
+                    {
+                            // if it's not RTL place vertical scroll bar at right border.
+                            mpVerticalScrollBar->SetPosSize(geometry::RealRectangle2D(
+                                                                                      rUpperBox.X2 - mpVerticalScrollBar->GetSize(),
+                                                                                      rUpperBox.Y1,
+                                                                                      rUpperBox.X2,
+                                                                                      rUpperBox.Y2));
+                            mpVerticalScrollBar->SetVisible(true);
+                            // Reduce area covered by the scroll bar from the available
+                            // space.
+                            return geometry::RealRectangle2D(
+                                                             rUpperBox.X1,
+                                                             rUpperBox.Y1,
+                                                             rUpperBox.X2 - mpVerticalScrollBar->GetSize() - gnHorizontalGap,
+                                                             rUpperBox.Y2);
+                    }
+            }
+            else
+                mpVerticalScrollBar->SetVisible(false);
+    }
+    return rUpperBox;
+}
+
+void PresenterSlideSorter::PlaceCloseButton (
+    const PresenterPaneContainer::SharedPaneDescriptor& rpPane,
+    const awt::Rectangle& rCenterBox,
+    const sal_Int32 nLeftBorderWidth)
+{
+    // Place button.  When the callout is near the center then the button is
+    // centered over the callout.  Otherwise it is centered with respect to
+    // the whole window.
+    sal_Int32 nCloseButtonCenter (rCenterBox.Width/2);
+    if (rpPane && rpPane->mxPane.is())
+    {
+        const sal_Int32 nCalloutCenter (-nLeftBorderWidth);
+        const sal_Int32 nDistanceFromWindowCenter (abs(nCalloutCenter - rCenterBox.Width/2));
+        const sal_Int32 nButtonWidth (mpCloseButton->GetSize().Width);
+        const static sal_Int32 nMaxDistanceForCalloutCentering (nButtonWidth * 2);
+        if (nDistanceFromWindowCenter < nMaxDistanceForCalloutCentering)
+        {
+            if (nCalloutCenter < nButtonWidth/2)
+                nCloseButtonCenter = nButtonWidth/2;
+            else if (nCalloutCenter > rCenterBox.Width-nButtonWidth/2)
+                nCloseButtonCenter = rCenterBox.Width-nButtonWidth/2;
+            else
+                nCloseButtonCenter = nCalloutCenter;
+        }
+    }
+    mpCloseButton->SetCenter(geometry::RealPoint2D(
+        nCloseButtonCenter,
+        rCenterBox.Height - mpCloseButton->GetSize().Height/ 2));
+}
+
+void PresenterSlideSorter::ClearBackground (
+    const Reference<rendering::XCanvas>& rxCanvas,
+    const awt::Rectangle& rUpdateBox)
+{
+    OSL_ASSERT(rxCanvas.is());
+
+    const awt::Rectangle aWindowBox (mxWindow->getPosSize());
+    mpPresenterController->GetCanvasHelper()->Paint(
+        mpPresenterController->GetViewBackground(mxViewId->getResourceURL()),
+        rxCanvas,
+        rUpdateBox,
+        awt::Rectangle(0,0,aWindowBox.Width,aWindowBox.Height),
+        awt::Rectangle());
+}
+
+double PresenterSlideSorter::GetSlideAspectRatio() const
+{
+    double nSlideAspectRatio (28.0/21.0);
+
+    try
+    {
+        Reference<container::XIndexAccess> xSlides(mxSlideShowController, UNO_QUERY_THROW);
+        if (mxSlideShowController.is() && xSlides->getCount()>0)
+        {
+            Reference<beans::XPropertySet> xProperties(xSlides->getByIndex(0),UNO_QUERY_THROW);
+            sal_Int32 nWidth (28000);
+            sal_Int32 nHeight (21000);
+            if ((xProperties->getPropertyValue(u"Width"_ustr) >>= nWidth)
+                && (xProperties->getPropertyValue(u"Height"_ustr) >>= nHeight)
+                && nHeight > 0)
+            {
+                nSlideAspectRatio = double(nWidth) / double(nHeight);
+            }
+        }
+    }
+    catch (RuntimeException&)
+    {
+        OSL_ASSERT(false);
+    }
+
+    return nSlideAspectRatio;
+}
+
+Reference<rendering::XBitmap> PresenterSlideSorter::GetPreview (const sal_Int32 nSlideIndex)
+{
+    if (nSlideIndex < 0 || nSlideIndex>=mpLayout->mnSlideCount)
+        return nullptr;
+    else if (mxPane.is())
+        return mxPreviewCache->getSlidePreview(nSlideIndex, mxPane->getCanvas());
+    else
+        return nullptr;
+}
+
+void PresenterSlideSorter::PaintPreview (
+    const Reference<rendering::XCanvas>& rxCanvas,
+    const css::awt::Rectangle& rUpdateBox,
+    const sal_Int32 nSlideIndex)
+{
+    OSL_ASSERT(rxCanvas.is());
+
+    geometry::IntegerSize2D aSize (mpLayout->maPreviewSize);
+
+    if (PresenterGeometryHelper::AreRectanglesDisjoint(
+        rUpdateBox,
+        mpLayout->GetBoundingBox(nSlideIndex)))
+    {
+        return;
+    }
+
+    Reference<rendering::XBitmap> xPreview (GetPreview(nSlideIndex));
+    bool isRTL = AllSettings::GetLayoutRTL();
+
+    const geometry::RealPoint2D aTopLeft (
+                                          mpLayout->GetWindowPosition(
+                                                                      mpLayout->GetPoint(nSlideIndex, isRTL?1:-1, -1)));
+
+    PresenterBitmapContainer aContainer (
+        u"PresenterScreenSettings/ScrollBar/Bitmaps"_ustr,
+        std::shared_ptr<PresenterBitmapContainer>(),
+        mxComponentContext,
+        rxCanvas);
+    Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
+    Reference<drawing::XDrawPage> xPage( xIndexAccess->getByIndex(nSlideIndex), UNO_QUERY);
+    bool bTransition = PresenterController::HasTransition(xPage);
+    bool bCustomAnimation = PresenterController::HasCustomAnimation(xPage);
+
+    // Create clip rectangle as intersection of the current update area and
+    // the bounding box of all previews.
+    geometry::RealRectangle2D aBoundingBox (mpLayout->maBoundingBox);
+    aBoundingBox.Y2 += 1;
+    const geometry::RealRectangle2D aClipBox (
+        PresenterGeometryHelper::Intersection(
+            PresenterGeometryHelper::ConvertRectangle(rUpdateBox),
+            aBoundingBox));
+    Reference<rendering::XPolyPolygon2D> xClip (
+        PresenterGeometryHelper::CreatePolygon(aClipBox, rxCanvas->getDevice()));
+
+    const rendering::ViewState aViewState (geometry::AffineMatrix2D(1,0,0, 0,1,0), xClip);
+
+    rendering::RenderState aRenderState (
+        geometry::AffineMatrix2D(
+            1, 0, aTopLeft.X,
+            0, 1, aTopLeft.Y),
+        nullptr,
+        Sequence<double>(4),
+        rendering::CompositeOperation::SOURCE);
+
+    // Emphasize the current slide.
+    if (nSlideIndex == mnCurrentSlideIndex)
+    {
+        if (mpCurrentSlideFrameRenderer != nullptr)
+        {
+            const awt::Rectangle aSlideBoundingBox(
+                sal::static_int_cast<sal_Int32>(0.5 + aTopLeft.X),
+                sal::static_int_cast<sal_Int32>(0.5 + aTopLeft.Y),
+                aSize.Width,
+                aSize.Height);
+            maCurrentSlideFrameBoundingBox
+                = mpCurrentSlideFrameRenderer->GetBoundingBox(aSlideBoundingBox);
+            mpCurrentSlideFrameRenderer->PaintCurrentSlideFrame (
+                aSlideBoundingBox,
+                mxCanvas,
+                aClipBox);
+        }
+    }
+
+    // Paint the preview.
+    if (xPreview.is())
+    {
+        aSize = xPreview->getSize();
+        if (aSize.Width > 0 && aSize.Height > 0)
+        {
+            rxCanvas->drawBitmap(xPreview, aViewState, aRenderState);
+            if( bCustomAnimation )
+            {
+                const awt::Rectangle aAnimationPreviewBox(aTopLeft.X+3, aTopLeft.Y+aSize.Height-40, 0, 0);
+                SharedBitmapDescriptor aAnimationDescriptor = aContainer.GetBitmap(u"Animation"_ustr);
+                Reference<rendering::XBitmap> xAnimationIcon (aAnimationDescriptor->GetNormalBitmap());
+                rendering::RenderState aAnimationRenderState (
+                    geometry::AffineMatrix2D(
+                    1, 0, aAnimationPreviewBox.X,
+                    0, 1, aAnimationPreviewBox.Y),
+                    nullptr,
+                    Sequence<double>(4),
+                    rendering::CompositeOperation::SOURCE);
+                rxCanvas->drawBitmap(xAnimationIcon, aViewState, aAnimationRenderState);
+            }
+            if( bTransition )
+            {
+                const awt::Rectangle aTransitionPreviewBox(aTopLeft.X+3, aTopLeft.Y+aSize.Height-20, 0, 0);
+                SharedBitmapDescriptor aTransitionDescriptor = aContainer.GetBitmap(u"Transition"_ustr);
+                Reference<rendering::XBitmap> xTransitionIcon (aTransitionDescriptor->GetNormalBitmap());
+                rendering::RenderState aTransitionRenderState (
+                    geometry::AffineMatrix2D(
+                    1, 0, aTransitionPreviewBox.X,
+                    0, 1, aTransitionPreviewBox.Y),
+                    nullptr,
+                    Sequence<double>(4),
+                    rendering::CompositeOperation::SOURCE);
+                rxCanvas->drawBitmap(xTransitionIcon, aViewState, aTransitionRenderState);
+            }
+        }
+    }
+
+    // Create a polygon that is used to paint a frame around previews.  Its
+    // coordinates are chosen in the local coordinate system of a preview.
+    if ( ! mxPreviewFrame.is())
+        mxPreviewFrame = PresenterGeometryHelper::CreatePolygon(
+            awt::Rectangle(-1, -1, aSize.Width+2, aSize.Height+2),
+            rxCanvas->getDevice());
+
+    // Paint a border around the preview.
+    if (mxPreviewFrame.is())
+    {
+        const util::Color aFrameColor (0x00000000);
+        PresenterCanvasHelper::SetDeviceColor(aRenderState, aFrameColor);
+        rxCanvas->drawPolyPolygon(mxPreviewFrame, aViewState, aRenderState);
+    }
+
+    // Paint mouse over effect.
+    mpMouseOverManager->Paint(nSlideIndex, mxCanvas, xClip);
+}
+
+void PresenterSlideSorter::Paint (const awt::Rectangle& rUpdateBox)
+{
+    const bool bCanvasChanged ( ! mxCanvas.is());
+    if ( ! ProvideCanvas())
+        return;
+
+    if (mpLayout->mnRowCount<=0 || mpLayout->mnColumnCount<=0)
+    {
+        OSL_ASSERT(mpLayout->mnRowCount>0 || mpLayout->mnColumnCount>0);
+        return;
+    }
+
+    ClearBackground(mxCanvas, rUpdateBox);
+
+    // Give the canvas to the controls.
+    if (bCanvasChanged)
+    {
+        if (mpVerticalScrollBar.is())
+            mpVerticalScrollBar->SetCanvas(mxCanvas);
+        if (mpCloseButton.is())
+            mpCloseButton->SetCanvas(mxCanvas, mxWindow);
+    }
+
+    // Now that the controls have a canvas we can do the layouting.
+    if (mbIsLayoutPending)
+        UpdateLayout();
+
+    // Paint the horizontal separator.
+    rendering::RenderState aRenderState (geometry::AffineMatrix2D(1,0,0, 0,1,0),
+            nullptr, Sequence<double>(4), rendering::CompositeOperation::SOURCE);
+    PresenterCanvasHelper::SetDeviceColor(aRenderState, maSeparatorColor);
+    mxCanvas->drawLine(
+        geometry::RealPoint2D(0, mnSeparatorY),
+        geometry::RealPoint2D(mxWindow->getPosSize().Width, mnSeparatorY),
+        rendering::ViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), nullptr),
+        aRenderState);
+
+    // Paint the slides.
+    if ( ! PresenterGeometryHelper::AreRectanglesDisjoint(
+        rUpdateBox,
+        PresenterGeometryHelper::ConvertRectangle(mpLayout->maBoundingBox)))
+    {
+        mpLayout->ForAllVisibleSlides(
+            [this, &rUpdateBox] (sal_Int32 const nIndex) {
+                return this->PaintPreview(this->mxCanvas, rUpdateBox, nIndex);
+            });
+    }
+
+    Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
+    if (xSpriteCanvas.is())
+        xSpriteCanvas->updateScreen(false);
+}
+
+void PresenterSlideSorter::SetHorizontalOffset (const double nXOffset)
+{
+    if (mpLayout->SetHorizontalOffset(nXOffset))
+    {
+        mxPreviewCache->setVisibleRange(
+            mpLayout->GetFirstVisibleSlideIndex(),
+            mpLayout->GetLastVisibleSlideIndex());
+
+        mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
+    }
+}
+
+void PresenterSlideSorter::SetVerticalOffset (const double nYOffset)
+{
+    if (mpLayout->SetVerticalOffset(nYOffset))
+    {
+        mxPreviewCache->setVisibleRange(
+            mpLayout->GetFirstVisibleSlideIndex(),
+            mpLayout->GetLastVisibleSlideIndex());
+
+        mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
+    }
+}
+
+void PresenterSlideSorter::GotoSlide (const sal_Int32 nSlideIndex)
+{
+    mxSlideShowController->gotoSlideIndex(nSlideIndex);
+}
+
+void PresenterSlideSorter::ScrollSlideIntoView(sal_Int32 nSlideIndex)
+{
+    const double fThumbPos = mpVerticalScrollBar->GetThumbPosition();
+    const double fThumbSize = mpVerticalScrollBar->GetThumbSize();
+    const double fSlidePos = mpLayout->GetPoint(nSlideIndex, -1, -1).Y;
+
+    const bool bFullyVisible
+        = (fSlidePos - mpLayout->mnVerticalBorder >= fThumbPos)
+          && (fSlidePos + mpLayout->maPreviewSize.Height + mpLayout->mnVerticalBorder
+              <= fThumbPos + fThumbSize);
+    if (!bFullyVisible)
+        mpVerticalScrollBar->SetThumbPosition(fSlidePos - mpLayout->mnVerticalBorder, false);
+}
+
+bool PresenterSlideSorter::ProvideCanvas()
+{
+    if ( ! mxCanvas.is())
+    {
+        if (mxPane.is())
+            mxCanvas = mxPane->getCanvas();
+
+        // Register as event listener so that we are informed when the
+        // canvas is disposed (and we have to fetch another one).
+        Reference<lang::XComponent> xComponent (mxCanvas, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->addEventListener(static_cast<awt::XWindowListener*>(this));
+
+        mpCurrentSlideFrameRenderer =
+            std::make_shared<CurrentSlideFrameRenderer>(mxComponentContext, mxCanvas);
+    }
+    return mxCanvas.is();
+}
+
+//===== PresenterSlideSorter::Layout ==========================================
+
+PresenterSlideSorter::Layout::Layout (
+    ::rtl::Reference<PresenterScrollBar> xVerticalScrollBar)
+    : mnHorizontalOffset(0),
+      mnVerticalOffset(0),
+      mnHorizontalGap(0),
+      mnVerticalGap(0),
+      mnHorizontalBorder(0),
+      mnVerticalBorder(0),
+      mnRowCount(1),
+      mnColumnCount(1),
+      mnSlideCount(0),
+      mnFirstVisibleColumn(-1),
+      mnLastVisibleColumn(-1),
+      mnFirstVisibleRow(-1),
+      mnLastVisibleRow(-1),
+      mpVerticalScrollBar(std::move(xVerticalScrollBar))
+{
+}
+
+void PresenterSlideSorter::Layout::Update (
+    const geometry::RealRectangle2D& rBoundingBox,
+    const double nSlideAspectRatio)
+{
+    maBoundingBox = rBoundingBox;
+
+    mnHorizontalBorder = gnHorizontalBorder;
+    mnVerticalBorder = gnVerticalBorder;
+
+    const double nWidth (rBoundingBox.X2 - rBoundingBox.X1 - 2*mnHorizontalBorder);
+    const double nHeight (rBoundingBox.Y2 - rBoundingBox.Y1 - 2*mnVerticalBorder);
+    if (nWidth<=0 || nHeight<=0)
+        return;
+
+    double nPreviewWidth;
+
+    // Determine column count, preview width, and horizontal gap (borders
+    // are half the gap).  Try to use the preferred values.  Try more to
+    // stay in the valid intervals.  This last constraint may be not
+    // fulfilled in some cases.
+    const double nElementWidth = nWidth / gnPreferredColumnCount;
+    if (nElementWidth < gnMinimalPreviewWidth + gnMinimalHorizontalPreviewGap)
+    {
+        // The preferred column count is too large.
+        // Can we use the preferred preview width?
+        if (nWidth - gnMinimalHorizontalPreviewGap >= gnPreferredPreviewWidth)
+        {
+            // Yes.
+            nPreviewWidth = gnPreferredPreviewWidth;
+            mnColumnCount = floor((nWidth+gnPreferredHorizontalPreviewGap)
+                / (nPreviewWidth+gnPreferredHorizontalPreviewGap));
+            mnHorizontalGap = round((nWidth - mnColumnCount*nPreviewWidth) / mnColumnCount);
+        }
+        else
+        {
+            // No.  Set the column count to 1 and adapt preview width and
+            // gap.
+            mnColumnCount = 1;
+            mnHorizontalGap = floor(gnMinimalHorizontalPreviewGap);
+            if (nWidth - gnMinimalHorizontalPreviewGap >= gnPreferredPreviewWidth)
+                nPreviewWidth = nWidth - gnMinimalHorizontalPreviewGap;
+            else
+                nPreviewWidth = ::std::max(gnMinimalPreviewWidth, nWidth-mnHorizontalGap);
+        }
+    }
+    else if (nElementWidth > gnMaximalPreviewWidth + gnMaximalHorizontalPreviewGap)
+    {
+        // The preferred column count is too small.
+        nPreviewWidth = gnPreferredPreviewWidth;
+        mnColumnCount = floor((nWidth+gnPreferredHorizontalPreviewGap)
+            / (nPreviewWidth+gnPreferredHorizontalPreviewGap));
+        mnHorizontalGap = round((nWidth - mnColumnCount*nPreviewWidth) / mnColumnCount);
+    }
+    else
+    {
+        // The preferred column count is possible.  Determine gap and
+        // preview width.
+        mnColumnCount = gnPreferredColumnCount;
+        if (nElementWidth - gnPreferredPreviewWidth < gnMinimalHorizontalPreviewGap)
+        {
+            // Use the minimal gap and adapt the preview width.
+            mnHorizontalGap = floor(gnMinimalHorizontalPreviewGap);
+            nPreviewWidth = (nWidth - mnColumnCount*mnHorizontalGap) / mnColumnCount;
+        }
+        else if (nElementWidth - gnPreferredPreviewWidth <= gnMaximalHorizontalPreviewGap)
+        {
+            // Use the maximal gap and adapt the preview width.
+            mnHorizontalGap = round(gnMaximalHorizontalPreviewGap);
+            nPreviewWidth = (nWidth - mnColumnCount*mnHorizontalGap) / mnColumnCount;
+        }
+        else
+        {
+            // Use the preferred preview width and adapt the gap.
+            nPreviewWidth = gnPreferredPreviewWidth;
+            mnHorizontalGap = round((nWidth - mnColumnCount*nPreviewWidth) / mnColumnCount);
+        }
+    }
+
+    // Now determine the row count, preview height, and vertical gap.
+    const double nPreviewHeight = nPreviewWidth / nSlideAspectRatio;
+    mnRowCount = ::std::max(
+        sal_Int32(1),
+        sal_Int32(ceil((nHeight+gnPreferredVerticalPreviewGap)
+                / (nPreviewHeight + gnPreferredVerticalPreviewGap))));
+    mnVerticalGap = round(gnPreferredVerticalPreviewGap);
+
+    maPreviewSize = geometry::IntegerSize2D(floor(nPreviewWidth), floor(nPreviewHeight));
+
+    // Reset the offset.
+    mnVerticalOffset = 0;
+    mnHorizontalOffset = round(-(nWidth
+        - mnColumnCount*maPreviewSize.Width
+        - (mnColumnCount-1)*mnHorizontalGap)
+        / 2);
+}
+
+void PresenterSlideSorter::Layout::SetupVisibleArea()
+{
+    geometry::RealPoint2D aPoint (GetLocalPosition(
+        geometry::RealPoint2D(maBoundingBox.X1, maBoundingBox.Y1)));
+    mnFirstVisibleColumn = 0;
+    mnFirstVisibleRow = ::std::max(sal_Int32(0), GetRow(aPoint));
+
+    aPoint = GetLocalPosition(geometry::RealPoint2D( maBoundingBox.X2, maBoundingBox.Y2));
+    mnLastVisibleColumn = mnColumnCount - 1;
+    mnLastVisibleRow = GetRow(aPoint, true);
+}
+
+bool PresenterSlideSorter::Layout::IsScrollBarNeeded (const sal_Int32 nSlideCount)
+{
+    geometry::RealPoint2D aBottomRight = GetPoint(
+        mnColumnCount * (GetRow(nSlideCount)+1) - 1, +1, +1);
+    return aBottomRight.X > maBoundingBox.X2-maBoundingBox.X1
+        || aBottomRight.Y > maBoundingBox.Y2-maBoundingBox.Y1;
+}
+
+geometry::RealPoint2D PresenterSlideSorter::Layout::GetLocalPosition(
+    const geometry::RealPoint2D& rWindowPoint) const
+{
+    if(AllSettings::GetLayoutRTL())
+    {
+            return css::geometry::RealPoint2D(
+                                              -rWindowPoint.X  + maBoundingBox.X2 + mnHorizontalOffset,
+                                              rWindowPoint.Y - maBoundingBox.Y1 + mnVerticalOffset);
+    }
+    else
+    {
+            return css::geometry::RealPoint2D(
+                                              rWindowPoint.X - maBoundingBox.X1 + mnHorizontalOffset,
+                                              rWindowPoint.Y - maBoundingBox.Y1 + mnVerticalOffset);
+    }
+}
+
+geometry::RealPoint2D PresenterSlideSorter::Layout::GetWindowPosition(
+    const geometry::RealPoint2D& rLocalPoint) const
+{
+    if(AllSettings::GetLayoutRTL())
+    {
+            return css::geometry::RealPoint2D(
+                                              -rLocalPoint.X + mnHorizontalOffset + maBoundingBox.X2,
+                                              rLocalPoint.Y - mnVerticalOffset + maBoundingBox.Y1);
+    }
+    else
+    {
+            return css::geometry::RealPoint2D(
+                                              rLocalPoint.X - mnHorizontalOffset + maBoundingBox.X1,
+                                              rLocalPoint.Y - mnVerticalOffset + maBoundingBox.Y1);
+    }
+}
+
+sal_Int32 PresenterSlideSorter::Layout::GetColumn (
+    const css::geometry::RealPoint2D& rLocalPoint) const
+{
+    const sal_Int32 nColumn(floor(
+        (rLocalPoint.X + mnHorizontalGap/2.0) / (maPreviewSize.Width+mnHorizontalGap)));
+    if (nColumn>=mnFirstVisibleColumn && nColumn<=mnLastVisibleColumn)
+    {
+        return nColumn;
+    }
+    else
+        return -1;
+}
+
+sal_Int32 PresenterSlideSorter::Layout::GetRow (
+    const css::geometry::RealPoint2D& rLocalPoint,
+    const bool bReturnInvalidValue) const
+{
+    const sal_Int32 nRow (floor(
+        (rLocalPoint.Y + mnVerticalGap/2.0) / (maPreviewSize.Height+mnVerticalGap)));
+    if (bReturnInvalidValue
+        || (nRow>=mnFirstVisibleRow && nRow<=mnLastVisibleRow))
+    {
+        return nRow;
+    }
+    else
+        return -1;
+}
+
+sal_Int32 PresenterSlideSorter::Layout::GetSlideIndexForPosition (
+    const css::geometry::RealPoint2D& rWindowPoint) const
+{
+    if ( ! PresenterGeometryHelper::IsInside(maBoundingBox, rWindowPoint))
+        return -1;
+
+    const css::geometry::RealPoint2D aLocalPosition (GetLocalPosition(rWindowPoint));
+    const sal_Int32 nColumn (GetColumn(aLocalPosition));
+    const sal_Int32 nRow (GetRow(aLocalPosition));
+
+    if (nColumn < 0 || nRow < 0)
+        return -1;
+    else
+    {
+        sal_Int32 nIndex (GetIndex(nRow, nColumn));
+        if (nIndex >= mnSlideCount)
+            return -1;
+        else
+            return nIndex;
+    }
+}
+
+geometry::RealPoint2D PresenterSlideSorter::Layout::GetPoint (
+    const sal_Int32 nSlideIndex,
+    const sal_Int32 nRelativeHorizontalPosition,
+    const sal_Int32 nRelativeVerticalPosition) const
+{
+    sal_Int32 nColumn (GetColumn(nSlideIndex));
+    sal_Int32 nRow (GetRow(nSlideIndex));
+
+    geometry::RealPoint2D aPosition (
+        mnHorizontalBorder + nColumn*(maPreviewSize.Width+mnHorizontalGap),
+        mnVerticalBorder + nRow*(maPreviewSize.Height+mnVerticalGap));
+
+    if (nRelativeHorizontalPosition >= 0)
+    {
+        if (nRelativeHorizontalPosition > 0)
+            aPosition.X += maPreviewSize.Width;
+        else
+            aPosition.X += maPreviewSize.Width / 2.0;
+    }
+    if (nRelativeVerticalPosition >= 0)
+    {
+        if (nRelativeVerticalPosition > 0)
+            aPosition.Y += maPreviewSize.Height;
+        else
+            aPosition.Y += maPreviewSize.Height / 2.0;
+    }
+
+    return aPosition;
+}
+
+awt::Rectangle PresenterSlideSorter::Layout::GetBoundingBox (const sal_Int32 nSlideIndex) const
+{
+    bool isRTL = AllSettings::GetLayoutRTL();
+    const geometry::RealPoint2D aWindowPosition(GetWindowPosition(GetPoint(nSlideIndex, isRTL?1:-1, -1)));
+    return PresenterGeometryHelper::ConvertRectangle(
+                                                     geometry::RealRectangle2D(
+                                                                               aWindowPosition.X,
+                                                                               aWindowPosition.Y,
+                                                                               aWindowPosition.X + maPreviewSize.Width,
+                                                                               aWindowPosition.Y + maPreviewSize.Height));
+}
+
+void PresenterSlideSorter::Layout::ForAllVisibleSlides(
+        const ::std::function<void (sal_Int32)>& rAction)
+{
+    for (sal_Int32 nRow=mnFirstVisibleRow; nRow<=mnLastVisibleRow; ++nRow)
+    {
+        for (sal_Int32 nColumn=mnFirstVisibleColumn; nColumn<=mnLastVisibleColumn; ++nColumn)
+        {
+            const sal_Int32 nSlideIndex (GetIndex(nRow, nColumn));
+            if (nSlideIndex >= mnSlideCount)
+                return;
+            rAction(nSlideIndex);
+        }
+    }
+}
+
+sal_Int32 PresenterSlideSorter::Layout::GetFirstVisibleSlideIndex() const
+{
+    return GetIndex(mnFirstVisibleRow, mnFirstVisibleColumn);
+}
+
+sal_Int32 PresenterSlideSorter::Layout::GetLastVisibleSlideIndex() const
+{
+    return ::std::min(
+        GetIndex(mnLastVisibleRow, mnLastVisibleColumn),
+        mnSlideCount);
+}
+
+bool PresenterSlideSorter::Layout::SetHorizontalOffset (const double nOffset)
+{
+    if (mnHorizontalOffset != nOffset)
+    {
+        mnHorizontalOffset = round(nOffset);
+        SetupVisibleArea();
+        UpdateScrollBars();
+        return true;
+    }
+    else
+        return false;
+}
+
+bool PresenterSlideSorter::Layout::SetVerticalOffset (const double nOffset)
+{
+    if (mnVerticalOffset != nOffset)
+    {
+        mnVerticalOffset = round(nOffset);
+        SetupVisibleArea();
+        UpdateScrollBars();
+        return true;
+    }
+    else
+        return false;
+}
+
+void PresenterSlideSorter::Layout::UpdateScrollBars()
+{
+    sal_Int32 nTotalRowCount = sal_Int32(ceil(double(mnSlideCount) / double(mnColumnCount)));
+
+    if (mpVerticalScrollBar)
+    {
+        mpVerticalScrollBar->SetTotalSize(
+            nTotalRowCount * maPreviewSize.Height
+                + (nTotalRowCount-1) * mnVerticalGap
+            + 2*mnVerticalGap);
+        mpVerticalScrollBar->SetThumbPosition(mnVerticalOffset, false);
+        mpVerticalScrollBar->SetThumbSize(maBoundingBox.Y2 - maBoundingBox.Y1 + 1);
+        mpVerticalScrollBar->SetLineHeight(maPreviewSize.Height);
+    }
+
+    // No place yet for the vertical scroll bar.
+}
+
+sal_Int32 PresenterSlideSorter::Layout::GetIndex (
+    const sal_Int32 nRow,
+    const sal_Int32 nColumn) const
+{
+    return nRow * mnColumnCount + nColumn;
+}
+
+sal_Int32 PresenterSlideSorter::Layout::GetRow (const sal_Int32 nSlideIndex) const
+{
+    return nSlideIndex / mnColumnCount;
+}
+
+sal_Int32 PresenterSlideSorter::Layout::GetColumn (const sal_Int32 nSlideIndex) const
+{
+    return nSlideIndex % mnColumnCount;
+}
+
+//===== PresenterSlideSorter::MouseOverManager ================================
+
+PresenterSlideSorter::MouseOverManager::MouseOverManager (
+    const Reference<container::XIndexAccess>& rxSlides,
+    const std::shared_ptr<PresenterTheme>& rpTheme,
+    const Reference<awt::XWindow>& rxInvalidateTarget,
+    std::shared_ptr<PresenterPaintManager> xPaintManager)
+    : mxSlides(rxSlides),
+      mnSlideIndex(-1),
+      mxInvalidateTarget(rxInvalidateTarget),
+      mpPaintManager(std::move(xPaintManager))
+{
+    if (rpTheme != nullptr)
+    {
+        std::shared_ptr<PresenterBitmapContainer> pBitmaps (rpTheme->GetBitmapContainer());
+        if (pBitmaps != nullptr)
+        {
+            mpLeftLabelBitmap = pBitmaps->GetBitmap(u"LabelLeft"_ustr);
+            mpCenterLabelBitmap = pBitmaps->GetBitmap(u"LabelCenter"_ustr);
+            mpRightLabelBitmap = pBitmaps->GetBitmap(u"LabelRight"_ustr);
+        }
+
+        mpFont = rpTheme->GetFont(u"SlideSorterLabelFont"_ustr);
+    }
+}
+
+void PresenterSlideSorter::MouseOverManager::Paint (
+    const sal_Int32 nSlideIndex,
+    const Reference<rendering::XCanvas>& rxCanvas,
+    const Reference<rendering::XPolyPolygon2D>& rxClip)
+{
+    if (nSlideIndex != mnSlideIndex)
+        return;
+
+    if (mxCanvas != rxCanvas)
+        SetCanvas(rxCanvas);
+    if (rxCanvas == nullptr)
+        return;
+
+    if ( ! mxBitmap.is())
+        mxBitmap = CreateBitmap(msText, maSlideBoundingBox.Width);
+    if (!mxBitmap.is())
+        return;
+
+    geometry::IntegerSize2D aSize (mxBitmap->getSize());
+    const double nXOffset (maSlideBoundingBox.X
+        + (maSlideBoundingBox.Width - aSize.Width) / 2.0);
+    const double nYOffset (maSlideBoundingBox.Y
+        + (maSlideBoundingBox.Height - aSize.Height) / 2.0);
+    rxCanvas->drawBitmap(
+        mxBitmap,
+        rendering::ViewState(
+            geometry::AffineMatrix2D(1,0,0, 0,1,0),
+            rxClip),
+        rendering::RenderState(
+            geometry::AffineMatrix2D(1,0,nXOffset, 0,1,nYOffset),
+            nullptr,
+            Sequence<double>(4),
+            rendering::CompositeOperation::SOURCE));
+}
+
+void PresenterSlideSorter::MouseOverManager::SetCanvas (
+    const Reference<rendering::XCanvas>& rxCanvas)
+{
+    mxCanvas = rxCanvas;
+    if (mpFont)
+        mpFont->PrepareFont(mxCanvas);
+}
+
+void PresenterSlideSorter::MouseOverManager::SetSlide (
+    const sal_Int32 nSlideIndex,
+    const awt::Rectangle& rBox)
+{
+    if (mnSlideIndex == nSlideIndex)
+        return;
+
+    mnSlideIndex = -1;
+    Invalidate();
+
+    maSlideBoundingBox = rBox;
+    mnSlideIndex = nSlideIndex;
+
+    if (nSlideIndex >= 0)
+    {
+        if (mxSlides)
+        {
+            msText.clear();
+
+            Reference<beans::XPropertySet> xSlideProperties(mxSlides->getByIndex(nSlideIndex), UNO_QUERY);
+            if (xSlideProperties.is())
+                xSlideProperties->getPropertyValue(u"LinkDisplayName"_ustr) >>= msText;
+
+            if (msText.isEmpty())
+                msText = "Slide " + OUString::number(nSlideIndex + 1);
+        }
+    }
+    else
+    {
+        msText.clear();
+    }
+    mxBitmap = nullptr;
+
+    Invalidate();
+}
+
+Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitmap (
+    const OUString& rsText,
+    const sal_Int32 nMaximalWidth) const
+{
+    if ( ! mxCanvas.is())
+        return nullptr;
+
+    if (!mpFont || !mpFont->mxFont.is())
+        return nullptr;
+
+    // Long text has to be shortened.
+    const OUString sText (GetFittingText(rsText, nMaximalWidth
+            - 2*gnHorizontalLabelBorder
+            - 2*gnHorizontalLabelPadding));
+
+    // Determine the size of the label.  Its height is defined by the
+    // bitmaps that are used to paints its background.  The width is defined
+    // by the text.
+    geometry::IntegerSize2D aLabelSize (CalculateLabelSize(sText));
+
+    // Create a new bitmap that will contain the complete label.
+    Reference<rendering::XBitmap> xBitmap (
+        mxCanvas->getDevice()->createCompatibleAlphaBitmap(aLabelSize));
+
+    if ( ! xBitmap.is())
+        return nullptr;
+
+    Reference<rendering::XBitmapCanvas> xBitmapCanvas (xBitmap, UNO_QUERY);
+    if ( ! xBitmapCanvas.is())
+        return nullptr;
+
+    // Paint the background.
+    PaintButtonBackground(xBitmapCanvas, aLabelSize);
+
+    // Paint the text.
+    if (!sText.isEmpty())
+    {
+
+        const rendering::StringContext aContext (sText, 0, sText.getLength());
+        const Reference<rendering::XTextLayout> xLayout (mpFont->mxFont->createTextLayout(
+            aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT,0));
+        const geometry::RealRectangle2D aTextBBox (xLayout->queryTextBounds());
+
+        const double nXOffset = (aLabelSize.Width - aTextBBox.X2 + aTextBBox.X1) / 2;
+        const double nYOffset = aLabelSize.Height
+            - (aLabelSize.Height - aTextBBox.Y2 + aTextBBox.Y1)/2 - aTextBBox.Y2;
+
+        const rendering::ViewState aViewState(
+            geometry::AffineMatrix2D(1,0,0, 0,1,0),
+            nullptr);
+
+        rendering::RenderState aRenderState (
+            geometry::AffineMatrix2D(1,0,nXOffset, 0,1,nYOffset),
+            nullptr,
+            Sequence<double>(4),
+            rendering::CompositeOperation::SOURCE);
+        PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
+
+        xBitmapCanvas->drawTextLayout (
+            xLayout,
+            aViewState,
+            aRenderState);
+    }
+
+    return xBitmap;
+}
+
+OUString PresenterSlideSorter::MouseOverManager::GetFittingText (
+    const OUString& rsText,
+    const double nMaximalWidth) const
+{
+    const double nTextWidth (
+        PresenterCanvasHelper::GetTextSize(mpFont->mxFont, rsText).Width);
+    if (nTextWidth > nMaximalWidth)
+    {
+        // Text is too wide.  Shorten it by removing characters from the end
+        // and replacing them by ellipses.
+
+        // Guess a start value of the final string length.
+        double nBestWidth (0);
+        OUString sBestCandidate;
+        sal_Int32 nLength (round(rsText.getLength() * nMaximalWidth / nTextWidth));
+        static constexpr OUStringLiteral sEllipses (u"...");
+        while (true)
+        {
+            const OUString sCandidate (rsText.subView(0,nLength) + sEllipses);
+            const double nWidth (
+                PresenterCanvasHelper::GetTextSize(mpFont->mxFont, sCandidate).Width);
+            if (nWidth > nMaximalWidth)
+            {
+                // Candidate still too wide, shorten it.
+                nLength -= 1;
+                if (nLength <= 0)
+                    break;
+            }
+            else if (nWidth < nMaximalWidth)
+            {
+                // Candidate short enough.
+                if (nWidth > nBestWidth)
+                {
+                    // Best length so far.
+                    sBestCandidate = sCandidate;
+                    nBestWidth = nWidth;
+                    nLength += 1;
+                    if (nLength >= rsText.getLength())
+                        break;
+                }
+                else
+                    break;
+            }
+            else
+            {
+                // Candidate is exactly as long as it may be.  Use it
+                // without looking any further.
+                sBestCandidate = sCandidate;
+                break;
+            }
+        }
+        return sBestCandidate;
+    }
+    else
+        return rsText;
+}
+
+geometry::IntegerSize2D PresenterSlideSorter::MouseOverManager::CalculateLabelSize (
+    const OUString& rsText) const
+{
+    // Height is specified by the label bitmaps.
+    sal_Int32 nHeight (32);
+    if (mpCenterLabelBitmap)
+    {
+        Reference<rendering::XBitmap> xBitmap (mpCenterLabelBitmap->GetNormalBitmap());
+        if (xBitmap.is())
+            nHeight = xBitmap->getSize().Height;
+    }
+
+    // Width is specified by text width and maximal width.
+    const geometry::RealSize2D aTextSize (
+        PresenterCanvasHelper::GetTextSize(mpFont->mxFont, rsText));
+
+    const sal_Int32 nWidth (round(aTextSize.Width + 2*gnHorizontalLabelPadding));
+
+    return geometry::IntegerSize2D(nWidth, nHeight);
+}
+
+void PresenterSlideSorter::MouseOverManager::PaintButtonBackground (
+    const Reference<rendering::XCanvas>& rxCanvas,
+    const geometry::IntegerSize2D& rSize) const
+{
+    // Get the bitmaps for painting the label background.
+    Reference<rendering::XBitmap> xLeftLabelBitmap;
+    if (mpLeftLabelBitmap)
+        xLeftLabelBitmap = mpLeftLabelBitmap->GetNormalBitmap();
+
+    Reference<rendering::XBitmap> xCenterLabelBitmap;
+    if (mpCenterLabelBitmap)
+        xCenterLabelBitmap = mpCenterLabelBitmap->GetNormalBitmap();
+
+    Reference<rendering::XBitmap> xRightLabelBitmap;
+    if (mpRightLabelBitmap)
+        xRightLabelBitmap = mpRightLabelBitmap->GetNormalBitmap();
+
+    PresenterUIPainter::PaintHorizontalBitmapComposite (
+        rxCanvas,
+        awt::Rectangle(0,0, rSize.Width,rSize.Height),
+        awt::Rectangle(0,0, rSize.Width,rSize.Height),
+        xLeftLabelBitmap,
+        xCenterLabelBitmap,
+        xRightLabelBitmap);
+}
+
+void PresenterSlideSorter::MouseOverManager::Invalidate()
+{
+    if (mpPaintManager != nullptr)
+        mpPaintManager->Invalidate(mxInvalidateTarget, maSlideBoundingBox, true);
+}
+
+//===== PresenterSlideSorter::CurrentSlideFrameRenderer =======================
+
+PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
+    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
+    : mnTopFrameSize(0),
+      mnLeftFrameSize(0),
+      mnRightFrameSize(0),
+      mnBottomFrameSize(0)
+{
+    PresenterConfigurationAccess aConfiguration (
+        rxContext,
+        u"/org.openoffice.Office.PresenterScreen/"_ustr,
+        PresenterConfigurationAccess::READ_ONLY);
+    Reference<container::XHierarchicalNameAccess> xBitmaps (
+        aConfiguration.GetConfigurationNode(
+            u"PresenterScreenSettings/SlideSorter/CurrentSlideBorderBitmaps"_ustr),
+        UNO_QUERY);
+    if ( ! xBitmaps.is())
+        return;
+
+    PresenterBitmapContainer aContainer (
+        u"PresenterScreenSettings/SlideSorter/CurrentSlideBorderBitmaps"_ustr,
+        std::shared_ptr<PresenterBitmapContainer>(),
+        rxContext,
+        rxCanvas);
+
+    mpTopLeft = aContainer.GetBitmap(u"TopLeft"_ustr);
+    mpTop = aContainer.GetBitmap(u"Top"_ustr);
+    mpTopRight = aContainer.GetBitmap(u"TopRight"_ustr);
+    mpLeft = aContainer.GetBitmap(u"Left"_ustr);
+    mpRight = aContainer.GetBitmap(u"Right"_ustr);
+    mpBottomLeft = aContainer.GetBitmap(u"BottomLeft"_ustr);
+    mpBottom = aContainer.GetBitmap(u"Bottom"_ustr);
+    mpBottomRight = aContainer.GetBitmap(u"BottomRight"_ustr);
+
+    // Determine size of frame.
+    if (mpTop)
+        mnTopFrameSize = mpTop->mnHeight;
+    if (mpLeft)
+        mnLeftFrameSize = mpLeft->mnWidth;
+    if (mpRight)
+        mnRightFrameSize = mpRight->mnWidth;
+    if (mpBottom)
+        mnBottomFrameSize = mpBottom->mnHeight;
+
+    if (mpTopLeft)
+    {
+        mnTopFrameSize = ::std::max(mnTopFrameSize, mpTopLeft->mnHeight);
+        mnLeftFrameSize = ::std::max(mnLeftFrameSize, mpTopLeft->mnWidth);
+    }
+    if (mpTopRight)
+    {
+        mnTopFrameSize = ::std::max(mnTopFrameSize, mpTopRight->mnHeight);
+        mnRightFrameSize = ::std::max(mnRightFrameSize, mpTopRight->mnWidth);
+    }
+    if (mpBottomLeft)
+    {
+        mnLeftFrameSize = ::std::max(mnLeftFrameSize, mpBottomLeft->mnWidth);
+        mnBottomFrameSize = ::std::max(mnBottomFrameSize, mpBottomLeft->mnHeight);
+    }
+    if (mpBottomRight)
+    {
+        mnRightFrameSize = ::std::max(mnRightFrameSize, mpBottomRight->mnWidth);
+        mnBottomFrameSize = ::std::max(mnBottomFrameSize, mpBottomRight->mnHeight);
+    }
+}
+
+void PresenterSlideSorter::CurrentSlideFrameRenderer::PaintCurrentSlideFrame (
+    const awt::Rectangle& rSlideBoundingBox,
+    const Reference<rendering::XCanvas>& rxCanvas,
+    const geometry::RealRectangle2D& rClipBox)
+{
+    if ( ! rxCanvas.is())
+        return;
+
+    const Reference<rendering::XPolyPolygon2D> xClip (
+        PresenterGeometryHelper::CreatePolygon(rClipBox, rxCanvas->getDevice()));
+
+    if (mpTop)
+    {
+        PaintBitmapTiled(
+            mpTop->GetNormalBitmap(),
+            rxCanvas,
+            rClipBox,
+            rSlideBoundingBox.X,
+            rSlideBoundingBox.Y - mpTop->mnHeight,
+            rSlideBoundingBox.Width,
+            mpTop->mnHeight);
+    }
+    if (mpLeft)
+    {
+        PaintBitmapTiled(
+            mpLeft->GetNormalBitmap(),
+            rxCanvas,
+            rClipBox,
+            rSlideBoundingBox.X - mpLeft->mnWidth,
+            rSlideBoundingBox.Y,
+            mpLeft->mnWidth,
+            rSlideBoundingBox.Height);
+    }
+    if (mpRight)
+    {
+        PaintBitmapTiled(
+            mpRight->GetNormalBitmap(),
+            rxCanvas,
+            rClipBox,
+            rSlideBoundingBox.X + rSlideBoundingBox.Width,
+            rSlideBoundingBox.Y,
+            mpRight->mnWidth,
+            rSlideBoundingBox.Height);
+    }
+    if (mpBottom)
+    {
+        PaintBitmapTiled(
+            mpBottom->GetNormalBitmap(),
+            rxCanvas,
+            rClipBox,
+            rSlideBoundingBox.X,
+            rSlideBoundingBox.Y + rSlideBoundingBox.Height,
+            rSlideBoundingBox.Width,
+            mpBottom->mnHeight);
+    }
+    if (mpTopLeft)
+    {
+        PaintBitmapOnce(
+            mpTopLeft->GetNormalBitmap(),
+            rxCanvas,
+            xClip,
+            rSlideBoundingBox.X - mpTopLeft->mnWidth,
+            rSlideBoundingBox.Y - mpTopLeft->mnHeight);
+    }
+    if (mpTopRight)
+    {
+        PaintBitmapOnce(
+            mpTopRight->GetNormalBitmap(),
+            rxCanvas,
+            xClip,
+            rSlideBoundingBox.X + rSlideBoundingBox.Width,
+            rSlideBoundingBox.Y - mpTopRight->mnHeight);
+    }
+    if (mpBottomLeft)
+    {
+        PaintBitmapOnce(
+            mpBottomLeft->GetNormalBitmap(),
+            rxCanvas,
+            xClip,
+            rSlideBoundingBox.X - mpBottomLeft->mnWidth,
+            rSlideBoundingBox.Y + rSlideBoundingBox.Height);
+    }
+    if (mpBottomRight)
+    {
+        PaintBitmapOnce(
+            mpBottomRight->GetNormalBitmap(),
+            rxCanvas,
+            xClip,
+            rSlideBoundingBox.X + rSlideBoundingBox.Width,
+            rSlideBoundingBox.Y + rSlideBoundingBox.Height);
+    }
+}
+
+awt::Rectangle PresenterSlideSorter::CurrentSlideFrameRenderer::GetBoundingBox (
+    const awt::Rectangle& rSlideBoundingBox)
+{
+    return awt::Rectangle(
+        rSlideBoundingBox.X - mnLeftFrameSize,
+        rSlideBoundingBox.Y - mnTopFrameSize,
+        rSlideBoundingBox.Width + mnLeftFrameSize + mnRightFrameSize,
+        rSlideBoundingBox.Height + mnTopFrameSize + mnBottomFrameSize);
+}
+
+void PresenterSlideSorter::CurrentSlideFrameRenderer::PaintBitmapOnce(
+    const css::uno::Reference<css::rendering::XBitmap>& rxBitmap,
+    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+    const Reference<rendering::XPolyPolygon2D>& rxClip,
+    const double nX,
+    const double nY)
+{
+    OSL_ASSERT(rxCanvas.is());
+    if ( ! rxBitmap.is())
+        return;
+
+    const rendering::ViewState aViewState(
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        rxClip);
+
+    const rendering::RenderState aRenderState (
+        geometry::AffineMatrix2D(
+            1, 0, nX,
+            0, 1, nY),
+        nullptr,
+        Sequence<double>(4),
+        rendering::CompositeOperation::SOURCE);
+
+    rxCanvas->drawBitmap(
+        rxBitmap,
+        aViewState,
+        aRenderState);
+}
+
+void PresenterSlideSorter::CurrentSlideFrameRenderer::PaintBitmapTiled(
+    const css::uno::Reference<css::rendering::XBitmap>& rxBitmap,
+    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+    const geometry::RealRectangle2D& rClipBox,
+    const double nX0,
+    const double nY0,
+    const double nWidth,
+    const double nHeight)
+{
+    OSL_ASSERT(rxCanvas.is());
+    if ( ! rxBitmap.is())
+        return;
+
+    geometry::IntegerSize2D aSize (rxBitmap->getSize());
+
+    const rendering::ViewState aViewState(
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        PresenterGeometryHelper::CreatePolygon(
+            PresenterGeometryHelper::Intersection(
+                rClipBox,
+                geometry::RealRectangle2D(nX0,nY0,nX0+nWidth,nY0+nHeight)),
+            rxCanvas->getDevice()));
+
+    rendering::RenderState aRenderState (
+        geometry::AffineMatrix2D(
+            1, 0, nX0,
+            0, 1, nY0),
+        nullptr,
+        Sequence<double>(4),
+        rendering::CompositeOperation::SOURCE);
+
+    const double nX1 = nX0 + nWidth;
+    const double nY1 = nY0 + nHeight;
+    for (double nY=nY0; nY<nY1; nY+=aSize.Height)
+        for (double nX=nX0; nX<nX1; nX+=aSize.Width)
+        {
+            aRenderState.AffineTransform.m02 = nX;
+            aRenderState.AffineTransform.m12 = nY;
+            rxCanvas->drawBitmap(
+                rxBitmap,
+                aViewState,
+                aRenderState);
+        }
+}
+
+} // end of namespace ::sdext::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

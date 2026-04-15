@@ -1,0 +1,23 @@
+--- afdko/c/shared/include/tx_shared.h
++++ afdko/c/shared/include/tx_shared.h
+@@ -86,6 +86,11 @@
+ #define sig_UFO CTL_TAG('<', '?', 'x', 'm')
+ /* Generate n-bit mask */
+ #define N_BIT_MASK(n) (~(~0UL << (n)))
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
+ enum { MAX_VERSION_SIZE = 100 };
+ 
+ typedef struct txCtx_ *txCtx; /* tx program context */
+@@ -587,4 +592,8 @@
+ void ttrReadFont(txCtx h, long origin, int iTTC);
+ void ufoReadFont(txCtx h, long origin);
+ 
++#ifdef __cplusplus
++}
++#endif
++
+ #endif /* TX_SHARED_H */

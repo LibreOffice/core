@@ -1,0 +1,463 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <vcl/event.hxx>
+#include <vcl/toolkit/spin.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
+
+#include <spin.hxx>
+
+SpinButton::SpinButton( vcl::Window* pParent, WinBits nStyle )
+    : Control(WindowType::SPINBUTTON)
+    , maRepeatTimer("SpinButton maRepeatTimer")
+    , mbUpperIsFocused(false)
+{
+    mbUpperIn     = false;
+    mbLowerIn     = false;
+    mbInitialUp   = false;
+    mbInitialDown = false;
+
+    mnMinRange  = 0;
+    mnMaxRange  = 100;
+    mnValue     = 0;
+    mnValueStep = 1;
+
+    maRepeatTimer.SetTimeout(MouseSettings::GetButtonStartRepeat());
+    maRepeatTimer.SetInvokeHandler(LINK(this, SpinButton, ImplTimeout));
+
+    mbRepeat = 0 != (nStyle & WB_REPEAT);
+
+    if (nStyle & WB_HSCROLL)
+        mbHorz = true;
+    else
+        mbHorz = false;
+
+    Control::ImplInit( pParent, nStyle, nullptr );
+}
+
+IMPL_LINK(SpinButton, ImplTimeout, Timer*, pTimer, void)
+{
+    if (pTimer->GetTimeout() == static_cast<sal_uInt64>(MouseSettings::GetButtonStartRepeat()))
+    {
+        pTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonRepeat() );
+        pTimer->Start();
+    }
+    else
+    {
+        if (mbInitialUp)
+            Up();
+        else
+            Down();
+    }
+}
+
+void SpinButton::Up()
+{
+    if (ImplIsUpperEnabled())
+    {
+        mnValue += mnValueStep;
+        CompatStateChanged(StateChangedType::Data);
+
+        ImplMoveFocus(true);
+    }
+
+    ImplCallEventListenersAndHandler(VclEventId::SpinbuttonUp, nullptr );
+}
+
+void SpinButton::Down()
+{
+    if (ImplIsLowerEnabled())
+    {
+        mnValue -= mnValueStep;
+        CompatStateChanged(StateChangedType::Data);
+
+        ImplMoveFocus(false);
+    }
+
+    ImplCallEventListenersAndHandler(VclEventId::SpinbuttonDown, nullptr );
+}
+
+void SpinButton::Resize()
+{
+    Control::Resize();
+
+    Size aSize(GetOutputSizePixel());
+    tools::Rectangle aRect(Point(), aSize);
+    if (mbHorz)
+    {
+        maLowerRect = tools::Rectangle(0, 0, aSize.Width() / 2, aSize.Height() - 1);
+        maUpperRect = tools::Rectangle(maLowerRect.TopRight(), aRect.BottomRight());
+    }
+    else
+    {
+        maUpperRect = tools::Rectangle(0, 0, aSize.Width() - 1, aSize.Height() / 2);
+        maLowerRect = tools::Rectangle(maUpperRect.BottomLeft(), aRect.BottomRight());
+    }
+
+    ImplCalcFocusRect(ImplIsUpperEnabled() || !ImplIsLowerEnabled());
+
+    Invalidate();
+}
+
+void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags)
+{
+    Point aPos  = pDev->LogicToPixel(rPos);
+    Size aSize = GetSizePixel();
+
+    auto popIt = pDev->ScopedPush();
+    pDev->SetMapMode();
+    if ( !(nFlags & SystemTextColorFlags::Mono) )
+    {
+        // DecoView uses the FaceColor...
+        AllSettings aSettings = pDev->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        if ( IsControlBackground() )
+            aStyleSettings.SetFaceColor( GetControlBackground() );
+        else
+            aStyleSettings.SetFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
+
+        aSettings.SetStyleSettings( aStyleSettings );
+        pDev->SetSettings( aSettings );
+    }
+
+    tools::Rectangle   aRect( Point( 0, 0 ), aSize );
+    tools::Rectangle aLowerRect, aUpperRect;
+    if ( mbHorz )
+    {
+        aLowerRect = tools::Rectangle( 0, 0, aSize.Width()/2, aSize.Height()-1 );
+        aUpperRect = tools::Rectangle( aLowerRect.TopRight(), aRect.BottomRight() );
+    }
+    else
+    {
+        aUpperRect = tools::Rectangle( 0, 0, aSize.Width()-1, aSize.Height()/2 );
+        aLowerRect = tools::Rectangle( aUpperRect.BottomLeft(), aRect.BottomRight() );
+    }
+
+    aUpperRect += aPos;
+    aLowerRect += aPos;
+
+    ImplDrawSpinButton(*pDev, this, aUpperRect, aLowerRect, false, false,
+                       IsEnabled() && ImplIsUpperEnabled(),
+                       IsEnabled() && ImplIsLowerEnabled(), mbHorz, true);
+}
+
+void SpinButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+{
+    HideFocus();
+
+    bool bEnable = IsEnabled();
+    ImplDrawSpinButton(rRenderContext, this, maUpperRect, maLowerRect, mbUpperIn, mbLowerIn,
+                       bEnable && ImplIsUpperEnabled(),
+                       bEnable && ImplIsLowerEnabled(), mbHorz, true);
+
+    if (HasFocus())
+        ShowFocus(maFocusRect);
+}
+
+void SpinButton::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if ( maUpperRect.Contains( rMEvt.GetPosPixel() ) && ( ImplIsUpperEnabled() ) )
+    {
+        mbUpperIn   = true;
+        mbInitialUp = true;
+        Invalidate( maUpperRect );
+    }
+    else if ( maLowerRect.Contains( rMEvt.GetPosPixel() ) && ( ImplIsLowerEnabled() ) )
+    {
+        mbLowerIn     = true;
+        mbInitialDown = true;
+        Invalidate( maLowerRect );
+    }
+
+    if ( mbUpperIn || mbLowerIn )
+    {
+        CaptureMouse();
+        if ( mbRepeat )
+            maRepeatTimer.Start();
+    }
+}
+
+void SpinButton::MouseButtonUp( const MouseEvent& )
+{
+    ReleaseMouse();
+    if ( mbRepeat )
+    {
+        maRepeatTimer.Stop();
+        maRepeatTimer.SetTimeout(MouseSettings::GetButtonStartRepeat() );
+    }
+
+    if ( mbUpperIn )
+    {
+        mbUpperIn   = false;
+        Invalidate( maUpperRect );
+        Up();
+    }
+    else if ( mbLowerIn )
+    {
+        mbLowerIn = false;
+        Invalidate( maLowerRect );
+        Down();
+    }
+
+    mbInitialUp = mbInitialDown = false;
+}
+
+void SpinButton::MouseMove( const MouseEvent& rMEvt )
+{
+    if ( !rMEvt.IsLeft() || (!mbInitialUp && !mbInitialDown) )
+        return;
+
+    if ( !maUpperRect.Contains( rMEvt.GetPosPixel() ) &&
+         mbUpperIn && mbInitialUp )
+    {
+        mbUpperIn = false;
+        maRepeatTimer.Stop();
+        Invalidate( maUpperRect );
+    }
+    else if ( !maLowerRect.Contains( rMEvt.GetPosPixel() ) &&
+              mbLowerIn && mbInitialDown )
+    {
+        mbLowerIn = false;
+        maRepeatTimer.Stop();
+        Invalidate( maLowerRect );
+    }
+    else if ( maUpperRect.Contains( rMEvt.GetPosPixel() ) &&
+              !mbUpperIn && mbInitialUp )
+    {
+        mbUpperIn = true;
+        if ( mbRepeat )
+            maRepeatTimer.Start();
+        Invalidate( maUpperRect );
+    }
+    else if ( maLowerRect.Contains( rMEvt.GetPosPixel() ) &&
+              !mbLowerIn && mbInitialDown )
+    {
+        mbLowerIn = true;
+        if ( mbRepeat )
+            maRepeatTimer.Start();
+        Invalidate( maLowerRect );
+    }
+}
+
+void SpinButton::KeyInput( const KeyEvent& rKEvt )
+{
+    if ( !rKEvt.GetKeyCode().GetModifier() )
+    {
+        switch ( rKEvt.GetKeyCode().GetCode() )
+        {
+        case KEY_LEFT:
+        case KEY_RIGHT:
+        {
+            bool bUp = KEY_RIGHT == rKEvt.GetKeyCode().GetCode();
+            if ( mbHorz && !ImplMoveFocus( bUp ) )
+                bUp ? Up() : Down();
+        }
+        break;
+
+        case KEY_UP:
+        case KEY_DOWN:
+        {
+            bool bUp = KEY_UP == rKEvt.GetKeyCode().GetCode();
+            if ( !mbHorz && !ImplMoveFocus( KEY_UP == rKEvt.GetKeyCode().GetCode() ) )
+                bUp ? Up() : Down();
+        }
+        break;
+
+        case KEY_SPACE:
+            mbUpperIsFocused ? Up() : Down();
+            break;
+
+        default:
+            Control::KeyInput( rKEvt );
+            break;
+        }
+    }
+    else
+        Control::KeyInput( rKEvt );
+}
+
+void SpinButton::StateChanged( StateChangedType nType )
+{
+    switch ( nType )
+    {
+    case StateChangedType::Data:
+    case StateChangedType::Enable:
+        Invalidate();
+        break;
+
+    case StateChangedType::Style:
+    {
+        bool bNewRepeat = 0 != ( GetStyle() & WB_REPEAT );
+        if ( bNewRepeat != mbRepeat )
+        {
+            if ( maRepeatTimer.IsActive() )
+            {
+                maRepeatTimer.Stop();
+                maRepeatTimer.SetTimeout( MouseSettings::GetButtonStartRepeat() );
+            }
+            mbRepeat = bNewRepeat;
+        }
+
+        bool bNewHorz = 0 != ( GetStyle() & WB_HSCROLL );
+        if ( bNewHorz != mbHorz )
+        {
+            mbHorz = bNewHorz;
+            Resize();
+        }
+    }
+    break;
+    default:;
+    }
+
+    Control::StateChanged( nType );
+}
+
+void SpinButton::SetRangeMin( tools::Long nNewRange )
+{
+    SetRange( Range( nNewRange, GetRangeMax() ) );
+}
+
+void SpinButton::SetRangeMax( tools::Long nNewRange )
+{
+    SetRange( Range( GetRangeMin(), nNewRange ) );
+}
+
+void SpinButton::SetRange( const Range& rRange )
+{
+    // adjust rage
+    Range aRange = rRange;
+    aRange.Normalize();
+    tools::Long nNewMinRange = aRange.Min();
+    tools::Long nNewMaxRange = aRange.Max();
+
+    // do something only if old and new range differ
+    if ( (mnMinRange == nNewMinRange) && (mnMaxRange == nNewMaxRange))
+        return;
+
+    mnMinRange = nNewMinRange;
+    mnMaxRange = nNewMaxRange;
+
+    // adjust value to new range, if necessary
+    if ( mnValue > mnMaxRange )
+        mnValue = mnMaxRange;
+    if ( mnValue < mnMinRange )
+        mnValue = mnMinRange;
+
+    CompatStateChanged( StateChangedType::Data );
+}
+
+void SpinButton::SetValue( tools::Long nValue )
+{
+    // adjust, if necessary
+    if ( nValue > mnMaxRange )
+        nValue = mnMaxRange;
+    if ( nValue < mnMinRange )
+        nValue = mnMinRange;
+
+    if ( mnValue != nValue )
+    {
+        mnValue = nValue;
+        CompatStateChanged( StateChangedType::Data );
+    }
+}
+
+void SpinButton::GetFocus()
+{
+    ShowFocus( maFocusRect );
+    Control::GetFocus();
+}
+
+void SpinButton::LoseFocus()
+{
+    HideFocus();
+    Control::LoseFocus();
+}
+
+bool SpinButton::ImplMoveFocus( bool _bUpper )
+{
+    if ( _bUpper == mbUpperIsFocused )
+        return false;
+
+    HideFocus();
+    ImplCalcFocusRect( _bUpper );
+    if ( HasFocus() )
+        ShowFocus( maFocusRect );
+    return true;
+}
+
+void SpinButton::ImplCalcFocusRect( bool _bUpper )
+{
+    maFocusRect = _bUpper ? maUpperRect : maLowerRect;
+    // inflate by some pixels
+    maFocusRect.AdjustLeft(2 );
+    maFocusRect.AdjustTop(2 );
+    maFocusRect.AdjustRight( -2 );
+    maFocusRect.AdjustBottom( -2 );
+    mbUpperIsFocused = _bUpper;
+}
+
+tools::Rectangle* SpinButton::ImplFindPartRect(const Point& rPt)
+{
+    if (maUpperRect.Contains(rPt))
+        return &maUpperRect;
+
+    if (maLowerRect.Contains(rPt))
+        return &maLowerRect;
+
+    return nullptr;
+}
+
+bool SpinButton::PreNotify( NotifyEvent& rNEvt )
+{
+    if (rNEvt.GetType() == NotifyEventType::MOUSEMOVE)
+    {
+        const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
+        if (pMouseEvt && !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged())
+        {
+            // trigger redraw if mouse over state has changed
+            if (IsNativeControlSupported(ControlType::Spinbox, ControlPart::Entire) ||
+                IsNativeControlSupported(ControlType::Spinbox, ControlPart::AllButtons) )
+            {
+                tools::Rectangle* pRect = ImplFindPartRect( GetPointerPosPixel() );
+                tools::Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
+                if (pRect != pLastRect || (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow()))
+                {
+                    vcl::Region aRgn(GetOutDev()->GetActiveClipRegion());
+                    if (pLastRect)
+                    {
+                        GetOutDev()->SetClipRegion(vcl::Region(*pLastRect));
+                        Invalidate(*pLastRect);
+                        GetOutDev()->SetClipRegion( aRgn );
+                    }
+                    if (pRect)
+                    {
+                        GetOutDev()->SetClipRegion(vcl::Region(*pRect));
+                        Invalidate(*pRect);
+                        GetOutDev()->SetClipRegion(aRgn);
+                    }
+                }
+            }
+        }
+    }
+
+    return Control::PreNotify(rNEvt);
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

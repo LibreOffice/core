@@ -1,0 +1,48 @@
+--- Modules/posixmodule.c
++++ Modules/posixmodule.c
+@@ -13998,6 +13998,9 @@
+ };
+ 
+ static int
++#if defined __clang__
++__attribute__((no_sanitize("shift-base"))) // MFD_HUGE_16GB in /usr/include/linux/memfd.h
++#endif
+ all_ins(PyObject *m)
+ {
+ #ifdef F_OK
+--- Objects/dictobject.c
++++ Objects/dictobject.c
+@@ -1497,7 +1497,7 @@
+             if (unicode) { // combined unicode -> combined unicode
+                 PyDictUnicodeEntry *newentries = DK_UNICODE_ENTRIES(mp->ma_keys);
+                 if (oldkeys->dk_nentries == numentries && mp->ma_keys->dk_kind == DICT_KEYS_UNICODE) {
+-                    memcpy(newentries, oldentries, numentries * sizeof(PyDictUnicodeEntry));
++                    memcpy(newentries, (void *) oldentries, numentries * sizeof(PyDictUnicodeEntry));
+                 }
+                 else {
+                     PyDictUnicodeEntry *ep = oldentries;
+--- Objects/listobject.c
++++ Objects/listobject.c
+@@ -539,7 +539,7 @@
+         dest[i] = Py_NewRef(v);
+     }
+     src = b->ob_item;
+-    dest = np->ob_item + Py_SIZE(a);
++    dest = Py_SIZE(a) == 0 ? np->ob_item : np->ob_item + Py_SIZE(a);
+     for (i = 0; i < Py_SIZE(b); i++) {
+         PyObject *v = src[i];
+         dest[i] = Py_NewRef(v);
+--- Parser/tokenizer.c
++++ Parser/tokenizer.c
+@@ -373,9 +373,9 @@
+ 
+   for (index = tok->tok_mode_stack_index; index >= 0; --index) {
+     mode = &(tok->tok_mode_stack[index]);
+-    mode->f_string_start = tok->buf + mode->f_string_start_offset;
++    mode->f_string_start = (char *) (((intptr_t) tok->buf) + mode->f_string_start_offset);
+     mode->f_string_multi_line_start =
+-        tok->buf + mode->f_string_multi_line_start_offset;
++        (char *) (((intptr_t) tok->buf) + mode->f_string_multi_line_start_offset);
+   }
+ }
+ 

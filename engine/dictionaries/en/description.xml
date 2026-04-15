@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="2025.04.01" />
+    <identifier value="org.openoffice.en.hunspell.dictionaries" />
+    <display-name>
+        <name lang="en-US">English spelling dictionaries, hyphenation rules, thesaurus, and grammar checker</name>
+    </display-name>
+    <platform value="all" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+    <icon>
+        <default xlink:href="English.png" />
+    </icon>
+    <publisher>
+        <name xlink:href="https://extensions.libreoffice.org/extensions/english-dictionaries" lang="en">Marco A.G.Pinto</name>
+    </publisher>
+</description>

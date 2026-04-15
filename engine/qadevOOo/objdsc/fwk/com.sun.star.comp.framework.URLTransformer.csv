@@ -1,0 +1,4 @@
+"URLTransformer";"com::sun::star::util::XURLTransformer";"parseStrict()"
+"URLTransformer";"com::sun::star::util::XURLTransformer";"parseSmart()"
+"URLTransformer";"com::sun::star::util::XURLTransformer";"assemble()"
+"URLTransformer";"com::sun::star::util::XURLTransformer";"getPresentation()"

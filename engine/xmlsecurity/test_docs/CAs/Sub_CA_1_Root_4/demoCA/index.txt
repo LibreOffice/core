@@ -1,0 +1,2 @@
+V	341114084401Z		1000	unknown	/C=DE/ST=Hamburg/O=OpenOffice.org/OU=Development/CN=User 1 Sub CA 1 Root 4
+R	341114085720Z	091120085929Z,keyCompromise	1001	unknown	/C=DE/ST=Hamburg/O=OpenOffice.org/OU=Development/CN=User 2 Sub CA 1 Root 4

@@ -1,0 +1,125 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module security {
+
+/**
+ * Interface of a PKI Certificate
+ *
+ * <p>This interface represents a certificate (X.509 or OpenPGP) .</p>
+ */
+interface XCertificate : com::sun::star::uno::XInterface
+{
+    /**
+     * the version number attribute of the certificate.
+     */
+    [attribute, readonly] short Version ;
+
+    /**
+     * the serial number attribute of the certificate.
+     */
+    [attribute, readonly] sequence< byte > SerialNumber ;
+
+    /**
+     * the issuer name attribute of the certificate.
+     */
+    [attribute, readonly] string IssuerName ;
+
+    /**
+     * the subject name attribute of the certificate.
+     */
+    [attribute, readonly] string SubjectName ;
+
+    /**
+     * the validity NotBefore date attribute of the certificate.
+     */
+    [attribute, readonly] com::sun::star::util::DateTime NotValidBefore ;
+
+    /**
+     * the validity NotAfter date attribute of the certificate.
+     */
+    [attribute, readonly] com::sun::star::util::DateTime NotValidAfter ;
+
+    /**
+     * the issuer unique ID attribute of the certificate.
+     */
+    [attribute, readonly] sequence< byte > IssuerUniqueID ;
+
+    /**
+     * the subject unique ID attribute of the certificate.
+     */
+    [attribute, readonly] sequence< byte > SubjectUniqueID ;
+
+    /**
+     * all extensions of a certificate.
+     */
+    [attribute, readonly] sequence< XCertificateExtension > Extensions ;
+
+    /**
+     * the DER encoded form of the certificate
+     */
+    [attribute, readonly] sequence< byte > Encoded ;
+
+    /**
+     * the algorithm of the subject public key
+     */
+    [attribute, readonly] string SubjectPublicKeyAlgorithm;
+
+    /**
+     * the value of the subject public key
+     */
+    [attribute, readonly] sequence< byte > SubjectPublicKeyValue;
+
+    /**
+     * the signature algorithm
+     */
+    [attribute, readonly] string SignatureAlgorithm;
+
+    /**
+     * the SHA-1 thumbprint
+     */
+    [attribute, readonly] sequence< byte > SHA1Thumbprint;
+
+    /**
+     * the MD5 thumbprint
+     */
+    [attribute, readonly] sequence< byte > MD5Thumbprint;
+
+    /**
+     *  the kind of certificate, X.509 or OpenPGP
+     */
+    [attribute, readonly] com::sun::star::security::CertificateKind CertificateKind;
+
+    /**
+     * Find an extension with an object identifier.
+     */
+    XCertificateExtension findCertificateExtension( [in]sequence< byte > oid ) ;
+
+    /**
+     * get the certificate usage. The return value is a set of bits, as defined in RFC3280 for the
+     * KeyUsage BIT STRING. Note the bit and byte order used in ASN.1, so for instance the bit
+     * dataEncipherment in KeyUsage, "bit 3", corresponds to CERT_DATA_ENCIPHERMENT_KEY_USAGE in
+     * Win32 and KU_DATA_ENCIPHERMENT in NSS, both with value 0x10.
+     */
+    long getCertificateUsage();
+} ;
+
+} ; } ; } ; } ;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

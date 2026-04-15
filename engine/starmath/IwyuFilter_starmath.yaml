@@ -1,0 +1,43 @@
+---
+assumeFilename: starmath/source/document.cxx
+excludelist:
+    starmath/inc/smmod.hxx:
+    # Needed for define
+    - sfx2/app.hxx
+    starmath/inc/format.hxx:
+    # Needed for FONTNAME_MATH macro
+    - types.hxx
+    starmath/qa/extras/mmlexport-test.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    starmath/qa/cppunit/test_node.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    starmath/source/accessibility.hxx:
+    # Base class needs complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleText.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    starmath/source/smdetect.hxx:
+    # Base class needs complete type
+    - com/sun/star/document/XExtendedFilterDetection.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    starmath/source/accessibility.cxx:
+    # Needed for implicit dtor
+    - editeng/editobj.hxx
+    starmath/source/node.cxx:
+    # Actually used
+    - vector
+    starmath/source/smdll.cxx:
+    # Needed to inherit linker visibility
+    - smdll.hxx
+    starmath/source/typemap.cxx:
+    # Needed for smslots.hxx to build
+    - config_options.h
+    - sfx2/msg.hxx
+    - sfx2/zoomitem.hxx
+    - svx/zoomslideritem.hxx
+    - svl/slstitm.hxx
+    starmath/source/unodoc.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp

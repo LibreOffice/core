@@ -1,0 +1,12 @@
+diff -ur cairo.org/src/meson.build cairo/src/meson.build
+--- cairo.org/src/meson.build	2025-01-29 14:45:14.418331058 +0200
++++ cairo/src/meson.build	2025-01-29 14:45:46.897440936 +0200
+@@ -240,7 +240,7 @@
+   add_project_arguments('-DCAIRO_WIN32_STATIC_BUILD', language: 'c')
+ endif
+ 
+-libcairo = library('cairo', cairo_sources,
++libcairo = library('cairo-lo', cairo_sources,
+   dependencies: deps,
+   c_args: cairo_no_warn_c_args + pthread_c_args + ['-DCAIRO_COMPILATION'],
+   cpp_args: cairo_no_warn_c_args + pthread_c_args + ['-DCAIRO_COMPILATION'],

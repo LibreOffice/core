@@ -1,0 +1,101 @@
+diff -ru pentaho-reporting-flow-engine-0.9.4.orig/source/org/jfree/report/JFreeReportBoot.java pentaho-reporting-flow-engine-0.9.4/source/org/jfree/report/JFreeReportBoot.java
+--- pentaho-reporting-flow-engine-0.9.4.orig/source/org/jfree/report/JFreeReportBoot.java	2021-04-07 12:09:46.917336778 +0100
++++ pentaho-reporting-flow-engine-0.9.4/source/org/jfree/report/JFreeReportBoot.java	2021-04-07 12:12:04.794062296 +0100
+@@ -42,8 +42,7 @@
+ import org.pentaho.reporting.libraries.base.boot.PackageManager;
+ import org.pentaho.reporting.libraries.base.versioning.ProjectInformation;
+ import org.pentaho.reporting.libraries.base.LibBaseBoot;
+-import org.apache.commons.logging.LogFactory;
+-import org.apache.commons.logging.Log;
++import java.util.logging.Logger;
+ 
+ /**
+  * An utility class to safely boot and initialize the JFreeReport library. This class
+@@ -66,7 +65,7 @@
+  */
+ public class JFreeReportBoot extends AbstractBoot
+ {
+-  private static final Log logger = LogFactory.getLog(JFreeReportBoot.class);
++  private static final Logger logger = Logger.getLogger(JFreeReportBoot.class.getName());
+ 
+   /**
+    * A wrappper around the user supplied global configuration.
+@@ -292,12 +291,12 @@
+     // make sure logging is re-initialized after we injected our configuration.
+     if (isStrictFP() == false)
+     {
+-      logger.warn("The used VM seems to use a non-strict floating point arithmetics");
+-      logger.warn("Layouts computed with this Java Virtual Maschine may be invalid.");
+-      logger.warn("JFreeReport and the library 'iText' depend on the strict floating point rules");
+-      logger.warn("of Java1.1 as implemented by the Sun Virtual Maschines.");
+-      logger.warn("If you are using the BEA JRockit VM, start the Java VM with the option");
+-      logger.warn("'-Xstrictfp' to restore the default behaviour.");
++      logger.warning("The used VM seems to use a non-strict floating point arithmetics");
++      logger.warning("Layouts computed with this Java Virtual Maschine may be invalid.");
++      logger.warning("JFreeReport and the library 'iText' depend on the strict floating point rules");
++      logger.warning("of Java1.1 as implemented by the Sun Virtual Maschines.");
++      logger.warning("If you are using the BEA JRockit VM, start the Java VM with the option");
++      logger.warning("'-Xstrictfp' to restore the default behaviour.");
+     }
+ 
+     final PackageManager mgr = getPackageManager();
+@@ -338,8 +337,8 @@
+     }
+     catch (Exception se)
+     {
+-      logger.error
+-              ("An error occured while checking the system properties for extension modules.", se);
++      logger.severe
++              ("An error occured while checking the system properties for extension modules: " + se);
+     }
+   }
+ 
+diff -ru pentaho-reporting-flow-engine-0.9.4.orig/source/org/jfree/report/util/ComponentDrawable.java pentaho-reporting-flow-engine-0.9.4/source/org/jfree/report/util/ComponentDrawable.java
+--- pentaho-reporting-flow-engine-0.9.4.orig/source/org/jfree/report/util/ComponentDrawable.java	2021-04-07 12:09:46.916336765 +0100
++++ pentaho-reporting-flow-engine-0.9.4/source/org/jfree/report/util/ComponentDrawable.java	2021-04-07 12:11:25.530570919 +0100
+@@ -42,8 +42,7 @@
+ import javax.swing.RepaintManager;
+ import javax.swing.SwingUtilities;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * Creation-Date: 11.10.2005, 14:03:15
+@@ -52,7 +51,7 @@
+  */
+ public class ComponentDrawable
+ {
+-  private static final Log logger = LogFactory.getLog (ComponentDrawable.class);
++  private static final Logger logger = Logger.getLogger(ComponentDrawable.class.getName());
+ 
+   /**
+    * A runnable that executes the drawing operation on the event-dispatcher thread.
+@@ -443,7 +442,7 @@
+     }
+     catch (Exception e)
+     {
+-      ComponentDrawable.logger.warn("Failed to compute the preferred size.");
++      ComponentDrawable.logger.warning("Failed to compute the preferred size.");
+     }
+     return new Dimension(0, 0);
+   }
+@@ -475,7 +474,7 @@
+     }
+     catch (Exception e)
+     {
+-      ComponentDrawable.logger.warn("Failed to compute the defined size.");
++      ComponentDrawable.logger.warning("Failed to compute the defined size.");
+     }
+     return new Dimension(0, 0);
+   }
+@@ -563,7 +562,7 @@
+       }
+       catch (Exception e)
+       {
+-        ComponentDrawable.logger.warn("Failed to redraw the component.");
++        ComponentDrawable.logger.warning("Failed to redraw the component.");
+       }
+     }
+   }

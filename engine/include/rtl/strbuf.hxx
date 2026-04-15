@@ -1,0 +1,1091 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include "sal/config.h"
+
+#include <cassert>
+#include <cstring>
+#include <limits>
+
+#include "rtl/strbuf.h"
+#include "rtl/string.hxx"
+#include "rtl/stringutils.hxx"
+
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+#include "rtl/stringconcat.hxx"
+#include <string_view>
+#include <type_traits>
+#endif
+
+#ifdef RTL_STRING_UNITTEST
+extern bool rtl_string_unittest_const_literal;
+extern bool rtl_string_unittest_const_literal_function;
+#endif
+
+// The unittest uses slightly different code to help check that the proper
+// calls are made. The class is put into a different namespace to make
+// sure the compiler generates a different (if generating also non-inline)
+// copy of the function and does not merge them together. The class
+// is "brought" into the proper rtl namespace by a typedef below.
+#ifdef RTL_STRING_UNITTEST
+#define rtl rtlunittest
+#endif
+
+namespace rtl
+{
+
+/// @cond INTERNAL
+#ifdef RTL_STRING_UNITTEST
+#undef rtl
+// helper macro to make functions appear more readable
+#define RTL_STRING_CONST_FUNCTION rtl_string_unittest_const_literal_function = true;
+#else
+#define RTL_STRING_CONST_FUNCTION
+#endif
+/// @endcond
+
+/** A string buffer implements a mutable sequence of characters.
+ */
+class SAL_WARN_UNUSED OStringBuffer
+{
+public:
+    /**
+        Constructs a string buffer with no characters in it and an
+        initial capacity of 16 characters.
+     */
+    OStringBuffer()
+        : pData(NULL)
+        , nCapacity( 16 )
+    {
+        rtl_string_new_WithLength( &pData, nCapacity );
+    }
+
+    /**
+        Allocates a new string buffer that contains the same sequence of
+        characters as the string buffer argument.
+
+        @param   value   a <code>OStringBuffer</code>.
+     */
+    OStringBuffer( const OStringBuffer & value )
+        : pData(NULL)
+        , nCapacity( value.nCapacity )
+    {
+        rtl_stringbuffer_newFromStringBuffer( &pData, value.nCapacity, value.pData );
+    }
+
+    /**
+        Constructs a string buffer with no characters in it and an
+        initial capacity specified by the <code>length</code> argument.
+
+        @param      length   the initial capacity.
+     */
+    explicit OStringBuffer(sal_Int32 length)
+        : pData(NULL)
+        , nCapacity( length )
+    {
+        rtl_string_new_WithLength( &pData, length );
+    }
+#if defined LIBO_INTERNAL_ONLY
+    template<typename T>
+    explicit OStringBuffer(T length, std::enable_if_t<std::is_integral_v<T>, int> = 0)
+        : OStringBuffer(static_cast<sal_Int32>(length))
+    {
+        assert(libreoffice_internal::IsValidStrLen(length));
+    }
+    // avoid (obvious) bugs
+    explicit OStringBuffer(bool) = delete;
+    explicit OStringBuffer(char) = delete;
+    explicit OStringBuffer(wchar_t) = delete;
+#if !(defined _MSC_VER && _MSC_VER >= 1930 && _MSC_VER <= 1939 && defined _MANAGED)
+    explicit OStringBuffer(char8_t) = delete;
+#endif
+    explicit OStringBuffer(char16_t) = delete;
+    explicit OStringBuffer(char32_t) = delete;
+#endif
+
+    /**
+        Constructs a string buffer so that it represents the same
+        sequence of characters as the string argument.
+
+        The initial
+        capacity of the string buffer is <code>16</code> plus the length
+        of the string argument.
+
+        @param   value   the initial string value.
+     */
+#if defined LIBO_INTERNAL_ONLY
+    OStringBuffer(std::string_view sv)
+        : pData(nullptr)
+        , nCapacity(libreoffice_internal::ThrowIfInvalidStrLen(sv.length(), 16) + 16)
+    {
+        rtl_stringbuffer_newFromStr_WithLength( &pData, sv.data(), sv.length() );
+    }
+#else
+    OStringBuffer(const OString& value)
+        : pData(NULL)
+        , nCapacity( value.getLength() + 16 )
+    {
+        rtl_stringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
+    }
+#endif
+
+    /**
+        @overload
+     */
+    template< typename T >
+    OStringBuffer( const T& value, typename libreoffice_internal::CharPtrDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy())
+        : pData(NULL)
+    {
+        sal_Int32 length = rtl_str_getLength( value );
+        nCapacity = length + 16;
+        rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
+    }
+
+    template< typename T >
+    OStringBuffer( T& value, typename libreoffice_internal::NonConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy())
+        : pData(NULL)
+    {
+        sal_Int32 length = rtl_str_getLength( value );
+        nCapacity = length + 16;
+        rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
+    }
+
+#if __cplusplus > 202002L // C++23 P2266R3 "Simpler implicit move"
+    template< typename T >
+    OStringBuffer( T&& value, typename libreoffice_internal::NonConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy())
+        : pData(NULL)
+    {
+        sal_Int32 length = rtl_str_getLength( value );
+        nCapacity = length + 16;
+        rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
+    }
+#endif
+
+    /**
+      Constructs a string buffer so that it represents the same
+        sequence of characters as the string literal.
+
+      If there are any embedded \0's in the string literal, the result is undefined.
+      Use the overload that explicitly accepts length.
+
+      @param    literal       a string literal
+    */
+    template< typename T >
+    OStringBuffer( T& literal, typename libreoffice_internal::ConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy())
+        : pData(NULL)
+        , nCapacity( libreoffice_internal::ConstCharArrayDetector<T>::length + 16 )
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        rtl_string_newFromLiteral(
+            &pData,
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            libreoffice_internal::ConstCharArrayDetector<T>::length, 16);
+#ifdef RTL_STRING_UNITTEST
+        rtl_string_unittest_const_literal = true;
+#endif
+    }
+
+    /**
+        Constructs a string buffer so that it represents the same
+        sequence of characters as the string argument.
+
+        The initial
+        capacity of the string buffer is <code>16</code> plus length
+
+        @param    value       a character array.
+        @param    length      the number of character which should be copied.
+                              The character array length must be greater or
+                              equal than this value.
+     */
+    OStringBuffer(const char * value, sal_Int32 length)
+        : pData(NULL)
+        , nCapacity( length + 16 )
+    {
+        rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
+    }
+
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+    /**
+     @overload
+     @internal
+    */
+    template< typename T1, typename T2 >
+    OStringBuffer( OStringConcat< T1, T2 >&& c )
+    {
+        const sal_Int32 l = c.length();
+        nCapacity = l + 16;
+        pData = rtl_string_alloc( nCapacity );
+        char* end = c.addData( pData->buffer );
+        *end = '\0';
+        pData->length = l;
+    }
+
+    /**
+     @overload
+     @internal
+    */
+    template< std::size_t N >
+    OStringBuffer( OStringNumber< N >&& n )
+        : OStringBuffer( n.buf, n.length)
+    {}
+#endif
+
+#if defined LIBO_INTERNAL_ONLY
+    operator std::string_view() const { return {getStr(), sal_uInt32(getLength())}; }
+#endif
+
+    /** Assign to this a copy of value.
+     */
+    OStringBuffer& operator = ( const OStringBuffer& value )
+    {
+        if (this != &value)
+        {
+            rtl_stringbuffer_newFromStringBuffer(&pData,
+                                                  value.nCapacity,
+                                                  value.pData);
+            nCapacity = value.nCapacity;
+        }
+        return *this;
+    }
+
+    /** Assign from a string.
+    */
+#if defined LIBO_INTERNAL_ONLY
+    OStringBuffer & operator =(std::string_view string) {
+        sal_Int32 n = string.length();
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        std::memcpy(pData->buffer, string.data(), n);
+        pData->buffer[n] = '\0';
+        pData->length = n;
+        return *this;
+    }
+#else
+    OStringBuffer & operator =(OString const & string) {
+        sal_Int32 n = string.getLength();
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        std::memcpy(pData->buffer, string.pData->buffer, n + 1);
+        pData->length = n;
+        return *this;
+    }
+#endif
+
+    /** Assign from a string literal.
+    */
+    template<typename T>
+    typename
+        libreoffice_internal::ConstCharArrayDetector<T, OStringBuffer &>::Type
+    operator =(T & literal) {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        sal_Int32 const n
+            = libreoffice_internal::ConstCharArrayDetector<T>::length;
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        std::memcpy(
+            pData->buffer,
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            n + 1);
+        pData->length = n;
+        return *this;
+    }
+
+#if defined LIBO_INTERNAL_ONLY
+    /** @overload */
+    template<typename T1, typename T2>
+    OStringBuffer & operator =(OStringConcat<T1, T2> && concat) {
+        sal_Int32 const n = concat.length();
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        *concat.addData(pData->buffer) = 0;
+        pData->length = n;
+        return *this;
+    }
+
+    /** @overload @internal */
+    template<std::size_t N>
+    OStringBuffer & operator =(OStringNumber<N> && n)
+    {
+        return operator =(std::string_view(n));
+    }
+#endif
+
+    /**
+        Release the string data.
+     */
+    ~OStringBuffer()
+    {
+        rtl_string_release( pData );
+    }
+
+    /**
+        Fill the string data in the new string and clear the buffer.
+
+        This method is more efficient than the constructor of the string. It does
+        not copy the buffer.
+
+        @return the string previously contained in the buffer.
+     */
+    SAL_WARN_UNUSED_RESULT OString makeStringAndClear()
+    {
+        OString aRet( pData );
+        rtl_string_new(&pData);
+        nCapacity = 0;
+        return aRet;
+    }
+
+    /**
+        Returns the length (character count) of this string buffer.
+
+        @return  the number of characters in this string buffer.
+     */
+    sal_Int32 getLength() const
+    {
+        return pData->length;
+    }
+
+    /**
+      Checks if a string buffer is empty.
+
+      @return   true if the string buffer is empty;
+                false, otherwise.
+    */
+    bool isEmpty() const
+    {
+        return pData->length == 0;
+    }
+
+    /**
+        Returns the current capacity of the String buffer.
+
+        The capacity
+        is the amount of storage available for newly inserted
+        characters. The real buffer size is 1 byte longer, because
+        all strings are 0 terminated.
+
+        @return  the current capacity of this string buffer.
+     */
+    sal_Int32 getCapacity() const
+    {
+        return nCapacity;
+    }
+
+    /**
+        Ensures that the capacity of the buffer is at least equal to the
+        specified minimum.
+
+        The new capacity will be at least as large as the maximum of the current
+        length (so that no contents of the buffer is destroyed) and the given
+        minimumCapacity.  If the given minimumCapacity is negative, nothing is
+        changed.
+
+        @param   minimumCapacity   the minimum desired capacity.
+     */
+    void ensureCapacity(sal_Int32 minimumCapacity)
+    {
+        rtl_stringbuffer_ensureCapacity( &pData, &nCapacity, minimumCapacity );
+    }
+
+    /**
+        Sets the length of this String buffer.
+
+        If the <code>newLength</code> argument is less than the current
+        length of the string buffer, the string buffer is truncated to
+        contain exactly the number of characters given by the
+        <code>newLength</code> argument.
+        <p>
+        If the <code>newLength</code> argument is greater than or equal
+        to the current length, sufficient null characters
+        (<code>'&#92;u0000'</code>) are appended to the string buffer so that
+        length becomes the <code>newLength</code> argument.
+        <p>
+        The <code>newLength</code> argument must be greater than or equal
+        to <code>0</code>.
+
+        @param      newLength   the new length of the buffer.
+     */
+    void setLength(sal_Int32 newLength)
+    {
+        assert(newLength >= 0);
+        // Avoid modifications if pData points to const empty string:
+        if( newLength != pData->length )
+        {
+            if( newLength > nCapacity )
+                rtl_stringbuffer_ensureCapacity(&pData, &nCapacity, newLength);
+            else
+                pData->buffer[newLength] = '\0';
+            pData->length = newLength;
+        }
+    }
+
+    /**
+        Returns the character at a specific index in this string buffer.
+
+        The first character of a string buffer is at index
+        <code>0</code>, the next at index <code>1</code>, and so on, for
+        array indexing.
+        <p>
+        The index argument must be greater than or equal to
+        <code>0</code>, and less than the length of this string buffer.
+
+        @param      index   the index of the desired character.
+        @return     the character at the specified index of this string buffer.
+    */
+    SAL_DEPRECATED("use rtl::OStringBuffer::operator [] instead")
+    char charAt( sal_Int32 index )
+    {
+        assert(index >= 0 && index < pData->length);
+        return pData->buffer[ index ];
+    }
+
+    /**
+        The character at the specified index of this string buffer is set
+        to <code>ch</code>.
+
+        The index argument must be greater than or equal to
+        <code>0</code>, and less than the length of this string buffer.
+
+        @param      index   the index of the character to modify.
+        @param      ch      the new character.
+     */
+    SAL_DEPRECATED("use rtl::OStringBuffer::operator [] instead")
+    OStringBuffer & setCharAt(sal_Int32 index, char ch)
+    {
+        assert(index >= 0 && index < pData->length);
+        pData->buffer[ index ] = ch;
+        return *this;
+    }
+
+    /**
+        Return a null terminated character array.
+     */
+    const char* getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
+
+#if defined LIBO_INTERNAL_ONLY
+    // Provide unsafe non-const access to the null-terminated string.  Callers can mutate the
+    // contents of the string buffer (including introducing embedded null characters), but cannot
+    // modify its length.
+    char * getMutableStr() SAL_RETURNS_NONNULL { return pData->buffer; }
+#endif
+
+    /**
+      Access to individual characters.
+
+      @param index must be non-negative and less than length.
+
+      @return a reference to the character at the given index.
+    */
+    char & operator [](sal_Int32 index)
+    {
+        assert(index >= 0 && index < pData->length);
+        return pData->buffer[index];
+    }
+
+    /**
+        Return an OString instance reflecting the current content
+        of this OStringBuffer.
+     */
+    OString toString() const
+    {
+        return OString(pData->buffer, pData->length);
+    }
+
+#if !defined LIBO_INTERNAL_ONLY
+    /**
+        Appends the string to this string buffer.
+
+        The characters of the <code>String</code> argument are appended, in
+        order, to the contents of this string buffer, increasing the
+        length of this string buffer by the length of the argument.
+
+        @param   str   a string.
+        @return  this string buffer.
+     */
+    OStringBuffer & append(const OString &str)
+    {
+        return insert(getLength(), str);
+    }
+#endif
+
+    /**
+        Appends the string representation of the <code>char</code> array
+        argument to this string buffer.
+
+        The characters of the array argument are appended, in order, to
+        the contents of this string buffer. The length of this string
+        buffer increases by the length of the argument.
+
+        @param   str   the characters to be appended.
+        @return  this string buffer.
+     */
+    template< typename T >
+    typename libreoffice_internal::CharPtrDetector< T, OStringBuffer& >::Type append( const T& str )
+    {
+        return insert(getLength(), str);
+    }
+
+    template< typename T >
+    typename libreoffice_internal::NonConstCharArrayDetector< T, OStringBuffer& >::Type append( T& str )
+    {
+        return insert(getLength(), str);
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, OStringBuffer& >::Type append( T& literal )
+    {
+        return insert(getLength(), literal);
+    }
+
+    /**
+        Appends the string representation of the <code>char</code> array
+        argument to this string buffer.
+
+        Characters of the character array <code>str</code> are appended,
+        in order, to the contents of this string buffer. The length of this
+        string buffer increases by the value of <code>len</code>.
+
+        @param str the characters to be appended; must be non-null, and must
+        point to at least len characters
+        @param len the number of characters to append; must be non-negative
+        @return  this string buffer.
+     */
+    OStringBuffer & append( const char * str, sal_Int32 len)
+    {
+        return insert(getLength(), str, len);
+    }
+
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+    /**
+     @overload
+     @internal
+    */
+    template< typename T1, typename T2 >
+    OStringBuffer& append( OStringConcat< T1, T2 >&& c )
+    {
+        sal_Int32 l = c.length();
+        if (l != 0)
+            c.addData(appendUninitialized(l));
+        return *this;
+    }
+
+    /**
+     @overload
+     @internal
+     */
+    OStringBuffer& append( std::string_view s )
+    {
+        return insert(getLength(), s);
+    }
+
+#endif
+
+    /**
+        Appends the string representation of the <code>sal_Bool</code>
+        argument to the string buffer.
+
+        The argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then appended to this string buffer.
+
+        @param   b   a <code>sal_Bool</code>.
+        @return  this string buffer.
+     */
+    OStringBuffer & append(sal_Bool b)
+    {
+        return insert(getLength(), b);
+    }
+
+    /**
+        Appends the string representation of the <code>bool</code>
+        argument to the string buffer.
+
+        The argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then appended to this string buffer.
+
+        @param   b   a <code>bool</code>.
+        @return  this string buffer.
+     */
+    OStringBuffer & append(bool b)
+    {
+        return insert(getLength(), b);
+    }
+
+    /// @cond INTERNAL
+    // Pointer can be automatically converted to bool, which is unwanted here.
+    // Explicitly delete all pointer append() overloads to prevent this
+    // (except for char* overload, which is handled elsewhere).
+    template< typename T >
+    typename libreoffice_internal::Enable< void,
+        !libreoffice_internal::CharPtrDetector< T* >::ok >::Type
+        append( T* ) SAL_DELETED_FUNCTION;
+    /// @endcond
+
+    /**
+        Appends the string representation of the <code>char</code>
+        argument to this string buffer.
+
+        The argument is appended to the contents of this string buffer.
+        The length of this string buffer increases by <code>1</code>.
+
+        @param   c   a <code>char</code>.
+        @return  this string buffer.
+     */
+    OStringBuffer & append(char c)
+    {
+        return insert(getLength(), c);
+    }
+
+    /**
+        Appends the string representation of the <code>sal_Int32</code>
+        argument to this string buffer.
+
+        The argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then appended to this string buffer.
+
+        @param   i   an <code>sal_Int32</code>.
+        @param radix the radix
+        @return  this string buffer.
+     */
+    OStringBuffer & append(sal_Int32 i, sal_Int16 radix = 10 )
+    {
+        return insert(getLength(), i, radix);
+    }
+
+    /**
+        Appends the string representation of the <code>long</code>
+        argument to this string buffer.
+
+        The argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then appended to this string buffer.
+
+        @param   l   a <code>long</code>.
+        @param radix the radix
+        @return  this string buffer.
+     */
+    OStringBuffer & append(sal_Int64 l, sal_Int16 radix = 10 )
+    {
+        return insert(getLength(), l, radix);
+    }
+
+    /**
+        Appends the string representation of the <code>float</code>
+        argument to this string buffer.
+
+        The argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then appended to this string buffer.
+
+        @param   f   a <code>float</code>.
+        @return  this string buffer.
+     */
+    OStringBuffer & append(float f)
+    {
+        return insert(getLength(), f);
+    }
+
+    /**
+        Appends the string representation of the <code>double</code>
+        argument to this string buffer.
+
+        The argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then appended to this string buffer.
+
+        @param   d   a <code>double</code>.
+        @return  this string buffer.
+     */
+    OStringBuffer & append(double d)
+    {
+        return insert(getLength(), d);
+    }
+
+    /**
+       Unsafe way to make space for a fixed amount of characters to be appended
+       into this OStringBuffer.
+
+       A call to this function must immediately be followed by code that
+       completely fills the uninitialized block pointed to by the return value.
+
+       @param length the length of the uninitialized block of char entities;
+       must be non-negative
+
+       @return a pointer to the start of the uninitialized block; only valid
+       until this OStringBuffer's capacity changes
+    */
+    char * appendUninitialized(sal_Int32 length) SAL_RETURNS_NONNULL {
+        sal_Int32 n = getLength();
+        rtl_stringbuffer_insert(&pData, &nCapacity, n, NULL, length);
+        return pData->buffer + n;
+    }
+
+    /**
+        Inserts the string into this string buffer.
+
+        The characters of the <code>String</code> argument are inserted, in
+        order, into this string buffer at the indicated offset. The length
+        of this string buffer is increased by the length of the argument.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      str      a string.
+        @return     this string buffer.
+     */
+#if defined LIBO_INTERNAL_ONLY
+    OStringBuffer & insert(sal_Int32 offset, std::string_view str)
+    {
+        return insert( offset, str.data(), str.length() );
+    }
+#else
+    OStringBuffer & insert(sal_Int32 offset, const OString & str)
+    {
+        return insert( offset, str.getStr(), str.getLength() );
+    }
+#endif
+
+    /**
+        Inserts the string representation of the <code>char</code> array
+        argument into this string buffer.
+
+        The characters of the array argument are inserted into the
+        contents of this string buffer at the position indicated by
+        <code>offset</code>. The length of this string buffer increases by
+        the length of the argument.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      str      a character array.
+        @return     this string buffer.
+     */
+    template< typename T >
+    typename libreoffice_internal::CharPtrDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, const T& str )
+    {
+        return insert( offset, str, rtl_str_getLength( str ) );
+    }
+
+    template< typename T >
+    typename libreoffice_internal::NonConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& str )
+    {
+        return insert( offset, str, rtl_str_getLength( str ) );
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
+    {
+        RTL_STRING_CONST_FUNCTION
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        return insert(
+            offset,
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            libreoffice_internal::ConstCharArrayDetector<T>::length);
+    }
+
+    /**
+        Inserts the string representation of the <code>char</code> array
+        argument into this string buffer.
+
+        The characters of the array argument are inserted into the
+        contents of this string buffer at the position indicated by
+        <code>offset</code>. The length of this string buffer increases by
+        the length of the argument.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      str      a character array.
+        @param      len      the number of characters to append.
+        @return     this string buffer.
+     */
+    OStringBuffer & insert( sal_Int32 offset, const char * str, sal_Int32 len)
+    {
+        assert( len == 0 || str != NULL ); // cannot assert that in rtl_stringbuffer_insert
+        rtl_stringbuffer_insert( &pData, &nCapacity, offset, str, len );
+        return *this;
+    }
+
+    /**
+        Inserts the string representation of the <code>sal_Bool</code>
+        argument into this string buffer.
+
+        The second argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then inserted into this string buffer at the indicated
+        offset.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      b        a <code>sal_Bool</code>.
+        @return     this string buffer.
+     */
+    OStringBuffer & insert(sal_Int32 offset, sal_Bool b)
+    {
+        char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
+        return insert( offset, sz, rtl_str_valueOfBoolean( sz, b ) );
+    }
+
+    /**
+        Inserts the string representation of the <code>bool</code>
+        argument into this string buffer.
+
+        The second argument is converted to a string as if by the method
+        <code>OString::boolean</code>, and the characters of that
+        string are then inserted into this string buffer at the indicated
+        offset.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      b        a <code>bool</code>.
+        @return     this string buffer.
+     */
+    OStringBuffer & insert(sal_Int32 offset, bool b)
+    {
+        char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
+        return insert( offset, sz, rtl_str_valueOfBoolean( sz, b ) );
+    }
+
+    /**
+        Inserts the string representation of the <code>char</code>
+        argument into this string buffer.
+
+        The second argument is inserted into the contents of this string
+        buffer at the position indicated by <code>offset</code>. The length
+        of this string buffer increases by one.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      c        a <code>char</code>.
+        @return     this string buffer.
+     */
+    OStringBuffer & insert(sal_Int32 offset, char c)
+    {
+        return insert( offset, &c, 1 );
+    }
+
+    /**
+        Inserts the string representation of the second <code>sal_Int32</code>
+        argument into this string buffer.
+
+        The second argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then inserted into this string buffer at the indicated
+        offset.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      i        an <code>sal_Int32</code>.
+        @param      radix the radix
+        @return     this string buffer.
+     */
+    OStringBuffer & insert(sal_Int32 offset, sal_Int32 i, sal_Int16 radix = 10 )
+    {
+        char sz[RTL_STR_MAX_VALUEOFINT32];
+        return insert( offset, sz, rtl_str_valueOfInt32( sz, i, radix ) );
+    }
+
+    /**
+        Inserts the string representation of the <code>long</code>
+        argument into this string buffer.
+
+        The second argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then inserted into this string buffer at the indicated
+        offset.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      l        a <code>long</code>.
+        @param      radix the radix
+        @return     this string buffer.
+     */
+    OStringBuffer & insert(sal_Int32 offset, sal_Int64 l, sal_Int16 radix = 10 )
+    {
+        char sz[RTL_STR_MAX_VALUEOFINT64];
+        return insert( offset, sz, rtl_str_valueOfInt64( sz, l, radix ) );
+    }
+
+    /**
+        Inserts the string representation of the <code>float</code>
+        argument into this string buffer.
+
+        The second argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then inserted into this string buffer at the indicated
+        offset.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      f        a <code>float</code>.
+        @return     this string buffer.
+     */
+    OStringBuffer & insert(sal_Int32 offset, float f)
+    {
+        // Same as rtl::str::valueOfFP, used for rtl_str_valueOfFloat
+        rtl_math_doubleToString(&pData, &nCapacity, offset, f, rtl_math_StringFormat_G,
+                                RTL_STR_MAX_VALUEOFFLOAT - SAL_N_ELEMENTS("-x.E-xxx") + 1, '.',
+                                NULL, 0, true);
+        return *this;
+    }
+
+    /**
+        Inserts the string representation of the <code>double</code>
+        argument into this string buffer.
+
+        The second argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then inserted into this string buffer at the indicated
+        offset.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      d        a <code>double</code>.
+        @return     this string buffer.
+     */
+    OStringBuffer & insert(sal_Int32 offset, double d)
+    {
+        // Same as rtl::str::valueOfFP, used for rtl_str_valueOfDouble
+        rtl_math_doubleToString(&pData, &nCapacity, offset, d, rtl_math_StringFormat_G,
+                                RTL_STR_MAX_VALUEOFDOUBLE - SAL_N_ELEMENTS("-x.E-xxx") + 1, '.',
+                                NULL, 0, true);
+        return *this;
+    }
+
+    /**
+        Removes the characters in a substring of this sequence.
+
+        The substring begins at the specified <code>start</code> and
+        is <code>len</code> characters long.
+
+        start must be >= 0 && <= getLength() && <= end
+
+        @param  start       The beginning index, inclusive
+        @param  len         The substring length
+        @return this string buffer.
+     */
+    OStringBuffer & remove( sal_Int32 start, sal_Int32 len )
+    {
+        rtl_stringbuffer_remove( &pData, start, len );
+        return *this;
+    }
+
+    /** Allows access to the internal data of this OStringBuffer, for effective
+        manipulation.
+
+        This function should be used with care.  After you have called this
+        function, you may use the returned pInternalData and pInternalCapacity
+        only as long as you make no other calls on this OStringBuffer.
+
+        @param pInternalData
+        This output parameter receives a pointer to the internal data
+        (rtl_String pointer).  pInternalData itself must not be null.
+
+        @param pInternalCapacity
+        This output parameter receives a pointer to the internal capacity.
+        pInternalCapacity itself must not be null.
+    */
+    void accessInternals(
+        rtl_String *** pInternalData, sal_Int32 ** pInternalCapacity)
+    {
+        *pInternalData = &pData;
+        *pInternalCapacity = &nCapacity;
+    }
+
+private:
+    /**
+        A pointer to the data structure which contains the data.
+     */
+    rtl_String * pData;
+
+    /**
+        The len of the pData->buffer.
+     */
+    sal_Int32       nCapacity;
+};
+
+#if defined LIBO_INTERNAL_ONLY
+template<> struct ToStringHelper<OStringBuffer> {
+    static std::size_t length(OStringBuffer const & s) { return s.getLength(); }
+
+    char * operator()(char * buffer, OStringBuffer const & s) const SAL_RETURNS_NONNULL
+    { return addDataHelper(buffer, s.getStr(), s.getLength()); }
+};
+#endif
+
+}
+
+#ifdef RTL_STRING_UNITTEST
+namespace rtl
+{
+typedef rtlunittest::OStringBuffer OStringBuffer;
+}
+#undef RTL_STRING_CONST_FUNCTION
+#endif
+
+#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
+using ::rtl::OStringBuffer;
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,154 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module i18n {
+
+
+/**
+    Constants to use with
+    XExtendedCalendar::getDisplayString() and the
+    XNativeNumberSupplier methods.
+
+    <p> The constants have different meanings if used with different
+    locales. However, NATNUM1 always tries to convert to
+    a string matching the native number mode of the corresponding
+    locale. </p>
+
+    <p> Where available, the corresponding Microsoft Excel (tm) DBNum
+    number format code modifier is listed. </p>
+
+    <p> Modifiers supported by XExtendedCalendar::getDisplayString() are
+    marked with CAL: for the specific language and the corresponding
+    DBNum modifier and the NatNum values used for Y/M/D are listed </p>
+ */
+
+published constants NativeNumberMode
+{
+    /** Transliteration to ASCII Arabic digits.
+        Try to convert any native number string to ASCII.
+        If already ASCII it remains ASCII.
+     */
+    const short NATNUM0     = 0;
+
+    /** Transliteration in <br/>
+        Chinese:    Chinese lower case characters; CAL: 1/7/7 [DBNum1] <br/>
+        Japanese:   short Kanji characters [DBNum1]; CAL: 1/4/4 [DBNum1] <br/>
+        Korean:     Korean lower case characters [DBNum1]; CAL: 1/7/7 [DBNum1] <br/>
+        Hebrew:     Hebrew characters <br/>
+        Arabic:     Arabic-Indic characters <br/>
+        Thai:       Thai characters <br/>
+        Hindi:      Indic-Devanagari characters <br/>
+        Odia:       Odia (Oriya) characters<br/>
+        Marathi:    Indic-Devanagari characters<br/>
+        Bengali:    Bengali characters<br/>
+        Punjabi:    Punjabi (Gurmukhi) characters<br/>
+        Gujarati:   Gujarati characters<br/>
+        Tamil:      Tamil characters<br/>
+        Telugu:     Telugu characters<br/>
+        Kannada:    Kannada characters<br/>
+        Malayalam:  Malayalam characters<br/>
+        Lao:        Lao characters<br/>
+        Tibetan:    Tibetan characters<br/>
+        Burmese:    Burmese (Myanmar) characters<br/>
+        Khmer:      Khmer (Cambodian) characters<br/>
+        Mongolian:  Mongolian characters<br/>
+        Nepali:     Indic-Devanagari characters<br/>
+        Dzongkha:   Tibetan characters<br/>
+        Farsi:      East Arabic-Indic characters<br/>
+        Church Slavic: Cyrillic characters
+     */
+    const short NATNUM1     = 1;
+
+    /** Transliteration in <br/>
+        Chinese:    Chinese upper case characters; CAL: 2/8/8 [DBNum2] <br/>
+        Japanese:   traditional Kanji characters; CAL: 2/5/5 [DBNum2] <br/>
+        Korean:     Korean upper case characters [DBNum2]; CAL: 2/8/8 [DBNum2] <br/>
+        Hebrew:     Hebrew numbering
+     */
+    const short NATNUM2     = 2;
+
+    /** Transliteration in <br/>
+        Chinese:    fullwidth Arabic digits; CAL: 3/3/3 [DBNum3] <br/>
+        Japanese:   fullwidth Arabic digits; CAL: 3/3/3 [DBNum3] <br/>
+        Korean:     fullwidth Arabic digits [DBNum3]; CAL: 3/3/3 [DBNum3]
+     */
+    const short NATNUM3     = 3;
+
+    /** Transliteration in <br/>
+        Chinese:    lower case text [DBNum1] <br/>
+        Japanese:   modern long Kanji text [DBNum2] <br/>
+        Korean:     formal lower case text
+     */
+    const short NATNUM4     = 4;
+
+    /** Transliteration in <br/>
+        Chinese:    Chinese upper case text [DBNum2] <br/>
+        Japanese:   traditional long Kanji text [DBNum3] <br/>
+        Korean:     formal upper case text
+     */
+    const short NATNUM5     = 5;
+
+    /** Transliteration in <br/>
+        Chinese:    fullwidth text [DBNum3] <br/>
+        Japanese:   fullwidth text <br/>
+        Korean:     fullwidth text
+     */
+    const short NATNUM6     = 6;
+
+    /** Transliteration in <br/>
+        Chinese:    short lower case text <br/>
+        Japanese:   modern short Kanji text <br/>
+        Korean:     informal lower case text
+     */
+    const short NATNUM7     = 7;
+
+    /** Transliteration in <br/>
+        Chinese:    short upper case text <br/>
+        Japanese:   traditional short Kanji text [DBNum4] <br/>
+        Korean:     informal upper case text
+     */
+    const short NATNUM8     = 8;
+
+    /** Transliteration in <br/>
+        Korean:     Hangul characters
+     */
+    const short NATNUM9     = 9;
+
+    /** Transliteration in <br/>
+        Korean:     formal Hangul text [DBNum4]; CAL: 9/11/11 [DBNum4]
+     */
+    const short NATNUM10    = 10;
+
+    /** Transliteration in <br/>
+        Korean:     informal Hangul text
+      */
+    const short NATNUM11    = 11;
+
+    /** Transliteration to cardinal number names (one, two, three, ...),
+        ordinal number names (first, second, third, ...),
+        ordinal indicators (1st, 2nd, 3rd, ...), etc.
+        Uses NatNum params string
+     */
+    const short NATNUM12 = 12;
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

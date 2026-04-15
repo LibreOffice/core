@@ -1,0 +1,124 @@
+--- src/core/CLucene/analysis/AnalysisHeader.h	2012-02-22 12:37:22.531637934 +0000
++++ src/core/CLucene/analysis/AnalysisHeader.h	2012-02-22 12:39:15.369916728 +0000
+@@ -7,6 +7,11 @@
+ #ifndef _lucene_analysis_AnalysisHeader_
+ #define _lucene_analysis_AnalysisHeader_
+ 
++#if defined(__GNUC__) || defined __clang__
++# pragma GCC diagnostic push
++# pragma GCC diagnostic ignored "-Woverloaded-virtual"
++#endif
++
+ #include "CLucene/index/Payload.h"
+ #include "CLucene/util/VoidList.h"
+ #include "CLucene/LuceneThreads.h"
+@@ -361,4 +361,8 @@
+ };
+ 
+ CL_NS_END
++
++#if defined(__GNUC__) || defined __clang__
++# pragma GCC diagnostic pop
++#endif
+ #endif
+--- src/core/CLucene/search/Searchable.h	2012-02-22 12:37:22.513637729 +0000
++++ src/core/CLucene/search/Searchable.h	2012-02-22 12:38:51.073641550 +0000
+@@ -7,6 +7,11 @@
+ #ifndef _lucene_search_Searcher_
+ #define _lucene_search_Searcher_
+ 
++#if defined(__GNUC__) || defined __clang__
++# pragma GCC diagnostic push
++# pragma GCC diagnostic ignored "-Woverloaded-virtual"
++#endif
++
+ 
+ //#include "CLucene/index/IndexReader.h"
+ CL_CLASS_DEF(index,Term)
+@@ -180,4 +180,8 @@
+ 	};
+ 
+ CL_NS_END
++
++#if defined(__GNUC__) || defined __clang__
++# pragma GCC diagnostic pop
++#endif
+ #endif
+--- src/core/CLucene/store/IndexInput.h	2012-02-22 12:37:22.508637673 +0000
++++ src/core/CLucene/store/IndexInput.h	2012-02-22 12:39:00.465747935 +0000
+@@ -7,6 +7,11 @@
+ #ifndef _lucene_store_IndexInput_
+ #define _lucene_store_IndexInput_
+ 
++#if defined(__GNUC__) || defined __clang__
++# pragma GCC diagnostic push
++# pragma GCC diagnostic ignored "-Woverloaded-virtual"
++#endif
++
+ #include "CLucene/LuceneThreads.h"
+ #include "CLucene/util/Equators.h"
+ 
+@@ -195,4 +195,8 @@
+ 		virtual void seekInternal(const int64_t pos) = 0;
+ 	};
+ CL_NS_END
++
++#if defined(__GNUC__) || defined __clang__
++# pragma GCC diagnostic pop
++#endif
+ #endif
+--- src/core/CLucene/util/Array.h	2012-02-22 12:37:22.510637696 +0000
++++ src/core/CLucene/util/Array.h	2012-02-22 12:38:33.714444884 +0000
+@@ -7,6 +7,20 @@
+ #ifndef _lucene_util_Array_
+ #define _lucene_util_Array_
+ 
++#if defined(__GNUC__) || defined __clang__
++# pragma GCC diagnostic push
++# pragma GCC diagnostic ignored "-Wshadow"
++# pragma GCC diagnostic ignored "-Wunused-parameter"
++#if defined __clang__
++#if __has_warning("-Wmisleading-indentation")
++#pragma GCC diagnostic ignored "-Wmisleading-indentation"
++#endif
++#else
++# pragma GCC diagnostic ignored "-Wpragmas"
++# pragma GCC diagnostic ignored "-Wmisleading-indentation"
++#endif
++#endif
++
+ #include <stdlib.h>
+ #include <string.h>
+ 
+@@ -338,4 +338,8 @@
+ 
+ 
+ CL_NS_END
++
++#if defined(__GNUC__) || defined __clang__
++# pragma GCC diagnostic pop
++#endif
+ #endif
+--- src/core/CLucene/util/PriorityQueue.h	2012-02-22 12:37:22.510637696 +0000
++++ src/core/CLucene/util/PriorityQueue.h	2012-02-22 12:38:40.316519685 +0000
+@@ -7,6 +7,11 @@
+ #ifndef _lucene_util_PriorityQueue_
+ #define _lucene_util_PriorityQueue_
+ 
++#if defined(__GNUC__) || defined __clang__
++# pragma GCC diagnostic push
++# pragma GCC diagnostic ignored "-Wshadow"
++#endif
++
+ #include <stdlib.h>
+ 
+ CL_NS_DEF(util)
+@@ -199,4 +199,8 @@
+ 	};
+ 
+ CL_NS_END
++
++#if defined(__GNUC__) || defined __clang__
++# pragma GCC diagnostic pop
++#endif
+ #endif

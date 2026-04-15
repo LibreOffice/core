@@ -1,0 +1,2174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="Controller" oor:package="org.openoffice.Office.UI">
+  <node oor:name="Registered">
+    <node oor:name="PopupMenu">
+      <node oor:name="c1" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:CharFontName</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.FontMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c2" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontHeight</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.FontSizeMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c4" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ObjectMenue</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ObjectMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c5" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertPageHeader</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.HeaderMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c6" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertPageFooter</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.FooterMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c7" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChangeControlType</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ControlMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c8" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AvailableToolbars</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolBarsMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c9" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ScriptOrganizer</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.MacrosMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c10" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RecentFileList</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.RecentFilesMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c11" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AddDirect</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.NewMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c12" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AutoPilotMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.NewMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c13" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SetLanguageSelectionMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c14" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SetLanguageAllTextMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c15" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SetLanguageParagraphMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c16" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SaveAsMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SaveAsMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c17" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ThesaurusFromContext</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ThesaurusMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c18" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:OpenSmartTagMenuOnCursor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.SmartTagMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c19" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:BasicShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>basicshapes</value>
+        </prop>
+      </node>
+      <node oor:name="c20" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SymbolShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>symbolshapes</value>
+        </prop>
+      </node>
+      <node oor:name="c21" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ArrowShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>arrowshapes</value>
+        </prop>
+      </node>
+      <node oor:name="c22" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:StarShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>starshapes</value>
+        </prop>
+      </node>
+      <node oor:name="c23" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:CalloutShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>calloutshapes</value>
+        </prop>
+      </node>
+      <node oor:name="c24" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FlowChartShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>flowchartshapes</value>
+        </prop>
+      </node>
+      <node oor:name="c25" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ConditionalFormatMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>conditional</value>
+        </prop>
+      </node>
+      <node oor:name="c26" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FreezePanesMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>freezepanes</value>
+        </prop>
+      </node>
+      <node oor:name="c27" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertFieldCtrl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertfield</value>
+        </prop>
+      </node>
+      <node oor:name="c28" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AnchorMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>anchor</value>
+        </prop>
+      </node>
+      <node oor:name="c29" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Notebookbar</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarModeMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c30" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ColumnOperations</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>column_operations</value>
+        </prop>
+      </node>
+      <node oor:name="c31" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RowOperations</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>row_operations</value>
+        </prop>
+      </node>
+      <node oor:name="c32" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ToolbarMode</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarModeMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c33" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBNewMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>new</value>
+        </prop>
+      </node>
+      <node oor:name="c34" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBRefreshMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>refreshdata</value>
+        </prop>
+      </node>
+      <node oor:name="c35" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBPreview</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>preview</value>
+        </prop>
+      </node>
+      <node oor:name="c36" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ArrowsToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>arrowsbar</value>
+        </prop>
+      </node>
+      <node oor:name="c37" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:LineToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>linesbar</value>
+        </prop>
+      </node>
+      <node oor:name="c38" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ConnectorToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>connectorsbar</value>
+        </prop>
+      </node>
+      <node oor:name="c39" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AdvancedMode</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>choosemodebar</value>
+        </prop>
+      </node>
+      <node oor:name="c40" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Objects3DToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>3dobjectsbar</value>
+        </prop>
+      </node>
+      <node oor:name="c41" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ShowTrackedChangesMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>showtrackedchanges</value>
+        </prop>
+      </node>
+      <node oor:name="c42" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:PrintRangesMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>printranges</value>
+        </prop>
+      </node>
+      <node oor:name="c43" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ObjectAlign</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>objectalign</value>
+        </prop>
+      </node>
+      <node oor:name="c44" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FormatSparklineMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>sparklinemenu</value>
+        </prop>
+      </node>
+      <node oor:name="c45" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:StatisticsMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>statisticsmenu</value>
+        </prop>
+      </node>
+      <node oor:name="c46" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RecordTrackedChangesMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>recordtrackedchanges</value>
+        </prop>
+      </node>
+      <node oor:name="c47" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DataTableMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>datatablemenu</value>
+        </prop>
+      </node>
+      <node oor:name="WindowListMenu" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:WindowList</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.WindowListMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="DistributeControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DistributeSelection</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>distributebar</value>
+        </prop>
+      </node>
+      <node oor:name="ConditionalFormatCondition" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ConditionalFormatConditionMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>conditional_easy</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="ToolBar">
+      <node oor:name="lo.writer.ScrollToPrevious" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ScrollToPrevious</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.PreviousScrollToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="lo.writer.ScrollToNext" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ScrollToNext</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.NextScrollToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="lo.writer.NavElement" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:NavElement</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.NavElementToolBoxController</value>
+        </prop>
+      </node>
+      <node oor:name="ZoomToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ZoomToolBox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>zoombar;.uno:ZoomPlus</value>
+        </prop>
+      </node>
+      <node oor:name="AdvancedModeToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AdvancedMode</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>choosemodebar;.uno:ToggleObjectRotateMode</value>
+        </prop>
+      </node>
+      <node oor:name="ObjectPositionToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ObjectPosition</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>positionbar;.uno:BringToFront</value>
+        </prop>
+      </node>
+      <node oor:name="TextToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:TextToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>textbar;.uno:Text</value>
+        </prop>
+      </node>
+      <node oor:name="RectangleToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RectangleToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>rectanglesbar;.uno:Rect</value>
+        </prop>
+      </node>
+      <node oor:name="EllipseToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:EllipseToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>ellipsesbar;.uno:Ellipse</value>
+        </prop>
+      </node>
+      <node oor:name="RedactedExportToolbox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RedactedExportToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>redactedexportbar;.uno:RedactedExportWhite</value>
+        </prop>
+      </node>
+      <node oor:name="LineToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:LineToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>linesbar;.uno:Freeline_Unfilled</value>
+        </prop>
+      </node>
+      <node oor:name="ArrowsToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ArrowsToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>arrowsbar;.uno:LineArrowEnd</value>
+        </prop>
+      </node>
+      <node oor:name="Objects3DToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Objects3DToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>3dobjectsbar;.uno:Cube</value>
+        </prop>
+      </node>
+      <node oor:name="ShowTrackedChangesController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ShowTrackedChanges</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:ShowTrackedChangesMenu</value>
+        </prop>
+      </node>
+      <node oor:name="RecordTrackedChangesController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:TrackChanges</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:RecordTrackedChangesMenu</value>
+        </prop>
+      </node>
+      <node oor:name="ConnectorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ConnectorToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>connectorsbar;.uno:Connector</value>
+        </prop>
+      </node>
+      <node oor:name="InsertToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertbar;.uno:InsertObjectChart</value>
+        </prop>
+      </node>
+      <node oor:name="BasicControlsToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChooseControls</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.script.BasicIDE</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertcontrolsbar</value>
+        </prop>
+      </node>
+      <node oor:name="FormsControlsToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Config</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>formcontrols;.uno:Config</value>
+        </prop>
+      </node>
+      <node oor:name="AlignmentControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ObjectAlign</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>alignmentbar;.uno:ObjectAlignLeft</value>
+        </prop>
+      </node>
+      <node oor:name="GraphicFilterControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:GraphicFilterToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>graffilterbar</value>
+        </prop>
+      </node>
+      <node oor:name="OptimizeTableControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:OptimizeTable</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>optimizetablebar</value>
+        </prop>
+      </node>
+      <node oor:name="InsertControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertCtrl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertbar;.uno:InsertGraphic</value>
+        </prop>
+      </node>
+      <node oor:name="InsertObjectControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertObjCtrl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertobjectbar;.uno:InsertObject</value>
+        </prop>
+      </node>
+      <node oor:name="InsertCellControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsCellsCtrl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertcellsbar;.uno:InsertCellsDown</value>
+        </prop>
+      </node>
+      <node oor:name="c1" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBNewForm</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:DBNewMenu;1</value>
+        </prop>
+      </node>
+      <node oor:name="org.libreoffice.comp.dbu.LimitBoxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBLimit</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>org.libreoffice.comp.dbu.LimitBoxController</value>
+        </prop>
+      </node>
+      <node oor:name="ChartProperties" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChartProperties</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.chart2.ChartDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>org.libreoffice.chart2.Chart2ToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="TableRefreshControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Refresh</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.TableDataView</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:DBRefreshMenu;1</value>
+        </prop>
+      </node>
+      <node oor:name="DataBrowserRefreshControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Refresh</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.DataSourceBrowser</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:DBRefreshMenu;1</value>
+        </prop>
+      </node>
+      <node oor:name="c13" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontHeight</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.FontHeightToolBoxController</value>
+        </prop>
+      </node>
+      <node oor:name="AssignLayout" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AssignLayout</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.presentation.PresentationDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.sd.SlideLayoutController</value>
+        </prop>
+      </node>
+      <node oor:name="DisplayMode" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DisplayMode</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.presentation.PresentationDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.sd.DisplayModeController</value>
+        </prop>
+      </node>
+      <node oor:name="InsertPage" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertPage</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.presentation.PresentationDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.sd.InsertSlideController</value>
+        </prop>
+      </node>
+       <node oor:name="SlideTransitionsPane" oor:op="replace">
+          <prop oor:name="Command">
+            <value>.uno:SlideTransitionsPane</value>
+          </prop>
+          <prop oor:name="Module">
+            <value>com.sun.star.presentation.PresentationDocument</value>
+          </prop>
+          <prop oor:name="Controller">
+            <value>com.sun.star.comp.sd.SlideTransitionsToolBoxControl</value>
+          </prop>
+      </node>
+      <node oor:name="NumberingToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DefaultNumbering</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.NumberingToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="SlideMasterPagesAll" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SlideMasterPagesAll</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.presentation.PresentationDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.sd.SlideMasterPagesToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="ThemeColorsPane" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ThemeSelectorPanel</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ThemeColorsToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="BulletsToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DefaultBullet</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.NumberingToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="OutlineToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SetOutline</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.NumberingToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="TableToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertTable</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.TableToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="PageToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ShowMultiplePages</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.TableToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="InteractiveFrameColumnsToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertFrameInteract</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColumnsToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="FrameColumnsToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertFrame</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColumnsToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="SectionColumnsToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertSection</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColumnsToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="ExtrusionDirectionFloater" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ExtrusionDirectionFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ExtrusionDirectionController</value>
+        </prop>
+      </node>
+      <node oor:name="ExtrusionDepthController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ExtrusionDepthFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ExtrusionDepthController</value>
+        </prop>
+      </node>
+      <node oor:name="ExtrusionLightingFloater" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ExtrusionLightingFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ExtrusionLightingController</value>
+        </prop>
+      </node>
+      <node oor:name="ExtrusionSurfaceFloater" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ExtrusionSurfaceFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ExtrusionSurfaceController</value>
+        </prop>
+      </node>
+      <node oor:name="FontworkAlignmentFloater" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontworkAlignmentFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.FontworkAlignmentController</value>
+        </prop>
+      </node>
+      <node oor:name="FontworkCharacterSpacingFloater" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontworkCharacterSpacingFloater</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.FontworkCharacterSpacingController</value>
+        </prop>
+      </node>
+      <node oor:name="FontworkShapeTypeControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontworkShapeType</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>fontworkshapetype</value>
+        </prop>
+      </node>
+      <node oor:name="c3" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChartElementSelector</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.chart2.ChartDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.chart.ElementSelectorToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="BasicShapesToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:BasicShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>basicshapes;.uno:BasicShapes.diamond</value>
+        </prop>
+      </node>
+      <node oor:name="SymbolShapesToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SymbolShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>symbolshapes;.uno:SymbolShapes.smiley</value>
+        </prop>
+      </node>
+      <node oor:name="ArrowShapesToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ArrowShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>arrowshapes;.uno:ArrowShapes.left-right-arrow</value>
+        </prop>
+      </node>
+      <node oor:name="FlowChartShapesToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FlowChartShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>flowchartshapes;.uno:FlowChartShapes.flowchart-internal-storage</value>
+        </prop>
+      </node>
+      <node oor:name="CalloutShapesToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:CalloutShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>calloutshapes;.uno:CalloutShapes.round-rectangular-callout</value>
+        </prop>
+      </node>
+      <node oor:name="StarShapesToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:StarShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>starshapes;.uno:StarShapes.star5</value>
+        </prop>
+      </node>
+      <node oor:name="lo.writer.MMCurrentEntryController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:MailMergeCurrentEntry</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.MMCurrentEntryController</value>
+        </prop>
+      </node>
+      <node oor:name="lo.writer.MMExcludeEntryController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:MailMergeExcludeEntry</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.MMExcludeEntryController</value>
+        </prop>
+      </node>
+      <node oor:name="PageSizeToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AttributePageSize</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.PageSizeToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="PageColumnToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:PageColumnType</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.PageColumnToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="PageMarginToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:PageMargin</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.PageMarginToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="PageOrientationToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Orientation</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.PageOrientationToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.svx.FindTextToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FindText</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.FindTextToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.svx.SearchLabelToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SearchLabel</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.SearchLabelToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.svx.DownSearchToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DownSearch</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.DownSearchToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.svx.ExitFindbarToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ExitSearch</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.ExitFindbarToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.svx.UpSearchToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:UpSearch</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.UpSearchToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.svx.MatchCaseToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:MatchCase</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.MatchCaseToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.svx.MatchDiacriticsToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:MatchDiacritics</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.MatchDiacriticsToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.svx.SearchFormattedToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SearchFormattedDisplayString</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.SearchFormattedToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.svx.FindAllToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FindAll</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.FindAllToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sfx2.ClassificationCategoriesController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ClassificationApply</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.sfx2.ClassificationCategoriesController</value>
+        </prop>
+      </node>
+      <node oor:name="LineEndToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:LineEndStyle</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.LineEndToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="VertTopToBottomToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:TextdirectionTopToBottom</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="VertLeftToRightToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:TextdirectionLeftToRight</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="VertCaptionToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:VerticalCaption</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="VertDrawFontworkToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DrawFontworkVertical</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="VertTextToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:VerticalText</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="VertTextFitToSizeToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:VerticalTextFitToSizeTool</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="CTLParaLeftToRightToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ParaLeftToRight</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.CTLToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="CTLParaRightToLeftToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ParaRightToLeft</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.CTLToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="LineStyleToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:XLineStyle</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.LineStyleToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="LineSpacingToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:LineSpacing</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.LineSpacingToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="CharacterSpacingToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Spacing</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.CharacterSpacingToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="InsertSymbolToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:CharmapControl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.sfx2.InsertSymbolToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="BorderStyleToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SetBorderStyle</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.FrameToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="BorderLineStyleToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:LineStyle</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.FrameToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="CurrencyToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:NumberFormatCurrency</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.CurrencyToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="FontColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="BackgroundColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:BackgroundColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="TableCellBackgroundColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:TableCellBackgroundColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="ColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Color</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="BackColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:BackColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="CharBackColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:CharBackColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="Extrusion3DColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Extrusion3DColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="UnderlineToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Underline</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.UnderlineToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="UndoToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Undo</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.UndoRedoToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="RedoToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Redo</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.UndoRedoToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="XLineColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:XLineColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="FillColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FillColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="FrameLineColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FrameLineColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="FontNameToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:CharFontName</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.FontNameToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="StyleToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:StyleApply</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.StyleToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="StylesPreviewToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:StylesPreview</value>
+          </prop>
+          <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.StylesPreviewToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="OpenToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Open</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:RecentFileList</value>
+        </prop>
+      </node>
+      <node oor:name="WriterOpenToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:OpenFromWriter</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.text.TextDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:RecentFileList</value>
+        </prop>
+      </node>
+      <node oor:name="CalcOpenToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:OpenFromCalc</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:RecentFileList</value>
+        </prop>
+      </node>
+      <node oor:name="SaveToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Save</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SaveToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="SimpleSaveInRelationDesign" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Save</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.RelationDesign</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="SimpleSaveInBasicIDE" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Save</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.script.BasicIDE</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="FreezePanesToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FreezePanes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:FreezePanesMenu</value>
+        </prop>
+      </node>
+      <node oor:name="InsertFieldController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertFieldCtrl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="AnchorController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AnchorMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="org.apache.openoffice.comp.framework.NewToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AddDirect</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>org.apache.openoffice.comp.framework.NewToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="WizardsToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AutoPilotMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="ConditionalFormatControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ConditionalFormatMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="ColumnOperationsControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ColumnOperations</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="RowOperationsControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RowOperations</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="DistributeControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DistributeSelection</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>distributebar</value>
+        </prop>
+      </node>
+      <node oor:name="ChartColorPaletteControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChartColorPalette</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.chart2.ChartColorPaletteControl</value>
+        </prop>
+      </node>
+      <node oor:name="ChartThemeControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChartTheme</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.chart2.ChartThemeControl</value>
+        </prop>
+      </node>
+      <node oor:name="ChartGradientPaletteControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChartGradientPalette</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.chart2.ChartGradientPaletteControl</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="StatusBar">
+      <node oor:name="c5" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:LanguageStatus</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.LangSelectionStatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c8" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:ZoomSlider</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.comp.StatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c9" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:Zoom</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.comp.StatusbarController</value>
+        </prop>
+      </node>
+    </node>
+  </node>
+</oor:component-data>

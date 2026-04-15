@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<?pi-target pi-data?>
+<Elements>
+    <Book xmlns:lib="http://www.library.com/">
+        <lib:Title>Sherlock Holmes - I</lib:Title>
+        <lib:Author>Arthur Conan Doyle</lib:Author>
+        <purchase xmlns:lib="http://www.otherlibrary.com/">
+            <lib:Title>Sherlock Holmes - II</lib:Title>
+            <lib:Author>Arthur Conan Doyle</lib:Author>
+        </purchase>
+        <lib:Title>Sherlock Holmes - III</lib:Title>
+        <lib:Author>Arthur Conan Doyle</lib:Author>
+    </Book>
+    <Electronics xmlns="http://doesntexist.com/electronics/">
+        <item>
+            <Name>Apple iPhone 6s</Name>
+            <?pi-target-only?>
+            <Price>$324</Price>
+        </item>
+        <item xmlns="http://doesntexist.com/dailyuse/">
+            <Name>Philips Aqua Touch Shaver</Name>
+            <item xmlns="http://doesntexist.com/dailyuse/model/">
+                <Model>AT890</Model>
+                <Price>$74</Price>
+            </item>
+        </item>
+        <item>
+            <Name>Macbook Pro</Name>
+            <Price>$500</Price>
+        </item>
+    </Electronics>
+</Elements>

@@ -1,0 +1,16 @@
+PKG=%pkgprefix3-desktop-int
+NAME=%PRODUCTNAME Solaris desktop integration
+CATEGORY=application
+BASEDIR=/
+VENDOR=The Document Foundation
+HOTLINE=Please contact your local service provider
+EMAIL=
+MAXINST=1000
+SUNW_PKGTYPE=usr
+SUNW_PKGVERS=1.0
+CLASSES=none build
+OFFICE_PATH=
+LEGACY_GNOME="false"
+DESC=Desktop integration for %PRODUCTNAME
+SUNW_PRODNAME=%PRODUCTNAME
+SUNW_PRODVERS=3

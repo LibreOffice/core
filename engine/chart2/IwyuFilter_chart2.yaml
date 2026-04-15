@@ -1,0 +1,647 @@
+---
+assumeFilename: chart2/source/controller/main/ChartWindow.cxx
+excludelist:
+    chart2/inc/ChartModel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XChartDocument.hpp
+    - com/sun/star/chart2/XTitled.hpp
+    - com/sun/star/chart2/data/XDataReceiver.hpp
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/container/XChild.hpp
+    - com/sun/star/datatransfer/XTransferable.hpp
+    - com/sun/star/document/XDocumentPropertiesSupplier.hpp
+    - com/sun/star/document/XStorageBasedDocument.hpp
+    - com/sun/star/document/XUndoManagerSupplier.hpp
+    - com/sun/star/embed/XVisualObject.hpp
+    - com/sun/star/frame/XLoadable.hpp
+    - com/sun/star/frame/XStorable2.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/qa/XDumper.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XCloseable.hpp
+    - com/sun/star/util/XModifiable.hpp
+    - com/sun/star/util/XNumberFormatsSupplier.hpp
+    - com/sun/star/util/XUpdatable.hpp
+    chart2/inc/ChartView.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XModeChangeBroadcaster.hpp
+    - com/sun/star/util/XUpdatable2.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/datatransfer/XTransferable.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/qa/XDumper.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/inc/AxisHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/ScaleData.hpp
+    chart2/source/inc/CachedDataSequence.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    - com/sun/star/chart2/data/XNumericalDataSequence.hpp
+    - com/sun/star/chart2/data/XTextualDataSequence.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    chart2/source/inc/chartview/ChartSfxItemIds.hxx:
+    # Needed for TypedWhichId macros
+    - class SvxSizeItem
+    - class SfxIntegerListItem
+    - class SfxBoolItem
+    - class SfxStringItem
+    - class SfxInt32Item
+    - class SfxUInt32Item
+    - class SvxChartIndicateItem
+    - class SvxDoubleItem
+    - class SvxBrushItem
+    chart2/source/inc/chartview/ExplicitScaleValues.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XScaling.hpp
+    chart2/source/inc/DataSource.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/data/XDataSink.hpp
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/inc/ErrorBar.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/chart2/data/XDataSink.hpp
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/inc/InternalData.hxx:
+    # complete type is needed in the inline dtor
+    - com/sun/star/uno/Sequence.hxx
+    chart2/source/inc/InternalDataProvider.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/data/XRangeXMLConversion.hpp
+    - com/sun/star/chart2/XAnyDescriptionAccess.hpp
+    - com/sun/star/chart2/XInternalDataProvider.hpp
+    - com/sun/star/chart/XDateCategories.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    chart2/source/inc/LabeledDataSequence.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/data/XLabeledDataSequence2.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/inc/ModifyListenerHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/inc/NameContainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    chart2/source/inc/NumberFormatterWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XNumberFormatsSupplier.hpp
+    chart2/source/inc/PropertyHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Any.hxx
+    chart2/source/inc/PopupRequest.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XRequestCallback.hpp
+    chart2/source/inc/RangeHighlighter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/data/XRangeHighlighter.hpp
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/inc/RegressionCurveCalculator.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XRegressionCurveCalculator.hpp
+    chart2/source/inc/Scaling.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XScaling.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XServiceName.hpp
+    chart2/source/inc/UncachedDataSequence.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    - com/sun/star/chart2/data/XNumericalDataSequence.hpp
+    - com/sun/star/chart2/data/XTextualDataSequence.hpp
+    - com/sun/star/container/XIndexReplace.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifiable.hpp
+    chart2/source/inc/WeakListenerAdapter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/inc/WrappedProperty.hxx:
+    # Needed for implicit dtor
+    - com/sun/star/uno/Any.hxx
+    chart2/source/inc/WrappedPropertySet.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XMultiPropertyStates.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    chart2/source/model/inc/StockBar.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XCloneable.hpp
+    chart2/source/model/inc/XMLFilter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XExporter.hpp
+    - com/sun/star/document/XFilter.hpp
+    - com/sun/star/document/XImporter.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/model/filter/XMLFilter.cxx:
+    # Actually used
+    - com/sun/star/lang/XMultiComponentFactory.hpp
+    chart2/source/model/main/ChartModel_Persistence.cxx:
+    # Needed for implicit dtor
+    - BaseCoordinateSystem.hxx
+    chart2/source/model/main/DataPoint.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XChild.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    chart2/source/model/main/Axis.cxx:
+    # Needed for template
+    - com/sun/star/awt/Size.hpp
+    chart2/source/model/main/DataPointProperties.cxx:
+    # Needed for template
+    - com/sun/star/chart2/XDataPointCustomLabelField.hpp
+    chart2/source/model/main/Diagram.cxx:
+    # Needed for template
+    - com/sun/star/chart2/RelativePosition.hpp
+    - com/sun/star/chart2/RelativeSize.hpp
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/inc/FormattedString.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XDataPointCustomLabelField.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    chart2/source/model/main/Legend.cxx:
+    # Needed for template
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/chart2/RelativePosition.hpp
+    - com/sun/star/chart2/RelativeSize.hpp
+    chart2/source/model/main/PageBackground.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    chart2/source/model/main/Title.cxx:
+    # Needed for template
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/chart2/RelativePosition.hpp
+    chart2/source/model/main/UndoManager.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XUndoManager.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    chart2/source/model/main/Wall.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XCloneable.hpp
+    chart2/source/model/template/AreaChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/BubbleChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/BarChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/ChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/ChartTypeManager.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/ColumnLineChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/NetChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/LineChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/ScatterChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/StockChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/PieChartTypeTemplate.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/model/template/XYDataInterpreter.cxx:
+    # Used after #ifdef
+    - sal/log.hxx
+    chart2/source/tools/AxisHelper.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/tools/BaseGFXHelper.cxx:
+    # Actually used
+    - com/sun/star/drawing/PolyPolygonShape3D.hpp
+    - com/sun/star/awt/Rectangle.hpp
+    chart2/source/tools/CommonConverters.cxx:
+    # Actually used
+    - com/sun/star/awt/Rectangle.hpp
+    - com/sun/star/drawing/PolyPolygonBezierCoords.hpp
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    chart2/source/tools/ErrorBar.cxx:
+    # Actually used
+    - com/sun/star/drawing/LineStyle.hpp
+    - com/sun/star/util/Color.hpp
+    - com/sun/star/drawing/LineJoint.hpp
+    chart2/source/tools/ExplicitCategoriesProvider.cxx:
+    # Needed for implicit dtor
+    - ChartType.hxx
+    chart2/source/tools/CharacterProperties.cxx:
+    # Actually used
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    chart2/source/tools/DataSourceHelper.cxx:
+    # Actually used
+    - com/sun/star/chart2/data/XLabeledDataSequence.hpp
+    chart2/source/tools/InternalDataProvider.cxx:
+    # Needed for implicit dtor
+    - BaseCoordinateSystem.hxx
+    chart2/source/tools/LegendHelper.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/tools/LinePropertiesHelper.cxx:
+    # Needed for template
+    - com/sun/star/drawing/LineDash.hpp
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/tools/LifeTime.cxx:
+    # Has to be complete type
+    - com/sun/star/util/CloseVetoException.hpp
+    chart2/source/tools/MediaDescriptorHelper.cxx:
+    # Needed for template
+    - com/sun/star/embed/XStorage.hpp
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    chart2/source/tools/ObjectIdentifier.cxx:
+    # Needed for template
+    - com/sun/star/drawing/XShape.hpp
+    chart2/source/tools/RangeHighlighter.cxx:
+    # Needed for template
+    - com/sun/star/drawing/XShape.hpp
+    # Actually used
+    - com/sun/star/view/XSelectionSupplier.hpp
+    chart2/source/tools/RegressionCurveHelper.cxx:
+    # Actually used
+    - com/sun/star/chart2/XRegressionCurveCalculator.hpp
+    # Needed for implicit dtor
+    - ChartType.hxx
+    chart2/source/tools/RegressionEquation.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XTitle.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloneable.hpp
+    chart2/source/tools/RegressionEquation.cxx:
+    # Needed for template
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/chart2/RelativePosition.hpp
+    chart2/source/tools/RelativePositionHelper.cxx:
+    # Actually used
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/chart2/RelativeSize.hpp
+    chart2/source/tools/RelativeSizeHelper.cxx:
+    # Actually used
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/tools/PropertyHelper.cxx:
+    # Actually used
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    chart2/source/tools/StatisticsHelper.cxx:
+    # Actually used
+    - com/sun/star/chart2/data/XDataProvider.hpp
+    chart2/source/tools/UserDefinedProperties.cxx:
+    # Needs a complete type
+    - com/sun/star/beans/Property.hpp
+    # Needed for template
+    - com/sun/star/container/XNameContainer.hpp
+    chart2/source/tools/WrappedProperty.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertyState.hpp
+    chart2/source/tools/WrappedDefaultProperty.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertyState.hpp
+    chart2/source/view/inc/VLineProperties.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/Reference.h
+    chart2/source/view/axes/DateScaling.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XScaling.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XServiceName.hpp
+    chart2/source/view/axes/VPolarAngleAxis.cxx:
+    # Needed for implicit dtor
+    - Axis.hxx
+    chart2/source/view/axes/VPolarRadiusAxis.cxx:
+    # Needed for implicit dtor
+    - Axis.hxx
+    chart2/source/view/axes/VCartesianGrid.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/view/diagram/VDiagram.cxx:
+    # Needed for implicit dtor
+    - ChartType.hxx
+    chart2/source/view/main/LabelPositionHelper.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/view/main/PropertyMapper.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/view/main/ShapeFactory.cxx:
+    # Needed for template
+    - com/sun/star/graphic/XGraphic.hpp
+    # Actually used
+    - com/sun/star/chart2/XFormattedString.hpp
+    chart2/source/view/main/VLineProperties.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/view/main/VTitle.cxx:
+    # Actually used
+    - com/sun/star/chart2/XTitle.hpp
+    chart2/source/controller/inc/AccessibleTextHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    chart2/source/controller/inc/AccessibleChartView.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/controller/inc/AccessibleBase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    chart2/source/controller/inc/CharacterPropertyItemConverter.hxx:
+    # has to be a complete type
+    - com/sun/star/awt/Size.hpp
+    chart2/source/controller/inc/ChartToolbarController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XStatusListener.hpp
+    - com/sun/star/frame/XToolbarController.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XUpdatable.hpp
+    chart2/source/controller/inc/ChartController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XDispatchProvider.hpp
+    - com/sun/star/frame/XLayoutManagerListener.hpp
+    - com/sun/star/ui/XContextMenuInterception.hpp
+    - com/sun/star/util/XModeChangeListener.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloseListener.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/controller/inc/ChartDocumentWrapper.hxx:
+    # base class has to be a complete type
+     - com/sun/star/chart/XChartDocument.hpp
+     - com/sun/star/drawing/XDrawPageSupplier.hpp
+     - com/sun/star/lang/XMultiServiceFactory.hpp
+     - com/sun/star/lang/XServiceInfo.hpp
+     - com/sun/star/uno/XAggregation.hpp
+    chart2/source/controller/inc/dlg_ChartType.hxx:
+    # Needed for vclptr type
+    - namespace chart { class ChartTypeTabPage; }
+    chart2/source/controller/inc/dlg_DataEditor.hxx:
+    # Needed for vclptr type
+    - namespace chart { class DataBrowser; }
+    chart2/source/controller/inc/dlg_View3D.hxx:
+    - namespace chart { class ThreeD_SceneAppearance_TabPage; }
+    - namespace chart { class ThreeD_SceneGeometry_TabPage; }
+    - namespace chart { class ThreeD_SceneIllumination_TabPage; }
+    chart2/source/controller/dialogs/tp_3D_SceneIllumination.hxx:
+    # Needed for vclptr type
+    - class ColorListBox
+    chart2/source/controller/inc/ItemPropertyMap.hxx:
+    # base class has to be a complete type
+    - map
+    chart2/source/controller/accessibility/AccessibleChartShape.hxx:
+    # base class has to be a complete type
+    - AccessibleBase.hxx
+    chart2/source/controller/accessibility/AccessibleChartElement.hxx:
+    # base class has to be a complete type
+    - AccessibleBase.hxx
+    chart2/source/controller/accessibility/AccessibleChartView.cxx:
+    # Actually used
+    - com/sun/star/view/XSelectionSupplier.hpp
+    chart2/source/controller/chartapiwrapper/DiagramWrapper.cxx:
+    # Needed for complex variable type
+    - com/sun/star/util/XRefreshable.hpp
+    chart2/source/controller/chartapiwrapper/WrappedAddInProperty.cxx:
+    # Needed for complex variable type
+    - com/sun/star/util/XRefreshable.hpp
+    chart2/source/controller/chartapiwrapper/WrappedCharacterHeightProperty.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    chart2/source/controller/chartapiwrapper/ChartDocumentWrapper.cxx:
+    # Needed for implicit dtor
+    - BaseCoordinateSystem.hxx
+    chart2/source/controller/dialogs/ChartTypeDialogController.cxx:
+    # Needed for implicit dtor
+    - DataSeries.hxx
+    - BaseCoordinateSystem.hxx
+    chart2/source/controller/dialogs/DialogModel.cxx:
+    # Needed for implicit dtor
+    - LabeledDataSequence.hxx
+    chart2/source/controller/dialogs/dlg_CreationWizard.cxx:
+    # Needed for implicit dtor
+    - ChartTypeTemplate.hxx
+    chart2/source/controller/dialogs/dlg_DataEditor.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XWindow.hpp
+    chart2/source/controller/dialogs/tp_3D_SceneGeometry.cxx:
+    # Needed for implicit dtor
+    - ChartType.hxx
+    chart2/source/controller/dialogs/tp_AxisPositions.cxx:
+    # Actually used
+    - rtl/math.hxx
+    chart2/source/controller/dialogs/tp_3D_SceneIllumination.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/dialogs/tp_DataSource.cxx:
+    # Needed for implicit dtor
+    - ChartTypeTemplate.hxx
+    - LabeledDataSequence.hxx
+    chart2/source/controller/itemsetwrapper/ItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/itemsetwrapper/LegendItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/itemsetwrapper/RegressionCurveItemConverter.cxx:
+    # Needed for implicit dtor
+    - RegressionCurveModel.hxx
+    chart2/source/controller/itemsetwrapper/RegressionEquationItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/itemsetwrapper/CharacterPropertyItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/itemsetwrapper/GraphicPropertyItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    chart2/source/controller/itemsetwrapper/DataPointItemConverter.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    chart2/source/controller/itemsetwrapper/AxisItemConverter.cxx:
+    # Needed for implicit dtor
+    - ChartType.hxx
+    - Diagram.hxx
+    chart2/source/controller/main/ChartModelClone.hxx:
+    # Needed for implicit dtor
+    - com/sun/star/uno/Any.hxx
+    chart2/source/controller/main/ChartFrameloader.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XSynchronousFrameLoader.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/main/ChartFrameloader.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    chart2/source/controller/main/ElementSelector.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/main/StatusBarCommandDispatch.hxx:
+    # base class has to be a complete type
+    - CommandDispatch.hxx
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/controller/main/ChartController_Insert.cxx:
+    # Needed for implicit dtor
+    - Legend.hxx
+    chart2/source/controller/main/ChartController_Position.cxx:
+    # Needed for implicit dtor
+    - ChartModel.hxx
+    chart2/source/controller/main/ChartController_Properties.cxx:
+    # Needed for implicit dtor
+    - RegressionCurveModel.hxx
+    chart2/source/controller/main/ChartController_TextEdit.cxx:
+    # Needed for implicit dtor
+    - ChartModel.hxx
+    chart2/source/controller/main/ChartController_Tools.cxx:
+    # Needed for template
+    - com/sun/star/graphic/XGraphic.hpp
+    chart2/source/controller/main/ControllerCommandDispatch.cxx:
+    # Needed for implicit dtor
+    - Axis.hxx
+    chart2/source/controller/main/DragMethod_RotateDiagram.cxx:
+    # Needed for implicit dtor
+    - ChartType.hxx
+    chart2/source/controller/main/PositionAndSizeHelper.cxx:
+    # Actually used
+    - com/sun/star/awt/Rectangle.hpp
+    # Needed for implicit dtor
+    - Diagram.hxx
+    chart2/source/controller/main/SelectionHelper.cxx:
+    # Needed for implicit dtor
+    - Diagram.hxx
+    chart2/source/controller/main/StatusBarCommandDispatch.cxx:
+    # Actually used
+    - com/sun/star/view/XSelectionSupplier.hpp
+    chart2/source/controller/main/UndoGuard.cxx:
+    # Actually used
+    - com/sun/star/document/XUndoManager.hpp
+    chart2/source/controller/main/UndoActions.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XUndoAction.hpp
+    chart2/source/controller/sidebar/Chart2PanelFactory.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XUIElementFactory.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/sidebar/ChartSeriesPanel.cxx:
+    # Needed for implicit dtor
+    - RegressionCurveModel.hxx
+    chart2/source/controller/sidebar/ChartSidebarModifyListener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XModifyListener.hpp
+    chart2/source/controller/sidebar/ChartSidebarSelectionListener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/controller/chartapiwrapper/ChartDataWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XAnyDescriptionAccess.hpp
+    - com/sun/star/chart/XDateCategories.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/chartapiwrapper/AxisWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart/XAxis.hpp
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XNumberFormatsSupplier.hpp
+    - WrappedPropertySet.hxx
+    chart2/source/controller/chartapiwrapper/AreaWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - WrappedPropertySet.hxx
+    chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XEventListener.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - WrappedPropertySet.hxx
+    chart2/source/controller/chartapiwrapper/DiagramWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XDiagramProvider.hpp
+    - com/sun/star/chart/X3DDefaultSetter.hpp
+    - com/sun/star/chart/X3DDisplay.hpp
+    - com/sun/star/chart/XAxisSupplier.hpp
+    - com/sun/star/chart/XAxisZSupplier.hpp
+    - com/sun/star/chart/XDiagram.hpp
+    - com/sun/star/chart/XDiagramPositioning.hpp
+    - com/sun/star/chart/XSecondAxisTitleSupplier.hpp
+    - com/sun/star/chart/XStatisticDisplay.hpp
+    - com/sun/star/chart/XTwoAxisXSupplier.hpp
+    - com/sun/star/chart/XTwoAxisYSupplier.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - WrappedPropertySet.hxx
+    chart2/source/controller/chartapiwrapper/GridWrapper.hxx:
+    # base class has to be a complete type
+    - WrappedPropertySet.hxx
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/chartapiwrapper/LegendWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - WrappedPropertySet.hxx
+    chart2/source/controller/chartapiwrapper/MinMaxLineWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XMultiPropertyStates.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/chartapiwrapper/UpDownBarWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XMultiPropertyStates.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/chartapiwrapper/TitleWrapper.hxx:
+    # base class has to be a complete type
+    - WrappedPropertySet.hxx
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/chartapiwrapper/WallFloorWrapper.hxx:
+    # base class has to be a complete type
+    - WrappedPropertySet.hxx
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/chartapiwrapper/WrappedStatisticProperties.cxx:
+    # Needed for implicit dtor
+    - RegressionCurveModel.hxx

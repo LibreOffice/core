@@ -1,0 +1,630 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<office:document xmlns:officeooo="http://openoffice.org/2009/office" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ooo="http://openoffice.org/2004/office" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Times New Roman" svg:font-family="'Times New Roman'" style:font-family-generic="roman" style:font-pitch="variable"/>
+  <style:font-face style:name="Times New Roman1" svg:font-family="'Times New Roman'" style:font-adornments="Standard" style:font-family-generic="roman" style:font-pitch="variable"/>
+  <style:font-face style:name="Arial" svg:font-family="Arial" style:font-adornments="Standard" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Arial Unicode MS" svg:font-family="'Arial Unicode MS'" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="Tahoma" svg:font-family="Tahoma" style:font-family-generic="system" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties svg:stroke-color="#808080" draw:fill-color="#cfe7f5" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:start-line-spacing-horizontal="0.283cm" draw:start-line-spacing-vertical="0.283cm" draw:end-line-spacing-horizontal="0.283cm" draw:end-line-spacing-vertical="0.283cm" style:flow-with-text="false"/>
+   <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" style:font-independent-line-spacing="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:color="#000000" style:font-name="Times New Roman" fo:font-size="12pt" fo:language="de" fo:country="DE" style:letter-kerning="true" style:font-name-asian="Arial Unicode MS" style:font-size-asian="12pt" style:language-asian="en" style:country-asian="US" style:font-name-complex="Tahoma" style:font-size-complex="12pt" style:language-complex="en" style:country-complex="US"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="1.997cm" style:writing-mode="page"/>
+   <style:text-properties fo:color="#000000" style:font-name="Times New Roman" fo:font-size="12pt" fo:language="de" fo:country="DE" style:letter-kerning="true" style:font-name-asian="Arial Unicode MS" style:font-size-asian="12pt" style:language-asian="en" style:country-asian="US" style:font-name-complex="Tahoma" style:font-size-complex="12pt" style:language-complex="en" style:country-complex="US" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Schrift1" style:family="paragraph">
+   <style:paragraph-properties>
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:font-name="Arial" fo:font-family="Arial" style:font-style-name="Standard" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  </style:style>
+  <style:style style:name="Schrift2" style:family="paragraph" style:master-page-name="">
+   <style:paragraph-properties style:page-number="auto"/>
+   <style:text-properties style:font-name="Times New Roman1" fo:font-family="'Times New Roman'" style:font-style-name="Standard" style:font-family-generic="roman" style:font-pitch="variable"/>
+  </style:style>
+  <style:style style:name="TextNormal" style:family="paragraph" style:parent-style-name="Schrift2" style:master-page-name="">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" loext:contextual-spacing="false" fo:line-height="150%" fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" style:page-number="auto"/>
+   <style:text-properties fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false"/>
+  </style:style>
+  <style:style style:name="Vfg2" style:family="paragraph" style:parent-style-name="TextNormal" style:list-style-name="Numbering_20_1" style:master-page-name="">
+   <style:paragraph-properties fo:line-height="100%" style:page-number="auto" text:number-lines="true" text:line-number="2"/>
+  </style:style>
+  <style:style style:name="Header_20_and_20_Footer" style:display-name="Header and Footer" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0">
+    <style:tab-stops>
+     <style:tab-stop style:position="9.5cm" style:type="center"/>
+     <style:tab-stop style:position="19.001cm" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="Header" style:family="paragraph" style:parent-style-name="Header_20_and_20_Footer" style:class="extra">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0">
+    <style:tab-stops>
+     <style:tab-stop style:position="8.5cm" style:type="center"/>
+     <style:tab-stop style:position="17.002cm" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="Footnote_20_Symbol" style:display-name="Footnote Symbol" style:family="text"/>
+  <style:style style:name="Numbering_20_Symbols" style:display-name="Numbering Symbols" style:family="text"/>
+  <style:style style:name="Endnote_20_Symbol" style:display-name="Endnote Symbol" style:family="text"/>
+  <style:style style:name="Footnote_20_anchor" style:display-name="Footnote anchor" style:family="text">
+   <style:text-properties style:text-position="super 58%"/>
+  </style:style>
+  <style:style style:name="Endnote_20_anchor" style:display-name="Endnote anchor" style:family="text">
+   <style:text-properties style:text-position="super 58%"/>
+  </style:style>
+  <text:outline-style style:name="Outline">
+   <text:outline-level-style text:level="1" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="2" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="3" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="4" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="5" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="6" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="7" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="8" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="9" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="10" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+  </text:outline-style>
+  <text:list-style style:name="Numbering_20_1" style:display-name="Numbering 1">
+   <text:list-level-style-number text:level="1" text:style-name="Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:space-before="-0.499cm" text:min-label-width="0.499cm"/>
+   </text:list-level-style-number>
+   <text:list-level-style-number text:level="2" text:style-name="Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:space-before="-0.499cm" text:min-label-width="0.499cm"/>
+   </text:list-level-style-number>
+   <text:list-level-style-number text:level="3" text:style-name="Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:space-before="-0.499cm" text:min-label-width="0.499cm"/>
+   </text:list-level-style-number>
+   <text:list-level-style-number text:level="4" text:style-name="Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:space-before="-0.499cm" text:min-label-width="0.499cm"/>
+   </text:list-level-style-number>
+   <text:list-level-style-number text:level="5" text:style-name="Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:space-before="-0.499cm" text:min-label-width="0.499cm"/>
+   </text:list-level-style-number>
+   <text:list-level-style-number text:level="6" text:style-name="Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:space-before="-0.499cm" text:min-label-width="0.499cm"/>
+   </text:list-level-style-number>
+   <text:list-level-style-number text:level="7" text:style-name="Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:space-before="-0.499cm" text:min-label-width="0.499cm"/>
+   </text:list-level-style-number>
+   <text:list-level-style-number text:level="8" text:style-name="Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:space-before="-0.499cm" text:min-label-width="0.499cm"/>
+   </text:list-level-style-number>
+   <text:list-level-style-number text:level="9" text:style-name="Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:space-before="-0.499cm" text:min-label-width="0.499cm"/>
+   </text:list-level-style-number>
+   <text:list-level-style-number text:level="10" text:style-name="Numbering_20_Symbols" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:space-before="-0.499cm" text:min-label-width="0.499cm"/>
+   </text:list-level-style-number>
+  </text:list-style>
+  <text:notes-configuration text:note-class="footnote" text:citation-style-name="Footnote_20_Symbol" text:citation-body-style-name="Footnote_20_anchor" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="page"/>
+  <text:notes-configuration text:note-class="endnote" text:citation-style-name="Endnote_20_Symbol" text:citation-body-style-name="Endnote_20_anchor" text:master-page-name="Endnote" style:num-format="1" text:start-value="0"/>
+  <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Tabelle4" style:family="table">
+   <style:table-properties style:width="17.002cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.499cm" table:align="margins" border-model="collapsing"/>
+  </style:style>
+  <style:style style:name="Tabelle4.A" style:family="table-column">
+   <style:table-column-properties style:column-width="12.702cm" style:rel-column-width="48961*"/>
+  </style:style>
+  <style:style style:name="Tabelle4.B" style:family="table-column">
+   <style:table-column-properties style:column-width="2.147cm" style:rel-column-width="8272*"/>
+  </style:style>
+  <style:style style:name="Tabelle4.C" style:family="table-column">
+   <style:table-column-properties style:column-width="2.154cm" style:rel-column-width="8302*"/>
+  </style:style>
+  <style:style style:name="Tabelle4.1" style:family="table-row">
+   <style:table-row-properties style:row-height="0.501cm"/>
+  </style:style>
+  <style:style style:name="Tabelle4.A1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0cm" fo:border="none"/>
+  </style:style>
+  <style:style style:name="Tabelle4.B1" style:family="table-cell">
+   <style:table-cell-properties style:vertical-align="middle" fo:padding="0cm" fo:border="none"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Schrift1">
+   <style:paragraph-properties>
+    <style:tab-stops>
+     <style:tab-stop style:position="17cm" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Standard" style:master-page-name="">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.101cm" loext:contextual-spacing="false" fo:line-height="100%" fo:text-align="start" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0cm" style:auto-text-indent="false" style:page-number="auto">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:font-name="Times New Roman" fo:font-size="10pt" fo:font-weight="normal" style:font-size-asian="10pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false"/>
+  </style:style>
+  <style:style style:name="P4" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:line-height="100%"/>
+   <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P5" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties style:font-name="Times New Roman" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P6" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:text-align="start" style:justify-single-word="false"/>
+   <style:text-properties style:font-name="Times New Roman" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P7" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
+   <style:text-properties style:font-name="Times New Roman" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P8" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:text-align="end" style:justify-single-word="false"/>
+   <style:text-properties style:font-name="Times New Roman" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P9" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
+   <style:text-properties style:font-name="Times New Roman" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" text:display="true"/>
+  </style:style>
+  <style:style style:name="P10" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
+   <style:text-properties style:font-name="Times New Roman" fo:font-size="10pt" fo:font-weight="normal" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P11" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
+   <style:text-properties style:text-position="0% 100%" style:font-name="Times New Roman" fo:font-size="10pt" fo:font-weight="bold" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P12" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
+   <style:text-properties style:text-position="0% 100%" style:font-name="Times New Roman" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P13" style:family="paragraph" style:parent-style-name="TextNormal">
+   <style:paragraph-properties fo:line-height="100%"/>
+   <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P14" style:family="paragraph" style:parent-style-name="TextNormal">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.499cm" loext:contextual-spacing="false"/>
+   <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P15" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.101cm" loext:contextual-spacing="false" fo:line-height="100%"/>
+   <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P16" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:line-height="100%" fo:break-before="auto" fo:break-after="auto"/>
+   <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P17" style:family="paragraph" style:parent-style-name="TextNormal">
+   <style:paragraph-properties fo:margin-top="0.199cm" fo:margin-bottom="0.199cm" loext:contextual-spacing="false" fo:line-height="100%" fo:text-align="start" style:justify-single-word="false"/>
+   <style:text-properties fo:font-size="10pt" fo:font-weight="normal" style:font-size-asian="10pt" style:font-weight-asian="normal" style:font-size-complex="10pt" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="P20" style:family="paragraph" style:parent-style-name="Vfg2" style:list-style-name="">
+   <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:font-size="10pt"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="1cm" fo:margin-bottom="1cm" fo:margin-left="2.499cm" fo:margin-right="1.499cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:footnote-max-height="0cm">
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="0cm" fo:margin-bottom="0.499cm"/>
+   </style:header-style>
+   <style:footer-style>
+    <style:header-footer-properties svg:height="0.9cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.3cm"/>
+   </style:footer-style>
+  </style:page-layout>
+  <style:page-layout style:name="pm2">
+   <style:page-layout-properties fo:page-width="20.999cm" fo:page-height="29.699cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:footnote-max-height="0cm">
+    <style:footnote-sep style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1">
+   <style:header>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+    <text:p text:style-name="Header"/>
+   </style:header>
+   <style:footer>
+    <text:p text:style-name="P1"><text:tab/><text:span text:style-name="T1"><text:page-continuation text:string-value="- " text:select-page="next"/></text:span><text:span text:style-name="T1"><text:page-number text:select-page="current" text:page-adjust="1"/></text:span><text:span text:style-name="T1"><text:page-continuation text:string-value=" -" text:select-page="next"/></text:span></text:p>
+   </style:footer>
+  </style:master-page>
+  <style:master-page style:name="Endnote" style:page-layout-name="pm2"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+   <text:sequence-decls>
+    <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+   </text:sequence-decls>
+   <text:p text:style-name="P14"/>
+   <text:p text:style-name="P14"/>
+   <text:p text:style-name="P13"/>
+   <text:p text:style-name="P17"/>
+   <text:p text:style-name="P13"/>
+   <text:p text:style-name="P13"/>
+   <text:p text:style-name="P13"/>
+   <text:p text:style-name="P13"/>
+   <table:table table:name="Tabelle4" table:style-name="Tabelle4">
+    <table:table-column table:style-name="Tabelle4.A"/>
+    <table:table-column table:style-name="Tabelle4.B"/>
+    <table:table-column table:style-name="Tabelle4.C"/>
+    <table:table-header-rows>
+     <table:table-row table:style-name="Tabelle4.1">
+      <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+       <text:p text:style-name="P5">dfghdfgnhdfgnhdbhfghndhgbhdfbh</text:p>
+      </table:table-cell>
+      <table:table-cell table:style-name="Tabelle4.B1" office:value-type="string">
+       <text:p text:style-name="P11">von</text:p>
+      </table:table-cell>
+      <table:table-cell table:style-name="Tabelle4.B1" office:value-type="string">
+       <text:p text:style-name="P11">bis</text:p>
+      </table:table-cell>
+     </table:table-row>
+    </table:table-header-rows>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P12"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P12"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P3"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P10"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P10"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P3"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P10"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P10"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P8"><text:hidden-paragraph text:condition="ooow:1"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" table:number-columns-spanned="2" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1"/></text:p>
+     </table:table-cell>
+     <table:covered-table-cell/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P9"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P9"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P9"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P9"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P9"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P9"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"><text:hidden-paragraph text:condition="ooow:1" text:is-hidden="true"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P6">fgdhgfhdfbhfbhfbhfgbfdbhdfbhfgbnfdbhdfbg</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabelle4.A1" office:value-type="string">
+      <text:p text:style-name="P7"/>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="P15"/>
+   <text:p text:style-name="P15"/>
+   <text:p text:style-name="P15"/>
+   <text:p text:style-name="P4"/>
+   <text:p text:style-name="P4"/>
+   <text:p text:style-name="P4"/>
+   <text:p text:style-name="P20"/>
+   <text:p text:style-name="P16"/>
+   <text:p text:style-name="P4"/>
+  </office:text>
+ </office:body>
+</office:document>

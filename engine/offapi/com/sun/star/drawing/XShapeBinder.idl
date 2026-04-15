@@ -1,0 +1,61 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+ module com {  module sun {  module star {  module drawing {
+
+
+/** connects or breaks the lines of Shapes
+ */
+published interface XShapeBinder: com::sun::star::uno::XInterface
+{
+
+    /** binds Shapes together.
+
+        @param xShapes
+            a container with Shapes that will be bind together.
+            All Shapes will be converted to a PolyPolygonBezierShape
+            and the lines will be connected. The Shapes in xShape will be
+            removed from the GenericDrawPage and disposed.
+
+        @returns
+            a newly created PolyPolygonBezierShape which contains all
+            line segment from the supplied Shapes. It is also added
+            to the GenericDrawPage of the source Shapes.
+     */
+    com::sun::star::drawing::XShape bind( [in] com::sun::star::drawing::XShapes xShapes );
+
+
+    /** breaks a Shape into its line segments
+
+        @param xShape
+            the given Shape will be converted to a PolyPolygonBezierShape
+            and the line segments of this Shape will be used to create
+            new PolyPolygonBezierShape shapes. The original Shape
+            will be removed from its GenericDrawPage and disposed.
+     */
+    void unbind( [in] com::sun::star::drawing::XShape xShape );
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

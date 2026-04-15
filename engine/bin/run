@@ -1,0 +1,116 @@
+#!/bin/sh
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# simple wrapper script to run non-installed executables from workdir
+
+print_usage()
+{
+    echo "This utility can be used to run the executables in this folder:"
+    echo
+    echo "  workdir/LinkTarget/Executable"
+    echo
+    echo "Usage:"
+    echo
+    echo "  ./bin/run application [parameters]|--list|--help"
+    echo
+    echo "Use --list (same as -list or -l) to get the list of executables"
+    echo "Use --help (same as -help or -h) to get this help"
+}
+
+list_executables()
+{
+    echo "Listing executables inside workdir/LinkTarget/Executable folder:"
+    if uname | grep -i CYGWIN >/dev/null
+    then
+        echo
+        find workdir/LinkTarget/Executable -iname "*.bat" -printf "%P\n"
+        find workdir/LinkTarget/Executable -iname "*.exe" -printf "%P\n"
+    else
+        find workdir/LinkTarget/Executable -executable -printf "%P\n"
+    fi
+}
+
+print_executable_name()
+{
+    echo "Setting env variables and running workdir/LinkTarget/Executable/$1"
+}
+
+setdefaults()
+{
+    dir=$(realpath "$(pwd)")
+
+    while test ! -d "${dir}/instdir/program" ; do
+        if test "${dir}" = "/"; then
+            echo "error: cannot find \"program\" dir from \"$(pwd)\""
+            exit 1
+        fi
+        dir=$(realpath "${dir}/..")
+    done
+
+    exedir="${dir}"/workdir/LinkTarget/Executable
+    export URE_BOOTSTRAP=file://"${dir}"/instdir/program/fundamentalrc
+}
+
+case "$1" in
+    ""|"-h"|"-help"|"--help")
+        print_usage; exit 1;;
+    "-l"|"-list"|"--list")
+        list_executables; exit 0;;
+    *) print_executable_name $1;;
+esac
+
+if uname | grep -i CYGWIN >/dev/null; then
+
+    setdefaults
+
+    exedir=$(cygpath -m "${dir}"/workdir/LinkTarget/Executable)
+    export URE_BOOTSTRAP=file:///$(cygpath -m "${dir}")/instdir/program/fundamental.ini
+    export PATH="${dir}/instdir/program${PATH:+:$PATH}"
+    SEARCH_PATH="${PATH}"
+
+elif [ $(uname) = Darwin ]; then
+
+    dir=$(pwd)
+
+    # Get PRODUCTNAME from config_host.mk, LibreOffice or LibreOfficeDev
+    eval `grep 'export PRODUCTNAME=' config_host.mk`
+
+    if [ ! -d "${dir}/instdir/$PRODUCTNAME.app" ]; then
+        echo "error: cannot find \"instdir/$PRODUCTNAME.app\" dir in \"$(pwd)\""
+        exit 1
+    fi
+
+    exedir="$dir"/workdir/LinkTarget/Executable
+    export URE_BOOTSTRAP=file://"${dir}"/instdir/$PRODUCTNAME.app/Contents/Resources/fundamentalrc
+    export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+$DYLD_LIBRARY_PATH:}"${dir}"/instdir/$PRODUCTNAME.app/Contents/Frameworks
+    SEARCH_PATH="${DYLD_LIBRARY_PATH}"
+
+elif [ $(uname) = Haiku ]; then
+
+    setdefaults
+
+    export LIBRARY_PATH=${LIBRARY_PATH:+$LIBRARY_PATH:}"${dir}"/instdir/program
+    SEARCH_PATH="${LIBRARY_PATH}"
+
+else
+
+    setdefaults
+
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}"${dir}"/instdir/program
+    SEARCH_PATH="${LD_LIBRARY_PATH}"
+
+fi
+
+# echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
+# echo "setting search path to: ${SEARCH_PATH}"
+# echo "execing: ${exedir}/$1"
+
+exec ${LO_TRACE} "${exedir}/$@"
+
+# vi:set shiftwidth=4 expandtab:

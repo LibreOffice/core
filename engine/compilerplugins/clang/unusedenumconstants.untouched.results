@@ -1,0 +1,566 @@
+canvas/inc/rendering/icolorbuffer.hxx:37
+    enum canvas::IColorBuffer::Format A8R8G8B8
+canvas/inc/rendering/icolorbuffer.hxx:40
+    enum canvas::IColorBuffer::Format X8R8G8B8
+canvas/inc/rendering/irendermodule.hxx:55
+    enum canvas::IRenderModule::PrimitiveType Unknown
+chart2/source/model/main/DataPointProperties.hxx:37
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_FILL_STYLE
+chart2/source/model/main/DataPointProperties.hxx:38
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_FILL_COLOR
+chart2/source/model/main/DataPointProperties.hxx:39
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_FILL_BACKGROUND
+chart2/source/model/main/DataPointProperties.hxx:40
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_FILL_HATCH_NAME
+chart2/source/model/main/DataPointProperties.hxx:43
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_COLOR
+chart2/source/model/main/DataPointProperties.hxx:44
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_TRANSPARENCY
+chart2/source/model/main/DataPointProperties.hxx:47
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_FILL_STYLE
+chart2/source/model/main/DataPointProperties.hxx:48
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME
+chart2/source/model/main/DataPointProperties.hxx:49
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_GRADIENT_NAME
+chart2/source/model/main/DataPointProperties.hxx:50
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_GRADIENT_STEPCOUNT
+chart2/source/model/main/DataPointProperties.hxx:51
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_HATCH_NAME
+chart2/source/model/main/DataPointProperties.hxx:52
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_FILL_BITMAP_NAME
+chart2/source/model/main/DataPointProperties.hxx:53
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_FILL_BACKGROUND
+chart2/source/model/main/DataPointProperties.hxx:57
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_BORDER_STYLE
+chart2/source/model/main/DataPointProperties.hxx:58
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_BORDER_WIDTH
+chart2/source/model/main/DataPointProperties.hxx:59
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_BORDER_DASH_NAME
+chart2/source/model/main/DataPointProperties.hxx:60
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_BORDER_TRANSPARENCY
+chart2/source/model/main/DataPointProperties.hxx:63
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_SYMBOL_PROP
+chart2/source/model/main/DataPointProperties.hxx:64
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_OFFSET
+chart2/source/model/main/DataPointProperties.hxx:65
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_GEOMETRY3D
+chart2/source/model/main/DataPointProperties.hxx:66
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_NUMBER_FORMAT
+chart2/source/model/main/DataPointProperties.hxx:67
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LINK_NUMBERFORMAT_TO_SOURCE
+chart2/source/model/main/DataPointProperties.hxx:68
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_PERCENTAGE_NUMBER_FORMAT
+chart2/source/model/main/DataPointProperties.hxx:69
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_PLACEMENT
+chart2/source/model/main/DataPointProperties.hxx:70
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE
+chart2/source/model/main/DataPointProperties.hxx:71
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_TEXT_ROTATION
+chart2/source/model/main/DataPointProperties.hxx:72
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_INVERT_NEGATIVE
+chart2/source/model/main/DataPointProperties.hxx:75
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_ERROR_BAR_X
+chart2/source/model/main/DataPointProperties.hxx:76
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_ERROR_BAR_Y
+chart2/source/model/main/DataPointProperties.hxx:77
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_SHOW_ERROR_BOX
+chart2/source/model/main/DataPointProperties.hxx:78
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_PERCENT_DIAGONAL
+chart2/source/model/main/DataPointProperties.hxx:81
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL
+chart2/source/model/main/DataPointProperties.hxx:82
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_SEPARATOR
+chart2/source/model/main/DataPointProperties.hxx:83
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_TEXT_WORD_WRAP
+chart2/source/model/main/DataPointProperties.hxx:84
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_STYLE
+chart2/source/model/main/DataPointProperties.hxx:85
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_COLOR
+chart2/source/model/main/DataPointProperties.hxx:86
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_WIDTH
+chart2/source/model/main/DataPointProperties.hxx:87
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_DASH
+chart2/source/model/main/DataPointProperties.hxx:88
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_DASH_NAME
+chart2/source/model/main/DataPointProperties.hxx:89
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_TRANS
+chart2/source/model/main/DataPointProperties.hxx:90
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_CUSTOM_LABEL_FIELDS
+chart2/source/model/main/DataPointProperties.hxx:91
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_CUSTOM_POS
+chart2/source/model/main/DataPointProperties.hxx:92
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_CUSTOM_SIZE
+chart2/source/model/main/Diagram.cxx:99
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Diagram.cxx:83:1) PROP_DIAGRAM_DATATABLEHBORDER
+chart2/source/model/main/Diagram.cxx:102
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Diagram.cxx:83:1) PROP_DIAGRAM_DATATABLEVBORDER
+chart2/source/model/main/Diagram.cxx:103
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Diagram.cxx:83:1) PROP_DIAGRAM_DATATABLEOUTLINE
+cui/source/options/optfltr.cxx:37
+    enum MSFltrPg2_CheckBoxEntries InvalidCBEntry
+dbaccess/source/inc/stringconstants.hxx:26
+    enum PropertyId PROPERTY_ID_TITLE
+dbaccess/source/inc/stringconstants.hxx:70
+    enum PropertyId PROPERTY_ID_ISSET
+dbaccess/source/inc/stringconstants.hxx:71
+    enum PropertyId PROPERTY_ID_ISOUTPARAMETER
+dbaccess/source/inc/stringconstants.hxx:73
+    enum PropertyId PROPERTY_ID_ISCALCULATED
+dbaccess/source/inc/stringconstants.hxx:89
+    enum PropertyId PROPERTY_ID_HELPFILENAME
+dbaccess/source/inc/stringconstants.hxx:112
+    enum PropertyId PROPERTY_ID_REFERENCEDCOLUMN
+dbaccess/source/inc/stringconstants.hxx:113
+    enum PropertyId PROPERTY_ID_PARENTWINDOW
+dbaccess/source/inc/stringconstants.hxx:115
+    enum PropertyId PROPERTY_ID_ISHIDDEN
+dbaccess/source/inc/stringconstants.hxx:124
+    enum PropertyId PROPERTY_ID_SPECIAL_OPTIONS
+drawinglayer/source/tools/emfphelperdata.cxx:68
+    enum emfplushelper::(unnamed at /home/noel/libo-plugin/drawinglayer/source/tools/emfphelperdata.cxx:62:5) WrapModeClamp
+drawinglayer/source/tools/emfpimage.hxx:30
+    emfplushelper::ImageDataType ImageDataTypeUnknown
+drawinglayer/source/tools/emfppen.hxx:75
+    enum emfplushelper::LineJoinType LineJoinTypeMiter
+drawinglayer/source/tools/emfppen.hxx:76
+    enum emfplushelper::LineJoinType LineJoinTypeBevel
+drawinglayer/source/tools/emfppen.hxx:77
+    enum emfplushelper::LineJoinType LineJoinTypeRound
+drawinglayer/source/tools/emfppen.hxx:78
+    enum emfplushelper::LineJoinType LineJoinTypeMiterClipped
+emfio/inc/mtftools.hxx:78
+    enum emfio::StockObject ANSI_FIXED_FONT
+emfio/inc/mtftools.hxx:79
+    enum emfio::StockObject ANSI_VAR_FONT
+emfio/inc/mtftools.hxx:80
+    enum emfio::StockObject SYSTEM_FIXED_FONT
+emfio/inc/mtftools.hxx:128
+    enum emfio::StretchMode HALFTONE
+emfio/inc/mtftools.hxx:129
+    enum emfio::StretchMode STRETCH_ANDSCANS
+emfio/inc/mtftools.hxx:130
+    enum emfio::StretchMode STRETCH_ORSCANS
+emfio/inc/mtftools.hxx:131
+    enum emfio::StretchMode STRETCH_DELETESCANS
+emfio/inc/mtftools.hxx:196
+    enum emfio::TernaryRasterOperation SRCERASE
+emfio/inc/mtftools.hxx:197
+    enum emfio::TernaryRasterOperation PATCOPY
+emfio/inc/mtftools.hxx:199
+    enum emfio::TernaryRasterOperation BLACKNESS
+emfio/inc/mtftools.hxx:200
+    enum emfio::TernaryRasterOperation WHITENESS
+emfio/inc/mtftools.hxx:214
+    enum emfio::PenStyle PS_USERSTYLE
+emfio/inc/mtftools.hxx:215
+    enum emfio::PenStyle PS_ALTERNATE
+emfio/inc/mtftools.hxx:235
+    enum emfio::CharacterSet ANSI_CHARSET
+emfio/inc/mtftools.hxx:237
+    enum emfio::CharacterSet SYMBOL_CHARSET
+emfio/inc/mtftools.hxx:238
+    enum emfio::CharacterSet SHIFTJIS_CHARSET
+emfio/inc/mtftools.hxx:239
+    enum emfio::CharacterSet HANGUL_CHARSET
+emfio/inc/mtftools.hxx:240
+    enum emfio::CharacterSet GB2312_CHARSET
+emfio/inc/mtftools.hxx:241
+    enum emfio::CharacterSet CHINESEBIG5_CHARSET
+emfio/inc/mtftools.hxx:244
+    enum emfio::CharacterSet MAC_CHARSET
+emfio/inc/mtftools.hxx:245
+    enum emfio::CharacterSet JOHAB_CHARSET
+emfio/inc/mtftools.hxx:246
+    enum emfio::CharacterSet GREEK_CHARSET
+emfio/inc/mtftools.hxx:247
+    enum emfio::CharacterSet TURKISH_CHARSET
+emfio/inc/mtftools.hxx:248
+    enum emfio::CharacterSet VIETNAMESE_CHARSET
+emfio/inc/mtftools.hxx:249
+    enum emfio::CharacterSet HEBREW_CHARSET
+emfio/inc/mtftools.hxx:250
+    enum emfio::CharacterSet ARABIC_CHARSET
+emfio/inc/mtftools.hxx:251
+    enum emfio::CharacterSet BALTIC_CHARSET
+emfio/inc/mtftools.hxx:252
+    enum emfio::CharacterSet RUSSIAN_CHARSET
+emfio/inc/mtftools.hxx:253
+    enum emfio::CharacterSet THAI_CHARSET
+emfio/inc/mtftools.hxx:254
+    enum emfio::CharacterSet EASTEUROPE_CHARSET
+emfio/inc/mtftools.hxx:283
+    enum emfio::FamilyFont FF_DONTCARE
+emfio/inc/mtftools.hxx:294
+    enum emfio::WeightFont FW_EXTRALIGHT
+emfio/inc/mtftools.hxx:296
+    enum emfio::WeightFont FW_NORMAL
+emfio/inc/mtftools.hxx:300
+    enum emfio::WeightFont FW_EXTRABOLD
+emfio/inc/mtftools.hxx:303
+    enum emfio::WeightFont FW_BLACK
+emfio/inc/mtftools.hxx:312
+    enum emfio::BrushStyle BS_HATCHED
+emfio/inc/mtftools.hxx:314
+    enum emfio::BrushStyle BS_INDEXED
+emfio/inc/mtftools.hxx:315
+    enum emfio::BrushStyle BS_DIBPATTERN
+emfio/inc/mtftools.hxx:316
+    enum emfio::BrushStyle BS_DIBPATTERNPT
+emfio/inc/mtftools.hxx:317
+    enum emfio::BrushStyle BS_PATTERN8X8
+emfio/inc/mtftools.hxx:318
+    enum emfio::BrushStyle BS_DIBPATTERN8X8
+emfio/inc/mtftools.hxx:319
+    enum emfio::BrushStyle BS_MONOPATTERN
+framework/inc/xml/imagesdocumenthandler.hxx:44
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_EXTERNALIMAGES
+framework/inc/xml/imagesdocumenthandler.hxx:45
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_EXTERNALENTRY
+framework/inc/xml/imagesdocumenthandler.hxx:46
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HREF
+framework/inc/xml/imagesdocumenthandler.hxx:47
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_MASKCOLOR
+framework/inc/xml/imagesdocumenthandler.hxx:49
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_BITMAPINDEX
+framework/inc/xml/imagesdocumenthandler.hxx:50
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_MASKURL
+framework/inc/xml/imagesdocumenthandler.hxx:51
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_MASKMODE
+framework/inc/xml/imagesdocumenthandler.hxx:52
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HIGHCONTRASTURL
+framework/inc/xml/imagesdocumenthandler.hxx:53
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HIGHCONTRASTMASKURL
+framework/source/fwe/classes/actiontriggerseparatorpropertyset.cxx:44
+    enum (anonymous namespace)::EPROPERTIES PROPERTYCOUNT
+include/basegfx/utils/systemdependentdata.hxx:48
+    enum basegfx::SDD_Type SDDType_ID2D1PathGeometry
+include/basegfx/utils/systemdependentdata.hxx:49
+    enum basegfx::SDD_Type SDDType_ID2D1Bitmap
+include/basegfx/utils/systemdependentdata.hxx:54
+    enum basegfx::SDD_Type SDDType_GraphicsPath
+include/basegfx/utils/systemdependentdata.hxx:55
+    enum basegfx::SDD_Type SDDType_GdiPlusBitmap
+include/connectivity/dbtools.hxx:829
+    enum connectivity::dbase::DBFType dBaseIVMemo
+include/desktop/exithelper.h:26
+    enum EExitCodes EXITHELPER_NO_ERROR
+include/desktop/exithelper.h:26
+    int EXITHELPER_NO_ERROR
+include/desktop/exithelper.h:28
+    int EXITHELPER_FATAL_ERROR
+include/editeng/borderline.hxx:135
+    enum SvxBorderLineStyle BORDER_LINE_STYLE_MAX
+include/filter/msfilter/ww8fields.hxx:28
+    enum ww::eField ePOSSIBLEBOOKMARK
+include/filter/msfilter/ww8fields.hxx:112
+    enum ww::eField eUNKNOWN2
+include/i18nutil/transliteration.hxx:45
+    enum TransliterationFlags NumToTextLower_zh_CN
+include/i18nutil/transliteration.hxx:47
+    enum TransliterationFlags NumToTextUpper_zh_CN
+include/i18nutil/transliteration.hxx:49
+    enum TransliterationFlags NumToTextLower_zh_TW
+include/i18nutil/transliteration.hxx:51
+    enum TransliterationFlags NumToTextUpper_zh_TW
+include/i18nutil/transliteration.hxx:53
+    enum TransliterationFlags NumToTextFormalHangul_ko
+include/i18nutil/transliteration.hxx:55
+    enum TransliterationFlags NumToTextFormalLower_ko
+include/i18nutil/transliteration.hxx:57
+    enum TransliterationFlags NumToTextFormalUpper_ko
+include/i18nutil/transliteration.hxx:117
+    enum TransliterationFlags smallToLarge_ja_JP
+include/i18nutil/transliteration.hxx:119
+    enum TransliterationFlags largeToSmall_ja_JP
+include/COKit/COKitEnums.h:56
+    COKitSelectionType KIT_SELTYPE_LARGE_TEXT
+include/COKit/COKitEnums.h:1089
+    COKitExtTextInputType KIT_EXT_TEXTINPUT_POS
+include/oox/ole/axfontdata.hxx:39
+    enum AxFontFlags Disabled
+include/oox/ole/axfontdata.hxx:40
+    enum AxFontFlags AutoColor
+include/svl/inettype.hxx:173
+    enum INetContentType CONTENT_TYPE_IMAGE_WEBP
+include/svx/diagram/datamodel.hxx:41
+    enum svx::diagram::TypeConstant XML_type
+include/svx/diagram/datamodel.hxx:42
+    enum svx::diagram::TypeConstant XML_asst
+include/svx/diagram/datamodel.hxx:47
+    enum svx::diagram::TypeConstant XML_parTrans
+include/svx/diagram/datamodel.hxx:52
+    enum svx::diagram::TypeConstant XML_sibTrans
+include/tools/stream.hxx:53
+    enum StreamMode DELETE_ON_CLOSE
+include/unotools/eventcfg.hxx:30
+    enum GlobalEventId STARTAPP
+include/unotools/eventcfg.hxx:31
+    enum GlobalEventId CLOSEAPP
+include/unotools/extendedsecurityoptions.hxx:28
+    enum SvtExtendedSecurityOptions::OpenHyperlinkMode OPEN_WITHSECURITYCHECK
+include/unotools/localedatawrapper.hxx:59
+    enum LongDateOrder Invalid
+include/unotools/sharedunocomponent.hxx:150
+    enum utl::SharedUNOComponent::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:150
+    enum utl::SharedUNOComponent<class com::sun::star::beans::XPropertySet>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:150
+    enum utl::SharedUNOComponent<class com::sun::star::embed::XStorage>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:150
+    enum utl::SharedUNOComponent<class com::sun::star::sdb::XSingleSelectQueryComposer>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:150
+    enum utl::SharedUNOComponent<class com::sun::star::sdbc::XPreparedStatement>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:150
+    enum utl::SharedUNOComponent<class com::sun::star::sdbc::XStatement>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:150
+    enum utl::SharedUNOComponent<class com::sun::star::uno::XInterface>::AssignmentMode NoTakeOwnership
+include/vcl/pdf/PDFAnnotationMarker.hxx:71
+    enum vcl::pdf::PDFTextMarkerType Underline
+include/vcl/pdf/PDFAnnotationMarker.hxx:72
+    enum vcl::pdf::PDFTextMarkerType Squiggly
+include/vcl/pdf/PDFAnnotationMarker.hxx:73
+    enum vcl::pdf::PDFTextMarkerType StrikeOut
+include/vcl/toolkit/treelistbox.hxx:149
+    enum DragDropMode APP_COPY
+include/vcl/toolkit/treelistbox.hxx:153
+    enum DragDropMode ALL
+include/vcl/vclenum.hxx:207
+    enum VclTaskBarStates ProgressUnknown
+include/vcl/vclenum.hxx:209
+    enum VclTaskBarStates Paused
+include/vcl/vclenum.hxx:385
+    enum TrackingEventFlags Focus
+include/vcl/windowstate.hxx:41
+    enum vcl::WindowState FullScreen
+kit/qa/gtktiledviewer/gtv-kit-dialog.cxx:71
+    enum (unnamed at /home/noel/libo-plugin/kit/qa/gtktiledviewer/gtv-kit-dialog.cxx:69:1) PROP_0
+kit/source/gtk/kitdocview.cxx:310
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/kitdocview.cxx:308:1) PROP_0
+lingucomponent/source/spellcheck/languagetool/languagetoolimp.cxx:123
+    enum (anonymous namespace)::HTTP_METHOD HTTP_GET
+reportdesign/source/filter/xml/xmlEnums.hxx:42
+    enum rptxml::XMLReportToken XML_TOK_REPORT_ELEMENT
+sc/inc/lookupcache.hxx:61
+    enum ScLookupCache::SearchMode SEARCHFWD
+sc/inc/lookupcache.hxx:62
+    enum ScLookupCache::SearchMode SEARCHREV
+sc/inc/lookupcache.hxx:63
+    enum ScLookupCache::SearchMode SEARCHBASC
+sc/inc/lookupcache.hxx:64
+    enum ScLookupCache::SearchMode SEARCHDESC
+sc/qa/unit/ucalc_copypaste.cxx:42
+    enum TestCopyPaste::CalcMode NoCalc
+sc/source/filter/excel/xiescher.cxx:480
+    enum (unnamed at /home/noel/libo-plugin/sc/source/filter/excel/xiescher.cxx:480:17) eCreateFromOffice
+sc/source/filter/inc/decl.h:23
+    enum WKTYP eWK4
+sc/source/ui/inc/anyrefdg.hxx:142
+    enum ScRefHdlrControllerImpl::(unnamed at /home/noel/libo-plugin/sc/source/ui/inc/anyrefdg.hxx:142:5) SLOTID
+sc/source/ui/inc/anyrefdg.hxx:142
+    enum ScRefHdlrControllerImpl<class SfxModelessDialogController>::(unnamed at /home/noel/libo-plugin/sc/source/ui/inc/anyrefdg.hxx:142:5) SLOTID
+sc/source/ui/inc/anyrefdg.hxx:142
+    enum ScRefHdlrControllerImpl<class SfxTabDialogController, false>::(unnamed at /home/noel/libo-plugin/sc/source/ui/inc/anyrefdg.hxx:142:5) SLOTID
+sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:101
+    enum (anonymous namespace)::ScRegType LINEAR
+sd/inc/resltn.hxx:24
+    enum PublishingFormat FORMAT_GIF
+sd/inc/resltn.hxx:25
+    enum PublishingFormat FORMAT_JPG
+sd/inc/resltn.hxx:26
+    enum PublishingFormat FORMAT_PNG
+sd/inc/resltn.hxx:31
+    enum PublishingScript SCRIPT_ASP
+sd/inc/resltn.hxx:32
+    enum PublishingScript SCRIPT_PERL
+starmath/inc/mathml/def.hxx:100
+    enum SmMlAttributeValueEmpty MlEmpty
+starmath/inc/mathml/def.hxx:142
+    enum SmMlAttributeValueLspace NMlEmpty
+starmath/inc/mathml/def.hxx:159
+    enum SmMlAttributeValueMathsize NMlEmpty
+starmath/inc/mathml/def.hxx:203
+    enum SmMlAttributeValueRspace NMlEmpty
+starmath/inc/mathml/mathmlMo.hxx:46
+    enum moOpDP movablelimits
+starmath/inc/mathml/mathmlMo.hxx:47
+    enum moOpDP starmathCustom
+starmath/inc/mathml/mathmlMo.hxx:48
+    enum moOpDP starmathCustomMo
+starmath/inc/mathml/mathmlMo.hxx:55
+    enum moOpDF nonedf
+svx/inc/sxmkitm.hxx:25
+    enum SdrMeasureKind SDRMEASURE_RADIUS
+svx/source/inc/datanavi.hxx:61
+    enum svxform::DataGroupType DGTUnknown
+sw/inc/docary.hxx:71
+    enum SwVectorModifyBase::DestructorPolicy KeepElements
+sw/inc/docary.hxx:71
+    enum SwVectorModifyBase<class SwNumRule *>::DestructorPolicy KeepElements
+sw/inc/docary.hxx:71
+    enum SwVectorModifyBase<class SwSectionFormat *>::DestructorPolicy KeepElements
+sw/inc/docary.hxx:72
+    enum SwVectorModifyBase::DestructorPolicy FreeElements
+sw/inc/tblenum.hxx:35
+    enum TableChgWidthHeightType InvalidPos
+sw/source/filter/ww8/ww8scan.hxx:385
+    enum ePLCFT SEP
+sw/source/filter/ww8/ww8struc.hxx:950
+    enum WW8_FSPA::FSPAOrient RelPgMargin
+sw/source/filter/ww8/ww8struc.hxx:950
+    enum WW8_FSPA::FSPAOrient RelText
+sw/source/ui/fldui/fldref.cxx:53
+    enum (anonymous namespace)::FMT_REF_IDX FMT_REF_PAGE_IDX
+sw/source/ui/fldui/fldref.cxx:54
+    enum (anonymous namespace)::FMT_REF_IDX FMT_REF_CHAPTER_IDX
+sw/source/ui/fldui/fldref.cxx:58
+    enum (anonymous namespace)::FMT_REF_IDX FMT_REF_ONLYNUMBER_IDX
+sw/source/ui/fldui/fldref.cxx:59
+    enum (anonymous namespace)::FMT_REF_IDX FMT_REF_ONLYCAPTION_IDX
+sw/source/uibase/utlui/content.cxx:1103
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_LEVEL
+sw/source/uibase/utlui/content.cxx:1104
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DISPLAY
+sw/source/uibase/utlui/content.cxx:1109
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_EDIT_ENTRY
+sw/source/uibase/utlui/content.cxx:1110
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DELETE_ENTRY
+sw/source/uibase/utlui/content.cxx:1111
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY
+sw/source/uibase/utlui/content.cxx:1113
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_DEFAULT
+sw/source/uibase/utlui/content.cxx:1114
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_FOCUS
+sw/source/uibase/utlui/content.cxx:1115
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_OFF
+sw/source/uibase/utlui/glbltree.cxx:93
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE
+sw/source/uibase/utlui/glbltree.cxx:94
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_EDIT_CONTENT
+sw/source/uibase/utlui/glbltree.cxx:95
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_EDIT_INSERT
+sw/source/uibase/utlui/glbltree.cxx:96
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_INDEX
+sw/source/uibase/utlui/glbltree.cxx:97
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_FILE
+sw/source/uibase/utlui/glbltree.cxx:98
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_NEW_FILE
+sw/source/uibase/utlui/glbltree.cxx:100
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_DELETE
+sw/source/uibase/utlui/glbltree.cxx:101
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_SEL
+sw/source/uibase/utlui/glbltree.cxx:102
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_INDEX
+sw/source/uibase/utlui/glbltree.cxx:103
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_LINK
+sw/source/uibase/utlui/glbltree.cxx:104
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_ALL
+sw/source/uibase/utlui/glbltree.cxx:106
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_EDIT_LINK
+sw/source/writerfilter/dmapper/PropertyMap.hxx:232
+    enum writerfilter::dmapper::PageBreakType Both
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:30
+    enum writerfilter::ooxml::ResourceType NoResource
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:31
+    enum writerfilter::ooxml::ResourceType Table
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:32
+    enum writerfilter::ooxml::ResourceType Stream
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:35
+    enum writerfilter::ooxml::ResourceType Properties
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:39
+    enum writerfilter::ooxml::ResourceType Shape
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:41
+    enum writerfilter::ooxml::ResourceType Value
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:42
+    enum writerfilter::ooxml::ResourceType XNote
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:43
+    enum writerfilter::ooxml::ResourceType TextTableCell
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:44
+    enum writerfilter::ooxml::ResourceType TextTableRow
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:45
+    enum writerfilter::ooxml::ResourceType TextTable
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:46
+    enum writerfilter::ooxml::ResourceType PropertyTable
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:47
+    enum writerfilter::ooxml::ResourceType Math
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:48
+    enum writerfilter::ooxml::ResourceType Any
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:53
+    enum writerfilter::ooxml::ResourceType CommentEx
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:54
+    enum writerfilter::ooxml::ResourceType Theme
+sw/source/writerfilter/ooxml/OOXMLFastContextHandler.hxx:203
+    enum writerfilter::ooxml::OOXMLFastContextHandler::eMathParaJc INLINE
+ucb/source/ucp/webdav-curl/webdavresponseparser.cxx:56
+    enum (anonymous namespace)::WebDAVNamespace WebDAVNamespace_last
+ucb/source/ucp/webdav-curl/webdavresponseparser.cxx:109
+    enum (anonymous namespace)::WebDAVName WebDAVName_last
+ucbhelper/source/client/proxydecider.cxx:126
+    enum ucbhelper::proxydecider_impl::InternetProxyDecider_Impl::ProxyType Manual
+vcl/inc/dndhelper.hxx:32
+    enum vcl::DragOrDrop Drop
+vcl/inc/font/PhysicalFontFace.hxx:104
+    vcl::font::NameID NAME_ID_COPYRIGHT
+vcl/inc/font/PhysicalFontFace.hxx:106
+    vcl::font::NameID NAME_ID_FONT_SUBFAMILY
+vcl/inc/font/PhysicalFontFace.hxx:107
+    vcl::font::NameID NAME_ID_UNIQUE_ID
+vcl/inc/font/PhysicalFontFace.hxx:108
+    vcl::font::NameID NAME_ID_FULL_NAME
+vcl/inc/font/PhysicalFontFace.hxx:109
+    vcl::font::NameID NAME_ID_VERSION_STRING
+vcl/inc/font/PhysicalFontFace.hxx:110
+    vcl::font::NameID NAME_ID_POSTSCRIPT_NAME
+vcl/inc/font/PhysicalFontFace.hxx:111
+    vcl::font::NameID NAME_ID_TRADEMARK
+vcl/inc/font/PhysicalFontFace.hxx:112
+    vcl::font::NameID NAME_ID_MANUFACTURER
+vcl/inc/font/PhysicalFontFace.hxx:113
+    vcl::font::NameID NAME_ID_DESIGNER
+vcl/inc/font/PhysicalFontFace.hxx:114
+    vcl::font::NameID NAME_ID_DESCRIPTION
+vcl/inc/font/PhysicalFontFace.hxx:115
+    vcl::font::NameID NAME_ID_VENDOR_URL
+vcl/inc/font/PhysicalFontFace.hxx:116
+    vcl::font::NameID NAME_ID_DESIGNER_URL
+vcl/inc/font/PhysicalFontFace.hxx:117
+    vcl::font::NameID NAME_ID_LICENSE
+vcl/inc/font/PhysicalFontFace.hxx:118
+    vcl::font::NameID NAME_ID_LICENSE_URL
+vcl/inc/font/PhysicalFontFace.hxx:120
+    vcl::font::NameID NAME_ID_TYPOGRAPHIC_FAMILY
+vcl/inc/font/PhysicalFontFace.hxx:121
+    vcl::font::NameID NAME_ID_TYPOGRAPHIC_SUBFAMILY
+vcl/inc/font/PhysicalFontFace.hxx:122
+    vcl::font::NameID NAME_ID_MAC_FULL_NAME
+vcl/inc/font/PhysicalFontFace.hxx:123
+    vcl::font::NameID NAME_ID_SAMPLE_TEXT
+vcl/inc/font/PhysicalFontFace.hxx:124
+    vcl::font::NameID NAME_ID_CID_FINDFONT_NAME
+vcl/inc/font/PhysicalFontFace.hxx:125
+    vcl::font::NameID NAME_ID_WWS_FAMILY
+vcl/inc/font/PhysicalFontFace.hxx:126
+    vcl::font::NameID NAME_ID_WWS_SUBFAMILY
+vcl/inc/font/PhysicalFontFace.hxx:127
+    vcl::font::NameID NAME_ID_LIGHT_BACKGROUND
+vcl/inc/font/PhysicalFontFace.hxx:128
+    vcl::font::NameID NAME_ID_DARK_BACKGROUND
+vcl/inc/font/PhysicalFontFace.hxx:129
+    vcl::font::NameID NAME_ID_VARIATIONS_PS_PREFIX
+vcl/inc/fontsubset.hxx:40
+    enum FontType ANY_SFNT
+vcl/inc/salptype.hxx:44
+    enum SalPrinterError General
+vcl/inc/unx/saldisp.hxx:59
+    srv_vendor_t vendor_none
+vcl/source/app/svapp.cxx:1186
+    enum (unnamed at /home/noel/libo-plugin/vcl/source/app/svapp.cxx:1186:1) hwAll
+vcl/source/filter/ipcd/ipcd.cxx:41
+    enum (anonymous namespace)::PCDResolution PCDRES_4BASE
+vcl/source/filter/ipcd/ipcd.cxx:42
+    enum (anonymous namespace)::PCDResolution PCDRES_16BASE
+vcl/source/fontsubset/ttcr.hxx:48
+    enum vcl::TTCRErrCodes TTCR_UNKNOWN
+vcl/unx/gtk3/gtkinst.cxx:7954
+    enum (unnamed at /home/noel/libo-plugin/vcl/unx/gtk3/gtkinst.cxx:7952:1) PROP_0
+vcl/unx/gtk3/gtkinst.cxx:7959
+    enum (unnamed at /home/noel/libo-plugin/vcl/unx/gtk3/gtkinst.cxx:7952:1) PROP_SHADOW_TYPE

@@ -1,0 +1,120 @@
+--- Cbc/configure
++++ Cbc/configure
+@@ -3208,7 +3208,7 @@
+ 
+ # Correct the LD variable if we are using the MS or Intel-windows compiler
+ case "$CC" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;
+@@ -4081,7 +4081,7 @@
+ 
+ # correct the LD variable in a build with MS or Intel-windows compiler
+ case "$CXX" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;
+--- Cgl/configure
++++ Cgl/configure
+@@ -3174,7 +3174,7 @@
+ 
+ # Correct the LD variable if we are using the MS or Intel-windows compiler
+ case "$CC" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;
+@@ -4045,7 +4045,7 @@
+ 
+ # correct the LD variable in a build with MS or Intel-windows compiler
+ case "$CXX" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;
+--- Clp/configure
++++ Clp/configure
+@@ -3204,7 +3204,7 @@
+ 
+ # Correct the LD variable if we are using the MS or Intel-windows compiler
+ case "$CC" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;
+@@ -4075,7 +4075,7 @@
+ 
+ # correct the LD variable in a build with MS or Intel-windows compiler
+ case "$CXX" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;
+--- CoinMP/configure
++++ CoinMP/configure
+@@ -3143,7 +3143,7 @@
+ 
+ # Correct the LD variable if we are using the MS or Intel-windows compiler
+ case "$CC" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;
+@@ -4016,7 +4016,7 @@
+ 
+ # correct the LD variable in a build with MS or Intel-windows compiler
+ case "$CXX" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;
+--- CoinUtils/configure
++++ CoinUtils/configure
+@@ -3200,7 +3200,7 @@
+ 
+ # Correct the LD variable if we are using the MS or Intel-windows compiler
+ case "$CC" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;
+@@ -4071,7 +4071,7 @@
+ 
+ # correct the LD variable in a build with MS or Intel-windows compiler
+ case "$CXX" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;
+--- Osi/configure
++++ Osi/configure
+@@ -3172,7 +3172,7 @@
+ 
+ # Correct the LD variable if we are using the MS or Intel-windows compiler
+ case "$CC" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;
+@@ -4845,7 +4845,7 @@
+ 
+ # correct the LD variable in a build with MS or Intel-windows compiler
+ case "$CXX" in
+-  clang* ) ;;
++  clang* | */clang* ) ;;
+   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+     LD=link
+     ;;

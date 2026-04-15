@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+
+# This configuration is for a typical end-user installation of Visual Studio Community 2022 with the
+# required components to build LibreOffice, excluding the components to cross-compile for ARM64
+# It includes recommended packages as if you had selected the "Desktop development with C++"
+# workload in the in the UI driven installer.
+
+properties:
+  resources:
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: VisualStudio
+      directives:
+        description: Install Visual Studio 2022 Community
+      settings:
+        id: Microsoft.VisualStudio.2022.Community
+        source: winget
+    - resource: Microsoft.VisualStudio.DSC/VSComponents
+      id: LibreOffice Components including recommended packages
+      dependsOn:
+        - VisualStudio
+      directives:
+        description: Install components required to build LibreOffice, including recommended ones
+      settings:
+        productId: Microsoft.VisualStudio.Product.Community
+        channelId: VisualStudio.17.Release
+        vsConfigFile: '${WinGetConfigRoot}\2022.vsconfig'
+        IncludeRecommended: true
+  configurationVersion: 0.2.0

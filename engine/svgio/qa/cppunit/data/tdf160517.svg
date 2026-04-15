@@ -1,0 +1,11 @@
+<svg width="230" height="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <filter id="filter">
+    <feComposite
+      in="SourceGraphic"
+      in2="unknown"
+      operator="arithmetic"
+      k1="0" k2="0.5" k3="0" k4="0" />
+  </filter>
+  <rect fill="green" filter="url(#filter)" x="10" y="10" width="100" height="100"/>
+</svg>
+

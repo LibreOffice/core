@@ -1,0 +1,29 @@
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+      <text
+         style="text-anchor:start"
+         x="114"
+         y="103"><tspan
+           x="114"
+           y="103"><tspan>First </tspan>line </tspan><tspan
+           x="114"
+           y="122">Second line</tspan>
+      </text>
+      <text
+         style="text-anchor:middle"
+         x="114"
+         y="153"><tspan
+           x="114"
+           y="153"><tspan>First </tspan>line </tspan><tspan
+           x="114"
+           y="172">Second line</tspan>
+      </text>
+      <text
+         style="text-anchor:end"
+         x="114"
+         y="203"><tspan
+           x="114"
+           y="203"><tspan>First </tspan>line </tspan><tspan
+           x="114"
+           y="222">Second line</tspan>
+      </text>
+</svg>

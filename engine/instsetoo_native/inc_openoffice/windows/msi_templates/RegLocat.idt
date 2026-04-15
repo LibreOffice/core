@@ -1,0 +1,4 @@
+Signature_	Root	Key	Name	Type
+s72	i2	s255	S255	I2
+RegLocator	Signature_
+WinMajorVer	2	Software\Microsoft\Windows NT\CurrentVersion	CurrentMajorVersionNumber	2

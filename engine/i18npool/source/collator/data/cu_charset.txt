@@ -1,0 +1,29 @@
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Church Slavic sort order according to UTN #41: http://www.unicode.org/notes/tn41/
+#
+[caseLevel on]
+[caseFirst upper]
+[backwards 2]
+[reorder Cyrl]
+[suppressContractions [Ии]]
+& [first secondary ignorable] =   ҇ =  ꙼ = ꙾ <<  ҅ << ҆ <<  ́ << ̀ << ̑ <<  ҃ <<  ̆ <<  ̈ =  ̏ << ⷶ << ⷠ <<  ⷡ <<  ⷢ <<  ⷣ <<  ⷷ <<  ꙴ << ⷤ <<  ⷥ <<  ꙵ <<  ꙶ <<  ⷦ <<  ⷧ <<  ⷨ <<  ⷩ <<  ⷪ <<  ꙻ <<  ⷫ <<  ⷬ <<  ⷭ <<  ⷮ <<  ⷹ <<  ꙷ << ꚞ <<   ⷯ <<  ⷰ <<  ⷱ <<  ⷲ <<  ⷳ <<  ̾ =  ꙸ =  ⸯ <<  ꙹ <<  ꙿ =  ꙽ =  ꙺ <<  ⷺ <<  ⷻ <<  ⷾ <<  ⷼ <<  ⷽ  <<  ⷴ
+& ⷭⷮ = ⷵ
+& д = ᲁ
+& Е <<< є <<< Є
+& ѕ < з = ꙁ <<<  З = Ꙁ
+& И < і <<< І
+& Н < ѻ <<< Ѻ <<<  о = ᲂ <<< О <<< ѡ <<< Ѡ <<< ꙍ <<< Ꙍ
+& Ꙍ҆̑ = Ѽ
+& ꙍ҆̑ = ѽ
+& Ѡт = Ѿ
+& ѡт = ѿ
+& Т  < ѹ = оу = ᲂу <<< Ѹ = Оу = ОУ <<< ꙋ <<< Ꙋ <<< у <<< У
+& Э <  ѣ <<< Ѣ
+& Ю < ѫ  <<< Ѫ < я <<< Я < ꙗ <<< Ꙗ <<< ѧ <<< Ѧ < ѯ <<< Ѯ < ѱ <<< Ѱ < ѳ <<< Ѳ < ѵ <<< Ѵ
+

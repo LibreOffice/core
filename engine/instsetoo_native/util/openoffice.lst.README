@@ -1,0 +1,44 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+Some documentation for the variables specified in file openoffice.lst.
+
+It contains values used by the creation of installation packages themselves,
+and as part of that contain substitutions for variables used in scp2 (those will
+be handled by the perl installer code)
+
+NOTE: For instdir, the corresponding files are created by
+instsetoo_native/CustomTarget_setup.mk instead.
+
+It used to contain variables that were replaced in the xcu configuration files,
+but those are handled by postprocess/CustomTarget_registry.mk (and there's no
+difference for those between an installation set and the instdir method)
+
+VARIABLE NAME                   USAGE
+-------------------------------------------------------------------------------
+BASISPACKAGEPREFIX              name prefix for the installation packages
+                                for Linux/Solaris platforms
+UREPACKAGEPREFIX                name prefix for the URE installation packages
+                                for Linux platforms
+SOLSUREPACKAGEPREFIX            name prefix for the URE installation packages
+                                for Solaris platforms
+
+UPDATEURL                       URL for the application update functionality
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

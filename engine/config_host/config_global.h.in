@@ -1,0 +1,54 @@
+/*
+Global configuration file.
+
+Only for settings that apply to every source file and are unlikely to change often,
+such as whether a certain C++11 feature is available.
+
+Do NOT use for settings local to some code or for settings that can change often.
+Any change in this header will cause a rebuild of almost everything.
+
+*/
+
+#ifndef CONFIG_GLOBAL_H
+#define CONFIG_GLOBAL_H
+
+#define HAVE_GCC_BUILTIN_ATOMIC 0
+#define HAVE_GCC_WSFINAE_INCOMPLETE 0
+#define HAVE_SYSLOG_H 0
+
+// Compiler supports C++20 <http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1073r3.html>
+// "Immediate functions":
+#define HAVE_CPP_CONSTEVAL 0
+
+// Compiler supports all of C++2a <https://wg21.link/P0202R3> "Add Constexpr Modifiers to Functions
+// in <algorithm> and <utility> Headers", <https://wg21.link/P1004R2> "Making std::vector
+// constexpr", and <https://wg21.link/P1143R2> "Adding the constinit keyword":
+#define HAVE_CPP_CONSTINIT_SORTED_VECTOR 0
+
+// Compiler supports C++20 <compare> std::strong_order:
+#define HAVE_CPP_STRONG_ORDER 0
+
+/* "CWG motion 23: P1825R0 'Merged wording for P0527R1 and P1155R3' (DR)" in
+   <https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/n4829.html> "N4829 Editors' Report --
+   Programming Languages -- C++" marks
+   <http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1155r3.html> "More implicit moves" as a
+   DR.  Some versions of GCC already implemented it prior to the fix for
+   <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87150> "move ctor wrongly chosen in return stmt
+   (derived vs. base)"; MSVC++ 14.24 started to implement it, see <https://
+   developercommunity.visualstudio.com/content/problem/852827/
+   msvc-1424-started-to-chose-move-ctor-in-return-der.html> "MSVC++ 14.24 started to choose move ctor
+   in return derived vs. base".  At least Clang 9, which does not implement it, emits
+   -Werror,-Wreturn-std-move when it therefore considers a std::move to be missing.  On the other
+   hand, at least some versions of GCC would emit -Werror=redundant-move in places where such a
+   std::move would be added unconditionally, see c00948d9bd35dfb15a331c2163f32e9ee24644fd "Silence
+   bogus -Werror=redundant-move (GCC 9)". */
+#define HAVE_P1155R3 0
+
+// Whether the OS provides a usable dynamic loading API
+#define HAVE_DLAPI 0
+
+// Whether the OS uses the common UNIX dynamic loading API calls, like dlopen, dlsym, dladdr etc.
+// Use HAVE_DLAPI instead. Should not be used outside of sal/osl/unx/module.cxx!
+#define HAVE_UNIX_DLAPI 0
+
+#endif

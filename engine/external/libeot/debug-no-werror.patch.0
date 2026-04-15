@@ -1,0 +1,11 @@
+--- Makefile.in
++++ Makefile.in
+@@ -365,7 +365,7 @@
+ eot2ttf_LDADD = libeot.la
+ eot2ttf_SOURCES = src/eot2ttf.c
+ common_flags = --std=c99 -DDECOMPRESS_ON
+-debug_flags = -Werror -Wall -g -O0 $(common_flags)
++debug_flags = -Wall -g -O0 $(common_flags)
+ release_flags = -O2 $(common_flags)
+ @DEBUG_FALSE@eot2ttf_CFLAGS = $(release_flags)
+ @DEBUG_TRUE@eot2ttf_CFLAGS = $(debug_flags)

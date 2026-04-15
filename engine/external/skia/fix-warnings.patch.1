@@ -1,0 +1,39 @@
+diff --git a/include/core/SkFontParameters.h b/include/core/SkFontParameters.h
+index ae4f1d68b6..71263da7c5 100644
+--- a/include/core/SkFontParameters.h
++++ b/include/core/SkFontParameters.h
+@@ -16,8 +16,8 @@ struct SkFontParameters {
+         // Parameters in a variation font axis.
+         struct Axis {
+             constexpr Axis() : tag(0), min(0), def(0), max(0), flags(0) {}
+-            constexpr Axis(SkFourByteTag tag, float min, float def, float max, bool hidden) :
+-                tag(tag), min(min), def(def), max(max), flags(hidden ? HIDDEN : 0) {}
++            constexpr Axis(SkFourByteTag _tag, float _min, float _def, float _max, bool hidden) :
++                tag(_tag), min(_min), def(_def), max(_max), flags(hidden ? HIDDEN : 0) {}
+ 
+             // Four character identifier of the font axis (weight, width, slant, italic...).
+             SkFourByteTag tag;
+diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
+index f143dab013..be3cde0f4f 100644
+--- a/tools/window/WindowContext.h
++++ b/tools/window/WindowContext.h
+@@ -31,7 +31,7 @@ public:
+ 
+     virtual void resize(int w, int h) = 0;
+ 
+-    virtual void activate(bool isActive) {}
++    virtual void activate(bool /*isActive*/) {}
+ 
+     const DisplayParams* getDisplayParams() { return fDisplayParams.get(); }
+     virtual void setDisplayParams(std::unique_ptr<const DisplayParams>) = 0;
+--- skia/include/core/SkSamplingOptions.h.orig	2022-05-22 12:25:06.112544528 +0200
++++ skia/include/core/SkSamplingOptions.h	2022-05-22 12:25:09.207636134 +0200
+@@ -97,7 +97,7 @@
+     bool isAniso() const { return maxAniso != 0; }
+ 
+ private:
+-    constexpr SkSamplingOptions(int maxAniso) : maxAniso(maxAniso) {}
++    constexpr SkSamplingOptions(int maxAniso_) : maxAniso(maxAniso_) {}
+ };
+ 
+ #endif

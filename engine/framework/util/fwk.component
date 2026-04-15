@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.frame.SessionListener"
+      constructor="com_sun_star_comp_frame_SessionListener_get_implementation">
+    <service name="com.sun.star.frame.SessionListener"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.AddonsToolBarFactory"
+      constructor="com_sun_star_comp_framework_AddonsToolBarFactory_get_implementation">
+    <service name="com.sun.star.ui.ToolBarFactory"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.AutoRecovery"
+      constructor="com_sun_star_comp_framework_AutoRecovery_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.frame.AutoRecovery"/>
+    <singleton name="com.sun.star.frame.theAutoRecovery"/>
+    <optional/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ControlMenuController"
+      constructor="com_sun_star_comp_framework_ControlMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.Desktop"
+      constructor="com_sun_star_comp_framework_Desktop_get_implementation">
+    <service name="com.sun.star.frame.Desktop"/>
+    <singleton name="com.sun.star.frame.theDesktop"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.DocumentAcceleratorConfiguration"
+      constructor="com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation">
+    <service name="com.sun.star.ui.DocumentAcceleratorConfiguration"/>
+  </implementation>
+  <implementation name="org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer"
+      constructor="org_apache_openoffice_comp_framework_ContextChangeEventMultiplexer_get_implementation"
+      single-instance="true">
+    <singleton name="com.sun.star.ui.ContextChangeEventMultiplexer"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.Frame"
+      constructor="com_sun_star_comp_framework_Frame_get_implementation">
+    <service name="com.sun.star.frame.Frame"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.GlobalAcceleratorConfiguration"
+      constructor="com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.ui.GlobalAcceleratorConfiguration"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ImageManager"
+      constructor="com_sun_star_comp_framework_ImageManager_get_implementation">
+    <service name="com.sun.star.ui.ImageManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.JobExecutor"
+      constructor="com_sun_star_comp_framework_JobExecutor_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.task.JobExecutor"/>
+    <singleton name="com.sun.star.task.theJobExecutor"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.LangSelectionStatusbarController"
+      constructor="com_sun_star_comp_framework_LangSelectionStatusbarController_get_implementation">
+    <service name="com.sun.star.frame.StatusbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.LayoutManager"
+      constructor="com_sun_star_comp_framework_LayoutManager_get_implementation">
+    <service name="com.sun.star.frame.LayoutManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.MenuBarFactory"
+      constructor="com_sun_star_comp_framework_MenuBarFactory_get_implementation">
+    <service name="com.sun.star.ui.UIElementFactory"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ModuleAcceleratorConfiguration"
+      constructor="com_sun_star_comp_framework_ModuleAcceleratorConfiguration_get_implementation">
+    <service name="com.sun.star.ui.ModuleAcceleratorConfiguration"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ModuleManager"
+      constructor="com_sun_star_comp_framework_ModuleManager_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.frame.ModuleManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ModuleUIConfigurationManager"
+      constructor="com_sun_star_comp_framework_ModuleUIConfigurationManager_get_implementation">
+    <service name="com.sun.star.ui.ModuleUIConfigurationManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ModuleUIConfigurationManagerSupplier"
+      constructor="com_sun_star_comp_framework_ModuleUIConfigurationManagerSupplier_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.ui.ModuleUIConfigurationManagerSupplier"/>
+    <singleton name="com.sun.star.ui.theModuleUIConfigurationManagerSupplier"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ObjectMenuController"
+      constructor="com_sun_star_comp_framework_ObjectMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.PathSettings"
+      constructor="com_sun_star_comp_framework_PathSettings_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.util.PathSettings"/>
+    <singleton name="com.sun.star.util.thePathSettings"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.PathSubstitution"
+      constructor="com_sun_star_comp_framework_PathSubstitution_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.util.PathSubstitution"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.PopupMenuControllerFactory"
+      constructor="com_sun_star_comp_framework_PopupMenuControllerFactory_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.frame.PopupMenuControllerFactory"/>
+    <singleton name="com.sun.star.frame.thePopupMenuControllerFactory"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.RecentFilesMenuController"
+      constructor="com_sun_star_comp_framework_RecentFilesMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.SaveAsMenuController"
+      constructor="com_sun_star_comp_framework_SaveAsMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.WindowListMenuController"
+      constructor="com_sun_star_comp_framework_WindowListMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.StatusBarControllerFactory"
+      constructor="com_sun_star_comp_framework_StatusBarControllerFactory_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.frame.StatusbarControllerFactory"/>
+    <singleton name="com.sun.star.frame.theStatusbarControllerFactory"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.StatusBarFactory"
+      constructor="com_sun_star_comp_framework_StatusBarFactory_get_implementation">
+    <service name="com.sun.star.ui.StatusBarFactory"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.StatusIndicatorFactory"
+      constructor="com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation">
+    <service name="com.sun.star.task.StatusIndicatorFactory"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.TaskCreator"
+      constructor="com_sun_star_comp_framework_TaskCreator_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.frame.TaskCreator"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ToolBarControllerFactory"
+      constructor="com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.frame.ToolbarControllerFactory"/>
+    <singleton name="com.sun.star.frame.theToolbarControllerFactory"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ToolBarFactory"
+      constructor="com_sun_star_comp_framework_ToolBarFactory_get_implementation">
+    <service name="com.sun.star.ui.ToolBarFactory"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.UICategoryDescription"
+      constructor="com_sun_star_comp_framework_UICategoryDescription_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.ui.UICategoryDescription"/>
+    <singleton name="com.sun.star.ui.theUICategoryDescription"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.UICommandDescription"
+      constructor="com_sun_star_comp_framework_UICommandDescription_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.frame.UICommandDescription"/>
+    <singleton name="com.sun.star.frame.theUICommandDescription"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.UIConfigurationManager"
+      constructor="com_sun_star_comp_framework_UIConfigurationManager_get_implementation">
+    <service name="com.sun.star.ui.UIConfigurationManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.UIElementFactoryManager"
+      constructor="com_sun_star_comp_framework_UIElementFactoryManager_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.ui.UIElementFactoryManager"/>
+    <singleton name="com.sun.star.ui.theUIElementFactoryManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.URLTransformer"
+      constructor="com_sun_star_comp_framework_URLTransformer_get_implementation">
+    <service name="com.sun.star.util.URLTransformer"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.WindowContentFactoryManager"
+      constructor="com_sun_star_comp_framework_WindowContentFactoryManager_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.ui.WindowContentFactoryManager"/>
+    <singleton name="com.sun.star.ui.theWindowContentFactoryManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.WindowStateConfiguration"
+      constructor="com_sun_star_comp_framework_WindowStateConfiguration_get_implementation"
+      single-instance="true">
+    <service name="com.sun.star.ui.WindowStateConfiguration"/>
+    <singleton name="com.sun.star.ui.theWindowStateConfiguration"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.jobs.JobDispatch"
+      constructor="com_sun_star_comp_framework_jobs_JobDispatch_get_implementation">
+    <service name="com.sun.star.frame.ProtocolHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.GenericPopupToolbarController"
+      constructor="com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.SaveToolbarController"
+      constructor="com_sun_star_comp_framework_SaveToolbarController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="org.apache.openoffice.comp.framework.NewToolbarController"
+      constructor="org_apache_openoffice_comp_framework_NewToolbarController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.SubToolBarController"
+      constructor="com_sun_star_comp_framework_SubToolBarController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ThesaurusMenuController"
+      constructor="com_sun_star_comp_framework_ThesaurusMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ToolbarAsMenuController"
+      constructor="com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ResourceMenuController"
+      constructor="com_sun_star_comp_framework_ResourceMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.LanguageSelectionMenuController"
+    constructor="framework_LanguageSelectionMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.DispatchRecorder"
+    constructor="framework_DispatchRecorder_get_implementation">
+    <service name="com.sun.star.frame.DispatchRecorder"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.DispatchRecorderSupplier"
+    constructor="framework_DispatchRecorderSupplier_get_implementation">
+    <service name="com.sun.star.frame.DispatchRecorderSupplier"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.FontMenuController"
+    constructor="framework_FontMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.FontSizeMenuController"
+    constructor="framework_FontSizeMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.FooterMenuController"
+    constructor="framework_FooterMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.HeaderMenuController"
+    constructor="framework_HeaderMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.MacrosMenuController"
+    constructor="framework_MacrosMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.MailToDispatcher"
+    constructor="framework_MailToDispatcher_get_implementation">
+    <service name="com.sun.star.frame.ProtocolHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.MediaTypeDetectionHelper"
+    constructor="framework_MediaTypeDetectionHelper_get_implementation">
+    <service name="com.sun.star.frame.MediaTypeDetectionHelper"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.NewMenuController"
+    constructor="framework_NewMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.OXTFileHandler"
+    constructor="framework_Oxt_Handler_get_implementation">
+    <service name="com.sun.star.frame.ContentHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.PopupMenuControllerDispatcher"
+    constructor="framework_PopupMenuDispatcher_get_implementation">
+    <service name="com.sun.star.frame.ProtocolHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ServiceHandler"
+    constructor="framework_ServiceHandler_get_implementation">
+    <service name="com.sun.star.frame.ProtocolHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ToolbarModeMenuController"
+    constructor="framework_ToolbarModeMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ToolBarsMenuController"
+    constructor="framework_ToolbarsMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.UriAbbreviation"
+    constructor="framework_UriAbbreviation_get_implementation">
+    <service name="com.sun.star.util.UriAbbreviation"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.services.DispatchHelper"
+    constructor="framework_DispatchHelper_get_implementation">
+    <service name="com.sun.star.frame.DispatchHelper"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.services.DispatchDisabler"
+    constructor="framework_DispatchDisabler_get_implementation">
+    <service name="com.sun.star.frame.DispatchDisabler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.HelpOnStartup"
+    constructor="framework_HelpOnStartup_get_implementation">
+    <service name="com.sun.star.task.Job"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.ShellJob"
+    constructor="framework_ShellJob_get_implementation">
+    <service name="com.sun.star.task.Job"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.framework.SystemExecute"
+    constructor="framework_SystemExecute_get_implementation">
+    <service name="com.sun.star.frame.ProtocolHandler"/>
+  </implementation>
+</component>

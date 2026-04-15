@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <draw:gradient draw:name="Gradient_20_1" draw:display-name="Gradient 1" draw:style="rectangular" draw:cx="0%" draw:cy="0%" draw:start-color="#ffff00" draw:end-color="#0066cc" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="45deg" draw:border="0%"/>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#000000" draw:marker-start="" draw:marker-start-width="0.3cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.3cm" draw:marker-end-center="false" draw:fill="gradient" draw:fill-color="#00b8ff" draw:fill-gradient-name="Gradient_20_1" draw:gradient-step-count="3" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:shadow="hidden" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:shadow-color="#808080" style:run-through="foreground" style:wrap="run-through" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="middle" style:vertical-rel="baseline" style:horizontal-pos="from-left" style:horizontal-rel="paragraph" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true" style:flow-with-text="false"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="Standard"><draw:rect text:anchor-type="as-char" draw:z-index="0" draw:name="Alakzat1" draw:style-name="gr1" svg:width="4cm" svg:height="10cm">
+     <text:p/>
+    </draw:rect></text:p>
+   <text:p text:style-name="Standard">Top left corner is blue.</text:p>
+  </office:text>
+ </office:body>
+</office:document>

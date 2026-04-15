@@ -1,0 +1,20 @@
+--- src/librdf.h
++++ src/librdf.h
+@@ -74,7 +74,7 @@
+ /* Use gcc 3.1+ feature to allow marking of deprecated API calls.
+  * This gives a warning during compiling.
+  */
+-#if ( __GNUC__ == 3 && __GNUC_MINOR__ > 0 ) || __GNUC__ > 3
++#if (defined __GNUC__ && (( __GNUC__ == 3 && __GNUC_MINOR__ > 0 ) || __GNUC__ > 3)) || defined __clang__
+ #define REDLAND_DEPRECATED __attribute__((deprecated))
+ #define REDLAND_NORETURN __attribute__((__noreturn__))
+ #else
+@@ -83,7 +83,7 @@
+ #endif
+ 
+ 
+-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
++#if (defined __GNUC__ && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4))) || defined __clang__
+ #define REDLAND_PRINTF_FORMAT(string_index, first_to_check_index) \
+   __attribute__((__format__(__printf__, string_index, first_to_check_index)))
+ #else

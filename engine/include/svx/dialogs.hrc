@@ -1,0 +1,120 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SVX_DIALOGS_HRC
+#define INCLUDED_SVX_DIALOGS_HRC
+
+#include <svl/solar.hrc>
+
+// factory IDs of tabpages implemented in CUI
+#define RID_SVXPAGE_CHAR_TWOLINES           (RID_SVX_START + 242)
+#define RID_SVXPAGE_EXT_PARAGRAPH           (RID_SVX_START +   7)
+#define RID_SVXPAGE_GRFCROP                 (RID_SVX_START + 238)
+#define RID_SVXPAGE_CHAR_NAME               (RID_SVX_START + 239)
+#define RID_SVXPAGE_CHAR_EFFECTS            (RID_SVX_START + 240)
+#define RID_SVXPAGE_CHAR_POSITION           (RID_SVX_START + 241)
+#define RID_SVXPAGE_STD_PARAGRAPH           (RID_SVX_START +   6)
+#define RID_SVXPAGE_ALIGN_PARAGRAPH         (RID_SVX_START + 187)
+#define RID_SVXPAGE_PARA_ASIAN              (RID_SVX_START + 245)
+#define RID_SVXPAGE_TABULATOR               (RID_SVX_START +   2)
+#define RID_SFXPAGE_DBREGISTER              (RID_OFA_START + 123)
+#define RID_SVXPAGE_NUMBERFORMAT            (RID_SVX_START +  41)
+#define RID_SVXPAGE_ALIGNMENT               (RID_SVX_START +  90)
+#define RID_SVXPAGE_BORDER                  (RID_SVX_START +   5)
+#define RID_SVXPAGE_PAGE                    (RID_SVX_START +  25)
+#define RID_SVXPAGE_LINE                    (RID_SVX_START +  51)
+#define RID_SVXPAGE_AREA                    (RID_SVX_START +  56)
+#define RID_SVXPAGE_BKG                     (RID_SVX_START +  57)
+#define RID_SVXPAGE_SHADOW                  (RID_SVX_START +  61)
+#define RID_SVXPAGE_TRANSPARENCE            (RID_SVX_START +  54)
+#define RID_SVXPAGE_TEXTATTR                (RID_SVX_START + 153)
+#define RID_SVXPAGE_TEXTANIMATION           (RID_SVX_START + 184)
+#define RID_SVXPAGE_TEXTCOLUMNS             (RID_SVX_START + 154)
+#define RID_SVXPAGE_MEASURE                 (RID_SVX_START + 161)
+#define RID_SVXPAGE_CONNECTION              (RID_SVX_START + 191)
+#define RID_SVXPAGE_LINE_DEF                (RID_SVX_START +  52)
+#define RID_SVXPAGE_LINEEND_DEF             (RID_SVX_START +  53)
+#define RID_SVXPAGE_NUM_OPTIONS             (RID_SVX_START + 219)
+#define RID_SVXPAGE_NUM_POSITION            (RID_SVX_START + 220)
+#define RID_SVXPAGE_PICK_SINGLE_NUM         (RID_SVX_START + 215)
+#define RID_SVXPAGE_PICK_BULLET             (RID_SVX_START + 216)
+#define RID_SVXPAGE_PICK_NUM                (RID_SVX_START + 217)
+#define RID_SVXPAGE_PICK_BMP                (RID_SVX_START + 218)
+#define RID_SVXPAGE_MACROASSIGN             (RID_SVX_START + 296)
+
+// ID of tabpages implemented in SVX, but used in CUI
+#define RID_SVXPAGE_GRID                    (RID_SVX_START + 152)
+
+// IDs of options pages of applications
+#define RID_SW_TP_MAILCONFIG            (RID_OFA_START + 102)
+#define RID_SW_TP_STD_FONT_CJK          (RID_OFA_START + 247)
+#define RID_SW_TP_STD_FONT_CTL          (RID_OFA_START + 251)
+#define RID_SW_TP_OPTLOAD_PAGE          (RID_OFA_START + 214)
+#define RID_SW_TP_CONTENT_OPT           (RID_OFA_START + 206)
+#define RID_SW_TP_OPTSHDWCRSR           (RID_OFA_START + 211)
+#define RID_SW_TP_STD_FONT              (RID_OFA_START + 208)
+#define RID_SW_TP_OPTPRINT_PAGE         (RID_OFA_START + 209)
+#define RID_SW_TP_OPTTABLE_PAGE         (RID_OFA_START + 210)
+#define RID_SW_TP_REDLINE_OPT           (RID_OFA_START + 212)
+#define RID_SW_TP_DOC_STAT              (RID_OFA_START + 252)
+#define RID_SW_TP_OPTCOMPATIBILITY_PAGE (RID_OFA_START + 255)
+#define RID_SW_TP_COMPARISON_OPT        (RID_OFA_START + 257)
+#define RID_SW_TP_HTML_CONTENT_OPT      (RID_OFA_START + 240)
+#define RID_SW_TP_HTML_OPTPRINT_PAGE    (RID_OFA_START + 242)
+#define RID_SW_TP_HTML_OPTTABLE_PAGE    (RID_OFA_START + 243)
+#define RID_SW_TP_HTML_OPTGRID_PAGE     (RID_OFA_START + 244)
+#define RID_SW_TP_HTML_OPTSHDWCRSR      (RID_OFA_START + 246)
+#define RID_SW_TP_OPTCAPTION_PAGE       (RID_OFA_START + 256)
+#define SID_SC_TP_LAYOUT                (RID_OFA_START + 218)
+#define SID_SC_TP_CONTENT               (RID_OFA_START + 219)
+#define SID_SC_TP_GRID                  (RID_OFA_START + 221)
+#define SID_SC_TP_USERLISTS             (RID_OFA_START + 222)
+#define SID_SC_TP_CALC                  (RID_OFA_START + 223)
+#define SID_SC_TP_CHANGES               (RID_OFA_START + 224)
+#define RID_SC_TP_PRINT                 (RID_OFA_START + 248)
+#define SID_SI_TP_PRINT                 (RID_OFA_START + 236)
+#define SID_SI_TP_CONTENTS              (RID_OFA_START + 232)
+#define SID_SI_TP_SNAP                  (RID_OFA_START + 234)
+#define SID_SI_TP_MISC                  (RID_OFA_START + 237)
+#define SID_SD_TP_PRINT                 (RID_OFA_START + 220)
+#define SID_SD_TP_CONTENTS              (RID_OFA_START + 225)
+#define SID_SD_TP_SNAP                  (RID_OFA_START + 227)
+#define SID_SD_TP_MISC                  (RID_OFA_START + 231)
+#define RID_SC_TP_DEFAULTS              (RID_OFA_START + 253)
+#define SID_SC_TP_STAT                  (RID_OFA_START + 254)
+
+// if we have _a_lot_ time, we should group the resource ids by type, instead
+// of grouping them by semantics. The reason is that resource ids have to be
+// unique relative to a fixed type (you can't have two dialogs with the same
+// resource id), but they do not need to be unique globally (means you can have
+// a dialog and a string, both with the same id)
+// I suggest sticking to per-type ids instead of per-semantic ids, this is
+// better maintainable (IMO), and does not waste that much ids
+
+// "ModalDialog" resource ids
+
+// TabPages --------------------------------------------------------------
+
+#define RID_SW_TP_OPTTEST_PAGE          (RID_OFA_START + 215)
+#define SID_SC_TP_FORMULA               (RID_OFA_START + 259)
+#define SID_SC_TP_COMPATIBILITY         (RID_OFA_START + 260)
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

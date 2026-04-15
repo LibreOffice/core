@@ -1,0 +1,4 @@
+Multi-dimensional data structure (mdds) library, available from [https://gitlab.com/mdds/mdds].
+
+mdds primarily provides data structures that are used by the calc
+core.

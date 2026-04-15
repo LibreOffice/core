@@ -1,0 +1,681 @@
+accessibility/inc/extended/accessibletabbarbase.hxx:53
+    accessibility::AccessibleTabBarBase m_pTabBar VclPtr<TabBar>
+    vcl::Window
+basctl/source/inc/accessibledialogwindow.hxx:67
+    basctl::AccessibleDialogWindow m_pDialogWindow VclPtr<basctl::DialogWindow>
+    vcl::Window
+basctl/source/inc/basidesh.hxx:87
+    basctl::Shell pLayout VclPtr<Layout>
+    basctl::ModulWindowLayout
+basctl/source/inc/basidesh.hxx:97
+    basctl::Shell m_xLibListener css::uno::Reference<css::container::XContainerListener>
+    basctl::ContainerListenerImpl
+basic/source/inc/errobject.hxx:27
+    SbxErrObject m_xErr css::uno::Reference<ooo::vba::XErrObject>
+    ErrObject
+basic/source/inc/runtime.hxx:220
+    SbiRuntime pMod SbModule *
+    SbClassModuleObject
+bridges/source/cpp_uno/gcc3_linux_x86-64/rtti.cxx:70
+    (anonymous namespace)::GeneratedPad pad_ std::unique_ptr<char[]>
+    std::type_info
+bridges/source/jni_uno/jni_info.h:96
+    jni_uno::JNI_compound_type_info m_base const JNI_type_info *
+    jni_uno::JNI_compound_type_info
+bxml/parser.h:258
+    _xmlParserCtxt _private void *
+    DOM::CDocumentBuilder
+bxml/tree.h:390
+    _xmlNs next struct _xmlNs *
+    _xmlNode
+bxml/xpath.h:338
+    _xmlXPathContext funcLookupData void *
+    CLibxml2XFormsExtension
+chart2/source/controller/inc/dlg_CreationWizard_UNO.hxx:108
+    chart::CreationWizardUnoDlg m_xParentWindow css::uno::Reference<css::awt::XWindow>
+    weld::TransportAsXWindow
+chart2/source/controller/inc/SelectionHelper.hxx:110
+    chart::SelectionHelper m_pMarkObj SdrObject *
+    SdrPathObj
+chart2/source/view/inc/PlotterBase.hxx:75
+    chart::PlotterBase m_pPosHelper PlottingPositionHelper *
+    chart::PolarPlottingPositionHelper
+configmgr/source/valueparser.hxx:76
+    configmgr::ValueParser node_ rtl::Reference<Node>
+    configmgr::PropertyNode
+configmgr/source/xcsparser.hxx:80
+    configmgr::XcsParser::Element node rtl::Reference<Node>
+    configmgr::SetNode
+cppu/source/uno/lbenv.cxx:72
+    (anonymous namespace)::InterfaceEntry pTypeDescr typelib_InterfaceTypeDescription *
+    _typelib_TypeDescription
+cui/source/inc/cfg.hxx:407
+    SvxConfigPage m_xContentsListBox std::unique_ptr<SvxMenuEntriesListBox>
+    SvxNotebookbarEntriesListBox
+cui/source/inc/cuitabline.hxx:321
+    SvxLineEndDefTabPage pPolyObj const SdrObject *
+    SdrPathObj
+cui/source/options/optcolor.cxx:270
+    (anonymous namespace)::ColorConfigWindow_Impl::Entry m_xText std::unique_ptr<weld::Widget>
+    weld::Toggleable
+cui/source/options/treeopt.cxx:424
+    OptionsPageInfo m_xPage std::unique_ptr<SfxTabPage>
+    SvxDefaultColorOptPage
+dbaccess/source/ui/app/AppDetailView.hxx:105
+    dbaui::OApplicationDetailView m_xControlHelper std::shared_ptr<OChildWindow>
+    dbaui::OAppDetailPageHelper
+dbaccess/source/ui/inc/RelationDlg.hxx:34
+    dbaui::ORelationDialog m_pConnData TTableConnectionData::value_type
+    dbaui::ORelationTableConnectionData
+dbaccess/source/ui/inc/RelationDlg.hxx:35
+    dbaui::ORelationDialog m_pOrigConnData TTableConnectionData::value_type
+    dbaui::ORelationTableConnectionData
+dbaccess/source/ui/querydesign/QueryDesignUndoAction.hxx:32
+    dbaui::OQueryDesignUndoAction m_pOwner VclPtr<OJoinTableView>
+    dbaui::OQueryTableView
+dbaccess/source/ui/querydesign/querydlg.hxx:37
+    dbaui::DlgQryJoin m_pConnData TTableConnectionData::value_type
+    dbaui::OQueryTableConnectionData
+editeng/source/editeng/impedit.hxx:268
+    ImpEditView mpViewShell OutlinerViewShell *
+    SfxViewShell
+editeng/source/editeng/impedit.hxx:270
+    ImpEditView mpOtherShell OutlinerViewShell *
+    SfxViewShell
+editeng/source/editeng/impedit.hxx:506
+    ImpEditEngine pEditEngine EditEngine *
+    OutlinerEditEng
+extensions/source/update/check/updatecheck.hxx:164
+    UpdateCheck m_pThread WorkerThread *
+    (anonymous namespace)::UpdateCheckThread
+i18npool/inc/calendarImpl.hxx:103
+    i18npool::CalendarImpl xCalendar css::uno::Reference<css::i18n::XCalendar4>
+    i18npool::Calendar_gregorian
+include/basegfx/DrawCommands.hxx:121
+    gfx::DrawRectangle mpFillGradient std::shared_ptr<GradientInfo>
+    gfx::LinearGradientInfo
+include/basic/sbstar.hxx:47
+    StarBASIC pRtl SbxObjectRef
+    SbiStdObject
+include/basic/sbxvar.hxx:258
+    SbxVariable pParent SbxObject *
+    StarBASIC
+include/comphelper/propertycontainerhelper.hxx:48
+    comphelper::PropertyDescription::LocationAccess pDerivedClassMember void *
+    com::sun::star::uno::Any
+include/connectivity/sdbcx/VTable.hxx:77
+    connectivity::sdbcx::OTable m_xColumns std::unique_ptr<OCollection>
+    dbaccess::OColumns
+include/connectivity/sdbcx/VTable.hxx:79
+    connectivity::sdbcx::OTable m_pTables OCollection *
+    connectivity::mysql::OTables
+include/editeng/editdata.hxx:231
+    HtmlImportInfo pParser SvParser<HtmlTokenId> *
+    HTMLParser
+include/editeng/editdata.hxx:245
+    RtfImportInfo pParser SvParser<int> *
+    SvxRTFParser
+include/filter/msfilter/msdffimp.hxx:219
+    SvxMSDffImportRec pObj rtl::Reference<SdrObject>
+    SdrObjGroup
+include/filter/msfilter/svdfppt.hxx:458
+    SdPageCapsule page SdrPage *
+    SdPage
+include/formula/FormulaCompiler.hxx:394
+    formula::FormulaCompiler mpToken FormulaTokenRef
+    ScTableRefToken
+include/formula/FormulaCompiler.hxx:397
+    formula::FormulaCompiler pArr FormulaTokenArray *
+    ScTokenArray
+include/jvmaccess/unovirtualmachine.hxx:94
+    jvmaccess::UnoVirtualMachine m_classLoader void *
+    _jobject
+include/oox/drawingml/graphicshapecontext.hxx:55
+    oox::drawingml::GraphicalObjectFrameContext mpParent ::oox::core::ContextHandler2Helper *
+    oox::ppt::PPTShapeGroupContext
+include/oox/drawingml/shapecontext.hxx:46
+    oox::drawingml::ShapeContext mpShapePtr ShapePtr
+    oox::ppt::PPTShape
+include/oox/export/vmlexport.hxx:87
+    oox::vml::VMLExport m_pSdrObject const SdrObject *
+    SdrGrafObj
+include/oox/vml/vmlshapecontext.hxx:147
+    oox::vml::ShapeContext mrShape ShapeBase &
+    oox::vml::SimpleShape
+include/sfx2/basedlgs.hxx:129
+    SfxSingleTabDialogController m_xSfxPage std::unique_ptr<SfxTabPage>
+    SfxMacroTabPage
+include/sfx2/devtools/DevelopmentToolDockingWindow.hxx:42
+    DevelopmentToolDockingWindow mxSelectionListener css::uno::Reference<css::view::XSelectionChangeListener>
+    SelectionChangeHandler
+include/sfx2/sfxstatuslistener.hxx:69
+    SfxStatusListener m_xDispatch css::uno::Reference<css::frame::XDispatch>
+    SfxOfficeDispatch
+include/sfx2/sidebar/Panel.hxx:102
+    sfx2::sidebar::Panel mxElement css::uno::Reference<css::ui::XUIElement>
+    sfx2::sidebar::SidebarPanelBase
+include/sot/storage.hxx:52
+    SotStorageStream pOwnStm BaseStorageStream *
+    UCBStorageStream
+include/sot/storage.hxx:77
+    SotStorage m_pOwnStg BaseStorage *
+    UCBStorage
+include/svl/style.hxx:208
+    SfxStyleSheetIterator pBasePool const SfxStyleSheetBasePool *
+    SwDocStyleSheetPool
+include/svl/style.hxx:236
+    SfxStyleSheetBasePool rPool SfxItemPool &
+    ScDocumentPool
+include/svl/undo.hxx:92
+    MarkedUndoAction pAction std::unique_ptr<SfxUndoAction>
+    ScSimpleUndo
+include/svx/AccessibleShape.hxx:391
+    accessibility::AccessibleShape m_pShape SdrObject *
+    SdrOle2Obj
+include/svx/fmsrcimp.hxx:161
+    FmSearchEngine m_xSearchCursor CursorWrapper
+    com::sun::star::uno::Reference
+include/svx/svdhdl.hxx:136
+    SdrHdl m_pObj SdrObject *
+    SdrEdgeObj
+include/svx/svdmodel.hxx:198
+    SdrModel mxStyleSheetPool rtl::Reference<SfxStyleSheetBasePool>
+    SdStyleSheetPool
+include/svx/svdview.hxx:100
+    SdrViewEvent mpObj SdrObject *
+    sdr::table::SdrTableObj
+include/svx/unomodel.hxx:45
+    SvxUnoDrawingModel mpDoc SdrModel *
+    FmFormModel
+include/svx/unopage.hxx:65
+    SvxDrawPage mpPage SdrPage *
+    SdPage
+include/test/a11y/accessibletestbase.hxx:42
+    test::AccessibleTestBase mxDocument css::uno::Reference<css::lang::XComponent>
+    vcl::ITiledRenderable
+include/toolkit/awt/vclxmenu.hxx:59
+    VCLXMenu mpMenu VclPtr<Menu>
+    PopupMenu
+include/tools/zcodec.hxx:59
+    ZCodec mpsC_Stream void *
+    z_stream_s
+include/vbahelper/vbaeventshelperbase.hxx:214
+    VbaEventsHelperBase mpShell SfxObjectShell *
+    ScDocShell
+include/vcl/builder.hxx:144
+    VclBuilder::WinAndId m_pWindow VclPtr<vcl::Window>
+    PushButton
+include/vcl/builder.hxx:158
+    VclBuilder::MenuAndId m_pMenu VclPtr<Menu>
+    PopupMenu
+include/vcl/dockwin.hxx:117
+    DockingWindow mpOldBorderWin VclPtr<vcl::Window>
+    ImplBorderWindow
+include/vcl/menu.hxx:127
+    Menu pStartedFrom VclPtr<Menu>
+    PopupMenu
+include/vcl/sysdata.hxx:68
+    SystemEnvData pDisplay void *
+    _XDisplay
+include/vcl/sysdata.hxx:71
+    SystemEnvData pVisual void *
+    Visual
+include/vcl/sysdata.hxx:155
+    SystemGraphicsData pDisplay void *
+    _XDisplay
+include/vcl/sysdata.hxx:157
+    SystemGraphicsData pVisual void *
+    Visual
+include/vcl/sysdata.hxx:161
+    SystemGraphicsData pSurface void *
+    _cairo_surface
+include/vcl/sysdata.hxx:197
+    SystemWindowData pVisual void *
+    Visual
+include/vcl/toolkit/fmtfield.hxx:60
+    FormattedField m_pFormatter Formatter *
+    (anonymous namespace)::DoubleCurrencyFormatter
+include/vcl/toolkit/menubtn.hxx:41
+    MenuButton mpFloatingWindow VclPtr<Window>
+    FloatingWindow
+include/vcl/uitest/uiobject.hxx:156
+    ButtonUIObject mxButton VclPtr<Button>
+    PushButton
+include/vcl/virdev.hxx:48
+    VirtualDevice mpVirDev std::unique_ptr<SalVirtualDevice>
+    SvpSalVirtualDevice
+include/xmloff/maptype.hxx:34
+    XMLPropertyMapEntry msApiName OUString
+    rtl::OUString
+include/xmloff/prstylei.hxx:45
+    XMLPropStyleContext mxStyles rtl::Reference<SvXMLStylesContext>
+    SvXMLStylesContext
+include/xmloff/shapeimport.hxx:150
+    XMLShapeImportHelper mrImporter SvXMLImport &
+    ScXMLImport
+lingucomponent/source/languageguessing/simpleguesser.hxx:97
+    SimpleGuesser h void *
+    (anonymous namespace)::textcat_t
+lotuswordpro/source/filter/lwpframelayout.hxx:103
+    LwpFrame m_pLayout LwpPlacableLayout *
+    LwpFrameLayout
+package/source/xstor/owriteablestream.hxx:241
+    OWriteStream m_xOutStream css::uno::Reference<css::io::XOutputStream>
+    comphelper::ByteWriter
+pyuno/inc/pyuno.hxx:165
+    pyuno::Runtime impl RuntimeImpl *
+    _object
+reportdesign/source/filter/xml/xmlImportDocumentHandler.hxx:83
+    rptxml::ImportDocumentHandler m_xDocumentHandler css::uno::Reference<css::xml::sax::XFastDocumentHandler>
+    SvXMLImport
+reportdesign/source/ui/inc/DesignView.hxx:57
+    rptui::ODesignView m_pTaskPane VclPtr<vcl::Window>
+    rptui::(anonymous namespace)::OTaskWindow
+sal/rtl/bootstrap.cxx:396
+    (anonymous namespace)::FundamentalIniData ini rtlBootstrapHandle
+    (anonymous namespace)::Bootstrap_Impl
+sc/inc/chgtrack.hxx:192
+    ScChangeAction pNext ScChangeAction *
+    ScChangeActionContent
+sc/inc/dpfilteredcache.hxx:97
+    ScDPFilteredCache::Criterion mpFilter std::shared_ptr<FilterBase>
+    ScDPFilteredCache::GroupFilter
+sc/inc/dpobject.hxx:95
+    ScDPObject mpTableData std::shared_ptr<ScDPTableData>
+    ScDPGroupTableData
+sc/qa/unit/screenshots/screenshots.cxx:36
+    ScScreenshotTest mpFoundShell SfxObjectShell *
+    ScDocShell
+sc/source/core/opencl/formulagroupcl.cxx:1873
+    sc::opencl::(anonymous namespace)::DynamicKernelSoPArguments mpCodeGen std::shared_ptr<SlidingFunctionBase>
+    sc::opencl::OpSumIfs
+sc/source/core/opencl/opbase.hxx:465
+    sc::opencl::DynamicKernelSlidingArgument mpCodeGen std::shared_ptr<SlidingFunctionBase>
+    sc::opencl::OpSumIfs
+sc/source/filter/excel/xeformula.cxx:60
+    (anonymous namespace)::XclExpScToken mpScToken const FormulaToken *
+    formula::FormulaExternalToken
+sc/source/filter/inc/eeimport.hxx:43
+    ScEEImport mpParser std::unique_ptr<ScEEParser>
+    ScHTMLParser
+sc/source/ui/inc/AccessibleContextBase.hxx:232
+    ScAccessibleContextBase mxParent css::uno::Reference<css::accessibility::XAccessible>
+    ScAccessibleSpreadsheet
+sc/source/ui/vba/vbaformat.hxx:42
+    ScVbaFormat mxPropertySet css::uno::Reference<css::beans::XPropertySet>
+    ScCellRangesBase
+sc/source/ui/vba/vbaname.hxx:34
+    ScVbaName mxNamedRange css::uno::Reference<css::sheet::XNamedRange>
+    ScNamedRangeObj
+sc/source/ui/vba/vbarange.hxx:79
+    ScVbaRange mxRanges css::uno::Reference<css::sheet::XSheetCellRangeContainer>
+    ScCellRangesBase
+sd/inc/Outliner.hxx:283
+    SdOutliner mpObj SdrObject *
+    SdrGrafObj
+sd/inc/sdfilter.hxx:53
+    SdFilter mrDocShell ::sd::DrawDocShell &
+    SfxObjectShell
+sd/qa/unit/dialogs-test.cxx:43
+    SdDialogsTest mxComponent uno::Reference<lang::XComponent>
+    SdXImpressDocument
+sd/source/ui/dlg/sddlgfact.hxx:165
+    AbstractBulletDialog_Impl m_xDlg std::shared_ptr<SfxTabDialogController>
+    sd::OutlineBulletDlg
+sd/source/ui/inc/DrawViewShell.hxx:497
+    sd::DrawViewShell mxScannerListener css::uno::Reference<css::lang::XEventListener>
+    sd::(anonymous namespace)::ScannerEventListener
+sd/source/ui/inc/framework/FrameworkHelper.hxx:301
+    sd::framework::FrameworkHelper mxConfigurationController css::uno::Reference<css::drawing::framework::XConfigurationController>
+    sd::framework::ConfigurationController
+sd/source/ui/inc/fupoor.hxx:147
+    sd::FuPoor mpDocSh DrawDocShell *
+    sd::GraphicDocShell
+sd/source/ui/inc/fusel.hxx:76
+    sd::FuSelection pHdl SdrHdl *
+    svx::diagram::DiagramFrameHdl
+sd/source/ui/inc/TextObjectBar.hxx:53
+    sd::TextObjectBar mpView ::sd::View *
+    sd::OutlineView
+sd/source/ui/inc/unchss.hxx:34
+    StyleSheetUndoAction mpStyleSheet SfxStyleSheet *
+    SdStyleSheet
+sd/source/ui/slideshow/slideshowimpl.hxx:296
+    sd::SlideshowImpl mpViewShell ViewShell *
+    sd::PresentationViewShell
+sd/source/ui/table/tableobjectbar.hxx:51
+    sd::ui::table::TableObjectBar mpViewSh ::sd::ViewShell *
+    sd::DrawViewShell
+sd/source/ui/view/DocumentRenderer.cxx:1319
+    sd::DocumentRenderer::Implementation mrBase ViewShellBase &
+    SfxBroadcaster
+sd/source/ui/view/sdview3.cxx:95
+    sd::(anonymous namespace)::ImpRememberOrigAndClone pOrig SdrObject *
+    SdrEdgeObj
+sd/source/ui/view/sdview3.cxx:96
+    sd::(anonymous namespace)::ImpRememberOrigAndClone pClone SdrObject *
+    SdrEdgeObj
+sd/source/ui/view/ViewShellManager.cxx:56
+    sd::(anonymous namespace)::ShellDescriptor mpShell SfxShell *
+    sd::ViewShell
+sdext/source/pdfimport/pdfparse/pdfentries.cxx:49
+    pdfparse::EmitImplData m_pObjectContainer const PDFContainer *
+    pdfparse::PDFFile
+sdext/source/pdfimport/sax/emitcontext.hxx:36
+    pdfi::SaxEmitter m_xDocHdl css::uno::Reference<css::xml::sax::XDocumentHandler>
+    SvXMLImport
+sfx2/source/inc/objshimp.hxx:66
+    SfxObjectShell_Impl nTime DateTime
+    tools::Time
+sfx2/source/inc/statcach.hxx:66
+    SfxStateCache pInternalController SfxControllerItem *
+    SfxDispatchController_Impl
+sfx2/source/inc/StyleList.hxx:234
+    StyleList m_pParentDialog SfxCommonTemplateDialog_Impl *
+    SfxTemplateDialog_Impl
+sfx2/source/inc/workwin.hxx:84
+    SfxChild_Impl pWin VclPtr<vcl::Window>
+    SplitWindow
+sfx2/source/view/impframe.hxx:45
+    SfxFrame_Impl pExternalContainerWindow VclPtr<vcl::Window>
+    SystemWindow
+slideshow/source/inc/slideshowcontext.hxx:106
+    slideshow::internal::SlideShowContext mrCursorManager CursorManager &
+    slideshow::internal::Slide
+sot/source/sdstor/stgavl.hxx:43
+    StgAvlNode m_pLeft StgAvlNode *
+    StgDirEntry
+sot/source/sdstor/stgavl.hxx:43
+    StgAvlNode m_pRight StgAvlNode *
+    StgDirEntry
+sot/source/sdstor/stgcache.hxx:57
+    StgCache m_pStrm SvStream *
+    SvFileStream
+starmath/inc/caret.hxx:26
+    SmCaretPos pSelectedNode SmNode *
+    SmTextNode
+starmath/source/unofilter.cxx:28
+    (anonymous namespace)::MathTypeFilter m_xDstDoc uno::Reference<lang::XComponent>
+    SmModel
+stoc/source/proxy_factory/proxyfac.cxx:153
+    (anonymous namespace)::binuno_Proxy m_typeDescr TypeDescription
+    _typelib_InterfaceTypeDescription
+store/source/storbase.hxx:546
+    store::OStorePageObject m_xPage std::shared_ptr<PageData>
+    store::OStoreDirectoryPageData
+svgio/inc/svgvisitor.hxx:23
+    svgio::svgreader::SvgDrawVisitor mpCurrent std::shared_ptr<gfx::DrawBase>
+    gfx::DrawRoot
+svx/source/accessibility/AccessibleTextHelper.cxx:188
+    accessibility::AccessibleTextHelper_Impl mxFrontEnd uno::Reference<XAccessible>
+    accessibility::AccessibleCell
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:459
+    (anonymous namespace)::BinaryFunctionExpression mpFirstArg std::shared_ptr<ExpressionNode>
+    (anonymous namespace)::BinaryFunctionExpression
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:460
+    (anonymous namespace)::BinaryFunctionExpression mpSecondArg std::shared_ptr<ExpressionNode>
+    (anonymous namespace)::BinaryFunctionExpression
+svx/source/unodraw/UnoGraphicExporter.cxx:172
+    (anonymous namespace)::GraphicExporter mpDoc SdrModel *
+    FmFormModel
+svx/source/unodraw/unoshtxt.cxx:82
+    SvxTextEditSourceImpl mpText SdrText *
+    sdr::table::Cell
+sw/inc/calbck.hxx:184
+    SwModify m_pWriterListeners sw::WriterListener *
+    SwClient
+sw/inc/calbck.hxx:287
+    sw::ClientIteratorBase m_pPosition WriterListener *
+    sw::ListenerEntry
+sw/inc/calc.hxx:146
+    SwCalcExp pFieldType const SwFieldType *
+    SwUserFieldType
+sw/inc/cellatr.hxx:57
+    SwTableBoxFormula m_pDefinedIn sw::BroadcastingModify *
+    SwTableBoxFormat
+sw/inc/contentindex.hxx:51
+    SwContentIndex m_pMark const sw::mark::IMark *
+    sw::mark::CrossRefBookmark
+sw/inc/crsrsh.hxx:115
+    SwContentAtPos pFndTextAttr const SwTextAttr *
+    SwTextFootnote
+sw/inc/docstyle.hxx:52
+    SwDocStyleSheet m_pColl SwTextFormatColl *
+    SwConditionTextFormatColl
+sw/inc/hints.hxx:61
+    SwPtrMsgPoolItem pObject void *
+    SwFormat
+sw/inc/OnlineAccessibilityCheck.hxx:30
+    sw::WeakNodeContainer m_pNode SwNode *
+    sw::BroadcastingModify
+sw/inc/section.hxx:152
+    SwSection m_RefLink tools::SvRef<sfx2::SvBaseLink>
+    (anonymous namespace)::SwIntrnlSectRefLink
+sw/inc/swbaslnk.hxx:31
+    SwBaseLink m_pContentNode SwContentNode *
+    SwGrfNode
+sw/inc/swevent.hxx:63
+    SwCallMouseEvent::(unnamed union at /home/noel/libo-plugin/sw/inc/swevent.hxx:60:5) pFormat const SwFrameFormat *
+    sw::SpzFrameFormat
+sw/inc/swevent.hxx:71
+    SwCallMouseEvent::(anonymous union)::(unnamed struct at /home/noel/libo-plugin/sw/inc/swevent.hxx:69:9) pFormat const SwFrameFormat *
+    sw::SpzFrameFormat
+sw/inc/swserv.hxx:37
+    SwServerObject::(unnamed union at /home/noel/libo-plugin/sw/inc/swserv.hxx:36:5) pBkmk ::sw::mark::IMark *
+    sw::mark::DdeBookmark
+sw/inc/undobj.hxx:300
+    SwUndoFlyBase m_pFrameFormat SwFrameFormat *
+    sw::SpzFrameFormat
+sw/qa/extras/mailmerge/mailmerge2.cxx:291
+    MMTest2 mxMMComponent uno::Reference<lang::XComponent>
+    SwXTextDocument
+sw/qa/extras/mailmerge/mailmerge.cxx:300
+    MMTest mxMMComponent uno::Reference<lang::XComponent>
+    SwXTextDocument
+sw/source/core/access/accfrmobj.hxx:82
+    sw::access::SwAccessibleChild mpDrawObj const SdrObject *
+    SwVirtFlyDrawObj
+sw/source/core/access/accnotexthyperlink.hxx:35
+    SwAccessibleNoTextHyperlink mpFrame const SwFrame *
+    SwLayoutFrame
+sw/source/core/doc/DocumentRedlineManager.cxx:1110
+    (anonymous namespace)::TemporaryRedlineUpdater m_rRedline SwRangeRedline &
+    SwPaM
+sw/source/core/doc/tblrwcl.cxx:81
+    (anonymous namespace)::CpyTabFrame pNewFrameFormat SwTableBoxFormat *
+    SwTableLineFormat
+sw/source/core/inc/flowfrm.hxx:118
+    SwFlowFrame m_pFollow SwFlowFrame *
+    SwTextFrame
+sw/source/core/inc/frame.hxx:338
+    SwFrame mpNext SwFrame *
+    SwContentFrame
+sw/source/core/inc/MarkManager.hxx:160
+    sw::mark::MarkManager m_pLastActiveFieldmark sw::mark::FieldmarkWithDropDownButton *
+    sw::mark::DropDownFieldmark
+sw/source/core/inc/swcache.hxx:204
+    SwCacheAccess m_pObj SwCacheObj *
+    SwTextLine
+sw/source/core/inc/txmsrt.hxx:51
+    SwTOXSource pNd const SwContentNode *
+    SwTextNode
+sw/source/core/inc/viewimp.hxx:61
+    SwViewShellImp m_pShell SwViewShell *
+    SwFEShell
+sw/source/core/layout/paintfrm.cxx:273
+    (anonymous namespace)::SwPaintProperties pSGlobalShell SwViewShell *
+    SwWrtShell
+sw/source/core/text/inftxt.hxx:692
+    SwTextSlot pInf SwTextSizeInfo *
+    SwTextPaintInfo
+sw/source/core/text/itrtxt.hxx:35
+    SwTextIter m_pInf SwTextInfo *
+    SwTextSizeInfo
+sw/source/core/text/porfld.hxx:242
+    SwFieldFormDropDownPortion m_pFieldMark sw::mark::IFieldmark *
+    sw::mark::DropDownFieldmark
+sw/source/core/text/porfld.hxx:260
+    SwFieldFormDatePortion m_pFieldMark sw::mark::IFieldmark *
+    sw::mark::DateFieldmark
+sw/source/core/unocore/unoobj2.cxx:682
+    SwXTextRange::Impl m_pTableOrSectionFormat const SwFrameFormat *
+    SwSectionFormat
+sw/source/core/unocore/unorefmk.cxx:592
+    SwXMeta::Impl m_pMeta sw::Meta *
+    sw::MetaField
+sw/source/filter/html/swhtml.hxx:400
+    SwHTMLParser m_pActionViewShell SwViewShell *
+    SwEditShell
+sw/source/filter/ww8/ww8par.hxx:1269
+    SwWW8ImplReader m_pCurrentColl SwFormat *
+    SwTextFormatColl
+sw/source/filter/ww8/ww8scan.hxx:95
+    SprmResult pSprm const sal_uInt8 *
+    WW8_ANLD
+sw/source/filter/xml/xmlexp.hxx:54
+    SwXMLExport m_pTableItemMapper std::unique_ptr<SvXMLExportItemMapper>
+    (anonymous namespace)::SwXMLTableItemMapper_Impl
+sw/source/ui/dialog/swdlgfact.hxx:231
+    AbstractSwBreakDlg_Impl m_xDlg std::shared_ptr<weld::DialogController>
+    SwBreakDlg
+sw/source/ui/dialog/swdlgfact.hxx:562
+    AbstractInsTableDlg_Impl m_xDlg std::shared_ptr<weld::DialogController>
+    SwInsTableDlg
+sw/source/uibase/inc/fldmgr.hxx:103
+    SwFieldMgr m_pCurField SwField *
+    SwPageNumberField
+sw/source/uibase/inc/swuiccoll.hxx:35
+    SwCondCollPage m_pFormat SwFormat *
+    SwConditionTextFormatColl
+unoidl/source/unoidl-read.cxx:151
+    (anonymous namespace)::Entity entity const rtl::Reference<unoidl::Entity>
+    unoidl::PublishableEntity
+vcl/inc/animate/AnimationRenderer.hxx:48
+    AnimationRenderer mpRenderContext VclPtr<OutputDevice>
+    vcl::WindowOutputDevice
+vcl/inc/listbox.hxx:503
+    ImplListBoxFloatingWindow mpImplLB VclPtr<ImplListBox>
+    vcl::Window
+vcl/inc/qt5/QtAccessibleWidget.hxx:185
+    QtAccessibleWidget m_pObject QObject *
+    QWidget
+vcl/inc/qt5/QtClipboard.hxx:48
+    QtClipboard m_aContents css::uno::Reference<css::datatransfer::XTransferable>
+    QtClipboardTransferable
+vcl/inc/qt5/QtMenu.hxx:45
+    QtMenu mpVCLMenu VclPtr<Menu>
+    MenuBar
+vcl/inc/salusereventlist.hxx:41
+    SalUserEventList::SalUserEvent m_pFrame SalFrame *
+    SvpSalFrame
+vcl/inc/salusereventlist.hxx:42
+    SalUserEventList::SalUserEvent m_pData void *
+    ImplSVEvent
+vcl/inc/salvtables.hxx:45
+    SalInstanceBuilder m_aOwnedToplevel VclPtr<vcl::Window>
+    VclBuilderContainer
+vcl/inc/salvtables.hxx:414
+    SalInstanceLabel m_xLabel VclPtr<Control>
+    FixedText
+vcl/inc/salwtype.hxx:134
+    SalMenuEvent mpMenu void *
+    Menu
+vcl/inc/svdata.hxx:397
+    ImplSVData mpDefInst SalInstance *
+    QtInstance
+vcl/inc/svimpbox.hxx:185
+    SvImpLBox m_pView VclPtr<SvTreeListBox>
+    IconView
+vcl/inc/unx/gendisp.hxx:31
+    SalGenericDisplay m_pCapture SalFrame *
+    GtkSalFrame
+vcl/inc/unx/gtk/gtksalmenu.hxx:55
+    GtkSalMenu mpVCLMenu VclPtr<Menu>
+    MenuBar
+vcl/inc/unx/i18n_cb.hxx:77
+    preedit_data_t pFrame SalFrame *
+    X11SalFrame
+vcl/inc/unx/salgdi.h:136
+    X11SalGraphics mxImpl std::unique_ptr<SalGraphicsImpl>
+    X11GraphicsImpl
+vcl/inc/window.h:230
+    WindowImpl mpSysObj SalObject *
+    QtObject
+vcl/inc/window.h:233
+    WindowImpl mpBorderWindow VclPtr<vcl::Window>
+    ImplBorderWindow
+vcl/inc/window.h:234
+    WindowImpl mpClientWindow VclPtr<vcl::Window>
+    WorkWindow
+vcl/qa/cppunit/lifecycle.cxx:212
+    (anonymous namespace)::LeakTestObject mxRef VclPtr<vcl::Window>
+    vcl::Window
+vcl/qa/cppunit/lifecycle.cxx:213
+    (anonymous namespace)::LeakTestObject mpRef void *
+    vcl::Window
+vcl/source/control/imivctl.hxx:130
+    SvxIconChoiceCtrl_Impl pView VclPtr<SvtIconChoiceCtrl>
+    vcl::Window
+vcl/source/window/impldockingwrapper.hxx:42
+    ImplDockingWindowWrapper mpDockingWindow VclPtr<vcl::Window>
+    DockingWindow
+vcl/source/window/impldockingwrapper.hxx:46
+    ImplDockingWindowWrapper mpOldBorderWin VclPtr<vcl::Window>
+    ImplBorderWindow
+vcl/source/window/menufloatingwindow.hxx:38
+    MenuFloatingWindow pMenu VclPtr<Menu>
+    PopupMenu
+writerfilter/source/dmapper/NumberingManager.hxx:221
+    writerfilter::dmapper::ListsManager m_pCurrentDefinition class AbstractListDef::Pointer
+    writerfilter::dmapper::ListDef
+writerfilter/source/dmapper/StyleSheetTable.cxx:279
+    writerfilter::dmapper::StyleSheetTable_Impl m_pCurrentEntry StyleSheetEntryPtr
+    writerfilter::dmapper::TableStyleSheetEntry
+writerfilter/source/dmapper/TablePropertiesHandler.hxx:38
+    writerfilter::dmapper::TablePropertiesHandler m_pTableManager TableManager *
+    writerfilter::dmapper::DomainMapperTableManager
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:365
+    writerfilter::ooxml::OOXMLFastContextHandlerTable mCurrentChild css::uno::Reference<css::xml::sax::XFastContextHandler>
+    writerfilter::ooxml::OOXMLFastContextHandler
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:536
+    writerfilter::ooxml::OOXMLFastContextHandlerWrapper mxWrappedContext css::uno::Reference<css::xml::sax::XFastContextHandler>
+    writerfilter::ooxml::OOXMLFastContextHandler
+writerperfect/inc/DocumentHandler.hxx:47
+    writerperfect::DocumentHandler mxHandler css::uno::Reference<css::xml::sax::XDocumentHandler>
+    SvXMLImport
+xmloff/source/draw/ximpshap.hxx:555
+    SdXMLFrameShapeContext mxImplContext SvXMLImportContextRef
+    SdXMLShapeContext
+xmloff/source/text/XMLTextFrameContext.hxx:38
+    XMLTextFrameContext m_xImplContext SvXMLImportContextRef
+    (anonymous namespace)::XMLTextFrameContext_Impl
+xmloff/source/transform/ControlOOoTContext.hxx:26
+    XMLControlOOoTransformerContext m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLMutableAttributeList
+xmloff/source/transform/FormPropOOoTContext.hxx:29
+    XMLFormPropOOoTransformerContext m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLMutableAttributeList
+xmloff/source/transform/FrameOASISTContext.hxx:26
+    XMLFrameOASISTransformerContext m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLMutableAttributeList
+xmloff/source/transform/MergeElemTContext.hxx:31
+    XMLMergeElemTransformerContext m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLMutableAttributeList
+xmloff/source/transform/PersAttrListTContext.hxx:29
+    XMLPersAttrListTContext m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLMutableAttributeList
+xmloff/source/transform/StyleOASISTContext.cxx:63
+    XMLPropertiesTContext_Impl m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLMutableAttributeList
+xmloff/source/transform/StyleOOoTContext.cxx:144
+    (anonymous namespace)::XMLTypedPropertiesOOoTContext_Impl m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLMutableAttributeList
+xmlscript/source/xmldlg_imexp/imp_share.hxx:199
+    xmlscript::ElementBase m_pParent ElementBase *
+    xmlscript::ControlElement
+xmlscript/source/xmllib_imexp/imp_share.hxx:149
+    xmlscript::LibElementBase mxParent rtl::Reference<LibElementBase>
+    xmlscript::LibrariesElement
+xmlsecurity/inc/xsecctl.hxx:73
+    InternalSignatureInformation xReferenceResolvedListener css::uno::Reference<css::xml::crypto::sax::XReferenceResolvedListener>
+    SignatureVerifierImpl

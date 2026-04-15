@@ -1,0 +1,21 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+inline constexpr OUString BMP_STR_OPEN = u"formula/res/fapopen.png"_ustr;
+inline constexpr OUString BMP_STR_END = u"formula/res/fapok.png"_ustr;
+inline constexpr OUString BMP_STR_ERROR = u"formula/res/faperror.png"_ustr;
+inline constexpr OUString RID_BMP_REFBTN1 = u"formula/res/refinp1.png"_ustr;
+inline constexpr OUString RID_BMP_REFBTN2 = u"formula/res/refinp2.png"_ustr;
+inline constexpr OUString BMP_FX = u"formula/res/fx.png"_ustr;
+inline constexpr OUString BMP_STAR_EMPTY = u"sc/res/icon-set-stars-empty.png"_ustr;
+inline constexpr OUString BMP_STAR_FULL = u"sc/res/icon-set-stars-full.png"_ustr;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <style>
+    path {
+      fill: none;
+      stroke-width: 4px;
+      marker: url(#diamond);
+    }
+  </style>
+  <path d="M 10,50 v -20 h 40 v -20" stroke="red"/>
+
+  <marker id="diamond" markerWidth="12" markerHeight="12" refX="6" refY="6" markerUnits="userSpaceOnUse">
+    <circle cx="6" cy="6" r="3" fill="white" stroke="context-stroke" stroke-width="2"/>
+  </marker>
+</svg>

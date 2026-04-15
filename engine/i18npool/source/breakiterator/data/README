@@ -1,0 +1,149 @@
+The originals of these come from svn checkout
+http://source.icu-project.org/repos/icu/icu/trunk/source/data/brkitr they no
+longer appear in the icu tarballs, but are in icu's svn
+
+dict_word is used for dictionary word break, edit_word is for cursor
+travelling, while count_word is for word count.
+
+At various stages these copies have been customized and are now horribly out of
+sync. It unclear which diffs from the base versions are deliberate and which
+are now accidental :-(
+
+The various issues and customizations have been reviewed, with tests written for
+customizations that are still relevant. However, these files are still extremely
+out-of-date and need to be refreshed. Relevant customizations should be reapplied
+on top of a current version.
+
+done, regression tests added:
+
+#112623# update Japanese word breakiterator dictionary
+#i50172# add cell breakiterator rule for Tamil
+#i80412# indic cursoring
+#i107843# em-dash/en-dash breakiterator fix for spell checking
+#i103552# Japanese word for 'shutdown' added to ja.dic
+#i113785# ligatures for spell checking will no longer break words
+An opening quote should not be counted as a word by word count tool (regression test in writer)
+fdo#31271 wrong line break with (
+#i89042# word count fix (regression test is in writer)
+#i58513# add break iterator rules for Finish
+#i19716# fix wrong line break on bracket characters
+#i21290# extend Greek script type
+#i21907# fix isBeginWord and isEndWord problem
+#i85411# Apply patch for ZWSP
+#i17155# fix line breakiterator rule to make slash and hyphen as part of word when doing line break
+#i13451# add '-' as midLetter for Catalan dictionary word breakiterator
+#i13494# fix word breakiterator rule to handle punctuations and signs correctly
+#i29548# Fix Thai word breakiterator problem
+#i11993# #i14904# fix word breakiterator issues
+#i64400# dash/hyphen should not break words (de/nds/nl/sv)
+#i22602# make dot stick on beginning of a word when doing line break
+#i24098# skip preceding space for beginOfSentence
+#i24098# fix beginOfSentence, which did not work correctly when cursor is on the beginning of the sentence
+#i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule.
+#i50172# add cell breakiterator rule for Tamil
+#i55778# reverse back last change, treat letter and number combination as one word.
+#i56347# apply patch to recognize suffixes of numbers in Hungarian spellchecking
+#i56348# add Hungarian word break rule for edit mode
+#i65267# fix line break rule
+#i86439# many changes to implement, tweak, debug UTF-16 surrogate pair handling
+#i75631#         "
+#i75632#         "
+#i75633#         "
+#i75412#         "
+#i80645# fix backslash issues in line breakiterator
+#i80841# fix hyphen line break problem
+#i81448# fixed dot line break issue
+#i81448# fix the problem of line break on punctuations (commit message says i81440)
+#i81448# fix problem of line break on symbols
+#i83649# fixed the problem of line break between quotation mark and open bracket
+#i83464# fix the problem of line break between letter and 1326
+b6634800# fix line break problem of dot after letter and before number
+#i83229# fix the problem of leading hyphen for numbers
+#i80815# count words like MS Word
+
+likely superseded:
+
+#i21392# Obscure line break behavior mismatch in string of symbols between MSO and LO.
+#i80548# "fix dash issues in line breakiterator" - fix no longer works
+#i72868# "fix Chinese punctuation for line breakiterator" - fix no longer works
+#i80891# "fix Chinese punctuation for line breakiterator" - fix no longer works
+
+#i27711# Adding/tweaking/removing languages later added to ICU.
+#i33756#         "
+#i41671#         "
+#i41671#         "
+#i55063#         "
+#i24850# ICU upgrades, internal bug fixes, or other work-arounds.
+#i24098#         "
+#112772#         "
+#i35285#         "
+4a1f1586173839d532f90507c72306bc9e2aec56        "
+a10b0e70c641d7438c557ef718c6942b3abffaec        "
+05fadde6f025bcaafca4f3093e88be3cc1bb6836        "
+#i57866#         "
+#i57866#         "
+#i69482#         "
+#142664#         "
+#i60645#         "
+#i53388#         "
+#i60645#         "
+#i78393#         "
+#i73903#         "
+#i75412#         "
+#i72589#         "
+#i75319#         "
+#i76706#         "
+#i64400#         "
+#i64400#         "
+#i79148#         "
+#i55063#         "
+#i87530#         "
+#i88041#         "
+#i88411#         "
+#i80923#         "
+#i80923#         "
+#i81519#         "
+
+
+suspect:
+
+
+- The intentions behind the following commits are unclear, as the referenced bugs were in the
+StarOffice internal bug tracker. These changes are contemporaneous with TR14 Revision 17, and seem
+to be part of an effort to backport upstream rule changes across multiple language customizations.
+
+commit 746ea3d8c29b27b23af3433446f66db0ad3096d6
+Author: Oliver Bolte <obo@openoffice.org>
+Date:   Tue Jan 11 10:19:26 2005 +0000
+
+    INTEGRATION: CWS i18n15 (1.2.20); FILE MERGED
+    2004/09/04 02:03:53 khong 1.2.20.1: #117685# make dictionary word contain only letter or only number, dot can be in middle or end of a word, but only one.
+
+commit a31a26ce1a9c7f63e354836fd9e1282b6a5063a1
+Author: Oliver Bolte <obo@openoffice.org>
+Date:   Tue Jan 11 10:19:07 2005 +0000
+
+    INTEGRATION: CWS i18n15 (1.2.58); FILE MERGED
+    2004/09/04 02:03:53 khong 1.2.58.1: #117685# make dictionary word contain only letter or only number, dot can be in middle or end of a word, but only one.
+
+commit f7babbe5ffcae9d60ab5e547887a0ccc453c2bcb
+Author: Oliver Bolte <obo@openoffice.org>
+Date:   Tue Jan 11 10:18:51 2005 +0000
+
+    INTEGRATION: CWS i18n15 (1.3.36); FILE MERGED
+    2004/09/04 02:03:53 khong 1.3.36.1: #117685# make dictionary word contain only letter or only number, dot can be in middle or end of a word, but only one.
+
+
+- The intention behind the following commit is unclear, as the bug references are incorrect and no
+good candidates were immediately apparent. Based on the text of the commit, however, it appears to
+be a simple bug fix for skipSpace(). This function has also had a great deal of churn since this
+commit, further suggesting it is no longer pertinent.
+
+commit 1967d8fb182b3101dee4f715e78be384400bc1e8
+Author: Kurt Zenker <kz@openoffice.org>
+Date:   Wed Sep 5 16:37:28 2007 +0000
+
+    INTEGRATION: CWS i18n37 (1.22.6); FILE MERGED
+    2007/09/03 18:27:39 khong 1.22.6.2: i8132 fixed a problem in skipping space for word breakiterator
+    2007/08/31 21:30:30 khong 1.22.6.1: i81158 fix skipping space problem
+

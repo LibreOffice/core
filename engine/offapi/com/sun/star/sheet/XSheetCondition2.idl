@@ -1,0 +1,38 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** provides methods to access the settings of a condition in a
+    conditional format or data validation.
+
+    @see com::sun::star::sheet::TableConditionalEntry
+    @see com::sun::star::sheet::TableValidation
+    @see com::sun::star::sheet::XSheetCondition
+ */
+interface XSheetCondition2: com::sun::star::sheet::XSheetCondition
+{
+
+    /** returns the operator in the condition (new interface).
+     */
+    long getConditionOperator();
+
+
+    /** sets the operator in the condition (new interface).
+     */
+    void setConditionOperator(
+            [in] long nOperator );
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

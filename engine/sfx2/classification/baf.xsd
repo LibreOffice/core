@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:xal="urn:oasis:names:tc:ciq:xal:3" xmlns:xnl="urn:oasis:names:tc:ciq:xnl:3" xmlns="urn:tscp:names:baf:1.1" targetNamespace="urn:tscp:names:baf:1.1">
+  <xs:import namespace="urn:oasis:names:tc:ciq:xal:3" schemaLocation="xAL.xsd"/>
+  <xs:import namespace="urn:oasis:names:tc:ciq:xnl:3" schemaLocation="xNL.xsd"/>
+  <xs:import namespace="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" schemaLocation="baf_loext.xsd"/>
+
+  <!-- Business Authorization -->
+  <xs:complexType name="BusinessAuthorization">
+    <xs:sequence>
+      <xs:element ref="PolicyAuthorityName"/>
+      <xs:element ref="PolicyName"/>
+      <xs:element ref="AdministrativeData"/>
+      <xs:element ref="Scope" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="Included"/>
+      <xs:element ref="Excluded" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AdministrativeData">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ProgramID"/>
+        <xs:element ref="LicenseID" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="StartValidityDate" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="StopValidityDate" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="Applicant" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="Signatories" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Included">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="BusinessAuthorizationCategory" maxOccurs="unbounded"/>
+        <xs:element ref="loext:Marking" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:IntellectualPropertyPart" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:IntellectualPropertyPartNumber" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Excluded">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="BusinessAuthorizationCategory" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:Marking" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:IntellectualPropertyPart" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:IntellectualPropertyPartNumber" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StopValidityDate">
+    <xs:simpleType>
+      <xs:restriction base="xs:date"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="StartValidityDate">
+    <xs:simpleType>
+      <xs:restriction base="xs:date"/>
+    </xs:simpleType>
+  </xs:element>
+  <!-- Business Authorization Category -->
+  <xs:element name="BusinessAuthorizationCategory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="AccessRules" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="HandlingRules" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="LabelingRules"/>
+        <xs:element ref="ImpactLevel"/>
+      </xs:sequence>
+      <xs:attribute name="Identifier" type="xs:anyURI" use="required"/>
+      <xs:attribute name="Name" type="xs:string" use="optional"/>
+      <xs:attribute name="loextAbbreviatedName" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Impact Level -->
+  <xs:element name="ImpactLevel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Scale"/>
+        <xs:element ref="ConfidentalityValue" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="IntegrityValue" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="AvailabilityValue" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Scale" type="xs:string"/>
+  <xs:element name="ConfidentalityValue" type="xs:string"/>
+  <xs:element name="IntegrityValue" type="xs:string"/>
+  <xs:element name="AvailabilityValue" type="xs:string"/>
+  <!-- Handling Rule -->
+  <xs:complexType name="HandlingRule" abstract="true"/>
+  <xs:complexType name="SecureWEBTransmission">
+    <xs:complexContent>
+      <xs:extension base="HandlingRule"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="StorageRule">
+    <xs:complexContent>
+      <xs:extension base="HandlingRule"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SecureWEBStorage">
+    <xs:complexContent>
+      <xs:extension base="StorageRule"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SecureFileTransferTransmission">
+    <xs:complexContent>
+      <xs:extension base="HandlingRule"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SecureEmailTransmission">
+    <xs:complexContent>
+      <xs:extension base="HandlingRule"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="MediumAuthentication">
+    <xs:complexContent>
+      <xs:extension base="HandlingRule"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FileDeletion">
+    <xs:complexContent>
+      <xs:extension base="HandlingRule"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DesktopStorage">
+    <xs:complexContent>
+      <xs:extension base="HandlingRule"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- Labeling Rule -->
+  <xs:element name="VisualMarkingPart">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Identifier"/>
+        <xs:element ref="Value"/>
+      </xs:sequence>
+      <xs:attribute name="type" type="xs:anyURI" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Identifier"/>
+  <xs:element name="Value"/>
+  <!-- Others -->
+  <xs:element name="WorkEffortsScope">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="WorkEfforts"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="WorkEfforts">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="WorkEffort" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="WorkEffort">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Name"/>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Signatories">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="Scope">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="OrganizationsScope"/>
+        <xs:element ref="WorkEffortsScope"/>
+        <xs:element ref="ActionsScope"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Rules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="HandlingRules"/>
+        <xs:element ref="LabelingRules"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PolicyAuthorityName" type="xs:string"/>
+  <xs:element name="PolicyName" type="xs:string"/>
+  <xs:element name="ProgramID" type="xs:string"/>
+  <xs:element name="OrganizationsScope">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Organizations"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Organizations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Organization" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Organization">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="xnl:PartyName"/>
+        <xs:element ref="xal:Address"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Name" type="xs:string"/>
+  <xs:element name="LicenseID" type="xs:anyURI"/>
+  <xs:element name="Level">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="Moderate"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LabelingRules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="VisualMarkingPart" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InformationScope">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ImpactLevel"/>
+        <xs:element ref="ClassificationNumbers"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="HandlingRules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="HandlingRule" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="HandlingRule" type="HandlingRule"/>
+  <xs:element name="Countries">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="ClassificationNumbers">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="BusinessAuthorization" type="BusinessAuthorization"/>
+  <xs:element name="Applicant">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="xnl:PartyName"/>
+        <xs:element ref="xal:Address"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ActionsScope">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Actions"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Actions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Action" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Action">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Name"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccessRules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="AccessRule" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccessRule">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Organization"/>
+        <xs:element ref="Countries"/>
+        <xs:element ref="WorkEffort"/>
+        <xs:element ref="Actions"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

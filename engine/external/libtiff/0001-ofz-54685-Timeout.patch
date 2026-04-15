@@ -1,0 +1,59 @@
+From caab95ab518aafbc985974098ad806f769c462ea Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Fri, 20 Jan 2023 10:41:34 +0000
+Subject: [PATCH] ofz#54685 Timeout
+
+---
+ libtiff/tif_ojpeg.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/libtiff/tif_ojpeg.c b/libtiff/tif_ojpeg.c
+index 0c915de2..27b84611 100644
+--- a/libtiff/tif_ojpeg.c
++++ b/libtiff/tif_ojpeg.c
+@@ -1312,6 +1312,34 @@ static int OJPEGReadSecondarySos(TIFF *tif, uint16_t s)
+     return (1);
+ }
+ 
++// see also vcl/source/filter/jpeg/jpegc.cxx
++static void emitMessage(j_common_ptr cinfo, int msg_level)
++{
++    if (msg_level < 0)
++    {
++        // https://libjpeg-turbo.org/pmwiki/uploads/About/TwoIssueswiththeJPEGStandard.pdf
++        // try to retain some degree of recoverability up to some reasonable
++        // limit (initially using ImageMagick's current limit of 1000), then
++        // bail.
++        const int WarningLimit = 1000;
++#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
++        // ofz#50452 due to Timeouts, just abandon fuzzing on any
++        // JWRN_NOT_SEQUENTIAL
++        if (cinfo->err->msg_code == JWRN_NOT_SEQUENTIAL)
++        {
++            cinfo->err->error_exit(cinfo);
++            return;
++        }
++#endif
++        if (++cinfo->err->num_warnings > WarningLimit)
++            cinfo->err->error_exit(cinfo);
++        else
++            cinfo->err->output_message(cinfo);
++    }
++    else if (cinfo->err->trace_level >= msg_level)
++        cinfo->err->output_message(cinfo);
++}
++
+ static int OJPEGWriteHeaderInfo(TIFF *tif)
+ {
+     static const char module[] = "OJPEGWriteHeaderInfo";
+@@ -1327,6 +1355,7 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
+     sp->libjpeg_jpeg_error_mgr.output_message =
+         OJPEGLibjpegJpegErrorMgrOutputMessage;
+     sp->libjpeg_jpeg_error_mgr.error_exit = OJPEGLibjpegJpegErrorMgrErrorExit;
++    sp->libjpeg_jpeg_error_mgr.emit_message = emitMessage;
+     sp->libjpeg_jpeg_decompress_struct.err = &(sp->libjpeg_jpeg_error_mgr);
+     sp->libjpeg_jpeg_decompress_struct.client_data = (void *)tif;
+     if (jpeg_create_decompress_encap(
+-- 
+2.39.0
+

@@ -1,0 +1,33 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com { module sun { module star { module chart2 {
+
+interface XTimeBased : com::sun::star::uno::XInterface
+{
+
+    /**
+     * @return
+     *      FALSE if the data wrapped around
+     */
+    boolean switchToNext( [in] boolean wrap);
+
+    /**
+     * point is the zero based index into the time based array
+     *
+     * @return FALSE if the point is outside of the supported array
+     */
+    boolean setToPointInTime( [in] long point );
+
+    void setRange( [in] long start, [in] long end );
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

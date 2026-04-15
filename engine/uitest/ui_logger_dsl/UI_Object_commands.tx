@@ -1,0 +1,90 @@
+/*
+    This file is for the grammar of:
+        1)  ButtonUIObject : ( Click event )
+        2)  EditUIObject	: ( Type event - Clear event - Select Text event )
+        3)  CheckBoxUIObject	: ( Toggle the value  )
+        4)  RadioButtonUIObject	: ( Select event )
+        5)  ListBoxUIObject : ( Select event )
+        6)  ComboBoxUIObject	( Select event )
+        7)  SpinUIObject		( Increase event - Decrease event )
+        8)  TabControlUIObject ( Change tab event )
+        9)  ToolBoxUIObject ( Click on item event )
+        10) ValueSetUIObject (Choose item)
+        10)  MenuBtnUIObject ( Select - Open - Close )
+*/
+
+import type_options
+
+UIObjectCommand:
+  ButtonUIObject | CheckBoxUIObject | EditUIObject |
+  RadioButtonUIObject | ListBoxUIObject | ComboBoxUIObject |
+  SpinFieldUIObject | TabControlUIObject | ToolBoxUIObject |
+  ValueSetUIObject | MenuBtnUIObject
+;
+TabPageNumber:
+  INT | ID
+;
+ButtonUIObject:
+  'Click on' ui_button=STRING  ('from' parent_id=ID)?
+;
+CheckBoxUIObject:
+  'Toggle' Check_box_id=STRING 'CheckBox' ('from' parent_id=ID)?
+;
+RadioButtonUIObject:
+  'Select' Radio_button_id=STRING 'RadioButton' ('from' parent_id=ID)?
+;
+ComboBoxUIObject:
+   'Select in' Combo_box_id=STRING 'ComboBox' 'item number' item_num=INT ('from' parent_id=ID)?
+;
+TabControlUIObject:
+   'Choose Tab number' tab_page_number=TabPageNumber 'in' tab_id=STRING ('from' parent_id=ID)?
+;
+EditUIObject:
+   action=action_on_UIObject ('from' parent_id=ID)?
+;
+SpinFieldUIObject:
+   change=increase_or_decrease Spin_id=STRING ('from' parent_id=ID)?
+;
+ListBoxUIObject:
+   'Select element with position ' POS=INT 'in' list_id=STRING ('from' parent_id=ID)?
+;
+ToolBoxUIObject:
+   'Click on item number' POS=INT 'in' toolbox_id=ID
+;
+ValueSetUIObject:
+   'Choose element with position ' POS=INT 'in' value_set_id=STRING 'from' parent_id=STRING
+;
+//=============================================================
+MenuBtnUIObject:
+  MenuBtnUIObjectOpen | MenuBtnUIObjectSelect | MenuBtnUIObjectClose
+;
+MenuBtnUIObjectOpen:
+    'Open List From' + MenuBtn_ID=ID
+;
+MenuBtnUIObjectClose:
+    'Close List From' + MenuBtn_ID=ID
+;
+MenuBtnUIObjectSelect:
+    'Select item no' + item_num=INT + 'From List of' + MenuBtn_ID=ID
+;
+//=============================================================
+// Helper grammar for EditUIObject
+action_on_UIObject:
+    Type_action | SELECT | Clear
+;
+Type_action:
+  'Type on' edit_button=STRING what_to_type=Type_options
+;
+SELECT:
+  'Select in ' edit_button=STRING
+  '{' + '"FROM"' + ':' + '"' from_pos=INT '"' + ',' + '"TO"' + ':' + '"' to_pos=INT '"'+'}'
+;
+Clear:
+  'Clear' edit_button=STRING
+;
+
+//=============================================================
+// Helper functions for SpinUIObject
+increase_or_decrease:
+  'Increase' | 'Decrease'
+;

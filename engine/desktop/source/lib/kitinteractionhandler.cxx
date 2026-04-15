@@ -1,0 +1,436 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "kitinteractionhandler.hxx"
+
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
+
+#include <com/sun/star/document/BrokenPackageRequest.hpp>
+#include <com/sun/star/document/FontsDisallowEditingRequest.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/task/XInteractionAbort.hpp>
+#include <com/sun/star/task/XInteractionApprove.hpp>
+#include <com/sun/star/task/XInteractionPassword2.hpp>
+#include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkOffLineException.hpp>
+
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkReadException.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkWriteException.hpp>
+
+#include <com/sun/star/task/DocumentPasswordRequest2.hpp>
+#include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
+
+#include <com/sun/star/document/FilterOptionsRequest.hpp>
+#include <com/sun/star/document/XInteractionFilterOptions.hpp>
+
+#include "../../inc/lib/init.hxx"
+
+#include <COKit/COKitEnums.h>
+#include <sfx2/kit/helper.hxx>
+#include <sfx2/viewsh.hxx>
+#include <utility>
+#include <vcl/svapp.hxx>
+
+#include <tools/json_writer.hxx>
+
+using namespace com::sun::star;
+
+KitInteractionHandler::KitInteractionHandler(
+        OString command,
+        desktop::LibCO_Impl *const pKit,
+        desktop::LibLODocument_Impl *const pKitDocument)
+    : m_pKit(pKit)
+    , m_pKitDocument(pKitDocument)
+    , m_command(std::move(command))
+    , m_usePassword(false)
+{
+    assert(m_pKit);
+}
+
+KitInteractionHandler::~KitInteractionHandler()
+{
+}
+
+OUString SAL_CALL KitInteractionHandler::getImplementationName()
+{
+    return u"com.sun.star.comp.uui.KitInteractionHandler"_ustr;
+}
+
+sal_Bool SAL_CALL KitInteractionHandler::supportsService(OUString const & rServiceName)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+uno::Sequence< OUString > SAL_CALL KitInteractionHandler::getSupportedServiceNames()
+{
+    return { u"com.sun.star.task.InteractionHandler"_ustr,
+             // added to indicate support for configuration.backend.MergeRecoveryRequest
+             u"com.sun.star.configuration.backend.InteractionHandler"_ustr,
+              // for backwards compatibility
+             u"com.sun.star.uui.InteractionHandler"_ustr };
+}
+
+void SAL_CALL KitInteractionHandler::initialize(uno::Sequence<uno::Any> const & /*rArguments*/)
+{
+}
+
+void SAL_CALL KitInteractionHandler::handle(
+        uno::Reference<task::XInteractionRequest> const & xRequest)
+{
+    // just do the same thing in both cases
+    handleInteractionRequest(xRequest);
+}
+
+void KitInteractionHandler::postError(css::task::InteractionClassification classif, const char* kind, ErrCode code, const OUString &message)
+{
+    std::string classification = "error";
+    switch (classif)
+    {
+        case task::InteractionClassification_ERROR: break;
+        case task::InteractionClassification_WARNING: classification = "warning"; break;
+        case task::InteractionClassification_INFO: classification = "info"; break;
+        case task::InteractionClassification_QUERY: classification = "query"; break;
+        default: assert(false); break;
+    }
+
+    // create the JSON representation
+    tools::JsonWriter aJson;
+    aJson.put("classification", classification);
+    aJson.put("cmd", m_command.getStr());
+    aJson.put("kind", kind);
+    aJson.put("code", static_cast<sal_uInt32>(code));
+    aJson.put("message", message.toUtf8());
+
+    std::size_t nView = SfxViewShell::Current() ? KitHelper::getCurrentView() : 0;
+    if (m_pKitDocument && m_pKitDocument->mpCallbackFlushHandlers.count(nView))
+        m_pKitDocument->mpCallbackFlushHandlers[nView]->queue(KIT_CALLBACK_ERROR, aJson.finishAndGetAsOString());
+    else if (m_pKit->mpCallback)
+        m_pKit->mpCallback(KIT_CALLBACK_ERROR, aJson.finishAndGetAsOString().getStr(), m_pKit->mpCallbackData);
+}
+
+namespace {
+
+/// Just approve the interaction.
+void selectApproved(uno::Sequence<uno::Reference<task::XInteractionContinuation>> const &rContinuations)
+{
+    for (auto const & c : rContinuations)
+    {
+        uno::Reference<task::XInteractionApprove> xApprove(c, uno::UNO_QUERY);
+        if (xApprove.is())
+            xApprove->select();
+    }
+}
+
+bool ShouldFallbackToStandard(const uno::Reference<task::XInteractionRequest>& xRequest)
+{
+    uno::Any const request(xRequest->getRequest());
+
+    if (task::DocumentMacroConfirmationRequest aStruct; request >>= aStruct)
+        return true;
+
+    if (document::BrokenPackageRequest aStruct; request >>= aStruct)
+        return true;
+
+    if (document::FontsDisallowEditingRequest aStruct; request >>= aStruct)
+        return true;
+
+    if (beans::NamedValue aStruct; request >>= aStruct)
+        if (aStruct.Name == "LoadReadOnlyRequest")
+            if (OUString aFileName; aStruct.Value >>= aFileName)
+                return true;
+
+    return false;
+}
+
+bool FallbackToStandard(const uno::Reference<task::XInteractionRequest>& xRequest)
+{
+    auto xInteraction(task::InteractionHandler::createWithParent(
+        comphelper::getProcessComponentContext(), nullptr));
+
+    if (xInteraction.is())
+        xInteraction->handleInteractionRequest(xRequest);
+
+    return true;
+}
+
+}
+
+bool KitInteractionHandler::handleIOException(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest)
+{
+    ucb::InteractiveIOException aIoException;
+    if (!(rRequest >>= aIoException))
+        return false;
+
+    static ErrCode const aErrorCode[int(ucb::IOErrorCode_WRONG_VERSION) + 1] =
+    {
+        ERRCODE_IO_ABORT,
+        ERRCODE_IO_ACCESSDENIED,
+        ERRCODE_IO_ALREADYEXISTS,
+        ERRCODE_IO_BADCRC,
+        ERRCODE_IO_CANTCREATE,
+        ERRCODE_IO_CANTREAD,
+        ERRCODE_IO_CANTSEEK,
+        ERRCODE_IO_CANTTELL,
+        ERRCODE_IO_CANTWRITE,
+        ERRCODE_IO_CURRENTDIR,
+        ERRCODE_IO_DEVICENOTREADY,
+        ERRCODE_IO_NOTSAMEDEVICE,
+        ERRCODE_IO_GENERAL,
+        ERRCODE_IO_INVALIDACCESS,
+        ERRCODE_IO_INVALIDCHAR,
+        ERRCODE_IO_INVALIDDEVICE,
+        ERRCODE_IO_INVALIDLENGTH,
+        ERRCODE_IO_INVALIDPARAMETER,
+        ERRCODE_IO_ISWILDCARD,
+        ERRCODE_IO_LOCKVIOLATION,
+        ERRCODE_IO_MISPLACEDCHAR,
+        ERRCODE_IO_NAMETOOLONG,
+        ERRCODE_IO_NOTEXISTS,
+        ERRCODE_IO_NOTEXISTSPATH,
+        ERRCODE_IO_NOTSUPPORTED,
+        ERRCODE_IO_NOTADIRECTORY,
+        ERRCODE_IO_NOTAFILE,
+        ERRCODE_IO_OUTOFSPACE,
+        ERRCODE_IO_TOOMANYOPENFILES,
+        ERRCODE_IO_OUTOFMEMORY,
+        ERRCODE_IO_PENDING,
+        ERRCODE_IO_RECURSIVE,
+        ERRCODE_IO_UNKNOWN,
+        ERRCODE_IO_WRITEPROTECTED,
+        ERRCODE_IO_WRONGFORMAT,
+        ERRCODE_IO_WRONGVERSION,
+    };
+
+    postError(aIoException.Classification, "io", aErrorCode[static_cast<int>(aIoException.Code)], u""_ustr);
+    selectApproved(rContinuations);
+
+    return true;
+}
+
+bool KitInteractionHandler::handleNetworkException(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const uno::Any &rRequest)
+{
+    ucb::InteractiveNetworkException aNetworkException;
+    if (!(rRequest >>= aNetworkException))
+        return false;
+
+    ErrCode nErrorCode;
+    OUString aMessage;
+
+    ucb::InteractiveNetworkOffLineException aOffLineException;
+    ucb::InteractiveNetworkResolveNameException aResolveNameException;
+    ucb::InteractiveNetworkConnectException aConnectException;
+    ucb::InteractiveNetworkReadException aReadException;
+    ucb::InteractiveNetworkWriteException aWriteException;
+    if (rRequest >>= aOffLineException)
+    {
+        nErrorCode = ERRCODE_INET_OFFLINE;
+    }
+    else if (rRequest >>= aResolveNameException)
+    {
+        nErrorCode = ERRCODE_INET_NAME_RESOLVE;
+        aMessage = aResolveNameException.Server;
+    }
+    else if (rRequest >>= aConnectException)
+    {
+        nErrorCode = ERRCODE_INET_CONNECT;
+        aMessage = aConnectException.Server;
+    }
+    else if (rRequest >>= aReadException)
+    {
+        nErrorCode = ERRCODE_INET_READ;
+        aMessage = aReadException.Diagnostic;
+    }
+    else if (rRequest >>= aWriteException)
+    {
+        nErrorCode = ERRCODE_INET_WRITE;
+        aMessage = aWriteException.Diagnostic;
+    }
+    else
+    {
+        nErrorCode = ERRCODE_INET_GENERAL;
+    }
+
+    postError(aNetworkException.Classification, "network", nErrorCode, aMessage);
+    selectApproved(rContinuations);
+
+    return true;
+}
+
+bool KitInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const uno::Any &rRequest)
+{
+    bool bPasswordRequestFound = false;
+    bool bIsRequestPasswordToModify = false;
+
+    OString sUrl;
+
+    task::DocumentPasswordRequest passwordRequest;
+    if (rRequest >>= passwordRequest)
+    {
+        bIsRequestPasswordToModify = false;
+        sUrl = passwordRequest.Name.toUtf8();
+        bPasswordRequestFound = true;
+    }
+
+    task::DocumentPasswordRequest2 passwordRequest2;
+    if (rRequest >>= passwordRequest2)
+    {
+        bIsRequestPasswordToModify = passwordRequest2.IsRequestPasswordToModify;
+        sUrl = passwordRequest2.Name.toUtf8();
+        bPasswordRequestFound = true;
+    }
+
+    task::DocumentMSPasswordRequest2 passwordMSRequest;
+    if (rRequest >>= passwordMSRequest)
+    {
+        bIsRequestPasswordToModify = passwordMSRequest.IsRequestPasswordToModify;
+        sUrl = passwordMSRequest.Name.toUtf8();
+        bPasswordRequestFound = true;
+    }
+
+    if (!bPasswordRequestFound)
+        return false;
+
+    if (m_pKit->mpCallback &&
+        m_pKit->hasOptionalFeature(bIsRequestPasswordToModify ? KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
+                                                                : KIT_FEATURE_DOCUMENT_PASSWORD))
+    {
+        // release SolarMutex, so the callback handler, which may run in another thread,
+        // can acquire it in 'lo_setDocumentPassword'
+        SolarMutexReleaser aReleaser;
+        m_pKit->mpCallback(bIsRequestPasswordToModify ? KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY
+                                                        : KIT_CALLBACK_DOCUMENT_PASSWORD,
+                sUrl.getStr(),
+                m_pKit->mpCallbackData);
+
+        // block until SetPassword is called
+        m_havePassword.wait();
+        m_havePassword.reset();
+    }
+
+    for (auto const & cont : rContinuations)
+    {
+        if (m_usePassword)
+        {
+            if (bIsRequestPasswordToModify)
+            {
+                uno::Reference<task::XInteractionPassword2> const xIPW2(cont, uno::UNO_QUERY);
+                xIPW2->setPasswordToModify(m_Password);
+                xIPW2->select();
+            }
+            else
+            {
+                uno::Reference<task::XInteractionPassword> const xIPW(cont, uno::UNO_QUERY);
+                if (xIPW.is())
+                {
+                    xIPW->setPassword(m_Password);
+                    xIPW->select();
+                }
+            }
+        }
+        else
+        {
+            if (bIsRequestPasswordToModify)
+            {
+                uno::Reference<task::XInteractionPassword2> const xIPW2(cont, uno::UNO_QUERY);
+                xIPW2->setRecommendReadOnly(true);
+                xIPW2->select();
+            }
+            else
+            {
+                uno::Reference<task::XInteractionAbort> const xAbort(cont, uno::UNO_QUERY);
+                if (xAbort.is())
+                {
+                    xAbort->select();
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool KitInteractionHandler::handleFilterOptionsRequest(
+        const uno::Sequence<uno::Reference<task::XInteractionContinuation>>& rContinuations,
+        const uno::Any& rRequest)
+{
+    document::FilterOptionsRequest aFilterOptionsRequest;
+    if (!(rRequest >>= aFilterOptionsRequest))
+        return false;
+
+    // Accept the provided/default filter options without showing a dialog,
+    // same as QuietInteraction did. This lets CSV files (and other formats
+    // that need import filter options) load in batch/silent mode.
+    for (auto const& cont : rContinuations)
+    {
+        uno::Reference<document::XInteractionFilterOptions> xFOptions(cont, uno::UNO_QUERY);
+        if (xFOptions.is())
+        {
+            xFOptions->select();
+            return true;
+        }
+    }
+    return false;
+}
+
+sal_Bool SAL_CALL KitInteractionHandler::handleInteractionRequest(
+        const uno::Reference<task::XInteractionRequest>& xRequest)
+{
+    uno::Sequence<uno::Reference<task::XInteractionContinuation>> const aContinuations = xRequest->getContinuations();
+    uno::Any const request(xRequest->getRequest());
+
+    if (handleIOException(aContinuations, request))
+        return true;
+
+    if (handleNetworkException(aContinuations, request))
+        return true;
+
+    if (handlePasswordRequest(aContinuations, request))
+        return true;
+
+    if (handleFilterOptionsRequest(aContinuations, request))
+        return true;
+
+    if (ShouldFallbackToStandard(xRequest))
+        return FallbackToStandard(xRequest);
+
+    // TODO: perform more interactions 'for real' like the above
+    selectApproved(aContinuations);
+
+    return true;
+}
+
+void KitInteractionHandler::SetPassword(char const*const pPassword)
+{
+    if (pPassword)
+    {
+        m_Password = OUString(pPassword, strlen(pPassword), RTL_TEXTENCODING_UTF8);
+        m_usePassword = true;
+    }
+    else
+    {
+        m_usePassword = false;
+    }
+    m_havePassword.set();
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

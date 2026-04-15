@@ -1,0 +1,35 @@
+FreeBSD porting fixes, patch by maho@openoffice.org
+
+--- Python-3.3.0/Python/thread_pthread.h	2012-11-28 09:00:41.097955124 +0000
++++ Python-3.3.0/Python/thread_pthread.h	2012-11-28 09:01:13.018329351 +0000
+@@ -238,6 +238,9 @@
+ {
+     pthread_t th;
+     int status;
++#ifdef __FreeBSD__
++	sigset_t set, oset;
++#endif
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+     pthread_attr_t attrs;
+ #endif
+@@ -277,6 +280,10 @@
+     callback->func = func;
+     callback->arg = arg;
+ 
++#ifdef __FreeBSD__
++	sigfillset(&set);
++	SET_THREAD_SIGMASK(SIG_BLOCK, &set, &oset);
++#endif
+     status = pthread_create(&th,
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+                              &attrs,
+@@ -285,6 +292,9 @@
+ #endif
+                              pythread_wrapper, callback);
+ 
++#ifdef __FreeBSD__
++	SET_THREAD_SIGMASK(SIG_SETMASK, &oset, NULL);
++#endif
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+     pthread_attr_destroy(&attrs);
+ #endif

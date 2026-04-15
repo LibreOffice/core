@@ -1,0 +1,281 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_TILEBUFFER_HXX
+#define INCLUDED_TILEBUFFER_HXX
+
+#include <cairo.h>
+#include <gio/gio.h>
+#include <glib.h>
+
+#include <map>
+
+#define KIT_TILEBUFFER_ERROR (KitTileBufferErrorQuark())
+
+// Let's use a square of side 256 pixels for each tile.
+const int nTileSizePixels = 256;
+
+/**
+   Converts the pixel value to zoom independent twip value.
+
+   @param fInput value to convert
+   @param zoom the current zoom level
+
+   @return the pixels value corresponding to given twip value
+*/
+float pixelToTwip(float fInput, float zoom);
+
+/**
+   Converts the zoom independent twip value pixel value.
+
+   @param fInput value to convert
+   @param zoom the current zoom level
+
+   @return the twip value corresponding to given pixel value
+*/
+float twipToPixel(float fInput, float zoom);
+
+/**
+   Gets GQuark identifying this tile buffer errors
+*/
+GQuark KitTileBufferErrorQuark(void);
+
+/**
+   This class represents a single tile in the tile buffer.
+   It encloses a reference to GdkPixBuf containing the pixel data of the tile.
+*/
+class Tile
+{
+public:
+    Tile()
+        : valid(false)
+        , m_pBuffer(nullptr)
+    {
+    }
+    ~Tile()
+    {
+        if (m_pBuffer)
+            cairo_surface_destroy(m_pBuffer);
+    }
+
+    /**
+       Tells if this tile is valid or not. Initialised to 0 (invalid) during
+       object creation.
+    */
+    bool valid;
+
+    /// Function to get the pointer to enclosing cairo_surface_t
+    cairo_surface_t* getBuffer();
+    /// Used to set the pixel buffer of this object
+    void setSurface(cairo_surface_t*);
+
+private:
+    /// Pixel buffer data for this tile
+    cairo_surface_t* m_pBuffer;
+};
+
+/**
+   This class represents the tile buffer which is responsible for managing,
+   reusing and caching all the already rendered tiles. If the given tile is not
+   present in the buffer, call to COKit Document's (m_pKitDocument) paintTile
+   method is made which fetches the rendered tile from LO core and store it in
+   buffer for future reuse.
+*/
+class TileBuffer
+{
+public:
+    TileBuffer(int columns = 0, int scale = 1)
+        : m_nWidth(columns)
+    {
+        cairo_surface_t* pSurface = cairo_image_surface_create(
+            CAIRO_FORMAT_ARGB32, nTileSizePixels * scale, nTileSizePixels * scale);
+        m_DummyTile.setSurface(pSurface);
+        cairo_surface_destroy(pSurface);
+    }
+
+    /**
+       Gets the underlying Tile object for given position. The position (0, 0)
+       points to the left top most tile of the buffer.
+
+       If the tile is not cached by the tile buffer, it makes a paintTile call
+       to LO core asking to render the given tile. It then stores the tile for
+       future reuse.
+
+       @param x the tile along the x-axis of the buffer
+       @param y the tile along the y-axis of the buffer
+       @param task GTask object containing the necessary data
+       @param pool GThreadPool managed by the widget instance used for all the
+       COKit calls made by widget. It is needed here because getTile invokes one
+       of the COKit call : paintTile.
+
+       @return the tile at the mentioned position (x, y)
+     */
+    Tile& getTile(int x, int y, GTask* task, GThreadPool* pool);
+
+    /*
+      Takes ownership of the surface and sets it on a tile at a given location
+    */
+    void setTile(int x, int y, cairo_surface_t* surface);
+
+    /// Returns true if a valid tile exists at this location
+    bool hasValidTile(int x, int y);
+
+    /// Destroys all the tiles in the tile buffer; also frees the memory allocated
+    /// for all the Tile objects.
+    void resetAllTiles();
+    /**
+       Marks the tile as invalid. The tile (0, 0) is the left topmost tile in
+       the tile buffer.
+
+       @param x the position of tile along x-axis
+       @param y the position of tile along y-axis
+       @param zoom zoom factor of the document
+       @param task GTask object containing the necessary data
+       @param pool GThreadPool managed by the widget instance used for all the
+       COKit calls made by widget. It is needed here because setInvalid() invokes one
+       of the COKit call : paintTile.
+     */
+    void setInvalid(int x, int y, float zoom, GTask* task, GThreadPool*);
+
+private:
+    /// Stores all the tiles cached by this tile buffer.
+    std::map<int, Tile> m_mTiles;
+    /// Width of the current tile buffer (number of columns)
+    int m_nWidth;
+    /// Dummy tile
+    Tile m_DummyTile;
+};
+
+enum
+{
+    KIT_LOAD_DOC,
+    KIT_POST_COMMAND,
+    KIT_SET_EDIT,
+    KIT_SET_PARTMODE,
+    KIT_SET_PART,
+    KIT_POST_KEY,
+    KIT_PAINT_TILE,
+    KIT_POST_MOUSE_EVENT,
+    KIT_SET_GRAPHIC_SELECTION,
+    KIT_SET_CLIENT_ZOOM
+};
+
+enum
+{
+    KIT_TILEBUFFER_CHANGED,
+    KIT_TILEBUFFER_MEMORY
+};
+
+/**
+   A struct that we use to store the data about the COKit call.
+
+   Object of this type is passed with all the COKit calls,
+   so that they can be identified. Additionally, it also contains
+   the data that COKit call needs.
+*/
+struct LOEvent
+{
+    /// To identify the type of COKit call
+    int m_nType;
+
+    /// @name post_command parameters
+    ///@{
+    const gchar* m_pCommand;
+    gchar* m_pArguments;
+    gboolean m_bNotifyWhenFinished;
+    ///@}
+
+    /// set_edit parameter
+    gboolean m_bEdit;
+
+    /// set_partmode parameter
+    int m_nPartMode;
+
+    /// set_part parameter
+    int m_nPart;
+
+    /// @name postKeyEvent parameters
+    ///@{
+    int m_nKeyEvent;
+    int m_nCharCode;
+    int m_nKeyCode;
+    ///@}
+
+    /// @name paintTile parameters
+    ///@{
+    int m_nPaintTileX;
+    int m_nPaintTileY;
+    float m_fPaintTileZoom;
+    TileBuffer* m_pTileBuffer;
+    ///@}
+
+    /// @name postMouseEvent parameters
+    ///@{
+    int m_nPostMouseEventType;
+    int m_nPostMouseEventX;
+    int m_nPostMouseEventY;
+    int m_nPostMouseEventCount;
+    int m_nPostMouseEventButton;
+    int m_nPostMouseEventModifier;
+    ///@}
+
+    /// @name setGraphicSelection parameters
+    ///@{
+    int m_nSetGraphicSelectionType;
+    int m_nSetGraphicSelectionX;
+    int m_nSetGraphicSelectionY;
+    ///@}
+
+    /// @name setClientView parameters
+    ///@{
+    int m_nTilePixelWidth;
+    int m_nTilePixelHeight;
+    int m_nTileTwipWidth;
+    int m_nTileTwipHeight;
+    ///@}
+
+    /// Constructor to instantiate an object of type `type`.
+    explicit LOEvent(int type)
+        : m_nType(type)
+        , m_pCommand(nullptr)
+        , m_pArguments(nullptr)
+        , m_bNotifyWhenFinished(false)
+        , m_bEdit(false)
+        , m_nPartMode(0)
+        , m_nPart(0)
+        , m_nKeyEvent(0)
+        , m_nCharCode(0)
+        , m_nKeyCode(0)
+        , m_nPaintTileX(0)
+        , m_nPaintTileY(0)
+        , m_fPaintTileZoom(0)
+        , m_pTileBuffer(nullptr)
+        , m_nPostMouseEventType(0)
+        , m_nPostMouseEventX(0)
+        , m_nPostMouseEventY(0)
+        , m_nPostMouseEventCount(0)
+        , m_nPostMouseEventButton(0)
+        , m_nPostMouseEventModifier(0)
+        , m_nSetGraphicSelectionType(0)
+        , m_nSetGraphicSelectionX(0)
+        , m_nSetGraphicSelectionY(0)
+        , m_nTilePixelWidth(0)
+        , m_nTilePixelHeight(0)
+        , m_nTileTwipWidth(0)
+        , m_nTileTwipHeight(0)
+    {
+    }
+
+    /// Wrapper around delete to help GLib.
+    static void destroy(void* pMemory);
+};
+
+#endif // INCLUDED_TILEBUFFER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

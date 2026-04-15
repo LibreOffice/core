@@ -1,0 +1,21 @@
+diff -ur lcms2.org/src/cmstypes.c lcms2/src/cmstypes.c
+--- lcms2.org/src/cmstypes.c	2025-07-28 14:27:59.954279541 +0200
++++ lcms2/src/cmstypes.c	2025-07-28 14:30:31.630036454 +0200
+@@ -4701,7 +4701,7 @@
+ 
+ 
+ // This is the list of built-in MPE types
+-static _cmsTagTypeLinkedList SupportedMPEtypes[] = {
++static _cmsTagTypeLinkedList const SupportedMPEtypes[] = {
+ 
+ {{ (cmsTagTypeSignature) cmsSigBAcsElemType, NULL, NULL, NULL, NULL, NULL, 0 }, &SupportedMPEtypes[1] },   // Ignore those elements for now
+ {{ (cmsTagTypeSignature) cmsSigEAcsElemType, NULL, NULL, NULL, NULL, NULL, 0 }, &SupportedMPEtypes[2] },   // (That's what the spec says)
+@@ -6028,7 +6028,7 @@
+ } _cmsTagLinkedList;
+ 
+ // This is the list of built-in tags. The data of this list can be modified by plug-ins
+-static _cmsTagLinkedList SupportedTags[] = {
++static const _cmsTagLinkedList SupportedTags[] = {
+ 
+     { cmsSigAToB0Tag,               { 1, 3,  { cmsSigLut16Type,  cmsSigLutAtoBType, cmsSigLut8Type}, DecideLUTtypeA2B}, &SupportedTags[1]},
+     { cmsSigAToB1Tag,               { 1, 3,  { cmsSigLut16Type,  cmsSigLutAtoBType, cmsSigLut8Type}, DecideLUTtypeA2B}, &SupportedTags[2]},

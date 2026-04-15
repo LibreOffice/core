@@ -1,0 +1,14 @@
+diff -ur icu.org/source/common/ubidiimp.h icu/source/common/ubidiimp.h
+--- icu.org/source/common/ubidiimp.h	2019-10-03 13:16:41.000000000 +0200
++++ icu/source/common/ubidiimp.h	2019-10-28 19:08:13.533284618 +0100
+@@ -198,8 +198,8 @@
+ /* in a Run, logicalStart will get this bit set if the run level is odd */
+ #define INDEX_ODD_BIT (1UL<<31)
+ 
+-#define MAKE_INDEX_ODD_PAIR(index, level) ((index)|((int32_t)((level)&1)<<31))
+-#define ADD_ODD_BIT_FROM_LEVEL(x, level)  ((x)|=((int32_t)((level)&1)<<31))
++#define MAKE_INDEX_ODD_PAIR(index, level) ((index)|((uint32_t)((level)&1)<<31))
++#define ADD_ODD_BIT_FROM_LEVEL(x, level)  ((x)|=((uint32_t)((level)&1)<<31))
+ #define REMOVE_ODD_BIT(x)                 ((x)&=~INDEX_ODD_BIT)
+ 
+ #define GET_INDEX(x)   ((x)&~INDEX_ODD_BIT)

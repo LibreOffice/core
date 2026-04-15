@@ -1,0 +1,78 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include <sfx2/tabdlg.hxx>
+#include <com/sun/star/configuration/XReadWriteAccess.hpp>
+
+#include "connpoolsettings.hxx"
+
+namespace offapp
+{
+    class ConnectionPoolOptionsPage final : public SfxTabPage
+    {
+        OUString m_sYes;
+        OUString m_sNo;
+        DriverPoolingSettings m_aSettings;
+        DriverPoolingSettings m_aSavedSettings;
+
+        css::uno::Reference< css::configuration::XReadWriteAccess> m_xReadWriteAccess;
+
+        std::unique_ptr<weld::CheckButton> m_xEnablePooling;
+        std::unique_ptr<weld::Widget> m_xEnablePoolingImg;
+        std::unique_ptr<weld::Label> m_xDriversLabel;
+        std::unique_ptr<weld::TreeView> m_xDriverList;
+        std::unique_ptr<weld::Label> m_xDriverLabel;
+        std::unique_ptr<weld::Label> m_xDriver;
+        std::unique_ptr<weld::CheckButton> m_xDriverPoolingEnabled;
+        std::unique_ptr<weld::Widget> m_xDriverPoolingEnabledImg;
+        std::unique_ptr<weld::Label> m_xTimeoutLabel;
+        std::unique_ptr<weld::SpinButton> m_xTimeout;
+        std::unique_ptr<weld::Widget> m_xTimeoutImg;
+
+    public:
+        ConnectionPoolOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
+        virtual ~ConnectionPoolOptionsPage() override;
+        static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet);
+        virtual OUString GetAllStrings() override;
+
+    private:
+        virtual bool        FillItemSet(SfxItemSet* _rSet) override;
+        virtual void        Reset(const SfxItemSet* _rSet) override;
+        virtual void        ActivatePage( const SfxItemSet& _rSet) override;
+
+        void updateRow(size_t nRow);
+        void updateCurrentRow();
+        void UpdateDriverList(const DriverPoolingSettings& _rSettings);
+        bool isModifiedDriverList() const;
+        void saveDriverList() { m_aSavedSettings = m_aSettings; }
+
+        DECL_LINK(OnEnabledDisabled, weld::Toggleable&, void);
+        DECL_LINK(OnSpinValueChanged, weld::SpinButton&, void);
+        DECL_LINK(OnDriverRowChanged, weld::TreeView&, void);
+
+        void implInitControls(const SfxItemSet& _rSet);
+
+        void commitTimeoutField();
+    };
+
+} // namespace offapp
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

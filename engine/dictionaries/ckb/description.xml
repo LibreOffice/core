@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="0.1"/>
+    <identifier value="org.sil.ckb.spell_oxt"/>
+    <display-name>
+        <name lang="en-US">Central Kurdish (Sorani) spelling dictionary</name>
+    </display-name>
+    <platform value="all"/>
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0"/>
+    </dependencies>
+    <publisher>
+        <name xlink:href="https://github.com/sinaahmadi/KurdishHunspell" lang="en">Sina Ahmadi (ahmadi.sina@outlook.com)</name>
+    </publisher>
+</description>

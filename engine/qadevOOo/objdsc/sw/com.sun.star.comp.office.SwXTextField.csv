@@ -1,0 +1,8 @@
+"SwXTextField";"com::sun::star::text::XTextField";"getPresentation()"
+"SwXTextField";"com::sun::star::beans::XPropertySet#optional";"getPropertySetInfo()"
+"SwXTextField";"com::sun::star::beans::XPropertySet#optional";"setPropertyValue()"
+"SwXTextField";"com::sun::star::beans::XPropertySet#optional";"getPropertyValue()"
+"SwXTextField";"com::sun::star::beans::XPropertySet#optional";"addPropertyChangeListener()"
+"SwXTextField";"com::sun::star::beans::XPropertySet#optional";"removePropertyChangeListener()"
+"SwXTextField";"com::sun::star::beans::XPropertySet#optional";"addVetoableChangeListener()"
+"SwXTextField";"com::sun::star::beans::XPropertySet#optional";"removeVetoableChangeListener()"

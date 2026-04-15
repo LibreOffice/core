@@ -1,0 +1,3 @@
+"ProviderAcceptor";"com::sun::star::ucb::XRemoteContentProviderAcceptor";"addRemoteContentProvider()"
+"ProviderAcceptor";"com::sun::star::ucb::XRemoteContentProviderAcceptor";"removeRemoteContentProvider()"
+"ProviderAcceptor";"com::sun::star::ucb::XRemoteContentProviderActivator#optional";"activateRemoteContentProviders()"

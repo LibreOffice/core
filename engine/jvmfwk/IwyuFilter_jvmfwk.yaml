@@ -1,0 +1,18 @@
+---
+assumeFilename: jvmfwk/source/fwkbase.cxx
+excludelist:
+    jvmfwk/inc/fwkutil.hxx:
+    # Needed on MACOSX
+    - config_folders.h
+    jvmfwk/source/fwkutil.cxx:
+    # Needed on WIN32
+    - sal/log.hxx
+    jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    - string_view
+    # Don't replace with bits/types, needed for sig_atomic_t
+    - signal.h
+    jvmfwk/plugins/sunmajor/pluginlib/util.cxx:
+    # Needed on MACOSX
+    - config_folders.h

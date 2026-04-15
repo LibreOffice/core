@@ -1,0 +1,9 @@
+dummy {
+     global:
+        Java_*;
+        JNI_OnLoad;
+        _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
+        libreofficekit_*;
+    local:
+        *;
+};

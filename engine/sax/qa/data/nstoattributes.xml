@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main/">
+    <w:body>
+        <w:p w:rsidR="009A1A3D" w:rsidRPr="00BA52A7" w:rsidRDefault="00225691" w:rsidP="00BA52A7">
+            <w:pPr xyz="abc">
+                <w:spacing w:line="276" w:lineRule="auto"/>
+            <w:rPr>
+                <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi"/>
+                <w:sz w:val="24" val="27" />
+                <w:szCs w:val="24"/>
+            </w:rPr>
+            </w:pPr>
+            <w:bookmarkStart w:id="0" w:name="page1"/>
+            <w:bookmarkEnd w:id="0"/>
+        </w:p>
+    </w:body>
+</w:document>

@@ -1,0 +1,205 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <drawinglayer/primitive3d/sdrsphereprimitive3d.hxx>
+#include <basegfx/polygon/b3dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <primitive3d/sdrdecompositiontools3d.hxx>
+#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <drawinglayer/attribute/sdrfillattribute.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/attribute/sdrshadowattribute.hxx>
+
+
+using namespace com::sun::star;
+
+
+namespace drawinglayer::primitive3d
+{
+        Primitive3DContainer SdrSpherePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        {
+            Primitive3DContainer aRetval;
+            const basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+            const bool bCreateNormals(css::drawing::NormalsKind_SPECIFIC == getSdr3DObjectAttribute().getNormalsKind()
+                || css::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind());
+
+            // create unit geometry
+            basegfx::B3DPolyPolygon aFill(basegfx::utils::createSphereFillPolyPolygonFromB3DRange(aUnitRange,
+                getHorizontalSegments(), getVerticalSegments(), bCreateNormals));
+
+            // normal inversion
+            if(!getSdrLFSAttribute().getFill().isDefault()
+                && bCreateNormals
+                && getSdr3DObjectAttribute().getNormalsInvert()
+                && aFill.areNormalsUsed())
+            {
+                // invert normals
+                aFill = basegfx::utils::invertNormals(aFill);
+            }
+
+            // texture coordinates
+            if(!getSdrLFSAttribute().getFill().isDefault())
+            {
+                // handle texture coordinates X
+                const bool bParallelX(css::drawing::TextureProjectionMode_PARALLEL == getSdr3DObjectAttribute().getTextureProjectionX());
+                const bool bObjectSpecificX(css::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
+                const bool bSphereX(css::drawing::TextureProjectionMode_SPHERE == getSdr3DObjectAttribute().getTextureProjectionX());
+
+                // handle texture coordinates Y
+                const bool bParallelY(css::drawing::TextureProjectionMode_PARALLEL == getSdr3DObjectAttribute().getTextureProjectionY());
+                const bool bObjectSpecificY(css::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
+                const bool bSphereY(css::drawing::TextureProjectionMode_SPHERE == getSdr3DObjectAttribute().getTextureProjectionY());
+
+                if(bParallelX || bParallelY)
+                {
+                    // apply parallel texture coordinates in X and/or Y
+                    const basegfx::B3DRange aRange(basegfx::utils::getRange(aFill));
+                    aFill = basegfx::utils::applyDefaultTextureCoordinatesParallel(aFill, aRange, bParallelX, bParallelY);
+                }
+
+                if(bSphereX || bObjectSpecificX || bSphereY || bObjectSpecificY)
+                {
+                    double fRelativeAngle(0.0);
+
+                    if(bObjectSpecificX)
+                    {
+                        // Since the texture coordinates are (for historical reasons)
+                        // different from forced to sphere texture coordinates,
+                        // create a old version from it by rotating to old state before applying
+                        // the texture coordinates to emulate old behaviour
+                        fRelativeAngle = 2 * M_PI * (static_cast<double>((getHorizontalSegments() >> 1)  - 1) / static_cast<double>(getHorizontalSegments()));
+                        basegfx::B3DHomMatrix aRot;
+                        aRot.rotate(0.0, fRelativeAngle, 0.0);
+                        aFill.transform(aRot);
+                    }
+
+                    // apply spherical texture coordinates in X and/or Y
+                    const basegfx::B3DRange aRange(basegfx::utils::getRange(aFill));
+                    const basegfx::B3DPoint aCenter(aRange.getCenter());
+                    aFill = basegfx::utils::applyDefaultTextureCoordinatesSphere(aFill, aCenter,
+                        bSphereX || bObjectSpecificX, bSphereY || bObjectSpecificY);
+
+                    if(bObjectSpecificX)
+                    {
+                        // rotate back again
+                        basegfx::B3DHomMatrix aRot;
+                        aRot.rotate(0.0, -fRelativeAngle, 0.0);
+                        aFill.transform(aRot);
+                    }
+                }
+
+                // transform texture coordinates to texture size
+                basegfx::B2DHomMatrix aTexMatrix;
+                aTexMatrix.scale(getTextureSize().getX(), getTextureSize().getY());
+                aFill.transformTextureCoordinates(aTexMatrix);
+            }
+
+            // build vector of PolyPolygons
+            std::vector< basegfx::B3DPolyPolygon > a3DPolyPolygonVector;
+
+            for(sal_uInt32 a(0); a < aFill.count(); a++)
+            {
+                a3DPolyPolygonVector.emplace_back(aFill.getB3DPolygon(a));
+            }
+
+            if(!getSdrLFSAttribute().getFill().isDefault())
+            {
+                // add fill
+                aRetval = create3DPolyPolygonFillPrimitives(
+                    a3DPolyPolygonVector,
+                    getTransform(),
+                    getTextureSize(),
+                    getSdr3DObjectAttribute(),
+                    getSdrLFSAttribute().getFill(),
+                    getSdrLFSAttribute().getFillFloatTransGradient());
+            }
+            else
+            {
+                // create simplified 3d hit test geometry
+                aRetval = createHiddenGeometryPrimitives3D(
+                    a3DPolyPolygonVector,
+                    getTransform(),
+                    getTextureSize(),
+                    getSdr3DObjectAttribute());
+            }
+
+            // add line
+            if(!getSdrLFSAttribute().getLine().isDefault())
+            {
+                basegfx::B3DPolyPolygon aSphere(basegfx::utils::createSpherePolyPolygonFromB3DRange(aUnitRange, getHorizontalSegments(), getVerticalSegments()));
+                const Primitive3DContainer aLines(create3DPolyPolygonLinePrimitives(
+                    aSphere, getTransform(), getSdrLFSAttribute().getLine()));
+                aRetval.append(aLines);
+            }
+
+            // add shadow
+            if(!getSdrLFSAttribute().getShadow().isDefault()
+                && !aRetval.empty())
+            {
+                const Primitive3DContainer aShadow(createShadowPrimitive3D(
+                    aRetval, getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D()));
+                aRetval.append(aShadow);
+            }
+
+            return aRetval;
+        }
+
+        SdrSpherePrimitive3D::SdrSpherePrimitive3D(
+            const basegfx::B3DHomMatrix& rTransform,
+            const basegfx::B2DVector& rTextureSize,
+            const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
+            const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
+            sal_uInt32 nHorizontalSegments,
+            sal_uInt32 nVerticalSegments)
+        :   SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
+            mnHorizontalSegments(nHorizontalSegments),
+            mnVerticalSegments(nVerticalSegments)
+        {
+        }
+
+        bool SdrSpherePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
+        {
+            if(SdrPrimitive3D::operator==(rPrimitive))
+            {
+                const SdrSpherePrimitive3D& rCompare = static_cast< const SdrSpherePrimitive3D& >(rPrimitive);
+
+                return (getHorizontalSegments() == rCompare.getHorizontalSegments()
+                    && getVerticalSegments() == rCompare.getVerticalSegments());
+            }
+
+            return false;
+        }
+
+        basegfx::B3DRange SdrSpherePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        {
+            // use default from sdrPrimitive3D which uses transformation expanded by line width/2
+            // The parent implementation which uses the ranges of the decomposition would be more
+            // correct, but for historical reasons it is necessary to do the old method: To get
+            // the range of the non-transformed geometry and transform it then. This leads to different
+            // ranges where the new method is more correct, but the need to keep the old behaviour
+            // has priority here.
+            return getStandard3DRange();
+        }
+
+        // provide unique ID
+        ImplPrimitive3DIDBlock(SdrSpherePrimitive3D, PRIMITIVE3D_ID_SDRSPHEREPRIMITIVE3D)
+
+} // end of namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,1372 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <ChartController.hxx>
+#include <ChartWindow.hxx>
+#include <ChartModel.hxx>
+#include <ChartType.hxx>
+#include <TitleHelper.hxx>
+#include <DataSeries.hxx>
+#include <DataSeriesHelper.hxx>
+#include "UndoGuard.hxx"
+#include <ControllerLockGuard.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
+#include <ObjectIdentifier.hxx>
+#include <ReferenceSizeProvider.hxx>
+#include <chartview/DrawModelWrapper.hxx>
+#include "ChartTransferable.hxx"
+#include <DrawViewWrapper.hxx>
+#include <Legend.hxx>
+#include <LegendHelper.hxx>
+#include <Axis.hxx>
+#include <AxisHelper.hxx>
+#include <RegressionCurveModel.hxx>
+#include <RegressionCurveHelper.hxx>
+#include "ShapeController.hxx"
+#include <DiagramHelper.hxx>
+#include <Diagram.hxx>
+#include <ObjectNameProvider.hxx>
+#include <unonames.hxx>
+
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+
+#include <docmodel/uno/UnoGradientTools.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/outliner.hxx>
+#include <svx/ActionDescriptionProvider.hxx>
+#include <vcl/transfer.hxx>
+#include <sot/storage.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/TypeSerializer.hxx>
+#include <svx/unomodel.hxx>
+#include <svx/svdmodel.hxx>
+#include <unotools/streamwrap.hxx>
+#include <vcl/svapp.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
+#include <svx/svditer.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/unoapi.hxx>
+#include <svx/unopage.hxx>
+#include <svx/unoshape.hxx>
+#include <PropertyHelper.hxx>
+
+#include <COKit/COKitEnums.h>
+#include <tools/debug.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <tools/UnitConversion.hxx>
+
+#include <memory>
+
+using namespace ::com::sun::star;
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+
+namespace chart
+{
+
+namespace
+{
+
+bool lcl_deleteDataSeries(
+    std::u16string_view rCID,
+    const rtl::Reference<::chart::ChartModel> & xModel,
+    const Reference< document::XUndoManager > & xUndoManager )
+{
+    bool bResult = false;
+    rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rCID, xModel );
+    if( xSeries.is() && xModel.is())
+    {
+        rtl::Reference< ::chart::ChartType > xChartType =
+            DataSeriesHelper::getChartTypeOfSeries( xSeries, xModel->getFirstChartDiagram());
+        if( xChartType.is())
+        {
+            UndoGuard aUndoGuard(
+                ActionDescriptionProvider::createDescription(
+                    ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_DATASERIES )),
+                xUndoManager );
+
+            rtl::Reference< Diagram > xDiagram = xModel->getFirstChartDiagram();
+            rtl::Reference< Axis > xAxis = xDiagram->getAttachedAxis( xSeries );
+
+            xChartType->deleteSeries( xSeries );
+
+            AxisHelper::hideAxisIfNoDataIsAttached( xAxis, xDiagram );
+
+            bResult = true;
+            aUndoGuard.commit();
+        }
+    }
+    return bResult;
+}
+
+bool lcl_deleteDataCurve(
+    std::u16string_view rCID,
+    const rtl::Reference<::chart::ChartModel> & xModel,
+    const Reference< document::XUndoManager > & xUndoManager )
+{
+    bool bResult = false;
+
+    uno::Reference< beans::XPropertySet > xProperties(
+        ObjectIdentifier::getObjectPropertySet( rCID, xModel));
+
+    uno::Reference< chart2::XRegressionCurve > xRegressionCurve( xProperties, uno::UNO_QUERY );
+
+    if( xRegressionCurve.is())
+    {
+        uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer(
+            ObjectIdentifier::getObjectPropertySet(
+                ObjectIdentifier::getFullParentParticle( rCID ), xModel), uno::UNO_QUERY );
+
+        if( xRegressionCurveContainer.is())
+        {
+            UndoGuard aUndoGuard(
+                ActionDescriptionProvider::createDescription(
+                    ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_CURVE )),
+                xUndoManager );
+
+            xRegressionCurveContainer->removeRegressionCurve( xRegressionCurve );
+
+            bResult = true;
+            aUndoGuard.commit();
+        }
+    }
+    return bResult;
+}
+
+bool lcl_arePropertiesSame(const std::vector<Reference<beans::XPropertySet>>& xProperties,
+                           const OUString& aPropName)
+{
+    if (xProperties.size() == 1)
+        return true;
+    if (xProperties.size() < 1)
+        return false;
+
+    uno::Any aValue = xProperties[0]->getPropertyValue(aPropName);
+    for (std::size_t i = 1; i < xProperties.size(); i++)
+    {
+        if (aValue != xProperties[i]->getPropertyValue(aPropName))
+            return false;
+    }
+    return true;
+}
+
+// Cf. ChartColorWrapper::operator()
+std::pair<css::uno::Reference<css::beans::XPropertySet>, ObjectType>
+getSelectedGraphObject(const css::uno::Any& rSelection, const rtl::Reference<ChartModel>& pModel)
+{
+    if (OUString sCID; rSelection >>= sCID)
+    {
+        auto xPropSet(ObjectIdentifier::getObjectPropertySet(sCID, pModel));
+        ObjectType eType = ObjectIdentifier::getObjectType(sCID);
+        if (eType == ObjectType::OBJECTTYPE_DIAGRAM)
+        {
+            if (auto xDiagram = xPropSet.query<css::chart2::XDiagram>())
+            {
+                xPropSet = xDiagram->getWall();
+                eType = ObjectType::OBJECTTYPE_DIAGRAM_WALL;
+            }
+        }
+
+        return { xPropSet, eType };
+    }
+
+    if (css::uno::Reference<css::beans::XPropertySet> xSelection; rSelection >>= xSelection)
+        return { xSelection, ObjectType::OBJECTTYPE_SHAPE };
+
+    return {};
+}
+
+css::uno::Reference<css::beans::XPropertySet> getSelectedGraphObject(ChartController& rController)
+{
+    return getSelectedGraphObject(rController.getSelection(), rController.getChartModel()).first;
+}
+
+} // anonymous namespace
+
+ReferenceSizeProvider ChartController::impl_createReferenceSizeProvider()
+{
+    rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
+    awt::Size aPageSize = xChartModel.is() ? xChartModel->getPageSize() : awt::Size(DEFAULT_PAGE_WIDTH, DEFAULT_PAGE_HEIGHT );
+    return ReferenceSizeProvider(aPageSize, xChartModel);
+}
+
+void ChartController::impl_adaptDataSeriesAutoResize()
+{
+    impl_createReferenceSizeProvider().setValuesAtAllDataSeries();
+}
+
+void ChartController::executeDispatch_NewArrangement()
+{
+    // remove manual positions at titles, legend and the diagram, remove manual
+    // size at the diagram
+
+    try
+    {
+        rtl::Reference<::chart::ChartModel> xModel( getChartModel() );
+        rtl::Reference< Diagram > xDiagram = xModel->getFirstChartDiagram();
+        if( xDiagram.is())
+        {
+            UndoGuard aUndoGuard(
+                SchResId( STR_ACTION_REARRANGE_CHART ),
+                m_xUndoManager );
+            ControllerLockGuardUNO aCtlLockGuard( xModel );
+
+            // diagram
+            xDiagram->setPropertyToDefault( u"RelativeSize"_ustr);
+            xDiagram->setPropertyToDefault( u"RelativePosition"_ustr);
+            xDiagram->setPropertyToDefault( u"PosSizeExcludeAxes"_ustr);
+
+            // 3d rotation
+            xDiagram->set3DSettingsToDefault();
+
+            // legend
+            rtl::Reference< Legend > xLegend = xDiagram->getLegend2();
+            if( xLegend.is())
+            {
+                xLegend->setPropertyToDefault( u"RelativePosition"_ustr);
+                xLegend->setPropertyToDefault( u"RelativeSize"_ustr);
+                xLegend->setPropertyToDefault( u"AnchorPosition"_ustr);
+            }
+
+            // titles
+            for( sal_Int32 eType = TitleHelper::TITLE_BEGIN;
+                 eType < TitleHelper::NORMAL_TITLE_END;
+                 ++eType )
+            {
+                rtl::Reference< Title > xTitleState =
+                    TitleHelper::getTitle(
+                        static_cast< TitleHelper::eTitleType >( eType ), xModel );
+                if( xTitleState.is())
+                    xTitleState->setPropertyToDefault( u"RelativePosition"_ustr);
+            }
+
+            // regression curve equations
+            std::vector< rtl::Reference< RegressionCurveModel > > aRegressionCurves =
+                xDiagram->getAllRegressionCurvesNotMeanValueLine();
+
+            // reset equation position
+            for( const auto& xCurve : aRegressionCurves )
+                RegressionCurveHelper::resetEquationPosition( xCurve );
+
+            aUndoGuard.commit();
+        }
+    }
+    catch( const uno::RuntimeException & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
+void ChartController::executeDispatch_ScaleText()
+{
+    SolarMutexGuard aSolarGuard;
+    UndoGuard aUndoGuard(
+        SchResId( STR_ACTION_SCALE_TEXT ),
+        m_xUndoManager );
+    ControllerLockGuardUNO aCtlLockGuard( getChartModel() );
+
+    impl_createReferenceSizeProvider().toggleAutoResizeState();
+
+    aUndoGuard.commit();
+}
+
+void ChartController::executeDispatch_FontBold(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    OUString aPropName = u"CharWeight"_ustr;
+    float nFontWeight = awt::FontWeight::NORMAL;
+    if (lcl_arePropertiesSame(xProperties, aPropName))
+    {
+        xProperties[0]->getPropertyValue(aPropName) >>= nFontWeight;
+    }
+    nFontWeight = (nFontWeight == awt::FontWeight::NORMAL) ? awt::FontWeight::BOLD
+                                                           : awt::FontWeight::NORMAL;
+    for (const auto& xProperty : xProperties)
+        xProperty->setPropertyValue(aPropName, uno::Any(nFontWeight));
+}
+
+void ChartController::executeDispatch_FontName(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+{
+    // the sent font may have a lot of properties that we could set.
+    // but now we set only this
+    awt::FontDescriptor aFont;
+    rArgs[0].Value >>= aFont;
+
+    for (const auto& xProperty : xProperties)
+        xProperty->setPropertyValue(u"CharFontName"_ustr, css::uno::Any(aFont.Name));
+}
+
+void ChartController::executeDispatch_FontHeight(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+{
+    for (const auto& xProperty : xProperties)
+        xProperty->setPropertyValue(u"CharHeight"_ustr, rArgs[0].Value);
+}
+
+void ChartController::executeDispatch_FontItalic(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    OUString aPropName = u"CharPosture"_ustr;
+    awt::FontSlant nFontItalic = awt::FontSlant::FontSlant_NONE;
+    if (lcl_arePropertiesSame(xProperties, aPropName))
+    {
+        xProperties[0]->getPropertyValue(aPropName) >>= nFontItalic;
+    }
+    nFontItalic = (nFontItalic == awt::FontSlant::FontSlant_NONE ? awt::FontSlant::FontSlant_ITALIC
+                                                                 : awt::FontSlant::FontSlant_NONE);
+    for (const auto& xProperty : xProperties)
+        xProperty->setPropertyValue(aPropName, css::uno::Any(nFontItalic));
+}
+
+void ChartController::executeDispatch_FontUnderline(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+{
+    OUString aPropName = u"CharUnderline"_ustr;
+    sal_Int16 nFontUnderline = 0;
+    sal_Int32 nFontUnderline32 = 0;
+    if (!(rArgs[0].Value >>= nFontUnderline) && (rArgs[0].Value >>= nFontUnderline32))
+    {
+        nFontUnderline = nFontUnderline32;
+    }
+    else
+    {
+        if (lcl_arePropertiesSame(xProperties, aPropName))
+        {
+            xProperties[0]->getPropertyValue(aPropName) >>= nFontUnderline;
+        }
+        nFontUnderline = (nFontUnderline == 0 ? 1 : 0);
+    }
+
+    for (const auto& xProperty : xProperties)
+        xProperty->setPropertyValue(aPropName, css::uno::Any(nFontUnderline));
+}
+
+void ChartController::executeDispatch_FontStrikeout(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    OUString aPropName = u"CharStrikeout"_ustr;
+    sal_Int16 nFontStrikeout = 0;
+    if (lcl_arePropertiesSame(xProperties, aPropName))
+    {
+        xProperties[0]->getPropertyValue(aPropName) >>= nFontStrikeout;
+    }
+    nFontStrikeout = (nFontStrikeout == 0 ? 1 : 0);
+    for (const auto& xProperty : xProperties)
+        xProperty->setPropertyValue(aPropName, css::uno::Any(nFontStrikeout));
+}
+
+void ChartController::executeDispatch_FontShadowed(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    OUString aPropName = u"CharShadowed"_ustr;
+    bool bFontShadowed = false;
+    if (lcl_arePropertiesSame(xProperties, aPropName))
+    {
+        xProperties[0]->getPropertyValue(aPropName) >>= bFontShadowed;
+    }
+    for (const auto& xProperty : xProperties)
+        xProperty->setPropertyValue(u"CharShadowed"_ustr, css::uno::Any(!bFontShadowed));
+}
+
+void ChartController::executeDispatch_FontColor(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+{
+    for (const auto& xProperty : xProperties)
+        xProperty->setPropertyValue(u"CharColor"_ustr, rArgs[0].Value);
+}
+
+void ChartController::executeDispatch_FontGrow(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    for (const auto& xProperty : xProperties)
+    {
+        float nFontHeight = 0;
+        xProperty->getPropertyValue(u"CharHeight"_ustr) >>= nFontHeight;
+        if (nFontHeight > 0)
+        {
+            nFontHeight = ceil(nFontHeight); //round
+            nFontHeight += 1;
+            if (nFontHeight > 999)
+                nFontHeight = 999;
+            xProperty->setPropertyValue(u"CharHeight"_ustr, css::uno::Any(nFontHeight));
+        }
+    }
+}
+
+void ChartController::executeDispatch_FontShrink(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    for (const auto& xProperty : xProperties)
+    {
+        float nFontHeight = 0;
+        xProperty->getPropertyValue(u"CharHeight"_ustr) >>= nFontHeight;
+        if (nFontHeight > 0)
+        {
+            if (nFontHeight - ceil(nFontHeight) >= 0.4)
+                nFontHeight = ceil(nFontHeight); //round
+            else
+            {
+                nFontHeight -= 1;
+                if (nFontHeight < 2)
+                    nFontHeight = 2;
+            }
+            xProperty->setPropertyValue(u"CharHeight"_ustr, css::uno::Any(nFontHeight));
+        }
+    }
+}
+
+void ChartController::executeDispatch_FontReset(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    for (const auto& xProperty: xProperties)
+    {
+        xProperty->setPropertyValue(u"CharFontName"_ustr,
+                                         css::uno::Any(OUString("Liberation Sans")));
+        xProperty->setPropertyValue(u"CharHeight"_ustr, css::uno::Any(float(13)));
+        xProperty->setPropertyValue(u"CharWeight"_ustr, uno::Any(float(100)));
+        xProperty->setPropertyValue(u"CharPosture"_ustr,
+                                         css::uno::Any(awt::FontSlant::FontSlant_NONE));
+        xProperty->setPropertyValue(u"CharUnderline"_ustr, css::uno::Any(sal_Int16(0)));
+        xProperty->setPropertyValue(u"CharStrikeout"_ustr, css::uno::Any(sal_Int16(0)));
+        xProperty->setPropertyValue(u"CharShadowed"_ustr, css::uno::Any(false));
+        xProperty->setPropertyValue(u"CharColor"_ustr, css::uno::Any(Color(0)));
+
+        xProperty->setPropertyValue(u"CharKerning"_ustr, css::uno::Any(sal_Int16(0)));
+        xProperty->setPropertyValue(u"CharEscapement"_ustr, css::uno::Any(sal_Int16(0)));
+        xProperty->setPropertyValue(u"CharEscapementHeight"_ustr,
+                                         css::uno::Any(sal_Int8(100)));
+    }
+}
+
+void ChartController::executeDispatch_FontSpacing(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+{
+    sal_Int16 nKerning = 0;
+    rArgs[0].Value >>= nKerning;
+    for (const auto& xProperty: xProperties)
+        xProperty->setPropertyValue(u"CharKerning"_ustr, css::uno::Any(nKerning));
+}
+
+void ChartController::executeDispatch_FontSuperScript(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    sal_Int16 nCharEscapement = 0;
+    xProperties[0]->getPropertyValue(u"CharEscapement"_ustr) >>= nCharEscapement;
+    for (const auto& xProperty: xProperties)
+    {
+        if (nCharEscapement > 0)
+        {
+            xProperty->setPropertyValue(u"CharEscapement"_ustr, css::uno::Any(sal_Int16(0)));
+            xProperty->setPropertyValue(u"CharEscapementHeight"_ustr,
+                                             css::uno::Any(sal_Int8(100)));
+        }
+        else
+        {
+            xProperty->setPropertyValue(u"CharEscapement"_ustr,
+                                             css::uno::Any(sal_Int16(14000)));
+            xProperty->setPropertyValue(u"CharEscapementHeight"_ustr,
+                                             css::uno::Any(sal_Int8(58)));
+        }
+    }
+}
+
+void ChartController::executeDispatch_FontSubScript(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    sal_Int16 nCharEscapement = 0;
+    xProperties[0]->getPropertyValue(u"CharEscapement"_ustr) >>= nCharEscapement;
+    for (const auto& xProperty: xProperties)
+    {
+        if (nCharEscapement < 0)
+        {
+            xProperty->setPropertyValue(u"CharEscapement"_ustr, css::uno::Any(sal_Int16(0)));
+            xProperty->setPropertyValue(u"CharEscapementHeight"_ustr,
+                                             css::uno::Any(sal_Int8(100)));
+        }
+        else
+        {
+            xProperty->setPropertyValue(u"CharEscapement"_ustr,
+                                             css::uno::Any(sal_Int16(-14000)));
+            xProperty->setPropertyValue(u"CharEscapementHeight"_ustr,
+                                             css::uno::Any(sal_Int8(58)));
+        }
+    }
+}
+
+void ChartController::executeDispatch_Paste()
+{
+    SolarMutexGuard aGuard;
+    auto pChartWindow(GetChartWindow());
+    if( !pChartWindow )
+        return;
+
+    Graphic aGraphic;
+    // paste location: center of window
+    Point aPos = pChartWindow->PixelToLogic( tools::Rectangle(Point{}, pChartWindow->GetSizePixel()).Center());
+
+    // handle different formats
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pChartWindow ));
+    if( aDataHelper.GetTransferable().is())
+    {
+        if ( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
+        {
+            if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING) )
+            {
+                xStm->Seek( 0 );
+                Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
+
+                std::unique_ptr< SdrModel > spModel(
+                    new SdrModel());
+
+                if ( SvxDrawingLayerImport( spModel.get(), xInputStream ) )
+                {
+                    impl_PasteShapes( spModel.get() );
+                }
+            }
+        }
+        else if ( aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) )
+        {
+            // graphic exchange format (graphic manager bitmap format?)
+            if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB ))
+            {
+                TypeSerializer aSerializer(*xStm);
+                aSerializer.readGraphic(aGraphic);
+            }
+        }
+        else if( aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ))
+        {
+            // meta file
+            GDIMetaFile aMetafile;
+            if( aDataHelper.GetGDIMetaFile( SotClipboardFormatId::GDIMETAFILE, aMetafile ))
+                aGraphic = Graphic( aMetafile );
+        }
+        else if( aDataHelper.HasFormat( SotClipboardFormatId::BITMAP ))
+        {
+            // bitmap (non-graphic-manager)
+            Bitmap aBmp;
+            if (aDataHelper.GetBitmap(SotClipboardFormatId::BITMAP, aBmp))
+                aGraphic = Graphic( aBmp );
+        }
+        else if( aDataHelper.HasFormat( SotClipboardFormatId::STRING ))
+        {
+            OUString aString;
+            if( aDataHelper.GetString( SotClipboardFormatId::STRING, aString ) && m_pDrawModelWrapper )
+            {
+                if( m_pDrawViewWrapper )
+                {
+                    OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+                    if (pOutlinerView)//in case of edit mode insert the formatted string
+                        pOutlinerView->PasteSpecial();
+                    else
+                    {
+                        impl_PasteStringAsTextShape( aString, awt::Point( 0, 0 ) );
+                    }
+                }
+            }
+        }
+    }
+
+    if( aGraphic.GetType() != GraphicType::NONE )
+    {
+        Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic());
+        if( xGraphic.is())
+            impl_PasteGraphic( xGraphic, aPos );
+    }
+}
+
+// note: aPosition is ignored for now. The object is always pasted centered to
+// the page
+void ChartController::impl_PasteGraphic(
+    uno::Reference< graphic::XGraphic > const & xGraphic,
+    const ::Point & /* aPosition */ )
+{
+    DBG_TESTSOLARMUTEX();
+    // note: the XPropertySet of the model is the old API. Also the property
+    // "AdditionalShapes" that is used there.
+    rtl::Reference< ChartModel > xModel = getChartModel();
+    DrawModelWrapper * pDrawModelWrapper( GetDrawModelWrapper());
+    if( ! (xGraphic.is() && xModel.is()))
+        return;
+    rtl::Reference<SvxGraphicObject> xGraphicShape = new SvxGraphicObject(nullptr);
+    xGraphicShape->setShapeKind(SdrObjKind::Graphic);
+
+    rtl::Reference< SvxDrawPage > xPage = pDrawModelWrapper->getMainDrawPage();
+    if( xPage.is())
+    {
+        xPage->add( xGraphicShape );
+        //need to change the model state manually
+        xModel->setModified( true );
+        //select new shape
+        m_aSelection.setSelection( xGraphicShape );
+        m_aSelection.applySelection( m_pDrawViewWrapper.get() );
+    }
+    xGraphicShape->SvxShape::setPropertyValue( u"Graphic"_ustr, uno::Any( xGraphic ));
+
+    awt::Size aGraphicSize( 1000, 1000 );
+    bool bGotGraphicSize = false;
+    try
+    {
+        bGotGraphicSize = xGraphicShape->SvxShape::getPropertyValue( u"Size100thMM"_ustr) >>= aGraphicSize;
+    }
+    catch (css::beans::UnknownPropertyException& )
+    {}
+    auto pChartWindow(GetChartWindow());
+    // first try size in 100th mm, then pixel size
+    if( !bGotGraphicSize )
+    {
+        bool bGotSizePixel = false;
+        try
+        {
+            bGotSizePixel = xGraphicShape->SvxShape::getPropertyValue( u"SizePixel"_ustr) >>= aGraphicSize;
+        }
+        catch (css::beans::UnknownPropertyException& )
+        {}
+        if ( bGotSizePixel && pChartWindow )
+        {
+            ::Size aVCLSize( pChartWindow->PixelToLogic( Size( aGraphicSize.Width, aGraphicSize.Height )));
+            aGraphicSize.Width = aVCLSize.getWidth();
+            aGraphicSize.Height = aVCLSize.getHeight();
+        }
+    }
+    xGraphicShape->setSize( aGraphicSize );
+    xGraphicShape->setPosition( awt::Point( 0, 0 ) );
+}
+
+void ChartController::impl_PasteShapes( SdrModel* pModel )
+{
+    DrawModelWrapper* pDrawModelWrapper( GetDrawModelWrapper() );
+    if ( !(pDrawModelWrapper && m_pDrawViewWrapper) )
+        return;
+
+    rtl::Reference< SvxDrawPage > xDestPage( pDrawModelWrapper->getMainDrawPage() );
+    SdrPage* pDestPage = GetSdrPageFromXDrawPage( xDestPage );
+    if ( !pDestPage )
+        return;
+
+    Reference< drawing::XShape > xSelShape;
+    m_pDrawViewWrapper->BegUndo( SvxResId( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
+    sal_uInt16 nCount = pModel->GetPageCount();
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    {
+        const SdrPage* pPage = pModel->GetPage( i );
+        SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
+        while ( aIter.IsMore() )
+        {
+            SdrObject* pObj(aIter.Next());
+            // Clone to new SdrModel
+            rtl::Reference<SdrObject> pNewObj;
+            if (pObj)
+                pNewObj = pObj->CloneSdrObject(pDrawModelWrapper->getSdrModel());
+
+            if ( pNewObj )
+            {
+                // set position
+                Reference< drawing::XShape > xShape( pNewObj->getUnoShape(), uno::UNO_QUERY );
+                if ( xShape.is() )
+                {
+                    xShape->setPosition( awt::Point( 0, 0 ) );
+                }
+
+                pDestPage->InsertObject( pNewObj.get() );
+                m_pDrawViewWrapper->AddUndo( std::make_unique<SdrUndoInsertObj>( *pNewObj ) );
+                xSelShape = std::move(xShape);
+            }
+        }
+    }
+
+    rtl::Reference< ChartModel > xModifiable = getChartModel();
+    if ( xModifiable.is() )
+    {
+        xModifiable->setModified( true );
+    }
+
+    // select last inserted shape
+    m_aSelection.setSelection( xSelShape );
+    m_aSelection.applySelection( m_pDrawViewWrapper.get() );
+
+    m_pDrawViewWrapper->EndUndo();
+
+    impl_switchDiagramPositioningToExcludingPositioning();
+}
+
+void ChartController::impl_PasteStringAsTextShape( const OUString& rString, const awt::Point& rPosition )
+{
+    DrawModelWrapper* pDrawModelWrapper( GetDrawModelWrapper() );
+    if ( !(pDrawModelWrapper && m_pDrawViewWrapper) )
+        return;
+
+    const rtl::Reference< SvxDrawPage > xDrawPage( pDrawModelWrapper->getMainDrawPage() );
+    OSL_ASSERT( xDrawPage.is() );
+
+    if ( !xDrawPage )
+        return;
+
+    try
+    {
+        rtl::Reference<SvxShapeText> xTextShape = new SvxShapeText(nullptr);
+        xTextShape->setShapeKind(SdrObjKind::Text);
+        xDrawPage->add( xTextShape );
+
+        xTextShape->setString( rString );
+
+        float fCharHeight = 10.0;
+        xTextShape->SvxShape::setPropertyValue( u"TextAutoGrowHeight"_ustr, uno::Any( true ) );
+        xTextShape->SvxShape::setPropertyValue( u"TextAutoGrowWidth"_ustr, uno::Any( true ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharHeight"_ustr, uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharHeightAsian"_ustr, uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharHeightComplex"_ustr, uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( u"TextVerticalAdjust"_ustr, uno::Any( drawing::TextVerticalAdjust_CENTER ) );
+        xTextShape->SvxShape::setPropertyValue( u"TextHorizontalAdjust"_ustr, uno::Any( drawing::TextHorizontalAdjust_CENTER ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharFontName"_ustr, uno::Any( u"Albany"_ustr ) );
+
+        xTextShape->setPosition( rPosition );
+
+        m_aSelection.setSelection( xTextShape );
+        m_aSelection.applySelection( m_pDrawViewWrapper.get() );
+
+        SdrObject* pObj = DrawViewWrapper::getSdrObject( xTextShape );
+        if ( pObj )
+        {
+            m_pDrawViewWrapper->BegUndo( SvxResId( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
+            m_pDrawViewWrapper->AddUndo( std::make_unique<SdrUndoInsertObj>( *pObj ) );
+            m_pDrawViewWrapper->EndUndo();
+
+            impl_switchDiagramPositioningToExcludingPositioning();
+        }
+    }
+    catch ( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
+void ChartController::executeDispatch_Copy()
+{
+    SolarMutexGuard aSolarGuard;
+    if (!m_pDrawViewWrapper)
+        return;
+
+    OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+    if (pOutlinerView)
+        pOutlinerView->Copy();
+    else
+    {
+        SdrObject* pSelectedObj = nullptr;
+        ObjectIdentifier aSelOID(m_aSelection.getSelectedOID());
+
+        if (aSelOID.isAutoGeneratedObject())
+            pSelectedObj = m_pDrawModelWrapper->getNamedSdrObject( aSelOID.getObjectCID() );
+        else if (aSelOID.isAdditionalShape())
+            pSelectedObj = DrawViewWrapper::getSdrObject( aSelOID.getAdditionalShape() );
+
+        if (pSelectedObj)
+        {
+            Reference<datatransfer::clipboard::XClipboard> xClipboard(GetChartWindow()->GetClipboard());
+            if (xClipboard.is())
+            {
+                Reference< datatransfer::XTransferable > xTransferable(
+                    new ChartTransferable(m_pDrawModelWrapper->getSdrModel(),
+                                          pSelectedObj, aSelOID.isAdditionalShape()));
+                xClipboard->setContents(xTransferable, Reference< datatransfer::clipboard::XClipboardOwner >());
+            }
+        }
+    }
+}
+
+void ChartController::executeDispatch_Cut()
+{
+    executeDispatch_Copy();
+    executeDispatch_Delete();
+}
+
+bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
+{
+    ObjectIdentifier aSelOID( rSelection );
+    if ( aSelOID.isAutoGeneratedObject() )
+    {
+        const OUString& aSelObjCID( aSelOID.getObjectCID() );
+        ObjectType aObjectType(ObjectIdentifier::getObjectType( aSelObjCID ));
+
+        switch(aObjectType)
+        {
+        case OBJECTTYPE_TITLE:
+        case OBJECTTYPE_LEGEND:
+        case OBJECTTYPE_DATA_SERIES:
+        case OBJECTTYPE_LEGEND_ENTRY:
+        case OBJECTTYPE_DATA_CURVE_EQUATION:
+        case OBJECTTYPE_DATA_CURVE:
+        case OBJECTTYPE_DATA_AVERAGE_LINE:
+        case OBJECTTYPE_DATA_ERRORS_X:
+        case OBJECTTYPE_DATA_ERRORS_Y:
+        case OBJECTTYPE_DATA_ERRORS_Z:
+        case OBJECTTYPE_DATA_LABELS:
+        case OBJECTTYPE_DATA_LABEL:
+        case OBJECTTYPE_AXIS:
+        case OBJECTTYPE_GRID:
+        case OBJECTTYPE_SUBGRID:
+            return true;
+        default:
+            break;
+        }
+    }
+    else if ( aSelOID.isAdditionalShape() )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool ChartController::isShapeContext() const
+{
+    return m_aSelection.isAdditionalShapeSelected() ||
+         ( m_pDrawViewWrapper && m_pDrawViewWrapper->GetMarkedObjectList().GetMarkCount() != 0 &&
+           ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == SdrObjKind::Text ) );
+}
+
+bool ChartController::IsTextEdit() const
+{
+    // only Title objects and additional shapes are editable textshapes in chart
+    return m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() &&
+        (m_aSelection.isTitleObjectSelected() || m_aSelection.isAdditionalShapeSelected());
+}
+
+void ChartController::impl_ClearSelection()
+{
+    if( m_aSelection.hasSelection())
+    {
+        m_aSelection.clearSelection();
+        impl_notifySelectionChangeListeners();
+    }
+}
+
+bool ChartController::executeDispatch_Delete()
+{
+    bool bReturn = false;
+
+    // remove the selected object
+    OUString aCID( m_aSelection.getSelectedCID() );
+    if( !aCID.isEmpty() )
+    {
+        if( !isObjectDeleteable( uno::Any( aCID ) ) )
+            return false;
+
+        //remove chart object
+        rtl::Reference< ChartModel > xChartDoc = getChartModel();
+        if( !xChartDoc.is() )
+            return false;
+
+        ObjectType aObjectType( ObjectIdentifier::getObjectType( aCID ));
+        switch( aObjectType )
+        {
+            case OBJECTTYPE_TITLE:
+            {
+                UndoGuard aUndoGuard(
+                    ActionDescriptionProvider::createDescription(
+                        ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_TITLE )),
+                    m_xUndoManager );
+                TitleHelper::removeTitle(
+                    ObjectIdentifier::getTitleTypeForCID( aCID ), getChartModel() );
+                bReturn = true;
+                aUndoGuard.commit();
+                break;
+            }
+            case OBJECTTYPE_LEGEND:
+            {
+                rtl::Reference< Diagram > xDiagram( xChartDoc->getFirstChartDiagram());
+                if( xDiagram.is())
+                {
+                    rtl::Reference< Legend > xLegend( xDiagram->getLegend2() );
+                    if( xLegend.is())
+                    {
+                        UndoGuard aUndoGuard(
+                            ActionDescriptionProvider::createDescription(
+                                ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_LEGEND )),
+                            m_xUndoManager );
+                        xLegend->setPropertyValue( u"Show"_ustr, uno::Any( false ));
+                        bReturn = true;
+                        aUndoGuard.commit();
+                    }
+                }
+                break;
+            }
+
+            case OBJECTTYPE_DATA_SERIES:
+                bReturn = lcl_deleteDataSeries( aCID, getChartModel(), m_xUndoManager );
+                break;
+
+            case OBJECTTYPE_LEGEND_ENTRY:
+            {
+                ObjectType eParentObjectType = ObjectIdentifier::getObjectType(
+                    ObjectIdentifier::getFullParentParticle( aCID ));
+                if( eParentObjectType == OBJECTTYPE_DATA_SERIES )
+                {
+                    bReturn = lcl_deleteDataSeries( aCID, getChartModel(), m_xUndoManager );
+                }
+                else if( eParentObjectType == OBJECTTYPE_DATA_CURVE )
+                {
+                    sal_Int32 nEndPos = aCID.lastIndexOf(':');
+                    OUString aParentCID = aCID.copy(0, nEndPos);
+
+                    bReturn = lcl_deleteDataCurve(aParentCID, getChartModel(), m_xUndoManager );
+                }
+                else if( eParentObjectType == OBJECTTYPE_DATA_AVERAGE_LINE )
+                {
+                    executeDispatch_DeleteMeanValue();
+                    bReturn = true;
+                }
+                break;
+            }
+
+            case OBJECTTYPE_DATA_AVERAGE_LINE:
+            {
+                uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+                    ObjectIdentifier::getObjectPropertySet(
+                        ObjectIdentifier::getFullParentParticle( aCID ), getChartModel()), uno::UNO_QUERY );
+                if( xRegCurveCnt.is())
+                {
+                    UndoGuard aUndoGuard(
+                        ActionDescriptionProvider::createDescription(
+                            ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_AVERAGE_LINE )),
+                        m_xUndoManager );
+                    RegressionCurveHelper::removeMeanValueLine( xRegCurveCnt );
+                    bReturn = true;
+                    aUndoGuard.commit();
+                }
+            }
+            break;
+
+            case OBJECTTYPE_DATA_CURVE:
+            {
+                bReturn = lcl_deleteDataCurve( aCID, getChartModel(), m_xUndoManager );
+            }
+            break;
+
+            case OBJECTTYPE_DATA_CURVE_EQUATION:
+            {
+                uno::Reference< beans::XPropertySet > xEqProp(
+                    ObjectIdentifier::getObjectPropertySet( aCID, getChartModel()));
+
+                if( xEqProp.is())
+                {
+                    rtl::Reference<::chart::ChartModel> xModel( getChartModel() );
+                    UndoGuard aUndoGuard(
+                        ActionDescriptionProvider::createDescription(
+                            ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_CURVE_EQUATION )),
+                        m_xUndoManager );
+                    {
+                        ControllerLockGuardUNO aCtlLockGuard( xModel );
+                        xEqProp->setPropertyValue( u"ShowEquation"_ustr, uno::Any( false ));
+                        xEqProp->setPropertyValue( u"XName"_ustr, uno::Any( u"x"_ustr ));
+                        xEqProp->setPropertyValue( u"YName"_ustr, uno::Any( u"f(x)"_ustr ));
+                        xEqProp->setPropertyValue( u"ShowCorrelationCoefficient"_ustr, uno::Any( false ));
+                    }
+                    bReturn = true;
+                    aUndoGuard.commit();
+                }
+            }
+            break;
+
+            case OBJECTTYPE_DATA_ERRORS_X:
+            case OBJECTTYPE_DATA_ERRORS_Y:
+            case OBJECTTYPE_DATA_ERRORS_Z:
+            {
+                uno::Reference< beans::XPropertySet > xErrorBarProp(
+                    ObjectIdentifier::getObjectPropertySet( aCID, getChartModel() ));
+                if( xErrorBarProp.is())
+                {
+                    TranslateId pId;
+
+                    if ( aObjectType == OBJECTTYPE_DATA_ERRORS_X )
+                        pId = STR_OBJECT_ERROR_BARS_X;
+                    else if ( aObjectType == OBJECTTYPE_DATA_ERRORS_Y )
+                        pId = STR_OBJECT_ERROR_BARS_Y;
+                    else
+                        pId = STR_OBJECT_ERROR_BARS_Z;
+
+                    rtl::Reference<::chart::ChartModel> xModel( getChartModel() );
+                    UndoGuard aUndoGuard(
+                        ActionDescriptionProvider::createDescription(
+                            ActionDescriptionProvider::ActionType::Delete, SchResId(pId)),
+                        m_xUndoManager);
+                    {
+                        ControllerLockGuardUNO aCtlLockGuard( xModel );
+                        xErrorBarProp->setPropertyValue(
+                            u"ErrorBarStyle"_ustr,
+                            uno::Any( css::chart::ErrorBarStyle::NONE ));
+                    }
+                    bReturn = true;
+                    aUndoGuard.commit();
+                }
+                break;
+            }
+
+            case OBJECTTYPE_DATA_LABELS:
+            case OBJECTTYPE_DATA_LABEL:
+            {
+                uno::Reference< beans::XPropertySet > xObjectProperties =
+                    ObjectIdentifier::getObjectPropertySet( aCID, getChartModel() );
+                if( xObjectProperties.is() )
+                {
+                    UndoGuard aUndoGuard(
+                        ActionDescriptionProvider::createDescription(
+                        ActionDescriptionProvider::ActionType::Delete,
+                            SchResId( aObjectType == OBJECTTYPE_DATA_LABEL ? STR_OBJECT_LABEL : STR_OBJECT_DATALABELS )),
+                                m_xUndoManager );
+                    chart2::DataPointLabel aLabel;
+                    xObjectProperties->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel;
+                    aLabel.ShowNumber = false;
+                    aLabel.ShowNumberInPercent = false;
+                    aLabel.ShowCategoryName = false;
+                    aLabel.ShowLegendSymbol = false;
+                    aLabel.ShowCustomLabel = false;
+                    aLabel.ShowSeriesName = false;
+                    if( aObjectType == OBJECTTYPE_DATA_LABELS )
+                    {
+                        rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aCID, getChartModel() );
+                        xSeries->setPropertyAlsoToAllAttributedDataPoints( CHART_UNONAME_LABEL, uno::Any(aLabel) );
+                        xSeries->setPropertyAlsoToAllAttributedDataPoints( CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any() );
+                    }
+                    else
+                    {
+                        xObjectProperties->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
+                        xObjectProperties->setPropertyValue(CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any());
+                    }
+                    bReturn = true;
+                    aUndoGuard.commit();
+                }
+                break;
+            }
+            case OBJECTTYPE_AXIS:
+            {
+                executeDispatch_DeleteAxis();
+                bReturn = true;
+                break;
+            }
+            case OBJECTTYPE_GRID:
+            {
+                executeDispatch_DeleteMajorGrid();
+                bReturn = true;
+                break;
+            }
+            case OBJECTTYPE_SUBGRID:
+            {
+                executeDispatch_DeleteMinorGrid();
+                bReturn = true;
+                break;
+            }
+
+            default:
+            {
+                break;
+            }
+        }
+    }
+    else
+    {
+        //remove additional shape
+        impl_ClearSelection();
+        {
+            SolarMutexGuard aSolarGuard;
+            if ( m_pDrawViewWrapper )
+            {
+                m_pDrawViewWrapper->DeleteMarked();
+                bReturn = true;
+            }
+        }
+    }
+    return bReturn;
+}
+
+void ChartController::executeDispatch_ToggleLegend()
+{
+    rtl::Reference< ChartModel > xModel = getChartModel();
+    UndoGuard aUndoGuard(
+        SchResId( STR_ACTION_TOGGLE_LEGEND ), m_xUndoManager );
+    rtl::Reference< Legend > xLegendProp = LegendHelper::getLegend(*xModel);
+    bool bChanged = false;
+    if( xLegendProp.is())
+    {
+        try
+        {
+            bool bShow = false;
+            if( xLegendProp->getPropertyValue( u"Show"_ustr) >>= bShow )
+            {
+                xLegendProp->setPropertyValue( u"Show"_ustr, uno::Any( ! bShow ));
+                bChanged = true;
+            }
+        }
+        catch( const uno::Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
+    else
+    {
+        xLegendProp = LegendHelper::getLegend(*xModel, m_xCC, true);
+        if( xLegendProp.is())
+            bChanged = true;
+    }
+
+    if( bChanged )
+        aUndoGuard.commit();
+}
+
+void ChartController::executeDispatch_ToggleGridHorizontal()
+{
+    UndoGuard aUndoGuard(
+        SchResId( STR_ACTION_TOGGLE_GRID_HORZ ), m_xUndoManager );
+    rtl::Reference< Diagram > xDiagram( getFirstDiagram() );
+    if( !xDiagram.is())
+        return;
+
+    sal_Int32 nDimensionIndex = 1;
+    sal_Int32 nCooSysIndex = 0;
+
+    bool bHasMajorYGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+    bool bHasMinorYGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false, xDiagram );
+
+    if( bHasMajorYGrid )
+    {
+        if ( bHasMinorYGrid )
+        {
+            AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+            AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
+        }
+        else
+        {
+            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
+        }
+    }
+    else
+    {
+        AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram );
+    }
+    aUndoGuard.commit();
+}
+
+void ChartController::executeDispatch_ToggleGridVertical()
+{
+    UndoGuard aUndoGuard(
+        SchResId( STR_ACTION_TOGGLE_GRID_VERTICAL ), m_xUndoManager );
+    rtl::Reference< Diagram > xDiagram( getFirstDiagram() );
+    if( !xDiagram.is())
+        return;
+
+    sal_Int32 nDimensionIndex = 0;
+    sal_Int32 nCooSysIndex = 0;
+
+    bool bHasMajorXGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+    bool bHasMinorXGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false, xDiagram );
+    if( bHasMajorXGrid )
+    {
+        if (bHasMinorXGrid)
+        {
+            AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+            AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
+        }
+        else
+        {
+            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
+        }
+    }
+    else
+    {
+        AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram );
+    }
+
+    aUndoGuard.commit();
+}
+
+void ChartController::executeDispatch_FillColor(const css::uno::Any& rColor)
+{
+    try
+    {
+        rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
+        if( xChartModel.is() )
+        {
+            const auto [xPointProperties, eType]
+                = getSelectedGraphObject(getSelection(), xChartModel);
+            if( xPointProperties.is() )
+                xPointProperties->setPropertyValue(u"FillColor"_ustr, rColor);
+
+            if (eType == OBJECTTYPE_DATA_SERIES || eType == OBJECTTYPE_DATA_POINT)
+            {
+                xChartModel->clearColorPalette();
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION( "chart2" );
+    }
+}
+
+void ChartController::executeDispatch_FillGradient(std::u16string_view sJSONGradient)
+{
+    basegfx::BGradient aBGradient = basegfx::BGradient::fromJSON(sJSONGradient);
+    css::awt::Gradient aGradient = model::gradient::createUnoGradient2(aBGradient);
+
+    try
+    {
+        OUString aCID( m_aSelection.getSelectedCID() );
+        rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
+
+        if( xChartModel.is() )
+        {
+            Reference< beans::XPropertySet > xPropSet(
+                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
+
+            if( xPropSet.is() )
+            {
+                OUString aPrefferedName =
+                    OUString::number(static_cast<sal_Int32>(Color(aBGradient.GetColorStops().front().getStopColor())))
+                    + OUString::number(static_cast<sal_Int32>(Color(aBGradient.GetColorStops().back().getStopColor())))
+                    + OUString::number(static_cast<sal_Int32>(aBGradient.GetAngle().get()));
+
+                OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(css::uno::Any(aGradient),
+                                        xChartModel,
+                                        aPrefferedName);
+
+                xPropSet->setPropertyValue(u"FillGradientName"_ustr, css::uno::Any(aNewName));
+            }
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+}
+
+void ChartController::executeDispatch_LineColor(const css::uno::Any& rColor)
+{
+    try
+    {
+        if (css::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
+            xPropSet->setPropertyValue(u"LineColor"_ustr, rColor);
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION( "chart2" );
+    }
+}
+
+void ChartController::executeDispatch_LineWidth(const css::uno::Any& rWidth)
+{
+    try
+    {
+        if (css::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
+            xPropSet->setPropertyValue(u"LineWidth"_ustr, rWidth);
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION( "chart2" );
+    }
+}
+
+void ChartController::executeDispatch_KitSetTextSelection(int nType, int nX, int nY)
+{
+    if (!m_pDrawViewWrapper)
+        return;
+
+    if (!m_pDrawViewWrapper->IsTextEdit())
+        return;
+
+    OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+    if (!pOutlinerView)
+        return;
+
+    EditView& rEditView = pOutlinerView->GetEditView();
+    Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
+    switch (nType)
+    {
+        case KIT_SETTEXTSELECTION_START:
+            rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
+            break;
+        case KIT_SETTEXTSELECTION_END:
+            rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
+            break;
+        case KIT_SETTEXTSELECTION_RESET:
+            rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
+            break;
+        default:
+            assert(false);
+            break;
+    }
+}
+
+void ChartController::executeDispatch_KitPieSegmentDragging( int nOffset )
+{
+    try
+    {
+        OUString aCID( m_aSelection.getSelectedCID() );
+        rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
+        if( xChartModel.is() )
+        {
+            Reference< beans::XPropertySet > xPointProperties(
+                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
+            if( xPointProperties.is() )
+                xPointProperties->setPropertyValue( u"Offset"_ustr, uno::Any( nOffset / 100.0 ) );
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+}
+
+void ChartController::impl_ShapeControllerDispatch( const util::URL& rURL, const Sequence< beans::PropertyValue >& rArgs )
+{
+    Reference< frame::XDispatch > xDispatch( m_aDispatchContainer.getShapeController() );
+    if ( xDispatch.is() )
+    {
+        xDispatch->dispatch( rURL, rArgs );
+    }
+}
+
+void ChartController::impl_switchDiagramPositioningToExcludingPositioning()
+{
+    UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
+        ActionDescriptionProvider::ActionType::PosSize,
+        ObjectNameProvider::getName( OBJECTTYPE_DIAGRAM)),
+        m_xUndoManager );
+    if (DiagramHelper::switchDiagramPositioningToExcludingPositioning(*getChartModel(), true, true))
+        aUndoGuard.commit();
+}
+
+} //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

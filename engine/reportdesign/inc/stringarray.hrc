@@ -1,0 +1,85 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_REPORTDESIGN_INC_FNP_HRC
+#define INCLUDED_REPORTDESIGN_INC_FNP_HRC
+
+#include <unotools/resmgr.hxx>
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+const TranslateId RID_STR_FORCENEWPAGE_CONST[] =
+{
+    NC_("RID_STR_FORCENEWPAGE_CONST", "None"),
+    NC_("RID_STR_FORCENEWPAGE_CONST", "Before Section"),
+    NC_("RID_STR_FORCENEWPAGE_CONST", "After Section"),
+    NC_("RID_STR_FORCENEWPAGE_CONST", "Before & After Section"),
+    {}
+};
+
+const TranslateId RID_STR_GROUPKEEPTOGETHER_CONST[] =
+{
+    NC_("RID_STR_GROUPKEEPTOGETHER_CONST", "Per Page"),
+    NC_("RID_STR_GROUPKEEPTOGETHER_CONST", "Per Column"),
+    {}
+};
+
+const TranslateId RID_STR_REPORTPRINTOPTION_CONST[] =
+{
+    NC_("RID_STR_REPORTPRINTOPTION_CONST", "All Pages"),
+    NC_("RID_STR_REPORTPRINTOPTION_CONST", "Not With Report Header"),
+    NC_("RID_STR_REPORTPRINTOPTION_CONST", "Not With Report Footer"),
+    NC_("RID_STR_REPORTPRINTOPTION_CONST", "Not With Report Header/Footer"),
+    {}
+};
+
+const TranslateId RID_STR_TYPE_CONST[] =
+{
+    NC_("RID_STR_TYPE_CONST", "Field or Formula"),
+    NC_("RID_STR_TYPE_CONST", "Function"),
+    NC_("RID_STR_TYPE_CONST", "Counter"),
+    NC_("RID_STR_TYPE_CONST", "User defined Function"),
+    {}
+};
+
+const TranslateId RID_STR_BOOL[] =
+{
+    NC_("RID_STR_BOOL", "No"),
+    NC_("RID_STR_BOOL", "Yes"),
+    {}
+};
+
+const TranslateId RID_STR_KEEPTOGETHER_CONST[] =
+{
+    NC_("RID_STR_KEEPTOGETHER_CONST", "No"),
+    NC_("RID_STR_KEEPTOGETHER_CONST", "Whole Group"),
+    NC_("RID_STR_KEEPTOGETHER_CONST", "With First Detail"),
+    {}
+};
+
+const TranslateId RID_STR_VERTICAL_ALIGN_CONST[] =
+{
+    NC_("RID_STR_VERTICAL_ALIGN_CONST", "Top"),
+    NC_("RID_STR_VERTICAL_ALIGN_CONST", "Middle"),
+    NC_("RID_STR_VERTICAL_ALIGN_CONST", "Bottom"),
+    {}
+};
+
+const TranslateId RID_STR_PARAADJUST_CONST[] =
+{
+    NC_("RID_STR_PARAADJUST_CONST", "Left"),
+    NC_("RID_STR_PARAADJUST_CONST", "Right"),
+    NC_("RID_STR_PARAADJUST_CONST", "Block"),
+    NC_("RID_STR_PARAADJUST_CONST", "Center"),
+    {}
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -1,0 +1,123 @@
+chart2/source/inc/CachedDataSequence.hxx:128
+    chart::CachedDataSequence m_nNumberFormatKey sal_Int32
+    void chart::CachedDataSequence::registerProperties()
+connectivity/source/drivers/firebird/ResultSet.hxx:85
+    connectivity::firebird::OResultSet m_statusVector ISC_STATUS_ARRAY
+    unsigned char connectivity::firebird::OResultSet::next()
+connectivity/source/inc/FDatabaseMetaDataResultSet.hxx:114
+    connectivity::ODatabaseMetaDataResultSet m_nFetchSize sal_Int32
+    void connectivity::ODatabaseMetaDataResultSet::construct()
+connectivity/source/inc/FDatabaseMetaDataResultSet.hxx:115
+    connectivity::ODatabaseMetaDataResultSet m_nResultSetType sal_Int32
+    void connectivity::ODatabaseMetaDataResultSet::construct()
+connectivity/source/inc/FDatabaseMetaDataResultSet.hxx:116
+    connectivity::ODatabaseMetaDataResultSet m_nFetchDirection sal_Int32
+    void connectivity::ODatabaseMetaDataResultSet::construct()
+connectivity/source/inc/FDatabaseMetaDataResultSet.hxx:117
+    connectivity::ODatabaseMetaDataResultSet m_nResultSetConcurrency sal_Int32
+    void connectivity::ODatabaseMetaDataResultSet::construct()
+cppuhelper/inc/interfacecontainer4.hxx:267
+    cppuhelper::OInterfaceContainerHelper4::NotifySingleListener m_rEvent const EventT &
+    void cppuhelper::OInterfaceContainerHelper4::NotifySingleListener::operator()(const Reference<type-parameter-?-?> &) const
+cui/source/inc/chardlg.hxx:170
+    SvxCharEffectsPage m_nHtmlMode sal_uInt16
+    void SvxCharEffectsPage::Initialize()
+embeddedobj/source/msole/olecomponent.hxx:73
+    OleComponent m_bWorkaroundActive _Bool
+    _Bool OleComponent::IsWorkaroundActive() const
+include/editeng/adjustitem.hxx:37
+    SvxAdjustItem bLeft _Bool
+    void SvxAdjustItem::SetAdjust(const enum SvxAdjust)
+include/o3tl/enumarray.hxx:130
+    o3tl::enumarray_const_iterator m_buf const EA *
+    const typename type-parameter-?-?::value_type & o3tl::enumarray_const_iterator::operator*() const
+include/oox/dump/oledumper.hxx:743
+    oox::dump::VbaDirStreamObject mnCurrOffset sal_Int32
+    void oox::dump::VbaDirStreamObject::implDumpRecordBody()
+include/salhelper/dynload.hxx:82
+    salhelper::ORealDynamicLoader m_refCount sal_uInt32
+     salhelper::ORealDynamicLoader::ORealDynamicLoader(class salhelper::ORealDynamicLoader **,const class rtl::OUString &,const class rtl::OUString &,void *,void *)
+include/sfx2/msg.hxx:104
+    SfxType createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+    class std::unique_ptr<class SfxPoolItem> SfxType::CreateItem() const
+include/sfx2/msg.hxx:105
+    SfxType pType const std::type_info *
+    const class std::type_info * SfxType::Type() const
+include/sfx2/msg.hxx:117
+    SfxType0 pType const std::type_info *
+    const class std::type_info * SfxType0::Type() const
+include/test/sheet/xdatapilottable.hxx:31
+    apitest::XDataPilotTable xCellForChange css::uno::Reference<css::table::XCell>
+    void apitest::XDataPilotTable::testRefresh()
+include/test/sheet/xdatapilottable.hxx:32
+    apitest::XDataPilotTable xCellForCheck css::uno::Reference<css::table::XCell>
+    void apitest::XDataPilotTable::testRefresh()
+include/vcl/tabpage.hxx:43
+    TabPage mbHasHoriBar _Bool
+    void TabPage::ImplInit(class vcl::Window *,long)
+include/vcl/tabpage.hxx:44
+    TabPage mbHasVertBar _Bool
+    void TabPage::ImplInit(class vcl::Window *,long)
+jvmfwk/plugins/sunmajor/pluginlib/util.cxx:205
+    jfw_plugin::(anonymous namespace)::FileHandleReader m_aBuffer char[1024]
+    enum jfw_plugin::(anonymous namespace)::FileHandleReader::Result jfw_plugin::(anonymous namespace)::FileHandleReader::readLine(class rtl::OString *)
+sc/source/ui/inc/datastream.hxx:104
+    sc::DataStream mnSettings sal_uInt32
+    void sc::DataStream::Decode(const class rtl::OUString &,const class ScRange &,int,enum sc::DataStream::MoveType,const unsigned int)
+sc/source/ui/inc/tabvwsh.hxx:99
+    ScTabViewShell eFormObjKind SdrObjKind
+    void ScTabViewShell::ExecDraw(class SfxRequest &)
+sc/source/ui/inc/tabvwsh.hxx:144
+    ScTabViewShell bActiveEditSh _Bool
+    void ScTabViewShell::SetEditShell(class EditView *,_Bool)
+sd/source/filter/html/htmlex.hxx:59
+    HtmlExport mnPagesWritten sal_uInt16
+    void HtmlExport::ExportSingleDocument()
+sfx2/source/appl/lnkbase2.cxx:82
+    sfx2::(anonymous namespace)::ImplDdeItem aData DdeData
+    class DdeData * sfx2::(anonymous namespace)::ImplDdeItem::Get(enum SotClipboardFormatId)
+sfx2/source/appl/lnkbase2.cxx:83
+    sfx2::(anonymous namespace)::ImplDdeItem aSeq Sequence<sal_Int8>
+    class DdeData * sfx2::(anonymous namespace)::ImplDdeItem::Get(enum SotClipboardFormatId)
+svl/source/misc/inethist.cxx:45
+    INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
+    void INetURLHistory_Impl::head_entry::initialize()
+sw/inc/viewopt.hxx:50
+    ViewOptFlags1 bRef _Bool
+     ViewOptFlags1::ViewOptFlags1()
+sw/source/core/text/txtdrop.cxx:702
+    SwDropCapCache m_aFactor sal_uInt16[10]
+    void SwDropCapCache::CalcFontSize(class SwDropPortion *,class SwTextFormatInfo &)
+sw/source/core/text/txtdrop.cxx:704
+    SwDropCapCache m_aDescent short[10]
+    void SwDropCapCache::CalcFontSize(class SwDropPortion *,class SwTextFormatInfo &)
+sw/source/filter/ww8/ww8par.hxx:663
+    WW8FormulaControl mfUnknown sal_uInt8
+     WW8FormulaControl::WW8FormulaControl(class rtl::OUString,class SwWW8ImplReader &)
+sw/source/filter/ww8/ww8par.hxx:1067
+    WW8TabBandDesc bCantSplit90 _Bool
+     WW8TabBandDesc::WW8TabBandDesc()
+sw/source/filter/ww8/ww8scan.hxx:440
+    WW8PLCFx_PCDAttrs m_aShortSprm SVBT32
+    void WW8PLCFx_PCDAttrs::GetSprms(struct WW8PLCFxDesc *)
+sw/source/uibase/inc/fldmgr.hxx:112
+    SwFieldMgr m_nCurFormat sal_uInt32
+    class SwField * SwFieldMgr::GetCurField()
+unoidl/source/unoidlprovider.cxx:89
+    unoidl::detail::(anonymous namespace)::Memory16 byte unsigned char[2]
+    unsigned short unoidl::detail::(anonymous namespace)::Memory16::getUnsigned16() const
+vcl/inc/sft.hxx:178
+    vcl::TTGlobalFontInfo_ fsSelection sal_uInt16
+     vcl::TTGlobalFontInfo_::TTGlobalFontInfo_()
+vcl/inc/unx/sessioninhibitor.hxx:46
+    SessionManagerInhibitor mbDPMSWasEnabled BOOL
+    void SessionManagerInhibitor::inhibitDPMS(_Bool,struct _XDisplay *)
+vcl/inc/unx/sessioninhibitor.hxx:47
+    SessionManagerInhibitor mnDPMSStandbyTimeout CARD16
+    void SessionManagerInhibitor::inhibitDPMS(_Bool,struct _XDisplay *)
+vcl/inc/unx/sessioninhibitor.hxx:48
+    SessionManagerInhibitor mnDPMSSuspendTimeout CARD16
+    void SessionManagerInhibitor::inhibitDPMS(_Bool,struct _XDisplay *)
+vcl/inc/unx/sessioninhibitor.hxx:49
+    SessionManagerInhibitor mnDPMSOffTimeout CARD16
+    void SessionManagerInhibitor::inhibitDPMS(_Bool,struct _XDisplay *)

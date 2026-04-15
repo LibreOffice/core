@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="2023.05.22" />
+    <identifier value="org.libreoffice.hu.hunspell.dictionaries" />
+    <display-name>
+        <name lang="en-US">Hungarian spelling dictionary, hyphenation rules, thesaurus, and grammar checker</name>
+    </display-name>
+    <publisher>
+        <name lang="en-US" xlink:href="http://www.fsf.hu/">FSF.hu Foundation</name>
+        <name lang="hu" xlink:href="http://www.fsf.hu/">FSF.hu Alapítvány</name>
+    </publisher>
+    <platform value="all" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.2" d:name="OpenOffice.org 3.2" />
+    </dependencies>
+</description>
+

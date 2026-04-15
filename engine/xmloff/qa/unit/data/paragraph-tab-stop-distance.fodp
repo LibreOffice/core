@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:paragraph-properties loext:tab-stop-distance="10cm"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page>
+    <draw:frame svg:width="25cm" svg:height="1cm" svg:x="1cm" svg:y="1cm">
+     <draw:text-box>
+      <text:p text:style-name="P1">start<text:tab/>tab1<text:tab/>tab2<text:tab/>tab4</text:p>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

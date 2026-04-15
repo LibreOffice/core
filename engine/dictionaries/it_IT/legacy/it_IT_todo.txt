@@ -1,0 +1,56 @@
+Elenco delle cose principali da fare:
+
+[0] creazione delle nuove versioni del dizionario utilizzando le regole di
+    hunspell per poter così superare tutti i limiti di MySpell e eliminare
+    così molti errori introdotti o non sistemati proprio per queste limitazioni
+
+
+[1] completamento della correzione delle coniugazioni per i verbi in -isco
+    (dovrebbero essercene ancora un centinaio)
+[1] completamento delle nuove regole che gestiscono i verbi
+[1] rigenerazione di tutte le regole attuali utilizzando la sintassi di
+    hunspell
+
+
+[2] eliminazione delle elisioni mancanti (es: un'alunno, brav'osso)
+[2] inserimento delle elisioni mancanti (es: un'alunna)
+[2] correzione coniugazione dei verbi irregolari con conseguente eliminazione
+    delle coniugazioni errate usando le nuove regole di hunspell
+[2] ricerca ed eliminazione di stringhe errate/arcaiche/letterarie/dialettali
+[2] ricerca ed inserimento di parole mancanti nel dizionario
+[2] ricerca di declinazioni/coniugazioni mancanti (es: mancanza del plurale)
+[2] estrazioni di parole generate da altre (es: amare -> amo/ami)
+
+
+[3] inserire i comuni italiani mancanti
+[3] inserimento di nomi propri di persona italiani
+
+
+[4] emissione delle procedure per generare le statistiche
+[4] emissione delle definizioni che vengono associate alle radici del
+    dizionario
+[4] generazione del dizionario in altri tipi di archivio (es: .deb)
+[4] conversione del dizionario in altri formati (es: ISpell)
+[4] documentare sul wiki le regole utilizzate, i procedimenti utilizzati,
+    i metodi per la creazione/mantenimento del dizionario, ...
+[4] creare procedure WEB per permettere una semplice collaborazione da parte
+    degli utenti
+
+
+-----------------------
+Legenda delle priorità:
+-----------------------
+[0]: priorità primaria: quasi sicuramente sarà implementata nella
+     successiva versione
+
+[1]: priorità alta: probabilmente sarà portata avanti a partire dalla
+     successiva versione
+
+[2]: priorità media: la sua realizzazione sarà lenta, ma costante nel tempo.
+     Questa priorità è associata anche a parti importanti, ma difficili da
+     identificare e quindi correggere
+
+[3]: priorità bassa: il suo realizzo potrebbe impiegare tempi lunghi
+
+[4]: priorità bassissima: per ora non è prevista la sua implementazione
+

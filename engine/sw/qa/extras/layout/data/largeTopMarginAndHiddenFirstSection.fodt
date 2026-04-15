@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text">
+   <style:paragraph-properties fo:margin-top="1in" fo:margin-bottom="0" style:contextual-spacing="false" fo:line-height="12pt"/>
+  </style:style>
+ </office:styles>
+ <office:body>
+  <office:text>
+   <text:section text:name="Hidden" text:display="none"/>
+   <text:section text:name="Shown"/>
+  </office:text>
+ </office:body>
+</office:document>

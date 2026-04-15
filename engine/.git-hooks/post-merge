@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Do not warn if there were no real merge
+git rev-parse -q --verify HEAD^2 >/dev/null || exit
+
+echo
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+echo "! You probably used 'git pull' instead of 'git pull -r' !"
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+echo
+echo "You can still fix it - please do 'git pull -r' now."
+echo

@@ -1,0 +1,56 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module xml { module crypto { module sax {
+
+/**
+ * Interface of Security SAX Event Keeper.
+ * <p>
+ * This interface is an extension of the XSAXEventKeeper interface,
+ * some security related features are added.
+ */
+interface XSecuritySAXEventKeeper : XSAXEventKeeper
+{
+    /**
+     * Adds a new element collector on the next element in the SAX event
+     * stream.
+     *
+     * @param priority                       the priority of the element collector. See
+     *                                       ConstOfPriority
+     * @param modifyElement                  a flag representing whether the element
+     *                                       collector will modify the content of its
+     *                                       element after notification
+     * @return                               the keeper id of the new element collector
+     */
+    long addSecurityElementCollector(
+        [in] ElementMarkPriority priority,
+        [in] boolean modifyElement);
+
+    /**
+     * Sets security id for an element mark.
+     *
+     * @param id           the keeper id of the element collector to be set
+     * @param securityId   the security id to be set
+     */
+    void setSecurityId([in] long id, [in] long securityId);
+};
+
+} ; } ; } ; } ; } ; } ;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

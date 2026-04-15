@@ -1,0 +1,748 @@
+diff -ru a/src/main/java/org/java_websocket/AbstractWebSocket.java b/src/main/java/org/java_websocket/AbstractWebSocket.java
+--- a/src/main/java/org/java_websocket/AbstractWebSocket.java	2023-07-20 21:24:05.000000000 +0100
++++ b/src/main/java/org/java_websocket/AbstractWebSocket.java	2023-08-30 12:06:11.004719499 +0100
+@@ -33,9 +33,7 @@
+ import java.util.concurrent.TimeUnit;
+ import org.java_websocket.framing.CloseFrame;
+ import org.java_websocket.util.NamedThreadFactory;
+-import org.slf4j.Logger;
+-import org.slf4j.LoggerFactory;
+-
++import java.util.logging.Logger;
+ 
+ /**
+  * Base class for additional implementations for the server as well as the client
+@@ -47,7 +45,7 @@
+    *
+    * @since 1.4.0
+    */
+-  private final Logger log = LoggerFactory.getLogger(AbstractWebSocket.class);
++  private final Logger log = Logger.getLogger(AbstractWebSocket.class.getName());
+ 
+   /**
+    * Attribute which allows you to deactivate the Nagle's algorithm
+@@ -118,12 +116,12 @@
+     synchronized (syncConnectionLost) {
+       this.connectionLostTimeout = TimeUnit.SECONDS.toNanos(connectionLostTimeout);
+       if (this.connectionLostTimeout <= 0) {
+-        log.trace("Connection lost timer stopped");
++        log.fine("Connection lost timer stopped");
+         cancelConnectionLostTimer();
+         return;
+       }
+       if (this.websocketRunning) {
+-        log.trace("Connection lost timer restarted");
++        log.fine("Connection lost timer restarted");
+         //Reset all the pings
+         try {
+           ArrayList<WebSocket> connections = new ArrayList<>(getConnections());
+@@ -135,7 +133,7 @@
+             }
+           }
+         } catch (Exception e) {
+-          log.error("Exception during connection lost restart", e);
++          log.severe("Exception during connection lost restart" + " : " + e);
+         }
+         restartConnectionLostTimer();
+       }
+@@ -151,7 +149,7 @@
+     synchronized (syncConnectionLost) {
+       if (connectionLostCheckerService != null || connectionLostCheckerFuture != null) {
+         this.websocketRunning = false;
+-        log.trace("Connection lost timer stopped");
++        log.fine("Connection lost timer stopped");
+         cancelConnectionLostTimer();
+       }
+     }
+@@ -165,10 +163,10 @@
+   protected void startConnectionLostTimer() {
+     synchronized (syncConnectionLost) {
+       if (this.connectionLostTimeout <= 0) {
+-        log.trace("Connection lost timer deactivated");
++        log.fine("Connection lost timer deactivated");
+         return;
+       }
+-      log.trace("Connection lost timer started");
++      log.fine("Connection lost timer started");
+       this.websocketRunning = true;
+       restartConnectionLostTimer();
+     }
+@@ -228,14 +226,14 @@
+     }
+     WebSocketImpl webSocketImpl = (WebSocketImpl) webSocket;
+     if (webSocketImpl.getLastPong() < minimumPongTime) {
+-      log.trace("Closing connection due to no pong received: {}", webSocketImpl);
++      log.fine("Closing connection due to no pong received: {}" + " : " + webSocketImpl);
+       webSocketImpl.closeConnection(CloseFrame.ABNORMAL_CLOSE,
+           "The connection was closed because the other endpoint did not respond with a pong in time. For more information check: https://github.com/TooTallNate/Java-WebSocket/wiki/Lost-connection-detection");
+     } else {
+       if (webSocketImpl.isOpen()) {
+         webSocketImpl.sendPing();
+       } else {
+-        log.trace("Trying to ping a non open connection: {}", webSocketImpl);
++        log.fine("Trying to ping a non open connection: {}" + " : " + webSocketImpl);
+       }
+     }
+   }
+diff -ru a/src/main/java/org/java_websocket/drafts/Draft_6455.java b/src/main/java/org/java_websocket/drafts/Draft_6455.java
+--- a/src/main/java/org/java_websocket/drafts/Draft_6455.java	2023-07-20 21:24:05.000000000 +0100
++++ b/src/main/java/org/java_websocket/drafts/Draft_6455.java	2023-08-30 12:16:03.534083539 +0100
+@@ -66,8 +66,8 @@
+ import org.java_websocket.protocols.Protocol;
+ import org.java_websocket.util.Base64;
+ import org.java_websocket.util.Charsetfunctions;
+-import org.slf4j.Logger;
+-import org.slf4j.LoggerFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ 
+ /**
+  * Implementation for the RFC 6455 websocket protocol This is the recommended class for your
+@@ -110,7 +110,7 @@
+    *
+    * @since 1.4.0
+    */
+-  private final Logger log = LoggerFactory.getLogger(Draft_6455.class);
++  private final Logger log = Logger.getLogger(Draft_6455.class.getName());
+ 
+   /**
+    * Attribute for the used extension in this draft
+@@ -263,7 +263,7 @@
+       throws InvalidHandshakeException {
+     int v = readVersion(handshakedata);
+     if (v != 13) {
+-      log.trace("acceptHandshakeAsServer - Wrong websocket version.");
++      log.fine("acceptHandshakeAsServer - Wrong websocket version.");
+       return HandshakeState.NOT_MATCHED;
+     }
+     HandshakeState extensionState = HandshakeState.NOT_MATCHED;
+@@ -272,7 +272,7 @@
+       if (knownExtension.acceptProvidedExtensionAsServer(requestedExtension)) {
+         negotiatedExtension = knownExtension;
+         extensionState = HandshakeState.MATCHED;
+-        log.trace("acceptHandshakeAsServer - Matching extension found: {}", negotiatedExtension);
++        log.fine("acceptHandshakeAsServer - Matching extension found: {}" + " : " + negotiatedExtension);
+         break;
+       }
+     }
+@@ -281,7 +281,7 @@
+     if (protocolState == HandshakeState.MATCHED && extensionState == HandshakeState.MATCHED) {
+       return HandshakeState.MATCHED;
+     }
+-    log.trace("acceptHandshakeAsServer - No matching extension or protocol found.");
++    log.fine("acceptHandshakeAsServer - No matching extension or protocol found.");
+     return HandshakeState.NOT_MATCHED;
+   }
+ 
+@@ -295,7 +295,7 @@
+     for (IProtocol knownProtocol : knownProtocols) {
+       if (knownProtocol.acceptProvidedProtocol(requestedProtocol)) {
+         protocol = knownProtocol;
+-        log.trace("acceptHandshake - Matching protocol found: {}", protocol);
++        log.fine("acceptHandshake - Matching protocol found: {}" + " : " + protocol);
+         return HandshakeState.MATCHED;
+       }
+     }
+@@ -306,12 +306,12 @@
+   public HandshakeState acceptHandshakeAsClient(ClientHandshake request, ServerHandshake response)
+       throws InvalidHandshakeException {
+     if (!basicAccept(response)) {
+-      log.trace("acceptHandshakeAsClient - Missing/wrong upgrade or connection in handshake.");
++      log.fine("acceptHandshakeAsClient - Missing/wrong upgrade or connection in handshake.");
+       return HandshakeState.NOT_MATCHED;
+     }
+     if (!request.hasFieldValue(SEC_WEB_SOCKET_KEY) || !response
+         .hasFieldValue(SEC_WEB_SOCKET_ACCEPT)) {
+-      log.trace("acceptHandshakeAsClient - Missing Sec-WebSocket-Key or Sec-WebSocket-Accept");
++      log.fine("acceptHandshakeAsClient - Missing Sec-WebSocket-Key or Sec-WebSocket-Accept");
+       return HandshakeState.NOT_MATCHED;
+     }
+ 
+@@ -320,7 +320,7 @@
+     seckeyChallenge = generateFinalKey(seckeyChallenge);
+ 
+     if (!seckeyChallenge.equals(seckeyAnswer)) {
+-      log.trace("acceptHandshakeAsClient - Wrong key for Sec-WebSocket-Key.");
++      log.fine("acceptHandshakeAsClient - Wrong key for Sec-WebSocket-Key.");
+       return HandshakeState.NOT_MATCHED;
+     }
+     HandshakeState extensionState = HandshakeState.NOT_MATCHED;
+@@ -329,7 +329,7 @@
+       if (knownExtension.acceptProvidedExtensionAsClient(requestedExtension)) {
+         negotiatedExtension = knownExtension;
+         extensionState = HandshakeState.MATCHED;
+-        log.trace("acceptHandshakeAsClient - Matching extension found: {}", negotiatedExtension);
++        log.fine("acceptHandshakeAsClient - Matching extension found: {}" + " : " + negotiatedExtension);
+         break;
+       }
+     }
+@@ -338,7 +338,7 @@
+     if (protocolState == HandshakeState.MATCHED && extensionState == HandshakeState.MATCHED) {
+       return HandshakeState.MATCHED;
+     }
+-    log.trace("acceptHandshakeAsClient - No matching extension or protocol found.");
++    log.fine("acceptHandshakeAsClient - No matching extension or protocol found.");
+     return HandshakeState.NOT_MATCHED;
+   }
+ 
+@@ -467,8 +467,8 @@
+   @Override
+   public ByteBuffer createBinaryFrame(Framedata framedata) {
+     getExtension().encodeFrame(framedata);
+-    if (log.isTraceEnabled()) {
+-      log.trace("afterEnconding({}): {}", framedata.getPayloadData().remaining(),
++    if (log.isLoggable(Level.FINE)) {
++      log.fine("afterEnconding({}): {}" + " : " + framedata.getPayloadData().remaining() + " : " +
+           (framedata.getPayloadData().remaining() > 1000 ? "too big to display"
+               : new String(framedata.getPayloadData().array())));
+     }
+@@ -587,8 +587,8 @@
+     }
+     currentDecodingExtension.isFrameValid(frame);
+     currentDecodingExtension.decodeFrame(frame);
+-    if (log.isTraceEnabled()) {
+-      log.trace("afterDecoding({}): {}", frame.getPayloadData().remaining(),
++    if (log.isLoggable(Level.FINE)) {
++      log.fine("afterDecoding({}): {}" + " : " + frame.getPayloadData().remaining() + " : " +
+           (frame.getPayloadData().remaining() > 1000 ? "too big to display"
+               : new String(frame.getPayloadData().array())));
+     }
+@@ -615,7 +615,7 @@
+     int payloadlength = oldPayloadlength;
+     int realpacketsize = oldRealpacketsize;
+     if (optcode == Opcode.PING || optcode == Opcode.PONG || optcode == Opcode.CLOSING) {
+-      log.trace("Invalid frame: more than 125 octets");
++      log.fine("Invalid frame: more than 125 octets");
+       throw new InvalidFrameException("more than 125 octets");
+     }
+     if (payloadlength == 126) {
+@@ -647,15 +647,15 @@
+    */
+   private void translateSingleFrameCheckLengthLimit(long length) throws LimitExceededException {
+     if (length > Integer.MAX_VALUE) {
+-      log.trace("Limit exedeed: Payloadsize is to big...");
++      log.fine("Limit exedeed: Payloadsize is to big...");
+       throw new LimitExceededException("Payloadsize is to big...");
+     }
+     if (length > maxFrameSize) {
+-      log.trace("Payload limit reached. Allowed: {} Current: {}", maxFrameSize, length);
++      log.fine("Payload limit reached. Allowed: {} Current: {}" + " : " + maxFrameSize + " : " + length);
+       throw new LimitExceededException("Payload limit reached.", maxFrameSize);
+     }
+     if (length < 0) {
+-      log.trace("Limit underflow: Payloadsize is to little...");
++      log.fine("Limit underflow: Payloadsize is to little...");
+       throw new LimitExceededException("Payloadsize is to little...");
+     }
+   }
+@@ -670,7 +670,7 @@
+   private void translateSingleFrameCheckPacketSize(int maxpacketsize, int realpacketsize)
+       throws IncompleteException {
+     if (maxpacketsize < realpacketsize) {
+-      log.trace("Incomplete frame: maxpacketsize < realpacketsize");
++      log.fine("Incomplete frame: maxpacketsize < realpacketsize");
+       throw new IncompleteException(realpacketsize);
+     }
+   }
+@@ -903,7 +903,7 @@
+     } else if (!frame.isFin() || curop == Opcode.CONTINUOUS) {
+       processFrameContinuousAndNonFin(webSocketImpl, frame, curop);
+     } else if (currentContinuousFrame != null) {
+-      log.error("Protocol error: Continuous frame sequence not completed.");
++      log.severe("Protocol error: Continuous frame sequence not completed.");
+       throw new InvalidDataException(CloseFrame.PROTOCOL_ERROR,
+           "Continuous frame sequence not completed.");
+     } else if (curop == Opcode.TEXT) {
+@@ -911,7 +911,7 @@
+     } else if (curop == Opcode.BINARY) {
+       processFrameBinary(webSocketImpl, frame);
+     } else {
+-      log.error("non control or continious frame expected");
++      log.severe("non control or continious frame expected");
+       throw new InvalidDataException(CloseFrame.PROTOCOL_ERROR,
+           "non control or continious frame expected");
+     }
+@@ -932,13 +932,13 @@
+     } else if (frame.isFin()) {
+       processFrameIsFin(webSocketImpl, frame);
+     } else if (currentContinuousFrame == null) {
+-      log.error("Protocol error: Continuous frame sequence was not started.");
++      log.severe("Protocol error: Continuous frame sequence was not started.");
+       throw new InvalidDataException(CloseFrame.PROTOCOL_ERROR,
+           "Continuous frame sequence was not started.");
+     }
+     //Check if the whole payload is valid utf8, when the opcode indicates a text
+     if (curop == Opcode.TEXT && !Charsetfunctions.isValidUTF8(frame.getPayloadData())) {
+-      log.error("Protocol error: Payload is not UTF8");
++      log.severe("Protocol error: Payload is not UTF8");
+       throw new InvalidDataException(CloseFrame.NO_UTF8);
+     }
+     //Checking if the current continuous frame contains a correct payload with the other frames combined
+@@ -969,7 +969,7 @@
+    * @param e             the runtime exception
+    */
+   private void logRuntimeException(WebSocketImpl webSocketImpl, RuntimeException e) {
+-    log.error("Runtime exception during onWebsocketMessage", e);
++    log.severe("Runtime exception during onWebsocketMessage" + " : " + e);
+     webSocketImpl.getWebSocketListener().onWebsocketError(webSocketImpl, e);
+   }
+ 
+@@ -999,7 +999,7 @@
+   private void processFrameIsFin(WebSocketImpl webSocketImpl, Framedata frame)
+       throws InvalidDataException {
+     if (currentContinuousFrame == null) {
+-      log.trace("Protocol error: Previous continuous frame sequence not completed.");
++      log.fine("Protocol error: Previous continuous frame sequence not completed.");
+       throw new InvalidDataException(CloseFrame.PROTOCOL_ERROR,
+           "Continuous frame sequence was not started.");
+     }
+@@ -1036,7 +1036,7 @@
+    */
+   private void processFrameIsNotFin(Framedata frame) throws InvalidDataException {
+     if (currentContinuousFrame != null) {
+-      log.trace("Protocol error: Previous continuous frame sequence not completed.");
++      log.fine("Protocol error: Previous continuous frame sequence not completed.");
+       throw new InvalidDataException(CloseFrame.PROTOCOL_ERROR,
+           "Previous continuous frame sequence not completed.");
+     }
+@@ -1102,7 +1102,7 @@
+     long totalSize = getByteBufferListSize();
+     if (totalSize > maxFrameSize) {
+       clearBufferList();
+-      log.trace("Payload limit reached. Allowed: {} Current: {}", maxFrameSize, totalSize);
++      log.fine("Payload limit reached. Allowed: {} Current: {}" + " : " + maxFrameSize + " : " + totalSize);
+       throw new LimitExceededException(maxFrameSize);
+     }
+   }
+diff -ru a/src/main/java/org/java_websocket/server/WebSocketServer.java b/src/main/java/org/java_websocket/server/WebSocketServer.java
+--- a/src/main/java/org/java_websocket/server/WebSocketServer.java	2023-07-20 21:24:05.000000000 +0100
++++ b/src/main/java/org/java_websocket/server/WebSocketServer.java	2023-08-30 12:06:46.372798355 +0100
+@@ -67,8 +67,7 @@
+ import org.java_websocket.framing.Framedata;
+ import org.java_websocket.handshake.ClientHandshake;
+ import org.java_websocket.handshake.Handshakedata;
+-import org.slf4j.Logger;
+-import org.slf4j.LoggerFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * <code>WebSocketServer</code> is an abstract class that only takes care of the
+@@ -84,7 +83,7 @@
+    *
+    * @since 1.4.0
+    */
+-  private final Logger log = LoggerFactory.getLogger(WebSocketServer.class);
++  private final Logger log = Logger.getLogger(WebSocketServer.class.getName());
+ 
+   /**
+    * Holds the list of active WebSocket connections. "Active" means WebSocket handshake is complete
+@@ -611,7 +610,7 @@
+       try {
+         selector.close();
+       } catch (IOException e) {
+-        log.error("IOException during selector.close", e);
++        log.severe("IOException during selector.close" + " : " + e);
+         onError(null, e);
+       }
+     }
+@@ -619,7 +618,7 @@
+       try {
+         server.close();
+       } catch (IOException e) {
+-        log.error("IOException during server.close", e);
++        log.severe("IOException during server.close" + " : " + e);
+         onError(null, e);
+       }
+     }
+@@ -677,13 +676,13 @@
+         } catch (IOException e) {
+           // there is nothing that must be done here
+         }
+-        log.trace("Connection closed because of exception", ex);
++        log.fine("Connection closed because of exception" + " : " + ex);
+       }
+     }
+   }
+ 
+   private void handleFatal(WebSocket conn, Exception e) {
+-    log.error("Shutdown due to fatal error", e);
++    log.severe("Shutdown due to fatal error" + " : " + e);
+     onError(conn, e);
+ 
+     String causeMessage = e.getCause() != null ? " caused by " + e.getCause().getClass().getName() : "";
+@@ -692,7 +691,7 @@
+       stop(0, errorMessage);
+     } catch (InterruptedException e1) {
+       Thread.currentThread().interrupt();
+-      log.error("Interrupt during stop", e);
++      log.severe("Interrupt during stop" + " : " + e);
+       onError(null, e1);
+     }
+ 
+@@ -760,8 +759,8 @@
+         removed = this.connections.remove(ws);
+       } else {
+         //Don't throw an assert error if the ws is not in the list. e.g. when the other endpoint did not send any handshake. see #512
+-        log.trace(
+-            "Removing connection which is not in the connections collection! Possible no handshake received! {}",
++        log.fine(
++            "Removing connection which is not in the connections collection! Possible no handshake received! {}" + " : " +
+             ws);
+       }
+     }
+@@ -1065,7 +1064,7 @@
+       setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+         @Override
+         public void uncaughtException(Thread t, Throwable e) {
+-          log.error("Uncaught exception in thread {}: {}", t.getName(), e);
++          log.severe("Uncaught exception in thread {}: {}" + " : " + t.getName() + " : " + e);
+         }
+       });
+     }
+@@ -1089,11 +1088,11 @@
+       } catch (InterruptedException e) {
+         Thread.currentThread().interrupt();
+       } catch (VirtualMachineError | ThreadDeath | LinkageError e) {
+-        log.error("Got fatal error in worker thread {}", getName());
++        log.severe("Got fatal error in worker thread {}" + " : " + getName());
+         Exception exception = new Exception(e);
+         handleFatal(ws, exception);
+       } catch (Throwable e) {
+-        log.error("Uncaught exception in thread {}: {}", getName(), e);
++        log.severe("Uncaught exception in thread {}: {}" + " : " + getName() + " : " + e);
+         if (ws != null) {
+           Exception exception = new Exception(e);
+           onWebsocketError(ws, exception);
+@@ -1113,7 +1112,7 @@
+       try {
+         ws.decode(buf);
+       } catch (Exception e) {
+-        log.error("Error while reading from remote connection", e);
++        log.severe("Error while reading from remote connection" + " : " + e);
+       } finally {
+         pushBuffer(buf);
+       }
+diff -ru a/src/main/java/org/java_websocket/SSLSocketChannel2.java b/src/main/java/org/java_websocket/SSLSocketChannel2.java
+--- a/src/main/java/org/java_websocket/SSLSocketChannel2.java	2023-07-20 21:24:05.000000000 +0100
++++ b/src/main/java/org/java_websocket/SSLSocketChannel2.java	2023-08-30 12:05:33.937636854 +0100
+@@ -47,8 +47,8 @@
+ import javax.net.ssl.SSLException;
+ import javax.net.ssl.SSLSession;
+ import org.java_websocket.interfaces.ISSLChannel;
+-import org.slf4j.Logger;
+-import org.slf4j.LoggerFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ 
+ /**
+  * Implements the relevant portions of the SocketChannel interface with the SSLEngine wrapper.
+@@ -66,7 +66,7 @@
+    *
+    * @since 1.4.0
+    */
+-  private final Logger log = LoggerFactory.getLogger(SSLSocketChannel2.class);
++  private final Logger log = Logger.getLogger(SSLSocketChannel2.class.getName());
+ 
+   protected ExecutorService exec;
+ 
+@@ -256,13 +256,13 @@
+         inCrypt = ByteBuffer.allocate(netBufferMax);
+       }
+     }
+-    if (inData.remaining() != 0 && log.isTraceEnabled()) {
+-      log.trace(new String(inData.array(), inData.position(), inData.remaining()));
++    if (inData.remaining() != 0 && log.isLoggable(Level.FINE)) {
++      log.fine(new String(inData.array(), inData.position(), inData.remaining()));
+     }
+     inData.rewind();
+     inData.flip();
+-    if (inCrypt.remaining() != 0 && log.isTraceEnabled()) {
+-      log.trace(new String(inCrypt.array(), inCrypt.position(), inCrypt.remaining()));
++    if (inCrypt.remaining() != 0 && log.isLoggable(Level.FINE)) {
++      log.fine(new String(inCrypt.array(), inCrypt.position(), inCrypt.remaining()));
+     }
+     inCrypt.rewind();
+     inCrypt.flip();
+@@ -498,4 +498,4 @@
+       saveCryptData = null;
+     }
+   }
+-}
+\ No newline at end of file
++}
+diff -ru a/src/main/java/org/java_websocket/SSLSocketChannel.java b/src/main/java/org/java_websocket/SSLSocketChannel.java
+--- a/src/main/java/org/java_websocket/SSLSocketChannel.java	2023-07-20 21:24:05.000000000 +0100
++++ b/src/main/java/org/java_websocket/SSLSocketChannel.java	2023-08-30 11:55:09.427244528 +0100
+@@ -39,8 +39,7 @@
+ import javax.net.ssl.SSLSession;
+ import org.java_websocket.interfaces.ISSLChannel;
+ import org.java_websocket.util.ByteBufferUtils;
+-import org.slf4j.Logger;
+-import org.slf4j.LoggerFactory;
++import java.util.logging.Logger;
+ 
+ 
+ /**
+@@ -70,7 +69,7 @@
+    *
+    * @since 1.4.0
+    */
+-  private final Logger log = LoggerFactory.getLogger(SSLSocketChannel.class);
++  private final Logger log = Logger.getLogger(SSLSocketChannel.class.getName());
+ 
+   /**
+    * The underlying socket channel
+@@ -148,7 +147,7 @@
+       try {
+         socketChannel.close();
+       } catch (IOException e) {
+-        log.error("Exception during the closing of the channel", e);
++        log.severe("Exception during the closing of the channel" + " : " + e);
+       }
+     }
+   }
+@@ -176,7 +175,7 @@
+         try {
+           result = engine.unwrap(peerNetData, peerAppData);
+         } catch (SSLException e) {
+-          log.error("SSLException during unwrap", e);
++          log.severe("SSLException during unwrap" + " : " + e);
+           throw e;
+         }
+         switch (result.getStatus()) {
+@@ -490,7 +489,7 @@
+     try {
+       engine.closeInbound();
+     } catch (Exception e) {
+-      log.error(
++      log.severe(
+           "This engine was forced to close inbound, without having received the proper SSL/TLS close notification message from the peer, due to end of stream.");
+     }
+     closeConnection();
+@@ -536,4 +535,4 @@
+   public SSLEngine getSSLEngine() {
+     return engine;
+   }
+-}
+\ No newline at end of file
++}
+diff -ru a/src/main/java/org/java_websocket/WebSocketImpl.java b/src/main/java/org/java_websocket/WebSocketImpl.java
+--- a/src/main/java/org/java_websocket/WebSocketImpl.java	2023-07-20 21:24:05.000000000 +0100
++++ b/src/main/java/org/java_websocket/WebSocketImpl.java	2023-08-30 12:12:26.045577651 +0100
+@@ -61,8 +61,8 @@
+ import org.java_websocket.protocols.IProtocol;
+ import org.java_websocket.server.WebSocketServer.WebSocketWorker;
+ import org.java_websocket.util.Charsetfunctions;
+-import org.slf4j.Logger;
+-import org.slf4j.LoggerFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ 
+ /**
+  * Represents one end (client or server) of a single WebSocketImpl connection. Takes care of the
+@@ -95,7 +95,7 @@
+    *
+    * @since 1.4.0
+    */
+-  private final Logger log = LoggerFactory.getLogger(WebSocketImpl.class);
++  private final Logger log = Logger.getLogger(WebSocketImpl.class.getName());
+ 
+   /**
+    * Queue of buffers that need to be sent to the client.
+@@ -224,8 +224,8 @@
+    */
+   public void decode(ByteBuffer socketBuffer) {
+     assert (socketBuffer.hasRemaining());
+-    if (log.isTraceEnabled()) {
+-      log.trace("process({}): ({})", socketBuffer.remaining(),
++    if (log.isLoggable(Level.FINE)) {
++      log.fine("process({}): ({})" + " : " + socketBuffer.remaining() + " : " +
+               (socketBuffer.remaining() > 1000 ? "too big to display"
+                       : new String(socketBuffer.array(), socketBuffer.position(), socketBuffer.remaining())));
+     }
+@@ -280,7 +280,7 @@
+                 socketBuffer.reset();
+                 Handshakedata tmphandshake = d.translateHandshake(socketBuffer);
+                 if (!(tmphandshake instanceof ClientHandshake)) {
+-                  log.trace("Closing due to wrong handshake");
++                  log.fine("Closing due to wrong handshake");
+                   closeConnectionDueToWrongHandshake(
+                       new InvalidDataException(CloseFrame.PROTOCOL_ERROR, "wrong http function"));
+                   return false;
+@@ -293,11 +293,11 @@
+                   try {
+                     response = wsl.onWebsocketHandshakeReceivedAsServer(this, d, handshake);
+                   } catch (InvalidDataException e) {
+-                    log.trace("Closing due to wrong handshake. Possible handshake rejection", e);
++                    log.fine("Closing due to wrong handshake. Possible handshake rejection" + " : " + e);
+                     closeConnectionDueToWrongHandshake(e);
+                     return false;
+                   } catch (RuntimeException e) {
+-                    log.error("Closing due to internal server error", e);
++                    log.severe("Closing due to internal server error" + " : " + e);
+                     wsl.onWebsocketError(this, e);
+                     closeConnectionDueToInternalServerError(e);
+                     return false;
+@@ -313,7 +313,7 @@
+               }
+             }
+             if (draft == null) {
+-              log.trace("Closing due to protocol error: no draft matches");
++              log.fine("Closing due to protocol error: no draft matches");
+               closeConnectionDueToWrongHandshake(
+                   new InvalidDataException(CloseFrame.PROTOCOL_ERROR, "no draft matches"));
+             }
+@@ -322,7 +322,7 @@
+             // special case for multiple step handshakes
+             Handshakedata tmphandshake = draft.translateHandshake(socketBuffer);
+             if (!(tmphandshake instanceof ClientHandshake)) {
+-              log.trace("Closing due to protocol error: wrong http function");
++              log.fine("Closing due to protocol error: wrong http function");
+               flushAndClose(CloseFrame.PROTOCOL_ERROR, "wrong http function", false);
+               return false;
+             }
+@@ -333,7 +333,7 @@
+               open(handshake);
+               return true;
+             } else {
+-              log.trace("Closing due to protocol error: the handshake did finally not match");
++              log.fine("Closing due to protocol error: the handshake did finally not match");
+               close(CloseFrame.PROTOCOL_ERROR, "the handshake did finally not match");
+             }
+             return false;
+@@ -342,7 +342,7 @@
+           draft.setParseMode(role);
+           Handshakedata tmphandshake = draft.translateHandshake(socketBuffer);
+           if (!(tmphandshake instanceof ServerHandshake)) {
+-            log.trace("Closing due to protocol error: wrong http function");
++            log.fine("Closing due to protocol error: wrong http function");
+             flushAndClose(CloseFrame.PROTOCOL_ERROR, "wrong http function", false);
+             return false;
+           }
+@@ -352,11 +352,11 @@
+             try {
+               wsl.onWebsocketHandshakeReceivedAsClient(this, handshakerequest, handshake);
+             } catch (InvalidDataException e) {
+-              log.trace("Closing due to invalid data exception. Possible handshake rejection", e);
++              log.fine("Closing due to invalid data exception. Possible handshake rejection" + " : " + e);
+               flushAndClose(e.getCloseCode(), e.getMessage(), false);
+               return false;
+             } catch (RuntimeException e) {
+-              log.error("Closing since client was never connected", e);
++              log.severe("Closing since client was never connected" + " : " + e);
+               wsl.onWebsocketError(this, e);
+               flushAndClose(CloseFrame.NEVER_CONNECTED, e.getMessage(), false);
+               return false;
+@@ -364,12 +364,12 @@
+             open(handshake);
+             return true;
+           } else {
+-            log.trace("Closing due to protocol error: draft {} refuses handshake", draft);
++            log.fine("Closing due to protocol error: draft {} refuses handshake" + " : " + draft);
+             close(CloseFrame.PROTOCOL_ERROR, "draft " + draft + " refuses handshake");
+           }
+         }
+       } catch (InvalidHandshakeException e) {
+-        log.trace("Closing due to invalid handshake", e);
++        log.fine("Closing due to invalid handshake" + " : " + e);
+         close(e);
+       }
+     } catch (IncompleteHandshakeException e) {
+@@ -398,24 +398,24 @@
+     try {
+       frames = draft.translateFrame(socketBuffer);
+       for (Framedata f : frames) {
+-        log.trace("matched frame: {}", f);
++        log.fine("matched frame: {}" + " : " + f);
+         draft.processFrame(this, f);
+       }
+     } catch (LimitExceededException e) {
+       if (e.getLimit() == Integer.MAX_VALUE) {
+-        log.error("Closing due to invalid size of frame", e);
++        log.severe("Closing due to invalid size of frame" + " : " + e);
+         wsl.onWebsocketError(this, e);
+       }
+       close(e);
+     } catch (InvalidDataException e) {
+-      log.error("Closing due to invalid data in frame", e);
++      log.severe("Closing due to invalid data in frame" + " : " + e);
+       wsl.onWebsocketError(this, e);
+       close(e);
+     } catch (VirtualMachineError | ThreadDeath | LinkageError e) {
+-      log.error("Got fatal error during frame processing");
++      log.severe("Got fatal error during frame processing");
+       throw e;
+     } catch (Error e) {
+-      log.error("Closing web socket due to an error during frame processing");
++      log.severe("Closing web socket due to an error during frame processing");
+       Exception exception = new Exception(e);
+       wsl.onWebsocketError(this, exception);
+       String errorMessage = "Got error " + e.getClass().getName();
+@@ -491,7 +491,7 @@
+               sendFrame(closeFrame);
+             }
+           } catch (InvalidDataException e) {
+-            log.error("generated frame is invalid", e);
++            log.severe("generated frame is invalid" + " : " + e);
+             wsl.onWebsocketError(this, e);
+             flushAndClose(CloseFrame.ABNORMAL_CLOSE, "generated frame is invalid", false);
+           }
+@@ -551,9 +551,9 @@
+         channel.close();
+       } catch (IOException e) {
+         if (e.getMessage() != null && e.getMessage().equals("Broken pipe")) {
+-          log.trace("Caught IOException: Broken pipe during closeConnection()", e);
++          log.fine("Caught IOException: Broken pipe during closeConnection()" + " : " + e);
+         } else {
+-          log.error("Exception during channel.close()", e);
++          log.severe("Exception during channel.close()" + " : " + e);
+           wsl.onWebsocketError(this, e);
+         }
+       }
+@@ -601,7 +601,7 @@
+     try {
+       wsl.onWebsocketClosing(this, code, message, remote);
+     } catch (RuntimeException e) {
+-      log.error("Exception in onWebsocketClosing", e);
++      log.severe("Exception in onWebsocketClosing" + " : " + e);
+       wsl.onWebsocketError(this, e);
+     }
+     if (draft != null) {
+@@ -678,7 +678,7 @@
+     }
+     ArrayList<ByteBuffer> outgoingFrames = new ArrayList<>();
+     for (Framedata f : frames) {
+-      log.trace("send frame: {}", f);
++      log.fine("send frame: {}" + " : " + f);
+       outgoingFrames.add(draft.createBinaryFrame(f));
+     }
+     write(outgoingFrames);
+@@ -729,7 +729,7 @@
+       // Stop if the client code throws an exception
+       throw new InvalidHandshakeException("Handshake data rejected by client.");
+     } catch (RuntimeException e) {
+-      log.error("Exception in startHandshake", e);
++      log.severe("Exception in startHandshake" + " : " + e);
+       wsl.onWebsocketError(this, e);
+       throw new InvalidHandshakeException("rejected because of " + e);
+     }
+@@ -739,8 +739,8 @@
+   }
+ 
+   private void write(ByteBuffer buf) {
+-    log.trace("write({}): {}", buf.remaining(),
+-        buf.remaining() > 1000 ? "too big to display" : new String(buf.array()));
++    log.fine("write({}): {}" + " : " + buf.remaining() + " : " +
++        (buf.remaining() > 1000 ? "too big to display" : new String(buf.array())));
+ 
+     outQueue.add(buf);
+     wsl.onWriteDemand(this);
+@@ -760,7 +760,7 @@
+   }
+ 
+   private void open(Handshakedata d) {
+-    log.trace("open using draft: {}", draft);
++    log.fine("open using draft: {}" + " : " + draft);
+     readyState = ReadyState.OPEN;
+     updateLastPong();
+     try {

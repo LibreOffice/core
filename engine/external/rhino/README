@@ -1,0 +1,5 @@
+JavaScript engine/interpreter written in Java, used to provide JavaScript extensions.
+
+The Scripting Framework makes use of the Rhino ([http://www.mozilla.org/rhino/])
+JavaScript interpreter, available under the Mozilla Public License
+([http://www.mozilla.org/MPL/MPL-1.1.html]).

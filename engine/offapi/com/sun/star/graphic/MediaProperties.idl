@@ -1,0 +1,114 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module graphic
+{
+
+/** This service describes the properties that are used
+    when using the XGraphicProvider interface methods
+*/
+published service MediaProperties
+{
+    /** Property that describes the location of the source or target
+        of the graphic as URL.
+
+        <p>A URL can be used instead of the
+        #InputStream or #OutputStream
+        property</p>
+
+        <p>In addition to the normal protocols like file:// or http://
+        you can use private URLs as follows to get access to graphics
+        lying inside the graphicrepository system within an Office context:
+        <ul>
+            <li><code>private:graphicrepository/<em>&lt;path_in_repository&gt;</em></code></li>
+        </ul>
+        </p>
+
+        <p>
+        Note: As of LibreOffice 6.1 GraphicObject scheme URLs are not supported anymore.
+        For example:
+        <ul>
+            <li>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</li>
+        </ul>
+        </p>
+    */
+    [optional, property ] string URL;
+
+    /** This property is only used for loading graphics or querying
+        graphic descriptors
+
+        <p>A #InputStream can be used instead of the
+        #URL property</p>
+
+        @see com::sun::star::io::XInputStream
+    */
+    [optional, property ] ::com::sun::star::io::XInputStream InputStream;
+
+    /** This property is only used for storing graphics
+
+        <p>A #OutputStream can be used instead of the
+        #URL property</p>
+
+        @see com::sun::star::io::XStream
+    */
+    [optional, property ] ::com::sun::star::io::XStream OutputStream;
+
+    /** This property is only used for storing graphics and describes the
+        format into which the graphic is to be converted
+
+        <p>At the moment, the following mime types are supported for storing
+        graphics:</p>
+
+        <ul>
+            <li>image/bmp</li>
+            <li>image/gif</li>
+            <li>image/jpeg</li>
+            <li>image/png</li>
+            <li>image/tiff</li>
+            <li>image/svg+xml</li>
+            <li>image/x-cmu-raster</li>
+            <li>image/x-emf</li>
+            <li>image/x-eps</li>
+            <li>image/x-met</li>
+            <li>image/x-pict</li>
+            <li>image/x-portable-bitmap</li>
+            <li>image/x-portable-pixmap</li>
+            <li>image/x-wmf</li>
+            <li>image/x-svm</li>
+            <li>image/x-xpixmap</li>
+            <li>image/x-vclgraphic</li>
+        </ul>
+    */
+    [optional, property ] string MimeType;
+
+    /** Additional properties that will be passed to the
+    appropriate filter module.
+    */
+    [optional, property] ::com::sun::star::beans::PropertyValues FilterData;
+
+    /** This property is only used for loading graphics
+
+        <p>Load the graphic as an external link</p>
+    */
+    [optional, property] boolean LoadAsLink;
+};
+
+} ; } ; } ; } ;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

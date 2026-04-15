@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="sc">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkDialog" id="dataproviderdlg">
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes" context="dataproviderdlg/dlg_name">Data Provider</property>
+    <property name="modal">True</property>
+    <property name="type-hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area1">
+            <property name="can-focus">False</property>
+            <property name="margin-end">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="ok">
+                <property name="label" translatable="yes" context="stock">_OK</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancel">
+                <property name="label" translatable="yes" context="stock">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="help">
+                <property name="label" translatable="yes" context="stock">_Help</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="pack-type">end</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkPaned">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="wide-handle">True</property>
+            <child>
+              <object class="GtkBox" id="bxSourceTransform">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkFrame" id="frmSource">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-top">6</property>
+                    <property name="label-xalign">0</property>
+                    <property name="shadow-type">none</property>
+                    <child>
+                      <!-- n-columns=3 n-rows=4 -->
+                      <object class="GtkGrid" id="gdSource">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="margin-top">6</property>
+                        <property name="row-spacing">6</property>
+                        <property name="column-spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="label2">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="dataproviderdlg|db_name">Database Range:</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">select_db_range</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="select_db_range">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="select_db_range-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|select_dg_range">The database range to receive the data from the provider.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label3">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="dataproviderdlg/provider">Data Format:</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">provider_lst</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="provider_lst">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <items>
+                              <item id="org.libreoffice.calc.csv">CSV</item>
+                              <item id="org.libreoffice.calc.html">HTML</item>
+                              <item id="org.libreoffice.calc.xml">XML</item>
+                            </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="provider_lst-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|provider_lst">The format of the data to be imported.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">1</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label4">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="dataproviderdlg/url">URL:</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">ed_url</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="ed_url">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="truncate-multiline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ed_url-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|ed_url">The URL of the data provider.For local file, insert the file path and name. For web service, insert the URL.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="browse">
+                            <property name="label" translatable="yes" context="dataproviderdlg/browse_btn">Browse</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="use-underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label5">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="dataproviderdlg/id">Identifier:</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">ed_id</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="ed_id">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="truncate-multiline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ed_id-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|ed_id">The table identifier in the HTML source or the XPath in XML source.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">3</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="dataproviderdlg/lbSource">Source</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frmTransformation">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-top">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="label-xalign">0</property>
+                    <property name="shadow-type">none</property>
+                    <child>
+                      <!-- n-columns=2 n-rows=2 -->
+                      <object class="GtkGrid" id="select_transformation">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="margin-top">6</property>
+                        <property name="row-spacing">6</property>
+                        <property name="column-spacing">12</property>
+                        <child>
+                          <object class="GtkButton" id="add_transformation">
+                            <property name="label" translatable="yes" context="dataproviderdlg/transformation_add">Add</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="dataproviderdlg/AddTransformation_tooltip">Add Transformations</property>
+                            <property name="halign">end</property>
+                            <property name="margin-end">12</property>
+                            <property name="use-underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="add_transformation-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|add_transformation">Includes the selected transformation to the transformation set. Transformations are included at the bottom of the list.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="transformation_box">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="hexpand">True</property>
+                            <items>
+                              <item id="0" translatable="yes" context="dataproviderdlg|transformation_list">Delete Columns</item>
+                              <item id="1" translatable="yes" context="dataproviderdlg|transformation_list">Delete Rows</item>
+                              <item id="2" translatable="yes" context="dataproviderdlg|transformation_list">Swap Rows</item>
+                              <item id="3" translatable="yes" context="dataproviderdlg|transformation_list">Split Column</item>
+                              <item id="4" translatable="yes" context="dataproviderdlg|transformation_list">Merge Columns</item>
+                              <item id="5" translatable="yes" context="dataproviderdlg|transformation_list">Text Transformation</item>
+                              <item id="6" translatable="yes" context="dataproviderdlg|transformation_list">Sort Columns</item>
+                              <item id="7" translatable="yes" context="dataproviderdlg|transformation_list">Aggregate Functions</item>
+                              <item id="8" translatable="yes" context="dataproviderdlg|transformation_list">Numeric</item>
+                              <item id="9" translatable="yes" context="dataproviderdlg|transformation_list">Replace Null</item>
+                              <item id="10" translatable="yes" context="dataproviderdlg|transformation_list">Date and Time</item>
+                              <item id="11" translatable="yes" context="dataproviderdlg|transformation_list">Find and Replace</item>
+                            </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="transformation_box-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|transformation_box">Available transformations that can be applied to the provided data.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkScrolledWindow" id="scroll">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="shadow-type">in</property>
+                            <child>
+                              <object class="GtkViewport">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <child>
+                                  <object class="GtkBox" id="transformation_ctrl">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="orientation">vertical</property>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel" id="label_transformation">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="dataproviderdlg/transformation">Transformations</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="frmPreview">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">6</property>
+                <property name="margin-top">6</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
+                <child>
+                  <object class="GtkBox" id="box2">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">6</property>
+                    <property name="margin-top">6</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkBox" id="data_table">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-end">6</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="apply">
+                        <property name="label" translatable="yes" context="dataproviderdlg/apply">Apply</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="dataproviderdlg/apply_tooltiptext">Apply Changes</property>
+                        <property name="halign">end</property>
+                        <property name="margin-end">6</property>
+                        <property name="use-underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="apply-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|apply">Applies the transformations to the provided data and displays results in the Preview area for inspection.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="label_preview"/>
+                    </accessibility>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label_preview">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="dataproviderdlg/preview">Preview</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                    <accessibility>
+                      <relation type="label-for" target="box2"/>
+                    </accessibility>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-11">help</action-widget>
+    </action-widgets>
+  </object>
+</interface>

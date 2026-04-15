@@ -1,0 +1,59 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module uri {
+
+/**
+   parses textual representations of absolute URIs.
+
+   <p>See <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC&nbsp;3986</a> for a
+   description of URIs and related terms.</p>
+ */
+published interface XUriSchemeParser: com::sun::star::uno::XInterface {
+    /**
+       parses the textual representation of an absolute URI.
+
+       <p>This method is used to parse URIs (with no fragment part), not URI
+       references (with an optional fragment part).</p>
+
+       <p>If an object is returned, the behaviour of its
+       com::sun::star::uri::XUriReference methods must
+       reflect the fact that the object represents an absolute URI reference
+       with the given scheme and scheme-specific part, and without a fragment
+       part.</p>
+
+       @param scheme
+       the textual representation of the scheme part (without the delimiting
+       &ldquo;<code>:</code>&rdquo;).
+
+       @param schemeSpecificPart
+       the textual representation of the scheme-specific part.
+
+       @returns
+       an object that supports
+       com::sun::star::uri::XUriReference (and possibly also
+       additional, scheme-specific interfaces), if the given input can be parsed
+       into an absolute URI; otherwise, `NULL` is returned.
+     */
+    XUriReference parse([in] string scheme, [in] string schemeSpecificPart);
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

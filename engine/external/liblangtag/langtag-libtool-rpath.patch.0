@@ -1,0 +1,23 @@
+Prevent libtool from adding annoying stuff to RPATH
+
+--- configure
++++ configure
+@@ -10730,6 +10730,7 @@
+       else
+         ld_shlibs=no
+       fi
++hardcode_libdir_flag_spec=
+       ;;
+ 
+     netbsd*)
+--- data/Makefile.in
++++ data/Makefile.in
+@@ -859,7 +859,7 @@
+ @CROSS_COMPILING_TRUE@language-subtag-registry.xml: language-subtag-registry reg2xml.c Makefile
+ @CROSS_COMPILING_TRUE@	@echo Warning: Unable to rebuild $@ when cross-compiling
+ @CROSS_COMPILING_FALSE@@REBUILD_DATA_TRUE@language-subtag-registry.xml: language-subtag-registry reg2xml$(EXEEXT) Makefile
+-@CROSS_COMPILING_FALSE@@REBUILD_DATA_TRUE@	$(AM_V_GEN) $(builddir)/reg2xml$(EXEEXT) $(srcdir)/language-subtag-registry $@.tmp || $(builddir)/reg2xml$(EXEEXT) $(builddir)/language-subtag-registry $@.tmp;	\
++@CROSS_COMPILING_FALSE@@REBUILD_DATA_TRUE@	$(AM_V_GEN) $(LIBO_TUNNEL_LIBRARY_PATH) $(builddir)/reg2xml$(EXEEXT) $(srcdir)/language-subtag-registry $@.tmp || $(LIBO_TUNNEL_LIBRARY_PATH) $(builddir)/reg2xml$(EXEEXT) $(builddir)/language-subtag-registry $@.tmp;	\
+ @CROSS_COMPILING_FALSE@@REBUILD_DATA_TRUE@	head -1 $@.tmp | grep -E '^<\?xml version'>/dev/null 2>&1 && mv $@.tmp $@ || (echo "E: $@ isn't an expected result"; rm $@.tmp)
+ @CROSS_COMPILING_FALSE@@REBUILD_DATA_FALSE@language-subtag-registry.xml:
+ @CROSS_COMPILING_FALSE@@REBUILD_DATA_FALSE@	@echo Warning: the rebuild of $@ is explicitly disabled.

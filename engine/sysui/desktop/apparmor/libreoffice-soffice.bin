@@ -1,0 +1,274 @@
+# ------------------------------------------------------------------
+#
+#    Copyright (C) 2016 Canonical Ltd.
+#    Copyright (C) 2018 Software in the Public Interest, Inc.
+#    Copyright (C) 2021 Google LLC
+#
+#    This Source Code Form is subject to the terms of the Mozilla Public
+#    License, v. 2.0. If a copy of the MPL was not distributed with this
+#    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+#    Authors: Jonathan Davies <jonathan.davies@canonical.com>
+#             Bryan Quigley <bryan.quigley@canonical.com>
+#             Rene Engelhard <rene@debian.org>
+#
+# ------------------------------------------------------------------
+
+# This profile should enable the average LibreOffice user to get their
+# work done while blocking some advanced usage
+# Namely not tested and likely not working : embedded plugins,
+# Using the LibreOffice SDK and other development tasks
+# Everything else should be working
+
+#Defines all common supported file formats
+#Some obscure ones we're excluded (mostly input)
+
+#Generic
+#.txt
+@{libreoffice_ext} = [tT][xX][tT]
+#All the open document format
+@{libreoffice_ext} += {,f,F}[oO][dDtT][tTsSpPbBgGfF]
+#.xml and xsl
+@{libreoffice_ext} += [xX][mMsS][lL]
+#.pdf
+@{libreoffice_ext} += [pP][dD][fF]
+#Unified office format
+@{libreoffice_ext} += [uU][oO][fFtTsSpP]
+#(x)htm(l)
+@{libreoffice_ext} += {,x,X}[hH][tT][mM]{,l,L}
+#.epub
+@{libreoffice_ext} += [eE][pP][uU][bB]
+#.ps (printing to file)
+@{libreoffice_ext} += [pP][sS]
+
+#Images
+@{libreoffice_ext} += [jJ][pP][gG]
+@{libreoffice_ext} += [jJ][pP][eE][gG]
+@{libreoffice_ext} += [pP][nN][gG]
+@{libreoffice_ext} += [sS][vV][gG]
+@{libreoffice_ext} += [sS][vV][gG][zZ]99251
+@{libreoffice_ext} += [tT][iI][fF]
+@{libreoffice_ext} += [tT][iI][fF][fF]
+
+#Writer
+@{libreoffice_ext} += [dD][oO][cCtT]{,x,X}
+@{libreoffice_ext} += [rR][tT][fF]
+
+#Calc
+@{libreoffice_ext} += [xX][lL][sStT]{,x,X,m,M}
+@{libreoffice_ext} += [xX][lL][wW]
+#.dif dbf
+@{libreoffice_ext} += [dD][iIbB][fF]
+#.tsv .csv
+@{libreoffice_ext} += [cCtT][sS][vV]
+@{libreoffice_ext} += [sS][lL][kK]
+
+#Impress/Draw
+@{libreoffice_ext} += [pP][pP][tTsS]{,x,X}
+@{libreoffice_ext} += [pP][oO][tT]{,m,M}
+#Photoshop
+@{libreoffice_ext} += [pP][sS][dD]
+
+#Math
+@{libreoffice_ext} += [mM][mM][lL]
+
+@{libo_inst_dir} = @INSTDIR@
+
+@{libo_user_dirs} = @{HOME} /mnt /media
+
+include <tunables/global>
+
+profile libreoffice-soffice @{libo_inst_dir}/program/soffice.bin flags=(complain) {
+  include <abstractions/private-files>
+
+  include <abstractions/audio>
+  include <abstractions/bash>
+  include <abstractions/cups-client>
+  include <abstractions/dbus>
+  include <abstractions/dbus-session>
+  include <abstractions/dbus-accessibility>
+  include <abstractions/dri-enumerate>
+  include <abstractions/gnome>
+# GnuPG1 only...
+##include <abstractions/gnupg>
+  include <abstractions/ibus>
+  include <abstractions/mesa>
+  include <abstractions/nameservice>
+  include <abstractions/opencl-intel>
+  include <abstractions/opencl-mesa>
+  include <abstractions/opencl-nvidia>
+  include <abstractions/p11-kit>
+  include <abstractions/python>
+  include <abstractions/user-tmp>
+
+  #List directories for file browser
+  /                                     r,
+  /**/                                  r,
+
+  owner @{libo_user_dirs}/**/           rw,  #allow creating directories that we own
+  owner @{libo_user_dirs}/**~lock.*     rw,  #lock file support
+  owner @{libo_user_dirs}/**.@{libreoffice_ext} rwk,  #Open files rw with the right exts
+  owner @{libo_user_dirs}/{,**/}lu*.tmp rwk, #Temporary file used when saving
+  owner @{libo_user_dirs}/{,**/}.directory r, #Read directory settings on KDE
+
+  # Settings
+  /etc/libreoffice/                     r,
+  /etc/libreoffice/**                   r,
+
+  /etc/cups/ppd/*.ppd                   r,
+  /etc/xml/catalog                      r, #exporting to .xhtml, for libxml2
+  /etc/paperspecs                       r, # used by paperconf
+  /proc/*/status                        r,
+
+  owner @{HOME}/.config/libreoffice{,dev}/** rwk,
+  owner @{HOME}/.config/soffice.binrc rwl -> @{HOME}/.config/#[0-9]*,
+  owner @{HOME}/.config/soffice.binrc.* rwl -> @{HOME}/.config/#[0-9]*,
+  owner @{HOME}/.config/soffice.binrc.lock rwk,
+  owner @{HOME}/.cache/fontconfig/**    rw,
+  owner @{HOME}/.config/gtk-???/bookmarks r,  #Make bookmarks work
+
+  owner @{run}/user/*/dconf/user        rw,
+  owner @{HOME}/.config/dconf/user      r,
+
+  owner @{run}/user/@{uid}/gvfsd/socket-* rw,
+
+  # allow schema to be read
+  /usr/share/glib-*/schemas/**          r,
+
+  # bluetooth send to
+  network bluetooth,
+
+  /{usr/,}bin/sh                        rmix,
+  /{usr/,}bin/bash                      rmix,
+  /{usr/,}bin/dash                      rmix,
+  /{usr/,}bin/rm                        rmix, #deleting /tmp/psp1534203998 (printing to file)
+  /usr/bin/bluetooth-sendto             rmPUx,
+  /usr/bin/lpr                          rmPUx,
+  /usr/bin/paperconf                    rmix,
+  /usr/bin/gpgconf                      rmix,
+  /usr/bin/gpg                          rmCx -> gpg,
+  /usr/bin/gpgsm                        rmCx -> gpg,
+  /usr/bin/gpa                          rix,
+  /usr/bin/seahorse                     rix,
+  /usr/bin/kgpg                         rix,
+  /usr/bin/kleopatra                    rix,
+
+  /dev/tty                              rw,
+
+  /usr/lib{,32,64}/@{multiarch}/gstreamer???/gstreamer-???/gst-plugin-scanner   rmPUx,
+  owner @{HOME}/.cache/gstreamer-???/** rw,
+
+  /etc/java-*-openjdk/security/java.security    r,
+  /usr/lib{,32,64}/jvm/                         r,
+  /usr/lib{,32,64}/jvm/**                       r,
+  /usr/lib{,32,64}/jvm/**/jre/bin/java          mix,
+  /usr/lib{,32,64}/jvm/**/bin/java              mix,
+  @{libo_inst_dir}/**                           rw,
+  @{libo_inst_dir}/**.so                        m,
+  @{libo_inst_dir}/program/soffice.bin          mix,
+  @{libo_inst_dir}/program/xpdfimport           px,
+  @{libo_inst_dir}/program/senddoc              px,
+  /usr/bin/xdg-open                             rPUx,
+
+  /usr/share/java/**.jar                r,
+  /usr/share/hunspell/**                r,
+  /usr/share/hyphen/**                  r,
+  /usr/share/mythes/**                  r,
+  /usr/share/liblangtag/**              r,
+  /usr/share/libreoffice/**             r,
+  /usr/share/yelp-xsl/xslt/mallard/**   r,
+  /usr/share/libexttextcat/*            r,
+  /usr/share/icu/**                     r,
+  /usr/share/locale-bundle/*            r,
+
+  /var/spool/libreoffice/**             rw,
+  /var/cache/fontconfig/                rw,
+
+  #Likely moving to abstractions in the future
+  owner @{HOME}/.icons/*/cursors/*      r,
+  /etc/fstab r, # Solid::DeviceNotifier::instance() TODO: deny?
+  /usr/share/*-fonts/conf.avail/*.conf  r,
+  /usr/share/fonts-config/conf.avail/*.conf r,
+  @{run}/udev/data/+usb:* r, # Solid::Device::listFromQuery()
+  @{run}/udev/data/{c,b}*:* r, # Solid::Device::description(), Solid::Device::listFromQuery()
+  @{PROC}/sys/kernel/random/boot_id r, # KRecentDocument::add() -> QSysInfo::bootUniqueId()
+
+  #To avoid "Unable to create io-slave." for file dialog
+  owner /{,var/}run/user/[0-9]*/#[0-9]* rw,
+  #For KIO IO::Slave::createSlave()
+  owner /{,var/}run/user/[0-9]*/soffice.bin*.slave-socket wl ->  /{,var/}run/user/[0-9]*/#[0-9]*,
+
+  owner @{HOME}/.mozilla/firefox/profiles.ini r,
+  owner @{HOME}/.mozilla/firefox/*/secmod.db r,
+  # firefox < 58
+  owner @{HOME}/.mozilla/firefox/*/cert8.db r,
+  # firefox >= 58
+  owner @{HOME}/.mozilla/firefox/*/cert9.db r,
+
+  # same as above, for thunderbird
+  owner @{HOME}/.thunderbird/profiles.ini r,
+  owner @{HOME}/.thunderbird/*/cert9.db r,
+
+  owner @{HOME}/.local/share/user-places.xbel r,
+
+  # there is abstractions/gnupg but that's just for gpg1...
+  profile gpg {
+    include <abstractions/base>
+
+    /usr/bin/gpgconf rm,
+    /usr/bin/gpg rm,
+    /usr/bin/gpgsm rm,
+
+    owner @{HOME}/.gnupg/* r,
+    owner @{HOME}/.gnupg/random_seed rk,
+    owner @{HOME}/.gnupg/tofu.db rwk,
+    owner @{run}/user/[0-9]*/gnupg/* rw,
+  }
+
+  # probably should become a subprofile like gpg above, but then it doesn't
+  # work either as it tries to access stuff only allowed above...
+  owner @{HOME}/.config/kdeglobals r,
+  /usr/lib/libreoffice/program/lo_kde5filepicker rPUx,
+  /usr/share/qt5/translations/* r,
+  /usr/lib/*/qt5/plugins/** rm,
+  /usr/share/plasma/look-and-feel/**/contents/defaults r,
+
+  # TODO: remove when rules are available in abstractions/kde
+  owner @{HOME}/.cache/ksycoca5_??_* r, # KDE System Configuration Cache
+  owner @{HOME}/.config/baloofilerc r, # indexing options (excludes, etc), used by KFileWidget
+  owner @{HOME}/.config/dolphinrc r, # settings used by KFileWidget
+  owner @{HOME}/.config/kde.org/libphonon.conf r, # for KNotifications::sendEvent()
+  owner @{HOME}/.config/klanguageoverridesrc r, # per-application languages, for KDEPrivate::initializeLanguages() from libKF5XmlGui.so
+  owner @{HOME}/.config/trashrc r, # user by KFileWidget
+  /usr/share/knotifications5/*.notifyrc r, # KNotification::sendEvent
+
+  # TODO: remove when rules are available in abstractions/kde-write-icon-cache or similar
+  owner @{HOME}/.cache/icon-cache.kcache rw, # for KIconLoader
+
+  # TODO: remove when rules are available in abstractions/kdeframeworks5 or similar
+  /usr/share/kservices5/*.protocol r,
+
+  # TODO: use qt5-settings-write abstraction when it is available
+  owner @{HOME}/.config/#[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9] rw,
+  owner @{HOME}/.config/QtProject.conf rw,
+  owner @{HOME}/.config/QtProject.conf.?????? l -> @{HOME}/.config/#[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9],
+  owner @{HOME}/.config/QtProject.conf.?????? rw, # for temporary files like QtProject.conf.Aqrgeb
+  owner @{HOME}/.config/QtProject.conf.lock rwk,
+
+  # TODO: use qt5-compose-cache-write abstraction when it is available
+  owner @{HOME}/.cache/qt_compose_cache_{little,big}_endian_* r,
+
+  # TODO: use recent-documents-write abstraction when it is available
+  owner @{HOME}/.local/share/RecentDocuments/** r,
+  owner @{HOME}/.local/share/RecentDocuments/*.desktop rwl -> @{HOME}/.local/share/RecentDocuments/#[0-9]*,
+  owner @{HOME}/.local/share/RecentDocuments/#[0-9]* rw,
+  owner @{HOME}/.local/share/RecentDocuments/*.lock rwk,
+
+  # TODO: use kde-globals-write abstraction when it is available
+  owner @{HOME}/.config/kdeglobals rw,
+  owner @{HOME}/.config/kdeglobals.* rwl -> @{HOME}/.config/#[0-9]*,
+  owner @{HOME}/.config/kdeglobals.lock rwk,
+
+  # Site-specific additions and overrides. See local/README for details.
+  include if exists <local/libreoffice-soffice>
+}

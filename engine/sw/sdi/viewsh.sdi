@@ -1,0 +1,642 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+interface TextEditView : BaseTextEditView
+{
+     // Slots, which are not needed in the WebDocShell
+    SID_DRAWTBX_LINES
+    [
+        StateMethod = GetState ;
+    ]
+
+    FN_INSERT_OBJ_CTRL
+    [
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    FN_INSERT_CAPTION // status()
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_INSERT_SIGNATURELINE // status()
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_EDIT_SIGNATURELINE // status()
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_SIGN_SIGNATURELINE // status()
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_INSERT_QRCODE // status()
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_EDIT_QRCODE // status()
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    FN_EDIT_FOOTNOTE // status(final|play)
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    FN_HYPHENATE_OPT_DLG // status(final|play)
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    FN_CHANGE_PAGENUM // status(final)
+    [
+        ExecMethod = ExecDlg ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_INSERT_DRAW // status()
+    [
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_LINE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_XLINE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_ARROW_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_ARROW_CIRCLE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_ARROW_SQUARE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_ARROW_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_CIRCLE_ARROW
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_SQUARE_ARROW
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_ARROWS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_MEASURELINE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_ARROWS
+    [
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_RECT
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_ELLIPSE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_XPOLYGON_NOFILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_XPOLYGON
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_POLYGON_NOFILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_POLYGON
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_BEZIER_NOFILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_BEZIER_FILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_FREELINE_NOFILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_FREELINE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_ARC
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_PIE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_CIRCLECUT
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_TEXT
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_TEXT_VERTICAL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_TEXT_MARQUEE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_CAPTION
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_CAPTION_VERTICAL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_FONTWORK_GALLERY_FLOATER
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_BASIC
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_SYMBOL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_ARROW
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_FLOWCHART
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_CALLOUT
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_STAR
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_CS_ID
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_FM_CREATE_CONTROL // status()
+    [
+        ExecMethod = ExecDraw ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_FM_CREATE_FIELDCONTROL
+    [
+        ExecMethod = ExecDraw ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_DRAWTBX_CONNECTORS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_TOOL_CONNECTOR
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_ARROW_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_ARROW_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_ARROWS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CIRCLE_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CIRCLE_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CIRCLES
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_ARROW_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_ARROW_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_ARROWS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_CIRCLE_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_CIRCLE_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_CIRCLES
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_ARROW_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_ARROW_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_ARROWS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_CIRCLE_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_CIRCLE_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_CIRCLES
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_ARROW_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_ARROW_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_ARROWS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_CIRCLE_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_CIRCLE_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_CIRCLES
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+}
+
+shell SwView
+{
+    import TextEditView;
+}
+
+interface TextPrintPreview
+{
+    SID_BROWSER_MODE
+    [
+        StateMethod = GetState;
+    ]
+    FN_PRINT_LAYOUT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_SINGLE_PAGE_PER_ROW
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_MULTIPLE_PAGES_PER_ROW
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_BOOKVIEW
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_REFRESH_VIEW // status(final|play)
+    [
+        StateMethod = GetState ;
+    ]
+    FN_CHAR_LEFT // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_CHAR_RIGHT // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_LINE_UP // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_LINE_DOWN // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_PAGEUP // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_PAGEDOWN // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_START_OF_DOCUMENT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_END_OF_DOCUMENT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_SHOW_TWO_PAGES // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_SHOW_SINGLE_PAGE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    FN_SHOW_MULTIPLE_PAGES // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_SHOW_BOOKVIEW // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_PRINT_PAGEPREVIEW // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTDOC // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTDOCDIRECT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTPREVIEW // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_VIEWLAYOUT
+    [
+        StateMethod = GetState ;
+    ]
+    FN_CLOSE_PAGEPREVIEW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ZOOM_IN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ZOOM_OUT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_PREVIEW_ZOOM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_UNDO // status()
+    [
+        StateMethod = StateUndo ;
+    ]
+    SID_REDO // status()
+    [
+        StateMethod = StateUndo ;
+    ]
+    SID_REPEAT // status()
+    [
+        StateMethod = StateUndo ;
+    ]
+
+    // Begin StatusBar
+    FN_STAT_ZOOM // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_ZOOM // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_STAT_PAGE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_START_OF_LINE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_END_OF_LINE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_INSERT_BREAK // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_ZOOMSLIDER // status()
+    [
+            ExecMethod = Execute ;
+            StateMethod = GetState ;
+    ]
+    FN_STAT_WORDCOUNT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_STAT_ACCESSIBILITY_CHECK // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_JUMP_TO_SPECIFIC_PAGE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    // End StatusBar
+}
+
+shell SwPagePreview
+{
+    import TextPrintPreview;
+}

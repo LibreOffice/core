@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {   module sun {   module star {   module document {
+
+/** The document can provide access to CMIS properties and versions
+    through this interface.
+  */
+interface XCmisDocument : com::sun::star::uno::XInterface
+{
+    /** Check out the document into a private working copy on the
+        server, and update the loaded document to reflect this change.
+     */
+    void checkOut( );
+
+    /** Cancel checked out document, this will discard all changes since
+        check-out.
+     */
+    void cancelCheckOut( );
+
+    /** Creates a new version of the document from the private working
+        copy.
+     */
+    void checkIn( [in] boolean isMajor, [in] string comment );
+
+    /** Tells whether a document can support versioning or not.
+     */
+    boolean isVersionable( );
+
+    boolean canCheckOut( );
+
+    boolean canCancelCheckOut( );
+
+    boolean canCheckIn( );
+
+    void updateCmisProperties( [in] sequence <com::sun::star::document::CmisProperty> cmisProperties );
+
+    sequence <com::sun::star::document::CmisVersion> getAllVersions( );
+
+    /** Contains the properties values named after their CMIS ID.
+     */
+    [attribute] sequence <com::sun::star::document::CmisProperty> CmisProperties;
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

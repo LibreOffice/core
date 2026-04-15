@@ -1,0 +1,6 @@
+The graphics library, used for anti-aliasing. From [http://cairographics.org/].
+
+This code is used by default only on Linux, though it is also
+available on Mac. There is a cairo-canvas implementation that is the
+main customer, and it is enabled via 'use hardware acceleration' in
+the general options.

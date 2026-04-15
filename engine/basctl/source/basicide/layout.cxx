@@ -1,0 +1,430 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <layout.hxx>
+
+#include <bastypes.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/event.hxx>
+
+namespace basctl
+{
+
+namespace
+{
+// the thickness of the splitting lines
+tools::Long const nSplitThickness = 3;
+} // namespace
+
+// ctor for derived classes
+// pParent: the parent window (Shell)
+Layout::Layout (vcl::Window* pParent) :
+    Window(pParent, WB_CLIPCHILDREN),
+    pChild(nullptr),
+    bFirstSize(true),
+    aLeftSide(this, SplittedSide::Side::Left),
+    aBottomSide(this, SplittedSide::Side::Bottom)
+{
+    SetBackground(GetSettings().GetStyleSettings().GetWindowColor());
+
+    vcl::Font aFont = GetFont();
+    Size aSz = aFont.GetFontSize();
+    aSz.setHeight( aSz.Height() * 1.5 );
+    aFont.SetFontSize(aSz);
+    aFont.SetWeight(WEIGHT_BOLD);
+    aFont.SetColor(GetSettings().GetStyleSettings().GetWindowTextColor());
+    SetFont(aFont);
+}
+
+Layout::~Layout()
+{
+    disposeOnce();
+}
+
+void Layout::dispose()
+{
+    aLeftSide.dispose();
+    aBottomSide.dispose();
+    pChild.reset();
+    Window::dispose();
+}
+
+// removes a docking window
+void Layout::Remove (DockingWindow* pWin)
+{
+    aLeftSide.Remove(pWin);
+    aBottomSide.Remove(pWin);
+}
+
+// called by Window when resized
+void Layout::Resize()
+{
+    if (IsVisible())
+        ArrangeWindows();
+}
+
+// ArrangeWindows() -- arranges the child windows
+void Layout::ArrangeWindows ()
+{
+    // prevent recursion via OnFirstSize() -> Add() -> ArrangeWindows()
+    static bool bInArrangeWindows = false;
+    if (bInArrangeWindows)
+        return;
+    bInArrangeWindows = true;
+
+    Size const aSize = GetOutputSizePixel();
+    tools::Long const nWidth = aSize.Width(), nHeight = aSize.Height();
+    if (nWidth && nHeight) // non-empty size
+    {
+        // On first call the derived classes initializes the sizes of the
+        // docking windows. This cannot be done at construction because
+        // the Layout has empty size at that point.
+        if (bFirstSize)
+        {
+            bFirstSize = false;
+            OnFirstSize(nWidth, nHeight); // virtual
+        }
+
+        // sides
+        aBottomSide.ArrangeIn(tools::Rectangle(Point(0, 0), aSize));
+        aLeftSide.ArrangeIn(tools::Rectangle(Point(0, 0), Size(nWidth, nHeight - aBottomSide.GetSize())));
+        // child in the middle
+        pChild->SetPosSizePixel(
+            Point(aLeftSide.GetSize(), 0),
+            Size(nWidth - aLeftSide.GetSize(), nHeight - aBottomSide.GetSize())
+        );
+    }
+
+    bInArrangeWindows = false;
+}
+
+void Layout::Activating (BaseWindow& rWindow)
+{
+    // first activation
+    pChild = &rWindow;
+    ArrangeWindows();
+    Show();
+    pChild->Activating();
+}
+
+void Layout::Deactivating ()
+{
+    if (pChild)
+        pChild->Deactivating();
+    Hide();
+    pChild = nullptr;
+}
+
+// virtual
+void Layout::DataChanged (DataChangedEvent const& rDCEvt)
+{
+    Window::DataChanged(rDCEvt);
+    if (!(rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)))
+        return;
+
+    bool bInvalidate = false;
+    Color aColor = GetSettings().GetStyleSettings().GetWindowColor();
+    const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
+    if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetWindowColor())
+    {
+        SetBackground(Wallpaper(aColor));
+        bInvalidate = true;
+    }
+    aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+    if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetWindowTextColor())
+    {
+        vcl::Font aFont(GetFont());
+        aFont.SetColor(aColor);
+        SetFont(aFont);
+        bInvalidate = true;
+    }
+    if (bInvalidate)
+        Invalidate();
+}
+
+
+// SplittedSide
+
+
+// ctor
+Layout::SplittedSide::SplittedSide (Layout* pParent, Side eSide) :
+    rLayout(*pParent),
+    bVertical(eSide == Side::Left),
+    bLower(eSide == Side::Left),
+    nSize(0),
+    aSplitter(VclPtr<Splitter>::Create(pParent, bVertical ? WB_HSCROLL : WB_VSCROLL))
+{
+    InitSplitter(*aSplitter);
+}
+
+void Layout::SplittedSide::dispose()
+{
+    aSplitter.disposeAndClear();
+    for (auto & item : vItems)
+    {
+        item.pSplit.disposeAndClear();
+        item.pWin.reset();
+    }
+}
+
+// Add() -- adds a new window to the side (after construction)
+void Layout::SplittedSide::Add (DockingWindow* pWin, Size const& rSize)
+{
+    tools::Long const nSize1 = (bVertical ? rSize.Width() : rSize.Height()) + nSplitThickness;
+    tools::Long const nSize2 = bVertical ? rSize.Height() : rSize.Width();
+    // nSize
+    if (nSize1 > nSize)
+        nSize = nSize1;
+    // window
+    Item aItem;
+    aItem.pWin = pWin;
+    aItem.nStartPos = vItems.empty() ? 0 : vItems.back().nEndPos + nSplitThickness;
+    aItem.nEndPos = aItem.nStartPos + nSize2;
+    // splitter
+    if (!vItems.empty())
+    {
+        aItem.pSplit = VclPtr<Splitter>::Create(&rLayout, bVertical ? WB_VSCROLL : WB_HSCROLL);
+        aItem.pSplit->SetSplitPosPixel(aItem.nStartPos - nSplitThickness);
+        InitSplitter(*aItem.pSplit);
+    }
+    vItems.push_back(aItem);
+    // refresh
+    rLayout.ArrangeWindows();
+}
+
+// Remove() -- removes a window from the side (if contains)
+void Layout::SplittedSide::Remove (DockingWindow* pWin)
+{
+    // contains?
+    std::vector<Item>::size_type iWin;
+    for (iWin = 0; iWin != vItems.size(); ++iWin)
+        if (vItems[iWin].pWin == pWin)
+            break;
+    if (iWin == vItems.size())
+        return;
+    // remove
+    vItems[iWin].pSplit.disposeAndClear();
+    vItems[iWin].pWin.reset();
+    vItems.erase(vItems.begin() + iWin);
+    // if that was the first one, remove the first splitter line
+    if (iWin == 0 && !vItems.empty())
+        vItems.front().pSplit.reset();
+}
+
+// creating a Point or a Size object
+// The coordinate order depends on bVertical (reversed if true).
+inline Size Layout::SplittedSide::MakeSize (tools::Long A, tools::Long B) const
+{
+    return bVertical ? Size(B, A) : Size(A, B);
+}
+inline Point Layout::SplittedSide::MakePoint (tools::Long A, tools::Long B) const
+{
+    return bVertical ? Point(B, A) : Point(A, B);
+}
+
+// IsDocking() -- is this window currently docking in the strip?
+bool Layout::SplittedSide::IsDocking (DockingWindow const& rWin)
+{
+    return rWin.IsVisible() && !rWin.IsFloatingMode();
+}
+
+// IsEmpty() -- are there no windows docked in this strip?
+bool Layout::SplittedSide::IsEmpty () const
+{
+    for (auto const & i: vItems)
+        if (IsDocking(*i.pWin))
+            return false;
+    return true;
+}
+
+// GetSize() -- returns the width or height of the strip (depending on the direction)
+tools::Long Layout::SplittedSide::GetSize () const
+{
+    return IsEmpty() ? 0 : nSize;
+}
+
+// Arrange() -- arranges the docking windows
+// rRect: the available space
+void Layout::SplittedSide::ArrangeIn (tools::Rectangle const& rRect)
+{
+    // saving the rectangle
+    aRect = rRect;
+
+    // the length of the side
+    tools::Long const nLength = bVertical ? aRect.GetSize().Height() : aRect.GetSize().Width();
+    tools::Long const nOtherSize = bVertical ? aRect.GetSize().Width() : aRect.GetSize().Height();
+    // bVertical ? horizontal position : vertical position
+    tools::Long const nPos1 = (bVertical ? aRect.Left() : aRect.Top()) +
+        (bLower ? 0 : nOtherSize - (nSize - nSplitThickness));
+    // bVertical ? vertical position : horizontal position
+    tools::Long const nPos2 = bVertical ? aRect.Top() : aRect.Left();
+
+    // main line
+    bool const bEmpty = IsEmpty();
+    // shown if any of the windows is docked
+    if (!bEmpty)
+    {
+        aSplitter->Show();
+        // split position
+        aSplitter->SetSplitPosPixel((bLower ? nSize : nPos1) - nSplitThickness);
+        // the actual position and size
+        aSplitter->SetPosSizePixel(
+            MakePoint(nPos2, aSplitter->GetSplitPosPixel()),
+            MakeSize(nLength, nSplitThickness)
+        );
+        // dragging rectangle
+        aSplitter->SetDragRectPixel(aRect);
+    }
+    else
+        aSplitter->Hide();
+
+    // positioning separator lines and windows
+    bool bPrevDocking = false; // is the previous window docked?
+    tools::Long nStartPos = 0; // window position in the strip
+    std::vector<Item>::size_type iLastWin = vItems.size(); // index of last docking window in the strip
+
+    for (std::vector<Item>::size_type i = 0; i != vItems.size(); ++i)
+    {
+        // window
+        DockingWindow& rWin = *vItems[i].pWin;
+        bool const bDocking = IsDocking(rWin);
+        if (bDocking)
+            iLastWin = i;
+        // sizing window
+        rWin.ResizeIfDocking(
+            MakePoint(nPos2 + nStartPos, nPos1),
+            MakeSize(vItems[i].nEndPos - nStartPos, nSize - nSplitThickness)
+        );
+        // splitting line before the window
+        if (i > 0)
+        {
+            Splitter& rSplit = *vItems[i].pSplit;
+            // If neither of two adjacent windows are docked,
+            // the splitting line is hidden.
+            // If this window is docking but the previous isn't,
+            // then the splitting line is also hidden, because this window
+            // will occupy the space of the previous.
+            if (bPrevDocking)
+            {
+                rSplit.Show();
+                // the actual position and size of the line
+                rSplit.SetPosSizePixel(
+                    MakePoint(nPos2 + nStartPos - nSplitThickness, nPos1),
+                    MakeSize(nSplitThickness, nSize - nSplitThickness)
+                );
+                // the dragging rectangle
+                rSplit.SetDragRectPixel(tools::Rectangle(
+                    MakePoint(nPos2, nPos1),
+                    MakeSize(nLength, nSize - nSplitThickness)
+                ));
+            }
+            else
+                rSplit.Hide();
+        }
+        // next
+        bPrevDocking = bDocking;
+        if (bDocking)
+            nStartPos = vItems[i].nEndPos + nSplitThickness;
+        // We only set nStartPos if this window is docking, because otherwise
+        // the next window will occupy also the space of this window.
+    }
+
+    // filling the remaining space with the last docking window
+    if (bEmpty || vItems[iLastWin].nEndPos == nLength)
+        return;
+
+    Item& rItem = vItems[iLastWin];
+    Size aSize = rItem.pWin->GetDockingSize();
+    if (bVertical)
+        aSize.AdjustHeight( nLength - rItem.nEndPos );
+    else
+        aSize.AdjustWidth( nLength - rItem.nEndPos );
+    rItem.pWin->ResizeIfDocking(aSize);
+    // and hiding the split line after the window
+    if (iLastWin + 1 < vItems.size())
+        vItems[iLastWin + 1].pSplit->Hide();
+}
+
+IMPL_LINK(Layout::SplittedSide, SplitHdl, Splitter*, pSplitter, void)
+{
+    // checking margins
+    CheckMarginsFor(pSplitter);
+    // changing stored sizes
+    if (pSplitter == aSplitter.get())
+    {
+        // nSize
+        if (bLower)
+            nSize = pSplitter->GetSplitPosPixel();
+        else
+            nSize = (bVertical ? aRect.Right() : aRect.Bottom()) + 1 - pSplitter->GetSplitPosPixel();
+    }
+    else
+    {
+        // Item::nStartPos, Item::nLength
+        for (size_t i = 1; i < vItems.size(); ++i)
+        {
+            if (vItems[i].pSplit.get() == pSplitter)
+            {
+                // before the line
+                vItems[i - 1].nEndPos = pSplitter->GetSplitPosPixel();
+                // after the line
+                vItems[i].nStartPos = pSplitter->GetSplitPosPixel() + nSplitThickness;
+            }
+        }
+    }
+    // arranging windows
+    rLayout.ArrangeWindows();
+}
+
+void Layout::SplittedSide::CheckMarginsFor (Splitter* pSplitter)
+{
+    // The splitter line cannot be closer to the edges than nMargin pixels.
+    static tools::Long const nMargin = 16;
+    // Checking margins:
+    tools::Long const nLength = pSplitter->IsHorizontal() ?
+        aRect.GetWidth() : aRect.GetHeight();
+    if (!nLength)
+        return;
+
+    // bounds
+    tools::Long const nLower = (pSplitter->IsHorizontal() ? aRect.Left() : aRect.Top()) + nMargin;
+    tools::Long const nUpper = nLower + nLength - 2*nMargin;
+    // split position
+    tools::Long const nPos = pSplitter->GetSplitPosPixel();
+    // checking bounds
+    if (nPos < nLower)
+        pSplitter->SetSplitPosPixel(nLower);
+    if (nPos > nUpper)
+        pSplitter->SetSplitPosPixel(nUpper);
+}
+
+void Layout::SplittedSide::InitSplitter (Splitter& rSplitter)
+{
+    // link
+    rSplitter.SetSplitHdl(LINK(this, SplittedSide, SplitHdl));
+    // color
+    Color aColor = rLayout.GetSettings().GetStyleSettings().GetShadowColor();
+    rSplitter.GetOutDev()->SetLineColor(aColor);
+    rSplitter.GetOutDev()->SetFillColor(aColor);
+}
+
+
+} // namespace basctl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

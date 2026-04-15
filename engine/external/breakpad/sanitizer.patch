@@ -1,0 +1,29 @@
+--- src/client/linux/minidump_writer/minidump_writer.cc
++++ src/client/linux/minidump_writer/minidump_writer.cc
+@@ -717,7 +717,7 @@
+     const std::vector<uint64_t> crash_exception_info =
+         dumper_->crash_exception_info();
+     stream->exception_record.number_parameters = crash_exception_info.size();
+-    memcpy(stream->exception_record.exception_information,
++    if (!crash_exception_info.empty()) memcpy(stream->exception_record.exception_information,
+            crash_exception_info.data(),
+            sizeof(uint64_t) * crash_exception_info.size());
+     stream->thread_context = crashing_thread_context_;
+@@ -760,7 +760,7 @@
+       // Adjust base address with the virtual address of the PT_LOAD segment
+       // corresponding to offset 0
+       if (ph.p_type == PT_LOAD && ph.p_offset == 0) {
+-        base -= ph.p_vaddr;
++        base = reinterpret_cast<char*>(reinterpret_cast<uintptr_t>(base) - ph.p_vaddr);
+       }
+       if (ph.p_type == PT_DYNAMIC) {
+         dyn_addr = ph.p_vaddr;
+@@ -769,7 +769,7 @@
+     if (!dyn_addr)
+       return false;
+ 
+-    ElfW(Dyn)* dynamic = reinterpret_cast<ElfW(Dyn)*>(dyn_addr + base);
++    ElfW(Dyn)* dynamic = reinterpret_cast<ElfW(Dyn)*>(dyn_addr + reinterpret_cast<uintptr_t>(base));
+ 
+     // The dynamic linker makes information available that helps gdb find all
+     // DSOs loaded into the program. If this information is indeed available,

@@ -1,0 +1,11 @@
+--- python3/PCbuild/sqlite3.vcxproj	2025-10-28 12:15:59.386769096 +0100
++++ python3/PCbuild/sqlite3.vcxproj	2025-10-28 12:21:58.905090639 +0100
+@@ -88,7 +88,7 @@
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+-    <_SqliteVersion>$([System.Text.RegularExpressions.Regex]::Match(`$(sqlite3Dir)`, `((\d+)\.(\d+)\.(\d+)\.(\d+))\\?$`).Groups)</_SqliteVersion>
++    <_SqliteVersion>$([System.Text.RegularExpressions.Regex]::Match(`0.0.0.0`, `((\d+)\.(\d+)\.(\d+)\.(\d+))\\?$`).Groups)</_SqliteVersion>
+     <SqliteVersion>$(_SqliteVersion.Split(`;`)[1])</SqliteVersion>
+     <SqliteMajorVersion>$(_SqliteVersion.Split(`;`)[2])</SqliteMajorVersion>
+     <SqliteMinorVersion>$(_SqliteVersion.Split(`;`)[3])</SqliteMinorVersion>

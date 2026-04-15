@@ -1,0 +1,11 @@
+Java database engine from [http://hsqldb.org/].
+
+Default database format for LibreOffice.
+
+At some point the plan was to replace it as default by Firebird, but
+that seems increasingly unlikely to happen.
+
+See:
+https://bugs.freedesktop.org/show_bug.cgi?id=51781
+http://www.firebirdsql.org
+

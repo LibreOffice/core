@@ -1,0 +1,37 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "macros.inc"
+
+#include "AutoInstall/reportbuilder"
+
+Module gid_Module_Reportbuilder
+    PackageInfo = "packinfo_office.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_REPORTDESIGN); 
+    ParentID = gid_Module_Optional;
+    Styles = ( );
+    Default = YES; 
+    Dirs = (gid_Dir_Share_Reportbuilder);
+    Files = (auto_reportbuilder_ALL,
+        gid_File_Xcd_Reportbuilder);
+End
+
+Directory gid_Dir_Share_Reportbuilder
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "reportbuilder";
+End
+
+File gid_File_Xcd_Reportbuilder
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Registry;
+    Name = "reportbuilder.xcd";
+    Styles = (PACKED);
+End
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,18 @@
+diff --git a/src/jrd/trace/TraceConfigStorage.cpp b/src/jrd/trace/TraceConfigStorage.cpp
+index 05fce3211ae7..d267713e85de 100644
+--- a/src/jrd/trace/TraceConfigStorage.cpp
++++ b/src/jrd/trace/TraceConfigStorage.cpp
+@@ -103,11 +103,11 @@ ConfigStorage::ConfigStorage()
+ 		pfnProcessIdToSessionId(GetCurrentProcessId(), &sesID) == 0 ||
+ 		sesID == 0)
+ 	{
+-		filename.printf(TRACE_FILE); // TODO: it must be per engine instance
++		filename.printf("%s.0.%u", TRACE_FILE, GetCurrentProcessId()); // TODO: it must be per engine instance
+ 	}
+ 	else
+ 	{
+-		filename.printf("%s.%u", TRACE_FILE, sesID);
++		filename.printf("%s.%u.%u", TRACE_FILE, sesID, GetCurrentProcessId());
+ 	}
+ #else
+ 	filename.printf(TRACE_FILE); // TODO: it must be per engine instance

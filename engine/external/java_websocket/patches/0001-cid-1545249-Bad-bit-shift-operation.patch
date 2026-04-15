@@ -1,0 +1,50 @@
+From 49a74350016b59c4cca054c5802b4437c0b3857f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Wed, 4 Oct 2023 15:19:13 +0100
+Subject: [PATCH] cid#1545249 Bad bit shift operation
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+https://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.19
+
+If the promoted type of the left-hand operand is int, only the five
+lowest-order bits of the right-hand operand are used as the shift
+distance. It is as if the right-hand operand were subjected to a bitwise
+logical AND operator & (§15.22.1) with the mask value 0x1f (0b11111).
+The shift distance actually used is therefore always in the range 0 to
+31, inclusive.
+
+so a >>> of 32 is the same as >>> 0 so this is
+result = 31 * result + (maxFrameSize ^ maxFrameSize);
+i.e.
+result = 31 * result + (0);
+
+which all looks a bit dubious.
+
+Working theory from https://gerrit.libreoffice.org/c/core/+/157571/1 is
+that at some point maxFrameSize was a long value, and then got changed
+to an int, but the hashCode() was not updated and should now read as
+changed here.
+
+    result = 31 * result + maxFrameSize;
+---
+ src/main/java/org/java_websocket/drafts/Draft_6455.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main/java/org/java_websocket/drafts/Draft_6455.java b/src/main/java/org/java_websocket/drafts/Draft_6455.java
+index 1e08448..635fa1f 100644
+--- a/src/main/java/org/java_websocket/drafts/Draft_6455.java
++++ b/src/main/java/org/java_websocket/drafts/Draft_6455.java
+@@ -1150,7 +1150,7 @@ public class Draft_6455 extends Draft {
+   public int hashCode() {
+     int result = negotiatedExtension != null ? negotiatedExtension.hashCode() : 0;
+     result = 31 * result + (protocol != null ? protocol.hashCode() : 0);
+-    result = 31 * result + (maxFrameSize ^ (maxFrameSize >>> 32));
++    result = 31 * result + maxFrameSize;
+     return result;
+   }
+ 
+-- 
+2.41.0
+

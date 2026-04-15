@@ -1,0 +1,77 @@
+Versione 2.4 (01/09/2007) (dd/mm/yyyy)
+
+home page: http://linguistico.sf.net/wiki
+
+For English Readers: please see the text at the end of this document
+----------------------------------
+
+**********************************
+***********  Italiano  ***********
+**********************************
+
+Questo dizionario è rilasciato sotto licenza GPL versione 3.0 o superiore.
+Puoi trovare il testo della licenza qui: http://www.gnu.org/
+(http://www.gnu.org/licenses/gpl.txt)
+
+Con questo file (it_IT_README.1st) sono inclusi anche i seguenti:
+* it_IT.dic il file del dizionario (radici + regole per l'espansione)
+* it_IT.aff il file delle affix (le regole)
+* it_IT_COPYING (la licenza GPL)
+* it_IT_license.txt (il copyright e la licenza usata per questo lavoro)
+* it_IT_README.txt (una piccola documentazione)
+* it_IT_statistiche.sxc (un file di OOoCalc con le statistiche tra le varie
+  versioni del dizionario)
+* it_IT_ChangeLog (file contenente la storia del dizionario)
+* it_IT_AUTHORS (file contenente i nomi dei volontari)
+* it_IT_notes.txt (file contenente note varie relative alla versione attuale del
+  dizionario)
+* it_IT_todo.txt (file contenente le cose da fare)
+
+Puoi trovare le nuove versioni del dizionario qui:
+- http://linguistico.sourceforge.net/wiki
+- http://sourceforge.net/projects/linguistico/
+
+Puoi trovare alcune delle vecchie versioni del dizionario qui:
+- http://sourceforge.net/projects/ooodocs/
+- http://xoomer.virgilio.it/alessandro.prina/
+
+Ulteriori informazioni circa questo dizionario, gli autori e chi ha contribuito,
+possono essere reperite visitando la pagina: 
+- http://it.openoffice.org/contribuire/spellcheck.html
+
+Per contattare gli autori è possibile scrivere a:
+* DavidePrina(chiocciola)yahoo(punto)com
+
+**********************************
+***********  English  ************
+**********************************
+
+This dictionary is released under GPL license version 2.0 or above.
+You can find the text of the license on http://www.gnu.org/
+(http://www.gnu.org/licenses/gpl.txt)
+
+With this file (it_IT_README.1st) you must find:
+* it_IT.dic the dictionary file (words with rules)
+* it_IT.aff the affix file (rules)
+* it_IT_COPYING (the GPL license)
+* it_IT_license.txt (the copyright and license used for this work)
+* it_IT_README.txt (a small documentation)
+* it_IT_statistiche.sxc (a calc file with statistics on our works)
+* it_IT_ChangeLog (file with the history of the Italian dictionary)
+* it_IT_AUTHORS (file with volunteer names)
+* it_IT_notes.txt (file with additional notes about acutual dictionary version)
+* it_IT_todo.txt (file with things todo)
+
+You can find new Italian dictionary versions here:
+- http://linguistico.sourceforge.net/wiki
+- http://sourceforge.net/projects/linguistico/
+
+You can find some old Italian dictionary versions here:
+- http://sourceforge.net/projects/ooodocs/
+- http://xoomer.virgilio.it/alessandro.prina/
+
+For further information about this dictionary, the authors or how to contribute
+to it, please visit http://it.openoffice.org/contribuire/spellcheck.html
+
+You can contact authours writing to:
+* DavidePrina(at)yahoo(dot)com

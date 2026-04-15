@@ -1,0 +1,97 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+module com {  module sun {  module star {  module lang {
+
+/** object represents a specific geographical, political, or cultural region.
+
+    <p>An operation that requires a <code>Locale</code> to perform
+    its task is called <em>locale-sensitive</em> and uses the
+    <code>Locale</code> to tailor information for the user. For example,
+    displaying a number is a locale-sensitive operation; the number
+    should be formatted according to the customs/conventions of the
+    user's native country, region, or culture.  </p>
+ */
+published struct Locale
+{
+    /** specifies an <strong>ISO 639 Language Code</strong>.
+
+        <p>These codes are preferably the lower-case two-letter codes as
+        defined by ISO 639-1, or three-letter codes as defined by ISO
+        639-3. You can find a full list of these codes at a number of
+        sites, such as: <br/>
+        <a href="https://iso639-3.sil.org/code_tables/639/data">
+        <code>https://iso639-3.sil.org/code_tables/639/data</code></a>.
+        </p>
+
+        <p>If this field contains an empty string, the meaning depends on the
+        context.</p>
+
+        <p>Since LibreOffice 4.2, if the locale can not be represented
+        using only ISO 639 and ISO 3166 codes this field contains the
+        ISO 639-3 reserved for local use code <strong>"qlt"</strong> and
+        a <strong>BCP 47</strong> language tag is present in the Variant
+        field. </p>
+     */
+    string Language;
+
+    /** specifies an <strong>ISO 3166 Country Code</strong>.
+
+        <p>These codes are the upper-case two-letter codes as
+        defined by ISO 3166-1.  You can find a full list of these codes
+        at a number of sites, such as: <br/>
+        <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">
+        <code>https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2</code></a>.
+        </p>
+
+        <p>If this field contains an empty string, the meaning depends on the
+        context.</p>
+     */
+    string Country;
+
+    /** specifies a <strong>BCP 47</strong> Language Tag.
+
+        <p>Since LibreOffice 4.2, <strong>if</strong> the Language field
+        is the code <strong>"qlt"</strong> this field contains the full
+        BCP 47 language tag. If the Language field is not "qlt" this
+        field is empty. </p>
+
+        <p>You can find BCP 47 language tag resources at <br/>
+        <a href="https://en.wikipedia.org/wiki/IETF_language_tag">
+        <code>https://en.wikipedia.org/wiki/IETF_language_tag</code></a> and
+        <a href="https://www.w3.org/International/articles/language-tags/">
+        <code>https://www.w3.org/International/articles/language-tags/</code></a>. </p>
+
+        <p>Earlier versions of the documentation mentioned "vendor and
+        browser-specific" codes but that was never supported. Use of any
+        arbitrary strings in the Variant field that do not form a valid
+        BCP 47 language tag is <strong>strongly deprecated</strong>.
+        </p>
+     */
+    string Variant;
+
+};
+
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

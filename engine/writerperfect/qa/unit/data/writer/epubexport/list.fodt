@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <style:style style:name="P1" style:family="paragraph" style:list-style-name="L1"/>
+    <text:list-style style:name="L1">
+      <text:list-level-style-bullet text:level="1" text:bullet-char="•">
+        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.27cm" fo:text-indent="-0.635cm" fo:margin-left="1.27cm"/>
+        </style:list-level-properties>
+      </text:list-level-style-bullet>
+    </text:list-style>
+  </office:automatic-styles>
+  <office:body>
+    <office:text>
+      <text:p>A</text:p>
+      <text:list xml:id="list1647378619" text:style-name="L1">
+        <text:list-item>
+          <text:p text:style-name="P1">B</text:p>
+        </text:list-item>
+      </text:list>
+      <text:p>C</text:p>
+      <text:p>D</text:p>
+      <text:list xml:id="list111055674" text:style-name="L1">
+        <text:list-item>
+          <text:p text:style-name="P1">E</text:p>
+          <text:list>
+            <text:list-item>
+              <text:p text:style-name="P1">F</text:p>
+            </text:list-item>
+          </text:list>
+        </text:list-item>
+      </text:list>
+      <text:p>G</text:p>
+    </office:text>
+  </office:body>
+</office:document>

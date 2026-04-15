@@ -1,0 +1,5 @@
+LIBRARY      "UAccCOM.DLL"
+
+EXPORTS
+	DllCanUnloadNow     PRIVATE
+	DllGetClassObject   PRIVATE

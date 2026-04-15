@@ -1,0 +1,20 @@
+--- src/lib/MSWrite.cpp
++++ src/lib/MSWrite.cpp
+@@ -1421,7 +1421,7 @@
+ 		break;
+ 	}
+ 
+-	unsigned offset = MSWriteParserInternal::BM_FILE_STRUCT_SIZE + MSWriteParserInternal::BM_INFO_V2_STRUCT_SIZE + colors * unsigned(sizeof(MSWriteParserInternal::BitmapPalette));
++	unsigned offset = +MSWriteParserInternal::BM_FILE_STRUCT_SIZE + MSWriteParserInternal::BM_INFO_V2_STRUCT_SIZE + colors * unsigned(sizeof(MSWriteParserInternal::BitmapPalette));
+ 
+ 	// File header
+ 	bmpdata.append('B');
+@@ -1513,7 +1513,7 @@
+ 	bmpdata.append('M');
+ 	MSWriteParserInternal::appendU32(bmpdata, size + MSWriteParserInternal::BM_FILE_STRUCT_SIZE);
+ 	MSWriteParserInternal::appendU32(bmpdata, 0);
+-	MSWriteParserInternal::appendU32(bmpdata, MSWriteParserInternal::BM_FILE_STRUCT_SIZE + MSWriteParserInternal::BM_INFO_V3_STRUCT_SIZE + 4 * colors);
++	MSWriteParserInternal::appendU32(bmpdata, +MSWriteParserInternal::BM_FILE_STRUCT_SIZE + MSWriteParserInternal::BM_INFO_V3_STRUCT_SIZE + 4 * colors);
+ 
+ 	bmpdata.append(data, size);
+ 

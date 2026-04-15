@@ -1,0 +1,30 @@
+From f08918e466a99bdb7577fe4f91fa651d7c14fcb5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Wed, 4 Oct 2023 15:36:02 +0100
+Subject: [PATCH] cid#1546344 Dm: Dubious method used
+
+---
+ src/main/java/org/java_websocket/util/Base64.java | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/src/main/java/org/java_websocket/util/Base64.java b/src/main/java/org/java_websocket/util/Base64.java
+index e9ff7b8..da49ed5 100644
+--- a/src/main/java/org/java_websocket/util/Base64.java
++++ b/src/main/java/org/java_websocket/util/Base64.java
+@@ -620,12 +620,7 @@ public class Base64 {
+     byte[] encoded = encodeBytesToBytes(source, off, len, options);
+ 
+     // Return value according to relevant encoding.
+-    try {
+-      return new String(encoded, PREFERRED_ENCODING);
+-    } catch (java.io.UnsupportedEncodingException uue) {
+-      return new String(encoded);
+-    }   // end catch
+-
++    return new String(encoded, PREFERRED_ENCODING);
+   }   // end encodeBytes
+ 
+   /**
+-- 
+2.41.0
+

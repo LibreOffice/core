@@ -1,0 +1,150 @@
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+import sys
+import getopt
+import os
+import unittest
+import importlib
+import importlib.machinery
+import types
+
+from uitest.framework import UITestCase
+
+from libreoffice.connection import OfficeConnection
+from libreoffice.connection import PersistentConnection
+
+test_name_limit_found = False
+
+def parseArgs(argv):
+    (optlist,args) = getopt.getopt(argv[1:], "hr",
+            ["help", "soffice=", "oneprocess", "userdir=", "dir=", "file=", "gdb"])
+    return (dict(optlist), args)
+
+def usage():
+    message = """usage: {program} [option]... [task_file]..."
+ -h | --help:      print usage information
+ {connection_params}
+ the 'task_file' parameters should be
+  full absolute pathnames, not URLs."""
+    print(message.format(program = os.path.basename(sys.argv[0]), \
+        connection_params = OfficeConnection.getHelpText()))
+
+
+def find_test_files(dir_path):
+    valid_files = []
+    for f in sorted(os.listdir(dir_path)):
+        file_path = os.path.join(dir_path, f)
+
+        # don't go through the sub-directories
+        if not os.path.isfile(file_path):
+            continue
+
+        if os.path.splitext(file_path)[1] == ".swp":
+            continue # ignore VIM swap files
+
+        if file_path[-1:] == "~":
+            continue # ignore backup files
+
+        # fail on any non .py files
+        if not os.path.splitext(file_path)[1] == ".py":
+            raise Exception("file with an extension which is not .py: " + file_path)
+
+        # ignore the __init__.py file
+        # it is obviously not a test file
+        if f == "__init__.py":
+            continue
+
+        valid_files.append(file_path)
+
+    return valid_files
+
+def get_classes_of_module(module):
+    md = module.__dict__
+    return [ md[c] for c in md if (
+            isinstance(md[c], type) and md[c].__module__ == module.__name__ ) ]
+
+def get_test_case_classes_of_module(module):
+    classes = get_classes_of_module(module)
+    return [ c for c in classes if issubclass(c, UITestCase) ]
+
+def add_tests_for_file(test_file, test_suite):
+    test_name_limit = os.environ.get('UITEST_TEST_NAME', '')
+    test_loader = unittest.TestLoader()
+    module_name = os.path.splitext(os.path.split(test_file)[1])[0]
+
+    loader = importlib.machinery.SourceFileLoader(module_name, test_file)
+    # exec_module was only introduced in 3.4
+    if sys.version_info < (3,4):
+        mod = loader.load_module()
+    else:
+        mod = types.ModuleType(loader.name)
+        loader.exec_module(mod)
+    classes = get_test_case_classes_of_module(mod)
+    global test_name_limit_found
+    for c in classes:
+        test_names = test_loader.getTestCaseNames(c)
+        for test_name in test_names:
+            full_name = ".".join([module_name, c.__name__, test_name])
+            if len(test_name_limit) > 0:
+                if test_name_limit != full_name:
+                    continue
+                test_name_limit_found = True
+
+            obj = c(test_name, opts, connection)
+            test_suite.addTest(obj)
+
+def get_test_suite_for_dir(opts):
+    test_suite = unittest.TestSuite()
+
+    valid_test_files = find_test_files(opts['--dir'])
+    for test_file in valid_test_files:
+        add_tests_for_file(test_file, test_suite)
+    return test_suite
+
+
+if __name__ == '__main__':
+    (opts,args) = parseArgs(sys.argv)
+    connection = None
+    if "--oneprocess" in opts:
+        connection = PersistentConnection(opts)
+        connection.setUp()
+    if "-h" in opts or "--help" in opts:
+        usage()
+        sys.exit()
+    elif "--soffice" not in opts:
+        usage()
+        sys.exit(1)
+    elif "--dir" in opts:
+        test_suite = get_test_suite_for_dir(opts)
+        test_name_limit = os.environ.get('UITEST_TEST_NAME', '')
+        if len(test_name_limit) > 0:
+            if not test_name_limit_found:
+                print("UITEST_TEST_NAME '%s' does not match any test" % test_name_limit)
+                sys.exit(1)
+            else:
+                print("UITEST_TEST_NAME '%s' active" % test_name_limit)
+    elif "--file" in opts:
+        test_suite = unittest.TestSuite()
+        add_tests_for_file(opts['--file'], test_suite)
+    else:
+        usage()
+        sys.exit()
+
+    result = unittest.TextTestRunner(stream=sys.stdout, verbosity=2).run(test_suite)
+    print("Tests run: %d" % result.testsRun)
+    print("Tests failed: %d" % len(result.failures))
+    print("Tests errors: %d" % len(result.errors))
+    print("Tests skipped: %d" % len(result.skipped))
+    if connection:
+        connection.tearDown()
+        connection.kill()
+    if not result.wasSuccessful():
+        sys.exit(1)
+    sys.exit(0)
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

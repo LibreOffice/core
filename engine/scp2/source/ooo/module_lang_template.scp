@@ -1,0 +1,103 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+Module gid_Module_Langpack_Basis_Template
+    ParentID = gid_Module_Langpack_Languageroot;
+    Name = "gid_Module_Langpack_Root_Template";
+    Description = "gid_Module_Langpack_Root_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (
+             gid_File_Share_Config_Sofficecfg_uiconfig_basicide_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_cui_Lang,
+#ifdef DBCONNECTIVITY
+             gid_File_Share_Config_Sofficecfg_uiconfig_dbaccess_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_dbreport_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_sbibliography_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_spropctrlr_Lang,
+#endif
+             gid_File_Share_Config_Sofficecfg_uiconfig_desktop_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_editeng_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_filter_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_formula_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_fps_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_sabpilot_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_scalc_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_scanner_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_schart_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_sdraw_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_sfx_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_simpress_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_smath_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_svt_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_svx_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_swriter_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_uui_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_vcl_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_xmlsec_Lang,
+             gid_File_Res_acc_Lang,
+             gid_File_Res_avmedia_Lang,
+             gid_File_Res_basctl_Lang,
+             gid_File_Res_chart_Lang,
+             gid_File_Res_cnr_Lang,
+             gid_File_Res_cui_Lang,
+             gid_File_Res_dba_Lang,
+             gid_File_Res_dkt_Lang,
+             gid_File_Res_editeng_Lang,
+             gid_File_Res_flt_Lang,
+             gid_File_Res_for_Lang,
+             gid_File_Res_fps_Lang,
+             gid_File_Res_frm_Lang,
+             gid_File_Res_fwk_Lang,
+             gid_File_Res_oox_Lang,
+             gid_File_Res_pcr_Lang,
+             gid_File_Res_rpt_Lang,
+             gid_File_Res_sb_Lang,
+             gid_File_Res_sc_Lang,
+             gid_File_Res_sca_Lang,
+             gid_File_Res_scc_Lang,
+             gid_File_Res_sd_Lang,
+             gid_File_Res_sfx_Lang,
+             gid_File_Res_sm_Lang,
+             gid_File_Res_svl_Lang,
+             gid_File_Res_svt_Lang,
+             gid_File_Res_svx_Lang,
+             gid_File_Res_sw_Lang,
+             gid_File_Res_uui_Lang,
+             gid_File_Res_vcl_Lang,
+             gid_File_Res_wiz_Lang,
+             gid_File_Res_wpt_Lang,
+             gid_File_Res_xsc_Lang,
+             gid_File_Extra_Autotextshare_Lang,
+             gid_File_Registry_Filter_Zip,
+             gid_File_Registry_Lang,
+             gid_File_Registry_Spool_Langpack_Lang,
+             gid_File_Share_Registry_Ctl_Xcd,
+             gid_File_Share_Registry_Ctlseqcheck_Xcd);
+    Dirs = (gid_Dir_Samples_Language,
+            gid_Dir_Autotext_Language);
+End
+
+Module gid_Module_Langpack_Fonts_Template
+    ParentID = gid_Module_Langpack_Languageroot;
+    Name = "gid_Module_Langpack_Fonts_Template";
+    Description = "gid_Module_Langpack_Fonts_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = ();
+End
+
+#include "alllangmodules_root.inc"

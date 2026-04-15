@@ -1,0 +1,84 @@
+--- a/pixman/pixman/pixman-x86.c
++++ b/pixman/pixman/pixman-x86.c
+@@ -74,6 +74,8 @@
+ 
+ #else
+ 
++#if !defined(__EMSCRIPTEN__)
++
+ #if defined (__GNUC__)
+ #include <cpuid.h>
+ #elif defined(_MSC_VER)
+@@ -100,10 +102,17 @@
+ #error Unknown compiler
+ #endif
+ }
++ 
++#endif // !__EMSCRIPTEN__
+ 
+ static cpu_features_t
+ detect_cpu_features (void)
+ {
++#if defined(__EMSCRIPTEN__)
++
++    return X86_MMX | X86_MMX_EXTENSIONS | X86_SSE | X86_SSE2 | X86_SSSE3;
++
++#else
+     uint32_t a, b, c, d;
+     cpu_features_t features = 0;
+ 
+@@ -149,6 +158,8 @@
+     }
+ 
+     return features;
++
++#endif // !__EMSCRIPTEN__
+ }
+ 
+ #endif
+--- a/pixman/pixman/pixman-ssse3.c
++++ b/pixman/pixman/pixman-ssse3.c
+@@ -28,7 +28,9 @@
+ #endif
+ 
+ #include <stdlib.h>
++#if !defined(__EMSCRIPTEN__)
+ #include <mmintrin.h>
++#endif
+ #include <xmmintrin.h>
+ #include <emmintrin.h>
+ #include <tmmintrin.h>
+--- a/pixman/meson.build
++++ b/pixman/meson.build
+@@ -104,7 +104,11 @@
+   if host_machine.cpu_family() == 'x86_64' or cc.get_id() == 'msvc'
+     have_mmx = true
+   elif host_machine.cpu_family() == 'x86' and cc.compiles('''
++      #if !defined(__EMSCRIPTEN__)
+       #include <mmintrin.h>
++      #else
++      #include <xmmintrin.h>
++      #endif
+       #include <stdint.h>
+ 
+       /* Check support for block expressions */
+@@ -167,7 +171,9 @@
+         #      error "Need GCC >= 4.2 for SSE2 intrinsics on x86"
+         #   endif
+         #endif
++        #if !defined(__EMSCRIPTEN__)
+         #include <mmintrin.h>
++        #endif
+         #include <xmmintrin.h>
+         #include <emmintrin.h>
+         int param;
+@@ -202,7 +208,9 @@
+ if not use_ssse3.disabled() and not (cc.get_id() == 'msvc' and cc.version().version_compare('<16') and host_machine.cpu_family() == 'x86_64')
+   if host_machine.cpu_family().startswith('x86')
+     if cc.compiles('''
++        #if !defined(__EMSCRIPTEN__)
+         #include <mmintrin.h>
++        #endif
+         #include <xmmintrin.h>
+         #include <emmintrin.h>
+         int param;

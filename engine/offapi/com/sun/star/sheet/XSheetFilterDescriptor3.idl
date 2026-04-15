@@ -1,0 +1,36 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {  module sun {  module star {  module sheet {
+
+/** provides access to a collection of filter conditions (filter fields).
+
+    <p>This interface uses the TableFilterField3 struct.
+    whereas the XSheetFilterDescriptor2 interface uses the
+    TableFilterField2 struct.</p>
+
+    @see SheetFilterDescriptor2
+ */
+interface XSheetFilterDescriptor3: com::sun::star::uno::XInterface
+{
+
+    /** returns the collection of filter fields.
+     */
+    sequence<TableFilterField3> getFilterFields3();
+
+
+    /** sets a new collection of filter fields.
+     */
+    void setFilterFields3( [in] sequence<TableFilterField3> aFilterFields );
+
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

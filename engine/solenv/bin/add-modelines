@@ -1,0 +1,158 @@
+#!/usr/bin/env bash
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# add-modelines, a simple script to add comments to
+# the beginning and end of source files for LibreOffice devs
+
+# Blame goes to Jesse Adelman (at least at first)
+# someone AT boldandbusted dotty-dot com
+# http://www.boldandbusted.com/
+# (c) 2010 Bold and Busted LLC
+
+# NOTE: At present, this script only works for files with C-like comments.
+# NOTE: If you don't specify -p, the script will act on the current working directory.
+# NOTE: If no arguments are specified, the definitions below are in effect.
+
+# TO DO
+#  - Deuglify?
+#  - Make source file type agnostic modelines?
+#  - Too many/too few comments?
+#  - Handle top level source directories with whitespace names? (Do they exist?)
+
+# Turn off globbing, helps with SourceFiles
+set -f
+
+# POSIX
+set -o posix
+
+# Change these to taste
+FirstLine='/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */'
+LastLine='/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */'
+SourceFiles='*.cxx *.cpp *.hxx *.hpp *.c *.h *.m *.mm *.idl *.src *.hrc'
+
+# Set defaults (don't change these)
+ModelineReplace="false"
+
+# Functions
+
+function SetEnvironment()
+{
+    if ! command -v tail || ! command -v head; then
+        echo "Missing head or tail, exiting..."
+        exit 1
+    fi
+    if ! command -v find; then
+        echo "Missing find, exiting..."
+        exit 1
+    fi
+}
+
+function EditFile()
+{
+    local FileToEdit
+    local currentFirstLine
+    local currentLastLine
+
+    FileToEdit="$1"
+
+    currentFirstLine=$(head -1 "$FileToEdit")
+    currentLastLine=$(tail -1 "$FileToEdit")
+
+    case "$ModelineReplace" in
+        "true" )
+            if [ "${currentFirstLine:0:6}" = "${FirstLine:0:6}" ]; then
+            {
+                echo "$FirstLine" > "$FileToEdit".new
+                tail -n +2 "$FileToEdit" >> "$FileToEdit".new
+            }
+            fi
+            if [ -e "$FileToEdit.new" ]; then
+            {
+                echo "$LastLine" >> "$FileToEdit".new
+            }
+            fi
+            if [ "${currentLastLine:0:6}" = "${LastLine:0:6}" ]; then
+            {
+                head -n -1 "$FileToEdit" > "$FileToEdit".new
+                echo "$LastLine" >> "$FileToEdit".new
+            }
+            fi
+            mv "$FileToEdit".new "$FileToEdit"
+            echo "$FileToEdit updated" ;;
+        "false" )
+            if [ "${currentFirstLine:0:6}" != "${FirstLine:0:6}" ]; then
+                if [ "${currentLastLine:0:6}" != "${LastLine:0:6}" ]; then
+                {
+                    echo "$FirstLine" > "$FileToEdit".new
+                    cat "$FileToEdit" >> "$FileToEdit".new
+                    if [ "x${currentLastLine}" != "x" ] ; then
+                        echo "" >> "$FileToEdit".new
+                    fi
+                    echo "$LastLine" >> "$FileToEdit".new
+                    mv "$FileToEdit".new "$FileToEdit"
+                    echo "$FileToEdit updated"
+                }
+                fi
+            fi ;;
+    esac
+}
+
+function PrintUsage()
+{
+    echo "Usage: $0 [-z] [-s \"<sourcefile glob>\"] [-p <path to source>]"
+}
+
+# Main
+
+SetEnvironment
+
+# Get command line options
+
+while getopts "zs:p:" opt; do
+    case $opt in
+        z) ModelineReplace="true" ;;
+        s) SourceFiles="$OPTARG" ;;
+        p) findPath="$OPTARG" ;;
+        *) PrintUsage
+           exit 1 ;;
+    esac
+done
+
+if [ $OPTIND -gt 1 ]; then
+    shift $((OPTIND - 1))
+fi
+
+if [ $# -gt 1 ]; then
+{
+    PrintUsage
+    echo "Remember to quote the source file globs after -s"
+    exit 1
+}
+fi
+
+# Create GNU find expressions that traverse the filesystem once and only once
+if [ -z "$findPath" ]; then
+    findArgs='.'
+    else
+        findArgs="$findPath"
+fi
+
+for FileType in ${SourceFiles}; do
+    findArgs="$findArgs"' ( -iname '"$FileType"' -print -o -true ) -a '
+done
+
+# This gets rid of the final " -a " in the find argument list
+findArgs=(${findArgs:0:(${#findArgs}-3)})
+
+for file in $(find "${findArgs[@]}"); do
+    EditFile "$file"
+    echo "Completed: " "$file"
+done
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

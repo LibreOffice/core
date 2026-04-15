@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-0 0 800 800">
+
+    <style>
+        .g1 > rect {fill:green;}
+        #g3 > rect {fill:green;}
+        .g4 > #r1 {fill:green;}
+        #g3 > .r5 {fill:green;}
+    </style>
+
+    <g class="g4 g1">
+        <g class="g2">
+            <rect x="0" y="0" height="50" width="50" fill="blue"></rect>
+        </g>
+        <rect x="60" y="0" height="50" width="50" fill="blue"></rect>
+    </g>
+    <g id="g3">
+        <g id="g4">
+            <rect x="120" y="0" height="50" width="50" fill="blue"></rect>
+        </g>
+        <rect x="180" y="0" height="50" width="50" fill="blue"></rect>
+    </g>
+    <g class="g4 g1">
+        <g>
+            <rect id="r1" x="240" y="0" height="50" width="50" fill="blue"></rect>
+        </g>
+        <rect id="r1" x="300" y="0" height="50" width="50" fill="blue"></rect>
+    </g>
+    <g id="g3">
+        <g id="g4">
+            <rect class="r5" x="360" y="0" height="50" width="50" fill="blue"></rect>
+        </g>
+        <rect class="r5" x="420" y="0" height="50" width="50" fill="blue"></rect>
+    </g>
+</svg>

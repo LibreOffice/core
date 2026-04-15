@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:styles>
+    <style:default-style style:family="paragraph">
+      <style:paragraph-properties fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
+    </style:default-style>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="Checklist" style:family="table">
+      <style:table-properties style:width="12.338cm" table:align="margins"/>
+    </style:style>
+    <style:style style:name="Checklist.A" style:family="table-column">
+      <style:table-column-properties style:column-width="12.338cm" style:rel-column-width="65535*"/>
+    </style:style>
+    <style:style style:name="Checklist.1" style:family="table-row">
+      <style:table-row-properties fo:background-color="#ffff00">
+        <style:background-image/>
+      </style:table-row-properties>
+    </style:style>
+    <style:style style:name="Checklist.A1" style:family="table-cell">
+      <style:table-cell-properties fo:padding-left="0.25cm" fo:padding-right="0.101cm" fo:padding-top="0.101cm" fo:padding-bottom="0.101cm" fo:border="0.05pt solid #000000"/>
+    </style:style>
+    <style:style style:name="Sect1" style:family="section">
+      <style:section-properties text:dont-balance-text-columns="false" style:editable="false">
+        <style:columns fo:column-count="2" fo:column-gap="0.497cm">
+          <style:column style:rel-width="32767*" fo:start-indent="0cm" fo:end-indent="0.249cm"/>
+          <style:column style:rel-width="32768*" fo:start-indent="0.249cm" fo:end-indent="0cm"/>
+        </style:columns>
+      </style:section-properties>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:text text:use-soft-page-breaks="true">
+      <text:p text:style-name="P5"><draw:frame draw:style-name="fr1" draw:name="Rámec2" text:anchor-type="paragraph" svg:x="-0.039cm" svg:y="1.914cm" svg:width="12.338cm" svg:height="15.399cm" draw:z-index="0"><draw:text-box><table:table table:name="Checklist" table:style-name="Checklist"><table:table-column table:style-name="Checklist.A"/><table:table-row table:style-name="Checklist.1"><table:table-cell table:style-name="Checklist.A1" office:value-type="string"><text:p text:style-name="Table_20_header"/></table:table-cell></table:table-row><table:table-row table:style-name="Checklist.1"><table:table-cell table:style-name="Checklist.A1" office:value-type="string"><text:p text:style-name="P3"/></table:table-cell></table:table-row><table:table-row table:style-name="Checklist.1"><table:table-cell table:style-name="Checklist.A1" office:value-type="string"><text:p text:style-name="Table_20_header"/></table:table-cell></table:table-row><table:table-row><table:table-cell table:style-name="Checklist.A1" office:value-type="string"><text:section text:style-name="Sect1" text:name="Oblasť1"><text:p text:style-name="P4">Para 1.</text:p><text:p text:style-name="P2">No. However, you will not be able to see the colours produced on a black-and-white set.</text:p></text:section></table:table-cell></table:table-row></table:table><text:p text:style-name="P1"/></draw:text-box></draw:frame></text:p>
+    </office:text>
+  </office:body>
+</office:document>

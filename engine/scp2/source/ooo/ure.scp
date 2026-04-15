@@ -1,0 +1,235 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "macros.inc"
+
+#include "AutoInstall/ure"
+
+#if defined MACOSX
+Directory gid_Dir_Ure_Share_Misc
+    ParentID = gid_Brand_Dir_Share_Ure_Share;
+    DosName = "misc";
+End
+#endif
+
+// Private Dynamic Libraries:
+
+#if defined _MSC_VER && ! defined _ARM64_
+File gid_File_Dl_Cli_Ure_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY);
+    Name = "cli_ure.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "cli_ure";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_URE_NEW_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+    ProcessorArchitecture = "MSIL";
+End
+
+File gid_File_Dl_Policy_Cli_Ure_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY);
+    Name = "${CLI_URE_POLICY_ASSEMBLY}.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "${CLI_URE_POLICY_ASSEMBLY}";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_URE_POLICY_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+    ProcessorArchitecture = "MSIL";
+End
+
+File gid_File_Dl_Policy_Cli_Ure_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPONENT);
+    Name = "cli_ure.config";
+    Dir = SCP2_URE_DL_DIR;
+    AssignComponent = gid_File_Dl_Policy_Cli_Ure_Assembly;
+End
+
+File gid_File_Dl_Cli_Basetypes_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY);
+    Name = "cli_basetypes.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "cli_basetypes";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_BASETYPES_NEW_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+    ProcessorArchitecture = "MSIL";
+End
+
+File gid_File_Dl_Policy_Cli_Basetypes_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY);
+    Name = "${CLI_BASETYPES_POLICY_ASSEMBLY}.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "${CLI_BASETYPES_POLICY_ASSEMBLY}";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_BASETYPES_POLICY_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+    ProcessorArchitecture = "MSIL";
+End
+
+File gid_File_Dl_Policy_Cli_Basetypes_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPONENT);
+    Name = "cli_basetypes.config";
+    Dir = SCP2_URE_DL_DIR;
+    AssignComponent = gid_File_Dl_Policy_Cli_Basetypes_Assembly;
+End
+
+File gid_File_Dl_Cli_Uretypes_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY);
+    Name = "cli_uretypes.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "cli_uretypes";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_URETYPES_NEW_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+    ProcessorArchitecture = "MSIL";
+End
+
+File gid_File_Dl_Policy_Cli_Uretypes_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY);
+    Name = "${CLI_URETYPES_POLICY_ASSEMBLY}.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "${CLI_URETYPES_POLICY_ASSEMBLY}";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_URETYPES_POLICY_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+    ProcessorArchitecture = "MSIL";
+End
+
+File gid_File_Dl_Policy_Cli_Uretypes_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPONENT);
+    Name = "cli_uretypes.config";
+    Dir = SCP2_URE_DL_DIR;
+    AssignComponent = gid_File_Dl_Policy_Cli_Uretypes_Assembly;
+End
+
+File gid_File_Lib_Cli_Cppuhelper_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY);
+    Name = "cli_cppuhelper.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "cli_cppuhelper";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_CPPUHELPER_NEW_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+    ProcessorArchitecture = "x86";
+End
+
+File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY);
+    Name = "${CLI_CPPUHELPER_POLICY_ASSEMBLY}.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "${CLI_CPPUHELPER_POLICY_ASSEMBLY}";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_CPPUHELPER_POLICY_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+    ProcessorArchitecture = "x86";
+End
+
+File gid_File_Lib_Policy_Cli_Cppuhelper_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPONENT);
+    Name = "cli_cppuhelper.config";
+    Dir = SCP2_URE_DL_DIR;
+    AssignComponent = gid_File_Lib_Policy_Cli_Cppuhelper_Assembly;
+End
+
+#endif
+
+// Public Miscellaneous Files:
+
+File gid_File_Misc_TypesRdb
+    TXT_FILE_BODY;
+#if defined MACOSX
+    Dir = gid_Dir_Ure_Share_Misc;
+#else
+    Dir = gid_Brand_Dir_Program;
+#endif
+    Name = "types.rdb";
+    Styles = (PACKED);
+End
+
+File gid_File_Misc_ServicesRdb
+    TXT_FILE_BODY;
+#if defined MACOSX
+    Dir = gid_Dir_Ure_Share_Misc;
+#else
+    Dir = gid_Brand_Dir_Program;
+#endif
+    Name = "services.rdb";
+    Styles = (PACKED);
+End
+
+//Module
+
+Module gid_Module_Root_Ure_Hidden
+    ParentID = gid_Module_Root;
+    PackageInfo = "packinfo_ure.txt";
+    InstallOrder = "10";
+    Name = "ure";
+    Description = "ure";
+	Sortkey = "2200";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+    Dirs = (gid_Dir_Ure_Share_Misc);
+    Files = (auto_ure_ALL,
+            gid_File_Dl_Cli_Ure_Assembly,
+            gid_File_Dl_Policy_Cli_Ure_Assembly,
+            gid_File_Dl_Policy_Cli_Ure_Config,
+            gid_File_Dl_Cli_Basetypes_Assembly,
+            gid_File_Dl_Policy_Cli_Basetypes_Assembly,
+            gid_File_Dl_Policy_Cli_Basetypes_Config,
+            gid_File_Dl_Cli_Uretypes_Assembly,
+            gid_File_Dl_Policy_Cli_Uretypes_Assembly,
+            gid_File_Dl_Policy_Cli_Uretypes_Config,
+            gid_File_Dl_Cli_Cppuhelper_Assembly,
+            gid_File_Dl_Policy_Cli_Cppuhelper_Assembly,
+            gid_File_Dl_Policy_Cli_Cppuhelper_Config,
+            gid_File_Lib_Cli_Cppuhelper_Assembly,
+            gid_File_Lib_Policy_Cli_Cppuhelper_Assembly,
+            gid_File_Lib_Policy_Cli_Cppuhelper_Config,
+            gid_File_Misc_TypesRdb,
+            gid_File_Misc_ServicesRdb);
+End
+
+// Windows Registry:
+
+RegistryItem gid_Regitem_Path
+    ModuleID = gid_Module_Root;
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "Software\LibreOffice\%PRODUCTNAME";
+    Name = "Path";
+    Value = "[INSTALLLOCATION]";
+End

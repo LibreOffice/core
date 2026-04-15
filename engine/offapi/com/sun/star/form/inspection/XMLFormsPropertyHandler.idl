@@ -1,0 +1,54 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module form { module inspection {
+
+
+/** implements a property handler for use with a com::sun::star::inspection::ObjectInspector
+    which provides properties related to binding form control models to XForm bindings.
+
+    <p>The handler introduces new properties to choose a com::sun::star::xforms::XModel
+    and a com::sun::star::xforms::Binding within this model. Additionally,
+    it introduces properties which reflect the different facets of the binding (e.g.
+    com::sun::star::xforms::Binding::BindingExpression), so they can be changed
+    directly in the com::sun::star::inspection::ObjectInspector as if they were a
+    property of the form component which is being inspected.</p>
+
+    <p>The handler expects a value named "ContextDocument" in the context in which it is created.
+    That is, the com::sun::star::uno::XComponentContext used for creating the
+    CellBindingPropertyHandler is examined for a value with this name. If the object in this
+    value denotes a XML form document (indicated by supporting the com::sun::star::xforms::XFormsSupplier
+    interface), this document is used to do XML binding related work.</p>
+
+    @see com::sun::star::inspection::XPropertyHandler
+    @see com::sun::star::form::binding::BindableControlModel
+    @see com::sun::star::form::binding::ValueBinding
+    @see com::sun::star::xforms::Binding
+    @see com::sun::star::uno::XComponentContext::getValueByName
+*/
+service XMLFormsPropertyHandler
+{
+    interface com::sun::star::inspection::XPropertyHandler;
+};
+
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

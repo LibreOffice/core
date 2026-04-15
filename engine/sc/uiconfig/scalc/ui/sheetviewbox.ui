@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="sc">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkBox" id="SheetViewBox">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="spacing">6</property>
+    <child>
+      <object class="GtkComboBoxText" id="sheetview_combobox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="sheetview_combobox-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="sheetviewbox|sheetview_combobox|accessible_name">Sheet View</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+  </object>
+</interface>

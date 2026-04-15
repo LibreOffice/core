@@ -1,0 +1,182 @@
+// nLegendEntryCount
+15
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+43091
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+8388352
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16765728
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16711807
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+8257569
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+8637183
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+3227652
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+11456256
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+4923247
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16749838
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+12910603
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+34001
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+17798
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16728590
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16765728
+// xLegendEntryText->getString()
+AA
+// xLegendEntryText->getString()
+BB
+// xLegendEntryText->getString()
+CC
+// xLegendEntryText->getString()
+DD
+// xLegendEntryText->getString()
+EE
+// xLegendEntryText->getString()
+FF
+// xLegendEntryText->getString()
+GG
+// xLegendEntryText->getString()
+HH
+// xLegendEntryText->getString()
+II
+// xLegendEntryText->getString()
+JJ
+// xLegendEntryText->getString()
+KK
+// xLegendEntryText->getString()
+LL
+// xLegendEntryText->getString()
+MM
+// xLegendEntryText->getString()
+NN
+// xLegendEntryText->getString()
+OO

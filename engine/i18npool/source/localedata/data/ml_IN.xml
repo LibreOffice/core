@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
+  <LC_INFO>
+    <Language>
+      <LangID>ml</LangID>
+      <DefaultName>Malayalam</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>IN</CountryID>
+      <DefaultName>India</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="hi_IN"/>
+  <LC_FORMAT ref="hi_IN" replaceFrom="[CURRENCY]" replaceTo="[$₹-44C]"/>
+  <LC_COLLATION ref="hi_IN" />
+  <LC_SEARCH ref="hi_IN"/>
+  <LC_INDEX>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">ംഃഅആഇഈഉഊഋഌഎഏഐഒഓഔകഖഗഘങചഛജഝഞടഠഡഢണതഥദധനപഫബഭമയരറലളഴവശഷസഹാിീുൂൃെേൈൊോൌ്ൗ</IndexKey>
+    <UnicodeScript>14</UnicodeScript>
+    <FollowPageWord>p.</FollowPageWord>
+    <FollowPageWord>pp.</FollowPageWord>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>ഞായര്‍</DefaultAbbrvName>
+          <DefaultFullName>ഞായറാഴ്ച്ച</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>തിങ്കള്‍</DefaultAbbrvName>
+          <DefaultFullName>തിങ്കളാഴ്ച്ച</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>ചൊവ്വ</DefaultAbbrvName>
+          <DefaultFullName>ചൊവ്വാഴ്ച്ച</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>ബുധന്‍</DefaultAbbrvName>
+          <DefaultFullName>ബുധനാഴ്ച്ച</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>വ്യാഴം</DefaultAbbrvName>
+          <DefaultFullName>വ്യാഴാഴ്ച്ച</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>വെള്ളി</DefaultAbbrvName>
+          <DefaultFullName>വെള്ളിയാഴ്ച്ച</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>ശനി</DefaultAbbrvName>
+          <DefaultFullName>ശനിയാഴ്ച്ച</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>ജനു</DefaultAbbrvName>
+          <DefaultFullName>ജനുവരി</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>ഫെബ്രു</DefaultAbbrvName>
+          <DefaultFullName>ഫെബ്രുവരി</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>മാര്‍ച്ച്</DefaultAbbrvName>
+          <DefaultFullName>മാര്‍ച്ച്</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>ഏപ്രില്‍</DefaultAbbrvName>
+          <DefaultFullName>ഏപ്രില്‍</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>മെയ്</DefaultAbbrvName>
+          <DefaultFullName>മെയ്</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>ജൂണ്‍</DefaultAbbrvName>
+          <DefaultFullName>ജൂണ്‍</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>ജൂലൈ</DefaultAbbrvName>
+          <DefaultFullName>ജൂലൈ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>ആഗസ്റ്റ്</DefaultAbbrvName>
+          <DefaultFullName>ആഗസ്റ്റ്</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>സെപ്റ്റം</DefaultAbbrvName>
+          <DefaultFullName>സെപ്റ്റംബര്‍</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>ഒക്ടോ</DefaultAbbrvName>
+          <DefaultFullName>ഒക്ടോബര്‍</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>നവം</DefaultAbbrvName>
+          <DefaultFullName>നവംബര്‍</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>ഡിസം</DefaultAbbrvName>
+          <DefaultFullName>ഡിസംബര്‍</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>ക്രി. മു.</DefaultAbbrvName>
+          <DefaultFullName>ക്രിസ്തുവിനു മുന്പ്</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>ക്രി.വ.</DefaultAbbrvName>
+          <DefaultFullName>ക്രിസ്തുവര്‍ഷം</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>INR</CurrencyID>
+      <CurrencySymbol>₹</CurrencySymbol>
+      <BankSymbol>INR</BankSymbol>
+      <CurrencyName>Rupee</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
+      <CurrencyID>INR</CurrencyID>
+      <CurrencySymbol>ക.</CurrencySymbol>
+      <BankSymbol>INR</BankSymbol>
+      <CurrencyName>Rupee</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION ref="hi_IN"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>അതെ</trueWord>
+      <falseWord>അല്ല</falseWord>
+      <quarter1Word>ആദ്യ കാല്‍ഭാഗം‍</quarter1Word>
+      <quarter2Word>രണ്ടാം കാല്‍ഭാഗം‍</quarter2Word>
+      <quarter3Word>മൂന്നാം കാല്‍ഭാഗം‍</quarter3Word>
+      <quarter4Word>നാലാം കാല്‍ഭാഗം‍</quarter4Word>
+      <aboveWord>മുകളില്‍</aboveWord>
+      <belowWord>താഴെ</belowWord>
+      <quarter1Abbreviation>Q1</quarter1Abbreviation>
+      <quarter2Abbreviation>Q2</quarter2Abbreviation>
+      <quarter3Abbreviation>Q3</quarter3Abbreviation>
+      <quarter4Abbreviation>Q4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel href="hi_IN"/>
+  <LC_OutLineNumberingLevel ref="hi_IN"/>
+</Locale>

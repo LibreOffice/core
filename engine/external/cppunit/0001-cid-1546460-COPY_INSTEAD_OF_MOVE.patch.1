@@ -1,0 +1,175 @@
+From ae5acc79d5f6e9b6f64cc550d858f41884362025 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sat, 30 Dec 2023 20:08:01 +0000
+Subject: [PATCH] cid#1546460 COPY_INSTEAD_OF_MOVE
+
+---
+ src/cppunit/TestFactoryRegistry.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/cppunit/TestFactoryRegistry.cpp b/src/cppunit/TestFactoryRegistry.cpp
+index 3b68d58..7b38a34 100644
+--- a/src/cppunit/TestFactoryRegistry.cpp
++++ b/src/cppunit/TestFactoryRegistry.cpp
+@@ -85,7 +85,7 @@ public:
+ 
+ TestFactoryRegistry::TestFactoryRegistry( std::string name ) :
+     m_factories(),
+-    m_name( name )
++    m_name(std::move(name))
+ {
+ }
+
+diff --git a/src/cppunit/XmlElement.cpp b/src/cppunit/XmlElement.cpp
+index 585c3da..be02385 100644
+--- a/src/cppunit/XmlElement.cpp
++++ b/src/cppunit/XmlElement.cpp
+@@ -8,8 +8,8 @@ CPPUNIT_NS_BEGIN
+   
+ XmlElement::XmlElement( std::string elementName,
+                         std::string content ) 
+-  : m_name( elementName )
+-  , m_content( content )
++  : m_name(std::move(elementName))
++  , m_content(std::move(content))
+   , m_attributes()
+   , m_elements()
+ {
+@@ -18,7 +18,7 @@ XmlElement::XmlElement( std::string elementName,
+     
+ XmlElement::XmlElement( std::string elementName,
+                         int numericContent )
+-  : m_name( elementName )
++  : m_name(std::move(elementName))
+   , m_content()
+   , m_attributes()
+   , m_elements()
+@@ -74,15 +74,15 @@ XmlElement::setContent( int numericContent )
+ 
+ 
+ void 
+-XmlElement::addAttribute( std::string attributeName,
+-                          std::string value  )
++XmlElement::addAttribute( const std::string& attributeName,
++                          const std::string& value  )
+ {
+   m_attributes.push_back( Attribute( attributeName, value ) );
+ }
+ 
+ 
+ void 
+-XmlElement::addAttribute( std::string attributeName,
++XmlElement::addAttribute( const std::string& attributeName,
+                           int numericValue )
+ {
+   addAttribute( attributeName, StringTools::toString( numericValue ) );
+@@ -194,7 +194,7 @@ XmlElement::attributesAsString() const
+ 
+ 
+ std::string 
+-XmlElement::escape( std::string value ) const
++XmlElement::escape( const std::string& value ) const
+ {
+   std::string escaped;
+   for ( unsigned int index =0; index < value.length(); ++index )
+diff --git a/include/cppunit/tools/XmlElement.h b/include/cppunit/tools/XmlElement.h
+index 3478a35..d033aa2 100644
+--- a/include/cppunit/tools/XmlElement.h
++++ b/include/cppunit/tools/XmlElement.h
+@@ -79,14 +79,14 @@ public:
+    * \param attributeName Name of the attribute. Must not be an empty.
+    * \param value Value of the attribute.
+    */
+-  void addAttribute( std::string attributeName,
+-                     std::string value );
++  void addAttribute( const std::string& attributeName,
++                     const std::string& value );
+ 
+   /*! \brief Adds an attribute with the specified numeric value.
+    * \param attributeName Name of the attribute. Must not be empty.
+    * \param numericValue Numeric value of the attribute.
+    */
+-  void addAttribute( std::string attributeName,
++  void addAttribute( const std::string& attributeName,
+                      int numericValue );
+ 
+   /*! \brief Adds a child element to the element.
+@@ -125,7 +125,7 @@ private:
+   typedef std::pair<std::string,std::string> Attribute;
+ 
+   std::string attributesAsString() const;
+-  std::string escape( std::string value ) const;
++  std::string escape( const std::string& value ) const;
+ 
+ private:
+   std::string m_name;
+diff --git a/include/cppunit/Asserter.h b/include/cppunit/Asserter.h
+index ca65593..2010739 100644
+--- a/include/cppunit/Asserter.h
++++ b/include/cppunit/Asserter.h
+@@ -159,11 +159,11 @@
+    *                          what are the differences between the expected and actual value.
+    * \param shortDescription Short description for the failure message.
+    */
+-  [[noreturn]] static void CPPUNIT_API failNotEqual( std::string expected, 
+-                                        std::string actual, 
++  [[noreturn]] static void CPPUNIT_API failNotEqual( const std::string& expected, 
++                                        const std::string& actual, 
+                                         const SourceLine &sourceLine,
+                                         const AdditionalMessage &additionalMessage = AdditionalMessage(),
+-                                        std::string shortDescription = "equality assertion failed" );
++                                        const std::string& shortDescription = "equality assertion failed" );
+ 
+   /*! \brief Throws an Exception with the specified message and location.
+    * \param expected Text describing the expected value.
+@@ -231,11 +231,11 @@
+    * \param shortDescription Short description for the failure message.
+    */
+   static void CPPUNIT_API failNotEqualIf( bool shouldFail,
+-                                          std::string expected, 
+-                                          std::string actual, 
++                                          const std::string& expected, 
++                                          const std::string& actual, 
+                                           const SourceLine &sourceLine,
+                                           const AdditionalMessage &additionalMessage = AdditionalMessage(),
+-                                          std::string shortDescription = "equality assertion failed" );
++                                          const std::string& shortDescription = "equality assertion failed" );
+ 
+ };
+ 
+diff --git a/src/cppunit/Asserter.cpp b/src/cppunit/Asserter.cpp
+index 52f8625..fe2097e 100644
+--- a/src/cppunit/Asserter.cpp
++++ b/src/cppunit/Asserter.cpp
+@@ -110,11 +110,11 @@
+ 
+ 
+ void 
+-Asserter::failNotEqual( std::string expected, 
+-                        std::string actual, 
++Asserter::failNotEqual( const std::string& expected, 
++                        const std::string& actual, 
+                         const SourceLine &sourceLine,
+                         const AdditionalMessage &additionalMessage,
+-                        std::string shortDescription )
++                        const std::string& shortDescription )
+ {
+   fail( makeMessage( makeExpectedEqual(expected),
+                      makeActual(actual),
+@@ -182,11 +182,11 @@
+ }
+ void 
+ Asserter::failNotEqualIf( bool shouldFail,
+-                          std::string expected, 
+-                          std::string actual, 
++                          const std::string& expected, 
++                          const std::string& actual, 
+                           const SourceLine &sourceLine,
+                           const AdditionalMessage &additionalMessage,
+-                          std::string shortDescription )
++                          const std::string& shortDescription )
+ {
+   if ( shouldFail )
+     failNotEqual( expected, actual, sourceLine, additionalMessage, shortDescription );
+-- 
+2.43.0

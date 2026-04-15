@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006"
+xmlns:d="http://openoffice.org/extensions/description/2006"
+xmlns:xlink="http://www.w3.org/1999/xlink">
+  <version value="2023.09" />
+  <identifier value="org.alex73.libreoffice.dict.be.official" />
+  <display-name>
+    <name lang="be">Беларускі слоўнік праверкі правапісу і пераносы згодна афіцыйнаму правапісу 2008</name>
+    <name lang="en-US">Belarusian spelling dictionary and hyphenation: official orthography 2008</name>
+  </display-name>
+  <platform value="all" />
+  <dependencies>
+    <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0"/>
+  </dependencies>
+
+    <publisher>
+        <name xlink:href="http://bnkorpus.info/" lang="be">bnkorpus.info</name>
+        <name xlink:href="http://bnkorpus.info/" lang="en">bnkorpus.info</name>
+    </publisher>
+
+</description>
+

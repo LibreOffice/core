@@ -1,0 +1,68 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include <sal/config.h>
+#include <test/testdllapi.hxx>
+#include <COKit/COKitTypes.h>
+#include <sfx2/kit/callback.hxx>
+#include <vcl/idle.hxx>
+
+#include <vector>
+
+class SfxChildWindow;
+
+/**
+A helper to convert CoKitCallbackInterface to a LIbreOfficeKitCallback for tests.
+
+It reimplements the specialized callbacks and converts them to the generic type/payload
+callback.
+*/
+class OOO_DLLPUBLIC_TEST TestKitCallbackWrapper final : public CoKitCallbackInterface, public Idle
+{
+public:
+    TestKitCallbackWrapper(COKitCallback callback, void* data);
+    /// Discard all possibly still held events.
+    void clear();
+    /// Set the view id of the associated SfxViewShell.
+    void setKitViewId(int viewId) { m_viewId = viewId; }
+    virtual void viewCallback(int nType, const rtl::OString& pPayload) override;
+    virtual void viewCallbackWithViewId(int nType, const rtl::OString& pPayload,
+                                        int nViewId) override;
+    virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
+                                             int nMode) override;
+    virtual void viewUpdatedCallback(int nType) override;
+    virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
+    virtual void viewAddPendingInvalidateTiles() override;
+    virtual void dumpState(rtl::OStringBuffer&) override{};
+
+    virtual void Invoke() override;
+
+    static SfxChildWindow* InitializeSidebar();
+
+private:
+    void callCallback(int nType, const char* pPayload, int nViewId);
+    void startTimer();
+    void flushKitData();
+    void discardUpdatedTypes(int nType, int nViewId);
+    COKitCallback m_callback;
+    void* m_data;
+    int m_viewId = -1; // the associated SfxViewShell
+    std::vector<int> m_updatedTypes; // value is type
+    struct PerViewIdData
+    {
+        int type;
+        int viewId;
+        int sourceViewId;
+    };
+    std::vector<PerViewIdData> m_updatedTypesPerViewId;
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

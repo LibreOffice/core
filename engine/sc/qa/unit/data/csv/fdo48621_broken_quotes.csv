@@ -1,0 +1,88 @@
+i80358
+"abc" d "ef",shall be:,"abc"" d ""ef"
+"a"b, "a",shall be:,"a""b, ""a"
+
+i78926_input.csv
+"2","5","GR010 015 1001","/image/grimas/015/1001.jpg","/image/grimas/015/1001.jpg","/image/grimas/015/1001.jpg",,,,,,,,,,,,,"5.45","0.00","0000-00-00 00:00:00","0000-00-00 00:00:00","0000-00-00 00:00:00","0.05","1","2","81","4","0","1","0","2000","0","0","0","0"
+"3","5","GR010 015 1002","/image/grimas/015/1002.jpg","/image/grimas/015/1002.jpg","/image/grimas/015/1002.jpg",,,,,,,,,,,,,"5.45","0.00","0000-00-00 00:00:00","0000-00-00 00:00:00","0000-00-00 00:00:00","0.05","1","2","81","4","0","0","0","2000","0","0","0","0"
+
+i78926_input.csv
+"772","3","SPAZZOLA ARIA BABYLISS 32","image/APP.ELET/Varie/Babyliss-Spazzola-Elettrica.jpg","image/APP.ELET/Varie/Babyliss-Spazzola-Elettrica.jpg","image/APP.ELET/Varie/Babyliss-Spazzola-Elettrica.jpg",,,,,,,,,,,,,"33.00","0.00","2006-11-07 09:26:16","2007-05-24 17:54:24",NULL,"1.00","1","2","86","150","0","0","0","2000","0",,,
+"773","1","BIGODINI RISCALDANTI \"BA","image/APP.ELET/Varie/Bigodini-caldi.jpg","image/APP.ELET/Varie/Bigodini-caldi.jpg","image/APP.ELET/Varie/Bigodini-caldi.jpg",,,,,,,,,,,,,"57.91","0.00","2006-11-07 09:26:16","2006-11-07 09:26:16","0000-00-00 00:00:00","0.70","1","2","86","152","0","1","0","2000","0","0","0","0"
+"774","3","PIASTRA \"BABYLISS\" PRO C","image/APP.ELET/piastre/Piastre-Babyliss-2564E.jpg","image/APP.ELET/piastre/Piastre-Babyliss-2564E.jpg","image/APP.ELET/piastre/Piastre-Babyliss-2564E.jpg",,,,,,,,,,,,,"78.00","0.00","2006-11-07 09:26:16","2006-12-13 19:18:31","0000-00-00 00:00:00","0.70","1","2","86","148","0","0","0","2000","0","0","0","0"
+"775","0","PHON ULTRON MAXI 2200W+1","image/APP.ELET/phon/Phon-Ultron-1500W.jpg","image/APP.ELET/phon/Phon-Ultron-1500W.jpg","image/APP.ELET/phon/Phon-Ultron-1500W.jpg",,,,,,,,,,,,,"26.66","0.00","2006-11-07 09:26:16","2006-12-13 18:57:03","0000-00-00 00:00:00","0.70","1","2","101","158","0","0","0","2000","0","0","0","0"
+
+i78926_inconsistent_double_quote_behavior.csv
+Description,Description
+"The following text breaks everything",OpenOffice.org calc doesn't " like quotes embedded in fields.
+Here is some data,Here is some data
+Here is some data,Here is some data
+Here is some data,Here is some data
+Here is some data,Here is some data
+This field will fix everything,Here is the " fix
+First fixed record,Here is some data
+Here is some data,Here is some data
+"This field will break things again",Mismatched quote " must be after some quoted text
+Here is some data,Here is some data
+Here is some data,Here is some data
+Here is some data,Here is some data
+This field will fix everything,Here is the " fix
+First fixed record,Here is some data
+Here is some data,Here is some data
+Here is some data,Here is some data
+Here is some data,Here is some data
+Here is some data,Here is some data
+This next field will /not/ break things because /this/ field is not quoted,Mismatched quote " must be after some quoted text
+Here is some data,Here is some data
+Here is some data,Here is some data
+Here is some data,Here is some data
+
+i80385_test1.csv
+test,"a"b, "a", d"a"c , m , "j" ,d,b"A",D"E,"f,1","a,b","de"b,a"
+"abcdef" test "abc","def"g"h",def"gh"
+"this is
+a test","yes
+it
+works",
+No it doesn't
+"yes it,"","does","no"
+""""a,cd""e
+"a""b""
+",<- needed to end test file here
+
+i80385_test2.csv
+test,"a"b, "a", d"a"c , m , "j" ,d,b"A",D"E,"f,1","a,b","de"b,a
+"abcdef" test "abc","def"g"h",def"gh"
+"this is
+a test","yes
+it
+works",
+No it doesn't
+"yes it,"","does","no"
+""""a,cd""e
+"a""b""
+",<- needed to end test file here
+
+i80385_test3.csv
+test,"a"b, "a", d"a"c , m , "j" ,d,b"A",D"E,"f,1","a,b","de"b,a"
+"abcdef" test "abc","def"g"h",def"gh"
+"this is
+a test","yes
+it
+works",
+No it doesn't
+"yes it,"","does","no"
+""""a,cd""e
+"a""b"""
+
+i80385_test4.csv
+test,"a"b, "a", d"a"c , m , "j" ,d,b"A",D"E,"f,1","a,b","de"b,a
+"abcdef" test "abc","def"g"h",def"gh"
+"this is
+a test","yes
+it
+works",
+No it doesn't
+"yes it,"","does","no"
+""""a,cd""e
+"a""b"""

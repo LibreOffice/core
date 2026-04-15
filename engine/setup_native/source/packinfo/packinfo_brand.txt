@@ -1,0 +1,136 @@
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+
+Start
+module = "gid_Module_Root_Brand"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME"
+packagename = "%UNIXPACKAGENAME"
+requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-images %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure (Name="UNO Runtime Environment"), %BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX-images (Name="Images module for %PRODUCTNAME %PRODUCTVERSION")"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+provides = "libreoffice"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Wrt"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-writer"
+packagename = "%UNIXPACKAGENAME-writer"
+requires = "%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-writer %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX-writer"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Writer brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-writer"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Calc"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-calc"
+packagename = "%UNIXPACKAGENAME-calc"
+requires = "%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-calc %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX-calc"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Calc brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-calc"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Impress"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-impress"
+packagename = "%UNIXPACKAGENAME-impress"
+requires = "%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-impress %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX-impress"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Impress brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-impress"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Draw"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-draw"
+packagename = "%UNIXPACKAGENAME-draw"
+requires = "%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-draw %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX-draw"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Draw brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-draw"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Math"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-math"
+packagename = "%UNIXPACKAGENAME-math"
+requires = "%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-math %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX-math"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Math brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-math"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Base"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-base"
+packagename = "%UNIXPACKAGENAME-base"
+requires = "%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-base %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX-base"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Base brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-base"
+End
+
+Start
+module = "gid_Module_Langpack_Brand"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-%LANGUAGESTRING"
+packagename = "%UNIXPACKAGENAME-%LANGUAGESTRING"
+requires = "%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX-%LANGUAGESTRING (Name="Language module for %PRODUCTNAME %PRODUCTVERSION\, language %LANGUAGESTRING")"
+copyright = "2026 Collabora Productivity Ltd."
+solariscopyright = "solariscopyrightfile"
+vendor = "Collabora Productivity Ltd."
+description = "Brand language module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End

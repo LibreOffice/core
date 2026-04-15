@@ -1,0 +1,107 @@
+LibreOffice Impress Remote Protocol Specification
+
+Communication is over a UTF-8 encoded character stream.
+(Using RTL_TEXTENCODING_UTF8 in the LibreOffice portion.)
+
+TCP
+---
+
+More TCP-specific details on setup and initial handshake to be
+written, but the actual message protocol is the same as for Bluetooth.
+
+
+Bluetooth
+---------
+
+Bluetooth communication is over RFCOMM.
+
+For discovery use the "standard UUID for the Serial Port Profile"
+I.e. the 16-bit SerialPort UUID 0x1101,
+or if necessary inserted into the Bluetooth BASE_UUID:
+00001101-0000-1000-8000-00805F9B34FB
+See https://www.bluetooth.org/Technical/AssignedNumbers/service_discovery.htm
+
+Message Format
+--------------
+
+A message consists of one or more lines. The first line is the message description,
+further lines can add any necessary data. An empty line concludes the message.
+
+I.e. "MESSAGE\n\n" or "MESSAGE\nDATA\nDATA2...\n\n"
+
+You must keep reading a message until an empty line (i.e. double
+new-line) is reached to allow for future protocol extension.
+
+Initialisation
+-------------
+
+Once connected the server sends "LO_SERVER_SERVER_PAIRED".
+(I.e. "LO_SERVER_SERVER_PAIRED\n\n" is sent over the stream.)
+
+Subsequently the server will send either slideshow_started if a slideshow is running,
+or slideshow_finished if no slideshow is running. (See below for details of.)
+
+The current server implementation then proceeds to send all slide notes and previews
+to the client. (This should be changed to prevent memory issues, and a preview
+request mechanism implemented.)
+
+
+Commands (Client to Server)
+---------------------------
+
+The client should not assume that the state of the server has changed when a
+command has been sent. All changes will be signalled back to the client.
+(This is to allow for cases such as multiple clients requesting different changes, etc.)
+
+Any lines in [square brackets] are optional, and should be omitted if not needed.
+
+* transition_next
+* transition_previous
+
+* goto_slide
+  slide_number
+
+* presentation_start
+* presentation_stop
+
+* presentation_resume       // Resumes after a presentation_blank_screen.
+* presentation_blank_screen
+  [Colour String]           // Colour the screen will show (default: black). Not
+                            // implemented, and format hasn't yet been defined.
+
+# As of gsoc2013, these commands are extended to the existing protocol, since server-end are tolerant with unknown commands, these extensions doesn't break backward compatibility
+* pointer_started           // create a red dot on screen at initial position (x,y)
+  initial_x                 // This should be called when user first touch the screen
+  initial_y                 // note that x, y are in percentage (from 0.0 to 1.0) with respect to the slideshow size
+* pointer_dismissed         // This dismiss the pointer red dot on screen, should be called when user stop touching screen
+* pointer_coordination      // This update pointer's position to current (x,y)
+  current_x                 // note that x, y are in percentage (from 0.0 to 1.0) with respect to the slideshow size
+  current_y                 // unless screenupdater's performance is significantly improved, we should consider limit the update frequency on the
+                            // remote-end
+
+
+
+Status/Data (Server to Client)
+------------------------------
+
+* slideshow_finished    // (Also transmitted if no slideshow running when started.)
+
+* slideshow_started     // (Also transmitted if a slideshow is running on startup.)
+  numberOfSlides
+  currentSlideNumber
+
+* slide_notes
+  slideNumber
+  [Notes]               // The notes are an html document, and may also include \n newlines,
+                        // i.e. the client should keep reading until a blank line is reached.
+
+* slide_updated         // Slide on server has changed
+  currentSlideNumber
+
+* slide_preview         // Supplies a preview image for a slide.
+  slideNumber
+  image                 // A Base 64 Encoded png image.
+
+# As of gsoc2013, these commands are extended to the existing protocol, since remote-end also ignore all unknown commands (which is the case of gsoc2012 android implementation), backward compatibility is kept.
+* slideshow_info        // once paired, the server-end will send back the title of the current presentation
+  Title

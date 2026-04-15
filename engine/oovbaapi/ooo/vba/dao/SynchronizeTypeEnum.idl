@@ -1,0 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module dao {
+    constants SynchronizeTypeEnum {
+        const long dbRepExportChanges = 1;
+        const long dbRepImpExpChanges = 4;
+        const long dbRepImportChanges = 2;
+        const long dbRepSyncInternet = 16;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,27 @@
+MSVC: using SOLARINC
+
+--- curl/winbuild/MakefileBuild.vc.orig	2017-10-23 16:36:07.713550851 +0200
++++ curl/winbuild/MakefileBuild.vc	2017-10-23 16:38:19.301547594 +0200
+@@ -52,7 +52,7 @@
+ !ELSE
+ CC_NODEBUG  = $(CC) /O2 /DNDEBUG
+ CC_DEBUG    = $(CC) /Od /D_DEBUG /RTC1 /Z7 /LDd
+-CFLAGS      = /I. /I ../lib /I../include /nologo /W4 /EHsc /FD /c /DBUILDING_LIBCURL
++CFLAGS      = /I. /I ../lib /I../include /nologo /W4 /EHsc /FD /c /DBUILDING_LIBCURL $(SOLARINC)
+ !ENDIF
+ 
+ LFLAGS     = /nologo /machine:$(MACHINE)
+@@ -428,11 +428,11 @@
+ # CURL_XX macros are for the curl.exe command
+ 
+ !IF "$(DEBUG)"=="yes"
+-RC_FLAGS = /d_DEBUG /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
++RC_FLAGS = $(SOLARINC) /d_DEBUG /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
+ CURL_CC       = $(CC_DEBUG) $(RTLIB_DEBUG)
+ CURL_RC_FLAGS = $(CURL_RC_FLAGS) /i../include /d_DEBUG /Fo $@ $(CURL_SRC_DIR)\curl.rc
+ !ELSE
+-RC_FLAGS = /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
++RC_FLAGS = $(SOLARINC) /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
+ CURL_CC       = $(CC_NODEBUG) $(RTLIB)
+ CURL_RC_FLAGS = $(CURL_RC_FLAGS) /i../include /Fo $@ $(CURL_SRC_DIR)\curl.rc
+ !ENDIF

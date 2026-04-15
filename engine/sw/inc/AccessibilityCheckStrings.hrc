@@ -1,0 +1,57 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#ifndef INCLUDED_SW_INC_ACCESSIBILITY_CHECK_STRINGS_HRC
+#define INCLUDED_SW_INC_ACCESSIBILITY_CHECK_STRINGS_HRC
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+#define STR_NO_ALT                      NC_("STR_NO_ALT", "%OBJECT_NAME%")
+#define STR_LINKED_GRAPHIC              NC_("STR_LINKED_GRAPHIC", "“%OBJECT_NAME%” referenced as “%LINK%”.")
+#define STR_TABLE_MERGE_SPLIT           NC_("STR_TABLE_MERGE_SPLIT", "Table “%OBJECT_NAME%” contains merges or splits.")
+#define STR_FAKE_NUMBERING              NC_("STR_FAKE_NUMBERING", "Simulated numbering “%NUMBERING%”.")
+#define STR_HYPERLINK_TEXT_IS_LINK      NC_("STR_HYPERLINK_TEXT_IS_LINK", "Hyperlink text is the same as the link address “%LINK%”.")
+#define STR_HYPERLINK_TEXT_IS_SHORT     NC_("STR_HYPERLINK_TEXT_IS_SHORT", "Hyperlink text is too short.")
+#define STR_HYPERLINK_NO_NAME           NC_("STR_HYPERLINK_NO_NAME", "Missing 'Name' property of hyperlink.")
+#define STR_LINK_TEXT_IS_NOT_NESTED     NC_("STR_LINK_TEXT_IS_NOT_NESTED", "Avoid using links and reference fields in the header or footer.")
+#define STR_TEXT_CONTRAST               NC_("STR_TEXT_CONTRAST", "Text contrast is too low.")
+#define STR_TEXT_BLINKING               NC_("STR_TEXT_BLINKING", "Blinking text.")
+#define STR_AVOID_FOOTNOTES             NC_("STR_AVOID_FOOTNOTES", "Avoid footnotes.")
+#define STR_AVOID_FAKE_FOOTNOTES        NC_("STR_AVOID_FAKE_FOOTNOTES", "Avoid simulated footnotes.")
+#define STR_AVOID_FAKE_CAPTIONS         NC_("STR_AVOID_FAKE_CAPTIONS", "Avoid simulated captions.")
+#define STR_AVOID_ENDNOTES              NC_("STR_AVOID_ENDNOTES", "Avoid endnotes.")
+#define STR_AVOID_BACKGROUND_IMAGES     NC_("STR_AVOID_BACKGROUND_IMAGES", "Avoid background images.")
+#define STR_AVOID_NEWLINES_SPACE        NC_("STR_AVOID_NEWLINES_SPACE", "Avoid newlines to create space.")
+#define STR_AVOID_SPACES_SPACE          NC_("STR_AVOID_SPACES_SPACE", "Avoid repeated spaces.")
+#define STR_AVOID_TABS_FORMATTING       NC_("STR_AVOID_TABS_FORMATTING", "Avoid using tabs for formatting.")
+#define STR_AVOID_EMPTY_NUM_PARA        NC_("STR_AVOID_EMPTY_NUM_PARA", "Avoid new empty lines between numbered paragraphs.")
+#define STR_HEADINGS_NOT_IN_ORDER       NC_("STR_HEADINGS_NOT_IN_ORDER", "Outline levels of headings not in sequential order.")
+#define STR_TEXT_FORMATTING_CONVEYS_MEANING NC_("STR_TEXT_FORMATTING_CONVEYS_MEANING", "The text formatting conveys additional meaning.")
+#define STR_NON_INTERACTIVE_FORMS       NC_("STR_NON_INTERACTIVE_FORMS", "Use interactive input fields.")
+#define STR_FLOATING_TEXT               NC_("STR_FLOATING_TEXT", "Anchor Frames/Text boxes “As Character“.")
+#define STR_HEADING_IN_TABLE            NC_("STR_HEADING_IN_TABLE", "Tables must not contain headings.")
+#define STR_HEADING_ORDER               NC_("STR_HEADING_ORDER", "A heading with outline level %LEVEL_CURRENT% must not follow a heading with outline level %LEVEL_PREV%.")
+#define STR_HEADING_START               NC_("STR_HEADING_START", "Outline levels should start with level 1, instead of level %LEVEL_CURRENT%.")
+#define STR_FONTWORKS                   NC_("STR_FONTWORKS", "Avoid Fontwork objects in your documents. Make sure you use it for samples or other meaningless text.")
+#define STR_TABLE_FORMATTING            NC_("STR_TABLE_FORMATTING", "Avoid using empty table cells for formatting.")
+#define STR_CONTENT_CONTROL_IN_HEADER_OR_FOOTER NC_("STR_CONTENT_CONTROL_IN_HEADER", "Avoid content controls in header or footer.")
+
+#define STR_DOCUMENT_DEFAULT_LANGUAGE   NC_("STR_DOCUMENT_DEFAULT_LANGUAGE", "Document default language is not set.")
+#define STR_STYLE_NO_LANGUAGE           NC_("STR_STYLE_NO_LANGUAGE", "Style “%STYLE_NAME%” has no language set.")
+#define STR_DOCUMENT_TITLE              NC_("STR_DOCUMENT_TITLE", "Document title is not set.")
+#define STR_DOCUMENT_TITLE_DLG_TITLE    NC_("STR_DOCUMENT_TITLE_DLG_TITLE", "Document title")
+#define STR_DOCUMENT_TITLE_DLG_DESC     NC_("STR_DOCUMENT_TITLE_DLG_DESC", "Enter document title:")
+#define STR_HYPERLINK_NO_NAME_DLG       NC_("STR_HYPERLINK_NO_NAME_DLG", "Enter a name of the hyperlink:")
+
+#define STR_ENTER_ALT                   NC_("STR_ENTER_ALT", "Enter alternative text:")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

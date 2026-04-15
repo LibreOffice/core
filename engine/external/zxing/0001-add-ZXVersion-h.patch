@@ -1,0 +1,21 @@
+--- /dev/null	2023-12-10 14:00:18.140142051 +0100
++++ a/core/src/Version.h	2023-12-22 21:38:22.466302568 +0100
+@@ -0,0 +1,18 @@
++/*
++* Copyright 2019 Nu-book Inc.
++* Copyright 2023 Axel Waggershauser
++*/
++// SPDX-License-Identifier: Apache-2.0
++
++#pragma once
++
++// Version numbering
++#define ZXING_VERSION_MAJOR 2
++#define ZXING_VERSION_MINOR 3
++#define ZXING_VERSION_PATCH 0
++
++namespace ZXing {
++
++constexpr const char* ZXING_VERSION_STR = "2.3.0";
++
++}

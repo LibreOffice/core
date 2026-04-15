@@ -1,0 +1,64 @@
+diff -ru rasqal.orig/src/win32_rasqal_config.h rasqal/src/win32_rasqal_config.h
+--- rasqal.orig/src/win32_rasqal_config.h	2015-09-02 23:12:00.733125322 +0200
++++ rasqal/src/win32_rasqal_config.h	2015-09-02 23:28:10.152190403 +0200
+@@ -31,7 +31,6 @@
+ /* MS names for these functions */
+ // next line breaks build on wntmsci12
+ //#define vsnprintf _vsnprintf
+-#define snprintf _snprintf
+ #define access _access
+ #define stricmp _stricmp
+ #define strnicmp _strnicmp
+@@ -42,10 +43,10 @@
+ int rasqal_gettimeofday(struct timeval *tv, struct timezone *tz);
+ #undef HAVE_GETTIMEOFDAY
+ 
+-#include <float.h>
+-#define isnan(n) _isnan(n)
+-/* no round function available */
+-#define round(x) floor(x+0.5)
++// #include <float.h>
++// #define isnan(n) _isnan(n)
++// /* no round function available */
++// #define round(x) floor(x+0.5)
+ 
+ /* These are SPARQL token definitions */
+ #ifdef OPTIONAL
+--- rasqal/src/rasqal_ntriples.c.orig	2016-08-26 23:29:58.343472683 +0200
++++ rasqal/src/rasqal_ntriples.c	2016-08-26 23:30:10.553471736 +0200
+@@ -25,6 +25,10 @@
+ #include <rasqal_config.h>
+ #endif
+ 
++#ifdef _WIN32
++#include <win32_rasqal_config.h>
++#endif
++
+ #include <stdio.h>
+ #include <string.h>
+ #include <ctype.h>
+--- rasqal/src/sv_config.h.orig	2016-08-26 23:29:42.408473919 +0200
++++ rasqal/src/sv_config.h	2016-08-26 23:29:44.760473737 +0200
+@@ -29,7 +29,11 @@
+ extern "C" {
+ #endif
+ 
++#ifdef _WIN32
++#include <win32_rasqal_config.h>
++#else
+ #include <rasqal_config.h>
++#endif
+ 
+ #define sv_new rasqal_sv_new
+ #define sv_free rasqal_sv_free
+--- rasqal/src/rasqal.h.in.orig	2016-08-26 23:42:23.198414915 +0200
++++ rasqal/src/rasqal.h.in	2016-08-26 23:42:34.627414028 +0200
+@@ -1473,7 +1473,7 @@
+ 
+ RASQAL_API
+ int rasqal_query_results_formats_check2(rasqal_world* world, const char *name, raptor_uri* uri, const char *mime_type, int flags);
+-RASQAL_API RASQAL_API RASQAL_DEPRECATED
++RASQAL_API RASQAL_DEPRECATED
+ int rasqal_query_results_formats_check(rasqal_world* world, const char *name, raptor_uri* uri, const char *mime_type, int flags);
+ RASQAL_API
+ rasqal_query_results_formatter* rasqal_new_query_results_formatter(rasqal_world* world, const char *name, const char *mime_type, raptor_uri* format_uri);

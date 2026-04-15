@@ -1,0 +1,253 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <drawingml/textbodyproperties.hxx>
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
+#include <tools/gen.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/svdoashp.hxx>
+#include <svx/sdtditm.hxx>
+
+#include <array>
+
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::text;
+using namespace css;
+
+namespace oox::drawingml {
+
+TextBodyProperties::TextBodyProperties()
+    : mbAnchorCtr(false)
+    , meVA( TextVerticalAdjust_TOP )
+{
+}
+
+/* For Legacy purposes: TODO: Check if it is required at all! */
+void TextBodyProperties::pushVertSimulation()
+{
+    sal_Int32 tVert = moVert.value_or( XML_horz );
+    if( !(tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert) )
+        return;
+
+    // #160799# fake different vertical text modes by top-bottom writing mode
+    maPropertyMap.setProperty( PROP_TextWritingMode, WritingMode_TB_RL);
+
+    // workaround for TB_LR as using WritingMode2 doesn't work
+    if( meVA != TextVerticalAdjust_CENTER )
+        maPropertyMap.setProperty( PROP_TextHorizontalAdjust,
+                            (tVert == XML_vert270) ? TextHorizontalAdjust_RIGHT : TextHorizontalAdjust_LEFT);
+    if( tVert == XML_vert270 )
+        maPropertyMap.setProperty( PROP_TextVerticalAdjust, TextVerticalAdjust_BOTTOM);
+    if( ( tVert == XML_vert && meVA == TextVerticalAdjust_TOP ) ||
+        ( tVert == XML_vert270 && meVA == TextVerticalAdjust_BOTTOM ) )
+        maPropertyMap.setProperty( PROP_TextHorizontalAdjust, TextHorizontalAdjust_RIGHT);
+    else if( meVA == TextVerticalAdjust_CENTER )
+        maPropertyMap.setProperty( PROP_TextHorizontalAdjust, TextHorizontalAdjust_CENTER);
+}
+
+/* Push text distances / insets, taking into consideration text rotation */
+void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
+{
+    for (auto & rValue : maTextDistanceValues)
+        rValue.reset();
+
+    sal_Int32 nOff = 0;
+    static constexpr auto aProps = std::to_array<sal_Int32>({
+        PROP_TextLeftDistance,
+        PROP_TextUpperDistance,
+        PROP_TextRightDistance,
+        PROP_TextLowerDistance
+    });
+
+    switch (moTextPreRotation.value_or(0))
+    {
+        case 90*1*60000: nOff = 3; break;
+        case 90*2*60000: nOff = 2; break;
+        case 90*3*60000: nOff = 1; break;
+        default: break;
+    }
+
+    if (moVert && (moVert.value() == XML_eaVert || moVert.value() == XML_vert))
+        nOff = (nOff + 3) % aProps.size();
+    else if (moVert && moVert.value() == XML_vert270)
+        nOff = (nOff + 1) % aProps.size();
+
+    // Compensate for text area rotation (bodyPr rot attribute).
+    // In PowerPoint, margins are relative to the unrotated frame.
+    // The rendering rotates the text area including margins, so pre-rotate
+    // margins in the opposite direction to compensate.
+    // Only do this for bodyPr 'rot', not for txXfrm rotation (SmartArt/diagram).
+    if (mbBodyPrRotation && moTextAreaRotation)
+    {
+        sal_Int32 nRotDeg = (*moTextAreaRotation / 60000) % 360;
+        if (nRotDeg < 0)
+            nRotDeg += 360;
+
+        if (nRotDeg >= 45 && nRotDeg < 135)       // ~90° CW
+            nOff = (nOff + 1) % aProps.size();
+        else if (nRotDeg >= 135 && nRotDeg < 225)  // ~180°
+            nOff = (nOff + 2) % aProps.size();
+        else if (nRotDeg >= 225 && nRotDeg < 315)  // ~270° CW
+            nOff = (nOff + 3) % aProps.size();
+    }
+
+    // When vert or bodyPr rot is active, fill in OOXML default insets for any
+    // not explicitly specified, so the defaults get rotated to the correct edges.
+    // Without rotation, LO's own defaults (which match OOXML) are fine as-is.
+    // Only do this for moVert / bodyPr rot (OOXML shape-level attributes),
+    // not for moTextPreRotation or txXfrm rotation (SmartArt/diagram mechanism).
+    // OOXML defaults: lIns=91440 tIns=45720 rIns=91440 bIns=45720 (EMU)
+    //                 → 254, 127, 254, 127 (HMM)
+    bool bNeedsDefaultInsets
+        = (moVert.has_value()
+           && (moVert.value() == XML_eaVert || moVert.value() == XML_vert
+               || moVert.value() == XML_vert270))
+          || mbBodyPrRotation;
+    auto aInsets = moInsets;
+    if (nOff != 0 && bNeedsDefaultInsets)
+    {
+        static constexpr sal_Int32 aDefaultInsets[] = { 254, 127, 254, 127 };
+        for (size_t i = 0; i < aInsets.size(); i++)
+        {
+            if (!aInsets[i])
+                aInsets[i] = aDefaultInsets[i];
+        }
+    }
+
+    for (size_t i = 0; i < aProps.size(); i++)
+    {
+        sal_Int32 nVal = 0;
+
+        // Hack for n#760986
+        // TODO: Preferred method would be to have a textbox on top
+        // of the shape and the place it according to the (off,ext)
+        if (nOff == 0 && moTextOffLeft)
+            nVal = *moTextOffLeft;
+
+        if (nOff == 1 && moTextOffUpper)
+            nVal = *moTextOffUpper;
+
+        if (nOff == 2 && moTextOffRight)
+            nVal = *moTextOffRight;
+
+        if (nOff == 3 && moTextOffLower)
+            nVal = *moTextOffLower;
+
+        sal_Int32 nTextOffsetValue = nVal;
+
+        if (aInsets[i])
+        {
+            nTextOffsetValue = *aInsets[i] + nVal;
+        }
+
+        // if inset is set, then always set the value
+        // this prevents the default to be set (0 is a valid value)
+        if (aInsets[i] || nTextOffsetValue)
+        {
+            maTextDistanceValues[nOff] = nTextOffsetValue;
+        }
+
+        nOff = (nOff + 1) % aProps.size();
+    }
+
+    // Check if left and right are set
+    if (maTextDistanceValues[0] && maTextDistanceValues[2])
+    {
+        double nWidth = rTextAreaSize.getWidth();
+
+        double nLeft = *maTextDistanceValues[0];
+        double nRight = *maTextDistanceValues[2];
+
+        // Check if left + right is more than text area width.
+        // If yes, we need to adjust the values as defined in OOXML.
+        // (Overload zero width to mean don't adjust)
+        if (nWidth > 0 && nLeft + nRight >= nWidth)
+        {
+            double diffFactor = (nLeft + nRight - nWidth) / 2.0;
+
+            maTextDistanceValues[0] = nLeft - diffFactor;
+            maTextDistanceValues[2] = nRight - diffFactor;
+        }
+    }
+
+    // Check if bottom and top are set
+    if (maTextDistanceValues[1] && maTextDistanceValues[3])
+    {
+        double nHeight = rTextAreaSize.getHeight();
+
+        double nTop = *maTextDistanceValues[1];
+        double nBottom = *maTextDistanceValues[3];
+
+        // Check if top + bottom is more than text area height.
+        // If yes, we need to adjust the values as defined in OOXML.
+        // (Overload zero height to mean don't adjust)
+        if (nHeight > 0 && nTop + nBottom >= nHeight)
+        {
+            double diffFactor = (nTop + nBottom - nHeight) / 2.0;
+
+            maTextDistanceValues[1] = nTop - diffFactor;
+            maTextDistanceValues[3] = nBottom - diffFactor;
+        }
+    }
+
+    for (size_t i = 0; i < aProps.size(); i++)
+    {
+        if (maTextDistanceValues[i])
+            maPropertyMap.setProperty(aProps[i], *maTextDistanceValues[i]);
+    }
+}
+
+/* Readjust the text distances / insets if necessary to take
+   the text area into account, not just the shape area*/
+void TextBodyProperties::readjustTextDistances(uno::Reference<drawing::XShape> const& xShape)
+{
+    // Only for custom shapes (for now)
+    auto* pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+    if (pCustomShape)
+    {
+        sal_Int32 nLower = pCustomShape->GetTextLowerDistance();
+        sal_Int32 nUpper = pCustomShape->GetTextUpperDistance();
+
+        pCustomShape->SetMergedItem(makeSdrTextUpperDistItem(0));
+        pCustomShape->SetMergedItem(makeSdrTextLowerDistItem(0));
+
+        tools::Rectangle aAnchorRect;
+        pCustomShape->TakeTextAnchorRect(aAnchorRect);
+        Size aAnchorSize = aAnchorRect.GetSize();
+
+        pushTextDistances(aAnchorSize);
+        if (maTextDistanceValues[1] && maTextDistanceValues[3])
+        {
+            nLower = *maTextDistanceValues[3];
+            nUpper = *maTextDistanceValues[1];
+        }
+
+        pCustomShape->SetMergedItem(makeSdrTextLowerDistItem(nLower));
+        pCustomShape->SetMergedItem(makeSdrTextUpperDistItem(nUpper));
+    }
+}
+
+
+} // namespace oox::drawingml
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

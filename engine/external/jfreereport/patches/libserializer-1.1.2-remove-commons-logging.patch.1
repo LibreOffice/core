@@ -1,0 +1,31 @@
+diff -ru libserializer-1.1.2.orig/source/org/pentaho/reporting/libraries/serializer/SerializerHelper.java libserializer-1.1.2/source/org/pentaho/reporting/libraries/serializer/SerializerHelper.java
+--- libserializer-1.1.2.orig/source/org/pentaho/reporting/libraries/serializer/SerializerHelper.java	2021-04-07 11:22:05.509434457 +0100
++++ libserializer-1.1.2/source/org/pentaho/reporting/libraries/serializer/SerializerHelper.java	2021-04-07 11:23:19.102343782 +0100
+@@ -25,8 +25,7 @@
+ import java.util.HashMap;
+ import java.util.Iterator;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.config.Configuration;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+ import org.pentaho.reporting.libraries.base.util.DebugLog;
+@@ -41,7 +40,7 @@
+  */
+ public class SerializerHelper
+ {
+-  private static final Log logger = LogFactory.getLog(SerializerHelper.class);
++  private static final Logger logger = Logger.getLogger(SerializerHelper.class.getName());
+   /**
+    * The singleton instance of the serialize helper.
+    */
+@@ -124,7 +123,7 @@
+       }
+       else
+       {
+-        logger.warn("Invalid SerializeMethod implementation: " + c);
++        logger.warning("Invalid SerializeMethod implementation: " + c);
+       }
+     }
+   }

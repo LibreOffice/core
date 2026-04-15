@@ -1,0 +1,6 @@
+---
+assumeFilename: jvmaccess/source/classpath.cxx
+excludelist:
+    jvmaccess/source/classpath.cxx:
+    # Needed to inherit linker visibility from function declaration
+    - jvmaccess/classpath.hxx

@@ -1,0 +1,6 @@
+Danish dictionary from Stavekontrolden.
+This dictionary is based on data from Det Danske Sprog- og Litteraturselskab
+(The Danish Society for Language and Literature), http://www.dsl.dk.
+Danish thesaurus based on data from Det Danske Sprog- og Litteraturselskab
+and Center for Sprogteknologi, Københavns Universitet
+Hyphenation dictionary Based on the TeX hyphenation tables.

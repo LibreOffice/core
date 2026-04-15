@@ -1,0 +1,38 @@
+--- pdfium.orig/fpdfsdk/fpdf_edittext.cpp
++++ pdfium/fpdfsdk/fpdf_edittext.cpp
+@@ -1173,6 +1173,21 @@
+   return FPDFGlyphPathFromCFXPath(pPath);
+ }
+ 
++FPDF_EXPORT uint32_t FPDF_CALLCONV
++FPDFFont_GetGlyphIndexFromCharCode(FPDF_FONT font, uint32_t char_code) {
++  auto* pFont = CPDFFontFromFPDFFont(font);
++  if (!pFont)
++    return 0;
++
++#if BUILDFLAG(IS_APPLE)
++  uint32_t extGID = pFont->GlyphFromCharCodeExt(char_code);
++  if (extGID != static_cast<uint32_t>(-1))
++    return extGID;
++#endif
++
++  return pFont->GlyphFromCharCode(char_code, nullptr);
++}
++
+ FPDF_EXPORT int FPDF_CALLCONV
+ FPDFGlyphPath_CountGlyphSegments(FPDF_GLYPHPATH glyphpath) {
+   auto* pPath = CFXPathFromFPDFGlyphPath(glyphpath);
+--- pdfium.orig/public/fpdf_edit.h
++++ pdfium/public/fpdf_edit.h
+@@ -1622,6 +1622,11 @@
+                                                                float font_size);
+ 
+ // Experimental API.
++// Get glyph index of the PDF character code
++FPDF_EXPORT uint32_t FPDF_CALLCONV
++FPDFFont_GetGlyphIndexFromCharCode(FPDF_FONT font, uint32_t charcode);
++
++// Experimental API.
+ // Get number of segments inside glyphpath.
+ //
+ // glyphpath - handle to a glyph path.

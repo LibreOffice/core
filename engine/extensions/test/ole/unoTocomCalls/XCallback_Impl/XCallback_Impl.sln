@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XCallback_Impl", "XCallback_Impl.vcproj", "{92A6B531-401E-4900-8217-169A96F4168D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release MinDependency|Win32 = Release MinDependency|Win32
+		Release MinSize|Win32 = Release MinSize|Win32
+		Unicode Debug|Win32 = Unicode Debug|Win32
+		Unicode Release MinDependency|Win32 = Unicode Release MinDependency|Win32
+		Unicode Release MinSize|Win32 = Unicode Release MinSize|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92A6B531-401E-4900-8217-169A96F4168D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{92A6B531-401E-4900-8217-169A96F4168D}.Debug|Win32.Build.0 = Debug|Win32
+		{92A6B531-401E-4900-8217-169A96F4168D}.Release MinDependency|Win32.ActiveCfg = Release MinDependency|Win32
+		{92A6B531-401E-4900-8217-169A96F4168D}.Release MinDependency|Win32.Build.0 = Release MinDependency|Win32
+		{92A6B531-401E-4900-8217-169A96F4168D}.Release MinSize|Win32.ActiveCfg = Release MinSize|Win32
+		{92A6B531-401E-4900-8217-169A96F4168D}.Release MinSize|Win32.Build.0 = Release MinSize|Win32
+		{92A6B531-401E-4900-8217-169A96F4168D}.Unicode Debug|Win32.ActiveCfg = Unicode Debug|Win32
+		{92A6B531-401E-4900-8217-169A96F4168D}.Unicode Debug|Win32.Build.0 = Unicode Debug|Win32
+		{92A6B531-401E-4900-8217-169A96F4168D}.Unicode Release MinDependency|Win32.ActiveCfg = Unicode Release MinDependency|Win32
+		{92A6B531-401E-4900-8217-169A96F4168D}.Unicode Release MinDependency|Win32.Build.0 = Unicode Release MinDependency|Win32
+		{92A6B531-401E-4900-8217-169A96F4168D}.Unicode Release MinSize|Win32.ActiveCfg = Unicode Release MinSize|Win32
+		{92A6B531-401E-4900-8217-169A96F4168D}.Unicode Release MinSize|Win32.Build.0 = Unicode Release MinSize|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

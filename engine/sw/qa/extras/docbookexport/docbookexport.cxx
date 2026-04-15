@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <swmodeltestbase.hxx>
+
+namespace
+{
+class DocbookExportTest : public SwModelTestBase
+{
+public:
+    DocbookExportTest() :
+        SwModelTestBase(u"/sw/qa/extras/docbookexport/data/"_ustr)
+    {}
+};
+
+CPPUNIT_TEST_FIXTURE(DocbookExportTest, testsimple)
+{
+    createSwDoc("simple.docx");
+    save(TestFilter::DOCBOOK);
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/article/para", u"aaaa");
+}
+
+/* the test actually should crash with this file */
+CPPUNIT_TEST_FIXTURE(DocbookExportTest, testtdf91095)
+{
+    createSwDoc("tdf91095.docx");
+    save(TestFilter::DOCBOOK);
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+}
+
+CPPUNIT_TEST_FIXTURE(DocbookExportTest, testtdf169122_resave_docbook)
+{
+    // Without fix, resave of a docbook was not possible due to duplicate attributes.
+    createSwDoc("tdf169122_Docbook_Example.xml");
+    save(TestFilter::DOCBOOK);
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+}
+
+} // end of anonymous namespace
+CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

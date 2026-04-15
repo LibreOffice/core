@@ -1,0 +1,13 @@
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+
+<defs><style type="text/css">
+.super{
+	font-size: 65%;
+}
+</style></defs>
+
+      <text>
+      <tspan x="114" y="103">x </tspan>
+      <tspan class="super" baseline-shift="super">3</tspan>
+      </text>
+</svg>

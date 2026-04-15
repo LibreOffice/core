@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include <unotools/resmgr.hxx>
+
+#include <utility>
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+namespace sd
+{
+
+// To translators: this is a listbox labelled by "Margins:", inch units
+const std::pair<TranslateId, int> RID_PAGEFORMATPANEL_MARGINS_INCH[] =
+{
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "None"), 0 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Narrow"), 0 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Moderate"), 0 },
+    // Normal (0.75")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"),  75 },
+    // Normal (1")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"), 100 },
+    // Normal (1.25")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"), 125 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Wide"), 0 }
+};
+
+// To translators: this is a listbox labelled by "Margins:", cm units
+const std::pair<TranslateId, int> RID_PAGEFORMATPANEL_MARGINS_CM[] =
+{
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "None"), 0 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Narrow"), 0 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Moderate"), 0 },
+    // Normal (1.9 cm)
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 190 },
+    // Normal (2.54 cm)
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 254 },
+    // Normal (3.18 cm)
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 318 },
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Wide"), 0 }
+};
+
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

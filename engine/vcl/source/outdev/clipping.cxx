@@ -1,0 +1,206 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <sal/config.h>
+#include <osl/diagnose.h>
+#include <tools/debug.hxx>
+
+#include <vcl/metaact.hxx>
+#include <vcl/virdev.hxx>
+
+#include <salgdi.hxx>
+
+void OutputDevice::SaveBackground(VirtualDevice& rSaveDevice,
+                                  const Point& rPos, const Size& rSize, const Size& rBackgroundSize) const
+{
+   rSaveDevice.DrawOutDev(Point(), rBackgroundSize, rPos, rSize, *this);
+}
+
+vcl::Region OutputDevice::GetClipRegion() const
+{
+
+    return PixelToLogic( maRegion );
+}
+
+void OutputDevice::SetClipRegion()
+{
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaClipRegionAction( vcl::Region(), false ) );
+
+    SetDeviceClipRegion( nullptr );
+}
+
+void OutputDevice::SetClipRegion( const vcl::Region& rRegion )
+{
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaClipRegionAction( rRegion, true ) );
+
+    if ( rRegion.IsNull() )
+    {
+        SetDeviceClipRegion( nullptr );
+    }
+    else
+    {
+        vcl::Region aRegion = LogicToPixel( rRegion );
+        SetDeviceClipRegion( &aRegion );
+    }
+}
+
+bool OutputDevice::SelectClipRegion( const vcl::Region& rRegion, SalGraphics* pGraphics )
+{
+    DBG_TESTSOLARMUTEX();
+
+    if( !pGraphics )
+    {
+        if( !mpGraphics && !AcquireGraphics() )
+            return false;
+        assert(mpGraphics);
+        pGraphics = mpGraphics;
+    }
+
+    pGraphics->SetClipRegion( rRegion, *this );
+    return true;
+}
+
+void OutputDevice::MoveClipRegion( tools::Long nHorzMove, tools::Long nVertMove )
+{
+    if ( mbClipRegion )
+    {
+        if( mpMetaFile )
+            mpMetaFile->AddAction( new MetaMoveClipRegionAction( nHorzMove, nVertMove ) );
+
+        maRegion.Move( ImplLogicWidthToDevicePixel( nHorzMove ),
+                       ImplLogicHeightToDevicePixel( nVertMove ) );
+        mbInitClipRegion = true;
+    }
+}
+
+void OutputDevice::IntersectClipRegion( const tools::Rectangle& rRect )
+{
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaISectRectClipRegionAction( rRect ) );
+
+    tools::Rectangle aRect = LogicToPixel( rRect );
+    maRegion.Intersect( aRect );
+    mbClipRegion        = true;
+    mbInitClipRegion    = true;
+}
+
+void OutputDevice::IntersectClipRegion( const vcl::Region& rRegion )
+{
+    if(!rRegion.IsNull())
+    {
+        if ( mpMetaFile )
+            mpMetaFile->AddAction( new MetaISectRegionClipRegionAction( rRegion ) );
+
+        vcl::Region aRegion = LogicToPixel( rRegion );
+        maRegion.Intersect( aRegion );
+        mbClipRegion        = true;
+        mbInitClipRegion    = true;
+    }
+}
+
+void OutputDevice::InitClipRegion()
+{
+    DBG_TESTSOLARMUTEX();
+
+    if ( mbClipRegion )
+    {
+        if ( maRegion.IsEmpty() )
+            mbOutputClipped = true;
+        else
+        {
+            mbOutputClipped = false;
+
+            // #102532# Respect output offset also for clip region
+            vcl::Region aRegion = ClipToDeviceBounds(ImplPixelToDevicePixel(maRegion));
+
+            if ( aRegion.IsEmpty() )
+            {
+                mbOutputClipped = true;
+            }
+            else
+            {
+                mbOutputClipped = false;
+                SelectClipRegion( aRegion );
+            }
+        }
+
+        mbClipRegionSet = true;
+    }
+    else
+    {
+        if ( mbClipRegionSet )
+        {
+            if (mpGraphics)
+                mpGraphics->ResetClipRegion();
+            mbClipRegionSet = false;
+        }
+
+        mbOutputClipped = false;
+    }
+
+    mbInitClipRegion = false;
+}
+
+vcl::Region OutputDevice::ClipToDeviceBounds(vcl::Region aRegion) const
+{
+    aRegion.Intersect(tools::Rectangle{mnOutOffX,
+                                       mnOutOffY,
+                                       mnOutOffX + GetOutputWidthPixel() - 1,
+                                       mnOutOffY + GetOutputHeightPixel() - 1
+                                      });
+    return aRegion;
+}
+
+vcl::Region OutputDevice::GetActiveClipRegion() const
+{
+    return GetClipRegion();
+}
+
+void OutputDevice::ClipToPaintRegion(tools::Rectangle& /*rDstRect*/)
+{
+    // this is only used in Window, but we still need it as it's called
+    // on in other clipping functions
+}
+
+void OutputDevice::SetDeviceClipRegion( const vcl::Region* pRegion )
+{
+    DBG_TESTSOLARMUTEX();
+
+    if ( !pRegion )
+    {
+        if ( mbClipRegion )
+        {
+            maRegion            = vcl::Region(true);
+            mbClipRegion        = false;
+            mbInitClipRegion    = true;
+        }
+    }
+    else
+    {
+        maRegion            = *pRegion;
+        mbClipRegion        = true;
+        mbInitClipRegion    = true;
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
+<interface domain="sd">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkFrame" id="SdViewPage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="border-width">6</property>
+    <property name="label-xalign">0</property>
+    <property name="shadow-type">none</property>
+    <child>
+      <!-- n-columns=2 n-rows=4 -->
+      <object class="GtkGrid">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-start">12</property>
+        <property name="margin-top">6</property>
+        <property name="row-spacing">6</property>
+        <child>
+          <object class="GtkCheckButton" id="ruler">
+            <property name="label" translatable="yes" context="sdviewpage|ruler">_Rulers visible</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="ruler-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ruler">Specifies whether to display the rulers at the top and to the left of the work area.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="dragstripes">
+            <property name="label" translatable="yes" context="sdviewpage|dragstripes">_Helplines while moving</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="dragstripes-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|dragstripes">Specifies whether to display guides when moving an object.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="handlesbezier">
+            <property name="label" translatable="yes" context="sdviewpage|handlesbezier">_All control points in Bézier editor</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="handlesbezier-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|handlesbezier">Displays the control points of all Bézier points if you have previously selected a Bézier curve. If the All control points in Bézier editor option is not marked, only the control points of the selected Bézier points will be visible.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="moveoutline">
+            <property name="label" translatable="yes" context="sdviewpage|moveoutline">_Contour of each individual object</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="moveoutline-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|moveoutline">The contour line of each individual object is displayed when moving this object.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockruler">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockdragstripes">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockhandlesbezier">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockmoveoutline">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child type="label">
+      <object class="GtkLabel" id="label1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="sdviewpage|label1">Display</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SdViewPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|SdViewPage">Specifies the available display modes.</property>
+      </object>
+    </child>
+  </object>
+</interface>

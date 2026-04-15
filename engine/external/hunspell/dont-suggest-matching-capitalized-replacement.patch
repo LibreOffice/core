@@ -1,0 +1,61 @@
+*** a/src/hunspell/hunspell.cxx	2025-10-01 17:20:17.599434991 -0400
+--- b/src/hunspell/hunspell.cxx	2025-10-01 17:21:01.839629317 -0400
+***************
+*** 155,160 ****
+--- 155,161 ----
+                      size_t* pabbrev);
+    void clean_ignore(std::string& dest, const std::string& src);
+    void mkinitcap(std::string& u8);
++   void mkinitsmall(std::string& u8);
+    int mkinitcap2(std::string& u8, std::vector<w_char>& u16);
+    int mkinitsmall2(std::string& u8, std::vector<w_char>& u16);
+    void mkallcap(std::string& u8);
+***************
+*** 964,973 ****
+    }
+  
+    // capitalize
+!   if (capwords)
+      for (auto& j : slst) {
+        mkinitcap(j);
+      }
+  
+    // expand suggestions with dot(s)
+    if (abbv && pAMgr && pAMgr->get_sugswithdots() && word.size() >= abbv) {
+--- 965,980 ----
+    }
+  
+    // capitalize
+!   if (capwords) {
+!     std::string initsmallword(word);
+!     mkinitsmall(initsmallword);
+!
+      for (auto& j : slst) {
++       if (initsmallword == j)
++         continue;  // if capitalized, it would match misspelled word!
+        mkinitcap(j);
+      }
++   }
+  
+    // expand suggestions with dot(s)
+    if (abbv && pAMgr && pAMgr->get_sugswithdots() && word.size() >= abbv) {
+***************
+*** 1442,1447 ****
+--- 1449,1465 ----
+      u16_u8(u8, u16);
+    } else {
+      ::mkinitcap(u8, csconv);
++   }
++ }
++
++ void HunspellImpl::mkinitsmall(std::string& u8) {
++   if (utf8) {
++     std::vector<w_char> u16;
++     u8_u16(u16, u8);
++     ::mkinitsmall_utf(u16, langnum);
++     u16_u8(u8, u16);
++   } else {
++     ::mkinitcap(u8, csconv);
+    }
+  }
+  

@@ -1,0 +1,3 @@
+"UcbPropertiesManager";"com::sun::star::beans::XPropertySetInfo";"getProperties()"
+"UcbPropertiesManager";"com::sun::star::beans::XPropertySetInfo";"getPropertyByName()"
+"UcbPropertiesManager";"com::sun::star::beans::XPropertySetInfo";"hasPropertyByName()"

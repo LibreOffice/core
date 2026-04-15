@@ -1,0 +1,273 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <rangecache.hxx>
+#include <cellvalue.hxx>
+#include <document.hxx>
+#include <brdcst.hxx>
+#include <queryevaluator.hxx>
+#include <queryparam.hxx>
+
+#include <sal/log.hxx>
+#include <svl/numformat.hxx>
+#include <unotools/collatorwrapper.hxx>
+
+static bool needsDescending(ScQueryOp op)
+{
+    assert(op == SC_GREATER || op == SC_GREATER_EQUAL || op == SC_LESS || op == SC_LESS_EQUAL
+           || op == SC_EQUAL);
+    // We want all matching values to start in the sort order,
+    // since the data is searched from start until the last matching one.
+    return op == SC_GREATER || op == SC_GREATER_EQUAL;
+}
+
+static ScSortedRangeCache::ValueType toValueType(const ScQueryParam& param)
+{
+    assert(param.GetEntry(0).bDoQuery && !param.GetEntry(1).bDoQuery
+           && param.GetEntry(0).GetQueryItems().size() == 1);
+    assert(param.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString
+           || param.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue);
+    if (param.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue)
+        return ScSortedRangeCache::ValueType::Values;
+    return param.bCaseSens ? ScSortedRangeCache::ValueType::StringsCaseSensitive
+                           : ScSortedRangeCache::ValueType::StringsCaseInsensitive;
+}
+
+ScSortedRangeCache::ScSortedRangeCache(ScDocument& rDoc, const ScRange& rRange,
+                                       const ScQueryParam& param, ScInterpreterContext* context,
+                                       bool invalid, bool bNewSearchFunction,
+                                       sal_uInt8 nSortedBinarySearch)
+    : maRange(rRange)
+    , mrDoc(rDoc)
+    , mValid(false)
+    , mRowSearch(param.bByRow)
+    , mValueType(toValueType(param))
+{
+    if (mRowSearch)
+        assert(maRange.aStart.Col() == maRange.aEnd.Col());
+    else
+        assert(maRange.aStart.Row() == maRange.aEnd.Row());
+    assert(maRange.aStart.Tab() == maRange.aEnd.Tab());
+    SCTAB nTab = maRange.aStart.Tab();
+    assert(param.GetEntry(0).bDoQuery && !param.GetEntry(1).bDoQuery
+           && param.GetEntry(0).GetQueryItems().size() == 1);
+    const ScQueryEntry& entry = param.GetEntry(0);
+    const ScQueryEntry::Item& item = entry.GetQueryItem();
+    mQueryOp = entry.eOp;
+    mQueryType = item.meType;
+
+    if (invalid)
+        return; // leave empty
+
+    SCROW startRow = maRange.aStart.Row();
+    SCROW endRow = maRange.aEnd.Row();
+    SCCOL startCol = maRange.aStart.Col();
+    SCCOL endCol = maRange.aEnd.Col();
+    if (!item.mbMatchEmpty)
+        if (!rDoc.ShrinkToDataArea(nTab, startCol, startRow, endCol, endRow))
+            return; // no data cells, no need for a cache
+
+    if (mValueType == ValueType::Values)
+    {
+        struct ColRowData
+        {
+            SCCOLROW col_row;
+            double value;
+        };
+
+        std::vector<ColRowData> colrowData;
+        for (SCCOL nCol = startCol; nCol <= endCol; ++nCol)
+        {
+            for (SCROW nRow = startRow; nRow <= endRow; ++nRow)
+            {
+                ScRefCellValue cell(rDoc.GetRefCellValue(ScAddress(nCol, nRow, nTab)));
+                if (ScQueryEvaluator::isQueryByValue(mQueryOp, mQueryType, cell))
+                    colrowData.push_back(ColRowData{ mRowSearch ? nRow : nCol, cell.getValue() });
+                else if (ScQueryEvaluator::isQueryByString(mQueryOp, mQueryType, cell))
+                {
+                    // Make sure that other possibilities in the generic handling
+                    // in ScQueryEvaluator::processEntry() do not alter the results.
+                    // (ByTextColor/ByBackgroundColor are blocked by CanBeUsedForSorterCache(),
+                    // but isQueryByString() is possible if the cell content is a string.
+                    // And including strings here would be tricky, as the string comparison
+                    // may possibly(?) be different than a numeric one. So check if the string
+                    // may possibly match a number, by converting it to one. If it can't match,
+                    // then it's fine to ignore it (and it can happen e.g. if the query uses
+                    // the whole column which includes a textual header). But if it can possibly
+                    // match, then bail out and leave it to the unoptimized case.
+                    // TODO Maybe it would actually work to use the numeric value obtained here?
+                    if (!bNewSearchFunction && !ScQueryEvaluator::isMatchWholeCell(rDoc, mQueryOp))
+                        return; // substring matching cannot be sorted, but new search functions are sorted
+                    sal_uInt32 format = 0;
+                    double value;
+                    if (context->NFIsNumberFormat(cell.getString(rDoc), format, value))
+                        return;
+                }
+            }
+        }
+
+        if (nSortedBinarySearch == 0x00) //nBinarySearchDisabled = 0x00
+        {
+            std::stable_sort(
+                colrowData.begin(), colrowData.end(),
+                [](const ColRowData& d1, const ColRowData& d2) { return d1.value < d2.value; });
+        }
+        else if (nSortedBinarySearch == 0x01) //nSearchbAscd
+        {
+            // expected it is already sorted properly in Ascd mode.
+        }
+        else /*(nSortedBinarySearch == 0x02) nSearchbDesc*/
+        {
+            // expected it is already sorted properly in Desc mode, just need to reverse.
+            std::reverse(colrowData.begin(), colrowData.end());
+        }
+
+        if (needsDescending(entry.eOp))
+        {
+            for (auto it = colrowData.rbegin(); it != colrowData.rend(); ++it)
+            {
+                if (mRowSearch)
+                    mSortedRows.emplace_back(it->col_row);
+                else
+                    mSortedCols.emplace_back(it->col_row);
+            }
+        }
+        else
+        {
+            for (const ColRowData& d : colrowData)
+            {
+                if (mRowSearch)
+                    mSortedRows.emplace_back(d.col_row);
+                else
+                    mSortedCols.emplace_back(d.col_row);
+            }
+        }
+    }
+    else
+    {
+        struct ColRowData
+        {
+            SCCOLROW col_row;
+            OUString string;
+        };
+        std::vector<ColRowData> colrowData;
+        // Try to reuse as much ScQueryEvaluator code as possible, this should
+        // basically do the same comparisons.
+        assert(rDoc.FetchTable(nTab) != nullptr);
+        ScQueryEvaluator evaluator(rDoc, *rDoc.FetchTable(nTab), param, context, nullptr,
+                                   bNewSearchFunction);
+        for (SCCOL nCol = startCol; nCol <= endCol; ++nCol)
+        {
+            for (SCROW nRow = startRow; nRow <= endRow; ++nRow)
+            {
+                ScRefCellValue cell(rDoc.GetRefCellValue(ScAddress(nCol, nRow, nTab)));
+                // This should be used only with ScQueryEntry::ByString, and that
+                // means that ScQueryEvaluator::isQueryByString() should be the only
+                // possibility in the generic handling in ScQueryEvaluator::processEntry()
+                // (ByTextColor/ByBackgroundColor are blocked by CanBeUsedForSorterCache(),
+                // and isQueryByValue() is blocked by ScQueryEntry::ByString).
+                assert(mQueryType == ScQueryEntry::ByString);
+                assert(!ScQueryEvaluator::isQueryByValue(mQueryOp, mQueryType, cell));
+                if (ScQueryEvaluator::isQueryByString(mQueryOp, mQueryType, cell))
+                {
+                    OUString string = evaluator.getCellString(cell, nRow, nCol);
+                    colrowData.push_back(ColRowData{ mRowSearch ? nRow : nCol, string });
+                }
+            }
+        }
+        CollatorWrapper& collator
+            = ScGlobal::GetCollator(mValueType == ValueType::StringsCaseSensitive);
+
+        if (nSortedBinarySearch == 0x00) //nBinarySearchDisabled = 0x00
+        {
+            std::stable_sort(colrowData.begin(), colrowData.end(),
+                             [&collator](const ColRowData& d1, const ColRowData& d2) {
+                                 return collator.compareString(d1.string, d2.string) < 0;
+                             });
+        }
+        else if (nSortedBinarySearch == 0x01) //nSearchbAscd
+        {
+            // expected it is already sorted properly in Asc mode.
+        }
+        else /*(nSortedBinarySearch == 0x02) nSearchbDesc*/
+        {
+            // expected it is already sorted properly in Desc mode, just need to reverse.
+            std::reverse(colrowData.begin(), colrowData.end());
+        }
+
+        if (needsDescending(entry.eOp))
+        {
+            for (auto it = colrowData.rbegin(); it != colrowData.rend(); ++it)
+            {
+                if (mRowSearch)
+                    mSortedRows.emplace_back(it->col_row);
+                else
+                    mSortedCols.emplace_back(it->col_row);
+            }
+        }
+        else
+        {
+            for (const ColRowData& d : colrowData)
+            {
+                if (mRowSearch)
+                    mSortedRows.emplace_back(d.col_row);
+                else
+                    mSortedCols.emplace_back(d.col_row);
+            }
+        }
+    }
+
+    if (mRowSearch)
+    {
+        mRowToIndex.resize(maRange.aEnd.Row() - maRange.aStart.Row() + 1, mSortedRows.max_size());
+        for (size_t i = 0; i < mSortedRows.size(); ++i)
+            mRowToIndex[mSortedRows[i] - maRange.aStart.Row()] = i;
+    }
+    else
+    {
+        mColToIndex.resize(maRange.aEnd.Col() - maRange.aStart.Col() + 1, mSortedCols.max_size());
+        for (size_t i = 0; i < mSortedCols.size(); ++i)
+            mColToIndex[mSortedCols[i] - maRange.aStart.Col()] = i;
+    }
+    mValid = true;
+}
+
+void ScSortedRangeCache::Notify(const SfxHint& rHint)
+{
+    if (!mrDoc.IsInDtorClear())
+    {
+        if (rHint.GetId() == SfxHintId::ScDataChanged || rHint.GetId() == SfxHintId::ScAreaChanged)
+        {
+            mrDoc.RemoveSortedRangeCache(*this);
+            // this ScSortedRangeCache is deleted by RemoveSortedRangeCache
+        }
+    }
+}
+
+ScSortedRangeCache::HashKey ScSortedRangeCache::makeHashKey(const ScRange& range,
+                                                            const ScQueryParam& param)
+{
+    assert(param.GetEntry(0).bDoQuery && !param.GetEntry(1).bDoQuery
+           && param.GetEntry(0).GetQueryItems().size() == 1);
+    const ScQueryEntry& entry = param.GetEntry(0);
+    const ScQueryEntry::Item& item = entry.GetQueryItem();
+    return { range, toValueType(param), entry.eOp, item.meType };
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,142 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com { module sun { module star { module testuno {
+
+interface XTest {
+    boolean getBoolean();
+    boolean isBoolean([in] boolean value);
+    byte getByte();
+    boolean isByte([in] byte value);
+    short getShort();
+    boolean isShort([in] short value);
+    unsigned short getUnsignedShort();
+    boolean isUnsignedShort([in] unsigned short value);
+    long getLong();
+    boolean isLong([in] long value);
+    unsigned long getUnsignedLong();
+    boolean isUnsignedLong([in] unsigned long value);
+    hyper getHyper();
+    boolean isHyper([in] hyper value);
+    unsigned hyper getUnsignedHyper();
+    boolean isUnsignedHyper([in] unsigned hyper value);
+    float getFloat();
+    boolean isFloat([in] float value);
+    double getDouble();
+    boolean isDouble([in] double value);
+    char getChar();
+    boolean isChar([in] char value);
+    string getString();
+    boolean isString([in] string value);
+    type getType();
+    boolean isType([in] type value);
+    Enum getEnum();
+    boolean isEnum([in] Enum value);
+    Struct getStruct();
+    boolean isStruct([in] Struct value);
+    StructLong getStructLong();
+    boolean isStructLong([in] StructLong value);
+    StructString getStructString();
+    boolean isStructString([in] StructString value);
+    Template<any, StructString> getTemplate();
+    boolean isTemplate([in] Template<any, StructString> value);
+    any getAnyVoid();
+    boolean isAnyVoid([in] any value);
+    any getAnyBoolean();
+    boolean isAnyBoolean([in] any value);
+    any getAnyByte();
+    boolean isAnyByte([in] any value);
+    any getAnyShort();
+    boolean isAnyShort([in] any value);
+    any getAnyUnsignedShort();
+    boolean isAnyUnsignedShort([in] any value);
+    any getAnyLong();
+    boolean isAnyLong([in] any value);
+    any getAnyUnsignedLong();
+    boolean isAnyUnsignedLong([in] any value);
+    any getAnyHyper();
+    boolean isAnyHyper([in] any value);
+    any getAnyUnsignedHyper();
+    boolean isAnyUnsignedHyper([in] any value);
+    any getAnyFloat();
+    boolean isAnyFloat([in] any value);
+    any getAnyDouble();
+    boolean isAnyDouble([in] any value);
+    any getAnyChar();
+    boolean isAnyChar([in] any value);
+    any getAnyString();
+    boolean isAnyString([in] any value);
+    any getAnyType();
+    boolean isAnyType([in] any value);
+    any getAnySequence();
+    boolean isAnySequence([in] any value);
+    any getAnyEnum();
+    boolean isAnyEnum([in] any value);
+    any getAnyStruct();
+    boolean isAnyStruct([in] any value);
+    any getAnyException();
+    boolean isAnyException([in] any value);
+    any getAnyInterface();
+    boolean isAnyInterface([in] any value);
+    sequence<boolean> getSequenceBoolean();
+    boolean isSequenceBoolean([in] sequence<boolean> value);
+    sequence<byte> getSequenceByte();
+    boolean isSequenceByte([in] sequence<byte> value);
+    sequence<short> getSequenceShort();
+    boolean isSequenceShort([in] sequence<short> value);
+    sequence<unsigned short> getSequenceUnsignedShort();
+    boolean isSequenceUnsignedShort([in] sequence<unsigned short> value);
+    sequence<long> getSequenceLong();
+    boolean isSequenceLong([in] sequence<long> value);
+    sequence<unsigned long> getSequenceUnsignedLong();
+    boolean isSequenceUnsignedLong([in] sequence<unsigned long> value);
+    sequence<hyper> getSequenceHyper();
+    boolean isSequenceHyper([in] sequence<hyper> value);
+    sequence<unsigned hyper> getSequenceUnsignedHyper();
+    boolean isSequenceUnsignedHyper([in] sequence<unsigned hyper> value);
+    sequence<float> getSequenceFloat();
+    boolean isSequenceFloat([in] sequence<float> value);
+    sequence<double> getSequenceDouble();
+    boolean isSequenceDouble([in] sequence<double> value);
+    sequence<char> getSequenceChar();
+    boolean isSequenceChar([in] sequence<char> value);
+    sequence<string> getSequenceString();
+    boolean isSequenceString([in] sequence<string> value);
+    sequence<type> getSequenceType();
+    boolean isSequenceType([in] sequence<type> value);
+    sequence<any> getSequenceAny();
+    boolean isSequenceAny([in] sequence<any> value);
+    sequence<sequence<string> > getSequenceSequenceString();
+    boolean isSequenceSequenceString([in] sequence<sequence<string> > value);
+    sequence<Enum> getSequenceEnum();
+    boolean isSequenceEnum([in] sequence<Enum> value);
+    sequence<Struct> getSequenceStruct();
+    boolean isSequenceStruct([in] sequence<Struct> value);
+    XTest getNull();
+    boolean isNull([in] XTest value);
+    void getOut(
+        [out] boolean value1, [out] byte value2, [out] short value3, [out] unsigned short value4,
+        [out] long value5, [out] unsigned long value6, [out] hyper value7,
+        [out] unsigned hyper value8, [out] float value9, [out] double value10, [out] char value11,
+        [out] string value12, [out] type value13, [out] any value14,
+        [out] sequence<string> value15, [out] Enum value16, [out] Struct value17,
+        [out] XTest value18);
+    void throwRuntimeException();
+    void passJob([in] com::sun::star::task::XJob object);
+    void passJobExecutor([in] com::sun::star::task::XJobExecutor object, [in] boolean newThread);
+    void passInterface([in] com::sun::star::uno::XInterface object);
+    boolean checkAttributes([in] com::sun::star::testuno::XAttributes object);
+    [attribute] string StringAttribute;
+    boolean testSolarMutex();
+    void executeTest([in] XTest test);
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

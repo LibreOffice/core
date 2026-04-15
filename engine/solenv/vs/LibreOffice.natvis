@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="rtl::OUString">
+    <DisplayString>{*pData}</DisplayString>
+    <StringView>*pData</StringView>
+  </Type>
+  <Type Name="rtl::OString">
+    <DisplayString>{*pData}</DisplayString>
+    <StringView>*pData</StringView>
+  </Type>
+  <Type Name="_rtl_uString">
+    <DisplayString Condition="length == 0">empty</DisplayString>
+    <DisplayString>{buffer,[length]na}</DisplayString>
+    <StringView>buffer,[length]na</StringView>
+    <Expand HideRawView="true">
+      <Item Name="refCount">refCount</Item>
+      <Item Name="length">length</Item>
+      <Item Name="buffer">buffer,[length+1]</Item>
+	</Expand>
+  </Type>
+  <Type Name="_rtl_String">
+    <DisplayString Condition="length == 0">empty</DisplayString>
+    <DisplayString>{buffer,[length]na}</DisplayString>
+    <StringView>buffer,[length]na</StringView>
+    <Expand HideRawView="true">
+      <Item Name="refCount">refCount</Item>
+      <Item Name="length">length</Item>
+      <Item Name="buffer">buffer,[length+1]</Item>
+	</Expand>
+  </Type>
+  <Type Name="rtl::OUStringLiteral &lt; * &gt;">
+    <DisplayString>{str}</DisplayString>
+    <StringView>str</StringView>
+  </Type>
+  <Type Name="_uno_Any">
+    <!--
+    typelib_TypeClass_VOID = 0,
+    typelib_TypeClass_TYPEDEF = 16,
+    typelib_TypeClass_STRUCT = 17,
+    typelib_TypeClass_UNION = 18,/** Deprecated, UNOIDL does not have a union concept.*/
+    typelib_TypeClass_ARRAY = 21,/** Deprecated, UNOIDL does not have an array concept.*/
+    typelib_TypeClass_SERVICE = 23,/** (not implemented) */
+    typelib_TypeClass_MODULE = 24,/** (not implemented) */
+    typelib_TypeClass_INTERFACE_METHOD = 25,
+    typelib_TypeClass_INTERFACE_ATTRIBUTE = 26,
+    typelib_TypeClass_UNKNOWN = 27,
+    typelib_TypeClass_PROPERTY = 28,
+    typelib_TypeClass_CONSTANT = 29,
+    typelib_TypeClass_CONSTANTS = 30,
+    typelib_TypeClass_SINGLETON = 31,
+    -->
+    <DisplayString Condition="pType->eTypeClass == 1" >{*((sal_Unicode*)pData),c} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_CHAR -->
+    <DisplayString Condition="pType->eTypeClass == 2" >{*((bool*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_BOOLEAN -->
+    <DisplayString Condition="pType->eTypeClass == 3" >{*((sal_Int8*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_BYTE -->
+    <DisplayString Condition="pType->eTypeClass == 4" >{*((sal_Int16*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_SHORT -->
+    <DisplayString Condition="pType->eTypeClass == 5" >{*((sal_uInt16*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_UNSIGNED_SHORT -->
+    <DisplayString Condition="pType->eTypeClass == 6" >{*((sal_Int32*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_LONG -->
+    <DisplayString Condition="pType->eTypeClass == 7" >{*((sal_uInt32*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_UNSIGNED_LONG -->
+    <DisplayString Condition="pType->eTypeClass == 8" >{*((sal_Int64*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_HYPER -->
+    <DisplayString Condition="pType->eTypeClass == 9" >{*((sal_uInt64*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_UNSIGNED_HYPER -->
+    <DisplayString Condition="pType->eTypeClass == 10">{*((float*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_FLOAT -->
+    <DisplayString Condition="pType->eTypeClass == 11">{*((double*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_DOUBLE -->
+    <DisplayString Condition="pType->eTypeClass == 12">{*((rtl::OUString*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_STRING -->
+    <DisplayString Condition="pType->eTypeClass == 13">{*((com::sun::star::uno::Type*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_TYPE -->
+    <DisplayString Condition="pType->eTypeClass == 14">{*((_uno_Any*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_ANY -->
+    <DisplayString Condition="pType->eTypeClass == 15">{*((sal_Int32*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_ENUM -->
+    <DisplayString Condition="pType->eTypeClass == 19">{*((com::sun::star::uno::Exception*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_EXCEPTION -->
+    <DisplayString Condition="pType->eTypeClass == 20">{**((uno_Sequence**)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_SEQUENCE -->
+    <DisplayString Condition="pType->eTypeClass == 22 &amp;&amp; !((com::sun::star::uno::BaseReference*)pData)->_pInterface">{*(com::sun::star::uno::BaseReference*)pData} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_INTERFACE -->
+    <DisplayString Condition="pType->eTypeClass == 22 &amp;&amp; ((com::sun::star::uno::BaseReference*)pData)->_pInterface">{*((com::sun::star::uno::BaseReference*)pData)->_pInterface} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_INTERFACE -->
+    <DisplayString>{pType->eTypeClass,en} ({*pType->pTypeName,sub})</DisplayString>
+    <Expand HideRawView="true">
+      <Item Name="pType">pType</Item>
+
+      <Item Name="pData" Condition="pType->eTypeClass == 1" >(sal_Unicode*)pData</Item><!-- typelib_TypeClass_CHAR -->
+      <Item Name="pData" Condition="pType->eTypeClass == 2" >(bool*)pData</Item><!-- typelib_TypeClass_BOOLEAN -->
+      <Item Name="pData" Condition="pType->eTypeClass == 3" >(sal_Int8*)pData</Item><!-- typelib_TypeClass_BYTE -->
+      <Item Name="pData" Condition="pType->eTypeClass == 4" >(sal_Int16*)pData</Item><!-- typelib_TypeClass_SHORT -->
+      <Item Name="pData" Condition="pType->eTypeClass == 5" >(sal_uInt16*)pData</Item><!-- typelib_TypeClass_UNSIGNED_SHORT -->
+      <Item Name="pData" Condition="pType->eTypeClass == 6" >(sal_Int32*)pData</Item><!-- typelib_TypeClass_LONG -->
+      <Item Name="pData" Condition="pType->eTypeClass == 7" >(sal_uInt32*)pData</Item><!-- typelib_TypeClass_UNSIGNED_LONG -->
+      <Item Name="pData" Condition="pType->eTypeClass == 8" >(sal_Int64*)pData</Item><!-- typelib_TypeClass_HYPER -->
+      <Item Name="pData" Condition="pType->eTypeClass == 9" >(sal_uInt64*)pData</Item><!-- typelib_TypeClass_UNSIGNED_HYPER -->
+      <Item Name="pData" Condition="pType->eTypeClass == 10">(float*)pData</Item><!-- typelib_TypeClass_FLOAT -->
+      <Item Name="pData" Condition="pType->eTypeClass == 11">(double*)pData</Item><!-- typelib_TypeClass_DOUBLE -->
+      <Item Name="pData" Condition="pType->eTypeClass == 12">(rtl::OUString*)pData</Item><!-- typelib_TypeClass_STRING -->
+      <Item Name="pData" Condition="pType->eTypeClass == 13">(com::sun::star::uno::Type*)pData</Item><!-- typelib_TypeClass_TYPE -->
+      <Item Name="pData" Condition="pType->eTypeClass == 14">(_uno_Any*)pData</Item><!-- typelib_TypeClass_ANY -->
+      <Item Name="pData" Condition="pType->eTypeClass == 15">(sal_Int32*)pData</Item><!-- typelib_TypeClass_ENUM -->
+      <Item Name="pData" Condition="pType->eTypeClass == 19">(com::sun::star::uno::Exception*)pData</Item><!-- typelib_TypeClass_EXCEPTION -->
+      <Item Name="pData" Condition="pType->eTypeClass == 20">(uno_Sequence**)pData</Item><!-- typelib_TypeClass_SEQUENCE -->
+      <Item Name="pData" Condition="pType->eTypeClass == 22">(com::sun::star::uno::BaseReference*)pData</Item><!-- typelib_TypeClass_INTERFACE -->
+      <Item Name="pData" Condition="pType->eTypeClass &lt; 1 || (pType->eTypeClass &gt; 15 &amp;&amp; pType->eTypeClass &lt; 19) || pType->eTypeClass == 21 || pType->eTypeClass &gt; 22">pData</Item>
+
+      <Item Name="pReserved">pReserved</Item>
+    </Expand>
+  </Type>
+  <Type Name="basegfx::internal::ImplMatLine &lt; 3 &gt;">
+    <DisplayString>{mfValue[0]}, {mfValue[1]}, {mfValue[2]}</DisplayString>
+  </Type>
+  <Type Name="basegfx::internal::ImplHomMatrixTemplate &lt; 3 &gt;">
+    <DisplayString>{{{maLine[0]}}}, {{{maLine[1]}}}, {mpLine}</DisplayString>
+  </Type>
+  <Type Name="o3tl::cow_wrapper &lt; basegfx::Impl2DHomMatrix,o3tl::UnsafeRefCountingPolicy &gt;::impl_t">
+    <DisplayString>{m_value}</DisplayString>
+  </Type>
+  <Type Name="o3tl::cow_wrapper &lt; basegfx::Impl2DHomMatrix,o3tl::UnsafeRefCountingPolicy &gt;">
+    <DisplayString>{m_pimpl}</DisplayString>
+  </Type>
+  <Type Name="basegfx::B2DHomMatrix">
+    <DisplayString>{mpImpl}</DisplayString>
+  </Type>
+  <Type Name="Point">
+    <DisplayString>X:{mnA}, Y:{mnB}</DisplayString>
+  </Type>
+  <Type Name="Size">
+    <DisplayString>W:{mnA}, H:{mnB}</DisplayString>
+  </Type>
+  <Type Name="Range">
+    <DisplayString>Min:{mnA}, Max:{mnB}</DisplayString>
+  </Type>
+  <Type Name="Selection">
+    <DisplayString>Min:{mnA}, Max:{mnB}</DisplayString>
+  </Type>
+  <Type Name="Pair">
+    <DisplayString>A:{mnA}, B:{mnB}</DisplayString>
+  </Type>
+  <Type Name="SwRect">
+    <DisplayString>{m_Point}, {m_Size}</DisplayString>
+  </Type>
+  <Type Name="tools::Rectangle">
+    <DisplayString IncludeView="w">{mnRight==-32767?0:(mnRight-mnLeft+(mnLeft>mnRight?(-1):(1)))}</DisplayString>
+    <DisplayString IncludeView="h">{mnBottom==-32767?0:(mnBottom-mnTop+(mnTop>mnBottom?(-1):(1)))}</DisplayString>
+    <DisplayString IncludeView="sz" Condition="mnRight==-32767 || mnBottom==-32767">empty</DisplayString>
+    <DisplayString IncludeView="sz">{*this,view(w)nd} x {*this,view(h)nd}</DisplayString>
+    <DisplayString>{{ LT=[{mnLeft} , {mnTop}] RB=[{mnRight} , {mnBottom}] [{*this,view(sz)}] }}</DisplayString>
+  </Type>
+  <Type Name="_sal_Sequence">
+    <DisplayString Condition="nElements == 0">_sal_Sequence (empty)</DisplayString>
+    <DisplayString>_sal_Sequence of {nElements,d} elements</DisplayString>
+  </Type>
+  <Type Name="com::sun::star::uno::Sequence &lt; signed char &gt;">
+    <DisplayString Condition="_pSequence->nElements == 0">Sequence (empty)</DisplayString>
+    <DisplayString>Sequence of {_pSequence->nElements,d} signed char</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>_pSequence->nElements</Size>
+        <ValuePointer>reinterpret_cast &lt; const char* &gt;( _pSequence->elements )</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="com::sun::star::uno::Sequence &lt; * &gt;">
+    <DisplayString Condition="_pSequence->nElements == 0">Sequence (empty)</DisplayString>
+    <DisplayString>Sequence of {_pSequence->nElements,d} {"$T1",sb}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>_pSequence->nElements</Size>
+        <ValuePointer>reinterpret_cast &lt; const $T1 * &gt;( _pSequence->elements )</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="std::span &lt; * &gt;">
+    <DisplayString Condition="size_ == 0">std::span (empty)</DisplayString>
+    <DisplayString>std::span of {size_,d} {"$T1",sb}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>size_</Size>
+        <ValuePointer>reinterpret_cast &lt; const $T1 * &gt;( data_ )</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="BigPtrArray">
+    <DisplayString>{{{m_nSize,d} nodes}}</DisplayString>
+    <Expand>
+      <CustomListItems>
+        <!-- Visualiser needs to know the type of variable (including pointer type).
+             If later we try to assign an incompatible value, visualiser will error out.
+             For pointers, valid syntax is e.g. "(BlockInfo*)nullptr" -->
+        <Variable Name="blocks" InitialValue="m_ppInf._Mypair._Myval2"/>
+        <Variable Name="count" InitialValue="m_nSize"/>
+        <Variable Name="pos" InitialValue="0"/>
+        <Variable Name="block_count" InitialValue="m_nBlock"/>
+        <Variable Name="block_pos" InitialValue="0"/>
+        <Variable Name="block" InitialValue="blocks[0]"/>
+        <Variable Name="next_block" InitialValue="block"/>
+
+        <Size>m_nSize</Size>
+
+        <Break Condition="block_pos &gt;= block_count"/>
+        <Break Condition="block == nullptr"/>
+        <Break Condition="block-&gt;nStart != 0"/>
+        <Break Condition="block-&gt;nEnd - block-&gt;nStart + 1 != block-&gt;nElem"/>
+
+        <Loop>
+          <Break Condition="pos &gt;= count"/>
+          <Item>*block-&gt;mvData._Elems[ pos - block-&gt;nStart ]</Item>
+          <If Condition="pos == block-&gt;nEnd">
+            <Exec>block_pos++</Exec>
+            <Break Condition="block_pos &gt;= block_count"/>
+            <Exec>next_block = blocks[block_pos]</Exec>
+            <Break Condition="next_block == nullptr"/>
+            <Break Condition="next_block-&gt;nEnd - next_block-&gt;nStart + 1 != next_block-&gt;nElem"/>
+            <Break Condition="next_block-&gt;nStart != block-&gt;nEnd + 1"/>
+            <Break Condition="next_block-&gt;nEnd &lt;= count"/>
+            <Exec>block = next_block</Exec>
+          </If>
+          <Exec>pos++</Exec>
+        </Loop>
+
+      </CustomListItems>
+    </Expand>
+  </Type>
+  <Type Name="SwNode">
+    <DisplayString IncludeView="No">[{m_pBlock->nStart + m_nOffset,d}]</DisplayString>
+    <DisplayString IncludeView="Name">Node</DisplayString>
+    <DisplayString>{*this,view(No)nd} {{{*this,view(Name)}}}</DisplayString>
+    <Expand>
+      <Item Name="No">m_pBlock->nStart + m_nOffset,d</Item>
+      <Item Name="Nodes">static_cast &lt; SwNodes* &gt;(m_pBlock->pBigArr)</Item>
+    </Expand>
+  </Type>
+  <Type Name="SwEndNode">
+    <DisplayString IncludeView="For" Condition="m_pStartOfSection != nullptr">- for {*(SwNode*)m_pStartOfSection,view(No)nd}</DisplayString>
+    <DisplayString IncludeView="For"/>
+    <DisplayString IncludeView="Name">EndNode</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd} {*this,view(For)nd}</DisplayString>
+  </Type>
+  <Type Name="SwStartNode">
+    <DisplayString IncludeView="Till">- till {*(SwNode*)m_pEndOfSection,view(No)nd}</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 0">NormalStartNode</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 1">TableBoxStartNode</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 2">FlyStartNode</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 3">FootnoteStartNode</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 4">HeaderStartNode</DisplayString>
+    <DisplayString IncludeView="Name" Condition="m_eStartNodeType == 5">FooterStartNode</DisplayString>
+    <DisplayString IncludeView="Name">StartNode {m_nNodeType,en}</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd} {*this,view(Till)nd}</DisplayString>
+  </Type>
+  <Type Name="SwContentNode">
+    <DisplayString IncludeView="Name">ContentNode</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd}</DisplayString>
+  </Type>
+  <Type Name="SwOLENode">
+    <DisplayString IncludeView="Name">OLENode</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd}</DisplayString>
+  </Type>
+  <Type Name="SwGrfNode">
+    <DisplayString IncludeView="Name">GrfNode</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd}</DisplayString>
+  </Type>
+  <Type Name="SwSectionNode">
+    <DisplayString IncludeView="Name">SectionNode</DisplayString>
+    <DisplayString>{*(SwStartNode*)this,nd}</DisplayString>
+  </Type>
+  <Type Name="SwTableNode">
+    <DisplayString IncludeView="Name">TableNode</DisplayString>
+    <DisplayString>{*(SwStartNode*)this,nd}</DisplayString>
+  </Type>
+  <Type Name="SwDummySectionNode">
+    <DisplayString IncludeView="Name">DummySectionNode</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd}</DisplayString>
+  </Type>
+  <Type Name="SwTextNode">
+    <DisplayString IncludeView="Name">TextNode: {m_Text}</DisplayString>
+    <DisplayString>{*(SwNode*)this,nd}</DisplayString>
+  </Type>
+  <Type Name="SwNodeIndex">
+    <DisplayString>{{{*m_pNode}}}</DisplayString>
+  </Type>
+  <Type Name="SwContentIndex">
+    <DisplayString>{{{m_nIndex}}}</DisplayString>
+  </Type>
+  <Type Name="SwPosition">
+    <DisplayString>{{Node: {nNode} Content: {nContent}}}</DisplayString>
+  </Type>
+  <Type Name="SwPaM">
+    <DisplayString>{{Point: {*m_pPoint} Mark: {*m_pMark}}}</DisplayString>
+  </Type>
+  <Type Name="SwFrameFormats">
+    <DisplayString Condition="m_Array.node_count == 0">empty</DisplayString>
+    <DisplayString>Size: {m_Array.node_count}</DisplayString>
+    <Expand>
+      <IndexListItems>
+        <Size>m_Array.node_count</Size>
+        <ValueNode>**reinterpret_cast &lt; value_type* &gt; (&amp;static_cast &lt; ByPos::node_type* &gt; (static_cast &lt; ByPos::node_type::trampoline* &gt; (m_PosIndex.ptrs.spc.data_[$i]))->space)</ValueNode>
+      </IndexListItems>
+    </Expand>
+  </Type>
+  <Type Name="SwFormat">
+    <DisplayString>Format: "{m_aFormatName,sub}"</DisplayString>
+  </Type>
+  <Type Name="com::sun::star::uno::BaseReference">
+    <DisplayString Condition="_pInterface == nullptr">empty</DisplayString>
+    <DisplayString>{{{_pInterface}}}</DisplayString>
+  </Type>
+  <Type Name="com::sun::star::uno::Reference &lt; * &gt;">
+    <DisplayString Condition="_pInterface == nullptr">empty</DisplayString>
+    <DisplayString>{{{reinterpret_cast &lt; $T1 * &gt;(_pInterface)}}}</DisplayString>
+    <Expand>
+      <ExpandedItem>reinterpret_cast &lt; $T1 * &gt;(_pInterface)</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="rtl::Reference &lt; * &gt;">
+    <DisplayString Condition="m_pBody == nullptr">empty</DisplayString>
+    <DisplayString>{{{reinterpret_cast &lt; $T1 * &gt;(m_pBody)}}}</DisplayString>
+    <Expand>
+      <ExpandedItem>reinterpret_cast &lt; $T1 * &gt;(m_pBody)</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="VclPtr &lt; * &gt;">
+    <DisplayString>{m_rInnerRef}</DisplayString>
+    <Expand>
+      <ExpandedItem>m_rInnerRef</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="com::sun::star::uno::Type">
+    <DisplayString>{_pType->eTypeClass,en}</DisplayString>
+    <Expand>
+      <Item Name="Type Class">_pType->eTypeClass,en</Item>
+      <Item Name="Type Name">_pType->pTypeName</Item>
+      <Item Condition="_pType->pType != nullptr" Name="Size">_pType->pType->nSize</Item>
+      <Item Condition="_pType->pType != nullptr" Name="Alignment">_pType->pType->nAlignment</Item>
+    </Expand>
+  </Type>
+  <Type Name="SfxBoolItem">
+    <DisplayString>{{which={m_nWhich,x}}} {m_bValue}</DisplayString>
+  </Type>
+  <Type Name="SfxEnumItem &lt; * &gt;">
+    <DisplayString>{{which={m_nWhich,x}}} {m_nValue}</DisplayString>
+  </Type>
+  <Type Name="SfxStringItem">
+    <DisplayString>{{which={m_nWhich,x}}} {m_aValue}</DisplayString>
+  </Type>
+  <Type Name="SfxUnoAnyItem">
+    <DisplayString>{{which={m_nWhich,x}}} {aValue}</DisplayString>
+  </Type>
+  <Type Name="SvxFontItem">
+    <DisplayString>{{which={m_nWhich,x}}} Font family: {aFamilyName,sub}</DisplayString>
+  </Type>
+  <Type Name="SfxInt16Item">
+    <DisplayString>{{which={m_nWhich,x}}} Int16: {m_nValue}</DisplayString>
+  </Type>
+  <Type Name="CntUInt16Item">
+    <DisplayString>{{which={m_nWhich,x}}} uInt16: {m_nValue}</DisplayString>
+  </Type>
+  <Type Name="CntByteItem">
+    <DisplayString>{{which={m_nWhich,x}}} uInt8: {m_nValue}</DisplayString>
+  </Type>
+  <Type Name="CntInt32Item">
+    <DisplayString>{{which={m_nWhich,x}}} Int32: {m_nValue}</DisplayString>
+  </Type>
+  <Type Name="CntUInt32Item">
+    <DisplayString>{{which={m_nWhich,x}}} uInt32: {m_nValue}</DisplayString>
+  </Type>
+  <Type Name="SfxGrabBagItem">
+    <DisplayString>
+      {{which={m_nWhich,x}}} GrabBag {{size={m_aMap._Mypair._Myval2._Myval2._Mysize,d}}}
+    </DisplayString>
+    <Expand>
+      <ExpandedItem>m_aMap</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="SfxPoolItem">
+    <DisplayString>{{which={m_nWhich,x}}}</DisplayString>
+  </Type>
+  <Type Name="WhichRangesContainer">
+    <DisplayString>{{size={m_size,d}}}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>m_size</Size>
+        <ValuePointer>m_pairs</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="SfxItemSet">
+    <DisplayString>{{size={m_nCount,d}}}</DisplayString>
+    <Expand>
+      <CustomListItems>
+        <Variable Name='pCurItem' InitialValue='m_ppItems'/>
+        <Variable Name='nRanges' InitialValue='m_pWhichRanges.m_size'/>
+        <Variable Name='nCurRange' InitialValue='0'/>
+        <Variable Name='nCurWhich' InitialValue='0'/>
+        <Loop Condition='nCurRange &lt; nRanges'>
+          <Exec>nCurWhich = m_pWhichRanges.m_pairs[nCurRange].first</Exec>
+          <Loop Condition='nCurWhich &lt;= m_pWhichRanges.m_pairs[nCurRange].second'>
+            <Item Condition='*pCurItem'>**pCurItem</Item>
+            <Exec>++pCurItem</Exec>
+            <Exec>++nCurWhich</Exec>
+          </Loop>
+          <Exec>++nCurRange</Exec>
+        </Loop>
+      </CustomListItems>
+      <Item Name="Which Ranges">m_pWhichRanges</Item>
+      <Item Condition="m_pParent != nullptr" Name="Parent">*m_pParent</Item>
+    </Expand>
+  </Type>
+  <Type Name="sax_fastparser::FastAttributeList">
+    <DisplayString>{{size={maAttributeTokens.size(),d}}}</DisplayString>
+    <Expand>
+      <CustomListItems>
+        <Variable Name='i' InitialValue='0'/>
+        <Loop Condition='i &lt; maAttributeTokens.size()'>
+          <Item Name='{maAttributeTokens[i],x}'>mpChunk	+ maAttributeValues[i]</Item>
+          <Exec>++i</Exec>
+        </Loop>
+      </CustomListItems>
+    </Expand>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLProperty'>
+    <DisplayString>{meType,en} {mId,d}: {*mpValue}</DisplayString>
+    <Expand HideRawView='true'>
+      <Item Name='Type'>meType</Item>
+      <Item Name='Id'>mId,d</Item> <!-- see workdir/CustomTarget/writerfilter/source/ooxml/resourceids.hxx -->
+      <Item Name='Value'>*mpValue</Item>
+    </Expand>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLStringValue'>
+    <DisplayString>"{mStr,sub}"</DisplayString>
+    <StringView>mStr</StringView>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLBooleanValue'>
+    <DisplayString>{mbValue}</DisplayString>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLIntegerValue'>
+    <DisplayString>{mnValue}</DisplayString>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLNthPtMeasureValue&lt;*&gt;'>
+    <DisplayString>{mnValue,d}/{$T1,d}={mnValue*1.0/$T1,g} pt</DisplayString>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLPropertySetValue'>
+    <DisplayString>{{Property set size={mpPropertySet->mProperties.size(),d}}}</DisplayString>
+    <Expand>
+      <IndexListItems>
+        <Size>mpPropertySet->mProperties.size()</Size>
+        <ValueNode>*mpPropertySet->mProperties[$i]</ValueNode>
+      </IndexListItems>
+    </Expand>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLPropertySet'>
+    <DisplayString>{{{maType} {{size={mProperties.size(),d}}}}}</DisplayString>
+    <Expand HideRawView='true'>
+      <IndexListItems>
+        <Size>mProperties.size()</Size>
+        <ValueNode>*mProperties[$i]</ValueNode>
+      </IndexListItems>
+      <Item Name='Type'>maType</Item>
+    </Expand>
+  </Type>
+  <Type Name='writerfilter::rtftok::RTFSprms'>
+    <DisplayString>{{Params: {m_pSprms.pObj->size()}}}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>m_pSprms.pObj->size()</Size>
+        <ValuePointer>m_pSprms.pObj->_Mypair._Myval2._Myfirst</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name='tools::SvRef&lt;*&gt;'>
+    <DisplayString Condition="pObj!=nullptr">{*pObj}</DisplayString>
+    <DisplayString Condition="pObj==nullptr">nullptr</DisplayString>
+    <Expand>
+      <ExpandedItem Condition="pObj!=nullptr">*pObj</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name='SwFrame'>
+    <DisplayString IncludeView='min'>{mnFrameType,en} of {mpUpper->mnFrameType,en} {(void*)mpUpper}</DisplayString>
+    <DisplayString Condition='!mpUpper'>{{{mnFrameType,en}}}</DisplayString>
+    <DisplayString>{{{*this,view(min)}}}</DisplayString>
+    <Expand>
+      <Synthetic Name='Frame'>
+        <DisplayString>Area: {maFrameArea}; Print Area: {maFramePrintArea}</DisplayString>
+        <Expand>
+          <Item Name='Area'>maFrameArea</Item>
+          <Item Name='Print Area'>maFramePrintArea</Item>
+        </Expand>
+      </Synthetic>
+      <Item Name='Upper'>mpUpper</Item>
+    </Expand>
+  </Type>
+  <Type Name='SwLayoutFrame'>
+    <DisplayString>{(SwFrame&amp;)*this}</DisplayString>
+    <Expand>
+      <ExpandedItem>(SwFrame&amp;)(*this)</ExpandedItem>
+      <Synthetic Name='Lowers' Condition='m_pLower'>
+        <Expand>
+          <CustomListItems>
+            <Variable Name="pChild" InitialValue="m_pLower"/>
+            <Loop>
+              <Break Condition="!pChild"/>
+              <Item>pChild</Item>
+              <Exec>pChild = pChild->mpNext</Exec>
+            </Loop>
+          </CustomListItems>
+        </Expand>
+      </Synthetic>
+    </Expand>
+  </Type>
+  <Type Name="SwRowFrame">
+    <DisplayString Condition="m_bIsRepeatedHeadline">{{Headline {(SwFrame&amp;)*this,view(min)}}}</DisplayString>
+    <DisplayString>{(SwFrame&amp;)*this}</DisplayString>
+    <Expand>
+      <ExpandedItem>(SwLayoutFrame&amp;)(*this)</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name='SwFlowFrame'>
+    <DisplayString Condition="m_pPrecede">{{Follow {m_rThis,view(min)nd}}}</DisplayString>
+    <DisplayString>{{{m_rThis,view(min)nd}}}</DisplayString>
+  </Type>
+  <Type Name="SwTabFrame">
+    <DisplayString>{(SwFlowFrame&amp;)*this}</DisplayString>
+    <Expand>
+      <ExpandedItem>(SwLayoutFrame&amp;)(*this)</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="SwContentFrame">
+    <DisplayString>{(SwFlowFrame&amp;)*this}</DisplayString>
+    <Expand>
+      <ExpandedItem>(SwFrame&amp;)(*this)</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="boost::optional&lt;*&gt;">
+    <DisplayString Condition="!m_initialized">Optional not set</DisplayString>
+    <DisplayString>{*reinterpret_cast&lt;$T1 *&gt;(m_storage.dummy_.data)}</DisplayString>
+    <Expand>
+      <Item Name="initialized">m_initialized</Item>
+      <Item Name="data">*reinterpret_cast&lt;$T1 *&gt;(m_storage.dummy_.data)</Item>
+    </Expand>
+  </Type>
+  <Type Name="ErrCode">
+    <DisplayString Condition="m_value == 0">None</DisplayString>
+    <DisplayString IncludeView="dynamic" Condition="m_value &amp; (31UL &lt;&lt; 26)">dynamic: {(m_value >> 26) &amp; 31UL} </DisplayString>
+    <DisplayString IncludeView="dynamic"/>
+    <DisplayString IncludeView="detail">{{{*this,view(dynamic)}area: {static_cast&lt;ErrCodeArea>((m_value >> 13) &amp; 0x01fff),en}, class: {static_cast&lt;ErrCodeClass>((m_value >> 8) &amp; 0x1f),en}, code: {m_value &amp; 0xff}}}</DisplayString>
+    <DisplayString Condition="m_value &amp; 0x80000000UL">Warning: {*this,view(detail)}</DisplayString>
+    <DisplayString>Error: {*this,view(detail)}</DisplayString>
+  </Type>
+  <Type Name="SvGUID">
+    <DisplayString>{{{Data1,Xb}-{Data2,Xb}-{Data3,Xb}-{Data4[0],nvoXb}{Data4[1],nvoXb}-{Data4[2],nvoXb}{Data4[3],nvoXb}{Data4[4],nvoXb}{Data4[5],nvoXb}{Data4[6],nvoXb}{Data4[7],nvoXb}}}</DisplayString>
+  </Type>
+  <Type Name="SvGlobalName">
+    <DisplayString>{m_aData}</DisplayString>
+  </Type>
+</AutoVisualizer>

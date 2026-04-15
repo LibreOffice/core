@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <text:list-style style:name="L1">
+   <text:list-level-style-bullet text:level="1" text:bullet-char="•"/>
+   <text:list-level-style-bullet text:level="2" text:bullet-char=""/>
+  </text:list-style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:list text:style-name="L1">
+    <text:list-item>
+     <text:list>
+      <text:list-header>
+       <text:p>list header</text:p>
+      </text:list-header>
+     </text:list>
+    </text:list-item>
+   </text:list>
+  </office:text>
+ </office:body>
+</office:document>

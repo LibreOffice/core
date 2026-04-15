@@ -1,0 +1,1344 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <scitems.hxx>
+
+#include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <svtools/cliplistener.hxx>
+#include <svtools/insdlg.hxx>
+#include <sot/formats.hxx>
+#include <svx/hlnkitem.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <vcl/EnumContext.hxx>
+#include <vcl/svapp.hxx>
+#include <svx/clipfmtitem.hxx>
+#include <svx/statusitem.hxx>
+
+#include <cellsh.hxx>
+#include <sc.hrc>
+#include <docsh.hxx>
+#include <attrib.hxx>
+#include <tabvwsh.hxx>
+#include <formulacell.hxx>
+#include <scmod.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
+#include <transobj.hxx>
+#include <drwtrans.hxx>
+#include <scabstdlg.hxx>
+#include <postit.hxx>
+#include <cliputil.hxx>
+#include <clipparam.hxx>
+#include <markdata.hxx>
+#include <gridwin.hxx>
+
+#define ShellClass_ScCellShell
+#define ShellClass_CellMovement
+#include <scslots.hxx>
+
+
+SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell)
+
+void ScCellShell::InitInterface_Impl()
+{
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT,
+                                            SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
+                                            ToolbarId::Objectbar_Format);
+
+    GetStaticInterface()->RegisterPopupMenu(u"cell"_ustr);
+}
+
+ScCellShell::ScCellShell(ScViewData& rData, const VclPtr<vcl::Window>& frameWin) :
+    ScFormatShell(rData),
+    pImpl( new CellShell_Impl() ),
+    bPastePossible(false),
+    pFrameWin(frameWin)
+{
+    SetName(u"Cell"_ustr);
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Cell));
+}
+
+ScCellShell::~ScCellShell()
+{
+    if ( pImpl->m_xClipEvtLstnr.is() )
+    {
+        pImpl->m_xClipEvtLstnr->RemoveListener( GetViewData().GetActiveWin() );
+
+        //  The listener may just now be waiting for the SolarMutex and call the link
+        //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
+        pImpl->m_xClipEvtLstnr->ClearCallbackLink();
+
+        pImpl->m_xClipEvtLstnr.clear();
+    }
+
+    pImpl->m_pLinkedDlg.disposeAndClear();
+    delete pImpl->m_pRequest;
+}
+
+void ScCellShell::GetBlockState( SfxItemSet& rSet )
+{
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
+    ScRange aMarkRange;
+    ScMarkType eMarkType = GetViewData().GetSimpleArea( aMarkRange );
+    bool bSimpleArea = (eMarkType == SC_MARK_SIMPLE);
+    bool bOnlyNotBecauseOfMatrix;
+    bool bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScDocShell* pDocShell = GetViewData().GetDocShell();
+    ScMarkData& rMark = GetViewData().GetMarkData();
+    SCCOL nCol1, nCol2;
+    SCROW nRow1, nRow2;
+    nCol1 = aMarkRange.aStart.Col();
+    nRow1 = aMarkRange.aStart.Row();
+    nCol2 = aMarkRange.aEnd.Col();
+    nRow2 = aMarkRange.aEnd.Row();
+    SCTAB nTab = GetViewData().CurrentTabForData();
+
+    SfxWhichIter aIter(rSet);
+    sal_uInt16 nWhich = aIter.FirstWhich();
+    while ( nWhich )
+    {
+        bool bDisable = false;
+        bool bNeedEdit = true;      // need selection be editable?
+        switch ( nWhich )
+        {
+            case FID_FILL_TO_BOTTOM:    // fill to top / bottom
+            {
+                bDisable = !bSimpleArea || (nRow1 == 0 && nRow2 == 0);
+                if (!bDisable && GetViewData().SelectionForbidsCellFill())
+                    bDisable = true;
+                if ( !bDisable && bEditable )
+                {   // do not damage matrix
+                    bDisable = rDoc.HasSelectedBlockMatrixFragment(
+                        nCol1, nRow1, nCol2, nRow1, rMark );    // first row
+                }
+            }
+            break;
+            case FID_FILL_TO_TOP:
+            {
+                bDisable = (!bSimpleArea) || (nRow1 == rDoc.MaxRow() && nRow2 == rDoc.MaxRow());
+                if (!bDisable && GetViewData().SelectionForbidsCellFill())
+                    bDisable = true;
+                if ( !bDisable && bEditable )
+                {   // do not damage matrix
+                    bDisable = rDoc.HasSelectedBlockMatrixFragment(
+                        nCol1, nRow2, nCol2, nRow2, rMark );    // last row
+                }
+            }
+            break;
+            case FID_FILL_TO_RIGHT:     // fill to left / right
+            {
+                bDisable = !bSimpleArea || (nCol1 == 0 && nCol2 == 0);
+                if (!bDisable && GetViewData().SelectionForbidsCellFill())
+                    bDisable = true;
+                if ( !bDisable && bEditable )
+                {   // do not damage matrix
+                    bDisable = rDoc.HasSelectedBlockMatrixFragment(
+                            nCol1, nRow1, nCol1, nRow2, rMark );    // first column
+                }
+            }
+            break;
+            case FID_FILL_TO_LEFT:
+            {
+                bDisable = (!bSimpleArea) || (nCol1 == rDoc.MaxCol() && nCol2 == rDoc.MaxCol());
+                if (!bDisable && GetViewData().SelectionForbidsCellFill())
+                    bDisable = true;
+                if ( !bDisable && bEditable )
+                {   // do not damage matrix
+                    bDisable = rDoc.HasSelectedBlockMatrixFragment(
+                        nCol2, nRow1, nCol2, nRow2, rMark );    // last column
+                }
+            }
+            break;
+
+            case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
+                bDisable = !bSimpleArea || GetViewData().SelectionForbidsCellFill();
+            break;
+            case SID_SAMPLING_DIALOG:
+            case SID_DESCRIPTIVE_STATISTICS_DIALOG:
+            case SID_ANALYSIS_OF_VARIANCE_DIALOG:
+            case SID_CORRELATION_DIALOG:
+            case SID_COVARIANCE_DIALOG:
+            case SID_INSERT_SPARKLINE:
+            {
+                bDisable = !bSimpleArea;
+            }
+            break;
+            case SID_GROUP_SPARKLINES:
+            case SID_UNGROUP_SPARKLINES:
+            {
+                bDisable = !bSimpleArea;
+            }
+            break;
+
+            case SID_EDIT_SPARKLINE:
+            {
+                bDisable = !rDoc.HasSparkline(GetViewData().GetCurPos());
+            }
+            break;
+
+            case SID_DELETE_SPARKLINE:
+            case SID_EDIT_SPARKLINE_GROUP:
+            case SID_DELETE_SPARKLINE_GROUP:
+            {
+                bDisable = !rDoc.HasOneSparklineGroup(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab));
+            }
+            break;
+
+            case FID_FILL_SERIES:       // fill block
+            case SID_OPENDLG_TABOP:     // multiple-cell operations, are at least 2 cells marked?
+                if (rDoc.GetChangeTrack()!=nullptr &&nWhich ==SID_OPENDLG_TABOP)
+                    bDisable = true;
+                else
+                    bDisable = (!bSimpleArea) || (nCol1 == nCol2 && nRow1 == nRow2);
+
+                if (!bDisable && GetViewData().SelectionForbidsCellFill())
+                    bDisable = true;
+
+                if ( !bDisable && bEditable && nWhich == FID_FILL_SERIES )
+                {   // do not damage matrix
+                    bDisable = rDoc.HasSelectedBlockMatrixFragment(
+                            nCol1, nRow1, nCol2, nRow1, rMark )     // first row
+                        ||  rDoc.HasSelectedBlockMatrixFragment(
+                            nCol1, nRow2, nCol2, nRow2, rMark )     // last row
+                        ||  rDoc.HasSelectedBlockMatrixFragment(
+                            nCol1, nRow1, nCol1, nRow2, rMark )     // first column
+                        ||  rDoc.HasSelectedBlockMatrixFragment(
+                            nCol2, nRow1, nCol2, nRow2, rMark );    // last column
+                }
+                break;
+            case FID_FILL_SINGLE_EDIT:
+                bDisable = false;
+                break;
+            case SID_CUT:               // cut
+            case SID_COPYDELETE:
+                bDisable = !bSimpleArea || GetObjectShell()->isContentExtractionLocked();
+                break;
+            case FID_INS_CELL:          // insert cells, just simple selection
+                bDisable = (!bSimpleArea);
+                break;
+
+            case SID_PASTE:
+            case SID_PASTE_SPECIAL:
+            case SID_PASTE_UNFORMATTED:
+            case SID_PASTE_ONLY_VALUE:
+            case SID_PASTE_ONLY_TEXT:
+            case SID_PASTE_ONLY_FORMULA:
+            case SID_PASTE_TRANSPOSED:
+            case SID_PASTE_AS_LINK:
+            case SID_PASTE_TEXTIMPORT_DIALOG:
+                bDisable = GetViewData().SelectionForbidsPaste();
+                break;
+
+            case FID_INS_ROW:
+            case FID_INS_ROWS_BEFORE:           // insert rows
+            case FID_INS_ROWS_AFTER:
+            {
+                sc::EditAction eAction = sc::EditAction::InsertRowsBefore;
+                if (nWhich == FID_INS_ROWS_AFTER)
+                    eAction = sc::EditAction::InsertRowsAfter;
+
+                bDisable = (!bSimpleArea) || GetViewData().SimpleColMarked();
+                if (!bEditable && nCol1 == 0 && nCol2 == rDoc.MaxCol())
+                {
+                    // See if row insertions are allowed.
+                    bEditable = rDoc.IsEditActionAllowed(eAction, rMark, nCol1, nRow1, nCol2, nRow2);
+                }
+                break;
+            }
+            case FID_INS_CELLSDOWN:
+                bDisable = (!bSimpleArea) || GetViewData().SimpleColMarked();
+                break;
+
+            case FID_INS_COLUMN:
+            case FID_INS_COLUMNS_BEFORE:        // insert columns
+            case FID_INS_COLUMNS_AFTER:
+            {
+                sc::EditAction eAction = sc::EditAction::InsertColumnsBefore;
+                if (nWhich == FID_INS_COLUMNS_AFTER)
+                    eAction = sc::EditAction::InsertColumnsAfter;
+
+                bDisable = (!bSimpleArea && eMarkType != SC_MARK_SIMPLE_FILTERED)
+                           || GetViewData().SimpleRowMarked();
+                if (!bEditable && nRow1 == 0 && nRow2 == rDoc.MaxRow())
+                {
+                    // See if row insertions are allowed.
+                    bEditable = rDoc.IsEditActionAllowed(eAction, rMark, nCol1, nRow1, nCol2, nRow2);
+                }
+                break;
+            }
+            case FID_INS_CELLSRIGHT:
+                bDisable = (!bSimpleArea) || GetViewData().SimpleRowMarked();
+                break;
+
+            case SID_COPY:              // copy
+            case SID_COPY_HYPERLINK_LOCATION:
+                // Copy is a read-only operation — it never requires an
+                // editable selection.  The only reason to grey it out is
+                // content-extraction lock (DRM).
+                bNeedEdit = false;
+                bDisable = GetObjectShell()->isContentExtractionLocked();
+                break;
+
+            case SID_AUTOFORMAT:        // Autoformat, at least 3x3 selected
+                bDisable =    (!bSimpleArea)
+                           || ((nCol2 - nCol1) < 2) || ((nRow2 - nRow1) < 2);
+                break;
+
+            case SID_CELL_FORMAT_RESET :
+            case FID_CELL_FORMAT :
+            case SID_ENABLE_HYPHENATION :
+                // not editable because of matrix only? Attribute ok nonetheless
+                if ( !bEditable && bOnlyNotBecauseOfMatrix )
+                    bNeedEdit = false;
+                break;
+
+            case FID_CURRENTVALIDATION:
+            case FID_VALIDATION:
+                {
+                    if ( pDocShell && pDocShell->IsDocShared() )
+                    {
+                        bDisable = true;
+                    }
+                }
+                break;
+            case SID_TRANSLITERATE_HALFWIDTH:
+            case SID_TRANSLITERATE_FULLWIDTH:
+            case SID_TRANSLITERATE_HIRAGANA:
+            case SID_TRANSLITERATE_KATAKANA:
+                ScViewUtil::HideDisabledSlot( rSet, GetViewData().GetBindings(), nWhich );
+            break;
+            case SID_CONVERT_FORMULA_TO_VALUE:
+            {
+                // Check and see if the marked range has at least one formula cell.
+                bDisable = !rDoc.HasFormulaCell(aMarkRange);
+            }
+            break;
+        }
+        if (!bDisable && bNeedEdit && !bEditable)
+            bDisable = true;
+
+        if (bDisable)
+            rSet.DisableItem(nWhich);
+        else if (nWhich == SID_ENABLE_HYPHENATION)
+        {
+            // toggle slots need a bool item
+            rSet.Put( SfxBoolItem( nWhich, false ) );
+        }
+        nWhich = aIter.NextWhich();
+    }
+}
+
+// functions, disabled depending on cursor position
+// Default:
+//     SID_INSERT_POSTIT, SID_CHARMAP, SID_OPENDLG_FUNCTION
+
+void ScCellShell::GetCellState( SfxItemSet& rSet )
+{
+    ScDocShell* pDocShell = GetViewData().GetDocShell();
+    ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
+    ScAddress aCursor( GetViewData().GetCurX(), GetViewData().GetCurY(),
+                        GetViewData().CurrentTabForData() );
+    SfxWhichIter aIter(rSet);
+    sal_uInt16 nWhich = aIter.FirstWhich();
+    while ( nWhich )
+    {
+        bool bDisable = false;
+        bool bNeedEdit = true;      // need cursor position be editable?
+        switch ( nWhich )
+        {
+            case SID_THESAURUS:
+                {
+                    CellType eType = rDoc.GetCellType( aCursor );
+                    bDisable = ( eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT);
+                    if (!bDisable)
+                    {
+                        //  test for available languages
+                        LanguageType nLang = ScViewUtil::GetEffLanguage( rDoc, aCursor );
+                        bDisable = !ScModule::HasThesaurusLanguage( nLang );
+                    }
+                }
+                break;
+            case SID_OPENDLG_FUNCTION:
+                {
+                    ScMarkData aMarkData = GetViewData().GetMarkData();
+                    aMarkData.MarkToSimple();
+                    const ScRange& aRange = aMarkData.GetMarkArea();
+                    if(aMarkData.IsMarked())
+                    {
+                        if (!rDoc.IsBlockEditable( aCursor.Tab(), aRange.aStart.Col(),aRange.aStart.Row(),
+                                            aRange.aEnd.Col(),aRange.aEnd.Row() ))
+                        {
+                            bDisable = true;
+                        }
+                        bNeedEdit=false;
+                    }
+
+                }
+                break;
+            case SID_INSERT_POSTIT:
+                {
+                    ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
+                    if( rDoc.GetNote(aPos) )
+                    {
+                        bDisable = true;
+                    }
+                    else
+                    {
+                        bDisable = false;
+                        if ( pDocShell && pDocShell->IsDocShared() )
+                        {
+                            bDisable = true;
+                        }
+                    }
+                }
+                break;
+            case SID_EDIT_POSTIT:
+                {
+                    ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
+                    bDisable = rDoc.GetNote(aPos) == nullptr;
+                }
+                break;
+        }
+        if (!bDisable && bNeedEdit)
+            if (!rDoc.IsBlockEditable( aCursor.Tab(), aCursor.Col(),aCursor.Row(),
+                                        aCursor.Col(),aCursor.Row() ))
+                bDisable = true;
+        if (bDisable)
+            rSet.DisableItem(nWhich);
+        nWhich = aIter.NextWhich();
+    }
+}
+
+static bool lcl_TestFormat( SvxClipboardFormatItem& rFormats, const TransferableDataHelper& rDataHelper,
+                        SotClipboardFormatId nFormatId )
+{
+    if ( rDataHelper.HasFormat( nFormatId ) )
+    {
+        //  translated format name strings are no longer inserted here,
+        //  handled by "paste special" dialog / toolbox controller instead.
+        //  Only the object type name has to be set here:
+        OUString aStrVal;
+        if ( nFormatId == SotClipboardFormatId::EMBED_SOURCE )
+        {
+            TransferableObjectDescriptor aDesc;
+            if ( rDataHelper.GetTransferableObjectDescriptor(
+                                        SotClipboardFormatId::OBJECTDESCRIPTOR, aDesc ) )
+                aStrVal = aDesc.maTypeName;
+        }
+        else if ( nFormatId == SotClipboardFormatId::EMBED_SOURCE_OLE
+          || nFormatId == SotClipboardFormatId::EMBEDDED_OBJ_OLE )
+        {
+            OUString aSource;
+            SvPasteObjectHelper::GetEmbeddedName( rDataHelper, aStrVal, aSource, nFormatId );
+        }
+
+        if ( !aStrVal.isEmpty() )
+            rFormats.AddClipbrdFormat( nFormatId, aStrVal );
+        else
+            rFormats.AddClipbrdFormat( nFormatId );
+
+        return true;
+    }
+
+    return false;
+}
+
+void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats )
+{
+    vcl::Window* pWin = GetViewData().GetActiveWin();
+    bool bDraw = ScDrawTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pWin)) != nullptr;
+
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
+
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::DRAWING );
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::SVXB );
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::GDIMETAFILE );
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::PNG );
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BITMAP );
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::EMBED_SOURCE );
+
+    if ( !bDraw )
+    {
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::LINK );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::STRING );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::STRING_TSVC );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::DIF );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::RTF );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::RICHTEXT );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::HTML );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::HTML_SIMPLE );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_12 );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_8 );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_5 );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::MARKDOWN );
+    }
+
+    if ( !lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::EMBED_SOURCE_OLE ) )
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::EMBEDDED_OBJ_OLE );
+}
+
+//  insert, insert contents
+
+static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
+{
+    bool bPossible = false;
+    css::uno::Reference< css::datatransfer::XTransferable2 > xTransferable(rData.GetXTransferable(), css::uno::UNO_QUERY);
+    if ( ScTransferObj::GetOwnClipboard(xTransferable) || ScDrawTransferObj::GetOwnClipboard(xTransferable) )
+        bPossible = true;
+    else
+    {
+        if ( rData.HasFormat( SotClipboardFormatId::PNG ) ||
+             rData.HasFormat( SotClipboardFormatId::BITMAP ) ||
+             rData.HasFormat( SotClipboardFormatId::GDIMETAFILE ) ||
+             rData.HasFormat( SotClipboardFormatId::SVXB ) ||
+             rData.HasFormat( SotClipboardFormatId::PRIVATE ) ||
+             rData.HasFormat( SotClipboardFormatId::RTF ) ||
+             rData.HasFormat( SotClipboardFormatId::RICHTEXT ) ||
+             rData.HasFormat( SotClipboardFormatId::EMBED_SOURCE ) ||
+             rData.HasFormat( SotClipboardFormatId::LINK_SOURCE ) ||
+             rData.HasFormat( SotClipboardFormatId::EMBED_SOURCE_OLE ) ||
+             rData.HasFormat( SotClipboardFormatId::LINK_SOURCE_OLE ) ||
+             rData.HasFormat( SotClipboardFormatId::EMBEDDED_OBJ_OLE ) ||
+             rData.HasFormat( SotClipboardFormatId::STRING ) ||
+             rData.HasFormat( SotClipboardFormatId::STRING_TSVC ) ||
+             rData.HasFormat( SotClipboardFormatId::SYLK ) ||
+             rData.HasFormat( SotClipboardFormatId::LINK ) ||
+             rData.HasFormat( SotClipboardFormatId::HTML ) ||
+             rData.HasFormat( SotClipboardFormatId::HTML_SIMPLE ) ||
+             rData.HasFormat( SotClipboardFormatId::DIF ) ||
+             rData.HasFormat( SotClipboardFormatId::MARKDOWN ) )
+        {
+            bPossible = true;
+        }
+    }
+    return bPossible;
+}
+
+bool ScCellShell::HasClipboardFormat( SotClipboardFormatId nFormatId )
+{
+    vcl::Window* pWin = GetViewData().GetActiveWin();
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ));
+    return aDataHelper.HasFormat( nFormatId );
+}
+
+IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
+{
+    bPastePossible = lcl_IsCellPastePossible( *pDataHelper );
+
+    SfxBindings& rBindings = GetViewData().GetBindings();
+    rBindings.Invalidate( SID_PASTE );
+    rBindings.Invalidate( SID_PASTE_SPECIAL );
+    rBindings.Invalidate( SID_PASTE_UNFORMATTED );
+    rBindings.Invalidate( SID_PASTE_ONLY_VALUE );
+    rBindings.Invalidate( SID_PASTE_ONLY_TEXT );
+    rBindings.Invalidate( SID_PASTE_ONLY_FORMULA );
+    rBindings.Invalidate( SID_PASTE_TRANSPOSED );
+    rBindings.Invalidate( SID_PASTE_AS_LINK );
+    rBindings.Invalidate( SID_PASTE_TEXTIMPORT_DIALOG );
+    rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
+}
+
+namespace {
+
+bool checkDestRanges(ScViewData& rViewData)
+{
+    ScRange aDummy;
+    ScMarkType eMarkType = rViewData.GetSimpleArea( aDummy);
+    if (eMarkType != SC_MARK_MULTI)
+    {
+        // Single destination range.
+        if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
+            return false;
+    }
+
+    // Multiple destination ranges.
+
+    // Same as ScViewData::SelectionForbidsPaste() in
+    // sc/source/ui/view/viewdata.cxx but different return details.
+
+    vcl::Window* pWin = rViewData.GetActiveWin();
+    if (!pWin)
+        return false;
+
+    const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pWin));
+    if (!pOwnClip)
+        // If it's not a Calc document, we won't be picky.
+        return true;
+
+    ScDocument* pClipDoc = pOwnClip->GetDocument();
+    if (!pClipDoc)
+        return false;
+
+    ScRange aSrcRange = pClipDoc->GetClipParam().getWholeRange();
+    SCROW nRowSize = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
+    SCCOL nColSize = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
+
+    if (rViewData.SelectionForbidsPaste( nColSize, nRowSize))
+        return false;
+
+    ScMarkData aMark = rViewData.GetMarkData();
+    ScRangeList aRanges;
+    aMark.MarkToSimple();
+    aMark.FillRangeListWithMarks(&aRanges, false);
+
+    return ScClipUtil::CheckDestRanges(rViewData.GetDocument(), nColSize, nRowSize, aMark, aRanges);
+}
+
+}
+
+void ScCellShell::GetClipState( SfxItemSet& rSet )
+{
+// SID_PASTE
+// SID_PASTE_SPECIAL
+// SID_PASTE_UNFORMATTED
+// SID_CLIPBOARD_FORMAT_ITEMS
+
+    if ( !pImpl->m_xClipEvtLstnr.is() )
+    {
+        // create listener
+        pImpl->m_xClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScCellShell, ClipboardChanged ) );
+        vcl::Window* pWin = GetViewData().GetActiveWin();
+        pImpl->m_xClipEvtLstnr->AddListener( pWin );
+
+        // get initial state
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
+        bPastePossible = lcl_IsCellPastePossible( aDataHelper );
+    }
+
+    bool bDisable = !bPastePossible;
+    bool bOnlyNotBecauseOfMatrix = false;
+
+    //  cell protection / multiple selection
+
+    if (!bDisable)
+    {
+        SCCOL nCol = GetViewData().GetCurX();
+        SCROW nRow = GetViewData().GetCurY();
+        SCTAB nTab = GetViewData().CurrentTabForData();
+        ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
+        if (!rDoc.IsBlockEditable( nTab, nCol,nRow, nCol,nRow,
+                                   &bOnlyNotBecauseOfMatrix ))
+            bDisable = true;
+
+        if (!bDisable && !checkDestRanges(GetViewData()))
+            bDisable = true;
+    }
+
+    if (!ScTransferObj::GetOwnClipboard(
+        ScTabViewShell::GetClipData(GetViewData().GetActiveWin())))
+    {
+        rSet.DisableItem( SID_PASTE_TRANSPOSED );
+    }
+
+    if (bDisable)
+    {
+        rSet.DisableItem( SID_PASTE );
+        rSet.DisableItem( SID_PASTE_SPECIAL );
+        rSet.DisableItem( SID_PASTE_UNFORMATTED );
+        rSet.DisableItem( SID_PASTE_ONLY_VALUE );
+        rSet.DisableItem( SID_PASTE_ONLY_TEXT );
+        rSet.DisableItem( SID_PASTE_ONLY_FORMULA );
+        rSet.DisableItem( SID_PASTE_TRANSPOSED );
+        rSet.DisableItem( SID_PASTE_AS_LINK );
+        rSet.DisableItem( SID_PASTE_TEXTIMPORT_DIALOG );
+        // tdf#164461: don't disable clipboard format items when the
+        // cursor is on a matrix cell — the clipboard content is still
+        // valid and must stay populated so the paste-special toolbar
+        // dropdown works after the cursor moves to an editable cell.
+        if (!bOnlyNotBecauseOfMatrix)
+            rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
+    }
+
+    // tdf#164461: populate format items even when paste is disabled
+    // due to a matrix cell, so the dropdown keeps its format list.
+    bool bHasFormatItems = rSet.GetItemState(SID_CLIPBOARD_FORMAT_ITEMS) != SfxItemState::UNKNOWN;
+    if ( bHasFormatItems && ( !bDisable || bOnlyNotBecauseOfMatrix ) )
+    {
+        SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+        GetPossibleClipboardFormats( aFormats );
+        rSet.Put( aFormats );
+    }
+}
+
+//  only SID_HYPERLINK_GETLINK:
+
+void ScCellShell::GetHLinkState( SfxItemSet& rSet )
+{
+    //  always return an item (or inserting will be disabled)
+    //  if the cell at the cursor contains only a link, return that link
+
+    SvxHyperlinkItem aHLinkItem;
+    aHLinkItem.SetShowName(false);
+    if ( !GetViewData().GetView()->HasBookmarkAtCursor( &aHLinkItem ) )
+    {
+        // tdf#80043 - put selected text into item
+        ScViewData& rData       = GetViewData();
+        ScDocument& rDoc        = rData.GetDocument();
+        SCCOL       nPosX       = rData.GetCurX();
+        SCROW       nPosY       = rData.GetCurY();
+        SCTAB       nTab        = rData.CurrentTabForData();
+        aHLinkItem.SetName(rDoc.GetString(nPosX, nPosY, nTab));
+    }
+
+    rSet.Put(aHLinkItem);
+}
+
+void ScCellShell::GetState(SfxItemSet &rSet)
+{
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScViewData& rData       = GetViewData();
+    ScDocument& rDoc        = rData.GetDocument();
+    ScMarkData& rMark       = rData.GetMarkData();
+    SCCOL       nPosX       = rData.GetCurX();
+    SCROW       nPosY       = rData.GetCurY();
+    SCTAB       nTab        = rData.CurrentTabForData();
+
+    SCTAB nTabCount = rDoc.GetTableCount();
+    SCTAB nTabSelCount = rMark.GetSelectCount();
+
+    SfxWhichIter aIter(rSet);
+    sal_uInt16 nWhich = aIter.FirstWhich();
+    while ( nWhich )
+    {
+        switch ( nWhich )
+        {
+            case SID_DETECTIVE_REFRESH:
+                if (!rDoc.HasDetectiveOperations())
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case SID_RANGE_ADDRESS:
+                {
+                    ScRange aRange;
+                    if ( rData.GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
+                    {
+                        OUString aStr(aRange.Format(rDoc, ScRefFlags::VALID | ScRefFlags::TAB_3D));
+                        rSet.Put( SfxStringItem( nWhich, aStr ) );
+                    }
+                }
+                break;
+
+            case SID_RANGE_NOTETEXT:
+                {
+                    //  always take cursor position, do not use top-left cell of selection
+                    OUString aNoteText;
+                    if ( const ScPostIt* pNote = rDoc.GetNote(nPosX, nPosY, nTab) )
+                        aNoteText = pNote->GetText();
+                    rSet.Put( SfxStringItem( nWhich, aNoteText ) );
+                }
+                break;
+
+            case SID_RANGE_ROW:
+                rSet.Put( SfxInt32Item( SID_RANGE_ROW, nPosY+1 ) );
+                break;
+
+            case SID_RANGE_COL:
+                rSet.Put( SfxInt16Item( SID_RANGE_COL, nPosX+1 ) );
+                break;
+
+            case SID_RANGE_TABLE:
+                rSet.Put( SfxInt16Item( SID_RANGE_TABLE, nTab+1 ) );
+                break;
+
+            case SID_RANGE_FORMULA:
+                {
+                    OUString aString = rDoc.GetFormula( nPosX, nPosY, nTab );
+                    if( aString.isEmpty() )
+                    {
+                        aString = rDoc.GetInputString( nPosX, nPosY, nTab );
+                    }
+                    rSet.Put( SfxStringItem( nWhich, aString ) );
+                }
+                break;
+
+            case SID_RANGE_TEXTVALUE:
+                {
+                    OUString aString = rDoc.GetString(nPosX, nPosY, nTab);
+                    rSet.Put( SfxStringItem( nWhich, aString ) );
+                }
+                break;
+
+            case SID_STATUS_SELMODE:
+                {
+                    /* 0: STD   Click cancels Sel
+                     * 1: ER    Click extends selection
+                     * 2: ERG   Click defines further selection
+                     */
+                    sal_uInt16 nMode = pTabViewShell->GetLockedModifiers();
+
+                    switch ( nMode )
+                    {
+                        case KEY_SHIFT: nMode = 1;  break;
+                        case KEY_MOD1:  nMode = 2;  break; // Control-key
+                        case 0:
+                        default:
+                            nMode = 0;
+                    }
+
+                    rSet.Put( SfxUInt16Item( nWhich, nMode ) );
+                }
+                break;
+
+            case SID_STATUS_DOCPOS:
+                {
+                    OUString aStr = ScResId( STR_TABLE_COUNT );
+
+                    aStr = aStr.replaceFirst("%1", OUString::number( nTab + 1  ) );
+                    aStr = aStr.replaceFirst("%2", OUString::number( nTabCount ) );
+
+                    rSet.Put( SfxStringItem( nWhich, aStr ) );                }
+                break;
+
+            case SID_ROWCOL_SELCOUNT:
+                {
+                    ScRangeListRef aMarkRanges;
+                    GetViewData().GetMultiArea(aMarkRanges);
+                    const SCCOL nCol1 = aMarkRanges->front().aStart.Col();
+                    const SCROW nRow1 = aMarkRanges->front().aStart.Row();
+                    const SCCOL nCol2 = aMarkRanges->front().aEnd.Col();
+                    const SCROW nRow2 = aMarkRanges->front().aEnd.Row();
+                    const size_t nRanges = aMarkRanges->size();
+
+                    if ((nRanges == 1 && (nCol2 != nCol1 || nRow1 != nRow2)) || nRanges > 1)
+                    {
+                        bool bSameRows = true;
+                        bool bSameCols = true;
+                        SCROW nRowsSum = 0;
+                        SCCOL nColsSum = 0;
+                        for (size_t i = 0; i < nRanges; ++i)
+                        {
+                            const ScRange& rRange = (*aMarkRanges)[i];
+                            const SCCOL nRangeCol1 = rRange.aStart.Col();
+                            const SCROW nRangeRow1 = rRange.aStart.Row();
+                            const SCCOL nRangeCol2 = rRange.aEnd.Col();
+                            const SCROW nRangeRow2 = rRange.aEnd.Row();
+                            bSameRows &= (nRow1 == nRangeRow1 && nRow2 == nRangeRow2);
+                            bSameCols &= (nCol1 == nRangeCol1 && nCol2 == nRangeCol2);
+                            // Sum rows if the number of cols is the same or
+                            // sum columns if the number of rows is the same,
+                            // otherwise do not show any count of selected cells.
+                            if (bSameRows || bSameCols)
+                            {
+                                const auto nCols = nRangeCol2 - nRangeCol1 + 1;
+                                const auto nRows = (bSameCols || nRowsSum == 0) ?
+                                    rDoc.CountNonFilteredRows( nRangeRow1, nRangeRow2, rRange.aStart.Tab()) :
+                                    nRowsSum;
+                                if (bSameRows)
+                                {
+                                    nRowsSum = nRows;
+                                    nColsSum += nCols;
+                                }
+                                else if (bSameCols)
+                                {
+                                    nRowsSum += nRows;
+                                    nColsSum = nCols;
+                                }
+                            }
+                            else
+                                break;
+                        }
+                        // Either the rows or columns are the same among selections
+                        if (bSameRows || bSameCols)
+                        {
+                            const LocaleDataWrapper& rLocaleData
+                                = Application::GetSettings().GetUILocaleDataWrapper();
+                            OUString aRowArg
+                                = ScResId(STR_SELCOUNT_ROWARG, nRowsSum)
+                                      .replaceAll("%d", rLocaleData.getNum(nRowsSum, 0));
+                            OUString aColArg
+                                = ScResId(STR_SELCOUNT_COLARG, nColsSum)
+                                      .replaceAll("%d", rLocaleData.getNum(nColsSum, 0));
+                            OUString aStr = ScResId(STR_SELCOUNT);
+                            aStr = aStr.replaceAll("%1", aRowArg);
+                            aStr = aStr.replaceAll("%2", aColArg);
+                            rSet.Put(SfxStringItem(nWhich, aStr));
+                        }
+                    }
+                    else
+                    {
+                        SCSIZE nSelected, nTotal;
+                        rDoc.GetFilterSelCount( nPosX, nPosY, nTab, nSelected, nTotal );
+                        if( nTotal && nSelected != SCSIZE_MAX )
+                        {
+                            OUString aStr = ScResId( STR_FILTER_SELCOUNT );
+                            aStr = aStr.replaceAll( "%1", OUString::number( nSelected ) );
+                            aStr = aStr.replaceAll( "%2", OUString::number( nTotal ) );
+                            rSet.Put( SfxStringItem( nWhich, aStr ) );
+                        }
+                    }
+                }
+                break;
+
+            //  calculations etc. with date/time/Fail/position&size together
+
+            // #i34458# The SvxStatusItem belongs only into SID_TABLE_CELL. It no longer has to be
+            // duplicated in SID_ATTR_POSITION or SID_ATTR_SIZE for SvxPosSizeStatusBarControl.
+            case SID_TABLE_CELL:
+                {
+                    //  Test, if error under cursor
+                    //  (not rDoc.GetErrCode, to avoid erasing circular references)
+
+                    // In interpreter may happen via rescheduled Basic
+                    if ( rDoc.IsInInterpreter() )
+                        rSet.Put( SvxStatusItem( SID_TABLE_CELL, u"..."_ustr, StatusCategory::Formula ) );
+                    else
+                    {
+                        FormulaError nErrCode = FormulaError::NONE;
+                        ScFormulaCell* pCell = rDoc.GetFormulaCell(ScAddress(nPosX, nPosY, nTab));
+                        if (pCell && !pCell->IsRunning())
+                            nErrCode = pCell->GetErrCode();
+
+                        OUString aFuncStr;
+                        if ( pTabViewShell->GetFunction( aFuncStr, nErrCode ) )
+                        {
+                            rSet.Put( SvxStatusItem( SID_TABLE_CELL, aFuncStr, StatusCategory::Formula ) );
+                        }
+                    }
+                }
+                break;
+
+            case SID_DATA_SELECT:
+                // HasSelectionData includes column content and validity,
+                // page fields have to be checked separately.
+                if ( !rDoc.HasSelectionData( nPosX, nPosY, nTab ) &&
+                     !pTabViewShell->HasPageFieldDataAtCursor() )
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_CURRENTVALIDATION:
+                if ( !rDoc.HasValidationData( nPosX, nPosY, nTab ))
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case SID_STATUS_SUM:
+                {
+                    OUString aFuncStr;
+                    if ( pTabViewShell->GetFunction( aFuncStr, FormulaError::NONE ) )
+                        rSet.Put( SfxStringItem( nWhich, aFuncStr ) );
+                }
+                break;
+
+            case FID_MERGE_ON:
+                if ( rDoc.GetChangeTrack() || !pTabViewShell->TestMergeCells() )
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_MERGE_OFF:
+                if ( rDoc.GetChangeTrack() || !pTabViewShell->TestRemoveMerge() )
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_MERGE_TOGGLE:
+                if ( rDoc.GetChangeTrack() )
+                    rSet.DisableItem( nWhich );
+                else
+                {
+                    bool bCanMerge = pTabViewShell->TestMergeCells();
+                    bool bCanSplit = pTabViewShell->TestRemoveMerge();
+                    if( !bCanMerge && !bCanSplit )
+                        rSet.DisableItem( nWhich );
+                    else
+                        rSet.Put( SfxBoolItem( nWhich, bCanSplit ) );
+                }
+                break;
+
+            case FID_INS_ROWBRK:
+                if ( nPosY==0 || (rDoc.HasRowBreak(nPosY, nTab) & ScBreakType::Manual) || rDoc.IsTabProtected(nTab) )
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_INS_COLBRK:
+                if ( nPosX==0 || (rDoc.HasColBreak(nPosX, nTab) & ScBreakType::Manual) || rDoc.IsTabProtected(nTab) )
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_DEL_ROWBRK:
+                if ( nPosY==0 || !(rDoc.HasRowBreak(nPosY, nTab) & ScBreakType::Manual) || rDoc.IsTabProtected(nTab) )
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_DEL_COLBRK:
+                if ( nPosX==0 || !(rDoc.HasColBreak(nPosX, nTab) & ScBreakType::Manual) || rDoc.IsTabProtected(nTab) )
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_FILL_TAB:
+                if ( nTabSelCount < 2 )
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case SID_INSERT_CURRENT_DATE:
+            case SID_INSERT_CURRENT_TIME:
+                {
+                    if ( rDoc.IsTabProtected(nTab) &&
+                            rDoc.HasAttrib(nPosX, nPosY, nTab, nPosX, nPosY, nTab, HasAttrFlags::Protected))
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case SID_SELECT_SCENARIO:
+                {
+                    std::vector<OUString> aList;
+                    Color   aDummyCol;
+
+                    if ( !rDoc.IsScenario(nTab) )
+                    {
+                        OUString aStr;
+                        ScScenarioFlags nFlags;
+                        SCTAB nScTab = nTab + 1;
+                        bool bSheetProtected = rDoc.IsTabProtected(nTab);
+
+                        while ( rDoc.IsScenario(nScTab) )
+                        {
+                            rDoc.GetName( nScTab, aStr );
+                            aList.push_back(aStr);
+                            rDoc.GetScenarioData( nScTab, aStr, aDummyCol, nFlags );
+                            aList.push_back(aStr);
+                            // Protection is sal_True if both Sheet and Scenario are protected
+                            aList.push_back((bSheetProtected && (nFlags & ScScenarioFlags::Protected)) ? u"1"_ustr : u"0"_ustr);
+                            ++nScTab;
+                        }
+                    }
+                    else
+                    {
+                        OUString aComment;
+                        ScScenarioFlags nDummyFlags;
+                        rDoc.GetScenarioData( nTab, aComment, aDummyCol, nDummyFlags );
+                        OSL_ENSURE( aList.empty(), "List not empty!" );
+                        aList.push_back(aComment);
+                    }
+
+                    rSet.Put( SfxStringListItem( nWhich, &aList ) );
+                }
+                break;
+
+            case FID_ROW_HIDE:
+            case FID_ROW_SHOW:
+            case FID_COL_HIDE:
+            case FID_COL_SHOW:
+            case FID_COL_OPT_WIDTH:
+            case FID_ROW_OPT_HEIGHT:
+            case FID_DELETE_CELL:
+                if ( rDoc.IsTabProtected(nTab) || pDocSh->IsReadOnly())
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case SID_OUTLINE_MAKE:
+                {
+                    if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
+                                            GetViewData().GetCurY(), GetViewData().CurrentTabForData() ) )
+                    {
+                        //! test for data pilot operation
+                    }
+                    else if (rDoc.GetChangeTrack()!=nullptr || GetViewData().IsMultiMarked())
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+            case SID_OUTLINE_SHOW:
+                if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() ) )
+                {
+                    //! test for data pilot operation
+                }
+                else if (!pTabViewShell->OutlinePossible(false))
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case SID_OUTLINE_HIDE:
+                if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() ) )
+                {
+                    //! test for data pilot operation
+                }
+                else if (!pTabViewShell->OutlinePossible(true))
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case SID_OUTLINE_REMOVE:
+                {
+                    if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
+                                            GetViewData().GetCurY(), GetViewData().CurrentTabForData() ) )
+                    {
+                        //! test for data pilot operation
+                    }
+                    else
+                    {
+                        bool bCol, bRow;
+                        pTabViewShell->TestRemoveOutline( bCol, bRow );
+                        if ( !bCol && !bRow )
+                            rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
+            case FID_COL_WIDTH:
+                {
+                    SfxUInt16Item aWidthItem( FID_COL_WIDTH, rDoc.GetColWidth( nPosX , nTab) );
+                    rSet.Put( aWidthItem );
+                    if ( pDocSh->IsReadOnly())
+                        rSet.DisableItem( nWhich );
+
+                    //XXX disable if not conclusive
+                }
+                break;
+
+            case FID_ROW_HEIGHT:
+                {
+                    SfxUInt16Item aHeightItem( FID_ROW_HEIGHT, rDoc.GetRowHeight( nPosY , nTab) );
+                    rSet.Put( aHeightItem );
+                    //XXX disable if not conclusive
+                    if ( pDocSh->IsReadOnly())
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case SID_DETECTIVE_FILLMODE:
+                rSet.Put(SfxBoolItem( nWhich, pTabViewShell->IsAuditShell() ));
+                break;
+
+            case FID_INPUTLINE_STATUS:
+                OSL_FAIL( "Old update method. Use ScTabViewShell::UpdateInputHandler()." );
+                break;
+
+            case SID_SCENARIOS:                                     // scenarios:
+                if (!(rMark.IsMarked() || rMark.IsMultiMarked()))   // only, if something selected
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_NOTE_VISIBLE:
+                {
+                    const ScPostIt* pNote = rDoc.GetNote(nPosX, nPosY, nTab);
+                    if ( pNote && rDoc.IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) )
+                        rSet.Put( SfxBoolItem( nWhich, pNote->IsCaptionShown() ) );
+                    else
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case FID_HIDE_NOTE:
+            case FID_SHOW_NOTE:
+                {
+                    bool bEnable = false;
+                    bool bSearchForHidden = nWhich == FID_SHOW_NOTE;
+                    if (!rMark.IsMarked() && !rMark.IsMultiMarked())
+                    {
+                        // Check current cell
+                        const ScPostIt* pNote = rDoc.GetNote(nPosX, nPosY, nTab);
+                        if ( pNote && rDoc.IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) )
+                            if ( pNote->IsCaptionShown() != bSearchForHidden)
+                                bEnable = true;
+                    }
+                    else
+                    {
+                        // Check selection range
+                        ScRangeListRef aRangesRef;
+                        rData.GetMultiArea(aRangesRef);
+                        ScRangeList aRanges = *aRangesRef;
+                        std::vector<sc::NoteEntry> aNotes;
+                        rDoc.GetNotesInRange(aRanges, aNotes);
+                        for(const auto& rNote : aNotes)
+                        {
+                            const ScAddress& rAdr = rNote.maPos;
+                            if( rDoc.IsBlockEditable( rAdr.Tab(), rAdr.Col(), rAdr.Row(), rAdr.Col(), rAdr.Row() ))
+                            {
+                                if (rNote.mpNote->IsCaptionShown() != bSearchForHidden)
+                                {
+                                    bEnable = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+                    if ( !bEnable )
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case FID_SHOW_ALL_NOTES:
+            case FID_HIDE_ALL_NOTES:
+            case FID_DELETE_ALL_NOTES:
+                {
+                    bool bHasNotes = false;
+
+                    for (auto const& rTab : rMark.GetSelectedTabs())
+                    {
+                        if (rDoc.HasTabNotes( rTab ))
+                        {
+                            bHasNotes = true;
+                            break;
+                        }
+                    }
+
+                    if ( !bHasNotes )
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case SID_TOGGLE_NOTES:
+                {
+                    bool bHasNotes = false;
+                    ScRangeList aRanges;
+
+                    for (auto const& rTab : rMark.GetSelectedTabs())
+                    {
+                        if (rDoc.HasTabNotes( rTab ))
+                        {
+                            bHasNotes = true;
+                            aRanges.push_back(ScRange(0,0,rTab,rDoc.MaxCol(),rDoc.MaxRow(),rTab));
+                        }
+                    }
+
+                    if ( !bHasNotes )
+                        rSet.DisableItem( nWhich );
+                    else
+                    {
+                         CommentCaptionState eState = rDoc.GetAllNoteCaptionsState( aRanges );
+                         bool bAllNotesInShown = (eState != ALLHIDDEN && eState != MIXED);
+                         rSet.Put( SfxBoolItem( SID_TOGGLE_NOTES, bAllNotesInShown) );
+                    }
+                }
+                break;
+
+            case SID_DELETE_NOTE:
+                {
+                    bool bEnable = false;
+                    if ( rMark.IsMarked() || rMark.IsMultiMarked() )
+                    {
+                        if ( rDoc.IsSelectionEditable( rMark ) )
+                        {
+                            // look for at least one note in selection
+                            ScRangeList aRanges;
+                            rMark.FillRangeListWithMarks( &aRanges, false );
+                            bEnable = rDoc.ContainsNotesInRange( aRanges );
+                        }
+                    }
+                    else
+                    {
+                        bEnable = rDoc.IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) &&
+                                  rDoc.GetNote(nPosX, nPosY, nTab);
+                    }
+                    if ( !bEnable )
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case SID_OPENDLG_CONSOLIDATE:
+            case SCITEM_CONSOLIDATEDATA:
+                {
+                    if (rDoc.GetChangeTrack()!=nullptr)
+                        rSet.DisableItem( nWhich);
+                }
+                break;
+
+            case SID_CHINESE_CONVERSION:
+            case SID_HANGUL_HANJA_CONVERSION:
+                ScViewUtil::HideDisabledSlot( rSet, rData.GetBindings(), nWhich );
+            break;
+
+            case FID_USE_NAME:
+                {
+                    if ( pDocSh->IsDocShared() )
+                        rSet.DisableItem( nWhich );
+                    else
+                    {
+                        ScRange aRange;
+                        if ( rData.GetSimpleArea( aRange ) != SC_MARK_SIMPLE )
+                            rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
+            case FID_DEFINE_NAME:
+            case FID_INSERT_NAME:
+            case FID_ADD_NAME:
+            case SID_DEFINE_COLROWNAMERANGES:
+                {
+                    if ( pDocSh->IsDocShared() )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
+            case FID_DEFINE_CURRENT_NAME:
+            {
+                ScAddress aCurrentAddress( nPosX, nPosY, nTab );
+
+                if ( !rDoc.IsAddressInRangeName( RangeNameScope::GLOBAL, aCurrentAddress ) &&
+                     !rDoc.IsAddressInRangeName( RangeNameScope::SHEET, aCurrentAddress ))
+                {
+                    rSet.DisableItem( nWhich );
+                }
+            }
+            break;
+
+            case SID_SPELL_DIALOG:
+                {
+                    if (rDoc.IsTabProtected(rData.CurrentTabForData()))
+                    {
+                        bool bVisible = false;
+                        SfxViewFrame* pViewFrame = ( pTabViewShell ? &pTabViewShell->GetViewFrame() : nullptr );
+                        if ( pViewFrame && pViewFrame->HasChildWindow( nWhich ) )
+                        {
+                            SfxChildWindow* pChild = pViewFrame->GetChildWindow( nWhich );
+                            std::shared_ptr<SfxDialogController> xController = pChild ? pChild->GetController() : nullptr;
+                            if (xController && xController->getDialog()->get_visible())
+                            {
+                                bVisible = true;
+                            }
+                        }
+                        if ( !bVisible )
+                        {
+                            rSet.DisableItem( nWhich );
+                        }
+                    }
+                }
+                break;
+
+            case SID_OPENDLG_CURRENTCONDFRMT:
+            case SID_OPENDLG_CURRENTCONDFRMT_MANAGER:
+                {
+                    const ScCondFormatItem& rCondFormatItem = rDoc.GetAttr(nPosX, nPosY, nTab, ATTR_CONDITIONAL);
+
+                    if ( rCondFormatItem.GetCondFormatData().empty() )
+                        rSet.DisableItem( nWhich );
+                    else if ( rCondFormatItem.GetCondFormatData().size() == 1 )
+                        rSet.DisableItem( SID_OPENDLG_CURRENTCONDFRMT_MANAGER );
+                    else if ( rCondFormatItem.GetCondFormatData().size() > 1 )
+                        rSet.DisableItem( SID_OPENDLG_CURRENTCONDFRMT );
+                }
+                break;
+
+        } // switch ( nWitch )
+        nWhich = aIter.NextWhich();
+    } // while ( nWitch )
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,97 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_LAYOUTATOMVISITORS_HXX
+#define INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_LAYOUTATOMVISITORS_HXX
+
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <utility>
+#include "diagram.hxx"
+#include "diagramlayoutatoms.hxx"
+#include "layoutatomvisitorbase.hxx"
+
+namespace oox::drawingml {
+
+class ShapeCreationVisitor : public LayoutAtomVisitorBase
+{
+public:
+    ShapeCreationVisitor(const SmartArtDiagram& rDgm,
+                         const svx::diagram::Point* pRootPoint,
+                         ShapePtr xParentShape) :
+        LayoutAtomVisitorBase(rDgm, pRootPoint),
+        mpParentShape(std::move(xParentShape))
+    {}
+
+    using LayoutAtomVisitorBase::visit;
+    virtual void visit(ConstraintAtom& rAtom) override;
+    virtual void visit(RuleAtom& rAtom) override;
+    virtual void visit(AlgAtom& rAtom) override;
+    virtual void visit(LayoutNode& rAtom) override;
+    virtual void visit(ShapeAtom& rAtom) override;
+
+private:
+    ShapePtr mpParentShape;
+};
+
+class ShapeTemplateVisitor : public LayoutAtomVisitorBase
+{
+public:
+    ShapeTemplateVisitor(const SmartArtDiagram& rDgm, const svx::diagram::Point* pRootPoint)
+        : LayoutAtomVisitorBase(rDgm, pRootPoint)
+    {}
+
+    using LayoutAtomVisitorBase::visit;
+    virtual void visit(ConstraintAtom& rAtom) override;
+    virtual void visit(RuleAtom& rAtom) override;
+    virtual void visit(AlgAtom& rAtom) override;
+    virtual void visit(ForEachAtom& rAtom) override;
+    virtual void visit(LayoutNode& rAtom) override;
+    virtual void visit(ShapeAtom& rAtom) override;
+
+    ShapePtr const & getShapeCopy() const
+        { return mpShape; }
+
+private:
+    ShapePtr mpShape;
+};
+
+class ShapeLayoutingVisitor : public LayoutAtomVisitorBase
+{
+public:
+    ShapeLayoutingVisitor(const SmartArtDiagram& rDgm, const svx::diagram::Point* pRootPoint) :
+        LayoutAtomVisitorBase(rDgm, pRootPoint)
+    {}
+
+    using LayoutAtomVisitorBase::visit;
+    virtual void visit(ConstraintAtom& rAtom) override;
+    virtual void visit(RuleAtom& rAtom) override;
+    virtual void visit(AlgAtom& rAtom) override;
+    virtual void visit(LayoutNode& rAtom) override;
+    virtual void visit(ShapeAtom& rAtom) override;
+
+private:
+    std::vector<Constraint> maConstraints;
+    std::vector<Rule> maRules;
+};
+
+}
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

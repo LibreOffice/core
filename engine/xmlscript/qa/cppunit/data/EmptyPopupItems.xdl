@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="TestDialog" dlg:left="116" dlg:top="56" dlg:width="175" dlg:height="123" dlg:closeable="true" dlg:moveable="true">
+ <dlg:bulletinboard>
+  <dlg:combobox dlg:id="ComboBox1" dlg:tab-index="0" dlg:left="9" dlg:top="15" dlg:width="92" dlg:height="15" dlg:spin="true">
+   <dlg:menupopup>
+    <dlg:menuitem dlg:value="Eintrag1"/>
+    <dlg:menuitem dlg:value=""/>
+    <dlg:menuitem dlg:value="Eintrag2"/>
+   </dlg:menupopup>
+  </dlg:combobox>
+ </dlg:bulletinboard>
+</dlg:window>

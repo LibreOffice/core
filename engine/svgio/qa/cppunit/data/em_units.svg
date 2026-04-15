@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10cm" height="10cm">
+
+  <style>
+    text {font-family: 'DejaVu Sans'; font-size: 36pt;}
+    new {font-family: 'DejaVu Sans'; font-size: 1em;}
+  </style>
+
+  <line x1="5cm" y1="5cm" x2="8cm" y2="5cm" stroke="black" />
+  <!-- 0.5in = 1.27cm = 36pt !-->
+  <line x1="5cm" y1="6.27cm" x2="8cm" y2="6.27cm" stroke="black" />
+  <text x="5cm" y="5cm" class="new">AWlll<tspan x="5cm" dy="1em">AWlll</tspan>
+  </text>
+</svg>
+

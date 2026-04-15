@@ -1,0 +1,187 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+interface BaseTextDrawBase
+{
+    FN_DRAW_WRAP_DLG
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_TRANSFORM
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_GROUP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_UNGROUP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ENTER_GROUP
+    [
+        AutoUpdate = TRUE ,
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_LEAVE_GROUP
+    [
+        AutoUpdate = TRUE ,
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_REGENERATE_DIAGRAM
+    [
+        AutoUpdate = TRUE ,
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_DIAGRAM_TO_GROUP
+    [
+        AutoUpdate = TRUE ,
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_EDIT_DIAGRAM
+    [
+        AutoUpdate = TRUE ,
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_FRAME_TO_TOP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_FRAME_TO_BOTTOM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_FRAME_UP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_FRAME_DOWN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_DELETE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        FastCall = FALSE ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_BACKSPACE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        FastCall = FALSE ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    // #i68101#
+    FN_TITLE_DESCRIPTION_SHAPE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    FN_NAME_SHAPE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_OPEN_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_EDIT_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_HYPERLINK_DIALOG
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_INSERT_HYPERLINK
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_HYPERLINK_SETLINK // status()
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_HYPERLINK_GETLINK // status()
+    [
+        StateMethod = GetState ;
+    ]
+    SID_REMOVE_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_COPY_HYPERLINK_LOCATION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+}
+

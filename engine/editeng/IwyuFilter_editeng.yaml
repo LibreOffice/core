@@ -1,0 +1,39 @@
+---
+assumeFilename: editeng/source/editeng/impedit.cxx
+excludelist:
+    editeng/source/editeng/impedit.hxx:
+    # Complete type needed for pointer arithmetic
+    - editeng/SpellPortions.hxx
+    editeng/source/accessibility/AccessibleEditableTextPara.cxx:
+    # Needed for macro defines
+    - editeng/unoprnms.hxx
+    editeng/source/accessibility/AccessibleImageBullet.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    editeng/source/editeng/impedit2.cxx:
+    # Needed for ValueRestorationGuard
+    - comphelper/flagguard.hxx
+    editeng/source/items/CustomPropertyField.cxx:
+    # Actually used
+    - com/sun/star/document/XDocumentProperties.hpp
+    editeng/source/editeng/impedit.cxx:
+    # Needed for DNDListenerContainer member access
+    - vcl/dndlistenercontainer.hxx
+    editeng/source/misc/SvXMLAutoCorrectExport.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XDocumentHandler.hpp
+    editeng/source/misc/unolingu.cxx:
+    # NEeded for OSL_DEBUG_LEVEL > 1
+    - com/sun/star/frame/XStorable.hpp
+    editeng/source/uno/unotext.cxx:
+    # Needed for macro defines
+    - editeng/unoprnms.hxx
+    # Needed for UnoType call to work
+    - com/sun/star/lang/Locale.hpp
+    editeng/source/xml/xmltxtexp.cxx:
+    # Needed for UnoType call to work
+    - com/sun/star/lang/Locale.hpp
+    editeng/source/xml/xmltxtimp.cxx:
+    # Needed for macro defines
+    - editeng/unoprnms.hxx

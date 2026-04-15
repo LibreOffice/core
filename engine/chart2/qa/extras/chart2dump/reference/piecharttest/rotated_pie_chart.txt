@@ -1,0 +1,50 @@
+// nSeriesCount
+4
+/// Series 0 slices
+// nSlicesCountInSeries
+3
+/// /D=0:CS=0:CT=0:Series=0:Point=0
+// aSlicePosition.X
+7679
+// aSlicePosition.Y
+2779
+// aSliceSize.Height
+4767
+// aSliceSize.Width
+3326
+// aSliceTransformation
+3326;0;7679;0;4767;2779;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+17798
+/// /D=0:CS=0:CT=0:Series=0:Point=1
+// aSlicePosition.X
+4353
+// aSlicePosition.Y
+3306
+// aSliceSize.Height
+5192
+// aSliceSize.Width
+5654
+// aSliceTransformation
+5654;0;4353;0;5192;3306;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+16728590
+/// /D=0:CS=0:CT=0:Series=0:Point=2
+// aSlicePosition.X
+4925
+// aSlicePosition.Y
+1846
+// aSliceSize.Height
+3326
+// aSliceSize.Width
+5064
+// aSliceTransformation
+5064;0;4925;0;3326;1846;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+16765728

@@ -1,0 +1,1109 @@
+SET UTF-8
+NEEDAFFIX F
+NOSUGGEST X
+FORBIDDENWORD x
+NOSPLITSUGS
+
+COMPOUNDMIN 1
+COMPOUNDFLAG &
+MAXCPDSUGS 0
+
+TRY आईऊऐऔखघछझठढणनथधफभशषक्षज्ञ
+
+IGNORE ़
+
+BREAK 27
+BREAK ॥
+BREAK ।
+BREAK -
+BREAK ्स$
+BREAK ं$
+BREAK े$
+BREAK ीय$
+BREAK त्व$
+BREAK च$
+BREAK ही$
+BREAK सुद्धा$
+BREAK देखील$
+BREAK जी$
+BREAK दादा$
+BREAK राव$
+BREAK ताई$
+BREAK बाई$
+BREAK ता$
+BREAK साहेब$
+BREAK पणा$
+BREAK पणे$
+BREAK रित्या$
+BREAK हून$
+BREAK ^सु
+BREAK ^अ
+BREAK ^अति
+BREAK ऽ$
+
+ICONV 52
+ICONV ं_ े
+ICONV बरोब्बर बरोबर
+ICONV मधे मध्ये
+ICONV क्‍ क्
+ICONV ख्‍ ख्
+ICONV ग्‍ ग्
+ICONV घ्‍ घ्
+ICONV च्‍ च्
+ICONV छ्‍ छ्
+ICONV ज्‍ ज्
+ICONV झ्‍ झ्
+ICONV ट्‍ ट्
+ICONV ठ्‍ ठ्
+ICONV ड्‍ ड्
+ICONV ढ्‍ ढ्
+ICONV ण्‍ ण्
+ICONV त्‍ त्
+ICONV थ्‍ थ्
+ICONV द्‍ द्
+ICONV ध्‍ ध्
+ICONV न्‍ न्
+ICONV प्‍ प्
+ICONV फ्‍ फ्
+ICONV ब्‍ ब्
+ICONV भ्‍ भ्
+ICONV म्‍ म्
+ICONV य्‍ य्
+ICONV र्‍ ऱ्
+ICONV ल्‍ ल्
+ICONV व्‍ व्
+ICONV श्‍ श्
+ICONV स्‍ स्
+ICONV ह्‍ ह्
+ICONV ह्र हृ
+ICONV ळ्‍ ळ्
+ICONV क़ क
+ICONV ख़ ख
+ICONV ग़ ग
+ICONV ज़ ज
+ICONV ड़ ड
+ICONV ढ़ ढ
+ICONV फ़ फ
+ICONV य़ य
+ICONV ऩ न
+ICONV ऴ ळ
+ICONV ॅम् ँ
+ICONV ॅन् ँ
+ICONV ॅण् ँ
+ICONV ॉन् ाँ
+ICONV ॉण् ाँ
+ICONV ॉम् ाँ
+ICONV ॅं ँ
+
+
+REP 114
+REP ञ त्र
+REP र्क ःक
+REP र्ख ःख
+REP र्च ःच
+REP र्छ ःछ
+REP र्ट ःट
+REP र्ठ ःठ
+REP र्त ःत
+REP र्थ ःथ
+REP र्प ःप
+REP र्फ ःफ
+REP र्श ःश
+REP र्ष ःष
+REP र्स ःस
+REP ा ां
+REP ाना ांना
+REP ानो ांनो
+REP ानी ांनी
+REP ए ॲ
+REP रुप$ रूप
+REP रुपा रूपा
+REP त्व त्त्व
+REP क़ क
+REP ख़ ख
+REP ग़ ग
+REP ज़ ज
+REP ढ़ ढ
+REP ऩ न
+REP फ़ फ
+REP य़ य
+REP ऴ ळ
+REP आय ऐ
+REP ॆ े
+REP ं े
+REP ण्  ं
+REP न्  ं
+REP म्  ं
+REP टय़ ट्य
+REP ठय़ ठ्य
+REP डय़ ड्य
+REP ढय़ ढ्य
+REP हय़ ह्य
+REP दय़ द्य
+REP स श
+REP स ष
+REP श ष
+REP प फ
+REP ज झ
+REP ल ळ
+REP न ण
+REP त ट
+REP ड ढ
+REP ण्ट ंट
+REP ण्ठ ंठ
+REP ण्ड ंड
+REP ण्ढ ंढ
+REP न्त ंत
+REP न्थ ंथ
+REP न्द ंद
+REP न्ध ंध
+REP ध्द द्ध
+REP ग्य ज्ञ
+REP द्न्य ज्ञ
+REP रि ऋ
+REP ि ी
+REP ी ि
+REP ु ू
+REP ू ु
+REP ॊ ो
+REP ो ौ
+REP ाे ो
+REP ॉं ाँ
+REP ाँ ॉं
+REP ॅं ँ
+REP ंॅ ँ
+REP ँ ॅं
+REP ाॅ ॉ
+REP अॉ ऑ
+REP अॅ ॲ
+REP अ‍ॅ ॲ
+REP : ः
+REP ्रु ृ
+REP ्रू ृ
+REP ै ॅ
+REP स्त्र स्र
+REP स्र स्त्र
+REP ल लं
+REP द्या _द्या
+REP या _या
+REP जणी _जणी
+REP जण _जण
+REP त्या त्या_
+REP ज्या ज्या_
+REP ऊन वून
+REP वून ऊन
+REP लु लू
+REP वू ऊ
+REP उ ऊ
+REP ऊ उ
+REP रि री
+REP र्य ऱ्य
+REP र्या ऱ्या
+REP र्ह ऱ्ह
+REP क्रु कृ
+REP क्रू कृ
+REP व्रु वृ
+REP व्रू वृ
+REP म भ
+REP ब ब
+REP न्य ऱ्य
+REP -य ऱ्य
+REP -ह ऱ्ह
+REP ऍ अ‍ॅ
+REP अा आ
+
+SFX N Y 1
+SFX N णे 0 णे
+
+SFX Q Y 89
+SFX Q णे वतो णे
+SFX Q णे वतोय णे
+SFX Q णे वतंय णे
+SFX Q णे वते णे
+SFX Q णे वतेय णे
+SFX Q णे वतोस णे
+SFX Q णे वतेस णे
+SFX Q णे वता णे
+SFX Q णे वताय णे
+SFX Q णे वतात णे
+SFX Q णे वतील णे
+SFX Q णे वत णे
+SFX Q णे वताना णे
+SFX Q णे वतास णे
+SFX Q णे वतीस णे
+SFX Q णे वती णे
+SFX Q णे वत्या णे
+SFX Q णे वला णे
+SFX Q णे वलात णे
+SFX Q णे वलास णे
+SFX Q णे वलस णे
+SFX Q णे वलंस णे
+SFX Q णे वलय णे
+SFX Q णे वलंय णे
+SFX Q णे वलाय णे
+SFX Q णे वली णे
+SFX Q णे वलीस णे
+SFX Q णे वले णे
+SFX Q णे वलं णे
+SFX Q णे वलेला णे
+SFX Q णे वलेलो णे
+SFX Q णे वलेली णे
+SFX Q णे वलेले णे
+SFX Q णे वलेलं णे
+SFX Q णे वलीत णे
+SFX Q णे वलेत णे
+SFX Q णे वलेस णे
+SFX Q णे वल्यात णे
+SFX Q णे वल्यास णे
+SFX Q णे वल्याच णे
+SFX Q णे वल्याचं णे
+SFX Q णे वलो णे
+SFX Q णे वू णे
+SFX Q णे वाल णे
+SFX Q णे वेल णे
+SFX Q णे वीन णे
+SFX Q णे वेन णे
+SFX Q णे वेना णे
+SFX Q णे वील णे
+SFX Q णे वीत णे
+SFX Q णे वा णे
+SFX Q णे वो णे
+SFX Q णे वोत णे
+SFX Q णे वावा णे
+SFX Q णे वावात णे
+SFX Q णे वावी णे
+SFX Q णे वावीत णे
+SFX Q णे वावे णे
+SFX Q णे वावेत णे
+SFX Q णे वाव्या णे
+SFX Q णे वाव्यात णे
+SFX Q णे वावास णे
+SFX Q णे वावीस णे
+SFX Q णे वावेस णे
+SFX Q णे वाव्यास णे
+SFX Q णे वावं णे
+SFX Q णे वायचं णे
+SFX Q णे वायचा णे
+SFX Q णे वायची णे
+SFX Q णे वायचे णे
+SFX Q णे वायचो णे
+SFX Q णे वायच्या णे
+SFX Q णे वायला णे
+SFX Q णे वून णे
+SFX Q णे वशील णे
+SFX Q णे वणार णे
+SFX Q णे वणारा णे
+SFX Q णे वणारी णे
+SFX Q णे वणारे णे
+SFX Q णे वणारं णे
+SFX Q णे वणं णे
+SFX Q णे वणाऱ्या/Aacd णे
+SFX Q णे वणाऱ्यां/Abcd णे
+SFX Q णे वण्या/Aacd णे
+SFX Q णे वण्यां/Abcd णे
+SFX Q णे वलेल्या/Aacd णे
+SFX Q णे वलेल्यां/Abcd णे
+SFX Q णे वल्या/Aacd णे
+SFX Q णे वणे/NO णे
+
+SFX R Y 76
+SFX R णे ाविणे/P णे
+SFX R णे ावतो णे
+SFX R णे ावते णे
+SFX R णे ावतोस णे
+SFX R णे ावतेस णे
+SFX R णे ावता णे
+SFX R णे ावतात णे
+SFX R णे ावतील णे
+SFX R णे ावत णे
+SFX R णे ावताना णे
+SFX R णे ावतास णे
+SFX R णे ावतीस णे
+SFX R णे ावती णे
+SFX R णे ावत्या णे
+SFX R णे ावला णे
+SFX R णे ावलात णे
+SFX R णे ावलास णे
+SFX R णे ावलस णे
+SFX R णे ावलंस णे
+SFX R णे ावलय णे
+SFX R णे ावलंय णे
+SFX R णे ावलाय णे
+SFX R णे ावली णे
+SFX R णे ावलीस णे
+SFX R णे ावले णे
+SFX R णे ावलं/Z णे
+SFX R णे ावलेला णे
+SFX R णे ावलेलो णे
+SFX R णे ावलेली णे
+SFX R णे ावलेले णे
+SFX R णे ावलेलं णे
+SFX R णे ावलीत णे
+SFX R णे ावलेत णे
+SFX R णे ावलेस णे
+SFX R णे ावल्यात णे
+SFX R णे ावल्यास णे
+SFX R णे ावल्याच णे
+SFX R णे ावल्याचं णे
+SFX R णे ावलो णे
+SFX R णे ावू णे
+SFX R णे ावाल णे
+SFX R णे ावेल णे
+SFX R णे ावीन णे
+SFX R णे ावेन णे
+SFX R णे ावील णे
+SFX R णे ावा णे
+SFX R णे ावो णे
+SFX R णे ावोत णे
+SFX R णे ावावा णे
+SFX R णे ावावात णे
+SFX R णे ावावी णे
+SFX R णे ावावीत णे
+SFX R णे ावावे णे
+SFX R णे ावावेत णे
+SFX R णे ावाव्या णे
+SFX R णे ावाव्यात णे
+SFX R णे ावावास णे
+SFX R णे ावावीस णे
+SFX R णे ावावेस णे
+SFX R णे ावाव्यास णे
+SFX R णे ावून/Z णे
+SFX R णे ावशील णे
+SFX R णे ावणार/Z णे
+SFX R णे ावणारा णे
+SFX R णे ावणारी णे
+SFX R णे ावणारे णे
+SFX R णे ावणारं णे
+SFX R णे ावणं णे
+SFX R णे ावणाऱ्या/Aacd णे
+SFX R णे ावणाऱ्यां/Abcd णे
+SFX R णे ावण्या/Aacd णे
+SFX R णे ावण्यां/Abcd णे
+SFX R णे ावलेल्या/Aacd णे
+SFX R णे ावलेल्यां/Abcd णे
+SFX R णे ावल्या/Aacd णे
+SFX R णे ावणे/O णे
+
+SFX P Y 133
+SFX P णे णं णे
+SFX P णे तो णे
+SFX P णे ते णे
+SFX P णे तेय णे
+SFX P णे तोस णे
+SFX P णे तेस णे
+SFX P णे ता णे
+SFX P णे ताहेत णे
+SFX P णे ताय णे
+SFX P णे तात णे
+SFX P णे तोय णे
+SFX P णे तोयस णे
+SFX P णे तील णे
+SFX P णे त णे
+SFX P णे तं णे
+SFX P णे ताना णे
+SFX P णे तानाची णे
+SFX P णे तानाचा णे
+SFX P णे तानाचे णे
+SFX P णे तानाच्या णे
+SFX P णे तास णे
+SFX P णे तीस णे
+SFX P णे ती णे
+SFX P णे त्या णे
+SFX P णे ला णे
+SFX P णे लात णे
+SFX P णे लास णे
+SFX P णे लस णे
+SFX P णे लंस णे
+SFX P णे लय णे
+SFX P णे लंय णे
+SFX P णे तय णे
+SFX P णे तंय णे
+SFX P णे लाय णे
+SFX P णे लायस णे
+SFX P णे ली णे
+SFX P णे लीय णे
+SFX P णे लीये णे
+SFX P णे लीस णे
+SFX P णे लीत णे
+SFX P णे ले/Z णे
+SFX P णे लं णे
+SFX P णे लेला णे
+SFX P णे लेलो णे
+SFX P णे लेली णे
+SFX P णे लेले/Z णे
+SFX P णे लेलं/Z णे
+SFX P णे लेत णे
+SFX P णे लेस णे
+SFX P णे ल्यात णे
+SFX P णे ल्यास णे
+SFX P णे ल्याच णे
+SFX P णे ल्याचं णे
+SFX P णे लो/Z णे
+SFX P णे लोय णे
+SFX P णे लेय णे
+SFX P णे ू णे
+SFX P णे ाल णे
+SFX P णे ायचं/Z णे
+SFX P णे ायचंय णे
+SFX P णे ायचा/Z णे
+SFX P णे ायचाय/Z णे
+SFX P णे ायची/Z णे
+SFX P णे ायचीय/Z णे
+SFX P णे ायचे/Z णे
+SFX P णे ायचेय/Z णे
+SFX P णे ायचो णे
+SFX P णे ायच्या णे
+SFX P णे ायला/Z णे
+SFX P णे ेना णे
+SFX P णे ेनात णे
+SFX P णे ेनासं णे
+SFX P णे ेनासा णे
+SFX P णे ेनासे णे
+SFX P णे ेनाशी णे
+SFX P णे ेपर्यंत णे
+SFX P णे ेपर्यंतचा णे
+SFX P णे ेपर्यंतची णे
+SFX P णे ेपर्यंतचे णे
+SFX P णे ेपर्यंतच्या णे
+SFX P णे ेल णे
+SFX P णे ीन णे
+SFX P णे ेन णे
+SFX P णे ील णे
+SFX P णे ा णे
+SFX P णे े णे
+SFX P णे ो णे
+SFX P णे ोत णे
+SFX P णे ावयाचा णे
+SFX P णे ावयाची णे
+SFX P णे ावयाचे णे
+SFX P णे ावयाच्या णे
+SFX P णे ावयास णे
+SFX P णे ावा णे
+SFX P णे ावात णे
+SFX P णे ावासा णे
+SFX P णे ावी णे
+SFX P णे वी णे
+SFX P णे ावीत णे
+SFX P णे वीत णे
+SFX P णे ावे/Z णे
+SFX P णे वे णे
+SFX P णे ावं णे
+SFX P णे ावंस णे
+SFX P णे ावस णे
+SFX P णे ावंसं णे
+SFX P णे ावंसे णे
+SFX P णे ावसं णे
+SFX P णे ावसे णे
+SFX P णे ावेत णे
+SFX P णे ाव्या णे
+SFX P णे ाव्यात णे
+SFX P णे ावास णे
+SFX P णे ावीस णे
+SFX P णे ावीशी णे
+SFX P णे ावेस णे
+SFX P णे ावेसे णे
+SFX P णे ाव्यास णे
+SFX P णे ून णे
+SFX P णे शील णे
+SFX P णे णार/Z णे
+SFX P णे णारा णे
+SFX P णे णारी णे
+SFX P णे णारे णे
+SFX P णे णारं णे
+SFX P णे णाऱ्या/Aacd णे
+SFX P णे णाऱ्यां/Abcd णे
+SFX P णे ण्या/Aacd णे
+SFX P णे ण्यां/Abcd णे
+SFX P णे लेल्या/Aacd णे
+SFX P णे लेल्यां/Abcd णे
+SFX P णे ल्या/Aacd णे
+SFX P णे ल्यानं णे
+
+
+SFX O Y 52
+SFX O णे िणे णे
+SFX O णे िणं णे
+SFX O णे ितो णे
+SFX O णे ितोय णे
+SFX O णे िते णे
+SFX O णे ितेय णे
+SFX O णे ितोस णे
+SFX O णे ितेस णे
+SFX O णे िता णे
+SFX O णे िताय णे
+SFX O णे ितात णे
+SFX O णे ितील णे
+SFX O णे ीत णे
+SFX O णे िताना णे
+SFX O णे ितास णे
+SFX O णे ितीस णे
+SFX O णे िती णे
+SFX O णे ित्या णे
+SFX O णे िला णे
+SFX O णे िलात णे
+SFX O णे िलास णे
+SFX O णे िली णे
+SFX O णे िलीस णे
+SFX O णे िले णे
+SFX O णे िलं णे
+SFX O णे िलेला णे
+SFX O णे िलेलो णे
+SFX O णे िलेली णे
+SFX O णे िलेले णे
+SFX O णे िलेलं णे
+SFX O णे िलीत णे
+SFX O णे िलेत णे
+SFX O णे िलेस णे
+SFX O णे िलय णे
+SFX O णे िलंय णे
+SFX O णे िलेय णे
+SFX O णे िल्यात णे
+SFX O णे िल्यास णे
+SFX O णे िलो णे
+SFX O णे िशील णे
+SFX O णे िणार णे
+SFX O णे िणारा णे
+SFX O णे िणारी णे
+SFX O णे िणारे णे
+SFX O णे िणारं णे
+SFX O णे िणाऱ्या/acd णे
+SFX O णे िणाऱ्यां/bcd णे
+SFX O णे िण्या/Aacd णे
+SFX O णे िण्यां/bcd णे
+SFX O णे िलेल्या/acd णे
+SFX O णे िलेल्यां/bcd णे
+SFX O णे िल्या/Aacd णे
+
+
+SFX Z Y 2
+SFX Z 0 च .
+SFX Z 0 ही .
+
+SFX c Y 7
+SFX c 0 ला .
+SFX c 0 शी .
+SFX c 0 चा .
+SFX c 0 ची .
+SFX c 0 चे .
+SFX c 0 च्या .
+SFX c 0 चं .
+
+SFX d Y 3
+SFX d 0 स .
+SFX d 0 त .
+SFX d 0 हून .
+
+SFX a Y 2
+SFX a 0 ने .
+SFX a 0 नं .
+
+SFX b Y 3
+SFX b 0 ना .
+SFX b 0 नो .
+SFX b 0 नी .
+
+PFX m Y 4
+PFX m 0 मुख्य .
+PFX m 0 प्रधान .
+PFX m 0 महा .
+PFX m 0 उप .
+
+PFX Y Y	1
+PFX Y 0 अर्थ .
+
+PFX v Y	3
+PFX v 0 साडे .
+PFX v 0 सव्वा .
+PFX v 0 पावणे .
+
+
+SFX q Y 21
+SFX q 0 शे/acd .
+SFX q 0 शेवा .
+SFX q 0 शेवी .
+SFX q 0 शेवे .
+SFX q 0 शेव्या .
+SFX q 0 वा/e .
+SFX q 0 वे .
+SFX q 0 व्या .
+SFX q 0 व्यांदा .
+SFX q 0 दा .
+SFX q 0 वी .
+SFX q 0 वेळा .
+SFX q 0 पट .
+SFX q ीस िसा/FAacd ीस
+SFX q ीस िसां/FAbcd ीस
+SFX q ीस िशी/Aacd ीस
+SFX q ीस िसावा ीस
+SFX q ीस िसावी ीस
+SFX q ीस िसावे ीस
+SFX q ीस िसाव्या/Aacd ीस
+SFX q ीस िसाव्यांदा ीस
+
+SFX e Y 8
+SFX e ा ्या/AFacd ा
+SFX e ा ्यां/AFbcd ा
+SFX e ी ्या/AFacd ी
+SFX e ी ्यां/AFbcd ी
+SFX e ि ्या/AFacd ि
+SFX e ि ्यां/AFbcd ि
+SFX e े ्या/AFacd े
+SFX e े ्यां/AFbcd े
+
+SFX f Y 2
+SFX f 0 ा/AFacd .
+SFX f 0 ां/AFbcd .
+
+
+SFX g Y 2
+SFX g 0 ी/AFacd .
+SFX g 0 ीं/AFbcd .
+
+SFX h Y 1
+SFX h 0 ं/AFbcd .
+
+SFX i Y 1
+SFX i 0 े/AFacd .
+
+
+SFX M Y 44
+SFX M णे विणे णे
+SFX M णे वितो णे
+SFX M णे विते णे
+SFX M णे वितोस णे
+SFX M णे वितेस णे
+SFX M णे विता णे
+SFX M णे वितात णे
+SFX M णे वितील णे
+SFX M णे वित णे
+SFX M णे विताना णे
+SFX M णे वितास णे
+SFX M णे वितीस णे
+SFX M णे विती णे
+SFX M णे वित्या णे
+SFX M णे विला णे
+SFX M णे विलात णे
+SFX M णे विलास णे
+SFX M णे विली णे
+SFX M णे विलीस णे
+SFX M णे विलं णे
+SFX M णे विले णे
+SFX M णे विलेला णे
+SFX M णे विलेली णे
+SFX M णे विलेले णे
+SFX M णे विलेलं णे
+SFX M णे विलीत णे
+SFX M णे विलेत णे
+SFX M णे विलेस णे
+SFX M णे विल्यात णे
+SFX M णे विल्यास णे
+SFX M णे विलो णे
+SFX M णे विशील णे
+SFX M णे विणार णे
+SFX M णे विणारा णे
+SFX M णे विणारी णे
+SFX M णे विणारे णे
+SFX M णे विणारं णे
+SFX M णे विणाऱ्या/Aacd णे
+SFX M णे विणाऱ्यां/Abcd णे
+SFX M णे विण्या/Aacd णे
+SFX M णे विण्यां/Abcd णे
+SFX M णे विलेल्या/Aacd णे
+SFX M णे विलेल्यां/Abcd णे
+SFX M णे विल्या/Aacd णे
+
+
+SFX T Y 27
+SFX T णे लेल्या/Aacd णे
+SFX T णे लेल्यां/Abcd णे
+SFX T णे ल्या/Aacd णे
+SFX T णे 0/Fc णे
+SFX T णे लेला णे
+SFX T णे लेली णे
+SFX T णे लेले णे
+SFX T णे लेलो णे
+SFX T णे ला णे
+SFX T णे ली णे
+SFX T णे ले णे
+SFX T णे लं णे
+SFX T णे लेय णे
+SFX T णे लंय णे
+SFX T णे लय णे
+SFX T णे लेस णे
+SFX T णे लंस णे
+SFX T णे लस णे
+SFX T णे लाय णे
+SFX T णे लास णे
+SFX T णे लात णे
+SFX T णे लोय णे
+SFX T णे लायस णे
+SFX T णे लीस णे
+SFX T णे लीय णे
+SFX T णे लीये णे
+SFX T णे लेलं णे
+
+SFX j Y 1
+SFX j ा े/AFacd ा
+
+SFX k Y 1
+SFX k 0 ा/AFacd .
+
+SFX l Y 1
+SFX l 0 ी/AFacd .
+
+SFX s Y 1
+SFX s ा ्या/Aacd ा
+
+SFX w Y 3
+SFX w 0 ता .
+SFX w 0 ते/FAacd .
+SFX w 0 तां/FAbcd .
+
+SFX u Y 3
+SFX u 0 पणा/Aacd .
+SFX u 0 पणे .
+SFX u 0 पण .
+
+SFX S Y 4
+SFX S 0 0/ac .
+SFX S 0 ्स/ac .
+SFX S ग ग्ज ग
+SFX S 0 ेस/ac [सशजच]
+
+
+SFX A Y 335
+SFX A 0 अंती .
+SFX A 0 अर्थी .
+SFX A 0 आतून .
+SFX A 0 आतूनचा .
+SFX A 0 आतूनची .
+SFX A 0 आतूनचे .
+SFX A 0 आतूनच्या .
+SFX A 0 आतूनला .
+SFX A 0 आधी .
+SFX A 0 आधीचा .
+SFX A 0 आधीची .
+SFX A 0 आधीचे .
+SFX A 0 आधीच्या .
+SFX A 0 आधीला .
+SFX A 0 उलट .
+SFX A 0 उलटे .
+SFX A 0 ऐवजी .
+SFX A 0 ऐवजीचा .
+SFX A 0 ऐवजीची .
+SFX A 0 ऐवजीचे .
+SFX A 0 ऐवजीच्या .
+SFX A 0 ऐवजीला .
+SFX A 0 कडचा .
+SFX A 0 कडची .
+SFX A 0 कडचे .
+SFX A 0 कडच्या .
+SFX A 0 कडला .
+SFX A 0 कडून .
+SFX A 0 कडूनचा .
+SFX A 0 कडूनची .
+SFX A 0 कडूनचे .
+SFX A 0 कडूनच्या .
+SFX A 0 कडूनला .
+SFX A 0 कडं .
+SFX A 0 कडे .
+SFX A 0 कडेचा .
+SFX A 0 कडेची .
+SFX A 0 कडेचे .
+SFX A 0 कडेच्या .
+SFX A 0 कडेला .
+SFX A 0 कडील .
+SFX A 0 करवी .
+SFX A 0 करिता .
+SFX A 0 करिताचा .
+SFX A 0 करिताची .
+SFX A 0 करिताचे .
+SFX A 0 करिताच्या .
+SFX A 0 करिताला .
+SFX A 0 करून .
+SFX A 0 करूनचा .
+SFX A 0 करूनची .
+SFX A 0 करूनचे .
+SFX A 0 करूनच्या .
+SFX A 0 करूनला .
+SFX A 0 कारणे .
+SFX A 0 खालचा .
+SFX A 0 खालची .
+SFX A 0 खालचे .
+SFX A 0 खालच्या .
+SFX A 0 खालला .
+SFX A 0 खाली .
+SFX A 0 खालून .
+SFX A 0 खालूनचा .
+SFX A 0 खालूनची .
+SFX A 0 खालूनचे .
+SFX A 0 खालूनच्या .
+SFX A 0 खालूनला .
+SFX A 0 खेरीज .
+SFX A 0 खेरीजचा .
+SFX A 0 खेरीजची .
+SFX A 0 खेरीजचे .
+SFX A 0 खेरीजच्या .
+SFX A 0 खेरीजला .
+SFX A 0 च .
+SFX A 0 चं .
+SFX A 0 जवळ .
+SFX A 0 जवळचा .
+SFX A 0 जवळची .
+SFX A 0 जवळचे .
+SFX A 0 जवळच्या .
+SFX A 0 जवळला .
+SFX A 0 जागी .
+SFX A 0 जोगा .
+SFX A 0 जोगी .
+SFX A 0 जोगे .
+SFX A 0 ठायी .
+SFX A 0 तम .
+SFX A 0 तर .
+SFX A 0 तलं .
+SFX A 0 तला .
+SFX A 0 तली .
+SFX A 0 तले .
+SFX A 0 तल्या .
+SFX A 0 तील .
+SFX A 0 तून .
+SFX A 0 देखील .
+SFX A 0 द्वारे .
+SFX A 0 नंतर .
+SFX A 0 नंतरचा .
+SFX A 0 नंतरची .
+SFX A 0 नंतरचे .
+SFX A 0 नंतरच्या .
+SFX A 0 नंतरला .
+SFX A 0 नजीक .
+SFX A 0 नजीकचा .
+SFX A 0 नजीकची .
+SFX A 0 नजीकचे .
+SFX A 0 नजीकच्या .
+SFX A 0 नजीकला .
+SFX A 0 निमित्त .
+SFX A 0 परता .
+SFX A 0 परी .
+SFX A 0 परीस .
+SFX A 0 पर्यंत .
+SFX A 0 पर्यंतचा .
+SFX A 0 पर्यंतची .
+SFX A 0 पर्यंतचे .
+SFX A 0 पर्यंतच्या .
+SFX A 0 पर्यंतला .
+SFX A 0 पलीकडे .
+SFX A 0 पाशी .
+SFX A 0 पाशीचा .
+SFX A 0 पाशीची .
+SFX A 0 पाशीचे .
+SFX A 0 पाशीच्या .
+SFX A 0 पाशीला .
+SFX A 0 पासून .
+SFX A 0 पासूनचा .
+SFX A 0 पासूनची .
+SFX A 0 पासूनचे .
+SFX A 0 पासूनच्या .
+SFX A 0 पासूनला .
+SFX A 0 पुढचा .
+SFX A 0 पुढची .
+SFX A 0 पुढचे .
+SFX A 0 पुढच्या .
+SFX A 0 पुढला .
+SFX A 0 पुढून .
+SFX A 0 पुढूनचा .
+SFX A 0 पुढूनची .
+SFX A 0 पुढूनचे .
+SFX A 0 पुढूनच्या .
+SFX A 0 पुढूनला .
+SFX A 0 पुढे .
+SFX A 0 पुढं .
+SFX A 0 पुढील .
+SFX A 0 पूर्वी .
+SFX A 0 पूर्वीचा .
+SFX A 0 पूर्वीची .
+SFX A 0 पूर्वीचे .
+SFX A 0 पूर्वीच्या .
+SFX A 0 पूर्वीला .
+SFX A 0 पेक्षा .
+SFX A 0 पैकी .
+SFX A 0 पैकीचा .
+SFX A 0 पैकीची .
+SFX A 0 पैकीचे .
+SFX A 0 पैकीच्या .
+SFX A 0 पैकीला .
+SFX A 0 पोटी .
+SFX A 0 पोटीचा .
+SFX A 0 पोटीची .
+SFX A 0 पोटीचे .
+SFX A 0 पोटीच्या .
+SFX A 0 पोटीला .
+SFX A 0 प्रत .
+SFX A 0 प्रती .
+SFX A 0 प्रमाणं .
+SFX A 0 प्रमाणे .
+SFX A 0 प्रमाणेचा .
+SFX A 0 प्रमाणेची .
+SFX A 0 प्रमाणेचे .
+SFX A 0 प्रमाणेच्या .
+SFX A 0 प्रमाणेला .
+SFX A 0 बदली .
+SFX A 0 बदलीचा .
+SFX A 0 बदलीची .
+SFX A 0 बदलीचे .
+SFX A 0 बदलीच्या .
+SFX A 0 बदलीला .
+SFX A 0 बद्दल .
+SFX A 0 बद्दलचा .
+SFX A 0 बद्दलची .
+SFX A 0 बद्दलचे .
+SFX A 0 बद्दलच्या .
+SFX A 0 बद्दलला .
+SFX A 0 बरोबर .
+SFX A 0 बरोबरचा .
+SFX A 0 बरोबरची .
+SFX A 0 बरोबरचे .
+SFX A 0 बरोबरच्या .
+SFX A 0 बरोबरला .
+SFX A 0 बाबत .
+SFX A 0 बाहेर .
+SFX A 0 भर .
+SFX A 0 भोवती .
+SFX A 0 भोवतीचा .
+SFX A 0 भोवतीची .
+SFX A 0 भोवतीचे .
+SFX A 0 भोवतीच्या .
+SFX A 0 भोवतीला .
+SFX A 0 मधलं .
+SFX A 0 मधला .
+SFX A 0 मधली .
+SFX A 0 मधले .
+SFX A 0 मधल्या .
+SFX A 0 मधील .
+SFX A 0 मधून .
+SFX A 0 मधूनचा .
+SFX A 0 मधूनची .
+SFX A 0 मधूनचे .
+SFX A 0 मधूनच्या .
+SFX A 0 मधूनला .
+SFX A 0 मध्ये .
+SFX A 0 मागचा .
+SFX A 0 मागची .
+SFX A 0 मागचे .
+SFX A 0 मागच्या .
+SFX A 0 मागला .
+SFX A 0 मागील .
+SFX A 0 मागून .
+SFX A 0 मागूनचा .
+SFX A 0 मागूनची .
+SFX A 0 मागूनचे .
+SFX A 0 मागूनच्या .
+SFX A 0 मागूनला .
+SFX A 0 मागे .
+SFX A 0 मात्र .
+SFX A 0 मुळे .
+SFX A 0 मुळं .
+SFX A 0 योगे .
+SFX A 0 योग्य .
+SFX A 0 लागी .
+SFX A 0 वतीनं .
+SFX A 0 वतीने .
+SFX A 0 वर .
+SFX A 0 वरचं .
+SFX A 0 वरचा .
+SFX A 0 वरची .
+SFX A 0 वरचे .
+SFX A 0 वरच्या .
+SFX A 0 वरती .
+SFX A 0 वरला .
+SFX A 0 वरली .
+SFX A 0 वरील .
+SFX A 0 वरून .
+SFX A 0 वरूनचा .
+SFX A 0 वरूनची .
+SFX A 0 वरूनचे .
+SFX A 0 वरूनच्या .
+SFX A 0 वरूनला .
+SFX A 0 वाचून .
+SFX A 0 वाचूनचा .
+SFX A 0 वाचूनची .
+SFX A 0 वाचूनचे .
+SFX A 0 वाचूनच्या .
+SFX A 0 वाचूनला .
+SFX A 0 विना .
+SFX A 0 विरुद्ध .
+SFX A 0 विरुद्धचा .
+SFX A 0 विरुद्धची .
+SFX A 0 विरुद्धचे .
+SFX A 0 विरुद्धच्या .
+SFX A 0 विरुद्धला .
+SFX A 0 विशी .
+SFX A 0 विषयी .
+SFX A 0 विषयीचा .
+SFX A 0 विषयीची .
+SFX A 0 विषयीचे .
+SFX A 0 विषयीच्या .
+SFX A 0 विषयीला .
+SFX A 0 वीण .
+SFX A 0 वेगळा .
+SFX A 0 वेगळी .
+SFX A 0 वेगळे .
+SFX A 0 वेगळं .
+SFX A 0 व्यतिरिक्त .
+SFX A 0 शिवाय .
+SFX A 0 शिवायचा .
+SFX A 0 शिवायची .
+SFX A 0 शिवायचे .
+SFX A 0 शिवायच्या .
+SFX A 0 शिवायला .
+SFX A 0 संगे .
+SFX A 0 संदर्भात .
+SFX A 0 संबंधी .
+SFX A 0 संबंधीचा .
+SFX A 0 संबंधीची .
+SFX A 0 संबंधीचे .
+SFX A 0 संबंधीच्या .
+SFX A 0 संबंधीला .
+SFX A 0 सकट .
+SFX A 0 सकटचा .
+SFX A 0 सकटची .
+SFX A 0 सकटचे .
+SFX A 0 सकटच्या .
+SFX A 0 सकटला .
+SFX A 0 सम .
+SFX A 0 समक्ष .
+SFX A 0 समवेत .
+SFX A 0 समान .
+SFX A 0 समोर .
+SFX A 0 समोरचा .
+SFX A 0 समोरची .
+SFX A 0 समोरचे .
+SFX A 0 समोरच्या .
+SFX A 0 समोरला .
+SFX A 0 सवे .
+SFX A 0 सह .
+SFX A 0 सहित .
+SFX A 0 साठी/Z .
+SFX A 0 साठीचा .
+SFX A 0 साठीची .
+SFX A 0 साठीचे .
+SFX A 0 साठीच्या .
+SFX A 0 साठीला .
+SFX A 0 सारखं .
+SFX A 0 सारखा .
+SFX A 0 सारखी .
+SFX A 0 सारखे .
+SFX A 0 सारख्या .
+SFX A 0 स्तव .
+SFX A 0 हाती .
+SFX A 0 ही .
+SFX A 0 इतका .
+SFX A 0 इतकी .
+SFX A 0 इतके .
+SFX A 0 एवढा .
+SFX A 0 एवढी .
+SFX A 0 एवढे .
+SFX A 0 करता .
+SFX A 0 पुरता .
+SFX A 0 पुरती .
+SFX A 0 पुरते .
+SFX A 0 पुरत्या .

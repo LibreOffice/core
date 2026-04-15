@@ -1,0 +1,65 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module ui { module dialogs {
+
+
+/** This service enables a filter developer to register a dialog to query
+    for user options before the filter operation is performed.
+
+    <p>The user options are stored inside the com::sun::star::document::MediaDescriptor
+    and can be queried from the com::sun::star::document::MediaDescriptor by
+    the component that implements com::sun::star::document::XFilter.</p>
+
+    <p>The application will set the com::sun::star::document::MediaDescriptor
+    using the interface com::sun::star::beans::XPropertyAccess and then
+    call XExecutableDialog::execute().</p>
+
+    <p>If that method returns <code>ExecutableDialogResults::OK</code>,
+    the application will retrieve the changed com::sun::star::document::MediaDescriptor
+    back using the interface com::sun::star::beans::XPropertyAccess. The filter
+    operation is then continued, using the new com::sun::star::document::MediaDescriptor.</p>
+
+    <p>Otherwise, the filter operation is canceled.</p>
+ */
+published service FilterOptionsDialog
+{
+    /** this interface is used to set the property values of the
+        com::sun::star::document::MediaDescriptor before executing
+        the dialog and to retrieve the changed com::sun::star::document::MediaDescriptor
+
+        afterwards.
+     */
+    interface com::sun::star::beans::XPropertyAccess;
+
+    /** this interface executes a dialog that displays the options
+        for a filter.
+        If XExecutableDialog::execute()
+        returns <code>ExecutableDialogResults::OK</code>,
+        the options can be retrieved by calling
+        com::sun::star::beans::XPropertyAccess::getPropertyValues.
+     */
+    interface ::com::sun::star::ui::dialogs::XExecutableDialog;
+};
+
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

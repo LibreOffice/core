@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {  module sun {  module star {  module sheet {
+
+service DataBar
+{
+    interface XConditionEntry;
+
+    [property] boolean ShowValue;
+
+    /**
+      * See com.sun.star.sheet.DataBarAxis for possible values
+      */
+    [property] long AxisPosition;
+
+    [property] boolean UseGradient;
+
+    [property] com::sun::star::util::Color Color;
+
+    [property] com::sun::star::util::Color AxisColor;
+
+    [property] boolean UseNegativeColor;
+
+    [property, optional] com::sun::star::util::Color NegativeColor;
+
+    [property] sequence<XDataBarEntry> DataBarEntries;
+
+    /**
+      * Minimum databar length in percent of cell width.
+      *
+      * Allowed values are [0, 100) but smaller than MaximumLength.
+      */
+    [property] double MinimumLength;
+
+    /**
+      * Maximum databar length in percent of cell width.
+      *
+      * Allowed values are (0, 1000) but larger than MinimumLength.
+      */
+    [property] double MaximumLength;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,82 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "macros.inc"
+
+#ifndef DISABLE_PYUNO
+
+#include "AutoInstall/python"
+#include "AutoInstall/python_scriptprovider"
+
+Module gid_Module_Pyuno
+#ifdef ENABLE_LIBRELOGO
+    PackageInfo = "packinfo_office.txt";
+#else
+    PackageInfo = "packinfo_librelogo_disabled.txt";
+#endif
+    ParentID = gid_Module_Root_Brand;
+    Name = "PyUNO";
+    Description = "Python-UNO bridge";
+    Dirs = (gid_Dir_PythonFramework,
+            gid_Dir_PythonFramework_Versions,
+            gid_Dir_PythonFramework_Versions_ver,
+            gid_Dir_PythonFramework_Versions_ver_bin,
+            gid_Dir_PythonFramework_Versions_ver_lib,
+            gid_Dir_PythonFramework_Versions_ver_lib_pkgconfig,
+            gid_Dir_PythonFramework_Versions_ver_lib_pythonver,
+            gid_Dir_PythonFramework_Versions_ver_lib_pythonver_config,
+            gid_Dir_Py_PythonCore,
+            gid_Dir_Py_PythonCore_Bin,
+            gid_Dir_Py_PythonCore_Lib);
+    Files = (auto_python_ALL,
+             gid_File_Pyuno_Rdb,
+             gid_File_Lib_Python_So,
+             gid_File_Lib_Python3_So);
+    Unixlinks = (gid_Unixlink_Python_Headers,
+                 gid_Unixlink_Python_LibreOfficePython,
+                 gid_Unixlink_Python_Resources,
+                 gid_Unixlink_Python_Versions_Current,
+                 gid_Unixlink_Python_Versions_ver_Headers,
+                 gid_Unixlink_Python_bin_idle,
+                 gid_Unixlink_Python_bin_pydoc,
+                 gid_Unixlink_Python_bin_python,
+                 gid_Unixlink_Python_bin_pythonconfig,
+                 gid_Unixlink_Python_bin_pythonw,
+                 gid_Unixlink_Python_bin_pyvenv,
+                 gid_Unixlink_Python_libpython,
+                 gid_Unixlink_Python_libpython_m,
+                 gid_Unixlink_Python_pkgconfig,
+                 gid_Unixlink_Python_pkgconfig_m,
+                 gid_Unixlink_Python_libpython_config_a,
+                 gid_Unixlink_Python_libpython_config_dylib,
+                 gid_Unixlink_Python_libpython_m_config_a,
+                 gid_Unixlink_Python_libpython_m_config_dylib);
+    Styles = (HIDDEN_ROOT);
+End
+
+Module gid_Module_Script_Provider_For_Python
+    Name = "Script Provider For Python";
+    Description = "Script Provider For Python";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Root_Brand;
+    Files = (auto_python_scriptprovider_ALL);
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+End
+
+#endif

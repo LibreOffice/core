@@ -1,0 +1,24 @@
+#!/bin/sh
+# run always - both when upgrading as well as when erasing the package.
+# Make sure this works when converted to .deb using alien.
+if [ "$1" != "purge" ]; then
+  if [ -x /usr/bin/update-mime-database ]; then
+    update-mime-database /usr/share/mime
+  fi
+  if [ -x /usr/bin/update-desktop-database ]; then
+    update-desktop-database -q /usr/share/applications
+  fi
+  if [ -x /usr/bin/update-menus ]; then
+    update-menus
+  fi
+  if [ -e /usr/share/icons/hicolor/icon-theme.cache ] ; then
+    # touch it, just in case we cannot find the binary...
+    touch /usr/share/icons/hicolor
+    if command -v gtk-update-icon-cache; then
+      gtk-update-icon-cache /usr/share/icons/hicolor
+    fi
+    # ignore errors (e.g. when there is a cache, but no index.theme)
+    true
+  fi
+fi
+exit 0

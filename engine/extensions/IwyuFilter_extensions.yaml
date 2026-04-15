@@ -1,0 +1,70 @@
+---
+assumeFilename: extensions/source/propctrlr/formcomponenthandler.cxx
+excludelist:
+    extensions/inc/strings.hrc:
+    # Needed for TranslateId macro
+    - unotools/resmgr.hxx
+    extensions/source/abpilot/admininvokationimpl.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XWindow.hpp
+    extensions/source/abpilot/unodialogabp.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XWindow.hpp
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    extensions/source/config/ldap/ldapaccess.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    extensions/source/dbpilots/listcombowizard.cxx:
+    # Actually used
+    - com/sun/star/container/XNameAccess.hpp
+    extensions/source/dbpilots/commonpagesdbp.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XConnection.hpp
+    extensions/source/update/check/updatecheck.cxx:
+    # Needed on WIN32 for WNT_hasInternetConnection
+    - onlinecheck.hxx
+    extensions/source/update/check/updatecheckconfig.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    extensions/source/propctrlr/editpropertyhandler.cxx:
+    # Actually used
+    - com/sun/star/inspection/XObjectInspectorUI.hpp
+    extensions/source/propctrlr/cellbindinghandler.cxx:
+    # Actually used
+    - com/sun/star/inspection/XObjectInspectorUI.hpp
+    extensions/source/propctrlr/eformspropertyhandler.cxx:
+    # Actually used
+    - com/sun/star/inspection/XObjectInspectorUI.hpp
+    extensions/source/propctrlr/formcomponenthandler.cxx:
+    # Actually used
+    - com/sun/star/inspection/XObjectInspectorUI.hpp
+    # Needed for template
+    - com/sun/star/ui/dialogs/XFilePicker3.hpp
+    extensions/source/propctrlr/formlinkdialog.cxx:
+    # Needed for template
+    - com/sun/star/sdb/XSingleSelectQueryComposer.hpp
+    extensions/source/propctrlr/handlerhelper.cxx:
+    # Actually used
+    - com/sun/star/inspection/LineDescriptor.hpp
+    extensions/source/propctrlr/pcrunodialogs.cxx:
+    # Actually used
+    - com/sun/star/awt/XWindow.hpp
+    extensions/source/propctrlr/sqlcommanddesign.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XConnection.hpp
+    extensions/source/propctrlr/xsddatatypes.cxx:
+    # Actually used
+    - com/sun/star/xsd/XDataType.hpp
+    extensions/source/propctrlr/submissionhandler.cxx:
+    # Actually used
+    - com/sun/star/inspection/XObjectInspectorUI.hpp
+    extensions/source/propctrlr/selectlabeldialog.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    extensions/source/propctrlr/xsdvalidationhelper.cxx:
+    # Actually used
+    - com/sun/star/xforms/XDataTypeRepository.hpp
+    extensions/source/propctrlr/xsdvalidationpropertyhandler.cxx:
+    # Actually used
+    - com/sun/star/inspection/XObjectInspectorUI.hpp

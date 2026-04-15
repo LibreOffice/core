@@ -1,0 +1,164 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the N_("License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include <basic/sberrors.hxx>
+#include <unotools/resmgr.hxx>
+#include <comphelper/errcode.hxx>
+
+#include <utility>
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+std::pair<TranslateId, ErrCode> const RID_BASIC_START[] =
+{
+    { NC_("RID_BASIC_START", "Syntax error."), ERRCODE_BASIC_SYNTAX },
+    { NC_("RID_BASIC_START", "Return without Gosub."), ERRCODE_BASIC_NO_GOSUB },
+    { NC_("RID_BASIC_START", "Incorrect entry; please retry."), ERRCODE_BASIC_REDO_FROM_START },
+    { NC_("RID_BASIC_START", "Invalid procedure call."), ERRCODE_BASIC_BAD_ARGUMENT },
+    { NC_("RID_BASIC_START", "Overflow."), ERRCODE_BASIC_MATH_OVERFLOW },
+    { NC_("RID_BASIC_START", "Not enough memory."), ERRCODE_BASIC_NO_MEMORY },
+    { NC_("RID_BASIC_START", "Array already dimensioned."), ERRCODE_BASIC_ALREADY_DIM },
+    { NC_("RID_BASIC_START", "Index out of defined range."), ERRCODE_BASIC_OUT_OF_RANGE },
+    { NC_("RID_BASIC_START", "Duplicate definition."), ERRCODE_BASIC_DUPLICATE_DEF },
+    { NC_("RID_BASIC_START", "Division by zero."), ERRCODE_BASIC_ZERODIV },
+    { NC_("RID_BASIC_START", "Variable not defined."), ERRCODE_BASIC_VAR_UNDEFINED },
+    { NC_("RID_BASIC_START", "Data type mismatch."), ERRCODE_BASIC_CONVERSION },
+    { NC_("RID_BASIC_START", "Invalid parameter."), ERRCODE_BASIC_BAD_PARAMETER },
+    { NC_("RID_BASIC_START", "Process interrupted by user."), ERRCODE_BASIC_USER_ABORT },
+    { NC_("RID_BASIC_START", "Resume without error."), ERRCODE_BASIC_BAD_RESUME },
+    { NC_("RID_BASIC_START", "Not enough stack memory."), ERRCODE_BASIC_STACK_OVERFLOW },
+    { NC_("RID_BASIC_START", "Sub-procedure or function procedure not defined."), ERRCODE_BASIC_PROC_UNDEFINED },
+    { NC_("RID_BASIC_START", "Error loading DLL file."), ERRCODE_BASIC_BAD_DLL_LOAD },
+    { NC_("RID_BASIC_START", "Wrong DLL call convention."), ERRCODE_BASIC_BAD_DLL_CALL },
+    { NC_("RID_BASIC_START", "Internal error $(ARG1)."), ERRCODE_BASIC_INTERNAL_ERROR },
+    { NC_("RID_BASIC_START", "Invalid file name or file number."), ERRCODE_BASIC_BAD_CHANNEL },
+    { NC_("RID_BASIC_START", "File not found."), ERRCODE_BASIC_FILE_NOT_FOUND },
+    { NC_("RID_BASIC_START", "Incorrect file mode."), ERRCODE_BASIC_BAD_FILE_MODE },
+    { NC_("RID_BASIC_START", "File already open."), ERRCODE_BASIC_FILE_ALREADY_OPEN },
+    { NC_("RID_BASIC_START", "Device I/O error."), ERRCODE_BASIC_IO_ERROR },
+    { NC_("RID_BASIC_START", "File already exists."), ERRCODE_BASIC_FILE_EXISTS },
+    { NC_("RID_BASIC_START", "Incorrect record length."), ERRCODE_BASIC_BAD_RECORD_LENGTH },
+    { NC_("RID_BASIC_START", "Disk or hard drive full."), ERRCODE_BASIC_DISK_FULL },
+    { NC_("RID_BASIC_START", "Reading exceeds EOF."), ERRCODE_BASIC_READ_PAST_EOF },
+    { NC_("RID_BASIC_START", "Incorrect record number."), ERRCODE_BASIC_BAD_RECORD_NUMBER },
+    { NC_("RID_BASIC_START", "Too many files."), ERRCODE_BASIC_TOO_MANY_FILES },
+    { NC_("RID_BASIC_START", "Device not available."), ERRCODE_BASIC_NO_DEVICE },
+    { NC_("RID_BASIC_START", "Access denied."), ERRCODE_BASIC_ACCESS_DENIED },
+    { NC_("RID_BASIC_START", "Disk not ready."), ERRCODE_BASIC_NOT_READY },
+    { NC_("RID_BASIC_START", "Not implemented."), ERRCODE_BASIC_NOT_IMPLEMENTED },
+    { NC_("RID_BASIC_START", "Renaming on different drives impossible."), ERRCODE_BASIC_DIFFERENT_DRIVE },
+    { NC_("RID_BASIC_START", "Path/File access error."), ERRCODE_BASIC_ACCESS_ERROR },
+    { NC_("RID_BASIC_START", "Path not found."), ERRCODE_BASIC_PATH_NOT_FOUND },
+    { NC_("RID_BASIC_START", "Object variable not set."), ERRCODE_BASIC_NO_OBJECT },
+    { NC_("RID_BASIC_START", "Invalid string pattern."), ERRCODE_BASIC_BAD_PATTERN },
+    { NC_("RID_BASIC_START", "Use of zero not permitted."), ERRCODE_BASIC_IS_NULL },
+    { NC_("RID_BASIC_START", "DDE Error."), ERRCODE_BASIC_DDE_ERROR },
+    { NC_("RID_BASIC_START", "Awaiting response to DDE connection."), ERRCODE_BASIC_DDE_WAITINGACK },
+    { NC_("RID_BASIC_START", "No DDE channels available."), ERRCODE_BASIC_DDE_OUTOFCHANNELS },
+    { NC_("RID_BASIC_START", "No application responded to DDE connect initiation."), ERRCODE_BASIC_DDE_NO_RESPONSE },
+    { NC_("RID_BASIC_START", "Too many applications responded to DDE connect initiation."), ERRCODE_BASIC_DDE_MULT_RESPONSES },
+    { NC_("RID_BASIC_START", "DDE channel locked."), ERRCODE_BASIC_DDE_CHANNEL_LOCKED },
+    { NC_("RID_BASIC_START", "External application cannot execute DDE operation."), ERRCODE_BASIC_DDE_NOTPROCESSED },
+    { NC_("RID_BASIC_START", "Timeout while waiting for DDE response."), ERRCODE_BASIC_DDE_TIMEOUT },
+    { NC_("RID_BASIC_START", "User pressed ESCAPE during DDE operation."), ERRCODE_BASIC_DDE_USER_INTERRUPT },
+    { NC_("RID_BASIC_START", "External application busy."), ERRCODE_BASIC_DDE_BUSY },
+    { NC_("RID_BASIC_START", "DDE operation without data."), ERRCODE_BASIC_DDE_NO_DATA },
+    { NC_("RID_BASIC_START", "Data are in wrong format."), ERRCODE_BASIC_DDE_WRONG_DATA_FORMAT },
+    { NC_("RID_BASIC_START", "External application has been terminated."), ERRCODE_BASIC_DDE_PARTNER_QUIT },
+    { NC_("RID_BASIC_START", "DDE connection interrupted or modified."), ERRCODE_BASIC_DDE_CONV_CLOSED },
+    { NC_("RID_BASIC_START", "DDE method invoked with no channel open."), ERRCODE_BASIC_DDE_NO_CHANNEL },
+    { NC_("RID_BASIC_START", "Invalid DDE link format."), ERRCODE_BASIC_DDE_INVALID_LINK },
+    { NC_("RID_BASIC_START", "DDE message has been lost."), ERRCODE_BASIC_DDE_QUEUE_OVERFLOW },
+    { NC_("RID_BASIC_START", "Paste link already performed."), ERRCODE_BASIC_DDE_LINK_ALREADY_EST },
+    { NC_("RID_BASIC_START", "Link mode cannot be set due to invalid link topic."), ERRCODE_BASIC_DDE_LINK_INV_TOPIC },
+    { NC_("RID_BASIC_START", "DDE requires the DDEML.DLL file."), ERRCODE_BASIC_DDE_DLL_NOT_FOUND },
+    { NC_("RID_BASIC_START", "Module cannot be loaded; invalid format."), ERRCODE_BASIC_CANNOT_LOAD },
+    { NC_("RID_BASIC_START", "Invalid object index."), ERRCODE_BASIC_BAD_INDEX },
+    { NC_("RID_BASIC_START", "Object is not available."), ERRCODE_BASIC_NO_ACTIVE_OBJECT },
+    { NC_("RID_BASIC_START", "Incorrect property value."), ERRCODE_BASIC_BAD_PROP_VALUE },
+    { NC_("RID_BASIC_START", "This property is read-only."), ERRCODE_BASIC_PROP_READONLY },
+    { NC_("RID_BASIC_START", "This property is write only."), ERRCODE_BASIC_PROP_WRITEONLY },
+    { NC_("RID_BASIC_START", "Invalid object reference."), ERRCODE_BASIC_INVALID_OBJECT },
+    { NC_("RID_BASIC_START", "Property or method not found: $(ARG1)."), ERRCODE_BASIC_NO_METHOD },
+    { NC_("RID_BASIC_START", "Object required."), ERRCODE_BASIC_NEEDS_OBJECT },
+    { NC_("RID_BASIC_START", "Invalid use of an object."), ERRCODE_BASIC_INVALID_USAGE_OBJECT },
+    { NC_("RID_BASIC_START", "OLE Automation is not supported by this object."), ERRCODE_BASIC_NO_OLE },
+    { NC_("RID_BASIC_START", "This property or method is not supported by the object."), ERRCODE_BASIC_BAD_METHOD },
+    { NC_("RID_BASIC_START", "OLE Automation Error."), ERRCODE_BASIC_OLE_ERROR },
+    { NC_("RID_BASIC_START", "This action is not supported by given object."), ERRCODE_BASIC_BAD_ACTION },
+    { NC_("RID_BASIC_START", "Named arguments are not supported by given object."), ERRCODE_BASIC_NO_NAMED_ARGS },
+    { NC_("RID_BASIC_START", "The current locale setting is not supported by the given object."), ERRCODE_BASIC_BAD_LOCALE },
+    { NC_("RID_BASIC_START", "Named argument not found."), ERRCODE_BASIC_NAMED_NOT_FOUND },
+    { NC_("RID_BASIC_START", "Argument is not optional."), ERRCODE_BASIC_NOT_OPTIONAL },
+    { NC_("RID_BASIC_START", "Invalid number of arguments."), ERRCODE_BASIC_WRONG_ARGS },
+    { NC_("RID_BASIC_START", "Object is not a list."), ERRCODE_BASIC_NOT_A_COLL },
+    { NC_("RID_BASIC_START", "Invalid ordinal number."), ERRCODE_BASIC_BAD_ORDINAL },
+    { NC_("RID_BASIC_START", "Specified DLL function not found."), ERRCODE_BASIC_DLLPROC_NOT_FOUND },
+    { NC_("RID_BASIC_START", "Invalid clipboard format."), ERRCODE_BASIC_BAD_CLIPBD_FORMAT },
+    { NC_("RID_BASIC_START", "Object does not have this property."), ERRCODE_BASIC_PROPERTY_NOT_FOUND },
+    { NC_("RID_BASIC_START", "Object does not have this method."), ERRCODE_BASIC_METHOD_NOT_FOUND },
+    { NC_("RID_BASIC_START", "Required argument lacking."), ERRCODE_BASIC_ARG_MISSING },
+    { NC_("RID_BASIC_START", "Invalid number of arguments."), ERRCODE_BASIC_BAD_NUMBER_OF_ARGS },
+    { NC_("RID_BASIC_START", "Error executing a method."), ERRCODE_BASIC_METHOD_FAILED },
+    { NC_("RID_BASIC_START", "Unable to set property."), ERRCODE_BASIC_SETPROP_FAILED },
+    { NC_("RID_BASIC_START", "Unable to determine property."), ERRCODE_BASIC_GETPROP_FAILED },
+     // Compiler errors. These are not runtime errors.
+    { NC_("RID_BASIC_START", "Unexpected symbol: $(ARG1)."), ERRCODE_BASIC_UNEXPECTED },
+    { NC_("RID_BASIC_START", "Expected: $(ARG1)."), ERRCODE_BASIC_EXPECTED },
+    { NC_("RID_BASIC_START", "Symbol expected."), ERRCODE_BASIC_SYMBOL_EXPECTED },
+    { NC_("RID_BASIC_START", "Variable expected."), ERRCODE_BASIC_VAR_EXPECTED },
+    { NC_("RID_BASIC_START", "Label expected."), ERRCODE_BASIC_LABEL_EXPECTED },
+    { NC_("RID_BASIC_START", "Value cannot be applied."), ERRCODE_BASIC_LVALUE_EXPECTED },
+    { NC_("RID_BASIC_START", "Variable $(ARG1) already defined."), ERRCODE_BASIC_VAR_DEFINED },
+    { NC_("RID_BASIC_START", "Sub procedure or function procedure $(ARG1) already defined."), ERRCODE_BASIC_PROC_DEFINED },
+    { NC_("RID_BASIC_START", "Label $(ARG1) already defined."), ERRCODE_BASIC_LABEL_DEFINED },
+    { NC_("RID_BASIC_START", "Variable $(ARG1) not found."), ERRCODE_BASIC_UNDEF_VAR },
+    { NC_("RID_BASIC_START", "Array or procedure $(ARG1) not found."), ERRCODE_BASIC_UNDEF_ARRAY },
+    { NC_("RID_BASIC_START", "Procedure $(ARG1) not found."), ERRCODE_BASIC_UNDEF_PROC },
+    { NC_("RID_BASIC_START", "Label $(ARG1) undefined."), ERRCODE_BASIC_UNDEF_LABEL },
+    { NC_("RID_BASIC_START", "Unknown data type $(ARG1)."), ERRCODE_BASIC_UNDEF_TYPE },
+    { NC_("RID_BASIC_START", "Exit $(ARG1) expected."), ERRCODE_BASIC_BAD_EXIT },
+    { NC_("RID_BASIC_START", "Statement block still open: $(ARG1) missing."), ERRCODE_BASIC_BAD_BLOCK },
+    { NC_("RID_BASIC_START", "Parentheses do not match."), ERRCODE_BASIC_BAD_BRACKETS },
+    { NC_("RID_BASIC_START", "Symbol $(ARG1) already defined differently."), ERRCODE_BASIC_BAD_DECLARATION },
+    { NC_("RID_BASIC_START", "Parameters do not correspond to procedure."), ERRCODE_BASIC_BAD_PARAMETERS },
+    { NC_("RID_BASIC_START", "Invalid character in number."), ERRCODE_BASIC_BAD_CHAR_IN_NUMBER },
+    { NC_("RID_BASIC_START", "Array must be dimensioned."), ERRCODE_BASIC_MUST_HAVE_DIMS },
+    { NC_("RID_BASIC_START", "Else/Endif without If."), ERRCODE_BASIC_NO_IF },
+    { NC_("RID_BASIC_START", "$(ARG1) not allowed within a procedure."), ERRCODE_BASIC_NOT_IN_SUBR },
+    { NC_("RID_BASIC_START", "$(ARG1) not allowed outside a procedure."), ERRCODE_BASIC_NOT_IN_MAIN },
+    { NC_("RID_BASIC_START", "Dimension specifications do not match."), ERRCODE_BASIC_WRONG_DIMS },
+    { NC_("RID_BASIC_START", "Unknown option: $(ARG1)."), ERRCODE_BASIC_BAD_OPTION },
+    { NC_("RID_BASIC_START", "Constant $(ARG1) redefined."), ERRCODE_BASIC_CONSTANT_REDECLARED },
+    { NC_("RID_BASIC_START", "Program too large."), ERRCODE_BASIC_PROG_TOO_LARGE },
+    { NC_("RID_BASIC_START", "Strings or arrays not permitted."), ERRCODE_BASIC_NO_STRINGS_ARRAYS },
+    { NC_("RID_BASIC_START", "An exception occurred $(ARG1)."), ERRCODE_BASIC_EXCEPTION },
+    { NC_("RID_BASIC_START", "This array is fixed or temporarily locked."), ERRCODE_BASIC_ARRAY_FIX },
+    { NC_("RID_BASIC_START", "Out of string space."), ERRCODE_BASIC_STRING_OVERFLOW },
+    { NC_("RID_BASIC_START", "Expression Too Complex."), ERRCODE_BASIC_EXPR_TOO_COMPLEX },
+    { NC_("RID_BASIC_START", "Can't perform requested operation."), ERRCODE_BASIC_OPER_NOT_PERFORM },
+    { NC_("RID_BASIC_START", "Too many DLL application clients."), ERRCODE_BASIC_TOO_MANY_DLL },
+    { NC_("RID_BASIC_START", "For loop not initialized."), ERRCODE_BASIC_LOOP_NOT_INIT },
+    { NC_("RID_BASIC_START", "$(ARG1)"), ERRCODE_BASIC_COMPAT },
+    { {}, ERRCODE_NONE }
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

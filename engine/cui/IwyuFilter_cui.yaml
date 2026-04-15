@@ -1,0 +1,41 @@
+---
+assumeFilename: cui/source/options/optgenrl.cxx
+excludelist:
+    cui/source/customize/macropg.cxx:
+    # Needed for TypedWhichId macro
+    - svl/macitem.hxx
+    cui/source/customize/CommandCategoryListBox.cxx:
+    # Actually used
+    - com/sun/star/script/browse/XBrowseNode.hpp
+    cui/source/customize/cfgutil.cxx:
+    # Actually used
+    - com/sun/star/script/browse/XBrowseNode.hpp
+    cui/source/dialogs/DiagramDialog.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/PropertyValue.hpp
+    cui/source/dialogs/pastedlg.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/PropertyValue.hpp
+    cui/source/dialogs/SignSignatureLineDialog.cxx:
+    # Actually used
+    - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/security/XCertificate.hpp
+    cui/source/factory/dlgfact.cxx:
+    # Needed on WIN
+    - fileextcheckdlg.hxx
+    cui/source/dialogs/thesdlg.cxx:
+    # Actually used
+    - com/sun/star/linguistic2/XMeaning.hpp
+    - com/sun/star/linguistic2/XThesaurus.hpp
+    cui/source/dialogs/tipofthedaydlg.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/PropertyValue.hpp
+    cui/source/tabpages/numfmt.cxx:
+    # Actually used
+    - com/sun/star/frame/XModel.hpp
+    cui/source/customize/cfg.cxx:
+    # Actually used
+    - com/sun/star/ui/dialogs/XFilePicker3.hpp
+    cui/source/dialogs/AdditionsDialog.cxx:
+    # Actually needed for orcus::json::parse_error
+    - orcus/json_parser.hpp

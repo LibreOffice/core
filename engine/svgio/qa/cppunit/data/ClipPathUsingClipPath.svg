@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+
+<clipPath id="clip1">
+    <polygon id="clip1Shape" points="100,10 40,180 190,60 10,60 160,180 100,10" stroke="blue" />
+</clipPath>
+
+<clipPath id="clip2">
+    <circle id="clip2Shape" cx="100" cy="100" r="65" />
+</clipPath>
+
+
+<clipPath id="clipIntersection" clip-path="url(#clip1)">
+    <use x="0" y="0" width="200" height="200" xlink:href="#clip2Shape" />
+</clipPath>
+
+</defs>
+
+<rect x="10" y="10" width="180" height="180" fill="red"
+    clip-path="url(#clipIntersection)" transform="translate(200)" />
+
+</svg>

@@ -1,0 +1,2 @@
+These are includes which are now only used by the toolkit module, which exposes
+them via uno. Don't use these in any new code.

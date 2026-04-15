@@ -1,0 +1,38 @@
+--- nss/lib/base/item.c
++++ nss/lib/base/item.c
+@@ -182,5 +182,5 @@
+         return PR_FALSE;
+     }
+ 
+-    return nsslibc_memequal(one->data, two->data, one->size, statusOpt);
++    return one->size == 0 || nsslibc_memequal(one->data, two->data, one->size, statusOpt);
+ }
+--- nss/lib/softoken/legacydb/pk11db.c
++++ nss/lib/softoken/legacydb/pk11db.c
+@@ -65,7 +65,7 @@
+     unsigned char isModuleDBOnly;
+     unsigned char isCritical;
+     unsigned char reserved[4];
+-    unsigned char names[6]; /* enough space for the length fields */
++    unsigned char names[1]; /* +5: enough space for the length fields */
+ };
+ 
+ struct lgdbSlotDataStr {
+@@ -148,7 +148,7 @@
+         goto loser;
+     }
+ 
+-    dataLen = sizeof(lgdbData) + len + len2 + len3 + sizeof(unsigned short) +
++    dataLen = sizeof(lgdbData)+5 + len + len2 + len3 + sizeof(unsigned short) +
+               count * sizeof(lgdbSlotData);
+ 
+     data->data = (unsigned char *)PORT_ZAlloc(dataLen);
+@@ -329,7 +329,7 @@
+     }
+     if ((encoded->major == LGDB_DB_EXT1_VERSION_MAJOR) &&
+         (encoded->minor >= LGDB_DB_EXT1_VERSION_MINOR)) {
+-        CHECK_SIZE(sizeof(lgdbData));
++        CHECK_SIZE(sizeof(lgdbData)+5);
+         trustOrder = LGDB_GETLONG(encoded->trustOrder);
+         cipherOrder = LGDB_GETLONG(encoded->cipherOrder);
+         isModuleDB = (encoded->isModuleDB != 0) ? PR_TRUE : PR_FALSE;

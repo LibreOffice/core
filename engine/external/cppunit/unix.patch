@@ -1,0 +1,10 @@
+--- misc/cppunit-1.13.1/src/cppunit/UnixDynamicLibraryManager.cpp
++++ misc/build/cppunit-1.13.1/src/cppunit/UnixDynamicLibraryManager.cpp
+@@ -20,7 +20,6 @@
+ void 
+ DynamicLibraryManager::doReleaseLibrary()
+ {
+-  ::dlclose( m_libraryHandle);
+ }
+ 
+ 

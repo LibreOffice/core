@@ -1,0 +1,7 @@
+---
+assumeFilename: io/source/stm/odata.cxx
+excludelist:
+    io/source/connector/connector.hxx:
+    # Base class needs full type
+    - com/sun/star/connection/XConnection.hpp
+    - com/sun/star/connection/XConnectionBroadcaster.hpp

@@ -1,0 +1,5 @@
+IAccessible2 is an accessibility API which complements Microsoft's earlier work on MSAA.
+
+It is used for LibreOffice's Windows accessibility bridge in the winaccessibility module.
+
+IAccessible2 is available from [ https://github.com/LinuxA11y/IAccessible2/ ].

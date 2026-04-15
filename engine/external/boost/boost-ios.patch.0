@@ -1,0 +1,27 @@
+# -*- Mode: Diff -*-
+--- libs/filesystem/src/operations.cpp
++++ libs/filesystem/src/operations.cpp
+@@ -492,7 +492,11 @@
+     int err = invoke_statx(basedir_fd, p.c_str(), AT_NO_AUTOMOUNT, STATX_TYPE | STATX_MODE, &path_stat);
+ #elif defined(BOOST_FILESYSTEM_HAS_POSIX_AT_APIS)
+     struct ::stat path_stat;
++#ifdef AT_NO_AUTOMOUNT
+     int err = ::fstatat(basedir_fd, p.c_str(), &path_stat, AT_NO_AUTOMOUNT);
++#else
++    int err = ::fstatat(basedir_fd, p.c_str(), &path_stat, 0);
++#endif
+ #else
+     struct ::stat path_stat;
+     int err = ::stat(p.c_str(), &path_stat);
+@@ -553,7 +553,11 @@
+     int err = invoke_statx(basedir_fd, p.c_str(), AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT, STATX_TYPE | STATX_MODE, &path_stat);
+ #elif defined(BOOST_FILESYSTEM_HAS_POSIX_AT_APIS)
+     struct ::stat path_stat;
++#ifdef AT_NO_AUTOMOUNT
+     int err = ::fstatat(basedir_fd, p.c_str(), &path_stat, AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT);
++#else
++    int err = ::fstatat(basedir_fd, p.c_str(), &path_stat, AT_SYMLINK_NOFOLLOW);
++#endif
+ #else
+     struct ::stat path_stat;
+     int err = ::lstat(p.c_str(), &path_stat);

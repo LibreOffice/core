@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="AGs"/>
+  <block-list:block block-list:abbreviated-name="BAföG"/>
+  <block-list:block block-list:abbreviated-name="CDs"/>
+  <block-list:block block-list:abbreviated-name="ESt"/>
+  <block-list:block block-list:abbreviated-name="EStG"/>
+  <block-list:block block-list:abbreviated-name="ICs"/>
+  <block-list:block block-list:abbreviated-name="IGs"/>
+  <block-list:block block-list:abbreviated-name="KGaA"/>
+  <block-list:block block-list:abbreviated-name="KSt"/>
+  <block-list:block block-list:abbreviated-name="KStG"/>
+  <block-list:block block-list:abbreviated-name="LPs"/>
+  <block-list:block block-list:abbreviated-name="MCs"/>
+  <block-list:block block-list:abbreviated-name="OOo"/>
+  <block-list:block block-list:abbreviated-name="PCs"/>
+  <block-list:block block-list:abbreviated-name="RAe"/>
+  <block-list:block block-list:abbreviated-name="TVs"/>
+  <block-list:block block-list:abbreviated-name="USt"/>
+  <block-list:block block-list:abbreviated-name="UStG"/>
+  <block-list:block block-list:abbreviated-name="VSt"/>
+  <block-list:block block-list:abbreviated-name="WGs"/>
+</block-list:block-list>

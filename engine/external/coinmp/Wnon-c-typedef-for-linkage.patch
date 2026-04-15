@@ -1,0 +1,14 @@
+--- Clp/src/Clp_C_Interface.h
++++ Clp/src/Clp_C_Interface.h
+@@ -12,9 +12,9 @@
+ #include "Coin_C_defines.h"
+ 
+ #if defined (CLP_EXTERN_C)
+-typedef struct {
++struct Clp_Solve {
+   ClpSolve options;
+-} Clp_Solve;
++};
+ #else
+ typedef void Clp_Solve;
+ #endif

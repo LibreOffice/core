@@ -1,0 +1,42 @@
+diff --git a/include/private/gpu/ganesh/GrContext_Base.h b/include/private/gpu/ganesh/GrContext_Base.h
+index 847e76f232..e27d9454f8 100644
+--- a/include/private/gpu/ganesh/GrContext_Base.h
++++ b/include/private/gpu/ganesh/GrContext_Base.h
+@@ -20,7 +20,7 @@ class GrDirectContext;
+ struct GrContextOptions;
+ class GrBackendFormat;
+ 
+-class GrContext_Base : public SkRefCnt {
++class SK_API GrContext_Base : public SkRefCnt {
+ public:
+     ~GrContext_Base() override;
+ 
+@@ -32,7 +32,7 @@ public:
+     /*
+      * The 3D API backing this context
+      */
+-    SK_API GrBackendApi backend() const;
++    GrBackendApi backend() const;
+ 
+     /*
+      * Retrieve the default GrBackendFormat for a given SkColorType and renderability.
+@@ -41,16 +41,16 @@ public:
+      *
+      * The caller should check that the returned format is valid.
+      */
+-    SK_API GrBackendFormat defaultBackendFormat(SkColorType, GrRenderable) const;
++    GrBackendFormat defaultBackendFormat(SkColorType, GrRenderable) const;
+ 
+-    SK_API GrBackendFormat compressedBackendFormat(SkTextureCompressionType) const;
++    GrBackendFormat compressedBackendFormat(SkTextureCompressionType) const;
+ 
+     /**
+      * Gets the maximum supported sample count for a color type. 1 is returned if only non-MSAA
+      * rendering is supported for the color type. 0 is returned if rendering to this color type
+      * is not supported at all.
+      */
+-    SK_API int maxSurfaceSampleCountForColorType(SkColorType colorType) const;
++    int maxSurfaceSampleCountForColorType(SkColorType colorType) const;
+ 
+     // TODO: When the public version is gone, rename to refThreadSafeProxy and add raw ptr ver.
+     sk_sp<GrContextThreadSafeProxy> threadSafeProxy();

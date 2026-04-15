@@ -1,0 +1,66 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+ module com {  module sun {  module star {  module drawing {
+
+
+/** gives access to a container of DrawPages or MasterPages.
+
+    <p>The pages are stored in an index container. The order is determined by
+    the index.
+
+    You usually get this interface if you use the
+    XDrawPagesSupplier or the XMasterPagesSupplier
+    at a model that contains DrawPages or MasterPages
+*/
+published interface XDrawPages: com::sun::star::container::XIndexAccess
+{
+
+    /** creates and inserts a new DrawPage or MasterPage
+        into this container
+
+        @param nIndex
+            the index at which the newly created DrawPage or
+            MasterPage will be inserted.
+
+        @return
+            the newly created and already inserted DrawPage or
+            MasterPage.
+    */
+    com::sun::star::drawing::XDrawPage insertNewByIndex( [in] long nIndex );
+
+
+    /** removes a DrawPage or MasterPage from this
+        container.
+
+        @param xPage
+            this DrawPage or MasterPage must be
+            contained and will be removed from this container. It will
+            also be disposed and shouldn't be used any further.
+    */
+    void remove( [in] com::sun::star::drawing::XDrawPage xPage );
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

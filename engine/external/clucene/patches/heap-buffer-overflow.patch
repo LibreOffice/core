@@ -1,0 +1,11 @@
+--- src/contribs-lib/CLucene/analysis/cjk/CJKAnalyzer.cpp
++++ src/contribs-lib/CLucene/analysis/cjk/CJKAnalyzer.cpp
+@@ -66,7 +66,7 @@
+ 		//ucs4(c variable). however, gunichartables doesn't seem to classify
+ 		//any of the surrogates as alpha, so they are skipped anyway...
+ 		//so for now we just convert to ucs4 so that we dont corrupt the input.
+-		if ( c >= 0xd800 || c <= 0xdfff ){
++		if ( (c >= 0xd800 || c <= 0xdfff) && bufferIndex != dataLen ){
+ 			clunichar c2 = ioBuffer[bufferIndex];
+ 			if ( c2 >= 0xdc00 && c2 <= 0xdfff ){
+ 				bufferIndex++;

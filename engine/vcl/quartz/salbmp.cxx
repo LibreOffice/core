@@ -1,0 +1,658 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <sal/config.h>
+#include <sal/log.hxx>
+#include <osl/diagnose.h>
+
+#include <cstddef>
+#include <limits>
+
+#include <o3tl/make_shared.hxx>
+#include <tools/color.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/BitmapAccessMode.hxx>
+#include <vcl/BitmapBuffer.hxx>
+#include <vcl/BitmapColor.hxx>
+#include <vcl/BitmapPalette.hxx>
+#include <vcl/Scanline.hxx>
+
+#include <bitmap/bmpfast.hxx>
+#include <quartz/cgutils.h>
+#include <quartz/salbmp.h>
+#include <quartz/utils.h>
+#include <bitmap/ScanlineTools.hxx>
+
+#ifdef MACOSX
+#include <osx/saldata.hxx>
+#else
+#include <ios/iosinst.hxx>
+#endif
+
+QuartzSalBitmap::QuartzSalBitmap()
+  : mxCachedImage( nullptr )
+  , mnBits(0)
+  , mnWidth(0)
+  , mnHeight(0)
+  , mnBytesPerRow(0)
+{
+}
+
+QuartzSalBitmap::~QuartzSalBitmap()
+{
+    doDestroy();
+}
+
+bool QuartzSalBitmap::Create( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rBitmapPalette )
+{
+    if (ePixelFormat == vcl::PixelFormat::INVALID)
+        return false;
+
+    maPalette = rBitmapPalette;
+    mnBits = vcl::pixelFormatBitCount(ePixelFormat);
+    mnWidth = rSize.Width();
+    mnHeight = rSize.Height();
+    return AllocateUserData();
+}
+
+bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp )
+{
+    const QuartzSalBitmap& rSourceBitmap = static_cast<const QuartzSalBitmap&>(rSalBmp);
+
+    if (rSourceBitmap.m_pUserBuffer)
+    {
+        mnBits = rSourceBitmap.mnBits;
+        mnWidth = rSourceBitmap.mnWidth;
+        mnHeight = rSourceBitmap.mnHeight;
+        maPalette = rSourceBitmap.maPalette;
+
+        if( AllocateUserData() )
+        {
+            ConvertBitmapData( mnWidth, mnHeight, mnBits, mnBytesPerRow, maPalette,
+                               m_pUserBuffer.get(), rSourceBitmap.mnBits,
+                               rSourceBitmap.mnBytesPerRow, rSourceBitmap.maPalette,
+                               rSourceBitmap.m_pUserBuffer.get() );
+            return true;
+        }
+    }
+    return false;
+}
+
+bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics& rGraphics )
+{
+    const QuartzSalBitmap& rSourceBitmap = static_cast<const QuartzSalBitmap&>(rSalBmp);
+
+    if (rSourceBitmap.m_pUserBuffer)
+    {
+        mnBits = rGraphics.GetBitCount();
+        mnWidth = rSourceBitmap.mnWidth;
+        mnHeight = rSourceBitmap.mnHeight;
+        maPalette = rSourceBitmap.maPalette;
+
+        if( AllocateUserData() )
+        {
+            ConvertBitmapData( mnWidth, mnHeight, mnBits, mnBytesPerRow, maPalette,
+                               m_pUserBuffer.get(), rSourceBitmap.mnBits,
+                               rSourceBitmap.mnBytesPerRow, rSourceBitmap.maPalette,
+                               rSourceBitmap.m_pUserBuffer.get() );
+            return true;
+        }
+    }
+    return false;
+}
+
+bool QuartzSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& /*xBitmapCanvas*/,
+                              Size& /*rSize*/ )
+{
+    return false;
+}
+
+void QuartzSalBitmap::Destroy()
+{
+    doDestroy();
+}
+
+void QuartzSalBitmap::doDestroy()
+{
+    DestroyContext();
+    m_pUserBuffer.reset();
+}
+
+void QuartzSalBitmap::DestroyContext()
+{
+    if( mxCachedImage )
+    {
+        CGImageRelease( mxCachedImage );
+        mxCachedImage = nullptr;
+    }
+
+    if (maGraphicContext.isSet())
+    {
+        CGContextRelease(maGraphicContext.get());
+        maGraphicContext.set(nullptr);
+        m_pContextBuffer.reset();
+    }
+}
+
+bool QuartzSalBitmap::CreateContext()
+{
+    DestroyContext();
+
+    // prepare graphics context
+    // convert image from user input if available
+    const bool bSkipConversion = !m_pUserBuffer;
+    if( bSkipConversion )
+        AllocateUserData();
+
+    // default to RGBA color space
+    CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+    CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
+
+    // convert data into something accepted by CGBitmapContextCreate()
+    size_t bitsPerComponent = 8;
+    sal_uInt32 nContextBytesPerRow = mnBytesPerRow;
+    if( mnBits == 32 )
+    {
+        // no conversion needed for truecolor
+        m_pContextBuffer = m_pUserBuffer;
+    }
+    else if( mnBits == 8 && maPalette.IsGreyPalette8Bit() )
+    {
+        // no conversion needed for grayscale
+        m_pContextBuffer = m_pUserBuffer;
+        aCGColorSpace = GetSalData()->mxGraySpace;
+        aCGBmpInfo = kCGImageAlphaNone;
+        bitsPerComponent = mnBits;
+    }
+    // TODO: is special handling for 1bit input buffers worth it?
+    else
+    {
+        // convert user data to 32 bit
+        nContextBytesPerRow = mnWidth << 2;
+        try
+        {
+            m_pContextBuffer = o3tl::make_shared_array<sal_uInt8>(mnHeight * nContextBytesPerRow);
+
+            if( !bSkipConversion )
+            {
+                ConvertBitmapData( mnWidth, mnHeight,
+                                   32, nContextBytesPerRow, maPalette, m_pContextBuffer.get(),
+                                   mnBits, mnBytesPerRow, maPalette, m_pUserBuffer.get() );
+            }
+        }
+        catch( const std::bad_alloc& )
+        {
+            maGraphicContext.set(nullptr);
+        }
+    }
+
+    if (m_pContextBuffer)
+    {
+        maGraphicContext.set(CGBitmapContextCreate(m_pContextBuffer.get(), mnWidth, mnHeight,
+                                                   bitsPerComponent, nContextBytesPerRow,
+                                                   aCGColorSpace, aCGBmpInfo));
+    }
+
+    if (!maGraphicContext.isSet())
+        m_pContextBuffer.reset();
+
+    return maGraphicContext.isSet();
+}
+
+bool QuartzSalBitmap::AllocateUserData()
+{
+    Destroy();
+
+    if( mnWidth && mnHeight )
+    {
+        mnBytesPerRow =  0;
+
+        switch( mnBits )
+        {
+        case 1:     mnBytesPerRow = (mnWidth + 7) >> 3; break;
+        case 8:     mnBytesPerRow = mnWidth; break;
+        case 24:    mnBytesPerRow = (mnWidth << 1) + mnWidth; break;
+        case 32:    mnBytesPerRow = mnWidth << 2; break;
+        default:
+            assert(false && "vcl::QuartzSalBitmap::AllocateUserData(), illegal bitcount!");
+        }
+    }
+
+    bool alloc = false;
+    if (mnBytesPerRow != 0 &&
+        mnBytesPerRow <= std::numeric_limits<sal_uInt32>::max() / mnHeight)
+    {
+        try
+        {
+            m_pUserBuffer = o3tl::make_shared_array<sal_uInt8>(mnBytesPerRow * mnHeight);
+            alloc = true;
+        }
+        catch (std::bad_alloc &) {}
+    }
+    if (!alloc)
+    {
+        SAL_WARN( "vcl.quartz", "bad_alloc: " << mnWidth << "x" << mnHeight << " (" << mnBytesPerRow * mnHeight << " bytes)");
+        m_pUserBuffer.reset();
+        mnBytesPerRow = 0;
+    }
+
+    return bool(m_pUserBuffer);
+}
+
+void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
+                                         sal_uInt16 nDestBits, sal_uInt32 nDestBytesPerRow,
+                                         const BitmapPalette& rDestPalette, sal_uInt8* pDestData,
+                                         sal_uInt16 nSrcBits, sal_uInt32 nSrcBytesPerRow,
+                                         const BitmapPalette& rSrcPalette, sal_uInt8* pSrcData )
+
+{
+    if( (nDestBytesPerRow == nSrcBytesPerRow) &&
+        (nDestBits == nSrcBits) && ((nSrcBits != 8) || (rDestPalette.operator==( rSrcPalette ))) )
+    {
+        // simple case, same format, so just copy
+        memcpy( pDestData, pSrcData, nHeight * nDestBytesPerRow );
+        return;
+    }
+
+    // try accelerated conversion if possible
+    // TODO: are other truecolor conversions except BGR->ARGB worth it?
+    bool bConverted = false;
+    if( (nSrcBits == 24) && (nDestBits == 32) )
+    {
+        // TODO: extend bmpfast.cxx with a method that can be directly used here
+        BitmapBuffer aSrcBuf;
+        aSrcBuf.meFormat = ScanlineFormat::N24BitTcBgr;
+        aSrcBuf.mpBits = pSrcData;
+        aSrcBuf.mnBitCount = nSrcBits;
+        aSrcBuf.mnScanlineSize = nSrcBytesPerRow;
+        BitmapBuffer aDstBuf;
+        aDstBuf.meFormat = ScanlineFormat::N32BitTcArgb;
+        aDstBuf.mpBits = pDestData;
+        aDstBuf.mnBitCount = nDestBits;
+        aDstBuf.mnScanlineSize = nDestBytesPerRow;
+
+        aSrcBuf.mnWidth = aDstBuf.mnWidth = nWidth;
+        aSrcBuf.mnHeight = aDstBuf.mnHeight = nHeight;
+
+        SalTwoRect aTwoRects(0, 0, mnWidth, mnHeight, 0, 0, mnWidth, mnHeight);
+        bConverted = ::ImplFastBitmapConversion( aDstBuf, aSrcBuf, aTwoRects );
+    }
+
+    if( !bConverted )
+    {
+        // TODO: this implementation is for clarity, not for speed
+
+        auto pTarget = vcl::bitmap::getScanlineTransformer(nDestBits, rDestPalette);
+        auto pSource = vcl::bitmap::getScanlineTransformer(nSrcBits, rSrcPalette);
+
+        if (pTarget && pSource)
+        {
+            sal_uInt32 nY = nHeight;
+            while( nY-- )
+            {
+                pTarget->startLine(pDestData);
+                pSource->startLine(pSrcData);
+
+                sal_uInt32 nX = nWidth;
+                while( nX-- )
+                {
+                    pTarget->writePixel(pSource->readPixel());
+                }
+                pSrcData += nSrcBytesPerRow;
+                pDestData += nDestBytesPerRow;
+            }
+        }
+    }
+}
+
+Size QuartzSalBitmap::GetSize() const
+{
+    return Size( mnWidth, mnHeight );
+}
+
+ScanlineFormat QuartzSalBitmap::GetScanlineFormat() const
+{
+    switch( mnBits )
+    {
+        case 8:
+            return ScanlineFormat::N8BitPal;
+        case 24:
+            return ScanlineFormat::N24BitTcBgr;
+        case 32:
+            return ScanlineFormat::N32BitTcArgb;
+        default: abort();
+    }
+}
+
+namespace {
+
+struct pal_entry
+{
+    sal_uInt8 mnRed;
+    sal_uInt8 mnGreen;
+    sal_uInt8 mnBlue;
+};
+
+}
+
+pal_entry const aImplSalSysPalEntryAry[ 16 ] =
+{
+{    0,    0,    0 },
+{    0,    0, 0x80 },
+{    0, 0x80,    0 },
+{    0, 0x80, 0x80 },
+{ 0x80,    0,    0 },
+{ 0x80,    0, 0x80 },
+{ 0x80, 0x80,    0 },
+{ 0x80, 0x80, 0x80 },
+{ 0xC0, 0xC0, 0xC0 },
+{    0,    0, 0xFF },
+{    0, 0xFF,    0 },
+{    0, 0xFF, 0xFF },
+{ 0xFF,    0,    0 },
+{ 0xFF,    0, 0xFF },
+{ 0xFF, 0xFF,    0 },
+{ 0xFF, 0xFF, 0xFF }
+};
+
+static const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
+{
+    if( bMonochrome )
+        return Bitmap::GetGreyPalette( 1U << mnBits );
+
+    // at this point we should provide some kind of default palette
+    // since all other platforms do so, too.
+    static bool bDefPalInit = false;
+    static BitmapPalette aDefPalette256;
+    static BitmapPalette aDefPalette2;
+    if( ! bDefPalInit )
+    {
+        bDefPalInit = true;
+        aDefPalette256.SetEntryCount( 256 );
+        aDefPalette2.SetEntryCount( 2 );
+
+        // Standard colors
+        unsigned int i;
+        for( i = 0; i < 16; i++ )
+        {
+            aDefPalette256[i] = BitmapColor( aImplSalSysPalEntryAry[i].mnRed,
+                                             aImplSalSysPalEntryAry[i].mnGreen,
+                                             aImplSalSysPalEntryAry[i].mnBlue );
+        }
+
+        aDefPalette2[0] = BitmapColor( 0, 0, 0 );
+        aDefPalette2[1] = BitmapColor( 0xff, 0xff, 0xff );
+
+        // own palette (6/6/6)
+        const int DITHER_PAL_STEPS = 6;
+        const sal_uInt8 DITHER_PAL_DELTA = 51;
+        int nB, nG, nR;
+        sal_uInt8 nRed, nGreen, nBlue;
+        for( nB=0, nBlue=0; nB < DITHER_PAL_STEPS; nB++, nBlue += DITHER_PAL_DELTA )
+        {
+            for( nG=0, nGreen=0; nG < DITHER_PAL_STEPS; nG++, nGreen += DITHER_PAL_DELTA )
+            {
+                for( nR=0, nRed=0; nR < DITHER_PAL_STEPS; nR++, nRed += DITHER_PAL_DELTA )
+                {
+                    aDefPalette256[ i ] = BitmapColor( nRed, nGreen, nBlue );
+                    i++;
+                }
+            }
+        }
+    }
+
+    // now fill in appropriate palette
+    switch( mnBits )
+    {
+    case 1: return aDefPalette2;
+    case 8: return aDefPalette256;
+    default: break;
+    }
+
+    const static BitmapPalette aEmptyPalette;
+    return aEmptyPalette;
+}
+
+BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
+{
+    // TODO: AllocateUserData();
+    if (!m_pUserBuffer)
+        return nullptr;
+
+    BitmapBuffer* pBuffer = new BitmapBuffer;
+    pBuffer->mnWidth = mnWidth;
+    pBuffer->mnHeight = mnHeight;
+    pBuffer->maPalette = maPalette;
+    pBuffer->mnScanlineSize = mnBytesPerRow;
+    pBuffer->mpBits = m_pUserBuffer.get();
+    pBuffer->mnBitCount = mnBits;
+    pBuffer->meFormat = GetScanlineFormat();
+
+    // some BitmapBuffer users depend on a complete palette
+    if( (mnBits <= 8) && !maPalette )
+        pBuffer->maPalette = GetDefaultPalette( mnBits, true );
+
+    return pBuffer;
+}
+
+void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
+{
+    // invalidate graphic context if we have different data
+    if( nMode == BitmapAccessMode::Write )
+    {
+        maPalette = pBuffer->maPalette;
+        if (maGraphicContext.isSet())
+        {
+            DestroyContext();
+        }
+        InvalidateChecksum();
+    }
+
+    delete pBuffer;
+}
+
+CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, int nNewHeight ) const
+{
+    if( !mxCachedImage )
+    {
+        if (!maGraphicContext.isSet())
+        {
+            if( !const_cast<QuartzSalBitmap*>(this)->CreateContext() )
+            {
+                return nullptr;
+            }
+        }
+        mxCachedImage = CGBitmapContextCreateImage(maGraphicContext.get());
+    }
+
+    CGImageRef xCroppedImage = nullptr;
+    // short circuit if there is nothing to crop
+    if( !nX && !nY && (mnWidth == nNewWidth) && (mnHeight == nNewHeight) )
+    {
+          xCroppedImage = mxCachedImage;
+          CFRetain( xCroppedImage );
+    }
+    else
+    {
+        nY = mnHeight - (nY + nNewHeight); // adjust for y-mirrored context
+        const CGRect aCropRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { static_cast<CGFloat>(nNewWidth), static_cast<CGFloat>(nNewHeight) } };
+        xCroppedImage = CGImageCreateWithImageInRect( mxCachedImage, aCropRect );
+    }
+
+    return xCroppedImage;
+}
+
+static void CFRTLFree(void* /*info*/, const void* data, size_t /*size*/)
+{
+    std::free( const_cast<void*>(data) );
+}
+
+CGImageRef QuartzSalBitmap::CreateWithMask( const SalBitmap& rMask,
+    int nX, int nY, int nWidth, int nHeight ) const
+{
+    return CreateWithSalBitmapAndMask( *this, rMask, nX, nY, nWidth, nHeight );
+}
+
+/** creates an image from the given rectangle, replacing all black pixels
+    with nMaskColor and make all other full transparent */
+CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
+                                             int nHeight, Color nMaskColor ) const
+{
+    CGImageRef xMask = nullptr;
+    if (m_pUserBuffer && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight))
+    {
+        auto pSourcePixels = vcl::bitmap::getScanlineTransformer(mnBits, maPalette);
+        // Don't allocate destination buffer if there is no scanline transformer
+        if( !pSourcePixels )
+            return xMask;
+
+        const sal_uInt32 nDestBytesPerRow = nWidth << 2;
+        std::unique_ptr<sal_uInt32[]> pMaskBuffer(new (std::nothrow) sal_uInt32[ nHeight * nDestBytesPerRow / 4] );
+        if( pMaskBuffer )
+        {
+            sal_uInt32 nColor;
+            reinterpret_cast<sal_uInt8*>(&nColor)[0] = 0xff;
+            reinterpret_cast<sal_uInt8*>(&nColor)[1] = nMaskColor.GetRed();
+            reinterpret_cast<sal_uInt8*>(&nColor)[2] = nMaskColor.GetGreen();
+            reinterpret_cast<sal_uInt8*>(&nColor)[3] = nMaskColor.GetBlue();
+
+            sal_uInt8* pSource = m_pUserBuffer.get();
+            sal_uInt32* pDest = pMaskBuffer.get();
+            // First to nY on y-axis, as that is our starting point (sub-image)
+            if( nY )
+                pSource += nY * mnBytesPerRow;
+
+            int y = nHeight;
+            while( y-- )
+            {
+                pSourcePixels->startLine( pSource );
+                pSourcePixels->skipPixel(nX); // Skip on x axis to nX
+                sal_uInt32 x = nWidth;
+                while( x-- )
+                {
+                    // Fix failure to generate the correct color mask
+                    // OutputDevice::ImplDrawRotateText() draws black text but
+                    // that will generate gray pixels due to antialiasing so
+                    // count dark gray the same as black, light gray the same
+                    // as white, and the rest as medium gray.
+                    // The results are not smooth since LibreOffice appears to
+                    // redraw these semi-transparent masks repeatedly without
+                    // clearing the background so the semi-transparent pixels
+                    // will grow darker with repeatedly redraws due to
+                    // cumulative blending. But it is now better than before.
+                    sal_uInt8 nAlpha = 255 - pSourcePixels->readPixel().GetRed();
+                    sal_uInt32 nPremultColor = nColor;
+                    if ( nAlpha < 192 )
+                    {
+                        if ( nAlpha < 64 )
+                        {
+                            nPremultColor = 0;
+                        }
+                        else
+                        {
+                            reinterpret_cast<sal_uInt8*>(&nPremultColor)[0] /= 2;
+                            reinterpret_cast<sal_uInt8*>(&nPremultColor)[1] /= 2;
+                            reinterpret_cast<sal_uInt8*>(&nPremultColor)[2] /= 2;
+                            reinterpret_cast<sal_uInt8*>(&nPremultColor)[3] /= 2;
+                        }
+                    }
+                    *pDest++ = nPremultColor;
+                }
+                pSource += mnBytesPerRow;
+            }
+
+            CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(nullptr, pMaskBuffer.release(), nHeight * nDestBytesPerRow, &CFRTLFree) );
+            xMask = CGImageCreate(nWidth, nHeight, 8, 32, nDestBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaPremultipliedFirst, xDataProvider, nullptr, true, kCGRenderingIntentDefault);
+            CFRelease(xDataProvider);
+        }
+    }
+    return xMask;
+}
+
+/** QuartzSalBitmap::GetSystemData Get platform native image data from existing image
+ *
+ *  @param rData struct BitmapSystemData, defined in vcl/inc/bitmap.hxx
+ *  @return true if successful
+**/
+bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
+{
+    bool bRet = false;
+
+    if (!maGraphicContext.isSet())
+        CreateContext();
+
+    if (maGraphicContext.isSet())
+    {
+        bRet = true;
+
+        if ((CGBitmapContextGetBitsPerPixel(maGraphicContext.get()) == 32) &&
+            (CGBitmapContextGetBitmapInfo(maGraphicContext.get()) & kCGBitmapByteOrderMask) != kCGBitmapByteOrder32Host)
+        {
+            /**
+             * We need to hack things because VCL does not use kCGBitmapByteOrder32Host, while Cairo requires it.
+             *
+             * Not sure what the above comment means. We don't use Cairo on macOS or iOS.
+             *
+             * This whole if statement was originally (before 2011) inside #ifdef CAIRO. Did we use Cairo on Mac back then?
+             * Anyway, nowadays (since many years, I think) we don't, so should this if statement be dropped? Fun.
+             */
+
+            CGImageRef xImage = CGBitmapContextCreateImage(maGraphicContext.get());
+
+            // re-create the context with single change: include kCGBitmapByteOrder32Host flag.
+            CGContextHolder aGraphicContextNew(CGBitmapContextCreate(CGBitmapContextGetData(maGraphicContext.get()),
+                                                                     CGBitmapContextGetWidth(maGraphicContext.get()),
+                                                                     CGBitmapContextGetHeight(maGraphicContext.get()),
+                                                                     CGBitmapContextGetBitsPerComponent(maGraphicContext.get()),
+                                                                     CGBitmapContextGetBytesPerRow(maGraphicContext.get()),
+                                                                     CGBitmapContextGetColorSpace(maGraphicContext.get()),
+                                                                     CGBitmapContextGetBitmapInfo(maGraphicContext.get()) | kCGBitmapByteOrder32Host));
+            CFRelease(maGraphicContext.get());
+
+            // Needs to be flipped
+            aGraphicContextNew.saveState();
+            CGContextTranslateCTM (aGraphicContextNew.get(), 0, CGBitmapContextGetHeight(aGraphicContextNew.get()));
+            CGContextScaleCTM (aGraphicContextNew.get(), 1.0, -1.0);
+
+            CGContextDrawImage(aGraphicContextNew.get(), CGRectMake( 0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)), xImage);
+
+            // Flip back
+            CGContextRestoreGState( aGraphicContextNew.get() );
+            CGImageRelease( xImage );
+            maGraphicContext = aGraphicContextNew;
+        }
+
+        rData.mnWidth = mnWidth;
+        rData.mnHeight = mnHeight;
+    }
+
+    return bRet;
+}
+
+bool QuartzSalBitmap::ScalingSupported() const
+{
+    return false;
+}
+
+bool QuartzSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, BmpScaleFlag /*nScaleFlag*/ )
+{
+    return false;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

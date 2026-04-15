@@ -1,0 +1,18 @@
+--- a/nss/nss/lib/sqlite/sqlite3.c
++++ b/nss/nss/lib/sqlite/sqlite3.c
+@@ -36136,6 +36136,15 @@
+ static int full_fsync(int fd, int fullSync, int dataOnly){
+   int rc;
+ 
++  static int disabledKnown = 0, disabled = 0;
++  if (!disabledKnown)
++  {
++    disabled = getenv("SAL_DISABLE_FSYNC") != NULL;
++    disabledKnown = 1;
++  }
++  if (disabled)
++    return 0;
++
+   /* The following "ifdef/elif/else/" block has the same structure as
+   ** the one below. It is replicated here solely to avoid cluttering 
+   ** up the real code with the UNUSED_PARAMETER() macros.

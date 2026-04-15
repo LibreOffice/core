@@ -1,0 +1,20 @@
+/*
+    This file is for the grammar of the UNO commands.
+    It has two modes: one with parameters and one without.
+*/
+
+UNOCommand:
+    'Send UNO Command' '(' uno_command_name=STRING ')'  (parameters=parameter)?
+;
+
+parameter:
+    '{'  parameter_data *= data ','? '}'
+;
+
+data:
+     ','? key=STRING ':' value= value_type
+;
+
+value_type:
+    INT|ID
+;

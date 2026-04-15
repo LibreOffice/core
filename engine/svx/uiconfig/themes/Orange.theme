@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Orange">
+    <theme-colors name="Orange">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#362010" />
+        <color name="light2" color="#F2EBE6" />
+        <color name="accent1" color="#D15D24" />
+        <color name="accent2" color="#9E3F3F" />
+        <color name="accent3" color="#B53C24" />
+        <color name="accent4" color="#A67C53" />
+        <color name="accent5" color="#C49149" />
+        <color name="accent6" color="#94763B" />
+        <color name="hyperlink" color="#4747B3" />
+        <color name="followed-hyperlink" color="#6B3D99" />
+    </theme-colors>
+</theme>

@@ -1,0 +1,98 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#pragma once
+
+#include <svx/Palette.hxx>
+#include <rtl/ustring.hxx>
+#include <svx/xtable.hxx>
+#include <svx/theme/ThemeColorPaletteManager.hxx>
+#include <vcl/ColorDialog.hxx>
+
+#include <deque>
+#include <vector>
+#include <memory>
+#include <set>
+
+namespace svx { class ToolboxButtonColorUpdaterBase; }
+namespace weld { class Window; }
+namespace tools { class JsonWriter; }
+
+class SVXCORE_DLLPUBLIC PaletteManager : public std::enable_shared_from_this<PaletteManager>
+{
+    struct ColorEntry {
+        OUString hexCode;
+        OUString name;
+    };
+
+    const sal_uInt16        mnMaxRecentColors;
+
+    sal_uInt16              mnNumOfPalettes;
+    sal_uInt16              mnCurrentPalette;
+
+    tools::Long                    mnColorCount;
+    svx::ToolboxButtonColorUpdaterBase* mpBtnUpdater;
+
+    XColorListRef           mpColorList;
+    std::deque<NamedColor>  maRecentColors;
+    std::vector<std::unique_ptr<Palette>> m_Palettes;
+
+    ColorSelectFunction maColorSelectFunction;
+
+    std::unique_ptr<ColorDialog> m_pColorDlg;
+    std::optional<svx::ThemePaletteCollection> moThemePaletteCollection;
+
+public:
+    PaletteManager();
+    ~PaletteManager();
+    PaletteManager(const PaletteManager&) = delete;
+    PaletteManager& operator=(const PaletteManager&) = delete;
+    void        LoadPalettes();
+    void        ReloadColorSet(SvxColorValueSet& rColorSet);
+    void        ReloadColorSet(weld::IconView& pIconView);
+    void        ReloadRecentColorSet(weld::IconView& pIconView);
+    std::vector<OUString> GetPaletteList();
+    void SetPalette(sal_Int32 nPos, bool bPosOnly = false);
+    sal_Int32   GetPalette() const;
+    sal_Int32   GetPaletteCount() const { return mnNumOfPalettes; }
+    OUString    GetPaletteName();
+    const OUString & GetSelectedPalettePath();
+
+    std::vector< NamedColor >        GetColors() const;
+    std::vector< NamedColor >        GetRecentColors() const;
+    void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName, bool bFront = true);
+    void        SetSplitButtonColor(const NamedColor& rColor);
+
+    void        SetBtnUpdater(svx::ToolboxButtonColorUpdaterBase* pBtnUpdater);
+    void        PopupColorPicker(weld::Window* pParent, const OUString& aCommand, const Color& rInitialColor);
+
+    void        SetColorSelectFunction(const ColorSelectFunction& aColorSelectFunction);
+
+    bool IsThemePaletteSelected() const;
+
+    static bool GetThemeAndEffectIndex(sal_uInt16 nItemId, sal_uInt16& rThemeIndex, sal_uInt16& rEffectIndex);
+    bool GetLumModOff(sal_uInt16 nThemeIndex, sal_uInt16 nEffect, sal_Int16& rLumMod, sal_Int16& rLumOff);
+
+    static void DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor);
+
+    /// Appends node for Document Colors into the ptree
+    static void generateJSON(tools::JsonWriter& aTree, const std::set<Color>& rColors);
+    static void generateColorNamesJSON(tools::JsonWriter& aTree);
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

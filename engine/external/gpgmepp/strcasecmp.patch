@@ -1,0 +1,14 @@
+--- src/key.c	2024-11-08 20:45:01.826019597 +0100
++++ src/key.c	2024-11-08 20:46:15.369716357 +0100
+@@ -19,6 +19,10 @@
+  * SPDX-License-Identifier: LGPL-2.1-or-later
+  */
+ 
++#ifdef _MSC_VER
++#  define strcasecmp _stricmp
++#endif
++
+ #if HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+

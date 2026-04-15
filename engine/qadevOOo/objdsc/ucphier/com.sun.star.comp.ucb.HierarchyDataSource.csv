@@ -1,0 +1,6 @@
+"HierarchyDataSource";"com::sun::star::lang::XComponent";"dispose()"
+"HierarchyDataSource";"com::sun::star::lang::XComponent";"addEventListener()"
+"HierarchyDataSource";"com::sun::star::lang::XComponent";"removeEventListener()"
+"HierarchyDataSource";"com::sun::star::lang::XMultiServiceFactory";"createInstance()"
+"HierarchyDataSource";"com::sun::star::lang::XMultiServiceFactory";"createInstanceWithArguments()"
+"HierarchyDataSource";"com::sun::star::lang::XMultiServiceFactory";"getAvailableServiceNames()"

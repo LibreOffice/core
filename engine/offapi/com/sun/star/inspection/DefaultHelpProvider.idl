@@ -1,0 +1,52 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module inspection {
+
+interface XObjectInspectorUI;
+
+
+/** implements a component which can default-fill the help section of an
+    ObjectInspector.
+
+    <p>The component registers a XPropertyControlObserver at an
+    XObjectInspectoryUI interface. Whenever it then is notified
+    of a XPropertyControl getting the focus, it will try to deduce
+    the extended help text of this control's window, and set this help text at the
+    object inspector's help section.</p>
+ */
+service DefaultHelpProvider : com::sun::star::uno::XInterface
+{
+    /** creates a help provider instance
+        @param InspectorUI
+            provides access to the UI of the ObjectInspector which should be
+            observed. Must not be `NULL`.
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given inspector UI is `NULL`.
+    */
+    create( [in] XObjectInspectorUI InspectorUI )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+
+}; }; }; };
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

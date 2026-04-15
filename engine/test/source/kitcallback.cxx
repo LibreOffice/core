@@ -1,0 +1,210 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <test/kitcallback.hxx>
+
+#include <COKit/COKitEnums.h>
+#include <rtl/strbuf.hxx>
+#include <tools/gen.hxx>
+#include <comphelper/kit.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/sidebar/SidebarDockingWindow.hxx>
+
+TestKitCallbackWrapper::TestKitCallbackWrapper(COKitCallback callback, void* data)
+    : Idle("TestKitCallbackWrapper flush timer")
+    , m_callback(callback)
+    , m_data(data)
+{
+    // Flushing timer needs to run with the lowest priority, so that all pending tasks
+    // such as invalidations are processed before it.
+    SetPriority(TaskPriority::LOWEST);
+}
+
+void TestKitCallbackWrapper::clear()
+{
+    m_viewId = -1;
+    m_updatedTypes.clear();
+    m_updatedTypesPerViewId.clear();
+}
+
+inline void TestKitCallbackWrapper::startTimer()
+{
+    if (!IsActive())
+        Start();
+}
+
+constexpr int NO_VIEWID = -1;
+
+inline void TestKitCallbackWrapper::callCallback(int nType, const char* pPayload, int nViewId)
+{
+    discardUpdatedTypes(nType, nViewId);
+    m_callback(nType, pPayload, m_data);
+    startTimer();
+}
+
+void TestKitCallbackWrapper::viewCallback(int nType, const rtl::OString& pPayload)
+{
+    callCallback(nType, pPayload.getStr(), NO_VIEWID);
+}
+
+void TestKitCallbackWrapper::viewCallbackWithViewId(int nType, const rtl::OString& pPayload,
+                                                    int nViewId)
+{
+    callCallback(nType, pPayload.getStr(), nViewId);
+}
+
+void TestKitCallbackWrapper::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
+                                                         int nMode)
+{
+    OStringBuffer buf(64);
+    if (pRect)
+        buf.append(pRect->toString());
+    else
+        buf.append("EMPTY");
+    if (comphelper::COKit::isPartInInvalidation())
+    {
+        buf.append(", " + OString::number(static_cast<sal_Int32>(nPart)) + ", "
+                   + OString::number(static_cast<sal_Int32>(nMode)));
+    }
+    callCallback(KIT_CALLBACK_INVALIDATE_TILES, buf.makeStringAndClear().getStr(), NO_VIEWID);
+}
+
+// TODO This is probably a pointless code duplication with CallbackFlushHandler,
+// and using this in unittests also means that CallbackFlushHandler does not get
+// tested as thoroughly as it could. On the other hand, this class is simpler,
+// so debugging those unittests should also be simpler. The proper solution
+// is presumably this class using CallbackFlushHandler internally by default,
+// but having an option to use this simpler code when needed.
+
+void TestKitCallbackWrapper::viewUpdatedCallback(int nType)
+{
+    if (std::find(m_updatedTypes.begin(), m_updatedTypes.end(), nType) == m_updatedTypes.end())
+    {
+        m_updatedTypes.push_back(nType);
+        startTimer();
+    }
+}
+
+void TestKitCallbackWrapper::viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId)
+{
+    const PerViewIdData data{ nType, nViewId, nSourceViewId };
+    auto& l = m_updatedTypesPerViewId;
+    // The source view doesn't matter for uniqueness, just keep the latest one.
+    auto it = std::find_if(l.begin(), l.end(), [data](const PerViewIdData& other) {
+        return data.type == other.type && data.viewId == other.viewId;
+    });
+    if (it != l.end())
+        *it = data;
+    else
+        l.push_back(data);
+    startTimer();
+}
+
+void TestKitCallbackWrapper::viewAddPendingInvalidateTiles()
+{
+    // Invoke() will call flushPendingKitInvalidateTiles().
+    startTimer();
+}
+
+void TestKitCallbackWrapper::discardUpdatedTypes(int nType, int nViewId)
+{
+    // If a callback is called directly with an event, drop the updated flag for it, since
+    // the direct event replaces it.
+    for (auto it = m_updatedTypes.begin(); it != m_updatedTypes.end();)
+    {
+        if (*it == nType)
+            it = m_updatedTypes.erase(it);
+        else
+            ++it;
+    }
+    // If we do not have a specific view id, drop flag for all views.
+    bool allViewIds = false;
+    if (nViewId < 0)
+        allViewIds = true;
+    if (nType == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR
+        && !comphelper::COKit::isViewIdForVisCursorInvalidation())
+        allViewIds = true;
+    for (auto it = m_updatedTypesPerViewId.begin(); it != m_updatedTypesPerViewId.end();)
+    {
+        if (it->type == nType && (allViewIds || it->viewId == nViewId))
+            it = m_updatedTypesPerViewId.erase(it);
+        else
+            ++it;
+    }
+}
+
+void TestKitCallbackWrapper::flushKitData()
+{
+    if (m_updatedTypes.empty() && m_updatedTypesPerViewId.empty())
+        return;
+    // Ask for payloads of all the pending types that need updating, and call the generic callback with that data.
+    assert(m_viewId >= 0);
+    SfxViewShell* viewShell = SfxViewShell::GetFirst(false, [this](const SfxViewShell& shell) {
+        return shell.GetViewShellId().get() == m_viewId;
+    });
+    assert(viewShell != nullptr);
+    // First move data to local structures, so that callbacks don't possibly modify it.
+    std::vector<int> updatedTypes;
+    std::swap(updatedTypes, m_updatedTypes);
+    std::vector<PerViewIdData> updatedTypesPerViewId;
+    std::swap(updatedTypesPerViewId, m_updatedTypesPerViewId);
+
+    for (int type : updatedTypes)
+    {
+        std::optional<OString> payload = viewShell->getKitPayload(type, m_viewId);
+        if (payload)
+            viewCallback(type, *payload);
+    }
+    for (const PerViewIdData& data : updatedTypesPerViewId)
+    {
+        viewShell = SfxViewShell::GetFirst(false, [data](const SfxViewShell& shell) {
+            return shell.GetViewShellId().get() == data.sourceViewId;
+        });
+        assert(viewShell != nullptr);
+        std::optional<OString> payload = viewShell->getKitPayload(data.type, data.viewId);
+        if (payload)
+            viewCallbackWithViewId(data.type, *payload, data.viewId);
+    }
+}
+
+void TestKitCallbackWrapper::Invoke()
+{
+    // Timer timeout, flush any possibly pending data.
+    for (SfxViewShell* viewShell = SfxViewShell::GetFirst(false); viewShell != nullptr;
+         viewShell = SfxViewShell::GetNext(*viewShell, false))
+    {
+        viewShell->flushPendingKitInvalidateTiles();
+    }
+    flushKitData();
+}
+
+SfxChildWindow* TestKitCallbackWrapper::InitializeSidebar()
+{
+    // in init.cxx we do setupSidebar which creates the controller, do it here
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    assert(pViewShell);
+
+    SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+    rViewFrame.ShowChildWindow(SID_SIDEBAR);
+    SfxChildWindow* pSideBar = rViewFrame.GetChildWindow(SID_SIDEBAR);
+    assert(pSideBar);
+
+    auto pDockingWin = dynamic_cast<sfx2::sidebar::SidebarDockingWindow*>(pSideBar->GetWindow());
+    assert(pDockingWin);
+
+    pDockingWin->GetOrCreateSidebarController(); // just to create the controller
+
+    return pSideBar;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

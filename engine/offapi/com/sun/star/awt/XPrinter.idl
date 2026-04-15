@@ -1,0 +1,90 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+ module com {  module sun {  module star {  module awt {
+
+
+/** represents a virtual printer.
+
+    <p>All properties are vetoable properties.
+    If you change the properties between a call to
+    com::sun::star::awt::XPrinter::startPage() and a call
+    to com::sun::star::awt::XPrinter::endPage(),
+    a com::sun::star::beans::PropertyVetoException is
+    thrown.</p>
+ */
+published interface XPrinter: com::sun::star::awt::XPrinterPropertySet
+{
+
+    /** puts the job into the printer spooler.
+
+        <p>This call may block the thread. So release all resources
+        (mutex, semaphore, etc.) before this call.</p>
+     */
+    boolean start( [in] string nJobName,
+             [in] short nCopies,
+             [in] boolean nCollate )
+            raises( com::sun::star::awt::PrinterException,
+                    com::sun::star::lang::IllegalArgumentException );
+
+
+    /** notifies the printer spooler that the job is done and printing
+        starts.
+
+        @see terminate
+     */
+    void end()
+            raises( com::sun::star::awt::PrinterException );
+
+
+    /** stops the current print job.
+
+        <p>If the method
+        com::sun::star::awt::XPrinter::end()
+        is called beforehand, then this call does nothing. If you call
+        com::sun::star::awt::XPrinter::terminate()
+        in or before the call to
+        com::sun::star::awt::XPrinter::start(),
+        com::sun::star::awt::XPrinter::terminate()
+        returns `FALSE`. This call must not block the thread.</p>
+
+        @see end
+     */
+    void terminate();
+
+
+    /** begins with a new page.
+     */
+    com::sun::star::awt::XDevice startPage()
+            raises( com::sun::star::awt::PrinterException );
+
+
+    /** ends the current page.
+     */
+    void endPage()
+            raises( com::sun::star::awt::PrinterException );
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

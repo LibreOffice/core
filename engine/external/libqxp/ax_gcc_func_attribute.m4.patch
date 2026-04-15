@@ -1,0 +1,11 @@
+--- configure
++++ configure
+@@ -18136,7 +18136,7 @@
+ 
+ _ACEOF
+ if ac_fn_cxx_try_link "$LINENO"; then :
+-                                      if test -s conftest.err; then :
++                                      if grep -- -Wattributes conftest.err; then :
+   ax_cv_have_func_attribute_visibility=no
+ else
+   ax_cv_have_func_attribute_visibility=yes

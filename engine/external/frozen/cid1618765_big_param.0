@@ -1,0 +1,13 @@
+--- include/frozen/bits/pmh.h	2024-09-01 12:04:54.942684661 +0100
++++ include/frozen/bits/pmh.h	2024-09-01 12:05:11.899749238 +0100
+@@ -155,8 +155,8 @@
+ 
+   constexpr pmh_tables(
+       std::uint64_t first_seed,
+-      carray<seed_or_index, M> first_table,
+-      carray<std::size_t, M> second_table,
++      const carray<seed_or_index, M>& first_table,
++      const carray<std::size_t, M>& second_table,
+       Hasher hash) noexcept
+     : Hasher(hash)
+     , first_seed_(first_seed)

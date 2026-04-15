@@ -1,0 +1,293 @@
+#!/usr/bin/env bash
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# verify that ELF NEEDED entries are known-good so hopefully builds run on
+# lots of different GNU/Linux distributions
+
+set -euo pipefail
+
+PARA=1
+check_path="${INSTDIR:-.}"
+
+help()
+{
+    cat << "EOF"
+    -d <dir>  directory to check
+    -p        run unbound parallel checks
+    -h        help
+EOF
+    [ -z "${1:-}" ] && exit 0
+}
+
+die()
+{
+    echo "$1"
+    echo
+    help 1
+    exit 1
+}
+
+while [ "${1:-}" != "" ]; do
+    parm=${1%%=*}
+    arg=${1#*=}
+    has_arg=
+    if [ "${1}" != "${parm?}" ] ; then
+        has_arg=1
+    else
+        arg=""
+    fi
+
+    case "${parm}" in
+        --dir|-d)
+	    if [ "$has_arg" ] ; then
+		check_path="$arg"
+	    else
+		shift
+		check_path="$1"
+	    fi
+	    if [ ! -d "$check_path" ]; then
+		die "Invalid directory '$check_path'"
+	    fi
+	    ;;
+        -h)
+	    help
+	    ;;
+        -p)
+	    # this sounds counter intuitive but the idea
+            # is to possibly support -p <n>
+            # in the meantime: 0 = nolimit and -p 1 would mean
+            # the current default: serialize
+            PARA=0
+            ;;
+        -*)
+            die "Invalid option $1"
+            ;;
+        *)
+            if [ "$DO_NEW" = 1 ] ; then
+                REPO="$1"
+            else
+                die "Invalid argument $1"
+            fi
+            ;;
+    esac
+    shift
+done
+
+
+files=$(find "${check_path}/program" "${check_path}/sdk/bin" -type f)
+# all RPATHs should point to ${INSTDIR}/program so that's the files they find
+programfiles=$(echo ${files} | grep -o '/program/[^/]* ' | xargs -n 1 basename)
+
+# allowlists should contain only system libraries that have a good reputation
+# of maintaining ABI stability
+# allow extending the allowlist using the environment variable to be able to work
+# on the installer stuff without the need for a baseline setup
+globalallowlist="ld-linux-x86-64.so.2 ld-linux-aarch64.so.1 ld-linux.so.2 libc.so.6 libm.so.6 libdl.so.2 libpthread.so.0 librt.so.1 libutil.so.1 libnsl.so.1 libcrypt.so.2 libgcc_s.so.1 libstdc++.so.6 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libxml2.so.2 libxslt.so.1 libexslt.so.0 libnspr4.so libnss3.so libnssutil3.so libplc4.so libplds4.so libsmime3.so libssl3.so ${LO_ELFCHECK_ALLOWLIST-}"
+x11allowlist="libX11.so.6 libX11-xcb.so.1 libXext.so.6 libSM.so.6 libICE.so.6 libXinerama.so.1 libXrender.so.1 libXrandr.so.2 libcairo.so.2"
+openglallowlist="libGL.so.1"
+gobjectallowlist="libgobject-2.0.so.0 libglib-2.0.so.0"
+gdbusallowlist="libdbus-glib-1.so.2 libdbus-1.so.3 libgmodule-2.0.so.0 libgthread-2.0.so.0 ${gobjectallowlist}"
+gioallowlist="libgio-2.0.so.0 ${gdbusallowlist}"
+gstreamerallowlist="libgsttag-1.0.so.0 libgstaudio-1.0.so.0 libgstpbutils-1.0.so.0 libgstvideo-1.0.so.0 libgstbase-1.0.so.0 libgstreamer-1.0.so.0 ${gobjectallowlist}"
+gtk3allowlist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libharfbuzz.so.0 ${gioallowlist}"
+gtk4allowlist="libgtk-4.so.1 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libatk-1.0.so.0 libcairo.so.2 libpango-1.0.so.0 libgdk_pixbuf-2.0.so.0 libharfbuzz.so.0 libgraphene-1.0.so.0 ${gioallowlist}"
+qt5allowlist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libQt5X11Extras.so.5 libcairo.so.2 libxcb.so.1 libxcb-icccm.so.4 ${gobjectallowlist}"
+qt6allowlist="libQt6Core.so.6 libQt6Gui.so.6 libQt6Multimedia.so.6 libQt6MultimediaWidgets.so.6 libQt6Network.so.6 libQt6Widgets.so.6 libcairo.so.2 libxcb.so.1"
+kf5allowlist="libKF5ConfigCore.so.5 libKF5CoreAddons.so.5 libKF5I18n.so.5 libKF5KIOCore.so.5 libKF5KIOFileWidgets.so.5 libKF5KIOWidgets.so.5 libKF5WindowSystem.so.5"
+kf6allowlist="libKF6ConfigCore.so.6 libKF6CoreAddons.so.6 libKF6I18n.so.6 libKF6KIOCore.so.6 libKF6KIOFileWidgets.so.6 libKF6KIOWidgets.so.6 libKF6WindowSystem.so.6"
+avahiallowlist="libavahi-common.so.3 libavahi-client.so.3 ${gdbusallowlist}"
+kerberosallowlist="libgssapi_krb5.so.2 libcom_err.so.2 libkrb5.so.3"
+dconfallowlist="libdconf.so.1 libgio-2.0.so.0 ${gobjectallowlist}"
+
+check_one_file()
+{
+local file="$1"
+
+    allowlist="${globalallowlist}"
+    case "${file}" in
+        */_uuid.cpython-*.so)
+            allowlist="${allowlist} libuuid.so.1"
+        ;;
+        */libcairo-lo.so.2)
+            allowlist="${allowlist} ${x11allowlist} libxcb-shm.so.0 libxcb.so.1 libxcb-render.so.0"
+        ;;
+        */libcairocanvaslo.so)
+            allowlist="${allowlist} libcairo.so.2"
+        ;;
+        */libucpgio1lo.so|*/liblosessioninstalllo.so|*/libevoablo.so)
+            allowlist="${allowlist} ${gioallowlist}"
+        ;;
+        */libavmediagst.so)
+            allowlist="${allowlist} ${gstreamerallowlist}"
+        ;;
+        */libavmediagtk.so)
+            allowlist="${allowlist} ${gtk4allowlist}"
+        ;;
+        */libavmediaqt6.so)
+            allowlist="${allowlist} ${qt6allowlist}"
+        ;;
+        */libvclplug_kf5lo.so|*/libkf5be1lo.so)
+            if [ "$ENABLE_KF5" = TRUE ]; then
+                allowlist="${allowlist} ${qt5allowlist} ${kf5allowlist}"
+            fi
+        ;;
+        */libvclplug_kf6lo.so)
+            if [ "$ENABLE_KF6" = TRUE ]; then
+                allowlist="${allowlist} ${qt6allowlist} ${kf6allowlist}"
+            fi
+        ;;
+        */libvclplug_gtk3lo.so|*/updater)
+            allowlist="${allowlist} ${x11allowlist} ${gtk3allowlist}"
+        ;;
+        */libvclplug_gtk4lo.so)
+            allowlist="${allowlist} ${x11allowlist} ${gtk4allowlist}"
+        ;;
+        */libvclplug_qt5lo.so)
+            if [ "$ENABLE_QT5" = TRUE ]; then
+                allowlist="${allowlist} ${qt5allowlist}"
+            fi
+        ;;
+        */libvclplug_qt6lo.so)
+            if [ "$ENABLE_QT6" = TRUE ]; then
+                allowlist="${allowlist} ${qt6allowlist}"
+            fi
+        ;;
+        */libvclplug_gtk3_kde5lo.so)
+            if [ "$ENABLE_GTK3_KDE5" = TRUE ]; then
+                allowlist="${allowlist} ${x11allowlist} ${gtk3allowlist} ${qt5allowlist} ${kf5allowlist}"
+            fi
+        ;;
+        */lo_kde5filepicker)
+            if [ "$ENABLE_GTK3_KDE5" = TRUE ]; then
+                allowlist="${allowlist} ${x11allowlist} ${gtk3allowlist} ${qt5allowlist} \
+                    ${kf5allowlist}"
+            fi
+        ;;
+        */oosplash|*/gengal.bin)
+            allowlist="${allowlist} ${x11allowlist}"
+        ;;
+        */libvclplug_genlo.so|*/libchart2lo.so|*/libavmediaogl.so|*/liboglcanvaslo.so)
+            allowlist="${allowlist} ${x11allowlist} ${openglallowlist}"
+        ;;
+        */libvcllo.so)
+            allowlist="${allowlist} ${x11allowlist} ${openglallowlist} ${gioallowlist} libcups.so.2"
+        ;;
+        */libsofficeapp.so)
+            allowlist="${allowlist} ${x11allowlist} ${openglallowlist} ${gioallowlist} libcups.so.2"
+        ;;
+        */libkitgtk.so)
+            allowlist="${allowlist} ${gtk3allowlist}"
+        ;;
+        */libsdlo.so)
+            allowlist="${allowlist} ${avahiallowlist}"
+        ;;
+        */libskialo.so)
+            allowlist="${allowlist} ${openglallowlist} ${x11allowlist}"
+        ;;
+        */libofficebean.so)
+            allowlist="${allowlist} libjawt.so"
+        ;;
+        */libcurl.so.4)
+            if [ "$WITH_GSSAPI" = TRUE ]; then
+                allowlist="${allowlist} ${kerberosallowlist}"
+            fi
+        ;;
+        */libpostgresql-sdbc-impllo.so)
+            if [ "$WITH_GSSAPI" = TRUE ]; then
+                allowlist="${allowlist} ${kerberosallowlist}"
+            fi
+        ;;
+        */libmysqlclo.so)
+            if [ "$WITH_GSSAPI" = TRUE ]; then
+                allowlist="${allowlist} ${kerberosallowlist}"
+            fi
+        ;;
+        */libconfigmgrlo.so)
+            if [ "$ENABLE_DCONF" = TRUE ]; then
+                allowlist="${allowlist} ${dconfallowlist}"
+            fi
+        ;;
+        */libmergedlo.so)
+            allowlist="${allowlist} ${x11allowlist} ${openglallowlist} ${gioallowlist} ${kerberosallowlist} ${dconfallowlist} libcups.so.2 libcairo.so.2"
+        ;;
+    esac
+    if readelf -d "${file}" &> /dev/null ; then
+        rpath=$(readelf -d "${file}" | grep '(\(RPATH\|RUNPATH\))' || true)
+        neededs=$(readelf -d "${file}" | grep '(NEEDED)' | sed -e 's/.*\[\(.*\)\]$/\1/')
+        neededsinternal=
+        for needed in ${neededs}
+        do
+            if ! echo ${allowlist} | grep -q -w "${needed}" ; then
+                neededsinternal="${neededsinternal} ${needed}"
+                if ! echo ${programfiles} | grep -q -w "${needed}" ; then
+                    echo "${file}" has suspicious NEEDED: "${needed}"
+                    status=1
+                fi
+            fi
+        done
+        if test -z "${rpath}" ; then
+            case "${file}" in
+                */python-core-*/lib/lib-dynload/*)
+                    # python modules don't have RPATH
+                ;;
+                */share/extensions/*)
+                    # extension libraries don't have RPATH
+                ;;
+                *)
+                    # no NEEDED from instdir, no RPATH needed
+                    if test -n "${neededsinternal}" ; then
+                        echo "${file}" has no RPATH
+                        status=1
+                    fi
+                ;;
+            esac
+        else
+            case "$file" in
+                */sdk/bin/*)
+                    if echo "${rpath}" | grep -q -v '\[\$ORIGIN/../../program\]$' ; then
+                        echo "${file}" has unexpected RPATH "${rpath}"
+                        status=1
+                    fi
+                ;;
+                *)
+                    if echo "${rpath}" | grep -q -v '\[\$ORIGIN\]$' ; then
+                        echo "${file}" has unexpected RPATH "${rpath}"
+                        status=1
+                    fi
+                ;;
+            esac
+        fi
+    fi
+}
+status=0
+
+if [ "$PARA" = "1" ] ; then
+    for file in ${files}
+    do
+	check_one_file $file
+    done
+else
+    rm -f check_elf.out
+    for file in ${files}
+    do
+	(
+	check_one_file $file
+	)>> check_elf.out &
+    done
+
+    wait
+
+    if [ -s check_elf.out ] ; then
+        cat check_elf.out
+        status=1
+    fi
+    rm check_elf.out
+fi
+exit ${status}
+

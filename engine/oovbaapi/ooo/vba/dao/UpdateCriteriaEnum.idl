@@ -1,0 +1,13 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module dao {
+    constants UpdateCriteriaEnum {
+        const long dbCriteriaAllCols = 4;
+        const long dbCriteriaDeleteInsert = 16;
+        const long dbCriteriaKey = 1;
+        const long dbCriteriaModValues = 2;
+        const long dbCriteriaTimestamp = 8;
+        const long dbCriteriaUpdate = 32;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

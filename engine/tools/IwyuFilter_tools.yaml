@@ -1,0 +1,36 @@
+---
+assumeFilename: tools/source/generic/gen.cxx
+excludelist:
+    tools/qa/cppunit/test_pathutils.cxx:
+    # Needed for WIN32 specific unit test
+    - cppunit/TestAssert.h
+    - tools/pathutils.hxx
+    - cwchar
+    tools/qa/cppunit/test_cpu_runtime_detection_AVX2_check.cxx:
+    # Needed for LO_AVX2_AVAILABLE case
+    - sal/types.h
+    - tools/simdsupport.hxx
+    - stdlib.h
+    tools/qa/cppunit/test_cpu_runtime_detection_SSSE3_check.cxx:
+    # Needed for LO_SSSE3_AVAILABLE case
+    - tools/simdsupport.hxx
+    - stdlib.h
+    tools/source/misc/extendapplicationenvironment.cxx:
+    # Needed on MACOSX
+    - config_folders.h
+    # Needed for linker visibility
+    - tools/extendapplicationenvironment.hxx
+    tools/source/ref/ref.cxx:
+    # Don't replace with impl. detail
+    - tools/weakbase.hxx
+    tools/source/stream/strmwnt.cxx:
+    # WIN32-specific file
+    - string.h
+    - osl/thread.h
+    - o3tl/char16_t2wchar_t.hxx
+    tools/source/stream/strmunx.cxx:
+    # Needed for OSL_DEBUG_LEVEL > 1
+    - osl/thread.h
+    tools/source/string/tenccvt.cxx:
+    # Needed for linker visibility
+    - tools/tenccvt.hxx

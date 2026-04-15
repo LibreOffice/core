@@ -1,0 +1,120 @@
+Globals
+{
+    Settings
+    {
+        variables
+        {
+            LIBO_VERSION_MAJOR @LIBO_VERSION_MAJOR@
+            UREPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@
+            URELAYERVERSION 1
+            REFERENCEOOOMAJORMINOR 4.1
+            WINDOWSBASISROOTNAME Collabora Office
+            UNIXBASISROOTNAME collaboraoffice
+            HIDELICENSEDIALOG 0
+            PACKAGEPREFIX
+            BASISPACKAGEPREFIX collaboraofficebasis
+            UREPACKAGEPREFIX collaboraoffice
+            SOLSUREPACKAGEPREFIX libreoffice
+            PROGRESSBARCOLOR 0,0,0
+            PROGRESSSIZE 460,6
+            PROGRESSSIZEHIGH 617,12
+            PROGRESSPOSITION 26,235
+            PROGRESSPOSITIONHIGH 46,212
+            PROGRESSFRAMECOLOR 102,102,102
+            PROGRESSTEXTBASELINE 230
+            PROGRESSTEXTCOLOR 255,255,255
+            NATIVEPROGRESS false
+            REGISTRYLAYERNAME Layers
+            SERVICEPACK 1
+            UPDATE_DATABASE 1
+            UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
+            PACKAGEMAP package_names.txt,package_names_ext.txt
+            WINDOWSPATCHLEVEL @LIBO_VERSION_MICRO@
+            OOOVENDOR Collabora Productivity Ltd.
+            64BITPRODUCT @WINDOWS_X64@
+            WINDOWSSDKVERSION @WINDOWS_SDK_VERSION@
+            CRASHDUMPENABLE @DEFAULT_CRASHDUMP_VALUE@
+        }
+    }
+}
+
+CollaboraOffice
+{
+    Settings
+    {
+        variables
+        {
+            PRODUCTNAME Collabora Office
+            PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@
+            POSTVERSIONEXTENSION
+            BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@
+            BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            USERDIRPRODUCTVERSION 4
+            BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            UPDATEURL https://update.libreoffice.org/check.php
+            ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
+            ADDSYSTEMINTEGRATION 1
+            PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@
+            PACKAGEREVISION @LIBO_VERSION_PATCH@
+            LICENSENAME @LICENSE@
+            ROOTMODULEGID gid_Module_Root
+            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+            SPELLCHECKERFILE spellchecker_selection.txt
+            CHANGETARGETDIR 1
+            PATCHCODEFILE ooo_patchcodes.txt
+        }
+        active          1
+        compression     5
+        script          setup_osl
+        downloadname    CollaboraOffice_{productversion}_{os}_install_{languages}
+        langpackdownloadname    CollaboraOffice_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    CollaboraOffice_{productversion}_helppack_{os}_install_{languages}
+        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
+    }
+}
+
+LibreOfficeDev
+{
+    Settings
+    {
+        variables
+        {
+            PRODUCTNAME LibreOfficeDev
+            PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
+            WINDOWSBASISROOTNAME LibreOfficeDev @LIBO_VERSION_MAJOR@
+            UNIXBASISROOTNAME libreofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            POSTVERSIONEXTENSION
+            BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@
+            BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            USERDIRPRODUCTVERSION 4
+            BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            DEVELOPMENTPRODUCT 1
+            BASISPACKAGEPREFIX lodevbasis
+            UREPACKAGEPREFIX libreofficedev
+            SOLSUREPACKAGEPREFIX libreofficedev
+            REGISTRYLAYERNAME LayerDev
+            UPDATEURL https://update.libreoffice.org/check.php
+            ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
+            ADDSYSTEMINTEGRATION 1
+            PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
+            PACKAGEREVISION {buildid}
+            LICENSENAME @LICENSE@
+            ROOTMODULEGID gid_Module_Root
+            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+            SPELLCHECKERFILE spellchecker_selection.txt
+            CHANGETARGETDIR 1
+            PATCHCODEFILE ooodev_patchcodes.txt
+            CODEFILENAME codes_ooodev.txt
+            LOCALUSERDIR $ORIGIN/..
+        }
+        active          1
+        compression     5
+        script          setup_osl
+        downloadname    LibreOfficeDev_{productversion}_{os}_install_{languages}
+        langpackdownloadname    LibreOfficeDev_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    LibreOfficeDev_{productversion}_helppack_{os}_install_{languages}
+        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
+    }
+}

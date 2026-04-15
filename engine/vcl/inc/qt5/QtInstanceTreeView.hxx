@@ -1,0 +1,235 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include "QtInstanceTreeIter.hxx"
+#include "QtInstanceWidget.hxx"
+
+#include <QtCore/QSortFilterProxyModel>
+#include <QtGui/QStandardItemModel>
+#include <QtWidgets/QTreeView>
+
+class QtInstanceTreeView : public QtInstanceWidget, public virtual weld::TreeView
+{
+    Q_OBJECT
+
+    QTreeView* m_pTreeView;
+
+    /** The model displayed in the tree view. The proxy model takes care of sorting
+     *  if sorting is enabled. */
+    QSortFilterProxyModel* m_pModel;
+
+    /** The QStandardItemModel used as the source model for `m_pModel`. */
+    QStandardItemModel* m_pSourceModel;
+
+    QItemSelectionModel* m_pSelectionModel;
+
+    /** List containing a list of item data roles supported by each column. */
+    QList<QList<Qt::ItemDataRole>> m_pColumnRoles;
+
+    bool m_bExtraToggleButtonsEnabled = false;
+
+public:
+    QtInstanceTreeView(QTreeView* pTreeView);
+
+    virtual void do_insert(const weld::TreeIter* pParent, int nPos, const OUString* pStr,
+                           const OUString* pId, const OUString* pIconName,
+                           VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                           weld::TreeIter* pRet) override;
+
+    virtual void do_insert_separator(int pos, const OUString& rId) override;
+
+    virtual OUString get_selected_text() const override;
+    virtual OUString get_selected_id() const override;
+
+    virtual void enable_toggle_buttons(weld::ColumnToggleType eType) override;
+
+    virtual void set_clicks_to_toggle(int nToggleBehavior) override;
+
+    virtual int get_selected_index() const override;
+    virtual void do_select(int nPos) override;
+    virtual void do_unselect(int nPos) override;
+    virtual void do_remove(int nPos) override;
+    virtual OUString get_text(int nRow, int nCol = -1) const override;
+    virtual void set_text(int nRow, const OUString& rText, int nCol = -1) override;
+    virtual void set_sensitive(int nRow, bool bSensitive, int nCol = -1) override;
+    virtual bool get_sensitive(int nRow, int nCol) const override;
+    virtual void set_id(int row, const OUString& rId) override;
+    virtual void set_toggle(int nRow, TriState eState, int nCol = -1) override;
+    virtual TriState get_toggle(int nRow, int nCol = -1) const override;
+    virtual void set_image(int nRow, const OUString& rImage, int nCol = -1) override;
+    virtual void set_image(int nRow, VirtualDevice& rImage, int nCol = -1) override;
+    virtual void set_image(int nRow, const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                           int nCol = -1) override;
+    virtual void set_text_emphasis(int nRow, bool bOn, int nCol) override;
+    virtual bool get_text_emphasis(int nRow, int nCol) const override;
+    virtual void set_text_align(int nRow, double fAlign, int nCol) override;
+    virtual void swap(int nPos1, int nPos2) override;
+    virtual std::vector<int> get_selected_rows() const override;
+    virtual void set_font_color(int nPos, const Color& rColor) override;
+    virtual void do_scroll_to_row(int nRow) override;
+    virtual bool is_selected(int nPos) const override;
+    virtual int get_cursor_index() const override;
+    virtual void do_set_cursor(int pos) override;
+
+    virtual int find_text(const OUString& rText) const override;
+    virtual OUString get_id(int nPos) const override;
+    virtual int find_id(const OUString& rId) const override;
+
+    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig
+                                                          = nullptr) const override;
+    virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override;
+    virtual bool get_selected(weld::TreeIter* pIter) const override;
+    virtual bool get_cursor(weld::TreeIter* pIter) const override;
+    virtual void do_set_cursor(const weld::TreeIter& rIter) override;
+    virtual bool get_iter_first(weld::TreeIter& rIter) const override;
+    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override;
+    virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override;
+    virtual bool iter_next(weld::TreeIter& rIter) const override;
+    virtual bool iter_previous(weld::TreeIter& rIter) const override;
+    virtual bool iter_children(weld::TreeIter& rIter) const override;
+    virtual bool iter_parent(weld::TreeIter& rIter) const override;
+    virtual int get_iter_depth(const weld::TreeIter& rIter) const override;
+    virtual int get_iter_index_in_parent(const weld::TreeIter& rIter) const override;
+
+    virtual int iter_compare(const weld::TreeIter& a, const weld::TreeIter& b) const override;
+    virtual bool iter_has_child(const weld::TreeIter& rIter) const override;
+    virtual int iter_n_children(const weld::TreeIter& rIter) const override;
+    virtual void do_remove(const weld::TreeIter& rIter) override;
+    virtual void do_select(const weld::TreeIter& rIter) override;
+    virtual void do_unselect(const weld::TreeIter& rIter) override;
+    virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override;
+    virtual void set_text(const weld::TreeIter& rIter, const OUString& rStr,
+                          int nCol = -1) override;
+    virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive,
+                               int nCol = -1) override;
+    virtual bool get_sensitive(const weld::TreeIter& rIter, int nCol) const override;
+    virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int nCol) override;
+    virtual bool get_text_emphasis(const weld::TreeIter& rIter, int nCol) const override;
+    virtual void set_text_align(const weld::TreeIter& rIter, double fAlign, int nCol) override;
+    virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int nCol = -1) override;
+    virtual TriState get_toggle(const weld::TreeIter& rIter, int nCol = -1) const override;
+    virtual OUString get_text(const weld::TreeIter& rIter, int nCol = -1) const override;
+    virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
+    virtual OUString get_id(const weld::TreeIter& rIter) const override;
+    virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage,
+                           int nCol = -1) override;
+    virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage,
+                           int nCol = -1) override;
+    virtual void set_image(const weld::TreeIter& rIter,
+                           const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                           int nCol = -1) override;
+    virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) override;
+    virtual void do_scroll_to_row(const weld::TreeIter& rIter) override;
+    virtual bool is_selected(const weld::TreeIter& rIter) const override;
+
+    virtual void move_subtree(weld::TreeIter& rNode, const weld::TreeIter* pNewParent,
+                              int nIndexInNewParent) override;
+
+    virtual void all_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
+    virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
+    virtual void visible_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
+    virtual void bulk_insert_for_each(
+        int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
+        const weld::TreeIter* pParent = nullptr, const std::vector<int>* pFixedWidths = nullptr,
+        bool bGoingToSetText = false) override;
+
+    virtual bool get_row_expanded(const weld::TreeIter& rIter) const override;
+    virtual void expand_row(const weld::TreeIter& rIter) override;
+    virtual void collapse_row(const weld::TreeIter& rIter) override;
+    virtual void do_set_children_on_demand(const weld::TreeIter& rIter,
+                                           bool bChildrenOnDemand) override;
+    virtual bool get_children_on_demand(const weld::TreeIter& rIter) const override;
+    virtual void set_show_expanders(bool bShow) override;
+
+    virtual void start_editing(const weld::TreeIter& rEntry) override;
+    virtual void end_editing() override;
+
+    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rTransferable,
+                                    sal_uInt8 eDNDConstants) override;
+
+    virtual void select_all() override;
+    virtual void unselect_all() override;
+
+    virtual int n_children() const override;
+
+    virtual void make_sorted() override;
+    virtual void make_unsorted() override;
+    virtual bool get_sort_order() const override;
+    virtual void set_sort_order(bool bAscending) override;
+
+    virtual void set_sort_indicator(TriState eState, int nColumn) override;
+    virtual TriState get_sort_indicator(int nColumn) const override;
+
+    virtual int get_sort_column() const override;
+    virtual void set_sort_column(int nColumn) override;
+
+    virtual void do_clear() override;
+    virtual int get_height_rows(int nRows) const override;
+
+    virtual void columns_autosize() override;
+    virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override;
+    virtual void set_column_editables(const std::vector<bool>& rEditables) override;
+    virtual int get_column_width(int nCol) const override;
+    virtual void set_centered_column(int nCol) override;
+    virtual OUString get_column_title(int nColumn) const override;
+    virtual void set_column_title(int nColumn, const OUString& rTitle) override;
+
+    virtual void set_selection_mode(SelectionMode eMode) override;
+    virtual int count_selected_rows() const override;
+    virtual void do_remove_selection() override;
+
+    virtual bool changed_by_hover() const override;
+
+    virtual void vadjustment_set_value(int nValue) override;
+    virtual int vadjustment_get_value() const override;
+
+    virtual void set_column_custom_renderer(int nColumn, bool bEnable) override;
+    virtual void queue_draw() override;
+
+    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult, bool bDnDMode,
+                                     bool bAutoScroll = true) override;
+    virtual void unset_drag_dest_row() override;
+    virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const override;
+    virtual weld::TreeView* get_drag_source() const override;
+
+    using QtInstanceWidget::set_sensitive;
+    using QtInstanceWidget::get_sensitive;
+
+    // methods to get/set which roles are supported by the individual columns
+    // based on the underlying GtkTreeViewColumns and their GtkCellRenderers
+    static QList<QList<Qt::ItemDataRole>> columnRoles(const QTreeView& rTreeView);
+    static void setColumnRoles(QTreeView& rTreeView,
+                               const QList<QList<Qt::ItemDataRole>>& rDataRoles);
+
+    virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;
+
+private:
+    QModelIndex modelIndex(int nRow, int nCol = 0,
+                           const QModelIndex& rParentIndex = QModelIndex()) const;
+    QModelIndex modelIndex(const weld::TreeIter& rIter, int nCol = 0) const;
+    QtInstanceTreeIter treeIter(int nRow, const QModelIndex& rParentIndex = QModelIndex()) const;
+    QStandardItem* itemFromIndex(const QModelIndex& rIndex) const;
+    QModelIndex toggleButtonModelIndex(const weld::TreeIter& rIter) const;
+    QModelIndex firstTextColumnModelIndex(const weld::TreeIter& rIter) const;
+    static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
+
+    void setImage(const weld::TreeIter& rIter, const QPixmap& rPixmap, int nCol);
+
+    bool handleViewPortToolTipEvent(const QHelpEvent& rEvent);
+
+private Q_SLOTS:
+    void handleActivated();
+    void handleDataChanged(const QModelIndex& rTopLeft, const QModelIndex& rBottomRight,
+                           const QVector<int>& rRoles);
+    void handleSelectionChanged();
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

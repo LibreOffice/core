@@ -1,0 +1,33 @@
+--- include/frozen/map.h	2023-07-22 20:20:19.580400347 +0100
++++ include/frozen/map.h	2023-07-22 20:25:44.893704485 +0100
+@@ -96,11 +96,11 @@
+ 
+ public:
+   /* constructors */
+-  constexpr map(container_type items, Compare const &compare)
++  constexpr map(const container_type& items, Compare const &compare)
+       : impl::CompareKey<Compare>{compare}
+       , items_{bits::quicksort(bits::remove_cv_t<container_type>(items), value_comp())} {}
+ 
+-  explicit constexpr map(container_type items)
++  explicit constexpr map(const container_type& items)
+       : map{items, Compare{}} {}
+ 
+   constexpr map(std::initializer_list<value_type> items, Compare const &compare)
+--- include/frozen/set.h	2023-09-29 09:19:22.208195458 +0100
++++ include/frozen/set.h	2023-09-29 09:20:21.175291240 +0100
+@@ -59,12 +59,12 @@
+   /* constructors */
+   constexpr set(const set &other) = default;
+ 
+-  constexpr set(container_type keys, Compare const & comp)
++  constexpr set(const container_type& keys, Compare const & comp)
+       : Compare{comp}
+       , keys_(bits::quicksort(keys, value_comp())) {
+       }
+ 
+-  explicit constexpr set(container_type keys)
++  explicit constexpr set(const container_type& keys)
+       : set{keys, Compare{}} {}
+ 
+   constexpr set(std::initializer_list<Key> keys, Compare const & comp)

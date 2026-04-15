@@ -1,0 +1,58 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module logging {
+
+interface XConsoleHandler;
+
+
+/** specifies a component implementing a log handler whose output
+    channel is the processes console.
+ */
+service ConsoleHandler : XConsoleHandler
+{
+    /// creates a <code>ConsoleHandler</code>
+    create();
+
+    /** creates an instance of the log handler, using generic settings
+
+        @param Settings
+            contains the initial settings for the log handler
+
+            <p>The following settings are recognized and supported:
+            <ul><li><code>Encoding</code> - denotes the initial value of the XLogHandler::Encoding</li>
+                <li><code>Formatter</code> - denotes the initial value of the XLogHandler::Formatter</li>
+                <li><code>Level</code> - denotes the initial value of the XLogHandler::Level</li>
+                <li><code>Threshold</code> - denotes the initial value of the XConsoleHandler::Threshold</li>
+            </ul></p>
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if `Settings` contains arguments with names other than in the list above, or
+            settings whose value is of the wrong type.
+    */
+    createWithSettings( [in] sequence< ::com::sun::star::beans::NamedValue > Settings )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+
+}; }; }; };
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

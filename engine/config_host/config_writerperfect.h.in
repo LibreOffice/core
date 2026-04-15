@@ -1,0 +1,35 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/* Configuration for versions of import libraries used by writerperfect.
+ * This is needed to skip test files that are not supported by the used
+ * version.
+ */
+
+#undef EBOOK_VERSION_MAJOR
+#undef EBOOK_VERSION_MINOR
+#undef EBOOK_VERSION_MICRO
+
+#undef ETONYEK_VERSION_MAJOR
+#undef ETONYEK_VERSION_MINOR
+#undef ETONYEK_VERSION_MICRO
+
+#undef MWAW_VERSION_MAJOR
+#undef MWAW_VERSION_MINOR
+#undef MWAW_VERSION_MICRO
+
+#undef STAROFFICE_VERSION_MAJOR
+#undef STAROFFICE_VERSION_MINOR
+#undef STAROFFICE_VERSION_MICRO
+
+#undef WPS_VERSION_MAJOR
+#undef WPS_VERSION_MINOR
+#undef WPS_VERSION_MICRO
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

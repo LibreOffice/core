@@ -1,0 +1,11 @@
+--- src/jrd/SimilarToMatcher.h
++++ src/jrd/SimilarToMatcher.h
+@@ -1455,7 +1455,7 @@
+ 		gds__log("%d, %s", state, debugText.c_str());
+ #endif
+ 
+-#define ENCODE_OP_STATE(op, state) ((op) | (state))
++#define ENCODE_OP_STATE(op, state) (+(op) | (state))
+ 
+ 		// Go directly to op and state with a single switch.
+ 

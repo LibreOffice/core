@@ -1,0 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module excel {
+    constants XlChartSplitType {
+        const long xlSplitByCustomSplit = 4;
+        const long xlSplitByPercentValue = 3;
+        const long xlSplitByPosition = 1;
+        const long xlSplitByValue = 2;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

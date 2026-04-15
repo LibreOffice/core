@@ -1,0 +1,152 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_OOX_DRAWINGML_CHART_CHARTCONVERTER_HXX
+#define INCLUDED_OOX_DRAWINGML_CHART_CHARTCONVERTER_HXX
+
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/chart/modelbase.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <oox/dllapi.h>
+#include <rtl/ustring.hxx>
+
+namespace com::sun::star {
+    namespace awt { struct Point; }
+    namespace awt { struct Size; }
+    namespace drawing { class XShapes; }
+    namespace chart2 { class XChartDocument; }
+    namespace chart2 { class XChartStyle; }
+    namespace chart2 { class XChartColorStyle; }
+    namespace chart2::data { class XDataProvider; }
+    namespace chart2::data { class XDataSequence; }
+}
+
+namespace oox::core { class XmlFilterBase; }
+
+namespace oox::drawingml::chart {
+
+struct ChartSpaceModel;
+struct DataSequenceModel;
+struct StyleModel;
+struct ColorStyleModel;
+struct StyleEntryModel;
+typedef ModelRef< StyleEntryModel >      StyleEntryRef;
+
+class OOX_DLLPUBLIC ChartConverter
+{
+public:
+    explicit            ChartConverter();
+    virtual             ~ChartConverter();
+
+    /** Converts the passed OOXML chart model to the passed chart2 document.
+
+        @param rChartModel  The filled MSOOXML chart model structure.
+
+        @param rxChartDoc  The UNO chart document model to be initialized.
+
+        @param rxExternalPage  If null, all embedded shapes will be inserted
+            into the internal drawing page of the chart document. If not null,
+            all embedded shapes will be inserted into this shapes collection.
+
+        @param rChartPos  The position of the chart shape in its drawing page,
+            in 1/100 mm. Will be used only, if parameter rxExternalPage is not
+            null, for correct positioning of the embedded shapes in the
+            external drawing page.
+
+        @param rChartSize  The size of the chart shape in 1/100 mm. Needed for
+            calculation of position and size of the chart elements (diagram,
+            titles, legend, etc.) and embedded shapes.
+     */
+    void                convertFromModel(
+                            ::oox::core::XmlFilterBase& rFilter,
+                            ChartSpaceModel& rChartModel,
+                            const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
+                            const css::uno::Reference< css::drawing::XShapes >& rxExternalPage,
+                            const css::awt::Point& rChartPos,
+                            const css::awt::Size& rChartSize ) const;
+
+    /** Creates an internal data provider. Derived classes may override this
+        function to create an external data provider. */
+    virtual void        createDataProvider(
+                            const css::uno::Reference<
+                            css::chart2::XChartDocument >& rxChartDoc ) const;
+
+    /** Creates a data sequence from a formula. Dummy implementation. Derived
+        classes have to override this function to actually parse the formula. */
+    virtual css::uno::Reference<css::chart2::data::XDataSequence>
+        createDataSequence(
+            const css::uno::Reference<css::chart2::data::XDataProvider>& rxDataProvider,
+            const DataSequenceModel& rDataSeq, const OUString& rRole,
+            const OUString& aRoleQualifier ) const;
+
+private:
+                        ChartConverter( const ChartConverter& ) = delete;
+    ChartConverter&     operator=( const ChartConverter& ) = delete;
+};
+
+class OOX_DLLPUBLIC ChartStyleConverter
+{
+public:
+    explicit    ChartStyleConverter() = default;
+
+    /** Converts the passed ChartStyleModel to the passed chart2 XChartStyle.
+
+        @param rChartStyleModel  The filled chart style model structure.
+
+        @param rxChartStyle  The UNO chart style structure to be initialized.
+
+     */
+    static void convertFromModel(
+                    const oox::core::XmlFilterBase& rFilter,
+                    const StyleModel& rChartStyleModel,
+                    const css::uno::Reference< css::chart2::XChartStyle >& rxChartStyle);
+
+private:
+    ChartStyleConverter( const ChartStyleConverter& ) = delete;
+    ChartStyleConverter&     operator=( const ChartStyleConverter& ) = delete;
+};
+
+class OOX_DLLPUBLIC ChartColorStyleConverter
+{
+public:
+    explicit    ChartColorStyleConverter() = default;
+
+    /** Converts the passed ChartColorStyleModel to the passed chart2
+     * XChartColorStyle.
+
+        @param rChartColorStyleModel  The filled chart colorstyle model structure.
+
+        @param rxColorChartStyle  The UNO chart colorstyle structure to be initialized.
+
+     */
+    static void convertFromModel(
+                    oox::core::XmlFilterBase& rFilter,
+                    ColorStyleModel& rChartColorStyleModel,
+                    const css::uno::Reference< css::chart2::XChartColorStyle >& rxChartColorStyle);
+private:
+    ChartColorStyleConverter( const ChartColorStyleConverter& ) = delete;
+    ChartColorStyleConverter&     operator=( const ChartColorStyleConverter& ) = delete;
+};
+
+
+} // namespace oox::drawingml::chart
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

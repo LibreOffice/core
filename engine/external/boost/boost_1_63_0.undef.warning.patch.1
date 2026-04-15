@@ -1,0 +1,1657 @@
+diff -up boost/boost/math/special_functions/fpclassify.hpp.dt boost/boost/math/special_functions/fpclassify.hpp
+--- boost/boost/math/special_functions/fpclassify.hpp.dt	2017-02-03 07:59:18.805415876 +0100
++++ boost/boost/math/special_functions/fpclassify.hpp	2017-02-03 08:00:45.046494362 +0100
+@@ -134,7 +134,7 @@ inline bool is_nan_helper(T, const boost
+ inline bool is_nan_helper(__float128 f, const std::true_type&) { return ::isnanq(f); }
+ inline bool is_nan_helper(__float128 f, const std::false_type&) { return ::isnanq(f); }
+ #elif defined(BOOST_GNU_STDLIB) && BOOST_GNU_STDLIB && \
+-      _GLIBCXX_USE_C99_MATH && !_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC
++      _GLIBCXX_USE_C99_MATH && (!defined(_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC) || !_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC)
+ inline bool is_nan_helper(__float128 f, const std::true_type&) { return std::isnan(static_cast<double>(f)); }
+ inline bool is_nan_helper(__float128 f, const std::false_type&) { return std::isnan(static_cast<double>(f)); }
+ #else
+diff --git boost/boost/beast/core/async_base.hpp boost/boost/beast/core/async_base.hpp
+--- boost/boost/beast/core/async_base.hpp
++++ boost/boost/beast/core/async_base.hpp
+@@ -176,7 +176,7 @@ template<
+     class Allocator = std::allocator<void>
+ >
+ class async_base
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     : public detail::with_immediate_executor_type<Handler>
+     , private boost::empty_value<Allocator>
+ #endif
+@@ -196,7 +196,7 @@ public:
+     be this type.
+     */
+     using executor_type =
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+         __implementation_defined__;
+ #else
+         typename
+@@ -212,7 +212,7 @@ public:
+     handler, then the associated immediage executor of the derived class will
+     be this type.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using immediate_executor_type =
+         __implementation_defined__;
+ #endif
+@@ -241,7 +241,7 @@ public:
+         derived from this class. If `Allocator` is default-constructible,
+         this parameter is optional and may be omitted.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class Handler_>
+     async_base(
+         Handler&& handler,
+@@ -454,7 +454,7 @@ public:
+         h_(std::forward<Args>(args)...);
+     }
+ 
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     Handler*
+     get_legacy_handler_pointer() noexcept
+     {
+@@ -673,7 +673,7 @@ public:
+         derived from this class. If `Allocator` is default-constructible,
+         this parameter is optional and may be omitted.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class Handler>
+     stable_async_base(
+         Handler&& handler,
+diff --git boost/boost/beast/core/basic_stream.hpp boost/boost/beast/core/basic_stream.hpp
+--- boost/boost/beast/core/basic_stream.hpp
++++ boost/boost/beast/core/basic_stream.hpp
+@@ -29,7 +29,7 @@
+ #include <limits>
+ #include <memory>
+ 
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+ namespace boost {
+ namespace asio {
+ namespace ssl {
+@@ -201,7 +201,7 @@ template<
+     class RatePolicy = unlimited_rate_policy
+ >
+ class basic_stream
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     : private detail::stream_base
+ #endif
+ {
+@@ -305,7 +305,7 @@ private:
+ 
+     struct ops;
+ 
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     // boost::asio::ssl::stream needs these
+     // DEPRECATED
+     template<class>
+@@ -344,7 +344,7 @@ public:
+         @param args A list of parameters forwarded to the constructor of
+         the underlying socket.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class... Args>
+     explicit
+     basic_stream(Args&&... args);
+@@ -385,7 +385,7 @@ public:
+         @param args A list of parameters forwarded to the constructor of
+         the underlying socket.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class RatePolicy_, class... Args>
+     explicit
+     basic_stream(RatePolicy_&& policy, Args&&... args);
+@@ -599,7 +599,7 @@ public:
+         Otherwise, contains the error from the last connection attempt.
+     */
+     template<class EndpointSequence
+-    #if ! BOOST_BEAST_DOXYGEN
++    #if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         ,class = typename std::enable_if<
+             net::is_endpoint_sequence<
+                 EndpointSequence>::value>::type
+@@ -633,7 +633,7 @@ public:
+         default-constructed endpoint.
+     */
+     template<class EndpointSequence
+-    #if ! BOOST_BEAST_DOXYGEN
++    #if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         ,class = typename std::enable_if<
+             net::is_endpoint_sequence<
+                 EndpointSequence>::value>::type
+@@ -745,7 +745,7 @@ public:
+     */
+     template<
+         class EndpointSequence, class ConnectCondition
+-    #if ! BOOST_BEAST_DOXYGEN
++    #if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         ,class = typename std::enable_if<
+             net::is_endpoint_sequence<
+                 EndpointSequence>::value>::type
+@@ -796,7 +796,7 @@ public:
+     */
+     template<
+         class EndpointSequence, class ConnectCondition
+-    #if ! BOOST_BEAST_DOXYGEN
++    #if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         ,class = typename std::enable_if<
+             net::is_endpoint_sequence<
+                 EndpointSequence>::value>::type
+@@ -1022,7 +1022,7 @@ public:
+             void(error_code, typename Protocol::endpoint))
+             RangeConnectHandler =
+                 net::default_completion_token_t<executor_type>
+-    #if ! BOOST_BEAST_DOXYGEN
++    #if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         ,class = typename std::enable_if<
+             net::is_endpoint_sequence<
+                 EndpointSequence>::value>::type
+@@ -1132,7 +1132,7 @@ public:
+             void(error_code, typename Protocol::endpoint))
+             RangeConnectHandler =
+                 net::default_completion_token_t<executor_type>
+-    #if ! BOOST_BEAST_DOXYGEN
++    #if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         ,class = typename std::enable_if<
+             net::is_endpoint_sequence<
+                 EndpointSequence>::value>::type
+@@ -1213,7 +1213,7 @@ public:
+             void(error_code, Iterator))
+             IteratorConnectHandler =
+                 net::default_completion_token_t<executor_type>
+-    #if ! BOOST_BEAST_DOXYGEN
++    #if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         ,class = typename std::enable_if<
+             !net::is_connect_condition<IteratorConnectHandler, Iterator>::value
+         >::type
+@@ -1293,7 +1293,7 @@ public:
+             void(error_code, Iterator))
+             IteratorConnectHandler =
+                 net::default_completion_token_t<executor_type>
+-    #if ! BOOST_BEAST_DOXYGEN
++    #if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         ,class = typename std::enable_if<
+             net::is_connect_condition<ConnectCondition, Iterator>::value
+         >::type
+diff --git boost/boost/beast/core/bind_handler.hpp boost/boost/beast/core/bind_handler.hpp
+--- boost/boost/beast/core/bind_handler.hpp
++++ boost/boost/beast/core/bind_handler.hpp
+@@ -56,7 +56,7 @@ namespace beast {
+     a fashion identical to a call to `std::bind`.
+ */
+ template<class Handler, class... Args>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ __implementation_defined__
+ #else
+ detail::bind_wrapper<
+@@ -107,7 +107,7 @@ bind_handler(Handler&& handler, Args&&... args)
+     The arguments are forwarded into the returned object.
+ */
+ template<class Handler, class... Args>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ __implementation_defined__
+ #else
+ auto
+diff --git boost/boost/beast/core/buffer_traits.hpp boost/boost/beast/core/buffer_traits.hpp
+--- boost/boost/beast/core/buffer_traits.hpp
++++ boost/boost/beast/core/buffer_traits.hpp
+@@ -32,7 +32,7 @@ namespace beast {
+     list is empty, the resulting type alias will be `std::true_type`.
+ */
+ template<class... BufferSequence>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ using is_const_buffer_sequence = __see_below__;
+ #else
+ using is_const_buffer_sequence = mp11::mp_all<
+@@ -51,7 +51,7 @@ using is_const_buffer_sequence = mp11::mp_all<
+     list is empty, the resulting type alias will be `std::true_type`.
+ */
+ template<class... BufferSequence>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ using is_mutable_buffer_sequence = __see_below__;
+ #else
+ using is_mutable_buffer_sequence = mp11::mp_all<
+@@ -93,7 +93,7 @@ using is_mutable_buffer_sequence = mp11::mp_all<
+     list is empty, the resulting type alias will be `net::mutable_buffer`.
+ */
+ template<class... BufferSequence>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ using buffers_type = __see_below__;
+ #else
+ using buffers_type = typename std::conditional<
+@@ -111,7 +111,7 @@ using buffers_type = typename std::conditional<
+     the buffer sequence.
+ */
+ template <class BufferSequence>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ using buffers_iterator_type = __see_below__;
+ #elif BOOST_WORKAROUND(BOOST_MSVC, < 1910)
+ using buffers_iterator_type = typename
+@@ -150,7 +150,7 @@ using buffers_iterator_type =
+ 
+     @return The total number of bytes in the buffer or sequence.
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class BufferSequence>
+ std::size_t
+ buffer_bytes(BufferSequence const& buffers);
+diff --git boost/boost/beast/core/buffers_adaptor.hpp boost/boost/beast/core/buffers_adaptor.hpp
+--- boost/boost/beast/core/buffers_adaptor.hpp
++++ boost/boost/beast/core/buffers_adaptor.hpp
+@@ -102,7 +102,7 @@ public:
+ 
+     //--------------------------------------------------------------------------
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     /// The ConstBufferSequence used to represent the readable bytes.
+     using const_buffers_type = __implementation_defined__;
+ 
+diff --git boost/boost/beast/core/buffers_cat.hpp boost/boost/beast/core/buffers_cat.hpp
+--- boost/boost/beast/core/buffers_cat.hpp
++++ boost/boost/beast/core/buffers_cat.hpp
+@@ -32,7 +32,7 @@ public:
+         then `value_type` will be `net::mutable_buffer`.
+         Otherwise, `value_type` will be `net::const_buffer`.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using value_type = __see_below__;
+ #else
+     using value_type = buffers_type<Buffers...>;
+@@ -81,7 +81,7 @@ public:
+     sequence will be a <em>ConstBufferSequence</em>.
+     @see buffers_cat_view
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class... BufferSequence>
+ buffers_cat_view<BufferSequence...>
+ buffers_cat(BufferSequence const&... buffers)
+diff --git boost/boost/beast/core/buffers_generator.hpp boost/boost/beast/core/buffers_generator.hpp
+--- boost/boost/beast/core/buffers_generator.hpp
++++ boost/boost/beast/core/buffers_generator.hpp
+@@ -83,7 +83,7 @@ struct is_buffers_generator<
+ template<
+     class SyncWriteStream,
+     class BuffersGenerator
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     , typename std::enable_if<is_buffers_generator<
+         typename std::decay<BuffersGenerator>::
+             type>::value>::type* = nullptr
+@@ -122,7 +122,7 @@ write(
+ template<
+     class SyncWriteStream,
+     class BuffersGenerator
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     , typename std::enable_if<is_buffers_generator<
+         typename std::decay<BuffersGenerator>::
+             type>::value>::type* = nullptr
+@@ -180,7 +180,7 @@ template<
+     class BuffersGenerator,
+     BOOST_BEAST_ASYNC_TPARAM2 CompletionToken
+     = net::default_completion_token_t<executor_type<AsyncWriteStream>>
+-#if !BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     , typename std::enable_if<is_buffers_generator<
+         BuffersGenerator>::value>::type* = nullptr
+ #endif
+diff --git boost/boost/beast/core/buffers_prefix.hpp boost/boost/beast/core/buffers_prefix.hpp
+--- boost/boost/beast/core/buffers_prefix.hpp
++++ boost/boost/beast/core/buffers_prefix.hpp
+@@ -60,7 +60,7 @@ public:
+ 
+         @see buffers_type
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using value_type = __see_below__;
+ #elif BOOST_WORKAROUND(BOOST_MSVC, < 1910)
+     using value_type = typename std::conditional<
+@@ -73,7 +73,7 @@ public:
+     using value_type = buffers_type<BufferSequence>;
+ #endif
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     /// A bidirectional iterator type that may be used to read elements.
+     using const_iterator = __implementation_defined__;
+ 
+@@ -127,7 +127,7 @@ public:
+     const_iterator
+     end() const;
+ 
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     std::size_t
+     buffer_bytes_impl() const noexcept
+     {
+diff --git boost/boost/beast/core/buffers_range.hpp boost/boost/beast/core/buffers_range.hpp
+--- boost/boost/beast/core/buffers_range.hpp
++++ boost/boost/beast/core/buffers_range.hpp
+@@ -54,7 +54,7 @@ namespace beast {
+     @see buffers_range_ref
+ */
+ template<class BufferSequence>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ __implementation_defined__
+ #else
+ detail::buffers_range_adaptor<BufferSequence>
+@@ -107,7 +107,7 @@ buffers_range(BufferSequence const& buffers)
+     @see buffers_range
+ */
+ template<class BufferSequence>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ __implementation_defined__
+ #else
+ detail::buffers_range_adaptor<BufferSequence const&>
+diff --git boost/boost/beast/core/buffers_suffix.hpp boost/boost/beast/core/buffers_suffix.hpp
+--- boost/boost/beast/core/buffers_suffix.hpp
++++ boost/boost/beast/core/buffers_suffix.hpp
+@@ -77,13 +77,13 @@ public:
+         `net::mutable_buffer`, otherwise this type will be
+         `net::const_buffer`.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using value_type = __see_below__;
+ #else
+     using value_type = buffers_type<BufferSequence>;
+ #endif
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     /// A bidirectional iterator type that may be used to read elements.
+     using const_iterator = __implementation_defined__;
+ 
+diff --git boost/boost/beast/core/detail/bind_continuation.hpp boost/boost/beast/core/detail/bind_continuation.hpp
+--- boost/boost/beast/core/detail/bind_continuation.hpp
++++ boost/boost/beast/core/detail/bind_continuation.hpp
+@@ -39,7 +39,7 @@ namespace detail {
+     @li <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4242.html">[N4242] Executors and Asynchronous Operations, Revision 1</a>
+ */
+ template<class CompletionHandler>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ __implementation_defined__
+ #else
+ net::executor_binder<
+@@ -75,7 +75,7 @@ bind_continuation(CompletionHandler&& handler)
+     @li <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4242.html">[N4242] Executors and Asynchronous Operations, Revision 1</a>
+ */
+ template<class Executor, class CompletionHandler>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ __implementation_defined__
+ #else
+ net::executor_binder<typename
+diff --git boost/boost/beast/core/detail/buffers_range_adaptor.hpp boost/boost/beast/core/detail/buffers_range_adaptor.hpp
+--- boost/boost/beast/core/detail/buffers_range_adaptor.hpp
++++ boost/boost/beast/core/detail/buffers_range_adaptor.hpp
+@@ -24,7 +24,7 @@ class buffers_range_adaptor
+     BufferSequence b_;
+ 
+ public:
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using value_type = __see_below__;
+ #else
+     using value_type = buffers_type<BufferSequence>;
+diff --git boost/boost/beast/core/detail/config.hpp boost/boost/beast/core/detail/config.hpp
+--- boost/boost/beast/core/detail/config.hpp
++++ boost/boost/beast/core/detail/config.hpp
+@@ -76,7 +76,7 @@ namespace net = boost::asio;
+ # endif
+ #endif
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ # define BOOST_BEAST_DECL
+ #elif defined(BOOST_BEAST_HEADER_ONLY)
+ # define BOOST_BEAST_DECL inline
+diff --git boost/boost/beast/core/detail/read.hpp boost/boost/beast/core/detail/read.hpp
+--- boost/boost/beast/core/detail/read.hpp
++++ boost/boost/beast/core/detail/read.hpp
+@@ -71,7 +71,7 @@ template<
+     class SyncReadStream,
+     class DynamicBuffer,
+     class CompletionCondition
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     , class = typename std::enable_if<
+         is_sync_read_stream<SyncReadStream>::value &&
+         net::is_dynamic_buffer<DynamicBuffer>::value &&
+@@ -132,7 +132,7 @@ template<
+     class SyncReadStream,
+     class DynamicBuffer,
+     class CompletionCondition
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     , class = typename std::enable_if<
+         is_sync_read_stream<SyncReadStream>::value &&
+         net::is_dynamic_buffer<DynamicBuffer>::value &&
+@@ -221,7 +221,7 @@ template<
+     class DynamicBuffer,
+     class CompletionCondition,
+     BOOST_BEAST_ASYNC_TPARAM2 ReadHandler
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     , class = typename std::enable_if<
+         is_async_read_stream<AsyncReadStream>::value &&
+         net::is_dynamic_buffer<DynamicBuffer>::value &&
+diff --git boost/boost/beast/core/error.hpp boost/boost/beast/core/error.hpp
+--- boost/boost/beast/core/error.hpp
++++ boost/boost/beast/core/error.hpp
+@@ -27,7 +27,7 @@ using system_error = boost::system::system_error;
+ using error_category = boost::system::error_category;
+ 
+ /// A function to return the generic error category used by the library
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ error_category const&
+ generic_category();
+ #else
+@@ -35,7 +35,7 @@ using boost::system::generic_category;
+ #endif
+ 
+ /// A function to return the system error category used by the library
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ error_category const&
+ system_category();
+ #else
+@@ -46,7 +46,7 @@ using boost::system::system_category;
+ using error_condition = boost::system::error_condition;
+ 
+ /// The set of constants used for cross-platform error codes
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ enum errc{};
+ #else
+ namespace errc = boost::system::errc;
+diff --git boost/boost/beast/core/file.hpp boost/boost/beast/core/file.hpp
+--- boost/boost/beast/core/file.hpp
++++ boost/boost/beast/core/file.hpp
+@@ -24,7 +24,7 @@ namespace beast {
+     This alias is set to the best available implementation
+     of <em>File</em> given the platform and build settings.
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ struct file : file_stdio
+ {
+ };
+diff --git boost/boost/beast/core/file_base.hpp boost/boost/beast/core/file_base.hpp
+--- boost/boost/beast/core/file_base.hpp
++++ boost/boost/beast/core/file_base.hpp
+@@ -122,7 +122,7 @@ enum class file_mode
+     f(File& file);
+     @endcode
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ struct is_file : std::integral_constant<bool, ...>{};
+ #else
+diff --git boost/boost/beast/core/file_win32.hpp boost/boost/beast/core/file_win32.hpp
+--- boost/boost/beast/core/file_win32.hpp
++++ boost/boost/beast/core/file_win32.hpp
+@@ -46,7 +46,7 @@ public:
+ 
+         This is platform-specific.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using native_handle_type = HANDLE;
+ #else
+     using native_handle_type = boost::winapi::HANDLE_;
+diff --git boost/boost/beast/core/flat_buffer.hpp boost/boost/beast/core/flat_buffer.hpp
+--- boost/boost/beast/core/flat_buffer.hpp
++++ boost/boost/beast/core/flat_buffer.hpp
+@@ -56,7 +56,7 @@ namespace beast {
+ */
+ template<class Allocator>
+ class basic_flat_buffer
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     : private boost::empty_value<
+         typename detail::allocator_traits<Allocator>::
+             template rebind_alloc<char>>
+diff --git boost/boost/beast/core/flat_stream.hpp boost/boost/beast/core/flat_stream.hpp
+--- boost/boost/beast/core/flat_stream.hpp
++++ boost/boost/beast/core/flat_stream.hpp
+@@ -88,7 +88,7 @@ namespace beast {
+ */
+ template<class NextLayer>
+ class flat_stream
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     : private detail::flat_stream_base
+ #endif
+ {
+diff --git boost/boost/beast/core/impl/basic_stream.hpp boost/boost/beast/core/impl/basic_stream.hpp
+--- boost/boost/beast/core/impl/basic_stream.hpp
++++ boost/boost/beast/core/impl/basic_stream.hpp
+@@ -1077,7 +1077,7 @@ async_write_some(
+ // Customization points
+ //
+ 
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+ 
+ template<
+     class Protocol, class Executor, class RatePolicy>
+diff --git boost/boost/beast/core/impl/multi_buffer.hpp boost/boost/beast/core/impl/multi_buffer.hpp
+--- boost/boost/beast/core/impl/multi_buffer.hpp
++++ boost/boost/beast/core/impl/multi_buffer.hpp
+@@ -726,7 +726,7 @@ shrink_to_fit()
+         in_pos_ = 0;
+         out_pos_ = 0;
+         out_end_ = 0;
+-    #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++    #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+         debug_check();
+     #endif
+         return;
+@@ -745,7 +745,7 @@ shrink_to_fit()
+                 std::next(out_),
+                 list_.end());
+             destroy(extra);
+-        #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++        #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+             debug_check();
+         #endif
+         }
+@@ -761,7 +761,7 @@ shrink_to_fit()
+             out_ = list_.end();
+             destroy(e);
+             out_end_ = 0;
+-        #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++        #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+             debug_check();
+         #endif
+         }
+@@ -793,7 +793,7 @@ shrink_to_fit()
+         out_ = list_.end();
+         out_pos_ = 0;
+         out_end_ = 0;
+-    #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++    #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+         debug_check();
+     #endif
+     }
+@@ -828,7 +828,7 @@ shrink_to_fit()
+             in_pos_ = 0;
+             out_ = list_.end();
+         }
+-    #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++    #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+         debug_check();
+     #endif
+     }
+@@ -867,7 +867,7 @@ prepare(size_type n) ->
+             out_end_ = out_->size();
+             reuse.splice(reuse.end(), list_,
+                 std::next(out_), list_.end());
+-        #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++        #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+             debug_check();
+         #endif
+         }
+@@ -882,7 +882,7 @@ prepare(size_type n) ->
+             out_end_ = out_pos_ + n;
+             n = 0;
+         }
+-    #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++    #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+         debug_check();
+     #endif
+     }
+@@ -903,7 +903,7 @@ prepare(size_type n) ->
+             out_end_ = n;
+             n = 0;
+         }
+-    #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++    #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+         debug_check();
+     #endif
+     }
+@@ -929,7 +929,7 @@ prepare(size_type n) ->
+             if(out_ == list_.end())
+                 out_ = list_.iterator_to(e);
+             out_end_ = n;
+-        #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++        #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+             debug_check();
+         #endif
+         }
+@@ -961,7 +961,7 @@ commit(size_type n) noexcept
+         {
+             out_pos_ += n;
+             in_size_ += n;
+-        #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++        #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+             debug_check();
+         #endif
+             return;
+@@ -970,7 +970,7 @@ commit(size_type n) noexcept
+         n -= avail;
+         out_pos_ = 0;
+         in_size_ += avail;
+-    #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++    #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+         debug_check();
+     #endif
+     }
+@@ -984,7 +984,7 @@ commit(size_type n) noexcept
+         out_pos_ = 0;
+         out_end_ = 0;
+     }
+-#if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++#if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+     debug_check();
+ #endif
+ }
+@@ -1006,7 +1006,7 @@ consume(size_type n) noexcept
+             {
+                 in_size_ -= n;
+                 in_pos_ += n;
+-            #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++            #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+                 debug_check();
+             #endif
+                 break;
+@@ -1017,7 +1017,7 @@ consume(size_type n) noexcept
+             auto& e = list_.front();
+             list_.erase(list_.iterator_to(e));
+             destroy(e);
+-        #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++        #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+             debug_check();
+         #endif
+         }
+@@ -1046,7 +1046,7 @@ consume(size_type n) noexcept
+                     out_end_ = 0;
+                 }
+             }
+-        #if BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
++        #if defined(BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK) && BOOST_BEAST_MULTI_BUFFER_DEBUG_CHECK
+             debug_check();
+         #endif
+             break;
+diff --git boost/boost/beast/core/make_printable.hpp boost/boost/beast/core/make_printable.hpp
+--- boost/boost/beast/core/make_printable.hpp
++++ boost/boost/beast/core/make_printable.hpp
+@@ -87,7 +87,7 @@ operator<<(std::ostream& os,
+     for managing its lifetime.
+ */
+ template<class ConstBufferSequence>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ __implementation_defined__
+ #else
+ detail::make_printable_adaptor<ConstBufferSequence>
+diff --git boost/boost/beast/core/multi_buffer.hpp boost/boost/beast/core/multi_buffer.hpp
+--- boost/boost/beast/core/multi_buffer.hpp
++++ boost/boost/beast/core/multi_buffer.hpp
+@@ -62,7 +62,7 @@ namespace beast {
+ */
+ template<class Allocator>
+ class basic_multi_buffer
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     : private boost::empty_value<Allocator>
+ #endif
+ {
+@@ -156,7 +156,7 @@ class basic_multi_buffer
+     size_type out_end_ = 0; // output end offset in list_.back()
+ 
+ public:
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     /// The ConstBufferSequence used to represent the readable bytes.
+     using const_buffers_type = __implementation_defined__;
+ 
+diff --git boost/boost/beast/core/ostream.hpp boost/boost/beast/core/ostream.hpp
+--- boost/boost/beast/core/ostream.hpp
++++ boost/boost/beast/core/ostream.hpp
+@@ -48,7 +48,7 @@ namespace beast {
+     lifetime of the output stream.
+ */
+ template<class DynamicBuffer>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ __implementation_defined__
+ #else
+ detail::ostream_helper<
+diff --git boost/boost/beast/core/static_buffer.hpp boost/boost/beast/core/static_buffer.hpp
+--- boost/boost/beast/core/static_buffer.hpp
++++ boost/boost/beast/core/static_buffer.hpp
+@@ -90,7 +90,7 @@ public:
+ 
+     //--------------------------------------------------------------------------
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     /// The ConstBufferSequence used to represent the readable bytes.
+     using const_buffers_type = __implementation_defined__;
+ 
+diff --git boost/boost/beast/core/stream_traits.hpp boost/boost/beast/core/stream_traits.hpp
+--- boost/boost/beast/core/stream_traits.hpp
++++ boost/boost/beast/core/stream_traits.hpp
+@@ -31,7 +31,7 @@ namespace beast {
+     @return The type of the lowest layer.
+ */
+ template<class T>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ using lowest_layer_type = __see_below__;
+ #else
+ using lowest_layer_type = detail::lowest_layer_type<T>;
+@@ -101,7 +101,7 @@ get_lowest_layer(T& t) noexcept
+     @return The type of values returned from `get_executor`.
+ */
+ // Workaround for ICE on gcc 4.8
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using executor_type = __see_below__;
+ #elif BOOST_WORKAROUND(BOOST_GCC, < 40900)
+@@ -161,7 +161,7 @@ using executor_type =
+     static_assert(has_get_executor<stream>::value, "Missing get_executor member");
+     @endcode
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using has_get_executor = __see_below__;
+ #else
+@@ -199,7 +199,7 @@ struct has_get_executor<T, boost::void_t<decltype(
+     f(SyncReadStream& stream);
+     @endcode
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using is_sync_read_stream = __see_below__;
+ #else
+@@ -243,7 +243,7 @@ struct is_sync_read_stream<T, boost::void_t<decltype(
+     f(SyncReadStream& stream);
+     @endcode
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using is_sync_write_stream = __see_below__;
+ #else
+@@ -288,7 +288,7 @@ struct is_sync_write_stream<T, boost::void_t<decltype(
+     f(SyncStream& stream);
+     @endcode
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using is_sync_stream = __see_below__;
+ #else
+@@ -326,7 +326,7 @@ using is_sync_stream = std::integral_constant<bool,
+         f(AsyncReadStream& stream);
+     @endcode
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using is_async_read_stream = __see_below__;
+ #else
+@@ -370,7 +370,7 @@ struct is_async_read_stream<T, boost::void_t<decltype(
+     f(AsyncWriteStream& stream);
+     @endcode
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using is_async_write_stream = __see_below__;
+ #else
+@@ -414,7 +414,7 @@ struct is_async_write_stream<T, boost::void_t<decltype(
+     f(AsyncStream& stream);
+     @endcode
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using is_async_stream = __see_below__;
+ #else
+@@ -530,7 +530,7 @@ struct close_socket_impl
+ 
+     @see beast_close_socket
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class Socket>
+ void
+ close_socket(Socket& sock);
+diff --git boost/boost/beast/http/basic_dynamic_body.hpp boost/boost/beast/http/basic_dynamic_body.hpp
+--- boost/boost/beast/http/basic_dynamic_body.hpp
++++ boost/boost/beast/http/basic_dynamic_body.hpp
+@@ -64,7 +64,7 @@ struct basic_dynamic_body
+ 
+         Meets the requirements of <em>BodyReader</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using reader = __implementation_defined__;
+ #else
+     class reader
+@@ -122,7 +122,7 @@ struct basic_dynamic_body
+ 
+         Meets the requirements of <em>BodyWriter</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using writer = __implementation_defined__;
+ #else
+     class writer
+diff --git boost/boost/beast/http/basic_file_body.hpp boost/boost/beast/http/basic_file_body.hpp
+--- boost/boost/beast/http/basic_file_body.hpp
++++ boost/boost/beast/http/basic_file_body.hpp
+@@ -573,7 +573,7 @@ finish(error_code& ec)
+ 
+ //]
+ 
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+ // operator<< is not supported for file_body
+ template<bool isRequest, class File, class Fields>
+ std::ostream&
+diff --git boost/boost/beast/http/basic_parser.hpp boost/boost/beast/http/basic_parser.hpp
+--- boost/boost/beast/http/basic_parser.hpp
++++ boost/boost/beast/http/basic_parser.hpp
+@@ -412,7 +412,7 @@ public:
+     std::size_t
+     put(ConstBufferSequence const& buffers, error_code& ec);
+ 
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     std::size_t
+     put(net::const_buffer buffer,
+         error_code& ec);
+diff --git boost/boost/beast/http/buffer_body.hpp boost/boost/beast/http/buffer_body.hpp
+--- boost/boost/beast/http/buffer_body.hpp
++++ boost/boost/beast/http/buffer_body.hpp
+@@ -98,7 +98,7 @@ struct buffer_body
+ 
+         Meets the requirements of <em>BodyReader</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using reader = __implementation_defined__;
+ #else
+     class reader
+@@ -156,7 +156,7 @@ struct buffer_body
+ 
+         Meets the requirements of <em>BodyWriter</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using writer = __implementation_defined__;
+ #else
+     class writer
+@@ -217,7 +217,7 @@ struct buffer_body
+ #endif
+ };
+ 
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+ // operator<< is not supported for buffer_body
+ template<bool isRequest, class Fields>
+ std::ostream&
+diff --git boost/boost/beast/http/chunk_encode.hpp boost/boost/beast/http/chunk_encode.hpp
+--- boost/boost/beast/http/chunk_encode.hpp
++++ boost/boost/beast/http/chunk_encode.hpp
+@@ -45,7 +45,7 @@ struct chunk_crlf
+     //-----
+ 
+     /// Required for <em>ConstBufferSequence</em>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using value_type = __implementation_defined__;
+ #else
+     using value_type = net::const_buffer;
+@@ -179,7 +179,7 @@ public:
+         @see https://tools.ietf.org/html/rfc7230#section-4.1
+     */
+     template<class ChunkExtensions
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         , class = typename std::enable_if<
+             detail::is_chunk_extensions<
+                 ChunkExtensions>::value>::type
+@@ -215,7 +215,7 @@ public:
+         @see https://tools.ietf.org/html/rfc7230#section-4.1
+     */
+     template<class ChunkExtensions, class Allocator
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         , class = typename std::enable_if<
+             detail::is_chunk_extensions<
+                 ChunkExtensions>::value>::type
+@@ -229,14 +229,14 @@ public:
+     //-----
+ 
+     /// Required for <em>ConstBufferSequence</em>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using value_type = __implementation_defined__;
+ #else
+     using value_type = typename view_type::value_type;
+ #endif
+ 
+     /// Required for <em>ConstBufferSequence</em>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using const_iterator = __implementation_defined__;
+ #else
+     using const_iterator = typename view_type::const_iterator;
+@@ -370,7 +370,7 @@ public:
+         @see https://tools.ietf.org/html/rfc7230#section-4.1
+     */
+     template<class ChunkExtensions
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         , class = typename std::enable_if<
+             ! std::is_convertible<typename std::decay<
+                 ChunkExtensions>::type, string_view>::value>::type
+@@ -409,7 +409,7 @@ public:
+         @see https://tools.ietf.org/html/rfc7230#section-4.1
+     */
+     template<class ChunkExtensions, class Allocator
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         , class = typename std::enable_if<
+             ! std::is_convertible<typename std::decay<
+                 ChunkExtensions>::type, string_view>::value>::type
+@@ -423,14 +423,14 @@ public:
+     //-----
+ 
+     /// Required for <em>ConstBufferSequence</em>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using value_type = __implementation_defined__;
+ #else
+     using value_type = typename view_type::value_type;
+ #endif
+ 
+     /// Required for <em>ConstBufferSequence</em>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using const_iterator = __implementation_defined__;
+ #else
+     using const_iterator = typename view_type::const_iterator;
+@@ -511,7 +511,7 @@ public:
+         @param allocator The allocator to use for storing temporary
+         data associated with the serialized trailer buffers.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class Allocator>
+     chunk_last(Trailer const& trailer, Allocator const& allocator);
+ #else
+@@ -528,7 +528,7 @@ public:
+     chunk_last(chunk_last const&) = default;
+ 
+     /// Required for <em>ConstBufferSequence</em>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using value_type = __implementation_defined__;
+ #else
+     using value_type =
+@@ -536,7 +536,7 @@ public:
+ #endif
+ 
+     /// Required for <em>ConstBufferSequence</em>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using const_iterator = __implementation_defined__;
+ #else
+     using const_iterator =
+diff --git boost/boost/beast/http/detail/basic_parsed_list.hpp boost/boost/beast/http/detail/basic_parsed_list.hpp
+--- boost/boost/beast/http/detail/basic_parsed_list.hpp
++++ boost/boost/beast/http/detail/basic_parsed_list.hpp
+@@ -35,7 +35,7 @@ public:
+     using value_type = typename Policy::value_type;
+ 
+     /// A constant iterator to a list element.
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using const_iterator = __implementation_defined__;
+ #else
+     class const_iterator;
+diff --git boost/boost/beast/http/dynamic_body.hpp boost/boost/beast/http/dynamic_body.hpp
+--- boost/boost/beast/http/dynamic_body.hpp
++++ boost/boost/beast/http/dynamic_body.hpp
+@@ -19,7 +19,7 @@ namespace boost {
+ namespace beast {
+ namespace http {
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ /** A dynamic message body represented by a @ref multi_buffer
+ 
+     Meets the requirements of <em>Body</em>.
+diff --git boost/boost/beast/http/empty_body.hpp boost/boost/beast/http/empty_body.hpp
+--- boost/boost/beast/http/empty_body.hpp
++++ boost/boost/beast/http/empty_body.hpp
+@@ -60,7 +60,7 @@ struct empty_body
+ 
+         Meets the requirements of <em>BodyReader</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using reader = __implementation_defined__;
+ #else
+     struct reader
+@@ -98,7 +98,7 @@ struct empty_body
+ 
+         Meets the requirements of <em>BodyWriter</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using writer = __implementation_defined__;
+ #else
+     struct writer
+diff --git boost/boost/beast/http/fields.hpp boost/boost/beast/http/fields.hpp
+--- boost/boost/beast/http/fields.hpp
++++ boost/boost/beast/http/fields.hpp
+@@ -51,7 +51,7 @@ namespace http {
+ */
+ template<class Allocator>
+ class basic_fields
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     : private boost::empty_value<Allocator>
+ #endif
+ {
+@@ -117,7 +117,7 @@ public:
+ 
+         The case-comparison operation is defined only for low-ASCII characters.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using key_compare = __implementation_defined__;
+ #else
+     struct key_compare : beast::iless
+@@ -164,7 +164,7 @@ public:
+     };
+ 
+     /// The algorithm used to serialize the header
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using writer = __implementation_defined__;
+ #else
+     class writer;
+@@ -294,7 +294,7 @@ public:
+ 
+ public:
+     /// A constant iterator to the field sequence.
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using const_iterator = __implementation_defined__;
+ #else
+     using const_iterator = typename list_t::const_iterator;
+@@ -864,7 +864,7 @@ private:
+     string_view target_or_reason_;
+ };
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ /// A typical HTTP header fields container
+ using fields = basic_fields<std::allocator<char>>;
+ #endif
+diff --git boost/boost/beast/http/file_body.hpp boost/boost/beast/http/file_body.hpp
+--- boost/boost/beast/http/file_body.hpp
++++ boost/boost/beast/http/file_body.hpp
+@@ -22,7 +22,7 @@ namespace boost {
+ namespace beast {
+ namespace http {
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ /// A message body represented by a file on the filesystem.
+ using file_body = basic_file_body<file>;
+ #endif
+diff --git boost/boost/beast/http/message.hpp boost/boost/beast/http/message.hpp
+--- boost/boost/beast/http/message.hpp
++++ boost/boost/beast/http/message.hpp
+@@ -44,7 +44,7 @@ namespace http {
+ 
+     A `header` includes the start-line and header-fields.
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<bool isRequest, class Fields = fields>
+ class header : public Fields
+ #else
+@@ -57,7 +57,7 @@ public:
+         "Fields type requirements not met");
+ 
+     /// Indicates if the header is a request or response.
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using is_request = std::integral_constant<bool, isRequest>;
+ #else
+     using is_request = std::true_type;
+@@ -205,7 +205,7 @@ public:
+         not convertible to @ref header, @ref verb, or
+         @ref status.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class... Args>
+     explicit
+     header(Args&&... args);
+@@ -415,7 +415,7 @@ public:
+     reason(string_view s);
+ 
+ private:
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     template<bool, class, class>
+     friend class message;
+ 
+@@ -440,7 +440,7 @@ private:
+ #endif
+ };
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ /// A typical HTTP request header
+ template<class Fields = fields>
+ using request_header = header<true, Fields>;
+@@ -487,14 +487,14 @@ using value_type_t = typename T::value_type;
+     @tparam Fields The type of container used to hold the
+     field value pairs.
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<bool isRequest, class Body, class Fields = fields>
+ #else
+ template<bool isRequest, class Body, class Fields>
+ #endif
+ class message
+     : public header<isRequest, Fields>
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     , boost::empty_value<
+         typename Body::value_type>
+ #endif
+@@ -556,7 +556,7 @@ public:
+ 
+         @note This function is only available when `isRequest == true`.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     message(verb method, string_view target, unsigned version);
+ #else
+     template<class Version,
+@@ -577,7 +577,7 @@ public:
+ 
+         @note This function is only available when `isRequest == true`.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class BodyArg>
+     message(verb method, string_view target,
+         unsigned version, BodyArg&& body_arg);
+@@ -603,7 +603,7 @@ public:
+ 
+         @note This function is only available when `isRequest == true`.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class BodyArg, class FieldsArg>
+     message(verb method, string_view target, unsigned version,
+         BodyArg&& body_arg, FieldsArg&& fields_arg);
+@@ -623,7 +623,7 @@ public:
+ 
+         @note This member is only available when `isRequest == false`.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     message(status result, unsigned version);
+ #else
+     template<class Version,
+@@ -642,7 +642,7 @@ public:
+ 
+         @note This member is only available when `isRequest == false`.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class BodyArg>
+     message(status result, unsigned version, BodyArg&& body_arg);
+ #else
+@@ -664,7 +664,7 @@ public:
+ 
+         @note This member is only available when `isRequest == false`.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class BodyArg, class FieldsArg>
+     message(status result, unsigned version,
+         BodyArg&& body_arg, FieldsArg&& fields_arg);
+@@ -868,7 +868,7 @@ public:
+     }
+ 
+     /// Returns the body
+-#if BOOST_BEAST_DOXYGEN || ! defined(BOOST_MSVC)
++#if (defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN) || ! defined(BOOST_MSVC)
+     typename body_type::value_type&
+ #else
+     detail::value_type_t<Body>&
+@@ -880,7 +880,7 @@ public:
+     }
+ 
+     /// Returns the body
+-#if BOOST_BEAST_DOXYGEN || ! defined(BOOST_MSVC)
++#if (defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN) || ! defined(BOOST_MSVC)
+     typename body_type::value_type&&
+ #else
+     detail::value_type_t<Body>&&
+@@ -893,7 +893,7 @@ public:
+     }
+ 
+     /// Returns the body
+-#if BOOST_BEAST_DOXYGEN || ! defined(BOOST_MSVC)
++#if (defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN) || ! defined(BOOST_MSVC)
+     typename body_type::value_type const&
+ #else
+     detail::value_type_t<Body> const&
+@@ -973,7 +973,7 @@ private:
+     prepare_payload(std::false_type);
+ };
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ /// A typical HTTP request
+ template<class Body, class Fields = fields>
+ using request = message<true, Body, Fields>;
+@@ -985,7 +985,7 @@ using response = message<false, Body, Fields>;
+ 
+ //------------------------------------------------------------------------------
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ /** Swap two header objects.
+ 
+     @par Requirements
+diff --git boost/boost/beast/http/parser.hpp boost/boost/beast/http/parser.hpp
+--- boost/boost/beast/http/parser.hpp
++++ boost/boost/beast/http/parser.hpp
+@@ -45,7 +45,7 @@ namespace http {
+ 
+     @note A new instance of the parser is required for each message.
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<
+     bool isRequest,
+     class Body,
+@@ -112,7 +112,7 @@ public:
+         resolution only if the first argument is not a
+         @ref parser.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class... Args>
+     explicit
+     parser(Args&&... args);
+@@ -156,7 +156,7 @@ public:
+         @note This function participates in overload resolution only
+         if the other parser uses a different body type.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     template<class OtherBody, class... Args>
+ #else
+     template<class OtherBody, class... Args,
+@@ -498,7 +498,7 @@ private:
+     }
+ };
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ /// An HTTP/1 parser for producing a request message.
+ template<class Body, class Allocator = std::allocator<char>>
+ using request_parser = parser<true, Body, Allocator>;
+diff --git boost/boost/beast/http/rfc7230.hpp boost/boost/beast/http/rfc7230.hpp
+--- boost/boost/beast/http/rfc7230.hpp
++++ boost/boost/beast/http/rfc7230.hpp
+@@ -65,7 +65,7 @@ public:
+         std::pair<string_view, string_view>;
+ 
+     /// A constant iterator to the list
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using const_iterator = __implementation_defined__;
+ #else
+     class const_iterator;
+@@ -154,7 +154,7 @@ public:
+     using value_type = std::pair<string_view, param_list>;
+ 
+     /// A constant iterator to the list
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using const_iterator = __implementation_defined__;
+ #else
+     class const_iterator;
+@@ -242,7 +242,7 @@ public:
+     using value_type = string_view;
+ 
+     /// A constant iterator to the list
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using const_iterator = __implementation_defined__;
+ #else
+     class const_iterator;
+diff --git boost/boost/beast/http/serializer.hpp boost/boost/beast/http/serializer.hpp
+--- boost/boost/beast/http/serializer.hpp
++++ boost/boost/beast/http/serializer.hpp
+@@ -59,7 +59,7 @@ namespace http {
+ 
+     @tparam Fields The type of fields in the message.
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<bool isRequest, class Body, class Fields = fields>
+ #else
+ template<bool isRequest, class Body, class Fields>
+@@ -78,7 +78,7 @@ public:
+         This may be const or non-const depending on the
+         implementation of the corresponding <em>BodyWriter</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using value_type = __implementation_defined__;
+ #else
+     using value_type = typename std::conditional<
+@@ -380,7 +380,7 @@ public:
+     }
+ };
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ /// A serializer for HTTP/1 requests
+ template<class Body, class Fields = fields>
+ using request_serializer = serializer<true, Body, Fields>;
+diff --git boost/boost/beast/http/span_body.hpp boost/boost/beast/http/span_body.hpp
+--- boost/boost/beast/http/span_body.hpp
++++ boost/boost/beast/http/span_body.hpp
+@@ -69,7 +69,7 @@ public:
+ 
+         Meets the requirements of <em>BodyReader</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using reader = __implementation_defined__;
+ #else
+     class reader
+@@ -128,7 +128,7 @@ public:
+ 
+         Meets the requirements of <em>BodyWriter</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using writer = __implementation_defined__;
+ #else
+     class writer
+diff --git boost/boost/beast/http/string_body.hpp boost/boost/beast/http/string_body.hpp
+--- boost/boost/beast/http/string_body.hpp
++++ boost/boost/beast/http/string_body.hpp
+@@ -34,7 +34,7 @@ namespace http {
+     for holding message payloads. Messages using this body type
+     may be serialized and parsed.
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<
+     class CharT,
+     class Traits = std::char_traits<CharT>,
+@@ -79,7 +79,7 @@ public:
+ 
+         Meets the requirements of <em>BodyReader</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using reader = __implementation_defined__;
+ #else
+     class reader
+@@ -147,7 +147,7 @@ public:
+ 
+         Meets the requirements of <em>BodyWriter</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using writer = __implementation_defined__;
+ #else
+     class writer
+@@ -182,7 +182,7 @@ public:
+ #endif
+ };
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ /// A <em>Body</em> using `std::string`
+ using string_body = basic_string_body<char>;
+ #endif
+diff --git boost/boost/beast/http/type_traits.hpp boost/boost/beast/http/type_traits.hpp
+--- boost/boost/beast/http/type_traits.hpp
++++ boost/boost/beast/http/type_traits.hpp
+@@ -42,7 +42,7 @@ namespace http {
+     @endcode
+ */
+ template<class T>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ using is_body = __see_below__;
+ #else
+ using is_body = detail::has_value_type<T>;
+@@ -68,7 +68,7 @@ using is_body = detail::has_value_type<T>;
+     }
+     @endcode
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using is_body_writer = __see_below__;
+ #else
+@@ -107,7 +107,7 @@ struct is_body_writer<T, beast::detail::void_t<
+ 
+     @tparam T The body type to test.
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using is_mutable_body_writer = __see_below__;
+ #else
+@@ -162,7 +162,7 @@ struct is_mutable_body_writer<T, beast::detail::void_t<
+     }
+     @endcode
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using is_body_reader = __see_below__;
+ #else
+@@ -217,7 +217,7 @@ struct is_body_reader<T, beast::detail::void_t<decltype(
+     f(message<isRequest, Body, Fields> const&);
+     @endcode
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T>
+ using is_fields = __see_below__;
+ #else
+diff --git boost/boost/beast/http/vector_body.hpp boost/boost/beast/http/vector_body.hpp
+--- boost/boost/beast/http/vector_body.hpp
++++ boost/boost/beast/http/vector_body.hpp
+@@ -33,7 +33,7 @@ namespace http {
+     for holding message payloads. Messages using this body type
+     may be serialized and parsed.
+ */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ template<class T, class Allocator = std::allocator<T>>
+ #else
+ template<class T, class Allocator>
+@@ -69,7 +69,7 @@ public:
+ 
+         Meets the requirements of <em>BodyReader</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using reader = __implementation_defined__;
+ #else
+     class reader
+@@ -131,7 +131,7 @@ public:
+ 
+         Meets the requirements of <em>BodyWriter</em>.
+     */
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     using writer = __implementation_defined__;
+ #else
+     class writer
+diff --git boost/boost/beast/http/write.hpp boost/boost/beast/http/write.hpp
+--- boost/boost/beast/http/write.hpp
++++ boost/boost/beast/http/write.hpp
+@@ -496,7 +496,7 @@ async_write(
+ template<
+     class SyncWriteStream,
+     bool isRequest, class Body, class Fields>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ std::size_t
+ #else
+ typename std::enable_if<
+@@ -537,7 +537,7 @@ write(
+ template<
+     class SyncWriteStream,
+     bool isRequest, class Body, class Fields>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ std::size_t
+ #else
+ typename std::enable_if<
+@@ -578,7 +578,7 @@ write(
+ template<
+     class SyncWriteStream,
+     bool isRequest, class Body, class Fields>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ std::size_t
+ #else
+ typename std::enable_if<
+@@ -620,7 +620,7 @@ write(
+ template<
+     class SyncWriteStream,
+     bool isRequest, class Body, class Fields>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+ std::size_t
+ #else
+ typename std::enable_if<
+diff --git boost/boost/beast/ssl/ssl_stream.hpp boost/boost/beast/ssl/ssl_stream.hpp
+--- boost/boost/beast/ssl/ssl_stream.hpp
++++ boost/boost/beast/ssl/ssl_stream.hpp
+@@ -32,7 +32,7 @@ struct ssl_stream : net::ssl::stream<NextLayer>
+     using net::ssl::stream<NextLayer>::stream;
+ };
+ 
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+ template<class SyncStream>
+ void
+ teardown(
+diff --git boost/boost/beast/websocket/error.hpp boost/boost/beast/websocket/error.hpp
+--- boost/boost/beast/websocket/error.hpp
++++ boost/boost/beast/websocket/error.hpp
+@@ -33,7 +33,7 @@ enum class error
+ 
+     - VFALCO
+ */
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     unused1 = 2, // failed
+     unused2 = 3, // handshake_failed
+ #endif
+diff --git boost/boost/beast/websocket/stream.hpp boost/boost/beast/websocket/stream.hpp
+--- boost/boost/beast/websocket/stream.hpp
++++ boost/boost/beast/websocket/stream.hpp
+@@ -144,7 +144,7 @@ template<
+     class NextLayer,
+     bool deflateSupported>
+ class stream
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+     : private stream_base
+ #endif
+ {
+@@ -372,7 +372,7 @@ public:
+         state of the current frame, if any.
+     */
+     template<class DynamicBuffer
+-#if ! BOOST_BEAST_DOXYGEN
++#if ! defined(BOOST_BEAST_DOXYGEN) || ! BOOST_BEAST_DOXYGEN
+         , class = typename std::enable_if<
+             ! std::is_integral<DynamicBuffer>::value>::type
+ #endif
+@@ -387,7 +387,7 @@ public:
+     //
+     //--------------------------------------------------------------------------
+ 
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     /// Get the option value
+     template<class Option>
+     void
+@@ -1222,7 +1222,7 @@ public:
+         @li <a href="https://tools.ietf.org/html/rfc6455#section-4.2">Websocket Opening Handshake Server Requirements (RFC6455)</a>
+     */
+     template<class ConstBufferSequence>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     void
+ #else
+     typename std::enable_if<! http::detail::is_header<
+@@ -1271,7 +1271,7 @@ public:
+         @li <a href="https://tools.ietf.org/html/rfc6455#section-4.2">Websocket Opening Handshake Server Requirements (RFC6455)</a>
+     */
+     template<class ConstBufferSequence>
+-#if BOOST_BEAST_DOXYGEN
++#if defined(BOOST_BEAST_DOXYGEN) && BOOST_BEAST_DOXYGEN
+     void
+ #else
+     typename std::enable_if<! http::detail::is_header<

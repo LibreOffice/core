@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="36pt" style:writing-mode="page"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt" style:letter-kerning="false" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text">
+   <style:paragraph-properties fo:margin-top="0pt" fo:margin-bottom="8pt" style:contextual-spacing="false" fo:line-height="108%" fo:text-align="start" style:justify-single-word="false" fo:orphans="2" fo:widows="2" style:writing-mode="lr-tb"/>
+  </style:style>
+  <style:default-page-layout>
+   <style:page-layout-properties style:writing-mode="lr-tb" style:layout-grid-standard-mode="true"/>
+  </style:default-page-layout>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Table1" style:family="table">
+   <style:table-properties style:width="11cm" fo:margin-left="0" fo:margin-top="0" fo:margin-bottom="0cm" table:align="left" style:writing-mode="page"/>
+  </style:style>
+  <style:style style:name="Table1.A" style:family="table-column">
+   <style:table-column-properties style:column-width="11cm"/>
+  </style:style>
+  <style:style style:name="Table1.1" style:family="table-row">
+   <style:table-row-properties style:min-row-height="1cm" fo:keep-together="always"/>
+  </style:style>
+  <style:style style:name="Table1.A1" style:family="table-cell">
+   <style:table-cell-properties fo:padding-left="1mm" fo:padding-right="1mm" fo:padding-top="0" fo:padding-bottom="0" fo:border="1pt solid #000000"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:margin-bottom="0pt" style:contextual-spacing="false" fo:orphans="0" fo:widows="0"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="11cm" fo:page-height="19cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="0" fo:margin-bottom="0cm" fo:margin-left="0" fo:margin-right="0" style:writing-mode="lr-tb"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="1cm" fo:margin-left="0" fo:margin-right="0" fo:margin-bottom="0cm" style:dynamic-spacing="true"/>
+   </style:header-style>
+   <style:footer-style>
+    <style:header-footer-properties fo:min-height="1cm" fo:margin-left="0" fo:margin-right="0" fo:margin-top="0" style:dynamic-spacing="true"/>
+   </style:footer-style>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1">
+   <style:header>
+    <text:p/>
+   </style:header>
+   <style:footer>
+    <text:p/>
+   </style:footer>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <table:table table:name="Table1" table:style-name="Table1">
+    <table:table-column table:style-name="Table1.A"/>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A1">
+      <text:p>pg_1 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st:</text:p>
+      <text:list>
+       <text:list-item>
+        <text:p>aaa</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>bbb</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>cccc</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>ddd</text:p>
+       </text:list-item>
+      </text:list>
+      <text:p text:style-name="P1">1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st.</text:p>
+      <text:p/>
+      <text:p text:style-name="P1">1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st</text:p>
+      <text:p/>
+      <text:p text:style-name="P1">1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st.</text:p>
+      <text:p/>
+      <text:p text:style-name="P1">1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st pg_2 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st s:</text:p>
+      <text:p/>
+      <text:p/>
+      <text:p>1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st</text:p>
+      <text:p>1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st</text:p>
+      <text:p/>
+      <text:p>1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st</text:p>
+      <text:p>1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st</text:p>
+      <text:p>1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st pg_3 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st 1_st</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A1">
+      <text:p>2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd 2_nd</text:p>
+      <text:p/>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>

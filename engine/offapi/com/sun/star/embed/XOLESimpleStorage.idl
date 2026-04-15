@@ -1,0 +1,67 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module embed {
+/** This interface allows to access and change contents of OLE storages.
+
+    <p>
+    This is a simple container allowing the access to OLE storages. The
+    subcomponents are either OLE storages themselves or streams.
+    </p>
+*/
+published interface XOLESimpleStorage
+{
+    //INTERFACES
+    /** interface XNameContainer is the generic interface for
+        supporting the insertion and removal of named elements.
+
+        <p>The access to the elements is provided though
+        XNameContainer methods.</p>
+    */
+    interface ::com::sun::star::container::XNameContainer;
+
+    /** interface XComponent allows to explicitly free resources
+        and break cyclic references.
+    */
+    interface ::com::sun::star::lang::XComponent;
+
+    /** interface XTransactedObject allows transacted access to
+        an object.
+
+        <p>The storages are always opened in transacted mode, the
+        XTransactedObject interface allows to commit the storage.
+        </p>
+    */
+    interface XTransactedObject;
+
+    /** interface XClassifiedObject represents common
+        functionality for embedded objects
+
+        <p>the XClassifiedObject interface allows to set/get the
+        ClassID of the storage.</p>
+    */
+    interface XClassifiedObject;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

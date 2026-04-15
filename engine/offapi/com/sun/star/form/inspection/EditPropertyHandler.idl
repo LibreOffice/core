@@ -1,0 +1,50 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module form { module inspection {
+
+
+/** implements a property handler for use with a com::sun::star::inspection::ObjectInspector
+    which provides convenience wrappers for some properties existing at a form component
+    derived from com::sun::star::awt::UnoControlEditModel.
+
+    <p>First, the handler supersedes the HScroll and the VScroll properties of a com::sun::star::awt::UnoControlEditModel
+    and puts them into one common property, allowing the user to choose whether she want to
+    have "no", a "vertical", a "horizontal", or "both" scrollbars.<p>
+
+    <p>Second, if it detects a com::sun::star::form::component::RichTextControl to inspect,
+    it supersedes the com::sun::star::form::component::RichTextControl::RichText
+    and the com::sun::star::awt::UnoControlEditModel::MultiLine properties with a new
+    one which allows choosing the text type with one single action.</p>
+
+    @see com::sun::star::inspection::XPropertyHandler
+    @see com::sun::star::awt::UnoControlEditModel
+    @see com::sun::star::form::component::RichTextControl
+    @see com::sun::star::form::component::TextField
+*/
+service EditPropertyHandler
+{
+    interface com::sun::star::inspection::XPropertyHandler;
+};
+
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

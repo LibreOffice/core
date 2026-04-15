@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="600" width="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<text x="5" y="15" font-size="xx-small" fill="black">Sample</text>
+<text x="5" y="50" font-size="x-small" fill="white">Sample</text>
+<text x="5" y="100" font-size="small" fill="gold">Sample</text>
+<text x="5" y="150" font-size="medium" fill="red">Sample</text>
+<text x="5" y="200" font-size="large" fill="yellow">Sample</text>
+<text x="5" y="250" font-size="x-large" fill="blue">Sample</text>
+<text x="5" y="300" font-size="xx-large" fill="green">Sample</text>
+<text x="5" y="350" font-size="smaller" fill="coral">Sample</text>
+<text x="5" y="400" font-size="larger" fill="pink">Sample</text>
+<text x="5" y="450" font-size="initial" fill="ivory">Sample</text>
+</svg>

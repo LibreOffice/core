@@ -1,0 +1,659 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+#include "dp_gui_updatedata.hxx"
+
+#include <sal/config.h>
+#include <osl/diagnose.h>
+#include <osl/file.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <utility>
+#include <vcl/svapp.hxx>
+#include <cppuhelper/implbase.hxx>
+
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/ucb/NameClash.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
+#include <com/sun/star/deployment/LicenseException.hpp>
+#include <com/sun/star/deployment/VersionException.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionApprove.hpp>
+
+#include <dp_descriptioninfoset.hxx>
+#include <strings.hrc>
+#include "dp_gui_updateinstalldialog.hxx"
+#include <dp_shared.hxx>
+#include <dp_ucb.h>
+#include <dp_misc.h>
+#include "dp_gui_extensioncmdqueue.hxx"
+#include <ucbhelper/content.hxx>
+#include <tools/urlobj.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
+#include <salhelper/thread.hxx>
+#include <com/sun/star/uno/Sequence.h>
+#include <comphelper/anytostring.hxx>
+
+#include <string_view>
+#include <vector>
+
+namespace dp_gui {
+
+class UpdateCommandEnv
+    : public ::cppu::WeakImplHelper< css::ucb::XCommandEnvironment,
+                                      css::task::XInteractionHandler,
+                                      css::ucb::XProgressHandler >
+{
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+
+public:
+    UpdateCommandEnv(css::uno::Reference<css::uno::XComponentContext> xCtx);
+
+    // XCommandEnvironment
+    virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
+    getInteractionHandler() override;
+    virtual css::uno::Reference<css::ucb::XProgressHandler >
+    SAL_CALL getProgressHandler() override;
+
+    // XInteractionHandler
+    virtual void SAL_CALL handle(
+        css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
+
+    // XProgressHandler
+    virtual void SAL_CALL push( css::uno::Any const & Status ) override;
+    virtual void SAL_CALL update( css::uno::Any const & Status ) override;
+    virtual void SAL_CALL pop() override;
+};
+
+class UpdateInstallDialog::Thread: public salhelper::Thread {
+public:
+    Thread(css::uno::Reference< css::uno::XComponentContext > const & ctx,
+        UpdateInstallDialog & dialog, std::vector< dp_gui::UpdateData > & aVecUpdateData);
+
+    void stop();
+
+private:
+    virtual ~Thread() override;
+
+    virtual void execute() override;
+    void downloadExtensions();
+    bool download(OUString const & aUrls, UpdateData & aUpdatData);
+    void installExtensions();
+    void removeTempDownloads();
+
+    UpdateInstallDialog & m_dialog;
+
+    // guarded by Application::GetSolarMutex():
+    css::uno::Reference< css::task::XAbortChannel > m_abort;
+    css::uno::Reference< css::uno::XComponentContext > m_xComponentContext;
+    std::vector< dp_gui::UpdateData > & m_aVecUpdateData;
+    ::rtl::Reference<UpdateCommandEnv> m_updateCmdEnv;
+
+    //A folder which is created in the temp directory in which then the updates are downloaded
+    OUString m_sDownloadFolder;
+
+    bool m_stop;
+
+};
+
+
+UpdateInstallDialog::Thread::Thread(
+    css::uno::Reference< css::uno::XComponentContext> const & xCtx,
+    UpdateInstallDialog & dialog,
+    std::vector< dp_gui::UpdateData > & aVecUpdateData):
+    salhelper::Thread("dp_gui_updateinstalldialog"),
+    m_dialog(dialog),
+    m_xComponentContext(xCtx),
+    m_aVecUpdateData(aVecUpdateData),
+    m_updateCmdEnv(new UpdateCommandEnv(xCtx)),
+    m_stop(false)
+{}
+
+void UpdateInstallDialog::Thread::stop() {
+    css::uno::Reference< css::task::XAbortChannel > abort;
+    {
+        SolarMutexGuard g;
+        abort = m_abort;
+        m_stop = true;
+    }
+    if (abort.is()) {
+        abort->sendAbort();
+    }
+}
+
+UpdateInstallDialog::Thread::~Thread() {}
+
+void UpdateInstallDialog::Thread::execute()
+{
+    try {
+        downloadExtensions();
+        installExtensions();
+    }
+    catch (...)
+    {
+    }
+
+    //clean up the temp directories
+    try {
+        removeTempDownloads();
+    } catch( ... ) {
+    }
+
+    {
+        //make sure m_dialog is still alive
+        SolarMutexGuard g;
+        if (! m_stop)
+             m_dialog.updateDone();
+    }
+}
+
+UpdateInstallDialog::UpdateInstallDialog(
+    weld::Window* pParent,
+    std::vector<dp_gui::UpdateData> & aVecUpdateData,
+    css::uno::Reference< css::uno::XComponentContext > const & xCtx)
+    : GenericDialogController(pParent, u"desktop/ui/updateinstalldialog.ui"_ustr,
+                              u"UpdateInstallDialog"_ustr)
+    , m_thread(new Thread(xCtx, *this, aVecUpdateData))
+    , m_bError(false)
+    , m_bNoEntry(true)
+    , m_sInstalling(DpResId(RID_DLG_UPDATE_INSTALL_INSTALLING))
+    , m_sFinished(DpResId(RID_DLG_UPDATE_INSTALL_FINISHED))
+    , m_sNoErrors(DpResId(RID_DLG_UPDATE_INSTALL_NO_ERRORS))
+    , m_sErrorDownload(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD))
+    , m_sErrorInstallation(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION))
+    , m_sErrorLicenseDeclined(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED))
+    , m_sNoInstall(DpResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL))
+    , m_sThisErrorOccurred(DpResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))
+    , m_xFt_action(m_xBuilder->weld_label(u"DOWNLOADING"_ustr))
+    , m_xStatusbar(m_xBuilder->weld_progress_bar(u"STATUSBAR"_ustr))
+    , m_xFt_extension_name(m_xBuilder->weld_label(u"EXTENSION_NAME"_ustr))
+    , m_xMle_info(m_xBuilder->weld_text_view(u"INFO"_ustr))
+    , m_xHelp(m_xBuilder->weld_button(u"help"_ustr))
+    , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCancel(m_xBuilder->weld_button(u"cancel"_ustr))
+{
+    m_xMle_info->set_size_request(m_xMle_info->get_approximate_digit_width() * 52,
+                                  m_xMle_info->get_height_rows(5));
+
+    m_xExtensionManager = css::deployment::ExtensionManager::get( xCtx );
+
+    m_xCancel->connect_clicked(LINK(this, UpdateInstallDialog, cancelHandler));
+    if ( ! dp_misc::office_is_running())
+        m_xHelp->set_sensitive(false);
+}
+
+UpdateInstallDialog::~UpdateInstallDialog()
+{
+}
+
+short UpdateInstallDialog::run()
+{
+    m_thread->launch();
+    short nRet = GenericDialogController::run();
+    m_thread->stop();
+    return nRet;
+}
+
+// make sure the solar mutex is locked before calling
+void UpdateInstallDialog::updateDone()
+{
+    if (!m_bError)
+        m_xMle_info->set_text(m_xMle_info->get_text() + m_sNoErrors);
+    m_xOk->set_sensitive(true);
+    m_xOk->grab_focus();
+    m_xCancel->set_sensitive(false);
+}
+
+// make sure the solar mutex is locked before calling
+//sets an error message in the text area
+void UpdateInstallDialog::setError(INSTALL_ERROR err, std::u16string_view sExtension,
+    std::u16string_view exceptionMessage)
+{
+    OUString sError;
+    m_bError = true;
+
+    switch (err)
+    {
+    case ERROR_DOWNLOAD:
+        sError = m_sErrorDownload;
+        break;
+    case ERROR_INSTALLATION:
+        sError = m_sErrorInstallation;
+        break;
+    case ERROR_LICENSE_DECLINED:
+        sError = m_sErrorLicenseDeclined;
+        break;
+
+    default:
+        OSL_ASSERT(false);
+    }
+
+    OUString sMsg(m_xMle_info->get_text());
+    sError = sError.replaceFirst("%NAME", sExtension);
+    //We want to have an empty line between the error messages. However,
+    //there shall be no empty line after the last entry.
+    if (m_bNoEntry)
+        m_bNoEntry = false;
+    else
+        sMsg += "\n";
+    sMsg += sError;
+    //Insert more information about the error
+    if (!exceptionMessage.empty())
+        sMsg += m_sThisErrorOccurred + exceptionMessage + "\n";
+
+    sMsg += m_sNoInstall + "\n";
+
+    m_xMle_info->set_text(sMsg);
+}
+
+void UpdateInstallDialog::setError(std::u16string_view exceptionMessage)
+{
+    m_bError = true;
+    m_xMle_info->set_text(m_xMle_info->get_text() + exceptionMessage + "\n");
+}
+
+IMPL_LINK_NOARG(UpdateInstallDialog, cancelHandler, weld::Button&, void)
+{
+    m_xDialog->response(RET_CANCEL);
+}
+
+void UpdateInstallDialog::Thread::downloadExtensions()
+{
+    try
+    {
+        //create the download directory in the temp folder
+        OUString sTempDir;
+        if (::osl::FileBase::getTempDirURL(sTempDir) != ::osl::FileBase::E_None)
+            throw css::uno::Exception(u"Could not get URL for the temp directory. No extensions will be installed."_ustr, nullptr);
+
+        //create a unique name for the directory
+        OUString tempEntry, destFolder;
+        if (::osl::File::createTempFile(&sTempDir, nullptr, &tempEntry ) != ::osl::File::E_None)
+            throw css::uno::Exception("Could not create a temporary file in " + sTempDir +
+             ". No extensions will be installed", nullptr );
+
+        tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
+
+        destFolder = dp_misc::makeURL( sTempDir, tempEntry ) + "_";
+        m_sDownloadFolder = destFolder;
+        try
+        {
+            dp_misc::create_folder(nullptr, destFolder, m_updateCmdEnv );
+        } catch (const css::uno::Exception & e)
+        {
+            css::uno::Any anyEx = cppu::getCaughtException();
+            throw css::lang::WrappedTargetException( e.Message + " No extensions will be installed",
+                            nullptr, anyEx );
+        }
+
+
+        sal_uInt16 count = 0;
+        for (auto & updateData : m_aVecUpdateData)
+        {
+            if (!updateData.aUpdateInfo.is() || updateData.aUpdateSource.is())
+                continue;
+            //We assume that m_aVecUpdateData contains only information about extensions which
+            //can be downloaded directly.
+            OSL_ASSERT(updateData.sWebsiteURL.isEmpty());
+
+            //update the name of the extension which is to be downloaded
+            {
+                SolarMutexGuard g;
+                if (m_stop) {
+                    return;
+                }
+                m_dialog.m_xFt_extension_name->set_label(updateData.aInstalledPackage->getDisplayName());
+                sal_uInt16 prog = (sal::static_int_cast<sal_uInt16>(100) * ++count) /
+                    sal::static_int_cast<sal_uInt16>(m_aVecUpdateData.size());
+                m_dialog.m_xStatusbar->set_percentage(prog);
+            }
+            dp_misc::DescriptionInfoset info(m_xComponentContext, updateData.aUpdateInfo);
+            //remember occurring exceptions in case we need to print out error information
+            std::vector< std::pair<OUString, css::uno::Exception> > vecExceptions;
+            css::uno::Sequence<OUString> seqDownloadURLs = info.getUpdateDownloadUrls();
+            OSL_ENSURE(seqDownloadURLs.hasElements(), "No download URL provided!");
+            for (sal_Int32 j = 0; j < seqDownloadURLs.getLength(); j++)
+            {
+                try
+                {
+                    OSL_ENSURE(!seqDownloadURLs[j].isEmpty(), "Download URL is empty!");
+                    bool bCancelled = download(seqDownloadURLs[j], updateData);
+                    if (bCancelled || !updateData.sLocalURL.isEmpty())
+                        break;
+                }
+                catch ( css::uno::Exception & e )
+                {
+                    vecExceptions.emplace_back(seqDownloadURLs[j], e);
+                    //There can be several different errors, for example, the URL is wrong, webserver cannot be reached,
+                    //name cannot be resolved. The UCB helper API does not specify different special exceptions for these
+                    //cases. Therefore ignore and continue.
+                    continue;
+                }
+            }
+            //update the progress and display download error
+            {
+                SolarMutexGuard g;
+                if (m_stop) {
+                    return;
+                }
+                if (updateData.sLocalURL.isEmpty())
+                {
+                    //Construct a string of all messages contained in the exceptions plus the respective download URLs
+                    OUStringBuffer buf(256);
+                    size_t nPos = 0;
+                    for (auto const& elem : vecExceptions)
+                    {
+                        if (nPos)
+                            buf.append("\n");
+                        buf.append("Could not download " + elem.first + ". " + elem.second.Message);
+                        ++nPos;
+                    }
+                    m_dialog.setError(UpdateInstallDialog::ERROR_DOWNLOAD, updateData.aInstalledPackage->getDisplayName(),
+                        buf);
+                }
+            }
+
+        }
+    }
+    catch (const css::uno::Exception & e)
+    {
+        SolarMutexGuard g;
+        if (m_stop) {
+            return;
+        }
+        m_dialog.setError(e.Message);
+    }
+}
+
+void UpdateInstallDialog::Thread::installExtensions()
+{
+    //Update the fix text in the dialog to "Installing extensions..."
+    {
+        SolarMutexGuard g;
+        if (m_stop) {
+            return;
+        }
+        m_dialog.m_xFt_action->set_label(m_dialog.m_sInstalling);
+        m_dialog.m_xStatusbar->set_percentage(0);
+    }
+
+    sal_uInt16 count = 0;
+    for (auto const& updateData : m_aVecUpdateData)
+    {
+        //update the name of the extension which is to be installed
+        {
+            SolarMutexGuard g;
+            if (m_stop) {
+                return;
+            }
+            //we only show progress after an extension has been installed.
+            if (count > 0) {
+                m_dialog.m_xStatusbar->set_percentage(
+                (sal::static_int_cast<sal_uInt16>(100) * count) /
+                sal::static_int_cast<sal_uInt16>(m_aVecUpdateData.size()));
+            }
+            m_dialog.m_xFt_extension_name->set_label(updateData.aInstalledPackage->getDisplayName());
+        }
+        bool bError = false;
+        bool bLicenseDeclined = false;
+        css::uno::Reference<css::deployment::XPackage> xExtension;
+        css::uno::Exception exc;
+        try
+        {
+            css::uno::Reference< css::task::XAbortChannel > xAbortChannel(
+                updateData.aInstalledPackage->createAbortChannel() );
+            {
+                SolarMutexGuard g;
+                if (m_stop) {
+                    return;
+                }
+                m_abort = xAbortChannel;
+            }
+            if (!updateData.aUpdateSource.is() && !updateData.sLocalURL.isEmpty())
+            {
+                css::beans::NamedValue prop(u"EXTENSION_UPDATE"_ustr, css::uno::Any(u"1"_ustr));
+                if (!updateData.bIsShared)
+                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                        updateData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        u"user"_ustr, xAbortChannel, m_updateCmdEnv);
+                else
+                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                        updateData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        u"shared"_ustr, xAbortChannel, m_updateCmdEnv);
+            }
+            else if (updateData.aUpdateSource.is())
+            {
+                OSL_ASSERT(updateData.aUpdateSource.is());
+                //I am not sure if we should obtain the install properties and pass them into
+                //add extension. Currently it contains only "SUPPRESS_LICENSE". So it could happen
+                //that a license is displayed when updating from the shared repository, although the
+                //shared extension was installed using "SUPPRESS_LICENSE".
+                css::beans::NamedValue prop(u"EXTENSION_UPDATE"_ustr, css::uno::Any(u"1"_ustr));
+                if (!updateData.bIsShared)
+                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                        updateData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        u"user"_ustr, xAbortChannel, m_updateCmdEnv);
+                else
+                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                        updateData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        u"shared"_ustr, xAbortChannel, m_updateCmdEnv);
+            }
+        }
+        catch (css::deployment::DeploymentException & de)
+        {
+            if (de.Cause.has<css::deployment::LicenseException>())
+            {
+                bLicenseDeclined = true;
+            }
+            else
+            {
+                exc = de.Cause.get<css::uno::Exception>();
+                bError = true;
+            }
+        }
+        catch (css::uno::Exception& e)
+        {
+            exc = e;
+            bError = true;
+        }
+
+        if (bLicenseDeclined)
+        {
+            SolarMutexGuard g;
+            if (m_stop) {
+                return;
+            }
+            m_dialog.setError(UpdateInstallDialog::ERROR_LICENSE_DECLINED,
+                updateData.aInstalledPackage->getDisplayName(), std::u16string_view());
+        }
+        else if (!xExtension.is() || bError)
+        {
+            SolarMutexGuard g;
+            if (m_stop) {
+                return;
+            }
+            m_dialog.setError(UpdateInstallDialog::ERROR_INSTALLATION,
+                updateData.aInstalledPackage->getDisplayName(), exc.Message);
+        }
+        ++count;
+    }
+    {
+        SolarMutexGuard g;
+        if (m_stop) {
+            return;
+        }
+        m_dialog.m_xStatusbar->set_percentage(100);
+        m_dialog.m_xFt_extension_name->set_label(OUString());
+        m_dialog.m_xFt_action->set_label(m_dialog.m_sFinished);
+    }
+}
+
+void UpdateInstallDialog::Thread::removeTempDownloads()
+{
+    if (!m_sDownloadFolder.isEmpty())
+    {
+        dp_misc::erase_path(m_sDownloadFolder,
+            css::uno::Reference<css::ucb::XCommandEnvironment>(),false /* no throw: ignore errors */ );
+        //remove also the temp file which we have used to create the unique name
+        OUString tempFile = m_sDownloadFolder.copy(0, m_sDownloadFolder.getLength() - 1);
+        dp_misc::erase_path(tempFile, css::uno::Reference<css::ucb::XCommandEnvironment>(),false);
+        m_sDownloadFolder.clear();
+    }
+}
+
+bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, UpdateData & aUpdateData)
+{
+    {
+        SolarMutexGuard g;
+        if (m_stop) {
+            return m_stop;
+        }
+    }
+
+    OSL_ASSERT(m_sDownloadFolder.getLength());
+    OUString tempEntry;
+    if (::osl::File::createTempFile(
+        &m_sDownloadFolder,
+        nullptr, &tempEntry ) != ::osl::File::E_None)
+    {
+        //ToDo feedback in window that download of this component failed
+        throw css::uno::Exception("Could not create temporary file in folder " + m_sDownloadFolder + ".", nullptr);
+    }
+    tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
+
+    OUString destFolder = dp_misc::makeURL(m_sDownloadFolder, tempEntry) + "_";
+
+    ::ucbhelper::Content destFolderContent;
+    dp_misc::create_folder( &destFolderContent, destFolder, m_updateCmdEnv );
+
+    ::ucbhelper::Content sourceContent;
+    (void)dp_misc::create_ucb_content(&sourceContent, sDownloadURL, m_updateCmdEnv);
+
+    OUString sTitle(dp_misc::StrTitle::getTitle(sourceContent));
+    if (sTitle.indexOf('.') < 0)
+    {
+        // The title could be changed due to redirection (seen with github URLs, which arrive
+        // something like 'eff2c80e-138d-4b06-8139-e433f4672379'). This will create problems in
+        // PackageRegistryImpl::bindPackage, where extension will be required to get mediatype.
+        // Try to restore the filename with extension from the URL.
+        // TODO: could also use Content-Disposition (RFC 6266), where the filename is provided.
+        INetURLObject aUrl(sDownloadURL);
+        aUrl.removeFinalSlash();
+        OUString newTitle = aUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+        if (newTitle.indexOf('.') >= 0)
+            sTitle = newTitle;
+    }
+
+    destFolderContent.transferContent(
+            sourceContent, ::ucbhelper::InsertOperation::Copy,
+            sTitle, css::ucb::NameClash::OVERWRITE );
+
+    {
+        //the user may have cancelled the dialog because downloading took too long
+        SolarMutexGuard g;
+        if (m_stop) {
+            return m_stop;
+        }
+        //all errors should be handled by the command environment.
+        aUpdateData.sLocalURL = dp_misc::makeURLAppendSysPathSegment(destFolder, sTitle);
+    }
+
+    return m_stop;
+}
+
+UpdateCommandEnv::UpdateCommandEnv(css::uno::Reference<css::uno::XComponentContext> xCtx)
+    : m_xContext(std::move(xCtx))
+{
+}
+
+// XCommandEnvironment
+css::uno::Reference<css::task::XInteractionHandler> UpdateCommandEnv::getInteractionHandler()
+{
+    return this;
+}
+
+css::uno::Reference<css::ucb::XProgressHandler> UpdateCommandEnv::getProgressHandler()
+{
+    return this;
+}
+
+// XInteractionHandler
+void UpdateCommandEnv::handle(
+    css::uno::Reference< css::task::XInteractionRequest> const & xRequest )
+{
+    css::uno::Any request( xRequest->getRequest() );
+    OSL_ASSERT( request.getValueTypeClass() == css::uno::TypeClass_EXCEPTION );
+    SAL_INFO("desktop.deployment", "incoming request:\n"
+        + ::comphelper::anyToString(request) + "\n\n");
+
+    css::deployment::VersionException verExc;
+    bool approve = false;
+
+    if (request >>= verExc)
+    {   //We must catch the version exception during the update,
+        //because otherwise the user would be confronted with the dialogs, asking
+        //them if they want to replace an already installed version of the same extension.
+        //During an update we assume that we always want to replace the old version with the
+        //new version.
+        approve = true;
+    }
+
+    if (!approve)
+    {
+        //forward to interaction handler for main dialog.
+        handleInteractionRequest( m_xContext, xRequest );
+    }
+    else
+    {
+        // select:
+        for (auto& cont : xRequest->getContinuations())
+        {
+            css::uno::Reference< css::task::XInteractionApprove > xInteractionApprove(
+                cont, css::uno::UNO_QUERY );
+            if (xInteractionApprove.is()) {
+                xInteractionApprove->select();
+                // don't query again for ongoing continuations:
+                break;
+            }
+        }
+    }
+}
+
+// XProgressHandler
+void UpdateCommandEnv::push( css::uno::Any const & /*Status*/ )
+{
+}
+
+void UpdateCommandEnv::update( css::uno::Any const & /*Status */)
+{
+}
+
+void UpdateCommandEnv::pop()
+{
+}
+
+
+} //end namespace dp_gui
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

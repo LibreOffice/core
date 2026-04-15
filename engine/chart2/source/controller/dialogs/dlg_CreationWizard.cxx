@@ -1,0 +1,207 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <dlg_CreationWizard.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
+#include <helpids.h>
+#include <ChartModel.hxx>
+
+#include "tp_ChartType.hxx"
+#include "tp_RangeChooser.hxx"
+#include "tp_Wizard_TitlesAndObjects.hxx"
+#include "tp_DataSource.hxx"
+#include <ChartTypeTemplateProvider.hxx>
+#include <ChartTypeTemplate.hxx>
+#include <utility>
+#include "DialogModel.hxx"
+
+using namespace css;
+
+using vcl::RoadmapWizardTypes::WizardPath;
+using vcl::RoadmapWizardTypes::PathId;
+
+namespace chart
+{
+
+namespace {
+    enum CreationWizardState{
+        First       = 0,
+        CharType    = First,
+        SimpleRange = 1,
+        DataSeries  = 2,
+        Objects     = 3,
+        Last        = Objects
+    };
+}
+
+CreationWizard::CreationWizard(weld::Window* pParent, const rtl::Reference<::chart::ChartModel>& xChartModel,
+                               uno::Reference<uno::XComponentContext> xContext)
+    : vcl::RoadmapWizardMachine(pParent)
+    , m_xChartModel(xChartModel)
+    , m_xComponentContext(std::move(xContext))
+    , m_pTemplateProvider(nullptr)
+    , m_aTimerTriggeredControllerLock(xChartModel)
+    , m_bCanTravel(true)
+{
+    m_pDialogModel.reset(new DialogModel(m_xChartModel));
+    defaultButton(WizardButtonFlags::FINISH);
+
+    setTitleBase(SchResId(STR_DLG_CHART_WIZARD));
+
+    // tdf#134386 set m_pTemplateProvider before creating any other pages
+    m_pTemplateProvider = static_cast<ChartTypeTabPage*>(GetOrCreatePage(CreationWizardState::CharType));
+    assert(m_pTemplateProvider && "must exist");
+    m_pDialogModel->setTemplate(m_pTemplateProvider->getCurrentTemplate());
+
+    WizardPath aPath = {
+        CreationWizardState::CharType,
+        CreationWizardState::SimpleRange,
+        CreationWizardState::DataSeries,
+        CreationWizardState::Objects
+    };
+
+    declarePath(PathId::COMPLETE, aPath);
+
+    // tdf#135935 ensure help ID is set when no element is clicked in the dialog
+    m_xAssistant->set_help_id(HID_SCH_WIZARD_ROADMAP);
+
+    if (!m_pDialogModel->getModel().isDataFromSpreadsheet())
+    {
+        enableState(CreationWizardState::SimpleRange, false);
+        enableState(CreationWizardState::DataSeries, false);
+    }
+
+    // Call ActivatePage, to create and activate the first page
+    ActivatePage();
+
+    m_xAssistant->set_current_page(0);
+}
+
+CreationWizard::~CreationWizard() = default;
+
+std::unique_ptr<BuilderPage> CreationWizard::createPage(WizardState nState)
+{
+    std::unique_ptr<vcl::OWizardPage> xRet;
+
+    OUString sIdent(OUString::number(nState));
+    weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
+
+    switch( nState )
+    {
+        case CreationWizardState::CharType:
+        {
+            m_aTimerTriggeredControllerLock.startTimer();
+            xRet = std::make_unique<ChartTypeTabPage>(pPageContainer, this, m_xChartModel);
+            break;
+        }
+        case CreationWizardState::SimpleRange:
+        {
+            m_aTimerTriggeredControllerLock.startTimer();
+            xRet = std::make_unique<RangeChooserTabPage>(pPageContainer, this, *m_pDialogModel, m_pTemplateProvider);
+            break;
+        }
+        case CreationWizardState::DataSeries:
+        {
+            m_aTimerTriggeredControllerLock.startTimer();
+            xRet = std::make_unique<DataSourceTabPage>(pPageContainer, this, *m_pDialogModel, m_pTemplateProvider);
+            break;
+        }
+        case CreationWizardState::Objects:
+        {
+            xRet = std::make_unique<TitlesAndObjectsTabPage>(pPageContainer, this, m_xChartModel, m_xComponentContext);
+            m_aTimerTriggeredControllerLock.startTimer();
+            break;
+        }
+        default:
+            break;
+    }
+
+    if (xRet)
+        xRet->SetPageTitle(OUString()); //remove title of pages to not get them in the wizard title
+
+    return xRet;
+}
+
+bool CreationWizard::leaveState( WizardState /*_nState*/ )
+{
+    return m_bCanTravel;
+}
+
+vcl::WizardTypes::WizardState CreationWizard::determineNextState( WizardState nCurrentState ) const
+{
+    if( !m_bCanTravel )
+        return WZS_INVALID_STATE;
+    if( nCurrentState == CreationWizardState::Last)
+        return WZS_INVALID_STATE;
+    vcl::WizardTypes::WizardState nNextState = nCurrentState + 1;
+    while( !isStateEnabled( nNextState ) && nNextState <= CreationWizardState::Last )
+        ++nNextState;
+    return (nNextState==CreationWizardState::Last+1) ? WZS_INVALID_STATE : nNextState;
+}
+
+void CreationWizard::enterState(WizardState nState)
+{
+    m_aTimerTriggeredControllerLock.startTimer();
+    enableButtons( WizardButtonFlags::PREVIOUS, nState > CreationWizardState::First);
+    enableButtons( WizardButtonFlags::NEXT, nState < CreationWizardState::Last);
+    if( isStateEnabled( nState ))
+        vcl::RoadmapWizardMachine::enterState(nState);
+}
+
+void CreationWizard::setInvalidPage(BuilderPage* pTabPage)
+{
+    if (pTabPage == m_pCurTabPage)
+        m_bCanTravel = false;
+}
+
+void CreationWizard::setValidPage(BuilderPage* pTabPage)
+{
+    if (pTabPage == m_pCurTabPage)
+        m_bCanTravel = true;
+}
+
+OUString CreationWizard::getStateDisplayName( WizardState nState ) const
+{
+    TranslateId pResId;
+    switch( nState )
+    {
+    case CreationWizardState::CharType:
+        pResId = STR_PAGE_CHARTTYPE;
+        break;
+    case CreationWizardState::SimpleRange:
+        pResId = STR_PAGE_DATA_RANGE;
+        break;
+    case CreationWizardState::DataSeries:
+        pResId = STR_OBJECT_DATASERIES_PLURAL;
+        break;
+    case CreationWizardState::Objects:
+        pResId = STR_PAGE_CHART_ELEMENTS;
+        break;
+    default:
+        break;
+    }
+    if (!pResId)
+        return OUString();
+    return SchResId(pResId);
+}
+
+} //namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

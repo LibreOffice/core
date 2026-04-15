@@ -1,0 +1,5 @@
+Condition	Description
+s255	l255
+65001	LaunchCondition	Condition
+Privileged	OOO_LAUNCH_1
+Installed Or (WINMAJORVER >= WinMajorVerMin)	OOO_LAUNCH_2

@@ -1,0 +1,130 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** is the base for AddIn services that supply functions which can be called
+    by other components.
+
+    <p>Any AddIn implementation must implement a service describing its
+    specific set of functions.
+    That service must contain the AddIn service, and the
+    functions that are implemented, in one or more interfaces.
+    The com::sun::star::lang::XServiceName interface
+    must describe that service, and the XAddIn interface
+    must describe the individual functions.</p>
+
+    <p>Each AddIn function can take parameters of the following types:</p>
+
+    <dl>
+    <dt>`long`</dt>
+    <dd>for integer values.</dd>
+
+    <dt>`double`</dt>
+    <dd>for floating point values.</dd>
+
+    <dt>`string`</dt>
+    <dd>for text strings.</dd>
+
+    <dt>`long[][]`</dt>
+    <dd>for (two-dimensional) arrays of integer values.</dd>
+
+    <dt>`double[][]`</dt>
+    <dd>for (two-dimensional) arrays of floating point values.</dd>
+
+    <dt>`string[][]`</dt>
+    <dd>for (two-dimensional) arrays of text strings.</dd>
+
+    <dt>`any[][]`</dt>
+    <dd>for (two-dimensional) arrays of mixed contents. Each `any`
+    will contain a `double` or a `string`, depending on
+    the data.</dd>
+
+    <dt>`any`</dt>
+    <dd>Depending on the data, a `double`, a `string`,
+    or an `any[][]` will be passed. If no argument is specified in
+    the function call, `VOID` will be passed. This allows for optional
+    parameters.</dd>
+
+    <dt>com::sun::star::table::XCellRange</dt>
+    <dd>for a com::sun::star::table::XCellRange interface
+    to the source data.</dd>
+
+    <dt>com::sun::star::beans::XPropertySet</dt>
+    <dd>for a com::sun::star::beans::XPropertySet
+    interface to the SpreadsheetDocument making the function
+    call. Only one parameter of this type is allowed in each function. It
+    can be used to query document settings like
+    SpreadsheetDocumentSettings::NullDate.</dd>
+
+    <dt>`any[]`</dt>
+    <dd>for varying parameters. Only the last parameter of a function may
+    have this type. It will be filled with the remaining arguments of the
+    function call that were not used for the previous parameters. Each
+    element of the sequence will be filled as in the case of `any`
+    above.</dd>
+    </dl>
+
+    <p>Each AddIn function must have one of the following return types:</p>
+
+    <ul>
+    <li>`long`</li>
+    <li>`double`</li>
+    <li>`string`</li>
+    <li>`long[][]`</li>
+    <li>`double[][]`</li>
+    <li>`string[][]`</li>
+    <li>`any[][]`</li>
+    <li>XVolatileResult</li>
+    <li>`any`</li>
+    </ul>
+
+    <p>The sequences must contain arrays as described above for the
+    parameter types.
+    An XVolatileResult return value must contain an object
+    implementing the VolatileResult service, that contains
+    a volatile result. Subsequent calls with the same parameters must
+    return the same object.
+    An `any` return value can contain any of the other types.</p>
+ */
+published service AddIn
+{
+
+    /** contains a method that returns the service name of the add-in.
+     */
+    interface com::sun::star::lang::XServiceName;
+
+
+    /** provides access to function descriptions and localized names
+        and descriptions.
+      */
+    interface com::sun::star::sheet::XAddIn;
+
+
+    /** provides access to compatibility names for the functions.
+     */
+    [optional] interface com::sun::star::sheet::XCompatibilityNames;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

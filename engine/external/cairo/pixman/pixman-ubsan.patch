@@ -1,0 +1,82 @@
+diff -ru pixman-0.42.2.orig/pixman/pixman-bits-image.c pixman-0.42.2/pixman/pixman-bits-image.c
+--- misc/pixman-0.42.2.orig/pixman/pixman-bits-image.c	2022-11-03 02:25:48.000000000 +0900
++++ misc/build/pixman-0.42.2/pixman/pixman-bits-image.c	2022-11-28 21:35:25.896969126 +0900
+@@ -351,8 +351,8 @@
+      * positioned relative to a particular phase (and not relative to whatever
+      * exact fraction we happen to get here).
+      */
+-    x = ((x >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
+-    y = ((y >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
++    x = ((uint32_t)(x >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
++    y = ((uint32_t)(y >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
+ 
+     px = (x & 0xffff) >> x_phase_shift;
+     py = (y & 0xffff) >> y_phase_shift;
+diff -ru pixman-0.42.2.orig/pixman/pixman-combine32.c pixman-0.42.2/pixman/pixman-combine32.c
+--- misc/pixman-0.42.2.orig/pixman/pixman-combine32.c	2022-02-02 05:51:25.000000000 +0900
++++ misc/build/pixman-0.42.2/pixman/pixman-combine32.c	2022-11-28 21:38:48.226968594 +0900
+@@ -589,7 +589,7 @@
+ 	    rg = DIV_ONE_UN8 (rg);					\
+ 	    rb = DIV_ONE_UN8 (rb);					\
+ 									\
+-	    *(dest + i) = ra << 24 | rr << 16 | rg << 8 | rb;		\
++	    *(dest + i) = (uint32_t)ra << 24 | rr << 16 | rg << 8 | rb;		\
+ 	}								\
+     }									\
+     									\
+diff -ru pixman-0.42.2.orig/pixman/pixman-fast-path.c pixman-0.42.2/pixman/pixman-fast-path.c
+--- misc/pixman-0.42.2.orig/pixman/pixman-fast-path.c	2022-10-18 02:47:42.000000000 +0900
++++ misc/build/pixman-0.42.2/pixman/pixman-fast-path.c	2022-11-28 21:53:12.596963317 +0900
+@@ -2758,8 +2758,8 @@
+ 	 * positioned relative to a particular phase (and not relative to whatever
+ 	 * exact fraction we happen to get here).
+ 	 */
+-	x = ((vx >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
+-	y = ((vy >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
++	x = ((uint32_t)(vx >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
++	y = ((uint32_t)(vy >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
+ 
+ 	px = (x & 0xffff) >> x_phase_shift;
+ 	py = (y & 0xffff) >> y_phase_shift;
+@@ -2836,7 +2836,7 @@
+ 	sgtot = CLIP (sgtot, 0, 0xff);
+ 	sbtot = CLIP (sbtot, 0, 0xff);
+ 
+-	buffer[k] = (satot << 24) | (srtot << 16) | (sgtot << 8) | (sbtot << 0);
++	buffer[k] = ((uint32_t)satot << 24) | (srtot << 16) | (sgtot << 8) | (sbtot << 0);
+ 
+     next:
+ 	vx += ux;
+diff -ru pixman-0.42.2.orig/pixman/pixman-sse2.c pixman-0.42.2/pixman/pixman-sse2.c
+--- misc/pixman-0.42.2/pixman/pixman-sse2.c	2022-02-02 05:51:25.000000000 +0900
++++ misc/build/pixman-0.42.2/pixman/pixman-sse2.c   2022-11-28 22:11:19.276969466 +0900
+@@ -516,7 +516,7 @@
+ }
+ 
+ static force_inline uint32_t
+-combine1 (const uint32_t *ps, const uint32_t *pm)
++combine1 (const void *ps, const uint32_t *pm)
+ {
+     uint32_t s;
+     memcpy(&s, ps, sizeof(uint32_t));
+@@ -3345,7 +3345,7 @@
+ 
+ 	b = filler & 0xff;
+ 	w = (b << 8) | b;
+-	filler = (w << 16) | w;
++	filler = ((uint32_t)w << 16) | w;
+     }
+     else if (bpp == 16)
+     {
+diff -ru pixman-0.42.2.orig/pixman/pixman-utils.c pixman-0.42.2/pixman/pixman-utils.c
+--- misc/pixman-0.42.2.orig/pixman/pixman-utils.c	2022-02-02 05:51:25.000000000 +0900
++++ misc/build/pixman-0.42.2/pixman/pixman-utils.c	2022-11-28 21:55:44.196964912 +0900
+@@ -213,7 +213,7 @@
+ 	g = float_to_unorm (src[i].g, 8);
+ 	b = float_to_unorm (src[i].b, 8);
+ 
+-	dst[i] = (a << 24) | (r << 16) | (g << 8) | (b << 0);
++	dst[i] = ((uint32_t)a << 24) | (r << 16) | (g << 8) | (b << 0);
+     }
+ }
+ 

@@ -1,0 +1,904 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <config_features.h>
+
+#include <DrawViewShell.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xflclit.hxx>
+#include <sfx2/bindings.hxx>
+
+#include <sfx2/dispatch.hxx>
+#include <svl/intitem.hxx>
+#include <sfx2/request.hxx>
+#include <svl/stritem.hxx>
+#include <svx/svxids.hrc>
+#include <svx/xtable.hxx>
+#include <vcl/graph.hxx>
+#include <svx/svdograf.hxx>
+#include <svl/whiter.hxx>
+#include <basic/sbstar.hxx>
+#include <basic/sberrors.hxx>
+
+#include <sfx2/viewfrm.hxx>
+
+#include <app.hrc>
+#include <strings.hrc>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <drawview.hxx>
+#include <DrawDocShell.hxx>
+#include <sdresid.hxx>
+
+#include <svx/galleryitem.hxx>
+#include <com/sun/star/gallery/GalleryItemType.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <memory>
+
+using namespace com::sun::star;
+
+namespace sd {
+
+void DrawViewShell::ExecGallery(SfxRequest const & rReq)
+{
+    // nothing is executed during a slide show!
+    if(HasCurrentFunction(SID_PRESENTATION))
+        return;
+
+    const SfxItemSet* pArgs = rReq.GetArgs();
+
+    const SvxGalleryItem* pGalleryItem = SfxItemSet::GetItem<SvxGalleryItem>(pArgs, SID_GALLERY_FORMATS, false);
+    if ( !pGalleryItem )
+        return;
+
+    GetDocSh()->SetWaitCursor( true );
+
+    sal_Int8 nType( pGalleryItem->GetType() );
+    // insert graphic
+    if (nType == css::gallery::GalleryItemType::GRAPHIC)
+    {
+        Graphic aGraphic( pGalleryItem->GetGraphic() );
+
+        // reduce size if necessary
+        ScopedVclPtrInstance< Window > aWindow(GetActiveWindow());
+        aWindow->SetMapMode(aGraphic.GetPrefMapMode());
+        Size aSizePix = aWindow->LogicToPixel(aGraphic.GetPrefSize());
+        aWindow->SetMapMode( MapMode(MapUnit::Map100thMM) );
+        Size aSize = aWindow->PixelToLogic(aSizePix);
+
+        // constrain size to page size if necessary
+        SdrPage* pPage = mpDrawView->GetSdrPageView()->GetPage();
+        Size aPageSize = pPage->GetSize();
+        aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
+        aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
+
+        // If the image is too large we make it fit into the page
+        const auto nSizeHeight = aSize.Height(), nSizeWidth = aSize.Width();
+        const auto nPageHeight = aPageSize.Height(), nPageWidth = aPageSize.Width();
+        if ((nSizeHeight > nPageHeight || nSizeWidth > nPageWidth) &&
+            nSizeHeight && nPageHeight)
+        {
+            float fGrfWH =  static_cast<float>(nSizeWidth) / static_cast<float>(nSizeHeight);
+            float fWinWH =  static_cast<float>(nPageWidth) / static_cast<float>(nPageHeight);
+
+            // constrain size to page size if necessary
+            if (fGrfWH < fWinWH)
+            {
+                aSize.setWidth( static_cast<::tools::Long>(nPageHeight * fGrfWH) );
+                aSize.setHeight( nPageHeight );
+            }
+            else
+            {
+                aSize.setWidth( nPageWidth );
+                aSize.setHeight( static_cast<::tools::Long>(nPageWidth / fGrfWH) );
+            }
+        }
+
+        // set output rectangle for graphic
+        Point aPnt ((nPageWidth  - aSize.Width())  / 2,
+                    (nPageHeight - aSize.Height()) / 2);
+        aPnt += Point(pPage->GetLeftBorder(), pPage->GetUpperBorder());
+        ::tools::Rectangle aRect (aPnt, aSize);
+
+        rtl::Reference<SdrGrafObj> pGrafObj;
+
+        bool bInsertNewObject = true;
+
+        const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+        if ( rMarkList.GetMarkCount() != 0 )
+        {
+            // is there an empty graphic object?
+            if (rMarkList.GetMarkCount() == 1)
+            {
+                SdrMark* pMark = rMarkList.GetMark(0);
+                SdrObject* pObj = pMark->GetMarkedSdrObj();
+
+                if (pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == SdrObjKind::Graphic)
+                {
+                    pGrafObj = static_cast<SdrGrafObj*>(pObj);
+
+                    if( pGrafObj->IsEmptyPresObj() )
+                    {
+                        // the empty graphic object gets a new graphic
+                        bInsertNewObject = false;
+
+                        rtl::Reference<SdrGrafObj> pNewGrafObj(SdrObject::Clone(*pGrafObj, pGrafObj->getSdrModelFromSdrObject()));
+                        pNewGrafObj->SetEmptyPresObj(false);
+                        pNewGrafObj->SetOutlinerParaObject(std::nullopt);
+                        pNewGrafObj->SetGraphic(aGraphic);
+
+                        OUString aStr = rMarkList.GetMarkDescription() +
+                            " " + SdResId(STR_UNDO_REPLACE);
+                        mpDrawView->BegUndo(aStr);
+                        SdrPageView* pPV = mpDrawView->GetSdrPageView();
+                        mpDrawView->ReplaceObjectAtView(pGrafObj.get(), *pPV, pNewGrafObj.get());
+                        mpDrawView->EndUndo();
+                    }
+                }
+            }
+        }
+
+        if( bInsertNewObject )
+        {
+            pGrafObj = new SdrGrafObj(
+                GetView()->getSdrModelFromSdrView(),
+                aGraphic,
+                aRect);
+            SdrPageView* pPV = mpDrawView->GetSdrPageView();
+            mpDrawView->InsertObjectAtView(pGrafObj.get(), *pPV, SdrInsertFlags::SETDEFLAYER);
+        }
+    }
+    // insert sound
+    else if( nType == css::gallery::GalleryItemType::MEDIA )
+    {
+        const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
+        GetViewFrame()->GetDispatcher()->ExecuteList(SID_INSERT_AVMEDIA,
+                SfxCallMode::SYNCHRON, { &aMediaURLItem });
+    }
+
+    GetDocSh()->SetWaitCursor( false );
+}
+
+/**
+ * Edit macros for attribute configuration
+ */
+
+/* the work flow to adjust the attributes is nearly everywhere the same
+   1. read existing attributes
+   2. read parameter from the basic-set
+   3. delete selected item from the attribute-set
+   4. create new attribute-item
+   5. insert item into set      */
+void DrawViewShell::AttrExec (SfxRequest &rReq)
+{
+    // nothing is executed during a slide show!
+    if(HasCurrentFunction(SID_PRESENTATION))
+        return;
+
+    CheckLineTo (rReq);
+
+    SfxBindings&    rBindings = GetViewFrame()->GetBindings();
+    SfxItemSet aAttr( GetDoc()->GetPool() );
+
+    GetView()->GetAttributes( aAttr );
+    const SfxItemSet* pArgs = rReq.GetArgs();
+
+    switch (rReq.GetSlot ())
+    {
+        // set new fill-style
+        case SID_SETFILLSTYLE :
+            if (pArgs && pArgs->Count () == 1)
+            {
+                const SfxUInt32Item* pFillStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
+                if (CHECK_RANGE (drawing::FillStyle_NONE, static_cast<drawing::FillStyle>(pFillStyle->GetValue ()), drawing::FillStyle_BITMAP))
+                {
+                    aAttr.ClearItem (XATTR_FILLSTYLE);
+                    XFillStyleItem aStyleItem(static_cast<drawing::FillStyle>(pFillStyle->GetValue ()));
+                    aStyleItem.SetWhich(XATTR_FILLSTYLE);
+                    aAttr.Put (aStyleItem);
+                    rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                    rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
+                }
+#if HAVE_FEATURE_SCRIPTING
+                else StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
+#endif
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        // determine new line style
+        case SID_SETLINESTYLE :
+            if (pArgs && pArgs->Count () == 1)
+            {
+                const SfxUInt32Item* pLineStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
+                if (CHECK_RANGE (sal_Int32(drawing::LineStyle_NONE), static_cast<sal_Int32>(pLineStyle->GetValue()), sal_Int32(drawing::LineStyle_DASH)))
+                {
+                    aAttr.ClearItem (XATTR_LINESTYLE);
+                    XLineStyleItem aStyleItem(static_cast<drawing::LineStyle>(pLineStyle->GetValue()));
+                    aStyleItem.SetWhich(XATTR_LINESTYLE);
+                    aAttr.Put(aStyleItem);
+                    rBindings.Invalidate (SID_ATTR_LINE_STYLE);
+                }
+#if HAVE_FEATURE_SCRIPTING
+                else StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
+#endif
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        // set line width
+        case SID_SETLINEWIDTH :
+            if (pArgs && pArgs->Count () == 1)
+            {
+                const SfxUInt32Item* pLineWidth = rReq.GetArg<SfxUInt32Item>(ID_VAL_WIDTH);
+                aAttr.ClearItem (XATTR_LINEWIDTH);
+                XLineWidthItem aWidthItem(pLineWidth->GetValue());
+                aWidthItem.SetWhich(XATTR_LINEWIDTH);
+                aAttr.Put(aWidthItem);
+                rBindings.Invalidate (SID_ATTR_LINE_WIDTH);
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        case SID_SETFILLCOLOR :
+            if (pArgs && pArgs->Count () == 3)
+            {
+                const SfxUInt32Item* pRed = rReq.GetArg<SfxUInt32Item>(ID_VAL_RED);
+                const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
+                const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
+
+                aAttr.ClearItem (XATTR_FILLCOLOR);
+                aAttr.ClearItem (XATTR_FILLSTYLE);
+                XFillColorItem aColorItem(-1, Color (static_cast<sal_uInt8>(pRed->GetValue ()),
+                                                       static_cast<sal_uInt8>(pGreen->GetValue ()),
+                                                       static_cast<sal_uInt8>(pBlue->GetValue ())));
+                aColorItem.SetWhich(XATTR_FILLCOLOR);
+                aAttr.Put(aColorItem);
+                rBindings.Invalidate (SID_ATTR_FILL_COLOR);
+                rBindings.Invalidate (SID_ATTR_PAGE_COLOR);
+                rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        case SID_SETLINECOLOR :
+            if (pArgs && pArgs->Count () == 3)
+            {
+                const SfxUInt32Item* pRed = rReq.GetArg<SfxUInt32Item>(ID_VAL_RED);
+                const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
+                const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
+
+                aAttr.ClearItem (XATTR_LINECOLOR);
+                XLineColorItem aColorItem(-1, Color(static_cast<sal_uInt8>(pRed->GetValue()),
+                                                    static_cast<sal_uInt8>(pGreen->GetValue()),
+                                                    static_cast<sal_uInt8>(pBlue->GetValue())));
+                aColorItem.SetWhich(XATTR_LINECOLOR);
+                aAttr.Put(aColorItem);
+                rBindings.Invalidate (SID_ATTR_LINE_COLOR);
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        case SID_SETGRADSTARTCOLOR :
+        case SID_SETGRADENDCOLOR :
+            if (pArgs && pArgs->Count () == 4)
+            {
+                const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                const SfxUInt32Item* pRed = rReq.GetArg<SfxUInt32Item>(ID_VAL_RED);
+                const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
+                const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
+                assert(pName && pRed && pGreen && pBlue && "must be present");
+
+                XGradientListRef pGradientList = GetDoc()->GetGradientList ();
+                ::tools::Long          nCounts        = pGradientList->Count ();
+                Color         aColor (static_cast<sal_uInt8>(pRed->GetValue ()),
+                                      static_cast<sal_uInt8>(pGreen->GetValue ()),
+                                      static_cast<sal_uInt8>(pBlue->GetValue ()));
+                ::tools::Long i;
+
+                aAttr.ClearItem (XATTR_FILLGRADIENT);
+                aAttr.ClearItem (XATTR_FILLSTYLE);
+
+                for ( i = 0; i < nCounts; i ++)
+                {
+                    const XGradientEntry* pEntry = pGradientList->GetGradient(i);
+
+                    if (pEntry->GetName () == pName->GetValue ())
+                    {
+                        basegfx::BGradient aGradient(pEntry->GetGradient());
+                        basegfx::BColorStops aNewColorStops(aGradient.GetColorStops());
+
+                        if (SID_SETGRADSTARTCOLOR == rReq.GetSlot ())
+                        {
+                            aNewColorStops.replaceStartColor(aColor.getBColor());
+                        }
+                        else
+                        {
+                            aNewColorStops.replaceEndColor(aColor.getBColor());
+                        }
+
+                        aGradient.SetColorStops(aNewColorStops);
+
+                        XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
+                        aStyleItem.SetWhich(XATTR_FILLSTYLE);
+                        aAttr.Put(aStyleItem);
+                        XFillGradientItem aGradientItem(pName->GetValue (), aGradient);
+                        aGradientItem.SetWhich(XATTR_FILLGRADIENT);
+                        aAttr.Put(aGradientItem);
+                        break;
+                    }
+                }
+
+                if (i >= nCounts)
+                {
+                    Color aBlack (0, 0, 0);
+                    basegfx::BGradient aGradient (
+                        basegfx::BColorStops(
+                            (rReq.GetSlot () == SID_SETGRADSTARTCOLOR)
+                                             ? aColor.getBColor()
+                                             : aBlack.getBColor(),
+                            (rReq.GetSlot () == SID_SETGRADENDCOLOR)
+                                             ? aColor.getBColor()
+                                             : aBlack.getBColor()));
+
+                    GetDoc()->GetGradientList()->Insert(std::make_unique<XGradientEntry>(aGradient, pName->GetValue()));
+
+                    XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
+                    aStyleItem.SetWhich(XATTR_FILLSTYLE);
+                    aAttr.Put(aStyleItem);
+                    XFillGradientItem aGradientItem(pName->GetValue(), aGradient);
+                    aGradientItem.SetWhich(XATTR_FILLGRADIENT);
+                    aAttr.Put(aGradientItem);
+                }
+
+                rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
+                rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
+                rBindings.Invalidate (SID_ATTR_PAGE_GRADIENT);
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        case SID_SETHATCHCOLOR :
+            if (pArgs && pArgs->Count () == 4)
+            {
+                const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                const SfxUInt32Item* pRed = rReq.GetArg<SfxUInt32Item>(ID_VAL_RED);
+                const SfxUInt32Item* pGreen = rReq.GetArg<SfxUInt32Item>(ID_VAL_GREEN);
+                const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
+                assert(pName && pRed && pGreen && pBlue && "must be present");
+
+                XHatchListRef pHatchList = GetDoc()->GetHatchList ();
+                ::tools::Long       nCounts     = pHatchList->Count ();
+                Color      aColor (static_cast<sal_uInt8>(pRed->GetValue ()),
+                                   static_cast<sal_uInt8>(pGreen->GetValue ()),
+                                   static_cast<sal_uInt8>(pBlue->GetValue ()));
+                ::tools::Long i;
+
+                aAttr.ClearItem (XATTR_FILLHATCH);
+                aAttr.ClearItem (XATTR_FILLSTYLE);
+
+                for ( i = 0; i < nCounts; i ++)
+                {
+                    const XHatchEntry* pEntry = pHatchList->GetHatch(i);
+
+                    if (pEntry->GetName () == pName->GetValue ())
+                    {
+                        XHatch aHatch(pEntry->GetHatch());
+
+                        aHatch.SetColor (aColor);
+
+                        XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
+                        aStyleItem.SetWhich(XATTR_FILLSTYLE);
+                        aAttr.Put(aStyleItem);
+                        XFillHatchItem aHatchItem(pName->GetValue(), aHatch);
+                        aHatchItem.SetWhich(XATTR_FILLHATCH);
+                        aAttr.Put(aHatchItem);
+                        break;
+                    }
+                }
+
+                if (i >= nCounts)
+                {
+                    XHatch aHatch (aColor);
+
+                    GetDoc()->GetHatchList()->Insert(std::make_unique<XHatchEntry>(aHatch, pName->GetValue()));
+
+                    XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
+                    aStyleItem.SetWhich(XATTR_FILLSTYLE);
+                    aAttr.Put(aStyleItem);
+                    XFillHatchItem aHatchItem(pName->GetValue (), aHatch);
+                    aHatchItem.SetWhich(XATTR_FILLHATCH);
+                    aAttr.Put(aHatchItem);
+                }
+
+                rBindings.Invalidate (SID_ATTR_FILL_HATCH);
+                rBindings.Invalidate (SID_ATTR_PAGE_HATCH);
+                rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        // configuration for line-dash
+        case SID_DASH :
+            if (pArgs && pArgs->Count () == 7)
+            {
+                const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                const SfxUInt32Item* pStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
+                const SfxUInt32Item* pDots = rReq.GetArg<SfxUInt32Item>(ID_VAL_DOTS);
+                const SfxUInt32Item* pDotLen = rReq.GetArg<SfxUInt32Item>(ID_VAL_DOTLEN);
+                const SfxUInt32Item* pDashes = rReq.GetArg<SfxUInt32Item>(ID_VAL_DASHES);
+                const SfxUInt32Item* pDashLen = rReq.GetArg<SfxUInt32Item>(ID_VAL_DASHLEN);
+                const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
+                assert(pName && pStyle && pDots && pDotLen && pDashes && pDashLen && pDistance && "must be present");
+
+                if (CHECK_RANGE (sal_Int32(css::drawing::DashStyle_RECT), static_cast<sal_Int32>(pStyle->GetValue()), sal_Int32(css::drawing::DashStyle_ROUNDRELATIVE)))
+                {
+                    XDash aNewDash (static_cast<css::drawing::DashStyle>(pStyle->GetValue ()), static_cast<short>(pDots->GetValue ()), pDotLen->GetValue (),
+                                    static_cast<short>(pDashes->GetValue ()), pDashLen->GetValue (), pDistance->GetValue ());
+
+                    aAttr.ClearItem (XATTR_LINEDASH);
+                    aAttr.ClearItem (XATTR_LINESTYLE);
+
+                    XDashListRef pDashList = GetDoc()->GetDashList();
+                    ::tools::Long       nCounts    = pDashList->Count ();
+                    std::unique_ptr<XDashEntry> pEntry = std::make_unique<XDashEntry>(aNewDash, pName->GetValue());
+                    ::tools::Long i;
+
+                    for ( i = 0; i < nCounts; i++ )
+                        if (pDashList->GetDash (i)->GetName () == pName->GetValue ())
+                            break;
+
+                    if (i < nCounts)
+                        pDashList->Replace(std::move(pEntry), i);
+                    else
+                        pDashList->Insert(std::move(pEntry));
+
+                    XLineDashItem aDashItem(pName->GetValue(), aNewDash);
+                    aDashItem.SetWhich(XATTR_LINEDASH);
+                    aAttr.Put(aDashItem);
+                    XLineStyleItem aStyleItem(drawing::LineStyle_DASH);
+                    aStyleItem.SetWhich(XATTR_LINESTYLE);
+                    aAttr.Put(aStyleItem);
+                    rBindings.Invalidate (SID_ATTR_LINE_DASH);
+                    rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                }
+#if HAVE_FEATURE_SCRIPTING
+                else StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
+#endif
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        // configuration for gradients
+        case SID_GRADIENT :
+            if (pArgs && pArgs->Count () == 8)
+            {
+                const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                const SfxUInt32Item* pStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
+                const SfxUInt32Item* pAngle = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLE);
+                const SfxUInt32Item* pBorder = rReq.GetArg<SfxUInt32Item>(ID_VAL_BORDER);
+                const SfxUInt32Item* pCenterX = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_X);
+                const SfxUInt32Item* pCenterY = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_Y);
+                const SfxUInt32Item* pStart = rReq.GetArg<SfxUInt32Item>(ID_VAL_STARTINTENS);
+                const SfxUInt32Item* pEnd = rReq.GetArg<SfxUInt32Item>(ID_VAL_ENDINTENS);
+                assert(pName && pStyle && pAngle && pBorder && pCenterX && pCenterY && pStart && pEnd && "must be present");
+
+                if (CHECK_RANGE (sal_Int32(css::awt::GradientStyle_LINEAR), static_cast<sal_Int32>(pStyle->GetValue()), sal_Int32(css::awt::GradientStyle_RECT)) &&
+                    CHECK_RANGE (0, static_cast<sal_Int32>(pAngle->GetValue ()), 360) &&
+                    CHECK_RANGE (0, static_cast<sal_Int32>(pBorder->GetValue ()), 100) &&
+                    CHECK_RANGE (0, static_cast<sal_Int32>(pCenterX->GetValue ()), 100) &&
+                    CHECK_RANGE (0, static_cast<sal_Int32>(pCenterY->GetValue ()), 100) &&
+                    CHECK_RANGE (0, static_cast<sal_Int32>(pStart->GetValue ()), 100) &&
+                    CHECK_RANGE (0, static_cast<sal_Int32>(pEnd->GetValue ()), 100))
+                {
+                    aAttr.ClearItem (XATTR_FILLGRADIENT);
+                    aAttr.ClearItem (XATTR_FILLSTYLE);
+
+                    XGradientListRef pGradientList = GetDoc()->GetGradientList ();
+                    ::tools::Long           nCounts        = pGradientList->Count ();
+                    ::tools::Long i;
+
+                    for ( i = 0; i < nCounts; i++ )
+                    {
+                        const XGradientEntry* pEntry = pGradientList->GetGradient(i);
+
+                        if (pEntry->GetName () == pName->GetValue ())
+                        {
+                            basegfx::BGradient aGradient(pEntry->GetGradient());
+
+                            aGradient.SetGradientStyle (static_cast<css::awt::GradientStyle>(pStyle->GetValue ()));
+                            aGradient.SetAngle (Degree10(pAngle->GetValue () * 10));
+                            aGradient.SetBorder (static_cast<short>(pBorder->GetValue ()));
+                            aGradient.SetXOffset (static_cast<short>(pCenterX->GetValue ()));
+                            aGradient.SetYOffset (static_cast<short>(pCenterY->GetValue ()));
+                            aGradient.SetStartIntens (static_cast<short>(pStart->GetValue ()));
+                            aGradient.SetEndIntens (static_cast<short>(pEnd->GetValue ()));
+
+                            XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
+                            aStyleItem.SetWhich(XATTR_FILLSTYLE);
+                            aAttr.Put(aStyleItem);
+                            XFillGradientItem aGradientItem(pName->GetValue (), aGradient);
+                            aGradientItem.SetWhich(XATTR_FILLGRADIENT);
+                            aAttr.Put(aGradientItem);
+                            break;
+                        }
+                    }
+
+                    if (i >= nCounts)
+                    {
+                        Color aBlack (0, 0, 0);
+                        basegfx::BGradient aGradient (
+                            basegfx::BColorStops(aBlack.getBColor(), aBlack.getBColor()),
+                            static_cast<css::awt::GradientStyle>(pStyle->GetValue ()),
+                            Degree10(pAngle->GetValue () * 10), static_cast<short>(pCenterX->GetValue ()),
+                            static_cast<short>(pCenterY->GetValue ()), static_cast<short>(pBorder->GetValue ()),
+                            static_cast<short>(pStart->GetValue ()), static_cast<short>(pEnd->GetValue ()));
+
+                        pGradientList->Insert(std::make_unique<XGradientEntry>(aGradient, pName->GetValue()));
+                        XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
+                        aStyleItem.SetWhich(XATTR_FILLSTYLE);
+                        aAttr.Put(aStyleItem);
+                        XFillGradientItem aGradientItem(pName->GetValue (), aGradient);
+                        aGradientItem.SetWhich(XATTR_FILLGRADIENT);
+                        aAttr.Put(aGradientItem);
+                    }
+
+                    rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
+                    rBindings.Invalidate (SID_ATTR_PAGE_GRADIENT);
+                    rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                    rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
+                }
+#if HAVE_FEATURE_SCRIPTING
+                else StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
+#endif
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        // configuration for hatch
+        case SID_HATCH :
+            if (pArgs && pArgs->Count () == 4)
+            {
+                const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                const SfxUInt32Item* pStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
+                const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
+                const SfxUInt32Item* pAngle = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLE);
+                assert(pName && pStyle && pDistance && pAngle && "must be present");
+
+                if (CHECK_RANGE (sal_Int32(css::drawing::HatchStyle_SINGLE), static_cast<sal_Int32>(pStyle->GetValue()), sal_Int32(css::drawing::HatchStyle_TRIPLE)) &&
+                    CHECK_RANGE (0, static_cast<sal_Int32>(pAngle->GetValue ()), 360))
+                {
+                    aAttr.ClearItem (XATTR_FILLHATCH);
+                    aAttr.ClearItem (XATTR_FILLSTYLE);
+
+                    XHatchListRef pHatchList = GetDoc()->GetHatchList ();
+                    ::tools::Long       nCounts     = pHatchList->Count ();
+                    ::tools::Long i;
+
+                    for ( i = 0; i < nCounts; i++ )
+                    {
+                        const XHatchEntry* pEntry = pHatchList->GetHatch(i);
+
+                        if (pEntry->GetName () == pName->GetValue ())
+                        {
+                            XHatch aHatch(pEntry->GetHatch());
+
+                            aHatch.SetHatchStyle (static_cast<css::drawing::HatchStyle>(pStyle->GetValue ()));
+                            aHatch.SetDistance (pDistance->GetValue ());
+                            aHatch.SetAngle (Degree10(pAngle->GetValue () * 10));
+
+                            XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
+                            aStyleItem.SetWhich(XATTR_FILLSTYLE);
+                            aAttr.Put(aStyleItem);
+                            XFillHatchItem aHatchItem(pName->GetValue (), aHatch);
+                            aHatchItem.SetWhich(XATTR_FILLHATCH);
+                            aAttr.Put(aHatchItem);
+                            break;
+                        }
+                    }
+
+                    if (i >= nCounts)
+                    {
+                        XHatch aHatch (Color(0), static_cast<css::drawing::HatchStyle>(pStyle->GetValue ()), pDistance->GetValue (),
+                                       Degree10(pAngle->GetValue () * 10));
+
+                        pHatchList->Insert(std::make_unique<XHatchEntry>(aHatch, pName->GetValue()));
+                        XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
+                        aStyleItem.SetWhich(XATTR_FILLSTYLE);
+                        aAttr.Put(aStyleItem);
+                        XFillHatchItem aHatchItem(pName->GetValue (), aHatch);
+                        aHatchItem.SetWhich(XATTR_FILLHATCH);
+                        aAttr.Put(aHatchItem);
+                    }
+
+                    rBindings.Invalidate (SID_ATTR_FILL_HATCH);
+                    rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                }
+#if HAVE_FEATURE_SCRIPTING
+                else StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
+#endif
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        case SID_SELECTGRADIENT :
+            if (pArgs && (pArgs->Count() == 1))
+            {
+                const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                assert(pName && "must be present");
+
+                XGradientListRef pGradientList = GetDoc()->GetGradientList ();
+                ::tools::Long           nCounts        = pGradientList->Count ();
+
+                for (::tools::Long i = 0; i < nCounts; i ++)
+                {
+                    const XGradientEntry* pEntry = pGradientList->GetGradient(i);
+
+                    if (pEntry->GetName () == pName->GetValue ())
+                    {
+                        aAttr.ClearItem (XATTR_FILLGRADIENT);
+                        aAttr.ClearItem (XATTR_FILLSTYLE);
+                        XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
+                        aStyleItem.SetWhich(XATTR_FILLSTYLE);
+                        aAttr.Put(aStyleItem);
+                        XFillGradientItem aGradientItem(pName->GetValue (), pEntry->GetGradient ());
+                        aGradientItem.SetWhich(XATTR_FILLGRADIENT);
+                        aAttr.Put(aGradientItem);
+                        rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
+                        rBindings.Invalidate (SID_ATTR_PAGE_GRADIENT);
+                        rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                        rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
+                        break;
+                    }
+                }
+
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        case SID_SELECTHATCH :
+            if (pArgs && pArgs->Count() == 1)
+            {
+                const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
+                assert(pName && "must be present");
+
+                XHatchListRef pHatchList = GetDoc()->GetHatchList ();
+                ::tools::Long       nCounts     = pHatchList->Count ();
+
+                for (::tools::Long i = 0; i < nCounts; i ++)
+                {
+                    const XHatchEntry* pEntry = pHatchList->GetHatch(i);
+
+                    if (pEntry->GetName () == pName->GetValue ())
+                    {
+                        aAttr.ClearItem (XATTR_FILLHATCH);
+                        aAttr.ClearItem (XATTR_FILLSTYLE);
+                        XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
+                        aStyleItem.SetWhich(XATTR_FILLSTYLE);
+                        aAttr.Put(aStyleItem);
+                        XFillHatchItem aHatchItem(pName->GetValue (), pEntry->GetHatch ());
+                        aHatchItem.SetWhich(XATTR_FILLHATCH);
+                        aAttr.Put(aHatchItem);
+
+                        rBindings.Invalidate (SID_ATTR_FILL_HATCH);
+                        rBindings.Invalidate (SID_ATTR_PAGE_HATCH);
+                        rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                        rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
+                        break;
+                    }
+                }
+
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+        case SID_UNSELECT :
+            mpDrawView->UnmarkAll ();
+            break;
+
+        case SID_GETRED :
+            if (pArgs && pArgs->Count () == 1)
+            {
+                break;
+            }
+#if HAVE_FEATURE_SCRIPTING
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+            break;
+
+/*        case SID_SETFONTFAMILYNAME :
+        case SID_SETFONTSTYLENAME :
+        case SID_SETFONTFAMILY :
+        case SID_SETFONTPITCH :
+        case SID_SETFONTCHARSET :
+        case SID_SETFONTPOSTURE :
+        case SID_SETFONTWEIGHT :
+        case SID_SETFONTUNDERLINE :
+        case SID_SETFONTCROSSEDOUT :
+        case SID_SETFONTSHADOWED :
+        case SID_SETFONTCONTOUR :
+        case SID_SETFONTCOLOR :
+        case SID_SETFONTLANGUAGE :
+        case SID_SETFONTWORDLINE :
+        case SID_SETFONTCASEMAP :
+        case SID_SETFONTESCAPE :
+        case SID_SETFONTKERNING :
+            break;*/
+
+        default :
+            ;
+    }
+
+    mpDrawView->SetAttributes (aAttr);
+    rReq.Ignore ();
+}
+
+/**
+ * Edit macros for attribute configuration
+ */
+void DrawViewShell::AttrState (SfxItemSet& rSet)
+{
+    SfxWhichIter     aIter (rSet);
+    sal_uInt16           nWhich = aIter.FirstWhich ();
+    SfxItemSet aAttr( GetDoc()->GetPool() );
+    mpDrawView->GetAttributes( aAttr );
+
+    while (nWhich)
+    {
+        switch (nWhich)
+        {
+            case SID_GETFILLSTYLE :
+            {
+                const XFillStyleItem &rFillStyleItem = aAttr.Get (XATTR_FILLSTYLE);
+
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>(rFillStyleItem.GetValue ())));
+                break;
+            }
+
+            case SID_GETLINESTYLE :
+            {
+                const XLineStyleItem &rLineStyleItem = aAttr.Get (XATTR_LINESTYLE);
+
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>(rLineStyleItem.GetValue ())));
+                break;
+            }
+
+            case SID_GETLINEWIDTH :
+            {
+                const XLineWidthItem &rLineWidthItem = aAttr.Get (XATTR_LINEWIDTH);
+
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>(rLineWidthItem.GetValue ())));
+                break;
+            }
+
+            case SID_GETGREEN :
+            case SID_GETRED :
+            case SID_GETBLUE :
+            {
+                const SfxUInt32Item &rWhatKind = static_cast<const SfxUInt32Item &>( rSet.Get (ID_VAL_WHATKIND) );
+                Color               aColor;
+
+                switch (rWhatKind.GetValue ())
+                {
+                    case 1 :
+                    {
+                        const XLineColorItem &rLineColorItem = aAttr.Get (XATTR_LINECOLOR);
+
+                        aColor = rLineColorItem.GetColorValue ();
+                        break;
+                    }
+
+                    case 2 :
+                    {
+                        const XFillColorItem &rFillColorItem = aAttr.Get (XATTR_FILLCOLOR);
+
+                        aColor = rFillColorItem.GetColorValue ();
+                        break;
+                    }
+
+                    case 3 :
+                    case 4 :
+                    {
+                        const XFillGradientItem &rFillGradientItem = aAttr.Get (XATTR_FILLGRADIENT);
+                        const basegfx::BGradient &rGradient = rFillGradientItem.GetGradientValue ();
+
+                        aColor = (rWhatKind.GetValue () == 3)
+                                    ? Color(rGradient.GetColorStops().front().getStopColor())
+                                    : Color(rGradient.GetColorStops().back().getStopColor());
+                        break;
+                    }
+
+                    case 5:
+                    {
+                        const XFillHatchItem &rFillHatchItem = aAttr.Get (XATTR_FILLHATCH);
+                        const XHatch         &rHatch         = rFillHatchItem.GetHatchValue ();
+
+                        aColor = rHatch.GetColor ();
+                        break;
+                    }
+
+                    default :
+                        ;
+                }
+
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>((nWhich == SID_GETRED)
+                                                             ? aColor.GetRed ()
+                                                             : (nWhich == SID_GETGREEN)
+                                                                   ? aColor.GetGreen ()
+                                                                   : aColor.GetBlue ())));
+                break;
+            }
+
+            default :
+                ;
+        }
+
+        nWhich = aIter.NextWhich ();
+    }
+}
+
+} // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

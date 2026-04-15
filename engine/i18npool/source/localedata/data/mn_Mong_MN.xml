@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
+  <LC_INFO>
+    <Language>
+      <LangID>qlt</LangID>
+      <DefaultName>Mongolian Mongolian</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>MN</CountryID>
+      <DefaultName>Mongolia</DefaultName>
+    </Country>
+    <Variant>mn-Mong-MN</Variant>
+  </LC_INFO>
+  <LC_CTYPE unoid="generic">
+    <Separators>
+      <DateSeparator>.</DateSeparator>
+      <ThousandSeparator> </ThousandSeparator>
+      <DecimalSeparator>,</DecimalSeparator>
+      <TimeSeparator>:</TimeSeparator>
+      <Time100SecSeparator>,</Time100SecSeparator>
+      <ListSeparator>;</ListSeparator>
+      <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
+      <LongDateDaySeparator> </LongDateDaySeparator>
+      <LongDateMonthSeparator> </LongDateMonthSeparator>
+      <LongDateYearSeparator> ᠣᠨ</LongDateYearSeparator>
+    </Separators>
+    <Markers>
+      <QuotationStart>‘</QuotationStart>
+      <QuotationEnd>’</QuotationEnd>
+      <DoubleQuotationStart>“</DoubleQuotationStart>
+      <DoubleQuotationEnd>”</DoubleQuotationEnd>
+    </Markers>
+    <TimeAM>AM</TimeAM>
+    <TimePM>PM</TimePM>
+    <MeasurementSystem>Metric</MeasurementSystem>
+  </LC_CTYPE>
+  <LC_FORMAT ref="mn_Cyrl_MN" replaceFrom="[CURRENCY]" replaceTo="[$₮-450]"/>
+  <LC_COLLATION ref="mn_Cyrl_MN"/>
+  <LC_SEARCH ref="mn_Cyrl_MN"/>
+  <LC_INDEX>
+    <IndexKey unoid="alphanumeric" default="true" phonetic="false">ᠠ-ᡂ</IndexKey>
+    <UnicodeScript>36</UnicodeScript>
+    <FollowPageWord>p.</FollowPageWord>
+    <FollowPageWord>pp.</FollowPageWord>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>ᠨᠢ</DefaultAbbrvName>
+          <DefaultFullName>ᠨᠢᠮ᠎ᠠ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>ᠲᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠳᠠᠸᠠ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>ᠮᠢᠭ</DefaultAbbrvName>
+          <DefaultFullName>ᠮᠢᠠᠠᠮᠠᠷ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>ᡀᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᡀᠠᠭᠪᠠ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>ᠫᠥᠷ</DefaultAbbrvName>
+          <DefaultFullName>ᠫᠦᠷᠪᠦ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>ᠪᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠪᠠᠰᠠᠩ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>ᠪᠢᠮ</DefaultAbbrvName>
+          <DefaultFullName>ᠪᠢᠮᠪᠠ</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>1 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠨᠢᠭᠡᠳᠥᠭᠡᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>2 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠬᠣᠶᠠᠳᠣᠭᠠᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>3 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠭᠣᠷᠪᠡᠳᠣᠭᠠᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>4 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠳᠥᠷᠪᠡᠳᠥᠭᠡᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>5 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠲᠠᠪᠣᠳᠣᠭᠠᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>6 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠵᠢᠷᠭᠣᠭᠠᠳᠣᠭᠠᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>7 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠲᠣᠯᠣᠭᠠᠳᠣᠭᠠᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>8 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠨᠠᠢᠮᠠᠳᠥᠭᠠᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>9 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠶᠢᠰᠥᠳᠥᠭᠡᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>10 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠠᠷᠪᠠᠳᠣᠭᠠᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>11 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠠᠷᠪᠠᠨ ᠨᠢᠭᠡᠳᠥᠭᠡᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>12 ᠊ᠷ ᠰᠠᠷ᠎ᠠ</DefaultAbbrvName>
+          <DefaultFullName>ᠠᠷᠪᠠᠨ ᠬᠣᠶᠠᠳᠣᠭᠠᠷ ᠰᠠᠷ᠎ᠠ</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>ᠮ᠂ ᠡᠡ᠂ ᠦ</DefaultAbbrvName>
+          <DefaultFullName>ᠮᠠᠨ ᠤ ᠡᠷᠡᠨ ᠦ ᠡᠮᠦᠨᠡᠬᠢ</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>ᠮ᠂ ᠡ</DefaultAbbrvName>
+          <DefaultFullName>ᠮᠠᠨ ᠤ ᠡᠷᠡᠨ ᠦ</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>mon</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>4</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY ref="mn_Cyrl_MN"/>
+  <LC_TRANSLITERATION ref="mn_Cyrl_MN"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>ᠦᠨᠡᠨ</trueWord>
+      <falseWord>ᠬᠤᠳᠠᠯ</falseWord>
+      <quarter1Word>ᠳᠥᠷᠪᠡᠨ ᠦ ᠨᠢᠭᠡ</quarter1Word>
+      <quarter2Word>ᠳᠥᠷᠪᠡᠨ ᠦ ᠬᠣᠶᠠᠷ</quarter2Word>
+      <quarter3Word>ᠳᠥᠷᠪᠡᠨ ᠦ ᠭᠤᠷᠪᠠ</quarter3Word>
+      <quarter4Word>ᠳᠥᠷᠪᠡᠨ ᠦ ᠳᠥᠷᠪᠡ</quarter4Word>
+      <aboveWord>ᠳᠡᠭᠡᠷ᠎ᠡ</aboveWord>
+      <belowWord>ᠳᠣᠣᠷ᠎ᠠ</belowWord>
+      <quarter1Abbreviation>1/4</quarter1Abbreviation>
+      <quarter2Abbreviation>2/4</quarter2Abbreviation>
+      <quarter3Abbreviation>4/4</quarter3Abbreviation>
+      <quarter4Abbreviation>4/4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="mn_Cyrl_MN"/>
+  <LC_OutLineNumberingLevel ref="mn_Cyrl_MN"/>
+</Locale>

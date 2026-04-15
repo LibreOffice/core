@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="12cm" height="4cm" viewBox="0 0 1200 400"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+<defs>
+    <marker id="Triangle"
+      markerUnits="strokeWidth" refY="3"
+      markerWidth="6" markerHeight="6"
+      orient="auto">
+      <path d="M 0 0 L 6 3 L 0 6 z"
+            stroke-width="0.5" stroke="black"/>
+    </marker>   
+</defs>
+           
+<polyline fill="none" stroke="red" stroke-width="10" 
+            points="450,50 550,50 650,150"
+      marker-end="url(#Triangle)" />
+</svg>

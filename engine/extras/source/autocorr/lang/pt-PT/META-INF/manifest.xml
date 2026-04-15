@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+ <file-entry full-path="/" media-type=""/>
+ <file-entry full-path="SentenceExceptList.xml" media-type="text/xml"/>
+ <file-entry full-path="WordExceptList.xml" media-type="text/xml"/>
+ <file-entry full-path="DocumentList.xml" media-type="text/xml"/>
+</manifest>

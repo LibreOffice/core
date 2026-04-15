@@ -1,0 +1,160 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module awt {
+
+
+/** specifies the standard model of a UnoControlDialog.
+ */
+published service UnoControlDialogModel
+{
+    service com::sun::star::awt::UnoControlModel;
+
+    /** allows to create control models, which support the
+        UnoControlDialogElement service and can be inserted into
+        this container.
+     */
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+    interface com::sun::star::container::XContainer;
+
+    interface com::sun::star::container::XNameContainer;
+
+
+    /** specifies the background color (RGB) of the dialog.
+     */
+    [property] com::sun::star::util::Color BackgroundColor;
+
+
+    /** specifies if the dialog is closeable.
+     */
+    [property] boolean Closeable;
+
+
+    /** determines whether a dialog is enabled or disabled.
+     */
+    [property] boolean Enabled;
+
+
+    /** specifies the font attributes of the text in the caption bar of the dialog.
+     */
+    [property] com::sun::star::awt::FontDescriptor FontDescriptor;
+
+
+    /** specifies the com::sun::star::text::FontEmphasis
+        value of the text in the caption bar of the dialog.
+     */
+    [property] short FontEmphasisMark;
+
+
+    /** specifies the com::sun::star::text::FontRelief
+        value of the text in the caption bar of the dialog.
+     */
+    [property] short FontRelief;
+
+
+    /** specifies the help text of the dialog.
+     */
+    [property] string HelpText;
+
+
+    /** specifies the help URL of the dialog.
+     */
+    [property] string HelpURL;
+
+
+    /** specifies if the dialog is moveable.
+     */
+    [property] boolean Moveable;
+
+
+    /** specifies if the dialog is sizeable.
+     */
+    [property] boolean Sizeable;
+
+
+    /** specifies the text color (RGB) of the dialog.
+     */
+    [property] com::sun::star::util::Color TextColor;
+
+
+    /** specifies the text line color (RGB) of the dialog.
+     */
+    [property] com::sun::star::util::Color TextLineColor;
+
+
+    /** specifies the text that is displayed in the caption bar of the dialog.
+     */
+    [property] string Title;
+
+
+    /** If set to true the dialog will have the desktop as parent.
+     */
+    [optional, property] boolean DesktopAsParent;
+
+    /** specifies a URL that references a graphic that should be used as a
+        background image.
+            @see Graphic
+    */
+    [optional, property] string ImageURL;
+
+    /** specifies a graphic to be displayed as a background image
+
+        <p>If this property is present, it interacts with the #ImageURL in the
+        following way:
+        <ul><li>If #ImageURL is set, #Graphic will be reset
+            to an object as loaded from the given image URL, or `NULL` if #ImageURL
+            does not point to a valid image file.</li>
+            <li>If #Graphic is set, #ImageURL will be reset
+            to an empty string.</li>
+        </ul></p>
+     */
+    [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
+
+    /** specifies that a horizontal scrollbar should be added to the dialog
+     */
+    [optional, property] boolean HScroll;
+
+    /** specifies that a vertical scrollbar should be added to the dialog
+     */
+    [optional, property] boolean VScroll;
+
+    /** specifies the horizontal position of the scrolled dialog content
+     */
+    [optional, property] long ScrollLeft;
+
+    /** specifies the vertical position of the scrolled dialog content
+     */
+    [optional, property] long ScrollTop;
+
+    /** specifies the total width of the scrollable dialog content
+     */
+    [optional, property] long ScrollWidth;
+
+    /** specifies the total height of the scrollable dialog content
+     */
+    [optional, property] long ScrollHeight;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:list text:style-name="Numbering 123">
+    <text:list-item>
+     <text:p>Item1</text:p>
+    </text:list-item>
+   </text:list>
+   <text:p/>
+   <text:list text:continue-numbering="true" text:style-name="Numbering 123">
+    <text:list-item>
+     <text:p>Item2</text:p>
+    </text:list-item>
+   </text:list>
+   <text:p/>
+   <text:list text:continue-numbering="true" text:style-name="Numbering 123">
+    <text:list-item text:start-value="1">
+     <text:p>Item3 (restarted)</text:p>
+    </text:list-item>
+   </text:list>
+  </office:text>
+ </office:body>
+</office:document>

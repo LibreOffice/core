@@ -1,0 +1,557 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "macros.inc"
+
+#ifndef MACOSX
+Directory gid_Dir_Brand_Root
+    ParentID = PREDEFINED_PROGDIR;
+  #ifdef WNT
+    HostName = "${WINDOWSBASISROOTNAME}";
+  #else
+    HostName = ".";
+  #endif
+    Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION,CREATE);
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_Resources
+    ParentID = gid_Dir_Bundle_Contents;
+    HostName = "Resources";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_Library
+    ParentID = gid_Dir_Bundle_Contents;
+    HostName = "Library";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_Library_Spotlight
+    ParentID = gid_Dir_Bundle_Contents_Library;
+    HostName = "Spotlight";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_Library_Spotlight_Bundle
+    ParentID = gid_Dir_Bundle_Contents_Library_Spotlight;
+    HostName = "OOoSpotlightImporter.mdimporter";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents
+    ParentID = gid_Dir_Bundle_Contents_Library_Spotlight_Bundle;
+    HostName = "Contents";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_PlugIns
+    ParentID = gid_Dir_Bundle_Contents;
+    HostName = "PlugIns";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_PlugIns_Preview
+    ParentID = gid_Dir_Bundle_Contents_PlugIns;
+    HostName = "QuickLookPreview.appex";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_PlugIns_Preview_Contents
+    ParentID = gid_Dir_Bundle_Contents_PlugIns_Preview;
+    HostName = "Contents";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_PlugIns_Thumbnail
+    ParentID = gid_Dir_Bundle_Contents_PlugIns;
+    HostName = "QuickLookThumbnail.appex";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_PlugIns_Thumbnail_Contents
+    ParentID = gid_Dir_Bundle_Contents_PlugIns_Thumbnail;
+    HostName = "Contents";
+End
+#endif
+
+#if defined MACOSX
+Unixlink gid_Unixlink_Applications
+    BIN_FILE_BODY;
+    Styles = ();
+    Dir = PD_PROGDIR;
+    Name = "Applications";
+    Target = "/Applications";
+End
+#endif
+
+Directory gid_Dir_Resource
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_Share;
+#else
+    ParentID = gid_Brand_Dir_Program;
+#endif
+    DosName = "resource";
+End
+
+Directory gid_Dir_Classes
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "java";
+#else
+    ParentID = gid_Brand_Dir_Program;
+    DosName = "classes";
+#endif
+End
+
+#ifdef WNT
+
+Directory gid_Dir_Shellnew
+    ParentID = gid_Dir_Template;
+    DosName = "shellnew";
+End
+
+#endif
+
+Directory gid_Dir_User
+#if defined MACOSX
+    ParentID = gid_Dir_Bundle_Contents_Resources;
+#else
+    ParentID = gid_Dir_Brand_Root;
+#endif
+    DosName = "presets";
+End
+
+Directory gid_Dir_User_Basic
+    ParentID = gid_Dir_User;
+    DosName = "basic";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_Basic_Standard
+    ParentID = gid_Dir_User_Basic;
+    DosName = "Standard";
+End
+
+Directory gid_Dir_User_Config
+    ParentID = gid_Dir_User;
+    DosName = "config";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_Fonts
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "fonts";
+End
+
+#ifdef WNT
+
+Directory gid_Dir_Winfonts
+    ParentID = gid_Dir_Fonts;
+    DosName = "truetype";
+End
+
+#endif
+
+Directory gid_Dir_Share_Autotext
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "autotext";
+End
+
+Directory gid_Dir_Autotext_Language
+    ParentID = gid_Dir_Share_Autotext;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
+    Styles = (CREATE);
+End
+
+Directory gid_Dir_Share_Xslt
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "xslt";
+End
+
+Directory gid_Dir_Share_Xslt_Docbook
+    ParentID = gid_Dir_Share_Xslt;
+    DosName = "docbook";
+End
+
+Directory gid_Dir_Share_Dtd
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "dtd";
+End
+
+Directory gid_Dir_Share_Dtd_Ooo
+    ParentID = gid_Dir_Share_Dtd;
+    DosName = "officedocument";
+End
+
+Directory gid_Dir_Share_Dtd_Ooo_1_0
+    ParentID = gid_Dir_Share_Dtd_Ooo;
+    DosName = "1_0";
+End
+
+Directory gid_Dir_Share_Dtd_Math
+    ParentID = gid_Dir_Share_Dtd;
+    DosName = "math";
+End
+
+Directory gid_Dir_Share_Dtd_Math_1_01
+    ParentID = gid_Dir_Share_Dtd_Math;
+    DosName = "1_01";
+End
+
+Directory gid_Dir_Share_Config_Wizard
+    ParentID = gid_Brand_Dir_Share_Config;
+    DosName = "wizard";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg
+    ParentID = gid_Brand_Dir_Share_Config;
+    DosName = "soffice.cfg";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Simpress
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "simpress";
+End
+
+Directory gid_Dir_Share_Registry_Res
+    ParentID = gid_Brand_Dir_Share_Registry;
+    HostName = "res";
+End
+
+Directory gid_Dir_Autotext
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "autotext";
+End
+
+Directory gid_Dir_Basic
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "basic";
+End
+
+Directory gid_Dir_Basic_Scriptbindinglib
+    ParentID = gid_Dir_Basic;
+    DosName = "ScriptBindingLibrary";
+End
+
+Directory gid_Dir_Share_Scripts
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "Scripts";
+End
+
+Directory gid_Dir_Gallery
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "gallery";
+End
+
+Directory gid_Dir_Template
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "template";
+End
+
+Directory gid_Dir_Share_Template_Wizard
+    ParentID = gid_Dir_Template;
+    DosName = "wizard";
+End
+
+Directory gid_Dir_Share_Template_Common_Wizard
+    ParentID = gid_Dir_Template_Common;
+    DosName = "wizard";
+End
+
+Directory gid_Dir_Share_Template_Common_Wizard_Agenda
+    ParentID = gid_Dir_Share_Template_Common_Wizard;
+    DosName = "agenda";
+End
+
+Directory gid_Dir_Share_Template_Wizard_Bitmap
+    ParentID = gid_Dir_Share_Template_Wizard;
+    DosName = "bitmap";
+End
+
+Directory gid_Dir_Share_Template_Common_Wizard_Fax
+    ParentID = gid_Dir_Share_Template_Common_Wizard;
+    DosName = "fax";
+End
+
+Directory gid_Dir_Share_Template_Common_Wizard_Letter
+    ParentID = gid_Dir_Share_Template_Common_Wizard;
+    DosName = "letter";
+End
+
+Directory gid_Dir_Share_Template_Common_Wizard_Report
+    ParentID = gid_Dir_Share_Template_Common_Wizard;
+    DosName = "report";
+End
+
+Directory gid_Dir_Share_Template_Common_Wizard_Styles
+    ParentID = gid_Dir_Share_Template_Common_Wizard;
+    DosName = "styles";
+End
+
+Directory gid_Dir_Template_Language
+    ParentID = gid_Dir_Template;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
+End
+
+Directory gid_Dir_Wordbook
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "wordbook";
+End
+
+Directory gid_Dir_Share_Fingerprint
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "fingerprint";
+End
+
+Directory gid_Dir_Help
+#if defined MACOSX
+    ParentID = gid_Dir_Bundle_Contents_Resources;
+#else
+    ParentID = gid_Dir_Brand_Root;
+#endif
+    DosName = "help";
+End
+
+Directory gid_Dir_Help_Isolanguage
+    ParentID = gid_Dir_Help;
+    DIR_ISOLANGUAGE_ALL_LANG;
+#ifdef WITH_HELPPACK_INTEGRATION
+    Styles = (FORCEHELPPACK);
+#else
+    Styles = (HELPPACK);
+#endif
+End
+
+#ifdef UNX
+
+Directory gid_Dir_Fonts_Truetype
+    ParentID = gid_Dir_Fonts;
+    DosName = "truetype";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Psprint
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "psprint";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Psprint_Driver
+    ParentID = gid_Dir_Psprint;
+    DosName = "driver";
+End
+
+#endif
+
+/* *** Accessories Extras *** */
+
+/* ** Gallery ** */
+
+/* Draws */
+Directory gid_Dir_Gallery_Draws
+    ParentID = gid_Dir_Gallery;
+    DosName = "Draws";
+End
+
+/* Draws - People */
+Directory gid_Dir_Gallery_Draws_People
+    ParentID = gid_Dir_Gallery_Draws;
+    DosName = "People";
+End
+
+/* Photos */
+Directory gid_Dir_Gallery_Photos
+    ParentID = gid_Dir_Gallery;
+    DosName = "Photos";
+End
+
+/* Photos - Cities */
+Directory gid_Dir_Gallery_Photos_Cities
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Cities";
+End
+
+/* Photos - Buildings */
+Directory gid_Dir_Gallery_Photos_Buildings
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Buildings";
+End
+
+/* Photos - Plants */
+Directory gid_Dir_Gallery_Photos_Plants
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Plants";
+End
+
+/* Photos - Fauna */
+Directory gid_Dir_Gallery_Photos_Fauna
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Fauna";
+End
+
+/* Photos - Flowers */
+Directory gid_Dir_Gallery_Photos_Flowers
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Flowers";
+End
+
+/* Photos - Landscapes */
+Directory gid_Dir_Gallery_Photos_Landscapes
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Landscapes";
+End
+
+/* Photos - Statues */
+Directory gid_Dir_Gallery_Photos_Statues
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Statues";
+End
+
+/* Photos - Space */
+Directory gid_Dir_Gallery_Photos_Space
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Space";
+End
+
+/* Photos - Travel */
+Directory gid_Dir_Gallery_Photos_Travel
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Travel";
+End
+
+/* Photos - Objects */
+Directory gid_Dir_Gallery_Photos_Objects
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Objects";
+End
+
+/* Photos - Humans */
+Directory gid_Dir_Gallery_Photos_Humans
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Humans";
+End
+
+/* Photos - FoodsandDrinks */
+Directory gid_Dir_Gallery_Photos_FoodsandDrinks
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "FoodsandDrinks";
+End
+
+/* Photos - Celebration */
+Directory gid_Dir_Gallery_Photos_Celebration
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Celebration";
+End
+
+Directory gid_Dir_Samples
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "samples";
+End
+
+Directory gid_Dir_Samples_Language
+    ParentID = gid_Dir_Samples;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
+End
+
+/* Elements */
+Directory gid_Dir_Gallery_Elements
+    ParentID = gid_Dir_Gallery;
+    DosName = "Elements";
+End
+
+/* Elements - Bullets 2 */
+Directory gid_Dir_Gallery_Elements_Bullets2
+    ParentID = gid_Dir_Gallery_Elements;
+    DosName = "Bullets2";
+End
+
+ /* Templates - Common */
+Directory gid_Dir_Template_Common
+    ParentID = gid_Dir_Template;
+    DosName = "common";
+End
+
+Directory gid_Dir_Template_Common_Internal
+    ParentID = gid_Dir_Template_Common;
+    DosName = "internal";
+End
+
+Directory gid_Dir_Template_Common_Draw
+    ParentID = gid_Dir_Template_Common;
+    DosName = "draw";
+End
+
+Directory gid_Dir_Template_Common_Officorr
+    ParentID = gid_Dir_Template_Common;
+    DosName = "officorr";
+End
+
+Directory gid_Dir_Template_Common_Offimisc
+    ParentID = gid_Dir_Template_Common;
+    DosName = "offimisc";
+End
+
+Directory gid_Dir_Template_Common_Personal
+    ParentID = gid_Dir_Template_Common;
+    DosName = "personal";
+End
+
+Directory gid_Dir_Template_Common_Presnt
+    ParentID = gid_Dir_Template_Common;
+    DosName = "presnt";
+End
+
+Directory gid_Dir_Template_Common_Styles
+    ParentID = gid_Dir_Template_Common;
+    DosName = "styles";
+End
+
+Directory gid_Brand_Dir_Program_Services
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_Share;
+#else
+    ParentID = gid_Brand_Dir_Program;
+#endif
+    DosName = "services";
+End
+
+Directory gid_Brand_Dir_Program_Types
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_Share;
+#else
+    ParentID = gid_Brand_Dir_Program;
+#endif
+    DosName = "types";
+End

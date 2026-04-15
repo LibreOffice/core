@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+    <text:p><draw:frame text:anchor-type="as-char" svg:width="2cm" style:rel-width="100%" svg:height="1cm" style:rel-height="scale">
+      <draw:image draw:mime-type="image/png">
+       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAMYAAABjAQMAAAD6hO1DAAAABlBMVEUAAAD/AAAb/40iAAAAAXRSTlMAQObYZgAAAK9JREFUSMed1rGJA0AMBECX9AU8uPUtaQsQyIkDBx4wUjrBcZxO2sdn/T1U/5SnJZRShrKWUEoZylpCKWUoawmllKGsJZRShrKWUEoZylpCKWUoawmllKGsJZRSBvI+aL9WKKUMZS2hlDKUtYRSylB6OOdwn1JCObxP2SGhHPqtlFAO/6eUUA7zoJRQDvOtlFAO87qUUA77p5RQDvu0lFAO+aCUUA55p5RQfstvznwvOCFYloT8wJsAAAAASUVORK5CYII</office:binary-data>
+      </draw:image>
+     </draw:frame></text:p>
+  </office:text>
+ </office:body>
+</office:document>

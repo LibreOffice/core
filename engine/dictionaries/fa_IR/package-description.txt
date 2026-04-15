@@ -1,0 +1,4 @@
+Lilak, Persian Spell Checking Dictionary
+
+Lilak is an open source project for generating Persian dictionary for hunspell spell checker based on Persian Morphology.
+This dictionary is free and the source is available under Apache License Version 2.0.

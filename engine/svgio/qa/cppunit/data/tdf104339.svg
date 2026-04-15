@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   id="svg2"
+   version="1.1"
+   xml:space="preserve"
+   width="565.10504"
+   height="132.81749"
+   viewBox="0 0 565.10504 132.8175">
+ <defs>
+  <clipPath clipPathUnits="userSpaceOnUse" id="clipPath16">
+   <path d="M 0,612 792,612 792,0 0,0 0,612 Z"/>
+  </clipPath>
+ </defs>
+ <g transform="matrix(1.25,0,0,-1.25,-221.64057,456.20243)">
+  <g transform="translate(16.855932,5.8347458)">
+   <g clip-path="url(#clipPath16)">
+    <g transform="translate(403.16803,288.82005)">
+     <path
+         d="m 0,0 v -7.675 h -34.756 v 51.656 h 8.19 V 0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>

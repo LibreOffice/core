@@ -1,0 +1,83 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com {  module sun {  module star {  module inspection {
+
+/** describes a com::sun::star::frame::Controller which can be used to
+    browse and modify properties of components.
+
+    <p>The controller can be plugged into a com::sun::star::frame::XFrame, and will
+    provide a visual component for inspecting and modifying component properties.<br>
+    Note that "property" here is a generic term - any aspect of a component can be considered a property,
+    as long as some property handler is able to describe this aspect in a property-like way.</p>
+
+    <p>The basic idea is that one facet of the inspected component is represented by a single line
+    of controls: A label, an input control, and optionally one or two buttons which, when pressed,
+    trigger additional user interaction (e.g. a more sophisticated dialog to enter a property value).</p>
+
+    <p>Additionally, property lines can be grouped into different categories. A usual implementation
+    of such categories would be tab pages, but other implementations are possible, too.</p>
+
+    <p>Even more, the inspector can optionally display a help section at the bottom of its
+    window, which can display arbitrary (context-sensitive) help texts.</p>
+
+    <p>An ObjectInspector needs one or more property handlers which describe
+    the facets of an inspected component - without such handlers, the inspector window will simply
+    stay empty.</p>
+
+    <p>The property handlers, as well as more information about the layout of the inspector,
+    are provided by an inspector model, which has to be implemented by the user of the inspector.</p>
+    </p>
+
+    <p>Since property handlers might have the need to raise UI, they will be created with a context
+    value named "DialogParentWindow", which contains an XWindow which should be used as parent of
+    any windows to raise.<br>
+    If the com::sun::star::uno::XComponentContext in which the ObjectInspector
+    was created already contains such a value, it is not overwritten. Only if it doesn't, the inspector
+    will add an own value - which contains the inspector's main window - to the context when creating
+    handlers.</p>
+
+    @see XPropertyHandler
+    @see LineDescriptor
+    @see PropertyControlType
+    @see ObjectInspectorModel
+    @see com::sun::star::uno::XComponentContext
+    @see com::sun::star::lang::XMultiComponentFactory
+*/
+service ObjectInspector : XObjectInspector
+{
+    /** creates a default instance of the ObjectInspector
+    */
+    createDefault();
+
+    /** creates an instance of the ObjectInspector, using a given ObjectInspectorModel
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if Model is `NULL`.
+    */
+    createWithModel( [in] XObjectInspectorModel Model )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+
+}; }; }; };
+
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

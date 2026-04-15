@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <style:style style:name="Table1" style:family="table">
+      <style:table-properties style:width="17.59cm" table:align="margins"/>
+    </style:style>
+    <style:style style:name="Table1.A" style:family="table-column">
+      <style:table-column-properties style:column-width="8.795cm" style:rel-column-width="32767*"/>
+    </style:style>
+    <style:style style:name="Table1.A1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0.097cm"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:text>
+      <text:p>Before</text:p>
+      <table:table table:name="Table1" table:style-name="Table1">
+        <table:table-column table:style-name="Table1.A" table:number-columns-repeated="2"/>
+        <table:table-row>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p>A1</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p>B1</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p>A2</text:p>
+          </table:table-cell>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p>B2</text:p>
+          </table:table-cell>
+        </table:table-row>
+      </table:table>
+      <text:p>After</text:p>
+    </office:text>
+  </office:body>
+</office:document>

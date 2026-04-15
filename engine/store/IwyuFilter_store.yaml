@@ -1,0 +1,14 @@
+---
+assumeFilename: store/source/storbase.cxx
+excludelist:
+    store/source/stordir.hxx:
+    # Checking other file gives this
+    - namespace store { struct OStoreDirectoryPageData; }
+    store/source/storlckb.hxx:
+    # Checking other file gives this
+    - namespace store { struct OStoreDataPageData; }
+    - namespace store { struct OStoreDirectoryPageData; }
+    store/source/storpage.hxx:
+    # Checking other file gives this
+    - namespace store { struct OStoreDirectoryPageData; }
+    - namespace store { class  OStoreDirectoryPageObject; }

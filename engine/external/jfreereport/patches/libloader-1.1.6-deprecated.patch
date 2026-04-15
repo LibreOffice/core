@@ -1,0 +1,34 @@
+--- misc/libloader-1.1.6/source/org/pentaho/reporting/libraries/resourceloader/ResourceException.java	2010-04-27 16:07:00.000000000 +0200
++++ misc/build/libloader-1.1.6/source/org/pentaho/reporting/libraries/resourceloader/ResourceException.java	2011-06-13 02:00:46.000000000 +0200
+@@ -42,7 +42,7 @@
+    */
+   public ResourceException(final String message, final Exception ex)
+   {
+-    super(message, ex);
++    super(message, (Throwable) ex);
+   }
+ 
+   /**
+--- misc/libloader-1.1.6/source/org/pentaho/reporting/libraries/resourceloader/loader/file/FileResourceLoader.java	2010-04-27 16:07:00.000000000 +0200
++++ misc/build/libloader-1.1.6/source/org/pentaho/reporting/libraries/resourceloader/loader/file/FileResourceLoader.java	2014-07-24 15:11:26.000000000 +0200
+@@ -19,6 +19,7 @@
+ 
+ import java.io.File;
+ import java.io.IOException;
++import java.lang.SecurityException;
+ import java.net.MalformedURLException;
+ import java.net.URL;
+ import java.util.HashMap;
+@@ -170,7 +171,11 @@
+     final File file = (File) key.getIdentifier();
+     try
+     {
+-      return file.toURL();
++      return file.toURI().toURL();
++    }
++    catch (SecurityException e)
++    {
++      return null;
+     }
+     catch (MalformedURLException e)
+     {

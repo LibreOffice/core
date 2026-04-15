@@ -1,0 +1,21 @@
+--- misc/liblayout-0.2.10/build.xml	(Revision 6728)
++++ misc/build/liblayout-0.2.10/build.xml	(Arbeitskopie)
+@@ -24,9 +24,15 @@
+ 
+   <!-- Setup the compile classpath -->
+   <path id="classpath">
+-    <fileset dir="lib">
+-      <include name="*.jar" />
+-    </fileset>
++    <pathelement path="${flute.jar}"/>
++    <pathelement path="${libbase.jar}"/>
++    <pathelement path="${libformula.jar}"/>
++    <pathelement path="${libfonts.jar}"/>
++    <pathelement path="${libloader.jar}"/>
++    <pathelement path="${librepository.jar}"/>
++    <pathelement path="${libserializer.jar}"/>
++    <pathelement path="${libxml.jar}"/>
++    <pathelement path="${sac.jar}"/>
+   </path>
+ 
+    <!-- Kill all the created directories -->

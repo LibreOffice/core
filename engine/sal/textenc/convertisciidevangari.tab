@@ -1,0 +1,35 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <sal/config.h>
+
+#include <rtl/tencinfo.h>
+#include <rtl/textenc.h>
+
+#include "convertisciidevangari.hxx"
+
+ImplTextEncodingData const aImplIsciiDevanagariTextEncodingData
+    = { { nullptr,
+          &ImplConvertIsciiDevanagariToUnicode,
+          &ImplConvertUnicodeToIsciiDevanagari,
+          &ImplCreateIsciiDevanagariToUnicodeContext,
+          &ImplDestroyIsciiDevanagariToUnicodeContext,
+          &ImplResetIsciiDevanagariToUnicodeContext,
+          &ImplCreateUnicodeToIsciiDevanagariContext,
+          &ImplDestroyUnicodeToIsciiDevanagariContext,
+          &ImplResetUnicodeToIsciiDevanagariContext },
+        nullptr,
+        "x-iscii-de ",
+        1,
+        2,
+        2,
+        1,
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE office:document-content PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "../../../../../../../xmloff/dtd/office.dtd">
+<office:document-content xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" office:class="text" office:version="1.1">
+  <office:script/>
+  <office:font-decls>
+    <style:font-decl style:name="Andale WT UI" fo:font-family="'Andale WT UI', 'MS Mincho', 'HG Mincho L', 'MS PGothic', 'Arial Unicode MS'"/>
+    <style:font-decl style:name="Simplified Arabic" fo:font-family="'Simplified Arabic', 'Andale WT UI', 'Arial Unicode MS'"/>
+    <style:font-decl style:name="Times New Roman" fo:font-family="'Times New Roman'" style:font-family-generic="roman" style:font-pitch="variable"/>
+  </office:font-decls>
+  <office:automatic-styles/>
+  <office:body>
+    <text:sequence-decls>
+      <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+      <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+      <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+      <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    </text:sequence-decls>
+    <text:p text:style-name="Standard">Reagujem na Váš inzerát v <text:s/>&lt;placeholder:"novinách":"Kliknite na zástupnú oblasť a prepíšte"&gt; zo dňa &lt;placeholder:"01.01.2004":"Kliknite na zástupnú oblasť a prepíšte"&gt;, v ktorom hľadáte vhodného kandidáta na pozíciu sales assistant-a. Táto pozícia veľmi dobre zodpovedá mojim záujmom a schopnostiam.</text:p>
+    <text:p text:style-name="Standard">Mám &lt;placeholder:"osemročné":"Kliknite na zástupnú oblasť a prepíšte"&gt; skúsenosti ako &lt;placeholder:"sekretár(ka) v malom podniku":"Kliknite na zástupnú oblasť a prepíšte"&gt;. V posledných rokoch moje povinnosti zahrňujú &lt;placeholder:"písanie na stroji, organizovanie dokumentov a zápis podľa diktátu":"Kliknite na zástupnú oblasť a prepíšte"&gt;. Okrem toho som bol(a) zodpovedný(á) za &lt;placeholder:"plánovania termínov schôdzok, prijímanie hovorov a návštev, a bežnej korešpondencie":"Kliknite na zástupnú oblasť a prepíšte"&gt;. Som dôkladne oboznámený(a) so &lt;placeholder:"všetkými povinnosťami asistenta vedúceho pracovníka":"Kliknite na zástupnú oblasť a prepíšte"&gt; a verím, že dokážem &lt;placeholder:"naplniť všetky Vaše očakávania":"Kliknite na zástupnú oblasť a prepíšte"&gt;. Som presvedčený(a), že budem prínosom vo Vašej obchodnej činnosti.</text:p>
+    <text:p text:style-name="Standard">Pokiaľ sa rozhodnete ma prijať, môžem u Vás nastúpiť kedykoľvek po &lt;placeholder:"1.1.2004":"Kliknite na zástupnú oblasť a prepíšte"&gt;.</text:p>
+    <text:p text:style-name="Standard">Veľmi rád(a) s Vami prejednám svoje kvalifikačné predpoklady osobne. Môžeme si dohodnúť schôdzku podľa Vašich dispozícií. Som k zastihnutiu &lt;placeholder:"po 17. hodine na tel. čísle 999 999 999":"Kliknite na zástupnú oblasť a prepíšte"&gt;.</text:p>
+  </office:body>
+</office:document-content>

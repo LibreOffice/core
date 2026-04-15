@@ -1,0 +1,36 @@
+External package containing skia.
+
+https://skia.org/
+
+
+How to update the tarball:
+==========================
+
+git clone https://skia.googlesource.com/skia.git
+cd skia
+git checkout chrome/mXX
+id=$(git rev-parse chrome/mXX)
+git clean -idx
+rm -rf .git gitignore infra modules/canvaskit resources site
+cd ..
+tar cvJf skia-mXX-$id.tar.xz skia
+
+(where XX refers to the branch version)
+
+And review differences for BUILD.gn and relevant files in gn/ :
+git diff chrome/mYY..chrome/mXX ./BUILD.gn ./gn
+
+The libreoffice Library_skia.mk file has been ordered and commented to make it easier to match
+up the changes in the external *.gn build files with the changes needed here.
+
+
+Debugging Skia:
+===============
+
+Note that Skia is always built optimized, unless you use --enable-skia=debug.
+
+
+GrContext sharing:
+==================
+
+For details about the share-grcontext patch, see vcl/skia/README.

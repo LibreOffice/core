@@ -1,0 +1,82 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#include <oox/helper/grabbagstack.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/sequence.hxx>
+
+namespace oox
+{
+
+using namespace css::beans;
+using namespace css::uno;
+
+GrabBagStack::GrabBagStack(const OUString& aElementName)
+{
+    mCurrentElement.maElementName = aElementName;
+}
+
+GrabBagStack::~GrabBagStack()
+{}
+
+bool GrabBagStack::isStackEmpty() const
+{
+    return mStack.empty();
+}
+
+PropertyValue GrabBagStack::getRootProperty()
+{
+    while(!mStack.empty())
+        pop();
+
+    PropertyValue aProperty;
+    aProperty.Name = mCurrentElement.maElementName;
+    aProperty.Value <<= comphelper::containerToSequence(mCurrentElement.maPropertyList);
+
+    return aProperty;
+}
+
+void GrabBagStack::appendElement(const OUString& aName, const Any& aAny)
+{
+    PropertyValue aValue;
+    aValue.Name = aName;
+    aValue.Value = aAny;
+    mCurrentElement.maPropertyList.push_back(aValue);
+}
+
+void GrabBagStack::push(const OUString& aKey)
+{
+    mStack.push(mCurrentElement);
+    mCurrentElement.maElementName = aKey;
+    mCurrentElement.maPropertyList.clear();
+}
+
+void GrabBagStack::pop()
+{
+    OUString aName = mCurrentElement.maElementName;
+    Sequence<PropertyValue> aSequence(comphelper::containerToSequence(mCurrentElement.maPropertyList));
+    mCurrentElement = mStack.top();
+    mStack.pop();
+    appendElement(aName, Any(aSequence));
+}
+
+void GrabBagStack::addInt32(const OUString& aElementName, sal_Int32 aIntValue)
+{
+    appendElement(aElementName, Any(aIntValue));
+}
+
+void GrabBagStack::addString(const OUString& aElementName, const OUString& aStringValue)
+{
+    appendElement(aElementName, Any(aStringValue));
+}
+
+} // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

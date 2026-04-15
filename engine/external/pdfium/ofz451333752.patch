@@ -1,0 +1,38 @@
+--- core/fpdfapi/page/cpdf_form.h
++++ core/fpdfapi/page/cpdf_form.h
+@@ -28,7 +28,22 @@
+     RecursionState();
+     ~RecursionState();
+ 
++    // returns false if that form is already getting parsed
++    bool PushForm(CPDF_Stream* pForm)
++    {
++      if (std::find(current_forms.begin(), current_forms.end(), pForm) != current_forms.end())
++        return false;
++      current_forms.push_back(pForm);
++      return true;
++    }
++
++    void PopForm()
++    {
++      current_forms.pop_back();
++    }
++
+     std::set<const uint8_t*> parsed_set;
++    std::vector<CPDF_Stream*> current_forms;
+   };
+ 
+   // Helper method to choose the first non-null resources dictionary.
+--- core/fpdfapi/page/cpdf_streamcontentparser.cpp
++++ core/fpdfapi/page/cpdf_streamcontentparser.cpp
+@@ -754,7 +754,10 @@
+ 
+   const ByteString type = pXObject->GetDict()->GetByteStringFor("Subtype");
+   if (type == "Form") {
++    if (!recursion_state_->PushForm(pXObject.Get()))
++        return;
+     AddForm(std::move(pXObject), name);
++    recursion_state_->PopForm();
+     return;
+   }
+ 

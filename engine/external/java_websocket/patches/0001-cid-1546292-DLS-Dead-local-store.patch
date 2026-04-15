@@ -1,0 +1,25 @@
+From 01a9d917f7f595a191f67a876ee67f3276dbf7cc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sun, 1 Oct 2023 19:39:22 +0100
+Subject: [PATCH] cid#1546292 DLS: Dead local store
+
+---
+ .../permessage_deflate/PerMessageDeflateExtension.java          | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main/java/org/java_websocket/extensions/permessage_deflate/PerMessageDeflateExtension.java b/src/main/java/org/java_websocket/extensions/permessage_deflate/PerMessageDeflateExtension.java
+index f24f9b6..9947da0 100644
+--- a/src/main/java/org/java_websocket/extensions/permessage_deflate/PerMessageDeflateExtension.java
++++ b/src/main/java/org/java_websocket/extensions/permessage_deflate/PerMessageDeflateExtension.java
+@@ -304,7 +304,7 @@ public class PerMessageDeflateExtension extends CompressionExtension {
+       }
+ 
+       // Holds parameters that are sent by the server, as a response to our initial extension request.
+-      Map<String, String> headers = extensionData.getExtensionParameters();
++      // Map<String, String> headers = extensionData.getExtensionParameters();
+       // After this point, parameters that the server sent back can be configured, but we don't use them for now.
+       return true;
+     }
+-- 
+2.41.0
+

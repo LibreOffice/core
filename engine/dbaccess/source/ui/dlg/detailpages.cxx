@@ -1,0 +1,712 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <config_java.h>
+#include <core_resource.hxx>
+#include "detailpages.hxx"
+#include <sqlmessage.hxx>
+#include <dsmeta.hxx>
+#include "advancedsettings.hxx"
+#include "DbAdminImpl.hxx"
+#include <dsitems.hxx>
+#include "dbfindex.hxx"
+#include "dsnItem.hxx"
+
+#include <IItemSetHelper.hxx>
+#include <strings.hrc>
+
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#if HAVE_FEATURE_JAVA
+#include <jvmaccess/virtualmachine.hxx>
+#endif
+#include <connectivity/CommonTools.hxx>
+#include "DriverSettings.hxx"
+
+namespace dbaui
+{
+
+    using namespace ::com::sun::star::uno;
+
+    OCommonBehaviourTabPage::OCommonBehaviourTabPage(weld::Container* pPage, weld::DialogController* pController,
+        const OUString& rUIXMLDescription, const OUString& rId, const SfxItemSet& rCoreAttrs,
+        OCommonBehaviourTabPageFlags nControlFlags)
+        : OGenericAdministrationPage(pPage, pController, rUIXMLDescription, rId, rCoreAttrs)
+        , m_nControlFlags(nControlFlags)
+    {
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
+        {
+            m_xOptionsLabel = m_xBuilder->weld_label(u"optionslabel"_ustr);
+            m_xOptionsLabel->show();
+            m_xOptions = m_xBuilder->weld_entry(u"options"_ustr);
+            m_xOptions->show();
+            m_xOptions->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
+        }
+
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
+        {
+            m_xDataConvertLabel = m_xBuilder->weld_label(u"charsetheader"_ustr);
+            m_xDataConvertLabel->show();
+            m_xCharsetLabel = m_xBuilder->weld_label(u"charsetlabel"_ustr);
+            m_xCharsetLabel->show();
+            m_xCharset.reset(new CharSetListBox(m_xBuilder->weld_combo_box(u"charset"_ustr)));
+            m_xCharset->show();
+            m_xCharset->connect_changed(LINK(this, OCommonBehaviourTabPage, CharsetSelectHdl));
+        }
+    }
+
+    IMPL_LINK_NOARG(OCommonBehaviourTabPage, CharsetSelectHdl, weld::ComboBox&, void)
+    {
+        callModifiedHdl();
+    }
+
+    OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
+    {
+        m_xCharset.reset();
+    }
+
+    void OCommonBehaviourTabPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
+        {
+            _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xOptionsLabel.get()));
+        }
+
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
+        {
+            _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xCharsetLabel.get()));
+        }
+    }
+
+    void OCommonBehaviourTabPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
+            _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xOptions.get()));
+
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
+            _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::ComboBox>(m_xCharset->get_widget()));
+    }
+
+    void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    {
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        // collect the items
+        const SfxStringItem* pOptionsItem = _rSet.GetItem<SfxStringItem>(DSID_ADDITIONALOPTIONS);
+        const SfxStringItem* pCharsetItem = _rSet.GetItem<SfxStringItem>(DSID_CHARSET);
+
+        // forward the values to the controls
+        if (bValid)
+        {
+            if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
+            {
+                m_xOptions->set_text(pOptionsItem->GetValue());
+                m_xOptions->save_value();
+            }
+
+            if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
+            {
+                m_xCharset->SelectEntryByIanaName( pCharsetItem->GetValue() );
+            }
+        }
+        OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
+    }
+
+    bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet* _rSet)
+    {
+        bool bChangedSomething = false;
+
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
+        {
+            fillString(*_rSet,m_xOptions.get(),DSID_ADDITIONALOPTIONS,bChangedSomething);
+        }
+
+        if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseCharset)
+        {
+            if ( m_xCharset->StoreSelectedCharSet( *_rSet, DSID_CHARSET ) )
+                bChangedSomething = true;
+        }
+
+        return bChangedSomething;
+    }
+
+    // ODbaseDetailsPage
+    ODbaseDetailsPage::ODbaseDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/dbasepage.ui"_ustr, u"DbasePage"_ustr,
+                                    _rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
+        , m_xShowDeleted(m_xBuilder->weld_check_button(u"showDelRowsCheckbutton"_ustr))
+        , m_xFT_Message(m_xBuilder->weld_label(u"specMessageLabel"_ustr))
+        , m_xIndexes(m_xBuilder->weld_button(u"indiciesButton"_ustr))
+    {
+        m_xIndexes->connect_clicked(LINK(this, ODbaseDetailsPage, OnButtonClicked));
+        m_xShowDeleted->connect_toggled(LINK(this, ODbaseDetailsPage, OnButtonToggled));
+    }
+
+    ODbaseDetailsPage::~ODbaseDetailsPage()
+    {
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateDbase(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
+    {
+        return std::make_unique<ODbaseDetailsPage>(pPage, pController, *_rAttrSet);
+    }
+
+    void ODbaseDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    {
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        // get the DSN string (needed for the index dialog)
+        const SfxStringItem* pUrlItem = _rSet.GetItem<SfxStringItem>(DSID_CONNECTURL);
+        const DbuTypeCollectionItem* pTypesItem = _rSet.GetItem<DbuTypeCollectionItem>(DSID_TYPECOLLECTION);
+        ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : nullptr;
+        if (pTypeCollection && pUrlItem && pUrlItem->GetValue().getLength())
+            m_sDsn = pTypeCollection->cutPrefix(pUrlItem->GetValue());
+
+        // get the other relevant items
+        const SfxBoolItem* pDeletedItem = _rSet.GetItem<SfxBoolItem>(DSID_SHOWDELETEDROWS);
+
+        if ( bValid )
+        {
+            m_xShowDeleted->set_active(pDeletedItem->GetValue());
+            m_xFT_Message->set_visible(m_xShowDeleted->get_active());
+        }
+
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+    }
+
+    bool ODbaseDetailsPage::FillItemSet( SfxItemSet* _rSet )
+    {
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+
+        fillBool(*_rSet, m_xShowDeleted.get(), DSID_SHOWDELETEDROWS, false, bChangedSomething);
+        return bChangedSomething;
+    }
+
+    IMPL_LINK_NOARG(ODbaseDetailsPage, OnButtonClicked, weld::Button&, void)
+    {
+        ODbaseIndexDialog aIndexDialog(GetFrameWeld(), m_sDsn);
+        aIndexDialog.run();
+    }
+
+    IMPL_LINK_NOARG(ODbaseDetailsPage, OnButtonToggled, weld::Toggleable&, void)
+    {
+        m_xFT_Message->set_visible(m_xShowDeleted->get_active());
+        // it was the checkbox -> we count as modified from now on
+        callModifiedHdl();
+    }
+
+
+    // OAdoDetailsPage
+    OAdoDetailsPage::OAdoDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/autocharsetpage.ui"_ustr, u"AutoCharset"_ustr,
+                                    rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
+    {
+
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateAdo(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
+    {
+        return std::make_unique<OAdoDetailsPage>(pPage, pController, *rAttrSet);
+    }
+
+    // OOdbcDetailsPage
+    OOdbcDetailsPage::OOdbcDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/odbcpage.ui"_ustr, u"ODBC"_ustr, rCoreAttrs,
+                                    OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
+        , m_xUseCatalog(m_xBuilder->weld_check_button(u"useCatalogCheckbutton"_ustr))
+    {
+        m_xUseCatalog->connect_toggled(LINK(this, OGenericAdministrationPage, OnControlModifiedButtonClick));
+    }
+
+    OOdbcDetailsPage::~OOdbcDetailsPage()
+    {
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateODBC(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pAttrSet)
+    {
+        return std::make_unique<OOdbcDetailsPage>(pPage, pController, *pAttrSet);
+    }
+
+    bool OOdbcDetailsPage::FillItemSet( SfxItemSet* _rSet )
+    {
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        fillBool(*_rSet,m_xUseCatalog.get(),DSID_USECATALOG,false,bChangedSomething);
+        return bChangedSomething;
+    }
+    void OOdbcDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    {
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        const SfxBoolItem* pUseCatalogItem = _rSet.GetItem<SfxBoolItem>(DSID_USECATALOG);
+
+        if ( bValid )
+            m_xUseCatalog->set_active(pUseCatalogItem->GetValue());
+
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+    }
+    // OOdbcDetailsPage
+    OUserDriverDetailsPage::OUserDriverDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/userdetailspage.ui"_ustr, u"UserDetailsPage"_ustr,
+                                    rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset | OCommonBehaviourTabPageFlags::UseOptions)
+        , m_xFTHostname(m_xBuilder->weld_label(u"hostnameft"_ustr))
+        , m_xEDHostname(m_xBuilder->weld_entry(u"hostname"_ustr))
+        , m_xPortNumber(m_xBuilder->weld_label(u"portnumberft"_ustr))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button(u"portnumber"_ustr))
+        , m_xUseCatalog(m_xBuilder->weld_check_button(u"usecatalog"_ustr))
+    {
+        m_xUseCatalog->connect_toggled(LINK(this, OGenericAdministrationPage, OnControlModifiedButtonClick));
+    }
+
+    OUserDriverDetailsPage::~OUserDriverDetailsPage()
+    {
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateUser(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pAttrSet)
+    {
+        return std::make_unique<OUserDriverDetailsPage>(pPage, pController, *pAttrSet);
+    }
+
+    bool OUserDriverDetailsPage::FillItemSet( SfxItemSet* _rSet )
+    {
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+
+        fillInt32(*_rSet,m_xNFPortNumber.get(),DSID_CONN_PORTNUMBER,bChangedSomething);
+        fillString(*_rSet,m_xEDHostname.get(),DSID_CONN_HOSTNAME,bChangedSomething);
+        fillBool(*_rSet,m_xUseCatalog.get(),DSID_USECATALOG,false,bChangedSomething);
+
+        return bChangedSomething;
+    }
+    void OUserDriverDetailsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillControls(_rControlList);
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xEDHostname.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xUseCatalog.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::SpinButton>(m_xNFPortNumber.get()));
+    }
+    void OUserDriverDetailsPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillWindows(_rControlList);
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xFTHostname.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xPortNumber.get()));
+    }
+    void OUserDriverDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    {
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        const SfxBoolItem* pUseCatalogItem = _rSet.GetItem<SfxBoolItem>(DSID_USECATALOG);
+        const SfxStringItem* pHostName = _rSet.GetItem<SfxStringItem>(DSID_CONN_HOSTNAME);
+        const SfxInt32Item* pPortNumber = _rSet.GetItem<SfxInt32Item>(DSID_CONN_PORTNUMBER);
+
+        if ( bValid )
+        {
+            m_xEDHostname->set_text(pHostName->GetValue());
+            m_xEDHostname->save_value();
+
+            m_xNFPortNumber->set_value(pPortNumber->GetValue());
+            m_xNFPortNumber->save_value();
+
+            m_xUseCatalog->set_active(pUseCatalogItem->GetValue());
+        }
+
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+    }
+    // OMySQLODBCDetailsPage
+    OMySQLODBCDetailsPage::OMySQLODBCDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/autocharsetpage.ui"_ustr, u"AutoCharset"_ustr,
+                                    rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset )
+    {
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLODBC(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pAttrSet)
+    {
+        return std::make_unique<OMySQLODBCDetailsPage>(pPage, pController, *pAttrSet);
+    }
+
+    // OMySQLJDBCDetailsPage
+    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs ,sal_uInt16 _nPortId, bool bShowSocket)
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/generalspecialjdbcdetailspage.ui"_ustr, u"GeneralSpecialJDBCDetails"_ustr,
+                                    rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
+        , m_nPortId(_nPortId)
+        , m_bUseClass(true)
+        , m_xEDHostname(m_xBuilder->weld_entry(u"hostNameEntry"_ustr))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button(u"portNumberSpinbutton"_ustr))
+        , m_xFTSocket(m_xBuilder->weld_label(u"socketLabel"_ustr))
+        , m_xEDSocket(m_xBuilder->weld_entry(u"socketEntry"_ustr))
+        , m_xFTDriverClass(m_xBuilder->weld_label(u"driverClassLabel"_ustr))
+        , m_xEDDriverClass(m_xBuilder->weld_entry(u"jdbcDriverClassEntry"_ustr))
+        , m_xTestJavaDriver(m_xBuilder->weld_button(u"testDriverClassButton"_ustr))
+    {
+        const SfxStringItem* pUrlItem = rCoreAttrs.GetItem<SfxStringItem>(DSID_CONNECTURL);
+        const DbuTypeCollectionItem* pTypesItem = rCoreAttrs.GetItem<DbuTypeCollectionItem>(DSID_TYPECOLLECTION);
+        ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : nullptr;
+        if (pTypeCollection && pUrlItem && pUrlItem->GetValue().getLength() )
+        {
+            m_sDefaultJdbcDriverName = pTypeCollection->getJavaDriverClass(pUrlItem->GetValue());
+        }
+        if ( m_sDefaultJdbcDriverName.getLength() )
+        {
+            m_xEDDriverClass->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
+            m_xTestJavaDriver->connect_clicked(LINK(this,OGeneralSpecialJDBCDetailsPage,OnTestJavaClickHdl));
+        }
+        else
+        {
+            m_bUseClass = false;
+            m_xFTDriverClass->hide();
+            m_xEDDriverClass->hide();
+            m_xTestJavaDriver->hide();
+        }
+
+        m_xFTSocket->set_visible(bShowSocket && !m_bUseClass);
+        m_xEDSocket->set_visible(bShowSocket && !m_bUseClass);
+
+        m_xEDHostname->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
+        m_xNFPortNumber->connect_value_changed(LINK(this,OGenericAdministrationPage,OnControlSpinButtonModifyHdl));
+        m_xEDSocket->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
+    }
+
+    OGeneralSpecialJDBCDetailsPage::~OGeneralSpecialJDBCDetailsPage()
+    {
+    }
+
+    bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet* _rSet )
+    {
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        if ( m_bUseClass )
+            fillString(*_rSet,m_xEDDriverClass.get(),DSID_JDBCDRIVERCLASS,bChangedSomething);
+        fillString(*_rSet,m_xEDHostname.get(),DSID_CONN_HOSTNAME,bChangedSomething);
+        fillString(*_rSet,m_xEDSocket.get(),DSID_CONN_SOCKET,bChangedSomething);
+        fillInt32(*_rSet,m_xNFPortNumber.get(),m_nPortId,bChangedSomething );
+
+        return bChangedSomething;
+    }
+    void OGeneralSpecialJDBCDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    {
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        const SfxStringItem* pDrvItem = _rSet.GetItem<SfxStringItem>(DSID_JDBCDRIVERCLASS);
+        const SfxStringItem* pHostName = _rSet.GetItem<SfxStringItem>(DSID_CONN_HOSTNAME);
+        const SfxInt32Item* pPortNumber = _rSet.GetItem<SfxInt32Item>(m_nPortId);
+        const SfxStringItem* pSocket = _rSet.GetItem<SfxStringItem>(DSID_CONN_SOCKET);
+
+        if ( bValid )
+        {
+            if ( m_bUseClass )
+            {
+                m_xEDDriverClass->set_text(pDrvItem->GetValue());
+                m_xEDDriverClass->save_value();
+            }
+
+            m_xEDHostname->set_text(pHostName->GetValue());
+            m_xEDHostname->save_value();
+
+            m_xNFPortNumber->set_value(pPortNumber->GetValue());
+            m_xNFPortNumber->save_value();
+
+            m_xEDSocket->set_text(pSocket->GetValue());
+            m_xEDSocket->save_value();
+        }
+
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+
+        // to get the correct value when saveValue was called by base class
+        if ( m_bUseClass && o3tl::trim(m_xEDDriverClass->get_text()).empty() )
+        {
+            m_xEDDriverClass->set_text(m_sDefaultJdbcDriverName);
+            m_xEDDriverClass->save_value();
+        }
+    }
+    IMPL_LINK_NOARG(OGeneralSpecialJDBCDetailsPage, OnTestJavaClickHdl, weld::Button&, void)
+    {
+        assert(m_pAdminDialog && "No Admin dialog set! ->GPF");
+        OSL_ENSURE(m_bUseClass,"Who called me?");
+
+        bool bSuccess = false;
+#if HAVE_FEATURE_JAVA
+        try
+        {
+            if (!o3tl::trim(m_xEDDriverClass->get_text()).empty())
+            {
+// TODO change jvmaccess
+                ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
+                m_xEDDriverClass->set_text(m_xEDDriverClass->get_text().trim()); // fdo#68341
+                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_xEDDriverClass->get_text());
+            }
+        }
+        catch(Exception&)
+        {
+        }
+#endif
+        TranslateId pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        const MessageType mt = bSuccess ? MessageType::Info : MessageType::Error;
+        OSQLMessageBox aMsg(GetFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
+        aMsg.run();
+    }
+
+    void OGeneralSpecialJDBCDetailsPage::callModifiedHdl(weld::Widget* pControl)
+    {
+        if (m_bUseClass && pControl == m_xEDDriverClass.get())
+            m_xTestJavaDriver->set_sensitive(!o3tl::trim(m_xEDDriverClass->get_text()).empty());
+
+        // tell the listener we were modified
+        OGenericAdministrationPage::callModifiedHdl();
+    }
+
+    // MySQLNativePage
+    MySQLNativePage::MySQLNativePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/mysqlnativepage.ui"_ustr, u"MysqlNativePage"_ustr, rCoreAttrs, OCommonBehaviourTabPageFlags::UseCharset)
+        , m_xMySQLSettingsContainer(m_xBuilder->weld_widget(u"MySQLSettingsContainer"_ustr))
+        , m_xMySQLSettings(new MySQLNativeSettings(m_xMySQLSettingsContainer.get(), LINK(this,OGenericAdministrationPage,OnControlModified)))
+        , m_xSeparator1(m_xBuilder->weld_label(u"connectionheader"_ustr))
+        , m_xSeparator2(m_xBuilder->weld_label(u"userheader"_ustr))
+        , m_xUserNameLabel(m_xBuilder->weld_label(u"usernamelabel"_ustr))
+        , m_xUserName(m_xBuilder->weld_entry(u"username"_ustr))
+        , m_xPasswordRequired(m_xBuilder->weld_check_button(u"passwordrequired"_ustr))
+    {
+        m_xUserName->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
+    }
+
+    MySQLNativePage::~MySQLNativePage()
+    {
+        m_xMySQLSettings.reset();
+    }
+
+    void MySQLNativePage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillControls( _rControlList );
+        m_xMySQLSettings->fillControls( _rControlList );
+
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Entry>(m_xUserName.get()));
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xPasswordRequired.get()));
+    }
+
+    void MySQLNativePage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillWindows( _rControlList );
+        m_xMySQLSettings->fillWindows( _rControlList);
+
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xSeparator1.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xSeparator2.get()));
+        _rControlList.emplace_back(new ODisableWidgetWrapper<weld::Label>(m_xUserNameLabel.get()));
+    }
+
+    bool MySQLNativePage::FillItemSet( SfxItemSet* _rSet )
+    {
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet( _rSet );
+
+        bChangedSomething |= m_xMySQLSettings->FillItemSet( _rSet );
+
+        if (m_xUserName->get_value_changed_from_saved())
+        {
+            _rSet->Put( SfxStringItem( DSID_USER, m_xUserName->get_text() ) );
+            _rSet->Put( SfxStringItem( DSID_PASSWORD, OUString()));
+            bChangedSomething = true;
+        }
+        fillBool(*_rSet,m_xPasswordRequired.get(),DSID_PASSWORDREQUIRED,false,bChangedSomething);
+
+        return bChangedSomething;
+    }
+    void MySQLNativePage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    {
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        m_xMySQLSettings->implInitControls( _rSet );
+
+        const SfxStringItem* pUidItem = _rSet.GetItem<SfxStringItem>(DSID_USER);
+        const SfxBoolItem* pAllowEmptyPwd = _rSet.GetItem<SfxBoolItem>(DSID_PASSWORDREQUIRED);
+
+        if ( bValid )
+        {
+            m_xUserName->set_text(pUidItem->GetValue());
+            m_xUserName->save_value();
+            m_xPasswordRequired->set_active(pAllowEmptyPwd->GetValue());
+        }
+
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLJDBC( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet )
+    {
+        return std::make_unique<OGeneralSpecialJDBCDetailsPage>(pPage, pController, *_rAttrSet,DSID_MYSQL_PORTNUMBER);
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateMySQLNATIVE(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pAttrSet)
+    {
+        return std::make_unique<MySQLNativePage>(pPage, pController, *pAttrSet);
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateOracleJDBC(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
+    {
+        return std::make_unique<OGeneralSpecialJDBCDetailsPage>(pPage, pController, *_rAttrSet,DSID_ORACLE_PORTNUMBER, false);
+    }
+
+    // OLDAPDetailsPage
+    OLDAPDetailsPage::OLDAPDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/ldappage.ui"_ustr, u"LDAP"_ustr,
+                                    rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
+        , m_xETBaseDN(m_xBuilder->weld_entry(u"baseDNEntry"_ustr))
+        , m_xCBUseSSL(m_xBuilder->weld_check_button(u"useSSLCheckbutton"_ustr))
+        , m_xNFPortNumber(m_xBuilder->weld_spin_button(u"portNumberSpinbutton"_ustr))
+        , m_xNFRowCount(m_xBuilder->weld_spin_button(u"LDAPRowCountspinbutton"_ustr))
+    {
+        m_xETBaseDN->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
+        m_xNFPortNumber->connect_value_changed(LINK(this,OGenericAdministrationPage,OnControlSpinButtonModifyHdl));
+        m_xNFRowCount->connect_value_changed(LINK(this,OGenericAdministrationPage,OnControlSpinButtonModifyHdl));
+
+        m_iNormalPort = 389;
+        m_iSSLPort    = 636;
+        m_xCBUseSSL->connect_toggled(LINK(this, OLDAPDetailsPage, OnCheckBoxClick));
+    }
+
+    OLDAPDetailsPage::~OLDAPDetailsPage()
+    {
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateLDAP(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
+    {
+        return std::make_unique<OLDAPDetailsPage>(pPage, pController, *_rAttrSet);
+    }
+
+    bool OLDAPDetailsPage::FillItemSet( SfxItemSet* _rSet )
+    {
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+
+        fillString(*_rSet,m_xETBaseDN.get(),DSID_CONN_LDAP_BASEDN,bChangedSomething);
+        fillInt32(*_rSet,m_xNFPortNumber.get(),DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
+        fillInt32(*_rSet,m_xNFRowCount.get(),DSID_CONN_LDAP_ROWCOUNT,bChangedSomething);
+        fillBool(*_rSet,m_xCBUseSSL.get(),DSID_CONN_LDAP_USESSL,false,bChangedSomething);
+        return bChangedSomething;
+    }
+
+    IMPL_LINK(OLDAPDetailsPage, OnCheckBoxClick, weld::Toggleable&, rCheckBox, void)
+    {
+        OnControlModifiedButtonClick(rCheckBox);
+        callModifiedHdl();
+        if (m_xCBUseSSL->get_active())
+        {
+            m_iNormalPort = m_xNFPortNumber->get_value();
+            m_xNFPortNumber->set_value(m_iSSLPort);
+        }
+        else
+        {
+            m_iSSLPort = m_xNFPortNumber->get_value();
+            m_xNFPortNumber->set_value(m_iNormalPort);
+        }
+    }
+
+    void OLDAPDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    {
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        const SfxStringItem* pBaseDN = _rSet.GetItem<SfxStringItem>(DSID_CONN_LDAP_BASEDN);
+        const SfxBoolItem* pUseSSL = _rSet.GetItem<SfxBoolItem>(DSID_CONN_LDAP_USESSL);
+        const SfxInt32Item* pPortNumber = _rSet.GetItem<SfxInt32Item>(DSID_CONN_LDAP_PORTNUMBER);
+        const SfxInt32Item* pRowCount = _rSet.GetItem<SfxInt32Item>(DSID_CONN_LDAP_ROWCOUNT);
+
+        if ( bValid )
+        {
+            m_xETBaseDN->set_text(pBaseDN->GetValue());
+            m_xNFPortNumber->set_value(pPortNumber->GetValue());
+            m_xNFRowCount->set_value(pRowCount->GetValue());
+            m_xCBUseSSL->set_active(pUseSSL->GetValue());
+        }
+
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+    }
+
+    // OTextDetailsPage
+    OTextDetailsPage::OTextDetailsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OCommonBehaviourTabPage(pPage, pController, u"dbaccess/ui/emptypage.ui"_ustr, u"EmptyPage"_ustr, rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
+        , m_xTextConnectionHelper(new OTextConnectionHelper(m_xContainer.get(), TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET))
+    {
+    }
+
+    OTextDetailsPage::~OTextDetailsPage()
+    {
+        m_xTextConnectionHelper.reset();
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateText(weld::Container* pPage, weld::DialogController* pController,  const SfxItemSet* pAttrSet)
+    {
+        return std::make_unique<OTextDetailsPage>(pPage, pController, *pAttrSet);
+    }
+
+    void OTextDetailsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillControls(_rControlList);
+        m_xTextConnectionHelper->fillControls(_rControlList);
+
+    }
+    void OTextDetailsPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillWindows(_rControlList);
+        m_xTextConnectionHelper->fillWindows(_rControlList);
+
+    }
+    void OTextDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
+    {
+        // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        m_xTextConnectionHelper->implInitControls(_rSet, bValid);
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+    }
+
+    bool OTextDetailsPage::FillItemSet( SfxItemSet* rSet )
+    {
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(rSet);
+        bChangedSomething = m_xTextConnectionHelper->FillItemSet(*rSet, bChangedSomething);
+        return bChangedSomething;
+    }
+
+    bool OTextDetailsPage::prepareLeave()
+    {
+        return m_xTextConnectionHelper->prepareLeave();
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
+    {
+        return std::make_unique<GeneratedValuesPage>(pPage, pController, *_rAttrSet);
+    }
+
+    std::unique_ptr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
+    {
+        OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( *_rAttrSet );
+        DataSourceMetaData aMetaData( eType );
+        return std::make_unique<SpecialSettingsPage>(pPage, pController, *_rAttrSet, aMetaData);
+    }
+}   // namespace dbaui
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

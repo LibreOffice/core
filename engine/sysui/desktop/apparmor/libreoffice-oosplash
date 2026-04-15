@@ -1,0 +1,36 @@
+# ------------------------------------------------------------------
+#
+#    Copyright (C) 2016 Canonical Ltd.
+#    Copyright (C) 2018 Software in the Public Interest, Inc.
+#
+#    This Source Code Form is subject to the terms of the Mozilla Public
+#    License, v. 2.0. If a copy of the MPL was not distributed with this
+#    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+#    Author: Bryan Quigley <bryan.quigley@canonical.com>
+#            Rene Engelhard <rene@debian.org>
+#
+# ------------------------------------------------------------------
+
+@{libo_inst_dir} = @INSTDIR@
+
+include <tunables/global>
+
+profile libreoffice-oosplash @{libo_inst_dir}/program/oosplash flags=(complain) {
+  include <abstractions/base>
+  include <abstractions/nameservice>
+  include <abstractions/X>
+
+  /etc/libreoffice/                     r,
+  /etc/libreoffice/**                   r,
+  /sys/devices/{virtual,pci[0-9]*}/**/queue/rotational  r, # for isRotational() in desktop/unx/source/pagein.c
+  /usr/lib{,32,64}/ure/bin/javaldx      rmpux,
+  /usr/share/libreoffice/program/*      r,
+  @{libo_inst_dir}/program/**           r,
+  @{libo_inst_dir}/program/soffice.bin  rmpx,
+  @{libo_inst_dir}/program/javaldx      rmpux,
+  owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
+
+  # Site-specific additions and overrides. See local/README for details.
+  include if exists <local/libreoffice-oosplash>
+}

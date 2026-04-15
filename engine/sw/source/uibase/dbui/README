@@ -1,0 +1,48 @@
+Mail merge (MM) has *four modes*. The modes 1-3 are directly exposed to the
+user via different GUIs. The modes are:
+
+1. FILE    = saves the result as documents
+2. PRINTER = directly prints resulting documents
+3. EMAIL   = sends results as individual emails
+4. SHELL   = returns an internal document shell for further programming
+
+There is one property, which changes the overall behaviour of these modes:
+*bCreateSingleFile*. This is the primary controller of the mail merge source
+code workflow, as it affects all modes!
+
+This also has timing constraints: for individual files the result can be
+defined in advance, while further processing of the single result can just
+be done after the merging. It mainly affects printing and the generation
+of huge (1000+ datasets) combined non-PRINT merge results. A valid
+combined document has to follow constraints, which are already met by
+individual documents, as these are just modified copies.
+
+LO currently has five working combinations of mode and *bCreateSingleFile*
+The others, ''PRINTER+false'', ''EMAIL+true'' and ''SHELL+false'', are currently not
+implemented. But the list contains implementation proposals for them.
+
+* Mode: FILE
+** false: Saves each merged document as an individual file. The file name can
+   be selected from a database column!
+** true: Saves a combined file of concatenated documents. Each document starts
+   with a new / reset page style. Depending on the page style this inserts
+   hidden blank pages
+* Mode: PRINTER
+** false: *not implemented*. This could generate individual print jobs, which could be grouped on some
+   platforms for easier abortion (needs verification!). All print options
+   affect only the individual document! Printing could start after the first
+   document is generated.
+** true: Generates a single print job. All print options affect the combined
+   document! This especially effects the results of reverse and N-UP printing.
+   Printing can just start after all documents are generated.
+* Mode: EMAIL
+** false: Each document can either be used as the email body (html or txt) or
+   be attached to a general email text. The emails are extracted from a DB
+   column, which must be provided!
+** true: *not implemented*. Could send the combined document to a single
+   email address.
+* Mode: SHELL
+** false: *not implemented*. Instead of a single shell this could return a
+   sequence of shells for the individual documents.
+** true: Returns the shell of the generated document. This is mainly
+   interesting for programmers. The document is just generated internally.

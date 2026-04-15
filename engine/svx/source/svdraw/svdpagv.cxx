@@ -1,0 +1,1007 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
+
+#include <svx/svdobj.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdtypes.hxx>
+
+#include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontactredirector.hxx>
+
+#include <algorithm>
+
+#include <svx/sdrpagewindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
+#include <comphelper/kit.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <basegfx/range/b2irectangle.hxx>
+#include <osl/diagnose.h>
+
+using namespace ::com::sun::star;
+
+// interface to SdrPageWindow
+
+SdrPageWindow* SdrPageView::FindPageWindow(const SdrPaintWindow& rPaintWindow) const
+{
+    for(auto & a : maPageWindows)
+    {
+        if(&(a->GetPaintWindow()) == &rPaintWindow)
+        {
+            return a.get();
+        }
+    }
+
+    return nullptr;
+}
+
+const SdrPageWindow* SdrPageView::FindPatchedPageWindow( const OutputDevice& _rOutDev ) const
+{
+    for ( auto const & pPageWindow : maPageWindows )
+    {
+        const SdrPaintWindow& rPaintWindow( pPageWindow->GetOriginalPaintWindow() ? *pPageWindow->GetOriginalPaintWindow() : pPageWindow->GetPaintWindow() );
+        if ( &rPaintWindow.GetOutputDevice() == &_rOutDev )
+        {
+            return pPageWindow.get();
+        }
+    }
+
+    return nullptr;
+}
+
+SdrPageWindow* SdrPageView::FindPageWindow(const OutputDevice& rOutDev) const
+{
+    for ( auto const & pPageWindow : maPageWindows )
+    {
+        if(&(pPageWindow->GetPaintWindow().GetOutputDevice()) == &rOutDev)
+        {
+            return pPageWindow.get();
+        }
+    }
+
+    return nullptr;
+}
+
+SdrPageWindow* SdrPageView::GetPageWindow(sal_uInt32 nIndex) const
+{
+    return maPageWindows[nIndex].get();
+}
+
+SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
+:   mrView(rNewView),
+    // col_auto color lets the view takes the default SvxColorConfig entry
+    maDocumentColor( COL_AUTO ),
+    maBackgroundColor( COL_AUTO ), // #i48367# also react on autocolor
+    mpPreparedPageWindow(nullptr) // #i72752#
+{
+    mpPage = pPage1;
+
+    if(mpPage)
+    {
+        maPageOrigin.setX(mpPage->GetLeftBorder() );
+        maPageOrigin.setY(mpPage->GetUpperBorder() );
+    }
+    // For example, in the case of charts, there is a LayerAdmin, but it has no valid values. Therefore
+    // a solution like pLayerAdmin->getVisibleLayersODF(aLayerVisi) is not possible. So use the
+    // generic SetAll() for now.
+    m_aLayerVisi.SetAll();
+    m_aLayerPrn.SetAll();
+
+    mbHasMarked = false;
+    mbVisible = false;
+    m_pCurrentList = nullptr;
+    m_pCurrentGroup = nullptr;
+    SetCurrentGroupAndList(nullptr, mpPage);
+
+    for(sal_uInt32 a(0); a < rNewView.PaintWindowCount(); a++)
+    {
+        AddPaintWindowToPageView(*rNewView.GetPaintWindow(a));
+    }
+}
+
+SdrPageView::~SdrPageView()
+{
+}
+
+void SdrPageView::AddPaintWindowToPageView(SdrPaintWindow& rPaintWindow)
+{
+    if(!FindPageWindow(rPaintWindow))
+    {
+        maPageWindows.emplace_back(new SdrPageWindow(*this, rPaintWindow));
+    }
+}
+
+void SdrPageView::RemovePaintWindowFromPageView(SdrPaintWindow& rPaintWindow)
+{
+    auto it = std::find_if(maPageWindows.begin(), maPageWindows.end(),
+        [&rPaintWindow](const std::unique_ptr<SdrPageWindow>& rpWindow) {
+            return &(rpWindow->GetPaintWindow()) == &rPaintWindow;
+        });
+    if (it != maPageWindows.end())
+        maPageWindows.erase(it);
+}
+
+rtl::Reference< UnoControlContainer > SdrPageView::GetControlContainer( const OutputDevice& _rDevice ) const
+{
+    rtl::Reference< UnoControlContainer > xReturn;
+    const SdrPageWindow* pCandidate = FindPatchedPageWindow( _rDevice );
+
+    if ( pCandidate )
+        xReturn = pCandidate->GetControlContainer();
+
+    return xReturn;
+}
+
+void SdrPageView::ModelHasChanged()
+{
+    if (GetCurrentGroup()!=nullptr) CheckCurrentGroup();
+}
+
+bool SdrPageView::IsReadOnly() const
+{
+    return (nullptr == GetPage() || GetView().GetModel().IsReadOnly() || GetPage()->IsReadOnly() || GetObjList()->IsReadOnly());
+}
+
+void SdrPageView::Show()
+{
+    if(!IsVisible())
+    {
+        mbVisible = true;
+
+        for(sal_uInt32 a(0); a < GetView().PaintWindowCount(); a++)
+        {
+            AddPaintWindowToPageView(*GetView().GetPaintWindow(a));
+        }
+    }
+}
+
+void SdrPageView::Hide()
+{
+    if(IsVisible())
+    {
+        if (!comphelper::COKit::isActive())
+        {
+            InvalidateAllWin();
+        }
+        mbVisible = false;
+        maPageWindows.clear();
+    }
+}
+
+tools::Rectangle SdrPageView::GetPageRect() const
+{
+    if (GetPage()==nullptr) return tools::Rectangle();
+    return tools::Rectangle(Point(),Size(GetPage()->GetWidth()+1,GetPage()->GetHeight()+1));
+}
+
+void SdrPageView::InvalidateAllWin()
+{
+    if(IsVisible() && GetPage())
+    {
+        tools::Rectangle aRect(Point(0,0),Size(GetPage()->GetWidth()+1,GetPage()->GetHeight()+1));
+        aRect.Union(GetPage()->GetAllObjBoundRect());
+        GetView().InvalidateAllWin(aRect);
+    }
+}
+
+
+void SdrPageView::PrePaint()
+{
+    const sal_uInt32 nCount(PageWindowCount());
+
+    for(sal_uInt32 a(0); a < nCount; a++)
+    {
+        SdrPageWindow* pCandidate = GetPageWindow(a);
+
+        if(pCandidate)
+        {
+            pCandidate->PrePaint();
+        }
+    }
+}
+
+void SdrPageView::CompleteRedraw(
+    SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector )
+{
+    if(!GetPage())
+        return;
+
+    SdrPageWindow* pPageWindow = FindPageWindow(rPaintWindow);
+    std::unique_ptr<SdrPageWindow> pTempPageWindow;
+
+    if(!pPageWindow)
+    {
+        // create temp PageWindow
+        pTempPageWindow.reset(new SdrPageWindow(*this, rPaintWindow));
+        pPageWindow = pTempPageWindow.get();
+    }
+
+    // do the redraw
+    pPageWindow->PrepareRedraw(rReg);
+    pPageWindow->RedrawAll(pRedirector);
+}
+
+
+// #i74769# use SdrPaintWindow directly
+
+void SdrPageView::setPreparedPageWindow(SdrPageWindow* pKnownTarget)
+{
+    // #i72752# remember prepared SdrPageWindow
+    mpPreparedPageWindow = pKnownTarget;
+}
+
+void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
+        sdr::contact::ViewObjectContactRedirector* pRedirector,
+        const tools::Rectangle& rRect, basegfx::B2IRectangle const*const pPageFrame)
+{
+    if(!GetPage())
+        return;
+
+    if(pGivenTarget)
+    {
+        SdrPageWindow* pKnownTarget = FindPageWindow(*pGivenTarget);
+
+        if(pKnownTarget)
+        {
+            // paint known target
+            pKnownTarget->RedrawLayer(&nID, pRedirector, pPageFrame);
+        }
+        else
+        {
+            // #i72752# DrawLayer() uses an OutputDevice different from BeginDrawLayer. This happens
+            // e.g. when SW paints a single text line in text edit mode. Try to use it
+            SdrPageWindow* pPreparedTarget = mpPreparedPageWindow;
+
+            if(pPreparedTarget)
+            {
+                // if we have a prepared target, do not use a new SdrPageWindow since this
+                // works but is expensive. Just use a temporary PaintWindow
+                SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
+
+                // Copy existing paint region to use the same as prepared in BeginDrawLayer
+                SdrPaintWindow& rExistingPaintWindow = pPreparedTarget->GetPaintWindow();
+                const vcl::Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
+                bool bUseRect(false);
+                if (!rRect.IsEmpty())
+                {
+                    vcl::Region r(rExistingRegion);
+                    r.Intersect(rRect);
+                    // fdo#74435: FIXME: visibility check broken if empty
+                    if (!r.IsEmpty())
+                        bUseRect = true;
+                }
+                if (!bUseRect)
+                    aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
+                else
+                    aTemporaryPaintWindow.SetRedrawRegion(vcl::Region(rRect));
+
+                // patch the ExistingPageWindow
+                auto pPreviousWindow = pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
+                // unpatch window when leaving the scope
+                const ::comphelper::ScopeGuard aGuard(
+                    [&pPreviousWindow, &pPreparedTarget]() { pPreparedTarget->unpatchPaintWindow(pPreviousWindow); } );
+                // redraw the layer
+                pPreparedTarget->RedrawLayer(&nID, pRedirector, pPageFrame);
+            }
+            else
+            {
+                OSL_FAIL("SdrPageView::DrawLayer: Creating temporary SdrPageWindow (ObjectContact), this should never be needed (!)");
+
+                // None of the known OutputDevices is the target of this paint, use
+                // a temporary SdrPageWindow for this Redraw.
+                SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
+                SdrPageWindow aTemporaryPageWindow(*this, aTemporaryPaintWindow);
+
+                // #i72752#
+                // Copy existing paint region if other PageWindows exist, this was created by
+                // PrepareRedraw() from BeginDrawLayer(). Needs to be used e.g. when suddenly SW
+                // paints into an unknown device other than the view was created for (e.g. VirtualDevice)
+                if(PageWindowCount())
+                {
+                    SdrPageWindow* pExistingPageWindow = GetPageWindow(0);
+                    SdrPaintWindow& rExistingPaintWindow = pExistingPageWindow->GetPaintWindow();
+                    const vcl::Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
+                    aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
+                }
+
+                aTemporaryPageWindow.RedrawLayer(&nID, pRedirector, nullptr);
+            }
+        }
+    }
+    else
+    {
+        // paint in all known windows
+        for(sal_uInt32 a(0); a < PageWindowCount(); a++)
+        {
+            SdrPageWindow* pTarget = GetPageWindow(a);
+            pTarget->RedrawLayer(&nID, pRedirector, nullptr);
+        }
+    }
+}
+
+void SdrPageView::SetDesignMode( bool _bDesignMode ) const
+{
+    for ( sal_uInt32 i = 0; i < PageWindowCount(); ++i )
+    {
+        const SdrPageWindow& rPageViewWindow = *GetPageWindow(i);
+        rPageViewWindow.SetDesignMode( _bDesignMode );
+    }
+}
+
+
+void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& rRect, Color aColor)
+{
+    if (GetPage()==nullptr)
+        return;
+
+    tools::Long nx1=GetView().maGridBig.Width();
+    tools::Long nx2=GetView().maGridFin.Width();
+    tools::Long ny1=GetView().maGridBig.Height();
+    tools::Long ny2=GetView().maGridFin.Height();
+
+    if (nx1==0) nx1=nx2;
+    if (nx2==0) nx2=nx1;
+    if (ny1==0) ny1=ny2;
+    if (ny2==0) ny2=ny1;
+    if (nx1==0) { nx1=ny1; nx2=ny2; }
+    if (ny1==0) { ny1=nx1; ny2=nx2; }
+    if (nx1<0) nx1=-nx1;
+    if (nx2<0) nx2=-nx2;
+    if (ny1<0) ny1=-ny1;
+    if (ny2<0) ny2=-ny2;
+
+    if (nx1==0)
+        return;
+
+    // no more global output size, use window size instead to decide grid sizes
+    tools::Long nScreenWdt = rOut.GetOutputSizePixel().Width();
+
+    tools::Long nMinDotPix=2;
+    tools::Long nMinLinPix=4;
+
+    if (nScreenWdt>=1600)
+    {
+        nMinDotPix=4;
+        nMinLinPix=8;
+    }
+    else if (nScreenWdt>=1024)
+    {
+        nMinDotPix=3;
+        nMinLinPix=6;
+    }
+    else
+    { // e. g. 640x480
+        nMinDotPix=2;
+        nMinLinPix=4;
+    }
+    Size aMinDotDist(rOut.PixelToLogic(Size(nMinDotPix,nMinDotPix)));
+    Size aMinLinDist(rOut.PixelToLogic(Size(nMinLinPix,nMinLinPix)));
+    bool bHoriSolid=nx2<aMinDotDist.Width();
+    bool bVertSolid=ny2<aMinDotDist.Height();
+    // enlarge line offset (minimum 4 pixels)
+    // enlarge by: *2 *5 *10 *20 *50 *100 ...
+    int nTgl=0;
+    tools::Long nVal0=nx1;
+    while (nx1<aMinLinDist.Width())
+    {
+        tools::Long a=nx1;
+
+        if (nTgl==0) nx1*=2;
+        if (nTgl==1) nx1=nVal0*5; // => nx1*=2.5
+        if (nTgl==2) nx1*=2;
+
+        nVal0=a;
+        nTgl++; if (nTgl>=3) nTgl=0;
+    }
+    nTgl=0;
+    nVal0=ny1;
+    while (ny1<aMinLinDist.Height())
+    {
+        tools::Long a=ny1;
+
+        if (nTgl==0) ny1*=2;
+        if (nTgl==1) ny1=nVal0*5; // => ny1*=2.5
+        if (nTgl==2) ny1*=2;
+
+        nVal0=a;
+        nTgl++;
+
+        if (nTgl>=3) nTgl=0;
+    }
+
+    assert(nx1 > 0);
+    assert(nx2 > 0);
+    assert(ny1 > 0);
+    assert(ny2 > 0);
+
+    bool bHoriFine=nx2<nx1;
+    bool bVertFine=ny2<ny1;
+    bool bHoriLines=bHoriSolid || bHoriFine || !bVertFine;
+    bool bVertLines=bVertSolid || bVertFine;
+
+    Color aOriginalLineColor( rOut.GetLineColor() );
+    rOut.SetLineColor( aColor );
+
+    bool bMap0=rOut.IsMapModeEnabled();
+
+    Point aGridOrigin(maPageOrigin);
+    tools::Long x1 = 0;
+    tools::Long x2 = 0;
+    if (GetPage()->GetWidth() < 0) // ScDrawPage of RTL sheet
+    {
+        x1 = GetPage()->GetWidth() + GetPage()->GetLeftBorder() + 1;
+        x2 = - GetPage()->GetRightBorder() - 1;
+    }
+    else
+    {
+        x1 = GetPage()->GetLeftBorder() + 1;
+        x2 = GetPage()->GetWidth() - GetPage()->GetRightBorder() - 1;
+    }
+    tools::Long y1 = GetPage()->GetUpperBorder() + 1;
+    tools::Long y2 = GetPage()->GetHeight() - GetPage()->GetLowerBorder() - 1;
+    const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,nullptr);
+
+    sal_uInt16 nGridPaintCnt=1;
+    if (pFrames!=nullptr) nGridPaintCnt=pFrames->GetCount();
+    for (sal_uInt16 nGridPaintNum=0; nGridPaintNum<nGridPaintCnt; nGridPaintNum++) {
+        if (pFrames!=nullptr) {
+            const SdrPageGridFrame& rGF=(*pFrames)[nGridPaintNum];
+            x1=rGF.GetUserArea().Left();
+            x2=rGF.GetUserArea().Right();
+            y1=rGF.GetUserArea().Top();
+            y2=rGF.GetUserArea().Bottom();
+            aGridOrigin=rGF.GetUserArea().TopLeft();
+        }
+        const tools::Rectangle aGridBoundingBox(x1, y1, x2, y2);
+        if (!rRect.IsEmpty()) {
+            Size a1PixSiz(rOut.PixelToLogic(Size(1,1)));
+            tools::Long nX1Pix=a1PixSiz.Width();  // add 1 pixel of tolerance
+            tools::Long nY1Pix=a1PixSiz.Height();
+            if (x1<rRect.Left()  -nX1Pix) x1=rRect.Left()  -nX1Pix;
+            if (x2>rRect.Right() +nX1Pix) x2=rRect.Right() +nX1Pix;
+            if (y1<rRect.Top()   -nY1Pix) y1=rRect.Top()   -nY1Pix;
+            if (y2>rRect.Bottom()+nY1Pix) y2=rRect.Bottom()+nY1Pix;
+        }
+
+        tools::Long xBigOrg=aGridOrigin.X();
+        while (xBigOrg>=x1) xBigOrg-=nx1;
+        while (xBigOrg<x1) xBigOrg+=nx1;
+        tools::Long xFinOrg=xBigOrg;
+        while (xFinOrg>=x1) xFinOrg-=nx2;
+        while (xFinOrg<x1) xFinOrg+=nx2;
+
+        tools::Long yBigOrg=aGridOrigin.Y();
+        while (yBigOrg>=y1) yBigOrg-=ny1;
+        while (yBigOrg<y1) yBigOrg+=ny1;
+        tools::Long yFinOrg=yBigOrg;
+        while (yFinOrg>=y1) yFinOrg-=ny2;
+        while (yFinOrg<y1) yFinOrg+=ny2;
+
+        if( x1 <= x2 && y1 <= y2 )
+        {
+            const tools::Rectangle aDrawingArea(x1, y1, x2, y2);
+            if( bHoriLines )
+            {
+                if( bHoriSolid )
+                {
+                    // Make sure the origin of the subgrid is within the drawing area
+                    const Point aSubGridPosition(x1, yBigOrg);
+                    if (aDrawingArea.Contains(aSubGridPosition))
+                    {
+                        // draw
+                        rOut.DrawGrid(
+                            tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                            Size( nx1, ny1 ), DrawGridFlags::HorzLines );
+                    }
+                }
+                else
+                {
+                    const sal_uInt16 nSteps = static_cast<sal_uInt16>(nx1 / nx2);
+                    if (nSteps != 0)
+                    {
+                        // Use one of the main grid points as anchor for consistent positioning
+                        const tools::Long nAnchorPos = aGridOrigin.X() + (((xFinOrg - aGridOrigin.X()) / nx1) * nx1);
+                        sal_uInt16 nStartStep = std::round(static_cast<double>(xFinOrg - nAnchorPos) / static_cast<double>(nx2));
+
+                        // The first grid position might be outside of the drawing area, then start with the next one
+                        if(nAnchorPos + ((nx1 * nStartStep) / nSteps) < aDrawingArea.Left())
+                        {
+                            nStartStep += 1;
+                        }
+
+                        for(sal_uInt16 a=0;a<nSteps;a++)
+                        {
+                            Point aSubGridPosition(nAnchorPos + ((nx1 * (nStartStep + a)) / nSteps), yBigOrg);
+                            if(aSubGridPosition.X() == xBigOrg) // Main grid points
+                            {
+                                // For cross rendering we need an extended grid area to handle partly rendered grid markers
+                                if(aGridBoundingBox.Contains(Point(aSubGridPosition.X() - nx1, aSubGridPosition.Y())))
+                                {
+                                    aSubGridPosition.Move(-nx1, 0);
+                                }
+
+                                if(aGridBoundingBox.Contains(Point(aSubGridPosition.X(), aSubGridPosition.Y() - ny1)))
+                                {
+                                    aSubGridPosition.Move(0, -ny1);
+                                }
+                                rOut.DrawGridOfCrosses(
+                                    tools::Rectangle( aSubGridPosition,
+                                        Point(std::min(x2 + nx1, aGridBoundingBox.Right()), std::min(y2 + ny1, aGridBoundingBox.Bottom()))),
+                                    Size( nx1, ny1 ), aDrawingArea );
+                            }
+                            else // Subdivision points
+                            {
+                                // Make sure the origin of the subgrid is within the drawing area
+                                if(!aDrawingArea.Contains(aSubGridPosition))
+                                {
+                                    continue;
+                                }
+
+                                // draw
+                                rOut.DrawGrid(
+                                    tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                                    Size( nx1, ny1 ), DrawGridFlags::Dots );
+                            }
+                        }
+                    }
+                }
+            }
+
+            if( bVertLines )
+            {
+                if( bVertSolid )
+                {
+                    // Make sure the origin of the subgrid is within the drawing area
+                    const Point aSubGridPosition(xBigOrg, y1);
+                    if (aDrawingArea.Contains(aSubGridPosition))
+                    {
+                        // draw
+                        rOut.DrawGrid(
+                            tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                            Size( nx1, ny1 ), DrawGridFlags::VertLines );
+                    }
+                }
+                else
+                {
+                    const sal_uInt16 nSteps = static_cast<sal_uInt16>(ny1 / ny2);
+                    if (nSteps != 0)
+                    {
+                        // Use one of the main grid points as anchor for consistent positioning
+                        const tools::Long nAnchorPos = aGridOrigin.Y() + (((yFinOrg - aGridOrigin.Y()) / ny1) * ny1);
+                        sal_uInt16 nStartStep = std::round(static_cast<double>(yFinOrg - nAnchorPos) / static_cast<double>(ny2));
+
+                        // The first grid position might be outside of the drawing area, then start with the next one
+                        if(nAnchorPos + ((ny1 * nStartStep) / nSteps) < aDrawingArea.Top())
+                        {
+                            nStartStep += 1;
+                        }
+
+                        for(sal_uInt16 a=0;a<nSteps;a++)
+                        {
+                            Point aSubGridPosition(xBigOrg, nAnchorPos + ((ny1 * (nStartStep + a)) / nSteps));
+                            if(aSubGridPosition.Y() == yBigOrg) // Main grid points
+                            {
+                                // For cross rendering we need an extended grid area to handle partly rendered grid markers
+                                if(aGridBoundingBox.Contains(Point(aSubGridPosition.X() - nx1, aSubGridPosition.Y())))
+                                {
+                                    aSubGridPosition.Move(-nx1, 0);
+                                }
+
+                                if(aGridBoundingBox.Contains(Point(aSubGridPosition.X(), aSubGridPosition.Y() - ny1)))
+                                {
+                                    aSubGridPosition.Move(0, -ny1);
+                                }
+                                rOut.DrawGridOfCrosses(
+                                    tools::Rectangle( aSubGridPosition,
+                                        Point(std::min(x2 + nx1, aGridBoundingBox.Right()), std::min(y2 + ny1, aGridBoundingBox.Bottom()))),
+                                    Size( nx1, ny1 ), aDrawingArea );
+                            }
+                            else // Subdivision points
+                            {
+                                // Make sure the origin of the subgrid is within the drawing area
+                                if(!aDrawingArea.Contains(aSubGridPosition))
+                                {
+                                    continue;
+                                }
+
+                                // draw
+                                rOut.DrawGrid(
+                                    tools::Rectangle( aSubGridPosition, Point(x2, y2) ),
+                                    Size( nx1, ny1 ), DrawGridFlags::Dots );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    rOut.EnableMapMode(bMap0);
+    rOut.SetLineColor(aOriginalLineColor);
+}
+
+void SdrPageView::AdjHdl()
+{
+    GetView().AdjustMarkHdl();
+}
+
+// return true if changed, false if unchanged
+bool SdrPageView::SetLayer(const OUString& rName, SdrLayerIDSet& rBS, bool bJa)
+{
+    if (!GetPage())
+        return false;
+
+    SdrLayerID nID = GetPage()->GetLayerAdmin().GetLayerID(rName);
+
+    if (SDRLAYER_NOTFOUND == nID)
+        return false;
+
+    if (rBS.IsSet(nID) == bJa)
+        return false;
+
+    rBS.Set(nID, bJa);
+    return true;
+}
+
+bool SdrPageView::IsLayer(const OUString& rName, const SdrLayerIDSet& rBS) const
+{
+    if(!GetPage())
+        return false;
+
+    bool bRet(false);
+
+    if (!rName.isEmpty())
+    {
+        SdrLayerID nId = GetPage()->GetLayerAdmin().GetLayerID(rName);
+
+        if(SDRLAYER_NOTFOUND != nId)
+        {
+            bRet = rBS.IsSet(nId);
+        }
+    }
+
+    return bRet;
+}
+
+bool SdrPageView::IsObjMarkable(SdrObject const * pObj) const
+{
+    if (!pObj)
+        return false;
+    if (pObj->IsMarkProtect())
+        return false;    // excluded from selection?
+    if (!pObj->IsVisible())
+        return false;    // only visible are selectable
+    if (!pObj->IsInserted())
+        return false;    // Obj deleted?
+    if (auto pObjGroup = dynamic_cast<const SdrObjGroup*>(pObj))
+    {
+        // If object is a Group object, visibility may depend on
+        // multiple layers. If one object is markable, Group is markable.
+        SdrObjList* pObjList = pObjGroup->GetSubList();
+
+        if (pObjList && pObjList->GetObjCount())
+        {
+            for (const rtl::Reference<SdrObject>& pCandidate : *pObjList)
+            {
+                // call recursively
+                if (IsObjMarkable(pCandidate.get()))
+                    return true;
+            }
+            return false;
+        }
+        else
+        {
+            // #i43302#
+            // Allow empty groups to be selected to be able to delete them
+            return true;
+        }
+    }
+    if (!pObj->Is3DObj() && pObj->getSdrPageFromSdrObject() != GetPage())
+    {
+        // Obj suddenly in different Page
+        return false;
+    }
+
+    // the layer has to be visible and must not be locked
+    SdrLayerID nL = pObj->GetLayer();
+    if (!m_aLayerVisi.IsSet(nL))
+        return false;
+    if (m_aLayerLock.IsSet(nL))
+        return false;
+    return true;
+}
+
+void SdrPageView::SetPageOrigin(const Point& rOrg)
+{
+    if (rOrg != maPageOrigin)
+    {
+        maPageOrigin = rOrg;
+        if (GetView().IsGridVisible())
+        {
+            InvalidateAllWin();
+        }
+    }
+}
+
+void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
+{
+    if (!(GetView().IsHlplVisible() && nNum<m_aHelpLines.GetCount()))        return;
+
+    const SdrHelpLine& rHL=m_aHelpLines[nNum];
+
+    for(sal_uInt32 a(0); a < GetView().PaintWindowCount(); a++)
+    {
+        SdrPaintWindow* pCandidate = GetView().GetPaintWindow(a);
+
+        if(pCandidate->OutputToWindow())
+        {
+            OutputDevice& rOutDev = pCandidate->GetOutputDevice();
+            tools::Rectangle aR(rHL.GetBoundRect(rOutDev));
+            Size aSiz(rOutDev.PixelToLogic(Size(1,1)));
+            aR.AdjustLeft( -(aSiz.Width()) );
+            aR.AdjustRight(aSiz.Width() );
+            aR.AdjustTop( -(aSiz.Height()) );
+            aR.AdjustBottom(aSiz.Height() );
+            const_cast<SdrView&>(GetView()).InvalidateOneWin(rOutDev, aR);
+        }
+    }
+}
+
+void SdrPageView::SetHelpLines(const SdrHelpLineList& rHLL)
+{
+    m_aHelpLines=rHLL;
+    InvalidateAllWin();
+}
+
+void SdrPageView::SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine)
+{
+    if (nNum >= m_aHelpLines.GetCount() || m_aHelpLines[nNum] == rNewHelpLine)
+        return;
+
+    bool bNeedRedraw = true;
+    if (m_aHelpLines[nNum].GetKind()==rNewHelpLine.GetKind()) {
+        switch (rNewHelpLine.GetKind()) {
+            case SdrHelpLineKind::Vertical  : if (m_aHelpLines[nNum].GetPos().X()==rNewHelpLine.GetPos().X()) bNeedRedraw = false; break;
+            case SdrHelpLineKind::Horizontal: if (m_aHelpLines[nNum].GetPos().Y()==rNewHelpLine.GetPos().Y()) bNeedRedraw = false; break;
+            default: break;
+        } // switch
+    }
+    if (bNeedRedraw) ImpInvalidateHelpLineArea(nNum);
+    m_aHelpLines[nNum]=rNewHelpLine;
+    if (bNeedRedraw) ImpInvalidateHelpLineArea(nNum);
+}
+
+void SdrPageView::DeleteHelpLine(sal_uInt16 nNum)
+{
+    if (nNum<m_aHelpLines.GetCount()) {
+        ImpInvalidateHelpLineArea(nNum);
+        m_aHelpLines.Delete(nNum);
+    }
+}
+
+void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL)
+{
+    sal_uInt16 nNum = m_aHelpLines.GetCount();
+    m_aHelpLines.Insert(rHL,nNum);
+    if (GetView().IsHlplVisible())
+        ImpInvalidateHelpLineArea(nNum);
+}
+
+// set current group and list
+void SdrPageView::SetCurrentGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList)
+{
+    if(m_pCurrentGroup != pNewGroup)
+    {
+        m_pCurrentGroup = pNewGroup;
+    }
+    if(m_pCurrentList != pNewList)
+    {
+        m_pCurrentList = pNewList;
+    }
+}
+
+bool SdrPageView::EnterGroup(SdrObject* pObj)
+{
+    if(!pObj || !pObj->IsGroupObject())
+        return false;
+
+    // Don't allow enter Diagrams
+    if(nullptr != pObj && pObj->isDiagram())
+        return false;
+
+    const bool bGlueInvalidate(GetView().ImpIsGlueVisible());
+
+    if (bGlueInvalidate)
+    {
+        GetView().GlueInvalidate();
+    }
+
+    // deselect all
+    GetView().UnmarkAll();
+
+    // set current group and list
+    SdrObjList* pNewObjList = pObj->GetSubList();
+    SetCurrentGroupAndList(pObj, pNewObjList);
+
+    // select contained object if only one object is contained,
+    // else select nothing and let the user decide what to do next
+    if(pNewObjList && pNewObjList->GetObjCount() == 1)
+    {
+        SdrObject* pFirstObject = pNewObjList->GetObj(0);
+
+        if(GetView().GetSdrPageView())
+        {
+            GetView().MarkObj(pFirstObject, GetView().GetSdrPageView());
+        }
+    }
+
+    // build new handles
+    GetView().AdjustMarkHdl();
+
+    // invalidate only when view wants to visualize group entering
+    InvalidateAllWin();
+
+    if (bGlueInvalidate)
+    {
+        GetView().GlueInvalidate();
+    }
+
+    return true;
+}
+
+void SdrPageView::LeaveOneGroup()
+{
+    SdrObject* pLastGroup = GetCurrentGroup();
+    if (!pLastGroup)
+        return;
+
+    bool bGlueInvalidate = GetView().ImpIsGlueVisible();
+
+    if(bGlueInvalidate)
+        GetView().GlueInvalidate();
+
+    SdrObject* pParentGroup = pLastGroup->getParentSdrObjectFromSdrObject();
+    SdrObjList* pParentList = GetPage();
+
+    if(pParentGroup)
+        pParentList = pParentGroup->GetSubList();
+
+    // deselect everything
+    GetView().UnmarkAll();
+
+    // allocations, pCurrentGroup and pCurrentList need to be set
+    SetCurrentGroupAndList(pParentGroup, pParentList);
+
+    // select the group we just left
+    if (GetView().GetSdrPageView())
+        GetView().MarkObj(pLastGroup, GetView().GetSdrPageView());
+
+    GetView().AdjustMarkHdl();
+
+    // invalidate only if view wants to visualize group entering
+    InvalidateAllWin();
+
+    if(bGlueInvalidate)
+        GetView().GlueInvalidate();
+}
+
+void SdrPageView::LeaveAllGroup()
+{
+    SdrObject* pLastGroup = GetCurrentGroup();
+    if (!pLastGroup)
+        return;
+
+    bool bGlueInvalidate = GetView().ImpIsGlueVisible();
+
+    if(bGlueInvalidate)
+        GetView().GlueInvalidate();
+
+    // deselect everything
+    GetView().UnmarkAll();
+
+    // allocations, pCurrentGroup and pCurrentList always need to be set
+    SetCurrentGroupAndList(nullptr, GetPage());
+
+    // find and select uppermost group
+    while (pLastGroup->getParentSdrObjectFromSdrObject())
+        pLastGroup = pLastGroup->getParentSdrObjectFromSdrObject();
+
+    if (GetView().GetSdrPageView())
+        GetView().MarkObj(pLastGroup, GetView().GetSdrPageView());
+
+    GetView().AdjustMarkHdl();
+
+    // invalidate only when view wants to visualize group entering
+    InvalidateAllWin();
+
+    if(bGlueInvalidate)
+        GetView().GlueInvalidate();
+}
+
+sal_uInt16 SdrPageView::GetEnteredLevel() const
+{
+    sal_uInt16 nCount=0;
+    SdrObject* pGrp=GetCurrentGroup();
+    while (pGrp!=nullptr) {
+        nCount++;
+        pGrp=pGrp->getParentSdrObjectFromSdrObject();
+    }
+    return nCount;
+}
+
+void SdrPageView::CheckCurrentGroup()
+{
+    SdrObject* pGrp(GetCurrentGroup());
+
+    while(nullptr != pGrp &&
+        (!pGrp->IsInserted() || nullptr == pGrp->getParentSdrObjListFromSdrObject() || nullptr == pGrp->getSdrPageFromSdrObject()))
+    {
+        // anything outside of the borders?
+        pGrp = pGrp->getParentSdrObjectFromSdrObject();
+    }
+
+    if(pGrp != GetCurrentGroup())
+    {
+        if(nullptr != pGrp)
+        {
+            EnterGroup(pGrp);
+        }
+        else
+        {
+            LeaveAllGroup();
+        }
+    }
+}
+
+// Set background color for svx at SdrPageViews
+void SdrPageView::SetApplicationBackgroundColor(Color aBackgroundColor)
+{
+    maBackgroundColor = aBackgroundColor;
+}
+
+
+// Set document color for svx at SdrPageViews
+void SdrPageView::SetApplicationDocumentColor(Color aDocumentColor)
+{
+    maDocumentColor = aDocumentColor;
+}
+
+void SdrPageView::resetGridOffsetsOfAllPageWindows() const
+{
+    for (auto& pPageWindow : maPageWindows)
+    {
+        assert(pPageWindow && "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageWindow list (!)");
+
+        if (pPageWindow)
+        {
+            sdr::contact::ObjectContact& rObjectContact(pPageWindow->GetObjectContact());
+
+            if (rObjectContact.supportsGridOffsets())
+            {
+                rObjectContact.resetAllGridOffsets();
+            }
+        }
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

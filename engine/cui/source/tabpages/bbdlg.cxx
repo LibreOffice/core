@@ -1,0 +1,95 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <bbdlg.hxx>
+#include <border.hxx>
+#include <backgrnd.hxx>
+#include <svx/svxids.hrc>
+#include <svl/intitem.hxx>
+#include <cuitabarea.hxx>
+
+#include <vcl/tabs.hrc>
+
+SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(weld::Window *pParent,
+    const SfxItemSet& rCoreSet,
+    bool bEnableSelector,
+    bool bEnableDrawingLayerFillStyles)
+    : SfxTabDialogController(pParent,
+        bEnableDrawingLayerFillStyles
+            ? u"cui/ui/borderareatransparencydialog.ui"_ustr
+            : u"cui/ui/borderbackgrounddialog.ui"_ustr,
+        bEnableDrawingLayerFillStyles
+            ? u"BorderAreaTransparencyDialog"_ustr
+            : u"BorderBackgroundDialog"_ustr,
+        &rCoreSet)
+    , mbEnableBackgroundSelector(bEnableSelector)
+{
+    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel), SvxBorderTabPage::Create,
+               RID_L + RID_TAB_BORDER.sIconName);
+    if (bEnableDrawingLayerFillStyles)
+    {
+        // Here we want full DrawingLayer FillStyle access, so add Area and Transparency TabPages
+        AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel), SvxAreaTabPage::Create,
+                   RID_L + RID_TAB_AREA.sIconName);
+        AddTabPage(u"transparence"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel),
+                   SvxTransparenceTabPage::Create, RID_L + RID_TAB_TRANSPARENCE.sIconName);
+    }
+    else
+    {
+        AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel), SvxBkgTabPage::Create,
+                   RID_L + RID_TAB_BACKGROUND.sIconName);
+    }
+}
+
+void SvxBorderBackgroundDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
+{
+    if (rPageId == "background")
+    {
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        // allow switching between Color/graphic
+        if (mbEnableBackgroundSelector)
+            aSet.Put(SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_SELECTOR)));
+        rTabPage.PageCreated(aSet);
+    }
+    // inits for Area and Transparency TabPages
+    // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
+    // the color table) need to be added as items (e.g. SvxColorTableItem) to make
+    // these pages find the needed attributes for fill style suggestions.
+    // These are added in SwDocStyleSheet::GetItemSet() for the SfxStyleFamily::Para on
+    // demand, but could also be directly added from the DrawModel.
+    else if (rPageId == "area")
+    {
+        SfxItemSetFixed<SID_COLOR_TABLE, SID_PATTERN_LIST,
+            SID_OFFER_IMPORT, SID_OFFER_IMPORT>
+            aNew(*GetInputSetImpl()->GetPool());
+
+        aNew.Put(*GetInputSetImpl());
+
+        // add flag for direct graphic content selection
+        aNew.Put(SfxBoolItem(SID_OFFER_IMPORT, true));
+
+        rTabPage.PageCreated(aNew);
+    }
+    else if (rPageId == "transparence")
+    {
+        rTabPage.PageCreated(*GetInputSetImpl());
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

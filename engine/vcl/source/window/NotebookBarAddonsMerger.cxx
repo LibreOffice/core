@@ -1,0 +1,242 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <sal/config.h>
+
+#include <cstddef>
+
+#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
+#include <vcl/commandinfoprovider.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/toolbox.hxx>
+#include <IPrioritable.hxx>
+#include <OptionalBox.hxx>
+
+// #tdf146101: For getting the app context
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <comphelper/processfactory.hxx>
+#include <rtl/ustring.hxx>
+#include <o3tl/string_view.hxx>
+
+const char STYLE_TEXT[] = "Text";
+const char STYLE_ICON[] = "Icon";
+
+const char MERGE_NOTEBOOKBAR_URL[] = "URL";
+const char MERGE_NOTEBOOKBAR_TITLE[] = "Title";
+const char MERGE_NOTEBOOKBAR_CONTEXT[] = "Context";
+const char MERGE_NOTEBOOKBAR_TARGET[] = "Target";
+const char MERGE_NOTEBOOKBAR_CONTROLTYPE[] = "ControlType";
+const char MERGE_NOTEBOOKBAR_WIDTH[] = "Width";
+const char MERGE_NOTEBOOKBAR_STYLE[] = "Style";
+
+// Get the current app context
+static OUString getCurrentDocumentContext(const css::uno::Reference<css::frame::XFrame>& xFrame)
+{
+    css::uno::Reference<css::frame::XModuleManager> xModuleManager
+        = css::frame::ModuleManager::create(comphelper::getProcessComponentContext());
+    return xModuleManager->identify(xFrame); // e.g. "com.sun.star.text.TextDocument"
+}
+
+static void GetAddonNotebookBarItem(const css::uno::Sequence<css::beans::PropertyValue>& pExtension,
+                                    AddonNotebookBarItem& aAddonNotebookBarItem)
+{
+    for (const auto& i : pExtension)
+    {
+        if (i.Name == MERGE_NOTEBOOKBAR_URL)
+            i.Value >>= aAddonNotebookBarItem.sCommandURL;
+        else if (i.Name == MERGE_NOTEBOOKBAR_TITLE)
+            i.Value >>= aAddonNotebookBarItem.sLabel;
+        else if (i.Name == MERGE_NOTEBOOKBAR_CONTEXT)
+            i.Value >>= aAddonNotebookBarItem.sContext;
+        else if (i.Name == MERGE_NOTEBOOKBAR_TARGET)
+            i.Value >>= aAddonNotebookBarItem.sTarget;
+        else if (i.Name == MERGE_NOTEBOOKBAR_CONTROLTYPE)
+            i.Value >>= aAddonNotebookBarItem.sControlType;
+        else if (i.Name == MERGE_NOTEBOOKBAR_WIDTH)
+            i.Value >>= aAddonNotebookBarItem.nWidth;
+        else if (i.Name == MERGE_NOTEBOOKBAR_STYLE)
+            i.Value >>= aAddonNotebookBarItem.sStyle;
+    }
+}
+
+static void CreateNotebookBarToolBox(vcl::Window* pNotebookbarToolBox,
+                                     const css::uno::Reference<css::frame::XFrame>& m_xFrame,
+                                     const AddonNotebookBarItem& aAddonNotebookBarItem,
+                                     const std::vector<Image>& aImageVec, const tools::ULong nIter)
+{
+    ToolBoxItemId nItemId(0);
+    ToolBox* pToolbox = dynamic_cast<ToolBox*>(pNotebookbarToolBox);
+    if (!pToolbox)
+        return;
+
+    pToolbox->InsertSeparator();
+    pToolbox->Show();
+    Size aSize(0, 0);
+    Image sImage;
+    pToolbox->InsertItem(aAddonNotebookBarItem.sCommandURL, m_xFrame, ToolBoxItemBits::NONE, aSize);
+    nItemId = pToolbox->GetItemId(aAddonNotebookBarItem.sCommandURL);
+    pToolbox->SetQuickHelpText(nItemId, aAddonNotebookBarItem.sLabel);
+
+    if (nIter < aImageVec.size())
+    {
+        sImage = aImageVec[nIter];
+        if (!sImage)
+        {
+            sImage = vcl::CommandInfoProvider::GetImageForCommand(aAddonNotebookBarItem.sCommandURL,
+                                                                  m_xFrame);
+        }
+    }
+
+    if (aAddonNotebookBarItem.sStyle == STYLE_TEXT)
+        pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
+    else if (aAddonNotebookBarItem.sStyle == STYLE_ICON)
+        pToolbox->SetItemImage(nItemId, sImage);
+    else
+    {
+        pToolbox->SetItemText(nItemId, aAddonNotebookBarItem.sLabel);
+        pToolbox->SetItemImage(nItemId, sImage);
+    }
+    pToolbox->Show();
+}
+
+namespace NotebookBarAddonsMerger
+{
+void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWidget& pFunction,
+                            const css::uno::Reference<css::frame::XFrame>& m_xFrame,
+                            const NotebookBarAddonsItem& aNotebookBarAddonsItem,
+                            VclBuilder::stringmap& rMap)
+{
+    std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
+    tools::ULong nIter = 0;
+    sal_uInt16 nPriorityIdx = aImageVec.size();
+
+    for (const auto& aExtension : aNotebookBarAddonsItem.aAddonValues)
+    {
+        for (const auto& pExtension : aExtension)
+        {
+            VclPtr<vcl::Window> pOptionalParent;
+            pOptionalParent = VclPtr<OptionalBox>::Create(pParent);
+            pOptionalParent->Show();
+
+            vcl::IPrioritable* pPrioritable
+                = dynamic_cast<vcl::IPrioritable*>(pOptionalParent.get());
+            if (pPrioritable)
+                pPrioritable->SetPriority(nPriorityIdx - nIter);
+
+            VclPtr<vcl::Window> pNotebookbarToolBox;
+            pFunction(pNotebookbarToolBox, pOptionalParent, rMap);
+
+            AddonNotebookBarItem aAddonNotebookBarItem;
+            GetAddonNotebookBarItem(pExtension, aAddonNotebookBarItem);
+            // #tdf146101: Filter context
+            if (!aAddonNotebookBarItem.sContext.isEmpty())
+            {
+                OUString currentContext = getCurrentDocumentContext(m_xFrame);
+                bool bMatch = false;
+                std::u16string_view contextView = aAddonNotebookBarItem.sContext;
+                sal_Int32 nIndex = 0;
+                do
+                {
+                    // might be multiple contexts, separated by comma
+                    std::u16string_view ctx
+                        = o3tl::trim(o3tl::getToken(contextView, 0, ',', nIndex));
+                    if (ctx == currentContext)
+                    {
+                        bMatch = true;
+                        break;
+                    }
+                } while (nIndex != -1);
+                if (!bMatch)
+                {
+                    nIter++; // or icons would be wrong
+                    continue;
+                }
+            }
+            CreateNotebookBarToolBox(pNotebookbarToolBox, m_xFrame, aAddonNotebookBarItem,
+                                     aImageVec, nIter);
+            nIter++;
+        }
+    }
+}
+
+void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OUString& sItemIdName,
+                                const css::uno::Reference<css::frame::XFrame>& m_xFrame,
+                                NotebookBarAddonsItem& aNotebookBarAddonsItem)
+{
+    std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
+    tools::ULong nIter = 0;
+    for (const auto& aExtension : aNotebookBarAddonsItem.aAddonValues)
+    {
+        for (int nSecIdx = 0; nSecIdx < aExtension.getLength(); nSecIdx++)
+        {
+            AddonNotebookBarItem aAddonNotebookBarItem;
+            Image sImage;
+            MenuItemBits nBits = MenuItemBits::ICON;
+            const css::uno::Sequence<css::beans::PropertyValue>& pExtension = aExtension[nSecIdx];
+
+            GetAddonNotebookBarItem(pExtension, aAddonNotebookBarItem);
+
+            // #tdf146101: Filter context
+            if (!aAddonNotebookBarItem.sContext.isEmpty())
+            {
+                OUString currentContext = getCurrentDocumentContext(m_xFrame);
+                bool bMatch = false;
+                std::u16string_view contextView = aAddonNotebookBarItem.sContext;
+                sal_Int32 nIndex = 0;
+                do
+                {
+                    // might be multiple contexts, separated by comma
+                    std::u16string_view ctx
+                        = o3tl::trim(o3tl::getToken(contextView, 0, ',', nIndex));
+                    if (ctx == currentContext)
+                    {
+                        bMatch = true;
+                        break;
+                    }
+                } while (nIndex != -1);
+                if (!bMatch)
+                {
+                    nIter++; // or icons would be wrong
+                    continue;
+                }
+            }
+
+            pPopupMenu->InsertItem(nItemId, aAddonNotebookBarItem.sLabel, nBits, sItemIdName);
+            pPopupMenu->SetItemCommand(nItemId, aAddonNotebookBarItem.sCommandURL);
+
+            if (nIter < aImageVec.size())
+            {
+                sImage = aImageVec[nIter];
+                nIter++;
+            }
+            pPopupMenu->SetItemImage(nItemId, sImage);
+
+            if (nSecIdx == aExtension.getLength() - 1)
+                pPopupMenu->InsertSeparator();
+
+            ++nItemId;
+        }
+    }
+}
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

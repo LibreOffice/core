@@ -1,0 +1,2347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name=".*(c)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(e)" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=".*(r)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=".*(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name="ablem" block-list:name="amblem"/>
+  <block-list:block block-list:abbreviated-name="Ablem" block-list:name="Amblem"/>
+  <block-list:block block-list:abbreviated-name="Abondone" block-list:name="Abandone"/>
+  <block-list:block block-list:abbreviated-name="abondone" block-list:name="abandone"/>
+  <block-list:block block-list:abbreviated-name="Abonoz" block-list:name="Abanoz"/>
+  <block-list:block block-list:abbreviated-name="abonoz" block-list:name="abanoz"/>
+  <block-list:block block-list:abbreviated-name="Acaip" block-list:name="Acayip"/>
+  <block-list:block block-list:abbreviated-name="acaip" block-list:name="acayip"/>
+  <block-list:block block-list:abbreviated-name="Acenta" block-list:name="Acente"/>
+  <block-list:block block-list:abbreviated-name="acenta" block-list:name="acente"/>
+  <block-list:block block-list:abbreviated-name="Acitasyon" block-list:name="Ajitasyon"/>
+  <block-list:block block-list:abbreviated-name="acitasyon" block-list:name="ajitasyon"/>
+  <block-list:block block-list:abbreviated-name="Açıcak" block-list:name="Açacak"/>
+  <block-list:block block-list:abbreviated-name="açıcak" block-list:name="açacak"/>
+  <block-list:block block-list:abbreviated-name="Adele" block-list:name="Adale"/>
+  <block-list:block block-list:abbreviated-name="adele" block-list:name="adale"/>
+  <block-list:block block-list:abbreviated-name="Afaroz" block-list:name="Aforoz"/>
+  <block-list:block block-list:abbreviated-name="afaroz" block-list:name="aforoz"/>
+  <block-list:block block-list:abbreviated-name="Afilli" block-list:name="Afili"/>
+  <block-list:block block-list:abbreviated-name="afilli" block-list:name="afili"/>
+  <block-list:block block-list:abbreviated-name="Ahçı" block-list:name="Aşçı"/>
+  <block-list:block block-list:abbreviated-name="ahçı" block-list:name="aşçı"/>
+  <block-list:block block-list:abbreviated-name="Ahpap" block-list:name="Ahbap"/>
+  <block-list:block block-list:abbreviated-name="ahpap" block-list:name="ahbap"/>
+  <block-list:block block-list:abbreviated-name="Akapunktur" block-list:name="Akupunktur"/>
+  <block-list:block block-list:abbreviated-name="akapunktur" block-list:name="akupunktur"/>
+  <block-list:block block-list:abbreviated-name="Akordiyon" block-list:name="Akordeon"/>
+  <block-list:block block-list:abbreviated-name="akordiyon" block-list:name="akordeon"/>
+  <block-list:block block-list:abbreviated-name="Akşam üzeri" block-list:name="Akşamüzeri"/>
+  <block-list:block block-list:abbreviated-name="akşam üzeri" block-list:name="akşamüzeri"/>
+  <block-list:block block-list:abbreviated-name="Alarım" block-list:name="Alarm"/>
+  <block-list:block block-list:abbreviated-name="alarım" block-list:name="alarm"/>
+  <block-list:block block-list:abbreviated-name="Aliminyum" block-list:name="Alüminyum"/>
+  <block-list:block block-list:abbreviated-name="aliminyum" block-list:name="alüminyum"/>
+  <block-list:block block-list:abbreviated-name="Alimünyum" block-list:name="Alüminyum"/>
+  <block-list:block block-list:abbreviated-name="alimünyum" block-list:name="alüminyum"/>
+  <block-list:block block-list:abbreviated-name="Allerji" block-list:name="Alerji"/>
+  <block-list:block block-list:abbreviated-name="allerji" block-list:name="alerji"/>
+  <block-list:block block-list:abbreviated-name="Almünyum" block-list:name="Alüminyum"/>
+  <block-list:block block-list:abbreviated-name="almünyum" block-list:name="alüminyum"/>
+  <block-list:block block-list:abbreviated-name="Alobora" block-list:name="Alabora"/>
+  <block-list:block block-list:abbreviated-name="alobora" block-list:name="alabora"/>
+  <block-list:block block-list:abbreviated-name="Amartisör" block-list:name="Amortisör"/>
+  <block-list:block block-list:abbreviated-name="amartisör" block-list:name="amortisör"/>
+  <block-list:block block-list:abbreviated-name="Ana kara" block-list:name="Anakara"/>
+  <block-list:block block-list:abbreviated-name="ana kara" block-list:name="anakara"/>
+  <block-list:block block-list:abbreviated-name="Anfi" block-list:name="Amfi"/>
+  <block-list:block block-list:abbreviated-name="anfi" block-list:name="amfi"/>
+  <block-list:block block-list:abbreviated-name="Anotomi" block-list:name="Anatomi"/>
+  <block-list:block block-list:abbreviated-name="anotomi" block-list:name="anatomi"/>
+  <block-list:block block-list:abbreviated-name="Antiparantez" block-list:name="Antrparantez"/>
+  <block-list:block block-list:abbreviated-name="antiparantez" block-list:name="antrparantez"/>
+  <block-list:block block-list:abbreviated-name="Antreman" block-list:name="Antrenman"/>
+  <block-list:block block-list:abbreviated-name="antreman" block-list:name="antrenman"/>
+  <block-list:block block-list:abbreviated-name="Aparatif" block-list:name="Aperitif"/>
+  <block-list:block block-list:abbreviated-name="aparatif" block-list:name="aperitif"/>
+  <block-list:block block-list:abbreviated-name="Aperatif" block-list:name="Aperitif"/>
+  <block-list:block block-list:abbreviated-name="aperatif" block-list:name="aperitif"/>
+  <block-list:block block-list:abbreviated-name="Aporlor" block-list:name="Hoparlör"/>
+  <block-list:block block-list:abbreviated-name="aporlor" block-list:name="hoparlör"/>
+  <block-list:block block-list:abbreviated-name="Aptes" block-list:name="Abdest"/>
+  <block-list:block block-list:abbreviated-name="aptes" block-list:name="abdest"/>
+  <block-list:block block-list:abbreviated-name="Arabeks" block-list:name="Arabesk"/>
+  <block-list:block block-list:abbreviated-name="arabeks" block-list:name="arabesk"/>
+  <block-list:block block-list:abbreviated-name="Arasıra" block-list:name="Ara sıra"/>
+  <block-list:block block-list:abbreviated-name="arasıra" block-list:name="ara sıra"/>
+  <block-list:block block-list:abbreviated-name="Arefe" block-list:name="Arife"/>
+  <block-list:block block-list:abbreviated-name="arefe" block-list:name="arife"/>
+  <block-list:block block-list:abbreviated-name="Aritmatik" block-list:name="Aritmetik"/>
+  <block-list:block block-list:abbreviated-name="aritmatik" block-list:name="aritmetik"/>
+  <block-list:block block-list:abbreviated-name="Arozöz" block-list:name="Arazöz"/>
+  <block-list:block block-list:abbreviated-name="arozöz" block-list:name="arazöz"/>
+  <block-list:block block-list:abbreviated-name="Artis" block-list:name="Artist"/>
+  <block-list:block block-list:abbreviated-name="artis" block-list:name="artist"/>
+  <block-list:block block-list:abbreviated-name="Artiz" block-list:name="Artist"/>
+  <block-list:block block-list:abbreviated-name="artiz" block-list:name="artist"/>
+  <block-list:block block-list:abbreviated-name="Askari" block-list:name="Asgari"/>
+  <block-list:block block-list:abbreviated-name="askari" block-list:name="asgari"/>
+  <block-list:block block-list:abbreviated-name="Aşkolsun" block-list:name="Aşk olsun"/>
+  <block-list:block block-list:abbreviated-name="aşkolsun" block-list:name="aşk olsun"/>
+  <block-list:block block-list:abbreviated-name="Assubay" block-list:name="Astsubay"/>
+  <block-list:block block-list:abbreviated-name="assubay" block-list:name="astsubay"/>
+  <block-list:block block-list:abbreviated-name="Asvalt" block-list:name="Asfalt"/>
+  <block-list:block block-list:abbreviated-name="asvalt" block-list:name="asfalt"/>
+  <block-list:block block-list:abbreviated-name="Aşantiyon" block-list:name="Eşantiyon"/>
+  <block-list:block block-list:abbreviated-name="aşantiyon" block-list:name="eşantiyon"/>
+  <block-list:block block-list:abbreviated-name="Aşentiyon" block-list:name="Eşantiyon"/>
+  <block-list:block block-list:abbreviated-name="aşentiyon" block-list:name="eşantiyon"/>
+  <block-list:block block-list:abbreviated-name="Aşofman" block-list:name="Eşofman"/>
+  <block-list:block block-list:abbreviated-name="aşofman" block-list:name="eşofman"/>
+  <block-list:block block-list:abbreviated-name="Ataç" block-list:name="Ataş"/>
+  <block-list:block block-list:abbreviated-name="ataç" block-list:name="ataş"/>
+  <block-list:block block-list:abbreviated-name="Atelye" block-list:name="Atölye"/>
+  <block-list:block block-list:abbreviated-name="atelye" block-list:name="atölye"/>
+  <block-list:block block-list:abbreviated-name="Azerbeycan" block-list:name="Azerbaycan"/>
+  <block-list:block block-list:abbreviated-name="azerbeycan" block-list:name="Azerbaycan"/>
+  <block-list:block block-list:abbreviated-name="Barsak" block-list:name="Bağırsak"/>
+  <block-list:block block-list:abbreviated-name="barsak" block-list:name="bağırsak"/>
+  <block-list:block block-list:abbreviated-name="Beyfendi" block-list:name="Beyefendi"/>
+  <block-list:block block-list:abbreviated-name="beyfendi" block-list:name="beyefendi"/>
+  <block-list:block block-list:abbreviated-name="Bilader" block-list:name="Birader"/>
+  <block-list:block block-list:abbreviated-name="bilader" block-list:name="birader"/>
+  <block-list:block block-list:abbreviated-name="Bilimum" block-list:name="Bilumum"/>
+  <block-list:block block-list:abbreviated-name="bilimum" block-list:name="bilumum"/>
+  <block-list:block block-list:abbreviated-name="Birfiil" block-list:name="Bilfiil"/>
+  <block-list:block block-list:abbreviated-name="birfiil" block-list:name="bilfiil"/>
+  <block-list:block block-list:abbreviated-name="Birhaber" block-list:name="Bihaber"/>
+  <block-list:block block-list:abbreviated-name="birhaber" block-list:name="bihaber"/>
+  <block-list:block block-list:abbreviated-name="Bir kaç" block-list:name="Birkaç"/>
+  <block-list:block block-list:abbreviated-name="bir kaç" block-list:name="birkaç"/>
+  <block-list:block block-list:abbreviated-name="Birşey" block-list:name="Bir şey"/>
+  <block-list:block block-list:abbreviated-name="birşey" block-list:name="bir şey"/>
+  <block-list:block block-list:abbreviated-name="Birgün" block-list:name="Bir gün"/>
+  <block-list:block block-list:abbreviated-name="birgün" block-list:name="bir gün"/>
+  <block-list:block block-list:abbreviated-name="Boğa yılanı" block-list:name="Boa yılanı"/>
+  <block-list:block block-list:abbreviated-name="boğa yılanı" block-list:name="boa yılanı"/>
+  <block-list:block block-list:abbreviated-name="Boğça" block-list:name="Poğaça"/>
+  <block-list:block block-list:abbreviated-name="boğça" block-list:name="poğaça"/>
+  <block-list:block block-list:abbreviated-name="Boy pos" block-list:name="Boy bos"/>
+  <block-list:block block-list:abbreviated-name="boy pos" block-list:name="boy bos"/>
+  <block-list:block block-list:abbreviated-name="Bujiteri" block-list:name="Bijuteri"/>
+  <block-list:block block-list:abbreviated-name="bujiteri" block-list:name="bijuteri"/>
+  <block-list:block block-list:abbreviated-name="Bulüz" block-list:name="Bluz"/>
+  <block-list:block block-list:abbreviated-name="bulüz" block-list:name="bluz"/>
+  <block-list:block block-list:abbreviated-name="Büsküüt" block-list:name="Bisküvi"/>
+  <block-list:block block-list:abbreviated-name="büsküüt" block-list:name="bisküvi"/>
+  <block-list:block block-list:abbreviated-name="Büyültmek" block-list:name="Büyütmek"/>
+  <block-list:block block-list:abbreviated-name="büyültmek" block-list:name="büyütmek"/>
+  <block-list:block block-list:abbreviated-name="Candarma" block-list:name="Jandarma"/>
+  <block-list:block block-list:abbreviated-name="candarma" block-list:name="jandarma"/>
+  <block-list:block block-list:abbreviated-name="Celatin" block-list:name="Jelatin"/>
+  <block-list:block block-list:abbreviated-name="celatin" block-list:name="jelatin"/>
+  <block-list:block block-list:abbreviated-name="Cenderme" block-list:name="Jandarma"/>
+  <block-list:block block-list:abbreviated-name="cenderme" block-list:name="jandarma"/>
+  <block-list:block block-list:abbreviated-name="Ceryan" block-list:name="Cereyan"/>
+  <block-list:block block-list:abbreviated-name="ceryan" block-list:name="cereyan"/>
+  <block-list:block block-list:abbreviated-name="Ceton" block-list:name="Jeton"/>
+  <block-list:block block-list:abbreviated-name="ceton" block-list:name="jeton"/>
+  <block-list:block block-list:abbreviated-name="Civa" block-list:name="Cıva"/>
+  <block-list:block block-list:abbreviated-name="civa" block-list:name="cıva"/>
+  <block-list:block block-list:abbreviated-name="Ciyer" block-list:name="Ciğer"/>
+  <block-list:block block-list:abbreviated-name="ciyer" block-list:name="ciğer"/>
+  <block-list:block block-list:abbreviated-name="Çala kalem" block-list:name="Çalakalem"/>
+  <block-list:block block-list:abbreviated-name="çala kalem" block-list:name="çalakalem"/>
+  <block-list:block block-list:abbreviated-name="Canbaz" block-list:name="Cambaz"/>
+  <block-list:block block-list:abbreviated-name="canbaz" block-list:name="cambaz"/>
+  <block-list:block block-list:abbreviated-name="Çeçaron" block-list:name="Çaçaron"/>
+  <block-list:block block-list:abbreviated-name="çeçaron" block-list:name="çaçaron"/>
+  <block-list:block block-list:abbreviated-name="Çekinser" block-list:name="Çekimser"/>
+  <block-list:block block-list:abbreviated-name="çekinser" block-list:name="çekimser"/>
+  <block-list:block block-list:abbreviated-name="Çenber" block-list:name="Çember"/>
+  <block-list:block block-list:abbreviated-name="çenber" block-list:name="çember"/>
+  <block-list:block block-list:abbreviated-name="Çiflik" block-list:name="Çiftlik"/>
+  <block-list:block block-list:abbreviated-name="çiflik" block-list:name="çiftlik"/>
+  <block-list:block block-list:abbreviated-name="Çinakop" block-list:name="Çinekop"/>
+  <block-list:block block-list:abbreviated-name="çinakop" block-list:name="çinekop"/>
+  <block-list:block block-list:abbreviated-name="Çukolata" block-list:name="Çikolata"/>
+  <block-list:block block-list:abbreviated-name="çukolata" block-list:name="çikolata"/>
+  <block-list:block block-list:abbreviated-name="Çukulata" block-list:name="Çikolata"/>
+  <block-list:block block-list:abbreviated-name="çukulata" block-list:name="çikolata"/>
+  <block-list:block block-list:abbreviated-name="Cimnastik" block-list:name="Jimnastik"/>
+  <block-list:block block-list:abbreviated-name="cimnastik" block-list:name="jimnastik"/>
+  <block-list:block block-list:abbreviated-name="Civata" block-list:name="Cıvata"/>
+  <block-list:block block-list:abbreviated-name="civata" block-list:name="cıvata"/>
+  <block-list:block block-list:abbreviated-name="Cübbe" block-list:name="Cüppe"/>
+  <block-list:block block-list:abbreviated-name="cübbe" block-list:name="cüppe"/>
+  <block-list:block block-list:abbreviated-name="Dekarasyon" block-list:name="Dekorasyon"/>
+  <block-list:block block-list:abbreviated-name="dekarasyon" block-list:name="dekorasyon"/>
+  <block-list:block block-list:abbreviated-name="Dekaratör" block-list:name="Dekoratör"/>
+  <block-list:block block-list:abbreviated-name="dekaratör" block-list:name="dekoratör"/>
+  <block-list:block block-list:abbreviated-name="Deynek" block-list:name="Değnek"/>
+  <block-list:block block-list:abbreviated-name="deynek" block-list:name="değnek"/>
+  <block-list:block block-list:abbreviated-name="Difransiyel" block-list:name="Diferansiyel"/>
+  <block-list:block block-list:abbreviated-name="difransiyel" block-list:name="diferansiyel"/>
+  <block-list:block block-list:abbreviated-name="Dinazor" block-list:name="Dinozor"/>
+  <block-list:block block-list:abbreviated-name="dinazor" block-list:name="dinozor"/>
+  <block-list:block block-list:abbreviated-name="Döğmek" block-list:name="Dövmek"/>
+  <block-list:block block-list:abbreviated-name="döğmek" block-list:name="dövmek"/>
+  <block-list:block block-list:abbreviated-name="Döküman" block-list:name="Doküman"/>
+  <block-list:block block-list:abbreviated-name="döküman" block-list:name="doküman"/>
+  <block-list:block block-list:abbreviated-name="Dökümanter" block-list:name="Dokümanter"/>
+  <block-list:block block-list:abbreviated-name="dökümanter" block-list:name="dokümanter"/>
+  <block-list:block block-list:abbreviated-name="Egsantrik" block-list:name="Eksantrik"/>
+  <block-list:block block-list:abbreviated-name="egsantrik" block-list:name="eksantrik"/>
+  <block-list:block block-list:abbreviated-name="Egzantrik" block-list:name="Eksantrik"/>
+  <block-list:block block-list:abbreviated-name="egzantrik" block-list:name="eksantrik"/>
+  <block-list:block block-list:abbreviated-name="Ekzantrik" block-list:name="Eksantrik"/>
+  <block-list:block block-list:abbreviated-name="ekzantrik" block-list:name="eksantrik"/>
+  <block-list:block block-list:abbreviated-name="Egzos" block-list:name="Egzoz"/>
+  <block-list:block block-list:abbreviated-name="egzos" block-list:name="egzoz"/>
+  <block-list:block block-list:abbreviated-name="Egzost" block-list:name="Egzoz"/>
+  <block-list:block block-list:abbreviated-name="egzost" block-list:name="egzoz"/>
+  <block-list:block block-list:abbreviated-name="Egsoz" block-list:name="Egzoz"/>
+  <block-list:block block-list:abbreviated-name="egsoz" block-list:name="egzoz"/>
+  <block-list:block block-list:abbreviated-name="Eksoz" block-list:name="Egzoz"/>
+  <block-list:block block-list:abbreviated-name="eksoz" block-list:name="egzoz"/>
+  <block-list:block block-list:abbreviated-name="Eksozt" block-list:name="Egzoz"/>
+  <block-list:block block-list:abbreviated-name="eksozt" block-list:name="egzoz"/>
+  <block-list:block block-list:abbreviated-name="Ensitü" block-list:name="Enstitü"/>
+  <block-list:block block-list:abbreviated-name="ensitü" block-list:name="enstitü"/>
+  <block-list:block block-list:abbreviated-name="Enstütü" block-list:name="Enstitü"/>
+  <block-list:block block-list:abbreviated-name="enstütü" block-list:name="enstitü"/>
+  <block-list:block block-list:abbreviated-name="Entellektüel" block-list:name="Entelektüel"/>
+  <block-list:block block-list:abbreviated-name="entellektüel" block-list:name="entelektüel"/>
+  <block-list:block block-list:abbreviated-name="Entrasan" block-list:name="Enteresan"/>
+  <block-list:block block-list:abbreviated-name="entrasan" block-list:name="enteresan"/>
+  <block-list:block block-list:abbreviated-name="Erezyon" block-list:name="Erozyon"/>
+  <block-list:block block-list:abbreviated-name="erezyon" block-list:name="erozyon"/>
+  <block-list:block block-list:abbreviated-name="Eskirim" block-list:name="Eskrim"/>
+  <block-list:block block-list:abbreviated-name="eskirim" block-list:name="eskrim"/>
+  <block-list:block block-list:abbreviated-name="Espiri" block-list:name="Espri"/>
+  <block-list:block block-list:abbreviated-name="espiri" block-list:name="espri"/>
+  <block-list:block block-list:abbreviated-name="Eşgal" block-list:name="Eşkâl"/>
+  <block-list:block block-list:abbreviated-name="eşgal" block-list:name="eşkâl"/>
+  <block-list:block block-list:abbreviated-name="Eşkal" block-list:name="Eşkâl"/>
+  <block-list:block block-list:abbreviated-name="eşkal" block-list:name="eşkâl"/>
+  <block-list:block block-list:abbreviated-name="Eşkiya" block-list:name="Eşkıya"/>
+  <block-list:block block-list:abbreviated-name="eşkiya" block-list:name="eşkıya"/>
+  <block-list:block block-list:abbreviated-name="Eşortman" block-list:name="Eşofman"/>
+  <block-list:block block-list:abbreviated-name="eşortman" block-list:name="eşofman"/>
+  <block-list:block block-list:abbreviated-name="Evsane" block-list:name="Efsane"/>
+  <block-list:block block-list:abbreviated-name="evsane" block-list:name="efsane"/>
+  <block-list:block block-list:abbreviated-name="Ezzane" block-list:name="Eczane"/>
+  <block-list:block block-list:abbreviated-name="ezzane" block-list:name="eczane"/>
+  <block-list:block block-list:abbreviated-name="Faide" block-list:name="Fayda"/>
+  <block-list:block block-list:abbreviated-name="faide" block-list:name="fayda"/>
+  <block-list:block block-list:abbreviated-name="Faliyet" block-list:name="Faaliyet"/>
+  <block-list:block block-list:abbreviated-name="faliyet" block-list:name="faaliyet"/>
+  <block-list:block block-list:abbreviated-name="Fantazi" block-list:name="Fantezi"/>
+  <block-list:block block-list:abbreviated-name="fantazi" block-list:name="fantezi"/>
+  <block-list:block block-list:abbreviated-name="Fasülye" block-list:name="Fasulye"/>
+  <block-list:block block-list:abbreviated-name="fasülye" block-list:name="fasulye"/>
+  <block-list:block block-list:abbreviated-name="Fermar" block-list:name="Fermuar"/>
+  <block-list:block block-list:abbreviated-name="fermar" block-list:name="fermuar"/>
+  <block-list:block block-list:abbreviated-name="Fesetmek" block-list:name="Feshetmek"/>
+  <block-list:block block-list:abbreviated-name="fesetmek" block-list:name="feshetmek"/>
+  <block-list:block block-list:abbreviated-name="Fiat" block-list:name="Fiyat"/>
+  <block-list:block block-list:abbreviated-name="fiat" block-list:name="fiyat"/>
+  <block-list:block block-list:abbreviated-name="Filim" block-list:name="Film"/>
+  <block-list:block block-list:abbreviated-name="filim" block-list:name="film"/>
+  <block-list:block block-list:abbreviated-name="Fites" block-list:name="Vites"/>
+  <block-list:block block-list:abbreviated-name="fites" block-list:name="vites"/>
+  <block-list:block block-list:abbreviated-name="Florasan" block-list:name="Floresan"/>
+  <block-list:block block-list:abbreviated-name="florasan" block-list:name="floresan"/>
+  <block-list:block block-list:abbreviated-name="Gangaster" block-list:name="Gangster"/>
+  <block-list:block block-list:abbreviated-name="gangaster" block-list:name="gangster"/>
+  <block-list:block block-list:abbreviated-name="Gangren" block-list:name="Kangren"/>
+  <block-list:block block-list:abbreviated-name="gangren" block-list:name="kangren"/>
+  <block-list:block block-list:abbreviated-name="Gardolap" block-list:name="Gardırop"/>
+  <block-list:block block-list:abbreviated-name="gardolap" block-list:name="gardırop"/>
+  <block-list:block block-list:abbreviated-name="Gaste" block-list:name="Gazete"/>
+  <block-list:block block-list:abbreviated-name="gaste" block-list:name="gazete"/>
+  <block-list:block block-list:abbreviated-name="Gazte" block-list:name="Gazete"/>
+  <block-list:block block-list:abbreviated-name="gazte" block-list:name="gazete"/>
+  <block-list:block block-list:abbreviated-name="Gider ayak" block-list:name="Giderayak"/>
+  <block-list:block block-list:abbreviated-name="gider ayak" block-list:name="giderayak"/>
+  <block-list:block block-list:abbreviated-name="Gravat" block-list:name="Kravat"/>
+  <block-list:block block-list:abbreviated-name="gravat" block-list:name="kravat"/>
+  <block-list:block block-list:abbreviated-name="Hakkaten" block-list:name="Hakikaten"/>
+  <block-list:block block-list:abbreviated-name="hakkaten" block-list:name="hakikaten"/>
+  <block-list:block block-list:abbreviated-name="Halisinasyon" block-list:name="Halüsinasyon"/>
+  <block-list:block block-list:abbreviated-name="halisinasyon" block-list:name="halüsinasyon"/>
+  <block-list:block block-list:abbreviated-name="Halisünasyon" block-list:name="Halüsinasyon"/>
+  <block-list:block block-list:abbreviated-name="halisünasyon" block-list:name="halüsinasyon"/>
+  <block-list:block block-list:abbreviated-name="Haremlik selamlık" block-list:name="Harem selamlık"/>
+  <block-list:block block-list:abbreviated-name="haremlik selamlık" block-list:name="harem selamlık"/>
+  <block-list:block block-list:abbreviated-name="Harfiyat" block-list:name="Hafriyat"/>
+  <block-list:block block-list:abbreviated-name="harfiyat" block-list:name="hafriyat"/>
+  <block-list:block block-list:abbreviated-name="Hegamonya" block-list:name="Hegemonya"/>
+  <block-list:block block-list:abbreviated-name="hegamonya" block-list:name="hegemonya"/>
+  <block-list:block block-list:abbreviated-name="Herkez" block-list:name="Herkes"/>
+  <block-list:block block-list:abbreviated-name="herkez" block-list:name="herkes"/>
+  <block-list:block block-list:abbreviated-name="Herkeş" block-list:name="Herkes"/>
+  <block-list:block block-list:abbreviated-name="herkeş" block-list:name="herkes"/>
+  <block-list:block block-list:abbreviated-name="Heycan" block-list:name="Heyecan"/>
+  <block-list:block block-list:abbreviated-name="heycan" block-list:name="heyecan"/>
+  <block-list:block block-list:abbreviated-name="Hıristiyan" block-list:name="Hristiyan"/>
+  <block-list:block block-list:abbreviated-name="hıristiyan" block-list:name="hristiyan"/>
+  <block-list:block block-list:abbreviated-name="Hiç bir" block-list:name="Hiçbir"/>
+  <block-list:block block-list:abbreviated-name="hiç bir" block-list:name="hiçbir"/>
+  <block-list:block block-list:abbreviated-name="Hoporlör" block-list:name="Hoparlör"/>
+  <block-list:block block-list:abbreviated-name="hoporlör" block-list:name="hoparlör"/>
+  <block-list:block block-list:abbreviated-name="Hoşçakal" block-list:name="Hoşça kal"/>
+  <block-list:block block-list:abbreviated-name="hoşçakal" block-list:name="hoşça kal"/>
+  <block-list:block block-list:abbreviated-name="Hoşgeldin" block-list:name="Hoş geldin"/>
+  <block-list:block block-list:abbreviated-name="hoşgeldin" block-list:name="hoş geldin"/>
+  <block-list:block block-list:abbreviated-name="Htp" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="htp" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="Http" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="Http:\\" block-list:name="http://"/>
+  <block-list:block block-list:abbreviated-name="http:\\" block-list:name="http://"/>
+  <block-list:block block-list:abbreviated-name="Iskonto" block-list:name="İskonto"/>
+  <block-list:block block-list:abbreviated-name="ıskonto" block-list:name="iskonto"/>
+  <block-list:block block-list:abbreviated-name="Istanbul" block-list:name="İstanbul"/>
+  <block-list:block block-list:abbreviated-name="ıstanbul" block-list:name="İstanbul"/>
+  <block-list:block block-list:abbreviated-name="Istambul" block-list:name="İstanbul"/>
+  <block-list:block block-list:abbreviated-name="ıstambul" block-list:name="İstanbul"/>
+  <block-list:block block-list:abbreviated-name="Istırap" block-list:name="Izdırap"/>
+  <block-list:block block-list:abbreviated-name="ıstırap" block-list:name="ızdırap"/>
+  <block-list:block block-list:abbreviated-name="İlizyon" block-list:name="İllüzyon"/>
+  <block-list:block block-list:abbreviated-name="ilizyon" block-list:name="illüzyon"/>
+  <block-list:block block-list:abbreviated-name="İlüzyon" block-list:name="İllüzyon"/>
+  <block-list:block block-list:abbreviated-name="ilüzyon" block-list:name="illüzyon"/>
+  <block-list:block block-list:abbreviated-name="İnformasyon" block-list:name="Enformasyon"/>
+  <block-list:block block-list:abbreviated-name="informasyon" block-list:name="enformasyon"/>
+  <block-list:block block-list:abbreviated-name="İnkilap" block-list:name="İnkılap"/>
+  <block-list:block block-list:abbreviated-name="inkilap" block-list:name="inkılap"/>
+  <block-list:block block-list:abbreviated-name="İnsiyatif" block-list:name="İnisiyatif"/>
+  <block-list:block block-list:abbreviated-name="insiyatif" block-list:name="inisiyatif"/>
+  <block-list:block block-list:abbreviated-name="İsbat" block-list:name="İspat"/>
+  <block-list:block block-list:abbreviated-name="isbat" block-list:name="ispat"/>
+  <block-list:block block-list:abbreviated-name="İstakoz" block-list:name="Istakoz"/>
+  <block-list:block block-list:abbreviated-name="istakoz" block-list:name="ıstakoz"/>
+  <block-list:block block-list:abbreviated-name="İstepne" block-list:name="Stepne"/>
+  <block-list:block block-list:abbreviated-name="istepne" block-list:name="stepne"/>
+  <block-list:block block-list:abbreviated-name="İstihap hatti" block-list:name="İstiap haddi"/>
+  <block-list:block block-list:abbreviated-name="istihap hatti" block-list:name="istiap haddi"/>
+  <block-list:block block-list:abbreviated-name="İzalasyon" block-list:name="İzolasyon"/>
+  <block-list:block block-list:abbreviated-name="izalasyon" block-list:name="izolasyon"/>
+  <block-list:block block-list:abbreviated-name="Jipon" block-list:name="Jüpon"/>
+  <block-list:block block-list:abbreviated-name="jipon" block-list:name="jüpon"/>
+  <block-list:block block-list:abbreviated-name="Kakafoni" block-list:name="Kakofoni"/>
+  <block-list:block block-list:abbreviated-name="kakafoni" block-list:name="kakofoni"/>
+  <block-list:block block-list:abbreviated-name="Kalemşör" block-list:name="Kalemşor"/>
+  <block-list:block block-list:abbreviated-name="kalemşör" block-list:name="kalemşor"/>
+  <block-list:block block-list:abbreviated-name="Kanpanya" block-list:name="Kampanya"/>
+  <block-list:block block-list:abbreviated-name="kanpanya" block-list:name="kampanya"/>
+  <block-list:block block-list:abbreviated-name="Kare kök" block-list:name="Karekök"/>
+  <block-list:block block-list:abbreviated-name="kare kök" block-list:name="karekök"/>
+  <block-list:block block-list:abbreviated-name="Karegrafi" block-list:name="Koreografi"/>
+  <block-list:block block-list:abbreviated-name="karegrafi" block-list:name="koreografi"/>
+  <block-list:block block-list:abbreviated-name="Kareografi" block-list:name="Koreografi"/>
+  <block-list:block block-list:abbreviated-name="kareografi" block-list:name="koreografi"/>
+  <block-list:block block-list:abbreviated-name="Karekter" block-list:name="Karakter"/>
+  <block-list:block block-list:abbreviated-name="karekter" block-list:name="karakter"/>
+  <block-list:block block-list:abbreviated-name="Karisör" block-list:name="Karoser"/>
+  <block-list:block block-list:abbreviated-name="karisör" block-list:name="karoser"/>
+  <block-list:block block-list:abbreviated-name="Karma karışık" block-list:name="Karmakarışık"/>
+  <block-list:block block-list:abbreviated-name="karma karışık" block-list:name="karmakarışık"/>
+  <block-list:block block-list:abbreviated-name="Karnıbahar" block-list:name="Karnabahar"/>
+  <block-list:block block-list:abbreviated-name="karnıbahar" block-list:name="karnabahar"/>
+  <block-list:block block-list:abbreviated-name="Karsör" block-list:name="Karoser"/>
+  <block-list:block block-list:abbreviated-name="karsör" block-list:name="karoser"/>
+  <block-list:block block-list:abbreviated-name="Katalok" block-list:name="Katalog"/>
+  <block-list:block block-list:abbreviated-name="katalok" block-list:name="katalog"/>
+  <block-list:block block-list:abbreviated-name="Kavonoz" block-list:name="Kavanoz"/>
+  <block-list:block block-list:abbreviated-name="kavonoz" block-list:name="kavanoz"/>
+  <block-list:block block-list:abbreviated-name="Kaysı" block-list:name="Kayısı"/>
+  <block-list:block block-list:abbreviated-name="kaysı" block-list:name="kayısı"/>
+  <block-list:block block-list:abbreviated-name="Kazazade" block-list:name="Kazazede"/>
+  <block-list:block block-list:abbreviated-name="kazazade" block-list:name="kazazede"/>
+  <block-list:block block-list:abbreviated-name="Kırahatane" block-list:name="Kıraathane"/>
+  <block-list:block block-list:abbreviated-name="kırahatane" block-list:name="kıraathane"/>
+  <block-list:block block-list:abbreviated-name="Kilot" block-list:name="Külot"/>
+  <block-list:block block-list:abbreviated-name="kilot" block-list:name="külot"/>
+  <block-list:block block-list:abbreviated-name="Kibri" block-list:name="Kirpi"/>
+  <block-list:block block-list:abbreviated-name="kibri" block-list:name="kirpi"/>
+  <block-list:block block-list:abbreviated-name="Kiprik" block-list:name="Kirpik"/>
+  <block-list:block block-list:abbreviated-name="kiprik" block-list:name="kirpik"/>
+  <block-list:block block-list:abbreviated-name="Kirbit" block-list:name="Kibrit"/>
+  <block-list:block block-list:abbreviated-name="kirbit" block-list:name="kibrit"/>
+  <block-list:block block-list:abbreviated-name="Kitlemek" block-list:name="Kilitlemek"/>
+  <block-list:block block-list:abbreviated-name="kitlemek" block-list:name="kilitlemek"/>
+  <block-list:block block-list:abbreviated-name="Klavuz" block-list:name="Kılavuz"/>
+  <block-list:block block-list:abbreviated-name="klavuz" block-list:name="kılavuz"/>
+  <block-list:block block-list:abbreviated-name="Klüp" block-list:name="Kulüp"/>
+  <block-list:block block-list:abbreviated-name="klüp" block-list:name="kulüp"/>
+  <block-list:block block-list:abbreviated-name="Kokareç" block-list:name="Kokoreç"/>
+  <block-list:block block-list:abbreviated-name="kokareç" block-list:name="kokoreç"/>
+  <block-list:block block-list:abbreviated-name="Kokreç" block-list:name="Kokoreç"/>
+  <block-list:block block-list:abbreviated-name="kokreç" block-list:name="kokoreç"/>
+  <block-list:block block-list:abbreviated-name="Kolanya" block-list:name="Kolonya"/>
+  <block-list:block block-list:abbreviated-name="kolanya" block-list:name="kolonya"/>
+  <block-list:block block-list:abbreviated-name="Kollej" block-list:name="Kolej"/>
+  <block-list:block block-list:abbreviated-name="kollej" block-list:name="kolej"/>
+  <block-list:block block-list:abbreviated-name="Kolleksiyon" block-list:name="Koleksiyon"/>
+  <block-list:block block-list:abbreviated-name="kolleksiyon" block-list:name="koleksiyon"/>
+  <block-list:block block-list:abbreviated-name="Kollektif" block-list:name="Kolektif"/>
+  <block-list:block block-list:abbreviated-name="kollektif" block-list:name="kolektif"/>
+  <block-list:block block-list:abbreviated-name="Komidin" block-list:name="Komodin"/>
+  <block-list:block block-list:abbreviated-name="komidin" block-list:name="komodin"/>
+  <block-list:block block-list:abbreviated-name="Kominist" block-list:name="Komünist"/>
+  <block-list:block block-list:abbreviated-name="kominist" block-list:name="komünist"/>
+  <block-list:block block-list:abbreviated-name="Komünükasyon" block-list:name="Komünikasyon"/>
+  <block-list:block block-list:abbreviated-name="komünükasyon" block-list:name="komünikasyon"/>
+  <block-list:block block-list:abbreviated-name="Konsansüs" block-list:name="Konsensüs"/>
+  <block-list:block block-list:abbreviated-name="konsansüs" block-list:name="konsensüs"/>
+  <block-list:block block-list:abbreviated-name="Kontür" block-list:name="Kontör"/>
+  <block-list:block block-list:abbreviated-name="kontür" block-list:name="kontör"/>
+  <block-list:block block-list:abbreviated-name="Kopye" block-list:name="Kopya"/>
+  <block-list:block block-list:abbreviated-name="kopye" block-list:name="kopya"/>
+  <block-list:block block-list:abbreviated-name="Kordale" block-list:name="Kurdele"/>
+  <block-list:block block-list:abbreviated-name="kordale" block-list:name="kurdele"/>
+  <block-list:block block-list:abbreviated-name="Kurdale" block-list:name="Kurdele"/>
+  <block-list:block block-list:abbreviated-name="kurdale" block-list:name="kurdele"/>
+  <block-list:block block-list:abbreviated-name="Kurdela" block-list:name="Kurdele"/>
+  <block-list:block block-list:abbreviated-name="kurdela" block-list:name="kurdele"/>
+  <block-list:block block-list:abbreviated-name="Küpür" block-list:name="Kupür"/>
+  <block-list:block block-list:abbreviated-name="küpür" block-list:name="kupür"/>
+  <block-list:block block-list:abbreviated-name="Küvöz" block-list:name="Kuvöz"/>
+  <block-list:block block-list:abbreviated-name="küvöz" block-list:name="kuvöz"/>
+  <block-list:block block-list:abbreviated-name="Labaratuar" block-list:name="Laboratuvar"/>
+  <block-list:block block-list:abbreviated-name="labaratuar" block-list:name="laboratuvar"/>
+  <block-list:block block-list:abbreviated-name="Labaratuvar" block-list:name="Laboratuvar"/>
+  <block-list:block block-list:abbreviated-name="labaratuvar" block-list:name="laboratuvar"/>
+  <block-list:block block-list:abbreviated-name="Laboratuar" block-list:name="Laboratuvar"/>
+  <block-list:block block-list:abbreviated-name="laboratuar" block-list:name="laboratuvar"/>
+  <block-list:block block-list:abbreviated-name="Lağbo" block-list:name="Lavabo"/>
+  <block-list:block block-list:abbreviated-name="lağbo" block-list:name="lavabo"/>
+  <block-list:block block-list:abbreviated-name="Lavobo" block-list:name="Lavabo"/>
+  <block-list:block block-list:abbreviated-name="lavobo" block-list:name="lavabo"/>
+  <block-list:block block-list:abbreviated-name="Layik" block-list:name="Laik"/>
+  <block-list:block block-list:abbreviated-name="layik" block-list:name="laik"/>
+  <block-list:block block-list:abbreviated-name="Laylon" block-list:name="Naylon"/>
+  <block-list:block block-list:abbreviated-name="laylon" block-list:name="naylon"/>
+  <block-list:block block-list:abbreviated-name="Loğusa" block-list:name="Lohusa"/>
+  <block-list:block block-list:abbreviated-name="loğusa" block-list:name="lohusa"/>
+  <block-list:block block-list:abbreviated-name="Mahçup" block-list:name="Mahcup"/>
+  <block-list:block block-list:abbreviated-name="mahçup" block-list:name="mahcup"/>
+  <block-list:block block-list:abbreviated-name="Mahfolmak" block-list:name="Mahvolmak"/>
+  <block-list:block block-list:abbreviated-name="mahfolmak" block-list:name="mahvolmak"/>
+  <block-list:block block-list:abbreviated-name="Mahsuz" block-list:name="Mahsus"/>
+  <block-list:block block-list:abbreviated-name="mahsuz" block-list:name="mahsus"/>
+  <block-list:block block-list:abbreviated-name="Makina" block-list:name="Makine"/>
+  <block-list:block block-list:abbreviated-name="makina" block-list:name="makine"/>
+  <block-list:block block-list:abbreviated-name="Makosen" block-list:name="Mokasen"/>
+  <block-list:block block-list:abbreviated-name="makosen" block-list:name="mokasen"/>
+  <block-list:block block-list:abbreviated-name="Maktül" block-list:name="Maktul"/>
+  <block-list:block block-list:abbreviated-name="maktül" block-list:name="maktul"/>
+  <block-list:block block-list:abbreviated-name="Malesef" block-list:name="Maalesef"/>
+  <block-list:block block-list:abbreviated-name="malesef" block-list:name="maalesef"/>
+  <block-list:block block-list:abbreviated-name="Manüpülasyon" block-list:name="Manipülasyon"/>
+  <block-list:block block-list:abbreviated-name="manüpülasyon" block-list:name="manipülasyon"/>
+  <block-list:block block-list:abbreviated-name="Masus" block-list:name="Mahsus"/>
+  <block-list:block block-list:abbreviated-name="masus" block-list:name="mahsus"/>
+  <block-list:block block-list:abbreviated-name="Matamatik" block-list:name="Matematik"/>
+  <block-list:block block-list:abbreviated-name="matamatik" block-list:name="matematik"/>
+  <block-list:block block-list:abbreviated-name="Mataryal" block-list:name="Materyal"/>
+  <block-list:block block-list:abbreviated-name="mataryal" block-list:name="materyal"/>
+  <block-list:block block-list:abbreviated-name="Matba" block-list:name="Matbaa"/>
+  <block-list:block block-list:abbreviated-name="matba" block-list:name="matbaa"/>
+  <block-list:block block-list:abbreviated-name="Maydonoz" block-list:name="Maydanoz"/>
+  <block-list:block block-list:abbreviated-name="maydonoz" block-list:name="maydanoz"/>
+  <block-list:block block-list:abbreviated-name="Maystro" block-list:name="Maestro"/>
+  <block-list:block block-list:abbreviated-name="maystro" block-list:name="maestro"/>
+  <block-list:block block-list:abbreviated-name="Mazallah" block-list:name="Maazallah"/>
+  <block-list:block block-list:abbreviated-name="mazallah" block-list:name="maazallah"/>
+  <block-list:block block-list:abbreviated-name="Mefta" block-list:name="Mevta"/>
+  <block-list:block block-list:abbreviated-name="mefta" block-list:name="mevta"/>
+  <block-list:block block-list:abbreviated-name="Megolaman" block-list:name="Megaloman"/>
+  <block-list:block block-list:abbreviated-name="megolaman" block-list:name="megaloman"/>
+  <block-list:block block-list:abbreviated-name="Megoloman" block-list:name="Megaloman"/>
+  <block-list:block block-list:abbreviated-name="megoloman" block-list:name="megaloman"/>
+  <block-list:block block-list:abbreviated-name="Melemen" block-list:name="Menemen"/>
+  <block-list:block block-list:abbreviated-name="melemen" block-list:name="menemen"/>
+  <block-list:block block-list:abbreviated-name="Melhem" block-list:name="Merhem"/>
+  <block-list:block block-list:abbreviated-name="melhem" block-list:name="merhem"/>
+  <block-list:block block-list:abbreviated-name="Menapoz" block-list:name="Menopoz"/>
+  <block-list:block block-list:abbreviated-name="menapoz" block-list:name="menopoz"/>
+  <block-list:block block-list:abbreviated-name="Menecer" block-list:name="Menajer"/>
+  <block-list:block block-list:abbreviated-name="menecer" block-list:name="menajer"/>
+  <block-list:block block-list:abbreviated-name="Menejer" block-list:name="Menajer"/>
+  <block-list:block block-list:abbreviated-name="menejer" block-list:name="menajer"/>
+  <block-list:block block-list:abbreviated-name="Mentalite" block-list:name="Mantalite"/>
+  <block-list:block block-list:abbreviated-name="mentalite" block-list:name="mantalite"/>
+  <block-list:block block-list:abbreviated-name="Menisküs" block-list:name="Menüsküs"/>
+  <block-list:block block-list:abbreviated-name="menisküs" block-list:name="menüsküs"/>
+  <block-list:block block-list:abbreviated-name="Meyva" block-list:name="Meyve"/>
+  <block-list:block block-list:abbreviated-name="meyva" block-list:name="meyve"/>
+  <block-list:block block-list:abbreviated-name="Miğde" block-list:name="Mide"/>
+  <block-list:block block-list:abbreviated-name="miğde" block-list:name="mide"/>
+  <block-list:block block-list:abbreviated-name="Minisküs" block-list:name="Menüsküs"/>
+  <block-list:block block-list:abbreviated-name="minisküs" block-list:name="menüsküs"/>
+  <block-list:block block-list:abbreviated-name="Mokasen" block-list:name="Makosen"/>
+  <block-list:block block-list:abbreviated-name="mokasen" block-list:name="makosen"/>
+  <block-list:block block-list:abbreviated-name="Motorsiklet" block-list:name="Motosiklet"/>
+  <block-list:block block-list:abbreviated-name="motorsiklet" block-list:name="motosiklet"/>
+  <block-list:block block-list:abbreviated-name="Mozayik" block-list:name="Mozaik"/>
+  <block-list:block block-list:abbreviated-name="mozayik" block-list:name="mozaik"/>
+  <block-list:block block-list:abbreviated-name="Mönü" block-list:name="Menü"/>
+  <block-list:block block-list:abbreviated-name="mönü" block-list:name="menü"/>
+  <block-list:block block-list:abbreviated-name="Muacir" block-list:name="Muhacir"/>
+  <block-list:block block-list:abbreviated-name="muacir" block-list:name="muhacir"/>
+  <block-list:block block-list:abbreviated-name="Muaffak" block-list:name="Muvaffak"/>
+  <block-list:block block-list:abbreviated-name="muaffak" block-list:name="muvaffak"/>
+  <block-list:block block-list:abbreviated-name="Muhattap" block-list:name="Muhatap"/>
+  <block-list:block block-list:abbreviated-name="muhattap" block-list:name="muhatap"/>
+  <block-list:block block-list:abbreviated-name="Mundar" block-list:name="Murdar"/>
+  <block-list:block block-list:abbreviated-name="mundar" block-list:name="murdar"/>
+  <block-list:block block-list:abbreviated-name="Mustarip" block-list:name="Muzdarip"/>
+  <block-list:block block-list:abbreviated-name="mustarip" block-list:name="muzdarip"/>
+  <block-list:block block-list:abbreviated-name="Muşanba" block-list:name="Muşamba"/>
+  <block-list:block block-list:abbreviated-name="muşanba" block-list:name="muşamba"/>
+  <block-list:block block-list:abbreviated-name="Muzur" block-list:name="Muzır"/>
+  <block-list:block block-list:abbreviated-name="muzur" block-list:name="muzır"/>
+  <block-list:block block-list:abbreviated-name="Münübüs" block-list:name="Minibüs"/>
+  <block-list:block block-list:abbreviated-name="münübüs" block-list:name="minibüs"/>
+  <block-list:block block-list:abbreviated-name="Müracat" block-list:name="Müracaat"/>
+  <block-list:block block-list:abbreviated-name="müracat" block-list:name="müracaat"/>
+  <block-list:block block-list:abbreviated-name="Mürivet" block-list:name="Mürüvvet"/>
+  <block-list:block block-list:abbreviated-name="mürivet" block-list:name="mürüvvet"/>
+  <block-list:block block-list:abbreviated-name="Mürüvet" block-list:name="Mürüvvet"/>
+  <block-list:block block-list:abbreviated-name="mürüvet" block-list:name="mürüvvet"/>
+  <block-list:block block-list:abbreviated-name="Müsade" block-list:name="Müsaade"/>
+  <block-list:block block-list:abbreviated-name="müsade" block-list:name="müsaade"/>
+  <block-list:block block-list:abbreviated-name="Müsayit" block-list:name="Müsait"/>
+  <block-list:block block-list:abbreviated-name="müsayit" block-list:name="müsait"/>
+  <block-list:block block-list:abbreviated-name="Müsbet" block-list:name="Müspet"/>
+  <block-list:block block-list:abbreviated-name="müsbet" block-list:name="müspet"/>
+  <block-list:block block-list:abbreviated-name="Müsvette" block-list:name="Müsvedde"/>
+  <block-list:block block-list:abbreviated-name="müsvette" block-list:name="müsvedde"/>
+  <block-list:block block-list:abbreviated-name="Mütaakip" block-list:name="Müteakip"/>
+  <block-list:block block-list:abbreviated-name="mütaakip" block-list:name="müteakip"/>
+  <block-list:block block-list:abbreviated-name="Mütahit" block-list:name="Müteahhit"/>
+  <block-list:block block-list:abbreviated-name="mütahit" block-list:name="müteahhit"/>
+  <block-list:block block-list:abbreviated-name="Nalet" block-list:name="Lanet"/>
+  <block-list:block block-list:abbreviated-name="nalet" block-list:name="lanet"/>
+  <block-list:block block-list:abbreviated-name="Naturel" block-list:name="Natürel"/>
+  <block-list:block block-list:abbreviated-name="naturel" block-list:name="natürel"/>
+  <block-list:block block-list:abbreviated-name="Nergiz" block-list:name="Nergis"/>
+  <block-list:block block-list:abbreviated-name="nergiz" block-list:name="nergis"/>
+  <block-list:block block-list:abbreviated-name="Nisbet" block-list:name="Nispet"/>
+  <block-list:block block-list:abbreviated-name="nisbet" block-list:name="nispet"/>
+  <block-list:block block-list:abbreviated-name="Nötür" block-list:name="Nötr"/>
+  <block-list:block block-list:abbreviated-name="nötür" block-list:name="nötr"/>
+  <block-list:block block-list:abbreviated-name="Oce" block-list:name="Oje"/>
+  <block-list:block block-list:abbreviated-name="oce" block-list:name="oje"/>
+  <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
+  <block-list:block block-list:abbreviated-name="Okşizen" block-list:name="Oksijen"/>
+  <block-list:block block-list:abbreviated-name="okşizen" block-list:name="oksijen"/>
+  <block-list:block block-list:abbreviated-name="Oparasyon" block-list:name="Operasyon"/>
+  <block-list:block block-list:abbreviated-name="oparasyon" block-list:name="operasyon"/>
+  <block-list:block block-list:abbreviated-name="Opsayt" block-list:name="Ofsayt"/>
+  <block-list:block block-list:abbreviated-name="opsayt" block-list:name="ofsayt"/>
+  <block-list:block block-list:abbreviated-name="Oğmak" block-list:name="Ovmak"/>
+  <block-list:block block-list:abbreviated-name="oğmak" block-list:name="ovmak"/>
+  <block-list:block block-list:abbreviated-name="Opörler" block-list:name="Hoparlör"/>
+  <block-list:block block-list:abbreviated-name="opörler" block-list:name="hoparlör"/>
+  <block-list:block block-list:abbreviated-name="Orjinal" block-list:name="Orijinal"/>
+  <block-list:block block-list:abbreviated-name="orjinal" block-list:name="orijinal"/>
+  <block-list:block block-list:abbreviated-name="Öğe" block-list:name="Öge"/>
+  <block-list:block block-list:abbreviated-name="öğe" block-list:name="öge"/>
+  <block-list:block block-list:abbreviated-name="Ön görmek" block-list:name="Öngörmek"/>
+  <block-list:block block-list:abbreviated-name="ön görmek" block-list:name="öngörmek"/>
+  <block-list:block block-list:abbreviated-name="Ötenazi" block-list:name="Ötanazi"/>
+  <block-list:block block-list:abbreviated-name="ötenazi" block-list:name="ötanazi"/>
+  <block-list:block block-list:abbreviated-name="Palyanço" block-list:name="Palyaço"/>
+  <block-list:block block-list:abbreviated-name="palyanço" block-list:name="palyaço"/>
+  <block-list:block block-list:abbreviated-name="Palyoça" block-list:name="Palyaço"/>
+  <block-list:block block-list:abbreviated-name="palyoça" block-list:name="palyaço"/>
+  <block-list:block block-list:abbreviated-name="Pantalon" block-list:name="Pantolon"/>
+  <block-list:block block-list:abbreviated-name="pantalon" block-list:name="pantolon"/>
+  <block-list:block block-list:abbreviated-name="Parağraf" block-list:name="Paragraf"/>
+  <block-list:block block-list:abbreviated-name="parağraf" block-list:name="paragraf"/>
+  <block-list:block block-list:abbreviated-name="Pardesü" block-list:name="Pardösü"/>
+  <block-list:block block-list:abbreviated-name="pardesü" block-list:name="pardösü"/>
+  <block-list:block block-list:abbreviated-name="Parelel" block-list:name="Paralel"/>
+  <block-list:block block-list:abbreviated-name="parelel" block-list:name="paralel"/>
+  <block-list:block block-list:abbreviated-name="Parende" block-list:name="Perende"/>
+  <block-list:block block-list:abbreviated-name="parende" block-list:name="perende"/>
+  <block-list:block block-list:abbreviated-name="Parlementer" block-list:name="Parlamenter"/>
+  <block-list:block block-list:abbreviated-name="parlementer" block-list:name="parlamenter"/>
+  <block-list:block block-list:abbreviated-name="Parlemento" block-list:name="Parlamento"/>
+  <block-list:block block-list:abbreviated-name="parlemento" block-list:name="parlamento"/>
+  <block-list:block block-list:abbreviated-name="Payton" block-list:name="Fayton"/>
+  <block-list:block block-list:abbreviated-name="payton" block-list:name="fayton"/>
+  <block-list:block block-list:abbreviated-name="Penbe" block-list:name="Pembe"/>
+  <block-list:block block-list:abbreviated-name="penbe" block-list:name="pembe"/>
+  <block-list:block block-list:abbreviated-name="Pehriz" block-list:name="Perhiz"/>
+  <block-list:block block-list:abbreviated-name="pehriz" block-list:name="perhiz"/>
+  <block-list:block block-list:abbreviated-name="Pekçok" block-list:name="Pek çok"/>
+  <block-list:block block-list:abbreviated-name="pekçok" block-list:name="pek çok"/>
+  <block-list:block block-list:abbreviated-name="Peştemal" block-list:name="Peştamal"/>
+  <block-list:block block-list:abbreviated-name="peştemal" block-list:name="peştamal"/>
+  <block-list:block block-list:abbreviated-name="Pisiklet" block-list:name="Bisiklet"/>
+  <block-list:block block-list:abbreviated-name="pisiklet" block-list:name="bisiklet"/>
+  <block-list:block block-list:abbreviated-name="Poaça" block-list:name="Poğaça"/>
+  <block-list:block block-list:abbreviated-name="poaça" block-list:name="poğaça"/>
+  <block-list:block block-list:abbreviated-name="Proğram" block-list:name="Program"/>
+  <block-list:block block-list:abbreviated-name="proğram" block-list:name="program"/>
+  <block-list:block block-list:abbreviated-name="Proleterya" block-list:name="Proletarya"/>
+  <block-list:block block-list:abbreviated-name="proleterya" block-list:name="proletarya"/>
+  <block-list:block block-list:abbreviated-name="Promasyon" block-list:name="Promosyon"/>
+  <block-list:block block-list:abbreviated-name="promasyon" block-list:name="promosyon"/>
+  <block-list:block block-list:abbreviated-name="Prooram" block-list:name="Program"/>
+  <block-list:block block-list:abbreviated-name="prooram" block-list:name="program"/>
+  <block-list:block block-list:abbreviated-name="Provakatör" block-list:name="Provokatör"/>
+  <block-list:block block-list:abbreviated-name="provakatör" block-list:name="provokatör"/>
+  <block-list:block block-list:abbreviated-name="Psikiyatrist" block-list:name="Psikiyatr"/>
+  <block-list:block block-list:abbreviated-name="psikiyatrist" block-list:name="psikiyatr"/>
+  <block-list:block block-list:abbreviated-name="Radyosyon" block-list:name="Radyasyon"/>
+  <block-list:block block-list:abbreviated-name="radyosyon" block-list:name="radyasyon"/>
+  <block-list:block block-list:abbreviated-name="Rakkam" block-list:name="Rakam"/>
+  <block-list:block block-list:abbreviated-name="rakkam" block-list:name="rakam"/>
+  <block-list:block block-list:abbreviated-name="Raslantı" block-list:name="Rastlantı"/>
+  <block-list:block block-list:abbreviated-name="raslantı" block-list:name="rastlantı"/>
+  <block-list:block block-list:abbreviated-name="Rasgele" block-list:name="Rastgele"/>
+  <block-list:block block-list:abbreviated-name="rasgele" block-list:name="rastgele"/>
+  <block-list:block block-list:abbreviated-name="Restorant" block-list:name="Restoran"/>
+  <block-list:block block-list:abbreviated-name="restorant" block-list:name="restoran"/>
+  <block-list:block block-list:abbreviated-name="Revanş" block-list:name="Rövanş"/>
+  <block-list:block block-list:abbreviated-name="revanş" block-list:name="rövanş"/>
+  <block-list:block block-list:abbreviated-name="Rezarvasyon" block-list:name="Rezervasyon"/>
+  <block-list:block block-list:abbreviated-name="rezarvasyon" block-list:name="rezervasyon"/>
+  <block-list:block block-list:abbreviated-name="Riks" block-list:name="Risk"/>
+  <block-list:block block-list:abbreviated-name="riks" block-list:name="risk"/>
+  <block-list:block block-list:abbreviated-name="Roma rakamları" block-list:name="Romen rakamları"/>
+  <block-list:block block-list:abbreviated-name="roma rakamları" block-list:name="Romen rakamları"/>
+  <block-list:block block-list:abbreviated-name="Ropörtaj" block-list:name="Röportaj"/>
+  <block-list:block block-list:abbreviated-name="ropörtaj" block-list:name="röportaj"/>
+  <block-list:block block-list:abbreviated-name="Sağnak" block-list:name="Sağanak"/>
+  <block-list:block block-list:abbreviated-name="sağnak" block-list:name="sağanak"/>
+  <block-list:block block-list:abbreviated-name="Sandoviç" block-list:name="Sandviç"/>
+  <block-list:block block-list:abbreviated-name="sandoviç" block-list:name="sandviç"/>
+  <block-list:block block-list:abbreviated-name="Sandöviç" block-list:name="Sandviç"/>
+  <block-list:block block-list:abbreviated-name="sandöviç" block-list:name="sandviç"/>
+  <block-list:block block-list:abbreviated-name="Sandüviç" block-list:name="Sandviç"/>
+  <block-list:block block-list:abbreviated-name="sandüviç" block-list:name="sandviç"/>
+  <block-list:block block-list:abbreviated-name="Sarmısak" block-list:name="Sarımsak"/>
+  <block-list:block block-list:abbreviated-name="sarmısak" block-list:name="sarımsak"/>
+  <block-list:block block-list:abbreviated-name="Satlık" block-list:name="Satılık"/>
+  <block-list:block block-list:abbreviated-name="satlık" block-list:name="satılık"/>
+  <block-list:block block-list:abbreviated-name="Selilöz" block-list:name="Selüloz"/>
+  <block-list:block block-list:abbreviated-name="selilöz" block-list:name="selüloz"/>
+  <block-list:block block-list:abbreviated-name="Sellektör" block-list:name="Selektör"/>
+  <block-list:block block-list:abbreviated-name="sellektör" block-list:name="selektör"/>
+  <block-list:block block-list:abbreviated-name="Seramoni" block-list:name="Seremoni"/>
+  <block-list:block block-list:abbreviated-name="seramoni" block-list:name="seremoni"/>
+  <block-list:block block-list:abbreviated-name="Serbes" block-list:name="Serbest"/>
+  <block-list:block block-list:abbreviated-name="serbes" block-list:name="serbest"/>
+  <block-list:block block-list:abbreviated-name="Seyehat" block-list:name="Seyahat"/>
+  <block-list:block block-list:abbreviated-name="seyehat" block-list:name="seyahat"/>
+  <block-list:block block-list:abbreviated-name="Sezeryan" block-list:name="Sezaryen"/>
+  <block-list:block block-list:abbreviated-name="sezeryan" block-list:name="sezaryen"/>
+  <block-list:block block-list:abbreviated-name="Sibop" block-list:name="Supap"/>
+  <block-list:block block-list:abbreviated-name="sibop" block-list:name="supap"/>
+  <block-list:block block-list:abbreviated-name="Silahşör" block-list:name="Silahşor"/>
+  <block-list:block block-list:abbreviated-name="silahşör" block-list:name="silahşor"/>
+  <block-list:block block-list:abbreviated-name="Sne" block-list:name="Sen"/>
+  <block-list:block block-list:abbreviated-name="sne" block-list:name="sen"/>
+  <block-list:block block-list:abbreviated-name="Sohpet" block-list:name="Sohbet"/>
+  <block-list:block block-list:abbreviated-name="sohpet" block-list:name="sohbet"/>
+  <block-list:block block-list:abbreviated-name="Subap" block-list:name="Supap"/>
+  <block-list:block block-list:abbreviated-name="subap" block-list:name="supap"/>
+  <block-list:block block-list:abbreviated-name="Supab" block-list:name="Supap"/>
+  <block-list:block block-list:abbreviated-name="supab" block-list:name="supap"/>
+  <block-list:block block-list:abbreviated-name="Su çiçeği" block-list:name="Suçiçeği"/>
+  <block-list:block block-list:abbreviated-name="su çiçeği" block-list:name="suçiçeği"/>
+  <block-list:block block-list:abbreviated-name="Suç üstü" block-list:name="Suçüstü"/>
+  <block-list:block block-list:abbreviated-name="suç üstü" block-list:name="suçüstü"/>
+  <block-list:block block-list:abbreviated-name="Sueter" block-list:name="Süveter"/>
+  <block-list:block block-list:abbreviated-name="sueter" block-list:name="süveter"/>
+  <block-list:block block-list:abbreviated-name="Sudyen" block-list:name="Sütyen"/>
+  <block-list:block block-list:abbreviated-name="sudyen" block-list:name="sütyen"/>
+  <block-list:block block-list:abbreviated-name="Südyen" block-list:name="Sütyen"/>
+  <block-list:block block-list:abbreviated-name="südyen" block-list:name="sütyen"/>
+  <block-list:block block-list:abbreviated-name="Sükûtuhayal" block-list:name="Sukutuhayal"/>
+  <block-list:block block-list:abbreviated-name="sükûtuhayal" block-list:name="sukutuhayal"/>
+  <block-list:block block-list:abbreviated-name="Süpriz" block-list:name="Sürpriz"/>
+  <block-list:block block-list:abbreviated-name="süpriz" block-list:name="sürpriz"/>
+  <block-list:block block-list:abbreviated-name="Süprüz" block-list:name="Sürpriz"/>
+  <block-list:block block-list:abbreviated-name="süprüz" block-list:name="sürpriz"/>
+  <block-list:block block-list:abbreviated-name="Sütüdyo" block-list:name="Stüdyo"/>
+  <block-list:block block-list:abbreviated-name="sütüdyo" block-list:name="stüdyo"/>
+  <block-list:block block-list:abbreviated-name="Şanzuman" block-list:name="Şanzıman"/>
+  <block-list:block block-list:abbreviated-name="şanzuman" block-list:name="şanzıman"/>
+  <block-list:block block-list:abbreviated-name="Şarter" block-list:name="Şalter"/>
+  <block-list:block block-list:abbreviated-name="şarter" block-list:name="şalter"/>
+  <block-list:block block-list:abbreviated-name="Şarz" block-list:name="Şarj"/>
+  <block-list:block block-list:abbreviated-name="şarz" block-list:name="Şarj"/>
+  <block-list:block block-list:abbreviated-name="Şayibe" block-list:name="Şaibe"/>
+  <block-list:block block-list:abbreviated-name="şayibe" block-list:name="şaibe"/>
+  <block-list:block block-list:abbreviated-name="Şemşiye" block-list:name="Şemsiye"/>
+  <block-list:block block-list:abbreviated-name="şemşiye" block-list:name="şemsiye"/>
+  <block-list:block block-list:abbreviated-name="Şevkat" block-list:name="Şefkat"/>
+  <block-list:block block-list:abbreviated-name="şevkat" block-list:name="şefkat"/>
+  <block-list:block block-list:abbreviated-name="Şifai" block-list:name="Şifahi"/>
+  <block-list:block block-list:abbreviated-name="şifai" block-list:name="şifahi"/>
+  <block-list:block block-list:abbreviated-name="Şohben" block-list:name="Şofben"/>
+  <block-list:block block-list:abbreviated-name="şohben" block-list:name="şofben"/>
+  <block-list:block block-list:abbreviated-name="Şok olmak" block-list:name="Şoke olmak"/>
+  <block-list:block block-list:abbreviated-name="şok olmak" block-list:name="şoke olmak"/>
+  <block-list:block block-list:abbreviated-name="Şöför" block-list:name="şoför"/>
+  <block-list:block block-list:abbreviated-name="şöför" block-list:name="şoför"/>
+  <block-list:block block-list:abbreviated-name="Tabiyat" block-list:name="Tabiat"/>
+  <block-list:block block-list:abbreviated-name="tabiyat" block-list:name="tabiat"/>
+  <block-list:block block-list:abbreviated-name="Tahüt" block-list:name="Taahhüt"/>
+  <block-list:block block-list:abbreviated-name="tahüt" block-list:name="taahhüt"/>
+  <block-list:block block-list:abbreviated-name="Taamüden" block-list:name="Taammüden"/>
+  <block-list:block block-list:abbreviated-name="taamüden" block-list:name="taammüden"/>
+  <block-list:block block-list:abbreviated-name="Tafsiye" block-list:name="Tavsiye"/>
+  <block-list:block block-list:abbreviated-name="tafsiye" block-list:name="tavsiye"/>
+  <block-list:block block-list:abbreviated-name="Tahtarevalli" block-list:name="Tahterevalli"/>
+  <block-list:block block-list:abbreviated-name="tahtarevalli" block-list:name="tahterevalli"/>
+  <block-list:block block-list:abbreviated-name="Taktim" block-list:name="Takdim"/>
+  <block-list:block block-list:abbreviated-name="taktim" block-list:name="takdim"/>
+  <block-list:block block-list:abbreviated-name="Tamüden" block-list:name="Taammüden"/>
+  <block-list:block block-list:abbreviated-name="tamüden" block-list:name="taammüden"/>
+  <block-list:block block-list:abbreviated-name="Tanpon" block-list:name="Tampon"/>
+  <block-list:block block-list:abbreviated-name="tanpon" block-list:name="tampon"/>
+  <block-list:block block-list:abbreviated-name="Tastik" block-list:name="Tasdik"/>
+  <block-list:block block-list:abbreviated-name="tastik" block-list:name="tasdik"/>
+  <block-list:block block-list:abbreviated-name="Tasfir" block-list:name="Tasvir"/>
+  <block-list:block block-list:abbreviated-name="tasfir" block-list:name="tasvir"/>
+  <block-list:block block-list:abbreviated-name="Tasviye" block-list:name="Tasfiye"/>
+  <block-list:block block-list:abbreviated-name="tasviye" block-list:name="tasfiye"/>
+  <block-list:block block-list:abbreviated-name="Taşaron" block-list:name="Taşeron"/>
+  <block-list:block block-list:abbreviated-name="taşaron" block-list:name="taşeron"/>
+  <block-list:block block-list:abbreviated-name="Teferuat" block-list:name="Teferruat"/>
+  <block-list:block block-list:abbreviated-name="teferuat" block-list:name="teferruat"/>
+  <block-list:block block-list:abbreviated-name="Tekneloji" block-list:name="Teknoloji"/>
+  <block-list:block block-list:abbreviated-name="tekneloji" block-list:name="teknoloji"/>
+  <block-list:block block-list:abbreviated-name="Temize gitmek" block-list:name="Temyize gitmek"/>
+  <block-list:block block-list:abbreviated-name="temize gitmek" block-list:name="temyize gitmek"/>
+  <block-list:block block-list:abbreviated-name="Tenbel" block-list:name="Tembel"/>
+  <block-list:block block-list:abbreviated-name="tenbel" block-list:name="tembel"/>
+  <block-list:block block-list:abbreviated-name="Tenbih" block-list:name="Tembih"/>
+  <block-list:block block-list:abbreviated-name="tenbih" block-list:name="tembih"/>
+  <block-list:block block-list:abbreviated-name="Tenefüs" block-list:name="Teneffüs"/>
+  <block-list:block block-list:abbreviated-name="tenefüs" block-list:name="teneffüs"/>
+  <block-list:block block-list:abbreviated-name="Teravi" block-list:name="Teravih"/>
+  <block-list:block block-list:abbreviated-name="teravi" block-list:name="teravih"/>
+  <block-list:block block-list:abbreviated-name="Terevi" block-list:name="Teravih"/>
+  <block-list:block block-list:abbreviated-name="terevi" block-list:name="teravih"/>
+  <block-list:block block-list:abbreviated-name="Tesbih" block-list:name="Tespih"/>
+  <block-list:block block-list:abbreviated-name="tesbih" block-list:name="tespih"/>
+  <block-list:block block-list:abbreviated-name="Tesbit" block-list:name="Tespit"/>
+  <block-list:block block-list:abbreviated-name="tesbit" block-list:name="tespit"/>
+  <block-list:block block-list:abbreviated-name="Teşfik" block-list:name="Teşvik"/>
+  <block-list:block block-list:abbreviated-name="teşfik" block-list:name="teşvik"/>
+  <block-list:block block-list:abbreviated-name="Tetanoz" block-list:name="Tetanos"/>
+  <block-list:block block-list:abbreviated-name="tetanoz" block-list:name="tetanos"/>
+  <block-list:block block-list:abbreviated-name="Tirbüşon" block-list:name="Tirbuşon"/>
+  <block-list:block block-list:abbreviated-name="tirbüşon" block-list:name="tirbuşon"/>
+  <block-list:block block-list:abbreviated-name="Tiskinmek" block-list:name="Tiksinmek"/>
+  <block-list:block block-list:abbreviated-name="tiskinmek" block-list:name="tiksinmek"/>
+  <block-list:block block-list:abbreviated-name="Tiyo" block-list:name="Tüyo"/>
+  <block-list:block block-list:abbreviated-name="tiyo" block-list:name="tüyo"/>
+  <block-list:block block-list:abbreviated-name="Tolorans" block-list:name="Tolerans"/>
+  <block-list:block block-list:abbreviated-name="tolorans" block-list:name="tolerans"/>
+  <block-list:block block-list:abbreviated-name="Traş" block-list:name="Tıraş"/>
+  <block-list:block block-list:abbreviated-name="traş" block-list:name="tıraş"/>
+  <block-list:block block-list:abbreviated-name="Tribuşon" block-list:name="Tirbuşon"/>
+  <block-list:block block-list:abbreviated-name="tribuşon" block-list:name="tirbuşon"/>
+  <block-list:block block-list:abbreviated-name="Turizim" block-list:name="Turizm"/>
+  <block-list:block block-list:abbreviated-name="turizim" block-list:name="turizm"/>
+  <block-list:block block-list:abbreviated-name="Türübün" block-list:name="Tribün"/>
+  <block-list:block block-list:abbreviated-name="türübün" block-list:name="tribün"/>
+  <block-list:block block-list:abbreviated-name="Ukte" block-list:name="Ukde"/>
+  <block-list:block block-list:abbreviated-name="ukte" block-list:name="ukde"/>
+  <block-list:block block-list:abbreviated-name="Ultrasyon" block-list:name="Ultrason"/>
+  <block-list:block block-list:abbreviated-name="ultrasyon" block-list:name="ultrason"/>
+  <block-list:block block-list:abbreviated-name="Ultümaton" block-list:name="Ültimatom"/>
+  <block-list:block block-list:abbreviated-name="ultümaton" block-list:name="ültimatom"/>
+  <block-list:block block-list:abbreviated-name="Uluslar arası" block-list:name="Uluslararası"/>
+  <block-list:block block-list:abbreviated-name="uluslar arası" block-list:name="uluslararası"/>
+  <block-list:block block-list:abbreviated-name="Usûl" block-list:name="Usul"/>
+  <block-list:block block-list:abbreviated-name="usûl" block-list:name="usul"/>
+  <block-list:block block-list:abbreviated-name="Utopya" block-list:name="Ütopya"/>
+  <block-list:block block-list:abbreviated-name="utopya" block-list:name="ütopya"/>
+  <block-list:block block-list:abbreviated-name="Ünüforma" block-list:name="Üniforma"/>
+  <block-list:block block-list:abbreviated-name="ünüforma" block-list:name="üniforma"/>
+  <block-list:block block-list:abbreviated-name="Ünvan" block-list:name="unvan"/>
+  <block-list:block block-list:abbreviated-name="ünvan" block-list:name="unvan"/>
+  <block-list:block block-list:abbreviated-name="Üvertür" block-list:name="Uvertür"/>
+  <block-list:block block-list:abbreviated-name="üvertür" block-list:name="uvertür"/>
+  <block-list:block block-list:abbreviated-name="Uyuya kal" block-list:name="Uyuyakal"/>
+  <block-list:block block-list:abbreviated-name="uyuya kal" block-list:name="uyuyakal"/>
+  <block-list:block block-list:abbreviated-name="Valeybol" block-list:name="Voleybol"/>
+  <block-list:block block-list:abbreviated-name="valeybol" block-list:name="voleybol"/>
+  <block-list:block block-list:abbreviated-name="Vaz geçmek" block-list:name="Vazgeçmek"/>
+  <block-list:block block-list:abbreviated-name="vaz geçmek" block-list:name="vazgeçmek"/>
+  <block-list:block block-list:abbreviated-name="Vaz geç" block-list:name="Vazgeç"/>
+  <block-list:block block-list:abbreviated-name="vaz geç" block-list:name="vazgeç"/>
+  <block-list:block block-list:abbreviated-name="Ve ya" block-list:name="Veya"/>
+  <block-list:block block-list:abbreviated-name="ve ya" block-list:name="veya"/>
+  <block-list:block block-list:abbreviated-name="Vehamet" block-list:name="Vahamet"/>
+  <block-list:block block-list:abbreviated-name="vehamet" block-list:name="vahamet"/>
+  <block-list:block block-list:abbreviated-name="Vejeteryan" block-list:name="Vejetaryen"/>
+  <block-list:block block-list:abbreviated-name="vejeteryan" block-list:name="vejetaryen"/>
+  <block-list:block block-list:abbreviated-name="Veleybol" block-list:name="Voleybol"/>
+  <block-list:block block-list:abbreviated-name="veleybol" block-list:name="voleybol"/>
+  <block-list:block block-list:abbreviated-name="Vurdum duymaz" block-list:name="Vurdumduymaz"/>
+  <block-list:block block-list:abbreviated-name="vurdum duymaz" block-list:name="vurdumduymaz"/>
+  <block-list:block block-list:abbreviated-name="Vürüs" block-list:name="Virüs"/>
+  <block-list:block block-list:abbreviated-name="vürüs" block-list:name="virüs"/>
+  <block-list:block block-list:abbreviated-name="Yada" block-list:name="Ya da"/>
+  <block-list:block block-list:abbreviated-name="yada" block-list:name="ya da"/>
+  <block-list:block block-list:abbreviated-name="Yalnış" block-list:name="Yanlış"/>
+  <block-list:block block-list:abbreviated-name="yalnış" block-list:name="yanlış"/>
+  <block-list:block block-list:abbreviated-name="Yanısıra" block-list:name="Yanı sıra"/>
+  <block-list:block block-list:abbreviated-name="yanısıra" block-list:name="yanı sıra"/>
+  <block-list:block block-list:abbreviated-name="Yanlız" block-list:name="Yalnız"/>
+  <block-list:block block-list:abbreviated-name="yanlız" block-list:name="yalnız"/>
+  <block-list:block block-list:abbreviated-name="Yayınlamak" block-list:name="Yayımlamak"/>
+  <block-list:block block-list:abbreviated-name="yayınlamak" block-list:name="yayımlamak"/>
+  <block-list:block block-list:abbreviated-name="Yeldeğirmeni" block-list:name="Yel değirmeni"/>
+  <block-list:block block-list:abbreviated-name="yeldeğirmeni" block-list:name="yel değirmeni"/>
+  <block-list:block block-list:abbreviated-name="Yeraltı" block-list:name="Yer altı"/>
+  <block-list:block block-list:abbreviated-name="yeraltı" block-list:name="yer altı"/>
+  <block-list:block block-list:abbreviated-name="Yımırta" block-list:name="Yumurta"/>
+  <block-list:block block-list:abbreviated-name="yımırta" block-list:name="yumurta"/>
+  <block-list:block block-list:abbreviated-name="Yövmiye" block-list:name="Yevmiye"/>
+  <block-list:block block-list:abbreviated-name="yövmiye" block-list:name="yevmiye"/>
+  <block-list:block block-list:abbreviated-name="Zatüre" block-list:name="Zatürre"/>
+  <block-list:block block-list:abbreviated-name="zatüre" block-list:name="zatürre"/>
+  <block-list:block block-list:abbreviated-name="Zenaat" block-list:name="Zanaat"/>
+  <block-list:block block-list:abbreviated-name="zenaat" block-list:name="zanaat"/>
+  <block-list:block block-list:abbreviated-name="Zerafet" block-list:name="Zarafet"/>
+  <block-list:block block-list:abbreviated-name="zerafet" block-list:name="zarafet"/>
+  <block-list:block block-list:abbreviated-name="Zınba" block-list:name="Zımba"/>
+  <block-list:block block-list:abbreviated-name="zınba" block-list:name="zımba"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":balık:" block-list:name="🐟"/>
+  <block-list:block block-list:abbreviated-name=":koç:" block-list:name="🐏"/>
+  <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
+  <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
+  <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
+  <block-list:block block-list:abbreviated-name=":10 s:" block-list:name="🕙"/>
+  <block-list:block block-list:abbreviated-name=":11 s:" block-list:name="🕚"/>
+  <block-list:block block-list:abbreviated-name=":1/2:" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name=":12 s:" block-list:name="🕛"/>
+  <block-list:block block-list:abbreviated-name=":1/3:" block-list:name="⅓"/>
+  <block-list:block block-list:abbreviated-name=":1/4:" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name=":1/8:" block-list:name="⅛"/>
+  <block-list:block block-list:abbreviated-name=":^1:" block-list:name="¹"/>
+  <block-list:block block-list:abbreviated-name=":_1:" block-list:name="₁"/>
+  <block-list:block block-list:abbreviated-name=":1 s:" block-list:name="🕐"/>
+  <block-list:block block-list:abbreviated-name=":2/3:" block-list:name="⅔"/>
+  <block-list:block block-list:abbreviated-name=":!2:" block-list:name="❗"/>
+  <block-list:block block-list:abbreviated-name=":?2:" block-list:name="❔"/>
+  <block-list:block block-list:abbreviated-name=":^2:" block-list:name="²"/>
+  <block-list:block block-list:abbreviated-name=":_2:" block-list:name="₂"/>
+  <block-list:block block-list:abbreviated-name=":2 s:" block-list:name="🕑"/>
+  <block-list:block block-list:abbreviated-name=":3/4:" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":3/8:" block-list:name="⅜"/>
+  <block-list:block block-list:abbreviated-name=":^3:" block-list:name="³"/>
+  <block-list:block block-list:abbreviated-name=":_3:" block-list:name="₃"/>
+  <block-list:block block-list:abbreviated-name=":3 s:" block-list:name="🕒"/>
+  <block-list:block block-list:abbreviated-name=":^4:" block-list:name="⁴"/>
+  <block-list:block block-list:abbreviated-name=":_4:" block-list:name="₄"/>
+  <block-list:block block-list:abbreviated-name=":4 s:" block-list:name="🕓"/>
+  <block-list:block block-list:abbreviated-name=":5/8:" block-list:name="⅝"/>
+  <block-list:block block-list:abbreviated-name=":^5:" block-list:name="⁵"/>
+  <block-list:block block-list:abbreviated-name=":_5:" block-list:name="₅"/>
+  <block-list:block block-list:abbreviated-name=":5 s:" block-list:name="🕔"/>
+  <block-list:block block-list:abbreviated-name=":^6:" block-list:name="⁶"/>
+  <block-list:block block-list:abbreviated-name=":_6:" block-list:name="₆"/>
+  <block-list:block block-list:abbreviated-name=":6 s:" block-list:name="🕕"/>
+  <block-list:block block-list:abbreviated-name=":7/8:" block-list:name="⅞"/>
+  <block-list:block block-list:abbreviated-name=":^7:" block-list:name="⁷"/>
+  <block-list:block block-list:abbreviated-name=":_7:" block-list:name="₇"/>
+  <block-list:block block-list:abbreviated-name=":7 s:" block-list:name="🕖"/>
+  <block-list:block block-list:abbreviated-name=":^8:" block-list:name="⁸"/>
+  <block-list:block block-list:abbreviated-name=":_8:" block-list:name="₈"/>
+  <block-list:block block-list:abbreviated-name=":8 s:" block-list:name="🕗"/>
+  <block-list:block block-list:abbreviated-name=":^9:" block-list:name="⁹"/>
+  <block-list:block block-list:abbreviated-name=":_9:" block-list:name="₉"/>
+  <block-list:block block-list:abbreviated-name=":9 s:" block-list:name="🕘"/>
+  <block-list:block block-list:abbreviated-name=":abc:" block-list:name="🔤"/>
+  <block-list:block block-list:abbreviated-name=":^a:" block-list:name="ᵃ"/>
+  <block-list:block block-list:abbreviated-name=":_a:" block-list:name="ₐ"/>
+  <block-list:block block-list:abbreviated-name=":^A:" block-list:name="ᴬ"/>
+  <block-list:block block-list:abbreviated-name=":aç:" block-list:name="🔓"/>
+  <block-list:block block-list:abbreviated-name=":acemi:" block-list:name="🔰"/>
+  <block-list:block block-list:abbreviated-name=":açı2:" block-list:name="∡"/>
+  <block-list:block block-list:abbreviated-name=":açı:" block-list:name="∠"/>
+  <block-list:block block-list:abbreviated-name=":açık ağız:" block-list:name="😮"/>
+  <block-list:block block-list:abbreviated-name=":açık eller:" block-list:name="👐"/>
+  <block-list:block block-list:abbreviated-name=":ada:" block-list:name="🏝"/>
+  <block-list:block block-list:abbreviated-name=":adam:" block-list:name="👨"/>
+  <block-list:block block-list:abbreviated-name=":Adi Shakti:" block-list:name="☬"/>
+  <block-list:block block-list:abbreviated-name=":ağaç:" block-list:name="🌳"/>
+  <block-list:block block-list:abbreviated-name=":ağ:" block-list:name="🕸"/>
+  <block-list:block block-list:abbreviated-name=":ağız:" block-list:name="👄"/>
+  <block-list:block block-list:abbreviated-name=":ağlayan:" block-list:name="😢"/>
+  <block-list:block block-list:abbreviated-name=":ağlayan kedi:" block-list:name="😿"/>
+  <block-list:block block-list:abbreviated-name=":ağzı sulanmış:" block-list:name="🤤"/>
+  <block-list:block block-list:abbreviated-name=":ağzı yok:" block-list:name="😶"/>
+  <block-list:block block-list:abbreviated-name=":ahtapot:" block-list:name="🐙"/>
+  <block-list:block block-list:abbreviated-name=":aile:" block-list:name="👪"/>
+  <block-list:block block-list:abbreviated-name=":akrep:" block-list:name="♏"/>
+  <block-list:block block-list:abbreviated-name=":alarm saati:" block-list:name="⏰"/>
+  <block-list:block block-list:abbreviated-name=":^alfa:" block-list:name="ᵅ"/>
+  <block-list:block block-list:abbreviated-name=":alfa:" block-list:name="α"/>
+  <block-list:block block-list:abbreviated-name=":Alfa:" block-list:name="Α"/>
+  <block-list:block block-list:abbreviated-name=":alıcı2:" block-list:name="🕻"/>
+  <block-list:block block-list:abbreviated-name=":alıcı3:" block-list:name="🕽"/>
+  <block-list:block block-list:abbreviated-name=":alıcı4:" block-list:name="🕼"/>
+  <block-list:block block-list:abbreviated-name=":alıcı:" block-list:name="📞"/>
+  <block-list:block block-list:abbreviated-name=":alkış:" block-list:name="👏"/>
+  <block-list:block block-list:abbreviated-name=":altıgen2:" block-list:name="⬢"/>
+  <block-list:block block-list:abbreviated-name=":altıgen:" block-list:name="⬡"/>
+  <block-list:block block-list:abbreviated-name=":altın:" block-list:name="🥇"/>
+  <block-list:block block-list:abbreviated-name=":alt küme:" block-list:name="⊂"/>
+  <block-list:block block-list:abbreviated-name=":alt küme değil:" block-list:name="⊄"/>
+  <block-list:block block-list:abbreviated-name=":ambulans:" block-list:name="🚑"/>
+  <block-list:block block-list:abbreviated-name=":amfora:" block-list:name="🏺"/>
+  <block-list:block block-list:abbreviated-name=":anahtar2:" block-list:name="🗝"/>
+  <block-list:block block-list:abbreviated-name=":anahtar:" block-list:name="🔑"/>
+  <block-list:block block-list:abbreviated-name=":ananas:" block-list:name="🍍"/>
+  <block-list:block block-list:abbreviated-name=":anten:" block-list:name="📡"/>
+  <block-list:block block-list:abbreviated-name=":araba2:" block-list:name="🚘"/>
+  <block-list:block block-list:abbreviated-name=":araba3:" block-list:name="🚙"/>
+  <block-list:block block-list:abbreviated-name=":araba4:" block-list:name="🏎"/>
+  <block-list:block block-list:abbreviated-name=":araba:" block-list:name="🚗"/>
+  <block-list:block block-list:abbreviated-name=":arı:" block-list:name="🐝"/>
+  <block-list:block block-list:abbreviated-name=":armut:" block-list:name="🍐"/>
+  <block-list:block block-list:abbreviated-name=":asa:" block-list:name="⚚"/>
+  <block-list:block block-list:abbreviated-name=":aşağı2:" block-list:name="👇"/>
+  <block-list:block block-list:abbreviated-name=":aşağı3:" block-list:name="🖟"/>
+  <block-list:block block-list:abbreviated-name=":aşağı4:" block-list:name="🖗"/>
+  <block-list:block block-list:abbreviated-name=":aşağı5:" block-list:name="🖣"/>
+  <block-list:block block-list:abbreviated-name=":aşağı6:" block-list:name="🖡"/>
+  <block-list:block block-list:abbreviated-name=":aşağı:" block-list:name="☟"/>
+  <block-list:block block-list:abbreviated-name=":asal:" block-list:name="′"/>
+  <block-list:block block-list:abbreviated-name=":aşk2:" block-list:name="🤟"/>
+  <block-list:block block-list:abbreviated-name=":aşk:" block-list:name="💘"/>
+  <block-list:block block-list:abbreviated-name=":aşk mektubu:" block-list:name="💌"/>
+  <block-list:block block-list:abbreviated-name=":aslan:" block-list:name="♌"/>
+  <block-list:block block-list:abbreviated-name=":asma demiryolu:" block-list:name="🚟"/>
+  <block-list:block block-list:abbreviated-name=":at2:" block-list:name="🐴"/>
+  <block-list:block block-list:abbreviated-name=":at3:" block-list:name="🏇"/>
+  <block-list:block block-list:abbreviated-name=":ataç2:" block-list:name="🖇"/>
+  <block-list:block block-list:abbreviated-name=":ataç:" block-list:name="📎"/>
+  <block-list:block block-list:abbreviated-name=":atan kalp:" block-list:name="💖"/>
+  <block-list:block block-list:abbreviated-name=":at:" block-list:name="🐎"/>
+  <block-list:block block-list:abbreviated-name=":ateş:" block-list:name="🔥"/>
+  <block-list:block block-list:abbreviated-name=":atm:" block-list:name="🏧"/>
+  <block-list:block block-list:abbreviated-name=":atom:" block-list:name="⚛"/>
+  <block-list:block block-list:abbreviated-name=":avakado:" block-list:name="🥑"/>
+  <block-list:block block-list:abbreviated-name=":avro2:" block-list:name="💶"/>
+  <block-list:block block-list:abbreviated-name=":avro:" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=":ay2:" block-list:name="🌜"/>
+  <block-list:block block-list:abbreviated-name=":Ay2:" block-list:name="☾"/>
+  <block-list:block block-list:abbreviated-name=":ayak:" block-list:name="🐾"/>
+  <block-list:block block-list:abbreviated-name=":ayakkabı2:" block-list:name="👟"/>
+  <block-list:block block-list:abbreviated-name=":ayakkabı3:" block-list:name="👠"/>
+  <block-list:block block-list:abbreviated-name=":ayakkabı:" block-list:name="👞"/>
+  <block-list:block block-list:abbreviated-name=":ay:" block-list:name="🌛"/>
+  <block-list:block block-list:abbreviated-name=":Ay:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":ayçiçeği:" block-list:name="🌻"/>
+  <block-list:block block-list:abbreviated-name=":ayı:" block-list:name="🐻"/>
+  <block-list:block block-list:abbreviated-name=":ay yıldız:" block-list:name="☪"/>
+  <block-list:block block-list:abbreviated-name=":azimli:" block-list:name="😣"/>
+  <block-list:block block-list:abbreviated-name=":badminton:" block-list:name="🏸"/>
+  <block-list:block block-list:abbreviated-name=":bagaj:" block-list:name="🛄"/>
+  <block-list:block block-list:abbreviated-name=":bagaj taşıyıcısı:" block-list:name="🛅"/>
+  <block-list:block block-list:abbreviated-name=":bağlantı:" block-list:name="🔗"/>
+  <block-list:block block-list:abbreviated-name=":baht:" block-list:name="฿"/>
+  <block-list:block block-list:abbreviated-name=":bal:" block-list:name="🍯"/>
+  <block-list:block block-list:abbreviated-name=":balina2:" block-list:name="🐋"/>
+  <block-list:block block-list:abbreviated-name=":balina:" block-list:name="🐳"/>
+  <block-list:block block-list:abbreviated-name=":balık2:" block-list:name="🐠"/>
+  <block-list:block block-list:abbreviated-name=":balık3:" block-list:name="🐡"/>
+  <block-list:block block-list:abbreviated-name=":balık:" block-list:name="♓"/>
+  <block-list:block block-list:abbreviated-name=":balık köftesi:" block-list:name="🍥"/>
+  <block-list:block block-list:abbreviated-name=":balık tutmak:" block-list:name="🎣"/>
+  <block-list:block block-list:abbreviated-name=":balon:" block-list:name="🎈"/>
+  <block-list:block block-list:abbreviated-name=":bambu:" block-list:name="🎍"/>
+  <block-list:block block-list:abbreviated-name=":bandaj:" block-list:name="🤕"/>
+  <block-list:block block-list:abbreviated-name=":banka:" block-list:name="🏦"/>
+  <block-list:block block-list:abbreviated-name=":banyo:" block-list:name="🛀"/>
+  <block-list:block block-list:abbreviated-name=":barış:" block-list:name="☮"/>
+  <block-list:block block-list:abbreviated-name=":başak:" block-list:name="♍"/>
+  <block-list:block block-list:abbreviated-name=":basketbol:" block-list:name="🏀"/>
+  <block-list:block block-list:abbreviated-name=":başlık:" block-list:name="🗣"/>
+  <block-list:block block-list:abbreviated-name=":başörtüsü:" block-list:name="🧕"/>
+  <block-list:block block-list:abbreviated-name=":baykuş:" block-list:name="🦉"/>
+  <block-list:block block-list:abbreviated-name=":bayrak2:" block-list:name="🏳"/>
+  <block-list:block block-list:abbreviated-name=":bayrak3:" block-list:name="⚑"/>
+  <block-list:block block-list:abbreviated-name=":bayrak4:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":bayrak:" block-list:name="☓"/>
+  <block-list:block block-list:abbreviated-name=":bayraklar2:" block-list:name="🎏"/>
+  <block-list:block block-list:abbreviated-name=":bayraklar:" block-list:name="🎌"/>
+  <block-list:block block-list:abbreviated-name=":B:" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name=":^b:" block-list:name="ᵇ"/>
+  <block-list:block block-list:abbreviated-name=":^B:" block-list:name="ᴮ"/>
+  <block-list:block block-list:abbreviated-name=":bebek2:" block-list:name="🚼"/>
+  <block-list:block block-list:abbreviated-name=":bebek3:" block-list:name="🤱"/>
+  <block-list:block block-list:abbreviated-name=":bebek biberonu:" block-list:name="🍼"/>
+  <block-list:block block-list:abbreviated-name=":bebek:" block-list:name="👶"/>
+  <block-list:block block-list:abbreviated-name=":bekçi:" block-list:name="💂"/>
+  <block-list:block block-list:abbreviated-name=":belge2:" block-list:name="🖹"/>
+  <block-list:block block-list:abbreviated-name=":belge3:" block-list:name="🖻"/>
+  <block-list:block block-list:abbreviated-name=":belge4:" block-list:name="🖺"/>
+  <block-list:block block-list:abbreviated-name=":belge:" block-list:name="🗎"/>
+  <block-list:block block-list:abbreviated-name=":bemol:" block-list:name="♭"/>
+  <block-list:block block-list:abbreviated-name=":benek:" block-list:name="❇"/>
+  <block-list:block block-list:abbreviated-name=":benekler:" block-list:name="✨"/>
+  <block-list:block block-list:abbreviated-name=":bento:" block-list:name="🍱"/>
+  <block-list:block block-list:abbreviated-name=":benzin pompası:" block-list:name="⛽"/>
+  <block-list:block block-list:abbreviated-name=":berber:" block-list:name="💈"/>
+  <block-list:block block-list:abbreviated-name=":beşgen2:" block-list:name="⬟"/>
+  <block-list:block block-list:abbreviated-name=":beşgen:" block-list:name="⬠"/>
+  <block-list:block block-list:abbreviated-name=":beta:" block-list:name="β"/>
+  <block-list:block block-list:abbreviated-name=":^beta:" block-list:name="ᵝ"/>
+  <block-list:block block-list:abbreviated-name=":_beta:" block-list:name="ᵦ"/>
+  <block-list:block block-list:abbreviated-name=":Beta:" block-list:name="Β"/>
+  <block-list:block block-list:abbreviated-name=":beyaz at:" block-list:name="♘"/>
+  <block-list:block block-list:abbreviated-name=":beyaz çember:" block-list:name="⚪"/>
+  <block-list:block block-list:abbreviated-name=":beyaz çiçek:" block-list:name="💮"/>
+  <block-list:block block-list:abbreviated-name=":beyaz fil:" block-list:name="♗"/>
+  <block-list:block block-list:abbreviated-name=":beyaz kale:" block-list:name="♖"/>
+  <block-list:block block-list:abbreviated-name=":beyaz piyon:" block-list:name="♙"/>
+  <block-list:block block-list:abbreviated-name=":beyaz şah:" block-list:name="♔"/>
+  <block-list:block block-list:abbreviated-name=":beyaz vezir:" block-list:name="♕"/>
+  <block-list:block block-list:abbreviated-name=":beyin:" block-list:name="🧠"/>
+  <block-list:block block-list:abbreviated-name=":beyzbol:" block-list:name="⚾"/>
+  <block-list:block block-list:abbreviated-name=":biber:" block-list:name="🌶"/>
+  <block-list:block block-list:abbreviated-name=":bikini:" block-list:name="👙"/>
+  <block-list:block block-list:abbreviated-name=":bilardo:" block-list:name="🎱"/>
+  <block-list:block block-list:abbreviated-name=":bilet2:" block-list:name="🎟"/>
+  <block-list:block block-list:abbreviated-name=":bilet:" block-list:name="🎫"/>
+  <block-list:block block-list:abbreviated-name=":bilgi:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":bilgisayar2:" block-list:name="🖥"/>
+  <block-list:block block-list:abbreviated-name=":bilgisayar:" block-list:name="💻"/>
+  <block-list:block block-list:abbreviated-name=":bilgisayar oyunu:" block-list:name="🎮"/>
+  <block-list:block block-list:abbreviated-name=":bira2:" block-list:name="🍻"/>
+  <block-list:block block-list:abbreviated-name=":bira:" block-list:name="🍺"/>
+  <block-list:block block-list:abbreviated-name=":birleşim:" block-list:name="∪"/>
+  <block-list:block block-list:abbreviated-name=":bisiklet:" block-list:name="🚲"/>
+  <block-list:block block-list:abbreviated-name=":bisikletçi2:" block-list:name="🚵"/>
+  <block-list:block block-list:abbreviated-name=":bisikletçi:" block-list:name="🚴"/>
+  <block-list:block block-list:abbreviated-name=":bisiklet giremez:" block-list:name="🚳"/>
+  <block-list:block block-list:abbreviated-name=":bitcoin:" block-list:name="₿"/>
+  <block-list:block block-list:abbreviated-name=":biyolojik tehlike:" block-list:name="☣"/>
+  <block-list:block block-list:abbreviated-name=":bıçak2:" block-list:name="🗡"/>
+  <block-list:block block-list:abbreviated-name=":bıçak:" block-list:name="🔪"/>
+  <block-list:block block-list:abbreviated-name=":!!:" block-list:name="‼"/>
+  <block-list:block block-list:abbreviated-name=":!:" block-list:name="❕"/>
+  <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
+  <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
+  <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
+  <block-list:block block-list:abbreviated-name=":-+:" block-list:name="∓"/>
+  <block-list:block block-list:abbreviated-name=":---:" block-list:name="—"/>
+  <block-list:block block-list:abbreviated-name=":--:" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name=":-:" block-list:name="−"/>
+  <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
+  <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
+  <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
+  <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
+  <block-list:block block-list:abbreviated-name=":^+:" block-list:name="⁺"/>
+  <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
+  <block-list:block block-list:abbreviated-name=":^=:" block-list:name="⁼"/>
+  <block-list:block block-list:abbreviated-name=":_(:" block-list:name="₍"/>
+  <block-list:block block-list:abbreviated-name=":_):" block-list:name="₎"/>
+  <block-list:block block-list:abbreviated-name=":_+:" block-list:name="₊"/>
+  <block-list:block block-list:abbreviated-name=":_-:" block-list:name="₋"/>
+  <block-list:block block-list:abbreviated-name=":_=:" block-list:name="₌"/>
+  <block-list:block block-list:abbreviated-name=":~:" block-list:name="≈"/>
+  <block-list:block block-list:abbreviated-name=":böcek:" block-list:name="🐛"/>
+  <block-list:block block-list:abbreviated-name=":boğa:" block-list:name="♉"/>
+  <block-list:block block-list:abbreviated-name=":boks:" block-list:name="🥊"/>
+  <block-list:block block-list:abbreviated-name=":böler:" block-list:name="∣"/>
+  <block-list:block block-list:abbreviated-name=":bölmez:" block-list:name="∤"/>
+  <block-list:block block-list:abbreviated-name=":bölüm:" block-list:name="§"/>
+  <block-list:block block-list:abbreviated-name=":bomba:" block-list:name="💣"/>
+  <block-list:block block-list:abbreviated-name=":borazan2:" block-list:name="🕬"/>
+  <block-list:block block-list:abbreviated-name=":borazan:" block-list:name="🕫"/>
+  <block-list:block block-list:abbreviated-name=":börek:" block-list:name="🌯"/>
+  <block-list:block block-list:abbreviated-name=":boşanma:" block-list:name="⚮"/>
+  <block-list:block block-list:abbreviated-name=":boş belge:" block-list:name="🗋"/>
+  <block-list:block block-list:abbreviated-name=":boş küme:" block-list:name="∅"/>
+  <block-list:block block-list:abbreviated-name=":boş not:" block-list:name="🗅"/>
+  <block-list:block block-list:abbreviated-name=":boş not defteri:" block-list:name="🗇"/>
+  <block-list:block block-list:abbreviated-name=":boş not sayfası:" block-list:name="🗆"/>
+  <block-list:block block-list:abbreviated-name=":boş sayfa:" block-list:name="🗌"/>
+  <block-list:block block-list:abbreviated-name=":boş sayfalar:" block-list:name="🗍"/>
+  <block-list:block block-list:abbreviated-name=":bovling:" block-list:name="🎳"/>
+  <block-list:block block-list:abbreviated-name=":boya fırçası:" block-list:name="🖌"/>
+  <block-list:block block-list:abbreviated-name=":boynuz:" block-list:name="📯"/>
+  <block-list:block block-list:abbreviated-name=":boynuzlar:" block-list:name="🤘"/>
+  <block-list:block block-list:abbreviated-name=":boynuzlu gülen yüz:" block-list:name="😈"/>
+  <block-list:block block-list:abbreviated-name=":brokoli:" block-list:name="🥦"/>
+  <block-list:block block-list:abbreviated-name=":bronz:" block-list:name="🥉"/>
+  <block-list:block block-list:abbreviated-name=":büftek:" block-list:name="🥩"/>
+  <block-list:block block-list:abbreviated-name=":buket2:" block-list:name="🎕"/>
+  <block-list:block block-list:abbreviated-name=":buket:" block-list:name="💐"/>
+  <block-list:block block-list:abbreviated-name=":bulantı:" block-list:name="🤢"/>
+  <block-list:block block-list:abbreviated-name=":bulut2:" block-list:name="⛅"/>
+  <block-list:block block-list:abbreviated-name=":bulut3:" block-list:name="⛈"/>
+  <block-list:block block-list:abbreviated-name=":bulut:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":bulutlu2:" block-list:name="🌥"/>
+  <block-list:block block-list:abbreviated-name=":bulutlu:" block-list:name="🌤"/>
+  <block-list:block block-list:abbreviated-name=":burun:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":büst:" block-list:name="👤"/>
+  <block-list:block block-list:abbreviated-name=":büstler:" block-list:name="👥"/>
+  <block-list:block block-list:abbreviated-name=":bütün kalan:" block-list:name="𝄻"/>
+  <block-list:block block-list:abbreviated-name=":büyük çember:" block-list:name="◯"/>
+  <block-list:block block-list:abbreviated-name=":büyük daire2:" block-list:name="⬤"/>
+  <block-list:block block-list:abbreviated-name=":büyük dolar işareti:" block-list:name="💲"/>
+  <block-list:block block-list:abbreviated-name=":büyük kare2:" block-list:name="⬛"/>
+  <block-list:block block-list:abbreviated-name=":büyük kare:" block-list:name="⬜"/>
+  <block-list:block block-list:abbreviated-name=":büyült:" block-list:name="🗖"/>
+  <block-list:block block-list:abbreviated-name=":büyüteç2:" block-list:name="🔎"/>
+  <block-list:block block-list:abbreviated-name=":büyüteç:" block-list:name="🔍"/>
+  <block-list:block block-list:abbreviated-name=":buz:" block-list:name="🂡"/>
+  <block-list:block block-list:abbreviated-name=":cadılar bayramı:" block-list:name="🎃"/>
+  <block-list:block block-list:abbreviated-name=":çadır:" block-list:name="⛺"/>
+  <block-list:block block-list:abbreviated-name=":çağrı:" block-list:name="📲"/>
+  <block-list:block block-list:abbreviated-name=":çağrı cihazı:" block-list:name="📟"/>
+  <block-list:block block-list:abbreviated-name=":cam3:" block-list:name="🥃"/>
+  <block-list:block block-list:abbreviated-name=":cam:" block-list:name="🍷"/>
+  <block-list:block block-list:abbreviated-name=":çam:" block-list:name="🌲"/>
+  <block-list:block block-list:abbreviated-name=":cami:" block-list:name="🕌"/>
+  <block-list:block block-list:abbreviated-name=":çanak:" block-list:name="🥣"/>
+  <block-list:block block-list:abbreviated-name=":canavar:" block-list:name="👹"/>
+  <block-list:block block-list:abbreviated-name=":çan dili:" block-list:name="🎬"/>
+  <block-list:block block-list:abbreviated-name=":çanta:" block-list:name="👛"/>
+  <block-list:block block-list:abbreviated-name=":çapa:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":çarpı2:" block-list:name="✖"/>
+  <block-list:block block-list:abbreviated-name=":çarpım:" block-list:name="∏"/>
+  <block-list:block block-list:abbreviated-name=":çatık bakışlı:" block-list:name="🙍"/>
+  <block-list:block block-list:abbreviated-name=":çatık:" block-list:name="😦"/>
+  <block-list:block block-list:abbreviated-name=":çay:" block-list:name="🍵"/>
+  <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
+  <block-list:block block-list:abbreviated-name=":cd:" block-list:name="💿"/>
+  <block-list:block block-list:abbreviated-name=":çekiç:" block-list:name="🔨"/>
+  <block-list:block block-list:abbreviated-name=":çekiç ve ingiliz anahtarı:" block-list:name="🛠"/>
+  <block-list:block block-list:abbreviated-name=":çember2:" block-list:name="●"/>
+  <block-list:block block-list:abbreviated-name=":çember3:" block-list:name="🔾"/>
+  <block-list:block block-list:abbreviated-name=":çember4:" block-list:name="🔿"/>
+  <block-list:block block-list:abbreviated-name=":çember:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":cent:" block-list:name="¢"/>
+  <block-list:block block-list:abbreviated-name=":cep telefonu:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":cep telefonu yok:" block-list:name="📵"/>
+  <block-list:block block-list:abbreviated-name=":çerçeve2:" block-list:name="🖽"/>
+  <block-list:block block-list:abbreviated-name=":çerçeve:" block-list:name="🖾"/>
+  <block-list:block block-list:abbreviated-name=":çerez2:" block-list:name="🥠"/>
+  <block-list:block block-list:abbreviated-name=":çeşme:" block-list:name="⛲"/>
+  <block-list:block block-list:abbreviated-name=":cetvel2:" block-list:name="📐"/>
+  <block-list:block block-list:abbreviated-name=":cetvel:" block-list:name="📏"/>
+  <block-list:block block-list:abbreviated-name=":çeyrek kalan:" block-list:name="𝄽"/>
+  <block-list:block block-list:abbreviated-name=":çeyrek nota:" block-list:name="𝅘𝅥"/>
+  <block-list:block block-list:abbreviated-name=":chi:" block-list:name="χ"/>
+  <block-list:block block-list:abbreviated-name=":Chi:" block-list:name="Χ"/>
+  <block-list:block block-list:abbreviated-name=":^çi:" block-list:name="ᵡ"/>
+  <block-list:block block-list:abbreviated-name=":_çi:" block-list:name="ᵪ"/>
+  <block-list:block block-list:abbreviated-name=":çiçek2:" block-list:name="🌸"/>
+  <block-list:block block-list:abbreviated-name=":çiçek:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":çift2:" block-list:name="👬"/>
+  <block-list:block block-list:abbreviated-name=":çift3:" block-list:name="👭"/>
+  <block-list:block block-list:abbreviated-name=":çift4:" block-list:name="💑"/>
+  <block-list:block block-list:abbreviated-name=":çift bemol:" block-list:name="𝄫"/>
+  <block-list:block block-list:abbreviated-name=":çift:" block-list:name="👫"/>
+  <block-list:block block-list:abbreviated-name=":çift diyez:" block-list:name="𝄪"/>
+  <block-list:block block-list:abbreviated-name=":çikolata:" block-list:name="🍫"/>
+  <block-list:block block-list:abbreviated-name=":çilek:" block-list:name="🍓"/>
+  <block-list:block block-list:abbreviated-name=":cilt1:" block-list:name="🏻"/>
+  <block-list:block block-list:abbreviated-name=":cilt2:" block-list:name="🏼"/>
+  <block-list:block block-list:abbreviated-name=":cilt3:" block-list:name="🏽"/>
+  <block-list:block block-list:abbreviated-name=":cilt4:" block-list:name="🏾"/>
+  <block-list:block block-list:abbreviated-name=":cilt5:" block-list:name="🏿"/>
+  <block-list:block block-list:abbreviated-name=":çim:" block-list:name="🌾"/>
+  <block-list:block block-list:abbreviated-name=":cin:" block-list:name="👺"/>
+  <block-list:block block-list:abbreviated-name=":çin dominosu:" block-list:name="🀄"/>
+  <block-list:block block-list:abbreviated-name=":cinema:" block-list:name="🎦"/>
+  <block-list:block block-list:abbreviated-name=":civciv2:" block-list:name="🐤"/>
+  <block-list:block block-list:abbreviated-name=":civciv3:" block-list:name="🐥"/>
+  <block-list:block block-list:abbreviated-name=":civciv:" block-list:name="🐣"/>
+  <block-list:block block-list:abbreviated-name=":çizelge2:" block-list:name="📉"/>
+  <block-list:block block-list:abbreviated-name=":çizelge3:" block-list:name="📊"/>
+  <block-list:block block-list:abbreviated-name=":çizelge4:" block-list:name="💹"/>
+  <block-list:block block-list:abbreviated-name=":çizelge5:" block-list:name="🗠"/>
+  <block-list:block block-list:abbreviated-name=":çizelge:" block-list:name="📈"/>
+  <block-list:block block-list:abbreviated-name=":çizgi:" block-list:name="💨"/>
+  <block-list:block block-list:abbreviated-name=":çizgili sincap:" block-list:name="🐿"/>
+  <block-list:block block-list:abbreviated-name=":çizme:" block-list:name="👢"/>
+  <block-list:block block-list:abbreviated-name=":çığlık atan kedi:" block-list:name="🙀"/>
+  <block-list:block block-list:abbreviated-name=":çığlık:" block-list:name="😱"/>
+  <block-list:block block-list:abbreviated-name=":çocuk:" block-list:name="🧒"/>
+  <block-list:block block-list:abbreviated-name=":çöl:" block-list:name="🏜"/>
+  <block-list:block block-list:abbreviated-name=":çöp atılmaz:" block-list:name="🚯"/>
+  <block-list:block block-list:abbreviated-name=":çöp:" block-list:name="🚮"/>
+  <block-list:block block-list:abbreviated-name=":çoraplar:" block-list:name="🧦"/>
+  <block-list:block block-list:abbreviated-name=":çubuk kraker:" block-list:name="🥨"/>
+  <block-list:block block-list:abbreviated-name=":dağ2:" block-list:name="🏔"/>
+  <block-list:block block-list:abbreviated-name=":dağ:" block-list:name="⛰"/>
+  <block-list:block block-list:abbreviated-name=":dağ demiryolu:" block-list:name="🚞"/>
+  <block-list:block block-list:abbreviated-name=":dağ teleferiği:" block-list:name="🚠"/>
+  <block-list:block block-list:abbreviated-name=":daha küçük kare2:" block-list:name="◾"/>
+  <block-list:block block-list:abbreviated-name=":daha küçük kare:" block-list:name="◽"/>
+  <block-list:block block-list:abbreviated-name=":dalga:" block-list:name="👋"/>
+  <block-list:block block-list:abbreviated-name=":dalgın:" block-list:name="😔"/>
+  <block-list:block block-list:abbreviated-name=":damat:" block-list:name="🤵"/>
+  <block-list:block block-list:abbreviated-name=":damlacık2:" block-list:name="🌢"/>
+  <block-list:block block-list:abbreviated-name=":damlacık:" block-list:name="💧"/>
+  <block-list:block block-list:abbreviated-name=":dango:" block-list:name="🍡"/>
+  <block-list:block block-list:abbreviated-name=":danışma2:" block-list:name="💁"/>
+  <block-list:block block-list:abbreviated-name=":danışma3:" block-list:name="🛈"/>
+  <block-list:block block-list:abbreviated-name=":danscı2:" block-list:name="🕺"/>
+  <block-list:block block-list:abbreviated-name=":danscı:" block-list:name="💃"/>
+  <block-list:block block-list:abbreviated-name=":Davud'un yıldızı:" block-list:name="✡"/>
+  <block-list:block block-list:abbreviated-name=":davul2:" block-list:name="🥁"/>
+  <block-list:block block-list:abbreviated-name=":davul:" block-list:name="🛢"/>
+  <block-list:block block-list:abbreviated-name=":D:" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
+  <block-list:block block-list:abbreviated-name=":dedektif:" block-list:name="🕵"/>
+  <block-list:block block-list:abbreviated-name=":defter2:" block-list:name="📔"/>
+  <block-list:block block-list:abbreviated-name=":defter:" block-list:name="📓"/>
+  <block-list:block block-list:abbreviated-name=":değildir:" block-list:name="¬"/>
+  <block-list:block block-list:abbreviated-name=":delik:" block-list:name="🕳"/>
+  <block-list:block block-list:abbreviated-name=":delta:" block-list:name="δ"/>
+  <block-list:block block-list:abbreviated-name=":^delta:" block-list:name="ᵟ"/>
+  <block-list:block block-list:abbreviated-name=":Delta:" block-list:name="Δ"/>
+  <block-list:block block-list:abbreviated-name=":derece:" block-list:name="°"/>
+  <block-list:block block-list:abbreviated-name=":deve2:" block-list:name="🐫"/>
+  <block-list:block block-list:abbreviated-name=":deve:" block-list:name="🐪"/>
+  <block-list:block block-list:abbreviated-name=":dikdörtgen2:" block-list:name="▬"/>
+  <block-list:block block-list:abbreviated-name=":dikdörtgen:" block-list:name="▭"/>
+  <block-list:block block-list:abbreviated-name=":dikkat:" block-list:name="☡"/>
+  <block-list:block block-list:abbreviated-name=":dil2:" block-list:name="😛"/>
+  <block-list:block block-list:abbreviated-name=":dil3:" block-list:name="😜"/>
+  <block-list:block block-list:abbreviated-name=":dil4:" block-list:name="😝"/>
+  <block-list:block block-list:abbreviated-name=":dil:" block-list:name="👅"/>
+  <block-list:block block-list:abbreviated-name=":dinazor2:" block-list:name="🦖"/>
+  <block-list:block block-list:abbreviated-name=":dinazor:" block-list:name="🦕"/>
+  <block-list:block block-list:abbreviated-name=":dingin:" block-list:name="😯"/>
+  <block-list:block block-list:abbreviated-name=":dişi:" block-list:name="♀"/>
+  <block-list:block block-list:abbreviated-name=":disket2:" block-list:name="🖬"/>
+  <block-list:block block-list:abbreviated-name=":disket3:" block-list:name="🖫"/>
+  <block-list:block block-list:abbreviated-name=":disket4:" block-list:name="🖪"/>
+  <block-list:block block-list:abbreviated-name=":disket:" block-list:name="💾"/>
+  <block-list:block block-list:abbreviated-name=":diyez:" block-list:name="♯"/>
+  <block-list:block block-list:abbreviated-name=":dizin:" block-list:name="🗂"/>
+  <block-list:block block-list:abbreviated-name=":doğal:" block-list:name="♮"/>
+  <block-list:block block-list:abbreviated-name=":doğum günü:" block-list:name="🎂"/>
+  <block-list:block block-list:abbreviated-name=":dolap:" block-list:name="🗄"/>
+  <block-list:block block-list:abbreviated-name=":dolar2:" block-list:name="💵"/>
+  <block-list:block block-list:abbreviated-name=":dolunay2:" block-list:name="🌝"/>
+  <block-list:block block-list:abbreviated-name=":dolunay:" block-list:name="🌕"/>
+  <block-list:block block-list:abbreviated-name=":dolunay sonrası:" block-list:name="🌖"/>
+  <block-list:block block-list:abbreviated-name=":domates:" block-list:name="🍅"/>
+  <block-list:block block-list:abbreviated-name=":domino:" block-list:name="🁠"/>
+  <block-list:block block-list:abbreviated-name=":domuz2:" block-list:name="🐷"/>
+  <block-list:block block-list:abbreviated-name=":domuz:" block-list:name="🐖"/>
+  <block-list:block block-list:abbreviated-name=":domuz burnu:" block-list:name="🐽"/>
+  <block-list:block block-list:abbreviated-name=":dondurma:" block-list:name="🍦"/>
+  <block-list:block block-list:abbreviated-name=":dönen ışık:" block-list:name="🚨"/>
+  <block-list:block block-list:abbreviated-name=":dönen kalpler:" block-list:name="💞"/>
+  <block-list:block block-list:abbreviated-name=":döngü2:" block-list:name="➿"/>
+  <block-list:block block-list:abbreviated-name=":döngü:" block-list:name="➰"/>
+  <block-list:block block-list:abbreviated-name=":dördüncü dereceden kök:" block-list:name="∜"/>
+  <block-list:block block-list:abbreviated-name=":dua:" block-list:name="🙏"/>
+  <block-list:block block-list:abbreviated-name=":dudaklar:" block-list:name="🗢"/>
+  <block-list:block block-list:abbreviated-name=":düğme2:" block-list:name="🔲"/>
+  <block-list:block block-list:abbreviated-name=":düğme:" block-list:name="🔳"/>
+  <block-list:block block-list:abbreviated-name=":düğün:" block-list:name="💒"/>
+  <block-list:block block-list:abbreviated-name=":dükkan:" block-list:name="🛍"/>
+  <block-list:block block-list:abbreviated-name=":dünya:" block-list:name="♁"/>
+  <block-list:block block-list:abbreviated-name=":dur2:" block-list:name="⏹"/>
+  <block-list:block block-list:abbreviated-name=":duraklat:" block-list:name="⏸"/>
+  <block-list:block block-list:abbreviated-name=":dur:" block-list:name="🛑"/>
+  <block-list:block block-list:abbreviated-name=":duş:" block-list:name="🚿"/>
+  <block-list:block block-list:abbreviated-name=":düşünce balonu:" block-list:name="💭"/>
+  <block-list:block block-list:abbreviated-name=":düşünüyor:" block-list:name="🤔"/>
+  <block-list:block block-list:abbreviated-name=":duyma:" block-list:name="🙉"/>
+  <block-list:block block-list:abbreviated-name=":dvd:" block-list:name="📀"/>
+  <block-list:block block-list:abbreviated-name=":E2:" block-list:name="⇒"/>
+  <block-list:block block-list:abbreviated-name=":ebegümeci:" block-list:name="🌺"/>
+  <block-list:block block-list:abbreviated-name=":^e:" block-list:name="ᵉ"/>
+  <block-list:block block-list:abbreviated-name=":_e:" block-list:name="ₑ"/>
+  <block-list:block block-list:abbreviated-name=":^E:" block-list:name="ᴱ"/>
+  <block-list:block block-list:abbreviated-name=":eğlenmeyen:" block-list:name="😒"/>
+  <block-list:block block-list:abbreviated-name=":ejderha2:" block-list:name="🐲"/>
+  <block-list:block block-list:abbreviated-name=":ejderha:" block-list:name="🐉"/>
+  <block-list:block block-list:abbreviated-name=":ekmek2:" block-list:name="🥖"/>
+  <block-list:block block-list:abbreviated-name=":ekmek:" block-list:name="🍞"/>
+  <block-list:block block-list:abbreviated-name=":ekran:" block-list:name="🖵"/>
+  <block-list:block block-list:abbreviated-name=":el2:" block-list:name="🖐"/>
+  <block-list:block block-list:abbreviated-name=":el3:" block-list:name="🖑"/>
+  <block-list:block block-list:abbreviated-name=":el4:" block-list:name="🤚"/>
+  <block-list:block block-list:abbreviated-name=":elbise:" block-list:name="👗"/>
+  <block-list:block block-list:abbreviated-name=":el:" block-list:name="✋"/>
+  <block-list:block block-list:abbreviated-name=":el çantası:" block-list:name="👜"/>
+  <block-list:block block-list:abbreviated-name=":eldiven:" block-list:name="🧤"/>
+  <block-list:block block-list:abbreviated-name=":elf:" block-list:name="🧝"/>
+  <block-list:block block-list:abbreviated-name=":el feneri:" block-list:name="🔦"/>
+  <block-list:block block-list:abbreviated-name=":elips:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":elma:" block-list:name="🍎"/>
+  <block-list:block block-list:abbreviated-name=":el sıkışma:" block-list:name="🤝"/>
+  <block-list:block block-list:abbreviated-name=":endişeli:" block-list:name="😟"/>
+  <block-list:block block-list:abbreviated-name=":e-posta:" block-list:name="📧"/>
+  <block-list:block block-list:abbreviated-name=":^epsilon:" block-list:name="ᵋ"/>
+  <block-list:block block-list:abbreviated-name=":epsilon:" block-list:name="ε"/>
+  <block-list:block block-list:abbreviated-name=":Epsilon:" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name=":erkek:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":erkek domuz:" block-list:name="🐗"/>
+  <block-list:block block-list:abbreviated-name=":erkekler:" block-list:name="🚹"/>
+  <block-list:block block-list:abbreviated-name=":eşarp:" block-list:name="🧣"/>
+  <block-list:block block-list:abbreviated-name=":eşit değil:" block-list:name="≠"/>
+  <block-list:block block-list:abbreviated-name=":eşkenar dörtgen:" block-list:name="◊"/>
+  <block-list:block block-list:abbreviated-name=":eski ay:" block-list:name="🌘"/>
+  <block-list:block block-list:abbreviated-name=":eskrimci:" block-list:name="🤺"/>
+  <block-list:block block-list:abbreviated-name=":eta:" block-list:name="η"/>
+  <block-list:block block-list:abbreviated-name=":Eta:" block-list:name="Η"/>
+  <block-list:block block-list:abbreviated-name=":et:" block-list:name="🍖"/>
+  <block-list:block block-list:abbreviated-name=":etiket:" block-list:name="🏷"/>
+  <block-list:block block-list:abbreviated-name=":ev2:" block-list:name="🏡"/>
+  <block-list:block block-list:abbreviated-name=":ev:" block-list:name="🏠"/>
+  <block-list:block block-list:abbreviated-name=":evet2:" block-list:name="🖒"/>
+  <block-list:block block-list:abbreviated-name=":evet:" block-list:name="👍"/>
+  <block-list:block block-list:abbreviated-name=":evler3:" block-list:name="🏚"/>
+  <block-list:block block-list:abbreviated-name=":evler:" block-list:name="🏘"/>
+  <block-list:block block-list:abbreviated-name=":evlilik:" block-list:name="⚭"/>
+  <block-list:block block-list:abbreviated-name=":EW2:" block-list:name="⇔"/>
+  <block-list:block block-list:abbreviated-name=":EW:" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name=":fabrika:" block-list:name="🏭"/>
+  <block-list:block block-list:abbreviated-name=":facepalm:" block-list:name="🤦"/>
+  <block-list:block block-list:abbreviated-name=":faks2:" block-list:name="🖷"/>
+  <block-list:block block-list:abbreviated-name=":faks:" block-list:name="📠"/>
+  <block-list:block block-list:abbreviated-name=":fare2:" block-list:name="🐭"/>
+  <block-list:block block-list:abbreviated-name=":fare3:" block-list:name="🖱"/>
+  <block-list:block block-list:abbreviated-name=":fare4:" block-list:name="🖰"/>
+  <block-list:block block-list:abbreviated-name=":fare5:" block-list:name="🖯"/>
+  <block-list:block block-list:abbreviated-name=":fare:" block-list:name="🐁"/>
+  <block-list:block block-list:abbreviated-name=":Farsça:" block-list:name="☫"/>
+  <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
+  <block-list:block block-list:abbreviated-name=":fener:" block-list:name="🏮"/>
+  <block-list:block block-list:abbreviated-name=":feribot:" block-list:name="⛴"/>
+  <block-list:block block-list:abbreviated-name=":fermuar:" block-list:name="🤐"/>
+  <block-list:block block-list:abbreviated-name=":ff:" block-list:name="ﬀ"/>
+  <block-list:block block-list:abbreviated-name=":ffi:" block-list:name="ﬃ"/>
+  <block-list:block block-list:abbreviated-name=":ffl:" block-list:name="ﬄ"/>
+  <block-list:block block-list:abbreviated-name=":fi:" block-list:name="ﬁ"/>
+  <block-list:block block-list:abbreviated-name=":fide:" block-list:name="🌱"/>
+  <block-list:block block-list:abbreviated-name=":fil:" block-list:name="🐘"/>
+  <block-list:block block-list:abbreviated-name=":film:" block-list:name="🎞"/>
+  <block-list:block block-list:abbreviated-name=":film kamerası:" block-list:name="🎥"/>
+  <block-list:block block-list:abbreviated-name=":fırtına2:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":fırtına:" block-list:name="🌧"/>
+  <block-list:block block-list:abbreviated-name=":fıstıklar:" block-list:name="🥜"/>
+  <block-list:block block-list:abbreviated-name=":flama2:" block-list:name="🏱"/>
+  <block-list:block block-list:abbreviated-name=":flama:" block-list:name="🏲"/>
+  <block-list:block block-list:abbreviated-name=":flaş:" block-list:name="📸"/>
+  <block-list:block block-list:abbreviated-name=":fl:" block-list:name="ﬂ"/>
+  <block-list:block block-list:abbreviated-name=":fuar2:" block-list:name="🎠"/>
+  <block-list:block block-list:abbreviated-name=":fuar:" block-list:name="🎡"/>
+  <block-list:block block-list:abbreviated-name=":Fuji:" block-list:name="🗻"/>
+  <block-list:block block-list:abbreviated-name=":futbol2:" block-list:name="🥅"/>
+  <block-list:block block-list:abbreviated-name=":futbol:" block-list:name="⚽"/>
+  <block-list:block block-list:abbreviated-name=":gama:" block-list:name="γ"/>
+  <block-list:block block-list:abbreviated-name=":^gama:" block-list:name="ᵞ"/>
+  <block-list:block block-list:abbreviated-name=":_gama:" block-list:name="ᵧ"/>
+  <block-list:block block-list:abbreviated-name=":Gama:" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=":gazete2:" block-list:name="🗞"/>
+  <block-list:block block-list:abbreviated-name=":gazete:" block-list:name="📰"/>
+  <block-list:block block-list:abbreviated-name=":G:" block-list:name="↓"/>
+  <block-list:block block-list:abbreviated-name=":^g:" block-list:name="ᵍ"/>
+  <block-list:block block-list:abbreviated-name=":^G:" block-list:name="ᴳ"/>
+  <block-list:block block-list:abbreviated-name=":gece:" block-list:name="🌃"/>
+  <block-list:block block-list:abbreviated-name=":gelin:" block-list:name="👰"/>
+  <block-list:block block-list:abbreviated-name=":gemi2:" block-list:name="🛳"/>
+  <block-list:block block-list:abbreviated-name=":gemi:" block-list:name="🚢"/>
+  <block-list:block block-list:abbreviated-name=":genç ay:" block-list:name="🌒"/>
+  <block-list:block block-list:abbreviated-name=":gergedan:" block-list:name="🦏"/>
+  <block-list:block block-list:abbreviated-name=":geri dönüşüm2:" block-list:name="♻"/>
+  <block-list:block block-list:abbreviated-name=":geri dönüşüm:" block-list:name="♲"/>
+  <block-list:block block-list:abbreviated-name=":geri dönüşümlü kağıt:" block-list:name="♼"/>
+  <block-list:block block-list:abbreviated-name=":geyik:" block-list:name="🦌"/>
+  <block-list:block block-list:abbreviated-name=":girilmez işareti:" block-list:name="🚫"/>
+  <block-list:block block-list:abbreviated-name=":giriş yasak:" block-list:name="⛔"/>
+  <block-list:block block-list:abbreviated-name=":gitar:" block-list:name="🎸"/>
+  <block-list:block block-list:abbreviated-name=":gökkuşağı:" block-list:name="🌈"/>
+  <block-list:block block-list:abbreviated-name=":golf2:" block-list:name="⛳"/>
+  <block-list:block block-list:abbreviated-name=":golf:" block-list:name="🏌"/>
+  <block-list:block block-list:abbreviated-name=":gömlek2:" block-list:name="🎽"/>
+  <block-list:block block-list:abbreviated-name=":gömlek:" block-list:name="👕"/>
+  <block-list:block block-list:abbreviated-name=":goril:" block-list:name="🦍"/>
+  <block-list:block block-list:abbreviated-name=":görme:" block-list:name="🙈"/>
+  <block-list:block block-list:abbreviated-name=":göz:" block-list:name="👁"/>
+  <block-list:block block-list:abbreviated-name=":göz kırpmak:" block-list:name="😉"/>
+  <block-list:block block-list:abbreviated-name=":gözleme:" block-list:name="🥙"/>
+  <block-list:block block-list:abbreviated-name=":gözler:" block-list:name="👀"/>
+  <block-list:block block-list:abbreviated-name=":gözlük:" block-list:name="👓"/>
+  <block-list:block block-list:abbreviated-name=":göz rulo:" block-list:name="🙄"/>
+  <block-list:block block-list:abbreviated-name=":grivna:" block-list:name="₴"/>
+  <block-list:block block-list:abbreviated-name=":&gt;=:" block-list:name="≥"/>
+  <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
+  <block-list:block block-list:abbreviated-name=":gül:" block-list:name="🌹"/>
+  <block-list:block block-list:abbreviated-name=":gülen kedi:" block-list:name="😸"/>
+  <block-list:block block-list:abbreviated-name=":gülen yüz:" block-list:name="😃"/>
+  <block-list:block block-list:abbreviated-name=":gülümseme2:" block-list:name="☻"/>
+  <block-list:block block-list:abbreviated-name=":gülümseme3:" block-list:name="🙂"/>
+  <block-list:block block-list:abbreviated-name=":gülümseme4:" block-list:name="🤭"/>
+  <block-list:block block-list:abbreviated-name=":gülümseme:" block-list:name="☺"/>
+  <block-list:block block-list:abbreviated-name=":gülüş:" block-list:name="😆"/>
+  <block-list:block block-list:abbreviated-name=":gümrük:" block-list:name="🛃"/>
+  <block-list:block block-list:abbreviated-name=":gümüş:" block-list:name="🥈"/>
+  <block-list:block block-list:abbreviated-name=":günbatımı:" block-list:name="🌆"/>
+  <block-list:block block-list:abbreviated-name=":gündoğumu2:" block-list:name="🌄"/>
+  <block-list:block block-list:abbreviated-name=":gündoğumu3:" block-list:name="🌇"/>
+  <block-list:block block-list:abbreviated-name=":gündoğumu:" block-list:name="🌅"/>
+  <block-list:block block-list:abbreviated-name=":güneş2:" block-list:name="🌣"/>
+  <block-list:block block-list:abbreviated-name=":Güneş2:" block-list:name="☼"/>
+  <block-list:block block-list:abbreviated-name=":güneş:" block-list:name="🌞"/>
+  <block-list:block block-list:abbreviated-name=":Güneş:" block-list:name="☉"/>
+  <block-list:block block-list:abbreviated-name=":güneş gözlüğü2:" block-list:name="😎"/>
+  <block-list:block block-list:abbreviated-name=":güneşli:" block-list:name="☀"/>
+  <block-list:block block-list:abbreviated-name=":güreş:" block-list:name="🤼"/>
+  <block-list:block block-list:abbreviated-name=":güveç:" block-list:name="🍲"/>
+  <block-list:block block-list:abbreviated-name=":güvercin:" block-list:name="🕊"/>
+  <block-list:block block-list:abbreviated-name=":hafif raylı:" block-list:name="🚈"/>
+  <block-list:block block-list:abbreviated-name=":halsiz:" block-list:name="🙇"/>
+  <block-list:block block-list:abbreviated-name=":halterci:" block-list:name="🏋"/>
+  <block-list:block block-list:abbreviated-name=":hamburger:" block-list:name="🍔"/>
+  <block-list:block block-list:abbreviated-name=":hamile:" block-list:name="🤰"/>
+  <block-list:block block-list:abbreviated-name=":hamster:" block-list:name="🐹"/>
+  <block-list:block block-list:abbreviated-name=":hançer2:" block-list:name="‡"/>
+  <block-list:block block-list:abbreviated-name=":hançer:" block-list:name="†"/>
+  <block-list:block block-list:abbreviated-name=":hap:" block-list:name="💊"/>
+  <block-list:block block-list:abbreviated-name=":hapşırma:" block-list:name="🤧"/>
+  <block-list:block block-list:abbreviated-name=":hareket topu:" block-list:name="🖲"/>
+  <block-list:block block-list:abbreviated-name=":harita:" block-list:name="🗺"/>
+  <block-list:block block-list:abbreviated-name=":hastane:" block-list:name="🏥"/>
+  <block-list:block block-list:abbreviated-name=":havadan tramvay:" block-list:name="🚡"/>
+  <block-list:block block-list:abbreviated-name=":havai fişek:" block-list:name="🎇"/>
+  <block-list:block block-list:abbreviated-name=":havai fişek gösterisi:" block-list:name="🎆"/>
+  <block-list:block block-list:abbreviated-name=":havuç:" block-list:name="🥕"/>
+  <block-list:block block-list:abbreviated-name=":hayalet:" block-list:name="👻"/>
+  <block-list:block block-list:abbreviated-name=":hayal kırıklığına uğramış:" block-list:name="😞"/>
+  <block-list:block block-list:abbreviated-name=":hayal kırıklığından rahatlamış:" block-list:name="😥"/>
+  <block-list:block block-list:abbreviated-name=":hayır:" block-list:name="👎"/>
+  <block-list:block block-list:abbreviated-name=":hayret içinde:" block-list:name="😲"/>
+  <block-list:block block-list:abbreviated-name=":^h:" block-list:name="ʰ"/>
+  <block-list:block block-list:abbreviated-name=":_h:" block-list:name="ₕ"/>
+  <block-list:block block-list:abbreviated-name=":^H:" block-list:name="ᴴ"/>
+  <block-list:block block-list:abbreviated-name=":hediye:" block-list:name="🎁"/>
+  <block-list:block block-list:abbreviated-name=":hediye kalp:" block-list:name="💝"/>
+  <block-list:block block-list:abbreviated-name=":helikopter:" block-list:name="🚁"/>
+  <block-list:block block-list:abbreviated-name=":hentbol:" block-list:name="🤾"/>
+  <block-list:block block-list:abbreviated-name=":hesap makinesi:" block-list:name="🖩"/>
+  <block-list:block block-list:abbreviated-name=":heyecanlı:" block-list:name="🤩"/>
+  <block-list:block block-list:abbreviated-name=":heykel:" block-list:name="🗿"/>
+  <block-list:block block-list:abbreviated-name=":hilal:" block-list:name="🌙"/>
+  <block-list:block block-list:abbreviated-name=":hindi:" block-list:name="🦃"/>
+  <block-list:block block-list:abbreviated-name=":hindistan cevizi:" block-list:name="🥥"/>
+  <block-list:block block-list:abbreviated-name=":hıçkıran:" block-list:name="😭"/>
+  <block-list:block block-list:abbreviated-name=":hız teknesi:" block-list:name="🚤"/>
+  <block-list:block block-list:abbreviated-name=":hokey2:" block-list:name="🏑"/>
+  <block-list:block block-list:abbreviated-name=":hokey:" block-list:name="🏒"/>
+  <block-list:block block-list:abbreviated-name=":hokkabaz:" block-list:name="🤹"/>
+  <block-list:block block-list:abbreviated-name=":hoparlör2:" block-list:name="🕩"/>
+  <block-list:block block-list:abbreviated-name=":hoparlör3:" block-list:name="🕨"/>
+  <block-list:block block-list:abbreviated-name=":hoparlör4:" block-list:name="🕪"/>
+  <block-list:block block-list:abbreviated-name=":hoparlör:" block-list:name="📢"/>
+  <block-list:block block-list:abbreviated-name=":horoz:" block-list:name="🐓"/>
+  <block-list:block block-list:abbreviated-name=":hortum:" block-list:name="🌀"/>
+  <block-list:block block-list:abbreviated-name=":hotel2:" block-list:name="🏩"/>
+  <block-list:block block-list:abbreviated-name=":hotel:" block-list:name="🏨"/>
+  <block-list:block block-list:abbreviated-name=":hukuk sembolü:" block-list:name="⚖"/>
+  <block-list:block block-list:abbreviated-name=":ibadet:" block-list:name="🛐"/>
+  <block-list:block block-list:abbreviated-name=":^i:" block-list:name="ⁱ"/>
+  <block-list:block block-list:abbreviated-name=":_i:" block-list:name="ᵢ"/>
+  <block-list:block block-list:abbreviated-name=":^I:" block-list:name="ᴵ"/>
+  <block-list:block block-list:abbreviated-name=":içecek2:" block-list:name="🍹"/>
+  <block-list:block block-list:abbreviated-name=":içilemez su:" block-list:name="🚱"/>
+  <block-list:block block-list:abbreviated-name=":içinde:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":içinde değil:" block-list:name="∉"/>
+  <block-list:block block-list:abbreviated-name=":içki:" block-list:name="🥤"/>
+  <block-list:block block-list:abbreviated-name=":içme suyu:" block-list:name="🚰"/>
+  <block-list:block block-list:abbreviated-name=":ifadesiz:" block-list:name="😑"/>
+  <block-list:block block-list:abbreviated-name=":iki kalp:" block-list:name="💕"/>
+  <block-list:block block-list:abbreviated-name=":ikizler:" block-list:name="♊"/>
+  <block-list:block block-list:abbreviated-name=":ilk çeyrek:" block-list:name="🌓"/>
+  <block-list:block block-list:abbreviated-name=":imbik:" block-list:name="⚗"/>
+  <block-list:block block-list:abbreviated-name=":inç:" block-list:name="″"/>
+  <block-list:block block-list:abbreviated-name=":inek2:" block-list:name="🐮"/>
+  <block-list:block block-list:abbreviated-name=":inek:" block-list:name="🐄"/>
+  <block-list:block block-list:abbreviated-name=":İngiliz anahtarı:" block-list:name="🔧"/>
+  <block-list:block block-list:abbreviated-name=":İngiliz haçı:" block-list:name="🕈"/>
+  <block-list:block block-list:abbreviated-name=":iniş:" block-list:name="🛬"/>
+  <block-list:block block-list:abbreviated-name=":inşaat:" block-list:name="🚧"/>
+  <block-list:block block-list:abbreviated-name=":integral2:" block-list:name="∬"/>
+  <block-list:block block-list:abbreviated-name=":integral3:" block-list:name="∭"/>
+  <block-list:block block-list:abbreviated-name=":integral4:" block-list:name="∮"/>
+  <block-list:block block-list:abbreviated-name=":integral5:" block-list:name="∰"/>
+  <block-list:block block-list:abbreviated-name=":integral:" block-list:name="∫"/>
+  <block-list:block block-list:abbreviated-name=":^iota:" block-list:name="ᶥ"/>
+  <block-list:block block-list:abbreviated-name=":iota:" block-list:name="ι"/>
+  <block-list:block block-list:abbreviated-name=":Iota:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":iptal et:" block-list:name="🗙"/>
+  <block-list:block block-list:abbreviated-name=":işaretler bölümü:" block-list:name="🕅"/>
+  <block-list:block block-list:abbreviated-name=":işçi:" block-list:name="👷"/>
+  <block-list:block block-list:abbreviated-name=":isim:" block-list:name="📛"/>
+  <block-list:block block-list:abbreviated-name=":ispatın sonu:" block-list:name="∎"/>
+  <block-list:block block-list:abbreviated-name=":istasyon:" block-list:name="🚉"/>
+  <block-list:block block-list:abbreviated-name=":itfaiye arabası2:" block-list:name="🛱"/>
+  <block-list:block block-list:abbreviated-name=":itfaiye arabası:" block-list:name="🚒"/>
+  <block-list:block block-list:abbreviated-name=":iyi değil:" block-list:name="🙅"/>
+  <block-list:block block-list:abbreviated-name=":iyilik sembolü:" block-list:name="☧"/>
+  <block-list:block block-list:abbreviated-name=":iyi şans:" block-list:name="🤞"/>
+  <block-list:block block-list:abbreviated-name=":izle:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":Japon:" block-list:name="🗾"/>
+  <block-list:block block-list:abbreviated-name=":^j:" block-list:name="ʲ"/>
+  <block-list:block block-list:abbreviated-name=":_j:" block-list:name="ⱼ"/>
+  <block-list:block block-list:abbreviated-name=":^J:" block-list:name="ᴶ"/>
+  <block-list:block block-list:abbreviated-name=":jimnastikçi:" block-list:name="🤸"/>
+  <block-list:block block-list:abbreviated-name=":joker:" block-list:name="🃏"/>
+  <block-list:block block-list:abbreviated-name=":judo:" block-list:name="🥋"/>
+  <block-list:block block-list:abbreviated-name=":jüpiter:" block-list:name="♃"/>
+  <block-list:block block-list:abbreviated-name=":kabarcık10:" block-list:name="🗩"/>
+  <block-list:block block-list:abbreviated-name=":kabarcık2:" block-list:name="🗪"/>
+  <block-list:block block-list:abbreviated-name=":kabarcık3:" block-list:name="🗫"/>
+  <block-list:block block-list:abbreviated-name=":kabarcık4:" block-list:name="🗯"/>
+  <block-list:block block-list:abbreviated-name=":kabarcık5:" block-list:name="🗭"/>
+  <block-list:block block-list:abbreviated-name=":kabarcık6:" block-list:name="🗱"/>
+  <block-list:block block-list:abbreviated-name=":kabarcık7:" block-list:name="🗬"/>
+  <block-list:block block-list:abbreviated-name=":kabarcık8:" block-list:name="🗮"/>
+  <block-list:block block-list:abbreviated-name=":kabarcık9:" block-list:name="🗰"/>
+  <block-list:block block-list:abbreviated-name=":kabarcık:" block-list:name="🗨"/>
+  <block-list:block block-list:abbreviated-name=":Kabe:" block-list:name="🕋"/>
+  <block-list:block block-list:abbreviated-name=":kablo:" block-list:name="🔌"/>
+  <block-list:block block-list:abbreviated-name=":kabuk:" block-list:name="🐚"/>
+  <block-list:block block-list:abbreviated-name=":kadın:" block-list:name="👩"/>
+  <block-list:block block-list:abbreviated-name=":kadınlar:" block-list:name="🚺"/>
+  <block-list:block block-list:abbreviated-name=":kadın noel baba:" block-list:name="🤶"/>
+  <block-list:block block-list:abbreviated-name=":kafatası:" block-list:name="💀"/>
+  <block-list:block block-list:abbreviated-name=":kahve:" block-list:name="☕"/>
+  <block-list:block block-list:abbreviated-name=":kaka:" block-list:name="💩"/>
+  <block-list:block block-list:abbreviated-name=":kaktüs:" block-list:name="🌵"/>
+  <block-list:block block-list:abbreviated-name=":kalamar:" block-list:name="🦑"/>
+  <block-list:block block-list:abbreviated-name=":kalanın yarısı:" block-list:name="𝄼"/>
+  <block-list:block block-list:abbreviated-name=":kale2:" block-list:name="🏯"/>
+  <block-list:block block-list:abbreviated-name=":kale:" block-list:name="🏰"/>
+  <block-list:block block-list:abbreviated-name=":kalem2:" block-list:name="✏"/>
+  <block-list:block block-list:abbreviated-name=":kalem3:" block-list:name="✐"/>
+  <block-list:block block-list:abbreviated-name=":kalem4:" block-list:name="🖉"/>
+  <block-list:block block-list:abbreviated-name=":kalem:" block-list:name="✎"/>
+  <block-list:block block-list:abbreviated-name=":kalem ucu2:" block-list:name="✒"/>
+  <block-list:block block-list:abbreviated-name=":kalem ucu:" block-list:name="✑"/>
+  <block-list:block block-list:abbreviated-name=":kalıcı kağıt:" block-list:name="♾"/>
+  <block-list:block block-list:abbreviated-name=":kalkan2:" block-list:name="⛨"/>
+  <block-list:block block-list:abbreviated-name=":kalkan:" block-list:name="🛡"/>
+  <block-list:block block-list:abbreviated-name=":kalkış:" block-list:name="🛫"/>
+  <block-list:block block-list:abbreviated-name=":kalp atımı:" block-list:name="💗"/>
+  <block-list:block block-list:abbreviated-name=":kalp atışı:" block-list:name="💓"/>
+  <block-list:block block-list:abbreviated-name=":kalp:" block-list:name="❤"/>
+  <block-list:block block-list:abbreviated-name=":kalp gözlü kedi:" block-list:name="😻"/>
+  <block-list:block block-list:abbreviated-name=":kalpli gözler:" block-list:name="😍"/>
+  <block-list:block block-list:abbreviated-name=":kalp yerleşimi:" block-list:name="💟"/>
+  <block-list:block block-list:abbreviated-name=":kamera:" block-list:name="📷"/>
+  <block-list:block block-list:abbreviated-name=":kamp:" block-list:name="🏕"/>
+  <block-list:block block-list:abbreviated-name=":kamyon2:" block-list:name="🚚"/>
+  <block-list:block block-list:abbreviated-name=":kamyon:" block-list:name="⛟"/>
+  <block-list:block block-list:abbreviated-name=":kanatlı but:" block-list:name="🍗"/>
+  <block-list:block block-list:abbreviated-name=":kanepe:" block-list:name="🛋"/>
+  <block-list:block block-list:abbreviated-name=":kaniş:" block-list:name="🐩"/>
+  <block-list:block block-list:abbreviated-name=":kano:" block-list:name="🛶"/>
+  <block-list:block block-list:abbreviated-name=":kapalı cep telefonu:" block-list:name="📴"/>
+  <block-list:block block-list:abbreviated-name=":kapı:" block-list:name="🚪"/>
+  <block-list:block block-list:abbreviated-name=":kapla:" block-list:name="🗗"/>
+  <block-list:block block-list:abbreviated-name=":kaplan2:" block-list:name="🐯"/>
+  <block-list:block block-list:abbreviated-name=":kaplan:" block-list:name="🐅"/>
+  <block-list:block block-list:abbreviated-name=":kaplıca:" block-list:name="♨"/>
+  <block-list:block block-list:abbreviated-name=":kaplumbağa:" block-list:name="🐢"/>
+  <block-list:block block-list:abbreviated-name=":kappa:" block-list:name="κ"/>
+  <block-list:block block-list:abbreviated-name=":Kappa:" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=":kar:" block-list:name="🌨"/>
+  <block-list:block block-list:abbreviated-name=":kardan adam2:" block-list:name="⛄"/>
+  <block-list:block block-list:abbreviated-name=":kardan adam:" block-list:name="☃"/>
+  <block-list:block block-list:abbreviated-name=":kare2:" block-list:name="■"/>
+  <block-list:block block-list:abbreviated-name=":kare:" block-list:name="□"/>
+  <block-list:block block-list:abbreviated-name=":karekök:" block-list:name="√"/>
+  <block-list:block block-list:abbreviated-name=":karides:" block-list:name="🦐"/>
+  <block-list:block block-list:abbreviated-name=":karınca:" block-list:name="🐜"/>
+  <block-list:block block-list:abbreviated-name=":kar kayakçısı:" block-list:name="🏂"/>
+  <block-list:block block-list:abbreviated-name=":karo2:" block-list:name="♢"/>
+  <block-list:block block-list:abbreviated-name=":karo:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":karpuz:" block-list:name="🍉"/>
+  <block-list:block block-list:abbreviated-name=":kartal:" block-list:name="🦅"/>
+  <block-list:block block-list:abbreviated-name=":kar tanesi:" block-list:name="❄"/>
+  <block-list:block block-list:abbreviated-name=":kart dizini:" block-list:name="📇"/>
+  <block-list:block block-list:abbreviated-name=":kartlar:" block-list:name="🎴"/>
+  <block-list:block block-list:abbreviated-name=":kartuş:" block-list:name="🖭"/>
+  <block-list:block block-list:abbreviated-name=":kas:" block-list:name="💪"/>
+  <block-list:block block-list:abbreviated-name=":kaş:" block-list:name="🤨"/>
+  <block-list:block block-list:abbreviated-name=":kaşık:" block-list:name="🥄"/>
+  <block-list:block block-list:abbreviated-name=":kasırga:" block-list:name="🌪"/>
+  <block-list:block block-list:abbreviated-name=":kask:" block-list:name="⛑"/>
+  <block-list:block block-list:abbreviated-name=":kavun:" block-list:name="🍈"/>
+  <block-list:block block-list:abbreviated-name=":kayak:" block-list:name="🎿"/>
+  <block-list:block block-list:abbreviated-name=":kayakçı:" block-list:name="⛷"/>
+  <block-list:block block-list:abbreviated-name=":kayan araba:" block-list:name="⛐"/>
+  <block-list:block block-list:abbreviated-name=":kaydırıcı:" block-list:name="🎚"/>
+  <block-list:block block-list:abbreviated-name=":kaydırma:" block-list:name="📜"/>
+  <block-list:block block-list:abbreviated-name=":kayıt:" block-list:name="⏺"/>
+  <block-list:block block-list:abbreviated-name=":kayıtlı:" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=":kazma:" block-list:name="⛏"/>
+  <block-list:block block-list:abbreviated-name=":K:" block-list:name="↑"/>
+  <block-list:block block-list:abbreviated-name=":^k:" block-list:name="ᵏ"/>
+  <block-list:block block-list:abbreviated-name=":_k:" block-list:name="ₖ"/>
+  <block-list:block block-list:abbreviated-name=":^K:" block-list:name="ᴷ"/>
+  <block-list:block block-list:abbreviated-name=":keçi:" block-list:name="🐐"/>
+  <block-list:block block-list:abbreviated-name=":kederli:" block-list:name="😧"/>
+  <block-list:block block-list:abbreviated-name=":kedi2:" block-list:name="🐱"/>
+  <block-list:block block-list:abbreviated-name=":kedi:" block-list:name="🐈"/>
+  <block-list:block block-list:abbreviated-name=":kelebek:" block-list:name="🦋"/>
+  <block-list:block block-list:abbreviated-name=":kelepçe:" block-list:name="🗜"/>
+  <block-list:block block-list:abbreviated-name=":keman:" block-list:name="🎻"/>
+  <block-list:block block-list:abbreviated-name=":kertenkele:" block-list:name="🦎"/>
+  <block-list:block block-list:abbreviated-name=":kesişim:" block-list:name="∩"/>
+  <block-list:block block-list:abbreviated-name=":kestane:" block-list:name="🌰"/>
+  <block-list:block block-list:abbreviated-name=":Ki:" block-list:name="Ξ"/>
+  <block-list:block block-list:abbreviated-name=":kilise:" block-list:name="⛪"/>
+  <block-list:block block-list:abbreviated-name=":kilit2:" block-list:name="🔏"/>
+  <block-list:block block-list:abbreviated-name=":kilit3:" block-list:name="🔐"/>
+  <block-list:block block-list:abbreviated-name=":kilit:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":kimono:" block-list:name="👘"/>
+  <block-list:block block-list:abbreviated-name=":kiraz:" block-list:name="🍒"/>
+  <block-list:block block-list:abbreviated-name=":kirli sepeti:" block-list:name="🗑"/>
+  <block-list:block block-list:abbreviated-name=":kirpi:" block-list:name="🦔"/>
+  <block-list:block block-list:abbreviated-name=":kitap2:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":kitap3:" block-list:name="📖"/>
+  <block-list:block block-list:abbreviated-name=":kitap:" block-list:name="🕮"/>
+  <block-list:block block-list:abbreviated-name=":kitaplar:" block-list:name="📚"/>
+  <block-list:block block-list:abbreviated-name=":kivi:" block-list:name="🥝"/>
+  <block-list:block block-list:abbreviated-name=":kılıçlar:" block-list:name="⚔"/>
+  <block-list:block block-list:abbreviated-name=":kırık kalp:" block-list:name="💔"/>
+  <block-list:block block-list:abbreviated-name=":kırılmış buz:" block-list:name="🍧"/>
+  <block-list:block block-list:abbreviated-name=":kısmen:" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name=":kıyafet:" block-list:name="👚"/>
+  <block-list:block block-list:abbreviated-name=":kızak:" block-list:name="🛷"/>
+  <block-list:block block-list:abbreviated-name=":kızarmak:" block-list:name="😊"/>
+  <block-list:block block-list:abbreviated-name=":kızarmış:" block-list:name="😳"/>
+  <block-list:block block-list:abbreviated-name=":kızarmış karides:" block-list:name="🍤"/>
+  <block-list:block block-list:abbreviated-name=":kız:" block-list:name="👧"/>
+  <block-list:block block-list:abbreviated-name=":kızgın2:" block-list:name="🙁"/>
+  <block-list:block block-list:abbreviated-name=":kızgın:" block-list:name="😠"/>
+  <block-list:block block-list:abbreviated-name=":kızlar:" block-list:name="🛊"/>
+  <block-list:block block-list:abbreviated-name=":klasör2:" block-list:name="📂"/>
+  <block-list:block block-list:abbreviated-name=":klasör3:" block-list:name="🗀"/>
+  <block-list:block block-list:abbreviated-name=":klasör4:" block-list:name="🗁"/>
+  <block-list:block block-list:abbreviated-name=":klasör5:" block-list:name="🖿"/>
+  <block-list:block block-list:abbreviated-name=":klasör:" block-list:name="📁"/>
+  <block-list:block block-list:abbreviated-name=":klavye2:" block-list:name="🖮"/>
+  <block-list:block block-list:abbreviated-name=":klavye3:" block-list:name="🖦"/>
+  <block-list:block block-list:abbreviated-name=":klavye:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":koala:" block-list:name="🐨"/>
+  <block-list:block block-list:abbreviated-name=":koç:" block-list:name="♈"/>
+  <block-list:block block-list:abbreviated-name=":kokteyl:" block-list:name="🍸"/>
+  <block-list:block block-list:abbreviated-name=":koltuk:" block-list:name="💺"/>
+  <block-list:block block-list:abbreviated-name=":kontrol:" block-list:name="🎛"/>
+  <block-list:block block-list:abbreviated-name=":konuşma balonu:" block-list:name="💬"/>
+  <block-list:block block-list:abbreviated-name=":konuşma:" block-list:name="🙊"/>
+  <block-list:block block-list:abbreviated-name=":köpek2:" block-list:name="🐶"/>
+  <block-list:block block-list:abbreviated-name=":köpek balığı:" block-list:name="🦈"/>
+  <block-list:block block-list:abbreviated-name=":köpek:" block-list:name="🐕"/>
+  <block-list:block block-list:abbreviated-name=":köprü:" block-list:name="🌉"/>
+  <block-list:block block-list:abbreviated-name=":köri:" block-list:name="🍛"/>
+  <block-list:block block-list:abbreviated-name=":korkmuş:" block-list:name="😨"/>
+  <block-list:block block-list:abbreviated-name=":körling:" block-list:name="🥌"/>
+  <block-list:block block-list:abbreviated-name=":korsan:" block-list:name="🕱"/>
+  <block-list:block block-list:abbreviated-name=":korsanlık yok:" block-list:name="🕲"/>
+  <block-list:block block-list:abbreviated-name=":koşucu:" block-list:name="🏃"/>
+  <block-list:block block-list:abbreviated-name=":kot:" block-list:name="👖"/>
+  <block-list:block block-list:abbreviated-name=":kova:" block-list:name="♒"/>
+  <block-list:block block-list:abbreviated-name=":kovboy:" block-list:name="🤠"/>
+  <block-list:block block-list:abbreviated-name=":koyun:" block-list:name="🐑"/>
+  <block-list:block block-list:abbreviated-name=":kraliçe:" block-list:name="🂭"/>
+  <block-list:block block-list:abbreviated-name=":kravat:" block-list:name="👔"/>
+  <block-list:block block-list:abbreviated-name=":kredi kartı:" block-list:name="💳"/>
+  <block-list:block block-list:abbreviated-name=":krema:" block-list:name="🍮"/>
+  <block-list:block block-list:abbreviated-name=":krepler:" block-list:name="🥞"/>
+  <block-list:block block-list:abbreviated-name=":kriket2:" block-list:name="🦗"/>
+  <block-list:block block-list:abbreviated-name=":kriket:" block-list:name="🏏"/>
+  <block-list:block block-list:abbreviated-name=":kriko:" block-list:name="🂫"/>
+  <block-list:block block-list:abbreviated-name=":kristal küre:" block-list:name="🔮"/>
+  <block-list:block block-list:abbreviated-name=":kronometre:" block-list:name="⏱"/>
+  <block-list:block block-list:abbreviated-name=":kruvasan:" block-list:name="🥐"/>
+  <block-list:block block-list:abbreviated-name=":küçük kare2:" block-list:name="▪"/>
+  <block-list:block block-list:abbreviated-name=":küçük kare:" block-list:name="▫"/>
+  <block-list:block block-list:abbreviated-name=":küçük ni:" block-list:name="∍"/>
+  <block-list:block block-list:abbreviated-name=":küçüktür:" block-list:name="∊"/>
+  <block-list:block block-list:abbreviated-name=":küçük yıldız2:" block-list:name="⭑"/>
+  <block-list:block block-list:abbreviated-name=":küçük yıldız:" block-list:name="⭒"/>
+  <block-list:block block-list:abbreviated-name=":küçült:" block-list:name="🗕"/>
+  <block-list:block block-list:abbreviated-name=":Kudüs haçı:" block-list:name="☩"/>
+  <block-list:block block-list:abbreviated-name=":kulak:" block-list:name="👂"/>
+  <block-list:block block-list:abbreviated-name=":kulaklık:" block-list:name="🎧"/>
+  <block-list:block block-list:abbreviated-name=":kule:" block-list:name="🗼"/>
+  <block-list:block block-list:abbreviated-name=":kumar makinesi:" block-list:name="🎰"/>
+  <block-list:block block-list:abbreviated-name=":kum saati2:" block-list:name="⏳"/>
+  <block-list:block block-list:abbreviated-name=":kum saati:" block-list:name="⌛"/>
+  <block-list:block block-list:abbreviated-name=":kupa2:" block-list:name="♡"/>
+  <block-list:block block-list:abbreviated-name=":kupa:" block-list:name="♥"/>
+  <block-list:block block-list:abbreviated-name=":küp kök:" block-list:name="∛"/>
+  <block-list:block block-list:abbreviated-name=":kurabiye:" block-list:name="🍪"/>
+  <block-list:block block-list:abbreviated-name=":kurbağa:" block-list:name="🐸"/>
+  <block-list:block block-list:abbreviated-name=":kurdele2:" block-list:name="🎀"/>
+  <block-list:block block-list:abbreviated-name=":kurdele:" block-list:name="🎗"/>
+  <block-list:block block-list:abbreviated-name=":küre2:" block-list:name="🌎"/>
+  <block-list:block block-list:abbreviated-name=":küre3:" block-list:name="🌏"/>
+  <block-list:block block-list:abbreviated-name=":küre4:" block-list:name="🌐"/>
+  <block-list:block block-list:abbreviated-name=":küre:" block-list:name="🌍"/>
+  <block-list:block block-list:abbreviated-name=":kurşun2:" block-list:name="‣"/>
+  <block-list:block block-list:abbreviated-name=":kurşun3:" block-list:name="◦"/>
+  <block-list:block block-list:abbreviated-name=":kurşun:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":kurt:" block-list:name="🐺"/>
+  <block-list:block block-list:abbreviated-name=":kuş:" block-list:name="🐦"/>
+  <block-list:block block-list:abbreviated-name=":kusma:" block-list:name="🤮"/>
+  <block-list:block block-list:abbreviated-name=":kutu:" block-list:name="🗃"/>
+  <block-list:block block-list:abbreviated-name=":küvet:" block-list:name="🛁"/>
+  <block-list:block block-list:abbreviated-name=":kuyrukluyıldız:" block-list:name="☄"/>
+  <block-list:block block-list:abbreviated-name=":lale:" block-list:name="🌷"/>
+  <block-list:block block-list:abbreviated-name=":lamba:" block-list:name="💡"/>
+  <block-list:block block-list:abbreviated-name=":lamda:" block-list:name="λ"/>
+  <block-list:block block-list:abbreviated-name=":Lamda:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":Latin haçı2:" block-list:name="🕆"/>
+  <block-list:block block-list:abbreviated-name=":Latin haçı3:" block-list:name="🕇"/>
+  <block-list:block block-list:abbreviated-name=":Latin haçı:" block-list:name="✝"/>
+  <block-list:block block-list:abbreviated-name=":^l:" block-list:name="ˡ"/>
+  <block-list:block block-list:abbreviated-name=":_l:" block-list:name="ₗ"/>
+  <block-list:block block-list:abbreviated-name=":^L:" block-list:name="ᴸ"/>
+  <block-list:block block-list:abbreviated-name=":leopar:" block-list:name="🐆"/>
+  <block-list:block block-list:abbreviated-name=":limon:" block-list:name="🍋"/>
+  <block-list:block block-list:abbreviated-name=":lira:" block-list:name="₤"/>
+  <block-list:block block-list:abbreviated-name=":lokanta:" block-list:name="🍴"/>
+  <block-list:block block-list:abbreviated-name=":lokomotif2:" block-list:name="🛲"/>
+  <block-list:block block-list:abbreviated-name=":lokomotif:" block-list:name="🚂"/>
+  <block-list:block block-list:abbreviated-name=":lol:" block-list:name="🤣"/>
+  <block-list:block block-list:abbreviated-name=":lolipop:" block-list:name="🍭"/>
+  <block-list:block block-list:abbreviated-name=":Lorraine haçı:" block-list:name="☨"/>
+  <block-list:block block-list:abbreviated-name=":&lt;=:" block-list:name="≤"/>
+  <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
+  <block-list:block block-list:abbreviated-name=":lunapark hız treni:" block-list:name="🎢"/>
+  <block-list:block block-list:abbreviated-name=":maça2:" block-list:name="♤"/>
+  <block-list:block block-list:abbreviated-name=":maça:" block-list:name="♠"/>
+  <block-list:block block-list:abbreviated-name=":madalya2:" block-list:name="🎖"/>
+  <block-list:block block-list:abbreviated-name=":madalya:" block-list:name="🏅"/>
+  <block-list:block block-list:abbreviated-name=":mağaza2:" block-list:name="🏬"/>
+  <block-list:block block-list:abbreviated-name=":mağaza:" block-list:name="🏪"/>
+  <block-list:block block-list:abbreviated-name=":makarna:" block-list:name="🍝"/>
+  <block-list:block block-list:abbreviated-name=":makas2:" block-list:name="✄"/>
+  <block-list:block block-list:abbreviated-name=":makas3:" block-list:name="✁"/>
+  <block-list:block block-list:abbreviated-name=":makas4:" block-list:name="✃"/>
+  <block-list:block block-list:abbreviated-name=":makas:" block-list:name="✂"/>
+  <block-list:block block-list:abbreviated-name=":Malta haçı:" block-list:name="✠"/>
+  <block-list:block block-list:abbreviated-name=":manda:" block-list:name="🐃"/>
+  <block-list:block block-list:abbreviated-name=":mandalina:" block-list:name="🍊"/>
+  <block-list:block block-list:abbreviated-name=":mantar:" block-list:name="🍄"/>
+  <block-list:block block-list:abbreviated-name=":market arabası:" block-list:name="🛒"/>
+  <block-list:block block-list:abbreviated-name=":masaj:" block-list:name="💆"/>
+  <block-list:block block-list:abbreviated-name=":masa tenisi:" block-list:name="🏓"/>
+  <block-list:block block-list:abbreviated-name=":maskara:" block-list:name="🤪"/>
+  <block-list:block block-list:abbreviated-name=":maske:" block-list:name="😷"/>
+  <block-list:block block-list:abbreviated-name=":masum:" block-list:name="😇"/>
+  <block-list:block block-list:abbreviated-name=":maymun2:" block-list:name="🐵"/>
+  <block-list:block block-list:abbreviated-name=":maymun:" block-list:name="🐒"/>
+  <block-list:block block-list:abbreviated-name=":^m:" block-list:name="ᵐ"/>
+  <block-list:block block-list:abbreviated-name=":_m:" block-list:name="ₘ"/>
+  <block-list:block block-list:abbreviated-name=":^M:" block-list:name="ᴹ"/>
+  <block-list:block block-list:abbreviated-name=":md:" block-list:name="💽"/>
+  <block-list:block block-list:abbreviated-name=":mega:" block-list:name="📣"/>
+  <block-list:block block-list:abbreviated-name=":melek:" block-list:name="👼"/>
+  <block-list:block block-list:abbreviated-name=":menorah:" block-list:name="🕎"/>
+  <block-list:block block-list:abbreviated-name=":merkür:" block-list:name="☿"/>
+  <block-list:block block-list:abbreviated-name=":merperson:" block-list:name="🧜"/>
+  <block-list:block block-list:abbreviated-name=":metro:" block-list:name="🚇"/>
+  <block-list:block block-list:abbreviated-name=":mevcut değildir:" block-list:name="∄"/>
+  <block-list:block block-list:abbreviated-name=":mevcuttur:" block-list:name="∃"/>
+  <block-list:block block-list:abbreviated-name=":mezuniyet:" block-list:name="🎓"/>
+  <block-list:block block-list:abbreviated-name=":mikrofon2:" block-list:name="🎙"/>
+  <block-list:block block-list:abbreviated-name=":mikrofon:" block-list:name="🎤"/>
+  <block-list:block block-list:abbreviated-name=":mikroskop:" block-list:name="🔬"/>
+  <block-list:block block-list:abbreviated-name=":mil başına:" block-list:name="‰"/>
+  <block-list:block block-list:abbreviated-name=":minibüs:" block-list:name="🚐"/>
+  <block-list:block block-list:abbreviated-name=":mısır:" block-list:name="🌽"/>
+  <block-list:block block-list:abbreviated-name=":mızrak:" block-list:name="🔱"/>
+  <block-list:block block-list:abbreviated-name=":mobil2:" block-list:name="🖁"/>
+  <block-list:block block-list:abbreviated-name=":mobilet2:" block-list:name="🛵"/>
+  <block-list:block block-list:abbreviated-name=":mobilet:" block-list:name="🛴"/>
+  <block-list:block block-list:abbreviated-name=":modem:" block-list:name="🖀"/>
+  <block-list:block block-list:abbreviated-name=":mont:" block-list:name="🧥"/>
+  <block-list:block block-list:abbreviated-name=":motorlu tekne:" block-list:name="🛥"/>
+  <block-list:block block-list:abbreviated-name=":motosiklet:" block-list:name="🏍"/>
+  <block-list:block block-list:abbreviated-name=":mu:" block-list:name="μ"/>
+  <block-list:block block-list:abbreviated-name=":Mu:" block-list:name="Μ"/>
+  <block-list:block block-list:abbreviated-name=":mücevher:" block-list:name="💎"/>
+  <block-list:block block-list:abbreviated-name=":mum:" block-list:name="🕯"/>
+  <block-list:block block-list:abbreviated-name=":mutlu:" block-list:name="🙋"/>
+  <block-list:block block-list:abbreviated-name=":muz:" block-list:name="🍌"/>
+  <block-list:block block-list:abbreviated-name=":müze:" block-list:name="🏛"/>
+  <block-list:block block-list:abbreviated-name=":müzik2:" block-list:name="🎵"/>
+  <block-list:block block-list:abbreviated-name=":müzik:" block-list:name="🎶"/>
+  <block-list:block block-list:abbreviated-name=":N2:" block-list:name="⇑"/>
+  <block-list:block block-list:abbreviated-name=":^n:" block-list:name="ⁿ"/>
+  <block-list:block block-list:abbreviated-name=":_n:" block-list:name="ₙ"/>
+  <block-list:block block-list:abbreviated-name=":^N:" block-list:name="ᴺ"/>
+  <block-list:block block-list:abbreviated-name=":NE2:" block-list:name="⇗"/>
+  <block-list:block block-list:abbreviated-name=":NE:" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=":neptün:" block-list:name="♆"/>
+  <block-list:block block-list:abbreviated-name=":neşe:" block-list:name="😂"/>
+  <block-list:block block-list:abbreviated-name=":ni:" block-list:name="∋"/>
+  <block-list:block block-list:abbreviated-name=":ni değil:" block-list:name="∌"/>
+  <block-list:block block-list:abbreviated-name=":nil anahtarı:" block-list:name="☥"/>
+  <block-list:block block-list:abbreviated-name=":noel:" block-list:name="🎄"/>
+  <block-list:block block-list:abbreviated-name=":not3:" block-list:name="🗈"/>
+  <block-list:block block-list:abbreviated-name=":nota2:" block-list:name="♪"/>
+  <block-list:block block-list:abbreviated-name=":nota anahtarı:" block-list:name="𝄞"/>
+  <block-list:block block-list:abbreviated-name=":nota:" block-list:name="♩"/>
+  <block-list:block block-list:abbreviated-name=":notalar2:" block-list:name="♬"/>
+  <block-list:block block-list:abbreviated-name=":notalar3:" block-list:name="🎝"/>
+  <block-list:block block-list:abbreviated-name=":notalar4:" block-list:name="🎜"/>
+  <block-list:block block-list:abbreviated-name=":notalar:" block-list:name="♫"/>
+  <block-list:block block-list:abbreviated-name=":not:" block-list:name="📝"/>
+  <block-list:block block-list:abbreviated-name=":not defteri:" block-list:name="🗒"/>
+  <block-list:block block-list:abbreviated-name=":nötr yüz:" block-list:name="😐"/>
+  <block-list:block block-list:abbreviated-name=":not sayfası:" block-list:name="🗉"/>
+  <block-list:block block-list:abbreviated-name=":NS2:" block-list:name="⇕"/>
+  <block-list:block block-list:abbreviated-name=":NS:" block-list:name="↕"/>
+  <block-list:block block-list:abbreviated-name=":nu:" block-list:name="ν"/>
+  <block-list:block block-list:abbreviated-name=":Nu:" block-list:name="Ν"/>
+  <block-list:block block-list:abbreviated-name=":numara2:" block-list:name="🖓"/>
+  <block-list:block block-list:abbreviated-name=":NW2:" block-list:name="⇖"/>
+  <block-list:block block-list:abbreviated-name=":NW:" block-list:name="↖"/>
+  <block-list:block block-list:abbreviated-name=":^o:" block-list:name="ᵒ"/>
+  <block-list:block block-list:abbreviated-name=":_o:" block-list:name="ₒ"/>
+  <block-list:block block-list:abbreviated-name=":^O:" block-list:name="ᴼ"/>
+  <block-list:block block-list:abbreviated-name=":oda:" block-list:name="🕴"/>
+  <block-list:block block-list:abbreviated-name=":oden:" block-list:name="🍢"/>
+  <block-list:block block-list:abbreviated-name=":ofis:" block-list:name="🏢"/>
+  <block-list:block block-list:abbreviated-name=":öfke:" block-list:name="💢"/>
+  <block-list:block block-list:abbreviated-name=":öfkeli:" block-list:name="😡"/>
+  <block-list:block block-list:abbreviated-name=":oğlak:" block-list:name="♑"/>
+  <block-list:block block-list:abbreviated-name=":oklar:" block-list:name="🗘"/>
+  <block-list:block block-list:abbreviated-name=":okul:" block-list:name="🏫"/>
+  <block-list:block block-list:abbreviated-name=":okul çantası:" block-list:name="🎒"/>
+  <block-list:block block-list:abbreviated-name=":öküz:" block-list:name="🐂"/>
+  <block-list:block block-list:abbreviated-name=":okyanus:" block-list:name="🌊"/>
+  <block-list:block block-list:abbreviated-name=":om:" block-list:name="🕉"/>
+  <block-list:block block-list:abbreviated-name=":omega:" block-list:name="ω"/>
+  <block-list:block block-list:abbreviated-name=":Omega:" block-list:name="Ω"/>
+  <block-list:block block-list:abbreviated-name=":omicron:" block-list:name="ο"/>
+  <block-list:block block-list:abbreviated-name=":Omikron:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":omuz silkme:" block-list:name="🤷"/>
+  <block-list:block block-list:abbreviated-name=":onaltılık nota:" block-list:name="𝅘𝅥𝅯"/>
+  <block-list:block block-list:abbreviated-name=":onay işareti2:" block-list:name="✔"/>
+  <block-list:block block-list:abbreviated-name=":onay işareti3:" block-list:name="✅"/>
+  <block-list:block block-list:abbreviated-name=":onay işareti4:" block-list:name="🗴"/>
+  <block-list:block block-list:abbreviated-name=":onay işareti5:" block-list:name="🗸"/>
+  <block-list:block block-list:abbreviated-name=":onay işareti:" block-list:name="✓"/>
+  <block-list:block block-list:abbreviated-name=":onay kutusu2:" block-list:name="☑"/>
+  <block-list:block block-list:abbreviated-name=":onay kutusu3:" block-list:name="☒"/>
+  <block-list:block block-list:abbreviated-name=":onay kutusu4:" block-list:name="🗷"/>
+  <block-list:block block-list:abbreviated-name=":onay kutusu5:" block-list:name="🗹"/>
+  <block-list:block block-list:abbreviated-name=":onay kutusu6:" block-list:name="🗵"/>
+  <block-list:block block-list:abbreviated-name=":onay kutusu:" block-list:name="☐"/>
+  <block-list:block block-list:abbreviated-name=":öpen kedi:" block-list:name="😽"/>
+  <block-list:block block-list:abbreviated-name=":optik disk:" block-list:name="🖸"/>
+  <block-list:block block-list:abbreviated-name=":öpücük2:" block-list:name="😘"/>
+  <block-list:block block-list:abbreviated-name=":öpücük3:" block-list:name="😙"/>
+  <block-list:block block-list:abbreviated-name=":öpücük4:" block-list:name="😚"/>
+  <block-list:block block-list:abbreviated-name=":öpücük:" block-list:name="💏"/>
+  <block-list:block block-list:abbreviated-name=":öpücük işareti:" block-list:name="💋"/>
+  <block-list:block block-list:abbreviated-name=":öpüşme:" block-list:name="😗"/>
+  <block-list:block block-list:abbreviated-name=":orak çekiç:" block-list:name="☭"/>
+  <block-list:block block-list:abbreviated-name=":ördek:" block-list:name="🦆"/>
+  <block-list:block block-list:abbreviated-name=":orta boy yıldız:" block-list:name="⭐"/>
+  <block-list:block block-list:abbreviated-name=":orta kare2:" block-list:name="◼"/>
+  <block-list:block block-list:abbreviated-name=":orta kare:" block-list:name="◻"/>
+  <block-list:block block-list:abbreviated-name=":orta nokta:" block-list:name="·"/>
+  <block-list:block block-list:abbreviated-name=":ortodoks haçı:" block-list:name="☦"/>
+  <block-list:block block-list:abbreviated-name=":örümcek:" block-list:name="🕷"/>
+  <block-list:block block-list:abbreviated-name=":ot:" block-list:name="🌿"/>
+  <block-list:block block-list:abbreviated-name=":otobüs2:" block-list:name="🚍"/>
+  <block-list:block block-list:abbreviated-name=":otobüs:" block-list:name="🚌"/>
+  <block-list:block block-list:abbreviated-name=":otobüs durağı:" block-list:name="🚏"/>
+  <block-list:block block-list:abbreviated-name=":otoyol:" block-list:name="🛣"/>
+  <block-list:block block-list:abbreviated-name=":oylama:" block-list:name="🗳"/>
+  <block-list:block block-list:abbreviated-name=":oyuncak bebekler:" block-list:name="🎎"/>
+  <block-list:block block-list:abbreviated-name=":oyun kolu:" block-list:name="🕹"/>
+  <block-list:block block-list:abbreviated-name=":özçekim:" block-list:name="🤳"/>
+  <block-list:block block-list:abbreviated-name=":özgürlük heykeli:" block-list:name="🗽"/>
+  <block-list:block block-list:abbreviated-name=":paket:" block-list:name="📦"/>
+  <block-list:block block-list:abbreviated-name=":palmiye2:" block-list:name="🤲"/>
+  <block-list:block block-list:abbreviated-name=":palmiye:" block-list:name="🌴"/>
+  <block-list:block block-list:abbreviated-name=":panda:" block-list:name="🐼"/>
+  <block-list:block block-list:abbreviated-name=":pano:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":papaz:" block-list:name="🂮"/>
+  <block-list:block block-list:abbreviated-name=":para2:" block-list:name="💰"/>
+  <block-list:block block-list:abbreviated-name=":para3:" block-list:name="🤑"/>
+  <block-list:block block-list:abbreviated-name=":para:" block-list:name="💸"/>
+  <block-list:block block-list:abbreviated-name=":paralel:" block-list:name="∥"/>
+  <block-list:block block-list:abbreviated-name=":paralel değil:" block-list:name="∦"/>
+  <block-list:block block-list:abbreviated-name=":paralelkenar2:" block-list:name="▰"/>
+  <block-list:block block-list:abbreviated-name=":paralelkenar:" block-list:name="▱"/>
+  <block-list:block block-list:abbreviated-name=":parça:" block-list:name="🛤"/>
+  <block-list:block block-list:abbreviated-name=":park:" block-list:name="🏞"/>
+  <block-list:block block-list:abbreviated-name=":parlaklık2:" block-list:name="🔆"/>
+  <block-list:block block-list:abbreviated-name=":parlaklık:" block-list:name="🔅"/>
+  <block-list:block block-list:abbreviated-name=":parmak:" block-list:name="🖕"/>
+  <block-list:block block-list:abbreviated-name=":parmakizi:" block-list:name="👣"/>
+  <block-list:block block-list:abbreviated-name=":parti2:" block-list:name="🎊"/>
+  <block-list:block block-list:abbreviated-name=":parti3:" block-list:name="🥂"/>
+  <block-list:block block-list:abbreviated-name=":parti4:" block-list:name="🍾"/>
+  <block-list:block block-list:abbreviated-name=":parti:" block-list:name="🎉"/>
+  <block-list:block block-list:abbreviated-name=":pasaport:" block-list:name="🛂"/>
+  <block-list:block block-list:abbreviated-name=":pasta:" block-list:name="🍰"/>
+  <block-list:block block-list:abbreviated-name=":pastel boya:" block-list:name="🖍"/>
+  <block-list:block block-list:abbreviated-name=":pastırma:" block-list:name="🥓"/>
+  <block-list:block block-list:abbreviated-name=":patates:" block-list:name="🥔"/>
+  <block-list:block block-list:abbreviated-name=":patates kızartması:" block-list:name="🍟"/>
+  <block-list:block block-list:abbreviated-name=":paten:" block-list:name="⛸"/>
+  <block-list:block block-list:abbreviated-name=":patlama:" block-list:name="💥"/>
+  <block-list:block block-list:abbreviated-name=":patlamış mısır:" block-list:name="🍿"/>
+  <block-list:block block-list:abbreviated-name=":patlıcan:" block-list:name="🍆"/>
+  <block-list:block block-list:abbreviated-name=":^p:" block-list:name="ᵖ"/>
+  <block-list:block block-list:abbreviated-name=":_p:" block-list:name="ₚ"/>
+  <block-list:block block-list:abbreviated-name=":^P:" block-list:name="ᴾ"/>
+  <block-list:block block-list:abbreviated-name=":pc:" block-list:name="🖳"/>
+  <block-list:block block-list:abbreviated-name=":pencere:" block-list:name="🗔"/>
+  <block-list:block block-list:abbreviated-name=":penguen:" block-list:name="🐧"/>
+  <block-list:block block-list:abbreviated-name=":pentagram:" block-list:name="⛤"/>
+  <block-list:block block-list:abbreviated-name=":peri:" block-list:name="🧚"/>
+  <block-list:block block-list:abbreviated-name=":peso:" block-list:name="₱"/>
+  <block-list:block block-list:abbreviated-name=":peynir:" block-list:name="🧀"/>
+  <block-list:block block-list:abbreviated-name=":phi:" block-list:name="φ"/>
+  <block-list:block block-list:abbreviated-name=":Phi:" block-list:name="Φ"/>
+  <block-list:block block-list:abbreviated-name=":^Pi:" block-list:name="ᶲ"/>
+  <block-list:block block-list:abbreviated-name=":pi:" block-list:name="π"/>
+  <block-list:block block-list:abbreviated-name=":Pi:" block-list:name="Π"/>
+  <block-list:block block-list:abbreviated-name=":^pi:" block-list:name="ᵠ"/>
+  <block-list:block block-list:abbreviated-name=":_pi:" block-list:name="ᵩ"/>
+  <block-list:block block-list:abbreviated-name=":pil:" block-list:name="🔋"/>
+  <block-list:block block-list:abbreviated-name=":pirinç:" block-list:name="🍚"/>
+  <block-list:block block-list:abbreviated-name=":pirinç kraker:" block-list:name="🍘"/>
+  <block-list:block block-list:abbreviated-name=":pirinç sahnesi:" block-list:name="🎑"/>
+  <block-list:block block-list:abbreviated-name=":pirinç topu:" block-list:name="🍙"/>
+  <block-list:block block-list:abbreviated-name=":piyano:" block-list:name="🎹"/>
+  <block-list:block block-list:abbreviated-name=":pizza:" block-list:name="🍕"/>
+  <block-list:block block-list:abbreviated-name=":plaj:" block-list:name="🏖"/>
+  <block-list:block block-list:abbreviated-name=":plüto:" block-list:name="♇"/>
+  <block-list:block block-list:abbreviated-name=":polis:" block-list:name="👮"/>
+  <block-list:block block-list:abbreviated-name=":polis otosu2:" block-list:name="🚔"/>
+  <block-list:block block-list:abbreviated-name=":polis otosu:" block-list:name="🚓"/>
+  <block-list:block block-list:abbreviated-name=":posta kutusu2:" block-list:name="📫"/>
+  <block-list:block block-list:abbreviated-name=":posta kutusu3:" block-list:name="📬"/>
+  <block-list:block block-list:abbreviated-name=":posta kutusu4:" block-list:name="📭"/>
+  <block-list:block block-list:abbreviated-name=":posta kutusu:" block-list:name="📪"/>
+  <block-list:block block-list:abbreviated-name=":postane2:" block-list:name="🏣"/>
+  <block-list:block block-list:abbreviated-name=":postane:" block-list:name="🏤"/>
+  <block-list:block block-list:abbreviated-name=":pound2:" block-list:name="💷"/>
+  <block-list:block block-list:abbreviated-name=":pound:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":prens:" block-list:name="🤴"/>
+  <block-list:block block-list:abbreviated-name=":prenses:" block-list:name="👸"/>
+  <block-list:block block-list:abbreviated-name=":projektör:" block-list:name="📽"/>
+  <block-list:block block-list:abbreviated-name=":psi:" block-list:name="ψ"/>
+  <block-list:block block-list:abbreviated-name=":Psi:" block-list:name="Ψ"/>
+  <block-list:block block-list:abbreviated-name=":puan:" block-list:name="🎼"/>
+  <block-list:block block-list:abbreviated-name=":radyoaktif:" block-list:name="☢"/>
+  <block-list:block block-list:abbreviated-name=":radyo:" block-list:name="📻"/>
+  <block-list:block block-list:abbreviated-name=":radyo düğmesi:" block-list:name="🔘"/>
+  <block-list:block block-list:abbreviated-name=":rahatlamış:" block-list:name="😌"/>
+  <block-list:block block-list:abbreviated-name=":ramen:" block-list:name="🍜"/>
+  <block-list:block block-list:abbreviated-name=":raptiye:" block-list:name="📌"/>
+  <block-list:block block-list:abbreviated-name=":raylar2:" block-list:name="🗥"/>
+  <block-list:block block-list:abbreviated-name=":raylar3:" block-list:name="🗤"/>
+  <block-list:block block-list:abbreviated-name=":raylar4:" block-list:name="🗧"/>
+  <block-list:block block-list:abbreviated-name=":raylar:" block-list:name="🗦"/>
+  <block-list:block block-list:abbreviated-name=":^r:" block-list:name="ʳ"/>
+  <block-list:block block-list:abbreviated-name=":_r:" block-list:name="ᵣ"/>
+  <block-list:block block-list:abbreviated-name=":^R:" block-list:name="ᴿ"/>
+  <block-list:block block-list:abbreviated-name=":resim:" block-list:name="🖼"/>
+  <block-list:block block-list:abbreviated-name=":reşit olmayan:" block-list:name="🔞"/>
+  <block-list:block block-list:abbreviated-name=":rho:" block-list:name="ρ"/>
+  <block-list:block block-list:abbreviated-name=":_ro:" block-list:name="ᵨ"/>
+  <block-list:block block-list:abbreviated-name=":Ro:" block-list:name="Ρ"/>
+  <block-list:block block-list:abbreviated-name=":robot:" block-list:name="🤖"/>
+  <block-list:block block-list:abbreviated-name=":roket:" block-list:name="🚀"/>
+  <block-list:block block-list:abbreviated-name=":rozet2:" block-list:name="🏶"/>
+  <block-list:block block-list:abbreviated-name=":rozet:" block-list:name="🏵"/>
+  <block-list:block block-list:abbreviated-name=":rugby futbolu:" block-list:name="🏉"/>
+  <block-list:block block-list:abbreviated-name=":ruj:" block-list:name="💄"/>
+  <block-list:block block-list:abbreviated-name=":rupi:" block-list:name="₹"/>
+  <block-list:block block-list:abbreviated-name=":rüzgar:" block-list:name="🌬"/>
+  <block-list:block block-list:abbreviated-name=":rüzgar zili:" block-list:name="🎐"/>
+  <block-list:block block-list:abbreviated-name=":S2:" block-list:name="⇓"/>
+  <block-list:block block-list:abbreviated-name=":saat:" block-list:name="🕰"/>
+  <block-list:block block-list:abbreviated-name=":sabit disk:" block-list:name="🖴"/>
+  <block-list:block block-list:abbreviated-name=":saç kesimi:" block-list:name="💇"/>
+  <block-list:block block-list:abbreviated-name=":sağ2:" block-list:name="👉"/>
+  <block-list:block block-list:abbreviated-name=":sağ3:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":sağ4:" block-list:name="🖛"/>
+  <block-list:block block-list:abbreviated-name=":sağ5:" block-list:name="🖙"/>
+  <block-list:block block-list:abbreviated-name=":sağ6:" block-list:name="🖝"/>
+  <block-list:block block-list:abbreviated-name=":sağ:" block-list:name="☞"/>
+  <block-list:block block-list:abbreviated-name=":sağ üçgen:" block-list:name="⊿"/>
+  <block-list:block block-list:abbreviated-name=":sakal:" block-list:name="🧔"/>
+  <block-list:block block-list:abbreviated-name=":sake:" block-list:name="🍶"/>
+  <block-list:block block-list:abbreviated-name=":saksafon:" block-list:name="🎷"/>
+  <block-list:block block-list:abbreviated-name=":salata:" block-list:name="🥗"/>
+  <block-list:block block-list:abbreviated-name=":salatalık:" block-list:name="🥒"/>
+  <block-list:block block-list:abbreviated-name=":salyangoz:" block-list:name="🐌"/>
+  <block-list:block block-list:abbreviated-name=":samanyolu:" block-list:name="🌌"/>
+  <block-list:block block-list:abbreviated-name=":sanat:" block-list:name="🎨"/>
+  <block-list:block block-list:abbreviated-name=":sandal:" block-list:name="🚣"/>
+  <block-list:block block-list:abbreviated-name=":sandalet:" block-list:name="👡"/>
+  <block-list:block block-list:abbreviated-name=":sandviç:" block-list:name="🥪"/>
+  <block-list:block block-list:abbreviated-name=":şans:" block-list:name="🎯"/>
+  <block-list:block block-list:abbreviated-name=":santa:" block-list:name="🎅"/>
+  <block-list:block block-list:abbreviated-name=":şapka2:" block-list:name="👲"/>
+  <block-list:block block-list:abbreviated-name=":şapka:" block-list:name="👒"/>
+  <block-list:block block-list:abbreviated-name=":sarık:" block-list:name="👳"/>
+  <block-list:block block-list:abbreviated-name=":sarılma:" block-list:name="🤗"/>
+  <block-list:block block-list:abbreviated-name=":sarı saç:" block-list:name="👱"/>
+  <block-list:block block-list:abbreviated-name=":sarsılmış:" block-list:name="🤯"/>
+  <block-list:block block-list:abbreviated-name=":şaşırmış:" block-list:name="😖"/>
+  <block-list:block block-list:abbreviated-name=":şaşkın:" block-list:name="💫"/>
+  <block-list:block block-list:abbreviated-name=":şaşkın yüz:" block-list:name="😵"/>
+  <block-list:block block-list:abbreviated-name=":satürn:" block-list:name="♄"/>
+  <block-list:block block-list:abbreviated-name=":sauna:" block-list:name="🧖"/>
+  <block-list:block block-list:abbreviated-name=":sayfa2:" block-list:name="🗏"/>
+  <block-list:block block-list:abbreviated-name=":sayfa3:" block-list:name="📃"/>
+  <block-list:block block-list:abbreviated-name=":sayfa4:" block-list:name="🗟"/>
+  <block-list:block block-list:abbreviated-name=":sayfa:" block-list:name="📄"/>
+  <block-list:block block-list:abbreviated-name=":sayfalar:" block-list:name="🗐"/>
+  <block-list:block block-list:abbreviated-name=":^s:" block-list:name="ˢ"/>
+  <block-list:block block-list:abbreviated-name=":_s:" block-list:name="ₛ"/>
+  <block-list:block block-list:abbreviated-name=":SE2:" block-list:name="⇘"/>
+  <block-list:block block-list:abbreviated-name=":SE:" block-list:name="↘"/>
+  <block-list:block block-list:abbreviated-name=":şeftali:" block-list:name="🍑"/>
+  <block-list:block block-list:abbreviated-name=":şehir:" block-list:name="🏙"/>
+  <block-list:block block-list:abbreviated-name=":şekel:" block-list:name="₪"/>
+  <block-list:block block-list:abbreviated-name=":şeker:" block-list:name="🍬"/>
+  <block-list:block block-list:abbreviated-name=":sekizinci kalan:" block-list:name="𝄾"/>
+  <block-list:block block-list:abbreviated-name=":sekizlik nota:" block-list:name="𝅘𝅥𝅮"/>
+  <block-list:block block-list:abbreviated-name=":semaver:" block-list:name="⚱"/>
+  <block-list:block block-list:abbreviated-name=":şemsiye2:" block-list:name="🌂"/>
+  <block-list:block block-list:abbreviated-name=":şemsiye3:" block-list:name="⛱"/>
+  <block-list:block block-list:abbreviated-name=":şemsiye:" block-list:name="☂"/>
+  <block-list:block block-list:abbreviated-name=":sentezleyici:" block-list:name="🎘"/>
+  <block-list:block block-list:abbreviated-name=":ses:" block-list:name="🔉"/>
+  <block-list:block block-list:abbreviated-name=":sessiz:" block-list:name="🔇"/>
+  <block-list:block block-list:abbreviated-name=":sevimlilik:" block-list:name="💠"/>
+  <block-list:block block-list:abbreviated-name=":sevinen kedi:" block-list:name="😹"/>
+  <block-list:block block-list:abbreviated-name=":şeytan:" block-list:name="👿"/>
+  <block-list:block block-list:abbreviated-name=":sigara içilebilir:" block-list:name="🚬"/>
+  <block-list:block block-list:abbreviated-name=":sigara içilmez:" block-list:name="🚭"/>
+  <block-list:block block-list:abbreviated-name=":sigma2:" block-list:name="ς"/>
+  <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="σ"/>
+  <block-list:block block-list:abbreviated-name=":Sigma:" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=":sihirbaz:" block-list:name="🧙"/>
+  <block-list:block block-list:abbreviated-name=":silindir şapka:" block-list:name="🎩"/>
+  <block-list:block block-list:abbreviated-name=":şimşek2:" block-list:name="🗲"/>
+  <block-list:block block-list:abbreviated-name=":şimşek3:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":şimşek:" block-list:name="🌩"/>
+  <block-list:block block-list:abbreviated-name=":sinagog:" block-list:name="🕍"/>
+  <block-list:block block-list:abbreviated-name=":sinek2:" block-list:name="♧"/>
+  <block-list:block block-list:abbreviated-name=":sinek:" block-list:name="♣"/>
+  <block-list:block block-list:abbreviated-name=":sinyal gücü:" block-list:name="📶"/>
+  <block-list:block block-list:abbreviated-name=":sirk:" block-list:name="🎪"/>
+  <block-list:block block-list:abbreviated-name=":sis:" block-list:name="🌫"/>
+  <block-list:block block-list:abbreviated-name=":sisli:" block-list:name="🌁"/>
+  <block-list:block block-list:abbreviated-name=":siyah at:" block-list:name="♞"/>
+  <block-list:block block-list:abbreviated-name=":siyah fil:" block-list:name="♝"/>
+  <block-list:block block-list:abbreviated-name=":siyah kale:" block-list:name="♜"/>
+  <block-list:block block-list:abbreviated-name=":siyah kalp:" block-list:name="🖤"/>
+  <block-list:block block-list:abbreviated-name=":siyah nokta:" block-list:name="⚫"/>
+  <block-list:block block-list:abbreviated-name=":siyah piyon:" block-list:name="♟"/>
+  <block-list:block block-list:abbreviated-name=":siyah şah:" block-list:name="♚"/>
+  <block-list:block block-list:abbreviated-name=":siyah vezir:" block-list:name="♛"/>
+  <block-list:block block-list:abbreviated-name=":sıçan:" block-list:name="🐀"/>
+  <block-list:block block-list:abbreviated-name=":şırınga:" block-list:name="💉"/>
+  <block-list:block block-list:abbreviated-name=":sırıtan kedi:" block-list:name="😼"/>
+  <block-list:block block-list:abbreviated-name=":sırıtma:" block-list:name="😀"/>
+  <block-list:block block-list:abbreviated-name=":soğuk terleyen:" block-list:name="😰"/>
+  <block-list:block block-list:abbreviated-name=":sol2:" block-list:name="👈"/>
+  <block-list:block block-list:abbreviated-name=":sol3:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":sol4:" block-list:name="🖚"/>
+  <block-list:block block-list:abbreviated-name=":sol5:" block-list:name="🖜"/>
+  <block-list:block block-list:abbreviated-name=":sol6:" block-list:name="🖘"/>
+  <block-list:block block-list:abbreviated-name=":sol:" block-list:name="☜"/>
+  <block-list:block block-list:abbreviated-name=":şölen2:" block-list:name="🕄"/>
+  <block-list:block block-list:abbreviated-name=":şölen:" block-list:name="🕃"/>
+  <block-list:block block-list:abbreviated-name=":somun ve cıvata:" block-list:name="🔩"/>
+  <block-list:block block-list:abbreviated-name=":somurtan:" block-list:name="🙎"/>
+  <block-list:block block-list:abbreviated-name=":somurtan kedi:" block-list:name="😾"/>
+  <block-list:block block-list:abbreviated-name=":somurtuk:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":son çeyrek:" block-list:name="🌗"/>
+  <block-list:block block-list:abbreviated-name=":sonsuz:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":sörfçü:" block-list:name="🏄"/>
+  <block-list:block block-list:abbreviated-name=":sosisli:" block-list:name="🌭"/>
+  <block-list:block block-list:abbreviated-name=":sövgü:" block-list:name="🤬"/>
+  <block-list:block block-list:abbreviated-name=":spock:" block-list:name="🖖"/>
+  <block-list:block block-list:abbreviated-name=":stadyum:" block-list:name="🏟"/>
+  <block-list:block block-list:abbreviated-name=":stereo:" block-list:name="📾"/>
+  <block-list:block block-list:abbreviated-name=":sus:" block-list:name="🤫"/>
+  <block-list:block block-list:abbreviated-name=":suşi:" block-list:name="🍣"/>
+  <block-list:block block-list:abbreviated-name=":süt:" block-list:name="🥛"/>
+  <block-list:block block-list:abbreviated-name=":su topu:" block-list:name="🤽"/>
+  <block-list:block block-list:abbreviated-name=":SW2:" block-list:name="⇙"/>
+  <block-list:block block-list:abbreviated-name=":SW:" block-list:name="↙"/>
+  <block-list:block block-list:abbreviated-name=":tabak:" block-list:name="🍽"/>
+  <block-list:block block-list:abbreviated-name=":tabanca:" block-list:name="🔫"/>
+  <block-list:block block-list:abbreviated-name=":taban puan:" block-list:name="‱"/>
+  <block-list:block block-list:abbreviated-name=":tabut:" block-list:name="⚰"/>
+  <block-list:block block-list:abbreviated-name=":taç:" block-list:name="👑"/>
+  <block-list:block block-list:abbreviated-name=":takas:" block-list:name="💱"/>
+  <block-list:block block-list:abbreviated-name=":tako:" block-list:name="🌮"/>
+  <block-list:block block-list:abbreviated-name=":taksi2:" block-list:name="🚖"/>
+  <block-list:block block-list:abbreviated-name=":taksi:" block-list:name="🚕"/>
+  <block-list:block block-list:abbreviated-name=":takvim2:" block-list:name="📆"/>
+  <block-list:block block-list:abbreviated-name=":takvim3:" block-list:name="🗓"/>
+  <block-list:block block-list:abbreviated-name=":takvim:" block-list:name="📅"/>
+  <block-list:block block-list:abbreviated-name=":tamam2:" block-list:name="🖏"/>
+  <block-list:block block-list:abbreviated-name=":tamam3:" block-list:name="🙆"/>
+  <block-list:block block-list:abbreviated-name=":tamam:" block-list:name="👌"/>
+  <block-list:block block-list:abbreviated-name=":tanabata ağacı:" block-list:name="🎋"/>
+  <block-list:block block-list:abbreviated-name=":tart:" block-list:name="🥧"/>
+  <block-list:block block-list:abbreviated-name=":tatlı:" block-list:name="😓"/>
+  <block-list:block block-list:abbreviated-name=":tatlı çörek:" block-list:name="🍩"/>
+  <block-list:block block-list:abbreviated-name=":tatlı patates:" block-list:name="🍠"/>
+  <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
+  <block-list:block block-list:abbreviated-name=":Tau:" block-list:name="Τ"/>
+  <block-list:block block-list:abbreviated-name=":tavşan2:" block-list:name="🐰"/>
+  <block-list:block block-list:abbreviated-name=":tavşan:" block-list:name="🐇"/>
+  <block-list:block block-list:abbreviated-name=":tavşan kulakları:" block-list:name="👯"/>
+  <block-list:block block-list:abbreviated-name=":tavuk:" block-list:name="🐔"/>
+  <block-list:block block-list:abbreviated-name=":^t:" block-list:name="ᵗ"/>
+  <block-list:block block-list:abbreviated-name=":_t:" block-list:name="ₜ"/>
+  <block-list:block block-list:abbreviated-name=":^T:" block-list:name="ᵀ"/>
+  <block-list:block block-list:abbreviated-name=":tebrik:" block-list:name="🙌"/>
+  <block-list:block block-list:abbreviated-name=":tehlike:" block-list:name="⚡"/>
+  <block-list:block block-list:abbreviated-name=":tek boynuzlu at:" block-list:name="🦄"/>
+  <block-list:block block-list:abbreviated-name=":tekerlekli sandalye:" block-list:name="♿"/>
+  <block-list:block block-list:abbreviated-name=":tek gözlük:" block-list:name="🧐"/>
+  <block-list:block block-list:abbreviated-name=":tek raylı demiryolu:" block-list:name="🚝"/>
+  <block-list:block block-list:abbreviated-name=":telefon2:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":telefon3:" block-list:name="🕾"/>
+  <block-list:block block-list:abbreviated-name=":telefon4:" block-list:name="🕿"/>
+  <block-list:block block-list:abbreviated-name=":telefon:" block-list:name="☎"/>
+  <block-list:block block-list:abbreviated-name=":teleskop:" block-list:name="🔭"/>
+  <block-list:block block-list:abbreviated-name=":telif hakkı:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=":teneke kutu:" block-list:name="🥫"/>
+  <block-list:block block-list:abbreviated-name=":tenis:" block-list:name="🎾"/>
+  <block-list:block block-list:abbreviated-name=":tepetaklak:" block-list:name="🙃"/>
+  <block-list:block block-list:abbreviated-name=":tepsi2:" block-list:name="📥"/>
+  <block-list:block block-list:abbreviated-name=":tepsi:" block-list:name="📤"/>
+  <block-list:block block-list:abbreviated-name=":terazi:" block-list:name="♎"/>
+  <block-list:block block-list:abbreviated-name=":ter damlaları:" block-list:name="💦"/>
+  <block-list:block block-list:abbreviated-name=":termometre2:" block-list:name="🤒"/>
+  <block-list:block block-list:abbreviated-name=":termometre:" block-list:name="🌡"/>
+  <block-list:block block-list:abbreviated-name=":tespih:" block-list:name="📿"/>
+  <block-list:block block-list:abbreviated-name=":teta:" block-list:name="θ"/>
+  <block-list:block block-list:abbreviated-name=":^teta:" block-list:name="ᶿ"/>
+  <block-list:block block-list:abbreviated-name=":Teta:" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name=":tilki:" block-list:name="🦊"/>
+  <block-list:block block-list:abbreviated-name=":timsah:" block-list:name="🐊"/>
+  <block-list:block block-list:abbreviated-name=":titreşim kipi:" block-list:name="📳"/>
+  <block-list:block block-list:abbreviated-name=":tiyatro:" block-list:name="🎭"/>
+  <block-list:block block-list:abbreviated-name=":tıp sembolü:" block-list:name="☤"/>
+  <block-list:block block-list:abbreviated-name=":tırmanıcı:" block-list:name="🧗"/>
+  <block-list:block block-list:abbreviated-name=":tırnak bakımı:" block-list:name="💅"/>
+  <block-list:block block-list:abbreviated-name=":tm:" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=":top:" block-list:name="⛹"/>
+  <block-list:block block-list:abbreviated-name=":toplam:" block-list:name="∑"/>
+  <block-list:block block-list:abbreviated-name=":torba:" block-list:name="👝"/>
+  <block-list:block block-list:abbreviated-name=":trafik ışığı2:" block-list:name="🚦"/>
+  <block-list:block block-list:abbreviated-name=":trafik ışığı:" block-list:name="🚥"/>
+  <block-list:block block-list:abbreviated-name=":traktör:" block-list:name="🚜"/>
+  <block-list:block block-list:abbreviated-name=":tramvay2:" block-list:name="🚋"/>
+  <block-list:block block-list:abbreviated-name=":tramvay:" block-list:name="🚊"/>
+  <block-list:block block-list:abbreviated-name=":tren2:" block-list:name="🚄"/>
+  <block-list:block block-list:abbreviated-name=":tren3:" block-list:name="🚅"/>
+  <block-list:block block-list:abbreviated-name=":tren:" block-list:name="🚆"/>
+  <block-list:block block-list:abbreviated-name=":troleybüs:" block-list:name="🚎"/>
+  <block-list:block block-list:abbreviated-name=":trompet:" block-list:name="🎺"/>
+  <block-list:block block-list:abbreviated-name=":tropi:" block-list:name="🏆"/>
+  <block-list:block block-list:abbreviated-name=":tüm nota:" block-list:name="𝅝"/>
+  <block-list:block block-list:abbreviated-name=":tümü için:" block-list:name="∀"/>
+  <block-list:block block-list:abbreviated-name=":Türk lirası:" block-list:name="₺"/>
+  <block-list:block block-list:abbreviated-name=":turta:" block-list:name="🥟"/>
+  <block-list:block block-list:abbreviated-name=":turuncu kalp:" block-list:name="🧡"/>
+  <block-list:block block-list:abbreviated-name=":tuvalet2:" block-list:name="🚾"/>
+  <block-list:block block-list:abbreviated-name=":tuvalet:" block-list:name="🚻"/>
+  <block-list:block block-list:abbreviated-name=":tv:" block-list:name="📺"/>
+  <block-list:block block-list:abbreviated-name=":^u:" block-list:name="ᵘ"/>
+  <block-list:block block-list:abbreviated-name=":_u:" block-list:name="ᵤ"/>
+  <block-list:block block-list:abbreviated-name=":^U:" block-list:name="ᵁ"/>
+  <block-list:block block-list:abbreviated-name=":uçak2:" block-list:name="🛩"/>
+  <block-list:block block-list:abbreviated-name=":uçak3:" block-list:name="🛧"/>
+  <block-list:block block-list:abbreviated-name=":uçak4:" block-list:name="🛨"/>
+  <block-list:block block-list:abbreviated-name=":uçak5:" block-list:name="🛦"/>
+  <block-list:block block-list:abbreviated-name=":uçak6:" block-list:name="🛪"/>
+  <block-list:block block-list:abbreviated-name=":uçak:" block-list:name="✈"/>
+  <block-list:block block-list:abbreviated-name=":üç çeyrek ay:" block-list:name="🌔"/>
+  <block-list:block block-list:abbreviated-name=":üçgen2:" block-list:name="▲"/>
+  <block-list:block block-list:abbreviated-name=":üçgen3:" block-list:name="🛆"/>
+  <block-list:block block-list:abbreviated-name=":üçgen bayrak:" block-list:name="🚩"/>
+  <block-list:block block-list:abbreviated-name=":üçgen:" block-list:name="△"/>
+  <block-list:block block-list:abbreviated-name=":ufo:" block-list:name="🛸"/>
+  <block-list:block block-list:abbreviated-name=":uğur böceği:" block-list:name="🐞"/>
+  <block-list:block block-list:abbreviated-name=":upsilon:" block-list:name="υ"/>
+  <block-list:block block-list:abbreviated-name=":Upsilon:" block-list:name="Υ"/>
+  <block-list:block block-list:abbreviated-name=":uranüs:" block-list:name="♅"/>
+  <block-list:block block-list:abbreviated-name=":üst germe:" block-list:name="📒"/>
+  <block-list:block block-list:abbreviated-name=":üst küme:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":üst küme değil:" block-list:name="⊅"/>
+  <block-list:block block-list:abbreviated-name=":uyarı:" block-list:name="⚠"/>
+  <block-list:block block-list:abbreviated-name=":uydu:" block-list:name="🛰"/>
+  <block-list:block block-list:abbreviated-name=":uyku:" block-list:name="🛌"/>
+  <block-list:block block-list:abbreviated-name=":uykulu:" block-list:name="😪"/>
+  <block-list:block block-list:abbreviated-name=":uyuyan:" block-list:name="😴"/>
+  <block-list:block block-list:abbreviated-name=":uzaylı2:" block-list:name="👾"/>
+  <block-list:block block-list:abbreviated-name=":uzaylı:" block-list:name="👽"/>
+  <block-list:block block-list:abbreviated-name=":üzüm:" block-list:name="🍇"/>
+  <block-list:block block-list:abbreviated-name=":vagon:" block-list:name="🚃"/>
+  <block-list:block block-list:abbreviated-name=":vampir:" block-list:name="🧛"/>
+  <block-list:block block-list:abbreviated-name=":^v:" block-list:name="ᵛ"/>
+  <block-list:block block-list:abbreviated-name=":_v:" block-list:name="ᵥ"/>
+  <block-list:block block-list:abbreviated-name=":^V:" block-list:name="ⱽ"/>
+  <block-list:block block-list:abbreviated-name=":ve:" block-list:name="∧"/>
+  <block-list:block block-list:abbreviated-name=":veya:" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=":vhs:" block-list:name="📼"/>
+  <block-list:block block-list:abbreviated-name=":video kamera:" block-list:name="📹"/>
+  <block-list:block block-list:abbreviated-name=":vinç:" block-list:name="🏗"/>
+  <block-list:block block-list:abbreviated-name=":vites:" block-list:name="⚙"/>
+  <block-list:block block-list:abbreviated-name=":voleybol:" block-list:name="🏐"/>
+  <block-list:block block-list:abbreviated-name=":volkan:" block-list:name="🌋"/>
+  <block-list:block block-list:abbreviated-name=":W2:" block-list:name="⇐"/>
+  <block-list:block block-list:abbreviated-name=":^w:" block-list:name="ʷ"/>
+  <block-list:block block-list:abbreviated-name=":^W:" block-list:name="ᵂ"/>
+  <block-list:block block-list:abbreviated-name=":won:" block-list:name="₩"/>
+  <block-list:block block-list:abbreviated-name=":x2:" block-list:name="❌"/>
+  <block-list:block block-list:abbreviated-name=":x3:" block-list:name="❎"/>
+  <block-list:block block-list:abbreviated-name=":x4:" block-list:name="🗶"/>
+  <block-list:block block-list:abbreviated-name=":x:" block-list:name="×"/>
+  <block-list:block block-list:abbreviated-name=":^x:" block-list:name="ˣ"/>
+  <block-list:block block-list:abbreviated-name=":_x:" block-list:name="ₓ"/>
+  <block-list:block block-list:abbreviated-name=":xi:" block-list:name="ξ"/>
+  <block-list:block block-list:abbreviated-name=":yağmur2:" block-list:name="⛆"/>
+  <block-list:block block-list:abbreviated-name=":yağmur:" block-list:name="☔"/>
+  <block-list:block block-list:abbreviated-name=":yağmurlu:" block-list:name="🌦"/>
+  <block-list:block block-list:abbreviated-name=":yalancı:" block-list:name="🤥"/>
+  <block-list:block block-list:abbreviated-name=":yamuk:" block-list:name="⏢"/>
+  <block-list:block block-list:abbreviated-name=":yaprak2:" block-list:name="🍂"/>
+  <block-list:block block-list:abbreviated-name=":yaprak3:" block-list:name="🍃"/>
+  <block-list:block block-list:abbreviated-name=":yaprak:" block-list:name="🍁"/>
+  <block-list:block block-list:abbreviated-name=":yarasa:" block-list:name="🦇"/>
+  <block-list:block block-list:abbreviated-name=":yarım nota:" block-list:name="𝅗𝅥"/>
+  <block-list:block block-list:abbreviated-name=":yarış:" block-list:name="🏁"/>
+  <block-list:block block-list:abbreviated-name=":yasak:" block-list:name="🛇"/>
+  <block-list:block block-list:abbreviated-name=":yaşlı adam:" block-list:name="👴"/>
+  <block-list:block block-list:abbreviated-name=":yaşlı:" block-list:name="🧓"/>
+  <block-list:block block-list:abbreviated-name=":yaşlı kadın:" block-list:name="👵"/>
+  <block-list:block block-list:abbreviated-name=":yatak:" block-list:name="🛏"/>
+  <block-list:block block-list:abbreviated-name=":yaya geçidi:" block-list:name="🚸"/>
+  <block-list:block block-list:abbreviated-name=":yaya giremez:" block-list:name="🚷"/>
+  <block-list:block block-list:abbreviated-name=":yay:" block-list:name="♐"/>
+  <block-list:block block-list:abbreviated-name=":yazı2:" block-list:name="🖎"/>
+  <block-list:block block-list:abbreviated-name=":yazı:" block-list:name="✍"/>
+  <block-list:block block-list:abbreviated-name=":yazıcı2:" block-list:name="🖶"/>
+  <block-list:block block-list:abbreviated-name=":yazıcı:" block-list:name="🖨"/>
+  <block-list:block block-list:abbreviated-name=":yazı tipi2:" block-list:name="🗚"/>
+  <block-list:block block-list:abbreviated-name=":yazı tipi:" block-list:name="🗛"/>
+  <block-list:block block-list:abbreviated-name=":^y:" block-list:name="ʸ"/>
+  <block-list:block block-list:abbreviated-name=":yelkenli:" block-list:name="⛵"/>
+  <block-list:block block-list:abbreviated-name=":yemek:" block-list:name="🍳"/>
+  <block-list:block block-list:abbreviated-name=":yemek çubuğu:" block-list:name="🥢"/>
+  <block-list:block block-list:abbreviated-name=":yen2:" block-list:name="💴"/>
+  <block-list:block block-list:abbreviated-name=":yen:" block-list:name="¥"/>
+  <block-list:block block-list:abbreviated-name=":yengeç:" block-list:name="♋"/>
+  <block-list:block block-list:abbreviated-name=":yeni ay2:" block-list:name="🌚"/>
+  <block-list:block block-list:abbreviated-name=":yeni ay:" block-list:name="🌑"/>
+  <block-list:block block-list:abbreviated-name=":yer imi2:" block-list:name="🔖"/>
+  <block-list:block block-list:abbreviated-name=":yer imi:" block-list:name="📑"/>
+  <block-list:block block-list:abbreviated-name=":yeşil elma:" block-list:name="🍏"/>
+  <block-list:block block-list:abbreviated-name=":yetişkin:" block-list:name="🧑"/>
+  <block-list:block block-list:abbreviated-name=":yin yang:" block-list:name="☯"/>
+  <block-list:block block-list:abbreviated-name=":yiyecek:" block-list:name="🥘"/>
+  <block-list:block block-list:abbreviated-name=":yılan:" block-list:name="🐍"/>
+  <block-list:block block-list:abbreviated-name=":yılancı:" block-list:name="⛎"/>
+  <block-list:block block-list:abbreviated-name=":yıldız2:" block-list:name="☆"/>
+  <block-list:block block-list:abbreviated-name=":yıldız3:" block-list:name="🌟"/>
+  <block-list:block block-list:abbreviated-name=":yıldız4:" block-list:name="🌠"/>
+  <block-list:block block-list:abbreviated-name=":yıldız:" block-list:name="★"/>
+  <block-list:block block-list:abbreviated-name=":yoga:" block-list:name="🧘"/>
+  <block-list:block block-list:abbreviated-name=":yonca:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":yorgun:" block-list:name="😩"/>
+  <block-list:block block-list:abbreviated-name=":yorgun surat:" block-list:name="😫"/>
+  <block-list:block block-list:abbreviated-name=":yukarı2:" block-list:name="👆"/>
+  <block-list:block block-list:abbreviated-name=":yukarı3:" block-list:name="🖞"/>
+  <block-list:block block-list:abbreviated-name=":yukarı4:" block-list:name="🖠"/>
+  <block-list:block block-list:abbreviated-name=":yukarı5:" block-list:name="🖢"/>
+  <block-list:block block-list:abbreviated-name=":yukarı:" block-list:name="☝"/>
+  <block-list:block block-list:abbreviated-name=":yüksek ses:" block-list:name="🔊"/>
+  <block-list:block block-list:abbreviated-name=":yum:" block-list:name="😋"/>
+  <block-list:block block-list:abbreviated-name=":yumruk2:" block-list:name="👊"/>
+  <block-list:block block-list:abbreviated-name=":yumruk3:" block-list:name="🤛"/>
+  <block-list:block block-list:abbreviated-name=":yumruk4:" block-list:name="🤜"/>
+  <block-list:block block-list:abbreviated-name=":yumruk:" block-list:name="✊"/>
+  <block-list:block block-list:abbreviated-name=":yumurta:" block-list:name="🥚"/>
+  <block-list:block block-list:abbreviated-name=":Yunan haçı2:" block-list:name="✙"/>
+  <block-list:block block-list:abbreviated-name=":Yunan haçı:" block-list:name="✚"/>
+  <block-list:block block-list:abbreviated-name=":yunus:" block-list:name="🐬"/>
+  <block-list:block block-list:abbreviated-name=":yürüyüş:" block-list:name="🚶"/>
+  <block-list:block block-list:abbreviated-name=":yuvarlak raptiye:" block-list:name="📍"/>
+  <block-list:block block-list:abbreviated-name=":yüzücü:" block-list:name="🏊"/>
+  <block-list:block block-list:abbreviated-name=":yüzük:" block-list:name="💍"/>
+  <block-list:block block-list:abbreviated-name=":yüzünü buruşturan:" block-list:name="😬"/>
+  <block-list:block block-list:abbreviated-name=":zafer:" block-list:name="😤"/>
+  <block-list:block block-list:abbreviated-name=":zafer işareti2:" block-list:name="🖔"/>
+  <block-list:block block-list:abbreviated-name=":zafer işareti:" block-list:name="✌"/>
+  <block-list:block block-list:abbreviated-name=":zamanlayıcı saat:" block-list:name="⏲"/>
+  <block-list:block block-list:abbreviated-name=":zambak:" block-list:name="⚜"/>
+  <block-list:block block-list:abbreviated-name=":zar1:" block-list:name="⚀"/>
+  <block-list:block block-list:abbreviated-name=":zar2:" block-list:name="⚁"/>
+  <block-list:block block-list:abbreviated-name=":zar3:" block-list:name="⚂"/>
+  <block-list:block block-list:abbreviated-name=":zar4:" block-list:name="⚃"/>
+  <block-list:block block-list:abbreviated-name=":zar5:" block-list:name="⚄"/>
+  <block-list:block block-list:abbreviated-name=":zar6:" block-list:name="⚅"/>
+  <block-list:block block-list:abbreviated-name=":zar:" block-list:name="🎲"/>
+  <block-list:block block-list:abbreviated-name=":zarf2:" block-list:name="🖃"/>
+  <block-list:block block-list:abbreviated-name=":zarf3:" block-list:name="🖂"/>
+  <block-list:block block-list:abbreviated-name=":zarf4:" block-list:name="🖆"/>
+  <block-list:block block-list:abbreviated-name=":zarf5:" block-list:name="🖄"/>
+  <block-list:block block-list:abbreviated-name=":zarf6:" block-list:name="🖅"/>
+  <block-list:block block-list:abbreviated-name=":zarf7:" block-list:name="📨"/>
+  <block-list:block block-list:abbreviated-name=":zarf8:" block-list:name="📩"/>
+  <block-list:block block-list:abbreviated-name=":zarf:" block-list:name="✉"/>
+  <block-list:block block-list:abbreviated-name=":^z:" block-list:name="ᶻ"/>
+  <block-list:block block-list:abbreviated-name=":zebra:" block-list:name="🦓"/>
+  <block-list:block block-list:abbreviated-name=":zehir:" block-list:name="☠"/>
+  <block-list:block block-list:abbreviated-name=":zeta:" block-list:name="ζ"/>
+  <block-list:block block-list:abbreviated-name=":Zeta:" block-list:name="Ζ"/>
+  <block-list:block block-list:abbreviated-name=":zil2:" block-list:name="🛎"/>
+  <block-list:block block-list:abbreviated-name=":zil3:" block-list:name="🕭"/>
+  <block-list:block block-list:abbreviated-name=":zil:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":zil çalma:" block-list:name="🔕"/>
+  <block-list:block block-list:abbreviated-name=":zincirler:" block-list:name="⛓"/>
+  <block-list:block block-list:abbreviated-name=":zombi:" block-list:name="🧟"/>
+  <block-list:block block-list:abbreviated-name=":zürafa:" block-list:name="🦒"/>
+  <block-list:block block-list:abbreviated-name=":zzz:" block-list:name="💤"/>
+</block-list:block-list>

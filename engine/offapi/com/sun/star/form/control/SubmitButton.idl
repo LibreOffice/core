@@ -1,0 +1,61 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module form {  module control {
+
+
+/** specifies a button control which can execute external submissions
+
+    <p>The model of the control has to support the com::sun::star::form::component::SubmitButton
+    service.</p>
+
+    <p>The control is clickable. When clicked (by mouse or keyboard, or programmatically),
+        the following happens:
+    <ol><li>Any com::sun::star::form::submission::XSubmissionVetoListeners registered
+            at the component are given the chance to veto the submission.
+        </li>
+        <li>The model of the control is examined for an external submission object. That is,
+            com::sun::star::form::submission::XSubmissionSupplier::getSubmission()
+            is called at the model.<br/>
+            If there is such a submission object, its
+            com::sun::star::form::submission::XSubmission::submit() method is invoked.
+        </li>
+        <li>If there is no external submission, the parent object of the model is examined
+            for the presence of the com::sun::star::form::XSubmit interface. If it
+            is present, it's com::sun::star::form::XSubmit::submit() method is
+            invoked.<br/>
+            Since the parent object of a submit button can only be a com::sun::star::form::component::Form,
+            this means that SubmitButtons are also able to submit com::sun::star::form::component::HTMLForms.
+        </li>
+    </ol>
+    </p>
+*/
+service SubmitButton
+{
+    /** allows interception (and vetoing) of submissions triggered by the control.
+    */
+    interface com::sun::star::form::submission::XSubmission;
+};
+
+
+}; }; }; }; };
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

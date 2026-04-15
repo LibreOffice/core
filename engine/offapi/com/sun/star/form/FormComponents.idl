@@ -1,0 +1,74 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module form {
+
+
+/** specifies the capabilities of a collection of FormComponents.
+
+    <p>The collection must provide the possibility of adding and removing
+    components by name and by index. The name of a component is not
+    necessarily unique, so the collection must be able to handle duplicate
+    entry names.</p>
+
+    @see FormComponent
+ */
+published service FormComponents
+{
+    /** allows to register listeners to be notified of changes in the container.
+    */
+    interface com::sun::star::container::XContainer;
+
+    /** allows to add/remove elements by name.
+    */
+    interface com::sun::star::container::XNameContainer;
+
+    /** gives access to the elements by index.
+    */
+    interface com::sun::star::container::XIndexContainer;
+
+    /** creates an enumeration of the elements.
+    */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    /** This interface has to be implemented to supply the scripting environment
+        for the contained components.
+
+        <p>The interface allows managing of scripts associated with dependent components, accessed by index.
+        However, as a client of the FormComponents service, there's no need to bother with
+        the container aspect of the com::sun::star::script::XEventAttacherManager
+        directly. A FormComponents container will automatically synchronize the elements
+        you put into it with the scripting information obtained at the
+        com::sun::star::script::XEventAttacherManager interface.</p>
+
+        <p>For instance, at any time you can obtain the events associated with
+        the <code>n</code><sup>th</sup>
+        element in the form components by calling
+        com::sun::star::script::XEventAttacherManager::getScriptEvents()
+        with parameter <code>n</code>. In particular, this invariant is always met, even after you
+        inserted/removed elements into/from the container.</p>
+     */
+    interface com::sun::star::script::XEventAttacherManager;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

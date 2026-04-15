@@ -1,0 +1,158 @@
+---
+assumeFilename: sfx2/source/appl/app.cxx
+excludelist:
+    sfx2/inc/sidebar/UnoDeck.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XDeck.hpp
+    sfx2/inc/sidebar/UnoDecks.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XDecks.hpp
+    sfx2/inc/sidebar/UnoPanel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XPanel.hpp
+    sfx2/inc/sidebar/UnoPanels.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XPanels.hpp
+    sfx2/inc/recentdocsview.hxx:
+    # Needed for struct declaration
+    - com/sun/star/beans/PropertyValue.hpp
+    sfx2/inc/unoctitm.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XNotifyingDispatch.hpp
+    sfx2/source/doc/syspathw32.hxx:
+    # Needed on WIN32
+    - sal/types.h
+    sfx2/source/appl/appdata.cxx:
+    # Needed for direct member access
+    - sfx2/module.hxx
+    sfx2/source/appl/appdde.cxx:
+    # Needed on WIN32
+    - config_features.h
+    - rtl/character.hxx
+    - rtl/malformeduriexception.hxx
+    - rtl/uri.hxx
+    - sot/exchange.hxx
+    - svl/eitem.hxx
+    - basic/sbstar.hxx
+    - svl/stritem.hxx
+    - sfx2/lnkbase.hxx
+    - sfx2/linkmgr.hxx
+    - tools/debug.hxx
+    - tools/urlobj.hxx
+    - comphelper/diagnose_ex.hxx
+    - unotools/pathoptions.hxx
+    - vcl/svapp.hxx
+    - sfx2/viewfrm.hxx
+    - sfx2/dispatch.hxx
+    - sfx2/sfxsids.hrc
+    - sfx2/docfile.hxx
+    - ucbhelper/content.hxx
+    - comphelper/processfactory.hxx
+    sfx2/source/appl/appmisc.cxx:
+    # Needed for TypedWhichId macro
+    - svl/stritem.hxx
+    sfx2/source/appl/appquit.cxx:
+    # Full type is needed for implicit dtor
+    - sfx2/stbitem.hxx
+    - sfx2/tbxctrl.hxx
+    sfx2/source/appl/appbas.cxx:
+    # Needed for createSfxPoolItem calls
+    - svl/eitem.hxx
+    - sfx2/dinfdlg.hxx
+    - sfx2/frame.hxx
+    - sfx2/msg.hxx
+    - sorgitm.hxx
+    sfx2/source/appl/newhelp.cxx:
+    # Actually used
+    - com/sun/star/i18n/XBreakIterator.hpp
+    sfx2/source/appl/shutdownicon.cxx:
+    # Needed on MAC
+    - osl/file.hxx
+    # Needed on WIN32
+    - sfx2/sfxresid.hxx
+    - sfx2/strings.hrc
+    sfx2/source/bastyp/fltfnc.cxx:
+    # Needed for UnoType to work
+    - com/sun/star/task/XInteractionHandler.hpp
+    sfx2/source/control/dispatch.cxx:
+    # Needed for DENTERREGISTRATIONS DLEAVEREGISTRATIONS macros from sfx2/bindings.hxx in DBG_UTIL mode
+    - rtl/strbuf.hxx
+    sfx2/source/control/sfxstatuslistener.cxx:
+    # Actually used
+    - com/sun/star/frame/XDispatchProvider.hpp
+    sfx2/source/control/statcach.cxx:
+    # Needed for template
+    - com/sun/star/frame/XFrame.hpp
+    sfx2/source/dialog/documentfontsdialog.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sfx2/source/dialog/versdlg.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sfx2/source/doc/docinf.cxx:
+    # Actually used
+    - com/sun/star/document/XDocumentProperties.hpp
+    sfx2/source/doc/DocumentMetadataAccess.cxx:
+    # Actually used
+    - com/sun/star/embed/XStorage.hpp
+    sfx2/source/doc/graphhelp.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    sfx2/source/doc/doctempl.cxx:
+    # Needed for template
+    - com/sun/star/ucb/NumberedSortingInfo.hpp
+    sfx2/source/doc/guisaveas.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    sfx2/source/doc/objstor.cxx:
+    # Actually used
+    - com/sun/star/frame/XModel.hpp
+    sfx2/source/doc/syspath.cxx:
+    # Needed on WIN32
+    - syspathw32.hxx
+    sfx2/source/doc/syspathw32.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    sfx2/source/doc/signaturestate.cxx:
+    # Actually used
+    - com/sun/star/security/DocumentSignatureInformation.hpp
+    sfx2/source/sidebar/ControllerFactory.cxx:
+    # Actually used
+    - com/sun/star/frame/XFrame.hpp
+    # Needed for instantiation of function template specialization
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    sfx2/source/sidebar/Panel.cxx:
+    # Actually used
+    - com/sun/star/ui/XUIElement.hpp
+    sfx2/source/sidebar/ResourceManager.cxx:
+    # Needed for template
+    - com/sun/star/ui/XSidebarPanel.hpp
+    sfx2/source/sidebar/SidebarToolBox.cxx:
+    # Actually used
+    - com/sun/star/frame/XFrame.hpp
+    - com/sun/star/frame/XToolbarController.hpp
+    sfx2/source/sidebar/SidebarController.cxx:
+    # Actually used
+    - com/sun/star/awt/XWindowPeer.hpp
+    - com/sun/star/frame/XDispatch.hpp
+    - com/sun/star/ui/ContextChangeEventObject.hpp
+    sfx2/source/sidebar/SidebarDockingWindow.cxx:
+    # Needed for json_parser_error
+    - boost/property_tree/json_parser.hpp
+    sfx2/source/sidebar/SidebarPanelBase.cxx:
+    # Needed for template
+    - com/sun/star/awt/XWindowPeer.hpp
+    sfx2/source/view/viewfrm2.cxx:
+    # Needed for direct member access
+    - com/sun/star/embed/VerbDescriptor.hpp
+    sfx2/source/view/classificationhelper.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertyContainer.hpp
+    - com/sun/star/document/XDocumentProperties.hpp
+    sfx2/source/view/userinputinterception.cxx:
+    # Actually used
+    - com/sun/star/awt/XKeyHandler.hpp
+    - com/sun/star/awt/XMouseClickHandler.hpp
+    sfx2/source/view/viewsh.cxx:
+    # Needed for TypedWhichId define
+    - svl/eitem.hxx

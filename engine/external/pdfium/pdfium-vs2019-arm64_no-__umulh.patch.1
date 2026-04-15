@@ -1,0 +1,17 @@
+clang as of Visual Studio 2019 doesn't support the __umulh intrinsic yet
+VS2022 (at last version 17.10) does, so instead of a !defined(__clang__)
+use a compiler version check to force the fallback for older versions.
+See https://learn.microsoft.com/en-us/cpp/overview/compiler-versions for
+a mapping of VisualStudio version to compiler version macro
+diff -ur pdfium.org/third_party/fast_float/src/include/fast_float/float_common.h pdfium/third_party/fast_float/src/include/fast_float/float_common.h
+--- pdfium.org/third_party/fast_float/src/include/fast_float/float_common.h	2025-03-14 14:19:56
++++ pdfium/third_party/fast_float/src/include/fast_float/float_common.h	2025-03-14 14:42:05
+@@ -338,7 +338,7 @@
+     return answer;
+   }
+   value128 answer;
+-#if defined(_M_ARM64) && !defined(__MINGW32__)
++#if defined(_M_ARM64) && !defined(__MINGW32__) && defined(_MSC_VER) && _MSC_VER >= 1930
+   // ARM64 has native support for 64-bit multiplications, no need to emulate
+   // But MinGW on ARM64 doesn't have native support for 64-bit multiplications
+   answer.high = __umulh(a, b);

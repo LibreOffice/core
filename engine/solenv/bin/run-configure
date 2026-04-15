@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# We could run emconfigure here, but LO's gbuild should have set up everything
+# correctly. If something breaks because of this, we likely have mre problems.
+if test "$OS" = "EMSCRIPTEN"; then
+    export EMMAKEN_JUST_CONFIGURE=1
+fi
+
+exec "$@"

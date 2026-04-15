@@ -1,0 +1,6 @@
+External library for reading/writing jpegs
+
+This is used by the jpeg import and export filters that are provided
+for use by VCL see [[vcl/source/filter/jpeg]]
+
+From [https://www.libjpeg-turbo.org/].

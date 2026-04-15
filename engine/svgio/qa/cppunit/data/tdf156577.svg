@@ -1,0 +1,8 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+	<text x="30" y="20">
+	 <tspan x="30" y="20">ABC</tspan>
+        </text>
+	<text x="30" y="30">
+	 <tspan x="30" y="30" dx="0 10 20 30 40">ABC</tspan>
+	</text>
+</svg>

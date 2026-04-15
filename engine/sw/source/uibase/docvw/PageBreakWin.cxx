@@ -1,0 +1,505 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <bitmaps.hlst>
+
+#include <cmdid.h>
+#include <cntfrm.hxx>
+#include <txtfrm.hxx>
+#include <notxtfrm.hxx>
+#include <ndtxt.hxx>
+#include <DashedLine.hxx>
+#include <doc.hxx>
+#include <edtwin.hxx>
+#include <fmtpdsc.hxx>
+#include <IDocumentUndoRedo.hxx>
+#include <IDocumentContentOperations.hxx>
+#include <PageBreakWin.hxx>
+#include <pagefrm.hxx>
+#include <PostItMgr.hxx>
+#include <FrameControlsManager.hxx>
+#include <strings.hrc>
+#include <tabfrm.hxx>
+#include <uiitems.hxx>
+#include <uiobject.hxx>
+#include <view.hxx>
+#include <viewopt.hxx>
+#include <wrtsh.hxx>
+
+#include <basegfx/color/bcolortools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <editeng/formatbreakitem.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svl/stritem.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <memory>
+
+#define BUTTON_WIDTH 30
+#define BUTTON_HEIGHT 19
+#define ARROW_WIDTH 9
+
+using namespace basegfx;
+using namespace basegfx::utils;
+
+SwBreakDashedLine::SwBreakDashedLine(SwEditWin* pEditWin, const SwFrame *pFrame)
+    : SwDashedLine(pEditWin, &SwViewOption::GetPageBreakColor)
+    , m_pEditWin(pEditWin)
+    , m_pFrame(pFrame)
+{
+    set_id(u"PageBreak"_ustr); // for uitest
+}
+
+SwPageBreakWin& SwBreakDashedLine::GetOrCreateWin()
+{
+    if (!m_pWin)
+    {
+        m_pWin = VclPtr<SwPageBreakWin>::Create(this, m_pEditWin, m_pFrame);
+        m_pWin->SetPosSizePixel(m_aBtnRect.TopLeft(), m_aBtnRect.GetSize());
+        m_pWin->SetZOrder(this, ZOrderFlags::Before);
+    }
+    return *m_pWin;
+}
+
+void SwBreakDashedLine::DestroyWin()
+{
+    m_pWin.disposeAndClear();
+}
+
+void SwBreakDashedLine::MouseMove( const MouseEvent& rMEvt )
+{
+    if ( rMEvt.IsLeaveWindow() )
+    {
+        // don't fade if we just move to the 'button'
+        Point aEventPos( GetPosPixel() + rMEvt.GetPosPixel() );
+        if (m_pWin && (!Contains(aEventPos) || !m_pWin->IsVisible()))
+            m_pWin->Fade(false);
+    }
+    else if (!m_pWin || !m_pWin->IsVisible())
+    {
+        GetOrCreateWin().Fade(true);
+    }
+
+    if (!rMEvt.IsSynthetic() && (!m_pWin || !m_pWin->IsVisible()))
+    {
+        UpdatePosition(rMEvt.GetPosPixel());
+    }
+}
+
+void SwBreakDashedLine::ShowAll(bool bShow)
+{
+    Show(bShow);
+}
+
+void SwBreakDashedLine::SetReadonly(bool bReadonly)
+{
+    ShowAll(!bReadonly);
+}
+
+bool SwBreakDashedLine::Contains(const Point &rDocPt) const
+{
+    if (m_aBtnRect.Contains(rDocPt))
+        return true;
+
+    ::tools::Rectangle aLineRect(GetPosPixel(), GetSizePixel());
+    return aLineRect.Contains(rDocPt);
+}
+
+SwPageBreakWin::SwPageBreakWin(SwBreakDashedLine* pLine, SwEditWin* pEditWin, const SwFrame *pFrame) :
+    InterimItemWindow(pEditWin, u"modules/swriter/ui/pbmenubutton.ui"_ustr, u"PBMenuButton"_ustr),
+    m_xMenuButton(m_xBuilder->weld_menu_button(u"menubutton"_ustr)),
+    m_pLine(pLine),
+    m_pEditWin(pEditWin),
+    m_pFrame(pFrame),
+    m_bIsAppearing( false ),
+    m_nFadeRate( 100 ),
+    m_nDelayAppearing( 0 ),
+    m_aFadeTimer("SwPageBreakWin m_aFadeTimer"),
+    m_bDestroyed( false )
+{
+    m_xMenuButton->connect_toggled(LINK(this, SwPageBreakWin, ToggleHdl));
+    m_xMenuButton->connect_selected(LINK(this, SwPageBreakWin, SelectHdl));
+    m_xMenuButton->set_accessible_name(SwResId(STR_PAGE_BREAK_BUTTON));
+
+    m_xVirDev = m_xMenuButton->create_virtual_device();
+    SwFrameMenuButtonBase::SetVirDevFont(*m_xVirDev);
+
+    // Use pixels for the rest of the drawing
+    m_xVirDev->SetMapMode( MapMode ( MapUnit::MapPixel ) );
+
+    m_aFadeTimer.SetTimeout( 50 );
+    m_aFadeTimer.SetInvokeHandler( LINK( this, SwPageBreakWin, FadeHandler ) );
+}
+
+SwPageBreakWin::~SwPageBreakWin( )
+{
+    disposeOnce();
+}
+
+void SwPageBreakWin::dispose()
+{
+    m_bDestroyed = true;
+    m_aFadeTimer.Stop();
+    m_xVirDev.disposeAndClear();
+
+    m_pLine.reset();
+    m_pEditWin.reset();
+
+    m_xMenuButton.reset();
+    InterimItemWindow::dispose();
+}
+
+void SwPageBreakWin::PaintButton()
+{
+    if (!m_xVirDev)
+        return;
+
+    const ::tools::Rectangle aRect(::tools::Rectangle(Point(0, 0), m_xVirDev->PixelToLogic(GetSizePixel())));
+
+    // Properly paint the control
+    BColor aColor = SwViewOption::GetCurrentViewOptions().GetPageBreakColor().getBColor();
+
+    BColor aHslLine = rgb2hsl(aColor);
+    double nLuminance = aHslLine.getZ();
+    nLuminance += (1.0 - nLuminance) * 0.75;
+    if ( aHslLine.getZ() > 0.7 )
+        nLuminance = aHslLine.getZ() * 0.7;
+    aHslLine.setZ(nLuminance);
+    BColor aOtherColor = hsl2rgb(aHslLine);
+
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    if (rSettings.GetHighContrastMode())
+    {
+        aColor = rSettings.GetDialogTextColor().getBColor();
+        aOtherColor = rSettings.GetDialogColor().getBColor();
+    }
+
+    bool bRtl = AllSettings::GetLayoutRTL();
+
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
+    B2DRectangle aBRect = vcl::unotools::b2DRectangleFromRectangle(aRect);
+    B2DPolygon aPolygon = createPolygonFromRect(aBRect, 3.0 / BUTTON_WIDTH, 3.0 / BUTTON_HEIGHT);
+
+    // Create the polygon primitives
+    aSeq.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                                        B2DPolyPolygon(aPolygon), aOtherColor));
+    aSeq.push_back(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                                        std::move(aPolygon), aColor));
+
+    // Create the primitive for the image
+    Bitmap aBmp(RID_BMP_PAGE_BREAK);
+    double nImgOfstX = 3.0;
+    if (bRtl)
+        nImgOfstX = aRect.Right() - aBmp.GetSizePixel().Width() - 3.0;
+    aSeq.push_back(new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
+                                        aBmp, B2DPoint(nImgOfstX, 1.0)));
+
+    double nTop = double(aRect.getOpenHeight()) / 2.0;
+    double nBottom = nTop + 4.0;
+    double nLeft = aRect.getOpenWidth() - ARROW_WIDTH - 6.0;
+    if (bRtl)
+        nLeft = ARROW_WIDTH - 2.0;
+    double nRight = nLeft + 8.0;
+
+    B2DPolygon aTriangle;
+    aTriangle.append(B2DPoint(nLeft, nTop));
+    aTriangle.append(B2DPoint(nRight, nTop));
+    aTriangle.append(B2DPoint((nLeft + nRight) / 2.0, nBottom));
+    aTriangle.setClosed(true);
+
+    BColor aTriangleColor = COL_BLACK.getBColor();
+    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+        aTriangleColor = COL_WHITE.getBColor();
+
+    aSeq.push_back( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                                        B2DPolyPolygon(aTriangle), aTriangleColor));
+
+    drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq;
+    double nFadeRate = double(m_nFadeRate) / 100.0;
+    basegfx::BColorModifierSharedPtr aBColorModifier =
+          std::make_shared<basegfx::BColorModifier_interpolate>(COL_WHITE.getBColor(),
+                                                        1.0 - nFadeRate);
+    aGhostedSeq.push_back( new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                            std::move(aSeq), std::move(aBColorModifier)));
+
+    // Create the processor and process the primitives
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(*m_xVirDev, aNewViewInfos));
+
+    pProcessor->process(aGhostedSeq);
+
+    m_xMenuButton->set_custom_button(m_xVirDev.get());
+}
+
+static SvxBreak lcl_GetBreakItem(const SwContentFrame* pCnt)
+{
+    SvxBreak eBreak = SvxBreak::NONE;
+    if ( pCnt )
+    {
+        if ( pCnt->IsInTab() )
+            eBreak =  pCnt->FindTabFrame()->GetBreakItem().GetBreak();
+        else
+            eBreak = pCnt->GetBreakItem().GetBreak();
+    }
+    return eBreak;
+}
+
+IMPL_LINK(SwPageBreakWin, SelectHdl, const OUString&, rIdent, void)
+{
+    SwFrameControlPtr pFrameControl = m_pEditWin->GetFrameControlsManager().GetControl(FrameControlType::PageBreak, m_pFrame);
+
+    m_pLine->execute(rIdent);
+
+    // Only fade if there is more than this temporary shared pointer:
+    // The main reference has been deleted due to a page break removal
+    if (pFrameControl.use_count() > 1)
+        Fade( false );
+}
+
+void SwBreakDashedLine::execute(std::u16string_view rIdent)
+{
+    const SwPageFrame* pPageFrame = SwFrameMenuButtonBase::GetPageFrame(m_pFrame);
+    // Is there a PageBefore break on this page?
+    SwContentFrame *pCnt = const_cast<SwContentFrame*>(pPageFrame->FindFirstBodyContent());
+    SvxBreak eBreak = lcl_GetBreakItem( pCnt );
+
+    // Also check the previous page - to see if there is a PageAfter break
+    SwContentFrame *pPrevCnt = nullptr;
+    SvxBreak ePrevBreak = SvxBreak::NONE;
+    const SwPageFrame* pPrevPage = static_cast<const SwPageFrame*>(pPageFrame->GetPrev());
+    if ( pPrevPage )
+    {
+        pPrevCnt = const_cast<SwContentFrame*>(pPrevPage->FindLastBodyContent());
+        ePrevBreak = lcl_GetBreakItem( pPrevCnt );
+    }
+
+    if (pCnt && rIdent == u"edit")
+    {
+        SwWrtShell& rSh = m_pEditWin->GetView().GetWrtShell();
+        bool bOldLock = rSh.IsViewLocked();
+        rSh.LockView( true );
+
+        // Order of edit detection: first RES_BREAK PageAfter, then RES_BREAK PageBefore/RES_PAGEDESC
+        if ( ePrevBreak == SvxBreak::PageAfter )
+            pCnt = pPrevCnt;
+
+        SwContentNode& rNd = pCnt->IsTextFrame()
+            ? *static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
+            : *static_cast<SwNoTextFrame*>(pCnt)->GetNode();
+
+        rSh.Push();
+        rSh.ClearMark();
+        rSh.SetSelection(SwPaM(rNd));
+
+        if ( pCnt->IsInTab() )
+        {
+            SfxStringItem aItem(m_pEditWin->GetView().GetPool().GetWhichIDFromSlotID(FN_FORMAT_TABLE_DLG), u"textflow"_ustr);
+            m_pEditWin->GetView().GetViewFrame().GetDispatcher()->ExecuteList(
+                    FN_FORMAT_TABLE_DLG,
+                    SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                    { &aItem });
+        }
+        else
+        {
+            SwPaM aPaM( rNd );
+            SwPaMItem aPaMItem( m_pEditWin->GetView().GetPool( ).GetWhichIDFromSlotID( FN_PARAM_PAM ), &aPaM );
+            SfxStringItem aItem( SID_PARA_DLG, u"textflow"_ustr );
+            m_pEditWin->GetView().GetViewFrame().GetDispatcher()->ExecuteList(
+                    SID_PARA_DLG,
+                    SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                    { &aItem, &aPaMItem });
+        }
+
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+
+        rSh.LockView( bOldLock );
+        m_pEditWin->GrabFocus( );
+    }
+    else if (pCnt && rIdent == u"delete")
+    {
+        SwContentNode& rNd = pCnt->IsTextFrame()
+            ? *static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
+            : *static_cast<SwNoTextFrame*>(pCnt)->GetNode();
+
+        rNd.GetDoc().GetIDocumentUndoRedo( ).StartUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
+
+        SfxItemSetFixed<RES_PAGEDESC, RES_BREAK> aSet(
+            m_pEditWin->GetView().GetWrtShell().GetAttrPool());
+
+        aSet.Put( SwFormatPageDesc( nullptr ) );
+        // This break could be from the current paragraph, if it has a PageBefore break.
+        if ( eBreak == SvxBreak::PageBefore )
+            aSet.Put( SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK ) );
+
+        rNd.GetDoc().getIDocumentContentOperations().InsertItemSet(
+            SwPaM(rNd), aSet, SetAttrMode::DEFAULT, pPageFrame->getRootFrame());
+
+        // This break could be from the previous paragraph, if it has a PageAfter break.
+        if ( ePrevBreak == SvxBreak::PageAfter )
+        {
+            SwContentNode& rPrevNd = pPrevCnt->IsTextFrame()
+                ? *static_cast<SwTextFrame*>(pPrevCnt)->GetTextNodeFirst()
+                : *static_cast<SwNoTextFrame*>(pPrevCnt)->GetNode();
+            aSet.ClearItem();
+            aSet.Put( SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK ) );
+            rPrevNd.GetDoc().getIDocumentContentOperations().InsertItemSet(
+                SwPaM(rPrevNd), aSet, SetAttrMode::DEFAULT, pPrevCnt->getRootFrame());
+        }
+
+        rNd.GetDoc().GetIDocumentUndoRedo( ).EndUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
+    }
+}
+
+void SwBreakDashedLine::UpdatePosition(const std::optional<Point>& xEvtPt)
+{
+    if ( xEvtPt )
+    {
+        if ( xEvtPt == m_xMousePt )
+            return;
+        m_xMousePt = xEvtPt;
+    }
+
+    const SwPageFrame* pPageFrame = SwFrameMenuButtonBase::GetPageFrame(m_pFrame);
+    const SwFrame* pPrevPage = pPageFrame;
+    do
+    {
+        pPrevPage = pPrevPage->GetPrev();
+    }
+    while ( pPrevPage && ( ( pPrevPage->getFrameArea().Top( ) == pPageFrame->getFrameArea().Top( ) )
+                || static_cast< const SwPageFrame* >( pPrevPage )->IsEmptyPage( ) ) );
+
+    ::tools::Rectangle aBoundRect = GetEditWin()->LogicToPixel( pPageFrame->GetBoundRect(GetEditWin()->GetOutDev()).SVRect() );
+    ::tools::Rectangle aFrameRect = GetEditWin()->LogicToPixel( pPageFrame->getFrameArea().SVRect() );
+
+    tools::Long nYLineOffset = ( aBoundRect.Top() + aFrameRect.Top() ) / 2;
+    if ( pPrevPage )
+    {
+        ::tools::Rectangle aPrevFrameRect = GetEditWin()->LogicToPixel( pPrevPage->getFrameArea().SVRect() );
+        nYLineOffset = ( aPrevFrameRect.Bottom() + aFrameRect.Top() ) / 2;
+    }
+
+    // Get the page + sidebar coords
+    tools::Long nPgLeft = aFrameRect.Left();
+    tools::Long nPgRight = aFrameRect.Right();
+
+    tools::ULong nSidebarWidth = 0;
+    const SwPostItMgr* pPostItMngr = GetEditWin()->GetView().GetWrtShell().GetPostItMgr();
+    if ( pPostItMngr && pPostItMngr->HasNotes() && pPostItMngr->ShowNotes() )
+        nSidebarWidth = pPostItMngr->GetSidebarBorderWidth( true ) + pPostItMngr->GetSidebarWidth( true );
+
+    if ( pPageFrame->SidebarPosition( ) == sw::sidebarwindows::SidebarPosition::LEFT )
+        nPgLeft -= nSidebarWidth;
+    else if ( pPageFrame->SidebarPosition( ) == sw::sidebarwindows::SidebarPosition::RIGHT )
+        nPgRight += nSidebarWidth;
+
+    Size aBtnSize( BUTTON_WIDTH + ARROW_WIDTH, BUTTON_HEIGHT );
+
+    // Place the button on the left or right?
+    ::tools::Rectangle aVisArea = GetEditWin()->LogicToPixel( GetEditWin()->GetView().GetVisArea() );
+
+    tools::Long nLineLeft = std::max( nPgLeft, aVisArea.Left() );
+    tools::Long nLineRight = std::min( nPgRight, aVisArea.Right() );
+    tools::Long nBtnLeft = nLineLeft;
+
+    if ( m_xMousePt )
+    {
+        nBtnLeft = nLineLeft + m_xMousePt->X() - aBtnSize.getWidth() / 2;
+
+        if ( nBtnLeft < nLineLeft )
+            nBtnLeft = nLineLeft;
+        else if ( ( nBtnLeft + aBtnSize.getWidth() ) > nLineRight )
+            nBtnLeft = nLineRight - aBtnSize.getWidth();
+    }
+
+    // Set the button position
+    m_aBtnRect = ::tools::Rectangle(Point(nBtnLeft, nYLineOffset - BUTTON_HEIGHT / 2), aBtnSize);
+    if (m_pWin)
+        m_pWin->SetRectanglePixel(m_aBtnRect);
+
+    // Set the line position
+    Point aLinePos( nLineLeft, nYLineOffset - 5 );
+    Size aLineSize( nLineRight - nLineLeft, 10 );
+    SetPosSizePixel(aLinePos, aLineSize);
+}
+
+void SwPageBreakWin::SetRectanglePixel(const ::tools::Rectangle& rRect)
+{
+    SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
+    m_xVirDev->SetOutputSizePixel(rRect.GetSize());
+}
+
+void SwPageBreakWin::Fade( bool bFadeIn )
+{
+    m_bIsAppearing = bFadeIn;
+    if ( bFadeIn )
+        m_nDelayAppearing = 0;
+
+    if ( !m_bDestroyed && m_aFadeTimer.IsActive( ) )
+        m_aFadeTimer.Stop();
+    if ( !m_bDestroyed )
+        m_aFadeTimer.Start( );
+}
+
+IMPL_LINK(SwPageBreakWin, ToggleHdl, weld::Toggleable&, rMenuButton, void)
+{
+    // hide on dropdown, draw fully unfaded if dropdown before fully faded in
+    Fade(rMenuButton.get_active());
+}
+
+IMPL_LINK_NOARG(SwPageBreakWin, FadeHandler, Timer *, void)
+{
+    const int TICKS_BEFORE_WE_APPEAR = 10;
+    if ( m_bIsAppearing && m_nDelayAppearing < TICKS_BEFORE_WE_APPEAR )
+    {
+        ++m_nDelayAppearing;
+        m_aFadeTimer.Start();
+        return;
+    }
+
+    if ( m_bIsAppearing && m_nFadeRate > 0 )
+        m_nFadeRate -= 25;
+    else if ( !m_bIsAppearing && m_nFadeRate < 100 )
+        m_nFadeRate += 25;
+
+    if ( m_nFadeRate != 100 && !IsVisible() )
+        Show();
+    else if ( m_nFadeRate == 100 && IsVisible( ) )
+    {
+        Hide();
+        m_pLine->DestroyWin();
+        return;
+    }
+    else
+    {
+        m_pLine->UpdatePosition();
+        PaintButton();
+    }
+
+    if (IsVisible( ) && m_nFadeRate > 0 && m_nFadeRate < 100)
+        m_aFadeTimer.Start();
+}
+
+FactoryFunction SwBreakDashedLine::GetUITestFactory() const
+{
+    return PageBreakUIObject::create;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,34 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba {
+    constants SystemColorConstants {
+
+    const long vbScrollBars = -2147483648;// 0x80000000;
+    const long vbDesktop = -2147483647; //0x80000001;
+    const long vbActiveTitleBar = -2147483646; //0x80000002;
+    const long vbInactiveTitleBar = -2147483645; //0x80000003;
+    const long vbMenuBar = -2147483644; //0x80000004;
+    const long vbWindowBackground = -2147483643; //0x80000005;
+    const long vbWindowFrame = -2147483642; //0x80000006;
+    const long vbMenuText = -2147483641; //0x80000007;
+    const long vbWindowText = -2147483640; //0x80000008;
+    const long vbTitleBarText = -2147483639; //0x80000009;
+    const long vbActiveBorder = -2147483638; //0x8000000A;
+    const long vbInactiveBorder = -2147483637; //0x8000000B;
+    const long vbApplicationWorkspace = -2147483636; //0x8000000C;
+    const long vbHighlight = -2147483635; //0x8000000D;
+    const long vbHighlightText = -2147483634; //0x8000000E;
+    const long vbButtonFace = -2147483633; //0x8000000F;
+    const long vbButtonShadow = -2147483632; //0x80000010;
+    const long vbGrayText = -2147483631; //0x80000011;
+    const long vbButtonText = -2147483630; //0x80000012;
+    const long vbInactiveCaptionText = -2147483629; //0x80000013;
+    const long vb3DHighlight = -2147483628; //0x80000014;
+    const long vb3DDKShadow = -2147483627; //0x80000015;
+    const long vb3DLight = -2147483626; //0x80000016;
+    const long vbInfoText = -2147483625; //0x80000017;
+    const long vbInfoBackground = -2147483624; //0x80000018;
+
+    };
+}; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

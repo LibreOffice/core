@@ -1,0 +1,11 @@
+--- foo/misc/boost/boost/spirit/home/classic/error_handling/exceptions.hpp
++++ foo/misc/boost/boost/spirit/home/classic/error_handling/exceptions.hpp
+@@ -101,7 +101,7 @@
+ 
+     //////////////////////////////////
+     template <typename ErrorDescrT, typename IteratorT>
+-    inline void
++    [[noreturn]] inline void
+     throw_(IteratorT where, ErrorDescrT descriptor)
+     {
+          boost::throw_exception(

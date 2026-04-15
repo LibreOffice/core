@@ -1,0 +1,5 @@
+dbaccess/uiconfig/ui/postgrespage.ui://GtkLabel[@id='browselabel'] orphan-label
+dbaccess/uiconfig/ui/connectionpage.ui://GtkLabel[@id='browselabel'] orphan-label
+dbaccess/uiconfig/ui/dbwizspreadsheetpage.ui://GtkLabel[@id='browselabel'] orphan-label
+dbaccess/uiconfig/ui/dbwiztextpage.ui://GtkLabel[@id='browselabel'] orphan-label
+

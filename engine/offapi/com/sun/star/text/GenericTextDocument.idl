@@ -1,0 +1,146 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module text {
+
+
+/** A text document is a model component which contains text
+    structured by paragraphs.
+
+    <p>Each paragraph and each portion of text can be fitted with
+    some attributes (technically properties).</p>
+
+    <p>It's declared as generic text document, because its function is
+    needed by different derived services (TextDocument/WebDocument/GlobalDocument).</p>
+
+    <p>In addition, all text objects can be searched.</p>
+ */
+published service GenericTextDocument
+{
+    service com::sun::star::document::OfficeDocument;
+
+    /** provides methods to create instances of several text document
+        services.
+        A text document provides several services which need the context
+        of a text document and these text document dependent services are
+        created at the text document directly and not over the global service
+        manager.
+     */
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+    interface com::sun::star::text::XTextDocument;
+
+    interface com::sun::star::util::XSearchable;
+
+    interface com::sun::star::util::XRefreshable;
+
+    [optional] interface com::sun::star::text::XFootnotesSupplier;
+
+    [optional] interface com::sun::star::text::XEndnotesSupplier;
+
+    [optional] interface com::sun::star::text::XContentControlsSupplier;
+
+    [optional] interface com::sun::star::util::XReplaceable;
+
+    [optional] interface com::sun::star::text::XPagePrintable;
+
+    [optional] interface com::sun::star::text::XReferenceMarksSupplier;
+
+    [optional] interface com::sun::star::text::XChapterNumberingSupplier;
+
+    [optional] interface com::sun::star::beans::XPropertySet;
+
+    [optional] interface com::sun::star::text::XTextGraphicObjectsSupplier;
+
+    [optional] interface com::sun::star::text::XTextEmbeddedObjectsSupplier;
+
+    [optional] interface com::sun::star::text::XTextTablesSupplier;
+
+    [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
+
+    [optional] interface com::sun::star::text::XBookmarksSupplier;
+
+    [optional] interface com::sun::star::text::XDocumentIndexesSupplier;
+
+    [optional] interface com::sun::star::text::XTextFieldsSupplier;
+
+    [optional] interface com::sun::star::text::XTextFramesSupplier;
+
+    [optional] interface com::sun::star::text::XTextSectionsSupplier;
+
+    [optional] interface com::sun::star::util::XNumberFormatsSupplier;
+
+    /** contains the identifier of the default locale of the document.
+     */
+    [optional, property] com::sun::star::lang::Locale CharLocale;
+
+
+    /** contains the count of all characters in the document.
+     */
+    [optional, readonly, property] long CharacterCount;
+
+
+
+    /** contains the count of all paragraphs in the document.
+     */
+    [optional, readonly, property] long ParagraphCount;
+
+
+    /** contains the count of all words in the document.@see WordSeparator
+     */
+    [optional, readonly, property] long WordCount;
+
+
+    /** contains a string that consists of characters that mark the
+        separation of words in counting the words in a document.
+
+        <p> I.e. slash and backslash. Whitespace (tab stop,
+        space, paragraph break, line break) always separate
+        words.</p>@see WordCount
+     */
+    [optional, property] string WordSeparator;
+
+        /** specifies the concordance file taken into account when
+         *  creating an index.
+         *
+         *  When no concordance file should be used the string is empty.
+         *  Used for text documents only.
+         */
+        [optional, property] string IndexAutoMarkFileURL;
+
+        /** specifies if change recording is active.
+         */
+        [optional, property] boolean RecordChanges;
+
+        /** specifies the first 4 digit year to be used when years
+         *  are given in 2 digits.
+         *
+         *  Example: if set to 1930
+         *    Oct-12-29 will be interpreted as Oct-12-2029
+         *    Oct-12-30 will be interpreted as Oct-12-1930
+         *    Oct-12-02 will be interpreted as Oct-12-2002
+         */
+        [optional, property] short TwoDigitYear;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

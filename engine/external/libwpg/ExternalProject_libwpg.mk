@@ -1,0 +1,52 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+$(eval $(call gb_ExternalProject_ExternalProject,libwpg))
+
+$(eval $(call gb_ExternalProject_use_autoconf,libwpg,build))
+
+$(eval $(call gb_ExternalProject_register_targets,libwpg,\
+	build \
+))
+
+$(eval $(call gb_ExternalProject_use_externals,libwpg,\
+	revenge \
+	wpd \
+))
+
+$(call gb_ExternalProject_get_state_target,libwpg,build) :
+	$(call gb_Trace_StartRange,libwpg,EXTERNAL)
+	$(call gb_ExternalProject_run,build,\
+		export PKG_CONFIG="" \
+		&& MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
+			--with-pic \
+			$(if $(DISABLE_DYNLOADING), \
+				--disable-shared --enable-static, \
+				--enable-shared --disable-static) \
+			--without-docs \
+			--disable-tools \
+			--disable-debug \
+			--disable-werror \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
+			$(gb_CONFIGURE_PLATFORMS) \
+			CXXFLAGS="$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libwpg)" \
+			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
+			$(if $(filter LINUX,$(OS)), \
+				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
+					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
+		&& $(MAKE) \
+		$(if $(filter MACOSX,$(OS)),\
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+				$(EXTERNAL_WORKDIR)/src/lib/.libs/libwpg-0.3.3.dylib \
+		) \
+	)
+	$(call gb_Trace_EndRange,libwpg,EXTERNAL)
+
+# vim: set noet sw=4 ts=4:

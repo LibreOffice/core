@@ -1,0 +1,158 @@
+--- foo/misc/boost/boost/spirit/home/classic/iterator/impl/file_iterator.ipp.orig
++++ foo/misc/boost/boost/spirit/home/classic/iterator/impl/file_iterator.ipp
+@@ -181,67 +181,28 @@ public:
+     {}
+ 
+     explicit mmap_file_iterator(std::string const& fileName)
+-      : m_filesize(0), m_curChar(0)
+-    {
+-        HANDLE hFile = ::CreateFileA(
++      : mmap_file_iterator(::CreateFileA(
+             fileName.c_str(),
+             GENERIC_READ,
+-            FILE_SHARE_READ,
++            FILE_SHARE_READ | FILE_SHARE_WRITE,
+             NULL,
+             OPEN_EXISTING,
+             FILE_FLAG_SEQUENTIAL_SCAN,
+             NULL
+-        );
+-
+-        if (hFile == INVALID_HANDLE_VALUE)
+-            return;
+-
+-        // Store the size of the file, it's used to construct
+-        //  the end iterator
+-        m_filesize = ::GetFileSize(hFile, NULL);
++        ))
++    {}
+ 
+-        HANDLE hMap = ::CreateFileMapping(
+-            hFile,
++    explicit mmap_file_iterator(std::wstring const& fileName)
++      : mmap_file_iterator(::CreateFileW(
++            fileName.c_str(),
++            GENERIC_READ,
++            FILE_SHARE_READ | FILE_SHARE_WRITE,
+             NULL,
+-            PAGE_READONLY,
+-            0, 0,
++            OPEN_EXISTING,
++            FILE_FLAG_SEQUENTIAL_SCAN,
+             NULL
+-        );
+-
+-        if (hMap == NULL)
+-        {
+-            ::CloseHandle(hFile);
+-            return;
+-        }
+-
+-        LPVOID pMem = ::MapViewOfFile(
+-            hMap,
+-            FILE_MAP_READ,
+-            0, 0, 0
+-        );
+-
+-        if (pMem == NULL)
+-        {
+-            ::CloseHandle(hMap);
+-            ::CloseHandle(hFile);
+-            return;
+-        }
+-
+-        // We hold both the file handle and the memory pointer.
+-        // We can close the hMap handle now because Windows holds internally
+-        //  a reference to it since there is a view mapped.
+-        ::CloseHandle(hMap);
+-
+-        // It seems like we can close the file handle as well (because
+-        //  a reference is hold by the filemap object).
+-        ::CloseHandle(hFile);
+-
+-        // Store the handles inside the shared_ptr (with the custom destructors)
+-        m_mem.reset(static_cast<CharT*>(pMem), ::UnmapViewOfFile);
+-
+-        // Start of the file
+-        m_curChar = m_mem.get();
+-    }
++        ))
++    {}
+ 
+     mmap_file_iterator(const mmap_file_iterator& iter)
+     { *this = iter; }
+@@ -290,6 +251,59 @@ private:
+     boost::shared_ptr<CharT> m_mem;
+     std::size_t m_filesize;
+     CharT* m_curChar;
++    
++    explicit mmap_file_iterator(HANDLE hFile)
++      : m_filesize(0), m_curChar(0)
++    {
++        if (hFile == INVALID_HANDLE_VALUE)
++            return;
++
++        // Store the size of the file, it's used to construct
++        //  the end iterator
++        m_filesize = ::GetFileSize(hFile, NULL);
++
++        HANDLE hMap = ::CreateFileMapping(
++            hFile,
++            NULL,
++            PAGE_READONLY,
++            0, 0,
++            NULL
++        );
++
++        if (hMap == NULL)
++        {
++            ::CloseHandle(hFile);
++            return;
++        }
++
++        LPVOID pMem = ::MapViewOfFile(
++            hMap,
++            FILE_MAP_READ,
++            0, 0, 0
++        );
++
++        if (pMem == NULL)
++        {
++            ::CloseHandle(hMap);
++            ::CloseHandle(hFile);
++            return;
++        }
++
++        // We hold both the file handle and the memory pointer.
++        // We can close the hMap handle now because Windows holds internally
++        //  a reference to it since there is a view mapped.
++        ::CloseHandle(hMap);
++
++        // It seems like we can close the file handle as well (because
++        //  a reference is hold by the filemap object).
++        ::CloseHandle(hFile);
++
++        // Store the handles inside the shared_ptr (with the custom destructors)
++        m_mem.reset(static_cast<CharT*>(pMem), ::UnmapViewOfFile);
++
++        // Start of the file
++        m_curChar = m_mem.get();
++    }
+ };
+ 
+ #endif // BOOST_SPIRIT_FILEITERATOR_WINDOWS
+--- foo/misc/boost/boost/spirit/home/classic/iterator/file_iterator.hpp.orig
++++ foo/misc/boost/boost/spirit/home/classic/iterator/file_iterator.hpp
+@@ -170,6 +170,12 @@ public:
+     :   base_t(adapted_t(fileName))
+     {}
+ 
++#ifdef BOOST_SPIRIT_FILEITERATOR_WINDOWS
++    file_iterator(std::wstring const& fileName)
++    :   base_t(adapted_t(fileName))
++    {}
++#endif
++
+     file_iterator(const base_t& iter)
+     :   base_t(iter)
+     {}

@@ -1,0 +1,64 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module awt {  module tree {
+
+
+/** You can implement this interface and register with XTreeControl::addTreeEditListener()
+    to get notifications when editing of a node starts and ends.
+
+    <p>You have to set the TreeControlModel::Editable property to
+    `TRUE` before a tree supports editing.</p>
+ */
+interface XTreeEditListener : ::com::sun::star::lang::XEventListener
+{
+    /** This method is called from the TreeControl implementation when editing of
+        <var>Node</var> is requested by calling XTreeControl::startEditingAtNode().
+
+        @param Node
+            the XTreeNode for that an edit request was fired by calling
+            XTreeControl::startEditingAtNode()
+
+        @throws VetoException
+            if thrown the editing will not start.
+    */
+    void nodeEditing( [in] XTreeNode Node )
+        raises ( ::com::sun::star::util::VetoException );
+
+    /** This method is called from the TreeControl implementation when editing
+        of <var>Node</var> is finished and was not canceled.
+
+        <p>Implementations that register a XTreeEditListener must update the
+        display value at the Node.</p>
+
+        @param Node
+            the XTreeNode for that an edit request was fired by calling
+            XTreeControl::startEditingAtNode()
+
+        @param NewText
+            the text that was entered by the user.
+    */
+    void nodeEdited( [in] XTreeNode Node, [in] string NewText );
+};
+
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,51 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module bridge {  module oleautomation {
+
+/** represents a named argument in a call to a method of an Automation object.
+    <p>
+    The Automation bridge accepts values of NamedArgument when a
+    call to an Automation object is made. The call is done through the
+    com::sun::star::script::XInvocation::invoke()
+    method, which takes all arguments in a sequence of anys. Usually the order
+    of the arguments must correspond to the order of arguments in the Automation
+    method. By using instances of NamedArgument the arguments in the
+    sequence can be unordered. The Automation object being called must support
+    named arguments, otherwise the call fails.
+    </p>
+ */
+struct NamedArgument
+{
+    /** The name of the argument, for which
+        NamedArgument::Value is intended.
+     */
+    string Name;
+
+    /** The value of the argument whose name is the one as contained in the
+        member #Name.
+     */
+    any Value;
+};
+
+}; }; }; }; };
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

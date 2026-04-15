@@ -1,0 +1,206 @@
+2014-03-18 László Németh:
+    * Start icon inserts and starts a simple localized demo program in an empty
+      document (UI fix for the missing feedback)
+    * LOG10 function
+    * PENTRANSPARENCY, FILLTRANSPARENCY: set transparency of the actual color:
+      - PENTRANSPARENCY 50 ; 50% transparency of the lines
+      - FILLTRANSPARENCY 20 ; 20% transparency of the areas
+    * fill gradient support
+      - FILLCOLOR ['red', 'blue'] ; gradient between red and blue
+      - FILLCOLOR [[255, 255, 255], [255, 128, 0]] ; between white and orange
+      - FILLCOLOR ['red', 'blue', 0, 90, 20] ; linear, 90deg gradient with 20% border
+      - FILLCOLOR ['red', 'blue', 0, 90, 20, 0, 0, 200, 50] ; from 200% to 50% intensity
+      - FILLCOLOR ['red', 'blue', 2, 0, 0, 50, 50] ; radial, with 50-50% x, y (centre)
+    * transparency gradient support (similar settings, without intensity values)
+      - FILLTRANSPARENCY [75] ; linear gradient from 75% to 0% transparency
+      - FILLTRANSPARENCY [75, 25] ; linear gradient from 75% to 25% transparency
+      - FILLTRANSPARENCY [75, 25, 2, 0, 20, 50, 50] ; radial with 20% border, 50-50% x, y
+    * normalized random colors for the visible spectrum (check FILLCOLOR ANY)
+    * magic icon sets also page zoom + page break for 2-page program editing
+    * fix multiple document handling using OfficeDocument.RuntimeUID
+      instead of Document.Title:
+      - "Saving as" doesn't create a new turtle
+      - use current doc. instead of old ones (eg. new Untitled 1 instead of the renamed one)
+    * change icon order: magic icon before input bar for better undocked Logo
+      toolbar (two-line, instead of three-line), suggested by Gilvan Vilarim
+    * keep turtle selection instead of the bad text selection at the end of the run 
+    * support capitalized color names in the translations (fix Slovak translation)
+
+2014-02-04 László Németh:
+    * avoid to translate comments: http://bug.openscope.org/browse/OOO-837,
+      reported by Levente Kovács
+
+2014-01-07 László Németh:
+    * fix messagebox (API changes)
+
+2014-01-01 László Németh:
+    * path, interop. and color name fixes
+
+2013-10-28: László Németh
+    * fix parsing problem of functions
+
+2013-10-25:
+    * fix Logo program halt at font settings (Windows)
+    * fix division with measurements
+
+2013-10-24 László Németh:
+    * synchronize Writer/Draw when saving cropped SVG to avoid program halt,
+      huge sleeps (the workaround) have been removed
+    * support hatching with 'INVISIBLE' filling color
+    * support PENUP in UI (Line Style "-none-")
+    * support INVISIBLE filling color in UI (Area Style/Filling "None")
+    * using 'INVISIBLE' line and filling colors set -none-/None in
+      Drawing Object Properties toolbar
+    * fix blinking LABEL (now the temporary text shape is invisible)
+    * support PENCAP settings (values: NONE, ROUND, SQUARE)
+    * fix black (not refreshed) invisible filling color (LO 4.1 problem)
+      reported by Levente Kovács in http://bug.openscope.org/browse/OOO-838
+
+2013-08-29 László Németh:
+    * fix bad selection of invisible turtle after HIDETURTLE CLEARSCREEN
+    * fix SVG cropping in LibreOffice 4.1
+    * fix vertical positions of labels in SVG export using RectangleShape
+    * fix double stroke-width attributes in SVG export
+    * LABEL supports relative positioning vector [X, Y, 'text'], where X, Y
+      0: center, eg. as the default positioning: LABEL [0, 0, 'text']
+      1: left or bottom aligned to the turtle position and angle
+     -1: right or top aligned to the turtle position and angle
+      n: n * text_width/2 or text_height/2
+    * simple SVG SMIL (animation) support using SLEEP, for example:
+      PICTURE 'animation.svg' [ CIRCLE 5 SLEEP 1000 CIRCLE 20 ]
+    * relative FORWARD (heading = y axis) with vector arg.: FORWARD [20, 10]
+    * rounded linejoint of turtle shape
+
+2013-07-15 László Németh:
+    * optional named PICTURE blocks: PICTURE 'name' [ CIRCLE 5 ]
+    * save PICTURE as cropped SVG file using path names, for example:
+      PICTURE 'example.svg' [ CIRCLE 5 CIRCLE 20 ] ; save in the home directory
+      PICTURE '/home/user/example.svg' [ CIRCLE 10 ] ; absolute path (on Linux)
+      PICTURE 'tmp/example.svg' [ CIRCLE 10 ] ; relative to the home directory
+    * support hexadecimal arguments
+
+2013-06-26 László Németh
+    * clockwise HEADING
+
+2013-04-30 László Németh
+    * fix hide/show turtle
+
+2013-02-24 László Németh:
+    * fix Asian and CTL language support. Language recognition depends from the
+      UI language of LibreOffice and the language(s) of the document.
+    * fix turtle shape, the problem with the old arrow-like turtle shape
+      reported by teachers and other users of turtle graphics
+    * better consistency with the UI based position and rotation settings of the
+      turtle: now Drawing Object toolbar supports also the pen color, fill
+      color and transparency, also line width settings of the turtle.
+    * real dotted line works with rectangles, also with rounded corners
+    * restore original cursor position and selection at the end of the running
+      (problem reported by Viktória Lakó)
+    * fix 'sleep' (resulted by the new default non-integer division of Python 3,
+      reported by Prof. Gilvan Vilarim)
+    * fix 1-character length variable name/casing problem (reported by
+      Prof. Gilvan Vilarim)
+    * fix false leading and ending function name recognition
+    * support 'translation' of the selected text
+    * fix bad line width settings after command 'home'
+    * fix dot shape of dotted lines (remove its 0 width 'tail') by minimal dot
+      size of dotted lines: 1pt, and shorter 'tail' size
+    * fix size of the rounded corners of the rectangle shape
+    * rotation doesn't modify the size of the selection frame of the turtle
+
+2012-12-26 László Németh:
+    * fix turtle position and rotation at repeated hideturtle/showturtle
+    * add new languages, fix Czech and Brazilian Portuguese for
+      language guessing at translation
+    * fix line break to paragraph break conversion at translation 
+
+2012-12-17 László Németh:
+    * handle possible translation problems (strip terminating bars)
+    * keep double compilation of the commands
+    * trace loading problems (with PYUNO_LOGLEVEL environmental variable)
+
+2012-11-24 László Németh:
+    * zero turtle width in hideturtle mode to draw at the left border of the page
+
+2012-11-06 László Németh:
+    * uppercase/translation icon:
+    - expands and uppercase Logo commands (fd -> FORWARD)
+    - translation between supported languages (commands, decimal sign, for/in order)
+    * new icon for clear screen
+    * add English manual (see LibreLogo/Logo/Turtle graphics in Help)
+
+2012-10-25 László Németh:
+    * fix positioning to the faulty program line
+    * program cache depends from the (modified) language of the document, too
+
+2012-10-21 László Németh:
+    * speed up command line
+    * add multiline tooltip to the command line (it works well from LibO 3.6.2)
+    * random color constants: ~color, eg. '~orange', '~green' etc.
+    * handle modulo operator
+    * ask before the compilation of long documents (avoid freezings)
+    * add compilation cache to the multiline programs
+    * better help window caption in the command line
+
+2012-06-27 László Németh:
+    * fix __string__ (use localized decimal sign)
+    * fix repcount in loops with inner picture block
+    * handle reopened documents
+    * modified argument list of custom dashed penstyle
+    * fix warning messages at maximum recursion depth and memory
+    * add hatching styles (fillstyle num or
+      fillstyle [line count(max 3), color, distance, degree]
+    * add localized set(), range(), sorted() 
+    * fix turtle selection at program start
+    * modified turtle colors
+    * fix showturtle
+    * fix LineStyle_SOLID and LineStyle_DASHED
+    * add repcount to the infinite loop
+    * add logical expression and better list support to the simple LibreLogo expression parser
+    * add string size limit for Print()
+    * support "pic" without block: new shape
+    * use localized __string__ for STR instead of str
+    * add min, max, and regex functions: sub, search, findall
+    * fix double round in localizations
+    * more stable dotted lines in the PDF export (implemented as arrays of dot-headed arrows)
+    * circles with dotted lines
+    * working pos and pagesize indices in expressions
+
+2012-05-17 László Németh:
+    * fix opt. suffix syntax of for+in (eg. with Finnish :ssa, Hungarian -ban)
+    * add dashed outline of turtle to show "pen up" state
+    * fix initial turtle focus for OpenOffice.org and older LibreOffice versions
+    * parsing simple (with 0 or 1 argument) user functions in complex expressions
+    * add localized "global"
+    * add localized operator "in" for logical expressions
+    * parsing user functions with 2 or more arguments in simple numerical expressions
+    * function heading supports coordinates
+    * function position supports drawing
+    * function pensize supports argument any
+    * set SizeProtect feature of turtle shape
+    * replace random while repcount variable with iterator
+    * fix repcount checking in conditions of "while" loops
+    * add repcount support to "for x in y" loops
+    * fix OUTPUT and STOP for lines with multiple commands
+    * fix = -> == conversion in logical expressions in OUTPUT
+    * fix multiple document support using CreationDate instead of Title
+    * better OpenOffice.org 3.2 compatibility (optional usage of feature Visible)
+
+2012-05-08 László Németh:
+    * picture [] handles left hanging shapes better
+    * function random works on lists or list-convertible objects (string, tuple, dict, set), too
+    * faster "label" (remove unnecessary shape search)
+    * document-level turtle states
+    * clean name spaces
+    * localization of "pi" (localizations support greek letter pi as alternative)
+    * localized "float"
+    * int & float support localized decimal signs and measurements (float '10,5cm')
+    * print, label, text support localized decimal sign
+
+2012-05-02 László Németh:
+    * fix slow drawing of new line shapes (unnecessary shape search)
+    * "circle" and "square" are synonyms of ellipse and rectangle, eg.
+      square num = rectangle [num, num]
+
+2012-04-27 László Németh:
+    * Initial release

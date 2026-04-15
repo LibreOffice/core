@@ -1,0 +1,64 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module text {
+
+
+/** points to a sequence of characters within a Text.
+
+    <p>The service provides access to the string content and the properties
+    of this range of text and the TextContent instances which
+    are bound to this text range.  </p>
+
+    <p>A TextRange is also used for a <i>text portion</i> which is
+    returned by the com::sun::star::container::XEnumeration
+    for a single paragraph. Because this is the mechanism to use to export
+    data, all formatting attributes and contents bound to this range have
+    to be available from implementations of this service. </p>
+
+    @see Text
+ */
+published service TextRange
+{
+    interface com::sun::star::text::XTextRange;
+
+    interface com::sun::star::beans::XPropertySet;
+
+    interface com::sun::star::beans::XPropertyState;
+
+    [optional] interface com::sun::star::container::XContentEnumerationAccess;
+
+    service com::sun::star::style::CharacterProperties;
+
+    [optional] service com::sun::star::style::CharacterPropertiesAsian;
+
+    [optional] service com::sun::star::style::CharacterPropertiesComplex;
+
+    service com::sun::star::style::ParagraphProperties;
+
+    [optional] service com::sun::star::style::ParagraphPropertiesAsian;
+
+    [optional] service com::sun::star::style::ParagraphPropertiesComplex;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

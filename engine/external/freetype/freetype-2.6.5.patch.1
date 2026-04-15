@@ -1,0 +1,157 @@
+diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
+--- freetype/builds/unix/configure.dt	2023-02-09 15:33:17.000000000 +0900
++++ freetype/builds/unix/configure	2023-02-22 16:53:49.547740397 +0900
+@@ -9523,7 +9523,7 @@ _LT_EOF
+       case $host_cpu in
+       powerpc)
+             # see comment about AmigaOS4 .so support
+-            archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags $wl-soname $wl$soname -o $lib'
++            archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $lib'
+             archive_expsym_cmds=''
+         ;;
+       m68k)
+@@ -9539,7 +9539,7 @@ _LT_EOF
+ 	allow_undefined_flag=unsupported
+ 	# Joseph Beckenbach <jrb3@best.com> says some releases of gcc
+ 	# support --undefined.  This deserves some investigation.  FIXME
+-	archive_cmds='$CC -nostart $libobjs $deplibs $compiler_flags $wl-soname $wl$soname -o $lib'
++	archive_cmds='$CC -nostart $libobjs $deplibs $compiler_flags -o $lib'
+       else
+ 	ld_shlibs=no
+       fi
+@@ -9771,7 +9771,7 @@
+       ;;
+ 
+     haiku*)
+-      archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags $wl-soname $wl$soname -o $lib'
++      archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $lib'
+       link_all_deplibs=no
+       ;;
+ 
+@@ -9669,13 +9669,13 @@ _LT_EOF
+ 	*Sun\ F*)			# Sun Fortran 8.3
+ 	  tmp_sharedflag='-G' ;;
+ 	esac
+-	archive_cmds='$CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags $wl-soname $wl$soname -o $lib'
++	archive_cmds='$CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags -o $lib'
+ 
+         if test yes = "$supports_anon_versioning"; then
+           archive_expsym_cmds='echo "{ global:" > $output_objdir/$libname.ver~
+             cat $export_symbols | $SED -e "s/\(.*\)/\1;/" >> $output_objdir/$libname.ver~
+             echo "local: *; };" >> $output_objdir/$libname.ver~
+-            $CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags $wl-soname $wl$soname $wl-version-script $wl$output_objdir/$libname.ver -o $lib'
++            $CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags $wl-version-script $wl$output_objdir/$libname.ver -o $lib'
+         fi
+ 
+ 	case $cc_basename in
+@@ -9705,8 +9705,8 @@ _LT_EOF
+ 	archive_cmds='$LD -Bshareable $libobjs $deplibs $linker_flags -o $lib'
+ 	wlarc=
+       else
+-	archive_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname -o $lib'
+-	archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname $wl-retain-symbols-file $wl$export_symbols -o $lib'
++	archive_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags -o $lib'
++	archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-retain-symbols-file $wl$export_symbols -o $lib'
+       fi
+       ;;
+ 
+@@ -9724,8 +9724,8 @@ _LT_EOF
+ 
+ _LT_EOF
+       elif $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
+-	archive_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname -o $lib'
+-	archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname $wl-retain-symbols-file $wl$export_symbols -o $lib'
++	archive_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags -o $lib'
++	archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-retain-symbols-file $wl$export_symbols -o $lib'
+       else
+ 	ld_shlibs=no
+       fi
+@@ -9753,8 +9753,8 @@ _LT_EOF
+ 	  # requires that you compile everything twice, which is a pain.
+ 	  if $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
+ 	    hardcode_libdir_flag_spec='$wl-rpath $wl$libdir'
+-	    archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags $wl-soname $wl$soname -o $lib'
+-	    archive_expsym_cmds='$CC -shared $libobjs $deplibs $compiler_flags $wl-soname $wl$soname $wl-retain-symbols-file $wl$export_symbols -o $lib'
++	    archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $lib'
++	    archive_expsym_cmds='$CC -shared $libobjs $deplibs $compiler_flags $wl-retain-symbols-file $wl$export_symbols -o $lib'
+ 	  else
+ 	    ld_shlibs=no
+ 	  fi
+@@ -9771,8 +9771,8 @@ _LT_EOF
+ 
+     *)
+       if $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
+-	archive_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname -o $lib'
+-	archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname $wl-retain-symbols-file $wl$export_symbols -o $lib'
++	archive_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags -o $lib'
++	archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-retain-symbols-file $wl$export_symbols -o $lib'
+       else
+ 	ld_shlibs=no
+       fi
+@@ -10075,7 +10075,7 @@ fi
+       case $host_cpu in
+       powerpc)
+             # see comment about AmigaOS4 .so support
+-            archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags $wl-soname $wl$soname -o $lib'
++            archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $lib'
+             archive_expsym_cmds=''
+         ;;
+       m68k)
+@@ -10345,7 +10345,7 @@ fi
+ 
+     irix5* | irix6* | nonstopux*)
+       if test yes = "$GCC"; then
+-	archive_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations -o $lib'
++	archive_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations -o $lib'
+ 	# Try to use the -exported_symbol ld option, if it does not
+ 	# work, assume that -exports_file does not work either and
+ 	# implicitly export all symbols.
+@@ -10375,7 +10375,7 @@ fi
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $lt_cv_irix_exported_symbol" >&5
+ printf "%s\n" "$lt_cv_irix_exported_symbol" >&6; }
+ 	if test yes = "$lt_cv_irix_exported_symbol"; then
+-          archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations $wl-exports_file $wl$export_symbols -o $lib'
++          archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations $wl-exports_file $wl$export_symbols -o $lib'
+ 	fi
+       else
+ 	archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -soname $soname `test -n "$verstring" && func_echo_all "-set_version $verstring"` -update_registry $output_objdir/so_locations -o $lib'
+@@ -10471,7 +10471,7 @@ printf "%s\n" "$lt_cv_irix_exported_symb
+     osf3*)
+       if test yes = "$GCC"; then
+ 	allow_undefined_flag=' $wl-expect_unresolved $wl\*'
+-	archive_cmds='$CC -shared$allow_undefined_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations -o $lib'
++	archive_cmds='$CC -shared$allow_undefined_flag $libobjs $deplibs $compiler_flags `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations -o $lib'
+       else
+ 	allow_undefined_flag=' -expect_unresolved \*'
+ 	archive_cmds='$CC -shared$allow_undefined_flag $libobjs $deplibs $compiler_flags -soname $soname `test -n "$verstring" && func_echo_all "-set_version $verstring"` -update_registry $output_objdir/so_locations -o $lib'
+@@ -10484,7 +10484,7 @@ printf "%s\n" "$lt_cv_irix_exported_symb
+     osf4* | osf5*)	# as osf3* with the addition of -msym flag
+       if test yes = "$GCC"; then
+ 	allow_undefined_flag=' $wl-expect_unresolved $wl\*'
+-	archive_cmds='$CC -shared$allow_undefined_flag $pic_flag $libobjs $deplibs $compiler_flags $wl-msym $wl-soname $wl$soname `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations -o $lib'
++	archive_cmds='$CC -shared$allow_undefined_flag $pic_flag $libobjs $deplibs $compiler_flags $wl-msym `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations -o $lib'
+ 	hardcode_libdir_flag_spec='$wl-rpath $wl$libdir'
+       else
+ 	allow_undefined_flag=' -expect_unresolved \*'
+@@ -13755,10 +13755,10 @@ if test "x$GCC" = xyes; then
+   XX_CFLAGS="-Wall"
+   case "$host" in
+   *-*-mingw*)
+-    XX_ANSIFLAGS="-pedantic"
++    XX_ANSIFLAGS=""
+     ;;
+   *-*-aix*)
+-    XX_ANSIFLAGS="-pedantic"
++    XX_ANSIFLAGS=""
+     ;;
+   *)
+     XX_ANSIFLAGS=""
+@@ -13982,7 +13982,7 @@
+ then :
+   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ok, adding to XX_ANSIFLAGS" >&5
+ printf "%s\n" "ok, adding to XX_ANSIFLAGS" >&6; }
+-         XX_ANSIFLAGS="${XX_ANSIFLAGS} ${a}"
++         XX_ANSIFLAGS="${XX_ANSIFLAGS}"
+ 
+ else case e in #(
+   e) { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5

@@ -1,0 +1,5 @@
+"FrameLoader";"com::sun::star::frame::XSynchronousFrameLoader";"load()"
+"FrameLoader";"com::sun::star::frame::XSynchronousFrameLoader";"cancel()"
+"FrameLoader";"com::sun::star::lang::XInitialization#optional";"initialize()"
+"FrameLoader";"com::sun::star::container::XNamed#optional";"getName()"
+"FrameLoader";"com::sun::star::container::XNamed#optional";"setName()"

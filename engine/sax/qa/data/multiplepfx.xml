@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0">
+    <office:body>
+        <office:text>
+            <text:p xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" text:style-name="Title">Test Document </text:p>
+            <note:p xmlns:note="urn:oasis:names:tc:opendocument:xmlns:text:1.0" note:style-name="Heading">For testing purposes only</note:p>
+        </office:text>
+    </office:body>
+</office:document>

@@ -1,0 +1,88 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import tools.NameProvider;
+
+class AccessibleContextHandler
+    extends NodeHandler
+{
+    @Override
+    public NodeHandler createHandler (XAccessibleContext xContext)
+    {
+        if (xContext != null)
+            return new AccessibleContextHandler (xContext);
+        else
+            return null;
+    }
+
+    public AccessibleContextHandler ()
+    {
+        super ();
+    }
+
+    private AccessibleContextHandler (XAccessibleContext xContext)
+    {
+        super();
+        if (xContext != null)
+            maChildList.setSize (4);
+    }
+
+    @Override
+    public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
+    {
+        XAccessibleContext xContext = null;
+        if (aParent instanceof AccTreeNode)
+            xContext = ((AccTreeNode)aParent).getContext();
+
+        String sChild = "";
+        if (xContext != null)
+        {
+            switch( nIndex )
+            {
+                case 0:
+                    sChild = "Description: " +
+                        xContext.getAccessibleDescription();
+                    break;
+                case 1:
+                    int nRole = xContext.getAccessibleRole();
+                    sChild = "Role: " + nRole + " (" + NameProvider.getRoleName(nRole) + ")";
+                    break;
+                case 2:
+                    XAccessible xParent = xContext.getAccessibleParent();
+                    sChild = "Has parent: " + (xParent!=null ? "yes" : "no");
+                    break;
+                case 3:
+                    sChild = "";
+                    long xStateSet = xContext.getAccessibleStateSet();
+                    for (short i=0; i<=30; i++)
+                    {
+                        if ((xStateSet & (1<<i)) != 0)
+                        {
+                            if (sChild.compareTo ("") != 0)
+                                sChild += ", ";
+                            sChild += NameProvider.getStateName(1<<i);
+                        }
+                    }
+                    sChild = "State set: " + sChild;
+            }
+        }
+        return new StringNode (sChild, aParent);
+    }
+}

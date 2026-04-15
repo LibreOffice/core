@@ -1,0 +1,15 @@
+extensions/uiconfig/spropctrlr/ui/browserline.ui://GtkLabel[@id='label'] orphan-label
+extensions/uiconfig/spropctrlr/ui/datefield.ui://GtkEntry[@id='entry'] no-labelled-by
+extensions/uiconfig/spropctrlr/ui/datefield.ui://GtkMenuButton[@id='button'] button-no-label
+extensions/uiconfig/spropctrlr/ui/datetimefield.ui://GtkSpinButton[@id='timefield'] no-labelled-by
+extensions/uiconfig/spropctrlr/ui/formattedcontrol.ui://GtkSpinButton[@id='formattedcontrol'] no-labelled-by
+extensions/uiconfig/spropctrlr/ui/formattedsample.ui://GtkEntry[@id='entry'] no-labelled-by
+extensions/uiconfig/spropctrlr/ui/formattedsample.ui://GtkSpinButton[@id='sample'] no-labelled-by
+extensions/uiconfig/spropctrlr/ui/formlinksdialog.ui://GtkLabel[@id='explanationLabel'] orphan-label
+extensions/uiconfig/spropctrlr/ui/formlinksdialog.ui://GtkLabel[@id='detailLabel'] orphan-label
+extensions/uiconfig/spropctrlr/ui/formlinksdialog.ui://GtkLabel[@id='masterLabel'] orphan-label
+extensions/uiconfig/spropctrlr/ui/hyperlinkfield.ui://GtkEntry[@id='entry'] no-labelled-by
+extensions/uiconfig/spropctrlr/ui/multiline.ui://GtkEntry[@id='entry'] no-labelled-by
+extensions/uiconfig/spropctrlr/ui/numericfield.ui://GtkSpinButton[@id='numericfield'] no-labelled-by
+extensions/uiconfig/spropctrlr/ui/textfield.ui://GtkEntry[@id='textfield'] no-labelled-by
+extensions/uiconfig/spropctrlr/ui/timefield.ui://GtkSpinButton[@id='timefield'] no-labelled-by

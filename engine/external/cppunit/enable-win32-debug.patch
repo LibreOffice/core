@@ -1,0 +1,34 @@
+--- misc/cppunit-1.14.0/src/cppunit/cppunit_dll.vcxproj
++++ misc/build/cppunit-1.14.0/src/cppunit/cppunit_dll.vcxproj
+@@ -190,7 +190,6 @@
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <WarningLevel>Level3</WarningLevel>
+       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+       <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CPPUNIT_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <AssemblerListingLocation>.\ReleaseDll\</AssemblerListingLocation>
+@@ -222,6 +221,7 @@
+     <Link>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <LinkDLL>true</LinkDLL>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
+       <SubSystem>Console</SubSystem>
+       <OutputFile>.\ReleaseDll\cppunit_dll.dll</OutputFile>
+       <ImportLibrary>.\ReleaseDll\cppunit_dll.lib</ImportLibrary>
+@@ -237,7 +237,6 @@
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <WarningLevel>Level3</WarningLevel>
+       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+       <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CPPUNIT_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <AssemblerListingLocation>.\ReleaseDll\</AssemblerListingLocation>
+@@ -266,6 +266,7 @@
+     <Link>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <LinkDLL>true</LinkDLL>
++      <GenerateDebugInformation>true</GenerateDebugInformation>
+       <SubSystem>Console</SubSystem>
+       <OutputFile>.\ReleaseDll\cppunit_dll.dll</OutputFile>
+       <ImportLibrary>.\ReleaseDll\cppunit_dll.lib</ImportLibrary>

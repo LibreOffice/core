@@ -1,0 +1,90 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include <tools/multisel.hxx>
+#include <vcl/pdfwriter.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/view/XRenderable.hpp>
+
+class GDIMetaFile;
+class Size;
+
+class PDFExport
+{
+private:
+
+    css::uno::Reference< css::lang::XComponent > mxSrcDoc;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
+    css::uno::Reference< css::task::XInteractionHandler > mxIH;
+
+    bool                mbUseLosslessCompression;
+    bool                mbReduceImageResolution;
+    bool                mbSkipEmptyPages;
+    sal_Int32           mnMaxImageResolution;
+    sal_Int32           mnQuality;
+    sal_Int32           mnProgressValue;
+    bool                mbRemoveTransparencies;
+
+    bool                mbIsRedactMode;
+
+    OUString            msWatermark;
+    Color               maWatermarkColor;
+    std::optional<sal_Int32> moWatermarkFontHeight;
+    OUString            maWatermarkFontName;
+    std::optional<Degree10> moWatermarkRotateAngle;
+    OUString            msTiledWatermark;
+
+    void                ImplExportPage( vcl::pdf::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData,
+                                        const GDIMetaFile& rMtf );
+
+    void                ImplWriteWatermark( vcl::pdf::PDFWriter& rWriter, const Size& rPageSize );
+    void                ImplWriteTiledWatermark( vcl::pdf::PDFWriter& rWriter, const Size& rPageSize );
+    css::uno::Reference<css::security::XCertificate> GetCertificateFromSubjectName(std::u16string_view rSubjectName) const;
+
+
+public:
+
+                        PDFExport(  const css::uno::Reference< css::lang::XComponent >& rxSrcDoc,
+                                    const css::uno::Reference< css::task::XStatusIndicator >& xStatusIndicator,
+                                    const css::uno::Reference< css::task::XInteractionHandler >& xIH,
+                                    const css::uno::Reference< css::uno::XComponentContext >& xFact );
+                        ~PDFExport();
+
+    bool                ExportSelection( vcl::pdf::PDFWriter& rPDFWriter,
+                                    css::uno::Reference< css::view::XRenderable > const & rRenderable,
+                                    const css::uno::Any& rSelection,
+                                    const StringRangeEnumerator& rRangeEnum,
+                                    css::uno::Sequence< css::beans::PropertyValue >& rRenderOptions,
+                                    sal_Int32 nPageCount );
+
+    bool                Export( const OUString& rFile, const css::uno::Sequence< css::beans::PropertyValue >& rFilterData );
+
+    void                showErrors( const std::set<vcl::pdf::PDFWriter::ErrorCode>& );
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

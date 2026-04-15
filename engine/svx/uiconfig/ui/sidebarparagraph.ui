@@ -1,0 +1,1085 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="svx">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment10">
+    <property name="lower">4</property>
+    <property name="upper">99</property>
+    <property name="value">4</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment11">
+    <property name="upper">55.88</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="upper">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment5">
+    <property name="upper">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment6">
+    <property name="lower">1</property>
+    <property name="upper">9</property>
+    <property name="value">2</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment7">
+    <property name="lower">2</property>
+    <property name="upper">9</property>
+    <property name="value">2</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment8">
+    <property name="upper">99</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment9">
+    <property name="lower">2</property>
+    <property name="upper">9</property>
+    <property name="value">2</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <!-- n-columns=1 n-rows=1 -->
+  <object class="GtkGrid" id="ParaPropertyPanel">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <!-- n-columns=2 n-rows=11 -->
+      <object class="GtkGrid" id="grid1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="border-width">6</property>
+        <property name="row-spacing">3</property>
+        <property name="column-spacing">6</property>
+        <property name="column-homogeneous">True</property>
+        <child>
+          <object class="GtkBox" id="box1">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkToolbar" id="horizontalalignment">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="tooltip-text" translatable="yes" context="sidebarparagraph|horizontalalignment|tooltip_text">Horizontal Alignment</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
+                <property name="icon_size">2</property>
+                <child>
+                  <object class="GtkToolButton" id=".uno:LeftPara">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id=".uno:CenterPara">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id=".uno:RightPara">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id=".uno:JustifyPara">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="horizontalalignment-atkobject">
+                    <property name="AtkObject::accessible-role">grouping</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolbar" id="writedirection">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
+                <property name="icon_size">2</property>
+                <child>
+                  <object class="GtkToolButton" id=".uno:ParaLeftToRight">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id=".uno:ParaRightToLeft">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="writedirection-atkobject">
+                    <property name="AtkObject::accessible-role">grouping</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolbar" id="verticalalignment">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="tooltip-text" translatable="yes" context="sidebarparagraph|verticalalignment|tooltip_text">Vertical Alignment</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
+                <property name="icon_size">2</property>
+                <child>
+                  <object class="GtkToolButton" id=".uno:CellVertTop">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id=".uno:CellVertCenter">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id=".uno:CellVertBottom">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="pack-type">end</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="box1-atkobject">
+                <property name="AtkObject::accessible-role">grouping</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box3">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkLabel" id="spacinglabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|spacinglabel">_Spacing:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">paraspacing</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolbar" id="paraspacing">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="tooltip-text" translatable="yes" context="sidebarparagraph|paraspacing|tooltip_text">Spacing</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
+                <property name="icon_size">2</property>
+                <child>
+                  <object class="GtkToolButton" id=".uno:ParaspaceIncrease">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id=".uno:ParaspaceDecrease">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="paraspacing-atkobject">
+                    <property name="AtkObject::accessible-role">grouping</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="aboveparaspacingbox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkImage" id="aboveparaspacingimg">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">3</property>
+                    <property name="icon-name">svx/res/symphony/spacing1.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="aboveparaspacing">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sidebarparagraph|aboveparaspacing|tooltip_text">Above Paragraph Spacing</property>
+                    <property name="hexpand">True</property>
+                    <property name="text">0</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="aboveparaspacing-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|aboveparaspacing-atkobject">Above Paragraph Spacing</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="belowparaspacingbox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkImage" id="belowparaspacingimg">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">3</property>
+                    <property name="icon-name">svx/res/symphony/spacing2.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="belowparaspacing">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sidebarparagraph|belowparaspacing|tooltip_text">Below Paragraph Spacing</property>
+                    <property name="hexpand">True</property>
+                    <property name="text">0</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="belowparaspacing-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|belowparaspacing-atkobject">Below Paragraph Spacing</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolbar" id="linespacing">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="margin-start">3</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
+                <property name="icon_size">2</property>
+                <child>
+                  <object class="GtkMenuToolButton" id=".uno:LineSpacing">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sidebarparagraph|setlinespacing|tooltip_text">Line Spacing</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="indentfieldbox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkLabel" id="indentlabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|indentlabel">_Indent:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">indent</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolbar" id="indent">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="tooltip-text" translatable="yes" context="sidebarparagraph|indent|tooltip_text">Indent</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
+                <property name="icon_size">2</property>
+                <child>
+                  <object class="GtkToolButton" id=".uno:IncrementIndent">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sidebarparagraph|increaseindent|tooltip_text">Increase Indent</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id=".uno:DecrementIndent">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sidebarparagraph|decreaseindent|tooltip_text">Decrease Indent</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id=".uno:HangingIndent">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sidebarparagraph|hangingindent|tooltip_text">Switch to Hanging Indent</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="indent-atkobject">
+                    <property name="AtkObject::accessible-role">grouping</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="beforetextindentbox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkImage" id="beforetextindentimg">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">3</property>
+                    <property name="icon-name">svx/res/symphony/Indent4.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="beforetextindent">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sidebarparagraph|beforetextindent|tooltip_text">Before Text Indent</property>
+                    <property name="hexpand">True</property>
+                    <property name="text">0</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment3</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="beforetextindent-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|beforetextindent-atkobject">Before Text Indent</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="aftertextindentbox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkImage" id="aftertextindentimg">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">3</property>
+                    <property name="icon-name">svx/res/symphony/Indent3.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="aftertextindent">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sidebarparagraph|aftertextindent|tooltip_text">After Text Indent</property>
+                    <property name="hexpand">True</property>
+                    <property name="text">0</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment4</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="aftertextindent-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|aftertextindent-atkobject">After Text Indent</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="firstlineindentbox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkImage" id="firstlineindentimg">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">3</property>
+                    <property name="icon-name">svx/res/symphony/Indent2.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="firstlineindent">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sidebarparagraph|firstlineindent|tooltip_text">First Line Indent</property>
+                    <property name="hexpand">True</property>
+                    <property name="text">0</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment5</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="firstlineindent-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|firstlineindent-atkobject">First Line Indent</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator" id="separator1">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">3</property>
+            <property name="margin-end">3</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lineend_label">
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|lineend_label">At line end:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">lineend</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="linebegin_label">
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|linebegin_label">At line begin:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">linebegin</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="compound_label">
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|linebegin_label">Compound constituent:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">compound</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="consecutive_label">
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|lineend_label">Consecutive lines:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">consecutive</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="wordlength_label">
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|linebegin_label">Word length:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">wordlength</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">9</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="zone_label">
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|lineend_label">Hyphenation zone:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">zone</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">9</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="lineend">
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|lineend|tooltip_text">Characters at Line End</property>
+            <property name="hexpand">True</property>
+            <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment6</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="linebegin">
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|linebegin|tooltip_text">Characters at Line Begin</property>
+            <property name="hexpand">True</property>
+            <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment7</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="compound">
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|lineend|tooltip_text">Compound Constituent Characters at Line End</property>
+            <property name="hexpand">True</property>
+            <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment9</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">8</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="consecutive">
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|linebegin|tooltip_text">Maximum Consecutive Hyphenated Lines</property>
+            <property name="hexpand">True</property>
+            <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment8</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">8</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="wordlength">
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|lineend|tooltip_text">Minimum Word Length</property>
+            <property name="hexpand">True</property>
+            <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment10</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">10</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="zone">
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|linebegin|tooltip_text">Line Break Between Words</property>
+            <property name="activates-default">True</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment11</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">10</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolbar" id="numberbullet">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|numberbullet|tooltip_text">Bullets and Numbering</property>
+            <property name="toolbar-style">icons</property>
+            <property name="show-arrow">False</property>
+            <property name="icon_size">2</property>
+            <child>
+              <object class="GtkMenuToolButton" id=".uno:DefaultBullet">
+                <property name="visible">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuToolButton" id=".uno:DefaultNumbering">
+                <property name="visible">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuToolButton" id=".uno:SetOutline">
+                <property name="visible">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="numberbullet-atkobject">
+                <property name="AtkObject::accessible-role">grouping</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolbar" id="backgroundcolor">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|backgroundcolor|tooltip_text">Paragraph Background Color</property>
+            <property name="halign">end</property>
+            <property name="hexpand">True</property>
+            <property name="toolbar-style">icons</property>
+            <property name="show-arrow">False</property>
+            <property name="icon_size">2</property>
+            <child>
+              <object class="GtkMenuToolButton" id=".uno:BackgroundColor">
+                <property name="visible">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box4">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="hyphenationlabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|hyphenationlabel">_Hyphenation:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">hyphenation</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box2">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkToolbar" id="hyphenation">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sidebarparagraph|hyphenation|tooltip_text">Hyphenation</property>
+                    <property name="hexpand">True</property>
+                    <property name="toolbar-style">icons</property>
+                    <property name="show-arrow">False</property>
+                    <property name="icon_size">2</property>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenateCaps">
+                        <property name="visible">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|caps">Hyphenate CAPS</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">cmd/sc_changecasetoupper.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenateLastWord">
+                        <property name="visible">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|lastword">Hyphenate Last Paragraph Word</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">cmd/sc_textbodyparastyle.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenateLastFullLine">
+                        <property name="visible">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|lastfullline">Hyphenate Last Full Paragraph Line</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">cmd/sc_insertfooter.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenateColumn">
+                        <property name="visible">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|column">Hyphenate Across Column</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">cmd/sc_formatcolumns.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenatePage">
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|page">Hyphenate Across Page</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">cmd/sc_showtwopages.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenateSpread">
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|spread">Hyphenate Across Spread</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">cmd/sc_showmultiplepages.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="Hyphenate">
+                        <property name="visible">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|hyphenation">Hyphenation</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">cmd/sc_hyphenation.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="box2-atkobject">
+                    <property name="AtkObject::accessible-role">grouping</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">4</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+  </object>
+</interface>

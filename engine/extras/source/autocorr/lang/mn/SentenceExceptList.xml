@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="Хул."/>
+  <block-list:block block-list:abbreviated-name="Үхэ."/>
+  <block-list:block block-list:abbreviated-name="Туу."/>
+  <block-list:block block-list:abbreviated-name="Мог."/>
+  <block-list:block block-list:abbreviated-name="Мор."/>
+  <block-list:block block-list:abbreviated-name="Хон."/>
+  <block-list:block block-list:abbreviated-name="Тах."/>
+  <block-list:block block-list:abbreviated-name="Нох."/>
+  <block-list:block block-list:abbreviated-name="Гах."/>
+  <block-list:block block-list:abbreviated-name="г.м."/>
+  <block-list:block block-list:abbreviated-name="Ж.нь"/>
+  <block-list:block block-list:abbreviated-name="мин."/>
+  <block-list:block block-list:abbreviated-name="сек."/>
+</block-list:block-list>

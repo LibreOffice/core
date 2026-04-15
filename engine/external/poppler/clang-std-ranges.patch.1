@@ -1,0 +1,122 @@
+clang jenkins bot fails with:
+
+In file included from /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UnpackedTarball/poppler/splash/SplashFontEngine.cc:38:
+In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/algorithm:60:
+In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/stl_algobase.h:65:
+In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/stl_iterator_base_types.h:71:
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:982:13: error: no matching function for call to '__begin'
+        = decltype(ranges::__cust_access::__begin(std::declval<_Tp&>()));
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/ranges_base.h:595:5: note: in instantiation of template type alias '__range_iter_t' requested here
+    using iterator_t = std::__detail::__range_iter_t<_Tp>;
+    ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/ranges_util.h:121:36: note: in instantiation of template type alias 'iterator_t' requested here
+      requires contiguous_iterator<iterator_t<_Derived>>
+                                   ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/ranges_util.h:228:29: note: in instantiation of template class 'std::ranges::view_interface<std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized>>' requested here
+    class subrange : public view_interface<subrange<_It, _Sent, _Kind>>
+                            ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/ranges_algo.h:1499:7: note: in instantiation of template class 'std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized>' requested here
+      operator()(_Range&& __r, iterator_t<_Range> __middle) const
+      ^
+/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UnpackedTarball/poppler/splash/SplashFontEngine.cc:246:24: note: in instantiation of function template specialization 'std::ranges::__rotate_fn::operator()<std::array<SplashFont *, 16> &>' requested here
+    std::ranges::rotate(fontCache, fontCache.end() - 1);
+                       ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:966:7: note: candidate template ignored: constraints not satisfied [with _Tp = std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized>]
+      __begin(_Tp& __t)
+      ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:964:16: note: because 'is_array_v<std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized> >' evaluated to false
+      requires is_array_v<_Tp> || __member_begin<_Tp&> || __adl_begin<_Tp&>
+               ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:964:35: note: and 'std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized> &' does not satisfy '__member_begin'
+      requires is_array_v<_Tp> || __member_begin<_Tp&> || __adl_begin<_Tp&>
+                                  ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:947:23: note: because '__decay_copy(__t.begin())' would be invalid: no member named 'begin' in 'std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized>'
+          { __decay_copy(__t.begin()) } -> input_or_output_iterator;
+                             ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:964:59: note: and 'std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized> &' does not satisfy '__adl_begin'
+      requires is_array_v<_Tp> || __member_begin<_Tp&> || __adl_begin<_Tp&>
+                                                          ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:958:19: note: because '__decay_copy(begin(__t))' would be invalid: call to deleted function 'begin'
+          { __decay_copy(begin(__t)) } -> input_or_output_iterator;
+                         ^
+
+--- poppler/splash/SplashFontEngine.cc.orig2	2025-01-08 10:58:44.891336796 +0100
++++ poppler/splash/SplashFontEngine.cc	2025-01-08 11:02:24.548166442 +0100
+@@ -243,7 +243,11 @@
+     if (fontCache.back()) {
+         delete fontCache.back();
+     }
++#ifndef __clang__
+     std::ranges::rotate(fontCache, fontCache.end() - 1);
++#else
++    std::rotate(fontCache.begin(), fontCache.end() - 1, fontCache.end());
++#endif
+ 
+     fontCache[0] = newFont;
+     return fontCache[0];
+--- poppler/fofi/FoFiTrueType.cc.orig	2025-01-08 12:26:45.256494256 +0100
++++ poppler/fofi/FoFiTrueType.cc	2025-01-08 12:22:26.462723118 +0100
+@@ -1160,12 +1160,20 @@
+             locaTable[i].origOffset = glyfTableLen;
+         }
+     }
++#ifndef __clang__
+     std::ranges::sort(locaTable, cmpTrueTypeLocaOffsetFunctor());
++#else
++    std::sort(locaTable.begin(), locaTable.end(), cmpTrueTypeLocaOffsetFunctor());
++#endif
+     for (i = 0; i < nGlyphs; ++i) {
+         locaTable[i].len = locaTable[i + 1].origOffset - locaTable[i].origOffset;
+     }
+     locaTable[nGlyphs].len = 0;
++#ifndef __clang__
+     std::ranges::sort(locaTable, cmpTrueTypeLocaIdxFunctor());
++#else
++    std::sort(locaTable.begin(), locaTable.end(), cmpTrueTypeLocaIdxFunctor());
++#endif
+     pos = 0;
+     for (i = 0; i <= nGlyphs; ++i) {
+         locaTable[i].newOffset = pos;
+--- poppler/poppler/CIDFontsWidthsBuilder.h.orig	2025-01-08 12:34:25.458714665 +0100
++++ poppler/poppler/CIDFontsWidthsBuilder.h	2025-01-08 12:35:05.809036940 +0100
+@@ -89,7 +89,11 @@
+         // How many elements at the end has this
+         int uniqueElementsFromEnd(int value)
+         {
++#ifndef __clang__
+             auto lastDifferent = std::ranges::find_if(std::ranges::reverse_view(m_values), [value](auto &&element) { return element != value; });
++#else
++            auto lastDifferent = std::find_if(m_values.rbegin(), m_values.rend(), [value](auto &&element) { return element != value; });
++#endif
+             return std::distance(m_values.rbegin(), lastDifferent);
+         }
+ 
+--- poppler/poppler/Dict.cc.orig	2025-01-08 12:17:07.701541557 +0100
++++ poppler/poppler/Dict.cc	2025-01-08 12:29:29.609619053 +0100
+@@ -125,7 +125,11 @@
+             return &*pos;
+         }
+     } else {
++#ifndef __clang__
+         const auto pos = std::ranges::find_if(std::ranges::reverse_view(entries), [key](const DictEntry &entry) { return entry.first == key; });
++#else
++        const auto pos = std::find_if(entries.rbegin(), entries.rend(), [key](const DictEntry &entry) { return entry.first == key; });
++#endif
+         if (pos != entries.rend()) {
+             return &*pos;
+         }
+--- poppler/poppler/CIDFontsWidthsBuilder.h.orig2	2025-01-08 13:26:29.167797754 +0100
++++ poppler/poppler/CIDFontsWidthsBuilder.h	2025-01-08 13:27:03.165988989 +0100
+@@ -152,7 +152,11 @@
+             if (differentValues || m_values.size() < 4) {
+                 std::vector<int> savedValues;
+                 if (m_values.size() >= 4) {
++#ifndef __clang__
+                     auto lastDifferent = std::ranges::find_if(std::ranges::reverse_view(m_values), [value = m_values.back()](auto &&element) { return element != value; });
++#else
++                    auto lastDifferent = std::find_if(m_values.rbegin(), m_values.rend(), [value = m_values.back()](auto &&element) { return element != value; });
++#endif
+                     if (std::distance(m_values.rbegin(), lastDifferent) >= 3) {
+                         savedValues.push_back(m_values.back());
+                         m_values.pop_back();

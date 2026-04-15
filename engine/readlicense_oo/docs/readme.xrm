@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+		<title id="title" xml:lang="en-US">${PRODUCTNAME} Readme File</title>
+
+		<style type="text/css">
+			#Copyright_Trademark * {font-size: .7em;}
+			.note {border: 1px solid #993333; padding: 3px;}
+			p { margin-top: .1em; margin-bottom: .1em;}
+			.code {font-family: monospace;}
+		</style>
+	</head>
+
+	<body>
+		<div id="Intro">
+			<h1 id="Welcome" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</h1>
+			<p id="CollaboraOffice" xml:lang="en-US">For more information please visit ${PRODUCTNAME} home page at <a href="https://collaboraoffice.com">https://CollaboraOffice.com/</a>.</p>
+		</div>
+	</body>
+</html>

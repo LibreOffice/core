@@ -1,0 +1,81 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module awt {
+
+/** specifies accessibility support for a menu bar.
+ */
+service AccessibleMenuBar
+{
+    /** This interface gives access to the structural information of a
+        menu bar:
+
+        <ul>
+        <li>Role: The role of a menu bar is
+        com::sun::star::accessibility::AccessibleRole::MENU_BAR.</li>
+        <li>Name: There is no name.</li>
+        <li>Description: The description of a menu bar is its localized
+            help text.</li>
+        <li>Children: The children of a menu bar are menus, menu items or
+            menu separators, whose accessible context supports the services
+            AccessibleMenu, AccessibleMenuItem or
+            AccessibleMenuSeparator.</li>
+        <li>Parent: The parent is the window that contains the menu bar.</li>
+        <li>Relations: There are no relations.</li>
+        <li>States: The states supported by this service are
+            <ul>
+            <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
+                is set if the object has already been disposed
+                and subsequent calls to this object result in
+                com::sun::star::lang::DisposedException
+                exceptions.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::ENABLED
+                is set if the object is enabled.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::FOCUSABLE
+                is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::FOCUSED
+                is set if the object currently has the keyboard focus.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::OPAQUE
+                is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
+                is set if the object is displayed on the screen.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                is always set.</li>
+            </ul>
+            </li>
+        </ul>
+     */
+    interface ::com::sun::star::accessibility::XAccessibleContext;
+
+    interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
+
+    interface ::com::sun::star::accessibility::XAccessibleComponent;
+
+    interface ::com::sun::star::accessibility::XAccessibleExtendedComponent;
+
+    /** This interface gives access to the selectable children of a
+        menu bar.
+     */
+    interface ::com::sun::star::accessibility::XAccessibleSelection;
+
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

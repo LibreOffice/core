@@ -1,0 +1,269 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com {  module sun {  module star {  module text {
+
+/** provides access to the settings of the controller of a text document.
+ */
+published service ViewSettings
+{
+    interface com::sun::star::beans::XPropertySet;
+
+    /** If this property is `TRUE`, annotations (notes) are visible.
+     */
+    [property] boolean ShowAnnotations;
+
+    /** If this property is `TRUE`, paragraph line breaks are visible.
+     */
+    [property] boolean ShowBreaks;
+
+    /** If this property is `TRUE`, shapes are visible.
+     */
+    [property] boolean ShowDrawings;
+
+    /** If this property is `TRUE`, text fields are shown with their commands; otherwise
+        the content is visible.
+     */
+    [property] boolean ShowFieldCommands;
+
+    /** If this property is `TRUE`, footnotes symbols are displayed with gray background.
+     */
+    [property] boolean ShowFootnoteBackground;
+
+    /** If this property is `TRUE`, graphic objects are visible.
+     */
+    [property] boolean ShowGraphics;
+
+    /** If this property is `TRUE`, hidden paragraphs are displayed.
+     */
+    [property] boolean ShowHiddenParagraphs;
+
+    /** If this property is `TRUE`, hidden text is displayed.
+     */
+    [property] boolean ShowHiddenText;
+
+    /** ShowHoriRuler and ShowVertRuler determine whether a ruler is visible.
+     */
+    [property] boolean ShowRulers;
+
+    /** If this property is `TRUE` and the property ShowRulers is `TRUE`,
+        the horizontal ruler is displayed.
+     */
+    [property] boolean ShowHoriRuler;
+
+    /** If this property is `TRUE` and the property ShowRulers is `TRUE`,
+        the horizontal scroll bar is displayed.
+     */
+    [property] boolean ShowHoriScrollBar;
+
+    /** If this property is `TRUE`, index marks are displayed with gray background.
+     */
+    [property] boolean ShowIndexMarkBackground;
+
+    /** If this property is `TRUE`, paragraph breaks are visible.
+     */
+    [property] boolean ShowParaBreaks;
+
+    /** If this property is `TRUE`, protected spaces (hard spaces) are displayed with gray
+        background.
+     */
+    [property] boolean ShowProtectedSpaces;
+
+    /** If this property is `TRUE`, soft hyphens are displayed with gray background.
+     */
+    [property] boolean ShowSoftHyphens;
+
+    /** If this property is `TRUE`, spaces are displayed with dots.
+     */
+    [property] boolean ShowSpaces;
+
+    /** If this property is `TRUE`, table boundaries are displayed.
+     */
+    [property] boolean ShowTableBoundaries;
+
+    /** If this property is `TRUE`, tables are visible.
+     */
+    [property] boolean ShowTables;
+
+    /** If this property is `TRUE`, tab stops are visible.
+     */
+    [property] boolean ShowTabstops;
+
+    /** If this property is `TRUE`, text boundaries are displayed.
+     */
+    [property] boolean ShowTextBoundaries;
+
+    /** If this property is `TRUE`, text fields are displayed with gray background.
+     */
+    [property] boolean ShowTextFieldBackground;
+
+    /** If this property is `TRUE`, the vertical ruler is displayed.
+     */
+    [property] boolean ShowVertRuler;
+
+    /** If this property is `TRUE`, the vertical scroll bar is displayed.
+     */
+    [property] boolean ShowVertScrollBar;
+
+    /** If this property is `TRUE`, smooth scrolling is active.
+     */
+    [property] boolean SmoothScrolling;
+
+    /** If this property is `TRUE`, the vertical ruler is aligned to the right side
+     of the view and the vertical scrollbar is on the left.
+     */
+    [property] boolean IsVertRulerRightAligned;
+
+    /** If this property is `TRUE` the document will be displayed as if it
+        were a HTML document.
+     */
+    [property] boolean ShowOnlineLayout;
+
+    /** This property defines the zoom type for the document.
+
+        @see com::sun::star::view::DocumentZoomType
+     */
+    [property] short ZoomType;
+
+    /** Defines the zoom value to use.
+        Valid only if the ZoomType is set to
+        com::sun::star::view::DocumentZoomType::BY_VALUE.
+     */
+    [property] short ZoomValue;
+    /** If this property is `TRUE` hyperlinks in the document are executed (loaded) on
+     mouse click. Otherwise they are handled like normal text.
+         */
+    [optional, property] boolean IsExecuteHyperlinks;
+
+    /** Specifies whether to display the grid or not
+     */
+    [optional, property] boolean IsRasterVisible;
+
+    /** Specifies whether to move frames, drawing elements, and form
+        functions only between grid points.
+     */
+    [optional, property] boolean IsSnapToRaster;
+
+    /** Specifies the number of intervals between grid points on the X-axis.
+
+        <p>The value must be greater or equal to 0, and the application
+        may enforce an upper bound for the value.</p>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterSubdivisionX;
+
+    /** Specifies the number of intervals between grid points on the Y-axis.
+
+        <p>The value must be greater or equal to 0, and the application
+        may enforce an upper bound for the value.</p>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterSubdivisionY;
+
+    /** Defines the unit of measure for the spacing between grid points
+        on the X-axis.
+
+        <p>The value must be greater than 0. The application
+        may enforce more restricting bounds for the value.</p>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterResolutionX;
+
+    /** Defines the unit of measure for the spacing between grid points
+        on the Y-axis.
+
+        <p>The value must be greater than 0. The application
+        may enforce more restricting bounds for the value.</p>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterResolutionY;
+
+    /** If this property is `TRUE`, hidden characters are displayed
+     */
+    [optional, property] boolean ShowHiddenCharacters;
+    /** If this property is `TRUE`, the settings of non-printing characters are applied.
+
+        <p>This option controls the use of the settings ShowHiddenCharacters,
+        ShowTabstops, ShowSpaces, ShowBreaks and ShowParaBreaks </p>
+     */
+    [optional, property] boolean ShowNonprintingCharacters;
+
+    /** metric unit of the horizontal ruler
+
+        <p>Uses values com::sun::star::awt::FieldUnit</p>
+     */
+    [optional, property] long HorizontalRulerMetric;
+
+    /** metric unit of the vertical ruler
+
+        <p>Uses values from com::sun::star::awt::FieldUnit</p>
+     */
+    [optional, property] long VerticalRulerMetric;
+
+    /** If this property is `TRUE`, tips for document content are shown,
+        typically in a help balloon when the mouse is over the content.
+     */
+    [optional, property] boolean ShowContentTips;
+
+    /** If this property is `TRUE`, and the scroll bar is shown, a tool tip
+        is displayed while scrolling.
+     */
+    [optional, property] boolean ShowScrollBarTips;
+
+    /** If this property is `TRUE`, whitespaces around pages are hidden.
+    */
+    [optional, property] boolean HideWhitespace;
+
+    /** If this property is `TRUE`, tooltips for tracked changes are shown.
+    */
+    [optional, property] boolean ShowInlineTooltips;
+
+    /** If this property is `TRUE`, the advanced menu for header/footer is shown
+    */
+    [optional, property] boolean UseHeaderFooterMenu;
+
+    /** If this property is `TRUE`, bookmark positions are displayed.
+     */
+    [optional, property] boolean ShowBookmarks;
+
+    /** If this property is `TRUE`, the outline content visibility toggle button is shown.
+    */
+    [optional, property] boolean ShowOutlineContentVisibilityButton;
+
+    /** If this property is `TRUE`, tracked deletions are shown in margin.
+    */
+    [optional, property] boolean ShowChangesInMargin;
+
+    /** If this property is `TRUE`, sub outline levels are treated as content in
+        outline content visibility actions.
+    */
+    [optional, property] boolean TreatSubOutlineLevelsAsContent;
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

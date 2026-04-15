@@ -1,0 +1,8 @@
+This is a tool that will be useful for various tasks when building LO on WSL.
+
+It is a Win32 program, not a Linux (WSL) one.
+
+Compile using the Developer Command Prompt from MSVC as:
+cl wsl-lo-helper.cpp advapi32.lib
+and the copy the executable to /opt/lo/bin (e.g. from shell as):
+sudo mv wsl-lo-helper.exe /opt/lo/bin/wsl-lo-helper

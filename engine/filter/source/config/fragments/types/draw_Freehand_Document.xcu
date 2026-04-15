@@ -1,0 +1,12 @@
+        <node oor:name="draw_Freehand_Document" oor:op="replace" >
+            <prop oor:name="DetectService"><value>com.sun.star.comp.Draw.FreehandImportFilter</value></prop>
+            <prop oor:name="URLPattern"/>
+            <prop oor:name="Extensions"><value>fh fh1 fh2 fh3 fh4 fh5 fh6 fh7 fh8 fh9 fh10 fh11</value></prop>
+            <prop oor:name="MediaType"><value>image/x-freehand</value></prop>
+            <prop oor:name="Preferred"><value>true</value></prop>
+            <prop oor:name="PreferredFilter"><value>Freehand Document</value></prop>
+            <prop oor:name="UIName">
+                <value>Adobe/Macromedia Freehand</value>
+            </prop>
+            <prop oor:name="ClipboardFormat"/>
+        </node>

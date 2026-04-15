@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:styles>
+    <style:style style:name="FrameX" style:family="graphic"/>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="Table1" style:family="table">
+      <style:table-properties style:width="8.042cm" fo:margin-left="0.009cm" fo:margin-top="0cm" fo:margin-bottom="0cm" table:align="left" style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="Table1.A" style:family="table-column">
+      <style:table-column-properties style:column-width="8.042cm"/>
+    </style:style>
+    <style:style style:name="Table1.1" style:family="table-row"/>
+    <style:style style:name="Table1.A1" style:family="table-cell"/>
+    <style:style style:name="gr1" style:family="graphic" style:parent-style-name="FrameX"/>
+  </office:automatic-styles>
+  <office:body>
+    <office:text>
+      <text:p text:style-name="Standard"><draw:custom-shape text:anchor-type="char" draw:z-index="0" draw:name="Rectangle: Rounded Corners 1" draw:style-name="gr1" svg:width="8.997cm" svg:height="4.287cm" svg:x="-0.141cm" svg:y="0.035cm"><loext:table table:name="Table1" table:style-name="Table1"><loext:table-column table:style-name="Table1.A"/><loext:table-row table:style-name="Table1.1"><loext:table-cell table:style-name="Table1.A1" office:value-type="string"><text:p>A1</text:p></loext:table-cell></loext:table-row></loext:table><text:p/><draw:enhanced-geometry draw:mirror-horizontal="false" draw:mirror-vertical="false" svg:viewBox="0 0 0 0" draw:text-areas="?f5 ?f5 ?f6 ?f7" draw:type="ooxml-roundRect" draw:modifiers="16667" draw:enhanced-path="M 0 ?f2 L ?f3 0 L ?f11 ?f4 L ?f2 ?f10 Z N" drawooo:enhanced-path="M 0 ?f2 G ?f2 ?f2 ?f12 ?f13 L ?f3 0 G ?f2 ?f2 ?f14 ?f15 L ?f11 ?f4 G ?f2 ?f2 ?f16 ?f17 L ?f2 ?f10 G ?f2 ?f2 ?f18 ?f19 Z N"><draw:equation draw:name="f0" draw:formula="if(0-$0 ,0,if(50000-$0 ,$0 ,50000))"/><draw:equation draw:name="f1" draw:formula="min(logwidth,logheight)"/><draw:equation draw:name="f2" draw:formula="?f1 *?f0 /100000"/><draw:equation draw:name="f3" draw:formula="logwidth+0-?f2 "/><draw:equation draw:name="f4" draw:formula="logheight+0-?f2 "/><draw:equation draw:name="f5" draw:formula="?f2 *29289/100000"/><draw:equation draw:name="f6" draw:formula="logwidth+0-?f5 "/><draw:equation draw:name="f7" draw:formula="logheight+0-?f5 "/><draw:equation draw:name="f8" draw:formula="logwidth/2"/><draw:equation draw:name="f9" draw:formula="logheight/2"/><draw:equation draw:name="f10" draw:formula="logheight"/><draw:equation draw:name="f11" draw:formula="logwidth"/><draw:equation draw:name="f12" draw:formula="(10800000)/60000.0"/><draw:equation draw:name="f13" draw:formula="(5400000)/60000.0"/><draw:equation draw:name="f14" draw:formula="(16200000)/60000.0"/><draw:equation draw:name="f15" draw:formula="(5400000)/60000.0"/><draw:equation draw:name="f16" draw:formula="(0)/60000.0"/><draw:equation draw:name="f17" draw:formula="(5400000)/60000.0"/><draw:equation draw:name="f18" draw:formula="(5400000)/60000.0"/><draw:equation draw:name="f19" draw:formula="(5400000)/60000.0"/><draw:handle draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="50000" draw:handle-position="?f2 0"/></draw:enhanced-geometry></draw:custom-shape></text:p>
+    </office:text>
+  </office:body>
+</office:document>

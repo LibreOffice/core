@@ -1,0 +1,4 @@
+Dragonbox is available from [ https://github.com/jk-jeon/dragonbox ].
+
+Used to convert a double to a decimal string, providing breakout of significand and exponent
+as integers, allowing to create custom number representation (e.g., locale-specific).

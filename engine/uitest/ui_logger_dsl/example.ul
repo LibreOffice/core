@@ -1,0 +1,34 @@
+Start writer
+Send UNO Command (".uno:UpdateInputFields") 
+Send UNO Command (".uno:FontDialog") 
+Open Modal CharacterPropertiesDialog
+Choose Tab number 0 in 'tabcontrol' from CharacterPropertiesDialog
+Select in 'westfontnamelb-cjk' ComboBox item number 66 from CharacterPropertiesDialog
+Choose Tab number 1 in 'tabcontrol' from CharacterPropertiesDialog
+Select element with position 3 in 'effectslb' fromCharacterPropertiesDialog
+Toggle 'shadowcb' CheckBox from CharacterPropertiesDialog
+Choose Tab number 2 in 'tabcontrol' from CharacterPropertiesDialog
+Select '270deg' RadioButton from CharacterPropertiesDialog
+Select '90deg' RadioButton from CharacterPropertiesDialog
+Increase 'scalewidthsb' from CharacterPropertiesDialog
+Increase 'scalewidthsb' from CharacterPropertiesDialog
+Increase 'scalewidthsb' from CharacterPropertiesDialog
+Decrease 'scalewidthsb' from CharacterPropertiesDialog
+Decrease 'scalewidthsb' from CharacterPropertiesDialog
+Decrease 'scalewidthsb' from CharacterPropertiesDialog
+Toggle 'pairkerning' CheckBox from CharacterPropertiesDialog
+Click on 'cancel' from CharacterPropertiesDialog
+Close Dialog
+Type on writer {"TEXT": "a"}
+Type on writer {"TEXT": "n"}
+Type on writer {"TEXT": "a"}
+Type on writer {"TEXT": " "}
+Type on writer {"TEXT": "a"}
+Type on writer {"TEXT": "h"}
+Type on writer {"TEXT": "m"}
+Type on writer {"TEXT": "e"}
+Type on writer {"TEXT": "d"}
+Select from Pos 4 to Pos 9
+Open Modal QuerySaveDialog
+Click on 'discard' from QuerySaveDialog
+Close Dialog

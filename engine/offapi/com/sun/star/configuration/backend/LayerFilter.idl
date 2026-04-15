@@ -1,0 +1,66 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module configuration { module backend {
+
+
+/**
+  provides a filtered version of a configuration data Layer.
+
+  <p> A layer filter wraps a source XLayer object and
+     provides access to a filtered version of its data.
+     The data read from the filter usually is produced from the source data
+     by adding and removing elements or modifying values.
+  </p>
+
+  @see com::sun::star::configuration::backend::DataImporter
+        Service that supports applying a LayerFilter to imported data.
+  */
+published service LayerFilter
+{
+
+    /**
+      provides read access to the filtered contents.
+
+      <p> Method XLayer::readData() will render a filtered version
+         of the data produced by the same method of the source object.
+     </p>
+      */
+    interface XLayer ;
+
+
+    /**
+      provides a means to set the source data for the filter.
+
+      <p> Call com::sun::star::lang::XInitialization::initialize()()
+         with a single argument of type com::sun::star::beans::NamedValue,
+         where com::sun::star::beans::NamedValue::Name is <code>"Source"</code>
+         and com::sun::star::beans::NamedValue::Value
+         is an object implementing XLayer.
+     </p>
+      */
+    interface com::sun::star::lang::XInitialization ;
+
+} ;
+
+
+} ; } ; } ; } ; } ;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

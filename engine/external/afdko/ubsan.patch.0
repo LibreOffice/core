@@ -1,0 +1,162 @@
+--- c/makeotf/lib/cffread/cffread.c
++++ c/makeotf/lib/cffread/cffread.c
+@@ -49,7 +49,7 @@
+ /* Type conversions */
+ #define INT(f) ((int16_t)(((f)&0xffff0000) >> 16))
+ #define FRAC(f) ((f)&0x0000ffff)
+-#define INT2FIX(i) ((Fixed)(i) << 16)
++#define INT2FIX(i) ((Fixed)((uint32_t)(i) << 16))
+ #define FIX2INT(f) ((short)(((f) + FixedHalf) >> 16))
+ #define FIX2DBL(f) ((double)((f) / fixedScale))
+ #define DBL2FIX(d) ((Fixed)((d)*fixedScale + ((d) < 0 ? -0.5 : 0.5)))
+--- c/makeotf/lib/typecomp/common.h
++++ c/makeotf/lib/typecomp/common.h
+@@ -36,7 +36,7 @@
+ #define INDEX_SIZE(items, size) \
+     ((items) == 0 ? sizeCard16 : (sizeCard16 + sizeCard8 + ((items) + 1) * INDEX_OFF_SIZE(size) + (size)))
+ #define FixedHalf ((Fixed)0x00008000)
+-#define INT2FIX(i) ((Fixed)((uint32_t)i) << 16)
++#define INT2FIX(i) ((Fixed)((uint32_t)i << 16))
+ #define DBL2FIX(d) ((Fixed)((double)(d)*65536.0 + ((d) < 0 ? -0.5 : 0.5)))
+ #define FIX2DBL(f) ((double)(f) / 65536.0)
+ #define RNDFIX(f) (((f) + FixedHalf) & 0xffff0000)
+--- c/makeotf/lib/typecomp/recode.c
++++ c/makeotf/lib/typecomp/recode.c
+@@ -1727,10 +1727,10 @@
+ 
+             case 255: {
+                 /* 5 byte number */
+-                int32_t value = (int32_t)cstr[i + 1] << 24 | (int32_t)cstr[i + 2] << 16 |
+-                                (int32_t)cstr[i + 3] << 8 | (int32_t)cstr[i + 4];
++                int32_t value = (uint32_t)cstr[i + 1] << 24 | (uint32_t)cstr[i + 2] << 16 |
++                                (uint32_t)cstr[i + 3] << 8 | (uint32_t)cstr[i + 4];
+                 if (-32000 <= value && value <= 32000) {
+-                    value <<= 16;
++                    value = (uint32_t)value << 16;
+                 } else {
+                     h->intDiv = 1;
+                 }
+@@ -3690,7 +3690,7 @@
+     /* Remove encryption */
+     for (i = 0; i < length; i++) {
+         unsigned char plain = cstr[i] ^ (r1 >> 8);
+-        r1 = (cstr[i] + r1) * 52845 + 22719;
++        r1 = (unsigned)(cstr[i] + r1) * 52845 + 22719;
+         cstr[i] = plain;
+     }
+ }
+--- c/shared/include/cffwrite.h
++++ c/shared/include/cffwrite.h
+@@ -156,7 +156,7 @@
+    compatible with a destination font dict of the same FontName, the function
+    returns 1 else it returns 0. */
+ 
+-int cfwMergeFDArray(cfwCtx h, abfTopDict *top, int *newFDIndex);
++long cfwMergeFDArray(void *h, abfTopDict *top, int *newFDIndex);
+ 
+ /* cfwMergeFDArray() merges all the fdArray font dicts of the passed-in source
+    font top dict into the destination font. It also fills in the array pointed
+--- c/shared/source/cffwrite/cffwrite.c
++++ c/shared/source/cffwrite/cffwrite.c
+@@ -488,7 +488,8 @@
+     return newFDIndex;
+ }
+ 
+-int cfwMergeFDArray(cfwCtx g, abfTopDict *top, int *newFDIndex) {
++long cfwMergeFDArray(void *g_, abfTopDict *top, int *newFDIndex) {
++    cfwCtx g = g_;
+     abfFontDict *srcDict = &top->FDArray.array[0];
+     int i = 0;
+ 
+--- c/shared/source/dynarr/dynarr.c
++++ c/shared/source/dynarr/dynarr.c
+@@ -68,6 +68,9 @@
+    0. If the client has arranged to trap allocation failures in the memory
+    callback functions by using setjmp/longjmp, for example, the -1 return will
+    never occur and the macro wrappers provided will be safe to use. */
++#if defined __clang__
++__attribute__((no_sanitize("function")))
++#endif
+ long dnaGrow(void *object, size_t elemsize, long index) {
+     void *new_ptr;
+     size_t new_size;
+--- c/shared/source/pstoken/pstoken.c
++++ c/shared/source/pstoken/pstoken.c
+@@ -201,7 +201,7 @@
+         else {
+             unsigned char cipher = hi_nib << 4 | nib;
+             *dst++ = cipher ^ (h->cipher.r >> 8);
+-            h->cipher.r = (cipher + h->cipher.r) * 52845 + 22719;
++            h->cipher.r = (unsigned)(cipher + h->cipher.r) * 52845 + 22719;
+             hi_nib = -1;
+         }
+     } while (src < end);
+@@ -232,7 +232,7 @@
+     for (i = 0; i < length; i++) {
+         unsigned char cipher = *src++;
+         *dst++ = cipher ^ (h->cipher.r >> 8);
+-        h->cipher.r = (cipher + h->cipher.r) * 52845 + 22719;
++        h->cipher.r = (unsigned)(cipher + h->cipher.r) * 52845 + 22719;
+     }
+ 
+     return 0;
+--- c/shared/source/t1cstr/t1cstr.c
++++ c/shared/source/t1cstr/t1cstr.c
+@@ -1504,13 +1504,13 @@
+ 
+         /* Prime state from random initial bytes */
+         while (lenIV--)
+-            r = (*c++ + r) * 52845 + 22719;
++            r = (unsigned)(*c++ + r) * 52845 + 22719;
+ 
+         /* Decrypt and copy bytes */
+         while (cnt--) {
+             unsigned char c1 = *c++;
+             *p++ = c1 ^ (r >> 8);
+-            r = (c1 + r) * 52845 + 22719;
++            r = (unsigned)(c1 + r) * 52845 + 22719;
+         }
+     }
+     return t1cSuccess;
+--- c/shared/source/t1write/t1write.c
++++ c/shared/source/t1write/t1write.c
+@@ -187,7 +187,7 @@
+     char *q = buf;
+     while (cnt--) {
+         unsigned char c = *p++ ^ h->eexec.r >> 8;
+-        h->eexec.r = (c + h->eexec.r) * 52845 + 22719;
++        h->eexec.r = (unsigned)(c + h->eexec.r) * 52845 + 22719;
+         *q++ = hexmap[c >> 4 & 0xf];
+         *q++ = hexmap[c & 0xf];
+     }
+@@ -376,7 +376,7 @@
+     p = data;
+     for (i = 0; i < length; i++) {
+         unsigned char c = *p ^ (r >> 8);
+-        r = (c + r) * 52845 + 22719;
++        r = (unsigned)(c + r) * 52845 + 22719;
+         *p++ = c;
+     }
+ 
+--- c/shared/source/t2cstr/t2cstr.c
++++ c/shared/source/t2cstr/t2cstr.c
+@@ -673,7 +673,7 @@
+ 
+     /* Compute mask length and unused bit mask */
+     h->mask.length = (short)((h->stems.cnt + 7) / 8);
+-    h->mask.unused = ~(~0 << (h->mask.length * 8 - h->stems.cnt));
++    h->mask.unused = ~(~0U << (h->mask.length * 8 - h->stems.cnt));
+ 
+     return 0;
+ }
+--- c/shared/source/ttread/ttread.c
++++ c/shared/source/ttread/ttread.c
+@@ -721,7 +721,7 @@
+ 
+ /* Read 4-byte signed number. */
+ static int32_t sread4(ttrCtx h) {
+-    uint32_t value = (int32_t)read1(h) << 24;
++    uint32_t value = (uint32_t)read1(h) << 24;
+     value |= (uint32_t)read1(h) << 16;
+     value |= (uint32_t)read1(h) << 8;
+     value |= (uint32_t)read1(h);

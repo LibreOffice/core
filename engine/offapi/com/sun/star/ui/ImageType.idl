@@ -1,0 +1,59 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com {  module sun {  module star {  module ui {
+
+/** Determine the image set of an image manager.
+
+    <p>
+    The constants describe bits in a bit field which determine
+    the current image set of an image manager.
+    </p>
+ */
+constants ImageType
+{
+    /** an image with default size.
+     */
+    const short SIZE_DEFAULT       = 0;
+
+    /** an image with large size.
+     */
+    const short SIZE_LARGE         = 1;
+
+    /** an image with size 32.
+     */
+    const short SIZE_32            = 2;
+
+    /** an image with normal colors.
+     */
+    const short COLOR_NORMAL       = 0;
+
+    /** an image with high contrast colors.
+     */
+    const short COLOR_HIGHCONTRAST = 4;
+
+    /** an image specialized for rl-tb writing. if unset, the
+        image is unspecialized or for lr-tb writing.
+     */
+    const short DIR_RL_TB = 8;
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

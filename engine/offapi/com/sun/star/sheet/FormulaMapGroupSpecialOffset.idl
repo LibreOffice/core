@@ -1,0 +1,205 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** Constants designating the offsets within the sequence returned by
+    XFormulaOpCodeMapper::getAvailableMappings() when
+    called for group FormulaMapGroup::SPECIAL.
+
+    <p>The number of constants may grow in future versions!</p>
+ */
+constants FormulaMapGroupSpecialOffset
+{
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe a formula operand token that will be pushed onto the formula
+        stack while the formula is interpreted.
+
+        <p>The FormulaToken::Data member shall contain one of
+        the following values:</p>
+
+        <ul>
+        <li>A value of type `double` for literal floating-point
+        constants.</li>
+        <li>A `string` for literal text.</li>
+        <li>A `any[][]` for a literal array. The contained
+        values shall be of type `double` or `string`.
+        Floating-point values and strings may occur together in an array.</li>
+        <li>A struct of type SingleReference for a reference to a
+        single cell in the own document.</li>
+        <li>A struct of type ComplexReference for a reference to
+        a range of cells in the own document.</li>
+        <li>A struct of type ExternalReference for a reference to
+        a cell, a range of cells, or a defined name in an external document.</li>
+        </ul>
+     */
+    const long PUSH = 0;
+
+
+    const long CALL = 1;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        instruct the formula interpreter to immediately stop interpreting the
+        formula.
+
+        <p>The FormulaToken::Data member is not used
+        and should be empty.</p>
+     */
+    const long STOP = 2;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe the reference to an external function (e.g. add-in function)
+        used in formulas.
+
+        <p>The FormulaToken::Data member shall contain a
+        `string` with the programmatic name of the function, e.g.
+        "com.sun.star.sheet.addin.Analysis.getEomonth" for the EOMONTH
+        function from the Analysis add-in.</p>
+     */
+    const long EXTERNAL = 3;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe the reference to a defined name (also known as named range)
+        used in formulas.
+
+        <p>The FormulaToken::Data member shall contain an
+        integer value of type `long` specifying the index of the
+        defined name. This index can be obtained from the defined name using
+        its NamedRange::TokenIndex property.</p>
+
+        @see  NamedRange
+     */
+    const long NAME = 4;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe an invalid name that resolves to the #NAME? error in formulas.
+
+        <p>The FormulaToken::Data member is not used
+        and should be empty.</p>
+     */
+    const long NO_NAME = 5;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe an empty function parameter.
+
+        <p>Example: In the formula <code>=SUM(1;;2)</code> the second
+        parameter is empty and represented by a formula token containing the
+        "missing" op-code.</p>
+
+        <p>The FormulaToken::Data member is not used
+        and should be empty.</p>
+     */
+    const long MISSING = 6;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe "bad" data in a formula, e.g. data the formula parser was not
+        able to parse.
+
+        <p>The FormulaToken::Data member shall contain a
+        `string` with the bad data. This string will be displayed
+        literally in the formula.</p>
+     */
+    const long BAD = 7;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe whitespace characters within the string representation of a
+        formula.
+
+        <p>Whitespace characters in formulas are used for readability and do
+        not affect the result of the formula.</p>
+
+        <p>The FormulaToken::Data member shall contain a
+        positive integer value of type `long` specifying the number
+        of space characters.</p>
+     */
+    const long SPACES = 8;
+
+
+    const long MAT_REF = 9;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe the reference to a database range used in formulas.
+
+        <p>The FormulaToken::Data member shall contain an
+        integer value of type `long` specifying the index of the
+        database range. This index can be obtained from the database range
+        using its DatabaseRange::TokenIndex property.</p>
+
+        @see  DatabaseRange
+     */
+    const long DB_AREA            = 10;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe the reference to a macro function called in a formula.
+
+        <p>The FormulaToken::Data member shall contain a
+        `string` specifying the name of the macro function.</p>
+     */
+    const long MACRO              = 11;
+
+
+    const long COL_ROW_NAME       = 12;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe whitespace characters within the string representation of a
+        formula.
+
+        <p>Whitespace characters in formulas are used for readability and do
+        not affect the result of the formula.</p>
+
+        <p>The FormulaToken::Data member shall contain a
+        `string` of one (repeated) whitespace character. The length of
+        the string determines the number of repetitions.</p>
+
+        <p>Allowed whitespace characters are SPACE (U+0020), CHARACTER
+        TABULATION (U+0009), LINE FEED (U+000A), and CARRIAGE RETURN
+        (U+000D). See also ODF v1.3 OpenFormula 5.14 Whitespace.</p>
+     */
+    const long WHITESPACE = 13;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe the reference to an item of a database range used in
+        formulas.
+
+        <p>The FormulaToken::Data member shall contain a struct of type
+        `TableRefToken`.</p>
+     */
+    const long TABLE_REF = 14;
+
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

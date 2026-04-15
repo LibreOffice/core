@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p><draw:g text:anchor-type="as-char" draw:name="A">
+     <draw:frame svg:width="1cm" svg:height="1cm" svg:x="1cm" svg:y="1cm">
+      <draw:image>
+       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciLz4</office:binary-data>
+       <text:p>json</text:p>
+      </draw:image>
+     </draw:frame>
+   </draw:g></text:p>
+  </office:text>
+ </office:body>
+</office:document>

@@ -1,0 +1,45 @@
+diff -ur skia.org/src/core/SkColorData.h skia/src/core/SkColorData.h
+--- skia.org/src/core/SkColorData.h	2024-10-10 13:25:03.614133252 +0200
++++ skia/src/core/SkColorData.h	2024-10-10 13:25:12.144187524 +0200
+@@ -382,4 +382,6 @@
+                                               SK_FloatNegativeInfinity,
+                                               SK_FloatNegativeInfinity,
+                                               SK_FloatNegativeInfinity };
++template <> uint32_t SkPMColor4f::toBytes_RGBA() const;
++
+ #endif  // SkColorData_DEFINED
+diff -ur skia.org/src/core/SkM44.cpp skia/src/core/SkM44.cpp
+--- skia.org/src/core/SkM44.cpp	2024-10-10 13:25:03.659133538 +0200
++++ skia/src/core/SkM44.cpp	2024-10-10 13:25:12.144187524 +0200
+@@ -340,6 +340,8 @@
+     return m;
+ }
+ 
++#undef near
++#undef far
+ SkM44 SkM44::Perspective(float near, float far, float angle) {
+     SkASSERT(far > near);
+ 
+diff -ur skia.org/src/gpu/ganesh/vk/GrVkSemaphore.cpp skia/src/gpu/ganesh/vk/GrVkSemaphore.cpp
+--- skia.org/src/gpu/ganesh/vk/GrVkSemaphore.cpp	2024-10-10 13:25:03.679133665 +0200
++++ skia/src/gpu/ganesh/vk/GrVkSemaphore.cpp	2024-10-10 13:25:12.144187524 +0200
+@@ -12,6 +12,7 @@
+ #include "include/private/base/SkAssert.h"
+ #include "src/gpu/ganesh/vk/GrVkGpu.h"
+ #include "src/gpu/ganesh/vk/GrVkUtil.h"
++#include "tools/gpu/vk/GrVulkanDefines.h"
+ 
+ #include <string.h>
+ 
+diff -ur skia.org/src/utils/win/SkDWriteGeometrySink.h skia/src/utils/win/SkDWriteGeometrySink.h
+--- skia.org/src/utils/win/SkDWriteGeometrySink.h	2024-10-10 13:25:03.683133691 +0200
++++ skia/src/utils/win/SkDWriteGeometrySink.h	2024-10-10 13:25:12.144187524 +0200
+@@ -8,6 +8,8 @@
+ #ifndef SkDWriteToPath_DEFINED
+ #define SkDWriteToPath_DEFINED
+ 
++#define CONST const
++
+ #include "include/core/SkPathBuilder.h"
+ #include "src/utils/win/SkObjBase.h"
+ 

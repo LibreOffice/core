@@ -1,0 +1,2540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:styles>
+  <style:default-style style:family="table-cell">
+   <style:paragraph-properties style:tab-stop-distance="12.7mm"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:language="en" fo:country="US" style:font-name-asian="DejaVu Sans" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="DejaVu Sans" style:language-complex="hi" style:country-complex="IN"/>
+  </style:default-style>
+  <number:number-style style:name="N0">
+   <number:number number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:currency-style style:name="N108P0" style:volatile="true">
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+  </number:currency-style>
+  <number:currency-style style:name="N108">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N108P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N110P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N110">
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N110P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N112P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N112">
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N112P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N113P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N113">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N113P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N114P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N114">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N114P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N116P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="0" number:min-integer-digits="1" number:decimal-replacement="--" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N116">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="0" number:min-integer-digits="1" number:decimal-replacement="--" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N116P0"/>
+  </number:currency-style>
+  <number:number-style style:name="N118P0" style:volatile="true">
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+  </number:number-style>
+  <number:number-style style:name="N118">
+   <number:text>(</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text>)</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N118P0"/>
+  </number:number-style>
+  <number:number-style style:name="N120P0" style:volatile="true">
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+  </number:number-style>
+  <number:number-style style:name="N120">
+   <number:text>(</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text>)</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N120P0"/>
+  </number:number-style>
+  <number:currency-style style:name="N122P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N122">
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N122P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N124P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N124">
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N124P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N126P0" style:volatile="true">
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+  </number:currency-style>
+  <number:currency-style style:name="N126">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N126P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N127P0" style:volatile="true">
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+  </number:currency-style>
+  <number:currency-style style:name="N127">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N127P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N128P0" style:volatile="true">
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+  </number:currency-style>
+  <number:currency-style style:name="N128">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N128P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N130P0" style:volatile="true">
+   <number:number number:decimal-places="2" loext:min-decimal-places="0" number:min-integer-digits="1" number:decimal-replacement="--" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+  </number:currency-style>
+  <number:currency-style style:name="N130">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="0" number:min-integer-digits="1" number:decimal-replacement="--" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N130P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N132P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="US">$</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N132">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="US">$</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N132P0"/>
+  </number:currency-style>
+  <number:number-style style:name="N133">
+   <number:number number:decimal-places="9" loext:min-decimal-places="9" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N134">
+   <number:number number:decimal-places="8" loext:min-decimal-places="8" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N135">
+   <number:number number:decimal-places="10" loext:min-decimal-places="10" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N136">
+   <number:number number:decimal-places="11" loext:min-decimal-places="11" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N137">
+   <number:number number:decimal-places="12" loext:min-decimal-places="12" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N138">
+   <number:number number:decimal-places="13" loext:min-decimal-places="13" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N139">
+   <number:number number:decimal-places="14" loext:min-decimal-places="14" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N140">
+   <number:number number:decimal-places="15" loext:min-decimal-places="15" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N141">
+   <number:number number:decimal-places="16" loext:min-decimal-places="16" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N142">
+   <number:number number:decimal-places="17" loext:min-decimal-places="17" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N143">
+   <number:number number:decimal-places="18" loext:min-decimal-places="18" number:min-integer-digits="1"/>
+  </number:number-style>
+  <style:style style:name="Default" style:family="table-cell">
+   <style:text-properties style:font-name-asian="Droid Sans Fallback" style:font-family-asian="&apos;Droid Sans Fallback&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-name-complex="Droid Sans Devanagari" style:font-family-complex="&apos;Droid Sans Devanagari&apos;" style:font-family-generic-complex="system" style:font-pitch-complex="variable"/>
+  </style:style>
+  <style:style style:name="Result" style:family="table-cell" style:parent-style-name="Default">
+   <style:text-properties fo:font-style="italic" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Result2" style:family="table-cell" style:parent-style-name="Result" style:data-style-name="N108"/>
+  <style:style style:name="Heading" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center"/>
+   <style:text-properties fo:font-size="16pt" fo:font-style="italic" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Heading1" style:family="table-cell" style:parent-style-name="Heading">
+   <style:table-cell-properties style:rotation-angle="90"/>
+  </style:style>
+  <style:style style:name="Untitled1" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:background-color="#ff3333"/>
+  </style:style>
+  <style:style style:name="Untitled2" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:background-color="#99ff66"/>
+  </style:style>
+  <style:style style:name="_31_true" style:display-name="1true" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:background-color="#3deb3d"/>
+  </style:style>
+  <style:style style:name="_30_false" style:display-name="0false" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:background-color="#ff0000"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="65.51mm"/>
+  </style:style>
+  <style:style style:name="co2" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="89.08mm"/>
+  </style:style>
+  <style:style style:name="co3" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="22.58mm"/>
+  </style:style>
+  <style:style style:name="co4" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="48.14mm"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="8.63mm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ro2" style:family="table-row">
+   <style:table-row-properties style:row-height="4.52mm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ro3" style:family="table-row">
+   <style:table-row-properties style:row-height="6.12mm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ro4" style:family="table-row">
+   <style:table-row-properties style:row-height="5.29mm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ro5" style:family="table-row">
+   <style:table-row-properties style:row-height="4.66mm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ro6" style:family="table-row">
+   <style:table-row-properties style:row-height="4.27mm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ta1" style:family="table" style:master-page-name="Default">
+   <style:table-properties table:display="true" style:writing-mode="lr-tb"/>
+  </style:style>
+  <number:date-style style:name="N36" number:automatic-order="true">
+   <number:day number:style="long"/>
+   <number:text>.</number:text>
+   <number:month number:style="long"/>
+   <number:text>.</number:text>
+   <number:year number:style="long"/>
+  </number:date-style>
+  <number:date-style style:name="N84">
+   <number:year number:style="long"/>
+   <number:text>-</number:text>
+   <number:month number:style="long"/>
+   <number:text>-</number:text>
+   <number:day number:style="long"/>
+  </number:date-style>
+  <number:boolean-style style:name="N99">
+   <number:boolean/>
+  </number:boolean-style>
+  <number:boolean-style style:name="N10099" number:language="cs" number:country="CZ">
+   <number:boolean/>
+  </number:boolean-style>
+  <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default"/>
+  <style:style style:name="ce2" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="start" fo:margin-left="0mm"/>
+   <style:text-properties fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce3" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce4" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+  </style:style>
+  <style:style style:name="ce6" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B3"/>
+  </style:style>
+  <style:style style:name="ce7" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
+  </style:style>
+  <style:style style:name="ce8" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
+  </style:style>
+  <style:style style:name="ce9" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:wrap-option="wrap"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+  </style:style>
+  <style:style style:name="ce10" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce11" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:map style:condition="cell-content()=TRUE()" style:apply-style-name="_31_true" style:base-cell-address="Sheet2.C2"/>
+   <style:map style:condition="cell-content()!=TRUE()" style:apply-style-name="_30_false" style:base-cell-address="Sheet2.C2"/>
+  </style:style>
+  <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N84">
+   <style:text-properties style:font-name="Liberation Sans"/>
+  </style:style>
+  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N84">
+   <style:table-cell-properties fo:wrap-option="wrap"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+  </style:style>
+  <style:style style:name="ce14" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36">
+   <style:table-cell-properties fo:wrap-option="wrap"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+  </style:style>
+  <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36"/>
+  <style:style style:name="ce16" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N10099"/>
+  <style:style style:name="ce17" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N84"/>
+  <style:style style:name="ta_extref" style:family="table">
+   <style:table-properties table:display="false"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties style:writing-mode="lr-tb"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-bottom="2.5mm"/>
+   </style:header-style>
+   <style:footer-style>
+    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-top="2.5mm"/>
+   </style:footer-style>
+  </style:page-layout>
+  <style:page-layout style:name="pm2">
+   <style:page-layout-properties style:writing-mode="lr-tb"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-bottom="2.5mm" fo:border="2.49pt solid #000000" fo:padding="0.18mm" fo:background-color="#c0c0c0">
+     <style:background-image/>
+    </style:header-footer-properties>
+   </style:header-style>
+   <style:footer-style>
+    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-top="2.5mm" fo:border="2.49pt solid #000000" fo:padding="0.18mm" fo:background-color="#c0c0c0">
+     <style:background-image/>
+    </style:header-footer-properties>
+   </style:footer-style>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1">
+   <style:header>
+    <text:p><text:sheet-name>???</text:sheet-name></text:p>
+   </style:header>
+   <style:header-left style:display="false"/>
+   <style:footer>
+    <text:p>Page <text:page-number>1</text:page-number></text:p>
+   </style:footer>
+   <style:footer-left style:display="false"/>
+  </style:master-page>
+  <style:master-page style:name="Report" style:page-layout-name="pm2">
+   <style:header>
+    <style:region-left>
+     <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
+    </style:region-left>
+    <style:region-right>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2016-05-26">00.00.0000</text:date>, <text:time style:data-style-name="N2" text:time-value="16:38:00.511345877">00:00:00</text:time></text:p>
+    </style:region-right>
+   </style:header>
+   <style:header-left style:display="false"/>
+   <style:footer>
+    <text:p>Page <text:page-number>1</text:page-number> / <text:page-count>99</text:page-count></text:p>
+   </style:footer>
+   <style:footer-left style:display="false"/>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:calculation-settings table:automatic-find-labels="false"/>
+   <table:table table:name="Sheet1" table:style-name="ta1">
+    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+    <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
+    <table:table-column table:style-name="co1" table:default-cell-style-name="ce5"/>
+    <table:table-column table:style-name="co2" table:default-cell-style-name="Default"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce2" office:value-type="string" calcext:value-type="string">
+      <text:p>DATEDIF Function</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro3">
+     <table:table-cell table:style-name="ce3" office:value-type="string" calcext:value-type="string">
+      <text:p>Result</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce6" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="3">
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro4">
+     <table:table-cell table:style-name="ce4" office:value-type="string" calcext:value-type="string">
+      <text:p>Sheet</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce4" office:value-type="string" calcext:value-type="string">
+      <text:p>Result</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce4" office:value-type="string" calcext:value-type="string">
+      <text:p>Description</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce7" table:formula="of:=AND([Sheet2.C2:.C200])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Simple DATEDIF formulas with local references and values</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="3">
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce8"/>
+     <table:table-cell/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce8"/>
+     <table:table-cell table:style-name="ce9"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="26">
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce8"/>
+     <table:table-cell/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048537">
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <calcext:conditional-formats>
+     <calcext:conditional-format calcext:target-range-address="Sheet1.B8:Sheet1.B38">
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet1.B8"/>
+      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet1.B8"/>
+      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet1.B8"/>
+     </calcext:conditional-format>
+     <calcext:conditional-format calcext:target-range-address="Sheet1.B3:Sheet1.B3">
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet1.B3"/>
+      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet1.B3"/>
+      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet1.B3"/>
+     </calcext:conditional-format>
+    </calcext:conditional-formats>
+   </table:table>
+   <table:table table:name="Sheet2" table:style-name="ta1" table:print="false">
+    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+    <table:table-column table:style-name="co3" table:number-columns-repeated="3" table:default-cell-style-name="Default"/>
+    <table:table-column table:style-name="co4" table:default-cell-style-name="Default"/>
+    <table:table-column table:style-name="co3" table:number-columns-repeated="12" table:default-cell-style-name="Default"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
+      <text:p>Function</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
+      <text:p>Expected</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
+      <text:p>Correct</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
+      <text:p>FunctionString</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
+      <text:p>Comment</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce15" table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>d</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>m</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>y</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>ym</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>md</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>yd</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K2];[.$L2];[.K$1])" office:value-type="float" office:value="365" calcext:value-type="float">
+      <text:p>365</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="365" calcext:value-type="float">
+      <text:p>365</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A2]=[.B2]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=DATEDIF($K2;$L2;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2011-02-01" calcext:value-type="date">
+      <text:p>2011-02-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2012-02-01" calcext:value-type="date">
+      <text:p>2012-02-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K3];[.$L3];[.K$1])" office:value-type="float" office:value="29" calcext:value-type="float">
+      <text:p>29</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="29" calcext:value-type="float">
+      <text:p>29</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A3]=[.B3]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=DATEDIF($K3;$L3;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2012-02-01" calcext:value-type="date">
+      <text:p>2012-02-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2012-03-01" calcext:value-type="date">
+      <text:p>2012-03-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K4];[.$L4];[.K$1])" office:value-type="float" office:value="365" calcext:value-type="float">
+      <text:p>365</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="365" calcext:value-type="float">
+      <text:p>365</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A4]=[.B4]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=DATEDIF($K4;$L4;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2012-03-28" calcext:value-type="date">
+      <text:p>2012-03-28</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2013-03-28" calcext:value-type="date">
+      <text:p>2013-03-28</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K5];[.$L5];[.K$1])" office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A5]=[.B5]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=DATEDIF($K5;$L5;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2012-03-28" calcext:value-type="date">
+      <text:p>2012-03-28</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2013-03-29" calcext:value-type="date">
+      <text:p>2013-03-29</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K6];[.$L6];[.K$1])" office:value-type="float" office:value="364" calcext:value-type="float">
+      <text:p>364</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="364" calcext:value-type="float">
+      <text:p>364</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A6]=[.B6]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=DATEDIF($K6;$L6;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2012-03-29" calcext:value-type="date">
+      <text:p>2012-03-29</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2013-03-28" calcext:value-type="date">
+      <text:p>2013-03-28</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K7];[.$L7];[.K$1])" office:value-type="float" office:value="365" calcext:value-type="float">
+      <text:p>365</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="365" calcext:value-type="float">
+      <text:p>365</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A7]=[.B7]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=DATEDIF($K7;$L7;K$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K7;$L7;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2012-02-29" calcext:value-type="date">
+      <text:p>2012-02-29</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2013-02-28" calcext:value-type="date">
+      <text:p>2013-02-28</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K8];[.$L8];[.K$1])" office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=DATEDIF($K8;$L8;K$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K8;$L8;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2012-02-29" calcext:value-type="date">
+      <text:p>2012-02-29</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2013-03-01" calcext:value-type="date">
+      <text:p>2013-03-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K9];[.$L9];[.K$1])" office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A9]=[.B9]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=DATEDIF($K9;$L9;K$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K9;$L9;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2011-02-28" calcext:value-type="date">
+      <text:p>2011-02-28</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2012-02-29" calcext:value-type="date">
+      <text:p>2012-02-29</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K10];[.$L10];[.K$1])" office:value-type="float" office:value="367" calcext:value-type="float">
+      <text:p>367</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="367" calcext:value-type="float">
+      <text:p>367</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A10]=[.B10]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=DATEDIF($K10;$L10;K$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K10;$L10;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2011-02-28" calcext:value-type="date">
+      <text:p>2011-02-28</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2012-03-01" calcext:value-type="date">
+      <text:p>2012-03-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K11];[.$L11];[.K$1])" office:value-type="float" office:value="32" calcext:value-type="float">
+      <text:p>32</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="32" calcext:value-type="float">
+      <text:p>32</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=DATEDIF($K11;$L11;K$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K11;$L11;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2011-01-28" calcext:value-type="date">
+      <text:p>2011-01-28</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2011-03-01" calcext:value-type="date">
+      <text:p>2011-03-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K12];[.$L12];[.K$1])" office:value-type="float" office:value="31" calcext:value-type="float">
+      <text:p>31</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="31" calcext:value-type="float">
+      <text:p>31</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=DATEDIF($K12;$L12;K$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K12;$L12;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2011-01-29" calcext:value-type="date">
+      <text:p>2011-01-29</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2011-03-01" calcext:value-type="date">
+      <text:p>2011-03-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K13];[.$L13];[.K$1])" office:value-type="float" office:value="426" calcext:value-type="float">
+      <text:p>426</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="426" calcext:value-type="float">
+      <text:p>426</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=DATEDIF($K13;$L13;K$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K13;$L13;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2001-01-01" calcext:value-type="date">
+      <text:p>2001-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2002-03-03" calcext:value-type="date">
+      <text:p>2002-03-03</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K14];[.$L14];[.K$1])" office:value-type="float" office:value="700" calcext:value-type="float">
+      <text:p>700</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="700" calcext:value-type="float">
+      <text:p>700</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=DATEDIF($K14;$L14;K$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K14;$L14;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2001-06-05" calcext:value-type="date">
+      <text:p>2001-06-05</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2003-05-06" calcext:value-type="date">
+      <text:p>2003-05-06</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K15];[.$L15];[.K$1])" office:value-type="float" office:value="304" calcext:value-type="float">
+      <text:p>304</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="304" calcext:value-type="float">
+      <text:p>304</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A15]=[.B15]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="=DATEDIF($K15;$L15;K$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K15;$L15;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2001-03-03" calcext:value-type="date">
+      <text:p>2001-03-03</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2002-01-01" calcext:value-type="date">
+      <text:p>2002-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K16];[.$L16];[.K$1])" office:value-type="float" office:value="760" calcext:value-type="float">
+      <text:p>760</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="760" calcext:value-type="float">
+      <text:p>760</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A16]=[.B16]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=DATEDIF($K16;$L16;K$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K16;$L16;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2001-05-06" calcext:value-type="date">
+      <text:p>2001-05-06</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2003-06-05" calcext:value-type="date">
+      <text:p>2003-06-05</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K17];[.$L17];[.K$1])" office:value-type="float" office:value="8724" calcext:value-type="float">
+      <text:p>8724</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="8724" calcext:value-type="float">
+      <text:p>8724</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=DATEDIF($K17;$L17;K$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K17;$L17;K$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="1988-06-22" calcext:value-type="date">
+      <text:p>1988-06-22</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2012-05-11" calcext:value-type="date">
+      <text:p>2012-05-11</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K2];[.$L2];[.L$1])" office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=DATEDIF($K2;$L2;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K2;$L2;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K3];[.$L3];[.L$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A19]=[.B19]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=DATEDIF($K3;$L3;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K3;$L3;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K4];[.$L4];[.L$1])" office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A20]=[.B20]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="=DATEDIF($K4;$L4;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K4;$L4;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K5];[.$L5];[.L$1])" office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A21]=[.B21]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="=DATEDIF($K5;$L5;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K5;$L5;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K6];[.$L6];[.L$1])" office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A22]=[.B22]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A22])" office:value-type="string" office:string-value="=DATEDIF($K6;$L6;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K6;$L6;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K7];[.$L7];[.L$1])" office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A23]=[.B23]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A23])" office:value-type="string" office:string-value="=DATEDIF($K7;$L7;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K7;$L7;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K8];[.$L8];[.L$1])" office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A24]=[.B24]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A24])" office:value-type="string" office:string-value="=DATEDIF($K8;$L8;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K8;$L8;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K9];[.$L9];[.L$1])" office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A25]=[.B25]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A25])" office:value-type="string" office:string-value="=DATEDIF($K9;$L9;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K9;$L9;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K10];[.$L10];[.L$1])" office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="12" calcext:value-type="float">
+      <text:p>12</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A26]=[.B26]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A26])" office:value-type="string" office:string-value="=DATEDIF($K10;$L10;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K10;$L10;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K11];[.$L11];[.L$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A27]=[.B27]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A27])" office:value-type="string" office:string-value="=DATEDIF($K11;$L11;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K11;$L11;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K12];[.$L12];[.L$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A28]=[.B28]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A28])" office:value-type="string" office:string-value="=DATEDIF($K12;$L12;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K12;$L12;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K13];[.$L13];[.L$1])" office:value-type="float" office:value="14" calcext:value-type="float">
+      <text:p>14</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="14" calcext:value-type="float">
+      <text:p>14</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A29]=[.B29]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A29])" office:value-type="string" office:string-value="=DATEDIF($K13;$L13;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K13;$L13;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K14];[.$L14];[.L$1])" office:value-type="float" office:value="23" calcext:value-type="float">
+      <text:p>23</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="23" calcext:value-type="float">
+      <text:p>23</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A30]=[.B30]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A30])" office:value-type="string" office:string-value="=DATEDIF($K14;$L14;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K14;$L14;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K15];[.$L15];[.L$1])" office:value-type="float" office:value="9" calcext:value-type="float">
+      <text:p>9</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="9" calcext:value-type="float">
+      <text:p>9</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A31]=[.B31]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A31])" office:value-type="string" office:string-value="=DATEDIF($K15;$L15;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K15;$L15;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K16];[.$L16];[.L$1])" office:value-type="float" office:value="24" calcext:value-type="float">
+      <text:p>24</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="24" calcext:value-type="float">
+      <text:p>24</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A32]=[.B32]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A32])" office:value-type="string" office:string-value="=DATEDIF($K16;$L16;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K16;$L16;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K17];[.$L17];[.L$1])" office:value-type="float" office:value="286" calcext:value-type="float">
+      <text:p>286</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="286" calcext:value-type="float">
+      <text:p>286</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A33]=[.B33]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A33])" office:value-type="string" office:string-value="=DATEDIF($K17;$L17;L$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K17;$L17;L$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K2];[.$L2];[.M$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A34]=[.B34]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A34])" office:value-type="string" office:string-value="=DATEDIF($K2;$L2;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K2;$L2;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K3];[.$L3];[.M$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A35]=[.B35]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A35])" office:value-type="string" office:string-value="=DATEDIF($K3;$L3;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K3;$L3;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K4];[.$L4];[.M$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A36]=[.B36]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A36])" office:value-type="string" office:string-value="=DATEDIF($K4;$L4;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K4;$L4;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K5];[.$L5];[.M$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A37]=[.B37]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A37])" office:value-type="string" office:string-value="=DATEDIF($K5;$L5;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K5;$L5;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K6];[.$L6];[.M$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A38]=[.B38]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A38])" office:value-type="string" office:string-value="=DATEDIF($K6;$L6;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K6;$L6;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce16" table:number-columns-repeated="6"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K7];[.$L7];[.M$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A39]=[.B39]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A39])" office:value-type="string" office:string-value="=DATEDIF($K7;$L7;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K7;$L7;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K8];[.$L8];[.M$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A40]=[.B40]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A40])" office:value-type="string" office:string-value="=DATEDIF($K8;$L8;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K8;$L8;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K9];[.$L9];[.M$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A41]=[.B41]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A41])" office:value-type="string" office:string-value="=DATEDIF($K9;$L9;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K9;$L9;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K10];[.$L10];[.M$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A42]=[.B42]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A42])" office:value-type="string" office:string-value="=DATEDIF($K10;$L10;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K10;$L10;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K11];[.$L11];[.M$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A43]=[.B43]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A43])" office:value-type="string" office:string-value="=DATEDIF($K11;$L11;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K11;$L11;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K12];[.$L12];[.M$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A44]=[.B44]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A44])" office:value-type="string" office:string-value="=DATEDIF($K12;$L12;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K12;$L12;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K13];[.$L13];[.M$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A45]=[.B45]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A45])" office:value-type="string" office:string-value="=DATEDIF($K13;$L13;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K13;$L13;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K14];[.$L14];[.M$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A46]=[.B46]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A46])" office:value-type="string" office:string-value="=DATEDIF($K14;$L14;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K14;$L14;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K15];[.$L15];[.M$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A47]=[.B47]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A47])" office:value-type="string" office:string-value="=DATEDIF($K15;$L15;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K15;$L15;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K16];[.$L16];[.M$1])" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A48]=[.B48]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A48])" office:value-type="string" office:string-value="=DATEDIF($K16;$L16;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K16;$L16;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K17];[.$L17];[.M$1])" office:value-type="float" office:value="23" calcext:value-type="float">
+      <text:p>23</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="23" calcext:value-type="float">
+      <text:p>23</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A49]=[.B49]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A49])" office:value-type="string" office:string-value="=DATEDIF($K17;$L17;M$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K17;$L17;M$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K2];[.$L2];[.N$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A50]=[.B50]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A50])" office:value-type="string" office:string-value="=DATEDIF($K2;$L2;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K2;$L2;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K3];[.$L3];[.N$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A51]=[.B51]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A51])" office:value-type="string" office:string-value="=DATEDIF($K3;$L3;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K3;$L3;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K4];[.$L4];[.N$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A52]=[.B52]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A52])" office:value-type="string" office:string-value="=DATEDIF($K4;$L4;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K4;$L4;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K5];[.$L5];[.N$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A53]=[.B53]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A53])" office:value-type="string" office:string-value="=DATEDIF($K5;$L5;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K5;$L5;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K6];[.$L6];[.N$1])" office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A54]=[.B54]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A54])" office:value-type="string" office:string-value="=DATEDIF($K6;$L6;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K6;$L6;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K7];[.$L7];[.N$1])" office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A55]=[.B55]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A55])" office:value-type="string" office:string-value="=DATEDIF($K7;$L7;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K7;$L7;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K8];[.$L8];[.N$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A56]=[.B56]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A56])" office:value-type="string" office:string-value="=DATEDIF($K8;$L8;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K8;$L8;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K9];[.$L9];[.N$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A57]=[.B57]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A57])" office:value-type="string" office:string-value="=DATEDIF($K9;$L9;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K9;$L9;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K10];[.$L10];[.N$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A58]=[.B58]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A58])" office:value-type="string" office:string-value="=DATEDIF($K10;$L10;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K10;$L10;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K11];[.$L11];[.N$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A59]=[.B59]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A59])" office:value-type="string" office:string-value="=DATEDIF($K11;$L11;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K11;$L11;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K12];[.$L12];[.N$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A60]=[.B60]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A60])" office:value-type="string" office:string-value="=DATEDIF($K12;$L12;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K12;$L12;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K13];[.$L13];[.N$1])" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A61]=[.B61]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A61])" office:value-type="string" office:string-value="=DATEDIF($K13;$L13;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K13;$L13;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K14];[.$L14];[.N$1])" office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="11" calcext:value-type="float">
+      <text:p>11</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A62]=[.B62]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A62])" office:value-type="string" office:string-value="=DATEDIF($K14;$L14;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K14;$L14;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K15];[.$L15];[.N$1])" office:value-type="float" office:value="9" calcext:value-type="float">
+      <text:p>9</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="9" calcext:value-type="float">
+      <text:p>9</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A63]=[.B63]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A63])" office:value-type="string" office:string-value="=DATEDIF($K15;$L15;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K15;$L15;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K16];[.$L16];[.N$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A64]=[.B64]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A64])" office:value-type="string" office:string-value="=DATEDIF($K16;$L16;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K16;$L16;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K17];[.$L17];[.N$1])" office:value-type="float" office:value="10" calcext:value-type="float">
+      <text:p>10</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="10" calcext:value-type="float">
+      <text:p>10</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A65]=[.B65]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A65])" office:value-type="string" office:string-value="=DATEDIF($K17;$L17;N$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K17;$L17;N$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K2];[.$L2];[.O$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A66]=[.B66]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A66])" office:value-type="string" office:string-value="=DATEDIF($K2;$L2;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K2;$L2;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K3];[.$L3];[.O$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A67]=[.B67]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A67])" office:value-type="string" office:string-value="=DATEDIF($K3;$L3;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K3;$L3;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K4];[.$L4];[.O$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A68]=[.B68]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A68])" office:value-type="string" office:string-value="=DATEDIF($K4;$L4;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K4;$L4;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K5];[.$L5];[.O$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A69]=[.B69]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A69])" office:value-type="string" office:string-value="=DATEDIF($K5;$L5;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K5;$L5;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K6];[.$L6];[.O$1])" office:value-type="float" office:value="27" calcext:value-type="float">
+      <text:p>27</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="27" calcext:value-type="float">
+      <text:p>27</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A70]=[.B70]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A70])" office:value-type="string" office:string-value="=DATEDIF($K6;$L6;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K6;$L6;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K7];[.$L7];[.O$1])" office:value-type="float" office:value="30" calcext:value-type="float">
+      <text:p>30</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="30" calcext:value-type="float">
+      <text:p>30</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A71]=[.B71]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A71])" office:value-type="string" office:string-value="=DATEDIF($K7;$L7;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K7;$L7;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K8];[.$L8];[.O$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A72]=[.B72]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A72])" office:value-type="string" office:string-value="=DATEDIF($K8;$L8;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K8;$L8;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K9];[.$L9];[.O$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A73]=[.B73]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A73])" office:value-type="string" office:string-value="=DATEDIF($K9;$L9;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K9;$L9;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K10];[.$L10];[.O$1])" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A74]=[.B74]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A74])" office:value-type="string" office:string-value="=DATEDIF($K10;$L10;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K10;$L10;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K11];[.$L11];[.O$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A75]=[.B75]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A75])" office:value-type="string" office:string-value="=DATEDIF($K11;$L11;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K11;$L11;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K12];[.$L12];[.O$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A76]=[.B76]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A76])" office:value-type="string" office:string-value="=DATEDIF($K12;$L12;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K12;$L12;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K13];[.$L13];[.O$1])" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A77]=[.B77]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A77])" office:value-type="string" office:string-value="=DATEDIF($K13;$L13;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K13;$L13;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K14];[.$L14];[.O$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A78]=[.B78]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A78])" office:value-type="string" office:string-value="=DATEDIF($K14;$L14;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K14;$L14;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K15];[.$L15];[.O$1])" office:value-type="float" office:value="29" calcext:value-type="float">
+      <text:p>29</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="29" calcext:value-type="float">
+      <text:p>29</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A79]=[.B79]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A79])" office:value-type="string" office:string-value="=DATEDIF($K15;$L15;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K15;$L15;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K16];[.$L16];[.O$1])" office:value-type="float" office:value="30" calcext:value-type="float">
+      <text:p>30</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="30" calcext:value-type="float">
+      <text:p>30</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A80]=[.B80]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A80])" office:value-type="string" office:string-value="=DATEDIF($K16;$L16;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K16;$L16;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K17];[.$L17];[.O$1])" office:value-type="float" office:value="19" calcext:value-type="float">
+      <text:p>19</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="19" calcext:value-type="float">
+      <text:p>19</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A81]=[.B81]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A81])" office:value-type="string" office:string-value="=DATEDIF($K17;$L17;O$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K17;$L17;O$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K2];[.$L2];[.P$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A82]=[.B82]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A82])" office:value-type="string" office:string-value="=DATEDIF($K2;$L2;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K2;$L2;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K3];[.$L3];[.P$1])" office:value-type="float" office:value="29" calcext:value-type="float">
+      <text:p>29</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="29" calcext:value-type="float">
+      <text:p>29</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A83]=[.B83]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A83])" office:value-type="string" office:string-value="=DATEDIF($K3;$L3;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K3;$L3;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K4];[.$L4];[.P$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A84]=[.B84]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A84])" office:value-type="string" office:string-value="=DATEDIF($K4;$L4;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K4;$L4;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K5];[.$L5];[.P$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A85]=[.B85]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A85])" office:value-type="string" office:string-value="=DATEDIF($K5;$L5;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K5;$L5;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K6];[.$L6];[.P$1])" office:value-type="float" office:value="364" calcext:value-type="float">
+      <text:p>364</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="364" calcext:value-type="float">
+      <text:p>364</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A86]=[.B86]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A86])" office:value-type="string" office:string-value="=DATEDIF($K6;$L6;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K6;$L6;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K7];[.$L7];[.P$1])" office:value-type="float" office:value="365" calcext:value-type="float">
+      <text:p>365</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="365" calcext:value-type="float">
+      <text:p>365</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A87]=[.B87]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A87])" office:value-type="string" office:string-value="=DATEDIF($K7;$L7;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K7;$L7;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K8];[.$L8];[.P$1])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A88]=[.B88]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A88])" office:value-type="string" office:string-value="=DATEDIF($K8;$L8;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K8;$L8;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K9];[.$L9];[.P$1])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A89]=[.B89]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A89])" office:value-type="string" office:string-value="=DATEDIF($K9;$L9;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K9;$L9;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K10];[.$L10];[.P$1])" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A90]=[.B90]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A90])" office:value-type="string" office:string-value="=DATEDIF($K10;$L10;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K10;$L10;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K11];[.$L11];[.P$1])" office:value-type="float" office:value="32" calcext:value-type="float">
+      <text:p>32</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="32" calcext:value-type="float">
+      <text:p>32</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A91]=[.B91]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A91])" office:value-type="string" office:string-value="=DATEDIF($K11;$L11;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K11;$L11;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K12];[.$L12];[.P$1])" office:value-type="float" office:value="31" calcext:value-type="float">
+      <text:p>31</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="31" calcext:value-type="float">
+      <text:p>31</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A92]=[.B92]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A92])" office:value-type="string" office:string-value="=DATEDIF($K12;$L12;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K12;$L12;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K13];[.$L13];[.P$1])" office:value-type="float" office:value="61" calcext:value-type="float">
+      <text:p>61</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="61" calcext:value-type="float">
+      <text:p>61</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A93]=[.B93]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A93])" office:value-type="string" office:string-value="=DATEDIF($K13;$L13;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K13;$L13;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K14];[.$L14];[.P$1])" office:value-type="float" office:value="335" calcext:value-type="float">
+      <text:p>335</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="335" calcext:value-type="float">
+      <text:p>335</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A94]=[.B94]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A94])" office:value-type="string" office:string-value="=DATEDIF($K14;$L14;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K14;$L14;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K15];[.$L15];[.P$1])" office:value-type="float" office:value="304" calcext:value-type="float">
+      <text:p>304</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="304" calcext:value-type="float">
+      <text:p>304</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A95]=[.B95]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A95])" office:value-type="string" office:string-value="=DATEDIF($K15;$L15;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K15;$L15;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K16];[.$L16];[.P$1])" office:value-type="float" office:value="30" calcext:value-type="float">
+      <text:p>30</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="30" calcext:value-type="float">
+      <text:p>30</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A96]=[.B96]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A96])" office:value-type="string" office:string-value="=DATEDIF($K16;$L16;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K16;$L16;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.$K17];[.$L17];[.P$1])" office:value-type="float" office:value="324" calcext:value-type="float">
+      <text:p>324</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="324" calcext:value-type="float">
+      <text:p>324</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A97]=[.B97]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A97])" office:value-type="string" office:string-value="=DATEDIF($K17;$L17;P$1)" calcext:value-type="string">
+      <text:p>=DATEDIF($K17;$L17;P$1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F98];[.G98];[.H98])" office:value-type="float" office:value="9" calcext:value-type="float">
+      <text:p>9</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="9" calcext:value-type="float">
+      <text:p>9</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A98]=[.B98]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A98])" office:value-type="string" office:string-value="=DATEDIF(F98;G98;H98)" calcext:value-type="string">
+      <text:p>=DATEDIF(F98;G98;H98)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce12" office:value-type="date" office:date-value="2007-01-01" calcext:value-type="date">
+      <text:p>2007-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" office:value-type="date" office:date-value="2007-01-10" calcext:value-type="date">
+      <text:p>2007-01-10</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>d</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F99];[.G99];[.H99])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A99]=[.B99]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A99])" office:value-type="string" office:string-value="=DATEDIF(F99;G99;H99)" calcext:value-type="string">
+      <text:p>=DATEDIF(F99;G99;H99)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-01" calcext:value-type="date">
+      <text:p>2007-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-31" calcext:value-type="date">
+      <text:p>2007-01-31</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>m</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F100];[.G100];[.H100])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A100]=[.B100]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A100])" office:value-type="string" office:string-value="=DATEDIF(F100;G100;H100)" calcext:value-type="string">
+      <text:p>=DATEDIF(F100;G100;H100)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-01" calcext:value-type="date">
+      <text:p>2007-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-02-01" calcext:value-type="date">
+      <text:p>2007-02-01</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>m</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F101];[.G101];[.H101])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A101]=[.B101]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A101])" office:value-type="string" office:string-value="=DATEDIF(F101;G101;H101)" calcext:value-type="string">
+      <text:p>=DATEDIF(F101;G101;H101)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-01" calcext:value-type="date">
+      <text:p>2007-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-02-28" calcext:value-type="date">
+      <text:p>2007-02-28</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>m</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F102];[.G102];[.H102])" office:value-type="float" office:value="364" calcext:value-type="float">
+      <text:p>364</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="364" calcext:value-type="float">
+      <text:p>364</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A102]=[.B102]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A102])" office:value-type="string" office:string-value="=DATEDIF(F102;G102;H102)" calcext:value-type="string">
+      <text:p>=DATEDIF(F102;G102;H102)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-01" calcext:value-type="date">
+      <text:p>2007-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-12-31" calcext:value-type="date">
+      <text:p>2007-12-31</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>d</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F103];[.G103];[.H103])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A103]=[.B103]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A103])" office:value-type="string" office:string-value="=DATEDIF(F103;G103;H103)" calcext:value-type="string">
+      <text:p>=DATEDIF(F103;G103;H103)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-01" calcext:value-type="date">
+      <text:p>2007-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-31" calcext:value-type="date">
+      <text:p>2007-01-31</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>y</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F104];[.G104];[.H104])" office:value-type="float" office:value="547" calcext:value-type="float">
+      <text:p>547</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="547" calcext:value-type="float">
+      <text:p>547</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A104]=[.B104]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A104])" office:value-type="string" office:string-value="=DATEDIF(F104;G104;H104)" calcext:value-type="string">
+      <text:p>=DATEDIF(F104;G104;H104)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-01" calcext:value-type="date">
+      <text:p>2007-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2008-07-01" calcext:value-type="date">
+      <text:p>2008-07-01</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>d</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F105];[.G105];[.H105])" office:value-type="float" office:value="18" calcext:value-type="float">
+      <text:p>18</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="18" calcext:value-type="float">
+      <text:p>18</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A105]=[.B105]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A105])" office:value-type="string" office:string-value="=DATEDIF(F105;G105;H105)" calcext:value-type="string">
+      <text:p>=DATEDIF(F105;G105;H105)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-01" calcext:value-type="date">
+      <text:p>2007-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2008-07-01" calcext:value-type="date">
+      <text:p>2008-07-01</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>m</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F106];[.G106];[.H106])" office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A106]=[.B106]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A106])" office:value-type="string" office:string-value="=DATEDIF(F106;G106;H106)" calcext:value-type="string">
+      <text:p>=DATEDIF(F106;G106;H106)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-01" calcext:value-type="date">
+      <text:p>2007-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2008-07-01" calcext:value-type="date">
+      <text:p>2008-07-01</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>ym</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F107];[.G107];[.H107])" office:value-type="float" office:value="182" calcext:value-type="float">
+      <text:p>182</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="182" calcext:value-type="float">
+      <text:p>182</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A107]=[.B107]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A107])" office:value-type="string" office:string-value="=DATEDIF(F107;G107;H107)" calcext:value-type="string">
+      <text:p>=DATEDIF(F107;G107;H107)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-01" calcext:value-type="date">
+      <text:p>2007-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2008-07-01" calcext:value-type="date">
+      <text:p>2008-07-01</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>yd</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F108];[.G108];[.H108])" office:value-type="float" office:value="181" calcext:value-type="float">
+      <text:p>181</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="181" calcext:value-type="float">
+      <text:p>181</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A108]=[.B108]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A108])" office:value-type="string" office:string-value="=DATEDIF(F108;G108;H108)" calcext:value-type="string">
+      <text:p>=DATEDIF(F108;G108;H108)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2008-01-01" calcext:value-type="date">
+      <text:p>2008-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2009-07-01" calcext:value-type="date">
+      <text:p>2009-07-01</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>yd</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F109];[.G109];[.H109])" office:value-type="float" office:value="30" calcext:value-type="float">
+      <text:p>30</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="30" calcext:value-type="float">
+      <text:p>30</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A109]=[.B109]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A109])" office:value-type="string" office:string-value="=DATEDIF(F109;G109;H109)" calcext:value-type="string">
+      <text:p>=DATEDIF(F109;G109;H109)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-01" calcext:value-type="date">
+      <text:p>2007-01-01</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="date" office:date-value="2007-01-31" calcext:value-type="date">
+      <text:p>2007-01-31</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>md</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F110];[.G110];[.H110])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A110]=[.B110]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A110])" office:value-type="string" office:string-value="=DATEDIF(F110;G110;H110)" calcext:value-type="string">
+      <text:p>=DATEDIF(F110;G110;H110)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce14" office:value-type="date" office:date-value="2007-02-01" calcext:value-type="date">
+      <text:p>01.02.2007</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce14" office:value-type="date" office:date-value="2009-03-01" calcext:value-type="date">
+      <text:p>01.03.2009</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>md</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F111];[.G111];[.H111])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A111]=[.B111]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A111])" office:value-type="string" office:string-value="=DATEDIF(F111;G111;H111)" calcext:value-type="string">
+      <text:p>=DATEDIF(F111;G111;H111)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce14" office:value-type="date" office:date-value="2008-02-01" calcext:value-type="date">
+      <text:p>01.02.2008</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce14" office:value-type="date" office:date-value="2009-03-01" calcext:value-type="date">
+      <text:p>01.03.2009</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>md</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F112];[.G112];[.H112])" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A112]=[.B112]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A112])" office:value-type="string" office:string-value="=DATEDIF(F112;G112;H112)" calcext:value-type="string">
+      <text:p>=DATEDIF(F112;G112;H112)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#105548</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce40" office:value-type="date" office:date-value="2017-01-01T08:00:00" calcext:value-type="date">
+      <text:p>01/01/2017 08:00  AM</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce40" office:value-type="date" office:date-value="2017-01-03T07:00:00" calcext:value-type="date">
+      <text:p>01/03/17 07:00 AM</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>d</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6" table:number-rows-repeated="1048464">
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <calcext:conditional-formats>
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C112">
+      <calcext:condition calcext:apply-style-name="1true" calcext:value="=TRUE()" calcext:base-cell-address="Sheet2.C2"/>
+      <calcext:condition calcext:apply-style-name="0false" calcext:value="!=TRUE()" calcext:base-cell-address="Sheet2.C2"/>
+     </calcext:conditional-format>
+    </calcext:conditional-formats>
+   </table:table>
+   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
+    <table:table-source xlink:type="simple" xlink:href="function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
+    <table:table-column table:number-columns-repeated="8"/>
+    <table:table-row table:number-rows-repeated="2">
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:number-columns-repeated="7"/>
+     <table:table-cell table:style-name="ce1" office:value-type="float" office:value="4">
+      <text:p>4</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <table:named-expressions>
+    <table:named-range table:name="day" table:base-cell-address="$Sheet1.$J$6" table:cell-range-address="#REF!"/>
+    <table:named-range table:name="month" table:base-cell-address="$Sheet1.$J$5" table:cell-range-address="#REF!"/>
+    <table:named-range table:name="year" table:base-cell-address="$Sheet1.$J$4" table:cell-range-address="#REF!"/>
+   </table:named-expressions>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

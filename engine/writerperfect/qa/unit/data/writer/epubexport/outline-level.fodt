@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document office:mimetype="application/vnd.oasis.opendocument.text" office:version="1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0">
+  <office:body>
+    <office:text>
+      <text:h text:outline-level="1">Chapter 1</text:h>
+      <text:p>foo</text:p>
+      <text:h text:outline-level="2">Chapter 1.1</text:h>
+      <text:p>foo</text:p>
+      <text:h text:outline-level="1">Chapter 2</text:h>
+      <text:p>bar</text:p>
+      <text:h text:outline-level="2">Chapter 2.1</text:h>
+      <text:p>bar</text:p>
+    </office:text>
+  </office:body>
+</office:document>

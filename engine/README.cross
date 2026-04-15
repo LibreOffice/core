@@ -1,0 +1,241 @@
+Cross-compiling Collabora Office
+********************************
+
+Cross-compilation works, to various degree, to the following
+platforms: iOS, Android, and Raspbian.
+
+Note that this document has not been updated very often, and not
+everything here necessarily is true any more.
+
+
+General
+-------
+
+In GNU Autoconf terminology, "build" is the platform on which you are
+running a build of some software and "host" is the platform on which
+the software you are building will run. Only in the specific case of
+building compilers and other programming tools is the term "target"
+used to indicate the platform for which the tools your are building
+will produce code. As Collabora Office is not a compiler, the "target" term
+should not be used in the context of cross-compilation.
+
+(For a case where all three of "build", "host" and "target" are
+different: consider a gcc cross-compiler running on Windows, producing
+code for Android, where the cross-compiler itself was built on
+Linux. (This is a real case.) An interesting tidbit is that such
+configurations are called "Canadian Cross".)
+
+Even though the Collabora Office build mechanism is highly unorthodox, the
+configure script takes the normal --build and --host options like any
+GNU Autoconf -based configure script. To cross-compile, you basically
+need just to specify a suitable --host option and things should work
+out nicely. In practice, many details need to be handled. See examples
+below.
+
+Note that in the case of Collabora Office, it is uncommon to run the
+configure script directly. Normally one uses the autogen.sh script.
+The autogen.sh script reads command-line options from file called
+autogen.input if it exists. The typical way of working is to keep
+the configure parameters in that file and edit it as needed.
+
+
+What is so hard, then?
+----------------------
+
+Despite the fact that the configure script takes normal --build and
+--host options, that is just the beginning. It was necessary to
+separate tests for "host" and "build" platforms in the configure
+script. See the git log for details. And the reasonably "standard"
+configure.in is just the top level; when we get down to the actual
+makefilery used to build the bits of Collabora Office, it gets much worse.
+
+
+iOS
+***
+
+iOS is the operating system on Apple's mobile devices. Clearly for a
+device like the iPad it would not be acceptable to run a normal
+Collabora Office application with overlapping windows and mouse-oriented
+GUI widgets.
+
+It makes sense to use only a part of Collabora Office's code for iOS. Lots
+of the GUI-oriented code should be left out. iOS apps that want to use
+the applicable Collabora Office code will handle all their GUI in a
+platform-dependent manner. How well it will be possible to do such a
+split remains to be seen.
+
+Obviously we want it to be possible to eventually distribute apps
+using Collabora Office code through the App Store. Technically, one
+important special aspect of iOS is that apps in the App Store are not
+allowed to load own dynamic libraries. (System libraries are used in
+the form of dynamic libraries, just like on macOS, of which iOS is
+a variant.)
+
+Thus all the libraries in Collabora Office that normally are shared
+libraries (DLLs on Windows, shared objects (.so) on Linux, dynamic
+libraries on macOS (.dylib)) must be built as static archives
+instead. This has some interesting consequences for how UNO is
+implemented and used.
+
+An iOS app is a "bundle" that contains a single executable. In an app
+using Collabora Office code, that executable then contains the necessary
+Collabora Office libraries and UNO components statically linked.
+
+The Apple tool-chain for iOS cross-building is available only for OS
+X. In order to be able to run and debug an app on an actual device
+(and not just the iOS Simulator) you need to be registered in the iOS
+Developer Program.
+
+Here is an autogen.input for iOS (device) using Xcode 4.6, on macOS 10.8:
+
+--build=i386-apple-darwin10.7.0
+--host=arm-apple-darwin10
+--enable-dbgutil
+--enable-debug
+--enable-werror
+
+For the iOS Simulator, but note that building for the simulator is
+broken at the moment (July 2014):
+
+--build=i386-apple-darwin10.7.0
+--host=arm-apple-darwin10
+--enable-ios-simulator
+--enable-dbgutil
+--enable-debug
+--enable-werror
+
+You will have to install autoconf and automake yourself before running
+autogen.sh. They are no longer included in Xcode 4.3 and later (not
+even in the add-on "command line tools").
+
+The -mmacosx-version-min=10.7 is necessary when building for the iOS
+simulator to avoid clang replacing simple calls to fprintf with calls
+to fwrite$UNIX2003 which Xcode then warns that doesn't exist on iOS.
+
+
+Android
+*******
+
+From a technical point of view the core Android OS (the kernel) is
+Linux, but everything else is different. Unlike iOS, an Android app
+can use shared objects just fine, so that aspect of UNO doesn't need
+special handling. Except that there is a silly low limit in the
+Android dynamic linker on the number of libraries you can dlopen. This
+is a limitation in user-level (but system-provided and not really
+replaceable) code, not the kernel.
+
+Thus, just like for iOS, also for Android the Collabora Office libraries
+and UNO components are built as static archives. For Android, those
+static archives, and any app-specific native code, are linked into one
+single app-specific shared library, called liblo-native-code.so.
+
+For the GUI, the same holds as said above for iOS. The GUI layer needs
+to be platform-specific, written in Java.
+
+Android cross-compilation work has been done mainly on Linux (openSUSE
+in particular). Earlier also cross-compiling from macOS was tried. The
+Android cross-compilation tool-chain (the "Native Development Kit", or
+NDK) is available for Linux, macOS and Windows, but trying to
+cross-compile Collabora Office from Windows will probably drive you insane.
+
+You will also need the Android SDK as full "make" also builds a couple
+of Android apps where the upper layer is written in Java.
+
+Use the "android" tool from the SDK to install the SDK Tools, SDK
+Platform Tools, the API 15 SDK Platform and the Android Support
+Library. If you want to run the Android apps in the emulator, you of
+course need an appropriate system image for that.
+
+Here is an autogen.input for Android on ARM when cross-compiling
+from Linux:
+
+--enable-dbgutil
+--enable-werror
+--with-distro=CPAndroid
+--with-android-sdk=/path/to/android/sdk
+--with-android-ndk=/path/to/android/sdk/ndk/version
+
+And here is an (quite old) autogen.input for Android on X86:
+
+--with-android-ndk=/path/to/android-ndk-r8b
+--with-android-ndk-toolchain-version=4.6
+--with-android-sdk=/path/to/android-sdk-linux
+--build=i586-suse-linux
+--enable-ccache
+--with-distro=CPAndroidX86
+
+NB: If you happen to upgrade to Android SDK Tools 23, and the build (using
+'make verbose=t android') fails for you with:
+
+       [dx] UNEXPECTED TOP-LEVEL EXCEPTION:
+       [dx] java.io.FileNotFoundException: /local/path/to/android-sdk-linux/tools/support/annotations.jar (no such file or directory)
+
+you need to copy the annotations.jar from an older sdk; like
+
+wget 'http://dl-ssl.google.com/android/repository/tools_r22.6.2-linux.zip'
+unzip tools_r22.6.2-linux.zip
+cp tools/support/annotations.jar <android-sdk-linux>/tools/support/
+
+Raspbian
+********
+
+In theory, this should work also for another Linux, it does not need to be Raspbian.
+But this cross-compilation work is tested from Debian and openSUSE to Raspbian.
+
+You will need headers, pkg-config files and libraries from a Raspbian
+system to build against. Available at
+https://dev-www.libreoffice.org/extern/ . Look for the latest
+raspbian-root-*.tar.gz . For instance:
+
+$ wget https://dev-www.libreoffice.org/extern/raspbian-root-20140120.tar.gz
+$ mkdir raspbian-root
+$ cd raspbian-root
+$ tar -xf raspbian-root-20140120.tar.gz
+
+You can build cross-compiler yourself or get the executables here:
+$ git clone git://github.com/raspberrypi/tools
+
+tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian is known to work.
+
+Then create pkg-config wrapper, something like:
+$ cat > pkg-config-wrapper-host << _EOF
+#!/bin/sh
+
+if [ "$CROSS_COMPILING" = TRUE ]; then
+   SYSROOT=$HOME/lo/raspbian-root
+   export PKG_CONFIG_PATH=${SYSROOT}/usr/lib/arm-linux-gnueabihf/pkgconfig:${SYSROOT}/usr/share/pkgconfig
+   export PKG_CONFIG_LIBDIR=${SYSROOT}/usr/lib/pkgconfig
+   export PKG_CONFIG_SYSROOT_DIR=${SYSROOT}
+fi
+
+exec pkg-config "\$@"
+_EOF
+$ chmod +x pkg-config-wrapper-host
+
+This does not work with pkg-config 0.23. 0.26 is known to work.
+
+And you are ready to build with autogen.input similar to:
+
+PKG_CONFIG=<path-to-pkg-config-wrapper-host>
+CC=<path-to-arm-linux-gnueabihf-gcc> --sysroot=<path-to-raspbian_rootfs>
+CXX=<path-to-arm-linux-gnueabihf-g++> --sysroot=<path-to-raspbian_rootfs>
+--build=x86_64-unknown-linux-gnu
+--host=arm-unknown-linux-gnueabihf
+--disable-sdk
+--enable-python=system
+PYTHON_CFLAGS=-I<path-to-raspbian_rootfs>/usr/include/python2.7
+PYTHON_LIBS=-lpython2.7
+--with-java
+JAVAINC=-I<path-to-raspbian_rootfs>/usr/lib/jvm/java-6-openjdk-armhf/include
+--with-system-cairo
+--with-system-cppunit
+--with-system-icu
+--with-system-neon
+--with-system-nss
+--with-system-openldap
+--with-system-openssl
+--with-system-redland
+
+Finally, when you are ready to run the binaries in Raspbian,
+you may need to get more system libraries, who knows.
+$ sudo apt-get build-dep libreoffice # or similar

@@ -1,0 +1,20 @@
+To allow opening files on Unicode paths on Windpws, expect passed 8-bit
+strings to be UTF-8-encoded, and convert them to wchar_t. Fallback to
+ACP strings for backward compatibility.
+
+diff --git a/src/Numbertext.cxx b/src/Numbertext.cxx
+--- a/src/Numbertext.cxx
++++ b/src/Numbertext.cxx
+@@ -27,7 +27,11 @@
+ bool readfile(const std::string& filename, std::wstring& result)
+ {
+ #ifdef _WIN32
+-    std::ifstream ifs(filename);
++    // First try to convert from UTF-8
++    std::ifstream ifs(Numbertext::string2wstring(filename));
++    // Fallback to ACP string for backward compatibility
++    if (ifs.fail())
++        ifs.open(filename);
+     if (ifs.fail())
+         return false;
+     std::stringstream ss;

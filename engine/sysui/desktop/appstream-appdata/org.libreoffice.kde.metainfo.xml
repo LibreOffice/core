@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <id>com.collabora.collaboraoffice.kde</id>
+
+  <extends>collaboraoffice-base.desktop</extends>
+  <extends>collaboraoffice-calc.desktop</extends>
+  <extends>collaboraoffice-draw.desktop</extends>
+  <extends>collaboraoffice-impress.desktop</extends>
+  <extends>collaboraoffice-writer.desktop</extends>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MPL-2.0</project_license>
+  <name>Collabora Office KDE Integration</name>
+  <summary>Improves Collabora Office integration within the KDE Plasma desktop environment</summary>
+
+  <url type="homepage">https://collabora.com</url>
+
+  <compulsory_for_desktop>KDE</compulsory_for_desktop>
+  <compulsory_for_desktop>Plasma</compulsory_for_desktop>
+
+  <developer_name>Collabora Limited</developer_name>
+</component>

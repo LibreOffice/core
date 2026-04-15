@@ -1,0 +1,18 @@
+<svg version="1.1" baseProfile="basic" id="svg-root"
+  width="100%" height="100%" viewBox="0 0 480 360"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- Define star path -->
+  <defs>
+    <path d="M50,0 21,90 98,35 2,35 79,90z" id="star" />
+  </defs>
+  <clipPath id="emptyStar">
+    <use xlink:href="#star" clip-rule="evenodd" />
+  </clipPath>
+  <rect clip-path="url(#emptyStar)" width="50" height="90" fill="blue" />
+
+  <clipPath id="filledStar">
+    <use xlink:href="#star" clip-rule="evenodd" />
+  </clipPath>
+  <rect clip-path="url(#filledStar)" width="50" height="90" x="50" fill="red" />
+</svg>
+

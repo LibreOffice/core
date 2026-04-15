@@ -1,0 +1,999 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <core_resource.hxx>
+#include <dbwizsetup.hxx>
+#include <dsmeta.hxx>
+#include "DBSetupConnectionPages.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
+#include <dsitems.hxx>
+#include "dsnItem.hxx"
+
+#include <unotools/pathoptions.hxx>
+#include <svl/stritem.hxx>
+#include "adminpages.hxx"
+#include <sfx2/docfilt.hxx>
+#include <unotools/ucbhelper.hxx>
+#include "generalpage.hxx"
+#include <unotools/confignode.hxx>
+#include "DbAdminImpl.hxx"
+#include <helpids.h>
+#include "ConnectionPageSetup.hxx"
+#include <UITools.hxx>
+#include <dbaccess/AsynchronousLink.hxx>
+#include <sfx2/filedlghelper.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/ucb/IOErrorCode.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionHandler2.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+
+#include <comphelper/interaction.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <osl/diagnose.h>
+#include <connectivity/DriversConfig.hxx>
+#include <utility>
+
+namespace dbaui
+{
+using namespace dbtools;
+using namespace vcl;
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::sdbc;
+using namespace com::sun::star::task;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::io;
+using namespace com::sun::star::util;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::container;
+using namespace com::sun::star::frame;
+using namespace com::sun::star::ucb;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::document;
+using namespace ::comphelper;
+using namespace ::cppu;
+
+using vcl::RoadmapWizardTypes::WizardPath;
+
+// ODbTypeWizDialogSetup
+ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
+                               ,SfxItemSet const * _pItems
+                               ,const Reference< XComponentContext >& _rxORB
+                               ,const css::uno::Any& _aDataSourceName
+                               )
+    : vcl::RoadmapWizardMachine( _pParent )
+
+    , m_bIsConnectable( false)
+    , m_sRM_IntroText( DBA_RES( STR_PAGETITLE_INTROPAGE ) )
+    , m_sRM_dBaseText( DBA_RES( STR_PAGETITLE_DBASE ) )
+    , m_sRM_TextText( DBA_RES( STR_PAGETITLE_TEXT ) )
+    , m_sRM_MSAccessText( DBA_RES( STR_PAGETITLE_MSACCESS ) )
+    , m_sRM_LDAPText( DBA_RES( STR_PAGETITLE_LDAP ) )
+    , m_sRM_ADOText( DBA_RES( STR_PAGETITLE_ADO ) )
+    , m_sRM_JDBCText( DBA_RES( STR_PAGETITLE_JDBC ) )
+    , m_sRM_MySQLNativePageTitle( DBA_RES( STR_PAGETITLE_MYSQL_NATIVE ) )
+    , m_sRM_OracleText( DBA_RES( STR_PAGETITLE_ORACLE ) )
+    , m_sRM_PostgresText( DBA_RES( STR_PAGETITLE_POSTGRES ) )
+    , m_sRM_MySQLText( DBA_RES( STR_PAGETITLE_MYSQL ) )
+    , m_sRM_ODBCText( DBA_RES( STR_PAGETITLE_ODBC ) )
+    , m_sRM_DocumentOrSpreadSheetText( DBA_RES( STR_PAGETITLE_DOCUMENT_OR_SPREADSHEET ) )
+    , m_sRM_AuthentificationText( DBA_RES( STR_PAGETITLE_AUTHENTIFICATION ) )
+    , m_sRM_FinalText( DBA_RES( STR_PAGETITLE_FINAL ) )
+    , m_sWorkPath( SvtPathOptions().GetWorkPath() )
+    , m_pGeneralPage( nullptr )
+    , m_pMySQLIntroPage( nullptr )
+    , m_pFinalPage( nullptr )
+{
+    // no local resources needed anymore
+    // extract the datasource type collection from the item set
+    const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>(_pItems->GetItem(DSID_TYPECOLLECTION));
+    assert(pCollectionItem && "must exist");
+    m_pCollection = pCollectionItem->getCollection();
+
+    assert(m_pCollection && "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
+
+    m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB, m_xAssistant.get(), _pParent, this));
+    m_pImpl->setDataSourceOrName(_aDataSourceName);
+    Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
+    m_pOutSet.reset( new SfxItemSet( *_pItems->GetPool(), _pItems->GetRanges() ) );
+
+    m_pImpl->translateProperties(xDatasource, *m_pOutSet);
+
+    defaultButton(WizardButtonFlags::NEXT);
+    enableButtons(WizardButtonFlags::FINISH, true);
+    enableAutomaticNextButtonState();
+
+    ::dbaccess::ODsnTypeCollection::TypeIterator aIter = m_pCollection->begin();
+    ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
+    for(auto i = 1;aIter != aEnd;++aIter,++i)
+    {
+        const OUString& sURLPrefix = aIter.getURLPrefix();
+        WizardPath aPath;
+        aPath.push_back(PAGE_DBSETUPWIZARD_INTRO);
+        m_pCollection->fillPageIds(sURLPrefix,aPath);
+        aPath.push_back(PAGE_DBSETUPWIZARD_AUTHENTIFICATION);
+        aPath.push_back(PAGE_DBSETUPWIZARD_FINAL);
+
+        declareAuthDepPath(sURLPrefix,static_cast<PathId>(i),aPath);
+    }
+
+    WizardPath aPath;
+    aPath.push_back(PAGE_DBSETUPWIZARD_INTRO);
+    declarePath( static_cast<PathId>(m_pCollection->size()+1), aPath);
+
+    // Set general help ID for the roadmap
+    SetRoadmapHelpId(HID_DBWIZ_ROADMAP);
+
+    m_xPrevPage->set_help_id(HID_DBWIZ_PREVIOUS);
+    m_xNextPage->set_help_id(HID_DBWIZ_NEXT);
+    m_xCancel->set_help_id(HID_DBWIZ_CANCEL);
+    m_xFinish->set_help_id(HID_DBWIZ_FINISH);
+    m_xHelp->set_help_id(HID_DBWIZ_HELP);
+    ActivatePage();
+    setTitleBase(DBA_RES(STR_DBWIZARDTITLE));
+    m_xAssistant->set_current_page(0);
+}
+
+void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const WizardPath& _rPaths)
+{
+    bool bHasAuthentication = DataSourceMetaData::getAuthentication( _sURL ) != AuthNone;
+
+    // collect the elements of the path
+    WizardPath aPath;
+
+    for (auto const& path : _rPaths)
+    {
+        if ( bHasAuthentication || ( path != PAGE_DBSETUPWIZARD_AUTHENTIFICATION ) )
+            aPath.push_back(path);
+    }
+
+    // call base method
+    ::vcl::RoadmapWizardMachine::declarePath( _nPathId, aPath );
+}
+
+OUString ODbTypeWizDialogSetup::getStateDisplayName(WizardState _nState) const
+{
+    OUString sRoadmapItem;
+    switch( _nState )
+    {
+        case PAGE_DBSETUPWIZARD_INTRO:
+            sRoadmapItem = m_sRM_IntroText;
+            break;
+
+        case PAGE_DBSETUPWIZARD_DBASE:
+            sRoadmapItem = m_sRM_dBaseText;
+            break;
+        case PAGE_DBSETUPWIZARD_ADO:
+            sRoadmapItem = m_sRM_ADOText;
+            break;
+        case PAGE_DBSETUPWIZARD_TEXT:
+            sRoadmapItem = m_sRM_TextText;
+            break;
+        case PAGE_DBSETUPWIZARD_MSACCESS:
+            sRoadmapItem = m_sRM_MSAccessText;
+            break;
+        case PAGE_DBSETUPWIZARD_LDAP:
+            sRoadmapItem = m_sRM_LDAPText;
+            break;
+        case PAGE_DBSETUPWIZARD_JDBC:
+            sRoadmapItem = m_sRM_JDBCText;
+            break;
+        case PAGE_DBSETUPWIZARD_ORACLE:
+            sRoadmapItem = m_sRM_OracleText;
+            break;
+        case PAGE_DBSETUPWIZARD_POSTGRES:
+            sRoadmapItem = m_sRM_PostgresText;
+            break;
+        case PAGE_DBSETUPWIZARD_MYSQL_INTRO:
+            sRoadmapItem = m_sRM_MySQLText;
+            break;
+        case PAGE_DBSETUPWIZARD_MYSQL_JDBC:
+            sRoadmapItem = m_sRM_JDBCText;
+            break;
+        case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
+            sRoadmapItem = m_sRM_MySQLNativePageTitle;
+            break;
+        case PAGE_DBSETUPWIZARD_MYSQL_ODBC:
+            sRoadmapItem = m_sRM_ODBCText;
+            break;
+        case PAGE_DBSETUPWIZARD_ODBC:
+            sRoadmapItem = m_sRM_ODBCText;
+            break;
+        case PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET:
+            sRoadmapItem = m_sRM_DocumentOrSpreadSheetText;
+            break;
+        case PAGE_DBSETUPWIZARD_AUTHENTIFICATION:
+            sRoadmapItem = m_sRM_AuthentificationText;
+            break;
+        case PAGE_DBSETUPWIZARD_USERDEFINED:
+            sRoadmapItem = DBA_RES(STR_PAGETITLE_CONNECTION);
+            break;
+        case PAGE_DBSETUPWIZARD_FINAL:
+            sRoadmapItem = m_sRM_FinalText;
+            break;
+        default:
+            break;
+    }
+    return sRoadmapItem;
+}
+
+ODbTypeWizDialogSetup::~ODbTypeWizDialogSetup()
+{
+}
+
+IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage&, void)
+{
+    activateDatabasePath();
+}
+
+static void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,const ::comphelper::NamedValueCollection& _aNew,::comphelper::NamedValueCollection& _rDSInfo)
+{
+    _rDSInfo.merge(_aNew,true);
+    for (auto& val : _aOld.getNamedValues())
+        if (!_aNew.has(val.Name))
+            _rDSInfo.remove(val.Name);
+}
+
+void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection, std::u16string_view _sOldURLPrefix, std::u16string_view _sNewURLPrefix,const css::uno::Reference< css::beans::XPropertySet >& _xDatasource)
+{
+    if ( _pCollection->getPrefix(_sOldURLPrefix) == _pCollection->getPrefix(_sNewURLPrefix) )
+        return ;
+    uno::Sequence< beans::PropertyValue> aInfo;
+    _xDatasource->getPropertyValue(PROPERTY_INFO) >>= aInfo;
+    ::comphelper::NamedValueCollection aDS(aInfo);
+
+    ::connectivity::DriversConfig aDriverConfig(xContext);
+
+    const ::comphelper::NamedValueCollection&  aOldProperties   = aDriverConfig.getProperties(_sOldURLPrefix);
+    const ::comphelper::NamedValueCollection&  aNewProperties   = aDriverConfig.getProperties(_sNewURLPrefix);
+    lcl_removeUnused(aOldProperties,aNewProperties,aDS);
+
+    aDS >>= aInfo;
+    _xDatasource->setPropertyValue(PROPERTY_INFO,uno::Any(aInfo));
+}
+
+void ODbTypeWizDialogSetup::activateDatabasePath()
+{
+    switch ( m_pGeneralPage->GetDatabaseCreationMode() )
+    {
+    case OGeneralPageWizard::eCreateNew:
+    {
+        sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pGeneralPage->GetSelectedType() );
+        if ( nCreateNewDBIndex == -1 )
+            nCreateNewDBIndex = m_pCollection->getIndexOf( u"sdbc:dbase:" );
+        OSL_ENSURE( nCreateNewDBIndex != -1, "ODbTypeWizDialogSetup::activateDatabasePath: the GeneralPage should have prevented this!" );
+        activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), true );
+
+        enableState(PAGE_DBSETUPWIZARD_FINAL );
+        enableButtons( WizardButtonFlags::FINISH, true);
+    }
+    break;
+    case OGeneralPageWizard::eConnectExternal:
+    {
+        OUString sOld = m_sURL;
+        m_sURL = m_pGeneralPage->GetSelectedType();
+        if (m_sURL.startsWith("sdbc:mysql:") && sOld.startsWith("sdbc:mysql:"))
+            m_sURL = sOld; // The type of MySQL connection was already set elsewhere; just use it,
+                           // instead of the hardcoded one from the selector
+        DataSourceInfoConverter::convert(getORB(), m_pCollection,sOld,m_sURL,m_pImpl->getCurrentDataSource());
+        ::dbaccess::DATASOURCE_TYPE eType = VerifyDataSourceType(m_pCollection->determineType(m_sURL));
+        if (eType ==  ::dbaccess::DST_UNKNOWN)
+            m_pCollection->determineType(m_sOldURL);
+
+        activatePath( static_cast<PathId>(m_pCollection->getIndexOf(m_sURL) + 1), true);
+        updateTypeDependentStates();
+    }
+    break;
+    case OGeneralPageWizard::eOpenExisting:
+    {
+        activatePath( static_cast<PathId>(m_pCollection->size() + 1), true );
+        enableButtons( WizardButtonFlags::FINISH, !m_pGeneralPage->GetSelectedDocumentURL().isEmpty() );
+    }
+    break;
+    default:
+        OSL_FAIL( "ODbTypeWizDialogSetup::activateDatabasePath: unknown creation mode!" );
+    }
+
+    enableButtons( WizardButtonFlags::NEXT, m_pGeneralPage->GetDatabaseCreationMode() != OGeneralPageWizard::eOpenExisting );
+        // TODO: this should go into the base class. Point is, we activate a path whose *last*
+        // step is also the current one. The base class should automatically disable
+        // the Next button in such a case. However, not for this patch ...
+}
+
+void ODbTypeWizDialogSetup::updateTypeDependentStates()
+{
+    bool bDoEnable = false;
+    bool bIsConnectionRequired = m_pCollection->isConnectionUrlRequired(m_sURL);
+    if (!bIsConnectionRequired)
+    {
+        bDoEnable = true;
+    }
+    else if ( m_sURL == m_sOldURL )
+    {
+        bDoEnable = m_bIsConnectable;
+    }
+    enableState(PAGE_DBSETUPWIZARD_AUTHENTIFICATION, bDoEnable);
+    enableState(PAGE_DBSETUPWIZARD_FINAL, bDoEnable );
+    enableButtons( WizardButtonFlags::FINISH, bDoEnable);
+}
+
+void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatasource)
+{
+    // remove all items which relate to indirect properties from the input set
+    // (without this, the following may happen: select an arbitrary data source where some indirect properties
+    // are set. Select another data source of the same type, where the indirect props are not set (yet). Then,
+    // the indirect property values of the first ds are shown in the second ds ...)
+    const ODbDataSourceAdministrationHelper::MapInt2String& rMap = m_pImpl->getIndirectProperties();
+    for (auto const& elem : rMap)
+        getWriteOutputSet()->ClearItem( static_cast<sal_uInt16>(elem.first) );
+
+    // extract all relevant data from the property set of the data source
+    m_pImpl->translateProperties(_rxDatasource, *getWriteOutputSet());
+}
+
+const SfxItemSet* ODbTypeWizDialogSetup::getOutputSet() const
+{
+    return m_pOutSet.get();
+}
+
+SfxItemSet* ODbTypeWizDialogSetup::getWriteOutputSet()
+{
+    return m_pOutSet.get();
+}
+
+std::pair< Reference<XConnection>,bool> ODbTypeWizDialogSetup::createConnection()
+{
+    return m_pImpl->createConnection();
+}
+
+Reference< XComponentContext > ODbTypeWizDialogSetup::getORB() const
+{
+    return m_pImpl->getORB();
+}
+
+Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
+{
+    return m_pImpl->getDriver();
+}
+
+::dbaccess::DATASOURCE_TYPE ODbTypeWizDialogSetup::VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE DatabaseType) const
+{
+    ::dbaccess::DATASOURCE_TYPE LocDatabaseType = DatabaseType;
+    if ((LocDatabaseType ==  ::dbaccess::DST_MYSQL_JDBC) || (LocDatabaseType ==  ::dbaccess::DST_MYSQL_ODBC) || (LocDatabaseType ==  ::dbaccess::DST_MYSQL_NATIVE))
+    {
+        if (m_pMySQLIntroPage != nullptr)
+        {
+            switch( m_pMySQLIntroPage->getMySQLMode() )
+            {
+                case OMySQLIntroPageSetup::VIA_JDBC:
+                    return  ::dbaccess::DST_MYSQL_JDBC;
+                case OMySQLIntroPageSetup::VIA_NATIVE:
+                    return  ::dbaccess::DST_MYSQL_NATIVE;
+                case OMySQLIntroPageSetup::VIA_ODBC:
+                    return  ::dbaccess::DST_MYSQL_ODBC;
+            }
+        }
+    }
+    return LocDatabaseType;
+}
+
+OUString ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
+{
+    OUString sRet = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(_rSet);
+    if (m_pMySQLIntroPage && m_pMySQLIntroPage->IsVisible())
+    {
+        switch( m_pMySQLIntroPage->getMySQLMode() )
+        {
+            case OMySQLIntroPageSetup::VIA_JDBC:
+                sRet = "sdbc:mysql:jdbc:";
+                break;
+            case OMySQLIntroPageSetup::VIA_NATIVE:
+                sRet = "sdbc:mysql:mysqlc:";
+                break;
+            case OMySQLIntroPageSetup::VIA_ODBC:
+                sRet = "sdbc:mysql:odbc:";
+                break;
+        }
+    }
+    return sRet;
+}
+
+void ODbTypeWizDialogSetup::clearPassword()
+{
+    m_pImpl->clearPassword();
+}
+
+void ODbTypeWizDialogSetup::SetIntroPage(OMySQLIntroPageSetup* pPage)
+{
+    m_pMySQLIntroPage = pPage;
+    m_pMySQLIntroPage->SetClickHdl(LINK( this, ODbTypeWizDialogSetup, ImplClickHdl ) );
+}
+
+void ODbTypeWizDialogSetup::SetGeneralPage(OGeneralPageWizard* pPage)
+{
+    m_pGeneralPage = pPage;
+    m_pGeneralPage->SetTypeSelectHandler(LINK(this, ODbTypeWizDialogSetup, OnTypeSelected));
+    m_pGeneralPage->SetCreationModeHandler(LINK( this, ODbTypeWizDialogSetup, OnChangeCreationMode ) );
+    m_pGeneralPage->SetDocumentSelectionHandler(LINK( this, ODbTypeWizDialogSetup, OnRecentDocumentSelected ) );
+    m_pGeneralPage->SetChooseDocumentHandler(LINK( this, ODbTypeWizDialogSetup, OnSingleDocumentChosen ) );
+}
+
+void ODbTypeWizDialogSetup::SetFinalPage(OFinalDBPageSetup* pPage)
+{
+    m_pFinalPage = pPage;
+}
+
+std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
+{
+    std::unique_ptr<OGenericAdministrationPage> xPage;
+
+    OUString sIdent(OUString::number(_nState));
+    weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
+
+    switch(_nState)
+    {
+        case PAGE_DBSETUPWIZARD_INTRO:
+            xPage = std::make_unique<OGeneralPageWizard>(pPageContainer,this,*m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_DBASE:
+            xPage = OConnectionTabPageSetup::CreateDbaseTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_ADO:
+            xPage = OConnectionTabPageSetup::CreateADOTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_TEXT:
+            xPage = OTextConnectionPageSetup::CreateTextTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_ODBC:
+            xPage = OConnectionTabPageSetup::CreateODBCTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_JDBC:
+            xPage = OJDBCConnectionPageSetup::CreateJDBCTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_MYSQL_ODBC:
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(u"sdbc:mysql:odbc:")));
+            xPage = OConnectionTabPageSetup::CreateODBCTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_MYSQL_JDBC:
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(u"sdbc:mysql:jdbc:")));
+            xPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+        case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(u"sdbc:mysql:mysqlc:")));
+            xPage = MySQLNativeSetupPage::Create(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_ORACLE:
+            xPage = OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_POSTGRES:
+            xPage = OPostgresConnectionPageSetup::CreatePostgresTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_LDAP:
+            xPage = OLDAPConnectionPageSetup::CreateLDAPTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET:
+            xPage = OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_MSACCESS:
+            xPage  = OConnectionTabPageSetup::CreateMSAccessTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+        case PAGE_DBSETUPWIZARD_MYSQL_INTRO:
+            xPage = OMySQLIntroPageSetup::CreateMySQLIntroTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_AUTHENTIFICATION:
+            xPage = OAuthentificationPageSetup::CreateAuthentificationTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_USERDEFINED:
+            xPage = OConnectionTabPageSetup::CreateUserDefinedTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_FINAL:
+            xPage = OFinalDBPageSetup::CreateFinalDBTabPageSetup(pPageContainer, this, *m_pOutSet);
+            break;
+    }
+
+    if ( xPage )
+    {
+        if ((_nState != PAGE_DBSETUPWIZARD_INTRO) && (_nState != PAGE_DBSETUPWIZARD_AUTHENTIFICATION))
+        {
+            xPage->SetModifiedHandler(LINK( this, ODbTypeWizDialogSetup, ImplModifiedHdl ) );
+        }
+
+        xPage->SetServiceFactory( m_pImpl->getORB() );
+        xPage->SetAdminDialog(this, this);
+
+        defaultButton( _nState == PAGE_DBSETUPWIZARD_FINAL ? WizardButtonFlags::FINISH : WizardButtonFlags::NEXT );
+        enableButtons( WizardButtonFlags::FINISH, _nState == PAGE_DBSETUPWIZARD_FINAL );
+        enableButtons( WizardButtonFlags::NEXT, _nState != PAGE_DBSETUPWIZARD_FINAL );
+
+        m_xAssistant->set_page_title(sIdent, getStateDisplayName(_nState));
+    }
+    return xPage;
+}
+
+IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage const *, _pConnectionPageSetup, void)
+{
+    m_bIsConnectable = _pConnectionPageSetup->GetRoadmapStateValue( );
+    enableState(PAGE_DBSETUPWIZARD_FINAL, m_bIsConnectable);
+    enableState(PAGE_DBSETUPWIZARD_AUTHENTIFICATION, m_bIsConnectable);
+    if (getCurrentState() == PAGE_DBSETUPWIZARD_FINAL)
+        enableButtons( WizardButtonFlags::FINISH, true);
+    else
+        enableButtons( WizardButtonFlags::FINISH, m_bIsConnectable);
+    enableButtons( WizardButtonFlags::NEXT, m_bIsConnectable  && (getCurrentState() != PAGE_DBSETUPWIZARD_FINAL));
+}
+
+IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLIntroPageSetup, void)
+{
+    OUString sURLPrefix;
+    switch( _pMySQLIntroPageSetup->getMySQLMode() )
+    {
+        case  OMySQLIntroPageSetup::VIA_ODBC:
+            sURLPrefix = "sdbc:mysql:odbc:";
+            break;
+        case  OMySQLIntroPageSetup::VIA_JDBC:
+            sURLPrefix = "sdbc:mysql:jdbc:";
+            break;
+        case  OMySQLIntroPageSetup::VIA_NATIVE:
+            sURLPrefix = "sdbc:mysql:mysqlc:";
+            break;
+    }
+    activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), true);
+}
+
+IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard&, void)
+{
+    activateDatabasePath();
+}
+
+IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWizard&, void)
+{
+    enableButtons( WizardButtonFlags::FINISH, !m_pGeneralPage->GetSelectedDocumentURL().isEmpty() );
+}
+
+IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPageWizard&, void)
+{
+    if (prepareLeaveCurrentState(WizardTypes::eFinish))
+        onFinish();
+}
+
+void ODbTypeWizDialogSetup::enterState(WizardState _nState)
+{
+    m_sURL = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(*m_pOutSet);
+    RoadmapWizardMachine::enterState(_nState);
+    switch(_nState)
+    {
+        case PAGE_DBSETUPWIZARD_INTRO:
+            m_sOldURL = m_sURL;
+            break;
+        case PAGE_DBSETUPWIZARD_FINAL:
+            enableButtons( WizardButtonFlags::FINISH, true);
+            if ( m_pFinalPage )
+                m_pFinalPage->enableTableWizardCheckBox(m_pCollection->supportsTableCreation(m_sURL));
+            break;
+    }
+}
+
+void ODbTypeWizDialogSetup::saveDatasource()
+{
+    SfxTabPage* pPage = static_cast<SfxTabPage*>(GetPage(getCurrentState()));
+    if ( pPage )
+        pPage->FillItemSet(m_pOutSet.get());
+}
+
+bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
+{
+    if (_nState == PAGE_DBSETUPWIZARD_MYSQL_INTRO)
+        return true;
+    if ( _nState == PAGE_DBSETUPWIZARD_INTRO && m_sURL != m_sOldURL )
+    {
+        resetPages(m_pImpl->getCurrentDataSource());
+    }
+    SfxTabPage* pPage = static_cast<SfxTabPage*>(GetPage(_nState));
+    return pPage && pPage->DeactivatePage(m_pOutSet.get()) != DeactivateRC::KeepPage;
+}
+
+void ODbTypeWizDialogSetup::setTitle(const OUString& _sTitle)
+{
+    m_xAssistant->set_title(_sTitle);
+}
+
+void ODbTypeWizDialogSetup::enableConfirmSettings( bool /*_bEnable*/ )
+{
+}
+
+namespace
+{
+    bool lcl_handle( const Reference< XInteractionHandler2 >& _rxHandler, const Any& _rRequest )
+    {
+        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest( _rRequest );
+        rtl::Reference<OInteractionAbort> pAbort = new OInteractionAbort;
+        pRequest->addContinuation( pAbort );
+
+        return _rxHandler->handleInteractionRequest( pRequest );
+    }
+}
+
+bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
+{
+    Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(getORB(), nullptr) );
+    try
+    {
+        if (callSaveAsDialog())
+        {
+            m_pImpl->saveChanges(*m_pOutSet);
+            Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
+            Reference< XModel > xModel( getDataSourceOrModel( xDatasource ), UNO_QUERY_THROW );
+            Reference< XStorable > xStore( xModel, UNO_QUERY_THROW );
+
+            if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eCreateNew )
+                CreateDatabase();
+
+            ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
+            aArgs.put( u"Overwrite"_ustr, true );
+            aArgs.put( u"InteractionHandler"_ustr, xHandler );
+            aArgs.put( u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG );
+            aArgs.put( u"IgnoreFirebirdMigration"_ustr, true );
+
+            OUString sPath = ODbDataSourceAdministrationHelper::getDocumentUrl( *m_pOutSet );
+            xStore->storeAsURL( sPath, aArgs.getPropertyValues() );
+
+            if ( !m_pFinalPage || m_pFinalPage->IsDatabaseDocumentToBeRegistered() )
+                RegisterDataSourceByLocation( sPath );
+
+            return true;
+        }
+    }
+    catch ( const Exception& e )
+    {
+        Any aError = ::cppu::getCaughtException();
+        if ( xHandler.is() )
+        {
+            if ( !lcl_handle( xHandler, aError ) )
+            {
+                css::ucb::IOErrorCode code
+                    = aError.isExtractableTo(::cppu::UnoType<IOException>::get())
+                          ? IOErrorCode_CANT_WRITE // assume saving the document failed
+                          : IOErrorCode_GENERAL;
+                InteractiveIOException aRequest(e.Message, e.Context,
+                                                InteractionClassification_ERROR, code);
+                lcl_handle( xHandler, Any( aRequest ) );
+            }
+        }
+    }
+    return false;
+}
+
+    bool ODbTypeWizDialogSetup::IsDatabaseDocumentToBeOpened() const
+    {
+        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
+            return true;
+
+        if ( m_pFinalPage != nullptr )
+            return m_pFinalPage->IsDatabaseDocumentToBeOpened();
+
+        return true;
+    }
+
+    bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted() const
+    {
+        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
+            return false;
+
+        if ( m_pFinalPage != nullptr )
+            return m_pFinalPage->IsTableWizardToBeStarted();
+
+        return false;
+    }
+
+    void ODbTypeWizDialogSetup::CreateDatabase()
+    {
+        OUString sUrl;
+        const OUString eType = m_pGeneralPage->GetSelectedType();
+        if ( dbaccess::ODsnTypeCollection::isEmbeddedDatabase(eType) )
+        {
+            sUrl = eType;
+            Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
+            OSL_ENSURE(xDatasource.is(),"DataSource is null!");
+            if ( xDatasource.is() )
+                xDatasource->setPropertyValue( PROPERTY_INFO, Any( m_pCollection->getDefaultDBSettings( eType ) ) );
+            m_pImpl->translateProperties(xDatasource,*m_pOutSet);
+        }
+        else if ( m_pCollection->isFileSystemBased(eType) )
+        {
+            Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
+            INetURLObject aDBPathURL(m_sWorkPath);
+            aDBPathURL.Append(m_aDocURL.getBase());
+            createUniqueFolderName(&aDBPathURL);
+            sUrl = aDBPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE);
+            xSimpleFileAccess->createFolder(sUrl);
+            sUrl = eType + sUrl;
+        }
+        m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));
+        m_pImpl->saveChanges(*m_pOutSet);
+    }
+
+    void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(std::u16string_view _sPath)
+    {
+        Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
+        Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(getORB()) );
+        INetURLObject aURL( _sPath );
+        OUString sFilename = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
+        OUString sDatabaseName = ::dbtools::createUniqueName(xDatabaseContext, sFilename, false);
+        xDatabaseContext->registerObject(sDatabaseName, xDatasource);
+    }
+
+    bool ODbTypeWizDialogSetup::callSaveAsDialog()
+    {
+        bool bRet = false;
+        ::sfx2::FileDialogHelper aFileDlg(
+                ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
+                FileDialogFlags::NONE, m_xAssistant.get());
+        aFileDlg.SetContext(sfx2::FileDialogHelper::BaseSaveAs);
+        std::shared_ptr<const SfxFilter> pFilter = getStandardDatabaseFilter();
+        if ( pFilter )
+        {
+            OUString sDefaultName = DBA_RES( STR_DATABASEDEFAULTNAME );
+            OUString sExtension = pFilter->GetDefaultExtension();
+            sDefaultName += sExtension.replaceAt( 0, 1, u"" );
+            INetURLObject aWorkURL( m_sWorkPath );
+            aWorkURL.Append( sDefaultName );
+            sDefaultName = createUniqueFileName( aWorkURL );
+            aFileDlg.SetFileName( sDefaultName );
+
+            aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
+            aFileDlg.SetCurrentFilter(pFilter->GetUIName());
+        }
+        if ( aFileDlg.Execute() == ERRCODE_NONE )
+        {
+            m_aDocURL = INetURLObject(aFileDlg.GetPath());
+
+            if( m_aDocURL.GetProtocol() != INetProtocol::NotValid )
+            {
+                OUString sFileName = m_aDocURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                if ( ::utl::UCBContentHelper::IsDocument(sFileName) )
+                    ::utl::UCBContentHelper::Kill(sFileName);
+                m_pOutSet->Put(SfxStringItem(DSID_DOCUMENT_URL, sFileName));
+                bRet = true;
+            }
+        }
+        return bRet;
+    }
+
+    void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
+    {
+        Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
+        OUString sLastSegmentName = pURL->getName();
+        bool bFolderExists = true;
+        sal_Int32 i = 1;
+        while (bFolderExists)
+        {
+            bFolderExists = xSimpleFileAccess->isFolder(pURL->GetMainURL( INetURLObject::DecodeMechanism::NONE ));
+            if (bFolderExists)
+            {
+                i++;
+                pURL->setName(Concat2View(sLastSegmentName + OUString::number(i)));
+            }
+        }
+    }
+
+    OUString ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
+    {
+        Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
+        OUString BaseName = _rURL.getBase();
+
+        bool bElementExists = true;
+
+        INetURLObject aExistenceCheck( _rURL );
+        for ( sal_Int32 i = 1; bElementExists; )
+        {
+            bElementExists = xSimpleFileAccess->exists( aExistenceCheck.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+            if ( bElementExists )
+            {
+                aExistenceCheck.setBase( Concat2View(BaseName + OUString::number( i ) ));
+                ++i;
+            }
+        }
+        return aExistenceCheck.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
+    }
+
+    vcl::IWizardPageController* ODbTypeWizDialogSetup::getPageController(BuilderPage* pCurrentPage) const
+    {
+        OGenericAdministrationPage* pPage = static_cast<OGenericAdministrationPage*>(pCurrentPage);
+        return pPage;
+    }
+
+    namespace
+    {
+        typedef ::cppu::WeakImplHelper<   XTerminateListener
+                                      >   AsyncLoader_Base;
+        class AsyncLoader : public AsyncLoader_Base
+        {
+        private:
+            Reference< XComponentLoader >       m_xFrameLoader;
+            Reference< XDesktop2 >              m_xDesktop;
+            Reference< XInteractionHandler2 >   m_xInteractionHandler;
+            OUString                     m_sURL;
+            OAsynchronousLink                    m_aAsyncCaller;
+
+        public:
+            AsyncLoader( const Reference< XComponentContext >& _xORB, OUString _aURL );
+
+            void doLoadAsync();
+
+            // XTerminateListener
+            virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) override;
+            virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) override;
+            // XEventListener
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+
+        private:
+            DECL_LINK( OnOpenDocument, void*, void );
+        };
+
+        AsyncLoader::AsyncLoader( const Reference< XComponentContext >& _rxORB, OUString _aURL )
+            :m_sURL(std::move( _aURL ))
+            ,m_aAsyncCaller( LINK( this, AsyncLoader, OnOpenDocument ) )
+        {
+            try
+            {
+                m_xDesktop.set( Desktop::create(_rxORB) );
+                m_xFrameLoader.set( m_xDesktop, UNO_QUERY_THROW );
+                m_xInteractionHandler = InteractionHandler::createWithParent(_rxORB, nullptr);
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
+            }
+        }
+
+        void AsyncLoader::doLoadAsync()
+        {
+            OSL_ENSURE( !m_aAsyncCaller.IsRunning(), "AsyncLoader:doLoadAsync: already running!" );
+
+            acquire();
+            try
+            {
+                if ( m_xDesktop.is() )
+                    m_xDesktop->addTerminateListener( this );
+            }
+            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
+
+            m_aAsyncCaller.Call();
+        }
+
+        IMPL_LINK_NOARG( AsyncLoader, OnOpenDocument, void*, void )
+        {
+            try
+            {
+                if ( m_xFrameLoader.is() )
+                {
+                    ::comphelper::NamedValueCollection aLoadArgs;
+                    aLoadArgs.put( u"InteractionHandler"_ustr, m_xInteractionHandler );
+                    aLoadArgs.put( u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG );
+
+                    Sequence< PropertyValue > aLoadArgPV;
+                    aLoadArgs >>= aLoadArgPV;
+
+                    m_xFrameLoader->loadComponentFromURL( m_sURL,
+                        u"_default"_ustr,
+                        FrameSearchFlag::ALL,
+                        aLoadArgPV
+                    );
+                }
+            }
+            catch( const Exception& )
+            {
+                // do not assert.
+                // Such an exception happens for instance of the to-be-loaded document does not exist anymore.
+            }
+
+            try
+            {
+                if ( m_xDesktop.is() )
+                    m_xDesktop->removeTerminateListener( this );
+            }
+            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
+
+            release();
+        }
+
+        void SAL_CALL AsyncLoader::queryTermination( const css::lang::EventObject& /*Event*/ )
+        {
+            throw TerminationVetoException();
+        }
+
+        void SAL_CALL AsyncLoader::notifyTermination( const css::lang::EventObject& /*Event*/ )
+        {
+        }
+        void SAL_CALL AsyncLoader::disposing( const css::lang::EventObject& /*Source*/ )
+        {
+        }
+    }
+
+    bool ODbTypeWizDialogSetup::onFinish()
+    {
+        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
+        {
+            // we're not going to re-use the XModel we have - since the document the user
+            // wants us to load could be a non-database document. Instead, we asynchronously
+            // open the selected document. Thus, the wizard's return value is RET_CANCEL,
+            // which means to not continue loading the database document
+            if ( !WizardMachine::Finish() )
+                return false;
+
+            try
+            {
+                rtl::Reference<AsyncLoader> pAsyncLoader = new AsyncLoader( getORB(), m_pGeneralPage->GetSelectedDocumentURL() );
+                pAsyncLoader->doLoadAsync();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
+            }
+
+            return true;
+        }
+
+        if (getCurrentState() != PAGE_DBSETUPWIZARD_FINAL)
+        {
+            skipUntil(PAGE_DBSETUPWIZARD_FINAL);
+        }
+        if (getCurrentState() == PAGE_DBSETUPWIZARD_FINAL)
+            return SaveDatabaseDocument() && WizardMachine::onFinish();
+        else
+        {
+            enableButtons( WizardButtonFlags::FINISH, false );
+            return false;
+        }
+    }
+
+}   // namespace dbaui
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

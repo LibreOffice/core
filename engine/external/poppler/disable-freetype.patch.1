@@ -1,0 +1,102 @@
+disable freetype dependent code
+
+--- poppler/poppler/Form.cc.orig	2023-06-05 19:29:14.000000000 +0900
++++ poppler/poppler/Form.cc	2023-06-14 18:50:22.232312300 +0900
+@@ -48,7 +48,7 @@
+ #include <cstdlib>
+ #include <cstring>
+ #include <cctype>
+-#include "goo/ft_utils.h"
++//#include "goo/ft_utils.h"
+ #include "goo/gfile.h"
+ #include "goo/GooString.h"
+ #include "Error.h"
+@@ -78,9 +78,9 @@
+ #include "fofi/FoFiTrueType.h"
+ #include "fofi/FoFiIdentifier.h"
+ 
+-#include <ft2build.h>
++//#include <ft2build.h>
+ #include <variant>
+-#include FT_FREETYPE_H
++//#include FT_FREETYPE_H
+ #include <unordered_set>
+ 
+ // helper for using std::visit to get a dependent false for static_asserts
+@@ -2723,6 +2723,8 @@
+ 
+ Form::AddFontResult Form::addFontToDefaultResources(const std::string &filepath, int faceIndex, const std::string &fontFamily, const std::string &fontStyle, bool fontSubstitutedIn, bool forceName)
+ {
++    return {};
++#if 0
+     if (!filepath.ends_with(".ttf") && !filepath.ends_with(".ttc") && !filepath.ends_with(".otf")) {
+         error(errIO, -1, "We only support embedding ttf/ttc/otf fonts for now. The font file for {0:s} {1:s} was {2:s}", fontFamily.c_str(), fontStyle.c_str(), filepath.c_str());
+         return {};
+@@ -2974,6 +2974,7 @@
+     }
+ 
+     return { .fontName = dictFontName, .ref = fontDictRef };
++#endif
+ }
+ 
+ std::string Form::getFallbackFontForChar(Unicode uChar, const GfxFont &fontToEmulate) const
+--- poppler/splash/SplashFontEngine.cc.orig	2024-02-21 01:28:10.479645185 +0000
++++ popller/splash/SplashFontEngine.cc	2023-09-05 22:15:14.000000000 +0100
+@@ -59,8 +59,6 @@
+     for (auto *font : fontCache) {
+         delete font;
+     }
+-
+-    delete ftEngine;
+ }
+ 
+ std::shared_ptr<SplashFontFile> SplashFontEngine::getFontFile(const SplashFontFileID &id)
+--- poppler/splash/SplashFTFontEngine.h.orig	2023-09-05 22:15:14.000000000 +0100
++++ poppler/splash/SplashFTFontEngine.h	2024-02-21 13:53:29.715423742 +0000
+@@ -27,8 +27,6 @@
+ #ifndef SPLASHFTFONTENGINE_H
+ #define SPLASHFTFONTENGINE_H
+ 
+-#include <ft2build.h>
+-#include FT_FREETYPE_H
+ #include <memory>
+ #include <vector>
+ 
+@@ -43,7 +41,7 @@
+ class SplashFTFontEngine
+ {
+ public:
+-    static SplashFTFontEngine *init(bool aaA, bool enableFreeTypeHintingA, bool enableSlightHinting);
++    static SplashFTFontEngine *init(bool aaA, bool enableFreeTypeHintingA, bool enableSlightHinting) { return nullptr; };
+ 
+     ~SplashFTFontEngine();
+ 
+@@ -49,22 +49,20 @@
+     SplashFTFontEngine &operator=(const SplashFTFontEngine &) = delete;
+ 
+     // Load fonts.
+-    std::shared_ptr<SplashFontFile> loadType1Font(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex);
+-    std::shared_ptr<SplashFontFile> loadType1CFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex);
+-    std::shared_ptr<SplashFontFile> loadOpenTypeT1CFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex);
+-    std::shared_ptr<SplashFontFile> loadCIDFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, int faceIndex);
+-    std::shared_ptr<SplashFontFile> loadOpenTypeCFFFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, std::vector<int> &&codeToGID, int faceIndex);
+-    std::shared_ptr<SplashFontFile> loadTrueTypeFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, std::vector<int> &&codeToGID, int faceIndex);
++    std::shared_ptr<SplashFontFile> loadType1Font(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex) { return nullptr; };
++    std::shared_ptr<SplashFontFile> loadType1CFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex) { return nullptr; };
++    std::shared_ptr<SplashFontFile> loadOpenTypeT1CFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex) { return nullptr; };
++    std::shared_ptr<SplashFontFile> loadCIDFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, int faceIndex) { return nullptr; };
++    std::shared_ptr<SplashFontFile> loadOpenTypeCFFFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, std::vector<int> &&codeToGID, int faceIndex) { return nullptr; };
++    std::shared_ptr<SplashFontFile> loadTrueTypeFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, std::vector<int> &&codeToGID, int faceIndex) { return nullptr; };
+     bool getAA() const { return aa; }
+     void setAA(bool aaA) { aa = aaA; }
+ 
+ private:
+-    SplashFTFontEngine(bool aaA, bool enableFreeTypeHintingA, bool enableSlightHintingA, FT_Library libA);
+ 
+     bool aa;
+     bool enableFreeTypeHinting;
+     bool enableSlightHinting;
+-    FT_Library lib;
+ 
+     friend class SplashFTFontFile;
+     friend class SplashFTFont;

@@ -1,0 +1,129 @@
+basic/source/comp/codegen.cxx:478
+    void (anonymous namespace)::OffSetAccumulator::start(const unsigned char *,)
+    empty
+basic/source/comp/codegen.cxx:490
+    _Bool (anonymous namespace)::OffSetAccumulator::processParams()
+    0
+basic/source/comp/codegen.cxx:540
+    _Bool (anonymous namespace)::BufferTransformer::processParams()
+    1
+canvas/inc/base/bitmapcanvasbase.hxx:79
+    unsigned char canvas::BitmapCanvasBase::hasAlpha()
+    1
+canvas/inc/base/bufferedgraphicdevicebase.hxx:105
+    void canvas::BufferedGraphicDeviceBase::destroyBuffers()
+    empty
+canvas/inc/base/graphicdevicebase.hxx:234
+    unsigned char canvas::GraphicDeviceBase::hasFullScreenMode()
+    0
+canvas/inc/base/graphicdevicebase.hxx:239
+    unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
+    0
+canvas/inc/base/graphicdevicebase.hxx:305
+    void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
+    empty
+canvas/inc/base/graphicdevicebase.hxx:318
+    void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
+    empty
+include/basegfx/utils/unopolypolygon.hxx:93
+    void basegfx::unotools::UnoPolyPolygon::modifying()const
+    empty
+include/comphelper/propmultiplex2.hxx:54
+    void comphelper::OPropertyChangeListener2::_disposing(const struct com::sun::star::lang::EventObject &,)
+    empty
+include/connectivity/sdbcx/IRefreshable.hxx:29
+    void connectivity::sdbcx::IRefreshableGroups::refreshGroups()
+    empty
+include/filter/msfilter/msdffimp.hxx:547
+    _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
+    1
+include/svl/svdde.hxx:236
+    class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
+    0
+include/svl/svdde.hxx:237
+    _Bool DdeTopic::Put(const class DdeData *,)
+    0
+include/svl/svdde.hxx:238
+    _Bool DdeTopic::Execute(const class rtl::OUString *,)
+    0
+include/svl/svdde.hxx:240
+    _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
+    0
+include/svl/svdde.hxx:243
+    _Bool DdeTopic::StartAdviseLoop()
+    0
+include/svtools/unoevent.hxx:198
+    unsigned short SvEventDescriptor::getMacroItemWhich()const
+    114
+include/svx/GenericCheckDialog.hxx:32
+    _Bool svx::CheckData::canMarkObject()
+    1
+include/svx/GenericCheckDialog.hxx:37
+    _Bool svx::CheckData::hasProperties()
+    1
+include/ucbhelper/resultset.hxx:410
+    void ucbhelper::ResultSetDataSupplier::close()
+    empty
+include/unotools/desktopterminationobserver.hxx:36
+    _Bool utl::ITerminationListener::queryTermination()const
+    1
+include/vbahelper/vbahelperinterface.hxx:75
+    int InheritedHelperInterfaceImpl::getCreator()
+    1400204879
+sc/source/core/opencl/opbase.hxx:333
+    _Bool sc::opencl::OpBase::takeNumeric()const
+    1
+sc/source/core/opencl/opbase.hxx:447
+    void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
+    empty
+sc/source/ui/vba/vbasheetobject.hxx:116
+    class rtl::OUString ScVbaSheetObjectBase::implGetBaseName()const
+    "Button"
+sc/source/ui/vba/vbasheetobjects.cxx:145
+    class rtl::OUString ScVbaObjectContainer::implGetShapeServiceName()const
+    "com.sun.star.drawing.ControlShape"
+slideshow/source/engine/animationfactory.cxx:617
+    void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
+    empty
+unoxml/inc/node.hxx:137
+    _Bool DOM::CNode::IsChildTypeAllowed(const enum com::sun::star::xml::dom::NodeType,const enum com::sun::star::xml::dom::NodeType *const,)
+    0
+vcl/inc/font/LogicalFontInstance.hxx:126
+    void LogicalFontInstance::ImplInitHbFont(struct hb_font_t *,)
+    empty
+vcl/inc/qt5/QtFilePicker.hxx:182
+    void QtFilePicker::updateAutomaticFileExtension()
+    empty
+vcl/inc/salbmp.hxx:71
+    _Bool SalBitmap::Create(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,class Size &,_Bool,)
+    0
+vcl/inc/salframe.hxx:145
+    void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
+    empty
+vcl/inc/salframe.hxx:204
+    _Bool SalFrame::MapUnicodeToKeyCode(char16_t,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,class vcl::KeyCode &,)
+    0
+vcl/inc/salgdiimpl.hxx:79
+    void SalGraphicsImpl::freeResources()
+    empty
+vcl/inc/salinst.hxx:95
+    _Bool SalInstance::SVMainHook(int *,)
+    0
+vcl/inc/salinst.hxx:204
+    void SalInstance::releaseMainThread()
+    empty
+vcl/inc/salinst.hxx:213
+    void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
+    empty
+vcl/inc/salmenu.hxx:76
+    void SalMenu::GetSystemMenuData(struct SystemMenuData *,)
+    empty
+vcl/inc/salobj.hxx:49
+    void SalObject::Enable(_Bool,)
+    empty
+vcl/inc/salprn.hxx:85
+    int SalInfoPrinter::GetLandscapeAngle(const class ImplJobSetup *,)
+    900
+vcl/inc/salprn.hxx:116
+    enum SalPrinterError SalPrinter::GetErrorCode()
+    0

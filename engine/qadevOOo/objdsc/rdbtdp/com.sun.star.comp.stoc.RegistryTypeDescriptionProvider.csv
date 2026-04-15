@@ -1,0 +1,6 @@
+"RegistryTypeDescriptionProvider";"com::sun::star::reflection::XTypeDescriptionEnumerationAccess#optional";"createTypeDescriptionEnumeration()"
+"RegistryTypeDescriptionProvider";"com::sun::star::lang::XComponent";"dispose()"
+"RegistryTypeDescriptionProvider";"com::sun::star::lang::XComponent";"addEventListener()"
+"RegistryTypeDescriptionProvider";"com::sun::star::lang::XComponent";"removeEventListener()"
+"RegistryTypeDescriptionProvider";"com::sun::star::container::XHierarchicalNameAccess";"getByHierarchicalName()"
+"RegistryTypeDescriptionProvider";"com::sun::star::container::XHierarchicalNameAccess";"hasByHierarchicalName()"

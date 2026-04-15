@@ -1,0 +1,12 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module excel {
+    constants XlErrorBarType {
+        const long xlErrorBarTypeCustom = -4114;
+        const long xlErrorBarTypeFixedValue = 1;
+        const long xlErrorBarTypePercent = 2;
+        const long xlErrorBarTypeStDev = -4155;
+        const long xlErrorBarTypeStError = 4;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

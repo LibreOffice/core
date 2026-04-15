@@ -1,0 +1,26 @@
+From ce34b9e5fea880c42b431939aed0449d16288d3b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sun, 13 Jul 2025 20:11:56 +0100
+Subject: [PATCH] const up my_uca1400_collation_definitions
+
+move this symbol out of the .data section
+---
+ libmariadb/ma_charset.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libmariadb/ma_charset.c b/libmariadb/ma_charset.c
+index ff4d82f..05fcac9 100644
+--- a/libmariadb/ma_charset.c
++++ b/libmariadb/ma_charset.c
+@@ -968,7 +968,7 @@ typedef struct my_uca1400_collation_definition_st
+   with IDs of their closest UCA1400 counterparts, for character sets
+   utf8mb3, utf8mb4, ucs2, utf16, utf32.
+ */
+-static MY_UCA1400_COLLATION_DEFINITION
++static const MY_UCA1400_COLLATION_DEFINITION
+ my_uca1400_collation_definitions[MY_UCA1400_COLLATION_DEFINITION_COUNT]=
+ {
+ #define COLDEF(tl,name,id_utf8mb3,id_utf8mb4,id_ucs2,id_utf16,id_utf32) \
+-- 
+2.49.0
+

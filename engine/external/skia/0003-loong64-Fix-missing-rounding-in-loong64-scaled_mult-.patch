@@ -1,0 +1,74 @@
+From d83823a4366ba80d17c1cb8238a1f9341b4b7dbb Mon Sep 17 00:00:00 2001
+From: WANG Xuerui <git@xen0n.name>
+Date: Tue, 8 Oct 2024 18:53:11 +0800
+Subject: [PATCH 3/4] [loong64] Fix missing rounding in loong64 scaled_mult
+ implementation
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2720; i=xtex@aosc.io;
+ h=from:subject; bh=kJJcHKrCRPKmlNuupz+tutR4ovZG2dr8WzFx7tRxsZ4=;
+ b=owGbwMvMwCW2U4Ij7wZL9ETG02pJDOmr/iYoOXn9Vw6eo9upkB98c86RSap2a5texns/mayXt
+ eBg1qtDHaUsDGJcDLJiiixFhg3erDrp/KLLymVh5rAygQxh4OIUgIncE2dkWN/jenqS27vvB5w2
+ BJocv8muYCVutbpokcN5C4XY0OSFQgz/zOaoHn6gdCY2UGm13i/tU1lls1f+NHq+S7mj12N5Ufc
+ MZgA=
+X-Developer-Key: i=xtex@aosc.io; a=openpgp;
+ fpr=7231804B052C670F15A6771DB918086ED8045B91
+
+The reference semantics of scaled_mult include rounding, but the
+original implementation did not do so. This is triggering an SkAssert
+in the unit test case FilterResult_raster_RescaleWithTransform, from
+constrained_add's debug checks.
+
+The fixed implementation bumps the cost of each scaled_mult from 2
+LoongArch SIMD instructions to 8 (with 1 constant load that can be
+shared across unrolled calls to scaled_mult), but now matches the
+reference scalar semantics and unblocks testing of debug builds.
+
+Change-Id: I45e43a7a7e6d50b4c32c5e69a6d1d7de341eccf1
+Signed-off-by: Bingwu Zhang <xtex@aosc.io>
+---
+ AUTHORS                          |  1 +
+ src/opts/SkRasterPipeline_opts.h | 16 ++++++++++++----
+ 2 files changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/AUTHORS b/AUTHORS
+index 03d0ac82a412..ef0fdfa550d7 100755
+--- a/AUTHORS
++++ b/AUTHORS
+@@ -104,6 +104,7 @@ Sylvestre Ledru <sylvestre.ledru@gmail.com>
+ The Chromium Authors <*@chromium.org>
+ Thiago Fransosi Farina <thiago.farina@gmail.com>
+ Vibe Inc <*@vibe.us>
++WANG Xuerui <git@xen0n.name>
+ William Candillon <wcandillon@gmail.com>
+ Wonmin Park <satcom1600@hanmail.net>
+ Yandex LLC <*@yandex-team.ru>
+diff --git a/src/opts/SkRasterPipeline_opts.h b/src/opts/SkRasterPipeline_opts.h
+index 27a00474e07b..42e9cd8aa229 100644
+--- a/src/opts/SkRasterPipeline_opts.h
++++ b/src/opts/SkRasterPipeline_opts.h
+@@ -5543,11 +5543,19 @@ SI I16 scaled_mult(I16 a, I16 b) {
+ #elif defined(SKRP_CPU_NEON)
+     return vqrdmulhq_s16(a, b);
+ #elif defined(SKRP_CPU_LASX)
+-    I16 res = __lasx_xvmuh_h(a, b);
+-    return __lasx_xvslli_h(res, 1);
++    Vec<8, int32_t> even = (Vec<8, int32_t>)__lasx_xvmulwev_w_h((__m256i)a, (__m256i)b);
++    Vec<8, int32_t> odd = (Vec<8, int32_t>)__lasx_xvmulwod_w_h((__m256i)a, (__m256i)b);
++    Vec<8, int32_t> roundingTerm = (Vec<8, int32_t>)__lasx_xvldi(-0xec0);  // v8i32(0x40 << 8)
++    even = (even + roundingTerm) >> 15;
++    odd = (odd + roundingTerm) >> 15;
++    return (I16)__lasx_xvpackev_h((__m256i)odd, (__m256i)even);
+ #elif defined(SKRP_CPU_LSX)
+-    I16 res = __lsx_vmuh_h(a, b);
+-    return __lsx_vslli_h(res, 1);
++    Vec<4, int32_t> even = (Vec<4, int32_t>)__lsx_vmulwev_w_h((__m128i)a, (__m128i)b);
++    Vec<4, int32_t> odd = (Vec<4, int32_t>)__lsx_vmulwod_w_h((__m128i)a, (__m128i)b);
++    Vec<4, int32_t> roundingTerm = (Vec<4, int32_t>)__lsx_vldi(-0xec0);  // v4i32(0x40 << 8)
++    even = (even + roundingTerm) >> 15;
++    odd = (odd + roundingTerm) >> 15;
++    return (I16)__lsx_vpackev_h((__m128i)odd, (__m128i)even);
+ #else
+     const I32 roundingTerm = I32_(1 << 14);
+     return cast<I16>((cast<I32>(a) * cast<I32>(b) + roundingTerm) >> 15);
+-- 
+2.48.1
+

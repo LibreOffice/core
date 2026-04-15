@@ -1,0 +1,27 @@
+--- src/autofit/aflatin.c
++++ src/autofit/aflatin.c
+@@ -3711,11 +3711,13 @@
+         /* We also check that the y minimum of the 'other' contour */
+         /* is below the high contour to avoid potential false hits */
+         /* with contours enclosed in the high one.                 */
++        if (max_y != FT_LONG_MIN) {
+         distance = SUB_LONG( high_min_y, max_y );
+         if ( distance < 64           &&
+              distance < min_distance &&
+              min_y < high_min_y      )
+           min_distance = distance;
++        }
+       }
+ 
+       adjustment_amount = 64 - min_distance;
+--- src/truetype/ttgxvar.c
++++ src/truetype/ttgxvar.c
+@@ -1217,7 +1217,7 @@
+       per_region_size *= 2;
+     }
+ 
+-    bytes = varData->deltaSet + per_region_size * innerIndex;
++    bytes = varData->deltaSet ? varData->deltaSet + per_region_size * innerIndex : NULL;
+ 
+     /* outer loop steps through master designs to be blended */
+     for ( master = 0; master < varData->regionIdxCount; master++ )

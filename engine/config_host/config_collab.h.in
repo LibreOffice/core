@@ -1,0 +1,11 @@
+#pragma once
+
+/* Collaboration stuff
+ *
+ * Currently only experimental YRS
+ */
+
+#define ENABLE_YRS 0
+
+#define ENABLE_YRS_WEAK 0
+

@@ -1,0 +1,11 @@
+# -*- Mode: Diff -*-
+--- src/Makefile.in
++++ src/Makefile.in
+@@ -529,6 +529,6 @@
+ lib_LTLIBRARIES = libfontconfig.la
+ libfontconfig_la_LDFLAGS = \
+-	-version-info @LIBT_VERSION_INFO@ -no-undefined $(export_symbols)
++	-version-info @LIBT_VERSION_INFO@ -no-undefined $(export_symbols) -release lo -Wl,-soname -Wl,libfontconfig-lo.so.1.16.1
+
+ libfontconfig_la_LIBADD = $(ICONV_LIBS) $(FREETYPE_LIBS) $(LIBXML2_LIBS) $(EXPAT_LIBS) $(LTLIBINTL)
+ libfontconfig_la_DEPENDENCIES = $(fontconfig_def_dependency)

@@ -1,0 +1,10 @@
+// static_cast<sal_Int32>(aChartWallFillStyle)
+1
+// static_cast<sal_Int32>(aChartWallFillColor)
+13773611
+// sChartWallLineDash
+0;2;01;203;203
+// static_cast<sal_Int32>(aChartWallLineColor)
+8388352
+// nChartWallLineWidth
+110

@@ -1,0 +1,5 @@
+Argon2 password hashing function
+
+This is used in ODF encryption as key derivation function.
+
+[https://github.com/P-H-C/phc-winner-argon2]

@@ -1,0 +1,77 @@
+diff -u mythes/mythes.cxx build/mythes/mythes.cxx
+--- mythes/mythes.cxx	2014-05-22 00:27:38.508588487 +0200
++++ build/mythes/mythes.cxx	2014-05-22 10:07:06.107547417 +0200
+@@ -8,6 +8,11 @@
+ 
+ #include "mythes.hxx"
+ 
++#ifdef _WIN32
++#include <windows.h>
++#include <wchar.h>
++#endif
++
+ MyThes::MyThes(const char* idxpath, const char * datpath)
+ {
+     nw = 0;
+@@ -35,7 +40,7 @@
+ {
+ 
+     // open the index file
+-    FILE * pifile = fopen(idxpath,"r");
++    FILE * pifile = myfopen(idxpath,"r");
+     if (!pifile) {
+         return 0;
+     } 
+@@ -90,7 +95,7 @@
+     fclose(pifile);
+ 
+     /* next open the data file */
+-    pdfile = fopen(datpath,"r");
++    pdfile = myfopen(datpath,"r");
+     if (!pdfile) {
+         return 0;
+     } 
+@@ -373,3 +378,22 @@
+   return -1;
+ }
+ 
++FILE * MyThes::myfopen(const char * path, const char * mode) {
++#ifdef _WIN32
++#define WIN32_LONG_PATH_PREFIX "\\\\?\\"
++    if (strncmp(path, WIN32_LONG_PATH_PREFIX, 4) == 0) {
++        int len = MultiByteToWideChar(CP_UTF8, 0, path, -1, NULL, 0);
++        wchar_t *buff = (wchar_t *) malloc(len * sizeof(wchar_t));
++        wchar_t *buff2 = (wchar_t *) malloc(len * sizeof(wchar_t));
++        FILE * f = NULL;
++        MultiByteToWideChar(CP_UTF8, 0, path, -1, buff, len);
++        if (_wfullpath( buff2, buff, len ) != NULL) {
++          f = _wfopen(buff2, (strcmp(mode, "r") == 0) ? L"r" : L"rb");
++        }
++        free(buff);
++        free(buff2);
++        return f;
++    }
++#endif
++    return fopen(path, mode);
++}
+diff -u mythes/mythes.hxx build/mythes/mythes.hxx
+--- mythes/mythes.hxx	2010-03-04 12:56:23.000000000 +0100
++++ build/mythes/mythes.hxx	2014-05-22 10:11:14.363543731 +0200
+@@ -30,6 +30,7 @@
+ 	MyThes & operator = (const MyThes &);
+ 
+ public:
++        // use UTF-8 encoded paths in WIN32 environment
+ 	MyThes(const char* idxpath, const char* datpath);
+ 	~MyThes();
+ 
+@@ -66,6 +67,9 @@
+         // return index of char in string
+         int mystr_indexOfChar(const char * d, int c);
+ 
++        // fopen or _wfopen
++        FILE * myfopen(const char * path, const char * mode);
++
+ };
+ 
+ #endif

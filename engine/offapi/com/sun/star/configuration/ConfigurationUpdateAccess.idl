@@ -1,0 +1,114 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module configuration {
+
+/** provides modifying access to a fragment of the configuration hierarchy.
+
+ <p>Extends ConfigurationAccess to support modifying values
+ or inserting and removing elements.
+ </p>
+
+ <p>Descendants of this service also implement this service
+ unless they are marked <em>read-only</em> (which is indicated by attribute
+ com::sun::star::beans::PropertyAttribute::READONLY),
+ in which case they only need implement ConfigurationAccess.
+ </p>
+
+ <p>The classification of implementations that is described for
+ ConfigurationAccess applies to implementations of this service
+ as well. Therefore an implementation will support one of several alternate
+ services describing its <em>Container</em> role and one of several alternate
+ services describing its <em>Element</em> role. These services are
+ extensions of the respective services documented for ConfigurationAccess.
+ </p>
+ <ul>
+    <li><em>Container</em> role:
+        A <em>group</em> permits changing child values.
+        A <em>set</em> permits inserting and removing contained elements.
+    </li>
+    <li><em>Element</em> role:
+        The root element of a modifiable tree provides extended functionality
+        to control processing of changes for the entire tree (fragment) by
+        supporting com::sun::star::util::XChangesBatch.
+        For elements of a <em>set</em> or a <em>group</em> no additional
+        interfaces are supported.
+    </li>
+ </ul>
+
+ @see ConfigurationProvider
+    Root instances of this service can be requested from a
+    ConfigurationProvider
+*/
+published service ConfigurationUpdateAccess
+{
+    /** is the basic service providing read access to an element of the
+     configuration hierarchy and its child and descendent elements.
+
+     <p>The HierarchyAccess specialization implemented will be
+     further specialized to support modifying access.
+     Implementations shall therefore implement one of SetUpdate or
+     GroupUpdate depending on the <em>Container</em> role.
+     </p>
+
+     <p>If the HierarchyElement specialization that is implemented
+     is AccessRootElement, the implementation must support the
+     extended functionality of UpdateRootElement. Otherwise, there
+     are no new requirements mandated by the <em>Element</em> role.
+     </p>
+
+    */
+    service ConfigurationAccess;
+
+    /** specializes SetAccess to support modifying the element.
+
+     <p>Implemented, if this element is a <em>Set</em>.
+     Otherwise service GroupUpdate is provided.
+     </p>
+    */
+    [optional] service SetUpdate;
+
+    /** specializes GroupAccess to support modifying contained
+     data.
+
+     <p>Implemented, if this element is a <em>Group</em>.
+     Otherwise service SetUpdate is provided.
+     </p>
+    */
+    [optional] service GroupUpdate;
+
+    /** specializes AccessRootElement to support transaction-like
+     control over a batch of changes accumulated within the tree fragment.
+
+     <p>Implemented, if this element is the <em>Root</em> of the whole hierarchy.
+     Otherwise either SetElement or GroupElement is provided.
+     </p>
+
+     @see ConfigurationProvider
+        Instances obtained from a ConfigurationProvider will
+        implement this version of HierarchyElement.
+    */
+    [optional] service UpdateRootElement;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

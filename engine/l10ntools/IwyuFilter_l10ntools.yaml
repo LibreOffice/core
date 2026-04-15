@@ -1,0 +1,9 @@
+---
+assumeFilename: l10ntools/source/helpmerge.cxx
+excludelist:
+    l10ntools/source/idxdict/idxdict.cxx:
+    # Actually needed
+    - fstream
+    l10ntools/source/xmlparse.cxx:
+    # Actually needed
+    - fstream

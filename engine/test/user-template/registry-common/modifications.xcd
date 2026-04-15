@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<oor:data xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:oor="http://openoffice.org/2001/registry">
+ <oor:component-schema oor:package="org.libreoffice" oor:name="unittest">
+  <component>
+   <prop oor:name="localized" oor:localized="true" oor:type="xs:string">
+   </prop>
+   <prop oor:name="noDefaultLang" oor:localized="true" oor:type="xs:string">
+   </prop>
+  </component>
+ </oor:component-schema>
+ <oor:component-data oor:package="org.libreoffice" oor:name="unittest">
+  <prop oor:name="localized">
+    <value>default</value>
+    <value xml:lang="en-US">en-US</value>
+    <value xml:lang="es">es</value>
+    <value xml:lang="pt-PT">pt-PT</value>
+    <value xml:lang="zh-CN">zh-CN</value>
+    <value xml:lang="zh-TW">zh-TW</value>
+  </prop>
+  <prop oor:name="noDefaultLang">
+    <value xml:lang="en-US">en-US</value>
+  </prop>
+ </oor:component-data>
+ <oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:name="VCL" oor:package="org.openoffice">
+  <node oor:name="DefaultFonts">
+   <node oor:name="ar">
+    <prop oor:name="CTL_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CTL_TEXT" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+   </node>
+   <node oor:name="en">
+    <prop oor:name="CJK_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CTL_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CTL_TEXT" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="UI_SANS" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+   </node>
+   <node oor:name="hi">
+    <prop oor:name="CTL_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CTL_TEXT" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+   </node>
+   <node oor:name="zh-cn">
+    <prop oor:name="CJK_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CJK_TEXT" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+   </node>
+   <node oor:name="zh-tw">
+    <prop oor:name="CJK_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CJK_TEXT" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+   </node>
+  </node>
+ </oor:component-data>
+ <oor:component-data oor:name="Common" oor:package="org.openoffice.Office">
+  <node oor:name="Misc">
+    <prop oor:name="UseDocumentSystemFileLocking">
+      <value>false</value>
+    </prop>
+    <prop oor:name="UseDocumentOOoLockFile">
+      <value>false</value>
+    </prop>
+    <prop oor:name="UseLocking">
+      <value>false</value>
+    </prop>
+    <prop oor:name="ShowTipOfTheDay">
+      <value>false</value>
+    </prop>
+    <prop oor:name="LastTipOfTheDayShown">
+      <value>"32767"</value> <!-- some arbitrary high value (sal_Int32) -->
+    </prop>
+  </node>
+  <node oor:name="Filter">
+    <node oor:name="Graphic">
+      <node oor:name="Export">
+        <node oor:name="SVG">
+          <prop oor:name="EmbedFonts">
+            <value>false</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+  </node>
+ </oor:component-data>
+ <oor:component-data oor:name="Jobs" oor:package="org.openoffice.Office">
+  <node oor:name="Events">
+   <node oor:name="onFirstVisibleTask" oor:op="fuse">
+    <node oor:name="JobList">
+     <node oor:name="UpdateCheck" oor:op="remove"/>
+    </node>
+   </node>
+  </node>
+ </oor:component-data>
+ <oor:component-data oor:name="Setup" oor:package="org.openoffice">
+  <node oor:name="L10N">
+    <prop oor:name="ooLocale">
+      <value>en-US</value>
+    </prop>
+    <prop oor:name="ooSetupSystemLocale">
+      <value>en-US</value>
+    </prop>
+  </node>
+ </oor:component-data>
+ <oor:component-data oor:name="Common" oor:package="org.openoffice.Office">
+  <node oor:name="Security">
+    <prop oor:name="LoadExoticFileFormats">
+      <value>2</value>
+    </prop>
+  </node>
+ </oor:component-data>
+</oor:data>

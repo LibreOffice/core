@@ -1,0 +1,62 @@
+--- src/cairo-surface.c
++++ src/cairo-surface.c
+@@ -2952,7 +2952,7 @@
+ 	scaled_font->options.color_mode != CAIRO_COLOR_MODE_NO_COLOR)
+     {
+         utf8_copy = malloc (sizeof (char) * utf8_len);
+-        memcpy (utf8_copy, utf8, sizeof (char) * utf8_len);
++        if (utf8_len != 0) memcpy (utf8_copy, utf8, sizeof (char) * utf8_len);
+         utf8 = utf8_copy;
+ 
+         status = composite_color_glyphs (surface, op,
+--- src/cairo-tor-scan-converter.c
++++ src/cairo-tor-scan-converter.c
+@@ -253,7 +253,7 @@
+ #elif GRID_XY == 15
+ #  define  GRID_AREA_TO_ALPHA(c)  (((c) << 4) + (c))
+ #elif GRID_XY == 2*256*15
+-#  define  GRID_AREA_TO_ALPHA(c)  (((c) + ((c)<<4) + 256) >> 9)
++#  define  GRID_AREA_TO_ALPHA(c)  (((c) + ((uint32_t)(c)<<4) + 256) >> 9)
+ #else
+ #  define  GRID_AREA_TO_ALPHA(c)  (((c)*255 + GRID_XY/2) / GRID_XY)
+ #endif
+--- src/cairo-xlib-render-compositor.c
++++ src/cairo-xlib-render-compositor.c
+@@ -1849,8 +1849,8 @@
+ 	    return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+     }
+ 
+-    dx = -dst_x << 16;
+-    dy = -dst_y << 16;
++    dx = (unsigned)-dst_x << 16;
++    dy = (unsigned)-dst_y << 16;
+     for (i = 0; i < traps->num_traps; i++) {
+ 	cairo_trapezoid_t *t = &traps->traps[i];
+ 
+--- src/cairo-xlib-surface-shm.c
++++ src/cairo-xlib-surface-shm.c
+@@ -1152,9 +1152,11 @@
+     cairo_surface_t *surface;
+ 
+     surface = NULL;
+-    if (has_shm (other))
+-	surface = &_cairo_xlib_shm_surface_create (other, format, width, height,
+-						   FALSE, has_shm_pixmaps (other))->image.base;
++    if (has_shm (other)) {
++	cairo_xlib_shm_surface_t * shm_surface = _cairo_xlib_shm_surface_create (other, format, width, height,
++						   FALSE, has_shm_pixmaps (other));
++	if (shm_surface) surface = &shm_surface->image.base;
++    }
+ 
+     return surface;
+ }
+--- src/cairo-boxes.c
++++ src/cairo-boxes.c
+@@ -41,6 +41,7 @@
+ _cairo_boxes_init (cairo_boxes_t *boxes)
+ {
+     boxes->status = CAIRO_STATUS_SUCCESS;
++    boxes->limits = NULL;
+     boxes->num_limits = 0;
+     boxes->num_boxes = 0;
+ 

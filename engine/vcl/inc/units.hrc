@@ -1,0 +1,66 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include <tools/fldunit.hxx>
+#include <unotools/resmgr.hxx>
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+inline constexpr std::pair<TranslateId, FieldUnit> SV_FUNIT_STRINGS[] =
+{
+    // To translators: This is the first entry of a sequence of measurement unit names
+    { NC_("SV_FUNIT_STRINGS", "mm"), FieldUnit::MM },
+    { NC_("SV_FUNIT_STRINGS", "cm"), FieldUnit::CM },
+    { NC_("SV_FUNIT_STRINGS", "m"), FieldUnit::M },
+    { NC_("SV_FUNIT_STRINGS", "km"), FieldUnit::KM },
+    { NC_("SV_FUNIT_STRINGS", "twips"), FieldUnit::TWIP },
+    { NC_("SV_FUNIT_STRINGS", "twip"), FieldUnit::TWIP },
+    { NC_("SV_FUNIT_STRINGS", "pt"), FieldUnit::POINT },
+    { NC_("SV_FUNIT_STRINGS", "pc"), FieldUnit::PICA },
+    /* To translators: double prime symbol for inch */
+    { NC_("SV_FUNIT_STRINGS", "″"), FieldUnit::INCH },
+    { NC_("SV_FUNIT_STRINGS", "\""), FieldUnit::INCH },
+    { NC_("SV_FUNIT_STRINGS", "in"), FieldUnit::INCH },
+    { NC_("SV_FUNIT_STRINGS", "inch"), FieldUnit::INCH },
+    /* To translators: prime symbol for foot */
+    { NC_("SV_FUNIT_STRINGS", "′"), FieldUnit::FOOT },
+    { NC_("SV_FUNIT_STRINGS", "'"), FieldUnit::FOOT },
+    { NC_("SV_FUNIT_STRINGS", "ft"), FieldUnit::FOOT },
+    { NC_("SV_FUNIT_STRINGS", "foot"), FieldUnit::FOOT },
+    { NC_("SV_FUNIT_STRINGS", "feet"), FieldUnit::FOOT },
+    { NC_("SV_FUNIT_STRINGS", "miles"), FieldUnit::MILE },
+    { NC_("SV_FUNIT_STRINGS", "mile"), FieldUnit::MILE },
+    { NC_("SV_FUNIT_STRINGS", "ch"), FieldUnit::CHAR },
+    { NC_("SV_FUNIT_STRINGS", "line"), FieldUnit::LINE },
+    { NC_("SV_FUNIT_STRINGS", "pixels"), FieldUnit::PIXEL },
+    { NC_("SV_FUNIT_STRINGS", "pixel"), FieldUnit::PIXEL },
+    /* To translators: degree */
+    { NC_("SV_FUNIT_STRINGS", "°"), FieldUnit::DEGREE },
+    { NC_("SV_FUNIT_STRINGS", "sec"), FieldUnit::SECOND },
+    { NC_("SV_FUNIT_STRINGS", "ms"), FieldUnit::MILLISECOND },
+    /* To translators: standard typographical metric 'em' */
+    { NC_("SV_FUNIT_STRINGS", "em"), FieldUnit::FONT_EM },
+    // To translators: This is the last entry of the sequence of measurement unit names
+    /* To translators: CSS unit 'ic'; CJK full-width advance in the current font */
+    { NC_("SV_FUNIT_STRINGS", "ic"), FieldUnit::FONT_CJK_ADVANCE }
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,75 @@
+diff -ur icu.org/source/common/unicode/platform.h icu/source/common/unicode/platform.h
+--- icu.org/source/common/unicode/platform.h	2024-10-25 03:24:00.000000000 +0900
++++ icu/source/common/unicode/platform.h	2024-11-04 20:40:39.757438800 +0900
+@@ -779,7 +779,7 @@
+                             UPRV_HAS_DECLSPEC_ATTRIBUTE(__dllimport__))
+ #   define U_EXPORT __declspec(dllexport)
+ #elif defined(__GNUC__) || defined(__open_xl__)
+-#   define U_EXPORT __attribute__((visibility("default")))
++#   define U_EXPORT
+ #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
+    || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
+ #   define U_EXPORT __global
+diff -ur icu.org/source/config/mh-linux icu/source/config/mh-linux
+--- icu.org/source/config/mh-linux	2021-11-15 20:56:39.460705065 +0100
++++ icu/source/config/mh-linux	2021-11-15 21:03:11.474638494 +0100
+@@ -27,7 +27,7 @@
+ 
+ ## Compiler switch to embed a library name
+ # The initial tab in the next line is to prevent icu-config from reading it.
+-	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
++	#LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
+ #SH# # We can't depend on MIDDLE_SO_TARGET being set.
+ #SH# LD_SONAME=
+ 
+diff -ur icu.org/source/configure icu/source/configure
+--- icu.org/source/configure	2021-11-15 20:56:39.875703936 +0100
++++ icu/source/configure	2021-11-15 21:03:11.475638491 +0100
+@@ -5272,7 +5273,7 @@
+ 	else
+ 		icu_cv_host_frag=mh-linux-va
+ 	fi ;;
+-*-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu) icu_cv_host_frag=mh-linux ;;
++*-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu|*-*-*-androideabi*) icu_cv_host_frag=mh-linux ;;
+ i[34567]86-*-cygwin)
+ 	if test "$GCC" = yes; then
+ 		icu_cv_host_frag=mh-cygwin
+@@ -6472,6 +6466,10 @@
+ # Check to see if genccode can generate simple assembly.
+ GENCCODE_ASSEMBLY=
+ case "${host}" in
++arm-*-linux-androideabi)
++    if test "$GCC" = yes; then
++        GENCCODE_ASSEMBLY="-a gcc-android-arm"
++    fi ;;
+ *-linux*|*-kfreebsd*-gnu*|i*86-*-*bsd*|i*86-pc-gnu)
+     if test "$GCC" = yes; then
+         # We're using gcc, and the simple -a gcc command line works for genccode
+@@ -7594,6 +7592,10 @@
+     # wchar_t can be used
+     CHECK_UTF16_STRING_RESULT="available"
+     ;;
++*-*-*-androideabi|mips-unknown-linux-android)
++    # no UTF-16 strings thanks, I think, this is to avoid the -std=c++0x which causes trouble with uint64_t
++    CHECK_UTF16_STRING_RESULT="nope"
++    ;;
+ *)
+     ;;
+ esac
+diff -ur icu.org/source/i18n/decimfmt.cpp icu/source/i18n/decimfmt.cpp
+--- icu.org/source/i18n/decimfmt.cpp	2021-10-28 18:04:57.000000000 +0200
++++ icu/source/i18n/decimfmt.cpp	2021-11-15 21:03:11.476638489 +0100
+@@ -9,6 +9,13 @@
+ // Helpful in toString methods and elsewhere.
+ #define UNISTR_FROM_STRING_EXPLICIT
+ 
++#ifdef __ANDROID__
++#ifndef ARM
++#define ARM
++#endif
++#include <android/compatibility.hxx>
++#endif
++
+ #include <cmath>
+ #include <cstdlib>
+ #include <stdlib.h>

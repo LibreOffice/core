@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>The first line of text in this document.</text:p>
+   <text:p>The second line of text in this document.</text:p>
+   <text:p>The third line of text in this document.</text:p>
+  </office:text>
+ </office:body>
+</office:document>

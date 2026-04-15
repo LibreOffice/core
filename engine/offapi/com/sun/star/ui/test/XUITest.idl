@@ -1,0 +1,39 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com { module sun { module star { module ui { module test {
+
+interface XUITest
+{
+    boolean executeCommand([in] string command);
+
+    boolean executeCommandWithParameters([in] string command,
+        [in] com::sun::star::beans::PropertyValues propValues);
+
+    boolean executeCommandForProvider([in] string command,
+        [in] ::com::sun::star::frame::XDispatchProvider xProvider);
+
+    boolean executeDialog([in] string command);
+
+    XUIObject getTopFocusWindow();
+
+    XUIObject getFloatWindow();
+
+    /** Get the XUIObject for the given window.
+    */
+    XUIObject getWindow([in] ::com::sun::star::awt::XWindow xWindow);
+
+    /** Get the XUIObject for the window that currently has focus.
+    */
+    XUIObject getFocusWindow();
+};
+
+}; }; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

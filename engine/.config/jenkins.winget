@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+
+# This configuration is for a minimal installation of Visual Studio meant for CI use or setups with
+# remote access with no need for convenience features of the IDE. It installs the dependencies
+# without additional recommended packages. If you want to use the IDE to edit code, you probably
+# want to use the regular configuration.winget (or launch Visual Studio Installer afterwards, pick
+# modify and then unselect and reselect the "Desktop Development with C++" workload)
+
+properties:
+  resources:
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: VisualStudio
+      directives:
+        description: Install Visual Studio 2022 Community
+      settings:
+        id: Microsoft.VisualStudio.2022.Community
+        source: winget
+    - resource: Microsoft.VisualStudio.DSC/VSComponents
+      id: minimal LibreOffice Components
+      dependsOn:
+        - VisualStudio
+      directives:
+        description: Install components required to build LibreOffice
+      settings:
+        productId: Microsoft.VisualStudio.Product.Community
+        channelId: VisualStudio.17.Release
+        vsConfigFile: '${WinGetConfigRoot}\2022_cross.vsconfig'
+  configurationVersion: 0.2.0

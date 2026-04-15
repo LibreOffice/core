@@ -1,0 +1,9 @@
+[
+    "Simple list of arrays",
+    "This file contains a list of arrays as data and some title strings at the top.",
+    [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9]
+    ]
+]

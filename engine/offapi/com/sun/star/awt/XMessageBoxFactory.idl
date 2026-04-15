@@ -1,0 +1,64 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module awt {
+
+/** specifies a factory interface for creating message boxes.
+ */
+published interface XMessageBoxFactory : com::sun::star::uno::XInterface
+{
+    /** creates a message box.
+
+        @returns
+            the created message box or a null reference if it cannot be
+            created.
+
+        @param aParent
+            a valid XWindowPeer reference which is used as a parent.
+
+            <p>This parameter must not be null.</p>
+
+        @param eType
+            the message box type.
+
+        @param nButtons
+            specifies which buttons should be available on the message box.
+
+            <p>A combination of com::sun::star::awt::MessageBoxButtons</p>
+            <p>A com::sun::star::awt::MessageBoxType::INFOBOX
+            ignores this parameter, instead it uses a
+            com::sun::star::awt::MessageBoxButtons::BUTTONS_OK.</p>
+
+        @param sTitle
+                specifies the title of the message box.
+
+        @param sMessage
+            specifies text which will be shown by the message box.
+            Line-breaks must be added using 'CR' or 'CR+LF'.
+    */
+    XMessageBox createMessageBox( [in] com::sun::star::awt::XWindowPeer aParent,
+                                  [in] MessageBoxType eType,
+                                  [in] long nButtons,
+                                  [in] string sTitle,
+                                  [in] string sMessage );
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

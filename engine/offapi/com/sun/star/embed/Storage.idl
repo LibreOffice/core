@@ -1,0 +1,308 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+
+ module com {  module sun {  module star {  module embed {
+
+/** This is a service that allows to get access to a package using storage
+    hierarchy.
+
+    <p>
+    A root storage should be retrieved by using StorageFactory
+    service. Substorages are created through XStorage interface
+    of a parent storage.
+    </p>
+ */
+published service Storage
+{
+    /** This service describes the base functionality of storages.
+
+        <p>
+        Please see below the description of additional requirements for the
+        package storage implementation.
+        </p>
+
+        <dl>
+            <dt>interface com::sun::star::lang::XComponent
+            </dt>
+            <dd>
+                <p>
+                A root storage is created by StorageFactory
+                and is controlled by refcounting. In case refcounting
+                is decreased to zero the storage will be disposed
+                automatically. It is still strongly recommended that
+                a root storage is disposed explicitly since in garbage
+                collector based languages the refcounting can be
+                decreased too late and resources locked by the storage
+                will not be freed until then.
+                </p>
+
+                <p>
+                A substorage is created by XStorage
+                interface of storage. Each time a substorage is opened
+                it is locked ( in case it is opened in readonly mode
+                it is locked for writing, in case it is opened in
+                read-write mode it is locked for reading and writing )
+                until it is disposed.  The lifetime of substorage is
+                also controlled by refcounting but because of mentioned
+                garbage collection specific it is strongly recommended
+                to dispose substorages explicitly.
+                </p>
+
+                <p>
+                In case a storage object is disposed all the elements
+                ( substorages and substreams ) retrieved from the
+                object are disposed. If the storage was opened in
+                read-write mode all non-committed changes will be lost.
+                </p>
+            </dd>
+            <dt>interface XStorage</dt>
+            <dd>
+                <dl>
+                    <dt>XStorage::openStreamElement()</dt>
+                    <dd>
+                        <p>
+                        This method returns StorageStream
+                        service implementation.
+                        </p>
+
+                        <p>
+                        If the child stream is an encrypted one a correct
+                        common storage password should be set through
+                        XEncryptionProtectedSource interface to
+                        this storage or to a one of storages in parent
+                        hierarchy. In case the password is not set or is a
+                        wrong one an exception will be thrown.
+                        </p>
+                    </dd>
+
+                    <dt>XStorage::openEncryptedStreamElement()</dt>
+                    <dd>
+                        This method allows to specify reading password for the
+                        stream explicitly. The password will be used to read
+                        the stream. It is possible to specify a new password
+                        for stream storing through
+                        XEncryptionProtectedSource interface. In
+                        case a new password is not specified an old one will
+                        be used for storing.
+                    </dd>
+
+                    <dt>XStorage::openStorageElement()</dt>
+                    <dd>
+                        This method returns Storage service
+                        implementation.
+                    </dd>
+
+                    <dt>XStorage::cloneStreamElement()</dt>
+                    <dd>
+                        <p>
+                        This method returns StorageStream service
+                        implementation.
+                        </p>
+
+                        <p>
+                        The latest flashed version of the stream will be used.
+                        The stream can be flashed explicitly by
+                        com::sun::star::io::XOutputStream::flush()
+                        call.
+                        </p>
+
+                        <p>
+                        A storage flashes on commit all the child streams it
+                        owns. So in case after the stream is changed neither
+                        the storage was committed nor the stream was flushed
+                        explicitly, the changes will not appear in the new
+                        created stream. This method allows to retrieve copy of
+                        a child stream even in case it is already opened for
+                        writing.
+                        </p>
+
+                        <p>
+                        If the child stream is an encrypted one a correct
+                        common storage password should be set through
+                        XEncryptionProtectedSource interface to
+                        this storage or to a one of storages in parent
+                        hierarchy. In case the password is not set or is a
+                        wrong one an exception will be thrown.
+                        </p>
+                    </dd>
+
+                    <dt>XStorage::cloneEncryptedStreamElement()</dt>
+                    <dd>
+                        <p>
+                        This method returns StorageStream service
+                        implementation.
+                        </p>
+
+                        <p>
+                        The latest flashed version of the stream will be used.
+                        The stream can be flashed explicitly by
+                        com::sun::star::io::XOutputStream::flush()
+                        call.
+                        </p>
+
+                        <p>
+                        A storage flashes on commit all the child streams it
+                        owns. So in case after the stream is changed neither
+                        the storage was committed nor the stream was flushed
+                        explicitly, the changes will not appear in the new
+                        created stream. This method allows to retrieve copy of
+                        a child stream even in case it is already opened for
+                        writing.
+                        </p>
+                    </dd>
+
+                    <dt>XStorage::copyLastCommitTo()</dt>
+                    <dd>
+                        This method gets Storage service
+                        implementation and fills it in with the latest
+                        committed version of this storage. So in case the
+                        storage was not committed after it was changed, the
+                        changes will not appear in the new created storage.
+                    </dd>
+
+                    <dt>XStorage::copyStorageElementLastCommitTo()</dt>
+                    <dd>
+                        <p>
+                        This method gets Storage service
+                        implementation and fills it in with the contents of
+                        the requested substorage. The latest committed version
+                        of child storage will be used. So in case the child
+                        storage was not committed after it was changed, the
+                        changes will not appear in the new created storage.
+                        </p>
+
+                        <p>
+                        This method allows to retrieve copy of a child storage
+                        even in case it is already opened for writing.
+                        </p>
+                    </dd>
+
+                    <dt>XStorage::removeStorageElement()</dt>
+                    <dd>
+                        If the element is opened the removing will fail.
+                    </dd>
+                </dl>
+            </dd>
+            <dt>property URL</dt>
+            <dd>
+                If the storage is created based on url this property allows
+                to retrieve it.
+            </dd>
+        </dl>
+
+     */
+    service BaseStorage;
+
+    /** allows to commit or revert changes that were done for the storage.
+
+        <p>
+        If a storage is committed all changes made to it will be integrated to
+        its parent storage. This is recursive process, so the last committed
+        storage should be the root one. For the package based storages commit
+        of a root storage also means flashing to the related medium. If
+        a storage is not committed, no changes for it or its child elements
+        will be stored.
+        </p>
+     */
+    interface ::com::sun::star::embed::XTransactedObject;
+
+    /** allows to track storage's transaction state.
+     */
+    interface ::com::sun::star::embed::XTransactionBroadcaster;
+
+    /** allows to set password to a root storage.
+
+        <p>
+        This interface can be supported by a storage to allow to set
+        a common storage password. This password is used as default password
+        to decrypt all encrypted streams and to encrypt streams that are
+        marked to use common storage password on storing.
+        Specifying of the password for a storage allows to use it for the
+        whole subtree. Of course substorage can allow to overwrite the common
+        storage password for own subtree.
+        </p>
+     */
+    [optional]
+    interface ::com::sun::star::embed::XEncryptionProtectedSource;
+
+    /** allows to get and set the media type of the storage.
+     */
+    [property] string MediaType;
+
+    /** allows to get and set the version of the format related to the
+        MediaType.
+     */
+    [property,optional] string Version;
+
+    /** allows to detect whether mediatype is detected by using fallback
+        approach.
+
+        <p>
+        Can be set to true if the mediatype can not be detected in standard
+        way, but there is a fallback solution allows to do it.
+        </p>
+
+        <p>
+        Usually means that the document validity is questionable, although
+        the package itself is not corrupted. The decision about document
+        validity in this case is in application hands. It is up to user of
+        the storage to decide whether he accepts the fallback approach for
+        an implementation of this service, outputs a warning or an error.
+        </p>
+     */
+    [property, readonly] boolean MediaTypeFallbackIsUsed;
+
+    /** allows to detect whether the storage is a root one.
+     */
+    [property, readonly] boolean IsRoot;
+
+    /** allows to detect whether storage is open in "repair package" mode or
+        not.
+     */
+    [property, optional, readonly] boolean RepairPackage;
+
+    /** allows to detect if the storage contains encrypted entries.
+
+        <p>
+        In case it is set to `TRUE` the storage itself and/or a tree of
+        substorages contain encrypted streams. Usually in case this property
+        is supported the implementation supports
+        XEncryptionProtectedSource interface.
+        </p>
+     */
+    [property, optional, readonly] boolean HasEncryptedEntries;
+
+    /** allows to detect if the storage contains non-encrypted entries.
+
+        <p>
+        In case it is set to `TRUE` the storage itself and/or a tree of
+        substorages contains non-encrypted streams. Usually in case this
+        property is supported the implementation supports
+        XEncryptionProtectedSource interface.
+        </p>
+     */
+    [property, optional, readonly] boolean HasNonEncryptedEntries;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

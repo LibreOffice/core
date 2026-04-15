@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+
+import polib
+import getopt
+import sys
+import os.path
+from subprocess import check_output
+
+try:
+    myopts, args = getopt.getopt(sys.argv[1:], "i:o:")
+except getopt.GetoptError as e:
+    print(" Syntax: uiex -i FileIn -o FileOut")
+    print(" FileIn:   Source files (*.ui)")
+    print(" FileOut:  Destination file (*.*)")
+    sys.exit(2)
+
+for o, a in myopts:
+    if o == '-i':
+        ifile = a
+    elif o == '-o':
+        ofile = a
+
+with open(ofile, "a") as output:
+    input = check_output(["xgettext", "--add-comments", "--no-wrap", ifile, "-o", "-"], encoding="UTF-8")
+    po = polib.pofile(input)
+    if len(po) != 0:
+        print("", file=output)
+        for entry in po:
+            # skip 'stock' entries like "cancel", "help", "ok", etc
+            # l10ntools/source/localize.cxx will insert one entry for each stock per .po
+            if entry.msgctxt == "stock":
+                continue
+            try:
+                keyid = entry.msgctxt + '|' + entry.msgid
+            except Exception:
+                print(f"There is a problem with the translatable string labeled \"{entry.msgid}\". Likely no context attribute has been specified.")
+                sys.exit(2)
+            print('#. ' + polib.genKeyId(keyid), file=output)
+            for i, occurrence in enumerate(entry.occurrences):
+                entry.occurrences[i] = os.path.relpath(occurrence[0], os.environ['SRCDIR']), occurrence[1]
+            print(entry, file=output)

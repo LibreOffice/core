@@ -1,0 +1,144 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: IBM Corporation
+ *
+ *  Copyright: 2008 by IBM Corporation
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+/*************************************************************************
+ * @file
+ *  For LWP filter architecture prototype
+ ************************************************************************/
+
+#include "lwpproplist.hxx"
+
+LwpPropListElement::LwpPropListElement(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
+:LwpDLVList(objHdr,pStrm)
+{
+}
+
+LwpPropListElement* LwpPropListElement::GetNext()
+{
+    return dynamic_cast<LwpPropListElement*>(LwpDLVList::GetNext().obj().get());
+}
+
+void LwpPropListElement::Read()
+{
+    LwpDLVList::Read();
+    m_Name.Read(m_pObjStrm.get());
+    m_Value.Read(m_pObjStrm.get());
+    m_pObjStrm->SkipExtra();
+}
+
+bool LwpPropListElement::IsNamed(std::u16string_view name)
+{
+    return name == m_Name.str();
+}
+
+OUString LwpPropList::GetNamedProperty(std::u16string_view name)
+{
+    LwpPropListElement* pProp = FindPropByName(name);
+    if (pProp)
+    {
+        return pProp->GetValue().str();
+    }
+    return OUString();
+}
+
+LwpPropListElement* LwpPropList::FindPropByName(std::u16string_view name)
+{
+    LwpPropListElement* pElement = GetFirst();
+
+    while(pElement)
+    {
+        if (pElement->IsNamed(name))
+            return pElement;
+        pElement = pElement->GetNext();
+    }
+    return nullptr;
+}
+
+LwpPropListElement* LwpPropList::GetFirst()
+{
+    return dynamic_cast<LwpPropListElement*>(LwpDLVListHead::GetFirst().obj().get());
+}
+
+OUString LwpPropList::EnumNamedProperty(OUString& name,OUString& value)
+{
+    LwpPropListElement* pElement;
+    if (name.isEmpty())
+    {
+        pElement = GetFirst();
+        if (pElement)
+        {
+            value = pElement->GetValue().str();
+            name  = pElement->GetName().str();
+            pElement = pElement->GetNext();
+            if(pElement)
+                return  pElement->GetName().str();
+        }
+        return OUString();
+    }
+    else
+    {
+        pElement = FindPropByName(name);
+        if (pElement)
+        {
+            value = pElement->GetValue().str();
+            pElement = pElement->GetNext();
+            if(pElement)
+                return  pElement->GetName().str();
+        }
+        return OUString();
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,368 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <i18nutil/scriptchangescanner.hxx>
+#include <i18nutil/unicode.hxx>
+#include <i18nutil/scriptclass.hxx>
+#include <unicode/uchar.h>
+#include <unicode/ubidi.h>
+#include <sal/log.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/CharType.hpp>
+#include <com/sun/star/i18n/UnicodeType.hpp>
+
+namespace css = ::com::sun::star;
+
+namespace i18nutil
+{
+void ScriptHintProvider::SetParagraphLevelHint(ScriptHintType eType) { m_eParaHint = eType; }
+
+void ScriptHintProvider::AddHint(ScriptHintType eType, sal_Int32 nStartIndex, sal_Int32 nEndIndex)
+{
+    m_aHints.emplace_back(eType, nStartIndex, nEndIndex);
+}
+
+void ScriptHintProvider::Start()
+{
+    m_pCurrIt = m_aHints.begin();
+    m_nCurrIdx = 0;
+
+    m_eCurrHint = m_eParaHint;
+    if (m_pCurrIt != m_aHints.end() && m_pCurrIt->m_nStartIndex == 0 && m_pCurrIt->m_nEndIndex > 0)
+    {
+        m_eCurrHint = m_pCurrIt->m_eType;
+    }
+}
+
+void ScriptHintProvider::AdvanceTo(sal_Int32 nNextIdx)
+{
+    m_nCurrIdx = nNextIdx;
+
+    while (m_pCurrIt != m_aHints.end() && m_nCurrIdx >= m_pCurrIt->m_nEndIndex)
+    {
+        ++m_pCurrIt;
+    }
+
+    m_eCurrHint = m_eParaHint;
+    if (m_pCurrIt != m_aHints.end() && m_nCurrIdx >= m_pCurrIt->m_nStartIndex
+        && m_nCurrIdx < m_pCurrIt->m_nEndIndex)
+    {
+        m_eCurrHint = m_pCurrIt->m_eType;
+    }
+}
+
+i18nutil::ScriptHintType ScriptHintProvider::Peek() const { return m_eCurrHint; }
+
+namespace
+{
+constexpr sal_uInt32 CHAR_NNBSP = 0x202f;
+
+class IcuDirectionChangeScanner : public DirectionChangeScanner
+{
+private:
+    const OUString& m_rText;
+    UBiDi* m_pBidi;
+    DirectionChange m_stCurr;
+    UBiDiLevel m_nInitialDirection;
+    int32_t m_nCurrIndex = 0;
+    int m_nCount = 0;
+    int m_nCurr = 0;
+    bool m_bAtEnd = false;
+
+    bool RangeHasStrongLTR(sal_Int32 nStart, sal_Int32 nEnd)
+    {
+        for (sal_Int32 nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx)
+        {
+            auto nCharDir = u_charDirection(m_rText[nCharIdx]);
+            if (nCharDir == U_LEFT_TO_RIGHT || nCharDir == U_LEFT_TO_RIGHT_EMBEDDING
+                || nCharDir == U_LEFT_TO_RIGHT_OVERRIDE)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void PopulateCurr()
+    {
+        int32_t nEndIndex = 0;
+        UBiDiLevel nCurrLevel = 0;
+        ubidi_getLogicalRun(m_pBidi, m_nCurrIndex, &nEndIndex, &nCurrLevel);
+
+        bool bHasEmbeddedStrongLTR = false;
+        if ((nCurrLevel % 2) == UBIDI_LTR && nCurrLevel > UBIDI_RTL)
+        {
+            bHasEmbeddedStrongLTR = RangeHasStrongLTR(m_nCurrIndex, nEndIndex);
+        }
+
+        m_stCurr = { m_nCurrIndex, nEndIndex, nCurrLevel, bHasEmbeddedStrongLTR };
+
+        m_nCurrIndex = nEndIndex;
+        ++m_nCurr;
+
+        m_bAtEnd = false;
+    }
+
+public:
+    IcuDirectionChangeScanner(const OUString& rText, UBiDiLevel nInitialDirection)
+        : m_rText(rText)
+        , m_nInitialDirection(nInitialDirection)
+    {
+        UErrorCode nError = U_ZERO_ERROR;
+        m_pBidi = ubidi_openSized(rText.getLength(), 0, &nError);
+        nError = U_ZERO_ERROR;
+
+        ubidi_setPara(m_pBidi, reinterpret_cast<const UChar*>(rText.getStr()), rText.getLength(),
+                      nInitialDirection, nullptr, &nError);
+        nError = U_ZERO_ERROR;
+
+        m_nCount = ubidi_countRuns(m_pBidi, &nError);
+        Reset();
+    }
+
+    ~IcuDirectionChangeScanner() override { ubidi_close(m_pBidi); }
+
+    void Reset() override
+    {
+        m_nCurrIndex = 0;
+        m_nCurr = 0;
+        m_stCurr = { /*start*/ 0, /*end*/ 0, /*level*/ m_nInitialDirection,
+                     /*has embedded strong LTR*/ false };
+        m_bAtEnd = true;
+
+        if (m_nCurr < m_nCount)
+        {
+            PopulateCurr();
+        }
+    }
+
+    bool AtEnd() const override { return m_bAtEnd; }
+
+    void Advance() override
+    {
+        if (m_nCurr >= m_nCount)
+        {
+            m_bAtEnd = true;
+            return;
+        }
+
+        PopulateCurr();
+    }
+
+    DirectionChange Peek() const override { return m_stCurr; }
+
+    UBiDiLevel GetLevelAt(sal_Int32 nIndex) const override
+    {
+        return ubidi_getLevelAt(m_pBidi, nIndex);
+    }
+};
+
+class GreedyScriptChangeScanner : public ScriptChangeScanner
+{
+private:
+    ScriptChange m_stCurr;
+    DirectionChangeScanner* m_pDirScanner;
+    ScriptHintProvider* m_pHints;
+    const OUString& m_rText;
+    sal_Int32 m_nIndex = 0;
+    sal_Int32 m_nNextStart = 0;
+    sal_Int16 m_nPrevScript = css::i18n::ScriptType::WEAK;
+    bool m_bAtEnd = false;
+
+    void AdvanceOnce()
+    {
+        m_stCurr
+            = ScriptChange{ /*start*/ m_nNextStart, /*end*/ m_nNextStart, /*type*/ m_nPrevScript };
+
+        if (m_nNextStart >= m_rText.getLength())
+        {
+            m_bAtEnd = true;
+            return;
+        }
+
+        auto nRunStart = m_nNextStart;
+        m_nNextStart = m_nIndex;
+
+        auto nScript = m_nPrevScript;
+
+        while (m_nIndex < m_rText.getLength())
+        {
+            auto nPrevIndex = m_nIndex;
+            auto nBidiLevel = m_pDirScanner->GetLevelAt(m_nIndex);
+
+            bool bCharIsRtl = (nBidiLevel % 2 == UBIDI_RTL);
+            bool bCharIsRtlOrEmbedded = (nBidiLevel > UBIDI_LTR);
+            bool bRunHasStrongEmbeddedLTR = false;
+
+            while (bCharIsRtlOrEmbedded && !m_pDirScanner->AtEnd())
+            {
+                const auto stDirRun = m_pDirScanner->Peek();
+                if (m_nIndex >= stDirRun.m_nStartIndex && m_nIndex < stDirRun.m_nEndIndex)
+                {
+                    bRunHasStrongEmbeddedLTR = stDirRun.m_bHasEmbeddedStrongLTR;
+                    break;
+                }
+
+                m_pDirScanner->Advance();
+            }
+
+            m_pHints->AdvanceTo(m_nIndex);
+            auto eCurrHint = m_pHints->Peek();
+
+            auto nChar = m_rText.iterateCodePoints(&m_nIndex);
+            nScript = GetScriptClass(nChar);
+
+            // tdf#166011 Apply style:script-type rules per ODF standard:
+            if (eCurrHint == ScriptHintType::Ignore)
+            {
+                // The generic/latin font attributes are always used if the hint is ignore.
+                nScript = css::i18n::ScriptType::LATIN;
+            }
+            else if (nScript == css::i18n::ScriptType::WEAK)
+            {
+                switch (eCurrHint)
+                {
+                    case ScriptHintType::Latin:
+                        nScript = css::i18n::ScriptType::LATIN;
+                        break;
+
+                    case ScriptHintType::Asian:
+                        nScript = css::i18n::ScriptType::ASIAN;
+                        break;
+
+                    case ScriptHintType::Complex:
+                        nScript = css::i18n::ScriptType::COMPLEX;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            // #i16354# Change script type for RTL text to CTL:
+            // 1. All text in RTL runs will use the CTL font
+            // #i89825# change the script type also to CTL (hennerdrewes)
+            // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
+            // tdf#163660 Asian-script characters inside RTL runs should still use Asian font
+            if ((eCurrHint == ScriptHintType::Automatic || eCurrHint == ScriptHintType::Complex)
+                && (bCharIsRtl || (bCharIsRtlOrEmbedded && !bRunHasStrongEmbeddedLTR)))
+            {
+                if (nScript != css::i18n::ScriptType::ASIAN)
+                {
+                    nScript = css::i18n::ScriptType::COMPLEX;
+                }
+            }
+            else if (nScript == css::i18n::ScriptType::WEAK)
+            {
+                nScript = m_nPrevScript;
+            }
+
+            if (nScript != m_nPrevScript)
+            {
+                m_nNextStart = nPrevIndex;
+                break;
+            }
+
+            m_nNextStart = m_nIndex;
+        }
+
+        if (m_nNextStart > 0)
+        {
+            // special case for dotted circle since it can be used with complex
+            // before a mark, so we want it associated with the mark's script
+            // tdf#112594: another special case for NNBSP followed by a Mongolian
+            // character, since NNBSP has special uses in Mongolian (tdf#112594)
+            auto nPrevPos = m_nNextStart;
+            auto nPrevChar = m_rText.iterateCodePoints(&nPrevPos, -1);
+            if (m_nNextStart < m_rText.getLength()
+                && css::i18n::ScriptType::WEAK == GetScriptClass(nPrevChar))
+            {
+                auto nChar = m_rText.iterateCodePoints(&m_nNextStart, 0);
+                auto nType = unicode::getUnicodeType(nChar);
+                if (nType == css::i18n::UnicodeType::NON_SPACING_MARK
+                    || nType == css::i18n::UnicodeType::ENCLOSING_MARK
+                    || nType == css::i18n::UnicodeType::COMBINING_SPACING_MARK
+                    || (nPrevChar == CHAR_NNBSP
+                        && u_getIntPropertyValue(nChar, UCHAR_SCRIPT) == USCRIPT_MONGOLIAN))
+                {
+                    m_nNextStart = nPrevPos;
+                }
+            }
+        }
+
+        m_stCurr = ScriptChange{ nRunStart, m_nNextStart, m_nPrevScript };
+        m_nPrevScript = nScript;
+    }
+
+public:
+    GreedyScriptChangeScanner(const OUString& rText, sal_Int16 nDefaultScriptType,
+                              DirectionChangeScanner* pDirScanner, ScriptHintProvider* pHints)
+        : m_pDirScanner(pDirScanner)
+        , m_pHints(pHints)
+        , m_rText(rText)
+    {
+        // tdf#66791: For compatibility with other programs, the Asian script is
+        // applied to any weak-script quote characters if the enclosing paragraph
+        // contains Chinese- or Japanese-script characters.
+        // In the original Writer algorithm, the application language is used for
+        // all leading weak characters (#94331#). This implementation deviates by
+        // instead using the first-seen non-weak script.
+        sal_Int32 nCjBase = 0;
+        while (nCjBase < m_rText.getLength())
+        {
+            auto nChar = m_rText.iterateCodePoints(&nCjBase);
+            auto nScript = GetScriptClass(nChar);
+            if (m_nPrevScript == css::i18n::ScriptType::WEAK)
+            {
+                m_nPrevScript = nScript;
+            }
+        }
+
+        // Fall back to the application language for leading weak characters if a
+        // better candidate was not found.
+        if (m_nPrevScript == css::i18n::ScriptType::WEAK)
+        {
+            m_nPrevScript = nDefaultScriptType;
+        }
+
+        m_pHints->Start();
+        Advance();
+    }
+
+    bool AtEnd() const override { return m_bAtEnd; }
+
+    void Advance() override
+    {
+        do
+        {
+            AdvanceOnce();
+        } while (!AtEnd() && (m_stCurr.m_nStartIndex == m_stCurr.m_nEndIndex));
+    }
+
+    ScriptChange Peek() const override { return m_stCurr; }
+};
+}
+}
+
+std::unique_ptr<i18nutil::DirectionChangeScanner>
+i18nutil::MakeDirectionChangeScanner(const OUString& rText, sal_uInt8 nInitialDirection)
+{
+    return std::make_unique<IcuDirectionChangeScanner>(rText, nInitialDirection);
+}
+
+std::unique_ptr<i18nutil::ScriptChangeScanner>
+i18nutil::MakeScriptChangeScanner(const OUString& rText, sal_Int16 nDefaultScriptType,
+                                  DirectionChangeScanner& rDirScanner, ScriptHintProvider& rHints)
+{
+    return std::make_unique<GreedyScriptChangeScanner>(rText, nDefaultScriptType, &rDirScanner,
+                                                       &rHints);
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

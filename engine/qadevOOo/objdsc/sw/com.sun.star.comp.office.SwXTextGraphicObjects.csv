@@ -1,0 +1,7 @@
+"SwXTextGraphicObjects";"com::sun::star::container::XNameAccess";"getByName()"
+"SwXTextGraphicObjects";"com::sun::star::container::XNameAccess";"getElementNames()"
+"SwXTextGraphicObjects";"com::sun::star::container::XNameAccess";"hasByName()"
+"SwXTextGraphicObjects";"com::sun::star::container::XIndexAccess";"getCount()"
+"SwXTextGraphicObjects";"com::sun::star::container::XIndexAccess";"getByIndex()"
+"SwXTextGraphicObjects";"com::sun::star::container::XElementAccess";"getElementType()"
+"SwXTextGraphicObjects";"com::sun::star::container::XElementAccess";"hasElements()"

@@ -1,0 +1,12 @@
+diff -ur lcms2.org/src/cmscnvrt.c lcms2/src/cmscnvrt.c
+--- lcms2.org/src/cmscnvrt.c	2025-07-25 11:19:46.585033759 +0200
++++ lcms2/src/cmscnvrt.c	2025-07-25 11:19:55.829564148 +0200
+@@ -79,7 +79,7 @@
+ 
+ 
+ // Built-in intents
+-static cmsIntentsList DefaultIntents[] = {
++static const cmsIntentsList DefaultIntents[] = {
+ 
+     { INTENT_PERCEPTUAL,                            "Perceptual",                                   DefaultICCintents,            &DefaultIntents[1] },
+     { INTENT_RELATIVE_COLORIMETRIC,                 "Relative colorimetric",                        DefaultICCintents,            &DefaultIntents[2] },

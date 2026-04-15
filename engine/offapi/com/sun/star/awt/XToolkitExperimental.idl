@@ -1,0 +1,55 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {  module sun {  module star {  module awt {
+
+/** Work in progress, don't use unless you know what you are doing.
+ */
+
+interface XToolkitExperimental : XToolkit3
+{
+    /** Process all pending idle events
+     */
+    void processEventsToIdle();
+
+    /** Get the number of OpenGL buffer swaps.
+     */
+    hyper getOpenGLBufferSwapCounter();
+
+    /** Turn on or off deterministic scheduling (off is the default).
+     */
+    void setDeterministicScheduling([in] boolean bDeterministicMode);
+
+    /** Pause the main thread of LibreOffice for the requested amount of time.
+     */
+    void pause([in] long nMilliseconds);
+
+    /** Start time logging.
+     */
+    void startRecording();
+
+    /** Stop time logging.
+     */
+    void stopRecording();
+
+    /** Query time logs and clear recording.
+        First line is the time of the recorded operations in seconds,
+        next ones are the log lines. A log line contains the thread ID,
+        time stamp, profile zone ID and "start" or "stop".
+     */
+    sequence<string> getRecordingAndClear();
+
+    /** Wait until all idles dispatched.
+     */
+    void waitUntilAllIdlesDispatched();
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

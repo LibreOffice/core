@@ -1,0 +1,204 @@
+basctl/source/basicide/localizationmgr.cxx:58
+    OUStringLiteral<2> aSemi
+chart2/source/view/inc/ViewDefines.hxx:29
+    double ZDIRECTION
+connectivity/source/drivers/hsqldb/HDriver.cxx:377
+    Reference<XTerminateListener> s_xTerminateListener
+connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx:39
+    std::string wild
+cppuhelper/source/servicemanager.cxx:2008
+    std::vector<css::uno::Mapping> maMaps
+forms/source/inc/frm_strings.hxx:216
+    OUStringLiteral<15> PROPERTY_HIGHLIGHT_COLOR
+forms/source/inc/frm_strings.hxx:217
+    OUStringLiteral<19> PROPERTY_HIGHLIGHT_TEXT_COLOR
+hwpfilter/source/grammar.cxx:307
+    int yynerrs
+hwpfilter/source/hbox.h:67
+    int boxCount
+hwpfilter/source/ksc5601.h:184
+    hchar[4888] ksc5601_2uni_page4a
+hwpfilter/source/nodes.h:95
+    std::vector<std::unique_ptr<Node> > nodelist
+include/vcl/animate/Animation.hxx:98
+    sal_uLong gAnimationRendererCount
+kit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
+    gpointer gtv_comments_sidebar_parent_class
+kit/qa/gtktiledviewer/gtv-kit-dialog.cxx:62
+    gpointer gtv_kit_dialog_parent_class
+sal/osl/unx/system.cxx:164
+    void *[3] dummy
+sal/qa/osl/file/osl_File_Const.h:63
+    char[11] pBuffer_Number
+sal/qa/osl/file/osl_File_Const.h:64
+    char[1] pBuffer_Blank
+sal/qa/osl/file/osl_File_Const.h:119
+    OUString aRootURL
+sal/qa/osl/file/osl_File_Const.h:129
+    OUString aCanURL2
+sal/qa/osl/file/osl_File_Const.h:131
+    OUString aCanURL3
+sal/qa/osl/file/osl_File_Const.h:132
+    OUString aCanURL4
+sal/qa/osl/file/osl_File_Const.h:139
+    OUString aTmpName7
+sal/qa/osl/file/osl_File_Const.h:144
+    OUString aRelURL1
+sal/qa/osl/file/osl_File_Const.h:145
+    OUString aRelURL2
+sal/qa/osl/file/osl_File_Const.h:146
+    OUString aRelURL3
+sal/qa/osl/file/osl_File_Const.h:148
+    OUString aRelURL5
+sal/qa/osl/file/osl_File_Const.h:149
+    OUString aLnkURL1
+sal/qa/osl/file/osl_File_Const.h:160
+    OUString aSysPathLnk
+sal/qa/osl/file/osl_File_Const.h:161
+    OUString aFifoSys
+sal/qa/osl/file/osl_File_Const.h:168
+    OUString aTypeURL1
+sal/qa/osl/file/osl_File_Const.h:169
+    OUString aTypeURL2
+sal/qa/osl/file/osl_File_Const.h:170
+    OUString aTypeURL3
+sal/qa/osl/file/osl_File_Const.h:185
+    OUString aVolURL2
+sal/qa/osl/file/osl_File_Const.h:187
+    OUString aVolURL3
+sal/qa/osl/file/osl_File_Const.h:188
+    OUString aVolURL4
+sal/qa/osl/file/osl_File_Const.h:189
+    OUString aVolURL5
+sal/qa/osl/file/osl_File_Const.h:190
+    OUString aVolURL6
+sal/qa/osl/security/osl_Security_Const.h:48
+    char[17] pTestString
+sal/qa/OStringBuffer/rtl_String_Const.h:275
+    sal_Unicode[3] uTestStr31
+sal/qa/OStringBuffer/rtl_String_Const.h:276
+    sal_Unicode[4] uTestStr32
+sal/qa/OStringBuffer/rtl_String_Const.h:297
+    sal_Int32[5] kInt32MaxNums
+sal/qa/OStringBuffer/rtl_String_Const.h:306
+    sal_Int64[7] kInt64MaxNums
+sal/qa/OStringBuffer/rtl_String_Const.h:335
+    double[24] expValDouble
+sal/qa/OStringBuffer/rtl_String_Const.h:345
+    float[22] expValFloat
+sal/qa/OStringBuffer/rtl_String_Const.h:355
+    sal_Unicode[15] expValChar
+sal/qa/OStringBuffer/rtl_String_Const.h:364
+    sal_Unicode[6] input1Default
+sal/qa/OStringBuffer/rtl_String_Const.h:368
+    sal_Int32[6] input2Default
+sal/qa/OStringBuffer/rtl_String_Const.h:372
+    sal_Int32[6] expValDefault
+sal/qa/OStringBuffer/rtl_String_Const.h:378
+    sal_Unicode[10] input1Normal
+sal/qa/OStringBuffer/rtl_String_Const.h:382
+    sal_Int32[10] input2Normal
+sal/qa/OStringBuffer/rtl_String_Const.h:386
+    sal_Int32[10] expValNormal
+sal/qa/OStringBuffer/rtl_String_Const.h:392
+    sal_Unicode[5] input1lastDefault
+sal/qa/OStringBuffer/rtl_String_Const.h:396
+    sal_Int32[5] input2lastDefault
+sal/qa/OStringBuffer/rtl_String_Const.h:400
+    sal_Int32[5] expVallastDefault
+sal/qa/OStringBuffer/rtl_String_Const.h:406
+    sal_Unicode[8] input1lastNormal
+sal/qa/OStringBuffer/rtl_String_Const.h:410
+    sal_Int32[8] input2lastNormal
+sal/qa/OStringBuffer/rtl_String_Const.h:414
+    sal_Int32[8] expVallastNormal
+sal/qa/OStringBuffer/rtl_String_Const.h:420
+    sal_Int32[6] input2StrDefault
+sal/qa/OStringBuffer/rtl_String_Const.h:424
+    sal_Int32[6] expValStrDefault
+sal/qa/OStringBuffer/rtl_String_Const.h:430
+    sal_Int32[9] input2StrNormal
+sal/qa/OStringBuffer/rtl_String_Const.h:434
+    sal_Int32[9] expValStrNormal
+sal/qa/OStringBuffer/rtl_String_Const.h:440
+    sal_Int32[6] input2StrLastDefault
+sal/qa/OStringBuffer/rtl_String_Const.h:444
+    sal_Int32[6] expValStrLastDefault
+sal/qa/OStringBuffer/rtl_String_Const.h:450
+    sal_Int32[12] input2StrLastNormal
+sal/qa/OStringBuffer/rtl_String_Const.h:454
+    sal_Int32[12] expValStrLastNormal
+sc/source/core/data/drwlayer.cxx:102
+    E3dObjFactory * pF3d
+scripting/source/provider/ActiveMSPList.cxx:73
+    NonDocMSPCreator theCreator
+sd/inc/bitmaps.hlst:212
+    OUStringLiteral<31> BMP_PREV_SLIDE_MOUSE_OVER
+sd/inc/bitmaps.hlst:214
+    OUStringLiteral<31> BMP_NEXT_SLIDE_MOUSE_OVER
+sd/inc/bitmaps.hlst:216
+    OUStringLiteral<35> BMP_MENU_SLIDE_MOUSE_OVER
+sfx2/source/appl/appdata.cxx:44
+    BasicDLL * pBasic
+sfx2/source/appl/shutdownicon.hxx:53
+    OUStringLiteral<24> WRITER_URL
+sfx2/source/appl/shutdownicon.hxx:54
+    OUStringLiteral<22> CALC_URL
+sfx2/source/appl/shutdownicon.hxx:55
+    OUStringLiteral<25> IMPRESS_URL
+sfx2/source/appl/shutdownicon.hxx:56
+    OUStringLiteral<35> IMPRESS_WIZARD_URL
+sfx2/source/appl/shutdownicon.hxx:57
+    OUStringLiteral<22> DRAW_URL
+sfx2/source/appl/shutdownicon.hxx:58
+    OUStringLiteral<22> MATH_URL
+sfx2/source/appl/shutdownicon.hxx:59
+    OUStringLiteral<38> BASE_URL
+sfx2/source/appl/shutdownicon.hxx:60
+    OUStringLiteral<21> STARTMODULE_URL
+sfx2/source/appl/shutdownicon.hxx:106
+    _Bool bModalMode
+soltools/cpp/cpp.h:245
+    Nlist * kwdefined
+starmath/inc/mathml/attribute.hxx:192
+    SmMlAttributePos[1] MlAttributeListEmpty
+starmath/inc/mathml/attribute.hxx:193
+    SmMlAttributePos[1] MlAttributeListMath
+starmath/inc/mathml/mathmlMo.hxx:107
+    std::vector<moOperatorData> moOperatorDataDictionary
+starmath/inc/mathml/starmathdatabase.hxx:189
+    Color COL_SM_DIV_BLACK
+starmath/inc/mathml/starmathdatabase.hxx:190
+    Color COL_SM_DIV_BLUE
+svl/source/items/style.cxx:60
+    DbgStyleSheetReferences aDbgStyleSheetReferences
+sw/inc/doc.hxx:343
+    SwDoc * s_pLast
+sw/inc/unoprnms.hxx:211
+    OUStringLiteral<19> UNO_NAME_REGISTER_MODE_ACTIVE
+sw/inc/unoprnms.hxx:333
+    OUStringLiteral<16> UNO_NAME_STATISTIC_TYPE_ID
+sw/source/core/inc/rootfrm.hxx:111
+    SwRootFrame * s_pLast
+sw/source/core/inc/swfont.hxx:999
+    SvStatistics g_SvStat
+sw/source/filter/ww8/ww8par6.cxx:1091
+    sal_uInt16[2] nLef
+sw/source/filter/ww8/ww8par6.cxx:1092
+    sal_uInt16[2] nRig
+sw/source/filter/ww8/ww8par6.cxx:1144
+    sal_uInt16[2] nTop
+sw/source/filter/ww8/ww8par6.cxx:1145
+    sal_uInt16[2] nBot
+unotools/source/config/eventcfg.cxx:376
+    rtl::Reference<GlobalEventConfig> createImpl
+vcl/inc/qt5/QtX11Support.hxx:19
+    xcb_atom_t m_nWindowGroupAtom
+vcl/qa/cppunit/timer.cxx:54
+    WatchDog * aWatchDog
+vcl/unx/gtk3/a11y/atkutil.cxx:435
+    WindowList g_aWindowList
+xmloff/inc/xmlprop.hxx:583
+    OUStringLiteral<14> PROP_SortByYValues
+xmloff/source/forms/strings.hxx:136
+    OUStringLiteral<11> PROPERTY_SCALE_IMAGE

@@ -1,0 +1,61 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTSTYLEPOOLMANAGER_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTSTYLEPOOLMANAGER_HXX
+
+#include <IDocumentStylePoolAccess.hxx>
+
+class SwDoc;
+
+namespace sw {
+
+class DocumentStylePoolManager final : public IDocumentStylePoolAccess
+{
+
+public:
+
+    DocumentStylePoolManager( SwDoc& i_rSwdoc );
+
+    virtual SwTextFormatColl* GetTextCollFromPool( SwPoolFormatId nId, bool bRegardLanguage = true ) override;
+    virtual SwFormat* GetFormatFromPool( SwPoolFormatId nId ) override;
+    virtual SwFrameFormat* GetFrameFormatFromPool( SwPoolFormatId nId ) override;
+    virtual SwCharFormat* GetCharFormatFromPool( SwPoolFormatId nId ) override;
+    virtual SwPageDesc* GetPageDescFromPool( SwPoolFormatId nId, bool bRegardLanguage = true ) override;
+    virtual SwNumRule* GetNumRuleFromPool( SwPoolFormatId nId ) override;
+    virtual bool IsPoolTextCollUsed( SwPoolFormatId nId ) const override;
+    virtual bool IsPoolFormatUsed( SwPoolFormatId nId ) const override;
+    virtual bool IsPoolPageDescUsed( SwPoolFormatId nId ) const override;
+
+    virtual ~DocumentStylePoolManager() override;
+
+private:
+
+    DocumentStylePoolManager(DocumentStylePoolManager const&) = delete;
+    DocumentStylePoolManager& operator=(DocumentStylePoolManager const&) = delete;
+
+    SwDoc& m_rDoc;
+};
+
+}
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

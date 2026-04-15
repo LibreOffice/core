@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:body>
+    <office:text>
+      <text:p><loext:content-control loext:date="true" loext:date-format="YYYY-MM-DD" loext:date-rfc-language-tag="en-US" loext:current-date="2022-05-25T00:00:00Z">choose a date</loext:content-control></text:p>
+    </office:text>
+  </office:body>
+</office:document>

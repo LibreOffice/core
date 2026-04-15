@@ -1,0 +1,24 @@
+---
+assumeFilename: svtools/source/control/ruler.cxx
+excludelist:
+    svtools/inc/framestatuslistener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XFrameActionListener.hpp
+    - com/sun/star/frame/XStatusListener.hpp
+    svtools/source/control/accessibleruler.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    svtools/source/dialogs/insdlg.cxx:
+    # Needed on WIN
+    - comphelper/classids.hxx
+    svtools/qa/unit/testHtmlReader.cxx:
+    # Needed for the CPPUNIT_TEST_FIXTURE() macro.
+    - unotest/bootstrapfixturebase.hxx
+    svtools/qa/unit/testHtmlWriter.cxx:
+    # Needed for --with-system-cppunit
+    - unotest/bootstrapfixturebase.hxx
+    svtools/source/uno/statusbarcontroller.cxx:
+    # Needed for template
+    - com/sun/star/ui/XStatusbarItem.hpp

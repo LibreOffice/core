@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:scripts>
+  <office:script script:language="ooo:Basic">
+   <ooo:libraries>
+    <ooo:library-embedded ooo:name="Standard">
+     <ooo:module ooo:name="Module1">
+      <ooo:source-code>
+Option VBASupport 1
+
+Sub ScheduleOnTime
+  Dim startTime As Date
+  ' Make start time 1 s in the past, to force minimal timer timeout:
+  startTime = Now() - TimeSerial(0, 0, 1)
+  Application.OnTime startTime, &quot;Standard.Module1.OnTime&quot;
+End Sub
+
+Sub OnTime()
+  ThisWorkbook.Sheets(1).Cells(1, 1).Value = 42
+End Sub
+      </ooo:source-code>
+     </ooo:module>
+    </ooo:library-embedded>
+   </ooo:libraries>
+  </office:script>
+ </office:scripts>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Sheet1"/>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

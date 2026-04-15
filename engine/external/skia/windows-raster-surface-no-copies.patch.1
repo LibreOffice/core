@@ -1,0 +1,40 @@
+diff -ur skia.org/tools/window/win/RasterWindowContext_win.cpp skia/tools/window/win/RasterWindowContext_win.cpp
+--- skia.org/tools/window/win/RasterWindowContext_win.cpp	2024-10-04 15:36:01.287777189 +0200
++++ skia/tools/window/win/RasterWindowContext_win.cpp	2024-10-04 15:37:22.221265385 +0200
+@@ -53,7 +53,7 @@
+     fWidth = w;
+     fHeight = h;
+     fBackbufferSurface.reset();
+-    const size_t bmpSize = sizeof(BITMAPINFOHEADER) + w * h * sizeof(uint32_t);
++    const size_t bmpSize = sizeof(BITMAPINFO);
+     fSurfaceMemory.reset(bmpSize);
+     BITMAPINFO* bmpInfo = reinterpret_cast<BITMAPINFO*>(fSurfaceMemory.get());
+     ZeroMemory(bmpInfo, sizeof(BITMAPINFO));
+@@ -63,11 +63,12 @@
+     bmpInfo->bmiHeader.biPlanes = 1;
+     bmpInfo->bmiHeader.biBitCount = 32;
+     bmpInfo->bmiHeader.biCompression = BI_RGB;
+-    void* pixels = bmpInfo->bmiColors;
++    // Do not use a packed DIB bitmap, SkSurface_Raster::onNewImageSnapshot() does
++    // a deep copy if it does not own the pixels.
+
+     SkImageInfo info = SkImageInfo::Make(
+             w, h, fDisplayParams->colorType(), kPremul_SkAlphaType, fDisplayParams->colorSpace());
+-    fBackbufferSurface = SkSurfaces::WrapPixels(info, pixels, sizeof(uint32_t) * w);
++    fBackbufferSurface = SkSurfaces::Raster(info);
+ }
+
+ sk_sp<SkSurface> RasterWindowContext_win::getBackbufferSurface() { return fBackbufferSurface; }
+@@ -75,8 +76,10 @@
+ void RasterWindowContext_win::onSwapBuffers() {
+     BITMAPINFO* bmpInfo = reinterpret_cast<BITMAPINFO*>(fSurfaceMemory.get());
+     HDC dc = GetDC(fWnd);
+-    StretchDIBits(dc, 0, 0, fWidth, fHeight, 0, 0, fWidth, fHeight, bmpInfo->bmiColors, bmpInfo,
+-                  DIB_RGB_COLORS, SRCCOPY);
++    SkPixmap pixmap;
++    fBackbufferSurface->peekPixels(&pixmap);
++    StretchDIBits(dc, 0, 0, fWidth, fHeight, 0, 0, fWidth, fHeight, pixmap.addr(), bmpInfo,
++                   DIB_RGB_COLORS, SRCCOPY);
+     ReleaseDC(fWnd, dc);
+ }
+

@@ -1,0 +1,5 @@
+lcms2 (Little CMS color engine)
+lcms2: Little CMS is a small, speed optimized color management engine.
+With the new libcdr, writerperfect depends on lcms2.
+
+From [https://www.littlecms.com/color-engine/].

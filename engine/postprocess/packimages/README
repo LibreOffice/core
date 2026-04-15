@@ -1,0 +1,16 @@
+Packs used images in sorted order into theme .zip files
+
+The essence of this module is contained within [[solenv/bin/pack_images.py]].
+This script takes several sources of information:
+
+* the list of images used in every .src file that is compiled
+* the configuration XML describing every command that is used
+* [[packimages/pack/image-sort.lst]] which provides a profile based
+  ordering of images.
+
+It then tries to pack the images together into the .zip file into an
+order that matches / is similar to that which we want at run-time, ie.
+an entire toolbar's images should (ideally) be next to each other in a
+nice linear run, to reduce LibreOffice's working set, and improve
+startup performance: we require all these images to get paged in on
+start.

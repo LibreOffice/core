@@ -1,0 +1,166 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module ucb {
+
+/** Provides read access to a ContentResultSet.
+
+    <p>
+    You can either get a simple static ContentResultSet or you can
+    listen to change-notifications and then swap from the old to a new
+    ContentResultSet.
+    </p>
+
+    <p>The following describes the dynamic use:</p>
+
+    <p>
+    XDynamicResultSet provides the possibility to get notifications
+    about changes on a ContentResultSet and have an
+    listener-controlled update from one version to the next version. Two
+    ContentResultSet implementations were given to the listener in
+    the first notification as interface
+    com::sun::star::sdbc::XResultSet.
+    </p>
+
+    <p>
+    To get notifications the listener has to be of type
+    XDynamicResultSetListener.
+    </p>
+
+    <p>
+    After registration you will get notifications for events of type
+    ListEvent.
+    </p>
+
+    <p>
+    The calling of XDynamicResultSetListener::notify() has
+    to happen in an own thread, because it could take a longer time and any
+    actions ??? until the listener returns the call. So don't block the notify-causing
+    action.
+    </p>
+
+    <p>
+    While one notify-call is going on:
+    </p>
+
+    <ol>
+      <li> The listener is allowed to access both ContentResultSets,
+         they must be both valid.</li>
+      <li> It is not allowed to start a second notify-call.</li>
+      <li> All additional things we want to send as notification are to be
+         queued.</li>
+      <li> Any other calls are to be accepted and treated.</li>
+    </ol>
+
+    <p>
+    After the listener has returned the notify-call:
+    </p>
+
+    <ol>
+    <li> The listener is allowed to access the new
+         ContentResultSet. The new one is first assigned in the
+         WELCOME-event and then the ResultSets are always swapped.</li>
+    <li> The listener is not allowed to access the old
+         ContentResultSet.</li>
+    </ol>
+*/
+
+published interface XDynamicResultSet: com::sun::star::lang::XComponent
+{
+    /** Call this, if you don't care about any changes.
+
+        @returns
+        a com::sun::star::sdbc::XResultSet that is
+        implemented as ContentResultSet. Its content will never
+        change.
+
+        @throws ListenerAlreadySetException
+        if someone already has registered as listener via
+        XDynamicResultSet::setListener() or if someone has
+        established a connection to a CachedDynamicResultSet
+        via XDynamicResultSet::connectToCache().
+    */
+    com::sun::star::sdbc::XResultSet getStaticResultSet()
+        raises( com::sun::star::ucb::ListenerAlreadySetException );
+
+    /** Call this, if you want to get notifications about changes.
+
+        <p>The implementor has to call
+        com::sun::star::lang::XComponent::addEventListener()
+        in this method, so that we can call
+        com::sun::star::lang::XEventListener::disposing()
+        at the listener
+
+        @param Listener
+        a listener for result set notifications
+
+        @throws ListenerAlreadySetException
+        if this method is called more than once during the life of the
+        implementation object or if this method is called if someone already
+        has fetched the ContentResultSet via
+        XDynamicResultSet::getStaticResultSet().
+
+    */
+    void setListener( [in] XDynamicResultSetListener Listener )
+        raises( com::sun::star::ucb::ListenerAlreadySetException );
+
+    /** Connects this to a CachedDynamicResultSet for optimized
+        remote data transport.
+
+        <p>This method creates a CachedDynamicResultSetStub
+        and sets it as Source to the given cache.
+
+        <p>After this method has returned you can and have to use the given
+        result set cache for further access.
+
+        @param Cache
+        has to be an implementation of the service
+        CachedDynamicResultSet. In particular it has to support
+        the interface XSourceInitialization.
+
+        @throws ListenerAlreadySetException
+        if someone already has fetched the ContentResultSet via
+        XDynamicResultSet::getStaticResultSet().
+
+        @throws AlreadyInitializedException
+        if <var>Cache</var> was already initialized with another source.
+
+        @throws ServiceNotFoundException
+    */
+    void connectToCache( [in] XDynamicResultSet Cache )
+        raises( com::sun::star::ucb::ListenerAlreadySetException
+                , com::sun::star::ucb::AlreadyInitializedException
+                , com::sun::star::ucb::ServiceNotFoundException );
+
+    /** Using this method you can get information, whether the offered
+        ContentResultSets are sorted or filtered etc correctly as
+        demanded during the creation of the XDynamicResultSet.
+
+        @returns
+        zero or more constants of the ContentResultSetCapability
+        constants group.
+    */
+    short getCapabilities();
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

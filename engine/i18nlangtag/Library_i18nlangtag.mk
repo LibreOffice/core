@@ -1,0 +1,44 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+$(eval $(call gb_Library_Library,i18nlangtag))
+
+$(eval $(call gb_Library_use_sdk_api,i18nlangtag))
+
+$(eval $(call gb_Library_add_defs,i18nlangtag,\
+	-DI18NLANGTAG_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_use_libraries,i18nlangtag,\
+	sal \
+))
+
+$(eval $(call gb_Library_use_externals,i18nlangtag,\
+	icu_headers \
+	icuuc \
+))
+
+$(eval $(call gb_Library_add_exception_objects,i18nlangtag,\
+	i18nlangtag/source/isolang/insys \
+	i18nlangtag/source/isolang/isolang \
+	i18nlangtag/source/isolang/mslangid \
+	i18nlangtag/source/languagetag/languagetag \
+	i18nlangtag/source/languagetag/languagetagicu \
+))
+
+
+$(eval $(call gb_Library_use_external,i18nlangtag,liblangtag))
+$(eval $(call gb_Library_use_external,i18nlangtag,libxml2))
+$(eval $(call gb_Library_use_system_win32_libs,i18nlangtag,\
+        $(if $(filter $(COM),MSC), \
+                kernel32 \
+        ) \
+))
+
+# vim: set noet sw=4 ts=4:

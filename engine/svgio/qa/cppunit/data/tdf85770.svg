@@ -1,0 +1,7 @@
+<svg id="svg-root"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="13cm" height="11cm">
+<text x="5" y="35" font-size="x-small">Start Middle End</text>
+<text x="5" y="65" font-size="x-small">Start <tspan visibility="hidden">Middle</tspan> End</text>
+</svg>

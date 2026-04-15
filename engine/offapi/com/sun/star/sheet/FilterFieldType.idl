@@ -1,0 +1,32 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {  module sun {  module star {  module sheet {
+
+constants FilterFieldType
+{
+   /** Filter by numeric value */
+   const long NUMERIC = 0;
+
+   /** Filter by string value */
+   const long STRING = 1;
+
+   /** Filter by date */
+   const long DATE = 2;
+
+   /** Filter by text color */
+   const long TEXT_COLOR = 3;
+
+   /** Filter by background color */
+   const long BACKGROUND_COLOR = 4;
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

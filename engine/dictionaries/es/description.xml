@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <version value="2.9" />
+  <identifier value="spanish.es.dicts.from.rla-es"/>
+
+  <display-name>
+      <name lang="es">Corrector ortográfico, separación de sílabas y diccionario de sinónimos para el español (todas las variantes).</name>
+      <name lang="en-US">Spanish spelling dictionary, hyphenation rules, and thesaurus for all variants of Spanish.</name>
+  </display-name>
+
+  <platform value="all" />
+
+  <dependencies>
+      <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+  </dependencies>
+
+  <publisher>
+      <name xlink:href="https://github.com/sbosio/rla-es" lang="es">Recursos Lingüísticos Abiertos del español (RLA-ES)</name>
+      <name xlink:href="https://github.com/sbosio/rla-es" lang="en">Open language resources for Spanish (RLA-ES)</name>
+  </publisher>
+  <icon>
+    <default xlink:href="RLA-ES.png" />
+  </icon>
+</description>

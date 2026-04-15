@@ -1,0 +1,122 @@
+#
+# Common Makefile pieces for building Java / Android apps.
+#
+
+#
+# BOOTSTRAPDIR needs to be set to this directory before starting this
+#
+
+# Probably would be best to just stop fooling around with the possibilities to
+# set various stuff with the -env command line parameters (and environment
+# variables?) and in a plethora of rc files, and hardcode construction of
+# *all* required pathnames based on the app installation location for Android
+# (and iOS), etc. We don't really win anything by having so many layers of
+# configurability on platforms like Android and iOS where apps based on LO
+# code are very much self-contained pre-packaged thingies.
+
+JNILIBSDIR=$(BUILDDIR)/android/jniLibs
+SODEST=$(JNILIBSDIR)/$(ANDROID_APP_ABI)
+OBJLOCAL=$(BUILDDIR)/android/obj/local/$(ANDROID_APP_ABI)
+
+#
+# Helpful rules ...
+#
+
+local.properties: $(BUILDDIR)/config_host.mk
+	echo sdk.dir=$(ANDROID_SDK_DIR) >local.properties
+
+#
+# Build / link the single .so for this app
+#
+
+ALL_STATIC_LIBS := $(shell $(SRCDIR)/bin/lo-all-static-libs)
+
+LIBS = \
+  -Wl,--start-group \
+  $(ALL_STATIC_LIBS) \
+  -Wl,--end-group
+
+NSSLIBS = freebl3 \
+	nspr4 \
+	nss3 \
+	nssckbi \
+	nssdbm3 \
+	nssutil3 \
+	plc4 \
+	plds4 \
+	smime3 \
+	softokn3 \
+	sqlite3 \
+	ssl3 \
+
+WHOLELIBS = \
+  -Wl,--whole-archive \
+  $(addprefix -l,$(strip \
+	$(if $(ENABLE_JAVA),juh) \
+  )) \
+  -Wl,--no-whole-archive
+
+
+$(OBJLOCAL)/liblo-native-code.so : native-code.cxx $(ALL_STATIC_LIBS)
+	@echo "Linking $@"
+	mkdir -p $(OBJLOCAL)
+	$(CXX) -Wl,--build-id=sha1 -Wl,--gc-sections -Wl,--version-script=../Bootstrap/version.map -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -Wl,-soname,liblo-native-code.so -o $(OBJLOCAL)/liblo-native-code.so -I$(BUILDDIR)/config_host -I$(SRCDIR)/include native-code.cxx -L$(INSTDIR)/$(LIBO_LIB_FOLDER) $(WHOLELIBS) $(LIBS) -lc++_static -lc++abi $(if $(filter armeabi-v7a,$(ANDROID_APP_ABI)),-lunwind) $(addprefix -l,$(NSSLIBS)) -lGLESv2 -landroid -ljnigraphics -llog -lz
+
+$(SODEST)/liblo-native-code.so : $(OBJLOCAL)/liblo-native-code.so
+	mkdir -p $(SODEST)
+	$(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
+	#to keep some symbols, eg.: $(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so -w -K 'Java*'
+
+$(SODEST)/nss-libraries :
+	mkdir -p $(SODEST)
+	$(foreach lib,$(NSSLIBS),$(STRIP) -o $(SODEST)/lib$(lib).so $(INSTDIR)/$(LIBO_LIB_FOLDER)/lib$(lib).so;)
+
+$(SODEST)/libc++_shared.so : $(ANDROID_TOOLCHAIN)/sysroot/usr/lib/$(ANDROID_SYSROOT_PLATFORM)/libc++_shared.so
+	mkdir -p $(SODEST)
+	cp $< $@
+
+link-so: $(SODEST)/liblo-native-code.so $(SODEST)/nss-libraries $(SODEST)/libc++_shared.so
+
+# If you reinstall an app several times *on the emulator*, even if you
+# uninstall it between, disk space seems to leak that won't get recycled until
+# you stop and start... No idea if this holds for a device, too. (And you
+# can't "stop" a device anyway.)
+
+stop-start-cycle:
+	$(ANDROID_SDK_DIR)/platform-tools/adb shell stop && $(ANDROID_SDK_DIR)/platform-tools/adb shell start && sleep 10
+
+# build-host specific stuff (build paths and the like) to keep build.gradle static
+liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk \
+		$(wildcard $(INSTDIR)/program/version.ini $(INSTDIR)/program/versionrc) \
+		$(SRCDIR)/android/Bootstrap/Makefile.shared
+	@echo "creating $@"
+	( \
+		echo "// created by Makefile.shared - your changes will be overridden" \
+		&& echo "ext {" \
+		&& echo "    liboSrcRoot         = '$(SRC_ROOT)'" \
+		&& echo "    liboJniLibsdir      = '$(JNILIBSDIR)'" \
+		&& echo "    liboWorkdir         = '$(WORKDIR)'" \
+		&& echo "    liboInstdir         = '$(INSTDIR)'" \
+		&& echo "    liboEtcFolder       = '$(LIBO_ETC_FOLDER)'" \
+		&& echo "    liboUreMiscFolder   = '$(LIBO_URE_MISC_FOLDER)'" \
+		&& echo "    liboSharedResFolder = '$(LIBO_SHARE_RESOURCE_FOLDER)'" \
+		&& echo "    liboUREJavaFolder   = '$(LIBO_URE_SHARE_JAVA_FOLDER)'" \
+		&& echo "    liboShareJavaFolder = '$(LIBO_SHARE_JAVA_FOLDER)'" \
+		&& echo "    liboVersionMajor    = '$(LIBO_VERSION_MAJOR)'" \
+		&& echo "    liboVersionMinor    = '$(LIBO_VERSION_MINOR)'" \
+		&& echo "    liboGitFullCommit   = '$(shell cd $(SRCDIR) && git log -1 --format=%H)'" \
+		&& echo "}" \
+		&& echo "android {" \
+		&& echo "    ndkPath = '$(ANDROID_NDK_DIR)'" \
+		&& echo "    ndkVersion = '$(ANDROID_NDK_VERSION)'" \
+		&& echo "}" \
+		&& echo "android.defaultConfig {" \
+		&& echo "    applicationId '$(ANDROID_PACKAGE_NAME)'" \
+		&& echo "    minSdkVersion $(ANDROID_API_LEVEL)" \
+		&& echo "    versionCode project.hasProperty('cmdVersionCode') ? cmdVersionCode.toInteger() : $(if $(versionCode),$(versionCode),1)" \
+		&& echo "    versionName '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)'" \
+		&& echo "    buildConfigField('String', 'BUILD_ID_SHORT', '\"$(shell cd $(SRCDIR) && git log -1 --format=%h)\"')" \
+		&& echo "    buildConfigField('String', 'VENDOR', '\"$(OOO_VENDOR)\"')" \
+		&& echo "    buildConfigField('String', 'PRIVACY_POLICY_URL', '\"$(PRIVACY_POLICY_URL)\"')" \
+		&& echo "}" \
+	) > $@

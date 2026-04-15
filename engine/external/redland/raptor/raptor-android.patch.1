@@ -1,0 +1,13 @@
+No sonames on Android
+
+--- a/configure	2023-03-02 02:58:10.000000000 +0900
++++ b/configure	2024-03-07 21:32:06.394607400 +0900
+@@ -11165,7 +11165,7 @@
+ 	*Sun\ F*)			# Sun Fortran 8.3
+ 	  tmp_sharedflag='-G' ;;
+ 	esac
+-	archive_cmds='$CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags $wl-soname $wl$soname -o $lib'
++	archive_cmds='$CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags -o $lib'
+ 
+         if test yes = "$supports_anon_versioning"; then
+           archive_expsym_cmds='echo "{ global:" > $output_objdir/$libname.ver~

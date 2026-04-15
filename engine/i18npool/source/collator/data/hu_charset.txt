@@ -1,0 +1,85 @@
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+
+#
+# Collation of Hungarian letters
+#
+
+# Because of the different requirements of Writer and Calc,
+# don't ignore the special characters, yet.
+# See tdf#123204 "EDITING Not all special characters appear in the AutoFilter window"
+# [alternate shifted]
+
+& c < cs <<< Cs <<< CS
+& d < dz <<< DZ < dzs <<< Dzs <<< DZS
+& g < gy <<< Gy <<< GY
+& l < ly <<< Ly <<< LY
+& n < ny <<< Ny <<< NY
+& o < ö <<< Ö <<< ő <<< Ő
+& s < sz <<< Sz <<< SZ
+& t < ty <<< Ty <<< TY
+& u < ü <<< Ü <<< ű <<< Ű
+& z < zs <<< Zs <<< ZS
+
+# We expand simplified double consonants, for example,
+# "ccs" sorted as "cscs". This is still not an error-free
+# method, but better, than the old method, because now
+# it's *possible* to fix all errors in a semi-automatic way,
+# using soft hyphens. Inserting them in bad or ambiguous
+# character positions will fix all automatic sortings later,
+# for example, “arccsont” -> “arc|csont” (“|” signs soft
+# hyphen position).
+
+# Note: Ccs and CCS are capitalized versions of the simplified
+# double consonant “cs”, but CCs is an abbreviation of words
+# beginning with C and Cs (similar to “AkH.”, “MHSz.”).
+
+# To avoid the comparison result “equal” we set a precedence
+# between the simplified and compound-like long forms, too.
+# For example, “ésszerű” (old orthography before 2015) and
+# “észszerű” (not “észszerű”, “ésszerű”), or “mennyelv” and
+# “menynyelv” (words with different meanings), sorted as
+# “észszerű” and “észSzerű”, also “menynyelv” and “menyNyelv”.
+
+& cs <<< ccs / cs <<< cscs / Cs
+& Cs <<< Ccs / cs <<< CsCs / Cs
+& CS <<< CCS / Cs <<< CSCS / CS
+& dz <<< ddz / dz <<< dzdz / Dz
+& Dz <<< Ddz / dz <<< DzDz / Dz
+& DZ <<< DDZ / Dz <<< DZDZ / DZ
+& dzs <<< ddzs / dzs <<< dzsdzs / Dzs
+& Dzs <<< Ddzs / dzs <<< DzsDzs / Dzs
+& DZS <<< DDZS / DZs <<< DZSDZS / DZS
+& gy <<< ggy / gy <<< gygy / Gy
+& Gy <<< Ggy / gy <<< GyGy / Gy
+& GY <<< GGY / Gy <<< GYGY / GY
+& ly <<< lly / ly <<< lyly / Ly
+& Ly <<< Lly / ly <<< LyLy / Ly
+& LY <<< LLY / Ly <<< LYLY / LY
+& ny <<< nny / ny <<< nyny / Ny
+& Ny <<< Nny / ny <<< NyNy / Ny
+& NY <<< NNY / Ny <<< NYNY / NY
+& sz <<< ssz / sz <<< szsz / Sz
+& Sz <<< Ssz / sz <<< SzSz / Sz
+& SZ <<< SSZ / Sz <<< SZSZ / SZ
+& ty <<< tty / ty <<< tyty / Ty
+& Ty <<< Tty / ty <<< TyTy / Ty
+& TY <<< TTY / Ty <<< TYTY / TY
+& zs <<< zzs / zs <<< zszs / Zs
+& Zs <<< Zzs / zs <<< ZsZs / Zs
+& ZS <<< ZZS / Zs <<< ZSZS / ZS

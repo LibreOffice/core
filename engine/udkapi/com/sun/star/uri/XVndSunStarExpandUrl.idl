@@ -1,0 +1,59 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module util {
+    published interface XMacroExpander;
+}; }; }; };
+
+module com { module sun { module star { module uri {
+
+/**
+   represents absolute &ldquo;vnd.sun.star.expand&rdquo; URLs.
+
+   <p>These URLs are of the form<br/>
+   &nbsp;&nbsp;&nbsp;<var>vnd-sun-star-expand-url</var> =
+   <code>"VND.SUN.STAR.EXPAND:"</code> <var>opaque_part</var><br/>
+   where the <var>opaque_part</var> is a UTF-8 string as described in
+   <a href="http://udk.openoffice.org/common/man/concept/micro_deployment.html">
+   Bootstrap Arguments and Micro Deployment</a>.  See
+   <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC&nbsp;3986</a>
+   <a href="http://www.ietf.org/rfc/rfc2234.txt">RFC&nbsp;2234</a> for
+   details.</p>
+ */
+published interface XVndSunStarExpandUrl {
+    /**
+       returns the expanded content of this URL.
+
+       @param expander
+       a macro expander; must not be `NULL`.
+
+       @returns
+       the expanded content of this URL.
+
+       @throws com::sun::star::lang::IllegalArgumentException
+       if calling com::sun::star::util::XMacroExpander::expandMacros() on
+       <code>expander</code> raises any such exception.
+     */
+    string expand([in] com::sun::star::util::XMacroExpander expander)
+        raises (com::sun::star::lang::IllegalArgumentException);
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

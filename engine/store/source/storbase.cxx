@@ -1,0 +1,121 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "storbase.hxx"
+
+#include <sal/types.h>
+#include <rtl/alloc.h>
+#include <rtl/ref.hxx>
+#include <osl/diagnose.h>
+
+#include <store/types.h>
+#include "object.hxx"
+
+#include <stdio.h>
+
+using namespace store;
+
+// PageData::Allocator_Impl (default allocator).
+
+namespace store
+{
+
+class PageData::Allocator_Impl :
+    public store::OStoreObject,
+    public store::PageData::Allocator
+{
+public:
+    /** Construction (two phase).
+     */
+    Allocator_Impl();
+
+    Allocator_Impl(const Allocator_Impl&) = delete;
+    Allocator_Impl& operator=(const Allocator_Impl&) = delete;
+
+    storeError initialize (sal_uInt16 nPageSize);
+
+protected:
+    virtual ~Allocator_Impl() override;
+
+private:
+    rtl_cache_type * m_page_cache;
+    sal_uInt16       m_page_size;
+
+    /** PageData::Allocator implementation.
+     */
+    virtual void allocate_Impl (void ** ppPage, sal_uInt16 * pnSize) override;
+    virtual void deallocate_Impl (void * pPage) override;
+};
+
+} // namespace store
+
+PageData::Allocator_Impl::Allocator_Impl()
+    : m_page_cache(nullptr), m_page_size(0)
+{}
+
+storeError
+PageData::Allocator_Impl::initialize (sal_uInt16 nPageSize)
+{
+    char name[RTL_CACHE_NAME_LENGTH + 1];
+    std::size_t size = sal::static_int_cast<std::size_t>(nPageSize);
+    (void) snprintf (name, sizeof(name), "store_page_alloc_%" SAL_PRI_SIZET "u", size);
+
+    m_page_cache = rtl_cache_create (name, size, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0);
+    if (!m_page_cache)
+        return store_E_OutOfMemory;
+
+    m_page_size = nPageSize;
+    return store_E_None;
+}
+
+PageData::Allocator_Impl::~Allocator_Impl()
+{
+    rtl_cache_destroy(m_page_cache);
+    m_page_cache = nullptr;
+}
+
+void PageData::Allocator_Impl::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
+{
+    OSL_PRECOND((ppPage != nullptr) && (pnSize != nullptr), "contract violation");
+    if ((ppPage != nullptr) && (pnSize != nullptr))
+    {
+        *ppPage = rtl_cache_alloc(m_page_cache);
+        *pnSize = m_page_size;
+    }
+}
+
+void PageData::Allocator_Impl::deallocate_Impl (void * pPage)
+{
+    OSL_PRECOND(pPage != nullptr, "contract violation");
+    rtl_cache_free(m_page_cache, pPage);
+}
+
+storeError
+PageData::Allocator::createInstance (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize)
+{
+    rtl::Reference< PageData::Allocator_Impl > xAllocator (new PageData::Allocator_Impl());
+    rxAllocator = &*xAllocator;
+    return xAllocator->initialize (nPageSize);
+}
+
+OStorePageObject::~OStorePageObject()
+{
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

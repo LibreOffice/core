@@ -1,0 +1,61 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com { module sun { module star { module datatransfer {
+
+/** Interface to be implemented by objects used to translate a DataFlavor to
+    a system dependent data transfer type and vice versa.
+
+    <p>Different platforms use different types to describe data formats available
+    during data exchange operations like clipboard or drag&drop. Windows for instance
+    uses integer values to describe an available clipboard or drag&drop format, Unix
+    X11 uses so called Atoms etc.</p>
+*/
+
+published interface XDataFormatTranslator : com::sun::star::uno::XInterface
+{
+    /** Converts a DataFlavor to system dependent data type.
+
+        @param aDataFlavor
+        Describes the format for which a system dependent data types is requested.
+
+        @returns
+        A system dependent data transfer type for the given DataFlavor
+        if there is one available.
+        <p>If the is no system dependent data type for a given DataFlavor
+        the returned any is empty.</p>
+    */
+    any getSystemDataTypeFromDataFlavor( [in] DataFlavor aDataFlavor );
+
+    /** Converts a system dependent data type to a DataFlavor.
+
+        @param aSysDataType
+        A system dependent data type. If aSysDataType is empty so is the returned DataFlavor.
+
+        @returns
+        A DataFlavor for the given system dependent data transfer type.
+        <p>If there is no appropriate mapping for a system dependent data type, the returned DataFlavor will be empty.</p>
+    */
+    DataFlavor getDataFlavorFromSystemDataType( [in] any aSysDataType );
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

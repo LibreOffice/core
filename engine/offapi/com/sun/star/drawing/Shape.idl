@@ -1,0 +1,205 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+ module com {  module sun {  module star {  module drawing {
+
+
+/** This abstract service specifies the general characteristics of all
+    Shapes.
+
+    @see XShape
+    @see com::sun::star::lang::XComponent
+    @see com::sun::star::text::XText
+    @see ShapeDescriptor
+ */
+published service Shape
+{
+
+    /** handles all the properties of this instance.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+
+    /** This gives you the size and position of this Shape
+                and lets you change it. You can use getShapeType()
+                to determine what kind of shape this is.
+     */
+    interface com::sun::star::drawing::XShape;
+
+
+    /** is used for lifetime control of this Shape.
+     */
+    interface com::sun::star::lang::XComponent;
+
+
+    /** The XShapeDescriptor tells you what kind of
+                Shape this instance is.
+     */
+    interface com::sun::star::drawing::XShapeDescriptor;
+
+
+    /** This interfaces gives access to an optional container of gluepoints.
+        To have unique ids you should query the returned interface for
+        com::sun::star::container::XIdentifierContainer.
+    */
+    [optional] interface com::sun::star::drawing::XGluePointsSupplier;
+
+
+        [optional] interface com::sun::star::beans::XTolerantMultiPropertySet;
+
+
+    /** is used to query or change the ZOrder of this Shape. */
+    [optional, property] long ZOrder;
+
+
+    /** This is the ID of the Layer to which this
+        Shape is attached.
+     */
+    [optional, property] short LayerID;
+
+
+    /** This is the name of the Layer to which this
+        Shape is attached.
+     */
+    [optional, property] string LayerName;
+
+
+    /** If this is `FALSE`, the Shape is not visible
+        on screen outputs. Please note that the Shape may still
+        be visible when printed, see #Printable.
+     */
+    [optional, property] boolean Visible;
+
+
+    /** If this is `FALSE`, the Shape is not visible
+        on printer outputs.
+     */
+    [optional, property] boolean Printable;
+
+
+    /** With this set to `TRUE`, this Shape
+        cannot be moved interactively in the user interface.
+     */
+    [optional, property] boolean MoveProtect;
+
+
+    /** This is the name of this Shape.
+     */
+    [optional, property] string Name;
+
+
+    /** With this set to `TRUE`, this Shape may not be
+        sized interactively in the user interface.
+     */
+    [optional, property] boolean SizeProtect;
+
+
+    /** this property lets you get and set a style for this shape.
+     */
+    [optional, property] com::sun::star::style::XStyle Style;
+
+
+    /** this property lets you get and set the transformation matrix
+        for this shape.
+
+        The transformation is a 3x3 homogeneous matrix and can contain
+        translation, rotation, shearing and scaling.
+     */
+    [optional, property] com::sun::star::drawing::HomogenMatrix3 Transformation;
+
+
+    /** this property stores xml attributes.
+        They will be saved to and restored from automatic styles inside xml files.
+
+        @see com::sun::star::xml::AttributeContainer
+    */
+    [optional, property] com::sun::star::container::XNameContainer ShapeUserDefinedAttributes;
+
+
+    /** this property stores the navigation order of this shape. If this value
+        is negative, the navigation order for this shapes page is equal to
+        the z-order.
+    */
+    [optional, property] long NavigationOrder;
+
+    /** this property lets you get and set a hyperlink for this shape.
+     */
+    [optional, property] string Hyperlink;
+
+    /** Grab bag of shape properties, used as a string-any map for
+        interim interop purposes.
+
+        <p>This property is intentionally not handled by the ODF
+        filter. Any member that should be handled there should be
+        first moved out from this grab bag to a separate property.</p>
+    */
+    [optional, property] sequence<com::sun::star::beans::PropertyValue> InteropGrabBag;
+
+    /** contains the relative height of the object.
+        <p> It is only valid if it is greater than zero.</p>
+     */
+    [optional, property] short RelativeHeight;
+
+    /** contains the relative width of the object.
+        <p> It is only valid if it is greater than zero. </p>
+     */
+    [optional, property] short RelativeWidth;
+
+    /** contains the relation of the relative height of the object.
+        <p> It is only valid if RelativeHeight is greater than zero.</p>
+
+        @see com::sun::star::text::RelOrientation
+     */
+    [optional, property] short RelativeHeightRelation;
+
+    /** contains the relation of the relative width of the object.
+        <p> It is only valid if RelativeWidth is greater than zero.</p>
+
+        @see com::sun::star::text::RelOrientation
+     */
+    [optional, property] short RelativeWidthRelation;
+
+    /** contains short title for the object
+
+        <p>This short title is visible as an alternative tag in HTML format.
+        Accessibility tools can read this text.</p>
+    */
+    [optional, property] string Title;
+
+    /** contains description for the object
+
+        <p>The long description text can be entered to describe an object in
+        more detail to users with screen reader software. The description is
+        visible as an alternative tag for accessibility tools.</p>
+    */
+    [optional, property] string Description;
+
+    /** Determines if the shape is purely decorative.
+
+        If `TRUE`, it is considered not part of the document content,
+        and may be ignored by assistive technologies.
+    */
+    [optional, property] boolean Decorative;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

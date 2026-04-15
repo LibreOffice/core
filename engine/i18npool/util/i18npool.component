@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="i18npool" xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.i18n.BreakIterator"
+      constructor="com_sun_star_i18n_BreakIterator_get_implementation">
+    <service name="com.sun.star.i18n.BreakIterator"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.BreakIterator_Unicode"
+      constructor="com_sun_star_i18n_BreakIterator_Unicode_get_implementation">
+    <service name="com.sun.star.i18n.BreakIterator_Unicode"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.BreakIterator_ja"
+    constructor="i18npool_BreakIterator_ja_get_implementation">
+    <service name="com.sun.star.i18n.BreakIterator_ja"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.BreakIterator_ko"
+    constructor="i18npool_BreakIterator_ko_get_implementation">
+    <service name="com.sun.star.i18n.BreakIterator_ko"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.BreakIterator_zh"
+    constructor="i18npool_BreakIterator_zh_get_implementation">
+    <service name="com.sun.star.i18n.BreakIterator_zh"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.BreakIterator_zh_TW"
+    constructor="i18npool_BreakIterator_zh_TW_get_implementation">
+    <service name="com.sun.star.i18n.BreakIterator_zh_TW"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.CalendarImpl"
+    constructor="i18npool_CalendarImpl_get_implementation">
+    <service name="com.sun.star.i18n.LocaleCalendar"/>
+    <service name="com.sun.star.i18n.LocaleCalendar2"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_ROC"
+    constructor="i18npool_Calendar_ROC_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_ROC"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_dangi"
+    constructor="i18npool_Calendar_dangi_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_dangi"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_buddhist"
+    constructor="i18npool_Calendar_buddhist_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_buddhist"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_gengou"
+    constructor="i18npool_Calendar_gengou_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_gengou"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_gregorian"
+    constructor="i18npool_Calendar_gregorian_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_gregorian"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_hanja"
+    constructor="i18npool_Calendar_hanja_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_hanja"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_hanja_yoil"
+    constructor="i18npool_Calendar_hanja_yoil_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_hanja_yoil"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_hijri"
+    constructor="i18npool_Calendar_hijri_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_hijri"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Calendar_jewish"
+    constructor="i18npool_Calendar_jewish_get_implementation">
+    <service name="com.sun.star.i18n.Calendar_jewish"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.ChapterCollator"
+    constructor="i18npool_ChapterCollator_get_implementation">
+    <service name="com.sun.star.i18n.ChapterCollator"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.CharacterClassification"
+      constructor="com_sun_star_i18n_CharacterClassification_get_implementation">
+    <service name="com.sun.star.i18n.CharacterClassification"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.CharacterClassification_Unicode"
+      constructor="com_sun_star_i18n_CharacterClassification_Unicode_get_implementation">
+    <service name="com.sun.star.i18n.CharacterClassification_Unicode"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Collator"
+      constructor="com_sun_star_i18n_Collator_get_implementation">
+    <service name="com.sun.star.i18n.Collator"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Collator_Unicode"
+    constructor="i18npool_Collator_Unicode_get_implementation">
+    <service name="com.sun.star.i18n.Collator_Unicode"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.IndexEntrySupplier"
+    constructor="i18npool_IndexEntrySupplier_get_implementation">
+    <service name="com.sun.star.i18n.IndexEntrySupplier"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.IndexEntrySupplier_Unicode"
+    constructor="i18npool_IndexEntrySupplier_Unicode_get_implementation">
+    <service name="com.sun.star.i18n.IndexEntrySupplier_Unicode"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.IndexEntrySupplier_asian"
+    constructor="i18npool_IndexEntrySupplier_asian_get_implementation">
+    <service name="com.sun.star.i18n.IndexEntrySupplier_asian"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by consonant)"
+    constructor="i18npool_IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant_get_implementation">
+    <service name="com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by consonant)"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by syllable)"
+    constructor="i18npool_IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable_get_implementation">
+    <service name="com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by syllable)"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by consonant)"
+    constructor="i18npool_IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant_get_implementation">
+    <service name="com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by consonant)"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by syllable)"
+    constructor="i18npool_IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable_get_implementation">
+    <service name="com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by syllable)"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.InputSequenceChecker"
+      constructor="com_sun_star_i18n_InputSequenceChecker_get_implementation">
+    <service name="com.sun.star.i18n.InputSequenceChecker"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.InputSequenceChecker_hi"
+      constructor="i18npool_InputSequenceChecker_hi_get_implementation">
+    <service name="com.sun.star.i18n.InputSequenceChecker_hi"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.InputSequenceChecker_th"
+      constructor="i18npool_InputSequenceChecker_th_get_implementation">
+    <service name="com.sun.star.i18n.InputSequenceChecker_th"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.LocaleDataImpl"
+      constructor="com_sun_star_i18n_LocaleDataImpl_get_implementation">
+    <service name="com.sun.star.i18n.LocaleData"/>
+    <service name="com.sun.star.i18n.LocaleData2"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.NativeNumberSupplier"
+      constructor="com_sun_star_i18n_NativeNumberSupplier_get_implementation">
+    <service name="com.sun.star.i18n.NativeNumberSupplier"/>
+    <service name="com.sun.star.i18n.NativeNumberSupplier2"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.NumberFormatCodeMapper"
+      constructor="com_sun_star_i18n_NumberFormatCodeMapper_get_implementation">
+    <service name="com.sun.star.i18n.NumberFormatMapper"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.OrdinalSuffix"
+      constructor="com_sun_star_i18n_OrdinalSuffix_get_implementation">
+    <service name="com.sun.star.i18n.OrdinalSuffix"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.ScriptTypeDetector"
+      constructor="com_sun_star_i18n_ScriptTypeDetector_get_implementation">
+    <service name="com.sun.star.i18n.ScriptTypeDetector"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.TextConversion"
+      constructor="com_sun_star_i18n_TextConversion_get_implementation">
+    <service name="com.sun.star.i18n.TextConversion"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.TextConversion_ko"
+      constructor="i18npool_TextConversion_ko_get_implementation">
+    <service name="com.sun.star.i18n.TextConversion_ko"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.TextConversion_zh"
+      constructor="i18npool_TextConversion_zh_get_implementation">
+    <service name="com.sun.star.i18n.TextConversion_zh"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration"
+      constructor="com_sun_star_i18n_Transliteration_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumEastIndic_ar"
+      constructor="i18npool_CharToNumEastIndic_ar_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumFullwidth"
+      constructor="i18npool_CharToNumFullwidth_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumHangul_ko"
+      constructor="i18npool_CharToNumHangul_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumIndic_ar"
+      constructor="i18npool_CharToNumIndic_ar_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumIndic_hi"
+      constructor="i18npool_CharToNumIndic_hi_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumKanjiShort_ja_JP"
+      constructor="i18npool_CharToNumKanjiShort_ja_JP_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumKanjiTraditional_ja_JP"
+      constructor="i18npool_CharToNumKanjiTraditional_ja_JP_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumLower_ko"
+      constructor="i18npool_CharToNumLower_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumLower_zh_CN"
+      constructor="i18npool_CharToNumLower_zh_CN_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumLower_zh_TW"
+      constructor="i18npool_CharToNumLower_zh_TW_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumUpper_ko"
+      constructor="i18npool_CharToNumUpper_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumUpper_zh_CN"
+      constructor="i18npool_CharToNumUpper_zh_CN_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumUpper_zh_TW"
+      constructor="i18npool_CharToNumUpper_zh_TW_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNum_th"
+      constructor="i18npool_CharToNum_th_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.FULLWIDTHKATAKANA_HALFWIDTHKATAKANA"
+      constructor="i18npool_FULLWIDTHKATAKANA_HALFWIDTHKATAKANA_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.FULLWIDTH_HALFWIDTH">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.FULLWIDTH_HALFWIDTH_LIKE_ASC"
+      constructor="i18npool_FULLWIDTH_HALFWIDTH_LIKE_ASC_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.HALFWIDTHKATAKANA_FULLWIDTHKATAKANA"
+      constructor="i18npool_HALFWIDTHKATAKANA_FULLWIDTHKATAKANA_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH_LIKE_JIS"
+      constructor="i18npool_HALFWIDTH_FULLWIDTH_LIKE_JIS_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.HIRAGANA_KATAKANA">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.IGNORE_CASE"
+      constructor="com_sun_star_i18n_Transliteration_IGNORE_CASE_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.IGNORE_KANA"
+      constructor="com_sun_star_i18n_Transliteration_IGNORE_KANA_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.IGNORE_WIDTH"
+      constructor="com_sun_star_i18n_Transliteration_IGNORE_WIDTH_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.KATAKANA_HIRAGANA">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.LOWERCASE_UPPERCASE">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharEastIndic_ar"
+      constructor="i18npool_NumToCharEastIndic_ar_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharFullwidth">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharHalfwidth">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharHangul_ko">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharIndic_ar">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharIndic_hi">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharKanjiShort_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharKanjiTraditional_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharLower_ko">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharLower_zh_CN">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharLower_zh_TW">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharUpper_ko">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharUpper_zh_CN">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharUpper_zh_TW">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToChar_th">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextAIUFullWidth_ja_JP"
+      constructor="i18npool_NumToTextAIUFullWidth_ja_JP_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextAIUHalfWidth_ja_JP"
+      constructor="i18npool_NumToTextAIUHalfWidth_ja_JP_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextCircledNumber">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextDate_zh">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextDiZi_zh">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFormalHangul_ko"
+      constructor="i18npool_NumToTextFormalHangul_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFormalLower_ko"
+      constructor="i18npool_NumToTextFormalLower_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFormalUpper_ko"
+      constructor="i18npool_NumToTextFormalUpper_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFullwidth_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFullwidth_ko">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFullwidth_zh_CN"
+      constructor="i18npool_NumToTextFullwidth_zh_CN_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFullwidth_zh_TW"
+      constructor="i18npool_NumToTextFullwidth_zh_TW_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulCircledJamo_ko"
+      constructor="i18npool_NumToTextHangulCircledJamo_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulCircledSyllable_ko"
+      constructor="i18npool_NumToTextHangulCircledSyllable_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulJamo_ko"
+      constructor="i18npool_NumToTextHangulJamo_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulSyllable_ko"
+      constructor="i18npool_NumToTextHangulSyllable_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextIROHAFullWidth_ja_JP"
+      constructor="i18npool_NumToTextIROHAFullWidth_ja_JP_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextIROHAHalfWidth_ja_JP"
+      constructor="i18npool_NumToTextIROHAHalfWidth_ja_JP_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextInformalHangul_ko"
+      constructor="i18npool_NumToTextInformalHangul_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextInformalLower_ko"
+      constructor="i18npool_NumToTextInformalLower_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextInformalUpper_ko"
+      constructor="i18npool_NumToTextInformalUpper_ko_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextKanjiLongModern_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextKanjiLongTraditional_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextKanjiShortModern_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextKanjiShortTraditional_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextLower_zh_CN"
+      constructor="i18npool_NumToTextLower_zh_CN_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextLower_zh_TW"
+      constructor="i18npool_NumToTextLower_zh_TW_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextTianGan_zh">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextUpper_zh_CN"
+      constructor="i18npool_NumToTextUpper_zh_CN_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextUpper_zh_TW"
+      constructor="i18npool_NumToTextUpper_zh_TW_get_implementation">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.SENTENCE_CASE">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TITLE_CASE">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TOGGLE_CASE">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToChuyin_zh_TW">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumFormalHangul_ko">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumFormalLower_ko">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumFormalUpper_ko">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumInformalHangul_ko">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumInformalLower_ko">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumInformalUpper_ko">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumKanjiLongModern_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumKanjiLongTraditional_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumLower_zh_CN">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumLower_zh_TW">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumUpper_zh_CN">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToNumUpper_zh_TW">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.TextToPinyin_zh_CN">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.UPPERCASE_LOWERCASE">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreBaFa_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreHyuByu_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreIandEfollowedByYa_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreIterationMark_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreKiKuFollowedBySa_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreMiddleDot_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreMinusSign_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreProlongedSoundMark_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreSeZe_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreSeparator_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreSize_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreSpace_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreTiJi_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreTraditionalKana_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreTraditionalKanji_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreZiZu_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.largeToSmall_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.smallToLarge_ja_JP">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.text.DefaultNumberingProvider"
+      constructor="com_sun_star_text_DefaultNumberingProvider_get_implementation">
+    <service name="com.sun.star.text.DefaultNumberingProvider"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreDiacritics_CTL">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreKashida_CTL">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
+</component>

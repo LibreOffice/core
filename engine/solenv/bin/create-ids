@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# create ID file for the whole LibO tree. run it in toplevel dir
+
+if [ "$1" = "--with-outpath" ]; then
+    # Include workdir generated files but without  workdir/UnpackedTarball  workdir/UnpackedTarget
+    dirs="$(ls -d ./*/* | sed -e '/\(\/\(cscope\.\|tags\|ID\)\)\|^\.\/\(workdir\/UnpackedTar\|\(instdir\/\)\)/d')"
+else
+    dirs="$(ls -d ./*/* | sed -e '/\(\/\(cscope\.\|tags\|ID\)\)\|^\.\/\(workdir\|instdir\)\//d')"
+fi
+mkid --lang-map="$(dirname "$0")"/id-lang.map --include='C C++ asm perl java make' --statistics $dirs

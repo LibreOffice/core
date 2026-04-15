@@ -1,0 +1,7 @@
+A library for easy access to GnuPG (GnuPG Made Easy)
+[https://www.gnupg.org/related_software/gpgme/index.html]
+
+(The upstream project and its git repo at <https://dev.gnupg.org/source/gpgme/> are called "gpgme",
+not "gpgmepp".  This external module was renamed from external/gpgme to external/gpgmepp with
+50a55d862034b7a06510c014332236f44e306831 "gpg4libre: cleanup gpgme & add gbuild lib for gpgmepp":
+"This moves the external to gpgmepp, since that's what we _actually_ link against [...]")

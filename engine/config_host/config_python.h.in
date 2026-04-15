@@ -1,0 +1,10 @@
+/* python stuff */
+
+#ifndef CONFIG_PYTHON_H
+#define CONFIG_PYTHON_H
+
+#undef PYTHON_VERSION_STRING
+
+#define ENABLE_LIBRELOGO 0
+
+#endif // CONFIG_PYTHON_H

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:font-face-decls>
+  </office:font-face-decls>
+  <office:styles>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="Ru1" style:family="ruby">
+      <style:ruby-properties style:ruby-align="left" style:ruby-position="above" loext:ruby-position="above"/>
+    </style:style>
+    <style:style style:name="Ru2" style:family="ruby">
+      <style:ruby-properties style:ruby-align="center" style:ruby-position="above" loext:ruby-position="above"/>
+    </style:style>
+    <style:style style:name="Ru3" style:family="ruby">
+      <style:ruby-properties style:ruby-align="right" style:ruby-position="above" loext:ruby-position="above"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:master-styles>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <text:p text:style-name="P1">Ruby test: <text:ruby text:style-name="Ru1"><text:ruby-base>base text</text:ruby-base><text:ruby-text text:style-name="Rubies">ruby (left)</text:ruby-text></text:ruby> <text:ruby text:style-name="Ru2"><text:ruby-base>base text</text:ruby-base><text:ruby-text>ruby (center)</text:ruby-text></text:ruby> <text:ruby text:style-name="Ru3"><text:ruby-base>base text</text:ruby-base><text:ruby-text>ruby (right)</text:ruby-text></text:ruby></text:p>
+    </office:text>
+  </office:body>
+</office:document>

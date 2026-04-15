@@ -1,0 +1,87 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+service FormulaParser
+{
+
+    service com::sun::star::beans::PropertySet;
+
+
+    interface XFormulaParser;
+
+
+    /** specifies whether to use English parser and formatter.
+
+        <p>Note: When changing this, an already existing #OpCodeMap
+        needs to be recreated internally, so for performance reasons
+        set this <em>before</em> setting the #OpCodeMap.
+     */
+    [property] boolean CompileEnglish;
+
+
+    /** specifies which address reference style convention to use when
+        parsing a formula string.
+
+        @see AddressConvention
+      */
+    [property] short FormulaConvention;
+
+
+    [property] boolean IgnoreLeadingSpaces;
+
+
+    [property] string ParameterSeparator;
+
+
+    /** contains the complete mapping of names to op-codes.
+
+        <p>Names and symbols not defined here lead to a parser/print error.</p>
+     */
+    [property] sequence< FormulaOpCodeMapEntry > OpCodeMap;
+
+
+    /** contains a list of external links referenced in formulas.
+
+        <p>Use of this property depends on the FormulaConvention
+        in use. It is relevant only for
+        AddressConvention::XL_OOX to map indices to external
+        documents. The sequence must be in the order of indices used. Note
+        that indices are 1-based, the sequence must start with an empty
+        element.</p>
+     */
+    [property] sequence< ExternalLinkInfo > ExternalLinks;
+
+
+    /** specifies that use special ooxml chart syntax in case of OOXML reference
+        convention, when parsing a formula string.
+
+        <p>Special syntax like: [0]!GlobalNamedRange, LocalSheet!LocalNamedRange</p>
+     */
+    [property] boolean RefConventionChartOOXML;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

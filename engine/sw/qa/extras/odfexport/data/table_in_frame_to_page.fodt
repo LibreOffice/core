@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:text-properties fo:font-style="italic"/>
+  </style:style>
+  <style:style style:name="P2" style:family="paragraph">
+   <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Table1" style:family="table">
+   <style:table-properties style:width="8cm" table:align="margins"/>
+  </style:style>
+  <style:style style:name="Table1.A" style:family="table-column">
+   <style:table-column-properties style:column-width="4cm" style:rel-column-width="32767*"/>
+  </style:style>
+  <style:style style:name="Table1.B" style:family="table-column">
+   <style:table-column-properties style:column-width="4cm" style:rel-column-width="32768*"/>
+  </style:style>
+  <style:style style:name="Table1.A1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="1mm" fo:border-left="0.5pt solid #000000" fo:border-right="none" fo:border-top="0.5pt solid #000000" fo:border-bottom="0.5pt solid #000000"/>
+  </style:style>
+  <style:style style:name="Table1.B1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="1mm" fo:border="0.5pt solid #000000"/>
+  </style:style>
+  <style:style style:name="Table1.A2" style:family="table-cell">
+   <style:table-cell-properties fo:padding="1mm" fo:border-left="0.5pt solid #000000" fo:border-right="none" fo:border-top="none" fo:border-bottom="0.5pt solid #000000"/>
+  </style:style>
+  <style:style style:name="Table1.B2" style:family="table-cell">
+   <style:table-cell-properties fo:padding="1mm" fo:border-left="0.5pt solid #000000" fo:border-right="0.5pt solid #000000" fo:border-top="none" fo:border-bottom="0.5pt solid #000000"/>
+  </style:style>
+  <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
+   <style:graphic-properties style:wrap="parallel" style:number-wrapped-paragraphs="no-limit" style:vertical-pos="from-top" style:vertical-rel="page" style:horizontal-pos="from-left" style:horizontal-rel="page" draw:wrap-influence-on-position="once-concurrent"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <draw:frame draw:style-name="fr1" draw:name="Frame1" text:anchor-type="page" text:anchor-page-number="1" svg:x="5cm" svg:y="1cm" svg:width="8cm" draw:z-index="0">
+    <draw:text-box fo:min-height="5cm">
+     <table:table table:name="Table1" table:style-name="Table1">
+      <table:table-column table:style-name="Table1.A"/>
+      <table:table-column table:style-name="Table1.B"/>
+      <table:table-row>
+       <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+        <text:p text:style-name="P1"/>
+       </table:table-cell>
+       <table:table-cell table:style-name="Table1.B1" office:value-type="string">
+        <text:p/>
+       </table:table-cell>
+      </table:table-row>
+      <table:table-row>
+       <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+        <text:p/>
+       </table:table-cell>
+       <table:table-cell table:style-name="Table1.B2" office:value-type="string">
+        <text:p/>
+       </table:table-cell>
+      </table:table-row>
+     </table:table>
+     <text:p text:style-name="P2"/>
+    </draw:text-box>
+   </draw:frame>
+   <text:p/>
+  </office:text>
+ </office:body>
+</office:document>

@@ -1,0 +1,34 @@
+--- Configurations/10-main.conf.sav	2023-09-19 22:02:31.000000000 +0900
++++ Configurations/10-main.conf	2023-09-30 23:47:49.734377000 +0900
+@@ -14,7 +14,7 @@
+         } elsif ($disabled{asm}) {
+             # assembler is still used to compile uplink shim
+             $vc_win64a_info = { AS        => "ml64",
+-                                ASFLAGS   => "/nologo /Zi",
++                                ASFLAGS   => "/nologo $$(DEBUG_FLAGS_VALUE)",
+                                 asflags   => "/c /Cp /Cx",
+                                 asoutflag => "/Fo",
+                                 perlasm_scheme => "masm" };
+@@ -44,7 +44,7 @@
+         } elsif ($disabled{asm}) {
+             # not actually used, uplink shim is inlined into C code
+             $vc_win32_info = { AS        => "ml",
+-                               ASFLAGS   => "/nologo /Zi",
++                               ASFLAGS   => "/nologo $$(DEBUG_FLAGS_VALUE)",
+                                asflags   => "/Cp /coff /c /Cx",
+                                asoutflag => "/Fo",
+                                perlasm_scheme => "win32" };
+@@ -1333,10 +1333,10 @@
+                                 "UNICODE", "_UNICODE",
+                                 "_CRT_SECURE_NO_DEPRECATE",
+                                 "_WINSOCK_DEPRECATED_NO_WARNINGS"),
+-        lib_cflags       => add("/Zi /Fdossl_static.pdb"),
++        lib_cflags       => add("\$(DEBUG_FLAGS_VALUE)"),
+         lib_defines      => add("L_ENDIAN"),
+-        dso_cflags       => "/Zi /Fddso.pdb",
+-        bin_cflags       => "/Zi /Fdapp.pdb",
++        dso_cflags       => "\$(DEBUG_FLAGS_VALUE)",
++        bin_cflags       => "\$(DEBUG_FLAGS_VALUE)",
+         # def_flag made to empty string so a .def file gets generated
+         shared_defflag   => '',
+         shared_ldflag    => "/dll",

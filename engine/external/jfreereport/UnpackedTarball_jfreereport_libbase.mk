@@ -1,0 +1,29 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the Collabora Office project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# for VERSION
+include $(SRCDIR)/external/jfreereport/version.mk
+
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,jfreereport_libbase))
+
+$(eval $(call gb_UnpackedTarball_set_tarball,jfreereport_libbase,$(JFREEREPORT_LIBBASE_TARBALL),0))
+
+$(eval $(call gb_UnpackedTarball_set_patchlevel,jfreereport_libbase,2))
+
+$(eval $(call gb_UnpackedTarball_fix_end_of_line,jfreereport_libbase,\
+	common_build.xml \
+))
+
+$(eval $(call gb_UnpackedTarball_add_patches,jfreereport_libbase,\
+	external/jfreereport/patches/common_build.patch \
+	external/jfreereport/patches/libbase-$(LIBBASE_VERSION)-deprecated.patch \
+	external/jfreereport/patches/libbase-1.1.3-remove-commons-logging.patch.1 \
+))
+
+# vim: set noet sw=4 ts=4:

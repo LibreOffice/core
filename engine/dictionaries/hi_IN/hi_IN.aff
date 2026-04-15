@@ -1,0 +1,659 @@
+﻿SET UTF-8
+# Hindi Spellcheking Dictionary in Hunspell format - SPELLCHECKERVERSION
+# Last Update by ShreeDevi Kumar on SPELLCHECKERDATE
+# Files available from http://github.com/Shreeshrii/hindi-hunspell
+#
+TRY ़ािीुूृॅेैॉोौ्ज़य़ँंःअआइईउऊऋएऐऑओऔकखगघङचछजझञटठडढणतथदधनपफबभमयरऱलवशषसह
+KEY इई|उऊ|आऑऒओऔॵ|ऄऍऎएऐ|िी|ुू|ॅॆेै|ाॉॊोौॏ|डङ|धघ|मभय|बव|ंँ
+MAXNGRAMSUGS 10
+MAXDIFF 5
+
+# convert internally for checking spelling
+ICONV 2
+ICONV । .
+ICONV ॥ .
+
+MAP 1
+MAP लळ
+
+
+# offer replacement as suggestion
+REP 99
+REP ि ी
+REP ी ि
+REP ु ू
+REP ू ु
+REP ो ौ
+REP ौ ो
+REP ॉं ाँ
+REP ॅं ँ
+REP ाॅ ॉ
+REP अॉ ऑ
+REP अॅ ॲ
+REP ये$ ए
+REP या$ आ
+REP यी$ ई
+REP : ः
+REP क़ क़
+REP ख़ ख़
+REP ग़ ग़
+REP ज़ ज़
+REP ड़ ड़
+REP ढ़ ढ़
+REP फ़ फ़
+REP य़ य़
+REP ऴ ऴ
+REP ऩ ऩ
+REP ऱ ऱ
+REP क़ क
+REP ख़ ख
+REP ग़ ग
+REP ज़ ज
+REP ड़ ड
+REP ढ़ ढ
+REP फ़ फ
+REP य़ य
+REP क़ क
+REP ख़ ख
+REP ग़ ग
+REP ड़ ड
+REP ढ़ ढ
+REP ज़ ज
+REP फ़ फ
+REP ऴ ळ
+REP ऩ न
+REP ऱ र
+REP क क़
+REP ख ख़
+REP ग ग़
+REP ड ड़
+REP ढ ढ़
+REP ज ज़
+REP फ फ़
+REP र् र
+REP र्‍ र्
+REP श ष
+REP ष श
+REP म् ं
+REP ं म्
+REP ंम म्म
+REP ंम न्म
+REP ंन न्न
+REP न्क ंक
+REP न्ख ंख
+REP न्ग ंग
+REP न्घ ंघ
+REP न्च ंच
+REP न्छ ंछ
+REP न्ज ंज
+REP न्झ ंझ
+REP न्ट ण्ट
+REP न्ठ ण्ठ
+REP न्ड ण्ड
+REP न्ढ ण्ढ
+REP ंट ण्ट
+REP ंठ ण्ठ
+REP ंड ण्ड
+REP ंढ ण्ढ
+REP ंत न्त
+REP ंथ न्थ
+REP ंद न्द
+REP ंध न्ध
+REP ङ्क ंक
+REP ङ्ख ंख
+REP ङ्ग ंग
+REP ङ्घ ंघ
+REP ञ्च ंच
+REP ञ्छ ंछ
+REP ञ्ज ंज
+REP ञ्झ ंझ
+REP ण्ट ंट
+REP ण्ठ ंठ
+REP ण्ड ंड
+REP ण्ढ ंढ
+REP न्त ंत
+REP न्थ ंथ
+REP न्द ंद
+REP न्ध ंध
+REP ध्द द्ध
+REP ग्य ज्ञ
+REP रि ऋ
+
+BREAK 4
+BREAK _
+BREAK -
+BREAK ˆ-
+BREAK -$
+
+WORDCHARS ०१२३४५६७८९।-.,॥‰§%°0123456789–'
+
+# hi-verb1.dic - verb forms for o-kaaraanta kriyaa-pada
+SFX 1 Y 18
+SFX 1 0 कर .
+SFX 1 0 ना .
+SFX 1 0 ने .
+SFX 1 0 ता .
+SFX 1 0 ती .
+SFX 1 0 ते .
+SFX 1 0 ए .
+SFX 1 0 एगा .
+SFX 1 0 एगी .
+SFX 1 0 एँगे .
+SFX 1 0 इए .
+SFX 1 0 इएगा .
+SFX 1 0 इएगी .
+SFX 1 0 इएँगी .
+SFX 1 0 ऊँ .
+SFX 1 0 ऊँगा .
+SFX 1 0 ऊँगी .
+SFX 1 0 या [^हो]
+
+
+# hi-verb2.dic - verb forms for o-kaaraanta kriyaa-pada
+SFX 2 Y 2
+SFX 2 0 /1 .
+SFX 2 ो ुला/7 [^हप]ो
+
+
+# hi-verb3.dic - verb forms for ii-kaaranta kriyaa-pada eg  पी, जी, सी
+SFX 3 Y 16
+SFX 3 0 कर .
+SFX 3 0 ना .
+SFX 3 0 ने .
+SFX 3 0 ता .
+SFX 3 0 ती .
+SFX 3 0 ते .
+SFX 3 ी िए ी
+SFX 3 ी िएगा ी
+SFX 3 ी िएगी ी
+SFX 3 ी िएँगे ी
+SFX 3 ी िऊँ ी
+SFX 3 ी िऊँगा ी
+SFX 3 ी िऊँगी ी
+SFX 3 ी िआ ी
+SFX 3 ी िला/7 ी
+SFX 3 ी िलवा/7 ी
+
+
+#  verb forms for u-kaaranta kriyaa-pada
+SFX 4 Y 14
+SFX 4 0 कर .
+SFX 4 0 ना .
+SFX 4 0 ने .
+SFX 4 0 ता .
+SFX 4 0 ती .
+SFX 4 0 ते .
+SFX 4 ू ुएगा ू
+SFX 4 ू ुएगी ू
+SFX 4 ू ुएँगे ू
+SFX 4 ू ुऊँगा ू
+SFX 4 ू ुऊँगी ू
+SFX 4 ू ुऊँ ू
+SFX 4 ू ुला/7 [^च]ू
+SFX 4 ू ुलवा/7 [^च]ू
+
+
+
+# hi-verb5.dic - verb forms for e-kaaranta kriyaa-pada eg. ले, दे, खे?
+SFX 5 Y 15
+SFX 5 0 कर .
+SFX 5 0 ना .
+SFX 5 0 ने .
+SFX 5 0 ता .
+SFX 5 0 ती .
+SFX 5 0 ते .
+SFX 5 े ीजिए े
+SFX 5 0 गा .
+SFX 5 0 गी .
+SFX 5 0 ँगे .
+SFX 5 0 ऊँ .
+SFX 5 0 ऊँगा .
+SFX 5 0 ऊँगी .
+SFX 5 े िला/7 [^ल]े
+SFX 5 े िलवा/7 [^ल]े
+
+
+# hi-verb6.dic - irregular past participles - जाना, करना, मरना, होना, देना, लेना
+SFX 6 Y 20
+SFX 6 ेना िया ेना
+SFX 6 ेना िए ेना
+SFX 6 ेना ी ेना
+SFX 6 ेना ीं ेना
+SFX 6 ोना ुआ होना
+SFX 6 ोना ुए होना
+SFX 6 ोना ुई होना
+SFX 6 ोना ुईं होना
+SFX 6 जाना गया जाना
+SFX 6 जाना गए जाना
+SFX 6 जाना गई जाना
+SFX 6 जाना गईं जाना
+SFX 6 रना िया करना
+SFX 6 रना िए करना
+SFX 6 रना ी करना
+SFX 6 रना ीं करना
+SFX 6 रना ुआ मरना
+SFX 6 रना ुए मरना
+SFX 6 रना ुई मरना
+SFX 6 रना ुईं मरना
+
+# hi-verb7.dic - verb forms for aa-kaaranta kriyaa-pada -
+SFX 7 Y 24
+SFX 7 0 इयो .
+SFX 7 0 वे .
+SFX 7 0 ई .
+SFX 7 0 कर .
+SFX 7 0 ना .
+SFX 7 0 ने .
+SFX 7 0 ता .
+SFX 7 0 ती .
+SFX 7 0 ते .
+SFX 7 0 ए .
+SFX 7 0 एगा .
+SFX 7 0 एगी .
+SFX 7 0 एँगीं .
+SFX 7 0 एँगे .
+SFX 7 0 ऊँ .
+SFX 7 0 ऊँगा .
+SFX 7 0 ऊँगी .
+SFX 7 0 ऊँगीं .
+SFX 7 0 इए .
+SFX 7 0 इएगा .
+SFX 7 0 इएगी .
+SFX 7 0 ओ .
+SFX 7 0 ओगे .
+SFX 7 0 ओगी .
+
+
+# verb forms for a-kaaranta kriyaa-pada
+SFX 8 Y 27
+SFX 8 0 ियो .
+SFX 8 0 ो .
+SFX 8 0 ोगे .
+SFX 8 0 ोगी .
+SFX 8 0 े .
+SFX 8 0 ेगी .
+SFX 8 0 ेगा .
+SFX 8 0 ें .
+SFX 8 0 ेंगे .
+SFX 8 0 ेंगें .
+SFX 8 0 ेंगी .
+SFX 8 0 ेंगीं .
+SFX 8 0 ूँ .
+SFX 8 0 ूँगी .
+SFX 8 0 ूँगा .
+SFX 8 0 ी .
+SFX 8 0 ीं .
+SFX 8 0 िए .
+SFX 8 0 िएगी .
+SFX 8 0 िएगा .
+SFX 8 0 ने .
+SFX 8 0 ना .
+SFX 8 0 ते .
+SFX 8 0 ती .
+SFX 8 0 तीं .
+SFX 8 0 ता .
+SFX 8 0 कर [^कर]
+
+# hi-verb9.dic - a-kaaranta - खटखट to खटखटाना - अनुकरणात्मक क्रिया
+SFX 9 Y 2
+SFX 9 0 ा/7 .
+SFX 9 0 ाहट .
+
+#NOUNS etc
+
+#change aa maatraa to ीं maatraa
+SFX A Y 1
+SFX A ा ीं ा
+
+#change aa maatraa to o maatraa
+SFX B Y 1
+SFX B ा ो ा
+
+#change aa maatraa to e maatraa
+SFX C Y 1
+SFX C ा े ा
+
+# add e maatraa
+SFX D Y 1
+SFX D 0 े .
+
+# add ii maatraa
+SFX E Y 1
+SFX E 0 ी .
+
+# add aa maatraa
+SFX F Y 1
+SFX F 0 ा .
+
+#change aa maatraa to ii maatraa
+SFX G Y 1
+SFX G ा ी ा
+
+# numbers
+SFX H Y 3
+SFX H 0 वाँ .
+SFX H 0 वीं .
+SFX H 0 वें .
+
+# hi-noun8b eg. अँगरखा/32
+SFX I Y 2
+SFX I ा े ा
+SFX I ा ों ा
+
+# hi-noun8 eg. आत्मा/33
+SFX J Y 2
+SFX J 0 एँ .
+SFX J 0 ओं .
+
+# hi-noun8c eg. चाचा/34
+SFX K Y 1
+SFX K 0 ओं ा
+
+# hi-noun6 eg. अटकल/35
+SFX L Y 2
+SFX L 0 ें .
+SFX L 0 ों .
+
+# hi-noun5 eg. अंग/16, अंगरेज/16
+SFX M Y 1
+SFX M 0 ों .
+
+# hi-noun4 eg. कली/17
+SFX N Y 2
+SFX N ी ियाँ ी
+SFX N ी िओं ी
+
+# hi-noun4a eg. भाई/38, धोबी/38
+SFX O Y 3
+SFX O ी िओं ी
+SFX O ई इओं ई
+SFX O ई इयाँ ई
+
+# hi-noun3 eg. जाति/39
+SFX P Y 2
+SFX P ि ियाँ ि
+SFX P ि िओं ि
+
+# hi-noun3a eg. मुनि/40
+SFX Q Y 1
+SFX Q ि िओं ि
+
+# hi-noun2 eg. बहू/41, वस्तु/41, गौ/41
+SFX R Y 3
+SFX R ू ुओं ू
+SFX R ु ुओं ु
+SFX R 0 ओं ौ
+
+# hi-noun8a eg. गुड़िया/42
+SFX S Y 2
+SFX S 0 ँ ा
+SFX S 0 ओं ा
+
+SFX T Y 1
+SFX T 0 ता .
+SFX U Y 1
+SFX U 0 दाता .
+SFX V Y 1
+SFX V 0 कर्ता .
+
+SFX W Y 10
+SFX W ा ाओं ा
+SFX W ा ाजनक ा
+SFX W ा ात्मक ा
+SFX W ा ापूर्ण ा
+SFX W ा ापूर्वक ा
+SFX W ा ाशीलता ा
+SFX W ा ाहीन ा
+SFX W ा ाहीनतः ा
+SFX W ा ाहीनता ा
+SFX W ा ित ा
+
+
+# तेरा, हमारी, तुम्हारा
+SFX X Y 3
+SFX X हम हमारा/26,30 हम
+SFX X तुम तुम्हारा/26,30 तुम
+SFX X तू तेरा/26,30 तू
+
+# वह
+SFX Y Y 4
+SFX Y 0 ी .
+SFX Y 0 ीं .
+SFX Y ह े ह
+SFX Y 0 ाँ .
+
+# उन्हें
+SFX Z Y 2
+SFX Z 0 ्हें .
+SFX Z 0 ्हीं .
+
+#  उन्होंने
+SFX z Y 1
+SFX z 0 ्होंने .
+
+# as per http://hi.wikipedia.org/wiki/मानक_हिंदी_वर्तनी
+
+#2.12_.वाला (misc3)
+SFX y Y 2
+SFX y 0 वाला .
+SFX y 0 वाले .
+SFX x Y 2
+SFX x 0 वाली .
+SFX x 0 वालियाँ .
+
+# kis - is, us, jis - various forms, ignore for सब
+SFX w Y 13
+SFX w स तने स
+SFX w 0 े [^ब]
+SFX w 0 ी [^ब]
+SFX w 0 ने .
+SFX w 0 से .
+SFX w 0 पर .
+SFX w 0 पे .
+SFX w 0 का .
+SFX w 0 के .
+SFX w 0 की .
+SFX w 0 को .
+SFX w 0 में .
+SFX w 0 लिए [^ब]
+
+# as per http://hi.wikipedia.org/wiki/मानक_हिंदी_वर्तनी
+
+#2.2 (misc2)
+SFX v Y 1
+SFX v 0 ने .
+
+# as per http://hi.wikipedia.org/wiki/मानक_हिंदी_वर्तनी
+
+#2.2 (misc2)
+SFX u Y 8
+SFX u 0 से .
+SFX u 0 को .
+SFX u 0 पर .
+SFX u 0 पे .
+SFX u 0 के [^म]
+SFX u 0 की [^म]
+SFX u 0 में .
+SFX u 0 का [^म]
+
+# as per http://hi.wikipedia.org/wiki/मानक_हिंदी_वर्तनी
+
+#2.4.2  (misc2)
+SFX t Y 4
+SFX t 0 -सा .
+SFX t 0 -से .
+SFX t 0 -जैसा .
+SFX t 0 -जैसे .
+
+# eg: add ता
+SFX s Y 1
+SFX s 0 ता .
+
+# eg: सुन्दर to सुन्दरतर, सुन्दरतम, सुन्दरता  (misc1)
+SFX r Y 3
+SFX r 0 तर .
+SFX r 0 तम .
+SFX r 0 ता [^अधुना]
+
+# eg: add सूचक
+SFX q Y 1
+SFX q 0 सूचक .
+
+# following rules are used only for example forms (misc9)
+SFX p Y 20
+SFX p 0 नगर .
+SFX p 0 गंज .
+SFX p 0 गिरि .
+SFX p 0 ताल .
+SFX p 0 पुर .
+SFX p 0 पुरी .
+SFX p 0 क्षेत्र .
+SFX p 0 झील .
+SFX p 0 कुंज .
+SFX p 0 मार्ग .
+SFX p 0 खेत .
+SFX p 0 पुरम .
+SFX p 0 टाउन .
+SFX p 0 पुरा .
+SFX p 0 वाड़ी .
+SFX p 0 घाटी .
+SFX p 0 घाट .
+SFX p 0 खंड .
+SFX p 0 गढ़ .
+SFX p 0 पहाड़ी .
+
+SFX o Y 28
+SFX o 0 किशोर .
+SFX o 0 कुमार .
+SFX o 0 जीत .
+SFX o 0 वीर .
+SFX o 0 नाथ .
+SFX o 0 दास .
+SFX o 0 प्रीत .
+SFX o 0 सिंह .
+SFX o 0 गुप्त .
+SFX o 0 कान्त .
+SFX o 0 राज .
+SFX o 0 रंजन .
+SFX o 0 मोहन .
+SFX o 0 रतन .
+SFX o 0 प्रताप .
+SFX o 0 पाल .
+SFX o 0 चन्द्र .
+SFX o 0 किरण .
+SFX o 0 जी .
+SFX o 0 लाल .
+SFX o 0 नन्द .
+SFX o 0 दीप .
+SFX o 0 नारायण .
+SFX o 0 राम .
+SFX o 0 शंकर .
+SFX o 0 दयाल .
+SFX o 0 दीन .
+SFX o 0 विजय .
+
+SFX 0 Y 3
+SFX 0 0 ी .
+SFX 0 0 िनी .
+SFX 0 0 ियों .
+
+#PREFIXES
+PFX a Y 4
+PFX a अ मुख्या अ
+PFX a अ प्रधाना अ
+PFX a अ महा अ
+PFX a अ उपा अ
+
+#
+PFX b Y 4
+PFX b 0 मुख्य .
+PFX b 0 प्रधान .
+PFX b 0 महा .
+PFX b 0 उप .
+
+#
+PFX c Y 4
+PFX c आ मुख्या आ
+PFX c आ प्रधाना आ
+PFX c आ महा आ
+PFX c आ उपा आ
+
+PFX d Y 2
+PFX d 0 खुश .
+PFX d 0 बद .
+
+PFX e Y 4
+PFX e 0 सु .
+PFX e 0 कु .
+PFX e 0 सद् .
+PFX e 0 स्व .
+
+PFX f Y 1
+PFX f 0 बे .
+
+PFX g Y 1
+PFX g 0 बा .
+
+PFX h Y 1
+PFX h 0 हर .
+
+PFX i Y 1
+PFX i 0 हम .
+
+PFX j Y 1
+PFX j 0 ना .
+
+PFX k Y 1
+PFX k 0 दर .
+
+PFX l Y 1
+PFX l 0 ऐन .
+
+PFX m Y 1
+PFX m 0 वि .
+
+PFX n Y 2
+PFX n 0 एक .
+PFX n 0 बहु .
+
+PFX ~ Y 1
+PFX ~ 0 अशुभ .
+
+PFX $ Y 1
+PFX $ 0 शुभ .
+
+PFX & Y 1
+PFX & 0 अर्थ .
+
+PFX ^ Y 1
+PFX ^ 0 पाप .
+
+PFX % Y 1
+PFX % 0 प्रति .
+
+PFX @ Y 1
+PFX @ 0 अनु .
+
+PFX ! Y 1
+PFX ! 0 अति .
+
+PFX ` Y 1
+PFX ` 0 भू- .
+
+PFX ( Y 1
+PFX ( 0 कार्य .
+
+PFX ) Y 1
+PFX ) 0 पुनः .
+
+PFX _ Y 1
+PFX _ 0 नेत्र .
+
+PFX - Y 1
+PFX - 0 जीवन- .
+
+PFX = Y 1
+PFX = 0 अ .
+
+PFX + Y 1
+PFX + 0 आ .

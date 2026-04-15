@@ -1,0 +1,411 @@
+---
+assumeFilename: sd/source/core/drawdoc.cxx
+excludelist:
+    sd/sdi/sdslots.hrc:
+    # Needed for sdi files to compile
+    - sfx2/sfxsids.hrc
+    - editeng/editids.hrc
+    - editeng/memberids.h
+    - svx/svxids.hrc
+    - svx/unomid.hxx
+    - app.hrc
+    - sdattr.hrc
+    sd/inc/CustomAnimationCloner.hxx:
+    # base class has to be a complete type
+    - com/sun/star/animations/XAnimationNode.hpp
+    sd/inc/CustomAnimationPreset.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    sd/inc/CustomAnimationEffect.hxx:
+    # base class has to be a complete type
+    - com/sun/star/animations/XAnimationNode.hpp
+    - com/sun/star/animations/XAudio.hpp
+    - com/sun/star/animations/XTimeContainer.hpp
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/util/XChangesListener.hpp
+    sd/inc/OutlinerIterator.hxx:
+    # base class has to be a complete type
+    - svx/svdobj.hxx
+    sd/inc/sderror.hxx:
+    # needed for defines
+    - comphelper/errcode.hxx
+    sd/inc/sdfilter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XModel.hpp
+    - com/sun/star/task/XStatusIndicator.hpp
+    sd/inc/sdmod.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    - sot/storage.hxx
+    # Needed for define
+    - sfx2/app.hxx
+    sd/inc/sdpage.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XDrawPage.hpp
+    - com/sun/star/office/XAnnotation.hpp
+    sd/inc/stlfamily.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XSingleServiceFactory.hpp
+    sd/inc/stlpool.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/lang/XComponent.hpp
+    sd/inc/stlsheet.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/style/XStyle.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    sd/inc/TransitionPreset.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    sd/inc/undoanim.hxx:
+    # base class has to be a complete type
+    - com/sun/star/animations/XAnimationNode.hpp
+    sd/inc/undo/undoobjects.hxx:
+    # base class has to be a complete type
+    - tools/weakbase.hxx
+    sd/inc/unolayer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XLayer.hpp
+    - com/sun/star/drawing/XLayerManager.hpp
+    sd/source/filter/eppt/eppt.hxx:
+    # base class has to be a complete type
+    - escherex.hxx
+    sd/source/filter/html/htmlex.hxx:
+    # Needed in --fwdecl mode, to silence "externally available entity 'HtmlState' is not previously declared in an included file"
+    - class HtmlState
+    sd/source/ui/annotations/annotationmanagerimpl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XEventListener.hpp
+    sd/source/ui/annotations/annotationmanager.cxx:
+    # Needed for unique_ptr type
+    - editeng/outlobj.hxx
+    sd/source/ui/app/sdmod.cxx:
+    # Needed to inherit linker visibility from SdResId declaration
+    - sdresid.hxx
+    sd/source/ui/dlg/headerfooterdlg.cxx:
+    # Needed for unique_ptr type
+    - editeng/outlobj.hxx
+    sd/source/ui/dlg/prntopts.cxx:
+    # Needed on MACOSX
+    - svl/intitem.hxx
+    - app.hrc
+    sd/source/ui/framework/configuration/GenericConfigurationChangeRequest.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    sd/source/ui/framework/configuration/UpdateRequest.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    sd/source/ui/inc/framework/factories/BasicToolBarFactory.hxx:
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/framework/factories/ChildWindowPane.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XEventListener.hpp
+    - framework/Pane.hxx
+    sd/source/ui/inc/AccessibleDocumentViewBase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
+    - com/sun/star/awt/XFocusListener.hpp
+    - com/sun/star/awt/XWindowListener.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    sd/source/ui/inc/AccessibleDrawDocumentView.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleGroupPosition.hpp
+    sd/source/ui/inc/AccessibleSlideSorterObject.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    sd/source/ui/inc/AccessibleSlideSorterView.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleSelection.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/inc/DrawDocShell.hxx:
+    # base class has to be a complete type
+    - fupoor.hxx
+    sd/source/ui/inc/DocumentRenderer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/view/XRenderable.hpp
+    sd/source/ui/inc/DrawController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XDrawView.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/view/XFormLayerAccess.hpp
+    - com/sun/star/view/XSelectionSupplier.hpp
+    - sfx2/sfxbasecontroller.hxx
+    sd/source/ui/inc/fupage.hxx:
+    # base class has to be a complete type
+    - vcl/weld.hxx
+    sd/source/ui/inc/slideshow.hxx:
+    # typedef needs a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/presentation/XPresentation2.hpp
+    sd/source/ui/inc/unosrch.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XReplaceDescriptor.hpp
+    sd/source/ui/inc/framework/Configuration.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/inc/framework/ConfigurationController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/inc/framework/ModuleController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/inc/framework/ViewShellWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XWindowListener.hpp
+    - com/sun/star/view/XSelectionSupplier.hpp
+    sd/source/ui/inc/tools/SlotStateListener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XStatusListener.hpp
+    sd/source/ui/presenter/PresenterCanvas.hxx:
+    # base class has to be a complete type
+    - com/sun/star/rendering/XSpriteCanvas.hpp
+    - com/sun/star/rendering/XBitmap.hpp
+    - com/sun/star/awt/XWindowListener.hpp
+    sd/source/ui/remotecontrol/Listener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/presentation/XSlideShowListener.hpp
+    sd/source/ui/sidebar/PanelFactory.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XUIElementFactory.hpp
+    sd/source/ui/slideshow/slideshowimpl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/presentation/XShapeEventListener.hpp
+    - com/sun/star/presentation/XSlideShowController.hpp
+    sd/source/ui/slideshow/slideshowviewimpl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XPaintListener.hpp
+    - com/sun/star/awt/XWindowListener.hpp
+    - com/sun/star/presentation/XSlideShowView.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    sd/source/ui/slidesorter/controller/SlsListener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XEventListener.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/frame/XFrameActionListener.hpp
+    sd/source/ui/unoidl/sddetect.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XExtendedFilterDetection.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/unoidl/unocpres.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XIndexContainer.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XSingleServiceFactory.hpp
+    sd/source/ui/unoidl/unopback.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/core/CustomAnimationCloner.cxx:
+    # Avoid loplugin:unreffun error
+    - CustomAnimationCloner.hxx
+    sd/source/core/EffectMigration.cxx:
+    # Needed for UnoType
+    - com/sun/star/presentation/ParagraphTarget.hpp
+    sd/source/core/stlsheet.cxx:
+    # Needed for UnoType
+    - com/sun/star/table/BorderLine.hpp
+    # Needed for TypedWhichId macros
+    - svx/sdtaaitm.hxx
+    - svx/sdtacitm.hxx
+    - svx/sdtayitm.hxx
+    - svx/sdtaiitm.hxx
+    sd/source/core/typemap.cxx:
+    # Needed by sdslots.hxx to build
+    - config_options.h
+    - editeng/boxitem.hxx
+    - editeng/cmapitem.hxx
+    - editeng/colritem.hxx
+    - editeng/contouritem.hxx
+    - editeng/crossedoutitem.hxx
+    - editeng/fhgtitem.hxx
+    - editeng/fontitem.hxx
+    - editeng/kernitem.hxx
+    - editeng/langitem.hxx
+    - editeng/lineitem.hxx
+    - editeng/lrspitem.hxx
+    - editeng/lspcitem.hxx
+    - editeng/memberids.h
+    - editeng/postitem.hxx
+    - editeng/protitem.hxx
+    - editeng/shdditem.hxx
+    - editeng/sizeitem.hxx
+    - editeng/tstpitem.hxx
+    - editeng/udlnitem.hxx
+    - editeng/ulspitem.hxx
+    - editeng/wghtitem.hxx
+    - sfx2/frame.hxx
+    - sfx2/msg.hxx
+    - sfx2/tplpitem.hxx
+    - sfx2/zoomitem.hxx
+    - svl/globalnameitem.hxx
+    - svl/lckbitem.hxx
+    - svl/ptitem.hxx
+    - svl/rectitem.hxx
+    - svl/slstitm.hxx
+    - svl/srchitem.hxx
+    - svx/chrtitem.hxx
+    - svx/clipfmtitem.hxx
+    - svx/drawitem.hxx
+    - svx/galleryitem.hxx
+    - svx/hlnkitem.hxx
+    - svx/pageitem.hxx
+    - svx/postattr.hxx
+    - svx/rulritem.hxx
+    - svx/sdmetitm.hxx
+    - svx/sdooitm.hxx
+    - svx/sdprcitm.hxx
+    - svx/sdtfsitm.hxx
+    - svx/unomid.hxx
+    - svx/xbtmpit.hxx
+    - svx/xfillit0.hxx
+    - svx/xflclit.hxx
+    - svx/xflftrit.hxx
+    - svx/xflhtit.hxx
+    - svx/xftadit.hxx
+    - svx/xftdiit.hxx
+    - svx/xftmrit.hxx
+    - svx/xftouit.hxx
+    - svx/xftshcit.hxx
+    - svx/xftshit.hxx
+    - svx/xftshxy.hxx
+    - svx/xftstit.hxx
+    - svx/xlineit0.hxx
+    - svx/xlinjoit.hxx
+    - svx/xlncapit.hxx
+    - svx/xlnclit.hxx
+    - svx/xlndsit.hxx
+    - svx/xlnedit.hxx
+    - svx/xlnstit.hxx
+    - svx/xlnwtit.hxx
+    - svx/xtextit0.hxx
+    - svx/zoomslideritem.hxx
+    - svx/sdangitm.hxx
+    sd/source/core/drawdoc.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sd/source/filter/eppt/epptso.cxx:
+    # Needed for direct member access
+    - com/sun/star/table/XTable.hpp
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sd/source/filter/eppt/pptx-animations.hxx:
+    # Needed for typedef
+    - sax/fshelper.hxx
+    sd/source/filter/eppt/pptexanimations.cxx:
+    # Needed for template
+    - com/sun/star/drawing/XDrawPage.hpp
+    sd/source/filter/eppt/pptx-epptooxml.cxx:
+    # Needed for direct member access
+    - com/sun/star/task/XStatusIndicator.hpp
+    - com/sun/star/frame/XModel.hpp
+    sd/source/filter/eppt/pptx-text.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XBitmap.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/style/TabStop.hpp
+    - com/sun/star/graphic/XGraphic.hpp
+    sd/source/filter/ppt/pptinanimations.cxx:
+    # Needed for template
+    - com/sun/star/drawing/XDrawPage.hpp
+    sd/source/filter/xml/sdxmlwrp.cxx:
+    # Needed for implicit dtor
+    - editeng/outlobj.hxx
+    sd/source/filter/xml/sdtransform.cxx:
+    # Needed for implicit dtor
+    - editeng/outlobj.hxx
+    sd/source/ui/framework/configuration/ChangeRequestQueueProcessor.cxx:
+    # Needed for DEBUG_SD_CONFIGURATION_TRACE
+    - ConfigurationTracer.hxx
+    - com/sun/star/container/XNamed.hpp
+    sd/source/ui/framework/configuration/ConfigurationTracer.cxx:
+    # Needed for DEBUG mode
+    - sal/log.hxx
+    sd/source/ui/framework/configuration/ConfigurationUpdater.cxx:
+    # Needed for DEBUG_SD_CONFIGURATION_TRACE
+    - ConfigurationTracer.hxx
+    sd/source/ui/framework/configuration/ResourceFactoryManager.cxx:
+    # Needed for VERBOSE mode
+    - sal/log.hxx
+    sd/source/ui/framework/module/ModuleController.cxx:
+    # Needed for direct member access
+    - com/sun/star/frame/XController.hpp
+    sd/source/ui/func/fuconbez.cxx:
+    # Needed for virtual method parameter
+    - Window.hxx
+    sd/source/ui/func/fuhhconv.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XWindow.hpp
+    sd/source/ui/dlg/RemoteDialogClientBox.cxx:
+    # Actually used
+    - vector
+    sd/source/ui/dlg/sdtreelb.cxx:
+    # Needed for template
+    - com/sun/star/embed/XEmbeddedObject.hpp
+    sd/source/ui/func/futempl.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sd/source/ui/sidebar/MasterPageObserver.cxx:
+    # Actually used
+    - set
+    sd/source/ui/slideshow/PaneHider.cxx:
+    # Needed for template
+    - com/sun/star/frame/XController.hpp
+    sd/source/ui/slidesorter/view/SlsInsertionIndicatorOverlay.cxx:
+    # Needed for instantiation of function template specialization
+    - Window.hxx
+    sd/source/ui/slidesorter/cache/SlsRequestQueue.cxx:
+    # Needed for  OSL_DEBUG_LEVEL >=2
+    - sal/log.hxx
+    sd/source/ui/slidesorter/controller/SlsCurrentSlideManager.cxx:
+    # Needed for template
+    - com/sun/star/frame/XController.hpp
+    sd/source/ui/slidesorter/controller/SlsListener.cxx:
+    # Needed for template
+    - com/sun/star/frame/FrameActionEvent.hpp
+    sd/source/ui/unoidl/sddetect.cxx:
+    # Needed for template
+    - com/sun/star/beans/PropertyValue.hpp
+    sd/source/ui/unoidl/unoobj.cxx:
+    # Needed for template
+    - com/sun/star/beans/PropertyState.hpp
+    sd/source/ui/unoidl/unodoc.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sd/source/ui/view/GraphicObjectBar.cxx:
+    # Needed by a sdslots.hxx constant
+    - svx/svxids.hrc
+    sd/source/ui/view/PresentationViewShellBase.cxx:
+    # Needed for template
+    - com/sun/star/frame/XFrame.hpp
+    sd/source/ui/view/drviewsf.cxx:
+    # Needed for template
+    - svx/sdmetitm.hxx
+    sd/source/ui/view/drvwshrg.cxx:
+    # Needed by a sdslots.hxx constant
+    - app.hrc
+    sd/source/ui/view/MediaObjectBar.cxx:
+    # Needed by a sdslots.hxx constant
+    - sfx2/sfxsids.hrc
+    sd/source/ui/view/sdview2.cxx:
+    # Needed for template
+    - com/sun/star/embed/XEmbeddedObject.hpp
+    sd/source/ui/view/presvish.cxx:
+    # Needed by a sdslots.hxx constant
+    - svx/svxids.hrc

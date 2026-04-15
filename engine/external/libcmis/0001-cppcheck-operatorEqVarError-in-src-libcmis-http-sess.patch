@@ -1,0 +1,24 @@
+From 308a5352bab44157ba13962b9aa4becefb6e3817 Mon Sep 17 00:00:00 2001
+From: Julien Nabet <serval2412@yahoo.fr>
+Date: Fri, 23 Feb 2024 17:56:17 +0100
+Subject: [PATCH] cppcheck: operatorEqVarError in src/libcmis/http-session.cxx
+
+---
+ src/libcmis/http-session.cxx | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/libcmis/http-session.cxx b/src/libcmis/http-session.cxx
+index f690914..8d427a4 100644
+--- a/src/libcmis/http-session.cxx
++++ b/src/libcmis/http-session.cxx
+@@ -224,6 +224,7 @@ HttpSession& HttpSession::operator=( const HttpSession& copy )
+     {
+         curl_easy_cleanup( m_curlHandle );
+         m_curlHandle = NULL;
++        m_CurlInitProtocolsFunction = copy.m_CurlInitProtocolsFunction;
+         m_no100Continue = copy.m_no100Continue;
+         m_oauth2Handler = copy.m_oauth2Handler;
+         m_username = copy.m_username;
+-- 
+2.45.1
+

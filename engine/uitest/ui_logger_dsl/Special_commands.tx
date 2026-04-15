@@ -1,0 +1,238 @@
+/*
+    This file is for the log statements that relate to each application.
+    Each grammar rule here is related to a specific application.
+*/
+
+import type_options
+
+SpecialCommand:
+  writer_command | calc_command | impress_command | math_command | draw_command
+;
+
+/*
+  This part is for all the Writer log statements:
+
+    1)  Type
+    2)  Select
+    3)  GOTO page
+    4)  Create Table
+    5)  Copy Text
+    6)  Cut Text
+    7)  Paste Text
+    8)  Insert Break Page
+*/
+writer_command:
+    writer_Type_command | writer_Select_command | writer_GOTO_command |
+    writer_Create_table | writer_Copy_Text | writer_Cut_Text |
+    writer_Paste_Text | writer_Insert_BreakPage | writer_Comment_command
+;
+writer_Type_command:
+  'Type on writer' what_to_type=Type_options
+;
+writer_Select_command:
+  'Select from Pos' from_pos=INT 'to Pos' to_pos=INT
+;
+writer_GOTO_command:
+  'GOTO page number' page_num=INT
+;
+writer_Create_table:
+  'Create Table with  Columns :' cols=INT ', Rows :' rows=INT
+;
+writer_Copy_Text:
+  'Copy the Selected Text'
+;
+writer_Cut_Text:
+  'Cut the Selected Text'
+;
+writer_Paste_Text:
+  'Paste in the Current Cursor Location'
+;
+writer_Insert_BreakPage:
+  'Insert Break Page'
+;
+
+/*
+  This part is for all the Calc log statements:
+
+    1)  select sheet
+    2)  Select cell or range
+    3)  launch AutoFill
+    4)  launch SELECTMENU
+    5)  Delete Cells
+    6)  Remove Content of a cell
+    7)  Insert new Cells
+    8)  Cut Cells
+    9)  Copy Cells
+    10)  Paste Cells
+    11) Merge Cells
+    12) Unmerge Cells
+    13) Open Comment
+    14) Close Comment
+*/
+calc_command:
+  calc_Type_command | calc_switch_sheet | calc_Select_cell | calc_AutoFill_filter |
+  calc_SelectMenu_filter | calc_Delete_Cells | calc_Remove_Content | calc_insert_cells |
+  calc_Cut_Cells | calc_Copy_Cells | calc_Paste_Cells | calc_UNMerge_Cells |
+  calc_Merge_Cells | calc_Rename_Sheet | calc_Insert_sheet | calc_Open_Comment |
+  calc_Close_Comment
+;
+calc_Type_command:
+  'Type on current cell' what_to_type=Type_options
+;
+calc_switch_sheet:
+  'Switch to sheet number' sheet_num=INT
+;
+calc_Select_cell:
+  'Select from calc' select_op=select_options
+;
+calc_AutoFill_filter:
+  'Launch AutoFilter from Col' col_num=INT 'and Row' row_num=INT
+;
+calc_SelectMenu_filter:
+  'Launch SELECTMENU from Col' col_num=INT 'and Row' row_num=INT
+;
+range_of_cells:
+    '{' '"RANGE":' input_range=STRING '}'
+;
+one_cell:
+    '{' '"CELL":' input_cell=STRING '}'
+;
+calc_Delete_Cells:
+    'Delete The Cells in' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_Remove_Content:
+    'Remove Content from This' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_insert_cells:
+    'Insert Cell around the ' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_Cut_Cells:
+    'CUT the selected ' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_Copy_Cells:
+    'COPY the selected ' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_Paste_Cells:
+    'Paste in the' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_Merge_Cells:
+    'Merge' '{' '"RANGE":' input_range=STRING '}'
+;
+calc_UNMerge_Cells:
+    'Delete the merge between' '{' '"CELL":' input_range=STRING '}'
+;
+calc_Rename_Sheet:
+    'Rename The Selected Tab to ' new_name=STRING
+;
+calc_Insert_sheet:
+    'Insert New Tab '
+;
+calc_Open_Comment:
+    'Open Comment' (txt=STRING)?
+;
+calc_Close_Comment:
+    'Close Comment' (txt=STRING)?
+;
+
+//this is the select options
+select_options:
+    one_cell | range_of_cells
+;
+
+/*
+  This part is for all the Impress log statements:
+
+    1)  Type
+    2)  Insert New Slide
+    3)  Delete Slide
+    4)  Duplicate Slide
+    5)  Rename Slide
+*/
+impress_command:
+    impress_Type_command | impress_Insert_Slide | impress_Delete_Page |
+    impress_Duplicate_Slide | impress_Rename_Slide
+;
+impress_Type_command:
+    'Type on impress ' what_to_type=Type_options
+;
+impress_Insert_Slide:
+    'Insert New Slide at Position ' position_num=INT
+;
+impress_Delete_Page:
+    'Delete Slide number ' position_num=INT
+;
+impress_Duplicate_Slide:
+    'Duplicate The Selected Slide '
+;
+impress_Rename_Slide:
+    'Rename The Selected Slide from ' old_name=STRING 'to' new_name=STRING
+;
+/*
+  This part is for all the Math log statements:
+
+    1)  element selector
+    2)  Type
+*/
+math_command:
+    math_element_selector | math_Type_command
+;
+math_element_selector:
+    'Select element no ' element_no=INT 'From' place=ID
+;
+math_Type_command:
+    'Type on math ' what_to_type=Type_options
+;
+
+/*
+  This part is for all the Draw log statements:
+
+    1) Type
+    2) Insert New Page
+    3) Delete Page
+    4) Rename Page
+*/
+draw_command:
+    draw_Type_command | draw_Insert_Page | draw_Delete_Page |
+    draw_Rename_Page
+;
+draw_Type_command:
+    'Type on draw ' what_to_type=Type_options
+;
+draw_Insert_Page:
+    'Insert New Page at Position ' position_num=INT
+;
+draw_Delete_Page:
+    'Delete Page number ' position_num=INT
+;
+draw_Rename_Page:
+    'Rename The Selected Page from ' old_name=STRING 'to' new_name=STRING
+;
+
+/*
+  This part is for all the Writer Comment log statements:
+
+    1) Leave
+    2) Hide
+    3) Show
+    4) Delete
+    5) Set Resolved
+*/
+writer_Comment_command:
+    writer_Comment_leave | writer_Comment_show | writer_Comment_hide |
+    writer_Comment_delete | writer_Comment_setresolved
+;
+writer_Comment_leave:
+  'Leave ' comment_id=STRING
+;
+writer_Comment_show:
+  'Show ' comment_id=STRING
+;
+writer_Comment_hide:
+  'Hide ' comment_id=STRING
+;
+writer_Comment_delete:
+  'Delete ' comment_id=STRING
+;
+writer_Comment_setresolved:
+  'Resolve'  comment_id=STRING
+;

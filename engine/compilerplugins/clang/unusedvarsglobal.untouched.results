@@ -1,0 +1,94 @@
+canvas/workben/canvasdemo.cxx:666
+    DemoApp aApp
+connectivity/source/drivers/evoab2/EApi.h:51
+    gconstpointer (*)(EContact *, EContactField) e_contact_get_const
+connectivity/source/drivers/evoab2/EApi.h:55
+    char *(*)(ESource *) e_source_peek_name
+connectivity/source/drivers/evoab2/EApi.h:64
+    GSList *(*)(ESourceList *) e_source_list_peek_groups
+connectivity/source/drivers/evoab2/EApi.h:70
+    GSList *(*)(ESourceGroup *) e_source_group_peek_sources
+connectivity/source/drivers/evoab2/EApi.h:71
+    char *(*)(ESourceGroup *) e_source_group_peek_base_uri
+connectivity/source/drivers/evoab2/EApi.h:90
+    char *(*)(EBook *) e_book_get_uri
+connectivity/source/drivers/evoab2/EApi.h:93
+    gboolean (*)(ESourceList **, GError **) e_book_get_addressbooks
+connectivity/source/drivers/evoab2/EApi.h:101
+    gboolean (*)(EBook *, const char *, const char *, const char *, GError **) e_book_authenticate_user
+cppu/source/uno/check.cxx:329
+    BinaryCompatible_Impl aTest
+desktop/source/lib/init.cxx:7376
+    SvtOptionsDialogOptions aDialogOptions
+desktop/source/lib/init.cxx:7377
+    SvtCTLOptions aSvtCTLOptions
+desktop/source/lib/init.cxx:7379
+    svtools::ColorConfig aColorConfig
+desktop/source/lib/init.cxx:7380
+    SvtMiscOptions aSvtMiscOptions
+desktop/source/lib/init.cxx:7382
+    SvtCommandOptions aSvtCommandOptions
+desktop/source/lib/init.cxx:7383
+    SvtCompatibilityOptions aSvtCompatibilityOptions
+desktop/source/lib/init.cxx:7384
+    SvtFilterOptions aSvtFilterOptions
+desktop/source/lib/init.cxx:7385
+    SvtLinguConfig aSvtLinguConfig
+desktop/source/lib/init.cxx:7386
+    SvtModuleOptions aSvtModuleOptions
+desktop/source/lib/init.cxx:7387
+    SvtPathOptions aSvtPathOptions
+desktop/source/lib/init.cxx:7388
+    SvtSearchOptions aSvtSearchOptions
+desktop/source/lib/init.cxx:7389
+    SvtSysLocaleOptions aSvtSysLocaleOptions
+desktop/source/lib/init.cxx:7390
+    SvtUserOptions aSvtUserOptions
+desktop/source/lib/init.cxx:7392
+    MouseSettings aMouseSettings
+desktop/source/lib/init.cxx:7393
+    StyleSettings aStyleSettings
+desktop/source/lib/init.cxx:7394
+    MiscSettings aMiscSettings
+desktop/source/lib/init.cxx:7395
+    HelpSettings aHelpSettings
+desktop/source/lib/init.cxx:7396
+    AllSettings aAllSettings
+framework/source/services/ContextChangeEventMultiplexer.cxx:353
+    Hook g_hook
+hwpfilter/source/nodes.h:89
+    int count
+pyuno/source/module/pyuno_gc.cxx:45
+    StaticDestructorGuard guard
+sal/osl/all/utility.cxx:45
+    OGlobalTimer aGlobalTimer
+sal/qa/osl/file/osl_File.cxx:4978
+    GlobalObject theGlobalObject
+sal/rtl/cmdargs.cxx:46
+    ArgHolder argHolder
+sal/rtl/strtmpl.hxx:772
+    rtl_tString data
+sfx2/source/bastyp/fltfnc.cxx:81
+    SfxFilterListener theSfxFilterListener
+soltools/cpp/cpp.h:238
+    int Lflag
+soltools/mkdepend/parse.c:40
+    symhash * maininclist
+soltools/mkdepend/pr.c:37
+    int width
+starmath/source/smdll.cxx:81
+    SmDLL theDll
+svx/source/gengal/gengal.cxx:323
+    GalApp aGalApp
+svx/source/items/svxerr.cxx:32
+    SvxErrorHandler SINGLETON
+vcl/backendtest/VisualBackendTest.cxx:883
+    VisualBackendTestApp aApplication
+vcl/workben/icontest.cxx:212
+    IconTestApp aApp
+vcl/workben/mtfdemo.cxx:243
+    DemoMtfApp aApp
+vcl/workben/vcldemo.cxx:2269
+    DemoApp aApp
+xmloff/inc/enummaps.hxx:22
+    SvXMLEnumMapEntry<sal_Int16>[] pXML_ThemeColor_Enum

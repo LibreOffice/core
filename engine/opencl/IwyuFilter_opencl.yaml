@@ -1,0 +1,6 @@
+---
+assumeFilename: opencl/source/opencl_device.cxx
+excludelist:
+    opencl/source/opencl_device.cxx:
+    # Avoid loplugin:unreffun error
+    - opencl_device.hxx

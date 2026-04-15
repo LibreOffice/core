@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="1in" height="1in" viewBox="0 0 100% 100%">
+
+	<text x="5" y="20" style="font-size:16px;font-family:Liberation Sans">foo
+		<tspan x="5" dy="1.5em" style="font-size:0.5em">bar</tspan></text>
+</svg>

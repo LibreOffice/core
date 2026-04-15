@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200 px" height="100 px">
+<style type="text/css" id="style1">
+* {font-size:18px;}
+#tspan6 {fill:blue}
+.c1 {fill:green}
+.c2 {fill:red}
+#tspan8 {fill:green}
+#text9 {fill:green}
+</style>
+<text id="text1" style="" x="1" y="20" >
+	<tspan id="tspan1" fill="red">red 1</tspan>
+</text>
+<text id="text2" style="fill:red" x="1" y="40" >
+	<tspan id="tspan2">red 2</tspan>
+</text>
+<text id="text3" style="" x="1" y="60" >
+	<tspan id="tspan3" style="fill:red">red 3</tspan>
+</text>
+
+<text id="text4" style="fill:red" x="60" y="20" >
+	<tspan id="tspan4" fill="blue">blue 4</tspan>
+</text>
+<text id="text5" x="60" y="40" >
+	<tspan id="tspan5" style="fill:blue" fill="red">blue 5</tspan>
+</text>
+<text id="text6" style="fill:red" x="60" y="60" >
+	<tspan id="tspan6">blue 6</tspan>
+</text>
+
+<text id="text7" x="130" y="20" >
+	<tspan id="tspan7" class="c1" fill="blue">green 7</tspan>
+</text>
+<text id="text8" x="130" y="40" >
+	<tspan id="tspan8" class="c2" fill="red">green 8</tspan>
+</text>
+<text id="text9" x="130" y="60" class="c2">
+	<tspan id="tspan9">green 9</tspan>
+</text>
+
+</svg>

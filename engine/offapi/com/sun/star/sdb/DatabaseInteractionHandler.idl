@@ -1,0 +1,57 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+module com { module sun { module star { module task {
+    interface XInteractionHandler2;
+}; }; }; };
+
+module com {  module sun {  module star {  module sdb {
+
+/** describes a service which is able to handle database-related interactions.
+
+    <p>Usually, you will not instantiate this service directly. Instead, you'll instantiate a generic
+    com::sun::star::task::InteractionHandler service, and pass it your request. Based on
+    configuration data, this implementation will decide where to forward the request to.</p>
+
+    <p>By default, the <code>DatabaseInteractionHandler</code> feels responsible (as per configuration) for the
+    following interaction types:
+    <ul>
+        <li><b>database related errors</b><br/>
+            The general structure to transport such errors is the com::sun::star::sdbc::SQLException,
+            and if your interaction request supplies such a <code>SQLException</code> (or an instance of any derived class),
+            the handler will display a generic error dialog, which is able to travel the object chain which may be contained
+            in the exception.
+        </li>
+        <li><b>parameter requests</b><br/>
+            If your interaction request supplies a com::sun::star::sdb::ParametersRequest,
+            the handler will open a standard dialog asking the user to fill in parameter values.
+            <br/>
+            In the case you want to use this feature of the handler, you should supply a special continuation
+            (com::sun::star::sdb::XInteractionSupplyParameters) as well, so the
+            handler can return the entered information.
+        </li>
+    </ul>
+    </p>
+*/
+service DatabaseInteractionHandler: com::sun::star::task::XInteractionHandler2;
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

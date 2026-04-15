@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<configuration>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="cli_basetypes" publicKeyToken="ce2cb7e279207b9e"/>
+        <bindingRedirect oldVersion="CLI_BASETYPES_OLD_VERSION" newVersion="CLI_BASETYPES_NEW_VERSION" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+</configuration>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Lohit Hindi" svg:font-family="&apos;Lohit Hindi&apos;, &apos;Times New Roman&apos;"/>
+  <style:font-face style:name="Liberation Serif1" svg:font-family="&apos;Liberation Serif&apos;, &apos;Times New Roman&apos;" style:font-family-generic="roman"/>
+  <style:font-face style:name="Lucida Sans1" svg:font-family="&apos;Lucida Sans&apos;" style:font-family-generic="swiss"/>
+  <style:font-face style:name="Droid Sans Fallback" svg:font-family="&apos;Droid Sans Fallback&apos;, &apos;Times New Roman&apos;" style:font-pitch="variable"/>
+  <style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+  <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Lucida Sans" svg:font-family="&apos;Lucida Sans&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="Tahoma" svg:font-family="Tahoma" style:font-family-generic="system" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties svg:stroke-color="#3465a4" draw:fill-color="#729fcf" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:start-line-spacing-horizontal="0.283cm" draw:start-line-spacing-vertical="0.283cm" draw:end-line-spacing-horizontal="0.283cm" draw:end-line-spacing-vertical="0.283cm" style:flow-with-text="false"/>
+   <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:use-window-font-color="true" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="Tahoma" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lucida Sans" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="1.251cm" style:writing-mode="page"/>
+   <style:text-properties style:use-window-font-color="true" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="Tahoma" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lucida Sans" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="text">
+   <style:paragraph-properties fo:margin-top="0.423cm" fo:margin-bottom="0.212cm" loext:contextual-spacing="false" fo:keep-with-next="always"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="14pt" style:font-name-asian="Tahoma" style:font-family-asian="Tahoma" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="14pt" style:font-name-complex="Lucida Sans" style:font-family-complex="&apos;Lucida Sans&apos;" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="14pt"/>
+  </style:style>
+  <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.247cm" loext:contextual-spacing="false" fo:line-height="120%"/>
+  </style:style>
+  <style:style style:name="List" style:family="paragraph" style:parent-style-name="Text_20_body" style:class="list">
+   <style:text-properties style:font-size-asian="12pt" style:font-name-complex="Lucida Sans1" style:font-family-complex="&apos;Lucida Sans&apos;" style:font-family-generic-complex="swiss"/>
+  </style:style>
+  <style:style style:name="Caption" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties fo:margin-top="0.212cm" fo:margin-bottom="0.212cm" loext:contextual-spacing="false" text:number-lines="false" text:line-number="0"/>
+   <style:text-properties fo:font-size="12pt" fo:font-style="italic" style:font-size-asian="12pt" style:font-style-asian="italic" style:font-name-complex="Lucida Sans1" style:font-family-complex="&apos;Lucida Sans&apos;" style:font-family-generic-complex="swiss" style:font-size-complex="12pt" style:font-style-complex="italic"/>
+  </style:style>
+  <style:style style:name="Index" style:family="paragraph" style:parent-style-name="Standard" style:class="index">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0"/>
+   <style:text-properties style:font-size-asian="12pt" style:font-name-complex="Lucida Sans1" style:font-family-complex="&apos;Lucida Sans&apos;" style:font-family-generic-complex="swiss"/>
+  </style:style>
+  <style:style style:name="Heading_20_3" style:display-name="Heading 3" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:default-outline-level="3" style:class="text">
+   <style:paragraph-properties fo:margin-top="0.101cm" fo:margin-bottom="0.101cm" loext:contextual-spacing="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-size="10pt" fo:font-weight="normal" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="Standard_20__28_user_29_" style:display-name="Standard (user)" style:family="paragraph">
+   <style:paragraph-properties fo:orphans="0" fo:widows="0" fo:hyphenation-ladder-count="no-limit" style:vertical-align="baseline"/>
+   <style:text-properties style:use-window-font-color="true" style:font-name="Liberation Serif1" fo:font-family="&apos;Liberation Serif&apos;, &apos;Times New Roman&apos;" style:font-family-generic="roman" fo:font-size="12pt" style:letter-kerning="true" style:font-name-asian="Droid Sans Fallback" style:font-family-asian="&apos;Droid Sans Fallback&apos;, &apos;Times New Roman&apos;" style:font-pitch-asian="variable" style:font-size-asian="12pt" style:font-name-complex="Lohit Hindi" style:font-family-complex="&apos;Lohit Hindi&apos;, &apos;Times New Roman&apos;" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2"/>
+  </style:style>
+  <style:style style:name="Table_20_Contents" style:display-name="Table Contents" style:family="paragraph" style:parent-style-name="Standard_20__28_user_29_" style:class="extra">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Tabel1" style:family="table">
+   <style:table-properties style:width="17.713cm" fo:margin-left="0cm" fo:break-before="page" table:align="left"/>
+  </style:style>
+  <style:style style:name="Tabel1.A" style:family="table-column">
+   <style:table-column-properties style:column-width="8.885cm"/>
+  </style:style>
+  <style:style style:name="Tabel1.B" style:family="table-column">
+   <style:table-column-properties style:column-width="8.828cm"/>
+  </style:style>
+  <style:style style:name="Tabel1.1" style:family="table-row">
+   <style:table-row-properties style:min-row-height="0.002cm"/>
+  </style:style>
+  <style:style style:name="Tabel1.A1" style:family="table-cell">
+   <style:table-cell-properties fo:padding-left="0.101cm" fo:padding-right="0.4cm" fo:padding-top="0.101cm" fo:padding-bottom="0.101cm" fo:border="none"/>
+  </style:style>
+  <style:style style:name="Tabel1.B1" style:family="table-cell">
+   <style:table-cell-properties fo:background-color="transparent" fo:padding-left="0.101cm" fo:padding-right="0.4cm" fo:padding-top="0.101cm" fo:padding-bottom="0.101cm" fo:border="none">
+    <style:background-image/>
+   </style:table-cell-properties>
+  </style:style>
+  <style:style style:name="Tabel2" style:family="table">
+   <style:table-properties style:width="8.327cm" table:align="margins"/>
+  </style:style>
+  <style:style style:name="Tabel2.A" style:family="table-column">
+   <style:table-column-properties style:column-width="2.432cm" style:rel-column-width="19138*"/>
+  </style:style>
+  <style:style style:name="Tabel2.B" style:family="table-column">
+   <style:table-column-properties style:column-width="5.895cm" style:rel-column-width="46397*"/>
+  </style:style>
+  <style:style style:name="Tabel2.A1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.097cm" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="none" fo:border-bottom="0.05pt solid #000000"/>
+  </style:style>
+  <style:style style:name="Tabel2.B1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.097cm" fo:border-left="0.05pt solid #000000" fo:border-right="0.05pt solid #000000" fo:border-top="none" fo:border-bottom="0.05pt solid #000000"/>
+  </style:style>
+  <style:style style:name="Tabel3" style:family="table">
+   <style:table-properties style:width="8.327cm" table:align="margins"/>
+  </style:style>
+  <style:style style:name="Tabel3.A" style:family="table-column">
+   <style:table-column-properties style:column-width="1.697cm" style:rel-column-width="13354*"/>
+  </style:style>
+  <style:style style:name="Tabel3.B" style:family="table-column">
+   <style:table-column-properties style:column-width="2.464cm" style:rel-column-width="19392*"/>
+  </style:style>
+  <style:style style:name="Tabel3.C" style:family="table-column">
+   <style:table-column-properties style:column-width="2.69cm" style:rel-column-width="21169*"/>
+  </style:style>
+  <style:style style:name="Tabel3.D" style:family="table-column">
+   <style:table-column-properties style:column-width="1.476cm" style:rel-column-width="11620*"/>
+  </style:style>
+  <style:style style:name="Tabel3.A1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.097cm" fo:border-left="0.05pt solid #000000" fo:border-right="none" fo:border-top="0.05pt solid #000000" fo:border-bottom="0.05pt solid #000000"/>
+  </style:style>
+  <style:style style:name="Tabel3.D1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.097cm" fo:border="0.05pt solid #000000"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties fo:font-size="10pt" fo:language="en" fo:country="GB" fo:font-weight="bold" officeooo:paragraph-rsid="00168480" style:font-size-asian="10pt" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties fo:font-size="8pt" officeooo:paragraph-rsid="00168480" fo:background-color="transparent" style:font-size-asian="8pt" style:font-size-complex="8pt"/>
+  </style:style>
+  <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties officeooo:paragraph-rsid="00168480"/>
+  </style:style>
+  <style:style style:name="P4" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:text-properties fo:font-size="8pt" fo:font-weight="bold" officeooo:paragraph-rsid="00168480" style:font-size-asian="8pt" style:font-weight-asian="bold" style:font-size-complex="8pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="P5" style:family="paragraph" style:parent-style-name="Heading_20_3">
+   <style:text-properties fo:font-size="10pt" fo:font-weight="normal" officeooo:paragraph-rsid="00168480" fo:background-color="transparent" style:font-size-asian="10pt" style:font-weight-asian="normal" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="P6" style:family="paragraph" style:parent-style-name="Heading_20_3">
+   <style:text-properties officeooo:paragraph-rsid="00168480"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="9.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="1.3cm" style:writing-mode="lr-tb" style:footnote-max-height="0cm">
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text text:use-soft-page-breaks="true">
+   <text:sequence-decls>
+    <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+   </text:sequence-decls>
+   <table:table table:name="Tabel1" table:style-name="Tabel1">
+    <table:table-column table:style-name="Tabel1.A"/>
+    <table:table-column table:style-name="Tabel1.B"/>
+    <table:table-row table:style-name="Tabel1.1">
+     <table:table-cell table:style-name="Tabel1.A1" office:value-type="string">
+      <text:p text:style-name="Standard">Start.</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Tabel1.B1" office:value-type="string">
+      <table:table table:name="Tabel2" table:style-name="Tabel2">
+       <table:table-column table:style-name="Tabel2.A"/>
+       <table:table-column table:style-name="Tabel2.B"/>
+       <table:table-row>
+        <table:table-cell table:style-name="Tabel2.A1" office:value-type="string">
+         <text:p text:style-name="Standard">First table.</text:p>
+        </table:table-cell>
+        <table:table-cell table:style-name="Tabel2.B1" office:value-type="string">
+         <text:p text:style-name="Standard"/>
+        </table:table-cell>
+       </table:table-row>
+      </table:table>
+      <text:h text:style-name="Heading_20_3" text:outline-level="3">one point one<text:line-break/></text:h>
+      <text:h text:style-name="Heading_20_3" text:outline-level="3">two point one<text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:soft-page-break/></text:h>
+      <table:table table:name="Tabel3" table:style-name="Tabel3">
+       <table:table-column table:style-name="Tabel3.A"/>
+       <table:table-column table:style-name="Tabel3.B"/>
+       <table:table-column table:style-name="Tabel3.C"/>
+       <table:table-column table:style-name="Tabel3.D"/>
+       <table:table-row>
+        <table:table-cell table:style-name="Tabel3.A1" office:value-type="string">
+         <text:p text:style-name="Table_20_Contents">2nd</text:p>
+        </table:table-cell>
+        <table:table-cell table:style-name="Tabel3.A1" office:value-type="string">
+         <text:p text:style-name="Table_20_Contents"/>
+        </table:table-cell>
+        <table:table-cell table:style-name="Tabel3.A1" office:value-type="string">
+         <text:p text:style-name="Table_20_Contents"/>
+        </table:table-cell>
+        <table:table-cell table:style-name="Tabel3.D1" office:value-type="string">
+         <text:p text:style-name="Table_20_Contents"/>
+        </table:table-cell>
+       </table:table-row>
+      </table:table>
+      <text:p text:style-name="Standard">End.</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="P1"/>
+  </office:text>
+ </office:body>
+</office:document>

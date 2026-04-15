@@ -1,0 +1,1 @@
+#include "../qt5/QtInstanceBuilder.hxx"

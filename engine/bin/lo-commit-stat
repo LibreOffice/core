@@ -1,0 +1,584 @@
+#!/usr/bin/perl
+    eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
+        if $running_under_some_shell;
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use LWP::UserAgent;
+use utf8;
+use File::Temp;
+use Encode;
+use open ':encoding(utf8)';
+use open ':std' => ':encoding(utf8)';
+
+my %module_dirname = (
+    "core"              => "",
+    "dictionaries"      => "dictionaries",
+    "help"              => "helpcontent2",
+    "translations"      => "translations"
+);
+
+
+my %bugzillas = (
+    fdo  => "https://bugs.documentfoundation.org/show_bug.cgi?id=",
+    tdf  => "https://bugs.documentfoundation.org/show_bug.cgi?id=",
+    bnc  => "https://bugzilla.novell.com/show_bug.cgi?id=",
+    rhbz => "https://bugzilla.redhat.com/show_bug.cgi?id=",
+    i    => "https://bz.apache.org/ooo/show_bug.cgi?id=",
+    fate => "https://features.opensuse.org/",
+);
+
+sub search_bugs($$$$)
+{
+    my ($pdata, $module, $commit_id, $line) = @_;
+
+    my $bug = "";
+    my $bug_orig;
+    while (defined $bug) {
+
+        # match fdo#123, rhz#123, i#123, #123
+        # but match only bug number with >= 4 digits
+        if ( $line =~ m/(\w+\#+\d{4,})/ ) {
+            $bug_orig = $1;
+            $bug = $1;
+		# default to issuezilla for the #123 variant
+        # but match only bug number with >= 4 digits
+        } elsif ( $line =~ m/(\#)(\d{4,})/ ) {
+            $bug_orig = $1 . $2;
+            $bug = "i#$2";
+        # match #i123#
+        } elsif ( $line =~ m/(\#i)(\d+)(\#)/ ) {
+            $bug_orig = $1 . $2 . $3;
+            $bug = "i#$2";
+        } else {
+            $bug = undef;
+            next;
+        }
+
+#        print "   found $bug\n";
+        # remove bug number from the comment; it will be added later a standardized way
+        $bug_orig =~ s/\#/\\#/;
+        $line =~ s/(,\s)*[Rr](elated|esolve[ds]):?\s*$bug_orig\s?:?\s*//;
+        $line =~ s/\s*-\s*$bug_orig\s*//;
+        $line =~ s/\(?$bug_orig\)?\s*[:,-]?\s*//;
+
+        # bnc# is preferred over n# for novell bugs
+        $bug =~ s/^n\#/bnc#/;
+        # deb# is preferred over debian# for debian bugs
+        $bug =~ s/^debian\#/deb#/;
+        # easyhack# is sometimes used for fdo# - based easy hacks
+        $bug =~ s/^easyhack\#/fdo#/;
+        # someone mistyped fdo as fd0
+        $bug =~ s/^fd0\#/fdo#/;
+        # save the bug number
+        $pdata->{$module}{$commit_id}{'bugs'}{$bug} = 1;
+    }
+
+    return $line;
+}
+
+sub standardize_summary($)
+{
+    my $line = shift;
+
+    $line =~ s/^\s*//;
+    $line =~ s/\s*$//;
+
+    # lower first letter if the word contains only lowercase letter
+    if ( $line =~ m/(^.[a-z]+\b)/ ) {
+        $line =~ m/(^.)/;
+        my $first_char = lc($1);
+        $line =~ s/^./$first_char/;
+    }
+
+    # FIXME: remove do at the end of line
+    #        remove bug numbers
+    return $line;
+}
+
+sub generate_git_cherry_ids_log($$$$$) 
+{
+    my ($pdata, $repo_dir, $module, $branch_name, $git_args) = @_;
+
+    my $commit_ids_log;
+    my $commit_ids_log_fh;
+    $commit_ids_log_fh = File::Temp->new(TEMPLATE => 'lo-commit-stat-ids-XXXXXX',
+                                         DIR => '/tmp',
+                                         UNLINK => 0);
+    $commit_ids_log = $commit_ids_log_fh->filename;
+
+    print STDERR "Filtering cherry-picked commits in the git repo: $module...\n";
+
+    my $cmd = "cd $repo_dir; git cherry $git_args";
+    open (GIT, "$cmd 2>&1|") || die "Can't run $cmd: $!";
+
+    while (my $line = <GIT>) {
+
+        # skip cherry-picked commits
+        next if ( $line =~ m/^\-/ );
+    
+        if ( $line =~ m/^\+ / ) {
+            $line =~ s/^\+ //;
+            print $commit_ids_log_fh $line;
+        }
+    }
+    
+    close GIT;
+    close $commit_ids_log_fh;
+    
+    return $commit_ids_log;
+}
+
+sub load_git_log($$$$$$$) 
+{
+    my ($pdata, $repo_dir, $module, $branch_name, $git_command, $git_cherry, $git_args) = @_;
+
+    my $cmd = "cd $repo_dir;";
+    my $commit_ids_log;
+    
+    if ($git_cherry) {
+        $commit_ids_log = generate_git_cherry_ids_log($pdata, $repo_dir, $module, $branch_name, $git_args);
+        $cmd .= " cat $commit_ids_log | xargs -n 1 $git_command -1";
+    } else {
+        $cmd .= " $git_command $git_args";
+    }
+
+    my $commit_id;
+    my $summary;
+
+    print STDERR "Analyzing log from the git repo: $module...\n";
+
+#   FIXME: ./g pull move submodules in unnamed branches
+#    my $repo_branch_name = get_branch_name($repo_dir);
+#    if ( $branch_name ne $repo_branch_name ) {
+#        die "Error: mismatch of branches:\n" .
+#            "       main repo is on the branch: $branch_name\n" .
+#            "       $module repo is on the branch: $repo_branch_name\n";
+#    }
+
+    open (GIT, "$cmd 2>&1|") || die "Can't run $cmd: $!";
+
+    while (my $line = <GIT>) {
+        chomp $line;
+
+        if ( $line =~ m/^commit ([0-9a-z]{20})/ ) {
+            $commit_id = $1;
+            $summary=undef;
+            next;
+        }
+
+        if ( $line =~ /^Author:\s*([^\<]*)\<([^\>]*)>/ ) {
+            # get rid of extra empty spaces;
+            my $name = $1;
+            my $email = $2;
+            $name =~ s/\s+$//;
+            die "Error: Author already defined for the commit {$commit_id}\n" if defined ($pdata->{$module}{$commit_id}{'author'});
+            $pdata->{$module}{$commit_id}{'author'}{'name'} = $name;
+            $pdata->{$module}{$commit_id}{'author'}{'email'} = $email;
+            next;
+        }
+
+        if ( $line =~ /^Date:\s+/ ) {
+            # ignore date line
+            next;
+        }
+
+        if ( $line =~ /^\s*$/ ) {
+            # ignore empty line
+            next;
+        }
+
+        unless (defined $pdata->{$module}{$commit_id}{'summary'}) {
+            $line = search_bugs($pdata, $module, $commit_id, $line);
+            # FIXME: need to be implemented
+            # search_keywords($pdata, $line);
+
+            $summary = standardize_summary($line);
+            $pdata->{$module}{$commit_id}{'summary'} = $summary;
+        }
+    }
+
+    close GIT;
+    unlink $commit_ids_log if ($git_cherry);
+}
+
+sub get_repo_name($)
+{
+    my $repo_dir = shift;
+
+    open (GIT_CONFIG, "$repo_dir/.git/config") ||
+        die "can't open \"$$repo_dir/.git/config\" for reading: $!\n";
+
+    while (my $line = <GIT_CONFIG>) {
+        chomp $line;
+
+        if ( $line =~ /^\s*url\s*=\s*(\S+)$/ ) {
+            my $repo_name = "$1";
+            $repo_name = s/.*\///g;
+            return "$repo_name";
+        }
+    }
+    die "Error: can't find repo name in \"$$repo_dir/.git/config\"\n";
+}
+
+sub load_data($$$$$$$)
+{
+    my ($pdata, $top_dir, $p_module_dirname, $branch_name, $git_command, $git_cherry, $git_args) = @_;
+
+    foreach my $module (sort { $a cmp $b } keys %{$p_module_dirname}) {
+        load_git_log($pdata, "$top_dir/$p_module_dirname->{$module}", $module, $branch_name, $git_command, $git_cherry, $git_args);
+    }
+}
+
+sub get_branch_name($)
+{
+    my ($top_dir) = @_;
+
+    my $branch;
+    my $cmd = "cd $top_dir && git branch";
+
+    open (GIT, "$cmd 2>&1|") || die "Can't run $cmd: $!";
+
+    while (my $line = <GIT>) {
+        chomp $line;
+
+        if ( $line =~ m/^\*\s*(\S+)/ ) {
+            $branch = "$1";
+        }
+    }
+
+    close GIT;
+    
+    die "Error: did not detect git branch name in $top_dir\n" unless defined ($branch);
+
+    return $branch;
+}
+
+sub get_bug_list($$$)
+{
+    my ($pdata, $pbugs, $check_bugzilla) = @_;
+
+    # associate bugs with their summaries and fixers
+    foreach my $module ( keys %{$pdata}) {
+        foreach my $id ( keys %{$pdata->{$module}}) {
+            foreach my $bug (keys %{$pdata->{$module}{$id}{'bugs'}}) {
+                my $author = $pdata->{$module}{$id}{'author'}{'name'};
+                my $summary = $pdata->{$module}{$id}{'summary'};
+                $pbugs->{$bug}{'summary'} = $summary;
+                $pbugs->{$bug}{'author'}{$author} = 1;
+            }
+        }
+    }
+
+    # try to replace summaries with bug names from bugzilla
+    if ($check_bugzilla) {
+        print "Getting bug titles:\n";
+        foreach my $bug ( sort { $a cmp $b } keys %{$pbugs}) {
+            $pbugs->{$bug}{'summary'} = get_bug_name($bug, $pbugs->{$bug}{'summary'});
+        }
+    }
+}
+
+sub open_log_file($$$$$$)
+{
+    my ($log_dir, $log_prefix, $log_suffix, $top_dir, $branch_name, $wiki) = @_;
+
+    my $logfilename = "$log_prefix-$branch_name-$log_suffix";
+    $logfilename = "$log_dir/$logfilename" if (defined $log_dir);
+    if ($wiki) {
+        $logfilename .= ".wiki";
+    } else {
+        $logfilename .= ".log";
+    }
+
+    if (-f $logfilename) {
+        print "WARNING: The log file already exists: $logfilename\n";
+        print "Do you want to overwrite it? (Y/n)?\n";
+        my $answer = <STDIN>;
+        chomp $answer;
+        $answer = "y" unless ($answer);
+        die "Please, rename the file or choose another log suffix\n" if ( lc($answer) ne "y" );
+    }
+    
+    my $log;
+    open($log, '>', $logfilename) || die "Can't open \"$logfilename\" for writing: $!\n";
+    
+    return $log;
+}
+
+sub print_commit_summary($$$$$$)
+{
+    my ($summary, $pmodule_title, $pbugs, $pauthors, $prefix, $log) = @_;
+
+    return if ( $summary eq "" );
+
+    # print module title if not done yet
+    if ( defined ${$pmodule_title} ) {
+        print $log "${$pmodule_title}\n";
+        ${$pmodule_title} = undef;
+    }
+
+    # finally print the summary line
+    my $bugs = "";
+    if ( %{$pbugs} ) {
+        $bugs = " (" . join (", ", keys %{$pbugs}) . ")";
+    }
+
+    my $authors = "";
+    if ( %{$pauthors} ) {
+        $authors = " [" . join (", ", keys %{$pauthors}) . "]";
+    }
+
+    print $log $prefix, $summary, $bugs, $authors, "\n";
+}
+
+sub print_commits($$$)
+{
+    my ($pdata, $log, $wiki) = @_;
+
+    foreach my $module ( sort { $a cmp $b } keys %{$pdata}) {
+        # check if this module has any entries at all
+        my $module_title = "+ $module";
+        if ( %{$pdata->{$module}} ) {
+            my $old_summary="";
+            my %authors = ();
+            my %bugs = ();
+            foreach my $id ( sort { lc $pdata->{$module}{$a}{'summary'} cmp lc $pdata->{$module}{$b}{'summary'} } keys %{$pdata->{$module}}) {
+                my $summary = $pdata->{$module}{$id}{'summary'};
+                if ($summary ne $old_summary) {
+                    print_commit_summary($old_summary, \$module_title, \%bugs, \%authors, "    + ", $log);
+                    $old_summary = $summary;
+                    %authors = ();
+                    %bugs = ();
+                }
+                # collect bug numbers
+                if (defined $pdata->{$module}{$id}{'bugs'}) {
+                    foreach my $bug (keys %{$pdata->{$module}{$id}{'bugs'}}) {
+                        $bugs{$bug} = 1;
+                    }
+                }
+                # collect author names
+                my $author = $pdata->{$module}{$id}{'author'}{'name'};
+                $authors{$author} = 1;
+            }
+            print_commit_summary($old_summary, \$module_title, \%bugs, \%authors, "    + ", $log);
+        }
+    }
+}
+
+sub get_bug_name($$)
+{
+    my ($bug, $summary) = @_;
+    print "$bug: ";
+
+    $bug =~ m/(?:(\w*)\#+(\d+))/; # fdo#12345
+    my $bugzilla = $1;            # fdo
+    my $bug_number = $2;          # 12345
+
+    if ( $bugzillas{$bugzilla} ) {
+        my $url = $bugzillas{$bugzilla} . $bug_number;
+        my $ua = LWP::UserAgent->new;
+        $ua->timeout(10);
+        $ua->env_proxy;
+        my $response = $ua->get($url);
+        if ($response->is_success) {
+            my $title = decode('utf8', $response->title);
+            if ( $title =~ s/^(?:Bug $bug_number \S+|$bug_number –) // ) {
+                print "$title\n";
+                return $title;
+            } else {
+                print "warning: not found; using commit message (only got $title)";
+            }
+        }
+    }
+    print "\n";
+
+    return $summary;
+}
+
+sub print_bugs($$$$)
+{
+    my ($pbugs, $log, $wiki) = @_;
+
+    # sort alphabetically by bugzilla-type, but within that numerically
+    foreach my $bug ( sort { ($a =~ /(\D+)/)[0] cmp ($b =~ /(\D+)/)[0] ||
+                             ($a =~ /(\d+)/)[0] <=> ($b =~ /(\d+)/)[0] } keys %{$pbugs}) {
+        my $summary = $pbugs->{$bug}{'summary'};
+
+        my $authors = "";
+        if ( %{$pbugs->{$bug}{'author'}} ) {
+            $authors = " [" . join (", ", keys %{$pbugs->{$bug}{'author'}}) . "]";
+        }
+
+        $bug =~ s/(.*)\#(.*)/# {{$1|$2}}/ if ($wiki);
+        print $log $bug, " ", $summary, $authors, "\n";
+    }
+}
+
+sub print_bugs_changelog($$$$)
+{
+    my ($pbugs, $log, $wiki) = @_;
+
+    foreach my $bug ( sort { $a cmp $b } keys %{$pbugs}) {
+        my $summary = $pbugs->{$bug}{'summary'};
+
+        my $authors = "";
+        if ( %{$pbugs->{$bug}{'author'}} ) {
+            $authors = " [" . join (", ", keys %{$pbugs->{$bug}{'author'}}) . "]";
+        }
+
+        print $log "    + $summary ($bug)$authors\n";
+    }
+}
+
+sub print_bugnumbers($$$$)
+{
+    my ($pbugs, $log, $wiki) = @_;
+
+    print $log join ("\n", sort { $a cmp $b } keys %{$pbugs}), "\n";
+}
+
+sub generate_log($$$$$$$$)
+{
+    my ($pused_data, $print_func, $log_dir, $log_prefix, $log_suffix, $top_dir, $branch_name, $wiki) = @_;
+
+    my $log = open_log_file($log_dir, $log_prefix, $log_suffix, $top_dir, $branch_name, $wiki);
+    & {$print_func} ($pused_data, $log, $wiki);
+    close $log;
+}
+
+########################################################################
+# help
+
+sub usage()
+{
+    print "This script generates LO git commit summary\n\n" .
+          
+          "Usage: lo-commit-stat [--help] [--no-submodules] [--module=<module>] --log-dir=<dir> --log-suffix=<string> topdir [git_arg...]\n\n" .
+
+          "Options:\n" .
+          "     --help           print this help\n" .
+          "     --no-submodule   read changes just from the main repository, ignore submodules\n" .
+          "     --module=<module> summarize just changes from the given module, use \"core\"\n" .
+          "                      for the main module\n" .
+          "     --log-dir=<dir>  directory where to put the generated log\n" .
+          "     --log-suffix=<string> suffix of the log file name; the result will be\n" .
+          "                      commit-log-<branch>-<log-name-suffix>.log; the branch name\n" .
+          "                      is detected automatically\n" .
+          "     --commits        generate log with all commits (default)\n" .
+          "     --bugs           generate log with bugzilla entries\n" .
+          "     --bugs-changelog generate log with bugzilla entries, use changelog style\n" .
+          "     --bugs-wiki      generate log with bugzilla entries, use wiki markup\n" .
+          "     --bugs-numbers   generate log with bugzilla numbers\n" .
+          "     --rev-list       use \"git rev-list\" instead of \"git log\"; useful to check\n" .
+          "                      differences between branches\n" .
+          "     --cherry         use \"git cherry\" instead of \"git log\"; detects cherry-picked\n" .
+          "                      commits between branches\n" .
+          "      topdir          directory with the libreoffice/core clone\n" .
+          "      git_arg         extra parameters passed to the git command to define\n" .
+          "                      the area of interest; The default command is \"git log\" and\n" .
+          "                      parameters might be, for example, --after=\"2010-09-27\" or\n" .
+          "                      TAG..HEAD; with the option --rev-list, useful might be, for\n" .
+          "                      example origin/master ^origin/libreoffice-3-3; with the option\n" .
+          "                      --rev-list, useful might be, for example libreoffice-3.6.3.2\n" .
+          "                      libreoffice-3.6.4.1\n";
+}
+
+
+#######################################################################
+#######################################################################
+# MAIN
+#######################################################################
+#######################################################################
+
+
+my $module;
+my %generate_log = ();
+my $top_dir;
+my $log_dir;
+my $log_suffix;
+my $log;
+my $list_bugs = 0;
+my $check_bugzilla = 0;
+my $branch_name;
+my $git_command = "git log";
+my $git_cherry;
+my $git_args = "";
+my %data;
+my %bugs = ();
+
+
+foreach my $arg (@ARGV) {
+    if ($arg eq '--help') {
+        usage();
+        exit;
+    } elsif ($arg eq '--no-submodule') {
+        $module = "core";
+    } elsif ($arg =~ m/--module=(.*)/) {
+	$module = $1;
+    } elsif ($arg =~ m/--log-suffix=(.*)/) {
+	$log_suffix = "$1";
+    } elsif ($arg =~ m/--log-dir=(.*)/) {
+	$log_dir = "$1";
+    } elsif ($arg eq '--commits') {
+        $generate_log{"commits"} = 1;
+    } elsif ($arg eq '--bugs') {
+        $generate_log{"bugs"} = 1;
+        $check_bugzilla = 1;
+        $list_bugs = 1;
+    } elsif ($arg eq '--bugs-changelog') {
+        $generate_log{"bugs-changelog"} = 1;
+        $check_bugzilla = 1;
+        $list_bugs = 1;
+    } elsif ($arg eq '--bugs-wiki' || $arg eq '--wikibugs') {
+        $generate_log{"bugs-wiki"} = 1;
+        $check_bugzilla = 1;
+        $list_bugs = 1;
+    } elsif ($arg eq '--bugs-numbers' || $arg eq '--bug-numbers') {
+        $generate_log{"bugs-numbers"} = 1;
+        $list_bugs = 1;
+    } elsif ($arg eq '--rev-list') {
+        $git_command = "git rev-list --pretty=medium"
+    } elsif ($arg eq '--cherry') {
+        $git_command = "git log";
+        $git_cherry = 1;
+    } else {
+        if (! defined $top_dir) {
+            $top_dir=$arg;
+        } else {
+            $git_args .= " $arg";
+        }
+    }
+}
+
+# default log
+unless (%generate_log) {
+    $generate_log{"commits"} = 1;
+}
+
+# we want only one module
+if ($module) {
+    my $name = $module_dirname{$module};
+    %module_dirname = ();
+    $module_dirname{$module} = $name;
+}
+
+(defined $top_dir) || die "Error: top directory is not defined\n";
+(-d "$top_dir") || die "Error: not a directory: $top_dir\n";
+(-f "$top_dir/.git/config") || die "Error: can't find $top_dir/.git/config\n";
+
+(!defined $log_dir) || (-d $log_dir) || die "Error: directory does no exist: $log_dir\n";
+
+(defined $log_suffix) || die "Error: define log suffix using --log-suffix=<string>\n";
+
+$branch_name = get_branch_name($top_dir);
+
+load_data(\%data, $top_dir, \%module_dirname, $branch_name, $git_command, $git_cherry, $git_args);
+get_bug_list(\%data, \%bugs, $check_bugzilla) if ($list_bugs);
+
+generate_log(\%data, \&print_commits,        $log_dir, "commits",        $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"commits"});
+generate_log(\%bugs, \&print_bugs,           $log_dir, "bugs",           $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"bugs"});
+generate_log(\%bugs, \&print_bugs,           $log_dir, "bugs",           $log_suffix, $top_dir, $branch_name, 1) if (defined $generate_log{"bugs-wiki"});
+generate_log(\%bugs, \&print_bugs_changelog, $log_dir, "bugs-changelog", $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"bugs-changelog"});
+generate_log(\%bugs, \&print_bugnumbers,     $log_dir, "bug-numbers",    $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"bugs-numbers"});

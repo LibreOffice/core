@@ -1,0 +1,7 @@
+"ScSheetLinkObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
+"ScSheetLinkObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
+"ScSheetLinkObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
+"ScSheetLinkObj";"com::sun::star::beans::XPropertySet";"addPropertyChangeListener()"
+"ScSheetLinkObj";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
+"ScSheetLinkObj";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
+"ScSheetLinkObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"

@@ -1,0 +1,147 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_STOC_SOURCE_JAVAVM_JAVAVM_HXX
+#define INCLUDED_STOC_SOURCE_JAVAVM_JAVAVM_HXX
+
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-attributes"
+#endif
+#include <jni.h>
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
+
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/java/XJavaThreadRegister_11.hpp>
+#include <com/sun/star/java/XJavaVM.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <osl/thread.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+
+namespace com::sun::star {
+    namespace container { class XContainer; }
+    namespace uno { class XComponentContext; }
+}
+namespace jvmaccess {
+    class UnoVirtualMachine;
+    class VirtualMachine;
+}
+
+namespace stoc_javavm {
+
+class JavaVirtualMachine:
+    private cppu::BaseMutex,
+    public cppu::WeakComponentImplHelper<
+        css::lang::XInitialization, css::lang::XServiceInfo, css::java::XJavaVM,
+        css::java::XJavaThreadRegister_11, css::container::XContainerListener>
+{
+public:
+    explicit JavaVirtualMachine(
+        css::uno::Reference<
+            css::uno::XComponentContext > xContext);
+
+    // XInitialization
+    virtual void SAL_CALL
+    initialize(css::uno::Sequence< css::uno::Any > const &
+                   rArguments) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+
+    virtual sal_Bool SAL_CALL
+    supportsService(OUString const & rServiceName) override;
+
+    virtual css::uno::Sequence< OUString > SAL_CALL
+    getSupportedServiceNames() override;
+
+    // XJavaVM
+    virtual css::uno::Any SAL_CALL
+    getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId) override;
+
+    virtual sal_Bool SAL_CALL isVMStarted() override;
+
+    virtual sal_Bool SAL_CALL isVMEnabled() override;
+
+    // XJavaThreadRegister_11
+    virtual sal_Bool SAL_CALL isThreadAttached() override;
+
+    virtual void SAL_CALL registerThread() override;
+
+    virtual void SAL_CALL revokeThread() override;
+
+    // XContainerListener
+    virtual void SAL_CALL
+    disposing(css::lang::EventObject const & rSource) override;
+
+    virtual void SAL_CALL
+    elementInserted(css::container::ContainerEvent const & rEvent) override;
+
+    virtual void SAL_CALL
+    elementRemoved(css::container::ContainerEvent const & rEvent) override;
+
+    virtual void SAL_CALL
+    elementReplaced(css::container::ContainerEvent const & rEvent) override;
+
+private:
+    JavaVirtualMachine(JavaVirtualMachine const &) = delete;
+    void operator =(const JavaVirtualMachine&) = delete;
+
+    virtual ~JavaVirtualMachine() override;
+
+    virtual void SAL_CALL disposing() override;
+
+    void registerConfigChangesListener();
+
+    void setINetSettingsInVM(bool set_reset);
+
+    void setUpUnoVirtualMachine(JNIEnv * environment);
+
+    void handleJniException(JNIEnv * environment);
+
+    css::uno::Reference< css::uno::XComponentContext >
+        m_xContext;
+
+    // the following are controlled by BaseMutex::m_aMutex:
+    bool m_bDisposed;
+    rtl::Reference< jvmaccess::VirtualMachine > m_xVirtualMachine;
+    rtl::Reference< jvmaccess::UnoVirtualMachine > m_xUnoVirtualMachine;
+    JavaVM * m_pJavaVm;
+        // If the first creation of Java failed and this flag is set then the
+        // next call to getJavaVM throws a RuntimException.  This is useful when
+        // the second attempt to create Java might cause a crash.
+    css::uno::Reference< css::container::XContainer >
+        m_xInetConfiguration;
+    css::uno::Reference< css::container::XContainer >
+        m_xJavaConfiguration; // for Java settings
+
+    osl::ThreadData m_aAttachGuards;
+};
+
+}
+
+#endif // INCLUDED_STOC_SOURCE_JAVAVM_JAVAVM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

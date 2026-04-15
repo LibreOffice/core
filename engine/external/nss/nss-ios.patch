@@ -1,0 +1,300 @@
+--- a/a/nss/Makefile
++++ a/a/nss/Makefile
+@@ -91,13 +91,11 @@
+ ifdef NS_USE_GCC
+ NSPR_CONFIGURE_ENV = CC=gcc CXX=g++
+ endif
+-# Make sure to remove -arch arguments. NSPR can't handle that.
+-remove_arch = $(filter-out __REMOVEME%,$(subst $(NULL) -arch , __REMOVEME,$(1)))
+ ifdef CC
+-NSPR_CONFIGURE_ENV = CC="$(call remove_arch,$(CC))"
++NSPR_CONFIGURE_ENV = CC="$(CC)"
+ endif
+ ifdef CCC
+-NSPR_CONFIGURE_ENV += CXX="$(call remove_arch,$(CCC))"
++NSPR_CONFIGURE_ENV += CXX="$(CCC)"
+ endif
+ 
+ #
+@@ -141,7 +143,6 @@
+ ifndef NSS_DISABLE_NSPR_TESTS
+ build_nspr: $(NSPR_CONFIG_STATUS)
+ 	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)
+-	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)/pr/tests
+ else
+ build_nspr: $(NSPR_CONFIG_STATUS)
+ 	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)
+--- a/a/nss/lib/ckfw/builtins/manifest.mn
++++ a/a/nss/lib/ckfw/builtins/manifest.mn
+@@ -5,7 +5,7 @@
+ 
+ CORE_DEPTH = ../../..
+ 
+-DIRS = testlib
++DIRS =
+ 
+ MODULE = nss
+ 
+--- a/a/nss/lib/nss/nssinit.c
++++ a/a/nss/lib/nss/nssinit.c
+@@ -275,6 +275,7 @@
+                           const char *secmodprefix,
+                           char **retoldpath, char **retnewpath)
+ {
++#ifndef NSS_STATIC_PKCS11
+     char *path, *oldpath = NULL, *lastsep;
+     int len, path_len, secmod_len, dll_len;
+ 
+@@ -309,6 +310,10 @@
+     }
+     *retoldpath = oldpath;
+     *retnewpath = path;
++#else
++    *retoldpath = NULL;
++    *retnewpath = PORT_Strdup("NSSCKBI");
++#endif
+     return;
+ }
+ 
+--- a/a/nss/lib/pk11wrap/pk11load.c
++++ a/a/nss/lib/pk11wrap/pk11load.c
+@@ -31,6 +31,8 @@
+ #include "debug_module.c"
+ #endif
+ 
++extern CK_RV NSSCKBI_C_GetFunctionList();
++
+ /* build the PKCS #11 2.01 lock files */
+ CK_RV PR_CALLBACK
+ secmodCreateMutext(CK_VOID_PTR_PTR pmutex)
+@@ -456,6 +456,7 @@
+ /* load the library. If this succeeds, then we have to remember to
+  * unload the library if anything goes wrong from here on out...
+  */
++#ifndef NSS_STATIC_PKCS11 // With NSS_STATIC_PKCS11, the only module wodule we load here is nssckbi
+ #if defined(_WIN32)
+         if (nssUTF8_Length(mod->dllName, NULL)) {
+             wchar_t *dllNameWide = _NSSUTIL_UTF8ToWide(mod->dllName);
+@@ -495,6 +496,11 @@
+             mod->moduleDBFunc = (void *)
+                 PR_FindSymbol(library, "NSS_ReturnModuleSpecData");
+         }
++#else
++        if (strcmp(mod->dllName, "NSSCKBI") == 0)
++            fentry = NSSCKBI_C_GetFunctionList;
++#endif
++
+         if (mod->moduleDBFunc == NULL)
+             mod->isModuleDB = PR_FALSE;
+         if ((ientry == NULL) && (fentry == NULL)) {
+@@ -545,10 +551,12 @@
+ 
+ fail:
+     mod->functionList = NULL;
++#ifndef NSS_STATIC_PKCS11
+     disableUnload = PR_GetEnvSecure("NSS_DISABLE_UNLOAD");
+     if (library && !disableUnload) {
+         PR_UnloadLibrary(library);
+     }
++#endif
+     return SECFailure;
+ }
+ 
+--- a/a/nss/lib/ckfw/nssck.api
++++ a/a/nss/lib/ckfw/nssck.api
+@@ -1842,7 +1842,11 @@
+ 
+ /* This one is always present */
+ CK_RV CK_ENTRY
++#ifndef NSS_STATIC_PKCS11
+ C_GetFunctionList
++#else
++NSSCKBI_C_GetFunctionList
++#endif
+ (
+   CK_FUNCTION_LIST_PTR_PTR ppFunctionList
+ )
+--- a/a/nss/lib/freebl/loader.c
++++ a/a/nss/lib/freebl/loader.c
+@@ -35,6 +35,7 @@
+ static PRStatus
+ freebl_LoadDSO(void)
+ {
++#ifndef NSS_STATIC_FREEBL
+     PRLibrary *handle;
+     const char *name = getLibName();
+ 
+@@ -47,32 +48,42 @@
+     if (handle) {
+         PRFuncPtr address = PR_FindFunctionSymbol(handle, "FREEBL_GetVector");
+         if (address) {
+-            FREEBLGetVectorFn *getVector = (FREEBLGetVectorFn *)address;
++#else
++            FREEBLGetVectorFn *getVector = FREEBL_GetVector;
++#endif
+             const FREEBLVector *dsoVector = getVector();
+             if (dsoVector) {
+                 unsigned short dsoVersion = dsoVector->version;
+                 unsigned short myVersion = FREEBL_VERSION;
+                 if (MSB(dsoVersion) == MSB(myVersion) &&
+                     LSB(dsoVersion) >= LSB(myVersion) &&
+                     dsoVector->length >= sizeof(FREEBLVector)) {
+                     vector = dsoVector;
++#ifndef NSS_STATIC_FREEBL
+                     libraryName = name;
+                     blLib = handle;
++#else
++                    libraryName = "self";
++#endif
+                     return PR_SUCCESS;
+                 }
+             }
++            else
++                return PR_FAILURE;
++#ifndef NSS_STATIC_FREEBL
+         }
+ #ifdef DEBUG
+         if (blLib) {
+             PRStatus status = PR_UnloadLibrary(blLib);
+             PORT_Assert(PR_SUCCESS == status);
+         }
+ #else
+         if (blLib)
+             PR_UnloadLibrary(blLib);
+ #endif
+     }
+     return PR_FAILURE;
++#endif
+ }
+ 
+ static const PRCallOnceType pristineCallOnce;
+@@ -860,6 +871,7 @@
+ void
+ BL_Unload(void)
+ {
++#ifndef NSS_STATIC_FREEBL
+     /* This function is not thread-safe, but doesn't need to be, because it is
+      * only called from functions that are also defined as not thread-safe,
+      * namely C_Finalize in softoken, and the SSL bypass shutdown callback called
+@@ -872,6 +884,7 @@
+         PR_UnloadLibrary(blLib);
+ #endif
+     }
++#endif
+     blLib = NULL;
+     loadFreeBLOnce = pristineCallOnce;
+ }
+--- a/a/nspr/build/autoconf/config.sub	2017-09-07 15:29:45.031246453 +0200
++++ a/a/nspr/build/autoconf/config.sub	2017-09-07 15:32:13.087235423 +0200
+@@ -110,6 +110,9 @@
+     exit 1;;
+ esac
+ 
++if test $1 = "arm64-apple-darwin"; then echo $1; exit; fi
++if test $1 = "aarch64-apple-darwin"; then echo $1; exit; fi
++
+ # Split fields of configuration type
+ # shellcheck disable=SC2162
+ IFS="-" read field1 field2 field3 field4 <<EOF
+--- a/a/nspr/config/autoconf.mk.in
++++ a/a/nspr/config/autoconf.mk.in
+@@ -69,7 +69,7 @@
+ MSC_VER		= @MSC_VER@
+ AR		= @AR@
+ AR_FLAGS	= @AR_FLAGS@
+-LD		= @LD@
++LD		= echo
+ RANLIB		= @RANLIB@
+ PERL		= @PERL@
+ RC		= @RC@
+--- a/a/nspr/configure
++++ a/a/nspr/configure
+@@ -2507,7 +2507,7 @@
+ OBJDIR='$(OBJDIR_NAME)'
+ OBJDIR_NAME=.
+ OBJDIR_SUFFIX=OBJ
+-NSINSTALL='$(MOD_DEPTH)/config/$(OBJDIR_NAME)/nsinstall'
++NSINSTALL=${NSINSTALL?'$(MOD_DEPTH)/config/$(OBJDIR_NAME)/nsinstall'}
+ NOSUCHFILE=/no-such-file
+ LIBNSPR='-L$(dist_libdir) -lnspr$(MOD_MAJOR_VERSION)'
+ LIBPLC='-L$(dist_libdir) -lplc$(MOD_MAJOR_VERSION)'
+@@ -5571,7 +5571,7 @@
+ LIB_SUFFIX=a
+ DLL_SUFFIX=so
+ ASM_SUFFIX=s
+-MKSHLIB='$(LD) $(DSO_LDOPTS) -o $@'
++MKSHLIB='touch $@; echo'
+ PR_MD_ASFILES=
+ PR_MD_CSRCS=
+ PR_MD_ARCH_DIR=unix
+@@ -6485,7 +6485,7 @@
+     DSO_CFLAGS=-fPIC
+     DSO_LDOPTS='-dynamiclib -compatibility_version 1 -current_version 1 -all_load -install_name @__________________________________________________OOO/$@ -headerpad_max_install_names'
+     _OPTIMIZE_FLAGS=-O2
+-    MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
++    MKSHLIB=touch $@
+     STRIP="$STRIP -x -S"
+     DLL_SUFFIX=dylib
+     USE_PTHREADS=1
+--- a/a/nss/coreconf/ruleset.mk
++++ a/a/nss/coreconf/ruleset.mk
+@@ -45,7 +45,7 @@
+ endif
+ 
+ ifeq ($(MKPROG),)
+-    MKPROG = $(CC)
++    MKPROG = touch $@; echo
+ endif
+ 
+ #
+--- a/a/nss/coreconf/Darwin.mk
++++ a/a/nss/coreconf/Darwin.mk
+@@ -116,7 +116,7 @@
+    DSO_LDOPTS += --coverage
+ endif
+ 
+-MKSHLIB		= $(CC) $(DSO_LDOPTS) $(DARWIN_SDK_SHLIBFLAGS)
++MKSHLIB		= touch $@; echo
+ DLL_SUFFIX	= dylib
+ ifdef MAPFILE
+ 	MKSHLIB += -exported_symbols_list $(MAPFILE)
+--- a/a/nss/coreconf/UNIX.mk
++++ a/a/nss/coreconf/UNIX.mk
+@@ -19,10 +19,14 @@
+ 
+ ifdef BUILD_TREE
+ NSINSTALL_DIR  = $(BUILD_TREE)/nss
++ifndef NSINSTALL
+ NSINSTALL      = $(BUILD_TREE)/nss/nsinstall
++endif
+ else
+ NSINSTALL_DIR  = $(CORE_DEPTH)/coreconf/nsinstall
++ifndef NSINSTALL
+ NSINSTALL      = $(NSINSTALL_DIR)/$(OBJDIR_NAME)/nsinstall
++endif
+ endif
+ 
+ ####################################################################
+--- a/a/nspr/pr/include/md/_darwin.h
++++ a/a/nspr/pr/include/md/_darwin.h
+@@ -26,6 +26,8 @@
+ #define _PR_SI_ARCHITECTURE "ppc"
+ #elif defined(__arm__)
+ #define _PR_SI_ARCHITECTURE "arm"
++#elif defined(__arm64__)
++#define _PR_SI_ARCHITECTURE "arm64"
+ #elif defined(__aarch64__)
+ #define _PR_SI_ARCHITECTURE "aarch64"
+ #else
+--- a/a/nss/cmd/shlibsign/sign.sh
++++ a/a/nss/cmd/shlibsign/sign.sh
+@@ -2,6 +2,9 @@
+ # This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
++
++# Pointless to sign anything for iOS as we don't build any real shared libraries
++exit 0
+ 
+ # arguments:
+ # 1: full path to DIST/OBJDIR (parent dir of "lib")

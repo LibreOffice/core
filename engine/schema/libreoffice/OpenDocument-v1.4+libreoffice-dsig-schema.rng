@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     Open Document Format for Office Applications (OpenDocument) Version 1.4
+     OASIS Standard
+     11 March 2024
+     Copyright (c) OASIS Open 2024. All Rights Reserved.
+     Source: https://docs.oasis-open.org/office/OpenDocument/v1.4/csd01/schemas/
+     Latest stage of specification: https://docs.oasis-open.org/office/OpenDocument/v1.4/OpenDocument-v1.4-part1-introduction.html
+     TC IPR Statement: https://www.oasis-open.org/committees/office/ipr.php 
+
+        Open Document Format for Office Applications (OpenDocument) Version 1.4
+        Digital Signatures Relax-NG Schema	
+        OpenDocument-v1.4-dsig-schema.rng
+-->
+<!-- https://issues.oasis-open.org/browse/OFFICE-2153 -->
+
+<rng:grammar xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dsig="urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <rng:start>
+    <rng:choice>
+      <rng:ref name="dsig-document-signatures"/>
+    </rng:choice>
+  </rng:start>
+  <rng:define name="ds-signature">
+    <rng:element name="ds:Signature">
+      <!-- The permitted content of this element is the permitted -->
+      <!-- content of the Signature element defined by W3C XML    -->
+      <!-- Signature Syntax and Processing (Second Edition).      -->
+      <!-- See OpenDocument v1.4 part 2, section 5.3.             -->
+      <!-- Office-3874 -->
+      <rng:ref name="dsMarkup"/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="dsMarkup">
+    <rng:zeroOrMore>
+      <rng:choice>
+        <rng:attribute>
+          <rng:anyName/>
+        </rng:attribute>
+        <rng:text/>
+        <rng:element>
+          <rng:anyName/>
+          <rng:ref name="dsMarkup"/>
+        </rng:element>
+      </rng:choice>
+    </rng:zeroOrMore>
+  </rng:define>
+  <rng:define name="dsig-document-signatures">
+    <rng:element name="dsig:document-signatures">
+      <rng:ref name="dsig-document-signatures-attlist"/>
+      <rng:oneOrMore>
+        <rng:ref name="ds-signature"/>
+      </rng:oneOrMore>
+    </rng:element>
+  </rng:define>
+  <rng:define name="dsig-document-signatures-attlist">
+    <rng:attribute name="dsig:version">
+      <rng:value>1.4</rng:value>
+    </rng:attribute>
+  </rng:define>
+</rng:grammar>

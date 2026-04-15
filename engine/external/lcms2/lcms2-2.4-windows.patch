@@ -1,0 +1,30 @@
+This patch is necessary for Windows (32-bit) build.
+
+(In Jenkins' build message)
+> icc_transform.o : error LNK2019: unresolved external symbol _cmsGetColorSpace referenced in function "public: static class std::unique_ptr<class fxcodec::IccTransform,struct std::default_delete<class fxcodec::IccTransform> > __cdecl fxcodec::IccTransform::CreateTransformSRGB(class pdfium::span<unsigned char const >)" (?CreateTransformSRGB@IccTransform@fxcodec@@SA?AV?$unique_ptr@VIccTransform@fxcodec@@U?$default_delete@VIccTransform@fxcodec@@@std@@@std@@V?$span@$$CBE@pdfium@@@Z)
+> icc_transform.o : error LNK2019: unresolved external symbol _cmsChannelsOf referenced in function "public: static class std::unique_ptr<class fxcodec::IccTransform,struct std::default_delete<class fxcodec::IccTransform> > __cdecl fxcodec::IccTransform::CreateTransformSRGB(class pdfium::span<unsigned char const >)" (?CreateTransformSRGB@IccTransform@fxcodec@@SA?AV?$unique_ptr@VIccTransform@fxcodec@@U?$default_delete@VIccTransform@fxcodec@@@std@@@std@@V?$span@$$CBE@pdfium@@@Z)
+> icc_transform.o : error LNK2019: unresolved external symbol _cmsOpenProfileFromMem referenced in function "public: static class std::unique_ptr<class fxcodec::IccTransform,struct std::default_delete<class fxcodec::IccTransform> > __cdecl fxcodec::IccTransform::CreateTransformSRGB(class pdfium::span<unsigned char const >)" (?CreateTransformSRGB@IccTransform@fxcodec@@SA?AV?$unique_ptr@VIccTransform@fxcodec@@U?$default_delete@VIccTransform@fxcodec@@@std@@@std@@V?$span@$$CBE@pdfium@@@Z)
+> icc_transform.o : error LNK2019: unresolved external symbol _cmsCloseProfile referenced in function "public: void __thiscall fxcodec::`anonymous namespace'::CmsProfileDeleter::operator()(void *)" (??RCmsProfileDeleter@?A0xf5ac6891@fxcodec@@QAEXPAX@Z)
+> icc_transform.o : error LNK2019: unresolved external symbol _cmsCreate_sRGBProfile referenced in function "public: static class std::unique_ptr<class fxcodec::IccTransform,struct std::default_delete<class fxcodec::IccTransform> > __cdecl fxcodec::IccTransform::CreateTransformSRGB(class pdfium::span<unsigned char const >)" (?CreateTransformSRGB@IccTransform@fxcodec@@SA?AV?$unique_ptr@VIccTransform@fxcodec@@U?$default_delete@VIccTransform@fxcodec@@@std@@@std@@V?$span@$$CBE@pdfium@@@Z)
+> icc_transform.o : error LNK2019: unresolved external symbol _cmsCreateTransform referenced in function "public: static class std::unique_ptr<class fxcodec::IccTransform,struct std::default_delete<class fxcodec::IccTransform> > __cdecl fxcodec::IccTransform::CreateTransformSRGB(class pdfium::span<unsigned char const >)" (?CreateTransformSRGB@IccTransform@fxcodec@@SA?AV?$unique_ptr@VIccTransform@fxcodec@@U?$default_delete@VIccTransform@fxcodec@@@std@@@std@@V?$span@$$CBE@pdfium@@@Z)
+> icc_transform.o : error LNK2019: unresolved external symbol _cmsDeleteTransform referenced in function "public: __thiscall fxcodec::IccTransform::~IccTransform(void)" (??1IccTransform@fxcodec@@QAE@XZ)
+> icc_transform.o : error LNK2019: unresolved external symbol _cmsDoTransform referenced in function "public: void __thiscall fxcodec::IccTransform::Translate(class pdfium::span<float const >,class pdfium::span<float>)" (?Translate@IccTransform@fxcodec@@QAEXV?$span@$$CBM@pdfium@@V?$span@M@4@@Z)
+> 
+> C:\cygwin\home\tdf\lode\jenkins\workspace\gerrit_windows\instdir\program\pdfiumlo.dll : fatal error LNK1120: 8 unresolved externals
+
+--- misc/lcms2/include/lcms2.h	2023-03-01 03:53:11.000000000 +0900
++++ misc/build/lcms2/include/lcms2.h	2023-11-29 15:47:08.535240600 +0900
+@@ -226,6 +226,13 @@ typedef int                  cmsBool;
+ #endif  // CMS_USE_BIG_ENDIAN
+ 
+ 
++// LibreOffice always builds this as DLL and with the stdcall calling
++// convention, so make this usable from outside without having to
++// specify CMS_DLL manually whenever the library is used.
++#if !defined(CMS_DLL_BUILD) && !defined(CMS_DLL) && defined(_MSC_VER) && defined(_M_IX86)
++#define CMS_DLL
++#endif
++
+ // Calling convention -- this is hardly platform and compiler dependent
+ #if defined(CMS_IS_WINDOWS_) && !defined(__GNUC__)
+ #  if defined(CMS_DLL) || defined(CMS_DLL_BUILD)

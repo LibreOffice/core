@@ -1,0 +1,318 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include <cstddef>
+
+#include <clang/AST/DeclBase.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/OperatorKinds.h>
+
+#include "compat.hxx"
+
+namespace loplugin {
+
+class ContextCheck;
+class TerminalCheck;
+
+namespace detail {
+
+inline ContextCheck checkRecordDecl(
+    clang::Decl const * decl, clang::TagTypeKind tag, llvm::StringRef id);
+
+}
+
+class DeclCheck;
+
+class TypeCheck {
+public:
+    explicit TypeCheck(clang::QualType type): type_(type) {}
+
+    explicit TypeCheck(clang::Type const * type): type_(type, 0) {}
+
+    explicit operator bool() const { return !type_.isNull(); }
+
+    TypeCheck NonConst() const;
+
+    TypeCheck NonConstVolatile() const;
+
+    TypeCheck Const() const;
+
+    TypeCheck Volatile() const;
+
+    TypeCheck ConstVolatile() const;
+
+    TypeCheck ConstNonVolatile() const;
+
+    TerminalCheck Void() const;
+
+    TerminalCheck Char() const;
+
+    TerminalCheck AnyBoolean() const;
+
+    TypeCheck Pointer() const;
+
+    TypeCheck MemberPointerOf() const;
+
+    TerminalCheck Enum() const;
+
+    TypeCheck LvalueReference() const;
+
+    TypeCheck RvalueReference() const;
+
+    inline ContextCheck Class(llvm::StringRef id) const;
+
+    inline ContextCheck Struct(llvm::StringRef id) const;
+
+    inline ContextCheck ClassOrStruct(llvm::StringRef id) const;
+
+    TypeCheck Typedef() const;
+
+    inline ContextCheck Typedef(llvm::StringRef id) const;
+
+    DeclCheck TemplateSpecializationClass() const;
+
+    TypeCheck NotSubstTemplateTypeParmType() const;
+
+private:
+    TypeCheck() = default;
+
+    clang::QualType const type_{};
+};
+
+class DeclCheck {
+    friend TypeCheck;
+
+public:
+    explicit DeclCheck(clang::Decl const * decl): decl_(decl) {}
+
+    explicit operator bool() const { return decl_ != nullptr; }
+
+    inline ContextCheck Class(llvm::StringRef id) const;
+
+    inline ContextCheck Struct(llvm::StringRef id) const;
+
+    inline ContextCheck ClassOrStruct(llvm::StringRef id) const;
+
+    inline ContextCheck Union(llvm::StringRef id) const;
+
+    inline ContextCheck Function(llvm::StringRef id) const;
+
+    ContextCheck Operator(clang::OverloadedOperatorKind op) const;
+
+    inline ContextCheck Var(llvm::StringRef id) const;
+
+    ContextCheck MemberFunction() const;
+
+private:
+    DeclCheck() = default;
+
+    clang::Decl const * const decl_ = nullptr;
+};
+
+class ContextCheck {
+public:
+    explicit ContextCheck(clang::DeclContext const * context = nullptr):
+        context_(context) {}
+
+    explicit operator bool() const { return context_ != nullptr; }
+
+    TerminalCheck GlobalNamespace() const;
+
+    inline ContextCheck Namespace(llvm::StringRef id) const;
+
+    TerminalCheck StdNamespace() const;
+
+    TerminalCheck StdOrNestedNamespace() const;
+
+    ContextCheck AnonymousNamespace() const;
+
+    inline ContextCheck Class(llvm::StringRef id) const;
+
+    inline ContextCheck Struct(llvm::StringRef id) const;
+
+    explicit ContextCheck(const clang::NamespaceDecl * decl ) : context_( decl ) {}
+
+private:
+    clang::DeclContext const * lookThroughLinkageSpec() const;
+
+    clang::DeclContext const * const context_;
+};
+
+class TerminalCheck {
+public:
+    explicit operator bool() const { return satisfied_; }
+
+private:
+    friend ContextCheck;
+    friend TypeCheck;
+
+    explicit TerminalCheck(bool satisfied): satisfied_(satisfied) {}
+
+    bool const satisfied_;
+};
+
+
+typedef std::function<bool(clang::Decl const *)> DeclChecker;
+// Returns true if the class has a base matching the checker, or, when checkSelf is true, if the
+// class itself matches.
+bool isDerivedFrom(const clang::CXXRecordDecl *decl, DeclChecker base, bool checkSelf = true);
+
+
+namespace detail {
+
+ContextCheck checkRecordDecl(
+    clang::Decl const * decl, clang::TagTypeKind tag, llvm::StringRef id)
+{
+    auto r = llvm::dyn_cast_or_null<clang::RecordDecl>(decl);
+    if (r != nullptr && r->getTagKind() == tag) {
+        auto const i = r->getIdentifier();
+        if (i != nullptr && i->getName() == id) {
+            return ContextCheck(r->getDeclContext());
+        }
+    }
+    return ContextCheck();
+}
+
+}
+
+ContextCheck TypeCheck::Class(llvm::StringRef id)
+    const
+{
+    if (!type_.isNull()) {
+        auto const t = type_->getAs<clang::RecordType>();
+        if (t != nullptr) {
+            return detail::checkRecordDecl(compat::getDecl(t), clang::TagTypeKind::Class, id);
+        }
+    }
+    return ContextCheck();
+}
+
+ContextCheck TypeCheck::Struct(llvm::StringRef id) const
+{
+    if (!type_.isNull()) {
+        auto const t = type_->getAs<clang::RecordType>();
+        if (t != nullptr) {
+            return detail::checkRecordDecl(compat::getDecl(t), clang::TagTypeKind::Struct, id);
+        }
+    }
+    return ContextCheck();
+}
+
+ContextCheck TypeCheck::ClassOrStruct(llvm::StringRef id) const
+{
+    auto const c1 = Class(id);
+    if (c1) {
+        return c1;
+    }
+    return Struct(id);
+}
+
+ContextCheck TypeCheck::Typedef(llvm::StringRef id) const
+{
+    if (!type_.isNull()) {
+        if (auto const t = type_->getAs<clang::TypedefType>()) {
+            auto const d = t->getDecl();
+            auto const i = d->getIdentifier();
+            assert(i != nullptr);
+            if (i->getName() == id) {
+                return ContextCheck(d->getDeclContext());
+            }
+        }
+    }
+    return ContextCheck();
+}
+
+ContextCheck DeclCheck::Class(llvm::StringRef id) const
+{
+    return detail::checkRecordDecl(decl_, clang::TagTypeKind::Class, id);
+}
+
+ContextCheck DeclCheck::Struct(llvm::StringRef id) const
+{
+    return detail::checkRecordDecl(decl_, clang::TagTypeKind::Struct, id);
+}
+
+ContextCheck DeclCheck::ClassOrStruct(llvm::StringRef id) const
+{
+    auto const c1 = Class(id);
+    if (c1) {
+        return c1;
+    }
+    return Struct(id);
+}
+
+ContextCheck DeclCheck::Union(llvm::StringRef id) const
+{
+    return detail::checkRecordDecl(decl_, clang::TagTypeKind::Union, id);
+}
+
+ContextCheck DeclCheck::Function(llvm::StringRef id) const
+{
+    auto f = llvm::dyn_cast_or_null<clang::FunctionDecl>(decl_);
+    if (f != nullptr) {
+        auto const i = f->getIdentifier();
+        if (i != nullptr && i->getName() == id) {
+            return ContextCheck(f->getDeclContext());
+        }
+    }
+    return ContextCheck();
+}
+
+ContextCheck DeclCheck::Var(llvm::StringRef id) const
+{
+    auto f = llvm::dyn_cast_or_null<clang::VarDecl>(decl_);
+    if (f != nullptr) {
+        auto const i = f->getIdentifier();
+        if (i != nullptr && i->getName() == id) {
+            return ContextCheck(f->getDeclContext());
+        }
+    }
+    return ContextCheck();
+}
+
+ContextCheck ContextCheck::Namespace(llvm::StringRef id) const
+{
+    if (context_) {
+        auto n = llvm::dyn_cast<clang::NamespaceDecl>(lookThroughLinkageSpec());
+        if (n != nullptr) {
+            auto const i = n->getIdentifier();
+            if (i != nullptr && i->getName() == id) {
+                return ContextCheck(n->getParent());
+            }
+        }
+    }
+    return ContextCheck();
+}
+
+ContextCheck ContextCheck::Class(llvm::StringRef id) const
+{
+    return detail::checkRecordDecl(
+        llvm::dyn_cast_or_null<clang::Decl>(context_), clang::TagTypeKind::Class, id);
+}
+
+ContextCheck ContextCheck::Struct(llvm::StringRef id) const
+{
+    return detail::checkRecordDecl(
+        llvm::dyn_cast_or_null<clang::Decl>(context_), clang::TagTypeKind::Struct, id);
+}
+
+bool isExtraWarnUnusedType(clang::ASTContext const & context, clang::QualType type);
+
+bool areSameSugaredType(clang::QualType type1, clang::QualType type2);
+
+bool isOkToRemoveArithmeticCast(
+    clang::ASTContext & context, clang::QualType t1, clang::QualType t2,
+    const clang::Expr* subExpr);
+
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

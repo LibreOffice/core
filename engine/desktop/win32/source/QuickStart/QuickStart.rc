@@ -1,0 +1,3 @@
+#include "resource.h"
+
+ICON_ACTIVE             ICON    DISCARDABLE     "icons/soffice.ico"

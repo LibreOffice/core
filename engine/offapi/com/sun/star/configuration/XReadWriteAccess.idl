@@ -1,0 +1,26 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com { module sun { module star { module configuration {
+
+/* Provides easy read/write access to the complete configuration.
+
+   <p>This interface is still unpublished and unstable.</p>
+*/
+interface XReadWriteAccess {
+    interface com::sun::star::container::XHierarchicalNameReplace;
+
+    interface com::sun::star::util::XChangesBatch;
+
+    interface com::sun::star::beans::XHierarchicalPropertySetInfo;
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

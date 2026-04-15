@@ -1,0 +1,58 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module awt {  module grid {
+
+
+
+/** A control that displays a set of tabular data.
+
+    <h4>The Column Model</h4>
+
+    <p>The horizontal structure of the grid is defined by the XGridColumnModel implemented in DefaultGridColumnModel
+    The XGridColumn implemented in GridColumn describes the properties and behavior of a single column. Use the XGridColumnModel::addColumn() to add a column to the column model.
+    </p>
+
+    <h4>The Data Model</h4>
+    <p> All row data are stored in the XGridDataModel.
+    Use the DefaultGridDataModel to add  XGridDataModel::addRow() or remove XGridDataModel::removeRow() rows.
+    </p>
+
+    <p>The column and data model must be set at the UnoControlGridModel::ColumnModel and UnoControlGridModel::GridDataModel properties.</p>
+
+    <h4>Selection</h4>
+    <p>If you are interested in knowing when the selection changes implement a
+    XGridSelectionListener and add the instance with the method
+    XGridRowSelection::addSelectionListener().
+    You than will be notified for any selection change.</p>
+ */
+service UnoControlGrid
+{
+    service com::sun::star::awt::UnoControl;
+
+    interface ::com::sun::star::awt::grid::XGridControl;
+
+    interface ::com::sun::star::awt::grid::XGridRowSelection;
+};
+
+
+}; }; }; };};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

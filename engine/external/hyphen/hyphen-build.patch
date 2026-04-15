@@ -1,0 +1,38 @@
+--- misc/hyphen-2.8.4/Makefile.am	2010-07-19 11:23:17.000000000 +0200
++++ misc/build/hyphen-2.8.4/Makefile.am	2010-12-02 10:15:44.390625000 +0100
+@@ -25,13 +25,13 @@
+ 
+ hyphen.us3:
+ 	cp -f $(srcdir)/hyphen.tex hyphen.us
+-	patch < $(srcdir)/hyphen.patch
++	$(GNUPATCH) < $(srcdir)/hyphen.patch
+ 	$(srcdir)/tbhyphext.sh <$(srcdir)/tbhyphext.tex >hyphen.us2
+ 	cat hyphen.us hyphen.us2 | $(AWK) -f $(srcdir)/lig.awk >hyphen.us3
+ 	cat $(srcdir)/ligpatch.txt >>hyphen.us3
+ 
+-hyph_en_US.dic: hyphen.us3
+-	perl $(srcdir)/substrings.pl hyphen.us3 hyph_en_US.dic UTF-8 2 3 >/dev/null
++hyph_en_US.dic:
++	@echo "hyph_en_US.txt distributed with Hyphen library"
+ 
+ clean-local:
+ 	rm -rf hyphen.us* hyph_en_US.dic
+--- misc/hyphen-2.8.4/Makefile.in	2010-12-01 02:31:29.000000000 +0100
++++ misc/build/hyphen-2.8.4/Makefile.in	2010-12-02 10:17:16.546875000 +0100
+@@ -940,13 +940,13 @@
+ 
+ hyphen.us3:
+ 	cp -f $(srcdir)/hyphen.tex hyphen.us
+-	patch < $(srcdir)/hyphen.patch
++	$(GNUPATCH) < $(srcdir)/hyphen.patch
+ 	$(srcdir)/tbhyphext.sh <$(srcdir)/tbhyphext.tex >hyphen.us2
+ 	cat hyphen.us hyphen.us2 | $(AWK) -f $(srcdir)/lig.awk >hyphen.us3
+ 	cat $(srcdir)/ligpatch.txt >>hyphen.us3
+ 
+-hyph_en_US.dic: hyphen.us3
+-	perl $(srcdir)/substrings.pl hyphen.us3 hyph_en_US.dic UTF-8 2 3 >/dev/null
++hyph_en_US.dic:
++	@echo "hyph_en_US.txt distributed with Hyphen library"
+ 
+ clean-local:
+ 	rm -rf hyphen.us* hyph_en_US.dic

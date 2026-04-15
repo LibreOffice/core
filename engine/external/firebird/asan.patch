@@ -1,0 +1,252 @@
+--- builds/posix/Makefile.in
++++ builds/posix/Makefile.in
+@@ -323,8 +323,8 @@
+ 
+ metadata.fdb:	$(RUN_ISQL) $(SRC_ROOT)/dbs/metadata.sql
+ 	-$(RM) $@
+-	$(RUN_ISQL) -q -i $(SRC_ROOT)/dbs/metadata.sql
+-	$(RUN_GFIX) -mode read_only $@
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_ISQL) -q -i $(SRC_ROOT)/dbs/metadata.sql
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_GFIX) -mode read_only $@
+ 	$(CHMOD) 0444 $@
+ 
+ $(HELP_FDB):	help.fdb
+@@ -333,7 +333,7 @@
+ 	$(CHMOD) 0444 $@
+ 
+ help.fdb:	$(BLD_ROOT)/misc/help.gbak
+-	$(RUN_GBAK) -MODE read_only -R $< $@
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_GBAK) -MODE read_only -R $< $@
+ 	$(CHMOD) 0444 $@
+ 
+ $(SECURITY_FDB):	security.fdb
+@@ -343,18 +343,18 @@
+ security.fdb:	$(SRC_ROOT)/dbs/security.sql
+ 	-$(RM) $@
+ 	-$(RM) $(SECURITY_TMP)
+-	echo create database \'$(SECURITY_TMP)\'\; | $(RUN_ISQL)
+-	$(RUN_GFIX) -write async $(SECURITY_TMP)
+-	$(RUN_ISQL) -i $^ $(SECURITY_TMP)
++	echo create database \'$(SECURITY_TMP)\'\; | $(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_ISQL)
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_GFIX) -write async $(SECURITY_TMP)
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_ISQL) -i $^ $(SECURITY_TMP)
+ 	$(CHMOD) a=rw $(SECURITY_TMP)
+ 	$(CP) $(SECURITY_TMP) $@
+-	$(RUN_GFIX) -write sync $@
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_GFIX) -write sync $@
+ 
+ msg.timestamp:	$(MSG_FILES)
+ 	-$(RM) msg.fdb
+-	echo create database \'msg.fdb\'\; | $(RUN_ISQL)
+-	$(RUN_GFIX) -write async msg.fdb
+-	for sql in $(MSG_FILES); do (echo $$sql; $(RUN_ISQL) -i $$sql msg.fdb) || exit; done
++	echo create database \'msg.fdb\'\; | $(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_ISQL)
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_GFIX) -write async msg.fdb
++	for sql in $(MSG_FILES); do (echo $$sql; $(LIBO_TUNNEL_LIBRARY_PATH) $(RUN_ISQL) -i $$sql msg.fdb) || exit; done
+ 	$(TOUCH) $@
+ 
+ 
+@@ -560,7 +560,7 @@
+ message_file:	$(FIREBIRD_MSG)
+ 
+ $(FIREBIRD_MSG):	$(BUILD_FILE) msg.timestamp
+-	$(BUILD_FILE) -d msg.fdb -f $@
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(BUILD_FILE) -d msg.fdb -f $@
+ 	$(CHMOD_6) $@
+ 
+ $(BUILD_FILE):	$(BUILD_Objects) $(COMMON_LIB)
+--- builds/posix/Makefile.in.examples
++++ builds/posix/Makefile.in.examples
+@@ -123,8 +123,8 @@
+ 
+ $(EMPLOYEE_DB):	$(EXAMPLES_DEST)/empbuild$(EXEC_EXT) $(INPUT_Sources) $(EXAMPLES_DEST)/isql$(EXEC_EXT)
+ 	-$(RM) $(EMPLOYEE_DB)
+-	./empbuild $(EMPLOYEE_DB)
+-	$(GFIX) -write sync $(EMPLOYEE_DB)
++	$(LIBO_TUNNEL_LIBRARY_PATH) ./empbuild $(EMPLOYEE_DB)
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(GFIX) -write sync $(EMPLOYEE_DB)
+ 	-$(CHMOD_6) $(EMPLOYEE_DB)
+ 
+ # To get past the fact isql is called from the programs, we create a local link in this directory
+@@ -140,7 +140,7 @@
+ 
+ $(EXAMPLES_DEST)/empbuild.fdb : $(EXAMPLES_DEST)/empddl.sql $(EXAMPLES_DEST)/empbld.sql $(EXAMPLES_DEST)/isql$(EXEC_EXT)
+ 	-$(RM) $(EXAMPLES_DEST)/empbuild.fdb
+-	$(EXAMPLES_DEST)/isql$(EXEC_EXT) -i empbld.sql
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(EXAMPLES_DEST)/isql$(EXEC_EXT) -i empbld.sql
+ 
+ # The chain for intlemp.fdb is the same a script file to create an empty database
+ # to allow a .e program to be compiled, to then create and populate with data
+@@ -158,7 +158,7 @@
+ 
+ $(EXAMPLES_DEST)/intlbuild.fdb : $(EXAMPLES_DEST)/intlddl.sql $(EXAMPLES_DEST)/intlbld.sql $(EXAMPLES_DEST)/isql$(EXEC_EXT)
+ 	-$(RM) intlbuild.fdb
+-	$(EXAMPLES_DEST)/isql$(EXEC_EXT) -i intlbld.sql
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(EXAMPLES_DEST)/isql$(EXEC_EXT) -i intlbld.sql
+ 
+ 
+ $(EXAMPLES_DEST)/%.sql: $(EXAMPLES_SRC)/empbuild/%.sql
+--- builds/posix/make.rules
++++ builds/posix/make.rules
+@@ -68,17 +68,17 @@
+ .SUFFIXES: .c .e .epp .cpp
+ 
+ .e.c:
+-	$(GPRE_CURRENT) $(GPRE_FLAGS) $< $@
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(GPRE_CURRENT) $(GPRE_FLAGS) $< $@
+ 
+ 
+ $(OBJ)/jrd/%.cpp: $(SRC_ROOT)/jrd/%.epp
+-	$(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $(firstword $<) $@
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(GPRE_CURRENT) $(JRD_GPRE_FLAGS) $(firstword $<) $@
+ 
+ $(OBJ)/isql/%.cpp: $(SRC_ROOT)/isql/%.epp
+-	$(GPRE_CURRENT) $(ISQL_GPRE_FLAGS) $< $@
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(GPRE_CURRENT) $(ISQL_GPRE_FLAGS) $< $@
+ 
+ $(OBJ)/%.cpp: $(SRC_ROOT)/%.epp
+-	$(GPRE_CURRENT) $(GPRE_FLAGS) $(firstword $<) $@
++	$(LIBO_TUNNEL_LIBRARY_PATH) $(GPRE_CURRENT) $(GPRE_FLAGS) $(firstword $<) $@
+ 
+ 
+ .SUFFIXES: .lo .o .cpp .c
+--- src/common/classes/alloc.cpp
++++ src/common/classes/alloc.cpp
+@@ -2187,7 +2187,7 @@
+ 
+ void* MemPool::allocRaw(size_t size)
+ {
+-#ifndef USE_VALGRIND
++#if !(defined USE_VALGRIND || defined USE_ASAN)
+ 	if (size == DEFAULT_ALLOCATION)
+ 	{
+ 		MutexLockGuard guard(*cache_mutex, "MemPool::allocRaw");
+@@ -2267,7 +2267,7 @@
+ 
+ void MemPool::releaseRaw(bool destroying, void* block, size_t size, bool use_cache) throw ()
+ {
+-#ifndef USE_VALGRIND
++#if !(defined USE_VALGRIND || defined USE_ASAN)
+ 	if (use_cache && (size == DEFAULT_ALLOCATION))
+ 	{
+ 		MutexLockGuard guard(*cache_mutex, "MemPool::releaseRaw");
+@@ -2277,7 +2277,7 @@
+ 			return;
+ 		}
+ 	}
+-#else
++#elif defined USE_VALGRIND
+ 	// Set access protection for block to prevent memory from deleted pool being accessed
+ 	int handle = /* //VALGRIND_MAKE_NOACCESS */ VALGRIND_MAKE_MEM_DEFINED(block, size);
+ 
+--- src/common/classes/alloc.h
++++ src/common/classes/alloc.h
+@@ -295,40 +295,60 @@
+ 
+ // operators new and delete
+ 
++#if !defined USE_ASAN
+ inline void* operator new(size_t s ALLOC_PARAMS)
+ {
+ 	return MemoryPool::globalAlloc(s ALLOC_PASS_ARGS);
+ }
+ inline void* operator new[](size_t s ALLOC_PARAMS)
+ {
+ 	return MemoryPool::globalAlloc(s ALLOC_PASS_ARGS);
+ }
++#endif
+ 
+ inline void* operator new(size_t s, Firebird::MemoryPool& pool ALLOC_PARAMS)
+ {
++#if defined USE_ASAN
++	return operator new(s);
++#else
+ 	return pool.allocate(s ALLOC_PASS_ARGS);
++#endif
+ }
+ inline void* operator new[](size_t s, Firebird::MemoryPool& pool ALLOC_PARAMS)
+ {
++#if defined USE_ASAN
++	return operator new[](s);
++#else
+ 	return pool.allocate(s ALLOC_PASS_ARGS);
++#endif
+ }
+ 
++#if !defined USE_ASAN
+ inline void operator delete(void* mem ALLOC_PARAMS) throw()
+ {
+ 	MemoryPool::globalFree(mem);
+ }
+ inline void operator delete[](void* mem ALLOC_PARAMS) throw()
+ {
+ 	MemoryPool::globalFree(mem);
+ }
++#endif
+ 
+ inline void operator delete(void* mem, Firebird::MemoryPool& pool ALLOC_PARAMS) throw()
+ {
++#if defined USE_ASAN
++	return operator delete(mem);
++#else
+ 	MemoryPool::globalFree(mem);
++#endif
+ }
+ inline void operator delete[](void* mem, Firebird::MemoryPool& pool ALLOC_PARAMS) throw()
+ {
++#if defined USE_ASAN
++	return operator delete[](mem);
++#else
+ 	MemoryPool::globalFree(mem);
++#endif
+ }
+ 
+ #ifdef DEBUG_GDS_ALLOC
+--- src/include/firebird.h
++++ src/include/firebird.h
+@@ -38,8 +38,17 @@
+ #include "gen/autoconfig.h"
+ #endif
+ 
++#if defined __clang__
++//#if __has_feature(address_sanitizer)
++#define USE_ASAN
++//#endif
++#endif
++#if defined __SANITIZE_ADDRESS__
++#define USE_ASAN
++#endif
++
+ // Using our debugging code is pointless when we may use Valgrind features
+-#if defined(DEV_BUILD) && !defined(USE_VALGRIND)
++#if defined(DEV_BUILD) && !(defined(USE_VALGRIND) || defined(USE_ASAN))
+ #define DEBUG_GDS_ALLOC
+ #endif
+ 
+--- src/jrd/SimilarToMatcher.h
++++ src/jrd/SimilarToMatcher.h
+@@ -338,7 +338,7 @@
+ 		private:
+ 			static const unsigned INCREASE_FACTOR = 50;
+ 			unsigned size;
+-			AutoPtr<UCHAR> data;
++			AutoPtr<UCHAR, ArrayDelete> data;
+ 			T* end;
+ 		};
+ #endif	// RECURSIVE_SIMILAR
+--- configure.orig	2018-06-03 17:44:50.152951348 +0200
++++ configure	2018-06-03 17:45:11.708907807 +0200
+@@ -18479,11 +18479,11 @@
+ #ifdef __cplusplus
+ extern "C"
+ #endif
+-char dlopen ();
++char dlsym ();
+ int
+ main ()
+ {
+-return dlopen ();
++return dlsym ();
+   ;
+   return 0;
+ }

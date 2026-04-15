@@ -1,0 +1,511 @@
+#!/usr/bin/perl
+    eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
+        if $running_under_some_shell;
+#!/usr/bin/perl
+
+use strict;
+use File::Copy;
+use File::Temp qw/ tempfile tempdir /;
+
+my %module_dirname = (
+    "core"              => "",
+    "dictionaries"      => "dictionaries",
+    "help"              => "helpcontent2",
+    "translations"      => "translations"
+);
+my $lo_topdir_name;
+
+# get libreoffice-build version from the given libreoffice-build sources
+sub get_config_version($)
+{
+    my ($lo_core_dir) = @_;
+    my $version;
+
+    open (CONFIGURE, "$lo_core_dir/configure.ac") ||
+        die "can't open \"$lo_core_dir/configure.ac\" for reading: $!\n";
+
+    while (my $line = <CONFIGURE>) {
+        chomp $line;
+
+        if ($line =~ /AC_INIT\s*\(\s*libreoffice-build\s*,\s*([\w\.]*)\)/) {
+            $version="$1";
+        }
+    }
+    close (CONFIGURE);
+    return $version;
+}
+
+# increment the version for a test build:
+#        + add 'a' if the version ended with a number
+#       + bump the letter otherwise
+sub inc_test_version($)
+{
+    my ($version) = @_;
+
+    my $lastchar = chop $version;
+    my $new_version;
+
+    if ($lastchar =~ /\d/) {
+        return "$version" . "$lastchar" . "a";
+    } elsif ($lastchar =~ /\w/) {
+        # select next letter alphabetically: a->b, b->c, ...
+        $lastchar =~ tr/0a-zA-Z/a-zA-Z0/;
+        return "$version" . "$lastchar";
+    } else {
+        die "Can't generate test version from \"$version$lastchar\n";
+    }
+}
+
+sub get_release_version($$$$)
+{
+    my ($config_version, $state_config_version, $state_release_version, $inc_version) = @_;
+    my $release_version;
+
+    if (defined $state_config_version &&
+        defined $state_release_version &&
+        "$state_config_version" eq "$config_version") {
+        $release_version = "$state_release_version";
+    } else {
+        $release_version = "$config_version";
+    }
+
+    if ( defined $inc_version ) {
+        $release_version = inc_test_version($release_version);
+    }
+
+    return $release_version;
+}
+
+# copy files to temp dir; showing a progress; using a black list
+sub copy_dir_filter_and_show_progress($$)
+{
+    my ($source_dir, $target_dir) = @_;
+
+    print "Copying \"$source_dir\" -> \"$target_dir\"...";
+    # copy sources from git and show progress
+    system ("cd $source_dir && " .
+            "git archive --format=tar HEAD | " .
+            "  tar -xf - -C $target_dir ") &&
+        die "Error: copying failed: $!\n";
+    print "\n";
+}
+
+# copy files to temp dir; showing a progress; using a black list
+sub remove_empty_submodules($)
+{
+    my ($target_topdir) = @_;
+
+    foreach my $submodule (sort values %module_dirname) {
+        next unless ($submodule);
+        print "Removing empty submodule: $submodule...\n";
+        rmdir "$target_topdir/$submodule" || die "Error: Can't remove submodule directory: $target_topdir/$submodule";
+    }
+}
+
+# copy the source directory into a tmp directory
+# omit the .git subdirectories
+sub copy_lo_module_to_tempdir($$$)
+{
+    my ($source_dir, $module, $lo_topdir_name) = @_;
+    my $tempdir = tempdir( 'libreoffice-XXXXXX', DIR => File::Spec->tmpdir );
+
+    mkdir "$tempdir/$lo_topdir_name" || die "Can't create directory \"$tempdir/$lo_topdir_name\": $!\n";
+    mkdir "$tempdir/$lo_topdir_name/$module_dirname{$module}" || die "Can't create directory \"$tempdir/$lo_topdir_name/$module_dirname{$module}\": $!\n" if ($module_dirname{$module});
+    
+    copy_dir_filter_and_show_progress("$source_dir/$module_dirname{$module}", "$tempdir/$lo_topdir_name/$module_dirname{$module}");
+    remove_empty_submodules("$tempdir/$lo_topdir_name/") if ($module eq "core");
+
+    return $tempdir;
+}
+
+sub generate_lo_module_changelog($$$)
+{
+    my ($source_dir, $lo_module_release_topdir, $module) = @_;
+    
+    my $log_name = "ChangeLog";
+    $log_name .= "-$module_dirname{$module}" if ($module_dirname{$module});
+    print "Generating changelog for $module...\n";
+    system ("cd $source_dir/$module_dirname{$module} && " .
+            "git log --date=short --pretty='format:%cd  %an  <%ae>  [%H]%n%n%w(0,8,8)%s%n%e%+b' " .
+            ">$lo_module_release_topdir/$log_name" ) &&
+        die "Error: generating failed: $!\n";
+}
+
+sub run_autogen($$)
+{
+    my ($dir, $module) = @_;
+
+    print "Running autogen for $module...\n";
+    system ("cd $dir && " .
+            "NOCONFIGURE=1 ./autogen.sh && " .
+            "rm -rf autom4te.cache && " .
+            "cd - >/dev/null 2>&1") && die "Error: autogen failed: $!\n";
+}
+
+sub generate_sources_version_file($$)
+{
+    my ($dir, $release_version) = @_;
+
+    open (VERFILE, ">$dir/sources.ver") || die "Can't open $dir/sources.ver: $!\n";
+
+    print VERFILE "lo_sources_ver=$release_version\n";
+
+    close VERFILE;
+}
+
+sub generate_tarball($$$)
+{
+    my ($dir, $tarball, $compressor_option) = @_;
+
+    print "Creating $tarball...";
+    # generate the tarball in the current directory; avoid "./" prefix in the stored paths; show progress
+    system ("tar -c -C $dir $lo_topdir_name | $compressor_option $tarball") &&
+        die "Error: releasing failed: $!\n";
+    print "\n";
+}
+
+sub generate_md5($)
+{
+    my ($filename) = @_;
+
+    print "Generating MD5...\n";
+    system ("md5sum $filename >$filename.md5") &&
+        die "Error: releasing failed: $!\n";
+}
+
+sub default_releases_state_file($)
+{
+    my ($lo_core_dir) = @_;
+
+    my $rootdir = $lo_core_dir;
+    $rootdir =~ s/^(.*?)\/?[^\/]+\/?$/$1/;
+
+    my $releases_state_file;
+    if ($rootdir) {
+        $releases_state_file = "$rootdir/.releases";
+    } else {
+        $releases_state_file = ".releases";
+    }
+
+    return "$releases_state_file";
+}
+
+sub load_releases_state($)
+{
+    my ($releases_state_file) = @_;
+
+    my $state_config_version;
+    my $state_release_version;
+
+    if (open (STATE, "$releases_state_file")) {
+
+        while (my $line = <STATE>) {
+            chomp $line;
+
+            if ($line =~ /^\s*configure_version\s*=\s*(.*)$/) {
+                $state_config_version = "$1";
+            } elsif ($line =~ /^\s*released_version\s*=\s*(.*)$/) {
+                $state_release_version = "$1";
+            }
+        }
+            close (STATE);
+    }
+
+    return $state_config_version, $state_release_version;
+}
+
+sub save_releases_state($$$)
+{
+    my ($releases_state_file, $config_version, $release_version) = @_;
+
+    open (STATE, '>', "$releases_state_file") ||
+        die "Can't open \"$releases_state_file\" for writing: $!\n";
+
+    print STATE "configure_version = $config_version\n";
+    print STATE "released_version  = $release_version\n";
+
+    close (STATE);
+}
+
+sub remove_tempdir($)
+{
+    my ($tempdir) = @_;
+
+#    print "Cleaning $tempdir...\n";
+    system ("rm -rf $tempdir") && die "Error: rm failed: $!\n";
+}
+
+sub check_if_file_exists($$)
+{
+    my ($file, $force) = @_;
+
+    if (-e $file) {
+        if (defined $force) {
+            print "Warning: $file already exists and will be replaced!\n";
+        } else {
+            die "Error: $file already exists.\n".
+                "       Use --force if you want to replace it.\n";
+        }
+    }
+}
+
+sub check_if_already_released($$$$$$)
+{
+    my ($p_module_tarball_name, $force, $bzip2, $xz, $pack_lo_core, $pack_lo_modules) = @_;
+
+    foreach my $tarball_name ( sort values %{$p_module_tarball_name} ) {
+        check_if_file_exists("$tarball_name.tar.bz2", $force) if (defined $bzip2);
+        check_if_file_exists("$tarball_name.tar.xz", $force) if (defined $xz);
+    }
+}
+
+sub prepare_module_sources($$$$)
+{
+    my ($source_dir, $release_version, $module, $lo_topdir_name) = @_;
+
+    # prepare sources
+    my $temp_dir = copy_lo_module_to_tempdir($source_dir, $module, $lo_topdir_name);
+    generate_lo_module_changelog($source_dir, "$temp_dir/$lo_topdir_name", $module);
+    run_autogen("$temp_dir/$lo_topdir_name", $module) if ($module eq 'core');
+    generate_sources_version_file("$temp_dir/$lo_topdir_name", $release_version) if ($module eq 'core');
+
+    return $temp_dir;
+}
+
+sub pack_module_sources($$$$)
+{
+    my ($temp_dir, $md5, $tarball, $compressor_option) = @_;
+
+    generate_tarball($temp_dir, $tarball, $compressor_option);
+    generate_md5($tarball) if (defined $md5);
+}
+
+sub generate_module_tarball($$$$$$$$)
+{
+    my ($source_dir, $release_version, $module, $md5, $bzip2, $xz, $lo_topdir_name, $module_tarball_name) = @_;
+	 my $PARALLELISM =  $ENV{'PARALLELISM'};
+	 my $CPUS_XZ = 0;
+	 my $CPUS_BZ2 = "";
+	 my $bzip_arguments;
+
+	 # Set CPUS_ to the number of CPUs that should be used. If PARALLELISM
+    # is set then this is used otherwise autodetect is used.
+    if (defined $PARALLELISM) {
+        if ($PARALLELISM > 0) {
+            $CPUS_XZ = $PARALLELISM;
+            $CPUS_BZ2 = "-p$PARALLELISM";
+        } else {
+            $CPUS_XZ = 1;
+            $CPUS_BZ2 = "-p1";
+		  }
+    }
+
+	 if (defined $bzip2) {
+		  my $exit_code = system("pbzip2 --version >/dev/null 2>&1");
+		  if ($exit_code == 0) {
+			  $bzip_arguments = "pbzip2 -z -b20 $CPUS_BZ2";
+		  } else {
+			  $bzip_arguments = "bzip2 -z --best";
+			  print("Consider installing pbzip2, using bzip2 now.\n");
+		  }
+	 }
+
+    my $temp_dir = prepare_module_sources($source_dir, $release_version, $module, $lo_topdir_name);
+    pack_module_sources($temp_dir, $md5, "$module_tarball_name.tar.bz2", "$bzip_arguments > ") if (defined $bzip2);
+    pack_module_sources($temp_dir, $md5, "$module_tarball_name.tar.xz", "xz -z -T$CPUS_XZ -e > ") if (defined $xz);
+    remove_tempdir($temp_dir);
+}
+
+
+sub generate_tarballs($$$$$$$$$)
+{
+    my ($source_dir, $release_version, $md5, $bzip2, $xz, $lo_topdir_name, $p_module_tarball_name, $pack_lo_core, $pack_lo_modules) = @_;
+
+    foreach my $module (sort keys %{$p_module_tarball_name} ) {
+        print "\n--- Generating $module ---\n";
+        generate_module_tarball($source_dir, $release_version, $module, $md5, $bzip2, $xz, $lo_topdir_name, $p_module_tarball_name->{$module});
+    }
+}
+
+
+sub usage()
+{
+    print "This tool helps to pack the libreoffice-build and module sources\n\n" .
+
+          "Usage:\n".
+          "\tlo-pack-sources [--help]\n" .
+          "\t  [--force] [--md5] [--bzip2] [--xz]\n" .
+          "\t [--version][--set-version=<ver>] [--inc-version]\n" .
+          "\t [--no-submodule] [--module=<module>]\n" .
+          "\t [dir]\n\n" .
+
+          "Options:\n\n" .
+          "\t--help: print this help\n" .
+          "\t--force: replace an already existing release of the same version\n" .
+          "\t--md5: generate md5 sum for the final tarball\n" .
+          "\t--bzip2: generate tarballs compressed by bzip2\n" .
+          "\t--xz: generate tarballs compressed by xz (default)\n" .
+          "\t--version: just print version of the released package but do not\n" .
+          "\t\trelease it; the version is affected by the other options, e.g.\n" .
+          "\t\t--inc-version\n" .
+          "\t--set-version: force another version\n" .
+          "\t--inc-version: increment the latest version; there is a difference\n" .
+          "\t\tbetween test release (default) and final (not yet supported)\n" .
+          "\t--no-submodule: do not pack sources from git submodules\n" .
+          "\t--module=<module>: pack just a single module, use \"core\"\n" .
+          "\t\tfor the main git repo,\n" .
+          "\tdir: path of the source directory, either libreoffice-build or module\n";
+}
+
+
+my $module;
+my $ptf;
+my $md5;
+my $bzip2;
+my $xz;
+my $inc_version;
+my $config_version;
+my $set_version;
+my $get_config_version;
+my $release_version;
+my $pack_lo_core=1;
+my $pack_lo_modules=1;
+my $source_dir;
+my $releases_state_file;
+my $state_config_version;
+my $state_release_version;
+my $lo_core_tempdir;
+my $force;
+my $verbose=1;
+my %module_tarball_name;
+
+###################
+# Arguments parsing
+###################
+
+for my $arg (@ARGV) {
+    if ($arg eq '--help' || $arg eq '-h') {
+        usage;
+        exit 0;
+    } elsif ($arg eq '--force') {
+        $force=1;
+    } elsif ($arg eq '--md5') {
+        $md5=1;
+    } elsif ($arg eq '--bzip2') {
+        $bzip2=1;
+    } elsif ($arg eq '--xz') {
+        $xz=1;
+    } elsif ($arg eq '--version') {
+        $get_config_version=1;
+        $verbose = undef;
+    } elsif ($arg eq '--inc-version') {
+        $inc_version=1
+    } elsif ($arg =~ m/--set-version=(.*)/) {
+          $set_version="$1";
+    } elsif ($arg eq '--no-submodule') {
+        $module = "core";
+    } elsif ($arg =~ m/--module=(.*)/) {
+          # process just one module and do not pack libreoffice-build
+          die("Error: unknown module: $1") unless (defined $module_dirname{$1});
+          $module = $1;
+    } elsif ($arg =~ /^-/ ) {
+        die "Error: unknown option: $arg\n";
+    } else {
+        if (! defined $source_dir) {
+            $source_dir = $arg;
+        } else {
+            die "Error: Too many arguments $arg\n";
+        }
+    }
+}
+
+# ugly hack; we want only one module
+if ($module) {
+    my $name = $module_dirname{$module};
+    %module_dirname = ();
+    $module_dirname{$module} = $name;
+}
+
+###################
+# Initial checks
+###################
+
+unless ( defined $source_dir ) {
+    die "Error: undefined source directory, try --help\n";
+}
+
+unless ( -d "$source_dir" ) {
+    die "Error: is not a directory: $source_dir\n";
+}
+
+# check if it is a valid libreoffice-core directory
+unless (-f "$source_dir/autogen.sh" && -f "$source_dir/config_host.mk.in") {
+    die "Error: \"$source_dir\" is not a valid libreoffice-core directory\n";
+}
+
+if (defined $set_version && defined $inc_version) {
+    die "Error: --set-version and --inc-version options can't be used together\n";
+}
+
+# default compression
+$xz = 1 unless (defined $xz || defined $bzip2);
+
+
+###################
+# Main logic
+###################
+
+
+print "Source: $source_dir\n" if ($verbose);
+
+# detect some paths
+$releases_state_file = default_releases_state_file($source_dir) unless (defined $releases_state_file);
+
+# detect versions
+$config_version = get_config_version($source_dir);
+($state_config_version, $state_release_version) = load_releases_state($releases_state_file);
+if (defined $set_version) {
+    $release_version = "$set_version";
+} else {
+    $release_version = get_release_version($config_version, $state_config_version, $state_release_version, $inc_version);
+}
+
+# define tarball names
+print "Detected module:\n";
+foreach my $module (sort keys %module_dirname) {
+    if (-e "$source_dir/$module_dirname{$module}/.git") {
+        print "    $module\n";
+        if ($module eq "core") {
+            $module_tarball_name{$module} = "libreoffice-$release_version";
+        } else {
+            $module_tarball_name{$module} = "libreoffice-$module-$release_version";
+        }
+    } else {
+        print "did not found: $source_dir/$module_dirname{$module}/.git\n";
+        print "Warning: $module sources are not available -> skipping\n";
+    }
+}
+
+# top directory inside the source tarballs
+$lo_topdir_name = "libreoffice-$release_version";
+
+print "Default version   : $config_version\n" if ($verbose && defined $config_version);
+print "Last used version : $state_release_version\n" if ($verbose && defined $state_release_version);
+print "New version       : $release_version\n" if ($verbose);
+
+# do the real job
+if ( defined $get_config_version ) {
+    print "$release_version\n";
+} else {
+    check_if_already_released(\%module_tarball_name, $force, $bzip2, $xz, $pack_lo_core, $pack_lo_modules);
+
+    # give a chance to stop the process
+    print ("\nWaiting 3 seconds...\n");
+    sleep 3;
+
+    generate_tarballs($source_dir, $release_version, $md5, $bzip2, $xz, $lo_topdir_name, \%module_tarball_name, $pack_lo_core, $pack_lo_modules);
+
+    if ( defined $releases_state_file ) {
+        save_releases_state($releases_state_file, $config_version, $release_version);
+    }
+}

@@ -1,0 +1,33 @@
+From caa6f1ea462d0f0c612b871106e3e309fe0290f5 Mon Sep 17 00:00:00 2001
+From: Stephan Bergmann <sbergman@redhat.com>
+Date: Thu, 16 Aug 2018 09:04:35 +0200
+Subject: [PATCH] Handle race between ExceptionHandler::SignalHandler and
+ ~ExceptionHandler
+
+...where thread A is blocked locking g_handler_stack_mutex_ in SignalHandler
+while thread B executes ~ExceptionHandler and sets g_handler_stack to null, but
+which thread A didn't expect to be null once it acquired the lock.
+---
+ src/client/linux/handler/exception_handler.cc | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/client/linux/handler/exception_handler.cc b/src/client/linux/handler/exception_handler.cc
+index b895f6d7..4d58e510 100644
+--- a/src/client/linux/handler/exception_handler.cc
++++ b/src/client/linux/handler/exception_handler.cc
+@@ -372,8 +372,10 @@ void ExceptionHandler::SignalHandler(int sig, siginfo_t* info, void* uc) {
+   }
+ 
+   bool handled = false;
+-  for (int i = g_handler_stack_->size() - 1; !handled && i >= 0; --i) {
+-    handled = (*g_handler_stack_)[i]->HandleSignal(sig, info, uc);
++  if (g_handler_stack_ != NULL) {
++    for (int i = g_handler_stack_->size() - 1; !handled && i >= 0; --i) {
++      handled = (*g_handler_stack_)[i]->HandleSignal(sig, info, uc);
++    }
+   }
+ 
+   // Upon returning from this signal handler, sig will become unmasked and then
+-- 
+2.17.1
+

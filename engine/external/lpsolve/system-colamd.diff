@@ -1,0 +1,39 @@
+diff -urN lp_solve_5.5-old/lpsolve55/ccc lp_solve_5.5/lpsolve55/ccc
+--- misc/build/lp_solve_5.5/lpsolve55/ccc	2005-06-11 21:27:18.000000000 +0200
++++ misc/build/lp_solve_5.5/lpsolve55/ccc	2025-03-02 17:58:19.904235635 +0100
+@@ -1,4 +1,7 @@
+-src='../lp_MDO.c ../shared/commonlib.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c ../colamd/colamd.c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c'
++if test "$SYSTEM_COLAMD" != "TRUE"; then
++     colamd_c=../colamd/colamd.c
++fi
++src="../lp_MDO.c ../shared/commonlib.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c $colamd_c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c"
+ ar=$AR
+ c=$CC
+ ranlib=$RANLIB
+@@ -25,17 +28,24 @@
+ 
+ if [ "$OS" = "LINUX" ]; then
+      libs="$libs -ldl"
++     libs="$libs $COLAMD_LIBS"
+ fi
+ 
+ opts='-O3'
+ 
+-$c -s $inline -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd $opts $def -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
++if test "$SYSTEM_COLAMD" = "TRUE"; then
++	colamd_i=$COLAMD_CFLAGS
++else
++	colamd_i=-I../colamd
++fi
++
++$c -s $inline -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL $colamd_i $opts $def -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
+ $ar rv liblpsolve55.$a `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'`
+ $ranlib liblpsolve55.$a
+ 
+ if [ "$so" != "" ]
+ then
+-  $c $pic -s $inline -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -I. $opts -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
++  $c $pic -s $inline -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL $colamd_i -I. $opts -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
+   $c -shared $ldflags -o ${soprefix}lpsolve55.$so `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` $libs
+ fi
+ 

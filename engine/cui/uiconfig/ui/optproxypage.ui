@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
+<interface domain="cui">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkFrame" id="OptProxyPage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="border-width">6</property>
+    <property name="label-xalign">0</property>
+    <property name="shadow-type">none</property>
+    <child>
+      <!-- n-columns=6 n-rows=5 -->
+      <object class="GtkGrid" id="grid1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-start">12</property>
+        <property name="margin-top">6</property>
+        <property name="hexpand">True</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">12</property>
+        <child>
+          <object class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="optproxypage|label2">Proxy s_erver:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">proxymode</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="http">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="valign">center</property>
+            <property name="hexpand">True</property>
+            <property name="activates-default">True</property>
+            <property name="truncate-multiline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="http-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|http">Type the name of the proxy server for HTTP.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">2</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="https">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="valign">center</property>
+            <property name="hexpand">True</property>
+            <property name="activates-default">True</property>
+            <property name="truncate-multiline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="https-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|https">Type the name of the proxy server for HTTPS. Type the port in the right-hand field.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">2</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="noproxy">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="valign">center</property>
+            <property name="hexpand">True</property>
+            <property name="activates-default">True</property>
+            <property name="truncate-multiline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="noproxy-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|noproxy">Specifies the names of the servers that do not require any proxy servers, separated by semicolons.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">2</property>
+            <property name="top-attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="httpport">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="valign">center</property>
+            <property name="max-length">5</property>
+            <property name="activates-default">True</property>
+            <property name="width-chars">5</property>
+            <property name="truncate-multiline">True</property>
+            <property name="input-purpose">digits</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="httpport-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|httpport">Type the port for the corresponding proxy server.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">5</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="httpsport">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="valign">center</property>
+            <property name="max-length">5</property>
+            <property name="activates-default">True</property>
+            <property name="width-chars">5</property>
+            <property name="truncate-multiline">True</property>
+            <property name="input-purpose">digits</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="httpsport-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|httpsport">Type the port for the corresponding proxy server.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">5</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="proxymode">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <items>
+              <item translatable="yes" context="optproxypage|proxymode">None</item>
+              <item translatable="yes" context="optproxypage|proxymode">System</item>
+              <item translatable="yes" context="optproxypage|proxymode">Manual</item>
+            </items>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="proxymode-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|proxymode">Specifies the type of proxy definition.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">2</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="httpft">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="optproxypage|httpft">HT_TP proxy:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">http</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="httpportft">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="optproxypage|httpportft">_Port:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">httpport</property>
+          </object>
+          <packing>
+            <property name="left-attach">4</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="httpsft">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="optproxypage|httpsft">HTTP_S proxy:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">https</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="noproxyft">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="optproxypage|noproxyft">_No proxy for:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">noproxy</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="httpsportft">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="optproxypage|httpsportft">P_ort:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">httpsport</property>
+          </object>
+          <packing>
+            <property name="left-attach">4</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="noproxydesc">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="optproxypage|noproxydesc">Separator ;</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">4</property>
+            <property name="top-attach">4</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockproxymode">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockhttp">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockhttps">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="locknoproxy">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockhttpport">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">3</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="lockhttpsport">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">res/lock.png</property>
+          </object>
+          <packing>
+            <property name="left-attach">3</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <child type="label">
+      <object class="GtkLabel" id="label1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="optproxypage|label1">Settings</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptProxyPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptProxyPage">Specifies the type of proxy definition.</property>
+      </object>
+    </child>
+  </object>
+</interface>

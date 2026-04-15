@@ -1,0 +1,35 @@
+<!-- dodano u DOCUMENTLIST.XML datoteku -->
+
+
+<!-- dodano u inačici 2017-03-18 -->
+	<!-- v. https://github.com/krunose/libo-acorr-hr/blob/master/dokumentacija.md#sentenceexceptlistxml -->
+	<block-list:block block-list:abbreviated-name="med. Biochem." block-list:name="med. biochem."/>
+	<block-list:block block-list:abbreviated-name="med. Chem." block-list:name="med. chem."/>
+	<block-list:block block-list:abbreviated-name="med. Dent." block-list:name="med. dent."/>
+	<block-list:block block-list:abbreviated-name="med. Lab." block-list:name="med. lab."/>
+	<block-list:block block-list:abbreviated-name="med. Techn." block-list:name="med. techn."/>
+	<block-list:block block-list:abbreviated-name="med. Vet." block-list:name="med. vet."/>
+
+<!-- dodano u inačici 2017-03-13 -->
+  <block-list:block block-list:abbreviated-name=":^10:" block-list:name="¹⁰"/>
+  <block-list:block block-list:abbreviated-name=":_10:" block-list:name="₁₀"/>
+
+<!-- dodano u inačici 2016-12-28 -->
+	<block-list:block block-list:abbreviated-name=":-a:" block-list:name="ā"/>
+	<block-list:block block-list:abbreviated-name=":-e:" block-list:name="ē"/>
+	<block-list:block block-list:abbreviated-name=":-i:" block-list:name="ī"/>
+	<block-list:block block-list:abbreviated-name=":-o:" block-list:name="ō"/>
+	<block-list:block block-list:abbreviated-name=":-u:" block-list:name="ū"/>
+
+<!-- dodano u inačici 2016-10-15 -->
+  <block-list:block block-list:abbreviated-name="%o" block-list:name="‰"/>
+  <block-list:block block-list:abbreviated-name="%oo" block-list:name="‱"/>
+
+<!-- dodano u inačici 2016-5-2 -->
+  <!-- ostali se naglasci mogu jednostavno umetnuti tipkovničkim kraticama ALT Gr + 9 na alfanumeričkom dijelu tipkovnice + samoglasnik, ili ALT Gr + desni Shift + 3 ili 9 na alfanumeričkom dijelu tipkovnice + samoglasnik. -->
+  <block-list:block block-list:abbreviated-name=":'a:" block-list:name="ȁ"/>
+  <block-list:block block-list:abbreviated-name=":'e:" block-list:name="ȅ"/>
+  <block-list:block block-list:abbreviated-name=":'i:" block-list:name="ȉ"/>
+  <block-list:block block-list:abbreviated-name=":'o:" block-list:name="ȍ"/>
+  <block-list:block block-list:abbreviated-name=":'u:" block-list:name="ȕ"/>
+

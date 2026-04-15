@@ -1,0 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+module ooo { module vba { module access {
+    constants AcImeSentenceMode {
+        const long acImeSentenceModeConversation = 2;
+        const long acImeSentenceModeNone = 3;
+        const long acImeSentenceModePhrasePredict = 0;
+        const long acImeSentenceModePluralClause = 1;
+    };
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

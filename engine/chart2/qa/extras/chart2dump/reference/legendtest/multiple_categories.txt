@@ -1,0 +1,66 @@
+// nLegendEntryCount
+8
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// xLegendEntryText->getString()
+A In0
+// xLegendEntryText->getString()
+A In100
+// xLegendEntryText->getString()
+A In200
+// xLegendEntryText->getString()
+A In400
+// xLegendEntryText->getString()
+B In0
+// xLegendEntryText->getString()
+B In100
+// xLegendEntryText->getString()
+B In200
+// xLegendEntryText->getString()
+B In400

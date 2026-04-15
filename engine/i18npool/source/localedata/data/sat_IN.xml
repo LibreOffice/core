@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
+  <LC_INFO>
+    <Language>
+      <LangID>sat</LangID>
+      <DefaultName>Santali</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>IN</CountryID>
+      <DefaultName>India</DefaultName>
+    </Country>
+  </LC_INFO>
+  <!-- Inherit from sat_Olck_IN as that was renamed from sat_IN but older documents since 7.6 (tdf#154987) may have used the sat_IN locale though it's actually Ol Chiki script. Adjust to Devanagari if wanted. -->
+  <LC_CTYPE ref="sat_Olck_IN" />
+  <LC_FORMAT ref="sat_Olck_IN" replaceFrom="[CURRENCY]" replaceTo="[$₹-646]"/>
+  <LC_COLLATION ref="sat_Olck_IN" />
+  <LC_SEARCH ref="sat_Olck_IN" />
+  <LC_INDEX ref="sat_Olck_IN" />
+  <LC_CALENDAR ref="sat_Olck_IN" />
+  <LC_CURRENCY ref="sat_Olck_IN" />
+  <LC_TRANSLITERATION ref="sat_Olck_IN" />
+  <LC_MISC ref="sat_Olck_IN" />
+  <LC_NumberingLevel ref="sat_Olck_IN" />
+  <LC_OutLineNumberingLevel ref="sat_Olck_IN"/>
+</Locale>
+<!--Version 1.0  -->

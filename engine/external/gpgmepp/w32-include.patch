@@ -1,0 +1,22 @@
+--- src/data-fd.c
++++ src/data-fd.c
+@@ -28,6 +28,9 @@
+ #ifdef HAVE_SYS_TYPES_H
+ # include <sys/types.h>
+ #endif
++#if defined HAVE_W32_SYSTEM
++#include <io.h>
++#endif
+ 
+ #include "debug.h"
+ #include "data.h"
+--- src/gpgme-w32spawn.c
++++ src/gpgme-w32spawn.c
+@@ -36,6 +36,7 @@
+ # include <sys/stat.h>
+ #endif
+ #include <stdint.h>
++#include <io.h>
+ #include <process.h>
+ 
+ #include "priv-io.h"

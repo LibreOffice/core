@@ -1,0 +1,60 @@
+--- util/perl/OpenSSL/config.pm	2022-09-08 11:45:57.408532119 +0100
++++ util/perl/OpenSSL/config.pm	2022-09-08 11:47:46.877590711 +0100
+@@ -16,7 +16,7 @@
+ use Getopt::Std;
+ use File::Basename;
+ use File::Spec;
+-use IPC::Cmd;
++# use IPC::Cmd;
+ use POSIX;
+ use Config;
+ use Carp;
+@@ -205,7 +205,8 @@
+ 
+ # Look for ISC/SCO with its unique uname program
+ sub is_sco_uname {
+-    return undef unless IPC::Cmd::can_run('uname');
++    return undef;
++#    return undef unless IPC::Cmd::can_run('uname');
+ 
+     open UNAME, "uname -X 2>/dev/null|" or return '';
+     my $line = "";
+@@ -303,13 +304,13 @@
+     $CCVENDOR = '';             # Dunno, don't care (unless found later)
+ 
+     # Find a compiler if we don't already have one
+-    if ( ! $cc ) {
+-        foreach (@c_compilers) {
+-            next unless IPC::Cmd::can_run("$CROSS_COMPILE$_");
+-            $CC = $_;
+-            last;
+-        }
+-    }
++#    if ( ! $cc ) {
++#        foreach (@c_compilers) {
++#            next unless IPC::Cmd::can_run("$CROSS_COMPILE$_");
++#            $CC = $_;
++#            last;
++#        }
++#    }
+ 
+     if ( $CC ) {
+         # Find the compiler vendor and version number for certain compilers
+--- util/perl/OpenSSL/config.pm.orig	2022-11-08 12:54:59.751298823 +0100
++++ util/perl/OpenSSL/config.pm	2022-11-08 12:55:16.436287053 +0100
+@@ -52,13 +52,13 @@
+ my @cc_version =
+     (
+      clang => sub {
+-         return undef unless IPC::Cmd::can_run("$CROSS_COMPILE$CC");
++         return undef; # unless IPC::Cmd::can_run("$CROSS_COMPILE$CC");
+          my $v = `$CROSS_COMPILE$CC -v 2>&1`;
+          $v =~ m/(?:(?:clang|LLVM) version|.*based on LLVM)\s+([0-9]+\.[0-9]+)/;
+          return $1;
+      },
+      gnu => sub {
+-         return undef unless IPC::Cmd::can_run("$CROSS_COMPILE$CC");
++         return undef; # unless IPC::Cmd::can_run("$CROSS_COMPILE$CC");
+          my $nul = File::Spec->devnull();
+          my $v = `$CROSS_COMPILE$CC -dumpversion 2> $nul`;
+          # Strip off whatever prefix egcs prepends the number with.

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <table:table table:name="Table1">
+    <table:table-column table:number-columns-repeated="2"/>
+    <table:table-row>
+     <table:table-cell>
+      <text:p/>
+     </table:table-cell>
+     <table:table-cell table:number-rows-spanned="2">
+      <text:p/>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell>
+      <text:p/>
+     </table:table-cell>
+     <table:covered-table-cell/>
+    </table:table-row>
+   </table:table>
+   <text:p/>
+  </office:text>
+ </office:body>
+</office:document>

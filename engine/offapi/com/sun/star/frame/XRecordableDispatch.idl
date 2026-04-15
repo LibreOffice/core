@@ -1,0 +1,86 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module frame {
+
+/** extends an existing XDispatch implementation with functionality
+    for dispatch recording
+
+    <p>
+    This interface can be implemented as an additional one beside an existing
+    XDispatch one to provide record functionality of dispatches.
+    Because it's an additional interface the status events are available there
+    and not at this interface.
+    </p>
+
+    <p>
+    But normally this interface mustn't be used directly.
+    If a dispatch object is well known and recording was enabled
+    on a XDispatchRecorderSupplier it's possible to use method
+    XDispatchRecorderSupplier::dispatchAndRecord() of it
+    to make dispatch and recording automatically. The interface XRecordableDispatch
+    is used transparently there.
+    </p>
+
+    @code{.java}
+        XDispatch xDispatcher = xFrame.queryDispatch(aURL,"",0);
+        XRecordableDispatch xRecordable =
+            (XRecordableDispatch)UnoRuntime.queryInterface(
+                XRecordableDispatch.class,
+                xDispatcher);
+
+        xDispatcher.addStatusListener(this,aURL);
+
+        if (xRecordable != null)
+            xRecordable.dispatchAndRecord(aURL,lArguments,xRecorder);
+        else
+            xDispatcher.dispatch(aURL,lArguments);
+        ...
+        xDispatcher.removeStatusListener(this,aURL);
+    @endcode
+
+    @see XDispatchRecorderSupplier
+    @see XDispatch
+ */
+published interface XRecordableDispatch: com::sun::star::uno::XInterface
+{
+    /** dispatch and record it
+
+        @param URL
+            full parsed URL which describe the feature which should be dispatched (executed)
+
+        @param Arguments
+            optional arguments for this request
+            (see com::sun::star::document::MediaDescriptor for details)
+
+        @param Recorder
+            object which can be used to record the request
+            (available on XDispatchRecorderSupplier::getDispatchRecorder())
+     */
+    void dispatchAndRecord(
+        [in] com::sun::star::util::URL URL,
+        [in] sequence<com::sun::star::beans::PropertyValue> Arguments,
+        [in] XDispatchRecorder Recorder);
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

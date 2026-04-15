@@ -1,0 +1,11 @@
+--- src/lib/RVNGBinaryData.cpp	2024-05-10 13:20:09.278288686 +0200
++++ src/lib/RVNGBinaryData.cpp	2024-05-10 13:23:14.365139906 +0200
+@@ -93,7 +93,7 @@
+ 
+ void RVNGBinaryDataImpl::makeUnique()
+ {
+-	if (!m_ptr.unique())
++	if (!(m_ptr.use_count() == 1))
+ 	{
+ 		std::shared_ptr<DataImpl> ptr(new DataImpl());
+ 		ptr->m_buf = m_ptr->m_buf;

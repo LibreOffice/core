@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="CSc"/>
+  <block-list:block block-list:abbreviated-name="DSc"/>
+  <block-list:block block-list:abbreviated-name="GBps"/>
+  <block-list:block block-list:abbreviated-name="GBq"/>
+  <block-list:block block-list:abbreviated-name="GGy"/>
+  <block-list:block block-list:abbreviated-name="GHz"/>
+  <block-list:block block-list:abbreviated-name="GPa"/>
+  <block-list:block block-list:abbreviated-name="GSv"/>
+  <block-list:block block-list:abbreviated-name="GWb"/>
+  <block-list:block block-list:abbreviated-name="GWh"/>
+  <block-list:block block-list:abbreviated-name="HBr"/>
+  <block-list:block block-list:abbreviated-name="HCl"/>
+  <block-list:block block-list:abbreviated-name="KBr"/>
+  <block-list:block block-list:abbreviated-name="KCl"/>
+  <block-list:block block-list:abbreviated-name="MBps"/>
+  <block-list:block block-list:abbreviated-name="MBq"/>
+  <block-list:block block-list:abbreviated-name="MGy"/>
+  <block-list:block block-list:abbreviated-name="MHz"/>
+  <block-list:block block-list:abbreviated-name="MPa"/>
+  <block-list:block block-list:abbreviated-name="MSv"/>
+  <block-list:block block-list:abbreviated-name="MWb"/>
+  <block-list:block block-list:abbreviated-name="MWh"/>
+  <block-list:block block-list:abbreviated-name="OOo"/>
+  <block-list:block block-list:abbreviated-name="PCl"/>
+  <block-list:block block-list:abbreviated-name="SRo"/>
+  <block-list:block block-list:abbreviated-name="TBps"/>
+  <block-list:block block-list:abbreviated-name="THz"/>
+  <block-list:block block-list:abbreviated-name="TWh"/>
+</block-list:block-list>

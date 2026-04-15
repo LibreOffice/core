@@ -1,0 +1,135 @@
+/*
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "macros.inc"
+
+#include "config_folders.h"
+
+Profile gid_Profile_Louno_ini
+    ModuleID = gid_Module_Root;
+    Name = PROFILENAME(louno);
+    Dir = GID_BRAND_DIR_ETC;
+    Styles = (NETWORK);
+End
+
+ProfileItem gid_Profileitem_Louno_Uno_Bundled_Extensions
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "BUNDLED_EXTENSIONS";
+    Value = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/extensions";
+End
+
+ProfileItem gid_Profileitem_Louno_Uno_Bundled_Extensions_User
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "BUNDLED_EXTENSIONS_USER";
+    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bundled";
+End
+
+ProfileItem gid_Profileitem_Louno_Uno_Shared_Packages
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "UNO_SHARED_PACKAGES";
+    Value = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/uno_packages";
+End
+
+ProfileItem gid_Profileitem_Louno_Uno_Shared_Packages_Cache
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 2;
+    Key = "UNO_SHARED_PACKAGES_CACHE";
+    Value = "$UNO_SHARED_PACKAGES/cache";
+End
+
+ProfileItem gid_Profileitem_Louno_Uno_Shared_Extensions_User
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "SHARED_EXTENSIONS_USER";
+    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/shared";
+End
+
+ProfileItem gid_Profileitem_Louno_Uno_User_Packages
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 3;
+    Key = "UNO_USER_PACKAGES";
+    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/uno_packages";
+End
+
+ProfileItem gid_Profileitem_Louno_Uno_Bundled_Tmp_Extensions
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "TMP_EXTENSIONS";
+    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/tmp";
+End
+
+ProfileItem gid_Profileitem_Louno_Uno_Bundled_Bak_Extensions
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "BAK_EXTENSIONS";
+    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bak";
+End
+
+ProfileItem gid_Profileitem_Louno_Uno_User_Packages_Cache
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "UNO_USER_PACKAGES_CACHE";
+    Value = "$UNO_USER_PACKAGES/cache";
+End
+ProfileItem gid_Profileitem_Louno_Pkg_BundledUnoFile
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "PKG_BundledUnoFile";
+    Value = "$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+End
+
+ProfileItem gid_Profileitem_Louno_Pkg_SharedUnoFile
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "PKG_SharedUnoFile";
+    Value = "$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+End
+
+ProfileItem gid_Profileitem_Louno_Pkg_UserUnoFile
+    ProfileID = gid_Profile_Louno_ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 6;
+    Key = "PKG_UserUnoFile";
+    Value = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+End
