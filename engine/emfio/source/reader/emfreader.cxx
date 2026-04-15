@@ -797,6 +797,14 @@ namespace emfio
         for (sal_uInt32 i = 0; i < nPoly && mpInputStream->good(); ++i)
         {
             const sal_uInt32 nPointCount(aPoints[i]);
+            auto nRemainingSize = nEndPos - mpInputStream->Tell();
+            if (nPointCount > nRemainingSize / (sizeof(T) * 2))
+            {
+                SAL_WARN("emfio", "polygon " << i << " claims " << nPointCount
+                         << " points but only " << nRemainingSize / (sizeof(T) * 2)
+                         << " fit in remaining stream");
+                return;
+            }
             std::vector<Point> aPtAry(nPointCount);
             for (sal_uInt32 j = 0; j < nPointCount && mpInputStream->good(); ++j)
             {
