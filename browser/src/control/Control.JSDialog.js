@@ -655,6 +655,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				if (instance.popupAnchor && instance.popupAnchor.indexOf('top') >= 0)
 					instance.posy = parent.getBoundingClientRect().top;
 
+				else if (instance.popupAnchor && instance.popupAnchor.indexOf('bottom') >= 0)
+					instance.posy -= instance.content.clientHeight;
+
 				instance.container.style.minWidth = parent.getBoundingClientRect().width + 'px';
 
 				if (isRTL)
