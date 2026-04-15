@@ -3123,7 +3123,9 @@ ScFormulaCell::RelNameRef ScFormulaCell::HasRelNameReference() const
                     eRelNameRef = RelNameRef::SINGLE;
             break;
             case formula::svDoubleRef:
-                if (t->GetDoubleRef()->Ref1.IsRelName() || t->GetDoubleRef()->Ref2.IsRelName())
+            {
+                auto pDoubleRefToken = static_cast<ScDoubleRefToken*>(t);
+                if (pDoubleRefToken->GetDoubleRef().Ref1.IsRelName() || pDoubleRefToken->GetDoubleRef().Ref2.IsRelName())
                     // May originate from individual cell names, in which case
                     // it needs recompilation.
                     return RelNameRef::DOUBLE;
@@ -3131,6 +3133,7 @@ ScFormulaCell::RelNameRef ScFormulaCell::HasRelNameReference() const
                  * extended? or too cumbersome? might narrow recompilation to
                  * only needed cases.
                  * */
+            }
             break;
             default:
                 ;   // nothing
@@ -3718,7 +3721,7 @@ void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
             rRef1.IncTab(1);
         if (p->GetType() == formula::svDoubleRef)
         {
-            ScSingleRefData& rRef2 = p->GetDoubleRef()->Ref2;
+            ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(p)->GetDoubleRef().Ref2;
             if (!rRef2.IsTabRel() && nTable <= rRef2.Tab())
                 rRef2.IncTab(1);
         }
@@ -3762,7 +3765,7 @@ bool ScFormulaCell::TestTabRefAbs(SCTAB nTable)
         }
         if (p->GetType() == formula::svDoubleRef)
         {
-            ScSingleRefData& rRef2 = p->GetDoubleRef()->Ref2;
+            ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(p)->GetDoubleRef().Ref2;
             if (!rRef2.IsTabRel())
             {
                 if(nTable != rRef2.Tab())
@@ -3806,7 +3809,7 @@ void ScFormulaCell::TransposeReference()
         if ( rRef1.IsColRel() && rRef1.IsRowRel() )
         {
             bool bDouble = (t->GetType() == formula::svDoubleRef);
-            ScSingleRefData& rRef2 = (bDouble ? t->GetDoubleRef()->Ref2 : rRef1);
+            ScSingleRefData& rRef2 = (bDouble ? static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2 : rRef1);
             if ( !bDouble || (rRef2.IsColRel() && rRef2.IsRowRel()) )
             {
                 lcl_TransposeReference(rRef1);
@@ -4513,8 +4516,8 @@ struct ScDependantsCalculator
                 // Result vector.
                 if (res->GetType() == svDoubleRef)
                 {
-                    ScComplexRefData aRef1 = *res->GetDoubleRef();
-                    ScComplexRefData aRef2 = *pRPNArray[nTokenIdx - 2]->GetDoubleRef();
+                    ScComplexRefData aRef1 = static_cast<ScDoubleRefToken*>(res)->GetDoubleRef();
+                    ScComplexRefData aRef2 = static_cast<ScDoubleRefToken*>(pRPNArray[nTokenIdx - 2])->GetDoubleRef();
                     ScRange resultRange = aRef1.toAbs(mrDoc, mrPos);
                     ScRange sourceRange = aRef2.toAbs(mrDoc, mrPos);
 
@@ -4616,7 +4619,7 @@ struct ScDependantsCalculator
                 break;
             case svDoubleRef:
                 {
-                    ScComplexRefData aRef = *p->GetDoubleRef();
+                    ScComplexRefData aRef = static_cast<ScDoubleRefToken*>(p)->GetDoubleRef();
                     if( aRef.IsDeleted())
                         return false;
                     ScRange aAbs = aRef.toAbs(mrDoc, mrPos);
@@ -5326,7 +5329,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
                 break;
                 case svDoubleRef:
                 {
-                    ScComplexRefData aRef = *p->GetDoubleRef();
+                    ScComplexRefData aRef = static_cast<const ScDoubleRefToken*>(p)->GetDoubleRef();
                     ScRange aRefRange = aRef.toAbs(rDocument, aPos);
                     formula::FormulaTokenRef pNewToken = rDocument.ResolveStaticReference(aRefRange);
                     if (!pNewToken)

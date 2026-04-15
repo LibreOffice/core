@@ -215,18 +215,6 @@ ScSingleRefData* FormulaToken::GetSingleRef()
     return nullptr;
 }
 
-const ScComplexRefData* FormulaToken::GetDoubleRef() const
-{
-    OSL_FAIL( "FormulaToken::GetDoubleRef: virtual dummy called" );
-    return nullptr;
-}
-
-ScComplexRefData* FormulaToken::GetDoubleRef()
-{
-    OSL_FAIL( "FormulaToken::GetDoubleRef: virtual dummy called" );
-    return nullptr;
-}
-
 const ScSingleRefData* FormulaToken::GetSingleRef2() const
 {
     OSL_FAIL( "FormulaToken::GetSingleRef2: virtual dummy called" );

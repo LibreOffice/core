@@ -11,6 +11,7 @@
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <tokenarray.hxx>
+#include <token.hxx>
 #include <refdata.hxx>
 
 #include <formula/token.hxx>
@@ -189,7 +190,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
                 // Additionally some functions such as INDEX() and OFFSET() require a reference,
                 // that is handled by denylisting those opcodes in ScTokenArray::CheckToken().
 
-                ScComplexRefData aRef = *p->GetDoubleRef();
+                ScComplexRefData aRef = static_cast<const ScDoubleRefToken*>(p)->GetDoubleRef();
                 if( aRef.IsDeleted())
                     return false;
                 ScRange aAbs = aRef.toAbs(mrDoc, mrPos);

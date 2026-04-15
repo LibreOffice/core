@@ -2450,7 +2450,7 @@ void ScInterpreter::ScIntersect()
             }
             else if (sv[i] == svDoubleRef)
             {
-                ScComplexRefData aRef = *xt[i]->GetDoubleRef();
+                ScComplexRefData aRef = static_cast<const ScDoubleRefToken*>(xt[i])->GetDoubleRef();
                 p.reset(new ScRefListToken);
                 p->GetRefList()->push_back( aRef);
                 xt[i] = p.get();
@@ -2627,7 +2627,7 @@ void ScInterpreter::ScUnionFunc()
                 }
                 break;
             case svDoubleRef:
-                pRes->push_back( *pt[i]->GetDoubleRef());
+                pRes->push_back( static_cast<const ScDoubleRefToken*>(pt[i])->GetDoubleRef());
                 break;
             case svRefList:
                 {

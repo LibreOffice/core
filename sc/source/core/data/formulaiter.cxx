@@ -39,9 +39,16 @@ static bool lcl_ScDetectiveRefIter_SkipRef( const ScDocument& rDoc, formula::For
     ScAddress aAbs1 = rRef1.toAbs(rDoc, rPos);
     if (!rDoc.ValidAddress(aAbs1))
         return true;
-    if ( p->GetType() == svDoubleRef || p->GetType() == svExternalDoubleRef )
+    if ( p->GetType() == svDoubleRef )
     {
-        ScSingleRefData& rRef2 = p->GetDoubleRef()->Ref2;
+        ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(p)->GetDoubleRef().Ref2;
+        ScAddress aAbs2 = rRef2.toAbs(rDoc, rPos);
+        if (!rDoc.ValidAddress(aAbs2))
+            return true;
+    }
+    else if ( p->GetType() == svExternalDoubleRef )
+    {
+        ScSingleRefData& rRef2 = static_cast<ScExternalDoubleRefToken*>(p)->GetDoubleRef().Ref2;
         ScAddress aAbs2 = rRef2.toAbs(rDoc, rPos);
         if (!rDoc.ValidAddress(aAbs2))
             return true;

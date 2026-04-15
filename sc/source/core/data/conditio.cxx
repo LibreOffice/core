@@ -90,7 +90,7 @@ static bool lcl_HasRelRef( ScDocument& rDoc, const ScTokenArray* pFormula, sal_u
             {
                 case svDoubleRef:
                 {
-                    ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
+                    ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
                         return true;
                     [[fallthrough]];
@@ -1430,7 +1430,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
                 }
                 if ( t->GetType() == svDoubleRef )
                 {
-                    ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
+                    ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2;
                     aAbs = rRef2.toAbs(mrDoc, aSrcPos);
                     if (!rRef2.IsTabDeleted())
                     {

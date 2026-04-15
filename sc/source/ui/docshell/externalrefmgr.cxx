@@ -1807,7 +1807,7 @@ void ScExternalRefManager::storeRangeNameTokens(sal_uInt16 nFileId, const OUStri
                     if (SCTAB nCacheId = rRef.Tab(); nCacheId >= 0)
                         aTabName = maRefCache.getTableName(nFileId, nCacheId);
                     ScExternalDoubleRefToken aNewToken(nFileId, svl::SharedString(aTabName),   // string not interned
-                        *pToken->GetDoubleRef());
+                        static_cast<const ScDoubleRefToken*>(pToken)->GetDoubleRef());
                     pNewArray->AddToken(aNewToken);
                     bTokenAdded = true;
                 }
@@ -2392,7 +2392,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
                 OUString aTabName;
                 rSrcDoc.GetName(rRef.Tab(), aTabName);
                 ScExternalDoubleRefToken aNewToken(nFileId, svl::SharedString( aTabName),   // string not interned
-                        *pToken->GetDoubleRef());
+                        static_cast<const ScDoubleRefToken*>(pToken)->GetDoubleRef());
                 pNew->AddToken(aNewToken);
                 bTokenAdded = true;
             }

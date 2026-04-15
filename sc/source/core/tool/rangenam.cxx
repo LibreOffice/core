@@ -227,7 +227,7 @@ void ScRangeData::GuessPosition()
 
         if ( t->GetType() == svDoubleRef )
         {
-            ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
+            ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2;
             if ( rRef2.IsColRel() && rRef2.Col() < nMinCol )
                 nMinCol = rRef2.Col();
             if ( rRef2.IsRowRel() && rRef2.Row() < nMinRow )
@@ -559,7 +559,7 @@ void ScRangeData::ValidateTabRefs()
         }
         if ( t->GetType() == svDoubleRef )
         {
-            ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
+            ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2;
             aAbs = rRef2.toAbs(rDoc, aPos);
             if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
             {
@@ -599,7 +599,7 @@ void ScRangeData::ValidateTabRefs()
             break;
             case svDoubleRef:
             {
-                ScComplexRefData& rRef = *t->GetDoubleRef();
+                ScComplexRefData& rRef = static_cast<ScDoubleRefToken*>(t)->GetDoubleRef();
                 if (!rRef.Ref1.IsTabDeleted())
                 {
                     ScAddress aAbs = rRef.Ref1.toAbs(rDoc, aOldPos);

@@ -2033,7 +2033,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpScToken& rTokData )
 void XclExpFmlaCompImpl::ProcessRangeRef( const XclExpScToken& rTokData )
 {
     // get the Excel address components, adjust internal data in aRefData
-    ScComplexRefData aRefData = *rTokData.mpScToken->GetDoubleRef();
+    ScComplexRefData aRefData = static_cast<const ScDoubleRefToken*>(rTokData.mpScToken)->GetDoubleRef();
     XclRange aXclRange( ScAddress::UNINITIALIZED );
     ConvertRefData( aRefData, aXclRange, false );
 
@@ -2116,7 +2116,7 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
     if( mxData->mpLinkMgr )
     {
         // get the Excel address components, adjust internal data in aRefData
-        ScComplexRefData aRefData = *rTokData.mpScToken->GetDoubleRef();
+        ScComplexRefData aRefData = static_cast<const ScExternalDoubleRefToken*>(rTokData.mpScToken)->GetDoubleRef();
         XclRange aXclRange( ScAddress::UNINITIALIZED );
         ConvertRefData( aRefData, aXclRange, false );
 
@@ -2208,7 +2208,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
                             break;
                             case svExternalDoubleRef:
                             {
-                                ScComplexRefData aRefData = *pScToken->GetDoubleRef();
+                                ScComplexRefData aRefData = static_cast<ScExternalDoubleRefToken*>(pScToken)->GetDoubleRef();
                                 mxData->mpLinkMgr->StoreCellRange(
                                     nFileId, pScToken->GetString().getString(), aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
                             }

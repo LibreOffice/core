@@ -5525,7 +5525,7 @@ void ScCompiler::AdjustSheetLocalNameRelReferences( SCTAB nDelta )
             rRef1.IncTab( nDelta);
         if ( t->GetType() == svDoubleRef )
         {
-            ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
+            ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2;
             if (rRef2.IsTabRel())
                 rRef2.IncTab( nDelta);
         }
@@ -5543,7 +5543,7 @@ void ScCompiler::SetRelNameReference()
             rRef1.SetRelName( true );
         if ( t->GetType() == svDoubleRef )
         {
-            ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
+            ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2;
             if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
                 rRef2.SetRelName( true );
         }
@@ -5558,8 +5558,10 @@ void ScCompiler::MoveRelWrap()
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
             ScRefUpdate::MoveRelWrap( rDoc, aPos, rDoc.MaxCol(), rDoc.MaxRow(), SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
+        else if (t->GetType() == svDoubleRef)
+            ScRefUpdate::MoveRelWrap( rDoc, aPos, rDoc.MaxCol(), rDoc.MaxRow(), static_cast<ScDoubleRefToken*>(t)->GetDoubleRef() );
         else
-            ScRefUpdate::MoveRelWrap( rDoc, aPos, rDoc.MaxCol(), rDoc.MaxRow(), *t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( rDoc, aPos, rDoc.MaxCol(), rDoc.MaxRow(), static_cast<ScExternalDoubleRefToken*>(t)->GetDoubleRef() );
     }
 }
 
@@ -5572,8 +5574,10 @@ void ScCompiler::MoveRelWrap( const ScTokenArray& rArr, const ScDocument& rDoc, 
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
             ScRefUpdate::MoveRelWrap( rDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
+        else if ( t->GetType() == svDoubleRef )
+            ScRefUpdate::MoveRelWrap( rDoc, rPos, nMaxCol, nMaxRow, static_cast<ScDoubleRefToken*>(t)->GetDoubleRef() );
         else
-            ScRefUpdate::MoveRelWrap( rDoc, rPos, nMaxCol, nMaxRow, *t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( rDoc, rPos, nMaxCol, nMaxRow, static_cast<ScExternalDoubleRefToken*>(t)->GetDoubleRef() );
     }
 }
 
@@ -5691,7 +5695,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
 
             pConv->makeExternalRefStr(
                 rDoc.GetSheetLimits(), rBuffer, GetPos(), nUsedFileId, *pFileName, aTabNames, t->GetString().getString(),
-                *t->GetDoubleRef());
+                static_cast<const ScExternalDoubleRefToken*>(t)->GetDoubleRef());
         }
         break;
         default:
@@ -6076,7 +6080,7 @@ void ScCompiler::CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const Formu
 {
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
     pConv->makeRefStr(rDoc.GetSheetLimits(), rBuffer, meGrammar, aPos, aErrRef, GetSetupTabNames(),
-                      *_pTokenP->GetDoubleRef(), false, (pArr && pArr->IsFromRangeName()));
+                      static_cast<const ScDoubleRefToken*>(_pTokenP)->GetDoubleRef(), false, (pArr && pArr->IsFromRangeName()));
 }
 
 void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
@@ -6669,7 +6673,7 @@ bool ScCompiler::HandleIIOpCodeInternal(FormulaToken* token, FormulaToken*** ppp
         if ( eSumRangeType != svSingleRef && eSumRangeType != svDoubleRef )
             return false;
 
-        const ScComplexRefData& rBaseRange = *(*pppToken[0])->GetDoubleRef();
+        const ScComplexRefData& rBaseRange = static_cast<ScDoubleRefToken*>(*pppToken[0])->GetDoubleRef();
 
         ScComplexRefData aSumRange;
         if (eSumRangeType == svSingleRef)
@@ -6678,7 +6682,7 @@ bool ScCompiler::HandleIIOpCodeInternal(FormulaToken* token, FormulaToken*** ppp
             aSumRange.Ref2 = aSumRange.Ref1;
         }
         else
-            aSumRange = *(*pppToken[2])->GetDoubleRef();
+            aSumRange = static_cast<ScDoubleRefToken*>(*pppToken[2])->GetDoubleRef();
 
         CorrectSumRange(rBaseRange, aSumRange, pppToken[2]);
         // TODO mark parameters as handled
@@ -6803,11 +6807,8 @@ void ScCompiler::AnnotateOperands()
 
 void ScCompiler::ReplaceDoubleRefII(FormulaToken** ppDoubleRefTok)
 {
-    const ScComplexRefData* pRange = (*ppDoubleRefTok)->GetDoubleRef();
-    if (!pRange)
-        return;
-
-    const ScComplexRefData& rRange = *pRange;
+    assert((*ppDoubleRefTok)->GetType() == svDoubleRef);
+    const ScComplexRefData& rRange = static_cast<ScDoubleRefToken*>(*ppDoubleRefTok)->GetDoubleRef();
 
     // Can't do optimization reliably in this case (when row references are absolute).
     // Example : =SIN(A$1:A$10) filled in a formula group starting at B5 and of length 100.
@@ -7100,9 +7101,9 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                             ((pRHS->GetType() == svSingleRef || pRHS->GetType() == svDouble) && pLHS->GetType() == svDoubleRef))
                         {
                             if (pLHS->GetType() == svDoubleRef)
-                                pLHS->GetDoubleRef()->SetTrimToData(true);
+                                static_cast<ScDoubleRefToken*>(pLHS)->GetDoubleRef().SetTrimToData(true);
                             else
-                                pRHS->GetDoubleRef()->SetTrimToData(true);
+                                static_cast<ScDoubleRefToken*>(pRHS)->GetDoubleRef().SetTrimToData(true);
                             return;
                         }
                     }
@@ -7156,8 +7157,8 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                             StackVar rhsType = pRHS->GetType();
                             if (lhsType == svDoubleRef && rhsType == svDoubleRef)
                             {
-                                pLHS->GetDoubleRef()->SetTrimToData(true);
-                                pRHS->GetDoubleRef()->SetTrimToData(true);
+                                static_cast<ScDoubleRefToken*>(pLHS)->GetDoubleRef().SetTrimToData(true);
+                                static_cast<ScDoubleRefToken*>(pRHS)->GetDoubleRef().SetTrimToData(true);
                             }
                         }
                     }
@@ -7189,11 +7190,11 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                             StackVar rhsType = pRHS->GetType();
                             if (lhsType == svDoubleRef && (rhsType == svSingleRef || rhsType == svDoubleRef))
                             {
-                                pLHS->GetDoubleRef()->SetTrimToData(true);
+                                static_cast<ScDoubleRefToken*>(pLHS)->GetDoubleRef().SetTrimToData(true);
                             }
                             if (rhsType == svDoubleRef && (lhsType == svSingleRef || lhsType == svDoubleRef))
                             {
-                                pRHS->GetDoubleRef()->SetTrimToData(true);
+                                static_cast<ScDoubleRefToken*>(pRHS)->GetDoubleRef().SetTrimToData(true);
                             }
                         }
                     }
@@ -7231,11 +7232,11 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                         StackVar rhsType = pRHS->GetType();
                         if (lhsType == svDoubleRef && (rhsType == svSingleRef || rhsType == svDouble))
                         {
-                            pLHS->GetDoubleRef()->SetTrimToData(true);
+                            static_cast<ScDoubleRefToken*>(pLHS)->GetDoubleRef().SetTrimToData(true);
                         }
                         if ((lhsType == svSingleRef || lhsType == svDouble) && rhsType == svDoubleRef)
                         {
-                            pRHS->GetDoubleRef()->SetTrimToData(true);
+                            static_cast<ScDoubleRefToken*>(pRHS)->GetDoubleRef().SetTrimToData(true);
                         }
                         return;
                     }
@@ -7259,9 +7260,9 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
             FormulaToken* pTok = *ppTok;
             if (pTok->GetType() == svDoubleRef)
             {
-                ScComplexRefData* pRefData = pTok->GetDoubleRef();
+                ScComplexRefData& rRefData = static_cast<ScDoubleRefToken*>(pTok)->GetDoubleRef();
                 // do no set pRefData->SetTrimToData(true); because we need to trim here if possible
-                ScRange rRange = pRefData->toAbs(rDoc, aPos);
+                ScRange rRange = rRefData.toAbs(rDoc, aPos);
                 SCCOL nTempStartCol = rRange.aStart.Col();
                 SCROW nTempStartRow = rRange.aStart.Row();
                 SCCOL nTempEndCol = rRange.aEnd.Col();
@@ -7274,7 +7275,7 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                     rRange.aStart.Set(nTempStartCol, nTempStartRow, rRange.aStart.Tab());
                     rRange.aEnd.Set(nTempEndCol, nTempEndRow, rRange.aEnd.Tab());
                     if (rRange.IsValid())
-                        pRefData->SetRange(rDoc.GetSheetLimits(), rRange, aPos);
+                        rRefData.SetRange(rDoc.GetSheetLimits(), rRange, aPos);
                 }
             }
             --ppTok;
