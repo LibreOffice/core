@@ -156,4 +156,38 @@ ImplMapRes ImplMapRes::ResolveMapRes(const MapMode* pMode, const MapMode& rDefau
     return aRes;
 }
 
+static tools::Long lcl_scaleLogicValue(const tools::Long nSourceValue, const double fSourceScale,
+                                       const double fDestScale)
+{
+    if (fDestScale == 0.0)
+        return 0;
+
+    return std::llround(nSourceValue * fSourceScale / fDestScale);
+}
+
+tools::Long ImplMapRes::ScaleLogicX(const tools::Long nLocalX, const ImplMapRes& rDestRes) const
+{
+    const tools::Long nAbsoluteX = nLocalX + mnMapOfsX;
+    return lcl_scaleLogicValue(nAbsoluteX, mfMapScX, rDestRes.mfMapScX);
+}
+
+tools::Long ImplMapRes::ScaleLogicY(const tools::Long nLocalY, const ImplMapRes& rDestRes) const
+{
+    const tools::Long nAbsoluteY = nLocalY + mnMapOfsY;
+    return lcl_scaleLogicValue(nAbsoluteY, mfMapScY, rDestRes.mfMapScY);
+}
+
+tools::Long ImplMapRes::ScaleDistanceX(const tools::Long nDistance,
+                                       const ImplMapRes& rDestRes) const
+{
+    // Distances only care about the scaling multiplier, not the origin offset
+    return lcl_scaleLogicValue(nDistance, mfMapScX, rDestRes.mfMapScX);
+}
+
+tools::Long ImplMapRes::ScaleDistanceY(const tools::Long nDistance,
+                                       const ImplMapRes& rDestRes) const
+{
+    return lcl_scaleLogicValue(nDistance, mfMapScY, rDestRes.mfMapScY);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

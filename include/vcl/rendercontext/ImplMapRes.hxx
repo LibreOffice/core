@@ -34,6 +34,12 @@ struct ImplMapRes
     ImplMapRes ResolveMapRes(const MapMode* pMode, const MapMode& rDefaultMapMode, bool bMap,
                              tools::Long nDPIX, tools::Long nDPIY);
 
+    tools::Long ScaleLogicX(const tools::Long nLocalX, const ImplMapRes& rDestRes) const;
+    tools::Long ScaleLogicY(const tools::Long nLocalY, const ImplMapRes& rDestRes) const;
+
+    tools::Long ScaleDistanceX(const tools::Long nDistance, const ImplMapRes& rDestRes) const;
+    tools::Long ScaleDistanceY(const tools::Long nDistance, const ImplMapRes& rDestRes) const;
+
     tools::Long mnMapOfsX = 0; ///< Offset in X direction
     tools::Long mnMapOfsY = 0; ///< Offset in Y direction
     double mfMapScX = 1; ///< Scaling factor in X direction
