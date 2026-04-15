@@ -1463,14 +1463,14 @@ bool lcl_CountBlanks(const MathMLAttributeLengthValue& rLV, sal_Int32* pWide, sa
     if (rLV.fNumber < 0)
         return false;
     auto aWide = rLV.fNumber / 2;
-    auto nWide = static_cast<sal_Int32>(static_cast<tools::Long>(aWide));
-    if (nWide < 0)
+    if (aWide > SAL_MAX_INT32)
+    {
+        SAL_WARN("starmath", "mspace width too large: " << rLV.fNumber);
         return false;
+    }
+    sal_Int32 nWide = aWide;
     const double fPointFive = 0.5;
-    auto aNarrow = (rLV.fNumber - nWide * 2) / fPointFive;
-    auto nNarrow = static_cast<sal_Int32>(static_cast<tools::Long>(aNarrow));
-    if (nNarrow < 0)
-        return false;
+    sal_Int32 nNarrow = (rLV.fNumber - nWide * 2.0) / fPointFive;
     *pWide = nWide;
     *pNarrow = nNarrow;
     return true;
