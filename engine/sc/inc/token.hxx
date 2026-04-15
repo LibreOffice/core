@@ -78,8 +78,8 @@ public:
                                     FormulaToken( formula::svDoubleRef, e ), mrSheetLimits(rLimits), aDoubleRef( r ) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
     virtual ScSingleRefData*      GetSingleRef() override;
-    virtual const ScComplexRefData* GetDoubleRef() const override;
-    virtual ScComplexRefData*       GetDoubleRef() override;
+    const ScComplexRefData&     GetDoubleRef() const { return aDoubleRef; }
+    ScComplexRefData&           GetDoubleRef() { return aDoubleRef; }
     virtual const ScSingleRefData*    GetSingleRef2() const override;
     virtual ScSingleRefData*      GetSingleRef2() override;
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const override;
@@ -114,8 +114,8 @@ public:
     ScMatrixRangeToken( const sc::RangeMatrix& rMat );
     ScMatrixRangeToken( const ScMatrixRangeToken& );
 
-    virtual const ScComplexRefData* GetDoubleRef() const override;
-    virtual ScComplexRefData* GetDoubleRef() override;
+    const ScComplexRefData& GetDoubleRef() const { return maRef; }
+    ScComplexRefData& GetDoubleRef() { return maRef; }
     virtual FormulaToken* Clone() const override;
     virtual bool IsMatrixRangeToken() const override { return true; }
 };
@@ -166,8 +166,8 @@ public:
     virtual ScSingleRefData*       GetSingleRef() override;
     virtual const ScSingleRefData* GetSingleRef2() const override;
     virtual ScSingleRefData*       GetSingleRef2() override;
-    virtual const ScComplexRefData*    GetDoubleRef() const override;
-    virtual ScComplexRefData*      GetDoubleRef() override;
+    const ScComplexRefData&     GetDoubleRef() const { return maDoubleRef; }
+    ScComplexRefData&           GetDoubleRef() { return maDoubleRef; }
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScExternalDoubleRefToken(*this); }
 };
@@ -407,7 +407,7 @@ public:
                         else
                         {
                             pS = nullptr;
-                            pD = rT.GetDoubleRef();
+                            pD = &static_cast<ScDoubleRefToken&>(rT).GetDoubleRef();
                             // coverity[uninit_member] - aDub intentionally not initialized, unnecessary because unused.
                         }
                     }
@@ -434,9 +434,11 @@ public:
 
                 SingleDoubleRefProvider( const formula::FormulaToken& r )
                         : Ref1( *r.GetSingleRef() ),
-                        Ref2( (r.GetType() == formula::svDoubleRef ||
-                                    r.GetType() == formula::svExternalDoubleRef) ?
-                                r.GetDoubleRef()->Ref2 : Ref1 )
+                          Ref2( r.GetType() == formula::svDoubleRef
+                                ? static_cast<const ScDoubleRefToken&>(r).GetDoubleRef().Ref2
+                                : r.GetType() == formula::svExternalDoubleRef
+                                ? static_cast<const ScExternalDoubleRefToken&>(r).GetDoubleRef().Ref2
+                                : Ref1 )
                     {}
 };
 

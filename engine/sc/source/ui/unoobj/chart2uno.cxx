@@ -1103,7 +1103,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
         break;
         case svDoubleRef:
         {
-            const ScComplexRefData& rData = *pToken->GetDoubleRef();
+            const ScComplexRefData& rData = static_cast<ScDoubleRefToken*>(pToken.get())->GetDoubleRef();
             nMinCol = std::min(rData.Ref1.Col(), rData.Ref2.Col());
             nMinRow = std::min(rData.Ref1.Row(), rData.Ref2.Row());
             nMaxCol = std::max(rData.Ref1.Col(), rData.Ref2.Col());
@@ -1126,7 +1126,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
         break;
         case svExternalDoubleRef:
         {
-            const ScComplexRefData& rData = *pToken->GetDoubleRef();
+            const ScComplexRefData& rData = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetDoubleRef();
             nMinCol = std::min(rData.Ref1.Col(), rData.Ref2.Col());
             nMinRow = std::min(rData.Ref1.Row(), rData.Ref2.Row());
             nMaxCol = std::max(rData.Ref1.Col(), rData.Ref2.Col());
@@ -1163,7 +1163,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
             break;
             case svDoubleRef:
             {
-                const ScComplexRefData& rData = *pToken->GetDoubleRef();
+                const ScComplexRefData& rData = static_cast<ScDoubleRefToken*>(pToken.get())->GetDoubleRef();
 
                 nMinCol = std::min(nMinCol, rData.Ref1.Col());
                 nMinCol = std::min(nMinCol, rData.Ref2.Col());
@@ -1203,7 +1203,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
                 if (nFileId != pToken->GetIndex() || aExtTabName != pToken->GetString())
                     return false;
 
-                const ScComplexRefData& rData = *pToken->GetDoubleRef();
+                const ScComplexRefData& rData = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetDoubleRef();
 
                 nMinCol = std::min(nMinCol, rData.Ref1.Col());
                 nMinCol = std::min(nMinCol, rData.Ref2.Col());
@@ -1261,9 +1261,13 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
             case svDoubleRef:
             case svExternalDoubleRef:
             {
-                const ScComplexRefData& rData = *rxToken->GetDoubleRef();
-                const ScSingleRefData& r1 = rData.Ref1;
-                const ScSingleRefData& r2 = rData.Ref2;
+                const ScComplexRefData* pData;
+                if (rxToken->GetType() == svDoubleRef)
+                    pData = &static_cast<ScDoubleRefToken*>(rxToken.get())->GetDoubleRef();
+                else
+                    pData = &static_cast<ScExternalDoubleRefToken*>(rxToken.get())->GetDoubleRef();
+                const ScSingleRefData& r1 = pData->Ref1;
+                const ScSingleRefData& r2 = pData->Ref2;
                 if (r1.Col() <= nMinCol && nMinCol <= r2.Col() &&
                     r1.Row() <= nMinRow && nMinRow <= r2.Row())
                     // The corner cell is contained.
@@ -1353,7 +1357,7 @@ public:
         if (rRef->GetType() != svDoubleRef)
             return;
 
-        ScComplexRefData& rData = *rRef->GetDoubleRef();
+        ScComplexRefData& rData = static_cast<ScDoubleRefToken*>(rRef.get())->GetDoubleRef();
         ScSingleRefData& s = rData.Ref1;
         ScSingleRefData& e = rData.Ref2;
 
@@ -1463,7 +1467,7 @@ ScChart2DataProvider::createDataSource(
             if (rxToken->GetType() != svDoubleRef)
                 continue;
 
-            ScComplexRefData& rData = *rxToken->GetDoubleRef();
+            ScComplexRefData& rData = static_cast<ScDoubleRefToken*>(rxToken.get())->GetDoubleRef();
             ScSingleRefData& s = rData.Ref1;
             ScSingleRefData& e = rData.Ref2;
 
@@ -1654,19 +1658,23 @@ void RangeAnalyzer::initRangeAnalyzer( const ScDocument* pDoc, const std::vector
         StackVar eVar = aRefToken->GetType();
         if (eVar == svDoubleRef || eVar == svExternalDoubleRef)
         {
-            const ScComplexRefData& r = *aRefToken->GetDoubleRef();
-            if (r.Ref1.Tab() == r.Ref2.Tab())
+            const ScComplexRefData* pRef;
+            if (eVar == svDoubleRef)
+                pRef = &static_cast<ScDoubleRefToken*>(aRefToken.get())->GetDoubleRef();
+            else
+                pRef = &static_cast<ScExternalDoubleRefToken*>(aRefToken.get())->GetDoubleRef();
+            if (pRef->Ref1.Tab() == pRef->Ref2.Tab())
             {
-                mnColumnCount = std::max<SCCOL>(mnColumnCount, static_cast<SCCOL>(abs(r.Ref2.Col() - r.Ref1.Col())+1));
-                mnRowCount = std::max<SCROW>(mnRowCount, static_cast<SCROW>(abs(r.Ref2.Row() - r.Ref1.Row())+1));
+                mnColumnCount = std::max<SCCOL>(mnColumnCount, static_cast<SCCOL>(abs(pRef->Ref2.Col() - pRef->Ref1.Col())+1));
+                mnRowCount = std::max<SCROW>(mnRowCount, static_cast<SCROW>(abs(pRef->Ref2.Row() - pRef->Ref1.Row())+1));
                 if( mnStartColumn == -1 )
                 {
-                    mnStartColumn = r.Ref1.Col();
-                    mnStartRow = r.Ref1.Row();
+                    mnStartColumn = pRef->Ref1.Col();
+                    mnStartRow = pRef->Ref1.Row();
                 }
                 else
                 {
-                    if (mnStartColumn != r.Ref1.Col() && mnStartRow != r.Ref1.Row())
+                    if (mnStartColumn != pRef->Ref1.Col() && mnStartRow != pRef->Ref1.Row())
                         mbAmbiguous=true;
                 }
             }
@@ -3457,7 +3465,7 @@ sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
         if (rxToken->GetType() != svDoubleRef)
             continue;
 
-        ScComplexRefData& rData = *rxToken->GetDoubleRef();
+        ScComplexRefData& rData = static_cast<ScDoubleRefToken*>(rxToken.get())->GetDoubleRef();
         ScSingleRefData& s = rData.Ref1;
         ScSingleRefData& e = rData.Ref2;
 
@@ -3490,7 +3498,7 @@ sal_Bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
         if (rxToken->GetType() != svDoubleRef)
             continue;
 
-        ScComplexRefData& rData = *rxToken->GetDoubleRef();
+        ScComplexRefData& rData = static_cast<ScDoubleRefToken*>(rxToken.get())->GetDoubleRef();
         ScSingleRefData& s = rData.Ref1;
         ScSingleRefData& e = rData.Ref2;
 

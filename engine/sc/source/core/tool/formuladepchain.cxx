@@ -12,6 +12,7 @@
 #include <externalrefmgr.hxx>
 #include <formulacell.hxx>
 #include <tokenarray.hxx>
+#include <token.hxx>
 #include <refdata.hxx>
 #include <global.hxx>
 
@@ -104,8 +105,8 @@ void DepChainWriter::writeDependencies(ScTokenArray* pCode, const ScAddress& rPo
         }
         else if (pToken->GetType() == formula::svDoubleRef)
         {
-            const ScComplexRefData* pRef = pToken->GetDoubleRef();
-            ScRange aRange = pRef->toAbs(m_rDoc, rPos);
+            const ScComplexRefData& rRef = static_cast<ScDoubleRefToken*>(pToken)->GetDoubleRef();
+            ScRange aRange = rRef.toAbs(m_rDoc, rPos);
 
             SCROW nRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
             SCCOL nCols = aRange.aEnd.Col() - aRange.aStart.Col() + 1;

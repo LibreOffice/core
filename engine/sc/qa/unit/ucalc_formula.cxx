@@ -1151,7 +1151,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaCompilerImplicitIntersection2Param)
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of token(first argument to SUMIF)", svDoubleRef, ppTokens[0]->GetType());
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of token(third argument to SUMIF)", svDoubleRef, ppTokens[2]->GetType());
 
-            ScComplexRefData aSumRangeData = *ppTokens[2]->GetDoubleRef();
+            ScComplexRefData aSumRangeData = static_cast<ScDoubleRefToken*>(ppTokens[2])->GetDoubleRef();
             ScRange aSumRange = aSumRangeData.toAbs(*m_pDoc, rCase.aCellAddress);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sum-range in RPN array", rCase.aSumRange, aSumRange);
 
@@ -1250,8 +1250,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaCompilerImplicitIntersection1ParamN
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of raw token(argument to COS)", svDoubleRef, ppRawTokens[nRawArgPos]->GetType());
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of RPN token(argument to COS)", svDoubleRef, ppRPNTokens[0]->GetType());
 
-            ScComplexRefData aArgRangeRaw = *ppRawTokens[nRawArgPos]->GetDoubleRef();
-            ScComplexRefData aArgRangeRPN = *ppRPNTokens[0]->GetDoubleRef();
+            ScComplexRefData aArgRangeRaw = static_cast<ScDoubleRefToken*>(ppRawTokens[nRawArgPos])->GetDoubleRef();
+            ScComplexRefData aArgRangeRPN = static_cast<ScDoubleRefToken*>(ppRPNTokens[0])->GetDoubleRef();
             bool bRawMatchRPNToken(aArgRangeRaw == aArgRangeRPN);
             CPPUNIT_ASSERT_MESSAGE("raw arg token and RPN arg token contents do not match", bRawMatchRPNToken);
         }
@@ -1488,13 +1488,13 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaAnnotateTrimOnDoubleRefs)
             FormulaToken* pTok = pRPNArray[nIdx];
             if (pTok && pTok->GetType() == svDoubleRef)
             {
-                ScRange aRange = pTok->GetDoubleRef()->toAbs(*m_pDoc, ScAddress(4, 0, 0));
+                ScRange aRange = static_cast<ScDoubleRefToken*>(pTok)->GetDoubleRef().toAbs(*m_pDoc, ScAddress(4, 0, 0));
                 if (aRange == rTestCase.aTrimmableRange)
                     CPPUNIT_ASSERT_MESSAGE(aMsgStart + "Double ref is incorrectly flagged as not trimmable to data",
-                        pTok->GetDoubleRef()->IsTrimToData());
+                        static_cast<ScDoubleRefToken*>(pTok)->GetDoubleRef().IsTrimToData());
                 else
                     CPPUNIT_ASSERT_MESSAGE(aMsgStart + "Double ref is incorrectly flagged as trimmable to data",
-                        !pTok->GetDoubleRef()->IsTrimToData());
+                        !static_cast<ScDoubleRefToken*>(pTok)->GetDoubleRef().IsTrimToData());
             }
         }
     }
@@ -4803,7 +4803,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFuncSUBTOTAL)
             FormulaToken* pTok = pRPNArray[nIdx];
             if (pTok && pTok->GetType() == svDoubleRef)
             {
-                ScRange aRange = pTok->GetDoubleRef()->toAbs(*m_pDoc, ScAddress(3, i, 0));
+                ScRange aRange = static_cast<ScDoubleRefToken*>(pTok)->GetDoubleRef().toAbs(*m_pDoc, ScAddress(3, i, 0));
                 if (i < 999)
                 {
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Double ref is incorrectly trimmed in: " + aCellName).toUtf8().getStr(),

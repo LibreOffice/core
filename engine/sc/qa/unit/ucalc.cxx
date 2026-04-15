@@ -45,6 +45,7 @@
 #include <postit.hxx>
 #include <tabprotection.hxx>
 #include <undomanager.hxx>
+#include <token.hxx>
 
 #include <formula/IFunctionDescription.hxx>
 
@@ -4511,7 +4512,7 @@ bool hasRange(const ScDocument* pDoc, const std::vector<ScTokenRef>& rRefTokens,
             break;
             case formula::svDoubleRef:
             {
-                ScComplexRefData aData = *p->GetDoubleRef();
+                ScComplexRefData aData = static_cast<ScDoubleRefToken*>(p.get())->GetDoubleRef();
                 ScRange aThis = aData.toAbs(*pDoc, rPos);
                 if (aThis == rRange)
                     return true;

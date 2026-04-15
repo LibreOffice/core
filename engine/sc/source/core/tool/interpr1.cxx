@@ -665,7 +665,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                     {
                         /* TODO: What about error handling and do we actually
                          * need the result matrix above at all in this case? */
-                        pJumpMatrix->GetRefList().push_back( *(xRef->GetDoubleRef()));
+                        pJumpMatrix->GetRefList().push_back( static_cast<const ScDoubleRefToken*>(xRef.get())->GetDoubleRef() );
                     }
                 }
                 break;
@@ -6085,7 +6085,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
         = bIsCountIfs ? pStack[sp - 1] : pStack[sp - nParamCount];
     if (pMainRangeToken->GetType() == svDoubleRef && bHasDoubleRefCriteriaRanges)
     {
-        const ScComplexRefData* pRefData = pMainRangeToken->GetDoubleRef();
+        const ScComplexRefData* pRefData = &static_cast<const ScDoubleRefToken*>(pMainRangeToken)->GetDoubleRef();
         if (!pRefData->IsDeleted())
         {
             DoubleRefToRange( *pRefData, aMainRange);
@@ -11528,7 +11528,7 @@ void ScInterpreter::ScAreas()
         case svDoubleRef:
             {
                 FormulaConstTokenRef xT = PopToken();
-                ValidateRef( *xT->GetDoubleRef());
+                ValidateRef( static_cast<const ScDoubleRefToken*>(xT.get())->GetDoubleRef());
                 ++nCount;
             }
             break;

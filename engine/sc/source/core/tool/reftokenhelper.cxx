@@ -83,7 +83,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 break;
             case svDoubleRef:
                 {
-                    const ScComplexRefData& rRef = *p->GetDoubleRef();
+                    const ScComplexRefData& rRef = static_cast<const ScDoubleRefToken*>(p)->GetDoubleRef();
                     if (!rRef.Valid(rDoc))
                         bFailure = true;
                     else if (bOnly3DRef && !rRef.Ref1.IsFlag3D())
@@ -98,7 +98,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 break;
             case svExternalDoubleRef:
                 {
-                    if (!p->GetDoubleRef()->ValidExternal(rDoc))
+                    if (!static_cast<const ScExternalDoubleRefToken*>(p)->GetDoubleRef().ValidExternal(rDoc))
                         bFailure = true;
                 }
                 break;
@@ -148,13 +148,20 @@ bool ScRefTokenHelper::getRangeFromToken(
             return true;
         }
         case svDoubleRef:
-        case svExternalDoubleRef:
         {
-            if ((eType == svExternalDoubleRef && !bExternal) ||
-                (eType == svDoubleRef && bExternal))
+            if (bExternal)
                 return false;
 
-            const ScComplexRefData& rRefData = *pToken->GetDoubleRef();
+            const ScComplexRefData& rRefData = static_cast<ScDoubleRefToken*>(pToken.get())->GetDoubleRef();
+            rRange = rRefData.toAbs(*pDoc, rPos);
+            return true;
+        }
+        case svExternalDoubleRef:
+        {
+            if (!bExternal)
+                return false;
+
+            const ScComplexRefData& rRefData = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetDoubleRef();
             rRange = rRefData.toAbs(*pDoc, rPos);
             return true;
         }
@@ -455,8 +462,10 @@ bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const 
         }
         break;
         case svDoubleRef:
+            rData = static_cast<ScDoubleRefToken*>(pToken.get())->GetDoubleRef();
+        break;
         case svExternalDoubleRef:
-            rData = *pToken->GetDoubleRef();
+            rData = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetDoubleRef();
         break;
         default:
             // Not a reference token.  Bail out.

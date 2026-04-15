@@ -235,7 +235,7 @@ bool XclExpShrfmlaBuffer::IsValidTokenArray( const ScTokenArray& rArray ) const
             break;
             case svDoubleRef:
             {
-                const ScComplexRefData& rRefData = *p->GetDoubleRef();
+                const ScComplexRefData& rRefData = static_cast<const ScDoubleRefToken*>(p)->GetDoubleRef();
                 if (!GetFormulaCompiler().IsRef2D(rRefData))
                     // Excel's shared formula cannot include 3D reference.
                     return false;

@@ -214,7 +214,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
             ScRange aRange;
             if(bDoubleRef)
             {
-                ScComplexRefData aRef( *pToken->GetDoubleRef() );
+                ScComplexRefData aRef( static_cast<const ScDoubleRefToken*>(pToken)->GetDoubleRef() );
                 aRange = aRef.toAbs(rDoc, aPos);
             }
             else

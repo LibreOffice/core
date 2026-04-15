@@ -1816,7 +1816,7 @@ static void lcl_InvalidateReference( const ScDocument& rDoc, formula::FormulaTok
     if ( rTok.GetType() != formula::svDoubleRef )
         return;
 
-    ScSingleRefData& rRef2 = rTok.GetDoubleRef()->Ref2;
+    ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken&>(rTok).GetDoubleRef().Ref2;
     if ( rPos.Col() < 0 || rDoc.MaxCol() < rPos.Col() )
     {
         rRef2.SetColDeleted( true );

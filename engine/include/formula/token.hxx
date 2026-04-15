@@ -222,8 +222,6 @@ public:
 
     virtual const ScSingleRefData*  GetSingleRef() const;
     virtual ScSingleRefData*        GetSingleRef();
-    virtual const ScComplexRefData* GetDoubleRef() const;
-    virtual ScComplexRefData*       GetDoubleRef();
     virtual const ScSingleRefData*  GetSingleRef2() const;
     virtual ScSingleRefData*        GetSingleRef2();
 

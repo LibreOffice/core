@@ -311,7 +311,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
 
     if (nTab1 == nTab2 && pToken)
     {
-        const ScComplexRefData& rCRef = *pToken->GetDoubleRef();
+        const ScComplexRefData& rCRef = static_cast<const ScMatrixRangeToken*>(pToken)->GetDoubleRef();
         if (rCRef.IsTrimToData())
         {
             // Clamp the size of the matrix area to rows which actually contain data.

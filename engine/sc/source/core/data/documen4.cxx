@@ -458,7 +458,7 @@ bool setCacheTableReferenced(const ScDocument& rDoc, formula::FormulaToken& rTok
                 rToken.GetIndex(), rToken.GetString().getString(), 1);
         case svExternalDoubleRef:
         {
-            const ScComplexRefData& rRef = *rToken.GetDoubleRef();
+            const ScComplexRefData& rRef = static_cast<ScExternalDoubleRefToken&>(rToken).GetDoubleRef();
             ScRange aAbs = rRef.toAbs(rDoc, rPos);
             size_t nSheets = aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1;
             return rRefMgr.setCacheTableReferenced(

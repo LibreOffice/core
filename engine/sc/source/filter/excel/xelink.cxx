@@ -995,7 +995,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
             }
             case svExternalDoubleRef:
             {
-                const ScComplexRefData& rRef = *p->GetDoubleRef();
+                const ScComplexRefData& rRef = static_cast<const ScExternalDoubleRefToken*>(p)->GetDoubleRef();
                 const ScSingleRefData& r1 = rRef.Ref1;
                 const ScSingleRefData& r2 = rRef.Ref2;
                 if (r1.IsTabRel() || r2.IsTabRel())

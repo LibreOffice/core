@@ -396,7 +396,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
                                 {
                                     pNewToken = new ScExternalDoubleRefToken(
                                         t->GetIndex(), svl::SharedString(it->second),
-                                        *t->GetDoubleRef());
+                                        static_cast<ScExternalDoubleRefToken*>(t)->GetDoubleRef());
                                 }
 
                                 if (pNewToken)

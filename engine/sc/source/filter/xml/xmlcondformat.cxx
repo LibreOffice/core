@@ -150,7 +150,7 @@ static bool HasRelRefIgnoringSheet0Relative( ScDocument* pDoc, const ScTokenArra
             {
                 case formula::svDoubleRef:
                 {
-                    ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
+                    ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || (rRef2.IsFlag3D() && rRef2.IsTabRel()) )
                         return true;
                     [[fallthrough]];

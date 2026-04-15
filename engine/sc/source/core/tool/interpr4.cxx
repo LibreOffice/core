@@ -947,7 +947,8 @@ void ScInterpreter::DoubleRefToVars( const formula::FormulaToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2 )
 {
-    const ScComplexRefData& rCRef = *p->GetDoubleRef();
+    assert(p->GetType() == svDoubleRef);
+    const ScComplexRefData& rCRef = static_cast<const ScDoubleRefToken*>(p)->GetDoubleRef();
     SingleRefToVars( rCRef.Ref1, rCol1, rRow1, rTab1);
     SingleRefToVars( rCRef.Ref2, rCol2, rRow2, rTab2);
     PutInOrder(rCol1, rCol2);
@@ -1056,13 +1057,13 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
             case svDoubleRef:
             {
                 --sp;
-                const ScComplexRefData* pRefData = pToken->GetDoubleRef();
-                if (pRefData->IsDeleted())
+                const ScComplexRefData& rRefData = static_cast<const ScDoubleRefToken*>(pToken)->GetDoubleRef();
+                if (rRefData.IsDeleted())
                 {
                     SetError( FormulaError::NoRef);
                     break;
                 }
-                DoubleRefToRange( *pRefData, rRange);
+                DoubleRefToRange( rRefData, rRange);
                 break;
             }
             case svRefList:
@@ -1107,7 +1108,7 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, bool bDontCheckForTableOp )
                 nGlobalError = static_cast<const FormulaErrorToken*>(p)->GetError();
                 break;
             case svDoubleRef:
-                DoubleRefToRange( *p->GetDoubleRef(), rRange, bDontCheckForTableOp);
+                DoubleRefToRange( static_cast<const ScDoubleRefToken*>(p)->GetDoubleRef(), rRange, bDontCheckForTableOp);
                 break;
             default:
                 SetError( FormulaError::IllegalParameter);
@@ -1125,7 +1126,7 @@ const ScComplexRefData* ScInterpreter::GetStackDoubleRef(size_t rRefInList)
         switch (p->GetType())
         {
             case svDoubleRef:
-                return p->GetDoubleRef();
+                return &static_cast<const ScDoubleRefToken*>(p)->GetDoubleRef();
             case svRefList:
             {
                 const ScRefList* pList = static_cast<const ScRefListToken*>(p)->GetRefList();
@@ -1245,7 +1246,7 @@ void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName
 
     rFileId = p->GetIndex();
     rTabName = p->GetString().getString();
-    rRef = *p->GetDoubleRef();
+    rRef = static_cast<const ScExternalDoubleRefToken*>(p)->GetDoubleRef();
 }
 
 void ScInterpreter::PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray)
@@ -1563,7 +1564,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                     {
                         sal_uInt16 nFileId = p->GetIndex();
                         OUString aTabName = p->GetString().getString();
-                        const ScComplexRefData& rRef = *p->GetDoubleRef();
+                        const ScComplexRefData& rRef = static_cast<const ScExternalDoubleRefToken*>(p)->GetDoubleRef();
                         ScExternalRefCache::TokenArrayRef pArray;
                         GetExternalDoubleRef(nFileId, aTabName, rRef, pArray);
                         if (nGlobalError != FormulaError::NONE || !pArray)
@@ -1706,7 +1707,7 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
                     aRet.mpMat->SetErrorInterpreter(this);
                     if (static_cast<const ScMatrixToken*>(p)->IsMatrixRangeToken())
                     {
-                        const ScComplexRefData& rRef = *p->GetDoubleRef();
+                        const ScComplexRefData& rRef = static_cast<const ScMatrixRangeToken*>(p)->GetDoubleRef();
                         if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel())
                         {
                             aRet.mnCol1 = rRef.Ref1.Col();
@@ -3741,7 +3742,8 @@ void ScInterpreter::ScDBArea()
 
 void ScInterpreter::ScColRowNameAuto()
 {
-    ScComplexRefData aRefData( *pCur->GetDoubleRef() );
+    assert(pCur->GetType() == svDoubleRef);
+    ScComplexRefData aRefData( static_cast<const ScDoubleRefToken*>(pCur)->GetDoubleRef() );
     ScRange aAbs = aRefData.toAbs(mrDoc, aPos);
     if (!mrDoc.ValidRange(aAbs))
     {
