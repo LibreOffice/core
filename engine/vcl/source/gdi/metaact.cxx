@@ -873,6 +873,9 @@ static bool AllowScale(const Size& rSource, const Size& rDest)
     static bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
     {
+        if (!AllowDim(rDest.Width()) || !AllowDim(rDest.Height()))
+            return false;
+
         constexpr int nMaxScaleWhenFuzzing = 128;
 
         auto nSourceHeight = rSource.Height();
