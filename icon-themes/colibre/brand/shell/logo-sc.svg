@@ -1,11 +1,6 @@
-<svg width="345" height="72" viewBox="0 0 345 72" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <style>
-      .brand-text { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-weight: 600; font-size: 48px; }
-      .office { fill: #1B6ACB; }
-      .labs { fill: #18A303; }
-    </style>
-  </defs>
-  <text x="8" y="52" class="brand-text office">Office</text>
-  <text x="163" y="52" class="brand-text labs">Labs</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Teal diamond icon - small variant -->
+  <g transform="translate(16, 16)">
+    <polygon points="0,-12 12,0 0,12 -12,0" fill="#0D9488"/>
+  </g>
 </svg>
