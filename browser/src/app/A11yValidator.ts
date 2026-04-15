@@ -34,6 +34,7 @@ class A11yValidator {
 		this.checks.push(this.checkLabelElement.bind(this));
 		this.checks.push(this.checkElementHasLabel.bind(this));
 		this.checks.push(this.checkAriaControls.bind(this));
+		this.checks.push(this.checkFrameOnlyDecorativeImages.bind(this));
 	}
 
 	checkWidget(type: string, element: HTMLElement): void {
@@ -246,6 +247,40 @@ class A11yValidator {
 				this.checkAriaControls(type, child as HTMLElement);
 			}
 		}
+	}
+
+	private checkFrameOnlyDecorativeImages(
+		type: string,
+		element: HTMLElement,
+	): void {
+		if (
+			!element.classList.contains('ui-frame-container') ||
+			!element.classList.contains('ui-fieldset')
+		) {
+			return;
+		}
+
+		const content = element.querySelector('.ui-expander-content');
+		if (!content) return;
+
+		const decorativeImages = content.querySelectorAll(
+			'img.ui-decorative-image',
+		);
+		if (decorativeImages.length === 0) return;
+
+		// If there is any focusable element, the frame has accessible content
+		if (JSDialog.FindFocusableWithin(content, 'next')) return;
+
+		// If there are any form controls (even disabled), the frame has
+		// real content rather than only decorative images
+		const formControlTags = JSDialog.GetFormControlTypesInCO();
+		for (const tag of formControlTags) {
+			if (content.querySelector(tag)) return;
+		}
+
+		throw new A11yValidatorException(
+			`In '${this.getDialogTitle(element)}' at '${this.getElementPath(element)}': frame '${type}' contains only decorative images with no accessible content. Remove the frame so its label does not mislead users into expecting meaningful content.`,
+		);
 	}
 
 	private checkDuplicateButtonLabels(container: HTMLElement): number {
