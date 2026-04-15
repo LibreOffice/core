@@ -1732,9 +1732,11 @@ void RTFDocumentImpl::prepareProperties(
     writerfilter::Reference<Properties>::Pointer_t& o_rpTableRowProperties, int const nCells,
     int const nCurrentCellX)
 {
-    o_rpParagraphProperties
-        = getProperties(rState.getParagraphAttributes(), rState.getParagraphSprms(),
-                        NS_ooxml::LN_Value_ST_StyleType_paragraph);
+    auto paraSprms{ rState.getParagraphSprms() };
+    // DomainMapper will only create table when \intbl in props (testFdo57678)
+    paraSprms.set(NS_ooxml::LN_inTbl, new RTFValue(1));
+    o_rpParagraphProperties = getProperties(rState.getParagraphAttributes(), paraSprms,
+                                            NS_ooxml::LN_Value_ST_StyleType_paragraph);
 
     if (rState.getFrame().hasProperties())
     {

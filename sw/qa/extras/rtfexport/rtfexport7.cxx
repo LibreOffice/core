@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -739,6 +740,132 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104085)
     verify();
     saveAndReload(mpFilter);
     verify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testIgnoreTableDefinition)
+{
+    createSwDoc("4010_min.rtf");
+
+    auto verify = [this](char const* const msg) {
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u"centered"_ustr, getParagraph(2)->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, sal_Int16(style::ParagraphAdjust_CENTER),
+                                     getProperty<sal_Int16>(getParagraph(2), u"ParaAdjust"_ustr));
+        // the problem was that the next 3 paragraphs were imported into table
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u"This text is not in a table. "_ustr,
+                                     getParagraph(3)->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, sal_Int16(style::ParagraphAdjust_BLOCK),
+                                     getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u"This is also not in a table."_ustr,
+                                     getParagraph(4)->getString());
+        uno::Reference<text::XTextTable> xTable{ getParagraphOrTable(6), uno::UNO_QUERY };
+        uno::Reference<text::XTextRange> xA1(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u"This is where the table starts."_ustr,
+                                     getParagraphOfText(1, xA1->getText())->getString());
+        uno::Reference<text::XTextRange> xB1(xTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u"another cell"_ustr,
+                                     getParagraphOfText(1, xB1->getText())->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(7)->getString());
+    };
+
+    verify("load");
+    saveAndReload(mpFilter);
+    verify("reload");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testItapIntblCell)
+{
+    createSwDoc("itapintblcell.rtf");
+
+    auto verify = [this](char const* const msg) {
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(1)->getString());
+        uno::Reference<text::XTextTable> xTable1{ getParagraphOrTable(2), uno::UNO_QUERY };
+        CPPUNIT_ASSERT_MESSAGE(msg, xTable1.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u"table "_ustr,
+            xTable1->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(3)->getString());
+        uno::Reference<text::XTextTable> xTable2{ getParagraphOrTable(4), uno::UNO_QUERY };
+        CPPUNIT_ASSERT_MESSAGE(msg, xTable2.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u"table "_ustr,
+            xTable2->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(5)->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u"notable "_ustr, getParagraph(6)->getString());
+        uno::Reference<text::XTextTable> xTable3{ getParagraphOrTable(7), uno::UNO_QUERY };
+        CPPUNIT_ASSERT_MESSAGE(msg, xTable3.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u""_ustr,
+            xTable3->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(8)->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u"notable "_ustr, getParagraph(9)->getString());
+        uno::Reference<text::XTextTable> xTable4{ getParagraphOrTable(10), uno::UNO_QUERY };
+        CPPUNIT_ASSERT_MESSAGE(msg, xTable4.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u""_ustr,
+            xTable4->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(11)->getString());
+        uno::Reference<text::XTextTable> xTable5{ getParagraphOrTable(12), uno::UNO_QUERY };
+        CPPUNIT_ASSERT_MESSAGE(msg, xTable5.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u"table \n"_ustr,
+            xTable5->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(13)->getString());
+        uno::Reference<text::XTextTable> xTable6{ getParagraphOrTable(14), uno::UNO_QUERY };
+        CPPUNIT_ASSERT_MESSAGE(msg, xTable6.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u"table \n"_ustr,
+            xTable6->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(15)->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u"notable "_ustr, getParagraph(16)->getString());
+        uno::Reference<text::XTextTable> xTable7{ getParagraphOrTable(17), uno::UNO_QUERY };
+        CPPUNIT_ASSERT_MESSAGE(msg, xTable7.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u""_ustr,
+            xTable7->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(18)->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u"notable "_ustr, getParagraph(19)->getString());
+        uno::Reference<text::XTextTable> xTable8{ getParagraphOrTable(20), uno::UNO_QUERY };
+        CPPUNIT_ASSERT_MESSAGE(msg, xTable8.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u""_ustr,
+            xTable8->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(21)->getString());
+        uno::Reference<text::XTextTable> xTable9{ getParagraphOrTable(22), uno::UNO_QUERY };
+        CPPUNIT_ASSERT_MESSAGE(msg, xTable9.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u"table "_ustr,
+            xTable9->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(23)->getString());
+        uno::Reference<text::XTextTable> xTable10{ getParagraphOrTable(24), uno::UNO_QUERY };
+        CPPUNIT_ASSERT_MESSAGE(msg, xTable10.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u"table "_ustr,
+            xTable10->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(25)->getString());
+        uno::Reference<text::XTextTable> xTable11{ getParagraphOrTable(26), uno::UNO_QUERY };
+        CPPUNIT_ASSERT_MESSAGE(msg, xTable11.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u"table \n"_ustr,
+            xTable11->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(27)->getString());
+    };
+
+    verify("load");
+    saveAndReload(mpFilter);
+    verify("reload");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf113550)
