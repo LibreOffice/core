@@ -122,6 +122,8 @@ SvxMeasurePage::SvxMeasurePage(weld::Container* pPage, weld::DialogController* p
     m_xMtrFldHelpline2Len->connect_value_changed(aLink);
     m_xMtrFldHelpline2Len->set_range(-10000, 10000, FieldUnit::MM);
     m_xMtrFldDecimalPlaces->connect_value_changed(LINK(this, SvxMeasurePage, ChangeAttrSpinHdl_Impl));
+    // tdf#171746 - limit number of decimal places to prevent numeric overflow
+    m_xMtrFldDecimalPlaces->set_range(0, 5);
     m_xTsbBelowRefEdge->connect_toggled(LINK(this, SvxMeasurePage, ChangeAttrClickHdl_Impl));
     m_xTsbParallel->connect_toggled( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl));
     m_xTsbShowUnit->connect_toggled(LINK(this, SvxMeasurePage, ChangeAttrClickHdl_Impl));
