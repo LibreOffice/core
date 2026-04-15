@@ -135,14 +135,17 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 			cy.cGet('body').realMouseMove(centerX, topY);
 			cy.cGet('body').rightclick(centerX, topY);
 
-			// Note: The context menu of the headers are still jquery based.
-			cy.cGet('.context-menu-link.insert-columns-before').should('exist');
-			cy.cGet('.context-menu-link.insert-columns-before').should('be.visible');
+			cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Insert Columns Before')
+				.should('exist')
+				.should('be.visible');
+
+			cy.cGet('body').realMouseMove(centerX, centerY);
+			// click in the document to close the header context menu.
+			cy.cGet('body').realClick();
+
+			cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Insert Columns Before').should('not.exist');
 
 			// Now show document context menu.
-			cy.cGet('body').realMouseMove(centerX, centerY);
-			cy.cGet('#document-canvas').realClick();
-			cy.wait(300);
 			cy.cGet('body').rightclick(centerX, centerY);
 
 			// Note: The context menu of the document area uses jsdialog dropdown.
