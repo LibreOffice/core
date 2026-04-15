@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="3.3.0" />
+    <identifier value="brazilian.portuguese.reform1990-dictionary.from.vero.by.raimundomoura" />
+    <display-name>
+        <name lang="en-US">Spelling, thesaurus, hyphenation and grammar checking tools for Brazilian Portuguese</name>
+        <name lang="pt-BR">Ortografia, sinônimos, gramática e hifenização para Português Brasileiro</name>
+    </display-name>
+    <platform value="all" />
+    <icon>
+        <default xlink:href="icons/VERO-logo.png" />
+    </icon>
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="BrOffice.org / OpenOffice.org 3.0" />
+    </dependencies>
+    <publisher>
+        <name xlink:href="http://pt-br.libreoffice.org/projetos/projeto-vero-verificador-ortografico" lang="pt-BR">VERO</name>
+    </publisher>
+</description>
+

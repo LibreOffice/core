@@ -1,0 +1,172 @@
+01/09/2007 emissione della versione 2.4
+Modifiche principali:
+* fatto l'upgrade alla licenza GPL 3.0 o superiore
+* corrette le generazioni dei numeri:
+  - c'era sul dizionario it_IT.dic ventinomila al posto di ventinovemila facendo
+  mancare tutti i numeri contenenti -ventinovemila-
+  - c'era nelle regole it_IT.aff ventottoesimo al posto di ventottesimo facendo
+    mancare tutti i numeri terminanti con -ventottesimo
+* eliminati i commenti sulle regole nel file it_IT.aff. Ho scoperto una 
+  incompatibilità tra MySpell e HunSpell che nel secondo genera stringhe se dopo
+  una regola c'è una stringa di uno o più caratteri seguita da uno spazio e da
+  una seconda stringa. Ogni carattere delle seconda stringa è interpretato come
+  regola da applicare alla stringa generata dalla regola che si sta considerando
+* modificata la riga TRY del file it_IT.aff aggiungendo le lettere accentate
+  maiuscole. Questo permette di considerarle durante la generazione dei
+  suggerimenti alle parole errate
+* aggiunte le regole REP per far apparire in prima posizione i suggerimenti per
+  l'uso di accenti errati (acuto al posto di grave)
+* inseriti molti nomi propri di persona mancanti
+* inserite molte parole mancanti
+* eliminate varie parole errate/arcaiche/letterarie
+* eliminate parecchie combinazioni errate contenenti l'elisione
+* aggiunte molte elisioni mancanti
+* corrette le coniugazioni dei verbi coniugati come sedere: possedere, risedere, 
+  sedere, soprassedere
+* corrette le coniugazioni di molti verbi in -isco
+* rifatte parzialmente le regole per la gestione delle combinazioni verbi + 
+  particelle pronominali per renderle utilizzabili da tutti i verbi
+* sistemate alcune regole per la coniugazione dei verbi
+* aggiornata la regola per la generazione degli avverbi
+* inserite e modificate varie regole minori
+* inseriti molti comuni italiani
+
+Da questa versione si cercherà di tenere distinte parole generate da altre.
+Ad esempio il verbo amare genera anche il sostantivo maschile amo. Questo causa
+un aumento delle stringhe generate più volte, ma permette di gestire in modo più
+semplice ed accurato le singole parole e semplifica di molto la gestione futura
+del dizionario.
+
+
+23/07/2006 emissione della versione beta 2.3 (23/07/2006) (dd/mm/yyyy)
+Modifiche principali:
+* rifatta la gestione della composizione "infinito verbo" + "pronome" in modo
+  da eliminare alcune composizioni errate e inserire tutte quelle corrette.
+  Tale gestione inserisce tutte le combinazioni possibili per ogni verbo.
+  Per fare questo sono state eliminate e semplificate alcune regole e ne è
+  stata creata una sola (la regola I) per la gestione di tutti i verbi
+* corretto il flag B (verbi -ere) che generava delle combinazioni verbo+pronome
+  errate se il verbo terminava per -iere (ad esempio per compiere generava
+  compiimi al posto di compimi)
+* generate correttamente tutte le coniugazioni dei verbi in -ucire:
+  cucire, scucire, ricucire, sdrucire (quest'ultimo si coniuga anche in -isco)
+* inserite alcune decine di nomi propri di persona mancanti
+* corretti numerosi verbi
+* inserite numerose elisioni mancanti
+* inserite varie coniugazioni mancanti
+* estrapolate varie parole generate da altre
+* eliminate varie elisioni errate
+* inserite varie parole mancanti
+* eliminate alcune parole errate
+* eliminati alcuni verbi arcaici/letterari/dialettali
+
+09/04/2006 emissione della versione beta 2.3 (09/04/2006) (dd/mm/yyyy)
+Modifiche principali:
+* inseriti circa 800 nomi propri di persona italiani mancanti
+* inseriti numerosi nomi di comuni italiani
+* inserite le generazioni -temelo -temela -temele -temeli -temene per i verbi
+  regolari in -are per il presente indicativo seconda persona plurale
+  (es: riportatemelo, ..., riportatemene)
+* eliminati 4 generazioni errate per i verbi -ersi (-itelo/a/e/i/ne)
+  es: confondersi -> confonditelo
+* inserita la gestione delle particelle pronominali per i verbi in -rre (flag j)
+* corretti numerosi verbi
+* inserite numerose elisioni mancanti
+* inserite varie coniugazioni mancanti
+* estrapolate varie parole generate da altre (es: un verbo che genera un
+  aggettivo)
+* eliminate molte elisioni errate
+* inserite molte parole mancanti
+* eliminate alcune parole errate
+* eliminati alcuni verbi arcaici/letterari
+* modificato il file .aff inserendo la sezione MAP per permettere la 
+  generazione di correzioni automatiche con parole accentate prima non proposte
+* modificato il file .aff per gestire i verbi in -venire (flag Z)
+* generate correttamente tutte le coniugazioni dei verbi in -venire:
+  addivenire, avvenire, circonvenire, contravvenire, convenire, divenire, 
+  intervenire, pervenire, prevenire, provenire, riconvenire, ridivenire,
+  rinvenire, risovvenire, risvenire, rivenire, sopravvenire, sovvenire, svenire,
+  venire
+
+11/12/2005 emissione della versione beta 2.3 (11/12/2005) (dd/mm/yyyy)
+La versione 2.3 si prefigge come obiettivi principali:
+> la riduzione drastica della dimensione del dizionario espanso grazie 
+  all'eliminazione della maggior parte delle elisioni errate.
+> l'inserimento della maggior parte degli avverbi mancanti (attualmente ne
+  mancano ancora moltissimi nel dizionario)
+> la sistemazione, almeno parziale, dei verbi irregolari
+> la sistemazione, almeno parziale, delle coniugazioni verbali unite alle
+  particelle pronominali
+Modifiche principali:
+* corretto un errore negli affix che generava per i verbi in -orre le parole
+  -orreò al posto di -orrò (es: posporre generava posporreò al posto di
+  posporrò)
+* inserite parole in -mento mancanti estratte in automatico 
+  (es: accasare -> accasamento). Fase completata
+* modificata la try string (file it_IT.aff) calcolando le statistiche dalle
+  radici del file it_IT.dic. Questo dovrebbe portare ad avere in altro le
+  correzioni agli errori più probabili. Un successivo passo sarà quello di
+  utilizzare tutto il dizionario espanso, però bisogna attendere che sia
+  ripulito dalla quasi totalità degli errori che ora contiene
+* iniziata la ricerca automatica dei lavori non presenti nel dizionario
+  (es: archeologia -> archeologo)
+* iniziata la ricerca automatica degli avverbi in -mente non presenti nel
+  dizionario (es: dolce -> dolcemente)
+* ricerca di parole mancanti usando varie liste di parole di pubblico dominio e
+  libri in formato elettronico con copyright scaduto o di dominio pubblico
+* iniziata l'eliminazione delle elisioni errate
+  - eliminate le elisioni davanti a parole inizianti per io- iu-
+  - eliminate le elisioni "brav'" davanti a parole terminanti in -tà
+  - eliminate elisioni "brav'" "buon'" davanti parole terminanti in -issim[ao]
+  - iniziata l'eliminazione delle elisioni errate associate ai verbi
+  - iniziata eliminazione elisioni errate davanti agli aggettivi/sostantivi/...
+  - ...
+* iniziato il controllo per le elisioni mancanti
+* iniziata la correzione ed il completamento per le coniugazioni dei verbi
+* iniziata la fase di creazione di commenti nel file delle regole it_IT.aff
+* iniziata la fase di estrapolazione di tutte le parole generate da altre 
+  (es: un verbo che genera anche un aggettivo). Questa fase è indispensabile
+  per poter in seguito sistemare le elisioni che riguardano i verbi; inoltre
+  questo permetterà di avere una base iniziale per un possibile futuro
+  correttore grammaticale
+
+
+26/07/2005 emissione della versione 2.2
+Modifiche principali (rispetto alla versione 2.2 beta (10/07/2005)):
+* cambiata la gestione dei numeri in lettere in modo da poter eliminare la
+  radice tré che è errata in italiano
+* modificata le gestione delle regole per gli avverbi in -mente in modo da
+  generare correttamente gli avverbi per le parole terminanti in [lu]ento che
+  hanno l'avverbio in -emente (turbolento -> turbolentemente) con eccezione di
+  lento (lentamente)
+* inserite le regole per gestire i numeri ordinali e -enne/enni
+* generati tutti i numeri in lettere fino a 100.000 (prima era 10.000)
+* generate le parole tra undicenne/undicenni e centonovenne/centonovenni
+* generati tutti i numeri ordinali in lettere tra primo/prima/primi/prime e
+  millesimo/millesima/millesimi/millesime
+* inseriti qualche centinaio di aggettivi in -bile ricavati in automatico dai
+  verbi presenti nel dizionario (mangiare -> mangia + bile -> mangiabile)
+
+Nota: ho trovato un errore in unmunch che impedisce la generazione di tutte le
+      parole nel caso in cui una stessa radice ne generi molte. Questo errore ha
+      falsato le statistiche che sono state rifatte; il dizionario attuale
+      genera 22.359.110 stringhe.
+
+10/07/2005 emissione della versione beta 2.2 (10/07/2005) (dd/mm/yyyy)
+Modifiche principali:
+* gestione verbi in -rre tramite gli affix
+* terminata pulizia dei finti verbi più evidenti (tipo bachiere/B)
+* eliminate circa 500 elisioni errate di maschili terminanti in -tore con
+  l'articolo indeterminativo femminile (es: un'ammiratore)
+
+2004 a settembre Gianluca Turconi termina la collaborazione attiva al progetto
+
+2002 negli ultimi mesi dell'anno Davide Prina inizia a collaborare al progetto
+     introducendo l'uso di un database (PostgreSQL) per la gestione del
+     dizionario. La collaborazione parte dalle modifiche fatte alla versione 1.6
+     per realizzare la versione 1.7
+
+2001 Gianluca Turconi inizia a creare il dizionario italiano per MySpell da
+     usare all'interno di OpenOffice.org. Gianluca realizza da solo tutte le
+     versioni fino alla 1.6 compresa.
+

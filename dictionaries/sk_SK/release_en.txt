@@ -1,0 +1,14 @@
+Slovak spell check dictionary, hyphenation rules and thesaurus
+
+This is update of dictionary to data (29.08.2024)
+- bugfixs in affix compression in spellchecker
+- new words for spellchecker dictionary and thesaurus
+
+You can improve Slovak thesaurus on webpage:
+http://sk-spell.sk.cx/thesaurus
+
+and spellchecker at:
+https://github.com/sk-spell/hunspell-sk
+
+
+***

@@ -1,0 +1,9 @@
+License
+
+This spell checking dictionary is licensed under 
+GPLv3, LGPLv2.1, MPL 1.1
+
+These licenses are distributed with this dictionary.
+
+(c) Reimar Heider
+with contributions from Kevin Scannell and Rêzan Tovjîn

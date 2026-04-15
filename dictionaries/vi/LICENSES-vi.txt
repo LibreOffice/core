@@ -1,0 +1,18 @@
+TỪ ĐIỂN KIỂM TRA CHÍNH TẢ TIẾNG VIỆT CHO OPENOFFICE phiên bản 1.0.45
+
+Tác giả:
+Ivan Garcia <capiscuas@gmail.com>
+Nguyễn Xuân Minh <mxn@zoomtown.com>
+
+Từ điển kiểm tra chính tả OpenOffice.org này dựa vào danh sách Từ Điển Tiếng Việt của Hồ Ngọc Đức.
+
+Trang chủ dự án: http://code.google.com/p/hunspell-spellcheck-vi/
+OpenOffice tiếng Việt:  http://vi.openoffice.org/
+
+Từ điển kiểm tra chính tả này được phát hành dưới Giấy Phép Công Cộng GNU (GPL) phiên bản 2.
+Xem:
+
+http://www.gnu.org/licenses/
+http://vi.wikisource.org/wiki/GPL
+
+để tìm thêm thông tin.

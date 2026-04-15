@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <version value="2020.11.07" />
+
+    <identifier value="org.openoffice.it.hunspell.dictionaries" />
+
+    <platform value="all" />
+
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+
+    <publisher>
+        <name xlink:href="https://libreitalia.org" lang="en-US">LibreItalia</name>
+        <name xlink:href="https://libreitalia.org" lang="it-IT">LibreItalia</name>
+    </publisher>
+
+    <display-name>
+        <name lang="en-US">Italian spelling dictionary, hyphenation rules, and thesaurus</name>
+        <name lang="it-IT">Dizionario ortografico italiano, regole di sillabazione e sinonimi</name>
+    </display-name>
+
+</description>

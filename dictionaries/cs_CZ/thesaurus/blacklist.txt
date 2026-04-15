@@ -1,0 +1,27 @@
+# Terms that are in the dictionary, but should be left out from thesaurus creation
+#
+# The words here are English Czech pairs, delimited by a TAB.  When one of
+# them is missing (is empty), it means "any".  Empty lines are ignored
+
+	?
+	(by the way)
+	(po)štvat
+	(vy)páčit
+	1. hrubý domácí produkt, 2. zbožové vývojové praktiky
+	14. písmeno hebrejské abecedy
+	= subprime mortgage
+	What You See Is What You Get
+	odstaňovat otřepy
+	odstraňoval pařezy
+	odstraňování pařezů
+	odstraňuje otřep
+
+a kept woman
+borrow sth from sb
+vermicelli
+
+adder	zmije
+aspic	zmije
+father	(z)plodit
+sea dog	tuleň
+seal	tuleň

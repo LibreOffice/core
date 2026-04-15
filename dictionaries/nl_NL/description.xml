@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <identifier value="org.openoffice.nl.hunspell.dictionaries" />
+    <platform value="all" />
+    <version value="2.0.0" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.2" d:name="OpenOffice.org 3.2" />
+    </dependencies>
+    <display-name>
+        <name lang="en-US">Dutch spelling dictionary, and hyphenation rules</name>
+    </display-name>
+    <icon>
+        <default xlink:href="OpenTaal.png" />
+    </icon>
+    <publisher>
+        <name xlink:href="http://www.opentaal.org" lang="nl">OpenTaal</name>
+        <name xlink:href="http://www.opentaal.org/english" lang="en-US">OpenTaal</name>
+    </publisher>
+</description>

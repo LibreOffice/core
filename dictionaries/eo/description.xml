@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <version value="2018.01.21" />
+  <identifier value="esperanto.eo" />
+  <display-name>
+    <name lang="en-US">Spelling dictionary, thesaurus, and hyphenator for Esperanto</name>
+    <name lang="ru">Словарь проверки орфографии, тезаурус и правила переноса для эсперанто</name>
+    <name lang="eo">Vortaro por literumado, tezaŭro kaj reguloj de vortodivido por Esperanto</name>
+  </display-name>
+  <platform value="all" />
+  <dependencies>
+    <OpenOffice.org-minimal-version value="3.4" d:name="OpenOffice.org 3.4" />
+  </dependencies>
+  <extension-description>
+    <src xlink:href="desc_eo.txt" lang="eo" />
+    <src xlink:href="desc_en.txt" lang="en" />
+  </extension-description>
+  <registration>
+    <simple-license accept-by="admin" default-license-id="en" suppress-if-required="true">
+      <license-text xlink:href="license-en.txt" lang="en" license-id="en" />
+    </simple-license>
+  </registration>
+</description>

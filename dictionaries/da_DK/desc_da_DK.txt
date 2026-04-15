@@ -1,0 +1,5 @@
+Danske ordbog til stavekontrol fra Stavekontrolden baseret på ord fra 
+Det Danske Sprog- og Litteraturselskab (www.dsl.dk) og brugerbidrag.
+Dansk synonymordbog (tesaurus) baseret på ord fra Det Danske Sprog- og
+Litteraturselskab og Center for Sprogteknologi, Københavns Universitet.
+Orddelingsordbog baseret på TeX orddelingstabeller.

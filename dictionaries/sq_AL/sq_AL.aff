@@ -1,0 +1,298 @@
+# Copyright 2002, 2009 Luan Kelmendi
+#
+# E-Mail: l.k@apolonix.com
+#
+# Version 1.2 (20.08.2009) 
+#
+# This file is distributed under GPL license
+#
+# This file is part of the Albanian dictionary.
+#
+# The Albanian dictionary is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# The Albanian dictionary is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+# GPL license can be found here:
+# http://www.fsf.org/licenses/licenses.html
+
+SET UTF-8
+
+TRY eiaërstohukmçpdvgbfycEIAËRSTOHUKMÇPDVGBFYC
+
+SFX T Y 9
+SFX T   0    ve           [aeëiouy]
+SFX T   0    të           [aeëiouy]
+SFX T   0    së           [aeëiouy]
+SFX T   0    sh           [aeëiouy]
+SFX T   0    në           [aeëiouy]
+SFX T   0    je           [aeëouy]
+SFX T   0    ja           [aeëouy]
+SFX T   0    e            i
+SFX T   0    a            i
+
+SFX S Y 9
+SFX S   e    ja           [^ij]e
+SFX S   e    a            [ij]e
+SFX S   0    ve           [eo]
+SFX S   0    t            [eo]
+SFX S   0    sh           [eo]
+SFX S   0    s            [eo]
+SFX S   0    n            [eo]
+SFX S   0    je           [eo]
+SFX S   0    ja           o
+
+SFX R Y 7
+SFX R   ë    e            ë
+SFX R   ë    a            ë
+SFX R   0    ve           ë
+SFX R   0    t            ë
+SFX R   0    sh           ë
+SFX R   0    s            ë
+SFX R   0    n            ë
+
+SFX Q Y 28
+SFX Q   ërr  rrës         ërr
+SFX Q   ërr  rrën         ërr
+SFX Q   ërr  rre          ërr
+SFX Q   ërr  rrave        ërr
+SFX Q   ërr  rrat         ërr
+SFX Q   ërr  rrash        ërr
+SFX Q   ërr  rra          ërr
+SFX Q   ër   rës          ër
+SFX Q   ër   rën          ër
+SFX Q   ër   re           ër
+SFX Q   ër   rave         ër
+SFX Q   ër   rat          ër
+SFX Q   ër   rash         ër
+SFX Q   ër   ra           ër
+SFX Q   ël   lës          ël
+SFX Q   ël   lën          ël
+SFX Q   ël   le           ël
+SFX Q   ël   lave         ël
+SFX Q   ël   lat          ël
+SFX Q   ël   lash         ël
+SFX Q   ël   la           ël
+SFX Q   ë    ës           ë
+SFX Q   ë    ën           ë
+SFX Q   ë    e            ë
+SFX Q   ë    ave          ë
+SFX Q   ë    at           ë
+SFX Q   ë    ash          ë
+SFX Q   ë    a            ë
+
+SFX P Y 3
+SFX P   0    ut           .
+SFX P   0    un           .
+SFX P   0    u            .
+
+SFX N Y 4
+SFX N   0    eve          [^aeëiouy]
+SFX N   0    et           [^aeëiouy]
+SFX N   0    esh          [^aeëiouy]
+SFX N   0    e            [^aeëiouy]
+
+SFX M Y 4
+SFX M   0    ëve          [^aeëiouy]
+SFX M   0    ët           [^aeëiouy]
+SFX M   0    ësh          [^aeëiouy]
+SFX M   0    ë            [^aeëiouy]
+
+SFX L Y 4
+SFX L   0    ave          [^aeëiouy]
+SFX L   0    at           [^aeëiouy]
+SFX L   0    ash          [^aeëiouy]
+SFX L   0    a            [^aeëiouy]
+
+SFX K Y 3
+SFX K   0    it           .
+SFX K   0    in           .
+SFX K   0    i            .
+
+SFX H Y 12
+SFX H   0    të           [^aeëiouy]
+SFX H   0    shin         [^aeëiouy]
+SFX H   0    shim         [^aeëiouy]
+SFX H   0    shi          [^aeëiouy]
+SFX H   0    sha          [^aeëiouy]
+SFX H   0    sh           [^aeëiouy]
+SFX H   0    keni         [^aeëiouy]
+SFX H   0    kemi         [^aeëiouy]
+SFX H   0    ke           [^aeëiouy]
+SFX H   0    kan          [^aeëiouy]
+SFX H   0    kam          [^aeëiouy]
+SFX H   0    ka           [^aeëiouy]
+
+SFX G Y 17
+SFX G   t    ste          t
+SFX G   0    ësh          [^aeëiouy]
+SFX G   0    ë            [^aeëiouy]
+SFX G   0    ur           [^aeëiouy]
+SFX G   0    te           t
+SFX G   0    te           [^aeëiotuy]
+SFX G   0    nit          [^aeëiouy]
+SFX G   0    nin          [^aeëiouy]
+SFX G   0    nim          [^aeëiouy]
+SFX G   0    ni           [^aeëiouy]
+SFX G   0    je           [^aeëiouy]
+SFX G   0    ja           [^aeëiouy]
+SFX G   0    in           [^aeëiouy]
+SFX G   0    im           [^aeëiouy]
+SFX G   0    i            [^aeëiouy]
+SFX G   0    e            [^aeëiouy]
+SFX G   0    a            [^aeëiouy]
+
+SFX F Y 13
+SFX F   j    huni         [aeëiouy]j
+SFX F   j    het          [aeëiouy]j
+SFX F   j    heshit       [aeëiouy]j
+SFX F   j    heshin       [aeëiouy]j
+SFX F   j    heshim       [aeëiouy]j
+SFX F   j    heshe        [aeëiouy]j
+SFX F   j    hesha        [aeëiouy]j
+SFX F   j    hesh         [aeëiouy]j
+SFX F   j    heni         [aeëiouy]j
+SFX F   j    hen          [aeëiouy]j
+SFX F   j    hemi         [aeëiouy]j
+SFX F   j    hem          [aeëiouy]j
+SFX F   j    hej          [aeëiouy]j
+
+SFX D Y 24
+SFX D   uaj  oftë         uaj
+SFX D   uaj  ofshin       uaj
+SFX D   uaj  ofshim       uaj
+SFX D   uaj  ofshi        uaj
+SFX D   uaj  ofsha        uaj
+SFX D   uaj  ofsh         uaj
+SFX D   oj   uakeni       oj
+SFX D   oj   uakemi       oj
+SFX D   oj   uake         oj
+SFX D   oj   uakan        oj
+SFX D   oj   uakam        oj
+SFX D   oj   uaka         oj
+SFX D   j    keni         [aeëiuy]j
+SFX D   j    kemi         [aeëiuy]j
+SFX D   j    ke           [aeëiuy]j
+SFX D   j    kan          [aeëiuy]j
+SFX D   j    kam          [aeëiuy]j
+SFX D   j    ka           [aeëiuy]j
+SFX D   j    ftë          [^u][aeëiouy]j
+SFX D   j    fshin        [^u][aeëiouy]j
+SFX D   j    fshim        [^u][aeëiouy]j
+SFX D   j    fshi         [^u][aeëiouy]j
+SFX D   j    fsha         [^u][aeëiouy]j
+SFX D   j    fsh          [^u][aeëiouy]j
+
+SFX C Y 28
+SFX C   yej  yet          yej
+SFX C   yej  yer          yej
+SFX C   yej  yen          yej
+SFX C   yej  yem          yej
+SFX C   yej  eve          yej
+SFX C   yej  eva          yej
+SFX C   yej  eu           yej
+SFX C   uaj  uat          uaj
+SFX C   uaj  uar          uaj
+SFX C   uaj  uan          uaj
+SFX C   uaj  uam          uaj
+SFX C   uaj  ove          uaj
+SFX C   uaj  ova          uaj
+SFX C   uaj  oi           uaj
+SFX C   oj   uat          oj
+SFX C   oj   uar          oj
+SFX C   oj   uan          oj
+SFX C   oj   uam          oj
+SFX C   j    ve           [^iuy][aeëiouy]j
+SFX C   j    va           [^iuy][aeëiouy]j
+SFX C   j    i            oj
+SFX C   iej  jeve         iej
+SFX C   iej  jeva         iej
+SFX C   iej  jeu          iej
+SFX C   iej  iet          iej
+SFX C   iej  ier          iej
+SFX C   iej  ien          iej
+SFX C   iej  iem          iej
+
+SFX B Y 12
+SFX B   j    sh           [aeëiouy]j
+SFX B   j    nte          [aeëiouy]j
+SFX B   j    nit          [aeëiouy]j
+SFX B   j    nin          [aeëiouy]j
+SFX B   j    nim          [aeëiouy]j
+SFX B   j    ni           [aeëiouy]j
+SFX B   j    n            [aeëiouy]j
+SFX B   j    jë           [aeëiouy]j
+SFX B   j    jnë          [aeëiouy]j
+SFX B   j    jmë          [aeëiouy]j
+SFX B   j    je           [aeëiouy]j
+SFX B   j    ja           [aeëiouy]j
+
+PFX Z Y 1
+PFX Z   0    ç'           .
+
+PFX X Y 1
+PFX X   0    s'           .
+
+PFX E Y 1
+PFX E   0    për          .
+
+PFX A Y 1
+PFX A   0    pa           .
+
+REP 52
+REP a ë
+REP ë a
+REP ë e
+REP e ë
+REP u y
+REP y u
+REP i y
+REP y i
+REP u ua
+REP u ue
+REP y ye
+REP c ç
+REP ç c
+REP ç q
+REP q ç
+REP i j
+REP j i
+REP i ij
+REP ij i
+REP d t
+REP t d
+REP g gj
+REP j nj
+REP gj xh
+REP xh gj
+REP s z
+REP z s
+REP sh ç
+REP ç sh
+REP z zh
+REP zh z
+REP ç sh
+REP sh ç
+REP ç zh
+REP zh ç
+REP d dt
+REP l ll
+REP ll l
+REP r rr
+REP rr r
+REP eshte është
+REP asht është
+REP kan kanë
+REP jan janë
+REP kete këtë
+REP ket këtë
+REP kte këtë
+REP ktë këtë
+REP kt këtë
+REP keti këtij
+REP kti këtij
+REP kto këto

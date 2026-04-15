@@ -1,0 +1,374 @@
+# Hunspell affix file for Scottish Gaelic by Kevin Scannell
+#
+# Copyright 2010 Kevin P. Scannell
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+#    02110-1301, USA.
+
+SET UTF-8
+
+TRY ahinrdescltogumbàf-AòCìBùèTpGSDMRFPILN'EOUÀéÒÌÙÈHóWVXxQyqÉKwvJÁk
+WORDCHARS -'’
+
+# stop split suggestions
+NOSPLITSUGS
+
+# replace correct accented double vowels with unaccented ones for acceptance
+ICONV 1
+ICONV ’ '
+
+OCONV 1
+OCONV ' ’
+
+# To avoid breaking h- n- t- words
+LEFTHYPHENMIN 2
+
+# BREAK 0 does not work (reported as bug), so this is a work-around
+# This also causes the - to be seen as part of the word,
+# which is necessary to support the optional - in compounded words
+BREAK 1
+BREAK =
+
+REP 271
+REP a'n$ a_'n
+REP à'n$ à_'n
+REP e'n$ e_'n
+REP è'n$ è_'n
+REP é'n$ é_'n
+REP i'n$ i_'n
+REP ì'n$ ì_'n
+REP o'n$ o_'n
+REP ò'n$ ò_'n
+REP ó'n$ ó_'n
+REP u'n$ u_'n
+REP ù'n$ ù_'n
+REP a'r$ a_'r
+REP à'r$ à_'r
+REP e'r$ e_'r
+REP è'r$ è_'r
+REP é'r$ é_'r
+REP i'r$ i_'r
+REP ì'r$ ì_'r
+REP o'r$ o_'r
+REP ò'r$ ò_'r
+REP ó'r$ ó_'r
+REP u'r$ u_'r
+REP ù'r$ ù_'r
+REP b's$ b_'s
+REP c's$ c_'s
+REP d's$ d_'s
+REP e's$ e_'s
+REP è's$ è_'s
+REP é's$ é_'s
+REP f's$ f_'s
+REP g's$ g_'s
+REP h's$ h_'s
+REP i's$ i_'s
+REP ì's$ ì_'s
+REP l's$ l_'s
+REP m's$ m_'s
+REP n's$ n_'s
+REP o's$ o_'s
+REP ò's$ ò_'s
+REP ó's$ ó_'s
+REP p's$ p_'s
+REP r's$ r_'s
+REP s's$ s_'s
+REP t's$ t_'s
+REP u's$ u_'s
+REP ù's$ ù_'s
+REP ^e-fhein$ e_fhèin
+REP ^e-fhèin e_fhèin
+REP ^i-fhein$ i_fhèin
+REP ^i-fhèin i_fhèin
+REP ^iad-fhein$ iad_fhèin
+REP ^iad-fhèin iad_fhèin
+REP ^mi-fhein$ mi_fhèin
+REP ^mi-fhèin mi_fhèin
+REP ^mi-fhìn mi_fhìn
+REP ^sinn-fhein$ sinn_fhèin
+REP ^sinn-fhèin sinn_fhèin
+REP ^sinn-fhìn sinn_fhìn
+REP ^thu-fhein$ thu_fhèin
+REP ^thu-fhèin thu_fhèin
+REP ^a'b a'_b
+REP ^a'c a'_c
+REP ^a'd a'_d
+REP ^a'f a'_f
+REP ^a'g a'_g
+REP ^a'l a'_l
+REP ^a'm a'_m
+REP ^a'n a'_n
+REP ^a'p a'_p
+REP ^a'r a'_r
+REP ^a's a'_s
+REP ^a't a'_t
+REP ^b'a b'_a
+REP ^b'à b'_à
+REP ^be b'_e
+REP ^b'e b'_e
+REP ^b'é b'_é
+REP ^b'è b'_è
+REP ^b'fh b'_fh
+REP ^bh'a bh'_a
+REP ^bh'á bh'_á
+REP ^bh'à bh'_à
+REP ^bh'i bh'_i
+REP ^bh'o bh'_o
+REP ^bh'u bh'_u
+REP ^b'i b'_i
+REP ^b'ì b'_ì
+REP ^b'o b'_o
+REP ^b'ó b'_ó
+REP ^b'ò b'_ò
+REP ^b'u b'_u
+REP ^b'ù b'_ù
+REP ^d'a d'_a
+REP ^d'à d'_à
+REP ^d'e d'_e
+REP ^d'é d'_é
+REP ^d'è d'_è
+REP ^d'fh d'_fh
+REP ^d'i d'_i
+REP ^d'ì d'_ì
+REP ^d'o d'_o
+REP ^d'ó d'_ó
+REP ^d'ò d'_ò
+REP ^d'u d'_u
+REP ^d'ù d'_ù
+REP ^m'a m'_a
+REP ^m'à m'_à
+REP ^m'e m'_e
+REP ^m'é m'_é
+REP ^m'è m'_è
+REP ^m'fh m'_fh
+REP ^m'i m'_i
+REP ^m'ì m'_ì
+REP ^m'o m'_o
+REP ^m'ó m'_ó
+REP ^m'ò m'_ò
+REP ^m'u m'_u
+REP ^m'ù m'_ù
+REP ^r'a r'_a
+REP ^r'à r'_à
+REP ^r'e r'_e
+REP ^r'é r'_é
+REP ^r'è r'_è
+REP ^r'i r'_i
+REP ^r'ì r'_ì
+REP ^r'o r'_o
+REP ^r'ó r'_ó
+REP ^r'ò r'_ò
+REP ^r'u r'_u
+REP ^r'ù r'_ù
+REP ^t'a d'_a
+REP ^t'à d'_à
+REP ^t'e d'_e
+REP ^t'é d'_é
+REP ^t'è d'_è
+REP ^t'i d'_i
+REP ^t'ì d'_ì
+REP ^t'o d'_o
+REP ^t'ó d'_ó
+REP ^t'ò d'_ò
+REP ^t'u d'_u
+REP ^t'ù d'_ù
+REP ^th'a th'_a
+REP ^th'á th'_á
+REP ^th'à th'_à
+REP ^th'i th'_i
+REP ^th'o th'_o
+REP ^th'u th'_u
+REP a-bharrachd a_bharrachd
+REP -a-deas _a_deas
+REP aghaidh-ri-aghaidh aghaidh_ri_aghaidh
+REP agiis agus
+REP air-ais air_ais
+REP àireamh-fòn àireamh_fòn
+REP airloidhne air_loidhne
+REP a-macho a-mach_o
+REP àmanan amannan
+REP amhàin a-mhàin
+REP an-ath-bhliadhna an_ath-bhliadhna
+REP an-ath-sheachdain an_ath-sheachdain
+REP an-ear an_ear
+REP an-iar an_iar
+REP an-toiseach an_toiseach
+REP an-urra an_urra
+REP aon-deug aon_deug
+REP athaisg aithisg
+REP -a-tuath _a_tuath
+REP b'abhaist b'_àbhaist
+REP ban-rìgh bànrigh
+REP Béarla Beurla
+REP bha'n bha_'n
+REP bhan-rìgh bhànrigh
+REP Bhéarla Bheurla
+REP bhfuil bheil
+REP bhlàr-a-muigh bhlàr_a-muigh
+REP blàr-a-muigh blàr_a-muigh
+REP càch-a-chèile càch_a_chèile
+REP ceill cèill
+REP ceimeagair ceimigear
+REP ceithear ceithir
+REP ceithir-deug ceithir_deug
+REP ceithreamh ceathramh
+REP ceithrear ceathrar
+REP Cèoto Kyōto
+REP chàch-a-chèile chàch_a_chèile
+REP chaid chaidh
+REP cha-mhòr cha_mhòr
+REP cha'n'eil chan_eil
+REP cheill chèill
+REP cheimeagair cheimigear
+REP cheithear cheithir
+REP cheithreamh cheathramh
+REP cheithrear cheathrar
+REP chionns chionn_'s
+REP còig-deug còig_deug
+REP cruinn-còmhla cruinn_còmhla
+REP dà-dheug dà_dheug
+REP Dhomhnuill Dhòmhnaill
+REP Dhomhnull Dhòmhnall
+REP dhuit-sa dhut-sa
+REP dol-an-sàs dol_an_sàs
+REP dol-seachad dol_seachad
+REP Domhnull Dòmhnall
+REP earra-dheas ear-dheas
+REP earra-thuath ear-thuath
+REP fhiolm fhilm
+REP fhiolmadh fhilmeadh
+REP fhiolman fhilmean
+REP fiolm film
+REP fiolmadh filmeadh
+REP fiolman filmean
+REP fius fiù_'s
+REP fiùs fiù_'s
+REP Frangais Fraingis
+REP g'eil g'_eil
+REP gu-m gum
+REP hAlban h-Albann
+REP huile h-uile
+REP Inbhirnis Inbhir_Nis
+REP Innse-Gall Innse_Gall
+REP lain Iain
+REP Lochabar Loch_Abar
+REP losa Ìosa
+REP manadsair manaidsear
+REP mi'n mi_'n
+REP mu'm mu_'m
+REP mu-thràth mu_thràth
+REP nacb nach
+REP nacheil nach_eil
+REP nach'eil nach_eil
+REP nacli nach
+REP naoi-deug naoi_deug
+REP naoidh-deug naoidh_deug
+REP ochd-deug ochd_deug
+REP òitreachais òtrachais
+REP òitreachas òtrachas
+REP polais poilis
+REP raibh robh
+REP ri'm ri_m'
+REP sann 's_ann
+REP s'ann 's_ann
+REP S'ann 'S_ann
+REP se 's_e
+REP seachd-deug seachd_deug
+REP sgaths sgàth_'s
+REP sgath's sgàth_'s
+REP sgàths sgàth_'s
+REP sia-deug sia_deug
+REP sprèadh spreadhadh
+REP srathspè srath_spè
+REP strìth strì
+REP taobh-a-muigh taobh_a-muigh
+REP thall-thairis thall_thairis
+REP tha'm tha_'m
+REP tha'n tha_'n
+REP thiomchioll thimcheall
+REP Thìr-nan-Òg Thìr_nan_Òg
+REP th'n$ th_'n
+REP thriur thriùir
+REP tiomchioll timcheall
+REP Tìr-nan-Òg Tìr_nan_Òg
+REP tlia tha
+REP Tòcèo Tōkyō
+REP trì-deug trì_deug
+REP triur triùir
+REP t-srì strì
+REP t-strì strì
+REP t-Stròim t-Sròim
+REP uair-is-uair uair_is_uair
+REP uile-gu-lèir uile_gu_lèir
+
+MAP 5
+MAP aáàAÁÀ
+MAP eéèEÉÈ
+MAP iíìIÍÌ
+MAP oóòOÓÒ
+MAP uúùUÚÙ
+
+PFX S Y 18
+PFX S   b     bh          b[^h]
+PFX S   B     Bh          B[^h]
+PFX S   c     ch          c[^h]
+PFX S   C     Ch          C[^h]
+PFX S   d     dh          d[^h]
+PFX S   D     Dh          D[^h]
+PFX S   f     fh          f[^h]
+PFX S   F     Fh          F[^h]
+PFX S   g     gh          g[^h]
+PFX S   G     Gh          G[^h]
+PFX S   m     mh          m[^h]
+PFX S   M     Mh          M[^h]
+PFX S   p     ph          p[^h]
+PFX S   P     Ph          P[^h]
+PFX S   s     sh          s[aeiouáéíóúàèìòùlnr]
+PFX S   S     Sh          S[aeiouáéíóúàèìòùlnr]
+PFX S   t     th          t[^h]
+PFX S   T     Th          T[^h]
+
+PFX H Y 1
+PFX H   0     h-          [aeiouáéíóúàèìòùAEIOUÁÉÍÓÚÀÈÌÒÙ]
+
+PFX D Y 3
+PFX D   0     d'          [aeiouáéíóúàèìòùAEIOUÁÉÍÓÚÀÈÌÒÙ]
+PFX D   0     d'          fh
+PFX D   f     d'fh        f[^h]
+
+PFX E Y 3
+PFX E   0     dh'          [aeiouáéíóúàèìòùAEIOUÁÉÍÓÚÀÈÌÒÙ] 
+PFX E   0     dh'          fh
+PFX E   f     dh'fh        f[^h]
+
+PFX T Y 2
+PFX T   0     t-        [aeiouáéíóúàèìòùAEIOUÁÉÍÓÚÀÈÌÒÙ] 
+PFX T   0     t-        [Ss][aeiouáéíóúàèìòùlnr]
+
+PFX N Y 1
+PFX N   0     n-        [aeiouáéíóúàèìòùAEIOUÁÉÍÓÚÀÈÌÒÙ] 
+
+SFX K Y 6
+SFX K   0     -sa          [^-]
+SFX K   0     -se          [^-] 
+SFX K   0     -ne          [^-]
+SFX K   0     -san      [^-]
+SFX K   0     eigin     [^e]
+SFX K   0     igin     e
+#SFX K   0     sa          [^-]
+#SFX K   0     se          [^-] 
+#SFX K   0     ne          [^-]
+#SFX K   0     san      [^-]

@@ -1,0 +1,5 @@
+LICENSES:
+Spell checker: GPLv3+
+
+The full text of the GPL is available from the following addresses:
+http://www.gnu.org/copyleft/gpl.html

@@ -1,0 +1,24 @@
+Kamus Tesaurus Bahasa Indonesia - untuk Apache OpenOffice.org/LibreOffice
+Copyright (C) 2008 Pusat Bahasa Departemen Pendidikan Nasional RI, dikompilasi
+ke dalam format kamus Stardict oleh Steven Haryanto <steven@masterweb.net>. 
+Kompilasi v0.02 2010-03-03.
+Diubah ke dalam format MyThes oleh Ali Ahmadi <idnux09@gmail.com> pada 
+2017-02-21.
+Copyright (C) 2017 Ali Ahmadi <idnux09@gmail.com>.
+Homepage: https://idnux.wordpress.com/proyek/mythes-id
+
+
+===== Tentang thes-id atau mythes-id ====
+
+thes-id atau mythes-id ini adalah sebuah kamus tesaurus bahasa Indonesia untuk
+kelompok perkakas perkantoran LibreOffice dan Apache OpenOffice.org. Kamus 
+tesaurus ini dibangun memanfaatkan data kamus TBIPB (Tesaurus Bahasa Indonesia 
+Pusat Bahasa) edisi I (2008) untuk aplikasi kamus Stardict yang dikompilasi 
+oleh Bapak Steven Haryanto yang kemudian diubah ke dalam format MyThes 
+(http://www.openoffice.org/lingucomponent) yang ditulis oleh Kevin Hendricks 
+(kevin.hendricks@sympatico.ca).
+
+MyThes sendiri adalah sebuah sistem tesaurus sederhana yang menggunakan berkas
+data terstruktur dan berkas indeks dengan pencarian biner untuk mencari kata-kata
+dan frase dan mengembalikan informasi tentang bagian dari ucapan, makna, dan
+sinonim. MyThes ini ditulis untuk menyediakan tesaurus untuk proyek OpenOffice.org.

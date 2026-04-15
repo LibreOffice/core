@@ -1,0 +1,2 @@
+This oxt extension package for LibreOffice 5.2+ provides dictionaries for spelling,
+thesaurus, and hyphenation for Esperanto.

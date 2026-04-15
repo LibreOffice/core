@@ -1,0 +1,15 @@
+Corrector Volga de Proxecto Trasno. 
+Edición 20.08
+
+Corrección ortográfica baseada en Hunspell
+(Versión desenvolvida por Miguel Solla)
+
+Guionización silábica baseada en Patgen
+(Versión desenvolvida por Antón Méixome e Fco. Rial)
+
+Sinónimos Volga 
+(Do ano 2010)
+
+Para notificar erros, prema na ligazón arriba á dereita. 
+Para máis detalles, vexa os ficheiros internos.
+

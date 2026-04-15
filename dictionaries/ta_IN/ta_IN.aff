@@ -1,0 +1,335 @@
+﻿# An .aff file created for corpus based dictionary - By Ve. Elanjelian, Thamizha
+
+SET UTF-8
+TRY ்ுதமனகறடபரநலிஎாளஒவஇஙணேசவயேோஅூழொீஙஞஉஆஸஷஜஏஊஓஈஹௌஐஃஔ
+
+REP 46
+REP	ன்ர ன்ற
+REP ன்ட ண்ட
+REP ன்ட் ண்ட்
+REP ன்டு ண்டு
+REP ரை றை
+REP ரம் றம்
+REP றம் ரம்
+REP றை ரை
+REP ன் ண்
+REP ள் ல்
+REP ல் ள்
+REP ள ல
+REP ல ள
+REP ன ண
+REP ண ன
+REP ண் ன்
+REP கோ கொ
+REP கொ கோ
+REP தெ தே
+REP தே தெ
+REP தொ தோ
+REP தோ தொ
+REP கெ கே
+REP கே கெ
+REP மெ மே
+REP மே மெ
+REP மொ மோ
+REP மோ மொ
+REP ழ்ல ழில்
+REP ழ்லே ழில்
+REP ழ்ஷ் ங்கிலம்
+REP ழிஷ் ங்கிலம்
+REP தமிழ தமிழை
+REP மிழ்வி மிழி
+REP தமில் தமிழ்
+REP ட்ல ட்டில்
+REP டமி தமி
+REP தெமி தமி
+REP டெமி தமி
+REP ர்ல ரில்
+REP க்னி கினி
+REP ங்கரு ங்கிரு
+REP ங்க ங்கே
+REP வனை வணை
+REP ைல ையில்
+REP த்ர த்திர
+
+PFX K Y 18
+PFX K அ அவ்வ         அ
+PFX K ஆ அவ்வா         ஆ
+PFX K இ அவ்வி         இ
+PFX K ஈ அவ்வீ         ஈ
+PFX K உ அவ்வு         உ
+PFX K ஊ அவ்வூ         ஊ
+PFX K எ அவ்வெ         எ
+PFX K ஏ அவ்வே         ஏ
+PFX K ஐ அவ்வை         ஐ
+PFX K ஒ அவ்வொ         ஒ
+PFX K ஓ அவ்வோ         ஓ
+PFX K 0 அக்         [ககாகிகீகுகூகெகேகைகொகோகௌ]
+PFX K 0 அச்         [சசாசிசீசுசூசெசேசைசொசோசௌ]
+PFX K 0 அத்         [ததாதிதீதுதூதெதேதைதொதோதௌ]
+PFX K 0 அப்         [பபாபிபீபுபூபெபேபைபொபோபௌ]
+PFX K 0 அந்         [நநாநிநீநுநூநெநேநைநொநோநௌ]
+PFX K 0 அம்         [மமாமிமீமுமூமெமேமைமொமோமௌ]
+PFX K 0 அவ்         வ[ாிீுூெேைொோௌ]
+
+PFX L Y 18
+PFX L   அ     இவ்வ         அ
+PFX L   ஆ     இவ்வா         ஆ
+PFX L   இ     இவ்வி         இ
+PFX L   ஈ     இவ்வீ         ஈ
+PFX L   உ     இவ்வு         உ
+PFX L   ஊ     இவ்வூ         ஊ
+PFX L   எ     இவ்வெ         எ
+PFX L   ஏ     இவ்வே         ஏ
+PFX L   ஐ     இவ்வை         ஐ
+PFX L   ஒ     இவ்வொ         ஒ
+PFX L   ஓ     இவ்வோ         ஓ
+PFX L   0     இக்         [ககாகிகீகுகூகெகேகைகொகோகௌ]
+PFX L   0     இச்         [சசாசிசீசுசூசெசேசைசொசோசௌ]
+PFX L   0     இத்         [ததாதிதீதுதூதெதேதைதொதோதௌ]
+PFX L   0     இப்         [பபாபிபீபுபூபெபேபைபொபோபௌ]
+PFX L   0     இந்         [நநாநிநீநுநூநெநேநைநொநோநௌ]
+PFX L   0     இம்         [மமாமிமீமுமூமெமேமைமொமோமௌ]
+PFX L   0     இவ்         [வவாவிவீவுவூவெவேவைவொவோவௌ]
+
+SFX A Y 12
+SFX A   ்     ை/AGNnQ        ்
+SFX A   ம்     த்தை/NnQ        ம்
+SFX A   0     தை/N        த்
+SFX A   0     ல்லை        ல்
+SFX A   ல்     லை        ால்
+SFX A   ல்     லை        டல்
+SFX A   0     யை/N        ை
+SFX A   0     யை/N        ி
+SFX A   0     வை/N        ா
+SFX A   0     வை/T         து
+SFX A   டு     ட்டை        டு
+SFX A   ு     ை/Nn        ு
+
+SFX B Y 7
+SFX B   ்     ால்/NPT        ்
+SFX B   ம்     த்தால்        ம்
+SFX B   0     ணால்        ண்
+SFX B   0     யால்/N        ை
+SFX B   0     யால்/N        ி
+SFX B   டு     ட்டால்        டு
+SFX B   ு     ால்/NQT        ு
+
+SFX C Y 9
+SFX C   ்     ுக்கு/imNnQRrSuT        ்
+SFX C   ம்     த்துக்கு/m        ம்
+SFX C   ல்     லுக்கு        ல்
+SFX C   0     க்கு/NR        ி
+SFX C   0     க்கு/mNn        ை
+SFX C   0     வுக்கு/NQ        ா
+SFX C   டு     ட்டுக்கு/Nm        டு
+SFX C   0     க்கு/Nm        ு
+SFX C   து     தற்கு/NR        து
+
+SFX c Y 2
+SFX c   0     விற்கு/N        ா
+SFX c   ம்     த்திற்கு/NR        ம்
+
+SFX D Y 13
+SFX D   ்     ில்/iNnPQTUuv        ்
+SFX D   ம்     த்தில்/NPUT        ம்
+SFX D   ம்     மில்/NPU        ாம்
+SFX D   ல்     லில்        ல்
+SFX D   0     யில்/UQ        ி
+SFX D   0     யில்/iNQPTUu        ை
+SFX D   டு     ட்டில்        டு
+SFX D   பு     ப்பில்        பு
+SFX D   பு     பில்        ப்பு
+SFX D   று     ற்றில்        று
+SFX D   0     வில்        ழு
+SFX D   0     வில்        ரு
+SFX D   ு     ில்/NU        ு
+SFX D   0     வில்/NU        ா
+
+SFX E Y 8
+SFX E   ்     து/Q        ்
+SFX E   ம்     த்தினது        ம்
+SFX E   ல்     லினது        ல்
+SFX E   டு     ட்டினது        டு
+SFX E   0     யது        ி
+SFX E   0     யது        தை
+SFX E   0     வது        ா
+SFX E   0     வது        ு
+
+SFX F Y 5
+SFX F   டு     ட்டின்கண்        டு
+SFX F   ம்     த்தின்கண்        ம்
+SFX F   ல்     லின்கண்        ல்
+SFX F   0     யின்கண்        தை
+SFX F   ள்     ளின்கண்        ள்
+
+SFX f Y 5
+SFX f   ்     ிடம்/DiNQUu        ்
+SFX f   ம்     த்திடம்/DNQUu        ம்
+SFX f   0     விடம்        ா
+SFX f   0     யிடம்        ை
+SFX f   0     யிடம்        ி
+
+SFX G Y 5
+SFX G   ்     ா/E        ்
+SFX G   ு     ா        ு
+SFX G   0     யா        ை
+SFX G   0     யா        ி
+SFX G   0     வா        ா
+
+SFX H Y 15
+SFX H   ்     ின்/ABCDm        ்
+SFX H   ம்     த்தின்/AB        ம்
+SFX H   0     தின்/B        த்
+SFX H   0     லின்        ல்
+SFX H   ல்     லின்        ால்
+SFX H   ல்     லின்        டல்
+SFX H   டு     ட்டின்        டு
+SFX H   டு     டின்        ட்டு
+SFX H   று     ற்றின்        று
+SFX H   0     வின்        ழு
+SFX H   கு     கின்AN        கு
+SFX H   0     யின்        ி
+SFX H   0     யின்/B        ை
+SFX H   0     வின்        ா
+SFX H   ு     ின்/ABm        ு
+
+SFX I Y 5
+SFX I   ்     ுடைய        ்
+SFX I   ம்     த்துடைய        ம்
+SFX I   டு     ட்டுடைய        டு
+SFX I   0     டைய        ு
+SFX I   0     யுடைய        ை
+
+SFX i Y 4
+SFX i   ்     ுள்ள        ்
+SFX i   0     யுள்ள        றை
+SFX i   0     யுள்ள        கே
+SFX i   0     ள்ள        ு
+
+SFX J Y 8
+SFX J   ்     ுடன்/QS        ்
+SFX J   ம்     லுடன்/S        ல்
+SFX J   ம்     த்துடன்/S        ம்
+SFX J   டு     ட்டுடன்        டு
+SFX J   0     யுடன்/S        ை
+SFX J   0     யுடன்/N        ி
+SFX J   0     வுடன்        ா
+SFX J   0     டன்/N        ு
+
+SFX j Y 6
+SFX j   ்     ோடு/N        ்
+SFX j   ம்     த்தோடு        ம்
+SFX j   டு     ட்டோடு        டு
+SFX j   0     ோடு        ு
+SFX j   0     யோடு        ி
+SFX j   0     யோடு/N        ை
+
+SFX M Y 7
+SFX M   ல்     ற்கள்/ABCDEFGHIJKL        ல்
+SFX M   ம்     ங்கள்/ABCDEFGHIJKL        ம்
+SFX M   0     கள்/ABCDEFGHIJKL         ு
+SFX M   0     கள்/ABCDEFfGHIJjKLRTS          ி
+SFX M   0     கள்          ்
+SFX M   0     கள்/ABCDEFGHIJjKLN        ை
+SFX M   0     க்கள்/ABCDEFGHIJKL        ா
+
+SFX m Y 2
+SFX m   ்     ுள்        ்
+SFX m   0     ள்        கு
+
+SFX N Y 7
+SFX N   ்     ும்/r        ்
+SFX N   0     ம்/AQ        ு
+SFX N   0     யும்/S        ி
+SFX N   0     யும்        ை
+SFX N   0     வும்        ா
+SFX N   0     யும்        கே
+SFX N   0     வும்        க
+
+SFX n Y 7
+SFX n   ்     ோ        ்
+SFX n   0     யோ        ை
+SFX n   0     யோ        ி
+SFX n   0     வோ        ா
+SFX n   ள்     ளோ        ள்
+SFX n   0     வோ        க
+SFX n   ு     ோ/T        ு
+
+SFX O N 1
+SFX O   ழ்     ழே        ழ்
+
+SFX o Y 2
+SFX o   0     யாம்         ை
+SFX o   0     யாம்      ி
+
+SFX P Y 1
+SFX P   ல்     லேயே        ல்
+
+SFX Q Y 10
+SFX Q   ்     ே/TQ        ்
+SFX Q   ல்     லே        ல்
+SFX Q   0     யே/T        ி
+SFX Q   0     யே/T        ை
+SFX Q   0     வே        ா
+SFX Q   0     வே        க
+SFX Q   0     யே/T        கே
+SFX Q   0    யே         ே
+SFX Q   ு     ே        ு
+SFX Q   0     வே        மா
+
+SFX R N 6
+SFX R   ்    ாக/NnQT         ்
+SFX R   ல்    லாக/N         ல்
+SFX R   0    யாக         ி
+SFX R   0    யாக/GNnQ         ை
+SFX R   0    வாக         ா
+SFX R   ு     ாக        ு
+
+SFX r N 4
+SFX r   ்    ாய்         ்
+SFX r   0    யாய்         ி
+SFX r   0    யாய்         ை
+SFX r   ு    ாய்         ு
+
+SFX S N 5
+SFX S   ்     ான        ்
+SFX S   ு     ான        ு
+SFX S   0    யான         ி
+SFX S   0    யான         ை
+SFX S   கு     கான        கு
+
+SFX T N 9
+SFX T   0    தான்/GQ         ்
+SFX T   0    தான்/GQ         ு
+SFX T   0    தான்/GQ         ி
+SFX T   0    தான்/GQ         ா
+SFX T   0    தான்/Q         ே
+SFX T   0    தான்/GQ         ை
+SFX T   0    தான்         யே
+SFX T   0    தான்         ளே
+SFX T   0    த்தான்        ாக
+
+SFX t N 4
+SFX t   ்    ாகும்         ்
+SFX t   0    யாகும்         தி
+SFX t   0    யாகும்         ை
+SFX t   ு    ாகும்         ு
+
+SFX U Y 2
+SFX U    ்     ிருந்து/Q          ்
+SFX U   0    யிருந்து         கே
+
+SFX u Y 3
+SFX u   ்    ிருந்த         ்
+SFX u   0    யிருந்த         கே
+SFX u   கு    கிருந்த         கு
+
+SFX V Y 1
+SFX V   0    யிருந்தால்         றை
+
+SFX v Y 4
+SFX v   0    யில்லை         றை
+SFX v   0    யில்லை         வே
+SFX v   ம்    மில்லை         ம்
+SFX v   0   ல்லை         ்
+SFX v   0    ில்லை         ு

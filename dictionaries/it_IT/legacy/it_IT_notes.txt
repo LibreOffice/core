@@ -1,0 +1,459 @@
+**********************************
+***********  Italiano  ***********
+**********************************
+
+ERRORI NEL DIZIONARIO
+
+Indice:
+1) INTRODUZIONE
+2) CLASSIFICAZIONE DEGLI ERRORI
+3) CONCLUSIONE
+4) ERRORI CONOSCIUTI
+5) ERRORI NON-ERRORI
+
+
+***************
+1) INTRODUZIONE
+
+Il dizionario italiano genera attualmente varie parole errate, contiene alcuni
+errori e non genera o non contiene tutte le parole corrette.
+
+Bisogna tenere presente che il dizionario attuale (statistiche calcolate
+rispetto alla versione 2.2 del dizionario) genera circa 22.400.000 stringhe
+(vedere il file statistiche.scx per maggiori dettagli e avere le statistiche
+aggiornate).
+Di queste bisognerebbe considerare due tipi di stringhe:
+* parole singole (circa 2.030.000)
+* parole elise (circa 20.330.000)
+Per le parole singole la presenza di errori è in percentuale molto bassa e
+diminuisce ad ogni nuovo rilascio. Attualmente stimo vi siano 10-50.000 parole
+singole errate.
+Per le parole elise sono presenti sia errori gravi (es: un'alunno o mancanza di
+elisioni come un'alunna) che errori "veniali" (es: brav'albero, quell'avergli,
+...), cioè errori che non è possibile commettere causa errata digitazione.
+Il numero degli errori gravi presumo sia molto basso, mentre quelli "veniali"
+sono abbastanza frequenti.
+
+
+*******************************
+2) CLASSIFICAZIONE DEGLI ERRORI
+
+Le stringhe errate sono generate principalmente dai seguenti fattori:
+
+1. flag associati erroneamente a parole non del tipo corrispondente (es: flag di
+   verbi associati a non verbi, ad esempio: cancelliere/B)
+
+Stato: conclusa.
+La correzione del punto 1 è stata terminata (almeno gli errori più evidenti e
+comunque la maggior parte di quelli presenti ... potrebbe essere sfuggito
+qualcosa dai controlli effettuati).
+Questi errori possono causare false parole viste dal correttore ortografico come
+corrette ad esempio cancelliere/B -> cancellierò.
+
+
+2. generazione di tutti e soli i casi possibili per ogni radice di un determinato
+   tipo (es: composizione verbi e pronomi)
+
+Stato: è in fase di analisi.
+       Completata la generazione infinito + pronome per tutti i verbi
+
+
+3. generazione dell'elisione per combinazioni non sempre corrette (es: 
+   brav'albero)
+
+Stato: in correzione, ci sono ancora molti errori di questo tipo.
+La correzione del punto 3 è in fase di esecuzione, questa parte richiederà molto
+tempo.
+Breve spiegazione: per permettere al dizionario di riconoscere la maggior parte
+delle elisioni corrette come non errate sono stati inseriti in automatico le più
+probabili combinazioni che hanno generato combinazioni non corrette come
+brav'albero, levare quelle errate è un'attività molto dispendiosa perché
+richiede un controllo puntuale su ogni parola. Questi errori possono essere
+visti come non gravi perché normalmente non sono generati da errori di battitura
+
+
+4. generazioni dell'elisione per combinazioni errate (es: un'alunno) o la
+   mancanza di una combinazione corretta (es: la combinazione un'alunna vista
+   come errata)
+
+Stato:
+* combinazioni errate: in correzione
+* combinazioni mancanti: in correzione
+La correzione del punto 4 è in fase di esecuzione, anche questa fase come quella
+del punto 3 è molto dispendiosa. Questi errori sono molto gravi e si sta
+studiando un modo per eliminarne la maggior parte nel tempo più breve.
+
+
+5. verbi irregolari. Ci sono verbi irregolari coniugati come verbi regolari
+   (generano parole errate) e/o non completamente coniugati (mancanza di parole
+   corrette)
+
+Stato: parte in correzione e parte non ancora analizzata
+La correzione del punto 5 è parzialmente in fase di sistemazione, mentre per la
+maggior parte dei casi restanti non è ancora iniziata la fase di analisi.
+Questa fase è abbastanza critica perché riguarda anche verbi ad alto utilizzo,
+però è anche molto complessa e delicata; richiede una fase di studio non
+indifferente.
+
+
+6. errori nei non verbi (es: errore nel generare il plurale di una parola)
+
+Stato: conclusa
+La correzione del punto 6 dovrebbe essere completata. Vengono trovati sempre più
+raramente errori di questo tipo.
+
+
+7. mancanza di generazioni nei non verbi (es: mancanza di un plurale di una
+   parola)
+
+Stato: in correzione
+La correzione del punto 7 è in fase di sistemazione. Vi sono ancora un certo
+numero di parole che sono adagio adagio sistemate. La maggior parte di questi
+casi riguarda parole non di uso comune o specialistiche di un determinato
+settore o parole che sono ottenute anche come coniugazione di verbi.
+
+
+8. eliminazione di parole arcaiche/dialettali/straniere non di uso comune/
+   famigliari/regionali/...
+
+Stato: in correzione
+La correzione del punto 8 è in fase di sistemazione. Questa parte è molto
+delicata perché non sempre è semplice individuare correttamente le parole da
+eliminare e la loro catalogazione molte volte è abbastanza soggettiva.
+
+
+9. mancanza totale di parole corrette
+
+Stato: in aggiornamento permanente
+Questa parte è cronica dato che la lingua italiana si arricchisce con il passare
+del tempo di nuovi termini. L'unica soluzione è un continuo aggiornamento. Anche
+questa parte è molto delicata perché non sempre è semplice stabilire se un
+termine deve essere inserito o meno.
+
+
+...
+
+
+**************
+3) CONCLUSIONE
+
+Il dizionario italiano contiene sì un numero di errori che è abbastanza elevato,
+ma tale valore è in proporzione basso rispetto alle parole corrette presenti.
+In conclusione il dizionario italiano può essere visto come un prodotto maturo,
+con qualche piccola pecca, e può benissimo essere usato con profitto in ambito
+lavorativo.
+
+
+********************
+4) ERRORI CONOSCIUTI
+
+A) Vi sono purtroppo una serie di errori conosciuti che non possono essere per
+ora eliminati. Questi errori sono presenti, alle volte introdotti
+volontariamente, per poter generare delle parole corrette.
+
+* generazione di coniugazioni di verbi errate, perché, pur essendo verbi
+regolari o coniugati come altri verbi, hanno delle eccezioni alle regole
+generali e non si è ancora trovata una regola che possa distinguere
+correttamente i vari casi.
+Seguono gli errori finora riscontrati:
+
+ disfanno <- disfare ha delle eccezioni rispetto a fare: fanno -> disfano
+ 
+ invi <- inviare è invii
+ invino <- inviare è inviino
+ scino <- sciare è sciino
+ sci <- sciare è scii
+ avvi <- avviare è avvii
+ avvino <- avviino
+ oli <- olii
+ olino <- oliino
+ obli <- oblii
+ oblino <- obliino
+ 
+ abradetti <- abradere è abrasi
+ abradei <- abradere è abrasi
+ abradé <- abradere è abrase
+ abradette <- abradere è abrase
+ abradettero <- abradere è abrasero
+ abraderono <- abradere è abrasero
+
+* verbi coniugati come cadere generano delle stringhe errate
+ accadé <- accadere è accadde
+ accadettero  <- accadere è accaddero
+ accaderono <- accadere è accaddero
+ accaderà <- accadere è accadrà
+ accaderanno <- accadere è accadranno
+ accaderebbe <- accadere è accadrebbe
+ accaderebbero <- accadere è accadrebbero
+ accadetti <- accadere è accaddi
+ accadei  <- accadere è accaddi
+ accaderò <- accadere è accadrò
+ accaderai <- accadere è accadrai
+ accaderemo <- accadere è accadremo
+ accaderete <- accadere è accadrete
+ accaderei <- accadere è accadrei
+ accaderesti <- accadere è accadresti
+ accaderemmo <- accadere è accadremmo
+ accadereste <- accadere è accadreste
+
+ Nota: per i verbi coniugati come cadere è già in sviluppo la correzione che,
+       molto probabilmente verrà già inserita nella prossima versione beta del
+       dizionario.
+
+B) Vi sono anche alcuni errori non rilevabili dall'attuale versione di MySpell
+   (il programma che gestisce il dizionario) e per i quali quindi non è
+   possibile fare nulla.
+
+* parole inizianti o terminanti con apostrofo (es: mo', 'ndrangheta).
+Per permettere la non segnalazione come errori si è dovuto inserire la parola
+senza l'apostrofo (es: mo, ndrangheta)
+
+
+C) Vi sono anche delle parole corrette e prensenti nel dizionario, ma che
+   MySpell segnala come errate
+
+* nella composizione di parole elise presenti nel dizionario solo con lettera
+  iniziale maiuscola e scritte tutte in maiuscolo.
+Per esempio la parola Alberta è presente solo con l'iniziale maiuscola nel
+dizionario.
+ MySpell vede giustamente come corrette le seguenti:
+  - Alberta l'Alberta L'Alberta 
+ MySpell vede giustamente errate le seguenti:
+  - alberta l'alberta L'alberta
+ MySpell vede erroneamente errata la seguente:
+  - L'ALBERTA
+
+
+********************
+5) ERRORI NON-ERRORI
+
+Le regole della lingua italiana non sono mai certe o per lo meno non esiste
+sempre un'unica interpretazione. Vi sono un certo numero di persone (esperti
+linguisti naturalmente) che ritengono una cosa corretta ed altre che la
+ritengono sbagliata.
+È sempre complesso scegliere quale strada seguire e per questo si cerca sempre
+la soluzione che pare migliore per ogni singolo caso dubbio.
+
+Qui di seguito vi è un elenco di segnalazioni di "errori" fatte più volte e dei
+motivi per cui tali "errori" sono ancora presenti:
+
+a) lettere accentate
+Vari hanno segnalato che per le vocali iu quando accentate dovrebbero avere
+l'accento acuto perché pronunciabili solo con suono chiuso.
+Si è scelto di usare gli accenti gravi come riportato dalla maggior parte dei
+dizionari, come indicato nella norma UNI 601567 (riportata qui:
+http://www.mat.unimi.it/users/dip/software/linux/appunti-linux/AL-14.44.184.html
+) e perché sulla tastiera italiana sono presenti normalmente per le vocali aiou
+solo gli accenti gravi.
+
+b) qual è <-> qual'è - qual era <-> qual'era
+La corrente "principale" indica tali elisioni come errate perché esiste il
+troncamento qual, ma vi sono personaggi illustri che hanno indicano tali
+elisioni come corrette adducendo come motivazione il fatto che il troncamento
+qual ormai è caduto quasi completamente in disuso e sono veramente rari i casi
+in cui è usato, quindi affermano che sono corrette entrambe le forme.
+Alcuni tra i grammatici che sono a favore dell'elisione: Federigo Tozzi, Mario
+Tobino, Tommaso Landolfi, Paolo Monelli, Bonaventura Tecchi
+Per approfondimenti: "La prima scienza" pp. 72-75 (Luciano Satta, Casa Editrice
+G. D'Anna, Firenze, 1971-1989)
+
+
+*********************************
+***********  English  ***********
+*********************************
+
+ERRORS INSIDE THE ITALIAN DICTIONARY
+
+Index:
+1) INTRODUCTION
+2) ERRORS CLASSIFICATION
+3) CONCLUSION
+4) KNOW ERRORS
+5) ERRORS NOT-ERRORS
+
+
+***************
+1) INTRODUCTION
+
+There are some error in the Italian dictionary.
+
+First of all we must consider that actually the Italian dictionary (statistic
+for the Italian dictionary ver. 2.2) generate about 22.400.000 different
+strings (see statistiche.scx for more details).
+There are two string types:
+* single words (about 2.030.000)
+* apostrophed words (about 20.330.000)
+
+There are few errors in the single words (actually I estimate about 10-50.000
+errors).
+
+
+************************
+2) ERRORS CLASSIFICATION
+
+1. some flags have mistaked appended to wrong words (example: non verb word with
+verb flag, for example: cancelliere/B)
+
+Status: completed
+
+
+2. generation of all possible case for a kind of word (for example words formed
+by union of verbs and pronoun)
+
+Status: analysis
+This part has actually in the analysis phase
+
+
+3. generation of apostrophed words not always corrected (example: brav'albero)
+
+Status: correction
+This is a very long process. This phase is actually under development
+
+
+4. generation of apostrophed words that are wrong (example: un'alunno) or
+missing of corrected one (example: missing the word un'alunna that is see as an
+error)
+
+Status:
+* wrong apostrophed: in progress
+* missing apostrophed: in progress
+This is a very long process. This phase is actually under development
+
+
+5. irregular verbs. There are irregulars verbs conjugated as regulars one (there
+generate wrong words) and/or not completely conjugated (missing of corrected
+words)
+
+Status: in progress and part must be analyzed
+This phase is only partially under development. It is not began the analysis for
+all the rest
+
+
+6. errors on non verb words (example: error on the generation of a plural)
+
+Status: completed
+Probably this phase is terminated or there are very few errors of this kind
+because is very difficult to find these errors type
+
+
+7. missing of some generation of non verbs (example: missing on the generation
+   of a plural)
+
+Status: in progress
+This is under development. There are some of these errors, but they are about
+not most used or specialistic words
+
+
+8. words that are not used in the Italian writing
+
+Status: in progress
+There are some of these errors, they are hard to find. This phase is under
+development. It is not simple to select words of this kind that must be deleted
+
+
+9. missing of corrected words
+ 
+Status: always in progress
+This phase is under development. All dictionary have this problem because new
+words are added in the time.
+
+
+...
+
+
+
+*************
+3) CONCLUSION
+The Italian dictionary have errors on it, but the errors number is low compared
+to the total amount of words generated from it.
+The Italian dictionary can be see as a mature product and so can be used as a
+stable and complete product.
+
+
+****************
+4) KNOW ERRORS
+
+a) there are some errors put into the dictionary intentionally:
+
+* wrong verbs generations, becouse they have some exception.
+Here are the errors found:
+
+ disfanno <- disfare is not equal as fare: fanno -> disfano
+ 
+ invi <- inviare is invii
+ invino <- inviare is inviino
+ scino <- sciare is sciino
+ sci <- sciare is scii
+ avvi <- avviare is avvii
+ 
+ abradetti <- abradere is abrasi
+ abradei <- abradere è abrasi
+ abradé <- abradere è abrase
+ abradette <- abradere è abrase
+ abradettero <- abradere è abrasero
+ abraderono <- abradere è abrasero
+
+* verbs like cadere generate wrong strings, for example accadere:
+ accadé <- accadere è accadde
+ accadettero  <- accadere è accaddero
+ accaderono <- accadere è accaddero
+ accaderà <- accadere è accadrà
+ accaderanno <- accadere è accadranno
+ accaderebbe <- accadere è accadrebbe
+ accaderebbero <- accadere è accadrebbero
+ accadetti <- accadere è accaddi
+ accadei  <- accadere è accaddi
+ accaderò <- accadere è accadrò
+ accaderai <- accadere è accadrai
+ accaderemo <- accadere è accadremo
+ accaderete <- accadere è accadrete
+ accaderei <- accadere è accadrei
+ accaderesti <- accadere è accadresti
+ accaderemmo <- accadere è accadremmo
+ accadereste <- accadere è accadreste
+		 
+
+b) there are some errors or corrected words that MySpell cannot found
+
+* words starting or ending with apostrophe (examples: mo', 'ndrangheta). For now
+this words are inserted without the apostrophe (examples: mo, ndrangheta)
+
+
+c) there are some words corrected in the dictionary but MySpell show you as
+   errors.
+
+* word starting with uppercase letter combined with aphostrophe
+For example the word Alberta is present only with the first letter uppercase
+ MySpell see correctly as correct the followings words:
+  - Alberta l'Alberta L'Alberta
+ MySpell see correctly as wrong the followings words:
+  - alberta l'alberta L'alberta
+ MySpell see wrongly as correct the following word:
+  - L'ALBERTA
+
+
+********************
+5) ERRORS NOT-ERRORS
+
+Italian language rules, as all other languages, are not unique, there is not a
+unique rule for all that are accepted from all linguistic.
+Here are some words that are errors for someone and correct words for others.
+
+a) accented iu vocal at end of words for someone must have acute accent.
+In the Italian dictionary this words have grave accent because:
+- majority of the Italian dictionary use this accent type
+- UNI 601567 (you can read it here:
+http://www.mat.unimi.it/users/dip/software/linux/appunti-linux/AL-14.44.184.html
+) say to use the grave accent
+- Italian keyboard have grave accent for iu but not the acute one
+
+b) qual è <-> qual'è - qual era <-> qual'era
+Some Italian linguistic say that qual is nearly vanished from the Italian
+language so we can use "qual è" or "qual'è": Federigo Tozzi, Mario Tobino,
+Tommaso Landolfi, Paolo Monelli, Bonaventura Tecchi.
+For more details see: "La prima scienza" pp. 72-75 (Luciano Satta, Casa
+Editrice G. D'Anna, Firenze, 1971-1989)
+
+
+
+

@@ -1,0 +1,73 @@
+SET UTF-8
+LANGCODE bo
+
+# ignoring Ux0F35 and Ux0F37, as they are extremely rare but valid.
+# This means that a syllable containing these signs at invalid places will not
+# be detected by the spell checker, but this makes the code more simple at
+# almost no cost
+IGNORE ༵༷
+
+NOSPLITSUGS
+
+# The "N" makes the suffixes mandatory. It is used only with B, example: དཀ/NB,
+# in this case, དཀ is invalid, but is not if there is a suffix.
+NEEDAFFIX N
+
+# grammatical suffixes only
+SFX C Y 7
+SFX C 0 འི . +'brel_sgra
+SFX C 0 འོ . +slar_bsdu
+SFX C 0 འིའོ . +'brel_sgra_slar_bsdu
+SFX C 0 ར . +la_don
+SFX C 0 ས . +byed_sgra
+SFX C 0 འང . +rgyan_sdud
+SFX C 0 འམ . +'byed_sdud
+
+# Words with mandatory vowel or suffix
+# If no ashung and no vowel, a suffix is mandatory
+SFX B Y 6
+SFX B 0 ི/S . +i
+SFX B 0 ུ/S . +u
+SFX B 0 ེ/S . +e
+SFX B 0 ོ/S . +o
+SFX B 0 འ . +ashung
+SFX B 0 /NS .
+
+# Non-mandatory vowel or suffix. In these cases, no ashung is possible, see
+# the documentation.
+SFX A Y 5
+SFX A 0 ི/S . +i
+SFX A 0 ུ/S . +u
+SFX A 0 ེ/S . +e
+SFX A 0 ོ/S . +o
+SFX A 0 /S .
+
+# List of suffixes used by both A and B
+SFX S Y 18
+SFX S 0 ག . +g
+SFX S 0 གས . +gs
+SFX S 0 ང . +ng
+SFX S 0 ངས . +ngs
+SFX S 0 ད . +d
+SFX S 0 ན . +n
+SFX S 0 བ . +b
+SFX S 0 བས . +bs
+SFX S 0 མ . +m
+SFX S 0 མས . +ms
+SFX S 0 འི . +'brel_sgra
+SFX S 0 འོ . +slar_bsdu
+SFX S 0 འིའོ . +'brel_sgra_slar_bsdu
+SFX S 0 འང . +rgyan_sdud
+SFX S 0 འམ . +'byed_sdud
+SFX S 0 ར . +r
+SFX S 0 ལ . +l
+SFX S 0 ས . +s
+
+# Replace archaic forms by modern ones
+REP 6
+REP འིས ས
+REP འའིས ས
+REP འར ར
+REP ནད ན
+REP རད ར
+REP ལད ལ

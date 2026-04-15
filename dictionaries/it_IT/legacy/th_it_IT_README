@@ -1,0 +1,209 @@
+Version 2.07.gh (10/02/2008) (dd/mm/yyyy)
+
+For English Readers: please see the text at the end of this document
+
+**********************************
+***********  Italiano  ***********
+**********************************
+
+Il thesaurus italiano
+
+SOMMARIO
+
+1. Licenza
+2. Avvertenze importanti (leggere assolutamente)
+3. Modalità di installazione e configurazione in OpenOffice.org
+4. Ringraziamenti
+5. Link/download
+
+
+**********
+1. Licenza
+
+Il thesaurus italiano per il programma MyThes usato da OpenOffice.org è
+distribuito da Daniela Volta, contattabile all'indirizzo e-mail:
+openoffice(chiocciola)keynes(punto)scuole(punto)bo(punto)it e da Davide Prina,
+contattabile all'indirizzo e-mail: davideprina(chiocciola)yanoo(punto)com, 
+sotto i termini e le condizioni della GNU General Public License (GPL)
+versione 3.0 o successiva.
+Una volta accettata la licenza per l'uso, la distribuzione è consentita la
+modifica di questo prodotto, l'accettante dovrà rispettare tutti i termini e le
+condizioni riportate nella licenza scelta.
+
+Dalla versione 2.0 è stato incluso parzialmente anche un altro thesaurus
+presente anche nel programma GPL http://search.mnogo.ru.
+
+Questo thesaurus è stato fornito da Marcello Bianchetti sotto licenza di
+pubblico dominio per l'integrazione con il thesaurus di OOo.
+In ogni caso verrà allegato un file contenente tutti i sinonimi ricavati da
+questo thesaurus nel file: thes_PD.txt
+
+
+************************************************
+2. Avvertenze importanti (leggere assolutamente)
+
+Il presente thesaurus funziona con le versioni di OpenOffice.org (OOo) maggiori
+o uguali della versione 2.0 (comprese alcune delle sue beta nominate 1.9.x)
+
+Il file degli indici è ottenuto con MyThes, disponibile sul sito di OOo.
+
+
+***************************************************************
+3. Modalità di installazione e configurazione in OpenOffice.org
+
+Se possibile è meglio consultare la guida d'installazione on-line, disponibile
+qui, che di sicuro è più aggiornata e completa:
+a) come installare il thesaurus: 
+http://linguistico.sf.net/wiki/doku.php?id=come_installare_un_thesaurus
+b) come aggiornare il thesaurus:
+http://linguistico.sf.net/wiki/doku.php?id=come_aggiornare_un_thesaurus
+
+Per installare il thesaurus occorre seguire i seguenti punti:
+1) copiare i file th_it_IT.* nella directory contenente il file dictionary.lst
+   (questa posizione può essere diversa a seconda del sistema operativo in uso
+   e della versione sia del sistema operativo che di OpenOffice.org; per
+   esempio sotto Debian GNU/Linux è attualmente sotto
+   /usr/share/myspell/dict, mentre sotto windows si trova normalmente in una
+   directory con percorso simile a questo \Programmi\OpenOffice\share\dict\ooo)
+2) editare il file di testo dictionary.lst ed aggiungendo la seguente linea
+THES it IT th_it_IT
+3) occorre ora chiudere tutti i processi di OpenOffice.org (compreso il
+   quickstart) per poter caricare il thesaurus appena installato con il prossimo
+   documento aperto di OOo
+
+Occorre successivamente configurare OpenOffice.org affinché utilizzi il
+thesaurus italiano; per fare questo seguire i seguenti punti:
+1) aprire un qualsiasi programma di OpenOffice.org (per esempio Write)
+2) aprire il menù "Strumenti" e selezionare "Opzioni"
+3) aprire "Impostazioni lingua" (facendo click sul segno "+")
+4) selezionare "Lingue"
+5) impostare l'italiano come lingua predefinita (vedi disegno Lingua.png)
+6) selezionare "Linguistica"
+7) premere il bottone "Modifica ..."
+8) selezionare "Italiano" dal combo box
+9) mettere il check per i check box di:
+   - "Controllo ortografico"
+   - "Sillabazione"
+   - "Sinonimi"
+   Vedere disegno Linguistica-Modifica.png
+10) premere il bottone "Chiudi"
+11) premere il bottone "Ok"
+
+Ora è possibile utilizzare il thesaurus:
+1) editare una parola (es: casa)
+2) posizionarsi su casa e fare una delle seguenti cose:
+   - premere Ctrl-F7
+   - Strumenti->Sinonimi
+Nota: la parola deve essere contenuta nel thesaurus per funzionare l'esempio
+Nota: è possibile anche crearsi un bottone su una barra per la visualizzazione
+      dei sinonimi della parola su cui si è posizionati; per fare questo è
+      sufficiente posizionarsi con il cursore su una barra degli strumenti in
+      una posizione vuota (senza nessun bottone), premere con il tasto destro
+      del mouse e selezionare "Modifica" dal menù pop-up che appare. A questo
+      punto si può aprire "Varie" e selezionare il bottone "Sinonimi".
+
+
+*****************
+4. Ringraziamenti
+
+Vedere i file:
+* AUTHORS
+* lettera in inglese.txt
+
+
+******
+5.Link/download
+
+Le ultime versioni del thesaurus, thescoder e tutto quanto riguarda il progetto
+linguistico italiano può essere scaricate da qui:
+http://linguistico.sf.net/wiki
+http://sf.net/projects/linguistico
+
+
+**********************************
+***********  English  ************
+**********************************
+
+The Italian Thesaurus
+
+INDEX
+
+1. License
+2. Warnings (to read absolutely)
+3. How to install it in OpenOffice.org
+4. Thanks
+5. Links/downloads
+
+
+**********
+1. License
+
+The Italian thesaurus used by OpenOffice.org are released by Daniela Volta
+openoffice(at)keynes(dot)scuole(dot)bo(dot)it and Davide Prina
+davideprina(at)yahoo(dot)com (please change <at> with @ and
+<dot> with . in order to contact the authors) under the terms and conditions of
+the GNU General Public License (GPL) version 3.0 or above. The user,
+distributor and/or programmer after accept this license when he/she uses,
+distributes and/or modifies these files. He/she must agree with every term and
+condition included in the chosen license.
+
+From version 2.0 we have been added a GPL thesaurus found here: 
+http://search.mnogo.ru
+This thesaurus author is Marcello Bianchetti.
+All words added from that thesaurus can be found here: thes_GPL.txt
+
+
+********************************
+2. Warnings (to read absolutely)
+
+The Italian Thesaurus work only with at least OpenOffice.org (OOo) version 2.0.
+
+The index file is created by MyThes, you can find MyThes on the OOo site.
+
+
+**************************************
+3. How to install it in OpenOffice.org
+
+It is best to read the italian documentation found here:
+a) come installare il thesaurus:
+http://linguistico.sf.net/wiki/doku.php?id=come_installare_un_thesaurus
+b) come aggiornare il thesaurus:
+http://linguistico.sf.net/wiki/doku.php?id=come_aggiornare_un_thesaurus
+
+When you have the two binary files you can install they do the following:
+1) copy th_it_IT.* files into the directory with the dictionary.lst file
+2) edit the dictionary.lst file and adding the following line:
+THES it IT th_it_IT
+3) shutdown all the OOo process (also the OOo quickstart) and than start a OOo
+program to have the new Italian thesaurus ready
+
+Now you must configure OpenOffice.org:
+1) open one OOo program (for example Write)
+2) open "Tools" menù and select "Options"
+3) open "Lenguage tools"
+4) select "Lenguage"
+5) set Italian as default lenguage (as show in the file Lingua.png)
+6) select "Linguistic"
+7) press "Modify" button
+8) select "Italian" from the combo box
+9) check all the check box (as show in the file Linguistica-Modifica.png)
+10) press "Close" button
+11) press "Ok"
+
+Now you can use the Italian thesaurus using Ctrl-F7 or Tools->Thesaurus
+	 
+	 
+*********	 
+4. Thanks
+
+You can read thanks in the following files:
+* AUTHORS
+* lettera in inglese.txt
+
+******
+5.Link
+
+Last thesaurus versions and related programs can be found here
+http://linguistico.sf.net/wiki (Italian only)
+http://sf.net/projects/linguistico/
+

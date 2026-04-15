@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree_view>
+<help_section application="swriter" id="02" title="Danske sprogværktøjer">
+<node id="0216" title="Danske sprogværktøjer">
+	<topic id="da/org.openoffice.da.hunspell.dictionaries/page1.xhp">Danske Synonymer</topic>
+	<topic id="da/org.openoffice.da.hunspell.dictionaries/page2.xhp">Dansk stavekontrol</topic>
+</node>
+</help_section>
+</tree_view>

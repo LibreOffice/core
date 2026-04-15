@@ -1,0 +1,8 @@
+LICENSE :
+"An Drouizig" spelling dictionary : Lesser GNU Public License (LGPL)
+
+LAÑVAZ :
+Geriadur reizhskrivañ "An Drouizig" : Lesser GNU Public License (LGPL)
+
+Sellit testenn al lañvaz war ar pajenn da heul :
+http://www.gnu.org/licenses/lgpl.html

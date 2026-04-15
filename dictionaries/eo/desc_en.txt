@@ -1,0 +1,1 @@
+This package provides dictionaries for spelling, thesaurus, and hyphenation for Esperanto.

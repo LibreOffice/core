@@ -1,0 +1,42 @@
+SET UTF-8
+TRY naohiugtcedmylrbvskpxqfjwzNAOHIUGTCEDMYLRBVSKPXQFJWZ-
+
+MAP 18
+MAP aàảãáạăằẳẵắặâầẩẫấậ
+MAP AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ
+MAP dđ
+MAP DĐ
+MAP eèẻẽéẹêềểễếệ
+MAP EÈẺẼÉẸÊỀỂỄẾỆ
+MAP iìỉĩíị
+MAP IÌỈĨÍỊ
+MAP oòỏõóọôồổỗốộơờởỡớợ
+MAP OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ
+MAP uùủũúụưừửữứự
+MAP UÙỦŨÚỤƯỪỬỮỨỰ
+MAP yỳỷỹýỵ
+MAP YỲỶỸÝỴ
+MAP óòỏaàáả
+MAP óóỏeèéẻ
+MAP úùủụyýỳỷỵ
+MAP uưoờớỡởợ
+
+REP 18
+REP dz d
+REP ch tr
+REP d gi
+REP f ph
+REP g gh
+REP gh g
+REP gi d
+REP j g
+REP ng ngh
+REP ngh ng
+REP ou uo
+REP ou ươ
+REP uo ươ
+REP s x
+REP tr ch
+REP x s
+REP w qu
+REP z d

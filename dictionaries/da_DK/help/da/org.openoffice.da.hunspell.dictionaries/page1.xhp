@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<helpdocument version="1.0">
+<meta>
+<topic id="Danske_Synonymer" indexer="include" status="PUBLISH">
+<title id="title">Danske Synonymer</title>
+<filename>/org.openoffice.da.hunspell.dictionaries/page1.xhp</filename>
+</topic>
+</meta>
+<body>
+
+<bookmark xml-lang="da-DK" branch="index" id="bm1">
+<bookmark_value>synonymeordbog</bookmark_value>
+<bookmark_value>synonymeordbog; danske synonymer</bookmark_value>
+<bookmark_value>danske synonymer</bookmark_value>
+<bookmark_value>sprog;danske synonymer</bookmark_value>
+</bookmark>
+
+
+<paragraph role="heading" level="1">Danske Synonymer
+</paragraph>
+<paragraph role="paragraph">
+<image id="img_idtrold" src="desktop/res/extension_32.png" width="1.2156cm" height="0.6888cm"><alt id="alt_idext">Udvidelse</alt></image>
+</paragraph>
+<paragraph role="paragraph">
+Synonymordbogen består af data fra <emph>DanNet</emph>, <emph>Den Danske Ordbog</emph> og <emph>Danske Synonymer</emph>.
+</paragraph>
+<paragraph role="paragraph">
+<emph>DanNet</emph> er et forsknings- og udviklingsprojekt der går ud på at udarbejde et dansk leksikalsk-semantisk ordnet; dvs. en sprogresurse hvor ords betydningsstruktur og interne relationer er udtrykt i et formelt sprog og derved gjort anvendelige for IT-systemer der arbejder med intelligent informationshåndtering. Bag projektet står <emph>Det Danske Sprog- og Litteraturselskab (DSL)</emph> og <emph>Center for Sprogteknologi (CST)</emph>, Københavns Universitet.
+</paragraph>
+<paragraph role="paragraph">
+<emph>Den Danske Ordbog</emph> har leveret synonymer til projektet.
+</paragraph>
+<paragraph role="paragraph">
+</paragraph>Projektet er venligst sponsoreret af <emph>Lyngby-Taarbæk Kommune</emph>, <emph>Gribskov Kommune</emph> og <emph>Region Midtjylland</emph>.
+<paragraph role="paragraph">
+<emph>Danske Synonymer</emph> udvikles og vedligeholdes af <emph>Fællesskabet bag LibreOffice i Danmark</emph> og <emph>Foreningen for frit tilgængelige sprogværktøjer</emph>.
+</paragraph>
+<paragraph role="paragraph">
+Synonymordbogen er ikke komplet men vi arbejder ihærdigt for at forbedre indholdet.
+</paragraph>
+<paragraph role="paragraph">
+<image id="img_idtrold02" src="org.openoffice.da.hunspell.dictionaries/Trold.png" width="1.2156cm" height="0.6888cm"><alt id="alt_idtrold">Trolden</alt></image>
+</paragraph>
+
+<paragraph role="heading" level="2">Links
+</paragraph>
+<paragraph role="paragraph">
+LibreOffice i Danmark: <link href="http://da.libreoffice.org" name="da.libreoffice.org">da.libreoffice.org</link></paragraph>
+<paragraph role="paragraph">
+Den Danske Ordbog: <link href="http://ordnet.dk/" name="ordnet.dk">ordnet.dk</link></paragraph>
+<paragraph role="paragraph">
+DanNet: <link href="http://www.wordnet.dk" name="www.wordnet.dk">www.wordnet.dk</link></paragraph>
+<paragraph role="paragraph">
+Stavekontrolden: <link href="http://www.stavekontrolden.dk" name="www.stavekontrolden.dk">www.stavekontrolden.dk</link></paragraph>
+<paragraph role="paragraph">
+Synonymordbogen: P.t. ikke online! Kontakt via Stavekontrolden.</paragraph>
+<paragraph role="paragraph">
+Hjælp med at gøre synonymordbogen bedre: <link href="http://wiki.services.openoffice.org/wiki/Da.openoffice.org/sprog/synonym" name="Wiki">Wiki</link>
+
+
+
+
+
+</paragraph>
+
+
+</body>
+</helpdocument>

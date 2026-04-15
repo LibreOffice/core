@@ -1,0 +1,5 @@
+Corrector ortogràfic 3.0.8 • Tesaurus 2.3.1 • Partició de mots 1.5
+
+ Per informar d'un error o suggerir mots nous, feu clic a l'enllaç.
+
+ https://www.softcatala.org/projectes/corrector-ortografic/

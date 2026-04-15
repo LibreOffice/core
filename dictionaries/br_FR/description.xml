@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- http://wiki.services.openoffice.org/wiki/Extension_Dictionaries -->
+    <version value="0.16" />
+    <identifier value="breton-dictionary.from.Drouizig" />
+    <display-name>
+        <name lang="en-US">Breton spelling dictionary</name>
+    </display-name>
+    <platform value="all" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+    <publisher>
+        <name xlink:href="http://www.drouizig.org/" lang="fr">Korvigelloù an Drouizig</name>
+    </publisher>
+</description>

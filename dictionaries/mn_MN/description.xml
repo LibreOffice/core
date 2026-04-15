@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="2026.01.18" />
+    <identifier value="dict-mn" />
+    <display-name>
+        <name lang="en-US">Mongolian spelling and hyphenation dictionaries</name>
+        <name lang="mn">Монгол үгийн алдаа шалгах болон үеэр таслагч толь</name>
+    </display-name>
+    <publisher>
+        <name xlink:href="https://bataak.github.io/dict-mn/" lang="mn">Батаак</name>
+        <name xlink:href="https://bataak.github.io/dict-mn/" lang="en-US">Bataak</name>
+    </publisher>
+    <platform value="all" />
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
+    </dependencies>
+    <registration>
+    <simple-license  accept-by="admin" default-license-id="ID0" suppress-on-update="true" >
+        <license-text xlink:href="lppl.txt" lang="en" license-id="ID0" />
+    </simple-license>
+    </registration>
+    <icon>
+        <default xlink:href="DictMN.png" />
+    </icon>
+</description>

@@ -1,0 +1,2384 @@
+SET UTF-8
+TRY শষসহ়ািীুূৃেৈোৌ্ড়য়ঁংঃঅআইঈউঊঋএঐওঔকখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরল
+
+# Copyright 2018 Jacob Thomas, Bengal Creative Media LTD
+
+ICONV 1
+ICONV য় য়
+
+REP 120
+REP	আ	অা
+REP	অা	আ
+REP	য়	য়
+REP	ড়	ড়
+REP	ঢ়	ঢ়
+REP	ং	ঙ
+REP	অ	আ
+REP	আ	অ
+REP	ই	ঈ
+REP	ই	য়ি
+REP	ঈ	ই
+REP	উ	ঊ
+REP	ঊ	উ
+REP	ও	ঔ
+REP	াও	ৌ
+REP	ৌ	াও
+REP	ঔ	ও
+REP	ক	খ
+REP	ক্ষ	খ
+REP	খ	ক
+REP	খ	ক্ষ
+REP	গ	ঘ
+REP	ঘ	গ
+REP	ঙ	ং
+REP	ঙ	ঙ্গ
+REP	ঙ্গ	ঙ
+REP	চ	ছ
+REP	ছ	স
+REP	ছ	চ
+REP	জ	য
+REP	য	জ
+REP	ট	ঠ
+REP	ট	ত
+REP	ঠ	ট
+REP	ঠ	থ
+REP	ড়	র
+REP	ড়	ঢ়
+REP	ঢ়	ড়
+REP	ণ	ন
+REP	ত	ট
+REP	ত	থ
+REP	ত	ৎ
+REP	ৎ	ত
+REP	থ	ত
+REP	থ	ঠ
+REP	ন	ণ
+REP	প	ফ
+REP	প	স্প
+REP	ফ	প
+REP	ব	ভ
+REP	ভ	ব
+REP	য	জ
+REP	য়ি	ই
+REP	র	ড়
+REP	শ	স
+REP	শ	ষ
+REP	ষ	শ
+REP	ষ	স
+REP	স	শ
+REP	স	ষ
+REP	স	ছ
+REP	স্প	প
+REP	হ	হ্‌
+REP	হ্‌	হ
+REP	শ্‌	শ
+REP	শ	শ্‌
+REP	া	্যা
+REP	্যা	া
+REP	ি	ী
+REP	ি	ে
+REP	ী	ি
+REP	ী	ি
+REP	ু	ূ
+REP	ু	ো
+REP	ূ	ু
+REP	ে	ি
+REP	ো	ু
+REP	দ্ধ	ধ্য
+REP	ধ্য	দ্ধ
+REP	নহ	হ্ন
+REP	ংগ	ঙ্গ
+REP	ঙ্গ	ংগ
+REP ত্	ৎ
+REP  িউ    ু
+REP  ু	িউ
+REP  ূ	িউ
+REP  ু‍্য	িউ$
+REP  ূ‍্য	িউ
+REP	াে	ো
+REP	ো	ো
+REP	ৗে	ৌ
+REP	ৌ	ৌ
+REP	ো	ও
+REP	ও	ো
+REP ংক	ঙ্ক
+REP ঙ্ক	ংক
+REP র	য়ের
+REP	্যা	ে
+REP	ে	্যা
+REP	উ	ও
+REP	ও	উ
+REP ট্ট	ট্র
+REP	ট্র	ট্ট
+REP লড	ল্ড
+REP ল্ড	লড
+REP নং	নম্বর
+REP	ু	ুর্
+REP	ূ	ূর্
+REP	শ	স্ক
+REP	স্ক	শ
+REP	্য	ে
+REP	ে	্য
+REP	‌্যা	ে
+REP	ে	‌্যা
+REP	ত	ত্য
+REP	ত্য	ত
+REP	ত্ত	ত্য
+REP	ত্য	ত্ত
+REP	ন্ন	ন্য
+REP	ন্য	ন্ন
+
+MAP 3
+MAP য়	(য়)  (character sequence)
+MAP ড়	(ড়)  ("fi" compatibility characters for Unicode fi ligature)
+MAP	ঢ়	(ঢ়)  ("fi" compatibility characters for Unicode fi ligature)
+
+CIRCUMFIX X
+
+# ENGLISH AFFIXES
+# =====================================================
+
+# english plural (s)
+SFX	X	Y	2$
+SFX	X	0	স	.$
+SFX	X	0	স	.$
+
+# english (ed)
+SFX	e	Y	2$
+SFX	e	0	েড	[^ািীুূৃেকনসইউ]	ফেইডেড
+SFX	e	0	ড	[ািীুূৃেকনসইউ]	লিংকড/Linked, হোনড/honed, পাসড/passed
+
+
+# english (-ing)
+# ক্রপিং, ফরম্যাটিং
+SFX	g	Y	4$
+SFX	g	0	িং		.$
+SFX	g	0	িং		.
+SFX	g	0	িংয়ে/i	.
+SFX	g	0	িংয়ের/i	.
+
+# english (-es)
+SFX	J	Y	2$
+SFX	J	0	েস	.$
+SFX	J	0	েস	.
+
+# english words ADJ & NOUNS (i, এর গুলো টা)
+SFX	L	Y	12$
+SFX	L	0	ও		.
+SFX	L	0	ই		.$
+SFX	L	0	টি	.$
+SFX	L	0	টিও	.
+SFX	L	0	টিই	.
+SFX	L	0	টা	.
+SFX	L	0	টায়	.$
+SFX	L	0	টাও	.
+SFX	L	0	টাই	.
+SFX	L	0	গুলো	.
+SFX	L	0	গুলোও	.
+SFX	L	0	গুলোই.
+
+
+# english words PROP (i, এর, দের, কে)
+SFX	M	Y	8$
+SFX	M	0	ও		.
+SFX	M	0	ই		.$
+SFX	M	0	এর	.$
+SFX	M	0	এরও	.
+SFX	M	0	এরই	.
+SFX	M	0	কে	.
+SFX	M	0	কেই	.
+SFX	M	0	কেও	.
+
+# NOUN AFFIXES
+# =====================================================
+
+# Emphatic and 'o' forms
+SFX	i  Y	2
+SFX	i	0	ও		.
+SFX	i	0	ই		.
+
+SFX	ক	Y	1
+SFX	ক	0	সহ		.
+
+# r = Universals for nouns
+#   (ের,ে,কে)+ ই/ও
+#    টা,টি+(ের,ে,কে)
+#    সহ, সমূহ+ ই/ও
+SFX	r  Y 	80
+SFX	r	0	ও		.
+SFX	r	0	ই		.$
+SFX	r	0	ের		[^ািীুূৃ্েৈোৌইআউঊৎং] genitive
+SFX	r	0	েরই		[^ািীুূৃ্েৈোৌইআউঊৎং] genitive
+SFX	r	0	েরও		[^ািীুূৃ্েৈোৌইআউঊৎং] genitive
+SFX	r	ৎ	তের		ৎ 				genitive
+SFX	r	ৎ	তেরই		ৎ 				genitive
+SFX	r	ৎ	তেরও		ৎ 				genitive
+SFX	r	0	য়ের 		[ংউঊইও]			genitive	"বউয়ের","বইয়ের"
+SFX	r	0	য়েরই 		[ংউঊইও]			genitive
+SFX	r	0	য়েরও 		[ংউঊইও]			genitive
+SFX	r	0	'র		[আ]				genitive	"কের্‌আ'র"
+SFX	r	0	'রই		[আ]				genitive
+SFX	r	0	'রও		[আ]				genitive
+SFX	r	0	র		[ঁািীুূৃ্েৈোৌয়ই]	genitive	"আল্লাহ্‌র"
+SFX	r	0	রই		[ঁািীুূৃ্েৈোৌয়ই]	genitive
+SFX	r	0	রও		[ঁািীুূৃ্েৈোৌয়ই]	genitive
+SFX	r	0	ের		য়				genitive	"অধ্যায়ের"
+SFX	r	0	েরই		য়				genitive
+SFX	r	0	েরও		য়				genitive
+SFX	r	0	ে		[^ািীুূৃ্েৈোৌইওআউঊৎং] locative	"কাগজে"
+SFX	r	0	েই		[^ািীুূৃ্েৈোৌইওআউঊৎং] locative
+SFX	r	0	েও		[^ািীুূৃ্েৈোৌইওআউঊৎং] locative
+SFX	r	0	য়ে 		[ইওআউঊৎং]			genitive	"ঢেউয়ে"
+SFX	r	0	য়েই 		[ইওআউঊৎং]			genitive
+SFX	r	0	য়েও 		[ইওআউঊৎং]			genitive
+SFX	r	ৎ	তে		ৎ 				genitive
+SFX	r	ৎ	তেই		ৎ 				genitive
+SFX	r	ৎ	তেও		ৎ 				genitive
+SFX	r	0	য়		[ঁাো]			locative	ো not always though!! ("ফোটোতে")
+SFX	r	0	য়ই		[ঁাো]			locative	ো not always though!!
+SFX	r	0	য়ও		[ঁাো]			locative	ো not always though!!
+SFX	r	0	েতে		[^ঁাি্ীোেুূ্ৌৎ]	locative	ো not always though!!
+SFX	r	0	েতেও		[^ঁাি্ীোেুূ্ৌৎ]	locative	ো not always though!!
+SFX	r	0	েতেই		[^ঁাি্ীোেুূ্ৌৎ]	locative	ো not always though!!
+SFX	r	0	তে		[ঁাি্ীোেুূ্ৌ]	locative	ো not always though!!
+SFX	r	0	তেও		[ঁাি্ীোেুূ্ৌ]	locative	ো not always though!!
+SFX	r	0	তেই		[ঁাি্ীোেুূ্ৌ]	locative	ো not always though!!
+SFX	r	0	কে		.				objective
+SFX	r	0	কেই		.				objective
+SFX	r	0	কেও		.				objective
+SFX	r	0	টা		.				objective
+SFX	r	0	টায়		.				objective
+SFX	r	0	টি		.				objective
+SFX	r	0	টাও		.				objective
+SFX	r	0	টিও		.				objective
+SFX	r	0	টাই		.				objective
+SFX	r	0	টিই		.				objective
+SFX	r	0	টাকে		.				objective
+SFX	r	0	টাকেই		.				objective
+SFX	r	0	টিকেও		.				objective
+SFX	r	0	টিকে		.				objective
+SFX	r	0	টিকেই		.				objective
+SFX	r	0	টিকেও		.				objective
+SFX	r	0	টাতে		.				objective	???
+SFX	r	0	টাতেই		.				objective	???
+SFX	r	0	টার		.				objective
+SFX	r	0	টারই		.				objective
+SFX	r	0	টারও		.				objective
+SFX	r	0	টাতেও		.				objective	???
+SFX	r	0	টিতে		.				objective	???
+SFX	r	0	টিতেই		.				objective	???
+SFX	r	0	টিতেও		.				objective	???
+SFX	r	0	টির		.				objective
+SFX	r	0	টিরই		.				objective
+SFX	r	0	টিরও		.				objective
+SFX	r	0	সহ		.				objective
+SFX	r	0	সহই		.				objective
+SFX	r	0	সমূহ		.				shomuho
+SFX	r	0	সমূহই		.				shomuho
+SFX	r	0	সমূহও		.				shomuho
+SFX	r	0	সমূহে		.				shomuho
+SFX	r	0	সমূহেই	.				shomuho
+SFX	r	0	সমূহেও	.				shomuho
+SFX	r	0	সমূহের	.				shomuho
+SFX	r	0	সমূহেরই	.				shomuho
+SFX	r	0	সমূহেরও	.				shomuho
+SFX	r	0	সমূহেকে	.				shomuho
+SFX	r	0	সমূহেকেই	.				shomuho
+SFX	r	0	সমূহেকেও	.				shomuho
+
+# Three Basics: Genetive (ের),Locative (ে), Objective (কে) + ই/ও
+SFX	f  Y 	41
+SFX	f	0	ও		.
+SFX	f	0	ই		.$
+SFX	f	0	ের		[^ািীুূৃ্েৈোৌইআউঊৎং] genitive
+SFX	f	0	েরই		[^ািীুূৃ্েৈোৌইআউঊৎং] genitive
+SFX	f	0	েরও		[^ািীুূৃ্েৈোৌইআউঊৎং] genitive
+SFX	f	ৎ	তের		ৎ 				genitive
+SFX	f	ৎ	তেরই		ৎ 				genitive
+SFX	f	ৎ	তেরও		ৎ 				genitive
+SFX	f	0	য়ের 		[ংউঊইও]			genitive	"বউয়ের","বইয়ের"
+SFX	f	0	য়েরই 		[ংউঊইও]			genitive
+SFX	f	0	য়েরও 		[ংউঊইও]			genitive
+SFX	f	0	'র		[আ]				genitive	"কের্‌আ'র"
+SFX	f	0	'রই		[আ]				genitive
+SFX	f	0	'রও		[আ]				genitive
+SFX	f	0	র		[ঁািীুূৃ্েৈোৌয়ই]	genitive	"আল্লাহ্‌র"
+SFX	f	0	রই		[ঁািীুূৃ্েৈোৌয়ই]	genitive
+SFX	f	0	রও		[ঁািীুূৃ্েৈোৌয়ই]	genitive
+SFX	f	0	ের		য়				genitive	"অধ্যায়ের"
+SFX	f	0	েরই		য়				genitive
+SFX	f	0	েরও		য়				genitive
+SFX	f	0	ে		[^ািীুূৃ্েৈোৌইআউঊওৎং] locative	"কাগজে"
+SFX	f	0	েই		[^ািীুূৃ্েৈোৌইআউঊওৎং] locative
+SFX	f	0	েও		[^ািীুূৃ্েৈোৌইআউঊওৎং] locative
+SFX	f	0	য়ে 		[ইআউঊওৎং]			genitive	"ঢেউয়ে"
+SFX	f	0	য়েই 		[ইআউঊওৎং]			genitive
+SFX	f	0	য়েও 		[ইআউঊওৎং]			genitive
+SFX	f	ৎ	তে		ৎ 				genitive
+SFX	f	ৎ	তেই		ৎ 				genitive
+SFX	f	ৎ	তেও		ৎ 				genitive
+SFX	f	0	য়		[ঁাো]			locative	ো not always though!! ("ফোটোতে")
+SFX	f	0	য়ই		[ঁাো]			locative	ো not always though!!
+SFX	f	0	য়ও		[ঁাো]			locative	ো not always though!!
+SFX	f	0	েতে		[^ঁাি্ীোেুূ্ৌৎ]	locative	ো not always though!!
+SFX	f	0	েতেও		[^ঁাি্ীোেুূ্ৌৎ]	locative	ো not always though!!
+SFX	f	0	েতেই		[^ঁাি্ীোেুূ্ৌৎ]	locative	ো not always though!!
+SFX	f	0	তে		[ঁাি্ীোেুূ্ৌ]	locative	ো not always though!!
+SFX	f	0	তেও		[ঁাি্ীোেুূ্ৌ]	locative	ো not always though!!
+SFX	f	0	তেই		[ঁাি্ীোেুূ্ৌ]	locative	ো not always though!!
+SFX	f	0	কে		.				objective
+SFX	f	0	কেই		.				objective
+SFX	f	0	কেও		.				objective
+
+# j = Multiples
+#    টা,টি,গুলো,গুলি,গুলা
+SFX	j  Y 	47
+SFX	j	0	টা		.				root
+SFX	j	0	টাই		.				root
+SFX	j	0	টাও		.				root
+SFX	j	0	টায়		.				locative
+SFX	j	0	টাকে		.				objective
+SFX	j	0	টাকেই		.				objective
+SFX	j	0	টাকেও		.				objective
+SFX	j	0	টার		.				genetive
+SFX	j	0	টারই		.				genetive
+SFX	j	0	টারও		.				genetive
+SFX	j	0	টি		.				root
+SFX	j	0	টিই		.				root
+SFX	j	0	টিও		.				root
+SFX	j	0	টিয়		.				locative
+SFX	j	0	টিকে		.				objective
+SFX	j	0	টিকেই		.				objective
+SFX	j	0	টিকেও		.				objective
+SFX	j	0	টির		.				genetive
+SFX	j	0	টিরই		.				genetive
+SFX	j	0	টিরও		.				genetive
+SFX	j	0	গুলো		.				root
+SFX	j	0	গুলোই		.				root
+SFX	j	0	গুলোও		.				root
+SFX	j	0	গুলোকে		.				objective
+SFX	j	0	গুলোকেই		.				objective
+SFX	j	0	গুলোকেও		.				objective
+SFX	j	0	গুলোর		.				genetive
+SFX	j	0	গুলোরই		.				genetive
+SFX	j	0	গুলোরও		.				genetive
+SFX	j	0	গুলা		.				root
+SFX	j	0	গুলাই		.				root
+SFX	j	0	গুলাও		.				root
+SFX	j	0	গুলাকে		.				objective
+SFX	j	0	গুলাকেই		.				objective
+SFX	j	0	গুলাকেও		.				objective
+SFX	j	0	গুলার		.				genetive
+SFX	j	0	গুলারই		.				genetive
+SFX	j	0	গুলারও		.				genetive
+SFX	j	0	গুলি		.				root
+SFX	j	0	গুলিই		.				root
+SFX	j	0	গুলিও		.				root
+SFX	j	0	গুলিকে		.				objective
+SFX	j	0	গুলিকেই		.				objective
+SFX	j	0	গুলিকেও		.				objective
+SFX	j	0	গুলির		.				genetive
+SFX	j	0	গুলিরই		.				genetive
+SFX	j	0	গুলিরও		.				genetive
+
+
+# Material Nouns - no গুলো, no দের; if টুকু this or inanimate countable
+# eg লোহার, ময়দা
+SFX	m	Y	4
+SFX	m	0	0/f		.
+SFX	m	0	সহ		.
+SFX	m	0	টুকু/f		.
+SFX	m	0	মুক্ত		.
+
+
+# Abstract Nouns/Inanimate Countable Nouns
+# no দের; can have টুকু
+# eg ইতিহাস, স্বপ্ন, সহানুভূতি
+SFX	b	Y	7
+SFX	b	0	0/fj	.
+SFX	b	0	টুকু/fi	.
+SFX	b	0	কেন্দ্রিক	.
+SFX	b	0	বিষয়ক		.
+SFX	b	0	নির্ভর		.
+SFX	b	0	ভিত্তিক		.
+SFX	b	0	জুড়ে/i	.
+
+
+# For প্রতি
+SFX	প	Y	9
+SFX	প	0	i		.
+SFX	প	0	টা/i		.
+SFX	প	0	টার/i		.
+SFX	প	0	টাকে/i	.
+SFX	প	0	টাতে/i	.
+SFX	প	0	টি/i		.
+SFX	প	0	টির/i		.
+SFX	প	0	টিকে/i	.
+SFX	প	0	টিতে/i	.
+
+
+# Inanimate Countable Nouns - has গুলো, no দের; can have টুকু and টিতে
+# eg গাছ, বই
+SFX	I   Y	7
+SFX	I	0	0/fji	.
+SFX	I	0	টুকু/fi	.
+SFX	I	0	টিতে		.			$
+SFX	I	0	টিতেই		.			$
+SFX	I	0	টিতেও		.			$
+SFX	I	0	কে/i	[ািীুূৃেৈোৌ]
+SFX	I	0	সহ		বইসহ
+
+# Animate Countable Non-Human Nouns - has দের; in dictionary
+# eg খরগোশ, গরু, কুকুর, অজগর
+SFX	a  Y	15
+SFX	a  0	0/fj	.
+SFX	a  0	দের/i		.
+SFX	a  0	েরা/i		[^্‌ািীুূৃেৈোৌযরত]
+SFX	a  0	েরা/i		[^্]যঞ
+SFX	a  0	েরা/i		[^ত]্ত
+SFX	a  0	রা/i		ত্ত
+SFX	a  0	রা/i		[ািীুূৃেৈোৌর]
+SFX	a  0	রা/i		্[যঞ]
+SFX	a	্‌	্‌রা/i		[্‌]
+SFX	a  0	সহ/i	.
+SFX	a  0	পালক/i	.
+SFX	a  0	প্রীতি/i	.
+SFX	a  0	প্রীতির/i	.
+SFX	a  0	প্রীতিকে/i	.
+SFX	a  0	প্রেমী/i	.
+
+
+
+# Animate Countable Human Nouns
+# has দের; in dictionary; no গুলো allowed
+# eg 'বিচারক', 'অংশীদার',
+SFX	h  Y	14
+SFX	h  0	0/f	.
+SFX	h  0	0/j	.	'-গুলো' endings added for the sake of "জাতিগুলোকে", "মানুষগুলো"
+SFX	h  0	দের/i	.
+SFX	h  0	েরা/i		[^্‌ািীুূৃেৈোৌযরতঞ]
+SFX	h  0	েরা/i		[^্]যঞ
+SFX	h  0	েরা/i		[^ত]্ত
+SFX	h  0	রা/i		ত্ত
+SFX	h  0	রা/i		[ািীুূৃেৈোৌরঞ]
+SFX	h  0	রা/i		্[যঞ]
+SFX	h	্‌	্‌রা/i		[্‌]
+SFX	h  0	গণ/i	.
+SFX	h  0	গণকে/i	.
+SFX	h  0	সহ/r	.
+SFX	h  0	মুক্ত/i	.
+
+
+# p=Place names (proper noun)
+#  যেমন 'রাজশাহী', 'ঢাকা'
+SFX	p  Y	16
+SFX	p  0	0/fi	.
+SFX	p  0	বাসী/i		.
+SFX	p  0	বাসীকে/i	.
+SFX	p  0	বাসীদের/i	.
+SFX	p  0	বাসীরা/i	.
+SFX	p  0	বাসীর/i	.
+SFX	p  0	সংক্রান্ত	.
+SFX	p  0	সহ		.
+SFX	p  0	নির্ভর		.
+SFX	p  0	কেন্দ্রিক	.
+SFX	p  0	কেন্দ্রিকতা	.
+SFX	p  0	মুখী		.
+SFX	p  0	গামী		.
+SFX	p  0	গামীসহ	.
+SFX	p  0	জুড়ে		.
+SFX	p  0	ভিত্তিক		.
+
+
+# People names (proper noun)
+# has দের; in dictionary; no গুলো allowed
+SFX	P  Y	11
+SFX	P  0	0/fi	.
+SFX	P  0	দের/i		.
+SFX	P  0	রে		.
+SFX	P  0	েরা/ri	[^্ািীুূৃেৈোৌ]
+SFX	P  0	কেন্দ্রিক/i	.
+SFX	P  0	সহ		.
+SFX	P  0	বিরোধী		.
+SFX	P  0	বিরোধীদের	.
+SFX	P  0	বিরোধীকে	.
+SFX	P  0	বিরোধীর	.
+SFX	P  0	বিরোধীরা	.
+
+# Digits/Numbers
+SFX	d  Y	10
+SFX	d  0	0/ri	.
+SFX	d  0	খানা/i	.
+SFX	d  0	খানি/i	.
+SFX	d  0	বার/i		.
+SFX	d  0	গুণ/i		.
+SFX	d  0	গুণের/i	.
+SFX	d  0	তম/i		.
+SFX	d  0	জন/r		.
+SFX	d  0	বার/r		.
+SFX	d  0	টায়/i		.
+
+
+
+# Complete Verb Conjugations
+# =======================================================
+SFX	v	Y	536
+SFX	v	0	র/i		.		"নামানোর"				genetive$
+SFX	v	0	টা/i		.		"যাওয়াটা"				classifier$
+SFX	v	0	টায়		.		"যাওয়াটা"				classifier$
+SFX	v	0	কে/i		.		"যাওয়াকে"				objective
+SFX	v	0	তে/i		.		"যাওয়াতে"				locative$
+SFX	v	0	তো/i		.		"যাওয়াতো"				emphatic to$
+SFX	v	া	ি/wXi	[^য়]া	"জানি/চিরি"	আমি	চলিত/সাধু	present simple/present imperative$
+SFX	v	য়া	ই/xXi	[^ও]য়া	"চুই"		আমি	চলিত/সাধু	present simple/present imperative$
+SFX	v	ওয়া	ই/xXi	ওয়া		"খাই"		আমি	চলিত/সাধু	present simple/present imperative
+SFX	v	নো	ইi		নো		"বোঝাই"	আমি	চলিত		present simple/present imperative
+SFX	v	নো	ই/xXi	নো		"বুঝাই"	আমি	        সাধু	present simple/present imperative
+SFX	v	0	0/βXi	ওয়া		"রহি"	আমি	        সাধু	present simple/present imperative$
+SFX	v	া	িস/xXi	[^য়]া	"জানিস"	তুই	চলিত/সাধু 	present simple
+SFX	v	য়া	স/xX	[^ও]য়া	"চুস"		তুই	চলিত/সাধু	present simple
+SFX	v	ওয়া	স/WX	ওয়া		"খাস"	তুই	চলিত/সাধু 	present simple$
+SFX	v	নো	স		নো		"বোঝাস"	তুই	চলিত  	present simple$
+SFX	v	য়া	ইস/xX	[^ও]য়া	"চুইস"	তুই	         সাধু 	present simple$
+SFX	v	নো	স/xX	নো		"বুঝাস"	তুই	         সাধু 	present simple$
+SFX	v	া	.		[^য়]া	"জান"	তুমি 	চলিত/সাধু 	present simple
+SFX	v	য়া	ও		[^ও]য়া	"চোও"	তুমি	চলিত/সাধু	present simple
+SFX	v	ওয়া	ও/θX		ওয়া		"খাও"	তুমি 	চলিত/সাধু 	present simple/present imperative
+SFX	v	নো	ও		নো		"বোঝাও"	তুমি	চলিত	 	present simple$
+SFX	v	নো	ও/xX		নো		"বুঝাও"	তুমি	        সাধু 	present simple$
+SFX	v	ওয়া	হ		[^া]ওয়া	"রহ"		তুমি	        সাধু	present simple
+SFX	v	া	েন/Ni	[^য়]া	"জানেন"	তিনি	চলিত/সাধু 	present simple
+SFX	v	য়া	ন/i		[^ও]য়া	"চোন"	তিনি	চলিত/সাধু	present simple
+SFX	v	ওয়া	ন/i		ওয়া		"খান"	তিনি	চলিত/সাধু 	present simple
+SFX	v	নো	ন/i		নো		"বোঝান"	তিনি	চলিত	 	present simple$
+SFX	v	নো	ন/xXi	নো		"বুঝান"	তিনি	        সাধু 	present simple$
+SFX	v	ওয়া	হেন		[^া]ওয়া	"রহেন"	তিনি	        সাধু	present simple
+SFX	v	ওয়া	হেনও		[^া]ওয়া	"রহেনও"	তিনি	        সাধু	present simple
+SFX	v	া	ে 		[^য়]া	"জানে"	সে	চলিত/সাধু 	present simple
+SFX	v	া	েও		[^য়]া	"জানেও"	সে	চলিত/সাধু 	present simple
+SFX	v	য়া	য়		[^ও]য়া	"চোয়"	সে	চলিত/সাধু	present simple
+SFX	v	য়া	য়ও		[^ও]য়া	"চোয়ও"	সে	চলিত/সাধু	present simple
+SFX	v	ওয়া	য়		ওয়া		"খায়"	সে	চলিত/সাধু 	present simple$
+SFX	v	ওয়া	য়ও		ওয়া		"খায়ও"	সে	চলিত/সাধু 	present simple$
+SFX	v	নো	য়		নো		"বোঝায়"	সে	চলিত/সাধু 	present simple$
+SFX	v	নো	য়ও		নো		"বোঝায়"	সে	চলিত/সাধু 	present simple$
+SFX	v	নো	য়/xX		নো		"বুঝায়"	সে	চলিত/সাধু 	present simple$
+SFX	v	নো	য়ও/xX	নো		"বুঝায়ও"	সে	চলিত/সাধু 	present simple$
+SFX	v	ওয়া	হে/i		[^া]ওয়া	"রহে"	সে	        সাধু	present simple
+SFX	v	া	0/N		[^য়]া	"জান"	তুই	চলিত/সাধু 	present imperative
+SFX	v	য়া	0 		[^ও]য়া	"চো"		তুই	চলিত/সাধু	present imperative$
+SFX	v	ওয়া	0		ওয়া		"খা"		তুই	চলিত/সাধু 	present imperative					$
+SFX	v	নো	0		নো		"বোঝা"	তুই	চলিত	 	present imperative					$
+SFX	v	নো	0/xX	নো		"বুঝা"	তুই	        সাধু 	present imperative					$
+SFX	v	া	্‌/N		া		"জান্‌"	তুই	চলিত/সাধু 	present imperative alt ??? (banglatangla.com)
+SFX	v	া	্		া		"কর‌্"	তুই	চলিত/সাধু 	present imperative alt ??? (banglatangla.com)
+SFX	v	া	ো 		[^য়]া	"জানো"	তুমি	চলিত/সাধু	present imperative$
+SFX	v	য়া	ও 		[^ওয়া]য়া	"চোও"	তুমি	চলিত/সাধু	present imperative$
+SFX	v	ওয়া	ও		ওয়া		"খাও"	তুমি 	চলিত/সাধু 	present imperative (a repeat)
+SFX	v	নো	ও		নো		"ঘুমাও"	তুমি 	চলিত/সাধু 	present imperative (a repeat)
+SFX	v	া	ুক/wX	[^য়]া	"জানুক"	সে	চলিত/সাধু	present imperative
+SFX	v	য়া	ক/xX	[^ও]য়া 	"চুক"	সে	চলিত/সাধু	present imperative
+SFX	v	াওয়া	াক		াওয়া 	"খাক"	সে	চলিত/সাধু	present imperative
+SFX	v	নো	ক/ZX	নো		"বোঝাক"	সে	চলিত	 	present imperative
+SFX	v	নো	ক/xX	নো		"বুঝাক"	সে	        সাধু 	present imperative
+SFX	v	ওয়া	হি		[^া]ওয়া	"রহি"	আমি	        সাধু	present imperative
+SFX	v	ওয়া	হ্		[^া]ওয়া	"রহ্"		তুই	        সাধু	present imperative
+SFX	v	ওয়া	হো		[^া]ওয়া	"রহো"	তুমি	        সাধু	present imperative
+SFX	v	ওয়া	োক		[^া]ওয়া	"রোক" 	সে	চলিত	 	present imperative
+SFX	v	ওয়া	হুক		[^া]ওয়া	"রহুক" 	সে	        সাধু	present imperative$
+SFX	v	ওয়া	হুন		[^া]ওয়া	"রহুন"	তিনি	        সাধু	present imperative
+SFX	v	য়া	উন/xX	[^ও]য়া 	"চুউন"	সে	চলিত/সাধু	present imperative
+SFX	v	য়া	উক/xX	[^ও]য়া 	"চুউক"	সে	চলিত/সাধু	present imperative
+SFX	v	ওয়া	উক/ζX	[^া]ওয়া 	"খউক"	সে	চলিত/সাধু	present imperative
+SFX	v	ওয়া	উন/ζX	[^া]ওয়া 	"খউন"	তিনি	চলিত/সাধু	present imperative
+SFX	v	ওয়া	উক/ηX	[^া]ওয়া 	"খউক"	সে	চলিত/সাধু	present imperative
+SFX	v	ওয়া	উন/ηX	[^া]ওয়া 	"খউন"	তিনি	চলিত/সাধু	present imperative
+SFX	v	া	ুন/wX	া		"জানুন"	তিনি	চলিত/সাধু 	present imperative
+SFX	v	য়া	ন/xX		[^ও]য়া	"চুন"		তিনি	চলিত		present imperative
+SFX	v	ওয়া	ন/xX		ওয়া		"খান"	তিনি	চলিত/সাধু 	present imperative (a repeat)
+SFX	v	নো	ন/ZX		নো		"ঘুমান"	তিনি	চলিত/সাধু 	present imperative (a repeat)
+SFX	v	ওয়া	োন		[^া]ওয়া	"রোন" 	তিনি	চলিত/সাধু 	present simple$
+SFX	v	া	ছি/wX	[^য়]া	"জানছি"	আমি	চলিত		present continuous
+SFX	v	য়া	চ্ছি/xX	[^ও]য়া	"চুচ্ছি"	আমি	চলিত		present continuous				$
+SFX	v	ওয়া	চ্ছি/xX	ওয়া		"খাচ্ছি"	আমি	চলিত		present continuous	$
+SFX	v	নো	চ্ছি/ZX	নো		"ঘুমাচ্ছি"	আমি	চলিত		present continuous	$
+SFX	v	া	ছিস/wX	[^য়]া	"জানছিস"	তুই	চলিত		present continuous
+SFX	v	য়া	চ্ছিস/xX	[^ও]য়া	"চুচ্ছিস"	তুই	চলিত		present continuous
+SFX	v	ওয়া	চ্ছিস/xX	ওয়া		"খাচ্ছিস"	তুই	চলিত		present continuous$
+SFX	v	নো	চ্ছিস/ZX	নো		"ঘুমাচ্ছিস"	তুই	চলিত		present continuous	$
+SFX	v	া	ছ/wX		[^য়]া	"জানছ"	তুমি	চলিত		present continuous
+SFX	v	য়া	চ্ছ/xX	[^ও]য়া	"চুচ্ছ"	তুমি	চলিত		present continuous
+SFX	v	ওয়া	চ্ছ/xX	ওয়া		"খাচ্ছ"	তুমি	চলিত		present continuous
+SFX	v	নো	চ্ছ/ZX	নো		"ঘুমাচ্ছ"	তুমি	চলিত		present continuous	$
+SFX	v	া	ছে/wX	[^য়]া	"জানছে"	সে	চলিত		present continuous
+SFX	v	য়া	চ্ছে/xX	[^ও]য়া	"চুচ্ছে"	সে	চলিত		present continuous
+SFX	v	ওয়া	চ্ছে/xX	ওয়া		"খাচ্ছে"	সে	চলিত		present continuous
+SFX	v	নো	চ্ছে/ZX	নো		"ঘুমাচ্ছে"	সে	চলিত		present continuous	$
+SFX	v	া	ছেন/wX	[^য়]া	"জানছেন"	তিনি	চলিত		present continuous
+SFX	v	য়া	চ্ছেন/xX	[^ও]য়া	"চুচ্ছেন"	তিনি	চলিত		present continuous$
+SFX	v	ওয়া	চ্ছেন/xX	ওয়া		"খাচ্ছেন"	তিনি	চলিত		present continuous$
+SFX	v	নো	চ্ছেন/ZX	নো		"ঘুমাচ্ছেন"	তিনি	চলিত		present continuous	$
+SFX	v	ওয়া	ইছি		ওয়া		"খাইছি"	আমি	চলিত?	present continuous alt (HRT p154) আঞ্চলিক
+SFX	v	ওয়া	ইছিস		ওয়া		"খাইছিস"	তুই	চলিত?	present continuous alt (HRT p154) আঞ্চলিক
+SFX	v	ওয়া	ইছ		ওয়া		"খাইছ"	তুমি	চলিত?	present continuous alt (HRT p154) আঞ্চলিক
+SFX	v	ওয়া	ইছে		ওয়া		"খাইছে"	সে	চলিত?	present continuous alt (HRT p154) আঞ্চলিক
+SFX	v	ওয়া	ইছেন		ওয়া		"খাইছেন"	তিনি	চলিত?	present continuous alt (HRT p154) আঞ্চলিক
+SFX	v	া	িতেছি/wX	া		"জানিতেছি" আমি	        সাধু	present continuous	$
+SFX	v	য়া	ইতেছি/xX	[^ও]য়া	"চুইতেছি"	আমি	         সাধু 	present continuous
+SFX	v	ওয়া	তেছি/βX	ওয়া	"খাইতেছি"/"চাহিতেছি" আমি সাধু 	present continuous	$
+SFX	v	নো	ইতেছি/OX	নো		 "ঘুমাইতেছি" আমি       সাধু	present continuous
+SFX	v	া	িতেছিস/wX [^য়]া	"জানিতেছিস" তুই	        সাধু	present continuous$
+SFX	v	য়া	ইতেছিস/xX [^ও]য়া	"চুইতেছিস"	তুই	        সাধু 	present continuous
+SFX	v	ওয়া	তেছিস/βX	ওয়া		"খাইতেছিস" তুই	        সাধু	present continuous$
+SFX	v	নো	ইতেছিস/OX নো		"ঘুমাইতেছিস" তুই	        সাধু	present continuous$
+SFX	v	া	িতেছ/wX	[^য়]া	"জানিতেছ"	তুমি	        সাধু	present continuous$
+SFX	v	য়া	ইতেছ/xX	[^ও]য়া	"চুইতেছ"	তুমি	        সাধু 	present continuous
+SFX	v	ওয়া	তেছ/βX	ওয়া		"খাইতেছ"	তুমি	        সাধু	present continuous
+SFX	v	নো	ইতেছ/OX	নো		"ঘুমাইতেছ" তুমি	        সাধু	present continuous	$
+SFX	v	া	িতেছে/wX	[^য়]া	"জানিতেছে" সে	        সাধু	present continuous
+SFX	v	য়া	ইতেছে/xX	[^ও]য়া	"চুইতেছে"	সে	        সাধু 	present continuous
+SFX	v	ওয়া	তেছে/βX	ওয়া		"খাইতেছে"	সে	        সাধু	present continuous
+SFX	v	নো	ইতেছে/OX	নো		"ঘুমাইতেছে" 	সে	        সাধু	present continuous	$
+SFX	v	া	িতেছেন/wX	[^য়]া	"জানিতেছেন"	তিনি	        সাধু	present continuous
+SFX	v	য়া	ইতেছেন/xX	[^ও]য়া	"চুইতেছেন"	তিনি	        সাধু 	present continuous
+SFX	v	ওয়া	তেছেন/βX	ওয়া		"খাইতেছেন"	তিনি	        সাধু	present continuous
+SFX	v	নো	ইতেছেন/OX	নো		"ঘুমাইতেছেন" তিনি	        সাধু	present continuous	$
+SFX	v	া	ব/wX		^য়া]া		"জানব"	আমি	চলিত		future & future imperative
+SFX	v	য়া	ব		[^ও]য়া	"চোব"		আমি	চলিত		future & future imperative
+SFX	v	ওয়া	ব/γX		ওয়া		"খাব"		আমি	চলিত		future & future imperative
+SFX	v	নো	ব/ZX		নো		"ঘুমাব"	আমি	চলিত		future & future imperative
+SFX	v	া	বো/wX	^য়া]া		"জানবো"	আমি	চলিত		future & future imperative alt
+SFX	v	য়া	বো		[^ও]য়া	"চোবো"	আমি	চলিত		future & future imperative alt
+SFX	v	ওয়া	বো/γX	ওয়া		"খাবো"	আমি	চলিত		future & future imperative alt
+SFX	v	নো	বো/ZX	নো		"ঘুমাবো"	আমি	চলিত		future & future imperative
+SFX	v	া	বি/wX		^য়া]া		"জানবি"	তুই	চলিত		future & future imperative
+SFX	v	য়া	বি/xX		[^ও]য়া	"চুবি"		তুই	চলিত		future & future imperative
+SFX	v	ওয়া	বি/IX		ওয়া		"খাবি"		তুই	চলিত		future & future imperative
+SFX	v	নো	বি/ZX		নো		"ঘুমাবি"	তুই	চলিত		future & future imperative
+SFX	v	ওয়া	বা/IX		ওয়া		"খাবা"		তুই	চলিত		future & future imperative alt
+SFX	v	নো	বা/ZX		নো		"ঘুমাবা"	তুই	চলিত		future & future imperative alt
+SFX	v	া	বে/wX		^য়া]া		"জানবে"	তুমি/সে চলিত		future & future imperative
+SFX	v	য়া	বে		[^ও]য়া	"চোবে"	তুমি/সে চলিত		future & future imperative
+SFX	v	ওয়া	বে/γX	ওয়া		"খাবে"		তুমি/সে চলিত		future & future imperative
+SFX	v	নো	বে/ZX	নো		"ঘুমাবে"	তুমি	চলিত		future & future imperative
+SFX	v	া	বা/wX		^য়া]া		"জানবা"	তুমি	চলিত		future & future imperative alt আঞ্চলিক
+SFX	v	য়া	বা		[^ও]য়া	"চোবা"	তুমি	চলিত		future & future imperative alt আঞ্চলিক
+SFX	v	া	বেন/wX	া 		"জানবেন"	তিনি	চলিত		future & future imperative
+SFX	v	য়া	বেন		[^ও]য়া	"চোবেন"	তিনি	চলিত		future & future imperative
+SFX	v	ওয়া	বেন/γX	ওয়া 		"খাবেন"	তিনি	চলিত		future & future imperative
+SFX	v	নো	বেন/ZX	নো		"ঘুমাবেন"	তিনি	চলিত		future & future imperative
+SFX	v	া	িব/wX	^য়া]া		"জানিব"	আমি	        সাধু	future & future imperative
+SFX	v	য়া	ইব/xX	[^ও]য়া	"চুইব"		আমি	        সাধু	future & future imperative
+SFX	v	ওয়া	ব/βX		ওয়া		"খাইব"	আমি	        সাধু	future & future imperative
+SFX	v	নো	ইব/OX	নো		"ঘুমাইব"	আমি	        সাধু	future & future imperative
+SFX	v	া	িবি/wX	^য়া]া		"জানিবি"	তুই	        সাধু	future & future imperative
+SFX	v	য়া	ইবি/xX	[^ও]য়া	"চুইবি"	তুই	        সাধু	future & future imperative
+SFX	v	ওয়া	বি/βX		ওয়া		"খাইবি"	তুই 	        সাধু	future & future imperative
+SFX	v	নো	ইবি/OX	নো		"ঘুমাইবি"	তুই	        সাধু	future & future imperative
+SFX	v	া	িবা/wX	^য়া]া		"জানিবা"	তুই 	        সাধু	future & future imperative alt ???
+SFX	v	য়া	ইবা/xX	[^ও]য়া	"চুইবা"	তুই	        সাধু	future & future imperative alt ???
+SFX	v	ওয়া	বা/βX		ওয়া		"খাইবা"	তুই 	        সাধু	future & future imperative alt ???
+SFX	v	নো	ইবা/OX	নো		"ঘুমাইবা"	তুই	        সাধু	future & future imperative alt ???
+SFX	v	া	িবে/wX	^য়া]া		"জানিবে"	তুমি/সে        সাধু	future & future imperative
+SFX	v	য়া	ইবে/xX	[^ও]য়া	"চুইবে"	তুমি/সে        সাধু	future & future imperative
+SFX	v	ওয়া	বে/βX	ওয়া		"খাইবে"	তুমি/সে        সাধু	future & future imperative
+SFX	v	নো	ইবে/OX	নো		"ঘুমাইবে"	তুমি/সে        সাধু	future & future imperative
+SFX	v	া	িবেন/wX	^য়া]া		"জানিবেন"	তিনি	        সাধু	future & future imperative
+SFX	v	য়া	ইবেন/xX	[^ও]য়া	"চুইবেন"	তিনি	        সাধু	future & future imperative
+SFX	v	ওয়া	বেন/βX	ওয়া		"খাইবেন"	তিনি	        সাধু	future & future imperative
+SFX	v	নো	ইবেন/OX	নো		"ঘুমাইবেন"	তিনি	        সাধু	future & future imperative
+SFX	v	া	লাম/wX	[^য়]া	"জানলাম"	আমি	চলিত		past simple
+SFX	v	া	লুম/wX	[^য়]া	"জানলুম"	আমি	চলিত		past simple	আঞ্চলিক
+SFX	v	া	লেম/wX	[^য়]া	"জানলেম"	আমি	চলিত		past simple	আঞ্চলিক
+SFX	v	য়া	লাম/xX	[^ও]য়া 	"চুলাম"	আমি	চলিত		past simple
+SFX	v	য়া	লুম/xX	[^ও]য়া 	"চুলুম"	আমি	চলিত		past simple	আঞ্চলিক
+SFX	v	য়া	লেম/xX	[^ও]য়া 	"চুলেম"	আমি	চলিত		past simple	আঞ্চলিক
+SFX	v	ওয়া	লাম/εX	ওয়া		"খেলাম"	আমি	চলিত		past simple
+SFX	v	ওয়া	লুম/εX	ওয়া		"খেলুম"	আমি	চলিত		past simple	আঞ্চলিক
+SFX	v	ওয়া	লেম/εX	ওয়া		"খেলেম"	আমি	চলিত		past simple	আঞ্চলিক
+SFX	v	নো	লাম/ZX	নো		"ঘুমালাম"	আমি	চলিত		past simple
+SFX	v	নো	লুম/ZX	নো		"ঘুমালুম"	আমি	চলিত		past simple	আঞ্চলিক
+SFX	v	নো	লেম/ZX	নো		"ঘুমালেম"	আমি	চলিত		past simple	আঞ্চলিক
+SFX	v	া	লি/wX 	[^য়]া	"জানলি"	তুই	চলিত		past simple
+SFX	v	য়া	লি/xX		[^ও]য়া 	"চুলি"		তুই	চলিত		past simple
+SFX	v	ওয়া	লি/εX		ওয়া		"খেলি"	তুই	চলিত		past simple
+SFX	v	নো	লি/ZX		নো		"ঘুমালি"	তুই	চলিত		past simple
+SFX	v	া	লে/wXi	[^য়]া	"জানলে"	তুমি	চলিত		past simple
+SFX	v	য়া	লে/xXi	[^ও]য়া 	"চুলে"		তুমি	চলিত		past simple
+SFX	v	ওয়া	লে/εXi	ওয়া		"খেলে"	তুমি	চলিত		past simple
+SFX	v	নো	লে/ZXi	নো		"ঘুমালে"	তুমি	চলিত		past simple
+SFX	v	া	ল/wX		[^য়]া	"জানল"	সে	চলিত		past simple
+SFX	v	য়া	ল/xX		[^ও]য়া 	"চুল"		সে	চলিত		past simple
+SFX	v	ওয়া	ল/εX		ওয়া		"খেল"		সে	চলিত		past simple
+SFX	v	নো	ল/ZX		নো		"ঘুমাল"	সে	চলিত		past simple
+SFX	v	া	লো/wX	[^য়]া	"জানলো"	সে	চলিত		past simple alt ???
+SFX	v	য়া	লো/xX	[^ও]য়া 	"চুলো"		সে	চলিত		past simple alt ???
+SFX	v	ওয়া	লো/εX	ওয়া		"খেলো"	সে	চলিত		past simple alt ???
+SFX	v	নো	লো/ZX	নো		"ঘুমালো"	সে	চলিত		past simple alt ???
+SFX	v	া	লেন/wX	[^য়]া	"জানলেন"	তিনি	চলিত		past simple
+SFX	v	য়া	লেন/xX	[^ও]য়া 	"চুলেন"	তিনি	চলিত		past simple
+SFX	v	ওয়া	লেন/εX	ওয়া		"খেলেন"	তিনি	চলিত		past simple
+SFX	v	নো	লেন/ZX	নো		"ঘুমালেন"	তুমি	চলিত		past simple
+SFX	v	া	িলাম/wX	[^য়]া	"জানিলাম"	আমি	        সাধু	past simple
+SFX	v	া	িলাম/wX	[^য়]া	"জানিলাম"	আমি	        সাধু	past simple
+SFX	v	া	িলাম/wX	[^য়]া	"জানিলাম"	আমি	        সাধু	past simple
+SFX	v	য়া	ইলাম/xX	[^ও]য়া 	"চুইলাম"	আমি	        সাধু	past simple
+SFX	v	ওয়া	লাম/βX	ওয়া		"খাইলাম"	আমি	        সাধু	past simple
+SFX	v	নো	ইলাম/OX	নো		"ঘুমাইলাম"	আমি	        সাধু	past simple
+SFX	v	া	িলি/wX 	[^য়]া	"জানিলি"	তুই	        সাধু	past simple
+SFX	v	য়া	ইলি/xX	[^ও]য়া 	"চুইলি"	তুই	        সাধু	past simple
+SFX	v	ওয়া	লি/βX		ওয়া		"খাইলি"	তুই	        সাধু	past simple
+SFX	v	নো	ইলি/OX	নো		"ঘুমাইলি"	তুই	        সাধু	past simple
+SFX	v	া	িলে/wXi	[^য়]া	"জানিলে"	তুমি	        সাধু	past simple
+SFX	v	য়া	ইলে/xXi	[^ও]য়া 	"চুইলে"	তুমি	        সাধু	past simple
+SFX	v	ওয়া	লে/βXi	ওয়া		"খাইলে"	তুমি	        সাধু	past simple
+SFX	v	নো	ইলে/OXi	নো		"ঘুমাইলে"	তুমি	        সাধু	past simple
+SFX	v	া	িল/wX	[^য়]া	"জানিল"	সে	        সাধু	past simple
+SFX	v	য়া	ইল/xX	[^ও]য়া 	"চুইল"		সে	        সাধু	past simple
+SFX	v	ওয়া	ল/βX		ওয়া		"খাইল"	সে	        সাধু	past simple
+SFX	v	নো	ইল/OX	নো		"ঘুমাইল"	সে	        সাধু	past simple
+SFX	v	া	িলো/wX	[^য়]া	"জানিলো"	সে	        সাধু	past simple alt ???
+SFX	v	য়া	ইলো/xX	[^ও]য়া 	"চুইলো"	সে	        সাধু	past simple alt ???
+SFX	v	ওয়া	লো/βX	ওয়া		"খাইলো"	সে	        সাধু	past simple alt ???
+SFX	v	নো	ইলো/OX	নো		"ঘুমাইলো"	সে	        সাধু	past simple alt ???
+SFX	v	া	িলেন/wX	[^য়]া	"জানিলেন"	তিনি	        সাধু	past simple
+SFX	v	য়া	ইলেন/xX	[^ও]য়া 	"চুইলেন"	তিনি	        সাধু	past simple
+SFX	v	ওয়া	লেন/βX	ওয়া		"খাইলেন"	তিনি	        সাধু	past simple
+SFX	v	নো	ইলেন/OX	নো		"ঘুমাইলেন"	তিনি	        সাধু	past simple
+SFX	v	া	তাম/wX	[^য়]া	"জানতাম"	আমি	চলিত		past habitual/cond.
+SFX	v	া	তুম/wX	[^য়]া	"জানতুম"	আমি	চলিত		past habitual/cond. আঞ্চলিক
+SFX	v	া	তেম/wX	[^য়]া	"জানতেম"	আমি	চলিত		past habitual/cond. আঞ্চলিক
+SFX	v	য়া	তাম/xX	[^ও]য়া	"চুতাম"	আমি	চলিত		past habitual/cond.
+SFX	v	য়া	তুম/xX	[^ও]য়া	"চুতুম"	আমি	চলিত		past habitual/cond. আঞ্চলিক
+SFX	v	য়া	তেম/xX	[^ও]য়া	"চুতেম"	আমি	চলিত		past habitual/cond. আঞ্চলিক
+SFX	v	ওয়া	তাম/αX	ওয়া		"খেতাম"	আমি	চলিত		past habitual/cond.
+SFX	v	ওয়া	তুম/αX	ওয়া		"খেতুম"	আমি	চলিত		past habitual/cond. আঞ্চলিক
+SFX	v	ওয়া	তেম/αX	ওয়া		"খেতেম"	আমি	চলিত		past habitual/cond. আঞ্চলিক
+SFX	v	নো	তাম/ZX	নো		"ঘুমাতাম"	আমি	চলিত		past habitual/cond.
+SFX	v	নো	তুম/ZX	নো		"ঘুমাতুম"	আমি	চলিত		past habitual/cond. আঞ্চলিক
+SFX	v	নো	তেম/ZX	নো		"ঘুমাতেম"	আমি	চলিত		past habitual/cond. আঞ্চলিক
+SFX	v	া	তিস/wX	[^য়]া	"জানতিস"	তুই	চলিত		past habitual/cond.
+SFX	v	য়া	তিস/xX	[^ও]য়া	"চুতিস"	তুই	চলিত		past habitual/cond.
+SFX	v	ওয়া	তিস/αX	ওয়া		"খেতিস"	তুই	চলিত		past habitual/cond.
+SFX	v	নো	তিস/ZX	নো		"ঘুমাতিস"	তুই	চলিত		past habitual/cond.
+SFX	v	া	তি/wX		[^য়]া		"জানতি"	তুই	চলিত		past habitual/cond.	alt ???
+SFX	v	য়া	তি/xX	[^ও]য়া		"চুতি"		তুই	চলিত		past habitual/cond.	alt ???
+SFX	v	ওয়া	তি/αX	ওয়া			"খেতি"	তুই	চলিত		past habitual/cond.	alt ???
+SFX	v	নো	তি/ZX	নো			"ঘুমাতি"	তুই	চলিত		past habitual/cond.	alt ???
+SFX	v	া	তে/wXi	[^য়]া		"জানতে"	তুমি	চলিত		past habitual/cond.
+SFX	v	য়া	তে/xXi	[^ও]য়া	"চুতে"		তুমি	চলিত		past habitual/cond.
+SFX	v	ওয়া	তে/αXi	ওয়া		"খেতে"	তুমি	চলিত		past habitual/cond.
+SFX	v	নো	তে/ZXi	নো		"ঘুমাতে"	তুমি	চলিত		past habitual/cond.
+SFX	v	া	ত/wX		[^য়]া		"জানত"	সে	চলিত		past habitual/cond.
+SFX	v	য়া	ত/xX		[^ও]য়া	"চুত"		সে	চলিত		past habitual/cond.
+SFX	v	ওয়া	ত/αX		ওয়া		"খেত"		সে	চলিত		past habitual/cond.
+SFX	v	নো	ত/ZX		নো		"ঘুমাত"	সে	চলিত		past habitual/cond.	alt ???
+SFX	v	া	তো/wX	[^য়]া		"জানতো"	সে	চলিত		past habitual/cond. alt ??????
+SFX	v	য়া	তো/xX	[^ও]য়া	"চুতো"	সে	চলিত		past habitual/cond. alt ??????
+SFX	v	ওয়া	তো/αX	ওয়া		"খেতো"	সে	চলিত		past habitual/cond. alt ??????
+SFX	v	নো	তো/ZX	নো		"ঘুমাতো"	সে	চলিত		past habitual/cond.	alt ???
+SFX	v	া	তেন/wX	[^য়]া		"জানতেন"	তিনি	চলিত		past habitual/cond.
+SFX	v	য়া	তেন/xX	[^ও]য়া	"চুতেন"	তিনি	চলিত		past habitual/cond.
+SFX	v	ওয়া	তেন/αX	ওয়া		"খেতেন"	তিনি	চলিত		past habitual/cond.
+SFX	v	নো	তেন/ZX	নো		"ঘুমাতেন"	তিনি	চলিত		past habitual/cond.	alt ???
+SFX	v	া	িতাম/wX	[^য়]া	"জানিতাম"	আমি	        সাধু	past habitual/cond.
+SFX	v	য়া	ইতাম/xX	[^ও]য়া	"চুইতাম"	আমি	        সাধু	past habitual/cond.
+SFX	v	ওয়া	তাম/βX	ওয়া		"খাইতাম"	আমি	        সাধু	past habitual/cond.
+SFX	v	নো	ইতাম/OX	নো		"ঘুমাইতাম"	আমি	        সাধু	past habitual/cond.
+SFX	v	া	িতিস/wX	[^য়]া	"জানিতিস"	তুই	        সাধু	past habitual/cond.
+SFX	v	য়া	ইতিস/xX	[^ও]য়া	"চুইতিস"	তুই	        সাধু	past habitual/cond.
+SFX	v	ওয়া	তিস/βX	ওয়া		"খাইতিস"	তুই	        সাধু	past habitual/cond.
+SFX	v	নো	ইতিস/OX	নো		"ঘুমাইতিস"	তুই	        সাধু	past habitual/cond.
+SFX	v	া	িতে/wX	[^য়]া	"জানিতে"	তুমি	        সাধু	past habitual/cond.
+SFX	v	য়া	ইতে/xXi	[^ও]য়া	"চুইতে"	তুমি	        সাধু	past habitual/cond.
+SFX	v	ওয়া	তে/βXi	ওয়া		"খাইতে"	তুমি	        সাধু	past habitual/cond.
+SFX	v	নো	ইতে/OXi	নো		"ঘুমাইতে"	তুমি	        সাধু	past habitual/cond.
+SFX	v	া	িত/wX	[^য়]া	"জানিত"	সে	        সাধু	past habitual/cond.
+SFX	v	য়া	ইত/xX	[^ও]য়া	"চুইত"	সে	        সাধু	past habitual/cond.
+SFX	v	ওয়া	ত/βX		ওয়া		"খাইত"	সে	        সাধু	past habitual/cond.
+SFX	v	নো	ইত/OX	নো		"ঘুমাইত"	সে	        সাধু	past habitual/cond.
+SFX	v	া	িতেন/wX	[^য়]া	"জানিতেন"	তিনি	        সাধু	past habitual/cond.
+SFX	v	য়া	ইতেন/xX	[^ও]য়া	"চুইতেন"	তিনি	        সাধু	past habitual/cond.
+SFX	v	ওয়া	তেন/βX	ওয়া		"খাইতেন"	তিনি	        সাধু	past habitual/cond.
+SFX	v	নো	ইতেন/OX	নো		"ঘুমাইতেন"	তিনি	        সাধু	past habitual/cond.
+SFX	v	া	ছিলাম/wX	[^য়]া	"জানছিলাম"	আমি	চলিত		past continuous
+SFX	v	া	ছিলুম/wX	[^য়]া	"জানছিলুম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	v	া	ছিলেম/wX	[^য়]া	"জানছিলেম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	v	য়া	চ্ছিলাম/xX	[^ও]য়া	"চুচ্ছিলাম"	আমি	চলিত		past continuous
+SFX	v	য়া	চ্ছিলুম/xX	[^ও]য়া	"চুচ্ছিলুম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	v	য়া	চ্ছিলেম/xX	[^ও]য়া	"চুচ্ছিলেম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	v	ওয়া	চ্ছিলাম/ζX	ওয়া		"খাচ্ছিলাম"	আমি	চলিত		past continuous
+SFX	v	ওয়া	চ্ছিলুম/ζX	ওয়া		"খাচ্ছিলুম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	v	ওয়া	চ্ছিলেম/ζX	ওয়া		"খাচ্ছিলেম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	v	ওয়া	ইছিলাম/ηX	ওয়া		"রইছিলাম"	আমি	চলিত		past continuous
+SFX	v	ওয়া	ইছিলুম/ηX	ওয়া		"রইছিলুম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	v	ওয়া	ইছিলেম/ηX	ওয়া		"রইছিলেম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	v	নো	চ্ছিলাম/ZX	নো		"ঘুমাচ্ছিলাম"	আমি	চলিত		past continuous
+SFX	v	নো	চ্ছিলুম/ZX	নো		"ঘুমাচ্ছিলুম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	v	নো	চ্ছিলেম/ZX	নো		"ঘুমাচ্ছিলেম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	v	া	ছিলি/wX	[^য়]া	"জানছিলি"	তুই	চলিত		past continuous
+SFX	v	য়া	চ্ছিলি/xX	[^ও]য়া	"চুচ্ছিলি"	তুই	চলিত		past continuous$
+SFX	v	ওয়া	চ্ছিলি/ζX	ওয়া		"খাচ্ছিলি"	তুই	চলিত		past continuous
+SFX	v	ওয়া	ইছিলি/ηX	ওয়া		"রইছিলি"	তুই	চলিত		past continuous
+SFX	v	নো	চ্ছিলি/ZX	নো		"ঘুমাচ্ছিলি"	তুই	চলিত		past continuous
+SFX	v	া	ছিলে/wX	[^য়]া	"জানছিলে"	তুমি	চলিত		past continuous
+SFX	v	য়া	চ্ছিলে/xX	[^ও]য়া	"চুচ্ছিলে"	তুমি	চলিত		past continuous
+SFX	v	ওয়া	চ্ছিলে/ζX	ওয়া		"খাচ্ছিলে"	তুমি	চলিত		past continuous
+SFX	v	ওয়া	ইছিলে/ηX	ওয়া		"রইছিলে"	তুমি	চলিত		past continuous
+SFX	v	নো	চ্ছিলে/ZX	নো		"ঘুমাচ্ছিলে"	তুমি	চলিত		past continuous
+SFX	v	া	ছিল/wX	[^য়]া	"জানছিল"	সে	চলিত		past continuous
+SFX	v	য়া	চ্ছিল/xX	[^ও]য়া	"চুচ্ছিল"	সে	চলিত		past continuous$
+SFX	v	ওয়া	চ্ছিল/ζX	ওয়া		"খাচ্ছিল"	সে	চলিত		past continuous
+SFX	v	ওয়া	ইছিল/ηX	ওয়া		"রইছিল"	সে	চলিত		past continuous
+SFX	v	নো	চ্ছিল/ZX	নো		"ঘুমাচ্ছিল"	সে	চলিত		past continuous
+SFX	v	া	ছিলেন/wX	[^য়]া	"জানছিলেন"	তিনি	চলিত		past continuous
+SFX	v	য়া	চ্ছিলেন/xX	[^ও]য়া	"চুচ্ছিলেন"	তিনি	চলিত		past continuous
+SFX	v	ওয়া	চ্ছিলেন/ζX	ওয়া		"খাচ্ছিলেন"	তিনি	চলিত		past continuous
+SFX	v	ওয়া	ইছিলেন/ηX	ওয়া		"রইছিলেন"	তিনি	চলিত		past continuous
+SFX	v	নো	চ্ছিলেন/ZX	নো		"ঘুমাচ্ছিলেন"	তিনি	চলিত		past continuous
+SFX	v	া	িতেছিলাম/wX [^য়]া	"জানিতেছিলাম" আমি        সাধু	past continuous
+SFX	v	য়া	ইতেছিলাম/xX [^ও]য়া	"চুইতেছিলাম"	আমি           সাধু	past continuous
+SFX	v	ওয়া	তেছিলাম/βX	ওয়া		"খাইতেছিলাম" আমি	        সাধু	past continuous
+SFX	v	নো	ইতেছিলাম/OX নো 		"ঘুমাইতেছিলাম" আমি        সাধু	past continuous
+SFX	v	া	িতেছিলি/wX	[^য়]া	"জানিতেছিলি" তুই	        সাধু	past continuous
+SFX	v	য়া	ইতেছিলি/xX	[^ও]য়া	"চুইতেছিলি"	তুই             সাধু	past continuous
+SFX	v	ওয়া	তেছিলি/βX	ওয়া		"খাইতেছিলি"	তুই	        সাধু	past continuous
+SFX	v	নো	ইতেছিলি/OX	নো		"ঘুমাইতেছিলি" তুই 	        সাধু	past continuous
+SFX	v	া	িতেছিলে/wX	[^য়]া	"জানিতেছিলে" তুমি	        সাধু	past continuous
+SFX	v	য়া	ইতেছিলে/xX	[^ও]য়া	"চুইতেছিলে"	তুমি            সাধু	past continuous
+SFX	v	ওয়া	তেছিলে/βX	ওয়া		"খাইতেছিলে"	তুমি	        সাধু	past continuous
+SFX	v	নো	ইতেছিলে/OX	নো		"ঘুমাইতেছিলে" তুমি	        সাধু	past continuous
+SFX	v	া	িতেছিল/wX	[^য়]া	"জানিতেছিল"	সে	        সাধু	past continuous
+SFX	v	য়া	ইতেছিল/xX	[^ও]য়া	"চুইতেছিল"	সে              সাধু	past continuous
+SFX	v	ওয়া	তেছিল/βX	ওয়া		"খাইতেছিল"	সে	        সাধু	past continuous
+SFX	v	নো	ইতেছিল/OX	নো		"ঘুমাইতেছিল" সে	        সাধু	past continuous
+SFX	v	া	িতেছিলেন/wX [^য়]া	"জানিতেছিলেন" তিনি        সাধু	past continuous
+SFX	v	য়া	ইতেছিলেন/xX [^ও]য়া	"চুইতেছিলেন"   তিনি         সাধু	past continuous
+SFX	v	ওয়া	তেছিলেন/βX	ওয়া		"খাইতেছিলেন" তিনি	        সাধু	past continuous
+SFX	v	নো	ইতেছিলেন/OX নো 		"ঘুমাইতেছিলেন" তিনি      সাধু	past continuous
+SFX	v	ওয়া	ইছিলাম/UX	ওয়া		"চাইছিলাম"	আমি	চলিত		past continuous	vXtra
+SFX	v	ওয়া	ইছিলুম/UX	ওয়া		"চাইছিলুম"	আমি	চলিত		past continuous	vXtra আঞ্চলিক
+SFX	v	ওয়া	ইছিলেম/UX	ওয়া		"চাইছিলেম"	আমি	চলিত		past continuous	vXtra আঞ্চলিক
+SFX	v	ওয়া	ইছিলি/UX	ওয়া		"চাইছিলি"	তুই	চলিত		past continuous	vXtra
+SFX	v	ওয়া	ইছিলে/UX	ওয়া		"চাইছিলে"	তুমি	চলিত		past continuous	vXtra
+SFX	v	ওয়া	ইছিল/UX	ওয়া		"চাইছিল"	সে	চলিত		past continuous	vXtra
+SFX	v	ওয়া	ইছিলেন/UX	ওয়া		"চাইছিলেন"	তিনি	চলিত		past continuous	vXtra
+SFX	v	া	েছি/lX	[^য়]া	"জেনেছি"	আমি	চলিত		present perfect
+SFX	v	য়া	য়েছি/xX	[^ও]য়া	"চুয়েছি"	আমি	চলিত		present perfect$
+SFX	v	ওয়া	য়েছি/yX	ওয়া		"খেয়েছি"	আমি	চলিত		present perfect
+SFX	v	ানো	িয়েছি/OX	[^য়]ানো 	"ঘুমিয়েছি"	আমি	চলিত		present perfect
+SFX	v	ানো	িয়েছি/zX	[^ও]য়ানো 	"চুঁয়িয়েছি"	আমি	চলিত		present perfect
+SFX	v	ওয়ানো	ইয়েছি/xX	ওয়ানো		"খাইয়েছি"	আমি	চলিত		present perfect
+SFX	v	া	েছিস/lX	[^য়]া	"জেনেছিস"	তুই	চলিত		present perfect
+SFX	v	য়া	য়েছিস/xX	[^ও]য়া	"চুয়েছিস"	আমি	চলিত		present perfect
+SFX	v	ওয়া	 য়েছিস/yX	ওয়া		"খেয়েছিস"	তুই	চলিত		present perfect
+SFX	v	ানো	িয়েছিস/OX	[^ওয়]ানো "ঘুমিয়েছিস"	তুই	চলিত		present perfect
+SFX	v	ওয়ানো	ইয়েছিস/xX	ওয়ানো		"খাইয়েছিস"	তুই	চলিত		present perfect
+SFX	v	া	েছ/lX	[^য়]া	"জেনেছ"	তুমি	চলিত		present perfect
+SFX	v	য়া	য়েছ/xX	[^ও]য়া	"চুয়েছ"	তুমি	চলিত		present perfect
+SFX	v	ওয়া	য়েছ/yX	ওয়া		"খেয়েছ"	তুমি	চলিত		present perfect
+SFX	v	ানো	িয়েছ/OX	[^ওয়]ানো "ঘুমিয়েছ"	তুমি	চলিত		present perfect
+SFX	v	ওয়ানো  ইয়েছ/xX  ওয়ানো	"খাইয়েছ"	তুমি	চলিত		present perfect
+SFX	v	া	েছে/lX	[^য়]া	"জেনেছে"	সে	চলিত		present perfect
+SFX	v	য়া	য়েছে/xX	[^ও]য়া	"চুয়েছে"	সে	চলিত		present perfect
+SFX	v	ওয়া	য়েছে/yX	ওয়া		"খেয়েছে"	সে	চলিত		present perfect
+SFX	v	ানো	িয়েছে/OX	[^ওয়]ানো "ঘুমিয়েছে"	সে	চলিত		present perfect
+SFX	v	ওয়ানো  ইয়েছে/xX ওয়ানো	"খাইয়েছে"	সে	চলিত		present perfect
+SFX	v	া	েছেন/lX	[^য়]া	"জেনেছেন"  তিনি	চলিত		present perfect
+SFX	v	য়া	য়েছেন/xX	[^ও]য়া	"চুয়েছেন"	তিনি	চলিত		present perfect
+SFX	v	ওয়া	 য়েছেন/yX	ওয়া		"খেয়েছেন"	তিনি	চলিত		present perfect
+SFX	v	ানো	িয়েছেন/OX  [^ওয়]ানো "ঘুমিয়েছেন"  তিনি   চলিত 	present perfect
+SFX	v	ওয়ানো  ইয়েছেন/xX  ওয়ানো	"খাইয়েছেন	তিনি	চলিত		present perfect
+SFX	v	া	িয়াছি/wX	[^য়]া	"জানিয়াছি"	আমি	        সাধু	present perfect
+SFX	v	য়া	ইয়াছি/xX	[^ও]য়া	"চুইয়াছি"	আমি	        সাধু 	present perfect
+SFX	v	ওয়া	য়াছি/βX	াওয়া		"খাইয়াছি"	আমি	        সাধু	present perfect
+SFX	v	নো	ইয়াছি/OX	নো		"ঘুমাইয়াছি"	আমি	        সাধু	present perfect
+SFX	v	া	িয়াছিস/wX	[^য়]া	"জানিয়াছিস"	তুই	        সাধু	present perfect
+SFX	v	য়া	ইয়াছিস/xX	[^ও]য়া	"চুইয়াছিস"	তুই	        সাধু 	present perfect
+SFX	v	ওয়া	য়াছিস/βX	ওয়া		"খাইয়াছিস"	তুই	        সাধু	present perfect
+SFX	v	নো	ইয়াছিস/OX	নো		"ঘুমাইয়াছিস"	তুই	        সাধু	present perfect
+SFX	v	া	িয়াছ/wX	[^য়]া	"জানিয়াছ"	তুমি	        সাধু	present perfect
+SFX	v	য়া	ইয়াছ/xX	[^ও]য়া	"চুইয়াছ"	তুমি	        সাধু 	present perfect
+SFX	v	ওয়া	য়াছ/βX	ওয়া		"খাইয়াছ"	তুমি	        সাধু	present perfect
+SFX	v	নো	ইয়াছ/OX	নো		"ঘুমাইয়াছ"	তুমি	        সাধু	present perfect
+SFX	v	া	িয়াছে/wX	[^য়]া	"জানিয়াছে"	সে	        সাধু	present perfect
+SFX	v	য়া	ইয়াছে/xX	[^ও]য়া	"চুইয়াছে"	সে	        সাধু 	present perfect
+SFX	v	ওয়া	য়াছে/βX	ওয়া		"খাইয়াছে"	সে	        সাধু	present perfect
+SFX	v	নো	ইয়াছে/OX	নো		"ঘুমাইয়াছে"	সে	        সাধু	present perfect
+SFX	v	া	িয়াছেন/wX [^য়]া	"জানিয়াছেন"	তিনি	        সাধু	present perfect
+SFX	v	য়া	ইয়াছেন/xX	[^ও]য়া	"চুইয়াছেন"	তিনি	        সাধু 	present perfect
+SFX	v	ওয়া	য়াছেন/βX	ওয়া		"খাইয়াছেন"	তিনি	        সাধু	present perfect
+SFX	v	নো	ইয়াছেন/OX	নো		"ঘুমাইয়াছেন"	তিনি	        সাধু	present perfect
+SFX	v	ওয়া	ছি/SX	ওয়া		"গেছি" 	আমি	চলিত		present perfect
+SFX	v	ওয়া	ছিস/SX	ওয়া		"গেছিস" 	তুই	চলিত		present perfect
+SFX	v	ওয়া	ছ/SX		ওয়া		"গেছ" 	তুমি	চলিত		present perfect
+SFX	v	ওয়া	ছে/SX	ওয়া		"গেছে" 	সে	চলিত		present perfect
+SFX	v	ওয়া	ছেন/SX	ওয়া		"গেছেন" 	তিনি	চলিত		present perfect
+SFX	v	া	িনি/wX	[^য়]া	"জানিনি"	আমি	চলিত		present perfect negative
+SFX	v	য়া	ইনি/xX	[^ও]য়া	"চুইনি"	আমি	চলিত		present perfect negative$
+SFX	v	ওয়া	ইনি/xX	ওয়া		"খাইনি"	আমি	চলিত		present perfect negative
+SFX	v	নো	ইনি/ZX	নো		"ঘুমাইনি"	আমি	চলিত		present perfect negative
+SFX	v	া	িসনি/wX	[^য়]া	"জানিসনি"	তুই	চলিত 	present perfect negative
+SFX	v	য়া	সনি/xX	[^ও]য়া	"চুসনি"	তুই	চলিত		present perfect negative
+SFX	v	ওয়া	সনি/xX	ওয়া		"খাসনি"	তুই	চলিত 	present perfect negative
+SFX	v	নো	সনি/ZX	নো		"ঘুমাসনি"	তুই	চলিত		present perfect negative
+SFX	v	ওয়া	োসনি	[^া]ওয়া	"হোসনি" 	তুই	চলিত 	present perfect negative
+SFX	v	া	নি/N		[^য়]া	"জাননি"	তুমি 	চলিত 	present perfect negative
+SFX	v	য়া	ওনি		[^ও]য়া	"চোওনি"	তুমি	চলিত		present perfect negative
+SFX	v	ওয়া	ওনি/θX	ওয়া		"খাওনি"	তুমি 	চলিত 	present perfect negative
+SFX	v	নো	ওনি/ZX	নো		"ঘুমাওনি"	তুমি	চলিত		present perfect negative
+SFX	v	া	েনি/N	[^য়]া	"জানেনি"	সে	চলিত 	present perfect negative
+SFX	v	য়া	ননি		[^ও]য়া	"চোননি"	সে	চলিত		present perfect negative
+SFX	v	ওয়া	য়নি		ওয়া		"খায়নি"	সে	চলিত		present perfect negative	$
+SFX	v	নো	য়নি/ZX	নো		"ঘুমায়নি"	সে	চলিত		present perfect negative
+SFX	v	া	েননি/N	[^য়]া	"জানেননি"	তিনি	চলিত		present perfect negative
+SFX	v	য়া	য়নি		[^ও]য়া	"চোয়নি"	তিনি	চলিত		present perfect negative
+SFX	v	ওয়া	ননি		ওয়া		"খাননি"	তিনি	চলিত 		present perfect negative
+SFX	v	নো	ননি/ZX	নো		"ঘুমাননি"	তিনি	চলিত 		present perfect negative	$
+SFX	v	া	িওনি/wX	[^য়]া	"জানিওনি"	আমি	চলিত		present perfect negative emphatic (banglatangla.com)
+SFX	v	য়া	ইওনি/xX	[^ও]য়া	"চুইওনি"	আমি	চলিত		present perfect negative emphatic (banglatangla.com)
+SFX	v	ওয়া	ইওনি/xX	ওয়া		"খাইওনি"	আমি	চলিত		present perfect negative emphatic (banglatangla.com)
+SFX	v	নো	ইওনি		নো		"ঘুমাইওনি"	আমি	চলিত		present perfect negative emphatic (banglatangla.com)
+SFX	v	া	িসওনি/wX	[^য়]া	"জানিসওনি"	তুই	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	v	য়া	সওনি/xX	[^ও]য়া	"চুসওনি"	তুই	চলিত		present perfect negative emphatic (banglatangla.com)
+SFX	v	ওয়া	সওনি/xX	ওয়া		"খাসওনি"	তুই	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	v	নো	সওনি		নো		"ঘুমাসওনি"	তুই	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	v	ওয়া	োসওনি	[^া]ওয়া 	"হোসওনি" 	তুই	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	v	া	ওনি/N	[^য়]া	"জানওনি"	তুমি 	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	v	য়া	ওওনি		[^ও]য়া	"চোওওনি"	তুমি	চলিত		present perfect negative emphatic (banglatangla.com)
+SFX	v	ওয়া	ওওনি/θX	ওয়া		"খাওওনি"	তুমি 	চলিত 		present perfect negative emphatic (banglatangla.com) ???
+SFX	v	নো	ওওনি		নো		"ঘুমাওওনি"	তুমি 	চলিত 		present perfect negative emphatic (banglatangla.com) ???
+SFX	v	া	েওনি/N	[^য়]া	"জানেওনি"	সে	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	v	য়া	নওনি		[^ও]য়া	"চোনওনি"	সে	চলিত		present perfect negative emphatic (banglatangla.com)
+SFX	v	ওয়া	য়ওনি		ওয়া		"খায়ওনি"	সে	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	v	নো	য়ওনি		নো		"ঘুমায়ওনি"	সে	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	v	া	েনওনি/N	[^য়]া	"জানেনওনি" তিনি	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	v	য়া	য়ওনি		[^ও]য়া	"চোয়ওনি"	তিনি	চলিত		present perfect negative emphatic (banglatangla.com)
+SFX	v	ওয়া	নওনি		ওয়া		"খানওনি"	তিনি	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	v	নো	নওনি		নো		"ঘুমানওনি"	তিনি	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	v	া	েছিলাম/lX	[^য়]া	"জেনেছিলাম"	আমি	চলিত		past perfect
+SFX	v	া	েছিলুম/lX	[^য়]া	"জেনেছিলুম"	আমি	চলিত		past perfect আঞ্চলিক
+SFX	v	া	েছিলেম/lX	[^য়]া	"জেনেছিলেম"	আমি	চলিত		past perfect আঞ্চলিক
+SFX	v	য়া	য়েছিলাম/xX	[^ও]য়া	"চুয়েছিলাম"	আমি	চলিত		past perfect
+SFX	v	য়া	য়েছিলুম/xX	[^ও]য়া	"চুয়েছিলুম"	আমি	চলিত		past perfect আঞ্চলিক
+SFX	v	য়া	য়েছিলেম/xX	[^ও]য়া	"চুয়েছিলেম"	আমি	চলিত		past perfect আঞ্চলিক
+SFX	v	ওয়া	য়েছিলাম/yX ওয়া		"খেয়েছিলাম"	আমি	চলিত		past perfect
+SFX	v	ওয়া	য়েছিলুম/yX ওয়া		"খেয়েছিলুম"	আমি	চলিত		past perfect আঞ্চলিক
+SFX	v	ওয়া	য়েছিলেম/yX ওয়া		"খেয়েছিলেম"	আমি	চলিত		past perfect আঞ্চলিক
+SFX	v	ানো	িয়েছিলাম/OX [^ওয়]ানো "ঘুমিয়েছিলাম" আমি 	চলিত		past perfect
+SFX	v	ানো	িয়েছিলুম/OX [^ওয়]ানো "ঘুমিয়েছিলুম" আমি 	চলিত		past perfect আঞ্চলিক
+SFX	v	ানো	িয়েছিলেম/OX [^ওয়]ানো "ঘুমিয়েছিলেম" আমি 	চলিত		past perfect আঞ্চলিক
+SFX	v	ওয়ানো	ইয়েছিলাম/xX ওয়ানো	"খাইয়েছিলাম" আমি	চলিত		past perfect
+SFX	v	ওয়ানো	ইয়েছিলুম/xX ওয়ানো	"খাইয়েছিলুম" আমি	চলিত		past perfect আঞ্চলিক
+SFX	v	ওয়ানো	ইয়েছিলেম/xX ওয়ানো	"খাইয়েছিলেম" আমি	চলিত		past perfect আঞ্চলিক
+SFX	v	া	েছিলি/lX	[^য়]া	"জেনেছিলি"	তুই	চলিত		past perfect
+SFX	v	য়া	য়েছিলি/xX	[^ও]য়া	"চুয়েছিলি"	তুই	চলিত		past perfect
+SFX	v	ওয়া	য়েছিলি/yX	ওয়া		"খেয়েছিলি"	তুই	চলিত		past perfect
+SFX	v	ানো	িয়েছিলি/OX	[^ওয়]ানো "ঘুমিয়েছিলি" তুই	চলিত		past perfect
+SFX	v	ওয়ানো	ইয়েছিলি/xX	ওয়ানো		"খাইয়েছিলি" তুই	চলিত		past perfect
+SFX	v	া	েছিলে/lX	[^য়]া	"জেনেছিলে"	তুমি	চলিত		past perfect
+SFX	v	য়া	য়েছিলে/xX	[^ও]য়া	"চুয়েছিলে"	তুমি	চলিত		past perfect
+SFX	v	ওয়া	য়েছিলে/yX	ওয়া		"খেয়েছিলে"	তুমি	চলিত		past perfect
+SFX	v	ানো	িয়েছিলে/OX	[^ওয়]ানো "ঘুমিয়েছিলে" তুমি	চলিত		past perfect
+SFX	v	ওয়ানো	ইয়েছিলে/xX	ওয়ানো		"খাইয়েছিলে" তুমি	চলিত		past perfect
+SFX	v	া	েছিল/lX	[^য়]া	"জেনেছিল"	সে	চলিত		past perfect
+SFX	v	য়া	য়েছিল/xX	[^ও]য়া	"চুয়েছিল"	সে	চলিত		past perfect
+SFX	v	ওয়া	য়েছিল/yX	ওয়া		"খেয়েছিল"	সে	চলিত		past perfect
+SFX	v	ানো	িয়েছিল/OX	[^ওয়]ানো "ঘুমিয়েছিল"	সে	চলিত		past perfect
+SFX	v	ওয়ানো	ইয়েছিল/xX	ওয়ানো		"খাইয়েছিল"	সে	চলিত		past perfect
+SFX	v	া	েছিলেন/lX	[^য়]া	"জেনেছিলেন"তিনি	চলিত		past perfect
+SFX	v	য়া	য়েছিলেন/xX	[^ও]য়া	"চুয়েছিলেন"	তিনি	চলিত		past perfect
+SFX	v	ওয়া	য়েছিলেন/yX ওয়া		"খেয়েছিলেন" তিনি	চলিত		past perfect
+SFX	v	ানো	িয়েছিলেন/OX [^ওয়]ানো "ঘুমিয়েছিলেন" তিনি চলিত		past perfect
+SFX	v	ওয়ানো	ইয়েছিলেন/xX ওয়ানো	"খাইয়েছিলেন" তিনি	চলিত		past perfect
+SFX	v	া	িয়াছিলাম/wX [^য়]া	"জানিয়াছিলাম" আমি	        সাধু	past perfect
+SFX	v	য়া	ইয়াছিলাম/xX	[^ও]য়া	"চুইয়াছিলাম"	আমি	        সাধু	past perfect
+SFX	v	ওয়া	য়াছিলাম/βX	ওয়া		"খাইয়াছিলাম"	আমি	        সাধু	past perfect
+SFX	v	নো	ইয়াছিলাম/OX	নো		"ঘুমাইয়াছিলাম" আমি	        সাধু	past perfect$
+SFX	v	া	িয়াছিলি/wX	[^য়]া	"জানিয়াছিলি"	তুই	        সাধু	past perfect
+SFX	v	য়া	ইয়াছিলি/xX	[^ও]য়া	"চুইয়াছিলি"	তুই	        সাধু	past perfect
+SFX	v	ওয়া	য়াছিলি/βX	ওয়া		"খাইয়াছিলি"	তুই	        সাধু	past perfect
+SFX	v	নো	ইয়াছিলি/OX	নো		"ঘুমাইতেছিলি" তুই	        সাধু	past perfect$
+SFX	v	া	িয়াছিলে/wX	[^য়]া	"জানিয়াছিলে"	তুমি	        সাধু	past perfect
+SFX	v	য়া	ইয়াছিলে/xX	[^ও]য়া	"চুইয়াছিলে"	তুমি	        সাধু	past perfect
+SFX	v	ওয়া	য়াছিলে/βX	ওয়া		"খাইয়াছিলে"	তুমি	        সাধু	past perfect
+SFX	v	নো	ইয়াছিলে/OX	নো		"ঘুমাইতেছে" 	তুমি	        সাধু	past perfect$
+SFX	v	া	িয়াছিল/wX	[^য়]া	"জানিয়াছিল"	সে	        সাধু	past perfect
+SFX	v	য়া	ইয়াছিল/xX	[^ও]য়া	"চুইয়াছিল"	সে	        সাধু	past perfect
+SFX	v	ওয়া	য়াছিল/βX	ওয়া		"খাইয়াছিল"	সে	        সাধু	past perfect
+SFX	v	নো	ইয়াছিল/OX	নো		"ঘুমাইয়াছিল"	সে	        সাধু	past perfect$
+SFX	v	া	িয়াছিলেন/wX [^য়]া	"জানিয়াছিলেন"তিনি	        সাধু	past perfect
+SFX	v	য়া	ইয়াছিলেন/xX	[^ও]য়া	"চুইয়াছিলেন"	তিনি	        সাধু	past perfect
+SFX	v	ওয়া	য়াছিলেন/βX	ওয়া		"খাইয়াছিলেন" তিনি	        সাধু	past perfect
+SFX	v	নো	ইয়াছিলেন/OX	নো 		"ঘুমাইয়াছিলেন" তিনি        সাধু	past perfect
+SFX	v	ওয়া	ছিলাম/SX	ওয়া		"গেছিলাম" 	আমি	চলিত		past perfect
+SFX	v	ওয়া	ছিলুম/SX	ওয়া		"গেছিলুম" 	আমি	চলিত		past perfect আঞ্চলিক
+SFX	v	ওয়া	ছিলেম/SX	ওয়া		"গেছিলেম" 	আমি	চলিত		past perfect আঞ্চলিক
+SFX	v	ওয়া	ছিলি/SX	ওয়া		"গেছিলি" 	তুই	চলিত		past perfect
+SFX	v	ওয়া	ছিলে/SX	ওয়া		"গেছিলে" 	তুমি	চলিত		past perfect
+SFX	v	ওয়া	ছিল/SX	ওয়া		"গেছিল" 	সে	চলিত		past perfect
+SFX	v	ওয়া	ছিলেন/SX	ওয়া		"গেছিলেন" 	তিনি	চলিত		past perfect
+SFX	v	া	ো/zX	[^য়]া	"জেনো"	তুমি	চলিত		future imperative
+SFX	v	য়া	য়ো/xX	[^ও]য়া	"চুয়ো"		তুমি	চলিত		future imperative
+SFX	v	ওয়া	ও/kX		েওয়া		"নিও"		তুমি	চলিত		future imperative
+SFX	v	ওয়া	ও/kX		াওয়া		"খেও"		তুমি	চলিত		future imperative
+SFX	v	ওয়া	য়ো/jX	ওয়া		"হোয়ো"	তুমি	চলিত		future imperative
+SFX	v	ানো	িও/xX	[^ওয়]ানো "দৌড়িও"	তুমি	চলিত		future imperative
+SFX	v	ওয়ানো ইও		ওয়ানো		"গাইও"	তুমি	চলিত		future imperative
+SFX	v	ওয়া	য়ো/zX	ওয়া		"খেয়ো"	সে	চলিত		future imperative alt ???
+SFX	v	ওয়ানো	ইয়ো/xX	ওয়ানো		"খাইয়ো"	সে	চলিত		future imperative	বাংলা একাডেমি বানান
+SFX	v	া	িও/wX	[^য়]া	"জানিও"	সে	        সাধু	future imperative
+SFX	v	য়া	ইও/xX	[^ও]য়া	"চুইও"		সে	        সাধু	future imperative
+SFX	v	ওয়া	ও/βX		ওয়া		"খাইও"	সে	        সাধু	future imperative
+SFX	v	নো	ইও/OX	নো		"ঘুমাইও"	সে	        সাধু	future imperative
+SFX	v	ওয়া	স/βX		[^া]ওয়া	"রহিস"	তুই	        সাধু	future imperative
+SFX	v	া	স/xX		া		"জানস"	তুই			future imperative  ???$
+SFX	v	ানো	াস/ZX	ানো		"ওঠাস"	তুই			future imperative  ???$
+SFX	v	া	ে/zXi	[^য়]া	"জেনে"		চলিত		perfective participle
+SFX	v	য়া	য়ে/xXi	[^ও]য়া	"চুয়ে"			চলিত		perfective participle
+SFX	v	ওয়া	য়ে/zXi	ওয়া		"খেয়ে"		চলিত		perfective participle
+SFX	v	ওয়া	য়েi		[^া]ওয়া	"রয়ে"			চলিত		perfective participle
+SFX	v	ানো	িয়ে/xXi	[^য়]ানো 	"ঘুমিয়েছি"		চলিত		perfective participle
+SFX	v	ওয়ানো ইয়েi		ওয়ানো		"গাইয়ে"		চলিত		perfective participle
+SFX	v	া	িয়া/wXi	[^য়]া	"জানিয়া"		        সাধু	perfective participle
+SFX	v	য়া	ইয়া/xXi	[^ও]য়া	"চুইয়া"		        সাধু	perfective participle
+SFX	v	ওয়া	য়া/βXi	ওয়া		"খাইয়া"		        সাধু	perfective participle
+SFX	v	নো	ইয়া/OXi	নো		"ঘুমাইয়া"		        সাধু	perfective participle
+SFX	v	0	0/xX	[^য়]া	"খুলা"			        সাধু	verbal noun (shadhu)
+SFX	v	ওয়া	হা		[^া]ওয়া	"রহা"			        সাধু	verbal noun (shadhu)
+SFX	v	0	0/zX	নো		"বুঝানো"		        সাধু	verbal noun (shadhu)
+SFX	v	া	িবার/wX	[^য়]া	"জানিবার"		        সাধু	genitive of verbal noun
+SFX	v	য়া	ইবার/xX	[^ও]য়া	"চুইবার"		        সাধু	genitive of verbal noun
+SFX	v	ওয়া	বার/βX   	ওয়া		"খাইবার"		        সাধু	genitive of verbal noun
+SFX	v	নো	ইবার/OX	 	নো		"ঘুমাইবার"		        সাধু	genitive of verbal noun
+SFX	v	া	বার/xX	[^য়]া	"জানবার"		চলিত		genitive of verbal noun (formal)
+SFX	v	া	বার		[^য়]া	"খোলবার"		চলিত		genitive of verbal noun (formal)
+SFX	v	য়া	বার		[^ও]য়া	"চোবার"		চলিত		genitive of verbal noun (formal)
+SFX	v	ওয়া	বার/δX	ওয়া		"খাবার"		চলিত		genitive of verbal noun (formal)
+SFX	v	নো	বার		নো		"বোঝাবার"		চলিত		genitive of verbal noun (formal)
+SFX	v	নো	বার/zX	নো		"বুঝাবার"		        সাধু	genitive of verbal noun (formal)
+SFX	v	া	ার		া		"জানার"		চলিত		genitive of verbal noun (simplified???)
+SFX	v	0	র		ওয়া		"খাওয়ার"		চলিত		genitive of verbal noun (simplified???)
+
+# Verb Conjugations for Longer (3+ consonant) causative verbs
+# These have a different perfect form, with no "য়ে" inserted
+# =======================================================
+SFX	V	Y	122
+SFX	V	0	র/i		.		"আটকানোর"				genetive$
+SFX	V	0	টা/i		.		"যআটকানোটা"			classifier$
+SFX	V	0	কে/i		.		"আটকানোকে"			objective
+SFX	V	0	তে/i		.		"আটকানোতে"			locative$
+SFX	V	0	তো/i		.		"আটকানোতো"			emphatic to$
+SFX	V	নো	ই		নো		"বোঝাই"	আমি	চলিত		present simple/present imperative
+SFX	V	নো	ই/xX		নো		"বুঝাই"	আমি	        সাধু	present simple/present imperative
+SFX	V	নো	স		নো		"বোঝাস"	তুই	চলিত  	present simple$
+SFX	V	নো	স/xX		নো		"বুঝাস"	তুই	         সাধু 	present simple$
+SFX	V	নো	ও		নো		"বোঝাও"	তুমি	চলিত	 	present simple$
+SFX	V	নো	ও/xX		নো		"বুঝাও"	তুমি	        সাধু 	present simple$
+SFX	V	নো	ন		নো		"বোঝান"	তিনি	চলিত	 	present simple$
+SFX	V	নো	ন/xX		নো		"বুঝান"	তিনি	        সাধু 	present simple$
+SFX	V	নো	য়		নো		"বোঝায়"	সে	চলিত/সাধু 	present simple$
+SFX	V	নো	য়/xX		নো		"বুঝায়"	সে	চলিত/সাধু 	present simple$
+SFX	V	নো	0		নো		"বোঝা"	তুই	চলিত	 	present imperative					$
+SFX	V	নো	0/xX	নো		"বুঝা"		তুই	        সাধু 	present imperative					$
+SFX	V	নো	ও		নো		"ঘুমাও"	তুমি 	চলিত/সাধু 	present imperative (a repeat)
+SFX	V	নো	ক		নো		"বোঝাক"	সে	চলিত	 	present imperative
+SFX	V	নো	ক/xX		নো		"বুঝাক"	সে	        সাধু 	present imperative
+SFX	V	নো	ন/xX		নো		"ঘুমান"	তিনি	চলিত/সাধু 	present imperative (a repeat)
+SFX	V	নো	চ্ছি		নো		"ঘুমাচ্ছি"	আমি	চলিত		present continuous	$
+SFX	V	নো	চ্ছিস		নো		"ঘুমাচ্ছিস"	তুই	চলিত		present continuous	$
+SFX	V	নো	চ্ছ		নো		"ঘুমাচ্ছ"	তুমি	চলিত		present continuous	$
+SFX	V	নো	চ্ছে		নো		"ঘুমাচ্ছে"	সে	চলিত		present continuous	$
+SFX	V	নো	চ্ছেন		নো		"ঘুমাচ্ছেন"	তিনি	চলিত		present continuous	$
+SFX	V	নো	ইতেছি/xX	নো		 "ঘুমাইতেছি" আমি	        সাধু	present continuous
+SFX	V	নো	ইতেছিস/xX	নো		"ঘুমাইতেছিস" তুই	        সাধু	present continuous$
+SFX	V	নো	ইতেছ/xX	নো		"ঘুমাইতেছ" 	তুমি	        সাধু	present continuous	$
+SFX	V	নো	ইতেছে/xX	নো		"ঘুমাইতেছে" 	সে	        সাধু	present continuous	$
+SFX	V	নো	ইতেছেন/xX	নো		"ঘুমাইতেছেন" তিনি	        সাধু	present continuous	$
+SFX	V	নো	ব		নো		"ঘুমাব"	আমি	চলিত		future & future imperative
+SFX	V	নো	বো		নো		"ঘুমাবো"	আমি	চলিত		future & future imperative
+SFX	V	নো	বি		নো		"ঘুমাবি"	তুই	চলিত		future & future imperative
+SFX	V	নো	বা		নো		"ঘুমাবা"	তুই	চলিত		future & future imperative alt
+SFX	V	নো	বে		নো		"ঘুমাবে"	তুমি	চলিত		future & future imperative
+SFX	V	নো	বেন		নো		"ঘুমাবেন"	তিনি	চলিত		future & future imperative
+SFX	V	নো	ইব/xX	নো		"ঘুমাইব"	আমি	        সাধু	future & future imperative
+SFX	V	নো	ইবি/xX	নো		"ঘুমাইবি"	তুই	        সাধু	future & future imperative
+SFX	V	নো	ইবা/xX	নো		"ঘুমাইবা"	তুই	        সাধু	future & future imperative alt ???
+SFX	V	নো	ইবে/xX	নো		"ঘুমাইবে"	তুমি/সে   সাধু		future & future imperative
+SFX	V	নো	ইবেন/xX	নো		"ঘুমাইবেন"	তিনি	        সাধু	future & future imperative
+SFX	V	নো	লাম		নো		"ঘুমালাম"	আমি	চলিত		past simple
+SFX	V	নো	লুম		নো		"ঘুমালুম"	আমি	চলিত		past simple আঞ্চলিক
+SFX	V	নো	লেম		নো		"ঘুমালেম"	আমি	চলিত		past simple আঞ্চলিক
+SFX	V	নো	লি		নো		"ঘুমালি"	তুই	চলিত		past simple
+SFX	V	নো	লে		নো		"ঘুমালে"	তুমি	চলিত		past simple
+SFX	V	নো	ল		নো		"ঘুমাল"	সে	চলিত		past simple
+SFX	V	নো	লো		নো		"ঘুমালো"	সে	চলিত		past simple alt ???
+SFX	V	নো	লেন		নো		"ঘুমালেন"	তুমি	চলিত		past simple
+SFX	V	নো	ইলাম/xX	নো		"ঘুমাইলাম"	আমি	        সাধু	past simple
+SFX	V	নো	ইলি/xX	নো		"ঘুমাইলি"	তুই	        সাধু	past simple
+SFX	V	নো	ইলে/xX	নো		"ঘুমাইলে"	তুমি	        সাধু	past simple
+SFX	V	নো	ইল/xX	নো		"ঘুমাইল"	সে	        সাধু	past simple
+SFX	V	নো	ইলো/xX	নো		"ঘুমাইলো"	সে	        সাধু	past simple
+SFX	V	নো	ইলেন/xX	নো		"ঘুমাইলেন"	তিনি	        সাধু	past simple
+SFX	V	নো	তাম		নো		"ঘুমাতাম"	আমি	চলিত		past habitual/cond.
+SFX	V	নো	তুম		নো		"ঘুমাতুম"	আমি	চলিত		past habitual/cond. আঞ্চলিক
+SFX	V	নো	তেম		নো		"ঘুমাতেম"	আমি	চলিত		past habitual/cond. আঞ্চলিক
+SFX	V	নো	তিস		নো		"ঘুমাতিস"	তুই	চলিত		past habitual/cond.
+SFX	V	নো	তি		নো		"ঘুমাতি"	তুই	চলিত		past habitual/cond.	alt ???
+SFX	V	নো	ত		নো		"ঘুমাত"	তুমি	চলিত		past habitual/cond.	alt ???
+SFX	V	নো	তে/i		নো		"ঘুমাতে"	সে	চলিত		past habitual/cond.	alt ???
+SFX	V	নো	তো		নো		"ঘুমাতো"	সে	চলিত		past habitual/cond.	alt ???
+SFX	V	নো	তেন		নো		"ঘুমাতেন"	তিনি	চলিত		past habitual/cond.	alt ???
+SFX	V	নো	ইতাম/xX	নো		"ঘুমাইতাম"	আমি	        সাধু	past habitual/cond.
+SFX	V	নো	ইতিস/xX	নো		"ঘুমাইতিস"	তুই	        সাধু	past habitual/cond.
+SFX	V	নো	ইতে/xXi	নো		"ঘুমাইতে"	তুমি	        সাধু	past habitual/cond.
+SFX	V	নো	ইত/xX	নো		"ঘুমাইত"	সে	        সাধু	past habitual/cond.
+SFX	V	নো	ইতেন/xX	নো		"ঘুমাইতেন"	তিনি	        সাধু	past habitual/cond.
+SFX	V	নো	চ্ছিলাম	নো		"ঘুমাচ্ছিলাম"	আমি	চলিত		past continuous
+SFX	V	নো	চ্ছিলুম		নো		"ঘুমাচ্ছিলুম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	V	নো	চ্ছিলেম	নো		"ঘুমাচ্ছিলেম"	আমি	চলিত		past continuous আঞ্চলিক
+SFX	V	নো	চ্ছিলি		নো		"ঘুমাচ্ছিলি"	তুই	চলিত		past continuous
+SFX	V	নো	চ্ছিলে		নো		"ঘুমাচ্ছিলে"	তুমি	চলিত		past continuous
+SFX	V	নো	চ্ছিল		নো		"ঘুমাচ্ছিল"	সে	চলিত		past continuous
+SFX	V	নো	চ্ছিলেন	নো		"ঘুমাচ্ছিলেন"	তিনি	চলিত		past continuous
+SFX	V	নো	ইতেছিলাম/xX নো 		"ঘুমাইতেছিলাম" আমি        সাধু	past continuous
+SFX	V	নো	ইতেছিলি/xX	নো		"ঘুমাইতেছিলি" তুই 	        সাধু	past continuous
+SFX	V	নো	ইতেছিলে/xX	নো		"ঘুমাইতেছিলে" তুমি	        সাধু	past continuous
+SFX	V	নো	ইতেছিল/xX	নো		"ঘুমাইতেছিল" সে	        সাধু	past continuous
+SFX	V	নো	ইতেছিলেন/xX নো 		"ঘুমাইতেছিলেন" তিনি      সাধু	past continuous
+SFX	V	ানো	েছি/xX	ানো 		"ঘুমেছি"	আমি	চলিত		present perfect
+SFX	V	ানো	েছিস/xX	ানো 		"ঘুমেছিস"	তুই	চলিত		present perfect
+SFX	V	ানো	েছ/xX	ানো 		"ঘুমেছ"	তুমি	চলিত		present perfect
+SFX	V	ানো	েছে/xX	ানো 		"ঘুমেছে"	সে	চলিত		present perfect
+SFX	V	ানো	েছেন/xX	ানো 		"ঘুমেছেন"	তিনি	চলিত		present perfect
+SFX	V	নো	ইয়াছি/xX	নো		"ঘুমাইয়াছি"	আমি	        সাধু	present perfect
+SFX	V	নো	ইয়াছিস/xX	নো		"ঘুমাইয়াছিস"	তুই	        সাধু	present perfect
+SFX	V	নো	ইয়াছ/xX	নো		"ঘুমাইয়াছ"	তুমি	        সাধু	present perfect
+SFX	V	নো	ইয়াছে/xX	নো		"ঘুমাইয়াছে"	সে	        সাধু	present perfect
+SFX	V	নো	ইয়াছেন/xX	নো		"ঘুমাইয়াছেন"	তিনি	        সাধু	present perfect
+SFX	V	নো	ইনি		নো		"ঘুমাইনি"	আমি	চলিত		present perfect negative
+SFX	V	নো	সনি		নো		"ঘুমাসনি"	তুই	চলিত		present perfect negative
+SFX	V	নো	ওনি		নো		"ঘুমাওনি"	তুমি	চলিত		present perfect negative
+SFX	V	নো	য়নি		নো		"ঘুমায়নি"	সে	চলিত		present perfect negative
+SFX	V	নো	ননি		নো		"ঘুমাননি"	তিনি	চলিত 		present perfect negative	$
+SFX	V	নো	ইওনি		নো		"ঘুমাইওনি"	আমি	চলিত		present perfect negative emphatic (banglatangla.com)
+SFX	V	নো	সওনি		নো		"ঘুমাসওনি"	তুই	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	V	নো	ওওনি		নো		"ঘুমাওওনি"	তুমি 	চলিত 		present perfect negative emphatic (banglatangla.com) ???
+SFX	V	নো	য়ওনি		নো		"ঘুমায়ওনি"	সে	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	V	নো	নওনি		নো		"ঘুমানওনি"	তিনি	চলিত 		present perfect negative emphatic (banglatangla.com)
+SFX	V	ানো	েছিলাম/xX	ানো 		"কামড়েছিলাম" আমি চলিত	past perfect
+SFX	V	ানো	েছিলুম/xX	ানো 		"কামড়েছিলুম" আমি চলিত	past perfect আঞ্চলিক
+SFX	V	ানো	েছিলেম/xX	ানো 		"কামড়েছিলেম" আমি চলিত	past perfect আঞ্চলিক
+SFX	V	ানো	েছিলি/xX	ানো 		"ঘুমেছিলি" তুই	চলিত		past perfect
+SFX	V	ানো	েছিলে/xX	ানো 		"ঘুমেছিলে" তুমি	চলিত		past perfect
+SFX	V	ানো	েছিল/xX	ানো 		"ঘুমেছিল"	সে	চলিত		past perfect
+SFX	V	ানো	েছিলেন/xX	ানো 		"ঘুমেছিলেন" তিনি চলিত	past perfect
+SFX	V	নো	ইয়াছিলাম/xX	নো		"ঘুমাইয়াছিলাম" আমি	        সাধু	past perfect$
+SFX	V	নো	ইয়াছিলি/xX	নো		"ঘুমাইতেছিলি" তুই	        সাধু	past perfect$
+SFX	V	নো	ইয়াছিলে/xX	নো		"ঘুমাইতেছে" 	তুমি	        সাধু	past perfect$
+SFX	V	নো	ইয়াছিল/xX	নো		"ঘুমাইয়াছিল"	সে	        সাধু	past perfect$
+SFX	V	নো	ইয়াছিলেন/xX নো 		"ঘুমাইয়াছিলেন" তিনি        সাধু	past perfect
+SFX	V	ানো	িও/xX	ানো 		"দৌড়িও"	তুমি	চলিত		future imperative
+SFX	V	নো	ইও/xX	নো		"ঘুমাইও"	সে	        সাধু	future imperative
+SFX	V	ানো	ে/xX	ানো		"লুকিয়ে"		চলিত		perfective participle
+SFX	V	নো	ইয়া/xX	নো		"ঘুমাইয়া"		        সাধু	perfective participle
+SFX	V	0	0/WX	নো		"বুঝানো"		        সাধু	verbal noun (shadhu)
+SFX	V	নো	ইবার/xX	নো		"ঘুমাইবার"		        সাধু	genitive of verbal noun
+SFX	V	নো	বার		নো		"বোঝাবার"		চলিত		genitive of verbal noun (formal)
+SFX	V	নো	বার/WX	নো		"বুঝাবার"		        সাধু	genitive of verbal noun (formal)
+
+
+# A special irregularity class for present simple তিনি form জানা format to cause "কিনা" verb to inflect to কেনেন rather than কিনেন
+
+PFX	N  Y 	2
+PFX	N  কি	কে/i		কি
+PFX	N  0	0		[^কি]
+
+
+
+# Inflections for non-causative verbs (perfect verbs in জানা format)
+# Very similar to PFX	z - I'm vXperimenting with relegating this to N-verbs only, and replacing all instances within 'E' with PFX	z
+PFX	W  Y 	18
+PFX	W  আ	এ/X		আ
+PFX	W   ও	উ/X		ও
+PFX	W  জা	জে/X		জা
+PFX	W  বল   	বল/X		বল
+PFX	W  চে	চি/X		চে
+PFX	W  খো   	খু/X		খো	different from R
+PFX	W  খা   	খে/X		খা
+PFX	W  চা   	চে/X		চা
+PFX	W  বো   	বু/X		বো
+PFX	W  ঘু   	ঘু/X		ঘু
+PFX	W  পৌ   	পৌ/X		পৌ
+PFX	W  দৌ   	দৌ/X		দৌ
+PFX	W  কর  	কর/X		কর
+PFX	W  ধা  	ধে/X		ধা
+PFX	W  গ্যাঁ  	গ্যাঁ/X		গ্যাঁ
+PFX	W  ঘা  	ঘা/X		ঘা	different from R
+PFX	W  না  	না/X		না	different from R
+PFX	W  যা	গি/X		যা	different from R
+
+
+# Same as R vXcept the inherent vowel form stays the same
+# Used *only for past perfect and present perfect of জানা form vowels
+# Probably identical to D
+# Removed e->i rule for খে, দে
+
+PFX	l	Y	127
+PFX	l   আ	এ/X		আ
+PFX	l   ও	উ/X		ও
+PFX	l	0	0/X	ক[^ােো]
+PFX	l	ক	কো/X	ক[^ােো]  	irregularity
+PFX	l	কা	কে/X	কা
+PFX	l	কে	কি/X	কে
+PFX	l	কো	কু/X	কো
+PFX	l	0	0/X	ক্ষ[^ােো]
+PFX	l	ক্ষা	ক্ষে/X	ক্ষা
+PFX	l	ক্ষে	ক্ষি/X	ক্ষে
+PFX	l	ক্ষো	ক্ষু/X	ক্ষো
+PFX	l	0	0/X	খ[^াো]
+PFX	l	খা	খে/X	খা
+PFX	l	খো	খু/X	খো
+PFX	l	0	0/X	গ[^ােো]
+PFX	l	গা	গে/X	গা
+PFX	l	গে	গি/X	গে
+PFX	l	গো	গু/X	গো
+PFX	l	0	0/X	ঘ[^ােো]
+PFX	l	ঘা	ঘে/X	ঘা
+PFX	l	ঘে	ঘি/X	ঘে
+PFX	l	ঘো	ঘু/X	ঘো
+PFX	l	0	0/X	চ[^ােো]
+PFX	l	চা	চে/X	চা
+PFX	l	চে	চি/X	চে
+PFX	l	চো	চু/X	চো
+PFX	l	0	0/X	ছ[^ােো]
+PFX	l	ছা	ছে/X	ছা
+PFX	l	ছে	ছি/X	ছে
+PFX	l	ছো	ছু/X	ছো
+PFX	l	0	0/X	জ[^ােো]
+PFX	l	জা	জে/X	জা
+PFX	l	জে	জি/X	জে
+PFX	l	জো	জু/X	জো
+PFX	l	0	0/X	ঝ[^ােো]
+PFX	l	ঝা	ঝে/X	ঝা
+PFX	l	ঝে	ঝি/X	ঝে
+PFX	l	ঝো	ঝু/X	ঝো
+PFX	l	0	0/X	ট[^ােো]
+PFX	l	টা	টে/X	টা
+PFX	l	টে	টি/X	টে
+PFX	l	টো	টু/X	টো
+PFX	l	0	0/X	ঠ[^ােো]
+PFX	l	ঠা	ঠে/X	ঠা
+PFX	l	ঠে	ঠি/X	ঠে
+PFX	l	ঠো	ঠু/X	ঠো
+PFX	l	0	0/X	ড[^ােো]
+PFX	l	ডা	ডে/X	ডা
+PFX	l	ডে	ডি/X	ডে
+PFX	l	ডো	ডু/X	ডো
+PFX	l	0	0/X	ড়[^ােো]
+PFX	l	ড়া	ড়ে/X	ড়া
+PFX	l	ড়ে	ড়ি/X	ড়ে
+PFX	l	ড়ো	ড়ু/X	ড়ো
+PFX	l	0	0/X	ঢ[^ােো]
+PFX	l	ঢা	ঢে/X	ঢা
+PFX	l	ঢে	ঢি/X	ঢে
+PFX	l	ঢো	ঢু/X	ঢো
+PFX	l	0	0/X	ত[^ােো]
+PFX	l	তা	তে/X	তা
+PFX	l	তে	তি/X	তে
+PFX	l	তো	তু/X	তো
+PFX	l	0	0/X	থ[^ােো]
+PFX	l	থ	থো/X	থ[^িীুূৃেৈোৌ]		irregularity
+PFX	l	থা	থে/X	থা
+PFX	l	থে	থি/X	থে
+PFX	l	থো	থু/X	থো
+PFX	l	0	0/X	দ[^ােো]
+PFX	l	দা	দে/X	দা
+PFX	l	দে	দে/X	দে
+PFX	l	দো	দু/X	দো
+PFX	l	0	0/X	ধ[^ােো]
+PFX	l	ধা	ধে/X	ধা
+PFX	l	ধে	ধি/X	ধে
+PFX	l	ধো	ধু/X	ধো
+PFX	l	0	0/X	ন[^ােো]
+PFX	l	না	নে/X	না
+PFX	l	নে	নি/X	নে
+PFX	l	নো	নু/X	নো
+PFX	l	0	0/X	প[^ােো]
+PFX	l	পা	পে/X	পা
+PFX	l	পে	পি/X	পে
+PFX	l	পো	পু/X	পো
+PFX	l	0	0/X	ফ[^ােো]
+PFX	l	ফা	ফে/X	ফা
+PFX	l	ফে	ফে/X	ফে		irregularity (ফেলা)
+PFX	l	ফো	ফু/X	ফো
+PFX	l	ব	ব/X	ব[^ােো]
+PFX	l	বা	বে/X	বা
+PFX	l	বে	বি/X	বে
+PFX	l	বো	বু/X	বো
+PFX	l	0	0/X	ভ[^ােো]
+PFX	l	ভা	ভে/X	ভা
+PFX	l	ভে	ভি/X	ভে
+PFX	l	ভো	ভু/X	ভো
+PFX	l	0	0/X	ম[^ােো]
+PFX	l	মা	মে/X	মা
+PFX	l	মে	মি/X	মে
+PFX	l	মো	মু/X	মো
+PFX	l	0	0/X	য[^ােো]
+PFX	l	যা	গি/X	যা				irregularity
+PFX	l	যে	যি/X	যে
+PFX	l	যো	যু/X	যো
+PFX	l	0	0/X	র[^ােো]
+PFX	l	রা	রে/X	রা
+PFX	l	রে	রি/X	রে
+PFX	l	রো	রু/X	রো
+PFX	l	0	0/X	ল[^ােো]
+PFX	l	লা	লে/X	লা
+PFX	l	লে	লি/X	লে
+PFX	l	লো	লু/X	লো
+PFX	l	0	0/X	শ[^ােো]
+PFX	l	শা	শে/X	শা
+PFX	l	শে	শি/X	শে
+PFX	l	শো	শু/X	শো
+PFX	l	0	0/X	ষ[^ােো]
+PFX	l	ষা	ষে/X	ষা
+PFX	l	ষে	ষি/X	ষে
+PFX	l	ষো	ষু/X	ষো
+PFX	l	0	0/X	স[^ােো]
+PFX	l	সা	সে/X	সা
+PFX	l	সে	সি/X	সে
+PFX	l	সো	সু/X	সো
+PFX	l	0	0/X	হ[^ােো]
+PFX	l	হা	হে/X	হা
+PFX	l	হে	হি/X	হে
+PFX	l	হো	হু/X	হো
+
+# Used for past perfect and present perfect of দেওয়া form vowels
+# Identical to 'l' vXcept there I removed e->i rule for খে, দে
+
+PFX	y	Y	128
+PFX	y   	আ	এ/X		আ
+PFX	y   	ও	উ/X		ও
+PFX	y	0	0/X	ক[^ােো]
+PFX	y	ক	কো/X	ক[^ােো]$
+PFX	y	কা	কে/X	কা
+PFX	y	কে	কি/X	কে
+PFX	y	কো	কু/X	কো
+PFX	y	0	0/X	ক্ষ[^ােো]
+PFX	y	ক্ষা	ক্ষে/X	ক্ষা
+PFX	y	ক্ষে	ক্ষি/X	ক্ষে
+PFX	y	ক্ষো	ক্ষু/X	ক্ষো
+PFX	y	0	0/X	খ[^াো]
+PFX	y	খা	খে/X	খা
+PFX	y	খে	খি/X	খে
+PFX	y	খো	খু/X	খো
+PFX	y	0	0/X	গ[^ােো]
+PFX	y	গা	গে/X	গা
+PFX	y	গে	গি/X	গে
+PFX	y	গো	গু/X	গো
+PFX	y	0	0/X	ঘ[^ােো]
+PFX	y	ঘা	ঘে/X	ঘা
+PFX	y	ঘে	ঘি/X	ঘে
+PFX	y	ঘো	ঘু/X	ঘো
+PFX	y	0	0/X	চ[^ােো]
+PFX	y	চা	চে/X	চা
+PFX	y	চে	চি/X	চে
+PFX	y	চো	চু/X	চো
+PFX	y	0	0/X	ছ[^ােো]
+PFX	y	ছা	ছে/X	ছা
+PFX	y	ছে	ছি/X	ছে
+PFX	y	ছো	ছু/X	ছো
+PFX	y	0	0/X	জ[^ােো]
+PFX	y	জা	জে/X	জা
+PFX	y	জে	জি/X	জে
+PFX	y	জো	জু/X	জো
+PFX	y	0	0/X	ঝ[^ােো]
+PFX	y	ঝা	ঝে/X	ঝা
+PFX	y	ঝে	ঝি/X	ঝে
+PFX	y	ঝো	ঝু/X	ঝো
+PFX	y	0	0/X	ট[^ােো]
+PFX	y	টা	টে/X	টা
+PFX	y	টে	টি/X	টে
+PFX	y	টো	টু/X	টো
+PFX	y	0	0/X	ঠ[^ােো]
+PFX	y	ঠা	ঠে/X	ঠা
+PFX	y	ঠে	ঠি/X	ঠে
+PFX	y	ঠো	ঠু/X	ঠো
+PFX	y	0	0/X	ড[^ােো]
+PFX	y	ডা	ডে/X	ডা
+PFX	y	ডে	ডি/X	ডে
+PFX	y	ডো	ডু/X	ডো
+PFX	y	0	0/X	ড়[^ােো]
+PFX	y	ড়া	ড়ে/X	ড়া
+PFX	y	ড়ে	ড়ি/X	ড়ে
+PFX	y	ড়ো	ড়ু/X	ড়ো
+PFX	y	0	0/X	ঢ[^ােো]
+PFX	y	ঢা	ঢে/X	ঢা
+PFX	y	ঢে	ঢি/X	ঢে
+PFX	y	ঢো	ঢু/X	ঢো
+PFX	y	0	0/X	ত[^ােো]
+PFX	y	তা	তে/X	তা
+PFX	y	তে	তি/X	তে
+PFX	y	তো	তু/X	তো
+PFX	y	0	0/X	থ[^ােো]
+PFX	y	থ	থো/X	থ[^িীুূৃেৈোৌ]
+PFX	y	থা	থে/X	থা
+PFX	y	থে	থি/X	থে
+PFX	y	থো	থু/X	থো
+PFX	y	0	0/X	দ[^ােো]
+PFX	y	দা	দে/X	দা
+PFX	y	দে	দি/X	দে
+PFX	y	দো	দু/X	দো
+PFX	y	0	0/X	ধ[^ােো]
+PFX	y	ধা	ধে/X	ধা
+PFX	y	ধে	ধি/X	ধে
+PFX	y	ধো	ধু/X	ধো
+PFX	y	0	0/X	ন[^ােো]
+PFX	y	না	নে/X	না
+PFX	y	নে	নি/X	নে
+PFX	y	নো	নু/X	নো
+PFX	y	0	0/X	প[^ােো]
+PFX	y	পা	পে/X	পা
+PFX	y	পে	পি/X	পে
+PFX	y	পো	পু/X	পো
+PFX	y	0	0/X	ফ[^ােো]
+PFX	y	ফা	ফে/X	ফা
+PFX	y	ফে	ফি/X	ফে
+PFX	y	ফো	ফু/X	ফো
+PFX	y	ব	ব/X	ব[^ােো]
+PFX	y	বা	বে/X	বা
+PFX	y	বে	বি/X	বে
+PFX	y	বো	বু/X	বো
+PFX	y	0	0/X	ভ[^ােো]
+PFX	y	ভা	ভে/X	ভা
+PFX	y	ভে	ভি/X	ভে
+PFX	y	ভো	ভু/X	ভো
+PFX	y	0	0/X	ম[^ােো]
+PFX	y	মা	মে/X	মা
+PFX	y	মে	মি/X	মে
+PFX	y	মো	মু/X	মো
+PFX	y	0	0/X	য[^ােো]
+PFX	y	যা	গি/X	যা				irregularity
+PFX	y	যে	যি/X	যে
+PFX	y	যো	যু/X	যো
+PFX	y	0	0/X	র[^ােো]
+PFX	y	রা	রে/X	রা
+PFX	y	রে	রি/X	রে
+PFX	y	রো	রু/X	রো
+PFX	y	0	0/X	ল[^ােো]
+PFX	y	লা	লে/X	লা
+PFX	y	লে	লি/X	লে
+PFX	y	লো	লু/X	লো
+PFX	y	0	0/X	শ[^ােো]
+PFX	y	শা	শে/X	শা
+PFX	y	শে	শি/X	শে
+PFX	y	শো	শু/X	শো
+PFX	y	0	0/X	ষ[^ােো]
+PFX	y	ষা	ষে/X	ষা
+PFX	y	ষে	ষি/X	ষে
+PFX	y	ষো	ষু/X	ষো
+PFX	y	0	0/X	স[^ােো]
+PFX	y	সা	সে/X	সা
+PFX	y	সে	সি/X	সে
+PFX	y	সো	সু/X	সো
+PFX	y	0	0/X	হ[^ােো]
+PFX	y	হা	হে/X	হা
+PFX	y	হে	হি/X	হে
+PFX	y	হো	হু/X	হো
+
+# Future Imperative of তুমি form (চলিত)  has a unusually strong propensity to change the initial vowel:
+# e.g.  কড়কা > কোড়কো
+PFX	z	Y	157
+PFX	z   আ	এ/X		আ
+PFX	z   ও	উ/X		ও
+PFX	z	0	0/X	ক[িীুূৃৈৌ]
+PFX	z	ক	কো/X	ক[^িীুূৃেৈোৌ]
+PFX	z	কা	কে/X	কা
+PFX	z	কে	কি/X	কে
+PFX	z	কো	কু/X	কো
+PFX	z	0	0/X	ক্ষ[িীুূৃৈৌ]
+PFX	z	ক্ষ	ক্ষো/X	ক্ষ[^িীুূৃেৈোৌ]
+PFX	z	ক্ষা	ক্ষে/X	ক্ষা
+PFX	z	ক্ষে	ক্ষি/X	ক্ষে
+PFX	z	ক্ষো	ক্ষু/X	ক্ষো
+PFX	z	0	0/X	খ[িীুূৃৈৌ]
+PFX	z	খ	খো/X	খ[^িীুূৃেৈোৌ]
+PFX	z	খা	খে/X	খা
+PFX	z	খে	খি/X	খে
+PFX	z	খো	খু/X	খো
+PFX	z	0	0/X	গ[িীুূৃৈৌ]
+PFX	z	গ	গো/X	গ[^িীুূৃেৈোৌ]
+PFX	z	গা	গে/X	গা
+PFX	z	গে	গি/X	গে
+PFX	z	গো	গু/X	গো
+PFX	z	0	0/X	ঘ[িীুূৃৈৌ]
+PFX	z	ঘ	ঘো/X	ঘ[^িীুূৃেৈোৌ]
+PFX	z	ঘা	ঘে/X	ঘা
+PFX	z	ঘে	ঘি/X	ঘে
+PFX	z	ঘো	ঘু/X	ঘো
+PFX	z	0	0/X	চ[িীুূৃৈৌ]
+PFX	z	চ	চো/X	চ[^িীুূৃেৈোৌ]
+PFX	z	চা	চে/X	চা
+PFX	z	চে	চি/X	চে
+PFX	z	চো	চু/X	চো
+PFX	z	0	0/X	ছ[িীুূৃৈৌ]
+PFX	z	ছ	ছো/X	ছ[^িীুূৃেৈোৌ]
+PFX	z	ছা	ছে/X	ছা
+PFX	z	ছে	ছি/X	ছে
+PFX	z	ছো	ছু/X	ছো
+PFX	z	0	0/X	জ[িীুূৃৈৌ]
+PFX	z	জ	জো/X	জ[^িীুূৃেৈোৌ]
+PFX	z	জা	জে/X	জা
+PFX	z	জে	জি/X	জে
+PFX	z	জো	জু/X	জো
+PFX	z	0	0/X	ঝ[িীুূৃৈৌ]
+PFX	z	ঝ	ঝো/X	ঝ[^িীুূৃেৈোৌ]
+PFX	z	ঝা	ঝে/X	ঝা
+PFX	z	ঝে	ঝি/X	ঝে
+PFX	z	ঝো	ঝু/X	ঝো
+PFX	z	0	0/X	ট[িীুূৃৈৌ]
+PFX	z	ট	টো/X	ট[^িীুূৃেৈোৌ]
+PFX	z	টা	টে/X	টা
+PFX	z	টে	টি/X	টে
+PFX	z	টো	টু/X	টো
+PFX	z	0	0/X	ঠ[িীুূৃৈৌ]
+PFX	z	ঠ	ঠো/X	ঠ[^িীুূৃেৈোৌ]
+PFX	z	ঠা	ঠে/X	ঠা
+PFX	z	ঠে	ঠি/X	ঠে
+PFX	z	ঠো	ঠু/X	ঠো
+PFX	z	0	0/X	ড[িীুূৃৈৌ]
+PFX	z	ড	ডো/X	ড[^িীুূৃেৈোৌ]
+PFX	z	ডা	ডে/X	ডা
+PFX	z	ডে	ডি/X	ডে
+PFX	z	ডো	ডু/X	ডো
+PFX	z	0	0/X	ড়[িীুূৃৈৌ]
+PFX	z	ড়	ড়ো/X	ড়[^িীুূৃেৈোৌ]
+PFX	z	ড়া	ড়ে/X	ড়া
+PFX	z	ড়ে	ড়ি/X	ড়ে
+PFX	z	ড়ো	ড়ু/X	ড়ো
+PFX	z	0	0/X	ঢ[িীুূৃৈৌ]
+PFX	z	ঢ	ঢো/X	ঢ[^িীুূৃেৈোৌ]
+PFX	z	ঢা	ঢে/X	ঢা
+PFX	z	ঢে	ঢি/X	ঢে
+PFX	z	ঢো	ঢু/X	ঢো
+PFX	z	0	0/X	ত[িীুূৃৈৌ]
+PFX	z	ত	তো/X	ত[^িীুূৃেৈোৌ]
+PFX	z	তা	তে/X	তা
+PFX	z	তে	তি/X	তে
+PFX	z	তো	তু/X	তো
+PFX	z	0	0/X	থ[িীুূৃৈৌ]
+PFX	z	থ	থো/X	থ[^িীুূৃেৈোৌ]
+PFX	z	থা	থে/X	থা
+PFX	z	থে	থি/X	থে
+PFX	z	থো	থু/X	থো
+PFX	z	0	0/X	দ[িীুূৃৈৌ]
+PFX	z	দ	দো/X	দ[^িীুূৃেৈোৌ]
+PFX	z	দা	দে/X	দা
+PFX	z	দে	দি/X	দে
+PFX	z	দো	দু/X	দো
+PFX	z	0	0/X	ধ[িীুূৃৈৌ]
+PFX	z	ধ	ধো/X	ধ[^িীুূৃেৈোৌ]
+PFX	z	ধা	ধে/X	ধা
+PFX	z	ধে	ধি/X	ধে
+PFX	z	ধো	ধু/X	ধো
+PFX	z	0	0/X	ন[িীুূৃৈৌ]
+PFX	z	ন	নো/X	ন[^িীুূৃেৈোৌ]
+PFX	z	না	নে/X	না
+PFX	z	নে	নি/X	নে
+PFX	z	নো	নু/X	নো
+PFX	z	0	0/X	প[িীুূৃৈৌ]
+PFX	z	প	পো/X	প[^িীুূৃেৈোৌ]
+PFX	z	পা	পে/X	পা
+PFX	z	পে	পি/X	পে
+PFX	z	পো	পু/X	পো
+PFX	z	0	0/X	ফ[িীুূৃৈৌ]
+PFX	z	ফ	ফো/X	ফ[^িীুূৃেৈোৌ]
+PFX	z	ফা	ফে/X	ফা
+PFX	z	ফে	ফি/X	ফে
+PFX	z	ফো	ফু/X	ফো
+PFX	z	0	0/X	ব[িীুূৃৈৌ]
+PFX	z	ব	বো/X	ব[^িীুূৃেৈোৌ]
+PFX	z	বা	বে/X	বা
+PFX	z	বে	বি/X	বে
+PFX	z	বো	বু/X	বো
+PFX	z	0	0/X	ভ[িীুূৃৈৌ]
+PFX	z	ভ	ভো/X	ভ[^িীুূৃেৈোৌ]
+PFX	z	ভা	ভে/X	ভা
+PFX	z	ভে	ভি/X	ভে
+PFX	z	ভো	ভু/X	ভো
+PFX	z	0	0/X	ম[িীুূৃৈৌ]
+PFX	z	ম	মো/X	ম[^িীুূৃেৈোৌ]
+PFX	z	মা	মে/X	মা
+PFX	z	মে	মি/X	মে
+PFX	z	মো	মু/X	মো
+PFX	z	0	0/X	য[িীুূৃৈৌ]
+PFX	z	য	যো/X	য[^িীুূৃেৈোৌ]
+PFX	z	যা	গি/X	যা				irregularity
+PFX	z	যে	যি/X	যে
+PFX	z	যো	যু/X	যো
+PFX	z	0	0/X	র[িীুূৃৈৌ]
+PFX	z	র	রো/X	র[^িীুূৃেৈোৌ]
+PFX	z	রা	রে/X	রা
+PFX	z	রে	রি/X	রে
+PFX	z	রো	রু/X	রো
+PFX	z	0	0/X	ল[িীুূৃৈৌ]
+PFX	z	ল	লো/X	ল[^িীুূৃেৈোৌ]
+PFX	z	লা	লে/X	লা
+PFX	z	লে	লি/X	লে
+PFX	z	লো	লু/X	লো
+PFX	z	0	0/X	শ[িীুূৃৈৌ]
+PFX	z	শ	শো/X	শ[^িীুূৃেৈোৌ]
+PFX	z	শা	শে/X	শা
+PFX	z	শে	শি/X	শে
+PFX	z	শো	শু/X	শো
+PFX	z	0	0/X	ষ[িীুূৃৈৌ]
+PFX	z	ষ	ষো/X	ষ[^িীুূৃেৈোৌ]
+PFX	z	ষা	ষে/X	ষা
+PFX	z	ষে	ষি/X	ষে
+PFX	z	ষো	ষু/X	ষো
+PFX	z	0	0/X	স[িীুূৃৈৌ]
+PFX	z	স	সো/X	স[^িীুূৃেৈোৌ]
+PFX	z	সা	সে/X	সা
+PFX	z	সে	সি/X	সে
+PFX	z	সো	সু/X	সো
+PFX	z	0	0/X	হ[িীুূৃৈৌ]
+PFX	z	হ	হো/X	হ[^িীুূৃেৈোৌ]
+PFX	z	হা	হে/X	হা
+PFX	z	হে	হি/X	হে
+PFX	z	হো	হু/X	হো
+
+
+# Opposite of x used for ানো verbs in continuous class
+PFX	Z	Y 	102
+PFX	Z	0	0/X	[অআএও]
+PFX	Z	 উ	ও/X	উ
+PFX	Z	 ই	এ/X	ই
+PFX	Z	 ক	ক/X	 ক[^ুি]
+PFX	Z	কি	কে/X	কি$
+PFX	Z	কু	কো/X	কু$
+PFX	Z	 ক্ষ	ক্ষ/X	 ক্ষ[^ুি]
+PFX	Z	ক্ষি	ক্ষে/X	ক্ষি$
+PFX	Z	ক্ষু	ক্ষো/X	ক্ষু$
+PFX	Z	 গ	গ/X	 গ[^ুি]
+PFX	Z	গি	গে/X	গি$
+PFX	Z	গু	গো/X	গু$
+PFX	Z	 খ	খ/X	 খ[^ুি]
+PFX	Z	খি	খে/X	খি$
+PFX	Z	খু	খো/X	খু$
+PFX	Z	 ঘ	ঘ/X	 [^ুি]ঘ
+PFX	Z	ঘি	ঘে/X	ঘি$
+PFX	Z	ঘু	ঘু/X	ঘু		irregularity for ঘুমানো$
+PFX	Z	চ	চ/X	চ[^ুি]
+PFX	Z	চি	চে/X	চি$
+PFX	Z	চু	চো/X	চু$
+PFX	Z	 ছ	ছ/X	 ছ[^ুি]
+PFX	Z	ছি	ছে/X	ছি$
+PFX	Z	ছু	ছো/X	ছু$
+PFX	Z	 জ	জ/X	 জ[^ুি]
+PFX	Z	জি	জে/X	জি$
+PFX	Z	জু	জো/X	জু$
+PFX	Z	 ঝ	ঝ/X	 ঝ[^ুি]
+PFX	Z	ঝি	ঝে/X	ঝি$
+PFX	Z	ঝু	ঝো/X	ঝু$
+PFX	Z	 ঞ	ঞ/X	 ঞ[^ুি]
+PFX	Z	ঞি	ঞে/X	ঞি$
+PFX	Z	ঞু	ঞো/X	ঞু$
+PFX	Z	 ট	ট/X	 ট[^ুি]
+PFX	Z	টি	টে/X	টি$
+PFX	Z	টু	টো/X	টু$
+PFX	Z	 ঠ	ঠ/X	 ঠ[^ুি]
+PFX	Z	ঠি	ঠে/X	ঠি$
+PFX	Z	ঠু	ঠো/X	ঠু$
+PFX	Z	 ড	ড/X	 ড[^ুি]
+PFX	Z	ডি	ডে/X	ডি$
+PFX	Z	ডু	ডো/X	ডু$
+PFX	Z	 ড়	ড়/X	 ড়[^ুি]
+PFX	Z	ড়ি	ড়ে/X	ড়ি$
+PFX	Z	ড়ু	ড়ো/X	ড়ু$
+PFX	Z	 ঢ	ঢ/X	 ঢ[^ুি]
+PFX	Z	ঢি	ঢে/X	ঢি$
+PFX	Z	ঢু	ঢো/X	ঢু$
+PFX	Z	 ণ	ণ/X	 ণ[^ুি]
+PFX	Z	ণি	ণে/X	ণি$
+PFX	Z	ণু	ণো/X	ণু$
+PFX	Z	 ত	ত/X	 ত[^ুি]
+PFX	Z	তি	তে/X	তি$
+PFX	Z	তু	তো/X	তু$
+PFX	Z	 থ	থ/X	 থ[^ুি]
+PFX	Z	থি	থে/X	থি$
+PFX	Z	থু	থো/X	থু$
+PFX	Z	 দ	দ/X	 দ[^ুি]
+PFX	Z	দি	দে/X	দি$
+PFX	Z	দু	দো/X	দু$
+PFX	Z	 ধ	ধ/X	 ধ[^ুি]
+PFX	Z	ধি	ধে/X	ধি$
+PFX	Z	ধু	ধো/X	ধু$
+PFX	Z	 ন	ন/X	 ন[^ুি]
+PFX	Z	নি	নে/X	নি$
+PFX	Z	নু	নো/X	নু$
+PFX	Z	 প	প/X	 প[^ুি]
+PFX	Z	পি	পে/X	পি$
+PFX	Z	পু	পো/X	পু$
+PFX	Z	 ফ	ফ/X	 ফ[^ুি]
+PFX	Z	ফি	ফে/X	ফি$
+PFX	Z	ফু	ফো/X	ফু$
+PFX	Z	 ব	ব/X	 ব[^ুি]
+PFX	Z	বি	বে/X	বি$
+PFX	Z	বু	বো/X	বু$
+PFX	Z	 ভ	ভ/X	 ভ[^ুি]
+PFX	Z	ভি	ভে/X	ভি$
+PFX	Z	ভু	ভো/X	ভু$
+PFX	Z	 ম	ম/X	 ম[^ুি]
+PFX	Z	মি	মে/X	মি$
+PFX	Z	মু	মো/X	মু$
+PFX	Z	 য	য/X	 য[^ুি]
+PFX	Z	যি	যে/X	যি$
+PFX	Z	যু	যো/X	যু$
+PFX	Z	 র	র/X	 র[^ুি]
+PFX	Z	রি	রে/X	রি$
+PFX	Z	রু	রো/X	রু$
+PFX	Z	 ল	ল/X	 ল[^ুি]
+PFX	Z	লি	লে/X	লি$
+PFX	Z	লু	লো/X	লু$
+PFX	Z	 শ	শ/X	 শ[^ুি]
+PFX	Z	শি	শে/X	শি$
+PFX	Z	শু	শো/X	শু$
+PFX	Z	 ষ	ষ/X	 ষ[^ুি]
+PFX	Z	ষি	ষে/X	ষি$
+PFX	Z	ষু	ষো/X	ষু$
+PFX	Z	 স	স/X	 স[^ুি]
+PFX	Z	সি	সে/X	সি$
+PFX	Z	সু	সো/X	সু$
+PFX	Z	 হ	হ/X	 হ[^ুি]
+PFX	Z	হি	হে/X	হি$
+PFX	Z	হু	হো/X	হু$
+
+
+# simple া verb prefixes for shadhu form - generally stays the same
+# Rules: ে>ি, ো>ু  only changes
+# changed 3/4/2017
+
+PFX	x	Y 	100
+PFX	x	0	0/X		[অআউএও]
+PFX	x	ক	 ক/X	ক[^েো]
+PFX	x	কি	কে/X	কি			irregularity for কিনা genetive of verbal noun 'কেনবার'
+PFX	x	কো	কু/X	কো
+PFX	x	ক্ষ	 ক্ষ/X	ক্ষ[^েো]
+PFX	x	ক্ষে	ক্ষি/X	ক্ষে
+PFX	x	ক্ষো	ক্ষু/X	ক্ষো
+PFX	x	গ	 গ/X	গ[^েো]
+PFX	x	গে	গি/X	গে
+PFX	x	গো	গু/X	গো
+PFX	x	খ	 খ/X	খ[^েো]
+PFX	x	খে	খি/X	খে
+PFX	x	খো	খু/X	খো
+PFX	x	ঘ	 ঘ/X	ঘ[^েো]
+PFX	x	ঘে	ঘি/X	ঘে
+PFX	x	ঘো	ঘু/X	ঘো
+PFX	x	চ	চ/X	চ[^েো]
+PFX	x	চে	চি/X	চে
+PFX	x	চো	চু/X	চো
+PFX	x	ছ	 ছ/X	ছ[^েো]
+PFX	x	ছে	ছি/X	ছে
+PFX	x	ছো	ছু/X	ছো
+PFX	x	জ	 জ/X	জ[^েো]
+PFX	x	জে	জি/X	জে
+PFX	x	জো	জু/X	জো
+PFX	x	ঝ	 ঝ/X	ঝ[^েো]
+PFX	x	ঝে	ঝি/X	ঝে
+PFX	x	ঝো	ঝু/X	ঝো
+PFX	x	ঞ	 ঞ/X	ঞ[^েো]
+PFX	x	ঞে	ঞি/X	ঞে
+PFX	x	ঞো	ঞু/X	ঞো
+PFX	x	ট	 ট/X	ট[^েো]
+PFX	x	টে	টি/X	টে
+PFX	x	টো	টু/X	টো
+PFX	x	ঠ	 ঠ/X	ঠ[^েো]
+PFX	x	ঠে	ঠি/X	ঠে
+PFX	x	ঠো	ঠু/X	ঠো
+PFX	x	ড	 ড/X	ড[^েো]
+PFX	x	ডে	ডি/X	ডে
+PFX	x	ডো	ডু/X	ডো
+PFX	x	ড়	 ড়/X	ড়[^েো]
+PFX	x	ড়ে	ড়ি/X	ড়ে
+PFX	x	ড়ো	ড়ু/X	ড়ো
+PFX	x	ঢ	 ঢ/X	ঢ[^েো]
+PFX	x	ঢে	ঢি/X	ঢে
+PFX	x	ঢো	ঢু/X	ঢো
+PFX	x	ণ	 ণ/X	ণ[^েো]
+PFX	x	ণে	ণি/X	ণে
+PFX	x	ণো	ণু/X	ণো
+PFX	x	ত	 ত/X	ত[^েো]
+PFX	x	তে	তি/X	তে
+PFX	x	তো	তু/X	তো
+PFX	x	থ	 থ/X	থ[^েো]
+PFX	x	থে	থি/X	থে
+PFX	x	থো	থু/X	থো
+PFX	x	দ	 দ/X	দ[^েো]
+PFX	x	দে	দি/X	দে
+PFX	x	দো	দু/X	দো
+PFX	x	ধ	 ধ/X	ধ[^েো]
+PFX	x	ধে	ধি/X	ধে
+PFX	x	ধো	ধু/X	ধো
+PFX	x	ন	 ন/X	ন[^েো]
+PFX	x	নে	নি/X	নে
+PFX	x	নো	নু/X	নো
+PFX	x	প	 প/X	প[^েো]
+PFX	x	পে	পি/X	পে
+PFX	x	পো	পু/X	পো
+PFX	x	ফ	 ফ/X	ফ[^েো]
+PFX	x	ফে	ফি/X	ফে
+PFX	x	ফো	ফু/X	ফো
+PFX	x	ব	 ব/X	ব[^েো]
+PFX	x	বে	বি/X	বে
+PFX	x	বো	বু/X	বো
+PFX	x	ভ	 ভ/X	ভ[^েো]
+PFX	x	ভে	ভি/X	ভে
+PFX	x	ভো	ভু/X	ভো
+PFX	x	ম	 ম/X	ম[^েো]
+PFX	x	মে	মি/X	মে
+PFX	x	মো	মু/X	মো
+PFX	x	য	 য/X	য[^েো]
+PFX	x	যে	যি/X	যে
+PFX	x	যো	যু/X	যো
+PFX	x	র	 র/X	র[^েো]
+PFX	x	রে	রি/X	রে
+PFX	x	রো	রু/X	রো
+PFX	x	ল	 ল/X	ল[^েো]
+PFX	x	লে	লি/X	লে
+PFX	x	লো	লু/X	লো
+PFX	x	শ	 শ/X	শ[^েো]
+PFX	x	শে	শি/X	শে
+PFX	x	শো	শু/X	শো
+PFX	x	ষ	 ষ/X	ষ[^েো]
+PFX	x	ষে	ষি/X	ষে
+PFX	x	ষো	ষু/X	ষো
+PFX	x	স	 স/X	স[^েো]
+PFX	x	সে	সি/X	সে
+PFX	x	সো	সু/X	সো
+PFX	x	হ	 হ/X	হ[^েো]
+PFX	x	হে	হি/X	হে
+PFX	x	হো	হু/X	হো
+
+
+# Identical to x, just modified for present & past perfect (shadhu) of দেখানো
+
+
+PFX	O	Y 	100
+PFX	O	0	0/X		[অআউএও]
+PFX	O	ক	 ক/X	ক[^েো]
+PFX	O	কে	কি/X	কে
+PFX	O	কো	কু/X	কো
+PFX	O	ক্ষ	 ক্ষ/X	ক্ষ[^েো]
+PFX	O	ক্ষে	ক্ষি/X	ক্ষে
+PFX	O	ক্ষো	ক্ষু/X	ক্ষো
+PFX	O	গ	 গ/X	গ[^েো]
+PFX	O	গে	গি/X	গে
+PFX	O	গো	গু/X	গো
+PFX	O	খ	 খ/X	খ[^েো]
+PFX	O	খে	খি/X	খে
+PFX	O	খো	খু/X	খো
+PFX	O	ঘ	 ঘ/X	ঘ[^েো]
+PFX	O	ঘে	ঘি/X	ঘে
+PFX	O	ঘো	ঘু/X	ঘো
+PFX	O	চ	চ/X	চ[^েো]
+PFX	O	চে	চি/X	চে
+PFX	O	চো	চু/X	চো
+PFX	O	ছ	 ছ/X	ছ[^েো]
+PFX	O	ছে	ছি/X	ছে
+PFX	O	ছো	ছু/X	ছো
+PFX	O	জ	 জ/X	জ[^েো]
+PFX	O	জে	জি/X	জে
+PFX	O	জো	জু/X	জো
+PFX	O	ঝ	 ঝ/X	ঝ[^েো]
+PFX	O	ঝে	ঝি/X	ঝে
+PFX	O	ঝো	ঝু/X	ঝো
+PFX	O	ঞ	 ঞ/X	ঞ[^েো]
+PFX	O	ঞে	ঞি/X	ঞে
+PFX	O	ঞো	ঞু/X	ঞো
+PFX	O	ট	 ট/X	ট[^েো]
+PFX	O	টে	টি/X	টে
+PFX	O	টো	টু/X	টো
+PFX	O	ঠ	 ঠ/X	ঠ[^েো]
+PFX	O	ঠে	ঠি/X	ঠে
+PFX	O	ঠো	ঠু/X	ঠো
+PFX	O	ড	 ড/X	ড[^েো]
+PFX	O	ডে	ডি/X	ডে
+PFX	O	ডো	ডু/X	ডো
+PFX	O	ড়	 ড়/X	ড়[^েো]
+PFX	O	ড়ে	ড়ি/X	ড়ে
+PFX	O	ড়ো	ড়ু/X	ড়ো
+PFX	O	ঢ	 ঢ/X	ঢ[^েো]
+PFX	O	ঢে	ঢি/X	ঢে
+PFX	O	ঢো	ঢু/X	ঢো
+PFX	O	ণ	 ণ/X	ণ[^েো]
+PFX	O	ণে	ণি/X	ণে
+PFX	O	ণো	ণু/X	ণো
+PFX	O	ত	 ত/X	ত[^েো]
+PFX	O	তে	তি/X	তে
+PFX	O	তো	তু/X	তো
+PFX	O	থ	 থ/X	থ[^েো]
+PFX	O	থে	থি/X	থে
+PFX	O	থো	থু/X	থো
+PFX	O	দ	 দ/X	দ[^েো]
+PFX	O	দে	দে/X	দে
+PFX	O	দো	দু/X	দো
+PFX	O	ধ	 ধ/X	ধ[^েো]
+PFX	O	ধে	ধি/X	ধে
+PFX	O	ধো	ধু/X	ধো
+PFX	O	ন	 ন/X	ন[^েো]
+PFX	O	নে	নি/X	নে
+PFX	O	নো	নু/X	নো
+PFX	O	প	 প/X	প[^েো]
+PFX	O	পে	পি/X	পে
+PFX	O	পো	পু/X	পো
+PFX	O	ফ	 ফ/X	ফ[^েো]
+PFX	O	ফে	ফি/X	ফে
+PFX	O	ফো	ফু/X	ফো
+PFX	O	ব	 ব/X	ব[^েো]
+PFX	O	বে	বি/X	বে
+PFX	O	বো	বু/X	বো
+PFX	O	ভ	 ভ/X	ভ[^েো]
+PFX	O	ভে	ভি/X	ভে
+PFX	O	ভো	ভু/X	ভো
+PFX	O	ম	 ম/X	ম[^েো]
+PFX	O	মে	মি/X	মে
+PFX	O	মো	মু/X	মো
+PFX	O	য	 য/X	য[^েো]
+PFX	O	যে	যি/X	যে
+PFX	O	যো	যু/X	যো
+PFX	O	র	 র/X	র[^েো]
+PFX	O	রে	রি/X	রে
+PFX	O	রো	রু/X	রো
+PFX	O	ল	 ল/X	ল[^েো]
+PFX	O	লে	লি/X	লে
+PFX	O	লো	লু/X	লো
+PFX	O	শ	 শ/X	শ[^েো]
+PFX	O	শে	শি/X	শে
+PFX	O	শো	শু/X	শো
+PFX	O	ষ	 ষ/X	ষ[^েো]
+PFX	O	ষে	ষি/X	ষে
+PFX	O	ষো	ষু/X	ষো
+PFX	O	স	 স/X	স[^েো]
+PFX	O	সে	সি/X	সে
+PFX	O	সো	সু/X	সো
+PFX	O	হ	 হ/X	হ[^েো]
+PFX	O	হে	হি/X	হে
+PFX	O	হো	হু/X	হো
+
+# Rules:  ো>ু  only changes
+
+PFX	w	Y 	63
+PFX	w	0	0/X		[অআউএও]
+PFX	w	ক	 ক/X	ক[^ো]
+PFX	w	কো	কু/X	কো
+PFX	w	ক্ষ	 ক্ষ/X	ক্ষ[^ো]
+PFX	w	ক্ষো	ক্ষু/X	ক্ষো
+PFX	w	গ	 গ/X	গ[^ো]
+PFX	w	গো	গু/X	গো
+PFX	w	খ	 খ/X	খ[^ো]
+PFX	w	খো	খু/X	খো
+PFX	w	ঘ	 ঘ/X	ঘ[^ো]
+PFX	w	ঘো	ঘু/X	ঘো
+PFX	w	চ	চ/X	চ[^ো]
+PFX	w	চো	চু/X	চো
+PFX	w	ছ	 ছ/X	ছ[^ো]
+PFX	w	ছো	ছু/X	ছো
+PFX	w	জ	 জ/X	জ[^ো]
+PFX	w	জো	জু/X	জো
+PFX	w	ঝ	 ঝ/X	ঝ[^ো]
+PFX	w	ঝো	ঝু/X	ঝো
+PFX	w	ট	 ট/X	ট[^ো]
+PFX	w	টো	টু/X	টো
+PFX	w	ঠ	 ঠ/X	ঠ[^ো]
+PFX	w	ঠো	ঠু/X	ঠো
+PFX	w	ড	 ড/X	ড[^ো]
+PFX	w	ডো	ডু/X	ডো
+PFX	w	ড়	 ড়/X	ড়[^ো]
+PFX	w	ড়ো	ড়ু/X	ড়ো
+PFX	w	ঢ	 ঢ/X	ঢ[^ো]
+PFX	w	ঢো	ঢু/X	ঢো
+PFX	w	ত	 ত/X	ত[^ো]
+PFX	w	তো	তু/X	তো
+PFX	w	থ	 থ/X	থ[^ো]
+PFX	w	থো	থু/X	থো
+PFX	w	দ	 দ/X	দ[^ো]
+PFX	w	দো	দু/X	দো
+PFX	w	ধ	 ধ/X	ধ[^ো]
+PFX	w	ধো	ধু/X	ধো
+PFX	w	ন	 ন/X	ন[^ো]
+PFX	w	নো	নু/X	নো
+PFX	w	প	 প/X	প[^ো]
+PFX	w	পো	পু/X	পো
+PFX	w	ফ	 ফ/X	ফ[^ো]
+PFX	w	ফো	ফু/X	ফো
+PFX	w	ব	 ব/X	ব[^ো]
+PFX	w	বো	বু/X	বো
+PFX	w	ভ	 ভ/X	ভ[^ো]
+PFX	w	ভো	ভু/X	ভো
+PFX	w	ম	 ম/X	ম[^ো]
+PFX	w	মো	মু/X	মো
+PFX	w	য	 য/X	য[^ো]
+PFX	w	যো	যু/X	যো
+PFX	w	র	 র/X	র[^ো]
+PFX	w	রো	রু/X	রো
+PFX	w	ল	 ল/X	ল[^ো]
+PFX	w	লো	লু/X	লো
+PFX	w	শ	 শ/X	শ[^ো]
+PFX	w	শো	শু/X	শো
+PFX	w	ষ	 ষ/X	ষ[^ো]
+PFX	w	ষো	ষু/X	ষো
+PFX	w	স	 স/X	স[^ো]
+PFX	w	সো	সু/X	সো
+PFX	w	হ	 হ/X	হ[^ো]
+PFX	w	হো	হু/X	হো
+
+
+
+
+PFX	G  Y 	1
+PFX	G  চে	চি/X		চে
+
+# -ওয়া verb irregularities 1 (past habitual, future imperative চলিত তুমি)
+# Characteristics: নে>নি, খা>খে/খাই (irregular); স>সই
+PFX	α	Y 	26
+PFX	α	ক	কই/X		ক		different
+PFX	α	ক্ষ	 ক্ষ/X		ক্ষ
+PFX	α	0	0/X		খ[^া]	different$
+PFX	α	খা	 খে/X		খা
+PFX	α	গা	গাই/X		গা		different
+PFX	α	চা	চাই/X		চা		different
+PFX	α	চা	চে/X		চা		difference from 'H'
+PFX	α	ছা	 ছে/X		ছা
+PFX	α	তা	 তে/X		তা
+PFX	α	দে	 দি/X		দে
+PFX	α	ধা	 ধে/X		ধা
+PFX	α	না	নাই/X		না		different
+PFX	α	নে	 নি/X		নে
+PFX	α	পা	 পে/X		পা
+PFX	α	0	0/X		ব[^া]
+PFX	α	ব	বই/X		ব		different
+PFX	α	যা	যে/X		যা		different
+PFX	α	ভ	 ভ/X		ভ
+PFX	α	ম	 ম/X		ম
+PFX	α	য	 য/X		য
+PFX	α	র	রই/X		র		different
+PFX	α	ল	লই/X		ল		different
+PFX	α	শ	শ/X		শ
+PFX	α	ষ	ষ/X		ষ
+PFX	α  	স	সই/X		স		different
+PFX	α	হ	 হ/X		হ
+
+
+# -ওয়া verb irregularities 3 (past simple only)
+# - Identical to H vXcept noted difference with 'গে' form
+PFX	ε	Y 	26
+PFX	ε	ক	কই/X		ক		different
+PFX	ε	ক্ষ	 ক্ষ/X		ক্ষ
+PFX	ε	0	0/X		খ[^া]	different$
+PFX	ε	খা	 খে/X		খা
+PFX	ε	গা	গাই/X		গা		different
+PFX	ε	চা	চাই/X		চা		different
+PFX	ε	ছা	 ছে/X		ছা
+PFX	ε	তা	 তে/X		তা
+PFX	ε	দে	 দি/X		দে
+PFX	ε	ধা	 ধে/X		ধা
+PFX	ε	না	নাই/X		না		different
+PFX	ε	নে	 নি/X		নে
+PFX	ε	পা	 পে/X		পা
+PFX	ε	0	0/X		ব[^া]
+PFX	ε	ম	 ম/X		ম
+PFX	ε	ব	বই/X		ব		different
+PFX	ε	যা	গে/X  	যা		difference from 'H'
+PFX	ε	ভ	 ভ/X		ভ
+PFX	ε	ম	 ম/X		ম
+PFX	ε	য	 য/X		য
+PFX	ε	র	রই/X		র		different
+PFX	ε	ল	লই/X		ল		different
+PFX	ε	শ	শ/X		শ
+PFX	ε	ষ	ষ/X		ষ
+PFX	ε  	স	সই/X		স		different
+PFX	ε	হ	 হ/X		হ
+
+
+
+# -ওয়া verb irregularities 2 (future & future imperative তুই only)
+PFX	I	Y 	15
+PFX	I	ক	কই/X		ক		different
+PFX	I	ক্ষ	 ক্ষ/X		ক্ষ
+PFX	I	0	0/X		খ[^া]	different$
+PFX	I	খা	 খা/X		খা
+PFX	I	গা	গাই/X		গা		different
+PFX	I	চা	চাই/X		চা		different
+PFX	I	চা	চা/X		চা		difference from '??'
+PFX	I	0	0/X		[তছধমপহভষশযব]
+PFX	I	দে	 দি/X		দে
+PFX	I	না	নাই/X		না		different
+PFX	I	নে	 নি/X		নে
+PFX	I	ব	বই/X		ব		different
+PFX	I	র	রই/X		র		different
+PFX	I	ল	লই/X		ল		different
+PFX	I  	স	সই/X		স		different
+
+# -ওয়া verb irregularities 2 (future & future imperative আমি,তুমি,সে,তিনি only)
+PFX	γ	Y 	15
+PFX	γ	ক	কই/X		ক		different
+PFX	γ	ক্ষ	 ক্ষ/X		ক্ষ
+PFX	γ	0	0/X		খ[^া]	different$
+PFX	γ	খা	 খা/X		খা
+PFX	γ	গা	গাই/X		গা		different
+PFX	γ	চা	চাই/X		চা		different
+PFX	γ	চা	চা/X		চা		difference from '??'
+PFX	γ	0	0/X		[তছধমপহভষশযব]
+PFX	γ	দে	 দে/X		দে
+PFX	γ	না	নাই/X		না		different
+PFX	γ	নে	নে/X		নে
+PFX	γ	ব	বই/X		ব		different
+PFX	γ	র	রই/X		র		different
+PFX	γ	ল	লই/X		ল		different
+PFX	γ  	স	সই/X		স		different
+
+
+# -ওয়া verb irregularities 2 (used only for চলিত genetive verbal noun of -াওয়া verbs)
+PFX	δ  Y	13
+PFX	δ  চা	চাই/X		চা
+PFX	δ  চা	চা/X		চা	difference from 'H' & 'T'
+PFX	δ  গা	গাই/X		গা
+PFX	δ  না	নাই/X		না
+PFX	δ  0	0/X		খ[^া]$
+PFX	δ  খা	খা/X		খা	difference from 'I'
+PFX	δ  যা	যা/X		যা
+PFX	δ  ক	ক/X		ক
+PFX	δ  ব	ব/X		ব
+PFX	δ  র	র/X		র
+PFX	δ  স	স/X		স
+PFX	δ  ল	ল/X		ল
+PFX	δ  0	0/X		[^চগনখষকবরসল]
+
+
+# -ওয়া verb forms for present simple, to cover হোস/হোন and নিস, খাস
+PFX	W  Y	21
+PFX	W  ক	কো/X		ক
+PFX	W  ক্ষ	ক্ষো/X		ক্ষ
+PFX	W  খ	খো/X		খ[^া]$
+PFX	W  খা	খা/X		খা
+PFX	W  গা	গা/X		গা
+PFX	W  চা	চা/X		চা
+PFX	W  ছা	ছা/X		ছা
+PFX	W  তা	তা/X		তা
+PFX	W  দে	দি/X		দে
+PFX	W  ধা	ধা/X		ধা
+PFX	W  না	না/X		না
+PFX	W  নে	নি/X		নে
+PFX	W  পা	পা/X		পা
+PFX	W  ব	বো/X		ব[^া]$
+PFX	W  বা	বা/X		বা
+PFX	W  ম	মো/X		ম
+PFX	W  যা	যা/X		যা
+PFX	W  র	রো/X		র
+PFX	W  ল	লো/X		ল
+PFX	W  স	সো/X		স
+PFX	W  হ	হো/X		হ
+
+# -ওয়া verb present simple তুমি and present perfect negative তুমি
+
+PFX	θ  Y	2
+PFX	θ	0	0/X		[^দে]
+PFX	θ	দে	দা/X		দে
+
+
+
+
+# Class 4 -াওয়া verbs with vXtra past continuous class forms
+# namely চাওয়া, গাওয়া, নাওয়া  - (refer to HRT p154)
+PFX	U  Y	3
+PFX	U  চা	চা/X		চা
+PFX	U  গা	গা/X		গা
+PFX	U  না	না/X		না
+
+
+
+
+# For -াওয়া verbs past continuous tense, to distinguish "খাচ্ছিলাম" type and "রইছিলাম" type
+# This has all the relevant -াওয়া verb starting letters
+
+PFX	ζ  Y	16
+PFX	ζ  খ	খ/X		খ[^া]$
+PFX	ζ  খা	খা/X		খা
+PFX	ζ  গা	গা/X		গা
+PFX	ζ  চা	চা/X		চা
+PFX	ζ  ছা	ছা/X		ছা
+PFX	ζ  তা	তা/X		তা
+PFX	ζ  দে	দি/X		দে
+PFX	ζ  ধা	ধা/X		ধা
+PFX	ζ  না	না/X		না
+PFX	ζ  নে	নি/X		নে
+PFX	ζ  পা	পা/X		পা
+PFX	ζ  বা	বা/X		বা
+PFX	ζ  যা	যা/X		যা
+PFX	ζ  হ	হ/X		হ
+PFX	ζ  ম	ম/X		ম
+PFX	ζ  ক্ষ	ক্ষ/X		ক্ষ
+
+# For -াওয়া verbs past continuous tense, to distinguish "খাচ্ছিলাম" type and "রইছিলাম" type
+# specifically for কওয়া, বওয়া, রওয়া, লওয়া, সওয়া (that's complete)
+PFX	η  Y	5
+PFX	η  ক	ক/X		ক
+PFX	η  ব	ব/X		ব[^া]$
+PFX	η  র	র/X		র
+PFX	η  ল	ল/X		ল
+PFX	η  স	স/X		স
+
+# For -ওয়া verbs future imperative cholit tumi form
+# specifically for কোয়ো হোয়ো ...
+PFX	j  Y	9
+PFX	j  খ	খো/X		খ[^া] $
+PFX	j  হ	হো/X		হ
+PFX	j  ম	মো/X		ম
+PFX	j  ক্ষ	ক্ষো/X		ক্ষ
+PFX	j  ক	কো/X		ক
+PFX	j  ব	বো/X		ব[^া]$
+PFX	j  র	রো/X		র
+PFX	j  ল	লো/X		ল
+PFX	j  স	সো/X		স
+
+# For -ওয়া verbs future imperative cholit tumi form
+# for vXample খেও, গেও, পেও, নিও...
+PFX	k  Y	12
+PFX	k  খা	খে/X		খা
+PFX	k  গা	গে/X		গা
+PFX	k  চা	চে/X		চা
+PFX	k  ছা	ছে/X		ছা
+PFX	k  তা	তে/X		তা
+PFX	k  দে	দি/X		দে
+PFX	k  ধা	ধে/X		ধা
+PFX	k  না	নে/X		না
+PFX	k  নে	নি/X		নে
+PFX	k  পা	পে/X		পা
+PFX	k  বা	বে/X		বা
+PFX	k  যা	যে/X		যা
+
+
+# Irregular verb pattern for চাওয়া, গাওয়া, নাওয়া ... যাওয়া
+PFX	β	Y	31
+PFX	β	ক	কই/X		ক
+PFX	β	ক্ষ	ক্ষই/X		ক্ষ
+PFX	β	খ	খই/X		খ
+PFX	β	খা	খাই/X		খা
+PFX	β	খা	খাই/X		খা
+PFX	β	গা	গাহি/X  	গা		different
+PFX	β	চা	চাহি/X  	চা		different
+PFX	β	ছা	ছাই/X		ছা
+PFX	β	তা	তাই/X		তা
+PFX	β	দে	দেই/X		দে
+PFX	β	ধা	ধাই/X		ধা
+PFX	β	না	নাহি/X  	না		different
+PFX	β	নে	নি/X  	নে		different
+PFX	β	পা	পাই/X		পা
+PFX	β	ব	বহি/X  	ব[^া]	different
+PFX	β	বা	বাই/X		বা
+PFX	β	ম	মই/X		ম
+PFX	β	যা	গি/X   	যা		different
+PFX	β	র	রহি/X  	র		different
+PFX	β	ল	লই/X		ল
+PFX	β	স	সই/X		স
+PFX	β	হ	হই/X		হ
+PFX	β	ভ	ভই/X		ভ
+PFX	β	ম	মই/X		ম
+PFX	β	যা	যাই/X		যা
+PFX	β	র	রই/X		র
+PFX	β	ল	লই/X		ল
+PFX	β	শ	শই/X		শ
+PFX	β	ষ	ষই/X		ষ
+PFX	β	স	সই/X		স
+PFX	β	হ	হই/X		হ
+
+
+
+
+# Irregular verb pattern for যাওয়া > গিয়া in perfect tenses
+PFX	S	Y	1
+PFX	S	যা	গে/X  যা
+
+
+# Additional irregular verb pattern for চাওয়া, গাওয়া, নাওয়া
+SFX	Z	Y	2
+SFX	Z	0	ই	0
+SFX	Z	0	ও	0
+
+
+SFX	ধ Y 1
+SFX	ধ 0 জীবী/h  .
+
+SFX	ব Y 1
+SFX	ব 0 কারী/h  .
+
+SFX	ভ Y 1
+SFX	ভ 0 ওয়ালা/h  .
+
+SFX	দ Y 1
+SFX	দ 0 ী  .
+
+SFX	ণ Y 1
+SFX	ণ 0 শীল/h  .
+
+SFX	ন Y 1
+SFX	ন 0 পূর্ণ  .
+
+SFX	থ Y 1
+SFX	থ 0 ময়  .
+
+SFX	ত Y 1
+SFX	ত 0 ভাবে/i  .
+
+SFX	ঢ Y 1
+SFX	ঢ 0 বিষয়ক  .
+
+SFX	ড Y 1
+SFX	ড 0 প্রাপ্ত  .
+
+SFX	ঠ Y 1
+SFX	ঠ 0 সম্পন্ন  .
+
+SFX	ট Y 1
+SFX	ট 0 সংক্রান্ত  .
+
+SFX	ঙ Y 1
+SFX	ঙ 0 সংশ্লিষ্ট  .
+
+SFX	ঝ Y 1
+SFX	ঝ 0 সংলগ্ন  .
+
+SFX	জ Y 1
+SFX	জ 0 পূর্ণ  .
+
+SFX	চ Y 1
+SFX	চ 0 হীন  .
+
+SFX	ছ Y 1
+SFX	ছ 0 বিহীন  .
+
+SFX	ক Y 1
+SFX	ক 0 সহ  .
+
+SFX	খ Y 1
+SFX	খ 0 সহকারে  .
+
+SFX	গ Y 1
+SFX	গ 0 বহ  .
+
+SFX	ঘ Y 1
+SFX	ঘ 0 বাহী  .
+
+PFX	অ Y 1
+PFX	অ 0 অ  .
+
+SFX	র Y 1
+SFX	র 0 রত  .
+
+SFX	ভ Y 1
+SFX	ভ 0 নির্ভর  .
+
+SFX	শ Y 2
+SFX	শ 0 বাদ  .
+SFX	শ 0 বাদী/h  .

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree_view>
+<help_section application="swriter" id="02" title="Magyar nyelvi eszközök">
+    <node id="0216" title="Magyar nyelvi eszközök">
+        <topic id="hu/org.openoffice.hu.hunspell.dictionaries/page1.xhp">Magyar szinonimaszótár</topic>
+    </node>
+</help_section>
+</tree_view>
+
