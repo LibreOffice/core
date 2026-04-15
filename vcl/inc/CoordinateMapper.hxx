@@ -40,20 +40,18 @@ private:
     sal_Int32 mnDPIY = 0;
     sal_Int32 mnDPIScalePercentage = 100;
 
-    /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    tools::Long mnOutOffX = 0;
-    /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    tools::Long mnOutOffY = 0;
+    tools::Long mnDeviceToWindowOffsetX = 0;
+    tools::Long mnDeviceToWindowOffsetY = 0;
 
     /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    tools::Long mnOutOffOrigX = 0;
+    tools::Long mnWindowToViewOffsetX = 0;
     /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    tools::Long mnOutOffOrigY = 0;
+    tools::Long mnWindowToViewOffsetY = 0;
 
     /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    tools::Long mnOutOffLogicX = 0;
+    tools::Long mnLogicToAbsoluteOffsetX = 0;
     /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    tools::Long mnOutOffLogicY = 0;
+    tools::Long mnLogicToAbsoluteOffsetY = 0;
 
     tools::Long mnOutWidth = 0;
     tools::Long mnOutHeight = 0;
@@ -72,26 +70,31 @@ public:
     float GetDPIScaleFactor() const;
     void SetDPIScalePercentage(sal_Int32 nPercentage);
 
-    tools::Long GetDeviceOriginX() const;
-    tools::Long GetDeviceOriginY() const;
+    void SetPixelOffset(const Size& rSize);
 
-    void SetDeviceOriginX(tools::Long nOutOffX);
-    void SetOutOffYPixel(tools::Long nOutOffY);
+    tools::Long GetDeviceToWindowOffsetX() const;
+    tools::Long GetDeviceToWindowOffsetY() const;
 
-    Point GetOutputOffPixel() const;
+    void SetDeviceToWindowOffsetX(tools::Long nDeviceToWindowOffsetX);
+    void SetDeviceToWindowOffsetY(tools::Long nDeviceToWindowOffsetY);
+
+    Point GetDeviceToWindowOffset() const;
 
     tools::Long GetOutputWidthPixel() const;
     tools::Long GetOutputHeightPixel() const;
     Size GetOutputSizePixel() const;
 
-    Size GetPixelOffset() const { return Size(mnOutOffOrigX, mnOutOffOrigY); }
-    void SetPixelOffset(const Size& rSize);
-    tools::Long GetPixelXOffset() const { return mnOutOffOrigX; }
-    tools::Long GetPixelYOffset() const { return mnOutOffOrigY; }
+    Size GetWindowToViewOffset() const
+    {
+        return Size(mnWindowToViewOffsetX, mnWindowToViewOffsetY);
+    }
+    void SetWindowToViewOffset(const Size& rSize);
+    tools::Long GetWindowToViewOffsetX() const { return mnWindowToViewOffsetX; }
+    tools::Long GetWindowToViewOffsetY() const { return mnWindowToViewOffsetY; }
 
-    void SetLogicalOffset(const Size& rSize);
-    tools::Long GetLogicalXOffset() const { return mnOutOffLogicX; }
-    tools::Long GetLogicalYOffset() const { return mnOutOffLogicY; }
+    void SetLogicToAbsoluteOffset(const Size& rSize);
+    tools::Long GetLogicToAbsoluteOffsetX() const { return mnLogicToAbsoluteOffsetX; }
+    tools::Long GetLogicToAbsoluteOffsetY() const { return mnLogicToAbsoluteOffsetY; }
 
     void SetOutputWidthPixel(tools::Long nWidth);
     void SetOutputHeightPixel(tools::Long nHeight);
@@ -198,7 +201,7 @@ public:
     double LogicToWindowSubPixelX(double fX) const;
     double LogicToWindowSubPixelY(double fY) const;
 
-    // View <-> Absolute Logic (Includes mnOutOffLogicX/Y)
+    // View <-> Absolute Logic (Includes mnLogicToAbsoluteOffsetX/Y)
     tools::Long ViewToLogicX(tools::Long nX) const;
     tools::Long ViewToLogicY(tools::Long nY) const;
 
@@ -219,6 +222,12 @@ public:
     tools::Long LogicToWindowUnitsY(tools::Long nY) const;
     tools::Long LogicToWindowUnitsX(tools::Long nX, const ImplMapRes& rRes) const;
     tools::Long LogicToWindowUnitsY(tools::Long nY, const ImplMapRes& rRes) const;
+
+    // Window <-> View subpixel
+    double WindowToViewSubPixelX(double fX) const;
+    double WindowToViewSubPixelY(double fY) const;
+    double ViewToWindowSubPixelX(double fX) const;
+    double ViewToWindowSubPixelY(double fY) const;
 
     // ========================================================================
     // DISTANCE SCALING (Raw Scalar Conversion, NO offsets applied)
