@@ -170,7 +170,7 @@
                     <child>
                       <object class="GtkDrawingArea" id="CTL_RECT">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
+                        <property name="can-focus">True</property>
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="tooltip-text" translatable="yes" context="rotationtabpage|CTL_RECT|tooltip_text">Rotation point</property>
                         <accessibility>
