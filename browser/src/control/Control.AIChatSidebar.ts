@@ -699,11 +699,19 @@ namespace cool {
 				});
 			}
 
-			const cardsToShow = this.showAllCards
+			// Count doc-specific chips toward the initial limit so
+			// Calc (3 specific) and Writer (0 specific) show the same
+			// total number of chips before "See more".
+			const specificCount = cardChildren.length - 1; // subtract selection-context
+			const collapsedGenericCount = Math.max(
+				0,
+				this.INITIAL_CARDS_SHOWN - specificCount,
+			);
+			const genericToShow = this.showAllCards
 				? this.PROMPT_CARDS.length
-				: this.INITIAL_CARDS_SHOWN;
+				: collapsedGenericCount;
 
-			for (let i = 0; i < cardsToShow && i < this.PROMPT_CARDS.length; i++) {
+			for (let i = 0; i < genericToShow && i < this.PROMPT_CARDS.length; i++) {
 				const card = this.PROMPT_CARDS[i];
 				cardChildren.push({
 					id: 'aichat-chip-' + i,
@@ -714,7 +722,7 @@ namespace cool {
 			}
 
 			// "See more" / "See less" toggle
-			if (this.PROMPT_CARDS.length > this.INITIAL_CARDS_SHOWN) {
+			if (collapsedGenericCount < this.PROMPT_CARDS.length) {
 				cardChildren.push({
 					id: 'aichat-see-more',
 					type: 'pushbutton',

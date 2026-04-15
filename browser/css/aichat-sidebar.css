@@ -800,6 +800,7 @@
 	flex-direction: column;
 	gap: 0;
 	padding: 0 4px;
+	align-self: stretch;
 }
 
 /* Individual suggestion card - pushbutton wrapper */
