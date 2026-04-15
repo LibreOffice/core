@@ -404,6 +404,51 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 			.should(el => expect(el.width()).gte(200));
 	});
 
+	it('Get_Comments postMessage returns all comments', function() {
+		desktopHelper.insertComment('first comment');
+		cy.cGet('#annotation-content-area-1').should('contain', 'first comment');
+
+		// Avoid notebookbar collapse before the second insertComment.
+		cy.cGet('#Home-tab-label').click();
+		helper.typeIntoDocument('{end}{enter}');
+
+		desktopHelper.insertComment('second comment');
+		cy.cGet('#annotation-content-area-2').should('contain', 'second comment');
+
+		// Stub postMessage to capture the response.
+		cy.getFrameWindow().then(win => {
+			cy.stub(win.parent, 'postMessage').as('postMessage');
+		});
+
+		// Send Get_Comments postMessage.
+		cy.getFrameWindow().then(win => {
+			const message = { 'MessageId': 'Get_Comments' };
+			win.postMessage(JSON.stringify(message), '*');
+		});
+
+		// Verify the response contains both comments.
+		cy.get('@postMessage').should(stub => {
+			const calls = stub.getCalls().filter(call => {
+				try {
+					const msg = typeof call.args[0] === 'string' ? JSON.parse(call.args[0]) : call.args[0];
+					return msg.MessageId === 'Get_Comments_Resp';
+				} catch (e) { return false; }
+			});
+			expect(calls.length, 'Get_Comments_Resp was not posted').to.be.greaterThan(0);
+			const resp = typeof calls[0].args[0] === 'string' ? JSON.parse(calls[0].args[0]) : calls[0].args[0];
+			const comments = resp.Values.Comments;
+			expect(comments.length).to.equal(2);
+			expect(comments[0].Id).to.equal('1');
+			expect(comments[0].Text).to.equal('first comment');
+			expect(comments[0]).to.have.property('Author');
+			expect(comments[0]).to.have.property('DateTime');
+			expect(comments[0].Resolved).to.equal('false');
+			expect(comments[0].Parent).to.equal('0');
+			expect(comments[1].Id).to.equal('2');
+			expect(comments[1].Text).to.equal('second comment');
+		});
+	});
+
 });
 
 describe(['tagdesktop'], 'Collapsed Annotation Tests', function() {

@@ -717,6 +717,46 @@ window.L.Map.WOPI = window.L.Handler.extend({
 
 			this._postMessage({msgId: 'Get_Export_Formats_Resp', args: exportFormatsResp});
 		}
+		else if (msg.MessageId === 'Get_Comments') {
+			let commentsResp = [];
+			const commentSection = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
+			if (commentSection) {
+				if (this._map._docLayer._docType === 'spreadsheet') {
+					// calcMasterList has raw data for all sheets.
+					const masterList = commentSection.sectionProperties.calcMasterList;
+					for (let i = 0; i < masterList.length; i++) {
+						const data = masterList[i];
+						const entry = {
+							Id: data.id,
+							Author: data.author,
+							DateTime: data.dateTime,
+							Text: data.text,
+						};
+						if (data.threaded) {
+							entry.Resolved = data.resolved;
+							entry.Parent = data.parent;
+						}
+						commentsResp.push(entry);
+					}
+				} else {
+					const commentList = commentSection.sectionProperties.commentList;
+					for (let i = 0; i < commentList.length; i++) {
+						const data = commentList[i].sectionProperties.data;
+						if (data.trackchange)
+							continue;
+						commentsResp.push({
+							Id: data.id,
+							Author: data.author,
+							DateTime: data.dateTime,
+							Text: commentList[i].sectionProperties.contentText.textContent,
+							Resolved: data.resolved,
+							Parent: data.parent,
+						});
+					}
+				}
+			}
+			this._postMessage({msgId: 'Get_Comments_Resp', args: { Comments: commentsResp }});
+		}
 		else if (msg.MessageId === 'Action_SaveAs') {
 			if (msg.Values) {
 				if (msg.Values.Filename !== null && msg.Values.Filename !== undefined) {
