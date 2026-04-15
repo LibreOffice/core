@@ -3673,18 +3673,12 @@ void ScColumn::UpdateSelectionFunction(
         return;     // nothing to do, bail out
 
     // Exclude all hidden rows.
+    ScFlatBoolRowSegments::RangeIterator aItr(rHiddenRows);
     ScFlatBoolRowSegments::RangeData aRange;
-    SCROW nRow = 0;
-    while (nRow <= GetDoc().MaxRow())
+    for (bool bFound = aItr.getFirst(aRange); bFound; bFound = aItr.getNext(aRange))
     {
-        if (!rHiddenRows.getRangeData(nRow, aRange))
-            break;
-
         if (aRange.mbValue)
-            // Hidden range detected.
-            aSpanSet.set(nRow, aRange.mnRow2, false);
-
-        nRow = aRange.mnRow2 + 1;
+            aSpanSet.set(aRange.mnRow1, aRange.mnRow2, false);
     }
 
     sc::SingleColumnSpanSet::SpansType aSpans;
