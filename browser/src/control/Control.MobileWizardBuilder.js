@@ -28,6 +28,7 @@ window.L.Control.MobileWizardBuilder = window.L.Control.JSDialogBuilder.extend({
 		this._controlHandlers['checkbox'] = this._checkboxControl;
 		this._controlHandlers['combobox'] = JSDialog.mobileCombobox;
 		this._controlHandlers['comboboxentry'] = JSDialog.mobileComboboxEntry;
+		this._controlHandlers['fixedtext'] = JSDialog.fixedtextControl;
 		this._controlHandlers['edit'] = this._editControl;
 		this._controlHandlers['frame'] = this._frameHandler;
 		this._controlHandlers['grid'] = this._gridHandler;
