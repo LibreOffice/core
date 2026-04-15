@@ -165,18 +165,6 @@ static tools::Long lcl_scaleLogicValue(const tools::Long nSourceValue, const dou
     return std::llround(nSourceValue * fSourceScale / fDestScale);
 }
 
-tools::Long ImplMapRes::ScaleLogicX(const tools::Long nLocalX, const ImplMapRes& rDestRes) const
-{
-    const tools::Long nAbsoluteX = nLocalX + mnMapOfsX;
-    return lcl_scaleLogicValue(nAbsoluteX, mfMapScX, rDestRes.mfMapScX);
-}
-
-tools::Long ImplMapRes::ScaleLogicY(const tools::Long nLocalY, const ImplMapRes& rDestRes) const
-{
-    const tools::Long nAbsoluteY = nLocalY + mnMapOfsY;
-    return lcl_scaleLogicValue(nAbsoluteY, mfMapScY, rDestRes.mfMapScY);
-}
-
 tools::Long ImplMapRes::ScaleDistanceX(const tools::Long nDistance,
                                        const ImplMapRes& rDestRes) const
 {
@@ -188,6 +176,54 @@ tools::Long ImplMapRes::ScaleDistanceY(const tools::Long nDistance,
                                        const ImplMapRes& rDestRes) const
 {
     return lcl_scaleLogicValue(nDistance, mfMapScY, rDestRes.mfMapScY);
+}
+
+// Adds the offset
+tools::Long ImplMapRes::LocalToAbsoluteX(const tools::Long nLocalX) const
+{
+    return nLocalX + mnMapOfsX;
+}
+
+// Subtracts the offset
+tools::Long ImplMapRes::AbsoluteToLocalX(const tools::Long nAbsoluteX) const
+{
+    return nAbsoluteX - mnMapOfsX;
+}
+
+// Adds the offset
+tools::Long ImplMapRes::LocalToAbsoluteY(const tools::Long nLocalY) const
+{
+    return nLocalY + mnMapOfsY;
+}
+
+// Subtracts the offset
+tools::Long ImplMapRes::AbsoluteToLocalY(const tools::Long nAbsoluteY) const
+{
+    return nAbsoluteY - mnMapOfsY;
+}
+
+tools::Long ImplMapRes::TransformPointX(const tools::Long nLocalX, const ImplMapRes& rDestRes) const
+{
+    // Add (Source to Absolute)
+    const tools::Long nAbsoluteX = LocalToAbsoluteX(nLocalX);
+
+    // Scale
+    const tools::Long nScaledX = ScaleDistanceX(nAbsoluteX, rDestRes);
+
+    // Subtract (Absolute to Dest)
+    return rDestRes.AbsoluteToLocalX(nScaledX);
+}
+
+tools::Long ImplMapRes::TransformPointY(const tools::Long nLocalY, const ImplMapRes& rDestRes) const
+{
+    // Add (Source to Absolute)
+    const tools::Long nAbsoluteY = LocalToAbsoluteY(nLocalY);
+
+    // Scale
+    const tools::Long nScaledY = ScaleDistanceY(nAbsoluteY, rDestRes);
+
+    // Subtract (Absolute to Dest)
+    return rDestRes.AbsoluteToLocalY(nScaledY);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

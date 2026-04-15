@@ -994,8 +994,8 @@ Point OutputDevice::LogicToLogic( const Point& rPtSource,
     ImplMapRes aMapResSource = mpMapper->ResolveMapRes(pMapModeSource);
     ImplMapRes aMapResDest   = mpMapper->ResolveMapRes(pMapModeDest);
 
-    return Point(aMapResSource.ScaleLogicX(rPtSource.X(), aMapResDest) - aMapResDest.mnMapOfsX,
-                 aMapResSource.ScaleLogicY(rPtSource.Y(), aMapResDest) - aMapResDest.mnMapOfsY);
+    return Point(aMapResSource.TransformPointX(rPtSource.X(), aMapResDest),
+                 aMapResSource.TransformPointY(rPtSource.Y(), aMapResDest));
 }
 
 Size OutputDevice::LogicToLogic( const Size& rSzSource,
@@ -1028,10 +1028,10 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
     ImplMapRes aMapResSource = mpMapper->ResolveMapRes(pMapModeSource);
     ImplMapRes aMapResDest   = mpMapper->ResolveMapRes(pMapModeDest);
 
-    return tools::Rectangle(aMapResSource.ScaleLogicX(rRectSource.Left(), aMapResDest) - aMapResDest.mnMapOfsX,
-                            aMapResSource.ScaleLogicY(rRectSource.Top(), aMapResDest) - aMapResDest.mnMapOfsY,
-                            aMapResSource.ScaleLogicX(rRectSource.Right(), aMapResDest) - aMapResDest.mnMapOfsX,
-                            aMapResSource.ScaleLogicY(rRectSource.Bottom(), aMapResDest) - aMapResDest.mnMapOfsY);
+    return tools::Rectangle(aMapResSource.TransformPointX(rRectSource.Left(), aMapResDest),
+                            aMapResSource.TransformPointY(rRectSource.Top(), aMapResDest),
+                            aMapResSource.TransformPointX(rRectSource.Right(), aMapResDest),
+                            aMapResSource.TransformPointY(rRectSource.Bottom(), aMapResDest));
 }
 
 Point OutputDevice::LogicToLogic( const Point& rPtSource,
@@ -1053,8 +1053,8 @@ Point OutputDevice::LogicToLogic( const Point& rPtSource,
 
     const auto [aMapResSource, aMapResDest] = lcl_calcConversionMapRes( rMapModeSource, rMapModeDest );
 
-    return Point(aMapResSource.ScaleLogicX(rPtSource.X(), aMapResDest) - aMapResDest.mnMapOfsX,
-                 aMapResSource.ScaleLogicY(rPtSource.Y(), aMapResDest) - aMapResDest.mnMapOfsY);
+    return Point(aMapResSource.TransformPointX(rPtSource.X(), aMapResDest),
+                 aMapResSource.TransformPointY(rPtSource.Y(), aMapResDest));
 }
 
 Size OutputDevice::LogicToLogic( const Size& rSzSource,
@@ -1166,12 +1166,12 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
     {
         const auto [aMapResSource, aMapResDest] = lcl_calcConversionMapRes( rMapModeSource, rMapModeDest );
 
-        auto left = aMapResSource.ScaleLogicX(rRectSource.Left(), aMapResDest) - aMapResDest.mnMapOfsX;
-        auto top = aMapResSource.ScaleLogicY(rRectSource.Top(), aMapResDest) - aMapResDest.mnMapOfsY;
+        auto left = aMapResSource.TransformPointX(rRectSource.Left(), aMapResDest);
+        auto top = aMapResSource.TransformPointY(rRectSource.Top(), aMapResDest);
 
         // tdf#141761 see comments above, IsEmpty() removed
-        auto right = rRectSource.IsWidthEmpty() ? 0 : aMapResSource.ScaleLogicX(rRectSource.Right(), aMapResDest) - aMapResDest.mnMapOfsX;
-        auto bottom = rRectSource.IsHeightEmpty() ? 0 : aMapResSource.ScaleLogicY(rRectSource.Bottom(), aMapResDest) - aMapResDest.mnMapOfsY;
+        auto right = rRectSource.IsWidthEmpty() ? 0 : aMapResSource.TransformPointX(rRectSource.Right(), aMapResDest);
+        auto bottom = rRectSource.IsHeightEmpty() ? 0 : aMapResSource.TransformPointY(rRectSource.Bottom(), aMapResDest);
 
         aRetval = tools::Rectangle(left, top, right, bottom);
     }
