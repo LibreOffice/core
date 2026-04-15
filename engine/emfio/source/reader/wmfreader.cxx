@@ -1489,6 +1489,8 @@ namespace emfio
             // inch
             mpInputStream->ReadUInt16( mnUnitsPerInch );
 
+            SAL_WARN_IF(!mnUnitsPerInch, "emfio", "Invalid WMF: mnUnitsPerInch is 0");
+
             // reserved
             mpInputStream->SeekRel( 4 );
 
@@ -1555,7 +1557,7 @@ namespace emfio
         SAL_INFO("emfio", "WMF size  w: " << aWMFSize.Width()    << " h: " << aWMFSize.Height());
 
         Size aDevExt( 10000, 10000 );
-        if( ( std::abs( aWMFSize.Width() ) > 1 ) && ( std::abs( aWMFSize.Height() ) > 1 ) )
+        if( ( std::abs( aWMFSize.Width() ) > 1 ) && ( std::abs( aWMFSize.Height() ) > 1 ) && mnUnitsPerInch )
         {
             const double    fFrac = 1.0 / mnUnitsPerInch;
             MapMode         aWMFMap( MapUnit::MapInch, Point(), fFrac, fFrac );
