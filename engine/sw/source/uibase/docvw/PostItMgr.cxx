@@ -480,7 +480,7 @@ bool SwPostItMgr::CheckForRemovedPostIts()
                 SetActiveSidebarWin(nullptr);
             p->mpPostIt.disposeAndClear();
 
-            if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
+            if (comphelper::COKit::isActive())
             {
                 const SwPostItField* pPostItField = static_cast<const SwPostItField*>(p->GetFormatField().GetField());
                 lcl_CommentNotification(mpView, CommentNotificationType::Remove, nullptr, pPostItField->GetPostItId());
@@ -638,8 +638,8 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     this->Broadcast(rHint);
                     RemoveItem(pField);
 
-                    // If COKit has disabled tiled annotations, emit annotation callbacks
-                    if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
+                    // Emit annotation callbacks for COKit
+                    if (comphelper::COKit::isActive())
                     {
                         SwPostItField* pPostItField = static_cast<SwPostItField*>(pField->GetField());
                         auto type = pFormatHint->Which() == SwFormatFieldHintWhich::REMOVED ? CommentNotificationType::Remove: CommentNotificationType::RedlinedDeletion;
@@ -669,8 +669,8 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             this->Forward(rBC, rHint);
                         }
 
-                        // If COKit has disabled tiled annotations, emit annotation callbacks
-                        if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
+                        // Emit annotation callbacks for COKit
+                        if (comphelper::COKit::isActive())
                         {
                             if(SwFormatFieldHintWhich::CHANGED == pFormatHint->Which())
                                 lcl_CommentNotification(mpView, CommentNotificationType::Modify, postItField.get(), 0);
@@ -964,7 +964,6 @@ VclPtr<SwAnnotationWin> SwPostItMgr::GetOrCreateAnnotationWindow(SwAnnotationIte
 void SwPostItMgr::LayoutPostIts()
 {
     const bool bLoKitActive = comphelper::COKit::isActive();
-    const bool bTiledAnnotations = comphelper::COKit::isTiledAnnotations();
     const bool bShowNotes = ShowNotes();
 
     const bool bEnableMapMode = bLoKitActive && !mpEditWin->IsMapModeEnabled();
@@ -1172,7 +1171,7 @@ void SwPostItMgr::LayoutPostIts()
 
                 for (auto const& visiblePostIt : aVisiblePostItList)
                 {
-                    if (bLoKitActive && !bTiledAnnotations)
+                    if (bLoKitActive)
                     {
                         if (visiblePostIt->GetSidebarItem().mbPendingLayout && visiblePostIt->GetSidebarItem().mLayoutStatus != SwPostItHelper::DELETED)
                         {
