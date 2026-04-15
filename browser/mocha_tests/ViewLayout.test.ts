@@ -205,6 +205,208 @@ describe('View Layout Tests', function () {
 
 		expectKeys('after-scroll', tileKeysSorted(), expectedAfterScrollDedup);
 	});
+
+	it('MultiPage tracks requested tiles across zoom and scroll', function () {
+		// Reuse the app-level stubs established by the previous test; they
+		// live on the shared globals and are idempotent. We additionally
+		// need stubs that checkRequestTiles / sendTileCombineMessage touch.
+
+		(app.CSections as any).MouseControl = {
+			name: 'mouse-control', zIndex: 5,
+			processingOrder: 72, drawingOrder: 51,
+		};
+		(app.CSections as any).Tiles = {
+			name: 'tiles', zIndex: 5,
+			processingOrder: 60, drawingOrder: 50,
+		};
+		(app.CSections as any).TextSelection = {
+			name: 'text selection', zIndex: 5,
+			processingOrder: 74, drawingOrder: 52,
+		};
+
+		(app as any).file = { writer: { pageRectangleList: [] } };
+
+		// Start at 1px = 15twips (same convention as the previous test).
+		app.pixelsToTwips = 15;
+		app.twipsToPixels = 1 / 15;
+
+		// Keep _docType = 'other' like the previous test - the Writer
+		// branch of DocumentBase would spin up a ViewLayoutWriter, which
+		// we do not need here. sendTileCombineRequest only consults
+		// isWriter() when mode === 2, and our tiles all use mode = 0.
+		app.map = {
+			on: function () {},
+			uiManager: null,
+			_docLayer: {
+				_docType: 'other',
+				isWriter: function () { return false; },
+			},
+			getScaleZoom: function () { return 1; },
+			setZoom: function () {},
+			getZoom: function () { return 10; },
+		} as any;
+
+		// sendTileCombineMessage reads app.tile.size.{x,y} and calls
+		// app.socket.sendMessage. Provide both.
+		(app.tile as any).size = { x: 3840, y: 3840 };
+		(app.socket as any).sendMessage = function () {};
+
+		(app.sectionContainer as any).getDocumentAnchorSection = function () {
+			return { size: [1024, 768], myTopLeft: [0, 0] };
+		};
+
+		const activeDocument = new DocumentBase();
+		(activeDocument as any)._fileSize = new cool.SimplePoint(7500, 49000);
+		app.activeDocument = activeDocument;
+
+		const multiPageViewLayout = new ViewLayoutMultiPage();
+
+		// --- Instrument sendTileCombineRequest without touching the source.
+		// TileManager.tileSize forces lazy singleton creation; then we reach
+		// into the BitmapTileManager instance and overwrite its private
+		// sendTileCombineRequest with a wrapper that logs every queue into
+		// a local array before delegating to the original. Previous entries
+		// are never cleared so the test can diff history across events.
+		void TileManager.tileSize;
+		const tileMgr: any = (TileManager as any)._instance;
+		const sentTileCombineRequests: Array<Array<TileCoordData>> = [];
+		const originalSendTileCombineRequest: Function =
+			tileMgr.sendTileCombineRequest;
+		tileMgr.sendTileCombineRequest = function (queue: Array<TileCoordData>) {
+			if (queue.length > 0) {
+				// Snapshot so later in-place mutations by the caller don't
+				// rewrite history.
+				sentTileCombineRequests.push(queue.slice());
+			}
+			originalSendTileCombineRequest.call(tileMgr, queue);
+		};
+
+		// A Writer document with three identical pages.
+		const pageRectangles = [
+			[0, 0, 7500, 15000],
+			[0, 17000, 7500, 15000],
+			[0, 34000, 7500, 15000],
+		];
+		app.file.writer.pageRectangleList = pageRectangles;
+
+		// Drive the layout step directly; the public reset() defers via
+		// LayoutingService and would also invoke updateViewData which
+		// expects a live socket / docLayer.
+		(multiPageViewLayout as any).resetViewLayout();
+
+		// Feed the layout's visible-tile list through checkRequestTiles;
+		// every fresh tile has needsFetch() === true, so the monkey-patched
+		// wrapper records a queue equal to the visible list.
+		const triggerRequest = (): void => {
+			(multiPageViewLayout as any).refreshCurrentCoordList();
+			TileManager.checkRequestTiles(
+				multiPageViewLayout.getCurrentCoordList().slice(),
+			);
+		};
+
+		const lastRequestedKeys = (): string[] => {
+			nodeassert.ok(
+				sentTileCombineRequests.length > 0,
+				'expected a new tile-combine request to be recorded',
+			);
+			return sentTileCombineRequests[sentTileCombineRequests.length - 1]
+				.map(function (c: any) { return c.key(); })
+				.sort();
+		};
+
+		// Expected lists below are hand-derived from the scenario inputs
+		// (page rectangles, viewport, pixelsToTwips, tileSize = 256, fileSize
+		// = (7500, 49000)) without calling refreshCurrentCoordList, so they
+		// are an independent reference rather than a self-comparison. The
+		// real layout is allowed to request MORE tiles than these (e.g.
+		// prefetch, overdraw), hence the assertion is "expected subset-of
+		// actual" rather than strict equality.
+		const assertSubset = (
+			label: string,
+			expected: string[],
+			actual: string[],
+		): void => {
+			const actualSet = new Set(actual);
+			const missing = expected.filter((k) => !actualSet.has(k));
+			if (missing.length > 0) {
+				console.error('[' + label + '] expected tiles missing from request.');
+				console.error('  missing:   ' + JSON.stringify(missing));
+				console.error('  expected:  ' + JSON.stringify(expected));
+				console.error('  requested: ' + JSON.stringify(actual));
+			}
+			nodeassert.deepStrictEqual(
+				missing,
+				[],
+				label + ': every expected tile must appear in the request',
+			);
+		};
+
+		try {
+			// --- Scenario 1: Zoom in -------------------------------------
+			// Halve twips-per-pixel so a page grows from 500x1000 to
+			// 1000x2000 px. Only page 0 fits vertically; the viewport shows
+			// its top portion in core-pixel doc space (0, 0)..(1000, 748).
+			// tileSize=256 enumerates x in {0,256,512,768,1024} and
+			// y in {0,256,512,768}. isValidTile drops x=1024 because
+			// 1024 * 7.5 = 7680 >= fileSize.x (7500). Result: a 4x4 grid.
+			app.pixelsToTwips = 7.5;
+			app.twipsToPixels = 1 / 7.5;
+			(multiPageViewLayout as any).resetViewLayout();
+
+			const expectedZoomIn = [
+				'0:0:10:0:0', '0:256:10:0:0', '0:512:10:0:0', '0:768:10:0:0',
+				'256:0:10:0:0', '256:256:10:0:0', '256:512:10:0:0', '256:768:10:0:0',
+				'512:0:10:0:0', '512:256:10:0:0', '512:512:10:0:0', '512:768:10:0:0',
+				'768:0:10:0:0', '768:256:10:0:0', '768:512:10:0:0', '768:768:10:0:0',
+			].sort();
+
+			triggerRequest();
+			assertSubset('zoom-in', expectedZoomIn, lastRequestedKeys());
+
+			// --- Scenario 2: Scroll down by one viewport -----------------
+			// Stay at the zoomed-in scale. Sliding viewY to 768 exposes
+			// doc-y 748..1516 of page 0; page 1 starts at view-y 2040 and is
+			// still off-screen. tile y in {512,768,1024,1280,1536}, tile x
+			// in {0,256,512,768} (1024 dropped as above). Result: 4x5.
+			multiPageViewLayout.scrollProperties.viewY = 768;
+
+			const expectedAfterScroll = [
+				'0:512:10:0:0', '0:768:10:0:0', '0:1024:10:0:0', '0:1280:10:0:0', '0:1536:10:0:0',
+				'256:512:10:0:0', '256:768:10:0:0', '256:1024:10:0:0', '256:1280:10:0:0', '256:1536:10:0:0',
+				'512:512:10:0:0', '512:768:10:0:0', '512:1024:10:0:0', '512:1280:10:0:0', '512:1536:10:0:0',
+				'768:512:10:0:0', '768:768:10:0:0', '768:1024:10:0:0', '768:1280:10:0:0', '768:1536:10:0:0',
+			].sort();
+
+			triggerRequest();
+			assertSubset('scroll-down', expectedAfterScroll, lastRequestedKeys());
+
+			// --- Scenario 3: Zoom out so all three pages fit -------------
+			// At pixelsToTwips = 70 each page is 107x214 px. Two pages fit
+			// side-by-side on the top row, the third lives on a second row,
+			// and the full stack is < 768 px tall so everything is on-screen.
+			// Per-page tiles before isValidTile: page 0 {(0,0),(0,256)},
+			// page 1 {(0,0),(0,256),(0,512)}, page 2 {(0,256),(0,512),(0,768)}.
+			// isValidTile drops every x >= 256 (256*70 = 17920 >= 7500) and
+			// y = 768 for page 2 (768*70 = 53760 >= 49000). Deduped union:
+			// (0,0), (0,256), (0,512).
+			app.pixelsToTwips = 70;
+			app.twipsToPixels = 1 / 70;
+			multiPageViewLayout.scrollProperties.viewX = 0;
+			multiPageViewLayout.scrollProperties.viewY = 0;
+			(multiPageViewLayout as any).resetViewLayout();
+
+			const expectedZoomOut = [
+				'0:0:10:0:0', '0:256:10:0:0', '0:512:10:0:0',
+			].sort();
+
+			triggerRequest();
+			assertSubset('zoom-out', expectedZoomOut, lastRequestedKeys());
+		} finally {
+			// Always restore the original method so later tests in this
+			// suite (or a future addition) see untouched production code.
+			tileMgr.sendTileCombineRequest = originalSendTileCombineRequest;
+		}
+	});
 });
 
 });
