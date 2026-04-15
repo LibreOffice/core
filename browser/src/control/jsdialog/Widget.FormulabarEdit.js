@@ -36,6 +36,9 @@ function _sendSelection(edit, builder, id) {
 		return;
 
 	var selection = document.getSelection();
+	if (!selection)
+		return;
+
 	var startPos = 0;
 	var anchorOffset = selection.anchorOffset;
 	var endPos = 0;
@@ -334,6 +337,9 @@ function _setSelection(builder, container, wrapper, cursorLayer, handleLayer, te
 	}
 
 	const selectionPositions = selectionTexts.flatMap(selectionText => Array.from(selectionText.getClientRects()));
+	if (!selectionPositions.length)
+		return;
+
 	const selectionStartPosition = selectionPositions[0];
 	const selectionEndPosition = selectionPositions[selectionPositions.length - 1];
 	const cursorLayerPosition = cursorLayer.getBoundingClientRect();
