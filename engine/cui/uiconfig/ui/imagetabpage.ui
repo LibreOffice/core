@@ -565,67 +565,44 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame3">
+      <object class="GtkBox" id="box4">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <property name="label-xalign">0</property>
-        <property name="shadow-type">none</property>
+        <property name="margin-start">12</property>
+        <property name="margin-top">6</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkBox" id="box4">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
-            <property name="orientation">vertical</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="vscrollbar-policy">never</property>
+            <property name="shadow-type">in</property>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkViewport">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="vscrollbar-policy">never</property>
-                <property name="shadow-type">in</property>
                 <child>
-                  <object class="GtkViewport">
+                  <object class="GtkDrawingArea" id="CTL_IMAGE_PREVIEW">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkDrawingArea" id="CTL_IMAGE_PREVIEW">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="CTL_IMAGE_PREVIEW-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="imagetabpage|CTL_IMAGE_PREVIEW-atkobject">Example</property>
-                          </object>
-                        </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CTL_IMAGE_PREVIEW-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="imagetabpage|CTL_IMAGE_PREVIEW-atkobject">Example</property>
                       </object>
                     </child>
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label8">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="imagetabpage|label8">Preview</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="label8-atkobject">
-                <property name="AtkObject::accessible-role">static</property>
-              </object>
-            </child>
-          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
         </child>
       </object>
       <packing>
