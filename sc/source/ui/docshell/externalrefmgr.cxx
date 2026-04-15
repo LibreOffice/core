@@ -695,7 +695,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                     switch (pToken->GetType())
                     {
                         case svDouble:
-                            xMat->PutDouble(pToken->GetDouble(), nC, nR);
+                            xMat->PutDouble(static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble(), nC, nR);
                             break;
                         case svString:
                             xMat->PutString(pToken->GetString(), nC, nR);

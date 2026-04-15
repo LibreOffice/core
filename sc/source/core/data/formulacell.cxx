@@ -4145,7 +4145,7 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaC
             break;
             case formula::svDouble:
             {
-                if(!rtl::math::approxEqual(pThisTok->GetDouble(), pOtherTok->GetDouble()))
+                if(!rtl::math::approxEqual(static_cast<FormulaDoubleToken*>(pThisTok)->GetDouble(), static_cast<FormulaDoubleToken*>(pOtherTok)->GetDouble()))
                     return NotEqual;
             }
             break;

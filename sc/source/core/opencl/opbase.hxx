@@ -284,7 +284,7 @@ public:
         formula::FormulaToken* Tok = GetFormulaToken();
         if (Tok->GetType() != formula::svDouble)
             throw Unhandled(__FILE__, __LINE__);
-        return Tok->GetDouble();
+        return static_cast<formula::FormulaDoubleToken*>(Tok)->GetDouble();
     }
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override

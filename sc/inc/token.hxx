@@ -283,7 +283,6 @@ public:
                                     bDisplayedAsString( bDisplayAsString ) {}
             bool                IsInherited() const { return bInherited; }
             bool                IsDisplayedAsString() const { return bDisplayedAsString; }
-    virtual double              GetDouble() const override;
     virtual const svl::SharedString & GetString() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScEmptyCellToken(*this); }
@@ -303,7 +302,7 @@ public:
     ScMatrixCellResultToken( ScConstMatrixRef pMat, const formula::FormulaToken* pUL );
     ScMatrixCellResultToken( const ScMatrixCellResultToken& );
     virtual ~ScMatrixCellResultToken() override;
-    virtual double              GetDouble() const override;
+    double                      GetDouble() const;
     virtual const svl::SharedString & GetString() const override;
     virtual const ScMatrix*     GetMatrix() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
@@ -387,7 +386,7 @@ public:
 
     const OUString& GetFormula() const  { return maFormula; }
     bool IsEmptyDisplayedAsString() const   { return mbEmptyDisplayedAsString; }
-    virtual double GetDouble() const override;
+    double GetDouble() const;
 
     virtual const svl::SharedString & GetString() const override;
     virtual bool operator==( const formula::FormulaToken& rToken ) const override;

@@ -1226,7 +1226,7 @@ XclExpScToken XclExpFmlaCompImpl::Factor( XclExpScToken aTokData )
 
 void XclExpFmlaCompImpl::ProcessDouble( const XclExpScToken& rTokData )
 {
-    double fValue = rTokData.mpScToken->GetDouble();
+    double fValue = static_cast<const FormulaDoubleToken*>(rTokData.mpScToken)->GetDouble();
     double fInt;
     double fFrac = modf( fValue, &fInt );
     if( (fFrac == 0.0) && (0.0 <= fInt) && (fInt <= 65535.0) )

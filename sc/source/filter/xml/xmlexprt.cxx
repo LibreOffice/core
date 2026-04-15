@@ -5143,7 +5143,7 @@ void ScXMLExport::WriteExternalRefCaches(const ScDocument& rDoc)
                             case svDouble:
                             {
                                 AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT);
-                                aStrVal = OUString::number(pToken->GetDouble());
+                                aStrVal = OUString::number(static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble());
                                 AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, aStrVal);
                             }
                             break;

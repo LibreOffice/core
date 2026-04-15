@@ -811,7 +811,7 @@ double ScInterpreter::PopDouble()
                     SvNumFormatType nType = static_cast<SvNumFormatType>(pDToken->GetDoubleType());
                     if (nType != SvNumFormatType::ALL && nType != SvNumFormatType::UNDEFINED)
                         nCurFmtType = nType;
-                    return p->GetDouble();
+                    return static_cast<const FormulaDoubleToken*>(p)->GetDouble();
                 }
             case svEmptyCell:
             case svMissing:
@@ -2185,8 +2185,10 @@ double ScInterpreter::GetDouble()
                 break;
             }
 
-            if (pToken->GetType() == svDouble || pToken->GetType() == svEmptyCell)
-                nVal = pToken->GetDouble();
+            if (pToken->GetType() == svDouble)
+                nVal = static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble();
+            else if (pToken->GetType() == svEmptyCell)
+                nVal = 0.0;
             else
                 nVal = ConvertStringToValue( pToken->GetString().getString());
         }
@@ -2436,7 +2438,7 @@ svl::SharedString ScInterpreter::GetString()
 
             if (pToken->GetType() == svDouble)
             {
-                return GetStringFromDouble( pToken->GetDouble() );
+                return GetStringFromDouble( static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble() );
             }
             else // svString or svEmpty
                 return pToken->GetString();
@@ -3364,7 +3366,7 @@ void ScInterpreter::ScMacro()
                     if ( pToken->GetType() == svString )
                         pPar->PutString( pToken->GetString().getString() );
                     else if ( pToken->GetType() == svDouble )
-                        pPar->PutDouble( pToken->GetDouble() );
+                        pPar->PutDouble( static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble() );
                     else
                     {
                         SetError( FormulaError::IllegalArgument );

@@ -1422,7 +1422,7 @@ Any SAL_CALL ScExternalSheetCacheObj::getCellValue(sal_Int32 nCol, sal_Int32 nRo
     {
         case svDouble:
         {
-            double fVal = pToken->GetDouble();
+            double fVal = static_cast<FormulaDoubleToken*>(pToken)->GetDouble();
             aValue <<= fVal;
         }
         break;

@@ -553,7 +553,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
                     pMat->PutError( static_cast<FormulaErrorToken*>(pToken.get())->GetError(), 0, 0);
                 break;
                 case svDouble:
-                    pMat->PutDouble( pToken->GetDouble(), 0, 0);
+                    pMat->PutDouble( static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble(), 0, 0);
                 break;
                 case svString:
                     pMat->PutString( pToken->GetString(), 0, 0);

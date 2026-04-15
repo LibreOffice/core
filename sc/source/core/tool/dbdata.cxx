@@ -1098,7 +1098,7 @@ OUString ScDBData::GetSimpleSubTotalFunction(const ScTokenArray* pTokens, SCCOL 
         {
             if (nIdx == 2) // { ocPush, formula::svDouble }
             {
-                sal_Int32 nFunc = static_cast<sal_Int32>(t->GetDouble());
+                sal_Int32 nFunc = static_cast<sal_Int32>(static_cast<formula::FormulaDoubleToken*>(t)->GetDouble());
                 if (nFunc > 100.)
                     nFunc -= 100;
 

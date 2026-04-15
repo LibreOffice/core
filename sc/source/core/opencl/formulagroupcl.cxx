@@ -165,7 +165,7 @@ std::string DebugPeekData(const FormulaToken* ref, int doubleRefIndex = 0)
     }
     else if (ref->GetType() == formula::svDouble)
     {
-        return preciseFloat(ref->GetDouble());
+        return preciseFloat(static_cast<const FormulaDoubleToken*>(ref)->GetDouble());
     }
     else
     {

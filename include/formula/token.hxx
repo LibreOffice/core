@@ -215,8 +215,6 @@ public:
     virtual void                SetByte( sal_uInt8 n );
     virtual ParamClass          GetInForceArray() const;
     virtual void                SetInForceArray( ParamClass c );
-    virtual double              GetDouble() const;
-    virtual void                SetDouble(double fValue);
     virtual const svl::SharedString & GetString() const;
     virtual void                SetString( const svl::SharedString& rStr );
     virtual sal_uInt16          GetIndex() const;
@@ -331,8 +329,8 @@ public:
                                     FormulaToken( r ), fDouble( r.fDouble ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaDoubleToken(*this); }
-    virtual double              GetDouble() const override final { return fDouble; }
-    virtual void                SetDouble(double fValue) override final { fDouble = fValue; }
+    double                      GetDouble() const { return fDouble; }
+    void                        SetDouble(double fValue) { fDouble = fValue; }
     virtual sal_Int16           GetDoubleType() const;     ///< always returns 0 for "not typed"
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
@@ -450,7 +448,6 @@ public:
                                     FormulaToken( r ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaMissingToken(*this); }
-    virtual double              GetDouble() const override;
     virtual const svl::SharedString & GetString() const override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };

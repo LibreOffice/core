@@ -1372,9 +1372,12 @@ bool XclExpXct::BuildCrnList( XclExpCrnList& rCrnRecs )
                     switch( xToken->GetType() )
                     {
                         case svDouble:
+                        {
+                            double fVal = static_cast<const FormulaDoubleToken*>(xToken.get())->GetDouble();
                             bValid = (rFormatter.GetType( nScNumFmt ) == SvNumFormatType::LOGICAL) ?
-                                rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() != 0 ) ) :
-                                rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() ) );
+                                rCrnRecs.InsertValue( nScCol, nScRow, Any( fVal != 0 ) ) :
+                                rCrnRecs.InsertValue( nScCol, nScRow, Any( fVal ) );
+                        }
                         break;
                         case svString:
                             // do not save empty strings (empty cells) to cache
