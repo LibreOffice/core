@@ -957,12 +957,6 @@ static tools::Long lcl_convertLogicValue(const tools::Long n1, const o3tl::Lengt
 
     bool bOverflow;
     const auto nResult = o3tl::convert(n1, eFrom, eTo, bOverflow);
-    if (bOverflow)
-    {
-        const auto [n2, n3] = o3tl::getConversionMulDiv(eFrom, eTo);
-        BigInt a4 = n1;
-        a4 *= n2;
-    }
 
     if (!bOverflow)
         return nResult;
