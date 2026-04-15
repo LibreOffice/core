@@ -21,6 +21,7 @@
 #include <symbol.hxx>
 #include <smmod.hxx>
 #include "tmpdevice.hxx"
+#include <algorithm>
 #include <utility>
 #include <visitors.hxx>
 #include <tools/UnitConversion.hxx>
@@ -140,6 +141,8 @@ void SmNode::SetFontSize(double fSize, FontSizeType nType)
     if (!(Flags() & FontChangeMask::Size))
     {
         double fVal(conversionFract(o3tl::Length::pt, SmO3tlLengthUnit()) * fSize);
+        const int nMaxVal = o3tl::convert(128, o3tl::Length::pt, SmO3tlLengthUnit());
+        fVal = std::clamp(fVal, static_cast<double>(-nMaxVal), static_cast<double>(nMaxVal));
         tools::Long      nHeight = static_cast<tools::Long>(fVal);
 
         aFntSize = GetFont().GetFontSize();
@@ -171,7 +174,6 @@ void SmNode::SetFontSize(double fSize, FontSizeType nType)
         }
 
         // check the requested size against maximum value
-        const int nMaxVal = o3tl::convert(128, o3tl::Length::pt, SmO3tlLengthUnit());
         if (aFntSize.Height() > nMaxVal)
             aFntSize.setHeight( nMaxVal );
 
