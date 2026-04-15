@@ -161,6 +161,19 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
     if( ( aValue >>= xPropertySet )
         && xPropertySet.is())
         ModifyListenerHelper::addListener( xPropertySet, m_xModifyEventForwarder );
+
+    if (rOther.m_xCalculatedYSequence.is())
+    {
+        uno::Reference<util::XCloneable> xCloneable(rOther.m_xCalculatedYSequence, uno::UNO_QUERY);
+        if (xCloneable.is())
+        {
+            m_xCalculatedYSequence.set(xCloneable->createClone(), uno::UNO_QUERY);
+        }
+        else
+        {
+            m_xCalculatedYSequence = rOther.m_xCalculatedYSequence;
+        }
+    }
 }
 
 // late initialization to call after copy-constructing
@@ -1033,6 +1046,21 @@ sal_Int32 DataSeries::getExplicitNumberFormatKeyForDataLabel()
         nFormat = 0;
     return nFormat;
 
+}
+
+void DataSeries::setCalculatedYSequence(css::uno::Reference<css::chart2::data::XLabeledDataSequence> const& xSequence)
+{
+    m_xCalculatedYSequence = xSequence;
+}
+
+css::uno::Reference<css::chart2::data::XLabeledDataSequence> DataSeries::getCalculatedYSequence() const
+{
+    return m_xCalculatedYSequence;
+}
+
+void DataSeries::clearCalculatedYSequence()
+{
+    m_xCalculatedYSequence.clear();
 }
 
 }  // namespace chart

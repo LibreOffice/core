@@ -190,6 +190,12 @@ public:
 
     sal_Int32 getExplicitNumberFormatKeyForDataLabel();
 
+    void setCalculatedYSequence(css::uno::Reference<css::chart2::data::XLabeledDataSequence> const& xSequence);
+
+    css::uno::Reference<css::chart2::data::XLabeledDataSequence> getCalculatedYSequence() const;
+
+    void clearCalculatedYSequence();
+
 private:
 
     // late initialization to call after copy-constructing
@@ -220,6 +226,8 @@ private:
     tRegressionCurveContainerType m_aRegressionCurves;
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
+
+    css::uno::Reference<css::chart2::data::XLabeledDataSequence> m_xCalculatedYSequence;
 };
 
 const tPropertyValueMap & StaticDataSeriesDefaults();
