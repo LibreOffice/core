@@ -950,29 +950,33 @@ static std::pair<ImplMapRes, ImplMapRes> lcl_calcConversionMapRes(const MapMode&
     return result;
 }
 
-static tools::Long lcl_convertLogicValue(const tools::Long n1, const o3tl::Length eFrom, const o3tl::Length eTo)
+static tools::Long lcl_convertLogicValue(const tools::Long nSourceValue, const o3tl::Length eSourceUnit, const o3tl::Length eDestUnit)
 {
-    if (n1 == 0 || eFrom == o3tl::Length::invalid || eTo == o3tl::Length::invalid)
+    if (nSourceValue == 0 || eSourceUnit == o3tl::Length::invalid || eDestUnit == o3tl::Length::invalid)
         return 0;
 
     bool bOverflow;
-    const auto nResult = o3tl::convert(n1, eFrom, eTo, bOverflow);
+    const auto nResult = o3tl::convert(nSourceValue, eSourceUnit, eDestUnit, bOverflow);
 
+    // Fast path: conversion succeeded without integer overflow
     if (!bOverflow)
         return nResult;
 
-    const auto [n2, n3] = o3tl::getConversionMulDiv(eFrom, eTo);
-    BigInt a4 = n1;
-    a4 *= n2;
+    // Fallback: Use BigInt to prevent overflow during intermediate multiplication
+    const auto [nMultiplier, nDivisor] = o3tl::getConversionMulDiv(eSourceUnit, eDestUnit);
+    BigInt aBigValue = nSourceValue;
+    aBigValue *= nMultiplier;
 
-    if ( a4.IsNeg() )
-        a4 -= n3 / 2;
+    // Manual rounding: standard integer division truncates towards zero.
+    // We add or subtract half the divisor before dividing to achieve round-to-nearest.
+    if (aBigValue.IsNeg())
+        aBigValue -= nDivisor / 2;
     else
-        a4 += n3 / 2;
+        aBigValue += nDivisor / 2;
 
-    a4 /= n3;
+    aBigValue /= nDivisor;
 
-    return static_cast<tools::Long>(a4);
+    return static_cast<tools::Long>(aBigValue);
 }
 
 Point OutputDevice::LogicToLogic( const Point& rPtSource,
