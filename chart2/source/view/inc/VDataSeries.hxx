@@ -172,6 +172,13 @@ public:
     void setOldTimeBased( VDataSeries* pOldSeries, double nPercent );
     VDataSeries* createCopyForTimeBased() const;
 
+    const VDataSequence& getCalculatedYValues() const { return m_aCalculatedValues_Y; }
+
+    // Chart types that calculate the resulting values use this once during addSeries
+    // to promote the calculated Y sidecar into the primary Y values, so the rendering
+    // path plots the frequencies instead of the raw data.
+    void useCalculatedYForRendering();
+
 private: //methods
     css::chart2::DataPointLabel* getDataPointLabel( sal_Int32 index ) const;
     void adaptPointCache( sal_Int32 nNewPointIndex ) const;
@@ -200,6 +207,8 @@ private: //member
     VDataSequence   m_aValues_X;
     VDataSequence   m_aValues_Y;
     VDataSequence   m_aValues_Z;
+
+    VDataSequence   m_aCalculatedValues_Y;
 
     VDataSequence   m_aValues_Y_Min;
     VDataSequence   m_aValues_Y_Max;

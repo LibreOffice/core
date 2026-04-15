@@ -188,6 +188,15 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
         std::vector< rtl::Reference< DataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
         const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.size();
 
+        // Clear all calculated sequences before changing chart type
+        for (auto const & xOldSeries : aFlatSeriesSeq)
+        {
+            if (xOldSeries.is())
+            {
+                xOldSeries->clearCalculatedYSequence();
+            }
+        }
+
         // chart-type specific interpretation of existing data series
         rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter2());
         InterpretedData aData;
@@ -228,9 +237,12 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
         std::vector< rtl::Reference< ChartType > > aOldChartTypesSeq =
             xDiagram->getChartTypes();
 
-        for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
+        for (rtl::Reference<BaseCoordinateSystem> const& rCoords : xDiagram->getBaseCoordinateSystems())
         {
-            coords->setChartTypes( Sequence< Reference< XChartType > >() );
+            if (rCoords.is())
+            {
+                rCoords->setChartTypes(uno::Sequence<uno::Reference<XChartType>>());
+            }
         }
 
         FillDiagram( xDiagram, aSeriesSeq, aData.Categories, aOldChartTypesSeq );

@@ -169,6 +169,12 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
     for(sal_Int32 nN = aDataSequences.size();nN--;)
     {
         uno::Reference<data::XDataSequence>  xDataSequence( aDataSequences[nN]->getValues());
+
+        if (!xDataSequence.is())
+        {
+            continue;
+        }
+
         uno::Reference<beans::XPropertySet> xProp(xDataSequence, uno::UNO_QUERY );
         if( xProp.is())
         {
@@ -224,6 +230,13 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
             m_nPointCount = m_aValues_Y_Last.getLength();
     }
 
+    // populated by chart types that render derived values
+    if (auto xCalculatedSequence = m_xDataSeries->getCalculatedYSequence())
+    {
+        if (xCalculatedSequence->getValues().is())
+            m_aCalculatedValues_Y.init(xCalculatedSequence->getValues());
+    }
+
     if( !xDataSeries.is())
         return;
 
@@ -246,6 +259,15 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
 
 VDataSeries::~VDataSeries()
 {
+}
+
+void VDataSeries::useCalculatedYForRendering()
+{
+    if (!m_aCalculatedValues_Y.is())
+        return;
+
+    m_aValues_Y = m_aCalculatedValues_Y;
+    m_nPointCount = m_aValues_Y.getLength();
 }
 
 void VDataSeries::doSortByXValues()
@@ -444,12 +466,12 @@ double VDataSeries::getXValue( sal_Int32 index ) const
 double VDataSeries::getYValue( sal_Int32 index ) const
 {
     double fRet = std::numeric_limits<double>::quiet_NaN();
-    if(m_aValues_Y.is())
+    if (m_aValues_Y.is())
     {
-        if( 0<=index && index<m_aValues_Y.getLength() )
+        if (0 <= index && index < m_aValues_Y.getLength())
         {
             fRet = m_aValues_Y.m_aValues[index];
-            if(mpOldSeries && index < mpOldSeries->m_aValues_Y.getLength())
+            if (mpOldSeries && index < mpOldSeries->m_aValues_Y.getLength())
             {
                 double nOldVal = mpOldSeries->m_aValues_Y.m_aValues[index];
                 fRet = nOldVal + (fRet - nOldVal) * mnPercent;
@@ -459,8 +481,8 @@ double VDataSeries::getYValue( sal_Int32 index ) const
     else
     {
         // #i70133# always return correct X position - needed for short data series
-        if( 0<=index /*&& index < m_nPointCount*/ )
-            fRet = index+1;//first category (index 0) matches with real number 1.0
+        if (0 <= index /*&& index < m_nPointCount*/)
+            fRet = index + 1; //first category (index 0) matches with real number 1.0
     }
     lcl_maybeReplaceNanWithZero( fRet, getMissingValueTreatment() );
     return fRet;
@@ -669,9 +691,9 @@ double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
 {
     double fMin = std::numeric_limits<double>::infinity();
 
-    if( !m_aValues_Y.is() &&
+    if (!m_aValues_Y.is() &&
         (m_aValues_Y_Min.is() || m_aValues_Y_Max.is()
-        || m_aValues_Y_First.is() || m_aValues_Y_Last.is() ) )
+        || m_aValues_Y_First.is() || m_aValues_Y_Last.is()))
     {
         double fY_Min = getY_Min( index );
         double fY_Max = getY_Max( index );
@@ -704,9 +726,9 @@ double VDataSeries::getMaximumofAllDifferentYValues( sal_Int32 index ) const
 {
     double fMax = -std::numeric_limits<double>::infinity();
 
-    if( !m_aValues_Y.is() &&
+    if (!m_aValues_Y.is() &&
         (m_aValues_Y_Min.is() || m_aValues_Y_Max.is()
-        || m_aValues_Y_First.is() || m_aValues_Y_Last.is() ) )
+        || m_aValues_Y_First.is() || m_aValues_Y_Last.is()))
     {
         double fY_Min = getY_Min( index );
         double fY_Max = getY_Max( index );
@@ -1092,6 +1114,7 @@ VDataSeries* VDataSeries::createCopyForTimeBased() const
     pNew->m_aValues_X = m_aValues_X;
     pNew->m_aValues_Y = m_aValues_Y;
     pNew->m_aValues_Z = m_aValues_Z;
+    pNew->m_aCalculatedValues_Y = m_aCalculatedValues_Y;
     pNew->m_aValues_Y_Min = m_aValues_Y_Min;
     pNew->m_aValues_Y_Max = m_aValues_Y_Max;
     pNew->m_aValues_Y_First = m_aValues_Y_First;
