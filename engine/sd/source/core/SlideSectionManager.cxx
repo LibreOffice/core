@@ -15,17 +15,13 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/drawing/XDrawPages.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/xmltools.hxx>
 #include <sal/log.hxx>
+#include <svx/svdmodel.hxx>
 
 using namespace ::com::sun::star;
 
@@ -36,123 +32,109 @@ SlideSectionManager::SlideSectionManager(SdDrawDocument& rDoc)
 {
 }
 
-void SlideSectionManager::EnsureLoaded() const
+void SlideSectionManager::SetSectionsFromPropertyValues(
+    const uno::Sequence<beans::PropertyValue>& rSections)
 {
-    if (!mbLoaded)
+    maSections.clear();
+
+    if (!rSections.hasElements())
+        return;
+
+    // Build page-name-to-index map
+    sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
+    std::map<OUString, sal_Int32> aNameToIndex;
+    for (sal_uInt16 i = 0; i < nPageCount; ++i)
     {
-        LoadFromGrabBag();
-        // If the grab bag was empty (e.g. during import before finalizeImport
-        // populates it), allow retrying on the next access.
-        if (maSections.empty())
-            mbLoaded = false;
+        SdPage* pPage = mrDoc.GetSdPage(i, PageKind::Standard);
+        if (pPage)
+            aNameToIndex[pPage->GetName()] = i;
     }
-}
 
-void SlideSectionManager::Invalidate()
-{
-    mbLoaded = false;
-    maSections.clear();
-}
-
-void SlideSectionManager::LoadFromGrabBag() const
-{
-    maSections.clear();
-    mbLoaded = true;
-
-    try
+    // Running index for position-based fallback when names don't match
+    sal_Int32 nFallbackIdx = 0;
+    for (const auto& rSectionProp : rSections)
     {
-        ::sd::DrawDocShell* pDocSh = mrDoc.GetDocSh();
-        if (!pDocSh)
-            return;
+        uno::Sequence<beans::PropertyValue> aSectionProps;
+        rSectionProp.Value >>= aSectionProps;
 
-        uno::Reference<frame::XModel> xModel(pDocSh->GetModel());
-        uno::Reference<beans::XPropertySet> xDocProps(xModel, uno::UNO_QUERY);
-        if (!xDocProps.is())
-            return;
+        SlideSection aSection;
+        uno::Sequence<OUString> aSlideNames;
 
-        uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
-        if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
-            return;
-
-        uno::Sequence<beans::PropertyValue> aGrabBag;
-        xDocProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
-
-        uno::Sequence<beans::PropertyValue> aSectionList;
-        for (const auto& rProp : aGrabBag)
+        for (const auto& rProp : aSectionProps)
         {
-            if (rProp.Name == "OOXSectionList")
-            {
-                rProp.Value >>= aSectionList;
-                break;
-            }
+            if (rProp.Name == "Name")
+                rProp.Value >>= aSection.maName;
+            else if (rProp.Name == "Id")
+                rProp.Value >>= aSection.maId;
+            else if (rProp.Name == "SlideNameList")
+                rProp.Value >>= aSlideNames;
         }
 
-        if (!aSectionList.hasElements())
-            return;
-
-        // Build page-name-to-index map
-        sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
-        std::map<OUString, sal_Int32> aNameToIndex;
-        for (sal_uInt16 i = 0; i < nPageCount; ++i)
+        // The section starts at the first slide in its list.
+        // Try name lookup first; fall back to position if names don't match
+        // (e.g. after ODP round-trip where page names change).
+        if (aSlideNames.hasElements())
         {
-            SdPage* pPage = mrDoc.GetSdPage(i, PageKind::Standard);
-            if (pPage)
-                aNameToIndex[pPage->GetName()] = i;
-        }
-
-        // Running index for position-based fallback when names don't match
-        sal_Int32 nFallbackIdx = 0;
-        for (const auto& rSectionProp : aSectionList)
-        {
-            uno::Sequence<beans::PropertyValue> aSectionProps;
-            rSectionProp.Value >>= aSectionProps;
-
-            SlideSection aSection;
-            uno::Sequence<OUString> aSlideNames;
-
-            for (const auto& rProp : aSectionProps)
-            {
-                if (rProp.Name == "Name")
-                    rProp.Value >>= aSection.maName;
-                else if (rProp.Name == "Id")
-                    rProp.Value >>= aSection.maId;
-                else if (rProp.Name == "SlideNameList")
-                    rProp.Value >>= aSlideNames;
-            }
-
-            // The section starts at the first slide in its list.
-            // Try name lookup first; fall back to position if names don't match
-            // (e.g. after ODP round-trip where page names change).
-            if (aSlideNames.hasElements())
-            {
-                auto it = aNameToIndex.find(aSlideNames[0]);
-                if (it != aNameToIndex.end())
-                    aSection.mnStartIndex = it->second;
-                else
-                    aSection.mnStartIndex = nFallbackIdx;
-            }
+            auto it = aNameToIndex.find(aSlideNames[0]);
+            if (it != aNameToIndex.end())
+                aSection.mnStartIndex = it->second;
             else
-            {
                 aSection.mnStartIndex = nFallbackIdx;
-            }
-
-            nFallbackIdx += aSlideNames.getLength();
-            maSections.push_back(aSection);
+        }
+        else
+        {
+            aSection.mnStartIndex = nFallbackIdx;
         }
 
-        // Sort by start index
-        std::sort(maSections.begin(), maSections.end(),
-                  [](const SlideSection& a, const SlideSection& b) {
-                      return a.mnStartIndex < b.mnStartIndex;
-                  });
+        nFallbackIdx += aSlideNames.getLength();
+        maSections.push_back(aSection);
     }
-    catch (const uno::Exception&)
-    {
-        SAL_WARN("sd", "SlideSectionManager::LoadFromGrabBag failed");
-    }
+
+    // Sort by start index
+    std::sort(maSections.begin(), maSections.end(),
+              [](const SlideSection& a, const SlideSection& b) {
+                  return a.mnStartIndex < b.mnStartIndex;
+              });
 }
 
-void SlideSectionManager::SaveToGrabBag()
+uno::Sequence<beans::PropertyValue> SlideSectionManager::GetSectionsAsPropertyValues() const
+{
+    sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
+
+    std::vector<beans::PropertyValue> aSectionsList;
+    for (size_t i = 0; i < maSections.size(); ++i)
+    {
+        const SlideSection& rSection = maSections[i];
+
+        // Determine end index (start of next section, or page count)
+        sal_Int32 nEndIndex
+            = (i + 1 < maSections.size()) ? maSections[i + 1].mnStartIndex : nPageCount;
+
+        // Collect slide names for this section
+        std::vector<OUString> aSlideNames;
+        for (sal_Int32 j = rSection.mnStartIndex; j < nEndIndex; ++j)
+        {
+            SdPage* pPage = mrDoc.GetSdPage(static_cast<sal_uInt16>(j), PageKind::Standard);
+            if (pPage)
+                aSlideNames.push_back(pPage->GetName());
+        }
+
+        // Build section properties
+        std::vector<beans::PropertyValue> aProps;
+        aProps.push_back(comphelper::makePropertyValue(u"Name"_ustr, rSection.maName));
+        if (!rSection.maId.isEmpty())
+            aProps.push_back(comphelper::makePropertyValue(u"Id"_ustr, rSection.maId));
+        aProps.push_back(comphelper::makePropertyValue(
+            u"SlideNameList"_ustr, comphelper::containerToSequence(aSlideNames)));
+
+        aSectionsList.push_back(comphelper::makePropertyValue(
+            u"Section"_ustr + OUString::number(i), comphelper::containerToSequence(aProps)));
+    }
+
+    return comphelper::containerToSequence(aSectionsList);
+}
+
+void SlideSectionManager::SaveToDocument()
 {
     try
     {
@@ -166,70 +148,31 @@ void SlideSectionManager::SaveToGrabBag()
             return;
 
         uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
-        if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
+        if (!xPropsInfo.is())
             return;
 
-        sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
+        uno::Sequence<beans::PropertyValue> aSections = GetSectionsAsPropertyValues();
 
-        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
-
-        std::vector<beans::PropertyValue> aSectionsList;
-        for (size_t i = 0; i < maSections.size(); ++i)
-        {
-            const SlideSection& rSection = maSections[i];
-
-            // Determine end index (start of next section, or page count)
-            sal_Int32 nEndIndex
-                = (i + 1 < maSections.size()) ? maSections[i + 1].mnStartIndex : nPageCount;
-
-            // Collect slide names for this section
-            std::vector<OUString> aSlideNames;
-            for (sal_Int32 j = rSection.mnStartIndex; j < nEndIndex; ++j)
-            {
-                SdPage* pPage = mrDoc.GetSdPage(static_cast<sal_uInt16>(j), PageKind::Standard);
-                if (pPage)
-                    aSlideNames.push_back(pPage->GetName());
-            }
-
-            // Build section properties
-            std::vector<beans::PropertyValue> aProps;
-            aProps.push_back(comphelper::makePropertyValue(u"Name"_ustr, rSection.maName));
-            if (!rSection.maId.isEmpty())
-                aProps.push_back(comphelper::makePropertyValue(u"Id"_ustr, rSection.maId));
-            aProps.push_back(comphelper::makePropertyValue(
-                u"SlideNameList"_ustr, comphelper::containerToSequence(aSlideNames)));
-
-            aSectionsList.push_back(comphelper::makePropertyValue(
-                u"Section"_ustr + OUString::number(i), comphelper::containerToSequence(aProps)));
-        }
-
-        aGrabBag[u"OOXSectionList"_ustr] <<= comphelper::containerToSequence(aSectionsList);
-        xDocProps->setPropertyValue(u"InteropGrabBag"_ustr,
-                                    uno::Any(aGrabBag.getAsConstPropertyValueList()));
+        // Write to the native "SlideSections" property
+        if (xPropsInfo->hasPropertyByName(u"SlideSections"_ustr))
+            xDocProps->setPropertyValue(u"SlideSections"_ustr, uno::Any(aSections));
     }
     catch (const uno::Exception&)
     {
-        SAL_WARN("sd", "SlideSectionManager::SaveToGrabBag failed");
+        SAL_WARN("sd", "SlideSectionManager::SaveToDocument failed");
     }
 }
 
-sal_Int32 SlideSectionManager::GetSectionCount() const
-{
-    EnsureLoaded();
-    return maSections.size();
-}
+sal_Int32 SlideSectionManager::GetSectionCount() const { return maSections.size(); }
 
 const SlideSection& SlideSectionManager::GetSection(sal_Int32 nIndex) const
 {
-    EnsureLoaded();
     assert(nIndex >= 0 && o3tl::make_unsigned(nIndex) < maSections.size());
     return maSections[nIndex];
 }
 
 sal_Int32 SlideSectionManager::GetSectionIndexForSlide(sal_Int32 nSlideIndex) const
 {
-    EnsureLoaded();
-
     // Sections are sorted by start index; find the last section whose start <= nSlideIndex
     sal_Int32 nResult = -1;
     for (sal_Int32 i = 0; i < static_cast<sal_Int32>(maSections.size()); ++i)
@@ -244,8 +187,6 @@ sal_Int32 SlideSectionManager::GetSectionIndexForSlide(sal_Int32 nSlideIndex) co
 
 bool SlideSectionManager::IsSectionStart(sal_Int32 nSlideIndex) const
 {
-    EnsureLoaded();
-
     for (const auto& rSection : maSections)
     {
         if (rSection.mnStartIndex == nSlideIndex)
@@ -256,8 +197,6 @@ bool SlideSectionManager::IsSectionStart(sal_Int32 nSlideIndex) const
 
 std::vector<sal_Int32> SlideSectionManager::GetSectionStartIndices() const
 {
-    EnsureLoaded();
-
     std::vector<sal_Int32> aResult;
     aResult.reserve(maSections.size());
     for (const auto& rSection : maSections)
@@ -267,8 +206,6 @@ std::vector<sal_Int32> SlideSectionManager::GetSectionStartIndices() const
 
 void SlideSectionManager::AddSection(sal_Int32 nStartSlideIndex, const OUString& rName)
 {
-    EnsureLoaded();
-
     SlideSection aNewSection;
     aNewSection.maName = rName;
     aNewSection.maId
@@ -283,35 +220,29 @@ void SlideSectionManager::AddSection(sal_Int32 nStartSlideIndex, const OUString&
                   return a.mnStartIndex < b.mnStartIndex;
               });
 
-    SaveToGrabBag();
+    SaveToDocument();
 }
 
 void SlideSectionManager::RemoveSection(sal_Int32 nSectionIndex)
 {
-    EnsureLoaded();
-
     if (nSectionIndex < 0 || nSectionIndex >= static_cast<sal_Int32>(maSections.size()))
         return;
 
     maSections.erase(maSections.begin() + nSectionIndex);
-    SaveToGrabBag();
+    SaveToDocument();
 }
 
 void SlideSectionManager::RenameSection(sal_Int32 nSectionIndex, const OUString& rNewName)
 {
-    EnsureLoaded();
-
     if (nSectionIndex < 0 || nSectionIndex >= static_cast<sal_Int32>(maSections.size()))
         return;
 
     maSections[nSectionIndex].maName = rNewName;
-    SaveToGrabBag();
+    SaveToDocument();
 }
 
 void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
 {
-    EnsureLoaded();
-
     if (nOldIndex < 0 || nOldIndex >= static_cast<sal_Int32>(maSections.size()))
         return;
     if (nNewIndex < 0 || nNewIndex >= static_cast<sal_Int32>(maSections.size()))
@@ -394,7 +325,23 @@ void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
         nCurrentIdx += aSlideCounts[i];
     }
 
-    SaveToGrabBag();
+    SaveToDocument();
+}
+
+std::vector<SlideSection> SlideSectionManager::GetSectionsSnapshot() const { return maSections; }
+
+void SlideSectionManager::RestoreSectionsSnapshot(const std::vector<SlideSection>& rSections)
+{
+    maSections = rSections;
+    SaveToDocument();
+
+    // Broadcast so listeners (e.g. the slide sorter) repaint section headers.
+    SdrPage* pPage = mrDoc.GetSdPage(0, PageKind::Standard);
+    if (pPage)
+    {
+        SdrHint aHint(SdrHintKind::PageOrderChange, pPage);
+        mrDoc.Broadcast(aHint);
+    }
 }
 
 } // namespace sd

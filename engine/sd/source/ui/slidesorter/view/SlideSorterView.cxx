@@ -311,9 +311,7 @@ void SlideSorterView::Rearrange()
         if (pDocument)
         {
             sd::SlideSectionManager& rSectionMgr = pDocument->GetSectionManager();
-            // If sections haven't been loaded yet, load from grab bag.
-            // Once loaded, in-memory state is authoritative (updated by
-            // AddSection/RemoveSection/MoveSection etc.)
+            // Pass current section start indices to the layouter.
             mpLayouter->SetSectionStarts(rSectionMgr.GetSectionStartIndices());
         }
 

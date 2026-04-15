@@ -131,6 +131,7 @@
 
 #include <Annotation.hxx>
 #include <drawdoc.hxx>
+#include <SlideSectionManager.hxx>
 #include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <sdpage.hxx>
@@ -1794,6 +1795,7 @@ const sal_uInt16 WID_MODEL_FONTS              = 13;
 const sal_uInt16 WID_MODEL_INTEROPGRABBAG     = 14;
 const sal_uInt16 WID_MODEL_THEME = 15;
 const sal_uInt16 WID_MODEL_ALLOWLINKUPDATE    = 16;
+const sal_uInt16 WID_MODEL_SLIDESECTIONS      = 17;
 
 static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 {
@@ -1815,6 +1817,7 @@ static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { sUNO_Prop_AllowLinkUpdate,      WID_MODEL_ALLOWLINKUPDATE,    ::cppu::UnoType<sal_Bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
         { u"Fonts"_ustr,                  WID_MODEL_FONTS,              cppu::UnoType<uno::Sequence<uno::Any>>::get(),                     beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_InteropGrabBag,       WID_MODEL_INTEROPGRABBAG,     cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
+        { u"SlideSections"_ustr,          WID_MODEL_SLIDESECTIONS,      cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
         { sUNO_Prop_Theme,                WID_MODEL_THEME,              cppu::UnoType<util::XTheme>::get(),       0, 0},
     };
     static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
@@ -3058,6 +3061,13 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
         case WID_MODEL_INTEROPGRABBAG:
             setGrabBagItem(aValue);
             break;
+        case WID_MODEL_SLIDESECTIONS:
+        {
+            uno::Sequence<beans::PropertyValue> aSections;
+            if (aValue >>= aSections)
+                mpDoc->GetSectionManager().SetSectionsFromPropertyValues(aSections);
+            break;
+        }
         case WID_MODEL_THEME:
             getSdrModelFromUnoModel().setTheme(model::Theme::FromAny(aValue));
             break;
@@ -3186,6 +3196,9 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
             }
         case WID_MODEL_INTEROPGRABBAG:
             getGrabBagItem(aAny);
+            break;
+        case WID_MODEL_SLIDESECTIONS:
+            aAny <<= mpDoc->GetSectionManager().GetSectionsAsPropertyValues();
             break;
         case WID_MODEL_THEME:
             if (auto const& pTheme = getSdrModelFromUnoModel().getTheme())

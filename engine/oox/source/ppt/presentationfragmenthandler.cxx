@@ -424,7 +424,7 @@ void PresentationFragmentHandler::saveColorMapToGrabBag(const oox::drawingml::Cl
     }
 }
 
-void PresentationFragmentHandler::saveSectionsToGrabBag()
+void PresentationFragmentHandler::saveSections()
 {
     if (maSectionList.empty())
         return;
@@ -435,11 +435,6 @@ void PresentationFragmentHandler::saveSectionsToGrabBag()
         if (!xDocProps.is())
             return;
 
-        uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
-        static constexpr OUString aGrabBagPropName = u"InteropGrabBag"_ustr;
-        if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(aGrabBagPropName))
-            return;
-
         // Get draw pages to resolve slide IDs to page names
         uno::Reference<drawing::XDrawPagesSupplier> xDPS(getFilter().getModel(), uno::UNO_QUERY);
         if (!xDPS.is())
@@ -447,8 +442,6 @@ void PresentationFragmentHandler::saveSectionsToGrabBag()
         uno::Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages());
         if (!xDrawPages.is())
             return;
-
-        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
 
         // Build a sequence of sections, each section containing name, id, and slide names
         std::vector<beans::PropertyValue> aSectionsList;
@@ -486,13 +479,12 @@ void PresentationFragmentHandler::saveSectionsToGrabBag()
                 comphelper::makePropertyValue(u"Section"_ustr + OUString::number(i), aSectionProps));
         }
 
-        aGrabBag[u"OOXSectionList"_ustr] <<= comphelper::containerToSequence(aSectionsList);
-        xDocProps->setPropertyValue(aGrabBagPropName,
-                                    uno::Any(aGrabBag.getAsConstPropertyValueList()));
+        xDocProps->setPropertyValue(u"SlideSections"_ustr,
+                                    uno::Any(comphelper::containerToSequence(aSectionsList)));
     }
     catch (const uno::Exception&)
     {
-        SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveSectionsToGrabBag, Failed to save grab bag");
+        SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveSections failed");
     }
 }
 
@@ -728,7 +720,7 @@ void PresentationFragmentHandler::finalizeImport()
             if (!maCustomShowList.empty())
                 importCustomSlideShow(maCustomShowList);
 
-            saveSectionsToGrabBag();
+            saveSections();
         }
         catch( uno::Exception& )
         {

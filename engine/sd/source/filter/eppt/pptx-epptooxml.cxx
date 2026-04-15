@@ -927,20 +927,11 @@ void PowerPointExport::WriteCustomSlideShow()
 
 void PowerPointExport::WriteSections()
 {
-    uno::Sequence<beans::PropertyValue> aGrabBag;
-    if (!mXModel->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+    if (!mXModel->getPropertySetInfo()->hasPropertyByName(u"SlideSections"_ustr))
         return;
-    mXModel->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
 
     uno::Sequence<beans::PropertyValue> aSectionList;
-    for (const auto& rProp : aGrabBag)
-    {
-        if (rProp.Name == "OOXSectionList")
-        {
-            rProp.Value >>= aSectionList;
-            break;
-        }
-    }
+    mXModel->getPropertyValue(u"SlideSections"_ustr) >>= aSectionList;
 
     if (!aSectionList.hasElements())
         return;
@@ -964,9 +955,7 @@ void PowerPointExport::WriteSections()
     mPresentationFS->startElementNS(XML_p14, XML_sectionLst, FSNS(XML_xmlns, XML_p14),
                                     getNamespaceURL(OOX_NS(p14)));
 
-    // Resolve slide names to IDs via name lookup. If names don't match
-    // (e.g. after ODP round-trip where names change), fall back to
-    // position-based resolution.
+    // Resolve slide page names to PPTX slide IDs via name-to-index lookup.
     sal_Int32 nFallbackIdx = 0;
     for (const auto& rSectionProp : aSectionList)
     {
@@ -1000,12 +989,11 @@ void PowerPointExport::WriteSections()
         {
             sal_Int32 nSlideIndex = -1;
 
-            // Try name-based lookup first
             auto it = aNameToIndex.find(rSlideName);
             if (it != aNameToIndex.end())
                 nSlideIndex = it->second;
             else
-                nSlideIndex = nFallbackIdx; // Position fallback for name mismatches
+                nSlideIndex = nFallbackIdx; // Fallback for edge cases
 
             if (nSlideIndex >= 0 && o3tl::make_unsigned(nSlideIndex) < maSlideIdsInOrder.size())
             {

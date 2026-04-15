@@ -34,7 +34,6 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/families.hxx>
 #include "ximpshow.hxx"
@@ -379,13 +378,7 @@ public:
             if (!xDocProps.is())
                 return;
 
-            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
-            if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
-                return;
-
-            comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
-
-            // Store sections with slide names directly
+            // Build section property values and set via "SlideSections" property
             std::vector<beans::PropertyValue> aSectionsList;
             for (size_t i = 0; i < maSections.size(); ++i)
             {
@@ -393,22 +386,24 @@ public:
 
                 std::vector<beans::PropertyValue> aProps;
                 aProps.push_back(comphelper::makePropertyValue(u"Name"_ustr, pSection->getSectionName()));
-                aProps.push_back(comphelper::makePropertyValue(u"Id"_ustr, pSection->getSectionId()));
-                aProps.push_back(comphelper::makePropertyValue(u"SlideNameList"_ustr,
-                                                               comphelper::containerToSequence(pSection->getSlideNames())));
-                uno::Sequence<beans::PropertyValue> aSectionProps(comphelper::containerToSequence(aProps));
+                if (!pSection->getSectionId().isEmpty())
+                    aProps.push_back(
+                        comphelper::makePropertyValue(u"Id"_ustr, pSection->getSectionId()));
+                aProps.push_back(comphelper::makePropertyValue(
+                    u"SlideNameList"_ustr,
+                    comphelper::containerToSequence(pSection->getSlideNames())));
 
                 aSectionsList.push_back(
-                    comphelper::makePropertyValue(u"Section"_ustr + OUString::number(i), aSectionProps));
+                    comphelper::makePropertyValue(u"Section"_ustr + OUString::number(i),
+                                                  comphelper::containerToSequence(aProps)));
             }
 
-            aGrabBag[u"OOXSectionList"_ustr] <<= comphelper::containerToSequence(aSectionsList);
-            xDocProps->setPropertyValue(u"InteropGrabBag"_ustr,
-                                        uno::Any(aGrabBag.getAsConstPropertyValueList()));
+            xDocProps->setPropertyValue(u"SlideSections"_ustr,
+                                        uno::Any(comphelper::containerToSequence(aSectionsList)));
         }
         catch (const uno::Exception&)
         {
-            SAL_WARN("xmloff.draw", "Failed to import sections to grab bag");
+            SAL_WARN("xmloff.draw", "Failed to import sections");
         }
     }
 };

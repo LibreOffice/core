@@ -1820,54 +1820,18 @@ void SdXMLExport::exportSections()
             return;
 
         uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
-        if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
+        if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(u"SlideSections"_ustr))
             return;
 
-        uno::Sequence<beans::PropertyValue> aGrabBag;
-        xDocProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
-
         uno::Sequence<beans::PropertyValue> aSectionList;
-        for (const auto& rProp : aGrabBag)
-        {
-            if (rProp.Name == "OOXSectionList")
-            {
-                rProp.Value >>= aSectionList;
-                break;
-            }
-        }
+        xDocProps->getPropertyValue(u"SlideSections"_ustr) >>= aSectionList;
 
         if (!aSectionList.hasElements())
             return;
 
-        // Build draw pages for resolving slide names to current page names
-        uno::Reference<drawing::XDrawPagesSupplier> xDPS(GetModel(), uno::UNO_QUERY);
-        if (!xDPS.is())
-            return;
-        uno::Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages());
-        if (!xDrawPages.is())
-            return;
-
-        // Build a map from grab bag slide names to current page names.
-        // The grab bag stores names from the time of import, which may differ
-        // from the current draw:name values (e.g. "Slide 1" vs "page1").
-        // Resolve by position: grab bag SlideNameList entries correspond to
-        // consecutive page indices starting from each section's first slide.
-        // We'll collect current page names by index.
-        sal_Int32 nPageCount = xDrawPages->getCount();
-        std::vector<OUString> aCurrentPageNames(nPageCount);
-        for (sal_Int32 i = 0; i < nPageCount; ++i)
-        {
-            uno::Reference<drawing::XDrawPage> xPage;
-            xDrawPages->getByIndex(i) >>= xPage;
-            uno::Reference<container::XNamed> xNamed(xPage, uno::UNO_QUERY);
-            if (xNamed.is())
-                aCurrentPageNames[i] = xNamed->getName();
-        }
-
         SvXMLElementExport aSectionListElem(*this, XML_NAMESPACE_LO_EXT, XML_SECTION_LIST,
                                             true, true);
 
-        sal_Int32 nSlideIdx = 0; // running page index across sections
         for (const auto& rSectionProp : aSectionList)
         {
             uno::Sequence<beans::PropertyValue> aSectionProps;
@@ -1893,16 +1857,12 @@ void SdXMLExport::exportSections()
             SvXMLElementExport aSectionElem(*this, XML_NAMESPACE_LO_EXT, XML_SECTION,
                                             true, true);
 
-            // Write current page names (not stale grab bag names)
-            for (sal_Int32 j = 0; j < aSlideNames.getLength(); ++j)
+            // Write slide page names
+            for (const OUString& rSlideName : aSlideNames)
             {
-                if (nSlideIdx < nPageCount)
-                {
-                    AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, aCurrentPageNames[nSlideIdx]);
-                    SvXMLElementExport aSlideElem(*this, XML_NAMESPACE_LO_EXT, XML_SECTION_SLIDE,
-                                                  true, true);
-                    ++nSlideIdx;
-                }
+                AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, rSlideName);
+                SvXMLElementExport aSlideElem(*this, XML_NAMESPACE_LO_EXT, XML_SECTION_SLIDE, true,
+                                              true);
             }
         }
     }

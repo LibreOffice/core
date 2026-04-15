@@ -60,7 +60,7 @@ private:
     void saveColorMapToGrabBag(const oox::drawingml::ClrMapPtr& pClrMapPtr);
     void importCustomSlideShow(std::vector<CustomShow>& rCustomShowList);
     static void importSlideNames(const ::oox::core::XmlFilterBase& rFilter, const std::vector<SlidePersistPtr>& rSlidePersist);
-    void saveSectionsToGrabBag();
+    void saveSections();
 
     struct SectionData
     {

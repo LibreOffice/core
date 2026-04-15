@@ -10,6 +10,8 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <vector>
 #include "sddllapi.h"
 
@@ -27,8 +29,8 @@ struct SlideSection
 /** Manages slide sections for a presentation document.
  *
  *  Sections group consecutive slides under a named header.
- *  The data is persisted via the document's InteropGrabBag
- *  (key "OOXSectionList") for PPTX/ODP round-trip compatibility.
+ *  The data is persisted via the "SlideSections" UNO property
+ *  on the document model for PPTX/ODP round-trip compatibility.
  *
  *  Sections are sorted by mnStartIndex. Each section spans from
  *  its start index to the next section's start (or end of deck).
@@ -38,11 +40,15 @@ class SD_DLLPUBLIC SlideSectionManager
 public:
     explicit SlideSectionManager(SdDrawDocument& rDoc);
 
-    /// Load sections from the document's InteropGrabBag.
-    void LoadFromGrabBag() const;
+    /// Get sections as a UNO PropertyValue sequence (for UNO property / export).
+    css::uno::Sequence<css::beans::PropertyValue> GetSectionsAsPropertyValues() const;
 
-    /// Save sections back to the document's InteropGrabBag.
-    void SaveToGrabBag();
+    /// Set sections from a UNO PropertyValue sequence (from UNO property / import).
+    void
+    SetSectionsFromPropertyValues(const css::uno::Sequence<css::beans::PropertyValue>& rSections);
+
+    /// Save sections to the document's "SlideSections" UNO property.
+    void SaveToDocument();
 
     sal_Int32 GetSectionCount() const;
     const SlideSection& GetSection(sal_Int32 nIndex) const;
@@ -68,17 +74,16 @@ public:
     /// Move a section (and its slides) to a new position.
     void MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex);
 
-    bool IsLoaded() const { return mbLoaded; }
+    /// Get a snapshot of all sections (for undo support).
+    std::vector<SlideSection> GetSectionsSnapshot() const;
 
-    /// Mark section data as stale; next access will reload from grab bag.
-    void Invalidate();
+    /// Replace all sections with the given vector (for undo support).
+    /// Does not move any slides.
+    void RestoreSectionsSnapshot(const std::vector<SlideSection>& rSections);
 
 private:
     SdDrawDocument& mrDoc;
-    mutable std::vector<SlideSection> maSections;
-    mutable bool mbLoaded = false;
-
-    void EnsureLoaded() const;
+    std::vector<SlideSection> maSections;
 };
 
 } // namespace sd
