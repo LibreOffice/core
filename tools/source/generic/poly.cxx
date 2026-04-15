@@ -1912,6 +1912,25 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon) :  mpImplPolygon(ImplPolyg
 {
 }
 
+Polygon::iterator Polygon::begin() { return GetPointAry(); }
+
+Polygon::iterator Polygon::end()
+{
+    Point* p = GetPointAry();
+    return p ? p + GetSize() : nullptr;
+}
+
+Polygon::const_iterator Polygon::begin() const { return GetConstPointAry(); }
+
+Polygon::const_iterator Polygon::end() const
+{
+    const Point* p = GetConstPointAry();
+    return p ? p + GetSize() : nullptr;
+}
+
+Polygon::const_iterator Polygon::cbegin() const { return begin(); }
+Polygon::const_iterator Polygon::cend() const { return end(); }
+
 } // namespace tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

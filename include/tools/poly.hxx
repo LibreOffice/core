@@ -26,6 +26,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
+#include <iterator>
 #include <vector>
 
 #define POLY_APPEND             (0xFFFF)
@@ -181,6 +182,19 @@ public:
     const Point*        GetConstPointAry() const;
     const PolyFlags*    GetConstFlagAry() const;
 
+    // Iterator support for range-based for loops
+    typedef Point* iterator;
+    typedef const Point* const_iterator;
+
+    iterator begin();
+    iterator end();
+
+    const_iterator begin() const;
+    const_iterator end() const;
+
+    const_iterator cbegin() const;
+    const_iterator cend() const;
+
     // convert to ::basegfx::B2DPolygon and return
     ::basegfx::B2DPolygon getB2DPolygon() const;
 
@@ -280,6 +294,9 @@ public:
 
     const_iterator begin() const;
     const_iterator end() const;
+
+    const_iterator cbegin() const;
+    const_iterator cend() const;
 };
 
 template< typename charT, typename traits >

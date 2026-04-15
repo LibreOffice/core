@@ -520,6 +520,10 @@ PolyPolygon::const_iterator PolyPolygon::end() const
     return mpImplPolyPolygon->end();
 }
 
+PolyPolygon::const_iterator PolyPolygon::cbegin() const { return begin(); }
+
+PolyPolygon::const_iterator PolyPolygon::cend() const { return end(); }
+
 } /* namespace tools */
 
 ImplPolyPolygon::ImplPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
