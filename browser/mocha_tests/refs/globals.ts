@@ -62,8 +62,8 @@ noopClass.addInitHook = () => {};
     canvasSize: null,
     definitions: {},
     dpiScale: 1,
-    twipsToPixels: 15,
-    pixelsToTwips: 1 / 15,
+    twipsToPixels: 1 / 15,
+    pixelsToTwips: 15,
     sectionContainer: {},
     socket: {},
     // Loader-time stubs: source files touch these at module-load time.
