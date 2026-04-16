@@ -1945,6 +1945,13 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         EndTag( nToken );
         break;
 
+    // tdf#171772 - properly close inserted tag to prevent persistent underline
+    case HtmlTokenId::INSERTEDTEXT_OFF:
+        EndTag(HtmlTokenId::UNDERLINE_OFF);
+        break;
+
+    // tdf#171772 - properly close deleted tag to prevent persistent strikethrough
+    case HtmlTokenId::DELETEDTEXT_OFF:
     case HtmlTokenId::STRIKETHROUGH_OFF:
         EndTag( HtmlTokenId::STRIKE_OFF );
         break;
@@ -2004,8 +2011,6 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::PERSON_OFF:
     case HtmlTokenId::ACRONYM_OFF:
     case HtmlTokenId::ABBREVIATION_OFF:
-    case HtmlTokenId::INSERTEDTEXT_OFF:
-    case HtmlTokenId::DELETEDTEXT_OFF:
 
     case HtmlTokenId::TELETYPE_OFF:
         EndTag( nToken );
