@@ -179,6 +179,20 @@ public:
     virtual OUString getChartName(sal_Int32 nId) const override;
 };
 
+class HistogramChartDialogController final : public ChartTypeDialogController
+{
+public:
+    HistogramChartDialogController();
+    virtual ~HistogramChartDialogController() override;
+
+    virtual OUString getName() override;
+    virtual OUString getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
+                                 const ChartTypeParameter& rParameter) override;
+    virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
+};
+
 class PieChartDialogController final : public ChartTypeDialogController
 {
 public:

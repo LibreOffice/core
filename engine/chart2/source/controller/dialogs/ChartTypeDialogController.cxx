@@ -615,6 +615,53 @@ OUString BarChartDialogController::getChartName( sal_Int32 nId ) const
 }
 
 //=========
+// HistogramChartDialogController
+//=========
+
+HistogramChartDialogController::HistogramChartDialogController()
+{
+    bSupports3D = false;
+}
+
+HistogramChartDialogController::~HistogramChartDialogController()
+{
+}
+
+OUString HistogramChartDialogController::getName()
+{
+    return SchResId(STR_TYPE_HISTOGRAM);
+}
+
+OUString HistogramChartDialogController::getImage()
+{
+    return BMP_TYPE_HISTOGRAM;
+}
+
+const tTemplateServiceChartTypeParameterMap& HistogramChartDialogController::getTemplateMap() const
+{
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+        {"com.sun.star.chart2.template.Histogram" , ChartTypeParameter(1, false, false, GlobalStackMode_NONE)}
+    };
+    return s_aTemplateMap;
+}
+
+void HistogramChartDialogController::fillSubTypeList(weld::IconView& rSubTypeList,
+                                                     const ChartTypeParameter& /*rParameter*/)
+{
+    rSubTypeList.clear();
+    lcl_appendSubType(rSubTypeList, u"1"_ustr, SchResId(STR_HISTOGRAM),
+                      Bitmap(BMP_HISTOGRAM));
+}
+
+
+void HistogramChartDialogController::adjustParameterToSubType(ChartTypeParameter& rParameter)
+{
+    rParameter.b3DLook = false;
+    rParameter.eStackMode = GlobalStackMode_NONE;
+    rParameter.bXAxisWithValues = false;
+}
+
+//=========
 // PieChartDialogController
 //=========
 

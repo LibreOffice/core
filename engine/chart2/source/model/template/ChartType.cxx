@@ -450,6 +450,9 @@ bool ChartType::isSupportingOverlapAndGapWidthProperties(sal_Int32 nDimensionCou
     if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR))
         return true;
 
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM))
+        return true;
+
     return false;
 }
 
@@ -504,7 +507,8 @@ bool ChartType::isSupportingBaseValue()
 
     return aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)
-        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA);
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM);
 }
 
 bool ChartType::isSupportingAxisPositioning(sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex )

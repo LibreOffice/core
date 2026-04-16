@@ -23,6 +23,7 @@
 #include "LineChartTypeTemplate.hxx"
 #include "BarChartTypeTemplate.hxx"
 #include "ColumnLineChartTypeTemplate.hxx"
+#include "HistogramChartTypeTemplate.hxx"
 #include "AreaChartTypeTemplate.hxx"
 #include "PieChartTypeTemplate.hxx"
 #include "ScatterChartTypeTemplate.hxx"
@@ -87,6 +88,7 @@ enum TemplateId
     TEMPLATE_PERCENTSTACKEDTHREEDBARFLAT,
     TEMPLATE_COLUMNWITHLINE,
     TEMPLATE_STACKEDCOLUMNWITHLINE,
+    TEMPLATE_HISTOGRAM,
     TEMPLATE_AREA,
     TEMPLATE_STACKEDAREA,
     TEMPLATE_PERCENTSTACKEDAREA,
@@ -171,6 +173,7 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         {"com.sun.star.chart2.template.PercentStackedThreeDBarFlat",    TEMPLATE_PERCENTSTACKEDTHREEDBARFLAT},
         {"com.sun.star.chart2.template.ColumnWithLine",                 TEMPLATE_COLUMNWITHLINE},
         {"com.sun.star.chart2.template.StackedColumnWithLine",          TEMPLATE_STACKEDCOLUMNWITHLINE},
+        {"com.sun.star.chart2.template.Histogram",                      TEMPLATE_HISTOGRAM},
         {"com.sun.star.chart2.template.Area",                           TEMPLATE_AREA},
         {"com.sun.star.chart2.template.StackedArea",                    TEMPLATE_STACKEDAREA},
         {"com.sun.star.chart2.template.PercentStackedArea",             TEMPLATE_PERCENTSTACKEDAREA},
@@ -388,6 +391,11 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
             xTemplate.set( new ColumnLineChartTypeTemplate( m_xContext, aServiceSpecifier, eMode, 1 ));
         }
         break;
+
+        // Histogram
+        case TEMPLATE_HISTOGRAM:
+            xTemplate.set(new HistogramChartTypeTemplate(m_xContext, aServiceSpecifier, StackMode::NONE));
+            break;
 
         // Area
         case TEMPLATE_AREA:
