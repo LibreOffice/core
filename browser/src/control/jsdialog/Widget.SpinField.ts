@@ -36,6 +36,19 @@ type SpinFieldControls = {
 	spinfield: HTMLInputElement;
 };
 
+/* for now we have this temporary type to prevent typescript error
+ * in the `builder._controlHandlers['...'](...)` statement. we
+ * have this because `MobileWizardBuilder` calls this function
+ * and overrides the constructor for 'basespinfield'. when MobileWizardBuilder
+ * gets converted to typescript, hopefully we would merge the two implementations
+ * and then remove this. */
+type BaseSpinFieldConstructor = (
+	parentContainer: HTMLElement,
+	data: any,
+	builder: JSBuilder,
+	_customCallback: JSDialogCallback,
+) => SpinFieldControls;
+
 let _decimal: string;
 let _minusSign: string;
 
@@ -340,24 +353,10 @@ JSDialog.spinfieldControl = function (
 	builder: JSBuilder,
 	customCallback: JSDialogCallback,
 ) {
-	/* since the spinfields are also used by mobile, it's better to
-	 * leave the callback resolution dynamic (like here). */
-
-	/* for now we have this temporary type to prevent typescript error
-	 * in the `builder._controlHandlers['...'](...)` statement below. we
-	 * didn't remove that because `MobileWizardBuilder` calls this function
-	 * and overrides the constructor for 'basespinfield'. when that is converted
-	 * to typescript, we will remove this. */
-	type baseSpinFieldConstructor = (
-		parentContainer: HTMLElement,
-		data: any,
-		builder: JSBuilder,
-		_customCallback: JSDialogCallback,
-	) => SpinFieldControls;
-
+	/* mobile also defines a constructor for 'basespinfield'. */
 	const baseSpinFieldCallback = builder._controlHandlers[
 		'basespinfield'
-	] as unknown as baseSpinFieldConstructor;
+	] as unknown as BaseSpinFieldConstructor;
 
 	const controls: SpinFieldControls = baseSpinFieldCallback(
 		parentContainer,
@@ -398,7 +397,12 @@ const _createBaseSpinField = function (
 	builder: JSBuilder,
 	customCallback: JSDialogCallback,
 ) {
-	const controls = JSDialog.baseSpinField(
+	/* mobile also defines a constructor for 'basespinfield'. */
+	const baseSpinFieldCtr = builder._controlHandlers[
+		'basespinfield'
+	] as unknown as BaseSpinFieldConstructor;
+
+	const controls = baseSpinFieldCtr(
 		parentContainer,
 		data,
 		builder,
