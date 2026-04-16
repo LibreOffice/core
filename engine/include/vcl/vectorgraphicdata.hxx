@@ -72,7 +72,6 @@ private:
     bool mbEnableEMFPlus = true;
 
     // on demand creators
-    void ensurePdfReplacement();
     void ensureReplacement();
     void ensureSequenceAndRange();
 

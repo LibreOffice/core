@@ -26,6 +26,30 @@
 #include <vcl/pdfread.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 
+namespace
+{
+Bitmap renderPDFPage(const void* pData, int nSize, int nPage = 0)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return {};
+    auto pDocument = pPdfium->openDocument(pData, nSize, OString());
+    if (!pDocument)
+        return {};
+    auto pPage = pDocument->openPage(nPage);
+    if (!pPage)
+        return {};
+    int nWidth = std::round(pPage->getWidth() * 96.0 / 72.0);
+    int nHeight = std::round(pPage->getHeight() * 96.0 / 72.0);
+    auto pPdfBitmap = pPdfium->createBitmap(nWidth, nHeight, /*nAlpha=*/1);
+    if (!pPdfBitmap)
+        return {};
+    pPdfBitmap->fillRect(0, 0, nWidth, nHeight, 0xFFFFFFFF);
+    pPdfBitmap->renderPageBitmap(pDocument.get(), pPage.get(), 0, 0, nWidth, nHeight);
+    return pPdfBitmap->createBitmapFromBuffer();
+}
+}
+
 class PDFiumLibraryTest : public test::BootstrapFixtureBase
 {
 protected:
@@ -283,13 +307,10 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testFormFields)
     aMemory.Seek(0);
 
     // When rendering its first (and only) page to a bitmap:
-    std::vector<Bitmap> aBitmaps;
-    int nRet = vcl::RenderPDFBitmaps(aMemory.GetData(), aMemory.GetSize(), aBitmaps);
-    CPPUNIT_ASSERT(nRet);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aBitmaps.size());
+    Bitmap aBitmap = renderPDFPage(aMemory.GetData(), aMemory.GetSize());
+    CPPUNIT_ASSERT(!aBitmap.IsEmpty());
 
     // Then make sure the bitmap contains that text:
-    Bitmap aBitmap = aBitmaps[0];
     BitmapReadAccess aAccess(aBitmap);
     Size aSize = aBitmap.GetSizePixel();
     std::set<sal_uInt32> aColors;

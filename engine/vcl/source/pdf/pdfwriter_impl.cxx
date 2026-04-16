@@ -98,7 +98,6 @@
 #include <pdf/XmpMetadata.hxx>
 #include <pdf/objectcopier.hxx>
 #include <pdf/pdfwriter_impl.hxx>
-#include <pdf/PdfConfig.hxx>
 #include <pdf/PDFEncryptorR6.hxx>
 #include <pdf/PDFEncryptor.hxx>
 #include <o3tl/sorted_vector.hxx>
@@ -8289,7 +8288,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     else
     {
         // fallback: convert pixel size to points via DPI
-        static const double fResolutionDPI = getDefaultPdfResolutionDpi();
+        static const double fResolutionDPI = 96.0;
         sal_Int32 nOldDPIX = GetDPIX();
         sal_Int32 nOldDPIY = GetDPIY();
         SetDPIX(fResolutionDPI);

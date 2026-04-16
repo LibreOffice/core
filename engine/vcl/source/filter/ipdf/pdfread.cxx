@@ -10,7 +10,6 @@
 #include <vcl/pdfread.hxx>
 #include <pdf/pdfcompat.hxx>
 
-#include <pdf/PdfConfig.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -24,83 +23,6 @@ using namespace com::sun::star;
 
 namespace vcl
 {
-size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBitmaps,
-                        const size_t nFirstPage, int nPages, const basegfx::B2DTuple* pSizeHint)
-{
-    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    if (!pPdfium)
-    {
-        return 0;
-    }
-
-    // Load the buffer using pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPdfium->openDocument(pBuffer, nSize, OString());
-    if (!pPdfDocument)
-        return 0;
-
-    static const double fResolutionDPI = vcl::pdf::getDefaultPdfResolutionDpi();
-
-    const int nPageCount = pPdfDocument->getPageCount();
-    if (nPages <= 0)
-        nPages = nPageCount;
-    const size_t nLastPage = std::min<int>(nPageCount, nFirstPage + nPages) - 1;
-    for (size_t nPageIndex = nFirstPage; nPageIndex <= nLastPage; ++nPageIndex)
-    {
-        // Render next page.
-        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(nPageIndex);
-        if (!pPdfPage)
-            break;
-
-        // Calculate the bitmap size in points.
-        double nPageWidthPoints = pPdfPage->getWidth();
-        double nPageHeightPoints = pPdfPage->getHeight();
-        if (pSizeHint && pSizeHint->getX() && pSizeHint->getY())
-        {
-            // Have a size hint, prefer that over the logic size from the PDF.
-            nPageWidthPoints
-                = o3tl::convert(pSizeHint->getX(), o3tl::Length::mm100, o3tl::Length::pt);
-            nPageHeightPoints
-                = o3tl::convert(pSizeHint->getY(), o3tl::Length::mm100, o3tl::Length::pt);
-        }
-
-        // Returned unit is points, convert that to pixel.
-
-        int nPageWidth = std::round(vcl::pdf::pointToPixel(nPageWidthPoints, fResolutionDPI)
-                                    * PDF_INSERT_MAGIC_SCALE_FACTOR);
-        int nPageHeight = std::round(vcl::pdf::pointToPixel(nPageHeightPoints, fResolutionDPI)
-                                     * PDF_INSERT_MAGIC_SCALE_FACTOR);
-        std::unique_ptr<vcl::pdf::PDFiumBitmap> pPdfBitmap
-            = pPdfium->createBitmap(nPageWidth, nPageHeight, /*nAlpha=*/1);
-        if (!pPdfBitmap)
-            break;
-
-        bool bTransparent = pPdfPage->hasTransparency();
-        if (pSizeHint)
-        {
-            // This is the PDF-in-EMF case: force transparency, even in case pdfium would tell us
-            // the PDF is not transparent.
-            bTransparent = true;
-        }
-        const sal_uInt32 nColor = bTransparent ? 0x00000000 : 0xFFFFFFFF;
-        pPdfBitmap->fillRect(0, 0, nPageWidth, nPageHeight, nColor);
-        pPdfBitmap->renderPageBitmap(pPdfDocument.get(), pPdfPage.get(), /*nStartX=*/0,
-                                     /*nStartY=*/0, nPageWidth, nPageHeight);
-        Bitmap aBitmap = pPdfBitmap->createBitmapFromBuffer();
-
-        if (bTransparent)
-        {
-            rBitmaps.emplace_back(std::move(aBitmap));
-        }
-        else
-        {
-            rBitmaps.emplace_back(aBitmap.CreateColorBitmap());
-        }
-    }
-
-    return rBitmaps.size();
-}
-
 bool ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex,
                const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
                bool& bEncrypted)

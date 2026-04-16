@@ -37,12 +37,10 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <pdf/PdfConfig.hxx>
 #include <rtl/crc.h>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/wmfexternal.hxx>
-#include <vcl/pdfread.hxx>
 #include <unotools/streamwrap.hxx>
 #include <graphic/UnoBinaryDataContainer.hxx>
 
@@ -143,25 +141,6 @@ bool VectorGraphicData::operator==(const VectorGraphicData& rCandidate) const
     return false;
 }
 
-void VectorGraphicData::ensurePdfReplacement()
-{
-    assert(getType() == VectorGraphicDataType::Pdf);
-
-    if (!maReplacement.IsEmpty())
-        return; // nothing to do
-
-    // use PDFium directly
-    std::vector<Bitmap> aBitmaps;
-    sal_Int32 nUsePageIndex = 0;
-    if (mnPageIndex >= 0)
-        nUsePageIndex = mnPageIndex;
-    vcl::RenderPDFBitmaps(maDataContainer.getData(),
-                          maDataContainer.getSize(), aBitmaps, nUsePageIndex, 1,
-                          &maSizeHint);
-    if (!aBitmaps.empty())
-        maReplacement = aBitmaps[0];
-}
-
 void VectorGraphicData::ensureReplacement()
 {
     if (!maReplacement.IsEmpty())
@@ -179,21 +158,6 @@ Bitmap VectorGraphicData::getBitmap(const Size& pixelSize) const
 {
     if (!maReplacement.IsEmpty() && maReplacement.GetSizePixel() == pixelSize)
         return maReplacement;
-
-    if (getType() == VectorGraphicDataType::Pdf)
-    {
-        // use PDFium directly
-        const sal_Int32 nUsePageIndex = mnPageIndex > 0 ? mnPageIndex : 0;
-        const double dpi = vcl::pdf::getDefaultPdfResolutionDpi();
-        basegfx::B2DTuple sizeMM100(
-            o3tl::convert(pixelSize.Width() / dpi / vcl::PDF_INSERT_MAGIC_SCALE_FACTOR, o3tl::Length::in, o3tl::Length::mm100),
-            o3tl::convert(pixelSize.Height() / dpi / vcl::PDF_INSERT_MAGIC_SCALE_FACTOR, o3tl::Length::in, o3tl::Length::mm100));
-        std::vector<Bitmap> aBitmaps;
-        vcl::RenderPDFBitmaps(maDataContainer.getData(), maDataContainer.getSize(), aBitmaps,
-                              nUsePageIndex, 1, &sizeMM100);
-        if (!aBitmaps.empty())
-            return aBitmaps[0];
-    }
 
     if (getPrimitive2DSequence().empty())
         return {};
