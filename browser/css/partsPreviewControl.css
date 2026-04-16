@@ -61,3 +61,24 @@
 .hidden-slide {
 	opacity: 0.5;
 }
+
+/* Slide section headers - styled to match sidebar expander labels */
+.slide-section-header {
+	display: flex;
+	align-items: center;
+	padding-inline: 8px;
+	line-height: var(--sidebar-header-height, 34px);
+	cursor: default;
+	user-select: none;
+	border-bottom: 1px solid var(--color-border, #ccc);
+}
+
+.slide-section-name {
+	color: var(--color-main-text);
+	font-size: var(--header-font-size, 12px);
+	font-weight: 600;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	flex: 1;
+}

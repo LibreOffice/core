@@ -1275,6 +1275,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		} else if (textMsg.startsWith('presentationinfo:')) {
 			var content = JSON.parse(textMsg.substring('presentationinfo:'.length + 1));
 			this._map.fire('presentationinfo', content);
+		} else if (textMsg.startsWith('slidesections:')) {
+			var sections = JSON.parse(textMsg.substring('slidesections:'.length + 1));
+			app.impress.sections = sections;
+			this._map.fire('updatesections', {sections: sections});
 		} else if (textMsg.startsWith('slideshowfollow')) {
 			const eventInfo = textMsg.substr('slideshowfollow '.length);
 			const parameterStartIndex = eventInfo.indexOf('{');

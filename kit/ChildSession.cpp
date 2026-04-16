@@ -606,7 +606,8 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "geta11ycaretposition") ||
                tokens.equals(0, "toggletiledumping") ||
                tokens.equals(0, "getpresentationinfo") ||
-               tokens.equals(0, "executescript"));
+               tokens.equals(0, "executescript") ||
+               tokens.equals(0, "getslidesections"));
 
         ProfileZone pz("ChildSession::_handleInput:" + tokens[0]);
         if (tokens.equals(0, "clientzoom"))
@@ -903,6 +904,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "executescript"))
         {
             return executeScript(buffer, length, tokens);
+        }
+        else if (tokens.equals(0, "getslidesections"))
+        {
+            return getSlideSections();
         }
         else
         {
@@ -3385,6 +3390,45 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
     // semantics (rather than collapsing it to JSON null).
     body += '}';
     sendTextFrame("executescriptresult: " + body);
+    return true;
+}
+
+bool ChildSession::getSlideSections()
+{
+    getLOKitDocument()->setView(_viewId);
+
+    LOKitHelper::ScopedString info(getLOKitDocument()->getPresentationInfo());
+    if (!info || !info.get())
+    {
+        sendTextFrame("slidesections: []");
+        return true;
+    }
+
+    std::string data(info.get());
+
+    // Extract just the "sections" array from the full presentation info
+    try
+    {
+        Poco::JSON::Parser parser;
+        auto result = parser.parse(data);
+        auto obj = result.extract<Poco::JSON::Object::Ptr>();
+        if (obj && obj->has("sections"))
+        {
+            std::ostringstream oss;
+            obj->getArray("sections")->stringify(oss);
+            sendTextFrame("slidesections: " + oss.str());
+        }
+        else
+        {
+            sendTextFrame("slidesections: []");
+        }
+    }
+    catch (const std::exception& e)
+    {
+        LOG_ERR("Failed to parse presentation info for sections: " << e.what());
+        sendTextFrame("slidesections: []");
+    }
+
     return true;
 }
 

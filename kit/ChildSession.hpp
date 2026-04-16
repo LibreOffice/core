@@ -230,6 +230,7 @@ private:
     bool getA11yCaretPosition();
     bool getPresentationInfo();
     bool executeScript(char const * buffer, int length, StringVector const & tokens);
+    bool getSlideSections();
 
     void rememberEventsForInactiveUser(int type, const std::string& payload);
 

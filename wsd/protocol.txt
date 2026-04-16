@@ -510,6 +510,11 @@ getpresentationinfo
 
     This change uses the new GetPresentationInfo() funciton that was added to the LOKit API.
 
+getslidesections
+
+    Returns the slide sections for an Impress presentation as a JSON array.
+    Response: slidesections: [{name, id, startIndex, slideCount}, ...]
+
 removetextcontext id=<windowId> before=<before_position> after=<after_position>
 
     This protocol is used to remove text context from a specified location in a document. It allows the deletion of multiple characters within a range by specifying the positions before and after the deletion.

@@ -157,12 +157,35 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		this._map = map;
 		map.addControl(this._preview);
 		map.on('updateparts', this.onUpdateParts, this);
+		map.on('commandstatechanged', this._onSlideSectionsCommandState, this);
 		app.events.on('updatepermission', this.onUpdatePermission.bind(this));
 
 		if (!map._docPreviews)
 			map._docPreviews = {};
 
 		map.uiManager.initializeSpecializedUI(this._docType);
+	},
+
+	// Sections arrive as a .uno:SlideSections state-change pushed by core, so
+	// the panel stays consistent with the async UNO dispatch.
+	_onSlideSectionsCommandState: function (e) {
+		if (!e || e.commandName !== '.uno:SlideSections')
+			return;
+
+		var sections = e.state;
+		if (typeof sections === 'string') {
+			try {
+				sections = JSON.parse(sections);
+			} catch (ex) {
+				console.warn('Failed to parse .uno:SlideSections state: ' + ex);
+				sections = [];
+			}
+		}
+		if (!Array.isArray(sections))
+			sections = [];
+
+		app.impress.sections = sections;
+		this._map.fire('updatesections', { sections: sections });
 	},
 
 	onResizeImpress: function () {
@@ -194,6 +217,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 	onRemove: function () {
 		clearTimeout(this._previewInvalidator);
+		this._map.off('commandstatechanged', this._onSlideSectionsCommandState, this);
 	},
 
 	_openMobileWizard: function(data) {
@@ -403,6 +427,9 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 				if (refreshAnnotation)
 					app.socket.sendMessage('commandvalues command=.uno:ViewAnnotations');
+
+				// Fetch slide sections data
+				app.socket.sendMessage('getslidesections');
 			}
 
 			this._documentInfo = textMsg;

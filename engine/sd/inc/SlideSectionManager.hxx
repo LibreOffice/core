@@ -81,6 +81,10 @@ public:
 private:
     SdDrawDocument& mrDoc;
     std::vector<SlideSection> maSections;
+
+    /// Push the sections via KIT_CALLBACK_STATE_CHANGED for .uno:SlideSections
+    /// so COKit clients update without polling after async UNO dispatch.
+    void NotifySectionsChanged();
 };
 
 } // namespace sd

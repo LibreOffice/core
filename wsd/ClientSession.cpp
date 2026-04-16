@@ -1429,6 +1429,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "geta11yfocusedparagraph") ||
              tokens.equals(0, "geta11ycaretposition") ||
              tokens.equals(0, "getpresentationinfo") ||
+             tokens.equals(0, "getslidesections") ||
              tokens.equals(0, "slideshowfollow"))
     {
 #if !MOBILEAPP
@@ -2760,6 +2761,10 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
     else if (tokens.equals(0, "presentationinfo:"))
     {
         return handlePresentationInfo(payload, docBroker);
+    }
+    else if (tokens.equals(0, "slidesections:"))
+    {
+        return forwardToClient(payload);
     }
     else if (tokens.equals(0, "clipboardcontent:"))
     {

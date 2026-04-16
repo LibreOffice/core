@@ -13,10 +13,14 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <COKit/COKitEnums.h>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmltools.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svx/svdmodel.hxx>
+#include <tools/json_writer.hxx>
 
 using namespace ::com::sun::star;
 
@@ -185,6 +189,8 @@ void SlideSectionManager::AddSection(sal_Int32 nStartSlideIndex, const OUString&
               [](const SlideSection& a, const SlideSection& b) {
                   return a.mnStartIndex < b.mnStartIndex;
               });
+
+    NotifySectionsChanged();
 }
 
 void SlideSectionManager::RemoveSection(sal_Int32 nSectionIndex)
@@ -193,6 +199,8 @@ void SlideSectionManager::RemoveSection(sal_Int32 nSectionIndex)
         return;
 
     maSections.erase(maSections.begin() + nSectionIndex);
+
+    NotifySectionsChanged();
 }
 
 void SlideSectionManager::RenameSection(sal_Int32 nSectionIndex, const OUString& rNewName)
@@ -201,6 +209,8 @@ void SlideSectionManager::RenameSection(sal_Int32 nSectionIndex, const OUString&
         return;
 
     maSections[nSectionIndex].maName = rNewName;
+
+    NotifySectionsChanged();
 }
 
 void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
@@ -286,6 +296,8 @@ void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
         maSections[i].mnStartIndex = nCurrentIdx;
         nCurrentIdx += aSlideCounts[i];
     }
+
+    NotifySectionsChanged();
 }
 
 std::vector<SlideSection> SlideSectionManager::GetSectionsSnapshot() const { return maSections; }
@@ -300,6 +312,53 @@ void SlideSectionManager::RestoreSectionsSnapshot(const std::vector<SlideSection
     {
         SdrHint aHint(SdrHintKind::PageOrderChange, pPage);
         mrDoc.Broadcast(aHint);
+    }
+
+    NotifySectionsChanged();
+}
+
+void SlideSectionManager::NotifySectionsChanged()
+{
+    if (!comphelper::COKit::isActive())
+        return;
+
+    SfxViewShell* pCurrent = SfxViewShell::Current();
+    if (!pCurrent)
+        return;
+
+    ::tools::JsonWriter aWriter;
+    aWriter.put("commandName", ".uno:SlideSections");
+    const sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
+    const sal_Int32 nSectionCount = static_cast<sal_Int32>(maSections.size());
+    {
+        auto aArr = aWriter.startArray("state");
+        for (sal_Int32 i = 0; i < nSectionCount; ++i)
+        {
+            const SlideSection& rSec = maSections[i];
+            const sal_Int32 nSectionSlideCount
+                = (i + 1 < nSectionCount)
+                      ? maSections[i + 1].mnStartIndex - rSec.mnStartIndex
+                      : nPageCount - rSec.mnStartIndex;
+            auto aNode = aWriter.startStruct();
+            aWriter.put("name", rSec.maName);
+            if (!rSec.maId.isEmpty())
+                aWriter.put("id", rSec.maId);
+            aWriter.put("startIndex", rSec.mnStartIndex);
+            aWriter.put("slideCount", nSectionSlideCount);
+        }
+    }
+    const OString aPayload = aWriter.finishAndGetAsOString();
+
+    // Deliver the same simple payload to every view in this document so all
+    // collaborators update; NotifyOtherViews wraps the payload in a different
+    // shape that the browser's commandstatechanged handler does not expect.
+    const ViewShellDocId nDocId = pCurrent->GetDocId();
+    SfxViewShell* pView = SfxViewShell::GetFirst();
+    while (pView)
+    {
+        if (pView->GetDocId() == nDocId)
+            pView->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
+        pView = SfxViewShell::GetNext(*pView);
     }
 }
 
