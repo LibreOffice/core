@@ -43,6 +43,7 @@
 
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
+#include <svx/fillbitmaplink.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/kit/helper.hxx>
 #include <svl/intitem.hxx>
@@ -1017,7 +1018,21 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 /** updates all links, only links in this document should by resolved */
 void SdDrawDocument::UpdateAllLinks()
 {
-    if (s_pDocLockedInsertingLinks || !m_pLinkManager || m_pLinkManager->GetLinks().empty())
+    if (s_pDocLockedInsertingLinks || !m_pLinkManager)
+        return;
+
+    // Register links for fill bitmap items (e.g. slide background images)
+    // with unresolved remote URLs, before checking whether the link list is empty.
+    registerFillBitmapLinks(GetItemPool(), *m_pLinkManager,
+        [this]()
+        {
+            for (sal_uInt16 i = 0; i < GetPageCount(); ++i)
+                GetPage(i)->ActionChanged();
+            for (sal_uInt16 i = 0; i < GetMasterPageCount(); ++i)
+                GetMasterPage(i)->ActionChanged();
+        });
+
+    if (m_pLinkManager->GetLinks().empty())
         return;
 
     ::sd::DrawDocShell* pDocShell = GetDocSh();

@@ -468,6 +468,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xml/xmlexport \
     svx/source/xml/xmlxtexp \
     svx/source/xml/xmlxtimp \
+    svx/source/xoutdev/fillbitmaplink \
     svx/source/xoutdev/xattr \
     svx/source/xoutdev/xattr2 \
     svx/source/xoutdev/xattrbmp \
