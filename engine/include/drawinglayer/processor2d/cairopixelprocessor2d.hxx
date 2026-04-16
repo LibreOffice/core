@@ -192,6 +192,9 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     // check if CairoCoordinateLimitWorkaround is needed
     void evaluateCairoCoordinateLimitWorkaround();
 
+    // read device scale from the cairo surface and store in ViewInformation2D
+    void updateDeviceScaleFactor();
+
     basegfx::BColor getLineColor(const basegfx::BColor& rColor) const;
     basegfx::BColor getFillColor(const basegfx::BColor& rColor) const;
     basegfx::BColor getTextColor(const basegfx::BColor& rColor) const;

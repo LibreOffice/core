@@ -962,6 +962,16 @@ void CairoPixelProcessor2D::onViewInformation2DChanged()
                                                                           : CAIRO_ANTIALIAS_NONE);
 }
 
+void CairoPixelProcessor2D::updateDeviceScaleFactor()
+{
+    double fSurfaceScaleX = 1.0;
+    double fSurfaceScaleY = 1.0;
+    cairo_surface_get_device_scale(cairo_get_target(mpRT), &fSurfaceScaleX, &fSurfaceScaleY);
+    geometry::ViewInformation2D aUpdatedViewInfo(getViewInformation2D());
+    aUpdatedViewInfo.setDeviceScaleFactor(basegfx::B2DTuple(fSurfaceScaleX, fSurfaceScaleY));
+    setViewInformation2D(aUpdatedViewInfo);
+}
+
 CairoPixelProcessor2D::CairoPixelProcessor2D(
     const basegfx::BColorModifierStack& rBColorModifierStack,
     const geometry::ViewInformation2D& rViewInformation, cairo_surface_t* pTarget)
@@ -987,6 +997,9 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(
     if (nullptr == mpRT)
         // error, invalid
         return;
+
+    // set the device scale factor from the cairo surface
+    updateDeviceScaleFactor();
 
     // initialize some basic used values/settings
     cairo_set_antialias(mpRT, rViewInformation.getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
@@ -1130,14 +1143,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(OutputDevice& rOutputDevice,
     }
 
     // set the device scale factor from the cairo surface
-    double fSurfaceScaleX = 1.0;
-    double fSurfaceScaleY = 1.0;
-    cairo_surface_get_device_scale(cairo_get_target(mpRT), &fSurfaceScaleX, &fSurfaceScaleY);
-    {
-        geometry::ViewInformation2D aUpdatedViewInfo(rViewInformation);
-        aUpdatedViewInfo.setDeviceScaleFactor(basegfx::B2DTuple(fSurfaceScaleX, fSurfaceScaleY));
-        setViewInformation2D(aUpdatedViewInfo);
-    }
+    updateDeviceScaleFactor();
 
     // initialize some basic used values/settings
     cairo_set_antialias(mpRT, rViewInformation.getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
