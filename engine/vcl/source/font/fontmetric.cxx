@@ -503,7 +503,18 @@ void FontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
             && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_HORIZONTAL_CLIPPING_DESCENT,
                                           &nWinDescent))
         {
+            // When hhea metrics differ from Win metrics but their total
+            // line heights match, prefer Win metrics for compatibility.
+            bool bHheaDiffersButTotalMatches = false;
+            if (nAscent != nWinAscent || nDescent != -nWinDescent)
+            {
+                auto nHheaTotal = nAscent - nDescent + nLineGap;
+                auto nWinTotal = nWinAscent + nWinDescent;
+                bHheaDiffersButTotalMatches = (nHheaTotal == nWinTotal);
+            }
+
             if ((fAscent == 0.0 && fDescent == 0.0)
+                || bHheaDiffersButTotalMatches
                 || ShouldUseWinMetrics(nAscent, nDescent, nTypoAscent, nTypoDescent, nWinAscent,
                                        nWinDescent))
             {

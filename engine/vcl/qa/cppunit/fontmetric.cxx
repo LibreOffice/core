@@ -11,9 +11,27 @@
 #include <cppunit/TestAssert.h>
 
 #include <vcl/metric.hxx>
+#include <vcl/virdev.hxx>
 
 class VclFontMetricTest : public test::BootstrapFixture
 {
+    OUString maDataUrl = u"/vcl/qa/cppunit/data/"_ustr;
+
+    OUString getFullUrl(std::u16string_view sFileName)
+    {
+        return m_directories.getURLFromSrc(maDataUrl) + sFileName;
+    }
+
+protected:
+    bool addFont(OutputDevice* pOutDev, std::u16string_view sFileName,
+                 std::u16string_view sFamilyName)
+    {
+        OutputDevice::ImplClearAllFontData(true);
+        bool bAdded = pOutDev->AddTempDevFont(getFullUrl(sFileName), OUString(sFamilyName));
+        OutputDevice::ImplRefreshAllFontData(true);
+        return bAdded;
+    }
+
 public:
     VclFontMetricTest() : BootstrapFixture(true, false) {}
 
@@ -22,6 +40,7 @@ public:
     void testSlant();
     void testBulletOffset();
     void testEqualityOperator();
+    void testHheaMatchingWinMetrics();
 
     CPPUNIT_TEST_SUITE(VclFontMetricTest);
     CPPUNIT_TEST(testFullstopCenteredFlag);
@@ -29,6 +48,7 @@ public:
     CPPUNIT_TEST(testSlant);
     CPPUNIT_TEST(testBulletOffset);
     CPPUNIT_TEST(testEqualityOperator);
+    CPPUNIT_TEST(testHheaMatchingWinMetrics);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -130,6 +150,40 @@ void VclFontMetricTest::testEqualityOperator()
     CPPUNIT_ASSERT_MESSAGE( "Slant set same, aLHS != aRhs succeeded", !aLhs.operator !=(aRhs) );
 }
 
+
+void VclFontMetricTest::testHheaMatchingWinMetrics()
+{
+    // Two fonts with different hhea tables but identical OS/2 Win and Typo metrics:
+    // - TestMetricsA: hhea ascent/descent differ from Win
+    // - TestMetricsB: hhea ascent/descent match Win exactly
+
+    // Both should produce the same ascent, descent, and external leading,
+    // because when hhea differs from Win but the total line height matches,
+    // the code should prefer Win metrics for compatibility.
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+
+    if (!addFont(pOutDev, u"TestFont_HheaDiffersWin.ttf", u"TestMetricsA"))
+        return; // skip if fonts cannot be loaded
+
+    if (!addFont(pOutDev, u"TestFont_HheaEqualsWin.ttf", u"TestMetricsB"))
+        return; // skip if fonts cannot be loaded
+
+    // Measure font A (hhea != Win)
+    vcl::Font aFontA(u"TestMetricsA"_ustr, u"Regular"_ustr, Size(0, 2048));
+    pOutDev->SetFont(aFontA);
+    FontMetric aMetricA = pOutDev->GetFontMetric();
+
+    // Measure font B (hhea == Win)
+    vcl::Font aFontB(u"TestMetricsB"_ustr, u"Regular"_ustr, Size(0, 2048));
+    pOutDev->SetFont(aFontB);
+    FontMetric aMetricB = pOutDev->GetFontMetric();
+
+    // Both fonts should have the same metrics
+    CPPUNIT_ASSERT_EQUAL(aMetricA.GetAscent(), aMetricB.GetAscent());
+    CPPUNIT_ASSERT_EQUAL(aMetricA.GetDescent(), aMetricB.GetDescent());
+    CPPUNIT_ASSERT_EQUAL(aMetricA.GetExternalLeading(), aMetricB.GetExternalLeading());
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclFontMetricTest);
 
