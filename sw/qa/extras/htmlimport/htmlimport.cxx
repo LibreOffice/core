@@ -408,16 +408,46 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf79298StrikeoutVariants)
         getProperty<sal_Int16>(getRun(getParagraph(3), 1), u"CharStrikeout"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf171772StrikeoutVariants)
+{
+    createSwWebDoc("tdf171772-strikeout-variants.html");
+
+    // Without the accompanying fix in place, this tests would have failed with:
+    // - Expected: 0 (FontStrikeout::NONE)
+    // - Actual  : 1 (FontStrikeout::SINGLE)
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Strikeout for <del> not properly closed", sal_Int16(awt::FontStrikeout::NONE),
+        getProperty<sal_Int16>(getRun(getParagraph(2), 1), u"CharStrikeout"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Strikeout for <s> not properly closed", sal_Int16(awt::FontStrikeout::NONE),
+        getProperty<sal_Int16>(getRun(getParagraph(4), 1), u"CharStrikeout"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Strikeout for <strike> not properly closed", sal_Int16(awt::FontStrikeout::NONE),
+        getProperty<sal_Int16>(getRun(getParagraph(6), 1), u"CharStrikeout"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf132770InsertedText)
 {
     createSwWebDoc("tdf132770-inserted-text.html");
 
-    // Without the accompanying fix in place, this tests would have failed with:
+    // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1 (FontLineStyle::LINESTYLE_SINGLE)
     // - Actual  : 0 (FontLineStyle::NONE)
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Underline for <ins> missing", sal_Int16(awt::FontUnderline::SINGLE),
         getProperty<sal_Int16>(getRun(getParagraph(1), 1), u"CharUnderline"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf171772InsertedText)
+{
+    createSwWebDoc("tdf171772-inserted-text.html");
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0 (FontLineStyle::NONE)
+    // - Actual  : 1 (FontLineStyle::LINESTYLE_SINGLE)
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Underline for <ins> not properly closed", sal_Int16(awt::FontUnderline::NONE),
+        getProperty<sal_Int16>(getRun(getParagraph(2), 1), u"CharUnderline"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf142781)
