@@ -4301,7 +4301,7 @@ SfxVoidItem RemoveSlideSection SID_REMOVE_SLIDE_SECTION
 ]
 
 SfxVoidItem RenameSlideSection SID_RENAME_SLIDE_SECTION
-()
+(SfxInt32Item SectionIndex SID_RENAME_SLIDE_SECTION, SfxStringItem Name SID_RENAMEPAGE)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

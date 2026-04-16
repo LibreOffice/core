@@ -4882,6 +4882,32 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
             aJsonWriter.put("loopAndRepeatDuration", nPauseTimeout);
         }
 
+        // Section data for COOL slide panel
+        {
+            sd::SlideSectionManager& rSectionMgr = mpDoc->GetSectionManager();
+            sal_Int32 nSectionCount = rSectionMgr.GetSectionCount();
+            if (nSectionCount > 0)
+            {
+                sal_uInt16 nPageCount = mpDoc->GetSdPageCount(PageKind::Standard);
+                auto aSectionsArray = aJsonWriter.startArray("sections");
+                for (sal_Int32 i = 0; i < nSectionCount; ++i)
+                {
+                    const sd::SlideSection& rSection = rSectionMgr.GetSection(i);
+                    sal_Int32 nSectionSlideCount
+                        = (i + 1 < nSectionCount)
+                              ? rSectionMgr.GetSection(i + 1).mnStartIndex - rSection.mnStartIndex
+                              : nPageCount - rSection.mnStartIndex;
+
+                    auto aSectionNode = aJsonWriter.startStruct();
+                    aJsonWriter.put("name", rSection.maName);
+                    if (!rSection.maId.isEmpty())
+                        aJsonWriter.put("id", rSection.maId);
+                    aJsonWriter.put("startIndex", rSection.mnStartIndex);
+                    aJsonWriter.put("slideCount", nSectionSlideCount);
+                }
+            }
+        }
+
         auto aSlideList = aJsonWriter.startArray("slides");
         sal_Int32 nSlideCount = xDrawPages->getCount();
         for (sal_Int32 i = 0; i < nSlideCount; ++i)

@@ -192,6 +192,31 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_ADD_SLIDE_SECTION
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_REMOVE_SLIDE_SECTION
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_RENAME_SLIDE_SECTION
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_MOVE_SLIDE_SECTION_UP
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_MOVE_SLIDE_SECTION_DOWN
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_INSERTLAYER // ole : no, status : play rec
     [
         ExecMethod = FuTemporary ;
