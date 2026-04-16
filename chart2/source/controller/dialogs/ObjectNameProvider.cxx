@@ -190,6 +190,33 @@ OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries,
         }
     }
 
+    if (xSeries.is())
+    {
+        uno::Reference<chart2::data::XLabeledDataSequence> xCalculatedSeq = xSeries->getCalculatedYSequence();
+        if (xCalculatedSeq.is() && xCalculatedSeq->getValues().is())
+        {
+            try
+            {
+                uno::Sequence<uno::Any> aCalcData = xCalculatedSeq->getValues()->getData();
+                if (nPointIndex >= 0 && nPointIndex < aCalcData.getLength())
+                {
+                    double fCalculatedValue = 0.0;
+                    if (aCalcData[nPointIndex] >>= fCalculatedValue)
+                    {
+                        sal_Int32 nNumberFormatKey
+                            = xCalculatedSeq->getValues()->getNumberFormatKeyByIndex(nPointIndex);
+                        aY = aNumberFormatterWrapper.getFormattedString(
+                            nNumberFormatKey, fCalculatedValue, nLabelColor, bColorChanged);
+                    }
+                }
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "");
+            }
+        }
+    }
+
     if( aX.isEmpty() )
     {
         ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartModel);

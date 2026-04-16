@@ -21,6 +21,7 @@
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <Diagram.hxx>
+#include <HistogramDataSequence.hxx>
 #include <LabeledDataSequence.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <PropertyHelper.hxx>
@@ -29,6 +30,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -46,6 +48,7 @@ namespace
 enum
 {
     PROP_HISTOGRAMCHARTTYPE_BINWIDTH,
+    PROP_HISTOGRAMCHARTTYPE_BINCOUNT,
     PROP_HISTOGRAMCHARTTYPE_FREQUENCYTYPE,
     PROP_HISTOGRAMCHARTTYPE_OVERLAP_SEQUENCE,
     PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE
@@ -55,6 +58,10 @@ void lcl_AddPropertiesToVector(std::vector<beans::Property>& rOutProperties)
 {
     rOutProperties.emplace_back(
         "BinWidth", PROP_HISTOGRAMCHARTTYPE_BINWIDTH, cppu::UnoType<double>::get(),
+        beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+
+    rOutProperties.emplace_back(
+        "BinCount", PROP_HISTOGRAMCHARTTYPE_BINCOUNT, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 
     rOutProperties.emplace_back(
@@ -150,6 +157,95 @@ HistogramChartType::createCoordinateSystem2(sal_Int32 DimensionCount)
     return xResult;
 }
 
+void HistogramChartType::createCalculatedDataSeries()
+{
+    if (m_aDataSeries.empty())
+    {
+        return;
+    }
+
+    // Snapshot the current binning parameters so each new HistogramDataSequence
+    // runs the calculator in the correct mode (auto / fixed width / fixed count).
+    sal_Int32 nFrequencyType = 0;
+    double fBinWidth = 0.0;
+    sal_Int32 nBinCount = 0;
+    try
+    {
+        getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType;
+        getPropertyValue(u"BinWidth"_ustr) >>= fBinWidth;
+        getPropertyValue(u"BinCount"_ustr) >>= nBinCount;
+    }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    for (const auto& xSeries : m_aDataSeries)
+    {
+        if (!xSeries.is())
+        {
+            continue;
+        }
+
+        // 1. Find the raw values-y
+        uno::Reference<chart2::data::XDataSequence> xValuesY;
+        auto aSeqs = xSeries->getDataSequences2();
+        for (const auto& seq : aSeqs)
+        {
+            if (seq.is() && seq->getValues().is() && DataSeriesHelper::getRole(seq) == "values-y")
+            {
+                xValuesY = seq->getValues();
+                break;
+            }
+        }
+
+        if (!xValuesY.is())
+        {
+            continue;
+        }
+
+        // 2. Regenerate the calculated-y frequencies
+        rtl::Reference<HistogramDataSequence> xCalcSeq
+            = new HistogramDataSequence(xValuesY, false, nFrequencyType, fBinWidth, nBinCount);
+        uno::Reference<chart2::data::XLabeledDataSequence> xLabeledCalc
+            = new LabeledDataSequence(xCalcSeq);
+        xSeries->setCalculatedYSequence(xLabeledCalc);
+
+        // 3. Regenerate the categories (bins)
+        rtl::Reference<HistogramDataSequence> xCatSeq
+            = new HistogramDataSequence(xValuesY, true, nFrequencyType, fBinWidth, nBinCount);
+
+        uno::Reference<chart2::data::XDataSequence> xCatDataSeq(xCatSeq);
+        uno::Reference<beans::XPropertySet> xCatProp(xCatDataSeq, uno::UNO_QUERY);
+        if (xCatProp.is())
+        {
+            xCatProp->setPropertyValue(u"Role"_ustr, uno::Any(u"categories"_ustr));
+        }
+
+        uno::Reference<chart2::data::XLabeledDataSequence> xLabeledCat
+            = new LabeledDataSequence(xCatSeq);
+
+        // 4. Attach the categories to the DataSeries so the View can find them
+        bool bHasCategories = false;
+        for (auto& seq : aSeqs)
+        {
+            if (seq.is() && DataSeriesHelper::getRole(seq) == "categories")
+            {
+                seq = xLabeledCat;
+                bHasCategories = true;
+                break;
+            }
+        }
+
+        if (!bHasCategories)
+        {
+            aSeqs.push_back(xLabeledCat);
+        }
+
+        xSeries->setData(aSeqs);
+    }
+}
+
 OUString SAL_CALL HistogramChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM;
@@ -181,6 +277,8 @@ void HistogramChartType::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) cons
 
         ::chart::PropertyHelper::setPropertyValueDefault(aTmp, PROP_HISTOGRAMCHARTTYPE_BINWIDTH,
                                                          2.0);
+        ::chart::PropertyHelper::setPropertyValueDefault(aTmp, PROP_HISTOGRAMCHARTTYPE_BINCOUNT,
+                                                         sal_Int32(10));
         ::chart::PropertyHelper::setPropertyValueDefault(
             aTmp, PROP_HISTOGRAMCHARTTYPE_FREQUENCYTYPE, sal_Int32(0));
         ::chart::PropertyHelper::setPropertyValueDefault(

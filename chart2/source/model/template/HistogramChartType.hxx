@@ -34,6 +34,8 @@ protected:
     rtl::Reference<::chart::BaseCoordinateSystem>
     createCoordinateSystem2(sal_Int32 DimensionCount) override;
 
+    virtual void createCalculatedDataSeries() override;
+
     OUString SAL_CALL getChartType() override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedPropertyRoles() override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedMandatoryRoles() override;

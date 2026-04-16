@@ -9,6 +9,7 @@
 
 #include "HistogramChartType.hxx"
 #include "HistogramChartTypeTemplate.hxx"
+#include "HistogramDataInterpreter.hxx"
 
 #include <algorithm>
 #include <DataSeries.hxx>
@@ -139,6 +140,14 @@ void HistogramChartTypeTemplate::resetStyles2(const rtl::Reference<::chart::Diag
     }
 
     xDiagram->setVertical(false);
+}
+
+rtl::Reference<DataInterpreter> HistogramChartTypeTemplate::getDataInterpreter2()
+{
+    if (!m_xDataInterpreter.is())
+        m_xDataInterpreter.set(new HistogramDataInterpreter);
+
+    return m_xDataInterpreter;
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2(HistogramChartTypeTemplate, ChartTypeTemplate, OPropertySet)
