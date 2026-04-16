@@ -4171,7 +4171,9 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaC
             break;
             case formula::svString:
             {
-                if(pThisTok->GetString() != pOtherTok->GetString())
+                assert(dynamic_cast<FormulaStringToken*>(pThisTok));
+                assert(dynamic_cast<FormulaStringToken*>(pOtherTok));
+                if(static_cast<FormulaStringToken*>(pThisTok)->GetString() != static_cast<FormulaStringToken*>(pOtherTok)->GetString())
                     return NotEqual;
             }
             break;

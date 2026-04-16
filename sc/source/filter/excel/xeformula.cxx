@@ -1238,7 +1238,7 @@ void XclExpFmlaCompImpl::ProcessDouble( const XclExpScToken& rTokData )
 void XclExpFmlaCompImpl::ProcessString( const XclExpScToken& rTokData )
 {
     AppendOperandTokenId( EXC_TOKID_STR, rTokData.mnSpaces );
-    Append( rTokData.mpScToken->GetString().getString() );
+    Append( static_cast<const FormulaStringToken*>(rTokData.mpScToken)->GetString().getString() );
 }
 
 void XclExpFmlaCompImpl::ProcessMissing( const XclExpScToken& rTokData )
@@ -1272,7 +1272,7 @@ bool lclGetTokenString( OUString& rString, const XclExpScToken& rTokData )
 {
     bool bIsStr = (rTokData.GetType() == svString) && (rTokData.GetOpCode() == ocPush);
     if( bIsStr )
-        rString = rTokData.mpScToken->GetString().getString();
+        rString = static_cast<const FormulaStringToken*>(rTokData.mpScToken)->GetString().getString();
     return bIsStr;
 }
 
@@ -2086,7 +2086,7 @@ void XclExpFmlaCompImpl::ProcessExternalCellRef( const XclExpScToken& rTokData )
 
         // store external cell contents in CRN records
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
-        OUString aTabName = rTokData.mpScToken->GetString().getString();
+        OUString aTabName = static_cast<const ScExternalSingleRefToken*>(rTokData.mpScToken)->GetString().getString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
             mxData->mpLinkMgr->StoreCell(nFileId, aTabName, aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
 
@@ -2115,14 +2115,15 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
 {
     if( mxData->mpLinkMgr )
     {
+        auto pEDRToken = static_cast<const ScExternalDoubleRefToken*>(rTokData.mpScToken);
         // get the Excel address components, adjust internal data in aRefData
-        ScComplexRefData aRefData = static_cast<const ScExternalDoubleRefToken*>(rTokData.mpScToken)->GetDoubleRef();
+        ScComplexRefData aRefData = pEDRToken->GetDoubleRef();
         XclRange aXclRange( ScAddress::UNINITIALIZED );
         ConvertRefData( aRefData, aXclRange, false );
 
         // store external cell contents in CRN records
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
-        OUString aTabName = rTokData.mpScToken->GetString().getString();
+        OUString aTabName = pEDRToken->GetString().getString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
             mxData->mpLinkMgr->StoreCellRange(nFileId, aTabName, aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
 
@@ -2185,7 +2186,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
     {
         ScExternalRefManager& rExtRefMgr = *GetDoc().GetExternalRefManager();
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
-        OUString aName = rTokData.mpScToken->GetString().getString();
+        OUString aName = static_cast<const ScExternalNameToken*>(rTokData.mpScToken)->GetString().getString();
         ScExternalRefCache::TokenArrayRef xArray = rExtRefMgr.getRangeNameTokens( nFileId, aName );
         if( xArray )
         {
@@ -2203,14 +2204,15 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
                             {
                                 ScSingleRefData aRefData = *pScToken->GetSingleRef();
                                 mxData->mpLinkMgr->StoreCell(
-                                    nFileId, pScToken->GetString().getString(), aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
+                                    nFileId, static_cast<ScExternalSingleRefToken*>(pScToken)->GetString().getString(), aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
                             }
                             break;
                             case svExternalDoubleRef:
                             {
-                                ScComplexRefData aRefData = static_cast<ScExternalDoubleRefToken*>(pScToken)->GetDoubleRef();
+                                auto pEDRToken = static_cast<ScExternalDoubleRefToken*>(pScToken);
+                                ScComplexRefData aRefData = pEDRToken->GetDoubleRef();
                                 mxData->mpLinkMgr->StoreCellRange(
-                                    nFileId, pScToken->GetString().getString(), aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
+                                    nFileId, pEDRToken->GetString().getString(), aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
                             }
                             break;
                             default:

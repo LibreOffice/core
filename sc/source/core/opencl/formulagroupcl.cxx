@@ -160,7 +160,7 @@ std::string DebugPeekData(const FormulaToken* ref, int doubleRefIndex = 0)
     else if (ref->GetType() == formula::svString)
     {
         outputstream buf;
-        buf << "String " << LimitedString( ref->GetString().getString());
+        buf << "String " << LimitedString( static_cast<const FormulaStringToken*>(ref)->GetString().getString());
         return buf.str();
     }
     else if (ref->GetType() == formula::svDouble)
@@ -734,7 +734,7 @@ public:
         if (GetFormulaToken()->GetType() != formula::svString)
             throw Unhandled(__FILE__, __LINE__);
         FormulaToken* Tok = GetFormulaToken();
-        ss << GetStringId(Tok->GetString().getData());
+        ss << GetStringId(static_cast<FormulaStringToken*>(Tok)->GetString().getData());
         return ss.str();
     }
     virtual std::string GenIsString( bool = false ) const override
@@ -752,7 +752,7 @@ public:
         {
             throw Unhandled(__FILE__, __LINE__);
         }
-        cl_double stringId = GetStringId(ref->GetString().getData());
+        cl_double stringId = GetStringId(static_cast<FormulaStringToken*>(ref)->GetString().getData());
 
         // Pass the scalar result back to the rest of the formula kernel
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno

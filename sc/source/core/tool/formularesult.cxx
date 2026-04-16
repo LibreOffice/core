@@ -526,14 +526,15 @@ const svl::SharedString & ScFormulaResult::GetString() const
         switch (mpToken->GetType())
         {
             case formula::svString:
+                return static_cast<const formula::FormulaStringToken*>(mpToken)->GetString();
             case formula::svHybridCell:
-                return mpToken->GetString();
+                return static_cast<const ScHybridCellToken*>(mpToken)->GetString();
             case formula::svMatrixCell:
                 {
                     const ScMatrixCellResultToken* p =
                         static_cast<const ScMatrixCellResultToken*>(mpToken);
                     if (p->GetUpperLeftType() == formula::svString)
-                        return p->GetUpperLeftToken()->GetString();
+                        return static_cast<const formula::FormulaStringToken*>(p->GetUpperLeftToken().get())->GetString();
                 }
                 break;
             default:
