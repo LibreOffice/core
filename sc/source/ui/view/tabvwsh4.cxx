@@ -89,6 +89,8 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <svx/fillbitmaplink.hxx>
+#include <docpool.hxx>
 
 using namespace com::sun::star;
 using namespace sfx2::sidebar;
@@ -1633,7 +1635,8 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             {
                 const sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
                 if (rDoc.HasLinkFormulaNeedingCheck() || rDoc.HasAreaLinks()
-                        || rDoc.HasDataProviderMappings() || rMgr.hasExternalLinks())
+                    || rDoc.HasDataProviderMappings() || rMgr.hasExternalLinks()
+                    || hasDeferredFillBitmapLinks(*rDoc.GetPool()))
                     bLink = true;
             }
             if (bLink)

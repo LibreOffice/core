@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    office:version="1.3"
+    office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:styles>
+    <draw:fill-image draw:name="remote_bg"
+        xlink:href="http://192.0.2.1:12345/background.png"
+        xlink:type="simple" xlink:actuate="onLoad" xlink:show="embed"/>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="gr1" style:family="graphic">
+      <style:graphic-properties
+          draw:fill="bitmap"
+          draw:fill-image-name="remote_bg"
+          style:repeat="stretch"
+          style:wrap="none"
+          style:vertical-pos="top"
+          style:vertical-rel="paragraph"
+          style:horizontal-pos="from-left"
+          style:horizontal-rel="paragraph"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:text>
+      <text:p>
+        <draw:custom-shape draw:style-name="gr1" text:anchor-type="paragraph"
+                           draw:z-index="0"
+                           svg:x="2cm" svg:y="1cm"
+                           svg:width="12cm" svg:height="6cm">
+          <text:p>Shape with remote fill image.</text:p>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600"
+              draw:type="rectangle"
+              draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+        </draw:custom-shape>
+      </text:p>
+    </office:text>
+  </office:body>
+</office:document>
