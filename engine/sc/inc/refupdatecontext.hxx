@@ -158,6 +158,11 @@ struct SC_DLLPUBLIC RefUpdateDeleteTabContext
     mutable RefErrorContext maRefErrors;
 
     RefUpdateDeleteTabContext(ScDocument& rDoc, SCTAB nInsertPos, SCTAB nSheets);
+
+    bool isDeletedTab(SCTAB nTab) const
+    {
+        return nTab >= mnDeletePos && nTab < mnDeletePos + mnSheets;
+    }
 };
 
 struct RefUpdateMoveTabContext

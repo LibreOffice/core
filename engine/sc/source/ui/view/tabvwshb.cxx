@@ -67,6 +67,8 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <comphelper/kit.hxx>
+#include <tools/json_writer.hxx>
+#include <COKit/COKitEnums.h>
 
 using namespace com::sun::star;
 
@@ -828,10 +830,20 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                     }
                     if ( bIsUndo )
                     {
-                        // Dismiss the #REF! warning infobar if the user
-                        // undoes. Redo re-runs the delete, which naturally
-                        // re-broadcasts via Delete{Row,Col,Tab,Tabs}().
-                        GetViewFrame().RemoveInfoBar(u"ref_logic_error");
+                        // Dismiss the #REF! warning. Same COOL/desktop
+                        // split as the show side in tabvwsh5.cxx.
+                        if (comphelper::COKit::isActive())
+                        {
+                            tools::JsonWriter aJson;
+                            aJson.put("commandName", "CalcRefErrorDismiss");
+                            { const auto aState = aJson.startNode("state"); }
+                            viewCallback(KIT_CALLBACK_STATE_CHANGED,
+                                         aJson.finishAndGetAsOString());
+                        }
+                        else
+                        {
+                            GetViewFrame().RemoveInfoBar(u"ref_logic_error");
+                        }
                     }
                 }
                 catch ( const uno::Exception& )

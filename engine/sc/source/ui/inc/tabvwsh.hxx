@@ -207,8 +207,7 @@ private:
     // Chart insert wizard's mark to make sure it undoes the correct thing in COKit case
     UndoStackMark m_InsertWizardUndoMark = MARK_INVALID;
 
-    /// Cell to navigate to when the user clicks "Go to First Error" on the
-    /// #REF! warning infobar. Set each time the infobar is (re-)shown.
+    /// Cell for the desktop "Go to First Error" button. Unused in COOL.
     ScAddress m_aRefErrorCell;
 
     void ShowRefErrorInfoBar(const ScAddress& rFormulaCell);

@@ -3184,9 +3184,12 @@ bool isDBDataModified( const ScDocument& rDoc, const formula::FormulaToken& rTok
 namespace {
 
 void lcl_accumulateRefError(sc::RefErrorContext& rCtx, const ScAddress& rFormulaPos,
-                            bool bOldError, bool bNewError)
+                            bool bOldError, bool bNewError, bool bFormulaDoomed)
 {
-    if (bOldError || !bNewError)
+    // Skip when the formula cell itself is being removed by this same
+    // delete pass: its rFormulaPos would alias an unrelated surviving
+    // cell after rows/cols shift up or tab indexes collapse.
+    if (bFormulaDoomed || bOldError || !bNewError)
         return;
 
     if (!rCtx.mbErrorCreated)
@@ -3201,6 +3204,12 @@ void lcl_accumulateRefError(sc::RefErrorContext& rCtx, const ScAddress& rFormula
 sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos )
 {
     ScRange aSelectedRange = getSelectedRange(rCxt);
+
+    // The formula cell itself is inside the deleted region and will be
+    // removed after this pass. Suppress #REF! accumulation for it — aNewPos
+    // would otherwise point at an unrelated cell that shifts into the freed
+    // slot.
+    const bool bFormulaDoomed = rCxt.isDeleted() && aSelectedRange.Contains(rOldPos);
 
     sc::RefUpdateResult aRes;
     ScAddress aNewPos = rOldPos;
@@ -3238,7 +3247,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             // This reference is in the deleted region.
                             setRefDeleted(rRef, rCxt);
                             aRes.mbValueChanged = true;
-                            lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, rRef.IsDeleted());
+                            lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, rRef.IsDeleted(), bFormulaDoomed);
                             break;
                         }
 
@@ -3279,7 +3288,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                                 setRefDeleted(rRef, rCxt);
                                 aRes.mbValueChanged = true;
                                 bool bNewError = rRef.Ref1.IsDeleted() || rRef.Ref2.IsDeleted();
-                                lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, bNewError);
+                                lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, bNewError, bFormulaDoomed);
                                 break;
                             }
                             else if (aSelectedRange.Intersects(aAbs))
@@ -3296,7 +3305,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                                     // was fully covered in col+row but not in tab (3D
                                     // refs, partial-tab delete). Treat that as #REF!.
                                     bool bNewError = rRef.Ref1.IsDeleted() || rRef.Ref2.IsDeleted() || !aAbs.IsValid();
-                                    lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, bNewError);
+                                    lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, bNewError, bFormulaDoomed);
                                     break;
                                 }
                                 else if (eSR == STICKY)
@@ -4342,6 +4351,12 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( const sc::RefUpda
     ScAddress aNewPos = rOldPos;
     ScRangeUpdater::UpdateDeleteTab( aNewPos, rCxt);
 
+    // The formula cell sits on a tab being deleted, so it will be gone
+    // after this pass; its recorded address would silently alias a
+    // different surviving sheet once tab indexes collapse. Suppress
+    // #REF! accumulation for it.
+    const bool bFormulaDoomed = rCxt.isDeletedTab(rOldPos.Tab());
+
     TokenPointers aPtrs( pCode.get(), nLen, pRPN.get(), nRPN);
     for (size_t j=0; j<2; ++j)
     {
@@ -4363,7 +4378,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( const sc::RefUpda
                         if (adjustSingleRefOnDeletedTab(*mxSheetLimits, rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
                             aRes.mbReferenceModified = true;
 
-                        lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, rRef.IsTabDeleted());
+                        lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, rRef.IsTabDeleted(), bFormulaDoomed);
                     }
                     break;
                 case svDoubleRef:
@@ -4374,7 +4389,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( const sc::RefUpda
                         aRes.mbReferenceModified |= adjustDoubleRefOnDeleteTab(*mxSheetLimits, rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos);
 
                         bool bNewError = rRef.Ref1.IsTabDeleted() || rRef.Ref2.IsTabDeleted();
-                        lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, bNewError);
+                        lcl_accumulateRefError(rCxt.maRefErrors, aNewPos, bOldError, bNewError, bFormulaDoomed);
                     }
                     break;
                 default:
