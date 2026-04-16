@@ -98,6 +98,8 @@ loext
 N_LO_EXT_DUMMY
 N_FIELD_DUMMY
 NP_FIELD_DUMMY
+coext
+N_CO_EXT_DUMMY
 m
 cm
 pt

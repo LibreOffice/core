@@ -180,14 +180,18 @@ namespace xmloff::token {
         TOKEN( "css3t",                        XML_NP_CSS3TEXT ),
         TOKEN( "http://www.w3.org/TR/css3-text/", XML_N_CSS3TEXT ),
 
-        // extension namespace for calc extensions
+        // extension namespace for calc extensions - instead use CO_EXT for new features!
         TOKEN( "calcext",                         XML_NP_CALC_EXT ),
         TOKEN( "urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0", XML_N_CALC_EXT ),
+        // generic extensions - instead use CO_EXT for new features!
         TOKEN( "loext",                           XML_NP_LO_EXT ),
         TOKEN( "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0", XML_N_LO_EXT ),
 
         TOKEN( "urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0",   XML_N_FIELD ),
         TOKEN( "field",         XML_NP_FIELD ),
+
+        TOKEN( "coext",                           XML_NP_CO_EXT ),
+        TOKEN( "urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0", XML_N_CO_EXT ),
 
         // units
         TOKEN( "m",                               XML_UNIT_M ),

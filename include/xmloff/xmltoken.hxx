@@ -166,16 +166,20 @@ namespace xmloff::token {
         XML_NP_CSS3TEXT,
         XML_N_CSS3TEXT,
 
-        // calc extensions
+        // calc extensions - instead use CO_EXT for new features!
         XML_NP_CALC_EXT,
         XML_N_CALC_EXT,
-        // generic LO extensions
+        // generic LO extensions - instead use CO_EXT for new features!
         XML_NP_LO_EXT,
         XML_N_LO_EXT,
 
         // enhanced fields
         XML_N_FIELD,
         XML_NP_FIELD,
+
+        // Collabora extensions
+        XML_NP_CO_EXT,
+        XML_N_CO_EXT,
 
         // units
         XML_UNIT_M,
