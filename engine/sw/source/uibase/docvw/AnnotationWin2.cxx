@@ -175,20 +175,18 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     }
 
     auto lclSizePixelToLogic = [this](Size szs) {
-        // In COKit without tiled annotations, SwAnnotationWin desn't have the
-        // right conversion when printing to PDF but mxSidebarTextControl does
-        if (comphelper::COKit::isActive()
-            && !comphelper::COKit::isTiledAnnotations())
+        // In COKit, SwAnnotationWin doesn't have the right conversion when
+        // printing to PDF but mxSidebarTextControl does
+        if (comphelper::COKit::isActive())
             return mxSidebarTextControl->GetDrawingArea()->get_ref_device().PixelToLogic(szs);
         else
             return PixelToLogic(szs);
     };
 
     auto lclPointPixelToLogic = [this](Point pnt) {
-        // In COKit without tiled annotations, SwAnnotationWin desn't have the
-        // right conversion when printing to PDF but mxSidebarTextControl does
-        if (comphelper::COKit::isActive()
-            && !comphelper::COKit::isTiledAnnotations())
+        // In COKit, SwAnnotationWin doesn't have the right conversion when
+        // printing to PDF but mxSidebarTextControl does
+        if (comphelper::COKit::isActive())
             return mxSidebarTextControl->GetDrawingArea()->get_ref_device().PixelToLogic(pnt);
         else
             return PixelToLogic(pnt);
@@ -537,7 +535,7 @@ void SwAnnotationWin::Rescale()
     // when modifying a commented text. Not clear the root cause,
     // anyway skipping this method fixes the problem, and there should be
     // no side effect, since the client has disabled annotations rendering.
-    if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
+    if (comphelper::COKit::isActive())
         return;
 
     MapMode aMode = GetParent()->GetMapMode();

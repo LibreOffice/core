@@ -458,8 +458,8 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
 
 void SwAnnotationWin::InitAnswer(OutlinerParaObject const & rText)
 {
-    // If tiled annotations is off in Kit case, skip adding additional reply text.
-    if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
+    // In the Kit case, skip adding additional reply text.
+    if (comphelper::COKit::isActive())
         return;
 
     //collect our old meta data
