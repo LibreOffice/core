@@ -923,6 +923,31 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBackgroundImageRemoteNotFetched)
 }
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPageBackgroundImageRemoteNotFetched)
+{
+    // style:background-image on a page style with a remote xlink:href must
+    // not fetch the URL during paint when link updates are not allowed.
+    comphelper::COKit::setActive(false);
+
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"page-background-link.fodt"), aParams);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    pWrtShell->CalcLayout();
+
+    // render through SwViewShell::Paint - the assert in
+    // createNewSdrFillGraphicAttribute will fire if a remote fetch is attempted.
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(Size(1024, 1024));
+    static_cast<SwViewShell*>(pWrtShell)->Paint(
+        *pDevice, tools::Rectangle(Point(0, 0), pWrtShell->GetLayout()->getFrameArea().SSize()));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
