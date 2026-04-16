@@ -63,28 +63,12 @@ tools::Long OutputDevice::DevicePixelToLogicWidth( tools::Long nWidth ) const
     return mpMapper->ViewToLogicDistanceX(nWidth);
 }
 
-SAL_DLLPRIVATE double OutputDevice::ImplDevicePixelToLogicWidthDouble(double nWidth) const
-{
-    if (!mpMapper->IsMapModeEnabled())
-        return nWidth;
-
-    return mpMapper->ViewToLogicDistanceDoubleX(nWidth);
-}
-
 tools::Long OutputDevice::DevicePixelToLogicHeight( tools::Long nHeight ) const
 {
     if ( !mpMapper->IsMapModeEnabled() )
         return nHeight;
 
     return mpMapper->ViewToLogicDistanceY(nHeight);
-}
-
-double OutputDevice::ImplDevicePixelToLogicHeightDouble(double nHeight) const
-{
-    if (!mpMapper->IsMapModeEnabled())
-        return nHeight;
-
-    return mpMapper->ViewToLogicDistanceDoubleY(nHeight);
 }
 
 Point OutputDevice::LogicToDevicePixel(const Point& rLogicPt) const

@@ -1821,9 +1821,6 @@ private:
      */
     SAL_DLLPRIVATE vcl::Region       ImplPixelToDevicePixel( const vcl::Region& rRegion ) const;
 
-    SAL_DLLPRIVATE double ImplDevicePixelToLogicWidthDouble(double nWidth) const;
-    SAL_DLLPRIVATE double ImplDevicePixelToLogicHeightDouble(double nHeight) const;
-
     /** @name Native Widget Rendering functions
 
         These all just call through to the private mpGraphics functions of the same name.

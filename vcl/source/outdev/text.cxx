@@ -672,9 +672,12 @@ double OutputDevice::GetTextHeightDouble() const
     if (!InitFont())
         return 0;
 
-    tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+    const tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
-    return ImplDevicePixelToLogicHeightDouble(nHeight);
+    if (!mpMapper->IsMapModeEnabled())
+        return nHeight;
+
+    return mpMapper->ViewToLogicDistanceDoubleY(nHeight);
 }
 
 float OutputDevice::approximate_char_width() const
@@ -887,7 +890,7 @@ OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, s
         if (mpMapper->IsMapModeEnabled())
         {
             for (int i = 0; i < nPartLen; ++i)
-                (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidthDouble((*pDXPixelArray)[i]);
+                (*pDXPixelArray)[i] = mpMapper->ViewToLogicDistanceDoubleX((*pDXPixelArray)[i]);
         }
     }
 
@@ -908,7 +911,10 @@ OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, s
         }
     }
 
-    return ImplDevicePixelToLogicWidthDouble(nWidth);
+    if (!mpMapper->IsMapModeEnabled())
+        return nWidth;
+
+    return mpMapper->ViewToLogicDistanceDoubleX(nWidth);
 }
 
 void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretPos,
@@ -962,7 +968,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretPos
     if (mpMapper->IsMapModeEnabled())
     {
         for (i = 0; i < nCaretPos; ++i)
-            aCaretPixelPos[i] = ImplDevicePixelToLogicWidthDouble(aCaretPixelPos[i]);
+            aCaretPixelPos[i] = mpMapper->ViewToLogicDistanceDoubleX(aCaretPixelPos[i]);
     }
 
     for (i = 0; i < nCaretPos; ++i)
