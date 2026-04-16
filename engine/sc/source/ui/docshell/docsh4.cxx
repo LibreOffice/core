@@ -93,6 +93,8 @@
 #include <chartpos.hxx>
 #include <tablink.hxx>
 #include <drwlayer.hxx>
+#include <svx/fillbitmaplink.hxx>
+#include <svx/svdpage.hxx>
 #include <docoptio.hxx>
 #include <undostyl.hxx>
 #include <rangeseq.hxx>
@@ -213,6 +215,10 @@ void ScDocShell::ReloadAllLinks()
     // update linked graphics from the draw layer
     if (sfx2::LinkManager* pLinkMgr = m_pDocument->GetDocLinkManager().getLinkManager(false))
     {
+        if (ScDrawLayer* pDrawLayer = m_pDocument->GetDrawLayer())
+        {
+            registerFillBitmapLinks(*pDrawLayer, *pLinkMgr);
+        }
         pLinkMgr->UpdateAllLinks(false, nullptr, u""_ustr);
     }
 }

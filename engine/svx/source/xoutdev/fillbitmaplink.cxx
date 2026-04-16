@@ -12,6 +12,9 @@
 #include <svx/fillbitmaplink.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
 #include <svl/itempool.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xdef.hxx>
@@ -73,21 +76,48 @@ public:
 };
 }
 
+namespace
+{
+OUString getDeferredOriginURL(const XFillBitmapItem& rItem)
+{
+    const Graphic& rGrf = rItem.GetGraphicObject().GetGraphic();
+    if (rGrf.GetType() == GraphicType::Default)
+        return rGrf.getOriginURL();
+    return OUString();
+}
+}
+
+bool hasDeferredFillBitmapLinks(const SfxItemPool& rPool)
+{
+    for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(XATTR_FILLBITMAP))
+    {
+        if (!getDeferredOriginURL(static_cast<const XFillBitmapItem&>(*pItem)).isEmpty())
+            return true;
+    }
+    return false;
+}
+
 void registerFillBitmapLinks(SfxItemPool& rPool, sfx2::LinkManager& rLinkMgr,
                              std::function<void()> fnInvalidate)
 {
     for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(XATTR_FILLBITMAP))
     {
-        auto* pBmpItem = static_cast<const XFillBitmapItem*>(pItem);
-        const Graphic& rGrf = pBmpItem->GetGraphicObject().GetGraphic();
-        if (rGrf.GetType() != GraphicType::Default)
-            continue;
-        OUString aURL = rGrf.getOriginURL();
+        OUString aURL = getDeferredOriginURL(static_cast<const XFillBitmapItem&>(*pItem));
         if (aURL.isEmpty())
             continue;
         tools::SvRef<sfx2::SvBaseLink> xLink(new FillBitmapLink(rPool, rLinkMgr, fnInvalidate));
         rLinkMgr.InsertFileLink(*xLink, sfx2::SvBaseLinkObjectType::ClientGraphic, aURL);
     }
+}
+
+void registerFillBitmapLinks(SdrModel& rModel, sfx2::LinkManager& rLinkMgr)
+{
+    registerFillBitmapLinks(rModel.GetItemPool(), rLinkMgr, [&rModel]() {
+        for (sal_uInt16 nPage = 0; nPage < rModel.GetPageCount(); ++nPage)
+            rModel.GetPage(nPage)->GetViewContact().flushViewObjectContacts();
+        for (sal_uInt16 nPage = 0; nPage < rModel.GetMasterPageCount(); ++nPage)
+            rModel.GetMasterPage(nPage)->GetViewContact().flushViewObjectContacts();
+    });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

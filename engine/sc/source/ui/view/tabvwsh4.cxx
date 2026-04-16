@@ -95,6 +95,8 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
+#include <svx/fillbitmaplink.hxx>
+#include <docpool.hxx>
 
 using namespace com::sun::star;
 using namespace sfx2::sidebar;
@@ -1741,7 +1743,9 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             if (!bLink)
             {
                 const sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
-                if (rDoc.HasLinkFormulaNeedingCheck() || rDoc.HasAreaLinks() || rMgr.hasExternalLinks())
+                if (rDoc.HasLinkFormulaNeedingCheck() || rDoc.HasAreaLinks()
+                    || rMgr.hasExternalLinks()
+                    || hasDeferredFillBitmapLinks(*rDoc.GetPool()))
                     bLink = true;
             }
             if (bLink)

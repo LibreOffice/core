@@ -1023,14 +1023,7 @@ void SdDrawDocument::UpdateAllLinks()
 
     // Register links for fill bitmap items (e.g. slide background images)
     // with unresolved remote URLs, before checking whether the link list is empty.
-    registerFillBitmapLinks(GetItemPool(), *m_pLinkManager,
-        [this]()
-        {
-            for (sal_uInt16 i = 0; i < GetPageCount(); ++i)
-                GetPage(i)->ActionChanged();
-            for (sal_uInt16 i = 0; i < GetMasterPageCount(); ++i)
-                GetMasterPage(i)->ActionChanged();
-        });
+    registerFillBitmapLinks(*this, *m_pLinkManager);
 
     if (m_pLinkManager->GetLinks().empty())
         return;

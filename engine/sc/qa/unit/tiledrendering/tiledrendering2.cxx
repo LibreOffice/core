@@ -10,6 +10,7 @@
 #include <sctiledrenderingtest.hxx>
 
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -387,6 +388,65 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropInsert)
     CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pDoc->GetString(ScAddress(3, 1, 0))); // D2
     CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pDoc->GetString(ScAddress(4, 1, 0))); // E2
     CPPUNIT_ASSERT_EQUAL(u"F"_ustr, pDoc->GetString(ScAddress(5, 1, 0))); // F2 (was D2)
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPageBackgroundRemoteNotFetched)
+{
+    // Page background image with a remote URL must not fetch
+    // the URL during paint when link updates are not allowed.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"page-background-link.fods"), aParams);
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering({});
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(Size(1024, 768));
+    pModelObj->paintTile(*pDevice, 1024, 768, 0, 0, 15360, 7680);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testShapeBackgroundRemoteNotFetched)
+{
+    // Shape fill bitmap with a remote URL must not fetch
+    // the URL during paint when link updates are not allowed.
+    // The assert in createNewSdrFillGraphicAttribute will fire if
+    // a remote fetch is attempted.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"shape-background-link.fods"), aParams);
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering({});
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(Size(1024, 768));
+    pModelObj->paintTile(*pDevice, 1024, 768, 0, 0, 15360, 7680);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testBulletImageRemoteNotFetched)
+{
+    // text:list-level-style-image with a remote URL must not fetch
+    // the URL during paint when link updates are not allowed.
+    // Currently the editeng rendering path silently skips unresolved
+    // GraphicExternalLink graphics. If someone adds fetching here,
+    // this test should catch it.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"bullet-image-link.fods"), aParams);
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering({});
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(Size(1024, 768));
+    pModelObj->paintTile(*pDevice, 1024, 768, 0, 0, 15360, 7680);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
