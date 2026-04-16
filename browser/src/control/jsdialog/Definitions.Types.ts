@@ -23,6 +23,7 @@ interface WidgetJSON {
 	children?: Array<WidgetJSON>; // child nodes
 	title?: string;
 	text?: string; // TODO: remove, its for not yet defined widget types
+	editText?: string; // text content from WeldEditView (EditEngine)
 	tooltip?: string; // tooltip text (QuickHelpText from VCL)
 	top?: string; // placement in the grid - row
 	left?: string; // placement in the grid - column

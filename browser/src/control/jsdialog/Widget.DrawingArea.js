@@ -39,52 +39,94 @@ function _drawingAreaControl (parentContainer, data, builder) {
 	if (!data.image)
 		return;
 
-	var image = window.L.DomUtil.create('img', builder.options.cssClass + ' ui-drawing-area', container);
+	var isTextbox = data.aria && data.aria.role === 'textbox';
 	var imageId = data.id + '-img';
-	image.id = imageId;
-	image.src = data.image.replace(/\\/g, '');
-	image.draggable = false;
-	image.ondragstart = function() { return false; };
 
-	const isFocusableImg = data.enabled && data.canFocus;
-	if (isFocusableImg) {
-		image.tabIndex = 0;
-		JSDialog.AddAltAttrOnFocusableImg(image, data, builder);
-		if (data.aria && data.aria.role) {
-			image.setAttribute('role', data.aria.role);
+	if (isTextbox) {
+		// Editable drawing areas (e.g. spell check sentence box) use a
+		// div with role="textbox" wrapping the visual image.
+		var wrapper = window.L.DomUtil.create('div', builder.options.cssClass + ' ui-drawing-area', container);
+		wrapper.id = imageId;
+		wrapper.tabIndex = 0;
+		wrapper.setAttribute('role', 'textbox');
+		wrapper.setAttribute('aria-multiline', 'true');
+
+		if (data.editText) {
+			wrapper.setAttribute('aria-label', data.editText);
 		}
+
+		if (data.aria.description) {
+			var descSpan = window.L.DomUtil.create('span', 'visuallyhidden', wrapper);
+			descSpan.id = imageId + '-desc';
+			descSpan.textContent = data.aria.description;
+			wrapper.setAttribute('aria-describedby', descSpan.id);
+		}
+
+		var img = window.L.DomUtil.create('img', '', wrapper);
+		img.src = data.image.replace(/\\/g, '');
+		img.style.display = 'block';
+		img.draggable = false;
+		img.ondragstart = function() { return false; };
+		img.alt = '';
+		img.setAttribute('aria-hidden', 'true');
+		img.addEventListener('mousedown', function() { wrapper.focus(); });
+
+		if (data.text) {
+			wrapper.setAttribute('data-cooltip', data.text);
+			if (builder.map) {
+				window.L.control.attachTooltipEventListener(wrapper, builder.map);
+			}
+		}
+
+		_setupDrawingAreaMouseEvents(img, container, builder);
+		_setupDrawingAreaKeyboardEvents(wrapper, container, builder);
 	} else {
-		image.alt = '';
-		image.classList.add('ui-decorative-image');
-	}
+		var image = window.L.DomUtil.create('img', builder.options.cssClass + ' ui-drawing-area', container);
+		image.id = imageId;
+		image.src = data.image.replace(/\\/g, '');
+		image.draggable = false;
+		image.ondragstart = function() { return false; };
 
-	if (data.text) {
-		image.setAttribute('data-cooltip', data.text);
-
-		if (builder.map) {
-			window.L.control.attachTooltipEventListener(image, builder.map);
+		const isFocusableImg = data.enabled && data.canFocus;
+		if (isFocusableImg) {
+			image.tabIndex = 0;
+			JSDialog.AddAltAttrOnFocusableImg(image, data, builder);
+			if (data.aria && data.aria.role) {
+				image.setAttribute('role', data.aria.role);
+			}
+		} else {
+			image.alt = '';
+			image.classList.add('ui-decorative-image');
 		}
-	}
 
-	// Line width dialog is affected from delay on image render.
-	// So If the image render is delayed, use width and height of the data
-	if (JSDialog.isWidgetInModalPopup(data) && image.width == 0 && image.height == 0) {
-		image.width = data.imagewidth;
-		image.height = data.imageheight;
-	}
+		if (data.text) {
+			image.setAttribute('data-cooltip', data.text);
 
-	if (data.loading && data.loading === 'true') {
-		var loaderContainer = window.L.DomUtil.create('div', 'ui-drawing-area-loader-container', container);
-		window.L.DomUtil.create('div', 'ui-drawing-area-loader', loaderContainer);
-	}
-	if (data.placeholderText && data.placeholderText === 'true') {
-		var spanContainer = window.L.DomUtil.create('div', 'ui-drawing-area-placeholder-container', container);
-		var span = window.L.DomUtil.create('span', 'ui-drawing-area-placeholder', spanContainer);
-		span.innerText = data.text;
-	}
+			if (builder.map) {
+				window.L.control.attachTooltipEventListener(image, builder.map);
+			}
+		}
 
-	_setupDrawingAreaMouseEvents(image, container, builder);
-	_setupDrawingAreaKeyboardEvents(image, container, builder);
+		// Line width dialog is affected from delay on image render.
+		// So If the image render is delayed, use width and height of the data
+		if (JSDialog.isWidgetInModalPopup(data) && image.width == 0 && image.height == 0) {
+			image.width = data.imagewidth;
+			image.height = data.imageheight;
+		}
+
+		if (data.loading && data.loading === 'true') {
+			var loaderContainer = window.L.DomUtil.create('div', 'ui-drawing-area-loader-container', container);
+			window.L.DomUtil.create('div', 'ui-drawing-area-loader', loaderContainer);
+		}
+		if (data.placeholderText && data.placeholderText === 'true') {
+			var spanContainer = window.L.DomUtil.create('div', 'ui-drawing-area-placeholder-container', container);
+			var span = window.L.DomUtil.create('span', 'ui-drawing-area-placeholder', spanContainer);
+			span.innerText = data.text;
+		}
+
+		_setupDrawingAreaMouseEvents(image, container, builder);
+		_setupDrawingAreaKeyboardEvents(image, container, builder);
+	}
 
 	return false;
 }
