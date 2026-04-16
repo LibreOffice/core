@@ -12,7 +12,7 @@
  * window.L.Control.PartsPreview
  */
 
-/* global _ app $ Hammer _UNO cool */
+/* global _ app $ Hammer _UNO cool JSDialog */
 window.L.Control.PartsPreview = window.L.Control.extend({
 	options: {
 		fetchThumbnail: true,
@@ -44,6 +44,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._width = 0;
 		this._height = 0;
 		this.scrollTimer = null;
+		this._menuPosEl = null;
 
 		document.body.addEventListener('click', (e) => {
 			if (!e.partsFocusedApplied && this.partsFocused)
@@ -181,6 +182,16 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			return !((x > nLeft && x < width - nRight) && (y > nTop && y < height - nBottom));
 	},
 
+	_getMenuPosEl: function () {
+		if (!this._menuPosEl) {
+			this._menuPosEl = document.createElement('div');
+			this._menuPosEl.id = 'slide-context-menu-pos';
+			this._menuPosEl.style.position = 'absolute';
+			this._container.appendChild(this._menuPosEl);
+		}
+		return this._menuPosEl;
+	},
+
 	_createPreview: function (i, hashCode) {
 		var frameClass = 'preview-frame ' + this.options.frameClass;
 		var frame = window.L.DomUtil.create('div', frameClass, this._partsPreviewCont);
@@ -245,12 +256,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		var that = this;
 		window.L.DomEvent.on(frame, 'contextmenu', function(e) {
 			var isMasterView = this._map['stateChangeHandler'].getItemValue('.uno:SlideMasterPage');
-			var pcw = document.getElementById('presentation-controls-wrapper');
-			var $trigger = $(pcw);
-			if (isMasterView === 'true' || app.map.isReadOnlyMode()) {
-				$trigger.contextMenu(false);
+			if (isMasterView === 'true' || app.map.isReadOnlyMode())
 				return;
-			}
+			e.preventDefault();
 
 			var nPos = undefined;
 			if (this.isPaddingClick(frame, e, 'top'))
@@ -260,137 +268,187 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			else if (this.isPaddingClick(frame, e, 'right') || this.isPaddingClick(frame, e, 'left'))
 				nPos = that._findClickedPart(frame);
 
-			$trigger.contextMenu(true);
 			if (!that._isSelected(e))
 				that._setPart(e);
-			$.contextMenu({
-				selector: '#'+frame.id,
-				className: 'cool-font',
-				items: {
-					paste: {
-						name: app.IconUtil.createMenuItemLink(_('Paste'), 'Paste'),
-						isHtmlName: true,
-						callback: function(key, options) {
-								if (nPos === undefined)
-									nPos = that._findClickedPart(options.$trigger[0]);
-								that._pasteSlide(nPos);
-						},
-						visible: function() {
-							// Show paste if we have a local copied slide OR
-							// the system clipboard API is available (may have content from another tab)
-							return that.copiedSlide || window.L.Browser.clipboardApiAvailable;
-						}
-					},
-					newslide: {
-						name: app.IconUtil.createMenuItemLink( _UNO(that._map._docLayer._docType == 'presentation' ? '.uno:InsertSlide' : '.uno:InsertPage', 'presentation'), 'InsertPage'),
-						isHtmlName: true,
-						callback: function() { that._map.insertPage(nPos); }
-					}
-				},
-				events: {
-					hide: function() {
-						img.focus();
-					}
-				}
+			img.focus();
+
+			var entries = [];
+			if (that.copiedSlide || window.L.Browser.clipboardApiAvailable) {
+				entries.push({
+					id: 'paste',
+					type: 'comboboxentry',
+					text: _('Paste'),
+					img: 'Paste',
+					pos: 0,
+				});
+			}
+			entries.push({
+				id: 'newslide',
+				type: 'comboboxentry',
+				text: _UNO(that._map._docLayer._docType == 'presentation' ? '.uno:InsertSlide' : '.uno:InsertPage', 'presentation'),
+				img: 'InsertPage',
+				pos: 0,
 			});
+
+			var menuPosEl = that._getMenuPosEl();
+			var rect = that._container.getBoundingClientRect();
+			menuPosEl.style.left = (e.clientX - rect.left) + 'px';
+			menuPosEl.style.top = (e.clientY - rect.top) + 'px';
+
+			var callback = function(objectType, eventType, object, data, entry) {
+				if (eventType !== 'selected')
+					return false;
+				if (entry.id === 'paste') {
+					if (nPos === undefined)
+						nPos = that._findClickedPart(frame);
+					that._pasteSlide(nPos);
+				} else if (entry.id === 'newslide') {
+					that._map.insertPage(nPos);
+				}
+				JSDialog.CloseAllDropdowns();
+				return true;
+			};
+
+			JSDialog.OpenDropdown(
+				'slide-frame-menu',
+				menuPosEl,
+				entries,
+				callback,
+				'',
+				false,
+			);
 		}, this);
 
 		window.L.DomEvent.on(img, 'contextmenu', function(e) {
+			e.stopPropagation();
 			var isMasterView = this._map['stateChangeHandler'].getItemValue('.uno:SlideMasterPage');
-			var $trigger = $('#' + img.id);
-			if (isMasterView === 'true' || app.map.isReadOnlyMode()) {
-				$trigger.contextMenu(false);
+			if (isMasterView === 'true' || app.map.isReadOnlyMode())
 				return;
-			}
-			$trigger.contextMenu(true);
+			e.preventDefault();
+
 			if (!that._isSelected(e))
 				that._setPart(e);
+			img.focus();
 
-			$.contextMenu({
-				selector: '#' + img.id,
-				className: 'cool-font',
-				items: {
-					copy: {
-						name: app.IconUtil.createMenuItemLink(_('Copy'), 'Copy'),
-						isHtmlName: true,
-						callback: function() {
-							that.copiedSlide = e;
-							that._map._clip.clearSelection();
-							that._map._clip.setTextSelectionType('slide');
-							that._map._clip._execCopyCutPaste('copy', '.uno:CopySlide');
-						},
-						visible: function() {
-							return !(app.impress.hasOverviewPage && that._map._docLayer._selectedPart === 0);
-						}
-					},
-					paste: {
-						name: app.IconUtil.createMenuItemLink(_('Paste'), 'Paste'),
-						isHtmlName: true,
-						callback: function() {
-							that._pasteSlide();
-						},
-					},
-					newslide: {
-						name: app.IconUtil.createMenuItemLink(_UNO(that._map._docLayer._docType == 'presentation' ? '.uno:InsertSlide' : '.uno:InsertPage', 'presentation'), 'InsertPage'),
-						isHtmlName: true,
-						callback: function() { that._map.insertPage(); }
-					},
-					duplicateslide: {
-						name: app.IconUtil.createMenuItemLink(_UNO(that._map._docLayer._docType == 'presentation' ? '.uno:DuplicateSlide' : '.uno:DuplicatePage', 'presentation'), 'DuplicatePage'),
-						isHtmlName: true,
-						callback: function() { that._map.duplicatePage(); }
-					},
-					delete: {
-						name: app.IconUtil.createMenuItemLink(_UNO(that._map._docLayer._docType == 'presentation' ? '.uno:DeleteSlide' : '.uno:DeletePage', 'presentation'), 'DeletePage'),
-						isHtmlName: true,
-						callback: function() { app.dispatcher.dispatch('deletepage'); },
-						visible: function() {
-							return that._map._docLayer._parts > 1;
-						}
-					},
-					slideproperties: {
-						name: app.IconUtil.createMenuItemLink(_UNO(that._map._docLayer._docType == 'presentation' ? '.uno:SlideSetup' : '.uno:PageSetup', 'presentation'), 'PageSetup'),
-						isHtmlName: true,
-						callback: function() {
-							app.socket.sendMessage('uno .uno:PageSetup');
-						}
-					},
-					showslide: {
-						name: app.IconUtil.createMenuItemLink(_UNO('.uno:ShowSlide', 'presentation'), 'ShowSlide'),
-						isHtmlName: true,
-						callback: function(key, options) {
-							var part = that._findClickedPart(options.$trigger[0].parentNode);
-							if (part !== null) {
-								that._map.showSlide();
-							}
-						},
-						visible: function(key, options) {
-							var part = that._findClickedPart(options.$trigger[0].parentNode);
-							return that._map._docLayer._docType === 'presentation' && app.impress.isSlideHidden(parseInt(part) - 1);
-						}
-					},
-					hideslide: {
-						name: app.IconUtil.createMenuItemLink(_UNO('.uno:HideSlide', 'presentation'), 'Hideslide'),
-						isHtmlName: true,
-						callback: function(key, options) {
-							var part = that._findClickedPart(options.$trigger[0].parentNode);
-							if (part !== null) {
-								that._map.hideSlide();
-							}
-						},
-						visible: function(key, options) {
-							var part = that._findClickedPart(options.$trigger[0].parentNode);
-							return that._map._docLayer._docType === 'presentation' && !app.impress.isSlideHidden(parseInt(part) - 1);
-						}
-					}
-				},
-				events: {
-					hide: function() {
-						// Restore focus to the element that opened the menu
-						img.focus();
-					}
-				}
+			var part = that._findClickedPart(img.parentNode);
+			var partIndex = parseInt(part) - 1;
+			var isPresentation = that._map._docLayer._docType === 'presentation';
+
+			var entries = [];
+			if (!(app.impress.hasOverviewPage && that._map._docLayer._selectedPart === 0)) {
+				entries.push({
+					id: 'copy',
+					type: 'comboboxentry',
+					text: _('Copy'),
+					img: 'Copy',
+					pos: 0,
+				});
+			}
+			entries.push({
+				id: 'paste',
+				type: 'comboboxentry',
+				text: _('Paste'),
+				img: 'Paste',
+				pos: 0,
 			});
+			entries.push({
+				id: 'newslide',
+				type: 'comboboxentry',
+				text: _UNO(isPresentation ? '.uno:InsertSlide' : '.uno:InsertPage', 'presentation'),
+				img: 'InsertPage',
+				pos: 0,
+			});
+			entries.push({
+				id: 'duplicateslide',
+				type: 'comboboxentry',
+				text: _UNO(isPresentation ? '.uno:DuplicateSlide' : '.uno:DuplicatePage', 'presentation'),
+				img: 'DuplicatePage',
+				pos: 0,
+			});
+			if (that._map._docLayer._parts > 1) {
+				entries.push({
+					id: 'delete',
+					type: 'comboboxentry',
+					text: _UNO(isPresentation ? '.uno:DeleteSlide' : '.uno:DeletePage', 'presentation'),
+					img: 'DeletePage',
+					pos: 0,
+				});
+			}
+			entries.push({
+				id: 'slideproperties',
+				type: 'comboboxentry',
+				text: _UNO(isPresentation ? '.uno:SlideSetup' : '.uno:PageSetup', 'presentation'),
+				img: 'PageSetup',
+				pos: 0,
+			});
+			if (isPresentation && app.impress.isSlideHidden(partIndex)) {
+				entries.push({
+					id: 'showslide',
+					type: 'comboboxentry',
+					text: _UNO('.uno:ShowSlide', 'presentation'),
+					img: 'ShowSlide',
+					pos: 0,
+				});
+			}
+			if (isPresentation && !app.impress.isSlideHidden(partIndex)) {
+				entries.push({
+					id: 'hideslide',
+					type: 'comboboxentry',
+					text: _UNO('.uno:HideSlide', 'presentation'),
+					img: 'Hideslide',
+					pos: 0,
+				});
+			}
+
+			var menuPosEl = that._getMenuPosEl();
+			var rect = that._container.getBoundingClientRect();
+			menuPosEl.style.left = (e.clientX - rect.left) + 'px';
+			menuPosEl.style.top = (e.clientY - rect.top) + 'px';
+
+			var callback = function(objectType, eventType, object, data, entry) {
+				if (eventType !== 'selected')
+					return false;
+				switch (entry.id) {
+				case 'copy':
+					that.copiedSlide = e;
+					that._map._clip.clearSelection();
+					that._map._clip.setTextSelectionType('slide');
+					that._map._clip._execCopyCutPaste('copy', '.uno:CopySlide');
+					break;
+				case 'paste':
+					that._pasteSlide();
+					break;
+				case 'newslide':
+					that._map.insertPage();
+					break;
+				case 'duplicateslide':
+					that._map.duplicatePage();
+					break;
+				case 'delete':
+					app.dispatcher.dispatch('deletepage');
+					break;
+				case 'slideproperties':
+					app.socket.sendMessage('uno .uno:PageSetup');
+					break;
+				case 'showslide':
+					that._map.showSlide();
+					break;
+				case 'hideslide':
+					that._map.hideSlide();
+					break;
+				}
+				JSDialog.CloseAllDropdowns();
+				return true;
+			};
+
+			JSDialog.OpenDropdown(
+				'slide-img-menu',
+				menuPosEl,
+				entries,
+				callback,
+				'',
+				false,
+			);
 		}, this);
 
 		var imgSize = this._map.getPreview(i, i,
