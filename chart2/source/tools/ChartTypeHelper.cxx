@@ -118,6 +118,18 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
         *pSeq++ = css::chart::DataLabelPlacement::INSIDE;
         *pSeq++ = css::chart::DataLabelPlacement::NEAR_ORIGIN;
     }
+    else if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM))
+    {
+        aRet.realloc(6);
+        sal_Int32* pSequence = aRet.getArray();
+
+        *pSequence++ = css::chart::DataLabelPlacement::TOP;
+        *pSequence++ = css::chart::DataLabelPlacement::BOTTOM;
+        *pSequence++ = css::chart::DataLabelPlacement::CENTER;
+        *pSequence++ = css::chart::DataLabelPlacement::OUTSIDE;
+        *pSequence++ = css::chart::DataLabelPlacement::INSIDE;
+        *pSequence++ = css::chart::DataLabelPlacement::NEAR_ORIGIN;
+    }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
     {
         bool bStacked = false;
@@ -178,6 +190,7 @@ bool ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( const rtl::Reference< C
         OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
             || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)
+            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM)
             || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
             return true;
     }
@@ -311,6 +324,13 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
         aRet.realloc( 2 );
         sal_Int32* pSeq = aRet.getArray();
         *pSeq++ = css::chart::MissingValueTreatment::LEAVE_GAP;
+        *pSeq++ = css::chart::MissingValueTreatment::USE_ZERO;
+    }
+    else if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM))
+    {
+        // Assuming histograms typically use zero for missing values
+        aRet.realloc(1);
+        sal_Int32* pSeq = aRet.getArray();
         *pSeq++ = css::chart::MissingValueTreatment::USE_ZERO;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )

@@ -556,6 +556,53 @@ void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
 }
 
 //=========
+// HistogramChartDialogController
+//=========
+
+HistogramChartDialogController::HistogramChartDialogController()
+{
+    bSupports3D = false;
+}
+
+HistogramChartDialogController::~HistogramChartDialogController()
+{
+}
+
+OUString HistogramChartDialogController::getName()
+{
+    return SchResId(STR_TYPE_HISTOGRAM);
+}
+
+OUString HistogramChartDialogController::getImage()
+{
+    return BMP_TYPE_HISTOGRAM;
+}
+
+const tTemplateServiceChartTypeParameterMap& HistogramChartDialogController::getTemplateMap() const
+{
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+        {"com.sun.star.chart2.template.Histogram" , ChartTypeParameter(1, false, false, GlobalStackMode_NONE)}
+    };
+    return s_aTemplateMap;
+}
+
+void HistogramChartDialogController::fillSubTypeList(ValueSet& rSubTypeList,
+                                                     const ChartTypeParameter& /*rParameter*/)
+{
+    rSubTypeList.Clear();
+    rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_HISTOGRAM));
+    rSubTypeList.SetItemText(1, SchResId(STR_HISTOGRAM));
+}
+
+
+void HistogramChartDialogController::adjustParameterToSubType(ChartTypeParameter& rParameter)
+{
+    rParameter.b3DLook = false;
+    rParameter.eStackMode = GlobalStackMode_NONE;
+    rParameter.bXAxisWithValues = false;
+}
+
+//=========
 // PieChartDialogController
 //=========
 
