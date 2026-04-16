@@ -12,11 +12,16 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <extendedprimitive2dxmldump.hxx>
 #include <rtl/ustring.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <sfx2/objsh.hxx>
+#include <svx/fillbitmaplink.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/svdmodel.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
@@ -176,6 +181,20 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
+
+    // Allow link updates and resolve the linked background image via the
+    // LinkManager before rendering, so createNewSdrFillGraphicAttribute
+    // sees a Bitmap and not a deferred GraphicType::Default item.
+    SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    CPPUNIT_ASSERT(pShell);
+    pShell->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+    auto* pSvxDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pSvxDrawPage);
+    SdrModel& rModel = pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage();
+    sfx2::LinkManager* pLinkMgr = rModel.GetLinkManager();
+    CPPUNIT_ASSERT(pLinkMgr);
+    registerFillBitmapLinks(rModel.GetItemPool(), *pLinkMgr, []() {});
+    pLinkMgr->UpdateAllLinks(false, nullptr, u""_ustr);
 
     // When rendering that document:
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence

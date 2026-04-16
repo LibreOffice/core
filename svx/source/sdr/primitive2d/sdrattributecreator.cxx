@@ -61,6 +61,7 @@
 #include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/GraphicLoader.hxx>
+#include <sfx2/objsh.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <svx/svx3ditems.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
@@ -75,6 +76,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/editobj.hxx>
+#include <o3tl/test_info.hxx>
 #include <osl/diagnose.h>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
@@ -708,8 +710,15 @@ namespace drawinglayer::primitive2d
             OUString aOriginURL = aGraphic.getOriginURL();
             if (aGraphic.GetType() == GraphicType::Default && !aOriginURL.isEmpty())
             {
-                aGraphic = vcl::graphic::loadFromURL(aGraphic.getOriginURL());
-                aGraphic.setOriginURL(aOriginURL);
+                SfxObjectShell* pSh = SfxObjectShell::Current();
+                if (pSh && pSh->GetEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+                {
+                    assert(!o3tl::IsRunningUnitTest()
+                           && "createNewSdrFillGraphicAttribute: unexpected remote graphic"
+                              " fetch during unit test");
+                    aGraphic = vcl::graphic::loadFromURL(aGraphic.getOriginURL());
+                    aGraphic.setOriginURL(aOriginURL);
+                }
             }
 
             if(GraphicType::Bitmap != aGraphic.GetType() && GraphicType::GdiMetafile != aGraphic.GetType())
