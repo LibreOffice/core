@@ -150,6 +150,7 @@ void ChartType::addDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
     SolarMutexGuard g;
 
     impl_addDataSeriesWithoutNotification( xDataSeries );
+    createCalculatedDataSeries();
     fireModifyEvent();
 }
 
@@ -223,9 +224,8 @@ void ChartType::setDataSeries( const std::vector< rtl::Reference< DataSeries > >
         throw;
     }
     m_bNotifyChanges = true;
-    fireModifyEvent();
-
     createCalculatedDataSeries();
+    fireModifyEvent();
 }
 
 void ChartType::createCalculatedDataSeries()
@@ -653,9 +653,8 @@ void ChartType::deleteSeries( const rtl::Reference< ::chart::DataSeries > & xSer
 
         ModifyListenerHelper::removeListener( *it, m_xModifyEventForwarder );
         m_aDataSeries.erase(it);
-        fireModifyEvent();
-
         createCalculatedDataSeries();
+        fireModifyEvent();
     }
     catch( const uno::Exception & )
     {

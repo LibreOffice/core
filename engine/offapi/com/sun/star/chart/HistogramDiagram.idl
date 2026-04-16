@@ -20,6 +20,9 @@ service HistogramDiagram
     /** Specifies the width of each bin in the histogram. */
     [property] double BinWidth;
 
+    /** Specifies the number of bins in the histogram. */
+    [property] long BinCount;
+
     /** Specifies the type of frequency representation (count or density). */
     [property] long FrequencyType;
 };

@@ -78,6 +78,7 @@ enum eServiceType
 {
     SERVICE_NAME_AREA_DIAGRAM = 0,
     SERVICE_NAME_BAR_DIAGRAM,
+    SERVICE_NAME_HISTOGRAM_DIAGRAM,
     SERVICE_NAME_DONUT_DIAGRAM,
     SERVICE_NAME_LINE_DIAGRAM,
     SERVICE_NAME_NET_DIAGRAM,
@@ -106,6 +107,7 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
     static tServiceNameMap aServiceNameMap {
         {"com.sun.star.chart.AreaDiagram",                    SERVICE_NAME_AREA_DIAGRAM},
         {"com.sun.star.chart.BarDiagram",                     SERVICE_NAME_BAR_DIAGRAM},
+        {"com.sun.star.chart.HistogramDiagram",               SERVICE_NAME_HISTOGRAM_DIAGRAM},
         {"com.sun.star.chart.DonutDiagram",                   SERVICE_NAME_DONUT_DIAGRAM},
         {"com.sun.star.chart.LineDiagram",                    SERVICE_NAME_LINE_DIAGRAM},
         {"com.sun.star.chart.NetDiagram",                     SERVICE_NAME_NET_DIAGRAM},
@@ -1195,6 +1197,13 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     // no "Vertical=false" property was set)
                     xTemplate =
                         xChartTypeManager->createTemplate(u"com.sun.star.chart2.template.Column"_ustr);
+                    bCreateDiagram = true;
+                }
+                break;
+            case SERVICE_NAME_HISTOGRAM_DIAGRAM:
+                if (xChartTypeManager.is())
+                {
+                    xTemplate = xChartTypeManager->createTemplate(u"com.sun.star.chart2.template.Histogram"_ustr);
                     bCreateDiagram = true;
                 }
                 break;

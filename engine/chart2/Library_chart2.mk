@@ -321,6 +321,8 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/model/template/BarChartTypeTemplate \
     chart2/source/model/template/HistogramChartType \
     chart2/source/model/template/HistogramChartTypeTemplate \
+    chart2/source/model/template/HistogramDataInterpreter \
+    chart2/source/model/template/HistogramCalculator \
     chart2/source/model/template/BoxWhiskerChartType \
     chart2/source/model/template/BoxWhiskerChartTypeTemplate \
     chart2/source/model/template/BubbleChartType \
@@ -388,6 +390,7 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/tools/ExponentialRegressionCurveCalculator \
     chart2/source/tools/FillProperties \
     chart2/source/tools/FormattedStringHelper \
+    chart2/source/tools/HistogramDataSequence \
     chart2/source/tools/InternalData \
     chart2/source/tools/InternalDataProvider \
     chart2/source/tools/LabeledDataSequence \

@@ -54,6 +54,7 @@ protected:
 
     virtual sal_Int32 getDimension() const override;
     virtual StackMode getStackMode(sal_Int32 nChartTypeIndex) const override;
+    rtl::Reference<DataInterpreter> getDataInterpreter2() override;
 
 private:
     StackMode m_eStackMode;
