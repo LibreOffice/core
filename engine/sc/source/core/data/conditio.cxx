@@ -337,7 +337,8 @@ void ScConditionEntry::SimplifyCompiledFormula( std::unique_ptr<ScTokenArray>& r
     else if ( pToken->GetType() == svString )
     {
         rIsStr = true;
-        rStrVal = pToken->GetString().getString();
+        assert(dynamic_cast<FormulaStringToken*>(pToken));
+        rStrVal = static_cast<FormulaStringToken*>(pToken)->GetString().getString();
         rFormula.reset();             // Do not remember as formula
     }
 }

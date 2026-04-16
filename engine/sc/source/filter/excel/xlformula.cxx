@@ -926,7 +926,7 @@ void XclTokenArrayIterator::SkipSpaces()
 bool XclTokenArrayHelper::GetTokenString( OUString& rString, const FormulaToken& rScToken )
 {
     bool bIsStr = (rScToken.GetType() == svString) && (rScToken.GetOpCode() == ocPush);
-    if( bIsStr ) rString = rScToken.GetString().getString();
+    if( bIsStr ) rString = static_cast<const FormulaStringToken&>(rScToken).GetString().getString();
     return bIsStr;
 }
 

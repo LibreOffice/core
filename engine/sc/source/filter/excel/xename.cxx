@@ -375,15 +375,19 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
                 // excel doesn't allow sheet names having length > 31
                 do
                 {
-                    if (t->IsExternalRef())
+                    if (t->IsExternalRef() && t->GetType() != formula::svExternalName)
                     {
                         formula::StackVar eType = t->GetType();
-                        if (eType != formula::svExternalName  && t->GetString().getLength() > MAX_TAB_NAME_LENGTH)
+                        OUString aSheetName;
+                        if (eType == formula::svExternalSingleRef)
+                            aSheetName = static_cast<ScExternalSingleRefToken*>(t)->GetString().getString();
+                        else
+                            aSheetName = static_cast<ScExternalDoubleRefToken*>(t)->GetString().getString();
+                        if (aSheetName.getLength() > MAX_TAB_NAME_LENGTH)
                         {
-                            const OUString& rSheetName = t->GetString().getString();
                             const auto& aTruncatedMap
                                 = GetRoot().GetGlobalLinkManager().GetTruncatedSheetMap(t->GetIndex());
-                            if (auto it = aTruncatedMap.find(rSheetName); it != aTruncatedMap.end())
+                            if (auto it = aTruncatedMap.find(aSheetName); it != aTruncatedMap.end())
                             {
                                 formula::FormulaToken* pNewToken = nullptr;
                                 if (eType == formula::svExternalSingleRef)
@@ -745,7 +749,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
                 // current-sheet references (e.g. !D3 in CELL("filename",!D3))
                 // that will be wrongly converted.
                 if (pToken && pToken->GetOpCode() == ocBad
-                    && pToken->GetString().getString() == "!")
+                    && static_cast<formula::FormulaStringOpToken*>(pToken)->GetString().getString() == "!")
                 {
                     // Skip the following reference token
                     if (i + 1 < nLen)

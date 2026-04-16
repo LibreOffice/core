@@ -686,7 +686,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                 pJumpMatrix->PutResultDouble( static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble(), nC, nR );
                             break;
                             case svString:
-                                pJumpMatrix->PutResultString( pToken->GetString(), nC, nR );
+                                pJumpMatrix->PutResultString( static_cast<FormulaStringToken*>(pToken.get())->GetString(), nC, nR );
                             break;
                             case svEmptyCell:
                                 pJumpMatrix->PutResultEmpty( nC, nR );
@@ -2600,7 +2600,7 @@ void ScInterpreter::ScCellExternal()
         switch (pToken->GetType())
         {
             case svString:
-                PushString(pToken->GetString());
+                PushString(static_cast<FormulaStringToken*>(pToken.get())->GetString());
             break;
             case svDouble:
                 PushString(OUString::number(static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble()));
@@ -5070,7 +5070,7 @@ void ScInterpreter::ScMatch()
                 else
                 {
                     vsa.isStringSearch = true;
-                    vsa.sSearchStr = pToken->GetString();
+                    vsa.sSearchStr = static_cast<FormulaStringToken*>(pToken.get())->GetString();
                 }
             }
             break;
@@ -5250,7 +5250,7 @@ void ScInterpreter::ScXMatch()
                 else
                 {
                     vsa.isStringSearch = true;
-                    vsa.sSearchStr = pToken->GetString();
+                    vsa.sSearchStr = static_cast<FormulaStringToken*>(pToken.get())->GetString();
                 }
             }
             break;
@@ -5453,7 +5453,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                     if (pToken->GetType() == svDouble)
                         pSumExtraMatrix->PutDouble(static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble(), 0, 0);
                     else
-                        pSumExtraMatrix->PutString(pToken->GetString(), 0, 0);
+                        pSumExtraMatrix->PutString(static_cast<FormulaStringToken*>(pToken.get())->GetString(), 0, 0);
                 }
                 break;
             case svExternalDoubleRef:
@@ -5528,7 +5528,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                         bIsString = false;
                     }
                     else
-                        aString = pToken->GetString();
+                        aString = static_cast<FormulaStringToken*>(pToken.get())->GetString();
                 }
             }
             break;
@@ -6175,7 +6175,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                             bIsString = false;
                         }
                         else
-                            aString = pToken->GetString();
+                            aString = static_cast<FormulaStringToken*>(pToken.get())->GetString();
                     }
                 }
                 break;
@@ -8092,7 +8092,7 @@ void ScInterpreter::ScXLookup()
                 else
                 {
                     vsa.isStringSearch = true;
-                    vsa.sSearchStr = pToken->GetString();
+                    vsa.sSearchStr = static_cast<FormulaStringToken*>(pToken.get())->GetString();
                 }
             }
             break;
@@ -9931,7 +9931,7 @@ void ScInterpreter::replaceNamesToResult( const std::unordered_map<OUString, for
     {
         if (aIterResult.GetIndex() > nEndPos)
             break;
-        auto iRes = rResultIndexes.find(t->GetString().getString());
+        auto iRes = rResultIndexes.find(static_cast<FormulaStringNameToken*>(t)->GetString().getString());
         if (iRes != rResultIndexes.end())
             rTokens.ReplaceRPNToken(aIterResult.GetIndex() - 1, iRes->second->Clone());
     }
@@ -9982,7 +9982,7 @@ void ScInterpreter::ScLet()
         {
             aIter.Jump(pJump[static_cast<short>(nOrgJumpCount - nJumpCount + 1)] - 1);
             FormulaToken* t = aIter.NextRPN();
-            aStrName = t->GetString().getString();
+            aStrName = static_cast<FormulaStringNameToken*>(t)->GetString().getString();
         }
         else
         {

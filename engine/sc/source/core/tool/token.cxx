@@ -564,7 +564,7 @@ FormulaTokenRef extendRangeReference( ScSheetLimits& rLimits, FormulaToken & rTo
         aRef.Ref2.SetFlag3D( false);
         aRef.Extend(rLimits, rRef2, rPos);
         if (bExternal)
-            xRes = new ScExternalDoubleRefToken( rTok1.GetIndex(), rTok1.GetString(), aRef);
+            xRes = new ScExternalDoubleRefToken( rTok1.GetIndex(), static_cast<ScExternalDoubleRefToken&>(rTok1).GetString(), aRef);
         else
             xRes = new ScDoubleRefToken(rLimits, aRef);
     }
@@ -723,11 +723,6 @@ sal_uInt16 ScExternalSingleRefToken::GetIndex() const
     return mnFileId;
 }
 
-const svl::SharedString & ScExternalSingleRefToken::GetString() const
-{
-    return maTabName;
-}
-
 const ScSingleRefData* ScExternalSingleRefToken::GetSingleRef() const
 {
     return &maSingleRef;
@@ -746,7 +741,7 @@ bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
     if (mnFileId != r.GetIndex())
         return false;
 
-    if (maTabName != r.GetString())
+    if (maTabName != static_cast<const ScExternalSingleRefToken&>(r).GetString())
         return false;
 
     return maSingleRef == *r.GetSingleRef();
@@ -767,11 +762,6 @@ ScExternalDoubleRefToken::~ScExternalDoubleRefToken()
 sal_uInt16 ScExternalDoubleRefToken::GetIndex() const
 {
     return mnFileId;
-}
-
-const svl::SharedString & ScExternalDoubleRefToken::GetString() const
-{
-    return maTabName;
 }
 
 const ScSingleRefData* ScExternalDoubleRefToken::GetSingleRef() const
@@ -802,10 +792,12 @@ bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
     if (mnFileId != r.GetIndex())
         return false;
 
-    if (maTabName != r.GetString())
+    auto rhs = static_cast<const ScExternalDoubleRefToken&>(r);
+
+    if (maTabName != rhs.GetString())
         return false;
 
-    return maDoubleRef == static_cast<const ScExternalDoubleRefToken&>(r).GetDoubleRef();
+    return maDoubleRef == rhs.GetDoubleRef();
 }
 
 ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, svl::SharedString aName ) :
@@ -822,11 +814,6 @@ sal_uInt16 ScExternalNameToken::GetIndex() const
     return mnFileId;
 }
 
-const svl::SharedString & ScExternalNameToken::GetString() const
-{
-    return maName;
-}
-
 bool ScExternalNameToken::operator==( const FormulaToken& r ) const
 {
     if ( !FormulaToken::operator==(r) )
@@ -835,7 +822,7 @@ bool ScExternalNameToken::operator==( const FormulaToken& r ) const
     if (mnFileId != r.GetIndex())
         return false;
 
-    return maName == r.GetString();
+    return maName == static_cast<const ScExternalNameToken&>(r).GetString();
 }
 
 ScTableRefToken::ScTableRefToken( sal_uInt16 nIndex, ScTableRefToken::Item eItem ) :
@@ -932,11 +919,6 @@ ScJumpMatrixToken::~ScJumpMatrixToken()
 {
 }
 
-const svl::SharedString & ScEmptyCellToken::GetString() const
-{
-    return svl::SharedString::getEmptyString();
-}
-
 bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
@@ -955,7 +937,7 @@ ScMatrixCellResultToken::~ScMatrixCellResultToken() {}
 
 const svl::SharedString & ScMatrixCellResultToken::GetString() const
 {
-    return xUpperLeft->GetString();
+    return static_cast<const FormulaStringToken*>(xUpperLeft.get())->GetString();
 }
 
 const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix.get(); }
@@ -1082,11 +1064,6 @@ ScHybridCellToken::ScHybridCellToken(
 }
 
 double ScHybridCellToken::GetDouble() const { return mfDouble; }
-
-const svl::SharedString & ScHybridCellToken::GetString() const
-{
-    return maString;
-}
 
 bool ScHybridCellToken::operator==( const FormulaToken& r ) const
 {
@@ -1777,7 +1754,7 @@ void ScTokenArray::GenHash()
                 case svString:
                 {
                     // Constant string.
-                    OUString aStr = p->GetString().getString();
+                    OUString aStr = static_cast<const FormulaStringToken*>(p)->GetString().getString();
                     nHash += aHasher(aStr);
                 }
                 break;
@@ -2217,7 +2194,7 @@ FormulaToken* ScTokenArray::MergeArray( )
                 }
                 else if ( t->GetType() == svString )
                 {
-                    pArray->PutString(t->GetString(), nCol, nRow);
+                    pArray->PutString(static_cast<FormulaStringToken*>(t)->GetString(), nCol, nRow);
                 }
             break;
 
@@ -5097,7 +5074,6 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
     if (rToken.IsExternalRef())
     {
         size_t nFileId = rToken.GetIndex();
-        OUString aTabName = rToken.GetString().getString();
         if (nFileId >= rCxt.maExternalFileNames.size())
             // out of bound
             return;
@@ -5107,11 +5083,17 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
         switch (rToken.GetType())
         {
             case svExternalName:
+            {
+                OUString aTabName = static_cast<const ScExternalNameToken&>(rToken).GetString().getString();
                 rBuf.append(rCxt.mpRefConv->makeExternalNameStr(nFileId, aFileName, aTabName));
+            }
             break;
             case svExternalSingleRef:
+            {
+                OUString aTabName = static_cast<const ScExternalSingleRefToken&>(rToken).GetString().getString();
                 rCxt.mpRefConv->makeExternalRefStr(
                        rLimits, rBuf, rPos, nFileId, aFileName, aTabName, *rToken.GetSingleRef());
+            }
             break;
             case svExternalDoubleRef:
             {
@@ -5121,6 +5103,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
                 if (it == rCxt.maExternalCachedTabNames.end())
                     return;
 
+                OUString aTabName = static_cast<const ScExternalDoubleRefToken&>(rToken).GetString().getString();
                 rCxt.mpRefConv->makeExternalRefStr(
                         rLimits, rBuf, rPos, nFileId, aFileName, it->second, aTabName,
                         static_cast<const ScExternalDoubleRefToken&>(rToken).GetDoubleRef());
@@ -5142,7 +5125,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
         break;
         case svString:
         {
-            OUString aStr = rToken.GetString().getString();
+            OUString aStr = static_cast<const FormulaStringToken&>(rToken).GetString().getString();
             if (eOp == ocBad || eOp == ocStringXML || eOp == ocStringName || eOp == ocDPFieldName)
             {
                 rBuf.append(aStr);

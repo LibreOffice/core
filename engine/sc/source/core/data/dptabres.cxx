@@ -2731,7 +2731,7 @@ std::unique_ptr<ScTokenArray> ScDPDataMember::ReplaceTokenMeasuresWithValues(con
     formula::FormulaTokenArrayPlainIterator aIterResult(*pNewArray);
     for (formula::FormulaToken* t = aIterResult.GetNextDPFieldNameRPN(); t; t = aIterResult.GetNextDPFieldNameRPN())
     {
-        OUString aName = t->GetString().getString();
+        OUString aName = static_cast<formula::FormulaStringNameToken*>(t)->GetString().getString();
         tools::Long nMemberMeasure = FindMeasureIndex(pResultData->GetMeasureNames(), aName);
         if (nMemberMeasure >= 0)
         {

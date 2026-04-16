@@ -1079,7 +1079,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
                 }
                 default:
                 {
-                    aText = pTokenArray->FirstToken()->GetString().getString().toUtf8();
+                    aText = static_cast<formula::FormulaStringToken*>(pTokenArray->FirstToken())->GetString().getString().toUtf8();
                     break;
                 }
             }

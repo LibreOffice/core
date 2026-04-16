@@ -779,7 +779,7 @@ void ScDPSource::AddDataDimsToResultData(sheet::DataPilotFieldOrientation nDataO
             for (formula::FormulaToken* t = aIter.GetNextDPFieldNameRPN(); t;
                  t = aIter.GetNextDPFieldNameRPN())
             {
-                OUString aName = t->GetString().getString();
+                OUString aName = static_cast<formula::FormulaStringNameToken*>(t)->GetString().getString();
 
                 SCCOL nDepIndex = rCache.GetDimensionIndex(aName);
                 if (nDepIndex < 0)

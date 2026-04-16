@@ -982,7 +982,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
                 if (bColRel) nCol |= 0x4000;
                 if (bRowRel) nCol |= 0x8000;
 
-                OUString aTabName = p->GetString().getString();
+                OUString aTabName = static_cast<const ScExternalSingleRefToken*>(p)->GetString().getString();
                 sal_uInt16 nSBTab = mrSupbook.GetTabIndex(aTabName);
 
                 // size is always 9
@@ -995,7 +995,8 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
             }
             case svExternalDoubleRef:
             {
-                const ScComplexRefData& rRef = static_cast<const ScExternalDoubleRefToken*>(p)->GetDoubleRef();
+                auto pEDRToken = static_cast<const ScExternalDoubleRefToken*>(p);
+                const ScComplexRefData& rRef = pEDRToken->GetDoubleRef();
                 const ScSingleRefData& r1 = rRef.Ref1;
                 const ScSingleRefData& r2 = rRef.Ref2;
                 if (r1.IsTabRel() || r2.IsTabRel())
@@ -1017,7 +1018,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
                 if (bCol2Rel) nCol2 |= 0x4000;
                 if (bRow2Rel) nCol2 |= 0x8000;
 
-                OUString aTabName = p->GetString().getString();
+                OUString aTabName = pEDRToken->GetString().getString();
                 sal_uInt16 nSBTab = mrSupbook.GetTabIndex(aTabName);
 
                 // size is always 13 (0x0D)
@@ -1380,9 +1381,12 @@ bool XclExpXct::BuildCrnList( XclExpCrnList& rCrnRecs )
                         }
                         break;
                         case svString:
+                        {
+                            auto pSToken = static_cast<const FormulaStringToken*>(xToken.get());
                             // do not save empty strings (empty cells) to cache
-                            if( !xToken->GetString().isEmpty() )
-                                bValid = rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetString().getString() ) );
+                            if( !pSToken->GetString().isEmpty() )
+                                bValid = rCrnRecs.InsertValue( nScCol, nScRow, Any( pSToken->GetString().getString() ) );
+                        }
                         break;
                         default:
                         break;

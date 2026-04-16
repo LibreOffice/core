@@ -57,7 +57,7 @@ void DepChainWriter::writeExternalRefInfo(formula::FormulaToken* pToken)
 {
     m_rJsonWriter.put("type", "external");
 
-    OUString aTabName = pToken->GetString().getString();
+    OUString aTabName = static_cast<ScExternalSingleRefToken*>(pToken)->GetString().getString();
     if (!aTabName.isEmpty())
         m_rJsonWriter.put("sheet", aTabName);
 

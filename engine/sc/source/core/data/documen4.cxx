@@ -454,15 +454,19 @@ bool setCacheTableReferenced(const ScDocument& rDoc, formula::FormulaToken& rTok
     switch (rToken.GetType())
     {
         case svExternalSingleRef:
+        {
+            auto rESRToken = static_cast<ScExternalSingleRefToken&>(rToken);
             return rRefMgr.setCacheTableReferenced(
-                rToken.GetIndex(), rToken.GetString().getString(), 1);
+                rToken.GetIndex(), rESRToken.GetString().getString(), 1);
+        }
         case svExternalDoubleRef:
         {
-            const ScComplexRefData& rRef = static_cast<ScExternalDoubleRefToken&>(rToken).GetDoubleRef();
+            auto rEDRToken = static_cast<ScExternalDoubleRefToken&>(rToken);
+            const ScComplexRefData& rRef = rEDRToken.GetDoubleRef();
             ScRange aAbs = rRef.toAbs(rDoc, rPos);
             size_t nSheets = aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1;
             return rRefMgr.setCacheTableReferenced(
-                    rToken.GetIndex(), rToken.GetString().getString(), nSheets);
+                    rToken.GetIndex(), rEDRToken.GetString().getString(), nSheets);
         }
         case svExternalName:
             /* TODO: external names aren't supported yet, but would

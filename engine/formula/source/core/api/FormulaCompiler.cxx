@@ -2728,11 +2728,17 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
 
             case svString:
                 if( eOp == ocBad || eOp == ocStringXML || eOp == ocStringName )
-                    rBuffer.append( t->GetString().getString());
+                {
+                    assert(dynamic_cast<const FormulaStringToken*>(t));
+                    rBuffer.append( static_cast<const FormulaStringToken*>(t)->GetString().getString());
+                }
                 else if (eOp == ocDPFieldName)
                     CreateStringFromDPFieldName( rBuffer, t );
                 else
-                    AppendString( rBuffer, t->GetString().getString() );
+                {
+                    assert(dynamic_cast<const FormulaStringToken*>(t));
+                    AppendString( rBuffer, static_cast<const FormulaStringToken*>(t)->GetString().getString() );
+                }
                 break;
             case svSingleRef:
                 CreateStringFromSingleRef( rBuffer, t);

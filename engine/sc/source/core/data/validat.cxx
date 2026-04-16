@@ -784,7 +784,10 @@ rtl_uString* ScStringTokenIterator::Next()
 
     maCurString = svl::SharedString(); // start with invalid string.
     if (mbOk && pToken)
-        maCurString = pToken->GetString();
+    {
+        assert(dynamic_cast<const FormulaStringToken*>(pToken));
+        maCurString = static_cast<const FormulaStringToken*>(pToken)->GetString();
+    }
 
     // string found but empty -> get next token; otherwise return it
     return (maCurString.isValid() && maCurString.isEmpty()) ? Next() : maCurString.getData();

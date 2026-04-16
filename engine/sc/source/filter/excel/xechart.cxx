@@ -868,7 +868,7 @@ void lclAddDoubleRefData(
         "lclAddDoubleRefData - double reference token expected");
     if( rToken.GetType() == ::formula::svExternalDoubleRef )
         orArray.AddExternalDoubleReference(
-            rToken.GetIndex(), rToken.GetString(), aComplexRef);
+            rToken.GetIndex(), static_cast<const ScExternalDoubleRefToken&>(rToken).GetString(), aComplexRef);
     else
         orArray.AddDoubleReference( aComplexRef );
 }

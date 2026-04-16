@@ -5197,7 +5197,7 @@ void ScXMLExport::WriteExternalRefCaches(const ScDocument& rDoc)
                             case svString:
                             {
                                 AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
-                                aStrVal = pToken->GetString().getString();
+                                aStrVal = static_cast<FormulaStringToken*>(pToken.get())->GetString().getString();
                             }
                             break;
                             default:

@@ -728,7 +728,12 @@ void Chart2Positioner::createPositionMap()
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
         svl::SharedString aTabName = svl::SharedString::getEmptyString();
         if (bExternal)
-            aTabName = pToken->GetString();
+        {
+            if (pToken->GetType() == svExternalSingleRef)
+                aTabName = static_cast<ScExternalSingleRefToken*>(pToken.get())->GetString();
+            else
+                aTabName = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetString();
+        }
 
         ScComplexRefData aData;
         if( !ScRefTokenHelper::getDoubleRefDataFromToken(aData, pToken) )
@@ -925,7 +930,11 @@ private:
             return false;
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
-        const svl::SharedString aTabName = bExternal ? pToken->GetString() : svl::SharedString::getEmptyString();
+        svl::SharedString aTabName;
+        if (!bExternal)
+            aTabName = svl::SharedString::getEmptyString();
+        else
+            aTabName = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetString();
 
         // In saving to XML, we don't prepend address with '$'.
         setRelative(aData.Ref1);
@@ -1120,7 +1129,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
             nMaxRow = rData.Row();
             nTab = rData.Tab();
             nFileId = pToken->GetIndex();
-            aExtTabName = pToken->GetString();
+            aExtTabName = static_cast<ScExternalSingleRefToken*>(pToken.get())->GetString();
             bExternal = true;
         }
         break;
@@ -1133,7 +1142,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
             nMaxRow = std::max(rData.Ref1.Row(), rData.Ref2.Row());
             nTab = rData.Ref1.Tab();
             nFileId = pToken->GetIndex();
-            aExtTabName = pToken->GetString();
+            aExtTabName = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetString();
             bExternal = true;
         }
         break;
@@ -1184,7 +1193,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
                 if (!bExternal)
                     return false;
 
-                if (nFileId != pToken->GetIndex() || aExtTabName != pToken->GetString())
+                if (nFileId != pToken->GetIndex() || aExtTabName != static_cast<ScExternalSingleRefToken*>(pToken.get())->GetString())
                     return false;
 
                 const ScSingleRefData& rData = *pToken->GetSingleRef();
@@ -1200,7 +1209,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
                 if (!bExternal)
                     return false;
 
-                if (nFileId != pToken->GetIndex() || aExtTabName != pToken->GetString())
+                if (nFileId != pToken->GetIndex() || aExtTabName != static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetString())
                     return false;
 
                 const ScComplexRefData& rData = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetDoubleRef();
@@ -2684,7 +2693,11 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
         return 0;
 
     sal_uInt16 nFileId = pToken->GetIndex();
-    OUString aTabName = pToken->GetString().getString();
+    OUString aTabName;
+    if (pToken->GetType() == svExternalDoubleRef)
+        aTabName = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetString().getString();
+    else
+        aTabName = static_cast<ScExternalSingleRefToken*>(pToken.get())->GetString().getString();
     ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, aTabName, aRange, nullptr);
     if (!pArray)
         // no external data exists for this range.
@@ -3060,7 +3073,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
     {
         if( m_aTokens.front()->GetType() == svString )
         {
-            aSeq = uno::Sequence<OUString> { m_aTokens.front()->GetString().getString() };
+            aSeq = uno::Sequence<OUString> { static_cast<FormulaStringToken*>(m_aTokens.front().get())->GetString().getString() };
         }
     }
 

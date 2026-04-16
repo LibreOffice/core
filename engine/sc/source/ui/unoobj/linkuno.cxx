@@ -1428,7 +1428,7 @@ Any SAL_CALL ScExternalSheetCacheObj::getCellValue(sal_Int32 nCol, sal_Int32 nRo
         break;
         case svString:
         {
-            OUString aVal = pToken->GetString().getString();
+            OUString aVal = static_cast<FormulaStringToken*>(pToken)->GetString().getString();
             aValue <<= aVal;
         }
         break;

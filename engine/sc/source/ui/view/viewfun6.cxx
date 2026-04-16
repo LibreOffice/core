@@ -49,6 +49,7 @@
 #include <tabvwsh.hxx>
 #include <scmod.hxx>
 #include <postit.hxx>
+#include <token.hxx>
 #include <comphelper/scopeguard.hxx>
 
 #include <vector>
@@ -199,7 +200,7 @@ void ScViewFunc::DetectiveMarkPred()
         ScRange aRange;
         if (pPath && ScRefTokenHelper::getRangeFromToken(&rDoc, aRange, p, aCurPos, true))
         {
-            OUString aTabName = p->GetString().getString();
+            OUString aTabName = static_cast<ScExternalDoubleRefToken*>(p.get())->GetString().getString();
             OUString aRangeStr(aRange.Format(rDoc, ScRefFlags::VALID));
             OUString sUrl =
                 *pPath +

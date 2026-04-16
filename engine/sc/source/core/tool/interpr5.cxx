@@ -560,7 +560,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
                     pMat->PutDouble( static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble(), 0, 0);
                 break;
                 case svString:
-                    pMat->PutString( pToken->GetString(), 0, 0);
+                    pMat->PutString( static_cast<FormulaStringToken*>(pToken.get())->GetString(), 0, 0);
                 break;
                 default:
                     ;   // nothing, empty element matrix

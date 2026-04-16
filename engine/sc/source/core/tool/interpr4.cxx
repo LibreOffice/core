@@ -824,9 +824,10 @@ const svl::SharedString & ScInterpreter::PopString()
                 nGlobalError = static_cast<const FormulaErrorToken*>(p)->GetError();
                 break;
             case svString:
+                return static_cast<const FormulaStringToken*>(p)->GetString();
             case svStringName:
             case svDPFieldName:
-                return p->GetString();
+                return static_cast<const FormulaStringNameToken*>(p)->GetString();
             case svEmptyCell:
             case svMissing:
                 return svl::SharedString::getEmptyString();
@@ -1166,7 +1167,7 @@ void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName
     }
 
     rFileId = p->GetIndex();
-    rTabName = p->GetString().getString();
+    rTabName = static_cast<const ScExternalSingleRefToken*>(p)->GetString().getString();
     rRef = *p->GetSingleRef();
 }
 
@@ -1245,7 +1246,7 @@ void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName
     }
 
     rFileId = p->GetIndex();
-    rTabName = p->GetString().getString();
+    rTabName = static_cast<const ScExternalDoubleRefToken*>(p)->GetString().getString();
     rRef = static_cast<const ScExternalDoubleRefToken*>(p)->GetDoubleRef();
 }
 
@@ -1563,8 +1564,9 @@ bool ScInterpreter::ConvertMatrixParameters()
                     if (eType == formula::ParamClass::Value || eType == formula::ParamClass::Array)
                     {
                         sal_uInt16 nFileId = p->GetIndex();
-                        OUString aTabName = p->GetString().getString();
-                        const ScComplexRefData& rRef = static_cast<const ScExternalDoubleRefToken*>(p)->GetDoubleRef();
+                        auto pEDRToken = static_cast<const ScExternalDoubleRefToken*>(p);
+                        OUString aTabName = pEDRToken->GetString().getString();
+                        const ScComplexRefData& rRef = pEDRToken->GetDoubleRef();
                         ScExternalRefCache::TokenArrayRef pArray;
                         GetExternalDoubleRef(nFileId, aTabName, rRef, pArray);
                         if (nGlobalError != FormulaError::NONE || !pArray)
@@ -2177,7 +2179,7 @@ double ScInterpreter::GetDouble()
             else if (pToken->GetType() == svEmptyCell)
                 nVal = 0.0;
             else
-                nVal = ConvertStringToValue( pToken->GetString().getString());
+                nVal = ConvertStringToValue( static_cast<FormulaStringToken*>(pToken.get())->GetString().getString());
         }
         break;
         case svExternalDoubleRef:
@@ -2427,8 +2429,11 @@ svl::SharedString ScInterpreter::GetString()
             {
                 return GetStringFromDouble( static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble() );
             }
-            else // svString or svEmpty
-                return pToken->GetString();
+            // svString or svEmpty
+            else if (pToken->GetType() == svString)
+                return static_cast<FormulaStringToken*>(pToken.get())->GetString();
+            else
+                return svl::SharedString::getEmptyString();
         }
         case svExternalDoubleRef:
         {
@@ -3351,7 +3356,7 @@ void ScInterpreter::ScMacro()
                 else
                 {
                     if ( pToken->GetType() == svString )
-                        pPar->PutString( pToken->GetString().getString() );
+                        pPar->PutString( static_cast<FormulaStringToken*>(pToken.get())->GetString().getString() );
                     else if ( pToken->GetType() == svDouble )
                         pPar->PutDouble( static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble() );
                     else
@@ -4858,7 +4863,7 @@ void ScInterpreter::AssertFormulaMatrix()
 
 const svl::SharedString & ScInterpreter::GetStringResult() const
 {
-    return xResult->GetString();
+    return static_cast<const FormulaStringToken*>(xResult.get())->GetString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

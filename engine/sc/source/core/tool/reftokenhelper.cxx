@@ -103,7 +103,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 }
                 break;
             case svString:
-                if (p->GetString().isEmpty())
+                if (static_cast<const FormulaStringToken*>(p)->GetString().isEmpty())
                     bFailure = true;
                 break;
             case svIndex:
@@ -339,7 +339,16 @@ private:
         // Get the information of the new token.
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
-        svl::SharedString aTabName = bExternal ? pToken->GetString() : svl::SharedString::getEmptyString();
+        svl::SharedString aTabName;
+        if (bExternal)
+        {
+            if (pToken->GetType() == svExternalDoubleRef)
+                aTabName = static_cast<ScExternalDoubleRefToken*>(pToken.get())->GetString();
+            else
+                aTabName = static_cast<ScExternalSingleRefToken*>(pToken.get())->GetString();
+        }
+        else
+            aTabName = svl::SharedString::getEmptyString();
 
         bool bJoined = false;
         for (ScTokenRef& pOldToken : rTokens)
@@ -359,7 +368,10 @@ private:
                     // Different external files.
                     continue;
 
-                if (aTabName != pOldToken->GetString())
+                auto aNewTabName = pOldToken->GetType() == svExternalSingleRef
+                    ? static_cast<ScExternalSingleRefToken*>(pOldToken.get())->GetString()
+                    : static_cast<ScExternalDoubleRefToken*>(pOldToken.get())->GetString();
+                if (aTabName != aNewTabName)
                     // Different table names.
                     continue;
             }

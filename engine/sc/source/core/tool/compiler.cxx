@@ -4989,9 +4989,9 @@ void ScCompiler::CreateStringFromXMLTokenArray( OUString& rFormula, OUString& rF
     {
         FormulaToken** ppTokens = pArr->GetArray();
         // string tokens expected, GetString() will assert if token type is wrong
-        rFormula = ppTokens[0]->GetString().getString();
+        rFormula = static_cast<FormulaStringToken*>(ppTokens[0])->GetString().getString();
         if( bExternal )
-            rFormulaNmsp = ppTokens[1]->GetString().getString();
+            rFormulaNmsp = static_cast<ScExternalNameToken*>(ppTokens[1])->GetString().getString();
     }
 }
 
@@ -5387,7 +5387,7 @@ ScRangeData* ScCompiler::GetRangeData( const FormulaIndexToken& rToken ) const
 bool ScCompiler::HandleStringName()
 {
     ScTokenArray* pNew = new ScTokenArray(rDoc);
-    pNew->AddStringName(mpToken->GetString());
+    pNew->AddStringName(static_cast<FormulaStringToken*>(mpToken.get())->GetString());
     PushTokenArray(pNew, true);
     return GetToken();
 }
@@ -5395,7 +5395,7 @@ bool ScCompiler::HandleStringName()
 bool ScCompiler::HandleDPFieldName()
 {
     ScTokenArray* pNew = new ScTokenArray(rDoc);
-    pNew->AddDPFieldName(mpToken->GetString());
+    pNew->AddDPFieldName(static_cast<FormulaStringToken*>(mpToken.get())->GetString());
     PushTokenArray(pNew, true);
     return GetToken();
 }
@@ -5487,7 +5487,7 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
                 return true;
             }
 
-            OUString aName = _aToken.GetString().getString();
+            OUString aName = static_cast<const ScExternalNameToken&>(_aToken).GetString().getString();
             ScExternalRefCache::TokenArrayRef xNew = pRefMgr->getRangeNameTokens(
                 _aToken.GetIndex(), aName, &aPos);
 
@@ -5665,7 +5665,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
         case svExternalName:
         {
             FormulaToken* p = maArrIterator.PeekNextNoSpaces();
-            OUString sName = t->GetString().getString();
+            OUString sName = static_cast<const ScExternalNameToken*>(t)->GetString().getString();
             if (p && p->GetOpCode() == ocOpen)
             {
                 OUString sUDPrefix = mxSymbols->getSymbol(ocUDExternal);
@@ -5678,22 +5678,23 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
         break;
         case svExternalSingleRef:
             pConv->makeExternalRefStr(rDoc.GetSheetLimits(),
-                   rBuffer, GetPos(), nUsedFileId, *pFileName, t->GetString().getString(),
+                   rBuffer, GetPos(), nUsedFileId, *pFileName, static_cast<const ScExternalSingleRefToken*>(t)->GetString().getString(),
                    *t->GetSingleRef());
         break;
         case svExternalDoubleRef:
         {
             std::vector<OUString> aTabNames;
             pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
+            auto pEDRToken = static_cast<const ScExternalDoubleRefToken*>(t);
             // No sheet names is a valid case if external sheets were not
             // cached in this document and external document is not reachable,
             // else not and worth to be investigated.
             SAL_WARN_IF( aTabNames.empty(), "sc.core", "wrecked cache of external document? '" <<
-                    *pFileName << "' '" << t->GetString().getString() << "'");
+                    *pFileName << "' '" << pEDRToken->GetString().getString() << "'");
 
             pConv->makeExternalRefStr(
-                rDoc.GetSheetLimits(), rBuffer, GetPos(), nUsedFileId, *pFileName, aTabNames, t->GetString().getString(),
-                static_cast<const ScExternalDoubleRefToken*>(t)->GetDoubleRef());
+                rDoc.GetSheetLimits(), rBuffer, GetPos(), nUsedFileId, *pFileName, aTabNames, pEDRToken->GetString().getString(),
+                pEDRToken->GetDoubleRef());
         }
         break;
         default:
@@ -6174,7 +6175,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
 
 void ScCompiler::CreateStringFromDPFieldName( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
 {
-    OUString aFieldName = _pTokenP->GetString().getString();
+    OUString aFieldName = static_cast<const FormulaStringToken*>(_pTokenP)->GetString().getString();
     if (aFieldName.indexOf('\'') >= 0)
         aFieldName = aFieldName.replaceAll(u"'", u"''");
     rBuffer.append("'" + aFieldName + "'");
