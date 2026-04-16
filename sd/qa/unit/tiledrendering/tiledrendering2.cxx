@@ -219,6 +219,26 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testBulletImageRemoteNotFetched)
     pImpressDocument->paintTile(*pDevice, 1024, 768, 0, 0, 15360, 7680);
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeFillRemoteNotFetched)
+{
+    // draw:fill-image with a remote URL on a shape must not fetch
+    // the URL during paint when link updates are not allowed.
+    // The assert in createNewSdrFillGraphicAttribute will fire if
+    // a remote fetch is attempted.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"shape-fill-link.fodp", aParams);
+    SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    pImpressDocument->initializeForTiledRendering({});
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(Size(1024, 768));
+    pImpressDocument->paintTile(*pDevice, 1024, 768, 0, 0, 15360, 7680);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

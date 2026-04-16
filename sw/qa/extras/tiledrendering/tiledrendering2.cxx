@@ -930,6 +930,31 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPageBackgroundImageRemoteNotFetch
         *pDevice, tools::Rectangle(Point(0, 0), pWrtShell->GetLayout()->getFrameArea().SSize()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeFillRemoteNotFetched)
+{
+    // draw:fill-image with a remote URL on a shape must not fetch
+    // the URL during paint when link updates are not allowed.
+    // The assert in createNewSdrFillGraphicAttribute will fire if
+    // a remote fetch is attempted.
+    comphelper::LibreOfficeKit::setActive(false);
+
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"shape-fill-link.fodt", aParams);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    pWrtShell->CalcLayout();
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(Size(1024, 1024));
+    static_cast<SwViewShell*>(pWrtShell)->Paint(
+        *pDevice, tools::Rectangle(Point(0, 0), pWrtShell->GetLayout()->getFrameArea().SSize()));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
