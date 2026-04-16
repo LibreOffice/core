@@ -16,6 +16,12 @@
 #include <editeng/editview.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/outdev.hxx>
+#include <tools/link.hxx>
+
+namespace tools
+{
+class JsonWriter;
+}
 
 class WeldEditAccessible;
 
@@ -54,6 +60,8 @@ protected:
     std::unique_ptr<EditEngine> m_xEditEngine;
     std::unique_ptr<EditView> m_xEditView;
     rtl::Reference<WeldEditAccessible> m_xAccessible;
+
+    DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 
     virtual void makeEditEngine();
 

@@ -19,6 +19,7 @@
 
 #include <config_wasm_strip.h>
 
+#include <tools/json_writer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -1537,9 +1538,17 @@ void WeldEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     pDrawingArea->set_cursor(PointerStyle::Text);
 
+    pDrawingArea->connect_get_property_tree(LINK(this, WeldEditView, DumpAsPropertyTreeHdl));
+
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     InitAccessible();
 #endif
+}
+
+IMPL_LINK(WeldEditView, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
+{
+    if (m_xEditEngine)
+        rJsonWriter.put("editText", m_xEditEngine->GetText());
 }
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
