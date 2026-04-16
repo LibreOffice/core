@@ -71,8 +71,6 @@ SvxBkgTabPage::SvxBkgTabPage(weld::Container* pPage, weld::DialogController* pCo
         m_xNotebook->remove_page(TABID_GRADIENT);
     if (m_xNotebook->get_page_index(TABID_HATCH) != -1)
         m_xNotebook->remove_page(TABID_HATCH);
-    if (m_xNotebook->get_page_index(TABID_BITMAP) != -1)
-        m_xNotebook->remove_page(TABID_BITMAP);
     if (m_xNotebook->get_page_index(TABID_PATTERN) != -1)
         m_xNotebook->remove_page(TABID_PATTERN);
 }
@@ -236,24 +234,30 @@ std::unique_ptr<SfxTabPage> SvxBkgTabPage::Create(weld::Container* pPage, weld::
 
 void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
+    bool bShowBitmap = false;
     const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_FLAG_TYPE, false);
     if (pFlagItem)
     {
         SvxBackgroundTabFlags nFlags = static_cast<SvxBackgroundTabFlags>(pFlagItem->GetValue());
         if ( nFlags & SvxBackgroundTabFlags::SHOW_TBLCTL )
         {
+            bShowBitmap = true;
             m_xTblLBox = m_xBuilder->weld_combo_box(u"tablelb"_ustr);
             m_xTblLBox->connect_changed(LINK(this, SvxBkgTabPage, TblDestinationHdl_Impl));
             m_xTblLBox->show();
         }
+        if (nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR)
+            bShowBitmap = true;
         if ((nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING) ||
             (nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR))
         {
             m_bHighlighting = bool(nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING);
             m_bCharBackColor = bool(nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR);
         }
-        SetOptimalSize();
     }
+    if (!bShowBitmap && m_xNotebook->get_page_index(TABID_BITMAP) != -1)
+        m_xNotebook->remove_page(TABID_BITMAP);
+    SetOptimalSize();
 
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
 
@@ -270,7 +274,7 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
     SetColorList(xColorTable);
 
     // sometimes we have the bitmap page
-    if (m_xNotebook->get_n_pages() > 4)
+    if (m_xNotebook->get_page_index(TABID_BITMAP) != -1)
     {
         XBitmapListRef xBitmapList;
         if (pObjSh)
