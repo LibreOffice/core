@@ -351,6 +351,10 @@ try {
 	isCODesktop = false;
 }
 
+// Keep in sync with the pre-canned provider map in wsd/FileServer.cpp
+// fetchModels. The server ignores the baseUrl from the client for non-custom
+// providers and uses its own copy, so a caller cannot pair a pre-canned id
+// with an arbitrary url.
 const AI_PROVIDERS: Array<AIProvider> = [
 	{
 		id: 'openai',

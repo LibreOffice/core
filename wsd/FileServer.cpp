@@ -232,6 +232,18 @@ std::string stringifyBoolFromConfig(const Poco::Util::LayeredConfiguration& conf
     return config.getBool(propertyName, defaultValue) ? "true" : "false";
 }
 
+/// Returns the canonical base url for a pre-canned AI provider id, or an
+/// empty view if the id is not pre-canned. Keep in sync with AI_PROVIDERS in
+/// browser/admin/src/integrator/AdminIntegratorSettings.ts.
+std::string_view preCannedAIProviderBaseUrl(std::string_view id)
+{
+    if (id == "openai")   return "https://api.openai.com";
+    if (id == "groq")     return "https://api.groq.com/openai";
+    if (id == "together") return "https://api.together.xyz";
+    if (id == "mistral")  return "https://api.mistral.ai";
+    return {};
+}
+
 /// Returns true if the host is forbidden by KIT_HOST_ALLOWLIST, matching
 /// the convention of core's HostFilter::isForbidden.
 bool isForbiddenKitHost(const std::string& host)
@@ -1871,26 +1883,35 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
         return;
     }
 
-    if (provider == "custom" && baseUrl.empty())
+    // Ignore the client's baseUrl for non-custom providers so a caller
+    // cannot pair a pre-canned id with an arbitrary url to bypass the KIT
+    // allowlist.
+    const bool isCustom = provider == "custom";
+    if (!isCustom)
+    {
+        const std::string_view preCanned = preCannedAIProviderBaseUrl(provider);
+        if (preCanned.empty())
+        {
+            sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
+                      "Unknown provider");
+            return;
+        }
+        baseUrl.assign(preCanned);
+    }
+    else if (baseUrl.empty())
     {
         sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
                   "Missing baseUrl for custom provider");
         return;
     }
 
-    if (baseUrl.empty())
-    {
-        sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
-                  "Missing baseUrl for provider");
-        return;
-    }
     if (baseUrl.back() == '/')
         baseUrl.pop_back();
     baseUrl += "/v1/models";
 
     Poco::URI uri(baseUrl);
 
-    if (isForbiddenKitHost(uri.getHost()))
+    if (isCustom && isForbiddenKitHost(uri.getHost()))
     {
         LOG_WRN("Rejected fetch-models request to host not in KIT allowlist ["
                 << COOLWSD::anonymizeUrl(baseUrl) << ']');
