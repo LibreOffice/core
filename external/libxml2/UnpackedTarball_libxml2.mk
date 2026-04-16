@@ -19,7 +19,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libxml2,\
 	$(if $(filter SOLARIS,$(OS)),external/libxml2/libxml2-global-symbols.patch) \
 	external/libxml2/libxml2-XMLCALL-redefine.patch.0 \
 	$(if $(filter ANDROID,$(OS)),external/libxml2/libxml2-android.patch) \
-	external/libxml2/0001-parser-Pass-userData-to-SAX-text-callbacks-in-xmlPar.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,libxml2,xml2-config.in,external/libxml2/xml2-config.in))
