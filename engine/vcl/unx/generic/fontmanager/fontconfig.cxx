@@ -124,9 +124,9 @@ public:
     CachedFontConfigFontOptions()
         // arbitrary cache size of 10
 #if defined __cpp_lib_memory_resource
-        : lru_options_cache(10, &CacheOwner::GetMemoryResource())
+        : lru_options_cache(256, &CacheOwner::GetMemoryResource())
 #else
-        : lru_options_cache(10)
+        : lru_options_cache(256)
 #endif
     {
     }
