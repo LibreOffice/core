@@ -445,6 +445,9 @@ void XmlTestTools::registerODFNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
         pXmlXpathCtx, BAD_CAST("loext"),
         BAD_CAST("urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"));
     xmlXPathRegisterNs(
+        pXmlXpathCtx, BAD_CAST("coext"),
+        BAD_CAST("urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"));
+    xmlXPathRegisterNs(
         pXmlXpathCtx, BAD_CAST("field"),
         BAD_CAST("urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0"));
     xmlXPathRegisterNs(

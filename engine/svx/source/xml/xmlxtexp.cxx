@@ -155,6 +155,7 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     GetNamespaceMap_().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     GetNamespaceMap_().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
     GetNamespaceMap_().Add( GetXMLToken(XML_NP_LO_EXT), GetXMLToken(XML_N_LO_EXT), XML_NAMESPACE_LO_EXT);
+    GetNamespaceMap_().Add( GetXMLToken(XML_NP_CO_EXT), GetXMLToken(XML_N_CO_EXT), XML_NAMESPACE_CO_EXT);
     SetGraphicStorageHandler(xGraphicStorageHandler);
 }
 

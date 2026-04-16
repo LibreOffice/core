@@ -87,13 +87,13 @@ constexpr sal_uInt16 XML_NAMESPACE_TABLE_EXT  = XML_NAMESPACE_EXT_BASE + 1;
 constexpr sal_uInt16 XML_NAMESPACE_CHART_EXT  = XML_NAMESPACE_EXT_BASE + 2;
 constexpr sal_uInt16 XML_NAMESPACE_DRAW_EXT   = XML_NAMESPACE_EXT_BASE + 3;
 constexpr sal_uInt16 XML_NAMESPACE_CALC_EXT   = XML_NAMESPACE_EXT_BASE + 4;
-constexpr sal_uInt16 XML_NAMESPACE_LO_EXT     = XML_NAMESPACE_EXT_BASE + 5;
+constexpr sal_uInt16 XML_NAMESPACE_LO_EXT     = XML_NAMESPACE_EXT_BASE + 5; // instead use CO_EXT for new features!
+constexpr sal_uInt16 XML_NAMESPACE_CO_EXT     = XML_NAMESPACE_EXT_BASE + 6;
 
 // experimental ODF extended namespaces
-constexpr sal_uInt16 XML_NAMESPACE_FIELD      = XML_NAMESPACE_EXT_BASE + 6;
-constexpr sal_uInt16 XML_NAMESPACE_CSS3TEXT   = XML_NAMESPACE_EXT_BASE + 7;  // CSS Text Level 3
-constexpr sal_uInt16 XML_NAMESPACE_FORMX      = XML_NAMESPACE_EXT_BASE + 8;  // form interop extensions
-
+constexpr sal_uInt16 XML_NAMESPACE_FIELD      = XML_NAMESPACE_EXT_BASE + 7;
+constexpr sal_uInt16 XML_NAMESPACE_CSS3TEXT   = XML_NAMESPACE_EXT_BASE + 8;  // CSS Text Level 3
+constexpr sal_uInt16 XML_NAMESPACE_FORMX      = XML_NAMESPACE_EXT_BASE + 9;  // form interop extensions
 
 // namespaces for OOo formats
 constexpr sal_uInt16 XML_NAMESPACE_OOO_BASE = 60;

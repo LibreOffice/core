@@ -728,6 +728,7 @@ void XSecController::exportSignature(
         {
             pAttributeList = new comphelper::AttributeList();
             pAttributeList->AddAttribute(u"xmlns:loext"_ustr, NS_LOEXT);
+            pAttributeList->AddAttribute(u"xmlns:coext"_ustr, NS_COEXT);
             /* Write PGPData element */
             xDocumentHandler->startElement(
                 u"PGPData"_ustr,

@@ -23,10 +23,12 @@
 inline constexpr OUString MANIFEST_NSPREFIX = u"manifest:"_ustr;
 inline constexpr OUString ELEMENT_MANIFEST = u"manifest:manifest"_ustr;
 inline constexpr OUString ATTRIBUTE_XMLNS = u"xmlns:manifest"_ustr;
-inline constexpr OUString ATTRIBUTE_XMLNS_LOEXT = u"xmlns:loext"_ustr;
+inline constexpr OUString ATTRIBUTE_XMLNS_LOEXT = u"xmlns:loext"_ustr; // instead use COEXT for new features!
+inline constexpr OUString ATTRIBUTE_XMLNS_COEXT = u"xmlns:coext"_ustr;
 inline constexpr OUString MANIFEST_NAMESPACE = u"http://openoffice.org/2001/manifest"_ustr;
 inline constexpr OUString MANIFEST_OASIS_NAMESPACE = u"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"_ustr;
 inline constexpr OUString MANIFEST_LOEXT_NAMESPACE = u"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"_ustr;
+inline constexpr OUString MANIFEST_COEXT_NAMESPACE = u"urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"_ustr;
 inline constexpr OUString MANIFEST_DOCTYPE = u"<!DOCTYPE manifest:manifest PUBLIC \"-//OpenOffice.org//DTD Manifest 1.0//EN\" \"Manifest.dtd\">"_ustr;
 
 inline constexpr OUString ELEMENT_FILE_ENTRY = u"manifest:file-entry"_ustr;

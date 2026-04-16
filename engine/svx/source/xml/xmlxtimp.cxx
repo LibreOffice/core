@@ -399,6 +399,9 @@ SvxXMLXTableImport::SvxXMLXTableImport(
     GetNamespaceMap().Add( u"___loext"_ustr,
                         GetXMLToken(XML_N_LO_EXT),
                         XML_NAMESPACE_LO_EXT);
+    GetNamespaceMap().Add( u"___coext"_ustr,
+                        GetXMLToken(XML_N_CO_EXT),
+                        XML_NAMESPACE_CO_EXT);
 }
 
 SvxXMLXTableImport::~SvxXMLXTableImport() noexcept

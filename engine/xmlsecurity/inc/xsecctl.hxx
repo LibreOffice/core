@@ -46,7 +46,8 @@ inline constexpr OUString NS_XMLDSIG = u"http://www.w3.org/2000/09/xmldsig#"_ust
 inline constexpr OUString NS_DC = u"http://purl.org/dc/elements/1.1/"_ustr;
 inline constexpr OUString NS_XD = u"http://uri.etsi.org/01903/v1.3.2#"_ustr;
 inline constexpr OUString NS_MDSSI = u"http://schemas.openxmlformats.org/package/2006/digital-signature"_ustr;
-inline constexpr OUString NS_LOEXT = u"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"_ustr;
+inline constexpr OUString NS_LOEXT = u"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"_ustr; // instead use COEXT for new features!
+inline constexpr OUString NS_COEXT = u"urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"_ustr;
 
 inline constexpr OUString ALGO_C14N = u"http://www.w3.org/TR/2001/REC-xml-c14n-20010315"_ustr;
 inline constexpr OUString ALGO_RSASHA1 = u"http://www.w3.org/2000/09/xmldsig#rsa-sha1"_ustr;

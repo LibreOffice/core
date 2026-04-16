@@ -377,6 +377,9 @@ void SigningTest2::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
     xmlXPathRegisterNs(
         pXmlXpathCtx, BAD_CAST("loext"),
         BAD_CAST("urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"));
+    xmlXPathRegisterNs(
+        pXmlXpathCtx, BAD_CAST("coext"),
+        BAD_CAST("urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

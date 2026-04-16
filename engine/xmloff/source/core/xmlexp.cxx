@@ -357,6 +357,9 @@ void SvXMLExport::InitCtor_()
                 GetXMLToken(XML_NP_LO_EXT), GetXMLToken(XML_N_LO_EXT),
                 XML_NAMESPACE_LO_EXT);
             mpNamespaceMap->Add( GetXMLToken(XML_NP_FIELD), GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
+            mpNamespaceMap->Add(
+                GetXMLToken(XML_NP_CO_EXT), GetXMLToken(XML_N_CO_EXT),
+                XML_NAMESPACE_CO_EXT);
         }
     }
     if( getExportFlags() & (SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )

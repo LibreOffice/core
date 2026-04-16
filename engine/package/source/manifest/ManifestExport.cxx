@@ -151,6 +151,9 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 // plus gpg4libre extensions - loext NS for that
                 pRootAttrList->AddAttribute ( ATTRIBUTE_XMLNS_LOEXT,
                                               MANIFEST_LOEXT_NAMESPACE );
+
+                pRootAttrList->AddAttribute(ATTRIBUTE_XMLNS_COEXT,
+                                            MANIFEST_COEXT_NAMESPACE);
             }
         }
         else

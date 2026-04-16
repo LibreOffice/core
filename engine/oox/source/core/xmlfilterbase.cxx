@@ -141,6 +141,7 @@ const Sequence< beans::Pair< OUString, sal_Int32 > >& NamespaceIds()
             {u"http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"_ustr,
              NMSP_xls14Lst},
             {u"http://schemas.libreoffice.org/"_ustr, NMSP_loext},
+            {u"urn:com:collaboraoffice:names:experimental:ooxml:xmlns:coext:1.0"_ustr, NMSP_coext},
             {u"http://schemas.microsoft.com/office/drawing/2010/main"_ustr,
              NMSP_a14},
             {u"http://schemas.microsoft.com/office/powerpoint/2010/main"_ustr,

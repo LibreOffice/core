@@ -117,3 +117,6 @@ xls14Lst               http://schemas.microsoft.com/office/spreadsheetml/2009/9/
 
 # LibreOffice's own extensions
 loext                  http://schemas.libreoffice.org/
+
+# Collabora extensions
+coext                  urn:com:collaboraoffice:names:experimental:ooxml:xmlns:coext:1.0
