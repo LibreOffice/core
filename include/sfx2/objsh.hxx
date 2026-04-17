@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel3.hpp>
 #include <vcl/bitmap.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <svl/poolitem.hxx>
 #include <sot/formats.hxx>
@@ -98,6 +99,7 @@ namespace sfx2
 namespace sfx { class IDocumentModelAccessor; }
 
 namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::document { struct CmisVersion; }
 namespace com::sun::star::document { class XDocumentProperties; }
@@ -198,6 +200,8 @@ private:
     bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
     bool                        bRememberSignature; // Do we want to remember the signature.
     bool                        bPendingLinkUpdateInfobar;
+    std::vector<std::pair<css::uno::WeakReference<css::beans::XPropertySet>, OUString>>
+                                maDeferredFormControlImages;
 
     enum TriState               {undefined, yes, no};
     TriState                    mbContinueImportOnFilterExceptions = undefined; // try to import as much as possible
@@ -339,6 +343,14 @@ public:
     void                        SetPendingLinkUpdateInfobar() { bPendingLinkUpdateInfobar = true; }
     void                        CheckPendingLinkUpdateInfobar();
     void                        ShowLinkUpdateInfobar();
+    void                        AddDeferredFormControlImage(
+                                    const css::uno::Reference<css::beans::XPropertySet>& rxControl,
+                                    const OUString& rURL);
+    const std::vector<std::pair<css::uno::WeakReference<css::beans::XPropertySet>, OUString>>&
+                                GetDeferredFormControlImages() const
+                                    { return maDeferredFormControlImages; }
+    void                        ClearDeferredFormControlImages()
+                                    { maDeferredFormControlImages.clear(); }
     virtual bool                LoadExternal( SfxMedium& rMedium );
     bool                        IsConfigOptionsChecked() const;
     void                        SetConfigOptionsChecked( bool bChecked );

@@ -20,6 +20,7 @@
 #include <svx/xdef.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/graph.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace
 {
@@ -118,6 +119,52 @@ void registerFillBitmapLinks(SdrModel& rModel, sfx2::LinkManager& rLinkMgr)
         for (sal_uInt16 nPage = 0; nPage < rModel.GetMasterPageCount(); ++nPage)
             rModel.GetMasterPage(nPage)->GetViewContact().flushViewObjectContacts();
     });
+}
+
+namespace
+{
+// Link class for form control images with remote URLs.
+// DataChanged sets ImageURL on the control to trigger the toolkit fetch.
+class FormImageLink final : public sfx2::SvBaseLink
+{
+    css::uno::Reference<css::beans::XPropertySet> m_xControl;
+
+public:
+    FormImageLink(css::uno::Reference<css::beans::XPropertySet> xControl)
+        : SvBaseLink(SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB)
+        , m_xControl(std::move(xControl))
+    {
+    }
+
+    virtual UpdateResult DataChanged(const OUString& /*rMimeType*/,
+                                     const css::uno::Any& /*rValue*/) override
+    {
+        if (!m_xControl.is())
+            return ERROR_GENERAL;
+
+        OUString aURL;
+        sfx2::LinkManager::GetDisplayNames(this, nullptr, &aURL);
+
+        m_xControl->setPropertyValue(u"ImageURL"_ustr, css::uno::Any(aURL));
+
+        return SUCCESS;
+    }
+};
+}
+
+void registerDeferredFormImageLinks(
+    const std::vector<std::pair<css::uno::WeakReference<css::beans::XPropertySet>, OUString>>&
+        rEntries,
+    sfx2::LinkManager& rLinkMgr)
+{
+    for (const auto & [ xWeak, aURL ] : rEntries)
+    {
+        css::uno::Reference<css::beans::XPropertySet> xControl(xWeak);
+        if (!xControl.is() || aURL.isEmpty())
+            continue;
+        tools::SvRef<sfx2::SvBaseLink> xLink(new FormImageLink(xControl));
+        rLinkMgr.InsertFileLink(*xLink, sfx2::SvBaseLinkObjectType::ClientGraphic, aURL);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
