@@ -24,6 +24,8 @@
 #include "SchXMLTools.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
@@ -355,6 +357,22 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
 
                     if( maSeriesChartTypeName.isEmpty())
                         maSeriesChartTypeName = aClassName;
+                }
+                break;
+            case XML_ELEMENT(LO_EXT, XML_CLASS):
+                {
+                    OUString aClassName;
+                    sal_uInt16 nClassPrefix =
+                        GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
+                            aValue, &aClassName );
+                    if (XML_NAMESPACE_LO_EXT == nClassPrefix)
+                    {
+                        maSeriesChartTypeName = SchXMLTools::GetChartTypeByClassName(
+                            aClassName, false /* bUseOldNames */ );
+
+                        if (maSeriesChartTypeName.isEmpty())
+                            maSeriesChartTypeName = aClassName;
+                    }
                 }
                 break;
             case XML_ELEMENT(LO_EXT, XML_HIDE_LEGEND):
@@ -732,6 +750,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLSeries2Context::
                     GetImport(),
                     mrLSequencesPerIndex, m_xSeries );
             break;
+
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }

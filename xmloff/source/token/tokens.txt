@@ -248,6 +248,8 @@ bibliography-entry-template
 bibliography-mark
 bibliography-source
 bibliography-type
+bin-count
+bin-width
 bind-styles-to-content
 bitmap
 bitmap-table
@@ -872,6 +874,7 @@ frame-margin-horizontal
 frame-margin-vertical
 frame-name
 frame-start-margin
+frequency-type
 freeze
 freeze-position
 from-another-table
@@ -956,6 +959,7 @@ hide-shape
 hide-text
 highlighted-range
 hint
+histogram
 horizontal
 horizontalstrike
 horizontal-lines
