@@ -71,6 +71,10 @@ class DocumentBase {
 
 	private addSections() {
 		this.mouseControl = new MouseControl(app.CSections.MouseControl.name);
+
+		if (app.sectionContainer.doesSectionExist(this.mouseControl.name))
+			app.sectionContainer.removeSection(this.mouseControl.name);
+
 		app.sectionContainer.addSection(this.mouseControl);
 
 		if (

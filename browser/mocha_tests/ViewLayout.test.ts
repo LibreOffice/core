@@ -74,6 +74,7 @@ describe('View Layout Tests', function () {
 			_docLayer: {
 				_docType: 'text',
 				isWriter: function () { return true; },
+				_sendClientZoom: function () {},
 			},
 			getScaleZoom: function () { return 1; },
 			setZoom: function () {},
@@ -214,6 +215,289 @@ describe('View Layout Tests', function () {
 	function resetTileManagerState(tileMgr: any): void {
 		tileMgr.tiles.clear();
 		if (tileMgr.tileBitmapList) tileMgr.tileBitmapList.length = 0;
+	}
+
+	// ========================================================================
+	// Shared test context and scenario assertions
+	// ========================================================================
+
+	// Create a test context: reset the TileManager singleton, install
+	// monkey-patches, and return everything needed for lifecycle
+	// assertions. Caller must call ctx.restore() in a finally block.
+	function createTestContext(layout: any): {
+		layout: any;
+		tileMgr: any;
+		sentRequests: Array<Array<TileCoordData>>;
+		renderedKeys: Set<string>;
+		restore: () => void;
+	} {
+		void TileManager.tileSize;
+		const tileMgr: any = (TileManager as any)._instance;
+		resetTileManagerState(tileMgr);
+		const tileCombine = instrumentTileCombineRequests(tileMgr);
+		const rendering = instrumentTileRendering(tileMgr);
+		return {
+			layout,
+			tileMgr,
+			sentRequests: tileCombine.sentRequests,
+			renderedKeys: rendering.renderedKeys,
+			restore: () => {
+				rendering.restore();
+				tileCombine.restore();
+			},
+		};
+	}
+
+	// Request all visible tiles and simulate their arrival so the
+	// tile map is fully populated. Returns the visible coordinate
+	// list.
+	function requestAndRenderAll(ctx: any): TileCoordData[] {
+		(ctx.layout as any).refreshCurrentCoordList();
+		TileManager.checkRequestTiles(
+			ctx.layout.getCurrentCoordList().slice(),
+		);
+		const visibleCoords: TileCoordData[] =
+			ctx.layout.getCurrentCoordList().slice();
+		for (const coords of visibleCoords) {
+			simulateTileArrival(ctx.tileMgr, ctx.tileMgr.get(coords));
+		}
+		return visibleCoords;
+	}
+
+	// After all visible tiles are rendered, invalidate a subset and
+	// verify only those tiles are re-requested.
+	function assertInvalidationCycle(ctx: any): void {
+		const visibleCoords = requestAndRenderAll(ctx);
+
+		const before = ctx.sentRequests.length;
+		(ctx.layout as any).refreshCurrentCoordList();
+		TileManager.checkRequestTiles(
+			ctx.layout.getCurrentCoordList().slice(),
+		);
+		nodeassert.strictEqual(
+			ctx.sentRequests.length,
+			before,
+			'no request expected before invalidation',
+		);
+
+		const toInvalidate = visibleCoords.slice(0, 3);
+		const toKeep = visibleCoords.slice(3);
+
+		for (const coords of toInvalidate) {
+			ctx.tileMgr.get(coords).invalidFrom =
+				ctx.tileMgr.get(coords).wireId;
+		}
+
+		(ctx.layout as any).refreshCurrentCoordList();
+		TileManager.checkRequestTiles(
+			ctx.layout.getCurrentCoordList().slice(),
+		);
+
+		nodeassert.ok(
+			ctx.sentRequests.length > before,
+			'invalidation should trigger a new tile-combine request',
+		);
+
+		const requestKeys = new Set(
+			ctx.sentRequests[ctx.sentRequests.length - 1].map(
+				function (c: any) { return c.key(); },
+			),
+		);
+
+		for (const coords of toInvalidate) {
+			nodeassert.ok(
+				requestKeys.has(coords.key()),
+				'invalidated tile ' + coords.key() +
+					' must be re-requested',
+			);
+		}
+
+		for (const coords of toKeep) {
+			nodeassert.ok(
+				!requestKeys.has(coords.key()),
+				'non-invalidated tile ' + coords.key() +
+					' must not be re-requested',
+			);
+		}
+	}
+
+	// After all visible tiles are rendered, forceKeyframe on a subset
+	// and verify only those are re-requested.
+	function assertForceKeyframeCycle(ctx: any): void {
+		const visibleCoords = requestAndRenderAll(ctx);
+
+		const toForce = visibleCoords.slice(0, 2);
+		const toKeep = visibleCoords.slice(2);
+
+		for (const coords of toForce) {
+			ctx.tileMgr.get(coords).forceKeyframe();
+		}
+
+		const before = ctx.sentRequests.length;
+		(ctx.layout as any).refreshCurrentCoordList();
+		TileManager.checkRequestTiles(
+			ctx.layout.getCurrentCoordList().slice(),
+		);
+
+		nodeassert.ok(
+			ctx.sentRequests.length > before,
+			'forceKeyframe should trigger a new tile-combine request',
+		);
+
+		const requestKeys = new Set(
+			ctx.sentRequests[ctx.sentRequests.length - 1].map(
+				function (c: any) { return c.key(); },
+			),
+		);
+
+		for (const coords of toForce) {
+			nodeassert.ok(
+				requestKeys.has(coords.key()),
+				'force-keyframed tile ' + coords.key() +
+					' must be re-requested',
+			);
+		}
+
+		for (const coords of toKeep) {
+			nodeassert.ok(
+				!requestKeys.has(coords.key()),
+				'untouched tile ' + coords.key() +
+					' must not be re-requested',
+			);
+		}
+	}
+
+	// Verify that an invalidation arriving while a tile request is
+	// in flight survives the stale response.
+	function assertRaceProtection(ctx: any): void {
+		(ctx.layout as any).refreshCurrentCoordList();
+		TileManager.checkRequestTiles(
+			ctx.layout.getCurrentCoordList().slice(),
+		);
+
+		const visibleCoords: TileCoordData[] =
+			ctx.layout.getCurrentCoordList().slice();
+
+		const raceTile = ctx.tileMgr.get(visibleCoords[0]);
+		raceTile.invalidFrom = 5;
+
+		simulateTileArrival(ctx.tileMgr, raceTile);
+
+		nodeassert.ok(
+			raceTile.needsFetch(),
+			'tile must still need fetch after stale arrival ' +
+				'(race protection)',
+		);
+
+		for (let i = 1; i < visibleCoords.length; i++) {
+			simulateTileArrival(
+				ctx.tileMgr,
+				ctx.tileMgr.get(visibleCoords[i]),
+			);
+		}
+
+		const before = ctx.sentRequests.length;
+		(ctx.layout as any).refreshCurrentCoordList();
+		TileManager.checkRequestTiles(
+			ctx.layout.getCurrentCoordList().slice(),
+		);
+
+		nodeassert.ok(
+			ctx.sentRequests.length > before,
+			'race-affected tile should trigger a new request',
+		);
+
+		const raceKeys = new Set(
+			ctx.sentRequests[ctx.sentRequests.length - 1].map(
+				function (c: any) { return c.key(); },
+			),
+		);
+
+		nodeassert.ok(
+			raceKeys.has(visibleCoords[0].key()),
+			'race-affected tile ' + visibleCoords[0].key() +
+				' must be re-requested',
+		);
+
+		for (let i = 1; i < visibleCoords.length; i++) {
+			nodeassert.ok(
+				!raceKeys.has(visibleCoords[i].key()),
+				'normally-rendered tile ' +
+					visibleCoords[i].key() +
+					' must not be re-requested',
+			);
+		}
+	}
+
+	// ========================================================================
+	// Layout setup helpers
+	// ========================================================================
+
+	// Three-page Writer document at pixelsToTwips=7.5 (zoomed in).
+	// pageRectangleList is set AFTER the constructor so that reset()
+	// returns early (empty list) and does not queue an async task
+	// that would interfere with test state.
+	function setupMultiPageForTest(): ViewLayoutMultiPage {
+		setupAppStubs(7.5);
+
+		const activeDocument = new DocumentBase();
+		(activeDocument as any)._fileSize =
+			new cool.SimplePoint(7500, 49000);
+		app.activeDocument = activeDocument;
+
+		const layout = new ViewLayoutMultiPage();
+
+		app.file.writer.pageRectangleList = [
+			[0, 0, 7500, 15000],
+			[0, 17000, 7500, 15000],
+			[0, 34000, 7500, 15000],
+		];
+
+		layout.scrollProperties.viewX = 0;
+		layout.scrollProperties.viewY = 0;
+		(layout as any).resetViewLayout();
+		return layout;
+	}
+
+	// Side-by-side compare view at pixelsToTwips=7.5. Sets
+	// _viewedRectangle and _viewSize directly to avoid calling
+	// updateViewData which needs a live socket / docLayer.
+	function setupCompareChangesForTest(): ViewLayoutCompareChanges {
+		setupAppStubs(7.5);
+
+		const activeDocument = new DocumentBase();
+		(activeDocument as any)._fileSize =
+			new cool.SimplePoint(7500, 49000);
+		app.activeDocument = activeDocument;
+
+		const layout = new ViewLayoutCompareChanges();
+
+		// The constructor queues an async task that would call
+		// updateViewData and overwrite the state we set below.
+		// Drain the queue so it never fires.
+		(app.layoutingService as any)._layoutTasks.length = 0;
+
+		// Reproduce refreshVisibleAreaRectangle + updateViewData
+		// inline.  The margin, yStart and viewGap values match the
+		// class defaults when app.dpiScale === 1.
+		const margin = 15;
+		const yStart = 20;
+		const viewGap = 20;
+		(layout as any)._viewedRectangle =
+			cool.SimpleRectangle.fromCorePixels([
+				-margin,
+				-yStart,
+				app.activeDocument.fileSize.pX + 2 * margin,
+				768,
+			]);
+		(layout as any)._viewSize = cool.SimplePoint.fromCorePixels([
+			Math.max(
+				1024,
+				2 * app.activeDocument.fileSize.pX + 2 * viewGap,
+			),
+			Math.max(768, app.activeDocument.fileSize.pY + yStart),
+		]);
+		return layout;
 	}
 
 	// ========================================================================
@@ -455,200 +739,16 @@ describe('View Layout Tests', function () {
 		}
 	});
 
-	// ----------------------------------------------------------------
-	// Tile invalidation: after all visible tiles are rendered, marking
-	// a subset as invalidated (invalidFrom >= wireId) must cause
-	// exactly those tiles to be re-requested while the rest stay put.
-	// This is the primary guard against the "visible but not drawn"
-	// regression where core sends invalidatetiles but the browser
-	// does not re-fetch.
-	// ----------------------------------------------------------------
 	it('MultiPage invalidation triggers re-request for affected tiles only', function () {
-		setupAppStubs(7.5);
-
-		const activeDocument = new DocumentBase();
-		(activeDocument as any)._fileSize = new cool.SimplePoint(7500, 49000);
-		app.activeDocument = activeDocument;
-
-		const layout = new ViewLayoutMultiPage();
-
-		void TileManager.tileSize;
-		const tileMgr: any = (TileManager as any)._instance;
-		resetTileManagerState(tileMgr);
-
-		const tileCombine = instrumentTileCombineRequests(tileMgr);
-		const rendering = instrumentTileRendering(tileMgr);
-
-		app.file.writer.pageRectangleList = [
-			[0, 0, 7500, 15000],
-			[0, 17000, 7500, 15000],
-			[0, 34000, 7500, 15000],
-		];
-
-		layout.scrollProperties.viewX = 0;
-		layout.scrollProperties.viewY = 0;
-		(layout as any).resetViewLayout();
-
-		try {
-			// Request and render all visible tiles.
-			(layout as any).refreshCurrentCoordList();
-			TileManager.checkRequestTiles(
-				layout.getCurrentCoordList().slice(),
-			);
-
-			const visibleCoords = layout.getCurrentCoordList().slice();
-			for (const coords of visibleCoords) {
-				simulateTileArrival(tileMgr, tileMgr.get(coords));
-			}
-
-			// Verify no re-request when all tiles are rendered.
-			const beforeInvalidation = tileCombine.sentRequests.length;
-			(layout as any).refreshCurrentCoordList();
-			TileManager.checkRequestTiles(
-				layout.getCurrentCoordList().slice(),
-			);
-			nodeassert.strictEqual(
-				tileCombine.sentRequests.length,
-				beforeInvalidation,
-				'no request expected before invalidation',
-			);
-
-			// Invalidate a subset: set invalidFrom = wireId so that
-			// needsFetch() returns true (invalidFrom >= wireId).
-			const toInvalidate = visibleCoords.slice(0, 3);
-			const toKeep = visibleCoords.slice(3);
-
-			for (const coords of toInvalidate) {
-				const tile = tileMgr.get(coords);
-				tile.invalidFrom = tile.wireId;
-			}
-
-			// Next request should include only the invalidated tiles.
-			(layout as any).refreshCurrentCoordList();
-			TileManager.checkRequestTiles(
-				layout.getCurrentCoordList().slice(),
-			);
-
-			nodeassert.ok(
-				tileCombine.sentRequests.length > beforeInvalidation,
-				'invalidation should trigger a new tile-combine request',
-			);
-
-			const requestKeys = new Set(
-				tileCombine.sentRequests[
-					tileCombine.sentRequests.length - 1
-				].map(function (c: any) { return c.key(); }),
-			);
-
-			for (const coords of toInvalidate) {
-				nodeassert.ok(
-					requestKeys.has(coords.key()),
-					'invalidated tile ' + coords.key() +
-						' must be re-requested',
-				);
-			}
-
-			for (const coords of toKeep) {
-				nodeassert.ok(
-					!requestKeys.has(coords.key()),
-					'non-invalidated tile ' + coords.key() +
-						' must not be re-requested',
-				);
-			}
-		} finally {
-			rendering.restore();
-			tileCombine.restore();
-		}
+		const ctx = createTestContext(setupMultiPageForTest());
+		try { assertInvalidationCycle(ctx); }
+		finally { ctx.restore(); }
 	});
 
-	// ----------------------------------------------------------------
-	// forceKeyframe resets wireId and invalidFrom to 0, making
-	// needsFetch() return true (0 >= 0). The production code uses
-	// this path when core demands a full tile re-send after, e.g., a
-	// garbage-collection mismatch. Tiles that were NOT force-keyframed
-	// must remain untouched.
-	// ----------------------------------------------------------------
 	it('MultiPage forceKeyframe causes tile re-request', function () {
-		setupAppStubs(7.5);
-
-		const activeDocument = new DocumentBase();
-		(activeDocument as any)._fileSize = new cool.SimplePoint(7500, 49000);
-		app.activeDocument = activeDocument;
-
-		const layout = new ViewLayoutMultiPage();
-
-		void TileManager.tileSize;
-		const tileMgr: any = (TileManager as any)._instance;
-		resetTileManagerState(tileMgr);
-
-		const tileCombine = instrumentTileCombineRequests(tileMgr);
-		const rendering = instrumentTileRendering(tileMgr);
-
-		app.file.writer.pageRectangleList = [
-			[0, 0, 7500, 15000],
-			[0, 17000, 7500, 15000],
-			[0, 34000, 7500, 15000],
-		];
-
-		layout.scrollProperties.viewX = 0;
-		layout.scrollProperties.viewY = 0;
-		(layout as any).resetViewLayout();
-
-		try {
-			// Request and render all visible tiles.
-			(layout as any).refreshCurrentCoordList();
-			TileManager.checkRequestTiles(
-				layout.getCurrentCoordList().slice(),
-			);
-
-			const visibleCoords = layout.getCurrentCoordList().slice();
-			for (const coords of visibleCoords) {
-				simulateTileArrival(tileMgr, tileMgr.get(coords));
-			}
-
-			const toForce = visibleCoords.slice(0, 2);
-			const toKeep = visibleCoords.slice(2);
-
-			for (const coords of toForce) {
-				tileMgr.get(coords).forceKeyframe();
-			}
-
-			const beforeForce = tileCombine.sentRequests.length;
-			(layout as any).refreshCurrentCoordList();
-			TileManager.checkRequestTiles(
-				layout.getCurrentCoordList().slice(),
-			);
-
-			nodeassert.ok(
-				tileCombine.sentRequests.length > beforeForce,
-				'forceKeyframe should trigger a new tile-combine request',
-			);
-
-			const requestKeys = new Set(
-				tileCombine.sentRequests[
-					tileCombine.sentRequests.length - 1
-				].map(function (c: any) { return c.key(); }),
-			);
-
-			for (const coords of toForce) {
-				nodeassert.ok(
-					requestKeys.has(coords.key()),
-					'force-keyframed tile ' + coords.key() +
-						' must be re-requested',
-				);
-			}
-
-			for (const coords of toKeep) {
-				nodeassert.ok(
-					!requestKeys.has(coords.key()),
-					'untouched tile ' + coords.key() +
-						' must not be re-requested',
-				);
-			}
-		} finally {
-			rendering.restore();
-			tileCombine.restore();
-		}
+		const ctx = createTestContext(setupMultiPageForTest());
+		try { assertForceKeyframeCycle(ctx); }
+		finally { ctx.restore(); }
 	});
 
 	// ----------------------------------------------------------------
@@ -759,116 +859,101 @@ describe('View Layout Tests', function () {
 		}
 	});
 
-	// ----------------------------------------------------------------
-	// Race protection: if an invalidation arrives while a tile request
-	// is in flight, the stale response must NOT clear the
-	// invalidation. The sequence:
-	//   1. Request sent (wireId=0)
-	//   2. Core modifies tile -> invalidation (invalidFrom=5)
-	//   3. Original response arrives (wireId bumped to 1)
-	//   4. needsFetch must still be true (5 >= 1)
-	// A second request cycle must re-fetch the race-affected tile.
-	// ----------------------------------------------------------------
 	it('MultiPage invalidation during pending response is not lost', function () {
-		setupAppStubs(7.5);
+		const ctx = createTestContext(setupMultiPageForTest());
+		try { assertRaceProtection(ctx); }
+		finally { ctx.restore(); }
+	});
 
-		const activeDocument = new DocumentBase();
-		(activeDocument as any)._fileSize = new cool.SimplePoint(7500, 49000);
-		app.activeDocument = activeDocument;
+	// ================================================================
+	// ViewLayoutCompareChanges tests
+	// ================================================================
 
-		const layout = new ViewLayoutMultiPage();
-
-		void TileManager.tileSize;
-		const tileMgr: any = (TileManager as any)._instance;
-		resetTileManagerState(tileMgr);
-
-		const tileCombine = instrumentTileCombineRequests(tileMgr);
-		const rendering = instrumentTileRendering(tileMgr);
-
-		app.file.writer.pageRectangleList = [
-			[0, 0, 7500, 15000],
-			[0, 17000, 7500, 15000],
-			[0, 34000, 7500, 15000],
-		];
-
-		layout.scrollProperties.viewX = 0;
-		layout.scrollProperties.viewY = 0;
-		(layout as any).resetViewLayout();
-
+	// CompareChanges duplicates every base tile with LeftSide and
+	// RightSide modes. Verify that both sets are present with
+	// identical base coordinates, and that the hand-derived tile
+	// grid matches the production output.
+	//
+	// At pixelsToTwips=7.5 with _viewedRectangle from
+	// fromCorePixels([-15, -20, 1030, 768]):
+	//   startX = floor(-15/256)*256 = -256
+	//   startY = floor(-20/256)*256 = -256
+	//   columnCount = ceil(1030/256) = 5, rowCount = ceil(768/256) = 3
+	//   j=0..3 -> y = {-256, 0, 256, 512}; y=-256 invalid
+	//   isValidTile drops x<0, y<0, x>=1024 (1024*7.5=7680>=7500)
+	//   Valid base: x in {0,256,512,768}, y in {0,256,512} = 12
+	//   After mode duplication: 12 LeftSide + 12 RightSide = 24
+	it('CompareChanges produces left and right mode tiles', function () {
+		const ctx = createTestContext(setupCompareChangesForTest());
 		try {
-			// Step 1: Request tiles but do NOT simulate arrival yet.
-			(layout as any).refreshCurrentCoordList();
-			TileManager.checkRequestTiles(
-				layout.getCurrentCoordList().slice(),
-			);
+			(ctx.layout as any).refreshCurrentCoordList();
+			const coordList: TileCoordData[] =
+				ctx.layout.getCurrentCoordList().slice();
 
-			const visibleCoords = layout.getCurrentCoordList().slice();
+			const leftKeys = new Set<string>();
+			const rightKeys = new Set<string>();
 
-			// Step 2: Before the response arrives, core modifies the
-			// tile region and sends an invalidation with a higher
-			// wireId. Simulate this by setting invalidFrom > 0 on
-			// the first tile while its wireId is still 0.
-			const raceTile = tileMgr.get(visibleCoords[0]);
-			raceTile.invalidFrom = 5;
-
-			// Step 3: The original response arrives.
-			// simulateTileArrival bumps wireId from 0 to 1 and
-			// installs a bitmap. After:
-			//   wireId=1, invalidFrom=5 -> needsFetch = (5>=1) = true
-			// The invalidation must survive the stale arrival.
-			simulateTileArrival(tileMgr, raceTile);
-
-			nodeassert.ok(
-				raceTile.needsFetch(),
-				'tile must still need fetch after stale arrival ' +
-					'(race protection)',
-			);
-
-			// Step 4: Render remaining tiles normally.
-			for (let i = 1; i < visibleCoords.length; i++) {
-				simulateTileArrival(
-					tileMgr,
-					tileMgr.get(visibleCoords[i]),
-				);
+			for (const coords of coordList) {
+				const base =
+					coords.x + ':' + coords.y + ':' +
+					coords.z + ':' + coords.part;
+				if (coords.mode === TileMode.LeftSide) {
+					leftKeys.add(base);
+				} else if (coords.mode === TileMode.RightSide) {
+					rightKeys.add(base);
+				}
 			}
 
-			// Step 5: Next request should include the race-affected
-			// tile but none of the normally-rendered ones.
-			const beforeRace = tileCombine.sentRequests.length;
-			(layout as any).refreshCurrentCoordList();
-			TileManager.checkRequestTiles(
-				layout.getCurrentCoordList().slice(),
-			);
-
+			nodeassert.ok(leftKeys.size > 0, 'should have LeftSide tiles');
 			nodeassert.ok(
-				tileCombine.sentRequests.length > beforeRace,
-				'race-affected tile should trigger a new request',
+				rightKeys.size > 0,
+				'should have RightSide tiles',
+			);
+			nodeassert.deepStrictEqual(
+				Array.from(leftKeys).sort(),
+				Array.from(rightKeys).sort(),
+				'LeftSide and RightSide must cover identical coordinates',
+			);
+			nodeassert.strictEqual(
+				coordList.length,
+				leftKeys.size + rightKeys.size,
+				'total tiles must equal left + right (no extra modes)',
 			);
 
-			const raceRequestKeys = new Set(
-				tileCombine.sentRequests[
-					tileCombine.sentRequests.length - 1
-				].map(function (c: any) { return c.key(); }),
-			);
+			// Verify against hand-derived expected base coordinates.
+			const expectedBases = [
+				'0:0:10:0', '0:256:10:0', '0:512:10:0',
+				'256:0:10:0', '256:256:10:0', '256:512:10:0',
+				'512:0:10:0', '512:256:10:0', '512:512:10:0',
+				'768:0:10:0', '768:256:10:0', '768:512:10:0',
+			].sort();
 
-			nodeassert.ok(
-				raceRequestKeys.has(visibleCoords[0].key()),
-				'race-affected tile ' + visibleCoords[0].key() +
-					' must be re-requested',
+			nodeassert.deepStrictEqual(
+				Array.from(leftKeys).sort(),
+				expectedBases,
+				'LeftSide base coordinates must match hand-derived grid',
 			);
-
-			for (let i = 1; i < visibleCoords.length; i++) {
-				nodeassert.ok(
-					!raceRequestKeys.has(visibleCoords[i].key()),
-					'normally-rendered tile ' +
-						visibleCoords[i].key() +
-						' must not be re-requested',
-				);
-			}
 		} finally {
-			rendering.restore();
-			tileCombine.restore();
+			ctx.restore();
 		}
+	});
+
+	it('CompareChanges invalidation triggers re-request for affected tiles only', function () {
+		const ctx = createTestContext(setupCompareChangesForTest());
+		try { assertInvalidationCycle(ctx); }
+		finally { ctx.restore(); }
+	});
+
+	it('CompareChanges forceKeyframe causes tile re-request', function () {
+		const ctx = createTestContext(setupCompareChangesForTest());
+		try { assertForceKeyframeCycle(ctx); }
+		finally { ctx.restore(); }
+	});
+
+	it('CompareChanges invalidation during pending response is not lost', function () {
+		const ctx = createTestContext(setupCompareChangesForTest());
+		try { assertRaceProtection(ctx); }
+		finally { ctx.restore(); }
 	});
 });
 
