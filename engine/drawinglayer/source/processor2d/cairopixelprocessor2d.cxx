@@ -550,10 +550,15 @@ class CairoSurfaceHelper
 
 public:
     CairoSurfaceHelper(const Bitmap& rBitmap)
-        : mpCairoSurface(nullptr)
+        // When using a cairo-backed Bitmap (i.e. SvpSalBitmap), we can avoid a lot of copying,
+        // which is beneficial for documents with lots of large images. Try to access directly.
+        : mpCairoSurface(static_cast<cairo_surface_t*>(rBitmap.tryToGetCairoSurface()))
         , maDownscaled()
     {
-        if (rBitmap.HasAlpha())
+        if (nullptr != mpCairoSurface)
+        {
+        } // all done, we got it directly
+        else if (rBitmap.HasAlpha())
             createRGBA(rBitmap);
         else
 #ifdef TEST_RGB16
@@ -561,13 +566,6 @@ public:
 #else
             createRGB(rBitmap);
 #endif
-    }
-
-    /* constructor for when we are using the cairo data directly from the underlying SvpSalBitmap */
-    CairoSurfaceHelper(cairo_surface_t* pCairoSurface)
-        : mpCairoSurface(pCairoSurface)
-        , maDownscaled()
-    {
     }
 
     ~CairoSurfaceHelper()
@@ -707,7 +705,8 @@ sal_Int64 SystemDependentData_CairoSurface::estimateUsageInBytes() const
         const tools::Long nStride(cairo_image_surface_get_stride(pSurface));
         const tools::Long nHeight(cairo_image_surface_get_height(pSurface));
 
-        nRetval = nStride * nHeight;
+        // w * h * 4 bytesPerPixel
+        nRetval = nStride * nHeight * 4;
 
         // if we do downscale, size will grow by 1/4 + 1/16 + 1/32 + ...,
         // rough estimation just multiplies by 1.25 .. 1.33, should be good enough
@@ -723,14 +722,6 @@ sal_Int64 SystemDependentData_CairoSurface::estimateUsageInBytes() const
 
 std::shared_ptr<CairoSurfaceHelper> getOrCreateCairoSurfaceHelper(const Bitmap& rBitmap)
 {
-    // When using a cairo-backed Bitmap (i.e. SvpSalBitmap), we can avoid a lot of copying,
-    // which is beneficial for documents with lots of large images.
-    cairo_surface_t* pSurface(static_cast<cairo_surface_t*>(rBitmap.tryToGetCairoSurface()));
-    if (nullptr != pSurface)
-    {
-        return std::make_shared<CairoSurfaceHelper>(pSurface);
-    }
-
     const basegfx::SystemDependentDataHolder* pHolder(rBitmap.accessSystemDependentDataHolder());
     std::shared_ptr<SystemDependentData_CairoSurface> pSystemDependentData_CairoSurface;
 
