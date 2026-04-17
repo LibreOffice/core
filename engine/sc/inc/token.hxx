@@ -68,7 +68,7 @@ public:
     virtual FormulaToken*       Clone() const override { return new ScSingleRefToken(*this); }
 };
 
-class ScDoubleRefToken final : public formula::FormulaToken
+class SAL_DLLPUBLIC_RTTI ScDoubleRefToken final : public formula::FormulaToken
 {
 private:
     ScSheetLimits&    mrSheetLimits; // don't use rtl::Reference to avoid ref-counting traffic

@@ -311,8 +311,12 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
 
     if (nTab1 == nTab2 && pToken)
     {
-        const ScComplexRefData& rCRef = static_cast<const ScMatrixRangeToken*>(pToken)->GetDoubleRef();
-        if (rCRef.IsTrimToData())
+        const ScComplexRefData* pCRef;
+        if (pToken->GetType() == svDoubleRef)
+            pCRef = &static_cast<const ScDoubleRefToken*>(pToken)->GetDoubleRef();
+        else
+            pCRef = &static_cast<const ScMatrixRangeToken*>(pToken)->GetDoubleRef();
+        if (pCRef->IsTrimToData())
         {
             // Clamp the size of the matrix area to rows which actually contain data.
             // For e.g. SUM(IF over an entire column, this can make a big difference,
