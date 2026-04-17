@@ -1514,7 +1514,7 @@ img.context-menu-icon {
 	border: 1px solid var(--color-primary);
 }
 
-[data-theme='dark'] .ui-combobox-entry img {
+[data-theme='dark'] .ui-combobox-entry img:not() {
 	filter: invert(1);
 }
 
