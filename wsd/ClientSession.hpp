@@ -35,66 +35,16 @@
 #include <utility>
 
 class DocumentBroker;
-namespace http { class Session; }
-
-/// Result of preparing an AI image generation HTTP request.
-struct ImageGenRequest
-{
-    std::shared_ptr<http::Session> httpSession; // null on error
-    std::string requestUrl;
-    std::string apiKey;
-    std::string payloadStr;
-    std::string error; // non-empty if setup failed
-};
-
-/// A single tool call from the LLM that is queued for execution.
-struct PendingToolCall
-{
-    std::string toolCallId;
-    std::string functionName;
-    std::string arguments;
-};
-
-/// A single pending image generation within a transform.
-struct PendingImageGen
-{
-    int slideIndex;        // target slide index
-    int objId;             // placeholder object index (N from GenerateImage.N)
-    std::string prompt;    // image generation prompt
-    std::string filePath;  // filled after generation with file:// URL for kit
-};
-
-/// State for the AI chat multi-round tool loop.
-/// The server drives the loop: LLM response -> tool execution -> LLM response -> ...
-struct AIToolLoopState
-{
-    std::string requestId;
-    Poco::JSON::Array::Ptr messages; // accumulated conversation
-    std::string model;
-    std::string requestUrl;
-    std::string apiKey;
-    int toolRoundsRemaining = 5;     // max rounds to prevent infinite loops
-    bool awaitingKitResponse = false;
-    bool awaitingApproval = false;
-    std::string pendingToolCallId;
-    std::string pendingToolName;
-    std::string pendingTransformArgs; // stored while awaiting approval
-    std::string pendingSummary;        // markdown summary for approval UI
-    std::string pendingForwardCommand; // command to forward to kit after approval
-    std::vector<PendingToolCall> pendingToolCalls; // queued tool calls
-
-    // Image generation state for transform_document_structure
-    std::vector<PendingImageGen> pendingImageGens;
-    std::size_t nextImageGenIndex = 0;
-    bool generatingImages = false;       // main transform forwarded, generating images
-    int outstandingImageTransforms = 0;  // mini-transform responses still expected
-    std::string mainTransformResult;     // kit response from the initial transform
-    std::vector<std::string> failedImagePrompts; // prompts of images that failed to generate
-};
+#if !MOBILEAPP
+class AIChatSession;
+#endif
 
 /// Represents a session to a COOL client, in the WSD process.
 class ClientSession final : public Session
 {
+#if !MOBILEAPP
+    friend class AIChatSession;
+#endif
 public:
     ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws, const std::string& id,
                   const std::shared_ptr<DocumentBroker>& docBroker, const Poco::URI& uriPublic,
@@ -404,49 +354,7 @@ private:
 
     bool handleSignatureAction(const StringVector& tokens);
 
-    bool handleAIAction(const StringVector& tokens);
-
-    bool handleAIChatAction(const std::string& firstLine);
-    bool handleAIChatCancel(const std::string& firstLine);
-    bool handleAIChatApprove(const std::string& firstLine);
     bool handleUpdateViewSettings(const std::string& firstLine);
-    void sendAIChatResult(bool success, const std::string& text,
-                          const std::string& requestId);
-
-    bool handleAIImageGeneration(const std::string& prompt,
-                                  const std::string& requestId);
-
-    /// Prepare an image generation HTTP session and payload.
-    ImageGenRequest createImageGenRequest(const std::string& prompt);
-
-    /// Parse an image generation HTTP response, extracting b64 data.
-    static std::pair<std::string, std::string> parseImageGenResponse(
-        const std::shared_ptr<const http::Response>& httpResponse);
-
-    /// Start generating images for GenerateImage.N commands in a transform,
-    /// then forward the modified transform to the kit.
-    void processTransformImageGenerations(const std::shared_ptr<DocumentBroker>& docBroker);
-    void generateNextTransformImage(std::shared_ptr<DocumentBroker> docBroker);
-    std::string appendImageGenFailures(const std::string& result) const;
-
-    Poco::JSON::Array::Ptr buildAIToolDefinitions() const;
-    void callLLMAPI();
-    void handleLLMResponse(const std::string& responseBody);
-    bool executeAIToolCall(const std::string& toolCallId,
-                           const std::string& fnName,
-                           const std::string& argsJson);
-    void processNextPendingToolCall();
-    void continueAIToolLoop(const std::string& toolCallId,
-                            const std::string& result);
-    void sendAIToolProgress(const std::string& toolName,
-                            const std::string& status);
-    void sendAIToolApproval(const std::string& toolName,
-                            const std::string& description);
-
-    /// Map an HTTP status code from an AI API response to a user-facing error string.
-    static std::string mapAIHttpStatusToError(http::StatusCode statusCode,
-                                              const std::string& reasonPhrase,
-                                              const std::string& context = "");
 
     bool loadDocument(const char* buffer, int length, const StringVector& tokens,
                       const std::shared_ptr<DocumentBroker>& docBroker);
@@ -617,11 +525,10 @@ private:
 
     Poco::SharedPtr<Poco::JSON::Object> _viewSettingsJSON;
 
-    /// Active AI chat HTTP session for cancellation support
-    std::shared_ptr<http::Session> _activeAIChatSession;
-
-    /// AI tool loop state for multi-round LLM tool calling
-    std::unique_ptr<AIToolLoopState> _aiToolLoop;
+#if !MOBILEAPP
+    /// AI chat orchestrator - multi-round LLM tool loop.
+    std::unique_ptr<AIChatSession> _aiChat;
+#endif
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

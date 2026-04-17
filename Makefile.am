@@ -195,6 +195,7 @@ coolwsd_sources = \
                   common/Crypto.cpp \
                   wsd/Admin.cpp \
                   wsd/AdminModel.cpp \
+                  wsd/AIChatSession.cpp \
                   wsd/Auth.cpp \
                   wsd/COOLWSD.cpp \
                   wsd/CacheUtil.cpp \
@@ -558,6 +559,7 @@ coolsocketdump_LDADD = libglobals.a
 wsd_headers = \
               wsd/Admin.hpp \
               wsd/AdminModel.hpp \
+              wsd/AIChatSession.hpp \
               wsd/Auth.hpp \
               wsd/COOLWSD.hpp \
               wsd/COOLWSDServer.hpp \

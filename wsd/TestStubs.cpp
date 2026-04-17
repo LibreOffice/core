@@ -16,12 +16,18 @@
 #include <config.h>
 
 #include <common/Log.hpp>
+#include <wsd/AIChatSession.hpp>
 #include <wsd/ClientSession.hpp>
 #include <wsd/DocumentBroker.hpp>
 
 void DocumentBroker::assertCorrectThread(LOG_CAPTURE_CALLER) const {}
 
 void ClientSession::enqueueSendMessage(const std::shared_ptr<Message>& /*data*/) {};
+
+#if !MOBILEAPP
+AIChatSession::AIChatSession(ClientSession& session) : _session(session) {}
+AIChatSession::~AIChatSession() = default;
+#endif
 
 ClientSession::~ClientSession() = default;
 

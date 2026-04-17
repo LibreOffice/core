@@ -147,6 +147,7 @@ wsd_sources = \
 	../common/Crypto.cpp \
 	../wsd/Admin.cpp \
 	../wsd/AdminModel.cpp \
+	../wsd/AIChatSession.cpp \
 	../wsd/Auth.cpp \
 	../wsd/COOLWSD.cpp \
 	../wsd/CacheUtil.cpp \
