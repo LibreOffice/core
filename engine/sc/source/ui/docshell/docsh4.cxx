@@ -219,6 +219,8 @@ void ScDocShell::ReloadAllLinks()
         {
             registerFillBitmapLinks(*pDrawLayer, *pLinkMgr);
         }
+        registerDeferredFormImageLinks(GetDeferredFormControlImages(), *pLinkMgr);
+        ClearDeferredFormControlImages();
         pLinkMgr->UpdateAllLinks(false, nullptr, u""_ustr);
     }
 }
@@ -497,6 +499,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
             break;
         case SID_UPDATETABLINKS:
             {
+                // Register links for form controls with deferred remote ImageURL
+                if (sfx2::LinkManager* pLinkMgr = m_pDocument->GetDocLinkManager().getLinkManager(false))
+                {
+                    registerDeferredFormImageLinks(GetDeferredFormControlImages(), *pLinkMgr);
+                    ClearDeferredFormControlImages();
+                }
+
                 ScLkUpdMode nSet = GetLinkUpdateModeState();
 
                 if (nSet == LM_ALWAYS)
@@ -507,6 +516,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 else if (nSet == LM_NEVER)
                 {
                     getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
+                    CheckPendingLinkUpdateInfobar();
                     rReq.Ignore();
                 }
                 else if (nSet == LM_ON_DEMAND)

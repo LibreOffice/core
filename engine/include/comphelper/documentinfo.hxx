@@ -23,6 +23,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 
+namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
@@ -41,6 +42,16 @@ namespace comphelper {
         /** notify that this document contains a macro event handler
         */
         COMPHELPER_DLLPUBLIC void notifyMacroEventRead( const css::uno::Reference< css::frame::XModel >& _rxDocument );
+
+        /** notify that this document contains a form control with a remote
+            image URL that was deferred during import. The control reference
+            and URL are accumulated so they can be registered as links
+            post-load when the user allows updates.
+        */
+        COMPHELPER_DLLPUBLIC void notifyRemoteContentFound(
+            const css::uno::Reference< css::frame::XModel >& _rxDocument,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxControl,
+            const OUString& _rURL );
     }
 
 }   // namespace comphelper

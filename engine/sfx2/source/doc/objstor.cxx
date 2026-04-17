@@ -4048,6 +4048,13 @@ bool SfxObjectShell::GetMacroCallsSeenWhileLoading() const
     return false;
 }
 
+void SfxObjectShell::AddDeferredFormControlImage(
+    const css::uno::Reference<css::beans::XPropertySet>& rxControl,
+    const OUString& rURL)
+{
+    maDeferredFormControlImages.emplace_back(rxControl, rURL);
+}
+
 bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
 #if !HAVE_FEATURE_SCRIPTING

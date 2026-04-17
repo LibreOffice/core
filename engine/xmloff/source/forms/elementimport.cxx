@@ -50,6 +50,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <algorithm>
@@ -423,6 +424,26 @@ namespace xmloff
                     default:
                         OSL_FAIL( "OElementImport::implImportGenericProperties: non-double values not supported!" );
                         break;
+                    }
+                }
+
+                // Skip setting ImageURL with remote URLs during import.
+                // The URL is fetched eagerly by the toolkit layer and
+                // must be deferred until the user allows link updates.
+                // Store the URL as DeferredImageURL so it can be applied
+                // post-load when the user allows link updates.
+                if (rPropValues.Name == "ImageURL")
+                {
+                    OUString sURL;
+                    if ((rPropValues.Value >>= sURL) && !sURL.isEmpty()
+                        && !m_rFormImport.getGlobalContext().IsPackageURL(sURL))
+                    {
+                        // Pass the control and URL to the document so they
+                        // can be registered as links post-load.
+                        comphelper::DocumentInfo::notifyRemoteContentFound(
+                            m_rFormImport.getGlobalContext().GetModel(),
+                            m_xElement, sURL);
+                        continue;
                     }
                 }
 

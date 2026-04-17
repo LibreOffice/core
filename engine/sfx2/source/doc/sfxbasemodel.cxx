@@ -918,6 +918,17 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
             {
                 pObjectShell->SetMacroCallsSeenWhileLoading();
             }
+            css::uno::Sequence<css::beans::PropertyValue> aRemoteContent;
+            if ( rProp.Name == "RemoteContentFound" && (rProp.Value >>= aRemoteContent) && aRemoteContent.hasElements())
+            {
+                pObjectShell->SetPendingLinkUpdateInfobar();
+                for (const auto& rEntry : aRemoteContent)
+                {
+                    css::uno::Reference<css::beans::XPropertySet> xControl;
+                    if (rEntry.Value >>= xControl)
+                        pObjectShell->AddDeferredFormControlImage(xControl, rEntry.Name);
+                }
+            }
         }
         Sequence<beans::PropertyValue> aStrippedArgs(rArgs.getLength());
         beans::PropertyValue* pStripped = aStrippedArgs.getArray();
@@ -926,6 +937,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
             if (rProp.Name == "WinExtent"
                 || rProp.Name == "BreakMacroSignature"
                 || rProp.Name == "MacroEventRead"
+                || rProp.Name == "RemoteContentFound"
                 || rProp.Name == "Stream"
                 || rProp.Name == "InputStream"
                 || rProp.Name == "URL"
