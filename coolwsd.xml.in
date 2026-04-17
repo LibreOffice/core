@@ -28,6 +28,13 @@
         <rest_protocol desc="REST API protocol. For LanguageTool leave it blank, for Duden Korrekturserver use the string 'duden'." type="string" default=""></rest_protocol>
     </languagetool>
 
+    <ai desc="AI assistant configuration. When enabled with credentials, all users on this instance get AI features without needing to configure them individually. Works with any OpenAI-compatible endpoint, including local/self-hosted models (Ollama, vLLM, LM Studio, etc.). No data is sent anywhere unless explicitly configured. Per-user WOPI settings and View Settings override these defaults.">
+        <enabled desc="Master switch for AI features. When false, AI is disabled server-wide regardless of WOPI or per-user settings." type="bool" default="false">false</enabled>
+        <api_url desc="Default AI provider base URL (e.g. http://localhost:11434 for local Ollama, or https://api.openai.com for OpenAI). Must support the /v1/chat/completions endpoint." type="string" default=""></api_url>
+        <api_key desc="Default API key for the AI provider." type="string" default=""></api_key>
+        <model desc="Default AI model name (e.g. llama3, gpt-4, mistral)." type="string" default=""></model>
+    </ai>
+
     <deepl desc="DeepL API settings for translation service">
         <enabled desc="If true, shows translate option as a menu entry in the compact view and as an icon in the tabbed view." type="bool" default="false">false</enabled>
         <api_url desc="URL for the API" type="string" default=""></api_url>

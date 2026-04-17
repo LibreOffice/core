@@ -1637,6 +1637,14 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     JsonUtil::findJSONValue(viewSettings, "aiImageSize", aiImageSize);
     JsonUtil::findJSONValue(viewSettings, "aiRequestTimeout", aiRequestTimeout);
 
+    // coolwsd.xml AI defaults as final fallback
+    if (aiProviderAPIKey.empty())
+        aiProviderAPIKey = ConfigUtil::getConfigValue<std::string>("ai.api_key", "");
+    if (aiProviderModel.empty())
+        aiProviderModel = ConfigUtil::getConfigValue<std::string>("ai.model", "");
+    if (aiProviderURL.empty())
+        aiProviderURL = ConfigUtil::getConfigValue<std::string>("ai.api_url", "");
+
     setAIProviderAPIKey(aiProviderAPIKey);
     setAIProviderModel(aiProviderModel);
     setAIProviderURL(aiProviderURL);
@@ -1664,7 +1672,8 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     viewSettings->remove("aiImageProviderURL");
     viewSettings->remove("aiImageModel");
 
-    const bool aiConfigured = !aiProviderAPIKey.empty() &&
+    const bool aiConfigured = ConfigUtil::getConfigValue<bool>("ai.enabled", false) &&
+                              !aiProviderAPIKey.empty() &&
                               !aiProviderModel.empty() &&
                               !aiProviderURL.empty();
     viewSettings->set("aiConfigured", aiConfigured);

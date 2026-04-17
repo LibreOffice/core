@@ -1491,7 +1491,9 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     wopiInfo->set("DisableInsertLocalImage", wopiFileInfo->getDisableInsertLocalImage());
     wopiInfo->set("EnableRemoteLinkPicker", wopiFileInfo->getEnableRemoteLinkPicker());
     wopiInfo->set("EnableRemoteAIContent", wopiFileInfo->getEnableRemoteAIContent());
-    wopiInfo->set("DisableAISettings", wopiFileInfo->getDisableAISettings());
+    wopiInfo->set("DisableAISettings",
+                  !ConfigUtil::getConfigValue<bool>("ai.enabled", false) ||
+                      wopiFileInfo->getDisableAISettings());
     wopiInfo->set("EnableShare", wopiFileInfo->getEnableShare());
     wopiInfo->set("HideUserList", wopiFileInfo->getHideUserList());
     wopiInfo->set("SupportsRename", wopiFileInfo->getSupportsRename());
@@ -1810,6 +1812,14 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
         JsonUtil::findJSONValue(viewSettings, "aiImageModel", aiImageModel);
         JsonUtil::findJSONValue(viewSettings, "aiImageSize", aiImageSize);
 
+        // coolwsd.xml AI defaults as final fallback
+        if (aiProviderAPIKey.empty())
+            aiProviderAPIKey = ConfigUtil::getConfigValue<std::string>("ai.api_key", "");
+        if (aiProviderModel.empty())
+            aiProviderModel = ConfigUtil::getConfigValue<std::string>("ai.model", "");
+        if (aiProviderURL.empty())
+            aiProviderURL = ConfigUtil::getConfigValue<std::string>("ai.api_url", "");
+
         session->setAIProviderAPIKey(aiProviderAPIKey);
         session->setAIProviderModel(aiProviderModel);
         session->setAIProviderURL(aiProviderURL);
@@ -1835,9 +1845,10 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
         viewSettings->remove("aiImageProviderURL");
         viewSettings->remove("aiImageModel");
 
-        // Let client know whether AI features are enabled based on the presence of necessary fields,
-        // so client can decide to show/hide AI related UI
-        const bool aiConfigured = !aiProviderAPIKey.empty() && !aiProviderModel.empty() &&
+        // Let client know whether AI features are enabled based on the global kill switch
+        // and the presence of necessary fields, so client can decide to show/hide AI related UI
+        const bool aiConfigured = ConfigUtil::getConfigValue<bool>("ai.enabled", false) &&
+                                  !aiProviderAPIKey.empty() && !aiProviderModel.empty() &&
                                   !aiProviderURL.empty();
         viewSettings->set("aiConfigured", aiConfigured);
         if (aiConfigured)

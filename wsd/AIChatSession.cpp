@@ -23,6 +23,7 @@
 #include "ClientSession.hpp"
 
 #include <common/Common.hpp>
+#include <common/ConfigUtil.hpp>
 #include <common/FileUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
@@ -425,6 +426,12 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     const std::string apiKey = _session.getAIProviderAPIKey();
     const std::string model = _session.getAIProviderModel();
     std::string baseUrl = _session.getAIProviderURL();
+
+    if (!ConfigUtil::getConfigValue<bool>("ai.enabled", false))
+    {
+        sendChatResult(false, "AI features are disabled by the administrator", requestId);
+        return true;
+    }
 
     if (apiKey.empty() || model.empty() || baseUrl.empty())
     {
