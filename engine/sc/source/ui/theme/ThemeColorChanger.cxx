@@ -60,6 +60,8 @@ bool changeBorderLine(editeng::SvxBorderLine* pBorderLine, model::ColorSet const
     if (rComplexColor.isValidThemeType())
     {
         Color aColor = rColorSet.resolveColor(rComplexColor);
+        if (aColor == pBorderLine->GetColor())
+            return false;
         pBorderLine->SetColor(aColor);
         return true;
     }
@@ -77,11 +79,13 @@ bool changeCellItems(SfxItemSet& rItemSet, model::ColorSet const& rColorSet)
         if (rComplexColor.isValidThemeType())
         {
             Color aColor = rColorSet.resolveColor(rComplexColor);
-
-            SvxColorItem aColorItem(*pColorItem);
-            aColorItem.setColor(aColor);
-            rItemSet.Put(aColorItem);
-            bChanged = true;
+            if (aColor != pColorItem->getColor())
+            {
+                SvxColorItem aColorItem(*pColorItem);
+                aColorItem.setColor(aColor);
+                rItemSet.Put(aColorItem);
+                bChanged = true;
+            }
         }
     }
     if (rItemSet.HasItem(ATTR_BACKGROUND, &pItem))
@@ -91,11 +95,13 @@ bool changeCellItems(SfxItemSet& rItemSet, model::ColorSet const& rColorSet)
         if (rComplexColor.isValidThemeType())
         {
             Color aColor = rColorSet.resolveColor(rComplexColor);
-
-            SvxBrushItem aNewBrushItem(*pBrushItem);
-            aNewBrushItem.SetColor(aColor);
-            rItemSet.Put(aNewBrushItem);
-            bChanged = true;
+            if (aColor != pBrushItem->GetColor())
+            {
+                SvxBrushItem aNewBrushItem(*pBrushItem);
+                aNewBrushItem.SetColor(aColor);
+                rItemSet.Put(aNewBrushItem);
+                bChanged = true;
+            }
         }
     }
     if (rItemSet.HasItem(ATTR_BORDER, &pItem))
