@@ -1516,6 +1516,12 @@ img.context-menu-icon {
 	grid-template-columns: 1fr 25px;
 	align-items: center;
 }
+
+/* add extra column space for the icon. */
+.ui-combobox-entry.ui-has-menu.ui-has-img {
+	grid-template-columns: 25px 1fr 25px;
+}
+
 /* Arrow/chevron */
 .ui-combobox-entry.ui-has-menu::after {
 	content: '';
