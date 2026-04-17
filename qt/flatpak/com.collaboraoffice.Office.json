@@ -42,9 +42,8 @@
       "name": "libreoffice",
       "sources": [
         {
-	  "type": "git",
-	  "url" : "https://gerrit.collaboraoffice.com/core",
-	  "branch": "main"
+          "type": "dir",
+          "path": "../../engine"
         },
         {
           "url": "https://dev-www.libreoffice.org/src/cairo-1.18.4.tar.xz",
@@ -1151,7 +1150,10 @@
       "sources": [
         {
           "type": "dir",
-          "path": "../../"
+          "path": "../../",
+          "skip": [
+            "engine"
+          ]
         },
         {
           "type": "shell",
