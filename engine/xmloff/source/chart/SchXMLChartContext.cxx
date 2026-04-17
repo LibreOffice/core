@@ -46,8 +46,10 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <com/sun/star/chart2/XDiagramProvider.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -371,6 +373,22 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
                 }
                 break;
 
+            case XML_ELEMENT(CO_EXT, XML_CLASS):
+                {
+                    OUString aValue = aIter.toString();
+                    OUString sClassName;
+                    sal_uInt16 nClassPrefix =
+                        GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
+                                aValue, &sClassName );
+                    if (XML_NAMESPACE_CO_EXT == nClassPrefix)
+                    {
+                        aOldChartTypeName = SchXMLTools::GetChartTypeByClassName(
+                            sClassName, true /* bUseOldNames */ );
+                        maChartTypeServiceName = SchXMLTools::GetChartTypeByClassName(
+                            sClassName, false /* bUseOldNames */ );
+                    }
+                }
+                break;
             case XML_ELEMENT(SVG, XML_WIDTH):
             case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
@@ -430,6 +448,40 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
         xVisualObject->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, maChartSize );
 
     InitChart( aOldChartTypeName);
+
+    // Apply the histogram template before plot-area styles are parsed so
+    // that BinWidth, BinCount, FrequencyType properties are picked up from
+    // <style:chart-properties> and land on the real histogram chart type.
+    if (maChartTypeServiceName == "com.sun.star.chart2.HistogramChartType")
+    {
+        try
+        {
+            uno::Reference<chart2::XDiagram> xHistDiagram;
+            if (xNewDoc.is())
+                xHistDiagram = xNewDoc->getFirstDiagram();
+
+            uno::Reference<chart2::XChartTypeManager> xChartTypeManager;
+            if (xNewDoc.is())
+                xChartTypeManager = xNewDoc->getChartTypeManager();
+
+            uno::Reference<lang::XMultiServiceFactory> xTemplateFactory(
+                xChartTypeManager, uno::UNO_QUERY);
+            uno::Reference<chart2::XChartTypeTemplate> xTemplate;
+            if (xTemplateFactory.is())
+                xTemplate.set(
+                    xTemplateFactory->createInstance(
+                        u"com.sun.star.chart2.template.Histogram"_ustr),
+                    uno::UNO_QUERY);
+
+            if (xHistDiagram.is() && xTemplate.is())
+                xTemplate->changeDiagram(xHistDiagram);
+        }
+        catch (const uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("xmloff.chart",
+                                 "Failed to apply histogram template during startElement");
+        }
+    }
 
     if( bHasAddin )
     {

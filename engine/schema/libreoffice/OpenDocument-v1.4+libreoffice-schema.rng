@@ -40,6 +40,7 @@ xmlns:drawooo="http://openoffice.org/2010/draw"
 xmlns:css3t="http://www.w3.org/TR/css3-text/"
 xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0"
 xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"
+xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
 >
   <rng:include href="../odf1.4/OpenDocument-v1.4-schema.rng">
 
@@ -2155,6 +2156,31 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- Extend the <chart:series> element -->
+  <rng:define name="chart-series">
+    <rng:element name="chart:series">
+      <rng:ref name="chart-series-attlist"/>
+      <rng:zeroOrMore>
+        <rng:ref name="chart-domain"/>
+      </rng:zeroOrMore>
+      <rng:optional>
+        <rng:ref name="chart-mean-value"/>
+      </rng:optional>
+      <rng:zeroOrMore>
+        <rng:ref name="chart-regression-curve"/>
+      </rng:zeroOrMore>
+      <rng:zeroOrMore>
+        <rng:ref name="chart-error-indicator"/>
+      </rng:zeroOrMore>
+      <rng:zeroOrMore>
+        <rng:ref name="chart-data-point"/>
+      </rng:zeroOrMore>
+      <rng:optional>
+        <rng:ref name="chart-data-label"/>
+      </rng:optional>
+    </rng:element>
+  </rng:define>
+
    </rng:include>
 
     <!-- TODO no proposal -->
@@ -3706,6 +3732,30 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- Histogram chart type properties -->
+  <rng:define name="style-chart-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:frequency-type">
+        <rng:choice>
+          <rng:value>0</rng:value> <!-- Automatic (Scott's Rule) -->
+          <rng:value>1</rng:value> <!-- Fixed bin width -->
+          <rng:value>2</rng:value> <!-- Fixed bin count -->
+          <rng:value>3</rng:value> <!-- By category -->
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="coext:bin-width">
+        <rng:data type="double"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="coext:bin-count">
+        <rng:data type="integer"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- https://issues.oasis-open.org/browse/OFFICE-4107 -->
   <rng:define name="table-filter-condition-attlist" combine="interleave">
     <rng:optional>
@@ -4275,6 +4325,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:text/>
     </rng:element>
   </rng:define>
+
 
   <!-- https://issues.oasis-open.org/browse/OFFICE-4174 Hierarchical tracked changes -->
   <rng:define name="text-changed-region" combine="choice">

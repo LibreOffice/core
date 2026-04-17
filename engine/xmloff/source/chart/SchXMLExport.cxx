@@ -1282,6 +1282,15 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                                        mrExport.GetNamespaceMap().GetQNameByKey(
                                            XML_NAMESPACE_OOO, sChartType) );
             }
+            else if (eXMLChartType == XML_HISTOGRAM)
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_CHART, XML_CLASS,
+                        mrExport.GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_CHART, GetXMLToken(XML_BAR)));
+                mrExport.AddAttribute(XML_NAMESPACE_CO_EXT, XML_CLASS,
+                        mrExport.GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_CO_EXT, GetXMLToken(XML_HISTOGRAM)));
+            }
             else if( eXMLChartType != XML_TOKEN_INVALID )
             {
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS,
@@ -2793,12 +2802,21 @@ void SchXMLExportHelper_Impl::exportSeries(
                         for( ; nSeqIdx<aSeqCnt.getLength(); ++nSeqIdx )
                         {
                             Reference< chart2::data::XDataSequence > xTempValueSeq( aSeqCnt[nSeqIdx]->getValues() );
+
+                            // 1. Get the Role for EVERY sequence
+                            OUString aRole;
+                            Reference<beans::XPropertySet> xSeqProp(xTempValueSeq, uno::UNO_QUERY);
+                            if (xSeqProp.is())
+                                xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole;
+
+                            // 2. Do not export the transient calculated-y
+                            if (aRole == "calculated-y")
+                            {
+                                continue;
+                            }
+
                             if( nMainSequenceIndex==-1 )
                             {
-                                OUString aRole;
-                                Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
-                                if( xSeqProp.is())
-                                    xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole;
                                 // "main" sequence
                                 if( aRole == aLabelRole )
                                 {

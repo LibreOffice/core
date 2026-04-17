@@ -142,7 +142,13 @@ enum
 
     PROP_DIAGRAM_AUTOMATIC_SIZE,
     PROP_DIAGRAM_EXTERNALDATA,
-    PROP_DIAGRAM_STYLE_INDEX
+    PROP_DIAGRAM_STYLE_INDEX,
+
+    // Histogram chart type properties.
+    // Exposed here so the ODF/OOXML exporters can pick them up via the chart property map
+    PROP_DIAGRAM_BIN_WIDTH,
+    PROP_DIAGRAM_BIN_COUNT,
+    PROP_DIAGRAM_FREQUENCY_TYPE
 };
 
 void lcl_AddPropertiesToVector(
@@ -218,6 +224,20 @@ void lcl_AddPropertiesToVector(
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    // Histogram chart type properties
+    rOutProperties.emplace_back("BinWidth",
+                  PROP_DIAGRAM_BIN_WIDTH,
+                  cppu::UnoType<double>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+    rOutProperties.emplace_back("BinCount",
+                  PROP_DIAGRAM_BIN_COUNT,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+    rOutProperties.emplace_back("FrequencyType",
+                  PROP_DIAGRAM_FREQUENCY_TYPE,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 
     //new for XY charts
     rOutProperties.emplace_back( CHART_UNONAME_SORT_BY_XVALUES,
@@ -1900,6 +1920,56 @@ Any WrappedIncludeHiddenCellsProperty::getPropertyValue( const Reference< beans:
     return uno::Any(bValue);
 }
 
+namespace
+{
+class WrappedHistogramProperty final : public WrappedProperty
+{
+public:
+    WrappedHistogramProperty(const OUString& rPropertyName,
+                             uno::Any aDefaultValue,
+                             std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
+        : WrappedProperty(rPropertyName, OUString())
+        , m_aDefaultValue(std::move(aDefaultValue))
+        , m_spChart2ModelContact(std::move(spChart2ModelContact))
+    {
+    }
+
+    void setPropertyValue(const uno::Any& rOuterValue,
+                          const Reference<beans::XPropertySet>& /*xInnerPropertySet*/) const override
+    {
+        rtl::Reference<::chart::ChartType> xHistogramType = lcl_getHistogramChartType();
+        if (xHistogramType.is())
+            xHistogramType->setPropertyValue(getOuterName(), rOuterValue);
+    }
+
+    Any getPropertyValue(const Reference<beans::XPropertySet>& /*xInnerPropertySet*/) const override
+    {
+        rtl::Reference<::chart::ChartType> xHistogramType = lcl_getHistogramChartType();
+        if (xHistogramType.is())
+            return xHistogramType->getPropertyValue(getOuterName());
+        return m_aDefaultValue;
+    }
+
+private:
+    rtl::Reference<::chart::ChartType> lcl_getHistogramChartType() const
+    {
+        rtl::Reference<::chart::Diagram> xDiagram(m_spChart2ModelContact->getDiagram());
+        if (!xDiagram.is())
+            return nullptr;
+        for (const rtl::Reference<::chart::ChartType>& xType : xDiagram->getChartTypes())
+        {
+            if (xType.is() && xType->getChartType() == "com.sun.star.chart2.HistogramChartType")
+                return xType;
+        }
+        return nullptr;
+    }
+
+    uno::Any m_aDefaultValue;
+    std::shared_ptr<Chart2ModelContact> m_spChart2ModelContact;
+};
+
+}
+
 // ____ XDiagramProvider ____
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
 {
@@ -1957,6 +2027,13 @@ std::vector< std::unique_ptr<WrappedProperty> > DiagramWrapper::createWrappedPro
     aWrappedProperties.emplace_back( new WrappedSolidTypeProperty( m_spChart2ModelContact ) );
     aWrappedProperties.emplace_back( new WrappedAutomaticSizeProperty() );
     aWrappedProperties.emplace_back( new WrappedIncludeHiddenCellsProperty( m_spChart2ModelContact ) );
+
+    aWrappedProperties.emplace_back(new WrappedHistogramProperty(
+        u"BinWidth"_ustr, uno::Any(0.0), m_spChart2ModelContact));
+    aWrappedProperties.emplace_back(new WrappedHistogramProperty(
+        u"BinCount"_ustr, uno::Any(sal_Int32(0)), m_spChart2ModelContact));
+    aWrappedProperties.emplace_back(new WrappedHistogramProperty(
+        u"FrequencyType"_ustr, uno::Any(sal_Int32(0)), m_spChart2ModelContact));
 
     return aWrappedProperties;
 }

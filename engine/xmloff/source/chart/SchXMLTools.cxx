@@ -142,6 +142,7 @@ const SvXMLEnumMapEntry<SchXMLChartTypeEnum> aXMLChartClassMap[] =
     { XML_RADAR,        XML_CHART_CLASS_RADAR   },
     { XML_FILLED_RADAR, XML_CHART_CLASS_FILLED_RADAR },
     { XML_BAR,          XML_CHART_CLASS_BAR     },
+    { XML_HISTOGRAM,    XML_CHART_CLASS_HISTOGRAM },
     { XML_STOCK,        XML_CHART_CLASS_STOCK   },
     { XML_BUBBLE,       XML_CHART_CLASS_BUBBLE  },
     { XML_SURFACE,      XML_CHART_CLASS_BAR     }, //@todo change this if a surface chart is available
@@ -168,6 +169,8 @@ static const tMakeStringStringMap& lcl_getChartTypeNameMap()
          "com.sun.star.chart2.AreaChartType"},
         {"com.sun.star.chart.BarDiagram",
          "com.sun.star.chart2.ColumnChartType"},
+        {"com.sun.star.chart.HistogramDiagram",
+         "com.sun.star.chart2.HistogramChartType"},
         {"com.sun.star.chart.PieDiagram",
          "com.sun.star.chart2.PieChartType"},
         {"com.sun.star.chart.BarOfPieDiagram",
@@ -229,6 +232,8 @@ OUString GetChartTypeByClassName(
             // @todo: might be Bar
         }
     }
+    else if (IsXMLToken(rClassName, XML_HISTOGRAM))
+        aResultBuffer.append("Histogram");
     else if( IsXMLToken( rClassName, XML_CIRCLE ))
         aResultBuffer.append("Pie");
     else if( IsXMLToken( rClassName, XML_RING ))
@@ -311,6 +316,8 @@ XMLTokenEnum getTokenByChartType(
             else if( aServiceName == u"Bar" ||
                      (!bUseOldNames && aServiceName == u"Column"))
                 eResult = XML_BAR;
+            else if (aServiceName == u"Histogram")
+                eResult = XML_HISTOGRAM;
             else if ( aServiceName == u"Pie" || aServiceName == u"BarOfPie" ||
                     aServiceName == u"PieOfPie" )
                 eResult = XML_CIRCLE;

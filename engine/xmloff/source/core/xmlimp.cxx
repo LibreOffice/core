@@ -2338,6 +2338,7 @@ void SvXMLImport::initializeNamespaceMaps()
     mapTokenToNamespace( XML_NAMESPACE_DRAW_EXT,         XML_NP_DRAW_EXT,      XML_N_DRAW_EXT         );
     mapTokenToNamespace( XML_NAMESPACE_CALC_EXT,         XML_NP_CALC_EXT,      XML_N_CALC_EXT         );
     mapTokenToNamespace( XML_NAMESPACE_LO_EXT,           XML_NP_LO_EXT,        XML_N_LO_EXT           );
+    mapTokenToNamespace( XML_NAMESPACE_CO_EXT,           XML_NP_CO_EXT,        XML_N_CO_EXT           );
     mapTokenToNamespace( XML_NAMESPACE_CSS3TEXT,         XML_NP_CSS3TEXT,      XML_N_CSS3TEXT         );
     mapTokenToNamespace( XML_NAMESPACE_FIELD,            XML_NP_FIELD,         XML_N_FIELD            );
     mapTokenToNamespace( XML_NAMESPACE_FORMX,            XML_NP_FORMX,         XML_N_FORMX            );
