@@ -653,9 +653,9 @@ public:
         cairo_paint(cr);
         cairo_destroy(cr);
 
-        // set device_scale for downscale surfaces to get them handled
-        // correctly, matching vcl's SurfaceHelper
-        cairo_surface_set_device_scale(pSurfaceTarget, fScaleX, fScaleY);
+        // NOTE: do NOT set device_scale on the mipmap surface - the callers
+        // build pattern matrices using cairo_image_surface_get_width/height
+        // (raw pixels), and device_scale would double-apply the scaling
 
         // add entry to cached entries
         maDownscaled[key] = pSurfaceTarget;
