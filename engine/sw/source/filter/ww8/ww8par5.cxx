@@ -116,6 +116,42 @@ namespace
         }
         return sTmp;
     }
+
+    // Natively, LO always automatically updates a DocInfo field from the File-Properties
+    // while MS Word requires the user to manually refresh the field (with F9).
+    // In other words, MS Word lets the field to be out of sync with the controlling variable.
+    // Thus, a soft-lock was introduced in LO to temporarily lock fields until a refresh request.
+    void lcl_SetSoftLockIfUnsyncronized(SwDocInfoField& rField, const OUString& rDisplayText)
+    {
+        // Soft lock not needed if the field is already locked
+        const SwDocInfoSubType eSubType = rField.GetSubType();
+        if (eSubType & SwDocInfoSubType::SubFixed)
+            return;
+
+        // SAVEDATE is always updated on import in MS Word - don't soft-lock this field
+        const bool bIsDateTime(eSubType & (SwDocInfoSubType::SubTime | SwDocInfoSubType::SubDate));
+        if (bIsDateTime && (eSubType & SwDocInfoSubType::LowerMask) == SwDocInfoSubType::Change)
+            return;
+
+        // Although PRINTDATE is not updated on import in MS Word, it IS updated when printing.
+        // So don't soft-lock this field either - otherwise it will never update when LO prints.
+        if (bIsDateTime && (eSubType & SwDocInfoSubType::LowerMask) == SwDocInfoSubType::Print)
+            return;
+
+        // Soft lock not needed if the displayed field text matches the DocInfo variable
+        OUString sVariableText = rField.ExpandField(/*bCache=*/false, nullptr);
+        if (rDisplayText.getLength() != sVariableText.getLength())
+        {
+            const sal_Int32 nLen = sVariableText.indexOf('\x0');
+            if (nLen >= 0)
+                sVariableText = sVariableText.copy(0, nLen);
+        }
+        if (rDisplayText == sVariableText)
+            return;
+
+        rField.SetSubType(eSubType | SwDocInfoSubType::SubSoftFixed);
+        rField.SetExpansion(rDisplayText); // calling ExpandField replaced/cached the field content
+    }
 }
 
 tools::Long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
@@ -1699,35 +1735,15 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
 
         if( !bFieldFound )
         {
-            // LO always automatically updates a DocInfo field from the File-Properties-Custom Prop
-            // while MS Word requires the user to manually refresh the field (with F9).
-            // In other words, Word lets the field to be out of sync with the controlling variable.
-            // Marking as FIXEDFLD solves the automatic replacement problem, but of course prevents
-            // Writer from making any changes, even on an F9 refresh.
-            // TODO: Extend LO to allow a linked field that doesn't automatically update.
             IDocumentContentOperations& rIDCO(m_rDoc.getIDocumentContentOperations());
             const auto pType(static_cast<SwDocInfoFieldType*>(
                 m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo)));
             const OUString sDisplayed = GetFieldResult(pF);
-            SwDocInfoField aField(pType, SwDocInfoSubType::Custom | nReg, aDocProperty);
+            SwDocInfoField aField(pType, SwDocInfoSubType::Custom | nReg, aDocProperty, sDisplayed);
 
-            // If text already matches the DocProperty var, then safe to treat as refreshable field.
-            OUString sVariable = aField.ExpandField(/*bCache=*/false, nullptr);
-            if (sDisplayed.getLength() != sVariable.getLength())
-            {
-                sal_Int32 nLen = sVariable.indexOf('\x0');
-                if (nLen >= 0)
-                    sVariable = sVariable.copy(0, nLen);
-            }
-            if (sDisplayed == sVariable)
-                rIDCO.InsertPoolItem(*m_pPaM, SwFormatField(aField));
-            else
-            {
-                // They don't match, so use a fixed field to prevent LO from altering the contents.
-                SwDocInfoField aFixedField(pType, SwDocInfoSubType::Custom | SwDocInfoSubType::SubFixed | nReg, aDocProperty,
-                                           sDisplayed);
-                rIDCO.InsertPoolItem(*m_pPaM, SwFormatField(aFixedField));
-            }
+            lcl_SetSoftLockIfUnsyncronized(aField, sDisplayed);
+
+            rIDCO.InsertPoolItem(*m_pPaM, SwFormatField(aField));
 
             return eF_ResT::OK;
         }
@@ -1852,9 +1868,11 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
     {
         const auto pType(static_cast<SwDocInfoFieldType*>(
             m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo)));
-        SwDocInfoField aField(pType, nSub|nReg, aData, GetFieldResult(pF), nFormat);
+        const OUString sDisplayText = GetFieldResult(pF);
+        SwDocInfoField aField(pType, nSub|nReg, aData, sDisplayText, nFormat);
         if (bDateTime)
             ForceFieldLanguage(aField, nLang);
+        lcl_SetSoftLockIfUnsyncronized(aField, sDisplayText);
         m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
     }
 

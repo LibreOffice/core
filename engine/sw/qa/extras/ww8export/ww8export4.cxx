@@ -596,6 +596,23 @@ nde muito parto na água. Tb posso fazer porcentagem de atendimento..."_ustr);
     verify();
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf98284_softLockedFields, "tdf98284_softLockedFields.doc")
+{
+    // given a document with some DocInfo fields containing hand-modified display values
+    getParagraph(1, "Title: Untitled");
+    // the save date must not be 'recently' - it must update to the actual last save date.
+    // Actual reported date is time-zone dependent.  Save Date: 17/04/2026 01:43:00 PM
+    OUString sPara = getParagraph(2)->getString();
+    CPPUNIT_ASSERT(sPara.endsWith("AM") || sPara.endsWith("PM"));
+    getParagraph(3, "Saved by user: Justin");
+
+    // PRINTDATE: tricky - needs soft-lock for import, but unlocked if a print is requested.
+    // Ultimately, paragraph 4 should return 'recent' here,
+    // but if you make it do that, ensure it refreshes before printing.
+    sPara = getParagraph(4)->getString();
+    CPPUNIT_ASSERT(sPara.endsWith("AM") || sPara.endsWith("PM"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf120629)
 {
     createSwDoc("tdf120629.odt");
