@@ -34,6 +34,7 @@
 #include "swdllapi.h"
 #include "docfac.hxx"
 #include "unocrsr.hxx"
+#include "unotextrange.hxx"
 
 class SfxItemPool;
 class SfxItemSet;
@@ -48,7 +49,6 @@ class SwPaM;
 class SwTextBlocks;
 struct SwPosition;
 struct Writer_Impl;
-class SwXTextRange;
 namespace sw::mark { class MarkBase; }
 namespace com::sun::star::embed { class XStorage; }
 
