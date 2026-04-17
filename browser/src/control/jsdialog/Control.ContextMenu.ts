@@ -223,6 +223,7 @@ class ContextMenuControl extends JSControl {
 			'',
 			false,
 			true /* earlyCallbackCall? */,
+			true /* noDefaultSelection? */,
 		);
 	}
 

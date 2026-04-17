@@ -1195,6 +1195,8 @@ class HRuler extends Ruler {
 			callback,
 			'',
 			false,
+			false,
+			true,
 		);
 	}
 

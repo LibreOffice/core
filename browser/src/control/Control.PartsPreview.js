@@ -316,6 +316,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				callback,
 				'',
 				false,
+				false,
+				true,
 			);
 		}, this);
 
@@ -448,6 +450,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				callback,
 				'',
 				false,
+				false,
+				true,
 			);
 		}, this);
 

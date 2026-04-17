@@ -405,6 +405,8 @@ window.L.Control.Tabs = window.L.Control.extend({
 			callback,
 			'bottom',
 			false,
+			false,
+			true,
 		);
 	},
 

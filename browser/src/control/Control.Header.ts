@@ -175,6 +175,7 @@ export class Header extends CanvasSectionObject {
 				'',
 				false,
 				true,
+				true,
 			);
 		}
 	}

@@ -1170,6 +1170,8 @@ export class Comment extends CanvasSectionObject {
 			callback,
 			'',
 			false,
+			false,
+			true,
 		);
 	}
 
