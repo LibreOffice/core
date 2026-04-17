@@ -1763,13 +1763,6 @@ class Socket {
 
 		this.TunnelledDialogImageCacheSize =
 			lokitVersionObj.tunnelled_dialog_image_cache_size;
-
-		Object.assign(window.app.serverInfo, {
-			lokitVersionName: lokitVersionObj.ProductName,
-			lokitVersionNumber: lokitVersionObj.ProductVersion,
-			lokitVersionSuffix: lokitVersionObj.ProductExtension,
-			lokitHash: lokitVersionObj.BuildId,
-		});
 	}
 
 	// 'osinfo ' message.

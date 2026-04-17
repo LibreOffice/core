@@ -382,7 +382,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 		cy.cGet('#mobile-wizard-content').should('exist');
 
 		// Check the version
-		cy.cGet('body').contains('#lokit-version', 'Collabora Office').should('exist');
+		cy.cGet('body').find('#coolwsd-version').should('exist');
 
 		// Close about dialog
 		cy.cGet('div.mobile-wizard.jsdialog-overlay.cancellable').click({force : true});

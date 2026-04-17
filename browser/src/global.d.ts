@@ -271,10 +271,6 @@ interface SockInterface {
 interface ServerInfo {
 	coolwsdVersion: string;
 	coolwsdHash: string;
-	lokitVersionName: string;
-	lokitVersionNumber: string;
-	lokitVersionSuffix: string;
-	lokitHash: string;
 	serverId: string;
 	osInfo: string;
 	wsdOptions: any;

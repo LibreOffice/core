@@ -242,7 +242,6 @@ m4_ifelse(MOBILEAPP,[true],
           </div>
           <div id="about-dialog-info-container">
             <div id="about-dialog-info">
-              <div id="lokit-version" dir="ltr"></div>
             </div>
           </div>
         </div>

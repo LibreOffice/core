@@ -90,7 +90,7 @@ var AdminSocketSettings = AdminSocketBase.extend({
 			var coolwsdVersionObj = JSON.parse(textMsg.substring(textMsg.indexOf('{')));
 			var h = coolwsdVersionObj.Hash;
 			if (parseInt(h,16).toString(16) === h.toLowerCase().replace(/^0+/, '')) {
-				h = '<a target="_blank" href="https://github.com/CollaboraOnline/online/commits/' + h + '">' + h + '</a>';
+				h = '<a target="_blank" href="https://gerrit.collaboraoffice.com/plugins/gitiles/online/+log/' + h + '">' + h + '</a>';
 				$('#coolwsd-version').html(coolwsdVersionObj.Version + ' (git hash: ' + h + ')');
 			}
 			else {
@@ -104,13 +104,6 @@ var AdminSocketSettings = AdminSocketBase.extend({
 		}
 		else if (textMsg.startsWith('lokitversion ')) {
 			var lokitVersionObj = JSON.parse(textMsg.substring(textMsg.indexOf('{')));
-			h = lokitVersionObj.BuildId.substring(0, 10);
-			if (parseInt(h,16).toString(16) === h.toLowerCase().replace(/^0+/, '')) {
-				h = '<a target="_blank" href="https://gerrit.collaboraoffice.com/plugins/gitiles/core/+log/' + lokitVersionObj.BuildId + '/">' + h + '</a>';
-			}
-			$('#lokit-version').html(lokitVersionObj.ProductName + ' ' +
-			                         lokitVersionObj.ProductVersion + lokitVersionObj.ProductExtension +
-			                         ' (git hash: ' + h + ')');
 			$('#lokit-buildconfig').html(lokitVersionObj.BuildConfig);
 		}
 	},

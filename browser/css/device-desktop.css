@@ -1,12 +1,10 @@
 /* CSS specific for desktop browsers. */
 
-#coolwsd-version span:before,
-#lokit-version > span:before {
+#coolwsd-version span:before {
 	content: ' (';
 	white-space: pre;
 }
-#coolwsd-version span:after,
-#lokit-version > span:after {
+#coolwsd-version span:after {
 	content: ')';
 }
 

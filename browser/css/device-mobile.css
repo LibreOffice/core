@@ -589,7 +589,7 @@ textarea.cool-annotation-textarea {
 	margin-top: -5px;
 }
 
-#coolwsd-version, #lokit-version {
+#coolwsd-version {
 	flex-direction: column;
 }
 

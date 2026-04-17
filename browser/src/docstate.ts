@@ -303,10 +303,6 @@
 	serverInfo: {
 		coolwsdVersion: '',
 		coolwsdHash: '',
-		lokitVersionName: '',
-		lokitVersionNumber: '',
-		lokitVersionSuffix: '',
-		lokitHash: '',
 		serverId: '',
 		osInfo: '',
 		wsdOptions: '',

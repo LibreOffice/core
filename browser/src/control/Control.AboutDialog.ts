@@ -22,7 +22,6 @@ declare var sanitizeUrl: any;
 
 interface AboutDialogElements {
 	coolwsdVersion: HTMLElement;
-	lokitVersion: HTMLElement;
 	servedBy: HTMLElement;
 	slowProxy: HTMLElement;
 	jsDialog: HTMLElement;
@@ -160,29 +159,10 @@ class AboutDialog {
 		this.appendSpanAndLink(
 			elements.coolwsdVersion,
 			' git hash:\xA0',
-			`https://github.com/CollaboraOnline/online/commits/${info.coolwsdHash}`,
+			`https://gerrit.collaboraoffice.com/plugins/gitiles/online/+log/${info.coolwsdHash}`,
 			info.coolwsdHash,
 			info.wsdOptions,
 		);
-
-		// LOKit version
-		const lokitVersionText = `${info.lokitVersionName} ${info.lokitVersionNumber}${info.lokitVersionSuffix}`;
-		elements.lokitVersion.textContent = lokitVersionText;
-		this.appendSpanAndLink(
-			elements.lokitVersion,
-			' git hash:\xA0',
-			`https://gerrit.collaboraoffice.com/plugins/gitiles/core/+log/${info.lokitHash}`,
-			info.lokitHash.substring(0, 10),
-		);
-
-		// Update lokit-extra position if exists
-		const lokitExtra = content.querySelector('#lokit-extra');
-		if (lokitExtra) {
-			elements.lokitVersion.parentNode.parentNode.insertBefore(
-				lokitExtra,
-				elements.lokitVersion.parentNode,
-			);
-		}
 
 		// Served By and Server ID
 		const label = document.createElement('span');
@@ -380,10 +360,6 @@ class AboutDialog {
 		coolwsdLine += ` (git hash: ${info.coolwsdHash} ${info.wsdOptions})`;
 		addLine('COOLWSD version', coolwsdLine);
 
-		const lokitVersionText = `${info.lokitVersionName} ${info.lokitVersionNumber}${info.lokitVersionSuffix}`;
-		let lokitLine = lokitVersionText;
-		lokitLine += ` (git hash: ${info.lokitHash.substring(0, 10)})`;
-		addLine('LOKit version', lokitLine);
 		addLine('Served by', info.osInfo);
 		addLine('Server ID', info.serverId);
 		addLine('WOPI host', window.wopiHostId);
@@ -480,24 +456,6 @@ class AboutDialog {
 		coolwsdVersionContainer.appendChild(coolwsdVersion);
 		infoDiv.appendChild(coolwsdVersionContainer);
 
-		infoDiv.appendChild(
-			AboutDialog.createElement('div', { className: 'spacer' }),
-		);
-
-		const lokitLabel = AboutDialog.createElement('div', {
-			id: 'lokit-version-label',
-		});
-		lokitLabel.textContent = _('LOKit version:');
-		infoDiv.appendChild(lokitLabel);
-
-		const lokitVersionContainer = AboutDialog.createElement('div', {
-			className: 'about-dialog-info-div',
-		});
-
-		const lokitVersion = content.querySelector('#lokit-version') as HTMLElement;
-		lokitVersionContainer.appendChild(lokitVersion);
-		infoDiv.appendChild(lokitVersionContainer);
-
 		const servedBy = AboutDialog.createElement('div', { id: 'served-by' });
 		if (!window.ThisIsAMobileApp) {
 			infoDiv.appendChild(servedBy);
@@ -538,7 +496,6 @@ class AboutDialog {
 
 		return {
 			coolwsdVersion,
-			lokitVersion,
 			servedBy,
 			slowProxy,
 			jsDialog,
