@@ -1525,14 +1525,16 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			controls['label'] = span;
 		}
 
-		const hasPopUp = hasPopupRole || JSDialog.IsDialogButton(id, data.command) || JSDialog.IsDropdownButton(id, data.command);
+		const isDialogButton = JSDialog.IsDialogButton(id, data.command);
+		const hasPopUp = hasPopupRole || isDialogButton || JSDialog.IsDropdownButton(id, data.command);
 
 		if (hasPopUp) {
-			button.setAttribute('aria-expanded', false);
-			if (JSDialog.IsDialogButton(id, data.command))
+			if (isDialogButton) {
 				button.setAttribute('aria-haspopup', 'dialog');
-			else
+			} else {
 				button.setAttribute('aria-haspopup', true);
+				button.setAttribute('aria-expanded', false);
+			}
 		}
 
 		JSDialog.SetupA11yLabelForNonLabelableElement(button, data, builder);
