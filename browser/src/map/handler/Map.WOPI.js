@@ -665,9 +665,11 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		else if (msg.MessageId == 'Action_InsertLink') {
 			if (msg.Values) {
 				var link = this._map.makeURLFromStr(msg.Values.url);
-				var text = this._map.getTextForLink();
+				var selection = this._map.getTextForLink();
 
-				text = text ? text.trim() : link;
+				var text = selection ? selection.trim()
+					: (msg.Values.text ? String(msg.Values.text).trim() : '')
+					|| link;
 
 				var command = {
 					'Hyperlink.Text': {
