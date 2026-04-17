@@ -692,8 +692,45 @@ public:
         return mpCairoSurfaceHelper;
     }
 
+    virtual sal_uInt32 calculateCombinedHoldCyclesInSeconds() const override;
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
+
+sal_uInt32 SystemDependentData_CairoSurface::calculateCombinedHoldCyclesInSeconds() const
+{
+    if (0 == getCombinedHoldCyclesInSeconds() && nullptr != mpCairoSurfaceHelper)
+    {
+        // if we have a really 'big' pixel-based graphic the cost for creating
+        // the mip-map entries is high. If that is the case, force keeping this
+        // entry alive and not getting flushed by using a large number of
+        // seconds. In that case the local MipMap is more important than the
+        // memory kept allocated for fast repaints.
+
+        // NOTE: It would be nice to only do that if true == isCairoCompatible,
+        // but is not avaliable here. Thus, if not, the mem footprint held extra
+        // will include the locally created cairo_surface_t mpCairoSurface.
+
+        // To detect 'big' graphics, compare to an assumed ScreenSize (may also
+        // be fetched from real screen if needed). To react, create a buffer
+        // residing time of one hour (increase if needed).
+        cairo_surface_t* pSurface(mpCairoSurfaceHelper->getCairoSurface());
+        const tools::Long nStride(cairo_image_surface_get_stride(pSurface));
+        const tools::Long nHeight(cairo_image_surface_get_height(pSurface));
+
+        // use a common big screen and assume 1/2 size of a graphic as 'big'
+        const sal_Int64 nBigGraphicPixels((2560 * 1440) / 2);
+
+        if (nStride * nHeight > nBigGraphicPixels)
+        {
+            // return number of seconds for 1 hour to force this not to be
+            // flushed.
+            return 60 * 60;
+        }
+    }
+
+    // use parent implementation which makes seconds dependent of graphic size
+    return basegfx::SystemDependentData::calculateCombinedHoldCyclesInSeconds();
+}
 
 sal_Int64 SystemDependentData_CairoSurface::estimateUsageInBytes() const
 {
