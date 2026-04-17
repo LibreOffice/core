@@ -1,5 +1,5 @@
 /* -*- js-indent-level: 8 -*- */
-/* global describe it cy require beforeEach */
+/* global describe it cy require beforeEach expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -113,6 +113,30 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 			helper.reloadDocument(this.newFilePath);
 
 			assertSectionHeaders(['Section-2', 'Section-1', 'Section-3']);
+		});
+
+		it('Section slide selection', function() {
+			helper.processToIdle(this.win);
+
+			// 3 sections: Section-1 (slides 1-4), Section-2 (5-11), Section-3 (12-13).
+			assertSectionHeaders(['Section-1', 'Section-2', 'Section-3']);
+
+			// Click the body of Section-2's header (anywhere that isn't the toggle).
+			cy.cGet('.slide-section-header').eq(1)
+				.find('.slide-section-name').click();
+			helper.processToIdle(this.win);
+
+			cy.window().then((win) => {
+				var impress = win['0'].app.impress;
+				// Slides in Section-2 (indices 4-10) should be selected.
+				for (var i = 4; i <= 10; i++)
+					expect(impress.isSlideSelected(i)).to.be.true;
+
+				// Slides outside Section-2 should not be selected.
+				[0, 1, 2, 3, 11, 12].forEach(function (i) {
+					expect(impress.isSlideSelected(i)).to.be.false;
+				});
+			});
 		});
 
 		it('Collapse section hides its slides', function() {

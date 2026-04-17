@@ -565,6 +565,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			that._toggleSectionCollapse(sectionIndex);
 		}, this);
 
+		// Click on the header (but not the toggle) selects all slides in the section.
+		window.L.DomEvent.on(header, 'click', function (e) {
+			if (toggleBtn.contains(e.target))
+				return;
+			window.L.DomEvent.stopPropagation(e);
+			window.L.DomEvent.preventDefault(e);
+			that._selectSection(sectionIndex);
+		}, this);
+
 		// Section context menu
 		if (this._map.isEditMode()) {
 			window.L.DomEvent.on(header, 'contextmenu', function(e) {
@@ -579,6 +588,22 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 
 		return header;
+	},
+
+	_selectSection: function (sectionIndex) {
+		var sections = app.impress && app.impress.sections;
+		if (!sections || !sections[sectionIndex])
+			return;
+
+		var start = sections[sectionIndex].startIndex;
+		var end = (sectionIndex + 1 < sections.length)
+			? sections[sectionIndex + 1].startIndex - 1
+			: this._previewTiles.length - 1;
+
+		if (start < 0 || end < start)
+			return;
+
+		this._selectPartRange(start, end, false);
 	},
 
 	_toggleSectionCollapse: function (sectionIndex) {
@@ -890,7 +915,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 	},
 
-	_selectPartRange: function (start, end) {
+	_selectPartRange: function (start, end, scrollToEnd = true) {
 		if (start === undefined || start === null)
 			start = this._map._docLayer._selectedPart;
 
@@ -915,7 +940,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			}
 		}
 		this._selectedPartRange = [start, end];
-		this._scrollToPart(end);
+		if (scrollToEnd)
+			this._scrollToPart(end);
 	},
 
 	_modifySelectedPartRange: function (direction) {
