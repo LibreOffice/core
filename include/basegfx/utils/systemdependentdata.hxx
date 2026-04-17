@@ -91,7 +91,11 @@ namespace basegfx
         // getHoldCyclesInSeconds and estimateUsageInBytes, the
         // result is created once on-demand and buffered in
         // mnCalculatedCycles
-        sal_uInt32 calculateCombinedHoldCyclesInSeconds() const;
+        virtual sal_uInt32 calculateCombinedHoldCyclesInSeconds() const;
+
+        // Allow read access to the calculated cycles in seconds, this
+        // can be e.g. used to determine if this instance got added
+        sal_uInt32 getCombinedHoldCyclesInSeconds() const { return mnCalculatedCycles; }
 
         // Size estimation of the entry in bytes - does not have to
         // be used, but should be. Default returns zero what
