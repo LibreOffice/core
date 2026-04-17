@@ -218,6 +218,10 @@ void DocumentLinksAdministrationManager::UpdateLinks()
                 pLayout->InvalidateAllContent(SwInvalidateFlags::PrtArea);
         });
 
+    // Register links for form controls with deferred remote ImageURL
+    registerDeferredFormImageLinks(pShell->GetDeferredFormControlImages(), GetLinkManager());
+    pShell->ClearDeferredFormControlImages();
+
     if (GetLinkManager().GetLinks().empty())
         return;
     sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode(true);

@@ -995,10 +995,17 @@ void SdDrawDocument::UpdateAllLinks()
     // with unresolved remote URLs, before checking whether the link list is empty.
     registerFillBitmapLinks(*this, *m_pLinkManager);
 
+    // Register links for form controls with deferred remote ImageURL
+    ::sd::DrawDocShell* pDocShell = GetDocSh();
+    if (pDocShell)
+    {
+        registerDeferredFormImageLinks(pDocShell->GetDeferredFormControlImages(), *m_pLinkManager);
+        pDocShell->ClearDeferredFormControlImages();
+    }
+
     if (m_pLinkManager->GetLinks().empty())
         return;
 
-    ::sd::DrawDocShell* pDocShell = GetDocSh();
     if (!pDocShell)
         return;
 

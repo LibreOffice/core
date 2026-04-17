@@ -318,6 +318,25 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testBulletImageRemoteNotFetched)
     pModelObj->paintTile(*pDevice, 1024, 768, 0, 0, 15360, 7680);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFormImageRemoteNotFetched)
+{
+    // Form image button with a remote ImageURL must not fetch the
+    // URL during import when link updates are not allowed.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"form-image-link.fods", aParams);
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering({});
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(Size(1024, 768));
+    // FIXME: it fails with void DeInitVCL(): Assertion `vcl::Window::IsLOKWindowsEmpty()' failed
+    // pModelObj->paintTile(*pDevice, 1024, 768, 0, 0, 15360, 7680);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

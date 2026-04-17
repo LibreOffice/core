@@ -955,6 +955,31 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeFillRemoteNotFetched)
         *pDevice, tools::Rectangle(Point(0, 0), pWrtShell->GetLayout()->getFrameArea().SSize()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormImageRemoteNotFetched)
+{
+    // Form image button with a remote ImageURL must not fetch the
+    // URL during import when link updates are not allowed. The
+    // ImageURL property is skipped in elementimport.cxx and deferred
+    // until the user allows link updates.
+    comphelper::LibreOfficeKit::setActive(false);
+
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"form-image-link.fodt", aParams);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    pWrtShell->CalcLayout();
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(Size(1024, 1024));
+    static_cast<SwViewShell*>(pWrtShell)->Paint(
+        *pDevice, tools::Rectangle(Point(0, 0), pWrtShell->GetLayout()->getFrameArea().SSize()));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

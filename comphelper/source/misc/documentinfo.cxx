@@ -23,6 +23,7 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
@@ -164,6 +165,55 @@ namespace comphelper {
         auto pMedDescr = aMedDescr.getArray();
         pMedDescr[nNewLen-1].Name = "MacroEventRead";
         pMedDescr[nNewLen-1].Value <<= true;
+        rModel->attachResource(rModel->getURL(), aMedDescr);
+    }
+
+    void DocumentInfo::notifyRemoteContentFound(
+        const css::uno::Reference<css::frame::XModel>& rModel,
+        const css::uno::Reference<css::beans::XPropertySet>& rxControl,
+        const OUString& rURL)
+    {
+        if (!rModel.is())
+            return;
+
+        // Build a sequence of (control, URL) pairs. If RemoteContentFound
+        // already exists, append to the existing sequence.
+        css::uno::Sequence<css::beans::PropertyValue> aMedDescr = rModel->getArgs();
+
+        css::uno::Sequence<css::beans::PropertyValue> aExisting;
+        for (const auto& rProp : aMedDescr)
+        {
+            if (rProp.Name == "RemoteContentFound")
+                rProp.Value >>= aExisting;
+        }
+
+        sal_Int32 nOldLen = aExisting.getLength();
+        aExisting.realloc(nOldLen + 1);
+        auto pEntries = aExisting.getArray();
+        pEntries[nOldLen].Name = rURL;
+        pEntries[nOldLen].Value <<= rxControl;
+
+        // Find and update or append RemoteContentFound
+        bool bFound = false;
+        sal_Int32 nNewLen = aMedDescr.getLength();
+        auto pMedDescr = aMedDescr.getArray();
+        for (sal_Int32 i = 0; i < nNewLen; ++i)
+        {
+            if (pMedDescr[i].Name == "RemoteContentFound")
+            {
+                pMedDescr[i].Value <<= aExisting;
+                bFound = true;
+                break;
+            }
+        }
+        if (!bFound)
+        {
+            aMedDescr.realloc(nNewLen + 1);
+            pMedDescr = aMedDescr.getArray();
+            pMedDescr[nNewLen].Name = "RemoteContentFound";
+            pMedDescr[nNewLen].Value <<= aExisting;
+        }
+
         rModel->attachResource(rModel->getURL(), aMedDescr);
     }
 
