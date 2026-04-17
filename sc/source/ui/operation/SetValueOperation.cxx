@@ -57,7 +57,7 @@ bool SetValueOperation::runImplementation()
         pUndoMgr->AddUndoAction(std::move(pUndoAction));
     }
 
-    syncSheetViews(pUndoSetCell);
+    syncCellToSheetViews(aPosition, pUndoSetCell);
 
     if (bHeight)
         mrDocFunc.AdjustRowHeight(ScRange(aPosition), true, mbApi);
