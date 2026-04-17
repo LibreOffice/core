@@ -97,6 +97,35 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 		desktopHelper.assertScrollbarPosition('vertical', 325, 360);
 	});
 
+	it('Jump to image when cursor not visible', function() {
+		// Regression test: when the text cursor is hidden, double-clicking
+		// an image in the navigator must still scroll the viewport to it.
+		// assertVisiblePage alone is not sufficient as #StatePageNumber
+		// reflects the selection's page (which core updates regardless of
+		// whether the viewport scrolls), so check the actual scrollbar.
+		expandSection('Images');
+
+		cy.cGet('#navigator-dock-wrapper').scrollTo(0,0, { ensureScrollable: false });
+
+		// Jump to a heading so a cursor exists at a known position.
+		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Feedback').dblclick();
+		desktopHelper.assertVisiblePage(2, 2, 8);
+		desktopHelper.assertScrollbarPosition('vertical', 45, 75);
+
+		// Scroll document to the top so the text cursor is no longer visible.
+		desktopHelper.scrollWriterDocumentToTop();
+		desktopHelper.updateFollowingUsers();
+		desktopHelper.assertScrollbarPosition('vertical', 0, 10);
+
+		// Double-click an image on a different page (graphics10 is on page 5).
+		// Without the fix, _onUpdateCursor returns early because the text
+		// cursor is invisible, so the viewport never scrolls and the
+		// scrollbar stays near 0.
+		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'graphics10').dblclick();
+		desktopHelper.assertVisiblePage(5, 5, 8);
+		desktopHelper.assertScrollbarPosition('vertical', 100, 400);
+	});
+
 	it.skip('Jump to element. Document -> Navigator', function() {
 		// Move the cursor into elements in Document, and check
 		// if navigator contentTree scroll to the element and select that,
