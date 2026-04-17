@@ -9,6 +9,7 @@
 
 #include <operation/Operation.hxx>
 #include <operation/OperationType.hxx>
+#include <cellvalue.hxx>
 #include <SheetViewOperationsTester.hxx>
 #include <address.hxx>
 #include <dbdata.hxx>
@@ -272,6 +273,67 @@ void Operation::syncSheetViews(UndoSheetViewSortData* pUndoSortData)
                 pDBData->GetArea(aAutoFilterRangeAfter);
             pUndoSortData->setAutoFilterRange(aAutoFilterRangeBefore, aAutoFilterRangeAfter);
         }
+    }
+}
+
+void Operation::syncCellToSheetViews(const ScAddress& rDefaultViewAddress,
+                                     UndoSheetViewSortData* pUndoSortData)
+{
+    if (!mpViewData)
+        return;
+
+    auto& rDocument = mpViewData->GetDocument();
+    SCTAB nDefaultViewTab = mpViewData->GetDefaultViewTab();
+
+    std::shared_ptr<SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
+    if (!pManager || pManager->isEmpty())
+        return;
+
+    // Check if the cell could expand the auto-filter range. If so, fall back
+    // to the full sync, which can handle the complexities of that.
+    ScDBData* pDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+    if (pDBData && pDBData->HasAutoFilter())
+    {
+        ScRange aDBRange;
+        pDBData->GetArea(aDBRange);
+        SCROW nCellRow = rDefaultViewAddress.Row();
+        SCCOL nCellCol = rDefaultViewAddress.Col();
+        if (nCellRow > aDBRange.aEnd.Row() && nCellCol >= aDBRange.aStart.Col()
+            && nCellCol <= aDBRange.aEnd.Col())
+        {
+            // Cell is below the auto-filter range in a relevant column
+            // so we need full sync.
+            syncSheetViews(pUndoSortData);
+            return;
+        }
+    }
+
+    // If any sheet view has an active sort, the sort order needs updating
+    // which requires the full sync fall back.
+    for (auto& rSheetView : pManager->iterateValidSheetViews())
+    {
+        if (rSheetView.getSortParam())
+        {
+            syncSheetViews(pUndoSortData);
+            return;
+        }
+    }
+
+    // Fast path: no sheet view sorts active, just propagate the cell value
+    // directly. We do handle the default view sort if there is any applied.
+    ScCellValue aCellValue;
+    aCellValue.assign(rDocument, rDefaultViewAddress);
+
+    SCCOL nColumn = rDefaultViewAddress.Col();
+    SCROW nDefaultRow = rDefaultViewAddress.Row();
+
+    for (auto& rSheetView : pManager->iterateValidSheetViews())
+    {
+        SCTAB nSheetViewTab = rSheetView.getTableNumber();
+        // Reverse the sheet view specific sorting of the default view.
+        SCROW nSheetViewRow = rSheetView.reverseDefaultViewToSheetView(nDefaultRow, nColumn);
+        ScAddress aSheetViewAddress(nColumn, nSheetViewRow, nSheetViewTab);
+        aCellValue.commit(rDocument, aSheetViewAddress);
     }
 }
 

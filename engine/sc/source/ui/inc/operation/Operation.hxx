@@ -65,6 +65,12 @@ protected:
     /** Synchronizes the sheet views and the default view */
     void syncSheetViews(UndoSheetViewSortData* pUndoSortData = nullptr);
 
+    /** Propagates a single cell change to all sheet views.
+     * This uses a fast-path to sync by setting the values directly to the default view and all
+     * sheet views, but can fall back to the slow sync in certain situations.*/
+    void syncCellToSheetViews(const ScAddress& rDefaultViewAddress,
+                              UndoSheetViewSortData* pUndoSortData = nullptr);
+
     /** Check if the input is on a sheet view tab */
     bool isInputOnSheetView() const;
 

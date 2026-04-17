@@ -134,6 +134,9 @@ public:
     /** Reverses the complete (sheet view and default view) sorting order for the input row */
     SCROW reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const;
 
+    /** Converts a row from the default view to the row in this sheet view, taking sorting data into acocunt.*/
+    SCROW reverseDefaultViewToSheetView(SCROW nRow, SCCOL nColumn) const;
+
     /** Update stored sort ranges when rows are inserted. */
     void insertedRows(SCROW nStartRow, SCROW nRowCount);
 

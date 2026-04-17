@@ -367,6 +367,33 @@ SCROW SheetView::reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const
     return nResortedRow;
 }
 
+SCROW SheetView::reverseDefaultViewToSheetView(SCROW nRow, SCCOL nColumn) const
+{
+    SCROW nUnsortedRow = nRow;
+
+    // Reverse the default view's sorting (default view -> unsorted)
+    if (mpSortData && !mpSortData->maOriginalReorderParams.maOrderIndices.empty())
+    {
+        ScRange const& rRange = mpSortData->maOriginalReorderParams.maSortRange;
+        SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ rRange.aStart.Col(),
+                                    rRange.aEnd.Col(),
+                                    rRange.aStart.Row(),
+                                    rRange.aEnd.Row(),
+                                    mpSortData->maOriginalReorderParams.maOrderIndices,
+                                    {} });
+        nUnsortedRow = aReverser.unsort(nRow, nColumn);
+    }
+
+    // Apply the sheet view's sort (unsorted -> sheet view)
+    SCROW nSheetViewRow = nUnsortedRow;
+    if (mpSortData)
+    {
+        nSheetViewRow = mpSortData->maSortOrder.resort(nUnsortedRow, nColumn);
+    }
+    return nSheetViewRow;
+}
+
 void SheetView::adjustReorderParamsForInsertRows(SCROW nStartRow, SCROW nRowCount)
 {
     if (!mpSortData || mpSortData->maOriginalReorderParams.maOrderIndices.empty())
