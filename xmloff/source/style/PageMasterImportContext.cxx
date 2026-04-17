@@ -31,10 +31,13 @@
 #include <osl/diagnose.h>
 
 //
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
 
@@ -45,6 +48,51 @@ using namespace ::com::sun::star::lang;
 
 //
 using namespace ::com::sun::star::beans;
+
+void PageStyleContext::RecoverMissingFillBitmapFromBackGraphic(
+    sal_Int32 nBitmapNameCtx, sal_Int32 nGraphicCtx)
+{
+    SvXMLImportPropertyMapper* pImpPrMap =
+        GetStyles()->GetImportPropertyMapper(GetFamily());
+    if (!pImpPrMap)
+        return;
+
+    const rtl::Reference<XMLPropertySetMapper>& rMapper =
+        pImpPrMap->getPropertySetMapper();
+
+    // find the fill-image-name and the background-image graphic in the
+    // parsed properties (before deactivation clears the indices)
+    OUString sBitmapName;
+    uno::Reference<graphic::XGraphic> xGraphic;
+
+    for (const auto& rProp : GetProperties())
+    {
+        if (rProp.mnIndex == -1)
+            continue;
+        sal_Int32 nCtx = rMapper->GetEntryContextId(rProp.mnIndex);
+        if (nCtx == nBitmapNameCtx)
+            rProp.maValue >>= sBitmapName;
+        else if (nCtx == nGraphicCtx)
+            rProp.maValue >>= xGraphic;
+    }
+
+    if (sBitmapName.isEmpty() || !xGraphic.is())
+        return;
+
+    // translate from ODF internal name to model name
+    sBitmapName = GetImport().GetStyleDisplayName(
+        XmlStyleFamily::SD_FILL_IMAGE_ID, sBitmapName);
+
+    uno::Reference<container::XNameContainer> xBitmapTable(
+        GetImport().GetBitmapHelper());
+    if (!xBitmapTable.is() || xBitmapTable->hasByName(sBitmapName))
+        return;
+
+    // create the missing bitmap table entry from the old background image
+    uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+    if (xBitmap.is())
+        xBitmapTable->insertByName(sBitmapName, uno::Any(xBitmap));
+}
 
 void PageStyleContext::SetAttribute( sal_Int32 nElement,
                                         const OUString& rValue )
@@ -169,6 +217,19 @@ void PageStyleContext::FillPropertySet_PageStyle(
         static constexpr OUString s_FillStyle(u"FillStyle"_ustr);
         static constexpr OUStringLiteral s_HeaderFillStyle(u"HeaderFillStyle");
         static constexpr OUStringLiteral s_FooterFillStyle(u"FooterFillStyle");
+
+        // Before deactivating old fill definitions, recover any missing
+        // bitmap table entries. A broken document may have
+        // draw:fill-image-name without a matching <draw:fill-image>
+        // element. If a style:background-image (BackGraphic) exists with
+        // actual image data, use it to create the missing bitmap entry
+        // so the new draw:fill mechanism can find it.
+        RecoverMissingFillBitmapFromBackGraphic(
+            CTF_PM_FILLBITMAPNAME, CTF_PM_GRAPHICURL);
+        RecoverMissingFillBitmapFromBackGraphic(
+            CTF_PM_HEADERFILLBITMAPNAME, CTF_PM_HEADERGRAPHICURL);
+        RecoverMissingFillBitmapFromBackGraphic(
+            CTF_PM_FOOTERFILLBITMAPNAME, CTF_PM_FOOTERGRAPHICURL);
 
         // note: the function must only check by property name, not any id/flag!
         if (doNewDrawingLayerFillStyleDefinitionsExist(s_FillStyle)
