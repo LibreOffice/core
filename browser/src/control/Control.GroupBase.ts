@@ -424,10 +424,6 @@ export abstract class GroupBase extends CanvasSectionObject {
 			this._updateOutlineState(group);
 	}
 
-	onMouseEnter(): void {
-		$.contextMenu('destroy', '#document-canvas');
-	}
-
 	onRemove(): void {
 		this.isRemoved = true;
 		this.containerObject.getSectionWithName(app.CSections.RowHeader.name).position[0] = 0;

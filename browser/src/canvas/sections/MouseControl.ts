@@ -106,8 +106,6 @@ class MouseControl extends CanvasSectionObject {
 		// We need this to prevent native context menu.
 		e.preventDefault();
 
-		$.contextMenu('destroy', '#canvas-container');
-
 		// We will remove below ones after we remove map HTML element.
 		e.stopPropagation();
 		e.stopImmediatePropagation();

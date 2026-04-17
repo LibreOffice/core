@@ -67,7 +67,6 @@ export class CornerGroup extends GroupBase {
 
 	onMouseEnter(): void {
 		this.containerObject.getCanvasStyle().cursor = 'pointer';
-		$.contextMenu('destroy', '#document-canvas');
 	}
 
 	onMouseLeave(): void {

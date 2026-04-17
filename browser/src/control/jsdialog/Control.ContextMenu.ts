@@ -493,7 +493,7 @@ class ContextMenuControl extends JSControl {
 
 	// Prevents right mouse button's mouseup event from triggering menu item accidentally.
 	public stopRightMouseUpEvent(): void {
-		const menuItems = document.getElementsByClassName('context-menu-item');
+		const menuItems = document.getElementsByClassName('ui-combobox-entry');
 
 		for (let i = 0; i < menuItems.length; i++) {
 			menuItems[i].addEventListener('mouseup', function (eo: Event) {

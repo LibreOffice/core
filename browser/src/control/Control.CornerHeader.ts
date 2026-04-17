@@ -53,7 +53,6 @@ export class CornerHeader extends CanvasSectionObject {
 
 	onMouseEnter(): void {
 		this.containerObject.getCanvasStyle().cursor = this.sectionProperties.cursor;
-		$.contextMenu('destroy', '#document-canvas');
 	}
 
 	onMouseLeave(): void {

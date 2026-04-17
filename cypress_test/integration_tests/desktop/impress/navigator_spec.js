@@ -107,7 +107,7 @@ describe.skip(['tagdesktop'], 'Scroll through document, insert/delete items', fu
 		// Table is inserted with the markers shown
 		cy.cGet('.leaflet-marker-icon.table-column-resize-marker').should('exist');
 		cy.cGet('path.leaflet-interactive').rightclick({force:true});
-		cy.cGet('body').contains('.context-menu-item', 'Delete').click();
+		cy.cGet('body').contains('.ui-combobox-entry', 'Delete').click();
 		checkIfItemNotExist('Shape 2 (Table)');
 
 		//Insert Fontwork
