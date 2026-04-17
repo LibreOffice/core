@@ -207,7 +207,6 @@ COOL_CSS =\
 	$(srcdir)/css/writer-mobile.css \
 	$(srcdir)/css/writer.css \
 	$(srcdir)/css/iframedialog.css \
-	$(builddir)/node_modules/jquery-contextmenu/dist/jquery.contextMenu.css \
 	$(builddir)/node_modules/smartmenus/dist/css/sm-core-css.css \
 	$(builddir)/node_modules/smartmenus/dist/css/sm-simple/sm-simple.css \
 	$(srcdir)/css/welcome.css \
@@ -253,7 +252,6 @@ NODE_MODULES_JS =\
 	$(if $(IS_SEPARATE),node_modules/hammerjs/hammer.js,node_modules/hammerjs/hammer.min.js) \
 	node_modules/dompurify/dist/purify.min.js \
 	node_modules/jquery/dist/jquery.js \
-	node_modules/jquery-contextmenu/dist/jquery.contextMenu.js \
 	node_modules/jquery-ui/dist/jquery-ui.js \
 	$(shell find node_modules/jquery-ui/ui/i18n -name '*.js' 2>/dev/null) \
 	node_modules/smartmenus/dist/jquery.smartmenus.js \

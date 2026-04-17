@@ -139,14 +139,6 @@
       "licenseConcluded": "MIT"
     },
     {
-      "SPDXID": "SPDXRef-jquery-contextMenu",
-      "name": "jQuery contextMenu",
-      "versionInfo": "2.9.2",
-      "filesAnalyzed": false,
-      "downloadLocation": "NONE",
-      "licenseConcluded": "MIT"
-    },
-    {
       "SPDXID": "SPDXRef-jquery-ui",
       "name": "jQuery UI",
       "versionInfo": "1.13.2",
@@ -303,11 +295,6 @@
       "spdxElementId": "SPDXRef-coolwsd",
       "relationshipType": "CONTAINS",
       "relatedSpdxElement": "SPDXRef-jquery-ui"
-    },
-    {
-      "spdxElementId": "SPDXRef-coolwsd",
-      "relationshipType": "CONTAINS",
-      "relatedSpdxElement": "SPDXRef-leaflet"
     },
     {
       "spdxElementId": "SPDXRef-coolwsd",
