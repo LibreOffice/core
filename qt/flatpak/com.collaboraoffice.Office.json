@@ -95,11 +95,11 @@
                     "dest-filename": "quickjs-v0.13.0.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/pdfium-7691.tar.bz2",
-                    "sha256": "a4ca01c0e58b5c6bf52c0d17584eaaa2a893dc0240fd47cf94dfb27f0b8c03f6",
+                    "url": "https://dev-www.libreoffice.org/src/pdfium-7795.tar.bz2",
+                    "sha256": "fbb7b551699a4bbf2f47986d485df0a82e9391841239cdbcd64554d88209014c",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "pdfium-7691.tar.bz2"
+                    "dest-filename": "pdfium-7795.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/afdko-4.0.3.tar.gz",

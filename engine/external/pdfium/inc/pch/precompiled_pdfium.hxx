@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-02-18 10:54:25 using:
+ Generated on 2026-04-16 16:07:55 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -37,8 +37,9 @@
 #include <climits>
 #include <cmath>
 #include <ctype.h>
-#include <fcntl.h>
 #include <functional>
+#include <hb-subset.h>
+#include <hb.h>
 #include <initializer_list>
 #include <iterator>
 #include <limits.h>
@@ -63,7 +64,6 @@
 #include <time.h>
 #include <tuple>
 #include <type_traits>
-#include <unistd.h>
 #include <utility>
 #include <variant>
 #include <vector>
@@ -94,6 +94,8 @@
 #include <core/fpdfapi/cmaps/fpdf_cmaps.h>
 #include <core/fpdfapi/edit/cpdf_contentstream_write_utils.h>
 #include <core/fpdfapi/edit/cpdf_creator.h>
+#include <core/fpdfapi/edit/cpdf_font_util.h>
+#include <core/fpdfapi/edit/cpdf_fontsubsetter.h>
 #include <core/fpdfapi/edit/cpdf_npagetooneexporter.h>
 #include <core/fpdfapi/edit/cpdf_pagecontentgenerator.h>
 #include <core/fpdfapi/edit/cpdf_pagecontentmanager.h>
@@ -199,7 +201,6 @@
 #include <core/fpdfapi/parser/fpdf_parser_decode.h>
 #include <core/fpdfapi/parser/fpdf_parser_utility.h>
 #include <core/fpdfapi/parser/object_tree_traversal_util.h>
-#include <core/fpdfapi/render/charposlist.h>
 #include <core/fpdfapi/render/cpdf_devicebuffer.h>
 #include <core/fpdfapi/render/cpdf_docrenderdata.h>
 #include <core/fpdfapi/render/cpdf_imagerenderer.h>
@@ -345,7 +346,6 @@
 #include <core/fxcrt/fx_string_wrappers.h>
 #include <core/fxcrt/fx_system.h>
 #include <core/fxcrt/fx_unicode.h>
-#include <core/fxcrt/mapped_data_bytes.h>
 #include <core/fxcrt/mask.h>
 #include <core/fxcrt/maybe_owned.h>
 #include <core/fxcrt/notreached.h>
@@ -364,6 +364,7 @@
 #include <core/fxcrt/string_data_template.h>
 #include <core/fxcrt/string_pool_template.h>
 #include <core/fxcrt/string_template.h>
+#include <core/fxcrt/to_underlying.h>
 #include <core/fxcrt/unowned_ptr.h>
 #include <core/fxcrt/unowned_ptr_exclusion.h>
 #include <core/fxcrt/utf16.h>
@@ -382,6 +383,7 @@
 #include <core/fxge/agg/cfx_agg_devicedriver.h>
 #include <core/fxge/agg/cfx_agg_imagerenderer.h>
 #include <core/fxge/calculate_pitch.h>
+#include <core/fxge/cfx_charmap_resolver.h>
 #include <core/fxge/cfx_color.h>
 #include <core/fxge/cfx_defaultrenderdevice.h>
 #include <core/fxge/cfx_drawutils.h>
@@ -400,7 +402,6 @@
 #include <core/fxge/cfx_renderdevice.h>
 #include <core/fxge/cfx_substfont.h>
 #include <core/fxge/cfx_textrenderoptions.h>
-#include <core/fxge/cfx_unicodeencoding.h>
 #include <core/fxge/dib/blend.h>
 #include <core/fxge/dib/cfx_bitmapstorer.h>
 #include <core/fxge/dib/cfx_cmyk_to_srgb.h>
@@ -483,8 +484,6 @@
 #include <public/fpdf_text.h>
 #include <public/fpdf_transformpage.h>
 #include <public/fpdfview.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
 #include <third_party/agg23/agg_clip_liang_barsky.h>
 #include <third_party/agg23/agg_conv_dash.h>
 #include <third_party/agg23/agg_conv_stroke.h>
