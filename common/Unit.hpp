@@ -217,13 +217,6 @@ public:
         return {};
     }
 
-    virtual std::string getProxyRatingServer() const
-    {
-        // return a blank proxy rating server by default so there is no
-        // external network traffic during tests.
-        return std::string();
-    }
-
     /// Called when the document has been loaded,
     /// based on the "loaded:" message, in the context of filterSendWebSocketMessage.
     /// Return true to stop further handling of messages.

@@ -25,63 +25,6 @@
 
 using namespace std::literals;
 
-// Inside the WSD process
-class UnitProxy : public UnitWSD
-{
-    std::shared_ptr<SocketPoll>  _poll;
-    http::Request _req;
-    bool _sentRequest;
-
-public:
-    UnitProxy()
-        : UnitWSD("UnitProxy"),
-          _poll(std::make_shared<SocketPoll>("proxy-poll")),
-          _sentRequest(false)
-    {
-        setTimeout(10s);
-    }
-
-    void configure(Poco::Util::LayeredConfiguration& config) override
-    {
-        UnitWSD::configure(config);
-
-        // Enable the unusual proxy prefix mode. Must be done on the first test.
-        config.setBool("net.proxy_prefix", true);
-    }
-
-    void invokeWSDTest() override
-    {
-        if (_sentRequest)
-            return; // be more patient.
-        _sentRequest = true;
-
-        auto httpSession = http::Session::create(helpers::getTestServerURI());
-
-        httpSession->setTimeout(9s);
-
-        // Request from rating.collaboraonline.com.
-        _req = http::Request("/browser/a90f83c/foo/remote/static/lokit-extra-img.svg");
-
-        TST_LOG("Attempt proxy URL fetch " << httpSession->getUrl() << _req.getUrl());
-
-        httpSession->setConnectFailHandler([this](const std::shared_ptr<http::Session>&) {
-            LOK_ASSERT_FAIL("Unexpected connection failure");
-        });
-
-        httpSession->setFinishedHandler(
-            [&](const std::shared_ptr<http::Session>&)
-            {
-                TST_LOG("Got a valid response from the proxy");
-                // any result short of server choking is fine - we may be off-line
-                exitTest(TestResult::Ok);
-            });
-
-        httpSession->asyncRequest(_req, _poll, false);
-
-        _poll->startThread();
-    }
-};
-
 class UnitProxyProtocol : public UnitWSD
 {
     http::Request _req;
@@ -164,7 +107,7 @@ public:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [] { new UnitProxy(), new UnitProxyProtocol(), nullptr };
+    return new UnitBase* [] { new UnitProxyProtocol(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

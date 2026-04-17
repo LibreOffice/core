@@ -1101,35 +1101,21 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         {
             // File server
             assert(socket && "Must have a valid socket");
-            constexpr std::string_view ProxyRemote = "/remote/";
-            constexpr auto ProxyRemoteLen = ProxyRemote.size();
             constexpr std::string_view ProxyRemoteStatic = "/remote/static/";
             const auto uri = requestDetails.getURI();
             const auto pos = uri.find(ProxyRemoteStatic);
             if (pos != std::string::npos)
             {
-                if (uri.ends_with("lokit-extra-img.svg"))
-                {
-                    std::string proxyRatingServer =
-                        !isUnitTesting ? ProxyRequestHandler::getProxyRatingServer()
-                                       : UnitWSD::get().getProxyRatingServer();
-                    ProxyRequestHandler::handleRequest(uri.substr(pos + ProxyRemoteLen - 1), socket,
-                                                       proxyRatingServer);
-                    servedSync = true;
-                }
 #if ENABLE_FEATURE_LOCK
-                else
+                const Poco::URI unlockImageUri =
+                    CommandControl::LockManager::getUnlockImageUri();
+                if (!unlockImageUri.empty())
                 {
-                    const Poco::URI unlockImageUri =
-                        CommandControl::LockManager::getUnlockImageUri();
-                    if (!unlockImageUri.empty())
-                    {
-                        const std::string& serverUri =
-                            unlockImageUri.getScheme() + "://" + unlockImageUri.getAuthority();
-                        ProxyRequestHandler::handleRequest(
-                            uri.substr(pos + sizeof("/remote/static") - 1), socket, serverUri);
-                        servedSync = true;
-                    }
+                    const std::string& serverUri =
+                        unlockImageUri.getScheme() + "://" + unlockImageUri.getAuthority();
+                    ProxyRequestHandler::handleRequest(
+                        uri.substr(pos + sizeof("/remote/static") - 1), socket, serverUri);
+                    servedSync = true;
                 }
 #endif
                 if (!servedSync)

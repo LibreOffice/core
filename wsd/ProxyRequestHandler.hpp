@@ -33,11 +33,6 @@ public:
     static void handleRequest(const std::string& relPath,
                               const std::shared_ptr<StreamSocket>& socket,
                               const std::string& serverUri);
-    static const std::string& getProxyRatingServer()
-    {
-        static const std::string ProxyRatingServer = "https://rating.collaboraonline.com";
-        return ProxyRatingServer;
-    }
 
 private:
     static std::chrono::system_clock::time_point MaxAge;
