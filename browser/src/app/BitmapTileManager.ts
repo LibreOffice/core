@@ -228,7 +228,11 @@ class BitmapTileManager {
 	// When a new bitmap is set on a tile we should see if we need to expire an old tile
 	private setBitmapOnTile(tile: Tile, bitmap: ImageBitmap) {
 		// 4k screen -> 8Mpixel, each tile is 64kpixel uncompressed
-		const highNumBitmaps = 250; // ~60Mb.
+		// Most tablets and larger displays (physical width >= 1280) get a
+		// higher cap so more tiles can stay decoded in memory.
+		const physicalScreenWidth =
+			window.screen.width * (window.devicePixelRatio || 1);
+		const highNumBitmaps = physicalScreenWidth >= 1280 ? 500 : 250; // ~120Mb / ~60Mb.
 
 		if (tile.image) {
 			// fast case - no impact on count of tiles or bitmap list:
