@@ -75,7 +75,7 @@ void VectorGraphicSearchTest::test()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2486.37, aRectangles[3].getMaxY(), 1E-2);
 
     CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-    CPPUNIT_ASSERT_EQUAL(809, aSearch.index());
+    CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
 
     aRectangles = aSearch.getTextRectangles();
     CPPUNIT_ASSERT_EQUAL(size_t(4), aRectangles.size());
@@ -116,11 +116,11 @@ void VectorGraphicSearchTest::testNextPrevious()
 
         // next - second position found
         CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-        CPPUNIT_ASSERT_EQUAL(809, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
 
         // next - not found, index unchanged
         CPPUNIT_ASSERT_EQUAL(false, aSearch.next());
-        CPPUNIT_ASSERT_EQUAL(809, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
 
         // previous - first position
         CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
@@ -132,7 +132,7 @@ void VectorGraphicSearchTest::testNextPrevious()
 
         // next - second position found
         CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-        CPPUNIT_ASSERT_EQUAL(809, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
     }
 
     { // Start from the end of the page
@@ -146,7 +146,7 @@ void VectorGraphicSearchTest::testNextPrevious()
 
         // previous - second position found
         CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
-        CPPUNIT_ASSERT_EQUAL(809, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
 
         // previous - first position found
         CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
@@ -158,11 +158,11 @@ void VectorGraphicSearchTest::testNextPrevious()
 
         // next - second position
         CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-        CPPUNIT_ASSERT_EQUAL(809, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
 
         // next - not found, index unchanged
         CPPUNIT_ASSERT_EQUAL(false, aSearch.next());
-        CPPUNIT_ASSERT_EQUAL(809, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
 
         // previous - first match found
         CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
@@ -187,18 +187,18 @@ void VectorGraphicSearchTest::testSearchStringChange()
     CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
 
     CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-    CPPUNIT_ASSERT_EQUAL(809, aSearch.index());
+    CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
 
     // Change search to "fox"
     CPPUNIT_ASSERT_EQUAL(true, aSearch.search(u"fox"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-    CPPUNIT_ASSERT_EQUAL(814, aSearch.index());
+    CPPUNIT_ASSERT_EQUAL(822, aSearch.index());
 
     // Change search to "Quick"
     CPPUNIT_ASSERT_EQUAL(true, aSearch.search(u"Quick"_ustr));
     CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
-    CPPUNIT_ASSERT_EQUAL(777, aSearch.index());
+    CPPUNIT_ASSERT_EQUAL(784, aSearch.index());
 }
 
 void VectorGraphicSearchTest::testSearchMatchWholeWord()
@@ -214,14 +214,14 @@ void VectorGraphicSearchTest::testSearchMatchWholeWord()
         // Search, whole word disabled - "Flummoxed" - found
         CPPUNIT_ASSERT_EQUAL(true, aSearch.search(u"Flummoxed"_ustr));
         CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-        CPPUNIT_ASSERT_EQUAL(612, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
     }
     {
         VectorGraphicSearch aSearch(aGraphic);
         // Search, whole word disabled - "Flummo" - found
         CPPUNIT_ASSERT_EQUAL(true, aSearch.search(u"Flummo"_ustr));
         CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-        CPPUNIT_ASSERT_EQUAL(612, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
     }
     {
         VectorGraphicSearch aSearch(aGraphic);
@@ -229,7 +229,7 @@ void VectorGraphicSearchTest::testSearchMatchWholeWord()
         CPPUNIT_ASSERT_EQUAL(
             true, aSearch.search(u"Flummoxed"_ustr, { SearchStartPosition::Begin, false, true }));
         CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-        CPPUNIT_ASSERT_EQUAL(612, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
     }
     {
         VectorGraphicSearch aSearch(aGraphic);
@@ -253,7 +253,7 @@ void VectorGraphicSearchTest::testSearchMatchCase()
         // Search "Flummoxed" - case insensitive - found
         CPPUNIT_ASSERT_EQUAL(true, aSearch.search(u"Flummoxed"_ustr));
         CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-        CPPUNIT_ASSERT_EQUAL(612, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
     }
 
     {
@@ -261,7 +261,7 @@ void VectorGraphicSearchTest::testSearchMatchCase()
         // Search "FLUMMOXED" - case insensitive - found
         CPPUNIT_ASSERT_EQUAL(true, aSearch.search(u"FLUMMOXED"_ustr));
         CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-        CPPUNIT_ASSERT_EQUAL(612, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
     }
 
     {
@@ -270,7 +270,7 @@ void VectorGraphicSearchTest::testSearchMatchCase()
         CPPUNIT_ASSERT_EQUAL(
             true, aSearch.search(u"Flummoxed"_ustr, { SearchStartPosition::Begin, true, false }));
         CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-        CPPUNIT_ASSERT_EQUAL(612, aSearch.index());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
     }
 
     {
