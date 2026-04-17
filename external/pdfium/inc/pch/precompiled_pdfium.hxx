@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-02-19 12:36:16 using:
+ Generated on 2026-06-19 13:14:02 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -38,6 +38,8 @@
 #include <cmath>
 #include <ctype.h>
 #include <functional>
+#include <hb-subset.h>
+#include <hb.h>
 #include <initializer_list>
 #include <iterator>
 #include <limits.h>
@@ -92,6 +94,8 @@
 #include <core/fpdfapi/cmaps/fpdf_cmaps.h>
 #include <core/fpdfapi/edit/cpdf_contentstream_write_utils.h>
 #include <core/fpdfapi/edit/cpdf_creator.h>
+#include <core/fpdfapi/edit/cpdf_font_util.h>
+#include <core/fpdfapi/edit/cpdf_fontsubsetter.h>
 #include <core/fpdfapi/edit/cpdf_npagetooneexporter.h>
 #include <core/fpdfapi/edit/cpdf_pagecontentgenerator.h>
 #include <core/fpdfapi/edit/cpdf_pagecontentmanager.h>
@@ -197,7 +201,6 @@
 #include <core/fpdfapi/parser/fpdf_parser_decode.h>
 #include <core/fpdfapi/parser/fpdf_parser_utility.h>
 #include <core/fpdfapi/parser/object_tree_traversal_util.h>
-#include <core/fpdfapi/render/charposlist.h>
 #include <core/fpdfapi/render/cpdf_devicebuffer.h>
 #include <core/fpdfapi/render/cpdf_docrenderdata.h>
 #include <core/fpdfapi/render/cpdf_imagerenderer.h>
@@ -289,10 +292,10 @@
 #include <core/fxcrt/bytestring.h>
 #include <core/fxcrt/cfx_bitstream.h>
 #include <core/fxcrt/cfx_datetime.h>
+#include <core/fxcrt/cfx_fileaccess_stream.h>
 #include <core/fxcrt/cfx_memorystream.h>
+#include <core/fxcrt/cfx_read_only_container_stream.h>
 #include <core/fxcrt/cfx_read_only_span_stream.h>
-#include <core/fxcrt/cfx_read_only_string_stream.h>
-#include <core/fxcrt/cfx_read_only_vector_stream.h>
 #include <core/fxcrt/cfx_seekablestreamproxy.h>
 #include <core/fxcrt/cfx_timer.h>
 #include <core/fxcrt/check.h>
@@ -325,7 +328,6 @@
 #include <core/fxcrt/css/cfx_cssvaluelistparser.h>
 #include <core/fxcrt/data_vector.h>
 #include <core/fxcrt/debug/alias.h>
-#include <core/fxcrt/fileaccess_iface.h>
 #include <core/fxcrt/fixed_size_data_vector.h>
 #include <core/fxcrt/fx_2d_size.h>
 #include <core/fxcrt/fx_bidi.h>
@@ -344,6 +346,7 @@
 #include <core/fxcrt/fx_string_wrappers.h>
 #include <core/fxcrt/fx_system.h>
 #include <core/fxcrt/fx_unicode.h>
+#include <core/fxcrt/mask.h>
 #include <core/fxcrt/maybe_owned.h>
 #include <core/fxcrt/notreached.h>
 #include <core/fxcrt/numerics/clamped_math.h>
@@ -361,6 +364,7 @@
 #include <core/fxcrt/string_data_template.h>
 #include <core/fxcrt/string_pool_template.h>
 #include <core/fxcrt/string_template.h>
+#include <core/fxcrt/to_underlying.h>
 #include <core/fxcrt/unowned_ptr.h>
 #include <core/fxcrt/unowned_ptr_exclusion.h>
 #include <core/fxcrt/utf16.h>
@@ -379,6 +383,7 @@
 #include <core/fxge/agg/cfx_agg_devicedriver.h>
 #include <core/fxge/agg/cfx_agg_imagerenderer.h>
 #include <core/fxge/calculate_pitch.h>
+#include <core/fxge/cfx_charmap_resolver.h>
 #include <core/fxge/cfx_color.h>
 #include <core/fxge/cfx_defaultrenderdevice.h>
 #include <core/fxge/cfx_drawutils.h>
@@ -397,7 +402,6 @@
 #include <core/fxge/cfx_renderdevice.h>
 #include <core/fxge/cfx_substfont.h>
 #include <core/fxge/cfx_textrenderoptions.h>
-#include <core/fxge/cfx_unicodeencoding.h>
 #include <core/fxge/dib/blend.h>
 #include <core/fxge/dib/cfx_bitmapstorer.h>
 #include <core/fxge/dib/cfx_cmyk_to_srgb.h>
