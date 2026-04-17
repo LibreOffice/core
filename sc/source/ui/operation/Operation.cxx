@@ -308,32 +308,46 @@ void Operation::syncCellToSheetViews(const ScAddress& rDefaultViewAddress,
         }
     }
 
-    // If any sheet view has an active sort, the sort order needs updating
-    // which requires the full sync fall back.
-    for (auto& rSheetView : pManager->iterateValidSheetViews())
-    {
-        if (rSheetView.getSortParam())
-        {
-            syncSheetViews(pUndoSortData);
-            return;
-        }
-    }
-
-    // Fast path: no sheet view sorts active, just propagate the cell value
-    // directly. We do handle the default view sort if there is any applied.
+    // Read the cell value from the default view
     ScCellValue aCellValue;
     aCellValue.assign(rDocument, rDefaultViewAddress);
 
     SCCOL nColumn = rDefaultViewAddress.Col();
     SCROW nDefaultRow = rDefaultViewAddress.Row();
 
+    ScDBData* pDefaultViewDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+
     for (auto& rSheetView : pManager->iterateValidSheetViews())
     {
         SCTAB nSheetViewTab = rSheetView.getTableNumber();
-        // Reverse the sheet view specific sorting of the default view.
+
+        // Set the cell value at the mapped position in the sheet view.
         SCROW nSheetViewRow = rSheetView.reverseDefaultViewToSheetView(nDefaultRow, nColumn);
         ScAddress aSheetViewAddress(nColumn, nSheetViewRow, nSheetViewTab);
         aCellValue.commit(rDocument, aSheetViewAddress);
+
+        // If the sheet view has an active sort, re-sort to maintain correct order.
+        ScSortParam const* pSortParam = rSheetView.getSortParam();
+        if (pSortParam)
+        {
+            ScSortParam aSortParam(*pSortParam);
+            if (pDefaultViewDBData && pDefaultViewDBData->HasAutoFilter())
+            {
+                ScRange aDBRange;
+                pDefaultViewDBData->GetArea(aDBRange);
+                SCCOL nColumn1 = aDBRange.aStart.Col();
+                SCROW nRow1 = aDBRange.aStart.Row();
+                SCCOL nColumn2 = aDBRange.aEnd.Col();
+                SCROW nRow2 = aDBRange.aEnd.Row();
+                rDocument.GetDataArea(nDefaultViewTab, nColumn1, nRow1, nColumn2, nRow2, false,
+                                      true);
+                aSortParam.nRow2 = nRow2;
+                aSortParam.nCol2 = nColumn2;
+            }
+            // Don't call resetSortOrder() here - we can just let it merge the existing
+            // sort indices with the new ones and the result will be correct.
+            rDocument.Sort(nSheetViewTab, aSortParam, false, false, nullptr, nullptr);
+        }
     }
 }
 
