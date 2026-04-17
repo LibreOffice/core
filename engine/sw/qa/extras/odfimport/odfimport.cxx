@@ -1674,6 +1674,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165156)
     // This must succeed
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFillImageNameMissingDefinition)
+{
+    // Load a document where draw:fill-image-name references "TestBitmap" but
+    // no <draw:fill-image> element defines it. The page layout does have a
+    // style:background-image with actual image data. The import should recover
+    // the missing bitmap table entry from the old background image so that the
+    // fill-image-name resolves and the bitmap is accessible via UNO (which is
+    // the code path Collabora Online uses for the page setup dialog).
+    createSwDoc("fill-image-name-missing-definition.odt");
+
+    // The BitmapTable must contain the recovered entry
+    uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBitmapTable(
+        xFact->createInstance(u"com.sun.star.drawing.BitmapTable"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xBitmapTable.is());
+    CPPUNIT_ASSERT(xBitmapTable->hasByName(u"TestBitmap"_ustr));
+
+    // The page style must report FillStyle_BITMAP with a resolvable name
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
+        getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"TestBitmap"_ustr,
+        getProperty<OUString>(xPageStyle, u"FillBitmapName"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

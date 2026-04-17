@@ -30,6 +30,8 @@ private:
 
     virtual void SetAttribute( sal_Int32 nElement,
                                const OUString& rValue ) override;
+    void RecoverMissingFillBitmapFromBackGraphic(
+        sal_Int32 nBitmapNameCtx, sal_Int32 nGraphicCtx);
 
 public:
 
