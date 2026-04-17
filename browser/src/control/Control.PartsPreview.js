@@ -56,6 +56,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._previewInitialized = false;
 		this._previewTiles = [];
 		this._sectionHeaders = []; // Section header DOM elements
+		this._collapsedSections = new Set(); // Names of sections collapsed by the user
 		this._direction = this.options.allowOrientation ?
 			(!window.mode.isDesktop() && window.L.DomUtil.isPortrait() ? 'x' : 'y') :
 			this.options.axis;
@@ -506,8 +507,20 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 		this._sectionHeaders = [];
 
-		if (!sections || sections.length === 0)
+		if (!sections || sections.length === 0) {
+			this._collapsedSections.clear();
 			return;
+		}
+
+		// Drop any remembered names that no longer correspond to a section
+		// (e.g. after a rename or removal).
+		var liveNames = new Set();
+		for (var ln = 0; ln < sections.length; ln++)
+			liveNames.add(sections[ln].name);
+		this._collapsedSections.forEach(function (name) {
+			if (!liveNames.has(name))
+				this._collapsedSections.delete(name);
+		}, this);
 
 		// Insert section headers before the frame of each section's first slide.
 		// The container children are: #first-drop-site, frame0, frame1, ...
@@ -526,17 +539,31 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			var slideFrame = this._previewTiles[slideIndex].parentNode;
 			slideFrame.parentNode.insertBefore(header, slideFrame);
 		}
+
+		this._applyAllSectionsCollapse();
 	},
 
 	_createSectionHeader: function (section, sectionIndex) {
 		var that = this;
+
 		var header = window.L.DomUtil.create('div', 'slide-section-header');
 		header.setAttribute('data-section-index', sectionIndex);
 		header.setAttribute('data-start-index', section.startIndex);
 
+		var toggleBtn = window.L.DomUtil.create('button', 'slide-section-toggle ui-expander-btn', header);
+		toggleBtn.type = 'button';
+		toggleBtn.setAttribute('aria-label',
+			_('Toggle section %1').replace('%1', section.name));
+
 		var nameSpan = window.L.DomUtil.create('span', 'slide-section-name', header);
 		nameSpan.textContent = section.name;
 		nameSpan.setAttribute('title', section.name);
+
+		window.L.DomEvent.on(toggleBtn, 'click', function (e) {
+			window.L.DomEvent.stopPropagation(e);
+			window.L.DomEvent.preventDefault(e);
+			that._toggleSectionCollapse(sectionIndex);
+		}, this);
 
 		// Section context menu
 		if (this._map.isEditMode()) {
@@ -552,6 +579,53 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 
 		return header;
+	},
+
+	_toggleSectionCollapse: function (sectionIndex) {
+		var sections = app.impress.sections || [];
+		var section = sections[sectionIndex];
+		if (!section)
+			return;
+
+		if (this._collapsedSections.has(section.name))
+			this._collapsedSections.delete(section.name);
+		else
+			this._collapsedSections.add(section.name);
+
+		this._applySectionCollapse(sectionIndex);
+		// Expanding may reveal thumbnails whose images were never fetched.
+		this._ensureVisiblePreviews();
+	},
+
+	// Apply the collapsed class to one section's header and its slide frames.
+	_applySectionCollapse: function (sectionIndex) {
+		var section = app.impress.sections && app.impress.sections[sectionIndex];
+		if (!section)
+			return;
+
+		var collapsed = this._collapsedSections.has(section.name);
+		var end = section.startIndex + section.slideCount;
+
+		var header = this._sectionHeaders[sectionIndex];
+		if (header) {
+			var toggleBtn = header.querySelector('.slide-section-toggle');
+			header.classList.toggle('collapsed', collapsed);
+			if (toggleBtn)
+				toggleBtn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+		}
+
+		for (var i = section.startIndex; i < end; i++) {
+			var frame = this._previewTiles[i] && this._previewTiles[i].parentNode;
+			if (frame)
+				frame.classList.toggle('section-collapsed', collapsed);
+		}
+	},
+
+	// Apply collapsed state to every section.
+	_applyAllSectionsCollapse: function () {
+		var sections = app.impress.sections || [];
+		for (var s = 0; s < sections.length; s++)
+			this._applySectionCollapse(s);
 	},
 
 	_openSectionContextMenu: function (section, sectionIndex, e) {

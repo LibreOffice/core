@@ -68,9 +68,43 @@
 	align-items: center;
 	padding-inline: 8px;
 	line-height: var(--sidebar-header-height, 34px);
-	cursor: default;
+	cursor: pointer;
 	user-select: none;
 	border-bottom: 1px solid var(--color-border, #ccc);
+}
+
+.slide-section-toggle {
+	background: transparent;
+	border: 0;
+	padding: 0;
+	margin-inline-end: 7px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	height: 16px;
+	flex: 0 0 auto;
+	color: inherit;
+}
+
+.slide-section-toggle::before {
+	content: '';
+	display: inline-block;
+	width: 9px;
+	height: 9px;
+	background: transparent url('images/lc_menu_chevron.svg') no-repeat center;
+	filter: brightness(0.5);
+	transform: rotate(90deg); /* expanded: chevron points down */
+	transition: transform 0.1s ease-in;
+}
+
+.slide-section-header.collapsed .slide-section-toggle::before {
+	transform: rotate(0deg); /* collapsed: chevron points right */
+}
+
+[data-theme='dark'] .slide-section-toggle::before {
+	filter: brightness(1);
 }
 
 .slide-section-name {
@@ -81,4 +115,8 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	flex: 1;
+}
+
+.preview-frame.section-collapsed {
+	display: none;
 }
