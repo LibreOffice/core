@@ -568,7 +568,8 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 		if (firstFocusableElement && document.activeElement !== firstFocusableElement && !instance.isAutoCompletePopup) {
 			// for tab control case we have more then 1 element that can be focusable so select the first tab for the list
-			firstFocusableElement = firstFocusableElement.length > 0 ? firstFocusableElement[0] : firstFocusableElement;
+			if (Array.isArray(firstFocusableElement))
+				firstFocusableElement = firstFocusableElement[0];
 			firstFocusableElement.focus();
 		}
 		else if (instance.canHaveFocus !== false && instance.init_focus_id)
