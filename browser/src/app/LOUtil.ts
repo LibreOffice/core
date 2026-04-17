@@ -324,10 +324,15 @@ class LOUtil {
 		return url;
 	}
 
-	public static setImage(img: HTMLImageElement, name: string, map: any): void {
+	public static setImage(
+		img: HTMLImageElement,
+		name: string,
+		map: any,
+		imageIsLayoutCritical?: boolean,
+	): void {
 		const setupIcon = function () {
 			img.src = LOUtil.getImageURL(name);
-			LOUtil.checkIfImageExists(img);
+			LOUtil.checkIfImageExists(img, imageIsLayoutCritical);
 		};
 		setupIcon();
 
