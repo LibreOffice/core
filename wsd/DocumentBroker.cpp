@@ -1779,7 +1779,7 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
                 JsonUtil::findJSONValue(userPrivateInfoObj, privateInfoKey, migratedValue);
                 if (!migratedValue.empty())
                 {
-                    LOG_INF("Migrating signature field [" << viewSettingKey << "] from user private info");
+                    LOG_INF("Migrating field [" << viewSettingKey << "] from user private info");
                     viewSettings->set(viewSettingKey, migratedValue);
                     value = std::move(migratedValue);
                     return true;
@@ -1802,9 +1802,9 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
 
         _isViewSettingsUpdated = true;
 
-        JsonUtil::findJSONValue(viewSettings, "aiProviderAPIKey", aiProviderAPIKey);
-        JsonUtil::findJSONValue(viewSettings, "aiProviderModel", aiProviderModel);
-        JsonUtil::findJSONValue(viewSettings, "aiProviderURL", aiProviderURL);
+        viewSettingsNeedUpdate |= migrateViewSettingsField("aiProviderAPIKey", "AIProviderAPIKey", aiProviderAPIKey);
+        viewSettingsNeedUpdate |= migrateViewSettingsField("aiProviderModel", "AIProviderModel", aiProviderModel);
+        viewSettingsNeedUpdate |= migrateViewSettingsField("aiProviderURL", "AIProviderURL", aiProviderURL);
         JsonUtil::findJSONValue(viewSettings, "aiImageProviderAPIKey", aiImageProviderAPIKey);
         JsonUtil::findJSONValue(viewSettings, "aiImageProviderURL", aiImageProviderURL);
         JsonUtil::findJSONValue(viewSettings, "aiImageModel", aiImageModel);
@@ -1820,7 +1820,7 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
 
         if (viewSettingsNeedUpdate)
         {
-            LOG_INF("View settings updated with migrated signature fields, uploading to WOPI host");
+            LOG_INF("View settings updated with migrated fields, uploading to WOPI host");
             session->setViewSettingsJSON(viewSettings);
             session->uploadViewSettingsToWopiHost();
         }
