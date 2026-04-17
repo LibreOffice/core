@@ -65,6 +65,7 @@
 #include <pausethreadstarting.hxx>
 #include <frameformats.hxx>
 #include <utility>
+#include <unotextrange.hxx>
 
 using namespace ::com::sun::star;
 
@@ -642,6 +643,102 @@ void Reader::ResetFrameFormats( SwDoc& rDoc )
 size_t Reader::GetSectionList(SfxMedium&, std::vector<OUString>&) const
 {
     return 0;
+}
+
+SwPasteInfo::SwPasteInfo(SwDoc& rDoc, SwPaM& rPam)
+    : m_rDoc(rDoc)
+    , m_rPam(rPam)
+{
+}
+
+void Reader::StartPaste(SwPasteInfo& rPasteInfo)
+{
+    // We want to work in an empty paragraph.
+    // Step 1: XTextRange will be updated when content is inserted, so we know
+    // the end position.
+    rPasteInfo.m_xInsertPosition
+        = SwXTextRange::CreateXTextRange(rPasteInfo.m_rDoc, *rPasteInfo.m_rPam.GetPoint(), nullptr);
+    rPasteInfo.m_pSttNdIdx = std::make_shared<SwNodeIndex>(rPasteInfo.m_rDoc.GetNodes());
+    const SwPosition* pPos = rPasteInfo.m_rPam.GetPoint();
+
+    // Step 2: Split once and remember the node that has been split.
+    rPasteInfo.m_rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
+    *rPasteInfo.m_pSttNdIdx = pPos->GetNodeIndex() - 1;
+
+    // Step 3: Split again.
+    rPasteInfo.m_rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
+    rPasteInfo.m_pSttNdIdx2 = std::make_shared<SwNodeIndex>(rPasteInfo.m_rDoc.GetNodes());
+    *rPasteInfo.m_pSttNdIdx2 = pPos->GetNodeIndex();
+
+    // Step 4: Insert all content into the new node
+    rPasteInfo.m_rPam.Move(fnMoveBackward);
+    rPasteInfo.m_rDoc.SetTextFormatColl(rPasteInfo.m_rPam, rPasteInfo.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(
+                                        SwPoolFormatId::COLL_STANDARD, false));
+
+}
+
+void Reader::EndPaste(SwPasteInfo& rPasteInfo)
+{
+    // Clean up the fake paragraphs.
+    SwUnoInternalPaM aPam(rPasteInfo.m_rDoc);
+    ::sw::XTextRangeToSwPaM(aPam, rPasteInfo.m_xInsertPosition);
+    if (rPasteInfo.m_pSttNdIdx->GetIndex())
+    {
+        // If we are in insert mode, join the split node that is in front
+        // of the new content with the first new node. Or in other words:
+        // Revert the first split node.
+        SwTextNode* pTextNode = rPasteInfo.m_pSttNdIdx->GetNode().GetTextNode();
+        SwNodeIndex aNxtIdx(*rPasteInfo.m_pSttNdIdx);
+        if (pTextNode && pTextNode->CanJoinNext(&aNxtIdx)
+            && rPasteInfo.m_pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex())
+        {
+            // If the PaM points to the first new node, move the PaM to the
+            // end of the previous node.
+            if (aPam.GetPoint()->GetNode() == aNxtIdx.GetNode())
+            {
+                aPam.GetPoint()->Assign(*pTextNode, pTextNode->GetText().getLength());
+            }
+            // If the first new node isn't empty, convert  the node's text
+            // attributes into hints. Otherwise, set the new node's
+            // paragraph style at the previous (empty) node.
+            SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
+            if (pTextNode->GetText().getLength())
+                pDelNd->FormatToTextAttr(pTextNode);
+            else
+            {
+                pTextNode->ChgFormatColl(pDelNd->GetTextColl());
+                if (!pDelNd->GetNoCondAttr(RES_PARATR_LIST_ID, /*bInParents=*/false))
+                {
+                    // Lists would need manual merging, but copy paragraph direct formatting
+                    // otherwise.
+                    pDelNd->CopyCollFormat(*pTextNode);
+                }
+            }
+            pTextNode->JoinNext();
+        }
+    }
+
+    if (rPasteInfo.m_pSttNdIdx2->GetIndex())
+    {
+        // If we are in insert mode, join the split node that is after
+        // the new content with the last new node. Or in other words:
+        // Revert the second split node.
+        SwTextNode* pTextNode = rPasteInfo.m_pSttNdIdx2->GetNode().GetTextNode();
+        SwNodeIndex aPrevIdx(*rPasteInfo.m_pSttNdIdx2);
+        if (pTextNode && pTextNode->CanJoinPrev(&aPrevIdx)
+            && rPasteInfo.m_pSttNdIdx2->GetIndex() - 1 == aPrevIdx.GetIndex())
+        {
+            // If the last new node isn't empty, convert  the node's text
+            // attributes into hints. Otherwise, set the new node's
+            // paragraph style at the next (empty) node.
+            SwTextNode* pDelNd = aPrevIdx.GetNode().GetTextNode();
+            if (pTextNode->GetText().getLength())
+                pDelNd->FormatToTextAttr(pTextNode);
+            else
+                pTextNode->ChgFormatColl(pDelNd->GetTextColl());
+            pTextNode->JoinPrev();
+        }
+    }
 }
 
 bool SwReader::HasGlossaries( const Reader& rOptions )

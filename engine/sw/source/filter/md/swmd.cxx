@@ -60,6 +60,7 @@
 #include <unicode/utypes.h>
 #include <unicode/ucsdet.h>
 #include <rtl/tencinfo.h>
+#include <unotextrange.hxx>
 
 #include "swmd.hxx"
 
@@ -829,11 +830,21 @@ void MarkdownReader::SetupFilterOptions(SwDoc& rDoc)
 
 ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, const OUString&)
 {
-    ErrCode nRet;
-
     SetupFilterOptions(rDoc);
+
+    SwPasteInfo aPasteInfo(rDoc, rPam);
+    if (m_bInsertMode)
+    {
+        StartPaste(aPasteInfo);
+    }
+
     SwMarkdownParser parser(rDoc, rPam, *m_pStream, rBaseURL, !m_bInsertMode);
-    nRet = parser.CallParser();
+    ErrCode nRet = parser.CallParser();
+
+    if (m_bInsertMode)
+    {
+        EndPaste(aPasteInfo);
+    }
 
     return nRet;
 }

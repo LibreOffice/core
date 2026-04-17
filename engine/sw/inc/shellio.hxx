@@ -48,6 +48,7 @@ class SwPaM;
 class SwTextBlocks;
 struct SwPosition;
 struct Writer_Impl;
+class SwXTextRange;
 namespace sw::mark { class MarkBase; }
 namespace com::sun::star::embed { class XStorage; }
 
@@ -207,6 +208,18 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportRTF(SvStream &rStream);
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportRTF(SvStream &rStream);
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportHTML(SvStream &rStream);
 
+/// Stores information about an import into an existing, non-empty document model.
+struct SW_DLLPUBLIC SwPasteInfo
+{
+    SwDoc& m_rDoc;
+    SwPaM& m_rPam;
+    rtl::Reference<SwXTextRange> m_xInsertPosition;
+    std::shared_ptr<SwNodeIndex> m_pSttNdIdx;
+    std::shared_ptr<SwNodeIndex> m_pSttNdIdx2;
+
+    SwPasteInfo(SwDoc& rDoc, SwPaM& rPam);
+};
+
 class SW_DLLPUBLIC Reader
 {
     friend class SwReader;
@@ -285,6 +298,9 @@ public:
 
     const rtl::Reference<SotStorage>& getSotStorageRef() const { return m_pStorage; };
     void setSotStorageRef(const rtl::Reference<SotStorage>& pStgRef) { m_pStorage = pStgRef; };
+
+    static void StartPaste(SwPasteInfo& rPasteInfo);
+    static void EndPaste(SwPasteInfo& rPasteInfo);
 
 private:
     virtual ErrCodeMsg Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &)=0;

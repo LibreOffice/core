@@ -63,27 +63,8 @@ ErrCodeMsg SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& r
     if (!m_pStream)
         return ERR_SWG_READ_ERROR;
 
-    // We want to work in an empty paragraph.
-    // Step 1: XTextRange will be updated when content is inserted, so we know
-    // the end position.
-    const rtl::Reference<SwXTextRange> xInsertPosition
-        = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
-    auto pSttNdIdx = std::make_shared<SwNodeIndex>(rDoc.GetNodes());
-    const SwPosition* pPos = rPam.GetPoint();
-
-    // Step 2: Split once and remember the node that has been split.
-    rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
-    *pSttNdIdx = pPos->GetNodeIndex() - 1;
-
-    // Step 3: Split again.
-    rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
-    auto pSttNdIdx2 = std::make_shared<SwNodeIndex>(rDoc.GetNodes());
-    *pSttNdIdx2 = pPos->GetNodeIndex();
-
-    // Step 4: Insert all content into the new node
-    rPam.Move(fnMoveBackward);
-    rDoc.SetTextFormatColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(
-                                     SwPoolFormatId::COLL_STANDARD, false));
+    SwPasteInfo aPasteInfo(rDoc, rPam);
+    StartPaste(aPasteInfo);
 
     auto ret = ERRCODE_NONE;
     SwDocShell* pDocShell(rDoc.GetDocShell());
@@ -120,66 +101,7 @@ ErrCodeMsg SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& r
         ret = ERR_SWG_READ_ERROR;
     }
 
-    // Clean up the fake paragraphs.
-    SwUnoInternalPaM aPam(rDoc);
-    ::sw::XTextRangeToSwPaM(aPam, xInsertPosition);
-    if (pSttNdIdx->GetIndex())
-    {
-        // If we are in insert mode, join the split node that is in front
-        // of the new content with the first new node. Or in other words:
-        // Revert the first split node.
-        SwTextNode* pTextNode = pSttNdIdx->GetNode().GetTextNode();
-        SwNodeIndex aNxtIdx(*pSttNdIdx);
-        if (pTextNode && pTextNode->CanJoinNext(&aNxtIdx)
-            && pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex())
-        {
-            // If the PaM points to the first new node, move the PaM to the
-            // end of the previous node.
-            if (aPam.GetPoint()->GetNode() == aNxtIdx.GetNode())
-            {
-                aPam.GetPoint()->Assign(*pTextNode, pTextNode->GetText().getLength());
-            }
-            // If the first new node isn't empty, convert  the node's text
-            // attributes into hints. Otherwise, set the new node's
-            // paragraph style at the previous (empty) node.
-            SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
-            if (pTextNode->GetText().getLength())
-                pDelNd->FormatToTextAttr(pTextNode);
-            else
-            {
-                pTextNode->ChgFormatColl(pDelNd->GetTextColl());
-                if (!pDelNd->GetNoCondAttr(RES_PARATR_LIST_ID, /*bInParents=*/false))
-                {
-                    // Lists would need manual merging, but copy paragraph direct formatting
-                    // otherwise.
-                    pDelNd->CopyCollFormat(*pTextNode);
-                }
-            }
-            pTextNode->JoinNext();
-        }
-    }
-
-    if (pSttNdIdx2->GetIndex())
-    {
-        // If we are in insert mode, join the split node that is after
-        // the new content with the last new node. Or in other words:
-        // Revert the second split node.
-        SwTextNode* pTextNode = pSttNdIdx2->GetNode().GetTextNode();
-        SwNodeIndex aPrevIdx(*pSttNdIdx2);
-        if (pTextNode && pTextNode->CanJoinPrev(&aPrevIdx)
-            && pSttNdIdx2->GetIndex() - 1 == aPrevIdx.GetIndex())
-        {
-            // If the last new node isn't empty, convert  the node's text
-            // attributes into hints. Otherwise, set the new node's
-            // paragraph style at the next (empty) node.
-            SwTextNode* pDelNd = aPrevIdx.GetNode().GetTextNode();
-            if (pTextNode->GetText().getLength())
-                pDelNd->FormatToTextAttr(pTextNode);
-            else
-                pTextNode->ChgFormatColl(pDelNd->GetTextColl());
-            pTextNode->JoinPrev();
-        }
-    }
+    EndPaste(aPasteInfo);
 
     return ret;
 }

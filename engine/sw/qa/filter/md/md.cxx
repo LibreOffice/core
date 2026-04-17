@@ -32,17 +32,12 @@
 #include <fmturl.hxx>
 #include <textcontentcontrol.hxx>
 #include <fmtfsize.hxx>
+#include <swdtflvr.hxx>
 
 namespace
 {
 /**
  * Covers sw/source/filter/md/ fixes.
- *
- * Note that these tests are meant to be simple: either load a file and assert some result or build
- * a document model with code, export and assert that result.
- *
- * Keep using the various sw_<format>import/export suites for multiple filter calls inside a single
- * test.
  */
 
 class Test : public SwModelTestBase
@@ -987,6 +982,32 @@ CPPUNIT_TEST_FIXTURE(Test, testOLEWithoutGraphicMdExport)
     // When exporting it as markdown:
     // Then make sure this doesn't crash:
     save(TestFilter::MD);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPaste)
+{
+    // Given a document with 4 paragraphs (start, A, B, end):
+    createSwDoc("paste.docx");
+
+    // When pasting markdown at the start of the second paragraph:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Down(/*bSelect=*/false);
+    rtl::Reference<TransferDataContainer> xTransferable(new TransferDataContainer);
+    xTransferable->CopyString(SotClipboardFormatId::MARKDOWN, u"- List 1\n- List 2"_ustr);
+    TransferableDataHelper aHelper(xTransferable);
+    SwTransferable::PasteFormat(*pWrtShell, aHelper, SotClipboardFormatId::MARKDOWN);
+
+    // Then make sure the pasted list items are inserted:
+    CPPUNIT_ASSERT_EQUAL(6, getParagraphs());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: List 1
+    // - Actual  : List 1A
+    // i.e. the paste result was new1-old-new2, which is buggy.
+    CPPUNIT_ASSERT_EQUAL(u"List 1"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"List 2"_ustr, getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, getParagraph(4)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, getParagraph(5)->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
