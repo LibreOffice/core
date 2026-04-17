@@ -208,7 +208,7 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         a11yHelper.handleDialog(win, 1);
     });
 
-    it.skip('Text Import Dialog (Buggy)', function () {
+    it('Text Import Dialog', function () {
         helper.setDummyClipboardForCopy('text/plain');
         // Select some text
         helper.selectAllText();
