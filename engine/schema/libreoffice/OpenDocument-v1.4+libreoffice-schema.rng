@@ -2877,6 +2877,16 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
     </rng:optional>
   </rng:define>
 
+  <rng:define name="chart-chart-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:class">
+        <rng:choice>
+          <rng:value>coext:histogram</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
     <!-- TODO no proposal -->
   <rng:define name="chart-chart-attlist" combine="interleave">
     <rng:optional>

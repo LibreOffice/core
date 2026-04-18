@@ -1264,6 +1264,34 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         }
 
         OUString sChartType( xDiagram->getDiagramType() );
+        if (sChartType == "com.sun.star.chart.BarDiagram")
+        {
+            Reference<chart2::XCoordinateSystemContainer> xCooSysCnt(xNewDiagram, uno::UNO_QUERY);
+            if (xCooSysCnt.is())
+            {
+                const Sequence<Reference<chart2::XCoordinateSystem>> aCooSysSeq(
+                    xCooSysCnt->getCoordinateSystems());
+                for (const auto& rCooSys : aCooSysSeq)
+                {
+                    Reference<chart2::XChartTypeContainer> xCTCnt(rCooSys, uno::UNO_QUERY);
+                    if (!xCTCnt.is())
+                        continue;
+
+                    const Sequence<Reference<chart2::XChartType>> aCTSeq(xCTCnt->getChartTypes());
+                    for (const auto& rChartType : aCTSeq)
+                    {
+                        if (rChartType.is() && rChartType->getChartType() == u"com.sun.star.chart2.HistogramChartType"_ustr)
+                        {
+                            sChartType = "com.sun.star.chart.HistogramDiagram";
+                            break;
+                        }
+                    }
+
+                    if (sChartType == "com.sun.star.chart.HistogramDiagram")
+                        break;
+                }
+            }
+        }
 
         // attributes
         // determine class
