@@ -1412,7 +1412,8 @@ void DomainMapper_Impl::PopProperties(ContextType eId)
     }
     else
     {
-        SAL_WARN_IF(eId != CONTEXT_SECTION, "writerfilter.dmapper",
+        SAL_WARN_IF((eId == CONTEXT_STYLESHEET && !IsStyleSheetImport())
+              || (eId == CONTEXT_LIST && !IsNumberingImport()), "writerfilter.dmapper",
                     "this should happen at a section context end");
         m_pTopContext.clear();
     }
