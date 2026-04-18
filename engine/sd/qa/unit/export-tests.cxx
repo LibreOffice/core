@@ -1103,11 +1103,11 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfHindi)
     // ensure the expected content
     assertXPathContent(pXmlDoc,
                        "/office:document/office:body/office:drawing/draw:page/draw:g/draw:frame[3]/"
-                       "draw:text-box/text:p[@text:style-name='P4'][1]",
+                       "draw:text-box/text:p[@text:style-name='P6'][1]",
                        u"FIRST-YEAR HINDI COURSE");
 
     // ensure the expected font name
-    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='P4']/"
+    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='P6']/"
                          "style:text-properties[@style:font-name='AcademyEngravedLetPlain']");
 }
 

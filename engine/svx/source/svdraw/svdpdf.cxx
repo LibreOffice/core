@@ -43,6 +43,7 @@
 #include <editeng/colritem.hxx>
 #include <vcl/metric.hxx>
 #include <editeng/charscaleitem.hxx>
+#include <editeng/kernitem.hxx>
 #include <svx/sdtditm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtfsitm.hxx>
@@ -1893,8 +1894,8 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     InsertTextObject(aRect.TopLeft(), aRect.GetSize(), sText, bInvisible);
 }
 
-void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& /*rSize*/,
-                                       const OUString& rStr, bool bInvisible)
+void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, const OUString& rStr,
+                                       bool bInvisible)
 {
     FontMetric aFontMetric(mpVD->GetFontMetric());
     vcl::Font aFont(mpVD->GetFont());
@@ -1916,8 +1917,33 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& /*rSize*/,
     auto nYDiff = aFontMetric.GetDescent() - aOurRect.Bottom();
 
     Point aPos(rPos.X() - nXDiff, rPos.Y() + nYDiff);
+
+    // Natural advance width of the string in the resolved font with no
+    // extra character spacing.
+    const tools::Long nVclTextWidth = mpVD->GetTextWidth(rStr);
+
+    // To detect PDF character spacing, compare inked widths on both
+    // sides. FPDFPageObj_GetBounds (and therefore rSize) reports the
+    // rendered ink bounds, which exclude the left bearing of the first
+    // glyph and the right bearing of the last glyph. Compare that
+    // against VCL's ink bounds from GetTextBoundRect, not against the
+    // advance width, or the bearings show up as spurious spacing and
+    // produce excessive kerning on short runs like "ld".
+    const tools::Long nVclInkedWidth = aOurRect.GetWidth();
+    const tools::Long nPdfInkedWidth = rSize.Width();
+
+    short nExtraKerning = 0;
+    const sal_Int32 nChars = rStr.getLength();
+    if (nChars > 1 && nVclInkedWidth > 0 && nPdfInkedWidth > 0)
+    {
+        const tools::Long nKern = (nPdfInkedWidth - nVclInkedWidth) / (nChars - 1);
+        nExtraKerning
+            = static_cast<short>(std::clamp<tools::Long>(nKern, SAL_MIN_INT16, SAL_MAX_INT16));
+    }
+
     // As per ImpEditEngine::CalcParaWidth the width of the text box has to be 1 unit wider than the text
-    auto nTextWidth = mpVD->GetTextWidth(rStr) + 1;
+    const tools::Long nTextWidth
+        = nVclTextWidth + static_cast<tools::Long>(nExtraKerning) * (nChars - 1) + 1;
     Size aSize(nTextWidth, -aFontMetric.GetLineHeight());
 
     Point aSdrPos(basegfx::fround<tools::Long>(aPos.X() * mfScaleX + maOfs.X()),
@@ -1941,6 +1967,13 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& /*rSize*/,
     pText->SetLayer(mnLayer);
     pText->NbcSetText(rStr);
     SetAttributes(pText.get(), true);
+    if (nExtraKerning != 0)
+    {
+        const tools::Long nKernSdr = basegfx::fround<tools::Long>(nExtraKerning * mfScaleX);
+        pText->SetMergedItem(SvxKerningItem(
+            static_cast<short>(std::clamp<tools::Long>(nKernSdr, SAL_MIN_INT16, SAL_MAX_INT16)),
+            EE_CHAR_KERNING));
+    }
     pText->SetSnapRect(aTextRect);
 
     if (!aFont.IsTransparent())
