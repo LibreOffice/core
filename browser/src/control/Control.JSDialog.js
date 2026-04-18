@@ -533,9 +533,18 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		}
 	},
 
+	// Focusables with the titlebar close (X) button demoted to the lowest
+	// priority - used only when nothing else in the dialog is focusable.
+	_getFocusablesForInitialFocus: function(container) {
+		const focusables = JSDialog.GetFocusableElements(container);
+		if (!focusables) return focusables;
+		const isClose = el => el.classList.contains('ui-dialog-titlebar-close');
+		return focusables.sort((a, b) => isClose(a) - isClose(b));
+	},
+
 	setupInitialFocus: function(instance) {
 		// setup initial focus and helper elements for closing popup
-		var initialFocusElement = JSDialog.GetFocusableElements(instance.container);
+		var initialFocusElement = this._getFocusablesForInitialFocus(instance.container);
 
 		if (instance.canHaveFocus && initialFocusElement && initialFocusElement.length)
 			initialFocusElement[0].focus();
@@ -556,13 +565,17 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			// If init_id is not defined, select the first focusable element from the container
 			firstFocusableElement = instance.init_focus_id ? instance.container.querySelector('[id=\'' + instance.init_focus_id + '\']') : null;
 
-			if (!firstFocusableElement) {
-				const focusables = JSDialog.GetFocusableElements(instance.container);
-				if (focusables && focusables.length) firstFocusableElement = focusables[0];
-			}
-
+			// If the candidate from init_focus_id can't itself take focus
+			// (e.g. a container div), descend into it for a focusable child.
 			if (firstFocusableElement && !JSDialog.IsFocusable(firstFocusableElement)) {
 				firstFocusableElement = JSDialog.FindFocusableWithin(firstFocusableElement, 'next');
+			}
+
+			// Still no target (no init_focus_id, or it resolved to a dead end):
+			// pick the first element in the dialog that can take focus.
+			if (!firstFocusableElement) {
+				const focusables = this._getFocusablesForInitialFocus(instance.container);
+				if (focusables && focusables.length) firstFocusableElement = focusables[0];
 			}
 		}
 
