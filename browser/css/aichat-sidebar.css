@@ -206,10 +206,9 @@
 #aichat-eu-notice {
 	color: var(--color-text-lighter);
 	text-align: center;
-	padding: 4px 0 0;
-	font-size: 8px;
-	line-height: 1.2;
-	opacity: 0.5;
+	padding: 6px 8px 4px;
+	font-size: 11px;
+	line-height: 1.4;
 	letter-spacing: 0.01em;
 }
 
