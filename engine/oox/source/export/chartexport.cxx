@@ -31,6 +31,8 @@
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 
+#include <algorithm>
+#include <cmath>
 #include <cstdio>
 #include <limits>
 
@@ -228,6 +230,133 @@ std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(co
     }
 
     return aSplitSeries;
+}
+
+bool lclGetAutoHistogramBinning(const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
+                                double& rfBinWidth, sal_Int32& rnBinCount)
+{
+    rfBinWidth = 0.0;
+    rnBinCount = 0;
+
+    css::uno::Reference<css::chart2::data::XDataSource> xSource(xSeries, css::uno::UNO_QUERY);
+    if (!xSource.is())
+    {
+        return false;
+    }
+
+    css::uno::Sequence<css::uno::Reference<css::chart2::data::XLabeledDataSequence>> aSeqs
+        = xSource->getDataSequences();
+
+    css::uno::Reference<css::chart2::data::XDataSequence> xValuesY;
+    for (const auto& xLabeledSeq : aSeqs)
+    {
+        if (!xLabeledSeq.is())
+        {
+            continue;
+        }
+
+        css::uno::Reference<css::chart2::data::XDataSequence> xValues = xLabeledSeq->getValues();
+        if (!xValues.is())
+        {
+            continue;
+        }
+
+        css::uno::Reference<css::beans::XPropertySet> xSeqProp(xValues, css::uno::UNO_QUERY);
+        if (!xSeqProp.is())
+        {
+            continue;
+        }
+
+        OUString aRole;
+        xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole;
+        if (aRole == "values-y")
+        {
+            xValuesY = xValues;
+            break;
+        }
+    }
+
+    if (!xValuesY.is())
+    {
+        return false;
+    }
+
+    std::vector<double> aRawData;
+    css::uno::Sequence<css::uno::Any> aValues = xValuesY->getData();
+    aRawData.reserve(aValues.getLength());
+
+    for (const auto& rAny : aValues)
+    {
+        double fValue = 0.0;
+        if (rAny >>= fValue)
+            aRawData.push_back(fValue);
+    }
+
+    if (aRawData.empty())
+    {
+        return false;
+    }
+
+    double fSum = 0.0;
+    double fSquareSum = 0.0;
+    double fMinValue = aRawData[0];
+    double fMaxValue = aRawData[0];
+    sal_Int32 nValidCount = 0;
+
+    for (double fValue : aRawData)
+    {
+        if (std::isfinite(fValue))
+        {
+            fSum += fValue;
+            fSquareSum += fValue * fValue;
+            fMinValue = std::min(fMinValue, fValue);
+            fMaxValue = std::max(fMaxValue, fValue);
+            ++nValidCount;
+        }
+    }
+
+    if (nValidCount == 0)
+    {
+        return false;
+    }
+
+    if (nValidCount < 2 || fMinValue == fMaxValue)
+    {
+        rfBinWidth = 1.0;
+        rnBinCount = 1;
+        return true;
+    }
+
+    const double fMean = fSum / nValidCount;
+    const double fVariance = (fSquareSum - fSum * fMean) / (nValidCount - 1);
+    const double fStdDev = std::sqrt(fVariance);
+
+    if (!std::isfinite(fStdDev) || fStdDev <= 0.0)
+    {
+        rfBinWidth = 1.0;
+        rnBinCount = 1;
+        return true;
+    }
+
+    rfBinWidth = (3.5 * fStdDev) / std::cbrt(static_cast<double>(nValidCount));
+    if (!std::isfinite(rfBinWidth) || rfBinWidth <= 0.0)
+    {
+        rfBinWidth = 1.0;
+        rnBinCount = 1;
+        return true;
+    }
+
+    rfBinWidth = std::round(rfBinWidth * 100.0) / 100.0;
+    if (rfBinWidth <= 0.0)
+    {
+        rfBinWidth = 1.0;
+        rnBinCount = 1;
+        return true;
+    }
+    rnBinCount = static_cast<sal_Int32>(std::ceil((fMaxValue - fMinValue) / rfBinWidth));
+    rnBinCount = std::max<sal_Int32>(rnBinCount, 1);
+
+    return true;
 }
 
 }   // unnamed namespace
@@ -552,6 +681,8 @@ constexpr auto constChartTypeMap = frozen::make_unordered_map<std::u16string_vie
     { u"com.sun.star.chart2.BoxWhiskerChartType",  chart::TYPEID_BOXWHISKER },
     { u"com.sun.star.chart2.ClusteredColumnDiagram", chart::TYPEID_CLUSTEREDCOLUMN },
     { u"com.sun.star.chart2.ClusteredColumnChartType", chart::TYPEID_CLUSTEREDCOLUMN },
+    { u"com.sun.star.chart.HistogramDiagram", chart::TYPEID_HISTO },
+    { u"com.sun.star.chart2.HistogramChartType", chart::TYPEID_HISTO },
     { u"com.sun.star.chart.FunnelDiagram",  chart::TYPEID_FUNNEL },
     { u"com.sun.star.chart2.FunnelChartType",  chart::TYPEID_FUNNEL },
     { u"com.sun.star.chart2.ParetoLineDiagram",  chart::TYPEID_PARETOLINE },
@@ -1658,7 +1789,8 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                     // as well as a ../embeddings file (which LO doesn't seem to produce).
                     // But there's probably a smarter way to determine which pathway to take
                     // than based on document type.
-                    if (GetDocumentType() == DOCUMENT_XLSX) {
+                    if (GetDocumentType() == DOCUMENT_XLSX && eChartType != chart::TYPEID_HISTO)
+                    {
                         // Just hard-coding this for now
 
                         sal_Int32 nSuffixVal = nSeriesIndex;
@@ -1707,6 +1839,7 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                         {
                             case chart::TYPEID_BOXWHISKER:
                             case chart::TYPEID_CLUSTEREDCOLUMN:
+                            case chart::TYPEID_HISTO:
                             case chart::TYPEID_PARETOLINE:
                             case chart::TYPEID_SUNBURST:
                             case chart::TYPEID_TREEMAP:
@@ -2692,6 +2825,7 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
                         break;
                     }
                 case chart::TYPEID_CLUSTEREDCOLUMN:
+                case chart::TYPEID_HISTO:
                     {
                         exportChartex( xChartType, "clusteredColumn" );
                         break;
@@ -3996,9 +4130,12 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                 exportShapeProps( xOldPropSet, XML_cx );
             }
 
-            DataLabelsRange aDLblsRange;
-            // export data labels
-            exportDataLabels(rSeries, nSeriesLength, eChartType, aDLblsRange, true);
+            if (aChartType != "com.sun.star.chart2.HistogramChartType")
+            {
+                DataLabelsRange aDLblsRange;
+                // export data labels
+                exportDataLabels(rSeries, nSeriesLength, eChartType, aDLblsRange, true);
+            }
 
             // dataId links to the correct data set in the <cx:chartData>. See
             // DATA_ID_COMMENT
@@ -4041,8 +4178,27 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                 bool bHasGeography = false;
                 xSeriesProp->getPropertyValue(u"HasGeography"_ustr) >>= bHasGeography;
 
+                sal_Int32 nFrequencyType = 0;
+                double fBinWidth = 0.0;
+                sal_Int32 nBinCount = 0;
+                bool bHasBinWidth = false;
+                bool bHasBinCount = false;
+                if (aChartType == "com.sun.star.chart2.HistogramChartType")
+                {
+                    Reference<beans::XPropertySet> xChartTypePropSet(xChartType, uno::UNO_QUERY);
+                    if (xChartTypePropSet.is())
+                    {
+                        xChartTypePropSet->getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType;
+                        bHasBinWidth =
+                            (xChartTypePropSet->getPropertyValue(u"BinWidth"_ustr) >>= fBinWidth);
+                        bHasBinCount =
+                            (xChartTypePropSet->getPropertyValue(u"BinCount"_ustr) >>= nBinCount);
+                    }
+                }
+
                 bool bHasAny = bHasParentLL || bHasRegionLL || bHasVisibility
-                            || bHasQM || bHasSubtotals || bHasIC || bHasGeography;
+                            || bHasQM || bHasSubtotals || bHasIC || bHasGeography
+                            || aChartType == "com.sun.star.chart2.HistogramChartType";
                 if (bHasAny)
                 {
                     pFS->startElement(FSNS(XML_cx, XML_layoutPr));
@@ -4078,8 +4234,54 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                     if (bHasGeography)
                         oox::drawingml::chart::exportGeography(xSeriesProp, pFS);
 
-                    if (bHasIC)
+                    if (aChartType == "com.sun.star.chart2.HistogramChartType")
                     {
+                        // histogram <cx:binning> wraps bin-size/bin-count children
+                        const char* pIntervalClosed = nullptr;
+                        if (bHasIC)
+                        {
+                            sal_uInt32 nIntervalClosedChar = '\0';
+                            aIntervalClosed >>= nIntervalClosedChar;
+                            if (nIntervalClosedChar == 'l')
+                                pIntervalClosed = "l";
+                            else if (nIntervalClosedChar == 'r')
+                                pIntervalClosed = "r";
+                        }
+
+                        if (pIntervalClosed)
+                            pFS->startElement(FSNS(XML_cx, XML_binning),
+                                              XML_intervalClosed, pIntervalClosed);
+                        else
+                            pFS->startElement(FSNS(XML_cx, XML_binning));
+
+                        if (nFrequencyType == 1 && bHasBinWidth)
+                        {
+                            pFS->singleElement(FSNS(XML_cx, XML_binSize), XML_val,
+                                               OString::number(fBinWidth));
+                        }
+                        else if (nFrequencyType == 2 && bHasBinCount)
+                        {
+                            pFS->singleElement(FSNS(XML_cx, XML_binCount), XML_val,
+                                               OString::number(nBinCount));
+                        }
+                        else if (nFrequencyType == 0)
+                        {
+                            double fAutoBinWidth = 0.0;
+                            sal_Int32 nAutoBinCount = 0;
+
+                            if (lclGetAutoHistogramBinning(rSeries, fAutoBinWidth, nAutoBinCount)
+                                && fAutoBinWidth > 0.0)
+                            {
+                                pFS->singleElement(FSNS(XML_cx, XML_binSize), XML_val,
+                                                   OString::number(fAutoBinWidth));
+                            }
+                        }
+
+                        pFS->endElement(FSNS(XML_cx, XML_binning));
+                    }
+                    else if (bHasIC)
+                    {
+                        // non-histogram (BoxWhisker): self-closing <cx:binning intervalClosed="…"/>
                         sal_uInt32 nIntervalClosedChar = '\0';
                         aIntervalClosed >>= nIntervalClosedChar;
 
@@ -6448,6 +6650,7 @@ bool ChartExport::isChartexNotChartNS(NamespaceAbbrev *peNS) const
                     break;
                 case chart::TYPEID_BOXWHISKER:
                 case chart::TYPEID_CLUSTEREDCOLUMN:
+                case chart::TYPEID_HISTO:
                 case chart::TYPEID_PARETOLINE:
                 case chart::TYPEID_SUNBURST:
                 case chart::TYPEID_TREEMAP:

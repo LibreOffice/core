@@ -112,11 +112,45 @@ ModelRef< AxisModel > lclGetOrCreateAxis( const AxesSetModel::AxisMap& rFromAxes
     return xAxis;
 }
 
+bool lclHasTypeGroupWithLayout(const AxesSetModel::TypeGroupVector& rTypeGroups, sal_Int32 nToken)
+{
+    for (auto const& typeGroup : rTypeGroups)
+        if (typeGroup && typeGroup->mnTypeId == nToken)
+            return true;
+    return false;
+}
+
 void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
                                         View3DModel& rView3DModel, sal_Int32 nAxesSetIdx,
                                         DataSourceCxModel::DataMap& raSourceMap,
                                         bool bSupportsVaryColorsByPoint, bool bUseFixedInnerSize)
 {
+    // chartex clusteredColumn + <cx:binning> is how a histogram is stored in OOXML.
+    // But the same markup also appears on the clusteredColumn sub-chart of a
+    // paretoLine, which must not be reclassified. The difference is visible only at
+    // this level, where we see all sibling type groups.
+    {
+        const bool bHasParetoSibling
+            = lclHasTypeGroupWithLayout(mrModel.maTypeGroups, CX_TOKEN(paretoLine));
+        if (!bHasParetoSibling)
+        {
+            for (auto const& typeGroup : mrModel.maTypeGroups)
+            {
+                if (!typeGroup || typeGroup->mnTypeId != CX_TOKEN(clusteredColumn))
+                    continue;
+                for (auto const& rxSeries : typeGroup->maSeries)
+                {
+                    if (rxSeries && rxSeries->mxLayoutPr.is()
+                        && rxSeries->mxLayoutPr->mxBinning.is())
+                    {
+                        typeGroup->mbForceHistogram = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     // create type group converter objects for all type groups
     typedef RefVector< TypeGroupConverter > TypeGroupConvVector;
     TypeGroupConvVector aTypeGroups;
@@ -172,17 +206,16 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             to the data provider attached to the chart document. */
         if( xCoordSystem.is() )
         {
+            // Transfer any (chartex) data, specified at the chartSpace level,
+            // into the appropriate series. Must happen before convertFromModel
+            // so the series data is available when data series are created.
+            for (auto const& typeGroup : aTypeGroups)
+                typeGroup->moveDataToSeries(raSourceMap);
+
             // convert all chart type groups, this converts all series data and formatting
             for (auto const& typeGroup : aTypeGroups)
                 typeGroup->convertFromModel( rxDiagram, xCoordSystem,
                         nAxesSetIdx,bSupportsVaryColorsByPoint );
-
-            // Transfer any (chartex) data, specified at the chartSpace level,
-            // into the appropriate series. This needs to happen before the
-            // calls to AxisConverter::convertFromModel() below.
-            for (auto const& typeGroup : aTypeGroups) {
-                typeGroup->moveDataToSeries(raSourceMap);
-            }
 
             bool bMSO2007Doc = getFilter().isMSO2007Document();
             // convert all axes (create missing axis models)

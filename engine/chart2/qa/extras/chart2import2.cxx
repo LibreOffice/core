@@ -1021,6 +1021,64 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSRoundtrip)
     CPPUNIT_ASSERT_EQUAL(3.5, fBinWidth);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
+{
+    // See tdf#163727
+    // OOXML chartex represents histograms as <cx:series layoutId="clusteredColumn">
+    // with a <cx:layoutPr><cx:binning/></cx:layoutPr> child.
+    // On import that should be detected as a HistogramChartType and on export the binning
+    // markup should stay preserved.
+
+    loadFromFile(u"xlsx/SimpleHistogram.xlsx");
+
+    // Round trip 1: chart type identity + binning element preserved.
+    saveAndReload(TestFilter::XLSX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"clusteredColumn");
+    assertXPath(pXmlDoc,
+                "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:layoutPr/"
+                "cx:binning",
+                "intervalClosed", u"r");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.HistogramChartType"_ustr,
+                         xChartType->getChartType());
+
+    // Round trip 2: non-default binning parameters survive save + reload.
+    Reference<beans::XPropertySet> xProperties(xChartType, uno::UNO_QUERY_THROW);
+    xProperties->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(1)));
+    xProperties->setPropertyValue(u"BinWidth"_ustr, uno::Any(2.5));
+
+    saveAndReload(TestFilter::XLSX);
+
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc,
+                "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:layoutPr/"
+                "cx:binning/cx:binSize",
+                "val", u"2.5");
+
+    xChartDoc = getChartDocFromSheet(0);
+    xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    Reference<beans::XPropertySet> xReloadedProperties(xChartType, uno::UNO_QUERY_THROW);
+
+    sal_Int32 nFrequencyType = -1;
+    CPPUNIT_ASSERT(xReloadedProperties->getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nFrequencyType);
+
+    double fBinWidth = 0.0;
+    CPPUNIT_ASSERT(xReloadedProperties->getPropertyValue(u"BinWidth"_ustr) >>= fBinWidth);
+    CPPUNIT_ASSERT_EQUAL(2.5, fBinWidth);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf60316)
 {
     loadFromFile(u"pptx/tdf60316.pptx");

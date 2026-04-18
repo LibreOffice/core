@@ -19,6 +19,10 @@
 
 #include <drawingml/chart/typegroupconverter.hxx>
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartTypeManager.hpp>
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/CartesianCoordinateSystem2d.hpp>
 #include <com/sun/star/chart2/CartesianCoordinateSystem3d.hpp>
@@ -90,7 +94,7 @@ const TypeGroupInfo spTypeInfos[] =
     // type-id          type-category         service                   varied-point-color   default label pos     polar  area2d 1stvis xcateg swap   stack  picopt
     { TYPEID_BAR,       TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true  },
     { TYPEID_HORBAR,    TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  true,  true  },
-    { TYPEID_HISTO,     TYPECATEGORY_HISTO,   SERVICE_CHART2_HISTO,     VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  true,  true  },
+    { TYPEID_HISTO,     TYPECATEGORY_HISTO,   SERVICE_CHART2_HISTO,     VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true  },
     { TYPEID_LINE,      TYPECATEGORY_LINE,    SERVICE_CHART2_LINE,      VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, true,  false, true,  false },
     { TYPEID_AREA,      TYPECATEGORY_LINE,    SERVICE_CHART2_AREA,      VARPOINTMODE_NONE,   csscd::CENTER,        false, true,  false, true,  false, true,  false },
     { TYPEID_STOCK,     TYPECATEGORY_LINE,    SERVICE_CHART2_CANDLE,    VARPOINTMODE_NONE,   csscd::RIGHT,         false, false, false, true,  false, true,  false },
@@ -215,6 +219,15 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
             mrModel.mnGrouping = XML_standard;
         break;
         default:;
+    }
+
+    // In OOXML chartex, histogram is represented as clusteredColumn with
+    // <cx:layoutPr><cx:binning .../></cx:layoutPr>. The decision whether this
+    // is a histogram or the clusteredColumn half of a paretoLine compound chart
+    // is made by the plot-area converter, which has sibling type-group visibility.
+    if (eTypeId == TYPEID_CLUSTEREDCOLUMN && mrModel.mbForceHistogram)
+    {
+        eTypeId = TYPEID_HISTO;
     }
 
     // set the chart type info struct for the current chart type
@@ -367,6 +380,50 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         // additional properties
         PropertySet aDiaProp( rxDiagram );
         PropertySet aTypeProp( xChartType );
+
+        if (maTypeInfo.meTypeId == TYPEID_HISTO)
+        {
+            Reference<css::beans::XPropertySet> xTypePropSet(xChartType, UNO_QUERY);
+            if (xTypePropSet.is())
+            {
+                for (const auto& rxSeriesModel : mrModel.maSeries)
+                {
+                    if (!rxSeriesModel || !rxSeriesModel->mxLayoutPr.is()
+                        || !rxSeriesModel->mxLayoutPr->mxBinning.is())
+                    {
+                        continue;
+                    }
+
+                    const BinningModel& rBinning = *rxSeriesModel->mxLayoutPr->mxBinning;
+
+                    if (rBinning.maBinSizeOrCount)
+                    {
+                        if (std::holds_alternative<double>(*rBinning.maBinSizeOrCount))
+                        {
+                            xTypePropSet->setPropertyValue(
+                                u"BinWidth"_ustr,
+                                uno::Any(std::get<double>(*rBinning.maBinSizeOrCount)));
+                            xTypePropSet->setPropertyValue(
+                                u"FrequencyType"_ustr,
+                                uno::Any(sal_Int32(1)));
+                        }
+                        else
+                        {
+                            xTypePropSet->setPropertyValue(
+                                u"BinCount"_ustr,
+                                uno::Any(static_cast<sal_Int32>(
+                                    std::get<sal_uInt32>(*rBinning.maBinSizeOrCount))));
+                            xTypePropSet->setPropertyValue(
+                                u"FrequencyType"_ustr,
+                                uno::Any(sal_Int32(2)));
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+
         switch( maTypeInfo.meTypeCategory )
         {
             case TYPECATEGORY_BAR:
@@ -509,6 +566,23 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         if (nOldChartTypeIdx == -1)
         {
             xChartTypeCont->addChartType(xChartType);
+        }
+
+        if (maTypeInfo.meTypeId == TYPEID_HISTO)
+        {
+            Reference<chart2::XChartDocument> const& xChartDoc = getChartDocument();
+            Reference<chart2::XChartTypeManager> xChartTypeManager(
+                xChartDoc.is() ? xChartDoc->getChartTypeManager() : nullptr);
+            Reference<lang::XMultiServiceFactory> xTemplateFactory(
+                xChartTypeManager, UNO_QUERY);
+            if (xTemplateFactory.is())
+            {
+                Reference<chart2::XChartTypeTemplate> xTemplate(
+                    xTemplateFactory->createInstance(u"com.sun.star.chart2.template.Histogram"_ustr),
+                    UNO_QUERY);
+                if (xTemplate.is())
+                    xTemplate->changeDiagram(rxDiagram);
+            }
         }
 
         // set existence of bar connector lines at diagram (only in stacked 2D bar charts)
