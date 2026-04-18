@@ -794,7 +794,7 @@ ContextHandlerRef BinningContext::onCreateContext( sal_Int32 nElement, const Att
 {
     switch( getCurrentElement() )
     {
-        case CX_TOKEN( layoutPr ):
+        case CX_TOKEN(binning):
             switch( nElement )
             {
                 case CX_TOKEN( binSize ):
@@ -807,6 +807,7 @@ ContextHandlerRef BinningContext::onCreateContext( sal_Int32 nElement, const Att
                     // TODO
                     return nullptr;
             }
+            break;
     }
     return ContextBase::onCreateContext( nElement, rAttribs );
 }
@@ -854,9 +855,8 @@ ContextHandlerRef LayoutPropsContext::onCreateContext( sal_Int32 nElement, const
                         rB.meIntervalClosed = BinningModel::ClosedSide::L;
                     } else if (rAttribs.getString( XML_intervalClosed ) == "r") {
                         rB.meIntervalClosed = BinningModel::ClosedSide::R;
-                    } else {
-                        assert(false);  // no other options
                     }
+                    // intervalClosed is optional in OOXML chartex
                     // TODO: Also handle attributes underflow, overflow
                     return new BinningContext( *this, rB );
                 }
