@@ -2876,6 +2876,16 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <rng:define name="chart-chart-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:class">
+        <rng:choice>
+          <rng:value>loext:histogram</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
     <!-- TODO no proposal -->
   <rng:define name="chart-chart-attlist" combine="interleave">
     <rng:optional>
