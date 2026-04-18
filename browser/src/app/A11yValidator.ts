@@ -283,6 +283,21 @@ class A11yValidator {
 		);
 	}
 
+	private checkInitialFocusNotCloseButton(dialogElement: HTMLElement): number {
+		const active = document.activeElement;
+		if (!active || !dialogElement.contains(active)) return 0;
+
+		if (active.classList.contains('ui-dialog-titlebar-close')) {
+			console.error(
+				new A11yValidatorException(
+					`In '${this.getDialogTitle(active as HTMLElement)}': initial keyboard focus is on the close (X) button in the titlebar. Focus should be on a control inside the dialog body.`,
+				),
+			);
+			return 1;
+		}
+		return 0;
+	}
+
 	private checkDuplicateButtonLabels(container: HTMLElement): number {
 		const buttons = container.querySelectorAll('button[aria-labelledby]');
 		const labelMap = new Map<string, HTMLElement[]>();
@@ -398,10 +413,11 @@ class A11yValidator {
 	validateDialog(dialogElement: HTMLElement): void {
 		const content = dialogElement.querySelector('.ui-dialog-content');
 
-		const errorCount = this.validateContainer(
-			dialogElement,
-			content instanceof HTMLElement ? content : undefined,
-		);
+		const errorCount =
+			this.validateContainer(
+				dialogElement,
+				content instanceof HTMLElement ? content : undefined,
+			) + this.checkInitialFocusNotCloseButton(dialogElement);
 
 		if (errorCount === 0) {
 			console.error('A11yValidator: dialog passed all checks');
