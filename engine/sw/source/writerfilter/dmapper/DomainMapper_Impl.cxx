@@ -1113,9 +1113,14 @@ void DomainMapper_Impl::PopSdt()
     xCursor->gotoRange(xEnd, /*bExpand=*/true);
 
     std::optional<OUString> oData = m_pSdtHelper->getValueFromDataBinding();
-    if (oData.has_value())
+    if (oData.has_value()
+        && m_pSdtHelper->getControlType() != SdtControlType::picture)
     {
         // Data binding has a value for us, prefer that over the in-document value.
+        // But not for picture content controls: their sdtContent has the rendered
+        // drawing (w:drawing), and the bound value is raw data (e.g. base64) that
+        // Word uses internally. Replacing the drawing with that text would show
+        // the encoded data instead of the image.
         xCursor->setString(*oData);
 
         // Such value is always a plain text string, remove the char style of the placeholder.

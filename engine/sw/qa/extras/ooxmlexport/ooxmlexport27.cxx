@@ -78,6 +78,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf171433_equation)
     assertXPath(pXmlDoc, "//m:sSubSup/m:sup", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testSdtPictureDataBinding)
+{
+    // Given a DOCX with a picture content control (w:picture + w:dataBinding)
+    // where the data binding resolves to base64 image data from custom XML.
+    // The sdtContent has a w:drawing with the actual rendered image.
+    // Without the fix, the drawing was replaced by the raw base64 text.
+    createSwDoc("sdt-picture-databinding.docx");
+
+    // The first paragraph should contain a graphic, not text
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
