@@ -1878,6 +1878,56 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testSplitFloattableGetCurWord)
     CPPUNIT_ASSERT_EQUAL(u"End"_ustr, pWrtShell->GetCurWord());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf59121_UndoRedoCutBookmark)
+{
+    // Bug 59121: Redo/Undo cut loses bookmark
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // 1. Type "hallo"
+    pWrtShell->Insert(u"hallo"_ustr);
+
+    // 2. Select "all"
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+
+    // 3. Insert bookmark "foo"
+    IDocumentMarkAccess& rIDMA(*pDoc->getIDocumentMarkAccess());
+    rIDMA.makeMark(*pWrtShell->GetCursor(), SwMarkName(u"foo"_ustr),
+                   IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getAllMarksCount());
+
+    // 4. Select the complete text ("hallo")
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    // 5. Cut -> Undo -> Cut -> Undo -> Cut -> Undo
+    for (int i = 0; i < 3; ++i)
+    {
+        dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rIDMA.getAllMarksCount());
+
+        dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getAllMarksCount());
+    }
+
+    // 6. Redo (which restores the Cut operation)
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rIDMA.getAllMarksCount());
+
+    // 7. Undo (restores the text)
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // 8. Verify the text is restored
+    CPPUNIT_ASSERT_EQUAL(u"hallo"_ustr, getParagraph(1)->getString());
+
+    // 9. Verify the bookmark is ALSO restored
+    // This is where tdf#59121 fails: it restored the text but the bookmark is LOST
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, (*(rIDMA.getAllMarksBegin()))->GetName().toString());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
