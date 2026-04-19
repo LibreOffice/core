@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include <common/StateEnum.hpp>
+
 #include <string>
 
 namespace Poco
@@ -30,13 +32,12 @@ class URI;
 class Authorization
 {
 public:
-    enum class Type : char
-    {
-        None, ///< Unlike Expired, this implies no Authorization needed.
-        Token,
-        Header,
-        Expired ///< The server is rejecting the current authorization key.
-    };
+    STATE_ENUM(Type,
+               None, ///< Unlike Expired, this implies no Authorization needed.
+               Token, ///< Valid access_token -> "Authorization: Bearer ..." header.
+               Header, ///< Valid access_header -> Custom header(s).
+               Expired ///< The server is rejecting the current authorization key.
+    );
 
 private:
     std::string _data;
