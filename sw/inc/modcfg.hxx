@@ -178,6 +178,8 @@ class SAL_DLLPUBLIC_RTTI SwMiscConfig final : public utl::ConfigItem
     bool        m_bShowIndexPreview;          // Index/ShowPreview
     bool        m_bGrfToGalleryAsLnk;         // Misc/GraphicToGalleryAsLink
     bool        m_bNumAlignSize;              // Numbering/Graphic/KeepRatio
+    bool        m_bIsOutputFile;              // FormLetter/FileOutput
+    bool        m_bIsSingleDoc;               // FormLetter/FileOutput/SingleDoc
     bool        m_bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
     bool        m_bIsPasswordFromColumn;      // FormLetter/FileOutput/FilePassword/Generation
     bool        m_bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
@@ -185,6 +187,7 @@ class SAL_DLLPUBLIC_RTTI SwMiscConfig final : public utl::ConfigItem
     OUString    m_sNameFromColumn;            // FormLetter/FileOutput/FileName/FromDatabaseField (string!)
     OUString    m_sPasswordFromColumn;        // FormLetter/FileOutput/FilePassword/FromDatabaseField (string!)
     OUString    m_sMailingPath;               // FormLetter/FileOutput/Path
+    OUString    m_sFileFormat;                // FormLetter/FileOutput/FileFormat
     OUString    m_sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
 
     static const css::uno::Sequence<OUString>& GetPropertyNames();
@@ -322,6 +325,20 @@ public:
     void           SetMailingFormats( MailTextFormats nSet ) { m_aMiscConfig.m_nMailingFormats = nSet;
                                                                m_aMiscConfig.SetModified();}
 
+    bool        IsOutputFile() const        { return m_aMiscConfig.m_bIsOutputFile; }
+    void        SetIsOutputFile( bool bSet )
+                        {
+                            m_aMiscConfig.SetModified();
+                            m_aMiscConfig.m_bIsOutputFile = bSet;
+                        }
+
+    bool        IsSingleDoc() const        { return m_aMiscConfig.m_bIsSingleDoc; }
+    void        SetIsSingleDoc( bool bSet )
+                        {
+                            m_aMiscConfig.SetModified();
+                            m_aMiscConfig.m_bIsSingleDoc = bSet;
+                        }
+
     bool        IsNameFromColumn() const        { return m_aMiscConfig.m_bIsNameFromColumn; }
     void        SetIsNameFromColumn( bool bSet )
                         {
@@ -344,6 +361,10 @@ public:
     const OUString& GetPasswordFromColumn() const       { return m_aMiscConfig.m_sPasswordFromColumn; }
     void        SetPasswordFromColumn( const OUString& rSet )       { m_aMiscConfig.m_sPasswordFromColumn = rSet;
                                                                       m_aMiscConfig.SetModified();}
+
+    const OUString& GetFileFormat() const          { return m_aMiscConfig.m_sFileFormat; }
+    void        SetFileFormat(const OUString& sPath)  { m_aMiscConfig.m_sFileFormat = sPath;
+                                                        m_aMiscConfig.SetModified();}
 
     const OUString& GetMailingPath() const          { return m_aMiscConfig.m_sMailingPath; }
     void        SetMailingPath(const OUString& sPath) { m_aMiscConfig.m_sMailingPath = sPath;

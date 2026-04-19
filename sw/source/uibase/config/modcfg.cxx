@@ -1168,6 +1168,8 @@ SwMiscConfig::SwMiscConfig() :
     m_bShowIndexPreview(false),
     m_bGrfToGalleryAsLnk(true),
     m_bNumAlignSize(true),
+    m_bIsOutputFile(false),
+    m_bIsSingleDoc(true),
     m_bIsNameFromColumn(true),
     m_bIsPasswordFromColumn(false),
     m_bAskForMailMergeInPrint(true),
@@ -1233,6 +1235,9 @@ void SwMiscConfig::ImplCommit()
             case 10: pValues[nProp] <<= m_bAskForMailMergeInPrint; break;
             case 11: pValues[nProp] <<= m_sPasswordFromColumn; break;
             case 12: pValues[nProp] <<= m_bIsPasswordFromColumn; break;
+            case 13: pValues[nProp] <<= m_bIsOutputFile; break;
+            case 14: pValues[nProp] <<= m_bIsSingleDoc; break;
+            case 15: pValues[nProp] <<= m_sFileFormat; break;
         }
     }
     PutProperties(aNames, aValues);
@@ -1266,6 +1271,9 @@ void SwMiscConfig::Load()
                 case 10: pValues[nProp] >>= m_bAskForMailMergeInPrint; break;
                 case 11: pValues[nProp] >>= sTmp; m_sPasswordFromColumn = sTmp; break;
                 case 12: m_bIsPasswordFromColumn = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 13: m_bIsOutputFile = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 14: m_bIsSingleDoc = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 15: pValues[nProp] >>= sTmp; m_sFileFormat = sTmp; break;
             }
         }
     }

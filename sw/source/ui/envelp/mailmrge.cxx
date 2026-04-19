@@ -231,13 +231,16 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
 
     m_xPathPB->connect_clicked(LINK(this, SwMailMergeDlg, InsertPathHdl));
 
-    m_xPrinterRB->connect_toggled(LINK(this, SwMailMergeDlg, OutputTypeHdl));
-    m_xFileRB->connect_toggled(LINK(this, SwMailMergeDlg, OutputTypeHdl));
 
     //#i63267# printing might be disabled
     bool bIsPrintable = !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
     m_xPrinterRB->set_sensitive(bIsPrintable);
-    OutputTypeHdl(bIsPrintable ? *m_xPrinterRB : *m_xFileRB);
+    bool bIsPrinter = bIsPrintable && !m_pModOpt->IsOutputFile();
+    m_xPrinterRB->set_active( bIsPrinter );
+    m_xPrinterRB->connect_toggled(LINK(this, SwMailMergeDlg, OutputTypeHdl));
+    m_xFileRB->set_active( !bIsPrinter );
+    m_xFileRB->connect_toggled(LINK(this, SwMailMergeDlg, OutputTypeHdl));
+    OutputTypeHdl( bIsPrinter ? *m_xPrinterRB : *m_xFileRB );
 
     m_xGenerateFromDataBaseCB->connect_toggled(LINK(this, SwMailMergeDlg, FilenameHdl));
     bool bColumn = m_pModOpt->IsNameFromColumn();
@@ -245,8 +248,9 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
         m_xGenerateFromDataBaseCB->set_active(true);
 
     FilenameHdl(*m_xGenerateFromDataBaseCB);
-    m_xSaveSingleDocRB->set_active(true);
+    m_xSaveSingleDocRB->set_active(m_pModOpt->IsSingleDoc());
     m_xSaveSingleDocRB->connect_toggled(LINK(this, SwMailMergeDlg, SaveTypeHdl));
+    m_xSaveIndividualRB->set_active(!m_pModOpt->IsSingleDoc());
     m_xSaveIndividualRB->connect_toggled(LINK(this, SwMailMergeDlg, SaveTypeHdl));
     SaveTypeHdl(*m_xSaveSingleDocRB);
 
@@ -319,7 +323,8 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
                                 + ":default_first");
         uno::Reference< container::XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
         static constexpr OUStringLiteral sName(u"Name");
-        sal_Int32 nODT = -1;
+        sal_Int32 nFilterIndex = -1;
+        const OUString sInitialFilter = m_pModOpt->GetFileFormat().isEmpty() ? "writer8" : m_pModOpt->GetFileFormat();
         while(xList->hasMoreElements()) {
             comphelper::SequenceAsHashMap aFilter(xList->nextElement());
             const OUString sFilter = aFilter.getUnpackedValueOrDefault(sName, OUString());
@@ -333,12 +338,13 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
             if (pProp != std::cend(aFilterProperties))
                 pProp->Value >>= sUIName2;
             if( !sUIName2.isEmpty() ) {
-                if( sFilter == "writer8" )
-                    nODT = m_xFilterLB->get_count();
+                if( sFilter == sInitialFilter )
+                    nFilterIndex = m_xFilterLB->get_count();
                 m_xFilterLB->append(sFilter, sUIName2);
             }
         }
-        m_xFilterLB->set_active( nODT );
+        m_xFilterLB->set_active( nFilterIndex );
+        FileFormatHdl( *m_xFilterLB );
     } catch (const uno::Exception&) {
     }
 }
@@ -388,7 +394,7 @@ IMPL_LINK_NOARG(SwMailMergeDlg, SaveTypeHdl, weld::Toggleable&, void)
 {
     bool bIndividual = m_xSaveIndividualRB->get_active();
 
-    m_xGenerateFromDataBaseCB->set_sensitive( bIndividual );
+    m_xGenerateFromDataBaseCB->set_sensitive( bIndividual && m_xFileRB->get_active() );
     if( bIndividual )
     {
         FilenameHdl(*m_xGenerateFromDataBaseCB);
@@ -410,7 +416,7 @@ IMPL_LINK_NOARG(SwMailMergeDlg, SaveTypeHdl, weld::Toggleable&, void)
 
 IMPL_LINK( SwMailMergeDlg, FilenameHdl, weld::Toggleable&, rBox, void )
 {
-    bool bEnable = rBox.get_active();
+    bool bEnable = rBox.get_active() && m_xFileRB->get_active();
     m_xColumnFT->set_sensitive( bEnable );
     m_xColumnLB->set_sensitive(bEnable);
     m_xPathFT->set_sensitive( bEnable );
@@ -482,11 +488,13 @@ bool SwMailMergeDlg::ExecQryShell()
         m_pImpl->xSelSupp->removeSelectionChangeListener( m_pImpl->xChgLstnr );
     }
 
+    m_pModOpt->SetIsOutputFile( m_xFileRB->get_active() );
     if (m_xPrinterRB->get_active())
         m_nMergeType = DBManagerOptions::MailMergePrinter;
     else {
         m_nMergeType = DBManagerOptions::MailMergeFile;
         m_pModOpt->SetMailingPath( GetURLfromPath() );
+        m_pModOpt->SetIsSingleDoc( m_xSaveSingleDocRB->get_active() );
         m_pModOpt->SetIsNameFromColumn(m_xGenerateFromDataBaseCB->get_active());
         m_pModOpt->SetIsFileEncryptedFromColumn(m_xPasswordCB->get_active());
 
@@ -494,8 +502,10 @@ bool SwMailMergeDlg::ExecQryShell()
         {
             m_pModOpt->SetNameFromColumn(m_xColumnLB->get_active_text());
             m_pModOpt->SetPasswordFromColumn(m_xPasswordLB->get_active_text());
-            if (m_xFilterLB->get_active() != -1)
+            if (m_xFilterLB->get_active() != -1) {
                 m_sSaveFilter = m_xFilterLB->get_active_id();
+                m_pModOpt->SetFileFormat( m_sSaveFilter );
+            }
             m_sFilename = OUString();
         } else {
             //#i97667# reset column name - otherwise it's remembered from the last run
