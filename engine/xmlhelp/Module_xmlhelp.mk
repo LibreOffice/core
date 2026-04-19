@@ -10,8 +10,10 @@
 $(eval $(call gb_Module_Module,xmlhelp))
 
 $(eval $(call gb_Module_add_targets,xmlhelp,\
-	Library_ucpchelp1 \
-	Package_helpxsl \
+	$(call gb_Helper_optional,XMLHELP, \
+		Library_ucpchelp1 \
+		Package_helpxsl \
+	) \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
