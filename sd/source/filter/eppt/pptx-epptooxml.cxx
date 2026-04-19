@@ -2820,6 +2820,7 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
 
     // MS PowerPoint reports a corrupt file if the media name contains non-ascii characters
     OUString sAsciiName;
+    uno::Sequence<sal_Int8> aTempBuf;
     if (comphelper::string::isValidAsciiFilename(sName))
         sAsciiName = sName;
     else
@@ -2827,7 +2828,6 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
         // create an ASCII name - using a hash to try and keep it unique and yet non-random
         comphelper::Hash aHash(comphelper::HashType::MD5);
         sal_Int32 nBytesToRead = std::clamp<sal_Int32>(xAudioStream->available(), 0, 32000);
-        uno::Sequence<sal_Int8> aTempBuf(nBytesToRead);
         if ((nBytesToRead = xAudioStream->readBytes(aTempBuf, nBytesToRead)))
             aHash.update(aTempBuf.getConstArray(), nBytesToRead);
         else // safety fallback: use the name to create a hash: should never happen
@@ -2846,6 +2846,9 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
     uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream(sPath.replaceAt(0, 2, u"/ppt"),
             u"audio/x-wav"_ustr);
 
+    // if bytes were read from input for hash generation, write those, too, otherwise they get lost
+    if (aTempBuf.hasElements())
+        xOutputStream->writeBytes(aTempBuf);
     comphelper::OStorageHelper::CopyInputToOutput(xAudioStream, xOutputStream);
 }
 
