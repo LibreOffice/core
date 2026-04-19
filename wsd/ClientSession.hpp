@@ -218,7 +218,7 @@ public:
     void removeOutdatedTilesOnFly(std::chrono::steady_clock::time_point now);
     void onTileProcessed(TileWireId wireId);
 
-    Util::Rectangle getVisibleArea() const { return _clientVisibleArea; }
+    const Util::Rectangle& getVisibleArea() const { return _clientVisibleArea; }
     /// Visible area can have negative value as position, but we have tiles only in the positive range
     Util::Rectangle getNormalizedVisibleArea() const;
 

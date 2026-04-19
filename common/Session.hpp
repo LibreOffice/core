@@ -290,28 +290,28 @@ public:
 
     void setZoteroAPIKey(const std::string& val) { _zoteroAPIKey = val; }
 
-    std::string getAIProviderAPIKey() const { return _aiProviderAPIKey; }
+    const std::string& getAIProviderAPIKey() const { return _aiProviderAPIKey; }
     void setAIProviderAPIKey(const std::string& val) { _aiProviderAPIKey = val; }
 
-    std::string getAIProviderModel() const { return _aiProviderModel; }
+    const std::string& getAIProviderModel() const { return _aiProviderModel; }
     void setAIProviderModel(const std::string& val) { _aiProviderModel = val; }
 
-    std::string getAIProviderURL() const { return _aiProviderURL; }
+    const std::string& getAIProviderURL() const { return _aiProviderURL; }
     void setAIProviderURL(const std::string& val) { _aiProviderURL = val; }
 
-    std::string getAIImageModel() const { return _aiImageModel; }
+    const std::string& getAIImageModel() const { return _aiImageModel; }
     void setAIImageModel(const std::string& val) { _aiImageModel = val; }
 
-    std::string getAIImageProviderAPIKey() const { return _aiImageProviderAPIKey; }
+    const std::string& getAIImageProviderAPIKey() const { return _aiImageProviderAPIKey; }
     void setAIImageProviderAPIKey(const std::string& val) { _aiImageProviderAPIKey = val; }
 
-    std::string getAIImageProviderURL() const { return _aiImageProviderURL; }
+    const std::string& getAIImageProviderURL() const { return _aiImageProviderURL; }
     void setAIImageProviderURL(const std::string& val) { _aiImageProviderURL = val; }
 
-    std::string getAIImageSize() const { return _aiImageSize; }
+    const std::string& getAIImageSize() const { return _aiImageSize; }
     void setAIImageSize(const std::string& val) { _aiImageSize = val; }
 
-    std::string getAIRequestTimeout() const { return _aiRequestTimeout; }
+    const std::string& getAIRequestTimeout() const { return _aiRequestTimeout; }
     void setAIRequestTimeout(const std::string& val) { _aiRequestTimeout = val; }
     int getAIRequestTimeoutSeconds() const
     {

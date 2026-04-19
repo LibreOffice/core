@@ -75,7 +75,7 @@ public:
             LOG_ERR("No http[s]:// in unusual proxy prefix '" << url << '\'');
     }
 
-    std::string getResponseRoot() const
+    const std::string& getResponseRoot() const
     {
         return _pathPlus;
     }

@@ -268,7 +268,7 @@ public:
         return false;
     }
 
-    std::string getURI() const
+    const std::string& getURI() const
     {
         return _uriString;
     }
@@ -276,11 +276,11 @@ public:
     {
         return _isProxy;
     }
-    const std::string getProxyPrefix() const
+    const std::string& getProxyPrefix() const
     {
         return _proxyPrefix;
     }
-    const std::string getHostUntrusted() const
+    const std::string& getHostUntrusted() const
     {
         return _hostUntrusted;
     }

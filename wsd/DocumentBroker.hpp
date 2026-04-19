@@ -367,7 +367,7 @@ public:
 
     bool isAsyncUploading() const;
 
-    Poco::URI getPublicUri() const { return _uriPublic; }
+    const Poco::URI& getPublicUri() const { return _uriPublic; }
     const AdditionalFilePaths& getAdditionalFileUrisJailed() const { return _additionalFileUrisJailed; }
     const std::string& getJailId() const { return _jailId; }
     const std::string& getDocKey() const { return _docKey; }
