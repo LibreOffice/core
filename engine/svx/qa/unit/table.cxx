@@ -9,8 +9,10 @@
 
 #include <test/unoapixml_test.hxx>
 
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 
 #include <extendedprimitive2dxmldump.hxx>
 #include <rtl/ustring.hxx>
@@ -19,10 +21,14 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
 #include <vcl/virdev.hxx>
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdoutl.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <editeng/editobj.hxx>
@@ -42,6 +48,8 @@ public:
 
     drawinglayer::primitive2d::Primitive2DContainer
     renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawPage);
+
+    drawinglayer::primitive2d::Primitive2DContainer renderObjectToPrimitives(SdrObject* pObject);
 };
 
 drawinglayer::primitive2d::Primitive2DContainer
@@ -58,6 +66,19 @@ Test::renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawPage
     sdr::contact::DisplayInfo aDisplayInfo;
     drawinglayer::primitive2d::Primitive2DContainer aContainer;
     rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, aContainer);
+    return aContainer;
+}
+
+drawinglayer::primitive2d::Primitive2DContainer Test::renderObjectToPrimitives(SdrObject* pObject)
+{
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice, { pObject },
+                                                               nullptr);
+    const sdr::contact::ViewObjectContact& rVOContact
+        = pObject->GetViewContact().GetViewObjectContact(aObjectContact);
+    sdr::contact::DisplayInfo aDisplayInfo;
+    drawinglayer::primitive2d::Primitive2DContainer aContainer;
+    rVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, aContainer);
     return aContainer;
 }
 
@@ -186,6 +207,88 @@ CPPUNIT_TEST_FIXTURE(Test, testSvxTableControllerSetAttrToSelectedShape)
 
     // Then make sure the text edit is not ended:
     CPPUNIT_ASSERT(pSdrView->IsTextEdit());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAutoColorOnDarkBackground)
+{
+    // Create new presentation with a table and black page background
+    loadFromURL(u"private:factory/simpress"_ustr);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pDrawPage);
+    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+
+    // Set the page background to black.
+    SfxItemSet aPageItems(pSdrPage->getSdrPageProperties().GetItemSet());
+    aPageItems.Put(XFillStyleItem(css::drawing::FillStyle_SOLID));
+    aPageItems.Put(XFillColorItem(OUString(), COL_BLACK));
+    pSdrPage->getSdrPageProperties().PutItemSet(aPageItems);
+
+    // Insert a 3x1 table.
+    uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"Rows"_ustr, sal_Int32(3)),
+            comphelper::makePropertyValue(u"Columns"_ustr, sal_Int32(1)) };
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
+
+    // End text edit so that rendering goes through the primitive path.
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    if (pSdrView->IsTextEdit())
+        pSdrView->SdrEndTextEdit();
+
+    SdrObject* pLastObject = pSdrPage->GetObj(pSdrPage->GetObjCount() - 1);
+    CPPUNIT_ASSERT(pLastObject);
+
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pLastObject);
+    CPPUNIT_ASSERT(pTableObject);
+
+    SdrOutliner& rOutliner = pSdrPage->getSdrModelFromSdrPage().GetDrawOutliner();
+
+    // Cell 0: no cell fill
+    rOutliner.Clear();
+    rOutliner.Insert(u"Test"_ustr);
+    pTableObject->getText(0)->SetOutlinerParaObject(rOutliner.CreateParaObject());
+
+    // Cell 1: explicit white fill
+    uno::Reference<beans::XPropertySet> xCell1(pTableObject->getTable()->getCellByPosition(0, 1),
+                                               uno::UNO_QUERY_THROW);
+    xCell1->setPropertyValue(u"FillStyle"_ustr, uno::Any(css::drawing::FillStyle_SOLID));
+    xCell1->setPropertyValue(u"FillColor"_ustr, uno::Any(sal_Int32(COL_WHITE)));
+    rOutliner.Clear();
+    rOutliner.Insert(u"Test"_ustr);
+    pTableObject->getText(1)->SetOutlinerParaObject(rOutliner.CreateParaObject());
+
+    // Cell 2: explicit black fill
+    uno::Reference<beans::XPropertySet> xCell2(pTableObject->getTable()->getCellByPosition(0, 2),
+                                               uno::UNO_QUERY_THROW);
+    xCell2->setPropertyValue(u"FillStyle"_ustr, uno::Any(css::drawing::FillStyle_SOLID));
+    xCell2->setPropertyValue(u"FillColor"_ustr, uno::Any(sal_Int32(COL_BLACK)));
+    rOutliner.Clear();
+    rOutliner.Insert(u"Test"_ustr);
+    pTableObject->getText(2)->SetOutlinerParaObject(rOutliner.CreateParaObject());
+
+    // When rendering the table to primitives:
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
+        = renderObjectToPrimitives(pTableObject);
+    svx::ExtendedPrimitive2dXmlDump aDumper;
+    xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
+
+    const char sCell1[] = "(//sdrCell[1]/group/sdrblocktext/texthierarchyblock/"
+                          "texthierarchyparagraph/texthierarchyline/textsimpleportion)[1]";
+    const char sCell2[] = "(//sdrCell[2]/group/sdrblocktext/texthierarchyblock/"
+                          "texthierarchyparagraph/texthierarchyline/textsimpleportion)[1]";
+    const char sCell3[] = "(//sdrCell[3]/group/sdrblocktext/texthierarchyblock/"
+                          "texthierarchyparagraph/texthierarchyline/textsimpleportion)[1]";
+
+    // Cell 0: no fill, dark page, expect white text
+    assertXPath(pDocument, sCell1, "fontcolor", u"#ffffff");
+    // Cell 1: white fill, expect black text
+    assertXPath(pDocument, sCell2, "fontcolor", u"#000000");
+    // Cell 2: black fill, expect white text
+    assertXPath(pDocument, sCell3, "fontcolor", u"#ffffff");
 }
 }
 
