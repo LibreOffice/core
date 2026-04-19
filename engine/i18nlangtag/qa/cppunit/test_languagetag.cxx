@@ -36,12 +36,14 @@ public:
     void testAllIsoLangEntries();
     void testDisplayNames();
     void testLanguagesWithoutHyphenation();
+    void testLongBcp47ToStackString();
 
     CPPUNIT_TEST_SUITE(TestLanguageTag);
     CPPUNIT_TEST(testAllTags);
     CPPUNIT_TEST(testAllIsoLangEntries);
     CPPUNIT_TEST(testDisplayNames);
     CPPUNIT_TEST(testLanguagesWithoutHyphenation);
+    CPPUNIT_TEST(testLongBcp47ToStackString);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1091,6 +1093,20 @@ void TestLanguageTag::testLanguagesWithoutHyphenation()
 
     // Vietnamese
     CPPUNIT_ASSERT(!MsLangId::usesHyphenation(LANGUAGE_VIETNAMESE));
+}
+
+void TestLanguageTag::testLongBcp47ToStackString()
+{
+    // A qlt locale whose variant exceeds the StackString64 buffer must
+    // not overflow. convertToBcp47 rejects it, leaving the buffer empty.
+    lang::Locale aLocale;
+    aLocale.Language = I18NLANGTAG_QLT;
+    aLocale.Country = u"US"_ustr;
+    aLocale.Variant = u"en-US-x-aaaa-bbbb-cccc-dddd-eeee-ffff-gggg-hhhh-"
+                      "iiii-jjjj-kkkk-llll-mmmm-nnnn-oooo-pppp-qqqq-rrrr"_ustr;
+    StackString64 aBuf;
+    LanguageTag::convertToBcp47(aBuf, aLocale, false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBuf.getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( TestLanguageTag );

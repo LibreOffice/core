@@ -2899,7 +2899,8 @@ void LanguageTagImpl::convertToBcp47( StackString64& rBuf, const css::lang::Loca
     }
     else if (rLocale.Language == I18NLANGTAG_QLT)
     {
-        appendAscii(rBuf, rLocale.Variant);
+        if (rLocale.Variant.getLength() < 64)
+            appendAscii(rBuf, rLocale.Variant);
     }
     else
     {
