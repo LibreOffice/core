@@ -938,8 +938,11 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf148478_transitionMusic)
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
-    CPPUNIT_ASSERT(
-        xNameAccess->hasByName(u"ppt/media/audio_ac976207e31e8b69f8b3c3d981097f3d.wav"_ustr));
+    uno::Reference<io::XInputStream> xStrm;
+    xNameAccess->getByName(u"ppt/media/audio_ac976207e31e8b69f8b3c3d981097f3d.wav"_ustr) >>= xStrm;
+    CPPUNIT_ASSERT(xStrm.is());
+    sal_Int32 nSize = xStrm->available();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(122448), nSize);
 
     xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
     assertXPath(pXmlDocRels,
