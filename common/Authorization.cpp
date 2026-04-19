@@ -131,7 +131,19 @@ Authorization Authorization::create(const Poco::URI& uri)
     if (!decoded.empty())
     {
         Authorization auth(type, std::move(decoded), noHeader);
-        auth.setExpiryEpoch(expiryEpoch);
+        if (expiryEpoch > duration::zero())
+        {
+            if (type != Authorization::Type::Token)
+            {
+                LOG_WRN("Ignoring invalid access_token_ttl with ["
+                        << name(type) << "] authorization type in uri [" << uri.toString() << ']');
+            }
+            else
+            {
+                auth.setExpiryEpoch(expiryEpoch);
+            }
+        }
+
         return auth;
     }
 

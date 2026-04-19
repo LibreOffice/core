@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include <common/Log.hpp>
 #include <common/StateEnum.hpp>
 
 #include <chrono>
@@ -39,6 +40,7 @@ public:
                None, ///< Unlike Expired, this implies no Authorization needed.
                Token, ///< Valid access_token -> "Authorization: Bearer ..." header.
                Header, ///< Valid access_header -> Custom header(s).
+               TokenRefresh, ///< Pending a Token refresh from integration.
                Expired ///< The server is rejecting the current authorization key.
     );
 
@@ -46,6 +48,8 @@ private:
     std::string _data;
     Type _type;
     duration _expiryEpoch; ///< Milliseconds from the epoch when the access_token will expire.
+    std::chrono::steady_clock::time_point _tokenRefreshStartTime; ///< Only when refreshing.
+    std::chrono::seconds _tokenRefreshTimeout; ///< Maximum time to wait for Token refresh.
     bool _noHeader;
 
     Authorization()
@@ -58,6 +62,8 @@ public:
         : _data(std::move(data))
         , _type(type)
         , _expiryEpoch(duration::zero())
+        , _tokenRefreshStartTime(duration::zero())
+        , _tokenRefreshTimeout(std::chrono::seconds::zero())
         , _noHeader(noHeader)
     {
     }
@@ -74,12 +80,46 @@ public:
         _expiryEpoch = expiryEpoch;
     }
 
+    /// Returns true iff Type is Token and we passed the expiry-epoch, or
+    /// we are refreshing already.
+    bool needTokenRefresh() const
+    {
+        return _type == Type::TokenRefresh ||
+               (_type == Type::Token && _expiryEpoch > duration::zero() &&
+                std::chrono::system_clock::now().time_since_epoch() > _expiryEpoch);
+    }
+
+    /// Start waiting for a token refresh.
+    void startTokenRefresh(const std::chrono::seconds timeout)
+    {
+        LOG_ASSERT_MSG(_type == Type::Token, "Token refresh is meaningful only for access_token");
+        _type = Type::TokenRefresh;
+        _tokenRefreshStartTime = std::chrono::steady_clock::now();
+        _tokenRefreshTimeout = timeout;
+    }
+
+    /// Returns true iff we are refreshing the token.
+    bool isRefreshingToken() const { return _type == Type::TokenRefresh; }
+
+    /// Returns true if the timeout has elapsed without a refresh.
+    bool isTokenRefreshTimedOut(
+        const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now()) const
+    {
+        return isRefreshingToken() && (now - _tokenRefreshStartTime) >= _tokenRefreshTimeout;
+    }
+
+    /// Sets the Token's expiry time from the epoch.
+    void setExpiryEpoch(duration epochMs)
+    {
+        LOG_ASSERT_MSG(epochMs == duration::zero() || _type == Type::Token,
+                       "Token expiry is meaningful only for access_token");
+        _expiryEpoch = epochMs;
+    }
+
     /// Expire the Authorization data.
     void expire() { _type = Type::Expired; }
 
-    void setExpiryEpoch(duration epochMs) { _expiryEpoch = epochMs; }
-
-    /// Returns true iff the Authorization data is invalid.
+    /// Returns true if Type is Expired or we passed the expiry-epoch.
     bool isExpired() const
     {
         return _type == Type::Expired ||

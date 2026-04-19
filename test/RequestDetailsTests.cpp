@@ -38,6 +38,7 @@ class RequestDetailsTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testRequestDetails);
     CPPUNIT_TEST(testCoolWs);
     CPPUNIT_TEST(testAuthorization);
+    CPPUNIT_TEST(testAuthorizationExpiry);
     CPPUNIT_TEST(testSanitizePercent);
 
     CPPUNIT_TEST_SUITE_END();
@@ -49,6 +50,7 @@ class RequestDetailsTests : public CPPUNIT_NS::TestFixture
     void testRequestDetails();
     void testCoolWs();
     void testAuthorization();
+    void testAuthorizationExpiry();
     void testSanitizePercent();
 };
 
@@ -1346,6 +1348,123 @@ void RequestDetailsTests::testAuthorization()
         Authorization auth7(Authorization::create(URI));
         Poco::Net::HTTPRequest req;
         auth7.authorizeRequest(req);
+    }
+}
+
+void RequestDetailsTests::testAuthorizationExpiry()
+{
+    constexpr std::string_view testname = __func__;
+
+    using duration = std::chrono::milliseconds;
+
+    // A token with no expiry should not be expired.
+    {
+        Authorization auth(Authorization::Type::Token, "tok1", false);
+        LOK_ASSERT(!auth.isExpired());
+        LOK_ASSERT(!auth.needTokenRefresh());
+    }
+
+    // A token with a far-future expiry should not be expired.
+    {
+        Authorization auth(Authorization::Type::Token, "tok2", false);
+        const auto futureMs = std::chrono::system_clock::now().time_since_epoch() +
+                              std::chrono::hours(1);
+        auth.setExpiryEpoch(std::chrono::duration_cast<duration>(futureMs));
+        LOK_ASSERT(!auth.isExpired());
+        LOK_ASSERT(!auth.needTokenRefresh());
+    }
+
+    // A token with a past expiry should be expired.
+    {
+        Authorization auth(Authorization::Type::Token, "tok3", false);
+        const auto pastMs = std::chrono::system_clock::now().time_since_epoch() -
+                            std::chrono::seconds(1);
+        auth.setExpiryEpoch(std::chrono::duration_cast<duration>(pastMs));
+        LOK_ASSERT(auth.isExpired());
+        LOK_ASSERT(auth.needTokenRefresh());
+        // Regression: a naturally-expired Token (startTokenRefresh never called) must
+        // not report a refresh-wait timeout, otherwise the poll-loop kills the session.
+        LOK_ASSERT(!auth.isRefreshingToken());
+        LOK_ASSERT(!auth.isTokenRefreshTimedOut());
+    }
+
+    // expire() should mark as expired regardless of TTL.
+    {
+        Authorization auth(Authorization::Type::Token, "tok4", false);
+        LOK_ASSERT(!auth.isExpired());
+        auth.expire();
+        LOK_ASSERT(auth.isExpired());
+    }
+
+    // resetAccessToken should clear expired state.
+    {
+        Authorization auth(Authorization::Type::Token, "tok5", false);
+        auth.expire();
+        LOK_ASSERT(auth.isExpired());
+        const auto futureMs = std::chrono::system_clock::now().time_since_epoch() +
+                              std::chrono::hours(1);
+        auth.resetAccessToken("tok5_new",
+                              std::chrono::duration_cast<duration>(futureMs));
+        LOK_ASSERT(!auth.isExpired());
+        LOK_ASSERT(!auth.needTokenRefresh());
+    }
+
+    // resetAccessToken with a past expiry should be expired.
+    {
+        Authorization auth(Authorization::Type::Token, "tok6", false);
+        const auto pastMs = std::chrono::system_clock::now().time_since_epoch() -
+                            std::chrono::seconds(1);
+        auth.resetAccessToken("tok6_new",
+                              std::chrono::duration_cast<duration>(pastMs));
+        LOK_ASSERT(auth.isExpired());
+    }
+
+    // Authorization::create with access_token_ttl should set expiry.
+    {
+        const auto futureMs = std::chrono::duration_cast<duration>(
+            std::chrono::system_clock::now().time_since_epoch() + std::chrono::hours(1));
+        const std::string uri = "http://host/wopi/files/0?access_token=secret&access_token_ttl=" +
+                                std::to_string(futureMs.count());
+        Authorization auth = Authorization::create(uri);
+        LOK_ASSERT(!auth.isExpired());
+    }
+
+    // Authorization::create with past access_token_ttl should be expired.
+    {
+        const auto pastMs = std::chrono::duration_cast<duration>(
+            std::chrono::system_clock::now().time_since_epoch() - std::chrono::seconds(1));
+        const std::string uri = "http://host/wopi/files/0?access_token=secret&access_token_ttl=" +
+                                std::to_string(pastMs.count());
+        Authorization auth = Authorization::create(uri);
+        LOK_ASSERT(auth.isExpired());
+    }
+
+    // Token refresh: startTokenRefresh, isRefreshingToken, isTokenRefreshTimedOut.
+    {
+        Authorization auth(Authorization::Type::Token, "tok7", false);
+        LOK_ASSERT(!auth.isRefreshingToken());
+
+        auth.startTokenRefresh(std::chrono::seconds(1));
+        LOK_ASSERT(auth.isRefreshingToken());
+        LOK_ASSERT(auth.needTokenRefresh());
+
+        // Should not have timed out yet.
+        LOK_ASSERT(!auth.isTokenRefreshTimedOut());
+
+        // Reset should clear the refreshing state.
+        const auto futureMs = std::chrono::system_clock::now().time_since_epoch() +
+                              std::chrono::hours(1);
+        auth.resetAccessToken("tok7_new",
+                              std::chrono::duration_cast<duration>(futureMs));
+        LOK_ASSERT(!auth.isRefreshingToken());
+        LOK_ASSERT(!auth.needTokenRefresh());
+    }
+
+    // Type::None should not be expired.
+    {
+        Authorization auth(Authorization::Type::None, "", false);
+        LOK_ASSERT(!auth.isExpired());
+        LOK_ASSERT(!auth.needTokenRefresh());
     }
 }
 
