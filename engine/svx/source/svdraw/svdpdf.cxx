@@ -44,6 +44,7 @@
 #include <vcl/metric.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/kernitem.hxx>
+#include <svx/sdtfchim.hxx>
 #include <svx/sdtditm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtfsitm.hxx>
@@ -1944,7 +1945,9 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
     // As per ImpEditEngine::CalcParaWidth the width of the text box has to be 1 unit wider than the text
     const tools::Long nTextWidth
         = nVclTextWidth + static_cast<tools::Long>(nExtraKerning) * (nChars - 1) + 1;
-    Size aSize(nTextWidth, -aFontMetric.GetLineHeight());
+    // We work with font independent metrics, so use fontSize * 1.2 for line height.
+    auto nLineHeight = basegfx::fround<tools::Long>(aFont.GetFontHeight() * 1.2);
+    Size aSize(nTextWidth, -nLineHeight);
 
     Point aSdrPos(basegfx::fround<tools::Long>(aPos.X() * mfScaleX + maOfs.X()),
                   basegfx::fround<tools::Long>(aPos.Y() * mfScaleY + maOfs.Y()));
@@ -1960,6 +1963,9 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
     pText->SetMergedItem(makeSdrTextLeftDistItem(0));
 
     pText->SetMergedItem(makeSdrTextAutoGrowHeightItem(false));
+
+    // We want font independent line spacing for PDF
+    pText->SetMergedItem(SdrTextFixedCellHeightItem(true));
 
     if (bInvisible)
         pText->SetVisible(false);

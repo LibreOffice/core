@@ -138,6 +138,13 @@ public: // TODO: make data members private
 
     SAL_DLLPRIVATE void GetScale(double* nXScale, double* nYScale) const;
 
+    /** Get the line height by reading the (Horizontal Header) hhea table directly.
+     * This differs from just reading the font metrics, as it bypasses any
+     * Win/Typo metric logic for backwards compatibility.
+     * Returns 0.0 if the font has no hhea table or is not set.
+     */
+    double GetHheaLineHeightRatio() const;
+
     bool NeedsArtificialItalic() const;
     bool NeedsArtificialBold() const;
 

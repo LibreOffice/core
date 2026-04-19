@@ -96,6 +96,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/sdsxyitm.hxx>
+#include <svx/sdtfchim.hxx>
 #include <svx/sdtditm.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/sdynitm.hxx>
@@ -269,6 +270,11 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(makeSdrTextWordWrapItem(true));
 
     rISet.Put(SvxLineSpacingItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL));
+
+    // Use font-independent line spacing (120% of font size) for new documents.
+    // This matches PowerPoint's behavior and avoids dependency on font metrics
+    // which can vary across systems (e.g. Carlito 1.103 vs 1.104 in Flatpak).
+    rISet.Put(SdrTextFixedCellHeightItem(true));
 
     // #i16874# enable kerning by default but only for new documents
     rISet.Put(SvxAutoKernItem(true, EE_CHAR_PAIRKERNING));

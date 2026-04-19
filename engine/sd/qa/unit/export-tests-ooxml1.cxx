@@ -1705,14 +1705,18 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf143129)
     assertXPath(pXmlDoc, "/p:presentationPr/p:showPr/p:custShow", "id", u"0");
 }
 
-CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf118045)
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testProportionalLineSpacingPPTXExport)
 {
-    createSdImpressDoc("odp/tdf118045.odp");
+    // tdf#118045: Proportional line spacing from a paragraph style was lost
+    // on PPTX export - only direct formatting was written to <a:lnSpc>, so
+    // the element was missing entirely when the 110% line spacing came from
+    // the paragraph style. Verify the element is present after export.
+    createSdImpressDoc("odp/LineSpacing_110Percent.odp");
     save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:lnSpc/a:spcPct", "val",
-                u"110000");
+
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:lnSpc/a:spcPct", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf137675)

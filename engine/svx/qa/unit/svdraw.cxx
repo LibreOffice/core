@@ -824,9 +824,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourText)
     // rotation. Without fix the text was rotated but positioned left-top of the shape. The first
     // line of text has started at (10000|7353), last line at (10000|5007).
     assertXPath(pXmlDoc, "(//textsimpleportion)[1]", "x", u"15998");
-    assertXPath(pXmlDoc, "(//textsimpleportion)[1]", "y", u"11424");
+    assertXPath(pXmlDoc, "(//textsimpleportion)[1]", "y", u"11471");
     assertXPath(pXmlDoc, "(//textsimpleportion)[4]", "x", u"15998");
-    assertXPath(pXmlDoc, "(//textsimpleportion)[4]", "y", u"9291");
+    assertXPath(pXmlDoc, "(//textsimpleportion)[4]", "y", u"9488");
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourTextCJK)

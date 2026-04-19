@@ -37,6 +37,6 @@ class tdf164299(UITestCase):
             self.assertEqual(3, len(xDrawPage))
             xShape = xDrawPage[2]
             self.assertEqual(1000, xShape.getSize().Width)
-            self.assertEqual(3697, xShape.getSize().Height)
+            self.assertEqual(3748, xShape.getSize().Height)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

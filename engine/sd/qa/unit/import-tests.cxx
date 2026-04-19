@@ -18,8 +18,15 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <editeng/numitem.hxx>
 
+#include <vcl/metric.hxx>
+#include <vcl/virdev.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/svddef.hxx>
+#include <svx/sdtfchim.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>
@@ -2180,6 +2187,118 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf111927)
         CPPUNIT_ASSERT_EQUAL(60.0f, nCharHeight);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
                              xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+    }
+}
+
+// On ODP/FODP import, shapes using font-metric-based line spacing
+// are migrated to font-independent line spacing (120% base) with an adjusted
+// percentage, to make documents independent of font metric variations across
+// systems (e.g. Carlito 1.103 vs 1.104 in Flatpak). Fixed line heights
+// (e.g. 0.8cm) are left untouched.
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFontIndependentLineSpacingMigration)
+{
+    createSdImpressDoc("odp/TestParagraph.fodp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+
+    // Get the hhea ratio for Carlito to compute expected converted values
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    pVDev->SetFont(vcl::Font(u"Carlito"_ustr, u"Regular"_ustr, Size(0, 2048)));
+    FontMetric aMetric = pVDev->GetFontMetric();
+    if (aMetric.GetFamilyName() != u"Carlito")
+        return; // Carlito not installed, skip test
+
+    double fHheaRatio = pVDev->GetHheaLineHeightRatio();
+    CPPUNIT_ASSERT(fHheaRatio > 0.0);
+    double fFactor = fHheaRatio / 1.2;
+
+    auto expectedProp = [&](sal_uInt16 nOriginal) -> sal_uInt16 {
+        return static_cast<sal_uInt16>(std::lround(nOriginal * fFactor));
+    };
+
+    auto checkFixedCellHeight = [](SdrTextObj* pTextObj, bool bExpected, const char* pMsg) {
+        CPPUNIT_ASSERT_MESSAGE(pMsg, pTextObj != nullptr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            pMsg, bExpected, pTextObj->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
+    };
+
+    auto checkParaProp = [](SdrTextObj* pTextObj, sal_Int32 nPara, sal_uInt16 nExpected,
+                            const char* pMsg) {
+        OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
+        CPPUNIT_ASSERT_MESSAGE(pMsg, pOPO != nullptr);
+        SfxItemSet aAttrs(pOPO->GetTextObject().GetParaAttribs(nPara));
+        const SvxLineSpacingItem& rLSP = aAttrs.Get(EE_PARA_SBL);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            OString(OString::Concat(pMsg) + ": should be proportional").getStr(),
+            SvxInterLineSpaceRule::Prop, rLSP.GetInterLineSpaceRule());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat(pMsg) + ": wrong percentage").getStr(),
+                                     nExpected, rLSP.GetPropLineSpace());
+    };
+
+    // Slide 1: Carlito (shape 0) with default 100%, Liberation Sans (shape 2).
+    // Fixup should convert the Carlito shape. Liberation Sans shape should NOT
+    // be converted (not Carlito).
+    {
+        const SdrPage* pPage = pDocument->GetSdPage(0, PageKind::Standard);
+        CPPUNIT_ASSERT(pPage);
+        SdrTextObj* pCarlito = DynCastSdrTextObj(pPage->GetObj(0));
+        checkFixedCellHeight(pCarlito, true, "Slide 1 Carlito: font-independent should be true");
+        checkParaProp(pCarlito, 0, expectedProp(100), "Slide 1 Carlito para 0 (100%)");
+
+        checkFixedCellHeight(DynCastSdrTextObj(pPage->GetObj(2)), true,
+                             "Slide 1 Liberation Sans: should be converted");
+    }
+
+    // Slide 2: Mixed paragraphs — Carlito shape (shape 0) with
+    // 135%, fixed 0.7cm, 110%, 90%, 115%.
+    // Liberation Serif shape (shape 2) should NOT be converted.
+    {
+        const SdrPage* pPage = pDocument->GetSdPage(1, PageKind::Standard);
+        CPPUNIT_ASSERT(pPage);
+        SdrTextObj* pCarlito = DynCastSdrTextObj(pPage->GetObj(0));
+        checkFixedCellHeight(pCarlito, true, "Slide 2 Carlito: font-independent should be true");
+        checkParaProp(pCarlito, 0, expectedProp(135), "Slide 2 para 0 (135%)");
+        // para 1 is fixed 0.7cm — should be left as-is
+        checkParaProp(pCarlito, 2, expectedProp(110), "Slide 2 para 2 (110%)");
+        checkParaProp(pCarlito, 3, expectedProp(90), "Slide 2 para 3 (90%)");
+        checkParaProp(pCarlito, 4, expectedProp(115), "Slide 2 para 4 (115%)");
+
+        checkFixedCellHeight(DynCastSdrTextObj(pPage->GetObj(2)), true,
+                             "Slide 2 Liberation Serif: should be converted");
+    }
+
+    // Slide 3: Carlito 125% (shape 0), Liberation Serif 125% (shape 2).
+    {
+        const SdrPage* pPage = pDocument->GetSdPage(2, PageKind::Standard);
+        CPPUNIT_ASSERT(pPage);
+        SdrTextObj* pCarlito = DynCastSdrTextObj(pPage->GetObj(0));
+        checkFixedCellHeight(pCarlito, true, "Slide 3 Carlito: font-independent should be true");
+        checkParaProp(pCarlito, 0, expectedProp(125), "Slide 3 Carlito para 0 (125%)");
+
+        checkFixedCellHeight(DynCastSdrTextObj(pPage->GetObj(2)), true,
+                             "Slide 3 Liberation Serif: should be converted");
+    }
+
+    // Slide 4: Bold (shape 0) 125% and Italic (shape 2) 125%, both Carlito.
+    {
+        const SdrPage* pPage = pDocument->GetSdPage(3, PageKind::Standard);
+        CPPUNIT_ASSERT(pPage);
+        SdrTextObj* pBold = DynCastSdrTextObj(pPage->GetObj(0));
+        checkFixedCellHeight(pBold, true, "Slide 4 Bold: font-independent should be true");
+        checkParaProp(pBold, 0, expectedProp(125), "Slide 4 Bold para 0 (125%)");
+
+        SdrTextObj* pItalic = DynCastSdrTextObj(pPage->GetObj(2));
+        checkFixedCellHeight(pItalic, true, "Slide 4 Italic: font-independent should be true");
+        checkParaProp(pItalic, 0, expectedProp(125), "Slide 4 Italic para 0 (125%)");
+    }
+
+    // Slide 5: Fixed line height (0.8cm) — should NOT be converted.
+    {
+        const SdrPage* pPage = pDocument->GetSdPage(4, PageKind::Standard);
+        CPPUNIT_ASSERT(pPage);
+        checkFixedCellHeight(DynCastSdrTextObj(pPage->GetObj(0)), false,
+                             "Slide 5 fixed 0.8cm: should NOT have font-independent spacing");
     }
 }
 

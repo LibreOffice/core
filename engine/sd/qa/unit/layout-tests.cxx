@@ -157,51 +157,51 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)
     // sentence#, index, length, x, y
     const std::tuple<int, int, int, int, int> strings[] = {
         // Column 1
-        { 0, 0, 40, 3750, 3193 },
-        { 0, 40, 41, 3750, 3587 },
-        { 0, 81, 39, 3750, 3981 },
-        { 0, 120, 33, 3750, 4375 },
-        { 0, 153, 35, 3750, 4769 },
-        { 0, 188, 34, 3750, 5163 },
-        { 0, 222, 38, 3750, 5557 },
-        { 0, 260, 35, 3750, 5951 },
-        { 0, 295, 37, 3750, 6345 },
-        { 0, 332, 31, 3750, 6739 },
-        { 0, 363, 33, 3750, 7133 },
-        { 0, 396, 39, 3750, 7527 },
-        { 0, 435, 37, 3750, 7921 },
-        { 0, 472, 32, 3750, 8315 },
-        { 0, 504, 22, 3750, 8709 },
-        { 1, 0, 43, 3750, 9103 },
-        { 1, 43, 35, 3750, 9497 },
-        { 1, 78, 36, 3750, 9891 },
-        { 1, 114, 41, 3750, 10285 },
-        { 1, 155, 39, 3750, 10679 },
-        { 1, 194, 35, 3750, 11073 },
-        { 1, 229, 37, 3750, 11467 },
-        { 1, 266, 40, 3750, 11861 },
-        { 1, 306, 39, 3750, 12255 },
-        { 1, 345, 38, 3750, 12649 },
-        { 1, 383, 39, 3750, 13043 },
-        { 1, 422, 29, 3750, 13437 },
-        { 2, 0, 42, 3750, 13831 },
-        { 2, 42, 41, 3750, 14225 },
-        { 2, 83, 39, 3750, 14619 },
-        { 2, 122, 32, 3750, 15013 },
-        { 2, 154, 38, 3750, 15407 },
-        { 2, 192, 34, 3750, 15801 },
-        { 2, 226, 38, 3750, 16195 },
+        { 0, 0, 40, 3750, 3190 },
+        { 0, 40, 41, 3750, 3584 },
+        { 0, 81, 39, 3750, 3978 },
+        { 0, 120, 33, 3750, 4372 },
+        { 0, 153, 35, 3750, 4766 },
+        { 0, 188, 34, 3750, 5160 },
+        { 0, 222, 38, 3750, 5554 },
+        { 0, 260, 35, 3750, 5948 },
+        { 0, 295, 37, 3750, 6342 },
+        { 0, 332, 31, 3750, 6736 },
+        { 0, 363, 33, 3750, 7130 },
+        { 0, 396, 39, 3750, 7524 },
+        { 0, 435, 37, 3750, 7918 },
+        { 0, 472, 32, 3750, 8312 },
+        { 0, 504, 22, 3750, 8706 },
+        { 1, 0, 43, 3750, 9100 },
+        { 1, 43, 35, 3750, 9494 },
+        { 1, 78, 36, 3750, 9888 },
+        { 1, 114, 41, 3750, 10282 },
+        { 1, 155, 39, 3750, 10676 },
+        { 1, 194, 35, 3750, 11070 },
+        { 1, 229, 37, 3750, 11464 },
+        { 1, 266, 40, 3750, 11858 },
+        { 1, 306, 39, 3750, 12252 },
+        { 1, 345, 38, 3750, 12646 },
+        { 1, 383, 39, 3750, 13040 },
+        { 1, 422, 29, 3750, 13434 },
+        { 2, 0, 42, 3750, 13828 },
+        { 2, 42, 41, 3750, 14222 },
+        { 2, 83, 39, 3750, 14616 },
+        { 2, 122, 32, 3750, 15010 },
+        { 2, 154, 38, 3750, 15404 },
+        { 2, 192, 34, 3750, 15798 },
+        { 2, 226, 38, 3750, 16192 },
         // Column 2
-        { 2, 264, 42, 10725, 3193 },
-        { 2, 306, 39, 10725, 3587 },
-        { 2, 345, 37, 10725, 3981 },
-        { 2, 382, 37, 10725, 4375 },
-        { 2, 419, 42, 10725, 4769 },
-        { 2, 461, 36, 10725, 5163 },
-        { 2, 497, 36, 10725, 5557 },
-        { 2, 533, 40, 10725, 5951 },
-        { 2, 573, 35, 10725, 6345 },
-        { 2, 608, 30, 10725, 6739 },
+        { 2, 264, 42, 10725, 3190 },
+        { 2, 306, 39, 10725, 3584 },
+        { 2, 345, 37, 10725, 3978 },
+        { 2, 382, 37, 10725, 4372 },
+        { 2, 419, 42, 10725, 4766 },
+        { 2, 461, 36, 10725, 5160 },
+        { 2, 497, 36, 10725, 5554 },
+        { 2, 533, 40, 10725, 5948 },
+        { 2, 573, 35, 10725, 6342 },
+        { 2, 608, 30, 10725, 6736 },
     };
 
     createSdDrawDoc("odg/two_columns.odg");
@@ -231,20 +231,20 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, tdf143258_testTbRlLayout)
     // sentence#, index, length, x, y
     const std::tuple<int, int, int, int, int> strings[] = {
         // Box 1
-        { 0, 0, 11, 5346, 3250 },
-        { 0, 11, 9, 4635, 3250 },
-        { 0, 20, 6, 3924, 3250 },
-        { 0, 26, 8, 3213, 3250 },
+        { 0, 0, 11, 5351, 3250 },
+        { 0, 11, 9, 4642, 3250 },
+        { 0, 20, 6, 3933, 3250 },
+        { 0, 26, 8, 3224, 3250 },
         // Box 2 column 1
-        { 1, 0, 6, 5346, 7250 },
-        { 1, 6, 5, 4635, 7250 },
-        { 1, 11, 7, 3924, 7250 },
-        { 1, 18, 8, 3213, 7250 },
+        { 1, 0, 6, 5351, 7250 },
+        { 1, 6, 5, 4642, 7250 },
+        { 1, 11, 7, 3933, 7250 },
+        { 1, 18, 8, 3224, 7250 },
         // Box 2 column 2
-        { 1, 26, 2, 5346, 9600 },
-        { 1, 28, 7, 4635, 9600 },
-        { 1, 35, 5, 3924, 9600 },
-        { 1, 40, 3, 3213, 9600 },
+        { 1, 26, 2, 5351, 9600 },
+        { 1, 28, 7, 4642, 9600 },
+        { 1, 35, 5, 3933, 9600 },
+        { 1, 40, 3, 3224, 9600 },
     };
 
     createSdDrawDoc("odg/tb-rl-textbox.odg");
@@ -263,10 +263,6 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, tdf143258_testTbRlLayout)
         assertXPath(pXmlDoc, sXPath, "index", OUString::number(index));
         assertXPath(pXmlDoc, sXPath, "length", OUString::number(length));
 
-        // Without the fix in place, this would have failed with
-        // - Expected: 5346
-        // - Actual  : 503924
-        // - In <>, attribute 'x' of '/metafile/push[1]/push[1]/textarray[1]' incorrect value.
         assertXPath(pXmlDoc, sXPath, "x", OUString::number(x));
         assertXPath(pXmlDoc, sXPath, "y", OUString::number(y));
     }
@@ -364,7 +360,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
     xmlDocUniquePtr pXmlDoc = parseLayout();
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", u"0");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", u"406");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", u"400");
 #ifndef _WIN32 // FIXME: Windows seems to differ in text layouting
     assertXPathDoubleValue(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "first",
                            114.087, 0.001);
@@ -461,22 +457,22 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf152906_AdjustToContour)
 
     // index, length, x, y
     const std::tuple<int, int, int, int> strings[] = {
-        { 0, 6, 9600, 8647 }, //                        Lorem
-        { 6, 22, 7570, 9358 }, //               ipsum dolor sit amet,
-        { 28, 29, 6776, 10069 }, //         consectetur adipiscing elit.
-        { 57, 29, 6299, 10780 }, //         Vestibulum consequat mi quis
-        { 86, 37, 5453, 11491 }, //     pretium semper. Proin luctus orci ac
-        { 123, 36, 5134, 12202 }, //     neque venenatis, quis commodo dolor
-        { 159, 41, 4764, 12913 }, //  posuere. Curabitur dignissim sapien quis
-        { 200, 43, 4481, 13624 }, // cursus egestas. Donec blandit auctor arcu,
-        { 243, 40, 4975, 14335 }, //   nec pellentesque eros molestie eget. In
-        { 283, 42, 4552, 15046 }, //  consectetur aliquam hendrerit. Sed cursus
-        { 325, 38, 5363, 15757 }, //    mauris vitae ligula pellentesque, non
-        { 363, 42, 4693, 16468 }, //  pellentesque urna aliquet. Fusce placerat
-        { 405, 37, 5047, 17179 }, //    mauris enim, nec rutrum purus semper
-        { 442, 33, 5963, 17890 }, //      vel. Praesent tincidunt neque eu
-        { 475, 29, 6387, 18601 }, //        pellentesque pharetra. Fusce
-        { 504, 22, 7499, 19312 }, //           pellentesque est orci.
+        { 0, 6, 9600, 8643 }, //                        Lorem
+        { 6, 22, 7570, 9352 }, //               ipsum dolor sit amet,
+        { 28, 29, 6776, 10061 }, //         consectetur adipiscing elit.
+        { 57, 29, 6299, 10770 }, //         Vestibulum consequat mi quis
+        { 86, 37, 5453, 11479 }, //     pretium semper. Proin luctus orci ac
+        { 123, 36, 5134, 12188 }, //     neque venenatis, quis commodo dolor
+        { 159, 41, 4764, 12897 }, //  posuere. Curabitur dignissim sapien quis
+        { 200, 43, 4481, 13606 }, // cursus egestas. Donec blandit auctor arcu,
+        { 243, 40, 4975, 14315 }, //   nec pellentesque eros molestie eget. In
+        { 283, 42, 4552, 15024 }, //  consectetur aliquam hendrerit. Sed cursus
+        { 325, 38, 5363, 15733 }, //    mauris vitae ligula pellentesque, non
+        { 363, 42, 4693, 16442 }, //  pellentesque urna aliquet. Fusce placerat
+        { 405, 37, 5047, 17151 }, //    mauris enim, nec rutrum purus semper
+        { 442, 33, 5963, 17860 }, //      vel. Praesent tincidunt neque eu
+        { 475, 29, 6387, 18569 }, //        pellentesque pharetra. Fusce
+        { 504, 22, 7499, 19278 }, //           pellentesque est orci.
     };
 
     createSdDrawDoc("odg/adjust-to-contour.fodg");
@@ -536,7 +532,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
     // The test documents have an auto-shrink text "textbox\n\n"; the box itself is positioned
     // identically in all cases; the text is aligned to bottom.
     // When "UseTrailingEmptyLinesInLayout" is set, "textbox" string is placed higher, than when
-    // the setting is not set (y value ~6700 vs. ~8100).
+    // the setting is not set (y value ~6700 vs. ~7978).
 
     // The existing ODPs have a standard draw:text-box. It produces three textarray elements,
     // in order from bottom to top. We need the topmost, third.
@@ -574,7 +570,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
 
         xmlDocUniquePtr pXml = parseLayout();
         sal_Int32 y = getXPath(pXml, "/metafile['3']/push/push/textarray[3]", "y").toInt32();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(8100, y, 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(7978, y, 100);
         assertXPathContent(pXml, "/metafile['3']/push/push/textarray[3]/text", u"textbox");
     }
 
@@ -586,7 +582,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
 
         xmlDocUniquePtr pXml = parseLayout();
         sal_Int32 y = getXPath(pXml, "/metafile['4']/push/push/textarray[3]", "y").toInt32();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(8100, y, 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(7978, y, 100);
         assertXPathContent(pXml, "/metafile['4']/push/push/textarray[3]/text", u"textbox");
     }
 

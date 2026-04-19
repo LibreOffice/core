@@ -24,9 +24,10 @@
   <style:style style:name="dp1" style:family="drawing-page"/>
   <style:style style:name="gr1" style:family="graphic" style:parent-style-name="standard">
    <style:graphic-properties draw:textarea-vertical-align="middle" draw:fit-to-contour="true"/>
+   <style:paragraph-properties style:font-independent-line-spacing="true"/>
   </style:style>
   <style:style style:name="P1" style:family="paragraph">
-   <style:paragraph-properties fo:text-align="center"/>
+   <style:paragraph-properties fo:line-height="93%" fo:text-align="center"/>
    <style:text-properties fo:language="zxx" fo:country="none"/>
   </style:style>
  </office:automatic-styles>

@@ -225,6 +225,18 @@ FontMetric OutputDevice::GetFontMetric( const vcl::Font& rFont ) const
     return aMetric;
 }
 
+double OutputDevice::GetHheaLineHeightRatio() const
+{
+    if (!InitFont())
+        return 0.0;
+
+    LogicalFontInstance const* pFontInstance = GetFontInstance();
+    if (!pFontInstance)
+        return 0.0;
+
+    return pFontInstance->GetHheaLineHeightRatio();
+}
+
 bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
 {
     if (!InitFont())

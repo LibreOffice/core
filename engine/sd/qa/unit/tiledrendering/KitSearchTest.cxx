@@ -558,7 +558,7 @@ CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchIn2MixedObjects)
     CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
     CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL("3545, 3174, 740, 402"_ostr, m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL("3545, 3174, 740, 401"_ostr, m_aSearchResultSelection[0]);
 
     // Search next
 
@@ -582,7 +582,7 @@ CPPUNIT_TEST_FIXTURE(KitSearchTest, SearchIn2MixedObjects)
     CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
     CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL("3545, 3174, 740, 402"_ostr, m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL("3545, 3174, 740, 401"_ostr, m_aSearchResultSelection[0]);
 }
 
 // Test searching in document with mixed objects. We have 6 objects.

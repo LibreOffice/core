@@ -130,18 +130,18 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
 
     // Check the object position
 #if !defined _WIN32
-    CPPUNIT_ASSERT_EQUAL(Point(2004, 2018), pImportedObject->GetLogicRect().GetPos());
+    CPPUNIT_ASSERT_EQUAL(Point(2004, 1980), pImportedObject->GetLogicRect().GetPos());
 #else
     // need to check why windows appears to be different
-    CPPUNIT_ASSERT_EQUAL(Point(1998, 2018), pImportedObject->GetLogicRect().GetPos());
+    CPPUNIT_ASSERT_EQUAL(Point(1998, 1980), pImportedObject->GetLogicRect().GetPos());
 #endif
 
     // Check the object size
 #if !defined _WIN32
-    CPPUNIT_ASSERT_EQUAL(Size(2165, 470), pImportedObject->GetLogicRect().GetSize());
+    CPPUNIT_ASSERT_EQUAL(Size(2165, 508), pImportedObject->GetLogicRect().GetSize());
 #else
     // need to check why windows appears to be different
-    CPPUNIT_ASSERT_EQUAL(Size(3944, 470), pImportedObject->GetLogicRect().GetSize());
+    CPPUNIT_ASSERT_EQUAL(Size(3944, 508), pImportedObject->GetLogicRect().GetSize());
 #endif
 
     // Object should be a text object containing one paragraph with

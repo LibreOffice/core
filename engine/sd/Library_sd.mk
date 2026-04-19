@@ -209,6 +209,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/filter/pdf/sdpdffilter \
 	sd/source/filter/sdfilter \
 	sd/source/filter/sdpptwrp \
+	sd/source/filter/xml/LineSpacingMigrator \
 	sd/source/filter/xml/sdtransform \
 	sd/source/filter/xml/sdxmlwrp \
 	sd/source/helper/simplereferencecomponent \

@@ -1021,6 +1021,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextPos)
         return;
     SdUsePdfium aGuard;
 
+    // Load a PDF, decompose it into Draw shapes, save as FODG and reload.
+    // The key assertion is that the text stays on one line (not split into two).
     loadFromFile(u"pdf/textheight1.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
@@ -1037,8 +1039,9 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextPos)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1985, x, 0);
 #endif
     sal_Int32 y = getXPath(pXml, "//textarray[1]", "y").toInt32();
-    // was 3092 originally
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3057, y, 0);
+    // was 3092 originally, then 3057; now 3073 with font-independent
+    // line spacing set during PDF decomposition
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3073, y, 0);
 
     // Before fix, on reimport this was split over two lines when it
     // should have remained as one line.

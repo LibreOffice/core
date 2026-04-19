@@ -1162,6 +1162,11 @@ public:
     FontMetric                  GetFontMetric() const;
     FontMetric                  GetFontMetric( const vcl::Font& rFont ) const;
 
+    /** Get the line height from hhea table directly.
+     * @see LogicalFontInstance::GetHheaLineHeightRatio()
+     */
+    double GetHheaLineHeightRatio() const;
+
     bool                        GetFontCharMap( FontCharMapRef& rxFontCharMap ) const;
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 

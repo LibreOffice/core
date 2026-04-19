@@ -23,7 +23,7 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrTextFixedCellHeightItem final : public SfxBoolItem
+class SVXCORE_DLLPUBLIC SdrTextFixedCellHeightItem final : public SfxBoolItem
 {
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SdrTextFixedCellHeightItem)

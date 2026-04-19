@@ -161,6 +161,35 @@ void LogicalFontInstance::GetScale(double* nXScale, double* nYScale) const
     }
 }
 
+double LogicalFontInstance::GetHheaLineHeightRatio() const
+{
+    hb_font_t* pHbFont = const_cast<LogicalFontInstance*>(this)->GetHbFont();
+    if (!pHbFont)
+        return 0.0;
+
+    constexpr auto ASCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'a', 's', 'c'));
+    constexpr auto DESCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'd', 's', 'c'));
+
+    hb_position_t nAscent = 0;
+    hb_position_t nDescent = 0;
+
+    if (!hb_ot_metrics_get_position(pHbFont, ASCENT_HHEA, &nAscent)
+        || !hb_ot_metrics_get_position(pHbFont, DESCENT_HHEA, &nDescent))
+    {
+        return 0.0;
+    }
+
+    // sanity check nAscent and nDescent
+    if (nAscent < 0 || nDescent > 0)
+        return 0.0;
+
+    double nUnitsPerEm = GetFontFace()->UnitsPerEm();
+    if (nUnitsPerEm <= 0)
+        return 0.0;
+
+    return double(nAscent - nDescent) / nUnitsPerEm;
+}
+
 void LogicalFontInstance::AddFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeight,
                                                 const OUString& rFontName, bool bEmbolden,
                                                 const ItalicMatrix& rMatrix)

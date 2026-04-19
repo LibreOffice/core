@@ -70,6 +70,7 @@
 #include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
 #include <sdxmlwrp.hxx>
+#include <LineSpacingMigrator.hxx>
 #include <sdpptwrp.hxx>
 #include <sdcgmfilter.hxx>
 #include <sdgrffilter.hxx>
@@ -304,6 +305,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
         // for legacy markup in OOoXML filter, convert the animations now
         EffectMigration::DocumentLoaded(*pDoc);
         UpdateTablePointers();
+        sd::LineSpacingMigrator::migrate(pDoc);
 
         // If we're an embedded OLE object, use tight bounds
         // for our visArea. No point in showing the user lots of empty
@@ -458,6 +460,9 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
     mpDoc->decImportExport();
 
+    if (bRet)
+        sd::LineSpacingMigrator::migrate(mpDoc);
+
     SfxItemSet& rSet = rMedium.GetItemSet();
     if (SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION))
     {
@@ -537,7 +542,8 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         mpDoc->StopWorkStartupDelay();
         ErrCode nError = ERRCODE_NONE;
         bRet = SdXMLFilter( rMedium, *this ).Import( nError );
-
+        if (bRet)
+            sd::LineSpacingMigrator::migrate(mpDoc);
     }
     else if (aFilterName.indexOf("StarOffice XML (Draw)") >= 0 ||
              aFilterName.indexOf("StarOffice XML (Impress)") >= 0)
