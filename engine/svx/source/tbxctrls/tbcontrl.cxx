@@ -2169,8 +2169,8 @@ ColorWindow::ColorWindow(OUString  rCommand,
 
     mxPaletteManager->ReloadColorSet(*mxColorIconView);
     mxPaletteManager->ReloadRecentColorSet(*mxRecentColorIconView);
-    vColors = mxPaletteManager->GetColors();
-    vRecentColors = mxPaletteManager->GetRecentColors();
+    m_vColors = mxPaletteManager->GetColors();
+    m_vRecentColors = mxPaletteManager->GetRecentColors();
 
     AddStatusListener( u".uno:ColorTableState"_ustr );
     AddStatusListener( maCommand );
@@ -2281,7 +2281,7 @@ IMPL_LINK(ColorWindow, SelectionChangedHdl, weld::IconView&, rIconView, void)
         if (!maMenuButton.get_active())
         {
             mxPaletteManager->ReloadRecentColorSet(*mxRecentColorIconView);
-            vRecentColors = mxPaletteManager->GetRecentColors();
+            m_vRecentColors = mxPaletteManager->GetRecentColors();
         }
     }
 }
@@ -2323,7 +2323,7 @@ IMPL_LINK_NOARG(ColorWindow, SelectPaletteHdl, weld::ComboBox&, void)
     int nPos = mxPaletteListBox->get_active();
     mxPaletteManager->SetPalette( nPos );
     mxPaletteManager->ReloadColorSet(*mxColorIconView);
-    vColors = mxPaletteManager->GetColors();
+    m_vColors = mxPaletteManager->GetColors();
 }
 
 NamedColor ColorWindow::GetAutoColor() const
@@ -2395,12 +2395,12 @@ OUString ColorWindow::QueryTooltipHdl_Impl(weld::IconView* pIconView, std::u16st
 const std::vector<NamedColor> & ColorWindow::GetColors(weld::IconView* pIconView)
 {
     if(mxRecentColorIconView.get() == pIconView) {
-        vRecentColors = vRecentColors.size() > 0 ? vRecentColors : mxPaletteManager->GetRecentColors();
-        return vRecentColors;
+        m_vRecentColors = m_vRecentColors.size() > 0 ? m_vRecentColors : mxPaletteManager->GetRecentColors();
+        return m_vRecentColors;
     }
 
-    vColors = vColors.size() > 0 ? vColors : mxPaletteManager->GetColors();
-    return vColors;
+    m_vColors = m_vColors.size() > 0 ? m_vColors : mxPaletteManager->GetColors();
+    return m_vColors;
 }
 
 void ColorWindow::SetNoSelection()
@@ -2426,7 +2426,7 @@ void ColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
         if (rEvent.IsEnabled && mxPaletteManager->GetPalette() == 0)
         {
             mxPaletteManager->ReloadColorSet(*mxColorIconView);
-            vColors = mxPaletteManager->GetColors();
+            m_vColors = mxPaletteManager->GetColors();
         }
     }
     else
@@ -2482,7 +2482,7 @@ void ColorWindow::SelectEntry(const NamedColor& rNamedColor)
         const OUString& rColorName = rNamedColor.m_aName;
         mxPaletteManager->AddRecentColor(rColor, rColorName, false);
         mxPaletteManager->ReloadRecentColorSet(*mxRecentColorIconView);
-        vRecentColors = mxPaletteManager->GetRecentColors();
+        m_vRecentColors = mxPaletteManager->GetRecentColors();
         SelectIconViewEntry(mxRecentColorIconView.get(), rColor);
     }
 }

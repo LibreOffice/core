@@ -95,8 +95,8 @@ private:
     std::unique_ptr<weld::Widget> mxAutomaticSeparator;
     weld::Button* mpDefaultButton;
 
-    std::vector<NamedColor> vColors;
-    std::vector<NamedColor> vRecentColors;
+    std::vector<NamedColor> m_vColors;
+    std::vector<NamedColor> m_vRecentColors;
 
     DECL_DLLPRIVATE_LINK(SelectionChangedHdl, weld::IconView&, void);
     DECL_DLLPRIVATE_LINK(ItemActivatedHdl, weld::IconView&, bool);
