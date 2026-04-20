@@ -14,6 +14,7 @@
 #include <chrono>
 #include <string>
 #include <vector>
+#include <set>
 
 class RecentFiles
 {
