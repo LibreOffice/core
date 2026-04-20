@@ -114,10 +114,8 @@ namespace Log
             std::chrono::system_clock::now();
         char* buffer = _buffer.data();
 
-#if defined(IOS) || defined(__FreeBSD__)
-        // Don't bother with the "Source" which would be just "Mobile" always (or whatever the app
-        // process is called depending on platform and configuration) and non-informative as there
-        // is just one process in the app anyway.
+#if defined(IOS) || defined(__FreeBSD__) || defined(_WIN32)
+        // Don't bother with identifying the process as there is just one process in the app anyway.
 
         // FIXME: Not sure why FreeBSD is here, too. Surely on FreeBSD COOL runs just like on Linux,
         // as a set of separate processes, so it would be useful to see from which process a log
@@ -127,7 +125,7 @@ namespace Log
 
         // Don't bother with the thread identifier either. We output the thread name which is much
         // more useful anyway.
-#else // !IOS && !__FreeBSD__
+#else // !IOS && !__FreeBSD__  && !_WIN32
         // Note that snprintf is deemed signal-safe in most common implementations.
         char* pos = strcopy((Static.getInited() ? Static.getId().c_str() : "<shutdown>"), buffer);
         *pos++ = '-';
@@ -274,16 +272,14 @@ namespace Log
     char* prefixReference(const std::chrono::time_point<std::chrono::system_clock>& tp,
                           char* buffer, const std::string_view level)
     {
-#if defined(IOS) || defined(__FreeBSD__)
-        // Don't bother with the "Source" which would be just "Mobile" always (or whatever the app
-        // process is called depending on platform and configuration) and non-informative as there
-        // is just one process in the app anyway.
+#if defined(IOS) || defined(__FreeBSD__) || defined(_WIN32)
+        // Don't bother with identifying the process as there is just one process in the app anyway.
 
         // FIXME: Not sure why FreeBSD is here, too. Surely on FreeBSD COOL runs just like on Linux,
         // as a set of separate processes, so it would be useful to see from which process a log
         // line is?
 
-        char *pos = buffer;
+        char* pos = buffer;
 
         // Don't bother with the thread identifier either. We output the thread name which is much
         // more useful anyway.
