@@ -112,6 +112,10 @@ namespace
 
         _pView->Invalidate(InvalidateFlags::NoChildren);
     }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
     void addConnections(OQueryTableView* _pView,
                         const OQueryTableWindow& _rSource,
                         const OQueryTableWindow& _rDest,
@@ -172,6 +176,9 @@ namespace
                 // the connection data if we would insert the conn-Undo-Action)
         }
     }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 }
 
 OQueryTableView::OQueryTableView( vcl::Window* pParent,OQueryDesignView* pView)
@@ -521,6 +528,10 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
     m_pView->getController().addUndoActionAndInvalidate( std::move(pUndoAction) );
 }
 
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
 void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
 {
     OQueryTableWindow* pSourceWin = static_cast< OQueryTableWindow*>(jxdSource.pListBox->GetTabWin());
@@ -567,6 +578,9 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
         connectionModified(this,pConn,false);
     }
 }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 
 void OQueryTableView::ConnDoubleClicked(VclPtr<OTableConnection>& rConnection)
 {

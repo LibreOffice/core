@@ -301,6 +301,10 @@ IMPL_LINK_NOARG(SwContentControlDlg, OkHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
 IMPL_LINK(SwContentControlDlg, SelectCharHdl, weld::Button&, rButton, void)
 {
     SvxCharacterMap aMap(m_xDialog.get(), nullptr, nullptr);
@@ -330,6 +334,9 @@ IMPL_LINK(SwContentControlDlg, SelectCharHdl, weld::Button&, rButton, void)
         m_xUncheckedState->set_text(OUString(&cBullet, 1));
     }
 }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 
 IMPL_LINK_NOARG(SwContentControlDlg, InsertHdl, weld::Button&, void)
 {
