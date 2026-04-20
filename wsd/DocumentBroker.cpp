@@ -608,7 +608,7 @@ void DocumentBroker::pollThread()
                 {
                     // Retry uploading, if the last one failed and we can try again.
                     const auto session = getWriteableSession();
-                    if (session && !session->getAuthorization().isExpired())
+                    if (session && session->getAuthorization().isValid())
                     {
                         checkAndUploadToStorage(session, /*justSaved=*/false);
                     }
@@ -767,7 +767,7 @@ void DocumentBroker::pollThread()
             LOG_ERR("No write-able session to unlock with");
             _lockCtx->bumpTimer();
         }
-        else if (session->getAuthorization().isExpired())
+        else if (!session->getAuthorization().isValid())
         {
             LOG_ERR("No write-able session with valid authorization to unlock with");
             _lockCtx->bumpTimer();
@@ -2340,7 +2340,7 @@ bool DocumentBroker::updateStorageLockState(ClientSession& session, StorageBase:
     LOG_TRC("Requesting async " << StorageBase::nameShort(lock) << "ing of [" << _docKey
                                 << "] by session #" << session.getId());
 
-    if (session.getAuthorization().isExpired())
+    if (!session.getAuthorization().isValid())
     {
         error = "Expired authorization token";
         return false;
@@ -2371,7 +2371,7 @@ bool DocumentBroker::updateStorageLockStateAsync(const std::shared_ptr<ClientSes
     LOG_TRC("Requesting async " << StorageBase::nameShort(lock) << "ing of [" << _docKey
                                 << "] by session #" << session->getId());
 
-    if (session->getAuthorization().isExpired())
+    if (!session->getAuthorization().isValid())
     {
         error = "Expired authorization token";
         return false;
@@ -3447,7 +3447,7 @@ std::shared_ptr<ClientSession> DocumentBroker::getFirstAuthorizedSession() const
     for (const auto& sessionIt : _sessions)
     {
         const auto& session = sessionIt.second;
-        if (!session->getAuthorization().isExpired())
+        if (session->getAuthorization().isValid())
         {
             return session;
         }
@@ -3469,7 +3469,7 @@ std::shared_ptr<ClientSession> DocumentBroker::getWriteableSession() const
         // with a valid authorization token, or the first.
         // Note that isViewLoaded() precludes inWaitDisconnected().
         if (!savingSession || (session->isViewLoaded() && session->isEditable() &&
-                               !session->getAuthorization().isExpired()))
+                               session->getAuthorization().isValid()))
         {
             savingSession = session;
         }
@@ -3496,7 +3496,7 @@ void DocumentBroker::refreshLock()
         LOG_ERR("No write-able session to refresh lock with");
         _lockCtx->bumpTimer();
     }
-    else if (session->getAuthorization().isExpired())
+    else if (!session->getAuthorization().isValid())
     {
         LOG_ERR("No write-able session with valid authorization to refresh lock with");
         _lockCtx->bumpTimer();
@@ -3779,7 +3779,7 @@ void DocumentBroker::autoSaveAndStop(const std::string_view reason)
         {
             // Nothing to save. Try to upload if necessary.
             const auto session = getWriteableSession();
-            if (session && !session->getAuthorization().isExpired())
+            if (session && session->getAuthorization().isValid())
             {
                 checkAndUploadToStorage(session, /*justSaved=*/false);
                 if (isAsyncUploading())

@@ -128,6 +128,19 @@ public:
                 std::chrono::system_clock::now().time_since_epoch() > _expiryEpoch);
     }
 
+    /// Returns true iff neither expired nor refreshing.
+    bool isValid() const
+    {
+        if (_type == Type::Expired || _type == Type::TokenRefresh)
+        {
+            return false;
+        }
+
+        // Check TTL-based expiry only for tokens with a known expiry.
+        return _expiryEpoch <= duration::zero() ||
+               std::chrono::system_clock::now().time_since_epoch() < _expiryEpoch;
+    }
+
     /// Set the access_token parameter to the given URI.
     void authorizeURI(Poco::URI& uri) const;
 
