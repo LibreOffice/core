@@ -109,10 +109,10 @@ class Base64 {
     out.resize(out_len);
 
     for (size_t i = 0, j = 0; i < in_len;) {
-      uint32_t a = input[i] == '=' ? 0 & i++ : decodingTable[static_cast<int>(input[i++])];
-      uint32_t b = input[i] == '=' ? 0 & i++ : decodingTable[static_cast<int>(input[i++])];
-      uint32_t c = input[i] == '=' ? 0 & i++ : decodingTable[static_cast<int>(input[i++])];
-      uint32_t d = input[i] == '=' ? 0 & i++ : decodingTable[static_cast<int>(input[i++])];
+      uint32_t a = input[i] == '=' ? 0 & i++ : decodingTable[static_cast<unsigned char>(input[i++])];
+      uint32_t b = input[i] == '=' ? 0 & i++ : decodingTable[static_cast<unsigned char>(input[i++])];
+      uint32_t c = input[i] == '=' ? 0 & i++ : decodingTable[static_cast<unsigned char>(input[i++])];
+      uint32_t d = input[i] == '=' ? 0 & i++ : decodingTable[static_cast<unsigned char>(input[i++])];
 
       uint32_t triple = (a << 3 * 6) + (b << 2 * 6) + (c << 1 * 6) + (d << 0 * 6);
 
