@@ -11,10 +11,13 @@
 
 #include <test/unoapi_test.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <tools/json_writer.hxx>
 #include <vcl/scheduler.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
@@ -512,6 +515,146 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationTextUpdate)
 
         CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, pPage->getAnnotations().at(0)->GetText());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationThreadedFields)
+{
+    // Threaded-comment fields (threaded/resolved/parentId) are carried by the
+    // annotation model, survive toData/fromData and clone, and surface in the
+    // Kit JSON so the Online client can show the resolve UI.
+    createSdDrawDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+
+    // A classic (non-threaded) annotation.
+    rtl::Reference<sdr::annotation::Annotation> xFlat = pPage->createAnnotation();
+    xFlat->setAuthor(u"Flat"_ustr);
+    xFlat->setPosition(geometry::RealPoint2D(0.0, 0.0));
+    xFlat->setSize(geometry::RealSize2D(10.0, 10.0));
+    xFlat->getTextRange()->setString(u"flat"_ustr);
+    pPage->addAnnotation(xFlat, -1);
+
+    CPPUNIT_ASSERT(!xFlat->IsThreaded());
+    CPPUNIT_ASSERT(!xFlat->IsResolved());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), xFlat->GetParentId());
+
+    // A threaded root annotation, resolved.
+    rtl::Reference<sdr::annotation::Annotation> xRoot = pPage->createAnnotation();
+    xRoot->setAuthor(u"Root"_ustr);
+    xRoot->setPosition(geometry::RealPoint2D(20.0, 0.0));
+    xRoot->setSize(geometry::RealSize2D(10.0, 10.0));
+    xRoot->getTextRange()->setString(u"root"_ustr);
+    xRoot->SetThreaded(true);
+    xRoot->SetResolved(true);
+    pPage->addAnnotation(xRoot, -1);
+
+    CPPUNIT_ASSERT(xRoot->IsThreaded());
+    CPPUNIT_ASSERT(xRoot->IsResolved());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), xRoot->GetParentId());
+
+    // A threaded reply referencing the root.
+    rtl::Reference<sdr::annotation::Annotation> xReply = pPage->createAnnotation();
+    xReply->setAuthor(u"Reply"_ustr);
+    xReply->setPosition(geometry::RealPoint2D(40.0, 0.0));
+    xReply->setSize(geometry::RealSize2D(10.0, 10.0));
+    xReply->getTextRange()->setString(u"reply"_ustr);
+    xReply->SetThreaded(true);
+    xReply->SetParentId(xRoot->GetId());
+    pPage->addAnnotation(xReply, -1);
+
+    CPPUNIT_ASSERT(xReply->IsThreaded());
+    CPPUNIT_ASSERT(!xReply->IsResolved());
+    CPPUNIT_ASSERT_EQUAL(xRoot->GetId(), xReply->GetParentId());
+
+    // toData / fromData round-trip carries the three new fields.
+    sdr::annotation::AnnotationData aSaved;
+    xReply->toData(aSaved);
+    CPPUNIT_ASSERT(aSaved.m_Threaded);
+    CPPUNIT_ASSERT(!aSaved.m_Resolved);
+    CPPUNIT_ASSERT_EQUAL(xRoot->GetId(), aSaved.m_ParentId);
+
+    // Flip the live annotation, then restore via fromData.
+    xReply->SetThreaded(false);
+    xReply->SetResolved(true);
+    xReply->SetParentId(0);
+    xReply->fromData(aSaved);
+    CPPUNIT_ASSERT(xReply->IsThreaded());
+    CPPUNIT_ASSERT(!xReply->IsResolved());
+    CPPUNIT_ASSERT_EQUAL(xRoot->GetId(), xReply->GetParentId());
+
+    // clone() propagates the fields.
+    rtl::Reference<sdr::annotation::Annotation> xClone = xRoot->clone(pPage);
+    CPPUNIT_ASSERT(xClone->IsThreaded());
+    CPPUNIT_ASSERT(xClone->IsResolved());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), xClone->GetParentId());
+
+    // Per-annotation ToJSON emits the new keys only when threaded.
+    auto parseJson = [](std::string_view aText) {
+        std::stringstream aStream{ std::string(aText) };
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        return aTree;
+    };
+
+    {
+        auto aTree = parseJson(xFlat->ToJSON(sdr::annotation::CommentNotificationType::Modify));
+        const auto& rComment = aTree.get_child("comment");
+        CPPUNIT_ASSERT(!rComment.get_child_optional("threaded"));
+        CPPUNIT_ASSERT(!rComment.get_child_optional("resolved"));
+        CPPUNIT_ASSERT(!rComment.get_child_optional("parentId"));
+    }
+    {
+        auto aTree = parseJson(xRoot->ToJSON(sdr::annotation::CommentNotificationType::Modify));
+        const auto& rComment = aTree.get_child("comment");
+        CPPUNIT_ASSERT_EQUAL(std::string("true"), rComment.get<std::string>("threaded"));
+        CPPUNIT_ASSERT_EQUAL(std::string("true"), rComment.get<std::string>("resolved"));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), rComment.get<sal_uInt64>("parentId"));
+    }
+    {
+        auto aTree = parseJson(xReply->ToJSON(sdr::annotation::CommentNotificationType::Modify));
+        const auto& rComment = aTree.get_child("comment");
+        CPPUNIT_ASSERT_EQUAL(std::string("true"), rComment.get<std::string>("threaded"));
+        CPPUNIT_ASSERT_EQUAL(std::string("false"), rComment.get<std::string>("resolved"));
+        CPPUNIT_ASSERT_EQUAL(xRoot->GetId(), rComment.get<sal_uInt64>("parentId"));
+    }
+
+    // Doc-level getPostIts dump: flat annotation has no threaded keys; root and
+    // reply carry the expected values.
+    tools::JsonWriter aWriter;
+    pXImpressDocument->getPostIts(aWriter);
+    auto aDocTree = parseJson(aWriter.finishAndGetAsOString());
+
+    int nVerified = 0;
+    for (const auto& rEntry : aDocTree.get_child("comments"))
+    {
+        const auto& rComment = rEntry.second;
+        const sal_uInt64 nId = rComment.get<sal_uInt64>("id");
+        if (nId == xFlat->GetId())
+        {
+            CPPUNIT_ASSERT(!rComment.get_child_optional("threaded"));
+            CPPUNIT_ASSERT(!rComment.get_child_optional("resolved"));
+            CPPUNIT_ASSERT(!rComment.get_child_optional("parentId"));
+            ++nVerified;
+        }
+        else if (nId == xRoot->GetId())
+        {
+            CPPUNIT_ASSERT_EQUAL(std::string("true"), rComment.get<std::string>("threaded"));
+            CPPUNIT_ASSERT_EQUAL(std::string("true"), rComment.get<std::string>("resolved"));
+            CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), rComment.get<sal_uInt64>("parentId"));
+            ++nVerified;
+        }
+        else if (nId == xReply->GetId())
+        {
+            CPPUNIT_ASSERT_EQUAL(std::string("true"), rComment.get<std::string>("threaded"));
+            CPPUNIT_ASSERT_EQUAL(std::string("false"), rComment.get<std::string>("resolved"));
+            CPPUNIT_ASSERT_EQUAL(xRoot->GetId(), rComment.get<sal_uInt64>("parentId"));
+            ++nVerified;
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(3, nVerified);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

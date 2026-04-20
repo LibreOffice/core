@@ -4442,6 +4442,12 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
             aRectangle = o3tl::toTwips(aRectangle, o3tl::Length::mm100);
             OString sRectangle = aRectangle.toString();
             rJsonWriter.put("rectangle", sRectangle.getStr());
+            if (xAnnotation->IsThreaded())
+            {
+                rJsonWriter.put("threaded", "true");
+                rJsonWriter.put("resolved", xAnnotation->IsResolved() ? "true" : "false");
+                rJsonWriter.put("parentId", xAnnotation->GetParentId());
+            }
         }
     }
 }

@@ -91,6 +91,9 @@ void Annotation::toData(AnnotationData& rData)
     rData.m_Initials = m_Initials;
     rData.m_DateTime = m_DateTime;
     rData.m_Text = GetTextImpl(g);
+    rData.m_Threaded = m_Threaded;
+    rData.m_Resolved = m_Resolved;
+    rData.m_ParentId = m_ParentId;
 }
 
 void Annotation::fromData(const AnnotationData& rData)
@@ -102,6 +105,9 @@ void Annotation::fromData(const AnnotationData& rData)
     m_Initials = rData.m_Initials;
     m_DateTime = rData.m_DateTime;
     SetTextImpl(rData.m_Text, g);
+    m_Threaded = rData.m_Threaded;
+    m_Resolved = rData.m_Resolved;
+    m_ParentId = rData.m_ParentId;
 }
 
 Annotation::Annotation(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -172,6 +178,24 @@ void Annotation::SetSize(const css::geometry::RealSize2D& rValue)
     m_Size = rValue;
 }
 
+void Annotation::SetThreaded(bool bThreaded)
+{
+    std::unique_lock g(m_aMutex);
+    m_Threaded = bThreaded;
+}
+
+void Annotation::SetResolved(bool bResolved)
+{
+    std::unique_lock g(m_aMutex);
+    m_Resolved = bResolved;
+}
+
+void Annotation::SetParentId(sal_uInt64 nParentId)
+{
+    std::unique_lock g(m_aMutex);
+    m_ParentId = nParentId;
+}
+
 void Annotation::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     mpPage = nullptr;
@@ -231,6 +255,12 @@ OString Annotation::ToJSON(CommentNotificationType nType)
                 Size(std::round(o3tl::toTwips(m_Size.Width, o3tl::Length::mm)),
                      std::round(o3tl::toTwips(m_Size.Height, o3tl::Length::mm))));
             aJsonWriter.put("rectangle", aRectangle.toString());
+            if (m_Threaded)
+            {
+                aJsonWriter.put("threaded", "true");
+                aJsonWriter.put("resolved", m_Resolved ? "true" : "false");
+                aJsonWriter.put("parentId", m_ParentId);
+            }
         }
     }
 

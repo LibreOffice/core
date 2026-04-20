@@ -88,6 +88,15 @@ struct SVXCORE_DLLPUBLIC AnnotationData
     OUString m_Initials;
     css::util::DateTime m_DateTime;
     OUString m_Text;
+
+    /// Threaded-comment participation. Set by filters that support
+    /// per-annotation reply/resolve (currently only the PDF filter).
+    bool m_Threaded = false;
+    /// Resolved / done flag. Only meaningful when m_Threaded is true.
+    bool m_Resolved = false;
+    /// GetId() of the parent annotation; 0 means "thread root".
+    /// Only meaningful when m_Threaded is true.
+    sal_uInt64 m_ParentId = 0;
 };
 
 /** Annotation object, responsible for handling of the annotation.
@@ -116,6 +125,11 @@ protected:
     rtl::Reference<sdr::annotation::TextApiObject> m_TextRange;
 
     CreationInfo maCreationInfo;
+
+    // Threaded-comment metadata; see AnnotationData for semantics.
+    bool m_Threaded = false;
+    bool m_Resolved = false;
+    sal_uInt64 m_ParentId = 0;
 
     std::unique_ptr<SdrUndoAction> createUndoAnnotation();
 
@@ -164,6 +178,20 @@ public:
 
     CreationInfo const& getCreationInfo() { return maCreationInfo; }
     void setCreationInfo(CreationInfo const& rCreationInfo) { maCreationInfo = rCreationInfo; }
+
+    /// Returns true if this annotation participates in the threaded-comments
+    /// feature (currently set only by the PDF filter).
+    bool IsThreaded() const { return m_Threaded; }
+    void SetThreaded(bool bThreaded);
+
+    /// Returns the resolved/done flag. Only meaningful if IsThreaded().
+    bool IsResolved() const { return m_Resolved; }
+    void SetResolved(bool bResolved);
+
+    /// GetId() of the parent annotation in the thread; 0 means "root".
+    /// Only meaningful if IsThreaded().
+    sal_uInt64 GetParentId() const { return m_ParentId; }
+    void SetParentId(sal_uInt64 nParentId);
 
     SdrObject* findAnnotationObject();
 
