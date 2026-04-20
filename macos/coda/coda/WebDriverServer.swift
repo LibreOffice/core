@@ -12,13 +12,16 @@ import Foundation
 import Network
 
 /**
- * Minimal HTTP server for UI testing.
+ * W3C WebDriver protocol server for UI testing.
  *
- * Listens on localhost and accepts POST /execute requests with a JSON body
- * containing a "js" field.  The JavaScript is evaluated in a WKWebView via
- * a caller-supplied closure, and the result (or error) is returned as JSON.
+ * Listens on localhost and implements a subset of the W3C WebDriver
+ * protocol sufficient for WebDriverIO to execute JavaScript, manage
+ * sessions, and track window handles.  This allows the same test
+ * specs to run on macOS (this server), Linux (WebEngineDriver), and
+ * Windows (EdgeDriver).
  *
- * Start with ``start()`` and stop with ``stop()``.
+ * Additionally supports POST /focus as a custom extension to make
+ * the WKWebView the macOS first responder for XCUITest typing.
  */
 final class WebDriverServer {
 
@@ -26,8 +29,11 @@ final class WebDriverServer {
     private let jsExecutor: (String, @escaping (Any?, Error?) -> Void) -> Void
     private let focusHandler: (@escaping () -> Void) -> Void
 
+    /// The session ID, created on first POST /session.
+    private var sessionId: String?
+
     /**
-     * Create a test HTTP server.
+     * Create a WebDriver server.
      *
      * - Parameters:
      *   - port: TCP port to listen on.
@@ -83,14 +89,11 @@ final class WebDriverServer {
                 buffer.append(data)
             }
 
-            // Check if we have a complete HTTP request (headers + body)
             if let request = self.parseHTTPRequest(buffer) {
-                self.handleRequest(request, connection: connection)
+                self.routeRequest(request, connection: connection)
             } else if isComplete {
-                // Connection closed before we got a full request
                 connection.cancel()
             } else {
-                // Need more data
                 self.receiveRequest(connection: connection, accumulated: buffer)
             }
         }
@@ -126,7 +129,6 @@ final class WebDriverServer {
         let method = String(parts[0])
         let path = String(parts[1])
 
-        // Find Content-Length
         var contentLength = 0
         for line in lines.dropFirst() {
             if line.lowercased().hasPrefix("content-length:") {
@@ -138,64 +140,128 @@ final class WebDriverServer {
         let bodyStart = headerEnd.upperBound
         let available = data.count - data.distance(from: data.startIndex, to: bodyStart)
         if available < contentLength {
-            return nil // Need more data
+            return nil
         }
 
         let body = data[bodyStart..<data.index(bodyStart, offsetBy: contentLength)]
         return HTTPRequest(method: method, path: path, body: Data(body))
     }
 
-    // MARK: - Request handling
+    // MARK: - W3C WebDriver routing
 
-    private func handleRequest(_ request: HTTPRequest, connection: NWConnection) {
-        guard request.method == "POST" else {
-            sendResponse(connection: connection, status: "404 Not Found",
-                         body: #"{"error":"Not found"}"#)
+    private func routeRequest(_ request: HTTPRequest, connection: NWConnection) {
+        let segments = request.path.split(separator: "/").map(String.init)
+
+        // GET /status
+        if request.method == "GET" && request.path == "/status" {
+            sendW3C(connection: connection, value: ["ready": true, "message": "coda-macos"])
             return
         }
 
-        if request.path == "/focus" {
+        // POST /session
+        if request.method == "POST" && segments == ["session"] {
+            if sessionId == nil {
+                sessionId = UUID().uuidString.lowercased()
+            }
+            sendW3C(connection: connection, value: [
+                "sessionId": sessionId!,
+                "capabilities": [String: Any]()
+            ] as [String: Any])
+            return
+        }
+
+        // DELETE /session/{id}
+        if request.method == "DELETE" && segments.count == 2 && segments[0] == "session" {
+            sendW3C(connection: connection, value: NSNull())
+            return
+        }
+
+        // Routes that require a valid session: /session/{id}/...
+        if segments.count >= 3 && segments[0] == "session" {
+            guard segments[1] == sessionId else {
+                sendW3CError(connection: connection, error: "invalid session id",
+                             message: "No active session with id '\(segments[1])'")
+                return
+            }
+
+            let subpath = Array(segments.dropFirst(2))
+
+            // POST /session/{id}/execute/sync
+            if request.method == "POST" && subpath == ["execute", "sync"] {
+                handleExecuteSync(request, connection: connection)
+                return
+            }
+
+            // GET /session/{id}/window/handles
+            if request.method == "GET" && subpath == ["window", "handles"] {
+                sendW3C(connection: connection, value: ["main"])
+                return
+            }
+
+            // POST /session/{id}/window
+            if request.method == "POST" && subpath == ["window"] {
+                sendW3C(connection: connection, value: NSNull())
+                return
+            }
+        }
+
+        // POST /focus (custom extension for XCUITest)
+        if request.method == "POST" && request.path == "/focus" {
             focusHandler { [weak self] in
-                self?.sendResponse(connection: connection, status: "200 OK",
-                                   body: #"{"result":"ok"}"#)
+                self?.sendW3C(connection: connection, value: NSNull())
             }
             return
         }
 
-        guard request.path == "/execute" else {
-            sendResponse(connection: connection, status: "404 Not Found",
-                         body: #"{"error":"Not found"}"#)
-            return
-        }
+        sendW3CError(connection: connection, error: "unknown command",
+                     message: "\(request.method) \(request.path) not implemented")
+    }
 
+    // MARK: - Execute sync
+
+    private func handleExecuteSync(_ request: HTTPRequest, connection: NWConnection) {
         guard let json = try? JSONSerialization.jsonObject(with: request.body) as? [String: Any],
-              let js = json["js"] as? String else {
-            sendResponse(connection: connection, status: "400 Bad Request",
-                         body: #"{"error":"Missing 'js' field in JSON body"}"#)
+              let script = json["script"] as? String else {
+            sendW3CError(connection: connection, error: "invalid argument",
+                         message: "Missing 'script' field in request body")
             return
         }
 
-        jsExecutor(js) { [weak self] result, error in
+        jsExecutor(script) { [weak self] result, error in
             if let error = error {
-                let msg = error.localizedDescription.replacingOccurrences(of: "\\", with: "\\\\")
-                    .replacingOccurrences(of: "\"", with: "\\\"")
-                self?.sendResponse(connection: connection, status: "200 OK",
-                                   body: #"{"error":"\#(msg)"}"#)
+                self?.sendW3CError(connection: connection, error: "javascript error",
+                                   message: error.localizedDescription)
             } else {
-                let resultJSON: String
-                if let result = result {
-                    if let data = try? JSONSerialization.data(withJSONObject: result),
-                       let str = String(data: data, encoding: .utf8) {
-                        resultJSON = str
-                    } else {
-                        resultJSON = "\"\(result)\""
-                    }
-                } else {
-                    resultJSON = "null"
-                }
-                self?.sendResponse(connection: connection, status: "200 OK",
-                                   body: "{\"result\":\(resultJSON)}")
+                self?.sendW3C(connection: connection, value: result ?? NSNull())
             }
+        }
+    }
+
+    // MARK: - W3C response helpers
+
+    private func sendW3C(connection: NWConnection, value: Any) {
+        let wrapper: [String: Any] = ["value": value]
+        if let data = try? JSONSerialization.data(withJSONObject: wrapper),
+           let body = String(data: data, encoding: .utf8) {
+            sendResponse(connection: connection, status: "200 OK", body: body)
+        } else {
+            sendResponse(connection: connection, status: "200 OK",
+                         body: #"{"value":null}"#)
+        }
+    }
+
+    private func sendW3CError(connection: NWConnection, error: String, message: String) {
+        let wrapper: [String: Any] = [
+            "value": [
+                "error": error,
+                "message": message,
+                "stacktrace": ""
+            ]
+        ]
+        let status = error == "invalid session id" ? "404 Not Found" : "500 Internal Server Error"
+        if let data = try? JSONSerialization.data(withJSONObject: wrapper),
+           let body = String(data: data, encoding: .utf8) {
+            sendResponse(connection: connection, status: status, body: body)
         }
     }
 
