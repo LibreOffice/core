@@ -3669,19 +3669,20 @@ bool DocumentBroker::autoSave(const bool force, const bool dontSaveIfUnmodified,
 
 void DocumentBroker::autoSaveAndStop(const std::string_view reason)
 {
-    LOG_TRC("autoSaveAndStop for docKey [" << getDocKey() << "]: " << reason);
-
     if (_saveManager.isSaving() || isAsyncUploading())
     {
-        LOG_TRC("Async saving/uploading in progress for docKey [" << getDocKey() << ']');
+        LOG_TRC("autoSaveAndStop ["
+                << reason << "] skipped for docKey [" << getDocKey() << "] because an async "
+                << (_saveManager.isSaving() ? "saving" : "uploading") << " is in progress");
         return;
     }
 
     const NeedToSave needToSave = needToSaveToDisk();
     const NeedToUpload needToUpload = needToUploadToStorage();
     bool canStop = (needToSave == NeedToSave::No && needToUpload == NeedToUpload::No);
-    LOG_TRC("autoSaveAndStop for docKey [" << getDocKey() << "]: " << name(needToSave) << ", "
-                                           << name(needToUpload) << ", canStop: " << canStop);
+    LOG_TRC("autoSaveAndStop [" << reason << "] for docKey [" << getDocKey()
+                                << "]: " << name(needToSave) << ", " << name(needToUpload)
+                                << ", canStop: " << canStop);
 
     if (!canStop && needToSave == NeedToSave::No && !isStorageOutdated())
     {
