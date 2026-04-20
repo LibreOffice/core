@@ -697,6 +697,13 @@ namespace cool {
 					text: _('Create a formula'),
 					enabled: true,
 				});
+			} else if (app.map.getDocType() === 'presentation') {
+				cardChildren.push({
+					id: 'aichat-chip-create-slides',
+					type: 'pushbutton',
+					text: _('Create slides'),
+					enabled: true,
+				});
 			}
 
 			// Count doc-specific chips toward the initial limit so
@@ -764,6 +771,7 @@ namespace cool {
 				'aichat-chip-formula-diagnosis': () => this.diagnoseFormulaError(),
 				'aichat-chip-sanity-check': () => this.sanityCheckData(),
 				'aichat-chip-create-formula': () => this.createFormula(),
+				'aichat-chip-create-slides': () => this.createSlides(),
 				'aichat-see-more': () => {
 					this.showAllCards = !this.showAllCards;
 					this.builder.updateWidget(this.container, this.getMessagesListJSON());
@@ -1812,6 +1820,16 @@ namespace cool {
 			this.updateChatState(true);
 			this.updateHint();
 			this.dispatchRequest();
+		}
+
+		private createSlides(): void {
+			if (this.isProcessing) return;
+
+			this.hintText = _(
+				'Describe the slides you want to create. For example: "A 5-slide overview of renewable energy" or "An introduction to our team".',
+			);
+			this.updateHint();
+			this.focusInput();
 		}
 
 		private async createFormula(): Promise<void> {
