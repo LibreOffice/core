@@ -3621,8 +3621,11 @@ void ClientSession::dumpState(std::ostream& os)
     os << "\t\tisLive: " << isLive()
        << "\n\t\tisViewLoaded: " << isViewLoaded()
        << "\n\t\tisDocumentOwner: " << isDocumentOwner()
-       << "\n\t\tstate: " << name(_state)
-       << "\n\t\tkeyEvents: " << _keyEvents
+       << "\n\t\tstate: " << name(_state);
+
+    _auth.dumpState(os);
+
+    os << "\n\t\tkeyEvents: " << _keyEvents
 //       << "\n\t\tvisibleArea: " << _clientVisibleArea
        << "\n\t\tclientSelectedPart: " << _clientSelectedPart
        << "\n\t\ttile size Pixel: " << _tileWidthPixel << 'x' << _tileHeightPixel

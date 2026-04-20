@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include <common/Anonymizer.hpp>
 #include <common/Log.hpp>
 #include <common/StateEnum.hpp>
 
@@ -132,6 +133,23 @@ public:
 
     /// Set the Authorization: header in request.
     void authorizeRequest(Poco::Net::HTTPRequest& request) const;
+
+    void dumpState(std::ostream& os, const std::string& indent = "\n  ") const
+    {
+        const auto now = std::chrono::system_clock::now();
+
+        os << indent << "Authorization: " << (Anonymizer::enabled() ? "<redacted>" : _data);
+        os << indent << "\ttype: " << name(_type);
+        os << indent << "\texpiryEpoch (TTL): " << _expiryEpoch
+           << Util::getTimeForLog(
+                  now, std::chrono::system_clock::time_point(
+                           std::chrono::duration_cast<std::chrono::system_clock::duration>(
+                               _expiryEpoch)));
+        os << indent
+           << "\ttokenRefreshStartTime: " << Util::getTimeForLog(now, _tokenRefreshStartTime);
+        os << indent << "\ttokenRefreshTimeout: " << _tokenRefreshTimeout;
+        os << indent << "\theader: " << (_noHeader ? "No" : "Yes");
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

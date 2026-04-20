@@ -39,6 +39,7 @@ class RequestDetailsTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testCoolWs);
     CPPUNIT_TEST(testAuthorization);
     CPPUNIT_TEST(testAuthorizationExpiry);
+    CPPUNIT_TEST(testAuthorizationDumpState);
     CPPUNIT_TEST(testSanitizePercent);
 
     CPPUNIT_TEST_SUITE_END();
@@ -51,6 +52,7 @@ class RequestDetailsTests : public CPPUNIT_NS::TestFixture
     void testCoolWs();
     void testAuthorization();
     void testAuthorizationExpiry();
+    void testAuthorizationDumpState();
     void testSanitizePercent();
 };
 
@@ -1465,6 +1467,81 @@ void RequestDetailsTests::testAuthorizationExpiry()
         Authorization auth(Authorization::Type::None, "", false);
         LOK_ASSERT(!auth.isExpired());
         LOK_ASSERT(!auth.needTokenRefresh());
+    }
+}
+
+void RequestDetailsTests::testAuthorizationDumpState()
+{
+    constexpr std::string_view testname = __func__;
+
+    using duration = std::chrono::milliseconds;
+
+    // Token type should dump type and data.
+    {
+        Authorization auth(Authorization::Type::Token, "secret123", false);
+        std::ostringstream oss;
+        auth.dumpState(oss);
+        const std::string dump = oss.str();
+        LOK_ASSERT_MESSAGE("Should contain token data", dump.find("secret123") != std::string::npos);
+        LOK_ASSERT_MESSAGE("Should contain type", dump.find("Token") != std::string::npos);
+        LOK_ASSERT_MESSAGE("Should contain header info", dump.find("header:") != std::string::npos);
+    }
+
+    // Expired type should show Expired.
+    {
+        Authorization auth(Authorization::Type::Token, "tok", false);
+        auth.expire();
+        std::ostringstream oss;
+        auth.dumpState(oss);
+        LOK_ASSERT_MESSAGE("Should show Expired", oss.str().find("Expired") != std::string::npos);
+    }
+
+    // TokenRefresh type should show TokenRefresh.
+    {
+        Authorization auth(Authorization::Type::Token, "tok", false);
+        auth.startTokenRefresh(std::chrono::seconds(10));
+        std::ostringstream oss;
+        auth.dumpState(oss);
+        LOK_ASSERT_MESSAGE("Should show TokenRefresh",
+                           oss.str().find("TokenRefresh") != std::string::npos);
+    }
+
+    // None type should show None.
+    {
+        Authorization auth(Authorization::Type::None, "", false);
+        std::ostringstream oss;
+        auth.dumpState(oss);
+        LOK_ASSERT_MESSAGE("Should show None", oss.str().find("None") != std::string::npos);
+    }
+
+    // Header type should show Header.
+    {
+        Authorization auth(Authorization::Type::Header, "Authorization: Basic abc==", false);
+        std::ostringstream oss;
+        auth.dumpState(oss);
+        LOK_ASSERT_MESSAGE("Should show Header", oss.str().find("Header") != std::string::npos);
+    }
+
+    // With expiry set, dump should contain TTL info.
+    {
+        Authorization auth(Authorization::Type::Token, "tok", false);
+        const auto futureMs = std::chrono::system_clock::now().time_since_epoch() +
+                              std::chrono::hours(1);
+        auth.setExpiryEpoch(std::chrono::duration_cast<duration>(futureMs));
+        std::ostringstream oss;
+        auth.dumpState(oss);
+        LOK_ASSERT_MESSAGE("Should contain TTL info", oss.str().find("TTL") != std::string::npos);
+        LOK_ASSERT_MESSAGE("Should contain 'later' for future expiry",
+                           oss.str().find("later") != std::string::npos);
+    }
+
+    // noHeader flag should show "No".
+    {
+        Authorization auth(Authorization::Type::Token, "tok", true);
+        std::ostringstream oss;
+        auth.dumpState(oss);
+        LOK_ASSERT_MESSAGE("Should show header: No",
+                           oss.str().find("header: No") != std::string::npos);
     }
 }
 
