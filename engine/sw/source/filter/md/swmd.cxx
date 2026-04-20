@@ -34,6 +34,7 @@
 #include <poolfmt.hxx>
 #include <iodetect.hxx>
 #include <hintids.hxx>
+#include <paratr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <IDocumentStylePoolAccess.hxx>
@@ -78,6 +79,22 @@ bool allowAccessLink(const SwDoc& rDoc)
 }
 }
 
+SwNumRuleItem SwMarkdownParser::GetNumRuleItem(const UIName& rName, sal_uInt8 nLevel) const
+{
+    if (m_pNumRuleItem)
+    {
+        SwNumRule* pExistingRule = m_xDoc->FindNumRulePtr(m_pNumRuleItem->GetValue());
+        SwNumRule* pNewRule = m_xDoc->FindNumRulePtr(rName);
+        if (pExistingRule && pNewRule
+            && pExistingRule->Get(nLevel).GetNumberingType()
+                   == pNewRule->Get(nLevel).GetNumberingType())
+        {
+            return *m_pNumRuleItem;
+        }
+    }
+    return SwNumRuleItem(rName);
+}
+
 void SwMarkdownParser::SetNodeNum(sal_uInt8 nLevel)
 {
     SwTextNode* pTextNode = m_pPam->GetPointNode().GetTextNode();
@@ -89,7 +106,7 @@ void SwMarkdownParser::SetNodeNum(sal_uInt8 nLevel)
 
     OSL_ENSURE(GetNumInfo().GetNumRule(), "No numbering rule");
     const UIName& rName = GetNumInfo().GetNumRule()->GetName();
-    static_cast<SwContentNode*>(pTextNode)->SetAttr(SwNumRuleItem(rName));
+    static_cast<SwContentNode*>(pTextNode)->SetAttr(GetNumRuleItem(rName, nLevel));
 
     pTextNode->SetAttrListLevel(nLevel);
     pTextNode->SetCountedInList(false);
@@ -530,7 +547,7 @@ void SwMarkdownParser::StartNumberedBulletListItem(MD_BLOCK_LI_DETAIL aDetail)
         m_xDoc->MakeNumRule(aNumRuleName, &aNumRule);
     }
 
-    static_cast<SwContentNode*>(pTextNode)->SetAttr(SwNumRuleItem(aNumRuleName));
+    static_cast<SwContentNode*>(pTextNode)->SetAttr(GetNumRuleItem(aNumRuleName, nLevel));
     pTextNode->SetAttrListLevel(nLevel);
 
     if (nLevel < MAXLEVEL)
@@ -832,6 +849,16 @@ ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rP
 {
     SetupFilterOptions(rDoc);
 
+    const SwNumRuleItem* pNumRuleItem = nullptr;
+    if (m_bInsertMode)
+    {
+        SwTextNode* pTextNode = rPam.GetPointNode().GetTextNode();
+        if (pTextNode)
+        {
+            pNumRuleItem = pTextNode->GetSwAttrSet().GetItemIfSet(RES_PARATR_NUMRULE, false);
+        }
+    }
+
     SwPasteInfo aPasteInfo(rDoc, rPam);
     if (m_bInsertMode)
     {
@@ -839,6 +866,10 @@ ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rP
     }
 
     SwMarkdownParser parser(rDoc, rPam, *m_pStream, rBaseURL, !m_bInsertMode);
+    if (pNumRuleItem)
+    {
+        parser.SetNumRuleItem(pNumRuleItem);
+    }
     ErrCode nRet = parser.CallParser();
 
     if (m_bInsertMode)

@@ -32,6 +32,7 @@
 #include "mdnum.hxx"
 
 class MDTable;
+class SwNumRuleItem;
 
 struct MDImage
 {
@@ -81,6 +82,7 @@ class SwMarkdownParser
     SvStream& m_rInput;
     // SfxMedium* m_pMedium;
     std::unique_ptr<SwMdNumRuleInfo> m_pNumRuleInfo;
+    const SwNumRuleItem* m_pNumRuleItem = nullptr;
 
     MDAttrStack m_aAttrStack;
 
@@ -101,6 +103,8 @@ class SwMarkdownParser
     SwMarkdownParser(const SwMarkdownParser&) = delete;
     SwMarkdownParser& operator=(const SwMarkdownParser&) = delete;
 
+    /// Gets a suitable numbering rule with num type from markdown, trying to match existing style.
+    SwNumRuleItem GetNumRuleItem(const UIName& rName, sal_uInt8 nLevel) const;
     void SetNodeNum(sal_uInt8 nLevel);
 
     sal_Int32 StripTrailingLF();
@@ -157,6 +161,10 @@ public:
     SwMarkdownParser(SwDoc& rD, SwPaM& rCursor, SvStream& rIn, OUString aBaseURL, bool bReadNewDoc);
 
     SwMdNumRuleInfo& GetNumInfo() const { return *m_pNumRuleInfo; }
+
+    /// Sets the current numbering rule at the insert position, if any.
+    void SetNumRuleItem(const SwNumRuleItem* pItem) { m_pNumRuleItem = pItem; }
+
     bool IsNewDoc() const { return m_bNewDoc; }
     ErrCode CallParser();
 

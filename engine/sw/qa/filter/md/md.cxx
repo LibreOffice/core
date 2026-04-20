@@ -1008,6 +1008,15 @@ CPPUNIT_TEST_FIXTURE(Test, testPaste)
     CPPUNIT_ASSERT_EQUAL(u"List 2"_ustr, getParagraph(3)->getString());
     CPPUNIT_ASSERT_EQUAL(u"A"_ustr, getParagraph(4)->getString());
     CPPUNIT_ASSERT_EQUAL(u"B"_ustr, getParagraph(5)->getString());
+
+    // Also check that List 2's list style is correct:
+    OUString aList2Style = getProperty<OUString>(getParagraph(3), u"NumberingStyleName"_ustr);
+    OUString aAStyle = getProperty<OUString>(getParagraph(4), u"NumberingStyleName"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 37305046321
+    // - Actual  : WWNum2
+    // i.e. List 1 & 2 had a non-named list style instead of being consistent with "A".
+    CPPUNIT_ASSERT_EQUAL(aList2Style, aAStyle);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
