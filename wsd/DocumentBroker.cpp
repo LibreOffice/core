@@ -3338,7 +3338,11 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
                        "Requesting token refresh from session ["
                     << session->getId() << ']');
             session->sendTextFrame("tokenexpired");
-            session->startTokenRefresh();
+
+            CONFIG_STATIC const auto refreshTimeout =
+                ConfigUtil::getConfigValue<std::chrono::seconds>(
+                    "storage.wopi.access_token.refresh_timeout_secs", 60);
+            session->startTokenRefresh(refreshTimeout);
         }
         else
         {

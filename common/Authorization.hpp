@@ -109,6 +109,10 @@ public:
         return isRefreshingToken() && (now - _tokenRefreshStartTime) >= _tokenRefreshTimeout;
     }
 
+    /// Apply config adjustments (timezone offset, default lifetime) to a raw TTL value.
+    /// Returns the adjusted expiry epoch in milliseconds, or zero if no expiry.
+    static duration adjustExpiryEpoch(duration rawExpiryEpoch);
+
     /// Sets the Token's expiry time from the epoch.
     void setExpiryEpoch(duration epochMs)
     {

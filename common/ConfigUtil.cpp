@@ -279,6 +279,8 @@ static const std::unordered_map<std::string, std::string> DefAppConfig = {
     { "storage.ssl.cipher_list", "" },
     // { "storage.ssl.enable" - deliberately not set; for back-compat
     { "storage.ssl.key_file_path", "" },
+    { "storage.wopi.access_token.default_lifetime_mins", "0" },
+    { "storage.wopi.access_token.refresh_timeout_secs", "60" },
     { "storage.wopi.alias_groups[@mode]", "first" },
     { "storage.wopi.is_legacy_server", "false" },
     { "storage.wopi.locking.refresh", "900" },

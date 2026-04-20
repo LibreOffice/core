@@ -308,6 +308,11 @@
             </alias_groups>
 
             <is_legacy_server desc="Set to true for legacy server that need deprecated headers." type="bool" default="false">false</is_legacy_server>
+            <access_token>
+                <!-- Note: access_token_ttl is optional and must be in *our* timezone. It is the number of milliseconds after the Unix time epoch when the access_token in question will expire. -->
+                <default_lifetime_mins desc="The default number of minutes an access_token is assumed to be valid after loading it when access_token_ttl is not provided (or is 0). 0 assumes no expiry." type="uint" default="0">0</default_lifetime_mins>
+                <refresh_timeout_secs desc="The number of seconds to wait for the access_token to be refreshed after postMessage App_TokenExpired before the document becomes read-only." type="uint" default="60">60</refresh_timeout_secs>
+            </access_token>
         </wopi>
         <ssl desc="SSL settings">
             <as_scheme type="bool" default="true" desc="When set we exclusively use the WOPI URI's scheme to enable SSL for storage">true</as_scheme>
