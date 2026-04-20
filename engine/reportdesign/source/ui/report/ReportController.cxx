@@ -2954,6 +2954,10 @@ uno::Reference< frame::XModel >  SAL_CALL OReportController::getModel()
     return m_xReportDefinition;
 }
 
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
 uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
 {
     OSL_PRECOND( m_xReportDefinition.is(), "OReportController::getRowSet: no report definition?!" );
@@ -2988,6 +2992,9 @@ uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
 
     return m_xRowSet;
 }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 
 void OReportController::insertGraphic()
 {
