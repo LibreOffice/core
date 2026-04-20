@@ -67,11 +67,11 @@
           "dest-filename": "libjpeg-turbo-3.1.3.tar.gz"
         },
         {
-          "url": "https://dev-www.libreoffice.org/src/md4c-release-0.5.2.tar.gz",
-          "sha256": "55d0111d48fb11883aaee91465e642b8b640775a4d6993c2d0e7a8092758ef21",
+          "url": "https://dev-www.libreoffice.org/src/md4c-release-0.5.3.tar.gz",
+          "sha256": "353c346f376b87c954a13f3415ede2d51264cc61dc5abcd38ff1d2aa0d059b9e",
           "type": "file",
           "dest": "external/tarballs",
-          "dest-filename": "md4c-release-0.5.2.tar.gz"
+          "dest-filename": "md4c-release-0.5.3.tar.gz"
         },
         {
           "url": "https://dev-www.libreoffice.org/src/2024-09-19-karla-main.zip",
