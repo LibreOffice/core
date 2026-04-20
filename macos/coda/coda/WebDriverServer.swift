@@ -20,7 +20,7 @@ import Network
  *
  * Start with ``start()`` and stop with ``stop()``.
  */
-final class TestHTTPServer {
+final class WebDriverServer {
 
     private let listener: NWListener
     private let jsExecutor: (String, @escaping (Any?, Error?) -> Void) -> Void
@@ -54,7 +54,7 @@ final class TestHTTPServer {
             self?.handleConnection(connection)
         }
         listener.start(queue: .global(qos: .userInitiated))
-        NSLog("TestHTTPServer: listening on port %d", listener.port?.rawValue ?? 0)
+        NSLog("WebDriverServer: listening on port %d", listener.port?.rawValue ?? 0)
     }
 
     func stop() {
@@ -73,7 +73,7 @@ final class TestHTTPServer {
             guard let self = self else { return }
 
             if let error = error {
-                NSLog("TestHTTPServer: receive error: %@", error.localizedDescription)
+                NSLog("WebDriverServer: receive error: %@", error.localizedDescription)
                 connection.cancel()
                 return
             }

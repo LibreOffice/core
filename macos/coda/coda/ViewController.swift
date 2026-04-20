@@ -57,8 +57,8 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
     /// Offscreen text view that accumulates all "lok" messages for XCUITest assertions.
     private var testMessageLog: NSTextView?
 
-    /// HTTP server for executing JS commands from XCUITest.
-    private var testHTTPServer: TestHTTPServer?
+    /// W3C WebDriver server for executing JS commands from tests.
+    private var webDriverServer: WebDriverServer?
 
     var savedViewFrame: NSRect!
     var savedConsoleViewFrame: NSRect!
@@ -126,11 +126,11 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                 .first
             if let portString, let port = UInt16(portString) {
                 do {
-                    let server = try TestHTTPServer(port: port,
+                    let server = try WebDriverServer(port: port,
                         jsExecutor: { [weak self] js, completion in
                             DispatchQueue.main.async {
                                 guard let webView = self?.webView else {
-                                    completion(nil, NSError(domain: "TestHTTPServer", code: 1,
+                                    completion(nil, NSError(domain: "WebDriverServer", code: 1,
                                                             userInfo: [NSLocalizedDescriptionKey: "webView not available"]))
                                     return
                                 }
@@ -149,9 +149,9 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                         }
                     )
                     server.start()
-                    testHTTPServer = server
+                    webDriverServer = server
                 } catch {
-                    NSLog("TestHTTPServer: failed to start: %@", error.localizedDescription)
+                    NSLog("WebDriverServer: failed to start: %@", error.localizedDescription)
                 }
             }
         }
