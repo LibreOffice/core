@@ -345,9 +345,9 @@ void DocumentBroker::pollThread()
 
     setupPriorities();
 
-#if !MOBILEAPP
     CONFIG_STATIC const std::chrono::seconds IdleDocTimeoutSecs =
         ConfigUtil::getConfigValue<std::chrono::seconds>("per_document.idle_timeout_secs", 3600);
+#if !MOBILEAPP
     if (IdleDocTimeoutSecs <= std::chrono::seconds(15))
     {
         LOG_WRN("The configured per_document.idle_timeout_secs ["
@@ -521,15 +521,12 @@ void DocumentBroker::pollThread()
                     continue;
                 }
 
-#if !MOBILEAPP
                 // Remove idle documents after the configured time.
-                if (isLoaded() && getIdleTime() >= IdleDocTimeoutSecs)
+                if (!Util::isMobileApp() && isLoaded() && getIdleTime() >= IdleDocTimeoutSecs)
                 {
                     autoSaveAndStop("idle");
                 }
-                else
-#endif
-                if (_sessions.empty() && (isLoaded() || _docState.isMarkedToDestroy()))
+                else if (_sessions.empty() && (isLoaded() || _docState.isMarkedToDestroy()))
                 {
                     if (!isLoaded())
                     {
