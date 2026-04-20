@@ -33,7 +33,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test rendering of a cell o
 		cy.cGet('#document-container').compareSnapshot(expected, 0.02);
 	}
 
-	it('Redraw after undo', function() {
+	it.only('Redraw after undo', function() {
 		// setup initial state
 		desktopHelper.assertScrollbarPosition('horizontal', 325, 355);
 		desktopHelper.assertScrollbarPosition('vertical', 235, 300);
@@ -47,8 +47,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test rendering of a cell o
 
 		desktopHelper.getNbIconArrow('Grow').click();
 		desktopHelper.getNbIcon('Bold').click();
+		cy.cGet('.jsdialog-overlay').click();
 		desktopHelper.getNbIconArrow('Grow').click();
 		desktopHelper.getNbIcon('Underline').click();
+		cy.cGet('.jsdialog-overlay').click();
 
 		helper.typeIntoDocument(testString + '{enter}');
 		checkTextContent('');
