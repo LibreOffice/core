@@ -133,6 +133,7 @@ all_local =
 
 if ENABLE_DEBUG
 
+AM_CXXFLAGS += -gsplit-dwarf
 online_LDFLAGS += \
 	-gseparate-dwarf -gsplit-dwarf -gpubnames
 
