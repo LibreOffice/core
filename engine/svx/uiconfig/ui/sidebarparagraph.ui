@@ -306,6 +306,21 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="aboveparaspacinglabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|aboveparaspacinglabel">_Above Paragraph Spacing</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">aboveparaspacing</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkBox" id="aboveparaspacingbox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -335,11 +350,6 @@
                     <property name="text">0</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment1</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="aboveparaspacing-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|aboveparaspacing-atkobject">Above Paragraph Spacing</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -351,7 +361,22 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="belowparaspacinglabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|belowparaspacinglabel">_Below Paragraph Spacing</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">belowparaspacing</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child>
@@ -384,11 +409,6 @@
                     <property name="text">0</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment2</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="belowparaspacing-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|belowparaspacing-atkobject">Below Paragraph Spacing</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -400,7 +420,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">5</property>
               </packing>
             </child>
             <child>
@@ -426,7 +446,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">6</property>
               </packing>
             </child>
           </object>
@@ -511,6 +531,21 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="beforetextindentlabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|beforetextindentlabel">B_efore Text Indent</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">beforetextindent</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkBox" id="beforetextindentbox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -540,11 +575,6 @@
                     <property name="text">0</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment3</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="beforetextindent-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|beforetextindent-atkobject">Before Text Indent</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -556,7 +586,22 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="aftertextindentlabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|aftertextindentlabel">A_fter Text Indent</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">aftertextindent</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child>
@@ -589,11 +634,6 @@
                     <property name="text">0</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment4</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="aftertextindent-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|aftertextindent-atkobject">After Text Indent</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -605,7 +645,22 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="firstlineindentlabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|firstlineindentlabel">_First Line Indent</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">firstlineindent</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">6</property>
               </packing>
             </child>
             <child>
@@ -638,11 +693,6 @@
                     <property name="text">0</property>
                     <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment5</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="firstlineindent-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|firstlineindent-atkobject">First Line Indent</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -654,7 +704,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">7</property>
               </packing>
             </child>
           </object>
