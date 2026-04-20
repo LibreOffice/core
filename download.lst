@@ -477,8 +477,8 @@ LPSOLVE_TARBALL := 26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LXML_SHA256SUM := 4137516be2a90775f99d8ef80ec0283f8d78b5d8bd4630ff20163b72e7e9abf2
-LXML_TARBALL := lxml-6.0.4.tar.gz
+LXML_SHA256SUM := bfd57d8008c4965709a919c3e9a98f76c2c7cb319086b3d26858250620023b13
+LXML_TARBALL := lxml-6.1.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
