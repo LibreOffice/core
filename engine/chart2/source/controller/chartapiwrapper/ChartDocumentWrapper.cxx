@@ -143,7 +143,8 @@ enum
     PROP_DOCUMENT_UPDATE_ADDIN,
     PROP_DOCUMENT_NULL_DATE,
     PROP_DOCUMENT_ENABLE_COMPLEX_CHARTTYPES,
-    PROP_DOCUMENT_ENABLE_DATATABLE_DIALOG
+    PROP_DOCUMENT_ENABLE_DATATABLE_DIALOG,
+    PROP_DOCUMENT_DISABLE_DATATABLE_DIALOG
 };
 
 void lcl_AddPropertiesToVector(
@@ -215,6 +216,10 @@ void lcl_AddPropertiesToVector(
                   PROP_DOCUMENT_ENABLE_DATATABLE_DIALOG,
                   cppu::UnoType<bool>::get(),
                   //#i112666# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "DisableDataTableDialog",
+                  PROP_DOCUMENT_DISABLE_DATATABLE_DIALOG,
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
@@ -1512,6 +1517,7 @@ std::vector< std::unique_ptr<WrappedProperty> > ChartDocumentWrapper::createWrap
     aWrappedProperties.emplace_back( new WrappedNullDateProperty( m_spChart2ModelContact ) );
     aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"EnableComplexChartTypes"_ustr, uno::Any(true) ) );
     aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"EnableDataTableDialog"_ustr, uno::Any(true) ) );
+    aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"DisableDataTableDialog"_ustr, uno::Any(false) ) );
 
     return aWrappedProperties;
 }
