@@ -22,7 +22,7 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <child>
-      <!-- n-columns=2 n-rows=6 -->
+      <!-- n-columns=2 n-rows=7 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -30,6 +30,46 @@
         <property name="border-width">6</property>
         <property name="row-spacing">3</property>
         <property name="column-spacing">6</property>
+        <child>
+          <object class="GtkLabel" id="numberformatcomboboxlabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="sidebarnumberformat|numberformatcomboboxlabel">_Category</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">numberformatcombobox</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="numberformatcombobox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarnumberformat|numberformatcombobox|tooltip_text">Select a category of contents.</property>
+            <property name="valign">center</property>
+            <property name="hexpand">True</property>
+            <items>
+              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">General</item>
+              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Number</item>
+              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Percent</item>
+              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Currency</item>
+              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Date </item>
+              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Time</item>
+              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Scientific</item>
+              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Fraction</item>
+              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Boolean Value</item>
+              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Text</item>
+            </items>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkToolbar" id="numberformat">
             <property name="visible">True</property>
@@ -69,38 +109,8 @@
             </child>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="numberformatcombobox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="tooltip-text" translatable="yes" context="sidebarnumberformat|numberformatcombobox|tooltip_text">Select a category of contents.</property>
-            <property name="valign">center</property>
-            <property name="hexpand">True</property>
-            <items>
-              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">General</item>
-              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Number</item>
-              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Percent</item>
-              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Currency</item>
-              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Date </item>
-              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Time</item>
-              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Scientific</item>
-              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Fraction</item>
-              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Boolean Value</item>
-              <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Text</item>
-            </items>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="numberformatcombobox-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="sidebarnumberformat|numberformatcombobox-atkobject">Category</property>
-              </object>
-            </child>
-          </object>
-          <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
@@ -141,7 +151,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
@@ -191,7 +201,7 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
@@ -205,7 +215,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
@@ -224,7 +234,7 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
@@ -240,7 +250,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
+            <property name="top-attach">4</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -257,7 +267,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">4</property>
+            <property name="top-attach">5</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -273,7 +283,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">5</property>
+            <property name="top-attach">6</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -288,7 +298,6 @@
     <widgets>
       <widget name="box4"/>
       <widget name="leadingzeroeslabel"/>
-      <widget name="numberformat"/>
     </widgets>
   </object>
 </interface>
