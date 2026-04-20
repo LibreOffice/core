@@ -1598,6 +1598,12 @@ void JSCheckButton::do_set_state(TriState eState)
     sendUpdate();
 }
 
+void JSCheckButton::set_label(const OUString& rText)
+{
+    SalInstanceCheckButton::set_label(rText);
+    sendUpdate();
+}
+
 JSDrawingArea::JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingArea,
                              SalInstanceBuilder* pBuilder,
                              const rtl::Reference<comphelper::OAccessible>& rAlly,

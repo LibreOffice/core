@@ -681,6 +681,7 @@ public:
                   bool bTakeOwnership);
 
     virtual void do_set_state(TriState eState) override;
+    virtual void set_label(const OUString& rText) override;
 };
 
 class JSDrawingArea final : public JSWidget<SalInstanceDrawingArea, VclDrawingArea>
