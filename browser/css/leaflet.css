@@ -560,7 +560,7 @@ a.leaflet-control-buttons:hover:first-child {
 }
 
 .leaflet-cursor {
-	background: black;
+	background: var(--color-cursor-blink-background);
 	width: 2px;
 	pointer-events: none;
 }
