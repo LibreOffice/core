@@ -59,7 +59,6 @@
 		BEA264B02CBE99340007435A /* ClientSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA264A52CBE99340007435A /* ClientSession.cpp */; };
 		BEA264B12CBE99340007435A /* RequestDetails.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA264A92CBE99340007435A /* RequestDetails.cpp */; };
 		BEA264B32CBE99340007435A /* DocumentBroker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA264A72CBE99340007435A /* DocumentBroker.cpp */; };
-		BEA82C9D2EC2116E00CDC5A6 /* font in Resources */ = {isa = PBXBuildFile; fileRef = BEA82C9C2EC2116A00CDC5A6 /* font */; };
 		BEB7CC182F332BF8006FCAE9 /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = BEB7CC172F332BF8006FCAE9 /* TestPlan.xctestplan */; };
 		BEDAD86B2F5EF7BA00E82F00 /* WSDGlobals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDAD86A2F5EF7BA00E82F00 /* WSDGlobals.cpp */; };
 		BEEF3F862CE2139E00ABE785 /* coolkitconfig.xcu in Resources */ = {isa = PBXBuildFile; fileRef = BEEF3F852CE2139E00ABE785 /* coolkitconfig.xcu */; };
@@ -174,7 +173,6 @@
 		BEA264AB2CBE99340007435A /* Storage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Storage.cpp; path = ../../../../wsd/Storage.cpp; sourceTree = "<group>"; };
 		BEA264AC2CBE99340007435A /* TileCache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TileCache.cpp; path = ../../../../wsd/TileCache.cpp; sourceTree = "<group>"; };
 		BEA264B52CBE9BEF0007435A /* Storage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Storage.hpp; path = ../../../../wsd/Storage.hpp; sourceTree = "<group>"; };
-		BEA82C9C2EC2116A00CDC5A6 /* font */ = {isa = PBXFileReference; lastKnownFileType = folder; name = font; path = "../../../browser/node_modules/jquery-contextmenu/dist/font"; sourceTree = "<group>"; };
 		BEB7CC172F332BF8006FCAE9 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		BECC4BAB2CBD3FA300A120B3 /* Collabora Office.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Collabora Office.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECC4BBC2CBD3FA400A120B3 /* codaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = codaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -289,7 +287,6 @@
 		BE22492A2CC79AAC00385A9C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				BEA82C9C2EC2116A00CDC5A6 /* font */,
 				BE22AA9B2CC7AE7400385A9C /* images */,
 				BE862C4C2EB9066E0061664E /* templates */,
 				BE22492D2CC79BAE00385A9C /* bundle.css */,
@@ -629,7 +626,6 @@
 				BE2253F32CC79BAE00385A9C /* device-desktop.css in Resources */,
 				BE22557E2CC79BAE00385A9C /* global.js in Resources */,
 				BE16C9F02CD51F58005E5960 /* hello.odt in Resources */,
-				BEA82C9D2EC2116E00CDC5A6 /* font in Resources */,
 				BE2257AD2CC79BAE00385A9C /* bundle.css in Resources */,
 				BE22492C2CC79AD700385A9C /* cool.html in Resources */,
 				BEEF3F862CE2139E00ABE785 /* coolkitconfig.xcu in Resources */,
