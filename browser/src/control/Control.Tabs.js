@@ -53,14 +53,14 @@ window.L.Control.Tabs = window.L.Control.extend({
 				name: app.IconUtil.createMenuItemLink(_('Insert sheet before this'), 'InsertSheetBefore'),
 				isHtmlName: true,
 				callback: (this._insertSheetBefore).bind(this),
-				_text: 'Insert sheet before this',
+				text: _('Insert sheet before this'),
 				_image: 'InsertSheetBefore',
 			},
 			'insertsheetafter': {
 				name: app.IconUtil.createMenuItemLink(_('Insert sheet after this'), 'InsertSheetAfter'),
 				isHtmlName: true,
 				callback: (this._insertSheetAfter).bind(this),
-				_text: 'Insert sheet after this',
+				text: _('Insert sheet after this'),
 				_image: 'InsertSheetAfter',
 			},
 			'.uno:Remove': {
@@ -108,7 +108,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 				isHtmlName: true,
 				callback: (this._moveSheetLeft).bind(this),
 				visible: areTabsMultiple,
-				_text: 'Move Sheet Left',
+				text: _('Move Sheet Left'),
 				_image: 'MoveSheetLeft',
 			},
 			'movesheetright': {
@@ -116,7 +116,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 				isHtmlName: true,
 				callback: (this._moveSheetRight).bind(this),
 				visible: areTabsMultiple,
-				_text: 'Move Sheet Right',
+				text: _('Move Sheet Right'),
 				_image: 'MoveSheetRight',
 			},
 			'.uno:Move': {
@@ -132,7 +132,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 				visible: function() {
 					return !areTabsMultiple();
 				},
-				_text: 'Copy Sheet...',
+				text: _('Copy Sheet...'),
 				_image: 'CopyTab',
 			},
 		};
@@ -352,7 +352,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 
 			const isUNO = key.startsWith('.uno:');
 			if (Object.prototype.hasOwnProperty.call(data, '_uno')) key = data._uno;
-			let text = isUNO ? _UNO(key, 'spreadsheet', true): _(data._text);
+			let text = isUNO ? _UNO(key, 'spreadsheet', true) : data.text;
 			entries.push({
 				id: key,
 				type: 'action',
