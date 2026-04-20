@@ -851,10 +851,23 @@ void SvXMLExportPropertyMapper::handleSpecialItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    OSL_ENSURE(mpImpl->mxNextMapper.is(), "special item not handled in xml export");
     if (mpImpl->mxNextMapper.is())
+    {
         mpImpl->mxNextMapper->handleSpecialItem(
             rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx);
+        return;
+    }
+    // An empty Any (e.g. unset UserDefinedAttributes / ChartUserDefinedAttributes)
+    // or a null XNameContainer reference means there is nothing to export; this
+    // is a normal state, not a missing-handler bug.
+    if (!rProperty.maValue.hasValue()
+        || rProperty.maValue.getValueTypeClass() == uno::TypeClass_INTERFACE)
+        return;
+    SAL_WARN("xmloff.style",
+             "special item not handled in xml export: index=" << rProperty.mnIndex
+             << " ns=" << mpImpl->mxPropMapper->GetEntryNameSpace(rProperty.mnIndex)
+             << " xmlName=" << mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex)
+             << " apiName=" << mpImpl->mxPropMapper->GetEntryAPIName(rProperty.mnIndex));
 }
 
 /** this method is called for every item that has the
