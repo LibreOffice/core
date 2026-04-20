@@ -47,7 +47,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
     external/firebird/0001-extern-cloop-Missing-dependency-of-BIN_DIR-cloop-on-.patch.1 \
     external/firebird/msvc.patch \
     external/firebird/wnt-per-process-trace-storage.patch.1 \
-    external/firebird/configure-c99.patch \
     external/firebird/Wincompatible-function-pointer-types.patch \
 	external/firebird/0001-Revert-Backported-fix-for-7122-Invalid-state-of-mapp.patch.1 \
 	external/firebird/0001-Revert-Fix-for-most-cases-of-7522-7828.patch.1 \
