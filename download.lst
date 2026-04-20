@@ -647,8 +647,8 @@ REVENGE_TARBALL := librevenge-0.0.$(REVENGE_VERSION_MICRO).tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MD4C_SHA256SUM := 55d0111d48fb11883aaee91465e642b8b640775a4d6993c2d0e7a8092758ef21
-MD4C_TARBALL := md4c-release-0.5.2.tar.gz
+MD4C_SHA256SUM := 353c346f376b87c954a13f3415ede2d51264cc61dc5abcd38ff1d2aa0d059b9e
+MD4C_TARBALL := md4c-release-0.5.3.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
